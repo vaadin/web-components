@@ -55,14 +55,8 @@ class VerticalLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) 
           padding: 1em;
         }
 
-        :host([theme~='spacing']) ::slotted(*) {
-          margin-top: 1em;
-        }
-
-        /* Compensate for the first item margin, so that there is no gap around the layout itself. */
-        :host([theme~='spacing'])::before {
-          content: '';
-          margin-top: -1em;
+        :host([theme~='spacing']) {
+          gap: 1em;
         }
       </style>
 
