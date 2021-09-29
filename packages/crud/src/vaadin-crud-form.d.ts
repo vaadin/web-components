@@ -1,4 +1,4 @@
-import { FormLayoutElement } from '@vaadin/vaadin-form-layout/src/vaadin-form-layout.js';
+import { FormLayoutElement } from '@vaadin/form-layout/src/vaadin-form-layout.js';
 
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 
