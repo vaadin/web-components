@@ -133,7 +133,7 @@ class RadioGroup extends FieldAriaMixin(
       /**
        * When present, the user cannot modify the value of the radio group.
        * The property works similarly to the `disabled` property.
-       * While the `disabled` property disables all the radio buttons inside the group,
+       * While the `disabled` property disables all radio buttons inside the group,
        * the `readonly` property disables only unchecked ones.
        *
        * @type {!boolean}
@@ -213,7 +213,7 @@ class RadioGroup extends FieldAriaMixin(
   }
 
   /**
-   * Registers the radio button once it is added to the group.
+   * Registers the radio button after adding it to the group.
    *
    * @param {!RadioButton} radioButton
    * @private
@@ -232,7 +232,7 @@ class RadioGroup extends FieldAriaMixin(
   }
 
   /**
-   * Unregisters the radio button once it is removed from the group.
+   * Unregisters the radio button before removing it from the group.
    *
    * @param {!RadioButton} radioButton
    * @private
@@ -256,12 +256,11 @@ class RadioGroup extends FieldAriaMixin(
   }
 
   /**
-   * Whenever the `value` property is changed, if the new value is not empty,
-   * the method selects the radio button with that value.
-   * If the value is empty, the method resets the currently selected radio button.
-   * If no radio button exists with the given value, the method shows a warning.
-   *
-   * The method also manages the `has-value` attribute on the group element.
+   * Whenever the user sets a non-empty value,
+   * the method tries to select the radio button with that value
+   * showing a warning if no radio button was found with the given value.
+   * If the new value is empty, the method deselects the currently selected radio button.
+   * At last, the method toggles the `has-value` attribute respecting the new value.
    *
    * @param {string | undefined} newValue
    * @param {string | undefined} oldValue
@@ -309,9 +308,9 @@ class RadioGroup extends FieldAriaMixin(
   }
 
   /**
-   * Extends the method from `DisabledMixin` such that,
-   * whenever `disabled` property changes on the group element,
-   * the method updates the `disabled` property for the radio buttons.
+   * Extends the method from `DisabledMixin`
+   * to update the `disabled` property for the radio buttons
+   * whenever the property changes on the group element.
    *
    * @param {!boolean} disabled
    * @protected
@@ -323,8 +322,8 @@ class RadioGroup extends FieldAriaMixin(
   }
 
   /**
-   * Extends the method from `FocusMixin` such that
-   * it prevents removing the `focused` attribute
+   * Extends the method from `FocusMixin`
+   * to prevent removing the `focused` attribute
    * when focus moves between radio buttons inside the group.
    *
    * @param {!FocusEvent} event
@@ -336,8 +335,8 @@ class RadioGroup extends FieldAriaMixin(
   }
 
   /**
-   * Extends the method from `FocusMixin` such that
-   * it runs validation whenever the group loses focus.
+   * Extends the method from `FocusMixin`
+   * to run validation when the group loses focus.
    *
    * @param {!boolean} focused
    * @protected
