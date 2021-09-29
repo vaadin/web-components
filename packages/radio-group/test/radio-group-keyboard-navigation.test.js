@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { sendKeys } from '@web/test-runner-commands';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, isFirefox } from '@vaadin/testing-helpers';
 import '../vaadin-radio-group.js';
 
 describe('keyboard navigation', () => {
@@ -19,7 +19,9 @@ describe('keyboard navigation', () => {
   });
 
   describe('Tab', () => {
-    it('should leave focusable only the first button by default', async () => {
+    // There is a bug in the Playwright Firefox build that causes all the radio buttons
+    // to be available for focus when no radio button has been selected yet.
+    (isFirefox ? it.skip : it)('should leave focusable only the first button by default', async () => {
       // Focus on the 1st radio button.
       await sendKeys({ press: 'Tab' });
       expect(buttons[0].hasAttribute('focused')).to.be.true;
