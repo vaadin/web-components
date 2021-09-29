@@ -90,11 +90,7 @@ describe('vaadin-vertical-layout', () => {
 
     it('should support theme="spacing"', () => {
       layout.setAttribute('theme', 'spacing');
-      const style = getComputedStyle(layout);
-      // Browsers can return either one or two values (e.g. '16px' or '16px 16px', vertical
-      // and horizontal gap) even if just one was provided by the author
-      const gap = style.getPropertyValue('gap').split(' ')[0];
-      expect(gap).to.equal(space);
+      expect(getComputedStyle(layout).rowGap).to.equal(space);
     });
   });
 
