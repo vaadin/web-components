@@ -6,7 +6,7 @@
 |
 [API documentation ↗](https://vaadin.com/components/vaadin-details/html-api)
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-details)](https://www.npmjs.com/package/@vaadin/vaadin-details)
+[![npm version](https://badgen.net/npm/v/@vaadin/details)](https://www.npmjs.com/package/@vaadin/details)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-details)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -24,13 +24,13 @@
 Install `vaadin-details`:
 
 ```sh
-npm i @vaadin/vaadin-details --save
+npm i @vaadin/details --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-details/vaadin-details.js';
+import '@vaadin/details/vaadin-details.js';
 ```
 
 ## Getting started

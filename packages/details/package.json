@@ -1,10 +1,10 @@
 {
-  "name": "@vaadin/vaadin-details",
+  "name": "@vaadin/details",
   "version": "22.0.0-alpha6",
   "description": "vaadin-details",
   "main": "vaadin-details.js",
   "module": "vaadin-details.js",
-  "repository": "vaadin/vaadin-details",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
     "vaadin-details",
@@ -15,7 +15,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-details/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
