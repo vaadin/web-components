@@ -1,0 +1,33 @@
+{
+  "name": "@vaadin/vaadin-date-time-picker",
+  "version": "22.0.0-alpha6",
+  "description": "vaadin-date-time-picker",
+  "main": "vaadin-date-time-picker.js",
+  "module": "vaadin-date-time-picker.js",
+  "repository": "vaadin/vaadin-date-time-picker",
+  "keywords": [
+    "Vaadin",
+    "vaadin-date-time-picker",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-date-time-picker/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/date-time-picker": "^22.0.0-alpha6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
