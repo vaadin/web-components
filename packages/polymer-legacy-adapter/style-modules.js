@@ -18,10 +18,10 @@ let moduleIdIndex = 0;
  * Registers CSS styles for a component type. Make sure to register the styles before
  * the first instance of a component of the type is attached to DOM.
  *
- * @param {String} themeFor The local/tag name of the component type to register the styles for
+ * @param {string} themeFor The local/tag name of the component type to register the styles for
  * @param {CSSResult[]} styles The CSS style rules to be registered for the component type
  * matching themeFor and included in the local scope of each component instance
- * @param {{moduleId?: String, include?: String | String[]}} options Additional options
+ * @param {{moduleId?: string, include?: string | string[]}} options Additional options
  * @return {void}
  */
 styleModules.registerStyles = (themeFor, styles = [], options = {}) => {
