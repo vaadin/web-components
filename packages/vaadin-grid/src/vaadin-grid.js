@@ -988,9 +988,14 @@ class GridElement extends ElementMixin(
    * (row/details cell positioning etc). Needs to be invoked whenever the sizing of grid
    * content changes asynchronously to ensure consistent appearance (e.g. when a
    * contained image whose bounds aren't known beforehand finishes loading).
+   *
+   * @deprecated Since Vaadin 22, `notifyResize()` is deprecated. The component uses a
+   * ResizeObserver internally and doesn't need to be explicitly notified of resizes.
    */
   notifyResize() {
-    // To be removed in https://github.com/vaadin/web-components/issues/331
+    console.warn(
+      `WARNING: Since Vaadin 22, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`
+    );
   }
 }
 
