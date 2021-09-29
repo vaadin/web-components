@@ -4,7 +4,7 @@
   "description": "polymer-legacy-adapter",
   "main": "index.js",
   "module": "index.js",
-  "repository": "vaadin/polymer-legacy-adapter",
+  "repository": "vaadin/web-components",
   "keywords": [
     "Vaadin",
     "web-components",
