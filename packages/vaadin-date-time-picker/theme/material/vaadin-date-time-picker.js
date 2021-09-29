@@ -1,2 +1,1 @@
-import './vaadin-date-time-picker-styles.js';
-import '../../src/vaadin-date-time-picker.js';
+import '@vaadin/date-time-picker/theme/material/vaadin-date-time-picker.js';

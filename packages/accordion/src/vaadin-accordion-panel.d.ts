@@ -1,4 +1,4 @@
-import { DetailsElement } from '@vaadin/vaadin-details/src/vaadin-details.js';
+import { DetailsElement } from '@vaadin/details/src/vaadin-details.js';
 
 /**
  * The accordion panel element.

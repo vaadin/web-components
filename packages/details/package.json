@@ -1,0 +1,43 @@
+{
+  "name": "@vaadin/details",
+  "version": "22.0.0-alpha6",
+  "description": "vaadin-details",
+  "main": "vaadin-details.js",
+  "module": "vaadin-details.js",
+  "repository": "vaadin/web-components",
+  "keywords": [
+    "Vaadin",
+    "vaadin-details",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/component-base": "^22.0.0-alpha6",
+    "@vaadin/vaadin-control-state-mixin": "^22.0.0-alpha6",
+    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha6",
+    "@vaadin/vaadin-material-styles": "^22.0.0-alpha6",
+    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha6"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/testing-helpers": "^0.3.0",
+    "sinon": "^9.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

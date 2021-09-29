@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DetailsElement } from '@vaadin/vaadin-details/src/vaadin-details.js';
+import { DetailsElement } from '@vaadin/details/src/vaadin-details.js';
 
 /**
  * The accordion panel element.

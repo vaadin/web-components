@@ -337,6 +337,25 @@ describe('keyboard', () => {
       expect(input.selectionStart).to.eql(3);
       expect(input.selectionEnd).to.eql(3);
     });
+
+    it('should not clear the value on esc if clear button is not visible', () => {
+      escKeyDown(input);
+      expect(comboBox.value).to.equal('bar');
+    });
+
+    it('should clear the value on esc if clear button is visible', () => {
+      comboBox.close();
+      comboBox.clearButtonVisible = true;
+      escKeyDown(input);
+      expect(comboBox.value).to.equal('');
+    });
+
+    it('should not clear the value on esc if the overlay is open', () => {
+      comboBox.clearButtonVisible = true;
+      comboBox.opened = true;
+      escKeyDown(input);
+      expect(comboBox.value).to.equal('bar');
+    });
   });
 
   describe('scrolling items', () => {
@@ -490,6 +509,30 @@ describe('keyboard', () => {
       escKeyDown(input);
       expect(input.value).to.equal('');
       expect(comboBox.value).to.equal('');
+    });
+
+    it('should revert changed input value on esc if clear button is visible', () => {
+      comboBox.value = 'bar';
+      comboBox.clearButtonVisible = true;
+      inputText('foo');
+      escKeyDown(input);
+      expect(input.value).to.equal('bar');
+      expect(comboBox.value).to.equal('bar');
+    });
+
+    it('should clear the value on esc if clear button is visible', () => {
+      comboBox.value = 'bar';
+      comboBox.clearButtonVisible = true;
+      escKeyDown(input);
+      expect(comboBox.value).to.equal('');
+    });
+
+    it('should not clear the value on esc if the overlay is open', () => {
+      comboBox.value = 'bar';
+      comboBox.clearButtonVisible = true;
+      comboBox.opened = true;
+      escKeyDown(input);
+      expect(comboBox.value).to.equal('bar');
     });
   });
 });

@@ -1,2 +1,1 @@
-import './vaadin-details-styles.js';
-import '../../src/vaadin-details.js';
+import '@vaadin/details/theme/lumo/vaadin-details.js';

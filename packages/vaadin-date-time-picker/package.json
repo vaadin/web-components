@@ -25,19 +25,7 @@
     "theme"
   ],
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^22.0.0-alpha6",
-    "@vaadin/vaadin-custom-field": "^22.0.0-alpha6",
-    "@vaadin/date-picker": "^22.0.0-alpha6",
-    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha6",
-    "@vaadin/vaadin-material-styles": "^22.0.0-alpha6",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha6",
-    "@vaadin/vaadin-time-picker": "^22.0.0-alpha6"
-  },
-  "devDependencies": {
-    "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/testing-helpers": "^0.3.0",
-    "sinon": "^9.2.1"
+    "@vaadin/date-time-picker": "^22.0.0-alpha6"
   },
   "publishConfig": {
     "access": "public"
