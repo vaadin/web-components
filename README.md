@@ -174,22 +174,28 @@ Not all variables are necessary for all scripts, individual sections below will 
 
 ### Unit tests
 
-Run all tests in Chrome:
+Run tests in Chrome:
 
 ```sh
 yarn test
 ```
 
-Run all tests in Firefox:
+Run tests in Firefox:
 
 ```sh
 yarn test:firefox
 ```
 
-Run all tests in WebKit:
+Run tests in WebKit:
 
 ```sh
 yarn test:webkit
+```
+
+By default, tests will only run for changed packages. To run tests for all packages, use the `--all` flag:
+
+```sh
+yarn test --all
 ```
 
 Run tests for single package:
@@ -202,6 +208,12 @@ Debug tests for single package:
 
 ```sh
 yarn debug --group vaadin-upload
+```
+
+Run tests with code coverage:
+
+```sh
+yarn test --coverage
 ```
 
 ### Visual tests
