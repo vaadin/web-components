@@ -550,16 +550,32 @@ export const ComboBoxMixin = (subclass) =>
      */
     _onEscape(e) {
       if (this.autoOpenDisabled) {
-        this._focusedIndex = -1;
-        this.cancel();
-      } else if (this.opened) {
-        e.stopPropagation();
-
-        if (this._focusedIndex > -1) {
+        // Auto-open is disabled
+        if (this.value !== this._inputElementValue) {
+          // The input value has changed but the change hasn't been committed, so cancel it.
           this._focusedIndex = -1;
-          this._revertInputValue();
-        } else {
           this.cancel();
+        } else if (this.clearButtonVisible && !this.opened) {
+          // The clear button is visible and the overlay is closed, so clear the value.
+          this._clear();
+        }
+      } else {
+        // Auto-open is enabled
+        if (this.opened) {
+          // The overlay is open
+          e.stopPropagation();
+
+          if (this._focusedIndex > -1) {
+            // An item is focused, revert the input to the filtered value
+            this._focusedIndex = -1;
+            this._revertInputValue();
+          } else {
+            // No item is focused, cancel the change and close the overlay
+            this.cancel();
+          }
+        } else if (this.clearButtonVisible) {
+          // The clear button is visible and the overlay is closed, so clear the value.
+          this._clear();
         }
       }
     }
