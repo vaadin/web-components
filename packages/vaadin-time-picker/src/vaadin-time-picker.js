@@ -311,17 +311,12 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     return this.$.clearButton;
   }
 
-  constructor() {
-    super();
-
-    this.addController(new InputController(this));
-    this.addController(new AriaLabelController(this));
-  }
-
   /** @protected */
   ready() {
     super.ready();
 
+    this.addController(new InputController(this));
+    this.addController(new AriaLabelController(this.inputElement, this._labelNode));
     this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
   }
 

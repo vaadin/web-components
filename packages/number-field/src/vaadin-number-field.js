@@ -186,9 +186,6 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
   constructor() {
     super();
     this._setType('number');
-
-    this.addController(new InputController(this));
-    this.addController(new AriaLabelController(this));
   }
 
   /** @protected */
@@ -234,6 +231,14 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
       this.inputElement.max = this.max;
       this.__applyStep(this.step);
     }
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.addController(new InputController(this));
+    this.addController(new AriaLabelController(this.inputElement, this._labelNode));
   }
 
   /** @private */

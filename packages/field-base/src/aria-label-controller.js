@@ -8,14 +8,15 @@
  * A controller to link an input element with a slotted `<label>` element.
  */
 export class AriaLabelController {
-  constructor(host) {
-    this.host = host;
+  constructor(input, label) {
+    this.input = input;
+    this.label = label;
     this.__preventDuplicateLabelClick = this.__preventDuplicateLabelClick.bind(this);
   }
 
   hostConnected() {
-    const label = this.host._labelNode;
-    const input = this.host.inputElement;
+    const label = this.label;
+    const input = this.input;
 
     if (label) {
       label.addEventListener('click', this.__preventDuplicateLabelClick);
@@ -28,7 +29,7 @@ export class AriaLabelController {
   }
 
   hostDisconnected() {
-    const label = this.host._labelNode;
+    const label = this.label;
     if (label) {
       label.removeEventListener('click', this.__preventDuplicateLabelClick);
     }
@@ -45,8 +46,8 @@ export class AriaLabelController {
   __preventDuplicateLabelClick() {
     const inputClickHandler = (e) => {
       e.stopImmediatePropagation();
-      this.host.inputElement.removeEventListener('click', inputClickHandler);
+      this.input.removeEventListener('click', inputClickHandler);
     };
-    this.host.inputElement.addEventListener('click', inputClickHandler);
+    this.input.addEventListener('click', inputClickHandler);
   }
 }

@@ -32,12 +32,12 @@ describe('aria-label-mixin', () => {
     describe(el, () => {
       beforeEach(() => {
         element = fixtureSync(`<aria-label-${el}-mixin-element></aria-label-${el}-mixin-element>`);
+        label = element.querySelector('[slot=label]');
         target = document.createElement(el);
         target.setAttribute('slot', el);
         element.appendChild(target);
         element._setInputElement(target);
-        element.addController(new AriaLabelController(element));
-        label = element.querySelector('[slot=label]');
+        element.addController(new AriaLabelController(target, label));
       });
 
       it('should set for attribute on the label', () => {

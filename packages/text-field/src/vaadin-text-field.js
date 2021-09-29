@@ -100,6 +100,6 @@ export class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(Elemen
     super.ready();
 
     this.addController(new InputController(this));
-    this.addController(new AriaLabelController(this));
+    this.addController(new AriaLabelController(this.inputElement, this._labelNode));
   }
 }
