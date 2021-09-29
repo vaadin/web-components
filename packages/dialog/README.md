@@ -6,7 +6,7 @@
 
 [&lt;vaadin-dialog&gt;](https://vaadin.com/components/vaadin-dialog) is a Web Component for customized modal dialogs, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-dialog)](https://www.npmjs.com/package/@vaadin/vaadin-dialog)
+[![npm version](https://badgen.net/npm/v/@vaadin/dialog)](https://www.npmjs.com/package/@vaadin/dialog)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-dialog)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -28,13 +28,13 @@
 Install `vaadin-dialog`:
 
 ```sh
-npm i @vaadin/vaadin-dialog --save
+npm i @vaadin/dialog --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-dialog/vaadin-dialog.js';
+import '@vaadin/dialog/vaadin-dialog.js';
 ```
 
 ## Getting started
