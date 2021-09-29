@@ -117,7 +117,7 @@ export const DragAndDropMixin = (superClass) =>
         }
 
         e.stopPropagation();
-        this._toggleAttribute('dragging-rows', true, this);
+        this.toggleAttribute('dragging-rows', true);
 
         if (this._safari) {
           // Safari doesn't position drag images from transformed
@@ -150,10 +150,8 @@ export const DragAndDropMixin = (superClass) =>
         e.dataTransfer.setData('text', this.__formatDefaultTransferData(rows));
 
         row.setAttribute('dragstart', rows.length > 1 ? rows.length : '');
-        this.updateStyles({
-          '--_grid-drag-start-x': `${e.clientX - rowRect.left + 20}px`,
-          '--_grid-drag-start-y': `${e.clientY - rowRect.top + 10}px`
-        });
+        this.style.setProperty('--_grid-drag-start-x', `${e.clientX - rowRect.left + 20}px`);
+        this.style.setProperty('--_grid-drag-start-y', `${e.clientY - rowRect.top + 10}px`);
 
         requestAnimationFrame(() => {
           row.removeAttribute('dragstart');
@@ -174,7 +172,7 @@ export const DragAndDropMixin = (superClass) =>
 
     /** @private */
     _onDragEnd(e) {
-      this._toggleAttribute('dragging-rows', false, this);
+      this.toggleAttribute('dragging-rows', false);
       e.stopPropagation();
       const event = new CustomEvent('grid-dragend');
       event.originalEvent = e;
@@ -245,7 +243,7 @@ export const DragAndDropMixin = (superClass) =>
         e.preventDefault();
 
         if (this._dropLocation === DropLocation.EMPTY) {
-          this._toggleAttribute('dragover', true, this);
+          this.toggleAttribute('dragover', true);
         } else if (row) {
           this._dragOverItem = row._item;
           if (row.getAttribute('dragover') !== this._dropLocation) {
@@ -389,8 +387,8 @@ export const DragAndDropMixin = (superClass) =>
         }
       });
 
-      this._toggleAttribute('drag-disabled', dragDisabled, row);
-      this._toggleAttribute('drop-disabled', dropDisabled, row);
+      row.toggleAttribute('drag-disabled', !!dragDisabled);
+      row.toggleAttribute('drop-disabled', !!dropDisabled);
     }
 
     /**

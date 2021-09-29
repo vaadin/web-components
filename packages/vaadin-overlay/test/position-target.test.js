@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { css } from 'lit';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles';
 import { PositionMixin } from '../src/vaadin-overlay-position-mixin.js';
 import { OverlayElement } from '../src/vaadin-overlay.js';
-import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles';
-import { css } from 'lit';
 import '../vaadin-overlay.js';
 
 class PositionedOverlay extends PositionMixin(OverlayElement) {

@@ -1,45 +1,6 @@
-export interface DatePickerDate {
-  day: number;
-  month: number;
-  year: number;
-}
-
-export interface DatePickerI18n {
-  monthNames: string[];
-  weekdays: string[];
-  weekdaysShort: string[];
-  firstDayOfWeek: number;
-  week: string;
-  calendar: string;
-  clear: string;
-  today: string;
-  cancel: string;
-  parseDate: (date: string) => DatePickerDate | undefined;
-  formatDate: (date: DatePickerDate) => string;
-  formatTitle: (monthName: string, fullYear: number) => string;
-}
-
 /**
- * Fired when the `opened` property changes.
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-export type DatePickerOpenedChangedEvent = CustomEvent<{ value: boolean }>;
-
-/**
- * Fired when the `invalid` property changes.
- */
-export type DatePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
-
-/**
- * Fired when the `value` property changes.
- */
-export type DatePickerValueChangedEvent = CustomEvent<{ value: string }>;
-
-export interface DatePickerElementEventMap {
-  'opened-changed': DatePickerOpenedChangedEvent;
-
-  'invalid-changed': DatePickerInvalidChangedEvent;
-
-  'value-changed': DatePickerValueChangedEvent;
-}
-
-export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerElementEventMap {}
+export * from '@vaadin/date-picker/src/interfaces';

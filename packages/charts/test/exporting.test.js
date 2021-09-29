@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
+import { fixtureSync, oneEvent, nextRender } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { fixtureSync, oneEvent, nextRender } from '@vaadin/testing-helpers';
-import { chartDefaultTheme } from '../theme/vaadin-chart-default-theme.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';
+import { chartDefaultTheme } from '../theme/vaadin-chart-default-theme.js';
 
 import '../vaadin-chart.js';
 

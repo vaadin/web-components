@@ -13,10 +13,8 @@ import {
   isDesktopSafari,
   nextFrame
 } from '@vaadin/testing-helpers';
-import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import '@polymer/iron-input/iron-input.js';
-import '@polymer/paper-input/paper-input.js';
+import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 import '@vaadin/vaadin-template-renderer';
 import { createEventSpy, getFirstItem } from './helpers.js';
@@ -31,9 +29,7 @@ class MyInput extends PolymerElement {
           display: inline-block;
         }
       </style>
-      <iron-input id="input" bind-value="{{customValue}}">
-        <input />
-      </iron-input>
+      <vaadin-text-field id="input" value="{{customValue}}"></vaadin-text-field>
     `;
   }
 
@@ -50,35 +46,29 @@ class MyInput extends PolymerElement {
 customElements.define('my-input', MyInput);
 
 describe('vaadin-combo-box-light', () => {
-  let comboBox, overlay, ironInput;
+  let comboBox, overlay, inputElement;
 
   beforeEach(() => {
     comboBox = fixtureSync(`
-      <vaadin-combo-box-light attr-for-value="bind-value">
-        <iron-input>
-          <input>
-        </iron-input>
+      <vaadin-combo-box-light>
+        <vaadin-text-field></vaadin-text-field>
       </vaadin-combo-box-light>
     `);
     comboBox.items = ['foo', 'bar', 'baz'];
     overlay = comboBox.$.dropdown.$.overlay;
-    ironInput = comboBox.querySelector('iron-input');
+    inputElement = comboBox.querySelector('vaadin-text-field');
   });
 
-  describe('using iron-input', () => {
-    it('should find the input element correctly', () => {
-      expect(comboBox.inputElement).to.eql(ironInput);
-    });
+  it('should find the input element correctly', () => {
+    expect(comboBox.inputElement).to.eql(inputElement);
+  });
 
-    it('should bind the input value correctly when setting combo box value', () => {
-      // Empty string by default.
-      expect(comboBox._inputElementValue).to.eql('');
-      expect(ironInput.value).to.eql('');
+  it('should update input element value when setting combo box value', () => {
+    // Empty string by default.
+    expect(inputElement.value).to.eql('');
 
-      comboBox.value = 'foo';
-      expect(comboBox._inputElementValue).to.eql('foo');
-      expect(ironInput.value).to.eql('foo');
-    });
+    comboBox.value = 'foo';
+    expect(inputElement.value).to.eql('foo');
   });
 
   it('should prevent default on overlay down', () => {
@@ -91,7 +81,7 @@ describe('vaadin-combo-box-light', () => {
   it('should not prevent default on input down', () => {
     const e = new CustomEvent('mousedown', { bubbles: true });
     const spy = sinon.spy(e, 'preventDefault');
-    ironInput.dispatchEvent(e);
+    inputElement.dispatchEvent(e);
     expect(spy.calledOnce).to.be.false;
   });
 
@@ -104,34 +94,34 @@ describe('vaadin-combo-box-light', () => {
     });
 
     it('should toggle overlay on input click', () => {
-      ironInput.dispatchEvent(new CustomEvent('click', { bubbles: true }));
+      inputElement.click();
       expect(comboBox.opened).to.be.true;
     });
 
     (isDesktopSafari ? it.skip : it)('should toggle on input click on touch devices', () => {
-      touchstart(ironInput);
-      touchend(ironInput);
-      mousedown(ironInput);
-      mouseup(ironInput);
-      click(ironInput);
+      touchstart(inputElement);
+      touchend(inputElement);
+      mousedown(inputElement);
+      mouseup(inputElement);
+      click(inputElement);
 
       expect(comboBox.opened).to.be.true;
     });
 
     it('should not clear on input click', () => {
       comboBox.value = 'foo';
-      ironInput.dispatchEvent(new CustomEvent('click', { bubbles: true }));
+      inputElement.click();
       expect(comboBox.value).to.equal('foo');
     });
 
     (isDesktopSafari ? it.skip : it)('should not clear on input click on touch devices', () => {
       comboBox.value = 'foo';
 
-      touchstart(ironInput);
-      touchend(ironInput);
-      mousedown(ironInput);
-      mouseup(ironInput);
-      click(ironInput);
+      touchstart(inputElement);
+      touchend(inputElement);
+      mousedown(inputElement);
+      mouseup(inputElement);
+      click(inputElement);
 
       expect(comboBox.value).to.equal('foo');
     });
@@ -150,10 +140,39 @@ describe('vaadin-combo-box-light', () => {
       expect(preventDefaultSpy.called).to.be.true;
     });
   });
+
+  describe('clear-button-visible', () => {
+    let clearButton;
+
+    beforeEach(() => {
+      inputElement.clearButtonVisible = true;
+      clearButton = inputElement.$.clearButton;
+      comboBox.value = 'bar';
+    });
+
+    it('should immediately clear value when using clear button of vaadin-text-field', () => {
+      click(clearButton);
+      expect(comboBox.value).not.to.be.ok;
+    });
+
+    it('should not close the dropdown after clearing a selection', () => {
+      comboBox.open();
+
+      click(clearButton);
+
+      expect(comboBox.opened).to.be.true;
+    });
+
+    it('should not open the dropdown after clearing a selection', () => {
+      click(clearButton);
+
+      expect(comboBox.opened).to.be.false;
+    });
+  });
 });
 
 describe('attr-for-value', () => {
-  let comboBox, customInput, ironInput, nativeInput;
+  let comboBox, customInput, inputElement;
 
   beforeEach(() => {
     comboBox = fixtureSync(`
@@ -163,8 +182,7 @@ describe('attr-for-value', () => {
     `);
     comboBox.items = ['foo', 'bar', 'baz'];
     customInput = comboBox.querySelector('.input');
-    ironInput = customInput.$.input;
-    nativeInput = ironInput.querySelector('input');
+    inputElement = customInput.$.input;
   });
 
   describe('using custom input with custom attr-for-value', () => {
@@ -174,81 +192,68 @@ describe('attr-for-value', () => {
 
     it('should bind the input value correctly when setting combo box value', () => {
       // Empty string by default.
-      expect(comboBox._inputElementValue).to.eql('');
       expect(customInput.customValue).to.eql('');
 
       comboBox.value = 'foo';
-      expect(comboBox._inputElementValue).to.eql('foo');
       expect(customInput.customValue).to.eql('foo');
     });
 
     it('should bind the input value correctly when getting input', () => {
       // Empty string by default.
-      expect(comboBox._inputElementValue).to.eql('');
       expect(customInput.customValue).to.eql('');
-      expect(nativeInput.value).to.eql('');
-
-      // Make sure the slotted <input> has been detected by <iron-input>
-      // before trying to modify the value of the <input>.
-      // Otherwise iron-input will throw an error (in `_onInput`) because
-      // it tries to read `inputElement.value` but `inputElement` is still
-      // undefined.
-      ironInput._observer.flush();
+      expect(inputElement.value).to.eql('');
 
       // Simulate typing an option with a keyboard and confirming it via Enter
-      nativeInput.value = 'foo';
-      fire(nativeInput, 'input');
+      inputElement.value = 'foo';
+      fire(inputElement, 'input');
 
-      enter(nativeInput);
+      enter(inputElement);
 
       expect(comboBox.value).to.eql('foo');
-      expect(comboBox._inputElementValue).to.eql('foo');
       expect(customInput.customValue).to.eql('foo');
     });
   });
 });
 
-describe('paper-input', () => {
+describe('custom buttons', () => {
   let comboBox;
 
   beforeEach(() => {
     comboBox = fixtureSync(`
       <vaadin-combo-box-light>
-        <paper-input>
+        <vaadin-text-field>
           <button slot="suffix" class="clear-button">Clear</button>
           <button slot="suffix" class="toggle-button">Toggle</button>
-        </paper-input>
+        </vaadin-text-field>
       </vaadin-combo-box-light>
     `);
     comboBox.items = ['foo', 'bar', 'baz'];
   });
 
-  it('should toggle overlay by clicking toggle element', () => {
-    click(comboBox._toggleElement);
-    expect(comboBox.opened).to.be.true;
+  describe('toggle-button', () => {
+    let toggleButton;
 
-    click(comboBox._toggleElement);
-    expect(comboBox.opened).to.be.false;
+    beforeEach(() => {
+      toggleButton = comboBox.querySelector('.toggle-button');
+    });
+
+    it('should toggle overlay by clicking toggle element', () => {
+      click(toggleButton);
+      expect(comboBox.opened).to.be.true;
+
+      click(toggleButton);
+      expect(comboBox.opened).to.be.false;
+    });
+
+    it('should prevent default on toggle element down', () => {
+      const e = new CustomEvent('mousedown', { bubbles: true });
+      const spy = sinon.spy(e, 'preventDefault');
+      toggleButton.dispatchEvent(e);
+      expect(spy.calledOnce).to.be.true;
+    });
   });
 
-  it('should prevent default on toggle element down', () => {
-    const e = new CustomEvent('mousedown', { bubbles: true });
-    const spy = sinon.spy(e, 'preventDefault');
-    comboBox._toggleElement.dispatchEvent(e);
-    expect(spy.calledOnce).to.be.true;
-  });
-
-  it('should validate the paper-input element on checkValidity', () => {
-    const spy = sinon.spy(comboBox.inputElement, 'validate');
-
-    comboBox.required = true;
-    comboBox.value = 'foo';
-    comboBox.checkValidity();
-
-    expect(spy.calledOnce).to.be.true;
-  });
-
-  describe('custom clear-button', () => {
+  describe('clear-button', () => {
     let clearButton;
 
     /**
@@ -294,12 +299,6 @@ describe('paper-input', () => {
       let target = elementFromPointDeep(x, y, elem.ownerDocument);
       if (!target) {
         return;
-      }
-
-      // Check if the found element contains a slot (needed for other browsers than Chrome)
-      const slot = target.querySelector('slot');
-      if (slot && slot.assignedNodes({ flatten: true }).indexOf(elem) !== -1) {
-        target = elem;
       }
 
       click(target);
@@ -369,10 +368,8 @@ describe('theme attribute', () => {
 
   beforeEach(() => {
     comboBox = fixtureSync(`
-      <vaadin-combo-box-light attr-for-value="bind-value" theme="foo">
-        <iron-input>
-          <input>
-        </iron-input>
+      <vaadin-combo-box-light theme="foo">
+        <vaadin-text-field></vaadin-text-field>
       </vaadin-combo-box-light>
     `);
   });
@@ -417,48 +414,5 @@ describe('nested template', () => {
     await nextFrame();
     expect(comboBox.querySelector('[slot="prefix"]').innerHTML).to.contain('1 foo');
     expect(getFirstItem(comboBox).shadowRoot.querySelector('#content').innerHTML).to.equal('bar');
-  });
-});
-
-describe('vaadin-text-field', () => {
-  let comboBox, textField;
-
-  beforeEach(() => {
-    comboBox = fixtureSync(`
-      <vaadin-combo-box-light>
-        <vaadin-text-field></vaadin-text-field>
-      </vaadin-combo-box-light>
-    `);
-    comboBox.items = ['bar', 'baz', 'qux'];
-    textField = comboBox.inputElement;
-  });
-
-  describe('clear-button-visible', () => {
-    let clearButton;
-
-    beforeEach(() => {
-      textField.clearButtonVisible = true;
-      clearButton = textField.$.clearButton;
-      comboBox.value = 'bar';
-    });
-
-    it('should immediately clear value when using clear button of vaadin-text-field', () => {
-      click(clearButton);
-      expect(comboBox.value).not.to.be.ok;
-    });
-
-    it('should not close the dropdown after clearing a selection', () => {
-      comboBox.open();
-
-      click(clearButton);
-
-      expect(comboBox.opened).to.be.true;
-    });
-
-    it('should not open the dropdown after clearing a selection', () => {
-      click(clearButton);
-
-      expect(comboBox.opened).to.be.false;
-    });
   });
 });

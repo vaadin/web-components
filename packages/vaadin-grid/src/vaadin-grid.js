@@ -3,13 +3,12 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { Virtualizer } from '@vaadin/vaadin-virtual-list/src/virtualizer.js';
 import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
 import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
 import { ArrayDataProviderMixin } from './vaadin-grid-array-data-provider-mixin.js';
@@ -26,7 +25,6 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
 import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { ColumnReorderingMixin } from './vaadin-grid-column-reordering-mixin.js';
-import { Virtualizer } from '@vaadin/vaadin-virtual-list/src/virtualizer.js';
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 
@@ -368,8 +366,7 @@ class GridElement extends ElementMixin(
       allRowsVisible: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true,
-        observer: '_allRowsVisibleChanged'
+        reflectToAttribute: true
       },
 
       /** @private */
@@ -793,7 +790,6 @@ class GridElement extends ElementMixin(
 
     if (row.hidden !== !visibleRowCells.length) {
       row.hidden = !visibleRowCells.length;
-      this.notifyResize();
     }
   }
 
@@ -805,8 +801,8 @@ class GridElement extends ElementMixin(
       return;
     }
 
-    this._toggleAttribute('first', index === 0, row);
-    this._toggleAttribute('odd', index % 2, row);
+    row.toggleAttribute('first', index === 0);
+    row.toggleAttribute('odd', index % 2);
     this._a11yUpdateRowRowindex(row, index);
     this._getItem(index, row);
   }
@@ -891,9 +887,9 @@ class GridElement extends ElementMixin(
     this._a11yUpdateRowExpanded(row, model.expanded);
     this._a11yUpdateRowDetailsOpened(row, model.detailsOpened);
 
-    this._toggleAttribute('expanded', model.expanded, row);
-    this._toggleAttribute('selected', model.selected, row);
-    this._toggleAttribute('details-opened', model.detailsOpened, row);
+    row.toggleAttribute('expanded', model.expanded);
+    row.toggleAttribute('selected', model.selected);
+    row.toggleAttribute('details-opened', model.detailsOpened);
 
     this._generateCellClassNames(row, model);
     this._filterDragAndDrop(row, model);
@@ -919,7 +915,6 @@ class GridElement extends ElementMixin(
     // ShadyCSS applies scoping suffixes to animation names
     if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
       e.stopPropagation();
-      this.notifyResize();
       this.__itemsReceived();
 
       requestAnimationFrame(() => {
@@ -927,22 +922,6 @@ class GridElement extends ElementMixin(
         // This needs to be set programmatically in order to avoid an iOS 10 bug (disappearing grid)
         this.$.table.style.webkitOverflowScrolling = 'touch';
       });
-    }
-  }
-
-  /**
-   * @param {string} name
-   * @param {boolean} bool
-   * @param {!Element} node
-   * @protected
-   */
-  _toggleAttribute(name, bool, node) {
-    if (node.hasAttribute(name) === !bool) {
-      if (bool) {
-        node.setAttribute(name, '');
-      } else {
-        node.removeAttribute(name);
-      }
     }
   }
 
@@ -1012,21 +991,6 @@ class GridElement extends ElementMixin(
    */
   notifyResize() {
     // To be removed in https://github.com/vaadin/web-components/issues/331
-  }
-
-  /** @private */
-  _allRowsVisibleChanged(value, oldValue) {
-    if (value || oldValue) {
-      this.notifyResize();
-    }
-  }
-
-  /** @protected */
-  __forceReflow() {
-    this._debouncerForceReflow = Debouncer.debounce(this._debouncerForceReflow, animationFrame, () => {
-      this.$.scroller.style.overflow = 'hidden';
-      setTimeout(() => (this.$.scroller.style.overflow = ''));
-    });
   }
 }
 

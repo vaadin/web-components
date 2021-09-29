@@ -28,7 +28,7 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/component-base": "^22.0.0-alpha6",
     "@vaadin/vaadin-custom-field": "^22.0.0-alpha6",
-    "@vaadin/vaadin-date-picker": "^22.0.0-alpha6",
+    "@vaadin/date-picker": "^22.0.0-alpha6",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha6",
     "@vaadin/vaadin-material-styles": "^22.0.0-alpha6",
     "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha6",

@@ -23,6 +23,9 @@ describe('drag and drop', () => {
       setDragImage: sinon.spy(),
       setData: (type, data) => (dragData[type] = data)
     };
+    const draggableRect = draggable.getBoundingClientRect();
+    event.clientX = draggableRect.left + draggableRect.width / 2;
+    event.clientY = draggableRect.top + draggableRect.height / 2;
     draggable.dispatchEvent(event);
     return event;
   };
@@ -189,7 +192,6 @@ describe('drag and drop', () => {
       it('should only use visible items for the row count state attribute', async () => {
         grid.style.height = '80px';
         flushGrid(grid);
-        grid.notifyResize();
         grid.selectedItems = grid.items;
 
         await aTimeout(0);
@@ -211,6 +213,13 @@ describe('drag and drop', () => {
         expect(row.getAttribute('dragstart')).to.equal('2');
         await nextFrame();
         expect(row.hasAttribute('dragstart')).to.be.false;
+      });
+
+      it('should add position properties to grid', () => {
+        grid.selectedItems = grid.items;
+        fireDragStart();
+        expect(grid.style.getPropertyValue('--_grid-drag-start-x')).to.be.ok;
+        expect(grid.style.getPropertyValue('--_grid-drag-start-y')).to.be.ok;
       });
 
       it('should override row count state attribute', () => {

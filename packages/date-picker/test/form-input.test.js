@@ -2,8 +2,8 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
-import { close, open } from './common.js';
 import { DatePicker } from '../vaadin-date-picker.js';
+import { close, open } from './common.js';
 
 class DatePicker2016 extends DatePicker {
   checkValidity() {

@@ -25,17 +25,16 @@ registerStyles(
       margin-left: var(--lumo-space-s);
     }
 
-    :host(:not([direction])) [part='indicators']::before {
-      opacity: 0.2;
+    [part='indicators']::before {
+      transform: scale(0.8);
+    }
+
+    :host(:not([direction]):not(:hover)) [part='indicators'] {
+      color: var(--lumo-tertiary-text-color);
     }
 
     :host([direction]) {
       color: var(--lumo-primary-text-color);
-    }
-
-    :host(:hover) [part='indicators'] {
-      color: var(--lumo-body-text-color);
-      opacity: 0.6;
     }
 
     [part='order'] {

@@ -8,7 +8,7 @@ snapshots["vaadin-password-field default"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -58,7 +58,7 @@ snapshots["vaadin-password-field disabled"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -111,7 +111,7 @@ snapshots["vaadin-password-field readonly"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -164,7 +164,7 @@ snapshots["vaadin-password-field invalid"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>
@@ -217,7 +217,7 @@ snapshots["vaadin-password-field theme"] =
     </slot>
     <span
       aria-hidden="true"
-      part="indicator"
+      part="required-indicator"
     >
     </span>
   </div>

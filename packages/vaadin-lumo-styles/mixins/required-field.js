@@ -43,7 +43,7 @@ const requiredField = css`
   /* TODO: remove old pseudo element when the following components are updated to use new indicator:
     combo-box, date-picker, time-picker, date-time-picker, select. */
   [part='label']::after,
-  [part='indicator']::after {
+  [part='required-indicator']::after {
     content: var(--lumo-required-field-indicator, '•');
     transition: opacity 0.2s;
     opacity: 0;
@@ -55,12 +55,12 @@ const requiredField = css`
   }
 
   :host([required]:not([has-value])) [part='label']::after,
-  :host([required]:not([has-value])) [part='indicator']::after {
+  :host([required]:not([has-value])) [part='required-indicator']::after {
     opacity: 1;
   }
 
   :host([invalid]) [part='label']::after,
-  :host([invalid]) [part='indicator']::after {
+  :host([invalid]) [part='required-indicator']::after {
     color: var(--lumo-error-text-color);
   }
 
@@ -101,7 +101,7 @@ const requiredField = css`
   }
 
   :host([dir='rtl']) [part='label']::after,
-  :host([dir='rtl']) [part='indicator']::after {
+  :host([dir='rtl']) [part='required-indicator']::after {
     right: auto;
     left: 0;
   }

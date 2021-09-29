@@ -2,7 +2,7 @@ import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/vaadin-template-renderer';
 import '@vaadin/vaadin-combo-box/theme/lumo/vaadin-combo-box.js';
-import '@vaadin/vaadin-date-picker/theme/lumo/vaadin-date-picker.js';
+import '@vaadin/date-picker/theme/lumo/vaadin-date-picker.js';
 import '@vaadin/vaadin-item/theme/lumo/vaadin-item.js';
 import '@vaadin/vaadin-form-layout/theme/lumo/vaadin-form-item.js';
 import '@vaadin/vaadin-form-layout/theme/lumo/vaadin-form-layout.js';

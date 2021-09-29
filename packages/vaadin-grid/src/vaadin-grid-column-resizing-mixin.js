@@ -39,7 +39,7 @@ export const ColumnResizingMixin = (superClass) =>
         const cell = handle.parentElement;
         let column = cell._column;
 
-        this._toggleAttribute('column-resizing', true, this.$.scroller);
+        this.$.scroller.toggleAttribute('column-resizing', true);
 
         // Get the target column to resize
         while (column.localName === 'vaadin-grid-column-group') {
@@ -88,7 +88,7 @@ export const ColumnResizingMixin = (superClass) =>
           });
 
         if (e.detail.state === 'end') {
-          this._toggleAttribute('column-resizing', false, this.$.scroller);
+          this.$.scroller.toggleAttribute('column-resizing', false);
           this.dispatchEvent(
             new CustomEvent('column-resize', {
               detail: { resizedColumn: column }

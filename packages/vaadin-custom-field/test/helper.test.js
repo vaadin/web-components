@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import sinon from 'sinon';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '../vaadin-custom-field.js';
 
 class XHelper extends PolymerElement {

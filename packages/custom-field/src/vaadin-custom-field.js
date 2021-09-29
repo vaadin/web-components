@@ -49,7 +49,7 @@ class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(Ele
       <div part="container">
         <div part="label" on-click="focus">
           <slot name="label"></slot>
-          <span part="indicator" aria-hidden="true"></span>
+          <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
         <div class="inputs-wrapper" on-change="__onInputChange">
@@ -298,9 +298,14 @@ class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(Ele
   }
 
   /** @private */
+  __isInput(node) {
+    const isSlottedInput = node.getAttribute('slot') === 'input' || node.getAttribute('slot') === 'textarea';
+    return !isSlottedInput && (node.validate || node.checkValidity);
+  }
+
+  /** @private */
   __getInputsFromSlot() {
-    const isInput = (node) => node.validate || node.checkValidity;
-    return this.__queryAllAssignedElements(this.$.slot).filter(isInput);
+    return this.__queryAllAssignedElements(this.$.slot).filter((node) => this.__isInput(node));
   }
 
   /** @private */
