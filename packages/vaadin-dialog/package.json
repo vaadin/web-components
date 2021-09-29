@@ -1,0 +1,33 @@
+{
+  "name": "@vaadin/vaadin-dialog",
+  "version": "22.0.0-alpha6",
+  "description": "vaadin-dialog",
+  "main": "vaadin-dialog.js",
+  "module": "vaadin-dialog.js",
+  "repository": "vaadin/vaadin-dialog",
+  "keywords": [
+    "Vaadin",
+    "vaadin-dialog",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-dialog/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/dialog": "^22.0.0-alpha6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
