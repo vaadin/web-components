@@ -162,7 +162,10 @@ const getVisualTestGroups = (packages, theme) => {
     });
 };
 
-const testRunnerHtml = (testFramework) => `
+const fontRoboto = '<link rel="stylesheet" href="./node_modules/@fontsource/roboto/latin.css">';
+
+const getTestRunnerHtml = (theme) => (testFramework) =>
+  `
   <!DOCTYPE html>
   <html>
     <body>
@@ -187,6 +190,7 @@ const testRunnerHtml = (testFramework) => `
           --vaadin-user-color-6: #078836;
         }
       </style>
+      ${theme === 'material' ? fontRoboto : ''}
       <script>
         /* Disable Roboto for Material theme tests */
         window.polymerSkipLoadingFontRoboto = true;
@@ -238,7 +242,7 @@ const createSnapshotTestsConfig = (config) => {
     ...config,
     nodeResolve: true,
     groups,
-    testRunnerHtml,
+    testRunnerHtml: getTestRunnerHtml(),
     filterBrowserLogs
   };
 };
@@ -266,7 +270,7 @@ const createUnitTestsConfig = (config) => {
     },
     coverage,
     groups,
-    testRunnerHtml,
+    testRunnerHtml: getTestRunnerHtml(),
     filterBrowserLogs
   };
 };
@@ -317,7 +321,7 @@ const createVisualTestsConfig = (theme) => {
       })
     ],
     groups,
-    testRunnerHtml,
+    testRunnerHtml: getTestRunnerHtml(theme),
     filterBrowserLogs
   };
 };
