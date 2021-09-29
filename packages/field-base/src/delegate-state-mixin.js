@@ -42,6 +42,7 @@ const DelegateStateMixinImplementation = (superclass) =>
       this._createDelegatePropsObserver();
     }
 
+    /** @protected */
     _stateTargetChanged(target) {
       if (target) {
         this._ensureAttrsDelegated();
