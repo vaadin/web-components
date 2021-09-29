@@ -1,1 +1,1 @@
-export { registerStyles, css, unsafeCSS } from './vaadin-themable-mixin';
+export { registerStyles, css, unsafeCSS } from './vaadin-themable-mixin.js';
