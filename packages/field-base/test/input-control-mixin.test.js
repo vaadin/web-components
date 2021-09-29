@@ -11,21 +11,6 @@ customElements.define(
   class extends InputControlMixin(ElementMixin(PolymerElement)) {
     static get template() {
       return html`
-        <style>
-          :host {
-            display: block;
-          }
-
-          /* Mimic Lumo styles to test resize */
-          [part='error-message'] {
-            max-height: 5em;
-          }
-
-          :host(:not([invalid])) [part='error-message'] {
-            max-height: 0;
-            overflow: hidden;
-          }
-        </style>
         <div part="label">
           <slot name="label"></slot>
         </div>
@@ -254,62 +239,6 @@ describe('input-control-mixin', () => {
       const spy = sinon.spy(input, 'select');
       element.autoselect = true;
       input.focus();
-      expect(spy.calledOnce).to.be.true;
-    });
-  });
-
-  describe('iron-resize', () => {
-    let spy;
-
-    function flushObserveHeight(field) {
-      field.__observeOffsetHeightDebouncer.flush();
-    }
-
-    beforeEach(() => {
-      element = fixtureSync('<input-control-mixin-element></input-control-mixin-element>');
-      spy = sinon.spy();
-      element.addEventListener('iron-resize', spy);
-    });
-
-    it('should not dispatch `iron-resize` event on init', () => {
-      expect(spy.called).to.be.false;
-    });
-
-    it('should dispatch `iron-resize` event on invalid height change', () => {
-      element.errorMessage = 'Error';
-      flushObserveHeight(element);
-      element.invalid = true;
-      flushObserveHeight(element);
-      expect(spy.called).to.be.true;
-    });
-
-    it('should be a composed event', () => {
-      element.errorMessage = 'Error';
-      flushObserveHeight(element);
-      element.invalid = true;
-      flushObserveHeight(element);
-      const event = spy.lastCall.lastArg;
-      expect(event.composed).to.be.true;
-    });
-
-    it('should dispatch `iron-resize` event on error message height change', () => {
-      element.errorMessage = 'Error';
-      flushObserveHeight(element);
-      element.invalid = true;
-      flushObserveHeight(element);
-      spy.resetHistory();
-
-      // Long message that spans on multiple lines
-      element.errorMessage = [...new Array(42)].map(() => 'bla').join(' ');
-      flushObserveHeight(element);
-
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should dispatch `iron-resize` event on label height change', () => {
-      flushObserveHeight(element);
-      element.label = 'Label';
-      flushObserveHeight(element);
       expect(spy.calledOnce).to.be.true;
     });
   });

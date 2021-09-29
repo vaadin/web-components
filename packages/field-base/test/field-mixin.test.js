@@ -1,4 +1,5 @@
 import { expect } from '@esm-bundle/chai';
+import sinon from 'sinon';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -11,9 +12,29 @@ customElements.define(
   class extends FieldMixin(InputMixin(ElementMixin(PolymerElement))) {
     static get template() {
       return html`
-        <slot name="label"></slot>
+        <style>
+          :host {
+            display: block;
+          }
+
+          /* Mimic Lumo styles to test resize */
+          [part='error-message'] {
+            max-height: 5em;
+          }
+
+          :host(:not([invalid])) [part='error-message'] {
+            max-height: 0;
+            overflow: hidden;
+          }
+        </style>
+        <div part="label">
+          <slot name="label"></slot>
+        </div>
         <slot name="input"></slot>
-        <slot name="error-message"></slot>
+        <button id="clearButton">Clear</button>
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
         <slot name="helper"></slot>
       `;
     }
@@ -473,6 +494,62 @@ describe('field-mixin', () => {
       await nextFrame();
       helper.removeAttribute('id');
       expect(input.getAttribute('aria-describedby')).to.include(helper.id);
+    });
+  });
+
+  describe('iron-resize', () => {
+    let spy;
+
+    function flushObserveHeight(field) {
+      field.__observeOffsetHeightDebouncer.flush();
+    }
+
+    beforeEach(() => {
+      element = fixtureSync('<field-mixin-element></field-mixin-element>');
+      spy = sinon.spy();
+      element.addEventListener('iron-resize', spy);
+    });
+
+    it('should not dispatch `iron-resize` event on init', () => {
+      expect(spy.called).to.be.false;
+    });
+
+    it('should dispatch `iron-resize` event on invalid height change', () => {
+      element.errorMessage = 'Error';
+      flushObserveHeight(element);
+      element.invalid = true;
+      flushObserveHeight(element);
+      expect(spy.called).to.be.true;
+    });
+
+    it('should be a composed event', () => {
+      element.errorMessage = 'Error';
+      flushObserveHeight(element);
+      element.invalid = true;
+      flushObserveHeight(element);
+      const event = spy.lastCall.lastArg;
+      expect(event.composed).to.be.true;
+    });
+
+    it('should dispatch `iron-resize` event on error message height change', () => {
+      element.errorMessage = 'Error';
+      flushObserveHeight(element);
+      element.invalid = true;
+      flushObserveHeight(element);
+      spy.resetHistory();
+
+      // Long message that spans on multiple lines
+      element.errorMessage = [...new Array(42)].map(() => 'bla').join(' ');
+      flushObserveHeight(element);
+
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should dispatch `iron-resize` event on label height change', () => {
+      flushObserveHeight(element);
+      element.label = 'Label';
+      flushObserveHeight(element);
+      expect(spy.calledOnce).to.be.true;
     });
   });
 });
