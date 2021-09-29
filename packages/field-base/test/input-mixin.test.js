@@ -142,14 +142,14 @@ describe('input-mixin', () => {
 
     it('should not call an input event listener when input is unset', () => {
       element.removeChild(input);
-      element._setInputElement(null);
+      element._setInputElement(undefined);
       input.dispatchEvent(new CustomEvent('input'));
       expect(inputSpy.called).to.be.false;
     });
 
     it('should not call a change event listener when input is unset', () => {
       element.removeChild(input);
-      element._setInputElement(null);
+      element._setInputElement(undefined);
       input.dispatchEvent(new CustomEvent('change'));
       expect(changeSpy.called).to.be.false;
     });
