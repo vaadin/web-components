@@ -17,6 +17,6 @@ interface ElementMixinConstructor {
   finalize(): void;
 }
 
-interface ElementMixin extends ReactiveControllerHost, DirMixin {}
+interface ElementMixin extends Pick<ReactiveControllerHost, 'addController' | 'removeController'>, DirMixin {}
 
 export { ElementMixin, ElementMixinConstructor };
