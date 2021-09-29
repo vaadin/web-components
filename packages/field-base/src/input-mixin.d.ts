@@ -27,11 +27,6 @@ interface InputMixin {
   readonly inputElement: HTMLInputElement;
 
   /**
-   * String used to define input type.
-   */
-  readonly type: string;
-
-  /**
    * The value of the field.
    */
   value: string;

@@ -34,8 +34,6 @@ interface FieldMixin extends LabelMixin, ValidateMixin {
    * @attr {string} error-message
    */
   errorMessage: string;
-
-  readonly _ariaAttr: string;
 }
 
 export { FieldMixin, FieldMixinConstructor };
