@@ -7,6 +7,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
@@ -64,7 +65,7 @@ import { RadioButton } from './vaadin-radio-button.js';
  * @mixes FieldAriaMixin
  */
 class RadioGroup extends FieldAriaMixin(
-  LabelMixin(FocusMixin(DisabledMixin(DirMixin(ThemableMixin(PolymerElement)))))
+  LabelMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMixin(ThemableMixin(PolymerElement))))))
 ) {
   static get is() {
     return 'vaadin-radio-group';
@@ -122,7 +123,7 @@ class RadioGroup extends FieldAriaMixin(
       /**
        * The value of the radio group.
        *
-       * @type {string}
+       * @attr {string} value
        */
       value: {
         type: String,
@@ -136,7 +137,7 @@ class RadioGroup extends FieldAriaMixin(
        * While the `disabled` property disables all radio buttons inside the group,
        * the `readonly` property disables only unchecked ones.
        *
-       * @type {!boolean}
+       * @attr {boolean} readonly
        */
       readonly: {
         type: Boolean,
@@ -210,6 +211,80 @@ class RadioGroup extends FieldAriaMixin(
    */
   get _ariaAttr() {
     return 'aria-labelledby';
+  }
+
+  /**
+   * @param {KeyboardEvent} event
+   * @override
+   * @protected
+   */
+  _onKeyDown(event) {
+    super._onKeyDown(event);
+
+    const radioButton = event.composedPath().find((element) => {
+      return element instanceof RadioButton;
+    });
+
+    const isHorizontalRTL = this.getAttribute('dir') === 'rtl' && this.theme !== 'vertical';
+
+    // LEFT, UP - select previous radio button
+    if (['ArrowLeft', 'ArrowUp'].includes(event.key)) {
+      event.preventDefault();
+      this.__selectIncRadioButton(isHorizontalRTL, radioButton);
+    }
+
+    // RIGHT, DOWN - select next radio button
+    if (['ArrowRight', 'ArrowDown'].includes(event.key)) {
+      event.preventDefault();
+      this.__selectIncRadioButton(!isHorizontalRTL, radioButton);
+    }
+  }
+
+  /**
+   * @param {!boolean} next
+   * @param {!RadioButton} radioButton
+   * @private
+   */
+  __selectIncRadioButton(next, radioButton) {
+    const index = this.__radioButtons.indexOf(radioButton);
+
+    if (next) {
+      this.__selectNextRadioButton(index);
+    } else {
+      this.__selectPrevRadioButton(index);
+    }
+  }
+
+  /**
+   * @param {!number} index
+   * @private
+   */
+  __selectNextRadioButton(index) {
+    const nextIndex = (this.__radioButtons.length + index + 1) % this.__radioButtons.length;
+    const nextRadioButton = this.__radioButtons[nextIndex];
+
+    if (nextRadioButton.disabled) {
+      this.__selectNextRadioButton(nextIndex);
+    } else {
+      nextRadioButton.focusElement.focus();
+      nextRadioButton.focusElement.click();
+    }
+  }
+
+  /**
+   * @param {!number} index
+   * @private
+   */
+  __selectPrevRadioButton(index) {
+    const prevIndex = (this.__radioButtons.length + index - 1) % this.__radioButtons.length;
+    const prevRadioButton = this.__radioButtons[prevIndex];
+
+    if (prevRadioButton.disabled) {
+      this.__selectPrevRadioButton(prevIndex);
+    } else {
+      prevRadioButton.focusElement.focus();
+      prevRadioButton.focusElement.click();
+    }
   }
 
   /**

@@ -22,6 +22,7 @@ describe('keyboard navigation', () => {
     it('should leave focusable only the 1st button by default', async () => {
       // Focus on the 1st radio button.
       await sendKeys({ press: 'Tab' });
+
       expect(buttons[0].hasAttribute('focused')).to.be.true;
       expect(buttons[1].hasAttribute('focused')).to.be.false;
       expect(buttons[2].hasAttribute('focused')).to.be.false;
@@ -80,7 +81,7 @@ describe('keyboard navigation', () => {
       expect(buttons[2].checked).to.be.false;
     });
 
-    it('should skip disabled button and check the next one instead', async () => {
+    it('should skip disabled button and check the next one instead on ArrowDown', async () => {
       buttons[0].checked = true;
       buttons[0].focus();
       buttons[1].disabled = true;
@@ -151,7 +152,7 @@ describe('keyboard navigation', () => {
       expect(buttons[2].checked).to.be.false;
     });
 
-    it('should skip disabled button and check the next one instead', async () => {
+    it('should skip disabled button and check the next one instead on ArrowRight', async () => {
       buttons[0].checked = true;
       buttons[0].focus();
       buttons[1].disabled = true;
