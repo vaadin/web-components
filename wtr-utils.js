@@ -35,7 +35,9 @@ const filterBrowserLogs = (log) => {
   return !isHidden;
 };
 
-const group = process.argv.indexOf('--group') !== -1;
+const hasGroupParam = process.argv.indexOf('--group') !== -1;
+const hasCoverageParam = process.argv.indexOf('--coverage') !== -1;
+const hasAllParam = process.argv.indexOf('--all') !== -1;
 
 /**
  * Check if lockfile has changed.
@@ -87,7 +89,11 @@ const getAllVisualPackages = () => {
  */
 const getTestPackages = (allPackages) => {
   // If --group flag is passed, return all packages.
-  if (group) {
+  if (hasGroupParam) {
+    return allPackages;
+  }
+  // If --all flag is passed, return all packages.
+  if (hasAllParam) {
     return allPackages;
   }
 
@@ -251,10 +257,6 @@ const createSnapshotTestsConfig = (config) => {
 const createUnitTestsConfig = (config) => {
   const allPackages = getAllUnitPackages();
   const testPackages = getTestPackages(allPackages);
-
-  // only collect coverage if all packages changed
-  const coverage = allPackages.length === testPackages.length;
-
   const groups = getUnitTestGroups(testPackages);
 
   return {
@@ -269,7 +271,7 @@ const createUnitTestsConfig = (config) => {
         timeout: '10000'
       }
     },
-    coverage,
+    coverage: hasCoverageParam,
     groups,
     testRunnerHtml: getTestRunnerHtml(),
     filterBrowserLogs
