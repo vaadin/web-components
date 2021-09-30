@@ -80,18 +80,18 @@ describe('radio-group', () => {
       expect(groupName).to.match(/^vaadin-radio-group-\d+$/);
     });
 
-    it('should delegate the group name to the radio buttons', () => {
+    it('should set the group name to the radio buttons', () => {
       expect(buttons[0].name).to.equal(groupName);
       expect(buttons[1].name).to.equal(groupName);
       expect(buttons[2].name).to.equal(groupName);
     });
 
-    it('should delegate the group name to the dynamically added radio buttons', async () => {
+    it('should set the group name to the dynamically added radio buttons', async () => {
       const radio = document.createElement('vaadin-radio-button');
       group.appendChild(radio);
       await nextFrame();
 
-      expect(radio.name).to.be.equal(groupName);
+      expect(radio.name).to.equal(groupName);
     });
   });
 
@@ -157,7 +157,7 @@ describe('radio-group', () => {
       // Focus on the first radio button.
       await sendKeys({ press: 'Tab' });
 
-      // Move focus out of the radio group.
+      // Move focus out of the group.
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
       await sendKeys({ up: 'Shift' });
@@ -239,7 +239,7 @@ describe('radio-group', () => {
       document.body.appendChild(input);
       input.focus();
       group.value = '2';
-      expect(document.activeElement).to.be.equal(input);
+      expect(document.activeElement).to.equal(input);
       document.body.removeChild(input);
     });
 
@@ -427,7 +427,7 @@ describe('radio-group', () => {
     it('should fire when selecting a radio button on click', () => {
       buttons[1].click();
       expect(spy.calledOnce).to.be.true;
-      const event = spy.getCall(0).args[0];
+      const event = spy.firstCall.args[0];
       expect(event).to.be.instanceof(Event);
     });
 
@@ -436,21 +436,21 @@ describe('radio-group', () => {
       buttons[1].checked = true;
       arrowDown(buttons[1]);
       expect(spy.calledOnce).to.be.true;
-      const event = spy.getCall(0).args[0];
+      const event = spy.firstCall.args[0];
       expect(event).to.be.instanceof(Event);
     });
 
     it('should bubble', () => {
       buttons[1].click();
       expect(spy.calledOnce).to.be.true;
-      const event = spy.getCall(0).args[0];
+      const event = spy.firstCall.args[0];
       expect(event).to.have.property('bubbles', true);
     });
 
     it('should not be composed', () => {
       buttons[1].click();
       expect(spy.calledOnce).to.be.true;
-      const event = spy.getCall(0).args[0];
+      const event = spy.firstCall.args[0];
       expect(event).to.have.property('composed', false);
     });
 
@@ -664,7 +664,7 @@ describe('radio-group initial value', () => {
   });
 
   it('should set the value based on the initially checked radio button', () => {
-    expect(group.value).to.be.equal('2');
+    expect(group.value).to.equal('2');
   });
 
   it('should set the last initially checked button value as the radio group value', () => {
