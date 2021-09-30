@@ -1,0 +1,33 @@
+{
+  "name": "@vaadin/vaadin-form-layout",
+  "version": "22.0.0-alpha6",
+  "description": "Web component providing configurable responsive layout for form elements",
+  "main": "vaadin-form-layout.js",
+  "module": "vaadin-form-layout.js",
+  "repository": "vaadin/vaadin-form-layout",
+  "keywords": [
+    "Vaadin",
+    "form-layout",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-form-layout/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/form-layout": "^22.0.0-alpha6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
