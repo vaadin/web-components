@@ -29,8 +29,7 @@ const radioGroup = css`
     padding-bottom: 0.7em;
   }
 
-  /* TODO: remove when the following components are updated to use new indicator:
-  combo-box, date-picker, time-picker, date-time-picker, select. */
+  /* TODO: remove when <vaadin-date-time-picker> is updated to use new indicator. */
   [part='label']::after {
     display: none;
   }

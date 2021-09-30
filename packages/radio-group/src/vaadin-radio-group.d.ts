@@ -75,8 +75,6 @@ declare class RadioGroup extends FieldMixin(
 ) {
   /**
    * The value of the radio group.
-   *
-   * @attr {value} readonly
    */
   value: string | null | undefined;
 
@@ -85,8 +83,6 @@ declare class RadioGroup extends FieldMixin(
    * The property works similarly to the `disabled` property.
    * While the `disabled` property disables all the radio buttons inside the group,
    * the `readonly` property disables only unchecked ones.
-   *
-   * @attr {boolean} readonly
    */
   readonly: boolean;
 

@@ -120,7 +120,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
       /**
        * The value of the radio group.
        *
-       * @attr {string} value
+       * @type {string} value
        */
       value: {
         type: String,
@@ -134,7 +134,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
        * While the `disabled` property disables all radio buttons inside the group,
        * the `readonly` property disables only unchecked ones.
        *
-       * @attr {boolean} readonly
+       * @type {boolean} readonly
        */
       readonly: {
         type: Boolean,
@@ -187,7 +187,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   /**
    * A collection of the group's radio buttons.
    *
-   * @type {!RadioButton[]}
+   * @return {!RadioButton[]}
    * @private
    */
   get __radioButtons() {
@@ -197,7 +197,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   /**
    * A currently selected radio button.
    *
-   * @type {!RadioButton | undefined}
+   * @return {!RadioButton | undefined}
    * @private
    */
   get __selectedRadioButton() {
@@ -205,7 +205,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   }
 
   /**
-   * @type {!boolean}
+   * @return {boolean}
    * @private
    */
   get isHorizontalRTL() {
@@ -213,7 +213,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   }
 
   /**
-   * @type {!string}
+   * @return {string}
    * @override
    * @protected
    */
@@ -222,16 +222,18 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   }
 
   /**
-   * @param {KeyboardEvent} event
+   * Override method inherited from `KeyboardMixin`
+   * to implement the custom keyboard navigation as a replacement for the native one,
+   * to make the navigation work the same way across different browsers.
+   *
+   * @param {!KeyboardEvent} event
    * @override
    * @protected
    */
   _onKeyDown(event) {
     super._onKeyDown(event);
 
-    const radioButton = event.composedPath().find((element) => {
-      return element instanceof RadioButton;
-    });
+    const radioButton = event.composedPath().find((node) => node instanceof RadioButton);
 
     if (['ArrowLeft', 'ArrowUp'].includes(event.key)) {
       event.preventDefault();
@@ -245,7 +247,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   }
 
   /**
-   * @param {!number} index
+   * @param {number} index
    * @private
    */
   __selectNextRadioButton(radioButton) {
@@ -255,7 +257,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   }
 
   /**
-   * @param {!number} index
+   * @param {number} index
    * @private
    */
   __selectPrevRadioButton(radioButton) {
@@ -265,8 +267,8 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   }
 
   /**
-   * @param {!number} index
-   * @param {!number} step
+   * @param {number} index
+   * @param {number} step
    * @private
    */
   __selectIncRadioButton(index, step) {
@@ -331,8 +333,8 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
    * If the new value is empty, the method deselects the currently selected radio button.
    * At last, the method toggles the `has-value` attribute considering the new value.
    *
-   * @param {string | undefined} newValue
-   * @param {string | undefined} oldValue
+   * @param {string | null | undefined} newValue
+   * @param {string | null | undefined} oldValue
    * @private
    */
   __valueChanged(newValue, oldValue) {
@@ -366,8 +368,8 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
    * Whenever `readonly` property changes on the group element,
    * the method updates the `disabled` property for the radio buttons.
    *
-   * @param {!boolean} newValue
-   * @param {!boolean} oldValue
+   * @param {boolean} newValue
+   * @param {boolean} oldValue
    * @private
    */
   __readonlyChanged(newValue, oldValue) {
@@ -377,11 +379,12 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   }
 
   /**
-   * Extends the method from `DisabledMixin`
+   * Override method inherited from `DisabledMixin`
    * to update the `disabled` property for the radio buttons
    * whenever the property changes on the group element.
    *
-   * @param {!boolean} disabled
+   * @param {boolean} disabled
+   * @override
    * @protected
    */
   _disabledChanged(disabled) {
@@ -391,12 +394,12 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   }
 
   /**
-   * Extends the method from `FocusMixin`
+   * Override method inherited from `FocusMixin`
    * to prevent removing the `focused` attribute
    * when focus moves between radio buttons inside the group.
    *
    * @param {!FocusEvent} event
-   * @return {!boolean}
+   * @return {boolean}
    * @protected
    */
   _shouldRemoveFocus(event) {
@@ -404,10 +407,11 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   }
 
   /**
-   * Extends the method from `FocusMixin`
+   * Override method inherited from `FocusMixin`
    * to run validation when the group loses focus.
    *
-   * @param {!boolean} focused
+   * @param {boolean} focused
+   * @override
    * @protected
    */
   _setFocused(focused) {
