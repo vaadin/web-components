@@ -5,10 +5,9 @@
  */
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -71,8 +70,8 @@ export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupCusto
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class RadioGroup extends FieldAriaMixin(
-  LabelMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMixin(ThemableMixin(HTMLElement))))))
+declare class RadioGroup extends FieldMixin(
+  FocusMixin(DisabledMixin(KeyboardMixin(DirMixin(ThemableMixin(HTMLElement)))))
 ) {
   /**
    * The value of the radio group.

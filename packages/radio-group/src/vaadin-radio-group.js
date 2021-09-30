@@ -7,10 +7,9 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { RadioButton } from './vaadin-radio-button.js';
 
@@ -62,12 +61,9 @@ import { RadioButton } from './vaadin-radio-button.js';
  * @mixes KeyboardMixin
  * @mixes DisabledMixin
  * @mixes FocusMixin
- * @mixes LabelMixin
- * @mixes FieldAriaMixin
+ * @mixes FieldMixin
  */
-class RadioGroup extends FieldAriaMixin(
-  LabelMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMixin(ThemableMixin(PolymerElement))))))
-) {
+class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMixin(ThemableMixin(PolymerElement)))))) {
   static get is() {
     return 'vaadin-radio-group';
   }
@@ -159,6 +155,8 @@ class RadioGroup extends FieldAriaMixin(
   /** @protected */
   ready() {
     super.ready();
+
+    this.ariaTarget = this;
 
     // See https://github.com/vaadin/vaadin-web-components/issues/94
     this.setAttribute('role', 'radiogroup');
