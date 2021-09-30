@@ -8,11 +8,11 @@ import '@vaadin/vaadin-form-layout/theme/material/vaadin-form-item.js';
 import '@vaadin/vaadin-form-layout/theme/material/vaadin-form-layout.js';
 import '@vaadin/vaadin-list-box/theme/material/vaadin-list-box.js';
 import '@vaadin/select/theme/material/vaadin-select.js';
-import '@vaadin/vaadin-text-field/theme/material/vaadin-email-field.js';
-import '@vaadin/vaadin-text-field/theme/material/vaadin-number-field.js';
-import '@vaadin/vaadin-text-field/theme/material/vaadin-text-area.js';
-import '@vaadin/vaadin-text-field/theme/material/vaadin-text-field.js';
-import '@vaadin/vaadin-text-field/theme/material/vaadin-password-field.js';
+import '@vaadin/email-field/theme/material/vaadin-email-field.js';
+import '@vaadin/number-field/theme/material/vaadin-number-field.js';
+import '@vaadin/password-field/theme/material/vaadin-password-field.js';
+import '@vaadin/text-area/theme/material/vaadin-text-area.js';
+import '@vaadin/text-field/theme/material/vaadin-text-field.js';
 import '@vaadin/vaadin-time-picker/theme/material/vaadin-time-picker.js';
 import '../../../theme/material/vaadin-custom-field.js';
 

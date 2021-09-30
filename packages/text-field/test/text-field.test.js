@@ -1,9 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { TextField } from '../src/vaadin-text-field.js';
-
-customElements.define('vaadin-text-field', TextField);
+import '../src/vaadin-text-field.js';
 
 describe('text-field', () => {
   let textField, input;

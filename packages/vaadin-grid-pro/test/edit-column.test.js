@@ -10,7 +10,6 @@ import {
   flushGrid,
   getCellEditor,
   getContainerCell,
-  getNativeInput,
   getRowCells,
   getRows,
   infiniteDataProvider
@@ -246,7 +245,7 @@ describe('edit column', () => {
         grid.enterNextRow = true;
         const firstCell = getContainerCell(grid.$.items, 1, 0);
         enter(firstCell._content);
-        input = getNativeInput(getCellEditor(firstCell));
+        input = getCellEditor(firstCell).inputElement;
 
         const spy = sinon.spy(firstCell, 'focus');
         enter(input);
