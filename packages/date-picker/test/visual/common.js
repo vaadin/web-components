@@ -10,3 +10,13 @@ registerStyles(
     }
   `
 );
+
+/* stop focused day animation */
+registerStyles(
+  'vaadin-month-calendar',
+  css`
+    [part='date'][focused]::before {
+      animation: none;
+    }
+  `
+);

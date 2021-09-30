@@ -80,7 +80,7 @@ registerStyles(
 
     /* Focus ring */
     :host([focus-ring]) [part='checkbox'] {
-      box-shadow: 0 0 0 3px var(--lumo-primary-color-50pct);
+      box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct);
     }
 
     /* Disabled */
