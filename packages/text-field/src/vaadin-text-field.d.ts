@@ -4,10 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
-import { TextFieldMixin } from '@vaadin/field-base/src/text-field-mixin.js';
+import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
+import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-declare class TextField extends TextFieldMixin(InputSlotMixin(ThemableMixin(ElementMixin(HTMLElement)))) {}
+declare class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement)))) {}
 
 export { TextField };

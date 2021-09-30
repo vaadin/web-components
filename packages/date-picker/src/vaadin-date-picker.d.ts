@@ -4,11 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
-import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
-import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
-import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 import { DatePickerEventMap } from './interfaces';
@@ -105,16 +101,7 @@ declare class DatePicker extends HTMLElement {
   ): void;
 }
 
-interface DatePicker
-  extends DatePickerMixin,
-    ElementMixin,
-    AriaLabelMixin,
-    ClearButtonMixin,
-    FieldAriaMixin,
-    InputSlotMixin,
-    DatePickerMixin,
-    InputConstraintsMixin,
-    ThemableMixin {}
+interface DatePicker extends DatePickerMixin, ElementMixin, InputControlMixin, ThemableMixin {}
 
 declare global {
   interface HTMLElementTagNameMap {

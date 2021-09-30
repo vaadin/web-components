@@ -7,124 +7,13 @@ customElements.define(
   'validate-mixin-element',
   class extends ValidateMixin(PolymerElement) {
     static get template() {
-      return html`<slot name="error-message"></slot>`;
+      return html`<input />`;
     }
   }
 );
 
 describe('validate-mixin', () => {
-  let element, error;
-
-  const ID_REGEX = /^error-validate-mixin-element-\d+$/;
-
-  describe('default', () => {
-    beforeEach(() => {
-      element = fixtureSync(`<validate-mixin-element></validate-mixin-element>`);
-      error = element.querySelector('[slot=error-message]');
-      element.invalid = true;
-    });
-
-    it('should create an error message element', () => {
-      expect(error).to.be.an.instanceof(HTMLDivElement);
-    });
-
-    it('should set aria-live attribute on the error message', () => {
-      expect(error.getAttribute('aria-live')).to.equal('assertive');
-    });
-
-    it('should set id on the error message element', () => {
-      const id = error.getAttribute('id');
-      expect(id).to.match(ID_REGEX);
-      expect(id.endsWith(element.constructor._uniqueErrorId)).to.be.true;
-    });
-
-    it('should update error message content on attribute change', () => {
-      element.setAttribute('error-message', 'This field is required');
-      expect(error.textContent).to.equal('This field is required');
-    });
-
-    it('should update error message content on property change', () => {
-      element.errorMessage = 'This field is required';
-      expect(error.textContent).to.equal('This field is required');
-    });
-
-    it('should clear error message content when field is valid', () => {
-      element.errorMessage = 'This field is required';
-      element.invalid = false;
-      expect(error.textContent).to.equal('');
-    });
-
-    it('should not set has-error-message attribute with no error', () => {
-      expect(element.hasAttribute('has-error-message')).to.be.false;
-    });
-
-    it('should set has-error-message attribute when attribute is set', () => {
-      element.setAttribute('error-message', 'This field is required');
-      expect(element.hasAttribute('has-error-message')).to.be.true;
-    });
-
-    it('should set has-error-message attribute when property is set', () => {
-      element.errorMessage = 'This field is required';
-      expect(element.hasAttribute('has-error-message')).to.be.true;
-    });
-
-    it('should remove has-error-message attribute when field is valid', () => {
-      element.errorMessage = 'This field is required';
-      element.invalid = false;
-      expect(element.hasAttribute('has-error-message')).to.be.false;
-    });
-  });
-
-  describe('attribute', () => {
-    beforeEach(() => {
-      element = fixtureSync(`
-        <validate-mixin-element
-          invalid
-          error-message="This field is required"
-        ></validate-mixin-element>
-      `);
-      error = element.querySelector('[slot=error-message]');
-    });
-
-    it('should set error-message text content from attribute', () => {
-      expect(error.textContent).to.equal('This field is required');
-    });
-
-    it('should set has-error-message attribute on the host', () => {
-      expect(element.hasAttribute('has-error-message')).to.be.true;
-    });
-  });
-
-  describe('slotted', () => {
-    beforeEach(() => {
-      element = fixtureSync(`
-        <validate-mixin-element>
-          <div slot="error-message">Required field</div>
-        </validate-mixin-element>
-      `);
-      error = element.querySelector('[slot=error-message]');
-      element.invalid = true;
-    });
-
-    it('should return slotted message content as an errorMessage', () => {
-      expect(element.errorMessage).to.equal('Required field');
-    });
-
-    it('should set id on the slotted error message element', () => {
-      const id = error.getAttribute('id');
-      expect(id).to.match(ID_REGEX);
-      expect(id.endsWith(element.constructor._uniqueErrorId)).to.be.true;
-    });
-
-    it('should set has-error-message attribute with slotted error message', () => {
-      expect(element.hasAttribute('has-error-message')).to.be.true;
-    });
-
-    it('should update slotted error message content on property change', () => {
-      element.errorMessage = 'This field is required';
-      expect(error.textContent).to.equal('This field is required');
-    });
-  });
+  let element;
 
   describe('checkValidity', () => {
     beforeEach(() => {

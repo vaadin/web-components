@@ -260,7 +260,31 @@ describe('text-field', () => {
       });
     });
 
-    describe('removing validation constraints', () => {
+    describe('validation constraints', () => {
+      it('should not validate the field when minlength is set', () => {
+        textField.minlength = 2;
+        expect(textField.invalid).to.be.false;
+      });
+
+      it('should not validate the field when maxlength is set', () => {
+        textField.maxlength = 6;
+        expect(textField.invalid).to.be.false;
+      });
+
+      it('should validate the field when invalid after minlength is changed', () => {
+        textField.invalid = true;
+        const spy = sinon.spy(textField, 'validate');
+        textField.minlength = 2;
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should validate the field when invalid after maxlength is changed', () => {
+        textField.invalid = true;
+        const spy = sinon.spy(textField, 'validate');
+        textField.maxlength = 6;
+        expect(spy.calledOnce).to.be.true;
+      });
+
       it('should update "invalid" state when "required" is removed', () => {
         textField.required = true;
         textField.validate();

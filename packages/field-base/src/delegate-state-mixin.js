@@ -7,6 +7,19 @@ import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 
 const DelegateStateMixinImplementation = (superclass) =>
   class DelegateStateMixinClass extends superclass {
+    static get properties() {
+      return {
+        /**
+         * A target element to which attributes and properties are delegated.
+         * @protected
+         */
+        stateTarget: {
+          type: Object,
+          observer: '_stateTargetChanged'
+        }
+      };
+    }
+
     /**
      * An array of the host attributes to delegate to the target element.
      */
@@ -21,23 +34,20 @@ const DelegateStateMixinImplementation = (superclass) =>
       return [];
     }
 
-    /**
-     * A target element to which attributes and properties are delegated.
-     */
-    get _delegateStateTarget() {
-      console.warn(`Please implement the '_delegateStateTarget' property in <${this.localName}>`);
-      return null;
-    }
-
     /** @protected */
     ready() {
       super.ready();
 
       this._createDelegateAttrsObserver();
-      this._ensureAttrsDelegated();
-
       this._createDelegatePropsObserver();
-      this._ensurePropsDelegated();
+    }
+
+    /** @protected */
+    _stateTargetChanged(target) {
+      if (target) {
+        this._ensureAttrsDelegated();
+        this._ensurePropsDelegated();
+      }
     }
 
     /** @protected */
@@ -80,7 +90,7 @@ const DelegateStateMixinImplementation = (superclass) =>
 
     /** @protected */
     _delegateAttribute(name, value) {
-      if (!this._delegateStateTarget) {
+      if (!this.stateTarget) {
         return;
       }
 
@@ -89,21 +99,21 @@ const DelegateStateMixinImplementation = (superclass) =>
       }
 
       if (typeof value === 'boolean') {
-        this._delegateStateTarget.toggleAttribute(name, value);
+        this.stateTarget.toggleAttribute(name, value);
       } else if (value) {
-        this._delegateStateTarget.setAttribute(name, value);
+        this.stateTarget.setAttribute(name, value);
       } else {
-        this._delegateStateTarget.removeAttribute(name);
+        this.stateTarget.removeAttribute(name);
       }
     }
 
     /** @protected */
     _delegateProperty(name, value) {
-      if (!this._delegateStateTarget) {
+      if (!this.stateTarget) {
         return;
       }
 
-      this._delegateStateTarget[name] = value;
+      this.stateTarget[name] = value;
     }
   };
 

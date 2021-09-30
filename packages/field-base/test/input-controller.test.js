@@ -1,39 +1,29 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { InputSlotMixin } from '../src/input-slot-mixin.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { InputController } from '../src/input-controller.js';
+import { InputMixin } from '../src/input-mixin.js';
 
 customElements.define(
-  'input-slot-mixin-element',
-  class extends InputSlotMixin(PolymerElement) {
+  'input-controller-element',
+  class extends InputMixin(ElementMixin(PolymerElement)) {
     static get template() {
       return html`<slot name="input"></slot>`;
     }
   }
 );
 
-customElements.define(
-  'input-slot-mixin-number-element',
-  class extends InputSlotMixin(PolymerElement) {
-    static get template() {
-      return html`<slot name="input"></slot>`;
-    }
-
-    constructor() {
-      super();
-
-      // Set readOnly property
-      this._setType('number');
-    }
-  }
-);
-
-describe('input-slot-mixin', () => {
-  let element, input;
+describe('input-controller', () => {
+  let element, controller, input;
 
   describe('default', () => {
     beforeEach(() => {
-      element = fixtureSync('<input-slot-mixin-element></input-slot-mixin-element>');
+      element = fixtureSync('<input-controller-element></input-controller-element>');
+      controller = new InputController(element, (node) => {
+        element._setInputElement(node);
+      });
+      element.addController(controller);
       input = element.querySelector('[slot=input]');
     });
 
@@ -46,16 +36,10 @@ describe('input-slot-mixin', () => {
     });
 
     it('should set id attribute on the input', () => {
-      const ID_REGEX = /^input-slot-mixin-element-\d+$/;
+      const ID_REGEX = /^input-controller-element-\d+$/;
       const id = input.getAttribute('id');
       expect(id).to.match(ID_REGEX);
-      expect(id.endsWith(element.constructor._uniqueInputId)).to.be.true;
-    });
-
-    it('should have a read-only type property', () => {
-      expect(element.type).to.be.undefined;
-      element.type = 'number';
-      expect(element.type).to.be.undefined;
+      expect(id.endsWith(controller.constructor._uniqueInputId)).to.be.true;
     });
 
     it('should have an empty name by default', () => {
@@ -69,33 +53,37 @@ describe('input-slot-mixin', () => {
 
   describe('name', () => {
     beforeEach(() => {
-      element = fixtureSync('<input-slot-mixin-element name="foo"></input-slot-mixin-element>');
-      input = element.querySelector('[slot=input]');
+      element = fixtureSync('<input-controller-element name="foo"></input-controller-element>');
     });
 
     it('should forward name attribute to the input', () => {
+      element.addController(new InputController(element));
+      input = element.querySelector('[slot=input]');
       expect(input.name).to.equal('foo');
     });
   });
 
   describe('value', () => {
     beforeEach(() => {
-      element = fixtureSync('<input-slot-mixin-element value="foo"></input-slot-mixin-element>');
-      input = element.querySelector('[slot=input]');
+      element = fixtureSync('<input-controller-element value="foo"></input-controller-element>');
     });
 
     it('should forward value attribute to the input', () => {
+      element.addController(new InputController(element));
+      input = element.querySelector('[slot=input]');
       expect(input.value).to.equal('foo');
     });
   });
 
   describe('type', () => {
     beforeEach(() => {
-      element = fixtureSync('<input-slot-mixin-number-element value="foo"></input-slot-mixin-number-element>');
-      input = element.querySelector('[slot=input]');
+      element = fixtureSync('<input-controller-element value="foo"></input-controller-element>');
     });
 
     it('should set input type based on the property', () => {
+      element._setType('number');
+      element.addController(new InputController(element));
+      input = element.querySelector('[slot=input]');
       expect(input.type).to.equal('number');
     });
   });

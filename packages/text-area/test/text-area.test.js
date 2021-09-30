@@ -115,6 +115,32 @@ describe('text-area', () => {
         expect(textArea.hasAttribute('has-value')).to.be.true;
       });
     });
+
+    describe('validation', () => {
+      it('should not validate the field when minlength is set', () => {
+        textArea.minlength = 2;
+        expect(textArea.invalid).to.be.false;
+      });
+
+      it('should not validate the field when maxlength is set', () => {
+        textArea.maxlength = 6;
+        expect(textArea.invalid).to.be.false;
+      });
+
+      it('should validate the field when invalid after minlength is changed', () => {
+        textArea.invalid = true;
+        const spy = sinon.spy(textArea, 'validate');
+        textArea.minlength = 2;
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should validate the field when invalid after maxlength is changed', () => {
+        textArea.invalid = true;
+        const spy = sinon.spy(textArea, 'validate');
+        textArea.maxlength = 6;
+        expect(spy.calledOnce).to.be.true;
+      });
+    });
   });
 
   describe('vaadin-text-area-appear', () => {

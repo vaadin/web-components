@@ -7,11 +7,10 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
-import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(ElementMixin(PolymerElement))))) {
+class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-custom-field';
   }
@@ -175,6 +174,8 @@ class CustomField extends FieldAriaMixin(LabelMixin(FocusMixin(ThemableMixin(Ele
 
     // See https://github.com/vaadin/vaadin-web-components/issues/94
     this.setAttribute('role', 'group');
+
+    this.ariaTarget = this;
 
     this.__setInputsFromSlot();
     this.__observer = new FlattenedNodesObserver(this.$.slot, () => {

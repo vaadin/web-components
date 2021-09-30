@@ -5,8 +5,10 @@
  */
 import { PolymerElement, html } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
-import { TextFieldMixin } from '@vaadin/field-base/src/text-field-mixin.js';
+import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
+import { InputController } from '@vaadin/field-base/src/input-controller.js';
+import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
+import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
@@ -14,7 +16,7 @@ import '@vaadin/input-container/src/vaadin-input-container.js';
 
 registerStyles('vaadin-text-field', inputFieldShared, { moduleId: 'vaadin-text-field-styles' });
 
-export class TextField extends TextFieldMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+export class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-text-field';
   }
@@ -57,6 +59,32 @@ export class TextField extends TextFieldMixin(InputSlotMixin(ThemableMixin(Eleme
     `;
   }
 
+  static get properties() {
+    return {
+      /**
+       * Maximum number of characters (in Unicode code points) that the user can enter.
+       */
+      maxlength: {
+        type: Number
+      },
+
+      /**
+       * Minimum number of characters (in Unicode code points) that the user can enter.
+       */
+      minlength: {
+        type: Number
+      }
+    };
+  }
+
+  static get delegateAttrs() {
+    return [...super.delegateAttrs, 'maxlength', 'minlength'];
+  }
+
+  static get constraints() {
+    return [...super.constraints, 'maxlength', 'minlength'];
+  }
+
   constructor() {
     super();
     this._setType('text');
@@ -65,5 +93,20 @@ export class TextField extends TextFieldMixin(InputSlotMixin(ThemableMixin(Eleme
   /** @protected */
   get clearElement() {
     return this.$.clearButton;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.addController(
+      new InputController(this, (input) => {
+        this._setInputElement(input);
+        this._setFocusElement(input);
+        this.stateTarget = input;
+        this.ariaTarget = input;
+      })
+    );
+    this.addController(new AriaLabelController(this.inputElement, this._labelNode));
   }
 }

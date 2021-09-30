@@ -5,8 +5,9 @@
  */
 import { PolymerElement, html } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
+import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
-import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
 import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -56,13 +57,11 @@ registerStyles('vaadin-number-field', inputFieldShared, { moduleId: 'vaadin-numb
  *
  * @extends HTMLElement
  * @mixes InputFieldMixin
- * @mixes InputSlotMixin
+ * @mixes SlotStylesMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-export class NumberField extends InputFieldMixin(
-  SlotStylesMixin(InputSlotMixin(ThemableMixin(ElementMixin(PolymerElement))))
-) {
+export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-number-field';
   }
@@ -232,6 +231,21 @@ export class NumberField extends InputFieldMixin(
       this.inputElement.max = this.max;
       this.__applyStep(this.step);
     }
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.addController(
+      new InputController(this, (input) => {
+        this._setInputElement(input);
+        this._setFocusElement(input);
+        this.stateTarget = input;
+        this.ariaTarget = input;
+      })
+    );
+    this.addController(new AriaLabelController(this.inputElement, this._labelNode));
   }
 
   /** @private */

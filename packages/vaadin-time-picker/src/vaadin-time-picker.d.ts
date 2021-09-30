@@ -4,10 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
-import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
-import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { TimePickerEventMap, TimePickerI18n } from './interfaces';
@@ -63,9 +60,7 @@ import { TimePickerEventMap, TimePickerI18n } from './interfaces';
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class TimePicker extends PatternMixin(
-  ClearButtonMixin(FieldAriaMixin(AriaLabelMixin(InputSlotMixin(ThemableMixin(ElementMixin(HTMLElement))))))
-) {
+declare class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   /**
    * The time value for this element.
    *

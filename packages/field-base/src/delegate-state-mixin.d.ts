@@ -17,7 +17,7 @@ interface DelegateStateMixin {
   /**
    * A target element to which attributes and properties are delegated.
    */
-  _delegateStateTarget: HTMLElement | null;
+  stateTarget: HTMLElement | null;
 }
 
 export { DelegateStateMixinConstructor, DelegateStateMixin };

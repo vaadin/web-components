@@ -4,22 +4,26 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { DelegateInputStateMixin } from './delegate-input-state-mixin.js';
+import { DelegateStateMixin } from './delegate-state-mixin.js';
+import { InputMixin } from './input-mixin.js';
+import { ValidateMixin } from './validate-mixin.js';
 
 const InputConstraintsMixinImplementation = (superclass) =>
-  class InputConstraintsMixinClass extends DelegateInputStateMixin(superclass) {
+  class InputConstraintsMixinClass extends DelegateStateMixin(ValidateMixin(InputMixin(superclass))) {
     /**
      * An array of attributes which participate in the input validation.
      * Changing these attributes will cause the input to re-validate.
      *
-     * IMPORTANT: The attributes should be properly delegated to the input element from the host
-     * which can be achieved by listing them in the list of delegated attributes (see `DelegateStateMixin.delegateAttrs`).
-     * Otherwise, the input validation will not work correctly.
-     *
-     * Note, the `required` attribute is already delegated in the parent `DelegateInputStateMixin`.
+     * IMPORTANT: The attributes should be properly delegated to the input element
+     * from the host using `delegateAttrs` getter (see `DelegateStateMixin`).
+     * The `required` attribute is already delegated.
      */
     static get constraints() {
       return ['required'];
+    }
+
+    static get delegateAttrs() {
+      return [...super.delegateAttrs, 'required'];
     }
 
     /** @protected */
@@ -34,11 +38,21 @@ const InputConstraintsMixinImplementation = (superclass) =>
      * @return {boolean}
      */
     checkValidity() {
-      if (this.inputElement && this.constructor.constraints.some((c) => this.__isValidConstraint(this[c]))) {
+      if (this.inputElement && this._hasValidConstraints(this.constructor.constraints.map((c) => this[c]))) {
         return this.inputElement.checkValidity();
       } else {
         return !this.invalid;
       }
+    }
+
+    /**
+     * Returns true if some of the provided set of constraints are valid.
+     * @param {Array} constraints
+     * @return {boolean}
+     * @protected
+     */
+    _hasValidConstraints(constraints) {
+      return constraints.some((c) => this.__isValidConstraint(c));
     }
 
     /**
@@ -63,7 +77,7 @@ const InputConstraintsMixinImplementation = (superclass) =>
         return;
       }
 
-      if (constraints.some((c) => this.__isValidConstraint(c))) {
+      if (this._hasValidConstraints(constraints)) {
         this.validate();
       } else {
         this.invalid = false;

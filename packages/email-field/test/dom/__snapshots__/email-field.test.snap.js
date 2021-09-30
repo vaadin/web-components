@@ -229,20 +229,20 @@ snapshots["vaadin-email-field theme"] =
 /* end snapshot vaadin-email-field theme */
 
 snapshots["vaadin-email-field slots"] = 
-`<input
-  autocapitalize="off"
-  slot="input"
-  type="email"
->
+`<label slot="label">
+</label>
 <div
   aria-live="assertive"
   slot="error-message"
 >
 </div>
-<label slot="label">
-</label>
 <div slot="helper">
 </div>
+<input
+  autocapitalize="off"
+  slot="input"
+  type="email"
+>
 `;
 /* end snapshot vaadin-email-field slots */
 

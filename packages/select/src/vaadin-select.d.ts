@@ -6,8 +6,7 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { SelectEventMap, SelectRenderer } from './interfaces';
 
@@ -92,9 +91,7 @@ import { SelectEventMap, SelectRenderer } from './interfaces';
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class Select extends DelegateFocusMixin(
-  FieldAriaMixin(LabelMixin(SlotMixin(ElementMixin(ThemableMixin(HTMLElement)))))
-) {
+declare class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(ThemableMixin(HTMLElement))))) {
   /**
    * Set when the select is open
    */

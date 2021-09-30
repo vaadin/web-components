@@ -4,10 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
-import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
-import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
@@ -176,10 +173,7 @@ interface ComboBox<TItem = ComboBoxDefaultItem>
   extends ComboBoxDataProviderMixin<TItem>,
     ComboBoxMixin<TItem>,
     PatternMixin,
-    FieldAriaMixin,
-    ClearButtonMixin,
-    AriaLabelMixin,
-    InputSlotMixin,
+    InputControlMixin,
     ThemableMixin,
     ElementMixin {}
 

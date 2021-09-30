@@ -7,11 +7,9 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '@polymer/iron-media-query/iron-media-query.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { AriaLabelMixin } from '@vaadin/field-base/src/aria-label-mixin.js';
-import { ClearButtonMixin } from '@vaadin/field-base/src/clear-button-mixin.js';
-import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
-import { InputSlotMixin } from '@vaadin/field-base/src/input-slot-mixin.js';
+import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
+import { InputController } from '@vaadin/field-base/src/input-controller.js';
+import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
@@ -103,20 +101,10 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes InputSlotMixin
- * @mixes AriaLabelMixin
- * @mixes ClearButtonMixin
- * @mixes FieldAriaMixin
- * @mixes DatePickerMixin
+ * @mixes InputControlMixin
  */
 class DatePicker extends DatePickerMixin(
-  FieldAriaMixin(
-    ClearButtonMixin(
-      AriaLabelMixin(
-        InputConstraintsMixin(InputSlotMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement)))))
-      )
-    )
-  )
+  InputControlMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement))))
 ) {
   static get is() {
     return 'vaadin-date-picker';
@@ -192,14 +180,6 @@ class DatePicker extends DatePickerMixin(
   }
 
   /**
-   * Element used by `FieldAriaMixin` to set ARIA attributes.
-   * @protected
-   */
-  get _ariaTarget() {
-    return this.inputElement;
-  }
-
-  /**
    * Used by `ClearButtonMixin` as a reference to the clear button element.
    * @protected
    * @return {!HTMLElement}
@@ -212,6 +192,15 @@ class DatePicker extends DatePickerMixin(
   ready() {
     super.ready();
 
+    this.addController(
+      new InputController(this, (input) => {
+        this._setInputElement(input);
+        this._setFocusElement(input);
+        this.stateTarget = input;
+        this.ariaTarget = input;
+      })
+    );
+    this.addController(new AriaLabelController(this.inputElement, this._labelNode));
     this.$.overlay.positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
   }
 

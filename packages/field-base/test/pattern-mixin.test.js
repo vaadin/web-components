@@ -2,15 +2,26 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { AriaLabelMixin } from '../src/aria-label-mixin.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { InputController } from '../src/input-controller.js';
 import { PatternMixin } from '../src/pattern-mixin.js';
-import { InputSlotMixin } from '../src/input-slot-mixin.js';
 
 customElements.define(
   'pattern-mixin-element',
-  class extends PatternMixin(AriaLabelMixin(InputSlotMixin(PolymerElement))) {
+  class extends PatternMixin(ElementMixin(PolymerElement)) {
     static get template() {
       return html`<slot name="label"></slot><slot name="input"></slot>`;
+    }
+
+    constructor() {
+      super();
+
+      this.addController(
+        new InputController(this, (input) => {
+          this._setInputElement(input);
+          this.stateTarget = input;
+        })
+      );
     }
   }
 );

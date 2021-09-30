@@ -29,10 +29,6 @@ const CheckedMixinImplementation = (superclass) =>
       return [...super.delegateProps, 'checked'];
     }
 
-    get _delegateStateTarget() {
-      return this.inputElement;
-    }
-
     /**
      * @protected
      * @override

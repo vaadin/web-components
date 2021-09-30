@@ -3,19 +3,13 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { animationFrame } from '@vaadin/component-base/src/async.js';
-import { AriaLabelMixin } from './aria-label-mixin.js';
-import { ClearButtonMixin } from './clear-button-mixin.js';
-import { DelegateFocusMixin } from './delegate-focus-mixin.js';
-import { FieldAriaMixin } from './field-aria-mixin.js';
-import { InputConstraintsMixin } from './input-constraints-mixin.js';
+import { InputControlMixin } from './input-control-mixin.js';
 
-const InputFieldMixinImplementation = (superclass) =>
-  class InputFieldMixinClass extends ClearButtonMixin(
-    FieldAriaMixin(InputConstraintsMixin(AriaLabelMixin(DelegateFocusMixin(superclass))))
-  ) {
+/**
+ * A mixin to provide logic for vaadin-text-field and related components.
+ */
+export const InputFieldMixin = (superclass) =>
+  class InputFieldMixinClass extends InputControlMixin(superclass) {
     static get properties() {
       return {
         /**
@@ -49,14 +43,6 @@ const InputFieldMixinImplementation = (superclass) =>
          */
         autocapitalize: {
           type: String
-        },
-
-        /**
-         * Specify that the value should be automatically selected when the field gains focus.
-         */
-        autoselect: {
-          type: Boolean,
-          value: false
         }
       };
     }
@@ -65,40 +51,23 @@ const InputFieldMixinImplementation = (superclass) =>
       return [...super.delegateAttrs, 'autocapitalize', 'autocomplete', 'autocorrect'];
     }
 
-    static get observers() {
-      return ['__observeOffsetHeight(errorMessage, invalid, label, helperText)'];
-    }
-
     /**
-     * Element used by `FieldAriaMixin` to set ARIA attributes.
+     * @param {HTMLElement} input
      * @protected
+     * @override
      */
-    get _ariaTarget() {
-      return this.inputElement;
-    }
+    _inputElementChanged(input) {
+      super._inputElementChanged(input);
 
-    /** @protected */
-    ready() {
-      super.ready();
-
-      // Lumo theme defines a max-height transition for the "error-message"
-      // part on invalid state change.
-      const errorPart = this.shadowRoot.querySelector('[part="error-message"]');
-      if (errorPart) {
-        errorPart.addEventListener('transitionend', () => {
-          this.__observeOffsetHeight();
-        });
-      }
-
-      if (this.inputElement) {
+      if (input) {
         // Discard value set on the custom slotted input.
-        if (this.inputElement.value && this.inputElement.value !== this.value) {
+        if (input.value && input.value !== this.value) {
           console.warn(`Please define value on the <${this.localName}> component!`);
-          this.inputElement.value = '';
+          input.value = '';
         }
 
         if (this.value) {
-          this.inputElement.value = this.value;
+          input.value = this.value;
         }
       }
     }
@@ -118,49 +87,10 @@ const InputFieldMixinImplementation = (superclass) =>
      * @protected
      * @override
      */
-    _onFocus(event) {
-      super._onFocus(event);
-
-      if (this.autoselect && this.inputElement) {
-        this.inputElement.select();
-      }
-    }
-
-    /**
-     * Override an event listener from `DelegateFocusMixin`.
-     * @param {FocusEvent} event
-     * @protected
-     * @override
-     */
     _onBlur(event) {
       super._onBlur(event);
 
       this.validate();
-    }
-
-    /**
-     * Dispatch an event if a specific size measurement property has changed.
-     * Supporting multiple properties here is needed for `vaadin-text-area`.
-     * @protected
-     */
-    _dispatchIronResizeEventIfNeeded(prop, value) {
-      const oldSize = '__old' + prop;
-      if (this[oldSize] !== undefined && this[oldSize] !== value) {
-        this.dispatchEvent(new CustomEvent('iron-resize', { bubbles: true, composed: true }));
-      }
-
-      this[oldSize] = value;
-    }
-
-    /** @private */
-    __observeOffsetHeight() {
-      this.__observeOffsetHeightDebouncer = Debouncer.debounce(
-        this.__observeOffsetHeightDebouncer,
-        animationFrame,
-        () => {
-          this._dispatchIronResizeEventIfNeeded('Height', this.offsetHeight);
-        }
-      );
     }
 
     /**
@@ -178,8 +108,3 @@ const InputFieldMixinImplementation = (superclass) =>
       }
     }
   };
-
-/**
- * A mixin to provide logic for vaadin-text-field and related components.
- */
-export const InputFieldMixin = dedupingMixin(InputFieldMixinImplementation);
