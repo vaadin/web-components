@@ -50,9 +50,9 @@ Import the component's JavaScript module, use the component in your HTML, and co
     <script type="module">
       // Importing the following modules registers <vaadin-grid> and its column
       // elements so that you can use them in this page.
-      import '@vaadin/grid/vaadin-grid.js';
-      import '@vaadin/grid/vaadin-grid-selection-column.js';
-      import '@vaadin/grid/vaadin-grid-sort-column.js';
+      import '@vaadin/vaadin-grid/vaadin-grid.js';
+      import '@vaadin/vaadin-grid/vaadin-grid-selection-column.js';
+      import '@vaadin/vaadin-grid/vaadin-grid-sort-column.js';
 
       // Use component's properties to populate data.
       const grid = document.querySelector('vaadin-grid');
