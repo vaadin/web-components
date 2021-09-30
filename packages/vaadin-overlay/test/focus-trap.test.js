@@ -92,7 +92,7 @@ describe('focus-trap', function () {
     });
 
     it('should properly detect focusable elements inside the content', () => {
-      expect(focusableElements.length).to.equal(9);
+      expect(focusableElements.length).to.equal(10);
       expect(focusableElements[0]).to.eql(overlay.content.querySelector('textarea'));
       expect(focusableElements[1]).to.eql(overlay.content.querySelector('select'));
       expect(focusableElements[2]).to.eql(overlay.$.overlay);
@@ -298,7 +298,7 @@ describe('focus-trap', function () {
     });
 
     it('should properly detect focusable elements inside the content', () => {
-      expect(focusableElements.length).to.equal(9);
+      expect(focusableElements.length).to.equal(10);
       expect(focusableElements[0]).to.eql(overlay.content.querySelector('textarea'));
       expect(focusableElements[1]).to.eql(overlay.content.querySelector('select'));
       expect(focusableElements[2]).to.eql(overlay.$.overlay);
