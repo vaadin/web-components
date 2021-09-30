@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2021 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import { GridColumnElement } from '@vaadin/vaadin-grid/src/vaadin-grid-column.js';
+import { GridColumnElement } from '@vaadin/grid/src/vaadin-grid-column.js';
 import './vaadin-crud-edit.js';
 
 /**

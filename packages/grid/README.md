@@ -6,7 +6,7 @@
 
 [&lt;vaadin-grid&gt;](https://vaadin.com/components/vaadin-grid) is a free, high quality data grid / data table Web Component, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-grid)](https://www.npmjs.com/package/@vaadin/vaadin-grid)
+[![npm version](https://badgen.net/npm/v/@vaadin/grid)](https://www.npmjs.com/package/@vaadin/grid)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-grid)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -39,13 +39,13 @@
 Install `vaadin-grid`:
 
 ```sh
-npm i @vaadin/vaadin-grid --save
+npm i @vaadin/grid --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-grid/vaadin-grid.js';
+import '@vaadin/grid/vaadin-grid.js';
 ```
 
 ## Getting started
