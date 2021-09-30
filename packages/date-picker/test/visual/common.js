@@ -6,7 +6,7 @@ registerStyles(
   css`
     :host([focus-ring]) ::slotted(input),
     :host([opened]) ::slotted(input) {
-      font-size: 0 !important;
+      caret-color: transparent;
     }
   `
 );
@@ -16,7 +16,7 @@ registerStyles(
   'vaadin-month-calendar',
   css`
     [part='date'][focused]::before {
-      animation: none;
+      animation: none !important;
     }
   `
 );
