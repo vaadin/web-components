@@ -25,6 +25,11 @@ const radioGroup = css`
     padding-top: 24px;
   }
 
+  /* TODO: remove when <vaadin-date-time-picker> is updated to use new indicator. */
+  [part='label']::after {
+    display: none;
+  }
+
   [part='label']:empty {
     display: none;
   }

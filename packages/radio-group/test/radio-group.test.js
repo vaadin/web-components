@@ -1,26 +1,11 @@
 import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { sendKeys } from '@web/test-runner-commands';
-import {
-  arrowDown,
-  arrowLeft,
-  arrowRight,
-  arrowUp,
-  aTimeout,
-  fixtureSync,
-  focusout,
-  nextFrame
-} from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-radio-group.js';
 
-function visible(e) {
-  const rect = e.getBoundingClientRect();
-  return !!(rect.width && rect.height);
-}
-
 describe('radio-group', () => {
-  let group;
-  let buttons;
+  let group, label, error, helper, buttons;
 
   beforeEach(async () => {
     group = fixtureSync(`
@@ -31,7 +16,10 @@ describe('radio-group', () => {
       </vaadin-radio-group>
     `);
     await nextFrame();
-    buttons = group._radioButtons;
+    buttons = group.__radioButtons;
+    label = group._labelNode;
+    error = group._errorNode;
+    helper = group._helperNode;
   });
 
   describe('custom element definition', () => {
@@ -166,11 +154,6 @@ describe('radio-group', () => {
       expect(group.hasAttribute('focused')).to.be.false;
     });
 
-    it('should set focused attribute on radio button focus', () => {
-      buttons[0].focus();
-      expect(group.hasAttribute('focused')).to.be.true;
-    });
-
     it('should not set focused attribute on Tab when disabled', async () => {
       group.disabled = true;
       // Try to focus on the first radio button.
@@ -251,171 +234,6 @@ describe('radio-group', () => {
     });
   });
 
-  describe('roving tabindex', () => {
-    it('should leave focusable only the 1st button by default', () => {
-      expect(buttons[0].focusElement.hasAttribute('tabindex')).to.be.false;
-      expect(buttons[1].focusElement.getAttribute('tabindex')).to.equal('-1');
-      expect(buttons[2].focusElement.getAttribute('tabindex')).to.equal('-1');
-    });
-
-    it('should leave focusable only the 2nd button when it is checked', () => {
-      buttons[1].checked = true;
-      expect(buttons[0].focusElement.getAttribute('tabindex')).to.equal('-1');
-      expect(buttons[1].focusElement.hasAttribute('tabindex')).to.be.false;
-      expect(buttons[2].focusElement.getAttribute('tabindex')).to.equal('-1');
-    });
-
-    it('should leave focusable only the 3rd button when it is checked', () => {
-      buttons[2].checked = true;
-      expect(buttons[0].focusElement.getAttribute('tabindex')).to.equal('-1');
-      expect(buttons[1].focusElement.getAttribute('tabindex')).to.equal('-1');
-      expect(buttons[2].focusElement.hasAttribute('tabindex')).to.be.false;
-    });
-  });
-
-  describe('keyboard selection', () => {
-    beforeEach(() => {
-      group.focus();
-    });
-
-    it('should not select radio button when focused', () => {
-      expect(group.value).to.be.undefined;
-    });
-
-    it('should select next radio button on arrow down when un-checked', () => {
-      arrowDown(buttons[0]);
-      expect(buttons[1].checked).to.be.true;
-      expect(group.value).to.equal('2');
-    });
-
-    it('should select next radio button on arrow down when checked', () => {
-      group.value = 'on';
-      arrowDown(buttons[0]);
-      expect(buttons[1].checked).to.be.true;
-      expect(group.value).to.equal('2');
-    });
-
-    it('should select prev radio button on arrow up when checked', () => {
-      group.value = '2';
-      buttons[1].focus();
-      arrowUp(buttons[1]);
-      expect(buttons[0].checked).to.be.true;
-      expect(group.value).to.equal('on');
-    });
-
-    it('should skip disabled button and check the next one instead', () => {
-      group.value = 'on';
-      buttons[1].disabled = true;
-      arrowDown(buttons[0]);
-      expect(buttons[2].checked).to.be.true;
-      expect(group.value).to.equal('3');
-    });
-
-    it('should set focus-ring attribute when selecting next radio', () => {
-      group.value = '2';
-      buttons[1].focus();
-      arrowDown(buttons[1]);
-      expect(buttons[2].hasAttribute('focus-ring')).to.be.true;
-    });
-
-    it('should set focus-ring attribute when selecting prev radio', () => {
-      group.value = '2';
-      buttons[1].focus();
-      arrowUp(buttons[1]);
-      expect(buttons[0].hasAttribute('focus-ring')).to.be.true;
-    });
-
-    it('should select last radio button on arrow up on first button', () => {
-      group.value = 'on';
-      arrowUp(buttons[0]);
-      expect(buttons[2].checked).to.be.true;
-      expect(group.value).to.equal('3');
-    });
-
-    it('should select first radio button on arrow down on last button', () => {
-      group.value = '3';
-      buttons[2].focus();
-      arrowDown(buttons[2]);
-      expect(buttons[0].checked).to.be.true;
-      expect(group.value).to.equal('on');
-    });
-
-    it('should select next radio button on arrow right when checked', () => {
-      group.value = 'on';
-      arrowRight(buttons[0]);
-      expect(buttons[1].checked).to.be.true;
-      expect(group.value).to.equal('2');
-    });
-
-    it('should select prev radio button on arrow left when checked', () => {
-      group.value = '2';
-      buttons[1].focus();
-      arrowLeft(buttons[1]);
-      expect(buttons[0].checked).to.be.true;
-      expect(group.value).to.equal('on');
-    });
-
-    it('should skip disabled button and check the next one instead', () => {
-      group.value = 'on';
-      buttons[1].disabled = true;
-      arrowRight(buttons[0]);
-      expect(buttons[2].checked).to.be.true;
-      expect(group.value).to.equal('3');
-    });
-
-    it('should select last radio button on arrow left on first button', () => {
-      group.value = 'on';
-      arrowLeft(buttons[0]);
-      expect(buttons[2].checked).to.be.true;
-      expect(group.value).to.equal('3');
-    });
-
-    it('should select first radio button on arrow right on last button', () => {
-      group.value = '3';
-      buttons[2].focus();
-      arrowRight(buttons[2]);
-      expect(buttons[0].checked).to.be.true;
-      expect(group.value).to.equal('on');
-    });
-
-    it('should not check radio button with keyboard if disabled', () => {
-      buttons[1].checked = true;
-      buttons[1].focus();
-      group.disabled = true;
-      arrowDown(buttons[1]);
-      expect(buttons[2].checked).to.be.false;
-    });
-
-    it('should not check radio button with keyboard if readonly', () => {
-      buttons[1].checked = true;
-      buttons[1].focus();
-      group.readonly = true;
-      arrowDown(buttons[1]);
-      expect(buttons[2].checked).to.be.false;
-    });
-
-    describe('RTL mode', () => {
-      beforeEach(() => {
-        group.setAttribute('dir', 'rtl');
-      });
-
-      it('should select prev radio button on arrow right when checked', () => {
-        group.value = '3';
-        buttons[2].focus();
-        arrowRight(buttons[2]);
-        expect(buttons[1].checked).to.be.true;
-        expect(group.value).to.equal('2');
-      });
-
-      it('should select next radio button on arrow left when checked', () => {
-        group.value = 'on';
-        arrowLeft(buttons[0]);
-        expect(buttons[1].checked).to.be.true;
-        expect(group.value).to.equal('2');
-      });
-    });
-  });
-
   describe('change event', () => {
     let spy;
 
@@ -431,10 +249,10 @@ describe('radio-group', () => {
       expect(event).to.be.instanceof(Event);
     });
 
-    it('should fire when selecting a radio button from keyboard', () => {
+    it('should fire when selecting a radio button from keyboard', async () => {
       buttons[1].focus();
       buttons[1].checked = true;
-      arrowDown(buttons[1]);
+      await sendKeys({ press: 'ArrowDown' });
       expect(spy.calledOnce).to.be.true;
       const event = spy.firstCall.args[0];
       expect(event).to.be.instanceof(Event);
@@ -462,12 +280,12 @@ describe('radio-group', () => {
       expect(spy.calledAfter(buttonSpy)).to.be.true;
     });
 
-    it('should be called after checked-changed on keydown', () => {
+    it('should be called after checked-changed on keydown', async () => {
       buttons[0].focus();
       buttons[0].checked = true;
       const buttonSpy = sinon.spy();
       buttons[1].addEventListener('checked-changed', buttonSpy);
-      arrowDown(buttons[0]);
+      await sendKeys({ press: 'ArrowDown' });
       expect(buttonSpy.calledOnce).to.be.true;
       expect(spy.calledAfter(buttonSpy)).to.be.true;
     });
@@ -486,23 +304,23 @@ describe('radio-group', () => {
       expect(group.value).to.equal(buttons[1].value);
     });
 
-    it('should fire after radio group value is updated on keydown', () => {
+    it('should fire after radio group value is updated on keydown', async () => {
       const changeSpy = sinon.spy();
       group.addEventListener('change', changeSpy);
       buttons[1].focus();
       buttons[1].checked = true;
-      arrowDown(buttons[1]);
+      await sendKeys({ press: 'ArrowDown' });
 
       expect(changeSpy.calledOnce).to.be.true;
       expect(group.value).to.equal(buttons[2].value);
     });
 
-    it('should have updated value after radio group value is updated on keydown', () => {
+    it('should have updated value after radio group value is updated on keydown', async () => {
       const changeSpy = sinon.spy();
       group.addEventListener('change', changeSpy);
       buttons[1].focus();
       buttons[1].checked = true;
-      arrowLeft(buttons[1]);
+      await sendKeys({ press: 'ArrowLeft' });
 
       expect(changeSpy.calledOnce).to.be.true;
 
@@ -541,18 +359,32 @@ describe('radio-group', () => {
       expect(group.invalid).to.be.false;
     });
 
-    it('should validate and set invalid on focusout when group is required', () => {
+    it('should validate and set invalid on focusout when group is required', async () => {
       group.required = true;
-      focusout(group);
+
+      // Focus on the first radio button.
+      await sendKeys({ press: 'Tab' });
+      // Move focus out of the group.
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
       expect(group.checkValidity()).to.be.false;
       expect(group.invalid).to.be.true;
     });
 
-    it('should dispatch invalid-changed event when invalid changes', () => {
+    it('should dispatch invalid-changed event when invalid changes', async () => {
       const spy = sinon.spy();
       group.addEventListener('invalid-changed', spy);
       group.required = true;
-      focusout(group);
+
+      // Focus on the first radio button.
+      await sendKeys({ press: 'Tab' });
+      // Move focus out of the group.
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -571,66 +403,20 @@ describe('radio-group', () => {
     });
   });
 
-  describe('errorMessage property', () => {
-    let error;
-
-    beforeEach(() => {
-      error = group.shadowRoot.querySelector('[part="error-message"]');
+  describe('aria-labelledby', () => {
+    it('should add label and helper text to aria-labelledby when field is valid', () => {
+      const aria = group.getAttribute('aria-labelledby');
+      expect(aria).to.include(helper.id);
+      expect(aria).to.not.include(error.id);
+      expect(aria).to.include(label.id);
     });
 
-    it('should set id and ARIA attributes to error message part', () => {
-      expect(error.getAttribute('aria-live')).to.be.equal('assertive');
-      expect(error.getAttribute('aria-hidden')).to.be.equal('true');
-      expect(/^vaadin-radio-group-error-\d+$/.test(error.id)).to.be.true;
-    });
-
-    it('should set aria-hidden to false when error is shown', () => {
-      group.errorMessage = 'Bad input!';
+    it('should add error message to aria-labelledby when field is invalid', () => {
       group.invalid = true;
-      expect(error.getAttribute('aria-hidden')).to.be.equal('false');
-    });
-
-    it('should not show error message by default', () => {
-      group.errorMessage = 'Bad input!';
-      expect(visible(error)).to.be.false;
-    });
-
-    it('should not show error message when it is empty', () => {
-      group.invalid = true;
-      expect(visible(error)).to.be.false;
-    });
-
-    it('should show error message when group is invalid', async () => {
-      group.errorMessage = 'Bad input!';
-      group.invalid = true;
-      await aTimeout(100);
-      expect(visible(error)).to.be.true;
-    });
-  });
-
-  describe('helperText property', () => {
-    it('should set has-helper attribute when not empty', () => {
-      group.helperText = 'foo';
-      expect(group.hasAttribute('has-helper')).to.be.true;
-    });
-
-    it('should not set has-helper attribute when empty string is set', () => {
-      group.helperText = '';
-      expect(group.hasAttribute('has-helper')).to.be.false;
-    });
-
-    it('should not set has-helper attribute when null is set', () => {
-      group.helperText = null;
-      expect(group.hasAttribute('has-helper')).to.be.false;
-    });
-
-    it('setting helper with slot updates has-helper attribute', () => {
-      const helper = document.createElement('div');
-      helper.setAttribute('slot', 'helper');
-      helper.textContent = 'foo';
-      group.appendChild(helper);
-      group._observer.flush();
-      expect(group.hasAttribute('has-helper')).to.be.true;
+      const aria = group.getAttribute('aria-labelledby');
+      expect(aria).to.include(helper.id);
+      expect(aria).to.include(error.id);
+      expect(aria).to.include(label.id);
     });
   });
 
@@ -660,7 +446,7 @@ describe('radio-group initial value', () => {
       </vaadin-radio-group>
     `);
     await nextFrame();
-    buttons = group._radioButtons;
+    buttons = group.__radioButtons;
   });
 
   it('should set the value based on the initially checked radio button', () => {
@@ -673,63 +459,23 @@ describe('radio-group initial value', () => {
   });
 
   it('should reset the value of radio group if the checked radio button is removed', async () => {
-    const button = buttons[2];
-    group.removeChild(button);
+    group.removeChild(buttons[2]);
     await nextFrame();
-    expect(group.value).to.not.be.equal('2');
+    expect(group.value).to.be.equal('');
   });
 
-  it('should work if value is set immediately after removing and adding new children', () => {
-    const items = [
-      { id: '1', name: 'item_1' },
-      { id: '2', name: 'item_2' },
-      { id: '3', name: 'item_3' },
-      { id: '4', name: 'item_4' }
-    ];
-    let buttonSelected = 0;
+  it('should keep value when set immediately after removing and adding new children', async () => {
+    group.__radioButtons.forEach((button) => group.removeChild(button));
 
-    function removeAndAddChildrenAndSelectNext() {
-      Array.from(group.children).forEach((button) => group.removeChild(button));
-      items.forEach((item) => {
-        const radio = document.createElement('vaadin-radio-button');
-        radio.textContent = item.name;
-        radio.value = item.id;
-        group.appendChild(radio);
-      });
-      group.value = ++buttonSelected;
-    }
+    ['value1', 'value2', 'value3'].forEach((value) => {
+      const radio = document.createElement('vaadin-radio-button');
+      radio.value = value;
+      group.appendChild(radio);
+    });
+    group.value = 'value2';
+    await nextFrame();
 
-    removeAndAddChildrenAndSelectNext();
-    group._observer.flush();
-    expect(+group.value).to.be.equal(buttonSelected);
-
-    removeAndAddChildrenAndSelectNext();
-    group._observer.flush();
-    expect(+group.value).to.be.equal(buttonSelected);
-  });
-});
-
-describe('radio-group helper slot', () => {
-  let group;
-
-  beforeEach(() => {
-    group = fixtureSync(`
-      <vaadin-radio-group>
-        <div slot="helper">foo</div>
-      </vaadin-radio-group>
-    `);
-    group._observer.flush();
-  });
-
-  it('should have has-helper attribute when slotted helper is present', () => {
-    expect(group.hasAttribute('has-helper')).to.be.true;
-  });
-
-  it('should not have has-helper attribute when slotted helper is removed', () => {
-    const helper = group.querySelector('[slot="helper"]');
-    group.removeChild(helper);
-    group._observer.flush();
-    expect(group.hasAttribute('has-helper')).to.be.false;
+    expect(group.value).to.equal('value2');
   });
 });
 
@@ -756,7 +502,6 @@ describe('radio-group wrapping', () => {
       </div>
     `);
     group = wrapper.firstElementChild;
-    group._observer.flush();
     await nextFrame();
   });
 

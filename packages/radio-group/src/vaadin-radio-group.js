@@ -6,17 +6,21 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { RadioButton } from './vaadin-radio-button.js';
 
 /**
- * `<vaadin-radio-group>` is a Web Component for grouping vaadin-radio-buttons.
+ * `<vaadin-radio-group>` is a web component that allows the user to choose one item from a group of choices.
  *
  * ```html
- * <vaadin-radio-group>
- *   <vaadin-radio-button name="foo">Foo</vaadin-radio-button>
- *   <vaadin-radio-button name="bar">Bar</vaadin-radio-button>
- *   <vaadin-radio-button name="baz">Baz</vaadin-radio-button>
+ * <vaadin-radio-group label="Travel class">
+ *   <vaadin-radio-button value="economy">Economy</vaadin-radio-button>
+ *   <vaadin-radio-button value="business">Business</vaadin-radio-button>
+ *   <vaadin-radio-button value="firstClass">First Class</vaadin-radio-button>
  * </vaadin-radio-group>
  * ```
  *
@@ -24,23 +28,27 @@ import { RadioButton } from './vaadin-radio-button.js';
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ----------------|----------------
- * `label` | The label element
- * `group-field` | The element that wraps radio-buttons
+ * Part name            | Description
+ * ---------------------|----------------
+ * `container`          | The container element
+ * `label`              | The slotted label element wrapper
+ * `group-field`        | The radio button elements wrapper
+ * `helper-text`        | The slotted helper text element wrapper
+ * `error-message`      | The slotted error message element wrapper
+ * `required-indicator` | The `required` state indicator element
  *
  * The following state attributes are available for styling:
  *
- * Attribute  | Description | Part name
- * -----------|-------------|------------
- * `disabled`   | Set when the radio group and its children are disabled. | :host
- * `readonly` | Set to a readonly radio group | :host
- * `invalid` | Set when the element is invalid | :host
- * `has-label` | Set when the element has a label | :host
- * `has-value` | Set when the element has a value | :host
- * `has-helper` | Set when the element has helper text or slot | :host
- * `has-error-message` | Set when the element has an error message, regardless if the field is valid or not | :host
- * `focused` | Set when the element contains focus | :host
+ * Attribute           | Description                               | Part name
+ * --------------------|-------------------------------------------|------------
+ * `disabled`          | Set when the element is disabled          | :host
+ * `readonly`          | Set when the element is readonly          | :host
+ * `invalid`           | Set when the element is invalid           | :host
+ * `focused`           | Set when the element is focused           | :host
+ * `has-label`         | Set when the element has a label          | :host
+ * `has-value`         | Set when the element has a value          | :host
+ * `has-helper`        | Set when the element has helper text      | :host
+ * `has-error-message` | Set when the element has an error message | :host
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
@@ -50,17 +58,21 @@ import { RadioButton } from './vaadin-radio-button.js';
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DirMixin
- * @element vaadin-radio-group
+ * @mixes KeyboardMixin
+ * @mixes DisabledMixin
+ * @mixes FocusMixin
+ * @mixes FieldMixin
  */
-class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
+class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMixin(ThemableMixin(PolymerElement)))))) {
+  static get is() {
+    return 'vaadin-radio-group';
+  }
+
   static get template() {
     return html`
       <style>
         :host {
           display: inline-flex;
-
-          /* Prevent horizontal overflow in IE 11 instead of wrapping radios */
-          max-width: 100%;
         }
 
         :host::before {
@@ -73,510 +85,384 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
           display: none !important;
         }
 
-        .vaadin-group-field-container {
+        [part='container'] {
           display: flex;
           flex-direction: column;
-
-          /* Prevent horizontal overflow in IE 11 instead of wrapping radios */
-          width: 100%;
         }
 
-        [part='label']:empty {
+        :host(:not([has-label])) [part='label'] {
           display: none;
         }
       </style>
-
-      <div class="vaadin-group-field-container">
-        <label part="label">[[label]]</label>
+      <div part="container">
+        <div part="label">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true"></span>
+        </div>
 
         <div part="group-field">
-          <slot id="slot"></slot>
+          <slot></slot>
         </div>
 
-        <div
-          part="helper-text"
-          id="[[_helperTextId]]"
-          aria-live="assertive"
-          aria-hidden$="[[_getHelperTextAriaHidden(helperText, _helperTextId, _hasSlottedHelper)]]"
-        >
-          <slot name="helper">[[helperText]]</slot>
+        <div part="helper-text">
+          <slot name="helper"></slot>
         </div>
 
-        <div
-          part="error-message"
-          id="[[_errorId]]"
-          aria-live="assertive"
-          aria-hidden$="[[_getErrorMessageAriaHidden(invalid, errorMessage, _errorId)]]"
-          >[[errorMessage]]</div
-        >
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
       </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-radio-group';
   }
 
   static get properties() {
     return {
       /**
-       * The current disabled state of the radio group. True if group and all internal radio buttons are disabled.
-       */
-      disabled: {
-        type: Boolean,
-        reflectToAttribute: true,
-        observer: '_disabledChanged'
-      },
-
-      /**
-       * This attribute indicates that the user cannot modify the value of the control.
-       */
-      readonly: {
-        type: Boolean,
-        reflectToAttribute: true,
-        observer: '_readonlyChanged'
-      },
-
-      /**
-       * This property is set to true when the value is invalid.
-       * @type {boolean}
-       */
-      invalid: {
-        type: Boolean,
-        reflectToAttribute: true,
-        notify: true,
-        value: false
-      },
-
-      /**
-       * Specifies that the user must fill in a value.
-       */
-      required: {
-        type: Boolean,
-        reflectToAttribute: true
-      },
-
-      /**
-       * Error to show when the input value is invalid.
-       * @attr {string} error-message
-       * @type {string}
-       */
-      errorMessage: {
-        type: String,
-        value: '',
-        observer: '_errorMessageChanged'
-      },
-
-      /** @private */
-      _errorId: {
-        type: String
-      },
-
-      /** @private */
-      _helperTextId: {
-        type: String
-      },
-
-      /** @private */
-      _hasSlottedHelper: Boolean,
-
-      /** @private */
-      _checkedButton: {
-        type: Object
-      },
-
-      /**
-       * String used for the label element.
-       * @type {string}
-       */
-      label: {
-        type: String,
-        value: '',
-        observer: '_labelChanged'
-      },
-
-      /**
-       * String used for the helper text.
-       * @attr {string} helper-text
-       * @type {string | null}
-       */
-      helperText: {
-        type: String,
-        value: '',
-        observer: '_helperTextChanged'
-      },
-
-      /**
-       * Value of the radio group.
+       * The value of the radio group.
+       *
+       * @type {string} value
        */
       value: {
         type: String,
         notify: true,
-        observer: '_valueChanged'
+        observer: '__valueChanged'
+      },
+
+      /**
+       * When present, the user cannot modify the value of the radio group.
+       * The property works similarly to the `disabled` property.
+       * While the `disabled` property disables all radio buttons inside the group,
+       * the `readonly` property disables only unchecked ones.
+       *
+       * @type {boolean} readonly
+       */
+      readonly: {
+        type: Boolean,
+        reflectToAttribute: true,
+        observer: '__readonlyChanged'
       }
     };
+  }
+
+  constructor() {
+    super();
+
+    this.__registerRadioButton = this.__registerRadioButton.bind(this);
+    this.__unregisterRadioButton = this.__unregisterRadioButton.bind(this);
+    this.__onRadioButtonCheckedChange = this.__onRadioButtonCheckedChange.bind(this);
   }
 
   /** @protected */
   ready() {
     super.ready();
 
-    this._addListeners();
+    this.ariaTarget = this;
 
-    // Ensure every instance has unique id
-    const uniqueId = (RadioGroupElement._uniqueRadioGroupId = 1 + RadioGroupElement._uniqueRadioGroupId || 0);
-    this._fieldName = `${this.localName}-${uniqueId}`;
-    this._errorId = `${this.localName}-error-${uniqueId}`;
-    this._helperTextId = `${this.localName}-helper-${uniqueId}`;
-
-    this._observer = new FlattenedNodesObserver(this, (info) => {
-      const checkedChangedListener = (e) => {
-        if (e.target.checked) {
-          this._changeSelectedButton(e.target);
-        }
-      };
-
-      // reverse() is used to set the last checked radio button value to radio group value
-      this._filterRadioButtons(info.addedNodes)
-        .reverse()
-        .forEach((button) => {
-          button.name = this._fieldName;
-          button.addEventListener('checked-changed', checkedChangedListener);
-          if (this.disabled) {
-            button.disabled = true;
-          }
-          if (button.checked) {
-            this._changeSelectedButton(button);
-          }
-        });
-
-      this._filterRadioButtons(info.removedNodes).forEach((button) => {
-        button.removeEventListener('checked-changed', checkedChangedListener);
-        if (button == this._checkedButton) {
-          this.value = undefined;
-        }
-      });
-
-      this._setOrToggleHasHelperAttribute();
-    });
-
+    // See https://github.com/vaadin/vaadin-web-components/issues/94
     this.setAttribute('role', 'radiogroup');
 
-    // Sometimes radio buttons are initialized after the radio group
-    // (the actual order depends on the way they are added to the DOM).
-    // That being so, `_setFocusable` should be called only after
-    // all the radio buttons in the group have been initialized and rendered.
-    // Otherwise, the radio button's focus element may be not available.
-    customElements.whenDefined(RadioButton.is).then(() => {
-      if (this._radioButtons.length) {
-        this._setFocusable(0);
-      }
-    });
-  }
+    // Ensure every instance has unique id
+    const uniqueId = (RadioGroup._uniqueRadioGroupId = 1 + RadioGroup._uniqueRadioGroupId || 0);
+    this._fieldName = `${this.localName}-${uniqueId}`;
 
-  /** @private */
-  get _radioButtons() {
-    return this._filterRadioButtons(this.querySelectorAll('*'));
+    this._observer = new FlattenedNodesObserver(this, ({ addedNodes, removedNodes }) => {
+      // Registers the added radio buttons in the reverse order
+      // in order for the group to take the value of the most recent button.
+      this.__filterRadioButtons(addedNodes).reverse().forEach(this.__registerRadioButton);
+
+      // Unregisters the removed radio buttons.
+      this.__filterRadioButtons(removedNodes).forEach(this.__unregisterRadioButton);
+    });
   }
 
   /**
-   * @param {boolean} focused
-   * @protected
+   * @param {!Array<!HTMLCollection | !HTMLElement>} nodes
+   * @return {!Array<!RadioButton>}
+   * @private
    */
-  _setFocused(focused) {
-    if (focused) {
-      this.setAttribute('focused', '');
-    } else {
-      this.removeAttribute('focused');
-    }
-  }
-
-  /** @private */
-  _filterRadioButtons(nodes) {
+  __filterRadioButtons(nodes) {
     return Array.from(nodes).filter((child) => child instanceof RadioButton);
   }
 
-  /** @private */
-  _disabledChanged(disabled) {
-    this.setAttribute('aria-disabled', disabled);
-    this._updateDisableButtons();
-  }
-
-  /** @private */
-  _updateDisableButtons() {
-    this._radioButtons.forEach((button) => {
-      if (this.disabled) {
-        button.disabled = true;
-      } else if (this.readonly) {
-        // it's not possible to set readonly to radio buttons, but we can
-        // unchecked ones instead.
-        button.disabled = button !== this._checkedButton && this.readonly;
-      } else {
-        button.disabled = false;
-      }
-    });
-  }
-
-  /** @private */
-  _readonlyChanged(newV, oldV) {
-    (newV || oldV) && this._updateDisableButtons();
-  }
-
-  /** @private */
-  _addListeners() {
-    this.addEventListener('keydown', (e) => {
-      // if e.target is vaadin-radio-group then assign to checkedRadioButton currently checked radio button
-      let checkedRadioButton;
-
-      if (e.target === this) {
-        checkedRadioButton = this._checkedButton;
-      } else {
-        checkedRadioButton = e.composedPath().find((element) => {
-          return element instanceof RadioButton;
-        });
-      }
-      const horizontalRTL = this.getAttribute('dir') === 'rtl' && this.theme !== 'vertical';
-
-      // LEFT, UP - select previous radio button
-      if (e.keyCode === 37 || e.keyCode === 38) {
-        e.preventDefault();
-        this._selectIncButton(horizontalRTL, checkedRadioButton);
-      }
-
-      // RIGHT, DOWN - select next radio button
-      if (e.keyCode === 39 || e.keyCode === 40) {
-        e.preventDefault();
-        this._selectIncButton(!horizontalRTL, checkedRadioButton);
-      }
-    });
-
-    this.addEventListener('focusin', () => this._setFocused(this._containsFocus()));
-
-    this.addEventListener('focusout', () => {
-      this.validate();
-      this._setFocused(false);
-    });
+  /**
+   * A collection of the group's radio buttons.
+   *
+   * @return {!Array<!RadioButton>}
+   * @private
+   */
+  get __radioButtons() {
+    return this.__filterRadioButtons(this.children);
   }
 
   /**
-   * @param {boolean} next
-   * @param {!RadioButton} checkedRadioButton
-   * @protected
+   * A currently selected radio button.
+   *
+   * @return {!RadioButton | undefined}
+   * @private
    */
-  _selectIncButton(next, checkedRadioButton) {
-    if (next) {
-      this._selectNextButton(checkedRadioButton);
-    } else {
-      this._selectPreviousButton(checkedRadioButton);
-    }
-  }
-
-  /**
-   * @param {!RadioButton} element
-   * @param {boolean=} setFocusRing
-   * @protected
-   */
-  _selectButton(element, setFocusRing) {
-    if (this._containsFocus()) {
-      element.focus();
-      if (setFocusRing) {
-        element.setAttribute('focus-ring', '');
-      }
-    }
-    this._changeSelectedButton(element, setFocusRing);
+  get __selectedRadioButton() {
+    return this.__radioButtons.find((radioButton) => radioButton.checked);
   }
 
   /**
    * @return {boolean}
-   * @protected
+   * @private
    */
-  _containsFocus() {
-    const activeElement = this.getRootNode().activeElement;
-    return this.contains(activeElement);
+  get isHorizontalRTL() {
+    return this.getAttribute('dir') === 'rtl' && this.theme !== 'vertical';
   }
 
   /**
-   * @return {boolean}
+   * @return {string}
+   * @override
    * @protected
    */
-  _hasEnabledButtons() {
-    return !this._radioButtons.every((button) => button.disabled);
+  get _ariaAttr() {
+    return 'aria-labelledby';
   }
 
   /**
-   * @param {!RadioButton} element
+   * Override method inherited from `KeyboardMixin`
+   * to implement the custom keyboard navigation as a replacement for the native one
+   * in order for the navigation to work the same way across different browsers.
+   *
+   * @param {!KeyboardEvent} event
+   * @override
    * @protected
    */
-  _selectNextButton(element) {
-    if (!this._hasEnabledButtons()) {
-      return;
+  _onKeyDown(event) {
+    super._onKeyDown(event);
+
+    const radioButton = event.composedPath().find((node) => node instanceof RadioButton);
+
+    if (['ArrowLeft', 'ArrowUp'].includes(event.key)) {
+      event.preventDefault();
+      this.__selectNextRadioButton(radioButton);
     }
 
-    var nextButton = element.nextElementSibling || this.firstElementChild;
+    if (['ArrowRight', 'ArrowDown'].includes(event.key)) {
+      event.preventDefault();
+      this.__selectPrevRadioButton(radioButton);
+    }
+  }
 
-    if (nextButton.disabled) {
-      this._selectNextButton(nextButton);
+  /**
+   * @param {number} index
+   * @private
+   */
+  __selectNextRadioButton(radioButton) {
+    const index = this.__radioButtons.indexOf(radioButton);
+
+    this.__selectIncRadioButton(index, this.isHorizontalRTL ? 1 : -1);
+  }
+
+  /**
+   * @param {number} index
+   * @private
+   */
+  __selectPrevRadioButton(radioButton) {
+    const index = this.__radioButtons.indexOf(radioButton);
+
+    this.__selectIncRadioButton(index, this.isHorizontalRTL ? -1 : 1);
+  }
+
+  /**
+   * @param {number} index
+   * @param {number} step
+   * @private
+   */
+  __selectIncRadioButton(index, step) {
+    const newIndex = (this.__radioButtons.length + index + step) % this.__radioButtons.length;
+    const newRadioButton = this.__radioButtons[newIndex];
+
+    if (newRadioButton.disabled) {
+      this.__selectIncRadioButton(newIndex, step);
     } else {
-      this._selectButton(nextButton, true);
+      newRadioButton.focusElement.focus();
+      newRadioButton.focusElement.click();
     }
   }
 
   /**
-   * @param {!RadioButton} element
-   * @protected
+   * Registers the radio button after adding it to the group.
+   *
+   * @param {!RadioButton} radioButton
+   * @private
    */
-  _selectPreviousButton(element) {
-    if (!this._hasEnabledButtons()) {
-      return;
+  __registerRadioButton(radioButton) {
+    radioButton.name = this._fieldName;
+    radioButton.addEventListener('checked-changed', this.__onRadioButtonCheckedChange);
+
+    if (this.disabled) {
+      radioButton.disabled = true;
     }
 
-    var previousButton = element.previousElementSibling || this.lastElementChild;
-
-    if (previousButton.disabled) {
-      this._selectPreviousButton(previousButton);
-    } else {
-      this._selectButton(previousButton, true);
+    if (radioButton.checked) {
+      this.__selectRadioButton(radioButton);
     }
   }
 
   /**
-   * @param {RadioButton} button
-   * @param {boolean=} fireChangeEvent
-   * @protected
+   * Unregisters the radio button before removing it from the group.
+   *
+   * @param {!RadioButton} radioButton
+   * @private
    */
-  _changeSelectedButton(button, fireChangeEvent) {
-    if (this._checkedButton === button) {
+  __unregisterRadioButton(radioButton) {
+    radioButton.removeEventListener('checked-changed', this.__onRadioButtonCheckedChange);
+
+    if (radioButton.value === this.value) {
+      this.__selectRadioButton(null);
+    }
+  }
+
+  /**
+   * @param {!CustomEvent} event
+   * @private
+   */
+  __onRadioButtonCheckedChange(event) {
+    if (event.target.checked) {
+      this.__selectRadioButton(event.target);
+    }
+  }
+
+  /**
+   * Whenever the user sets a non-empty value,
+   * the method tries to select the radio button with that value
+   * showing a warning if no radio button was found with the given value.
+   * If the new value is empty, the method deselects the currently selected radio button.
+   * At last, the method toggles the `has-value` attribute considering the new value.
+   *
+   * @param {string | null | undefined} newValue
+   * @param {string | null | undefined} oldValue
+   * @private
+   */
+  __valueChanged(newValue, oldValue) {
+    if (!oldValue && !newValue) {
       return;
     }
 
-    this._checkedButton = button;
-
-    if (this._checkedButton) {
-      this.value = this._checkedButton.value;
-    }
-
-    this._radioButtons.forEach((button) => {
-      if (button === this._checkedButton) {
-        if (fireChangeEvent) {
-          button.click();
-        } else {
-          button.checked = true;
-        }
-      } else {
-        button.checked = false;
-      }
-    });
-
-    this.validate();
-    this.readonly && this._updateDisableButtons();
-    button && this._setFocusable(this._radioButtons.indexOf(button));
-  }
-
-  /** @private */
-  _valueChanged(newV, oldV) {
-    if (oldV && (newV === '' || newV === null || newV === undefined)) {
-      this._changeSelectedButton(null);
+    if (oldValue && !newValue) {
+      this.__selectRadioButton(null);
       this.removeAttribute('has-value');
       return;
     }
 
-    if (!this._checkedButton || newV != this._checkedButton.value) {
-      const newCheckedButton = this._radioButtons.filter((button) => button.value == newV)[0];
-
-      if (newCheckedButton) {
-        this._selectButton(newCheckedButton);
-        this.setAttribute('has-value', '');
-      } else {
-        console.warn(`No <vaadin-radio-button> with value ${newV} found.`);
-      }
-    }
-  }
-
-  /**
-   * Returns true if `value` is valid.
-   *
-   * @return {boolean} True if the value is valid.
-   */
-  validate() {
-    return !(this.invalid = !this.checkValidity());
-  }
-
-  /**
-   * Returns true if the current input value satisfies all constraints (if any)
-   * @return {boolean}
-   */
-  checkValidity() {
-    return !this.required || !!this.value;
-  }
-
-  /**
-   * @param {number} idx
-   * @protected
-   */
-  _setFocusable(idx) {
-    this._radioButtons.forEach((radioButton, radioButtonIdx) => {
-      if (radioButtonIdx === idx) {
-        radioButton.focusElement.removeAttribute('tabindex');
-      } else {
-        radioButton.focusElement.setAttribute('tabindex', '-1');
-      }
-    });
-  }
-
-  /** @private */
-  _labelChanged(label) {
-    this._setOrToggleAttribute('has-label', !!label);
-  }
-
-  /** @private */
-  _errorMessageChanged(errorMessage) {
-    this._setOrToggleAttribute('has-error-message', !!errorMessage);
-  }
-
-  /** @private */
-  _helperTextChanged(helperText) {
-    this._setOrToggleAttribute('has-helper', !!helperText);
-  }
-
-  /** @private */
-  _setOrToggleAttribute(name, value) {
-    if (!name) {
+    if (this.__selectedRadioButton && this.__selectedRadioButton.value === newValue) {
       return;
     }
 
-    if (value) {
-      this.setAttribute(name, typeof value === 'boolean' ? '' : value);
+    const newSelectedRadioButton = this.__radioButtons.find((radioButton) => {
+      return radioButton.value === newValue;
+    });
+
+    if (newSelectedRadioButton) {
+      this.__selectRadioButton(newSelectedRadioButton);
+      this.toggleAttribute('has-value', true);
     } else {
-      this.removeAttribute(name);
+      console.warn(`The radio button with the value "${newValue}" was not found.`);
     }
   }
 
-  /** @private */
-  _setOrToggleHasHelperAttribute() {
-    const slottedNodes = this.shadowRoot.querySelector(`[name="helper"]`).assignedNodes();
-    // Only has slotted helper if not a text node
-    // Text nodes are added by the helperText prop and not the helper slot
-    // The filter is added due to shady DOM triggering this slotchange event on helperText prop change
-    this._hasSlottedHelper = slottedNodes.filter((node) => node.nodeType !== 3).length > 0;
-
-    this._setOrToggleAttribute('has-helper', this._hasSlottedHelper ? 'slotted' : !!this.helperText);
+  /**
+   * Whenever `readonly` property changes on the group element,
+   * the method updates the `disabled` property for the radio buttons.
+   *
+   * @param {boolean} newValue
+   * @param {boolean} oldValue
+   * @private
+   */
+  __readonlyChanged(newValue, oldValue) {
+    if (newValue !== oldValue) {
+      this.__updateRadioButtonsDisabledProperty();
+    }
   }
 
-  /** @private */
-  _getActiveErrorId(invalid, errorMessage, errorId) {
-    return errorMessage && invalid ? errorId : undefined;
+  /**
+   * Override method inherited from `DisabledMixin`
+   * to update the `disabled` property for the radio buttons
+   * whenever the property changes on the group element.
+   *
+   * @param {boolean} disabled
+   * @override
+   * @protected
+   */
+  _disabledChanged(disabled) {
+    super._disabledChanged(disabled);
+
+    this.__updateRadioButtonsDisabledProperty();
   }
 
-  /** @private */
-  _getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
-    return (!this._getActiveErrorId(invalid, errorMessage, errorId)).toString();
+  /**
+   * Override method inherited from `FocusMixin`
+   * to prevent removing the `focused` attribute
+   * when focus moves between radio buttons inside the group.
+   *
+   * @param {!FocusEvent} event
+   * @return {boolean}
+   * @protected
+   */
+  _shouldRemoveFocus(event) {
+    return !this.contains(event.relatedTarget);
   }
 
-  _getHelperTextAriaHidden(helperText, helperTextId, hasSlottedHelper) {
-    return (!(helperText || hasSlottedHelper)).toString();
+  /**
+   * Override method inherited from `FocusMixin`
+   * to run validation when the group loses focus.
+   *
+   * @param {boolean} focused
+   * @override
+   * @protected
+   */
+  _setFocused(focused) {
+    super._setFocused(focused);
+
+    if (!focused) {
+      this.validate();
+    }
+  }
+
+  /**
+   * @param {RadioButton} radioButton
+   * @private
+   */
+  __selectRadioButton(radioButton) {
+    if (radioButton) {
+      this.value = radioButton.value;
+    } else {
+      this.value = '';
+    }
+
+    this.__radioButtons.forEach((button) => {
+      button.checked = button === radioButton;
+    });
+
+    this.validate();
+
+    if (this.readonly) {
+      this.__updateRadioButtonsDisabledProperty();
+    }
+  }
+
+  /**
+   * If the group is read-only, the method disables the unchecked radio buttons.
+   * Otherwise, the method propagates the group's `disabled` property to the radio buttons.
+   *
+   * @private
+   */
+  __updateRadioButtonsDisabledProperty() {
+    this.__radioButtons.forEach((button) => {
+      if (this.readonly) {
+        // The native radio button doesn't support the `readonly` attribute
+        // so the state can be only imitated, by disabling unchecked radio buttons.
+        button.disabled = button !== this.__selectedRadioButton;
+      } else {
+        button.disabled = this.disabled;
+      }
+    });
   }
 }
 
-customElements.define(RadioGroupElement.is, RadioGroupElement);
+customElements.define(RadioGroup.is, RadioGroup);
 
-export { RadioGroupElement };
+export { RadioGroup };

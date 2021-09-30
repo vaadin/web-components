@@ -29,6 +29,11 @@ const radioGroup = css`
     padding-bottom: 0.7em;
   }
 
+  /* TODO: remove when <vaadin-date-time-picker> is updated to use new indicator. */
+  [part='label']::after {
+    display: none;
+  }
+
   :host([focused]:not([readonly])) [part='label'] {
     color: var(--lumo-primary-text-color);
   }
