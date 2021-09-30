@@ -66,9 +66,16 @@ export function registerStyles(themeFor, styles, options = {}) {
 function getAllThemes() {
   if (window.Vaadin && window.Vaadin.styleModules) {
     if (themeRegistry.length > 0) {
-      console.warn(`Seems that styles have been registered before the
-<dom-module> styling adapter was imported.
-Make sure to import the adapter before registering any styles.`);
+      // Some styles were registered before the style-modules adapter was imported.
+      // Convert the registry to dom-modules by using the adapter.
+      themeRegistry.forEach((theme) => {
+        window.Vaadin.styleModules.registerStyles(theme.themeFor, theme.styles, {
+          moduleId: theme.moduleId,
+          include: theme.include
+        });
+      });
+      // Clear the themeRegistry
+      themeRegistry.length = 0;
     }
 
     return window.Vaadin.styleModules.getAllThemes();
@@ -111,7 +118,7 @@ function getIncludePriority(moduleName = '') {
  * @param {CSSResult[]} result
  * @returns {CSSResult[]}
  */
-function recursiveFlattenStyles(styles, result = []) {
+function recursiveFlattenStyles(styles = [], result = []) {
   if (styles instanceof CSSResult) {
     result.push(styles);
   } else if (Array.isArray(styles)) {
