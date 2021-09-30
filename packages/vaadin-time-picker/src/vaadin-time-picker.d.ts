@@ -177,3 +177,13 @@ declare global {
 }
 
 export { TimePicker };
+
+/**
+ * @deprecated Import `TimePicker` from `@vaadin/vaadin-time-picker` instead.
+ */
+export type TimePickerElement = TimePicker;
+
+/**
+ * @deprecated Import `TimePicker` from `@vaadin/vaadin-time-picker` instead.
+ */
+export const TimePickerElement: typeof TimePicker;

@@ -675,3 +675,8 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 customElements.define(TimePicker.is, TimePicker);
 
 export { TimePicker };
+
+/**
+ * @deprecated Import `TimePicker` from `@vaadin/vaadin-time-picker` instead.
+ */
+export const TimePickerElement = TimePicker;
