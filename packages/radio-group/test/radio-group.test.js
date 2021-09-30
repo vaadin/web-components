@@ -174,7 +174,7 @@ describe('radio-group', () => {
     it('should check proper button when value is set', () => {
       group.value = '2';
       expect(buttons[1].checked).to.be.true;
-      buttons[0].checked = true;
+      group.value = 'on';
       expect(buttons[0].checked).to.be.true;
     });
 
