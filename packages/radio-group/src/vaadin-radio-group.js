@@ -223,8 +223,8 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
 
   /**
    * Override method inherited from `KeyboardMixin`
-   * to implement the custom keyboard navigation as a replacement for the native one,
-   * to make the navigation work the same way across different browsers.
+   * to implement the custom keyboard navigation as a replacement for the native one
+   * in order for the navigation to work the same way across different browsers.
    *
    * @param {!KeyboardEvent} event
    * @override
