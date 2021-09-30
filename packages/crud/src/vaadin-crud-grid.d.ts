@@ -1,4 +1,4 @@
-import { GridElement } from '@vaadin/vaadin-grid/src/vaadin-grid.js';
+import { GridElement } from '@vaadin/grid/src/vaadin-grid.js';
 
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 

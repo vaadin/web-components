@@ -4,7 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
-import { GridElement } from '@vaadin/vaadin-grid/src/vaadin-grid.js';
+import { GridElement } from '@vaadin/grid/src/vaadin-grid.js';
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 

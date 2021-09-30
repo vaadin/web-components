@@ -1,4 +1,4 @@
-import { GridDefaultItem, GridElement, GridElementEventMap } from '@vaadin/vaadin-grid';
+import { GridDefaultItem, GridElement, GridElementEventMap } from '@vaadin/grid';
 
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
 

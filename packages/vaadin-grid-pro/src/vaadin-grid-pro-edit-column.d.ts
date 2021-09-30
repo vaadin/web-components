@@ -1,6 +1,6 @@
-import { GridColumnElement } from '@vaadin/vaadin-grid/src/vaadin-grid-column.js';
+import { GridColumnElement } from '@vaadin/grid/src/vaadin-grid-column.js';
 
-import { GridDefaultItem, GridBodyRenderer, GridItemModel } from '@vaadin/vaadin-grid';
+import { GridDefaultItem, GridBodyRenderer, GridItemModel } from '@vaadin/grid';
 
 import { GridProEditorType } from './interfaces';
 

@@ -5,7 +5,7 @@
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
 import { get, set } from '@polymer/polymer/lib/utils/path.js';
-import { GridColumnElement } from '@vaadin/vaadin-grid/src/vaadin-grid-column.js';
+import { GridColumnElement } from '@vaadin/grid/src/vaadin-grid-column.js';
 import './vaadin-grid-pro-edit-checkbox.js';
 import './vaadin-grid-pro-edit-select.js';
 import './vaadin-grid-pro-edit-text-field.js';

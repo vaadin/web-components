@@ -33,7 +33,7 @@
     "@vaadin/dialog": "^22.0.0-alpha6",
     "@vaadin/form-layout": "^22.0.0-alpha6",
     "@vaadin/text-field": "^22.0.0-alpha6",
-    "@vaadin/vaadin-grid": "^22.0.0-alpha6",
+    "@vaadin/grid": "^22.0.0-alpha6",
     "@vaadin/vaadin-license-checker": "^2.1.0",
     "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha6",
     "@vaadin/vaadin-material-styles": "^22.0.0-alpha6",
