@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender, enter } from '@vaadin/testing-helpers';
-import '@vaadin/vaadin-grid-pro';
+import '@vaadin/grid-pro';
 import { GridTemplatizer } from '../src/vaadin-template-renderer-grid-templatizer.js';
 
 import '../vaadin-template-renderer.js';
