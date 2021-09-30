@@ -86,6 +86,16 @@ export interface TextFieldEventMap extends HTMLElementEventMap, TextFieldCustomE
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
+  /**
+   * Maximum number of characters (in Unicode code points) that the user can enter.
+   */
+  maxlength: number | null | undefined;
+
+  /**
+   * Minimum number of characters (in Unicode code points) that the user can enter.
+   */
+  minlength: number | null | undefined;
+
   addEventListener<K extends keyof TextFieldEventMap>(
     type: K,
     listener: (this: TextField, ev: TextFieldEventMap[K]) => void,

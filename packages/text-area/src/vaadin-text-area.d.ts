@@ -79,6 +79,16 @@ export interface TextAreaEventMap extends HTMLElementEventMap, TextAreaCustomEve
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement))) {
+  /**
+   * Maximum number of characters (in Unicode code points) that the user can enter.
+   */
+  maxlength: number | null | undefined;
+
+  /**
+   * Minimum number of characters (in Unicode code points) that the user can enter.
+   */
+  minlength: number | null | undefined;
+
   addEventListener<K extends keyof TextAreaEventMap>(
     type: K,
     listener: (this: TextArea, ev: TextAreaEventMap[K]) => void,
