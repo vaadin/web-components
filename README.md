@@ -21,7 +21,7 @@
 Install the components that you need from npm:
 
 ```sh
-npm install @vaadin/grid
+npm install @vaadin/vaadin-grid
 ```
 
 ## Usage
