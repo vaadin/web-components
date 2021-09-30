@@ -176,8 +176,8 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   }
 
   /**
-   * @param {!HTMLCollection | !HTMLElement[]} nodes
-   * @return {!RadioButton[]}
+   * @param {!Array<!HTMLCollection | !HTMLElement>} nodes
+   * @return {!Array<!RadioButton>}
    * @private
    */
   __filterRadioButtons(nodes) {
@@ -187,7 +187,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   /**
    * A collection of the group's radio buttons.
    *
-   * @return {!RadioButton[]}
+   * @return {!Array<!RadioButton>}
    * @private
    */
   get __radioButtons() {
