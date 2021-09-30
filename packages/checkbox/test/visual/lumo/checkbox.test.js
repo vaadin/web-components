@@ -37,6 +37,12 @@ describe('checkbox', () => {
     await visualDiff(div, 'focus-ring');
   });
 
+  it('checked focus-ring', async () => {
+    element.checked = true;
+    await sendKeys({ press: 'Tab' });
+    await visualDiff(div, 'checked-focus-ring');
+  });
+
   describe('disabled', () => {
     beforeEach(() => {
       element.disabled = true;
