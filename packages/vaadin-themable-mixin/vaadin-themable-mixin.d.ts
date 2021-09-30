@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { CSSResultGroup } from 'lit';
+import { CSSResult, CSSResultGroup } from 'lit';
 import { ThemePropertyMixin, ThemePropertyMixinConstructor } from './vaadin-theme-property-mixin.js';
 
 declare function ThemableMixin<T extends new (...args: any[]) => {}>(
@@ -23,6 +23,18 @@ interface ThemableMixin extends ThemePropertyMixin {}
  */
 declare function registerStyles(themeFor: string | null, styles: CSSResultGroup, options?: object | null): void;
 
+type Theme = {
+  themeFor: string;
+  styles: CSSResult[];
+  moduleId?: string;
+  include?: string | string[];
+};
+
+/**
+ * For internal purposes only.
+ */
+declare const __themeRegistry: Theme[];
+
 export { css, unsafeCSS } from 'lit';
 
-export { ThemableMixin, ThemableMixinConstructor, registerStyles };
+export { ThemableMixin, ThemableMixinConstructor, registerStyles, __themeRegistry };

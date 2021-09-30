@@ -6,8 +6,7 @@
 import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
 import { stylesFromTemplate } from '@polymer/polymer/lib/utils/style-gather.js';
 import { unsafeCSS } from 'lit';
-
-const styleModules = {};
+import { __themeRegistry as themeRegistry } from '@vaadin/vaadin-themable-mixin';
 
 /**
  * @typedef CSSResult
@@ -29,7 +28,7 @@ let moduleIdIndex = 0;
  * @param {{moduleId?: string, include?: string | string[]}} options Additional options
  * @return {void}
  */
-styleModules.registerStyles = (themeFor, styles = [], options = {}) => {
+function registerStyles(themeFor, styles = [], options = {}) {
   const themeId = options.moduleId || `custom-style-module-${moduleIdIndex++}`;
 
   /** @type {DomModuleWithCachedStyles} */
@@ -65,7 +64,7 @@ styleModules.registerStyles = (themeFor, styles = [], options = {}) => {
   `;
 
   module.register(themeId);
-};
+}
 
 /**
  * Returns an array of CSS results obtained from the style module
@@ -89,7 +88,7 @@ function getModuleStyles(module) {
  * Returns all the registered dom-modules mapped as themable-mixin -compatible Theme objects
  * @returns {Theme[]}
  */
-styleModules.getAllThemes = () => {
+function getAllThemes() {
   const domModule = DomModule;
   const modules = domModule.prototype.modules;
 
@@ -105,7 +104,22 @@ styleModules.getAllThemes = () => {
       styles: module.__allStyles
     };
   });
-};
+}
 
 window.Vaadin = window.Vaadin || {};
-window.Vaadin.styleModules = styleModules;
+window.Vaadin.styleModules = {
+  getAllThemes,
+  registerStyles
+};
+
+// Convert any existing themes from the themable-mixin's themeRegistry to the style modules format
+if (themeRegistry && themeRegistry.length > 0) {
+  themeRegistry.forEach((theme) => {
+    registerStyles(theme.themeFor, theme.styles, {
+      moduleId: theme.moduleId,
+      include: theme.include
+    });
+  });
+  // Clear the themeRegistry
+  themeRegistry.length = 0;
+}
