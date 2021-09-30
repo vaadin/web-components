@@ -7,9 +7,9 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { FieldAriaMixin } from '@vaadin/field-base/src/field-aria-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { RadioButton } from './vaadin-radio-button.js';
@@ -59,6 +59,7 @@ import { RadioButton } from './vaadin-radio-button.js';
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DirMixin
+ * @mixes KeyboardMixin
  * @mixes DisabledMixin
  * @mixes FocusMixin
  * @mixes LabelMixin
@@ -236,12 +237,12 @@ class RadioGroup extends FieldAriaMixin(
 
     if (['ArrowLeft', 'ArrowUp'].includes(event.key)) {
       event.preventDefault();
-      this.__navigateToNextRadioButton(radioButton);
+      this.__selectNextRadioButton(radioButton);
     }
 
     if (['ArrowRight', 'ArrowDown'].includes(event.key)) {
       event.preventDefault();
-      this.__navigateToPrevRadioButton(radioButton);
+      this.__selectPrevRadioButton(radioButton);
     }
   }
 
@@ -249,20 +250,20 @@ class RadioGroup extends FieldAriaMixin(
    * @param {!number} index
    * @private
    */
-  __navigateToNextRadioButton(radioButton) {
+  __selectNextRadioButton(radioButton) {
     const index = this.__radioButtons.indexOf(radioButton);
 
-    this.__navigateToRadioButton(index, this.isHorizontalRTL ? 1 : -1);
+    this.__selectIncRadioButton(index, this.isHorizontalRTL ? 1 : -1);
   }
 
   /**
    * @param {!number} index
    * @private
    */
-  __navigateToPrevRadioButton(radioButton) {
+  __selectPrevRadioButton(radioButton) {
     const index = this.__radioButtons.indexOf(radioButton);
 
-    this.__navigateToRadioButton(index, this.isHorizontalRTL ? -1 : 1);
+    this.__selectIncRadioButton(index, this.isHorizontalRTL ? -1 : 1);
   }
 
   /**
@@ -270,12 +271,12 @@ class RadioGroup extends FieldAriaMixin(
    * @param {!number} step
    * @private
    */
-  __navigateToRadioButton(index, step) {
+  __selectIncRadioButton(index, step) {
     const newIndex = (this.__radioButtons.length + index + step) % this.__radioButtons.length;
     const newRadioButton = this.__radioButtons[newIndex];
 
     if (newRadioButton.disabled) {
-      this.__navigateToRadioButton(newIndex, step);
+      this.__selectIncRadioButton(newIndex, step);
     } else {
       newRadioButton.focusElement.focus();
       newRadioButton.focusElement.click();
