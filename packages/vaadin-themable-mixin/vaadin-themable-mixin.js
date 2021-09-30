@@ -65,19 +65,6 @@ export function registerStyles(themeFor, styles, options = {}) {
  */
 function getAllThemes() {
   if (window.Vaadin && window.Vaadin.styleModules) {
-    if (themeRegistry.length > 0) {
-      // Some styles were registered before the style-modules adapter was imported.
-      // Convert the registry to dom-modules by using the adapter.
-      themeRegistry.forEach((theme) => {
-        window.Vaadin.styleModules.registerStyles(theme.themeFor, theme.styles, {
-          moduleId: theme.moduleId,
-          include: theme.include
-        });
-      });
-      // Clear the themeRegistry
-      themeRegistry.length = 0;
-    }
-
     return window.Vaadin.styleModules.getAllThemes();
   } else {
     return themeRegistry;
@@ -239,3 +226,5 @@ export const ThemableMixin = (superClass) =>
       );
     }
   };
+
+export { themeRegistry as __themeRegistry };

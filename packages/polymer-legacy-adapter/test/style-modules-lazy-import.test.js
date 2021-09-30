@@ -83,6 +83,8 @@ describe('lazy import', () => {
     // Import the adapter lazily
     await import('../style-modules.js');
 
+    expect(window.Vaadin.styleModules.getAllThemes()).not.to.be.empty;
+
     // Define the custom element
     const customElement = fixtureSync('<custom-element>');
     defineCustomElement(customElementName);
