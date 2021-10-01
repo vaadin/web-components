@@ -166,7 +166,7 @@ export const FieldMixin = (superclass) =>
     __applyCustomHelper(helper) {
       this.__updateHelperId(helper);
       this._currentHelper = helper;
-      this.setAttribute('has-helper', '');
+      this.__toggleHasHelper(helper.children.length > 0 || helper.textContent.trim() !== '');
     }
 
     /** @private */
@@ -174,6 +174,11 @@ export const FieldMixin = (superclass) =>
       helper.id = this.__savedHelperId;
       this.appendChild(helper);
       this._currentHelper = helper;
+    }
+
+    /** @private */
+    __toggleHasHelper(hasHelper) {
+      this.toggleAttribute('has-helper', hasHelper);
     }
 
     /**
@@ -253,7 +258,7 @@ export const FieldMixin = (superclass) =>
         helper.textContent = helperText;
       }
 
-      this.toggleAttribute('has-helper', Boolean(helperText));
+      this.__toggleHasHelper(Boolean(helperText));
     }
 
     /** @protected */

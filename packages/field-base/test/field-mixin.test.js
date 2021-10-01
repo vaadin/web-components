@@ -321,6 +321,20 @@ describe('field-mixin', () => {
       });
     });
 
+    describe('slotted empty', () => {
+      beforeEach(() => {
+        element = fixtureSync(`
+          <field-mixin-element>
+            <div slot="helper"><span></span></div>
+          </field-mixin-element>
+        `);
+      });
+
+      it('should set has-helper attribute when helper children are empty', () => {
+        expect(element.hasAttribute('has-helper')).to.be.true;
+      });
+    });
+
     describe('lazy', () => {
       describe('DOM manipulations', () => {
         let defaultHelper;
