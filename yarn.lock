@@ -245,13 +245,6 @@
   dependencies:
     "@types/chai" "^4.2.12"
 
-"@esm-bundle/chai@^4.3.4-fix.0":
-  version "4.3.4-fix.0"
-  resolved "https://registry.yarnpkg.com/@esm-bundle/chai/-/chai-4.3.4-fix.0.tgz#3084cff7eb46d741749f47f3a48dbbdcbaf30a92"
-  integrity sha512-26SKdM4uvDWlY8/OOOxSB1AqQWeBosCX3wRYUZO7enTAj03CtVxIiCimYVG2WpULcyV51qapK4qTovwkUr5Mlw==
-  dependencies:
-    "@types/chai" "^4.2.12"
-
 "@fontsource/roboto@^4.5.1":
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/@fontsource/roboto/-/roboto-4.5.1.tgz#63f7b783f755d8f6727eb60198627e7e1be3ac20"
@@ -2045,15 +2038,6 @@
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.3.0.tgz#b8f98c72aa389985c9d6071bfd2049374b323461"
   integrity sha512-y6oWPo5NvDXXKyZd6sC4P3lVmEcCCfq5+wvVSy46gIq31rb2VRoJl+BOtTfyof05QMJkjXb5vklDZcTfQ0zlfQ==
-  dependencies:
-    "@esm-bundle/chai" "^4.3.1"
-    "@open-wc/semantic-dom-diff" "^0.19.5-next.1"
-    "@polymer/polymer" "^3.4.1"
-
-"@vaadin/testing-helpers@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.3.1.tgz#785368988a05a5b354b089e72291775087b68708"
-  integrity sha512-dtSnQcQ2guLWRODOOhI5QF452Mu/3XzZC068EW8sw3kmFutcSCQCeHGszbOniWyIF+3IEn/H2OTpOFQGNLoHsw==
   dependencies:
     "@esm-bundle/chai" "^4.3.1"
     "@open-wc/semantic-dom-diff" "^0.19.5-next.1"
