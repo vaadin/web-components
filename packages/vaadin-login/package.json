@@ -1,0 +1,33 @@
+{
+  "name": "@vaadin/vaadin-login",
+  "version": "22.0.0-alpha6",
+  "description": "vaadin-login",
+  "main": "vaadin-login-overlay.js",
+  "module": "vaadin-login-overlay.js",
+  "repository": "vaadin/vaadin-login",
+  "keywords": [
+    "Vaadin",
+    "vaadin-login",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-login/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/login": "^22.0.0-alpha6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
