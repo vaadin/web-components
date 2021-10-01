@@ -60,7 +60,7 @@ const inputField = css`
     mask-image: none;
   }
 
-  ::slotted(:is(input, textarea))::placeholder {
+  ::slotted(:is(input, textarea):placeholder-shown) {
     color: inherit;
     transition: opacity 0.175s 0.1s;
     opacity: 0.5;
@@ -102,8 +102,7 @@ const inputField = css`
   }
 
   /* Read-only and disabled */
-  :host([readonly]) ::slotted(:is(input, textarea))::placeholder,
-  :host([disabled]) ::slotted(:is(input, textarea))::placeholder {
+  :host(:is([readonly], [disabled])) ::slotted(:is(input, textarea):placeholder-shown) {
     opacity: 0;
   }
 
