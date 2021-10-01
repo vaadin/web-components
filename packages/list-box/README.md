@@ -6,7 +6,7 @@
 
 [&lt;vaadin-list-box&gt;](https://vaadin.com/components/vaadin-list-box) is a Web Component providing reusable list boxes, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-list-box)](https://www.npmjs.com/package/@vaadin/vaadin-list-box)
+[![npm version](https://badgen.net/npm/v/@vaadin/list-box)](https://www.npmjs.com/package/@vaadin/list-box)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-list-box)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -28,13 +28,13 @@
 Install `vaadin-list-box`:
 
 ```sh
-npm i @vaadin/vaadin-list-box --save
+npm i @vaadin/list-box --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-list-box/vaadin-list-box.js';
+import '@vaadin/list-box/vaadin-list-box.js';
 ```
 
 ## Getting started
