@@ -7,25 +7,11 @@ import '../vaadin-radio-group.js';
 describe('radio-group', () => {
   let group, label, error, helper, buttons;
 
-  beforeEach(async () => {
-    group = fixtureSync(`
-      <vaadin-radio-group>
-        <vaadin-radio-button>Button 1</vaadin-radio-button>
-        <vaadin-radio-button value="2">Button 2</vaadin-radio-button>
-        <vaadin-radio-button value="3">Button 3</vaadin-radio-button>
-      </vaadin-radio-group>
-    `);
-    await nextFrame();
-    buttons = group.__radioButtons;
-    label = group._labelNode;
-    error = group._errorNode;
-    helper = group._helperNode;
-  });
-
   describe('custom element definition', () => {
     let tagName;
 
     beforeEach(() => {
+      group = fixtureSync(`<vaadin-radio-group></vaadin-radio-group>`);
       tagName = group.tagName.toLowerCase();
     });
 
@@ -38,14 +24,60 @@ describe('radio-group', () => {
     });
   });
 
-  describe('disabled property', () => {
-    beforeEach(() => {
-      group.disabled = true;
+  describe('default', () => {
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-radio-group>
+          <vaadin-radio-button>Button 1</vaadin-radio-button>
+          <vaadin-radio-button disabled>Button 2</vaadin-radio-button>
+        </vaadin-radio-group>
+      `);
+      await nextFrame();
+      buttons = group.__radioButtons;
     });
 
-    it('should propagate disabled property to all the radio buttons', () => {
+    it('should not be disabled by default', () => {
+      expect(group.disabled).to.be.false;
+    });
+
+    it('should not be readonly by default', () => {
+      expect(group.readonly).to.be.false;
+    });
+
+    it('should set role to radiogroup', () => {
+      expect(group.getAttribute('role')).to.equal('radiogroup');
+    });
+
+    it('should keep initial disabled property for radio buttons', () => {
+      expect(buttons[0].disabled).to.be.false;
+      expect(buttons[1].disabled).to.be.true;
+    });
+  });
+
+  describe('disabled property', () => {
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-radio-group disabled>
+          <vaadin-radio-button>Button 1</vaadin-radio-button>
+          <vaadin-radio-button>Button 2</vaadin-radio-button>
+        </vaadin-radio-group>
+      `);
+      await nextFrame();
+      buttons = group.__radioButtons;
+    });
+
+    it('should set aria-disabled to true when disabled', () => {
+      expect(group.getAttribute('aria-disabled')).to.equal('true');
+    });
+
+    it('should propagate disabled property to radio buttons', () => {
       buttons.forEach((button) => {
         expect(button.disabled).to.be.true;
+      });
+
+      group.disabled = false;
+      buttons.forEach((button) => {
+        expect(button.disabled).to.be.false;
       });
     });
 
@@ -60,7 +92,15 @@ describe('radio-group', () => {
   describe('name', () => {
     let groupName;
 
-    beforeEach(() => {
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-radio-group>
+          <vaadin-radio-button>Button 1</vaadin-radio-button>
+          <vaadin-radio-button>Button 2</vaadin-radio-button>
+        </vaadin-radio-group>
+      `);
+      await nextFrame();
+      buttons = group.__radioButtons;
       groupName = group._fieldName;
     });
 
@@ -71,7 +111,6 @@ describe('radio-group', () => {
     it('should set the group name to the radio buttons', () => {
       expect(buttons[0].name).to.equal(groupName);
       expect(buttons[1].name).to.equal(groupName);
-      expect(buttons[2].name).to.equal(groupName);
     });
 
     it('should set the group name to the dynamically added radio buttons', async () => {
@@ -84,27 +123,30 @@ describe('radio-group', () => {
   });
 
   describe('readonly property', () => {
-    it('should not be set by default', () => {
-      expect(group.readonly).to.be.undefined;
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-radio-group readonly>
+          <vaadin-radio-button value="1">Button 1</vaadin-radio-button>
+          <vaadin-radio-button value="2">Button 2</vaadin-radio-button>
+        </vaadin-radio-group>
+      `);
+      await nextFrame();
+      buttons = group.__radioButtons;
     });
 
     it('should disable unchecked buttons when readonly', () => {
-      group.readonly = true;
       buttons.forEach((button) => {
         expect(button.disabled).to.be.true;
       });
     });
 
     it('should enable button when value is set while readonly', () => {
-      group.readonly = true;
       group.value = '2';
       expect(buttons[0].disabled).to.be.true;
       expect(buttons[1].disabled).to.be.false;
-      expect(buttons[2].disabled).to.be.true;
     });
 
     it('should enable all buttons when readonly is set back to false', () => {
-      group.readonly = true;
       group.readonly = false;
       buttons.forEach((button) => {
         expect(button.disabled).to.be.false;
@@ -112,14 +154,18 @@ describe('radio-group', () => {
     });
 
     it('should reflect to lowercase readonly attribute', () => {
-      group.readonly = true;
-      expect(group.hasAttribute('readonly')).to.be.true;
       group.readonly = false;
       expect(group.hasAttribute('readonly')).to.be.false;
+      group.readonly = true;
+      expect(group.hasAttribute('readonly')).to.be.true;
     });
   });
 
   describe('label property', () => {
+    beforeEach(() => {
+      group = fixtureSync(`<vaadin-radio-group></vaadin-radio-group>`);
+    });
+
     it('should not have has-label attribute by default', () => {
       expect(group.hasAttribute('has-label')).to.be.false;
     });
@@ -133,6 +179,17 @@ describe('radio-group', () => {
   });
 
   describe('focused state', () => {
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-radio-group>
+          <vaadin-radio-button>Button 1</vaadin-radio-button>
+          <vaadin-radio-button>Button 2</vaadin-radio-button>
+        </vaadin-radio-group>
+      `);
+      await nextFrame();
+      buttons = group.__radioButtons;
+    });
+
     it('should set focused attribute on Tab', async () => {
       // Focus on the first radio button.
       await sendKeys({ press: 'Tab' });
@@ -164,6 +221,17 @@ describe('radio-group', () => {
   });
 
   describe('value property', () => {
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-radio-group>
+          <vaadin-radio-button>Button 1</vaadin-radio-button>
+          <vaadin-radio-button value="2">Button 2</vaadin-radio-button>
+        </vaadin-radio-group>
+      `);
+      await nextFrame();
+      buttons = group.__radioButtons;
+    });
+
     it('should set value when radio button is checked', () => {
       buttons[0].checked = true;
       expect(group.value).to.eq('on');
@@ -237,7 +305,17 @@ describe('radio-group', () => {
   describe('change event', () => {
     let spy;
 
-    beforeEach(() => {
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-radio-group>
+          <vaadin-radio-button value="1">Button 1</vaadin-radio-button>
+          <vaadin-radio-button value="2">Button 2</vaadin-radio-button>
+          <vaadin-radio-button value="3">Button 3</vaadin-radio-button>
+        </vaadin-radio-group>
+      `);
+      await nextFrame();
+      buttons = group.__radioButtons;
+
       spy = sinon.spy();
       group.addEventListener('change', spy);
     });
@@ -331,6 +409,17 @@ describe('radio-group', () => {
   });
 
   describe('validation', () => {
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-radio-group>
+          <vaadin-radio-button value="1">Button 1</vaadin-radio-button>
+          <vaadin-radio-button value="2">Button 2</vaadin-radio-button>
+        </vaadin-radio-group>
+      `);
+      await nextFrame();
+      buttons = group.__radioButtons;
+    });
+
     it('should not set required property by default', () => {
       expect(group.required).to.be.undefined;
     });
@@ -404,6 +493,13 @@ describe('radio-group', () => {
   });
 
   describe('aria-labelledby', () => {
+    beforeEach(() => {
+      group = fixtureSync(`<vaadin-radio-group></vaadin-radio-group>`);
+      helper = group._helperNode;
+      error = group._errorNode;
+      label = group._labelNode;
+    });
+
     it('should add label and helper text to aria-labelledby when field is valid', () => {
       const aria = group.getAttribute('aria-labelledby');
       expect(aria).to.include(helper.id);
@@ -420,104 +516,90 @@ describe('radio-group', () => {
     });
   });
 
-  describe('ARIA', () => {
-    it('should have proper role', () => {
-      expect(group.getAttribute('role')).to.eq('radiogroup');
-    });
-
-    it('should set aria-disabled to true when disabled', () => {
-      group.disabled = true;
-      expect(group.getAttribute('aria-disabled')).to.equal('true');
-    });
-  });
-});
-
-describe('radio-group initial value', () => {
-  let group;
-  let buttons;
-
-  beforeEach(async () => {
-    group = fixtureSync(`
-      <vaadin-radio-group>
-        <vaadin-radio-button>Button 1</vaadin-radio-button>
-        <vaadin-radio-button value="1" checked>Button 2</vaadin-radio-button>
-        <vaadin-radio-button value="2" checked>Button 3</vaadin-radio-button>
-        <vaadin-radio-button>Button 4</vaadin-radio-button>
-      </vaadin-radio-group>
-    `);
-    await nextFrame();
-    buttons = group.__radioButtons;
-  });
-
-  it('should set the value based on the initially checked radio button', () => {
-    expect(group.value).to.equal('2');
-  });
-
-  it('should set the last initially checked button value as the radio group value', () => {
-    expect(buttons[1].checked).to.be.false;
-    expect(buttons[2].checked).to.be.true;
-  });
-
-  it('should reset the value of radio group if the checked radio button is removed', async () => {
-    group.removeChild(buttons[2]);
-    await nextFrame();
-    expect(group.value).to.be.equal('');
-  });
-
-  it('should keep value when set immediately after removing and adding new children', async () => {
-    group.__radioButtons.forEach((button) => group.removeChild(button));
-
-    ['value1', 'value2', 'value3'].forEach((value) => {
-      const radio = document.createElement('vaadin-radio-button');
-      radio.value = value;
-      group.appendChild(radio);
-    });
-    group.value = 'value2';
-    await nextFrame();
-
-    expect(group.value).to.equal('value2');
-  });
-});
-
-describe('radio-group wrapping', () => {
-  let wrapper, group;
-
-  beforeEach(async () => {
-    wrapper = fixtureSync(`
-      <div style="width: 500px">
+  describe('initial value', () => {
+    beforeEach(async () => {
+      group = fixtureSync(`
         <vaadin-radio-group>
-          <vaadin-radio-button value="r_1">Radio button 1</vaadin-radio-button>
-          <vaadin-radio-button value="r_2">Radio button 2</vaadin-radio-button>
-          <vaadin-radio-button value="r_3">Radio button 3</vaadin-radio-button>
-          <vaadin-radio-button value="r_4">Radio button 4</vaadin-radio-button>
-          <vaadin-radio-button value="r_5">Radio button 5</vaadin-radio-button>
-          <vaadin-radio-button value="r_6">Radio button 6</vaadin-radio-button>
-          <vaadin-radio-button value="r_7">Radio button 7</vaadin-radio-button>
-          <vaadin-radio-button value="r_8">Radio button 8</vaadin-radio-button>
-          <vaadin-radio-button value="r_9">Radio button 9</vaadin-radio-button>
-          <vaadin-radio-button value="r_10">Radio button 10</vaadin-radio-button>
-          <vaadin-radio-button value="r_11">Radio button 11</vaadin-radio-button>
-          <vaadin-radio-button value="r_12">Radio button 12</vaadin-radio-button>
+          <vaadin-radio-button>Button 1</vaadin-radio-button>
+          <vaadin-radio-button value="1" checked>Button 2</vaadin-radio-button>
+          <vaadin-radio-button value="2" checked>Button 3</vaadin-radio-button>
+          <vaadin-radio-button>Button 4</vaadin-radio-button>
         </vaadin-radio-group>
-      </div>
-    `);
-    group = wrapper.firstElementChild;
-    await nextFrame();
+      `);
+      await nextFrame();
+      buttons = group.__radioButtons;
+    });
+
+    it('should set the value based on the initially checked radio button', () => {
+      expect(group.value).to.equal('2');
+    });
+
+    it('should set the last initially checked button value as the radio group value', () => {
+      expect(buttons[1].checked).to.be.false;
+      expect(buttons[2].checked).to.be.true;
+    });
+
+    it('should reset the value of radio group if the checked radio button is removed', async () => {
+      group.removeChild(buttons[2]);
+      await nextFrame();
+      expect(group.value).to.be.equal('');
+    });
+
+    it('should keep value when set immediately after removing and adding new children', async () => {
+      group.__radioButtons.forEach((button) => group.removeChild(button));
+
+      ['value1', 'value2', 'value3'].forEach((value) => {
+        const radio = document.createElement('vaadin-radio-button');
+        radio.value = value;
+        group.appendChild(radio);
+      });
+      group.value = 'value2';
+      await nextFrame();
+
+      expect(group.value).to.equal('value2');
+    });
   });
 
-  it('should not overflow horizontally', () => {
-    const parentWidth = wrapper.offsetWidth;
-    expect(group.offsetWidth).to.be.lte(parentWidth);
-    expect(group.shadowRoot.querySelector('[part~="group-field"]').offsetWidth).to.be.lte(parentWidth);
-  });
+  describe('wrapping', () => {
+    let wrapper;
 
-  it('should wrap radio-buttons', () => {
-    const radios = Array.from(group.children);
-    const { top: firstTop, left: firstLeft } = radios[0].getBoundingClientRect();
-    const wrappedRadios = Array.from(radios)
-      .slice(1)
-      .filter((radio) => radio.getBoundingClientRect().top > firstTop);
-    expect(wrappedRadios).to.not.be.empty;
-    expect(wrappedRadios[0].getBoundingClientRect().left).to.equal(firstLeft);
+    beforeEach(async () => {
+      wrapper = fixtureSync(`
+        <div style="width: 500px">
+          <vaadin-radio-group>
+            <vaadin-radio-button value="r_1">Radio button 1</vaadin-radio-button>
+            <vaadin-radio-button value="r_2">Radio button 2</vaadin-radio-button>
+            <vaadin-radio-button value="r_3">Radio button 3</vaadin-radio-button>
+            <vaadin-radio-button value="r_4">Radio button 4</vaadin-radio-button>
+            <vaadin-radio-button value="r_5">Radio button 5</vaadin-radio-button>
+            <vaadin-radio-button value="r_6">Radio button 6</vaadin-radio-button>
+            <vaadin-radio-button value="r_7">Radio button 7</vaadin-radio-button>
+            <vaadin-radio-button value="r_8">Radio button 8</vaadin-radio-button>
+            <vaadin-radio-button value="r_9">Radio button 9</vaadin-radio-button>
+            <vaadin-radio-button value="r_10">Radio button 10</vaadin-radio-button>
+            <vaadin-radio-button value="r_11">Radio button 11</vaadin-radio-button>
+            <vaadin-radio-button value="r_12">Radio button 12</vaadin-radio-button>
+          </vaadin-radio-group>
+        </div>
+      `);
+      group = wrapper.firstElementChild;
+      await nextFrame();
+    });
+
+    it('should not overflow horizontally', () => {
+      const parentWidth = wrapper.offsetWidth;
+      expect(group.offsetWidth).to.be.lte(parentWidth);
+      expect(group.shadowRoot.querySelector('[part~="group-field"]').offsetWidth).to.be.lte(parentWidth);
+    });
+
+    it('should wrap radio-buttons', () => {
+      const radios = Array.from(group.children);
+      const { top: firstTop, left: firstLeft } = radios[0].getBoundingClientRect();
+      const wrappedRadios = Array.from(radios)
+        .slice(1)
+        .filter((radio) => radio.getBoundingClientRect().top > firstTop);
+      expect(wrappedRadios).to.not.be.empty;
+      expect(wrappedRadios[0].getBoundingClientRect().left).to.equal(firstLeft);
+    });
   });
 });
