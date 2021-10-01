@@ -1,4 +1,4 @@
-import { ItemElement } from '@vaadin/vaadin-item/src/vaadin-item.js';
+import { ItemElement } from '@vaadin/item/src/vaadin-item.js';
 
 import { ListBoxElement } from '@vaadin/vaadin-list-box/src/vaadin-list-box.js';
 

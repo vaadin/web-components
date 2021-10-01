@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '@vaadin/vaadin-item/vaadin-item.js';
+import '@vaadin/item/vaadin-item.js';
 import '../vaadin-list-box.js';
 
 describe('vaadin-list-box', () => {

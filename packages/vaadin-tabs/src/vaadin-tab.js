@@ -5,7 +5,7 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ItemMixin } from '@vaadin/vaadin-item/src/vaadin-item-mixin.js';
+import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
