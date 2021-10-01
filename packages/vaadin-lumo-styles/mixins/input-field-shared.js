@@ -49,12 +49,6 @@ const inputField = css`
     display: none;
   }
 
-  [part='input-field'] ::slotted(:is(input, textarea)) {
-    /* Slotted input does not inherit these from the host */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
   :host([focused]) [part='input-field'] ::slotted(:is(input, textarea)) {
     -webkit-mask-image: none;
     mask-image: none;
