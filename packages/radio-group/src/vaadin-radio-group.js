@@ -138,6 +138,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
        */
       readonly: {
         type: Boolean,
+        value: false,
         reflectToAttribute: true,
         observer: '__readonlyChanged'
       }
@@ -373,7 +374,14 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
    * @private
    */
   __readonlyChanged(newValue, oldValue) {
-    if (newValue !== oldValue) {
+    // Prevent updating the `disabled` property for the radio buttons at initialization.
+    // Otherwise, the group's radio buttons may end up enabled regardless
+    // an intentionally added `disabled` attribute on some of them.
+    if (!newValue && oldValue === undefined) {
+      return;
+    }
+
+    if (oldValue !== newValue) {
       this.__updateRadioButtonsDisabledProperty();
     }
   }
@@ -383,14 +391,24 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
    * to update the `disabled` property for the radio buttons
    * whenever the property changes on the group element.
    *
-   * @param {boolean} disabled
+   * @param {boolean} newValue
+   * @param {boolean} oldValue
    * @override
    * @protected
    */
-  _disabledChanged(disabled) {
-    super._disabledChanged(disabled);
+  _disabledChanged(newValue, oldValue) {
+    super._disabledChanged(newValue, oldValue);
 
-    this.__updateRadioButtonsDisabledProperty();
+    // Prevent updating the `disabled` property for the radio buttons at initialization.
+    // Otherwise, the group's radio buttons may end up enabled regardless
+    // an intentionally added `disabled` attribute on some of them.
+    if (!newValue && oldValue === undefined) {
+      return;
+    }
+
+    if (oldValue !== newValue) {
+      this.__updateRadioButtonsDisabledProperty();
+    }
   }
 
   /**
