@@ -6,7 +6,7 @@
 
 [&lt;vaadin-item&gt;](https://vaadin.com/components/vaadin-item) is a Web Component providing a container for item elements, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-item)](https://www.npmjs.com/package/@vaadin/vaadin-item)
+[![npm version](https://badgen.net/npm/v/@vaadin/item)](https://www.npmjs.com/package/@vaadin/item)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-item)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -21,13 +21,13 @@
 Install `vaadin-item`:
 
 ```sh
-npm i @vaadin/vaadin-item --save
+npm i @vaadin/item --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-item/vaadin-item.js';
+import '@vaadin/item/vaadin-item.js';
 ```
 
 ## Getting started
