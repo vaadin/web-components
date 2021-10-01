@@ -51,19 +51,7 @@ describe('input-controller', () => {
     });
   });
 
-  describe('name', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-controller-element name="foo"></input-controller-element>');
-    });
-
-    it('should forward name attribute to the input', () => {
-      element.addController(new InputController(element));
-      input = element.querySelector('[slot=input]');
-      expect(input.name).to.equal('foo');
-    });
-  });
-
-  describe('value', () => {
+  describe('value attribute', () => {
     beforeEach(() => {
       element = fixtureSync('<input-controller-element value="foo"></input-controller-element>');
     });
@@ -75,7 +63,20 @@ describe('input-controller', () => {
     });
   });
 
-  describe('type', () => {
+  describe('value property', () => {
+    beforeEach(() => {
+      element = fixtureSync('<input-controller-element></input-controller-element>');
+      element.value = 'foo';
+    });
+
+    it('should forward value property to the input', () => {
+      element.addController(new InputController(element));
+      input = element.querySelector('[slot=input]');
+      expect(input.value).to.equal('foo');
+    });
+  });
+
+  describe('type property', () => {
     beforeEach(() => {
       element = fixtureSync('<input-controller-element value="foo"></input-controller-element>');
     });
