@@ -203,28 +203,20 @@ describe('field-mixin', () => {
         helper = element.querySelector('[slot=helper]');
       });
 
-      it('should create a helper element', () => {
+      it('should not create a helper element by default', () => {
+        expect(helper).to.be.not.ok;
+      });
+
+      it('should add a helper when helperText property is set', () => {
+        element.helperText = '3 digits';
+        helper = element.querySelector('[slot=helper]');
         expect(helper).to.be.an.instanceof(HTMLDivElement);
       });
 
-      it('should set slot on the helper', () => {
-        expect(helper.getAttribute('slot')).to.equal('helper');
-      });
-
-      it('should set id on the helper element', () => {
-        const id = helper.getAttribute('id');
-        expect(id).to.match(ID_REGEX);
-        expect(id.endsWith(element.constructor._uniqueFieldId)).to.be.true;
-      });
-
-      it('should update helper content on attribute change', () => {
+      it('should add a helper when helper-text attribute is set', () => {
         element.setAttribute('helper-text', '3 digits');
-        expect(helper.textContent).to.equal('3 digits');
-      });
-
-      it('should update helper content on property change', () => {
-        element.helperText = '3 digits';
-        expect(helper.textContent).to.equal('3 digits');
+        helper = element.querySelector('[slot=helper]');
+        expect(helper).to.be.an.instanceof(HTMLDivElement);
       });
 
       it('should not set has-helper attribute with no helper', () => {
@@ -242,6 +234,43 @@ describe('field-mixin', () => {
       });
     });
 
+    describe('property', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<field-mixin-element></field-mixin-element>`);
+        element.helperText = 'Positive number';
+        helper = element.querySelector('[slot=helper]');
+      });
+
+      it('should set slot on the generated helper element', () => {
+        expect(helper.getAttribute('slot')).to.equal('helper');
+      });
+
+      it('should set id on the generated helper element', () => {
+        const id = helper.getAttribute('id');
+        expect(id).to.match(ID_REGEX);
+        expect(id.endsWith(element.constructor._uniqueFieldId)).to.be.true;
+      });
+
+      it('should set content to the generated helper element', () => {
+        expect(helper.textContent).to.equal('Positive number');
+      });
+
+      it('should update helper content on attribute change', () => {
+        element.setAttribute('helper-text', '3 digits');
+        expect(helper.textContent).to.equal('3 digits');
+      });
+
+      it('should update helper content on property change', () => {
+        element.helperText = '3 digits';
+        expect(helper.textContent).to.equal('3 digits');
+      });
+
+      it('should remove has-helper attribute when property is unset', () => {
+        element.helperText = '';
+        expect(element.hasAttribute('has-helper')).to.be.false;
+      });
+    });
+
     describe('attribute', () => {
       beforeEach(() => {
         element = fixtureSync(`
@@ -254,6 +283,11 @@ describe('field-mixin', () => {
 
       it('should set helper text content from attribute', () => {
         expect(helper.textContent).to.equal('3 digits');
+      });
+
+      it('should remove has-helper attribute when attribute is removed', () => {
+        element.removeAttribute('helper-text');
+        expect(element.hasAttribute('has-helper')).to.be.false;
       });
     });
 
@@ -281,9 +315,9 @@ describe('field-mixin', () => {
         expect(element.hasAttribute('has-helper')).to.be.true;
       });
 
-      it('should update slotted helper content on property change', () => {
+      it('should not update slotted helper content on property change', () => {
         element.helperText = '3 digits';
-        expect(helper.textContent).to.equal('3 digits');
+        expect(helper.textContent).to.not.equal('3 digits');
       });
     });
 
@@ -293,6 +327,7 @@ describe('field-mixin', () => {
 
         beforeEach(async () => {
           element = fixtureSync('<field-mixin-element></field-mixin-element>');
+          element.helperText = 'Default helper';
           await nextFrame();
           defaultHelper = element._helperNode;
           helper = document.createElement('div');
@@ -370,6 +405,7 @@ describe('field-mixin', () => {
       describe('ID attribute', () => {
         beforeEach(async () => {
           element = fixtureSync('<field-mixin-element></field-mixin-element>');
+          element.helperText = 'Default';
           await nextFrame();
           helper = document.createElement('div');
           helper.setAttribute('slot', 'helper');
@@ -397,11 +433,22 @@ describe('field-mixin', () => {
           await nextFrame();
           expect(helper.getAttribute('id')).to.match(ID_REGEX);
         });
+
+        it('should apply helper text if the custom helper is removed', async () => {
+          element.appendChild(helper);
+          await nextFrame();
+          element.helperText = 'Default';
+          element.removeChild(helper);
+          await nextFrame();
+          const defaultHelper = element.querySelector('[slot="helper"]');
+          expect(defaultHelper.textContent).to.equal('Default');
+        });
       });
 
       describe('attributes', () => {
         beforeEach(async () => {
           element = fixtureSync('<field-mixin-element></field-mixin-element>');
+          element.helperText = 'Default';
           await nextFrame();
           helper = document.createElement('div');
           helper.setAttribute('slot', 'helper');
@@ -418,9 +465,9 @@ describe('field-mixin', () => {
           expect(element.hasAttribute('has-helper')).to.be.true;
         });
 
-        it('should update lazy helper content on property change', () => {
+        it('should not update lazy helper content on property change', () => {
           element.helperText = '3 digits';
-          expect(helper.textContent).to.equal('3 digits');
+          expect(helper.textContent).to.equal('Lazy');
         });
       });
     });
@@ -428,7 +475,7 @@ describe('field-mixin', () => {
 
   describe('aria-describedby', () => {
     beforeEach(() => {
-      element = fixtureSync(`<field-mixin-element></field-mixin-element>`);
+      element = fixtureSync(`<field-mixin-element helper-text="Helper"></field-mixin-element>`);
       label = element.querySelector('[slot=label]');
       error = element.querySelector('[slot=error-message]');
       helper = element.querySelector('[slot=helper]');
@@ -453,7 +500,7 @@ describe('field-mixin', () => {
 
   describe('aria-labelledby', () => {
     beforeEach(() => {
-      element = fixtureSync(`<field-mixin-group-element></field-mixin-group-element>`);
+      element = fixtureSync(`<field-mixin-group-element helper-text="Helper"></field-mixin-group-element>`);
       label = element.querySelector('[slot=label]');
       error = element.querySelector('[slot=error-message]');
       helper = element.querySelector('[slot=helper]');

@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { LabelMixin } from './label-mixin.js';
@@ -55,11 +56,6 @@ export const FieldMixin = (superclass) =>
           error.textContent = this.errorMessage;
           error.setAttribute('aria-live', 'assertive');
           return error;
-        },
-        helper: () => {
-          const helper = document.createElement('div');
-          helper.textContent = this.helperText;
-          return helper;
         }
       };
     }
@@ -97,53 +93,92 @@ export const FieldMixin = (superclass) =>
 
       // Save generated ID to restore later
       this.__savedHelperId = this._helperId;
+
+      this.__helperIdObserver = new MutationObserver((mutationRecord) => {
+        mutationRecord.forEach((mutation) => {
+          // only handle helper nodes
+          if (
+            mutation.type === 'attributes' &&
+            mutation.attributeName === 'id' &&
+            mutation.target === this._currentHelper &&
+            mutation.target.id !== this.__savedHelperId
+          ) {
+            this.__updateHelperId(mutation.target);
+          }
+        });
+      });
     }
 
     /** @protected */
     ready() {
       super.ready();
 
-      if (this._errorNode) {
-        this._errorNode.id = this._errorId;
+      const error = this._errorNode;
+      if (error) {
+        error.id = this._errorId;
 
-        this._applyCustomError();
+        this.__applyCustomError();
 
         this._updateErrorMessage(this.invalid, this.errorMessage);
       }
 
-      if (this._helperNode) {
-        this._currentHelper = this._helperNode;
-        this._helperNode.id = this._helperId;
-
-        this._applyCustomHelper();
-
-        this.__helperSlot = this.shadowRoot.querySelector('[name="helper"]');
-        this.__helperSlot.addEventListener('slotchange', this.__onHelperSlotChange.bind(this));
-        this.__helperIdObserver = new MutationObserver((mutationRecord) => {
-          mutationRecord.forEach((mutation) => {
-            // only handle helper nodes
-            if (
-              mutation.type === 'attributes' &&
-              mutation.attributeName === 'id' &&
-              mutation.target === this._currentHelper &&
-              mutation.target.id !== this.__savedHelperId
-            ) {
-              this.__updateHelperId(mutation.target);
-            }
-          });
-        });
-
-        this.__helperIdObserver.observe(this, { attributes: true, subtree: true });
+      const helper = this._helperNode;
+      if (helper) {
+        this.__applyCustomHelper(helper);
       }
+
+      this.__helperSlot = this.shadowRoot.querySelector('[name="helper"]');
+
+      this._observer = new FlattenedNodesObserver(this.__helperSlot, (info) => {
+        const helper = this._currentHelper;
+
+        const newHelper = info.addedNodes.find((node) => node !== helper);
+        const oldHelper = info.removedNodes.find((node) => node === helper);
+
+        if (newHelper) {
+          // Custom helper is added, remove the default one.
+          if (helper && helper.isConnected) {
+            this.removeChild(helper);
+          }
+
+          this.__applyCustomHelper(newHelper);
+
+          this.__helperIdObserver.observe(newHelper, { attributes: true, subtree: true });
+        } else if (oldHelper && this.helperText) {
+          // Custom helper is removed, restore the default one.
+          const helper = this.__defaultHelper;
+          helper.textContent = this.helperText;
+          this.__applyDefaultHelper(helper);
+        }
+      });
     }
 
-    /** @protected */
-    _applyCustomError() {
+    /** @private */
+    __applyCustomError() {
       const error = this.__errorMessage;
       if (error && error !== this.errorMessage) {
         this.errorMessage = error;
         delete this.__errorMessage;
       }
+    }
+
+    /** @private */
+    __applyCustomHelper(helper) {
+      this.__updateHelperId(helper);
+
+      const helperText = helper.textContent;
+      if (helperText !== this.helperText) {
+        this.helperText = helperText;
+      }
+
+      this._currentHelper = helper;
+    }
+
+    /** @private */
+    __applyDefaultHelper(helper) {
+      helper.id = this.__savedHelperId;
+      this.appendChild(helper);
+      this._currentHelper = helper;
     }
 
     /**
@@ -176,16 +211,17 @@ export const FieldMixin = (superclass) =>
      * @protected
      */
     _updateErrorMessage(invalid, errorMessage) {
-      if (!this._errorNode) {
+      const error = this._errorNode;
+      if (!error) {
         return;
       }
 
       // save the custom error message content
-      if (this._errorNode.textContent && !errorMessage) {
-        this.__errorMessage = this._errorNode.textContent.trim();
+      if (error.textContent && !errorMessage) {
+        this.__errorMessage = error.textContent.trim();
       }
       const hasError = Boolean(invalid && errorMessage);
-      this._errorNode.textContent = hasError ? errorMessage : '';
+      error.textContent = hasError ? errorMessage : '';
       this.toggleAttribute('has-error-message', hasError);
     }
 
@@ -203,41 +239,26 @@ export const FieldMixin = (superclass) =>
       this._helperId = newId;
     }
 
-    /** @private */
-    __onHelperSlotChange() {
-      const current = this._currentHelper;
+    /** @protected */
+    _helperTextChanged(helperText) {
+      let helper = this._helperNode;
 
-      // Check fot slotted element node that is not the one created by this mixin.
-      const customHelper = this.__helperSlot.assignedElements({ flatten: true }).find((node) => node !== current);
-
-      if (customHelper) {
-        this.__updateHelperId(customHelper);
-
-        if (current && current.isConnected) {
-          current.remove();
+      if (helperText) {
+        // Create helper lazily
+        if (!helper) {
+          helper = document.createElement('div');
+          helper.setAttribute('slot', 'helper');
+          this.__defaultHelper = helper;
+          this.__applyDefaultHelper(helper);
         }
-
-        this._applyCustomHelper();
-
-        this._currentHelper = customHelper;
-      }
-    }
-
-    /** @protected */
-    _applyCustomHelper() {
-      const helper = this._helperNode.textContent;
-      if (helper !== this.helperText) {
-        this.helperText = helper;
-      }
-    }
-
-    /** @protected */
-    _helperTextChanged(helper) {
-      if (this._helperNode) {
-        this._helperNode.textContent = helper;
       }
 
-      this.toggleAttribute('has-helper', Boolean(helper));
+      // Only set text content for default helper
+      if (helper && helper === this.__defaultHelper) {
+        helper.textContent = helperText;
+      }
+
+      this.toggleAttribute('has-helper', Boolean(helperText));
     }
 
     /** @protected */
