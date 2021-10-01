@@ -1,0 +1,33 @@
+{
+  "name": "@vaadin/vaadin-item",
+  "version": "22.0.0-alpha6",
+  "description": "vaadin-item",
+  "main": "vaadin-item.js",
+  "module": "vaadin-item.js",
+  "repository": "vaadin/vaadin-item",
+  "keywords": [
+    "Vaadin",
+    "vaadin-item",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-item/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/item": "^22.0.0-alpha6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
