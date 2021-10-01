@@ -124,6 +124,15 @@ describe('label-mixin', () => {
         await nextFrame();
         expect(element.hasAttribute('has-label')).to.be.true;
       });
+
+      it('should add the attribute when label children are initially empty', () => {
+        element = fixtureSync(`
+          <label-mixin-element>
+            <label slot="label"><div></div></label>
+          </label-mixin-element>
+        `);
+        expect(element.hasAttribute('has-label')).to.be.true;
+      });
     });
   });
 });
