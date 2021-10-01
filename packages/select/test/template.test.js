@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '@vaadin/item';
-import '@vaadin/vaadin-list-box';
+import '@vaadin/list-box';
 import '@vaadin/vaadin-template-renderer';
 import './not-animated-styles.js';
 import '../vaadin-select.js';

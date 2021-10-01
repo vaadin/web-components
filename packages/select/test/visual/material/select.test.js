@@ -2,7 +2,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/item/theme/material/vaadin-item.js';
-import '@vaadin/vaadin-list-box/theme/material/vaadin-list-box.js';
+import '@vaadin/list-box/theme/material/vaadin-list-box.js';
 import '../../not-animated-styles.js';
 import '../../../theme/material/vaadin-select.js';
 
