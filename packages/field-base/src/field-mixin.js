@@ -93,20 +93,6 @@ export const FieldMixin = (superclass) =>
 
       // Save generated ID to restore later
       this.__savedHelperId = this._helperId;
-
-      this.__helperIdObserver = new MutationObserver((mutationRecord) => {
-        mutationRecord.forEach((mutation) => {
-          // only handle helper nodes
-          if (
-            mutation.type === 'attributes' &&
-            mutation.attributeName === 'id' &&
-            mutation.target === this._currentHelper &&
-            mutation.target.id !== this.__savedHelperId
-          ) {
-            this.__updateHelperId(mutation.target);
-          }
-        });
-      });
     }
 
     /** @protected */
@@ -143,12 +129,30 @@ export const FieldMixin = (superclass) =>
 
           this.__applyCustomHelper(newHelper);
 
+          this.__helperIdObserver = new MutationObserver((mutationRecord) => {
+            mutationRecord.forEach((mutation) => {
+              // only handle helper nodes
+              if (
+                mutation.type === 'attributes' &&
+                mutation.attributeName === 'id' &&
+                mutation.target === this._currentHelper &&
+                mutation.target.id !== this.__savedHelperId
+              ) {
+                this.__updateHelperId(mutation.target);
+              }
+            });
+          });
+
           this.__helperIdObserver.observe(newHelper, { attributes: true, subtree: true });
-        } else if (oldHelper && this.helperText) {
-          // Custom helper is removed, restore the default one.
-          const helper = this.__defaultHelper;
-          helper.textContent = this.helperText;
-          this.__applyDefaultHelper(helper);
+        } else if (oldHelper) {
+          this.__helperIdObserver.disconnect();
+
+          if (this.helperText) {
+            // Custom helper is removed, restore the default one.
+            const helper = this.__defaultHelper;
+            helper.textContent = this.helperText;
+            this.__applyDefaultHelper(helper);
+          }
         }
       });
     }
