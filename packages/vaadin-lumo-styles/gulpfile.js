@@ -116,7 +116,7 @@ ${createIconset(folder, filenames)}
         });
 
         const vaadinIcons = `${createCopyright()}
-import '@vaadin/vaadin-icon/vaadin-iconset.js';
+import '@vaadin/icon/vaadin-iconset.js';
 import './version.js';
 
 const $_documentContainer = document.createElement('template');

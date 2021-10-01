@@ -34,7 +34,7 @@
     "@polymer/iron-icon": "^3.0.0",
     "@polymer/iron-iconset-svg": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-icon": "^22.0.0-alpha6",
+    "@vaadin/icon": "^22.0.0-alpha6",
     "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha6"
   },
   "devDependencies": {

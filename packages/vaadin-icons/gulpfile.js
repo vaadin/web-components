@@ -70,8 +70,8 @@ gulp.task('vaadin-icons', function () {
         fileModifier: function (file, contents) {
           // Enclose all icons in a vaadin-iconset
           return `${createCopyright()}
-import '@vaadin/vaadin-icon/vaadin-iconset.js';
-import '@vaadin/vaadin-icon/vaadin-icon.js';
+import '@vaadin/icon/vaadin-iconset.js';
+import '@vaadin/icon/vaadin-icon.js';
 
 const $_documentContainer = document.createElement('template');
 
