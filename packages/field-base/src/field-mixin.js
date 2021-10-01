@@ -165,13 +165,8 @@ export const FieldMixin = (superclass) =>
     /** @private */
     __applyCustomHelper(helper) {
       this.__updateHelperId(helper);
-
-      const helperText = helper.textContent;
-      if (helperText !== this.helperText) {
-        this.helperText = helperText;
-      }
-
       this._currentHelper = helper;
+      this.setAttribute('has-helper', '');
     }
 
     /** @private */

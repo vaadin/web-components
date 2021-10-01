@@ -301,8 +301,8 @@ describe('field-mixin', () => {
         helper = element.querySelector('[slot=helper]');
       });
 
-      it('should return slotted helper content as a helperText', () => {
-        expect(element.helperText).to.equal('Custom');
+      it('should not return slotted helper content as a helperText', () => {
+        expect(element.helperText).to.be.not.ok;
       });
 
       it('should set id on the slotted helper element', () => {
@@ -335,22 +335,22 @@ describe('field-mixin', () => {
           helper.textContent = 'Lazy';
         });
 
-        it('should return lazy helper content as a helperText using appendChild', async () => {
+        it('should handle lazy helper added using appendChild', async () => {
           element.appendChild(helper);
           await nextFrame();
-          expect(element.helperText).to.equal('Lazy');
+          expect(element._helperNode).to.equal(helper);
         });
 
-        it('should return lazy helper content as a helperText using insertBefore', async () => {
+        it('should handle lazy helper added using insertBefore', async () => {
           element.insertBefore(helper, defaultHelper);
           await nextFrame();
-          expect(element.helperText).to.equal('Lazy');
+          expect(element._helperNode).to.equal(helper);
         });
 
-        it('should return lazy helper content as a helperText using replaceChild', async () => {
+        it('should handle lazy helper added using replaceChild', async () => {
           element.replaceChild(helper, defaultHelper);
           await nextFrame();
-          expect(element.helperText).to.equal('Lazy');
+          expect(element._helperNode).to.equal(helper);
         });
 
         it('should remove the default helper from the element when using appendChild', async () => {
@@ -374,7 +374,7 @@ describe('field-mixin', () => {
           div.textContent = 'New';
           element.appendChild(div);
           await nextFrame();
-          expect(element.helperText).to.equal('New');
+          expect(element._helperNode).to.equal(div);
         });
 
         it('should support replacing lazy helper with a new one using insertBefore', async () => {
@@ -386,7 +386,7 @@ describe('field-mixin', () => {
           div.textContent = 'New';
           element.insertBefore(div, helper);
           await nextFrame();
-          expect(element.helperText).to.equal('New');
+          expect(element._helperNode).to.equal(div);
         });
 
         it('should support replacing lazy helper with a new one using replaceChild', async () => {
@@ -398,7 +398,7 @@ describe('field-mixin', () => {
           div.textContent = 'New';
           element.replaceChild(div, helper);
           await nextFrame();
-          expect(element.helperText).to.equal('New');
+          expect(element._helperNode).to.equal(div);
         });
       });
 
