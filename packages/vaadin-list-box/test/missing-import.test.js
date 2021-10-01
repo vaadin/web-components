@@ -28,7 +28,7 @@ describe('missing import', () => {
   });
 
   it('should not warn after vaadin-item is imported', async () => {
-    await import('@vaadin/vaadin-item/vaadin-item.js');
+    await import('@vaadin/item/vaadin-item.js');
     listBox._checkImport();
     expect(console.warn.called).to.be.false;
   });

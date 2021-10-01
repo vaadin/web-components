@@ -2,7 +2,7 @@ import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styl
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/font-icons.js';
 import '@vaadin/vaadin-material-styles/typography.js';
-import { item } from '@vaadin/vaadin-item/theme/material/vaadin-item-styles.js';
+import { item } from '@vaadin/item/theme/material/vaadin-item-styles.js';
 
 const comboBoxItem = css`
   :host {

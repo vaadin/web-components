@@ -1,6 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/vaadin-item/theme/material/vaadin-item.js';
+import '@vaadin/item/theme/material/vaadin-item.js';
 import '../../../theme/material/vaadin-list-box.js';
 
 describe('list-box', () => {

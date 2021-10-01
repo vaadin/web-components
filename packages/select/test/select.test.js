@@ -15,8 +15,8 @@ import {
   spaceKeyDown
 } from '@vaadin/testing-helpers';
 import { html, render } from 'lit';
+import '@vaadin/item/vaadin-item.js';
 import '@vaadin/vaadin-list-box/vaadin-list-box.js';
-import '@vaadin/vaadin-item/vaadin-item.js';
 import './not-animated-styles.js';
 import '../vaadin-select.js';
 

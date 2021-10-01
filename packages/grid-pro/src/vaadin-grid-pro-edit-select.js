@@ -5,8 +5,8 @@
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
 import { Select } from '@vaadin/select/src/vaadin-select.js';
+import '@vaadin/item/src/vaadin-item.js';
 import '@vaadin/vaadin-list-box/src/vaadin-list-box.js';
-import '@vaadin/vaadin-item/src/vaadin-item.js';
 
 /**
  * An element used internally by `<vaadin-grid-pro>`. Not intended to be used separately.

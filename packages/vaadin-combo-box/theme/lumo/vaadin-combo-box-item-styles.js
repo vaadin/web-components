@@ -1,5 +1,5 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { item } from '@vaadin/vaadin-item/theme/lumo/vaadin-item-styles.js';
+import { item } from '@vaadin/item/theme/lumo/vaadin-item-styles.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';

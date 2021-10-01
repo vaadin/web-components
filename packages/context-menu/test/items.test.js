@@ -14,8 +14,8 @@ import {
   nextRender,
   spaceKeyDown
 } from '@vaadin/testing-helpers';
+import '@vaadin/item/vaadin-item.js';
 import '@vaadin/vaadin-list-box/vaadin-list-box.js';
-import '@vaadin/vaadin-item/vaadin-item.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 
