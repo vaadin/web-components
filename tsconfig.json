@@ -12,6 +12,7 @@
     "skipDefaultLibCheck": true
   },
   "include": [
-    "packages/**/test/typings"
+    "packages/**/test/typings",
+    "test/typings"
   ]
 }

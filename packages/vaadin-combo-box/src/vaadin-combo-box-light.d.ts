@@ -86,3 +86,13 @@ declare global {
 }
 
 export { ComboBoxLight };
+
+/**
+ * @deprecated Import `ComboBoxLight` from `@vaadin/vaadin-combo-box` instead.
+ */
+export type ComboBoxLightElement = ComboBoxLight;
+
+/**
+ * @deprecated Import `ComboBoxLight` from `@vaadin/vaadin-combo-box` instead.
+ */
+export const ComboBoxLightElement: typeof ComboBoxLight;

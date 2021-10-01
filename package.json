@@ -34,11 +34,13 @@
     "test:material": "web-test-runner --config web-test-runner-material.config.js",
     "test:snapshots": "web-test-runner --config web-test-runner-snapshots.config.js",
     "test:webkit": "web-test-runner --config web-test-runner-webkit.config.js",
+    "test:smoke": "web-test-runner --config web-test-runner-smoke.config.js",
     "update:lumo": "TEST_ENV=update web-test-runner --config web-test-runner-lumo.config.js",
     "update:material": "TEST_ENV=update web-test-runner --config web-test-runner-material.config.js",
     "update:snapshots": "web-test-runner --config web-test-runner-snapshots.config.js --update-snapshots"
   },
   "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
     "@fontsource/roboto": "^4.5.1",
     "@polymer/iron-component-page": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
