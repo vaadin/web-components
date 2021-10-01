@@ -165,7 +165,7 @@ const getVisualTestGroups = (packages, theme) => {
     })
     .concat({
       name: `vaadin-icons`,
-      files: `packages/vaadin-icons/test/visual/*.test.js`
+      files: `packages/icons/test/visual/*.test.js`
     });
 };
 
@@ -225,8 +225,8 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
   if (testFile.includes('-styles')) {
     const match = testFile.match(/\/packages\/(vaadin-(lumo|material)-styles\/test\/visual\/)(.+)/);
     folder = match[1] + 'screenshots';
-  } else if (testFile.includes('vaadin-icons')) {
-    folder = 'vaadin-icons/test/visual/screenshots';
+  } else if (testFile.includes('icons')) {
+    folder = 'icons/test/visual/screenshots';
   } else {
     const match = testFile.match(/\/packages\/(.+)\.test\.js/);
     folder = match[1].replace(/(lumo|material)/, '$1/screenshots');

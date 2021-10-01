@@ -1,6 +1,6 @@
 # Vaadin Icons
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-icons)](https://www.npmjs.com/package/@vaadin/vaadin-icons)
+[![npm version](https://badgen.net/npm/v/@vaadin/icons)](https://www.npmjs.com/package/@vaadin/icons)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-icons)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -15,13 +15,13 @@ Visit **https://vaadin.com/icons** for more information and instructions how to 
 Install `vaadin-icons`:
 
 ```sh
-npm i @vaadin/vaadin-icons --save
+npm i @vaadin/icons --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-icons/vaadin-icons.js';
+import '@vaadin/icons/vaadin-icons.js';
 ```
 
 ## License
