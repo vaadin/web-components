@@ -135,25 +135,8 @@ const typography = css`
 
 registerStyles('', typography, { moduleId: 'lumo-typography' });
 
-const inputs = css`
-  /* Slotted input styles */
-  input[slot='input']::placeholder,
-  textarea[slot='textarea']::placeholder {
-    color: inherit;
-    transition: opacity 0.175s 0.1s;
-    opacity: 0.5;
-  }
-
-  [readonly] > input[slot='input']::placeholder,
-  [readonly] > textarea[slot='textarea']::placeholder,
-  [disabled] > input[slot='input']::placeholder,
-  [disabled] > textarea[slot='textarea']::placeholder {
-    opacity: 0;
-  }
-`;
-
 const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${font.toString().replace(':host', 'html')}${inputs.toString()}</style>`;
+$tpl.innerHTML = `<style>${font.toString().replace(':host', 'html')}</style>`;
 document.head.appendChild($tpl.content);
 
-export { font, inputs, typography };
+export { font, typography };

@@ -117,14 +117,13 @@ const inputField = css`
 
   /* TODO: the text opacity should be 42%, but the disabled style is 38%.
   Would need to introduce another property for it if we want to be 100% accurate. */
-  ::slotted(:is(input, textarea))::placeholder {
+  ::slotted(:is(input, textarea):placeholder-shown) {
     color: var(--material-disabled-text-color);
     transition: opacity 0.175s 0.1s;
-    opacity: 1;
   }
 
   /* prettier-ignore */
-  :host([has-label]:not([focused]):not([invalid]):not([theme='always-float-label'])) ::slotted(:is(input, textarea))::placeholder {
+  :host([has-label]:not([focused]):not([invalid]):not([theme='always-float-label'])) ::slotted(:is(input, textarea):placeholder-shown) {
     opacity: 0;
     transition-delay: 0;
   }
