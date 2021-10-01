@@ -5,7 +5,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-radio-group.js';
 
 describe('radio-group', () => {
-  let group, label, error, helper, buttons;
+  let group, buttons;
 
   describe('custom element definition', () => {
     let tagName;
@@ -493,10 +493,12 @@ describe('radio-group', () => {
   });
 
   describe('aria-labelledby', () => {
+    let error, helper, label;
+
     beforeEach(() => {
-      group = fixtureSync(`<vaadin-radio-group></vaadin-radio-group>`);
-      helper = group._helperNode;
+      group.helperText = 'Choose one';
       error = group._errorNode;
+      helper = group._helperNode;
       label = group._labelNode;
     });
 

@@ -8,7 +8,7 @@ describe('ARIA', () => {
   let comboBox, input, label, helper, error;
 
   beforeEach(() => {
-    comboBox = fixtureSync('<vaadin-combo-box label="my label"></vaadin-combo-box>');
+    comboBox = fixtureSync('<vaadin-combo-box label="my label" helper-text="Helper"></vaadin-combo-box>');
     comboBox.items = ['foo', 'bar', 'baz'];
     input = comboBox.inputElement;
     label = comboBox.querySelector('[slot=label]');
