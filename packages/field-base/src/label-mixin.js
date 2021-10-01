@@ -76,7 +76,7 @@ const LabelMixinImplementation = (superclass) =>
     /** @protected */
     _toggleHasLabelAttribute() {
       if (this._labelNode) {
-        const hasLabel = this._labelNode.children > 0 || this._labelNode.textContent.trim() !== '';
+        const hasLabel = this._labelNode.children.length > 0 || this._labelNode.textContent.trim() !== '';
 
         this.toggleAttribute('has-label', hasLabel);
       }
