@@ -6,7 +6,7 @@
 import { RadioButton } from '@vaadin/radio-group/src/vaadin-radio-button.js';
 
 /**
- * @deprecated Import `RadioButton` from `@vaadin/radio-group` instead.
+ * @deprecated Import `RadioButton` from `@vaadin/radio-group/vaadin-radio-button` instead.
  */
 export const RadioButtonElement = RadioButton;
 
