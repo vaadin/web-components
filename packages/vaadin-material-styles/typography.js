@@ -29,16 +29,7 @@ const font = css`
 `;
 
 const typography = css`
-  body {
-    font-family: var(--material-font-family);
-    font-size: var(--material-body-font-size);
-    line-height: 1.4;
-    -webkit-text-size-adjust: 100%;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Can’t combine with the above selector because that doesn’t work in browsers without native shadow dom */
+  body,
   :host {
     font-family: var(--material-font-family);
     font-size: var(--material-body-font-size);

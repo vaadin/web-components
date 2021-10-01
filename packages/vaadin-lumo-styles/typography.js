@@ -29,16 +29,7 @@ const font = css`
 `;
 
 const typography = css`
-  html {
-    font-family: var(--lumo-font-family);
-    font-size: var(--lumo-font-size, var(--lumo-font-size-m));
-    line-height: var(--lumo-line-height-m);
-    -webkit-text-size-adjust: 100%;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Can’t combine with the above selector because that doesn’t work in browsers without native shadow dom */
+  html,
   :host {
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size, var(--lumo-font-size-m));
