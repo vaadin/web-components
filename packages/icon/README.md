@@ -2,7 +2,7 @@
 
 [&lt;vaadin-icon&gt;](https://vaadin.com/docs/latest/ds/components/icon) is a Web Component for creating SVG icons, part of the [Vaadin components](https://vaadin.com/docs/latest/ds/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-icon)](https://www.npmjs.com/package/@vaadin/vaadin-icon)
+[![npm version](https://badgen.net/npm/v/@vaadin/icon)](https://www.npmjs.com/package/@vaadin/icon)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -14,13 +14,13 @@
 Install `vaadin-icon`:
 
 ```sh
-npm i @vaadin/vaadin-icon --save
+npm i @vaadin/icon --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-icon/vaadin-icon.js';
+import '@vaadin/icon/vaadin-icon.js';
 ```
 
 ## Getting started

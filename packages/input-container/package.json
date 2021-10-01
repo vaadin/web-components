@@ -31,8 +31,8 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/icon": "^22.0.0-alpha6",
     "@vaadin/testing-helpers": "^0.3.0",
-    "@vaadin/vaadin-icon": "^22.0.0-alpha6",
     "@vaadin/vaadin-icons": "^22.0.0-alpha6"
   },
   "publishConfig": {
