@@ -8,7 +8,7 @@
 
 &lt;vaadin-login-overlay&gt; is a Web Component providing a painless login experience, part of the [Vaadin components](https://vaadin.com/components). Component shows the &lt;vaadin-login-form&gt; inside of an overlay.
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-login)](https://www.npmjs.com/package/@vaadin/vaadin-login)
+[![npm version](https://badgen.net/npm/v/@vaadin/login)](https://www.npmjs.com/package/@vaadin/login)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-login)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -29,13 +29,13 @@
 Install `vaadin-login`:
 
 ```sh
-npm i @vaadin/vaadin-login --save
+npm i @vaadin/login --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-login/vaadin-login-overlay.js';
+import '@vaadin/login/vaadin-login-overlay.js';
 ```
 
 ## Getting started
