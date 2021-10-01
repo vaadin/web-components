@@ -55,9 +55,7 @@ const inputField = css`
   }
 
   ::slotted(:is(input, textarea):placeholder-shown) {
-    color: inherit;
-    transition: opacity 0.175s 0.1s;
-    opacity: 0.5;
+    color: var(--lumo-secondary-text-color);
   }
 
   /* Hover */
