@@ -2,8 +2,8 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { click, enter, fire, fixtureSync, isIOS, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '@vaadin/item/vaadin-item.js';
+import '@vaadin/list-box/vaadin-list-box.js';
 import '@vaadin/vaadin-template-renderer';
-import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 

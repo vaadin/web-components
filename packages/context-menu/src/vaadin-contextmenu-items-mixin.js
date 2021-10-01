@@ -5,7 +5,7 @@
  */
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { ItemElement } from '@vaadin/item/src/vaadin-item.js';
-import { ListBoxElement } from '@vaadin/vaadin-list-box/src/vaadin-list-box.js';
+import { ListBoxElement } from '@vaadin/list-box/src/vaadin-list-box.js';
 
 /**
  * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.

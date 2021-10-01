@@ -3,8 +3,8 @@ import sinon from 'sinon';
 import { fixtureSync, fire } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@vaadin/item/vaadin-item.js';
+import '@vaadin/list-box/vaadin-list-box.js';
 import '@vaadin/vaadin-template-renderer';
-import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 

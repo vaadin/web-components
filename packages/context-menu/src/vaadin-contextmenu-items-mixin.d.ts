@@ -1,6 +1,6 @@
 import { ItemElement } from '@vaadin/item/src/vaadin-item.js';
 
-import { ListBoxElement } from '@vaadin/vaadin-list-box/src/vaadin-list-box.js';
+import { ListBoxElement } from '@vaadin/list-box/src/vaadin-list-box.js';
 
 import { ContextMenuElement } from './vaadin-context-menu.js';
 
