@@ -10,8 +10,6 @@ snapshots["vaadin-message-input default"] =
     slot="error-message"
   >
   </div>
-  <div slot="helper">
-  </div>
   <textarea
     aria-label="Message"
     placeholder="Message"
@@ -43,8 +41,6 @@ snapshots["vaadin-message-input disabled"] =
     aria-live="assertive"
     slot="error-message"
   >
-  </div>
-  <div slot="helper">
   </div>
   <textarea
     aria-label="Message"

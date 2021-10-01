@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '../../src/vaadin-number-field.js';
+import '../../src/vaadin-text-field.js';
 
-describe('vaadin-number-field', () => {
+describe('vaadin-text-field', () => {
   let field;
 
   // Ignore generated attributes to prevent failures
@@ -12,16 +12,11 @@ describe('vaadin-number-field', () => {
   };
 
   beforeEach(() => {
-    field = fixtureSync('<vaadin-number-field></vaadin-number-field>');
+    field = fixtureSync('<vaadin-text-field></vaadin-text-field>');
   });
 
   describe('shadow', () => {
     it('default', async () => {
-      await expect(field).shadowDom.to.equalSnapshot();
-    });
-
-    it('controls', async () => {
-      field.hasControls = true;
       await expect(field).shadowDom.to.equalSnapshot();
     });
 

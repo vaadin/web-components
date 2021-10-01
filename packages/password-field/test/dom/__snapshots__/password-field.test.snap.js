@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-password-field default"] = 
+snapshots["vaadin-password-field shadow default"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -49,9 +49,9 @@ snapshots["vaadin-password-field default"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-password-field default */
+/* end snapshot vaadin-password-field shadow default */
 
-snapshots["vaadin-password-field disabled"] = 
+snapshots["vaadin-password-field shadow disabled"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -102,9 +102,9 @@ snapshots["vaadin-password-field disabled"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-password-field disabled */
+/* end snapshot vaadin-password-field shadow disabled */
 
-snapshots["vaadin-password-field readonly"] = 
+snapshots["vaadin-password-field shadow readonly"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -155,9 +155,9 @@ snapshots["vaadin-password-field readonly"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-password-field readonly */
+/* end snapshot vaadin-password-field shadow readonly */
 
-snapshots["vaadin-password-field invalid"] = 
+snapshots["vaadin-password-field shadow invalid"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -208,9 +208,9 @@ snapshots["vaadin-password-field invalid"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-password-field invalid */
+/* end snapshot vaadin-password-field shadow invalid */
 
-snapshots["vaadin-password-field theme"] = 
+snapshots["vaadin-password-field shadow theme"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -261,17 +261,15 @@ snapshots["vaadin-password-field theme"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-password-field theme */
+/* end snapshot vaadin-password-field shadow theme */
 
-snapshots["vaadin-password-field slots"] = 
+snapshots["vaadin-password-field slots default"] = 
 `<label slot="label">
 </label>
 <div
   aria-live="assertive"
   slot="error-message"
 >
-</div>
-<div slot="helper">
 </div>
 <button
   aria-label="Show password"
@@ -287,5 +285,32 @@ snapshots["vaadin-password-field slots"] =
   type="password"
 >
 `;
-/* end snapshot vaadin-password-field slots */
+/* end snapshot vaadin-password-field slots default */
+
+snapshots["vaadin-password-field slots helper"] = 
+`<label slot="label">
+</label>
+<div
+  aria-live="assertive"
+  slot="error-message"
+>
+</div>
+<button
+  aria-label="Show password"
+  aria-pressed="false"
+  slot="reveal"
+  tabindex="0"
+  type="button"
+>
+</button>
+<input
+  autocapitalize="off"
+  slot="input"
+  type="password"
+>
+<div slot="helper">
+  Helper
+</div>
+`;
+/* end snapshot vaadin-password-field slots helper */
 

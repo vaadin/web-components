@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-text-area default"] = 
+snapshots["vaadin-text-area shadow default"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -42,9 +42,9 @@ snapshots["vaadin-text-area default"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-text-area default */
+/* end snapshot vaadin-text-area shadow default */
 
-snapshots["vaadin-text-area disabled"] = 
+snapshots["vaadin-text-area shadow disabled"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -88,9 +88,9 @@ snapshots["vaadin-text-area disabled"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-text-area disabled */
+/* end snapshot vaadin-text-area shadow disabled */
 
-snapshots["vaadin-text-area readonly"] = 
+snapshots["vaadin-text-area shadow readonly"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -134,9 +134,9 @@ snapshots["vaadin-text-area readonly"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-text-area readonly */
+/* end snapshot vaadin-text-area shadow readonly */
 
-snapshots["vaadin-text-area invalid"] = 
+snapshots["vaadin-text-area shadow invalid"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -180,9 +180,9 @@ snapshots["vaadin-text-area invalid"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-text-area invalid */
+/* end snapshot vaadin-text-area shadow invalid */
 
-snapshots["vaadin-text-area theme"] = 
+snapshots["vaadin-text-area shadow theme"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -226,9 +226,9 @@ snapshots["vaadin-text-area theme"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-text-area theme */
+/* end snapshot vaadin-text-area shadow theme */
 
-snapshots["vaadin-text-area slots"] = 
+snapshots["vaadin-text-area slots default"] = 
 `<label slot="label">
 </label>
 <div
@@ -236,10 +236,24 @@ snapshots["vaadin-text-area slots"] =
   slot="error-message"
 >
 </div>
-<div slot="helper">
-</div>
 <textarea slot="textarea">
 </textarea>
 `;
-/* end snapshot vaadin-text-area slots */
+/* end snapshot vaadin-text-area slots default */
+
+snapshots["vaadin-text-area slots helper"] = 
+`<label slot="label">
+</label>
+<div
+  aria-live="assertive"
+  slot="error-message"
+>
+</div>
+<textarea slot="textarea">
+</textarea>
+<div slot="helper">
+  Helper
+</div>
+`;
+/* end snapshot vaadin-text-area slots helper */
 

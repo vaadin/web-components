@@ -15,31 +15,40 @@ describe('vaadin-select', () => {
     select = fixtureSync('<vaadin-select></vaadin-select>');
   });
 
-  it('default', async () => {
-    await expect(select).shadowDom.to.equalSnapshot();
+  describe('shadow', () => {
+    it('default', async () => {
+      await expect(select).shadowDom.to.equalSnapshot();
+    });
+
+    it('disabled', async () => {
+      select.disabled = true;
+      await expect(select).shadowDom.to.equalSnapshot();
+    });
+
+    it('readonly', async () => {
+      select.readonly = true;
+      await expect(select).shadowDom.to.equalSnapshot();
+    });
+
+    it('invalid', async () => {
+      select.invalid = true;
+      await expect(select).shadowDom.to.equalSnapshot();
+    });
+
+    it('theme', async () => {
+      select.setAttribute('theme', 'align-right');
+      await expect(select).shadowDom.to.equalSnapshot();
+    });
   });
 
-  it('disabled', async () => {
-    select.disabled = true;
-    await expect(select).shadowDom.to.equalSnapshot();
-  });
+  describe('slots', () => {
+    it('default', async () => {
+      await expect(select).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
 
-  it('readonly', async () => {
-    select.readonly = true;
-    await expect(select).shadowDom.to.equalSnapshot();
-  });
-
-  it('invalid', async () => {
-    select.invalid = true;
-    await expect(select).shadowDom.to.equalSnapshot();
-  });
-
-  it('theme', async () => {
-    select.setAttribute('theme', 'align-right');
-    await expect(select).shadowDom.to.equalSnapshot();
-  });
-
-  it('slots', async () => {
-    await expect(select).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    it('helper', async () => {
+      select.helperText = 'Helper';
+      await expect(select).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
   });
 });
