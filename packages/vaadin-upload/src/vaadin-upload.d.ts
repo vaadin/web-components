@@ -183,7 +183,6 @@ declare class UploadElement extends ThemableMixin(ElementMixin(HTMLElement)) {
    *     one: 'Select File...',
    *     many: 'Upload Files...'
    *   },
-   *   cancel: 'Cancel',
    *   error: {
    *     tooManyFiles: 'Too Many Files.',
    *     fileIsTooBig: 'File is Too Big.',
