@@ -48,9 +48,11 @@ const SlotTargetMixinImplementation = (superclass) =>
         return;
       }
 
-      let nodes = this._sourceSlot.assignedNodes({ flatten: true });
-      // issue 2709 - whitespace becomes a node
-      nodes = nodes.filter(node => !(node.nodeValue === " " && node.nodeType === 3));
+      // Exclude whitespace text nodes
+      const nodes = this._sourceSlot
+        .assignedNodes({ flatten: true })
+        .filter((node) => !(node.nodeType == Node.TEXT_NODE && node.textContent.trim() === ''));
+
       if (nodes.length > 0) {
         this._slotTarget.replaceChildren(...nodes);
       }
