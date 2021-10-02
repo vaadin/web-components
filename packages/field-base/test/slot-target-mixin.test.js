@@ -71,14 +71,14 @@ describe('slot-target-mixin', () => {
       document.body.removeChild(element);
     });
 
-    it('should populate the target element with nodes from the source slot', () => {
-      expect(element._slotTarget.childNodes).to.have.lengthOf(2);
-      expect(element._slotTarget.childNodes[0]).to.include(node1);
-      expect(element._slotTarget.childNodes[1]).to.include(node2);
+    it('should populate the target element with non-empty nodes from the source slot', () => {
+      expect(element._slotTarget.childNodes).to.have.lengthOf(1);
+      expect(element._slotTarget.firstChild).to.equal(node1);
     });
 
-    it('should not have any nodes in the source slot', () => {
-      expect(element.childNodes).to.have.lengthOf(0);
+    it('should keep whitespace text nodes in the source slot', () => {
+      expect(element.childNodes).to.have.lengthOf(1);
+      expect(element.firstChild).to.equal(node2);
     });
   });
 
@@ -91,7 +91,7 @@ describe('slot-target-mixin', () => {
       await nextFrame();
 
       expect(element._slotTarget.childNodes).to.have.lengthOf(1);
-      expect(element._slotTarget.childNodes[0]).to.equal(node);
+      expect(element._slotTarget.firstChild).to.equal(node);
     });
 
     it('should re-populate the target element when adding new nodes to the source slot', async () => {
@@ -102,7 +102,7 @@ describe('slot-target-mixin', () => {
       await nextFrame();
 
       expect(element._slotTarget.childNodes).to.have.lengthOf(1);
-      expect(element._slotTarget.childNodes[0]).to.equal(node);
+      expect(element._slotTarget.firstChild).to.equal(node);
     });
   });
 
