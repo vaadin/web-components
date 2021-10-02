@@ -74,4 +74,18 @@ describe('slot-label-mixin', () => {
       expect(element.hasAttribute('has-label')).to.be.true;
     });
   });
+
+  describe('custom label', () => {
+    beforeEach(() => {
+      element = fixtureSync(`
+        <slot-label-mixin-element>
+          <label slot="label">Custom</label>
+        </slot-label-mixin-element>
+      `);
+    });
+
+    it('should not override slotted label content', () => {
+      expect(element._labelNode.textContent).to.equal('Custom');
+    });
+  });
 });
