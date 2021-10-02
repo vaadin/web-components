@@ -25,7 +25,6 @@ export interface UploadI18n {
     one: string;
     many: string;
   };
-  cancel: string;
   error: {
     tooManyFiles: string;
     fileIsTooBig: string;
