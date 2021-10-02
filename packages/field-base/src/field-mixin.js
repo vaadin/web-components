@@ -129,8 +129,8 @@ export const FieldMixin = (superclass) =>
 
           this.__applyCustomHelper(newHelper);
 
-          this.__helperIdObserver = new MutationObserver((mutationRecord) => {
-            mutationRecord.forEach((mutation) => {
+          this.__helperIdObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
               // only handle helper nodes
               if (
                 mutation.type === 'attributes' &&
@@ -143,15 +143,14 @@ export const FieldMixin = (superclass) =>
             });
           });
 
-          this.__helperIdObserver.observe(newHelper, { attributes: true, subtree: true });
+          this.__helperIdObserver.observe(newHelper, { attributes: true });
         } else if (oldHelper) {
           this.__helperIdObserver.disconnect();
 
           if (this.helperText) {
             // Custom helper is removed, restore the default one.
-            const helper = this.__defaultHelper;
+            const helper = this.__attachDefaultHelper();
             helper.textContent = this.helperText;
-            this.__applyDefaultHelper(helper);
           }
         }
       });
@@ -170,14 +169,29 @@ export const FieldMixin = (superclass) =>
     __applyCustomHelper(helper) {
       this.__updateHelperId(helper);
       this._currentHelper = helper;
-      this.__toggleHasHelper(helper.children.length > 0 || helper.textContent.trim() !== '');
+      this.__toggleHasHelper(helper.children.length > 0 || this.__isNotEmpty(helper.textContent));
     }
 
     /** @private */
-    __applyDefaultHelper(helper) {
+    __isNotEmpty(helperText) {
+      return helperText && helperText.trim() !== '';
+    }
+
+    /** @private */
+    __attachDefaultHelper() {
+      let helper = this.__defaultHelper;
+
+      if (!helper) {
+        helper = document.createElement('div');
+        helper.setAttribute('slot', 'helper');
+        this.__defaultHelper = helper;
+      }
+
       helper.id = this.__savedHelperId;
       this.appendChild(helper);
       this._currentHelper = helper;
+
+      return helper;
     }
 
     /** @private */
@@ -247,13 +261,11 @@ export const FieldMixin = (superclass) =>
     _helperTextChanged(helperText) {
       let helper = this._helperNode;
 
-      if (helperText) {
+      const hasHelper = this.__isNotEmpty(helperText);
+      if (hasHelper) {
         // Create helper lazily
         if (!helper) {
-          helper = document.createElement('div');
-          helper.setAttribute('slot', 'helper');
-          this.__defaultHelper = helper;
-          this.__applyDefaultHelper(helper);
+          helper = this.__attachDefaultHelper();
         }
       }
 
@@ -262,7 +274,7 @@ export const FieldMixin = (superclass) =>
         helper.textContent = helperText;
       }
 
-      this.__toggleHasHelper(Boolean(helperText));
+      this.__toggleHasHelper(hasHelper);
     }
 
     /** @protected */

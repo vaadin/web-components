@@ -232,6 +232,16 @@ describe('field-mixin', () => {
         element.helperText = '3 digits';
         expect(element.hasAttribute('has-helper')).to.be.true;
       });
+
+      it('should not add a helper when helperText is whitespace string', () => {
+        element.helperText = ' ';
+        expect(element.querySelector('[slot=helper]')).to.be.not.ok;
+      });
+
+      it('should not set has-helper when helperText is whitespace string', () => {
+        element.helperText = ' ';
+        expect(element.hasAttribute('has-helper')).to.be.false;
+      });
     });
 
     describe('property', () => {

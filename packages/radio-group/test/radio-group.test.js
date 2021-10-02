@@ -496,7 +496,7 @@ describe('radio-group', () => {
     let error, helper, label;
 
     beforeEach(() => {
-      group.helperText = 'Choose one';
+      group = fixtureSync('<vaadin-radio-group helper-text="Choose one"></vaadin-radio-group>');
       error = group._errorNode;
       helper = group._helperNode;
       label = group._labelNode;
