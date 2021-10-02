@@ -1004,7 +1004,7 @@ export const ComboBoxMixin = (subclass) =>
         event.composedPath()[0].focus();
         return;
       }
-      if (!this._closeOnBlurIsPrevented) {
+      if (!this.readonly && !this._closeOnBlurIsPrevented) {
         this._closeOrCommit();
       }
     }

@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout } from '@vaadin/testing-helpers';
 import { getFirstItem, getViewportItems } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
@@ -197,6 +197,18 @@ describe('Properties', () => {
         comboBox.close();
 
         expect(spy.callCount).to.eql(0);
+      });
+
+      it('should be fired when combo-box is read-only', () => {
+        const spy = sinon.spy();
+        comboBox.addEventListener('custom-value-set', spy);
+
+        comboBox.readonly = true;
+        input.value = 'foo';
+        comboBox.focus();
+        focusout(comboBox);
+
+        expect(spy.called).to.be.false;
       });
 
       it('should be cancelable', () => {
