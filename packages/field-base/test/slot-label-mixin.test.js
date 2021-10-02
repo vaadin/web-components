@@ -87,5 +87,5 @@ describe('slot-label-mixin', () => {
     it('should not override slotted label content', () => {
       expect(element._labelNode.textContent).to.equal('Custom');
     });
-  });  
+  });
 });
