@@ -261,11 +261,10 @@ export const FieldMixin = (superclass) =>
     _helperTextChanged(helperText) {
       let helper = this._helperNode;
 
-      const hasHelper = this.__isNotEmpty(helperText);
+      const hasHelperText = this.__isNotEmpty(helperText);
       if (hasHelperText && !helper) {
         // Create helper lazily
         helper = this.__attachDefaultHelper();
-      }
       }
 
       // Only set text content for default helper
@@ -273,7 +272,7 @@ export const FieldMixin = (superclass) =>
         helper.textContent = helperText;
       }
 
-      this.__toggleHasHelper(hasHelper);
+      this.__toggleHasHelper(hasHelperText);
     }
 
     /** @protected */
