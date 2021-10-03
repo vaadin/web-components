@@ -21,6 +21,7 @@
     "lint:css": "stylelint packages/**/src/*.js packages/**/theme/**/*-styles.js",
     "lint:js": "eslint --ext .js,.ts *.js scripts packages",
     "lint:types": "tsc",
+    "prepare": "husky install",
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
     "start": "web-dev-server --node-resolve --open /dev/index.html",
     "test": "web-test-runner",
@@ -32,8 +33,7 @@
     "test:smoke": "web-test-runner --config web-test-runner-smoke.config.js",
     "update:lumo": "TEST_ENV=update web-test-runner --config web-test-runner-lumo.config.js",
     "update:material": "TEST_ENV=update web-test-runner --config web-test-runner-material.config.js",
-    "update:snapshots": "web-test-runner --config web-test-runner-snapshots.config.js --update-snapshots",
-    "prepare": "husky install"
+    "update:snapshots": "web-test-runner --config web-test-runner-snapshots.config.js --update-snapshots"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
