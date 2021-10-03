@@ -122,7 +122,7 @@ export const FieldMixin = (superclass) =>
         const oldHelper = info.removedNodes.find((node) => node === helper);
 
         if (newHelper) {
-          // Custom helper is added, remove the default one.
+          // Custom helper is added, remove the previous one.
           if (helper && helper.isConnected) {
             this.removeChild(helper);
           }
@@ -262,11 +262,10 @@ export const FieldMixin = (superclass) =>
       let helper = this._helperNode;
 
       const hasHelper = this.__isNotEmpty(helperText);
-      if (hasHelper) {
+      if (hasHelperText && !helper) {
         // Create helper lazily
-        if (!helper) {
-          helper = this.__attachDefaultHelper();
-        }
+        helper = this.__attachDefaultHelper();
+      }
       }
 
       // Only set text content for default helper
