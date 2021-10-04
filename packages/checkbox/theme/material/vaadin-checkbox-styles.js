@@ -14,8 +14,8 @@ registerStyles(
       -webkit-tap-highlight-color: transparent;
     }
 
-    :host([has-label]) [part='label'] {
-      margin: 3px 12px 3px 6px;
+    :host([has-label]) [part='label'] ::slotted(*) {
+      padding: 3px 12px 3px 6px;
     }
 
     [part='native-checkbox'] {
@@ -34,6 +34,14 @@ registerStyles(
       box-shadow: inset 0 0 0 2px var(--material-secondary-text-color);
       line-height: 1.275;
       background-color: transparent;
+    }
+
+    /* Enhance the clickable area for the input */
+    [part='checkbox'] ::slotted(input) {
+      top: -4px;
+      left: -4px;
+      width: calc(100% + 4px * 2);
+      height: calc(100% + 4px * 2);
     }
 
     /* Used for the ripple */
