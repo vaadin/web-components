@@ -257,7 +257,7 @@ export const ComboBoxMixin = (subclass) =>
         '_filteredItemsChanged(filteredItems.*, itemValuePath, itemLabelPath)',
         '_templateOrRendererChanged(_itemTemplate, renderer)',
         '_loadingChanged(loading)',
-        '_selectedItemChanged(selectedItem, itemLabelPath)',
+        '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
         '_toggleElementChanged(_toggleElement)'
       ];
     }
