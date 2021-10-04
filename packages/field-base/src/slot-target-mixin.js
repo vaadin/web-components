@@ -52,6 +52,12 @@ const SlotTargetMixinImplementation = (superclass) =>
         return;
       }
 
+      // Remove any existing clones from the slot target
+      if (this.__slotTargetClones) {
+        this.__slotTargetClones.forEach((node) => this._slotTarget.removeChild(node));
+        delete this.__slotTargetClones;
+      }
+
       // Exclude whitespace text nodes
       const nodes = this._sourceSlot
         .assignedNodes({ flatten: true })
@@ -63,18 +69,18 @@ const SlotTargetMixinImplementation = (superclass) =>
     }
 
     /**
-     * Copies the nodes to the target element. Target element is cleared before
-     * the nodes are copied.
+     * Copies the nodes to the target element.
      *
      * @protected
      * @param {Array<Node>} nodes
      */
     __copyNodesToSlotTarget(nodes) {
-      this._slotTarget.innerHTML = '';
-
+      this.__slotTargetClones = this.__slotTargetClones || [];
       nodes.forEach((node) => {
         // Clone the nodes and append the clones to the target slot
-        this._slotTarget.appendChild(node.cloneNode(true));
+        const clone = node.cloneNode(true);
+        this.__slotTargetClones.push(clone);
+        this._slotTarget.appendChild(clone);
         // Observe all changes to the source node to have the clones updated
         this.__sourceSlotObserver.observe(node, {
           attributes: true,

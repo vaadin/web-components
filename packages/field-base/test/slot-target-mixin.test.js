@@ -142,6 +142,14 @@ describe('slot-target-mixin', () => {
       await nextFrame();
       expect(element._slotTarget.firstElementChild.textContent).to.equal('New content');
     });
+
+    it('should reflect cleared content to the target slot content', async () => {
+      element = fixtureSync(`<slot-target-mixin-element><div>Content</div></slot-target-mixin-element>`);
+      await nextFrame();
+      element.firstChild.remove();
+      await nextFrame();
+      expect(element._slotTarget.children).to.be.empty;
+    });
   });
 
   describe('warnings', () => {
