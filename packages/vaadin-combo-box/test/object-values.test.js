@@ -34,6 +34,12 @@ describe('object values', () => {
       comboBox.open();
     });
 
+    it('it should change combo-box value when value path changes', () => {
+      selectItem(comboBox, 0);
+      comboBox.itemValuePath = 'custom';
+      expect(comboBox.value).to.be.equal('bazs');
+    });
+
     it('should use the default label property on input field', () => {
       selectItem(0);
 
@@ -69,9 +75,9 @@ describe('object values', () => {
     });
 
     it('should use toString if provided label and value paths are not found', () => {
+      comboBox.items[0].toString = () => 'default';
       comboBox.itemValuePath = 'not.found';
       comboBox.itemLabelPath = 'not.found';
-      comboBox.items[0].toString = () => 'default';
 
       selectItem(0);
 
