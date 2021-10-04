@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { sendKeys } from '@web/test-runner-commands';
-import { fixtureSync, nextFrame, fire, mousedown, mouseup } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, mousedown, mouseup } from '@vaadin/testing-helpers';
 import '../vaadin-radio-button.js';
 
 describe('radio-button', () => {
