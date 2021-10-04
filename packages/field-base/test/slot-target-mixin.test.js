@@ -73,7 +73,7 @@ describe('slot-target-mixin', () => {
     });
 
     it('should populate the target element with non-empty nodes from the source slot', () => {
-      expect(element._slotTarget.firstChild.textContent).to.eql('node1');
+      expect(element._slotTarget.firstChild.textContent).to.equal('node1');
     });
 
     it('should not clone whitespace text nodes', () => {
