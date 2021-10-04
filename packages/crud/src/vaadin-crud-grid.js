@@ -113,6 +113,21 @@ class CrudGridElement extends IncludedMixin(GridElement) {
     this.__toggleEditColumn();
   }
 
+  /**
+   * Parse the camelCase column names into sentence case headers.
+   * @param {string} path
+   * @return {string}
+   * @protected
+   */
+  _generateHeader(path) {
+    return path
+      .substr(path.lastIndexOf('.') + 1)
+      .replace(/([A-Z])/g, '-$1')
+      .toLowerCase()
+      .replace(/-/g, ' ')
+      .replace(/^./, (match) => match.toUpperCase());
+  }
+
   /** @private */
   __createColumn(parent, path) {
     const col = document.createElement('vaadin-grid-column');
@@ -123,7 +138,7 @@ class CrudGridElement extends IncludedMixin(GridElement) {
 
     if (!this.noHead && path) {
       col.headerRenderer = (root) => {
-        const label = this.__capitalize(path.replace(/^.*\./, ''));
+        const label = this._generateHeader(path);
 
         if (!this.noSort) {
           const sorter = window.document.createElement('vaadin-grid-sorter');
