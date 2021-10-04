@@ -4,7 +4,11 @@
   "description": "vaadin-progress-bar",
   "main": "vaadin-progress-bar.js",
   "module": "vaadin-progress-bar.js",
-  "repository": "vaadin/vaadin-progress-bar",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-progress-bar"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-progress",

@@ -4,7 +4,11 @@
   "description": "Collection of 600+ unique icons designed for web applications",
   "main": "vaadin-icons.js",
   "module": "vaadin-icons.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/icons"
+  },
   "keywords": [
     "Vaadin",
     "icons",

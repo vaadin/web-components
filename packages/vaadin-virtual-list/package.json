@@ -4,7 +4,11 @@
   "description": "Web Component for displaying a virtual/infinite list of items.",
   "main": "vaadin-virtual-list.js",
   "module": "vaadin-virtual-list.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-virtual-list"
+  },
   "keywords": [
     "Vaadin",
     "virtualizer",

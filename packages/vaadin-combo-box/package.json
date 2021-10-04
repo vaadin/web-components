@@ -3,7 +3,11 @@
   "version": "22.0.0-alpha6",
   "description": "Web Component for displaying a list of items with filtering",
   "main": "vaadin-combo-box.js",
-  "repository": "vaadin/vaadin-combo-box",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-combo-box"
+  },
   "keywords": [
     "Vaadin",
     "combo-box",

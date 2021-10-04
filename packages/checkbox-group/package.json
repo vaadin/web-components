@@ -4,7 +4,11 @@
   "description": "vaadin-checkbox-group",
   "main": "vaadin-checkbox-group.js",
   "module": "vaadin-checkbox-group.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/checkbox-group"
+  },
   "keywords": [
     "Vaadin",
     "checkbox",

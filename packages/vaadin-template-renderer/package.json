@@ -4,7 +4,11 @@
   "description": "vaadin-template-renderer",
   "main": "vaadin-template-renderer.js",
   "module": "vaadin-template-renderer.js",
-  "repository": "vaadin/vaadin-template-renderer",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-template-renderer"
+  },
   "keywords": [
     "Vaadin",
     "polymer",

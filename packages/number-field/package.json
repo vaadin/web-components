@@ -4,7 +4,11 @@
   "description": "vaadin-number-field",
   "main": "vaadin-number-field.js",
   "module": "vaadin-number-field.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/number-field"
+  },
   "keywords": [
     "Vaadin",
     "input",

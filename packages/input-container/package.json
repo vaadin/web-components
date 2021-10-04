@@ -4,7 +4,11 @@
   "description": "vaadin-input-container",
   "main": "vaadin-input-container.js",
   "module": "vaadin-input-container.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/input-container"
+  },
   "keywords": [
     "Vaadin",
     "web-components",

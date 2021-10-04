@@ -4,7 +4,11 @@
   "description": "vaadin-menu-bar",
   "main": "vaadin-menu-bar.js",
   "module": "vaadin-menu-bar.js",
-  "repository": "vaadin/vaadin-menu-bar",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-menu-bar"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-menu-bar",

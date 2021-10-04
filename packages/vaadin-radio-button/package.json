@@ -4,7 +4,11 @@
   "description": "vaadin-radio-button",
   "main": "vaadin-radio-button.js",
   "module": "vaadin-radio-button.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-radio-button"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-radio-button",

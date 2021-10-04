@@ -4,7 +4,11 @@
   "description": "vaadin-message-input",
   "main": "vaadin-message-input.js",
   "module": "vaadin-message-input.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/message-input"
+  },
   "keywords": [
     "Vaadin",
     "message-input",

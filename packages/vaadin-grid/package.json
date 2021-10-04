@@ -4,7 +4,11 @@
   "description": "A free, flexible and high-quality Web Component for showing large amounts of tabular data",
   "main": "vaadin-grid.js",
   "module": "vaadin-grid.js",
-  "repository": "vaadin/vaadin-grid",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-grid"
+  },
   "keywords": [
     "vaadin",
     "elements",

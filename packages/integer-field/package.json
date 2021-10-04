@@ -4,7 +4,11 @@
   "description": "vaadin-integer-field",
   "main": "vaadin-integer-field.js",
   "module": "vaadin-integer-field.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/integer-field"
+  },
   "keywords": [
     "Vaadin",
     "input",

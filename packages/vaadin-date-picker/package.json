@@ -4,7 +4,11 @@
   "description": "Web component providing a date selection field with scrollable month calendar",
   "main": "vaadin-date-picker.js",
   "module": "vaadin-date-picker.js",
-  "repository": "vaadin/vaadin-date-picker",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-date-picker"
+  },
   "keywords": [
     "Vaadin",
     "date-picker",

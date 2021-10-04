@@ -4,7 +4,11 @@
   "description": "vaadin-accordion",
   "main": "vaadin-accordion.js",
   "module": "vaadin-accordion.js",
-  "repository": "vaadin/vaadin-accordion",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-accordion"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-accordion",

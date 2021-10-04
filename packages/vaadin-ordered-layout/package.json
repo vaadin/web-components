@@ -4,7 +4,11 @@
   "description": "vaadin-ordered-layout",
   "main": "imports.js",
   "module": "imports.js",
-  "repository": "vaadin/vaadin-ordered-layout",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-ordered-layout"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-ordered-layout",

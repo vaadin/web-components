@@ -4,7 +4,11 @@
   "description": "vaadin-list-box",
   "main": "vaadin-list-box.js",
   "module": "vaadin-list-box.js",
-  "repository": "vaadin/vaadin-list-box",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-list-box"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-list-box",

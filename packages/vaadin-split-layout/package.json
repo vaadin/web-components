@@ -4,7 +4,11 @@
   "description": "Web component for partitioning a layout into resizeable areas",
   "main": "vaadin-split-layout.js",
   "module": "vaadin-split-layout.js",
-  "repository": "vaadin/vaadin-split-layout",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-split-layout"
+  },
   "keywords": [
     "Vaadin",
     "split layout",

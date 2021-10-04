@@ -4,7 +4,11 @@
   "description": "vaadin-date-time-picker",
   "main": "vaadin-date-time-picker.js",
   "module": "vaadin-date-time-picker.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/date-time-picker"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-date-time-picker",

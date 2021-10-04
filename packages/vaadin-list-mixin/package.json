@@ -4,7 +4,11 @@
   "description": "vaadin-list-mixin",
   "main": "vaadin-list-mixin.js",
   "module": "vaadin-list-mixin.js",
-  "repository": "vaadin/vaadin-list-mixin",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-list-mixin"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-list-mixin",

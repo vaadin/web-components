@@ -4,7 +4,11 @@
   "description": "vaadin-login",
   "main": "vaadin-login-overlay.js",
   "module": "vaadin-login-overlay.js",
-  "repository": "vaadin/vaadin-login",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-login"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-login",

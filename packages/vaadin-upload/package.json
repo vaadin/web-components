@@ -4,7 +4,11 @@
   "description": "Web Component for uploading files with drag and drop support",
   "main": "vaadin-upload.js",
   "module": "vaadin-upload.js",
-  "repository": "vaadin/vaadin-upload",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-upload"
+  },
   "keywords": [
     "Vaadin",
     "upload",

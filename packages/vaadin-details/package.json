@@ -4,7 +4,11 @@
   "description": "vaadin-details",
   "main": "vaadin-details.js",
   "module": "vaadin-details.js",
-  "repository": "vaadin/vaadin-details",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-details"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-details",

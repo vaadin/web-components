@@ -4,7 +4,11 @@
   "description": "vaadin-button",
   "main": "vaadin-button.js",
   "module": "vaadin-button.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/button"
+  },
   "keywords": [
     "Vaadin",
     "button",

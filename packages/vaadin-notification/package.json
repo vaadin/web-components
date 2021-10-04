@@ -4,7 +4,11 @@
   "description": "vaadin-notification",
   "main": "vaadin-notification.js",
   "module": "vaadin-notification.js",
-  "repository": "vaadin/vaadin-notification",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-notification"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-notification",

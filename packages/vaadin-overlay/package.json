@@ -4,7 +4,11 @@
   "description": "vaadin-overlay",
   "main": "vaadin-overlay.js",
   "module": "vaadin-overlay.js",
-  "repository": "vaadin/vaadin-overlay",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-overlay"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-overlay",
