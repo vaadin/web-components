@@ -424,6 +424,35 @@ describe('field-mixin', () => {
           await nextFrame();
           expect(element._helperNode).to.equal(div);
         });
+
+        it('should restore the default helper when helperText property is set', async () => {
+          element.appendChild(helper);
+          await nextFrame();
+
+          element.removeChild(helper);
+          await nextFrame();
+          expect(element._helperNode).to.equal(defaultHelper);
+        });
+
+        it('should keep has-helper attribute when the default helper is restored', async () => {
+          element.appendChild(helper);
+          await nextFrame();
+
+          element.removeChild(helper);
+          await nextFrame();
+          expect(element.hasAttribute('has-helper')).to.be.true;
+        });
+
+        it('should remove has-helper attribute when helperText is set to empty', async () => {
+          element.appendChild(helper);
+          await nextFrame();
+
+          element.helperText = '';
+
+          element.removeChild(helper);
+          await nextFrame();
+          expect(element.hasAttribute('has-helper')).to.be.false;
+        });
       });
 
       describe('ID attribute', () => {

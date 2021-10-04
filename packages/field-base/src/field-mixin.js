@@ -146,12 +146,7 @@ export const FieldMixin = (superclass) =>
           this.__helperIdObserver.observe(newHelper, { attributes: true });
         } else if (oldHelper) {
           this.__helperIdObserver.disconnect();
-
-          if (this.helperText) {
-            // Custom helper is removed, restore the default one.
-            const helper = this.__attachDefaultHelper();
-            helper.textContent = this.helperText;
-          }
+          this.__applyDefaultHelper(this.helperText);
         }
       });
     }
@@ -192,6 +187,24 @@ export const FieldMixin = (superclass) =>
       this._currentHelper = helper;
 
       return helper;
+    }
+
+    /** @private */
+    __applyDefaultHelper(helperText) {
+      let helper = this._helperNode;
+
+      const hasHelperText = this.__isNotEmpty(helperText);
+      if (hasHelperText && !helper) {
+        // Create helper lazily
+        helper = this.__attachDefaultHelper();
+      }
+
+      // Only set text content for default helper
+      if (helper && helper === this.__defaultHelper) {
+        helper.textContent = helperText;
+      }
+
+      this.__toggleHasHelper(hasHelperText);
     }
 
     /** @private */
@@ -259,20 +272,7 @@ export const FieldMixin = (superclass) =>
 
     /** @protected */
     _helperTextChanged(helperText) {
-      let helper = this._helperNode;
-
-      const hasHelperText = this.__isNotEmpty(helperText);
-      if (hasHelperText && !helper) {
-        // Create helper lazily
-        helper = this.__attachDefaultHelper();
-      }
-
-      // Only set text content for default helper
-      if (helper && helper === this.__defaultHelper) {
-        helper.textContent = helperText;
-      }
-
-      this.__toggleHasHelper(hasHelperText);
+      this.__applyDefaultHelper(helperText);
     }
 
     /** @protected */
