@@ -115,7 +115,16 @@ const inputField = css`
   }
 
   :host([input-prevented]) [part='input-field'] {
-    color: var(--lumo-error-text-color);
+    animation: shake 0.15s infinite;
+  }
+
+  @keyframes shake {
+    25% {
+      transform: translateX(4px);
+    }
+    75% {
+      transform: translateX(-4px);
+    }
   }
 
   /* Small theme */
