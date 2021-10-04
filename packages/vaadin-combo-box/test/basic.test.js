@@ -218,7 +218,7 @@ describe('Properties', () => {
         expect(spy.callCount).to.eql(0);
       });
 
-      it('should be fired when combo-box is read-only', () => {
+      it('should not be fired when combo-box is read-only', () => {
         const spy = sinon.spy();
         comboBox.addEventListener('custom-value-set', spy);
 
