@@ -10,7 +10,7 @@ describe('radio-button', () => {
     div = document.createElement('div');
     div.style.display = 'inline-block';
     div.style.padding = '10px';
-    element = fixtureSync('<vaadin-radio-button>Radio button</vaadin-radio-button>', div);
+    element = fixtureSync('<vaadin-radio-button label="Radio button"></vaadin-radio-button>', div);
   });
 
   it('basic', async () => {
