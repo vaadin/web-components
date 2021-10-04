@@ -172,6 +172,7 @@ describe('custom field', () => {
     let label, helper, error;
 
     beforeEach(() => {
+      customField.helperText = 'Helper';
       label = customField.querySelector('[slot="label"]');
       helper = customField.querySelector('[slot="helper"]');
       error = customField.querySelector('[slot="error-message"]');

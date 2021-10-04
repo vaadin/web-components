@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-integer-field default"] = 
+snapshots["vaadin-integer-field shadow default"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -54,9 +54,9 @@ snapshots["vaadin-integer-field default"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-integer-field default */
+/* end snapshot vaadin-integer-field shadow default */
 
-snapshots["vaadin-integer-field controls"] = 
+snapshots["vaadin-integer-field shadow controls"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -107,9 +107,9 @@ snapshots["vaadin-integer-field controls"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-integer-field controls */
+/* end snapshot vaadin-integer-field shadow controls */
 
-snapshots["vaadin-integer-field disabled"] = 
+snapshots["vaadin-integer-field shadow disabled"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -165,9 +165,9 @@ snapshots["vaadin-integer-field disabled"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-integer-field disabled */
+/* end snapshot vaadin-integer-field shadow disabled */
 
-snapshots["vaadin-integer-field readonly"] = 
+snapshots["vaadin-integer-field shadow readonly"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -223,9 +223,9 @@ snapshots["vaadin-integer-field readonly"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-integer-field readonly */
+/* end snapshot vaadin-integer-field shadow readonly */
 
-snapshots["vaadin-integer-field invalid"] = 
+snapshots["vaadin-integer-field shadow invalid"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -281,9 +281,9 @@ snapshots["vaadin-integer-field invalid"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-integer-field invalid */
+/* end snapshot vaadin-integer-field shadow invalid */
 
-snapshots["vaadin-integer-field theme"] = 
+snapshots["vaadin-integer-field shadow theme"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -339,17 +339,15 @@ snapshots["vaadin-integer-field theme"] =
   </div>
 </div>
 `;
-/* end snapshot vaadin-integer-field theme */
+/* end snapshot vaadin-integer-field shadow theme */
 
-snapshots["vaadin-integer-field slots"] = 
+snapshots["vaadin-integer-field slots default"] = 
 `<label slot="label">
 </label>
 <div
   aria-live="assertive"
   slot="error-message"
 >
-</div>
-<div slot="helper">
 </div>
 <input
   max="undefined"
@@ -359,5 +357,26 @@ snapshots["vaadin-integer-field slots"] =
   type="number"
 >
 `;
-/* end snapshot vaadin-integer-field slots */
+/* end snapshot vaadin-integer-field slots default */
+
+snapshots["vaadin-integer-field slots helper"] = 
+`<label slot="label">
+</label>
+<div
+  aria-live="assertive"
+  slot="error-message"
+>
+</div>
+<input
+  max="undefined"
+  min="undefined"
+  slot="input"
+  step="any"
+  type="number"
+>
+<div slot="helper">
+  Helper
+</div>
+`;
+/* end snapshot vaadin-integer-field slots helper */
 

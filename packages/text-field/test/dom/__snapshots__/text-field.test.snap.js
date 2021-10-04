@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-select shadow default"] = 
+snapshots["vaadin-text-field shadow default"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -18,10 +18,16 @@ snapshots["vaadin-select shadow default"] =
       slot="prefix"
     >
     </slot>
-    <slot name="value">
+    <slot name="input">
+    </slot>
+    <slot
+      name="suffix"
+      slot="suffix"
+    >
     </slot>
     <div
-      part="toggle-button"
+      id="clearButton"
+      part="clear-button"
       slot="suffix"
     >
     </div>
@@ -35,14 +41,10 @@ snapshots["vaadin-select shadow default"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay>
-</vaadin-select-overlay>
-<iron-media-query style="display: none;">
-</iron-media-query>
 `;
-/* end snapshot vaadin-select shadow default */
+/* end snapshot vaadin-text-field shadow default */
 
-snapshots["vaadin-select shadow disabled"] = 
+snapshots["vaadin-text-field shadow disabled"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -62,10 +64,16 @@ snapshots["vaadin-select shadow disabled"] =
       slot="prefix"
     >
     </slot>
-    <slot name="value">
+    <slot name="input">
+    </slot>
+    <slot
+      name="suffix"
+      slot="suffix"
+    >
     </slot>
     <div
-      part="toggle-button"
+      id="clearButton"
+      part="clear-button"
       slot="suffix"
     >
     </div>
@@ -79,14 +87,10 @@ snapshots["vaadin-select shadow disabled"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay>
-</vaadin-select-overlay>
-<iron-media-query style="display: none;">
-</iron-media-query>
 `;
-/* end snapshot vaadin-select shadow disabled */
+/* end snapshot vaadin-text-field shadow disabled */
 
-snapshots["vaadin-select shadow readonly"] = 
+snapshots["vaadin-text-field shadow readonly"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -106,10 +110,16 @@ snapshots["vaadin-select shadow readonly"] =
       slot="prefix"
     >
     </slot>
-    <slot name="value">
+    <slot name="input">
+    </slot>
+    <slot
+      name="suffix"
+      slot="suffix"
+    >
     </slot>
     <div
-      part="toggle-button"
+      id="clearButton"
+      part="clear-button"
       slot="suffix"
     >
     </div>
@@ -123,14 +133,10 @@ snapshots["vaadin-select shadow readonly"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay>
-</vaadin-select-overlay>
-<iron-media-query style="display: none;">
-</iron-media-query>
 `;
-/* end snapshot vaadin-select shadow readonly */
+/* end snapshot vaadin-text-field shadow readonly */
 
-snapshots["vaadin-select shadow invalid"] = 
+snapshots["vaadin-text-field shadow invalid"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -150,10 +156,16 @@ snapshots["vaadin-select shadow invalid"] =
       slot="prefix"
     >
     </slot>
-    <slot name="value">
+    <slot name="input">
+    </slot>
+    <slot
+      name="suffix"
+      slot="suffix"
+    >
     </slot>
     <div
-      part="toggle-button"
+      id="clearButton"
+      part="clear-button"
       slot="suffix"
     >
     </div>
@@ -167,14 +179,10 @@ snapshots["vaadin-select shadow invalid"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay>
-</vaadin-select-overlay>
-<iron-media-query style="display: none;">
-</iron-media-query>
 `;
-/* end snapshot vaadin-select shadow invalid */
+/* end snapshot vaadin-text-field shadow invalid */
 
-snapshots["vaadin-select shadow theme"] = 
+snapshots["vaadin-text-field shadow theme"] = 
 `<div part="container">
   <div part="label">
     <slot name="label">
@@ -194,10 +202,16 @@ snapshots["vaadin-select shadow theme"] =
       slot="prefix"
     >
     </slot>
-    <slot name="value">
+    <slot name="input">
+    </slot>
+    <slot
+      name="suffix"
+      slot="suffix"
+    >
     </slot>
     <div
-      part="toggle-button"
+      id="clearButton"
+      part="clear-button"
       slot="suffix"
     >
     </div>
@@ -211,14 +225,10 @@ snapshots["vaadin-select shadow theme"] =
     </slot>
   </div>
 </div>
-<vaadin-select-overlay theme="align-right">
-</vaadin-select-overlay>
-<iron-media-query style="display: none;">
-</iron-media-query>
 `;
-/* end snapshot vaadin-select shadow theme */
+/* end snapshot vaadin-text-field shadow theme */
 
-snapshots["vaadin-select slots default"] = 
+snapshots["vaadin-text-field slots default"] = 
 `<label slot="label">
 </label>
 <div
@@ -226,19 +236,14 @@ snapshots["vaadin-select slots default"] =
   slot="error-message"
 >
 </div>
-<vaadin-select-value-button
-  aria-expanded="false"
-  aria-haspopup="listbox"
-  aria-required="false"
-  role="button"
-  slot="value"
-  tabindex="0"
+<input
+  slot="input"
+  type="text"
 >
-</vaadin-select-value-button>
 `;
-/* end snapshot vaadin-select slots default */
+/* end snapshot vaadin-text-field slots default */
 
-snapshots["vaadin-select slots helper"] = 
+snapshots["vaadin-text-field slots helper"] = 
 `<label slot="label">
 </label>
 <div
@@ -246,18 +251,13 @@ snapshots["vaadin-select slots helper"] =
   slot="error-message"
 >
 </div>
-<vaadin-select-value-button
-  aria-expanded="false"
-  aria-haspopup="listbox"
-  aria-required="false"
-  role="button"
-  slot="value"
-  tabindex="0"
+<input
+  slot="input"
+  type="text"
 >
-</vaadin-select-value-button>
 <div slot="helper">
   Helper
 </div>
 `;
-/* end snapshot vaadin-select slots helper */
+/* end snapshot vaadin-text-field slots helper */
 

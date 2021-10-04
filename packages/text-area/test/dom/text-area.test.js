@@ -15,31 +15,40 @@ describe('vaadin-text-area', () => {
     textArea = fixtureSync('<vaadin-text-area></vaadin-text-area>');
   });
 
-  it('default', async () => {
-    await expect(textArea).shadowDom.to.equalSnapshot();
+  describe('shadow', () => {
+    it('default', async () => {
+      await expect(textArea).shadowDom.to.equalSnapshot();
+    });
+
+    it('disabled', async () => {
+      textArea.disabled = true;
+      await expect(textArea).shadowDom.to.equalSnapshot();
+    });
+
+    it('readonly', async () => {
+      textArea.readonly = true;
+      await expect(textArea).shadowDom.to.equalSnapshot();
+    });
+
+    it('invalid', async () => {
+      textArea.invalid = true;
+      await expect(textArea).shadowDom.to.equalSnapshot();
+    });
+
+    it('theme', async () => {
+      textArea.setAttribute('theme', 'align-right');
+      await expect(textArea).shadowDom.to.equalSnapshot();
+    });
   });
 
-  it('disabled', async () => {
-    textArea.disabled = true;
-    await expect(textArea).shadowDom.to.equalSnapshot();
-  });
+  describe('slots', () => {
+    it('default', async () => {
+      await expect(textArea).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
 
-  it('readonly', async () => {
-    textArea.readonly = true;
-    await expect(textArea).shadowDom.to.equalSnapshot();
-  });
-
-  it('invalid', async () => {
-    textArea.invalid = true;
-    await expect(textArea).shadowDom.to.equalSnapshot();
-  });
-
-  it('theme', async () => {
-    textArea.setAttribute('theme', 'align-right');
-    await expect(textArea).shadowDom.to.equalSnapshot();
-  });
-
-  it('slots', async () => {
-    await expect(textArea).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    it('helper', async () => {
+      textArea.helperText = 'Helper';
+      await expect(textArea).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
   });
 });

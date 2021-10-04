@@ -10,7 +10,7 @@ describe('WAI-ARIA', () => {
     let datepicker, toggleButton, input, label, helper, error;
 
     beforeEach(() => {
-      datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+      datepicker = fixtureSync(`<vaadin-date-picker helper-text="Week day"></vaadin-date-picker>`);
       toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
       input = datepicker.inputElement;
       label = datepicker.querySelector('[slot=label]');

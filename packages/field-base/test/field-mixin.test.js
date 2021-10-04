@@ -203,28 +203,20 @@ describe('field-mixin', () => {
         helper = element.querySelector('[slot=helper]');
       });
 
-      it('should create a helper element', () => {
+      it('should not create a helper element by default', () => {
+        expect(helper).to.be.not.ok;
+      });
+
+      it('should add a helper when helperText property is set', () => {
+        element.helperText = '3 digits';
+        helper = element.querySelector('[slot=helper]');
         expect(helper).to.be.an.instanceof(HTMLDivElement);
       });
 
-      it('should set slot on the helper', () => {
-        expect(helper.getAttribute('slot')).to.equal('helper');
-      });
-
-      it('should set id on the helper element', () => {
-        const id = helper.getAttribute('id');
-        expect(id).to.match(ID_REGEX);
-        expect(id.endsWith(element.constructor._uniqueFieldId)).to.be.true;
-      });
-
-      it('should update helper content on attribute change', () => {
+      it('should add a helper when helper-text attribute is set', () => {
         element.setAttribute('helper-text', '3 digits');
-        expect(helper.textContent).to.equal('3 digits');
-      });
-
-      it('should update helper content on property change', () => {
-        element.helperText = '3 digits';
-        expect(helper.textContent).to.equal('3 digits');
+        helper = element.querySelector('[slot=helper]');
+        expect(helper).to.be.an.instanceof(HTMLDivElement);
       });
 
       it('should not set has-helper attribute with no helper', () => {
@@ -239,6 +231,53 @@ describe('field-mixin', () => {
       it('should set has-helper attribute when property is set', () => {
         element.helperText = '3 digits';
         expect(element.hasAttribute('has-helper')).to.be.true;
+      });
+
+      it('should not add a helper when helperText is whitespace string', () => {
+        element.helperText = ' ';
+        expect(element.querySelector('[slot=helper]')).to.be.not.ok;
+      });
+
+      it('should not set has-helper when helperText is whitespace string', () => {
+        element.helperText = ' ';
+        expect(element.hasAttribute('has-helper')).to.be.false;
+      });
+    });
+
+    describe('property', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<field-mixin-element></field-mixin-element>`);
+        element.helperText = 'Positive number';
+        helper = element.querySelector('[slot=helper]');
+      });
+
+      it('should set slot on the generated helper element', () => {
+        expect(helper.getAttribute('slot')).to.equal('helper');
+      });
+
+      it('should set id on the generated helper element', () => {
+        const id = helper.getAttribute('id');
+        expect(id).to.match(ID_REGEX);
+        expect(id.endsWith(element.constructor._uniqueFieldId)).to.be.true;
+      });
+
+      it('should set content to the generated helper element', () => {
+        expect(helper.textContent).to.equal('Positive number');
+      });
+
+      it('should update helper content on attribute change', () => {
+        element.setAttribute('helper-text', '3 digits');
+        expect(helper.textContent).to.equal('3 digits');
+      });
+
+      it('should update helper content on property change', () => {
+        element.helperText = '3 digits';
+        expect(helper.textContent).to.equal('3 digits');
+      });
+
+      it('should remove has-helper attribute when property is unset', () => {
+        element.helperText = '';
+        expect(element.hasAttribute('has-helper')).to.be.false;
       });
     });
 
@@ -255,6 +294,11 @@ describe('field-mixin', () => {
       it('should set helper text content from attribute', () => {
         expect(helper.textContent).to.equal('3 digits');
       });
+
+      it('should remove has-helper attribute when attribute is removed', () => {
+        element.removeAttribute('helper-text');
+        expect(element.hasAttribute('has-helper')).to.be.false;
+      });
     });
 
     describe('slotted', () => {
@@ -267,8 +311,8 @@ describe('field-mixin', () => {
         helper = element.querySelector('[slot=helper]');
       });
 
-      it('should return slotted helper content as a helperText', () => {
-        expect(element.helperText).to.equal('Custom');
+      it('should not return slotted helper content as a helperText', () => {
+        expect(element.helperText).to.be.not.ok;
       });
 
       it('should set id on the slotted helper element', () => {
@@ -281,9 +325,23 @@ describe('field-mixin', () => {
         expect(element.hasAttribute('has-helper')).to.be.true;
       });
 
-      it('should update slotted helper content on property change', () => {
+      it('should not update slotted helper content on property change', () => {
         element.helperText = '3 digits';
-        expect(helper.textContent).to.equal('3 digits');
+        expect(helper.textContent).to.not.equal('3 digits');
+      });
+    });
+
+    describe('slotted empty', () => {
+      beforeEach(() => {
+        element = fixtureSync(`
+          <field-mixin-element>
+            <div slot="helper"><span></span></div>
+          </field-mixin-element>
+        `);
+      });
+
+      it('should set has-helper attribute when helper children are empty', () => {
+        expect(element.hasAttribute('has-helper')).to.be.true;
       });
     });
 
@@ -293,6 +351,7 @@ describe('field-mixin', () => {
 
         beforeEach(async () => {
           element = fixtureSync('<field-mixin-element></field-mixin-element>');
+          element.helperText = 'Default helper';
           await nextFrame();
           defaultHelper = element._helperNode;
           helper = document.createElement('div');
@@ -300,22 +359,22 @@ describe('field-mixin', () => {
           helper.textContent = 'Lazy';
         });
 
-        it('should return lazy helper content as a helperText using appendChild', async () => {
+        it('should handle lazy helper added using appendChild', async () => {
           element.appendChild(helper);
           await nextFrame();
-          expect(element.helperText).to.equal('Lazy');
+          expect(element._helperNode).to.equal(helper);
         });
 
-        it('should return lazy helper content as a helperText using insertBefore', async () => {
+        it('should handle lazy helper added using insertBefore', async () => {
           element.insertBefore(helper, defaultHelper);
           await nextFrame();
-          expect(element.helperText).to.equal('Lazy');
+          expect(element._helperNode).to.equal(helper);
         });
 
-        it('should return lazy helper content as a helperText using replaceChild', async () => {
+        it('should handle lazy helper added using replaceChild', async () => {
           element.replaceChild(helper, defaultHelper);
           await nextFrame();
-          expect(element.helperText).to.equal('Lazy');
+          expect(element._helperNode).to.equal(helper);
         });
 
         it('should remove the default helper from the element when using appendChild', async () => {
@@ -339,7 +398,7 @@ describe('field-mixin', () => {
           div.textContent = 'New';
           element.appendChild(div);
           await nextFrame();
-          expect(element.helperText).to.equal('New');
+          expect(element._helperNode).to.equal(div);
         });
 
         it('should support replacing lazy helper with a new one using insertBefore', async () => {
@@ -351,7 +410,7 @@ describe('field-mixin', () => {
           div.textContent = 'New';
           element.insertBefore(div, helper);
           await nextFrame();
-          expect(element.helperText).to.equal('New');
+          expect(element._helperNode).to.equal(div);
         });
 
         it('should support replacing lazy helper with a new one using replaceChild', async () => {
@@ -363,13 +422,53 @@ describe('field-mixin', () => {
           div.textContent = 'New';
           element.replaceChild(div, helper);
           await nextFrame();
-          expect(element.helperText).to.equal('New');
+          expect(element._helperNode).to.equal(div);
+        });
+
+        it('should support adding lazy helper after removing the default one', async () => {
+          element.removeChild(defaultHelper);
+          await nextFrame();
+
+          element.appendChild(helper);
+          await nextFrame();
+
+          expect(element._helperNode).to.equal(helper);
+        });
+
+        it('should restore the default helper when helperText property is set', async () => {
+          element.appendChild(helper);
+          await nextFrame();
+
+          element.removeChild(helper);
+          await nextFrame();
+          expect(element._helperNode).to.equal(defaultHelper);
+        });
+
+        it('should keep has-helper attribute when the default helper is restored', async () => {
+          element.appendChild(helper);
+          await nextFrame();
+
+          element.removeChild(helper);
+          await nextFrame();
+          expect(element.hasAttribute('has-helper')).to.be.true;
+        });
+
+        it('should remove has-helper attribute when helperText is set to empty', async () => {
+          element.appendChild(helper);
+          await nextFrame();
+
+          element.helperText = '';
+
+          element.removeChild(helper);
+          await nextFrame();
+          expect(element.hasAttribute('has-helper')).to.be.false;
         });
       });
 
       describe('ID attribute', () => {
         beforeEach(async () => {
           element = fixtureSync('<field-mixin-element></field-mixin-element>');
+          element.helperText = 'Default';
           await nextFrame();
           helper = document.createElement('div');
           helper.setAttribute('slot', 'helper');
@@ -397,11 +496,22 @@ describe('field-mixin', () => {
           await nextFrame();
           expect(helper.getAttribute('id')).to.match(ID_REGEX);
         });
+
+        it('should apply helper text if the custom helper is removed', async () => {
+          element.appendChild(helper);
+          await nextFrame();
+          element.helperText = 'Default';
+          element.removeChild(helper);
+          await nextFrame();
+          const defaultHelper = element.querySelector('[slot="helper"]');
+          expect(defaultHelper.textContent).to.equal('Default');
+        });
       });
 
       describe('attributes', () => {
         beforeEach(async () => {
           element = fixtureSync('<field-mixin-element></field-mixin-element>');
+          element.helperText = 'Default';
           await nextFrame();
           helper = document.createElement('div');
           helper.setAttribute('slot', 'helper');
@@ -418,9 +528,9 @@ describe('field-mixin', () => {
           expect(element.hasAttribute('has-helper')).to.be.true;
         });
 
-        it('should update lazy helper content on property change', () => {
+        it('should not update lazy helper content on property change', () => {
           element.helperText = '3 digits';
-          expect(helper.textContent).to.equal('3 digits');
+          expect(helper.textContent).to.equal('Lazy');
         });
       });
     });
@@ -428,7 +538,7 @@ describe('field-mixin', () => {
 
   describe('aria-describedby', () => {
     beforeEach(() => {
-      element = fixtureSync(`<field-mixin-element></field-mixin-element>`);
+      element = fixtureSync(`<field-mixin-element helper-text="Helper"></field-mixin-element>`);
       label = element.querySelector('[slot=label]');
       error = element.querySelector('[slot=error-message]');
       helper = element.querySelector('[slot=helper]');
@@ -453,7 +563,7 @@ describe('field-mixin', () => {
 
   describe('aria-labelledby', () => {
     beforeEach(() => {
-      element = fixtureSync(`<field-mixin-group-element></field-mixin-group-element>`);
+      element = fixtureSync(`<field-mixin-group-element helper-text="Helper"></field-mixin-group-element>`);
       label = element.querySelector('[slot=label]');
       error = element.querySelector('[slot=error-message]');
       helper = element.querySelector('[slot=helper]');
