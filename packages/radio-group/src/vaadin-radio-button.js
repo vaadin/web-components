@@ -162,7 +162,7 @@ class RadioButton extends SlotLabelMixin(
 
     console.warn(
       `WARNING: Since Vaadin 22, placing the label as a direct child of a <vaadin-radio-button> is deprecated.
-  Please use <label slot="label"> wrapper or the "label"-property instead.`
+  Please use <label slot="label"> wrapper or the label property instead.`
     );
   }
 
