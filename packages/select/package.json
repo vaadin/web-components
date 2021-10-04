@@ -4,7 +4,11 @@
   "description": "vaadin-select",
   "main": "vaadin-select.js",
   "module": "vaadin-select.js",
-  "repository": "vaadin/vaadin-select",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/select"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-select",

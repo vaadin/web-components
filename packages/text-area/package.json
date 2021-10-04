@@ -4,7 +4,11 @@
   "description": "vaadin-text-area",
   "main": "vaadin-text-area.js",
   "module": "vaadin-text-area.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/text-area"
+  },
   "keywords": [
     "Vaadin",
     "input",

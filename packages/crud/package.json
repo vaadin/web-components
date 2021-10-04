@@ -4,7 +4,11 @@
   "description": "vaadin-crud",
   "main": "vaadin-crud.js",
   "module": "vaadin-crud.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/crud"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-crud",

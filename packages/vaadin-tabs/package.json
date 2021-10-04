@@ -4,7 +4,11 @@
   "description": "vaadin-tabs",
   "main": "vaadin-tabs.js",
   "module": "vaadin-tabs.js",
-  "repository": "vaadin/vaadin-tabs",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-tabs"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-tabs",

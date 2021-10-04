@@ -4,7 +4,11 @@
   "description": "vaadin-messages",
   "main": "all-imports.js",
   "module": "all-imports.js",
-  "repository": "vaadin/vaadin-messages",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-messages"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-messages",

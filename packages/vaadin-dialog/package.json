@@ -4,7 +4,11 @@
   "description": "vaadin-dialog",
   "main": "vaadin-dialog.js",
   "module": "vaadin-dialog.js",
-  "repository": "vaadin/vaadin-dialog",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-dialog"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-dialog",

@@ -4,7 +4,11 @@
   "description": "vaadin-rich-text-editor",
   "main": "vaadin-rich-text-editor.js",
   "module": "vaadin-rich-text-editor.js",
-  "repository": "vaadin/vaadin-rich-text-editor",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-rich-text-editor"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-rich-text-editor",

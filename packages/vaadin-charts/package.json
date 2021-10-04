@@ -4,7 +4,11 @@
   "description": "vaadin-charts",
   "main": "vaadin-chart.js",
   "module": "vaadin-chart.js",
-  "repository": "vaadin/vaadin-charts",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-charts"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-charts",

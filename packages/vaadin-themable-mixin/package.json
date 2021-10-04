@@ -4,7 +4,11 @@
   "description": "vaadin-themable-mixin",
   "main": "vaadin-themable-mixin.js",
   "module": "vaadin-themable-mixin.js",
-  "repository": "vaadin/vaadin-themable-mixin",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-themable-mixin"
+  },
   "keywords": [
     "Vaadin",
     "web-components",

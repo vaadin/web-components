@@ -4,7 +4,11 @@
   "description": "vaadin-radio-group",
   "main": "vaadin-radio-group.js",
   "module": "vaadin-radio-group.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/radio-group"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-radio-group",

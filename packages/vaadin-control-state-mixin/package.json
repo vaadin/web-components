@@ -4,7 +4,11 @@
   "description": "vaadin-control-state-mixin",
   "main": "vaadin-control-state-mixin.js",
   "module": "vaadin-control-state-mixin.js",
-  "repository": "vaadin/vaadin-control-state-mixin",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-control-state-mixin"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-control-state-mixin",

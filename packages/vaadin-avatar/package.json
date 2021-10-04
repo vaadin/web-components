@@ -4,7 +4,11 @@
   "description": "vaadin-avatar",
   "main": "vaadin-avatar-group.js",
   "module": "vaadin-avatar-group.js",
-  "repository": "vaadin/vaadin-avatar",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-avatar"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-avatar",

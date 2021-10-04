@@ -4,7 +4,11 @@
   "description": "vaadin-text-field",
   "main": "vaadin-text-field.js",
   "module": "vaadin-text-field.js",
-  "repository": "vaadin/vaadin-text-field",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-text-field"
+  },
   "keywords": [
     "Vaadin",
     "input",

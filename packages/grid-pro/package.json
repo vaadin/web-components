@@ -4,7 +4,11 @@
   "description": "vaadin-grid-pro",
   "main": "vaadin-grid-pro.js",
   "module": "vaadin-grid-pro.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/grid-pro"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-grid-pro",

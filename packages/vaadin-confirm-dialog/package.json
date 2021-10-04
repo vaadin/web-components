@@ -4,7 +4,11 @@
   "description": "vaadin-confirm-dialog",
   "main": "vaadin-confirm-dialog.js",
   "module": "vaadin-confirm-dialog.js",
-  "repository": "vaadin/vaadin-confirm-dialog",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-confirm-dialog"
+  },
   "keywords": [
     "Vaadin",
     "vaadin-confirm-dialog",

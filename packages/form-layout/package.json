@@ -4,7 +4,11 @@
   "description": "Web component providing configurable responsive layout for form elements",
   "main": "vaadin-form-layout.js",
   "module": "vaadin-form-layout.js",
-  "repository": "vaadin/web-components",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/form-layout"
+  },
   "keywords": [
     "Vaadin",
     "form-layout",

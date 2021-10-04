@@ -11,7 +11,11 @@
     "web-component",
     "polymer"
   ],
-  "repository": "vaadin/vaadin-time-picker",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-time-picker"
+  },
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
