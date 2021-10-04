@@ -65,12 +65,26 @@ describe('radio-button', () => {
       expect(input.value).to.equal('on');
     });
 
+    it('should set checked property on click', () => {
+      radio.click();
+      expect(radio.checked).to.be.true;
+
+      radio.click();
+      expect(radio.checked).to.be.true;
+    });
+
     it('should set checked property on input click', () => {
+      input.click();
+      expect(radio.checked).to.be.true;
+
       input.click();
       expect(radio.checked).to.be.true;
     });
 
     it('should set checked property on label click', () => {
+      label.click();
+      expect(radio.checked).to.be.true;
+
       label.click();
       expect(radio.checked).to.be.true;
     });
@@ -81,12 +95,6 @@ describe('radio-button', () => {
       // Press Space on the input
       await sendKeys({ press: 'Space' });
 
-      expect(radio.checked).to.be.true;
-    });
-
-    it('should set checked property on input change', () => {
-      input.checked = true;
-      fire(input, 'change');
       expect(radio.checked).to.be.true;
     });
 

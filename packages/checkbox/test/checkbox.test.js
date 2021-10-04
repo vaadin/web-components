@@ -63,6 +63,14 @@ describe('checkbox', () => {
       expect(getComputedStyle(checkbox).display).to.equal('none');
     });
 
+    it('should toggle checked property on click', () => {
+      checkbox.click();
+      expect(checkbox.checked).to.be.true;
+
+      checkbox.click();
+      expect(checkbox.checked).to.be.false;
+    });
+
     it('should toggle checked property on input click', () => {
       input.click();
       expect(checkbox.checked).to.be.true;

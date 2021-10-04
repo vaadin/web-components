@@ -48,6 +48,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
+ * @fires {CustomEvent} change - Fired when the user commits a value change.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  *
  * @extends HTMLElement
@@ -145,7 +146,7 @@ class RadioButton extends SlotLabelMixin(
    *
    * @override
    * @protected
-   * @type {HTMLSlotElement}
+   * @return {HTMLSlotElement}
    */
   get _sourceSlot() {
     return this.$.noop;
@@ -164,6 +165,19 @@ class RadioButton extends SlotLabelMixin(
       })
     );
     this.addController(new AriaLabelController(this.inputElement, this._labelNode));
+  }
+
+  /**
+   * Override method inherited from `CheckedMixin`
+   * to prevent the radio button from toggling off.
+   *
+   * @override
+   * @protected
+   */
+  _toggleChecked() {
+    if (!this.checked) {
+      super._toggleChecked();
+    }
   }
 }
 

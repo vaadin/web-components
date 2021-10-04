@@ -44,6 +44,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
+ * @fires {CustomEvent} change - Fired when the user commits a value change.
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  *
@@ -185,8 +186,9 @@ class Checkbox extends SlotLabelMixin(
   }
 
   /**
-   * Extends the method from `ActiveMixin` in order to
-   * prevent setting the `active` attribute when interacting with a link inside the label.
+   * Override method inherited from `ActiveMixin`
+   * to prevent setting the `active` attribute
+   * when the user interacts with a link inside the label.
    *
    * @param {Event} event
    * @return {boolean}
@@ -202,19 +204,36 @@ class Checkbox extends SlotLabelMixin(
   }
 
   /**
-   * Extends the method from `CheckedMixin` in order to
-   * reset the indeterminate state once the user switches the checkbox.
+   * Override method inherited from `CheckedMixin`
+   * to prevent toggling the `checked` state
+   * when the user interacts with a link inside the label.
    *
-   * @param {boolean} checked
+   * @param {MouseEvent} event
+   * @return {boolean}
    * @protected
    * @override
    */
-  _toggleChecked(checked) {
+  _shouldToggleChecked(event) {
+    if (event.target.localName === 'a') {
+      return false;
+    }
+
+    return super._shouldToggleChecked(event);
+  }
+
+  /**
+   * Override method inherited from `CheckedMixin`
+   * to reset the indeterminate state once the user switches the checkbox.
+   *
+   * @protected
+   * @override
+   */
+  _toggleChecked() {
     if (this.indeterminate) {
       this.indeterminate = false;
     }
 
-    super._toggleChecked(checked);
+    super._toggleChecked();
   }
 }
 

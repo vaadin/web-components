@@ -403,7 +403,7 @@ describe('radio-group', () => {
       expect(changeSpy.calledOnce).to.be.true;
 
       const event = changeSpy.firstCall.args[0];
-      expect(event.target).to.equal(buttons[0].inputElement);
+      expect(event.target).to.equal(buttons[0]);
       expect(event.target.value).to.equal(buttons[0].value);
     });
   });
