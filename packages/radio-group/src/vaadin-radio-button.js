@@ -141,7 +141,7 @@ class RadioButton extends SlotLabelMixin(
   }
 
   /**
-   * A reference to the default slot from which nodes are forwarded to the label node.
+   * A reference to the default slot from which nodes are copied to the label node.
    *
    * @override
    * @protected
@@ -149,6 +149,21 @@ class RadioButton extends SlotLabelMixin(
    */
   get _sourceSlot() {
     return this.$.noop;
+  }
+
+  /**
+   * Override __copyNodesToSlotTarget from SlotTargetMixin to show a warning.
+   * @override
+   * @protected
+   * @param {Array<Node>} nodes
+   **/
+  __copyNodesToSlotTarget(nodes) {
+    super.__copyNodesToSlotTarget(nodes);
+
+    console.warn(
+      `WARNING: Since Vaadin 22, placing the label as a direct child of a <vaadin-radio-button> is deprecated.
+  Please use <label slot="label"> wrapper or the "label"-property instead.`
+    );
   }
 
   /** @protected */

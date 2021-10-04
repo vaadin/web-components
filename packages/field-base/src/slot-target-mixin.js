@@ -7,12 +7,12 @@ const SlotTargetMixinImplementation = (superclass) =>
       super.ready();
 
       if (this._sourceSlot) {
-        this.__sourceSlotObserver = new MutationObserver(() => this.__forwardNodesToSlotTarget());
+        this.__sourceSlotObserver = new MutationObserver(() => this.__checkAndCopyNodesToSlotTarget());
 
-        this.__forwardNodesToSlotTarget();
+        this.__checkAndCopyNodesToSlotTarget();
 
         this._sourceSlot.addEventListener('slotchange', () => {
-          this.__forwardNodesToSlotTarget();
+          this.__checkAndCopyNodesToSlotTarget();
         });
       }
     }
@@ -45,7 +45,7 @@ const SlotTargetMixinImplementation = (superclass) =>
      *
      * @private
      */
-    __forwardNodesToSlotTarget() {
+    __checkAndCopyNodesToSlotTarget() {
       this.__sourceSlotObserver.disconnect();
 
       if (!this._slotTarget) {
@@ -58,20 +58,31 @@ const SlotTargetMixinImplementation = (superclass) =>
         .filter((node) => !(node.nodeType == Node.TEXT_NODE && node.textContent.trim() === ''));
 
       if (nodes.length > 0) {
-        this._slotTarget.innerHTML = '';
-
-        nodes.forEach((node) => {
-          // Clone the nodes and append the clones to the target slot
-          this._slotTarget.appendChild(node.cloneNode(true));
-          // Observe all changes to the source node to have the clones updated
-          this.__sourceSlotObserver.observe(node, {
-            attributes: true,
-            childList: true,
-            subtree: true,
-            characterData: true
-          });
-        });
+        this.__copyNodesToSlotTarget(nodes);
       }
+    }
+
+    /**
+     * Copies the nodes to the target element. Target element is cleared before
+     * the nodes are copied.
+     *
+     * @protected
+     * @param {Array<Node>} nodes
+     */
+    __copyNodesToSlotTarget(nodes) {
+      this._slotTarget.innerHTML = '';
+
+      nodes.forEach((node) => {
+        // Clone the nodes and append the clones to the target slot
+        this._slotTarget.appendChild(node.cloneNode(true));
+        // Observe all changes to the source node to have the clones updated
+        this.__sourceSlotObserver.observe(node, {
+          attributes: true,
+          childList: true,
+          subtree: true,
+          characterData: true
+        });
+      });
     }
   };
 

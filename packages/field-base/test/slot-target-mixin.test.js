@@ -87,22 +87,25 @@ describe('slot-target-mixin', () => {
       element = fixtureSync(`<slot-target-mixin-element></slot-target-mixin-element>`);
 
       const node = document.createElement('div');
+      node.textContent = 'node';
       element.appendChild(node);
       await nextFrame();
 
       expect(element._slotTarget.childNodes).to.have.lengthOf(1);
-      expect(element._slotTarget.firstChild).to.equal(node);
+      expect(element._slotTarget.firstChild.textContent).to.equal('node');
     });
 
-    it('should re-populate the target element when adding new nodes to the source slot', async () => {
+    it('should add new nodes to the target slot', async () => {
       element = fixtureSync(`<slot-target-mixin-element><div>Content</div></slot-target-mixin-element>`);
 
       const node = document.createElement('div');
+      node.textContent = 'New content';
       element.appendChild(node);
       await nextFrame();
 
-      expect(element._slotTarget.childNodes).to.have.lengthOf(1);
-      expect(element._slotTarget.firstChild).to.equal(node);
+      expect(element._slotTarget.childNodes).to.have.lengthOf(2);
+      expect(element._slotTarget.children[0].textContent).to.equal('Content');
+      expect(element._slotTarget.children[1].textContent).to.equal('New content');
     });
 
     it('should reflect content mutations to the target slot content', async () => {
