@@ -54,7 +54,11 @@ const SlotTargetMixinImplementation = (superclass) =>
 
       // Remove any existing clones from the slot target
       if (this.__slotTargetClones) {
-        this.__slotTargetClones.forEach((node) => this._slotTarget.removeChild(node));
+        this.__slotTargetClones.forEach((node) => {
+          if (node.parentElement === this._slotTarget) {
+            this._slotTarget.removeChild(node);
+          }
+        });
         delete this.__slotTargetClones;
       }
 
@@ -64,6 +68,7 @@ const SlotTargetMixinImplementation = (superclass) =>
         .filter((node) => !(node.nodeType == Node.TEXT_NODE && node.textContent.trim() === ''));
 
       if (nodes.length > 0) {
+        this._slotTarget.innerHTML = '';
         this.__copyNodesToSlotTarget(nodes);
       }
     }
