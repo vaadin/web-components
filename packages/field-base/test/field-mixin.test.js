@@ -425,6 +425,16 @@ describe('field-mixin', () => {
           expect(element._helperNode).to.equal(div);
         });
 
+        it('should support adding lazy helper after removing the default one', async () => {
+          element.removeChild(defaultHelper);
+          await nextFrame();
+
+          element.appendChild(helper);
+          await nextFrame();
+
+          expect(element._helperNode).to.equal(helper);
+        });
+
         it('should restore the default helper when helperText property is set', async () => {
           element.appendChild(helper);
           await nextFrame();

@@ -145,7 +145,11 @@ export const FieldMixin = (superclass) =>
 
           this.__helperIdObserver.observe(newHelper, { attributes: true });
         } else if (oldHelper) {
-          this.__helperIdObserver.disconnect();
+          // The observer does not exist when default helper is removed.
+          if (this.__helperIdObserver) {
+            this.__helperIdObserver.disconnect();
+          }
+
           this.__applyDefaultHelper(this.helperText);
         }
       });
