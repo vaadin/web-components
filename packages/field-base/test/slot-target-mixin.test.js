@@ -61,6 +61,7 @@ describe('slot-target-mixin', () => {
     beforeEach(() => {
       element = document.createElement('slot-target-mixin-element');
       node1 = document.createElement('div');
+      node1.textContent = 'node1';
       node2 = document.createTextNode('');
       element.append(node1, node2);
 
@@ -72,13 +73,12 @@ describe('slot-target-mixin', () => {
     });
 
     it('should populate the target element with non-empty nodes from the source slot', () => {
-      expect(element._slotTarget.childNodes).to.have.lengthOf(1);
-      expect(element._slotTarget.firstChild).to.equal(node1);
+      expect(element._slotTarget.firstChild.textContent).to.eql('node1');
     });
 
-    it('should keep whitespace text nodes in the source slot', () => {
-      expect(element.childNodes).to.have.lengthOf(1);
-      expect(element.firstChild).to.equal(node2);
+    it('should not clone whitespace text nodes', () => {
+      expect(element.childNodes).to.have.lengthOf(2);
+      expect(element._slotTarget.childNodes).to.have.lengthOf(1);
     });
   });
 
@@ -103,6 +103,14 @@ describe('slot-target-mixin', () => {
 
       expect(element._slotTarget.childNodes).to.have.lengthOf(1);
       expect(element._slotTarget.firstChild).to.equal(node);
+    });
+
+    it('should reflect content mutations to the target slot content', async () => {
+      element = fixtureSync(`<slot-target-mixin-element><div>Content</div></slot-target-mixin-element>`);
+      expect(element._slotTarget.textContent).to.equal('Content');
+      element.firstChild.textContent = 'New content';
+      await nextFrame();
+      expect(element._slotTarget.textContent).to.equal('New content');
     });
   });
 
