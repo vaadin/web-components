@@ -18,7 +18,7 @@ const SlotTargetMixinImplementation = (superclass) =>
     }
 
     /**
-     * A reference to the source slot from which the nodes are copies to the target element.
+     * A reference to the source slot from which the nodes are copied to the target element.
      *
      * @type {HTMLSlotElement | null}
      * @protected
