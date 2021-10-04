@@ -59,9 +59,9 @@ registerStyles(
       cursor: var(--lumo-clickable-cursor);
     }
 
-    [part='year-number'],
+    [part='year-number']:not([current]),
     [part='year-separator'] {
-      opacity: 0.5;
+      opacity: 0.7;
       transition: 0.2s opacity;
     }
 

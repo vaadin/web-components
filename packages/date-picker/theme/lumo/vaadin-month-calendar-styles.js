@@ -34,9 +34,9 @@ registerStyles(
     [part='weekdays'],
     [part='weekday'],
     [part='week-numbers'] {
-      font-size: var(--lumo-font-size-xs);
+      font-size: var(--lumo-font-size-xxs);
       line-height: 1;
-      color: var(--lumo-tertiary-text-color);
+      color: var(--lumo-secondary-text-color);
     }
 
     [part='weekdays'] {
