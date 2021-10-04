@@ -114,11 +114,12 @@ class CrudGridElement extends IncludedMixin(GridElement) {
   }
 
   /**
-   * Parse the camelCase column names into sentence case column names
-   *
-   * @private
-   */  
-   _generateHeader(path) {
+   * Parse the camelCase column names into sentence case headers.
+   * @param {string} path
+   * @return {string}
+   * @protected
+   */
+  _generateHeader(path) {
     return path
       .substr(path.lastIndexOf('.') + 1)
       .replace(/([A-Z])/g, '-$1')
