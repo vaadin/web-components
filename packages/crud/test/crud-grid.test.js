@@ -67,6 +67,18 @@ describe('crud grid', () => {
         expect(getHeaderCellContent(grid, 1, 3).textContent.trim()).to.be.equal('Last');
       });
 
+      it('should convert camelCase fields label into sentence field label', async () => {
+        grid.include = 'role,passwordField,name.firstName,name.last';
+        flushGrid(grid);
+        await aTimeout(100);
+        expect(getHeaderCellContent(grid, 0, 2).textContent.trim()).to.be.equal('Name');
+        expect(getHeaderCellContent(grid, 1, 0).textContent.trim()).to.be.equal('Role');
+        expect(getHeaderCellContent(grid, 1, 1).textContent.trim()).to.be.equal('Password field');
+        expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.be.equal('First name');
+        expect(getHeaderCellContent(grid, 1, 3).textContent.trim()).to.be.equal('Last');
+      });
+
+
       it('should configure include fields in the provided order when items is provided', () => {
         grid.include = 'a, b, c';
         grid.items = [{ d: 1 }];
