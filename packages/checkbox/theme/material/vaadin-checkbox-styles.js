@@ -18,11 +18,6 @@ registerStyles(
       padding: 3px 12px 3px 6px;
     }
 
-    [part='native-checkbox'] {
-      opacity: 0;
-      position: absolute;
-    }
-
     [part='checkbox'] {
       display: inline-block;
       width: 16px;
@@ -34,12 +29,6 @@ registerStyles(
       box-shadow: inset 0 0 0 2px var(--material-secondary-text-color);
       line-height: 1.275;
       background-color: transparent;
-    }
-
-    /* Enhance the clickable area for the input */
-    ::slotted(input) {
-      width: calc(16px + 4px * 2);
-      height: calc(16px + 4px * 2);
     }
 
     /* Used for the ripple */

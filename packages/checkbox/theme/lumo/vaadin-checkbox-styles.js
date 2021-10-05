@@ -27,10 +27,6 @@ registerStyles(
       padding: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs);
     }
 
-    [part='checkbox-wrapper'] {
-      position: relative;
-    }
-
     [part='checkbox'] {
       width: calc(var(--lumo-size-m) / 2);
       height: calc(var(--lumo-size-m) / 2);
