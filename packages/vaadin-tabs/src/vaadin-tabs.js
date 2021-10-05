@@ -133,13 +133,13 @@ class TabsElement extends ElementMixin(
           content: '◀';
         }
       </style>
-      <div on-click="_scrollBack" part="back-button"></div>
+      <div on-click="_scrollBack" part="back-button" aria-hidden="true"></div>
 
       <div id="scroll" part="tabs">
         <slot></slot>
       </div>
 
-      <div on-click="_scrollForward" part="forward-button"></div>
+      <div on-click="_scrollForward" part="forward-button" aria-hidden="true"></div>
     `;
   }
 
