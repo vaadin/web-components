@@ -97,6 +97,12 @@ describe('ARIA', () => {
       });
     });
 
+    it('should set aria-posinset attribute on the dropdown items', () => {
+      items.forEach((item, idx) => {
+        expect(item.getAttribute('aria-posinset')).to.equal(idx.toString());
+      });
+    });
+
     it('should set aria-activedescendant on the input', () => {
       expect(input.hasAttribute('aria-activedescendant')).to.be.false;
 
