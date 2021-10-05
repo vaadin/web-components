@@ -155,7 +155,7 @@ class RadioButton extends SlotLabelMixin(
    * Override __copyNodesToSlotTarget from SlotTargetMixin to show a warning.
    * @override
    * @protected
-   * @param {Array<Node>} nodes
+   * @param {!Array<!Node>} nodes
    **/
   __copyNodesToSlotTarget(nodes) {
     super.__copyNodesToSlotTarget(nodes);
