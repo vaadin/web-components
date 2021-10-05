@@ -3,7 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -117,6 +116,7 @@ export const ComboBoxMixin = (subclass) =>
          */
         _focusedIndex: {
           type: Number,
+          observer: '_focusedIndexChanged',
           value: -1
         },
 
@@ -247,7 +247,13 @@ export const ComboBoxMixin = (subclass) =>
 
         input.setAttribute('role', 'combobox');
         input.setAttribute('aria-autocomplete', 'list');
-        input.setAttribute('aria-expanded', this.opened);
+        input.setAttribute('aria-expanded', !!this.opened);
+
+        // Disable the macOS Safari spell check auto corrections.
+        input.setAttribute('spellcheck', 'false');
+
+        // Disable iOS autocorrect suggestions.
+        input.setAttribute('autocorrect', 'off');
 
         this._revertInputValueToValue();
 
@@ -264,7 +270,6 @@ export const ComboBoxMixin = (subclass) =>
       this.addEventListener('focusout', this._boundOnFocusout);
 
       this._lastCommittedValue = this.value;
-      IronA11yAnnouncer.requestAvailability();
 
       this.$.dropdown.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
 
@@ -299,7 +304,7 @@ export const ComboBoxMixin = (subclass) =>
         return;
       }
 
-      this.$.dropdown._scroller.querySelectorAll('vaadin-combo-box-item').forEach((item) => {
+      this._getItemElements().forEach((item) => {
         item.requestContentUpdate();
       });
     }
@@ -333,6 +338,29 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
+    _focusedIndexChanged(index, oldIndex) {
+      if (oldIndex === undefined) {
+        return;
+      }
+      this._updateActiveDescendant(index);
+    }
+
+    /** @private */
+    _updateActiveDescendant(index) {
+      const input = this.inputElement;
+      if (!input) {
+        return;
+      }
+
+      const item = this._getItemElements().find((el) => el.index === index);
+      if (item) {
+        input.setAttribute('aria-activedescendant', item.id);
+      } else {
+        input.removeAttribute('aria-activedescendant');
+      }
+    }
+
+    /** @private */
     _openedChanged(opened, wasOpened) {
       // Prevent _close() being called when opened is set to its default value (false).
       if (wasOpened === undefined) {
@@ -353,8 +381,15 @@ export const ComboBoxMixin = (subclass) =>
         }
       }
 
-      if (this.inputElement) {
-        this.inputElement.setAttribute('aria-expanded', opened);
+      const input = this.inputElement;
+      if (input) {
+        input.setAttribute('aria-expanded', !!opened);
+
+        if (opened) {
+          input.setAttribute('aria-controls', this.$.dropdown.scrollerId);
+        } else {
+          input.removeAttribute('aria-controls');
+        }
       }
     }
 
@@ -479,14 +514,8 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _prefillFocusedItemLabel() {
       if (this._focusedIndex > -1) {
-        // Reset the input value asynchronously to prevent partial value changes
-        // announce. Makes OSX VoiceOver to announce the complete value instead.
-        this._inputElementValue = '';
-        // 1ms delay needed for OSX VoiceOver to realise input value was reset
-        setTimeout(() => {
-          this._inputElementValue = this._getItemLabel(this.$.dropdown.focusedItem);
-          this._markAllSelectionRange();
-        }, 1);
+        this._inputElementValue = this._getItemLabel(this.$.dropdown.focusedItem);
+        this._markAllSelectionRange();
       }
     }
 
@@ -621,8 +650,14 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _onOpened() {
       setTimeout(() => this._resizeDropdown(), 1);
+
       // Defer scroll position adjustment to improve performance.
-      window.requestAnimationFrame(() => this.$.dropdown.adjustScrollPosition());
+      requestAnimationFrame(() => {
+        this.$.dropdown.adjustScrollPosition();
+
+        // Set attribute after the items are rendered when overlay is opened for the first time.
+        this._updateActiveDescendant(this._focusedIndex);
+      });
 
       // _detectAndDispatchChange() should not consider value changes done before opening
       this._lastCommittedValue = this.value;
@@ -939,6 +974,11 @@ export const ComboBoxMixin = (subclass) =>
       if (this.selectedItem === null && previouslySelectedItem === null) {
         this._selectedItemChanged(this.selectedItem);
       }
+    }
+
+    /** @protected */
+    _getItemElements() {
+      return Array.from(this.$.dropdown._scroller.querySelectorAll('vaadin-combo-box-item'));
     }
 
     /** @private */

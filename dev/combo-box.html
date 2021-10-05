@@ -10,12 +10,17 @@
     </script>
   </head>
   <body>
-    <vaadin-combo-box></vaadin-combo-box>
+    <vaadin-combo-box label="User"></vaadin-combo-box>
 
     <script>
       const comboBox = document.querySelector('vaadin-combo-box');
-      comboBox.items = new Array(100).fill().map((e, i) => `value-${i}`);
-      comboBox.value = comboBox.items[50];
+
+      (async () => {
+        const res = await fetch('https://demo.vaadin.com/demo-data/1.0/people?count=200');
+        const arr = await res.json();
+        comboBox.items = arr.result.map((user) => `${user.firstName} ${user.lastName}`);
+        // comboBox.renderer = (root, owner, model) => (root.innerHTML = `<i>${model.item}</i>`);
+      })();
     </script>
   </body>
 </html>

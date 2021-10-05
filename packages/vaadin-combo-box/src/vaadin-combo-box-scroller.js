@@ -224,6 +224,8 @@ export class ComboBoxScroller extends PolymerElement {
     if (this.__virtualizer && items) {
       this.__virtualizer.size = items.length;
       this.__virtualizer.flush();
+      // Ensure the total count of items is properly announced.
+      this.setAttribute('aria-setsize', items.length);
     }
   }
 
@@ -273,9 +275,16 @@ export class ComboBoxScroller extends PolymerElement {
       focused: this.__isItemFocused(focusedIndex, index)
     });
 
+    el.id = `${this.__hostTagName}-item-${index}`;
     el.setAttribute('role', this.__getAriaRole(index));
     el.setAttribute('aria-selected', this.__getAriaSelected(focusedIndex, index));
-    el.setAttribute('theme', this.theme);
+    el.setAttribute('aria-posinset', index);
+
+    if (this.theme) {
+      el.setAttribute('theme', this.theme);
+    } else {
+      el.removeAttribute('theme');
+    }
   }
 
   /** @private */

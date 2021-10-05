@@ -38,7 +38,7 @@ describe('dynamic size change', () => {
       const items = getViewportItems(comboBox);
       expect(items.length).to.be.above(5);
       items.forEach((item) => {
-        expect(item.$.content.textContent).to.be.ok;
+        expect(item.textContent).to.be.ok;
       });
     });
   });

@@ -43,7 +43,9 @@ export class ComboBoxItem extends ThemableMixin(DirMixin(PolymerElement)) {
           display: none;
         }
       </style>
-      <div part="content" id="content"></div>
+      <div part="content">
+        <slot></slot>
+      </div>
     `;
   }
 
@@ -132,7 +134,7 @@ export class ComboBoxItem extends ThemableMixin(DirMixin(PolymerElement)) {
       selected: this.selected
     };
 
-    this.renderer(this.$.content, this._comboBox, model);
+    this.renderer(this, this._comboBox, model);
   }
 
   /** @private */
@@ -142,11 +144,11 @@ export class ComboBoxItem extends ThemableMixin(DirMixin(PolymerElement)) {
     }
 
     if (this._oldRenderer !== renderer) {
-      this.$.content.innerHTML = '';
+      this.innerHTML = '';
       // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
       // When clearing the rendered content, this part needs to be manually disposed of.
       // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
-      delete this.$.content._$litPart$;
+      delete this._$litPart$;
     }
 
     if (renderer) {
@@ -159,9 +161,7 @@ export class ComboBoxItem extends ThemableMixin(DirMixin(PolymerElement)) {
   __updateLabel(label, renderer) {
     if (renderer) return;
 
-    if (this.$.content) {
-      this.$.content.textContent = label;
-    }
+    this.textContent = label;
   }
 }
 

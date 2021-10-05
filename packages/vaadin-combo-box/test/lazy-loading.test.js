@@ -305,9 +305,7 @@ describe('lazy loading', () => {
             setTimeout(() => {
               callback(items, 10);
               setTimeout(() => {
-                const renderedTexts = getAllItems(comboBox).map(
-                  (i) => i.shadowRoot.querySelector('#content').innerText
-                );
+                const renderedTexts = getAllItems(comboBox).map((item) => item.innerText);
                 expect(renderedTexts).to.eql(items);
                 done();
               });
@@ -329,7 +327,7 @@ describe('lazy loading', () => {
 
               setTimeout(() => {
                 // Expect the renderer to have run for the updated items.
-                expect(getViewportItems(comboBox)[0].$.content.textContent).to.equal('bar');
+                expect(getViewportItems(comboBox)[0].textContent).to.equal('bar');
 
                 // Avoid getting done called multiple times
                 if (!done._called) {
@@ -444,7 +442,7 @@ describe('lazy loading', () => {
           expect(comboBox.filteredItems).to.eql(['baz']);
           // The helper already excludes hidden items
           const visibleItems = getAllItems(comboBox);
-          expect(visibleItems.map((item) => item.$.content.innerText)).to.eql(['baz']);
+          expect(visibleItems.map((item) => item.innerText)).to.eql(['baz']);
         });
       });
     });

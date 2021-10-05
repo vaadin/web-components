@@ -61,6 +61,14 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
     return this.querySelector('[part="clear-button"]');
   }
 
+  /**
+   * @protected
+   * @override
+   */
+  _getItemElements() {
+    return Array.from(this.$.dropdown._scroller.querySelectorAll('vaadin-time-picker-item'));
+  }
+
   /** @protected */
   ready() {
     super.ready();

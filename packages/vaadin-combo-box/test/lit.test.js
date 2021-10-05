@@ -25,7 +25,7 @@ describe('lit', () => {
 
     it('should render the content', () => {
       comboBox.opened = true;
-      expect(getViewportItems(comboBox)[0].$.content.textContent).to.equal('value-0');
+      expect(getViewportItems(comboBox)[0].textContent).to.equal('value-0');
     });
 
     it('should render new content after assigning a new renderer', () => {
@@ -33,7 +33,7 @@ describe('lit', () => {
       comboBox.renderer = (root, _, { index }) => {
         render(html`new-${index}`, root);
       };
-      expect(getViewportItems(comboBox)[0].$.content.textContent).to.equal('new-0');
+      expect(getViewportItems(comboBox)[0].textContent).to.equal('new-0');
     });
   });
 });
