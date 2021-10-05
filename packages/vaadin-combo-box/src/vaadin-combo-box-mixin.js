@@ -13,7 +13,7 @@ import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
  * @polymerMixin
  */
 export const ComboBoxMixin = (subclass) =>
-  class ComboBoxMixinElement extends KeyboardMixin(InputMixin(DisabledMixin(subclass))) {
+  class VaadinComboBoxMixinElement extends KeyboardMixin(InputMixin(DisabledMixin(subclass))) {
     static get properties() {
       return {
         /**
