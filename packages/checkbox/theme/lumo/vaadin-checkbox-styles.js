@@ -27,6 +27,10 @@ registerStyles(
       padding: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs);
     }
 
+    [part='checkbox-wrapper'] {
+      position: relative;
+    }
+
     [part='checkbox'] {
       width: calc(var(--lumo-size-m) / 2);
       height: calc(var(--lumo-size-m) / 2);
@@ -38,16 +42,6 @@ registerStyles(
       line-height: 1.2;
       cursor: var(--lumo-clickable-cursor);
       flex: none;
-    }
-
-    /* Enhance the clickable area for the input */
-    ::slotted(input) {
-      /* TODO: Remove when CSS variables will be used instead of em units. */
-      font: inherit;
-      /* TODO: Use CSS variables instead of em units. */
-      width: calc(1em + 2px + 0.1875em * 2);
-      /* TODO: Use CSS variables instead of em units. */
-      height: calc(1em + 2px + 0.1875em * 2);
     }
 
     :host([indeterminate]) [part='checkbox'],

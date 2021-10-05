@@ -67,7 +67,6 @@ class Checkbox extends SlotLabelMixin(
       <style>
         :host {
           display: inline-block;
-          position: relative;
         }
 
         :host([hidden]) {
@@ -88,15 +87,20 @@ class Checkbox extends SlotLabelMixin(
           position: absolute;
           top: 0;
           left: 0;
+          right: 0;
+          width: 100%;
+          height: 100%;
           opacity: 0;
           cursor: inherit;
           margin: 0;
         }
       </style>
       <div class="vaadin-checkbox-container">
-        <div part="checkbox">
+        <div part="checkbox-wrapper">
+          <div part="checkbox"></div>
           <slot name="input"></slot>
         </div>
+
         <div part="label">
           <slot name="label"></slot>
         </div>
