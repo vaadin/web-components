@@ -6,12 +6,7 @@ describe('vaadin-tabs', () => {
   let tabs;
 
   beforeEach(() => {
-    tabs = fixtureSync(`
-    <vaadin-tabs>
-      <vaadin-tab>Analytics</vaadin-tab>
-      <vaadin-tab>Customers</vaadin-tab>
-      <vaadin-tab>Dashboards</vaadin-tab>
-    </vaadin-tabs>`);
+    tabs = fixtureSync('<vaadin-tabs></vaadin-tabs>');
   });
 
   it('default', async () => {
