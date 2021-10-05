@@ -1,11 +1,20 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
+import '@vaadin/vaadin-lumo-styles/sizing.js';
+import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
+import '@vaadin/vaadin-lumo-styles/typography.js';
 
 registerStyles(
   'vaadin-radio-button',
   css`
     :host {
+      color: var(--lumo-body-text-color);
+      font-size: var(--lumo-font-size-m);
+      font-family: var(--lumo-font-family);
+      line-height: var(--lumo-line-height-s);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
       -moz-user-select: none;
@@ -15,13 +24,13 @@ registerStyles(
     }
 
     :host([has-label]) [part='label'] {
-      margin: 0.1875em 0.875em 0.1875em 0.375em;
+      margin: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs);
     }
 
     [part='radio'] {
-      width: calc(1em + 2px);
-      height: calc(1em + 2px);
-      margin: 0.1875em;
+      width: calc(var(--lumo-size-m) / 2);
+      height: calc(var(--lumo-size-m) / 2);
+      margin: var(--lumo-space-xs);
       position: relative;
       border-radius: 50%;
       background-color: var(--lumo-contrast-20pct);
@@ -29,6 +38,7 @@ registerStyles(
       will-change: transform;
       line-height: 1.2;
       cursor: var(--lumo-clickable-cursor);
+      flex: none;
     }
 
     /* Used for activation "halo" */
@@ -115,7 +125,7 @@ registerStyles(
 
     /* RTL specific styles */
     :host([dir='rtl'][has-label]) [part='label'] {
-      margin: 0.1875em 0.375em 0.1875em 0.875em;
+      margin: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
     }
   `,
   { moduleId: 'lumo-radio-button' }

@@ -1,5 +1,9 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
+import '@vaadin/vaadin-lumo-styles/sizing.js';
+import '@vaadin/vaadin-lumo-styles/spacing.js';
+import '@vaadin/vaadin-lumo-styles/style.js';
+import '@vaadin/vaadin-lumo-styles/typography.js';
 import { requiredField } from '@vaadin/vaadin-lumo-styles/mixins/required-field.js';
 
 const checkboxGroup = css`
@@ -14,7 +18,8 @@ const checkboxGroup = css`
   }
 
   :host::before {
-    height: var(--lumo-size-m);
+    /* Effective height of vaadin-checkbox */
+    height: var(--lumo-size-s);
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
@@ -23,10 +28,6 @@ const checkboxGroup = css`
   :host([theme~='vertical']) [part='group-field'] {
     display: flex;
     flex-direction: column;
-  }
-
-  [part='label'] {
-    padding-bottom: 0.7em;
   }
 
   :host([disabled]) [part='label'] {
