@@ -45,6 +45,14 @@ describe('ARIA', () => {
       expect(aria).to.include(helper.id);
       expect(aria).to.include(error.id);
     });
+
+    it('should set spellcheck attribute on the native input', () => {
+      expect(input.getAttribute('spellcheck')).to.equal('false');
+    });
+
+    it('should set autocorrect attribute on the native input', () => {
+      expect(input.getAttribute('autocorrect')).to.equal('off');
+    });
   });
 
   describe('opened', () => {
