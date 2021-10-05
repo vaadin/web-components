@@ -628,7 +628,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     _onKeyUp(e) {
-      if (!/^( |SpaceBar)$/.test(e.key)) {
+      if (!/^( |SpaceBar)$/.test(e.key) || this.interacting) {
         return;
       }
 

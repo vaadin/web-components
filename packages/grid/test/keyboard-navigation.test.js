@@ -27,6 +27,7 @@ import {
 } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
+import '../vaadin-grid-selection-column.js';
 
 let grid, focusable, scroller, header, footer, body;
 
@@ -1365,6 +1366,19 @@ describe('keyboard navigation', () => {
 
         expect(spy.called).to.be.true;
         expect(grid.activeItem).to.be.null;
+      });
+
+      it('should allow toggling a checkbox with space keypress', async () => {
+        // Add a selection column
+        grid.appendChild(document.createElement('vaadin-grid-selection-column'));
+        flushGrid(grid);
+
+        // Get a reference to a checkbox, focus it and hit space
+        const vaadinCheckbox = getCellContent(getRowCell(0, 3)).children[0];
+        vaadinCheckbox.focus();
+        await sendKeys({ press: 'Space' });
+
+        expect(vaadinCheckbox.checked).to.be.true;
       });
     });
   });
