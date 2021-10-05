@@ -276,4 +276,23 @@ describe('radio-button', () => {
       expect(radio.hasAttribute('has-label')).to.be.true;
     });
   });
+
+  describe('warnings', () => {
+    beforeEach(() => {
+      sinon.stub(console, 'warn');
+    });
+
+    afterEach(() => {
+      console.warn.restore();
+    });
+
+    it('should warn about using default slot label', () => {
+      fixtureSync('<vaadin-radio-button>label</vaadin-radio-button>');
+
+      expect(console.warn.calledOnce).to.be.true;
+      expect(console.warn.args[0][0]).to.include(
+        'WARNING: Since Vaadin 22, placing the label as a direct child of a <vaadin-radio-button> is deprecated.'
+      );
+    });
+  });
 });

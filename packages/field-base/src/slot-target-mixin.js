@@ -7,16 +7,18 @@ const SlotTargetMixinImplementation = (superclass) =>
       super.ready();
 
       if (this._sourceSlot) {
-        this.__forwardNodesToSlotTarget();
+        this.__sourceSlotObserver = new MutationObserver(() => this.__checkAndCopyNodesToSlotTarget());
+
+        this.__checkAndCopyNodesToSlotTarget();
 
         this._sourceSlot.addEventListener('slotchange', () => {
-          this.__forwardNodesToSlotTarget();
+          this.__checkAndCopyNodesToSlotTarget();
         });
       }
     }
 
     /**
-     * A reference to the source slot from which the nodes are forwarded to the target element.
+     * A reference to the source slot from which the nodes are copied to the target element.
      *
      * @type {HTMLSlotElement | null}
      * @protected
@@ -27,7 +29,7 @@ const SlotTargetMixinImplementation = (superclass) =>
     }
 
     /**
-     * A reference to the target element to which the nodes are forwarded from the source slot.
+     * A reference to the target element to which the nodes are copied from the source slot.
      *
      * @type {HTMLElement | null}
      * @protected
@@ -38,14 +40,26 @@ const SlotTargetMixinImplementation = (superclass) =>
     }
 
     /**
-     * Forwards every node from the source slot to the target element
+     * Copies every node from the source slot to the target element
      * once the source slot' content is changed.
      *
      * @private
      */
-    __forwardNodesToSlotTarget() {
+    __checkAndCopyNodesToSlotTarget() {
+      this.__sourceSlotObserver.disconnect();
+
       if (!this._slotTarget) {
         return;
+      }
+
+      // Remove any existing clones from the slot target
+      if (this.__slotTargetClones) {
+        this.__slotTargetClones.forEach((node) => {
+          if (node.parentElement === this._slotTarget) {
+            this._slotTarget.removeChild(node);
+          }
+        });
+        delete this.__slotTargetClones;
       }
 
       // Exclude whitespace text nodes
@@ -54,12 +68,36 @@ const SlotTargetMixinImplementation = (superclass) =>
         .filter((node) => !(node.nodeType == Node.TEXT_NODE && node.textContent.trim() === ''));
 
       if (nodes.length > 0) {
-        this._slotTarget.replaceChildren(...nodes);
+        this._slotTarget.innerHTML = '';
+        this.__copyNodesToSlotTarget(nodes);
       }
+    }
+
+    /**
+     * Copies the nodes to the target element.
+     *
+     * @protected
+     * @param {!Array<!Node>} nodes
+     */
+    __copyNodesToSlotTarget(nodes) {
+      this.__slotTargetClones = this.__slotTargetClones || [];
+      nodes.forEach((node) => {
+        // Clone the nodes and append the clones to the target slot
+        const clone = node.cloneNode(true);
+        this.__slotTargetClones.push(clone);
+        this._slotTarget.appendChild(clone);
+        // Observe all changes to the source node to have the clones updated
+        this.__sourceSlotObserver.observe(node, {
+          attributes: true,
+          childList: true,
+          subtree: true,
+          characterData: true
+        });
+      });
     }
   };
 
 /**
- * A mixin to forward the content from a source slot to a target element.
+ * A mixin to copy the content from a source slot to a target element.
  */
 export const SlotTargetMixin = dedupingMixin(SlotTargetMixinImplementation);

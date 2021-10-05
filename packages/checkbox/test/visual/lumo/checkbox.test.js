@@ -10,7 +10,7 @@ describe('checkbox', () => {
     div = document.createElement('div');
     div.style.display = 'inline-block';
     div.style.padding = '10px';
-    element = fixtureSync('<vaadin-checkbox>Checkbox</vaadin-checkbox>', div);
+    element = fixtureSync('<vaadin-checkbox label="Checkbox"></vaadin-checkbox>', div);
   });
 
   it('basic', async () => {

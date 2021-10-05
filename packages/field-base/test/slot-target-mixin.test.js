@@ -61,6 +61,7 @@ describe('slot-target-mixin', () => {
     beforeEach(() => {
       element = document.createElement('slot-target-mixin-element');
       node1 = document.createElement('div');
+      node1.textContent = 'node1';
       node2 = document.createTextNode('');
       element.append(node1, node2);
 
@@ -72,13 +73,12 @@ describe('slot-target-mixin', () => {
     });
 
     it('should populate the target element with non-empty nodes from the source slot', () => {
-      expect(element._slotTarget.childNodes).to.have.lengthOf(1);
-      expect(element._slotTarget.firstChild).to.equal(node1);
+      expect(element._slotTarget.firstChild.textContent).to.equal('node1');
     });
 
-    it('should keep whitespace text nodes in the source slot', () => {
-      expect(element.childNodes).to.have.lengthOf(1);
-      expect(element.firstChild).to.equal(node2);
+    it('should not clone whitespace text nodes', () => {
+      expect(element.childNodes).to.have.lengthOf(2);
+      expect(element._slotTarget.childNodes).to.have.lengthOf(1);
     });
   });
 
@@ -87,22 +87,68 @@ describe('slot-target-mixin', () => {
       element = fixtureSync(`<slot-target-mixin-element></slot-target-mixin-element>`);
 
       const node = document.createElement('div');
+      node.textContent = 'node';
       element.appendChild(node);
       await nextFrame();
 
       expect(element._slotTarget.childNodes).to.have.lengthOf(1);
-      expect(element._slotTarget.firstChild).to.equal(node);
+      expect(element._slotTarget.firstChild.textContent).to.equal('node');
     });
 
-    it('should re-populate the target element when adding new nodes to the source slot', async () => {
+    it('should add new nodes to the target slot', async () => {
       element = fixtureSync(`<slot-target-mixin-element><div>Content</div></slot-target-mixin-element>`);
 
       const node = document.createElement('div');
+      node.textContent = 'New content';
       element.appendChild(node);
       await nextFrame();
 
-      expect(element._slotTarget.childNodes).to.have.lengthOf(1);
-      expect(element._slotTarget.firstChild).to.equal(node);
+      expect(element._slotTarget.childNodes).to.have.lengthOf(2);
+      expect(element._slotTarget.children[0].textContent).to.equal('Content');
+      expect(element._slotTarget.children[1].textContent).to.equal('New content');
+    });
+
+    it('should reflect content mutations to the target slot content', async () => {
+      element = fixtureSync(`<slot-target-mixin-element><div>Content</div></slot-target-mixin-element>`);
+      expect(element._slotTarget.textContent).to.equal('Content');
+      await nextFrame();
+      element.firstChild.textContent = 'New content';
+      await nextFrame();
+      expect(element._slotTarget.textContent).to.equal('New content');
+    });
+
+    it('should reflect content attribute mutations to the target slot content', async () => {
+      element = fixtureSync(`<slot-target-mixin-element><div>Content</div></slot-target-mixin-element>`);
+      await nextFrame();
+      element.firstChild.setAttribute('data-name', 'content');
+      await nextFrame();
+      expect(element._slotTarget.firstElementChild.dataset.name).to.equal('content');
+    });
+
+    it('should reflect content subtree mutations to the target slot content', async () => {
+      element = fixtureSync(`<slot-target-mixin-element><div>Content</div></slot-target-mixin-element>`);
+      const subtree = document.createElement('div');
+      element.firstChild.appendChild(subtree);
+      await nextFrame();
+      subtree.textContent = 'New content';
+      await nextFrame();
+      expect(element._slotTarget.firstElementChild.firstElementChild.textContent).to.equal('New content');
+    });
+
+    it('should reflect content character data mutations to the target slot content', async () => {
+      element = fixtureSync(`<slot-target-mixin-element><div>Content</div></slot-target-mixin-element>`);
+      await nextFrame();
+      element.firstChild.firstChild.textContent = 'New content';
+      await nextFrame();
+      expect(element._slotTarget.firstElementChild.textContent).to.equal('New content');
+    });
+
+    it('should reflect cleared content to the target slot content', async () => {
+      element = fixtureSync(`<slot-target-mixin-element><div>Content</div></slot-target-mixin-element>`);
+      await nextFrame();
+      element.firstChild.remove();
+      await nextFrame();
+      expect(element._slotTarget.children).to.be.empty;
     });
   });
 
