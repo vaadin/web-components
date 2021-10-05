@@ -35,7 +35,7 @@ describe('object values', () => {
     });
 
     it('it should change combo-box value when value path changes', () => {
-      selectItem(comboBox, 0);
+      selectItem(0);
       comboBox.itemValuePath = 'custom';
       expect(comboBox.value).to.be.equal('bazs');
     });
