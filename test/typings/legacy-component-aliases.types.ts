@@ -73,7 +73,7 @@ import { IntegerFieldElement } from '@vaadin/vaadin-text-field/vaadin-integer-fi
 import { PasswordFieldElement } from '@vaadin/vaadin-text-field/vaadin-password-field';
 import { TextAreaElement } from '@vaadin/vaadin-text-field/vaadin-text-area';
 import { TimePickerElement } from '@vaadin/vaadin-time-picker';
-import { UploadElement } from '@vaadin/vaadin-upload';
+// import { UploadElement } from '@vaadin/vaadin-upload';
 import { VirtualListElement } from '@vaadin/vaadin-virtual-list';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
@@ -143,5 +143,5 @@ assertType<HTMLElement>(new IntegerFieldElement());
 assertType<HTMLElement>(new PasswordFieldElement());
 assertType<HTMLElement>(new TextAreaElement());
 assertType<HTMLElement>(new TimePickerElement());
-assertType<HTMLElement>(new UploadElement());
+// assertType<HTMLElement>(new UploadElement());
 assertType<HTMLElement>(new VirtualListElement());
