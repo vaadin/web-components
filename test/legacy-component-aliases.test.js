@@ -75,7 +75,7 @@ import { IntegerFieldElement } from '@vaadin/vaadin-text-field/vaadin-integer-fi
 import { PasswordFieldElement } from '@vaadin/vaadin-text-field/vaadin-password-field';
 import { TextAreaElement } from '@vaadin/vaadin-text-field/vaadin-text-area';
 import { TimePickerElement } from '@vaadin/vaadin-time-picker';
-import { UploadElement } from '@vaadin/vaadin-upload';
+// import { UploadElement } from '@vaadin/vaadin-upload';
 import { VirtualListElement } from '@vaadin/vaadin-virtual-list';
 
 describe('legacy-exports', () => {
@@ -145,7 +145,7 @@ describe('legacy-exports', () => {
     expect(new PasswordFieldElement()).to.be.instanceof(HTMLElement);
     expect(new TextAreaElement()).to.be.instanceof(HTMLElement);
     expect(new TimePickerElement()).to.be.instanceof(HTMLElement);
-    expect(new UploadElement()).to.be.instanceof(HTMLElement);
+    // expect(new UploadElement()).to.be.instanceof(HTMLElement);
     expect(new VirtualListElement()).to.be.instanceof(HTMLElement);
   });
 });

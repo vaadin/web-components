@@ -1,5 +1,5 @@
 {
-  "name": "@vaadin/vaadin-upload",
+  "name": "@vaadin/upload",
   "version": "22.0.0-alpha6",
   "description": "Web Component for uploading files with drag and drop support",
   "main": "vaadin-upload.js",
@@ -7,7 +7,7 @@
   "repository": {
     "type" : "git",
     "url" : "https://github.com/vaadin/web-components.git",
-    "directory": "packages/vaadin-upload"
+    "directory": "packages/upload"
   },
   "keywords": [
     "Vaadin",
@@ -19,7 +19,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-upload/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
