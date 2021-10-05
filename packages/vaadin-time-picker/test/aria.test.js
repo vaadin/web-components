@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, arrowDownKeyDown, escKeyDown } from '@vaadin/testing-helpers';
+import { fixtureSync, arrowDownKeyDown, escKeyDown, nextFrame } from '@vaadin/testing-helpers';
 import '../src/vaadin-time-picker.js';
 
 describe('ARIA', () => {
@@ -31,6 +31,14 @@ describe('ARIA', () => {
       expect(input.getAttribute('aria-labelledby')).to.equal(label.id);
     });
 
+    it('should set spellcheck attribute on the native input', () => {
+      expect(input.getAttribute('spellcheck')).to.equal('false');
+    });
+
+    it('should set autocorrect attribute on the native input', () => {
+      expect(input.getAttribute('autocorrect')).to.equal('off');
+    });
+
     it('should set aria-describedby with helper text ID when valid', () => {
       const aria = input.getAttribute('aria-describedby');
       expect(aria).to.include(helper.id);
@@ -46,13 +54,31 @@ describe('ARIA', () => {
   });
 
   describe('opened', () => {
-    beforeEach(() => {
+    let scroller, items;
+
+    beforeEach(async () => {
       arrowDownKeyDown(input);
+      scroller = comboBox.$.dropdown._scroller;
+      items = comboBox.$.dropdown._scroller.querySelectorAll('vaadin-time-picker-item');
+      await nextFrame();
     });
 
     it('should set role listbox on the scroller', () => {
-      const scroller = comboBox.$.dropdown._scroller;
       expect(scroller.getAttribute('role')).to.equal('listbox');
+    });
+
+    it('should set aria-setsize attribute on the scroller', () => {
+      expect(scroller.getAttribute('aria-setsize')).to.equal(comboBox.filteredItems.length.toString());
+    });
+
+    it('should set aria-controls on the native input', () => {
+      expect(input.getAttribute('aria-controls')).to.equal(scroller.id);
+    });
+
+    it('should remove aria-controls attribute when closed', () => {
+      escKeyDown(input);
+
+      expect(input.hasAttribute('aria-controls')).to.be.false;
     });
 
     it('should set aria-expanded attribute when opened', () => {
@@ -65,14 +91,44 @@ describe('ARIA', () => {
       expect(input.getAttribute('aria-expanded')).to.equal('false');
     });
 
-    it('should set selection aria attributes when focusing an item', () => {
+    it('should set role attribute on the dropdown items', () => {
+      items.forEach((item) => {
+        expect(item.getAttribute('role')).to.equal('option');
+      });
+    });
+
+    it('should set ID on the dropdown items', () => {
+      items.forEach((item) => {
+        expect(item.id).to.match(/^vaadin-time-picker-item-\d+$/);
+      });
+    });
+
+    it('should set aria-posinset attribute on the dropdown items', () => {
+      items.forEach((item, idx) => {
+        expect(item.getAttribute('aria-posinset')).to.equal(idx.toString());
+      });
+    });
+
+    it('should set aria-activedescendant on the input', () => {
+      expect(input.hasAttribute('aria-activedescendant')).to.be.false;
+
+      arrowDownKeyDown(input); // 'focus moves to 1st item'
+      expect(input.getAttribute('aria-activedescendant')).to.equal(items[0].id);
+    });
+
+    it('should update aria-selected when focused item changes', () => {
       timePicker.value = '00:00';
       arrowDownKeyDown(input); // 'focus moves to 2nd item'
 
-      const items = comboBox.$.dropdown._scroller.querySelectorAll('vaadin-time-picker-item');
-      expect(items[0].getAttribute('role')).to.equal('option');
       expect(items[0].getAttribute('aria-selected')).to.equal('false');
       expect(items[1].getAttribute('aria-selected')).to.equal('true');
+    });
+
+    it('should update aria-activedescendant when focused item changes', () => {
+      timePicker.value = '00:00';
+      arrowDownKeyDown(input); // 'focus moves to 2nd item'
+
+      expect(input.getAttribute('aria-activedescendant')).to.equal(items[1].id);
     });
   });
 });

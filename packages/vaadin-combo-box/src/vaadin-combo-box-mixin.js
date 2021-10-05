@@ -976,7 +976,7 @@ export const ComboBoxMixin = (subclass) =>
       }
     }
 
-    /** @private */
+    /** @protected */
     _getItemElements() {
       return Array.from(this.$.dropdown._scroller.querySelectorAll('vaadin-combo-box-item'));
     }
