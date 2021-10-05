@@ -77,7 +77,7 @@ const SlotTargetMixinImplementation = (superclass) =>
      * Copies the nodes to the target element.
      *
      * @protected
-     * @param {Array<Node>} nodes
+     * @param {!Array<!Node>} nodes
      */
     __copyNodesToSlotTarget(nodes) {
       this.__slotTargetClones = this.__slotTargetClones || [];
