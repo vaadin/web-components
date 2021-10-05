@@ -10,7 +10,6 @@ import {
   enterKeyDown,
   escKeyDown,
   fire,
-  isDesktopSafari,
   nextFrame
 } from '@vaadin/testing-helpers';
 import { getViewportItems, getVisibleItemsCount, onceScrolled, scrollToIndex } from './helpers.js';
@@ -256,41 +255,31 @@ describe('keyboard', () => {
       expect(comboBox.value).to.equal('baz');
     });
 
-    it('should reset the input value synchronously when keyboard navigating', () => {
+    it('should prefill the input field when navigating down', () => {
       arrowDownKeyDown(input);
-      expect(input.value).to.eql('');
-    });
-
-    it('should prefill the input field when navigating down', async () => {
-      arrowDownKeyDown(input);
-      await aTimeout(1);
       expect(input.value).to.eql('baz');
     });
 
-    (isDesktopSafari ? it.skip : it)('should select the input field text when navigating down', async () => {
+    it('should select the input field text when navigating down', () => {
       arrowDownKeyDown(input);
-      await aTimeout(1);
       expect(input.selectionStart).to.eql(0);
       expect(input.selectionEnd).to.eql(3);
     });
 
-    it('should prefill the input field when navigating up', async () => {
+    it('should prefill the input field when navigating up', () => {
       arrowUpKeyDown(input);
-      await aTimeout(1);
       expect(input.value).to.eql('foo');
     });
 
-    it('should not prefill the input when there are no items to navigate', async () => {
+    it('should not prefill the input when there are no items to navigate', () => {
       filter('invalid filter');
 
       arrowDownKeyDown(input);
-      await aTimeout(1);
       expect(input.value).to.eql('invalid filter');
     });
 
-    (isDesktopSafari ? it.skip : it)('should select the input field text when navigating up', async () => {
+    it('should select the input field text when navigating up', () => {
       arrowUpKeyDown(input);
-      await aTimeout(1);
       expect(input.selectionStart).to.eql(0);
       expect(input.selectionEnd).to.eql(3);
     });

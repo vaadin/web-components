@@ -129,6 +129,14 @@ export class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, Poly
     ];
   }
 
+  constructor() {
+    super();
+
+    // Ensure every instance has unique ID
+    const uniqueId = (ComboBoxDropdown._uniqueId = 1 + ComboBoxDropdown._uniqueId || 0);
+    this.scrollerId = `${this.localName}-scroller-${uniqueId}`;
+  }
+
   ready() {
     super.ready();
 
@@ -149,6 +157,7 @@ export class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, Poly
     overlay.requestContentUpdate();
 
     this._scroller = overlay.content.querySelector(scrollerTag);
+    this._scroller.id = this.scrollerId;
 
     this._scroller.getItemLabel = this.getItemLabel.bind(this);
     this._scroller.comboBox = this.getRootNode().host;

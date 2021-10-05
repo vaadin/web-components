@@ -32,7 +32,7 @@ describe('item renderer', () => {
     it(`should pass the 'root', 'owner', 'model' arguments to the renderer`, () => {
       const [root, owner, model] = comboBox.renderer.args[0];
 
-      expect(root.getAttribute('part')).to.equal('content');
+      expect(root.localName).to.equal('vaadin-combo-box-item');
       expect(owner).to.eql(comboBox);
       expect(model).to.deep.equal({
         item: 'foo',
@@ -66,7 +66,7 @@ describe('item renderer', () => {
     };
     comboBox.opened = true;
 
-    expect(getFirstItem(comboBox).$.content.textContent.trim()).to.equal('foo 0');
+    expect(getFirstItem(comboBox).textContent.trim()).to.equal('foo 0');
   });
 
   it('should run renderers when requesting content update', () => {
@@ -111,16 +111,16 @@ describe('item renderer', () => {
     };
     comboBox.opened = true;
 
-    expect(getFirstItem(comboBox).$.content.textContent).to.equal('bar');
+    expect(getFirstItem(comboBox).textContent).to.equal('bar');
 
     comboBox.renderer = null;
 
-    expect(getFirstItem(comboBox).$.content.textContent).to.equal('foo');
+    expect(getFirstItem(comboBox).textContent).to.equal('foo');
   });
 
   it('should clear the old content after assigning a new renderer', () => {
     comboBox.opened = true;
     comboBox.renderer = () => {};
-    expect(getFirstItem(comboBox).$.content.textContent).to.equal('');
+    expect(getFirstItem(comboBox).textContent).to.equal('');
   });
 });

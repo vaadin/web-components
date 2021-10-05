@@ -411,6 +411,6 @@ describe('nested template', () => {
     comboBox.open();
     await nextFrame();
     expect(comboBox.querySelector('[slot="prefix"]').innerHTML).to.contain('1 foo');
-    expect(getFirstItem(comboBox).shadowRoot.querySelector('#content').innerHTML).to.equal('bar');
+    expect(getFirstItem(comboBox).innerHTML).to.equal('bar');
   });
 });
