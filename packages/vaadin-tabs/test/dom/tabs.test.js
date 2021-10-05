@@ -5,12 +5,6 @@ import '../../src/vaadin-tabs.js';
 describe('vaadin-tabs', () => {
   let tabs;
 
-  // Ignore generated attributes to prevent failures
-  // when running snapshot tests in a different order
-  const SNAPSHOT_CONFIG = {
-    ignoreAttributes: ['id', 'aria-describedby', 'aria-labelledby', 'for']
-  };
-
   beforeEach(() => {
     tabs = fixtureSync(`
     <vaadin-tabs>
