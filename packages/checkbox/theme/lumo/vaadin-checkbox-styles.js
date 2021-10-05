@@ -41,11 +41,13 @@ registerStyles(
     }
 
     /* Enhance the clickable area for the input */
-    [part='checkbox'] ::slotted(input) {
-      top: -0.1875em;
-      left: -0.1875em;
-      width: calc(100% + 0.1875em * 2);
-      height: calc(100% + 0.1875em * 2);
+    ::slotted(input) {
+      /* TODO: Remove when CSS variables will be used instead of em units. */
+      font: inherit;
+      /* TODO: Use CSS variables instead of em units. */
+      width: calc(1em + 2px + 0.1875em * 2);
+      /* TODO: Use CSS variables instead of em units. */
+      height: calc(1em + 2px + 0.1875em * 2);
     }
 
     :host([indeterminate]) [part='checkbox'],

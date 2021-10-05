@@ -37,11 +37,9 @@ registerStyles(
     }
 
     /* Enhance the clickable area for the input */
-    [part='checkbox'] ::slotted(input) {
-      top: -4px;
-      left: -4px;
-      width: calc(100% + 4px * 2);
-      height: calc(100% + 4px * 2);
+    ::slotted(input) {
+      width: calc(16px + 4px * 2);
+      height: calc(16px + 4px * 2);
     }
 
     /* Used for the ripple */

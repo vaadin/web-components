@@ -67,6 +67,7 @@ class Checkbox extends SlotLabelMixin(
       <style>
         :host {
           display: inline-block;
+          position: relative;
         }
 
         :host([hidden]) {
@@ -83,13 +84,10 @@ class Checkbox extends SlotLabelMixin(
         }
 
         /* visually hidden */
-        [part='checkbox'] ::slotted(input) {
+        ::slotted(input) {
           position: absolute;
           top: 0;
           left: 0;
-          right: 0;
-          width: 100%;
-          height: 100%;
           opacity: 0;
           cursor: inherit;
           margin: 0;
