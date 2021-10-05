@@ -133,6 +133,7 @@ describe('keyboard', () => {
     beforeEach(async () => {
       comboBox.value = 'bar';
 
+      comboBox.focus();
       comboBox.open();
       await aTimeout(1);
     });
