@@ -300,6 +300,27 @@ describe('Properties', () => {
 
       expect(overlay.opened).not.to.be.true;
     });
+
+    describe('autoselect', () => {
+      it('should set autoselect to false by default', () => {
+        expect(comboBox.autoselect).to.be.false;
+      });
+
+      it('should not select content on focus when autoselect is false', () => {
+        const spy = sinon.spy(input, 'select');
+        comboBox.value = 'foo';
+        input.focus();
+        expect(spy.called).to.be.false;
+      });
+
+      it('should select content on focus when autoselect is true', () => {
+        const spy = sinon.spy(input, 'select');
+        comboBox.value = 'foo';
+        comboBox.autoselect = true;
+        input.focus();
+        expect(spy.calledOnce).to.be.true;
+      });
+    });
   });
 
   describe('focus API', () => {
