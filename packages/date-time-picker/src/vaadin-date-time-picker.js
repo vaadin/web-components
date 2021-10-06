@@ -926,6 +926,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     }
 
     this.toggleAttribute('has-value', value !== '' && value != null);
+    this.__updateTimePickerMinMax();
   }
 
   /** @private */
@@ -1004,14 +1005,9 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
 
     const [date, time] = value.split('T');
 
-    // Handle updating time picker min/max if the date changed.
-    // This may cause the time picker value to be adjusted.
-    // __oldDateValue is used only here and the if condition is only a minor performance optimization
-    // not to run the update checks unnecessarily if only the time was changed.
-    if (this.__oldDateValue !== date) {
-      this.__oldDateValue = date;
-      this.__updateTimePickerMinMax();
-    }
+    this.__ignoreInputValueChange = true;
+    this.__updateTimePickerMinMax();
+    this.__ignoreInputValueChange = false;
 
     if (date && time) {
       if (value !== this.value) {

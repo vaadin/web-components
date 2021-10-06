@@ -61,18 +61,15 @@ const fixtures = {
 ['default', 'slotted'].forEach((set) => {
   describe(`Property propagation (${set})`, () => {
     let dateTimePicker;
-    let customField;
     let datePicker;
     let timePicker;
 
     beforeEach(() => {
       dateTimePicker = fixtureSync(fixtures[set]);
 
-      customField = dateTimePicker.$.customField;
-
       if (set === 'default') {
-        datePicker = customField.inputs[0];
-        timePicker = customField.inputs[1];
+        datePicker = dateTimePicker.__datePicker;
+        timePicker = dateTimePicker.__timePicker;
       } else {
         datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
         timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
@@ -281,8 +278,8 @@ const fixtures = {
       customField = dateTimePicker.$.customField;
 
       if (set === 'default') {
-        datePicker = customField.inputs[0];
-        timePicker = customField.inputs[1];
+        datePicker = dateTimePicker.__datePicker;
+        timePicker = dateTimePicker.__timePicker;
       } else {
         datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
         timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
