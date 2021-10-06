@@ -24,22 +24,20 @@ const fixtures = {
 ['default', 'slotted'].forEach((set) => {
   describe(`Validation (${set})`, () => {
     let dateTimePicker;
-    let customField;
 
     beforeEach(() => {
       dateTimePicker = fixtureSync(fixtures[set]);
-      customField = dateTimePicker.$.customField;
     });
 
     it('should not be required', () => {
-      expect(customField.required).to.be.false;
+      expect(dateTimePicker.required).to.be.false;
     });
 
-    it('should not trigger custom field validation', () => {
-      const validitySpy = sinon.spy(customField, 'checkValidity');
-      customField.validate();
-      expect(validitySpy.called).to.be.false;
-      expect(customField.invalid).to.be.false;
+    it('should trigger custom field validation', () => {
+      const validitySpy = sinon.spy(dateTimePicker, 'checkValidity');
+      dateTimePicker.validate();
+      expect(validitySpy.called).to.be.true;
+      expect(dateTimePicker.invalid).to.be.false;
     });
 
     it('should validate correctly with required flag', () => {
