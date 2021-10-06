@@ -942,20 +942,25 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
       this.value = formattedValue;
     }
 
+    // TODO: Fix docs
     // Setting the customField.value below triggers validation of the date picker and time picker.
     // If the inputs are slotted (e.g. when using the Java API) and have an initial value this can
     // happen before date picker ready() which would throw an error when date picker is trying to read
     // `this.$.input` (as a result of value change triggered by setting custom field value).
     // Workaround the problem by setting custom field value only if date picker is ready.
-    // const inputs = this.__inputs;
-    // const isDatePickerReady = Boolean(inputs && inputs[0] && inputs[0].$);
-    // if (isDatePickerReady) {
-    //   const doDispatchChange = this.__doDispatchChange;
+    const isDatePickerReady = Boolean(this.__datePicker && this.__datePicker.$);
+    if (isDatePickerReady) {
+      const doDispatchChange = this.__doDispatchChange;
 
-    //   this.$.customField.value = this.value !== '' ? this.value : 'T';
+      // Ignore value changes until both inputs have a value updated
+      this.__ignoreInputValueChange = true;
+      const [dateValue, timeValue] = this.__customFieldValueFormat.parseValue(this.value);
+      this.__datePicker.value = dateValue;
+      this.__timePicker.value = timeValue;
+      this.__ignoreInputValueChange = false;
 
-    //   this.__doDispatchChange = doDispatchChange;
-    // }
+      this.__doDispatchChange = doDispatchChange;
+    }
   }
 
   /** @private */
@@ -970,6 +975,10 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
 
   /** @private */
   __inputValueChanged() {
+    if (this.__ignoreInputValueChange) {
+      return;
+    }
+
     const value = this.__formattedValue;
 
     // Initial empty value from custom field
