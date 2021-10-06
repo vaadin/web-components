@@ -6,7 +6,7 @@
 
 [&lt;vaadin-notification&gt;](https://vaadin.com/components/vaadin-notification) is a Web Component providing accessible and customizable notifications (toasts), part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-notification)](https://www.npmjs.com/package/@vaadin/vaadin-notification)
+[![npm version](https://badgen.net/npm/v/@vaadin/notification)](https://www.npmjs.com/package/@vaadin/notification)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-notification)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -29,13 +29,13 @@
 Install `vaadin-notification`:
 
 ```sh
-npm i @vaadin/vaadin-notification --save
+npm i @vaadin/notification --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-notification/vaadin-notification.js';
+import '@vaadin/notification/vaadin-notification.js';
 ```
 
 ## Getting started
