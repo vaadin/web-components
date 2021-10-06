@@ -7,8 +7,8 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
-import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 
@@ -115,7 +115,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
   static get properties() {
     return {
       /**
-       * the value of the checkbox group.
+       * The value of the checkbox group.
        * Note: toggling the checkboxes modifies the value by creating new
        * array each time, to override Polymer dirty-checking for arrays.
        * You can still use Polymer array mutation methods to update the value.
