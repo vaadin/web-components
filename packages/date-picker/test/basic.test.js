@@ -447,6 +447,27 @@ describe('basic features', () => {
       datepicker.open();
     });
   });
+
+  describe('autoselect', () => {
+    it('should set autoselect to false by default', () => {
+      expect(datepicker.autoselect).to.be.false;
+    });
+
+    it('should not select content on focus when autoselect is false', () => {
+      const spy = sinon.spy(input, 'select');
+      datepicker.value = '2016-07-14';
+      input.focus();
+      expect(spy.called).to.be.false;
+    });
+
+    it('should select content on focus when autoselect is true', () => {
+      const spy = sinon.spy(input, 'select');
+      datepicker.value = '2016-07-14';
+      datepicker.autoselect = true;
+      input.focus();
+      expect(spy.calledOnce).to.be.true;
+    });
+  });
 });
 
 describe('inside flexbox', () => {

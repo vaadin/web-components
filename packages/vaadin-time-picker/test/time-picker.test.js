@@ -247,6 +247,27 @@ describe('time-picker', () => {
     });
   });
 
+  describe('autoselect', () => {
+    it('should set autoselect to false by default', () => {
+      expect(timePicker.autoselect).to.be.false;
+    });
+
+    it('should not select content on focus when autoselect is false', () => {
+      const spy = sinon.spy(inputElement, 'select');
+      timePicker.value = '2016-07-14';
+      inputElement.focus();
+      expect(spy.called).to.be.false;
+    });
+
+    it('should select content on focus when autoselect is true', () => {
+      const spy = sinon.spy(inputElement, 'select');
+      timePicker.value = '00:00';
+      timePicker.autoselect = true;
+      inputElement.focus();
+      expect(spy.calledOnce).to.be.true;
+    });
+  });
+
   describe('change event', () => {
     let spy;
 
