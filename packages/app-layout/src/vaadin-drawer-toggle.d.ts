@@ -9,14 +9,14 @@ import { Button } from '@vaadin/button/src/vaadin-button.js';
  * </vaadin-app-layout>
  * ```
  */
-declare class DrawerToggleElement extends Button {
+declare class DrawerToggle extends Button {
   ariaLabel: string;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-drawer-toggle': DrawerToggleElement;
+    'vaadin-drawer-toggle': DrawerToggle;
   }
 }
 
-export { DrawerToggleElement };
+export { DrawerToggle };

@@ -85,7 +85,7 @@ import './detect-ios-navbar.js';
  * - If the `vaadin-app-layout` instance is available, then `drawerOpened` can be set to `false`
  * - If not, a custom event `close-overlay-drawer` can be dispatched either by calling
  *  `window.dispatchEvent(new CustomEvent('close-overlay-drawer'))` or by calling
- *  `AppLayoutElement.dispatchCloseOverlayDrawerEvent()`
+ *  `AppLayout.dispatchCloseOverlayDrawerEvent()`
  *
  * ### Scrolling areas
  *
@@ -105,7 +105,7 @@ import './detect-ios-navbar.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class AppLayoutElement extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement))) {
+class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -626,6 +626,6 @@ class AppLayoutElement extends ElementMixin(ThemableMixin(mixinBehaviors([IronRe
    */
 }
 
-customElements.define(AppLayoutElement.is, AppLayoutElement);
+customElements.define(AppLayout.is, AppLayout);
 
-export { AppLayoutElement };
+export { AppLayout };

@@ -17,7 +17,7 @@ export type AppLayoutOverlayChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type AppLayoutPrimarySectionChangedEvent = CustomEvent<{ value: 'navbar' | 'drawer' }>;
 
-export interface AppLayoutElementEventMap {
+export interface AppLayoutCustomEventMap {
   'drawer-opened-changed': AppLayoutDrawerOpenedChangedEvent;
 
   'overlay-changed': AppLayoutOverlayChangedEvent;
@@ -25,7 +25,7 @@ export interface AppLayoutElementEventMap {
   'primary-section-changed': AppLayoutPrimarySectionChangedEvent;
 }
 
-export type AppLayoutEventMap = HTMLElementEventMap & AppLayoutElementEventMap;
+export type AppLayoutEventMap = HTMLElementEventMap & AppLayoutCustomEventMap;
 
 /**
  * `<vaadin-app-layout>` is a Web Component providing a quick and easy way to get a common application layout structure done.
@@ -99,7 +99,7 @@ export type AppLayoutEventMap = HTMLElementEventMap & AppLayoutElementEventMap;
  * - If the `vaadin-app-layout` instance is available, then `drawerOpened` can be set to `false`
  * - If not, a custom event `close-overlay-drawer` can be dispatched either by calling
  *  `window.dispatchEvent(new CustomEvent('close-overlay-drawer'))` or by calling
- *  `AppLayoutElement.dispatchCloseOverlayDrawerEvent()`
+ *  `AppLayout.dispatchCloseOverlayDrawerEvent()`
  *
  * ### Scrolling areas
  *
@@ -115,7 +115,7 @@ export type AppLayoutEventMap = HTMLElementEventMap & AppLayoutElementEventMap;
  * @fires {CustomEvent} overlay-changed - Fired when the `overlay` property changes.
  * @fires {CustomEvent} primary-section-changed - Fired when the `primarySection` property changes.
  */
-declare class AppLayoutElement extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class AppLayout extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
    * Defines whether navbar or drawer will come first visually.
    * - By default (`primary-section="navbar"`), the navbar takes the full available width and moves the drawer down.
@@ -154,21 +154,21 @@ declare class AppLayoutElement extends ElementMixin(ThemableMixin(HTMLElement)) 
 
   addEventListener<K extends keyof AppLayoutEventMap>(
     type: K,
-    listener: (this: AppLayoutElement, ev: AppLayoutEventMap[K]) => void,
+    listener: (this: AppLayout, ev: AppLayoutEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof AppLayoutEventMap>(
     type: K,
-    listener: (this: AppLayoutElement, ev: AppLayoutEventMap[K]) => void,
+    listener: (this: AppLayout, ev: AppLayoutEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-app-layout': AppLayoutElement;
+    'vaadin-app-layout': AppLayout;
   }
 }
 
-export { AppLayoutElement };
+export { AppLayout };
