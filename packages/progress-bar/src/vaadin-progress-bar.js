@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ProgressMixin } from './vaadin-progress-mixin.js';
@@ -37,13 +38,54 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  * Attribute       | Description | Part name
  * ----------------|-------------|------------
  * `indeterminate` | Set to an indeterminate progress bar | :host
+ *
+ * @extends HTMLElement
+ * @mixes ProgressMixin
+ * @mixes ThemableMixin
+ * @mixes ElementMixin
  */
-declare class ProgressBarElement extends ProgressMixin(ThemableMixin(ElementMixin(HTMLElement))) {}
+class ProgressBar extends ElementMixin(ThemableMixin(ProgressMixin(PolymerElement))) {
+  static get template() {
+    return html`
+      <style>
+        :host {
+          display: block;
+          width: 100%; /* prevent collapsing inside non-stretching column flex */
+          height: 8px;
+        }
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'vaadin-progress-bar': ProgressBarElement;
+        :host([hidden]) {
+          display: none !important;
+        }
+
+        [part='bar'] {
+          height: 100%;
+        }
+
+        [part='value'] {
+          height: 100%;
+          transform-origin: 0 50%;
+          transform: scaleX(var(--vaadin-progress-value));
+        }
+
+        /* RTL specific styles */
+
+        :host([dir='rtl']) [part='value'] {
+          transform-origin: 100% 50%;
+        }
+      </style>
+
+      <div part="bar">
+        <div part="value"></div>
+      </div>
+    `;
+  }
+
+  static get is() {
+    return 'vaadin-progress-bar';
   }
 }
 
-export { ProgressBarElement };
+customElements.define(ProgressBar.is, ProgressBar);
+
+export { ProgressBar };
