@@ -66,7 +66,7 @@ import { RadioButtonElement } from '@vaadin/vaadin-radio-button';
 import { RadioGroupElement } from '@vaadin/vaadin-radio-button/vaadin-radio-group';
 import { RichTextEditorElement } from '@vaadin/vaadin-rich-text-editor';
 import { SelectElement } from '@vaadin/vaadin-select';
-import { SplitLayoutElement } from '@vaadin/vaadin-split-layout';
+// import { SplitLayoutElement } from '@vaadin/vaadin-split-layout';
 import { TabsElement } from '@vaadin/vaadin-tabs';
 import { TabElement } from '@vaadin/vaadin-tabs/vaadin-tab';
 import { TextFieldElement } from '@vaadin/vaadin-text-field';
@@ -136,7 +136,7 @@ describe('legacy-exports', () => {
     expect(new RadioGroupElement()).to.be.instanceof(HTMLElement);
     expect(new RichTextEditorElement()).to.be.instanceof(HTMLElement);
     expect(new SelectElement()).to.be.instanceof(HTMLElement);
-    expect(new SplitLayoutElement()).to.be.instanceof(HTMLElement);
+    // expect(new SplitLayoutElement()).to.be.instanceof(HTMLElement);
     expect(new TabsElement()).to.be.instanceof(HTMLElement);
     expect(new TabElement()).to.be.instanceof(HTMLElement);
     expect(new TextFieldElement()).to.be.instanceof(HTMLElement);
