@@ -6,12 +6,12 @@
 import { ComboBoxLight } from '@vaadin/combo-box/src/vaadin-combo-box-light.js';
 
 /**
- * @deprecated Import `ComboBoxLight` from `@vaadin/combo-box` instead.
+ * @deprecated Import `ComboBoxLight` from `@vaadin/combo-box/vaadin-combo-box-light` instead.
  */
 export type ComboBoxLightElement = ComboBoxLight;
 
 /**
- * @deprecated Import `ComboBoxLight` from `@vaadin/combo-box` instead.
+ * @deprecated Import `ComboBoxLight` from `@vaadin/combo-box/vaadin-combo-box-light` instead.
  */
 export const ComboBoxLightElement: typeof ComboBoxLight;
 
