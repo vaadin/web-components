@@ -2,7 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-select shadow default"] = 
-`<div part="container">
+`<div class="vaadin-select-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -43,7 +43,7 @@ snapshots["vaadin-select shadow default"] =
 /* end snapshot vaadin-select shadow default */
 
 snapshots["vaadin-select shadow disabled"] = 
-`<div part="container">
+`<div class="vaadin-select-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -87,7 +87,7 @@ snapshots["vaadin-select shadow disabled"] =
 /* end snapshot vaadin-select shadow disabled */
 
 snapshots["vaadin-select shadow readonly"] = 
-`<div part="container">
+`<div class="vaadin-select-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -131,7 +131,7 @@ snapshots["vaadin-select shadow readonly"] =
 /* end snapshot vaadin-select shadow readonly */
 
 snapshots["vaadin-select shadow invalid"] = 
-`<div part="container">
+`<div class="vaadin-select-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -175,7 +175,7 @@ snapshots["vaadin-select shadow invalid"] =
 /* end snapshot vaadin-select shadow invalid */
 
 snapshots["vaadin-select shadow theme"] = 
-`<div part="container">
+`<div class="vaadin-select-container">
   <div part="label">
     <slot name="label">
     </slot>

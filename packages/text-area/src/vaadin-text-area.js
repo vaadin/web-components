@@ -85,7 +85,7 @@ export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(Polymer
           animation: 1ms vaadin-text-area-appear;
         }
 
-        [part='container'] {
+        .vaadin-text-area-container {
           flex: auto;
         }
 
@@ -136,7 +136,7 @@ export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(Polymer
         }
       </style>
 
-      <div part="container">
+      <div class="vaadin-text-area-container">
         <div part="label">
           <slot name="label"></slot>
           <span part="required-indicator" aria-hidden="true"></span>

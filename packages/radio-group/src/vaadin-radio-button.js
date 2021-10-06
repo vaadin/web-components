@@ -79,7 +79,7 @@ class RadioButton extends SlotLabelMixin(
           -webkit-tap-highlight-color: transparent;
         }
 
-        [part='container'] {
+        .vaadin-radio-button-container {
           display: inline-flex;
           align-items: baseline;
         }
@@ -97,7 +97,7 @@ class RadioButton extends SlotLabelMixin(
           margin: 0;
         }
       </style>
-      <div part="container">
+      <div class="vaadin-radio-button-container">
         <div part="radio">
           <slot name="input"></slot>
         </div>

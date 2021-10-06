@@ -2,7 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-integer-field shadow default"] = 
-`<div part="container">
+`<div class="vaadin-field-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -57,7 +57,7 @@ snapshots["vaadin-integer-field shadow default"] =
 /* end snapshot vaadin-integer-field shadow default */
 
 snapshots["vaadin-integer-field shadow controls"] = 
-`<div part="container">
+`<div class="vaadin-field-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -110,7 +110,7 @@ snapshots["vaadin-integer-field shadow controls"] =
 /* end snapshot vaadin-integer-field shadow controls */
 
 snapshots["vaadin-integer-field shadow disabled"] = 
-`<div part="container">
+`<div class="vaadin-field-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -168,7 +168,7 @@ snapshots["vaadin-integer-field shadow disabled"] =
 /* end snapshot vaadin-integer-field shadow disabled */
 
 snapshots["vaadin-integer-field shadow readonly"] = 
-`<div part="container">
+`<div class="vaadin-field-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -226,7 +226,7 @@ snapshots["vaadin-integer-field shadow readonly"] =
 /* end snapshot vaadin-integer-field shadow readonly */
 
 snapshots["vaadin-integer-field shadow invalid"] = 
-`<div part="container">
+`<div class="vaadin-field-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -284,7 +284,7 @@ snapshots["vaadin-integer-field shadow invalid"] =
 /* end snapshot vaadin-integer-field shadow invalid */
 
 snapshots["vaadin-integer-field shadow theme"] = 
-`<div part="container">
+`<div class="vaadin-field-container">
   <div part="label">
     <slot name="label">
     </slot>
