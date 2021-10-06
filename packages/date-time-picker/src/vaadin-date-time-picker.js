@@ -405,7 +405,8 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
       '__disabledChanged(disabled)',
       '__readonlyChanged(readonly)',
       '__i18nChanged(i18n.*)',
-      '__autoOpenDisabledChanged(autoOpenDisabled)'
+      '__autoOpenDisabledChanged(autoOpenDisabled)',
+      '__themeChanged(theme, __datePicker, __timePicker)'
     ];
   }
 
@@ -955,6 +956,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     const isDatePickerReady = Boolean(this.__datePicker && this.__datePicker.$);
     if (isDatePickerReady) {
       // Ignore value changes until both inputs have a value updated
+      // TODO: This logic clears both fields if one of them is cleared :(
       this.__ignoreInputValueChange = true;
       const [dateValue, timeValue] = this.__customFieldValueFormat.parseValue(this.value);
       this.__datePicker.value = dateValue;
@@ -1017,6 +1019,19 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     if (this.__timePicker) {
       this.__timePicker.autoOpenDisabled = autoOpenDisabled;
     }
+  }
+
+  /** @private */
+  __themeChanged(theme, datePicker, timePicker) {
+    [datePicker, timePicker].forEach((picker) => {
+      if (picker) {
+        if (theme) {
+          picker.setAttribute('theme', theme);
+        } else {
+          picker.removeAttribute('theme');
+        }
+      }
+    });
   }
 
   /**
