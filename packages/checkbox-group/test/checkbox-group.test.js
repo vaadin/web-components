@@ -201,6 +201,30 @@ describe('vaadin-checkbox-group', () => {
       expect(checkboxes[0].checked).to.be.true;
       expect(checkboxes[2].checked).to.be.false;
     });
+
+    describe('value observer callback', () => {
+      let spy;
+
+      beforeEach(() => {
+        spy = sinon.spy(group, '__valueChanged');
+      });
+
+      afterEach(() => {
+        spy.restore();
+      });
+
+      it('should invoke the callback only once when adding a value', () => {
+        group.value = ['1', '2'];
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should invoke the callback only once when removing a value', () => {
+        group.value = ['1', '2'];
+        spy.resetHistory();
+        group.value = ['1'];
+        expect(spy.calledOnce).to.be.true;
+      });
+    });
   });
 
   describe('focused attribute', () => {

@@ -268,11 +268,9 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
    * @private
    */
   __addCheckboxToValue(value) {
-    if (this.value.includes(value)) {
-      return;
+    if (!this.value.includes(value)) {
+      this.value = [...this.value, value];
     }
-
-    this.value = [...this.value, value];
   }
 
   /**
@@ -280,7 +278,9 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
    * @private
    */
   __removeCheckboxFromValue(value) {
-    this.value = this.value.filter((v) => v !== value);
+    if (this.value.includes(value)) {
+      this.value = this.value.filter((v) => v !== value);
+    }
   }
 
   /**
@@ -300,24 +300,17 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
   /** @private */
   __valueChanged(value) {
     // setting initial value to empty array, skip validation
-    if (value.length === 0 && this._oldValue === undefined) {
+    if (value.length === 0 && this.__oldValue === undefined) {
       return;
     }
 
-    if (value.length > 0) {
-      this.setAttribute('has-value', '');
-    } else {
-      this.removeAttribute('has-value');
-    }
+    this.__oldValue = value;
 
-    this._oldValue = value;
-    // // set a flag to avoid updating loop
-    // this._updatingValue = true;
-    // // reflect the value array to checkboxes
+    this.toggleAttribute('has-value', value.length > 0);
+
     this.__checkboxes.forEach((checkbox) => {
       checkbox.checked = value.includes(checkbox.value);
     });
-    // this._updatingValue = false;
 
     this.validate();
   }
