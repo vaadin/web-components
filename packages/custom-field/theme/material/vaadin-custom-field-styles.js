@@ -69,3 +69,5 @@ const customField = css`
 registerStyles('vaadin-custom-field', [requiredField, customField], {
   moduleId: 'material-custom-field'
 });
+
+export { customField };

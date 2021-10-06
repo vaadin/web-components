@@ -1,10 +1,13 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { inputFieldShared } from '@vaadin/vaadin-lumo-styles/mixins/input-field-shared.js';
-import '@vaadin/vaadin-custom-field/theme/lumo/vaadin-custom-field.js';
+import { requiredField } from '@vaadin/vaadin-lumo-styles/mixins/required-field.js';
+import { customField } from '@vaadin/custom-field/theme/lumo/vaadin-custom-field-styles.js';
 import '@vaadin/date-picker/theme/lumo/vaadin-date-picker.js';
 import '@vaadin/time-picker/theme/lumo/vaadin-time-picker.js';
 
-registerStyles('vaadin-date-time-picker', [inputFieldShared], { moduleId: 'lumo-date-time-picker' });
+registerStyles('vaadin-date-time-picker', [inputFieldShared, requiredField, customField], {
+  moduleId: 'lumo-date-time-picker'
+});
 
 registerStyles(
   'vaadin-date-time-picker-date-picker',
