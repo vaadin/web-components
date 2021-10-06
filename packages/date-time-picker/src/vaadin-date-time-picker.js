@@ -406,7 +406,8 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
       '__readonlyChanged(readonly)',
       '__i18nChanged(i18n.*)',
       '__autoOpenDisabledChanged(autoOpenDisabled)',
-      '__themeChanged(theme, __datePicker, __timePicker)'
+      '__themeChanged(theme, __datePicker, __timePicker)',
+      '__pickersChanged(__datePicker, __timePicker)'
     ];
   }
 
@@ -415,10 +416,12 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
       ...super.slots,
       'date-picker': () => {
         const element = document.createElement('vaadin-date-time-picker-date-picker');
+        element.__defaultPicker = true;
         return element;
       },
       'time-picker': () => {
         const element = document.createElement('vaadin-date-time-picker-time-picker');
+        element.__defaultPicker = true;
         return element;
       }
     };
@@ -494,16 +497,19 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
 
   /** @private */
   __datePickerChanged() {
-    const defaultDatePicker = this.shadowRoot.querySelector('[part="date"]');
     const assignedElements = this.$.dateSlot.assignedNodes({ flatten: true }).filter(this.__filterElements);
     const datePicker = assignedElements[0];
     if (this.__datePicker === datePicker || !datePicker) {
       return;
     }
+    if (this.__datePicker) {
+      this.__datePicker.remove();
+    }
+
     this.__addInputListeners(datePicker);
     this.__datePicker = datePicker;
 
-    if (datePicker === defaultDatePicker) {
+    if (datePicker.__defaultPicker) {
       // Synchronize properties to default date picker
       datePicker.placeholder = this.datePlaceholder;
       datePicker.invalid = this.invalid;
@@ -534,16 +540,19 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
 
   /** @private */
   __timePickerChanged() {
-    const defaultTimePicker = this.shadowRoot.querySelector('[part="time"]');
     const assignedElements = this.$.timeSlot.assignedNodes({ flatten: true }).filter(this.__filterElements);
     const timePicker = assignedElements[0];
     if (this.__timePicker === timePicker || !timePicker) {
       return;
     }
+    if (this.__timePicker) {
+      this.__timePicker.remove();
+    }
+
     this.__addInputListeners(timePicker);
     this.__timePicker = timePicker;
 
-    if (timePicker === defaultTimePicker) {
+    if (timePicker.__defaultPicker) {
       // Synchronize properties to default time picker
       timePicker.placeholder = this.timePlaceholder;
       timePicker.step = this.step;
@@ -915,6 +924,8 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     if (oldValue !== undefined) {
       this.__dispatchChangeForValue = value;
     }
+
+    this.toggleAttribute('has-value', value !== '' && value != null);
   }
 
   /** @private */
@@ -959,8 +970,8 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
       // TODO: This logic clears both fields if one of them is cleared :(
       this.__ignoreInputValueChange = true;
       const [dateValue, timeValue] = this.__customFieldValueFormat.parseValue(this.value);
-      this.__datePicker.value = dateValue;
-      this.__timePicker.value = timeValue;
+      this.__datePicker.value = dateValue || '';
+      this.__timePicker.value = timeValue || '';
       this.__ignoreInputValueChange = false;
     }
   }
@@ -1032,6 +1043,27 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
         }
       }
     });
+  }
+
+  /** @private */
+  __pickersChanged(datePicker, timePicker) {
+    if (!datePicker || !timePicker) {
+      // Both pickers are not ready yet
+      return;
+    }
+
+    if (datePicker.__defaultPicker !== timePicker.__defaultPicker) {
+      // Both pickers are not replaced yet
+      return;
+    }
+
+    if (datePicker.value) {
+      // The new pickers have a value, update the component value
+      this.__valueChangedEventHandler();
+    } else if (this.value) {
+      // The component has a value, update the new pickers values
+      this.__selectedDateTimeChanged(this.__selectedDateTime);
+    }
   }
 
   /**
