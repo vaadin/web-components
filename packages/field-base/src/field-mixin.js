@@ -115,7 +115,7 @@ export const FieldMixin = (superclass) =>
 
       this.__helperSlot = this.shadowRoot.querySelector('[name="helper"]');
 
-      this._observer = new FlattenedNodesObserver(this.__helperSlot, (info) => {
+      this.__helperSlotObserver = new FlattenedNodesObserver(this.__helperSlot, (info) => {
         const helper = this._currentHelper;
 
         const newHelper = info.addedNodes.find((node) => node !== helper);

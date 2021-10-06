@@ -518,6 +518,30 @@ describe('radio-group', () => {
     });
   });
 
+  describe('custom helper', () => {
+    let group, helper;
+
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-radio-group>
+          <div slot="helper">Custom helper</div>
+        </vaadin-radio-group>
+      `);
+      await nextFrame();
+      helper = group.querySelector('[slot=helper]');
+    });
+
+    it('should set has-helper attribute', () => {
+      expect(group.hasAttribute('has-helper')).to.be.true;
+    });
+
+    it('should remove has-helper attribute when the custom helper is removed', async () => {
+      group.removeChild(helper);
+      await nextFrame();
+      expect(group.hasAttribute('has-helper')).to.be.false;
+    });
+  });
+
   describe('initial value', () => {
     beforeEach(async () => {
       group = fixtureSync(`
