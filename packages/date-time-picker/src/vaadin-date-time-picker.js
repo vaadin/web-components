@@ -362,6 +362,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
       },
 
       /** @private */
+      // TODO: Rename / relocate
       __customFieldValueFormat: {
         type: Object,
         value: () => ({
@@ -500,6 +501,8 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     this.__addChangeListener(datePicker);
     this.__datePicker = datePicker;
 
+    this.__datePicker.addEventListener('value-changed', () => this.__inputValueChanged());
+
     if (datePicker === defaultDatePicker) {
       // Synchronize properties to default date picker
       datePicker.placeholder = this.datePlaceholder;
@@ -540,6 +543,8 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     this.__removeChangeListener(this.__timePicker);
     this.__addChangeListener(timePicker);
     this.__timePicker = timePicker;
+
+    this.__timePicker.addEventListener('value-changed', () => this.__inputValueChanged());
 
     if (timePicker === defaultTimePicker) {
       // Synchronize properties to default time picker
@@ -963,16 +968,26 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
   }
 
   /** @private */
-  __customFieldValueChanged(e) {
-    /** @type {string} */
-    const value = e.detail.value;
+  get __formattedValue() {
+    const dateValue = this.__datePicker.value;
+    const timeValue = this.__timePicker.value;
+    if (dateValue && timeValue) {
+      return this.__customFieldValueFormat.formatValue([dateValue, timeValue]);
+    }
+    return '';
+  }
+
+  /** @private */
+  __inputValueChanged() {
+    const value = this.__formattedValue;
 
     // Initial empty value from custom field
-    if (value === 'T' && !this.__customFieldInitialValueChangeReceived) {
-      this.__customFieldInitialValueChangeReceived = true;
-      // Ignore initial value from custom field so we don't override initial value of date time picker
-      return;
-    }
+    // TODO: FIX
+    // if (value && !this.__customFieldInitialValueChangeReceived) {
+    //   this.__customFieldInitialValueChangeReceived = true;
+    //   // Ignore initial value from custom field so we don't override initial value of date time picker
+    //   return;
+    // }
 
     const [date, time] = value.split('T');
 
