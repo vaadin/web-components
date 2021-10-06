@@ -1,0 +1,38 @@
+{
+  "name": "@vaadin/vaadin-progress-bar",
+  "version": "22.0.0-alpha6",
+  "description": "vaadin-progress-bar",
+  "main": "vaadin-progress-bar.js",
+  "module": "vaadin-progress-bar.js",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-progress-bar"
+  },
+  "keywords": [
+    "Vaadin",
+    "vaadin-progress",
+    "vaadin-progress-bar",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/progress-bar": "^22.0.0-alpha6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
