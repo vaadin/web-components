@@ -84,8 +84,13 @@ class RadioButton extends SlotLabelMixin(
           align-items: baseline;
         }
 
+        .vaadin-radio-button-wrapper {
+          position: relative;
+          flex: none;
+        }
+
         /* visually hidden */
-        [part='radio'] ::slotted(input) {
+        ::slotted(input) {
           position: absolute;
           top: 0;
           left: 0;
@@ -98,12 +103,13 @@ class RadioButton extends SlotLabelMixin(
         }
       </style>
       <div class="vaadin-radio-button-container">
-        <div part="radio">
+        <div class="vaadin-radio-button-wrapper">
+          <div part="radio"></div>
           <slot name="input"></slot>
         </div>
-        <div part="label">
-          <slot name="label"></slot>
-        </div>
+
+        <slot name="label"></slot>
+
         <div style="display: none !important">
           <slot id="noop"></slot>
         </div>
