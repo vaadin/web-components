@@ -427,8 +427,6 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     this.__defaultTimeMinValue = '00:00:00.000';
     // Default value for "max" property of vaadin-time-picker (for removing constraint)
     this.__defaultTimeMaxValue = '23:59:59.999';
-
-    this.__changeEventHandler = this.__changeEventHandler.bind(this);
   }
 
   /** @protected */
@@ -458,7 +456,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
 
   /** @protected */
   focus() {
-    this.$.customField.focus();
+    this.__datePicker.focus();
   }
 
   /** @private */
@@ -478,15 +476,9 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
   }
 
   /** @private */
-  __removeChangeListener(node) {
-    if (node) {
-      node.removeEventListener('change', this.__changeEventHandler, false);
-    }
-  }
-
-  /** @private */
-  __addChangeListener(node) {
-    node.addEventListener('change', this.__changeEventHandler, false);
+  __addInputListeners(node) {
+    node.addEventListener('change', () => this.__changeEventHandler());
+    node.addEventListener('value-changed', () => this.__inputValueChanged());
   }
 
   /** @private */
@@ -494,14 +486,11 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     const defaultDatePicker = this.shadowRoot.querySelector('[part="date"]');
     const assignedElements = this.$.dateSlot.assignedNodes({ flatten: true }).filter(this.__filterElements);
     const datePicker = assignedElements[0];
-    if (this.__datePicker === datePicker) {
+    if (this.__datePicker === datePicker || !datePicker) {
       return;
     }
-    this.__removeChangeListener(this.__datePicker);
-    this.__addChangeListener(datePicker);
+    this.__addInputListeners(datePicker);
     this.__datePicker = datePicker;
-
-    this.__datePicker.addEventListener('value-changed', () => this.__inputValueChanged());
 
     if (datePicker === defaultDatePicker) {
       // Synchronize properties to default date picker
@@ -537,14 +526,11 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     const defaultTimePicker = this.shadowRoot.querySelector('[part="time"]');
     const assignedElements = this.$.timeSlot.assignedNodes({ flatten: true }).filter(this.__filterElements);
     const timePicker = assignedElements[0];
-    if (this.__timePicker === timePicker) {
+    if (this.__timePicker === timePicker || !timePicker) {
       return;
     }
-    this.__removeChangeListener(this.__timePicker);
-    this.__addChangeListener(timePicker);
+    this.__addInputListeners(timePicker);
     this.__timePicker = timePicker;
-
-    this.__timePicker.addEventListener('value-changed', () => this.__inputValueChanged());
 
     if (timePicker === defaultTimePicker) {
       // Synchronize properties to default time picker
