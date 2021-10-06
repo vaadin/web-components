@@ -30,7 +30,7 @@ import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
  * Part name            | Description
  * ---------------------|----------------
  * `label`              | The slotted label element wrapper
- * `group-field`        | The radio button elements wrapper
+ * `group-field`        | The checkbox elements wrapper
  * `helper-text`        | The slotted helper text element wrapper
  * `error-message`      | The slotted error message element wrapper
  * `required-indicator` | The `required` state indicator element
@@ -184,7 +184,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
   /**
    * A collection of the checkboxes.
    *
-   * @return {!Array<!RadioButton>}
+   * @return {!Array<!Checkbox>}
    * @private
    */
   get __checkboxes() {
@@ -208,6 +208,8 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
   }
 
   /**
+   * Registers the checkbox after adding it to the group.
+   *
    * @param {!Checkbox} checkbox
    * @private
    */
@@ -226,6 +228,8 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
   }
 
   /**
+   * Unregisters the checkbox before removing it from the group.
+   *
    * @param {!Checkbox} checkbox
    * @private
    */
@@ -264,7 +268,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
   }
 
   /**
-   * @param {!string} value
+   * @param {string} value
    * @private
    */
   __addCheckboxToValue(value) {
@@ -274,7 +278,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
   }
 
   /**
-   * @param {!string} value
+   * @param {string} value
    * @private
    */
   __removeCheckboxFromValue(value) {
@@ -297,7 +301,10 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
     }
   }
 
-  /** @private */
+  /**
+   * @param {string | null | undefined} value
+   * @private
+   */
   __valueChanged(value) {
     // setting initial value to empty array, skip validation
     if (value.length === 0 && this.__oldValue === undefined) {
@@ -318,7 +325,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
   /**
    * Override method inherited from `FocusMixin`
    * to prevent removing the `focused` attribute
-   * when focus moves between radio buttons inside the group.
+   * when focus moves between checkboxes inside the group.
    *
    * @param {!FocusEvent} event
    * @return {boolean}
