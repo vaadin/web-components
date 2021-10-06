@@ -23,8 +23,8 @@ registerStyles(
       outline: none;
     }
 
-    :host([has-label]) [part='label'] {
-      margin: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs);
+    :host([has-label]) ::slotted(label) {
+      padding: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs);
     }
 
     [part='checkbox'] {
@@ -99,7 +99,7 @@ registerStyles(
       color: var(--lumo-disabled-text-color);
     }
 
-    :host([disabled]) [part='label'] ::slotted(*) {
+    :host([disabled]) ::slotted(label) {
       color: inherit;
     }
 
@@ -116,8 +116,8 @@ registerStyles(
     }
 
     /* RTL specific styles */
-    :host([dir='rtl'][has-label]) [part='label'] {
-      margin: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
+    :host([dir='rtl'][has-label]) ::slotted(label) {
+      padding: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
     }
 
     /* Transition the checkmark if activated with the mouse (disabled for grid select-all this way) */

@@ -82,8 +82,13 @@ class Checkbox extends SlotLabelMixin(
           align-items: baseline;
         }
 
+        .vaadin-checkbox-wrapper {
+          position: relative;
+          flex: none;
+        }
+
         /* visually hidden */
-        [part='checkbox'] ::slotted(input) {
+        ::slotted(input) {
           position: absolute;
           top: 0;
           left: 0;
@@ -96,12 +101,13 @@ class Checkbox extends SlotLabelMixin(
         }
       </style>
       <div class="vaadin-checkbox-container">
-        <div part="checkbox">
+        <div class="vaadin-checkbox-wrapper">
+          <div part="checkbox"></div>
           <slot name="input"></slot>
         </div>
-        <div part="label">
-          <slot name="label"></slot>
-        </div>
+
+        <slot name="label"></slot>
+
         <div style="display: none !important">
           <slot id="noop"></slot>
         </div>
