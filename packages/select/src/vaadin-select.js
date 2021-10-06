@@ -121,7 +121,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
         }
       </style>
 
-      <div part="container">
+      <div class="vaadin-select-container">
         <div part="label" on-click="focus">
           <slot name="label"></slot>
           <span part="required-indicator" aria-hidden="true"></span>

@@ -169,7 +169,7 @@ describe('text-area', () => {
     beforeEach(() => {
       native = textArea.inputElement;
       inputField = textArea.shadowRoot.querySelector('[part=input-field]');
-      container = textArea.shadowRoot.querySelector('[part=container]');
+      container = textArea.shadowRoot.querySelector('.vaadin-text-area-container');
     });
 
     it('should grow height with unwrapped text', () => {

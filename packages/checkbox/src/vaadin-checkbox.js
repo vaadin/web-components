@@ -77,7 +77,7 @@ class Checkbox extends SlotLabelMixin(
           -webkit-tap-highlight-color: transparent;
         }
 
-        [part='container'] {
+        .vaadin-checkbox-container {
           display: inline-flex;
           align-items: baseline;
         }
@@ -95,7 +95,7 @@ class Checkbox extends SlotLabelMixin(
           margin: 0;
         }
       </style>
-      <div part="container">
+      <div class="vaadin-checkbox-container">
         <div part="checkbox">
           <slot name="input"></slot>
         </div>

@@ -2,7 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-text-area shadow default"] = 
-`<div part="container">
+`<div class="vaadin-text-area-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -45,7 +45,7 @@ snapshots["vaadin-text-area shadow default"] =
 /* end snapshot vaadin-text-area shadow default */
 
 snapshots["vaadin-text-area shadow disabled"] = 
-`<div part="container">
+`<div class="vaadin-text-area-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -91,7 +91,7 @@ snapshots["vaadin-text-area shadow disabled"] =
 /* end snapshot vaadin-text-area shadow disabled */
 
 snapshots["vaadin-text-area shadow readonly"] = 
-`<div part="container">
+`<div class="vaadin-text-area-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -137,7 +137,7 @@ snapshots["vaadin-text-area shadow readonly"] =
 /* end snapshot vaadin-text-area shadow readonly */
 
 snapshots["vaadin-text-area shadow invalid"] = 
-`<div part="container">
+`<div class="vaadin-text-area-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -183,7 +183,7 @@ snapshots["vaadin-text-area shadow invalid"] =
 /* end snapshot vaadin-text-area shadow invalid */
 
 snapshots["vaadin-text-area shadow theme"] = 
-`<div part="container">
+`<div class="vaadin-text-area-container">
   <div part="label">
     <slot name="label">
     </slot>

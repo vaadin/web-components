@@ -85,7 +85,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
           display: none !important;
         }
 
-        [part='container'] {
+        .vaadin-group-field-container {
           display: flex;
           flex-direction: column;
         }
@@ -94,7 +94,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
           display: none;
         }
       </style>
-      <div part="container">
+      <div class="vaadin-group-field-container">
         <div part="label">
           <slot name="label"></slot>
           <span part="required-indicator" aria-hidden="true"></span>

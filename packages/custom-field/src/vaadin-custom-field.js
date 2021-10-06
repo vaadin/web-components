@@ -34,7 +34,7 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
           display: none !important;
         }
 
-        [part='container'] {
+        .vaadin-custom-field-container {
           width: 100%;
           display: flex;
           flex-direction: column;
@@ -45,7 +45,7 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
         }
       </style>
 
-      <div part="container">
+      <div class="vaadin-custom-field-container">
         <div part="label" on-click="focus">
           <slot name="label"></slot>
           <span part="required-indicator" aria-hidden="true"></span>

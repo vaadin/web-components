@@ -2,7 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-password-field shadow default"] = 
-`<div part="container">
+`<div class="vaadin-field-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -52,7 +52,7 @@ snapshots["vaadin-password-field shadow default"] =
 /* end snapshot vaadin-password-field shadow default */
 
 snapshots["vaadin-password-field shadow disabled"] = 
-`<div part="container">
+`<div class="vaadin-field-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -105,7 +105,7 @@ snapshots["vaadin-password-field shadow disabled"] =
 /* end snapshot vaadin-password-field shadow disabled */
 
 snapshots["vaadin-password-field shadow readonly"] = 
-`<div part="container">
+`<div class="vaadin-field-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -158,7 +158,7 @@ snapshots["vaadin-password-field shadow readonly"] =
 /* end snapshot vaadin-password-field shadow readonly */
 
 snapshots["vaadin-password-field shadow invalid"] = 
-`<div part="container">
+`<div class="vaadin-field-container">
   <div part="label">
     <slot name="label">
     </slot>
@@ -211,7 +211,7 @@ snapshots["vaadin-password-field shadow invalid"] =
 /* end snapshot vaadin-password-field shadow invalid */
 
 snapshots["vaadin-password-field shadow theme"] = 
-`<div part="container">
+`<div class="vaadin-field-container">
   <div part="label">
     <slot name="label">
     </slot>
