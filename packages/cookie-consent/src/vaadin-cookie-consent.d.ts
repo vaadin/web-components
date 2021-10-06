@@ -26,7 +26,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  * `cc-btn`        | Dismiss cookie button
  * `cc-link`       | Learn more link element
  */
-declare class CookieConsentElement extends ElementMixin(HTMLElement) {
+declare class CookieConsent extends ElementMixin(HTMLElement) {
   /**
    * The message to show in the popup.
    */
@@ -74,8 +74,8 @@ declare class CookieConsentElement extends ElementMixin(HTMLElement) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-cookie-consent': CookieConsentElement;
+    'vaadin-cookie-consent': CookieConsent;
   }
 }
 
-export { CookieConsentElement };
+export { CookieConsent };

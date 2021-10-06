@@ -37,7 +37,7 @@ import 'cookieconsent/build/cookieconsent.min.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  */
-class CookieConsentElement extends ElementMixin(PolymerElement) {
+class CookieConsent extends ElementMixin(PolymerElement) {
   static get template() {
     return html`
       <style>
@@ -138,7 +138,7 @@ class CookieConsentElement extends ElementMixin(PolymerElement) {
     const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
     /* c8 ignore next 3 */
     if (typeof licenseChecker === 'function') {
-      licenseChecker(CookieConsentElement);
+      licenseChecker(CookieConsent);
     }
   }
 
@@ -233,6 +233,6 @@ class CookieConsentElement extends ElementMixin(PolymerElement) {
   }
 }
 
-customElements.define(CookieConsentElement.is, CookieConsentElement);
+customElements.define(CookieConsent.is, CookieConsent);
 
-export { CookieConsentElement };
+export { CookieConsent };
