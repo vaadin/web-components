@@ -34,7 +34,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  * `--vaadin-board-width-small` | Determines the width where mode changes from `small` to `medium` | `600px`
  * `--vaadin-board-width-medium` | Determines the width where mode changes from `medium` to `large` | `960px`
  */
-declare class BoardRowElement extends ElementMixin(HTMLElement) {
+declare class BoardRow extends ElementMixin(HTMLElement) {
   /**
    * Redraws the row, if necessary.
    *
@@ -46,8 +46,8 @@ declare class BoardRowElement extends ElementMixin(HTMLElement) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-board-row': BoardRowElement;
+    'vaadin-board-row': BoardRow;
   }
 }
 
-export { BoardRowElement };
+export { BoardRow };

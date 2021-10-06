@@ -19,7 +19,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  * </vaadin-board>
  * ```
  */
-declare class BoardElement extends ElementMixin(HTMLElement) {
+declare class Board extends ElementMixin(HTMLElement) {
   static _finalizeClass(): void;
 
   /**
@@ -33,8 +33,8 @@ declare class BoardElement extends ElementMixin(HTMLElement) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-board': BoardElement;
+    'vaadin-board': Board;
   }
 }
 
-export { BoardElement };
+export { Board };
