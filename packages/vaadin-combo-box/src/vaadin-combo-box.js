@@ -1,0 +1,13 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { ComboBox } from '@vaadin/combo-box/src/vaadin-combo-box.js';
+
+/**
+ * @deprecated Import `ComboBox` from `@vaadin/combo-box` instead.
+ */
+export const ComboBoxElement = ComboBox;
+
+export * from '@vaadin/combo-box/src/vaadin-combo-box.js';
