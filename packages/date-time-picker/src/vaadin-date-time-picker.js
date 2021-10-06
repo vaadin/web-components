@@ -103,22 +103,26 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
           display: none !important;
         }
 
-        .slot-container {
+        .inputs {
           display: flex;
         }
 
         [part='date'],
-        .slot-container ::slotted([slot='date-picker']) {
+        .inputs ::slotted([slot='date-picker']) {
           pointer-events: all;
           min-width: 0;
           flex: 1 1 auto;
         }
 
         [part='time'],
-        .slot-container ::slotted([slot='time-picker']) {
+        .inputs ::slotted([slot='time-picker']) {
           pointer-events: all;
           min-width: 0;
           flex: 1 1.65 auto;
+        }
+
+        div.vaadin-date-time-picker-container {
+          width: auto;
         }
       </style>
 
@@ -128,7 +132,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div class="slot-container">
+        <div class="inputs">
           <slot name="date-picker" id="dateSlot"></slot>
           <slot name="time-picker" id="timeSlot"></slot>
         </div>
