@@ -1,12 +1,12 @@
 {
-  "name": "@vaadin/vaadin-combo-box",
+  "name": "@vaadin/combo-box",
   "version": "22.0.0-alpha6",
   "description": "Web Component for displaying a list of items with filtering",
   "main": "vaadin-combo-box.js",
   "repository": {
     "type" : "git",
     "url" : "https://github.com/vaadin/web-components.git",
-    "directory": "packages/vaadin-combo-box"
+    "directory": "packages/combo-box"
   },
   "keywords": [
     "Vaadin",
@@ -18,7 +18,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-combo-box/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
