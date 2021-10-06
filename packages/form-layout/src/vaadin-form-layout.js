@@ -105,7 +105,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class FormLayoutElement extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement))) {
+class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -524,6 +524,6 @@ class FormLayoutElement extends ElementMixin(ThemableMixin(mixinBehaviors([IronR
   }
 }
 
-customElements.define(FormLayoutElement.is, FormLayoutElement);
+customElements.define(FormLayout.is, FormLayout);
 
-export { FormLayoutElement };
+export { FormLayout };

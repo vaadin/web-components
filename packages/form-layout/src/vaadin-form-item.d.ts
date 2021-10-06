@@ -92,12 +92,12 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  */
-declare class FormItemElement extends ThemableMixin(HTMLElement) {}
+declare class FormItem extends ThemableMixin(HTMLElement) {}
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-form-item': FormItemElement;
+    'vaadin-form-item': FormItem;
   }
 }
 
-export { FormItemElement };
+export { FormItem };

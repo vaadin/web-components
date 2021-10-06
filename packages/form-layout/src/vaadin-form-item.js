@@ -101,7 +101,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ThemableMixin
  */
-class FormItemElement extends ThemableMixin(PolymerElement) {
+class FormItem extends ThemableMixin(PolymerElement) {
   static get template() {
     return html`
       <style>
@@ -178,6 +178,6 @@ class FormItemElement extends ThemableMixin(PolymerElement) {
   }
 }
 
-customElements.define(FormItemElement.is, FormItemElement);
+customElements.define(FormItem.is, FormItem);
 
-export { FormItemElement };
+export { FormItem };
