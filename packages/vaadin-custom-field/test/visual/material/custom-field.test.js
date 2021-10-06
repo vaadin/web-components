@@ -1,5 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/combo-box/theme/material/vaadin-combo-box.js';
 import '@vaadin/date-picker/theme/material/vaadin-date-picker.js';
 import '@vaadin/email-field/theme/material/vaadin-email-field.js';
 import '@vaadin/form-layout/theme/material/vaadin-form-item.js';
@@ -11,7 +12,6 @@ import '@vaadin/password-field/theme/material/vaadin-password-field.js';
 import '@vaadin/select/theme/material/vaadin-select.js';
 import '@vaadin/text-area/theme/material/vaadin-text-area.js';
 import '@vaadin/text-field/theme/material/vaadin-text-field.js';
-import '@vaadin/vaadin-combo-box/theme/material/vaadin-combo-box.js';
 import '@vaadin/vaadin-template-renderer';
 import '@vaadin/time-picker/theme/material/vaadin-time-picker.js';
 import '../../../theme/material/vaadin-custom-field.js';

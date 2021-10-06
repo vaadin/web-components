@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { ComboBoxDropdown } from '@vaadin/vaadin-combo-box/src/vaadin-combo-box-dropdown.js';
+import { ComboBoxDropdown } from '@vaadin/combo-box/src/vaadin-combo-box-dropdown.js';
 import './vaadin-time-picker-item.js';
 import './vaadin-time-picker-overlay.js';
 import './vaadin-time-picker-scroller.js';

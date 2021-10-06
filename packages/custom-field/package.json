@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/combo-box": "^22.0.0-alpha6",
     "@vaadin/date-picker": "^22.0.0-alpha6",
     "@vaadin/email-field": "^22.0.0-alpha6",
     "@vaadin/form-layout": "^22.0.0-alpha6",
