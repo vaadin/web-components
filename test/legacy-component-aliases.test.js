@@ -56,7 +56,7 @@ import { MenuBarElement } from '@vaadin/vaadin-menu-bar';
 import { MessageElement } from '@vaadin/vaadin-messages';
 import { MessageInputElement } from '@vaadin/vaadin-messages';
 import { MessageListElement } from '@vaadin/vaadin-messages';
-import { NotificationElement } from '@vaadin/vaadin-notification';
+// import { NotificationElement } from '@vaadin/vaadin-notification';
 import { HorizontalLayoutElement } from '@vaadin/vaadin-ordered-layout';
 import { VerticalLayoutElement } from '@vaadin/vaadin-ordered-layout';
 import { ScrollerElement } from '@vaadin/vaadin-ordered-layout';
@@ -126,7 +126,7 @@ describe('legacy-exports', () => {
     expect(new MessageElement()).to.be.instanceof(HTMLElement);
     expect(new MessageInputElement()).to.be.instanceof(HTMLElement);
     expect(new MessageListElement()).to.be.instanceof(HTMLElement);
-    expect(new NotificationElement()).to.be.instanceof(HTMLElement);
+    // expect(new NotificationElement()).to.be.instanceof(HTMLElement);
     expect(new HorizontalLayoutElement()).to.be.instanceof(HTMLElement);
     expect(new VerticalLayoutElement()).to.be.instanceof(HTMLElement);
     expect(new ScrollerElement()).to.be.instanceof(HTMLElement);
