@@ -95,12 +95,8 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
   static get template() {
     return html`
       <style>
-        :host {
-          display: inline-block;
-        }
-
-        :host([hidden]) {
-          display: none !important;
+        div.vaadin-date-time-picker-container {
+          width: auto;
         }
 
         .inputs {
@@ -119,10 +115,6 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
           pointer-events: all;
           min-width: 0;
           flex: 1 1.65 auto;
-        }
-
-        div.vaadin-date-time-picker-container {
-          width: auto;
         }
       </style>
 
@@ -365,16 +357,6 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
         type: Date
       },
 
-      /** @private */
-      // TODO: Rename / relocate
-      __customFieldValueFormat: {
-        type: Object,
-        value: () => ({
-          parseValue: (combinedValue) => combinedValue.split('T'),
-          formatValue: (inputValues) => inputValues.join('T')
-        })
-      },
-
       /**
        * The object used to localize this component.
        * To change the default localization, replace the entire
@@ -458,6 +440,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     }
   }
 
+  /** @private */
   __filterElements(node) {
     return node.nodeType === Node.ELEMENT_NODE;
   }
@@ -503,6 +486,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
       return;
     }
     if (this.__datePicker) {
+      // Remove an existing date picker
       this.__datePicker.remove();
     }
 
@@ -546,6 +530,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
       return;
     }
     if (this.__timePicker) {
+      // Remove an existing time picker
       this.__timePicker.remove();
     }
 
@@ -634,24 +619,8 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
   /** @private */
   __stepChanged(step) {
     if (this.__timePicker && this.__timePicker.step !== step) {
-      const oldTimeValue = this.__timePicker.value;
-
       this.__timePicker.step = step;
-
-      // If time picker value changes due to the new step (precision change)
-      // propagate the updated value change to custom-field (which doesn't
-      // automatically process programmatically triggered value updates)
-      if (this.__timePicker.value !== oldTimeValue) {
-        this.__triggerCustomFieldValueUpdate();
-      }
     }
-  }
-
-  /** @private */
-  __triggerCustomFieldValueUpdate() {
-    // if (this.__timePicker) {
-    // this.__timePicker.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-    // }
   }
 
   /** @private */
@@ -959,18 +928,17 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
       this.value = formattedValue;
     }
 
-    // TODO: Fix docs
-    // Setting the customField.value below triggers validation of the date picker and time picker.
+    // Setting the date/time picker value below triggers validation of the components.
     // If the inputs are slotted (e.g. when using the Java API) and have an initial value this can
     // happen before date picker ready() which would throw an error when date picker is trying to read
-    // `this.$.input` (as a result of value change triggered by setting custom field value).
+    // `this.$.input` (as a result of value change triggered by setting the value).
     // Workaround the problem by setting custom field value only if date picker is ready.
     const isDatePickerReady = Boolean(this.__datePicker && this.__datePicker.$);
     if (isDatePickerReady) {
       // Ignore value changes until both inputs have a value updated
       // TODO: This logic clears both fields if one of them is cleared :(
       this.__ignoreInputValueChange = true;
-      const [dateValue, timeValue] = this.__customFieldValueFormat.parseValue(this.value);
+      const [dateValue, timeValue] = this.value.split('T');
       this.__datePicker.value = dateValue || '';
       this.__timePicker.value = timeValue || '';
       this.__ignoreInputValueChange = false;
@@ -982,7 +950,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     const dateValue = this.__datePicker.value;
     const timeValue = this.__timePicker.value;
     if (dateValue && timeValue) {
-      return this.__customFieldValueFormat.formatValue([dateValue, timeValue]);
+      return [dateValue, timeValue].join('T');
     }
     return '';
   }
@@ -994,14 +962,6 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     }
 
     const value = this.__formattedValue;
-
-    // Initial empty value from custom field
-    // TODO: FIX
-    // if (value && !this.__customFieldInitialValueChangeReceived) {
-    //   this.__customFieldInitialValueChangeReceived = true;
-    //   // Ignore initial value from custom field so we don't override initial value of date time picker
-    //   return;
-    // }
 
     const [date, time] = value.split('T');
 

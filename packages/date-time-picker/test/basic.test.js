@@ -70,7 +70,6 @@ describe('Basic features', () => {
   it('should get value from custom field', () => {
     datePicker.value = '2019-09-19';
     timePicker.value = '15:00';
-    dateTimePicker.__triggerCustomFieldValueUpdate();
     expect(dateTimePicker.value).to.equal('2019-09-19T15:00');
   });
 
@@ -298,20 +297,17 @@ describe('Theme attribute', () => {
 
     it('should not have has-value if only time is selected', () => {
       timePicker.value = '15:00';
-      // dateTimePicker.__triggerCustomFieldValueUpdate();
       expect(dateTimePicker.hasAttribute('has-value')).to.be.false;
     });
 
     it('should not have has-value if only date is selected', () => {
       datePicker.value = '2019-09-16';
-      // dateTimePicker.__triggerCustomFieldValueUpdate();
       expect(dateTimePicker.hasAttribute('has-value')).to.be.false;
     });
 
     it('should have has-value if both date and time are selected', () => {
       timePicker.value = '15:00';
       datePicker.value = '2019-09-16';
-      // dateTimePicker.__triggerCustomFieldValueUpdate();
       expect(dateTimePicker.hasAttribute('has-value')).to.be.true;
     });
 
@@ -328,11 +324,9 @@ describe('Theme attribute', () => {
     it('should get value from slotted inputs', () => {
       datePicker.value = '2019-09-16';
       timePicker.value = '15:00';
-      // dateTimePicker.__triggerCustomFieldValueUpdate();
       expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
 
       datePicker.value = '';
-      // dateTimePicker.__triggerCustomFieldValueUpdate();
       expect(dateTimePicker.value).to.equal('');
     });
 
