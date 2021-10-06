@@ -1,7 +1,7 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-custom-field/theme/lumo/vaadin-custom-field.js';
 import '@vaadin/date-picker/theme/lumo/vaadin-date-picker.js';
-import '@vaadin/vaadin-time-picker/theme/lumo/vaadin-time-picker.js';
+import '@vaadin/time-picker/theme/lumo/vaadin-time-picker.js';
 
 registerStyles(
   'vaadin-date-time-picker-date-picker',
