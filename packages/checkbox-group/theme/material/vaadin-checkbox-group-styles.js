@@ -30,11 +30,6 @@ const checkboxGroup = css`
     display: none;
   }
 
-  :host(:not([has-label])) [part='label']::before {
-    content: '\\00a0';
-    position: absolute;
-  }
-
   :host([theme~='vertical']) [part='group-field'] {
     display: flex;
     flex-direction: column;
