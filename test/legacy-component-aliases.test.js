@@ -20,6 +20,7 @@ import { BoardElement } from '@vaadin/vaadin-board';
 import { BoardRowElement } from '@vaadin/vaadin-board/vaadin-board-row';
 import { ButtonElement } from '@vaadin/vaadin-button';
 import { ChartElement } from '@vaadin/vaadin-charts';
+import { ChartSeriesElement } from '@vaadin/vaadin-charts/src/vaadin-chart-series';
 import { CheckboxElement } from '@vaadin/vaadin-checkbox';
 import { CheckboxGroupElement } from '@vaadin/vaadin-checkbox/vaadin-checkbox-group';
 import { ComboBoxElement } from '@vaadin/vaadin-combo-box';
@@ -90,6 +91,7 @@ describe('legacy-exports', () => {
     expect(new BoardRowElement()).to.be.instanceof(HTMLElement);
     expect(new ButtonElement()).to.be.instanceof(HTMLElement);
     expect(new ChartElement()).to.be.instanceof(HTMLElement);
+    expect(new ChartSeriesElement()).to.be.instanceof(HTMLElement);
     expect(new CheckboxElement()).to.be.instanceof(HTMLElement);
     expect(new CheckboxGroupElement()).to.be.instanceof(HTMLElement);
     expect(new ComboBoxElement()).to.be.instanceof(HTMLElement);

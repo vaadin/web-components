@@ -4,7 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { deepMerge, ChartElement } from './vaadin-chart.js';
+import { deepMerge, Chart } from './vaadin-chart.js';
 
 /**
  * `<vaadin-chart-series>` is a custom element for creating series for Vaadin Charts.
@@ -51,7 +51,7 @@ import { deepMerge, ChartElement } from './vaadin-chart.js';
  *
  * @extends HTMLElement
  */
-class ChartSeriesElement extends PolymerElement {
+class ChartSeries extends PolymerElement {
   static get is() {
     return 'vaadin-chart-series';
   }
@@ -367,8 +367,8 @@ class ChartSeriesElement extends PolymerElement {
     if (series && unit !== this.__oldUnit) {
       this.__oldUnit = unit;
 
-      const parent = this.parentNode instanceof ChartElement && this.parentNode;
-      if (parent && parent instanceof ChartElement) {
+      const parent = this.parentNode instanceof Chart && this.parentNode;
+      if (parent && parent instanceof Chart) {
         if (unit && !parent.__getAxis(unit)) {
           const title = { title: { text: unit } };
           parent.__addAxis(Object.assign({ id: unit, axisGenerated: true }, title));
@@ -438,6 +438,6 @@ class ChartSeriesElement extends PolymerElement {
   }
 }
 
-customElements.define(ChartSeriesElement.is, ChartSeriesElement);
+customElements.define(ChartSeries.is, ChartSeries);
 
-export { ChartSeriesElement };
+export { ChartSeries };

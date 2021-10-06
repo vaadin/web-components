@@ -2,7 +2,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-import { Axis, Chart, Options } from 'highcharts';
+import { Axis, Chart as HighchartsChart, Options } from 'highcharts';
 
 import { ChartCategories, ChartCategoryPosition, ChartEventMap, ChartStacking } from './interfaces';
 
@@ -178,7 +178,7 @@ import { ChartCategories, ChartCategoryPosition, ChartEventMap, ChartStacking } 
  * @fires {CustomEvent} xaxes-extremes-set - Fired when when the minimum and maximum is set for the X axis.
  * @fires {CustomEvent} yaxes-extremes-set - Fired when when the minimum and maximum is set for the Y axis.
  */
-declare class ChartElement extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class Chart extends ThemableMixin(ElementMixin(HTMLElement)) {
   readonly options: Options;
 
   /**
@@ -200,7 +200,7 @@ declare class ChartElement extends ThemableMixin(ElementMixin(HTMLElement)) {
    *
    * For detailed documentation of available API check the [API site](http://api.highcharts.com/class-reference/classes.list)
    */
-  configuration: Chart | undefined;
+  configuration: HighchartsChart | undefined;
 
   /**
    * If categories are present names are used instead of numbers for the category axis.
@@ -402,21 +402,21 @@ declare class ChartElement extends ThemableMixin(ElementMixin(HTMLElement)) {
 
   addEventListener<K extends keyof ChartEventMap>(
     type: K,
-    listener: (this: ChartElement, ev: ChartEventMap[K]) => void,
+    listener: (this: Chart, ev: ChartEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof ChartEventMap>(
     type: K,
-    listener: (this: ChartElement, ev: ChartEventMap[K]) => void,
+    listener: (this: Chart, ev: ChartEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-chart': ChartElement;
+    'vaadin-chart': Chart;
   }
 }
 
-export { ChartElement };
+export { Chart };
