@@ -44,7 +44,7 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class ProgressBarElement extends ElementMixin(ThemableMixin(ProgressMixin(PolymerElement))) {
+class ProgressBar extends ElementMixin(ThemableMixin(ProgressMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -86,6 +86,6 @@ class ProgressBarElement extends ElementMixin(ThemableMixin(ProgressMixin(Polyme
   }
 }
 
-customElements.define(ProgressBarElement.is, ProgressBarElement);
+customElements.define(ProgressBar.is, ProgressBar);
 
-export { ProgressBarElement };
+export { ProgressBar };

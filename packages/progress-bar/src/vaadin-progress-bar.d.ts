@@ -38,12 +38,12 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  * ----------------|-------------|------------
  * `indeterminate` | Set to an indeterminate progress bar | :host
  */
-declare class ProgressBarElement extends ProgressMixin(ThemableMixin(ElementMixin(HTMLElement))) {}
+declare class ProgressBar extends ProgressMixin(ThemableMixin(ElementMixin(HTMLElement))) {}
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-progress-bar': ProgressBarElement;
+    'vaadin-progress-bar': ProgressBar;
   }
 }
 
-export { ProgressBarElement };
+export { ProgressBar };
