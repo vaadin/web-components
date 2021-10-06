@@ -13,10 +13,10 @@ export type DateTimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type DateTimePickerValueChangedEvent = CustomEvent<{ value: string }>;
 
-export interface DateTimePickerElementEventMap {
+export interface DateTimePickerCustomEventMap {
   'invalid-changed': DateTimePickerInvalidChangedEvent;
 
   'value-changed': DateTimePickerValueChangedEvent;
 }
 
-export interface DateTimePickerEventMap extends DateTimePickerElementEventMap, HTMLElementEventMap {}
+export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HTMLElementEventMap {}
