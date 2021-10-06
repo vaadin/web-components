@@ -155,7 +155,7 @@ export interface SplitLayoutEventMap extends HTMLElementEventMap, SplitLayoutEle
  *
  * @fires {Event} splitter-dragend - Fired after dragging the splitter have ended.
  */
-declare class SplitLayoutElement extends ElementMixin(ThemableMixin(GestureEventListeners(HTMLElement))) {
+declare class SplitLayout extends ElementMixin(ThemableMixin(GestureEventListeners(HTMLElement))) {
   /**
    * The split layout's orientation. Possible values are: `horizontal|vertical`.
    */
@@ -169,21 +169,21 @@ declare class SplitLayoutElement extends ElementMixin(ThemableMixin(GestureEvent
 
   addEventListener<K extends keyof SplitLayoutEventMap>(
     type: K,
-    listener: (this: SplitLayoutElement, ev: SplitLayoutEventMap[K]) => void,
+    listener: (this: SplitLayout, ev: SplitLayoutEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof SplitLayoutEventMap>(
     type: K,
-    listener: (this: SplitLayoutElement, ev: SplitLayoutEventMap[K]) => void,
+    listener: (this: SplitLayout, ev: SplitLayoutEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-split-layout': SplitLayoutElement;
+    'vaadin-split-layout': SplitLayout;
   }
 }
 
-export { SplitLayoutElement };
+export { SplitLayout };
