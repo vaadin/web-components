@@ -40,8 +40,8 @@ export const DynamicColumnsMixin = (superClass) =>
     }
 
     /**
-     * @param {!GridColumnGroupElement} el
-     * @return {!Array<!GridColumnElement>}
+     * @param {!GridColumnGroup} el
+     * @return {!Array<!GridColumn>}
      * @protected
      */
     _getChildColumns(el) {

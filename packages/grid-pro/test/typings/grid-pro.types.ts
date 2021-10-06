@@ -6,13 +6,13 @@ import {
   GridDragStartEvent,
   GridDropEvent,
   GridDropLocation,
-  GridElement,
+  Grid,
   GridExpandedItemsChangedEvent,
   GridItemModel,
   GridLoadingChangedEvent,
   GridSelectedItemsChangedEvent
 } from '@vaadin/grid';
-import { GridColumnElement } from '@vaadin/grid/vaadin-grid-column';
+import { GridColumn } from '@vaadin/grid/vaadin-grid-column';
 import { InlineEditingMixin } from '../../src/vaadin-grid-pro-inline-editing-mixin';
 import { GridProElement } from '../../vaadin-grid-pro';
 import { GridProEditColumnElement } from '../../vaadin-grid-pro-edit-column';
@@ -28,7 +28,7 @@ const genericGrid = document.createElement('vaadin-grid-pro');
 assertType<GridProElement>(genericGrid);
 
 const narrowedGrid = genericGrid as GridProElement<TestGridItem>;
-assertType<GridElement<TestGridItem>>(narrowedGrid);
+assertType<Grid<TestGridItem>>(narrowedGrid);
 assertType<InlineEditingMixin>(narrowedGrid);
 
 narrowedGrid.addEventListener('cell-edit-started', (event) => {
@@ -56,12 +56,12 @@ narrowedGrid.addEventListener('cell-activate', (event) => {
 
 narrowedGrid.addEventListener('column-reorder', (event) => {
   assertType<GridColumnReorderEvent<TestGridItem>>(event);
-  assertType<GridColumnElement<TestGridItem>[]>(event.detail.columns);
+  assertType<GridColumn<TestGridItem>[]>(event.detail.columns);
 });
 
 narrowedGrid.addEventListener('column-resize', (event) => {
   assertType<GridColumnResizeEvent<TestGridItem>>(event);
-  assertType<GridColumnElement<TestGridItem>>(event.detail.resizedColumn);
+  assertType<GridColumn<TestGridItem>>(event.detail.resizedColumn);
 });
 
 narrowedGrid.addEventListener('loading-changed', (event) => {
@@ -95,4 +95,4 @@ const genericEditColumn = document.createElement('vaadin-grid-pro-edit-column');
 assertType<GridProEditColumnElement>(genericEditColumn);
 
 const narrowedEditColumn = genericEditColumn as GridProEditColumnElement<TestGridItem>;
-assertType<GridColumnElement<TestGridItem>>(narrowedEditColumn);
+assertType<GridColumn<TestGridItem>>(narrowedEditColumn);

@@ -74,7 +74,7 @@ document.head.appendChild($_documentContainer.content);
  * @extends HTMLElement
  * @mixes ThemableMixin
  */
-class GridTreeToggleElement extends ThemableMixin(DirMixin(PolymerElement)) {
+class GridTreeToggle extends ThemableMixin(DirMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -200,6 +200,6 @@ class GridTreeToggleElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 }
 
-customElements.define(GridTreeToggleElement.is, GridTreeToggleElement);
+customElements.define(GridTreeToggle.is, GridTreeToggle);
 
-export { GridTreeToggleElement };
+export { GridTreeToggle };

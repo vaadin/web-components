@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2021 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import { GridElement } from '@vaadin/grid/src/vaadin-grid.js';
+import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 import '@vaadin/grid/src/vaadin-grid-column.js';
 import '@vaadin/grid/src/vaadin-grid-column-group.js';
 import '@vaadin/grid/src/vaadin-grid-sorter.js';
@@ -14,11 +14,11 @@ import './vaadin-crud-edit-column.js';
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  *
- * @extends GridElement
+ * @extends Grid
  * @mixes IncludedMixin
  * @private
  */
-class CrudGrid extends IncludedMixin(GridElement) {
+class CrudGrid extends IncludedMixin(Grid) {
   static get is() {
     return 'vaadin-crud-grid';
   }

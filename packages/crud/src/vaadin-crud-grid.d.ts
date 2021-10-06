@@ -1,11 +1,11 @@
-import { GridElement } from '@vaadin/grid/src/vaadin-grid.js';
+import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  */
-declare class CrudGrid extends IncludedMixin(GridElement) {
+declare class CrudGrid extends IncludedMixin(Grid) {
   /**
    * Disable filtering in the generated columns.
    * @attr {boolean} no-filter

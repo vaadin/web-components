@@ -1,12 +1,12 @@
-import { GridFilter, GridSorter } from '@vaadin/grid';
+import { GridFilterDefinition, GridSorterDefinition } from '@vaadin/grid';
 
 export type CrudDataProviderCallback<T> = (items: Array<T>, size?: number) => void;
 
 export type CrudDataProviderParams = {
   page: number;
   pageSize: number;
-  filters: Array<GridFilter>;
-  sortOrders: Array<GridSorter>;
+  filters: Array<GridFilterDefinition>;
+  sortOrders: Array<GridSorterDefinition>;
 };
 
 export type CrudDataProvider<T> = (params: CrudDataProviderParams, callback: CrudDataProviderCallback<T>) => void;

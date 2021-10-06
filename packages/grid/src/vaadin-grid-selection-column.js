@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { GridColumnElement } from './vaadin-grid-column.js';
+import { GridColumn } from './vaadin-grid-column.js';
 import '@vaadin/checkbox/src/vaadin-checkbox.js';
 
 /**
@@ -30,7 +30,7 @@ import '@vaadin/checkbox/src/vaadin-checkbox.js';
  *
  * @fires {CustomEvent} select-all-changed - Fired when the `selectAll` property changes.
  */
-class GridSelectionColumnElement extends GridColumnElement {
+class GridSelectionColumn extends GridColumn {
   static get is() {
     return 'vaadin-grid-selection-column';
   }
@@ -280,6 +280,6 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 }
 
-customElements.define(GridSelectionColumnElement.is, GridSelectionColumnElement);
+customElements.define(GridSelectionColumn.is, GridSelectionColumn);
 
-export { GridSelectionColumnElement };
+export { GridSelectionColumn };

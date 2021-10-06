@@ -1,16 +1,13 @@
-import { GridColumnElement } from './vaadin-grid-column.js';
-import { GridElement } from './vaadin-grid.js';
+import { GridColumn } from './vaadin-grid-column.js';
+import { Grid } from './vaadin-grid.js';
 
 export type GridBodyRenderer<TItem> = (
   root: HTMLElement,
-  column: GridColumnElement<TItem>,
+  column: GridColumn<TItem>,
   model: GridItemModel<TItem>
 ) => void;
 
-export type GridCellClassNameGenerator<TItem> = (
-  column: GridColumnElement<TItem>,
-  model: GridItemModel<TItem>
-) => string;
+export type GridCellClassNameGenerator<TItem> = (column: GridColumn<TItem>, model: GridItemModel<TItem>) => string;
 
 export type GridColumnTextAlign = 'start' | 'center' | 'end' | null;
 
@@ -19,8 +16,8 @@ export type GridDataProviderCallback<TItem> = (items: Array<TItem>, size?: numbe
 export type GridDataProviderParams<TItem> = {
   page: number;
   pageSize: number;
-  filters: Array<GridFilter>;
-  sortOrders: Array<GridSorter>;
+  filters: Array<GridFilterDefinition>;
+  sortOrders: Array<GridSorterDefinition>;
   parentItem?: TItem;
 };
 
@@ -35,7 +32,7 @@ export type GridDropLocation = 'above' | 'on-top' | 'below' | 'empty';
 
 export type GridDropMode = 'between' | 'on-top' | 'on-top-or-between' | 'on-grid';
 
-export interface GridFilter {
+export interface GridFilterDefinition {
   path: string;
   value: string;
 }
@@ -43,7 +40,7 @@ export interface GridFilter {
 export interface GridEventContext<TItem> {
   section?: 'body' | 'header' | 'footer' | 'details';
   item?: TItem;
-  column?: GridColumnElement<TItem>;
+  column?: GridColumn<TItem>;
   index?: number;
   selected?: boolean;
   detailsOpened?: boolean;
@@ -51,7 +48,7 @@ export interface GridEventContext<TItem> {
   level?: number;
 }
 
-export type GridHeaderFooterRenderer<TItem> = (root: HTMLElement, column: GridColumnElement<TItem>) => void;
+export type GridHeaderFooterRenderer<TItem> = (root: HTMLElement, column: GridColumn<TItem>) => void;
 
 export type GridDefaultItem = any;
 
@@ -66,13 +63,13 @@ export interface GridItemModel<TItem> {
 
 export type GridRowDetailsRenderer<TItem> = (
   root: HTMLElement,
-  grid?: GridElement<TItem>,
+  grid?: Grid<TItem>,
   model?: GridItemModel<TItem>
 ) => void;
 
 export type GridSorterDirection = 'asc' | 'desc' | null;
 
-export interface GridSorter {
+export interface GridSorterDefinition {
   path: string;
   direction: GridSorterDirection;
 }

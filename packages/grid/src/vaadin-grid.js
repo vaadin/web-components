@@ -258,7 +258,7 @@ const TOUCH_DEVICE = (() => {
  * @mixes StylingMixin
  * @mixes DragAndDropMixin
  */
-class GridElement extends ElementMixin(
+class Grid extends ElementMixin(
   ThemableMixin(
     DataProviderMixin(
       ArrayDataProviderMixin(
@@ -533,7 +533,7 @@ class GridElement extends ElementMixin(
   }
 
   /**
-   * @param {!Array<!GridColumnElement>} cols the columns to auto size based on their content width
+   * @param {!Array<!GridColumn>} cols the columns to auto size based on their content width
    * @private
    */
   _recalculateColumnWidths(cols) {
@@ -665,7 +665,7 @@ class GridElement extends ElementMixin(
 
   /**
    * @param {!HTMLTableRowElement} row
-   * @param {!Array<!GridColumnElement>} columns
+   * @param {!Array<!GridColumn>} columns
    * @param {?string} section
    * @param {boolean} isColumnRow
    * @param {boolean} noNotify
@@ -814,7 +814,7 @@ class GridElement extends ElementMixin(
   }
 
   /**
-   * @param {!Array<!GridColumnElement>} columnTree
+   * @param {!Array<!GridColumn>} columnTree
    * @protected
    */
   _renderColumnTree(columnTree) {
@@ -945,10 +945,10 @@ class GridElement extends ElementMixin(
    * Requests an update for the content of cells.
    *
    * While performing the update, the following renderers are invoked:
-   * - `GridElement.rowDetailsRenderer`
-   * - `GridColumnElement.renderer`
-   * - `GridColumnElement.headerRenderer`
-   * - `GridColumnElement.footerRenderer`
+   * - `Grid.rowDetailsRenderer`
+   * - `GridColumn.renderer`
+   * - `GridColumn.headerRenderer`
+   * - `GridColumn.footerRenderer`
    *
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
@@ -999,6 +999,6 @@ class GridElement extends ElementMixin(
   }
 }
 
-customElements.define(GridElement.is, GridElement);
+customElements.define(Grid.is, Grid);
 
-export { GridElement };
+export { Grid };

@@ -3,11 +3,11 @@
  */
 export type GridFilterValueChangedEvent = CustomEvent<{ value: string }>;
 
-export interface GridFilterElementEventMap {
+export interface GridFilterCustomEventMap {
   'value-changed': GridFilterValueChangedEvent;
 }
 
-export interface GridFilterEventMap extends HTMLElementEventMap, GridFilterElementEventMap {}
+export interface GridFilterEventMap extends HTMLElementEventMap, GridFilterCustomEventMap {}
 
 /**
  * `<vaadin-grid-filter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,
@@ -34,7 +34,7 @@ export interface GridFilterEventMap extends HTMLElementEventMap, GridFilterEleme
  *
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class GridFilterElement extends HTMLElement {
+declare class GridFilter extends HTMLElement {
   /**
    * JS Path of the property in the item used for filtering the data.
    */
@@ -47,21 +47,21 @@ declare class GridFilterElement extends HTMLElement {
 
   addEventListener<K extends keyof GridFilterEventMap>(
     type: K,
-    listener: (this: GridFilterElement, ev: GridFilterEventMap[K]) => void,
+    listener: (this: GridFilter, ev: GridFilterEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof GridFilterEventMap>(
     type: K,
-    listener: (this: GridFilterElement, ev: GridFilterEventMap[K]) => void,
+    listener: (this: GridFilter, ev: GridFilterEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid-filter': GridFilterElement;
+    'vaadin-grid-filter': GridFilter;
   }
 }
 
-export { GridFilterElement };
+export { GridFilter };

@@ -1,4 +1,4 @@
-import { GridDefaultItem, GridElement, GridElementEventMap } from '@vaadin/grid';
+import { GridDefaultItem, Grid, GridCustomEventMap } from '@vaadin/grid';
 
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
 
@@ -34,7 +34,7 @@ export interface GridProElementEventMap<TItem> {
 export interface GridProEventMap<TItem>
   extends HTMLElementEventMap,
     GridProElementEventMap<TItem>,
-    GridElementEventMap<TItem> {}
+    GridCustomEventMap<TItem> {}
 
 /**
  * `<vaadin-grid-pro>` is a high quality data grid / data table Web Component with extended functionality.
@@ -68,7 +68,7 @@ export interface GridProEventMap<TItem>
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  */
-declare class GridProElement<TItem = GridDefaultItem> extends GridElement<TItem> {
+declare class GridProElement<TItem = GridDefaultItem> extends Grid<TItem> {
   static _finalizeClass(): void;
 
   addEventListener<K extends keyof GridProEventMap<TItem>>(

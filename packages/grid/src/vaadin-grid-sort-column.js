@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { GridColumnElement } from './vaadin-grid-column.js';
+import { GridColumn } from './vaadin-grid-column.js';
 import './vaadin-grid-sorter.js';
 
 /**
@@ -21,7 +21,7 @@ import './vaadin-grid-sorter.js';
  *
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  */
-class GridSortColumnElement extends GridColumnElement {
+class GridSortColumn extends GridColumn {
   static get is() {
     return 'vaadin-grid-sort-column';
   }
@@ -113,6 +113,6 @@ class GridSortColumnElement extends GridColumnElement {
   }
 }
 
-customElements.define(GridSortColumnElement.is, GridSortColumnElement);
+customElements.define(GridSortColumn.is, GridSortColumn);
 
-export { GridSortColumnElement };
+export { GridSortColumn };

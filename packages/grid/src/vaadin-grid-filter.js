@@ -35,7 +35,7 @@ import '@vaadin/text-field/src/vaadin-text-field.js';
  *
  * @extends HTMLElement
  */
-class GridFilterElement extends class extends PolymerElement {} {
+class GridFilter extends class extends PolymerElement {} {
   static get template() {
     return html`
       <style>
@@ -120,6 +120,6 @@ class GridFilterElement extends class extends PolymerElement {} {
   }
 }
 
-customElements.define(GridFilterElement.is, GridFilterElement);
+customElements.define(GridFilter.is, GridFilter);
 
-export { GridFilterElement };
+export { GridFilter };

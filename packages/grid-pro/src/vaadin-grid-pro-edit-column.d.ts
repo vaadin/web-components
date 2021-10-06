@@ -1,4 +1,4 @@
-import { GridColumnElement } from '@vaadin/grid/src/vaadin-grid-column.js';
+import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 
 import { GridDefaultItem, GridBodyRenderer, GridItemModel } from '@vaadin/grid';
 
@@ -19,7 +19,7 @@ import { GridProEditorType } from './interfaces';
  *    ...
  * ```
  */
-declare class GridProEditColumnElement<TItem = GridDefaultItem> extends GridColumnElement<TItem> {
+declare class GridProEditColumnElement<TItem = GridDefaultItem> extends GridColumn<TItem> {
   /**
    * JS Path of the property in the item used for the editable content.
    */

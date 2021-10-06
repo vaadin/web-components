@@ -758,7 +758,7 @@ export const KeyboardNavigationMixin = (superClass) =>
     /**
      * @param {HTMLTableSectionElement=} rowGroup
      * @param {number=} rowIndex
-     * @return {!Array<!GridColumnElement>}
+     * @return {!Array<!GridColumn>}
      * @protected
      */
     _getColumns(rowGroup, rowIndex) {
