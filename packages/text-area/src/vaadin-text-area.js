@@ -279,6 +279,19 @@ export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(Polymer
 
     this._dispatchIronResizeEventIfNeeded('InputHeight', inputHeight);
   }
+
+  checkValidity() {
+    if (!super.checkValidity()) {
+      return false;
+    }
+
+    if (!this.pattern) {
+      return true;
+    }
+
+    const match = this.inputElement.value.match(this.pattern);
+    return match ? match[0] == match.input : false;
+  }
 }
 
 customElements.define(TextArea.is, TextArea);
