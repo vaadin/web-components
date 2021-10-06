@@ -2,7 +2,7 @@ import { ItemElement } from '@vaadin/item/src/vaadin-item.js';
 
 import { ListBoxElement } from '@vaadin/list-box/src/vaadin-list-box.js';
 
-import { ContextMenuElement } from './vaadin-context-menu.js';
+import { ContextMenu } from './vaadin-context-menu.js';
 
 import { ContextMenuItem, ContextMenuRendererContext } from './interfaces';
 
@@ -68,7 +68,7 @@ interface ItemsMixin {
 
   __forwardFocus(): void;
 
-  __itemsRenderer(root: HTMLElement, menu: ContextMenuElement, context: ContextMenuRendererContext): void;
+  __itemsRenderer(root: HTMLElement, menu: ContextMenu, context: ContextMenuRendererContext): void;
 }
 
 export { ItemsMixin, ItemsMixinConstructor };

@@ -36,7 +36,7 @@ registerStyles(
  * @extends OverlayElement
  * @protected
  */
-class ContextMenuOverlayElement extends OverlayElement {
+class ContextMenuOverlay extends OverlayElement {
   static get is() {
     return 'vaadin-context-menu-overlay';
   }
@@ -110,4 +110,4 @@ class ContextMenuOverlayElement extends OverlayElement {
   }
 }
 
-customElements.define(ContextMenuOverlayElement.is, ContextMenuOverlayElement);
+customElements.define(ContextMenuOverlay.is, ContextMenuOverlay);

@@ -201,7 +201,7 @@ export const ItemsMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} root
-     * @param {!ContextMenuElement} menu
+     * @param {!ContextMenu} menu
      * @param {!ContextMenuRendererContext} context
      * @protected
      */

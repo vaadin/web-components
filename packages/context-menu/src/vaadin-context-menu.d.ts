@@ -189,9 +189,7 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
  */
-declare class ContextMenuElement extends ElementMixin(
-  ThemePropertyMixin(ItemsMixin(GestureEventListeners(HTMLElement)))
-) {
+declare class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEventListeners(HTMLElement)))) {
   /**
    * CSS selector that can be used to target any child element
    * of the context menu to listen for `openOn` events.
@@ -263,21 +261,21 @@ declare class ContextMenuElement extends ElementMixin(
 
   addEventListener<K extends keyof ContextMenuEventMap>(
     type: K,
-    listener: (this: ContextMenuElement, ev: ContextMenuEventMap[K]) => void,
+    listener: (this: ContextMenu, ev: ContextMenuEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof ContextMenuEventMap>(
     type: K,
-    listener: (this: ContextMenuElement, ev: ContextMenuEventMap[K]) => void,
+    listener: (this: ContextMenu, ev: ContextMenuEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-context-menu': ContextMenuElement;
+    'vaadin-context-menu': ContextMenu;
   }
 }
 
-export { ContextMenuElement };
+export { ContextMenu };
