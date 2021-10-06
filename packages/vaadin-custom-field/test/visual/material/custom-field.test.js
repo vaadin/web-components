@@ -13,7 +13,7 @@ import '@vaadin/text-area/theme/material/vaadin-text-area.js';
 import '@vaadin/text-field/theme/material/vaadin-text-field.js';
 import '@vaadin/vaadin-combo-box/theme/material/vaadin-combo-box.js';
 import '@vaadin/vaadin-template-renderer';
-import '@vaadin/vaadin-time-picker/theme/material/vaadin-time-picker.js';
+import '@vaadin/time-picker/theme/material/vaadin-time-picker.js';
 import '../../../theme/material/vaadin-custom-field.js';
 
 describe('custom-field', () => {

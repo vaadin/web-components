@@ -48,7 +48,7 @@
     "@vaadin/text-area": "^22.0.0-alpha6",
     "@vaadin/text-field": "^22.0.0-alpha6",
     "@vaadin/vaadin-template-renderer": "^22.0.0-alpha6",
-    "@vaadin/vaadin-time-picker": "^22.0.0-alpha6",
+    "@vaadin/time-picker": "^22.0.0-alpha6",
     "sinon": "^9.2.1"
   },
   "publishConfig": {

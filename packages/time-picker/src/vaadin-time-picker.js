@@ -677,6 +677,6 @@ customElements.define(TimePicker.is, TimePicker);
 export { TimePicker };
 
 /**
- * @deprecated Import `TimePicker` from `@vaadin/vaadin-time-picker` instead.
+ * @deprecated Import `TimePicker` from `@vaadin/time-picker` instead.
  */
 export const TimePickerElement = TimePicker;
