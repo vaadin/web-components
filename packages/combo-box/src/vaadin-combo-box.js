@@ -314,8 +314,3 @@ class ComboBox extends ComboBoxDataProviderMixin(
 customElements.define(ComboBox.is, ComboBox);
 
 export { ComboBox };
-
-/**
- * @deprecated Import `ComboBox` from `@vaadin/vaadin-combo-box` instead.
- */
-export const ComboBoxElement = ComboBox;

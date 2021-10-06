@@ -171,8 +171,3 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
 customElements.define(ComboBoxLight.is, ComboBoxLight);
 
 export { ComboBoxLight };
-
-/**
- * @deprecated Import `ComboBoxLight` from `@vaadin/vaadin-combo-box` instead.
- */
-export const ComboBoxLightElement = ComboBoxLight;

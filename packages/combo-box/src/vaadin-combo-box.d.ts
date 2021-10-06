@@ -184,13 +184,3 @@ declare global {
 }
 
 export { ComboBox };
-
-/**
- * @deprecated Import `ComboBox` from `@vaadin/vaadin-combo-box` instead.
- */
-export type ComboBoxElement = ComboBox;
-
-/**
- * @deprecated Import `ComboBox` from `@vaadin/vaadin-combo-box` instead.
- */
-export const ComboBoxElement: typeof ComboBox;
