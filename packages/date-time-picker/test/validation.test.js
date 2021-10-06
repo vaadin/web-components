@@ -30,7 +30,7 @@ const fixtures = {
     });
 
     it('should not be required', () => {
-      expect(dateTimePicker.required).to.be.false;
+      expect(dateTimePicker.required).not.to.be.ok;
     });
 
     it('should trigger custom field validation', () => {

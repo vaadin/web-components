@@ -5,7 +5,8 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin';
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -91,7 +92,7 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(ElementMixin(PolymerElement))))) {
   static get template() {
     return html`
       <style>
@@ -99,19 +100,19 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
           width: auto;
         }
 
-        .inputs {
+        .slots {
           display: flex;
         }
 
         [part='date'],
-        .inputs ::slotted([slot='date-picker']) {
+        .slots ::slotted([slot='date-picker']) {
           pointer-events: all;
           min-width: 0;
           flex: 1 1 auto;
         }
 
         [part='time'],
-        .inputs ::slotted([slot='time-picker']) {
+        .slots ::slotted([slot='time-picker']) {
           pointer-events: all;
           min-width: 0;
           flex: 1 1.65 auto;
@@ -124,7 +125,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
           <span part="required-indicator" aria-hidden="true"></span>
         </div>
 
-        <div class="inputs">
+        <div class="slots">
           <slot name="date-picker" id="dateSlot"></slot>
           <slot name="time-picker" id="timeSlot"></slot>
         </div>
@@ -152,32 +153,6 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
       name: {
         type: String
       },
-
-      /**
-       * Set to true if the value is invalid.
-       * @type {boolean}
-       */
-      invalid: {
-        type: Boolean,
-        reflectToAttribute: true,
-        notify: true,
-        value: false
-      },
-
-      /**
-       * Set to true to mark the input as required.
-       * @type {boolean}
-       */
-      required: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * The error message to display when the input is invalid.
-       * @attr {string} error-message
-       */
-      errorMessage: String,
 
       /**
        * The value for this element.
@@ -260,15 +235,6 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
       },
 
       /**
-       * String used for the helper text.
-       * @attr {string} helper-text
-       */
-      helperText: {
-        type: String,
-        value: ''
-      },
-
-      /**
        * Defines the time interval (in seconds) between the items displayed
        * in the time selection box. The default is 1 hour (i.e. `3600`).
        *
@@ -307,29 +273,10 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
       },
 
       /**
-       * String used for the label element.
-       * @type {string}
-       */
-      label: {
-        type: String,
-        value: ''
-      },
-
-      /**
        * Set to true to prevent the overlays from opening automatically.
        * @attr {boolean} auto-open-disabled
        */
       autoOpenDisabled: Boolean,
-
-      /**
-       * Set to true to disable this element.
-       * @type {boolean}
-       */
-      disabled: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
 
       /**
        * Set to true to make this element read-only.
@@ -797,15 +744,6 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
       timeObject.milliseconds = this.__stepSegment < 4 ? undefined : timeObject.milliseconds;
     }
     return timeObject;
-  }
-
-  /**
-   * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-   *
-   * @return {boolean} True if the value is valid.
-   */
-  validate() {
-    return !(this.invalid = !this.checkValidity());
   }
 
   /** @private */
