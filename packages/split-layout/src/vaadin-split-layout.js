@@ -154,7 +154,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @mixes GestureEventListeners
  */
-class SplitLayoutElement extends ElementMixin(
+class SplitLayout extends ElementMixin(
   ThemableMixin(GestureEventListeners(mixinBehaviors([IronResizableBehavior], PolymerElement)))
 ) {
   static get template() {
@@ -355,6 +355,6 @@ class SplitLayoutElement extends ElementMixin(
    */
 }
 
-customElements.define(SplitLayoutElement.is, SplitLayoutElement);
+customElements.define(SplitLayout.is, SplitLayout);
 
-export { SplitLayoutElement };
+export { SplitLayout };
