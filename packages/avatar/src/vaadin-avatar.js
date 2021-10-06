@@ -58,7 +58,7 @@ window.addEventListener(
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class Avatar extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -343,6 +343,6 @@ class AvatarElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 }
 
-customElements.define(AvatarElement.is, AvatarElement);
+customElements.define(Avatar.is, Avatar);
 
-export { AvatarElement };
+export { Avatar };

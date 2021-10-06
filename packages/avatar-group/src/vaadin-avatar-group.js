@@ -61,7 +61,7 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class AvatarGroupElement extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement))) {
+class AvatarGroup extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -596,6 +596,6 @@ class AvatarGroupElement extends ElementMixin(ThemableMixin(mixinBehaviors([Iron
   }
 }
 
-customElements.define(AvatarGroupElement.is, AvatarGroupElement);
+customElements.define(AvatarGroup.is, AvatarGroup);
 
-export { AvatarGroupElement };
+export { AvatarGroup };

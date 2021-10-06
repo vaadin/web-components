@@ -41,7 +41,7 @@ import { AvatarGroupItem, AvatarGroupI18n } from './interfaces';
  * - `<vaadin-avatar-group-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  * - `<vaadin-avatar-group-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  */
-declare class AvatarGroupElement extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class AvatarGroup extends ElementMixin(ThemableMixin(HTMLElement)) {
   readonly _avatars: HTMLElement[];
 
   /**
@@ -108,8 +108,8 @@ declare class AvatarGroupElement extends ElementMixin(ThemableMixin(HTMLElement)
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-avatar-group': AvatarGroupElement;
+    'vaadin-avatar-group': AvatarGroup;
   }
 }
 
-export { AvatarGroupElement };
+export { AvatarGroup };
