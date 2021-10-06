@@ -6,7 +6,7 @@
 
 [&lt;vaadin-split-layout&gt;](https://vaadin.com/components/vaadin-split-layout) is a Web Component implementing a split layout for two content elements with a draggable splitter between them, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-split-layout)](https://www.npmjs.com/package/@vaadin/vaadin-split-layout)
+[![npm version](https://badgen.net/npm/v/@vaadin/split-layout)](https://www.npmjs.com/package/@vaadin/split-layout)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-split-layout)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -30,13 +30,13 @@
 Install `vaadin-split-layout`:
 
 ```sh
-npm i @vaadin/vaadin-split-layout --save
+npm i @vaadin/split-layout --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-split-layout/vaadin-split-layout.js';
+import '@vaadin/split-layout/vaadin-split-layout.js';
 ```
 
 ## Getting started
