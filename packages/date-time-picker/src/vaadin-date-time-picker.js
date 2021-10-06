@@ -477,13 +477,18 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
   /** @private */
   __changeEventHandler(event) {
     event.stopPropagation();
-    this.__doDispatchChange = true;
+
+    if (this.__dispatchChangeForValue === this.value) {
+      this.__dispatchChange();
+      this.validate();
+    }
+    this.__dispatchChangeForValue = undefined;
   }
 
   /** @private */
   __addInputListeners(node) {
     node.addEventListener('change', (e) => this.__changeEventHandler(e));
-    node.addEventListener('value-changed', () => this.__inputValueChanged());
+    node.addEventListener('value-changed', () => this.__valueChangedEventHandler());
   }
 
   /** @private */
@@ -906,9 +911,8 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
   __valueChanged(value, oldValue) {
     this.__handleDateTimeChange('value', '__selectedDateTime', value, oldValue);
 
-    if (this.__doDispatchChange) {
-      this.__dispatchChange();
-      this.validate();
+    if (oldValue !== undefined) {
+      this.__dispatchChangeForValue = value;
     }
   }
 
@@ -950,16 +954,12 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     // Workaround the problem by setting custom field value only if date picker is ready.
     const isDatePickerReady = Boolean(this.__datePicker && this.__datePicker.$);
     if (isDatePickerReady) {
-      const doDispatchChange = this.__doDispatchChange;
-
       // Ignore value changes until both inputs have a value updated
       this.__ignoreInputValueChange = true;
       const [dateValue, timeValue] = this.__customFieldValueFormat.parseValue(this.value);
       this.__datePicker.value = dateValue;
       this.__timePicker.value = timeValue;
       this.__ignoreInputValueChange = false;
-
-      this.__doDispatchChange = doDispatchChange;
     }
   }
 
@@ -974,7 +974,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
   }
 
   /** @private */
-  __inputValueChanged() {
+  __valueChangedEventHandler() {
     if (this.__ignoreInputValueChange) {
       return;
     }
@@ -1007,7 +1007,6 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
     } else {
       this.value = '';
     }
-    this.__doDispatchChange = false;
   }
 
   /** @private */
