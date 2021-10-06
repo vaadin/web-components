@@ -18,7 +18,7 @@ import './vaadin-crud-edit-column.js';
  * @mixes IncludedMixin
  * @private
  */
-class CrudGridElement extends IncludedMixin(GridElement) {
+class CrudGrid extends IncludedMixin(GridElement) {
   static get is() {
     return 'vaadin-crud-grid';
   }
@@ -225,6 +225,6 @@ class CrudGridElement extends IncludedMixin(GridElement) {
   }
 }
 
-customElements.define(CrudGridElement.is, CrudGridElement);
+customElements.define(CrudGrid.is, CrudGrid);
 
-export { CrudGridElement };
+export { CrudGrid };

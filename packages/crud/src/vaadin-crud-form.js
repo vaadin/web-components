@@ -14,7 +14,7 @@ import { IncludedMixin } from './vaadin-crud-include-mixin.js';
  * @mixes IncludedMixin
  * @private
  */
-class CrudFormElement extends IncludedMixin(FormLayoutElement) {
+class CrudForm extends IncludedMixin(FormLayoutElement) {
   static get is() {
     return 'vaadin-crud-form';
   }
@@ -104,6 +104,6 @@ class CrudFormElement extends IncludedMixin(FormLayoutElement) {
   }
 }
 
-customElements.define(CrudFormElement.is, CrudFormElement);
+customElements.define(CrudForm.is, CrudForm);
 
-export { CrudFormElement };
+export { CrudForm };

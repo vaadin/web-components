@@ -150,7 +150,7 @@ const HOST_PROPS = {
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -586,7 +586,7 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     const devModeCallback = window.Vaadin.developmentModeCallback;
     const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
     if (typeof licenseChecker === 'function') {
-      licenseChecker(CrudElement);
+      licenseChecker(Crud);
     }
   }
 
@@ -643,7 +643,7 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __onEditorPositionChange(editorPosition) {
-    if (CrudElement._isValidEditorPosition(editorPosition)) {
+    if (Crud._isValidEditorPosition(editorPosition)) {
       return;
     }
     this.editorPosition = '';
@@ -1128,6 +1128,6 @@ class CrudElement extends ElementMixin(ThemableMixin(PolymerElement)) {
    */
 }
 
-customElements.define(CrudElement.is, CrudElement);
+customElements.define(Crud.is, Crud);
 
-export { CrudElement };
+export { Crud };

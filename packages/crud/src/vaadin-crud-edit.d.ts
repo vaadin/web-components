@@ -8,10 +8,10 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Typical usage is in a `<vaadin-grid-column>` of a custom `<vaadin-grid>` inside
  * a `<vaadin-crud>` to enable editing.
  */
-declare class CrudEditElement extends ThemableMixin(HTMLElement) {}
+declare class CrudEdit extends ThemableMixin(HTMLElement) {}
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-crud-edit': CrudEditElement;
+    'vaadin-crud-edit': CrudEdit;
   }
 }

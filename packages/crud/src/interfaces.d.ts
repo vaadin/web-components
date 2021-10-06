@@ -85,7 +85,7 @@ export type CrudCancelEvent<T> = CustomEvent<{ item: T }>;
  */
 export type CrudSaveEvent<T> = CustomEvent<{ item: T; new: boolean }>;
 
-export type CrudElementEventMap<T> = {
+export type CrudCustomEventMap<T> = {
   'editor-opened-changed': CrudEditorOpenedChangedEvent;
 
   'edited-item-changed': CrudEditedItemChangedEvent<T>;
@@ -105,4 +105,4 @@ export type CrudElementEventMap<T> = {
   save: CrudSaveEvent<T>;
 };
 
-export type CrudEventMap<T> = HTMLElementEventMap & CrudElementEventMap<T>;
+export type CrudEventMap<T> = HTMLElementEventMap & CrudCustomEventMap<T>;

@@ -1,6 +1,6 @@
 import '../../vaadin-crud.js';
 import {
-  CrudElement,
+  Crud,
   CrudEditedItemChangedEvent,
   CrudEditorOpenedChangedEvent,
   CrudCancelEvent,
@@ -21,7 +21,7 @@ type User = {
   };
 };
 
-const crud: CrudElement<User> = document.createElement('vaadin-crud');
+const crud: Crud<User> = document.createElement('vaadin-crud');
 
 crud.addEventListener('editor-opened-changed', (event) => {
   assertType<CrudEditorOpenedChangedEvent>(event);

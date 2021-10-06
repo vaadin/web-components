@@ -23,7 +23,7 @@ import './vaadin-crud-edit.js';
  *
  * @extends GridColumnElement
  */
-class CrudEditColumnElement extends GridColumnElement {
+class CrudEditColumn extends GridColumnElement {
   static get is() {
     return 'vaadin-crud-edit-column';
   }
@@ -80,6 +80,6 @@ class CrudEditColumnElement extends GridColumnElement {
   }
 }
 
-customElements.define(CrudEditColumnElement.is, CrudEditColumnElement);
+customElements.define(CrudEditColumn.is, CrudEditColumn);
 
-export { CrudEditColumnElement };
+export { CrudEditColumn };
