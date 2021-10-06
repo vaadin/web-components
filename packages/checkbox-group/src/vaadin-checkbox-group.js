@@ -81,7 +81,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
           display: none !important;
         }
 
-        #container {
+        .vaadin-checkbox-group-container {
           display: flex;
           flex-direction: column;
         }
@@ -91,7 +91,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
         }
       </style>
 
-      <div id="container">
+      <div class="vaadin-checkbox-group-container">
         <div part="label">
           <slot name="label"></slot>
           <span part="required-indicator" aria-hidden="true"></span>
