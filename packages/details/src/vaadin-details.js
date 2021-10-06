@@ -48,7 +48,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class DetailsElement extends ShadowFocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -133,7 +133,7 @@ class DetailsElement extends ShadowFocusMixin(ElementMixin(ThemableMixin(Polymer
 
   ready() {
     super.ready();
-    const uniqueId = (DetailsElement._uniqueId = 1 + DetailsElement._uniqueId || 0);
+    const uniqueId = (Details._uniqueId = 1 + Details._uniqueId || 0);
     this._contentId = `${this.constructor.is}-content-${uniqueId}`;
     // prevent Shift + Tab on content from host blur
     this._collapsible.addEventListener('keydown', (e) => {
@@ -172,6 +172,6 @@ class DetailsElement extends ShadowFocusMixin(ElementMixin(ThemableMixin(Polymer
   }
 }
 
-customElements.define(DetailsElement.is, DetailsElement);
+customElements.define(Details.is, Details);
 
-export { DetailsElement };
+export { Details };

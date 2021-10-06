@@ -31,6 +31,7 @@ import { Crud } from '@vaadin/crud';
 import { CustomField } from '@vaadin/custom-field';
 import { DatePicker } from '@vaadin/date-picker';
 import { DateTimePicker } from '@vaadin/date-time-picker';
+import { Details } from '@vaadin/details';
 import { Dialog } from '@vaadin/dialog';
 import { FormLayout } from '@vaadin/form-layout';
 import { FormItem } from '@vaadin/form-layout/vaadin-form-item';
@@ -102,6 +103,7 @@ describe('legacy-exports', () => {
     expect(new CustomField()).to.be.instanceof(HTMLElement);
     expect(new DatePicker()).to.be.instanceof(HTMLElement);
     expect(new DateTimePicker()).to.be.instanceof(HTMLElement);
+    expect(new Details()).to.be.instanceof(HTMLElement);
     expect(new Dialog()).to.be.instanceof(HTMLElement);
     expect(new FormLayout()).to.be.instanceof(HTMLElement);
     expect(new FormItem()).to.be.instanceof(HTMLElement);

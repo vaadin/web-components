@@ -12,11 +12,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 export type DetailsOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
-export interface DetailsElementEventMap {
+export interface DetailsCustomEventMap {
   'opened-changed': DetailsOpenedChangedEvent;
 }
 
-export type DetailsEventMap = HTMLElementEventMap & DetailsElementEventMap;
+export type DetailsEventMap = HTMLElementEventMap & DetailsCustomEventMap;
 
 /**
  * `<vaadin-details>` is a Web Component which the creates an
@@ -53,7 +53,7 @@ export type DetailsEventMap = HTMLElementEventMap & DetailsElementEventMap;
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class DetailsElement extends ShadowFocusMixin(ElementMixin(ThemableMixin(HTMLElement))) {
+declare class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
    * If true, the details content is visible.
    */
@@ -61,21 +61,21 @@ declare class DetailsElement extends ShadowFocusMixin(ElementMixin(ThemableMixin
 
   addEventListener<K extends keyof DetailsEventMap>(
     type: K,
-    listener: (this: DetailsElement, ev: DetailsEventMap[K]) => void,
+    listener: (this: Details, ev: DetailsEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof DetailsEventMap>(
     type: K,
-    listener: (this: DetailsElement, ev: DetailsEventMap[K]) => void,
+    listener: (this: Details, ev: DetailsEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-details': DetailsElement;
+    'vaadin-details': Details;
   }
 }
 
-export { DetailsElement };
+export { Details };

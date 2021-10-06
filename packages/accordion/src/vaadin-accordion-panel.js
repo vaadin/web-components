@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DetailsElement } from '@vaadin/details/src/vaadin-details.js';
+import { Details } from '@vaadin/details/src/vaadin-details.js';
 
 /**
  * The accordion panel element.
@@ -32,7 +32,7 @@ import { DetailsElement } from '@vaadin/details/src/vaadin-details.js';
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-class AccordionPanel extends DetailsElement {
+class AccordionPanel extends Details {
   static get is() {
     return 'vaadin-accordion-panel';
   }
