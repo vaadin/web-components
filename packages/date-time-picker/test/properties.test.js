@@ -203,26 +203,29 @@ const fixtures = {
       expect(datePicker.showWeekNumbers).to.be.true;
     });
 
-    it('should propagate label to custom field', () => {
+    it('should handle label', () => {
       dateTimePicker.label = 'Birth date and time';
-      expect(customField.label).to.equal('Birth date and time');
+      const label = [...dateTimePicker.children].find((node) => node.localName === 'label');
+      expect(label.textContent).to.equal('Birth date and time');
     });
 
-    it('should propagate invalid to custom field', () => {
+    it('should propagate invalid to date and time pickers', () => {
       dateTimePicker.invalid = true;
-      expect(customField.invalid).to.be.true;
+      expect(datePicker.invalid).to.be.true;
+      expect(timePicker.invalid).to.be.true;
     });
 
-    it('should propagate required to custom field', () => {
+    it('should propagate required to date and time pickers', () => {
       dateTimePicker.required = true;
-      expect(customField.required).to.be.true;
       expect(datePicker.required).to.be.true;
       expect(timePicker.required).to.be.true;
     });
 
-    it('should propagate error-message to custom field', () => {
+    it('should handle error-message', () => {
       dateTimePicker.errorMessage = 'error-message';
-      expect(customField.errorMessage).to.equal('error-message');
+      dateTimePicker.invalid = true;
+      const errorMessage = [...dateTimePicker.children].find((node) => node.matches('[slot="error-message"]'));
+      expect(errorMessage.textContent).to.equal('error-message');
     });
 
     it('should propagate disabled to date and time pickers', () => {
@@ -267,7 +270,6 @@ const fixtures = {
 
   describe(`Initial property values (${set})`, () => {
     let dateTimePicker;
-    let customField;
     let datePicker;
     let timePicker;
 
@@ -275,7 +277,6 @@ const fixtures = {
     // these tests do not modify the state but only check the initial state.
     before(() => {
       dateTimePicker = fixtureSync(fixtures[`${set}-initial`]);
-      customField = dateTimePicker.$.customField;
 
       if (set === 'default') {
         datePicker = dateTimePicker.__datePicker;
@@ -288,12 +289,10 @@ const fixtures = {
 
     it('should have initial value for errorMessage', () => {
       expect(dateTimePicker.errorMessage).to.equal('error-message');
-      expect(customField.errorMessage).to.equal('error-message');
     });
 
     it('should have initial value for required', () => {
       expect(dateTimePicker.required).to.be.true;
-      expect(customField.required).to.be.true;
       expect(datePicker.required).to.be.true;
       expect(timePicker.required).to.be.true;
     });
@@ -361,7 +360,6 @@ const fixtures = {
 
     it('should have initial value for label', () => {
       expect(dateTimePicker.label).to.equal('Birth date and time');
-      expect(customField.label).to.equal('Birth date and time');
     });
   });
 });
