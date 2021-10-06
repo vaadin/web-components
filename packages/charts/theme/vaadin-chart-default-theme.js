@@ -33,12 +33,6 @@ const chartDefaultTheme = css`
     outline: none;
   }
 
-  .highcharts-container svg {
-    /* https://github.com/highcharts/highcharts/issues/4649 */
-    /* https://github.com/vaadin/web-components/issues/2171 */
-    width: 100% !important;
-  }
-
   .highcharts-root {
     display: block;
   }
