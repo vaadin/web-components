@@ -475,13 +475,14 @@ class DateTimePicker extends FieldMixin(SlotMixin(ThemableMixin(ElementMixin(Pol
   }
 
   /** @private */
-  __changeEventHandler() {
+  __changeEventHandler(event) {
+    event.stopPropagation();
     this.__doDispatchChange = true;
   }
 
   /** @private */
   __addInputListeners(node) {
-    node.addEventListener('change', () => this.__changeEventHandler());
+    node.addEventListener('change', (e) => this.__changeEventHandler(e));
     node.addEventListener('value-changed', () => this.__inputValueChanged());
   }
 
