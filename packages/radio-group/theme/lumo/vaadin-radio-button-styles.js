@@ -23,8 +23,8 @@ registerStyles(
       outline: none;
     }
 
-    :host([has-label]) [part='label'] {
-      margin: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs);
+    :host([has-label]) ::slotted(label) {
+      padding: var(--lumo-space-xs) var(--lumo-space-s) var(--lumo-space-xs) var(--lumo-space-xs);
     }
 
     [part='radio'] {
@@ -38,7 +38,6 @@ registerStyles(
       will-change: transform;
       line-height: 1.2;
       cursor: var(--lumo-clickable-cursor);
-      flex: none;
     }
 
     /* Used for activation "halo" */
@@ -111,7 +110,7 @@ registerStyles(
       color: var(--lumo-disabled-text-color);
     }
 
-    :host([disabled]) [part='label'] ::slotted(*) {
+    :host([disabled]) ::slotted(label) {
       color: inherit;
     }
 
@@ -124,8 +123,8 @@ registerStyles(
     }
 
     /* RTL specific styles */
-    :host([dir='rtl'][has-label]) [part='label'] {
-      margin: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
+    :host([dir='rtl'][has-label]) ::slotted(label) {
+      padding: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
     }
   `,
   { moduleId: 'lumo-radio-button' }

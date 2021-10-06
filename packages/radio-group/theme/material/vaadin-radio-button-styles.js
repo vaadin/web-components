@@ -13,15 +13,14 @@ registerStyles(
       -webkit-tap-highlight-color: transparent;
     }
 
-    :host([has-label]) [part='label'] {
-      margin: 4px 0.875em 4px 0.375em;
+    :host([has-label]) ::slotted(label) {
+      padding: 4px 0.875em 4px 0.375em;
     }
 
     [part='radio'] {
       display: inline-block;
       width: 16px;
       height: 16px;
-      flex: none;
       margin: 4px;
       position: relative;
       border: 2px solid;
@@ -93,7 +92,7 @@ registerStyles(
       color: var(--material-disabled-text-color);
     }
 
-    :host([disabled]) [part='label'] ::slotted(*) {
+    :host([disabled]) ::slotted(label) {
       color: inherit;
     }
 
@@ -106,8 +105,8 @@ registerStyles(
     }
 
     /* RTL specific styles */
-    :host([dir='rtl'][has-label]) [part='label'] {
-      margin: 4px 0.375em 4px 0.875em;
+    :host([dir='rtl'][has-label]) ::slotted(label) {
+      padding: 4px 0.375em 4px 0.875em;
     }
   `,
   { moduleId: 'material-radio-button' }
