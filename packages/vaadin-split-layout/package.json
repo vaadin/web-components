@@ -1,0 +1,37 @@
+{
+  "name": "@vaadin/vaadin-split-layout",
+  "version": "22.0.0-alpha6",
+  "description": "Web component for partitioning a layout into resizeable areas",
+  "main": "vaadin-split-layout.js",
+  "module": "vaadin-split-layout.js",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-split-layout"
+  },
+  "keywords": [
+    "Vaadin",
+    "split layout",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/split-layout": "^22.0.0-alpha6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
