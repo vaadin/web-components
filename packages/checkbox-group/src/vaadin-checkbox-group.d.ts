@@ -17,13 +17,13 @@ export type CheckboxGroupInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type CheckboxGroupValueChangedEvent = CustomEvent<{ value: Array<string> }>;
 
-export interface CheckboxGroupElementEventMap {
+export interface CheckboxGroupCustomEventMap {
   'invalid-changed': CheckboxGroupInvalidChangedEvent;
 
   'value-changed': CheckboxGroupValueChangedEvent;
 }
 
-export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGroupElementEventMap {}
+export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGroupCustomEventMap {}
 
 /**
  * `<vaadin-checkbox-group>` is a Polymer element for grouping vaadin-checkboxes.
@@ -64,7 +64,7 @@ export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGrou
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class CheckboxGroupElement extends ThemableMixin(DirMixin(HTMLElement)) {
+declare class CheckboxGroup extends ThemableMixin(DirMixin(HTMLElement)) {
   /**
    * The current disabled state of the checkbox group. True if group and all internal checkboxes are disabled.
    */
@@ -124,21 +124,21 @@ declare class CheckboxGroupElement extends ThemableMixin(DirMixin(HTMLElement)) 
 
   addEventListener<K extends keyof CheckboxGroupEventMap>(
     type: K,
-    listener: (this: CheckboxGroupElement, ev: CheckboxGroupEventMap[K]) => void,
+    listener: (this: CheckboxGroup, ev: CheckboxGroupEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof CheckboxGroupEventMap>(
     type: K,
-    listener: (this: CheckboxGroupElement, ev: CheckboxGroupEventMap[K]) => void,
+    listener: (this: CheckboxGroup, ev: CheckboxGroupEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-checkbox-group': CheckboxGroupElement;
+    'vaadin-checkbox-group': CheckboxGroup;
   }
 }
 
-export { CheckboxGroupElement };
+export { CheckboxGroup };
