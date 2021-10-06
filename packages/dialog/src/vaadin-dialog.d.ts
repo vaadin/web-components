@@ -51,9 +51,7 @@ import { DialogEventMap, DialogRenderer } from './interfaces';
  * @fires {CustomEvent} resize - Fired when the dialog resize is finished.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class DialogElement extends ThemePropertyMixin(
-  ElementMixin(DialogDraggableMixin(DialogResizableMixin(HTMLElement)))
-) {
+declare class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(DialogResizableMixin(HTMLElement)))) {
   /**
    * True if the overlay is currently displayed.
    */
@@ -109,21 +107,21 @@ declare class DialogElement extends ThemePropertyMixin(
 
   addEventListener<K extends keyof DialogEventMap>(
     type: K,
-    listener: (this: DialogElement, ev: DialogEventMap[K]) => void,
+    listener: (this: Dialog, ev: DialogEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof DialogEventMap>(
     type: K,
-    listener: (this: DialogElement, ev: DialogEventMap[K]) => void,
+    listener: (this: Dialog, ev: DialogEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-dialog': DialogElement;
+    'vaadin-dialog': Dialog;
   }
 }
 
-export { DialogElement };
+export { Dialog };

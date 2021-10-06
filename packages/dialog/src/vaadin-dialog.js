@@ -40,7 +40,7 @@ let memoizedTemplate;
  * @extends OverlayElement
  * @private
  */
-class DialogOverlayElement extends mixinBehaviors(IronResizableBehavior, OverlayElement) {
+class DialogOverlay extends mixinBehaviors(IronResizableBehavior, OverlayElement) {
   static get is() {
     return 'vaadin-dialog-overlay';
   }
@@ -121,7 +121,7 @@ class DialogOverlayElement extends mixinBehaviors(IronResizableBehavior, Overlay
   }
 }
 
-customElements.define(DialogOverlayElement.is, DialogOverlayElement);
+customElements.define(DialogOverlay.is, DialogOverlay);
 
 /**
  * `<vaadin-dialog>` is a Web Component for creating customized modal dialogs.
@@ -172,9 +172,7 @@ customElements.define(DialogOverlayElement.is, DialogOverlayElement);
  * @mixes DialogDraggableMixin
  * @mixes DialogResizableMixin
  */
-class DialogElement extends ThemePropertyMixin(
-  ElementMixin(DialogDraggableMixin(DialogResizableMixin(PolymerElement)))
-) {
+class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(DialogResizableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -359,6 +357,6 @@ class DialogElement extends ThemePropertyMixin(
   }
 }
 
-customElements.define(DialogElement.is, DialogElement);
+customElements.define(Dialog.is, Dialog);
 
-export { DialogElement };
+export { Dialog };

@@ -1,6 +1,6 @@
-import { DialogElement } from './vaadin-dialog.js';
+import { Dialog } from './vaadin-dialog.js';
 
-export type DialogRenderer = (root: HTMLElement, dialog?: DialogElement) => void;
+export type DialogRenderer = (root: HTMLElement, dialog?: Dialog) => void;
 
 export type DialogResizableDirection = 'n' | 'e' | 's' | 'w' | 'nw' | 'ne' | 'se' | 'sw';
 
@@ -37,10 +37,10 @@ export type DialogOpenedChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type DialogResizeEvent = CustomEvent<DialogResizeDimensions>;
 
-export interface DialogElementEventMap {
+export interface DialogCustomEventMap {
   'opened-changed': DialogOpenedChangedEvent;
 
   resize: DialogResizeEvent;
 }
 
-export type DialogEventMap = HTMLElementEventMap & DialogElementEventMap;
+export type DialogEventMap = HTMLElementEventMap & DialogCustomEventMap;
