@@ -84,6 +84,7 @@ class Checkbox extends SlotLabelMixin(
 
         .vaadin-checkbox-wrapper {
           position: relative;
+          flex: none;
         }
 
         /* visually hidden */
@@ -105,9 +106,8 @@ class Checkbox extends SlotLabelMixin(
           <slot name="input"></slot>
         </div>
 
-        <div part="label">
-          <slot name="label"></slot>
-        </div>
+        <slot name="label"></slot>
+
         <div style="display: none !important">
           <slot id="noop"></slot>
         </div>

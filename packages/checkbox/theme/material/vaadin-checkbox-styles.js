@@ -14,7 +14,7 @@ registerStyles(
       -webkit-tap-highlight-color: transparent;
     }
 
-    :host([has-label]) [part='label'] ::slotted(*) {
+    :host([has-label]) ::slotted(label) {
       padding: 3px 12px 3px 6px;
     }
 
@@ -22,7 +22,6 @@ registerStyles(
       display: inline-block;
       width: 16px;
       height: 16px;
-      flex: none;
       margin: 4px;
       position: relative;
       border-radius: 2px;
@@ -109,7 +108,7 @@ registerStyles(
       color: var(--material-disabled-text-color);
     }
 
-    :host([disabled]) ::slotted(*) {
+    :host([disabled]) ::slotted(label) {
       color: inherit;
     }
 
@@ -123,8 +122,8 @@ registerStyles(
     }
 
     /* RTL specific styles */
-    :host([dir='rtl'][has-label]) [part='label'] {
-      margin: 3px 6px 3px 12px;
+    :host([dir='rtl'][has-label]) ::slotted(label) {
+      padding: 3px 6px 3px 12px;
     }
   `,
   { moduleId: 'material-checkbox' }
