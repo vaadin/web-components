@@ -1,0 +1,37 @@
+{
+  "name": "@vaadin/vaadin-time-picker",
+  "version": "22.0.0-alpha6",
+  "description": "vaadin-time-picker",
+  "main": "vaadin-time-picker.js",
+  "module": "vaadin-time-picker.js",
+  "keywords": [
+    "Vaadin",
+    "vaadin-time-picker",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-time-picker"
+  },
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-time-picker/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/time-picker": "^22.0.0-alpha6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
