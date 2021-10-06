@@ -6,7 +6,7 @@
 
 [&lt;vaadin-combo-box&gt;](https://vaadin.com/components/vaadin-combo-box) is a Web Component combining a dropdown list with an input field for filtering the list of items, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-combo-box)](https://www.npmjs.com/package/@vaadin/vaadin-combo-box)
+[![npm version](https://badgen.net/npm/v/@vaadin/combo-box)](https://www.npmjs.com/package/@vaadin/combo-box)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-combo-box)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -34,13 +34,13 @@
 Install `vaadin-combo-box`:
 
 ```sh
-npm i @vaadin/vaadin-combo-box --save
+npm i @vaadin/combo-box --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
+import '@vaadin/combo-box/vaadin-combo-box.js';
 ```
 
 ## Getting Started
