@@ -32,12 +32,12 @@ import { DetailsElement } from '@vaadin/details/src/vaadin-details.js';
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-class AccordionPanelElement extends DetailsElement {
+class AccordionPanel extends DetailsElement {
   static get is() {
     return 'vaadin-accordion-panel';
   }
 }
 
-customElements.define(AccordionPanelElement.is, AccordionPanelElement);
+customElements.define(AccordionPanel.is, AccordionPanel);
 
-export { AccordionPanelElement };
+export { AccordionPanel };

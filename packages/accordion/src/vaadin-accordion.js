@@ -7,7 +7,7 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { AccordionPanelElement } from './vaadin-accordion-panel.js';
+import { AccordionPanel } from './vaadin-accordion-panel.js';
 
 /**
  * `<vaadin-accordion>` is a Web Component implementing accordion widget —
@@ -57,7 +57,7 @@ import { AccordionPanelElement } from './vaadin-accordion-panel.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class AccordionElement extends ThemableMixin(ElementMixin(PolymerElement)) {
+class Accordion extends ThemableMixin(ElementMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -96,7 +96,7 @@ class AccordionElement extends ThemableMixin(ElementMixin(PolymerElement)) {
        * The list of `<vaadin-accordion-panel>` child elements.
        * It is populated from the elements passed to the light DOM,
        * and updated dynamically when adding or removing panels.
-       * @type {!Array<!AccordionPanelElement>}
+       * @type {!Array<!AccordionPanel>}
        */
       items: {
         type: Array,
@@ -154,11 +154,11 @@ class AccordionElement extends ThemableMixin(ElementMixin(PolymerElement)) {
 
   /**
    * @param {!Array<!Element>} array
-   * @return {!Array<!AccordionPanelElement>}
+   * @return {!Array<!AccordionPanel>}
    * @protected
    */
   _filterItems(array) {
-    return array.filter((el) => el instanceof AccordionPanelElement);
+    return array.filter((el) => el instanceof AccordionPanel);
   }
 
   /** @private */
@@ -255,6 +255,6 @@ class AccordionElement extends ThemableMixin(ElementMixin(PolymerElement)) {
   }
 }
 
-customElements.define(AccordionElement.is, AccordionElement);
+customElements.define(Accordion.is, Accordion);
 
-export { AccordionElement };
+export { Accordion };

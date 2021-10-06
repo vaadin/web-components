@@ -2,25 +2,25 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-import { AccordionPanelElement } from './vaadin-accordion-panel.js';
+import { AccordionPanel } from './vaadin-accordion-panel.js';
 
 /**
  * Fired when the `items` property changes.
  */
-export type AccordionItemsChangedEvent = CustomEvent<{ value: AccordionPanelElement[] }>;
+export type AccordionItemsChangedEvent = CustomEvent<{ value: AccordionPanel[] }>;
 
 /**
  * Fired when the `opened` property changes.
  */
 export type AccordionOpenedChangedEvent = CustomEvent<{ value: number | null }>;
 
-export interface AccordionElementEventMap {
+export interface AccordionCustomEventMap {
   'items-changed': AccordionItemsChangedEvent;
 
   'opened-changed': AccordionOpenedChangedEvent;
 }
 
-export type AccordionEventMap = HTMLElementEventMap & AccordionElementEventMap;
+export type AccordionEventMap = HTMLElementEventMap & AccordionCustomEventMap;
 
 /**
  * `<vaadin-accordion>` is a Web Component implementing accordion widget —
@@ -66,7 +66,7 @@ export type AccordionEventMap = HTMLElementEventMap & AccordionElementEventMap;
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class AccordionElement extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class Accordion extends ElementMixin(ThemableMixin(HTMLElement)) {
   readonly focused: Element | null;
 
   /**
@@ -81,9 +81,9 @@ declare class AccordionElement extends ElementMixin(ThemableMixin(HTMLElement)) 
    * It is populated from the elements passed to the light DOM,
    * and updated dynamically when adding or removing panels.
    */
-  readonly items: AccordionPanelElement[];
+  readonly items: AccordionPanel[];
 
-  _filterItems(array: Element[]): AccordionPanelElement[];
+  _filterItems(array: Element[]): AccordionPanel[];
 
   _onKeydown(event: KeyboardEvent): void;
 
@@ -91,21 +91,21 @@ declare class AccordionElement extends ElementMixin(ThemableMixin(HTMLElement)) 
 
   addEventListener<K extends keyof AccordionEventMap>(
     type: K,
-    listener: (this: AccordionElement, ev: AccordionEventMap[K]) => void,
+    listener: (this: Accordion, ev: AccordionEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof AccordionEventMap>(
     type: K,
-    listener: (this: AccordionElement, ev: AccordionEventMap[K]) => void,
+    listener: (this: Accordion, ev: AccordionEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-accordion': AccordionElement;
+    'vaadin-accordion': Accordion;
   }
 }
 
-export { AccordionElement };
+export { Accordion };
