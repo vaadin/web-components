@@ -25,7 +25,7 @@ export type GridProItemPropertyChangedEvent<TItem> = CustomEvent<{
   };
 }>;
 
-export interface GridProElementEventMap<TItem> {
+export interface GridProCustomEventMap<TItem> {
   'cell-edit-started': GridProCellEditStartedEvent<TItem>;
 
   'item-property-changed': GridProItemPropertyChangedEvent<TItem>;
@@ -33,7 +33,7 @@ export interface GridProElementEventMap<TItem> {
 
 export interface GridProEventMap<TItem>
   extends HTMLElementEventMap,
-    GridProElementEventMap<TItem>,
+    GridProCustomEventMap<TItem>,
     GridCustomEventMap<TItem> {}
 
 /**
@@ -68,28 +68,28 @@ export interface GridProEventMap<TItem>
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  */
-declare class GridProElement<TItem = GridDefaultItem> extends Grid<TItem> {
+declare class GridPro<TItem = GridDefaultItem> extends Grid<TItem> {
   static _finalizeClass(): void;
 
   addEventListener<K extends keyof GridProEventMap<TItem>>(
     type: K,
-    listener: (this: GridProElement<TItem>, ev: GridProEventMap<TItem>[K]) => void,
+    listener: (this: GridPro<TItem>, ev: GridProEventMap<TItem>[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof GridProEventMap<TItem>>(
     type: K,
-    listener: (this: GridProElement<TItem>, ev: GridProEventMap<TItem>[K]) => void,
+    listener: (this: GridPro<TItem>, ev: GridProEventMap<TItem>[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
-interface GridProElement extends InlineEditingMixin {}
+interface GridPro extends InlineEditingMixin {}
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid-pro': GridProElement<GridDefaultItem>;
+    'vaadin-grid-pro': GridPro<GridDefaultItem>;
   }
 }
 
-export { GridProElement };
+export { GridPro };

@@ -12,10 +12,10 @@ import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
  * @extends Checkbox
  * @private
  */
-class GridProEditCheckboxElement extends Checkbox {
+class GridProEditCheckbox extends Checkbox {
   static get is() {
     return 'vaadin-grid-pro-edit-checkbox';
   }
 }
 
-customElements.define(GridProEditCheckboxElement.is, GridProEditCheckboxElement);
+customElements.define(GridProEditCheckbox.is, GridProEditCheckbox);

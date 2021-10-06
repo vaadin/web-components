@@ -14,7 +14,7 @@ import '@vaadin/list-box/src/vaadin-list-box.js';
  * @extends Select
  * @private
  */
-class GridProEditSelectElement extends Select {
+class GridProEditSelect extends Select {
   static get is() {
     return 'vaadin-grid-pro-edit-select';
   }
@@ -125,4 +125,4 @@ class GridProEditSelectElement extends Select {
   }
 }
 
-customElements.define(GridProEditSelectElement.is, GridProEditSelectElement);
+customElements.define(GridProEditSelect.is, GridProEditSelect);

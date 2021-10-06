@@ -27,7 +27,7 @@ import './vaadin-grid-pro-edit-text-field.js';
  *
  * @extends GridColumn
  */
-class GridProEditColumnElement extends GridColumn {
+class GridProEditColumn extends GridColumn {
   static get is() {
     return 'vaadin-grid-pro-edit-column';
   }
@@ -277,6 +277,6 @@ class GridProEditColumnElement extends GridColumn {
   }
 }
 
-customElements.define(GridProEditColumnElement.is, GridProEditColumnElement);
+customElements.define(GridProEditColumn.is, GridProEditColumn);
 
-export { GridProEditColumnElement };
+export { GridProEditColumn };

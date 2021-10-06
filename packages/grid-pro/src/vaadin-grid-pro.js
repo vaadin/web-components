@@ -44,7 +44,7 @@ import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
  * @extends Grid
  * @mixes InlineEditingMixin
  */
-class GridProElement extends InlineEditingMixin(Grid) {
+class GridPro extends InlineEditingMixin(Grid) {
   static get is() {
     return 'vaadin-grid-pro';
   }
@@ -58,11 +58,11 @@ class GridProElement extends InlineEditingMixin(Grid) {
     const devModeCallback = window.Vaadin.developmentModeCallback;
     const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
     if (typeof licenseChecker === 'function') {
-      licenseChecker(GridProElement);
+      licenseChecker(GridPro);
     }
   }
 }
 
-customElements.define(GridProElement.is, GridProElement);
+customElements.define(GridPro.is, GridPro);
 
-export { GridProElement };
+export { GridPro };
