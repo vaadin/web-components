@@ -1,8 +1,11 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-
+import { ShadowFocusMixin } from '@vaadin/field-base/src/shadow-focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
 
 /**
  * Fired when the `opened` property changes.
@@ -50,14 +53,7 @@ export type DetailsEventMap = HTMLElementEventMap & DetailsElementEventMap;
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class DetailsElement extends ControlStateMixin(ElementMixin(ThemableMixin(HTMLElement))) {
-  /**
-   * Focusable element used by vaadin-control-state-mixin
-   */
-  readonly focusElement: HTMLElement;
-
-  readonly _collapsible: HTMLElement;
-
+declare class DetailsElement extends ShadowFocusMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
    * If true, the details content is visible.
    */
