@@ -2,13 +2,13 @@
  * Polymer.IronControlState is not a proper 2.0 class, also, its tabindex
  * implementation fails in the shadow dom, so we have this for vaadin elements.
  */
-declare function ControlStateMixin<T extends new (...args: any[]) => {}>(base: T): T & ControlStateMixinConstructor;
+declare function ShadowFocusMixin<T extends new (...args: any[]) => {}>(base: T): T & ShadowFocusMixinConstructor;
 
-interface ControlStateMixinConstructor {
-  new (...args: any[]): ControlStateMixin;
+interface ShadowFocusMixinConstructor {
+  new (...args: any[]): ShadowFocusMixin;
 }
 
-interface ControlStateMixin {
+interface ShadowFocusMixin {
   /**
    * Any element extending this mixin is required to implement this getter.
    * It returns the actual focusable element in the component.
@@ -32,4 +32,4 @@ interface ControlStateMixin {
   click(): void;
 }
 
-export { ControlStateMixinConstructor, ControlStateMixin };
+export { ShadowFocusMixinConstructor, ShadowFocusMixin };

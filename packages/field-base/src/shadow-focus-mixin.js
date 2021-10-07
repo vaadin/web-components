@@ -57,7 +57,7 @@ const TabIndexMixin = (superClass) =>
  * implementation fails in the shadow dom, so we have this for vaadin elements.
  * @polymerMixin
  */
-export const ControlStateMixin = (superClass) =>
+export const ShadowFocusMixin = (superClass) =>
   class VaadinControlStateMixin extends TabIndexMixin(superClass) {
     static get properties() {
       return {

@@ -10,11 +10,11 @@ import {
   nextFrame
 } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { ControlStateMixin } from '../vaadin-control-state-mixin.js';
+import { ShadowFocusMixin } from '../src/shadow-focus-mixin.js';
 
 customElements.define(
   'control-state-element',
-  class extends ControlStateMixin(PolymerElement) {
+  class extends ShadowFocusMixin(PolymerElement) {
     static get template() {
       return html`
         <input id="input" />
@@ -30,7 +30,7 @@ customElements.define(
 
 customElements.define(
   'control-state-wrapper',
-  class extends ControlStateMixin(PolymerElement) {
+  class extends ShadowFocusMixin(PolymerElement) {
     static get template() {
       return html` <control-state-element id="testElement"></control-state-element> `;
     }
@@ -276,7 +276,7 @@ describe('control-state-mixin', () => {
         }
       }
 
-      class TestClass extends ControlStateMixin(TestSuperClass) {}
+      class TestClass extends ShadowFocusMixin(TestSuperClass) {}
       customElements.define('control-state-listeners', TestClass);
       const instance = document.createElement('control-state-listeners');
       instance.ready();
@@ -327,7 +327,7 @@ describe('control-state-mixin', () => {
     });
 
     it('should warn when creating an element without focusElement', () => {
-      class ControlStateMissing extends ControlStateMixin(PolymerElement) {}
+      class ControlStateMissing extends ShadowFocusMixin(PolymerElement) {}
       customElements.define('control-state-missing', ControlStateMissing);
       const instance = document.createElement('control-state-missing');
       expect(instance.focusElement).to.equal(instance);

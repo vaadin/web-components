@@ -5,8 +5,8 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ShadowFocusMixin } from '@vaadin/field-base/src/shadow-focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-control-state-mixin.js';
 
 /**
  * `<vaadin-details>` is a Web Component which the creates an
@@ -44,11 +44,11 @@ import { ControlStateMixin } from '@vaadin/vaadin-control-state-mixin/vaadin-con
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
  * @extends HTMLElement
- * @mixes ControlStateMixin
+ * @mixes ShadowFocusMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class DetailsElement extends ControlStateMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class DetailsElement extends ShadowFocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
