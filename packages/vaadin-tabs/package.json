@@ -1,0 +1,37 @@
+{
+  "name": "@vaadin/vaadin-tabs",
+  "version": "22.0.0-alpha6",
+  "description": "vaadin-tabs",
+  "main": "vaadin-tabs.js",
+  "module": "vaadin-tabs.js",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-tabs"
+  },
+  "keywords": [
+    "Vaadin",
+    "vaadin-tabs",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-tabs/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "dependencies": {
+    "@vaadin/tabs": "^22.0.0-alpha6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
