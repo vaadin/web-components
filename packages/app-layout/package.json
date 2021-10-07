@@ -39,8 +39,8 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/testing-helpers": "^0.3.0",
     "@vaadin/tabs": "^22.0.0-alpha6",
+    "@vaadin/testing-helpers": "^0.3.0",
     "sinon": "^9.2.1"
   },
   "publishConfig": {
