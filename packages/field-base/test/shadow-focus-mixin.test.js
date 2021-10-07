@@ -1,19 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import {
-  aTimeout,
-  fixtureSync,
-  focusin,
-  focusout,
-  keyboardEventFor,
-  keyDownOn,
-  nextFrame
-} from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, focusin, focusout, keyboardEventFor, keyDownOn } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ShadowFocusMixin } from '../src/shadow-focus-mixin.js';
 
 customElements.define(
-  'control-state-element',
+  'shadow-focus-element',
   class extends ShadowFocusMixin(PolymerElement) {
     static get template() {
       return html`
@@ -29,10 +21,10 @@ customElements.define(
 );
 
 customElements.define(
-  'control-state-wrapper',
+  'shadow-focus-wrapper',
   class extends ShadowFocusMixin(PolymerElement) {
     static get template() {
-      return html` <control-state-element id="testElement"></control-state-element> `;
+      return html`<shadow-focus-element id="testElement"></shadow-focus-element>`;
     }
 
     get focusElement() {
@@ -41,11 +33,11 @@ customElements.define(
   }
 );
 
-describe('control-state-mixin', () => {
+describe('shadow-focus-mixin', () => {
   let customElement, focusElement;
 
   beforeEach(() => {
-    customElement = fixtureSync('<control-state-element></control-state-element>');
+    customElement = fixtureSync('<shadow-focus-element></shadow-focus-element>');
     focusElement = customElement.focusElement;
   });
 
@@ -155,7 +147,7 @@ describe('control-state-mixin', () => {
     let customElement, focusElement;
 
     beforeEach(() => {
-      customElement = fixtureSync('<control-state-element></control-state-element>');
+      customElement = fixtureSync('<shadow-focus-element></shadow-focus-element>');
       focusElement = customElement.focusElement;
 
       customElement.disabled = true;
@@ -202,7 +194,7 @@ describe('control-state-mixin', () => {
     let customElement, focusElement;
 
     beforeEach(() => {
-      customElement = fixtureSync('<control-state-element></control-state-element>');
+      customElement = fixtureSync('<shadow-focus-element></shadow-focus-element>');
       focusElement = customElement.focusElement;
     });
 
@@ -244,12 +236,12 @@ describe('control-state-mixin', () => {
     });
 
     it('should not throw an error when using focus() to a newly created method', () => {
-      const element = document.createElement('control-state-wrapper');
+      const element = document.createElement('shadow-focus-wrapper');
       expect(() => element.focus()).to.not.throw(Error);
     });
 
     it('should not throw an error when using blur() to a newly created element', () => {
-      const element = document.createElement('control-state-wrapper');
+      const element = document.createElement('shadow-focus-wrapper');
       expect(() => element.blur()).to.not.throw(Error);
     });
 
@@ -260,46 +252,11 @@ describe('control-state-mixin', () => {
     });
   });
 
-  describe('event listeners', () => {
-    it('should add focusin and focusout listeners before super.ready', (done) => {
-      class TestSuperClass extends HTMLElement {
-        constructor() {
-          super();
-          this.addEventListener = sinon.stub();
-        }
-        ready() {
-          this.attachShadow({ mode: 'open' });
-          // The listeners should have been added by now
-          expect(this.addEventListener.calledWith('focusin')).to.be.true;
-          expect(this.addEventListener.calledWith('focusout')).to.be.true;
-          done();
-        }
-      }
-
-      class TestClass extends ShadowFocusMixin(TestSuperClass) {}
-      customElements.define('control-state-listeners', TestClass);
-      const instance = document.createElement('control-state-listeners');
-      instance.ready();
-    });
-  });
-
-  describe('autofocus', () => {
-    beforeEach(() => {
-      customElement = fixtureSync('<control-state-element autofocus></control-state-element>');
-    });
-
-    it('should have focused and focus-ring set', async () => {
-      await nextFrame();
-      expect(customElement.hasAttribute('focused')).to.be.true;
-      expect(customElement.hasAttribute('focus-ring')).to.be.true;
-    });
-  });
-
   describe('nested focusable elements', () => {
     let wrapper, customElement, focusElement;
 
     beforeEach(() => {
-      wrapper = fixtureSync('<control-state-wrapper></control-state-wrapper>');
+      wrapper = fixtureSync('<shadow-focus-wrapper></shadow-focus-wrapper>');
       customElement = wrapper.focusElement;
       focusElement = customElement.focusElement;
     });
@@ -314,24 +271,6 @@ describe('control-state-mixin', () => {
       expect(wrapper.hasAttribute('focused')).to.be.true;
       focusout(focusElement);
       expect(wrapper.hasAttribute('focused')).to.be.false;
-    });
-  });
-
-  describe('focusElement missing', () => {
-    beforeEach(() => {
-      sinon.stub(console, 'warn');
-    });
-
-    afterEach(() => {
-      console.warn.restore();
-    });
-
-    it('should warn when creating an element without focusElement', () => {
-      class ControlStateMissing extends ShadowFocusMixin(PolymerElement) {}
-      customElements.define('control-state-missing', ControlStateMissing);
-      const instance = document.createElement('control-state-missing');
-      expect(instance.focusElement).to.equal(instance);
-      expect(console.warn.calledOnce).to.be.true;
     });
   });
 });

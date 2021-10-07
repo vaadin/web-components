@@ -123,7 +123,7 @@ class DetailsElement extends ShadowFocusMixin(ElementMixin(ThemableMixin(Polymer
   }
 
   /**
-   * Focusable element used by vaadin-control-state-mixin
+   * Focusable element used by `ShadowFocusMixin`.
    * @return {!HTMLElement}
    * @protected
    */
