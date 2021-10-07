@@ -58,6 +58,14 @@ const fixtures = {
   `
 };
 
+function getDatePicker(dateTimePicker) {
+  return dateTimePicker.querySelector('[slot="date-picker"]');
+}
+
+function getTimePicker(dateTimePicker) {
+  return dateTimePicker.querySelector('[slot="time-picker"]');
+}
+
 ['default', 'slotted'].forEach((set) => {
   describe(`Property propagation (${set})`, () => {
     let dateTimePicker;
@@ -66,14 +74,8 @@ const fixtures = {
 
     beforeEach(() => {
       dateTimePicker = fixtureSync(fixtures[set]);
-
-      if (set === 'default') {
-        datePicker = dateTimePicker.__datePicker;
-        timePicker = dateTimePicker.__timePicker;
-      } else {
-        datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
-        timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
-      }
+      datePicker = getDatePicker(dateTimePicker);
+      timePicker = getTimePicker(dateTimePicker);
     });
 
     it('should propagate value to date and time pickers', () => {
@@ -277,14 +279,8 @@ const fixtures = {
     // these tests do not modify the state but only check the initial state.
     before(() => {
       dateTimePicker = fixtureSync(fixtures[`${set}-initial`]);
-
-      if (set === 'default') {
-        datePicker = dateTimePicker.__datePicker;
-        timePicker = dateTimePicker.__timePicker;
-      } else {
-        datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
-        timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
-      }
+      datePicker = getDatePicker(dateTimePicker);
+      timePicker = getTimePicker(dateTimePicker);
     });
 
     it('should have initial value for errorMessage', () => {

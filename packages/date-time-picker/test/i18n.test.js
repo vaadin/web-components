@@ -87,12 +87,7 @@ customElements.define(
     before(() => {
       const element = fixtureSync(`<dtp-i18n-${set}></dtp-i18n-${set}>`);
       dateTimePicker = element.$.dateTimePicker;
-
-      if (set === 'default') {
-        datePicker = dateTimePicker.__datePicker;
-      } else if (set === 'slotted') {
-        datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
-      }
+      datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
     });
 
     it('should have initial value for i18n', () => {

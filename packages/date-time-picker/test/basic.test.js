@@ -31,6 +31,14 @@ const fixtures = {
   `
 };
 
+function getDatePicker(dateTimePicker) {
+  return dateTimePicker.querySelector('[slot="date-picker"]');
+}
+
+function getTimePicker(dateTimePicker) {
+  return dateTimePicker.querySelector('[slot="time-picker"]');
+}
+
 describe('Basic features', () => {
   let dateTimePicker;
   let datePicker;
@@ -38,8 +46,8 @@ describe('Basic features', () => {
 
   beforeEach(() => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker></vaadin-date-time-picker>');
-    datePicker = dateTimePicker.__inputs[0];
-    timePicker = dateTimePicker.__inputs[1];
+    datePicker = getDatePicker(dateTimePicker);
+    timePicker = getTimePicker(dateTimePicker);
   });
 
   it('should have default value', () => {
@@ -225,7 +233,7 @@ describe('autofocus', () => {
 
   beforeEach(async () => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker autofocus></vaadin-date-time-picker>');
-    datePicker = dateTimePicker.__inputs[0];
+    datePicker = getDatePicker(dateTimePicker);
     await nextFrame();
   });
 
@@ -266,8 +274,8 @@ describe('Theme attribute', () => {
 
   beforeEach(() => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker theme="foo"></vaadin-date-time-picker>');
-    datePicker = dateTimePicker.__inputs[0];
-    timePicker = dateTimePicker.__inputs[1];
+    datePicker = getDatePicker(dateTimePicker);
+    timePicker = getTimePicker(dateTimePicker);
   });
 
   it('should propagate theme attribute to date-picker', () => {
@@ -296,11 +304,6 @@ describe('Theme attribute', () => {
         timePicker.slot = 'time-picker';
         await aTimeout(0);
       }
-    });
-
-    it('should have correct inputs set', () => {
-      expect(dateTimePicker.__inputs[0]).to.equal(datePicker);
-      expect(dateTimePicker.__inputs[1]).to.equal(timePicker);
     });
 
     it('should not have has-value by default', () => {
