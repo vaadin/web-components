@@ -33,7 +33,7 @@ const fixtures = {
       expect(dateTimePicker.required).not.to.be.ok;
     });
 
-    it('should trigger custom field validation', () => {
+    it('should call checkValidity when validate is called', () => {
       const validitySpy = sinon.spy(dateTimePicker, 'checkValidity');
       dateTimePicker.validate();
       expect(validitySpy.called).to.be.true;

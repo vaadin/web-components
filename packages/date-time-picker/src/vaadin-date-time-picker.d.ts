@@ -7,7 +7,6 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
-
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DateTimePickerEventMap, DateTimePickerI18n } from './interfaces';
 
