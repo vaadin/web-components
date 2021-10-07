@@ -4,6 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DateTimePickerEventMap, DateTimePickerI18n } from './interfaces';
 
@@ -45,8 +49,6 @@ import { DateTimePickerEventMap, DateTimePickerI18n } from './interfaces';
  *
  * - `<vaadin-date-time-picker-date-picker>` - has the same API as [`<vaadin-date-picker>`](#/elements/vaadin-date-picker).
  * - `<vaadin-date-time-picker-time-picker>` - has the same API as [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
- * - `<vaadin-date-time-picker-time-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
- * - `<vaadin-date-time-picker-custom-field>` - has the same API as [`<vaadin-custom-field>`](#/elements/vaadin-custom-field).
  *
  * Note: the `theme` attribute value set on `<vaadin-date-time-picker>` is
  * propagated to the internal components listed above.
@@ -55,27 +57,11 @@ import { DateTimePickerEventMap, DateTimePickerI18n } from './interfaces';
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class DateTimePickerElement extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(ElementMixin(HTMLElement))))) {
   /**
    * The name of the control, which is submitted with the form data.
    */
   name: string | null | undefined;
-
-  /**
-   * Set to true if the value is invalid.
-   */
-  invalid: boolean;
-
-  /**
-   * Set to true to mark the input as required.
-   */
-  required: boolean;
-
-  /**
-   * The error message to display when the input is invalid.
-   * @attr {string} error-message
-   */
-  errorMessage: string | null | undefined;
 
   /**
    * The value for this element.
@@ -120,12 +106,6 @@ declare class DateTimePickerElement extends ElementMixin(ThemableMixin(HTMLEleme
   timePlaceholder: string | null | undefined;
 
   /**
-   * String used for the helper text.
-   * @attr {string} helper-text
-   */
-  helperText: string | null | undefined;
-
-  /**
    * Specifies the number of valid intervals in a day used for
    * configuring the items displayed in the time selection box.
    *
@@ -160,20 +140,10 @@ declare class DateTimePickerElement extends ElementMixin(ThemableMixin(HTMLEleme
   showWeekNumbers: boolean | null | undefined;
 
   /**
-   * String used for the label element.
-   */
-  label: string;
-
-  /**
    * Set to true to prevent the overlays from opening automatically.
    * @attr {boolean} auto-open-disabled
    */
   autoOpenDisabled: boolean | null | undefined;
-
-  /**
-   * Set to true to disable this element.
-   */
-  disabled: boolean;
 
   /**
    * Set to true to make this element read-only.
@@ -196,37 +166,23 @@ declare class DateTimePickerElement extends ElementMixin(ThemableMixin(HTMLEleme
    */
   i18n: DateTimePickerI18n;
 
-  /**
-   * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-   *
-   * @returns True if the value is valid.
-   */
-  validate(): boolean;
-
-  /**
-   * Returns true if the current input value satisfies all constraints (if any)
-   *
-   * You can override the `checkValidity` method for custom validations.
-   */
-  checkValidity(): boolean;
-
   addEventListener<K extends keyof DateTimePickerEventMap>(
     type: K,
-    listener: (this: DateTimePickerElement, ev: DateTimePickerEventMap[K]) => void,
+    listener: (this: DateTimePicker, ev: DateTimePickerEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof DateTimePickerEventMap>(
     type: K,
-    listener: (this: DateTimePickerElement, ev: DateTimePickerEventMap[K]) => void,
+    listener: (this: DateTimePicker, ev: DateTimePickerEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-date-time-picker': DateTimePickerElement;
+    'vaadin-date-time-picker': DateTimePicker;
   }
 }
 
-export { DateTimePickerElement };
+export { DateTimePicker };

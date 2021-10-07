@@ -392,7 +392,6 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
     return node.nodeType === Node.ELEMENT_NODE;
   }
 
-  /** @protected */
   focus() {
     this.__datePicker.focus();
   }
