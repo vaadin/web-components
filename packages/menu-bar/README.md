@@ -6,7 +6,7 @@
 
 [&lt;vaadin-menu-bar&gt;](https://vaadin.com/components/vaadin-menu-bar) is a Web Component providing application menu functionality, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-menu-bar)](https://www.npmjs.com/package/@vaadin/vaadin-menu-bar)
+[![npm version](https://badgen.net/npm/v/@vaadin/menu-bar)](https://www.npmjs.com/package/@vaadin/menu-bar)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-menu-bar)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -21,13 +21,13 @@
 Install `vaadin-menu-bar`:
 
 ```sh
-npm i @vaadin/vaadin-menu-bar --save
+npm i @vaadin/menu-bar --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-menu-bar/vaadin-menu-bar.js';
+import '@vaadin/menu-bar/vaadin-menu-bar.js';
 ```
 
 ## Getting started
