@@ -44,7 +44,7 @@ import './vaadin-upload-icons.js';
  *
  * @mixes ThemableMixin
  */
-class UploadFileElement extends ThemableMixin(PolymerElement) {
+class UploadFile extends ThemableMixin(PolymerElement) {
   static get template() {
     return html`
       <style>
@@ -230,6 +230,6 @@ class UploadFileElement extends ThemableMixin(PolymerElement) {
    */
 }
 
-customElements.define(UploadFileElement.is, UploadFileElement);
+customElements.define(UploadFile.is, UploadFile);
 
-export { UploadFileElement };
+export { UploadFile };

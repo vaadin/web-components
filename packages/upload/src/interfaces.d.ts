@@ -131,7 +131,7 @@ export type UploadAbortEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFi
  */
 export type UploadRequestEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile; formData: FormData }>;
 
-export interface UploadElementEventMap {
+export interface UploadCustomEventMap {
   'file-reject': UploadFileRejectEvent;
 
   'files-changed': UploadFilesChangedEvent;
@@ -157,4 +157,4 @@ export interface UploadElementEventMap {
   'upload-request': UploadRequestEvent;
 }
 
-export interface UploadEventMap extends HTMLElementEventMap, UploadElementEventMap {}
+export interface UploadEventMap extends HTMLElementEventMap, UploadCustomEventMap {}
