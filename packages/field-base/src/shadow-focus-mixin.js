@@ -42,7 +42,7 @@ export const ShadowFocusMixin = (superClass) =>
      * @override
      */
     _shouldSetFocus(event) {
-      if (!this.disabled) {
+      if (!this.disabled && this.focusElement) {
         const path = event.composedPath();
 
         // When focus moves from outside and not with Shift + Tab, delegate it to focusElement.
