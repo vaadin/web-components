@@ -72,10 +72,10 @@ export const ShadowFocusMixin = (superClass) =>
         this.focusElement.tabIndex = tabindex;
       }
 
-      if (this.disabled && this.tabindex) {
+      if (this.disabled && tabindex) {
         // If tabindex attribute was changed while component was disabled
-        if (this.tabindex !== -1) {
-          this.__lastTabIndex = this.tabindex;
+        if (tabindex !== -1) {
+          this.__lastTabIndex = tabindex;
         }
         this.tabindex = undefined;
       }
