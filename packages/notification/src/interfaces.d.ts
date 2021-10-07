@@ -1,4 +1,4 @@
-import { NotificationElement } from './vaadin-notification';
+import { Notification } from './vaadin-notification';
 
 export type NotificationPosition =
   | 'top-stretch'
@@ -11,18 +11,18 @@ export type NotificationPosition =
   | 'bottom-end'
   | 'bottom-stretch';
 
-export type NotificationRenderer = (root: HTMLElement, notification?: NotificationElement) => void;
+export type NotificationRenderer = (root: HTMLElement, notification?: Notification) => void;
 
 /**
  * Fired when the `opened` property changes.
  */
 export type NotificationOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
-export interface NotificationElementEventMap {
+export interface NotificationCustomEventMap {
   'opened-changed': NotificationOpenedChangedEvent;
 }
 
-export interface NotificationEventMap extends HTMLElementEventMap, NotificationElementEventMap {}
+export interface NotificationEventMap extends HTMLElementEventMap, NotificationCustomEventMap {}
 
 export interface ShowOptions {
   duration?: number;

@@ -237,7 +237,7 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
  * @mixes ThemePropertyMixin
  * @mixes ElementMixin
  */
-class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
+class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -377,11 +377,11 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
 
   /** @private */
   get _container() {
-    if (!NotificationElement._container) {
-      NotificationElement._container = document.createElement('vaadin-notification-container');
-      document.body.appendChild(NotificationElement._container);
+    if (!Notification._container) {
+      Notification._container = document.createElement('vaadin-notification-container');
+      document.body.appendChild(Notification._container);
     }
-    return NotificationElement._container;
+    return Notification._container;
   }
 
   /** @private */
@@ -496,11 +496,11 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
    */
   static show(contents, options) {
     if (isTemplateResult(contents)) {
-      return NotificationElement._createAndShowNotification((root) => {
+      return Notification._createAndShowNotification((root) => {
         render(contents, root);
       }, options);
     } else {
-      return NotificationElement._createAndShowNotification((root) => {
+      return Notification._createAndShowNotification((root) => {
         root.innerText = contents;
       }, options);
     }
@@ -508,7 +508,7 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
 
   /** @private */
   static _createAndShowNotification(renderer, options) {
-    const notification = document.createElement(NotificationElement.is);
+    const notification = document.createElement(Notification.is);
     if (options && Number.isFinite(options.duration)) {
       notification.duration = options.duration;
     }
@@ -531,6 +531,6 @@ class NotificationElement extends ThemePropertyMixin(ElementMixin(PolymerElement
 
 customElements.define(NotificationContainer.is, NotificationContainer);
 customElements.define(NotificationCard.is, NotificationCard);
-customElements.define(NotificationElement.is, NotificationElement);
+customElements.define(Notification.is, Notification);
 
-export { NotificationElement };
+export { Notification };
