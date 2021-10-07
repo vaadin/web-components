@@ -38,19 +38,15 @@ describe('radio-group', () => {
       await visualDiff(div, 'vertical');
     });
 
-    describe('label', () => {
-      beforeEach(() => {
-        element.label = 'Label';
-      });
+    it('label', async () => {
+      element.label = 'Label';
+      await visualDiff(div, 'label');
+    });
 
-      it('basic', async () => {
-        await visualDiff(div, 'label');
-      });
-
-      it('focused', async () => {
-        await sendKeys({ press: 'Tab' });
-        await visualDiff(div, 'label-focused');
-      });
+    it('label focused', async () => {
+      element.label = 'Label';
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'label-focused');
     });
 
     it('value', async () => {

@@ -33,7 +33,7 @@ describe('radio-group', () => {
         </vaadin-radio-group>
       `);
       await nextFrame();
-      buttons = group.__radioButtons;
+      buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });
 
     it('should not be disabled by default', () => {
@@ -63,7 +63,7 @@ describe('radio-group', () => {
         </vaadin-radio-group>
       `);
       await nextFrame();
-      buttons = group.__radioButtons;
+      buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });
 
     it('should set aria-disabled to true when disabled', () => {
@@ -100,7 +100,7 @@ describe('radio-group', () => {
         </vaadin-radio-group>
       `);
       await nextFrame();
-      buttons = group.__radioButtons;
+      buttons = [...group.querySelectorAll('vaadin-radio-button')];
       groupName = group._fieldName;
     });
 
@@ -131,7 +131,7 @@ describe('radio-group', () => {
         </vaadin-radio-group>
       `);
       await nextFrame();
-      buttons = group.__radioButtons;
+      buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });
 
     it('should disable unchecked buttons when readonly', () => {
@@ -187,7 +187,7 @@ describe('radio-group', () => {
         </vaadin-radio-group>
       `);
       await nextFrame();
-      buttons = group.__radioButtons;
+      buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });
 
     it('should set focused attribute on Tab', async () => {
@@ -229,7 +229,7 @@ describe('radio-group', () => {
         </vaadin-radio-group>
       `);
       await nextFrame();
-      buttons = group.__radioButtons;
+      buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });
 
     it('should set value when radio button is checked', () => {
@@ -314,7 +314,7 @@ describe('radio-group', () => {
         </vaadin-radio-group>
       `);
       await nextFrame();
-      buttons = group.__radioButtons;
+      buttons = [...group.querySelectorAll('vaadin-radio-button')];
 
       spy = sinon.spy();
       group.addEventListener('change', spy);
@@ -417,7 +417,7 @@ describe('radio-group', () => {
         </vaadin-radio-group>
       `);
       await nextFrame();
-      buttons = group.__radioButtons;
+      buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });
 
     it('should not set required property by default', () => {
@@ -497,9 +497,9 @@ describe('radio-group', () => {
 
     beforeEach(() => {
       group = fixtureSync('<vaadin-radio-group helper-text="Choose one"></vaadin-radio-group>');
-      error = group._errorNode;
-      helper = group._helperNode;
-      label = group._labelNode;
+      error = group.querySelector('[slot=error-message]');
+      helper = group.querySelector('[slot=helper]');
+      label = group.querySelector('[slot=label]');
     });
 
     it('should add label and helper text to aria-labelledby when field is valid', () => {
@@ -553,7 +553,7 @@ describe('radio-group', () => {
         </vaadin-radio-group>
       `);
       await nextFrame();
-      buttons = group.__radioButtons;
+      buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });
 
     it('should set the value based on the initially checked radio button', () => {

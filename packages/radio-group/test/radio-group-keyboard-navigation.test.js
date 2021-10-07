@@ -15,7 +15,7 @@ describe('keyboard navigation', () => {
       </vaadin-radio-group>
     `);
     await nextFrame();
-    buttons = group.__radioButtons;
+    buttons = [...group.querySelectorAll('vaadin-radio-button')];
   });
 
   describe('Tab', () => {
