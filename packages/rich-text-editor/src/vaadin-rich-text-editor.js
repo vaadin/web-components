@@ -121,7 +121,7 @@ const TAB_KEY = 9;
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class RichTextEditorElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -508,7 +508,7 @@ class RichTextEditorElement extends ElementMixin(ThemableMixin(PolymerElement)) 
     const devModeCallback = window.Vaadin.developmentModeCallback;
     const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
     if (typeof licenseChecker === 'function') {
-      licenseChecker(RichTextEditorElement);
+      licenseChecker(RichTextEditor);
     }
   }
 
@@ -1108,6 +1108,6 @@ class RichTextEditorElement extends ElementMixin(ThemableMixin(PolymerElement)) 
    */
 }
 
-customElements.define(RichTextEditorElement.is, RichTextEditorElement);
+customElements.define(RichTextEditor.is, RichTextEditor);
 
-export { RichTextEditorElement };
+export { RichTextEditor };

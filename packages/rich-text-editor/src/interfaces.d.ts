@@ -36,10 +36,10 @@ export type RichTextEditorHtmlValueChangedEvent = CustomEvent<{ value: string }>
  */
 export type RichTextEditorValueChangedEvent = CustomEvent<{ value: string }>;
 
-export interface RichTextEditorElementEventMap {
+export interface RichTextEditorCustomEventMap {
   'html-value-changed': RichTextEditorHtmlValueChangedEvent;
 
   'value-changed': RichTextEditorValueChangedEvent;
 }
 
-export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEditorElementEventMap {}
+export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEditorCustomEventMap {}
