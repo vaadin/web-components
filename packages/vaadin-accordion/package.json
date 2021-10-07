@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-accordion",
-  "version": "20.0.4",
+  "version": "20.0.5",
   "description": "vaadin-accordion",
   "main": "vaadin-accordion.js",
   "module": "vaadin-accordion.js",
@@ -26,11 +26,11 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-details": "^20.0.4",
-    "@vaadin/vaadin-element-mixin": "^20.0.4",
-    "@vaadin/vaadin-lumo-styles": "^20.0.4",
-    "@vaadin/vaadin-material-styles": "^20.0.4",
-    "@vaadin/vaadin-themable-mixin": "^20.0.4"
+    "@vaadin/vaadin-details": "^20.0.5",
+    "@vaadin/vaadin-element-mixin": "^20.0.5",
+    "@vaadin/vaadin-lumo-styles": "^20.0.5",
+    "@vaadin/vaadin-material-styles": "^20.0.5",
+    "@vaadin/vaadin-themable-mixin": "^20.0.5"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.1.5",

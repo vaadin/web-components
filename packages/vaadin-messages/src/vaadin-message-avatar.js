@@ -29,7 +29,7 @@ class MessageAvatarElement extends AvatarElement {
   }
 
   static get version() {
-    return '20.0.4';
+    return '20.0.5';
   }
 }
 

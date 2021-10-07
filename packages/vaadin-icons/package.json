@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-icons",
-  "version": "20.0.4",
+  "version": "20.0.5",
   "description": "Collection of 600+ unique icons designed for web applications",
   "main": "vaadin-icons.js",
   "module": "vaadin-icons.js",
