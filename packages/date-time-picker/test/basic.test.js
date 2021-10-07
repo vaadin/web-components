@@ -292,9 +292,13 @@ describe('Theme attribute', () => {
     let dateTimePicker;
     let datePicker;
     let timePicker;
+    let originalDatePicker;
+    let originalTimePicker;
 
     beforeEach(async () => {
       dateTimePicker = fixtureSync(fixtures[`${set}-inputs`]);
+      originalDatePicker = getDatePicker(dateTimePicker);
+      originalTimePicker = getTimePicker(dateTimePicker);
       datePicker = dateTimePicker.querySelector('vaadin-date-picker');
       timePicker = dateTimePicker.querySelector('vaadin-time-picker');
 
@@ -352,6 +356,20 @@ describe('Theme attribute', () => {
     it('should contain only one time-picker', () => {
       expect(dateTimePicker.querySelectorAll('[slot="time-picker"]').length).to.equal(1);
     });
+
+    if (set === 'lazy') {
+      it('should not react to changes on discarded pickers', () => {
+        sinon.spy(dateTimePicker, '__valueChangedEventHandler');
+        sinon.spy(dateTimePicker, '__changeEventHandler');
+        originalDatePicker.value = '2000-01-01';
+        originalDatePicker.dispatchEvent(new CustomEvent('change'));
+        originalTimePicker.value = '00:00';
+        originalTimePicker.dispatchEvent(new CustomEvent('change'));
+
+        expect(dateTimePicker.__valueChangedEventHandler.called).to.be.false;
+        expect(dateTimePicker.__changeEventHandler.called).to.be.false;
+      });
+    }
 
     describe('Removing change listeners', () => {
       it('should remove change listener from removed date picker', async () => {

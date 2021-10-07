@@ -364,6 +364,9 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
     this.__defaultTimeMinValue = '00:00:00.000';
     // Default value for "max" property of vaadin-time-picker (for removing constraint)
     this.__defaultTimeMaxValue = '23:59:59.999';
+
+    this.__changeEventHandler = this.__changeEventHandler.bind(this);
+    this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
   }
 
   /** @protected */
@@ -420,8 +423,14 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
 
   /** @private */
   __addInputListeners(node) {
-    node.addEventListener('change', (e) => this.__changeEventHandler(e));
-    node.addEventListener('value-changed', () => this.__valueChangedEventHandler());
+    node.addEventListener('change', this.__changeEventHandler);
+    node.addEventListener('value-changed', this.__valueChangedEventHandler);
+  }
+
+  /** @private */
+  __removeInputListeners(node) {
+    node.removeEventListener('change', this.__changeEventHandler);
+    node.removeEventListener('value-changed', this.__valueChangedEventHandler);
   }
 
   /** @private */
@@ -432,6 +441,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
     }
     if (this.__datePicker) {
       // Remove an existing date picker
+      this.__removeInputListeners(this.__datePicker);
       this.__datePicker.remove();
     }
 
@@ -475,6 +485,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
     }
     if (this.__timePicker) {
       // Remove an existing time picker
+      this.__removeInputListeners(this.__timePicker);
       this.__timePicker.remove();
     }
 
