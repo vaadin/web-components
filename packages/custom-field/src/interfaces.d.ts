@@ -12,3 +12,21 @@ export interface CustomFieldI18n {
 
   formatValue: CustomFieldFormatValueFn;
 }
+
+/**
+ * Fired when the `invalid` property changes.
+ */
+export type CustomFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `value` property changes.
+ */
+export type CustomFieldValueChangedEvent = CustomEvent<{ value: string }>;
+
+export interface CustomFieldElementEventMap {
+  'invalid-changed': CustomFieldInvalidChangedEvent;
+
+  'value-changed': CustomFieldValueChangedEvent;
+}
+
+export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldElementEventMap {}

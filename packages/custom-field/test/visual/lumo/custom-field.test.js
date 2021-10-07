@@ -15,9 +15,6 @@ import '@vaadin/text-field/theme/lumo/vaadin-text-field.js';
 import '@vaadin/vaadin-template-renderer';
 import '@vaadin/time-picker/theme/lumo/vaadin-time-picker.js';
 import '../../../theme/lumo/vaadin-custom-field.js';
-import { CustomField } from '../../../src/vaadin-custom-field.js';
-
-customElements.define('vaadin-custom-field', CustomField);
 
 describe('custom-field', () => {
   describe('basic', () => {
