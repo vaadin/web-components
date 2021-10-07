@@ -39,7 +39,7 @@ import { MultiSelectListMixin } from '@vaadin/vaadin-list-mixin/vaadin-multi-sel
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class ListBoxElement extends ElementMixin(MultiSelectListMixin(ThemableMixin(PolymerElement))) {
+class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -113,6 +113,6 @@ class ListBoxElement extends ElementMixin(MultiSelectListMixin(ThemableMixin(Pol
   }
 }
 
-customElements.define(ListBoxElement.is, ListBoxElement);
+customElements.define(ListBox.is, ListBox);
 
-export { ListBoxElement };
+export { ListBox };

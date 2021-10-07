@@ -55,28 +55,28 @@ export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxElementEven
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  * @fires {CustomEvent} selected-values-changed - Fired when the `selectedValues` property changes.
  */
-declare class ListBoxElement extends MultiSelectListMixin(ThemableMixin(ElementMixin(HTMLElement))) {
+declare class ListBox extends MultiSelectListMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   focused: Element | null;
 
   readonly _scrollerElement: HTMLElement;
 
   addEventListener<K extends keyof ListBoxEventMap>(
     type: K,
-    listener: (this: ListBoxElement, ev: ListBoxEventMap[K]) => void,
+    listener: (this: ListBox, ev: ListBoxEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof ListBoxEventMap>(
     type: K,
-    listener: (this: ListBoxElement, ev: ListBoxEventMap[K]) => void,
+    listener: (this: ListBox, ev: ListBoxEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-list-box': ListBoxElement;
+    'vaadin-list-box': ListBox;
   }
 }
 
-export { ListBoxElement };
+export { ListBox };

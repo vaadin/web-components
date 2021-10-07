@@ -5,7 +5,7 @@
  */
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { Item } from '@vaadin/item/src/vaadin-item.js';
-import { ListBoxElement } from '@vaadin/list-box/src/vaadin-list-box.js';
+import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
 
 /**
  * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
@@ -24,10 +24,10 @@ customElements.define(ContextMenuItemElement.is, ContextMenuItemElement);
 /**
  * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
  *
- * @extends ListBoxElement
+ * @extends ListBox
  * @protected
  */
-class ContextMenuListBoxElement extends ListBoxElement {
+class ContextMenuListBoxElement extends ListBox {
   static get is() {
     return 'vaadin-context-menu-list-box';
   }

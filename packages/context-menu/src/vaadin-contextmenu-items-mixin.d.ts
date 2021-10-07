@@ -1,6 +1,6 @@
 import { Item } from '@vaadin/item/src/vaadin-item.js';
 
-import { ListBoxElement } from '@vaadin/list-box/src/vaadin-list-box.js';
+import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
 
 import { ContextMenu } from './vaadin-context-menu.js';
 
@@ -25,7 +25,7 @@ declare global {
  *
  * @protected
  */
-declare class ContextMenuListBoxElement extends ListBoxElement {}
+declare class ContextMenuListBoxElement extends ListBox {}
 
 declare function ItemsMixin<T extends new (...args: any[]) => {}>(base: T): T & ItemsMixinConstructor;
 
