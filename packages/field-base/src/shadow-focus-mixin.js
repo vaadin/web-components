@@ -42,20 +42,18 @@ export const ShadowFocusMixin = (superClass) =>
      * @override
      */
     _shouldSetFocus(event) {
-      if (this.disabled) {
-        return false;
-      }
+      if (!this.disabled) {
+        const path = event.composedPath();
 
-      const path = event.composedPath();
+        // When focus moves from outside and not with Shift + Tab, delegate it to focusElement.
+        if (path[0] === this && !this.contains(event.relatedTarget) && !this._isShiftTabbing) {
+          this.focusElement.focus();
+          return true;
+        }
 
-      // When focus moves from outside and not with Shift + Tab, delegate it to focusElement.
-      if (path[0] === this && !this.contains(event.relatedTarget) && !this._isShiftTabbing) {
-        this.focusElement.focus();
-        return true;
-      }
-
-      if (path.indexOf(this.focusElement) !== -1) {
-        return true;
+        if (path.indexOf(this.focusElement) !== -1) {
+          return true;
+        }
       }
 
       return false;
