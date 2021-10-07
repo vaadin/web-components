@@ -415,14 +415,12 @@ describe('text-area', () => {
       element.pattern = 'a\u{10FFFF}';
       userSetValue('a\u{10FFFF}');
       expect(element.validate()).to.be.true;
-
     });
 
     it('the value attribute matches JavaScript-specific regular expression', () => {
       element.pattern = '\\u1234\\cx[5-[]{2}';
       userSetValue('\u1234\x18[6');
       expect(element.validate()).to.be.true;
-
     });
 
     it('the value attribute mismatches JavaScript-specific regular expression', () => {
@@ -430,6 +428,5 @@ describe('text-area', () => {
       userSetValue('\u1234\x18[4');
       expect(element.validate()).to.be.false;
     });
-    
   });
 });
