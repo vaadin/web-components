@@ -45,6 +45,10 @@ const checkboxGroup = css`
     color: var(--lumo-body-text-color);
   }
 
+  :host([has-helper][theme~='helper-above-field']) [part='group-field'] {
+    order: 2;
+  }
+
   /* Touch device adjustment */
   @media (pointer: coarse) {
     :host(:hover:not([disabled]):not([focused])) [part='label'] {
