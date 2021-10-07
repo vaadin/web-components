@@ -1,4 +1,5 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-checkbox-group.js';
 
@@ -40,6 +41,12 @@ describe('checkbox-group', () => {
     it('label', async () => {
       element.label = 'Label';
       await visualDiff(div, 'label');
+    });
+
+    it('label focused', async () => {
+      element.label = 'Label';
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'label-focused');
     });
 
     it('value', async () => {

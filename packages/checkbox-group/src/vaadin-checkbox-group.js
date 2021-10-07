@@ -6,11 +6,14 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 
 /**
- * `<vaadin-checkbox-group>` is a Polymer element for grouping vaadin-checkboxes.
+ * `<vaadin-checkbox-group>` is a web component that allows the user to choose several items from a group of binary choices.
  *
  * ```html
  * <vaadin-checkbox-group label="Preferred language of contact:">
@@ -24,24 +27,25 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ----------------|----------------
- * `label` | The label element
- * `group-field` | The element that wraps checkboxes
- * `error-message` | The error message element
+ * Part name            | Description
+ * ---------------------|----------------
+ * `label`              | The slotted label element wrapper
+ * `group-field`        | The checkbox elements wrapper
+ * `helper-text`        | The slotted helper text element wrapper
+ * `error-message`      | The slotted error message element wrapper
+ * `required-indicator` | The `required` state indicator element
  *
  * The following state attributes are available for styling:
  *
- * Attribute  | Description | Part name
- * -----------|-------------|------------
- * `disabled`   | Set when the checkbox group and its children are disabled. | :host
- * `focused` | Set when the checkbox group contains focus | :host
- * `has-label` | Set when the element has a label | :host
- * `has-value` | Set when the element has a value | :host
- * `has-helper` | Set when the element has helper text or slot | :host
- * `has-error-message` | Set when the element has an error message, regardless if the field is valid or not | :host
- * `required` | Set when the element is required | :host
- * `invalid` | Set when the element is invalid | :host
+ * Attribute           | Description                               | Part name
+ * --------------------|-------------------------------------------|------------
+ * `disabled`          | Set when the element is disabled          | :host
+ * `invalid`           | Set when the element is invalid           | :host
+ * `focused`           | Set when the element is focused           | :host
+ * `has-label`         | Set when the element has a label          | :host
+ * `has-value`         | Set when the element has a value          | :host
+ * `has-helper`        | Set when the element has helper text      | :host
+ * `has-error-message` | Set when the element has an error message | :host
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
@@ -51,9 +55,15 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DirMixin
- * @element vaadin-checkbox-group
+ * @mixes DisabledMixin
+ * @mixes FocusMixin
+ * @mixes FieldMixin
  */
-class CheckboxGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
+class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(ThemableMixin(PolymerElement))))) {
+  static get is() {
+    return 'vaadin-checkbox-group';
+  }
+
   static get template() {
     return html`
       <style>
@@ -76,62 +86,36 @@ class CheckboxGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
           flex-direction: column;
         }
 
-        [part='label']:empty {
+        :host(:not([has-label])) [part='label'] {
           display: none;
         }
       </style>
 
       <div class="vaadin-group-field-container">
-        <label part="label">[[label]]</label>
+        <div part="label">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true"></span>
+        </div>
 
         <div part="group-field">
-          <slot id="slot"></slot>
+          <slot></slot>
         </div>
 
-        <div
-          part="helper-text"
-          aria-live="assertive"
-          aria-hidden$="[[_getHelperTextAriaHidden(helperText, _hasSlottedHelper)]]"
-        >
-          <slot name="helper">[[helperText]]</slot>
+        <div part="helper-text">
+          <slot name="helper"></slot>
         </div>
 
-        <div
-          part="error-message"
-          aria-live="assertive"
-          aria-hidden$="[[_getErrorMessageAriaHidden(invalid, errorMessage)]]"
-          >[[errorMessage]]</div
-        >
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
       </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-checkbox-group';
   }
 
   static get properties() {
     return {
       /**
-       * The current disabled state of the checkbox group. True if group and all internal checkboxes are disabled.
-       */
-      disabled: {
-        type: Boolean,
-        reflectToAttribute: true,
-        observer: '_disabledChanged'
-      },
-
-      /**
-       * String used for the label element.
-       */
-      label: {
-        type: String,
-        value: '',
-        observer: '_labelChanged'
-      },
-
-      /**
-       * Value of the checkbox group.
+       * The value of the checkbox group.
        * Note: toggling the checkboxes modifies the value by creating new
        * array each time, to override Polymer dirty-checking for arrays.
        * You can still use Polymer array mutation methods to update the value.
@@ -141,267 +125,232 @@ class CheckboxGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
         type: Array,
         value: () => [],
         notify: true
-      },
-
-      /**
-       * Error to show when the input value is invalid.
-       * @attr {string} error-message
-       */
-      errorMessage: {
-        type: String,
-        value: '',
-        observer: '_errorMessageChanged'
-      },
-
-      /**
-       * String used for the helper text.
-       * @attr {string} helper-text
-       * @type {string | null}
-       */
-      helperText: {
-        type: String,
-        value: '',
-        observer: '_helperTextChanged'
-      },
-
-      /**
-       * Specifies that the user must fill in a value.
-       */
-      required: {
-        type: Boolean,
-        reflectToAttribute: true
-      },
-
-      /**
-       * This property is set to true when the control value is invalid.
-       * @type {boolean}
-       */
-      invalid: {
-        type: Boolean,
-        reflectToAttribute: true,
-        notify: true,
-        value: false
-      },
-
-      /** @private */
-      _hasSlottedHelper: Boolean
+      }
     };
   }
 
   static get observers() {
-    return ['_updateValue(value, value.splices)'];
+    return ['__valueChanged(value, value.splices)'];
+  }
+
+  constructor() {
+    super();
+
+    this.__registerCheckbox = this.__registerCheckbox.bind(this);
+    this.__unregisterCheckbox = this.__unregisterCheckbox.bind(this);
+    this.__onCheckboxCheckedChanged = this.__onCheckboxCheckedChanged.bind(this);
   }
 
   ready() {
     super.ready();
 
-    this.addEventListener('focusin', () => this._setFocused(this._containsFocus()));
+    this.ariaTarget = this;
 
-    this.addEventListener('focusout', (e) => {
-      // Skip if focus is just moved to another checkbox.
-      if (this._checkboxes.some((checkbox) => checkbox.contains(e.relatedTarget))) {
-        return;
-      }
+    // See https://github.com/vaadin/vaadin-web-components/issues/94
+    this.setAttribute('role', 'group');
 
-      this.validate();
-      this._setFocused(false);
-    });
+    this._observer = new FlattenedNodesObserver(this, ({ addedNodes, removedNodes }) => {
+      const addedCheckboxes = this.__filterCheckboxes(addedNodes);
+      const removedCheckboxes = this.__filterCheckboxes(removedNodes);
 
-    const checkedChangedListener = (e) => {
-      this._changeSelectedCheckbox(e.target);
-    };
+      addedCheckboxes.forEach(this.__registerCheckbox);
+      removedCheckboxes.forEach(this.__unregisterCheckbox);
 
-    this._observer = new FlattenedNodesObserver(this, (info) => {
-      const addedCheckboxes = this._filterCheckboxes(info.addedNodes);
-
-      addedCheckboxes.forEach((checkbox) => {
-        checkbox.addEventListener('checked-changed', checkedChangedListener);
-        if (this.disabled) {
-          checkbox.disabled = true;
-        }
-        if (checkbox.checked) {
-          this._addCheckboxToValue(checkbox.value);
-        } else if (this.value.indexOf(checkbox.value) > -1) {
-          checkbox.checked = true;
-        }
-      });
-
-      this._filterCheckboxes(info.removedNodes).forEach((checkbox) => {
-        checkbox.removeEventListener('checked-changed', checkedChangedListener);
-        if (checkbox.checked) {
-          this._removeCheckboxFromValue(checkbox.value);
-        }
-      });
-
-      this._setOrToggleHasHelperAttribute();
-
-      const hasValue = (checkbox) => {
-        const { value } = checkbox;
-        return checkbox.hasAttribute('value') || (value && value !== 'on');
-      };
-      if (!addedCheckboxes.every(hasValue)) {
-        console.warn('Please add value attribute to all checkboxes in checkbox group');
-      }
+      this.__warnOfCheckboxesWithoutValue(addedCheckboxes);
     });
   }
 
   /**
-   * Returns true if `value` is valid.
+   * Override method inherited from `ValidateMixin`
+   * to validate the value array.
    *
-   * @return {boolean} True if the value is valid.
+   * @override
+   * @return {boolean}
    */
-  validate() {
-    this.invalid = this.required && this.value.length === 0;
-    return !this.invalid;
-  }
-
-  /** @private */
-  get _checkboxes() {
-    return this._filterCheckboxes(this.querySelectorAll('*'));
-  }
-
-  /** @private */
-  _filterCheckboxes(nodes) {
-    return Array.from(nodes).filter((child) => child instanceof Checkbox);
-  }
-
-  /** @private */
-  _disabledChanged(disabled) {
-    this.setAttribute('aria-disabled', disabled);
-
-    this._checkboxes.forEach((checkbox) => (checkbox.disabled = disabled));
+  checkValidity() {
+    return !this.required || this.value.length > 0;
   }
 
   /**
-   * @param {string} value
-   * @protected
+   * @param {!Array<!Node>} nodes
+   * @return {!Array<!Checkbox>}
+   * @private
    */
-  _addCheckboxToValue(value) {
-    if (this.value.indexOf(value) === -1) {
-      this.value = this.value.concat(value);
+  __filterCheckboxes(nodes) {
+    return nodes.filter((child) => child instanceof Checkbox);
+  }
+
+  /**
+   * A collection of the checkboxes.
+   *
+   * @return {!Array<!Checkbox>}
+   * @private
+   */
+  get __checkboxes() {
+    return this.__filterCheckboxes([...this.children]);
+  }
+
+  /**
+   * @param {!Array<!Checkbox>} checkboxes
+   * @private
+   */
+  __warnOfCheckboxesWithoutValue(checkboxes) {
+    const hasCheckboxesWithoutValue = checkboxes.some((checkbox) => {
+      const { value } = checkbox;
+
+      return !checkbox.hasAttribute('value') && (!value || value === 'on');
+    });
+
+    if (hasCheckboxesWithoutValue) {
+      console.warn('Please provide the value attribute to all the checkboxes inside the checkbox group.');
     }
   }
 
   /**
-   * @param {string} value
-   * @protected
+   * Registers the checkbox after adding it to the group.
+   *
+   * @param {!Checkbox} checkbox
+   * @private
    */
-  _removeCheckboxFromValue(value) {
-    this.value = this.value.filter((v) => v !== value);
-  }
+  __registerCheckbox(checkbox) {
+    checkbox.addEventListener('checked-changed', this.__onCheckboxCheckedChanged);
 
-  /**
-   * @param {Checkbox} checkbox
-   * @protected
-   */
-  _changeSelectedCheckbox(checkbox) {
-    if (this._updatingValue) {
-      return;
+    if (this.disabled) {
+      checkbox.disabled = true;
     }
 
     if (checkbox.checked) {
-      this._addCheckboxToValue(checkbox.value);
-    } else {
-      this._removeCheckboxFromValue(checkbox.value);
+      this.__addCheckboxToValue(checkbox.value);
+    } else if (this.value.includes(checkbox.value)) {
+      checkbox.checked = true;
     }
   }
 
-  /** @private */
-  _updateValue(value) {
-    // setting initial value to empty array, skip validation
-    if (value.length === 0 && this._oldValue === undefined) {
+  /**
+   * Unregisters the checkbox before removing it from the group.
+   *
+   * @param {!Checkbox} checkbox
+   * @private
+   */
+  __unregisterCheckbox(checkbox) {
+    checkbox.removeEventListener('checked-changed', this.__onCheckboxCheckedChanged);
+
+    if (checkbox.checked) {
+      this.__removeCheckboxFromValue(checkbox.value);
+    }
+  }
+
+  /**
+   * Override method inherited from `DisabledMixin`
+   * to propagate the `disabled` property to the checkboxes.
+   *
+   * @param {boolean} newValue
+   * @param {boolean} oldValue
+   * @override
+   * @protected
+   */
+  _disabledChanged(newValue, oldValue) {
+    super._disabledChanged(newValue, oldValue);
+
+    // Prevent updating the `disabled` property for the checkboxes at initialization.
+    // Otherwise, the checkboxes may end up enabled regardless the `disabled` attribute
+    // intentionally added by the user on some of them.
+    if (!newValue && oldValue === undefined) {
       return;
     }
 
-    if (value.length) {
-      this.setAttribute('has-value', '');
+    if (oldValue !== newValue) {
+      this.__checkboxes.forEach((checkbox) => {
+        checkbox.disabled = newValue;
+      });
+    }
+  }
+
+  /**
+   * @param {string} value
+   * @private
+   */
+  __addCheckboxToValue(value) {
+    if (!this.value.includes(value)) {
+      this.value = [...this.value, value];
+    }
+  }
+
+  /**
+   * @param {string} value
+   * @private
+   */
+  __removeCheckboxFromValue(value) {
+    if (this.value.includes(value)) {
+      this.value = this.value.filter((v) => v !== value);
+    }
+  }
+
+  /**
+   * @param {!CustomEvent} event
+   * @private
+   */
+  __onCheckboxCheckedChanged(event) {
+    const checkbox = event.target;
+
+    if (checkbox.checked) {
+      this.__addCheckboxToValue(checkbox.value);
     } else {
-      this.removeAttribute('has-value');
+      this.__removeCheckboxFromValue(checkbox.value);
+    }
+  }
+
+  /**
+   * @param {string | null | undefined} value
+   * @private
+   */
+  __valueChanged(value) {
+    // setting initial value to empty array, skip validation
+    if (value.length === 0 && this.__oldValue === undefined) {
+      return;
     }
 
-    this._oldValue = value;
-    // set a flag to avoid updating loop
-    this._updatingValue = true;
-    // reflect the value array to checkboxes
-    this._checkboxes.forEach((checkbox) => {
-      checkbox.checked = value.indexOf(checkbox.value) > -1;
+    this.__oldValue = value;
+
+    this.toggleAttribute('has-value', value.length > 0);
+
+    this.__checkboxes.forEach((checkbox) => {
+      checkbox.checked = value.includes(checkbox.value);
     });
-    this._updatingValue = false;
 
     this.validate();
   }
 
-  /** @private */
-  _labelChanged(label) {
-    this._setOrToggleAttribute('has-label', !!label);
-  }
-
-  /** @private */
-  _errorMessageChanged(errorMessage) {
-    this._setOrToggleAttribute('has-error-message', !!errorMessage);
-  }
-
-  /** @private */
-  _helperTextChanged(helperText) {
-    this._setOrToggleAttribute('has-helper', !!helperText);
-  }
-
-  /** @private */
-  _setOrToggleAttribute(name, value) {
-    if (!name) {
-      return;
-    }
-
-    if (value) {
-      this.setAttribute(name, typeof value === 'boolean' ? '' : value);
-    } else {
-      this.removeAttribute(name);
-    }
-  }
-
-  /** @private */
-  _getErrorMessageAriaHidden(invalid, errorMessage) {
-    return (!errorMessage || !invalid).toString();
-  }
-
   /**
+   * Override method inherited from `FocusMixin`
+   * to prevent removing the `focused` attribute
+   * when focus moves between checkboxes inside the group.
+   *
+   * @param {!FocusEvent} event
    * @return {boolean}
    * @protected
    */
-  _containsFocus() {
-    const activeElement = this.getRootNode().activeElement;
-    return this.contains(activeElement);
+  _shouldRemoveFocus(event) {
+    return !this.contains(event.relatedTarget);
   }
 
   /**
+   * Override method inherited from `FocusMixin`
+   * to run validation when the group loses focus.
+   *
    * @param {boolean} focused
+   * @override
    * @protected
    */
   _setFocused(focused) {
-    if (focused) {
-      this.setAttribute('focused', '');
-    } else {
-      this.removeAttribute('focused');
+    super._setFocused(focused);
+
+    if (!focused) {
+      this.validate();
     }
-  }
-
-  /** @private */
-  _setOrToggleHasHelperAttribute() {
-    const slottedNodes = this.shadowRoot.querySelector(`[name="helper"]`).assignedNodes();
-    // Only has slotted helper if not a text node
-    // Text nodes are added by the helperText prop and not the helper slot
-    // The filter is added due to shady DOM triggering this slotchange event on helperText prop change
-    this._hasSlottedHelper = slottedNodes.filter((node) => node.nodeType !== 3).length > 0;
-
-    this._setOrToggleAttribute('has-helper', this._hasSlottedHelper ? 'slotted' : !!this.helperText);
-  }
-
-  /** @private */
-  _getHelperTextAriaHidden(helperText, hasSlottedHelper) {
-    return (!(helperText || hasSlottedHelper)).toString();
   }
 }
 
-customElements.define(CheckboxGroupElement.is, CheckboxGroupElement);
+customElements.define(CheckboxGroup.is, CheckboxGroup);
 
-export { CheckboxGroupElement };
+export { CheckboxGroup };
