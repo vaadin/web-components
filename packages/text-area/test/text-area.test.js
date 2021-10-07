@@ -363,69 +363,69 @@ describe('text-area', () => {
       element = fixtureSync('<vaadin-text-area></vaadin-text-area>');
     });
 
-    it('the pattern attribute is not set', function() {
+    it('the pattern attribute is not set', () => {
       element.pattern = null;
       userSetValue('abc');
       expect(element.validate()).to.be.true;
     });
 
-    it('the value attibute is empty string', function() {
+    it('the value attibute is empty string', () => {
       element.pattern = '[A-Z]+';
       userSetValue('');
       expect(element.validate()).to.be.false;
     });
 
-    it('the value attribute matches the pattern attribute', function() {
+    it('the value attribute matches the pattern attribute', () => {
       element.pattern = '[A-Z]{1}';
       userSetValue('A');
       expect(element.validate()).to.be.true;
     });
 
-    it('the value(ABC) in unicode attribute matches the pattern attribute', function() {
+    it('the value(ABC) in unicode attribute matches the pattern attribute', () => {
       element.pattern = '[A-Z]+';
       userSetValue('\u0041\u0042\u0043');
       expect(element.validate()).to.be.true;
     });
 
-    it('the value attribute mismatches the pattern attribute', function() {
+    it('the value attribute mismatches the pattern attribute', () => {
       element.pattern = '[a-z]{3,}';
       userSetValue('ABCD');
       expect(element.validate()).to.be.false;
     });
 
-    it('the value attribute mismatches the pattern attribute even when a subset matches', function() {
+    it('the value attribute mismatches the pattern attribute even when a subset matches', () => {
       element.pattern = '[A-Z]+';
       userSetValue('ABC123');
       expect(element.validate()).to.be.false;
     });
 
-    it('invalid regular expression gets ignored', function() {
+    it('invalid regular expression gets ignored', () => {
       element.pattern = '(abc';
       userSetValue('de');
       expect(element.validate()).to.be.true;
     });
 
-    it('the pattern attribute tries to escape a group', function() {
+    it('the pattern attribute tries to escape a group', () => {
       element.pattern = 'a)(b';
       userSetValue('de');
       expect(element.validate()).to.be.true;
     });
 
-    it('the pattern attribute uses Unicode features', function() {
+    it('the pattern attribute uses Unicode features', () => {
       element.pattern = 'a\u{10FFFF}';
       userSetValue('a\u{10FFFF}');
       expect(element.validate()).to.be.true;
 
     });
 
-    it('the value attribute matches JavaScript-specific regular expression', function() {
+    it('the value attribute matches JavaScript-specific regular expression', () => {
       element.pattern = '\\u1234\\cx[5-[]{2}';
       userSetValue('\u1234\x18[6');
       expect(element.validate()).to.be.true;
 
     });
 
-    it('the value attribute mismatches JavaScript-specific regular expression', function() {
+    it('the value attribute mismatches JavaScript-specific regular expression', () => {
       element.pattern = '\\u1234\\cx[5-[]{2}';
       userSetValue('\u1234\x18[4');
       expect(element.validate()).to.be.false;
