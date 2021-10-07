@@ -15,4 +15,4 @@ export type DateTimePickerElement = DateTimePicker;
  */
 export const DateTimePickerElement: typeof DateTimePicker;
 
-export * from '@vaadin/combo-box/src/vaadin-combo-box-light.js';
+export * from '@vaadin/date-time-picker/src/vaadin-date-time-picker.js';
