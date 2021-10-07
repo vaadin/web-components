@@ -51,7 +51,7 @@ export const ShadowFocusMixin = (superClass) =>
           return true;
         }
 
-        if (path.indexOf(this.focusElement) !== -1) {
+        if (path.includes(this.focusElement)) {
           return true;
         }
       }
