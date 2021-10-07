@@ -48,7 +48,7 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  * @mixes ThemableMixin
  * @mixes DirMixin
  */
-class ItemElement extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
+class Item extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -81,6 +81,6 @@ class ItemElement extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
   }
 }
 
-customElements.define(ItemElement.is, ItemElement);
+customElements.define(Item.is, Item);
 
-export { ItemElement };
+export { Item };

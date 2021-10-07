@@ -1,4 +1,4 @@
-import { ItemElement } from '@vaadin/item/src/vaadin-item.js';
+import { Item } from '@vaadin/item/src/vaadin-item.js';
 
 import { ListBoxElement } from '@vaadin/list-box/src/vaadin-list-box.js';
 
@@ -11,7 +11,7 @@ import { ContextMenuItem, ContextMenuRendererContext } from './interfaces';
  *
  * @protected
  */
-declare class ContextMenuItemElement extends ItemElement {}
+declare class ContextMenuItemElement extends Item {}
 
 declare global {
   interface HTMLElementTagNameMap {

@@ -4,16 +4,16 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { ItemElement } from '@vaadin/item/src/vaadin-item.js';
+import { Item } from '@vaadin/item/src/vaadin-item.js';
 import { ListBoxElement } from '@vaadin/list-box/src/vaadin-list-box.js';
 
 /**
  * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
  *
- * @extends ItemElement
+ * @extends Item
  * @protected
  */
-class ContextMenuItemElement extends ItemElement {
+class ContextMenuItemElement extends Item {
   static get is() {
     return 'vaadin-context-menu-item';
   }
@@ -225,7 +225,7 @@ export const ItemsMixin = (superClass) =>
           component = document.createElement(item.component || 'vaadin-context-menu-item');
         }
 
-        if (component instanceof ItemElement) {
+        if (component instanceof Item) {
           component.setAttribute('role', 'menuitem');
           component.classList.add('vaadin-menu-item');
         } else if (component.localName === 'hr') {

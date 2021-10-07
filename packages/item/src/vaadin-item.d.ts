@@ -39,7 +39,7 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  * `selected` | Set when the item is selected | :host
  * `active` | Set when mousedown or enter/spacebar pressed | :host
  */
-declare class ItemElement extends ItemMixin(ThemableMixin(DirMixin(HTMLElement))) {
+declare class Item extends ItemMixin(ThemableMixin(DirMixin(HTMLElement))) {
   /**
    * Submittable string value. The default value is the trimmed text content of the element.
    */
@@ -48,8 +48,8 @@ declare class ItemElement extends ItemMixin(ThemableMixin(DirMixin(HTMLElement))
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-item': ItemElement;
+    'vaadin-item': Item;
   }
 }
 
-export { ItemElement };
+export { Item };
