@@ -64,7 +64,7 @@ import { OverlayElement } from '@vaadin/vaadin-overlay';
 import { ProgressBarElement } from '@vaadin/vaadin-progress-bar';
 import { RadioButtonElement } from '@vaadin/vaadin-radio-button';
 import { RadioGroupElement } from '@vaadin/vaadin-radio-button/vaadin-radio-group';
-// import { RichTextEditorElement } from '@vaadin/vaadin-rich-text-editor';
+import { RichTextEditorElement } from '@vaadin/vaadin-rich-text-editor';
 import { SelectElement } from '@vaadin/vaadin-select';
 import { SplitLayoutElement } from '@vaadin/vaadin-split-layout';
 import { TabsElement } from '@vaadin/vaadin-tabs';
@@ -134,7 +134,7 @@ describe('legacy-exports', () => {
     expect(new ProgressBarElement()).to.be.instanceof(HTMLElement);
     expect(new RadioButtonElement()).to.be.instanceof(HTMLElement);
     expect(new RadioGroupElement()).to.be.instanceof(HTMLElement);
-    // expect(new RichTextEditorElement()).to.be.instanceof(HTMLElement);
+    expect(new RichTextEditorElement()).to.be.instanceof(HTMLElement);
     expect(new SelectElement()).to.be.instanceof(HTMLElement);
     expect(new SplitLayoutElement()).to.be.instanceof(HTMLElement);
     expect(new TabsElement()).to.be.instanceof(HTMLElement);
