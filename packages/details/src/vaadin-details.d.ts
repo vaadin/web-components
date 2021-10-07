@@ -55,13 +55,6 @@ export type DetailsEventMap = HTMLElementEventMap & DetailsElementEventMap;
  */
 declare class DetailsElement extends ShadowFocusMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
-   * Focusable element used by vaadin-control-state-mixin
-   */
-  readonly focusElement: HTMLElement;
-
-  readonly _collapsible: HTMLElement;
-
-  /**
    * If true, the details content is visible.
    */
   opened: boolean;
