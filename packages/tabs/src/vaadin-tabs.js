@@ -51,9 +51,7 @@ import './vaadin-tab.js';
  * @mixes ListMixin
  * @mixes ThemableMixin
  */
-class TabsElement extends ElementMixin(
-  ListMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement)))
-) {
+class Tabs extends ElementMixin(ListMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -235,6 +233,6 @@ class TabsElement extends ElementMixin(
   }
 }
 
-customElements.define(TabsElement.is, TabsElement);
+customElements.define(Tabs.is, Tabs);
 
-export { TabsElement };
+export { Tabs };
