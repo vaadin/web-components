@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { IconsetElement } from '../vaadin-iconset.js';
+import { Iconset } from '../vaadin-iconset.js';
 import { isValidSvg } from '../src/vaadin-icon-svg.js';
 
 describe('vaadin-iconset', () => {
@@ -55,25 +55,25 @@ describe('vaadin-iconset', () => {
 
   describe('getIconset', () => {
     it('should return the existing instance when getIconset with taken name', () => {
-      const result = IconsetElement.getIconset('vaadin');
+      const result = Iconset.getIconset('vaadin');
       expect(result).to.equal(iconset);
     });
 
     it('should return the new instance when getIconset with not taken name', () => {
-      const result = IconsetElement.getIconset('other');
-      expect(result instanceof IconsetElement).to.be.true;
+      const result = Iconset.getIconset('other');
+      expect(result instanceof Iconset).to.be.true;
       expect(result).to.not.equal(iconset);
     });
 
     it('should return the same instance when iconset name has changed', () => {
       iconset.name = 'custom';
-      const result = IconsetElement.getIconset('custom');
+      const result = Iconset.getIconset('custom');
       expect(result).to.equal(iconset);
     });
 
     it('should return the new instance for old name after iconset change', () => {
       iconset.name = 'custom';
-      const result = IconsetElement.getIconset('vaadin');
+      const result = Iconset.getIconset('vaadin');
       expect(result).to.not.equal(iconset);
     });
   });

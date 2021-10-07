@@ -15,7 +15,7 @@ const iconRegistry = {};
  * @extends HTMLElement
  * @mixes ElementMixin
  */
-class IconsetElement extends ElementMixin(PolymerElement) {
+class Iconset extends ElementMixin(PolymerElement) {
   static get template() {
     return null;
   }
@@ -104,7 +104,7 @@ class IconsetElement extends ElementMixin(PolymerElement) {
   /** @private */
   __nameChanged(name, oldName) {
     if (oldName) {
-      iconRegistry[name] = IconsetElement.getIconset(oldName);
+      iconRegistry[name] = Iconset.getIconset(oldName);
       delete iconRegistry[oldName];
     }
     if (name) {
@@ -114,6 +114,6 @@ class IconsetElement extends ElementMixin(PolymerElement) {
   }
 }
 
-customElements.define(IconsetElement.is, IconsetElement);
+customElements.define(Iconset.is, Iconset);
 
-export { IconsetElement };
+export { Iconset };
