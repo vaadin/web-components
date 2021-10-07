@@ -1,2 +1,1 @@
-import './vaadin-custom-field-styles.js';
-import '../../src/vaadin-custom-field.js';
+import '@vaadin/custom-field/theme/material/vaadin-custom-field.js';

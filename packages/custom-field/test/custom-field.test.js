@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, focusin, focusout } from '@vaadin/testing-helpers';
 import { dispatchChange } from './common.js';
-import './vaadin-custom-field.js';
+import '../src/vaadin-custom-field.js';
 
 describe('custom field', () => {
   let customField;
