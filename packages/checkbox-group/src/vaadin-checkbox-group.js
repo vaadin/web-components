@@ -81,7 +81,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
           display: none !important;
         }
 
-        .vaadin-checkbox-group-container {
+        .vaadin-group-field-container {
           display: flex;
           flex-direction: column;
         }
@@ -91,7 +91,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
         }
       </style>
 
-      <div class="vaadin-checkbox-group-container">
+      <div class="vaadin-group-field-container">
         <div part="label">
           <slot name="label"></slot>
           <span part="required-indicator" aria-hidden="true"></span>
@@ -119,7 +119,6 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
        * Note: toggling the checkboxes modifies the value by creating new
        * array each time, to override Polymer dirty-checking for arrays.
        * You can still use Polymer array mutation methods to update the value.
-       *
        * @type {!Array<!string>}
        */
       value: {
@@ -173,12 +172,12 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
   }
 
   /**
-   * @param {!Array<!HTMLCollection | !HTMLElement>} nodes
+   * @param {!Array<!Node>} nodes
    * @return {!Array<!Checkbox>}
    * @private
    */
   __filterCheckboxes(nodes) {
-    return Array.from(nodes).filter((child) => child instanceof Checkbox);
+    return nodes.filter((child) => child instanceof Checkbox);
   }
 
   /**
@@ -188,7 +187,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
    * @private
    */
   get __checkboxes() {
-    return this.__filterCheckboxes(this.children);
+    return this.__filterCheckboxes([...this.children]);
   }
 
   /**

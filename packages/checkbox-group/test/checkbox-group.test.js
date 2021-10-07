@@ -66,7 +66,7 @@ describe('vaadin-checkbox-group', () => {
         </vaadin-checkbox-group>
       `);
       await nextFrame();
-      checkboxes = group.__checkboxes;
+      checkboxes = [...group.querySelectorAll('vaadin-checkbox')];
     });
 
     it('should set aria-disabled to true when disabled', () => {
@@ -103,7 +103,7 @@ describe('vaadin-checkbox-group', () => {
         </vaadin-checkbox-group>
       `);
       await nextFrame();
-      checkboxes = group.__checkboxes;
+      checkboxes = [...group.querySelectorAll('vaadin-checkbox')];
     });
 
     it('should add dynamically added checked checkbox value to checkbox group value', async () => {
@@ -201,30 +201,6 @@ describe('vaadin-checkbox-group', () => {
       expect(checkboxes[0].checked).to.be.true;
       expect(checkboxes[2].checked).to.be.false;
     });
-
-    describe('value observer callback', () => {
-      let spy;
-
-      beforeEach(() => {
-        spy = sinon.spy(group, '__valueChanged');
-      });
-
-      afterEach(() => {
-        spy.restore();
-      });
-
-      it('should invoke the callback only once when adding a value', () => {
-        group.value = ['1', '2'];
-        expect(spy.calledOnce).to.be.true;
-      });
-
-      it('should invoke the callback only once when removing a value', () => {
-        group.value = ['1', '2'];
-        spy.resetHistory();
-        group.value = ['1'];
-        expect(spy.calledOnce).to.be.true;
-      });
-    });
   });
 
   describe('focused attribute', () => {
@@ -235,7 +211,7 @@ describe('vaadin-checkbox-group', () => {
         </vaadin-checkbox-group>
       `);
       await nextFrame();
-      checkboxes = group.__checkboxes;
+      checkboxes = [...group.querySelectorAll('vaadin-checkbox')];
     });
 
     it('should set focused attribute on Tab', async () => {
@@ -286,7 +262,7 @@ describe('vaadin-checkbox-group', () => {
         </vaadin-checkbox-group>
       `);
       await nextFrame();
-      checkboxes = group.__checkboxes;
+      checkboxes = [...group.querySelectorAll('vaadin-checkbox')];
     });
 
     it('should not set has-value attribute by default', () => {
@@ -489,6 +465,20 @@ describe('vaadin-checkbox-group', () => {
 
       checkboxes[0].checked = true;
       expect(group.hasAttribute('invalid')).to.be.false;
+    });
+
+    it('should run validation only once when adding a value', () => {
+      const spy = sinon.spy(group, 'validate');
+      group.value = ['en', 'fr'];
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should run validation only once when removing a value', () => {
+      const spy = sinon.spy(group, 'validate');
+      group.value = ['en', 'fr'];
+      spy.resetHistory();
+      group.value = ['en'];
+      expect(spy.calledOnce).to.be.true;
     });
 
     it('should run validation and set invalid when field is required and user blurs out of the group', async () => {
