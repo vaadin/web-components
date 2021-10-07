@@ -29,9 +29,6 @@
     "vendor",
     "theme"
   ],
-  "scripts": {
-    "icons": "gulp icons"
-  },
   "dependencies": {
     "@vaadin/rich-text-editor": "^22.0.0-alpha6"
   },
