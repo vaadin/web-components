@@ -22,10 +22,10 @@ export interface LoginI18n {
  */
 export type LoginEvent = CustomEvent<{ username: string; password: string }>;
 
-export interface LoginElementEventMap {
+export interface LoginCustomEventMap {
   'forgot-password': Event;
 
   login: LoginEvent;
 }
 
-export interface LoginEventMap extends HTMLElementEventMap, LoginElementEventMap {}
+export interface LoginEventMap extends HTMLElementEventMap, LoginCustomEventMap {}

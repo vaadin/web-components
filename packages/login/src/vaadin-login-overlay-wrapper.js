@@ -63,7 +63,7 @@ let memoizedTemplate;
  * @extends OverlayElement
  * @private
  */
-class LoginOverlayWrapperElement extends OverlayElement {
+class LoginOverlayWrapper extends OverlayElement {
   static get is() {
     return 'vaadin-login-overlay-wrapper';
   }
@@ -106,4 +106,4 @@ class LoginOverlayWrapperElement extends OverlayElement {
   }
 }
 
-customElements.define(LoginOverlayWrapperElement.is, LoginOverlayWrapperElement);
+customElements.define(LoginOverlayWrapper.is, LoginOverlayWrapper);

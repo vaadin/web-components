@@ -46,7 +46,7 @@ import './vaadin-login-overlay-wrapper.js';
  * @mixes ThemableMixin
  * @mixes LoginMixin
  */
-class LoginOverlayElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <vaadin-login-overlay-wrapper
@@ -193,6 +193,6 @@ class LoginOverlayElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerE
   }
 }
 
-customElements.define(LoginOverlayElement.is, LoginOverlayElement);
+customElements.define(LoginOverlay.is, LoginOverlay);
 
-export { LoginOverlayElement };
+export { LoginOverlay };
