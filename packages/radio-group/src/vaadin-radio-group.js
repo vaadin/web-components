@@ -120,7 +120,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
       /**
        * The value of the radio group.
        *
-       * @type {string} value
+       * @type {string}
        */
       value: {
         type: String,
@@ -134,13 +134,21 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
        * While the `disabled` property disables all radio buttons inside the group,
        * the `readonly` property disables only unchecked ones.
        *
-       * @type {boolean} readonly
+       * @type {boolean}
        */
       readonly: {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
         observer: '__readonlyChanged'
+      },
+
+      /**
+       * @type {string}
+       * @private
+       */
+      _fieldName: {
+        type: String
       }
     };
   }
@@ -177,12 +185,12 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
   }
 
   /**
-   * @param {!Array<!HTMLCollection | !HTMLElement>} nodes
+   * @param {!Array<!Node>} nodes
    * @return {!Array<!RadioButton>}
    * @private
    */
   __filterRadioButtons(nodes) {
-    return Array.from(nodes).filter((child) => child instanceof RadioButton);
+    return nodes.filter((child) => child instanceof RadioButton);
   }
 
   /**
@@ -192,7 +200,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
    * @private
    */
   get __radioButtons() {
-    return this.__filterRadioButtons(this.children);
+    return this.__filterRadioButtons([...this.children]);
   }
 
   /**

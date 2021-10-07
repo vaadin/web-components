@@ -28,7 +28,7 @@ describe('radio-button', () => {
   describe('default', () => {
     beforeEach(() => {
       radio = fixtureSync('<vaadin-radio-button>Label</vaadin-radio-button>');
-      label = radio._labelNode;
+      label = radio.querySelector('[slot=label]');
     });
 
     it('should set checked property to false', () => {
@@ -51,8 +51,8 @@ describe('radio-button', () => {
   describe('native input', () => {
     beforeEach(() => {
       radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
-      input = radio.inputElement;
-      label = radio._labelNode;
+      input = radio.querySelector('[slot=input]');
+      label = radio.querySelector('[slot=label]');
     });
 
     // TODO: A legacy test. Replace with snapshot tests when possible.
@@ -111,8 +111,8 @@ describe('radio-button', () => {
   describe('disabled attribute', () => {
     beforeEach(() => {
       radio = fixtureSync('<vaadin-radio-button disabled></vaadin-radio-button>');
-      input = radio.inputElement;
-      label = radio._labelNode;
+      input = radio.querySelector('[slot=input]');
+      label = radio.querySelector('[slot=label]');
     });
 
     it('should not set checked property on input click', () => {
@@ -139,7 +139,7 @@ describe('radio-button', () => {
   describe('label attribute', () => {
     beforeEach(() => {
       radio = fixtureSync('<vaadin-radio-button label="Label"></vaadin-radio-button>');
-      label = radio._labelNode;
+      label = radio.querySelector('[slot=label]');
     });
 
     it('should display the label', () => {
@@ -151,7 +151,7 @@ describe('radio-button', () => {
   describe('active attribute', () => {
     beforeEach(() => {
       radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
-      input = radio.inputElement;
+      input = radio.querySelector('[slot=input]');
     });
 
     it('should set active attribute during input click', () => {
@@ -180,8 +180,8 @@ describe('radio-button', () => {
 
     beforeEach(() => {
       radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
-      label = radio._labelNode;
-      input = radio.inputElement;
+      label = radio.querySelector('[slot=label]');
+      input = radio.querySelector('[slot=input]');
 
       spy = sinon.spy();
       radio.addEventListener('change', spy);
@@ -240,7 +240,7 @@ describe('radio-button', () => {
     describe('name attribute', () => {
       beforeEach(() => {
         radio = fixtureSync(`<vaadin-radio-button name="Name"></vaadin-radio-button>`);
-        input = radio.inputElement;
+        input = radio.querySelector('[slot=input]');
       });
 
       it('should delegate name attribute to the input', () => {
