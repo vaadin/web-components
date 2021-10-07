@@ -6,7 +6,7 @@
 
 [&lt;vaadin-tabs&gt;](https://vaadin.com/components/vaadin-tabs) is a Web Component providing item navigation part of the [Vaadin components](https://vaadin.com/components). It is designed for menu and tab components.
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-tabs)](https://www.npmjs.com/package/@vaadin/vaadin-tabs)
+[![npm version](https://badgen.net/npm/v/@vaadin/tabs)](https://www.npmjs.com/package/@vaadin/tabs)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-tabs)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -26,13 +26,13 @@
 Install `vaadin-tabs`:
 
 ```sh
-npm i @vaadin/vaadin-tabs --save
+npm i @vaadin/tabs --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-tabs/vaadin-tabs.js';
+import '@vaadin/tabs/vaadin-tabs.js';
 ```
 
 ## Getting started

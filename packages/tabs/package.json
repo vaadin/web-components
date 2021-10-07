@@ -1,5 +1,5 @@
 {
-  "name": "@vaadin/vaadin-tabs",
+  "name": "@vaadin/tabs",
   "version": "22.0.0-alpha6",
   "description": "vaadin-tabs",
   "main": "vaadin-tabs.js",
@@ -19,7 +19,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-tabs/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
