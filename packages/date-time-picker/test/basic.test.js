@@ -354,7 +354,7 @@ describe('Theme attribute', () => {
     });
 
     it('should contain only one time-picker', () => {
-      expect(dateTimePicker.querySelectorAll('[slot="time-picker"]').length).to.equal(1);
+      expect(dateTimePicker.querySelectorAll('[slot="time-picker"]')).to.have.lengthOf(1);
     });
 
     if (set === 'lazy') {
