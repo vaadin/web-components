@@ -330,6 +330,14 @@ describe('Theme attribute', () => {
       expect(dateTimePicker.value).to.equal('');
     });
 
+    it('should contain only one date-picker', () => {
+      expect(dateTimePicker.querySelectorAll('[slot="date-picker"]').length).to.equal(1);
+    });
+
+    it('should contain only one time-picker', () => {
+      expect(dateTimePicker.querySelectorAll('[slot="time-picker"]').length).to.equal(1);
+    });
+
     describe('Removing change listeners', () => {
       it('should remove change listener from removed date picker', async () => {
         dateTimePicker.removeChild(datePicker); // Remove slotted date picker
