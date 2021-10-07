@@ -11,7 +11,7 @@ import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * `<vaadin-custom-field>` is a component for wrapping multiple components as a single field.
+ * `<vaadin-custom-field>` is a web component for wrapping multiple components as a single field.
  *
  * ```
  * <vaadin-custom-field label="Appointment time">
@@ -58,7 +58,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes FocusMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes CustomFieldMixin
  */
 class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {

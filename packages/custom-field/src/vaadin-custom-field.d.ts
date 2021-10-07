@@ -10,7 +10,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { CustomFieldEventMap, CustomFieldI18n } from './interfaces';
 
 /**
- * `<vaadin-custom-field>` is a component for wrapping multiple components as a single field.
+ * `<vaadin-custom-field>` is a web component for wrapping multiple components as a single field.
  *
  * ```
  * <vaadin-custom-field label="Appointment time">

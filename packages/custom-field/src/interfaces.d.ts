@@ -23,10 +23,10 @@ export type CustomFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type CustomFieldValueChangedEvent = CustomEvent<{ value: string }>;
 
-export interface CustomFieldElementEventMap {
+export interface CustomFieldCustomEventMap {
   'invalid-changed': CustomFieldInvalidChangedEvent;
 
   'value-changed': CustomFieldValueChangedEvent;
 }
 
-export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldElementEventMap {}
+export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldCustomEventMap {}
