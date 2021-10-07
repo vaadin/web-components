@@ -149,3 +149,24 @@ assertType<HTMLElement>(new TextAreaElement());
 assertType<HTMLElement>(new TimePickerElement());
 assertType<HTMLElement>(new UploadElement());
 assertType<HTMLElement>(new VirtualListElement());
+
+// Check generic type params are exposed on aliases
+/*
+assertType<ComboBoxElement<number>>(new ComboBoxElement<number>());
+assertType<ComboBoxLightElement<number>>(new ComboBoxLightElement<number>());
+
+assertType<CrudElement<number>>(new CrudElement<number>());
+
+assertType<GridElement<number>>(new GridElement<number>());
+assertType<GridColumnElement<number>>(new GridColumnElement<number>());
+assertType<GridColumnGroupElement<number>>(new GridColumnGroupElement<number>());
+assertType<GridFilterColumnElement<number>>(new GridFilterColumnElement<number>());
+assertType<GridSelectionColumnElement<number>>(new GridSelectionColumnElement<number>());
+assertType<GridSortColumnElement<number>>(new GridSortColumnElement<number>());
+assertType<GridTreeColumnElement<number>>(new GridTreeColumnElement<number>());
+
+assertType<GridProElement<number>>(new GridProElement<number>());
+assertType<GridProEditColumnElement<number>>(new GridProEditColumnElement<number>());
+
+assertType<SelectElement<number>>(new SelectElement<number>());
+ */
