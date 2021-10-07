@@ -144,12 +144,7 @@ describe('shadow-focus-mixin', () => {
   });
 
   describe('disabled', () => {
-    let customElement, focusElement;
-
     beforeEach(() => {
-      customElement = fixtureSync('<shadow-focus-element></shadow-focus-element>');
-      focusElement = customElement.focusElement;
-
       customElement.disabled = true;
     });
 
@@ -191,13 +186,6 @@ describe('shadow-focus-mixin', () => {
   });
 
   describe('focus', () => {
-    let customElement, focusElement;
-
-    beforeEach(() => {
-      customElement = fixtureSync('<shadow-focus-element></shadow-focus-element>');
-      focusElement = customElement.focusElement;
-    });
-
     it('should call focus on focusElement', () => {
       const spy = sinon.spy(focusElement, 'focus');
       customElement.focus();
@@ -251,26 +239,26 @@ describe('shadow-focus-mixin', () => {
       expect(customElement.hasAttribute('focused')).to.be.false;
     });
   });
+});
 
-  describe('nested focusable elements', () => {
-    let wrapper, customElement, focusElement;
+describe('nested focusable elements', () => {
+  let wrapper, customElement, focusElement;
 
-    beforeEach(() => {
-      wrapper = fixtureSync('<shadow-focus-wrapper></shadow-focus-wrapper>');
-      customElement = wrapper.focusElement;
-      focusElement = customElement.focusElement;
-    });
+  beforeEach(() => {
+    wrapper = fixtureSync('<shadow-focus-wrapper></shadow-focus-wrapper>');
+    customElement = wrapper.focusElement;
+    focusElement = customElement.focusElement;
+  });
 
-    it('should set focused attribute on focusin event dispatched from an element inside focusElement', () => {
-      focusin(focusElement);
-      expect(wrapper.hasAttribute('focused')).to.be.true;
-    });
+  it('should set focused attribute on focusin event dispatched from an element inside focusElement', () => {
+    focusin(focusElement);
+    expect(wrapper.hasAttribute('focused')).to.be.true;
+  });
 
-    it('should remove focused attribute on focusout event dispatched from an element inside focusElement', () => {
-      focusin(focusElement);
-      expect(wrapper.hasAttribute('focused')).to.be.true;
-      focusout(focusElement);
-      expect(wrapper.hasAttribute('focused')).to.be.false;
-    });
+  it('should remove focused attribute on focusout event dispatched from an element inside focusElement', () => {
+    focusin(focusElement);
+    expect(wrapper.hasAttribute('focused')).to.be.true;
+    focusout(focusElement);
+    expect(wrapper.hasAttribute('focused')).to.be.false;
   });
 });
