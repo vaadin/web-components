@@ -51,9 +51,9 @@ export interface TextFieldEventMap extends HTMLElementEventMap, TextFieldCustomE
  *
  * The following custom properties are available for styling:
  *
- * Custom property | Description | Default
- * ----------------|-------------|-------------
- * `--vaadin-text-field-default-width` | Set the default width of the input field | `12em`
+ * Custom property                | Description                | Default
+ * -------------------------------|----------------------------|---------
+ * `--vaadin-field-default-width` | Default width of the field | `12em`
  *
  * The following shadow DOM parts are available for styling:
  *
