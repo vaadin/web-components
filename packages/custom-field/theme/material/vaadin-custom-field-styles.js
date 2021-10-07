@@ -22,19 +22,13 @@ const customField = css`
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* TODO: remove when the following components are updated to use new indicator:
-  combo-box, date-picker, time-picker, date-time-picker, select. */
-  [part='label']::after {
-    display: none;
-  }
-
   /* align with text-field label */
   :host([has-label]) {
     padding-top: 16px;
   }
 
   /* align with text-field error message */
-  [part='error-message']:not(:empty),
+  :host([has-error-message]) [part='error-message'],
   :host([has-helper]) [part='helper-text'] {
     margin-top: -8px;
   }

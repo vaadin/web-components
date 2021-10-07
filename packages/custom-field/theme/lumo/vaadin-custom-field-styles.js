@@ -32,12 +32,6 @@ const customField = css`
     align-items: center;
   }
 
-  /* TODO: remove when the following components are updated to use new indicator:
-  combo-box, date-picker, time-picker, date-time-picker, select. */
-  [part='label']::after {
-    display: none;
-  }
-
   /* align with text-field label */
   :host([has-label]) [part='label'] {
     padding-bottom: calc(0.5em - var(--lumo-space-xs));
@@ -49,7 +43,7 @@ const customField = css`
   }
 
   /* align with text-field error message */
-  :host([invalid]) [part='error-message']:not(:empty)::before {
+  :host([has-error-message]) [part='error-message']::before {
     height: calc(0.4em - var(--lumo-space-xs));
   }
 

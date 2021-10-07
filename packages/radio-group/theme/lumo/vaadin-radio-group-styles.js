@@ -30,18 +30,12 @@ const radioGroup = css`
     flex-direction: column;
   }
 
-  /* TODO: remove when <vaadin-date-time-picker> is updated to use new indicator. */
-  [part='label']::after {
-    display: none;
-  }
-
   :host([focused]:not([readonly])) [part='label'] {
     color: var(--lumo-primary-text-color);
   }
 
   :host(:hover:not([readonly]):not([focused])) [part='label'],
-  :host(:hover:not([readonly])) [part='helper-text'],
-  :host(:hover:not([readonly])) [part='helper-text'] ::slotted(*) {
+  :host(:hover:not([readonly])) [part='helper-text'] {
     color: var(--lumo-body-text-color);
   }
 
@@ -51,8 +45,7 @@ const radioGroup = css`
     height: 0.4em;
   }
 
-  [part='helper-text'],
-  [part='helper-text'] ::slotted(*) {
+  [part='helper-text'] {
     display: block;
     color: var(--lumo-secondary-text-color);
     font-size: var(--lumo-font-size-xs);

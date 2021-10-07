@@ -25,11 +25,6 @@ const checkboxGroup = css`
     align-items: center;
   }
 
-  /* TODO: remove when <vaadin-date-time-picker> is updated to use new indicator. */
-  [part='label']::after {
-    display: none;
-  }
-
   :host([theme~='vertical']) [part='group-field'] {
     display: flex;
     flex-direction: column;
@@ -45,8 +40,7 @@ const checkboxGroup = css`
   }
 
   :host(:hover:not([disabled]):not([focused])) [part='label'],
-  :host(:hover:not([disabled]):not([focused])) [part='helper-text'],
-  :host(:hover:not([disabled]):not([focused])) [part='helper-text'] ::slotted(*) {
+  :host(:hover:not([disabled]):not([focused])) [part='helper-text'] {
     color: var(--lumo-body-text-color);
   }
 
@@ -56,8 +50,7 @@ const checkboxGroup = css`
     height: 0.4em;
   }
 
-  [part='helper-text'],
-  [part='helper-text'] ::slotted(*) {
+  [part='helper-text'] {
     display: block;
     color: var(--lumo-secondary-text-color);
     font-size: var(--lumo-font-size-xs);

@@ -23,9 +23,6 @@ const requiredField = css`
     transform: scale(0.75);
   }
 
-  /* TODO: remove old pseudo element when the following components are updated to use new indicator:
-    combo-box, date-picker, time-picker, date-time-picker, select. */
-  :host([required]) [part='label']::after,
   :host([required]) [part='required-indicator']::after {
     content: ' *';
     color: inherit;
@@ -41,9 +38,7 @@ const requiredField = css`
     color: var(--material-error-text-color);
   }
 
-  /* TODO update to check for "has-error-message" when all the field components
-  are updated to use ValidateMixin that only sets that attribute when invalid */
-  [part='error-message']:not(:empty)::before {
+  :host([has-error-message]) [part='error-message']::before {
     content: '';
     display: block;
     height: 6px;

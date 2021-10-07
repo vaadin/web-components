@@ -25,11 +25,6 @@ const checkboxGroup = css`
     padding-top: 24px;
   }
 
-  /* TODO: remove when <vaadin-date-time-picker> is updated to use new indicator. */
-  [part='label']::after {
-    display: none;
-  }
-
   :host([theme~='vertical']) [part='group-field'] {
     display: flex;
     flex-direction: column;
@@ -55,8 +50,7 @@ const checkboxGroup = css`
     height: 6px;
   }
 
-  [part='helper-text'],
-  [part='helper-text'] ::slotted(*) {
+  [part='helper-text'] {
     font-size: 0.75rem;
     line-height: 1;
     color: var(--material-secondary-text-color);
