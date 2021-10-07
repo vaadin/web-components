@@ -207,7 +207,7 @@ function getTimePicker(dateTimePicker) {
 
     it('should handle label', () => {
       dateTimePicker.label = 'Birth date and time';
-      const label = [...dateTimePicker.children].find((node) => node.localName === 'label');
+      const label = dateTimePicker.querySelector(':scope > label');
       expect(label.textContent).to.equal('Birth date and time');
     });
 
@@ -226,7 +226,7 @@ function getTimePicker(dateTimePicker) {
     it('should handle error-message', () => {
       dateTimePicker.errorMessage = 'error-message';
       dateTimePicker.invalid = true;
-      const errorMessage = [...dateTimePicker.children].find((node) => node.matches('[slot="error-message"]'));
+      const errorMessage = dateTimePicker.querySelector(':scope > [slot=error-message]');
       expect(errorMessage.textContent).to.equal('error-message');
     });
 
