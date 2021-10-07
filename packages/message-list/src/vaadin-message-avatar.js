@@ -23,10 +23,10 @@ registerStyles(
  * @extends Avatar
  * @private
  */
-class MessageAvatarElement extends Avatar {
+class MessageAvatar extends Avatar {
   static get is() {
     return 'vaadin-message-avatar';
   }
 }
 
-customElements.define(MessageAvatarElement.is, MessageAvatarElement);
+customElements.define(MessageAvatar.is, MessageAvatar);

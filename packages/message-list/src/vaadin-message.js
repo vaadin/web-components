@@ -42,7 +42,7 @@ import './vaadin-message-avatar.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class Message extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get properties() {
     return {
       /**
@@ -198,6 +198,6 @@ class MessageElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 }
 
-customElements.define(MessageElement.is, MessageElement);
+customElements.define(Message.is, Message);
 
-export { MessageElement };
+export { Message };

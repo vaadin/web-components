@@ -33,7 +33,7 @@ import './vaadin-message-input-button.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class MessageInput extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get properties() {
     return {
       /**
@@ -128,6 +128,6 @@ class MessageInputElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 }
 
-customElements.define(MessageInputElement.is, MessageInputElement);
+customElements.define(MessageInput.is, MessageInput);
 
-export { MessageInputElement };
+export { MessageInput };

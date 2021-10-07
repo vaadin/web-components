@@ -41,7 +41,7 @@ import './vaadin-message.js';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get is() {
     return 'vaadin-message-list';
   }
@@ -212,6 +212,6 @@ class MessageListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 }
 
-customElements.define(MessageListElement.is, MessageListElement);
+customElements.define(MessageList.is, MessageList);
 
-export { MessageListElement };
+export { MessageList };
