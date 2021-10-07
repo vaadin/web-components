@@ -755,8 +755,8 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
    * @return {boolean}
    */
   checkValidity() {
-    const hasInvalidFields = this.__inputs.filter((input) => !input.checkValidity.call(input)).length > 0;
-    const hasEmptyFields = this.required && this.__inputs.filter((el) => !el.value).length > 0;
+    const hasInvalidFields = this.__inputs.some((input) => !input.checkValidity());
+    const hasEmptyFields = this.required && this.__inputs.some((el) => !el.value);
 
     if (hasInvalidFields || hasEmptyFields) {
       return false;
@@ -829,7 +829,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
       this.__dispatchChangeForValue = value;
     }
 
-    this.toggleAttribute('has-value', value !== '' && value != null);
+    this.toggleAttribute('has-value', !!value);
     this.__updateTimePickerMinMax();
   }
 
