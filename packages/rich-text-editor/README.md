@@ -6,7 +6,7 @@
 
 [&lt;vaadin-rich-text-editor&gt;](https://vaadin.com/components/vaadin-rich-text-editor) is a Web Component providing rich text editor functionality, part of the [Vaadin components](https://vaadin.com/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-rich-text-editor)](https://www.npmjs.com/package/@vaadin/vaadin-rich-text-editor)
+[![npm version](https://badgen.net/npm/v/@vaadin/rich-text-editor)](https://www.npmjs.com/package/@vaadin/rich-text-editor)
 [![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-rich-text-editor)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
@@ -21,13 +21,13 @@
 Install `vaadin-rich-text-editor`:
 
 ```sh
-npm i @vaadin/vaadin-rich-text-editor --save
+npm i @vaadin/rich-text-editor --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-rich-text-editor/vaadin-rich-text-editor.js';
+import '@vaadin/rich-text-editor/vaadin-rich-text-editor.js';
 ```
 
 ## Getting started
