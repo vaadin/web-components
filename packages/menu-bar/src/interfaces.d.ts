@@ -23,8 +23,8 @@ export interface MenuBarI18n {
  */
 export type MenuBarItemSelectedEvent = CustomEvent<{ value: MenuBarItem }>;
 
-export interface MenuBarElementEventMap {
+export interface MenuBarCustomEventMap {
   'item-selected': MenuBarItemSelectedEvent;
 }
 
-export interface MenuBarEventMap extends HTMLElementEventMap, MenuBarElementEventMap {}
+export interface MenuBarEventMap extends HTMLElementEventMap, MenuBarCustomEventMap {}

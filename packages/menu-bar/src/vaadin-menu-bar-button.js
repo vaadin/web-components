@@ -23,10 +23,10 @@ registerStyles(
  * @extends Button
  * @private
  */
-class MenuBarButtonElement extends Button {
+class MenuBarButton extends Button {
   static get is() {
     return 'vaadin-menu-bar-button';
   }
 }
 
-customElements.define(MenuBarButtonElement.is, MenuBarButtonElement);
+customElements.define(MenuBarButton.is, MenuBarButton);

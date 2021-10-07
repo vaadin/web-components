@@ -11,7 +11,7 @@ import { ContextMenu } from '@vaadin/vaadin-context-menu/src/vaadin-context-menu
  * @extends ContextMenu
  * @protected
  */
-class MenuBarSubmenuElement extends ContextMenu {
+class MenuBarSubmenu extends ContextMenu {
   static get is() {
     return 'vaadin-menu-bar-submenu';
   }
@@ -42,4 +42,4 @@ class MenuBarSubmenuElement extends ContextMenu {
   }
 }
 
-customElements.define(MenuBarSubmenuElement.is, MenuBarSubmenuElement);
+customElements.define(MenuBarSubmenu.is, MenuBarSubmenu);
