@@ -426,8 +426,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
 
   /** @private */
   __datePickerChanged() {
-    const assignedElements = this.$.dateSlot.assignedNodes({ flatten: true }).filter(this.__filterElements);
-    const datePicker = assignedElements[0];
+    const datePicker = this._getDirectSlotChild('date-picker');
     if (this.__datePicker === datePicker || !datePicker) {
       return;
     }
@@ -470,8 +469,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
 
   /** @private */
   __timePickerChanged() {
-    const assignedElements = this.$.timeSlot.assignedNodes({ flatten: true }).filter(this.__filterElements);
-    const timePicker = assignedElements[0];
+    const timePicker = this._getDirectSlotChild('time-picker');
     if (this.__timePicker === timePicker || !timePicker) {
       return;
     }
