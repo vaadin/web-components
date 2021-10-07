@@ -61,7 +61,7 @@ import { Notification } from '@vaadin/notification';
 import { HorizontalLayout } from '@vaadin/horizontal-layout';
 import { VerticalLayout } from '@vaadin/vertical-layout';
 import { Scroller } from '@vaadin/scroller';
-import { Overlay } from '@vaadin/overlay';
+// import { Overlay } from '@vaadin/overlay';
 import { ProgressBar } from '@vaadin/progress-bar';
 import { RadioButton } from '@vaadin/radio-group/vaadin-radio-button';
 import { RadioGroup } from '@vaadin/radio-group';
@@ -133,7 +133,7 @@ describe('legacy-exports', () => {
     expect(new HorizontalLayout()).to.be.instanceof(HTMLElement);
     expect(new VerticalLayout()).to.be.instanceof(HTMLElement);
     expect(new Scroller()).to.be.instanceof(HTMLElement);
-    expect(new Overlay()).to.be.instanceof(HTMLElement);
+    // expect(new Overlay()).to.be.instanceof(HTMLElement);
     expect(new ProgressBar()).to.be.instanceof(HTMLElement);
     expect(new RadioButton()).to.be.instanceof(HTMLElement);
     expect(new RadioGroup()).to.be.instanceof(HTMLElement);
