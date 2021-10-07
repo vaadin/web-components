@@ -13,7 +13,7 @@ import { dateAllowed, dateEquals, getISOWeekNumber } from './vaadin-date-picker-
  * @extends HTMLElement
  * @private
  */
-class MonthCalendarElement extends ThemableMixin(GestureEventListeners(PolymerElement)) {
+class MonthCalendar extends ThemableMixin(GestureEventListeners(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -367,4 +367,4 @@ class MonthCalendarElement extends ThemableMixin(GestureEventListeners(PolymerEl
   }
 }
 
-customElements.define(MonthCalendarElement.is, MonthCalendarElement);
+customElements.define(MonthCalendar.is, MonthCalendar);

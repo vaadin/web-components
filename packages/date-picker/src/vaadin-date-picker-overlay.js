@@ -19,10 +19,10 @@ registerStyles('vaadin-date-picker-overlay', datePickerOverlayStyles, {
  * @extends OverlayElement
  * @private
  */
-class DatePickerOverlayElement extends DisableUpgradeMixin(PositionMixin(OverlayElement)) {
+class DatePickerOverlay extends DisableUpgradeMixin(PositionMixin(OverlayElement)) {
   static get is() {
     return 'vaadin-date-picker-overlay';
   }
 }
 
-customElements.define(DatePickerOverlayElement.is, DatePickerOverlayElement);
+customElements.define(DatePickerOverlay.is, DatePickerOverlay);

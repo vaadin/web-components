@@ -13,7 +13,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
  * @extends HTMLElement
  * @private
  */
-class InfiniteScrollerElement extends PolymerElement {
+class InfiniteScroller extends PolymerElement {
   static get template() {
     return html`
       <style>
@@ -290,7 +290,7 @@ class InfiniteScrollerElement extends PolymerElement {
         itemWrapper.style.height = this.itemHeight + 'px';
         itemWrapper.instance = {};
 
-        const contentId = (InfiniteScrollerElement._contentIndex = InfiniteScrollerElement._contentIndex + 1 || 0);
+        const contentId = (InfiniteScroller._contentIndex = InfiniteScroller._contentIndex + 1 || 0);
         const slotName = 'vaadin-infinite-scroller-item-content-' + contentId;
 
         const insertionPoint = document.createElement('slot');
@@ -355,4 +355,4 @@ class InfiniteScrollerElement extends PolymerElement {
   }
 }
 
-customElements.define(InfiniteScrollerElement.is, InfiniteScrollerElement);
+customElements.define(InfiniteScroller.is, InfiniteScroller);

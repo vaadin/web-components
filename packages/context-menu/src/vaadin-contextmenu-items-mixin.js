@@ -27,13 +27,13 @@ customElements.define(ContextMenuItemElement.is, ContextMenuItemElement);
  * @extends ListBox
  * @protected
  */
-class ContextMenuListBoxElement extends ListBox {
+class ContextMenuListBox extends ListBox {
   static get is() {
     return 'vaadin-context-menu-list-box';
   }
 }
 
-customElements.define(ContextMenuListBoxElement.is, ContextMenuListBoxElement);
+customElements.define(ContextMenuListBox.is, ContextMenuListBox);
 
 /**
  * @polymerMixin

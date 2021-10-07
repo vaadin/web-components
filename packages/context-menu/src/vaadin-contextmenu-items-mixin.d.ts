@@ -16,7 +16,7 @@ declare class ContextMenuItemElement extends Item {}
 declare global {
   interface HTMLElementTagNameMap {
     'vaadin-context-menu-item': ContextMenuItemElement;
-    'vaadin-context-menu-list-box': ContextMenuListBoxElement;
+    'vaadin-context-menu-list-box': ContextMenuListBox;
   }
 }
 
@@ -25,7 +25,7 @@ declare global {
  *
  * @protected
  */
-declare class ContextMenuListBoxElement extends ListBox {}
+declare class ContextMenuListBox extends ListBox {}
 
 declare function ItemsMixin<T extends new (...args: any[]) => {}>(base: T): T & ItemsMixinConstructor;
 

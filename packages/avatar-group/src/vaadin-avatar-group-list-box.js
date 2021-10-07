@@ -11,10 +11,10 @@ import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
  * @extends ListBox
  * @private
  */
-class AvatarGroupListBoxElement extends ListBox {
+class AvatarGroupListBox extends ListBox {
   static get is() {
     return 'vaadin-avatar-group-list-box';
   }
 }
 
-customElements.define(AvatarGroupListBoxElement.is, AvatarGroupListBoxElement);
+customElements.define(AvatarGroupListBox.is, AvatarGroupListBox);

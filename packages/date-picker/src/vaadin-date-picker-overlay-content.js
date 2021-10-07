@@ -22,7 +22,7 @@ import { dateEquals, getClosestDate, getISOWeekNumber, extractDateParts } from '
  * @extends HTMLElement
  * @private
  */
-class DatePickerOverlayContentElement extends ThemableMixin(DirMixin(GestureEventListeners(PolymerElement))) {
+class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListeners(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -928,4 +928,4 @@ class DatePickerOverlayContentElement extends ThemableMixin(DirMixin(GestureEven
   }
 }
 
-customElements.define(DatePickerOverlayContentElement.is, DatePickerOverlayContentElement);
+customElements.define(DatePickerOverlayContent.is, DatePickerOverlayContent);
