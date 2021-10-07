@@ -871,7 +871,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
     // `this.$.input` (as a result of value change triggered by setting the value).
     // Workaround the problem by setting custom field value only if date picker is ready.
     const isDatePickerReady = Boolean(this.__datePicker && this.__datePicker.$);
-    if (isDatePickerReady) {
+    if (isDatePickerReady && !this.__ignoreInputValueChange) {
       // Ignore value changes until both inputs have a value updated
       // TODO: This logic clears both fields if one of them is cleared :(
       this.__ignoreInputValueChange = true;
@@ -904,7 +904,6 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
 
     this.__ignoreInputValueChange = true;
     this.__updateTimePickerMinMax();
-    this.__ignoreInputValueChange = false;
 
     if (date && time) {
       if (value !== this.value) {
@@ -913,6 +912,8 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
     } else {
       this.value = '';
     }
+
+    this.__ignoreInputValueChange = false;
   }
 
   /** @private */

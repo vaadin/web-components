@@ -67,6 +67,18 @@ describe('Basic features', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
+  it('should not clear time-picker when date-picker is cleared', () => {
+    dateTimePicker.value = '2019-09-19T08:26';
+    datePicker.value = '';
+    expect(timePicker.value).to.equal('08:26');
+  });
+
+  it('should not clear date-picker when time-picker is cleared', () => {
+    dateTimePicker.value = '2019-09-19T08:26';
+    timePicker.value = '';
+    expect(datePicker.value).to.equal('2019-09-19');
+  });
+
   it('should get value from custom field', () => {
     datePicker.value = '2019-09-19';
     timePicker.value = '15:00';
