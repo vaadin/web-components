@@ -5,11 +5,17 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { dateEquals } from '@vaadin/date-picker/src/vaadin-date-picker-helper.js';
-import './vaadin-date-time-picker-custom-field.js';
 import './vaadin-date-time-picker-date-picker.js';
 import './vaadin-date-time-picker-time-picker.js';
+
+registerStyles('vaadin-date-time-picker', inputFieldShared, { moduleId: 'vaadin-date-time-picker' });
 
 /**
  * @typedef {object} TimePickerTime
@@ -74,8 +80,6 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  *
  * - `<vaadin-date-time-picker-date-picker>` - has the same API as [`<vaadin-date-picker>`](#/elements/vaadin-date-picker).
  * - `<vaadin-date-time-picker-time-picker>` - has the same API as [`<vaadin-time-picker>`](#/elements/vaadin-time-picker).
- * - `<vaadin-date-time-picker-time-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
- * - `<vaadin-date-time-picker-custom-field>` - has the same API as [`<vaadin-custom-field>`](#/elements/vaadin-custom-field).
  *
  * Note: the `theme` attribute value set on `<vaadin-date-time-picker>` is
  * propagated to the internal components listed above.
@@ -88,59 +92,53 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(ElementMixin(PolymerElement))))) {
   static get template() {
     return html`
       <style>
-        :host {
-          display: inline-block;
+        .vaadin-date-time-picker-container {
+          --vaadin-text-field-default-width: auto;
         }
 
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        .slot-container {
+        .slots {
           display: flex;
+          --vaadin-text-field-default-width: 12em;
         }
 
         [part='date'],
-        .slot-container ::slotted([slot='date-picker']) {
+        .slots ::slotted([slot='date-picker']) {
           pointer-events: all;
           min-width: 0;
           flex: 1 1 auto;
         }
 
         [part='time'],
-        .slot-container ::slotted([slot='time-picker']) {
+        .slots ::slotted([slot='time-picker']) {
           pointer-events: all;
           min-width: 0;
           flex: 1 1.65 auto;
         }
       </style>
-      <vaadin-date-time-picker-custom-field
-        id="customField"
-        on-value-changed="__customFieldValueChanged"
-        i18n="[[__customFieldValueFormat]]"
-        label="[[label]]"
-        theme$="[[theme]]"
-        invalid="[[invalid]]"
-        required="[[required]]"
-        disabled$="[[disabled]]"
-        readonly$="[[readonly]]"
-        error-message="[[errorMessage]]"
-        helper-text="[[helperText]]"
-      >
-        <div class="slot-container">
-          <slot name="date-picker" id="dateSlot">
-            <vaadin-date-time-picker-date-picker part="date" theme$="[[theme]]"></vaadin-date-time-picker-date-picker>
-          </slot>
-          <slot name="time-picker" id="timeSlot">
-            <vaadin-date-time-picker-time-picker part="time" theme$="[[theme]]"></vaadin-date-time-picker-time-picker>
-          </slot>
+
+      <div class="vaadin-date-time-picker-container">
+        <div part="label" on-click="focus">
+          <slot name="label"></slot>
+          <span part="required-indicator" aria-hidden="true"></span>
         </div>
-        <slot name="helper" slot="helper">[[helperText]]</slot>
-      </vaadin-date-time-picker-custom-field>
+
+        <div class="slots">
+          <slot name="date-picker" id="dateSlot"></slot>
+          <slot name="time-picker" id="timeSlot"></slot>
+        </div>
+
+        <div part="helper-text">
+          <slot name="helper"></slot>
+        </div>
+
+        <div part="error-message">
+          <slot name="error-message"></slot>
+        </div>
+      </div>
     `;
   }
 
@@ -156,32 +154,6 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
       name: {
         type: String
       },
-
-      /**
-       * Set to true if the value is invalid.
-       * @type {boolean}
-       */
-      invalid: {
-        type: Boolean,
-        reflectToAttribute: true,
-        notify: true,
-        value: false
-      },
-
-      /**
-       * Set to true to mark the input as required.
-       * @type {boolean}
-       */
-      required: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * The error message to display when the input is invalid.
-       * @attr {string} error-message
-       */
-      errorMessage: String,
 
       /**
        * The value for this element.
@@ -264,15 +236,6 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
       },
 
       /**
-       * String used for the helper text.
-       * @attr {string} helper-text
-       */
-      helperText: {
-        type: String,
-        value: ''
-      },
-
-      /**
        * Defines the time interval (in seconds) between the items displayed
        * in the time selection box. The default is 1 hour (i.e. `3600`).
        *
@@ -311,29 +274,10 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
       },
 
       /**
-       * String used for the label element.
-       * @type {string}
-       */
-      label: {
-        type: String,
-        value: ''
-      },
-
-      /**
        * Set to true to prevent the overlays from opening automatically.
        * @attr {boolean} auto-open-disabled
        */
       autoOpenDisabled: Boolean,
-
-      /**
-       * Set to true to disable this element.
-       * @type {boolean}
-       */
-      disabled: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
 
       /**
        * Set to true to make this element read-only.
@@ -359,15 +303,6 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
        */
       __selectedDateTime: {
         type: Date
-      },
-
-      /** @private */
-      __customFieldValueFormat: {
-        type: Object,
-        value: () => ({
-          parseValue: (combinedValue) => combinedValue.split('T'),
-          formatValue: (inputValues) => inputValues.join('T')
-        })
       },
 
       /**
@@ -400,8 +335,26 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
       '__disabledChanged(disabled)',
       '__readonlyChanged(readonly)',
       '__i18nChanged(i18n.*)',
-      '__autoOpenDisabledChanged(autoOpenDisabled)'
+      '__autoOpenDisabledChanged(autoOpenDisabled)',
+      '__themeChanged(theme, __datePicker, __timePicker)',
+      '__pickersChanged(__datePicker, __timePicker)'
     ];
+  }
+
+  get slots() {
+    return {
+      ...super.slots,
+      'date-picker': () => {
+        const element = document.createElement('vaadin-date-time-picker-date-picker');
+        element.__defaultPicker = true;
+        return element;
+      },
+      'time-picker': () => {
+        const element = document.createElement('vaadin-date-time-picker-time-picker');
+        element.__defaultPicker = true;
+        return element;
+      }
+    };
   }
 
   constructor() {
@@ -414,6 +367,7 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
     this.__defaultTimeMaxValue = '23:59:59.999';
 
     this.__changeEventHandler = this.__changeEventHandler.bind(this);
+    this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
   }
 
   /** @protected */
@@ -437,13 +391,13 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
     }
   }
 
+  /** @private */
   __filterElements(node) {
     return node.nodeType === Node.ELEMENT_NODE;
   }
 
-  /** @protected */
   focus() {
-    this.$.customField.focus();
+    this.__datePicker.focus();
   }
 
   /** @private */
@@ -457,52 +411,45 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
     });
   }
 
-  // This is needed only for the case when date or time picker is slotted/changed after ready
-  // since custom field doesn't automatically pick that change because we use a wrapper element
-  // in the custom field slot.
   /** @private */
-  __updateCustomFieldInputs() {
-    const cfInputs = this.$.customField.inputs;
-    if (
-      this.__datePicker &&
-      this.__timePicker &&
-      (cfInputs[0] !== this.__datePicker || cfInputs[1] !== this.__timePicker)
-    ) {
-      this.$.customField._setInputs([this.__datePicker, this.__timePicker]);
+  __changeEventHandler(event) {
+    event.stopPropagation();
+
+    if (this.__dispatchChangeForValue === this.value) {
+      this.__dispatchChange();
+      this.validate();
     }
+    this.__dispatchChangeForValue = undefined;
   }
 
   /** @private */
-  __changeEventHandler() {
-    this.__doDispatchChange = true;
+  __addInputListeners(node) {
+    node.addEventListener('change', this.__changeEventHandler);
+    node.addEventListener('value-changed', this.__valueChangedEventHandler);
   }
 
   /** @private */
-  __removeChangeListener(node) {
-    if (node) {
-      node.removeEventListener('change', this.__changeEventHandler, false);
-    }
-  }
-
-  /** @private */
-  __addChangeListener(node) {
-    node.addEventListener('change', this.__changeEventHandler, false);
+  __removeInputListeners(node) {
+    node.removeEventListener('change', this.__changeEventHandler);
+    node.removeEventListener('value-changed', this.__valueChangedEventHandler);
   }
 
   /** @private */
   __datePickerChanged() {
-    const defaultDatePicker = this.shadowRoot.querySelector('[part="date"]');
-    const assignedElements = this.$.dateSlot.assignedNodes({ flatten: true }).filter(this.__filterElements);
-    const datePicker = assignedElements[0];
-    if (this.__datePicker === datePicker) {
+    const datePicker = this._getDirectSlotChild('date-picker');
+    if (this.__datePicker === datePicker || !datePicker) {
       return;
     }
-    this.__removeChangeListener(this.__datePicker);
-    this.__addChangeListener(datePicker);
-    this.__datePicker = datePicker;
-    this.__updateCustomFieldInputs();
+    if (this.__datePicker) {
+      // Remove an existing date picker
+      this.__removeInputListeners(this.__datePicker);
+      this.__datePicker.remove();
+    }
 
-    if (datePicker === defaultDatePicker) {
+    this.__addInputListeners(datePicker);
+    this.__datePicker = datePicker;
+
+    if (datePicker.__defaultPicker) {
       // Synchronize properties to default date picker
       datePicker.placeholder = this.datePlaceholder;
       datePicker.invalid = this.invalid;
@@ -533,18 +480,20 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
 
   /** @private */
   __timePickerChanged() {
-    const defaultTimePicker = this.shadowRoot.querySelector('[part="time"]');
-    const assignedElements = this.$.timeSlot.assignedNodes({ flatten: true }).filter(this.__filterElements);
-    const timePicker = assignedElements[0];
-    if (this.__timePicker === timePicker) {
+    const timePicker = this._getDirectSlotChild('time-picker');
+    if (this.__timePicker === timePicker || !timePicker) {
       return;
     }
-    this.__removeChangeListener(this.__timePicker);
-    this.__addChangeListener(timePicker);
-    this.__timePicker = timePicker;
-    this.__updateCustomFieldInputs();
+    if (this.__timePicker) {
+      // Remove an existing time picker
+      this.__removeInputListeners(this.__timePicker);
+      this.__timePicker.remove();
+    }
 
-    if (timePicker === defaultTimePicker) {
+    this.__addInputListeners(timePicker);
+    this.__timePicker = timePicker;
+
+    if (timePicker.__defaultPicker) {
       // Synchronize properties to default time picker
       timePicker.placeholder = this.timePlaceholder;
       timePicker.step = this.step;
@@ -626,23 +575,7 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
   /** @private */
   __stepChanged(step) {
     if (this.__timePicker && this.__timePicker.step !== step) {
-      const oldTimeValue = this.__timePicker.value;
-
       this.__timePicker.step = step;
-
-      // If time picker value changes due to the new step (precision change)
-      // propagate the updated value change to custom-field (which doesn't
-      // automatically process programmatically triggered value updates)
-      if (this.__timePicker.value !== oldTimeValue) {
-        this.__triggerCustomFieldValueUpdate();
-      }
-    }
-  }
-
-  /** @private */
-  __triggerCustomFieldValueUpdate() {
-    if (this.__timePicker) {
-      this.__timePicker.dispatchEvent(new CustomEvent('change', { bubbles: true }));
     }
   }
 
@@ -822,13 +755,9 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
     return timeObject;
   }
 
-  /**
-   * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-   *
-   * @return {boolean} True if the value is valid.
-   */
-  validate() {
-    return !(this.invalid = !this.checkValidity());
+  /** @private */
+  get __inputs() {
+    return [this.__datePicker, this.__timePicker];
   }
 
   /**
@@ -838,8 +767,8 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
    * @return {boolean}
    */
   checkValidity() {
-    const hasInvalidFields = this.$.customField.inputs.filter((input) => !input.checkValidity.call(input)).length > 0;
-    const hasEmptyFields = this.required && this.$.customField.inputs.filter((el) => !el.value).length > 0;
+    const hasInvalidFields = this.__inputs.some((input) => !input.checkValidity());
+    const hasEmptyFields = this.required && this.__inputs.some((el) => !el.value);
 
     if (hasInvalidFields || hasEmptyFields) {
       return false;
@@ -908,10 +837,12 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
   __valueChanged(value, oldValue) {
     this.__handleDateTimeChange('value', '__selectedDateTime', value, oldValue);
 
-    if (this.__doDispatchChange) {
-      this.__dispatchChange();
-      this.validate();
+    if (oldValue !== undefined) {
+      this.__dispatchChangeForValue = value;
     }
+
+    this.toggleAttribute('has-value', !!value);
+    this.__updateTimePickerMinMax();
   }
 
   /** @private */
@@ -944,44 +875,45 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
       this.value = formattedValue;
     }
 
-    // Setting the customField.value below triggers validation of the date picker and time picker.
+    // Setting the date/time picker value below triggers validation of the components.
     // If the inputs are slotted (e.g. when using the Java API) and have an initial value this can
     // happen before date picker ready() which would throw an error when date picker is trying to read
-    // `this.$.input` (as a result of value change triggered by setting custom field value).
+    // `this.$.input` (as a result of value change triggered by setting the value).
     // Workaround the problem by setting custom field value only if date picker is ready.
-    const inputs = this.$.customField.inputs;
-    const isDatePickerReady = Boolean(inputs && inputs[0] && inputs[0].$);
-    if (isDatePickerReady) {
-      const doDispatchChange = this.__doDispatchChange;
-
-      this.$.customField.value = this.value !== '' ? this.value : 'T';
-
-      this.__doDispatchChange = doDispatchChange;
+    const isDatePickerReady = Boolean(this.__datePicker && this.__datePicker.$);
+    if (isDatePickerReady && !this.__ignoreInputValueChange) {
+      // Ignore value changes until both inputs have a value updated
+      // TODO: This logic clears both fields if one of them is cleared :(
+      this.__ignoreInputValueChange = true;
+      const [dateValue, timeValue] = this.value.split('T');
+      this.__datePicker.value = dateValue || '';
+      this.__timePicker.value = timeValue || '';
+      this.__ignoreInputValueChange = false;
     }
   }
 
   /** @private */
-  __customFieldValueChanged(e) {
-    /** @type {string} */
-    const value = e.detail.value;
+  get __formattedValue() {
+    const dateValue = this.__datePicker.value;
+    const timeValue = this.__timePicker.value;
+    if (dateValue && timeValue) {
+      return [dateValue, timeValue].join('T');
+    }
+    return '';
+  }
 
-    // Initial empty value from custom field
-    if (value === 'T' && !this.__customFieldInitialValueChangeReceived) {
-      this.__customFieldInitialValueChangeReceived = true;
-      // Ignore initial value from custom field so we don't override initial value of date time picker
+  /** @private */
+  __valueChangedEventHandler() {
+    if (this.__ignoreInputValueChange) {
       return;
     }
 
+    const value = this.__formattedValue;
+
     const [date, time] = value.split('T');
 
-    // Handle updating time picker min/max if the date changed.
-    // This may cause the time picker value to be adjusted.
-    // __oldDateValue is used only here and the if condition is only a minor performance optimization
-    // not to run the update checks unnecessarily if only the time was changed.
-    if (this.__oldDateValue !== date) {
-      this.__oldDateValue = date;
-      this.__updateTimePickerMinMax();
-    }
+    this.__ignoreInputValueChange = true;
+    this.__updateTimePickerMinMax();
 
     if (date && time) {
       if (value !== this.value) {
@@ -990,7 +922,8 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
     } else {
       this.value = '';
     }
-    this.__doDispatchChange = false;
+
+    this.__ignoreInputValueChange = false;
   }
 
   /** @private */
@@ -1003,6 +936,40 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
     }
   }
 
+  /** @private */
+  __themeChanged(theme, datePicker, timePicker) {
+    [datePicker, timePicker].forEach((picker) => {
+      if (picker) {
+        if (theme) {
+          picker.setAttribute('theme', theme);
+        } else {
+          picker.removeAttribute('theme');
+        }
+      }
+    });
+  }
+
+  /** @private */
+  __pickersChanged(datePicker, timePicker) {
+    if (!datePicker || !timePicker) {
+      // Both pickers are not ready yet
+      return;
+    }
+
+    if (datePicker.__defaultPicker !== timePicker.__defaultPicker) {
+      // Both pickers are not replaced yet
+      return;
+    }
+
+    if (datePicker.value) {
+      // The new pickers have a value, update the component value
+      this.__valueChangedEventHandler();
+    } else if (this.value) {
+      // The component has a value, update the new pickers values
+      this.__selectedDateTimeChanged(this.__selectedDateTime);
+    }
+  }
+
   /**
    * Fired when the user commits a value change.
    *
@@ -1010,6 +977,6 @@ class DateTimePickerElement extends ElementMixin(ThemableMixin(PolymerElement)) 
    */
 }
 
-customElements.define(DateTimePickerElement.is, DateTimePickerElement);
+customElements.define(DateTimePicker.is, DateTimePicker);
 
-export { DateTimePickerElement };
+export { DateTimePicker };

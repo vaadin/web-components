@@ -31,17 +31,23 @@ const fixtures = {
   `
 };
 
+function getDatePicker(dateTimePicker) {
+  return dateTimePicker.querySelector('[slot="date-picker"]');
+}
+
+function getTimePicker(dateTimePicker) {
+  return dateTimePicker.querySelector('[slot="time-picker"]');
+}
+
 describe('Basic features', () => {
   let dateTimePicker;
-  let customField;
   let datePicker;
   let timePicker;
 
   beforeEach(() => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker></vaadin-date-time-picker>');
-    customField = dateTimePicker.$.customField;
-    datePicker = customField.inputs[0];
-    timePicker = customField.inputs[1];
+    datePicker = getDatePicker(dateTimePicker);
+    timePicker = getTimePicker(dateTimePicker);
   });
 
   it('should have default value', () => {
@@ -69,10 +75,21 @@ describe('Basic features', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
+  it('should not clear time-picker when date-picker is cleared', () => {
+    dateTimePicker.value = '2019-09-19T08:26';
+    datePicker.value = '';
+    expect(timePicker.value).to.equal('08:26');
+  });
+
+  it('should not clear date-picker when time-picker is cleared', () => {
+    dateTimePicker.value = '2019-09-19T08:26';
+    timePicker.value = '';
+    expect(datePicker.value).to.equal('2019-09-19');
+  });
+
   it('should get value from custom field', () => {
     datePicker.value = '2019-09-19';
     timePicker.value = '15:00';
-    dateTimePicker.__triggerCustomFieldValueUpdate();
     expect(dateTimePicker.value).to.equal('2019-09-19T15:00');
   });
 
@@ -216,7 +233,7 @@ describe('autofocus', () => {
 
   beforeEach(async () => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker autofocus></vaadin-date-time-picker>');
-    datePicker = dateTimePicker.$.customField.inputs[0];
+    datePicker = getDatePicker(dateTimePicker);
     await nextFrame();
   });
 
@@ -227,16 +244,13 @@ describe('autofocus', () => {
 
 describe('Initial value', () => {
   let dateTimePicker;
-  let customField;
 
   beforeEach(() => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker value="2019-09-16T15:00"></vaadin-date-time-picker>');
-    customField = dateTimePicker.$.customField;
   });
 
   it('should use initial value from attribute without clearing it', () => {
     expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
-    expect(customField.value).to.equal('2019-09-16T15:00');
   });
 });
 
@@ -249,43 +263,19 @@ describe('helperText', () => {
 
   it('should display the helper text when provided', () => {
     dateTimePicker.helperText = 'Foo';
-    expect(dateTimePicker.$.customField.helperText).to.equal(dateTimePicker.helperText);
-  });
-});
-
-describe('slotted helper', () => {
-  let dateTimePicker;
-  let customField;
-
-  beforeEach(() => {
-    dateTimePicker = fixtureSync(`
-      <vaadin-date-time-picker>
-        <div slot="helper">foo</div>
-      </vaadin-date-time-picker>
-    `);
-    customField = dateTimePicker.$.customField;
-  });
-
-  it('should display the helper text when slotted helper available', () => {
-    expect(customField.querySelector('slot[slot="helper"]').assignedNodes()[0].textContent).to.eql('foo');
+    expect(dateTimePicker.querySelector('[slot="helper"]').textContent).to.equal('Foo');
   });
 });
 
 describe('Theme attribute', () => {
   let dateTimePicker;
-  let customField;
   let datePicker;
   let timePicker;
 
   beforeEach(() => {
     dateTimePicker = fixtureSync('<vaadin-date-time-picker theme="foo"></vaadin-date-time-picker>');
-    customField = dateTimePicker.$.customField;
-    datePicker = customField.inputs[0];
-    timePicker = customField.inputs[1];
-  });
-
-  it('should propagate theme attribute to custom-field', () => {
-    expect(customField.getAttribute('theme')).to.equal('foo');
+    datePicker = getDatePicker(dateTimePicker);
+    timePicker = getTimePicker(dateTimePicker);
   });
 
   it('should propagate theme attribute to date-picker', () => {
@@ -300,13 +290,15 @@ describe('Theme attribute', () => {
 ['default', 'lazy'].forEach((set) => {
   describe(`Slotted inputs (${set})`, () => {
     let dateTimePicker;
-    let customField;
     let datePicker;
     let timePicker;
+    let originalDatePicker;
+    let originalTimePicker;
 
     beforeEach(async () => {
       dateTimePicker = fixtureSync(fixtures[`${set}-inputs`]);
-      customField = dateTimePicker.$.customField;
+      originalDatePicker = getDatePicker(dateTimePicker);
+      originalTimePicker = getTimePicker(dateTimePicker);
       datePicker = dateTimePicker.querySelector('vaadin-date-picker');
       timePicker = dateTimePicker.querySelector('vaadin-time-picker');
 
@@ -318,32 +310,24 @@ describe('Theme attribute', () => {
       }
     });
 
-    it('should have correct inputs set in custom-field', () => {
-      expect(customField.inputs[0]).to.equal(datePicker);
-      expect(customField.inputs[1]).to.equal(timePicker);
+    it('should not have has-value by default', () => {
+      expect(dateTimePicker.hasAttribute('has-value')).to.be.false;
     });
 
-    it('should not have has-value on custom field by default', () => {
-      expect(customField.hasAttribute('has-value')).to.be.false;
-    });
-
-    it('should not have has-value on custom field if only time is selected', () => {
+    it('should not have has-value if only time is selected', () => {
       timePicker.value = '15:00';
-      dateTimePicker.__triggerCustomFieldValueUpdate();
-      expect(customField.hasAttribute('has-value')).to.be.false;
+      expect(dateTimePicker.hasAttribute('has-value')).to.be.false;
     });
 
-    it('should not have has-value on custom field if only date is selected', () => {
+    it('should not have has-value if only date is selected', () => {
       datePicker.value = '2019-09-16';
-      dateTimePicker.__triggerCustomFieldValueUpdate();
-      expect(customField.hasAttribute('has-value')).to.be.false;
+      expect(dateTimePicker.hasAttribute('has-value')).to.be.false;
     });
 
-    it('should have has-value on custom field if both date and time are selected', () => {
+    it('should have has-value if both date and time are selected', () => {
       timePicker.value = '15:00';
       datePicker.value = '2019-09-16';
-      dateTimePicker.__triggerCustomFieldValueUpdate();
-      expect(customField.hasAttribute('has-value')).to.be.true;
+      expect(dateTimePicker.hasAttribute('has-value')).to.be.true;
     });
 
     it('should propagate value to slotted inputs', () => {
@@ -359,13 +343,33 @@ describe('Theme attribute', () => {
     it('should get value from slotted inputs', () => {
       datePicker.value = '2019-09-16';
       timePicker.value = '15:00';
-      dateTimePicker.__triggerCustomFieldValueUpdate();
       expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
 
       datePicker.value = '';
-      dateTimePicker.__triggerCustomFieldValueUpdate();
       expect(dateTimePicker.value).to.equal('');
     });
+
+    it('should contain only one date-picker', () => {
+      expect(dateTimePicker.querySelectorAll('[slot="date-picker"]')).to.have.lengthOf(1);
+    });
+
+    it('should contain only one time-picker', () => {
+      expect(dateTimePicker.querySelectorAll('[slot="time-picker"]')).to.have.lengthOf(1);
+    });
+
+    if (set === 'lazy') {
+      it('should not react to changes on discarded pickers', () => {
+        sinon.spy(dateTimePicker, '__valueChangedEventHandler');
+        sinon.spy(dateTimePicker, '__changeEventHandler');
+        originalDatePicker.value = '2000-01-01';
+        originalDatePicker.dispatchEvent(new CustomEvent('change'));
+        originalTimePicker.value = '00:00';
+        originalTimePicker.dispatchEvent(new CustomEvent('change'));
+
+        expect(dateTimePicker.__valueChangedEventHandler.called).to.be.false;
+        expect(dateTimePicker.__changeEventHandler.called).to.be.false;
+      });
+    }
 
     describe('Removing change listeners', () => {
       it('should remove change listener from removed date picker', async () => {
@@ -386,11 +390,9 @@ describe('Theme attribute', () => {
 
   describe(`Initial value from slotted inputs (${set})`, () => {
     let dateTimePicker;
-    let customField;
 
     beforeEach(async () => {
       dateTimePicker = fixtureSync(fixtures[`${set}-values`]);
-      customField = dateTimePicker.$.customField;
 
       if (set === 'lazy') {
         // Assign the slots lazily simulating the case if Flow adds the slotted elements after date time picker is ready
@@ -402,7 +404,6 @@ describe('Theme attribute', () => {
 
     // This test simulates how DatePicker sets the initial value from server side
     it('should get initial value from slotted inputs', () => {
-      expect(customField.value).to.equal('2019-09-16T15:00');
       expect(dateTimePicker.value).to.equal('2019-09-16T15:00');
     });
   });

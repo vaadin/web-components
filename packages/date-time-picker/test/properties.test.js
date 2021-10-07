@@ -58,25 +58,24 @@ const fixtures = {
   `
 };
 
+function getDatePicker(dateTimePicker) {
+  return dateTimePicker.querySelector('[slot="date-picker"]');
+}
+
+function getTimePicker(dateTimePicker) {
+  return dateTimePicker.querySelector('[slot="time-picker"]');
+}
+
 ['default', 'slotted'].forEach((set) => {
   describe(`Property propagation (${set})`, () => {
     let dateTimePicker;
-    let customField;
     let datePicker;
     let timePicker;
 
     beforeEach(() => {
       dateTimePicker = fixtureSync(fixtures[set]);
-
-      customField = dateTimePicker.$.customField;
-
-      if (set === 'default') {
-        datePicker = customField.inputs[0];
-        timePicker = customField.inputs[1];
-      } else {
-        datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
-        timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
-      }
+      datePicker = getDatePicker(dateTimePicker);
+      timePicker = getTimePicker(dateTimePicker);
     });
 
     it('should propagate value to date and time pickers', () => {
@@ -206,26 +205,29 @@ const fixtures = {
       expect(datePicker.showWeekNumbers).to.be.true;
     });
 
-    it('should propagate label to custom field', () => {
+    it('should handle label', () => {
       dateTimePicker.label = 'Birth date and time';
-      expect(customField.label).to.equal('Birth date and time');
+      const label = dateTimePicker.querySelector(':scope > label');
+      expect(label.textContent).to.equal('Birth date and time');
     });
 
-    it('should propagate invalid to custom field', () => {
+    it('should propagate invalid to date and time pickers', () => {
       dateTimePicker.invalid = true;
-      expect(customField.invalid).to.be.true;
+      expect(datePicker.invalid).to.be.true;
+      expect(timePicker.invalid).to.be.true;
     });
 
-    it('should propagate required to custom field', () => {
+    it('should propagate required to date and time pickers', () => {
       dateTimePicker.required = true;
-      expect(customField.required).to.be.true;
       expect(datePicker.required).to.be.true;
       expect(timePicker.required).to.be.true;
     });
 
-    it('should propagate error-message to custom field', () => {
+    it('should handle error-message', () => {
       dateTimePicker.errorMessage = 'error-message';
-      expect(customField.errorMessage).to.equal('error-message');
+      dateTimePicker.invalid = true;
+      const errorMessage = dateTimePicker.querySelector(':scope > [slot=error-message]');
+      expect(errorMessage.textContent).to.equal('error-message');
     });
 
     it('should propagate disabled to date and time pickers', () => {
@@ -270,7 +272,6 @@ const fixtures = {
 
   describe(`Initial property values (${set})`, () => {
     let dateTimePicker;
-    let customField;
     let datePicker;
     let timePicker;
 
@@ -278,25 +279,16 @@ const fixtures = {
     // these tests do not modify the state but only check the initial state.
     before(() => {
       dateTimePicker = fixtureSync(fixtures[`${set}-initial`]);
-      customField = dateTimePicker.$.customField;
-
-      if (set === 'default') {
-        datePicker = customField.inputs[0];
-        timePicker = customField.inputs[1];
-      } else {
-        datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
-        timePicker = dateTimePicker.querySelector('[slot="time-picker"]');
-      }
+      datePicker = getDatePicker(dateTimePicker);
+      timePicker = getTimePicker(dateTimePicker);
     });
 
     it('should have initial value for errorMessage', () => {
       expect(dateTimePicker.errorMessage).to.equal('error-message');
-      expect(customField.errorMessage).to.equal('error-message');
     });
 
     it('should have initial value for required', () => {
       expect(dateTimePicker.required).to.be.true;
-      expect(customField.required).to.be.true;
       expect(datePicker.required).to.be.true;
       expect(timePicker.required).to.be.true;
     });
@@ -364,7 +356,6 @@ const fixtures = {
 
     it('should have initial value for label', () => {
       expect(dateTimePicker.label).to.equal('Birth date and time');
-      expect(customField.label).to.equal('Birth date and time');
     });
   });
 });

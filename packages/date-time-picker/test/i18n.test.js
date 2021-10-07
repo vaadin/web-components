@@ -80,7 +80,6 @@ customElements.define(
 ['default', 'slotted'].forEach((set) => {
   describe(`i18n property (${set})`, () => {
     let dateTimePicker;
-    let customField;
     let datePicker;
 
     // No need for "beforeEach" to recreate the fixture before every test since these tests do not
@@ -88,13 +87,7 @@ customElements.define(
     before(() => {
       const element = fixtureSync(`<dtp-i18n-${set}></dtp-i18n-${set}>`);
       dateTimePicker = element.$.dateTimePicker;
-      customField = dateTimePicker.$.customField;
-
-      if (set === 'default') {
-        datePicker = customField.inputs[0];
-      } else if (set === 'slotted') {
-        datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
-      }
+      datePicker = dateTimePicker.querySelector('[slot="date-picker"]');
     });
 
     it('should have initial value for i18n', () => {
