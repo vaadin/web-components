@@ -1,5 +1,5 @@
 {
-  "name": "@vaadin/vaadin-rich-text-editor",
+  "name": "@vaadin/rich-text-editor",
   "version": "22.0.0-alpha6",
   "description": "vaadin-rich-text-editor",
   "main": "vaadin-rich-text-editor.js",
@@ -7,7 +7,7 @@
   "repository": {
     "type" : "git",
     "url" : "https://github.com/vaadin/web-components.git",
-    "directory": "packages/vaadin-rich-text-editor"
+    "directory": "packages/rich-text-editor"
   },
   "keywords": [
     "Vaadin",
@@ -17,9 +17,9 @@
     "polymer"
   ],
   "author": "Vaadin Ltd",
-  "license": "https://raw.githubusercontent.com/vaadin/vaadin-rich-text-editor/master/LICENSE",
+  "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/rich-text-editor/LICENSE",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-rich-text-editor/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "homepage": "https://vaadin.com/components",
   "files": [
