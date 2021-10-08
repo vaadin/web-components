@@ -30,7 +30,7 @@ import { Virtualizer } from './virtualizer.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -190,6 +190,6 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 }
 
-customElements.define(VirtualListElement.is, VirtualListElement);
+customElements.define(VirtualList.is, VirtualList);
 
-export { VirtualListElement };
+export { VirtualList };
