@@ -60,7 +60,7 @@ export const PatternMixin = (superclass) =>
       }
     }
 
-    checkValidity() {     
+    checkValidity() {
       try {
         new RegExp(this.pattern);
       } catch (error) {
