@@ -804,7 +804,7 @@ describe('wrapped grid', () => {
       grid.size = 5000;
       // scroll and collect > 10 pages
       grid.scrollToIndex(600);
-      grid.dataProvider.reset();
+      grid.dataProvider.resetHistory();
       // when
       grid.size = 1200;
       // then
@@ -819,7 +819,7 @@ describe('wrapped grid', () => {
       });
       grid.size = 5000;
       grid.scrollToIndex(600);
-      grid.dataProvider.reset();
+      grid.dataProvider.resetHistory();
       // when
       grid.scrollToIndex(700);
       // then
