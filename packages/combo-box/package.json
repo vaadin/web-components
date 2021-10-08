@@ -38,7 +38,7 @@
     "@vaadin/vaadin-material-styles": "^22.0.0-alpha6",
     "@vaadin/vaadin-overlay": "^22.0.0-alpha6",
     "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha6",
-    "@vaadin/vaadin-virtual-list": "^22.0.0-alpha6"
+    "@vaadin/virtual-list": "^22.0.0-alpha6"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
