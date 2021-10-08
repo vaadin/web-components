@@ -794,5 +794,37 @@ describe('wrapped grid', () => {
       const lastVisibleItem = grid.getRootNode().elementFromPoint(lastRowCenterX, lastRowCenterY);
       expect(lastVisibleItem.innerText.trim()).to.equal('foo' + (grid.size - 1));
     });
+
+    it('should not call data provider when jumping to 0 index', () => {
+      // given
+      grid.dataProvider = sinon.spy((params, callback) => {
+        // no-op
+        // collects pending pages
+      });
+      grid.size = 5000;
+      // scroll and collect > 10 pages
+      grid.scrollToIndex(600);
+      grid.dataProvider.reset();
+      // when
+      grid.size = 1200;
+      // then
+      expect(grid.dataProvider.called).to.be.false;
+    });
+
+    it('should not call data provider when too many pending pages', () => {
+      // given
+      grid.dataProvider = sinon.spy((params, callback) => {
+        // no-op
+        // collects pending pages
+      });
+      grid.size = 5000;
+      grid.scrollToIndex(600);
+      grid.dataProvider.reset();
+      // when
+      grid.scrollToIndex(700);
+      // then
+      expect(grid.dataProvider.called).to.be.false;
+    });
+
   });
 });

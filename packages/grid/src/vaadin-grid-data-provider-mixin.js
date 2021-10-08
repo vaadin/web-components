@@ -97,6 +97,30 @@ export const ItemCache = class ItemCache {
     }
     return { cache: this, scaledIndex: thisLevelIndex };
   }
+
+  /**
+   * @param {page} page to be checked on what range of pages it creates
+   * along with the current pending pages.
+   * @return {boolean} true if the requested page and the current pending
+   * pages create the page list under the allowed limit.
+   */
+  requestedPageCountAllowed(page) {
+    if (Object.keys(this.pendingRequests).length) {
+      const maxPageCountAllowed = 10;
+      const pendingPageIndexes =
+        Object.keys(this.pendingRequests).map(strInd => parseInt(strInd));
+      const maxPageIndex = Math.max(pendingPageIndexes);
+      const minPageIndex = Math.min(pendingPageIndexes);
+      if (page < minPageIndex) {
+        return maxPageIndex - page <= maxPageCountAllowed;
+      } else if (page > maxPageIndex) {
+        return page - minPageIndex <= maxPageCountAllowed;
+      } else {
+        return maxPageIndex - minPageIndex <= maxPageCountAllowed;
+      }
+    }
+    return true;
+  }
 };
 
 /**
@@ -336,7 +360,7 @@ export const DataProviderMixin = (superClass) =>
      */
     _loadPage(page, cache) {
       // make sure same page isn't requested multiple times.
-      if (!cache.pendingRequests[page] && this.dataProvider) {
+      if (!cache.pendingRequests[page] && this.dataProvider && cache.requestedPageCountAllowed(page)) {
         this._setLoading(true);
         cache.pendingRequests[page] = true;
         const params = {
