@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '@vaadin/item';
 import '@vaadin/list-box';
-import '@vaadin/polymer-legacy-adapter';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-select.js';
 

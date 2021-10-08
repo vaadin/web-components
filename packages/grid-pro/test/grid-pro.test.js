@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { GridElement } from '@vaadin/grid/src/vaadin-grid.js';
 import { GridColumnElement } from '@vaadin/grid/src/vaadin-grid-column.js';
-import '@vaadin/polymer-legacy-adapter';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import { flushGrid, infiniteDataProvider } from './helpers.js';
 import '../vaadin-grid-pro.js';
 

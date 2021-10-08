@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import { flushGrid, getBodyCellContent, infiniteDataProvider } from './helpers.js';
-import '@vaadin/polymer-legacy-adapter';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 
 describe('hidden grid', () => {

@@ -9,7 +9,7 @@ import {
   getRowCells,
   infiniteDataProvider
 } from './helpers.js';
-import '@vaadin/polymer-legacy-adapter';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-selection-column.js';
 import '../vaadin-grid-filter.js';

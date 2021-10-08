@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { enter, esc, fixtureSync, focusin, focusout, isIOS, tab } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import {
   createItems,
   dblclick,

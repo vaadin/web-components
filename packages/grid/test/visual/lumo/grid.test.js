@@ -1,7 +1,7 @@
 import { click, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers/dist/index-no-side-effects.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import { sendKeys } from '@web/test-runner-commands';
-import '@vaadin/polymer-legacy-adapter';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import { flushGrid, nextResize } from '../../helpers.js';
 import { users } from '../users.js';
 import '../../../theme/lumo/vaadin-grid.js';

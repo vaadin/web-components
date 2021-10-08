@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/polymer-legacy-adapter';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/text-area/vaadin-text-area.js';
 import '../src/vaadin-dialog.js';
 
