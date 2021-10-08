@@ -289,7 +289,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        * - `configuration.title`: The chart title.
        *
        * For detailed documentation of available API check the [API site](http://api.highcharts.com/class-reference/classes.list)
-       * @type {!Chart | undefined}
+       * @type {!Highcharts.Chart | undefined}
        */
       configuration: Object,
 
