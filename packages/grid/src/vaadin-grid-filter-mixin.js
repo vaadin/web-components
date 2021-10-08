@@ -62,7 +62,7 @@ export const FilterMixin = (superClass) =>
     }
 
     /**
-     * @return {!Array<!GridFilter>}
+     * @return {!Array<!GridFilterDefinition>}
      * @protected
      */
     _mapFilters() {

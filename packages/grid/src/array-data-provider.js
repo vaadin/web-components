@@ -11,7 +11,7 @@ function get(path, object) {
 
 /**
  * Check array of filters/sorters for paths validity, console.warn invalid items
- * @param {!Array<!GridFilter | !GridSorter>} arrayToCheck The array of filters/sorters to check
+ * @param {!Array<!GridFilterDefinition | !GridSorterDefinition>} arrayToCheck The array of filters/sorters to check
  * @param {string} action The name of action to include in warning (filtering, sorting)
  * @param {!Array<!GridItem>} items
  */
@@ -44,7 +44,7 @@ function checkPaths(arrayToCheck, action, items) {
  * Sorts the given array of items based on the sorting rules and returns the result.
  *
  * @param {Array<any>} items
- * @param {Array<GridSorter>} items
+ * @param {Array<GridSorterDefinition>} items
  * @return {Array<any>}
  */
 function multiSort(items, sortOrders) {

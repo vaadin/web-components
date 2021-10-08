@@ -22,7 +22,7 @@ export const SortMixin = (superClass) =>
         },
 
         /**
-         * @type {!Array<!GridSorter>}
+         * @type {!Array<!GridSorterDefinition>}
          * @protected
          */
         _sorters: {
@@ -117,7 +117,7 @@ export const SortMixin = (superClass) =>
     }
 
     /**
-     * @return {!Array<!GridSorter>}
+     * @return {!Array<!GridSorterDefinition>}
      * @protected
      */
     _mapSorters() {
