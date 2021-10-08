@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/combo-box",
-  "version": "22.0.0-alpha6",
+  "version": "22.0.0-alpha7",
   "publishConfig": {
     "access": "public"
   },
@@ -33,22 +33,22 @@
   "dependencies": {
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^22.0.0-alpha6",
-    "@vaadin/field-base": "^22.0.0-alpha6",
-    "@vaadin/input-container": "^22.0.0-alpha6",
-    "@vaadin/item": "^22.0.0-alpha6",
-    "@vaadin/vaadin-lumo-styles": "^22.0.0-alpha6",
-    "@vaadin/vaadin-material-styles": "^22.0.0-alpha6",
-    "@vaadin/vaadin-overlay": "^22.0.0-alpha6",
-    "@vaadin/vaadin-themable-mixin": "^22.0.0-alpha6",
-    "@vaadin/virtual-list": "^22.0.0-alpha6"
+    "@vaadin/component-base": "22.0.0-alpha7",
+    "@vaadin/field-base": "22.0.0-alpha7",
+    "@vaadin/input-container": "22.0.0-alpha7",
+    "@vaadin/item": "22.0.0-alpha7",
+    "@vaadin/vaadin-lumo-styles": "22.0.0-alpha7",
+    "@vaadin/vaadin-material-styles": "22.0.0-alpha7",
+    "@vaadin/vaadin-overlay": "22.0.0-alpha7",
+    "@vaadin/vaadin-themable-mixin": "22.0.0-alpha7",
+    "@vaadin/virtual-list": "22.0.0-alpha7"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/dialog": "^22.0.0-alpha6",
-    "@vaadin/polymer-legacy-adapter": "^22.0.0-alpha6",
+    "@vaadin/dialog": "22.0.0-alpha7",
+    "@vaadin/polymer-legacy-adapter": "22.0.0-alpha7",
     "@vaadin/testing-helpers": "^0.3.0",
-    "@vaadin/text-field": "^22.0.0-alpha6",
+    "@vaadin/text-field": "22.0.0-alpha7",
     "lit": "^2.0.0",
     "sinon": "^9.2.0"
   }
