@@ -1,32 +1,35 @@
 {
   "name": "@vaadin/scroller",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "vaadin-scroller",
-  "main": "vaadin-scroller.js",
-  "module": "vaadin-scroller.js",
+  "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/scroller"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-scroller.js",
+  "module": "vaadin-scroller.js",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-scroller",
     "web-components",
     "web-component",
     "polymer"
-  ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/web-components/issues"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "src",
-    "theme"
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
@@ -38,8 +41,5 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.3.0"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

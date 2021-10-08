@@ -1,14 +1,29 @@
 {
   "name": "@vaadin/vaadin-board",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Polymer element to create flexible responsive layouts and build nice looking dashboard.",
-  "main": "vaadin-board.js",
-  "module": "vaadin-board.js",
+  "license": "https://raw.githubusercontent.com/vaadin/vaadin-board/master/LICENSE.txt",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/vaadin-board"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-board/issues"
+  },
+  "main": "vaadin-board.js",
+  "module": "vaadin-board.js",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
   "keywords": [
     "Vaadin",
     "Board",
@@ -19,22 +34,7 @@
     "web-component",
     "polymer"
   ],
-  "author": "Vaadin Ltd",
-  "license": "https://raw.githubusercontent.com/vaadin/vaadin-board/master/LICENSE.txt",
-  "bugs": {
-    "url": "https://github.com/vaadin/vaadin-board/issues"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "src",
-    "theme"
-  ],
   "dependencies": {
     "@vaadin/board": "^22.0.0-alpha6"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

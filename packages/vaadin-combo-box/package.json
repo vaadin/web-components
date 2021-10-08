@@ -1,13 +1,28 @@
 {
   "name": "@vaadin/vaadin-combo-box",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Web Component for displaying a list of items with filtering",
-  "main": "vaadin-combo-box.js",
+  "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/vaadin-combo-box"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-combo-box/issues"
+  },
+  "main": "vaadin-combo-box.js",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
   "keywords": [
     "Vaadin",
     "combo-box",
@@ -15,22 +30,7 @@
     "web-component",
     "polymer"
   ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/vaadin-combo-box/issues"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "src",
-    "theme"
-  ],
   "dependencies": {
     "@vaadin/combo-box": "^22.0.0-alpha6"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

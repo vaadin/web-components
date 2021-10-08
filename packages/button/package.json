@@ -1,31 +1,34 @@
 {
   "name": "@vaadin/button",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "vaadin-button",
-  "main": "vaadin-button.js",
-  "module": "vaadin-button.js",
+  "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/button"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-button/issues"
+  },
+  "main": "vaadin-button.js",
+  "module": "vaadin-button.js",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
   "keywords": [
     "Vaadin",
     "button",
     "web-components",
     "web-component"
-  ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/vaadin-button/issues"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "src",
-    "theme"
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
@@ -38,8 +41,5 @@
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.3.0",
     "sinon": "^9.2.4"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

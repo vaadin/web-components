@@ -1,32 +1,35 @@
 {
   "name": "@vaadin/virtual-list",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Web Component for displaying a virtual/infinite list of items.",
-  "main": "vaadin-virtual-list.js",
-  "module": "vaadin-virtual-list.js",
+  "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/virtual-list"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-virtual-list.js",
+  "module": "vaadin-virtual-list.js",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
   "keywords": [
     "Vaadin",
     "virtualizer",
     "virtual-list",
     "web-components",
     "web-component"
-  ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/web-components/issues"
-  },
-  "homepage": "https://vaadin.com",
-  "files": [
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "src",
-    "theme"
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
@@ -41,8 +44,5 @@
     "@vaadin/testing-helpers": "^0.3.0",
     "lit": "^2.0.0",
     "sinon": "^9.2.4"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

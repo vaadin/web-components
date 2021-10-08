@@ -1,14 +1,29 @@
 {
   "name": "@vaadin/vaadin-form-layout",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Web component providing configurable responsive layout for form elements",
-  "main": "vaadin-form-layout.js",
-  "module": "vaadin-form-layout.js",
+  "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/vaadin-form-layout"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-form-layout/issues"
+  },
+  "main": "vaadin-form-layout.js",
+  "module": "vaadin-form-layout.js",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
   "keywords": [
     "Vaadin",
     "form-layout",
@@ -16,22 +31,7 @@
     "web-component",
     "polymer"
   ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/vaadin-form-layout/issues"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "src",
-    "theme"
-  ],
   "dependencies": {
     "@vaadin/form-layout": "^22.0.0-alpha6"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

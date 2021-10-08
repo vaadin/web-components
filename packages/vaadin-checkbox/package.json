@@ -1,14 +1,29 @@
 {
   "name": "@vaadin/vaadin-checkbox",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "vaadin-checkbox",
-  "main": "vaadin-checkbox.js",
-  "module": "vaadin-checkbox.js",
+  "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/vaadin-checkbox"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-checkbox/issues"
+  },
+  "main": "vaadin-checkbox.js",
+  "module": "vaadin-checkbox.js",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
   "keywords": [
     "Vaadin",
     "checkbox",
@@ -16,23 +31,8 @@
     "web-component",
     "polymer"
   ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/vaadin-checkbox/issues"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "src",
-    "theme"
-  ],
   "dependencies": {
     "@vaadin/checkbox": "^22.0.0-alpha6",
     "@vaadin/checkbox-group": "^22.0.0-alpha6"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

@@ -1,14 +1,29 @@
 {
   "name": "@vaadin/vaadin-confirm-dialog",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "vaadin-confirm-dialog",
-  "main": "vaadin-confirm-dialog.js",
-  "module": "vaadin-confirm-dialog.js",
+  "license": "https://raw.githubusercontent.com/vaadin/vaadin-confirm-dialog/master/LICENSE",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/vaadin-confirm-dialog"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-confirm-dialog/issues"
+  },
+  "main": "vaadin-confirm-dialog.js",
+  "module": "vaadin-confirm-dialog.js",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-confirm-dialog",
@@ -16,22 +31,7 @@
     "web-component",
     "polymer"
   ],
-  "author": "Vaadin Ltd",
-  "license": "https://raw.githubusercontent.com/vaadin/vaadin-confirm-dialog/master/LICENSE",
-  "bugs": {
-    "url": "https://github.com/vaadin/vaadin-confirm-dialog/issues"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "src",
-    "theme"
-  ],
   "dependencies": {
     "@vaadin/confirm-dialog": "^22.0.0-alpha6"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

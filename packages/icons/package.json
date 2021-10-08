@@ -1,14 +1,31 @@
 {
   "name": "@vaadin/icons",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Collection of 600+ unique icons designed for web applications",
-  "main": "vaadin-icons.js",
-  "module": "vaadin-icons.js",
+  "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/icons"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/icons",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-icons.js",
+  "module": "vaadin-icons.js",
+  "scripts": {
+    "icons": "gulp icons"
+  },
+  "files": [
+    "iconset.js",
+    "vaadin-icons.js",
+    "vaadin-iconset.js"
+  ],
   "keywords": [
     "Vaadin",
     "icons",
@@ -16,20 +33,6 @@
     "web-component",
     "polymer"
   ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/web-components/issues"
-  },
-  "homepage": "https://vaadin.com/icons",
-  "files": [
-    "iconset.js",
-    "vaadin-icons.js",
-    "vaadin-iconset.js"
-  ],
-  "scripts": {
-    "icons": "gulp icons"
-  },
   "dependencies": {
     "@polymer/iron-icon": "^3.0.0",
     "@polymer/iron-iconset-svg": "^3.0.0",
@@ -42,8 +45,5 @@
     "gulp-cli": "^2.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-modify": "^0.1.1"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

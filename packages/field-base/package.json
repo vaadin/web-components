@@ -1,29 +1,32 @@
 {
   "name": "@vaadin/field-base",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Vaadin field base mixins",
-  "main": "index.js",
-  "module": "index.js",
+  "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/field-base"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components"
+  },
+  "main": "index.js",
+  "module": "index.js",
+  "files": [
+    "index.d.ts",
+    "index.js",
+    "src"
+  ],
   "keywords": [
     "Vaadin",
     "web-components",
     "web-component"
-  ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/web-components"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "index.js",
-    "index.d.ts",
-    "src"
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
@@ -34,8 +37,5 @@
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.3.0",
     "sinon": "^9.2.1"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

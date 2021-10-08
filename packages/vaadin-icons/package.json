@@ -1,14 +1,28 @@
 {
   "name": "@vaadin/vaadin-icons",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Collection of 600+ unique icons designed for web applications",
-  "main": "vaadin-icons.js",
-  "module": "vaadin-icons.js",
+  "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/vaadin-icons"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/icons",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-icons/issues"
+  },
+  "main": "vaadin-icons.js",
+  "module": "vaadin-icons.js",
+  "files": [
+    "iconset.js",
+    "vaadin-icons.js",
+    "vaadin-iconset.js"
+  ],
   "keywords": [
     "Vaadin",
     "icons",
@@ -16,21 +30,7 @@
     "web-component",
     "polymer"
   ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/vaadin-icons/issues"
-  },
-  "homepage": "https://vaadin.com/icons",
-  "files": [
-    "iconset.js",
-    "vaadin-icons.js",
-    "vaadin-iconset.js"
-  ],
   "dependencies": {
     "@vaadin/icons": "^22.0.0-alpha6"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
