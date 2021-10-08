@@ -91,6 +91,9 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
+ * @mixes DisabledMixin
+ * @mixes SlotMixin
+ * @mixes FieldMixin
  */
 class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(ElementMixin(PolymerElement))))) {
   static get template() {
@@ -341,6 +344,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
     ];
   }
 
+  /** @protected */
   get slots() {
     return {
       ...super.slots,
