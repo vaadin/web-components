@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
-import '@vaadin/vaadin-template-renderer';
+import '@vaadin/polymer-legacy-adapter';
 import {
   flushGrid,
   getFirstVisibleItem,

@@ -18,7 +18,7 @@ export function processTemplates(component) {
 
   if (component.querySelector('template')) {
     console.warn(
-      `WARNING: <template> inside <${component.localName}> is no longer supported. Import @vaadin/vaadin-template-renderer to enable compatibility (see https://vaad.in/template-renderer)`
+      `WARNING: <template> inside <${component.localName}> is no longer supported. Import @vaadin/polymer-legacy-adapter/template-renderer.js to enable compatibility.`
     );
   }
 }

@@ -5,8 +5,8 @@
   "main": "vaadin-date-picker.js",
   "module": "vaadin-date-picker.js",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/date-picker"
   },
   "keywords": [
@@ -43,9 +43,9 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/testing-helpers": "^0.3.0",
     "@vaadin/dialog": "^22.0.0-alpha6",
-    "@vaadin/vaadin-template-renderer": "^22.0.0-alpha6",
+    "@vaadin/polymer-legacy-adapter": "^22.0.0-alpha6",
+    "@vaadin/testing-helpers": "^0.3.0",
     "sinon": "^9.2.0"
   },
   "publishConfig": {

@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/vaadin-template-renderer';
+import '@vaadin/polymer-legacy-adapter';
 import '../vaadin-notification.js';
 
 registerStyles(

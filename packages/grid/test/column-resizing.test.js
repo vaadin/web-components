@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
-import '@vaadin/vaadin-template-renderer';
+import '@vaadin/polymer-legacy-adapter';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import {
   dragAndDropOver,

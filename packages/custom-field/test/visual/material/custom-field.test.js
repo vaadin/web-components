@@ -12,7 +12,7 @@ import '@vaadin/password-field/theme/material/vaadin-password-field.js';
 import '@vaadin/select/theme/material/vaadin-select.js';
 import '@vaadin/text-area/theme/material/vaadin-text-area.js';
 import '@vaadin/text-field/theme/material/vaadin-text-field.js';
-import '@vaadin/vaadin-template-renderer';
+import '@vaadin/polymer-legacy-adapter';
 import '@vaadin/time-picker/theme/material/vaadin-time-picker.js';
 import '../../../theme/material/vaadin-custom-field.js';
 

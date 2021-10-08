@@ -12,7 +12,7 @@ import {
   nextFrame,
   up as mouseUp
 } from '@vaadin/testing-helpers';
-import '@vaadin/vaadin-template-renderer';
+import '@vaadin/polymer-legacy-adapter';
 import { sendKeys } from '@web/test-runner-commands';
 import {
   flushGrid,

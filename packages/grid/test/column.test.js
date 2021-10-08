@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import '@vaadin/vaadin-template-renderer';
+import '@vaadin/polymer-legacy-adapter';
 import {
   flushGrid,
   getBodyCellContent,

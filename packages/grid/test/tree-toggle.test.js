@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { click, fixtureSync } from '@vaadin/testing-helpers';
 import { flushGrid, getBodyCellContent } from './helpers.js';
-import '@vaadin/vaadin-template-renderer';
+import '@vaadin/polymer-legacy-adapter';
 import '../vaadin-grid.js';
 import '../vaadin-grid-tree-toggle.js';
 import '../vaadin-grid-tree-column.js';

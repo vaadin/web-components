@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import '@vaadin/vaadin-template-renderer';
+import '@vaadin/polymer-legacy-adapter';
 import './not-animated-styles.js';
 import { getFirstItem } from './helpers.js';
 import './fixtures/mock-combo-box-template-wrapper.js';

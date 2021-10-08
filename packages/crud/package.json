@@ -5,8 +5,8 @@
   "main": "vaadin-crud.js",
   "module": "vaadin-crud.js",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/crud"
   },
   "keywords": [
@@ -45,8 +45,8 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/polymer-legacy-adapter": "^22.0.0-alpha6",
     "@vaadin/testing-helpers": "^0.3.0",
-    "@vaadin/vaadin-template-renderer": "^22.0.0-alpha6",
     "sinon": "^9.2.1"
   },
   "publishConfig": {

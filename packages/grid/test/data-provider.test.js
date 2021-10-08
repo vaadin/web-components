@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/vaadin-template-renderer';
+import '@vaadin/polymer-legacy-adapter';
 import {
   flushGrid,
   getCellContent,

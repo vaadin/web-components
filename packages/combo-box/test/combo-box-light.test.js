@@ -15,7 +15,7 @@ import {
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import '@vaadin/text-field/vaadin-text-field.js';
-import '@vaadin/vaadin-template-renderer';
+import '@vaadin/polymer-legacy-adapter';
 import { createEventSpy, getFirstItem } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';

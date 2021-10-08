@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/vaadin-template-renderer';
+import '@vaadin/polymer-legacy-adapter';
 import '../vaadin-notification.js';
 
 registerStyles(
