@@ -166,3 +166,5 @@ assertType<GridTreeColumnElement<number>>(new GridTreeColumnElement<number>());
 
 assertType<GridProElement<number>>(new GridProElement<number>());
 assertType<GridProEditColumnElement<number>>(new GridProEditColumnElement<number>());
+
+assertType<VirtualListElement<number>>(new VirtualListElement<number>());
