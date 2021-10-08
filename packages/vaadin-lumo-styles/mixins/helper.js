@@ -53,7 +53,7 @@ export const helper = css`
     order: 1;
   }
 
-  :host([has-helper][theme~='helper-above-field']) [part='input-field'] {
+  :host([has-helper][theme~='helper-above-field']) [part='label'] + * {
     order: 2;
   }
 

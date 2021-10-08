@@ -6,6 +6,7 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/typography.js';
+import { helper } from '@vaadin/vaadin-material-styles/mixins/helper.js';
 import { requiredField } from '@vaadin/vaadin-material-styles/mixins/required-field.js';
 
 const customField = css`
@@ -22,19 +23,13 @@ const customField = css`
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* TODO: remove when the following components are updated to use new indicator:
-  combo-box, date-picker, time-picker, date-time-picker, select. */
-  [part='label']::after {
-    display: none;
-  }
-
   /* align with text-field label */
   :host([has-label]) {
     padding-top: 16px;
   }
 
   /* align with text-field error message */
-  [part='error-message']:not(:empty),
+  :host([has-error-message]) [part='error-message'],
   :host([has-helper]) [part='helper-text'] {
     margin-top: -8px;
   }
@@ -47,26 +42,9 @@ const customField = css`
   :host([focused]:not([invalid])) [part='label'] {
     color: var(--material-primary-text-color);
   }
-
-  /* According to material theme guidelines, helper text should be hidden when error message is set and input is invalid */
-  :host([has-helper][invalid][has-error-message]) [part='helper-text'] {
-    display: none;
-  }
-
-  :host([has-helper]) [part='helper-text']::before {
-    content: '';
-    display: block;
-    height: 6px;
-  }
-
-  [part='helper-text'] {
-    font-size: 0.75em;
-    line-height: 1;
-    color: var(--material-secondary-text-color);
-  }
 `;
 
-registerStyles('vaadin-custom-field', [requiredField, customField], {
+registerStyles('vaadin-custom-field', [requiredField, helper, customField], {
   moduleId: 'material-custom-field'
 });
 

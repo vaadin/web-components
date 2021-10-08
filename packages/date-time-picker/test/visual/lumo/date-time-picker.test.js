@@ -61,6 +61,16 @@ describe('date-time-picker', () => {
       element.helperText = 'Helper text';
       await visualDiff(div, 'helper-text');
     });
+
+    it('helper above field', async () => {
+      element.label = 'Label';
+      element.errorMessage = 'This field is required';
+      element.required = true;
+      element.validate();
+      element.helperText = 'Helper text';
+      element.setAttribute('theme', 'helper-above-field');
+      await visualDiff(div, 'helper-above-field');
+    });
   });
 
   describe('RTL', () => {

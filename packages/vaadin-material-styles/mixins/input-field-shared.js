@@ -30,31 +30,11 @@ const inputField = css`
     line-height: 32px;
   }
 
-  /* TODO: remove when the following components are updated to use new indicator:
-  time-picker, date-time-picker. */
-  [part='label']::after {
-    display: none;
-  }
-
-  /* TODO update when all the field components are updated to use slotted input */
-  :host(:not([has-error-message])) [part='error-message']::before {
-    display: none;
-  }
-
   /* Strange gymnastics to make fields vertically align nicely in most cases
      (no label, with label, without prefix, with prefix, etc.) */
 
   :host([has-label]) {
     padding-top: 24px;
-  }
-
-  [part='label']:empty {
-    display: none;
-  }
-
-  [part='label']:empty::before {
-    content: '\\00a0';
-    position: absolute;
   }
 
   [part='input-field'] {

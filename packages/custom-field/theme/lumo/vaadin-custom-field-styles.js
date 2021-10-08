@@ -8,6 +8,7 @@ import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
+import { helper } from '@vaadin/vaadin-lumo-styles/mixins/helper.js';
 import { requiredField } from '@vaadin/vaadin-lumo-styles/mixins/required-field.js';
 
 const customField = css`
@@ -32,12 +33,6 @@ const customField = css`
     align-items: center;
   }
 
-  /* TODO: remove when the following components are updated to use new indicator:
-  combo-box, date-picker, time-picker, date-time-picker, select. */
-  [part='label']::after {
-    display: none;
-  }
-
   /* align with text-field label */
   :host([has-label]) [part='label'] {
     padding-bottom: calc(0.5em - var(--lumo-space-xs));
@@ -49,7 +44,7 @@ const customField = css`
   }
 
   /* align with text-field error message */
-  :host([invalid]) [part='error-message']:not(:empty)::before {
+  :host([has-error-message]) [part='error-message']::before {
     height: calc(0.4em - var(--lumo-space-xs));
   }
 
@@ -60,49 +55,6 @@ const customField = css`
   :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'],
   :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='helper-text'] {
     color: var(--lumo-body-text-color);
-  }
-
-  :host([has-helper]) [part='helper-text']::before {
-    content: '';
-    display: block;
-    height: 0.4em;
-  }
-
-  [part='helper-text'] {
-    display: block;
-    color: var(--lumo-secondary-text-color);
-    font-size: var(--lumo-font-size-xs);
-    line-height: var(--lumo-line-height-xs);
-    margin-left: calc(var(--lumo-border-radius-m) / 4);
-    transition: color 0.2s;
-  }
-
-  /* Helper text position */
-  :host([has-helper][theme~='helper-above-field']) [part='helper-text']::before {
-    display: none;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='helper-text']::after {
-    content: '';
-    display: block;
-    height: 0.4em;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='label'] {
-    order: 0;
-    padding-bottom: 0.4em;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='helper-text'] {
-    order: 1;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) .inputs-wrapper {
-    order: 2;
-  }
-
-  :host([has-helper][theme~='helper-above-field']) [part='error-message'] {
-    order: 3;
   }
 
   /* Touch device adjustment */
@@ -133,7 +85,7 @@ const customField = css`
   }
 `;
 
-registerStyles('vaadin-custom-field', [requiredField, customField], {
+registerStyles('vaadin-custom-field', [requiredField, helper, customField], {
   moduleId: 'lumo-custom-field'
 });
 

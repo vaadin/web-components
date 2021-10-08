@@ -37,18 +37,6 @@ const inputField = css`
     color: var(--lumo-primary-text-color);
   }
 
-  /* TODO: remove when the following components are updated to use new indicator:
-  time-picker, date-time-picker */
-  [part='label']::after {
-    display: none;
-  }
-
-  /* TODO update when all the field components are updated to use slotted input */
-  :host(:not([has-error-message])) [part='error-message']::before,
-  :host(:not([has-error-message])) [part='error-message']::after {
-    display: none;
-  }
-
   :host([focused]) [part='input-field'] ::slotted(:is(input, textarea)) {
     -webkit-mask-image: none;
     mask-image: none;

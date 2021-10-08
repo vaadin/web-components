@@ -1,5 +1,6 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-material-styles/color.js';
+import { helper } from '@vaadin/vaadin-material-styles/mixins/helper.js';
 import { requiredField } from '@vaadin/vaadin-material-styles/mixins/required-field.js';
 
 const radioGroup = css`
@@ -25,20 +26,6 @@ const radioGroup = css`
     padding-top: 24px;
   }
 
-  /* TODO: remove when <vaadin-date-time-picker> is updated to use new indicator. */
-  [part='label']::after {
-    display: none;
-  }
-
-  [part='label']:empty {
-    display: none;
-  }
-
-  [part='label']:empty::before {
-    content: '\\00a0';
-    position: absolute;
-  }
-
   :host([theme~='vertical']) [part='group-field'] {
     display: flex;
     flex-direction: column;
@@ -52,24 +39,6 @@ const radioGroup = css`
   :host([focused]:not([invalid])) [part='label'] {
     color: var(--material-primary-text-color);
   }
-
-  /* According to material theme guidelines, helper text should be hidden when error message is set and input is invalid */
-  :host([has-helper][invalid][has-error-message]) [part='helper-text'] {
-    display: none;
-  }
-
-  :host([has-helper]) [part='helper-text']::before {
-    content: '';
-    display: block;
-    height: 6px;
-  }
-
-  [part='helper-text'],
-  [part='helper-text'] ::slotted(*) {
-    font-size: 0.75rem;
-    line-height: 1;
-    color: var(--material-secondary-text-color);
-  }
 `;
 
-registerStyles('vaadin-radio-group', [requiredField, radioGroup], { moduleId: 'material-radio-group' });
+registerStyles('vaadin-radio-group', [requiredField, helper, radioGroup], { moduleId: 'material-radio-group' });

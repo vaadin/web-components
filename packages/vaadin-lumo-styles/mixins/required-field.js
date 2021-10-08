@@ -40,9 +40,6 @@ const requiredField = css`
     padding-top: var(--lumo-space-m);
   }
 
-  /* TODO: remove old pseudo element when the following components are updated to use new indicator:
-    combo-box, date-picker, time-picker, date-time-picker, select. */
-  [part='label']::after,
   [part='required-indicator']::after {
     content: var(--lumo-required-field-indicator, '•');
     transition: opacity 0.2s;
@@ -54,12 +51,10 @@ const requiredField = css`
     text-align: center;
   }
 
-  :host([required]:not([has-value])) [part='label']::after,
   :host([required]:not([has-value])) [part='required-indicator']::after {
     opacity: 1;
   }
 
-  :host([invalid]) [part='label']::after,
   :host([invalid]) [part='required-indicator']::after {
     color: var(--lumo-error-text-color);
   }
@@ -74,10 +69,8 @@ const requiredField = css`
     max-height: 5em;
   }
 
-  /* TODO update to check for "has-error-message" when all the field components
-  are updated to use ValidateMixin that only sets that attribute when invalid */
-  [part='error-message']:not(:empty)::before,
-  [part='error-message']:not(:empty)::after {
+  :host([has-error-message]) [part='error-message']::before,
+  :host([has-error-message]) [part='error-message']::after {
     content: '';
     display: block;
     height: 0.4em;
@@ -100,7 +93,6 @@ const requiredField = css`
     padding-right: 0;
   }
 
-  :host([dir='rtl']) [part='label']::after,
   :host([dir='rtl']) [part='required-indicator']::after {
     right: auto;
     left: 0;
