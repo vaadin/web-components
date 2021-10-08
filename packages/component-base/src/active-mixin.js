@@ -3,12 +3,22 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { DisabledMixin } from './disabled-mixin.js';
 import { KeyboardMixin } from './keyboard-mixin.js';
 
-const ActiveMixinImplementation = (superclass) =>
+/**
+ * A mixin to toggle the `active` attribute.
+ *
+ * The attribute is set whenever the user activates the element by a pointer
+ * or presses an activation key on the element from the keyboard.
+ *
+ * The attribute is removed as soon as the element is deactivated
+ * by the pointer or by releasing the activation key.
+ *
+ * @polymerMixin
+ */
+export const ActiveMixin = (superclass) =>
   class ActiveMixinClass extends DisabledMixin(GestureEventListeners(KeyboardMixin(superclass))) {
     /**
      * An array of activation keys.
@@ -97,14 +107,3 @@ const ActiveMixinImplementation = (superclass) =>
       this.toggleAttribute('active', active);
     }
   };
-
-/**
- * A mixin to toggle the `active` attribute.
- *
- * The attribute is set whenever the user activates the element by a pointer
- * or presses an activation key on the element from the keyboard.
- *
- * The attribute is removed as soon as the element is deactivated
- * by the pointer or by releasing the activation key.
- */
-export const ActiveMixin = dedupingMixin(ActiveMixinImplementation);

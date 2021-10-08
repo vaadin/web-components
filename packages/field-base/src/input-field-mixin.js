@@ -7,6 +7,9 @@ import { InputControlMixin } from './input-control-mixin.js';
 
 /**
  * A mixin to provide logic for vaadin-text-field and related components.
+ *
+ * @polymerMixin
+ * @mixes InputControlMixin
  */
 export const InputFieldMixin = (superclass) =>
   class InputFieldMixinClass extends InputControlMixin(superclass) {

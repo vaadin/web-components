@@ -10,6 +10,12 @@ import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
 /**
  * A mixin to provide shared logic for the editable form input controls.
+ *
+ * @polymerMixin
+ * @mixes DelegateFocusMixin
+ * @mixes FieldMixin
+ * @mixes InputConstraintsMixin
+ * @mixes KeyboardMixin
  */
 export const InputControlMixin = (superclass) =>
   class InputControlMixinClass extends DelegateFocusMixin(

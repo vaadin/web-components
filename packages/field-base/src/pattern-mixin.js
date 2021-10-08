@@ -9,6 +9,9 @@ import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
 /**
  * A mixin to provide `pattern` and `preventInvalidInput` properties.
+ *
+ * @polymerMixin
+ * @mixes InputConstraintsMixin
  */
 export const PatternMixin = (superclass) =>
   class PatternMixinClass extends InputConstraintsMixin(superclass) {

@@ -11,6 +11,10 @@ import { ValidateMixin } from './validate-mixin.js';
 
 /**
  * A mixin to provide common field logic: label, error message and helper text.
+ *
+ * @polymerMixin
+ * @mixes LabelMixin
+ * @mixes ValidateMixin
  */
 export const FieldMixin = (superclass) =>
   class FieldMixinClass extends ValidateMixin(LabelMixin(superclass)) {
@@ -48,6 +52,7 @@ export const FieldMixin = (superclass) =>
       };
     }
 
+    /** @protected */
     get slots() {
       return {
         ...super.slots,
