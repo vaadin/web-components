@@ -57,10 +57,6 @@ const customField = css`
     color: var(--lumo-body-text-color);
   }
 
-  :host([has-helper][theme~='helper-above-field']) .inputs-wrapper {
-    order: 2;
-  }
-
   /* Touch device adjustment */
   @media (pointer: coarse) {
     :host(:hover:not([readonly]):not([disabled]):not([focused])) [part='label'] {

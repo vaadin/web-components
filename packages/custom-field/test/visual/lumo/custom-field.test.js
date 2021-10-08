@@ -87,6 +87,16 @@ describe('custom-field', () => {
       element.helperText = 'Helper text';
       await visualDiff(element, 'basic-helper-text');
     });
+
+    it('helper above field', async () => {
+      element.label = 'Label';
+      element.errorMessage = 'This field is required';
+      element.required = true;
+      element.validate();
+      element.helperText = 'Helper text';
+      element.setAttribute('theme', 'helper-above-field');
+      await visualDiff(element, 'helper-above-field');
+    });
   });
 
   describe('alignment', () => {
