@@ -23,6 +23,13 @@ import { TimePickerEventMap, TimePickerI18n } from './interfaces';
  *
  * ### Styling
  *
+ * The following custom properties are available for styling:
+ *
+ * Custom property                           | Description                | Default
+ * ------------------------------------------|----------------------------|---------
+ * `--vaadin-field-default-width`            | Default width of the field | `12em`
+ * `--vaadin-time-picker-overlay-max-height` | Max height of the overlay  | `65vh`
+ *
  * The following shadow DOM parts are available for styling:
  *
  * Part name       | Description

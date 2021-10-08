@@ -61,6 +61,13 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 
  *
  * ### Styling
  *
+ * The following custom properties are available for styling:
+ *
+ * Custom property                    | Description                  | Target element          | Default
+ * -----------------------------------|------------------------------|----------------------------------
+ * `--vaadin-field-default-width`     | Default width of the field   | :host                   | `12em`
+ * `--vaadin-select-text-field-width` | Effective width of the field | `vaadin-select-overlay` |
+ *
  * The following shadow DOM parts are available for styling:
  *
  * Part name | Description
@@ -76,12 +83,6 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 
  * `focused`    | Set when the element is focused | :host
  * `focus-ring` | Set when the element is keyboard focused | :host
  * `readonly`   | Set when the select is read only | :host
- *
- * `<vaadin-select>` element sets these custom CSS properties:
- *
- * Property name | Description | Theme for element
- * --- | --- | ---
- * `--vaadin-select-text-field-width` | Width of the select text field | `vaadin-select-overlay`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *

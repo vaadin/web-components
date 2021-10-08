@@ -97,12 +97,12 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
     return html`
       <style>
         .vaadin-date-time-picker-container {
-          --vaadin-text-field-default-width: auto;
+          --vaadin-field-default-width: auto;
         }
 
         .slots {
           display: flex;
-          --vaadin-text-field-default-width: 12em;
+          --vaadin-field-default-width: 12em;
         }
 
         [part='date'],

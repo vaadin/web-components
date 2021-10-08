@@ -51,6 +51,13 @@ import { SelectEventMap, SelectRenderer } from './interfaces';
  *
  * ### Styling
  *
+ * The following custom properties are available for styling:
+ *
+ * Custom property                    | Description                  | Target element          | Default
+ * -----------------------------------|------------------------------|----------------------------------
+ * `--vaadin-field-default-width`     | Default width of the field   | :host                   | `12em`
+ * `--vaadin-select-text-field-width` | Effective width of the field | `vaadin-select-overlay` |
+ *
  * The following shadow DOM parts are available for styling:
  *
  * Part name | Description
@@ -67,12 +74,6 @@ import { SelectEventMap, SelectRenderer } from './interfaces';
  * `focus-ring` | Set when the element is keyboard focused | :host
  * `readonly` | Set when the select is read only | :host
  *
- * `<vaadin-select>` element sets these custom CSS properties:
- *
- * Property name | Description | Theme for element
- * --- | --- | ---
- * `--vaadin-select-text-field-width` | Width of the select text field | `vaadin-select-overlay`
- *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * ### Internal components
@@ -80,7 +81,6 @@ import { SelectEventMap, SelectRenderer } from './interfaces';
  * In addition to `<vaadin-select>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-select-text-field>` - has the same API as [`<vaadin-text-field>`](#/elements/vaadin-text-field).
  * - `<vaadin-select-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  *
  * Note: the `theme` attribute value set on `<vaadin-select>` is

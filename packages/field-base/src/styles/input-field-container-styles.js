@@ -11,6 +11,6 @@ export const inputFieldContainer = css`
     flex-direction: column;
     min-width: 100%;
     max-width: 100%;
-    width: var(--vaadin-text-field-default-width, 12em);
+    width: var(--vaadin-field-default-width, 12em);
   }
 `;

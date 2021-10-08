@@ -109,9 +109,10 @@ import { ComboBoxDefaultItem, ComboBoxEventMap } from './interfaces';
  *
  * The following custom properties are available for styling:
  *
- * Custom property | Description | Default
- * ----------------|-------------|-------------
- * `--vaadin-combo-box-overlay-max-height` | Property that determines the max height of overlay | `65vh`
+ * Custom property                         | Description                | Default
+ * ----------------------------------------|----------------------------|---------
+ * `--vaadin-field-default-width`          | Default width of the field | `12em`
+ * `--vaadin-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
  *
  * The following shadow DOM parts are available for styling:
  *
