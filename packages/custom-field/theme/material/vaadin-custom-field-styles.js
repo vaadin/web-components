@@ -6,6 +6,7 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/typography.js';
+import { helper } from '@vaadin/vaadin-material-styles/mixins/helper.js';
 import { requiredField } from '@vaadin/vaadin-material-styles/mixins/required-field.js';
 
 const customField = css`
@@ -41,26 +42,9 @@ const customField = css`
   :host([focused]:not([invalid])) [part='label'] {
     color: var(--material-primary-text-color);
   }
-
-  /* According to material theme guidelines, helper text should be hidden when error message is set and input is invalid */
-  :host([has-helper][invalid][has-error-message]) [part='helper-text'] {
-    display: none;
-  }
-
-  :host([has-helper]) [part='helper-text']::before {
-    content: '';
-    display: block;
-    height: 6px;
-  }
-
-  [part='helper-text'] {
-    font-size: 0.75em;
-    line-height: 1;
-    color: var(--material-secondary-text-color);
-  }
 `;
 
-registerStyles('vaadin-custom-field', [requiredField, customField], {
+registerStyles('vaadin-custom-field', [requiredField, helper, customField], {
   moduleId: 'material-custom-field'
 });
 
