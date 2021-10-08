@@ -107,8 +107,7 @@ export const ItemCache = class ItemCache {
   requestedPageCountAllowed(page) {
     if (Object.keys(this.pendingRequests).length) {
       const maxPageCountAllowed = 10;
-      const pendingPageIndexes =
-        Object.keys(this.pendingRequests).map(strInd => parseInt(strInd));
+      const pendingPageIndexes = Object.keys(this.pendingRequests).map(strInd => parseInt(strInd));
       const maxPageIndex = Math.max(pendingPageIndexes);
       const minPageIndex = Math.min(pendingPageIndexes);
       if (page < minPageIndex) {

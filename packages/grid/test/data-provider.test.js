@@ -797,7 +797,7 @@ describe('wrapped grid', () => {
 
     it('should not call data provider when jumping to 0 index', () => {
       // given
-      grid.dataProvider = sinon.spy((params, callback) => {
+      grid.dataProvider = sinon.spy((_, __) => {
         // no-op
         // collects pending pages
       });
@@ -813,7 +813,7 @@ describe('wrapped grid', () => {
 
     it('should not call data provider when too many pending pages', () => {
       // given
-      grid.dataProvider = sinon.spy((params, callback) => {
+      grid.dataProvider = sinon.spy((_, __) => {
         // no-op
         // collects pending pages
       });
@@ -825,6 +825,5 @@ describe('wrapped grid', () => {
       // then
       expect(grid.dataProvider.called).to.be.false;
     });
-
   });
 });
