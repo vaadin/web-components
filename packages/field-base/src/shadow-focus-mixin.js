@@ -9,7 +9,11 @@ import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 
 /**
  * A mixin to forward focus to an element in the shadow DOM.
+ *
  * @polymerMixin
+ * @mixes DelegateFocusMixin
+ * @mixes KeyboardMixin
+ * @mixes TabindexMixin
  */
 export const ShadowFocusMixin = (superClass) =>
   class ShadowFocusMixinClass extends TabindexMixin(DelegateFocusMixin(KeyboardMixin(superClass))) {

@@ -3,15 +3,26 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { DisabledMixin } from './disabled-mixin.js';
 
-const TabindexMixinImplementation = (superclass) =>
+/**
+ * A mixin to provide the `tabindex` attribute.
+ *
+ * By default, the attribute is set to 0 that makes the element focusable.
+ *
+ * The attribute is set to -1 whenever the user disables the element
+ * and restored with the last known value once the element is enabled.
+ *
+ * @polymerMixin
+ * @mixes DisabledMixin
+ */
+export const TabindexMixin = (superclass) =>
   class TabindexMixinClass extends DisabledMixin(superclass) {
     static get properties() {
       return {
         /**
          * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
+         * @protected
          */
         tabindex: {
           type: Number,
@@ -66,13 +77,3 @@ const TabindexMixinImplementation = (superclass) =>
       }
     }
   };
-
-/**
- * A mixin to provide the `tabindex` attribute.
- *
- * By default, the attribute is set to 0 that makes the element focusable.
- *
- * The attribute is set to -1 whenever the user disables the element
- * and restored with the last known value once the element is enabled.
- */
-export const TabindexMixin = dedupingMixin(TabindexMixinImplementation);

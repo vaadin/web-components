@@ -117,6 +117,7 @@ export class PasswordField extends TextField {
     return ['__i18nChanged(i18n.*)'];
   }
 
+  /** @protected */
   get slots() {
     return {
       ...super.slots,

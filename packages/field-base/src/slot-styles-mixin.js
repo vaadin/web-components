@@ -1,3 +1,8 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 
 const stylesMap = new WeakMap();
@@ -31,39 +36,41 @@ function insertStyles(styles, root) {
   }
 }
 
-const SlotStylesMixinImplementation = (superclass) =>
-  class SlotStylesMixinClass extends superclass {
-    /**
-     * List of styles to insert into root.
-     * @protected
-     */
-    get slotStyles() {
-      return {};
-    }
-
-    /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
-
-      this.__applySlotStyles();
-    }
-
-    /** @private */
-    __applySlotStyles() {
-      const root = this.getRootNode();
-      const rootStyles = getRootStyles(root);
-
-      this.slotStyles.forEach((styles) => {
-        if (!rootStyles.has(styles)) {
-          insertStyles(styles, root);
-          rootStyles.add(styles);
-        }
-      });
-    }
-  };
-
 /**
  * Mixin to insert styles into the outer scope to handle slotted components.
  * This is useful e.g. to hide native `<input type="number">` controls.
+ *
+ * @polymerMixin
  */
-export const SlotStylesMixin = dedupingMixin(SlotStylesMixinImplementation);
+export const SlotStylesMixin = dedupingMixin(
+  (superclass) =>
+    class SlotStylesMixinClass extends superclass {
+      /**
+       * List of styles to insert into root.
+       * @protected
+       */
+      get slotStyles() {
+        return {};
+      }
+
+      /** @protected */
+      connectedCallback() {
+        super.connectedCallback();
+
+        this.__applySlotStyles();
+      }
+
+      /** @private */
+      __applySlotStyles() {
+        const root = this.getRootNode();
+        const rootStyles = getRootStyles(root);
+
+        this.slotStyles.forEach((styles) => {
+          if (!rootStyles.has(styles)) {
+            insertStyles(styles, root);
+            rootStyles.add(styles);
+          }
+        });
+      }
+    }
+);

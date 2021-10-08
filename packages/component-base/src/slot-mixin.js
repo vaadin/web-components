@@ -5,45 +5,48 @@
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 
-const SlotMixinImplementation = (superclass) =>
-  class SlotMixinClass extends superclass {
-    /**
-     * List of named slots to initialize.
-     */
-    get slots() {
-      return {};
-    }
-
-    /** @protected */
-    ready() {
-      super.ready();
-      this._connectSlotMixin();
-    }
-
-    /** @private */
-    _connectSlotMixin() {
-      Object.keys(this.slots).forEach((slotName) => {
-        // Ignore labels of nested components, if any
-        const hasContent = this._getDirectSlotChild(slotName) !== undefined;
-
-        if (!hasContent) {
-          const slotFactory = this.slots[slotName];
-          const slotContent = slotFactory();
-          if (slotContent instanceof Element) {
-            slotContent.setAttribute('slot', slotName);
-            this.appendChild(slotContent);
-          }
-        }
-      });
-    }
-
-    /** @protected */
-    _getDirectSlotChild(slotName) {
-      return Array.from(this.children).find((el) => el.slot === slotName);
-    }
-  };
-
 /**
  * A mixin to provide content for named slots defined by component.
+ *
+ * @polymerMixin
  */
-export const SlotMixin = dedupingMixin(SlotMixinImplementation);
+export const SlotMixin = dedupingMixin(
+  (superclass) =>
+    class SlotMixinClass extends superclass {
+      /**
+       * List of named slots to initialize.
+       * @protected
+       */
+      get slots() {
+        return {};
+      }
+
+      /** @protected */
+      ready() {
+        super.ready();
+        this._connectSlotMixin();
+      }
+
+      /** @private */
+      _connectSlotMixin() {
+        Object.keys(this.slots).forEach((slotName) => {
+          // Ignore labels of nested components, if any
+          const hasContent = this._getDirectSlotChild(slotName) !== undefined;
+
+          if (!hasContent) {
+            const slotFactory = this.slots[slotName];
+            const slotContent = slotFactory();
+            if (slotContent instanceof Element) {
+              slotContent.setAttribute('slot', slotName);
+              this.appendChild(slotContent);
+            }
+          }
+        });
+      }
+
+      /** @protected */
+      _getDirectSlotChild(slotName) {
+        return Array.from(this.children).find((el) => el.slot === slotName);
+      }
+    }
+);
