@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 
-import '../vaadin-template-renderer.js';
+import '../template-renderer.js';
 
 import './fixtures/mock-component.js';
 import './fixtures/mock-component-slotted-host.js';

@@ -2,8 +2,8 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { click, fire, fixtureSync } from '@vaadin/testing-helpers';
 
-import '../vaadin-template-renderer.js';
-import { Templatizer } from '../src/vaadin-template-renderer-templatizer.js';
+import '../template-renderer.js';
+import { Templatizer } from '../src/template-renderer-templatizer.js';
 
 import './fixtures/mock-component.js';
 import './fixtures/mock-component-host.js';

@@ -2,9 +2,9 @@ import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '@vaadin/grid';
-import { GridTemplatizer } from '../src/vaadin-template-renderer-grid-templatizer.js';
+import { GridTemplatizer } from '../src/template-renderer-grid-templatizer.js';
 
-import '../vaadin-template-renderer.js';
+import '../template-renderer.js';
 
 import './fixtures/mock-grid-host.js';
 

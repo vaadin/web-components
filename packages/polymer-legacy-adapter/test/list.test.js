@@ -2,7 +2,7 @@ import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, fire, click } from '@vaadin/testing-helpers';
 
-import '../vaadin-template-renderer.js';
+import '../template-renderer.js';
 
 import './fixtures/mock-list-host.js';
 import './fixtures/mock-list.js';
