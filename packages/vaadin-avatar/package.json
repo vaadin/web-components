@@ -1,32 +1,35 @@
 {
   "name": "@vaadin/vaadin-avatar",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "vaadin-avatar",
-  "main": "vaadin-avatar-group.js",
-  "module": "vaadin-avatar-group.js",
+  "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/vaadin-avatar"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-avatar/issues"
+  },
+  "main": "vaadin-avatar-group.js",
+  "module": "vaadin-avatar-group.js",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-avatar",
     "web-components",
     "web-component",
     "polymer"
-  ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/vaadin-avatar/issues"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "src",
-    "theme"
   ],
   "dependencies": {
     "@vaadin/avatar": "^22.0.0-alpha6",
@@ -36,8 +39,5 @@
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.3.0",
     "sinon": "^9.2.1"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

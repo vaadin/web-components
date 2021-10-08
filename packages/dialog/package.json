@@ -1,32 +1,35 @@
 {
   "name": "@vaadin/dialog",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "vaadin-dialog",
-  "main": "vaadin-dialog.js",
-  "module": "vaadin-dialog.js",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/dialog"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-dialog.js",
+  "module": "vaadin-dialog.js",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-dialog",
     "web-components",
     "web-component",
     "polymer"
-  ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/web-components/issues"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "src",
-    "theme"
   ],
   "dependencies": {
     "@polymer/iron-resizable-behavior": "^3.0.0",
@@ -43,8 +46,5 @@
     "@vaadin/testing-helpers": "^0.3.0",
     "@vaadin/text-area": "^22.0.0-alpha6",
     "sinon": "^9.2.1"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

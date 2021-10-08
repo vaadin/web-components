@@ -1,14 +1,33 @@
 {
   "name": "@vaadin/rich-text-editor",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "vaadin-rich-text-editor",
-  "main": "vaadin-rich-text-editor.js",
-  "module": "vaadin-rich-text-editor.js",
+  "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/rich-text-editor/LICENSE",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/rich-text-editor"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-rich-text-editor.js",
+  "module": "vaadin-rich-text-editor.js",
+  "scripts": {
+    "icons": "gulp icons"
+  },
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "vendor"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-rich-text-editor",
@@ -16,22 +35,6 @@
     "web-component",
     "polymer"
   ],
-  "author": "Vaadin Ltd",
-  "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/rich-text-editor/LICENSE",
-  "bugs": {
-    "url": "https://github.com/vaadin/web-components/issues"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "src",
-    "vendor",
-    "theme"
-  ],
-  "scripts": {
-    "icons": "gulp icons"
-  },
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
     "@vaadin/button": "^22.0.0-alpha6",
@@ -50,8 +53,5 @@
     "gulp-cli": "^2.0.1",
     "gulp-iconfont": "^11.0.0",
     "sinon": "^9.2.1"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

@@ -1,14 +1,31 @@
 {
   "name": "@vaadin/vaadin-messages",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "vaadin-messages",
-  "main": "all-imports.js",
-  "module": "all-imports.js",
+  "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/vaadin-messages"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-messages/issues"
+  },
+  "main": "all-imports.js",
+  "module": "all-imports.js",
+  "files": [
+    "all-imports.d.ts",
+    "all-imports.js",
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-messages",
@@ -18,20 +35,6 @@
     "web-component",
     "polymer"
   ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/vaadin-messages/issues"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "all-imports.d.ts",
-    "all-imports.js",
-    "src",
-    "theme"
-  ],
   "dependencies": {
     "@vaadin/message-input": "^22.0.0-alpha6",
     "@vaadin/message-list": "^22.0.0-alpha6"
@@ -40,8 +43,5 @@
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.3.0",
     "sinon": "^9.2.4"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

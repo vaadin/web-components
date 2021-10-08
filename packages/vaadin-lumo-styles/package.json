@@ -1,14 +1,34 @@
 {
   "name": "@vaadin/vaadin-lumo-styles",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Lumo is a design system foundation for modern web applications, used by Vaadin components",
-  "main": "all-imports.js",
-  "module": "all-imports.js",
+  "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/vaadin-lumo-styles"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-lumo-styles/issues"
+  },
+  "main": "all-imports.js",
+  "module": "all-imports.js",
+  "scripts": {
+    "icons": "gulp icons"
+  },
+  "files": [
+    "*.d.ts",
+    "*.js",
+    "mixins/*.d.ts",
+    "mixins/*.js",
+    "presets/*.js",
+    "utilities/*.js"
+  ],
   "keywords": [
     "vaadin",
     "lumo",
@@ -17,23 +37,6 @@
     "web-component",
     "polymer"
   ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/vaadin-lumo-styles/issues"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "*.js",
-    "*.d.ts",
-    "mixins/*.js",
-    "mixins/*.d.ts",
-    "presets/*.js",
-    "utilities/*.js"
-  ],
-  "scripts": {
-    "icons": "gulp icons"
-  },
   "dependencies": {
     "@polymer/iron-icon": "^3.0.0",
     "@polymer/iron-iconset-svg": "^3.0.0",
@@ -47,8 +50,5 @@
     "gulp-iconfont": "^11.0.0",
     "gulp-sort": "^2.0.0",
     "gulp-svgmin": "^3.0.0"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

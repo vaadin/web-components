@@ -1,14 +1,30 @@
 {
   "name": "@vaadin/vaadin-grid",
   "version": "22.0.0-alpha6",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "A free, flexible and high-quality Web Component for showing large amounts of tabular data",
-  "main": "vaadin-grid.js",
-  "module": "vaadin-grid.js",
+  "license": "Apache-2.0",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/vaadin-grid"
   },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-grid/issues"
+  },
+  "main": "vaadin-grid.js",
+  "module": "vaadin-grid.js",
+  "files": [
+    "all-imports.js",
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
   "keywords": [
     "vaadin",
     "elements",
@@ -21,23 +37,7 @@
     "data-grid",
     "data-table"
   ],
-  "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/vaadin/vaadin-grid/issues"
-  },
-  "homepage": "https://vaadin.com/components",
-  "files": [
-    "vaadin-*.d.ts",
-    "vaadin-*.js",
-    "all-imports.js",
-    "src",
-    "theme"
-  ],
   "dependencies": {
     "@vaadin/grid": "^22.0.0-alpha6"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
