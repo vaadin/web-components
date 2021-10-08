@@ -6,7 +6,7 @@
 
 [&lt;vaadin-virtual-list&gt;](https://vaadin.com/docs/latest/ds/components/virtual-list) is a Web Component providing an accessible and customizable virtual-list, part of the [Vaadin components](https://vaadin.com/docs/latest/ds/components).
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-virtual-list)](https://www.npmjs.com/package/@vaadin/vaadin-virtual-list)
+[![npm version](https://badgen.net/npm/v/@vaadin/virtual-list)](https://www.npmjs.com/package/@vaadin/virtual-list)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -28,13 +28,13 @@
 Install `vaadin-virtual-list`:
 
 ```sh
-npm i @vaadin/vaadin-virtual-list --save
+npm i @vaadin/virtual-list --save
 ```
 
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/vaadin-virtual-list/vaadin-virtual-list.js';
+import '@vaadin/virtual-list/vaadin-virtual-list.js';
 ```
 
 ## Getting started
