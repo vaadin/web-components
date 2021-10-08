@@ -25,7 +25,7 @@ export type SelectInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type SelectValueChangedEvent = CustomEvent<{ value: string }>;
 
-export interface SelectElementEventMap {
+export interface SelectCustomEventMap {
   'opened-changed': SelectOpenedChangedEvent;
 
   'invalid-changed': SelectInvalidChangedEvent;
@@ -33,4 +33,4 @@ export interface SelectElementEventMap {
   'value-changed': SelectValueChangedEvent;
 }
 
-export interface SelectEventMap extends HTMLElementEventMap, SelectElementEventMap {}
+export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMap {}

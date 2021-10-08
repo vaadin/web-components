@@ -17,11 +17,11 @@ export interface MessageInputI18n {
  */
 export type MessageInputSubmitEvent = CustomEvent<{ value: string }>;
 
-export interface MessageInputElementEventMap {
+export interface MessageInputCustomEventMap {
   submit: MessageInputSubmitEvent;
 }
 
-export type MessageInputEventMap = HTMLElementEventMap & MessageInputElementEventMap;
+export type MessageInputEventMap = HTMLElementEventMap & MessageInputCustomEventMap;
 
 /**
  * `<vaadin-message-input>` is a Web Component for sending messages.

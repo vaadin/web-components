@@ -19,7 +19,7 @@ export type ListBoxSelectedChangedEvent = CustomEvent<{ value: number }>;
  */
 export type ListBoxSelectedValuesChangedEvent = CustomEvent<{ value: Array<number> }>;
 
-export interface ListBoxElementEventMap {
+export interface ListBoxCustomEventMap {
   'items-changed': ListBoxItemsChangedEvent;
 
   'selected-changed': ListBoxSelectedChangedEvent;
@@ -27,7 +27,7 @@ export interface ListBoxElementEventMap {
   'selected-values-changed': ListBoxSelectedValuesChangedEvent;
 }
 
-export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxElementEventMap {}
+export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxCustomEventMap {}
 
 /**
  * `<vaadin-list-box>` is a Web Component for creating menus.
