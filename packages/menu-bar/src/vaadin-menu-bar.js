@@ -58,7 +58,7 @@ import './vaadin-menu-bar-button.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class MenuBarElement extends ButtonsMixin(InteractionsMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
+class MenuBar extends ButtonsMixin(InteractionsMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -209,6 +209,6 @@ class MenuBarElement extends ButtonsMixin(InteractionsMixin(ElementMixin(Themabl
    */
 }
 
-customElements.define(MenuBarElement.is, MenuBarElement);
+customElements.define(MenuBar.is, MenuBar);
 
-export { MenuBarElement };
+export { MenuBar };

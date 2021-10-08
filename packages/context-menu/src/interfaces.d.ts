@@ -1,4 +1,4 @@
-import { ContextMenuElement } from '../src/vaadin-context-menu.js';
+import { ContextMenu } from '../src/vaadin-context-menu.js';
 
 export interface ContextMenuItem {
   text?: string;
@@ -16,7 +16,7 @@ export interface ContextMenuRendererContext {
 
 export type ContextMenuRenderer = (
   root: HTMLElement,
-  contextMenu?: ContextMenuElement,
+  contextMenu?: ContextMenu,
   context?: ContextMenuRendererContext
 ) => void;
 
@@ -30,7 +30,7 @@ export type ContextMenuOpenedChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type ContextMenuItemSelectedEvent = CustomEvent<{ value: ContextMenuItem }>;
 
-export interface ContextMenuElementEventMap {
+export interface ContextMenuCustomEventMap {
   'opened-changed': ContextMenuOpenedChangedEvent;
 
   'item-selected': ContextMenuItemSelectedEvent;
@@ -40,4 +40,4 @@ export interface ContextMenuElementEventMap {
   'items-outside-click': Event;
 }
 
-export interface ContextMenuEventMap extends HTMLElementEventMap, ContextMenuElementEventMap {}
+export interface ContextMenuEventMap extends HTMLElementEventMap, ContextMenuCustomEventMap {}

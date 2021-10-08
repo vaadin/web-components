@@ -7,7 +7,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 export type ConfirmDialogOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
-export interface ConfirmDialogElementEventMap {
+export interface ConfirmDialogCustomEventMap {
   'opened-changed': ConfirmDialogOpenedChangedEvent;
 
   confirm: Event;
@@ -17,7 +17,7 @@ export interface ConfirmDialogElementEventMap {
   reject: Event;
 }
 
-export type ConfirmDialogEventMap = HTMLElementEventMap & ConfirmDialogElementEventMap;
+export type ConfirmDialogEventMap = HTMLElementEventMap & ConfirmDialogCustomEventMap;
 
 /**
  * `<vaadin-confirm-dialog>` is a Web Component for showing alerts and asking for user confirmation.
@@ -57,7 +57,7 @@ export type ConfirmDialogEventMap = HTMLElementEventMap & ConfirmDialogElementEv
  * @fires {Event} reject - Fired when Reject button was pressed.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class ConfirmDialogElement extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class ConfirmDialog extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
    * True if the overlay is currently displayed.
    */
@@ -127,21 +127,21 @@ declare class ConfirmDialogElement extends ElementMixin(ThemableMixin(HTMLElemen
 
   addEventListener<K extends keyof ConfirmDialogEventMap>(
     type: K,
-    listener: (this: ConfirmDialogElement, ev: ConfirmDialogEventMap[K]) => void,
+    listener: (this: ConfirmDialog, ev: ConfirmDialogEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof ConfirmDialogEventMap>(
     type: K,
-    listener: (this: ConfirmDialogElement, ev: ConfirmDialogEventMap[K]) => void,
+    listener: (this: ConfirmDialog, ev: ConfirmDialogEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-confirm-dialog': ConfirmDialogElement;
+    'vaadin-confirm-dialog': ConfirmDialog;
   }
 }
 
-export { ConfirmDialogElement };
+export { ConfirmDialog };

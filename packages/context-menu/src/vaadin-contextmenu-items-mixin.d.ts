@@ -1,8 +1,8 @@
-import { ItemElement } from '@vaadin/item/src/vaadin-item.js';
+import { Item } from '@vaadin/item/src/vaadin-item.js';
 
-import { ListBoxElement } from '@vaadin/list-box/src/vaadin-list-box.js';
+import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
 
-import { ContextMenuElement } from './vaadin-context-menu.js';
+import { ContextMenu } from './vaadin-context-menu.js';
 
 import { ContextMenuItem, ContextMenuRendererContext } from './interfaces';
 
@@ -11,12 +11,12 @@ import { ContextMenuItem, ContextMenuRendererContext } from './interfaces';
  *
  * @protected
  */
-declare class ContextMenuItemElement extends ItemElement {}
+declare class ContextMenuItemElement extends Item {}
 
 declare global {
   interface HTMLElementTagNameMap {
     'vaadin-context-menu-item': ContextMenuItemElement;
-    'vaadin-context-menu-list-box': ContextMenuListBoxElement;
+    'vaadin-context-menu-list-box': ContextMenuListBox;
   }
 }
 
@@ -25,7 +25,7 @@ declare global {
  *
  * @protected
  */
-declare class ContextMenuListBoxElement extends ListBoxElement {}
+declare class ContextMenuListBox extends ListBox {}
 
 declare function ItemsMixin<T extends new (...args: any[]) => {}>(base: T): T & ItemsMixinConstructor;
 
@@ -68,7 +68,7 @@ interface ItemsMixin {
 
   __forwardFocus(): void;
 
-  __itemsRenderer(root: HTMLElement, menu: ContextMenuElement, context: ContextMenuRendererContext): void;
+  __itemsRenderer(root: HTMLElement, menu: ContextMenu, context: ContextMenuRendererContext): void;
 }
 
 export { ItemsMixin, ItemsMixinConstructor };

@@ -41,7 +41,7 @@ import { IconSvgLiteral } from './vaadin-icon-svg.js';
  * }
  * ```
  */
-declare class IconElement extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class Icon extends ThemableMixin(ElementMixin(HTMLElement)) {
   /**
    * The name of the icon to use. The name should be of the form:
    * `iconset_name:icon_name`. When using `vaadin-icons` it is possible
@@ -67,8 +67,8 @@ declare class IconElement extends ThemableMixin(ElementMixin(HTMLElement)) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-icon': IconElement;
+    'vaadin-icon': Icon;
   }
 }
 
-export { IconElement };
+export { Icon };

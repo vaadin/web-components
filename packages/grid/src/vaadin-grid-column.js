@@ -234,7 +234,7 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * @return {!GridElement | undefined}
+     * @return {!Grid | undefined}
      * @protected
      */
     _findHostGrid() {
@@ -248,7 +248,7 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /**
-     * @return {!GridElement | undefined}
+     * @return {!Grid | undefined}
      * @protected
      */
     get _grid() {
@@ -645,7 +645,7 @@ export const ColumnBaseMixin = (superClass) =>
  * @extends HTMLElement
  * @mixes ColumnBaseMixin
  */
-class GridColumnElement extends ColumnBaseMixin(DirMixin(PolymerElement)) {
+class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
   static get is() {
     return 'vaadin-grid-column';
   }
@@ -740,6 +740,6 @@ class GridColumnElement extends ColumnBaseMixin(DirMixin(PolymerElement)) {
   }
 }
 
-customElements.define(GridColumnElement.is, GridColumnElement);
+customElements.define(GridColumn.is, GridColumn);
 
-export { GridColumnElement };
+export { GridColumn };

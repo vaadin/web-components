@@ -36,7 +36,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * - `<vaadin-message-avatar>` - has the same API as [`<vaadin-avatar>`](#/elements/vaadin-avatar).
  */
-declare class MessageElement extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class Message extends ThemableMixin(ElementMixin(HTMLElement)) {
   /**
    * Time of sending the message. It is rendered as-is to the part='time' slot,
    * so the formatting is up to you.
@@ -90,8 +90,8 @@ declare class MessageElement extends ThemableMixin(ElementMixin(HTMLElement)) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-message': MessageElement;
+    'vaadin-message': Message;
   }
 }
 
-export { MessageElement };
+export { Message };

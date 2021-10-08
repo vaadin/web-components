@@ -1,12 +1,12 @@
-import { GridFilter, GridSorter } from '@vaadin/grid';
+import { GridFilterDefinition, GridSorterDefinition } from '@vaadin/grid';
 
 export type CrudDataProviderCallback<T> = (items: Array<T>, size?: number) => void;
 
 export type CrudDataProviderParams = {
   page: number;
   pageSize: number;
-  filters: Array<GridFilter>;
-  sortOrders: Array<GridSorter>;
+  filters: Array<GridFilterDefinition>;
+  sortOrders: Array<GridSorterDefinition>;
 };
 
 export type CrudDataProvider<T> = (params: CrudDataProviderParams, callback: CrudDataProviderCallback<T>) => void;
@@ -85,7 +85,7 @@ export type CrudCancelEvent<T> = CustomEvent<{ item: T }>;
  */
 export type CrudSaveEvent<T> = CustomEvent<{ item: T; new: boolean }>;
 
-export type CrudElementEventMap<T> = {
+export type CrudCustomEventMap<T> = {
   'editor-opened-changed': CrudEditorOpenedChangedEvent;
 
   'edited-item-changed': CrudEditedItemChangedEvent<T>;
@@ -105,4 +105,4 @@ export type CrudElementEventMap<T> = {
   save: CrudSaveEvent<T>;
 };
 
-export type CrudEventMap<T> = HTMLElementEventMap & CrudElementEventMap<T>;
+export type CrudEventMap<T> = HTMLElementEventMap & CrudCustomEventMap<T>;

@@ -52,7 +52,7 @@ import '@vaadin/dialog/src/vaadin-dialog.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class ConfirmDialogElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -264,7 +264,7 @@ class ConfirmDialogElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
     /* c8 ignore next 3 */
     if (typeof licenseChecker === 'function') {
-      licenseChecker(ConfirmDialogElement);
+      licenseChecker(ConfirmDialog);
     }
   }
 
@@ -408,6 +408,6 @@ class ConfirmDialogElement extends ElementMixin(ThemableMixin(PolymerElement)) {
    */
 }
 
-customElements.define(ConfirmDialogElement.is, ConfirmDialogElement);
+customElements.define(ConfirmDialog.is, ConfirmDialog);
 
-export { ConfirmDialogElement };
+export { ConfirmDialog };

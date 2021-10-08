@@ -3,15 +3,15 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ContextMenuElement } from '@vaadin/vaadin-context-menu/src/vaadin-context-menu.js';
+import { ContextMenu } from '@vaadin/vaadin-context-menu/src/vaadin-context-menu.js';
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
  *
- * @extends ContextMenuElement
+ * @extends ContextMenu
  * @protected
  */
-class MenuBarSubmenuElement extends ContextMenuElement {
+class MenuBarSubmenu extends ContextMenu {
   static get is() {
     return 'vaadin-menu-bar-submenu';
   }
@@ -42,4 +42,4 @@ class MenuBarSubmenuElement extends ContextMenuElement {
   }
 }
 
-customElements.define(MenuBarSubmenuElement.is, MenuBarSubmenuElement);
+customElements.define(MenuBarSubmenu.is, MenuBarSubmenu);

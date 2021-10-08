@@ -19,7 +19,7 @@ export type ListBoxSelectedChangedEvent = CustomEvent<{ value: number }>;
  */
 export type ListBoxSelectedValuesChangedEvent = CustomEvent<{ value: Array<number> }>;
 
-export interface ListBoxElementEventMap {
+export interface ListBoxCustomEventMap {
   'items-changed': ListBoxItemsChangedEvent;
 
   'selected-changed': ListBoxSelectedChangedEvent;
@@ -27,7 +27,7 @@ export interface ListBoxElementEventMap {
   'selected-values-changed': ListBoxSelectedValuesChangedEvent;
 }
 
-export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxElementEventMap {}
+export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxCustomEventMap {}
 
 /**
  * `<vaadin-list-box>` is a Web Component for creating menus.
@@ -55,28 +55,28 @@ export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxElementEven
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  * @fires {CustomEvent} selected-values-changed - Fired when the `selectedValues` property changes.
  */
-declare class ListBoxElement extends MultiSelectListMixin(ThemableMixin(ElementMixin(HTMLElement))) {
+declare class ListBox extends MultiSelectListMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   focused: Element | null;
 
   readonly _scrollerElement: HTMLElement;
 
   addEventListener<K extends keyof ListBoxEventMap>(
     type: K,
-    listener: (this: ListBoxElement, ev: ListBoxEventMap[K]) => void,
+    listener: (this: ListBox, ev: ListBoxEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof ListBoxEventMap>(
     type: K,
-    listener: (this: ListBoxElement, ev: ListBoxEventMap[K]) => void,
+    listener: (this: ListBox, ev: ListBoxEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-list-box': ListBoxElement;
+    'vaadin-list-box': ListBox;
   }
 }
 
-export { ListBoxElement };
+export { ListBox };

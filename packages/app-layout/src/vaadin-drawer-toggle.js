@@ -17,7 +17,7 @@ import { Button } from '@vaadin/button/src/vaadin-button.js';
  *
  * @extends Button
  */
-class DrawerToggleElement extends Button {
+class DrawerToggle extends Button {
   static get template() {
     return html`
       <style>
@@ -85,6 +85,6 @@ class DrawerToggleElement extends Button {
   }
 }
 
-customElements.define(DrawerToggleElement.is, DrawerToggleElement);
+customElements.define(DrawerToggle.is, DrawerToggle);
 
-export { DrawerToggleElement };
+export { DrawerToggle };

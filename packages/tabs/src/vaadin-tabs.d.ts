@@ -18,13 +18,13 @@ export type TabsItemsChangedEvent = CustomEvent<{ value: Array<Element> }>;
  */
 export type TabsSelectedChangedEvent = CustomEvent<{ value: number }>;
 
-export interface TabsElementEventMap {
+export interface TabsCustomEventMap {
   'items-changed': TabsItemsChangedEvent;
 
   'selected-changed': TabsSelectedChangedEvent;
 }
 
-export interface TabsEventMap extends HTMLElementEventMap, TabsElementEventMap {}
+export interface TabsEventMap extends HTMLElementEventMap, TabsCustomEventMap {}
 
 /**
  * `<vaadin-tabs>` is a Web Component for easy switching between different views.
@@ -60,7 +60,7 @@ export interface TabsEventMap extends HTMLElementEventMap, TabsElementEventMap {
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  */
-declare class TabsElement extends ElementMixin(ListMixin(ThemableMixin(HTMLElement))) {
+declare class Tabs extends ElementMixin(ListMixin(ThemableMixin(HTMLElement))) {
   readonly _scrollerElement: HTMLElement;
 
   /**
@@ -77,21 +77,21 @@ declare class TabsElement extends ElementMixin(ListMixin(ThemableMixin(HTMLEleme
 
   addEventListener<K extends keyof TabsEventMap>(
     type: K,
-    listener: (this: TabsElement, ev: TabsEventMap[K]) => void,
+    listener: (this: Tabs, ev: TabsEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof TabsEventMap>(
     type: K,
-    listener: (this: TabsElement, ev: TabsEventMap[K]) => void,
+    listener: (this: Tabs, ev: TabsEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-tabs': TabsElement;
+    'vaadin-tabs': Tabs;
   }
 }
 
-export { TabsElement };
+export { Tabs };

@@ -34,7 +34,7 @@ export type DatePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type DatePickerValueChangedEvent = CustomEvent<{ value: string }>;
 
-export interface DatePickerElementEventMap {
+export interface DatePickerCustomEventMap {
   'opened-changed': DatePickerOpenedChangedEvent;
 
   'invalid-changed': DatePickerInvalidChangedEvent;
@@ -42,4 +42,4 @@ export interface DatePickerElementEventMap {
   'value-changed': DatePickerValueChangedEvent;
 }
 
-export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerElementEventMap {}
+export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCustomEventMap {}

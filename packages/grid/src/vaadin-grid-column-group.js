@@ -41,7 +41,7 @@ import { updateColumnOrders } from './vaadin-grid-helpers.js';
  * @extends HTMLElement
  * @mixes ColumnBaseMixin
  */
-class GridColumnGroupElement extends ColumnBaseMixin(PolymerElement) {
+class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   static get is() {
     return 'vaadin-grid-column-group';
   }
@@ -276,8 +276,8 @@ class GridColumnGroupElement extends ColumnBaseMixin(PolymerElement) {
   }
 
   /**
-   * @param {!GridColumnGroupElement} el
-   * @return {!Array<!GridColumnElement>}
+   * @param {!GridColumnGroup} el
+   * @return {!Array<!GridColumn>}
    * @protected
    */
   _getChildColumns(el) {
@@ -315,6 +315,6 @@ class GridColumnGroupElement extends ColumnBaseMixin(PolymerElement) {
   }
 }
 
-customElements.define(GridColumnGroupElement.is, GridColumnGroupElement);
+customElements.define(GridColumnGroup.is, GridColumnGroup);
 
-export { GridColumnGroupElement };
+export { GridColumnGroup };

@@ -29,14 +29,14 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  */
-declare class TabElement extends ElementMixin(ThemableMixin(ItemMixin(HTMLElement))) {
+declare class Tab extends ElementMixin(ThemableMixin(ItemMixin(HTMLElement))) {
   _onKeyup(event: KeyboardEvent): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-tab': TabElement;
+    'vaadin-tab': Tab;
   }
 }
 
-export { TabElement };
+export { Tab };

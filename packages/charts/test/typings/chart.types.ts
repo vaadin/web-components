@@ -1,4 +1,4 @@
-import { Axis, Chart, Point, Series } from 'highcharts';
+import { Axis, Chart as HighchartsChart, Point, Series } from 'highcharts';
 import '../../vaadin-chart.js';
 import {
   ChartAddSeriesEvent,
@@ -39,74 +39,74 @@ const chart = document.createElement('vaadin-chart');
 
 chart.addEventListener('chart-add-series', (event) => {
   assertType<ChartAddSeriesEvent>(event);
-  assertType<Chart>(event.detail.chart);
-  assertType<Chart>(event.detail.originalEvent.target);
+  assertType<HighchartsChart>(event.detail.chart);
+  assertType<HighchartsChart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-after-export', (event) => {
   assertType<ChartAfterExportEvent>(event);
-  assertType<Chart>(event.detail.chart);
-  assertType<Chart>(event.detail.originalEvent.target);
+  assertType<HighchartsChart>(event.detail.chart);
+  assertType<HighchartsChart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-after-print', (event) => {
   assertType<ChartAfterPrintEvent>(event);
-  assertType<Chart>(event.detail.chart);
-  assertType<Chart>(event.detail.originalEvent.target);
+  assertType<HighchartsChart>(event.detail.chart);
+  assertType<HighchartsChart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-before-export', (event) => {
   assertType<ChartBeforeExportEvent>(event);
-  assertType<Chart>(event.detail.chart);
-  assertType<Chart>(event.detail.originalEvent.target);
+  assertType<HighchartsChart>(event.detail.chart);
+  assertType<HighchartsChart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-before-print', (event) => {
   assertType<ChartBeforePrintEvent>(event);
-  assertType<Chart>(event.detail.chart);
-  assertType<Chart>(event.detail.originalEvent.target);
+  assertType<HighchartsChart>(event.detail.chart);
+  assertType<HighchartsChart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-click', (event) => {
   assertType<ChartClickEvent>(event);
-  assertType<Chart>(event.detail.chart);
-  assertType<Chart>(event.detail.originalEvent.target);
+  assertType<HighchartsChart>(event.detail.chart);
+  assertType<HighchartsChart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-drilldown', (event) => {
   assertType<ChartDrilldownEvent>(event);
-  assertType<Chart>(event.detail.chart);
-  assertType<Chart>(event.detail.originalEvent.target);
+  assertType<HighchartsChart>(event.detail.chart);
+  assertType<HighchartsChart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-drillup', (event) => {
   assertType<ChartDrillupEvent>(event);
-  assertType<Chart>(event.detail.chart);
-  assertType<Chart>(event.detail.originalEvent.target);
+  assertType<HighchartsChart>(event.detail.chart);
+  assertType<HighchartsChart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-drillupall', (event) => {
   assertType<ChartDrillupallEvent>(event);
-  assertType<Chart>(event.detail.chart);
-  assertType<Chart>(event.detail.originalEvent.target);
+  assertType<HighchartsChart>(event.detail.chart);
+  assertType<HighchartsChart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-load', (event) => {
   assertType<ChartLoadEvent>(event);
-  assertType<Chart>(event.detail.chart);
-  assertType<Chart>(event.detail.originalEvent.target);
+  assertType<HighchartsChart>(event.detail.chart);
+  assertType<HighchartsChart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-redraw', (event) => {
   assertType<ChartRedrawEvent>(event);
-  assertType<Chart>(event.detail.chart);
-  assertType<Chart>(event.detail.originalEvent.target);
+  assertType<HighchartsChart>(event.detail.chart);
+  assertType<HighchartsChart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('chart-selection', (event) => {
   assertType<ChartSelectionEvent>(event);
-  assertType<Chart>(event.detail.chart);
-  assertType<Chart>(event.detail.originalEvent.target);
+  assertType<HighchartsChart>(event.detail.chart);
+  assertType<HighchartsChart>(event.detail.originalEvent.target);
 });
 
 chart.addEventListener('series-after-animate', (event) => {

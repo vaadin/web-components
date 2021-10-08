@@ -36,7 +36,7 @@ import { LoginEventMap } from './interfaces';
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.
  */
-declare class LoginOverlayElement extends ElementMixin(ThemableMixin(LoginMixin(HTMLElement))) {
+declare class LoginOverlay extends ElementMixin(ThemableMixin(LoginMixin(HTMLElement))) {
   /**
    * Defines the application description
    */
@@ -54,21 +54,21 @@ declare class LoginOverlayElement extends ElementMixin(ThemableMixin(LoginMixin(
 
   addEventListener<K extends keyof LoginEventMap>(
     type: K,
-    listener: (this: LoginOverlayElement, ev: LoginEventMap[K]) => void,
+    listener: (this: LoginOverlay, ev: LoginEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof LoginEventMap>(
     type: K,
-    listener: (this: LoginOverlayElement, ev: LoginEventMap[K]) => void,
+    listener: (this: LoginOverlay, ev: LoginEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-login-overlay': LoginOverlayElement;
+    'vaadin-login-overlay': LoginOverlay;
   }
 }
 
-export { LoginOverlayElement };
+export { LoginOverlay };

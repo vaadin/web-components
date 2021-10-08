@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { GridElement } from '@vaadin/grid/src/vaadin-grid.js';
-import { GridColumnElement } from '@vaadin/grid/src/vaadin-grid-column.js';
+import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
+import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import { flushGrid, infiniteDataProvider } from './helpers.js';
 import '../vaadin-grid-pro.js';
@@ -40,12 +40,12 @@ describe('basic features', () => {
     flushGrid(grid);
   });
 
-  it('should extend GridElement', () => {
-    expect(grid instanceof GridElement).to.be.true;
+  it('should extend Grid', () => {
+    expect(grid instanceof Grid).to.be.true;
   });
 
   it('should be possible to use grid modules for defining content and layout', () => {
-    expect(column instanceof GridColumnElement).to.be.true;
+    expect(column instanceof GridColumn).to.be.true;
     expect(grid.querySelectorAll('vaadin-grid-cell-content').length).to.above(0);
   });
 

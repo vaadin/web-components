@@ -43,7 +43,7 @@ export interface MessageListItem {
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  */
-declare class MessageListElement extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class MessageList extends ThemableMixin(ElementMixin(HTMLElement)) {
   /**
    * An array of objects which will be rendered as messages.
    * The message objects can have the following properties:
@@ -66,8 +66,8 @@ declare class MessageListElement extends ThemableMixin(ElementMixin(HTMLElement)
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-message-list': MessageListElement;
+    'vaadin-message-list': MessageList;
   }
 }
 
-export { MessageListElement };
+export { MessageList };

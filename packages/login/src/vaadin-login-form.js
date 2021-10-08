@@ -50,7 +50,7 @@ import { LoginMixin } from './vaadin-login-mixin.js';
  * @mixes ThemableMixin
  * @mixes LoginMixin
  */
-class LoginFormElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -203,6 +203,6 @@ class LoginFormElement extends LoginMixin(ElementMixin(ThemableMixin(PolymerElem
   }
 }
 
-customElements.define(LoginFormElement.is, LoginFormElement);
+customElements.define(LoginForm.is, LoginForm);
 
-export { LoginFormElement };
+export { LoginForm };

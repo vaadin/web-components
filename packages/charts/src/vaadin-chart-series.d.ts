@@ -45,7 +45,7 @@ import { ChartSeriesMarkers, ChartSeriesOptions, ChartSeriesValues } from './int
  *  chart.removeChild(seriesToBeRemoved);
  * ```
  */
-declare class ChartSeriesElement extends HTMLElement {
+declare class ChartSeries extends HTMLElement {
   /**
    * Object with the configured options defined and used to create a series.
    */
@@ -150,8 +150,8 @@ declare class ChartSeriesElement extends HTMLElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-chart-series': ChartSeriesElement;
+    'vaadin-chart-series': ChartSeries;
   }
 }
 
-export { ChartSeriesElement };
+export { ChartSeries };

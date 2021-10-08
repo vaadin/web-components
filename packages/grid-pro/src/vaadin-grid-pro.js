@@ -4,7 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
-import { GridElement } from '@vaadin/grid/src/vaadin-grid.js';
+import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 
@@ -41,10 +41,10 @@ import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  *
- * @extends GridElement
+ * @extends Grid
  * @mixes InlineEditingMixin
  */
-class GridProElement extends InlineEditingMixin(GridElement) {
+class GridPro extends InlineEditingMixin(Grid) {
   static get is() {
     return 'vaadin-grid-pro';
   }
@@ -58,11 +58,11 @@ class GridProElement extends InlineEditingMixin(GridElement) {
     const devModeCallback = window.Vaadin.developmentModeCallback;
     const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
     if (typeof licenseChecker === 'function') {
-      licenseChecker(GridProElement);
+      licenseChecker(GridPro);
     }
   }
 }
 
-customElements.define(GridProElement.is, GridProElement);
+customElements.define(GridPro.is, GridPro);
 
-export { GridProElement };
+export { GridPro };

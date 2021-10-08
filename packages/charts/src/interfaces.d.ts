@@ -1,4 +1,12 @@
-import { Axis, Chart, ExtremesObject, Point, PointOptionsObject, Series, SeriesOptionsType } from 'highcharts';
+import {
+  Axis,
+  Chart as HighchartsChart,
+  ExtremesObject,
+  Point,
+  PointOptionsObject,
+  Series,
+  SeriesOptionsType
+} from 'highcharts';
 
 export type ChartCategories = Array<string> | { [key: number]: string };
 
@@ -25,7 +33,7 @@ export type ChartSeriesValues = Array<number | Array<number> | PointOptionsObjec
 
 export type ChartStacking = 'normal' | 'percent' | null;
 
-export type ChartEvent = { target: Chart; type: string };
+export type ChartEvent = { target: HighchartsChart; type: string };
 
 export type ChartSeriesEvent = { target: Series; type: string };
 
@@ -34,63 +42,63 @@ export type ChartPointEvent = { target: Point; type: string };
 /**
  * Fired when a new series is added.
  */
-export type ChartAddSeriesEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartAddSeriesEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
  * Fired after a chart is exported.
  */
-export type ChartAfterExportEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartAfterExportEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
  * Fired after a chart is printed.
  */
-export type ChartAfterPrintEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartAfterPrintEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
  * Fired before a chart is exported.
  */
-export type ChartBeforeExportEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartBeforeExportEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
  * Fired before a chart is printed.
  */
-export type ChartBeforePrintEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartBeforePrintEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when clicking on the plot background.
  */
-export type ChartClickEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartClickEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when the chart has finished loading.
  */
-export type ChartLoadEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartLoadEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when drilldown point is clicked.
  */
-export type ChartDrilldownEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartDrilldownEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when drilling up from a drilldown series.
  */
-export type ChartDrillupEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartDrillupEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
  * Fired after all the series has been drilled up if chart has multiple drilldown series.
  */
-export type ChartDrillupallEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartDrillupallEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when the chart is redraw. Can be called after a `Chart.configuration.redraw()`
  * or after an axis, series or point is modified with the `redraw` option set to `true`.
  */
-export type ChartRedrawEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartRedrawEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when an area of the chart has been selected.
  */
-export type ChartSelectionEvent = CustomEvent<{ chart: Chart; originalEvent: ChartEvent }>;
+export type ChartSelectionEvent = CustomEvent<{ chart: HighchartsChart; originalEvent: ChartEvent }>;
 
 /**
  * Fired when the series has finished its initial animation.
@@ -194,7 +202,7 @@ export type ChartYaxesExtremesSetEvent = CustomEvent<{
   };
 }>;
 
-export interface ChartElementEventMap {
+export interface ChartCustomEventMap {
   'chart-add-series': ChartAddSeriesEvent;
 
   'chart-after-export': ChartAfterExportEvent;
@@ -256,4 +264,4 @@ export interface ChartElementEventMap {
   'yaxes-extremes-set': ChartYaxesExtremesSetEvent;
 }
 
-export type ChartEventMap = HTMLElementEventMap & ChartElementEventMap;
+export type ChartEventMap = HTMLElementEventMap & ChartCustomEventMap;

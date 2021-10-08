@@ -49,7 +49,7 @@ import { UploadEventMap, UploadFile, UploadI18n, UploadMethod } from './interfac
  * @fires {CustomEvent} upload-retry - Fired when retry upload is requested.
  * @fires {CustomEvent} upload-abort - Fired when upload abort is requested.
  */
-declare class UploadElement extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class Upload extends ThemableMixin(ElementMixin(HTMLElement)) {
   /**
    * Define whether the element supports dropping files on it for uploading.
    * By default it's enabled in desktop and disabled in touch devices
@@ -251,21 +251,21 @@ declare class UploadElement extends ThemableMixin(ElementMixin(HTMLElement)) {
 
   addEventListener<K extends keyof UploadEventMap>(
     type: K,
-    listener: (this: UploadElement, ev: UploadEventMap[K]) => void,
+    listener: (this: Upload, ev: UploadEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof UploadEventMap>(
     type: K,
-    listener: (this: UploadElement, ev: UploadEventMap[K]) => void,
+    listener: (this: Upload, ev: UploadEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-upload': UploadElement;
+    'vaadin-upload': Upload;
   }
 }
 
-export { UploadElement };
+export { Upload };

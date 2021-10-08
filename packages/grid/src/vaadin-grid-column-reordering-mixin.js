@@ -192,7 +192,7 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /**
-     * @return {!Array<!GridColumnElement>}
+     * @return {!Array<!GridColumn>}
      * @protected
      */
     _getColumnsInOrder() {
@@ -280,7 +280,7 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /**
-     * @param {!GridColumnElement} column
+     * @param {!GridColumn} column
      * @param {string} status
      * @protected
      */
@@ -309,8 +309,8 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /**
-     * @param {GridColumnElement | undefined} column1
-     * @param {GridColumnElement | undefined} column2
+     * @param {GridColumn | undefined} column1
+     * @param {GridColumn | undefined} column2
      * @return {boolean | undefined}
      * @protected
      */
@@ -324,7 +324,7 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /**
-     * @param {!GridColumnElement} targetColumn
+     * @param {!GridColumn} targetColumn
      * @param {number} clientX
      * @return {boolean}
      * @protected
@@ -345,8 +345,8 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /**
-     * @param {!GridColumnElement} column1
-     * @param {!GridColumnElement} column2
+     * @param {!GridColumn} column1
+     * @param {!GridColumn} column2
      * @protected
      */
     _swapColumnOrders(column1, column2) {
@@ -359,8 +359,8 @@ export const ColumnReorderingMixin = (superClass) =>
 
     /**
      * @param {HTMLElement | undefined} targetCell
-     * @param {GridColumnElement} draggedColumn
-     * @return {GridColumnElement | undefined}
+     * @param {GridColumn} draggedColumn
+     * @return {GridColumn | undefined}
      * @protected
      */
     _getTargetColumn(targetCell, draggedColumn) {

@@ -28,7 +28,7 @@ import { AvatarI18n } from './interfaces';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  */
-declare class AvatarElement extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class Avatar extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
    * The path to the image
    */
@@ -67,8 +67,8 @@ declare class AvatarElement extends ElementMixin(ThemableMixin(HTMLElement)) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-avatar': AvatarElement;
+    'vaadin-avatar': Avatar;
   }
 }
 
-export { AvatarElement };
+export { Avatar };

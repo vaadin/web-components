@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { AvatarElement } from '@vaadin/avatar/src/vaadin-avatar.js';
+import { Avatar } from '@vaadin/avatar/src/vaadin-avatar.js';
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
@@ -20,13 +20,13 @@ registerStyles(
 /**
  * An element used internally by `<vaadin-message>`. Not intended to be used separately.
  *
- * @extends AvatarElement
+ * @extends Avatar
  * @private
  */
-class MessageAvatarElement extends AvatarElement {
+class MessageAvatar extends Avatar {
   static get is() {
     return 'vaadin-message-avatar';
   }
 }
 
-customElements.define(MessageAvatarElement.is, MessageAvatarElement);
+customElements.define(MessageAvatar.is, MessageAvatar);

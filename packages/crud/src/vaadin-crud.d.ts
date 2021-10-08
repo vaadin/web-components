@@ -127,7 +127,7 @@ import { CrudDataProvider, CrudEditorPosition, CrudEventMap, CrudI18n } from './
  * @fires {CustomEvent} save - Fired when user wants to save a new or an existing item.
  * @fires {CustomEvent} cancel - Fired when user discards edition.
  */
-declare class CrudElement<Item> extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class Crud<Item> extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
    * A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element
    */
@@ -271,21 +271,21 @@ declare class CrudElement<Item> extends ElementMixin(ThemableMixin(HTMLElement))
 
   addEventListener<K extends keyof CrudEventMap<Item>>(
     type: K,
-    listener: (this: CrudElement<Item>, ev: CrudEventMap<Item>[K]) => void,
+    listener: (this: Crud<Item>, ev: CrudEventMap<Item>[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof CrudEventMap<Item>>(
     type: K,
-    listener: (this: CrudElement<Item>, ev: CrudEventMap<Item>[K]) => void,
+    listener: (this: Crud<Item>, ev: CrudEventMap<Item>[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-crud': CrudElement<any>;
+    'vaadin-crud': Crud<any>;
   }
 }
 
-export { CrudElement };
+export { Crud };

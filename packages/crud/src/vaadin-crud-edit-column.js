@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2021 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import { GridColumnElement } from '@vaadin/grid/src/vaadin-grid-column.js';
+import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 import './vaadin-crud-edit.js';
 
 /**
@@ -21,9 +21,9 @@ import './vaadin-crud-edit.js';
  *    ...
  * ```
  *
- * @extends GridColumnElement
+ * @extends GridColumn
  */
-class CrudEditColumnElement extends GridColumnElement {
+class CrudEditColumn extends GridColumn {
   static get is() {
     return 'vaadin-crud-edit-column';
   }
@@ -80,6 +80,6 @@ class CrudEditColumnElement extends GridColumnElement {
   }
 }
 
-customElements.define(CrudEditColumnElement.is, CrudEditColumnElement);
+customElements.define(CrudEditColumn.is, CrudEditColumn);
 
-export { CrudEditColumnElement };
+export { CrudEditColumn };

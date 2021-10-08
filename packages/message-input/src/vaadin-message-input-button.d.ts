@@ -6,10 +6,10 @@ import { Button } from '@vaadin/button/src/vaadin-button.js';
  * @extends Button
  * @protected
  */
-declare class MessageInputButtonElement extends Button {}
+declare class MessageInputButton extends Button {}
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-message-input-button': MessageInputButtonElement;
+    'vaadin-message-input-button': MessageInputButton;
   }
 }

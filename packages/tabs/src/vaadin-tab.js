@@ -35,7 +35,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @mixes ItemMixin
  */
-class TabElement extends ElementMixin(ThemableMixin(ItemMixin(PolymerElement))) {
+class Tab extends ElementMixin(ThemableMixin(ItemMixin(PolymerElement))) {
   static get template() {
     return html`<slot></slot>`;
   }
@@ -68,6 +68,6 @@ class TabElement extends ElementMixin(ThemableMixin(ItemMixin(PolymerElement))) 
   }
 }
 
-customElements.define(TabElement.is, TabElement);
+customElements.define(Tab.is, Tab);
 
-export { TabElement };
+export { Tab };

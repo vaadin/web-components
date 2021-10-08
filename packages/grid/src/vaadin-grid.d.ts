@@ -26,7 +26,7 @@ import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 
 import { ColumnReorderingMixin } from './vaadin-grid-column-reordering-mixin.js';
 
-import { GridColumnElement } from './vaadin-grid-column.js';
+import { GridColumn } from './vaadin-grid-column.js';
 
 /**
  * Fired when the `activeItem` property changes.
@@ -46,12 +46,12 @@ export type GridCellFocusEvent<TItem> = CustomEvent<{ context: GridEventContext<
 /**
  * Fired when the columns in the grid are reordered.
  */
-export type GridColumnReorderEvent<TItem> = CustomEvent<{ columns: GridColumnElement<TItem>[] }>;
+export type GridColumnReorderEvent<TItem> = CustomEvent<{ columns: GridColumn<TItem>[] }>;
 
 /**
  * Fired when the grid column resize is finished.
  */
-export type GridColumnResizeEvent<TItem> = CustomEvent<{ resizedColumn: GridColumnElement<TItem> }>;
+export type GridColumnResizeEvent<TItem> = CustomEvent<{ resizedColumn: GridColumn<TItem> }>;
 
 /**
  * Fired when the `expandedItems` property changes.
@@ -86,7 +86,7 @@ export type GridLoadingChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type GridSelectedItemsChangedEvent<TItem> = CustomEvent<{ value: TItem[] }>;
 
-export interface GridElementEventMap<TItem> {
+export interface GridCustomEventMap<TItem> {
   'active-item-changed': GridActiveItemChangedEvent<TItem>;
 
   'cell-activate': GridCellActivateEvent<TItem>;
@@ -110,7 +110,7 @@ export interface GridElementEventMap<TItem> {
   'selected-items-changed': GridSelectedItemsChangedEvent<TItem>;
 }
 
-export interface GridEventMap<TItem> extends HTMLElementEventMap, GridElementEventMap<TItem> {}
+export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEventMap<TItem> {}
 
 /**
  * `<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the
@@ -313,7 +313,7 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridElementEve
  * @fires {CustomEvent} loading-changed - Fired when the `loading` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  */
-declare class GridElement<TItem = GridDefaultItem> extends HTMLElement {
+declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
   /**
    * If true, the grid's height is defined by its rows.
    *
@@ -332,10 +332,10 @@ declare class GridElement<TItem = GridDefaultItem> extends HTMLElement {
    * Requests an update for the content of cells.
    *
    * While performing the update, the following renderers are invoked:
-   * - `GridElement.rowDetailsRenderer`
-   * - `GridColumnElement.renderer`
-   * - `GridColumnElement.headerRenderer`
-   * - `GridColumnElement.footerRenderer`
+   * - `Grid.rowDetailsRenderer`
+   * - `GridColumn.renderer`
+   * - `GridColumn.headerRenderer`
+   * - `GridColumn.footerRenderer`
    *
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
@@ -362,18 +362,18 @@ declare class GridElement<TItem = GridDefaultItem> extends HTMLElement {
 
   addEventListener<K extends keyof GridEventMap<TItem>>(
     type: K,
-    listener: (this: GridElement<TItem>, ev: GridEventMap<TItem>[K]) => void,
+    listener: (this: Grid<TItem>, ev: GridEventMap<TItem>[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof GridEventMap<TItem>>(
     type: K,
-    listener: (this: GridElement<TItem>, ev: GridEventMap<TItem>[K]) => void,
+    listener: (this: Grid<TItem>, ev: GridEventMap<TItem>[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
-interface GridElement<TItem = GridDefaultItem>
+interface Grid<TItem = GridDefaultItem>
   extends ElementMixin,
     ThemableMixin,
     ActiveItemMixin<TItem>,
@@ -390,8 +390,8 @@ interface GridElement<TItem = GridDefaultItem>
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid': GridElement<GridDefaultItem>;
+    'vaadin-grid': Grid<GridDefaultItem>;
   }
 }
 
-export { GridElement };
+export { Grid };

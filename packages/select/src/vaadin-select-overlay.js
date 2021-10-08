@@ -24,10 +24,10 @@ registerStyles(
  * @extends OverlayElement
  * @protected
  */
-class SelectOverlayElement extends PositionMixin(OverlayElement) {
+class SelectOverlay extends PositionMixin(OverlayElement) {
   static get is() {
     return 'vaadin-select-overlay';
   }
 }
 
-customElements.define(SelectOverlayElement.is, SelectOverlayElement);
+customElements.define(SelectOverlay.is, SelectOverlay);

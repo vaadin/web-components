@@ -201,7 +201,7 @@ import './vaadin-context-menu-overlay.js';
  * @mixes ItemsMixin
  * @mixes GestureEventListeners
  */
-class ContextMenuElement extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEventListeners(PolymerElement)))) {
+class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEventListeners(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -729,5 +729,5 @@ class ContextMenuElement extends ElementMixin(ThemePropertyMixin(ItemsMixin(Gest
    */
 }
 
-customElements.define(ContextMenuElement.is, ContextMenuElement);
-export { ContextMenuElement };
+customElements.define(ContextMenu.is, ContextMenu);
+export { ContextMenu };

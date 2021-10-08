@@ -54,7 +54,7 @@ const CLASSES = {
  * @extends HTMLElement
  * @mixes ElementMixin
  */
-class BoardRowElement extends ElementMixin(mixinBehaviors([IronResizableBehavior], PolymerElement)) {
+class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -289,6 +289,6 @@ class BoardRowElement extends ElementMixin(mixinBehaviors([IronResizableBehavior
   }
 }
 
-customElements.define(BoardRowElement.is, BoardRowElement);
+customElements.define(BoardRow.is, BoardRow);
 
-export { BoardRowElement };
+export { BoardRow };

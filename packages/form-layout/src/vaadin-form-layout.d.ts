@@ -94,7 +94,7 @@ import { FormLayoutResponsiveStep } from './interfaces';
  * ---|---|---
  * `--vaadin-form-layout-column-spacing` | Length of the spacing between columns | `2em`
  */
-declare class FormLayoutElement extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class FormLayout extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
    * Allows specifying a responsive behavior with the number of columns
    * and the label position depending on the layout width.
@@ -142,8 +142,8 @@ declare class FormLayoutElement extends ElementMixin(ThemableMixin(HTMLElement))
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-form-layout': FormLayoutElement;
+    'vaadin-form-layout': FormLayout;
   }
 }
 
-export { FormLayoutElement };
+export { FormLayout };

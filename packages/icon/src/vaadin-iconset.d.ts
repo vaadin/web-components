@@ -4,11 +4,11 @@ import { IconSvgLiteral } from './vaadin-icon-svg.js';
 /**
  * `<vaadin-iconset>` is a Web Component for creating SVG icon collections.
  */
-declare class IconsetElement extends ElementMixin(HTMLElement) {
+declare class Iconset extends ElementMixin(HTMLElement) {
   /**
    * Create an instance of the iconset.
    */
-  static getIconset(name: string): IconsetElement;
+  static getIconset(name: string): Iconset;
 
   /**
    * The name of the iconset. Every iconset is required to have its own unique name.
@@ -35,8 +35,8 @@ declare class IconsetElement extends ElementMixin(HTMLElement) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-iconset': IconsetElement;
+    'vaadin-iconset': Iconset;
   }
 }
 
-export { IconsetElement };
+export { Iconset };

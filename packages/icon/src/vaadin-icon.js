@@ -6,7 +6,7 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { IconsetElement } from './vaadin-iconset.js';
+import { Iconset } from './vaadin-iconset.js';
 import { ensureSvgLiteral, renderSvg } from './vaadin-icon-svg.js';
 
 const DEFAULT_ICONSET = 'vaadin';
@@ -54,7 +54,7 @@ const DEFAULT_ICONSET = 'vaadin';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
+class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -177,7 +177,7 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
     if (icon) {
       this.__checkDeprecatedIcon(icon);
       const iconsetName = this.__getIconsetName(icon);
-      const iconset = IconsetElement.getIconset(iconsetName);
+      const iconset = Iconset.getIconset(iconsetName);
       const { svg, size } = iconset.applyIcon(icon);
       if (size !== this.size) {
         this.size = size;
@@ -217,6 +217,6 @@ class IconElement extends ThemableMixin(ElementMixin(PolymerElement)) {
   }
 }
 
-customElements.define(IconElement.is, IconElement);
+customElements.define(Icon.is, Icon);
 
-export { IconElement };
+export { Icon };

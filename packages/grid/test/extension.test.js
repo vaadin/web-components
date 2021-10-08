@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { GridElement } from '../src/vaadin-grid.js';
+import { Grid } from '../src/vaadin-grid.js';
 
-customElements.define('vaadin-custom-grid', class CustomGrid extends GridElement {});
+customElements.define('vaadin-custom-grid', class CustomGrid extends Grid {});
 
 describe('extended grid', () => {
   let grid;

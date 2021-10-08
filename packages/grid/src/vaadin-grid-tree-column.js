@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { GridColumnElement } from './vaadin-grid-column.js';
+import { GridColumn } from './vaadin-grid-column.js';
 import './vaadin-grid-tree-toggle.js';
 
 /**
@@ -19,7 +19,7 @@ import './vaadin-grid-tree-toggle.js';
  *    ...
  * ```
  */
-class GridTreeColumnElement extends GridColumnElement {
+class GridTreeColumn extends GridColumn {
   static get is() {
     return 'vaadin-grid-tree-column';
   }
@@ -114,6 +114,6 @@ class GridTreeColumnElement extends GridColumnElement {
   }
 }
 
-customElements.define(GridTreeColumnElement.is, GridTreeColumnElement);
+customElements.define(GridTreeColumn.is, GridTreeColumn);
 
-export { GridTreeColumnElement };
+export { GridTreeColumn };

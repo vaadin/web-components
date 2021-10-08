@@ -17,11 +17,11 @@ export interface MessageInputI18n {
  */
 export type MessageInputSubmitEvent = CustomEvent<{ value: string }>;
 
-export interface MessageInputElementEventMap {
+export interface MessageInputCustomEventMap {
   submit: MessageInputSubmitEvent;
 }
 
-export type MessageInputEventMap = HTMLElementEventMap & MessageInputElementEventMap;
+export type MessageInputEventMap = HTMLElementEventMap & MessageInputCustomEventMap;
 
 /**
  * `<vaadin-message-input>` is a Web Component for sending messages.
@@ -35,7 +35,7 @@ export type MessageInputEventMap = HTMLElementEventMap & MessageInputElementEven
  * <vaadin-message-input></vaadin-message-input>
  * ```
  */
-declare class MessageInputElement extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class MessageInput extends ThemableMixin(ElementMixin(HTMLElement)) {
   /**
    * Current content of the text input field
    */
@@ -67,21 +67,21 @@ declare class MessageInputElement extends ThemableMixin(ElementMixin(HTMLElement
 
   addEventListener<K extends keyof MessageInputEventMap>(
     type: K,
-    listener: (this: MessageInputElement, ev: MessageInputEventMap[K]) => void,
+    listener: (this: MessageInput, ev: MessageInputEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof MessageInputEventMap>(
     type: K,
-    listener: (this: MessageInputElement, ev: MessageInputEventMap[K]) => void,
+    listener: (this: MessageInput, ev: MessageInputEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-message-input': MessageInputElement;
+    'vaadin-message-input': MessageInput;
   }
 }
 
-export { MessageInputElement };
+export { MessageInput };

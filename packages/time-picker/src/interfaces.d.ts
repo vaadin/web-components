@@ -22,10 +22,10 @@ export type TimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type TimePickerValueChangedEvent = CustomEvent<{ value: string }>;
 
-export interface TimePickerElementEventMap {
+export interface TimePickerCustomEventMap {
   'invalid-changed': TimePickerInvalidChangedEvent;
 
   'value-changed': TimePickerValueChangedEvent;
 }
 
-export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerElementEventMap {}
+export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerCustomEventMap {}

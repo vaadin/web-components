@@ -1,17 +1,17 @@
 import { GridDefaultItem, GridSorterDirection } from './interfaces';
 
-import { GridColumnElement } from './vaadin-grid-column.js';
+import { GridColumn } from './vaadin-grid-column.js';
 
 /**
  * Fired when the `direction` property changes.
  */
 export type GridSortColumnDirectionChangedEvent = CustomEvent<{ value: GridSorterDirection }>;
 
-export interface GridSortColumnElementEventMap {
+export interface GridSortColumnCustomEventMap {
   'direction-changed': GridSortColumnDirectionChangedEvent;
 }
 
-export interface GridSortColumnEventMap extends HTMLElementEventMap, GridSortColumnElementEventMap {}
+export interface GridSortColumnEventMap extends HTMLElementEventMap, GridSortColumnCustomEventMap {}
 
 /**
  * `<vaadin-grid-sort-column>` is a helper element for the `<vaadin-grid>`
@@ -28,7 +28,7 @@ export interface GridSortColumnEventMap extends HTMLElementEventMap, GridSortCol
  *
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  */
-declare class GridSortColumnElement<TItem = GridDefaultItem> extends GridColumnElement<TItem> {
+declare class GridSortColumn<TItem = GridDefaultItem> extends GridColumn<TItem> {
   /**
    * JS Path of the property in the item used for sorting the data.
    */
@@ -43,21 +43,21 @@ declare class GridSortColumnElement<TItem = GridDefaultItem> extends GridColumnE
 
   addEventListener<K extends keyof GridSortColumnEventMap>(
     type: K,
-    listener: (this: GridSortColumnElement<TItem>, ev: GridSortColumnEventMap[K]) => void,
+    listener: (this: GridSortColumn<TItem>, ev: GridSortColumnEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof GridSortColumnEventMap>(
     type: K,
-    listener: (this: GridSortColumnElement<TItem>, ev: GridSortColumnEventMap[K]) => void,
+    listener: (this: GridSortColumn<TItem>, ev: GridSortColumnEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid-sort-column': GridSortColumnElement<GridDefaultItem>;
+    'vaadin-grid-sort-column': GridSortColumn<GridDefaultItem>;
   }
 }
 
-export { GridSortColumnElement };
+export { GridSortColumn };

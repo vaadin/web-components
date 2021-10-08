@@ -39,26 +39,26 @@ import { LoginEventMap } from './interfaces';
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.
  */
-declare class LoginFormElement extends ElementMixin(ThemableMixin(LoginMixin(HTMLElement))) {
+declare class LoginForm extends ElementMixin(ThemableMixin(LoginMixin(HTMLElement))) {
   submit(): void;
 
   addEventListener<K extends keyof LoginEventMap>(
     type: K,
-    listener: (this: LoginFormElement, ev: LoginEventMap[K]) => void,
+    listener: (this: LoginForm, ev: LoginEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof LoginEventMap>(
     type: K,
-    listener: (this: LoginFormElement, ev: LoginEventMap[K]) => void,
+    listener: (this: LoginForm, ev: LoginEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-login-form': LoginFormElement;
+    'vaadin-login-form': LoginForm;
   }
 }
 
-export { LoginFormElement };
+export { LoginForm };

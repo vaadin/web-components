@@ -49,7 +49,7 @@ import { MenuBarEventMap, MenuBarI18n, MenuBarItem } from './interfaces';
  *
  * @fires {CustomEvent} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  */
-declare class MenuBarElement extends ButtonsMixin(InteractionsMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
+declare class MenuBar extends ButtonsMixin(InteractionsMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
   /**
    * Defines a hierarchical structure, where root level items represent menu bar buttons,
    * and `children` property configures a submenu with items to be opened below
@@ -104,21 +104,21 @@ declare class MenuBarElement extends ButtonsMixin(InteractionsMixin(ElementMixin
 
   addEventListener<K extends keyof MenuBarEventMap>(
     type: K,
-    listener: (this: MenuBarElement, ev: MenuBarEventMap[K]) => void,
+    listener: (this: MenuBar, ev: MenuBarEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof MenuBarEventMap>(
     type: K,
-    listener: (this: MenuBarElement, ev: MenuBarEventMap[K]) => void,
+    listener: (this: MenuBar, ev: MenuBarEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-menu-bar': MenuBarElement;
+    'vaadin-menu-bar': MenuBar;
   }
 }
 
-export { MenuBarElement };
+export { MenuBar };

@@ -6,16 +6,16 @@ import {
   GridDragStartEvent,
   GridDropEvent,
   GridDropLocation,
-  GridElement,
+  Grid,
   GridExpandedItemsChangedEvent,
   GridItemModel,
   GridLoadingChangedEvent,
   GridSelectedItemsChangedEvent
 } from '@vaadin/grid';
-import { GridColumnElement } from '@vaadin/grid/vaadin-grid-column';
+import { GridColumn } from '@vaadin/grid/vaadin-grid-column';
 import { InlineEditingMixin } from '../../src/vaadin-grid-pro-inline-editing-mixin';
-import { GridProElement } from '../../vaadin-grid-pro';
-import { GridProEditColumnElement } from '../../vaadin-grid-pro-edit-column';
+import { GridPro } from '../../vaadin-grid-pro';
+import { GridProEditColumn } from '../../vaadin-grid-pro-edit-column';
 
 interface TestGridItem {
   testProperty: string;
@@ -23,12 +23,12 @@ interface TestGridItem {
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
-/* GridProElement */
+/* GridPro */
 const genericGrid = document.createElement('vaadin-grid-pro');
-assertType<GridProElement>(genericGrid);
+assertType<GridPro>(genericGrid);
 
-const narrowedGrid = genericGrid as GridProElement<TestGridItem>;
-assertType<GridElement<TestGridItem>>(narrowedGrid);
+const narrowedGrid = genericGrid as GridPro<TestGridItem>;
+assertType<Grid<TestGridItem>>(narrowedGrid);
 assertType<InlineEditingMixin>(narrowedGrid);
 
 narrowedGrid.addEventListener('cell-edit-started', (event) => {
@@ -56,12 +56,12 @@ narrowedGrid.addEventListener('cell-activate', (event) => {
 
 narrowedGrid.addEventListener('column-reorder', (event) => {
   assertType<GridColumnReorderEvent<TestGridItem>>(event);
-  assertType<GridColumnElement<TestGridItem>[]>(event.detail.columns);
+  assertType<GridColumn<TestGridItem>[]>(event.detail.columns);
 });
 
 narrowedGrid.addEventListener('column-resize', (event) => {
   assertType<GridColumnResizeEvent<TestGridItem>>(event);
-  assertType<GridColumnElement<TestGridItem>>(event.detail.resizedColumn);
+  assertType<GridColumn<TestGridItem>>(event.detail.resizedColumn);
 });
 
 narrowedGrid.addEventListener('loading-changed', (event) => {
@@ -90,9 +90,9 @@ narrowedGrid.addEventListener('grid-drop', (event) => {
   assertType<GridDropLocation>(event.detail.dropLocation);
 });
 
-/* GridProEditColumnElement */
+/* GridProEditColumn */
 const genericEditColumn = document.createElement('vaadin-grid-pro-edit-column');
-assertType<GridProEditColumnElement>(genericEditColumn);
+assertType<GridProEditColumn>(genericEditColumn);
 
-const narrowedEditColumn = genericEditColumn as GridProEditColumnElement<TestGridItem>;
-assertType<GridColumnElement<TestGridItem>>(narrowedEditColumn);
+const narrowedEditColumn = genericEditColumn as GridProEditColumn<TestGridItem>;
+assertType<GridColumn<TestGridItem>>(narrowedEditColumn);

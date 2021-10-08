@@ -18,6 +18,7 @@ import { BoardElement } from '@vaadin/vaadin-board';
 import { BoardRowElement } from '@vaadin/vaadin-board/vaadin-board-row';
 import { ButtonElement } from '@vaadin/vaadin-button';
 import { ChartElement } from '@vaadin/vaadin-charts';
+import { ChartSeriesElement } from '@vaadin/vaadin-charts/src/vaadin-chart-series';
 import { CheckboxElement } from '@vaadin/vaadin-checkbox';
 import { CheckboxGroupElement } from '@vaadin/vaadin-checkbox/vaadin-checkbox-group';
 import { ComboBoxElement } from '@vaadin/vaadin-combo-box';
@@ -29,6 +30,7 @@ import { CrudElement } from '@vaadin/vaadin-crud';
 import { CustomFieldElement } from '@vaadin/vaadin-custom-field';
 import { DatePickerElement } from '@vaadin/vaadin-date-picker';
 import { DateTimePickerElement } from '@vaadin/vaadin-date-time-picker';
+import { DetailsElement } from '@vaadin/vaadin-details';
 import { DialogElement } from '@vaadin/vaadin-dialog';
 import { FormLayoutElement } from '@vaadin/vaadin-form-layout';
 import { FormItemElement } from '@vaadin/vaadin-form-layout/vaadin-form-item';
@@ -88,6 +90,7 @@ assertType<HTMLElement>(new BoardElement());
 assertType<HTMLElement>(new BoardRowElement());
 assertType<HTMLElement>(new ButtonElement());
 assertType<HTMLElement>(new ChartElement());
+assertType<HTMLElement>(new ChartSeriesElement());
 assertType<HTMLElement>(new CheckboxElement());
 assertType<HTMLElement>(new CheckboxGroupElement());
 assertType<HTMLElement>(new ComboBoxElement());
@@ -99,6 +102,7 @@ assertType<HTMLElement>(new CrudElement());
 assertType<HTMLElement>(new CustomFieldElement());
 assertType<HTMLElement>(new DatePickerElement());
 assertType<HTMLElement>(new DateTimePickerElement());
+assertType<HTMLElement>(new DetailsElement());
 assertType<HTMLElement>(new DialogElement());
 assertType<HTMLElement>(new FormLayoutElement());
 assertType<HTMLElement>(new FormItemElement());
@@ -145,3 +149,22 @@ assertType<HTMLElement>(new TextAreaElement());
 assertType<HTMLElement>(new TimePickerElement());
 assertType<HTMLElement>(new UploadElement());
 assertType<HTMLElement>(new VirtualListElement());
+
+// Check generic type params are exposed on aliases
+assertType<ComboBoxElement<number>>(new ComboBoxElement<number>());
+assertType<ComboBoxLightElement<number>>(new ComboBoxLightElement<number>());
+
+assertType<CrudElement<number>>(new CrudElement<number>());
+
+assertType<GridElement<number>>(new GridElement<number>());
+assertType<GridColumnElement<number>>(new GridColumnElement<number>());
+assertType<GridColumnGroupElement<number>>(new GridColumnGroupElement<number>());
+assertType<GridFilterColumnElement<number>>(new GridFilterColumnElement<number>());
+assertType<GridSelectionColumnElement<number>>(new GridSelectionColumnElement<number>());
+assertType<GridSortColumnElement<number>>(new GridSortColumnElement<number>());
+assertType<GridTreeColumnElement<number>>(new GridTreeColumnElement<number>());
+
+assertType<GridProElement<number>>(new GridProElement<number>());
+assertType<GridProEditColumnElement<number>>(new GridProEditColumnElement<number>());
+
+assertType<VirtualListElement<number>>(new VirtualListElement<number>());

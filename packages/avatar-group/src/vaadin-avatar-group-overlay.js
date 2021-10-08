@@ -27,10 +27,10 @@ registerStyles(
  * @extends OverlayElement
  * @private
  */
-class AvatarGroupOverlayElement extends OverlayElement {
+class AvatarGroupOverlay extends OverlayElement {
   static get is() {
     return 'vaadin-avatar-group-overlay';
   }
 }
 
-customElements.define(AvatarGroupOverlayElement.is, AvatarGroupOverlayElement);
+customElements.define(AvatarGroupOverlay.is, AvatarGroupOverlay);

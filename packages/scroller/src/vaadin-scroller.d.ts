@@ -11,7 +11,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * </vaadin-scroller>
  * ```
  */
-declare class ScrollerElement extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class Scroller extends ThemableMixin(ElementMixin(HTMLElement)) {
   /**
    * This property indicates the scroll direction. Supported values are `vertical`, `horizontal`, `none`.
    * When `scrollDirection` is undefined scrollbars will be shown in both directions.
@@ -21,8 +21,8 @@ declare class ScrollerElement extends ThemableMixin(ElementMixin(HTMLElement)) {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-scroller': ScrollerElement;
+    'vaadin-scroller': Scroller;
   }
 }
 
-export { ScrollerElement };
+export { Scroller };

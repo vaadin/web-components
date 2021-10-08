@@ -17,7 +17,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ThemableMixin
  */
-class CrudEditElement extends ThemableMixin(PolymerElement) {
+class CrudEdit extends ThemableMixin(PolymerElement) {
   static get template() {
     return html`
       <style>
@@ -57,4 +57,4 @@ class CrudEditElement extends ThemableMixin(PolymerElement) {
    */
 }
 
-window.customElements.define(CrudEditElement.is, CrudEditElement);
+window.customElements.define(CrudEdit.is, CrudEdit);

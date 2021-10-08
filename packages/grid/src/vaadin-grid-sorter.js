@@ -63,7 +63,7 @@ document.head.appendChild($_documentContainer.content);
  *
  * @extends HTMLElement
  */
-class GridSorterElement extends ThemableMixin(DirMixin(PolymerElement)) {
+class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -225,6 +225,6 @@ class GridSorterElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 }
 
-customElements.define(GridSorterElement.is, GridSorterElement);
+customElements.define(GridSorter.is, GridSorter);
 
-export { GridSorterElement };
+export { GridSorter };

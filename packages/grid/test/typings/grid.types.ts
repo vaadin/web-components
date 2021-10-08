@@ -8,9 +8,9 @@ import {
   GridDragAndDropFilter,
   GridDropMode,
   GridEventContext,
-  GridFilter,
+  GridFilterDefinition,
   GridRowDetailsRenderer,
-  GridSorter
+  GridSorterDefinition
 } from '../../src/interfaces';
 import { ActiveItemMixin } from '../../src/vaadin-grid-active-item-mixin';
 import { ArrayDataProviderMixin } from '../../src/vaadin-grid-array-data-provider-mixin';
@@ -23,29 +23,26 @@ import { ScrollMixin } from '../../src/vaadin-grid-scroll-mixin';
 import { SelectionMixin } from '../../src/vaadin-grid-selection-mixin';
 import { SortMixin } from '../../src/vaadin-grid-sort-mixin';
 import { StylingMixin } from '../../src/vaadin-grid-styling-mixin';
-import { GridColumnGroupElement } from '../../vaadin-grid-column-group';
-import { GridFilterColumnElement } from '../../vaadin-grid-filter-column';
-import { GridFilterElement, GridFilterValueChangedEvent } from '../../vaadin-grid-filter.js';
-import {
-  GridSelectionColumnElement,
-  GridSelectionColumnSelectAllChangedEvent
-} from '../../vaadin-grid-selection-column.js';
-import { GridSortColumnDirectionChangedEvent, GridSortColumnElement } from '../../vaadin-grid-sort-column.js';
-import { GridSorterDirectionChangedEvent, GridSorterElement } from '../../vaadin-grid-sorter.js';
-import { GridTreeColumnElement } from '../../vaadin-grid-tree-column';
-import { GridTreeToggleElement, GridTreeToggleExpandedChangedEvent } from '../../vaadin-grid-tree-toggle.js';
+import { GridColumnGroup } from '../../vaadin-grid-column-group';
+import { GridFilterColumn } from '../../vaadin-grid-filter-column';
+import { GridFilter, GridFilterValueChangedEvent } from '../../vaadin-grid-filter.js';
+import { GridSelectionColumn, GridSelectionColumnSelectAllChangedEvent } from '../../vaadin-grid-selection-column.js';
+import { GridSortColumnDirectionChangedEvent, GridSortColumn } from '../../vaadin-grid-sort-column.js';
+import { GridSorterDirectionChangedEvent, GridSorter } from '../../vaadin-grid-sorter.js';
+import { GridTreeColumn } from '../../vaadin-grid-tree-column';
+import { GridTreeToggle, GridTreeToggleExpandedChangedEvent } from '../../vaadin-grid-tree-toggle.js';
 import {
   ColumnBaseMixin,
   GridActiveItemChangedEvent,
   GridCellActivateEvent,
   GridCellFocusEvent,
-  GridColumnElement,
+  GridColumn,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
   GridDragStartEvent,
   GridDropEvent,
   GridDropLocation,
-  GridElement,
+  Grid,
   GridExpandedItemsChangedEvent,
   GridItemModel,
   GridLoadingChangedEvent,
@@ -59,11 +56,11 @@ interface TestGridItem {
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
-/* GridElement */
+/* Grid */
 const genericGrid = document.createElement('vaadin-grid');
-assertType<GridElement>(genericGrid);
+assertType<Grid>(genericGrid);
 
-const narrowedGrid = genericGrid as GridElement<TestGridItem>;
+const narrowedGrid = genericGrid as Grid<TestGridItem>;
 assertType<ElementMixin>(narrowedGrid);
 assertType<ThemableMixin>(narrowedGrid);
 assertType<ActiveItemMixin<TestGridItem>>(narrowedGrid);
@@ -95,12 +92,12 @@ narrowedGrid.addEventListener('cell-focus', (event) => {
 
 narrowedGrid.addEventListener('column-reorder', (event) => {
   assertType<GridColumnReorderEvent<TestGridItem>>(event);
-  assertType<GridColumnElement<TestGridItem>[]>(event.detail.columns);
+  assertType<GridColumn<TestGridItem>[]>(event.detail.columns);
 });
 
 narrowedGrid.addEventListener('column-resize', (event) => {
   assertType<GridColumnResizeEvent<TestGridItem>>(event);
-  assertType<GridColumnElement<TestGridItem>>(event.detail.resizedColumn);
+  assertType<GridColumn<TestGridItem>>(event.detail.resizedColumn);
 });
 
 narrowedGrid.addEventListener('loading-changed', (event) => {
@@ -130,11 +127,11 @@ narrowedGrid.addEventListener('grid-drop', (event) => {
 });
 
 narrowedGrid.dataProvider = (params, callback) => {
-  assertType<GridFilter[]>(params.filters);
+  assertType<GridFilterDefinition[]>(params.filters);
   assertType<number>(params.page);
   assertType<number>(params.pageSize);
   assertType<TestGridItem | undefined>(params.parentItem);
-  assertType<GridSorter[]>(params.sortOrders);
+  assertType<GridSorterDefinition[]>(params.sortOrders);
   assertType<GridDataProviderCallback<TestGridItem>>(callback);
 };
 
@@ -182,28 +179,28 @@ assertType<() => void>(narrowedGrid.recalculateColumnWidths);
 assertType<() => void>(narrowedGrid.requestContentUpdate);
 assertType<() => void>(narrowedGrid.render);
 
-/* GridColumnElement */
+/* GridColumn */
 const genericColumn = document.createElement('vaadin-grid-column');
-assertType<GridColumnElement>(genericColumn);
+assertType<GridColumn>(genericColumn);
 
 const bodyRenderer: GridBodyRenderer<TestGridItem> = (root, column, model) => {
   assertType<HTMLElement>(root);
-  assertType<GridColumnElement>(column);
+  assertType<GridColumn>(column);
   assertType<TestGridItem>(model.item);
 };
 genericColumn.renderer = bodyRenderer;
 
 genericColumn.headerRenderer = (root, column) => {
   assertType<HTMLElement>(root);
-  assertType<GridColumnElement>(column);
+  assertType<GridColumn>(column);
 };
 
 genericColumn.footerRenderer = (root, column) => {
   assertType<HTMLElement>(root);
-  assertType<GridColumnElement>(column);
+  assertType<GridColumn>(column);
 };
 
-const narrowedColumn = genericColumn as GridColumnElement<TestGridItem>;
+const narrowedColumn = genericColumn as GridColumn<TestGridItem>;
 assertType<HTMLElement>(narrowedColumn);
 assertType<ColumnBaseMixin<TestGridItem>>(narrowedColumn);
 
@@ -217,17 +214,17 @@ assertType<GridColumnTextAlign | null | undefined>(narrowedColumn.textAlign);
 assertType<string | null | undefined>(narrowedColumn.path);
 assertType<boolean>(narrowedColumn.autoWidth);
 
-/* GridColumnGroupElement */
+/* GridColumnGroup */
 const genericColumnGroup = document.createElement('vaadin-grid-column-group');
-assertType<GridColumnGroupElement>(genericColumnGroup);
+assertType<GridColumnGroup>(genericColumnGroup);
 
-const narrowedColumnGroup = genericColumnGroup as GridColumnGroupElement<TestGridItem>;
+const narrowedColumnGroup = genericColumnGroup as GridColumnGroup<TestGridItem>;
 assertType<HTMLElement>(narrowedColumnGroup);
 assertType<ColumnBaseMixin<TestGridItem>>(narrowedColumnGroup);
 
-/* GridFilterElement */
+/* GridFilter */
 const filter = document.createElement('vaadin-grid-filter');
-assertType<GridFilterElement>(filter);
+assertType<GridFilter>(filter);
 assertType<HTMLElement>(filter);
 assertType<string | null | undefined>(filter.path);
 assertType<string | null | undefined>(filter.value);
@@ -237,21 +234,21 @@ filter.addEventListener('value-changed', (event) => {
   assertType<string>(event.detail.value);
 });
 
-/* GridFilterColumnElement */
+/* GridFilterColumn */
 const genericFilterColumn = document.createElement('vaadin-grid-filter-column');
-assertType<GridFilterColumnElement>(genericFilterColumn);
+assertType<GridFilterColumn>(genericFilterColumn);
 
-const narrowedFilterColumn = genericFilterColumn as GridFilterColumnElement<TestGridItem>;
-assertType<GridColumnElement<TestGridItem>>(narrowedFilterColumn);
+const narrowedFilterColumn = genericFilterColumn as GridFilterColumn<TestGridItem>;
+assertType<GridColumn<TestGridItem>>(narrowedFilterColumn);
 assertType<string | null | undefined>(narrowedFilterColumn.header);
 assertType<string | null | undefined>(narrowedFilterColumn.path);
 
-/* GridSelectionColumnElement */
+/* GridSelectionColumn */
 const genericSelectionColumn = document.createElement('vaadin-grid-selection-column');
-assertType<GridSelectionColumnElement>(genericSelectionColumn);
+assertType<GridSelectionColumn>(genericSelectionColumn);
 
-const narrowedSelectionColumn = genericSelectionColumn as GridSelectionColumnElement<TestGridItem>;
-assertType<GridColumnElement<TestGridItem>>(narrowedSelectionColumn);
+const narrowedSelectionColumn = genericSelectionColumn as GridSelectionColumn<TestGridItem>;
+assertType<GridColumn<TestGridItem>>(narrowedSelectionColumn);
 
 narrowedSelectionColumn.addEventListener('select-all-changed', (event) => {
   assertType<GridSelectionColumnSelectAllChangedEvent>(event);
@@ -263,12 +260,12 @@ assertType<number>(narrowedSelectionColumn.flexGrow);
 assertType<boolean>(narrowedSelectionColumn.selectAll);
 assertType<boolean>(narrowedSelectionColumn.autoSelect);
 
-/* GridSortColumnElement */
+/* GridSortColumn */
 const genericSortColumn = document.createElement('vaadin-grid-sort-column');
-assertType<GridSortColumnElement>(genericSortColumn);
+assertType<GridSortColumn>(genericSortColumn);
 
-const narrowedSortColumn = genericSortColumn as GridSortColumnElement<TestGridItem>;
-assertType<GridColumnElement<TestGridItem>>(narrowedSortColumn);
+const narrowedSortColumn = genericSortColumn as GridSortColumn<TestGridItem>;
+assertType<GridColumn<TestGridItem>>(narrowedSortColumn);
 assertType<string | null | undefined>(narrowedSortColumn.path);
 assertType<GridSorterDirection | null | undefined>(narrowedSortColumn.direction);
 
@@ -277,9 +274,9 @@ narrowedSortColumn.addEventListener('direction-changed', (event) => {
   assertType<GridSorterDirection>(event.detail.value);
 });
 
-/* GridSorterElement */
+/* GridSorter */
 const sorter = document.createElement('vaadin-grid-sorter');
-assertType<GridSorterElement>(sorter);
+assertType<GridSorter>(sorter);
 
 sorter.addEventListener('direction-changed', (event) => {
   assertType<GridSorterDirectionChangedEvent>(event);
@@ -289,18 +286,18 @@ sorter.addEventListener('direction-changed', (event) => {
 assertType<string | null | undefined>(sorter.path);
 assertType<GridSorterDirection | null | undefined>(sorter.direction);
 
-/* GridTreeColumnElement */
+/* GridTreeColumn */
 const genericTreeColumn = document.createElement('vaadin-grid-tree-column');
-assertType<GridTreeColumnElement>(genericTreeColumn);
+assertType<GridTreeColumn>(genericTreeColumn);
 
-const narrowedTreeColumn = genericTreeColumn as GridTreeColumnElement<TestGridItem>;
-assertType<GridColumnElement<TestGridItem>>(narrowedTreeColumn);
+const narrowedTreeColumn = genericTreeColumn as GridTreeColumn<TestGridItem>;
+assertType<GridColumn<TestGridItem>>(narrowedTreeColumn);
 assertType<string | null | undefined>(narrowedTreeColumn.path);
 assertType<string | null | undefined>(narrowedTreeColumn.itemHasChildrenPath);
 
-/* GridTreeToggleElement */
+/* GridTreeToggle */
 const treeToggle = document.createElement('vaadin-grid-tree-toggle');
-assertType<GridTreeToggleElement>(treeToggle);
+assertType<GridTreeToggle>(treeToggle);
 assertType<ThemableMixin>(treeToggle);
 assertType<number>(treeToggle.level);
 assertType<boolean>(treeToggle.leaf);

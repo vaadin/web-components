@@ -1,4 +1,4 @@
-import { GridColumnElement } from '@vaadin/grid/src/vaadin-grid-column.js';
+import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 
 /**
  * `<vaadin-crud-edit-column>` is a helper element for the `<vaadin-grid>`
@@ -15,7 +15,7 @@ import { GridColumnElement } from '@vaadin/grid/src/vaadin-grid-column.js';
  *    ...
  * ```
  */
-declare class CrudEditColumnElement extends GridColumnElement {
+declare class CrudEditColumn extends GridColumn {
   /**
    * The arial-label for the edit button
    */
@@ -24,8 +24,8 @@ declare class CrudEditColumnElement extends GridColumnElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-crud-edit-column': CrudEditColumnElement;
+    'vaadin-crud-edit-column': CrudEditColumn;
   }
 }
 
-export { CrudEditColumnElement };
+export { CrudEditColumn };

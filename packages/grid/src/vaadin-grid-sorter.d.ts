@@ -12,13 +12,13 @@ import { GridSorterDirection } from './interfaces';
  */
 export type GridSorterDirectionChangedEvent = CustomEvent<{ value: GridSorterDirection }>;
 
-export interface GridSorterElementEventMap {
+export interface GridSorterCustomEventMap {
   'sorter-changed': Event;
 
   'direction-changed': GridSorterDirectionChangedEvent;
 }
 
-export interface GridSorterEventMap extends HTMLElementEventMap, GridSorterElementEventMap {}
+export interface GridSorterEventMap extends HTMLElementEventMap, GridSorterCustomEventMap {}
 
 /**
  * `<vaadin-grid-sorter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,
@@ -59,7 +59,7 @@ export interface GridSorterEventMap extends HTMLElementEventMap, GridSorterEleme
  * @fires {CustomEvent} direction-changed - Fired when the `direction` property changes.
  * @fires {CustomEvent} sorter-changed - Fired when the `path` or `direction` property changes.
  */
-declare class GridSorterElement extends ThemableMixin(DirMixin(HTMLElement)) {
+declare class GridSorter extends ThemableMixin(DirMixin(HTMLElement)) {
   /**
    * JS Path of the property in the item used for sorting the data.
    */
@@ -74,21 +74,21 @@ declare class GridSorterElement extends ThemableMixin(DirMixin(HTMLElement)) {
 
   addEventListener<K extends keyof GridSorterEventMap>(
     type: K,
-    listener: (this: GridSorterElement, ev: GridSorterEventMap[K]) => void,
+    listener: (this: GridSorter, ev: GridSorterEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof GridSorterEventMap>(
     type: K,
-    listener: (this: GridSorterElement, ev: GridSorterEventMap[K]) => void,
+    listener: (this: GridSorter, ev: GridSorterEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid-sorter': GridSorterElement;
+    'vaadin-grid-sorter': GridSorter;
   }
 }
 
-export { GridSorterElement };
+export { GridSorter };

@@ -31,7 +31,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class HorizontalLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class HorizontalLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -67,6 +67,6 @@ class HorizontalLayoutElement extends ElementMixin(ThemableMixin(PolymerElement)
   }
 }
 
-customElements.define(HorizontalLayoutElement.is, HorizontalLayoutElement);
+customElements.define(HorizontalLayout.is, HorizontalLayout);
 
-export { HorizontalLayoutElement };
+export { HorizontalLayout };

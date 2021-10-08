@@ -32,7 +32,7 @@ import './vaadin-board-row.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  */
-class BoardElement extends ElementMixin(mixinBehaviors([IronResizableBehavior], PolymerElement)) {
+class Board extends ElementMixin(mixinBehaviors([IronResizableBehavior], PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -58,7 +58,7 @@ class BoardElement extends ElementMixin(mixinBehaviors([IronResizableBehavior], 
     const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
     /* c8 ignore next 3 */
     if (typeof licenseChecker === 'function') {
-      licenseChecker(BoardElement);
+      licenseChecker(Board);
     }
   }
 
@@ -73,6 +73,6 @@ class BoardElement extends ElementMixin(mixinBehaviors([IronResizableBehavior], 
   }
 }
 
-customElements.define(BoardElement.is, BoardElement);
+customElements.define(Board.is, Board);
 
-export { BoardElement };
+export { Board };

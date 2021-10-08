@@ -22,12 +22,12 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `theme="padding"` | Applies the default amount of CSS padding for the host element (specified by the theme)
  * `theme="spacing"` | Applies the default amount of CSS margin between items (specified by the theme)
  */
-declare class VerticalLayoutElement extends ThemableMixin(ElementMixin(HTMLElement)) {}
+declare class VerticalLayout extends ThemableMixin(ElementMixin(HTMLElement)) {}
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-vertical-layout': VerticalLayoutElement;
+    'vaadin-vertical-layout': VerticalLayout;
   }
 }
 
-export { VerticalLayoutElement };
+export { VerticalLayout };

@@ -20,7 +20,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class ScrollerElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class Scroller extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -68,6 +68,6 @@ class ScrollerElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 }
 
-customElements.define(ScrollerElement.is, ScrollerElement);
+customElements.define(Scroller.is, Scroller);
 
-export { ScrollerElement };
+export { Scroller };

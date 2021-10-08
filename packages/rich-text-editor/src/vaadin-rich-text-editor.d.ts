@@ -75,7 +75,7 @@ import { RichTextEditorEventMap, RichTextEditorI18n } from './interfaces';
  * @fires {CustomEvent} html-value-changed - Fired when the `htmlValue` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class RichTextEditorElement extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class RichTextEditor extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
    * Value is a list of the operations which describe change to the document.
    * Each of those operations describe the change at the current index.
@@ -126,21 +126,21 @@ declare class RichTextEditorElement extends ElementMixin(ThemableMixin(HTMLEleme
 
   addEventListener<K extends keyof RichTextEditorEventMap>(
     type: K,
-    listener: (this: RichTextEditorElement, ev: RichTextEditorEventMap[K]) => void,
+    listener: (this: RichTextEditor, ev: RichTextEditorEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof RichTextEditorEventMap>(
     type: K,
-    listener: (this: RichTextEditorElement, ev: RichTextEditorEventMap[K]) => void,
+    listener: (this: RichTextEditor, ev: RichTextEditorEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-rich-text-editor': RichTextEditorElement;
+    'vaadin-rich-text-editor': RichTextEditor;
   }
 }
 
-export { RichTextEditorElement };
+export { RichTextEditor };

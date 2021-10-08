@@ -30,7 +30,7 @@ import { ColumnBaseMixin } from './vaadin-grid-column.js';
  * column2.renderer = (root, column, model) => { ... };
  * ```
  */
-declare class GridColumnGroupElement extends HTMLElement {
+declare class GridColumnGroup extends HTMLElement {
   /**
    * Flex grow ratio for the column group as the sum of the ratios of its child columns.
    * @attr {number} flex-grow
@@ -43,12 +43,12 @@ declare class GridColumnGroupElement extends HTMLElement {
   readonly width: string | null | undefined;
 }
 
-interface GridColumnGroupElement<TItem = GridDefaultItem> extends ColumnBaseMixin<TItem> {}
+interface GridColumnGroup<TItem = GridDefaultItem> extends ColumnBaseMixin<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-grid-column-group': GridColumnGroupElement<GridDefaultItem>;
+    'vaadin-grid-column-group': GridColumnGroup<GridDefaultItem>;
   }
 }
 
-export { GridColumnGroupElement };
+export { GridColumnGroup };

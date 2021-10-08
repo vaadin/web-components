@@ -11,7 +11,7 @@ export interface VirtualListItemModel<TItem> {
 
 export type VirtualListRenderer<TItem> = (
   root: HTMLElement,
-  virtualList: VirtualListElement<TItem>,
+  virtualList: VirtualList<TItem>,
   model: VirtualListItemModel<TItem>
 ) => void;
 
@@ -36,7 +36,7 @@ export type VirtualListRenderer<TItem> = (
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-declare class VirtualListElement<TItem = VirtualListDefaultItem> extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class VirtualList<TItem = VirtualListDefaultItem> extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
    * Custom function for rendering the content of every item.
    * Receives three arguments:
@@ -81,8 +81,8 @@ declare class VirtualListElement<TItem = VirtualListDefaultItem> extends Element
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-virtual-list': VirtualListElement;
+    'vaadin-virtual-list': VirtualList;
   }
 }
 
-export { VirtualListElement };
+export { VirtualList };

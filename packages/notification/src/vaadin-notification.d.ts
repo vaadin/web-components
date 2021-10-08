@@ -65,7 +65,7 @@ declare class NotificationCard extends ThemableMixin(HTMLElement) {}
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class NotificationElement extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
+declare class Notification extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   /**
    * The duration in milliseconds to show the notification.
    * Set to `0` or a negative number to disable the notification auto-closing.
@@ -120,13 +120,13 @@ declare class NotificationElement extends ThemePropertyMixin(ElementMixin(HTMLEl
 
   addEventListener<K extends keyof NotificationEventMap>(
     type: K,
-    listener: (this: NotificationElement, ev: NotificationEventMap[K]) => void,
+    listener: (this: Notification, ev: NotificationEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
   removeEventListener<K extends keyof NotificationEventMap>(
     type: K,
-    listener: (this: NotificationElement, ev: NotificationEventMap[K]) => void,
+    listener: (this: Notification, ev: NotificationEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 
@@ -150,15 +150,15 @@ declare class NotificationElement extends ThemePropertyMixin(ElementMixin(HTMLEl
    * @param contents the contents to show, either as a string or a Lit template.
    * @param options optional options for customizing the notification.
    */
-  static show(contents: string | TemplateResult, options?: ShowOptions): NotificationElement;
+  static show(contents: string | TemplateResult, options?: ShowOptions): Notification;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
     'vaadin-notification-container': NotificationContainer;
     'vaadin-notification-card': NotificationCard;
-    'vaadin-notification': NotificationElement;
+    'vaadin-notification': Notification;
   }
 }
 
-export { NotificationElement };
+export { Notification };

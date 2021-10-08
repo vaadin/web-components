@@ -12,7 +12,7 @@ import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
  * @extends TextField
  * @private
  */
-class GridProEditTextField extends TextField {
+class GridProEditText extends TextField {
   static get is() {
     return 'vaadin-grid-pro-edit-text-field';
   }
@@ -23,4 +23,4 @@ class GridProEditTextField extends TextField {
   }
 }
 
-customElements.define(GridProEditTextField.is, GridProEditTextField);
+customElements.define(GridProEditText.is, GridProEditText);

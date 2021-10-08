@@ -3,18 +3,18 @@
  * Copyright (c) 2017 - 2021 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import { FormLayoutElement } from '@vaadin/form-layout/src/vaadin-form-layout.js';
+import { FormLayout } from '@vaadin/form-layout/src/vaadin-form-layout.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 
 /**
  * An element used internally by `<vaadin-crud>`. Not intended to be used separately.
  *
- * @extends FormLayoutElement
+ * @extends FormLayout
  * @mixes IncludedMixin
  * @private
  */
-class CrudFormElement extends IncludedMixin(FormLayoutElement) {
+class CrudForm extends IncludedMixin(FormLayout) {
   static get is() {
     return 'vaadin-crud-form';
   }
@@ -104,6 +104,6 @@ class CrudFormElement extends IncludedMixin(FormLayoutElement) {
   }
 }
 
-customElements.define(CrudFormElement.is, CrudFormElement);
+customElements.define(CrudForm.is, CrudForm);
 
-export { CrudFormElement };
+export { CrudForm };

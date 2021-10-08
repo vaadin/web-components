@@ -9,7 +9,7 @@ import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
-import { ChartSeriesElement } from './vaadin-chart-series.js';
+import { ChartSeries } from './vaadin-chart-series.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import 'highcharts/es-modules/masters/modules/accessibility.src.js';
 import 'highcharts/es-modules/masters/highcharts-more.src.js';
@@ -234,7 +234,7 @@ export const deepMerge = function deepMerge(target, source) {
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
+class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -289,7 +289,7 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
        * - `configuration.title`: The chart title.
        *
        * For detailed documentation of available API check the [API site](http://api.highcharts.com/class-reference/classes.list)
-       * @type {!Chart | undefined}
+       * @type {!Highcharts.Chart | undefined}
        */
       configuration: Object,
 
@@ -477,7 +477,7 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
     /* c8 ignore next 3 */
     if (typeof licenseChecker === 'function') {
-      licenseChecker(ChartElement);
+      licenseChecker(Chart);
     }
   }
 
@@ -945,7 +945,7 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __filterSeriesNodes(node) {
-    return node.nodeType === Node.ELEMENT_NODE && node instanceof ChartSeriesElement;
+    return node.nodeType === Node.ELEMENT_NODE && node instanceof ChartSeries;
   }
 
   /** @private */
@@ -993,7 +993,7 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
 
     seriesNodes.forEach((series) => {
-      if (series instanceof ChartSeriesElement) {
+      if (series instanceof ChartSeries) {
         series._series.remove();
       }
     });
@@ -1803,6 +1803,6 @@ class ChartElement extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 }
 
-customElements.define(ChartElement.is, ChartElement);
+customElements.define(Chart.is, Chart);
 
-export { ChartElement };
+export { Chart };
