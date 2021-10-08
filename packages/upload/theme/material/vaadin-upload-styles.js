@@ -168,7 +168,7 @@ registerStyles(
       outline: none;
     }
 
-    [part='clear-button'] {
+    [part='remove-button'] {
       margin-right: -8px;
     }
 
@@ -194,7 +194,7 @@ registerStyles(
       content: var(--material-icons-reload);
     }
 
-    [part='clear-button']::before {
+    [part='remove-button']::before {
       content: var(--material-icons-clear);
     }
 

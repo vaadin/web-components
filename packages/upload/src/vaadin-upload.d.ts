@@ -208,7 +208,7 @@ declare class Upload extends ThemableMixin(ElementMixin(HTMLElement)) {
    *   file: {
    *     retry: 'Retry',
    *     start: 'Start',
-   *     clear: 'Clear'
+   *     remove: 'Remove'
    *   },
    *   units: {
    *     size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
