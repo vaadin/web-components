@@ -2,18 +2,18 @@ import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '@vaadin/grid';
-import { Templatizer } from '../src/vaadin-template-renderer-templatizer.js';
+import { Templatizer } from '../src/template-renderer-templatizer.js';
 
-import '../vaadin-template-renderer.js';
+import '../template-renderer.js';
 
 import './fixtures/mock-grid-host.js';
 
-describe('grid footer template', () => {
+describe('grid header template', () => {
   function fixtureGrid() {
     return fixtureSync(`
       <vaadin-grid>
         <vaadin-grid-column>
-          <template class="footer">footer</template>
+          <template class="header">header</template>
         </vaadin-grid-column>
       </vaadin-grid>
     `);
@@ -21,7 +21,7 @@ describe('grid footer template', () => {
 
   it('should process the template', () => {
     const grid = fixtureGrid();
-    const template = grid.querySelector('template.footer');
+    const template = grid.querySelector('template.header');
 
     expect(template.__templatizer).to.be.an.instanceof(Templatizer);
   });
@@ -32,7 +32,7 @@ describe('grid footer template', () => {
 
     await nextRender(grid);
 
-    expect(column._footerCell._content.textContent).to.equal('footer');
+    expect(column._headerCell._content.textContent).to.equal('header');
   });
 
   it('should throw when using both a template and a renderer', () => {
@@ -41,7 +41,7 @@ describe('grid footer template', () => {
     const column = grid.firstElementChild;
     stub.restore();
 
-    column.footerRenderer = () => {};
+    column.headerRenderer = () => {};
 
     expect(() => window.Vaadin.templateRendererCallback(column)).to.throw(
       /^Cannot use both a template and a renderer for <vaadin-grid-column \/>\.$/

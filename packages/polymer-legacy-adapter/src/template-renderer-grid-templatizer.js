@@ -1,4 +1,4 @@
-import { Templatizer } from './vaadin-template-renderer-templatizer.js';
+import { Templatizer } from './template-renderer-templatizer.js';
 
 export class GridTemplatizer extends Templatizer {
   /**

@@ -1,5 +1,5 @@
 import { PolymerElement } from '@polymer/polymer';
-import { templatize } from '@polymer/polymer/lib/utils/templatize';
+import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 
 export class Templatizer extends PolymerElement {
   static create(component, template) {

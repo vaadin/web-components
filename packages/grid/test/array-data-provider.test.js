@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import '@vaadin/vaadin-template-renderer';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import { flushGrid, getCellContent, getRows, getRowCells, getBodyCellContent } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-filter.js';

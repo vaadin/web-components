@@ -5,8 +5,8 @@
   "main": "vaadin-grid-pro.js",
   "module": "vaadin-grid-pro.js",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/vaadin/web-components.git",
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
     "directory": "packages/grid-pro"
   },
   "keywords": [
@@ -44,10 +44,10 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/testing-helpers": "^0.3.0",
     "@vaadin/date-picker": "^22.0.0-alpha6",
     "@vaadin/dialog": "^22.0.0-alpha6",
-    "@vaadin/vaadin-template-renderer": "^22.0.0-alpha6",
+    "@vaadin/polymer-legacy-adapter": "^22.0.0-alpha6",
+    "@vaadin/testing-helpers": "^0.3.0",
     "lit": "^2.0.0",
     "sinon": "^9.2.1"
   },
