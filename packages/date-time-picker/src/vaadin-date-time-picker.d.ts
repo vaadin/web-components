@@ -7,8 +7,29 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { DatePickerI18n } from '@vaadin/date-picker/src/vaadin-date-picker.js';
+import { TimePickerI18n } from '@vaadin/time-picker/src/vaadin-time-picker.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { DateTimePickerEventMap, DateTimePickerI18n } from './interfaces';
+
+export interface DateTimePickerI18n extends DatePickerI18n, TimePickerI18n {}
+
+/**
+ * Fired when the `invalid` property changes.
+ */
+export type DateTimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `value` property changes.
+ */
+export type DateTimePickerValueChangedEvent = CustomEvent<{ value: string }>;
+
+export interface DateTimePickerCustomEventMap {
+  'invalid-changed': DateTimePickerInvalidChangedEvent;
+
+  'value-changed': DateTimePickerValueChangedEvent;
+}
+
+export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HTMLElementEventMap {}
 
 /**
  * `<vaadin-date-time-picker>` is a Web Component providing a date time selection field.

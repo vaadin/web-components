@@ -6,7 +6,20 @@
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
-import { ComboBoxRenderer } from './interfaces';
+import { ComboBox } from './vaadin-combo-box';
+
+export type ComboBoxDefaultItem = any;
+
+export interface ComboBoxItemModel<TItem> {
+  index: number;
+  item: TItem;
+}
+
+export type ComboBoxRenderer<TItem> = (
+  root: HTMLElement,
+  comboBox: ComboBox<TItem>,
+  model: ComboBoxItemModel<TItem>
+) => void;
 
 declare function ComboBoxMixin<TItem, T extends new (...args: any[]) => {}>(
   base: T

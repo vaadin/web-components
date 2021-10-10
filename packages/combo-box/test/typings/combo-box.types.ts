@@ -11,7 +11,15 @@ import {
   ComboBoxSelectedItemChangedEvent,
   ComboBox
 } from '../../vaadin-combo-box';
-import { ComboBoxLight } from '../../vaadin-combo-box-light';
+import {
+  ComboBoxLightFilterChangedEvent,
+  ComboBoxLightInvalidChangedEvent,
+  ComboBoxLightOpenedChangedEvent,
+  ComboBoxLightValueChangedEvent,
+  ComboBoxLightCustomValueSetEvent,
+  ComboBoxLightSelectedItemChangedEvent,
+  ComboBoxLight
+} from '../../vaadin-combo-box-light';
 
 interface TestComboBoxItem {
   testProperty: string;
@@ -68,31 +76,31 @@ assertType<ComboBoxMixin<TestComboBoxItem>>(narrowedComboBoxLightElement);
 assertType<ThemableMixin>(narrowedComboBoxLightElement);
 
 narrowedComboBoxLightElement.addEventListener('custom-value-set', (event) => {
-  assertType<ComboBoxCustomValueSetEvent>(event);
+  assertType<ComboBoxLightCustomValueSetEvent>(event);
   assertType<string>(event.detail);
 });
 
 narrowedComboBoxLightElement.addEventListener('opened-changed', (event) => {
-  assertType<ComboBoxOpenedChangedEvent>(event);
+  assertType<ComboBoxLightOpenedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 
 narrowedComboBoxLightElement.addEventListener('invalid-changed', (event) => {
-  assertType<ComboBoxInvalidChangedEvent>(event);
+  assertType<ComboBoxLightInvalidChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 
 narrowedComboBoxLightElement.addEventListener('value-changed', (event) => {
-  assertType<ComboBoxValueChangedEvent>(event);
+  assertType<ComboBoxLightValueChangedEvent>(event);
   assertType<string>(event.detail.value);
 });
 
 narrowedComboBoxLightElement.addEventListener('filter-changed', (event) => {
-  assertType<ComboBoxFilterChangedEvent>(event);
+  assertType<ComboBoxLightFilterChangedEvent>(event);
   assertType<string>(event.detail.value);
 });
 
 narrowedComboBoxLightElement.addEventListener('selected-item-changed', (event) => {
-  assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
+  assertType<ComboBoxLightSelectedItemChangedEvent<TestComboBoxItem>>(event);
   assertType<TestComboBoxItem | null | undefined>(event.detail.value);
 });

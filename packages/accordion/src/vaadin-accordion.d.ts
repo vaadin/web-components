@@ -1,7 +1,10 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
 import { AccordionPanel } from './vaadin-accordion-panel.js';
 
 /**
@@ -67,8 +70,6 @@ export type AccordionEventMap = HTMLElementEventMap & AccordionCustomEventMap;
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
 declare class Accordion extends ElementMixin(ThemableMixin(HTMLElement)) {
-  readonly focused: Element | null;
-
   /**
    * The index of currently opened panel. First panel is opened by
    * default. Only one panel can be opened at the same time.
@@ -82,12 +83,6 @@ declare class Accordion extends ElementMixin(ThemableMixin(HTMLElement)) {
    * and updated dynamically when adding or removing panels.
    */
   readonly items: AccordionPanel[];
-
-  _filterItems(array: Element[]): AccordionPanel[];
-
-  _onKeydown(event: KeyboardEvent): void;
-
-  _getAvailableIndex(index: number, increment: number): number;
 
   addEventListener<K extends keyof AccordionEventMap>(
     type: K,

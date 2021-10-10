@@ -6,7 +6,57 @@
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
-import { ComboBoxDefaultItem, ComboBoxEventMap } from './interfaces';
+import { ComboBoxDefaultItem } from './vaadin-combo-box-mixin.js';
+export {
+  ComboBoxDataProvider,
+  ComboBoxDataProviderCallback,
+  ComboBoxDataProviderParams
+} from './vaadin-combo-box-data-provider-mixin.js';
+export { ComboBoxDefaultItem, ComboBoxItemModel, ComboBoxRenderer } from './vaadin-combo-box-mixin.js';
+
+/**
+ * Fired when the user sets a custom value.
+ */
+export type ComboBoxLightCustomValueSetEvent = CustomEvent<string>;
+
+/**
+ * Fired when the `opened` property changes.
+ */
+export type ComboBoxLightOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `invalid` property changes.
+ */
+export type ComboBoxLightInvalidChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `value` property changes.
+ */
+export type ComboBoxLightValueChangedEvent = CustomEvent<{ value: string }>;
+
+/**
+ * Fired when the `filter` property changes.
+ */
+export type ComboBoxLightFilterChangedEvent = CustomEvent<{ value: string }>;
+
+/**
+ * Fired when the `selectedItem` property changes.
+ */
+export type ComboBoxLightSelectedItemChangedEvent<TItem> = CustomEvent<{ value: TItem | null | undefined }>;
+
+export interface ComboBoxLightEventMap<TItem> extends HTMLElementEventMap {
+  'custom-value-set': ComboBoxLightCustomValueSetEvent;
+
+  'opened-changed': ComboBoxLightOpenedChangedEvent;
+
+  'filter-changed': ComboBoxLightFilterChangedEvent;
+
+  'invalid-changed': ComboBoxLightInvalidChangedEvent;
+
+  'value-changed': ComboBoxLightValueChangedEvent;
+
+  'selected-item-changed': ComboBoxLightSelectedItemChangedEvent<TItem>;
+}
 
 /**
  * `<vaadin-combo-box-light>` is a customizable version of the `<vaadin-combo-box>` providing
@@ -61,15 +111,15 @@ declare class ComboBoxLight<TItem = ComboBoxDefaultItem> extends HTMLElement {
    */
   attrForValue: string;
 
-  addEventListener<K extends keyof ComboBoxEventMap<TItem>>(
+  addEventListener<K extends keyof ComboBoxLightEventMap<TItem>>(
     type: K,
-    listener: (this: ComboBoxLight<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
+    listener: (this: ComboBoxLight<TItem>, ev: ComboBoxLightEventMap<TItem>[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
-  removeEventListener<K extends keyof ComboBoxEventMap<TItem>>(
+  removeEventListener<K extends keyof ComboBoxLightEventMap<TItem>>(
     type: K,
-    listener: (this: ComboBoxLight<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
+    listener: (this: ComboBoxLight<TItem>, ev: ComboBoxLightEventMap<TItem>[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }

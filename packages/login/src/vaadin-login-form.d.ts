@@ -1,10 +1,25 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
 import { LoginMixin } from './vaadin-login-mixin.js';
+export { LoginI18n } from './vaadin-login-mixin.js';
 
-import { LoginEventMap } from './interfaces';
+/**
+ * Fired when a user submits the login.
+ */
+export type LoginFormLoginEvent = CustomEvent<{ username: string; password: string }>;
+
+export interface LoginFormCustomEventMap {
+  'forgot-password': Event;
+
+  login: LoginFormLoginEvent;
+}
+
+export interface LoginFormEventMap extends HTMLElementEventMap, LoginFormCustomEventMap {}
 
 /**
  * `<vaadin-login-form>` is a Web Component providing an easy way to require users
@@ -42,15 +57,15 @@ import { LoginEventMap } from './interfaces';
 declare class LoginForm extends ElementMixin(ThemableMixin(LoginMixin(HTMLElement))) {
   submit(): void;
 
-  addEventListener<K extends keyof LoginEventMap>(
+  addEventListener<K extends keyof LoginFormEventMap>(
     type: K,
-    listener: (this: LoginForm, ev: LoginEventMap[K]) => void,
+    listener: (this: LoginForm, ev: LoginFormEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
-  removeEventListener<K extends keyof LoginEventMap>(
+  removeEventListener<K extends keyof LoginFormEventMap>(
     type: K,
-    listener: (this: LoginForm, ev: LoginEventMap[K]) => void,
+    listener: (this: LoginForm, ev: LoginFormEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }

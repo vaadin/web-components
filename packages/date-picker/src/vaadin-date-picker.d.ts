@@ -7,7 +7,32 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
-import { DatePickerEventMap } from './interfaces';
+export { DatePickerDate, DatePickerI18n } from './vaadin-date-picker-mixin.js';
+
+/**
+ * Fired when the `opened` property changes.
+ */
+export type DatePickerOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `invalid` property changes.
+ */
+export type DatePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `value` property changes.
+ */
+export type DatePickerValueChangedEvent = CustomEvent<{ value: string }>;
+
+export interface DatePickerCustomEventMap {
+  'opened-changed': DatePickerOpenedChangedEvent;
+
+  'invalid-changed': DatePickerInvalidChangedEvent;
+
+  'value-changed': DatePickerValueChangedEvent;
+}
+
+export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCustomEventMap {}
 
 /**
  * `<vaadin-date-picker>` is a date selection field which includes a scrollable

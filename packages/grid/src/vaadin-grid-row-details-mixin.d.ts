@@ -1,4 +1,15 @@
-import { GridRowDetailsRenderer } from './interfaces';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { Grid, GridItemModel } from './vaadin-grid.js';
+
+export type GridRowDetailsRenderer<TItem> = (
+  root: HTMLElement,
+  grid?: Grid<TItem>,
+  model?: GridItemModel<TItem>
+) => void;
 
 declare function RowDetailsMixin<TItem, T extends new (...args: any[]) => {}>(
   base: T

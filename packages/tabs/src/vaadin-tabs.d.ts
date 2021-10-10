@@ -6,7 +6,6 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ListMixin } from '@vaadin/vaadin-list-mixin/vaadin-list-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ListOrientation } from '@vaadin/vaadin-list-mixin/interfaces';
 
 /**
  * Fired when the `items` property changes.
@@ -71,7 +70,7 @@ declare class Tabs extends ElementMixin(ListMixin(ThemableMixin(HTMLElement))) {
   /**
    * Set tabs disposition. Possible values are `horizontal|vertical`
    */
-  orientation: ListOrientation;
+  orientation: 'horizontal' | 'vertical';
 
   readonly _scrollOffset: number;
 

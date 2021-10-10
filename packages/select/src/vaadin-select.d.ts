@@ -8,7 +8,41 @@ import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { SelectEventMap, SelectRenderer } from './interfaces';
+
+/**
+ * Function for rendering the content of the `<vaadin-select>`.
+ * Receives two arguments:
+ *
+ * - `root` The `<vaadin-select-overlay>` internal container
+ *   DOM element. Append your content to it.
+ * - `select` The reference to the `<vaadin-select>` element.
+ */
+export type SelectRenderer = (root: HTMLElement, select?: Select) => void;
+
+/**
+ * Fired when the `opened` property changes.
+ */
+export type SelectOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `invalid` property changes.
+ */
+export type SelectInvalidChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `value` property changes.
+ */
+export type SelectValueChangedEvent = CustomEvent<{ value: string }>;
+
+export interface SelectCustomEventMap {
+  'opened-changed': SelectOpenedChangedEvent;
+
+  'invalid-changed': SelectInvalidChangedEvent;
+
+  'value-changed': SelectValueChangedEvent;
+}
+
+export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMap {}
 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.

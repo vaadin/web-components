@@ -5,7 +5,8 @@
  */
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { GridSorterDirection } from './interfaces';
+
+export type GridSorterDirection = 'asc' | 'desc' | null;
 
 /**
  * Fired when the `direction` property changes.
@@ -70,7 +71,7 @@ declare class GridSorter extends ThemableMixin(DirMixin(HTMLElement)) {
    * Possible values are `asc` to use an ascending algorithm, `desc` to sort the data in
    * descending direction, or `null` for not sorting the data.
    */
-  direction: GridSorterDirection | null | undefined;
+  direction: GridSorterDirection | undefined;
 
   addEventListener<K extends keyof GridSorterEventMap>(
     type: K,

@@ -6,7 +6,27 @@
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { DatePickerI18n } from './interfaces';
+
+export interface DatePickerDate {
+  day: number;
+  month: number;
+  year: number;
+}
+
+export interface DatePickerI18n {
+  monthNames: string[];
+  weekdays: string[];
+  weekdaysShort: string[];
+  firstDayOfWeek: number;
+  week: string;
+  calendar: string;
+  clear: string;
+  today: string;
+  cancel: string;
+  parseDate: (date: string) => DatePickerDate | undefined;
+  formatDate: (date: DatePickerDate) => string;
+  formatTitle: (monthName: string, fullYear: number) => string;
+}
 
 declare function DatePickerMixin<T extends new (...args: any[]) => {}>(base: T): T & DatePickerMixinConstructor;
 

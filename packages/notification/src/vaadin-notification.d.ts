@@ -1,8 +1,41 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { TemplateResult } from 'lit';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-import { NotificationEventMap, NotificationPosition, NotificationRenderer, ShowOptions } from './interfaces';
+
+export type NotificationPosition =
+  | 'top-stretch'
+  | 'top-start'
+  | 'top-center'
+  | 'top-end'
+  | 'middle'
+  | 'bottom-start'
+  | 'bottom-center'
+  | 'bottom-end'
+  | 'bottom-stretch';
+
+export type NotificationRenderer = (root: HTMLElement, notification?: Notification) => void;
+
+/**
+ * Fired when the `opened` property changes.
+ */
+export type NotificationOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+export interface NotificationCustomEventMap {
+  'opened-changed': NotificationOpenedChangedEvent;
+}
+
+export interface NotificationEventMap extends HTMLElementEventMap, NotificationCustomEventMap {}
+
+export interface ShowOptions {
+  duration?: number;
+  position?: NotificationPosition;
+}
 
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.

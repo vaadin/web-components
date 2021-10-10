@@ -1,4 +1,27 @@
-import { LoginI18n } from './interfaces';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+
+export interface LoginI18n {
+  form: {
+    title: string;
+    username: string;
+    password: string;
+    submit: string;
+    forgotPassword: string;
+  };
+  errorMessage: {
+    title: string;
+    message: string;
+  };
+  header?: {
+    title?: string;
+    description?: string;
+  };
+  additionalInformation?: string;
+}
 
 declare function LoginMixin<T extends new (...args: any[]) => {}>(base: T): T & LoginMixinConstructor;
 

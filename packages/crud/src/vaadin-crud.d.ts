@@ -1,8 +1,118 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { GridFilterDefinition, GridSorterDefinition } from '@vaadin/grid/src/vaadin-grid.js';
 
-import { CrudDataProvider, CrudEditorPosition, CrudEventMap, CrudI18n } from './interfaces';
+export type CrudDataProviderCallback<T> = (items: Array<T>, size?: number) => void;
+
+export type CrudDataProviderParams = {
+  page: number;
+  pageSize: number;
+  filters: Array<GridFilterDefinition>;
+  sortOrders: Array<GridSorterDefinition>;
+};
+
+export type CrudDataProvider<T> = (params: CrudDataProviderParams, callback: CrudDataProviderCallback<T>) => void;
+
+export type CrudEditorPosition = '' | 'bottom' | 'aside';
+
+export interface CrudI18n {
+  newItem: string;
+  editItem: string;
+  saveItem: string;
+  cancel: string;
+  deleteItem: string;
+  editLabel: string;
+  confirm: {
+    delete: {
+      title: string;
+      content: string;
+      button: {
+        confirm: string;
+        dismiss: string;
+      };
+    };
+    cancel: {
+      title: string;
+      content: string;
+      button: {
+        confirm: string;
+        dismiss: string;
+      };
+    };
+  };
+}
+
+/**
+ * Fired when the `editorOpened` property changes.
+ */
+export type CrudEditorOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `editedItem` property changes.
+ */
+export type CrudEditedItemChangedEvent<T> = CustomEvent<{ value: T }>;
+
+/**
+ * Fired when the `items` property changes.
+ */
+export type CrudItemsChangedEvent<T> = CustomEvent<{ value: Array<T> }>;
+
+/**
+ * Fired when the `size` property changes.
+ */
+export type CrudSizeChangedEvent = CustomEvent<{ value: number }>;
+
+/**
+ * Fired when user wants to create a new item.
+ */
+export type CrudNewEvent = CustomEvent<{ item: null }>;
+
+/**
+ * Fired when user wants to edit an existing item.
+ */
+export type CrudEditEvent<T> = CustomEvent<{ item: T }>;
+
+/**
+ * Fired when user wants to delete item.
+ */
+export type CrudDeleteEvent<T> = CustomEvent<{ item: T }>;
+
+/**
+ * Fired when user discards edition.
+ */
+export type CrudCancelEvent<T> = CustomEvent<{ item: T }>;
+
+/**
+ * Fired when user wants to save a new or an existing item.
+ */
+export type CrudSaveEvent<T> = CustomEvent<{ item: T; new: boolean }>;
+
+export type CrudCustomEventMap<T> = {
+  'editor-opened-changed': CrudEditorOpenedChangedEvent;
+
+  'edited-item-changed': CrudEditedItemChangedEvent<T>;
+
+  'items-changed': CrudItemsChangedEvent<T>;
+
+  'size-changed': CrudSizeChangedEvent;
+
+  new: CrudNewEvent;
+
+  cancel: CrudCancelEvent<T>;
+
+  delete: CrudDeleteEvent<T>;
+
+  edit: CrudEditEvent<T>;
+
+  save: CrudSaveEvent<T>;
+};
+
+export type CrudEventMap<T> = HTMLElementEventMap & CrudCustomEventMap<T>;
 
 /**
  * `<vaadin-crud>` is a Web Component for [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
