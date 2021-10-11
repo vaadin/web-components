@@ -72,7 +72,7 @@ declare class Tabs extends ElementMixin(ListMixin(ThemableMixin(HTMLElement))) {
   /**
    * Set tabs disposition. Possible values are `horizontal|vertical`
    */
-  orientation: 'horizontal' | 'vertical';
+  orientation: TabsOrientation;
 
   readonly _scrollOffset: number;
 
