@@ -188,9 +188,9 @@ class ComboBox extends ComboBoxDataProviderMixin(
       </style>
 
       <div class="vaadin-combo-box-container">
-        <div part="label" on-click="focus">
+        <div part="label">
           <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true"></span>
+          <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
         </div>
 
         <vaadin-input-container

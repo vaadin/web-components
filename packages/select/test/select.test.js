@@ -426,6 +426,11 @@ describe('vaadin-select', () => {
         valueButton.dispatchEvent(ev);
         expect(ev.defaultPrevented).to.be.false;
       });
+
+      it('should focus on required indicator click', () => {
+        select.shadowRoot.querySelector('[part="required-indicator"]').click();
+        expect(select.hasAttribute('focused')).to.be.true;
+      });
     });
 
     describe('focus when overlay opened', () => {

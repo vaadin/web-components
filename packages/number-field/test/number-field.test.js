@@ -898,3 +898,16 @@ describe('invalid with value', () => {
     expect(numberField.invalid).to.be.true;
   });
 });
+
+describe('required', () => {
+  let numberField;
+
+  beforeEach(() => {
+    numberField = fixtureSync('<vaadin-number-field required></vaadin-number-field>');
+  });
+
+  it('should focus on required indicator click', () => {
+    numberField.shadowRoot.querySelector('[part="required-indicator"]').click();
+    expect(numberField.hasAttribute('focused')).to.be.true;
+  });
+});
