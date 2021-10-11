@@ -7,6 +7,7 @@ import '@vaadin/vaadin-material-styles/typography.js';
 const contextMenuOverlay = css`
   [part='overlay'] {
     outline: none;
+    will-change: transform, opacity;
   }
 `;
 
