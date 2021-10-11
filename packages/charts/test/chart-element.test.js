@@ -174,27 +174,6 @@ describe('vaadin-chart', () => {
       expect(title).to.be.ok;
       expect(title.textContent).to.be.empty;
     });
-
-    it('should call updateConfiguration() when calling deprecated update()', () => {
-      const stub = sinon.stub(chart, 'updateConfiguration');
-      chart.update({}, true);
-      stub.restore();
-
-      expect(stub.calledOnce).to.be.true;
-      expect(stub.args[0][0]).to.be.an('object');
-      expect(stub.args[0][1]).to.be.true;
-    });
-
-    it('should warn when calling deprecated update()', () => {
-      const stub = sinon.stub(console, 'warn');
-      chart.update({}, true);
-      stub.restore();
-
-      expect(stub.calledOnce).to.be.true;
-      expect(stub.args[0][0]).to.equal(
-        'WARNING: Since Vaadin 21, update() is deprecated. Please use updateConfiguration() instead.'
-      );
-    });
   });
 
   describe('series', () => {
