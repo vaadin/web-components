@@ -602,4 +602,56 @@ describe('vaadin-select', () => {
       expect(parseFloat(window.getComputedStyle(select).width)).to.eql(500);
     });
   });
+
+  describe('support non-english characters', () => {
+    let menu;
+    let valueButton;
+
+    beforeEach(async () => {
+      select = fixtureSync(`<vaadin-select value="small"></vaadin-select>`);
+      select.renderer = (root) => {
+        if (root.firstElementChild) {
+          return;
+        }
+        render(
+          html`
+            <vaadin-list-box>
+              <vaadin-item value="small">เล็ก</vaadin-item>
+              <vaadin-item value="large">ใหญ่</vaadin-item>
+            </vaadin-list-box>
+          `,
+          root
+        );
+      };
+      menu = select._menuElement;
+      valueButton = select._valueButton;
+      await nextFrame();
+    });
+
+    it('should be possible to set value declaratively', () => {
+      expect(menu.selected).to.be.equal(0);
+      expect(select._valueButton.textContent.trim()).to.be.equal('เล็ก');
+      expect(select.value).to.be.equal('small');
+
+      select.value = 'large';
+      expect(menu.selected).to.be.equal(1);
+      expect(select._valueButton.textContent.trim()).to.be.equal('ใหญ่');
+    });
+
+    it('should display correctly and set correct value when users type non-english character', () => {
+      expect(select.value).to.be.equal('small');
+      keyDownChar(valueButton, 'ใ');
+      expect(menu.selected).to.be.equal(1);
+      expect(select._valueButton.textContent.trim()).to.be.equal('ใหญ่');
+      expect(select.value).to.be.equal('large');
+    });
+
+    it('should not match and value is unchanged if users type character that not available in options', () => {
+      expect(select.value).to.be.equal('small');
+      keyDownChar(valueButton, 'น');
+      expect(menu.selected).to.be.equal(0);
+      expect(select._valueButton.textContent.trim()).to.be.equal('เล็ก');
+      expect(select.value).to.be.equal('small');
+    });
+  });
 });

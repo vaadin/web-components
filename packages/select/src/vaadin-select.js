@@ -424,7 +424,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       if (/^(Enter|SpaceBar|\s|ArrowDown|Down|ArrowUp|Up)$/.test(e.key)) {
         e.preventDefault();
         this.opened = true;
-      } else if (/[a-zA-Z0-9]/.test(e.key) && e.key.length === 1) {
+      } else if (/[\p{L}\p{Nd}]/u.test(e.key) && e.key.length === 1) {
         const selected = this._menuElement.selected;
         const currentIdx = selected !== undefined ? selected : -1;
         const newIdx = this._menuElement._searchKey(currentIdx, e.key);
