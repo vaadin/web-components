@@ -159,7 +159,7 @@ const uploadFile = css`
     content: var(--lumo-icons-reload);
   }
 
-  [part='clear-button']::before {
+  [part='remove-button']::before {
     content: var(--lumo-icons-cross);
   }
 

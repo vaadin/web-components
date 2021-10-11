@@ -80,7 +80,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should focus on the clear button', async () => {
-      const removeButton = fileElement.shadowRoot.querySelector('[part=clear-button]');
+      const removeButton = fileElement.shadowRoot.querySelector('[part=remove-button]');
 
       await repeatTab(5);
 

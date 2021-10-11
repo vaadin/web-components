@@ -369,7 +369,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
        *   file: {
        *     retry: 'Retry',
        *     start: 'Start',
-       *     clear: 'Clear'
+       *     remove: 'Remove'
        *   },
        *   units: {
        *     size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
@@ -424,7 +424,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
             file: {
               retry: 'Retry',
               start: 'Start',
-              clear: 'Clear'
+              remove: 'Remove'
             },
             units: {
               size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
