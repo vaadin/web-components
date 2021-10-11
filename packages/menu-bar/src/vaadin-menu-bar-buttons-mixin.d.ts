@@ -18,12 +18,6 @@ interface ButtonsMixin {
   readonly _overflow: HTMLElement;
 
   _hasOverflow: boolean;
-
-  /**
-   * Call this method after updating menu bar `items` dynamically, including changing
-   * any property on the item object corresponding to one of the menu bar buttons.
-   */
-  render(): void;
 }
 
 export { ButtonsMixin, ButtonsMixinConstructor };

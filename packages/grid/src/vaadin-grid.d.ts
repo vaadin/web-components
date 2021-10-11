@@ -373,14 +373,6 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
   requestContentUpdate(): void;
 
   /**
-   * Manually invoke existing renderers for all the columns
-   * (header, footer and body cells) and opened row details.
-   *
-   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
-   */
-  render(): void;
-
-  /**
    * Updates the computed metrics and positioning of internal grid parts
    * (row/details cell positioning etc). Needs to be invoked whenever the sizing of grid
    * content changes asynchronously to ensure consistent appearance (e.g. when a

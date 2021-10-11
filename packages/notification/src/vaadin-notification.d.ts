@@ -135,13 +135,6 @@ declare class Notification extends ThemePropertyMixin(ElementMixin(HTMLElement))
   requestContentUpdate(): void;
 
   /**
-   * Manually invoke existing renderer.
-   *
-   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
-   */
-  render(): void;
-
-  /**
    * Opens the notification.
    */
   open(): void;

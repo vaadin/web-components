@@ -89,27 +89,11 @@ describe('root menu layout', () => {
     });
   });
 
-  it('should not throw when render() is called before menu bar is attached', () => {
-    expect(() => document.createElement('vaadin-menu-bar').render()).to.not.throw(Error);
-  });
-
-  it('should render buttons when calling deprecated render()', () => {
-    const stub = sinon.stub(menu, '__renderButtons');
-    menu.render();
-    stub.restore();
-
-    expect(stub.calledOnce).to.be.true;
-  });
-
-  it('should warn when calling deprecated render()', () => {
-    const stub = sinon.stub(console, 'warn');
-    menu.render();
-    stub.restore();
-
-    expect(stub.calledOnce).to.be.true;
-    expect(stub.args[0][0]).to.equal(
-      'WARNING: Since Vaadin 21, render() is deprecated. The items value is immutable. Please replace it with a new value instead of mutating in place.'
-    );
+  it('should not throw when changing items before the menu bar is attached', () => {
+    expect(() => {
+      const menuBar = document.createElement('vaadin-menu-bar');
+      menuBar.items = [{ text: 'Item 1' }];
+    }).to.not.throw(Error);
   });
 
   describe('keyboard navigation', () => {
@@ -341,8 +325,8 @@ describe('overflow button', () => {
     expect(overflow.item.children[2]).to.deep.equal(menu.items[4]);
   });
 
-  it('should show overflow button after calling render() with same items', () => {
-    menu.render();
+  it('should show overflow button after assigning the same items', () => {
+    menu.items = [...menu.items];
     expect(overflow.hasAttribute('hidden')).to.be.false;
   });
 

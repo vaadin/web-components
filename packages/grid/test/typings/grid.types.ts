@@ -175,7 +175,6 @@ assertType<() => void>(narrowedGrid.generateCellClassNames);
 assertType<boolean>(narrowedGrid.allRowsVisible);
 assertType<() => void>(narrowedGrid.recalculateColumnWidths);
 assertType<() => void>(narrowedGrid.requestContentUpdate);
-assertType<() => void>(narrowedGrid.render);
 
 /* GridColumn */
 const genericColumn = document.createElement('vaadin-grid-column');

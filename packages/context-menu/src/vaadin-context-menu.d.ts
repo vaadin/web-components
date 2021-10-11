@@ -276,13 +276,6 @@ declare class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(Ges
   requestContentUpdate(): void;
 
   /**
-   * Manually invoke existing renderer.
-   *
-   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
-   */
-  render(): void;
-
-  /**
    * Closes the overlay.
    */
   close(): void;

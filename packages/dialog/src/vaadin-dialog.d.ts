@@ -143,13 +143,6 @@ declare class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixi
    */
   requestContentUpdate(): void;
 
-  /**
-   * Manually invoke existing renderer.
-   *
-   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
-   */
-  render(): void;
-
   addEventListener<K extends keyof DialogEventMap>(
     type: K,
     listener: (this: Dialog, ev: DialogEventMap[K]) => void,
