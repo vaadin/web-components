@@ -6,7 +6,7 @@
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
-import { ComboBox } from './vaadin-combo-box';
+import { ComboBox } from './vaadin-combo-box.js';
 
 export type ComboBoxDefaultItem = any;
 

@@ -71,7 +71,7 @@ declare class GridSorter extends ThemableMixin(DirMixin(HTMLElement)) {
    * Possible values are `asc` to use an ascending algorithm, `desc` to sort the data in
    * descending direction, or `null` for not sorting the data.
    */
-  direction: GridSorterDirection | undefined;
+  direction: GridSorterDirection | null | undefined;
 
   addEventListener<K extends keyof GridSorterEventMap>(
     type: K,

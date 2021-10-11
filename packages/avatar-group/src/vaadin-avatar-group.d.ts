@@ -7,6 +7,8 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AvatarI18n } from '@vaadin/avatar/src/vaadin-avatar.js';
 
+export { AvatarI18n };
+
 export interface AvatarGroupI18n extends AvatarI18n {
   activeUsers: {
     one: string;

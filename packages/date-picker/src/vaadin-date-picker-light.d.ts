@@ -5,6 +5,7 @@
  */
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
+export { DatePickerDate, DatePickerI18n } from './vaadin-date-picker-mixin.js';
 
 /**
  * Fired when the `opened` property changes.
