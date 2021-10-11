@@ -226,8 +226,11 @@ describe('sub-menu', () => {
   });
 
   (isIOS ? it.skip : it)('should switch submenu again on subsequent arrow left', async () => {
-    menu.items[1] = { text: 'Menu Item 2', children: [{ text: 'Menu Item 2 1' }] };
-    menu.render();
+    menu.items = [
+      ...menu.items.slice(0, 1),
+      { text: 'Menu Item 2', children: [{ text: 'Menu Item 2 1' }] },
+      ...menu.items.slice(2)
+    ];
     buttons = menu._buttons;
     await nextRender(menu);
     arrowDown(buttons[0]);

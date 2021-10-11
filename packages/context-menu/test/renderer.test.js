@@ -96,27 +96,6 @@ describe('renderer', () => {
     expect(menu.renderer.calledTwice).to.be.true;
   });
 
-  it('should request content update when calling deprecated render()', () => {
-    const stub = sinon.stub(menu, 'requestContentUpdate');
-    fire(target, 'vaadin-contextmenu');
-    menu.render();
-    stub.restore();
-
-    expect(stub.calledOnce).to.be.true;
-  });
-
-  it('should warn when calling deprecated render()', () => {
-    const stub = sinon.stub(console, 'warn');
-    fire(target, 'vaadin-contextmenu');
-    menu.render();
-    stub.restore();
-
-    expect(stub.calledOnce).to.be.true;
-    expect(stub.args[0][0]).to.equal(
-      'WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.'
-    );
-  });
-
   it('should clear the content when removing the renderer', () => {
     menu.renderer = (root) => {
       root.innerHTML = 'foo';

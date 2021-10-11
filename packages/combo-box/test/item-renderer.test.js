@@ -80,27 +80,6 @@ describe('item renderer', () => {
     expect(comboBox.renderer.callCount).to.be.equal(comboBox.items.length * 2);
   });
 
-  it('should request content update when calling deprecated render()', () => {
-    const stub = sinon.stub(comboBox, 'requestContentUpdate');
-    comboBox.opened = true;
-    comboBox.render();
-    stub.restore();
-
-    expect(stub.calledOnce).to.be.true;
-  });
-
-  it('should warn when calling deprecated render()', () => {
-    const stub = sinon.stub(console, 'warn');
-    comboBox.opened = true;
-    comboBox.render();
-    stub.restore();
-
-    expect(stub.calledOnce).to.be.true;
-    expect(stub.args[0][0]).to.equal(
-      'WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.'
-    );
-  });
-
   it('should not throw if requestContentUpdate() called before opening', () => {
     expect(() => comboBox.requestContentUpdate()).not.to.throw(Error);
   });

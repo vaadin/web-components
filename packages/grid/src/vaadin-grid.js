@@ -966,18 +966,6 @@ class Grid extends ElementMixin(
     }
   }
 
-  /**
-   * Manually invoke existing renderers for all the columns
-   * (header, footer and body cells) and opened row details.
-   *
-   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
-   */
-  render() {
-    console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.');
-
-    this.requestContentUpdate();
-  }
-
   /** @protected */
   __updateVisibleRows(start, end) {
     this.__virtualizer && this.__virtualizer.update(start, end);

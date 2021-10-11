@@ -345,17 +345,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     }
   }
 
-  /**
-   * Manually invoke existing renderer.
-   *
-   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
-   */
-  render() {
-    console.warn('WARNING: Since Vaadin 21, render() is deprecated. Please use requestContentUpdate() instead.');
-
-    this.requestContentUpdate();
-  }
-
   /** @private */
   _rendererChanged(renderer, overlay) {
     if (!overlay) {
