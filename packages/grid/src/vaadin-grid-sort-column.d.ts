@@ -1,6 +1,11 @@
-import { GridDefaultItem, GridSorterDirection } from './interfaces';
-
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { GridColumn } from './vaadin-grid-column.js';
+import { GridDefaultItem } from './vaadin-grid.js';
+import { GridSorterDirection } from './vaadin-grid-sorter.js';
 
 /**
  * Fired when the `direction` property changes.

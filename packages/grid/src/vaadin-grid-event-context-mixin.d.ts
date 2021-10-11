@@ -1,4 +1,20 @@
-import { GridEventContext } from './interfaces';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { GridColumn } from './vaadin-grid-column.js';
+
+export interface GridEventContext<TItem> {
+  section?: 'body' | 'header' | 'footer' | 'details';
+  item?: TItem;
+  column?: GridColumn<TItem>;
+  index?: number;
+  selected?: boolean;
+  detailsOpened?: boolean;
+  expanded?: boolean;
+  level?: number;
+}
 
 declare function EventContextMixin<TItem, T extends new (...args: any[]) => {}>(
   base: T

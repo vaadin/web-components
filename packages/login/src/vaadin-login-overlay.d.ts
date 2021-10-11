@@ -1,10 +1,25 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
 import { LoginMixin } from './vaadin-login-mixin.js';
+export { LoginI18n } from './vaadin-login-mixin.js';
 
-import { LoginEventMap } from './interfaces';
+/**
+ * Fired when a user submits the login.
+ */
+export type LoginOverlayLoginEvent = CustomEvent<{ username: string; password: string }>;
+
+export interface LoginOverlayCustomEventMap {
+  'forgot-password': Event;
+
+  login: LoginOverlayLoginEvent;
+}
+
+export interface LoginOverlayEventMap extends HTMLElementEventMap, LoginOverlayCustomEventMap {}
 
 /**
  * `<vaadin-login-overlay>` is a wrapper of the `<vaadin-login-form>` which opens a login form in an overlay and
@@ -52,15 +67,15 @@ declare class LoginOverlay extends ElementMixin(ThemableMixin(LoginMixin(HTMLEle
    */
   title: string;
 
-  addEventListener<K extends keyof LoginEventMap>(
+  addEventListener<K extends keyof LoginOverlayEventMap>(
     type: K,
-    listener: (this: LoginOverlay, ev: LoginEventMap[K]) => void,
+    listener: (this: LoginOverlay, ev: LoginOverlayEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
-  removeEventListener<K extends keyof LoginEventMap>(
+  removeEventListener<K extends keyof LoginOverlayEventMap>(
     type: K,
-    listener: (this: LoginOverlay, ev: LoginEventMap[K]) => void,
+    listener: (this: LoginOverlay, ev: LoginOverlayEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }

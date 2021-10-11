@@ -1,10 +1,19 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { Item } from '@vaadin/item/src/vaadin-item.js';
-
 import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
 
-import { ContextMenu } from './vaadin-context-menu.js';
-
-import { ContextMenuItem, ContextMenuRendererContext } from './interfaces';
+export interface ContextMenuItem {
+  text?: string;
+  component?: string | HTMLElement;
+  disabled?: boolean;
+  checked?: boolean;
+  theme?: string | string[];
+  children?: ContextMenuItem[];
+}
 
 /**
  * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
@@ -65,10 +74,6 @@ interface ItemsMixin {
    * ```
    */
   items: ContextMenuItem[] | undefined;
-
-  __forwardFocus(): void;
-
-  __itemsRenderer(root: HTMLElement, menu: ContextMenu, context: ContextMenuRendererContext): void;
 }
 
 export { ItemsMixin, ItemsMixinConstructor };

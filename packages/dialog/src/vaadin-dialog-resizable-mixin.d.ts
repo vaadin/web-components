@@ -1,4 +1,8 @@
-import { DialogResizableDirection, DialogResizeDimensions } from './interfaces';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 
 declare function DialogResizableMixin<T extends new (...args: any[]) => {}>(
   base: T
@@ -13,14 +17,6 @@ interface DialogResizableMixin {
    * Set to true to enable resizing the dialog by dragging the corners and edges.
    */
   resizable: boolean;
-
-  _startResize(e: MouseEvent | TouchEvent, direction: DialogResizableDirection): void;
-
-  _resize(e: MouseEvent | TouchEvent, resizer: DialogResizableDirection): void;
-
-  _stopResize(direction: DialogResizableDirection): void;
-
-  _getResizeDimensions(): DialogResizeDimensions;
 }
 
 export { DialogResizableMixin, DialogResizableMixinConstructor };

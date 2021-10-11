@@ -1,14 +1,17 @@
-import '../../vaadin-date-picker.js';
-
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
+import '../../vaadin-date-picker.js';
 import {
   DatePicker,
   DatePickerInvalidChangedEvent,
   DatePickerOpenedChangedEvent,
   DatePickerValueChangedEvent
 } from '../../vaadin-date-picker.js';
-
-import { DatePickerLight } from '../../vaadin-date-picker-light.js';
+import {
+  DatePickerLight,
+  DatePickerLightInvalidChangedEvent,
+  DatePickerLightOpenedChangedEvent,
+  DatePickerLightValueChangedEvent
+} from '../../vaadin-date-picker-light.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -62,17 +65,17 @@ assertType<DatePickerLight>(datePickerLight);
 assertType<ThemableMixin>(datePickerLight);
 
 datePickerLight.addEventListener('opened-changed', (event) => {
-  assertType<DatePickerOpenedChangedEvent>(event);
+  assertType<DatePickerLightOpenedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 
 datePickerLight.addEventListener('invalid-changed', (event) => {
-  assertType<DatePickerInvalidChangedEvent>(event);
+  assertType<DatePickerLightInvalidChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 
 datePickerLight.addEventListener('value-changed', (event) => {
-  assertType<DatePickerValueChangedEvent>(event);
+  assertType<DatePickerLightValueChangedEvent>(event);
   assertType<string>(event.detail.value);
 });
 

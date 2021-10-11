@@ -1,4 +1,12 @@
-import { GridCellClassNameGenerator } from './interfaces';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { GridColumn } from './vaadin-grid-column.js';
+import { GridItemModel } from './vaadin-grid.js';
+
+export type GridCellClassNameGenerator<TItem> = (column: GridColumn<TItem>, model: GridItemModel<TItem>) => string;
 
 declare function StylingMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & StylingMixinConstructor<TItem>;
 

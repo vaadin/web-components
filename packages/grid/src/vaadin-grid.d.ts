@@ -1,32 +1,63 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-import { GridDefaultItem, GridDropLocation, GridEventContext, GridItemModel } from './interfaces';
-
 import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
-
 import { ArrayDataProviderMixin } from './vaadin-grid-array-data-provider-mixin.js';
-
-import { DataProviderMixin } from './vaadin-grid-data-provider-mixin.js';
-
-import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
-
-import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
-
-import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
-
-import { SelectionMixin } from './vaadin-grid-selection-mixin.js';
-
-import { SortMixin } from './vaadin-grid-sort-mixin.js';
-
-import { StylingMixin } from './vaadin-grid-styling-mixin.js';
-
-import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
-
+import { GridColumn, GridBodyRenderer, GridHeaderFooterRenderer } from './vaadin-grid-column.js';
 import { ColumnReorderingMixin } from './vaadin-grid-column-reordering-mixin.js';
+import {
+  DataProviderMixin,
+  GridDataProvider,
+  GridDataProviderCallback,
+  GridDataProviderParams,
+  GridFilterDefinition,
+  GridSorterDefinition,
+  GridSorterDirection
+} from './vaadin-grid-data-provider-mixin.js';
+import {
+  DragAndDropMixin,
+  GridDragAndDropFilter,
+  GridDropLocation,
+  GridDropMode
+} from './vaadin-grid-drag-and-drop-mixin.js';
+import { EventContextMixin, GridEventContext } from './vaadin-grid-event-context-mixin.js';
+import { RowDetailsMixin, GridRowDetailsRenderer } from './vaadin-grid-row-details-mixin.js';
+import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
+import { SelectionMixin } from './vaadin-grid-selection-mixin.js';
+import { SortMixin } from './vaadin-grid-sort-mixin.js';
+import { StylingMixin, GridCellClassNameGenerator } from './vaadin-grid-styling-mixin.js';
 
-import { GridColumn } from './vaadin-grid-column.js';
+export {
+  GridBodyRenderer,
+  GridCellClassNameGenerator,
+  GridDataProvider,
+  GridDataProviderCallback,
+  GridDataProviderParams,
+  GridDragAndDropFilter,
+  GridDropLocation,
+  GridDropMode,
+  GridEventContext,
+  GridFilterDefinition,
+  GridHeaderFooterRenderer,
+  GridRowDetailsRenderer,
+  GridSorterDefinition,
+  GridSorterDirection
+};
+
+export type GridDefaultItem = any;
+
+export interface GridItemModel<TItem> {
+  index: number;
+  item: TItem;
+  selected?: boolean;
+  expanded?: boolean;
+  level?: number;
+  detailsOpened?: boolean;
+}
 
 /**
  * Fired when the `activeItem` property changes.

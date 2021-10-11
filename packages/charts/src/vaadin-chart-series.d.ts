@@ -1,6 +1,28 @@
-import { Series, SeriesOptionsType } from 'highcharts';
+/**
+ * @license
+ * Copyright (c) 2015 - 2021 Vaadin Ltd
+ * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
+ */
+import { PointOptionsObject, Series, SeriesOptionsType } from 'highcharts';
 
-import { ChartSeriesMarkers, ChartSeriesOptions, ChartSeriesValues } from './interfaces';
+export type ChartSeriesMarkers = 'shown' | 'hidden' | 'auto';
+
+export interface ChartSeriesConfig {
+  data?: ChartSeriesValues;
+  marker?: { enabled: boolean | null };
+  name?: string;
+  neckWidth?: number | string;
+  neckHeight?: number | string;
+  stack?: number | string;
+  type?: string;
+  yAxis?: string;
+  yAxisValueMin?: number;
+  yAxisValueMax?: number;
+}
+
+export type ChartSeriesOptions = ChartSeriesConfig & SeriesOptionsType;
+
+export type ChartSeriesValues = Array<number | Array<number> | PointOptionsObject>;
 
 /**
  * `<vaadin-chart-series>` is a custom element for creating series for Vaadin Charts.

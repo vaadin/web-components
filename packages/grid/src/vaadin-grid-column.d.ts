@@ -1,6 +1,19 @@
-import { Grid } from './vaadin-grid.js';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { GridDefaultItem, GridItemModel } from './vaadin-grid.js';
 
-import { GridBodyRenderer, GridColumnTextAlign, GridHeaderFooterRenderer, GridDefaultItem } from './interfaces';
+export type GridBodyRenderer<TItem> = (
+  root: HTMLElement,
+  column: GridColumn<TItem>,
+  model: GridItemModel<TItem>
+) => void;
+
+export type GridColumnTextAlign = 'start' | 'center' | 'end' | null;
+
+export type GridHeaderFooterRenderer<TItem> = (root: HTMLElement, column: GridColumn<TItem>) => void;
 
 declare function ColumnBaseMixin<TItem, T extends new (...args: any[]) => {}>(
   base: T
@@ -11,9 +24,6 @@ export interface ColumnBaseMixinConstructor<TItem> {
 }
 
 interface ColumnBaseMixin<TItem> {
-  readonly _grid: Grid<TItem> | undefined;
-  readonly _allCells: HTMLElement[];
-
   /**
    * When set to true, the column is user-resizable.
    */

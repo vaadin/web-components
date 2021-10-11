@@ -5,7 +5,8 @@
  */
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { GridSorterDirection } from './interfaces';
+
+export type GridSorterDirection = 'asc' | 'desc' | null;
 
 /**
  * Fired when the `direction` property changes.

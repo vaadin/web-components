@@ -1,8 +1,29 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { AvatarI18n } from '@vaadin/avatar/src/vaadin-avatar.js';
 
-import { AvatarGroupItem, AvatarGroupI18n } from './interfaces';
+export { AvatarI18n };
+
+export interface AvatarGroupI18n extends AvatarI18n {
+  activeUsers: {
+    one: string;
+    many: string;
+  };
+  joined: string;
+  left: string;
+}
+
+export interface AvatarGroupItem {
+  name?: string;
+  abbr?: string;
+  img?: string;
+  colorIndex?: number;
+}
 
 /**
  * `<vaadin-avatar-group>` is a Web Component providing avatar group displaying functionality.

@@ -1,4 +1,36 @@
-import { GridDataProvider } from './interfaces';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { GridSorterDirection } from './vaadin-grid-sorter.js';
+
+export { GridSorterDirection };
+
+export interface GridFilterDefinition {
+  path: string;
+  value: string;
+}
+
+export interface GridSorterDefinition {
+  path: string;
+  direction: GridSorterDirection;
+}
+
+export type GridDataProviderCallback<TItem> = (items: Array<TItem>, size?: number) => void;
+
+export type GridDataProviderParams<TItem> = {
+  page: number;
+  pageSize: number;
+  filters: Array<GridFilterDefinition>;
+  sortOrders: Array<GridSorterDefinition>;
+  parentItem?: TItem;
+};
+
+export type GridDataProvider<TItem> = (
+  params: GridDataProviderParams<TItem>,
+  callback: GridDataProviderCallback<TItem>
+) => void;
 
 declare class ItemCache<TItem> {
   grid: HTMLElement;

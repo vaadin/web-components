@@ -1,4 +1,8 @@
-import { ListOrientation } from './interfaces';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 
 /**
  * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
@@ -12,11 +16,7 @@ interface ListMixinConstructor {
 interface ListMixin {
   readonly focused: Element | null;
 
-  readonly _isRTL: boolean;
-
   readonly _scrollerElement: HTMLElement;
-
-  readonly _vertical: boolean;
 
   /**
    * Used for mixin detection because `instanceof` does not work with mixins.
@@ -34,7 +34,7 @@ interface ListMixin {
    * Possible values are: `horizontal|vertical`.
    * It also changes navigation keys from left/right to up/down.
    */
-  orientation: ListOrientation;
+  orientation: 'horizontal' | 'vertical';
 
   /**
    * The list of items from which a selection can be made.
@@ -48,33 +48,6 @@ interface ListMixin {
    * you have to use `dom-repeat` and place it to the light DOM.
    */
   readonly items: Element[] | undefined;
-
-  ready(): void;
-
-  _filterItems(array: Element[]): Element[];
-
-  _onClick(event: MouseEvent): void;
-
-  _searchKey(currentIdx: number, key: string): number;
-
-  _onKeydown(event: KeyboardEvent): void;
-
-  _getAvailableIndex(idx: number, increment: number, condition: (p0: Element) => boolean): number;
-
-  _isItemHidden(item: Element): boolean;
-
-  _setFocusable(idx: number): void;
-
-  _focus(idx: number): void;
-
-  focus(): void;
-
-  /**
-   * Scroll the container to have the next item by the edge of the viewport.
-   */
-  _scrollToItem(idx: number): void;
-
-  _scroll(pixels: number): void;
 }
 
 export { ListMixin, ListMixinConstructor };

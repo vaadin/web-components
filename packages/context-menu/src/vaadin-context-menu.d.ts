@@ -1,12 +1,47 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
+import { ContextMenuItem, ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
 
-import { ContextMenuEventMap, ContextMenuRenderer } from './interfaces';
+export { ContextMenuItem };
 
-import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
+export interface ContextMenuRendererContext {
+  target: HTMLElement;
+  detail?: { sourceEvent: Event };
+}
+
+export type ContextMenuRenderer = (
+  root: HTMLElement,
+  contextMenu?: ContextMenu,
+  context?: ContextMenuRendererContext
+) => void;
+
+/**
+ * Fired when the `opened` property changes.
+ */
+export type ContextMenuOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when an item is selected when the context menu is populated using the `items` API.
+ */
+export type ContextMenuItemSelectedEvent = CustomEvent<{ value: ContextMenuItem }>;
+
+export interface ContextMenuCustomEventMap {
+  'opened-changed': ContextMenuOpenedChangedEvent;
+
+  'item-selected': ContextMenuItemSelectedEvent;
+
+  'close-all-menus': Event;
+
+  'items-outside-click': Event;
+}
+
+export interface ContextMenuEventMap extends HTMLElementEventMap, ContextMenuCustomEventMap {}
 
 /**
  * `<vaadin-context-menu>` is a Web Component for creating context menus.

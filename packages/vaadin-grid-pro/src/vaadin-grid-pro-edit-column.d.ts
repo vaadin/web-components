@@ -4,7 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
-import { GridDefaultItem } from '@vaadin/grid';
+import { GridDefaultItem } from '@vaadin/grid/src/vaadin-grid.js';
 import { GridProEditColumn } from '@vaadin/grid-pro/src/vaadin-grid-pro-edit-column.js';
 
 /**

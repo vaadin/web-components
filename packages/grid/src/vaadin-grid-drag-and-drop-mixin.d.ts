@@ -1,4 +1,15 @@
-import { GridDragAndDropFilter, GridDropMode } from './interfaces';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { GridItemModel } from './vaadin-grid.js';
+
+export type GridDragAndDropFilter<TItem> = (model: GridItemModel<TItem>) => boolean;
+
+export type GridDropLocation = 'above' | 'on-top' | 'below' | 'empty';
+
+export type GridDropMode = 'between' | 'on-top' | 'on-top-or-between' | 'on-grid';
 
 declare function DragAndDropMixin<TItem, T extends new (...args: any[]) => {}>(
   base: T

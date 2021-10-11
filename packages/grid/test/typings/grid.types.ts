@@ -1,17 +1,5 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
-import {
-  GridBodyRenderer,
-  GridCellClassNameGenerator,
-  GridColumnTextAlign,
-  GridDataProviderCallback,
-  GridDragAndDropFilter,
-  GridDropMode,
-  GridEventContext,
-  GridFilterDefinition,
-  GridRowDetailsRenderer,
-  GridSorterDefinition
-} from '../../src/interfaces';
 import { ActiveItemMixin } from '../../src/vaadin-grid-active-item-mixin';
 import { ArrayDataProviderMixin } from '../../src/vaadin-grid-array-data-provider-mixin';
 import { ColumnReorderingMixin } from '../../src/vaadin-grid-column-reordering-mixin';
@@ -35,18 +23,28 @@ import {
   ColumnBaseMixin,
   GridActiveItemChangedEvent,
   GridCellActivateEvent,
+  GridBodyRenderer,
+  GridCellClassNameGenerator,
   GridCellFocusEvent,
   GridColumn,
   GridColumnReorderEvent,
   GridColumnResizeEvent,
+  GridColumnTextAlign,
+  GridDataProviderCallback,
+  GridDragAndDropFilter,
   GridDragStartEvent,
   GridDropEvent,
   GridDropLocation,
+  GridDropMode,
   Grid,
+  GridEventContext,
   GridExpandedItemsChangedEvent,
+  GridFilterDefinition,
   GridItemModel,
   GridLoadingChangedEvent,
+  GridRowDetailsRenderer,
   GridSelectedItemsChangedEvent,
+  GridSorterDefinition,
   GridSorterDirection
 } from '../../vaadin-grid.js';
 

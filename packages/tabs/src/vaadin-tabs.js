@@ -149,7 +149,7 @@ class Tabs extends ElementMixin(ListMixin(ThemableMixin(mixinBehaviors([IronResi
     return {
       /**
        * Set tabs disposition. Possible values are `horizontal|vertical`
-       * @type {!ListOrientation}
+       * @type {!TabsOrientation}
        */
       orientation: {
         value: 'horizontal',

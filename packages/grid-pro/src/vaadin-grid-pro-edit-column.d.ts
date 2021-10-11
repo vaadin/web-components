@@ -1,8 +1,13 @@
+/**
+ * @license
+ * Copyright (c) 2019 - 2021 Vaadin Ltd.
+ * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
+ * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
+ */
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
+import { GridDefaultItem, GridBodyRenderer, GridItemModel } from '@vaadin/grid/src/vaadin-grid.js';
 
-import { GridDefaultItem, GridBodyRenderer, GridItemModel } from '@vaadin/grid';
-
-import { GridProEditorType } from './interfaces';
+export type GridProEditorType = 'text' | 'checkbox' | 'select' | 'custom';
 
 /**
  * `<vaadin-grid-pro-edit-column>` is a helper element for the `<vaadin-grid-pro>`

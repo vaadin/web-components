@@ -1,4 +1,21 @@
-import { ComboBoxDataProvider } from './interfaces';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+
+export type ComboBoxDataProviderCallback<TItem> = (items: Array<TItem>, size: number) => void;
+
+export interface ComboBoxDataProviderParams {
+  page: number;
+  pageSize: number;
+  filter: string;
+}
+
+export type ComboBoxDataProvider<TItem> = (
+  params: ComboBoxDataProviderParams,
+  callback: ComboBoxDataProviderCallback<TItem>
+) => void;
 
 declare function ComboBoxDataProviderMixin<TItem, T extends new (...args: any[]) => {}>(
   base: T

@@ -1,3 +1,9 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+
 declare function InteractionsMixin<T extends new (...args: any[]) => {}>(base: T): T & InteractionsMixinConstructor;
 
 interface InteractionsMixinConstructor {
@@ -16,14 +22,6 @@ interface InteractionsMixin {
    * resizables of a resize change.
    */
   notifyResize(): void;
-
-  _onFocusin(event: FocusEvent): void;
-
-  _onKeydown(event: KeyboardEvent): void;
-
-  _onMouseOver(e: MouseEvent): void;
-
-  _close(restoreFocus: boolean): void;
 }
 
 export { InteractionsMixin, InteractionsMixinConstructor };

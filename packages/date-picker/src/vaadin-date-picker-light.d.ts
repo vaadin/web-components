@@ -1,8 +1,36 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
+export { DatePickerDate, DatePickerI18n } from './vaadin-date-picker-mixin.js';
 
-import { DatePickerEventMap } from './interfaces';
+/**
+ * Fired when the `opened` property changes.
+ */
+export type DatePickerLightOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `invalid` property changes.
+ */
+export type DatePickerLightInvalidChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `value` property changes.
+ */
+export type DatePickerLightValueChangedEvent = CustomEvent<{ value: string }>;
+
+export interface DatePickerLightCustomEventMap {
+  'opened-changed': DatePickerLightOpenedChangedEvent;
+
+  'invalid-changed': DatePickerLightInvalidChangedEvent;
+
+  'value-changed': DatePickerLightValueChangedEvent;
+}
+
+export interface DatePickerLightEventMap extends HTMLElementEventMap, DatePickerLightCustomEventMap {}
 
 /**
  * `<vaadin-date-picker-light>` is a customizable version of the `<vaadin-date-picker>` providing
@@ -50,15 +78,15 @@ declare class DatePickerLight extends ThemableMixin(DatePickerMixin(HTMLElement)
    */
   attrForValue: string;
 
-  addEventListener<K extends keyof DatePickerEventMap>(
+  addEventListener<K extends keyof DatePickerLightEventMap>(
     type: K,
-    listener: (this: DatePickerLight, ev: DatePickerEventMap[K]) => void,
+    listener: (this: DatePickerLight, ev: DatePickerLightEventMap[K]) => void,
     options?: boolean | AddEventListenerOptions
   ): void;
 
-  removeEventListener<K extends keyof DatePickerEventMap>(
+  removeEventListener<K extends keyof DatePickerLightEventMap>(
     type: K,
-    listener: (this: DatePickerLight, ev: DatePickerEventMap[K]) => void,
+    listener: (this: DatePickerLight, ev: DatePickerLightEventMap[K]) => void,
     options?: boolean | EventListenerOptions
   ): void;
 }

@@ -1,12 +1,57 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
-
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
-
 import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
 
-import { DialogEventMap, DialogRenderer } from './interfaces';
+export type DialogRenderer = (root: HTMLElement, dialog?: Dialog) => void;
+
+export type DialogResizableDirection = 'n' | 'e' | 's' | 'w' | 'nw' | 'ne' | 'se' | 'sw';
+
+export type DialogResizeDimensions = {
+  width: string;
+  height: string;
+  contentWidth: string;
+  contentHeight: string;
+};
+
+export type DialogOverlayBounds = {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+};
+
+export type DialogOverlayBoundsParam =
+  | DialogOverlayBounds
+  | {
+      top?: string | number;
+      left?: string | number;
+      width?: string | number;
+      height?: string | number;
+    };
+
+/**
+ * Fired when the `opened` property changes.
+ */
+export type DialogOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the dialog resize is finished.
+ */
+export type DialogResizeEvent = CustomEvent<DialogResizeDimensions>;
+
+export interface DialogCustomEventMap {
+  'opened-changed': DialogOpenedChangedEvent;
+
+  resize: DialogResizeEvent;
+}
+
+export type DialogEventMap = HTMLElementEventMap & DialogCustomEventMap;
 
 /**
  * `<vaadin-dialog>` is a Web Component for creating customized modal dialogs.

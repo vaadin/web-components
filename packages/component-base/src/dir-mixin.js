@@ -34,6 +34,8 @@ const getDocumentDir = function () {
 };
 
 /**
+ * A mixin to handle `dir` attribute based on the one set on the `<html>` element.
+ *
  * @polymerMixin
  */
 export const DirMixin = (superClass) =>

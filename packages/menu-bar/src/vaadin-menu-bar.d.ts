@@ -1,12 +1,43 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
 import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
-
 import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
 
-import { MenuBarEventMap, MenuBarI18n, MenuBarItem } from './interfaces';
+export interface MenuBarItem {
+  text?: string;
+  component?: string | HTMLElement;
+  disabled?: boolean;
+  theme?: string | string[];
+  children?: SubMenuItem[];
+}
+
+export interface SubMenuItem {
+  text?: string;
+  component?: string | HTMLElement;
+  disabled?: boolean;
+  checked?: boolean;
+  children?: SubMenuItem[];
+}
+
+export interface MenuBarI18n {
+  moreOptions: string;
+}
+
+/**
+ * Fired when a submenu item or menu bar button without children is clicked.
+ */
+export type MenuBarItemSelectedEvent = CustomEvent<{ value: MenuBarItem }>;
+
+export interface MenuBarCustomEventMap {
+  'item-selected': MenuBarItemSelectedEvent;
+}
+
+export interface MenuBarEventMap extends HTMLElementEventMap, MenuBarCustomEventMap {}
 
 /**
  * `<vaadin-menu-bar>` is a Web Component providing a set of horizontally stacked buttons offering

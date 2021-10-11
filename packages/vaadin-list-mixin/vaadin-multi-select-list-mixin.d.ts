@@ -1,3 +1,8 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
 import { ListMixin, ListMixinConstructor } from './vaadin-list-mixin.js';
 
 /**
@@ -22,8 +27,6 @@ interface MultiSelectListMixin extends ListMixin {
    * Note: Not updated when used in single selection mode.
    */
   selectedValues: number[] | null | undefined;
-
-  _onMultipleClick(event: MouseEvent): void;
 }
 
 export { MultiSelectListMixin, MultiSelectListMixinConstructor };
