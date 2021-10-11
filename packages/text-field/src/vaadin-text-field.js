@@ -95,9 +95,9 @@ export class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(Elemen
       </style>
 
       <div class="vaadin-field-container">
-        <div part="label" on-click="focus">
+        <div part="label">
           <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true"></span>
+          <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
         </div>
 
         <vaadin-input-container

@@ -105,9 +105,9 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       </style>
 
       <div class="vaadin-time-picker-container">
-        <div part="label" on-click="focus">
+        <div part="label">
           <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true"></span>
+          <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
         </div>
 
         <vaadin-time-picker-combo-box

@@ -218,22 +218,14 @@ describe('text-field', () => {
       });
     });
 
-    describe('label', () => {
-      let label;
-
+    describe('required', () => {
       beforeEach(() => {
-        label = textField.shadowRoot.querySelector('[part="label"]');
+        textField.required = true;
       });
 
-      it('should update focused property on label click', () => {
-        label.click();
+      it('should focus on required indicator click', () => {
+        textField.shadowRoot.querySelector('[part="required-indicator"]').click();
         expect(textField.hasAttribute('focused')).to.be.true;
-      });
-
-      it('should not update focused property on click if disabled', () => {
-        textField.disabled = true;
-        label.click();
-        expect(textField.hasAttribute('focused')).to.be.false;
       });
     });
 

@@ -164,6 +164,11 @@ describe('form input', () => {
       datepicker.validate();
       expect(datepicker.invalid).to.be.true;
     });
+
+    it('should focus on required indicator click', () => {
+      datepicker.shadowRoot.querySelector('[part="required-indicator"]').click();
+      expect(datepicker.hasAttribute('focused')).to.be.true;
+    });
   });
 
   describe('custom validator', () => {

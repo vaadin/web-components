@@ -345,6 +345,13 @@ describe('Properties', () => {
       expect(comboBox.hasAttribute('focused')).to.be.false;
     });
 
+    it('should focus on required indicator click', () => {
+      comboBox.required = true;
+      comboBox.autoOpenDisabled = true;
+      comboBox.shadowRoot.querySelector('[part="required-indicator"]').click();
+      expect(comboBox.hasAttribute('focused')).to.be.true;
+    });
+
     describe('touch devices', () => {
       it('should blur the input on touchend', () => {
         comboBox.focus();

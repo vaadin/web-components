@@ -582,4 +582,15 @@ describe('time-picker', () => {
       expect(timePicker.$.comboBox.getAttribute('theme')).to.equal('foo');
     });
   });
+
+  describe('required', () => {
+    beforeEach(() => {
+      timePicker.required = true;
+    });
+
+    it('should focus on required indicator click', () => {
+      timePicker.shadowRoot.querySelector('[part="required-indicator"]').click();
+      expect(timePicker.hasAttribute('focused')).to.be.true;
+    });
+  });
 });
