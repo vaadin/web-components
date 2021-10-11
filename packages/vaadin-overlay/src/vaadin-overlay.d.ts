@@ -209,13 +209,6 @@ declare class OverlayElement extends ThemableMixin(DirMixin(HTMLElement)) {
    */
   requestContentUpdate(): void;
 
-  /**
-   * Manually invoke existing renderer.
-   *
-   * @deprecated Since Vaadin 21, `render()` is deprecated. Please use `requestContentUpdate()` instead.
-   */
-  render(): void;
-
   _isFocused(element: Element | null): boolean;
 
   _focusedIndex(elements: Array<Element | null> | null): number;
