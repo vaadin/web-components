@@ -60,17 +60,6 @@ export const PatternMixin = (superclass) =>
       }
     }
 
-    checkValidity() {
-      try {
-        new RegExp(this.pattern);
-      } catch (error) {
-        this.pattern = null; // remove invalid pattern
-        this.preventInvalidInput = false;
-      }
-
-      return super.checkValidity();
-    }
-
     /**
      * @param {Event} event
      * @protected
