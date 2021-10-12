@@ -420,7 +420,7 @@ describe('text-area', () => {
     });
   });
 
-  describe('textarea pattern mismatch', () => {
+  describe('web platform pattern validation spec', () => {
     // https://github.com/web-platform-tests/wpt/blob/7b0ebaccc62b566a1965396e5be7bb2bc06f841f/html/
     //     semantics/forms/constraints/form-validation-validity-patternMismatch.html
 
