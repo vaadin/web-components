@@ -1,8 +1,9 @@
 ---
 name: "\U0001F41B Bug Report"
-about: "Please report issues related to the TypeScript and HTML API of Vaadin components here."
+about: Please report issues related to the TypeScript and HTML API of Vaadin components
+  here.
 title: ''
-labels: 'i: needs triage'
+labels: ''
 assignees: ''
 
 ---
