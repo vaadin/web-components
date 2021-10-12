@@ -780,7 +780,8 @@ export const DatePickerMixin = (subclass) =>
       }
 
       // If the input isn't focused when overlay closes (fullscreen mode), clear focused state
-      if (!this.inputElement.matches(':focus')) {
+      const isInputFocused = this.getRootNode().activeElement !== this.inputElement;
+      if (isInputFocused) {
         this._setFocused(false);
       }
     }
