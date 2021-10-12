@@ -12,7 +12,7 @@ description: Report a problem found in an a11y fix
 labels: [a11y-finding]
 body:
   - type: input
-    id: a11y fix issuee
+    id: a11y fix issue
     attributes:
       label: A11y fix issue
       description: Which a11y fix was this problem found in?
@@ -39,7 +39,7 @@ body:
   - type: checkboxes
     id: screen-readers
     attributes:
-      label: Screeen Readers
+      label: Screen Readers
       description: Which screen reader did this problem occur with?
       options:
         - label: None
