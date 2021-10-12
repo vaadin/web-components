@@ -161,6 +161,15 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
   }
 
   /**
+   * @return {string}
+   * @override
+   * @protected
+   */
+  get _ariaAttr() {
+    return 'aria-labelledby';
+  }
+
+  /**
    * Override method inherited from `ValidateMixin`
    * to validate the value array.
    *
