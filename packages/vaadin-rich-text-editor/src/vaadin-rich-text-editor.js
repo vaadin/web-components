@@ -361,7 +361,7 @@ class RichTextEditorElement extends ElementMixin(ThemableMixin(PolymerElement)) 
   }
 
   static get version() {
-    return '21.0.2';
+    return '21.0.3';
   }
 
   static get properties() {
