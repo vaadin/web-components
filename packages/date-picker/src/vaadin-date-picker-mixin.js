@@ -465,7 +465,7 @@ export const DatePickerMixin = (subclass) =>
 
       // Keep focus attribute in focusElement for styling
       this._overlayContent.addEventListener('focus', () => {
-        this.toggleAttribute('focused', true);
+        this._setFocused(true);
       });
 
       this.$.overlay.addEventListener('vaadin-overlay-close', this._onVaadinOverlayClose.bind(this));
@@ -777,6 +777,11 @@ export const DatePickerMixin = (subclass) =>
       // Needed in case the value was not changed: open and close dropdown.
       if (!this.value) {
         this.validate();
+      }
+
+      // If the input isn't focused when overlay closes (fullscreen mode), clear focused state
+      if (!this.inputElement.matches(':focus')) {
+        this._setFocused(false);
       }
     }
 

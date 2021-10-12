@@ -48,6 +48,27 @@ describe('basic features', () => {
     expect(spy.called).to.be.true;
   });
 
+  it('should keep focused attribute when focus moves to overlay', async () => {
+    await open(datepicker);
+    getOverlayContent(datepicker).dispatchEvent(new CustomEvent('focus'));
+    expect(datepicker.hasAttribute('focused')).to.be.true;
+  });
+
+  it('should have focused attribute when closed and focused', async () => {
+    await open(datepicker);
+    getOverlayContent(datepicker).dispatchEvent(new CustomEvent('focus'));
+    await close(datepicker);
+    expect(datepicker.hasAttribute('focused')).to.be.true;
+  });
+
+  it('should remove focused attribute when closed and not focused', async () => {
+    datepicker._fullscreen = true;
+    await open(datepicker);
+    getOverlayContent(datepicker).dispatchEvent(new CustomEvent('focus'));
+    await close(datepicker);
+    expect(datepicker.hasAttribute('focused')).to.be.false;
+  });
+
   it('should blur when datepicker is opened on fullscreen', async () => {
     datepicker._fullscreen = true;
     const spy = sinon.spy(input, 'blur');
