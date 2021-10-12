@@ -1,22 +1,13 @@
----
-name: A11y test finding
-about: Create a report to help us improve
-title: ''
-labels: a11y-finding
-assignees: ''
-
----
-
 name: A11y test finding
 description: Report a problem found in an a11y fix
-labels: [a11y-finding]
+labels: [a11y]
 body:
   - type: input
     id: a11y fix issue
     attributes:
       label: A11y fix issue
       description: Which a11y fix was this problem found in?
-      placeholder: ex. https://github.com/vaadin/flow-components/issues/9999
+      placeholder: ex. https://github.com/vaadin/web-components/issues/9999
     validations:
       required: true
   - type: textarea
