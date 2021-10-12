@@ -427,6 +427,32 @@ describe('vaadin-checkbox-group', () => {
     });
   });
 
+  describe('aria-labelledby', () => {
+    let error, helper, label;
+
+    beforeEach(() => {
+      group = fixtureSync('<vaadin-checkbox-group helper-text="Choose one"></vaadin-checkbox-group>');
+      error = group.querySelector('[slot=error-message]');
+      helper = group.querySelector('[slot=helper]');
+      label = group.querySelector('[slot=label]');
+    });
+
+    it('should add label and helper text to aria-labelledby when field is valid', () => {
+      const aria = group.getAttribute('aria-labelledby');
+      expect(aria).to.include(helper.id);
+      expect(aria).to.not.include(error.id);
+      expect(aria).to.include(label.id);
+    });
+
+    it('should add error message to aria-labelledby when field is invalid', () => {
+      group.invalid = true;
+      const aria = group.getAttribute('aria-labelledby');
+      expect(aria).to.include(helper.id);
+      expect(aria).to.include(error.id);
+      expect(aria).to.include(label.id);
+    });
+  });
+
   describe('validation', () => {
     beforeEach(async () => {
       group = fixtureSync(`
