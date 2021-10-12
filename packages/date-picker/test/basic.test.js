@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
+import { sendKeys } from '@web/test-runner-commands';
 import { aTimeout, click, fixtureSync, oneEvent, tap } from '@vaadin/testing-helpers';
 import { close, getOverlayContent, monthsEqual, open } from './common.js';
 import '../src/vaadin-date-picker.js';
@@ -46,6 +47,26 @@ describe('basic features', () => {
     input.dispatchEvent(new CustomEvent('focus'));
 
     expect(spy.called).to.be.true;
+  });
+
+  it('should keep focused attribute when focus moves to overlay', async () => {
+    datepicker.focus();
+    await sendKeys({ press: 'ArrowDown' });
+    expect(datepicker.hasAttribute('focused')).to.be.true;
+  });
+
+  it('should have focused attribute when closed and focused', async () => {
+    datepicker.focus();
+    await sendKeys({ press: 'ArrowDown' });
+    await sendKeys({ press: 'Escape' });
+    expect(datepicker.hasAttribute('focused')).to.be.true;
+  });
+
+  it('should remove focused attribute when closed and not focused', async () => {
+    datepicker._fullscreen = true;
+    datepicker.click();
+    await sendKeys({ press: 'Escape' });
+    expect(datepicker.hasAttribute('focused')).to.be.false;
   });
 
   it('should blur when datepicker is opened on fullscreen', async () => {
