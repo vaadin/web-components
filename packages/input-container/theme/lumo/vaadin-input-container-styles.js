@@ -10,7 +10,6 @@ registerStyles(
     :host {
       border-radius: var(--lumo-border-radius-m);
       background-color: var(--lumo-contrast-10pct);
-      padding: 0 calc(0.375em + var(--lumo-border-radius-m) / 4 - 1px);
       color: var(--lumo-body-text-color);
       font-size: var(--lumo-font-size-m);
       font-family: var(--lumo-font-family);
@@ -40,7 +39,7 @@ registerStyles(
     ::slotted(:not([slot$='fix'])) {
       cursor: inherit;
       min-height: var(--lumo-text-field-size, var(--lumo-size-m));
-      padding: 0 0.25em;
+      padding: 0 calc(0.625em + var(--lumo-border-radius-m) / 4 - 1px);
       --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
       -webkit-mask-image: var(--_lumo-text-field-overflow-mask-image);
       mask-image: var(--_lumo-text-field-overflow-mask-image);
