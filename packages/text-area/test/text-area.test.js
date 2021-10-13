@@ -392,6 +392,12 @@ describe('text-area', () => {
       expect(element.validate()).to.be.true;
     });
 
+    it('the value attribute is empty string', () => {
+      element.pattern = '[A-Z]+';
+      userSetValue('');
+      expect(element.validate()).to.be.true;
+    });
+
     it('the value attribute matches the pattern attribute', () => {
       element.pattern = '[A-Z]{1}';
       userSetValue('A');

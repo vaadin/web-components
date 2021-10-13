@@ -287,10 +287,14 @@ export class TextArea extends PatternMixin(InputFieldMixin(ThemableMixin(Element
       return false;
     }
 
-    if (!this.pattern) {
+    // Custom pattern validation implementation, according to web standards spec
+
+    // Skip pattern validation if there is no pattern, or the value is empty
+    if (!this.pattern || !this.inputElement.value) {
       return true;
     }
 
+    // Skip if pattern is invalid
     try {
       new RegExp(this.pattern);
     } catch (error) {
