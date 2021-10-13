@@ -183,18 +183,51 @@ describe('vaadin-select', () => {
     });
 
     describe('keyboard selection', () => {
-      it('should select items when alphanumeric keys are pressed', () => {
-        select.opened = false;
-        expect(select._menuElement.selected).to.be.equal(2);
-        keyDownChar(valueButton, 'o');
-        keyDownChar(valueButton, 'p');
-        keyDownChar(valueButton, 't');
-        expect(select._menuElement.selected).to.be.equal(0);
-        keyDownChar(valueButton, 'i');
-        keyDownChar(valueButton, 'o');
-        keyDownChar(valueButton, 'n');
-        keyDownChar(valueButton, '2');
-        expect(select._menuElement.selected).to.be.equal(1);
+      let menu;
+
+      beforeEach(() => {
+        menu = select._menuElement;
+      });
+
+      describe('default', () => {
+        it('should select items when alphanumeric keys are pressed', () => {
+          expect(menu.selected).to.be.equal(2);
+          keyDownChar(valueButton, 'o');
+          keyDownChar(valueButton, 'p');
+          keyDownChar(valueButton, 't');
+          expect(menu.selected).to.be.equal(0);
+          keyDownChar(valueButton, 'i');
+          keyDownChar(valueButton, 'o');
+          keyDownChar(valueButton, 'n');
+          keyDownChar(valueButton, '2');
+          expect(menu.selected).to.be.equal(1);
+        });
+      });
+
+      describe('non-latin keys', () => {
+        const LARGE = 'ใหญ่';
+        const SMALL = 'เล็ก';
+
+        beforeEach(() => {
+          const items = select._items;
+          items[0].value = 'large';
+          items[0].textContent = LARGE;
+          items[1].value = 'small';
+          items[1].textContent = SMALL;
+          items[1].removeAttribute('label');
+        });
+
+        it('should select items when non-latin keys are pressed', () => {
+          keyDownChar(valueButton, SMALL.charAt(0));
+          expect(menu.selected).to.be.equal(1);
+          expect(select._valueButton.textContent.trim()).to.be.equal(SMALL);
+          expect(select.value).to.be.equal('small');
+
+          keyDownChar(valueButton, LARGE.charAt(0));
+          expect(menu.selected).to.be.equal(0);
+          expect(select._valueButton.textContent.trim()).to.be.equal(LARGE);
+          expect(select.value).to.be.equal('large');
+        });
       });
     });
 

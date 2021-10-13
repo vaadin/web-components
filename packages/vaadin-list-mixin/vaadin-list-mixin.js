@@ -156,7 +156,7 @@ export const ListMixin = (superClass) =>
       const condition = (item) =>
         !(item.disabled || this._isItemHidden(item)) &&
         item.textContent
-          .replace(/[^a-zA-Z0-9]/g, '')
+          .replace(/[^\p{L}\p{Nd}]/gu, '')
           .toLowerCase()
           .indexOf(this._searchBuf) === 0;
 
@@ -164,7 +164,7 @@ export const ListMixin = (superClass) =>
         !this.items.some(
           (item) =>
             item.textContent
-              .replace(/[^a-zA-Z0-9]/g, '')
+              .replace(/[^\p{L}\p{Nd}]/gu, '')
               .toLowerCase()
               .indexOf(this._searchBuf) === 0
         )
