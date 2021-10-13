@@ -19,7 +19,7 @@ registerStyles(
     :host(:not([nodrop])) {
       overflow: hidden;
       border: 1px dashed var(--lumo-contrast-20pct);
-      border-radius: var(--lumo-border-radius-s);
+      border-radius: var(--lumo-border-radius-l);
       padding: var(--lumo-space-m);
       transition: background-color 0.6s, border-color 0.6s;
     }
