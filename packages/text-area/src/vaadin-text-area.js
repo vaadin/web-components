@@ -283,17 +283,17 @@ export class TextArea extends PatternMixin(InputFieldMixin(ThemableMixin(Element
   }
 
   checkValidity() {
-    try {
-      new RegExp(this.pattern);
-    } catch (error) {
-      return true;
-    }
-
     if (!super.checkValidity()) {
       return false;
     }
 
     if (!this.pattern) {
+      return true;
+    }
+
+    try {
+      new RegExp(this.pattern);
+    } catch (error) {
       return true;
     }
 
