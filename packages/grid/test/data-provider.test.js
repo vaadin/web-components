@@ -794,6 +794,5 @@ describe('wrapped grid', () => {
       const lastVisibleItem = grid.getRootNode().elementFromPoint(lastRowCenterX, lastRowCenterY);
       expect(lastVisibleItem.innerText.trim()).to.equal('foo' + (grid.size - 1));
     });
-
   });
 });
