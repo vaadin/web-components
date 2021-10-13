@@ -16,6 +16,11 @@ interface CheckedMixinConstructor {
   new (...args: any[]): CheckedMixin;
 }
 
-interface CheckedMixin extends DelegateStateMixin, DisabledMixin, InputMixin {}
+interface CheckedMixin extends DelegateStateMixin, DisabledMixin, InputMixin {
+  /**
+   * True if the element is checked.
+   */
+  checked: boolean;
+}
 
 export { CheckedMixinConstructor, CheckedMixin };
