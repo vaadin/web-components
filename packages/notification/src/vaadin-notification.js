@@ -473,6 +473,7 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
    * {
    *   position?: string
    *   duration?: number
+   *   theme?: string
    * }
    * ```
    *
@@ -503,6 +504,9 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     }
     if (options && options.position) {
       notification.position = options.position;
+    }
+    if (options && options.theme) {
+      notification.setAttribute('theme', options.theme);
     }
     notification.renderer = renderer;
     document.body.appendChild(notification);
