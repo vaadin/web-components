@@ -207,3 +207,47 @@ describe('invalid with value', () => {
     expect(field.invalid).to.be.true;
   });
 });
+
+describe('disabled', () => {
+  let passwordField;
+
+  beforeEach(() => {
+    passwordField = fixtureSync('<vaadin-password-field disabled></vaadin-password-field>');
+  });
+
+  describe('reveal button focus', () => {
+    let revealButton;
+    let focusInput;
+
+    async function shiftTab() {
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+    }
+
+    beforeEach(async () => {
+      revealButton = passwordField.querySelector('[slot=reveal]');
+      focusInput = fixtureSync('<input>');
+      // Move focus to the input after the field so we can shift-tab to the reveal button in tests
+      focusInput.focus();
+    });
+
+    it('should not focus the reveal button of an initially disabled password field', async () => {
+      await shiftTab();
+      expect(document.activeElement).not.to.equal(revealButton);
+    });
+
+    it('should focus the reveal button of an enabled password field', async () => {
+      passwordField.disabled = false;
+      await shiftTab();
+      expect(document.activeElement).to.equal(revealButton);
+    });
+
+    it('should not focus the reveal button of a dynamically disabled password field', async () => {
+      passwordField.disabled = false;
+      passwordField.disabled = true;
+      await shiftTab();
+      expect(document.activeElement).not.to.equal(revealButton);
+    });
+  });
+});

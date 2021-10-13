@@ -124,7 +124,7 @@ export class PasswordField extends TextField {
       reveal: () => {
         const btn = document.createElement('button');
         btn.setAttribute('type', 'button');
-        btn.setAttribute('tabindex', '0');
+        btn.disabled = this.disabled;
         return btn;
       }
     };
@@ -280,6 +280,20 @@ export class PasswordField extends TextField {
     this._setType(passwordVisible ? 'text' : 'password');
 
     this._updateToggleState(passwordVisible);
+  }
+
+  /**
+   * Override method inherited from `DisabledMixin` to synchronize the reveal button
+   * disabled state with the password field disabled state.
+   * @param {boolean} disabled
+   * @protected
+   */
+  _disabledChanged(disabled) {
+    super._disabledChanged(disabled);
+
+    if (this._revealNode) {
+      this._revealNode.disabled = disabled;
+    }
   }
 }
 
