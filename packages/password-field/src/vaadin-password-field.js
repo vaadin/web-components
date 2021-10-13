@@ -124,7 +124,6 @@ export class PasswordField extends TextField {
       reveal: () => {
         const btn = document.createElement('button');
         btn.setAttribute('type', 'button');
-        btn.setAttribute('tabindex', '0');
         btn.disabled = this.disabled;
         return btn;
       }
