@@ -35,6 +35,11 @@ describe('static helpers', () => {
     expect(notification.position).to.equal('top-center');
   });
 
+  it('show should set the given theme attribute', () => {
+    const notification = Notification.show('Hello world', { theme: 'error' });
+    expect(notification.getAttribute('theme')).to.equal('error');
+  });
+
   it('show should work with a duration of zero', () => {
     const notification = Notification.show('Hello world', { duration: 0 });
     expect(notification.duration).to.equal(0);

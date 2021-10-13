@@ -35,6 +35,7 @@ export interface NotificationEventMap extends HTMLElementEventMap, NotificationC
 export interface ShowOptions {
   duration?: number;
   position?: NotificationPosition;
+  theme?: string;
 }
 
 /**
@@ -166,6 +167,7 @@ declare class Notification extends ThemePropertyMixin(ElementMixin(HTMLElement))
    * {
    *   position?: string
    *   duration?: number
+   *   theme?: string
    * }
    * ```
    *
