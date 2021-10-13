@@ -124,6 +124,10 @@ export class IronListAdapter {
   }
 
   __updateElement(el, index) {
+    if (this.__preventElementUpdates) {
+      return;
+    }
+
     // Clean up temporary min height
     if (el.style.minHeight) {
       el.style.minHeight = '';
@@ -149,6 +153,9 @@ export class IronListAdapter {
     if (size === this.size) {
       return;
     }
+
+    // Prevent element update while the scroll position is being restored
+    this.__preventElementUpdates = true;
 
     // Record the scroll position before changing the size
     let fvi; // first visible index
@@ -184,6 +191,9 @@ export class IronListAdapter {
     if (!this.elementsContainer.children.length) {
       requestAnimationFrame(() => this._resizeHandler());
     }
+
+    this.__preventElementUpdates = false;
+    this.update();
   }
 
   get size() {
