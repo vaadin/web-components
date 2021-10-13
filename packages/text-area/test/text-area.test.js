@@ -163,6 +163,78 @@ describe('text-area', () => {
     });
   });
 
+  describe('prevent invalid input', () => {
+    beforeEach(() => {
+      textArea.preventInvalidInput = true;
+      textArea.value = '1';
+    });
+
+    function inputText(value) {
+      textArea.inputElement.value = value;
+      textArea.inputElement.dispatchEvent(new CustomEvent('input'));
+    }
+
+    it('should prevent invalid pattern', () => {
+      textArea.pattern = '[0-9]*';
+      inputText('f');
+      expect(textArea.inputElement.value).to.equal('1');
+    });
+
+    it('should temporarily set input-prevented attribute on invalid input', () => {
+      textArea.pattern = '[0-9]*';
+      inputText('f');
+      expect(textArea.hasAttribute('input-prevented')).to.be.true;
+    });
+
+    it('should not set input-prevented attribute on valid input', () => {
+      textArea.pattern = '[0-9]*';
+      inputText('1');
+      expect(textArea.hasAttribute('input-prevented')).to.be.false;
+    });
+
+    it('should remove input-prevented attribute after 200ms timeout', () => {
+      const clock = sinon.useFakeTimers();
+      textArea.pattern = '[0-9]*';
+      inputText('f');
+      clock.tick(200);
+      expect(textArea.hasAttribute('input-prevented')).to.be.false;
+      clock.restore();
+    });
+
+    it('should prevent entering invalid characters', () => {
+      textArea.value = '';
+      textArea.pattern = '[0-9]*';
+      inputText('f');
+      expect(textArea.inputElement.value).to.equal('');
+    });
+
+    it('should not fire value-changed event when prevented', () => {
+      const spy = sinon.spy();
+      textArea.addEventListener('value-changed', spy);
+      textArea.pattern = '[0-9]*';
+      inputText('f');
+      expect(spy.called).to.be.false;
+    });
+
+    it('should not prevent valid pattern', () => {
+      textArea.pattern = '[0-9]*';
+      inputText('2');
+      expect(textArea.inputElement.value).to.equal('2');
+    });
+
+    it('should not prevent too short value', () => {
+      textArea.inputElement.minlength = 1;
+      inputText('');
+      expect(textArea.inputElement.value).to.equal('');
+    });
+
+    it('should not prevent empty value for required field', () => {
+      textArea.required = true;
+      inputText('');
+      expect(textArea.inputElement.value).to.equal('');
+    });
+  });
+
   describe('multi-line', () => {
     let native, container, inputField;
 
@@ -367,12 +439,6 @@ describe('text-area', () => {
       element.pattern = null;
       userSetValue('abc');
       expect(element.validate()).to.be.true;
-    });
-
-    it('the value attibute is empty string', () => {
-      element.pattern = '[A-Z]+';
-      userSetValue('');
-      expect(element.validate()).to.be.false;
     });
 
     it('the value attribute matches the pattern attribute', () => {
