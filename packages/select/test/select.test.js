@@ -183,18 +183,51 @@ describe('vaadin-select', () => {
     });
 
     describe('keyboard selection', () => {
-      it('should select items when alphanumeric keys are pressed', () => {
-        select.opened = false;
-        expect(select._menuElement.selected).to.be.equal(2);
-        keyDownChar(valueButton, 'o');
-        keyDownChar(valueButton, 'p');
-        keyDownChar(valueButton, 't');
-        expect(select._menuElement.selected).to.be.equal(0);
-        keyDownChar(valueButton, 'i');
-        keyDownChar(valueButton, 'o');
-        keyDownChar(valueButton, 'n');
-        keyDownChar(valueButton, '2');
-        expect(select._menuElement.selected).to.be.equal(1);
+      let menu;
+
+      beforeEach(() => {
+        menu = select._menuElement;
+      });
+
+      describe('default', () => {
+        it('should select items when alphanumeric keys are pressed', () => {
+          expect(menu.selected).to.be.equal(2);
+          keyDownChar(valueButton, 'o');
+          keyDownChar(valueButton, 'p');
+          keyDownChar(valueButton, 't');
+          expect(menu.selected).to.be.equal(0);
+          keyDownChar(valueButton, 'i');
+          keyDownChar(valueButton, 'o');
+          keyDownChar(valueButton, 'n');
+          keyDownChar(valueButton, '2');
+          expect(menu.selected).to.be.equal(1);
+        });
+      });
+
+      describe('non-latin keys', () => {
+        const LARGE = 'ใหญ่';
+        const SMALL = 'เล็ก';
+
+        beforeEach(() => {
+          const items = select._items;
+          items[0].value = 'large';
+          items[0].textContent = LARGE;
+          items[1].value = 'small';
+          items[1].textContent = SMALL;
+          items[1].removeAttribute('label');
+        });
+
+        it('should select items when non-latin keys are pressed', () => {
+          keyDownChar(valueButton, SMALL.charAt(0));
+          expect(menu.selected).to.be.equal(1);
+          expect(select._valueButton.textContent.trim()).to.be.equal(SMALL);
+          expect(select.value).to.be.equal('small');
+
+          keyDownChar(valueButton, LARGE.charAt(0));
+          expect(menu.selected).to.be.equal(0);
+          expect(select._valueButton.textContent.trim()).to.be.equal(LARGE);
+          expect(select.value).to.be.equal('large');
+        });
       });
     });
 
@@ -600,58 +633,6 @@ describe('vaadin-select', () => {
       const select = container.querySelector('vaadin-select');
       expect(window.getComputedStyle(container).width).to.eql('500px');
       expect(parseFloat(window.getComputedStyle(select).width)).to.eql(500);
-    });
-  });
-
-  describe('support non-english characters', () => {
-    let menu;
-    let valueButton;
-
-    beforeEach(async () => {
-      select = fixtureSync(`<vaadin-select value="small"></vaadin-select>`);
-      select.renderer = (root) => {
-        if (root.firstElementChild) {
-          return;
-        }
-        render(
-          html`
-            <vaadin-list-box>
-              <vaadin-item value="small">เล็ก</vaadin-item>
-              <vaadin-item value="large">ใหญ่</vaadin-item>
-            </vaadin-list-box>
-          `,
-          root
-        );
-      };
-      menu = select._menuElement;
-      valueButton = select._valueButton;
-      await nextFrame();
-    });
-
-    it('should be possible to set value declaratively', () => {
-      expect(menu.selected).to.be.equal(0);
-      expect(select._valueButton.textContent.trim()).to.be.equal('เล็ก');
-      expect(select.value).to.be.equal('small');
-
-      select.value = 'large';
-      expect(menu.selected).to.be.equal(1);
-      expect(select._valueButton.textContent.trim()).to.be.equal('ใหญ่');
-    });
-
-    it('should display correctly and set correct value when users type non-english character', () => {
-      expect(select.value).to.be.equal('small');
-      keyDownChar(valueButton, 'ใ');
-      expect(menu.selected).to.be.equal(1);
-      expect(select._valueButton.textContent.trim()).to.be.equal('ใหญ่');
-      expect(select.value).to.be.equal('large');
-    });
-
-    it('should not match and value is unchanged if users type character that not available in options', () => {
-      expect(select.value).to.be.equal('small');
-      keyDownChar(valueButton, 'น');
-      expect(menu.selected).to.be.equal(0);
-      expect(select._valueButton.textContent.trim()).to.be.equal('เล็ก');
-      expect(select.value).to.be.equal('small');
     });
   });
 });
