@@ -84,6 +84,22 @@ describe('password-field', () => {
     expect(revealButton.getAttribute('aria-pressed')).to.equal('false');
   });
 
+  it('should not focus the reveal button of a disabled password field', async () => {
+    passwordField.disabled = true;
+    await sendKeys({ press: 'Tab' });
+    expect(document.activeElement).not.to.equal(revealButton);
+  });
+
+  it('should not focus the reveal button of an initially disabled password field', async () => {
+    // Remove the existing password field
+    passwordField.remove();
+    // Create an initially disabled password field
+    passwordField = fixtureSync('<vaadin-password-field disabled></vaadin-password-field>');
+    revealButton = passwordField.querySelector('[slot=reveal]');
+    await sendKeys({ press: 'Tab' });
+    expect(document.activeElement).not.to.equal(revealButton);
+  });
+
   describe('focus-ring', () => {
     let button;
 
