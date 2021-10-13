@@ -18,7 +18,7 @@ interface InputControlMixinConstructor {
 
 interface InputControlMixin extends KeyboardMixin, InputConstraintsMixin, FieldMixin {
   /**
-   * Specify that the value should be automatically selected when the field gains focus.
+   * If true, the input text gets fully selected when the field is focused using click or touch / tap.
    */
   autoselect: boolean;
 

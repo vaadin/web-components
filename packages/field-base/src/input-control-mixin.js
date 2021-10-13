@@ -24,7 +24,7 @@ export const InputControlMixin = (superclass) =>
     static get properties() {
       return {
         /**
-         * Specify that the value should be automatically selected when the field gains focus.
+         * If true, the input text gets fully selected when the field is focused using click or touch / tap.
          */
         autoselect: {
           type: Boolean,
