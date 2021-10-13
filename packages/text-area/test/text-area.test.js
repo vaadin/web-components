@@ -447,6 +447,12 @@ describe('text-area', () => {
       expect(element.validate()).to.be.true;
     });
 
+    it('the value attribute matches the pattern attribute (multiline)', () => {
+      element.pattern = '[A-Z\n]{3}';
+      userSetValue('A\nJ');
+      expect(element.validate()).to.be.true;
+    });
+
     it('the value(ABC) in unicode attribute matches the pattern attribute', () => {
       element.pattern = '[A-Z]+';
       userSetValue('\u0041\u0042\u0043');
