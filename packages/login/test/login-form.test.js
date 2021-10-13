@@ -257,6 +257,11 @@ describe('login form', () => {
     const usernameElement = login.$.vaadinLoginUsername;
     expect(document.activeElement).to.equal(usernameElement.inputElement);
   });
+
+  it('should have autocomplete attribute set', () => {
+    const passwordField = login.$.vaadinLoginPassword;
+    expect(passwordField.getAttribute('autocomplete')).to.be.equal('current-password');
+  });
 });
 
 describe('no forgot password', () => {

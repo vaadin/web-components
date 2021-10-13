@@ -91,6 +91,7 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
             required
             on-keydown="_handleInputKeydown"
             spellcheck="false"
+            autocomplete="current-password"
           >
             <input type="password" slot="input" on-keyup="_handleInputKeyup" />
           </vaadin-password-field>
