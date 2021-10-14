@@ -18,8 +18,10 @@ export class AriaLabelController {
       if (input) {
         label.setAttribute('for', input.id);
 
-        this.__linkAria(input, label, host.hasAttribute('has-label'));
-        host.addEventListener('has-label-changed', (event) => this.__linkAria(input, label, event.detail.value));
+        this.__setAriaLabelledBy(input, host.hasAttribute('has-label') ? label.id : null);
+        host.addEventListener('has-label-changed', (event) =>
+          this.__setAriaLabelledBy(input, event.detail.value ? label.id : null)
+        );
       }
     }
   }
@@ -41,16 +43,16 @@ export class AriaLabelController {
   }
 
   /**
-   * Links or unlinks the input to the label element using aria-labelledby attribute.
+   * Sets or removes the `aria-labelledby` attribute on the input element.
+   * @param {HTMLElement} input
+   * @param {string | null | undefined} value
    * @private
    */
-  __linkAria(input, label, link) {
-    if (input && label) {
-      if (link) {
-        input.setAttribute('aria-labelledby', label.id);
-      } else {
-        input.removeAttribute('aria-labelledby');
-      }
+  __setAriaLabelledBy(input, value) {
+    if (value) {
+      input.setAttribute('aria-labelledby', value);
+    } else {
+      input.removeAttribute('aria-labelledby');
     }
   }
 }
