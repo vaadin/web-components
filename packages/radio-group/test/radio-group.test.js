@@ -267,17 +267,6 @@ describe('radio-group', () => {
       expect(buttons[1].checked).to.be.false;
     });
 
-    it('should not have has-value attribute by default', () => {
-      expect(group.hasAttribute('has-value')).to.be.false;
-    });
-
-    it('should toggle has-value attribute on value change', () => {
-      group.value = '2';
-      expect(group.hasAttribute('has-value')).to.be.true;
-      group.value = '';
-      expect(group.hasAttribute('has-value')).to.be.false;
-    });
-
     it('should dispatch value-changed event when value changes', () => {
       const spy = sinon.spy();
       group.addEventListener('value-changed', spy);
@@ -299,6 +288,37 @@ describe('radio-group', () => {
       group.value = 'foo';
       expect(stub.callCount).to.equal(1);
       stub.restore();
+    });
+  });
+
+  describe('has-value attribute', () => {
+    beforeEach(async () => {
+      group = fixtureSync(`
+        <vaadin-radio-group>
+          <vaadin-radio-button value="1" label="Button 1"></vaadin-radio-button>
+          <vaadin-radio-button value="2" label="Button 2"></vaadin-radio-button>
+        </vaadin-radio-group>
+      `);
+      await nextFrame();
+      buttons = [...group.querySelectorAll('vaadin-radio-button')];
+    });
+
+    it('should not have has-value attribute by default', () => {
+      expect(group.hasAttribute('has-value')).to.be.false;
+    });
+
+    it('should set has-value on radio button click', () => {
+      buttons[0].click();
+      expect(group.hasAttribute('has-value')).to.be.true;
+      buttons[1].click();
+      expect(group.hasAttribute('has-value')).to.be.true;
+    });
+
+    it('should toggle has-value attribute on value change', () => {
+      group.value = '2';
+      expect(group.hasAttribute('has-value')).to.be.true;
+      group.value = '';
+      expect(group.hasAttribute('has-value')).to.be.false;
     });
   });
 
