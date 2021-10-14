@@ -581,7 +581,7 @@ export const DatePickerMixin = (subclass) =>
       }
     }
 
-    /** @private */
+    /** @protected */
     _openedChanged(opened) {
       if (opened && !this._overlayInitialized) {
         this._initOverlay();

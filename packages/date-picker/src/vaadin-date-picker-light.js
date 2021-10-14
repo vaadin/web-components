@@ -72,8 +72,6 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
         id="overlay"
         fullscreen$="[[_fullscreen]]"
         opened="{{opened}}"
-        position-target="[[inputElement]]"
-        no-vertical-overlap
         on-vaadin-overlay-open="_onOverlayOpened"
         on-vaadin-overlay-close="_onOverlayClosed"
         theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]"
@@ -148,6 +146,15 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
   /** @return {string | undefined} */
   get _inputValue() {
     return this.inputElement && this.inputElement[dashToCamelCase(this.attrForValue)];
+  }
+
+  // Workaround https://github.com/vaadin/web-components/issues/2855
+  /** @protected */
+  _openedChanged(opened) {
+    super._openedChanged(opened);
+
+    this.$.overlay.positionTarget = this.inputElement;
+    this.$.overlay.noVerticalOverlap = true;
   }
 }
 

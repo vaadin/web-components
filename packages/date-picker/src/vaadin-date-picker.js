@@ -156,7 +156,6 @@ class DatePicker extends DatePickerMixin(
         id="overlay"
         fullscreen$="[[_fullscreen]]"
         theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]"
-        no-vertical-overlap
         on-vaadin-overlay-open="_onOverlayOpened"
         on-vaadin-overlay-close="_onOverlayClosed"
         disable-upgrade
@@ -207,7 +206,6 @@ class DatePicker extends DatePickerMixin(
       })
     );
     this.addController(new AriaLabelController(this, this.inputElement, this._labelNode));
-    this.$.overlay.positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
   }
 
   /** @private */
@@ -226,6 +224,15 @@ class DatePicker extends DatePickerMixin(
   _toggle(e) {
     e.stopPropagation();
     this[this._overlayInitialized && this.$.overlay.opened ? 'close' : 'open']();
+  }
+
+  // Workaround https://github.com/vaadin/web-components/issues/2855
+  /** @protected */
+  _openedChanged(opened) {
+    super._openedChanged(opened);
+
+    this.$.overlay.positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
+    this.$.overlay.noVerticalOverlap = true;
   }
 }
 
