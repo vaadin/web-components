@@ -462,15 +462,13 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
       return;
     }
 
-    if (!this._checkedButton || newV != this._checkedButton.value) {
-      const newCheckedButton = this._radioButtons.filter((button) => button.value == newV)[0];
+    const newCheckedButton = this._radioButtons.filter((button) => button.value == newV)[0];
 
-      if (newCheckedButton) {
-        this._selectButton(newCheckedButton);
-        this.setAttribute('has-value', '');
-      } else {
-        console.warn(`No <vaadin-radio-button> with value ${newV} found.`);
-      }
+    if (newCheckedButton) {
+      this._selectButton(newCheckedButton);
+      this.setAttribute('has-value', '');
+    } else {
+      console.warn(`No <vaadin-radio-button> with value ${newV} found.`);
     }
   }
 
