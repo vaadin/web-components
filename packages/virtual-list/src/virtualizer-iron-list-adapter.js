@@ -124,16 +124,14 @@ export class IronListAdapter {
   }
 
   __updateElement(el, index) {
-    if (this.__preventElementUpdates) {
-      return;
-    }
-
     // Clean up temporary min height
     if (el.style.minHeight) {
       el.style.minHeight = '';
     }
 
-    this.updateElement(el, index);
+    if (!this.__preventElementUpdates) {
+      this.updateElement(el, index);
+    }
 
     if (el.offsetHeight === 0) {
       // If the elements have 0 height after update (for example due to lazy rendering),
@@ -193,7 +191,11 @@ export class IronListAdapter {
     }
 
     this.__preventElementUpdates = false;
+    // Update all the elements currently in the DOM
     this.update();
+    // Schedule and flush a resize handler
+    this._resizeHandler();
+    flush();
   }
 
   get size() {
