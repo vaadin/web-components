@@ -16,8 +16,8 @@
   "bugs": {
     "url": "https://github.com/vaadin/web-components/issues"
   },
-  "main": "vaadin-icons.js",
-  "module": "vaadin-icons.js",
+  "main": "vaadin-iconset.js",
+  "module": "vaadin-iconset.js",
   "scripts": {
     "icons": "gulp icons"
   },
