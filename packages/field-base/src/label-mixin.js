@@ -87,6 +87,7 @@ export const LabelMixin = dedupingMixin(
           const hasLabel = this._labelNode.children.length > 0 || this._labelNode.textContent.trim() !== '';
 
           this.toggleAttribute('has-label', hasLabel);
+          this.dispatchEvent(new CustomEvent('has-label-changed', { detail: { value: hasLabel } }));
         }
       }
     }

@@ -226,7 +226,7 @@ export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(Polymer
         this.ariaTarget = input;
       })
     );
-    this.addController(new AriaLabelController(this.inputElement, this._labelNode));
+    this.addController(new AriaLabelController(this, this.inputElement, this._labelNode));
     this.addEventListener('animationend', this._onAnimationEnd);
   }
 

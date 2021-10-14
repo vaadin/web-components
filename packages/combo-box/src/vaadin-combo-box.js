@@ -261,7 +261,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
         this.ariaTarget = input;
       })
     );
-    this.addController(new AriaLabelController(this.inputElement, this._labelNode));
+    this.addController(new AriaLabelController(this, this.inputElement, this._labelNode));
     this._positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
     this._toggleElement = this.$.toggleButton;
   }
