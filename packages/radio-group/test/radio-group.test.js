@@ -295,8 +295,8 @@ describe('radio-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-radio-group>
-          <vaadin-radio-button value="1">Button 1</vaadin-radio-button>
-          <vaadin-radio-button value="2">Button 2</vaadin-radio-button>
+          <vaadin-radio-button value="1" label="Button 1"></vaadin-radio-button>
+          <vaadin-radio-button value="2" label="Button 2"></vaadin-radio-button>
         </vaadin-radio-group>
       `);
       await nextFrame();
