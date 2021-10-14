@@ -310,7 +310,6 @@ describe('radio-group', () => {
     it('should set has-value on radio button click', () => {
       buttons[0].click();
       expect(group.hasAttribute('has-value')).to.be.true;
-
       buttons[1].click();
       expect(group.hasAttribute('has-value')).to.be.true;
     });
