@@ -8,30 +8,21 @@
  * A controller to link an input element with a slotted `<label>` element.
  */
 export class AriaLabelController {
-  constructor(input, label) {
+  constructor(host, input, label) {
     this.input = input;
-    this.label = label;
     this.__preventDuplicateLabelClick = this.__preventDuplicateLabelClick.bind(this);
-  }
-
-  hostConnected() {
-    const label = this.label;
-    const input = this.input;
 
     if (label) {
       label.addEventListener('click', this.__preventDuplicateLabelClick);
 
       if (input) {
-        input.setAttribute('aria-labelledby', label.id);
         label.setAttribute('for', input.id);
-      }
-    }
-  }
 
-  hostDisconnected() {
-    const label = this.label;
-    if (label) {
-      label.removeEventListener('click', this.__preventDuplicateLabelClick);
+        this.__setAriaLabelledBy(input, host.hasAttribute('has-label') ? label.id : null);
+        host.addEventListener('has-label-changed', (event) =>
+          this.__setAriaLabelledBy(input, event.detail.value ? label.id : null)
+        );
+      }
     }
   }
 
@@ -49,5 +40,19 @@ export class AriaLabelController {
       this.input.removeEventListener('click', inputClickHandler);
     };
     this.input.addEventListener('click', inputClickHandler);
+  }
+
+  /**
+   * Sets or removes the `aria-labelledby` attribute on the input element.
+   * @param {HTMLElement} input
+   * @param {string | null | undefined} value
+   * @private
+   */
+  __setAriaLabelledBy(input, value) {
+    if (value) {
+      input.setAttribute('aria-labelledby', value);
+    } else {
+      input.removeAttribute('aria-labelledby');
+    }
   }
 }

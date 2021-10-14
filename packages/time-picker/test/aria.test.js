@@ -6,7 +6,7 @@ describe('ARIA', () => {
   let timePicker, comboBox, input, label, helper, error;
 
   beforeEach(() => {
-    timePicker = fixtureSync(`<vaadin-time-picker helper-text="Time slot"></vaadin-time-picker>`);
+    timePicker = fixtureSync(`<vaadin-time-picker helper-text="Time slot" label="Time"></vaadin-time-picker>`);
     comboBox = timePicker.$.comboBox;
     input = timePicker.inputElement;
     label = timePicker.querySelector('[slot=label]');

@@ -31,13 +31,13 @@ describe('aria-label-mixin', () => {
   ['input', 'textarea'].forEach((el) => {
     describe(el, () => {
       beforeEach(() => {
-        element = fixtureSync(`<aria-label-${el}-mixin-element></aria-label-${el}-mixin-element>`);
+        element = fixtureSync(`<aria-label-${el}-mixin-element label="label"></aria-label-${el}-mixin-element>`);
         label = element.querySelector('[slot=label]');
         target = document.createElement(el);
         target.setAttribute('slot', el);
         element.appendChild(target);
         element._setInputElement(target);
-        element.addController(new AriaLabelController(target, label));
+        element.addController(new AriaLabelController(element, target, label));
       });
 
       it('should set for attribute on the label', () => {
@@ -45,6 +45,17 @@ describe('aria-label-mixin', () => {
       });
 
       it('should set aria-labelledby attribute on the ' + el, () => {
+        expect(target.getAttribute('aria-labelledby')).to.equal(label.id);
+      });
+
+      it('should remove aria-labelledby attribute from the ' + el, () => {
+        element.label = '';
+        expect(target.hasAttribute('aria-labelledby')).to.be.false;
+      });
+
+      it('should restore aria-labelledby attribute on the ' + el, () => {
+        element.label = '';
+        element.label = 'label';
         expect(target.getAttribute('aria-labelledby')).to.equal(label.id);
       });
 
