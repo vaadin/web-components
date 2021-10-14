@@ -10,30 +10,17 @@
 export class AriaLabelController {
   constructor(host, input, label) {
     this.input = input;
-    this.label = label;
     this.__preventDuplicateLabelClick = this.__preventDuplicateLabelClick.bind(this);
-
-    this.__linkAria(input, label, host.hasAttribute('has-label'));
-    host.addEventListener('has-label-changed', (event) => this.__linkAria(input, label, event.detail.value));
-  }
-
-  hostConnected() {
-    const label = this.label;
-    const input = this.input;
 
     if (label) {
       label.addEventListener('click', this.__preventDuplicateLabelClick);
 
       if (input) {
         label.setAttribute('for', input.id);
-      }
-    }
-  }
 
-  hostDisconnected() {
-    const label = this.label;
-    if (label) {
-      label.removeEventListener('click', this.__preventDuplicateLabelClick);
+        this.__linkAria(input, label, host.hasAttribute('has-label'));
+        host.addEventListener('has-label-changed', (event) => this.__linkAria(input, label, event.detail.value));
+      }
     }
   }
 
