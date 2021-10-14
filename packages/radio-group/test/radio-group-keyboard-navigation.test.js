@@ -9,9 +9,9 @@ describe('keyboard navigation', () => {
   beforeEach(async () => {
     group = fixtureSync(`
       <vaadin-radio-group>
-        <vaadin-radio-button value="1">Button 1</vaadin-radio-button>
-        <vaadin-radio-button value="2">Button 2</vaadin-radio-button>
-        <vaadin-radio-button value="3">Button 3</vaadin-radio-button>
+        <vaadin-radio-button label="Button 1" value="1"></vaadin-radio-button>
+        <vaadin-radio-button label="Button 2" value="2"></vaadin-radio-button>
+        <vaadin-radio-button label="Button 3" value="3"></vaadin-radio-button>
       </vaadin-radio-group>
     `);
     await nextFrame();
