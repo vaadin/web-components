@@ -28,8 +28,8 @@ describe('radio-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-radio-group>
-          <vaadin-radio-button>Button 1</vaadin-radio-button>
-          <vaadin-radio-button disabled>Button 2</vaadin-radio-button>
+          <vaadin-radio-button label="Button 1"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 2" disabled></vaadin-radio-button>
         </vaadin-radio-group>
       `);
       await nextFrame();
@@ -58,8 +58,8 @@ describe('radio-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-radio-group disabled>
-          <vaadin-radio-button>Button 1</vaadin-radio-button>
-          <vaadin-radio-button>Button 2</vaadin-radio-button>
+          <vaadin-radio-button label="Button 1"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 2"></vaadin-radio-button>
         </vaadin-radio-group>
       `);
       await nextFrame();
@@ -95,8 +95,8 @@ describe('radio-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-radio-group>
-          <vaadin-radio-button>Button 1</vaadin-radio-button>
-          <vaadin-radio-button>Button 2</vaadin-radio-button>
+          <vaadin-radio-button label="Button 1"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 2"></vaadin-radio-button>
         </vaadin-radio-group>
       `);
       await nextFrame();
@@ -126,8 +126,8 @@ describe('radio-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-radio-group readonly>
-          <vaadin-radio-button value="1">Button 1</vaadin-radio-button>
-          <vaadin-radio-button value="2">Button 2</vaadin-radio-button>
+          <vaadin-radio-button label="Button 1" value="1"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 2" value="2"></vaadin-radio-button>
         </vaadin-radio-group>
       `);
       await nextFrame();
@@ -182,8 +182,8 @@ describe('radio-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-radio-group>
-          <vaadin-radio-button>Button 1</vaadin-radio-button>
-          <vaadin-radio-button>Button 2</vaadin-radio-button>
+          <vaadin-radio-button label="Button 1"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 2"></vaadin-radio-button>
         </vaadin-radio-group>
       `);
       await nextFrame();
@@ -224,8 +224,8 @@ describe('radio-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-radio-group>
-          <vaadin-radio-button>Button 1</vaadin-radio-button>
-          <vaadin-radio-button value="2">Button 2</vaadin-radio-button>
+          <vaadin-radio-button label="Button 1"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 2" value="2"></vaadin-radio-button>
         </vaadin-radio-group>
       `);
       await nextFrame();
@@ -295,8 +295,8 @@ describe('radio-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-radio-group>
-          <vaadin-radio-button value="1" label="Button 1"></vaadin-radio-button>
-          <vaadin-radio-button value="2" label="Button 2"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 1" value="1"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 2" value="2"></vaadin-radio-button>
         </vaadin-radio-group>
       `);
       await nextFrame();
@@ -328,9 +328,9 @@ describe('radio-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-radio-group>
-          <vaadin-radio-button value="1">Button 1</vaadin-radio-button>
-          <vaadin-radio-button value="2">Button 2</vaadin-radio-button>
-          <vaadin-radio-button value="3">Button 3</vaadin-radio-button>
+          <vaadin-radio-button label="Button 1" value="1"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 2" value="2"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 3" value="3"></vaadin-radio-button>
         </vaadin-radio-group>
       `);
       await nextFrame();
@@ -432,8 +432,8 @@ describe('radio-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-radio-group>
-          <vaadin-radio-button value="1">Button 1</vaadin-radio-button>
-          <vaadin-radio-button value="2">Button 2</vaadin-radio-button>
+          <vaadin-radio-button label="Button 1" value="1"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 2" value="2"></vaadin-radio-button>
         </vaadin-radio-group>
       `);
       await nextFrame();
@@ -566,10 +566,10 @@ describe('radio-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-radio-group>
-          <vaadin-radio-button>Button 1</vaadin-radio-button>
-          <vaadin-radio-button value="1" checked>Button 2</vaadin-radio-button>
-          <vaadin-radio-button value="2" checked>Button 3</vaadin-radio-button>
-          <vaadin-radio-button>Button 4</vaadin-radio-button>
+          <vaadin-radio-button label="Button 1"></vaadin-radio-button>
+          <vaadin-radio-button label="Button 2" value="1" checked></vaadin-radio-button>
+          <vaadin-radio-button label="Button 3" value="2" checked></vaadin-radio-button>
+          <vaadin-radio-button label="Button 4"></vaadin-radio-button>
         </vaadin-radio-group>
       `);
       await nextFrame();
@@ -613,18 +613,18 @@ describe('radio-group', () => {
       wrapper = fixtureSync(`
         <div style="width: 500px">
           <vaadin-radio-group>
-            <vaadin-radio-button value="r_1">Radio button 1</vaadin-radio-button>
-            <vaadin-radio-button value="r_2">Radio button 2</vaadin-radio-button>
-            <vaadin-radio-button value="r_3">Radio button 3</vaadin-radio-button>
-            <vaadin-radio-button value="r_4">Radio button 4</vaadin-radio-button>
-            <vaadin-radio-button value="r_5">Radio button 5</vaadin-radio-button>
-            <vaadin-radio-button value="r_6">Radio button 6</vaadin-radio-button>
-            <vaadin-radio-button value="r_7">Radio button 7</vaadin-radio-button>
-            <vaadin-radio-button value="r_8">Radio button 8</vaadin-radio-button>
-            <vaadin-radio-button value="r_9">Radio button 9</vaadin-radio-button>
-            <vaadin-radio-button value="r_10">Radio button 10</vaadin-radio-button>
-            <vaadin-radio-button value="r_11">Radio button 11</vaadin-radio-button>
-            <vaadin-radio-button value="r_12">Radio button 12</vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 1" value="r_1"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 2" value="r_2"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 3" value="r_3"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 4" value="r_4"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 5" value="r_5"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 6" value="r_6"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 7" value="r_7"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 8" value="r_8"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 9" value="r_9"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 10 value="r_10"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 11 value="r_11"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 12 value="r_12"></vaadin-radio-button>
           </vaadin-radio-group>
         </div>
       `);
