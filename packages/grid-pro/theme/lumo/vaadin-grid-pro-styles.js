@@ -1,5 +1,6 @@
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
+import '@vaadin/vaadin-lumo-styles/style.js';
 
 registerStyles(
   'vaadin-grid-pro',
@@ -13,6 +14,11 @@ registerStyles(
       left: 0;
       pointer-events: none;
       box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+    }
+
+    [part~='editable-cell'],
+    [part~='editable-cell'] ::slotted(vaadin-grid-cell-content) {
+      cursor: var(--lumo-clickable-cursor);
     }
 
     [part~='editable-cell']:hover,
