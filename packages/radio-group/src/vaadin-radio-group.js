@@ -357,10 +357,6 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
       return;
     }
 
-    if (this.__selectedRadioButton && this.__selectedRadioButton.value === newValue) {
-      return;
-    }
-
     const newSelectedRadioButton = this.__radioButtons.find((radioButton) => {
       return radioButton.value === newValue;
     });
@@ -453,15 +449,15 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
    * @private
    */
   __selectRadioButton(radioButton) {
+    this.__radioButtons.forEach((button) => {
+      button.checked = button === radioButton;
+    });
+
     if (radioButton) {
       this.value = radioButton.value;
     } else {
       this.value = '';
     }
-
-    this.__radioButtons.forEach((button) => {
-      button.checked = button === radioButton;
-    });
 
     this.validate();
 
