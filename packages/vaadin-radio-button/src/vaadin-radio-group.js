@@ -462,7 +462,7 @@ class RadioGroupElement extends ThemableMixin(DirMixin(PolymerElement)) {
       return;
     }
 
-    const newCheckedButton = this._radioButtons.filter((button) => button.value == newV)[0];
+    const newCheckedButton = this._radioButtons.find((button) => button.value == newV);
 
     if (newCheckedButton) {
       this._selectButton(newCheckedButton);
