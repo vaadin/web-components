@@ -15,13 +15,13 @@ const select = css`
   }
 
   /* placeholder styles */
-  :host(:not([has-value])) [part='input-field'] ::slotted([slot='value']) {
+  :host [part='input-field'] ::slotted([slot='value'][placeholder]) {
     color: var(--material-disabled-text-color);
     transition: opacity 0.175s 0.1s;
     opacity: 1;
   }
 
-  :host([has-value]) [part='input-field'] ::slotted([slot='value']) {
+  :host [part='input-field'] ::slotted([slot='value']) {
     color: var(--material-body-text-color);
   }
 
