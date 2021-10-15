@@ -22,6 +22,10 @@ const $_documentContainer = html` <style>
         [part='reveal-button'][hidden] {
           display: none !important;
         }
+
+        input::-ms-reveal {
+          display: none;
+        }
       </style>
 
       <div
