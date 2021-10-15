@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/grid-pro",
-  "version": "22.0.0-alpha9",
+  "version": "22.0.0-alpha10",
   "publishConfig": {
     "access": "public"
   },
@@ -33,23 +33,23 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/checkbox": "22.0.0-alpha9",
-    "@vaadin/component-base": "22.0.0-alpha9",
-    "@vaadin/grid": "22.0.0-alpha9",
-    "@vaadin/item": "22.0.0-alpha9",
-    "@vaadin/list-box": "22.0.0-alpha9",
-    "@vaadin/select": "22.0.0-alpha9",
-    "@vaadin/text-field": "22.0.0-alpha9",
+    "@vaadin/checkbox": "22.0.0-alpha10",
+    "@vaadin/component-base": "22.0.0-alpha10",
+    "@vaadin/grid": "22.0.0-alpha10",
+    "@vaadin/item": "22.0.0-alpha10",
+    "@vaadin/list-box": "22.0.0-alpha10",
+    "@vaadin/select": "22.0.0-alpha10",
+    "@vaadin/text-field": "22.0.0-alpha10",
     "@vaadin/vaadin-license-checker": "^2.1.0",
-    "@vaadin/vaadin-lumo-styles": "22.0.0-alpha9",
-    "@vaadin/vaadin-material-styles": "22.0.0-alpha9",
-    "@vaadin/vaadin-themable-mixin": "22.0.0-alpha9"
+    "@vaadin/vaadin-lumo-styles": "22.0.0-alpha10",
+    "@vaadin/vaadin-material-styles": "22.0.0-alpha10",
+    "@vaadin/vaadin-themable-mixin": "22.0.0-alpha10"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/date-picker": "22.0.0-alpha9",
-    "@vaadin/dialog": "22.0.0-alpha9",
-    "@vaadin/polymer-legacy-adapter": "22.0.0-alpha9",
+    "@vaadin/date-picker": "22.0.0-alpha10",
+    "@vaadin/dialog": "22.0.0-alpha10",
+    "@vaadin/polymer-legacy-adapter": "22.0.0-alpha10",
     "@vaadin/testing-helpers": "^0.3.0",
     "lit": "^2.0.0",
     "sinon": "^9.2.1"
