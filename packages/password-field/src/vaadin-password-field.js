@@ -137,7 +137,7 @@ export class PasswordField extends SlotStylesMixin(TextField) {
     const tag = this.localName;
     return [
       `
-        ${tag} [slot="input"]::-ms-reveal{
+        ${tag} [slot="input"]::-ms-reveal {
           display: none;
         }
       `
