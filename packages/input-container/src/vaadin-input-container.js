@@ -102,6 +102,28 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
       }
     };
   }
+
+  ready() {
+    super.ready();
+
+    this.addEventListener('pointerdown', (event) => {
+      if (event.target === this) {
+        // Prevent direct clicks to the input container from blurring the input
+        event.preventDefault();
+      }
+    });
+
+    this.addEventListener('click', (event) => {
+      if (event.target === this) {
+        // The vaadin-input-container element was directly clicked,
+        // focus any focusable child element from the default slot
+        this.shadowRoot
+          .querySelector('slot:not([name])')
+          .assignedNodes({ flatten: true })
+          .forEach((node) => node.focus && node.focus());
+      }
+    });
+  }
 }
 
 customElements.define(InputContainer.is, InputContainer);
