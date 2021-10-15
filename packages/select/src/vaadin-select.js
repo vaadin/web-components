@@ -532,10 +532,13 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
     const selected = this._items[this._menuElement.selected];
 
+    this._valueButton.removeAttribute('placeholder');
+
     if (!selected) {
       if (this.placeholder) {
         const item = this.__createItem(this.placeholder);
         this.__appendItem(item);
+        this._valueButton.setAttribute('placeholder', '');
       }
     } else {
       this.__attachSelectedItem(selected);

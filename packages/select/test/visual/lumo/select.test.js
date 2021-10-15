@@ -136,4 +136,17 @@ describe('select', () => {
     element.value = 'item 1';
     await visualDiff(div, 'width-value');
   });
+
+  it('empty value', async () => {
+    // To make sure placeholder styles aren't applied to empty value item
+    element.placeholder = 'Placeholder';
+    element.renderer = (root) => {
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item value="">Empty</vaadin-item>
+        </vaadin-list-box>
+        `;
+    };
+    await visualDiff(div, 'empty-value');
+  });
 });
