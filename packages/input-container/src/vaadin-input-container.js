@@ -103,6 +103,7 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
     };
   }
 
+  /** @protected */
   ready() {
     super.ready();
 
