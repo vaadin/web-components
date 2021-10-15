@@ -21,7 +21,7 @@ const item = css`
   }
 
   /* Checkmark */
-  :host span[part='checkmark']::before {
+  :host [part='checkmark']::before {
     display: var(--_material-item-selected-icon-display, none);
     content: '';
     font-family: material-icons;
@@ -35,7 +35,7 @@ const item = css`
     flex: none;
   }
 
-  :host([selected]) span[part='checkmark']::before {
+  :host([selected]) [part='checkmark']::before {
     content: var(--material-icons-check);
   }
 
@@ -47,7 +47,7 @@ const item = css`
   }
 
   /* RTL specific styles */
-  :host([dir='rtl']) span[part='checkmark']::before {
+  :host([dir='rtl']) [part='checkmark']::before {
     margin-right: 0;
     margin-left: 10px;
   }
