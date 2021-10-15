@@ -21,7 +21,7 @@ const item = css`
   }
 
   /* Checkmark */
-  :host([tabindex])::before {
+  :host([tabindex]) span[part='checkmark']::before {
     display: var(--_lumo-item-selected-icon-display, none);
     content: var(--lumo-icons-checkmark);
     font-family: lumo-icons;
@@ -37,11 +37,11 @@ const item = css`
     transition: transform 0.2s cubic-bezier(0.12, 0.32, 0.54, 2), opacity 0.1s;
   }
 
-  :host([selected])::before {
+  :host([selected]) span[part='checkmark']::before {
     opacity: 1;
   }
 
-  :host([active]:not([selected]))::before {
+  :host([active]:not([selected])) span[part='checkmark']::before {
     transform: scale(0.8);
     opacity: 0;
     transition-duration: 0s;
