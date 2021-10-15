@@ -15,18 +15,6 @@ interface KeyboardMixinConstructor {
   new (...args: any[]): KeyboardMixin;
 }
 
-interface KeyboardMixin {
-  /**
-   * A handler for the `keydown` event. By default, it does nothing.
-   * Override the method to implement your own behavior.
-   */
-  _onKeyDown(event: KeyboardEvent): void;
-
-  /**
-   * A handler for the `keyup` event. By default, it does nothing.
-   * Override the method to implement your own behavior.
-   */
-  _onKeyUp(event: KeyboardEvent): void;
-}
+interface KeyboardMixin {}
 
 export { KeyboardMixinConstructor, KeyboardMixin };

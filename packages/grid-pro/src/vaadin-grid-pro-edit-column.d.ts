@@ -5,7 +5,7 @@
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
-import { GridDefaultItem, GridBodyRenderer, GridItemModel } from '@vaadin/grid/src/vaadin-grid.js';
+import { GridDefaultItem, GridBodyRenderer } from '@vaadin/grid/src/vaadin-grid.js';
 
 export type GridProEditorType = 'text' | 'checkbox' | 'select' | 'custom';
 
@@ -69,16 +69,6 @@ declare class GridProEditColumn<TItem = GridDefaultItem> extends GridColumn<TIte
    * @attr {string} editor-value-path
    */
   editorValuePath: string;
-
-  _getEditorTagName(cell: HTMLElement): string;
-
-  _getEditorComponent(cell: HTMLElement): HTMLElement | null;
-
-  _getEditorValue(editor: HTMLElement): unknown | null;
-
-  _startCellEdit(cell: HTMLElement, model: GridItemModel<TItem>): void;
-
-  _stopCellEdit(cell: HTMLElement, model: GridItemModel<TItem>): void;
 }
 
 declare global {

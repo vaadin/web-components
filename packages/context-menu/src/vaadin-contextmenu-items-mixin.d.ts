@@ -43,8 +43,6 @@ interface ItemsMixinConstructor {
 }
 
 interface ItemsMixin {
-  readonly __isRTL: boolean;
-
   /**
    * Defines a (hierarchical) menu structure for the component.
    * If a menu item has a non-empty `children` set, a sub-menu with the child items is opened

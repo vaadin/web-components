@@ -36,12 +36,6 @@ interface InlineEditingMixin {
    * @attr {boolean} edit-on-click
    */
   editOnClick: boolean | null | undefined;
-
-  _checkImports(): void;
-
-  _stopEdit(shouldCancel?: boolean, shouldRestoreFocus?: boolean): void;
-
-  _switchEditCell(e: KeyboardEvent): void;
 }
 
 export { InlineEditingMixin, InlineEditingMixinConstructor };

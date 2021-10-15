@@ -10,14 +10,6 @@ interface ButtonsMixinConstructor {
   new (...args: any[]): ButtonsMixin;
 }
 
-interface ButtonsMixin {
-  readonly _buttons: HTMLElement[];
-
-  readonly _container: HTMLElement;
-
-  readonly _overflow: HTMLElement;
-
-  _hasOverflow: boolean;
-}
+interface ButtonsMixin {}
 
 export { ButtonsMixin, ButtonsMixinConstructor };

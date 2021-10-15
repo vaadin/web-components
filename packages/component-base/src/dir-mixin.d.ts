@@ -15,10 +15,6 @@ interface DirMixinConstructor {
   finalize(): void;
 }
 
-interface DirMixin {
-  __getNormalizedScrollLeft(element: Element | null): number;
-
-  __setNormalizedScrollLeft(element: Element | null, scrollLeft: number): void;
-}
+interface DirMixin {}
 
 export { DirMixin, DirMixinConstructor };

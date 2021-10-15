@@ -13,21 +13,6 @@ interface FocusMixinConstructor {
   new (...args: any[]): FocusMixin;
 }
 
-interface FocusMixin {
-  /**
-   * Override to change how focused and focus-ring attributes are set.
-   */
-  _setFocused(focused: boolean): void;
-
-  /**
-   * Override to define if the field receives focus based on the event.
-   */
-  _shouldSetFocus(event: FocusEvent): boolean;
-
-  /**
-   * Override to define if the field loses focus based on the event.
-   */
-  _shouldRemoveFocus(event: FocusEvent): boolean;
-}
+interface FocusMixin {}
 
 export { FocusMixinConstructor, FocusMixin };

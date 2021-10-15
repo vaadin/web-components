@@ -13,20 +13,6 @@ interface SlotTargetMixinConstructor {
   new (...args: any[]): SlotTargetMixin;
 }
 
-interface SlotTargetMixin {
-  /**
-   * A reference to the source slot from which the content is copied to the target element.
-   *
-   * @protected
-   */
-  _sourceSlot: HTMLSlotElement;
-
-  /**
-   * A reference to the target element to which the content is copied from the source slot.
-   *
-   * @protected
-   */
-  _slotTarget: HTMLElement;
-}
+interface SlotTargetMixin {}
 
 export { SlotTargetMixinConstructor, SlotTargetMixin };

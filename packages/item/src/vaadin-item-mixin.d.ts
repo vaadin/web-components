@@ -19,13 +19,6 @@ interface ItemMixin {
   value: string;
 
   /**
-   * Used for mixin detection because `instanceof` does not work with mixins.
-   * e.g. in VaadinListMixin it filters items by using the
-   * `element._hasVaadinItemMixin` condition.
-   */
-  _hasVaadinItemMixin: boolean;
-
-  /**
    * If true, the user cannot interact with this element.
    */
   disabled: boolean;
@@ -34,14 +27,6 @@ interface ItemMixin {
    * If true, the item is in selected state.
    */
   selected: boolean;
-
-  _setFocused(focused: boolean): void;
-
-  _setActive(active: boolean): void;
-
-  _onKeydown(event: KeyboardEvent): void;
-
-  _onKeyup(event: KeyboardEvent): void;
 }
 
 export { ItemMixin, ItemMixinConstructor };

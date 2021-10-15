@@ -30,8 +30,6 @@ interface ComboBoxMixinConstructor<TItem> {
 }
 
 interface ComboBoxMixin<TItem> extends DisabledMixin, InputMixin, KeyboardMixin {
-  readonly _propertyForValue: string;
-
   /**
    * True if the dropdown is open, false otherwise.
    */

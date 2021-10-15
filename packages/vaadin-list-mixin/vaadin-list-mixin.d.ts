@@ -16,13 +16,6 @@ interface ListMixinConstructor {
 interface ListMixin {
   readonly focused: Element | null;
 
-  readonly _scrollerElement: HTMLElement;
-
-  /**
-   * Used for mixin detection because `instanceof` does not work with mixins.
-   */
-  _hasVaadinListMixin: boolean;
-
   /**
    * The index of the item selected in the items array.
    * Note: Not updated when used in `multiple` selection mode.
