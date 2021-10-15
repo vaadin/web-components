@@ -542,29 +542,6 @@ declare class Chart extends ThemableMixin(ElementMixin(HTMLElement)) {
   polar: boolean | null | undefined;
 
   /**
-   * Search for axis with given `id`.
-   *
-   * @param id contains the id that will be searched
-   * @param isXAxis indicates if it will remove x or y axes. Defaults to `false`.
-   */
-  __getAxis(id: string, isXAxis: boolean): Axis | null;
-
-  /**
-   * Add an axis with given options
-   *
-   * @param options axis options
-   * @param isXAxis indicates if axis is X (`true`) or Y (`false`). Defaults to `false`.
-   */
-  __addAxis(options: object | null, isXAxis: boolean): Axis;
-
-  /**
-   * Iterates over axes (y or x) and removes whenever it doesn't contain any series and was created for unit
-   *
-   * @param isXAxis indicates if it will remove x or y axes. Defaults to `false`.
-   */
-  __removeAxisIfEmpty(isXAxis: boolean): void;
-
-  /**
    * Update the chart configuration.
    * This JSON API provides a simple single-argument alternative to the configuration property.
    *

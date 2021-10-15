@@ -70,15 +70,13 @@ declare class GridProEditColumn<TItem = GridDefaultItem> extends GridColumn<TIte
    */
   editorValuePath: string;
 
-  _getEditorTagName(cell: HTMLElement): string;
+  protected _getEditorComponent(cell: HTMLElement): HTMLElement | null;
 
-  _getEditorComponent(cell: HTMLElement): HTMLElement | null;
+  protected _getEditorValue(editor: HTMLElement): unknown | null;
 
-  _getEditorValue(editor: HTMLElement): unknown | null;
+  protected _startCellEdit(cell: HTMLElement, model: GridItemModel<TItem>): void;
 
-  _startCellEdit(cell: HTMLElement, model: GridItemModel<TItem>): void;
-
-  _stopCellEdit(cell: HTMLElement, model: GridItemModel<TItem>): void;
+  protected _stopCellEdit(cell: HTMLElement, model: GridItemModel<TItem>): void;
 }
 
 declare global {

@@ -75,8 +75,6 @@ export interface GridProEventMap<TItem>
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  */
 declare class GridPro<TItem = GridDefaultItem> extends Grid<TItem> {
-  static _finalizeClass(): void;
-
   addEventListener<K extends keyof GridProEventMap<TItem>>(
     type: K,
     listener: (this: GridPro<TItem>, ev: GridProEventMap<TItem>[K]) => void,

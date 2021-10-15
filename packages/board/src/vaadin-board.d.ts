@@ -25,8 +25,6 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  * ```
  */
 declare class Board extends ElementMixin(HTMLElement) {
-  static _finalizeClass(): void;
-
   /**
    * Redraws the board and all rows inside it, if necessary.
    *
