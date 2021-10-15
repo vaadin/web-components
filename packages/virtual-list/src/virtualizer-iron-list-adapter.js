@@ -191,8 +191,6 @@ export class IronListAdapter {
     }
 
     this.__preventElementUpdates = false;
-    // Update all the elements currently in the DOM
-    this.update();
     // Schedule and flush a resize handler
     this._resizeHandler();
     flush();
