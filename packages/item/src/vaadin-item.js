@@ -60,6 +60,7 @@ class Item extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
           display: none !important;
         }
       </style>
+      <span part="checkmark" aria-hidden="true"></span>
       <div part="content">
         <slot></slot>
       </div>
