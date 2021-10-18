@@ -36,7 +36,7 @@ registerStyles(
       align-items: center;
     }
 
-    :host(vaadin-item[theme='avatar-group-item']) [part='checkmark']::before {
+    :host([theme='avatar-group-item']) [part='checkmark']::before {
       display: none;
     }
 
