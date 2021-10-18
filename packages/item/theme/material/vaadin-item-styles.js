@@ -21,7 +21,7 @@ const item = css`
   }
 
   /* Checkmark */
-  :host [part='checkmark']::before {
+  [part='checkmark']::before {
     display: var(--_material-item-selected-icon-display, none);
     content: '';
     font-family: material-icons;

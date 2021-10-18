@@ -21,7 +21,7 @@ const item = css`
   }
 
   /* Checkmark */
-  :host([tabindex]) [part='checkmark']::before {
+  [part='checkmark']::before {
     display: var(--_lumo-item-selected-icon-display, none);
     content: var(--lumo-icons-checkmark);
     font-family: lumo-icons;

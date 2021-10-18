@@ -5,10 +5,13 @@ import '../../../theme/lumo/vaadin-item.js';
 describe('item', () => {
   let div, element;
 
+  function setIconVisible(container) {
+    container.style.setProperty('--_lumo-item-selected-icon-display', 'block');
+  }
+
   beforeEach(() => {
     div = document.createElement('div');
     div.style.display = 'inline-block';
-    div.style.setProperty('--_lumo-item-selected-icon-display', 'block');
     element = fixtureSync('<vaadin-item>Basic item</vaadin-item>', div);
   });
 
@@ -26,13 +29,13 @@ describe('item', () => {
         await visualDiff(div, `${dir}-basic`);
       });
 
-      it('focusable', async () => {
-        element.setAttribute('tabindex', '0');
-        await visualDiff(div, `${dir}-focusable`);
+      it('checkmark', async () => {
+        setIconVisible(div);
+        await visualDiff(div, `${dir}-checkmark`);
       });
 
       it('selected', async () => {
-        element.setAttribute('tabindex', '0');
+        setIconVisible(div);
         element.setAttribute('selected', '');
         await visualDiff(div, `${dir}-selected`);
       });
