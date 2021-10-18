@@ -45,24 +45,6 @@ const menuBarButton = css`
     padding: 0;
   }
 
-  :host([expanded]) {
-    background-color: var(--lumo-primary-color-10pct);
-  }
-
-  :host([expanded][theme~='primary']) {
-    background-color: var(--lumo-primary-color-50pct);
-  }
-
-  :host([disabled][theme~='primary']) {
-    color: var(--lumo-disabled-text-color);
-    background-color: var(--lumo-contrast-5pct);
-  }
-
-  :host([expanded][theme~='tertiary']),
-  :host([expanded][theme~='tertiary-inline']) {
-    background-color: var(--lumo-primary-color-10pct) !important;
-  }
-
   :host(:first-of-type) {
     border-radius: var(--lumo-border-radius-m) 0 0 var(--lumo-border-radius-m);
 
