@@ -3,19 +3,17 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { DisabledMixinInterface } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusMixinInterface } from '@vaadin/component-base/src/focus-mixin.js';
 
 /**
  * A mixin to forward focus to an element in the light DOM.
  */
-declare function DelegateFocusMixin<T extends new (...args: any[]) => {}>(base: T): T & DelegateFocusMixinConstructor;
+declare const DelegateFocusMixin: <T>(superClass: T) => Constructor<DelegateFocusMixinInterface> & T;
 
-interface DelegateFocusMixinConstructor {
-  new (...args: any[]): DelegateFocusMixin;
-}
+declare type Constructor<T> = new (...args: any[]) => T;
 
-declare class DelegateFocusMixin extends FocusMixin(DisabledMixin) {
+declare class DelegateFocusMixinClass {
   /**
    * Specify that this control should have input focus when the page loads.
    */
@@ -31,4 +29,6 @@ declare class DelegateFocusMixin extends FocusMixin(DisabledMixin) {
   readonly focusElement: Element | null | undefined;
 }
 
-export { DelegateFocusMixinConstructor, DelegateFocusMixin };
+type DelegateFocusMixinInterface = DisabledMixinInterface & FocusMixinInterface & DelegateFocusMixinClass;
+
+export { DelegateFocusMixin, DelegateFocusMixinInterface };

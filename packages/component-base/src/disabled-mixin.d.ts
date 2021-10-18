@@ -7,17 +7,17 @@
 /**
  * A mixin to provide disabled property for field components.
  */
-declare function DisabledMixin<T extends new (...args: any[]) => {}>(base: T): T & DisabledMixinConstructor;
+declare const DisabledMixin: <T>(superClass: T) => Constructor<DisabledMixinInterface> & T;
 
-interface DisabledMixinConstructor {
-  new (...args: any[]): DisabledMixin;
-}
+declare type Constructor<T> = new (...args: any[]) => T;
 
-interface DisabledMixin {
+declare class DisabledMixinClass {
   /**
    * If true, the user cannot interact with this element.
    */
   disabled: boolean;
 }
 
-export { DisabledMixinConstructor, DisabledMixin };
+type DisabledMixinInterface = DisabledMixinClass;
+
+export { DisabledMixin, DisabledMixinInterface };
