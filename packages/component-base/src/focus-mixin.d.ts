@@ -11,7 +11,7 @@ declare const FocusMixin: <T>(superClass: T) => Constructor<FocusMixinInterface>
 
 declare type Constructor<T> = new (...args: any[]) => T;
 
-declare class FocusMixinClass {
+declare class FocusMixinInterface {
   /**
    * Override to change how focused and focus-ring attributes are set.
    */
@@ -28,6 +28,4 @@ declare class FocusMixinClass {
   protected _shouldRemoveFocus(event: FocusEvent): boolean;
 }
 
-type FocusMixinInterface = FocusMixinClass;
-
-export { FocusMixin, FocusMixinInterface };
+export { FocusMixin };

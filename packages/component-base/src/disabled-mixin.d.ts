@@ -11,13 +11,11 @@ declare const DisabledMixin: <T>(superClass: T) => Constructor<DisabledMixinInte
 
 declare type Constructor<T> = new (...args: any[]) => T;
 
-declare class DisabledMixinClass {
+declare class DisabledMixinInterface {
   /**
    * If true, the user cannot interact with this element.
    */
   disabled: boolean;
 }
 
-type DisabledMixinInterface = DisabledMixinClass;
-
-export { DisabledMixin, DisabledMixinInterface };
+export { DisabledMixin };
