@@ -129,7 +129,9 @@ export class IronListAdapter {
       el.style.minHeight = '';
     }
 
-    this.updateElement(el, index);
+    if (!this.__preventElementUpdates) {
+      this.updateElement(el, index);
+    }
 
     if (el.offsetHeight === 0) {
       // If the elements have 0 height after update (for example due to lazy rendering),
@@ -149,6 +151,9 @@ export class IronListAdapter {
     if (size === this.size) {
       return;
     }
+
+    // Prevent element update while the scroll position is being restored
+    this.__preventElementUpdates = true;
 
     // Record the scroll position before changing the size
     let fvi; // first visible index
@@ -184,6 +189,11 @@ export class IronListAdapter {
     if (!this.elementsContainer.children.length) {
       requestAnimationFrame(() => this._resizeHandler());
     }
+
+    this.__preventElementUpdates = false;
+    // Schedule and flush a resize handler
+    this._resizeHandler();
+    flush();
   }
 
   get size() {
