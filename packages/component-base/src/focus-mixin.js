@@ -84,7 +84,7 @@ export const FocusMixin = dedupingMixin(
       /**
        * Override to define if the field receives focus based on the event.
        *
-       * @param {FocusEvent} event
+       * @param {FocusEvent} _event
        * @return {boolean}
        * @protected
        */
@@ -95,7 +95,7 @@ export const FocusMixin = dedupingMixin(
       /**
        * Override to define if the field loses focus based on the event.
        *
-       * @param {FocusEvent} event
+       * @param {FocusEvent} _event
        * @return {boolean}
        * @protected
        */

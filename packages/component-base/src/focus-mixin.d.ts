@@ -7,12 +7,25 @@
 /**
  * A mixin to handle `focused` and `focus-ring` attributes based on focus.
  */
-declare function FocusMixin<T extends new (...args: any[]) => {}>(base: T): T & FocusMixinConstructor;
+declare const FocusMixin: <T>(superClass: T) => Constructor<FocusMixinInterface> & T;
 
-interface FocusMixinConstructor {
-  new (...args: any[]): FocusMixin;
+declare type Constructor<T> = new (...args: any[]) => T;
+
+declare class FocusMixinInterface {
+  /**
+   * Override to change how focused and focus-ring attributes are set.
+   */
+  protected _setFocused(focused: boolean): void;
+
+  /**
+   * Override to define if the field receives focus based on the event.
+   */
+  protected _shouldSetFocus(event: FocusEvent): boolean;
+
+  /**
+   * Override to define if the field loses focus based on the event.
+   */
+  protected _shouldRemoveFocus(event: FocusEvent): boolean;
 }
 
-interface FocusMixin {}
-
-export { FocusMixinConstructor, FocusMixin };
+export { FocusMixin };

@@ -15,7 +15,7 @@ interface DelegateFocusMixinConstructor {
   new (...args: any[]): DelegateFocusMixin;
 }
 
-interface DelegateFocusMixin extends DisabledMixin, FocusMixin {
+declare class DelegateFocusMixin extends FocusMixin(DisabledMixin) {
   /**
    * Specify that this control should have input focus when the page loads.
    */
