@@ -66,6 +66,7 @@ export const InteractionsMixin = (superClass) =>
     /** @protected */
     _setExpanded(button, expanded) {
       button.toggleAttribute('expanded', expanded);
+      button.toggleAttribute('active', expanded);
       button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
     }
 
