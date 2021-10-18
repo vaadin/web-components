@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menu bar</title>
+
+    <script type="module">
+      import '@vaadin/menu-bar';
+
+      const menuBar = document.querySelector('vaadin-menu-bar');
+      menuBar.items = [
+        { text: 'View' },
+        { text: 'Edit' },
+        {
+          text: 'Share',
+          children: [
+            {
+              text: 'On social media',
+              children: [{ text: 'Facebook' }, { text: 'Twitter' }, { text: 'Instagram' }]
+            },
+            { text: 'By email' },
+            { text: 'Get link' }
+          ]
+        },
+        {
+          text: 'Move',
+          children: [{ text: 'To folder' }, { text: 'To trash' }]
+        },
+        { text: 'Duplicate' }
+      ];
+    </script>
+  </head>
+
+  <body>
+    <vaadin-menu-bar></vaadin-menu-bar>
+  </body>
+</html>
