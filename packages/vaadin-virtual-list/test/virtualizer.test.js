@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
 describe('virtualizer', () => {
@@ -169,6 +170,42 @@ describe('virtualizer', () => {
     virtualizer.size = virtualizer.size * 2;
     const item = elementsContainer.querySelector('#item-50');
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top - 10);
+  });
+
+  it('should not request a different set of items on size increase', () => {
+    const updateElement = sinon.spy((el, index) => (el.textContent = `item-${index}`));
+    init({ size: 100, updateElement });
+
+    // Scroll halfway down the list
+    updateElement.resetHistory();
+    virtualizer.scrollToIndex(50);
+    const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
+
+    // Increase the size so it shouldn't affect the current viewport items
+    updateElement.resetHistory();
+    virtualizer.size = 200;
+    const postResizeUpdatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
+
+    expect(postResizeUpdatedIndexes).to.eql(updatedIndexes);
+    expect(postResizeUpdatedIndexes).not.to.include(0);
+  });
+
+  it('should request a different set of items on size decrease', () => {
+    const updateElement = sinon.spy((el, index) => (el.textContent = `item-${index}`));
+    init({ size: 100, updateElement });
+
+    // Scroll halfway down the list
+    updateElement.resetHistory();
+    virtualizer.scrollToIndex(50);
+    const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
+
+    // Decrease the size so that we end up at the top of the list
+    updateElement.resetHistory();
+    virtualizer.size = 10;
+    const postResizeUpdatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
+
+    expect(postResizeUpdatedIndexes).not.to.include.members(updatedIndexes);
+    expect(postResizeUpdatedIndexes).to.include(0);
   });
 
   it('should have physical items once visible', async () => {
