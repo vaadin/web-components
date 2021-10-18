@@ -24,10 +24,6 @@ registerStyles(
       padding: 8px;
       padding-left: 24px;
     }
-
-    [part='items'] ::slotted(vaadin-item[theme='avatar-group-item'])::before {
-      display: none;
-    }
   `,
   { moduleId: 'material-avatar-group-list-box' }
 );
@@ -38,6 +34,10 @@ registerStyles(
     :host([theme='avatar-group-item']) [part='content'] {
       display: flex;
       align-items: center;
+    }
+
+    :host([theme='avatar-group-item']) [part='checkmark']::before {
+      display: none;
     }
 
     :host([theme='avatar-group-item']:not([dir='rtl'])) ::slotted(vaadin-avatar) {
