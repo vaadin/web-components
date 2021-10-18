@@ -43,7 +43,7 @@ const requiredField = css`
   [part='required-indicator']::after {
     content: var(--lumo-required-field-indicator, '•');
     transition: opacity 0.2s;
-    opacity: 0;
+    opacity: var(--lumo-required-field-indicator-opacity, 0);
     color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
     position: absolute;
     right: 0;
@@ -52,7 +52,7 @@ const requiredField = css`
   }
 
   :host([required]:not([has-value])) [part='required-indicator']::after {
-    opacity: 1;
+    opacity: var(--lumo-required-field-indicator-opacity, 1);
   }
 
   :host([invalid]) [part='required-indicator']::after {
