@@ -77,6 +77,18 @@ describe('checkbox-group', () => {
       element.style.width = '150px';
       await visualDiff(div, 'wrapped');
     });
+
+    it('full width', async () => {
+      div.style.width = '300px';
+      div.style.padding = '0';
+      element.style.width = '100%';
+      element.querySelectorAll('vaadin-checkbox').forEach((checkbox) => {
+        checkbox.style.width = '33%';
+        // compensate inline-block whitespace
+        checkbox.style.marginRight = '-3px';
+      });
+      await visualDiff(div, 'full-width');
+    });
   });
 
   describe('RTL', () => {

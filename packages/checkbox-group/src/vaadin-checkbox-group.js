@@ -84,6 +84,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
         .vaadin-group-field-container {
           display: flex;
           flex-direction: column;
+          width: 100%;
         }
 
         :host(:not([has-label])) [part='label'] {

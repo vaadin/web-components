@@ -88,6 +88,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
         .vaadin-group-field-container {
           display: flex;
           flex-direction: column;
+          width: 100%;
         }
 
         :host(:not([has-label])) [part='label'] {
