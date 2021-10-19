@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '@polymer/polymer/lib/elements/custom-style.js';
+import '../vaadin-form-layout.js';
 import '../vaadin-form-item.js';
 
 describe('form-item', () => {
@@ -9,11 +10,13 @@ describe('form-item', () => {
 
   beforeEach(() => {
     item = fixtureSync(`
-      <vaadin-form-item>
-        <label slot="label">Label</label>
-        <input>
-      </vaadin-form-item>
-    `);
+      <vaadin-form-layout>
+        <vaadin-form-item>
+          <label slot="label">Label</label>
+          <input>
+        </vaadin-form-item>
+      </vaadin-form-layout>
+    `).querySelector('vaadin-form-item');
     label = item.querySelector('label');
     input = item.querySelector('input');
   });
