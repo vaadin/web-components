@@ -32,7 +32,7 @@ What happened instead.
 
 <!-- Example: Grid content occasionally gets scrolled. -->
 
-### Live Demo (optional)
+### Live demo (optional)
 
 A screenshot or video with issue reproduced.
 
@@ -71,12 +71,13 @@ Clear steps describing how to reproduce the issue.
 - OSX 10.13.4
 -->
 
-### Browsers Affected
-<!-- Check all that apply -->
-- [ ] Chrome
-- [ ] Firefox
-- [ ] Safari
-- [ ] Edge
-- [ ] IE 11
-- [ ] iOS Safari
-- [ ] Android Chrome
+### Browsers affected
+
+<!-- Remove the ones that don't apply -->
+- Chrome
+- Firefox
+- Safari
+- Edge
+- IE 11
+- iOS Safari
+- Android Chrome
