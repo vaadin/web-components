@@ -114,6 +114,9 @@ class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizabl
           max-width: 100%;
           animation: 1ms vaadin-form-layout-appear;
           /* CSS API for host */
+          --vaadin-form-item-label-width: 8em;
+          --vaadin-form-item-label-spacing: 1em;
+          --vaadin-form-item-row-spacing: 1em;
           --vaadin-form-layout-column-spacing: 2em; /* (default) */
           align-self: stretch;
         }
