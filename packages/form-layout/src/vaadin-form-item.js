@@ -109,7 +109,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
           display: inline-flex;
           flex-direction: row;
           align-items: baseline;
-          margin: calc(0.5 * var(--vaadin-form-item-row-spacing)) 0;
+          margin: calc(0.5 * var(--vaadin-form-item-row-spacing, 1em)) 0;
         }
 
         :host([label-position='top']) {
@@ -122,7 +122,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
         }
 
         #label {
-          width: var(--vaadin-form-item-label-width);
+          width: var(--vaadin-form-item-label-width, 8em);
           flex: 0 0 auto;
         }
 
@@ -131,7 +131,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
         }
 
         #spacing {
-          width: var(--vaadin-form-item-label-spacing);
+          width: var(--vaadin-form-item-label-spacing, 1em);
           flex: 0 0 auto;
         }
 
