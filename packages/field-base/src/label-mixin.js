@@ -69,7 +69,7 @@ export const LabelMixin = dedupingMixin(
           this._labelNode.id = this._labelId;
           this._toggleHasLabelAttribute();
 
-          this.__labelNodeObserver.observe(this._labelNode, { childList: true });
+          this.__labelNodeObserver.observe(this._labelNode, { childList: true, subtree: true, characterData: true });
         }
       }
 

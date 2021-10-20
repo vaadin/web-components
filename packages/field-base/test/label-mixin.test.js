@@ -82,55 +82,97 @@ describe('label-mixin', () => {
   });
 
   describe('slotted', () => {
-    beforeEach(() => {
-      element = fixtureSync(`
-        <label-mixin-element>
-          <label slot="label"><div>Custom</div></label>
-        </label-mixin-element>
-      `);
-      label = element.querySelector('label');
-    });
+    describe('basic', () => {
+      beforeEach(() => {
+        element = fixtureSync(`
+          <label-mixin-element>
+            <label slot="label">Custom</label>
+          </label-mixin-element>
+        `);
+        label = element.querySelector('label');
+      });
 
-    it('should set id on the slotted label element', () => {
-      const id = label.getAttribute('id');
-      expect(id).to.match(ID_REGEX);
-      expect(id.endsWith(element.constructor._uniqueLabelId)).to.be.true;
-    });
+      it('should set id on the slotted label element', () => {
+        const id = label.getAttribute('id');
+        expect(id).to.match(ID_REGEX);
+        expect(id.endsWith(element.constructor._uniqueLabelId)).to.be.true;
+      });
 
-    it('should update slotted label content on property change', () => {
-      element.label = 'Email';
-      expect(label.textContent).to.equal('Email');
-    });
+      it('should update slotted label content on property change', () => {
+        element.label = 'Email';
+        expect(label.textContent).to.equal('Email');
+      });
 
-    describe('has-label attribute', () => {
-      it('should set the attribute', () => {
+      it('should add has-label attribute', () => {
         expect(element.hasAttribute('has-label')).to.be.true;
       });
 
-      it('should remove the attribute when label content is only whitespaces', async () => {
+      it('should remove has-label attribute when label content is whitespace string', async () => {
         label.textContent = ' ';
         await nextFrame();
         expect(element.hasAttribute('has-label')).to.be.false;
       });
 
-      it('should remove the attribute when label content is empty', async () => {
+      it('should remove has-label attribute when label content is empty', async () => {
         label.textContent = '';
         await nextFrame();
         expect(element.hasAttribute('has-label')).to.be.false;
       });
+    });
 
-      it('should not remove the attribute when label children are empty', async () => {
+    describe('empty text node', () => {
+      beforeEach(() => {
+        element = fixtureSync(`
+          <label-mixin-element>
+            <label slot="label"> </label>
+          </label-mixin-element>
+        `);
+        label = element.querySelector('label');
+      });
+
+      it('should not add has-label attribute', () => {
+        expect(element.hasAttribute('has-label')).to.be.false;
+      });
+
+      it('should add has-label attribute when mutating a child text node', async () => {
+        label.childNodes[0].textContent = 'Label';
+        await nextFrame();
+        expect(element.hasAttribute('has-label')).to.be.true;
+      });
+    });
+
+    describe('element node', () => {
+      beforeEach(() => {
+        element = fixtureSync(`
+          <label-mixin-element>
+            <label slot="label"><div>Label</div></label>
+          </label-mixin-element>
+        `);
+        label = element.querySelector('label');
+      });
+
+      it('should add has-label attribute', () => {
+        expect(element.hasAttribute('has-label')).to.be.true;
+      });
+
+      it('should not remove has-label attribute when label children are empty', async () => {
         label.firstChild.textContent = '';
         await nextFrame();
         expect(element.hasAttribute('has-label')).to.be.true;
       });
+    });
 
-      it('should add the attribute when label children are initially empty', () => {
+    describe('empty element node', () => {
+      beforeEach(() => {
         element = fixtureSync(`
           <label-mixin-element>
             <label slot="label"><div></div></label>
           </label-mixin-element>
         `);
+        label = element.querySelector('label');
+      });
+
+      it('should add has-label attribute', () => {
         expect(element.hasAttribute('has-label')).to.be.true;
       });
     });
