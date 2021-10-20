@@ -15,9 +15,9 @@ customElements.define(
 );
 
 describe('text-area-controller', () => {
-  let element, controller, textarea;
-
   describe('default', () => {
+    let element, controller, textarea;
+
     beforeEach(() => {
       element = fixtureSync('<textarea-controller-element></textarea-controller-element>');
       controller = new TextAreaController(element, (node) => {
@@ -35,13 +35,6 @@ describe('text-area-controller', () => {
       expect(element.inputElement).to.equal(textarea);
     });
 
-    it('should set id attribute on the textarea', () => {
-      const ID_REGEX = /^textarea-controller-element-\d+$/;
-      const id = textarea.getAttribute('id');
-      expect(id).to.match(ID_REGEX);
-      expect(id.endsWith(controller.constructor._uniqueTextAreaId)).to.be.true;
-    });
-
     it('should have an empty name by default', () => {
       expect(textarea.name).to.equal('');
     });
@@ -52,6 +45,8 @@ describe('text-area-controller', () => {
   });
 
   describe('name', () => {
+    let element, textarea;
+
     beforeEach(() => {
       element = fixtureSync('<textarea-controller-element name="foo"></textarea-controller-element>');
     });
@@ -64,6 +59,8 @@ describe('text-area-controller', () => {
   });
 
   describe('value', () => {
+    let element, textarea;
+
     beforeEach(() => {
       element = fixtureSync('<textarea-controller-element value="foo"></textarea-controller-element>');
     });
@@ -72,6 +69,32 @@ describe('text-area-controller', () => {
       element.addController(new TextAreaController(element));
       textarea = element.querySelector('[slot=textarea]');
       expect(textarea.value).to.equal('foo');
+    });
+  });
+
+  describe('unique id', () => {
+    let wrapper, elements;
+
+    const ID_REGEX = /^textarea-controller-element-\d+$/;
+
+    beforeEach(() => {
+      wrapper = fixtureSync(`
+        <div>
+          <textarea-controller-element></textarea-controller-element>
+          <textarea-controller-element></textarea-controller-element>
+        </div>
+      `);
+      elements = wrapper.children;
+      elements[0].addController(new TextAreaController(elements[0]));
+      elements[1].addController(new TextAreaController(elements[1]));
+    });
+
+    it('should set unique ID attribute on each textarea', () => {
+      const textarea1 = elements[0].querySelector('[slot=textarea]');
+      const textarea2 = elements[1].querySelector('[slot=textarea]');
+      expect(textarea1.id).to.match(ID_REGEX);
+      expect(textarea2.id).to.match(ID_REGEX);
+      expect(textarea1.id).to.not.equal(textarea2.id);
     });
   });
 });
