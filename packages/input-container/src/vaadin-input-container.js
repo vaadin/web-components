@@ -36,11 +36,6 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
           width: 100%;
           height: 100%;
           outline: none;
-          flex: auto;
-          white-space: nowrap;
-          overflow: hidden;
-          width: 100%;
-          height: 100%;
           margin: 0;
           padding: 0;
           border: 0;
