@@ -81,7 +81,7 @@ describe('form layout', () => {
   });
 
   describe('CSS properties', () => {
-    let layout;
+    let layout, item;
 
     beforeEach(() => {
       layout = fixtureSync(`
@@ -90,6 +90,40 @@ describe('form layout', () => {
           <vaadin-form-item></vaadin-form-item>
         </vaadin-form-layout>
       `);
+      item = layout.querySelector('vaadin-form-item');
+    });
+
+    it('should have default label-width', () => {
+      expect(getComputedStyle(item).getPropertyValue('--vaadin-form-item-label-width').trim()).to.equal('8em');
+      const labelFontSize = parseFloat(getComputedStyle(item.$.label).fontSize);
+      expect(parseFloat(getComputedStyle(item.$.label).width)).to.be.closeTo(8 * labelFontSize, 0.5);
+    });
+
+    it('should apply label-width', () => {
+      item.updateStyles({ '--vaadin-form-item-label-width': '100px' });
+      expect(getComputedStyle(item.$.label).width).to.equal('100px');
+    });
+
+    it('should not apply label-width when label-position="top" attribute is set', () => {
+      item.setAttribute('label-position', 'top');
+      item.updateStyles({ '--vaadin-form-item-label-width': '100px' });
+      expect(getComputedStyle(item.$.label).width).to.not.equal('100px');
+    });
+
+    it('should have default label-spacing', () => {
+      expect(getComputedStyle(item).getPropertyValue('--vaadin-form-item-label-spacing').trim()).to.equal('1em');
+      expect(getComputedStyle(item.$.spacing).width).to.equal('16px'); // 1em in px
+    });
+
+    it('should apply label-spacing', () => {
+      item.updateStyles({ '--vaadin-form-item-label-spacing': '8px' });
+      expect(getComputedStyle(item.$.spacing).width).to.equal('8px');
+    });
+
+    it('should not have default row-spacing', () => {
+      expect(getComputedStyle(item).getPropertyValue('--vaadin-form-item-row-spacing').trim()).to.equal('0');
+      expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(0);
+      expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(0);
     });
 
     it('should apply default column-spacing', () => {
