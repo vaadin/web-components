@@ -884,7 +884,6 @@ class Grid extends ElementMixin(
 
     this._a11yUpdateRowLevel(row, model.level);
     this._a11yUpdateRowSelected(row, model.selected);
-    this._a11yUpdateRowExpanded(row, model.expanded);
     this._a11yUpdateRowDetailsOpened(row, model.detailsOpened);
 
     row.toggleAttribute('expanded', model.expanded);
@@ -902,6 +901,8 @@ class Grid extends ElementMixin(
     });
 
     this._updateDetailsCellHeight(row);
+
+    this._a11yUpdateRowExpanded(row, model.expanded);
   }
 
   /** @private */
