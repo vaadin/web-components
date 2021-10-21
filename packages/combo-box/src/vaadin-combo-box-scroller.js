@@ -81,7 +81,8 @@ export class ComboBoxScroller extends PolymerElement {
        * calling `scrollIntoView` does not have any effect.
        */
       opened: {
-        type: Boolean
+        type: Boolean,
+        observer: '__openedChanged'
       },
 
       /**
@@ -132,6 +133,12 @@ export class ComboBoxScroller extends PolymerElement {
   constructor() {
     super();
     this.__boundOnItemClick = this.__onItemClick.bind(this);
+  }
+
+  __openedChanged(opened) {
+    if (this.__virtualizer && opened) {
+      this.__virtualizer.update();
+    }
   }
 
   /** @protected */
@@ -226,6 +233,7 @@ export class ComboBoxScroller extends PolymerElement {
       this.__virtualizer.flush();
       // Ensure the total count of items is properly announced.
       this.setAttribute('aria-setsize', items.length);
+      this.__virtualizer.update();
     }
   }
 
@@ -239,6 +247,7 @@ export class ComboBoxScroller extends PolymerElement {
   /** @private */
   __focusedIndexChanged(index) {
     if (this.__virtualizer && index >= 0) {
+      this.__virtualizer.update();
       this.scrollIntoView(index);
     }
   }

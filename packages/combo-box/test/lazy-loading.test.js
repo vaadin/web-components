@@ -734,11 +734,13 @@ describe('lazy loading', () => {
         expect(selectedRenderedItemElements[0].item).to.eql({ id: 0, value: 'value 0', label: 'label 0' });
       });
 
-      it('should select value matching selectedItem when items are loaded', () => {
+      it('should select value matching selectedItem when items are loaded', async () => {
         comboBox.opened = true;
         comboBox.selectedItem = { id: 0, value: 'value 0', label: 'label 0' };
         expect(comboBox.value).to.equal('value 0');
         flushComboBox(comboBox);
+        // Wait for the timeout in __loadingChanged to finish
+        await aTimeout(0);
         const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
         // doesn't work when run on SauceLabs, work locally
         // expect(selectedRenderedItemElements).to.have.lengthOf(1);

@@ -172,22 +172,19 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top - 10);
   });
 
-  it('should not request a different set of items on size increase', () => {
+  it('should not request item updates on size increase', () => {
     const updateElement = sinon.spy((el, index) => (el.textContent = `item-${index}`));
     init({ size: 100, updateElement });
 
     // Scroll halfway down the list
     updateElement.resetHistory();
     virtualizer.scrollToIndex(50);
-    const updatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
 
     // Increase the size so it shouldn't affect the current viewport items
     updateElement.resetHistory();
     virtualizer.size = 200;
-    const postResizeUpdatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
 
-    expect(postResizeUpdatedIndexes).to.eql(updatedIndexes);
-    expect(postResizeUpdatedIndexes).not.to.include(0);
+    expect(updateElement.called).to.be.false;
   });
 
   it('should request a different set of items on size decrease', () => {
@@ -206,6 +203,17 @@ describe('virtualizer', () => {
 
     expect(postResizeUpdatedIndexes).not.to.include.members(updatedIndexes);
     expect(postResizeUpdatedIndexes).to.include(0);
+  });
+
+  it('should request an index only once', async () => {
+    const updateElement = sinon.spy((el, index) => (el.textContent = `item-${index}`));
+    init({ size: 100, updateElement });
+
+    // Wait for a possible resize observer flush
+    await aTimeout(100);
+
+    const firstIndexUpdatesCount = updateElement.getCalls().filter((call) => call.args[1] === 0).length;
+    expect(firstIndexUpdatesCount).to.equal(1);
   });
 
   it('should have physical items once visible', async () => {
