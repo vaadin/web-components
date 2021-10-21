@@ -242,7 +242,7 @@ describe('vaadin-select', () => {
         expect(select.opened).to.be.false;
       });
 
-      it('should focus on the menu when opening the overlay', () => {
+      it('should focus the menu when opening the overlay', () => {
         const spy = sinon.spy(select._menuElement, 'focus');
         select.opened = true;
         expect(spy.calledOnce).to.be.true;
