@@ -6,8 +6,8 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
+import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { Virtualizer } from './virtualizer.js';
 
 /**
  * `<vaadin-virtual-list>` is a Web Component for displaying a virtual/infinite list of items.

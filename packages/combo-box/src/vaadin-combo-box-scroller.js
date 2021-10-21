@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { Virtualizer } from '@vaadin/virtual-list/src/virtualizer.js';
+import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
