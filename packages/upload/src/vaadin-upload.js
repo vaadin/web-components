@@ -68,6 +68,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
         :host {
           display: block;
           position: relative;
+          box-sizing: border-box;
         }
 
         :host([hidden]) {
