@@ -1,6 +1,6 @@
 import { timeOut, animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer, flush } from '@vaadin/component-base/src/debounce.js';
-import { ironList } from './iron-list.js';
+import { ironList } from './iron-list-core.js';
 
 // iron-list can by default handle sizes up to around 100000.
 // When the size is larger than MAX_VIRTUAL_COUNT _vidxOffset is used

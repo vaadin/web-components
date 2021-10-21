@@ -44,8 +44,7 @@
     "@vaadin/text-field": "22.0.0-alpha10",
     "@vaadin/vaadin-lumo-styles": "22.0.0-alpha10",
     "@vaadin/vaadin-material-styles": "22.0.0-alpha10",
-    "@vaadin/vaadin-themable-mixin": "22.0.0-alpha10",
-    "@vaadin/virtual-list": "22.0.0-alpha10"
+    "@vaadin/vaadin-themable-mixin": "22.0.0-alpha10"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
