@@ -1,6 +1,8 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/form-layout/theme/lumo/vaadin-form-layout.js';
+import '@vaadin/form-layout/theme/lumo/vaadin-form-item.js';
 import '../../../theme/lumo/vaadin-upload.js';
 
 describe('upload', () => {
@@ -9,13 +11,16 @@ describe('upload', () => {
   beforeEach(() => {
     div = document.createElement('div');
     div.style.padding = '10px';
-    element = fixtureSync('<vaadin-upload></vaadin-upload>', div);
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
     describe(dir, () => {
       before(() => {
         document.documentElement.setAttribute('dir', dir);
+      });
+
+      beforeEach(() => {
+        element = fixtureSync('<vaadin-upload></vaadin-upload>', div);
       });
 
       after(() => {
@@ -42,7 +47,8 @@ describe('upload', () => {
   });
 
   describe('focus', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
+      element = fixtureSync('<vaadin-upload></vaadin-upload>', div);
       element.files = [{ name: 'Don Quixote.pdf' }, { name: 'Hamlet.pdf', progress: 100, complete: true }];
       // To show the start button
       element.files[0].held = true;
@@ -97,11 +103,42 @@ describe('upload', () => {
   });
 
   describe('states', () => {
+    beforeEach(() => {
+      element = fixtureSync('<vaadin-upload></vaadin-upload>', div);
+    });
+
     it('max files reached', async () => {
       element.maxFiles = 1;
       element.files = [{ name: 'Don Quixote.pdf' }];
 
       await visualDiff(div, 'state-max-files-reached');
+    });
+  });
+
+  describe('form-item', () => {
+    beforeEach(() => {
+      element = fixtureSync(
+        `<vaadin-form-layout>
+          <vaadin-upload></vaadin-upload>
+          <vaadin-form-item>
+            <label slot="label">Description</label>
+            <textarea></textarea>
+          </vaadin-form-item>
+          <vaadin-form-item>
+            <label slot="label">File</label>
+            <vaadin-upload></vaadin-upload>
+          </vaadin-form-item>
+          <vaadin-form-item>
+            <label slot="label">Description</label>
+            <textarea></textarea>
+          </vaadin-form-item>
+        </vaadin-form-layout>`,
+        div
+      );
+    });
+
+    it('form-item', async () => {
+      await visualDiff(div, 'form-item');
     });
   });
 });

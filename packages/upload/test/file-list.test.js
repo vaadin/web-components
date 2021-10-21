@@ -47,10 +47,10 @@ describe('file list', () => {
   });
 
   it('should not overflow content', async () => {
-    upload.style.width = '150px';
+    upload.style.width = '180px';
     upload._addFile(createFiles(1)[0]);
     await nextRender(upload);
     const fileListItem = getFileListItems(upload)[0];
-    expect(fileListItem.scrollWidth).to.equal(fileListItem.offsetWidth);
+    expect(fileListItem.scrollWidth - fileListItem.offsetWidth).to.equal(0);
   });
 });
