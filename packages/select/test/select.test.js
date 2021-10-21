@@ -242,6 +242,12 @@ describe('vaadin-select', () => {
         expect(select.opened).to.be.false;
       });
 
+      it('should focus on the menu when opening the overlay', () => {
+        const spy = sinon.spy(select._menuElement, 'focus');
+        select.opened = true;
+        expect(spy.calledOnce).to.be.true;
+      });
+
       it('should restore attribute focus-ring if it was initially set before opening', () => {
         select.setAttribute('focus-ring', '');
         select.opened = true;
@@ -249,61 +255,61 @@ describe('vaadin-select', () => {
         expect(select.hasAttribute('focus-ring')).to.be.true;
       });
 
-      it('should open overlay on click event on value button', () => {
-        expect(select._overlayElement.opened).to.be.false;
+      it('should open the overlay on click event on value button', () => {
+        expect(select.opened).to.be.false;
         click(valueButton);
-        expect(select._overlayElement.opened).to.be.true;
+        expect(select.opened).to.be.true;
       });
 
-      it('should open overlay on input container click event', () => {
-        expect(select._overlayElement.opened).to.be.false;
+      it('should open the overlay on input container click event', () => {
+        expect(select.opened).to.be.false;
         select._inputContainer.click();
-        expect(select._overlayElement.opened).to.be.true;
+        expect(select.opened).to.be.true;
       });
 
-      it('should open overlay on label click', () => {
+      it('should open the overlay on label click', () => {
         select.querySelector('[slot=label]').click();
-        expect(select._overlayElement.opened).to.be.true;
+        expect(select.opened).to.be.true;
       });
 
-      it('should open overlay on required indicator click', () => {
+      it('should open the overlay on required indicator click', () => {
         select.shadowRoot.querySelector('[part=required-indicator]').click();
-        expect(select._overlayElement.opened).to.be.true;
+        expect(select.opened).to.be.true;
       });
 
-      it('should open overlay on ArrowUp', () => {
+      it('should open the overlay on ArrowUp', () => {
         arrowUp(valueButton);
-        expect(select._overlayElement.opened).to.be.true;
+        expect(select.opened).to.be.true;
       });
 
-      it('should open overlay on Down', () => {
+      it('should open the overlay on Down', () => {
         arrowDown(valueButton);
-        expect(select._overlayElement.opened).to.be.true;
+        expect(select.opened).to.be.true;
       });
 
-      it('should open overlay on Space', () => {
+      it('should open the overlay on Space', () => {
         spaceKeyDown(valueButton);
-        expect(select._overlayElement.opened).to.be.true;
+        expect(select.opened).to.be.true;
       });
 
-      it('should open overlay on Enter', () => {
+      it('should open the overlay on Enter', () => {
         enterKeyDown(valueButton);
-        expect(select._overlayElement.opened).to.be.true;
+        expect(select.opened).to.be.true;
       });
 
-      it('should close overlay on Escape', () => {
+      it('should close the overlay on Escape', () => {
         select.opened = true;
         escKeyDown(valueButton);
-        expect(select._overlayElement.opened).to.be.false;
+        expect(select.opened).to.be.false;
       });
 
-      it('should not open overlay on helper click', () => {
+      it('should not open the overlay on helper click', () => {
         select.helperText = 'Helper Text';
         select.querySelector('[slot=helper]').click();
-        expect(select._overlayElement.opened).to.be.false;
+        expect(select.opened).to.be.false;
       });
 
-      it('should not open overlay on error message click', () => {
+      it('should not open the overlay on error message click', () => {
         select.errorMessage = 'Error Message';
         select.querySelector('[slot=error-message]').click();
         expect(select._overlayElement.opened).to.be.false;
