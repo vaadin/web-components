@@ -123,7 +123,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       </style>
 
       <div class="vaadin-select-container">
-        <div part="label">
+        <div part="label" on-click="_onClick">
           <slot name="label"></slot>
           <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
         </div>
@@ -397,12 +397,13 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     this.validate();
   }
 
-  /** @private */
-  _onClick(e) {
-    const isHelperClick = Array.from(e.composedPath()).some((node) => {
-      return node.nodeType === Node.ELEMENT_NODE && node.getAttribute('slot') === 'helper';
-    });
-    this.opened = !this.readonly && !isHelperClick;
+  /**
+   * Opens the overlay if the field is not read-only.
+   *
+   * @private
+   */
+  _onClick() {
+    this.opened = !this.readonly;
   }
 
   /**

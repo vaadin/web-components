@@ -261,6 +261,16 @@ describe('vaadin-select', () => {
         expect(select._overlayElement.opened).to.be.true;
       });
 
+      it('should open overlay on label click', () => {
+        select.querySelector('[slot=label]').click();
+        expect(select._overlayElement.opened).to.be.true;
+      });
+
+      it('should open overlay on required indicator click', () => {
+        select.shadowRoot.querySelector('[part=required-indicator]').click();
+        expect(select._overlayElement.opened).to.be.true;
+      });
+
       it('should open overlay on ArrowUp', () => {
         arrowUp(valueButton);
         expect(select._overlayElement.opened).to.be.true;
@@ -284,6 +294,18 @@ describe('vaadin-select', () => {
       it('should close overlay on Escape', () => {
         select.opened = true;
         escKeyDown(valueButton);
+        expect(select._overlayElement.opened).to.be.false;
+      });
+
+      it('should not open overlay on helper click', () => {
+        select.helperText = 'Helper Text';
+        select.querySelector('[slot=helper]').click();
+        expect(select._overlayElement.opened).to.be.false;
+      });
+
+      it('should not open overlay on error message click', () => {
+        select.errorMessage = 'Error Message';
+        select.querySelector('[slot=error-message]').click();
         expect(select._overlayElement.opened).to.be.false;
       });
 
