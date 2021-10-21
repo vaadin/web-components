@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { html, render } from 'lit';
+import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
 import './not-animated-styles.js';
@@ -81,5 +82,28 @@ describe('accessibility', () => {
     select.value = 'Option 1';
     const id = valueButton.firstChild.getAttribute('id');
     expect(valueButton.getAttribute('aria-labelledby')).to.include(id);
+  });
+
+  it('should not have aria-live attribute initially', async () => {
+    // Wait for items
+    await nextFrame();
+    expect(valueButton.hasAttribute('aria-live')).to.be.false;
+  });
+
+  it('should add aria-live attribute on first-letter shortcut selection', async () => {
+    // Wait for items
+    await nextFrame();
+    select.focus();
+    await sendKeys({ press: 'o' });
+    expect(valueButton.getAttribute('aria-live')).to.equal('polite');
+  });
+
+  it('should remove aria-live attribute on dropdown open', async () => {
+    // Wait for items
+    await nextFrame();
+    select.focus();
+    await sendKeys({ press: 'o' });
+    select.opened = true;
+    expect(valueButton.hasAttribute('aria-live')).to.be.false;
   });
 });

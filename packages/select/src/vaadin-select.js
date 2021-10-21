@@ -421,6 +421,9 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
         const newIdx = this._menuElement._searchKey(currentIdx, e.key);
         if (newIdx >= 0) {
           this.__userInteraction = true;
+
+          // Announce the value selected with the first letter shortcut
+          this._valueButton.setAttribute('aria-live', 'polite');
           this._updateSelectedItem(this._items[newIdx].value, this._items);
         }
       }
@@ -440,6 +443,9 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   /** @private */
   _openedChanged(opened, wasOpened) {
     if (opened) {
+      // Avoid multiple announcements when a value gets selected from the dropdown
+      this._valueButton.removeAttribute('aria-live');
+
       if (!this._overlayElement || !this._menuElement || !this.focusElement || this.disabled || this.readonly) {
         this.opened = false;
         return;
