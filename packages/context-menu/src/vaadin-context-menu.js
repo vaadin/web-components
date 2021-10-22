@@ -552,6 +552,12 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
   /** @private */
   __alignOverlayPosition() {
     const overlay = this.$.overlay;
+
+    if (overlay.positionTarget) {
+      // overlay-position-mixin is used
+      return;
+    }
+
     const style = overlay.style;
 
     // Reset all properties before measuring
@@ -559,89 +565,37 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
     ['right-aligned', 'end-aligned', 'bottom-aligned'].forEach((attr) => overlay.removeAttribute(attr));
 
     // Maximum x and y values are imposed by content size and overlay limits.
-    const { xMax, xMin, yMax, left, right, top, width } = overlay.getBoundaries();
+    const { xMax, xMin, yMax } = overlay.getBoundaries();
     // Reuse saved x and y event values, in order to this method be used async
     // in the `vaadin-overlay-change` which guarantees that overlay is ready
-    let x = this.__x || (!this.__isRTL ? left : right);
-    const y = this.__y || top;
+    let x = this.__x;
+    const y = this.__y;
 
     // Select one overlay corner and move to the event x/y position.
     // Then set styling attrs for flex-aligning the content appropriately.
     const wdthVport = document.documentElement.clientWidth;
     const hghtVport = document.documentElement.clientHeight;
 
-    // Align to the parent menu overlay, if any.
-    const parent = overlay.parentOverlay;
-    let alignedToParent = false;
-    let parentContentRect;
-    if (parent) {
-      parentContentRect = parent.$.overlay.getBoundingClientRect();
-      if (parent.hasAttribute('right-aligned') || parent.hasAttribute('end-aligned')) {
-        const parentStyle = getComputedStyle(parent);
-        const getPadding = (el, direction) => {
-          return parseFloat(getComputedStyle(el.$.content)['padding' + direction]);
-        };
-        const dimensionToSet = parseFloat(parentStyle[this.__isRTL ? 'left' : 'right']) + parentContentRect.width;
-        const padding = getPadding(parent, 'Left') + getPadding(overlay, 'Right');
-
-        // Preserve end-aligned, if possible.
-        if (wdthVport - (dimensionToSet - padding) > width) {
-          this._setEndAligned(overlay);
-          style[this.__isRTL ? 'left' : 'right'] = dimensionToSet + 'px';
-          alignedToParent = true;
-        }
-      } else if (x < parentContentRect.x) {
-        // Check if sub menu opens on the left side and the parent menu is not right aligned.
-        // If so, use actual width of the submenu content instead of the parent menu content.
-        x = x - (width - parentContentRect.width);
-      }
-    }
-
-    if (!alignedToParent) {
-      if (!this.__isRTL) {
+    if (!this.__isRTL) {
+      if (x < wdthVport / 2 || x < xMax) {
         // Sub-menu is displayed in the right side of root menu
-        if ((x < wdthVport / 2 || x < xMax) && !parent) {
-          style.left = x + 'px';
-        } else if (parent && wdthVport - parentContentRect.width - parentContentRect.left >= parentContentRect.width) {
-          // Sub-menu is displayed in the right side of root menu If it is nested menu
-          style.left = parentContentRect.left + parentContentRect.width + 'px';
-        } else if (parent) {
-          // Sub-menu is displayed in the left side of root menu If it is nested menu
-          style.right = 'auto';
-          style.left =
-            Math.max(
-              overlay.getBoundingClientRect().left,
-              parentContentRect.left - overlay.getBoundingClientRect().width
-            ) + 'px';
-          this._setEndAligned(overlay);
-        } else {
-          // Sub-menu is displayed in the left side of root menu
-          style.right = Math.max(0, wdthVport - x) + 'px';
-          this._setEndAligned(overlay);
-        }
+        style.left = x + 'px';
       } else {
         // Sub-menu is displayed in the left side of root menu
-        if ((x > wdthVport / 2 || x > xMin) && !parent) {
-          style.right = Math.max(0, wdthVport - x) + 'px';
-        } else if (parent && parentContentRect.left >= parentContentRect.width) {
-          // Sub-menu is displayed in the left side of root menu If it is nested menu
-          style.right = wdthVport - parentContentRect.right + parentContentRect.width + 'px';
-        } else if (parent) {
-          // Sub-menu is displayed in the right side of root menu If it is nested menu
-          style.right = 'auto';
-          style.left =
-            Math.max(
-              overlay.getBoundingClientRect().left - overlay.getBoundingClientRect().width,
-              parentContentRect.right
-            ) + 'px';
-          this._setEndAligned(overlay);
-        } else {
-          // Sub-menu is displayed in the left side of root menu
-          style.left = x + 'px';
-          this._setEndAligned(overlay);
-        }
+        style.right = Math.max(0, wdthVport - x) + 'px';
+        this._setEndAligned(overlay);
+      }
+    } else {
+      // Sub-menu is displayed in the left side of root menu
+      if (x > wdthVport / 2 || x > xMin) {
+        style.right = Math.max(0, wdthVport - x) + 'px';
+      } else {
+        // Sub-menu is displayed in the left side of root menu
+        style.left = x + 'px';
+        this._setEndAligned(overlay);
       }
     }
+
     if (y < hghtVport / 2 || y < yMax) {
       style.top = y + 'px';
     } else {
