@@ -159,7 +159,7 @@ describe('filtering', () => {
     grid._filters[0].value = '99';
     flushFilters(grid);
     flushGrid(grid);
-    expect(grid.$.items.querySelectorAll('tr:not([hidden])')).to.have.length(19);
+    expect(grid.$.items.querySelectorAll('tr:not([hidden])')).to.have.length(18);
   });
 
   it('should not overflow filter text field', () => {

@@ -17,6 +17,8 @@ export class IronListAdapter {
     this.scrollContainer = scrollContainer;
     this.elementsContainer = elementsContainer || scrollContainer;
     this.reorderElements = reorderElements;
+    // Iron-list uses this value to determine how many pages of elements to render
+    this._maxPages = 1.3;
 
     this.__safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
