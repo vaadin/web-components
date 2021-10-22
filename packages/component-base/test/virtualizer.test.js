@@ -245,7 +245,7 @@ describe('virtualizer', () => {
     const initialCount = elementsContainer.childElementCount;
     const viewportHeight = scrollTarget.offsetHeight;
     const itemHeight = elementsContainer.querySelector('#item-0').offsetHeight;
-    const expectedCount = Math.ceil((viewportHeight / itemHeight) * 1.3);
+    const expectedCount = Math.ceil((viewportHeight / itemHeight) * 1.3) + 1;
     expect(initialCount).not.to.be.above(expectedCount);
   });
 
