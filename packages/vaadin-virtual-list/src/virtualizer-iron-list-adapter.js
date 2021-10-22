@@ -118,19 +118,20 @@ export class IronListAdapter {
   update(startIndex = 0, endIndex = this.size - 1) {
     this.__getVisibleElements().forEach((el) => {
       if (el.__virtualIndex >= startIndex && el.__virtualIndex <= endIndex) {
-        this.__updateElement(el, el.__virtualIndex);
+        this.__updateElement(el, el.__virtualIndex, true);
       }
     });
   }
 
-  __updateElement(el, index) {
+  __updateElement(el, index, forceSameIndexUpdates) {
     // Clean up temporary min height
     if (el.style.minHeight) {
       el.style.minHeight = '';
     }
 
-    if (!this.__preventElementUpdates) {
+    if (!this.__preventElementUpdates && (el.__lastUpdatedIndex !== index || forceSameIndexUpdates)) {
       this.updateElement(el, index);
+      el.__lastUpdatedIndex = index;
     }
 
     if (el.offsetHeight === 0) {

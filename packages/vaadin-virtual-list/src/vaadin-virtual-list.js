@@ -157,11 +157,8 @@ class VirtualListElement extends ElementMixin(ThemableMixin(PolymerElement)) {
     const hasRenderedItems = this.childElementCount > 0;
 
     if ((renderer || hasRenderedItems) && virtualizer) {
-      if (items.length === virtualizer.size) {
-        virtualizer.update();
-      } else {
-        virtualizer.size = items.length;
-      }
+      virtualizer.size = items.length;
+      virtualizer.update();
     }
   }
 
