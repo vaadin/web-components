@@ -1,6 +1,6 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { visualDiff } from '@web/test-runner-visual-regression';
 import { sendKeys } from '@web/test-runner-commands';
+import { visualDiff } from '@web/test-runner-visual-regression';
 import { getContainerCell } from '../../helpers.js';
 import { users } from '../users.js';
 import '../../../theme/lumo/vaadin-grid-pro.js';
