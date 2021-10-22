@@ -198,7 +198,7 @@ describe('virtualizer', () => {
 
     // Decrease the size so that we end up at the top of the list
     updateElement.resetHistory();
-    virtualizer.size = 10;
+    virtualizer.size = 5;
     const postResizeUpdatedIndexes = updateElement.getCalls().map((call) => call.args[1]);
 
     expect(postResizeUpdatedIndexes).not.to.include.members(updatedIndexes);
@@ -239,6 +239,14 @@ describe('virtualizer', () => {
     virtualizer.size = 1000;
 
     expect(elementsContainer.childElementCount).to.equal(initialCount);
+  });
+
+  it('should initially have a decent amount of physical elements', () => {
+    const initialCount = elementsContainer.childElementCount;
+    const viewportHeight = scrollTarget.offsetHeight;
+    const itemHeight = elementsContainer.querySelector('#item-0').offsetHeight;
+    const expectedCount = Math.ceil((viewportHeight / itemHeight) * 1.3) + 1;
+    expect(initialCount).not.to.be.above(expectedCount);
   });
 
   describe('lazy rendering', () => {
