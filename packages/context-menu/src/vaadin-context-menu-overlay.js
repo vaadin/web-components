@@ -107,6 +107,28 @@ class ContextMenuOverlay extends PositionMixin(OverlayElement) {
       yMax
     };
   }
+
+  _updatePosition() {
+    this.style.transform = '';
+    super._updatePosition();
+
+    if (this.positionTarget && this.modeless) {
+      // This overlay is positioned by a parent menu item,
+      // adjust the position by the overlay content paddings
+      const content = this.$.content;
+      const style = getComputedStyle(content);
+
+      const offsetY = this.hasAttribute('bottom-aligned')
+        ? parseFloat(style.paddingBottom)
+        : -parseFloat(style.paddingTop);
+
+      const isLeftAligned =
+        (this.hasAttribute('start-aligned') && !this.__isRTL) || (this.hasAttribute('end-aligned') && this.__isRTL);
+      const offsetX = isLeftAligned ? parseFloat(style.paddingLeft) : -parseFloat(style.paddingRight);
+
+      this.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+    }
+  }
 }
 
 customElements.define(ContextMenuOverlay.is, ContextMenuOverlay);
