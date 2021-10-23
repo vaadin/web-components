@@ -104,11 +104,7 @@ class ContextMenuOverlay extends PositionMixin(OverlayElement) {
     return {
       xMax: overlayRect.right - contentRect.width,
       xMin: overlayRect.left + contentRect.width,
-      yMax,
-      left: overlayRect.left,
-      right: overlayRect.right,
-      top: overlayRect.top,
-      width: contentRect.width
+      yMax
     };
   }
 }
