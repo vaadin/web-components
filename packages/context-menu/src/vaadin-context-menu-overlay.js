@@ -112,7 +112,7 @@ class ContextMenuOverlay extends PositionMixin(OverlayElement) {
     this.style.transform = '';
     super._updatePosition();
 
-    if (this.positionTarget && this.modeless) {
+    if (this.positionTarget && this.parentOverlay) {
       // This overlay is positioned by a parent menu item,
       // adjust the position by the overlay content paddings
       const content = this.$.content;
