@@ -156,12 +156,13 @@ export const ItemsMixin = (superClass) =>
       subMenu.items = itemElement._item.children;
       subMenu.listenOn = itemElement;
 
-      subMenu.$.overlay.positionTarget = itemElement;
-
       const parent = this.$.overlay;
 
+      const subMenuOverlay = subMenu.$.overlay;
+      subMenuOverlay.positionTarget = itemElement;
+      subMenuOverlay.noHorizontalOverlap = true;
       // Store the reference parent overlay
-      subMenu.$.overlay._setParentOverlay(parent);
+      subMenuOverlay._setParentOverlay(parent);
 
       // Set theme attribute from parent element
       if (parent.theme) {

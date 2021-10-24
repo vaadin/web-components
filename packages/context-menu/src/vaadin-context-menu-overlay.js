@@ -74,8 +74,6 @@ class ContextMenuOverlay extends PositionMixin(OverlayElement) {
         }
       }
     });
-
-    this.noHorizontalOverlap = true;
   }
 
   getFirstChild() {

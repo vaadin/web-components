@@ -316,7 +316,6 @@ export const InteractionsMixin = (superClass) =>
       subMenu.listenOn = button;
       const overlay = subMenu.$.overlay;
       overlay.positionTarget = button;
-      overlay.noHorizontalOverlap = false;
       overlay.noVerticalOverlap = true;
 
       this._expandedButton = button;
