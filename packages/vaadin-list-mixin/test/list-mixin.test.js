@@ -96,55 +96,57 @@ customElements.define(
 describe('vaadin-list-mixin', () => {
   let list;
 
-  beforeEach(() => {
-    list = fixtureSync(`
-      <test-list-element style="width: 400px; height: 400px;">
-        <test-item-element>Foo</test-item-element>
-        <test-item-element>Bar</test-item-element>
-        <separator></separator>
-        <test-item-element disabled>Bay</test-item-element>
-        <test-item-element><span>Baz</span></test-item-element>
-        <separator></separator>
-        <test-item-element disabled>Qux</test-item-element>
-        <test-item-element>
-          <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=">
-          <span>Xyzzy</span>
-        </test-item-element>
-        <test-item-element>Bax</test-item-element>
-      </test-list-element>
-    `);
-  });
-
   describe('items observer', () => {
+    beforeEach(() => {
+      list = fixtureSync(`
+        <test-list-element>
+          <test-item-element>Item 0</test-item-element>
+          <test-item-element>Item 1</test-item-element>
+          <test-item-element>Item 2</test-item-element>
+        </test-list-element>
+      `);
+    });
+
     it('should have a list of valid items after the DOM `_observer` has been run', () => {
       // DOM _observer runs asynchronously, we need to flush to access items
       list._observer.flush();
-      expect(list.items.length).to.be.equal(7);
+      expect(list.items.length).to.be.equal(3);
     });
 
     it('`focus` should flush the `_observer` if it is called too soon', () => {
       // focus flushes the observer in order to be run in 3rd party elements initialization
       list.focus();
-      expect(list.items.length).to.be.equal(7);
+      expect(list.items.length).to.be.equal(3);
     });
   });
 
   describe('DOM', () => {
     beforeEach(() => {
+      list = fixtureSync(`
+        <test-list-element>
+          <test-item-element>Item 0</test-item-element>
+          <test-item-element>Item 1</test-item-element>
+          <separator></separator>
+          <test-item-element>Item 2</test-item-element>
+          <test-item-element>Item 3</test-item-element>
+          <separator></separator>
+          <test-item-element>Item 4</test-item-element>
+        </test-list-element>
+      `);
       list._observer.flush();
     });
 
     it('should update items list when removing nodes', () => {
-      expect(list.items.length).to.be.equal(7);
-      list.removeChild(list.items[3]);
+      expect(list.items.length).to.be.equal(5);
+      list.removeChild(list.items[0]);
       list._observer.flush();
-      expect(list.items.length).to.be.equal(6);
+      expect(list.items.length).to.be.equal(4);
     });
 
     it('should update items list when adding nodes', () => {
       list.appendChild(document.createElement('test-item-element'));
       list._observer.flush();
-      expect(list.items.length).to.be.equal(8);
+      expect(list.items.length).to.be.equal(6);
     });
 
     it('should update items list when moving nodes', () => {
@@ -159,6 +161,14 @@ describe('vaadin-list-mixin', () => {
 
   describe('selection', () => {
     beforeEach(() => {
+      list = fixtureSync(`
+        <test-list-element>
+          <test-item-element>Item 0</test-item-element>
+          <test-item-element>Item 1</test-item-element>
+          <test-item-element>Item 2</test-item-element>
+          <test-item-element><span>Item 3</span></test-item-element>
+        </test-list-element>
+      `);
       list._observer.flush();
     });
 
@@ -192,32 +202,70 @@ describe('vaadin-list-mixin', () => {
 
   describe('tabIndex', () => {
     beforeEach(() => {
+      list = fixtureSync(`
+        <test-list-element>
+          <test-item-element disabled>Item 0</test-item-element>
+          <test-item-element disabled>Item 1</test-item-element>
+          <test-item-element>Item 2</test-item-element>
+          <test-item-element>Item 3</test-item-element>
+        </test-list-element>
+      `);
       list._observer.flush();
     });
 
-    it('should set tabIndex=-1 to all items, but the first', () => {
-      [0, -1, -1, -1].forEach((val, idx) => expect(list.items[idx].tabIndex).to.be.equal(val));
+    it('should have the first not disabled item focusable by default', () => {
+      [-1, -1, 0, -1].forEach((val, idx) => expect(list.items[idx].tabIndex).to.equal(val));
     });
 
-    it('should move tabIndex when moving focus', () => {
-      list._focus(3);
-      [-1, -1, -1, 0].forEach((val, idx) => expect(list.items[idx].tabIndex).to.be.equal(val));
-    });
-
-    it('should not set tabIndex=0 to disabled items, but the next one in the loop', () => {
-      list._focus(2);
-      [-1, -1, -1, 0].forEach((val, idx) => expect(list.items[idx].tabIndex).to.be.equal(val));
-    });
-
-    it('should have a `focus()` method focusing item with `tabIndex=0`', (done) => {
+    it('should set a not disabled item focusable', () => {
       list._setFocusable(3);
-      list.items[3].focus = () => done();
+      [-1, -1, -1, 0].forEach((val, idx) => expect(list.items[idx].tabIndex).to.equal(val));
+    });
+
+    it('should not set a disabled item focusable but the next not disabled item instead', () => {
+      list._setFocusable(1);
+      [-1, -1, 0, -1].forEach((val, idx) => expect(list.items[idx].tabIndex).to.equal(val));
+    });
+
+    it('should call focus() method on the item when setting it focusable', () => {
+      const spy = sinon.spy();
+      list._setFocusable(3);
+      list.items[3].focus = spy;
       list.focus();
+      expect(spy.calledOnce).to.be.true;
+    });
+  });
+
+  describe('tabIndex when all the items are disabled', () => {
+    beforeEach(() => {
+      list = fixtureSync(`
+        <test-list-element>
+          <test-item-element disabled>Item 0</test-item-element>
+          <test-item-element disabled>Item 1</test-item-element>
+        </test-list-element>
+      `);
+      list._observer.flush();
+    });
+
+    it('should not have any item focusable', () => {
+      expect(list.items[0].tabIndex).to.equal(-1);
+      expect(list.items[1].tabIndex).to.equal(-1);
     });
   });
 
   describe('focus', () => {
     beforeEach(() => {
+      list = fixtureSync(`
+        <test-list-element>
+          <test-item-element>Foo</test-item-element>
+          <test-item-element>Bar</test-item-element>
+          <test-item-element disabled>Bay</test-item-element>
+          <test-item-element><span>Baz</span></test-item-element>
+          <test-item-element disabled>Qux</test-item-element>
+          <test-item-element><span>Xyzzy</span></test-item-element>
+          <test-item-element>Bax</test-item-element>
+        </test-list-element>
+      `);
       list._observer.flush();
       list._focus(0);
     });
@@ -405,6 +453,12 @@ describe('vaadin-list-mixin', () => {
 
   describe('orientation', () => {
     beforeEach(() => {
+      list = fixtureSync(`
+        <test-list-element>
+          <test-item-element>Item 0</test-item-element>
+          <test-item-element>Item 1</test-item-element>
+        </test-list-element>
+      `);
       list._observer.flush();
     });
 
@@ -462,8 +516,15 @@ describe('vaadin-list-mixin', () => {
 
   describe('Scroll', () => {
     beforeEach(() => {
+      list = fixtureSync(`
+        <test-list-element style="width: 50px; height: 50px;">
+          <test-item-element>Foo</test-item-element>
+          <test-item-element>Bar</test-item-element>
+          <test-item-element disabled>Bay</test-item-element>
+          <test-item-element>Baz</test-item-element>
+        </test-list-element>
+      `);
       list._observer.flush();
-      list.style.width = list.style.height = '50px';
     });
 
     it('when orientation is horizontal should scroll in advance when reaching right most visible item', () => {
@@ -534,6 +595,14 @@ describe('vaadin-list-mixin', () => {
 
   describe('disabled', () => {
     beforeEach(() => {
+      list = fixtureSync(`
+        <test-list-element>
+          <test-item-element>Item 0</test-item-element>
+          <test-item-element>Item 1</test-item-element>
+          <test-item-element>Item 2</test-item-element>
+          <test-item-element>Item 3</test-item-element>
+        </test-list-element>
+      `);
       list._observer.flush();
     });
 
@@ -552,6 +621,14 @@ describe('vaadin-list-mixin', () => {
 
   describe('multiple', () => {
     beforeEach(() => {
+      list = fixtureSync(`
+        <test-list-element>
+          <test-item-element>Item 0</test-item-element>
+          <test-item-element>Item 1</test-item-element>
+          <test-item-element>Item 2</test-item-element>
+          <test-item-element>Item 3</test-item-element>
+        </test-list-element>
+      `);
       list._observer.flush();
     });
 
@@ -645,76 +722,74 @@ describe('vaadin-list-mixin', () => {
       expect(list._scrollerElement.scrollTop).to.be.greaterThan(0);
     });
   });
-});
 
-describe('hidden items', () => {
-  let list;
+  describe('hidden items', () => {
+    beforeEach(() => {
+      list = fixtureSync(`
+        <test-list-element style="width: 400px; height: 400px;">
+          <test-item-element>Foo</test-item-element>
+          <test-item-element hidden>Bar</test-item-element>
+          <test-item-element>Bax</test-item-element>
+          <test-item-element style="display: none;">Bay</test-item-element>
+          <test-item-element>Fox</test-item-element>
+          <test-item-element class="hidden-attribute">Pub</test-item-element>
+          <test-item-element>Bin</test-item-element>
+          <test-item-element style="display: none;">Bop</test-item-element>
+        </test-list-element>
+      `);
+      list._observer.flush();
+      list._focus(0);
+    });
 
-  beforeEach(() => {
-    list = fixtureSync(`
-      <test-list-element style="width: 400px; height: 400px;">
-        <test-item-element>Foo</test-item-element>
-        <test-item-element hidden>Bar</test-item-element>
-        <test-item-element>Bax</test-item-element>
-        <test-item-element style="display: none;">Bay</test-item-element>
-        <test-item-element>Fox</test-item-element>
-        <test-item-element class="hidden-attribute">Pub</test-item-element>
-        <test-item-element>Bin</test-item-element>
-        <test-item-element style="display: none;">Bop</test-item-element>
-      </test-list-element>
-    `);
-    list._observer.flush();
-    list._focus(0);
+    it('should move focus to next not hidden element on "arrow-down"', () => {
+      expect(list.items[0].focused).to.be.true;
+      expect(getComputedStyle(list.items[0]).getPropertyValue('display')).to.equal('block');
+      arrowDown(list);
+      expect(getComputedStyle(list.items[1]).getPropertyValue('display')).to.equal('none');
+      expect(list.items.filter((item) => item.textContent === 'Bax')[0].focused).to.be.true;
+    });
+
+    it('should move focus to next not hidden element on "arrow-up"', () => {
+      expect(list.items[0].focused).to.be.true;
+      expect(getComputedStyle(list.items[0]).getPropertyValue('display')).to.equal('block');
+      arrowUp(list);
+      expect(getComputedStyle(list.items[list.items.length - 1]).getPropertyValue('display')).to.equal('none');
+      expect(list.items.filter((item) => item.textContent === 'Bin')[0].focused).to.be.true;
+    });
+
+    it('should not set tabIndex=0 to hidden items, but the next one in the loop', () => {
+      arrowDown(list);
+      [-1, -1, 0].forEach((val, idx) => expect(list.items[idx].tabIndex).to.be.equal(val));
+    });
+
+    it('should skip hidden items to key search', () => {
+      keyDownChar(list, 'b');
+      keyDownChar(list, 'b');
+      expect(list.items.filter((item) => item.textContent === 'Bin')[0].focused).to.be.true;
+    });
+
+    it('should skip hidden items to focus loop', () => {
+      arrowDown(list);
+      arrowDown(list);
+      expect(list.items.filter((item) => item.textContent === 'Fox')[0].focused).to.be.true;
+    });
   });
 
-  it('should move focus to next not hidden element on "arrow-down"', () => {
-    expect(list.items[0].focused).to.be.true;
-    expect(getComputedStyle(list.items[0]).getPropertyValue('display')).to.equal('block');
-    arrowDown(list);
-    expect(getComputedStyle(list.items[1]).getPropertyValue('display')).to.equal('none');
-    expect(list.items.filter((item) => item.textContent === 'Bax')[0].focused).to.be.true;
-  });
+  describe('_scrollerElement missing', () => {
+    beforeEach(() => {
+      sinon.stub(console, 'warn');
+    });
 
-  it('should move focus to next not hidden element on "arrow-up"', () => {
-    expect(list.items[0].focused).to.be.true;
-    expect(getComputedStyle(list.items[0]).getPropertyValue('display')).to.equal('block');
-    arrowUp(list);
-    expect(getComputedStyle(list.items[list.items.length - 1]).getPropertyValue('display')).to.equal('none');
-    expect(list.items.filter((item) => item.textContent === 'Bin')[0].focused).to.be.true;
-  });
+    afterEach(() => {
+      console.warn.restore();
+    });
 
-  it('should not set tabIndex=0 to hidden items, but the next one in the loop', () => {
-    arrowDown(list);
-    [-1, -1, 0].forEach((val, idx) => expect(list.items[idx].tabIndex).to.be.equal(val));
-  });
-
-  it('should skip hidden items to key search', () => {
-    keyDownChar(list, 'b');
-    keyDownChar(list, 'b');
-    expect(list.items.filter((item) => item.textContent === 'Bin')[0].focused).to.be.true;
-  });
-
-  it('should skip hidden items to focus loop', () => {
-    arrowDown(list);
-    arrowDown(list);
-    expect(list.items.filter((item) => item.textContent === 'Fox')[0].focused).to.be.true;
-  });
-});
-
-describe('_scrollerElement missing', () => {
-  beforeEach(() => {
-    sinon.stub(console, 'warn');
-  });
-
-  afterEach(() => {
-    console.warn.restore();
-  });
-
-  it('should warn when creating an element without focusElement', () => {
-    class ScrollerElementMissing extends ListMixin(PolymerElement) {}
-    customElements.define('scroller-element-missing', ScrollerElementMissing);
-    const instance = document.createElement('scroller-element-missing');
-    expect(instance._scrollerElement).to.equal(instance);
-    expect(console.warn.calledOnce).to.be.true;
+    it('should warn when creating an element without focusElement', () => {
+      class ScrollerElementMissing extends ListMixin(PolymerElement) {}
+      customElements.define('scroller-element-missing', ScrollerElementMissing);
+      const instance = document.createElement('scroller-element-missing');
+      expect(instance._scrollerElement).to.equal(instance);
+      expect(console.warn.calledOnce).to.be.true;
+    });
   });
 });
