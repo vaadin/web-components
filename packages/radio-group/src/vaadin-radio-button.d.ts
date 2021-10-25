@@ -39,9 +39,7 @@ export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonCus
  *
  * Part name   | Description
  * ------------|----------------
- * `container` | The container element.
  * `radio`     | The wrapper element which contains slotted `<input type="radio">`.
- * `label`     | The wrapper element which contains slotted `<label>`.
  *
  * The following state attributes are available for styling:
  *
