@@ -17,6 +17,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Part name | Description
  * ---|---
  * `content` | The element that wraps the item content
+ * `checkmark` | The element that indicates whether the item is checked
  *
  * The following state attributes are exposed for styling:
  *
