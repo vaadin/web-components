@@ -26,9 +26,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * Part name   | Description
  * ------------|----------------
- * `container` | The container element.
  * `checkbox`  | The wrapper element that contains slotted <input type="checkbox">.
- * `label`     | The wrapper element that contains slotted <label>.
  *
  * The following state attributes are available for styling:
  *
