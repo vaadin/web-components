@@ -42,7 +42,6 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
           border-radius: 0;
           min-width: 0;
           font: inherit;
-          font-size: 1em;
           line-height: normal;
           color: inherit;
           background-color: transparent;
