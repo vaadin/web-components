@@ -11,3 +11,4 @@ import { PasswordField } from '@vaadin/password-field/src/vaadin-password-field.
 export const PasswordFieldElement = PasswordField;
 
 export * from '@vaadin/password-field/src/vaadin-password-field.js';
+
