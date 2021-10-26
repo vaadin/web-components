@@ -31,7 +31,7 @@ describe('vaadin-icon', () => {
     });
   });
 
-  describe('avg element', () => {
+  describe('svg element', () => {
     beforeEach(() => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
       svgElement = icon.shadowRoot.querySelector('svg');
