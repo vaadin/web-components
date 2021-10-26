@@ -162,6 +162,14 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
+  it('should scroll to an arbitrary index 2', async () => {
+    // Wait for a possible resize observer flush
+    await aTimeout(100);
+    virtualizer.scrollToIndex(6);
+    const item = elementsContainer.querySelector(`#item-6`);
+    expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
+  });
+
   it('should restore scroll position on size change', async () => {
     // Scroll to item 50 and an additional 10 pixels
     virtualizer.scrollToIndex(50);
