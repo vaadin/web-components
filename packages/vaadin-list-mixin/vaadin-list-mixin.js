@@ -100,7 +100,7 @@ export const ListMixin = (superClass) =>
             orientation ? item.setAttribute('orientation', orientation) : item.removeAttribute('orientation');
           });
 
-          this._setFocusable(selected);
+          this._setFocusable(selected || 0);
 
           const itemToSelect = items[selected];
           items.forEach((item) => (item.selected = item === itemToSelect));
@@ -271,7 +271,7 @@ export const ListMixin = (superClass) =>
      */
     _setFocusable(idx) {
       idx = this._getAvailableIndex(idx, 1, (item) => !item.disabled);
-      const item = this.items[idx] || this.items[0];
+      const item = this.items[idx];
       this.items.forEach((e) => (e.tabIndex = e === item ? 0 : -1));
     }
 
