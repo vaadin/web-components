@@ -160,6 +160,14 @@ describe('time-picker', () => {
       timePicker.value = null;
       expect(timePicker.value).to.equal('');
     });
+
+    it('should not have a value after blur', () => {
+      const timePicker = fixtureSync(`<vaadin-time-picker value="00:00"></vaadin-time-picker>`);
+      timePicker.value = '';
+      timePicker.focus();
+      timePicker.blur();
+      expect(timePicker.value).to.equal('');
+    });
   });
 
   describe('properties and attributes', () => {

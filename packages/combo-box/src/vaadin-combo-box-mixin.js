@@ -865,6 +865,11 @@ export const ComboBoxMixin = (subclass) =>
         return;
       }
 
+      // reset this._focusedIndex when value is reset
+      if (value === '') {
+        this._focusedIndex = -1;
+      }
+
       if (this._isValidValue(value)) {
         let item;
         if (this._getItemValue(this.selectedItem) !== value) {
