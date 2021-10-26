@@ -31,6 +31,18 @@ describe('vaadin-icon', () => {
     });
   });
 
+  describe('avg element', () => {
+    beforeEach(() => {
+      icon = fixtureSync('<vaadin-icon></vaadin-icon>');
+      svgElement = icon.shadowRoot.querySelector('svg');
+    });
+
+    it('should set aria-hidden attribute on the svg', () => {
+      // semantic-dom-diff does not support SVG so we can't test this with snapshots.
+      expect(svgElement.getAttribute('aria-hidden')).to.equal('true');
+    });
+  });
+
   describe('svg property', () => {
     beforeEach(() => {
       icon = fixtureSync('<vaadin-icon></vaadin-icon>');
