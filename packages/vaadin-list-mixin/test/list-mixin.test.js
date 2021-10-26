@@ -126,10 +126,10 @@ describe('vaadin-list-mixin', () => {
         <test-list-element>
           <test-item-element>Item 0</test-item-element>
           <test-item-element>Item 1</test-item-element>
-          <separator></separator>
+          <hr />
           <test-item-element>Item 2</test-item-element>
           <test-item-element>Item 3</test-item-element>
-          <separator></separator>
+          <hr />
           <test-item-element>Item 4</test-item-element>
         </test-list-element>
       `);
@@ -228,9 +228,8 @@ describe('vaadin-list-mixin', () => {
     });
 
     it('should call focus() method on the item when setting it focusable', () => {
-      const spy = sinon.spy();
       list._setFocusable(3);
-      list.items[3].focus = spy;
+      const spy = sinon.spy(list.items[3], 'focus');
       list.focus();
       expect(spy.calledOnce).to.be.true;
     });
