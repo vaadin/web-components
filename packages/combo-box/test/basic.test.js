@@ -286,7 +286,8 @@ describe('Properties', () => {
     });
 
     it('should not have a value after blur', () => {
-      const comboBoxElement = fixtureSync(`<vaadin-combo-box value="00:00"></vaadin-combo-box>`);
+      const comboBoxElement = fixtureSync(`<vaadin-combo-box value="foo"></vaadin-combo-box>`);
+      comboBoxElement.filteredItems = ['foo'];
       comboBoxElement.value = '';
       comboBoxElement.focus();
       comboBoxElement.blur();
