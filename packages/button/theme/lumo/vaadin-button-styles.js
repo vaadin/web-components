@@ -18,8 +18,8 @@ const button = css`
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     font-weight: 500;
-    color: var(--_lumo-button-color, var(--lumo-primary-text-color));
-    background-color: var(--_lumo-button-background-color, var(--lumo-contrast-5pct));
+    color: var(--lumo-button-color, var(--lumo-primary-text-color));
+    background-color: var(--lumo-button-background-color, var(--lumo-contrast-5pct));
     border-radius: var(--lumo-border-radius-m);
     cursor: var(--lumo-clickable-cursor);
     -webkit-tap-highlight-color: transparent;
