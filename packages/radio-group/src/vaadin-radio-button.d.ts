@@ -27,9 +27,9 @@ export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonCus
  *
  * ```html
  * <vaadin-radio-group label="Travel class">
- *  <vaadin-radio-button value="economy">Economy</vaadin-radio-button>
- *  <vaadin-radio-button value="business">Business</vaadin-radio-button>
- *  <vaadin-radio-button value="firstClass">First Class</vaadin-radio-button>
+ *   <vaadin-radio-button value="economy" label="Economy"></vaadin-radio-button>
+ *   <vaadin-radio-button value="business" label="Business"></vaadin-radio-button>
+ *   <vaadin-radio-button value="firstClass" label="First Class"></vaadin-radio-button>
  * </vaadin-radio-group>
  * ```
  *
