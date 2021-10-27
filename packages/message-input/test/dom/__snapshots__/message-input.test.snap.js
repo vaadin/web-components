@@ -5,10 +5,7 @@ snapshots["vaadin-message-input default"] =
 `<vaadin-message-input-text-area placeholder="Message">
   <label slot="label">
   </label>
-  <div
-    aria-live="assertive"
-    slot="error-message"
-  >
+  <div slot="error-message">
   </div>
   <textarea
     aria-label="Message"
@@ -37,10 +34,7 @@ snapshots["vaadin-message-input disabled"] =
 >
   <label slot="label">
   </label>
-  <div
-    aria-live="assertive"
-    slot="error-message"
-  >
+  <div slot="error-message">
   </div>
   <textarea
     aria-label="Message"

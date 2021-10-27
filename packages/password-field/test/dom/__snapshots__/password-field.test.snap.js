@@ -266,10 +266,7 @@ snapshots["vaadin-password-field shadow theme"] =
 snapshots["vaadin-password-field slots default"] = 
 `<label slot="label">
 </label>
-<div
-  aria-live="assertive"
-  slot="error-message"
->
+<div slot="error-message">
 </div>
 <button
   aria-label="Show password"
@@ -290,10 +287,7 @@ snapshots["vaadin-password-field slots default"] =
 snapshots["vaadin-password-field slots helper"] = 
 `<label slot="label">
 </label>
-<div
-  aria-live="assertive"
-  slot="error-message"
->
+<div slot="error-message">
 </div>
 <button
   aria-label="Show password"
