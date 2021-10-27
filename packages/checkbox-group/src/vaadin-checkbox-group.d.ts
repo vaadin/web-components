@@ -32,9 +32,9 @@ export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGrou
  *
  * ```html
  * <vaadin-checkbox-group label="Preferred language of contact:">
- *  <vaadin-checkbox value="en">English</vaadin-checkbox>
- *  <vaadin-checkbox value="fr">Français</vaadin-checkbox>
- *  <vaadin-checkbox value="de">Deutsch</vaadin-checkbox>
+ *   <vaadin-checkbox value="en" label="English"></vaadin-checkbox>
+ *   <vaadin-checkbox value="fr" label="Français"></vaadin-checkbox>
+ *   <vaadin-checkbox value="de" label="Deutsch"></vaadin-checkbox>
  * </vaadin-checkbox-group>
  * ```
  *
