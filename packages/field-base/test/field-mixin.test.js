@@ -93,10 +93,6 @@ describe('field-mixin', () => {
         expect(error).to.be.an.instanceof(HTMLDivElement);
       });
 
-      it('should set aria-live attribute on the error message', () => {
-        expect(error.getAttribute('aria-live')).to.equal('assertive');
-      });
-
       it('should set id on the error message element', () => {
         const id = error.getAttribute('id');
         expect(id).to.match(ID_REGEX);
