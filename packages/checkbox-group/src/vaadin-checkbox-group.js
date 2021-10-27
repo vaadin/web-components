@@ -131,7 +131,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
   }
 
   static get observers() {
-    return ['__valueChanged(value, value.splices)'];
+    return ['__valueChanged(value, value.splices)', '__requiredChanged(required)'];
   }
 
   constructor() {
@@ -311,6 +311,11 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
   }
 
   /**
+   * A callback method for the `value` property observer.
+   * Whenever the observed property changes, the method toggles the `has-value` attribute,
+   * makes checked only those checkboxes which are included in the new value,
+   * and then runs the validation.
+   *
    * @param {string | null | undefined} value
    * @private
    */
@@ -329,6 +334,21 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
     });
 
     this.validate();
+  }
+
+  /**
+   * A callback method for the `required` property observer.
+   * Whenever the observed property changes, the method toggles the `aria-required` attribute.
+   *
+   * @param {boolean} required
+   * @private
+   */
+  __requiredChanged(required) {
+    if (required) {
+      this.setAttribute('aria-required', 'true');
+    } else {
+      this.removeAttribute('aria-required');
+    }
   }
 
   /**

@@ -93,6 +93,24 @@ describe('vaadin-checkbox-group', () => {
     });
   });
 
+  describe('aria-required attribute', () => {
+    beforeEach(async () => {
+      group = fixtureSync(`<vaadin-checkbox-group></vaadin-checkbox-group>`);
+      await nextFrame();
+    });
+
+    it('should not set aria-required attribute by default', () => {
+      expect(group.hasAttribute('aria-required')).to.be.false;
+    });
+
+    it('should toggle aria-required attribute on required property change', () => {
+      group.required = true;
+      expect(group.getAttribute('aria-required')).to.equal('true');
+      group.required = false;
+      expect(group.hasAttribute('aria-required')).to.false;
+    });
+  });
+
   describe('value', () => {
     beforeEach(async () => {
       group = fixtureSync(`
