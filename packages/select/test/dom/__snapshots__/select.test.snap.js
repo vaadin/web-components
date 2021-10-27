@@ -221,10 +221,7 @@ snapshots["vaadin-select shadow theme"] =
 snapshots["vaadin-select slots default"] = 
 `<label slot="label">
 </label>
-<div
-  aria-live="assertive"
-  slot="error-message"
->
+<div slot="error-message">
 </div>
 <vaadin-select-value-button
   aria-expanded="false"
@@ -241,10 +238,7 @@ snapshots["vaadin-select slots default"] =
 snapshots["vaadin-select slots helper"] = 
 `<label slot="label">
 </label>
-<div
-  aria-live="assertive"
-  slot="error-message"
->
+<div slot="error-message">
 </div>
 <vaadin-select-value-button
   aria-expanded="false"
