@@ -11,6 +11,9 @@ describe('input-container', () => {
     div = document.createElement('div');
     div.style.display = 'inline-block';
     div.style.padding = '10px';
+    div.style.color = 'var(--lumo-body-text-color)';
+    div.style.fontSize = 'var(--lumo-font-size-m)';
+    div.style.fontFamily = 'var(--lumo-font-family)';
     element = fixtureSync('<vaadin-input-container><input></vaadin-input-container>', div);
     input = element.querySelector('input');
   });
@@ -48,6 +51,14 @@ describe('input-container', () => {
     icon.icon = 'lumo:user';
     element.appendChild(icon);
     await visualDiff(div, 'suffix-icon');
+  });
+
+  it('custom font', async () => {
+    div.style.color = 'red';
+    div.style.fontSize = '40px';
+    div.style.fontFamily = 'monospace';
+    input.value = 'Some text';
+    await visualDiff(div, 'custom-font');
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
