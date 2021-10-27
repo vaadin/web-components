@@ -59,7 +59,6 @@ export const FieldMixin = (superclass) =>
         'error-message': () => {
           const error = document.createElement('div');
           error.textContent = this.errorMessage;
-          error.setAttribute('aria-live', 'assertive');
           return error;
         }
       };
@@ -263,6 +262,14 @@ export const FieldMixin = (superclass) =>
       const hasError = Boolean(invalid && errorMessage);
       error.textContent = hasError ? errorMessage : '';
       this.toggleAttribute('has-error-message', hasError);
+
+      // Role alert will make the error message announce immediately
+      // as the field becomes invalid
+      if (hasError) {
+        error.setAttribute('role', 'alert');
+      } else {
+        error.removeAttribute('role');
+      }
     }
 
     /** @private */
