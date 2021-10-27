@@ -421,7 +421,10 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
         const newIdx = this._menuElement._searchKey(currentIdx, e.key);
         if (newIdx >= 0) {
           this.__userInteraction = true;
-          this._updateSelectedItem(this._items[newIdx].value, this._items);
+
+          // Announce the value selected with the first letter shortcut
+          this._updateAriaLive(true);
+          this._menuElement.selected = newIdx;
         }
       }
     }
@@ -440,6 +443,9 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   /** @private */
   _openedChanged(opened, wasOpened) {
     if (opened) {
+      // Avoid multiple announcements when a value gets selected from the dropdown
+      this._updateAriaLive(false);
+
       if (!this._overlayElement || !this._menuElement || !this.focusElement || this.disabled || this.readonly) {
         this.opened = false;
         return;
@@ -484,6 +490,17 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   _updateAriaRequired(required) {
     if (this._valueButton) {
       this._valueButton.setAttribute('aria-required', required ? 'true' : 'false');
+    }
+  }
+
+  /** @private */
+  _updateAriaLive(ariaLive) {
+    if (this._valueButton) {
+      if (ariaLive) {
+        this._valueButton.setAttribute('aria-live', 'polite');
+      } else {
+        this._valueButton.removeAttribute('aria-live');
+      }
     }
   }
 
