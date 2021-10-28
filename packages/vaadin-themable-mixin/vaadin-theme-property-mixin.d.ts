@@ -15,14 +15,14 @@ interface ThemePropertyMixin {
    * in shadow DOM.
    *
    * Enables the component implementation to propagate the `theme`
-   * attribute value to the subcomponents in Shadow DOM by binding
-   * the subcomponent’s "theme" attribute to the `theme` property of
+   * attribute value to the sub-components in Shadow DOM by binding
+   * the sub-component’s "theme" attribute to the `theme` property of
    * the host.
    *
    * **NOTE:** Extending the mixin only provides the property for binding,
    * and does not make the propagation alone.
    *
-   * See [Theme Attribute and Subcomponents](https://github.com/vaadin/vaadin-themable-mixin/wiki/5.-Theme-Attribute-and-Subcomponents).
+   * See [Styling Components: Sub-components](https://vaadin.com/docs/latest/ds/customization/styling-components/#sub-components).
    * page for more information.
    */
   readonly theme: string | null | undefined;
