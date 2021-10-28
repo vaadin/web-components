@@ -133,7 +133,17 @@ describe('keyboard', () => {
     it('should tab to the next focusable', async () => {
       await sendKeys({ press: 'Tab' });
 
-      expect(document.activeElement).not.to.equal(input);
+      expect(document.activeElement).to.equal(document.body);
+    });
+
+    it('should tab to the next focusable when items have focusable content', async () => {
+      const nextFocusable = fixtureSync('<input>');
+      document.body.appendChild(nextFocusable);
+      comboBox.renderer = (root) => (root.innerHTML = '<input>');
+
+      await sendKeys({ press: 'Tab' });
+
+      expect(document.activeElement).to.equal(nextFocusable);
     });
   });
 
