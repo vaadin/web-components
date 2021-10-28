@@ -30,7 +30,6 @@ import { RadioButton } from './vaadin-radio-button.js';
  *
  * Part name            | Description
  * ---------------------|----------------
- * `container`          | The container element
  * `label`              | The slotted label element wrapper
  * `group-field`        | The radio button elements wrapper
  * `helper-text`        | The slotted helper text element wrapper
