@@ -28,19 +28,22 @@ import { ItemMixin } from './vaadin-item-mixin.js';
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ---|---
- * `content` | The element that wraps the slot
+ * Part name    | Description
+ * -------------|----------------
+ * `checkmark`  | The graphical checkmark shown for a selected item
+ * `content`    | The element that wraps the slot
  *
  * The following state attributes are available for styling:
  *
- * Attribute  | Description | Part name
- * -----------|-------------|------------
- * `disabled` | Set to a disabled item | :host
- * `focused` | Set when the element is focused | :host
- * `focus-ring` | Set when the element is keyboard focused | :host
- * `selected` | Set when the item is selected | :host
- * `active` | Set when mousedown or enter/spacebar pressed | :host
+ * Attribute    | Description
+ * -------------|-------------
+ * `active`     | Set when the item is pressed down, either with mouse, touch or the keyboard.
+ * `disabled`   | Set when the item is disabled.
+ * `focus-ring` | Set when the item is focused using the keyboard.
+ * `focused`    | Set when the item is focused.
+ * `selected`   | Set when the item is selected
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  */
 declare class Item extends ItemMixin(ThemableMixin(DirMixin(HTMLElement))) {
   /**
