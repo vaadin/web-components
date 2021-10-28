@@ -91,6 +91,19 @@ describe('custom field', () => {
     });
   });
 
+  describe('aria-required', () => {
+    it('should not have aria-required attribute by default', () => {
+      expect(customField.hasAttribute('aria-required')).to.be.false;
+    });
+
+    it('should toggle aria-required attribute on required property change', () => {
+      customField.required = true;
+      expect(customField.getAttribute('aria-required')).to.equal('true');
+      customField.required = false;
+      expect(customField.hasAttribute('aria-required')).to.be.false;
+    });
+  });
+
   describe('focused', () => {
     it('should set focused attribute on input focusin', () => {
       focusin(customField.inputs[0]);

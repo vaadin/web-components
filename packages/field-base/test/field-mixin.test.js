@@ -601,6 +601,60 @@ describe('field-mixin', () => {
     });
   });
 
+  describe('aria-required', () => {
+    describe('field', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<field-mixin-element></field-mixin-element>`);
+      });
+
+      it('should not set aria-required attribute by default', () => {
+        expect(element.hasAttribute('aria-required')).to.be.false;
+      });
+
+      it('should not set aria-required attribute on required property change', () => {
+        element.required = true;
+        expect(element.hasAttribute('aria-required')).to.be.false;
+      });
+    });
+
+    describe('field initially required', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<field-mixin-element required></field-mixin-element>`);
+      });
+
+      it('should not set aria-required attribute', () => {
+        expect(element.hasAttribute('aria-required')).to.be.false;
+      });
+    });
+
+    describe('field group', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<field-mixin-group-element></field-mixin-group-element>`);
+      });
+
+      it('should not set aria-required attribute by default', () => {
+        expect(element.hasAttribute('aria-required')).to.be.false;
+      });
+
+      it('should toggle aria-required attribute on required property change', () => {
+        element.required = true;
+        expect(element.getAttribute('aria-required')).to.equal('true');
+        element.required = false;
+        expect(element.hasAttribute('aria-required')).to.be.false;
+      });
+    });
+
+    describe('field group initially required', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<field-mixin-group-element required></field-mixin-group-element>`);
+      });
+
+      it('should set aria-required to true', () => {
+        expect(element.getAttribute('aria-required')).to.equal('true');
+      });
+    });
+  });
+
   describe('custom helper', () => {
     beforeEach(() => {
       element = fixtureSync(`<field-mixin-element></field-mixin-element>`);
