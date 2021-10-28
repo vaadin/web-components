@@ -42,12 +42,10 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
  * -------------------------------|----------------------------|---------
  * `--vaadin-field-default-width` | Default width of the field | `12em`
  *
- * The following shadow DOM parts are available for styling:
- *
  * `<vaadin-date-picker>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
  * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
- * In addition to `<vaadin-text-field>` parts, the following `<vaadin-date-picker>` parts are available for theming:
+ * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
  * Part name             | Description
  * ----------------------|--------------------
