@@ -136,14 +136,30 @@ describe('keyboard', () => {
       expect(document.activeElement).to.equal(document.body);
     });
 
-    it('should tab to the next focusable when items have focusable content', async () => {
-      const nextFocusable = fixtureSync('<input>');
-      document.body.appendChild(nextFocusable);
-      comboBox.renderer = (root) => (root.innerHTML = '<input>');
+    describe('focusable items content', () => {
+      let button;
 
-      await sendKeys({ press: 'Tab' });
+      beforeEach(() => {
+        button = document.createElement('button');
+        button.textContent = 'Button';
+      });
 
-      expect(document.activeElement).to.equal(nextFocusable);
+      afterEach(() => {
+        button.remove();
+      });
+
+      it('should tab to the next focusable when items have focusable content', async () => {
+        comboBox.renderer = (root) => (root.innerHTML = '<input>');
+        document.body.appendChild(button);
+
+        // Workaround Firefox sendKeys bug
+        button.focus();
+        input.focus();
+        arrowDownKeyDown(input);
+
+        await sendKeys({ press: 'Tab' });
+        expect(document.activeElement).to.equal(button);
+      });
     });
   });
 
