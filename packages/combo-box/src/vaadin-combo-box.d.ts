@@ -190,6 +190,7 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
  *
  * - `<vaadin-combo-box-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-combo-box-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
+ * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
  *
  * Note: the `theme` attribute value set on `<vaadin-combo-box>` is
  * propagated to the internal components listed above.

@@ -92,23 +92,19 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  * `--vaadin-field-default-width`     | Default width of the field   | :host                   | `12em`
  * `--vaadin-select-text-field-width` | Effective width of the field | `vaadin-select-overlay` |
  *
- * The following shadow DOM parts are available for styling:
+ * `<vaadin-select>` provides mostly the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
+ * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
- * Part name | Description
+ *
+ * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
+ *
+ * Part name       | Description
  * ----------------|----------------
  * `toggle-button` | The toggle button
  *
- * The following state attributes are available for styling:
- *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `opened` | Set when the select is open | :host
- * `invalid` | Set when the element is invalid | :host
- * `focused` | Set when the element is focused | :host
- * `focus-ring` | Set when the element is keyboard focused | :host
- * `readonly` | Set when the select is read only | :host
- *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * There are two exceptions in terms of styling compared to `<vaadin-text-field>`:
+ * - the `clear-button` shadow DOM part does not exist in `<vaadin-select>`.
+ * - the `input-prevented` state attribute is not supported by `<vaadin-select>`.
  *
  * ### Internal components
  *
@@ -116,9 +112,13 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  * components are themable:
  *
  * - `<vaadin-select-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
+ * - `<vaadin-select-value-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
+ * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the button.
  *
  * Note: the `theme` attribute value set on `<vaadin-select>` is
  * propagated to the internal components listed above.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.

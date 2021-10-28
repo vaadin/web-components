@@ -55,6 +55,7 @@ registerStyles('vaadin-time-picker', inputFieldShared, { moduleId: 'vaadin-time-
  * - `<vaadin-time-picker-combo-box>` - has the same API as [`<vaadin-combo-box-light>`](#/elements/vaadin-combo-box-light).
  * - `<vaadin-time-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-time-picker-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
+ * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
  *
  * Note: the `theme` attribute value set on `<vaadin-time-picker>` is
  * propagated to the internal components listed above.

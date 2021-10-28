@@ -86,6 +86,7 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * - `<vaadin-date-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-date-picker-overlay-content>`
  * - `<vaadin-month-calendar>`
+ * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
  *
  * In order to style the overlay content, use `<vaadin-date-picker-overlay-content>` shadow DOM parts:
  *

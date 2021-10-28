@@ -35,7 +35,7 @@ export interface IntegerFieldEventMap extends HTMLElementEventMap, IntegerFieldC
  * `<vaadin-integer-field>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
  * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
- * In addition to `<vaadin-text-field>` parts, the following `<vaadin-integer-field>` parts are available for theming:
+ * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
  * Part name         | Description
  * ------------------|-------------------------
