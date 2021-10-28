@@ -62,6 +62,7 @@ export interface TextFieldEventMap extends HTMLElementEventMap, TextFieldCustomE
  * `label`         | The label element
  * `input-field`   | The element that wraps prefix, value and suffix
  * `error-message` | The error message element
+ * `helper-text`   | The helper text element wrapper
  *
  * The following state attributes are available for styling:
  *

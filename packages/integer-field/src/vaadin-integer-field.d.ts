@@ -32,28 +32,17 @@ export interface IntegerFieldEventMap extends HTMLElementEventMap, IntegerFieldC
  *
  * ### Styling
  *
- * The following shadow DOM parts are available for styling:
+ * `<vaadin-integer-field>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
+ * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
- * Part name       | Description
- * ----------------|----------------
- * `label`         | The label element wrapper
- * `input-field`   | The element that wraps prefix, textarea and suffix
- * `error-message` | The error message element wrapper
- * `helper-text`   | The helper text element wrapper
+ * In addition to `<vaadin-text-field>` parts, the following `<vaadin-integer-field>` parts are available for theming:
  *
- * The following state attributes are available for styling:
+ * Part name         | Description
+ * ------------------|-------------------------
+ * `increase-button` | Increase ("plus") button
+ * `decrease-button` | Decrease ("minus") button
  *
- * Attribute           | Description                               | Part name
- * --------------------|-------------------------------------------|----------
- * `disabled`          | Set when the element is disabled          | :host
- * `has-value`         | Set when the element has a value          | :host
- * `has-label`         | Set when the element has a label          | :host
- * `has-helper`        | Set when the element has helper text      | :host
- * `has-error-message` | Set when the element has an error message | :host
- * `invalid`           | Set when the element is invalid           | :host
- * `focused`           | Set when the element is focused           | :host
- * `focus-ring`        | Set when the element is keyboard focused  | :host
- * `readonly`          | Set when the element is readonly          | :host
+ * Note, the `input-prevented` state attribute is not supported by `<vaadin-integer-field>`.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
