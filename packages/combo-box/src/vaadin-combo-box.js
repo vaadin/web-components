@@ -122,20 +122,24 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * `--vaadin-field-default-width`          | Default width of the field | `12em`
  * `--vaadin-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
  *
- * `<vaadin-combo-box>` includes all parts and state attributes from `<vaadin-text-field>`, see [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
+ * `<vaadin-combo-box>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
+ * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
  * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
- * Part name | Description
+ * Part name       | Description
  * ----------------|----------------
  * `toggle-button` | The toggle button
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `opened` | Set when the combo box dropdown is open | :host
+ * Attribute | Description | Part name
+ * ----------|-------------|------------
+ * `opened`  | Set when the combo box dropdown is open | :host
  * `loading` | Set when new items are expected | :host
+ *
+ * If you want to replace the default `<input>` and its container with a custom implementation to get full control
+ * over the input field, consider using the [`<vaadin-combo-box-light>`](#/elements/vaadin-combo-box-light) element.
  *
  * ### Internal components
  *
@@ -143,7 +147,7 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * components are themable:
  *
  * - `<vaadin-combo-box-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
- * - `<vaadin-combo-box-item>`
+ * - `<vaadin-combo-box-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
  *
  * Note: the `theme` attribute value set on `<vaadin-combo-box>` is
  * propagated to the internal components listed above.
