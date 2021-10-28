@@ -393,6 +393,18 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
     if (this.autofocus && !this.disabled) {
       window.requestAnimationFrame(() => this.focus());
     }
+
+    this.setAttribute('role', 'group');
+
+    this.ariaTarget = this;
+  }
+
+  /**
+   * Attribute used by `FieldMixin` to set accessible name.
+   * @protected
+   */
+  get _ariaAttr() {
+    return 'aria-labelledby';
   }
 
   /** @private */
