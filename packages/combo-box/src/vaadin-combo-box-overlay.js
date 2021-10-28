@@ -23,6 +23,8 @@ registerStyles(
   { moduleId: 'vaadin-combo-box-overlay-styles' }
 );
 
+let memoizedTemplate;
+
 /**
  * An element used internally by `<vaadin-combo-box>`. Not intended to be used separately.
  *
@@ -32,6 +34,15 @@ registerStyles(
 export class ComboBoxOverlay extends PositionMixin(OverlayElement) {
   static get is() {
     return 'vaadin-combo-box-overlay';
+  }
+
+  static get template() {
+    if (!memoizedTemplate) {
+      memoizedTemplate = super.template.cloneNode(true);
+      memoizedTemplate.content.querySelector('[part~="overlay"]').removeAttribute('tabindex');
+    }
+
+    return memoizedTemplate;
   }
 
   connectedCallback() {

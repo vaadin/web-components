@@ -1,4 +1,5 @@
 import { expect } from '@esm-bundle/chai';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import {
   aTimeout,
@@ -70,7 +71,7 @@ describe('keyboard', () => {
     });
   });
 
-  describe('navigating the items after overlay opened', () => {
+  describe('navigating after overlay opened', () => {
     beforeEach(async () => {
       await aTimeout(0);
       arrowDownKeyDown(input);
@@ -126,6 +127,12 @@ describe('keyboard', () => {
       arrowDownKeyDown(input);
 
       expect(getFocusedIndex()).to.equal(0);
+    });
+
+    it('should tab to the next focusable', async () => {
+      await sendKeys({ press: 'Tab' });
+
+      expect(document.activeElement).not.to.equal(input);
     });
   });
 
