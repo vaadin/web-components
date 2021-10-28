@@ -360,7 +360,10 @@ export const FieldMixin = (superclass) =>
      * @protected
      */
     _updateAriaRequiredAttribute(target, required) {
-      if (target !== this) return;
+      if (target !== this) {
+        // native <input> or <textarea>, required is enough
+        return;
+      }
 
       if (required) {
         target.setAttribute('aria-required', true);
