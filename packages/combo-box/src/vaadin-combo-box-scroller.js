@@ -264,6 +264,7 @@ export class ComboBoxScroller extends PolymerElement {
     return [...Array(count)].map(() => {
       const item = document.createElement(`${this.__hostTagName}-item`);
       item.addEventListener('click', this.__boundOnItemClick);
+      // Negative tabindex prevents the item content from being focused.
       item.tabIndex = '-1';
       item.style.width = '100%';
       return item;
