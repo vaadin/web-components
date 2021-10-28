@@ -3,7 +3,7 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-date-time-picker.js';
 
 describe('ARIA', () => {
-  let dateTimePicker, label, helper;
+  let dateTimePicker, error, label, helper;
 
   beforeEach(() => {
     dateTimePicker = fixtureSync(
@@ -11,13 +11,25 @@ describe('ARIA', () => {
     );
     label = dateTimePicker.querySelector(':scope > [slot=label]');
     helper = dateTimePicker.querySelector(':scope > [slot=helper]');
+    error = dateTimePicker.querySelector(':scope > [slot=error-message]');
   });
 
   it('should set role attribute to group', () => {
     expect(dateTimePicker.getAttribute('role')).to.equal('group');
   });
 
-  it('should set aria-labelledby attribute on the host', () => {
-    expect(dateTimePicker.getAttribute('aria-labelledby')).to.equal([label.id, helper.id].join(' '));
+  it('should add label and helper text to aria-labelledby when field is valid', () => {
+    const aria = dateTimePicker.getAttribute('aria-labelledby');
+    expect(aria).to.include(helper.id);
+    expect(aria).to.not.include(error.id);
+    expect(aria).to.include(label.id);
+  });
+
+  it('should add error message to aria-labelledby when field is invalid', () => {
+    dateTimePicker.invalid = true;
+    const aria = dateTimePicker.getAttribute('aria-labelledby');
+    expect(aria).to.include(helper.id);
+    expect(aria).to.include(error.id);
+    expect(aria).to.include(label.id);
   });
 });
