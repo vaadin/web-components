@@ -74,6 +74,7 @@ describe('keyboard', () => {
   describe('navigating after overlay opened', () => {
     beforeEach(async () => {
       await aTimeout(0);
+      input.focus();
       arrowDownKeyDown(input);
     });
 
