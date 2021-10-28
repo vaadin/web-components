@@ -26,17 +26,17 @@ let memoizedTemplate;
  *
  * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
- * In addition to `<vaadin-text-field>` parts, here's the list of `<vaadin-password-field>` specific parts:
+ * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
  * Part name       | Description
  * ----------------|----------------------------------------------------
  * `reveal-button` | The eye icon which toggles the password visibility
  *
- * In addition to `<vaadin-text-field>` state attributes, here's the list of `<vaadin-password-field>` specific attributes:
+ * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
- * Attribute          | Description | Part name
- * -------------------|-------------|------------
- * `password-visible` | Set when the password is visible | :host
+ * Attribute          | Description
+ * -------------------|---------------------------------
+ * `password-visible` | Set when the password is visible
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
