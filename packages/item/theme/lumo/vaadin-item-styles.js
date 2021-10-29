@@ -13,10 +13,8 @@ const item = css`
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-xs);
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    padding-left: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
-    padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
+    padding: 0.5em calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4) 0.5em
+      var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
     min-height: var(--lumo-size-m);
     outline: none;
     border-radius: var(--lumo-border-radius-m);
