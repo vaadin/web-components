@@ -102,6 +102,12 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  * ----------------|----------------
  * `toggle-button` | The toggle button
  *
+ * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
+ *
+ * Attribute | Description                 | Part name
+ * ----------|-----------------------------|-----------
+ * `opened`  | Set when the select is open | :host
+ *
  * There are two exceptions in terms of styling compared to `<vaadin-text-field>`:
  * - the `clear-button` shadow DOM part does not exist in `<vaadin-select>`.
  * - the `input-prevented` state attribute is not supported by `<vaadin-select>`.
