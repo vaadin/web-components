@@ -40,18 +40,13 @@ const item = css`
     content: var(--material-icons-check);
   }
 
-  :host(:hover:not([disabled])) {
-    background-color: var(--material-secondary-background-color);
-  }
+  @media (any-hover: hover) {
+    :host(:hover:not([disabled])) {
+      background-color: var(--material-secondary-background-color);
+    }
 
-  :host([focused]:not([disabled])) {
-    background-color: var(--material-divider-color);
-  }
-
-  @media (pointer: coarse) {
-    :host(:hover:not([disabled])),
     :host([focused]:not([disabled])) {
-      background-color: transparent;
+      background-color: var(--material-divider-color);
     }
   }
 

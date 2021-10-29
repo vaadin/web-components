@@ -63,21 +63,13 @@ const item = css`
   }
 
   /* TODO a workaround until we have "focus-follows-mouse". After that, use the hover style for focus-ring as well */
-  :host(:hover:not([disabled])) {
-    background-color: var(--lumo-primary-color-10pct);
-  }
-
-  :host([focus-ring]:not([disabled])) {
-    box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
-  }
-
-  @media (pointer: coarse) {
+  @media (any-hover: hover) {
     :host(:hover:not([disabled])) {
-      background-color: transparent;
+      background-color: var(--lumo-primary-color-10pct);
     }
 
     :host([focus-ring]:not([disabled])) {
-      box-shadow: none;
+      box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
     }
   }
 
