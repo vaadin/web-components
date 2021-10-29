@@ -13,9 +13,9 @@ export class MockGridHost extends PolymerElement {
           <template>
             <input class="parent-property" value="{{parentProperty::input}}" />
             <input class="title" value="{{item.title::input}}" />
-            <vaadin-checkbox class="selected" checked="{{selected}}" />
-            <vaadin-checkbox class="expanded" checked="{{expanded}}" />
-            <vaadin-checkbox class="details-opened" checked="{{detailsOpened}}" />
+            <vaadin-checkbox class="selected" checked="{{selected}}"></vaadin-checkbox>
+            <vaadin-checkbox class="expanded" checked="{{expanded}}"></vaadin-checkbox>
+            <vaadin-checkbox class="details-opened" checked="{{detailsOpened}}"></vaadin-checkbox>
           </template>
         </vaadin-grid-column>
 
@@ -35,9 +35,9 @@ export class MockGridHost extends PolymerElement {
         <template class="row-details">
           <div class="index">[[index]]</div>
           <input class="title" value="{{item.title::input}}" />
-          <vaadin-checkbox class="selected" checked="{{selected}}" />
-          <vaadin-checkbox class="expanded" checked="{{expanded}}" />
-          <vaadin-checkbox class="details-opened" checked="{{detailsOpened}}" />
+          <vaadin-checkbox class="selected" checked="{{selected}}"></vaadin-checkbox>
+          <vaadin-checkbox class="expanded" checked="{{expanded}}"></vaadin-checkbox>
+          <vaadin-checkbox class="details-opened" checked="{{detailsOpened}}"></vaadin-checkbox>
         </template>
       </vaadin-grid>
     `;
