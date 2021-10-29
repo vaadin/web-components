@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-list-mixin",
-  "version": "22.0.0-alpha10",
+  "version": "22.0.0-beta1",
   "publishConfig": {
     "access": "public"
   },
@@ -31,7 +31,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "22.0.0-alpha10"
+    "@vaadin/component-base": "22.0.0-beta1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
