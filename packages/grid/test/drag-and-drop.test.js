@@ -121,15 +121,6 @@ describe('drag and drop', () => {
     }
   });
 
-  afterEach(() => {
-    fireDragEnd(grid.$.table);
-    fireDrop(grid.$.table);
-    grid.rowsDraggable = false;
-    grid.dropMode = null;
-    grid.style.height = '';
-    grid.selectedItems = [];
-  });
-
   it('should not be draggable by default', () => {
     expect(getDraggable(grid)).not.to.be.ok;
   });
