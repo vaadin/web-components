@@ -13,11 +13,17 @@ const item = css`
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-xs);
-    padding: 0.5em 1em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
+    padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
     min-height: var(--lumo-size-m);
+    outline: none;
+    border-radius: var(--lumo-border-radius-m);
+    cursor: var(--lumo-clickable-cursor);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: var(--lumo-primary-color-10pct);
   }
 
   /* Checkmark */
@@ -56,6 +62,31 @@ const item = css`
     color: var(--lumo-disabled-text-color);
     cursor: default;
     pointer-events: none;
+  }
+
+  /* TODO a workaround until we have "focus-follows-mouse". After that, use the hover style for focus-ring as well */
+  :host(:hover:not([disabled])) {
+    background-color: var(--lumo-primary-color-10pct);
+  }
+
+  :host([focus-ring]:not([disabled])) {
+    box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+  }
+
+  @media (pointer: coarse) {
+    :host(:hover:not([disabled])) {
+      background-color: transparent;
+    }
+
+    :host([focus-ring]:not([disabled])) {
+      box-shadow: none;
+    }
+  }
+
+  /* RTL specific styles */
+  :host([dir='rtl']) {
+    padding-left: calc(var(--lumo-space-l) + var(--lumo-border-radius-m) / 4);
+    padding-right: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius-m) / 4));
   }
 
   /* Slotted icons */
