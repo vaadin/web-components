@@ -285,15 +285,6 @@ describe('Properties', () => {
       expect(comboBox.selectedItem).to.be.null;
     });
 
-    it('should not have a value after blur', () => {
-      const comboBoxElement = fixtureSync(`<vaadin-combo-box value="foo"></vaadin-combo-box>`);
-      comboBoxElement.filteredItems = ['foo'];
-      comboBoxElement.value = '';
-      comboBoxElement.focus();
-      comboBoxElement.blur();
-      expect(comboBoxElement.value).to.equal('');
-    });
-
     it('should be null after clearing the value', () => {
       comboBox.value = 'foo';
 

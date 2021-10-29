@@ -390,3 +390,15 @@ describe('filtered items attribute', () => {
     expect(comboBox._focusedIndex).to.eql(1);
   });
 });
+
+describe('value attribute', () => {
+  // see https://github.com/vaadin/web-components/issues/2615
+  it('should not reset value after blur when set as html attribute', () => {
+    const comboBoxElement = fixtureSync(`<vaadin-combo-box value="foo"></vaadin-combo-box>`);
+    comboBoxElement.filteredItems = ['foo'];
+    comboBoxElement.value = '';
+    comboBoxElement.focus();
+    comboBoxElement.blur();
+    expect(comboBoxElement.value).to.equal('');
+  });
+});
