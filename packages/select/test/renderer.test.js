@@ -72,8 +72,8 @@ describe('renderer', () => {
     // Mimic creating new list-box in Lit render
     content = rendererContent.cloneNode(true);
     content.id = 'bar';
-    select.requestContentUpdate();
 
+    select.requestContentUpdate();
     expect(select._menuElement.id).to.equal(content.id);
   });
 
