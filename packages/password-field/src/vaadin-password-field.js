@@ -24,6 +24,7 @@ let memoizedTemplate;
  *
  * ### Styling
  *
+ * `<vaadin-password-field>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
  * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
  * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
