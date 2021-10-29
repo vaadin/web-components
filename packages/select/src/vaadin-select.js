@@ -366,20 +366,9 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   /** @private */
   _assignMenuElement() {
     const menuElement = this.__getMenuElement();
-    this.__initMenuElement(menuElement);
-  }
 
-  /** @private */
-  __getMenuElement() {
-    const content = this._overlayElement && this._overlayElement.content;
-    return content ? Array.from(content.children).find((el) => el.localName !== 'style') : null;
-  }
-
-  /** @private */
-  __initMenuElement(menuElement) {
     if (menuElement && menuElement !== this.__lastMenuElement) {
       this._menuElement = menuElement;
-
       menuElement.addEventListener('items-changed', () => {
         this._items = menuElement.items;
         this._items.forEach((item) => item.setAttribute('role', 'option'));
@@ -400,6 +389,12 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       // Store the menu element reference
       this.__lastMenuElement = menuElement;
     }
+  }
+
+  /** @private */
+  __getMenuElement() {
+    const content = this._overlayElement && this._overlayElement.content;
+    return content ? Array.from(content.children).find((el) => el.localName !== 'style') : null;
   }
 
   /** @private */
