@@ -53,6 +53,15 @@ registerStyles(
     :host::after {
       display: none;
     }
+
+    ::slotted(vaadin-item) {
+      font: inherit;
+      padding: 4px 0;
+    }
+
+    ::slotted(vaadin-item:hover) {
+      background-color: transparent;
+    }
   `,
   { moduleId: 'material-select-value-button' }
 );

@@ -62,6 +62,10 @@ registerStyles(
     :host([focus-ring]) {
       box-shadow: none;
     }
+
+    ::slotted(vaadin-item:hover) {
+      background-color: transparent;
+    }
   `,
   { moduleId: 'lumo-select-value-button' }
 );
