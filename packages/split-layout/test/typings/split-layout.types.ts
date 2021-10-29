@@ -1,4 +1,4 @@
-import '../../src/vaadin-split-layout';
+import '../../vaadin-split-layout';
 
 const assert = <T>(value: T) => value;
 
