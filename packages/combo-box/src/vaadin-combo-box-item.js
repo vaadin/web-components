@@ -8,23 +8,23 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * The default element used for items in the vaadin-combo-box.
+ * An item element used by the `<vaadin-combo-box>` dropdown.
  *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ---|---
- * `content` | The element that wraps the item content
- * `checkmark` | The element that indicates whether the item is checked
+ * Part name   | Description
+ * ------------|--------------
+ * `checkmark` | The graphical checkmark shown for a selected item
+ * `content`   | The element that wraps the item content
  *
  * The following state attributes are exposed for styling:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `selected` | Set when the item is selected | :host
- * `focused` | Set when the item is focused | :host
+ * Attribute    | Description
+ * -------------|-------------
+ * `selected`   | Set when the item is selected
+ * `focused`    | Set when the item is focused
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *

@@ -59,19 +59,24 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description | Theme for Element
- * ----------|-------------|------------------
- * `date` | Date picker element | vaadin-date-time-picker
- * `time` | Time picker element | vaadin-date-time-picker
+ * Part name            | Description
+ * ---------------------|----------------
+ * `label`              | The slotted label element wrapper
+ * `helper-text`        | The slotted helper text element wrapper
+ * `error-message`      | The slotted error message element wrapper
+ * `required-indicator` | The `required` state indicator element
  *
  * The following state attributes are available for styling:
  *
- * Attribute | Description | Part name
- * ----------|-------------|----------
- * `disabled` | Set when the element is disabled | :host
- * `readonly` | Set when the element is read-only | :host
- *
- * See [ThemableMixin – Stylable Shadow Parts](https://github.com/vaadin/vaadin-themable-mixin#stylable-shadow-parts)
+ * Attribute           | Description                               | Part name
+ * --------------------|-------------------------------------------|------------
+ * `disabled`          | Set when the element is disabled          | :host
+ * `readonly`          | Set when the element is readonly          | :host
+ * `invalid`           | Set when the element is invalid           | :host
+ * `has-label`         | Set when the element has a label          | :host
+ * `has-value`         | Set when the element has a value          | :host
+ * `has-helper`        | Set when the element has helper text      | :host
+ * `has-error-message` | Set when the element has an error message | :host
  *
  * ### Internal components
  *
@@ -83,6 +88,8 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  *
  * Note: the `theme` attribute value set on `<vaadin-date-time-picker>` is
  * propagated to the internal components listed above.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.

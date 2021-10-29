@@ -45,7 +45,6 @@ export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupCusto
  *
  * Part name            | Description
  * ---------------------|----------------
- * `container`          | The container element
  * `label`              | The slotted label element wrapper
  * `group-field`        | The radio button elements wrapper
  * `helper-text`        | The slotted helper text element wrapper

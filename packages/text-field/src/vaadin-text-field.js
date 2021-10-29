@@ -47,11 +47,14 @@ registerStyles('vaadin-text-field', inputFieldShared, { moduleId: 'vaadin-text-f
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name       | Description
- * ----------------|----------------
- * `label`         | The label element
- * `input-field`   | The element that wraps prefix, value and suffix
- * `error-message` | The error message element
+ * Part name            | Description
+ * ---------------------|----------------
+ * `label`              | The label element
+ * `input-field`        | The element that wraps prefix, value and suffix
+ * `clear-button`       | The clear button
+ * `error-message`      | The error message element
+ * `helper-text`        | The helper text element wrapper
+ * `required-indicator` | The `required` state indicator element
  *
  * The following state attributes are available for styling:
  *
