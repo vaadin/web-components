@@ -49,8 +49,8 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.3.0",
-    "gulp": "^4.0.0",
-    "gulp-cli": "^2.0.1",
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.3.0",
     "gulp-iconfont": "^11.0.0",
     "sinon": "^9.2.1"
   }
