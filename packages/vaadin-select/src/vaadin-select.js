@@ -378,6 +378,9 @@ class SelectElement extends ElementMixin(
   requestContentUpdate() {
     this._overlayElement.requestContentUpdate();
 
+    // Ensure menu element is set
+    this._assignMenuElement();
+
     if (this._menuElement && this._menuElement.items) {
       this._updateSelectedItem(this.value, this._menuElement.items);
     }
@@ -411,18 +414,17 @@ class SelectElement extends ElementMixin(
 
   /** @private */
   _assignMenuElement() {
-    this._menuElement = Array.from(this._overlayElement.content.children).find(
-      (element) => element.localName !== 'style'
-    );
+    const menuElement = this.__getMenuElement();
 
-    if (this._menuElement) {
-      this._menuElement.addEventListener('items-changed', () => {
-        this._items = this._menuElement.items;
+    if (menuElement && menuElement !== this.__lastMenuElement) {
+      this._menuElement = menuElement;
+      menuElement.addEventListener('items-changed', () => {
+        this._items = menuElement.items;
         this._items.forEach((item) => item.setAttribute('role', 'option'));
       });
-      this._menuElement.addEventListener('selected-changed', () => this._updateValueSlot());
-      this._menuElement.addEventListener('keydown', (e) => this._onKeyDownInside(e));
-      this._menuElement.addEventListener(
+      menuElement.addEventListener('selected-changed', () => this._updateValueSlot());
+      menuElement.addEventListener('keydown', (e) => this._onKeyDownInside(e));
+      menuElement.addEventListener(
         'click',
         () => {
           this.__userInteraction = true;
@@ -431,8 +433,17 @@ class SelectElement extends ElementMixin(
         true
       );
 
-      this._menuElement.setAttribute('role', 'listbox');
+      menuElement.setAttribute('role', 'listbox');
+
+      // Store the menu element reference
+      this.__lastMenuElement = menuElement;
     }
+  }
+
+  /** @private */
+  __getMenuElement() {
+    const content = this._overlayElement && this._overlayElement.content;
+    return content ? Array.from(content.children).find((el) => el.localName !== 'style') : null;
   }
 
   /**

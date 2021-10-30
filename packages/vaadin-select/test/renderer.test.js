@@ -59,6 +59,23 @@ describe('renderer', () => {
     expect(select.renderer.calledOnce).to.be.true;
   });
 
+  it('should ensure menu element is defined when requesting content update', () => {
+    let content = rendererContent;
+    content.id = 'foo';
+    select.renderer = (root) => {
+      root.innerHTML = '';
+      root.appendChild(content);
+    };
+    expect(select._menuElement.id).to.equal(content.id);
+
+    // Mimic creating new list-box in Lit render
+    content = rendererContent.cloneNode(true);
+    content.id = 'bar';
+
+    select.requestContentUpdate();
+    expect(select._menuElement.id).to.equal(content.id);
+  });
+
   it('should request content update when calling deprecated render()', () => {
     const stub = sinon.stub(select, 'requestContentUpdate');
     select.opened = true;
