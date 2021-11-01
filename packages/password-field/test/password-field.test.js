@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { fixtureSync, focusout } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout, mousedown } from '@vaadin/testing-helpers';
 import '../src/vaadin-password-field.js';
 
 describe('password-field', () => {
@@ -143,6 +143,15 @@ describe('password-field', () => {
         await sendKeys({ up: 'Shift' });
 
         expect(passwordField.hasAttribute('focus-ring')).to.be.true;
+      });
+    });
+
+    describe('mousedown', () => {
+      it('should not set focus-ring attribute when focusing on mousedown', () => {
+        // reset FocusMixin flag
+        mousedown(passwordField);
+        passwordField.focus();
+        expect(passwordField.hasAttribute('focus-ring')).to.be.false;
       });
     });
   });
