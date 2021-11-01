@@ -3,22 +3,19 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
+
+export declare class SlotStylesHost {
+  /**
+   * List of styles to insert into root.
+   */
+  protected readonly slotStyles: string[];
+}
 
 /**
  * Mixin to insert styles into the outer scope to handle slotted components.
  * This is useful e.g. to hide native `<input type="number">` controls.
  */
-declare function SlotStylesMixin<T extends new (...args: any[]) => {}>(base: T): T & SlotStylesMixinConstructor;
-
-interface SlotStylesMixinConstructor {
-  new (...args: any[]): SlotStylesMixin;
-}
-
-interface SlotStylesMixin {
-  /**
-   * List of styles to insert into root.
-   */
-  readonly slotStyles: string[];
-}
-
-export { SlotStylesMixinConstructor, SlotStylesMixin };
+export declare function SlotStylesMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T & Constructor<SlotStylesHost> & Pick<typeof SlotStylesHost, keyof typeof SlotStylesHost>;

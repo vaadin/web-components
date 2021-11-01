@@ -3,19 +3,12 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { LabelMixin } from './label-mixin.js';
-import { ValidateMixin } from './validate-mixin.js';
+import { Constructor } from '@open-wc/dedupe-mixin';
+import { DelegateStateHost } from './delegate-state-mixin.js';
+import { LabelHost } from './label-mixin.js';
+import { ValidateHost } from './validate-mixin.js';
 
-/**
- * A mixin to provide common field logic: label, error message and helper text.
- */
-declare function FieldMixin<T extends new (...args: any[]) => {}>(base: T): T & FieldMixinConstructor;
-
-interface FieldMixinConstructor {
-  new (...args: any[]): FieldMixin;
-}
-
-interface FieldMixin extends LabelMixin, ValidateMixin {
+export declare class FieldHost {
   /**
    * A target element to which ARIA attributes are set.
    */
@@ -34,6 +27,33 @@ interface FieldMixin extends LabelMixin, ValidateMixin {
    * @attr {string} error-message
    */
   errorMessage: string;
+
+  protected readonly _ariaAttr: 'aria-labelledby' | 'aria-describedby';
+
+  protected _ariaTargetChanged(target: HTMLElement): void;
+
+  protected readonly _errorNode: HTMLElement;
+
+  protected readonly _helperNode?: HTMLElement;
+
+  protected _helperTextChanged(helperText: string | null | undefined): void;
+
+  protected _updateAriaAttribute(target: HTMLElement, invalid: boolean, helperId: string): void;
+
+  protected _updateAriaRequiredAttribute(target: HTMLElement, required: boolean): void;
 }
 
-export { FieldMixin, FieldMixinConstructor };
+/**
+ * A mixin to provide common field logic: label, error message and helper text.
+ */
+export declare function FieldMixin<T extends Constructor<HTMLElement>>(
+  superclass: T
+): T &
+  Constructor<FieldHost> &
+  Pick<typeof FieldHost, keyof typeof FieldHost> &
+  Constructor<DelegateStateHost> &
+  Pick<typeof DelegateStateHost, keyof typeof DelegateStateHost> &
+  Constructor<LabelHost> &
+  Pick<typeof LabelHost, keyof typeof LabelHost> &
+  Constructor<ValidateHost> &
+  Pick<typeof ValidateHost, keyof typeof ValidateHost>;

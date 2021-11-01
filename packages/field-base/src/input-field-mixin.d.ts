@@ -3,18 +3,20 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { InputControlMixin } from './input-control-mixin.js';
+import { Constructor } from '@open-wc/dedupe-mixin';
+import { DisabledHost } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusHost } from '@vaadin/component-base/src/focus-mixin.js';
+import { KeyboardHost } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { DelegateFocusHost } from './delegate-focus-mixin.js';
+import { DelegateStateHost } from './delegate-state-mixin.js';
+import { FieldHost } from './field-mixin.js';
+import { InputConstraintsHost } from './input-constraints-mixin.js';
+import { InputControlHost } from './input-control-mixin.js';
+import { InputHost } from './input-mixin.js';
+import { LabelHost } from './label-mixin.js';
+import { ValidateHost } from './validate-mixin.js';
 
-/**
- * A mixin to provide logic for vaadin-text-field and related components.
- */
-declare function InputFieldMixin<T extends new (...args: any[]) => {}>(base: T): T & InputFieldMixinConstructor;
-
-interface InputFieldMixinConstructor {
-  new (...args: any[]): InputFieldMixin;
-}
-
-interface InputFieldMixin extends InputControlMixin {
+export declare class InputFieldHost {
   /**
    * Whether the value of the control can be automatically completed by the browser.
    * List of available options at:
@@ -43,4 +45,33 @@ interface InputFieldMixin extends InputControlMixin {
   autocapitalize: 'on' | 'off' | 'none' | 'characters' | 'words' | 'sentences' | undefined;
 }
 
-export { InputFieldMixin, InputFieldMixinConstructor };
+/**
+ * A mixin to provide logic for vaadin-text-field and related components.
+ */
+export declare function InputFieldMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T &
+  Constructor<InputFieldHost> &
+  Pick<typeof InputFieldHost, keyof typeof InputFieldHost> &
+  Constructor<DelegateFocusHost> &
+  Pick<typeof DelegateFocusHost, keyof typeof DelegateFocusHost> &
+  Constructor<DelegateStateHost> &
+  Pick<typeof DelegateStateHost, keyof typeof DelegateStateHost> &
+  Constructor<DisabledHost> &
+  Pick<typeof DisabledHost, keyof typeof DisabledHost> &
+  Constructor<FieldHost> &
+  Pick<typeof FieldHost, keyof typeof FieldHost> &
+  Constructor<FocusHost> &
+  Pick<typeof FocusHost, keyof typeof FocusHost> &
+  Constructor<InputConstraintsHost> &
+  Pick<typeof InputConstraintsHost, keyof typeof InputConstraintsHost> &
+  Constructor<InputControlHost> &
+  Pick<typeof InputControlHost, keyof typeof InputControlHost> &
+  Constructor<InputHost> &
+  Pick<typeof InputHost, keyof typeof InputHost> &
+  Constructor<KeyboardHost> &
+  Pick<typeof KeyboardHost, keyof typeof KeyboardHost> &
+  Constructor<LabelHost> &
+  Pick<typeof LabelHost, keyof typeof LabelHost> &
+  Constructor<ValidateHost> &
+  Pick<typeof ValidateHost, keyof typeof ValidateHost>;

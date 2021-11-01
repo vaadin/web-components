@@ -3,9 +3,12 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { Constructor } from '@open-wc/dedupe-mixin';
+import { DisabledHost } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusHost } from '@vaadin/component-base/src/focus-mixin.js';
+import { KeyboardHost } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { DelegateFocusHost } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { InputHost } from '@vaadin/field-base/src/input-mixin.js';
 
 export interface DatePickerDate {
   day: number;
@@ -28,13 +31,7 @@ export interface DatePickerI18n {
   formatTitle: (monthName: string, fullYear: number) => string;
 }
 
-declare function DatePickerMixin<T extends new (...args: any[]) => {}>(base: T): T & DatePickerMixinConstructor;
-
-interface DatePickerMixinConstructor {
-  new (...args: any[]): DatePickerMixin;
-}
-
-interface DatePickerMixin extends DelegateFocusMixin, InputMixin, KeyboardMixin {
+export declare class DatePickerHost {
   /**
    * The value for this element.
    *
@@ -195,4 +192,18 @@ interface DatePickerMixin extends DelegateFocusMixin, InputMixin, KeyboardMixin 
   checkValidity(): boolean;
 }
 
-export { DatePickerMixinConstructor, DatePickerMixin };
+export declare function DatePickerMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T &
+  Constructor<DatePickerHost> &
+  Pick<typeof DatePickerHost, keyof typeof DatePickerHost> &
+  Constructor<DelegateFocusHost> &
+  Pick<typeof DelegateFocusHost, keyof typeof DelegateFocusHost> &
+  Constructor<DisabledHost> &
+  Pick<typeof DisabledHost, keyof typeof DisabledHost> &
+  Constructor<FocusHost> &
+  Pick<typeof FocusHost, keyof typeof FocusHost> &
+  Constructor<InputHost> &
+  Pick<typeof InputHost, keyof typeof InputHost> &
+  Constructor<KeyboardHost> &
+  Pick<typeof KeyboardHost, keyof typeof KeyboardHost>;

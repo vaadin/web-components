@@ -3,19 +3,11 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { Constructor } from '@open-wc/dedupe-mixin';
+import { DisabledHost } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusHost } from '@vaadin/component-base/src/focus-mixin.js';
 
-/**
- * A mixin to forward focus to an element in the light DOM.
- */
-declare function DelegateFocusMixin<T extends new (...args: any[]) => {}>(base: T): T & DelegateFocusMixinConstructor;
-
-interface DelegateFocusMixinConstructor {
-  new (...args: any[]): DelegateFocusMixin;
-}
-
-interface DelegateFocusMixin extends DisabledMixin, FocusMixin {
+export declare class DelegateFocusHost {
   /**
    * Specify that this control should have input focus when the page loads.
    */
@@ -28,7 +20,30 @@ interface DelegateFocusMixin extends DisabledMixin, FocusMixin {
    * Any component implementing this mixin is expected to provide it
    * by using `this._setFocusElement(input)` Polymer API.
    */
-  readonly focusElement: Element | null | undefined;
+  readonly focusElement: HTMLElement | null | undefined;
+
+  protected _addFocusListeners(element: HTMLElement): void;
+
+  protected _removeFocusListeners(element: HTMLElement): void;
+
+  protected _focusElementChanged(element: HTMLElement, oldElement: HTMLElement): void;
+
+  protected _onBlur(event: FocusEvent): void;
+
+  protected _onFocus(event: FocusEvent): void;
+
+  protected _setFocusElement(element: HTMLElement): void;
 }
 
-export { DelegateFocusMixinConstructor, DelegateFocusMixin };
+/**
+ * A mixin to forward focus to an element in the light DOM.
+ */
+export declare function DelegateFocusMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T &
+  Constructor<DelegateFocusHost> &
+  Pick<typeof DelegateFocusHost, keyof typeof DelegateFocusHost> &
+  Constructor<DisabledHost> &
+  Pick<typeof DisabledHost, keyof typeof DisabledHost> &
+  Constructor<FocusHost> &
+  Pick<typeof FocusHost, keyof typeof FocusHost>;
