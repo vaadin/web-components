@@ -700,7 +700,7 @@ describe('drag and drop', () => {
 
       beforeEach(() => {
         grid.dataProvider = (_params, callback) => {
-          finishLoadingItems = () => callback(getTestItems());
+          finishLoadingItems = (items) => callback(items || getTestItems());
         };
       });
 
@@ -718,6 +718,19 @@ describe('drag and drop', () => {
       it('should not run drag filter while loading items', () => {
         grid.dragFilter = sinon.spy();
         expect(grid.dragFilter.called).to.be.false;
+      });
+
+      it('should disable row drag for rows without an item', () => {
+        finishLoadingItems([getTestItems()[0], undefined]);
+        expect(getDraggable(grid, 1)).not.to.be.ok;
+        expect(grid.$.items.children[1].hasAttribute('drag-disabled')).to.be.true;
+      });
+
+      it('should enable row drag once items are available', () => {
+        finishLoadingItems([getTestItems()[0], undefined]);
+        finishLoadingItems();
+        expect(getDraggable(grid, 1)).to.be.ok;
+        expect(grid.$.items.children[1].hasAttribute('drag-disabled')).to.be.false;
       });
     });
   });
@@ -782,7 +795,7 @@ describe('drag and drop', () => {
 
       beforeEach(() => {
         grid.dataProvider = (_params, callback) => {
-          finishLoadingItems = () => callback(getTestItems());
+          finishLoadingItems = (items) => callback(items || getTestItems());
         };
       });
 
@@ -804,6 +817,23 @@ describe('drag and drop', () => {
       it('should not run drop filter while loading items', () => {
         grid.dropFilter = sinon.spy();
         expect(grid.dropFilter.called).to.be.false;
+      });
+
+      it('should disable drop on row for rows without an item', () => {
+        finishLoadingItems([getTestItems()[0], undefined]);
+        const row = grid.$.items.children[1];
+        fireDragOver(row, 'above');
+        expect(row.hasAttribute('dragover')).to.be.false;
+        expect(row.hasAttribute('drop-disabled')).to.be.true;
+      });
+
+      it('should enable drop on row once items are available', () => {
+        finishLoadingItems([getTestItems()[0], undefined]);
+        finishLoadingItems();
+        const row = grid.$.items.children[1];
+        fireDragOver(row, 'above');
+        expect(row.hasAttribute('dragover')).to.be.true;
+        expect(row.hasAttribute('drop-disabled')).to.be.false;
       });
     });
   });
