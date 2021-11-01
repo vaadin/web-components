@@ -932,9 +932,9 @@ export const ComboBoxMixin = (subclass) =>
             : this._indexOfValue(this.value, this.filteredItems);
 
         // see https://github.com/vaadin/web-components/issues/2615
-        if (this.value && this._focusedIndex >= 0) {
-          const filteredValue = this.filteredItems[this._focusedIndex];
-          if (this._getItemValue(filteredValue) === this.value) {
+        if (this.selectedItem === null && this._focusedIndex >= 0) {
+          const filteredItem = this.filteredItems[this._focusedIndex];
+          if (this._getItemValue(filteredItem) === this.value) {
             this._selectItemForValue(this.value);
           }
         }
