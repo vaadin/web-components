@@ -865,11 +865,6 @@ export const ComboBoxMixin = (subclass) =>
         return;
       }
 
-      // reset this._focusedIndex when value is reset
-      if (value === '') {
-        this._focusedIndex = -1;
-      }
-
       if (this._isValidValue(value)) {
         let item;
         if (this._getItemValue(this.selectedItem) !== value) {
@@ -935,6 +930,11 @@ export const ComboBoxMixin = (subclass) =>
           this.opened || this.autoOpenDisabled
             ? this.$.dropdown.indexOfLabel(this.filter)
             : this._indexOfValue(this.value, this.filteredItems);
+
+        // see https://github.com/vaadin/web-components/issues/2615
+        if (this.value && this._focusedIndex >= 0 && this.filteredItems[this._focusedIndex] === this.value) {
+          this._selectItemForValue(this.value);
+        }
       }
     }
 

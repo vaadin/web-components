@@ -392,13 +392,25 @@ describe('filtered items attribute', () => {
 });
 
 describe('value attribute', () => {
+  let comboBox, input;
+
+  beforeEach(() => {
+    comboBox = fixtureSync(`<vaadin-combo-box value="foo"></vaadin-combo-box>`);
+    input = comboBox.inputElement;
+  });
+
+  it('should be able to be set before filtered items', () => {
+    comboBox.filteredItems = ['foo', 'bar', 'baz'];
+    expect(comboBox.selectedItem).to.eql('foo');
+    expect(input.value).to.eql('foo');
+  });
+
   // see https://github.com/vaadin/web-components/issues/2615
   it('should not reset value after blur when set as html attribute', () => {
-    const comboBoxElement = fixtureSync(`<vaadin-combo-box value="foo"></vaadin-combo-box>`);
-    comboBoxElement.filteredItems = ['foo'];
-    comboBoxElement.value = '';
-    comboBoxElement.focus();
-    comboBoxElement.blur();
-    expect(comboBoxElement.value).to.equal('');
+    comboBox.filteredItems = ['foo'];
+    comboBox.value = '';
+    comboBox.focus();
+    comboBox.blur();
+    expect(comboBox.value).to.equal('');
   });
 });
