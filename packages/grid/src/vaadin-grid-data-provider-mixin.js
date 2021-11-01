@@ -373,10 +373,9 @@ export const DataProviderMixin = (superClass) =>
           delete cache.pendingRequests[page];
 
           this._debouncerApplyCachedData = Debouncer.debounce(this._debouncerApplyCachedData, timeOut.after(0), () => {
+            this._setLoading(false);
             this._cache.updateSize();
             this._effectiveSize = this._cache.effectiveSize;
-
-            let isARowLoading = false;
 
             Array.from(this.$.items.children)
               .filter((row) => !row.hidden)
@@ -385,12 +384,7 @@ export const DataProviderMixin = (superClass) =>
                 if (cachedItem) {
                   this._getItem(row.index, row);
                 }
-                if (row.hasAttribute('loading')) {
-                  isARowLoading = true;
-                }
               });
-
-            this._setLoading(this._cache.isLoading() || isARowLoading);
 
             this.__scrollToPendingIndex();
           });

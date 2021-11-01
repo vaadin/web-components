@@ -498,34 +498,6 @@ describe('data provider', () => {
           expandIndex(grid, 0);
           expandIndex(grid, 1);
         });
-
-        it('should be in loading state if child items are still loading', () => {
-          let rootLevelItems = [];
-
-          grid.dataProvider = (params, callback) => {
-            if (!params.parentItem) {
-              // Resolve normally for root level items
-              finiteDataProvider(params, (items) => {
-                rootLevelItems.push(...items);
-                callback(items, 10);
-              });
-            } else if (params.parentItem === rootLevelItems[0]) {
-              // Resolve an empty array for the first expanded item
-              callback([], 0);
-            }
-          };
-          // Expand first two items
-          grid.expandedItems = [rootLevelItems[0], rootLevelItems[1]];
-
-          // Should be loading since the data provider never
-          // resolves for the second root level item children
-          expect(grid.loading).to.be.true;
-        });
-
-        it('should be in loading state if there are rows in loading state', () => {
-          grid.dataProvider = (_params, callback) => callback([], 1);
-          expect(grid.loading).to.be.true;
-        });
       });
 
       it('should increase full size', () => {
@@ -745,7 +717,7 @@ describe('wrapped grid', () => {
 
       container.dataProvider = (params, callback) => {
         expect(grid.loading).to.be.true;
-        callback([...Array(params.pageSize)].map((_, i) => ({ value: `item-${params.page * params.pageSize + i}` })));
+        callback(Array(params.pageSize));
         expect(grid.loading).not.to.be.true;
 
         cancelAnimationFrame(raf);
@@ -766,7 +738,7 @@ describe('wrapped grid', () => {
       container.dataProvider = (params, callback) => {
         cb = callback;
       };
-      cb([...Array(25)].map((_, i) => ({ value: `item-${i}` })));
+      cb(Array(25));
       expect(grid.loading).not.to.be.true;
       grid.clearCache();
       expect(grid.loading).to.be.true;
