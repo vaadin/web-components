@@ -218,7 +218,12 @@ export class PasswordField extends SlotStylesMixin(TextField) {
     );
   }
 
-  /** @protected */
+  /**
+   * Override method inherited from `FocusMixin` to toggle password visibility.
+   * @param {boolean} focused
+   * @protected
+   * @override
+   */
   _setFocused(focused) {
     super._setFocused(focused);
 
@@ -227,7 +232,7 @@ export class PasswordField extends SlotStylesMixin(TextField) {
     } else {
       const isButtonFocused = this.getRootNode().activeElement === this._revealNode;
       // Remove focus-ring from the field when the reveal button gets focused
-      this.toggleAttribute('focus-ring', !isButtonFocused);
+      this.toggleAttribute('focus-ring', this._keyboardActive && !isButtonFocused);
     }
   }
 

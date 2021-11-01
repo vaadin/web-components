@@ -14,6 +14,8 @@ interface FocusMixinConstructor {
 }
 
 interface FocusMixin {
+  readonly _keyboardActive: boolean;
+
   /**
    * Override to change how focused and focus-ring attributes are set.
    */
