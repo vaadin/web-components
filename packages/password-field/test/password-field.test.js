@@ -148,6 +148,7 @@ describe('password-field', () => {
 
     describe('mousedown', () => {
       it('should not set focus-ring attribute when focusing on mousedown', () => {
+        // reset FocusMixin flag
         mousedown(passwordField);
         passwordField.focus();
         expect(passwordField.hasAttribute('focus-ring')).to.be.false;
