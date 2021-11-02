@@ -95,7 +95,7 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
             user-color-index="[[item.userColorIndex]]"
             theme$="[[item.theme]]"
             role="listitem"
-            on-focus="_handleFocusEvent"
+            on-focusin="_handleFocusEvent"
             >[[item.text]]</vaadin-message
           >
         </template>
@@ -193,6 +193,7 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
       .filter((elem) => elem.nodeType === Node.ELEMENT_NODE && elem.tagName.toLowerCase() === 'vaadin-message')[0];
     this._setTabIndexesByMessage(target);
   }
+
   /**
    * @param {number} idx
    * @protected
