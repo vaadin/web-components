@@ -15,9 +15,9 @@ export declare function CheckedMixin<T extends Constructor<object>>(
   base: T
 ): T &
   Constructor<CheckedMixinClass> &
+  Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &
-  Constructor<InputMixinClass> &
-  Constructor<DelegateStateMixinClass>;
+  Constructor<InputMixinClass>;
 
 export declare class CheckedMixinClass {
   /**

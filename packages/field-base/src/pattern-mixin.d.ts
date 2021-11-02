@@ -16,11 +16,11 @@ import { ValidateMixinClass } from './validate-mixin.js';
 export declare function PatternMixin<T extends Constructor<HTMLElement>>(
   base: T
 ): T &
-  Constructor<PatternMixinClass> &
-  Constructor<InputConstraintsMixinClass> &
-  Constructor<DisabledMixinClass> &
-  Constructor<InputMixinClass> &
   Constructor<DelegateStateMixinClass> &
+  Constructor<DisabledMixinClass> &
+  Constructor<InputConstraintsMixinClass> &
+  Constructor<InputMixinClass> &
+  Constructor<PatternMixinClass> &
   Constructor<ValidateMixinClass>;
 
 export declare class PatternMixinClass {

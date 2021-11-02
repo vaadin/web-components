@@ -15,8 +15,8 @@ import { DirMixinClass } from './dir-mixin.js';
 export declare function ElementMixin<T extends Constructor<HTMLElement>>(
   superclass: T
 ): T &
-  Constructor<ElementMixinClass> &
   Constructor<DirMixinClass> &
+  Constructor<ElementMixinClass> &
   Pick<ReactiveControllerHost, 'addController' | 'removeController'>;
 
 export declare class ElementMixinClass {

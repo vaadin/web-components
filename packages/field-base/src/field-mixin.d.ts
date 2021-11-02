@@ -14,8 +14,8 @@ import { ValidateMixinClass } from './validate-mixin.js';
 export declare function FieldMixin<T extends Constructor<HTMLElement>>(
   superclass: T
 ): T &
-  Constructor<FieldMixinClass> &
   Constructor<DelegateStateMixinClass> &
+  Constructor<FieldMixinClass> &
   Constructor<LabelMixinClass> &
   Constructor<ValidateMixinClass>;
 

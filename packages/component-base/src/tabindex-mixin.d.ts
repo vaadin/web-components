@@ -16,7 +16,7 @@ import { DisabledMixinClass } from './disabled-mixin.js';
  */
 export declare const TabindexMixin: <T extends Constructor<HTMLElement>>(
   base: T
-) => T & Constructor<TabindexMixinClass> & Constructor<DisabledMixinClass>;
+) => T & Constructor<DisabledMixinClass> & Constructor<TabindexMixinClass>;
 
 export declare class TabindexMixinClass {
   /**
