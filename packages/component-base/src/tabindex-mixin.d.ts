@@ -9,11 +9,10 @@ import { DisabledMixinClass } from './disabled-mixin.js';
 /**
  * A mixin to toggle the `tabindex` attribute.
  *
- * The attribute is set whenever the user activates the element by a pointer
- * or presses an activation key on the element from the keyboard.
+ * By default, the attribute is set to 0 that makes the element focusable.
  *
- * The attribute is removed as soon as the element is deactivated
- * by the pointer or by releasing the activation key.
+ * The attribute is set to -1 whenever the user disables the element
+ * and restored with the last known value once the element is enabled.
  */
 export declare const TabindexMixin: <T extends Constructor<HTMLElement>>(
   base: T
