@@ -1,4 +1,4 @@
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 import { ActiveItemMixin } from '../../src/vaadin-grid-active-item-mixin';
 import { ArrayDataProviderMixin } from '../../src/vaadin-grid-array-data-provider-mixin';
@@ -59,7 +59,7 @@ const genericGrid = document.createElement('vaadin-grid');
 assertType<Grid>(genericGrid);
 
 const narrowedGrid = genericGrid as Grid<TestGridItem>;
-assertType<ElementMixin>(narrowedGrid);
+assertType<ElementMixinClass>(narrowedGrid);
 assertType<ThemableMixin>(narrowedGrid);
 assertType<ActiveItemMixin<TestGridItem>>(narrowedGrid);
 assertType<ArrayDataProviderMixin<TestGridItem>>(narrowedGrid);

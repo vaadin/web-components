@@ -31,6 +31,7 @@
     "web-component"
   ],
   "dependencies": {
+    "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/iron-a11y-announcer": "^3.0.0",
     "@polymer/iron-a11y-keys-behavior": "^3.0.0",
     "@polymer/iron-media-query": "^3.0.0",

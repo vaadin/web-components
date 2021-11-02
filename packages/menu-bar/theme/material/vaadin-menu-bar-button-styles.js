@@ -8,6 +8,7 @@ const menuBarButton = css`
 
   [part='label'] ::slotted(vaadin-context-menu-item) {
     line-height: 20px;
+    background-color: transparent;
     margin: -8px;
     padding: 8px;
     justify-content: center;

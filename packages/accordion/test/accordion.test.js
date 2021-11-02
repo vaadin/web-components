@@ -230,6 +230,7 @@ describe('vaadin-accordion', () => {
         accordion.items[1].disabled = true;
         accordion.items[2].disabled = true;
         heading = getHeading(0);
+        arrowDownKeyDown(heading);
         expect(accordion.items[0].hasAttribute('focus-ring')).to.be.true;
       });
 

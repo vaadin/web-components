@@ -5,30 +5,9 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import './vaadin-avatar-icons.js';
-
-// We consider the keyboard to be active if the window has received a keydown
-// event since the last mousedown event.
-let keyboardActive = false;
-
-// Listen for top-level Tab keydown and mousedown events.
-// Use capture phase so we detect events even if they're handled.
-window.addEventListener(
-  'keydown',
-  (e) => {
-    keyboardActive = e.keyCode === 9;
-  },
-  true
-);
-
-window.addEventListener(
-  'mousedown',
-  () => {
-    keyboardActive = false;
-  },
-  true
-);
 
 /**
  * `<vaadin-avatar>` is a Web Component providing avatar displaying functionality.
@@ -46,19 +25,22 @@ window.addEventListener(
  * `abbr`    | The abbreviation element
  * `icon`    | The icon element
  *
- * The following attributes are exposed for styling:
+ * The following state attributes are available for styling:
  *
- * Attribute | Description
- * --------- | -----------
+ * Attribute         | Description
+ * ------------------|-------------
+ * `focus-ring`      | Set when the avatar is focused using the keyboard.
+ * `focused`         | Set when the avatar is focused.
  * `has-color-index` | Set when the avatar has `colorIndex` and the corresponding custom CSS property exists.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @extends HTMLElement
+ * @mixes FocusMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Avatar extends ElementMixin(ThemableMixin(PolymerElement)) {
+class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -235,28 +217,6 @@ class Avatar extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     if (!this.hasAttribute('tabindex')) {
       this.setAttribute('tabindex', '0');
-    }
-
-    this.addEventListener('focusin', () => {
-      this.__setFocused(true);
-    });
-
-    this.addEventListener('focusout', () => {
-      this.__setFocused(false);
-    });
-  }
-
-  /** @private */
-  __setFocused(focused) {
-    if (focused) {
-      this.setAttribute('focused', '');
-
-      if (keyboardActive) {
-        this.setAttribute('focus-ring', '');
-      }
-    } else {
-      this.removeAttribute('focused');
-      this.removeAttribute('focus-ring');
     }
   }
 

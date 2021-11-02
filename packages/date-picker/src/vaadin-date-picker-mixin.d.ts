@@ -3,9 +3,12 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
-import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { Constructor } from '@open-wc/dedupe-mixin';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
+import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 
 export interface DatePickerDate {
   day: number;
@@ -28,15 +31,19 @@ export interface DatePickerI18n {
   formatTitle: (monthName: string, fullYear: number) => string;
 }
 
-declare function DatePickerMixin<T extends new (...args: any[]) => {}>(base: T): T & DatePickerMixinConstructor;
+export declare function DatePickerMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T &
+  Constructor<DatePickerMixinClass> &
+  Constructor<DelegateFocusMixinClass> &
+  Constructor<DisabledMixinClass> &
+  Constructor<FocusMixinClass> &
+  Constructor<InputMixinClass> &
+  Constructor<KeyboardMixinClass>;
 
-interface DatePickerMixinConstructor {
-  new (...args: any[]): DatePickerMixin;
-}
-
-interface DatePickerMixin extends DelegateFocusMixin, InputMixin, KeyboardMixin {
+export declare class DatePickerMixinClass {
   /**
-   * The value for this element.
+   * Selected date.
    *
    * Supported date formats:
    * - ISO 8601 `"YYYY-MM-DD"` (default)
@@ -194,5 +201,3 @@ interface DatePickerMixin extends DelegateFocusMixin, InputMixin, KeyboardMixin 
    */
   checkValidity(): boolean;
 }
-
-export { DatePickerMixinConstructor, DatePickerMixin };

@@ -3,19 +3,18 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { Constructor } from '@open-wc/dedupe-mixin';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 
 /**
  * A mixin to forward focus to an element in the light DOM.
  */
-declare function DelegateFocusMixin<T extends new (...args: any[]) => {}>(base: T): T & DelegateFocusMixinConstructor;
+export declare function DelegateFocusMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T & Constructor<DelegateFocusMixinClass> & Constructor<DisabledMixinClass> & Constructor<FocusMixinClass>;
 
-interface DelegateFocusMixinConstructor {
-  new (...args: any[]): DelegateFocusMixin;
-}
-
-interface DelegateFocusMixin extends DisabledMixin, FocusMixin {
+export declare class DelegateFocusMixinClass {
   /**
    * Specify that this control should have input focus when the page loads.
    */
@@ -28,7 +27,17 @@ interface DelegateFocusMixin extends DisabledMixin, FocusMixin {
    * Any component implementing this mixin is expected to provide it
    * by using `this._setFocusElement(input)` Polymer API.
    */
-  readonly focusElement: Element | null | undefined;
-}
+  readonly focusElement: HTMLElement | null | undefined;
 
-export { DelegateFocusMixinConstructor, DelegateFocusMixin };
+  protected _addFocusListeners(element: HTMLElement): void;
+
+  protected _removeFocusListeners(element: HTMLElement): void;
+
+  protected _focusElementChanged(element: HTMLElement, oldElement: HTMLElement): void;
+
+  protected _onBlur(event: FocusEvent): void;
+
+  protected _onFocus(event: FocusEvent): void;
+
+  protected _setFocusElement(element: HTMLElement): void;
+}

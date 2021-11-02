@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
 export type ComboBoxDataProviderCallback<TItem> = (items: Array<TItem>, size: number) => void;
 
@@ -17,15 +18,11 @@ export type ComboBoxDataProvider<TItem> = (
   callback: ComboBoxDataProviderCallback<TItem>
 ) => void;
 
-declare function ComboBoxDataProviderMixin<TItem, T extends new (...args: any[]) => {}>(
+export declare function ComboBoxDataProviderMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T
-): T & ComboBoxDataProviderMixinConstructor<TItem>;
+): T & Constructor<ComboBoxDataProviderMixinClass<TItem>>;
 
-interface ComboBoxDataProviderMixinConstructor<TItem> {
-  new (...args: any[]): ComboBoxDataProviderMixin<TItem>;
-}
-
-interface ComboBoxDataProviderMixin<TItem> {
+export declare class ComboBoxDataProviderMixinClass<TItem> {
   /**
    * Number of items fetched at a time from the dataprovider.
    * @attr {number} page-size
@@ -57,5 +54,3 @@ interface ComboBoxDataProviderMixin<TItem> {
    */
   clearCache(): void;
 }
-
-export { ComboBoxDataProviderMixin, ComboBoxDataProviderMixinConstructor };

@@ -3,18 +3,39 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { InputControlMixin } from './input-control-mixin.js';
+import { Constructor } from '@open-wc/dedupe-mixin';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
+import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { DelegateFocusMixinClass } from './delegate-focus-mixin.js';
+import { DelegateStateMixinClass } from './delegate-state-mixin.js';
+import { FieldMixinClass } from './field-mixin.js';
+import { InputConstraintsMixinClass } from './input-constraints-mixin.js';
+import { InputControlMixinClass } from './input-control-mixin.js';
+import { InputMixinClass } from './input-mixin.js';
+import { LabelMixinClass } from './label-mixin.js';
+import { ValidateMixinClass } from './validate-mixin.js';
 
 /**
  * A mixin to provide logic for vaadin-text-field and related components.
  */
-declare function InputFieldMixin<T extends new (...args: any[]) => {}>(base: T): T & InputFieldMixinConstructor;
+export declare function InputFieldMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T &
+  Constructor<DelegateFocusMixinClass> &
+  Constructor<DelegateStateMixinClass> &
+  Constructor<DisabledMixinClass> &
+  Constructor<FieldMixinClass> &
+  Constructor<FocusMixinClass> &
+  Constructor<InputConstraintsMixinClass> &
+  Constructor<InputControlMixinClass> &
+  Constructor<InputFieldMixinClass> &
+  Constructor<InputMixinClass> &
+  Constructor<KeyboardMixinClass> &
+  Constructor<LabelMixinClass> &
+  Constructor<ValidateMixinClass>;
 
-interface InputFieldMixinConstructor {
-  new (...args: any[]): InputFieldMixin;
-}
-
-interface InputFieldMixin extends InputControlMixin {
+export declare class InputFieldMixinClass {
   /**
    * Whether the value of the control can be automatically completed by the browser.
    * List of available options at:
@@ -42,5 +63,3 @@ interface InputFieldMixin extends InputControlMixin {
    */
   autocapitalize: 'on' | 'off' | 'none' | 'characters' | 'words' | 'sentences' | undefined;
 }
-
-export { InputFieldMixin, InputFieldMixinConstructor };

@@ -3,20 +3,37 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { FieldMixin } from './field-mixin.js';
-import { InputConstraintsMixin } from './input-constraints-mixin.js';
+import { Constructor } from '@open-wc/dedupe-mixin';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
+import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { DelegateFocusMixinClass } from './delegate-focus-mixin.js';
+import { DelegateStateMixinClass } from './delegate-state-mixin.js';
+import { FieldMixinClass } from './field-mixin.js';
+import { InputConstraintsMixinClass } from './input-constraints-mixin.js';
+import { InputMixinClass } from './input-mixin.js';
+import { LabelMixinClass } from './label-mixin.js';
+import { ValidateMixinClass } from './validate-mixin.js';
 
 /**
  * A mixin to provide shared logic for the editable form input controls.
  */
-declare function InputControlMixin<T extends new (...args: any[]) => {}>(base: T): T & InputControlMixinConstructor;
+export declare function InputControlMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T &
+  Constructor<DelegateFocusMixinClass> &
+  Constructor<DelegateStateMixinClass> &
+  Constructor<DisabledMixinClass> &
+  Constructor<FieldMixinClass> &
+  Constructor<FocusMixinClass> &
+  Constructor<InputConstraintsMixinClass> &
+  Constructor<InputControlMixinClass> &
+  Constructor<InputMixinClass> &
+  Constructor<KeyboardMixinClass> &
+  Constructor<LabelMixinClass> &
+  Constructor<ValidateMixinClass>;
 
-interface InputControlMixinConstructor {
-  new (...args: any[]): InputControlMixin;
-}
-
-interface InputControlMixin extends KeyboardMixin, InputConstraintsMixin, FieldMixin {
+export declare class InputControlMixinClass {
   /**
    * If true, the input text gets fully selected when the field is focused using click or touch / tap.
    */
@@ -48,5 +65,3 @@ interface InputControlMixin extends KeyboardMixin, InputConstraintsMixin, FieldM
    */
   title: string;
 }
-
-export { InputControlMixin, InputControlMixinConstructor };
