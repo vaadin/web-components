@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -36,7 +37,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * - `<vaadin-message-avatar>` - has the same API as [`<vaadin-avatar>`](#/elements/vaadin-avatar).
  */
-declare class Message extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class Message extends FocusMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**
    * Time of sending the message. It is rendered as-is to the part='time' slot,
    * so the formatting is up to you.

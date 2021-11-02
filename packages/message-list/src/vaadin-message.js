@@ -5,6 +5,7 @@
  */
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import './vaadin-message-avatar.js';
 
@@ -39,10 +40,11 @@ import './vaadin-message-avatar.js';
  * - `<vaadin-message-avatar>` - has the same API as [`<vaadin-avatar>`](#/elements/vaadin-avatar).
  *
  * @extends HTMLElement
+ * @mixes FocusMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Message extends ElementMixin(ThemableMixin(PolymerElement)) {
+class Message extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get properties() {
     return {
       /**
@@ -162,39 +164,6 @@ class Message extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   static get is() {
     return 'vaadin-message';
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    // Handle focus
-    this.addEventListener('focus', () => this._setFocused(true), true);
-    this.addEventListener('blur', () => this._setFocused(false), true);
-    this.addEventListener('mousedown', () => {
-      this._mousedown = true;
-      const mouseUpListener = () => {
-        this._mousedown = false;
-        document.removeEventListener('mouseup', mouseUpListener);
-      };
-      document.addEventListener('mouseup', mouseUpListener);
-    });
-  }
-
-  /**
-   * @param {boolean} focused
-   * @protected
-   */
-  _setFocused(focused) {
-    if (focused) {
-      this.setAttribute('focused', '');
-      if (!this._mousedown) {
-        this.setAttribute('focus-ring', '');
-      }
-    } else {
-      this.removeAttribute('focused');
-      this.removeAttribute('focus-ring');
-    }
   }
 }
 
