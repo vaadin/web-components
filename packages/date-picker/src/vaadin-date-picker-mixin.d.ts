@@ -43,7 +43,7 @@ export declare function DatePickerMixin<T extends Constructor<HTMLElement>>(
 
 export declare class DatePickerMixinClass {
   /**
-   * The value for this element.
+   * Selected date.
    *
    * Supported date formats:
    * - ISO 8601 `"YYYY-MM-DD"` (default)

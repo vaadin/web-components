@@ -33,7 +33,7 @@ export const DatePickerMixin = (subclass) =>
         _focusedDate: Date,
 
         /**
-         * The value for this element.
+         * Selected date.
          *
          * Supported date formats:
          * - ISO 8601 `"YYYY-MM-DD"` (default)
