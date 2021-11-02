@@ -5,7 +5,14 @@
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
 
-export declare class SlotTargetHost {
+/**
+ * A mixin to copy the content from a source slot to a target element.
+ */
+export declare function SlotTargetMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T & Constructor<SlotTargetMixinClass>;
+
+export declare class SlotTargetMixinClass {
   /**
    * A reference to the source slot from which the content is copied to the target element.
    */
@@ -16,10 +23,3 @@ export declare class SlotTargetHost {
    */
   protected readonly _slotTarget: HTMLElement;
 }
-
-/**
- * A mixin to copy the content from a source slot to a target element.
- */
-export declare function SlotTargetMixin<T extends Constructor<HTMLElement>>(
-  base: T
-): T & Constructor<SlotTargetHost> & Pick<typeof SlotTargetHost, keyof typeof SlotTargetHost>;

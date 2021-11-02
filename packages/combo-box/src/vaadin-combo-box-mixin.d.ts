@@ -4,9 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
-import { DisabledHost } from '@vaadin/component-base/src/disabled-mixin.js';
-import { KeyboardHost } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { InputHost } from '@vaadin/field-base/src/input-mixin.js';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import { ComboBox } from './vaadin-combo-box.js';
 
 export type ComboBoxDefaultItem = any;
@@ -22,7 +22,15 @@ export type ComboBoxRenderer<TItem> = (
   model: ComboBoxItemModel<TItem>
 ) => void;
 
-export declare class ComboBoxHost<TItem> {
+export declare function ComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
+  base: T
+): T &
+  Constructor<ComboBoxMixinClass<TItem>> &
+  Constructor<DisabledMixinClass> &
+  Constructor<InputMixinClass> &
+  Constructor<KeyboardMixinClass>;
+
+export declare class ComboBoxMixinClass<TItem> {
   protected readonly _propertyForValue: string;
 
   protected _inputElementValue: string | undefined;
@@ -172,15 +180,3 @@ export declare class ComboBoxHost<TItem> {
    */
   checkValidity(): boolean;
 }
-
-export declare function ComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
-  base: T
-): T &
-  Constructor<ComboBoxHost<TItem>> &
-  Pick<typeof ComboBoxHost, keyof typeof ComboBoxHost> &
-  Constructor<DisabledHost> &
-  Pick<typeof DisabledHost, keyof typeof DisabledHost> &
-  Constructor<InputHost> &
-  Pick<typeof InputHost, keyof typeof InputHost> &
-  Constructor<KeyboardHost> &
-  Pick<typeof KeyboardHost, keyof typeof KeyboardHost>;

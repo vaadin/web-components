@@ -5,7 +5,12 @@
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
 
-export declare class FocusHost {
+/**
+ * A mixin to handle `focused` and `focus-ring` attributes based on focus.
+ */
+export declare const FocusMixin: <T extends Constructor<HTMLElement>>(base: T) => T & Constructor<FocusMixinClass>;
+
+export declare class FocusMixinClass {
   protected readonly _keyboardActive: boolean;
 
   /**
@@ -23,10 +28,3 @@ export declare class FocusHost {
    */
   protected _shouldRemoveFocus(event: FocusEvent): boolean;
 }
-
-/**
- * A mixin to handle `focused` and `focus-ring` attributes based on focus.
- */
-export declare function FocusMixin<T extends Constructor<HTMLElement>>(
-  superclass: T
-): T & Constructor<FocusHost> & Pick<typeof FocusHost, keyof typeof FocusHost>;

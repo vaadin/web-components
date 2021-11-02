@@ -5,7 +5,14 @@
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
 
-export declare class DisabledHost {
+/**
+ * A mixin to provide disabled property for field components.
+ */
+export declare const DisabledMixin: <T extends Constructor<HTMLElement>>(
+  base: T
+) => Constructor<DisabledMixinClass> & T;
+
+export declare class DisabledMixinClass {
   /**
    * If true, the user cannot interact with this element.
    */
@@ -13,10 +20,3 @@ export declare class DisabledHost {
 
   protected _disabledChanged(disabled: boolean, oldDisabled: boolean): void;
 }
-
-/**
- * A mixin to provide disabled property for field components.
- */
-export declare function DisabledMixin<T extends Constructor<HTMLElement>>(
-  superclass: T
-): T & Constructor<DisabledHost> & Pick<typeof DisabledHost, keyof typeof DisabledHost>;

@@ -4,19 +4,38 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
-import { DisabledHost } from '@vaadin/component-base/src/disabled-mixin.js';
-import { FocusHost } from '@vaadin/component-base/src/focus-mixin.js';
-import { KeyboardHost } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { DelegateFocusHost } from './delegate-focus-mixin.js';
-import { DelegateStateHost } from './delegate-state-mixin.js';
-import { FieldHost } from './field-mixin.js';
-import { InputConstraintsHost } from './input-constraints-mixin.js';
-import { InputControlHost } from './input-control-mixin.js';
-import { InputHost } from './input-mixin.js';
-import { LabelHost } from './label-mixin.js';
-import { ValidateHost } from './validate-mixin.js';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
+import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { DelegateFocusMixinClass } from './delegate-focus-mixin.js';
+import { DelegateStateMixinClass } from './delegate-state-mixin.js';
+import { FieldMixinClass } from './field-mixin.js';
+import { InputConstraintsMixinClass } from './input-constraints-mixin.js';
+import { InputControlMixinClass } from './input-control-mixin.js';
+import { InputMixinClass } from './input-mixin.js';
+import { LabelMixinClass } from './label-mixin.js';
+import { ValidateMixinClass } from './validate-mixin.js';
 
-export declare class InputFieldHost {
+/**
+ * A mixin to provide logic for vaadin-text-field and related components.
+ */
+export declare function InputFieldMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T &
+  Constructor<InputFieldMixinClass> &
+  Constructor<DelegateFocusMixinClass> &
+  Constructor<DelegateStateMixinClass> &
+  Constructor<DisabledMixinClass> &
+  Constructor<FieldMixinClass> &
+  Constructor<FocusMixinClass> &
+  Constructor<InputConstraintsMixinClass> &
+  Constructor<InputControlMixinClass> &
+  Constructor<InputMixinClass> &
+  Constructor<KeyboardMixinClass> &
+  Constructor<LabelMixinClass> &
+  Constructor<ValidateMixinClass>;
+
+export declare class InputFieldMixinClass {
   /**
    * Whether the value of the control can be automatically completed by the browser.
    * List of available options at:
@@ -44,34 +63,3 @@ export declare class InputFieldHost {
    */
   autocapitalize: 'on' | 'off' | 'none' | 'characters' | 'words' | 'sentences' | undefined;
 }
-
-/**
- * A mixin to provide logic for vaadin-text-field and related components.
- */
-export declare function InputFieldMixin<T extends Constructor<HTMLElement>>(
-  base: T
-): T &
-  Constructor<InputFieldHost> &
-  Pick<typeof InputFieldHost, keyof typeof InputFieldHost> &
-  Constructor<DelegateFocusHost> &
-  Pick<typeof DelegateFocusHost, keyof typeof DelegateFocusHost> &
-  Constructor<DelegateStateHost> &
-  Pick<typeof DelegateStateHost, keyof typeof DelegateStateHost> &
-  Constructor<DisabledHost> &
-  Pick<typeof DisabledHost, keyof typeof DisabledHost> &
-  Constructor<FieldHost> &
-  Pick<typeof FieldHost, keyof typeof FieldHost> &
-  Constructor<FocusHost> &
-  Pick<typeof FocusHost, keyof typeof FocusHost> &
-  Constructor<InputConstraintsHost> &
-  Pick<typeof InputConstraintsHost, keyof typeof InputConstraintsHost> &
-  Constructor<InputControlHost> &
-  Pick<typeof InputControlHost, keyof typeof InputControlHost> &
-  Constructor<InputHost> &
-  Pick<typeof InputHost, keyof typeof InputHost> &
-  Constructor<KeyboardHost> &
-  Pick<typeof KeyboardHost, keyof typeof KeyboardHost> &
-  Constructor<LabelHost> &
-  Pick<typeof LabelHost, keyof typeof LabelHost> &
-  Constructor<ValidateHost> &
-  Pick<typeof ValidateHost, keyof typeof ValidateHost>;

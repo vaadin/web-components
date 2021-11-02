@@ -5,16 +5,16 @@
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
 
-export declare class DelegateStateHost {
-  /**
-   * A target element to which attributes and properties are delegated.
-   */
-  stateTarget: HTMLElement | null;
-}
-
 /**
  * A mixin to delegate properties and attributes to a target element.
  */
 export declare function DelegateStateMixin<T extends Constructor<HTMLElement>>(
   base: T
-): T & Constructor<DelegateStateHost> & Pick<typeof DelegateStateHost, keyof typeof DelegateStateHost>;
+): T & Constructor<DelegateStateMixinClass>;
+
+export declare class DelegateStateMixinClass {
+  /**
+   * A target element to which attributes and properties are delegated.
+   */
+  stateTarget: HTMLElement | null;
+}

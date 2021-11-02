@@ -3,12 +3,12 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ElementHost } from '@vaadin/component-base/src/element-mixin.js';
-import { InputControlHost } from '@vaadin/field-base/src/input-control-mixin.js';
-import { PatternHost } from '@vaadin/field-base/src/pattern-mixin.js';
+import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
+import { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ComboBoxDataProviderHost } from './vaadin-combo-box-data-provider-mixin.js';
-import { ComboBoxHost } from './vaadin-combo-box-mixin.js';
+import { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
+import { ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
 import { ComboBoxDefaultItem } from './vaadin-combo-box-mixin.js';
 export {
   ComboBoxDataProvider,
@@ -220,12 +220,12 @@ declare class ComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
 }
 
 interface ComboBox<TItem = ComboBoxDefaultItem>
-  extends ComboBoxDataProviderHost<TItem>,
-    ComboBoxHost<TItem>,
-    PatternHost,
-    InputControlHost,
+  extends ComboBoxDataProviderMixinClass<TItem>,
+    ComboBoxMixinClass<TItem>,
+    PatternMixinClass,
+    InputControlMixinClass,
     ThemableMixin,
-    ElementHost {}
+    ElementMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {

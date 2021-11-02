@@ -1,13 +1,13 @@
-import { ElementHost } from '@vaadin/component-base/src/element-mixin.js';
-import { FocusHost } from '@vaadin/component-base/src/focus-mixin.js';
-import { DisabledHost } from '@vaadin/component-base/src/disabled-mixin.js';
-import { KeyboardHost } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { DelegateFocusHost } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { LabelHost } from '@vaadin/field-base/src/label-mixin.js';
-import { InputConstraintsHost } from '@vaadin/field-base/src/input-constraints-mixin.js';
-import { InputControlHost } from '@vaadin/field-base/src/input-control-mixin.js';
-import { InputHost } from '@vaadin/field-base/src/input-mixin.js';
-import { ValidateHost } from '@vaadin/field-base/src/validate-mixin.js';
+import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
+import { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
+import { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
+import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
+import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '../../vaadin-date-picker.js';
 import {
@@ -22,7 +22,7 @@ import {
   DatePickerLightOpenedChangedEvent,
   DatePickerLightValueChangedEvent
 } from '../../vaadin-date-picker-light.js';
-import { DatePickerHost } from '../../src/vaadin-date-picker-mixin.js';
+import { DatePickerMixinClass } from '../../src/vaadin-date-picker-mixin.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -71,18 +71,18 @@ assertType<string>(datePicker.name);
 assertType<string | null | undefined>(datePicker.initialPosition);
 
 // DatePicker mixins
-assertType<ElementHost>(datePicker);
-assertType<FocusHost>(datePicker);
-assertType<DisabledHost>(datePicker);
-assertType<KeyboardHost>(datePicker);
-assertType<DelegateFocusHost>(datePicker);
-assertType<LabelHost>(datePicker);
-assertType<InputConstraintsHost>(datePicker);
-assertType<InputControlHost>(datePicker);
-assertType<InputHost>(datePicker);
-assertType<ValidateHost>(datePicker);
+assertType<ElementMixinClass>(datePicker);
+assertType<FocusMixinClass>(datePicker);
+assertType<DisabledMixinClass>(datePicker);
+assertType<KeyboardMixinClass>(datePicker);
+assertType<DelegateFocusMixinClass>(datePicker);
+assertType<LabelMixinClass>(datePicker);
+assertType<InputConstraintsMixinClass>(datePicker);
+assertType<InputControlMixinClass>(datePicker);
+assertType<InputMixinClass>(datePicker);
+assertType<ValidateMixinClass>(datePicker);
 assertType<ThemableMixin>(datePicker);
-assertType<DatePickerHost>(datePicker);
+assertType<DatePickerMixinClass>(datePicker);
 
 /* DatePickerLight */
 const datePickerLight = document.createElement('vaadin-date-picker-light');
@@ -121,10 +121,10 @@ assertType<string>(datePickerLight.value);
 assertType<string | null | undefined>(datePickerLight.initialPosition);
 
 // DatePickerLight mixins
-assertType<FocusHost>(datePickerLight);
-assertType<DisabledHost>(datePickerLight);
-assertType<KeyboardHost>(datePickerLight);
-assertType<DelegateFocusHost>(datePickerLight);
-assertType<InputHost>(datePickerLight);
+assertType<FocusMixinClass>(datePickerLight);
+assertType<DisabledMixinClass>(datePickerLight);
+assertType<KeyboardMixinClass>(datePickerLight);
+assertType<DelegateFocusMixinClass>(datePickerLight);
+assertType<InputMixinClass>(datePickerLight);
 assertType<ThemableMixin>(datePickerLight);
-assertType<DatePickerHost>(datePickerLight);
+assertType<DatePickerMixinClass>(datePickerLight);

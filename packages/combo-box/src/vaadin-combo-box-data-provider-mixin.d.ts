@@ -18,7 +18,11 @@ export type ComboBoxDataProvider<TItem> = (
   callback: ComboBoxDataProviderCallback<TItem>
 ) => void;
 
-export declare class ComboBoxDataProviderHost<TItem> {
+export declare function ComboBoxDataProviderMixin<TItem, T extends Constructor<HTMLElement>>(
+  base: T
+): T & Constructor<ComboBoxDataProviderMixinClass<TItem>>;
+
+export declare class ComboBoxDataProviderMixinClass<TItem> {
   /**
    * Number of items fetched at a time from the dataprovider.
    * @attr {number} page-size
@@ -50,9 +54,3 @@ export declare class ComboBoxDataProviderHost<TItem> {
    */
   clearCache(): void;
 }
-
-export declare function ComboBoxDataProviderMixin<TItem, T extends Constructor<HTMLElement>>(
-  base: T
-): T &
-  Constructor<ComboBoxDataProviderHost<TItem>> &
-  Pick<typeof ComboBoxDataProviderHost, keyof typeof ComboBoxDataProviderHost>;

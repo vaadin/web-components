@@ -5,7 +5,12 @@
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
 
-export declare class ValidateHost {
+/**
+ * A mixin to provide required state and validation logic.
+ */
+export declare function ValidateMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ValidateMixinClass>;
+
+export declare class ValidateMixinClass {
   /**
    * Set to true when the field is invalid.
    */
@@ -26,10 +31,3 @@ export declare class ValidateHost {
    */
   checkValidity(): boolean;
 }
-
-/**
- * A mixin to provide required state and validation logic.
- */
-export declare function ValidateMixin<T extends Constructor<HTMLElement>>(
-  base: T
-): T & Constructor<ValidateHost> & Pick<typeof ValidateHost, keyof typeof ValidateHost>;

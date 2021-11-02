@@ -4,10 +4,17 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
-import { DisabledHost } from '@vaadin/component-base/src/disabled-mixin.js';
-import { FocusHost } from '@vaadin/component-base/src/focus-mixin.js';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 
-export declare class DelegateFocusHost {
+/**
+ * A mixin to forward focus to an element in the light DOM.
+ */
+export declare function DelegateFocusMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T & Constructor<DelegateFocusMixinClass> & Constructor<DisabledMixinClass> & Constructor<FocusMixinClass>;
+
+export declare class DelegateFocusMixinClass {
   /**
    * Specify that this control should have input focus when the page loads.
    */
@@ -34,16 +41,3 @@ export declare class DelegateFocusHost {
 
   protected _setFocusElement(element: HTMLElement): void;
 }
-
-/**
- * A mixin to forward focus to an element in the light DOM.
- */
-export declare function DelegateFocusMixin<T extends Constructor<HTMLElement>>(
-  base: T
-): T &
-  Constructor<DelegateFocusHost> &
-  Pick<typeof DelegateFocusHost, keyof typeof DelegateFocusHost> &
-  Constructor<DisabledHost> &
-  Pick<typeof DisabledHost, keyof typeof DisabledHost> &
-  Constructor<FocusHost> &
-  Pick<typeof FocusHost, keyof typeof FocusHost>;

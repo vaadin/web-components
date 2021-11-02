@@ -4,9 +4,22 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
-import { DisabledHost } from './disabled-mixin.js';
+import { DisabledMixinClass } from './disabled-mixin.js';
 
-export declare class TabindexHost {
+/**
+ * A mixin to toggle the `tabindex` attribute.
+ *
+ * The attribute is set whenever the user activates the element by a pointer
+ * or presses an activation key on the element from the keyboard.
+ *
+ * The attribute is removed as soon as the element is deactivated
+ * by the pointer or by releasing the activation key.
+ */
+export declare const TabindexMixin: <T extends Constructor<HTMLElement>>(
+  base: T
+) => T & Constructor<TabindexMixinClass> & Constructor<DisabledMixinClass>;
+
+export declare class TabindexMixinClass {
   /**
    * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
    */
@@ -19,20 +32,3 @@ export declare class TabindexHost {
    */
   protected _tabindexChanged(tabindex: number | undefined | null): void;
 }
-
-/**
- * A mixin to toggle the `tabindex` attribute.
- *
- * The attribute is set whenever the user activates the element by a pointer
- * or presses an activation key on the element from the keyboard.
- *
- * The attribute is removed as soon as the element is deactivated
- * by the pointer or by releasing the activation key.
- */
-export declare function TabindexMixin<T extends Constructor<HTMLElement>>(
-  superclass: T
-): T &
-  Constructor<TabindexHost> &
-  Pick<typeof TabindexHost, keyof typeof TabindexHost> &
-  Constructor<DisabledHost> &
-  Pick<typeof DisabledHost, keyof typeof DisabledHost>;

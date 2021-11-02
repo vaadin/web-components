@@ -5,7 +5,13 @@
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
 
-export declare class InputHost {
+/**
+ * A mixin to store the reference to an input element
+ * and add input and change event listeners to it.
+ */
+export declare function InputMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<InputMixinClass>;
+
+export declare class InputMixinClass {
   /**
    * A reference to the input element controlled by the mixin.
    * Any component implementing this mixin is expected to provide it
@@ -45,11 +51,3 @@ export declare class InputHost {
 
   protected _valueChanged(value?: string, oldValue?: string): void;
 }
-
-/**
- * A mixin to store the reference to an input element
- * and add input and change event listeners to it.
- */
-export declare function InputMixin<T extends Constructor<HTMLElement>>(
-  base: T
-): T & Constructor<InputHost> & Pick<typeof InputHost, keyof typeof InputHost>;

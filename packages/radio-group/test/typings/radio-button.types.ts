@@ -1,12 +1,11 @@
-import { ActiveHost } from '@vaadin/component-base/src/active-mixin.js';
-import { ElementHost } from '@vaadin/component-base/src/element-mixin.js';
-import { FocusHost } from '@vaadin/component-base/src/focus-mixin.js';
-import { DisabledHost } from '@vaadin/component-base/src/disabled-mixin.js';
-import { KeyboardHost } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { CheckedHost } from '@vaadin/field-base/src/checked-mixin.js';
-import { DelegateFocusHost } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { LabelHost } from '@vaadin/field-base/src/label-mixin.js';
-import { SlotLabelHost } from '@vaadin/field-base/src/slot-label-mixin.js';
+import { ActiveMixinClass } from '@vaadin/component-base/src/active-mixin.js';
+import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js';
+import { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '../../vaadin-radio-button.js';
 import '../../vaadin-radio-group.js';
@@ -26,15 +25,14 @@ assertType<string>(radio.name);
 assertType<string>(radio.value);
 
 // Radio mixins
-assertType<ActiveHost>(radio);
-assertType<DisabledHost>(radio);
-assertType<ElementHost>(radio);
-assertType<FocusHost>(radio);
-assertType<KeyboardHost>(radio);
-assertType<CheckedHost>(radio);
-assertType<DelegateFocusHost>(radio);
-assertType<LabelHost>(radio);
-assertType<SlotLabelHost>(radio);
+assertType<ActiveMixinClass>(radio);
+assertType<DisabledMixinClass>(radio);
+assertType<ElementMixinClass>(radio);
+assertType<FocusMixinClass>(radio);
+assertType<KeyboardMixinClass>(radio);
+assertType<CheckedMixinClass>(radio);
+assertType<DelegateFocusMixinClass>(radio);
+assertType<LabelMixinClass>(radio);
 assertType<ThemableMixin>(radio);
 
 // Radio events

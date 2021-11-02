@@ -4,11 +4,22 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
-import { DelegateStateHost } from './delegate-state-mixin.js';
-import { LabelHost } from './label-mixin.js';
-import { ValidateHost } from './validate-mixin.js';
+import { DelegateStateMixinClass } from './delegate-state-mixin.js';
+import { LabelMixinClass } from './label-mixin.js';
+import { ValidateMixinClass } from './validate-mixin.js';
 
-export declare class FieldHost {
+/**
+ * A mixin to provide common field logic: label, error message and helper text.
+ */
+export declare function FieldMixin<T extends Constructor<HTMLElement>>(
+  superclass: T
+): T &
+  Constructor<FieldMixinClass> &
+  Constructor<DelegateStateMixinClass> &
+  Constructor<LabelMixinClass> &
+  Constructor<ValidateMixinClass>;
+
+export declare class FieldMixinClass {
   /**
    * A target element to which ARIA attributes are set.
    */
@@ -42,18 +53,3 @@ export declare class FieldHost {
 
   protected _updateAriaRequiredAttribute(target: HTMLElement, required: boolean): void;
 }
-
-/**
- * A mixin to provide common field logic: label, error message and helper text.
- */
-export declare function FieldMixin<T extends Constructor<HTMLElement>>(
-  superclass: T
-): T &
-  Constructor<FieldHost> &
-  Pick<typeof FieldHost, keyof typeof FieldHost> &
-  Constructor<DelegateStateHost> &
-  Pick<typeof DelegateStateHost, keyof typeof DelegateStateHost> &
-  Constructor<LabelHost> &
-  Pick<typeof LabelHost, keyof typeof LabelHost> &
-  Constructor<ValidateHost> &
-  Pick<typeof ValidateHost, keyof typeof ValidateHost>;
