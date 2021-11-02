@@ -549,6 +549,18 @@ class Grid extends ElementMixin(
       col.width = 'auto';
       col._origFlexGrow = col.flexGrow;
       col.flexGrow = 0;
+
+      if (col.parentElement != null && col.parentElement.localName === 'vaadin-grid-column-group') {
+        const golumnGroup = col.parentElement;
+
+        if (golumnGroup._headerCell != null) {
+          golumnGroup._headerCell.style.width = 'auto';
+        }
+
+        if (golumnGroup._footerCell != null) {
+          golumnGroup._footerCell.style.width = 'auto';
+        }
+      }
     });
     // [read] Measure max cell width in each column
     cols.forEach((col) => {
@@ -564,6 +576,20 @@ class Grid extends ElementMixin(
           const cellWidth = c.offsetWidth + 1;
           col._currentWidth = Math.max(col._currentWidth, cellWidth);
         });
+
+      if (col.parentElement != null && col.parentElement.localName === 'vaadin-grid-column-group') {
+        const columnGroup = col.parentElement;
+
+        if (columnGroup._headerCell != null) {
+          const cellWidth = columnGroup._headerCell.offsetWidth + 1;
+          col._currentWidth = Math.max(col._currentWidth, cellWidth);
+        }
+
+        if (columnGroup._footerCell != null) {
+          const cellWidth = columnGroup._footerCell.offsetWidth + 1;
+          col._currentWidth = Math.max(col._currentWidth, cellWidth);
+        }
+      }
     });
     // [write] Set column widths to fit widest measured content
     cols.forEach((col) => {
