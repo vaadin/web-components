@@ -3,22 +3,25 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { Constructor } from '@open-wc/dedupe-mixin';
+import { SlotMixinClass } from '@vaadin/component-base/src/slot-mixin.js';
 
 /**
  * A mixin to provide label via corresponding property or named slot.
  */
-declare function LabelMixin<T extends new (...args: any[]) => {}>(base: T): T & LabelMixinConstructor;
+export declare function LabelMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T & Constructor<LabelMixinClass> & Constructor<SlotMixinClass>;
 
-interface LabelMixinConstructor {
-  new (...args: any[]): LabelMixin;
-}
-
-interface LabelMixin extends SlotMixin {
+export declare class LabelMixinClass {
   /**
    * String used for a label element.
    */
   label: string | null | undefined;
-}
 
-export { LabelMixinConstructor, LabelMixin };
+  protected readonly _labelNode: HTMLLabelElement;
+
+  protected _labelChanged(label: string | null | undefined): void;
+
+  protected _toggleHasLabelAttribute(): void;
+}

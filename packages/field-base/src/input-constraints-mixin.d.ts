@@ -3,26 +3,27 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DelegateStateMixin } from './delegate-state-mixin.js';
-import { InputMixin } from './input-mixin.js';
-import { ValidateMixin } from './validate-mixin.js';
+import { Constructor } from '@open-wc/dedupe-mixin';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { DelegateStateMixinClass } from './delegate-state-mixin.js';
+import { InputMixinClass } from './input-mixin.js';
+import { ValidateMixinClass } from './validate-mixin.js';
 
 /**
  * A mixin to combine multiple input validation constraints.
  */
-declare function InputConstraintsMixin<T extends new (...args: any[]) => {}>(
+export declare function InputConstraintsMixin<T extends Constructor<HTMLElement>>(
   base: T
-): T & InputConstraintsMixinConstructor;
+): T &
+  Constructor<DelegateStateMixinClass> &
+  Constructor<DisabledMixinClass> &
+  Constructor<InputConstraintsMixinClass> &
+  Constructor<InputMixinClass> &
+  Constructor<ValidateMixinClass>;
 
-interface InputConstraintsMixinConstructor {
-  new (...args: any[]): InputConstraintsMixin;
-}
-
-interface InputConstraintsMixin extends DelegateStateMixin, InputMixin, ValidateMixin {
+export declare class InputConstraintsMixinClass {
   /**
    * Returns true if the current input value satisfies all constraints (if any).
    */
   checkValidity(): boolean;
 }
-
-export { InputConstraintsMixin, InputConstraintsMixinConstructor };

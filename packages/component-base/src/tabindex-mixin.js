@@ -6,7 +6,7 @@
 import { DisabledMixin } from './disabled-mixin.js';
 
 /**
- * A mixin to provide the `tabindex` attribute.
+ * A mixin to toggle the `tabindex` attribute.
  *
  * By default, the attribute is set to 0 that makes the element focusable.
  *

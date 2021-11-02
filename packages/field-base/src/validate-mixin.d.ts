@@ -3,17 +3,14 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
 /**
  * A mixin to provide required state and validation logic.
  */
-declare function ValidateMixin<T extends new (...args: any[]) => {}>(base: T): T & ValidateMixinConstructor;
+export declare function ValidateMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ValidateMixinClass>;
 
-interface ValidateMixinConstructor {
-  new (...args: any[]): ValidateMixin;
-}
-
-interface ValidateMixin {
+export declare class ValidateMixinClass {
   /**
    * Set to true when the field is invalid.
    */
@@ -34,5 +31,3 @@ interface ValidateMixin {
    */
   checkValidity(): boolean;
 }
-
-export { ValidateMixinConstructor, ValidateMixin };

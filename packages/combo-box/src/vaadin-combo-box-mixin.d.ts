@@ -3,9 +3,10 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
+import { Constructor } from '@open-wc/dedupe-mixin';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import { ComboBox } from './vaadin-combo-box.js';
 
 export type ComboBoxDefaultItem = any;
@@ -21,16 +22,22 @@ export type ComboBoxRenderer<TItem> = (
   model: ComboBoxItemModel<TItem>
 ) => void;
 
-declare function ComboBoxMixin<TItem, T extends new (...args: any[]) => {}>(
+export declare function ComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T
-): T & ComboBoxMixinConstructor<TItem>;
+): T &
+  Constructor<ComboBoxMixinClass<TItem>> &
+  Constructor<DisabledMixinClass> &
+  Constructor<InputMixinClass> &
+  Constructor<KeyboardMixinClass>;
 
-interface ComboBoxMixinConstructor<TItem> {
-  new (...args: any[]): ComboBoxMixin<TItem>;
-}
+export declare class ComboBoxMixinClass<TItem> {
+  protected readonly _propertyForValue: string;
 
-interface ComboBoxMixin<TItem> extends DisabledMixin, InputMixin, KeyboardMixin {
-  readonly _propertyForValue: string;
+  protected _inputElementValue: string | undefined;
+
+  protected _revertInputValue(): void;
+
+  protected _getItemElements(): HTMLElement[];
 
   /**
    * True if the dropdown is open, false otherwise.
@@ -173,5 +180,3 @@ interface ComboBoxMixin<TItem> extends DisabledMixin, InputMixin, KeyboardMixin 
    */
   checkValidity(): boolean;
 }
-
-export { ComboBoxMixin, ComboBoxMixinConstructor };
