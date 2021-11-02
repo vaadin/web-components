@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export interface AvatarI18n {
@@ -26,15 +27,17 @@ export interface AvatarI18n {
  * `abbr`    | The abbreviation element
  * `icon`    | The icon element
  *
- * The following attributes are exposed for styling:
+ * The following state attributes are available for styling:
  *
- * Attribute | Description
- * --------- | -----------
+ * Attribute         | Description
+ * ------------------|-------------
+ * `focus-ring`      | Set when the avatar is focused using the keyboard.
+ * `focused`         | Set when the avatar is focused.
  * `has-color-index` | Set when the avatar has `colorIndex` and the corresponding custom CSS property exists.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  */
-declare class Avatar extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class Avatar extends FocusMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
    * The path to the image
    */
