@@ -30,6 +30,13 @@ import './vaadin-message-avatar.js';
  * `time`    | When the message was posted
  * `content` | The message itself as a slotted content
  *
+ * The following state attributes are available for styling:
+ *
+ * Attribute    | Description
+ * -------------|-------------
+ * `focus-ring` | Set when the message is focused using the keyboard.
+ * `focused`    | Set when the message is focused.
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * ### Internal components
