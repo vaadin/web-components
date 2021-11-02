@@ -164,9 +164,9 @@ describe('async recalculateWidth columns', () => {
 });
 
 describe("column's width with vaadin-grid-column-group", () => {
-  function expectColumnWidthToBeOk(grid, expectedWidth) {
+  function expectColumnWidthToBeOk(grid, expectedWidth, delta = 5) {
     const columnWidth = parseInt(grid.querySelector('vaadin-grid-column').width);
-    expect(columnWidth).to.be.closeTo(expectedWidth, 5);
+    expect(columnWidth).to.be.closeTo(expectedWidth, delta);
   }
 
   function createGrid(html) {
@@ -185,7 +185,7 @@ describe("column's width with vaadin-grid-column-group", () => {
             </vaadin-grid-column-group>
           </vaadin-grid>
         `);
-    expectColumnWidthToBeOk(grid, 434);
+    expectColumnWidthToBeOk(grid, 420, 20);
   });
 
   it("should consider vaadin-grid-column header when calculating column's width", async () => {
@@ -196,7 +196,7 @@ describe("column's width with vaadin-grid-column-group", () => {
             </vaadin-grid-column-group>
           </vaadin-grid>
         `);
-    expectColumnWidthToBeOk(grid, 434);
+    expectColumnWidthToBeOk(grid, 420, 20);
   });
 
   it("should consider vaadin-grid-column-group footer when calculating column's width", async () => {
