@@ -8,7 +8,7 @@ import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import './vaadin-message.js';
+import { Message } from './vaadin-message.js';
 
 /**
  * `<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>
@@ -95,7 +95,7 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
             user-color-index="[[item.userColorIndex]]"
             theme$="[[item.theme]]"
             role="listitem"
-            on-focus="_handleFocusEvent"
+            on-focusin="_handleFocusEvent"
             >[[item.text]]</vaadin-message
           >
         </template>
@@ -188,11 +188,10 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   _handleFocusEvent(e) {
-    const target = e
-      .composedPath()
-      .filter((elem) => elem.nodeType === Node.ELEMENT_NODE && elem.tagName.toLowerCase() === 'vaadin-message')[0];
+    const target = e.composedPath().find((node) => node instanceof Message);
     this._setTabIndexesByMessage(target);
   }
+
   /**
    * @param {number} idx
    * @protected
