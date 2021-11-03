@@ -398,20 +398,6 @@ declare class Upload extends ThemableMixin(ElementMixin(HTMLElement)) {
    */
   uploadFiles(files?: UploadFile | UploadFile[]): void;
 
-  /**
-   * Add the file for uploading. Called internally for each file after picking files from dialog or dropping files.
-   *
-   * @param file File being added
-   */
-  _addFile(file: UploadFile): void;
-
-  /**
-   * Remove file from upload list. Called internally if file upload was canceled.
-   *
-   * @param file File to remove
-   */
-  _removeFile(file: UploadFile): void;
-
   addEventListener<K extends keyof UploadEventMap>(
     type: K,
     listener: (this: Upload, ev: UploadEventMap[K]) => void,

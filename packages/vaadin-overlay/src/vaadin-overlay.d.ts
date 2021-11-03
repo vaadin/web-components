@@ -112,11 +112,6 @@ export type OverlayEventMap = HTMLElementEventMap & OverlayElementEventMap;
  */
 declare class OverlayElement extends ThemableMixin(DirMixin(HTMLElement)) {
   /**
-   * returns true if this is the last one in the opened overlays stack
-   */
-  readonly _last: boolean;
-
-  /**
    * When true, the overlay is visible and attached to body.
    */
   opened: boolean | null | undefined;
@@ -184,37 +179,7 @@ declare class OverlayElement extends ThemableMixin(DirMixin(HTMLElement)) {
    */
   restoreFocusOnClose: boolean;
 
-  _setTemplateFromNodes(nodes: Element[]): void;
-
   close(sourceEvent?: Event | null): void;
-
-  _ensureTemplatized(): void;
-
-  _shouldAnimate(): boolean;
-
-  _enqueueAnimation(type: string, callback: Function | null): void;
-
-  _flushAnimation(type: string): void;
-
-  _animatedOpening(): void;
-
-  _attachOverlay(): void;
-
-  _animatedClosing(): void;
-
-  _detachOverlay(): void;
-
-  _addGlobalListeners(): void;
-
-  _enterModalState(): void;
-
-  _removeGlobalListeners(): void;
-
-  _exitModalState(): void;
-
-  _removeOldContent(): void;
-
-  _stampOverlayTemplate(template: HTMLTemplateElement, instanceProps: object | null): void;
 
   /**
    * Requests an update for the content of the overlay.
@@ -223,18 +188,6 @@ declare class OverlayElement extends ThemableMixin(DirMixin(HTMLElement)) {
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate(): void;
-
-  _isFocused(element: Element | null): boolean;
-
-  _focusedIndex(elements: Array<Element | null> | null): number;
-
-  _cycleTab(increment: number, index: number | undefined): void;
-
-  _getFocusableElements(): HTMLElement[];
-
-  _getActiveElement(): Element;
-
-  _deepContains(node: Node): boolean;
 
   /**
    * Brings the overlay as visually the frontmost one
