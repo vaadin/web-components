@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/menu-bar",
-  "version": "22.0.0-alpha10",
+  "version": "22.0.0-beta1",
   "publishConfig": {
     "access": "public"
   },
@@ -32,18 +32,19 @@
     "polymer"
   ],
   "dependencies": {
+    "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/button": "22.0.0-alpha10",
-    "@vaadin/component-base": "22.0.0-alpha10",
-    "@vaadin/vaadin-context-menu": "22.0.0-alpha10",
-    "@vaadin/vaadin-lumo-styles": "22.0.0-alpha10",
-    "@vaadin/vaadin-material-styles": "22.0.0-alpha10",
-    "@vaadin/vaadin-themable-mixin": "22.0.0-alpha10"
+    "@vaadin/button": "22.0.0-beta1",
+    "@vaadin/component-base": "22.0.0-beta1",
+    "@vaadin/vaadin-context-menu": "22.0.0-beta1",
+    "@vaadin/vaadin-lumo-styles": "22.0.0-beta1",
+    "@vaadin/vaadin-material-styles": "22.0.0-beta1",
+    "@vaadin/vaadin-themable-mixin": "22.0.0-beta1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/icon": "22.0.0-alpha10",
+    "@vaadin/icon": "22.0.0-beta1",
     "@vaadin/testing-helpers": "^0.3.0",
     "sinon": "^9.2.1"
   }

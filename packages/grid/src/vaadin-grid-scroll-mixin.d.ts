@@ -3,14 +3,11 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
-declare function ScrollMixin<T extends new (...args: any[]) => {}>(base: T): T & ScrollMixinConstructor;
+export declare function ScrollMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ScrollMixinClass>;
 
-interface ScrollMixinConstructor {
-  new (...args: any[]): ScrollMixin;
-}
-
-interface ScrollMixin {
+export declare class ScrollMixinClass {
   /**
    * Scroll to a specific row index in the virtual list. Note that the row index is
    * not always the same for any particular item. For example, sorting/filtering/expanding
@@ -20,5 +17,3 @@ interface ScrollMixin {
    */
   scrollToIndex(index: number): void;
 }
-
-export { ScrollMixin, ScrollMixinConstructor };

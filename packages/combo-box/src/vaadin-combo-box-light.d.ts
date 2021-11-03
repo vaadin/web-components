@@ -3,9 +3,9 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
-import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
+import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
+import { ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
 import { ComboBoxDefaultItem } from './vaadin-combo-box-mixin.js';
 export {
   ComboBoxDataProvider,
@@ -125,9 +125,9 @@ declare class ComboBoxLight<TItem = ComboBoxDefaultItem> extends HTMLElement {
 }
 
 interface ComboBoxLight<TItem = ComboBoxDefaultItem>
-  extends ComboBoxDataProviderMixin<TItem>,
-    ComboBoxMixin<TItem>,
-    ThemableMixin {}
+  extends ComboBoxDataProviderMixinClass<TItem>,
+    ComboBoxMixinClass<TItem>,
+    ThemableMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {

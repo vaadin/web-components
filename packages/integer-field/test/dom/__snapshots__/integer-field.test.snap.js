@@ -344,10 +344,7 @@ snapshots["vaadin-integer-field shadow theme"] =
 snapshots["vaadin-integer-field slots default"] = 
 `<label slot="label">
 </label>
-<div
-  aria-live="assertive"
-  slot="error-message"
->
+<div slot="error-message">
 </div>
 <input
   max="undefined"
@@ -362,10 +359,7 @@ snapshots["vaadin-integer-field slots default"] =
 snapshots["vaadin-integer-field slots helper"] = 
 `<label slot="label">
 </label>
-<div
-  aria-live="assertive"
-  slot="error-message"
->
+<div slot="error-message">
 </div>
 <input
   max="undefined"

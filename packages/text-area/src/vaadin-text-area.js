@@ -44,28 +44,8 @@ registerStyles('vaadin-text-area', inputFieldShared, { moduleId: 'vaadin-text-ar
  * -------------------------------|----------------------------|---------
  * `--vaadin-field-default-width` | Default width of the field | `12em`
  *
- * The following shadow DOM parts are available for styling:
- *
- * Part name       | Description
- * ----------------|----------------
- * `label`         | The label element wrapper
- * `input-field`   | The element that wraps prefix, textarea and suffix
- * `error-message` | The error message element wrapper
- * `helper-text`   | The helper text element wrapper
- *
- * The following state attributes are available for styling:
- *
- * Attribute           | Description                               | Part name
- * --------------------|-------------------------------------------|----------
- * `disabled`          | Set when the element is disabled          | :host
- * `has-value`         | Set when the element has a value          | :host
- * `has-label`         | Set when the element has a label          | :host
- * `has-helper`        | Set when the element has helper text      | :host
- * `has-error-message` | Set when the element has an error message | :host
- * `invalid`           | Set when the element is invalid           | :host
- * `focused`           | Set when the element is focused           | :host
- * `focus-ring`        | Set when the element is keyboard focused  | :host
- * `readonly`          | Set when the element is readonly          | :host
+ * `<vaadin-text-area>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
+ * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *

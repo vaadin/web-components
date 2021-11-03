@@ -3,19 +3,16 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
 /**
  * A mixin providing `focused`, `focus-ring`, `active`, `disabled` and `selected`.
  *
  * `focused`, `active` and `focus-ring` are set as only as attributes.
  */
-declare function ItemMixin<T extends new (...args: any[]) => {}>(base: T): T & ItemMixinConstructor;
+export declare function ItemMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ItemMixinClass>;
 
-interface ItemMixinConstructor {
-  new (...args: any[]): ItemMixin;
-}
-
-interface ItemMixin {
+export declare class ItemMixinClass {
   value: string;
 
   /**
@@ -23,7 +20,7 @@ interface ItemMixin {
    * e.g. in VaadinListMixin it filters items by using the
    * `element._hasVaadinItemMixin` condition.
    */
-  _hasVaadinItemMixin: boolean;
+  protected _hasVaadinItemMixin: boolean;
 
   /**
    * If true, the user cannot interact with this element.
@@ -35,13 +32,11 @@ interface ItemMixin {
    */
   selected: boolean;
 
-  _setFocused(focused: boolean): void;
+  protected _setFocused(focused: boolean): void;
 
-  _setActive(active: boolean): void;
+  protected _setActive(active: boolean): void;
 
-  _onKeydown(event: KeyboardEvent): void;
+  protected _onKeydown(event: KeyboardEvent): void;
 
-  _onKeyup(event: KeyboardEvent): void;
+  protected _onKeyup(event: KeyboardEvent): void;
 }
-
-export { ItemMixin, ItemMixinConstructor };

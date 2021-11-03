@@ -19,9 +19,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * ```html
  * <vaadin-radio-group label="Travel class">
- *  <vaadin-radio-button value="economy">Economy</vaadin-radio-button>
- *  <vaadin-radio-button value="business">Business</vaadin-radio-button>
- *  <vaadin-radio-button value="firstClass">First Class</vaadin-radio-button>
+ *   <vaadin-radio-button value="economy" label="Economy"></vaadin-radio-button>
+ *   <vaadin-radio-button value="business" label="Business"></vaadin-radio-button>
+ *   <vaadin-radio-button value="firstClass" label="First Class"></vaadin-radio-button>
  * </vaadin-radio-group>
  * ```
  *
@@ -31,9 +31,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * Part name   | Description
  * ------------|----------------
- * `container` | The container element.
  * `radio`     | The wrapper element that contains slotted `<input type="radio">`.
- * `label`     | The wrapper element that contains slotted `<label>`.
  *
  * The following state attributes are available for styling:
  *

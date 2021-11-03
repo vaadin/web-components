@@ -311,6 +311,23 @@ describe('vaadin-checkbox-group', () => {
     });
   });
 
+  describe('aria-required attribute', () => {
+    beforeEach(() => {
+      group = fixtureSync(`<vaadin-checkbox-group></vaadin-checkbox-group>`);
+    });
+
+    it('should not have aria-required attribute by default', () => {
+      expect(group.hasAttribute('aria-required')).to.be.false;
+    });
+
+    it('should toggle aria-required attribute on required property change', () => {
+      group.required = true;
+      expect(group.getAttribute('aria-required')).to.equal('true');
+      group.required = false;
+      expect(group.hasAttribute('aria-required')).to.be.false;
+    });
+  });
+
   describe('warnings', () => {
     beforeEach(async () => {
       group = fixtureSync(`<vaadin-checkbox-group></vaadin-checkbox-group>`);

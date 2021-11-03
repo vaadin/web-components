@@ -24,19 +24,20 @@ let memoizedTemplate;
  *
  * ### Styling
  *
+ * `<vaadin-password-field>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
  * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
- * In addition to `<vaadin-text-field>` parts, here's the list of `<vaadin-password-field>` specific parts:
+ * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
  * Part name       | Description
  * ----------------|----------------------------------------------------
  * `reveal-button` | The eye icon which toggles the password visibility
  *
- * In addition to `<vaadin-text-field>` state attributes, here's the list of `<vaadin-password-field>` specific attributes:
+ * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
- * Attribute          | Description | Part name
- * -------------------|-------------|------------
- * `password-visible` | Set when the password is visible | :host
+ * Attribute          | Description
+ * -------------------|---------------------------------
+ * `password-visible` | Set when the password is visible
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
@@ -217,7 +218,12 @@ export class PasswordField extends SlotStylesMixin(TextField) {
     );
   }
 
-  /** @protected */
+  /**
+   * Override method inherited from `FocusMixin` to toggle password visibility.
+   * @param {boolean} focused
+   * @protected
+   * @override
+   */
   _setFocused(focused) {
     super._setFocused(focused);
 
@@ -226,7 +232,7 @@ export class PasswordField extends SlotStylesMixin(TextField) {
     } else {
       const isButtonFocused = this.getRootNode().activeElement === this._revealNode;
       // Remove focus-ring from the field when the reveal button gets focused
-      this.toggleAttribute('focus-ring', !isButtonFocused);
+      this.toggleAttribute('focus-ring', this._keyboardActive && !isButtonFocused);
     }
   }
 

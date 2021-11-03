@@ -35,6 +35,14 @@ window.addEventListener(
 export const FocusMixin = dedupingMixin(
   (superclass) =>
     class FocusMixinClass extends superclass {
+      /**
+       * @protected
+       * @return {boolean}
+       */
+      get _keyboardActive() {
+        return keyboardActive;
+      }
+
       /** @protected */
       ready() {
         this.addEventListener('focusin', (e) => {
@@ -78,13 +86,13 @@ export const FocusMixin = dedupingMixin(
 
         // focus-ring is true when the element was focused from the keyboard.
         // Focus Ring [A11ycasts]: https://youtu.be/ilj2P5-5CjI
-        this.toggleAttribute('focus-ring', focused && keyboardActive);
+        this.toggleAttribute('focus-ring', focused && this._keyboardActive);
       }
 
       /**
        * Override to define if the field receives focus based on the event.
        *
-       * @param {FocusEvent} event
+       * @param {FocusEvent} _event
        * @return {boolean}
        * @protected
        */
@@ -95,7 +103,7 @@ export const FocusMixin = dedupingMixin(
       /**
        * Override to define if the field loses focus based on the event.
        *
-       * @param {FocusEvent} event
+       * @param {FocusEvent} _event
        * @return {boolean}
        * @protected
        */

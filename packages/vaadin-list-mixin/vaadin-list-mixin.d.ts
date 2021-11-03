@@ -3,20 +3,17 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
 /**
  * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
  */
-declare function ListMixin<T extends new (...args: any[]) => {}>(base: T): T & ListMixinConstructor;
+export declare function ListMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ListMixinClass>;
 
-interface ListMixinConstructor {
-  new (...args: any[]): ListMixin;
-}
+export declare class ListMixinClass {
+  protected readonly focused: Element | null;
 
-interface ListMixin {
-  readonly focused: Element | null;
-
-  readonly _scrollerElement: HTMLElement;
+  protected readonly _scrollerElement: HTMLElement;
 
   /**
    * Used for mixin detection because `instanceof` does not work with mixins.
@@ -49,5 +46,3 @@ interface ListMixin {
    */
   readonly items: Element[] | undefined;
 }
-
-export { ListMixin, ListMixinConstructor };

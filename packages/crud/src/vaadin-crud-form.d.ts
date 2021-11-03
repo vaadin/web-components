@@ -14,13 +14,6 @@ declare class CrudForm<Item> extends IncludedMixin(FormLayout) {
    * The item being edited.
    */
   item: Item | null | undefined;
-
-  /**
-   * Auto-generate form fields based on the JSON structure of the object provided.
-   *
-   * If not called, the method will be executed the first time an item is assigned.
-   */
-  _configure(object: Item): void;
 }
 
 declare global {

@@ -1,4 +1,5 @@
 import { expect } from '@esm-bundle/chai';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import {
   aTimeout,
@@ -70,9 +71,10 @@ describe('keyboard', () => {
     });
   });
 
-  describe('navigating the items after overlay opened', () => {
+  describe('navigating after overlay opened', () => {
     beforeEach(async () => {
       await aTimeout(0);
+      input.focus();
       arrowDownKeyDown(input);
     });
 
@@ -126,6 +128,38 @@ describe('keyboard', () => {
       arrowDownKeyDown(input);
 
       expect(getFocusedIndex()).to.equal(0);
+    });
+
+    it('should tab to the next focusable', async () => {
+      await sendKeys({ press: 'Tab' });
+
+      expect(document.activeElement).to.equal(document.body);
+    });
+
+    describe('focusable items content', () => {
+      let button;
+
+      beforeEach(() => {
+        button = document.createElement('button');
+        button.textContent = 'Button';
+      });
+
+      afterEach(() => {
+        button.remove();
+      });
+
+      it('should tab to the next focusable when items have focusable content', async () => {
+        comboBox.renderer = (root) => (root.innerHTML = '<input>');
+        document.body.appendChild(button);
+
+        // Workaround Firefox sendKeys bug
+        button.focus();
+        input.focus();
+        arrowDownKeyDown(input);
+
+        await sendKeys({ press: 'Tab' });
+        expect(document.activeElement).to.equal(button);
+      });
     });
   });
 

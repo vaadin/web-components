@@ -160,8 +160,6 @@ declare class ChartSeries extends HTMLElement {
    */
   additionalOptions: SeriesOptionsType | null | undefined;
 
-  _series: Series | undefined;
-
   /**
    * Method to attach a series object of type `Highcharts.Series`.
    *

@@ -33,9 +33,9 @@ export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupCusto
  *
  * ```html
  * <vaadin-radio-group label="Travel class">
- *   <vaadin-radio-button value="economy">Economy</vaadin-radio-button>
- *   <vaadin-radio-button value="business">Business</vaadin-radio-button>
- *   <vaadin-radio-button value="firstClass">First Class</vaadin-radio-button>
+ *   <vaadin-radio-button value="economy" label="Economy"></vaadin-radio-button>
+ *   <vaadin-radio-button value="business" label="Business"></vaadin-radio-button>
+ *   <vaadin-radio-button value="firstClass" label="First Class"></vaadin-radio-button>
  * </vaadin-radio-group>
  * ```
  *
@@ -45,7 +45,6 @@ export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupCusto
  *
  * Part name            | Description
  * ---------------------|----------------
- * `container`          | The container element
  * `label`              | The slotted label element wrapper
  * `group-field`        | The radio button elements wrapper
  * `helper-text`        | The slotted helper text element wrapper

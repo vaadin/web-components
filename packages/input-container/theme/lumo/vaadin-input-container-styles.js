@@ -11,9 +11,6 @@ registerStyles(
       border-radius: var(--lumo-border-radius-m);
       background-color: var(--lumo-contrast-10pct);
       padding: 0 calc(0.375em + var(--lumo-border-radius-m) / 4 - 1px);
-      color: var(--lumo-body-text-color);
-      font-size: var(--lumo-font-size-m);
-      font-family: var(--lumo-font-family);
       font-weight: 500;
       line-height: 1;
       position: relative;

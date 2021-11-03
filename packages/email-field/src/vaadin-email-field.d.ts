@@ -32,6 +32,7 @@ export interface EmailFieldEventMap extends HTMLElementEventMap, EmailFieldCusto
  *
  * ### Styling
  *
+ * `<vaadin-email-field>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
  * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
@@ -41,7 +42,6 @@ export interface EmailFieldEventMap extends HTMLElementEventMap, EmailFieldCusto
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-
 declare class EmailField extends TextField {
   addEventListener<K extends keyof EmailFieldEventMap>(
     type: K,

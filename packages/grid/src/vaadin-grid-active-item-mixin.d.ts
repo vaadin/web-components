@@ -3,16 +3,13 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
-declare function ActiveItemMixin<TItem, T extends new (...args: any[]) => {}>(
+export declare function ActiveItemMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T
-): T & ActiveItemMixinConstructor<TItem>;
+): T & Constructor<ActiveItemMixinClass<TItem>>;
 
-interface ActiveItemMixinConstructor<TItem> {
-  new (...args: any[]): ActiveItemMixin<TItem>;
-}
-
-interface ActiveItemMixin<TItem> {
+export declare class ActiveItemMixinClass<TItem> {
   /**
    * The item user has last interacted with. Turns to `null` after user deactivates
    * the item by re-interacting with the currently active item.
@@ -20,6 +17,4 @@ interface ActiveItemMixin<TItem> {
   activeItem: TItem | null;
 }
 
-declare function isFocusable(target: Element): boolean;
-
-export { ActiveItemMixin, ActiveItemMixinConstructor, isFocusable };
+export declare function isFocusable(target: Element): boolean;

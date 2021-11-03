@@ -15,6 +15,7 @@ const menuBarButton = css`
   /* NOTE(web-padawan): avoid using shorthand padding property for IE11 */
   [part='label'] ::slotted(vaadin-context-menu-item) {
     justify-content: center;
+    background-color: transparent;
     height: var(--lumo-button-size);
     margin: 0 calc((var(--lumo-size-m) / 3 + var(--lumo-border-radius-m) / 2) * -1);
     padding-left: calc(var(--lumo-size-m) / 3 + var(--lumo-border-radius-m) / 2);

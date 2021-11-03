@@ -231,10 +231,7 @@ snapshots["vaadin-text-area shadow theme"] =
 snapshots["vaadin-text-area slots default"] = 
 `<label slot="label">
 </label>
-<div
-  aria-live="assertive"
-  slot="error-message"
->
+<div slot="error-message">
 </div>
 <textarea slot="textarea">
 </textarea>
@@ -244,10 +241,7 @@ snapshots["vaadin-text-area slots default"] =
 snapshots["vaadin-text-area slots helper"] = 
 `<label slot="label">
 </label>
-<div
-  aria-live="assertive"
-  slot="error-message"
->
+<div slot="error-message">
 </div>
 <textarea slot="textarea">
 </textarea>

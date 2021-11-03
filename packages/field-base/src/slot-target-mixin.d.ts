@@ -3,30 +3,23 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
 /**
  * A mixin to copy the content from a source slot to a target element.
  */
-declare function SlotTargetMixin<T extends new (...args: any[]) => {}>(base: T): T & SlotTargetMixinConstructor;
+export declare function SlotTargetMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T & Constructor<SlotTargetMixinClass>;
 
-interface SlotTargetMixinConstructor {
-  new (...args: any[]): SlotTargetMixin;
-}
-
-interface SlotTargetMixin {
+export declare class SlotTargetMixinClass {
   /**
    * A reference to the source slot from which the content is copied to the target element.
-   *
-   * @protected
    */
-  _sourceSlot: HTMLSlotElement;
+  protected readonly _sourceSlot: HTMLSlotElement;
 
   /**
    * A reference to the target element to which the content is copied from the source slot.
-   *
-   * @protected
    */
-  _slotTarget: HTMLElement;
+  protected readonly _slotTarget: HTMLElement;
 }
-
-export { SlotTargetMixinConstructor, SlotTargetMixin };

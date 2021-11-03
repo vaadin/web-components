@@ -35,16 +35,17 @@ export interface DatePickerCustomEventMap {
 export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCustomEventMap {}
 
 /**
- * `<vaadin-date-picker>` is a date selection field which includes a scrollable
- * month calendar view.
+ * `<vaadin-date-picker>` is an input field that allows to enter a date by typing or by selecting from a calendar overlay.
+ *
  * ```html
  * <vaadin-date-picker label="Birthday"></vaadin-date-picker>
  * ```
+ *
  * ```js
  * datePicker.value = '2016-03-02';
  * ```
- * When the selected `value` is changed, a `value-changed` event is triggered.
  *
+ * When the selected `value` is changed, a `value-changed` event is triggered.
  *
  * ### Styling
  *
@@ -54,71 +55,77 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * -------------------------------|----------------------------|---------
  * `--vaadin-field-default-width` | Default width of the field | `12em`
  *
- * The following shadow DOM parts are available for styling:
+ * `<vaadin-date-picker>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
+ * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
- * Part name | Description | Theme for Element
- * ----------------|----------------|----------------
- * `input-field` | Input element | vaadin-date-picker
- * `clear-button` | Clear button | vaadin-date-picker
- * `toggle-button` | Toggle button | vaadin-date-picker
- * `overlay-content` | The overlay element | vaadin-date-picker
- * `overlay-header` | Fullscreen mode header | vaadin-date-picker-overlay-content
- * `label` | Fullscreen mode value/label | vaadin-date-picker-overlay-content
- * `clear-button` | Fullscreen mode clear button | vaadin-date-picker-overlay-content
- * `toggle-button` | Fullscreen mode toggle button | vaadin-date-picker-overlay-content
- * `years-toggle-button` | Fullscreen mode years scroller toggle | vaadin-date-picker-overlay-content
- * `months` | Months scroller | vaadin-date-picker-overlay-content
- * `years` | Years scroller | vaadin-date-picker-overlay-content
- * `toolbar` | Footer bar with buttons | vaadin-date-picker-overlay-content
- * `today-button` | Today button | vaadin-date-picker-overlay-content
- * `cancel-button` | Cancel button | vaadin-date-picker-overlay-content
- * `month` | Month calendar | vaadin-date-picker-overlay-content
- * `year-number` | Year number | vaadin-date-picker-overlay-content
- * `year-separator` | Year separator | vaadin-date-picker-overlay-content
- * `month-header` | Month title | vaadin-month-calendar
- * `weekdays` | Weekday container | vaadin-month-calendar
- * `weekday` | Weekday element | vaadin-month-calendar
- * `week-numbers` | Week numbers container | vaadin-month-calendar
- * `week-number` | Week number element | vaadin-month-calendar
- * `date` | Date element | vaadin-month-calendar
+ * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * Part name             | Description
+ * ----------------------|--------------------
+ * `toggle-button`       | Toggle button
+ * `overlay-content`     | The overlay element
  *
- * The following state attributes are available for styling:
+ * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `invalid` | Set when the element is invalid | :host
- * `opened` | Set when the date selector overlay is opened | :host
- * `readonly` | Set when the element is readonly | :host
- * `disabled` | Set when the element is disabled | :host
- * `today` | Set on the date corresponding to the current day | date
- * `focused` | Set on the focused date | date
- * `disabled` | Set on the date out of the allowed range | date
- * `selected` | Set on the selected date | date
+ * Attribute  | Description                                      | Part name
+ * -----------|--------------------------------------------------|-----------
+ * `opened`   | Set when the date selector overlay is opened     | :host
+ * `today`    | Set on the date corresponding to the current day | date
+ * `selected` | Set on the selected date                         | date
  *
- * If you want to replace the default input field with a custom implementation, you should use the
- * [`<vaadin-date-picker-light>`](#vaadin-date-picker-light) element.
+ * If you want to replace the default `<input>` and its container with a custom implementation to get full control
+ * over the input field, consider using the [`<vaadin-date-picker-light>`](#/elements/vaadin-date-picker-light) element.
  *
  * ### Internal components
  *
  * In addition to `<vaadin-date-picker>` itself, the following internal
  * components are themable:
  *
-
  * - `<vaadin-date-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-date-picker-overlay-content>`
  * - `<vaadin-month-calendar>`
+ * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
+ *
+ * In order to style the overlay content, use `<vaadin-date-picker-overlay-content>` shadow DOM parts:
+ *
+ * Part name             | Description
+ * ----------------------|--------------------
+ * `overlay-header`      | Fullscreen mode header
+ * `label`               | Fullscreen mode value/label
+ * `clear-button`        | Fullscreen mode clear button
+ * `toggle-button`       | Fullscreen mode toggle button
+ * `years-toggle-button` | Fullscreen mode years scroller toggle
+ * `months`              | Months scroller
+ * `years`               | Years scroller
+ * `toolbar`             | Footer bar with buttons
+ * `today-button`        | Today button
+ * `cancel-button`       | Cancel button
+ * `month`               | Month calendar
+ * `year-number`         | Year number
+ * `year-separator`      | Year separator
+ *
+ * In order to style the month calendar, use `<vaadin-month-calendar>` shadow DOM parts:
+ *
+ * Part name             | Description
+ * ----------------------|--------------------
+ * `month-header`        | Month title
+ * `weekdays`            | Weekday container
+ * `weekday`             | Weekday element
+ * `week-numbers`        | Week numbers container
+ * `week-number`         | Week number element
+ * `date`                | Date element
  *
  * Note: the `theme` attribute value set on `<vaadin-date-picker>` is
  * propagated to the internal components listed above.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class DatePicker extends HTMLElement {
+declare class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   addEventListener<K extends keyof DatePickerEventMap>(
     type: K,
     listener: (this: DatePicker, ev: DatePickerEventMap[K]) => void,
@@ -131,8 +138,6 @@ declare class DatePicker extends HTMLElement {
     options?: boolean | EventListenerOptions
   ): void;
 }
-
-interface DatePicker extends DatePickerMixin, ElementMixin, InputControlMixin, ThemableMixin {}
 
 declare global {
   interface HTMLElementTagNameMap {

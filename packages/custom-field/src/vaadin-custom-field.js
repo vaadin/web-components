@@ -22,9 +22,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * ### Styling
  *
- * You may set the attribute `disabled` or `readonly` on this component to make the label styles
- * behave the same way as they would on a `<vaadin-text-field>` which is disabled or readonly.
- *
  * The following shadow DOM parts are available for styling:
  *
  * Part name            | Description
@@ -192,7 +189,7 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
   }
 
   /**
-   * Attribute used by `FieldAriaMixin` to set accessible name.
+   * Attribute used by `FieldMixin` to set accessible name.
    * @protected
    */
   get _ariaAttr() {

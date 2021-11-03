@@ -61,8 +61,6 @@ export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxCustomEvent
 declare class ListBox extends MultiSelectListMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   focused: Element | null;
 
-  readonly _scrollerElement: HTMLElement;
-
   addEventListener<K extends keyof ListBoxEventMap>(
     type: K,
     listener: (this: ListBox, ev: ListBoxEventMap[K]) => void,

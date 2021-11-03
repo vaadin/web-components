@@ -62,8 +62,6 @@ export interface TabsEventMap extends HTMLElementEventMap, TabsCustomEventMap {}
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  */
 declare class Tabs extends ElementMixin(ListMixin(ThemableMixin(HTMLElement))) {
-  readonly _scrollerElement: HTMLElement;
-
   /**
    * The index of the selected tab.
    */
@@ -73,8 +71,6 @@ declare class Tabs extends ElementMixin(ListMixin(ThemableMixin(HTMLElement))) {
    * Set tabs disposition. Possible values are `horizontal|vertical`
    */
   orientation: TabsOrientation;
-
-  readonly _scrollOffset: number;
 
   addEventListener<K extends keyof TabsEventMap>(
     type: K,

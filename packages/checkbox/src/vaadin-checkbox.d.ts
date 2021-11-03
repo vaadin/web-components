@@ -32,7 +32,7 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEve
  * `<vaadin-checkbox>` is an input field representing a binary choice.
  *
  * ```html
- * <vaadin-checkbox>I accept the terms and conditions</vaadin-checkbox>
+ * <vaadin-checkbox label="I accept the terms and conditions"></vaadin-checkbox>
  * ```
  *
  * ### Styling
@@ -41,9 +41,7 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEve
  *
  * Part name   | Description
  * ------------|----------------
- * `container` | The container element
  * `checkbox`  | The wrapper element that contains slotted `<input type="checkbox">`
- * `label`     | The wrapper element that contains slotted `<label>`
  *
  * The following state attributes are available for styling:
  *

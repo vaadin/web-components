@@ -8,11 +8,12 @@ const item = css`
     display: flex;
     align-items: center;
     box-sizing: border-box;
+    min-height: 36px;
+    padding: 8px 32px 8px 10px;
     overflow: hidden;
     font-family: var(--material-font-family);
-    font-size: var(--material-body-font-size);
+    font-size: var(--material-small-font-size);
     line-height: 24px;
-    padding: 4px 0;
   }
 
   /* It's the list-box's responsibility to add the focus style */
@@ -39,6 +40,16 @@ const item = css`
     content: var(--material-icons-check);
   }
 
+  @media (any-hover: hover) {
+    :host(:hover:not([disabled])) {
+      background-color: var(--material-secondary-background-color);
+    }
+
+    :host([focused]:not([disabled])) {
+      background-color: var(--material-divider-color);
+    }
+  }
+
   /* Disabled */
   :host([disabled]) {
     color: var(--material-disabled-text-color);
@@ -47,6 +58,10 @@ const item = css`
   }
 
   /* RTL specific styles */
+  :host([dir='rtl']) {
+    padding: 8px 10px 8px 32px;
+  }
+
   :host([dir='rtl']) [part='checkmark']::before {
     margin-right: 0;
     margin-left: 10px;

@@ -930,6 +930,14 @@ export const ComboBoxMixin = (subclass) =>
           this.opened || this.autoOpenDisabled
             ? this.$.dropdown.indexOfLabel(this.filter)
             : this._indexOfValue(this.value, this.filteredItems);
+
+        // see https://github.com/vaadin/web-components/issues/2615
+        if (this.selectedItem === null && this._focusedIndex >= 0) {
+          const filteredItem = this.filteredItems[this._focusedIndex];
+          if (this._getItemValue(filteredItem) === this.value) {
+            this._selectItemForValue(this.value);
+          }
+        }
       }
     }
 

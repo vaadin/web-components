@@ -122,25 +122,24 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * `--vaadin-field-default-width`          | Default width of the field | `12em`
  * `--vaadin-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
  *
- * The following shadow DOM parts are available for styling:
+ * `<vaadin-combo-box>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
+ * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
- * Part name | Description
+ * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
+ *
+ * Part name       | Description
  * ----------------|----------------
- * `text-field` | The text field
  * `toggle-button` | The toggle button
  *
- * The following state attributes are available for styling:
+ * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `opened` | Set when the combo box dropdown is open | :host
- * `disabled` | Set to a disabled combo box | :host
- * `readonly` | Set to a read only combo box | :host
- * `has-value` | Set when the element has a value | :host
- * `invalid` | Set when the element is invalid | :host
- * `focused` | Set when the element is focused | :host
- * `focus-ring` | Set when the element is keyboard focused | :host
+ * Attribute | Description | Part name
+ * ----------|-------------|------------
+ * `opened`  | Set when the combo box dropdown is open | :host
  * `loading` | Set when new items are expected | :host
+ *
+ * If you want to replace the default `<input>` and its container with a custom implementation to get full control
+ * over the input field, consider using the [`<vaadin-combo-box-light>`](#/elements/vaadin-combo-box-light) element.
  *
  * ### Internal components
  *
@@ -148,8 +147,8 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * components are themable:
  *
  * - `<vaadin-combo-box-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
- * - [`<vaadin-text-field>`](#/elements/vaadin-text-field)
- * - `<vaadin-combo-box-item>`
+ * - `<vaadin-combo-box-item>` - has the same API as [`<vaadin-item>`](#/elements/vaadin-item).
+ * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
  *
  * Note: the `theme` attribute value set on `<vaadin-combo-box>` is
  * propagated to the internal components listed above.

@@ -404,10 +404,24 @@ describe('avatar-group', () => {
       overflow.click();
     });
 
-    it('should not restore focus-ring attribute on close if not set', (done) => {
+    it('should restore focus-ring attribute on close if closed with keyboard', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
         const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
         escKeyDown(list);
+
+        afterNextRender(overlay, () => {
+          expect(overflow.hasAttribute('focus-ring')).to.be.true;
+          done();
+        });
+      });
+
+      overflow.click();
+    });
+
+    it('should not restore focus-ring attribute on close if not set', (done) => {
+      overlay.addEventListener('vaadin-overlay-open', () => {
+        const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
+        items[0].click();
 
         afterNextRender(overlay, () => {
           expect(overflow.hasAttribute('focus-ring')).to.be.false;

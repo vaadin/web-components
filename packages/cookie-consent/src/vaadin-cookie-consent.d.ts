@@ -70,11 +70,6 @@ declare class CookieConsent extends ElementMixin(HTMLElement) {
    * @attr {string} cookie-name
    */
   cookieName: string;
-
-  /**
-   * Shows the popup even if the user has seen it before.
-   */
-  _show(): void;
 }
 
 declare global {

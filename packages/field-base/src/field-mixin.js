@@ -59,7 +59,6 @@ export const FieldMixin = (superclass) =>
         'error-message': () => {
           const error = document.createElement('div');
           error.textContent = this.errorMessage;
-          error.setAttribute('aria-live', 'assertive');
           return error;
         }
       };
@@ -67,23 +66,32 @@ export const FieldMixin = (superclass) =>
 
     static get observers() {
       return [
-        '__ariaChanged(invalid, _helperId)',
+        '__ariaChanged(invalid, _helperId, required)',
         '__observeOffsetHeight(errorMessage, invalid, label, helperText)',
         '_updateErrorMessage(invalid, errorMessage)'
       ];
     }
 
-    /** @protected */
+    /**
+     * @protected
+     * @return {HTMLElement}
+     */
     get _errorNode() {
       return this._getDirectSlotChild('error-message');
     }
 
-    /** @protected */
+    /**
+     * @protected
+     * @return {HTMLElement}
+     */
     get _helperNode() {
       return this._getDirectSlotChild('helper');
     }
 
-    /** @protected */
+    /**
+     * @protected
+     * @return {string}
+     */
     get _ariaAttr() {
       return 'aria-describedby';
     }
@@ -169,14 +177,20 @@ export const FieldMixin = (superclass) =>
       }
     }
 
-    /** @private */
+    /**
+     * @param {HTMLElement} helper
+     * @private
+     */
     __applyCustomHelper(helper) {
       this.__updateHelperId(helper);
       this._currentHelper = helper;
       this.__toggleHasHelper(helper.children.length > 0 || this.__isNotEmpty(helper.textContent));
     }
 
-    /** @private */
+    /**
+     * @param {string} helperText
+     * @private
+     */
     __isNotEmpty(helperText) {
       return helperText && helperText.trim() !== '';
     }
@@ -198,7 +212,10 @@ export const FieldMixin = (superclass) =>
       return helper;
     }
 
-    /** @private */
+    /**
+     * @param {string} helperText
+     * @private
+     */
     __applyDefaultHelper(helperText) {
       let helper = this._helperNode;
 
@@ -216,7 +233,10 @@ export const FieldMixin = (superclass) =>
       this.__toggleHasHelper(hasHelperText);
     }
 
-    /** @private */
+    /**
+     * @param {boolean} hasHelper
+     * @private
+     */
     __toggleHasHelper(hasHelper) {
       this.toggleAttribute('has-helper', hasHelper);
     }
@@ -248,6 +268,7 @@ export const FieldMixin = (superclass) =>
 
     /**
      * @param {boolean} invalid
+     * @param {string} errorMessage
      * @protected
      */
     _updateErrorMessage(invalid, errorMessage) {
@@ -263,9 +284,20 @@ export const FieldMixin = (superclass) =>
       const hasError = Boolean(invalid && errorMessage);
       error.textContent = hasError ? errorMessage : '';
       this.toggleAttribute('has-error-message', hasError);
+
+      // Role alert will make the error message announce immediately
+      // as the field becomes invalid
+      if (hasError) {
+        error.setAttribute('role', 'alert');
+      } else {
+        error.removeAttribute('role');
+      }
     }
 
-    /** @private */
+    /**
+     * @param {HTMLElement} customHelper
+     * @private
+     */
     __updateHelperId(customHelper) {
       let newId;
 
@@ -279,23 +311,35 @@ export const FieldMixin = (superclass) =>
       this._helperId = newId;
     }
 
-    /** @protected */
+    /**
+     * @param {string} helperText
+     * @protected
+     */
     _helperTextChanged(helperText) {
       this.__applyDefaultHelper(helperText);
     }
 
-    /** @protected */
+    /**
+     * @param {HTMLElement} target
+     * @protected
+     */
     _ariaTargetChanged(target) {
       if (target) {
-        this._updateAriaAttribute(this.invalid, this._helperId);
+        this._updateAriaAttribute(target, this.invalid, this._helperId);
+        this._updateAriaRequiredAttribute(target, this.required);
       }
     }
 
-    /** @protected */
-    _updateAriaAttribute(invalid, helperId) {
+    /**
+     * @param {HTMLElement} target
+     * @param {boolean} invalid
+     * @param {string} helperId
+     * @protected
+     */
+    _updateAriaAttribute(target, invalid, helperId) {
       const attr = this._ariaAttr;
 
-      if (this.ariaTarget && attr) {
+      if (target && attr) {
         // For groups, add all IDs to aria-labelledby rather than aria-describedby -
         // that should guarantee that it's announced when the group is entered.
         const ariaIds = attr === 'aria-describedby' ? [helperId] : [this._labelId, helperId];
@@ -306,12 +350,36 @@ export const FieldMixin = (superclass) =>
           ariaIds.push(this._errorId);
         }
 
-        this.ariaTarget.setAttribute(attr, ariaIds.join(' '));
+        target.setAttribute(attr, ariaIds.join(' '));
       }
     }
 
-    /** @private */
-    __ariaChanged(invalid, helperId) {
-      this._updateAriaAttribute(invalid, helperId);
+    /**
+     * @param {HTMLElement} target
+     * @param {boolean} required
+     * @protected
+     */
+    _updateAriaRequiredAttribute(target, required) {
+      if (target !== this) {
+        // native <input> or <textarea>, required is enough
+        return;
+      }
+
+      if (required) {
+        target.setAttribute('aria-required', true);
+      } else {
+        target.removeAttribute('aria-required');
+      }
+    }
+
+    /**
+     * @param {boolean} invalid
+     * @param {string} helperId
+     * @param {boolean} required
+     * @private
+     */
+    __ariaChanged(invalid, helperId, required) {
+      this._updateAriaAttribute(this.ariaTarget, invalid, helperId);
+      this._updateAriaRequiredAttribute(this.ariaTarget, required);
     }
   };

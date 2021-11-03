@@ -13,7 +13,7 @@ import {
   GridSelectedItemsChangedEvent
 } from '@vaadin/grid';
 import { GridColumn } from '@vaadin/grid/vaadin-grid-column';
-import { InlineEditingMixin } from '../../src/vaadin-grid-pro-inline-editing-mixin';
+import { InlineEditingMixinClass } from '../../src/vaadin-grid-pro-inline-editing-mixin';
 import { GridPro } from '../../vaadin-grid-pro';
 import { GridProEditColumn } from '../../vaadin-grid-pro-edit-column';
 
@@ -29,7 +29,7 @@ assertType<GridPro>(genericGrid);
 
 const narrowedGrid = genericGrid as GridPro<TestGridItem>;
 assertType<Grid<TestGridItem>>(narrowedGrid);
-assertType<InlineEditingMixin>(narrowedGrid);
+assertType<InlineEditingMixinClass>(narrowedGrid);
 
 narrowedGrid.addEventListener('cell-edit-started', (event) => {
   assertType<string>(event.detail.value.path);

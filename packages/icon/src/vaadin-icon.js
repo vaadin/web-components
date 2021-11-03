@@ -85,6 +85,7 @@ class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
         xmlns:xlink="http://www.w3.org/1999/xlink"
         viewBox="[[__computeViewBox(size)]]"
         preserveAspectRatio="xMidYMid meet"
+        aria-hidden="true"
       ></svg>
     `;
   }

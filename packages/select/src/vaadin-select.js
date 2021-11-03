@@ -68,23 +68,25 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 
  * `--vaadin-field-default-width`     | Default width of the field   | :host                   | `12em`
  * `--vaadin-select-text-field-width` | Effective width of the field | `vaadin-select-overlay` |
  *
- * The following shadow DOM parts are available for styling:
+ * `<vaadin-select>` provides mostly the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
+ * See [`<vaadin-text-field>`](#/elements/vaadin-text-field) for the styling documentation.
  *
- * Part name | Description
+ *
+ * In addition to `<vaadin-text-field>` parts, the following parts are available for theming:
+ *
+ * Part name       | Description
  * ----------------|----------------
  * `toggle-button` | The toggle button
  *
- * The following state attributes are available for styling:
+ * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
- * Attribute    | Description | Part name
- * -------------|-------------|------------
- * `opened`     | Set when the select is open | :host
- * `invalid`    | Set when the element is invalid | :host
- * `focused`    | Set when the element is focused | :host
- * `focus-ring` | Set when the element is keyboard focused | :host
- * `readonly`   | Set when the select is read only | :host
+ * Attribute | Description                 | Part name
+ * ----------|-----------------------------|-----------
+ * `opened`  | Set when the select is open | :host
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * There are two exceptions in terms of styling compared to `<vaadin-text-field>`:
+ * - the `clear-button` shadow DOM part does not exist in `<vaadin-select>`.
+ * - the `input-prevented` state attribute is not supported by `<vaadin-select>`.
  *
  * ### Internal components
  *
@@ -92,9 +94,13 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 
  * components are themable:
  *
  * - `<vaadin-select-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
+ * - `<vaadin-select-value-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
+ * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the button.
  *
  * Note: the `theme` attribute value set on `<vaadin-select>` is
  * propagated to the internal components listed above.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
@@ -340,6 +346,9 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   requestContentUpdate() {
     this._overlayElement.requestContentUpdate();
 
+    // Ensure menu element is set
+    this._assignMenuElement();
+
     if (this._menuElement && this._menuElement.items) {
       this._updateSelectedItem(this.value, this._menuElement.items);
     }
@@ -362,18 +371,17 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
   /** @private */
   _assignMenuElement() {
-    this._menuElement = Array.from(this._overlayElement.content.children).find(
-      (element) => element.localName !== 'style'
-    );
+    const menuElement = this.__getMenuElement();
 
-    if (this._menuElement) {
-      this._menuElement.addEventListener('items-changed', () => {
-        this._items = this._menuElement.items;
+    if (menuElement && menuElement !== this.__lastMenuElement) {
+      this._menuElement = menuElement;
+      menuElement.addEventListener('items-changed', () => {
+        this._items = menuElement.items;
         this._items.forEach((item) => item.setAttribute('role', 'option'));
       });
-      this._menuElement.addEventListener('selected-changed', () => this.__updateValueButton());
-      this._menuElement.addEventListener('keydown', (e) => this._onKeyDownInside(e));
-      this._menuElement.addEventListener(
+      menuElement.addEventListener('selected-changed', () => this.__updateValueButton());
+      menuElement.addEventListener('keydown', (e) => this._onKeyDownInside(e));
+      menuElement.addEventListener(
         'click',
         () => {
           this.__userInteraction = true;
@@ -382,8 +390,17 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
         true
       );
 
-      this._menuElement.setAttribute('role', 'listbox');
+      menuElement.setAttribute('role', 'listbox');
+
+      // Store the menu element reference
+      this.__lastMenuElement = menuElement;
     }
+  }
+
+  /** @private */
+  __getMenuElement() {
+    const content = this._overlayElement && this._overlayElement.content;
+    return content ? Array.from(content.children).find((el) => el.localName !== 'style') : null;
   }
 
   /** @private */
@@ -421,7 +438,10 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
         const newIdx = this._menuElement._searchKey(currentIdx, e.key);
         if (newIdx >= 0) {
           this.__userInteraction = true;
-          this._updateSelectedItem(this._items[newIdx].value, this._items);
+
+          // Announce the value selected with the first letter shortcut
+          this._updateAriaLive(true);
+          this._menuElement.selected = newIdx;
         }
       }
     }
@@ -440,6 +460,9 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   /** @private */
   _openedChanged(opened, wasOpened) {
     if (opened) {
+      // Avoid multiple announcements when a value gets selected from the dropdown
+      this._updateAriaLive(false);
+
       if (!this._overlayElement || !this._menuElement || !this.focusElement || this.disabled || this.readonly) {
         this.opened = false;
         return;
@@ -484,6 +507,17 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   _updateAriaRequired(required) {
     if (this._valueButton) {
       this._valueButton.setAttribute('aria-required', required ? 'true' : 'false');
+    }
+  }
+
+  /** @private */
+  _updateAriaLive(ariaLive) {
+    if (this._valueButton) {
+      if (ariaLive) {
+        this._valueButton.setAttribute('aria-live', 'polite');
+      } else {
+        this._valueButton.removeAttribute('aria-live');
+      }
     }
   }
 

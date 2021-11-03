@@ -93,10 +93,6 @@ describe('field-mixin', () => {
         expect(error).to.be.an.instanceof(HTMLDivElement);
       });
 
-      it('should set aria-live attribute on the error message', () => {
-        expect(error.getAttribute('aria-live')).to.equal('assertive');
-      });
-
       it('should set id on the error message element', () => {
         const id = error.getAttribute('id');
         expect(id).to.match(ID_REGEX);
@@ -137,6 +133,26 @@ describe('field-mixin', () => {
         element.errorMessage = 'This field is required';
         element.invalid = false;
         expect(element.hasAttribute('has-error-message')).to.be.false;
+      });
+
+      it('should not set alert role with no error', () => {
+        expect(error.hasAttribute('role')).to.be.false;
+      });
+
+      it('should set alert role when attribute is set', () => {
+        element.setAttribute('error-message', 'This field is required');
+        expect(error.getAttribute('role')).to.equal('alert');
+      });
+
+      it('should set alert role when property is set', () => {
+        element.errorMessage = 'This field is required';
+        expect(error.getAttribute('role')).to.equal('alert');
+      });
+
+      it('should remove alert role when field is valid', () => {
+        element.errorMessage = 'This field is required';
+        element.invalid = false;
+        expect(error.hasAttribute('role')).to.be.false;
       });
     });
 
@@ -582,6 +598,60 @@ describe('field-mixin', () => {
       expect(aria).to.include(helper.id);
       expect(aria).to.include(error.id);
       expect(aria).to.include(label.id);
+    });
+  });
+
+  describe('aria-required', () => {
+    describe('field', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<field-mixin-element></field-mixin-element>`);
+      });
+
+      it('should not set aria-required attribute by default', () => {
+        expect(element.hasAttribute('aria-required')).to.be.false;
+      });
+
+      it('should not set aria-required attribute on required property change', () => {
+        element.required = true;
+        expect(element.hasAttribute('aria-required')).to.be.false;
+      });
+    });
+
+    describe('field initially required', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<field-mixin-element required></field-mixin-element>`);
+      });
+
+      it('should not set aria-required attribute', () => {
+        expect(element.hasAttribute('aria-required')).to.be.false;
+      });
+    });
+
+    describe('field group', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<field-mixin-group-element></field-mixin-group-element>`);
+      });
+
+      it('should not set aria-required attribute by default', () => {
+        expect(element.hasAttribute('aria-required')).to.be.false;
+      });
+
+      it('should toggle aria-required attribute on required property change', () => {
+        element.required = true;
+        expect(element.getAttribute('aria-required')).to.equal('true');
+        element.required = false;
+        expect(element.hasAttribute('aria-required')).to.be.false;
+      });
+    });
+
+    describe('field group initially required', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<field-mixin-group-element required></field-mixin-group-element>`);
+      });
+
+      it('should set aria-required to true', () => {
+        expect(element.getAttribute('aria-required')).to.equal('true');
+      });
     });
   });
 

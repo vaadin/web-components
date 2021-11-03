@@ -3,16 +3,13 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
-declare function SelectionMixin<TItem, T extends new (...args: any[]) => {}>(
+export declare function SelectionMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T
-): T & SelectionMixinConstructor<TItem>;
+): T & Constructor<SelectionMixinClass<TItem>>;
 
-interface SelectionMixinConstructor<TItem> {
-  new (...args: any[]): SelectionMixin<TItem>;
-}
-
-interface SelectionMixin<TItem> {
+export declare class SelectionMixinClass<TItem> {
   /**
    * An array that contains the selected items.
    */
@@ -32,5 +29,3 @@ interface SelectionMixin<TItem> {
    */
   deselectItem(item: TItem): void;
 }
-
-export { SelectionMixin, SelectionMixinConstructor };
