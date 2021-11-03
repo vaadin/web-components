@@ -85,7 +85,7 @@ export const DragAndDropMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_dragDropAccessChanged(rowsDraggable, dropMode, dragFilter, dropFilter)'];
+      return ['_dragDropAccessChanged(rowsDraggable, dropMode, dragFilter, dropFilter, loading)'];
     }
 
     /** @protected */
@@ -374,8 +374,9 @@ export const DragAndDropMixin = (superClass) =>
      * @protected
      */
     _filterDragAndDrop(row, model) {
-      const dragDisabled = !this.rowsDraggable || (this.dragFilter && !this.dragFilter(model));
-      const dropDisabled = !this.dropMode || (this.dropFilter && !this.dropFilter(model));
+      const loading = this.loading || row.hasAttribute('loading');
+      const dragDisabled = !this.rowsDraggable || loading || (this.dragFilter && !this.dragFilter(model));
+      const dropDisabled = !this.dropMode || loading || (this.dropFilter && !this.dropFilter(model));
 
       const draggableElements = Array.from(row.children).map((cell) => cell._content);
 
