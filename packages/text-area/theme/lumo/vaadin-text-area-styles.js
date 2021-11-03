@@ -59,7 +59,7 @@ const textArea = css`
       background-color: var(--lumo-contrast-10pct);
     }
 
-    :host(:active:not([readonly]):not([focused])) [part='input-field'] {
+    :host(:active:not([readonly]):not([focused]):not([disabled])) [part='input-field'] {
       background-color: var(--lumo-contrast-20pct);
     }
   }
