@@ -36,12 +36,26 @@ const textArea = css`
     border: none;
   }
 
-  :host(:hover:not([readonly]):not([focused]):not([invalid])) [part='input-field'] {
+  /* Allow pointer events when disabled in order to work around crash in FF
+     See https://bugzilla.mozilla.org/show_bug.cgi?id=1739079 */
+  :host([disabled]) {
+    pointer-events: initial;
+  }
+
+  /* Part of the workaround above: restore default cursor and prevent text 
+     selection, same as when setting pointer-events: none */
+  :host([disabled]) [part='input-field'],
+  :host([disabled]) ::slotted(textarea) {
+    cursor: default;
+    user-select: none;
+  }
+
+  :host(:hover:not([readonly]):not([focused]):not([invalid]):not([disabled])) [part='input-field'] {
     background-color: var(--lumo-contrast-20pct);
   }
 
   @media (pointer: coarse) {
-    :host(:hover:not([readonly]):not([focused]):not([invalid])) [part='input-field'] {
+    :host(:hover:not([readonly]):not([focused]):not([invalid]):not([disabled])) [part='input-field'] {
       background-color: var(--lumo-contrast-10pct);
     }
 
