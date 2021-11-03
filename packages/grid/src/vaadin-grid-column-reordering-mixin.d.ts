@@ -3,23 +3,16 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
-declare function ColumnReorderingMixin<T extends new (...args: any[]) => {}>(
+export declare function ColumnReorderingMixin<T extends Constructor<HTMLElement>>(
   base: T
-): T & ColumnReorderingMixinConstructor;
+): T & Constructor<ColumnReorderingMixinClass>;
 
-interface ColumnReorderingMixinConstructor {
-  new (...args: any[]): ColumnReorderingMixin;
-}
-
-export { ColumnReorderingMixinConstructor };
-
-interface ColumnReorderingMixin {
+export declare class ColumnReorderingMixinClass {
   /**
    * Set to true to allow column reordering.
    * @attr {boolean} column-reordering-allowed
    */
   columnReorderingAllowed: boolean;
 }
-
-export { ColumnReorderingMixin };

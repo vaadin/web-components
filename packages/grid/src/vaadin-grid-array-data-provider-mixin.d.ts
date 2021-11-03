@@ -3,20 +3,15 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
-declare function ArrayDataProviderMixin<TItem, T extends new (...args: any[]) => {}>(
+export declare function ArrayDataProviderMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T
-): T & ArrayDataProviderMixinConstructor<TItem>;
+): T & Constructor<ArrayDataProviderMixinClass<TItem>>;
 
-interface ArrayDataProviderMixinConstructor<TItem> {
-  new (...args: any[]): ArrayDataProviderMixin<TItem>;
-}
-
-declare interface ArrayDataProviderMixin<TItem> {
+export declare class ArrayDataProviderMixinClass<TItem> {
   /**
    * An array containing the items which will be passed to renderer functions.
    */
   items: TItem[] | null | undefined;
 }
-
-export { ArrayDataProviderMixin, ArrayDataProviderMixinConstructor };

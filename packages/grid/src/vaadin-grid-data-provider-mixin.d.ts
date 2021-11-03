@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 import { GridSorterDirection } from './vaadin-grid-sorter.js';
 
 export { GridSorterDirection };
@@ -32,7 +33,7 @@ export type GridDataProvider<TItem> = (
   callback: GridDataProviderCallback<TItem>
 ) => void;
 
-declare class ItemCache<TItem> {
+export declare class ItemCache<TItem> {
   grid: HTMLElement;
   parentCache: ItemCache<TItem> | undefined;
   parentItem: TItem | undefined;
@@ -55,15 +56,11 @@ declare class ItemCache<TItem> {
   getCacheAndIndex(index: number): { cache: ItemCache<TItem>; scaledIndex: number };
 }
 
-declare function DataProviderMixin<TItem, T extends new (...args: any[]) => {}>(
+export declare function DataProviderMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T
-): T & DataProviderMixinConstructor<TItem>;
+): T & Constructor<DataProviderMixinClass<TItem>>;
 
-interface DataProviderMixinConstructor<TItem> {
-  new (...args: any[]): DataProviderMixin<TItem>;
-}
-
-interface DataProviderMixin<TItem> {
+export declare class DataProviderMixinClass<TItem> {
   /**
    * Number of items fetched at a time from the dataprovider.
    * @attr {number} page-size
@@ -136,5 +133,3 @@ interface DataProviderMixin<TItem> {
    */
   clearCache(): void;
 }
-
-export { DataProviderMixin, DataProviderMixinConstructor, ItemCache };

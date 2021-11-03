@@ -5,12 +5,12 @@
  */
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
-import { ArrayDataProviderMixin } from './vaadin-grid-array-data-provider-mixin.js';
+import { ActiveItemMixinClass } from './vaadin-grid-active-item-mixin.js';
+import { ArrayDataProviderMixinClass } from './vaadin-grid-array-data-provider-mixin.js';
 import { GridColumn, GridBodyRenderer, GridHeaderFooterRenderer } from './vaadin-grid-column.js';
-import { ColumnReorderingMixin } from './vaadin-grid-column-reordering-mixin.js';
+import { ColumnReorderingMixinClass } from './vaadin-grid-column-reordering-mixin.js';
 import {
-  DataProviderMixin,
+  DataProviderMixinClass,
   GridDataProvider,
   GridDataProviderCallback,
   GridDataProviderParams,
@@ -19,17 +19,17 @@ import {
   GridSorterDirection
 } from './vaadin-grid-data-provider-mixin.js';
 import {
-  DragAndDropMixin,
+  DragAndDropMixinClass,
   GridDragAndDropFilter,
   GridDropLocation,
   GridDropMode
 } from './vaadin-grid-drag-and-drop-mixin.js';
-import { EventContextMixin, GridEventContext } from './vaadin-grid-event-context-mixin.js';
-import { RowDetailsMixin, GridRowDetailsRenderer } from './vaadin-grid-row-details-mixin.js';
-import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
-import { SelectionMixin } from './vaadin-grid-selection-mixin.js';
-import { SortMixin } from './vaadin-grid-sort-mixin.js';
-import { StylingMixin, GridCellClassNameGenerator } from './vaadin-grid-styling-mixin.js';
+import { EventContextMixinClass, GridEventContext } from './vaadin-grid-event-context-mixin.js';
+import { RowDetailsMixinClass, GridRowDetailsRenderer } from './vaadin-grid-row-details-mixin.js';
+import { ScrollMixinClass } from './vaadin-grid-scroll-mixin.js';
+import { SelectionMixinClass } from './vaadin-grid-selection-mixin.js';
+import { SortMixinClass } from './vaadin-grid-sort-mixin.js';
+import { StylingMixinClass, GridCellClassNameGenerator } from './vaadin-grid-styling-mixin.js';
 
 export {
   GridBodyRenderer,
@@ -399,17 +399,17 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
 interface Grid<TItem = GridDefaultItem>
   extends ElementMixinClass,
     ThemableMixinClass,
-    ActiveItemMixin<TItem>,
-    ArrayDataProviderMixin<TItem>,
-    DataProviderMixin<TItem>,
-    RowDetailsMixin<TItem>,
-    ScrollMixin,
-    SelectionMixin<TItem>,
-    SortMixin,
-    ColumnReorderingMixin,
-    EventContextMixin<TItem>,
-    StylingMixin<TItem>,
-    DragAndDropMixin<TItem> {}
+    ActiveItemMixinClass<TItem>,
+    ArrayDataProviderMixinClass<TItem>,
+    DataProviderMixinClass<TItem>,
+    RowDetailsMixinClass<TItem>,
+    ScrollMixinClass,
+    SelectionMixinClass<TItem>,
+    SortMixinClass,
+    ColumnReorderingMixinClass,
+    EventContextMixinClass<TItem>,
+    StylingMixinClass<TItem>,
+    DragAndDropMixinClass<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {

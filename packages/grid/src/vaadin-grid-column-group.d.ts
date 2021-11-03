@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ColumnBaseMixin } from './vaadin-grid-column.js';
+import { ColumnBaseMixinClass } from './vaadin-grid-column.js';
 import { GridDefaultItem } from './vaadin-grid.js';
 
 /**
@@ -48,7 +48,7 @@ declare class GridColumnGroup extends HTMLElement {
   readonly width: string | null | undefined;
 }
 
-interface GridColumnGroup<TItem = GridDefaultItem> extends ColumnBaseMixin<TItem> {}
+interface GridColumnGroup<TItem = GridDefaultItem> extends ColumnBaseMixinClass<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
