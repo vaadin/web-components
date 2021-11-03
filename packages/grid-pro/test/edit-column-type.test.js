@@ -214,7 +214,6 @@ describe('edit column editor type', () => {
         grid.enterNextRow = true;
         const item = editor._overlayElement.querySelector('vaadin-item');
         enter(item);
-        item.click();
         expect(column._getEditorComponent(cell)).to.not.be.ok;
         const secondCell = getContainerCell(grid.$.items, 1, 1);
         expect(getCellEditor(secondCell)).to.be.ok;

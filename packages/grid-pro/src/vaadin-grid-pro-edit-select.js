@@ -100,12 +100,17 @@ class GridProEditSelect extends Select {
           listBox.appendChild(item);
         });
 
-        // save the "keydown" event for Enter
-        listBox.addEventListener('keydown', (e) => {
-          if (e.keyCode === 13) {
-            this._enterKeydown = e;
-          }
-        });
+        // Save the "keydown" event for Enter to handle it on value change.
+        // Use capture phase because the item calls `preventDefault()`.
+        listBox.addEventListener(
+          'keydown',
+          (e) => {
+            if (e.keyCode === 13) {
+              this._enterKeydown = e;
+            }
+          },
+          true
+        );
 
         root.appendChild(listBox);
       };
