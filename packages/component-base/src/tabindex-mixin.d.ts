@@ -14,9 +14,9 @@ import { DisabledMixinClass } from './disabled-mixin.js';
  * The attribute is set to -1 whenever the user disables the element
  * and restored with the last known value once the element is enabled.
  */
-export declare const TabindexMixin: <T extends Constructor<HTMLElement>>(
+export declare function TabindexMixin<T extends Constructor<HTMLElement>>(
   base: T
-) => T & Constructor<DisabledMixinClass> & Constructor<TabindexMixinClass>;
+): T & Constructor<DisabledMixinClass> & Constructor<TabindexMixinClass>;
 
 export declare class TabindexMixinClass {
   /**
