@@ -1,5 +1,17 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, arrowRight, arrowUp, end, fixtureSync, home, nextRender } from '@vaadin/testing-helpers';
+import {
+  arrowDown,
+  arrowRight,
+  arrowUp,
+  end,
+  fixtureSync,
+  focusin,
+  focusout,
+  home,
+  mousedown,
+  nextRender,
+  tabKeyDown
+} from '@vaadin/testing-helpers';
 import '../vaadin-message-list.js';
 
 describe('message-list', () => {
@@ -178,11 +190,10 @@ describe('message-list', () => {
       expect(firstMessage.tabIndex).to.be.equal(0);
     });
 
-    it('should preserve index of message with tabindex=0 when list grows', async () => {
+    it('should preserve tabindex when increasing items count', async () => {
       const secondMessage = messageList.shadowRoot.querySelectorAll('vaadin-message')[1];
-      secondMessage.dispatchEvent(new CustomEvent('mousedown', { composed: true, bubbles: true }));
-      secondMessage.dispatchEvent(new CustomEvent('focus', { composed: true, bubbles: true }));
-      secondMessage.dispatchEvent(new CustomEvent('mouseup', { composed: true, bubbles: true }));
+      mousedown(secondMessage);
+      focusin(secondMessage);
       messageList.items = [
         ...messageList.items,
         {
@@ -197,19 +208,15 @@ describe('message-list', () => {
       ];
       await nextRender(messageList);
       const messages = messageList.shadowRoot.querySelectorAll('vaadin-message');
-      expect(messages[0].tabIndex).to.be.equal(-1);
-      expect(messages[1].tabIndex).to.be.equal(0);
-      expect(messages[2].tabIndex).to.be.equal(-1);
-      expect(messages[3].tabIndex).to.be.equal(-1);
-      expect(messages[4].tabIndex).to.be.equal(-1);
+      messages.forEach((msg, idx) => {
+        expect(msg.tabIndex).to.equal(idx === 1 ? 0 : -1);
+      });
     });
 
-    it('should preserve index of message with tabindex=0 when list is made shorter, but still have enough messages to preserve it', async () => {
+    it('should preserve tabindex when decreasing items count if possible', async () => {
       const secondMessage = messageList.shadowRoot.querySelectorAll('vaadin-message')[1];
-      // click on second item to give it tabindex=0
-      secondMessage.dispatchEvent(new CustomEvent('mousedown', { composed: true, bubbles: true }));
-      secondMessage.dispatchEvent(new CustomEvent('focus', { composed: true, bubbles: true }));
-      secondMessage.dispatchEvent(new CustomEvent('mouseup', { composed: true, bubbles: true }));
+      mousedown(secondMessage);
+      focusin(secondMessage);
 
       // set message list to two items
       messageList.items = [
@@ -241,40 +248,50 @@ describe('message-list', () => {
     });
   });
 
-  describe('mouse navigation', () => {
-    let messageElements;
+  describe('focus', () => {
+    let messageElements, message;
 
     beforeEach(async () => {
       messageList.items = messages;
       await nextRender(messageList);
       messageElements = messageList.shadowRoot.querySelectorAll('vaadin-message');
+      message = messageElements[1];
     });
 
-    it('click message to give it focus', () => {
-      messageElements[1].dispatchEvent(new CustomEvent('mousedown', { composed: true, bubbles: true }));
-      messageElements[1].dispatchEvent(new CustomEvent('focus', { composed: true, bubbles: true }));
-      messageElements[1].dispatchEvent(new CustomEvent('mouseup', { composed: true, bubbles: true }));
-
-      expect(messageElements[1].hasAttribute('focused')).to.be.true;
-      expect(messageElements[1].tabIndex).to.be.equal(0);
+    it('should set focused attribute on message focusin', () => {
+      focusin(message);
+      expect(message.hasAttribute('focused')).to.be.true;
     });
 
-    it('click message should not add focus ring', () => {
-      messageElements[1].dispatchEvent(new CustomEvent('mousedown', { composed: true, bubbles: true }));
-      messageElements[1].dispatchEvent(new CustomEvent('focus', { composed: true, bubbles: true }));
-      messageElements[1].dispatchEvent(new CustomEvent('mouseup', { composed: true, bubbles: true }));
-
-      expect(messageElements[1].hasAttribute('focus-ring')).to.be.false;
+    it('should remove focused attribute on message focusout', () => {
+      focusin(message);
+      focusout(message);
+      expect(message.hasAttribute('focused')).to.be.false;
     });
 
-    it('click message moves tabindex=0 to the newly selected item', () => {
-      messageElements[1].dispatchEvent(new CustomEvent('mousedown', { composed: true, bubbles: true }));
-      messageElements[1].dispatchEvent(new CustomEvent('focus', { composed: true, bubbles: true }));
-      messageElements[1].dispatchEvent(new CustomEvent('mouseup', { composed: true, bubbles: true }));
-      messageElements.forEach((aMessage) => {
-        aMessage === messageElements[1]
-          ? expect(aMessage.tabIndex).to.be.equal(0)
-          : expect(aMessage.tabIndex).to.be.equal(-1);
+    it('should set focus-ring attribute on message focusin after Tab', () => {
+      tabKeyDown(document.body);
+      focusin(message);
+      expect(message.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should not set the focus-ring attribute on message mousedown', () => {
+      tabKeyDown(document.body);
+      mousedown(document.body);
+      focusin(message);
+      expect(message.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should set focus-ring attribute on message focusin after Tab', () => {
+      tabKeyDown(document.body);
+      focusin(message);
+      expect(message.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should update tabindex for message elements on focusin', () => {
+      focusin(message);
+      messageElements.forEach((msg, idx) => {
+        expect(msg.tabIndex).to.equal(idx === 1 ? 0 : -1);
       });
     });
   });
@@ -288,80 +305,63 @@ describe('message-list', () => {
       messageElements = messageList.shadowRoot.querySelectorAll('vaadin-message');
     });
 
-    it('no focus before interaction', () => {
-      messageElements.forEach((aMessage) => {
-        expect(aMessage.hasAttribute('focused')).to.be.false;
+    it('should set tabindex on the next message on "arrow-down" keydown', () => {
+      arrowDown(messageElements[0]);
+      messageElements.forEach((msg, idx) => {
+        expect(msg.tabIndex).to.equal(idx === 1 ? 0 : -1);
       });
     });
 
-    it('down arrow should select the next message', () => {
+    it('should move focus to the next message on "arrow-down" keydown', () => {
       arrowDown(messageElements[0]);
       expect(messageElements[0].hasAttribute('focused')).to.be.false;
       expect(messageElements[1].hasAttribute('focused')).to.be.true;
     });
 
-    it('down arrow on last message should select first message', () => {
+    it('should focus first message on last message "arrow-down" keydown', () => {
       arrowDown(messageElements[3]);
       expect(messageElements[3].hasAttribute('focused')).to.be.false;
       expect(messageElements[0].hasAttribute('focused')).to.be.true;
     });
 
-    it('down arrow moves tabindex=0 to the newly selected item', () => {
-      arrowDown(messageElements[0]);
-      messageElements.forEach((aMessage) => {
-        aMessage === messageElements[1]
-          ? expect(aMessage.tabIndex).to.be.equal(0)
-          : expect(aMessage.tabIndex).to.be.equal(-1);
-      });
-    });
-
-    it('up arrow should select the previous message', () => {
+    it('should move focus to the previous message on "arrow-up" keydown', () => {
       arrowUp(messageElements[1]);
       expect(messageElements[1].hasAttribute('focused')).to.be.false;
       expect(messageElements[0].hasAttribute('focused')).to.be.true;
     });
 
-    it('up arrow on first message should select last message', () => {
+    it('should focus last message on first message "arrow-down" keydown', () => {
       arrowUp(messageElements[0]);
       expect(messageElements[0].hasAttribute('focused')).to.be.false;
       expect(messageElements[3].hasAttribute('focused')).to.be.true;
     });
 
-    it('home on any message should select first message', () => {
+    it('should move focus to the first message on "home" keydown', () => {
       home(messageElements[2]);
       expect(messageElements[2].hasAttribute('focused')).to.be.false;
       expect(messageElements[0].hasAttribute('focused')).to.be.true;
     });
 
-    it('end on any message should select last message', () => {
+    it('should move focus to the last panel on "end" keydown', () => {
       end(messageElements[1]);
       expect(messageElements[1].hasAttribute('focused')).to.be.false;
       expect(messageElements[3].hasAttribute('focused')).to.be.true;
     });
 
-    it('keyboard navigation should add focus-ring', () => {
+    it('should set focus-ring attribute when moving focus using keyboard', () => {
       expect(messageElements[1].hasAttribute('focus-ring')).to.be.false;
       arrowDown(messageElements[0]);
       expect(messageElements[1].hasAttribute('focus-ring')).to.be.true;
     });
 
-    it('should remove focus-ring and focused when component is blurred', () => {
-      arrowDown(messageElements[0]);
-      expect(messageElements[1].hasAttribute('focus-ring')).to.be.true;
-      expect(messageElements[1].hasAttribute('focused')).to.be.true;
-      messageElements[1].dispatchEvent(new CustomEvent('blur', { composed: true, bubbles: true }));
-      expect(messageElements[1].hasAttribute('focus-ring')).to.be.false;
-      expect(messageElements[1].hasAttribute('focused')).to.be.false;
-    });
-
-    it('holding down control while pressing keys should not do anything', () => {
+    it('should ignore keydown events when Ctrl modifier key is pressed', () => {
       arrowDown(messageElements[1]);
       arrowDown(messageElements[2], ['ctrl']);
       expect(messageElements[3].hasAttribute('focused')).to.be.false;
       expect(messageElements[2].hasAttribute('focused')).to.be.true;
     });
 
-    it('random unhandled key press should not affect focus', () => {
+    it('should not change focus when unrelated key is pressed', () => {
       arrowDown(messageElements[0]);
       arrowRight(messageElements[1]);
       expect(messageElements[1].hasAttribute('focused')).to.be.true;

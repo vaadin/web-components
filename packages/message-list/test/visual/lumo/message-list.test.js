@@ -1,4 +1,5 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-message-list.js';
 
@@ -54,7 +55,8 @@ describe('message-list', () => {
         });
 
         it('focused', async () => {
-          element.shadowRoot.querySelectorAll('vaadin-message')[1].focus();
+          element.shadowRoot.querySelectorAll('vaadin-message')[0].focus();
+          await sendKeys({ press: 'ArrowDown' });
           await visualDiff(div, `${dir}-focused`);
         });
       });
