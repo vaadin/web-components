@@ -79,8 +79,8 @@ export const ItemMixin = (superClass) =>
     }
 
     /**
-     * Override native `focus` to set focus-ring attribute
-     * in a backwards compatible way when opened using keyboard.
+     * Override native `focus` to set focused attribute
+     * when focusing the item programmatically.
      * @protected
      * @override
      */
