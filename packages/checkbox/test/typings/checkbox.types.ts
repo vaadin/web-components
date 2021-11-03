@@ -6,7 +6,7 @@ import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js
 import { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js';
 import { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '../../vaadin-checkbox.js';
 import { CheckboxCheckedChangedEvent, CheckboxIndeterminateChangedEvent } from '../../vaadin-checkbox.js';
 
@@ -32,7 +32,7 @@ assertType<KeyboardMixinClass>(checkbox);
 assertType<CheckedMixinClass>(checkbox);
 assertType<DelegateFocusMixinClass>(checkbox);
 assertType<LabelMixinClass>(checkbox);
-assertType<ThemableMixin>(checkbox);
+assertType<ThemableMixinClass>(checkbox);
 
 // Events
 checkbox.addEventListener('checked-changed', (event) => {

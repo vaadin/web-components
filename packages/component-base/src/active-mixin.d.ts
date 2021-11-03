@@ -16,9 +16,9 @@ import { KeyboardMixinClass } from './keyboard-mixin.js';
  * The attribute is removed as soon as the element is deactivated
  * by the pointer or by releasing the activation key.
  */
-export declare const ActiveMixin: <T extends Constructor<HTMLElement>>(
+export declare function ActiveMixin<T extends Constructor<HTMLElement>>(
   base: T
-) => T & Constructor<ActiveMixinClass> & Constructor<DisabledMixinClass> & Constructor<KeyboardMixinClass>;
+): T & Constructor<ActiveMixinClass> & Constructor<DisabledMixinClass> & Constructor<KeyboardMixinClass>;
 
 export declare class ActiveMixinClass {
   /**

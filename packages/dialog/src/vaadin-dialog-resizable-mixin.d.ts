@@ -3,20 +3,15 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
-declare function DialogResizableMixin<T extends new (...args: any[]) => {}>(
+export declare function DialogResizableMixin<T extends Constructor<HTMLElement>>(
   base: T
-): T & DialogResizableMixinConstructor;
+): T & Constructor<DialogResizableMixinClass>;
 
-interface DialogResizableMixinConstructor {
-  new (...args: any[]): DialogResizableMixin;
-}
-
-interface DialogResizableMixin {
+export declare class DialogResizableMixinClass {
   /**
    * Set to true to enable resizing the dialog by dragging the corners and edges.
    */
   resizable: boolean;
 }
-
-export { DialogResizableMixin, DialogResizableMixinConstructor };

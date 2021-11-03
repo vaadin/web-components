@@ -3,19 +3,14 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
-declare function SortMixin<T extends new (...args: any[]) => {}>(base: T): T & SortMixinConstructor;
+export declare function SortMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<SortMixinClass>;
 
-interface SortMixinConstructor {
-  new (...args: any[]): SortMixin;
-}
-
-interface SortMixin {
+export declare class SortMixinClass {
   /**
    * When `true`, all `<vaadin-grid-sorter>` are applied for sorting.
    * @attr {boolean} multi-sort
    */
   multiSort: boolean;
 }
-
-export { SortMixin, SortMixinConstructor };

@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 import { GridItemModel } from './vaadin-grid.js';
 
 export type GridDragAndDropFilter<TItem> = (model: GridItemModel<TItem>) => boolean;
@@ -11,15 +12,11 @@ export type GridDropLocation = 'above' | 'on-top' | 'below' | 'empty';
 
 export type GridDropMode = 'between' | 'on-top' | 'on-top-or-between' | 'on-grid';
 
-declare function DragAndDropMixin<TItem, T extends new (...args: any[]) => {}>(
+export declare function DragAndDropMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T
-): T & DragAndDropMixinConstructor<TItem>;
+): T & Constructor<DragAndDropMixinClass<TItem>>;
 
-interface DragAndDropMixinConstructor<TItem> {
-  new (...args: any[]): DragAndDropMixin<TItem>;
-}
-
-interface DragAndDropMixin<TItem> {
+export declare class DragAndDropMixinClass<TItem> {
   /**
    * Defines the locations within the Grid row where an element can be dropped.
    *
@@ -76,5 +73,3 @@ interface DragAndDropMixin<TItem> {
    */
   filterDragAndDrop(): void;
 }
-
-export { DragAndDropMixin, DragAndDropMixinConstructor };

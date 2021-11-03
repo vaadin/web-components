@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 import { GridColumn } from './vaadin-grid-column.js';
 
 export interface GridEventContext<TItem> {
@@ -16,15 +17,11 @@ export interface GridEventContext<TItem> {
   level?: number;
 }
 
-declare function EventContextMixin<TItem, T extends new (...args: any[]) => {}>(
+export declare function EventContextMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T
-): T & EventContextMixinConstructor<TItem>;
+): T & Constructor<EventContextMixinClass<TItem>>;
 
-interface EventContextMixinConstructor<TItem> {
-  new (...args: any[]): EventContextMixin<TItem>;
-}
-
-interface EventContextMixin<TItem> {
+export declare class EventContextMixinClass<TItem> {
   /**
    * Returns an object with context information about the event target:
    * - `item`: the data object corresponding to the targeted row (not specified when targeting header or footer)
@@ -45,5 +42,3 @@ interface EventContextMixin<TItem> {
    */
   getEventContext(event: Event): GridEventContext<TItem>;
 }
-
-export { EventContextMixin, EventContextMixinConstructor };

@@ -3,14 +3,11 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
-declare function IncludedMixin<T extends new (...args: any[]) => {}>(base: T): T & IncludedMixinConstructor;
+export declare function IncludedMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<IncludedMixinClass>;
 
-interface IncludedMixinConstructor {
-  new (...args: any[]): IncludedMixin;
-}
-
-interface IncludedMixin {
+export declare class IncludedMixinClass {
   /**
    * A list of item fields that should not be mapped to form fields.
    *
@@ -27,5 +24,3 @@ interface IncludedMixin {
    */
   include: string | string[] | undefined;
 }
-
-export { IncludedMixin, IncludedMixinConstructor };

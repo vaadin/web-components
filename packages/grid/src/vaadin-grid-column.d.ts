@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 import { GridDefaultItem, GridItemModel } from './vaadin-grid.js';
 
 export type GridBodyRenderer<TItem> = (
@@ -15,15 +16,11 @@ export type GridColumnTextAlign = 'start' | 'center' | 'end' | null;
 
 export type GridHeaderFooterRenderer<TItem> = (root: HTMLElement, column: GridColumn<TItem>) => void;
 
-declare function ColumnBaseMixin<TItem, T extends new (...args: any[]) => {}>(
+export declare function ColumnBaseMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T
-): T & ColumnBaseMixinConstructor<TItem>;
+): T & Constructor<ColumnBaseMixinClass<TItem>>;
 
-export interface ColumnBaseMixinConstructor<TItem> {
-  new (...args: any[]): ColumnBaseMixin<TItem>;
-}
-
-interface ColumnBaseMixin<TItem> {
+export declare class ColumnBaseMixinClass<TItem> {
   /**
    * When set to true, the column is user-resizable.
    */
@@ -132,7 +129,7 @@ declare class GridColumn<TItem = GridDefaultItem> extends HTMLElement {
   autoWidth: boolean;
 }
 
-interface GridColumn<TItem = GridDefaultItem> extends ColumnBaseMixin<TItem> {}
+interface GridColumn<TItem = GridDefaultItem> extends ColumnBaseMixinClass<TItem> {}
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -140,4 +137,4 @@ declare global {
   }
 }
 
-export { ColumnBaseMixin, GridColumn };
+export { GridColumn };

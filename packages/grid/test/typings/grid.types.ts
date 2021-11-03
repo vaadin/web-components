@@ -1,16 +1,16 @@
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
-import { ActiveItemMixin } from '../../src/vaadin-grid-active-item-mixin';
-import { ArrayDataProviderMixin } from '../../src/vaadin-grid-array-data-provider-mixin';
-import { ColumnReorderingMixin } from '../../src/vaadin-grid-column-reordering-mixin';
-import { DataProviderMixin } from '../../src/vaadin-grid-data-provider-mixin';
-import { DragAndDropMixin } from '../../src/vaadin-grid-drag-and-drop-mixin';
-import { EventContextMixin } from '../../src/vaadin-grid-event-context-mixin';
-import { RowDetailsMixin } from '../../src/vaadin-grid-row-details-mixin';
-import { ScrollMixin } from '../../src/vaadin-grid-scroll-mixin';
-import { SelectionMixin } from '../../src/vaadin-grid-selection-mixin';
-import { SortMixin } from '../../src/vaadin-grid-sort-mixin';
-import { StylingMixin } from '../../src/vaadin-grid-styling-mixin';
+import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
+import { ActiveItemMixinClass } from '../../src/vaadin-grid-active-item-mixin';
+import { ArrayDataProviderMixinClass } from '../../src/vaadin-grid-array-data-provider-mixin';
+import { ColumnReorderingMixinClass } from '../../src/vaadin-grid-column-reordering-mixin';
+import { DataProviderMixinClass } from '../../src/vaadin-grid-data-provider-mixin';
+import { DragAndDropMixinClass } from '../../src/vaadin-grid-drag-and-drop-mixin';
+import { EventContextMixinClass } from '../../src/vaadin-grid-event-context-mixin';
+import { RowDetailsMixinClass } from '../../src/vaadin-grid-row-details-mixin';
+import { ScrollMixinClass } from '../../src/vaadin-grid-scroll-mixin';
+import { SelectionMixinClass } from '../../src/vaadin-grid-selection-mixin';
+import { SortMixinClass } from '../../src/vaadin-grid-sort-mixin';
+import { StylingMixinClass } from '../../src/vaadin-grid-styling-mixin';
 import { GridColumnGroup } from '../../vaadin-grid-column-group';
 import { GridFilterColumn } from '../../vaadin-grid-filter-column';
 import { GridFilter, GridFilterValueChangedEvent } from '../../vaadin-grid-filter.js';
@@ -20,7 +20,7 @@ import { GridSorterDirectionChangedEvent, GridSorter } from '../../vaadin-grid-s
 import { GridTreeColumn } from '../../vaadin-grid-tree-column';
 import { GridTreeToggle, GridTreeToggleExpandedChangedEvent } from '../../vaadin-grid-tree-toggle.js';
 import {
-  ColumnBaseMixin,
+  ColumnBaseMixinClass,
   GridActiveItemChangedEvent,
   GridCellActivateEvent,
   GridBodyRenderer,
@@ -60,18 +60,18 @@ assertType<Grid>(genericGrid);
 
 const narrowedGrid = genericGrid as Grid<TestGridItem>;
 assertType<ElementMixinClass>(narrowedGrid);
-assertType<ThemableMixin>(narrowedGrid);
-assertType<ActiveItemMixin<TestGridItem>>(narrowedGrid);
-assertType<ArrayDataProviderMixin<TestGridItem>>(narrowedGrid);
-assertType<DataProviderMixin<TestGridItem>>(narrowedGrid);
-assertType<RowDetailsMixin<TestGridItem>>(narrowedGrid);
-assertType<ScrollMixin>(narrowedGrid);
-assertType<SelectionMixin<TestGridItem>>(narrowedGrid);
-assertType<SortMixin>(narrowedGrid);
-assertType<ColumnReorderingMixin>(narrowedGrid);
-assertType<EventContextMixin<TestGridItem>>(narrowedGrid);
-assertType<StylingMixin<TestGridItem>>(narrowedGrid);
-assertType<DragAndDropMixin<TestGridItem>>(narrowedGrid);
+assertType<ThemableMixinClass>(narrowedGrid);
+assertType<ActiveItemMixinClass<TestGridItem>>(narrowedGrid);
+assertType<ArrayDataProviderMixinClass<TestGridItem>>(narrowedGrid);
+assertType<DataProviderMixinClass<TestGridItem>>(narrowedGrid);
+assertType<RowDetailsMixinClass<TestGridItem>>(narrowedGrid);
+assertType<ScrollMixinClass>(narrowedGrid);
+assertType<SelectionMixinClass<TestGridItem>>(narrowedGrid);
+assertType<SortMixinClass>(narrowedGrid);
+assertType<ColumnReorderingMixinClass>(narrowedGrid);
+assertType<EventContextMixinClass<TestGridItem>>(narrowedGrid);
+assertType<StylingMixinClass<TestGridItem>>(narrowedGrid);
+assertType<DragAndDropMixinClass<TestGridItem>>(narrowedGrid);
 
 narrowedGrid.addEventListener('active-item-changed', (event) => {
   assertType<GridActiveItemChangedEvent<TestGridItem>>(event);
@@ -199,7 +199,7 @@ genericColumn.footerRenderer = (root, column) => {
 
 const narrowedColumn = genericColumn as GridColumn<TestGridItem>;
 assertType<HTMLElement>(narrowedColumn);
-assertType<ColumnBaseMixin<TestGridItem>>(narrowedColumn);
+assertType<ColumnBaseMixinClass<TestGridItem>>(narrowedColumn);
 
 assertType<number | null | undefined>(narrowedColumn.flexGrow);
 assertType<string | null | undefined>(narrowedColumn.width);
@@ -217,7 +217,7 @@ assertType<GridColumnGroup>(genericColumnGroup);
 
 const narrowedColumnGroup = genericColumnGroup as GridColumnGroup<TestGridItem>;
 assertType<HTMLElement>(narrowedColumnGroup);
-assertType<ColumnBaseMixin<TestGridItem>>(narrowedColumnGroup);
+assertType<ColumnBaseMixinClass<TestGridItem>>(narrowedColumnGroup);
 
 /* GridFilter */
 const filter = document.createElement('vaadin-grid-filter');
@@ -295,7 +295,7 @@ assertType<string | null | undefined>(narrowedTreeColumn.itemHasChildrenPath);
 /* GridTreeToggle */
 const treeToggle = document.createElement('vaadin-grid-tree-toggle');
 assertType<GridTreeToggle>(treeToggle);
-assertType<ThemableMixin>(treeToggle);
+assertType<ThemableMixinClass>(treeToggle);
 assertType<number>(treeToggle.level);
 assertType<boolean>(treeToggle.leaf);
 assertType<boolean>(treeToggle.expanded);

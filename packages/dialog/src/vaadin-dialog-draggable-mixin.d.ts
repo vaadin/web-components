@@ -3,16 +3,13 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
-declare function DialogDraggableMixin<T extends new (...args: any[]) => {}>(
+export declare function DialogDraggableMixin<T extends Constructor<HTMLElement>>(
   base: T
-): T & DialogDraggableMixinConstructor;
+): T & Constructor<DialogDraggableMixinClass>;
 
-interface DialogDraggableMixinConstructor {
-  new (...args: any[]): DialogDraggableMixin;
-}
-
-interface DialogDraggableMixin {
+export declare class DialogDraggableMixinClass {
   /**
    * Set to true to enable repositioning the dialog by clicking and dragging.
    *
@@ -25,5 +22,3 @@ interface DialogDraggableMixin {
    */
   draggable: boolean;
 }
-
-export { DialogDraggableMixin, DialogDraggableMixinConstructor };

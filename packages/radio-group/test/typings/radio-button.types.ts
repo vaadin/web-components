@@ -6,7 +6,7 @@ import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js
 import { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js';
 import { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '../../vaadin-radio-button.js';
 import '../../vaadin-radio-group.js';
 import { RadioButtonCheckedChangedEvent } from '../../vaadin-radio-button.js';
@@ -33,7 +33,7 @@ assertType<KeyboardMixinClass>(radio);
 assertType<CheckedMixinClass>(radio);
 assertType<DelegateFocusMixinClass>(radio);
 assertType<LabelMixinClass>(radio);
-assertType<ThemableMixin>(radio);
+assertType<ThemableMixinClass>(radio);
 
 // Radio events
 radio.addEventListener('checked-changed', (event) => {

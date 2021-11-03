@@ -6,7 +6,7 @@
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
 import { ComboBoxDefaultItem } from './vaadin-combo-box-mixin.js';
@@ -224,7 +224,7 @@ interface ComboBox<TItem = ComboBoxDefaultItem>
     ComboBoxMixinClass<TItem>,
     PatternMixinClass,
     InputControlMixinClass,
-    ThemableMixin,
+    ThemableMixinClass,
     ElementMixinClass {}
 
 declare global {

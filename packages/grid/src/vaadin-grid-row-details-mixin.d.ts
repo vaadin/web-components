@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 import { Grid, GridItemModel } from './vaadin-grid.js';
 
 export type GridRowDetailsRenderer<TItem> = (
@@ -11,15 +12,11 @@ export type GridRowDetailsRenderer<TItem> = (
   model?: GridItemModel<TItem>
 ) => void;
 
-declare function RowDetailsMixin<TItem, T extends new (...args: any[]) => {}>(
+export declare function RowDetailsMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T
-): T & RowDetailsMixinConstructor<TItem>;
+): T & Constructor<RowDetailsMixinClass<TItem>>;
 
-interface RowDetailsMixinConstructor<TItem> {
-  new (...args: any[]): RowDetailsMixin<TItem>;
-}
-
-interface RowDetailsMixin<TItem> {
+export declare class RowDetailsMixinClass<TItem> {
   /**
    * An array containing references to items with open row details.
    */
@@ -51,5 +48,3 @@ interface RowDetailsMixin<TItem> {
    */
   closeItemDetails(item: TItem): void;
 }
-
-export { RowDetailsMixin, RowDetailsMixinConstructor };

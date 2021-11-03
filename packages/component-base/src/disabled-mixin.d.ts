@@ -8,9 +8,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
 /**
  * A mixin to provide disabled property for field components.
  */
-export declare const DisabledMixin: <T extends Constructor<HTMLElement>>(
-  base: T
-) => Constructor<DisabledMixinClass> & T;
+export declare function DisabledMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<DisabledMixinClass> & T;
 
 export declare class DisabledMixinClass {
   /**

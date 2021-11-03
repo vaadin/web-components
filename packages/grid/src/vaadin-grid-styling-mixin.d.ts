@@ -3,18 +3,17 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 import { GridColumn } from './vaadin-grid-column.js';
 import { GridItemModel } from './vaadin-grid.js';
 
 export type GridCellClassNameGenerator<TItem> = (column: GridColumn<TItem>, model: GridItemModel<TItem>) => string;
 
-declare function StylingMixin<TItem, T extends new (...args: any[]) => {}>(base: T): T & StylingMixinConstructor<TItem>;
+export declare function StylingMixin<TItem, T extends Constructor<HTMLElement>>(
+  base: T
+): T & Constructor<StylingMixinClass<TItem>>;
 
-interface StylingMixinConstructor<TItem> {
-  new (...args: any[]): StylingMixin<TItem>;
-}
-
-interface StylingMixin<TItem> {
+export declare class StylingMixinClass<TItem> {
   /**
    * A function that allows generating CSS class names for grid cells
    * based on their row and column. The return value should be the generated
@@ -41,5 +40,3 @@ interface StylingMixin<TItem> {
    */
   generateCellClassNames(): void;
 }
-
-export { StylingMixin, StylingMixinConstructor };

@@ -3,13 +3,13 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-declare function ThemePropertyMixin<T extends new (...args: any[]) => {}>(base: T): T & ThemePropertyMixinConstructor;
+import { Constructor } from '@open-wc/dedupe-mixin';
 
-interface ThemePropertyMixinConstructor {
-  new (...args: any[]): ThemePropertyMixin;
-}
+export declare function ThemePropertyMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T & Constructor<ThemePropertyMixinClass>;
 
-interface ThemePropertyMixin {
+export declare class ThemePropertyMixinClass {
   /**
    * Helper property with theme attribute value facilitating propagation
    * in shadow DOM.
@@ -27,5 +27,3 @@ interface ThemePropertyMixin {
    */
   readonly theme: string | null | undefined;
 }
-
-export { ThemePropertyMixin, ThemePropertyMixinConstructor };

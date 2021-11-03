@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
 export interface LoginI18n {
   form: {
@@ -23,13 +24,9 @@ export interface LoginI18n {
   additionalInformation?: string;
 }
 
-declare function LoginMixin<T extends new (...args: any[]) => {}>(base: T): T & LoginMixinConstructor;
+export declare function LoginMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<LoginMixinClass>;
 
-interface LoginMixinConstructor {
-  new (...args: any[]): LoginMixin;
-}
-
-interface LoginMixin {
+export declare class LoginMixinClass {
   /**
    * If set, a synchronous POST call will be fired to the path defined.
    * The `login` event is also dispatched, so `event.preventDefault()` can be called to prevent the POST call.
@@ -91,7 +88,5 @@ interface LoginMixin {
    */
   i18n: LoginI18n;
 
-  _retargetEvent(e: Event): void;
+  protected _retargetEvent(e: Event): void;
 }
-
-export { LoginMixin, LoginMixinConstructor };
