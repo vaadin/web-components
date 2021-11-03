@@ -4,14 +4,13 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 
-declare function InlineEditingMixin<T extends new (...args: any[]) => {}>(base: T): T & InlineEditingMixinConstructor;
+export declare function InlineEditingMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T & Constructor<InlineEditingMixinClass>;
 
-interface InlineEditingMixinConstructor {
-  new (...args: any[]): InlineEditingMixin;
-}
-
-interface InlineEditingMixin {
+export declare class InlineEditingMixinClass {
   /**
    * When true, pressing Enter while in cell edit mode
    * will move focus to the editable cell in the next row
@@ -37,11 +36,7 @@ interface InlineEditingMixin {
    */
   editOnClick: boolean | null | undefined;
 
-  _checkImports(): void;
+  protected _stopEdit(shouldCancel?: boolean, shouldRestoreFocus?: boolean): void;
 
-  _stopEdit(shouldCancel?: boolean, shouldRestoreFocus?: boolean): void;
-
-  _switchEditCell(e: KeyboardEvent): void;
+  protected _switchEditCell(e: KeyboardEvent): void;
 }
-
-export { InlineEditingMixin, InlineEditingMixinConstructor };

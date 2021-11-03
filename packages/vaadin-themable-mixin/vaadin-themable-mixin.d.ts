@@ -3,19 +3,22 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 import { CSSResult, CSSResultGroup } from 'lit';
-import { ThemePropertyMixin, ThemePropertyMixinConstructor } from './vaadin-theme-property-mixin.js';
+import { ThemePropertyMixinClass } from './vaadin-theme-property-mixin.js';
 
-declare function ThemableMixin<T extends new (...args: any[]) => {}>(
+/**
+ * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
+ */
+export declare function ThemableMixin<T extends Constructor<HTMLElement>>(
   base: T
-): T & ThemableMixinConstructor & ThemePropertyMixinConstructor;
+): T & Constructor<ThemableMixinClass> & Constructor<ThemePropertyMixinClass>;
 
-interface ThemableMixinConstructor {
-  new (...args: any[]): ThemableMixin;
-  finalize(): void;
+export declare class ThemableMixinClass {
+  protected static finalize(): void;
+
+  protected static finalizeStyles(styles?: CSSResultGroup): CSSResult[];
 }
-
-interface ThemableMixin extends ThemePropertyMixin {}
 
 /**
  * Registers CSS styles for a component type. Make sure to register the styles before
@@ -37,4 +40,4 @@ declare const __themeRegistry: Theme[];
 
 export { css, unsafeCSS } from 'lit';
 
-export { ThemableMixin, ThemableMixinConstructor, registerStyles, __themeRegistry };
+export { registerStyles, __themeRegistry };

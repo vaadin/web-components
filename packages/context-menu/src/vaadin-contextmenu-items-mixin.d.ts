@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 import { Item } from '@vaadin/item/src/vaadin-item.js';
 import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
 
@@ -36,14 +37,10 @@ declare global {
  */
 declare class ContextMenuListBox extends ListBox {}
 
-declare function ItemsMixin<T extends new (...args: any[]) => {}>(base: T): T & ItemsMixinConstructor;
+export declare function ItemsMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ItemsMixinClass>;
 
-interface ItemsMixinConstructor {
-  new (...args: any[]): ItemsMixin;
-}
-
-interface ItemsMixin {
-  readonly __isRTL: boolean;
+export declare class ItemsMixinClass {
+  protected readonly __isRTL: boolean;
 
   /**
    * Defines a (hierarchical) menu structure for the component.
@@ -75,5 +72,3 @@ interface ItemsMixin {
    */
   items: ContextMenuItem[] | undefined;
 }
-
-export { ItemsMixin, ItemsMixinConstructor };

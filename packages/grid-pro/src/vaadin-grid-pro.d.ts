@@ -5,8 +5,7 @@
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
 import { GridDefaultItem, Grid, GridCustomEventMap } from '@vaadin/grid/src/vaadin-grid.js';
-import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
-
+import { InlineEditingMixinClass } from './vaadin-grid-pro-inline-editing-mixin.js';
 export { GridProEditorType } from './vaadin-grid-pro-edit-column.js';
 
 /**
@@ -91,7 +90,7 @@ declare class GridPro<TItem = GridDefaultItem> extends Grid<TItem> {
   ): void;
 }
 
-interface GridPro extends InlineEditingMixin {}
+interface GridPro extends InlineEditingMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {

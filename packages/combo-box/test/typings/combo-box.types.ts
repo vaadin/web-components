@@ -1,5 +1,5 @@
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
+import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import { ComboBoxDataProviderMixinClass } from '../../src/vaadin-combo-box-data-provider-mixin';
 import { ComboBoxMixinClass } from '../../src/vaadin-combo-box-mixin';
 import {
@@ -35,7 +35,7 @@ assertType<ComboBox>(narrowedComboBox);
 assertType<ElementMixinClass>(narrowedComboBox);
 assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBox);
-assertType<ThemableMixin>(narrowedComboBox);
+assertType<ThemableMixinClass>(narrowedComboBox);
 
 narrowedComboBox.addEventListener('custom-value-set', (event) => {
   assertType<ComboBoxCustomValueSetEvent>(event);
@@ -74,7 +74,7 @@ assertType<ComboBoxLight>(genericComboBoxLightElement);
 const narrowedComboBoxLightElement = genericComboBoxLightElement as ComboBoxLight<TestComboBoxItem>;
 assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBoxLightElement);
 assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBoxLightElement);
-assertType<ThemableMixin>(narrowedComboBoxLightElement);
+assertType<ThemableMixinClass>(narrowedComboBoxLightElement);
 
 narrowedComboBoxLightElement.addEventListener('custom-value-set', (event) => {
   assertType<ComboBoxLightCustomValueSetEvent>(event);

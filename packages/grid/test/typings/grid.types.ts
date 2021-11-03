@@ -1,5 +1,5 @@
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
+import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import { ActiveItemMixin } from '../../src/vaadin-grid-active-item-mixin';
 import { ArrayDataProviderMixin } from '../../src/vaadin-grid-array-data-provider-mixin';
 import { ColumnReorderingMixin } from '../../src/vaadin-grid-column-reordering-mixin';
@@ -60,7 +60,7 @@ assertType<Grid>(genericGrid);
 
 const narrowedGrid = genericGrid as Grid<TestGridItem>;
 assertType<ElementMixinClass>(narrowedGrid);
-assertType<ThemableMixin>(narrowedGrid);
+assertType<ThemableMixinClass>(narrowedGrid);
 assertType<ActiveItemMixin<TestGridItem>>(narrowedGrid);
 assertType<ArrayDataProviderMixin<TestGridItem>>(narrowedGrid);
 assertType<DataProviderMixin<TestGridItem>>(narrowedGrid);
@@ -295,7 +295,7 @@ assertType<string | null | undefined>(narrowedTreeColumn.itemHasChildrenPath);
 /* GridTreeToggle */
 const treeToggle = document.createElement('vaadin-grid-tree-toggle');
 assertType<GridTreeToggle>(treeToggle);
-assertType<ThemableMixin>(treeToggle);
+assertType<ThemableMixinClass>(treeToggle);
 assertType<number>(treeToggle.level);
 assertType<boolean>(treeToggle.leaf);
 assertType<boolean>(treeToggle.expanded);

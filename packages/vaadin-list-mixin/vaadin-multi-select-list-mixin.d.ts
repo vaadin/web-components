@@ -3,20 +3,17 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ListMixin, ListMixinConstructor } from './vaadin-list-mixin.js';
+import { Constructor } from '@open-wc/dedupe-mixin';
+import { ListMixinClass } from './vaadin-list-mixin.js';
 
 /**
  * A mixin for `nav` elements, facilitating multiple selection of childNodes.
  */
-declare function MultiSelectListMixin<T extends new (...args: any[]) => {}>(
+export declare function MultiSelectListMixin<T extends Constructor<HTMLElement>>(
   base: T
-): T & MultiSelectListMixinConstructor & ListMixinConstructor;
+): T & Constructor<ListMixinClass> & Constructor<ListMixinClass>;
 
-interface MultiSelectListMixinConstructor {
-  new (...args: any[]): MultiSelectListMixin;
-}
-
-interface MultiSelectListMixin extends ListMixin {
+export declare class MultiSelectListMixinClass {
   /**
    * Specifies that multiple options can be selected at once.
    */
@@ -28,5 +25,3 @@ interface MultiSelectListMixin extends ListMixin {
    */
   selectedValues: number[] | null | undefined;
 }
-
-export { MultiSelectListMixin, MultiSelectListMixinConstructor };

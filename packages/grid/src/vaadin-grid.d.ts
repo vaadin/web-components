@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
 import { ArrayDataProviderMixin } from './vaadin-grid-array-data-provider-mixin.js';
 import { GridColumn, GridBodyRenderer, GridHeaderFooterRenderer } from './vaadin-grid-column.js';
@@ -398,7 +398,7 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
 
 interface Grid<TItem = GridDefaultItem>
   extends ElementMixinClass,
-    ThemableMixin,
+    ThemableMixinClass,
     ActiveItemMixin<TItem>,
     ArrayDataProviderMixin<TItem>,
     DataProviderMixin<TItem>,

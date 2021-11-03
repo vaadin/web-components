@@ -8,7 +8,7 @@ import { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constra
 import { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '../../vaadin-date-picker.js';
 import {
   DatePicker,
@@ -29,7 +29,6 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 const datePicker = document.createElement('vaadin-date-picker');
 
 assertType<DatePicker>(datePicker);
-assertType<ThemableMixin>(datePicker);
 
 datePicker.addEventListener('opened-changed', (event) => {
   assertType<DatePickerOpenedChangedEvent>(event);
@@ -81,14 +80,13 @@ assertType<InputConstraintsMixinClass>(datePicker);
 assertType<InputControlMixinClass>(datePicker);
 assertType<InputMixinClass>(datePicker);
 assertType<ValidateMixinClass>(datePicker);
-assertType<ThemableMixin>(datePicker);
+assertType<ThemableMixinClass>(datePicker);
 assertType<DatePickerMixinClass>(datePicker);
 
 /* DatePickerLight */
 const datePickerLight = document.createElement('vaadin-date-picker-light');
 
 assertType<DatePickerLight>(datePickerLight);
-assertType<ThemableMixin>(datePickerLight);
 
 datePickerLight.addEventListener('opened-changed', (event) => {
   assertType<DatePickerLightOpenedChangedEvent>(event);
@@ -126,5 +124,5 @@ assertType<DisabledMixinClass>(datePickerLight);
 assertType<KeyboardMixinClass>(datePickerLight);
 assertType<DelegateFocusMixinClass>(datePickerLight);
 assertType<InputMixinClass>(datePickerLight);
-assertType<ThemableMixin>(datePickerLight);
+assertType<ThemableMixinClass>(datePickerLight);
 assertType<DatePickerMixinClass>(datePickerLight);
