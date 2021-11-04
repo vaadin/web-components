@@ -44,9 +44,6 @@ class GridProEditSelect extends Select {
     super.ready();
 
     this.setAttribute('theme', 'grid-pro-editor');
-
-    this.__boundOnKeyDown = this.__onOverlayKeyDown.bind(this);
-    this._overlayElement.addEventListener('keydown', this.__boundOnKeyDown);
   }
 
   _onKeyDown(e) {
@@ -61,10 +58,25 @@ class GridProEditSelect extends Select {
     }
   }
 
-  __onOverlayKeyDown(e) {
-    if (e.keyCode === 9) {
-      !this._grid.singleCellEdit && this._grid._switchEditCell(e);
+  /**
+   * Override list-box event listener inherited from `Select`:
+   * - Enter: set flag for moving to next row on value change,
+   * - Tab: switch to next cell when "singleCellEdit" is false.
+   * @param {!KeyboardEvent} event
+   * @protected
+   * @override
+   */
+  _onKeyDownInside(event) {
+    if (event.keyCode === 13) {
+      this._enterKeydown = event;
     }
+
+    if (event.keyCode === 9) {
+      !this._grid.singleCellEdit && this._grid._switchEditCell(event);
+    }
+
+    // Call `super` to close overlay on Tab.
+    super._onKeyDownInside(event);
   }
 
   _valueChanged(value, oldValue) {
@@ -99,18 +111,6 @@ class GridProEditSelect extends Select {
           item.textContent = option;
           listBox.appendChild(item);
         });
-
-        // Save the "keydown" event for Enter to handle it on value change.
-        // Use capture phase because the item calls `preventDefault()`.
-        listBox.addEventListener(
-          'keydown',
-          (e) => {
-            if (e.keyCode === 13) {
-              this._enterKeydown = e;
-            }
-          },
-          true
-        );
 
         root.appendChild(listBox);
       };
