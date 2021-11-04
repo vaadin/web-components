@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid Pro</title>
+  </head>
+  <body>
+    <vaadin-grid-pro single-cell-edit>
+      <vaadin-grid-pro-edit-column path="name.first"></vaadin-grid-pro-edit-column>
+      <vaadin-grid-pro-edit-column path="name.last"></vaadin-grid-pro-edit-column>
+      <vaadin-grid-pro-edit-column
+        path="name.title"
+        editor-type="select"
+        editor-options='["mr", "mrs", "ms"]'
+      ></vaadin-grid-pro-edit-column>
+      <vaadin-grid-pro-edit-column path="married" editor-type="checkbox"></vaadin-grid-pro-edit-column>
+    </vaadin-grid-pro>
+
+    <script type="module">
+      import '@vaadin/grid-pro';
+      import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
+      import { users } from '../packages/grid-pro/test/visual/users.js';
+
+      const grid = document.querySelector('vaadin-grid-pro');
+      grid.items = users;
+    </script>
+  </body>
+</html>
