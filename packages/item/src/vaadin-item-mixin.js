@@ -99,7 +99,7 @@ export const ItemMixin = (superClass) =>
      * @override
      */
     _shouldSetActive(event) {
-      return !this.disabled && !event.defaultPrevented;
+      return !this.disabled && !(event.type === 'keydown' && event.defaultPrevented);
     }
 
     /** @private */

@@ -170,6 +170,7 @@ describe('vaadin-item-mixin', () => {
       });
 
       it('should not set focus-ring on programmatic focus after mousedown', () => {
+        tabKeyDown(item);
         mousedown(item);
         item.focus();
         expect(item.hasAttribute('focus-ring')).to.be.false;
