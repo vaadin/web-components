@@ -44,10 +44,12 @@ const textArea = css`
 
   /* Part of the workaround above: restore default cursor and prevent text 
      selection, same as when setting pointer-events: none */
+  :host([disabled]),
   :host([disabled]) [part='input-field'],
   :host([disabled]) ::slotted(textarea) {
     cursor: default;
     user-select: none;
+    -webkit-user-select: none;
   }
 
   :host(:hover:not([readonly]):not([focused]):not([invalid]):not([disabled])) [part='input-field'] {
