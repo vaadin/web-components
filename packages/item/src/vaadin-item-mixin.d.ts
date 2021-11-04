@@ -5,6 +5,7 @@
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
 import { ActiveMixinClass } from '@vaadin/component-base/src/active-mixin.js';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 
 /**
@@ -14,7 +15,11 @@ import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
  */
 export declare function ItemMixin<T extends Constructor<HTMLElement>>(
   base: T
-): T & Constructor<ItemMixinClass> & Constructor<ActiveMixinClass> & Constructor<FocusMixinClass>;
+): T &
+  Constructor<ItemMixinClass> &
+  Constructor<ActiveMixinClass> &
+  Constructor<DisabledMixinClass> &
+  Constructor<FocusMixinClass>;
 
 export declare class ItemMixinClass {
   value: string;
