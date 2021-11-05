@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@vaadin/text-field/vaadin-text-field.js';
-import { open, close } from './helpers.js';
 import '../src/vaadin-overlay.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { close, open } from './helpers.js';
 
 customElements.define(
   'overlay-field-wrapper',

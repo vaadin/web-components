@@ -1,9 +1,12 @@
 import { expect } from '@esm-bundle/chai';
+import { aTimeout, enterKeyDown, fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { fixtureSync, nextFrame, aTimeout, enterKeyDown, fire } from '@vaadin/testing-helpers';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/text-field/vaadin-text-field.js';
+import './not-animated-styles.js';
+import '../vaadin-combo-box.js';
+import '../vaadin-combo-box-light.js';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import {
   flushComboBox,
@@ -14,9 +17,6 @@ import {
   getVisibleItemsCount,
   makeItems
 } from './helpers.js';
-import './not-animated-styles.js';
-import '../vaadin-combo-box.js';
-import '../vaadin-combo-box-light.js';
 
 registerStyles(
   'vaadin-combo-box*',

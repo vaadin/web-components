@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import sinon from 'sinon';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputController } from '../src/input-controller.js';
 import { InputFieldMixin } from '../src/input-field-mixin.js';

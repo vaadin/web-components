@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { click, fixtureSync, listenOnce, tap } from '@vaadin/testing-helpers';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import sinon from 'sinon';
 import '../src/vaadin-date-picker-overlay-content.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { getDefaultI18n, getFirstVisibleItem, monthsEqual } from './common.js';
 
 function waitUntilScrolledTo(overlay, date, callback) {

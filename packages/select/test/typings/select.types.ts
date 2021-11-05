@@ -1,5 +1,4 @@
 import '../../vaadin-select.js';
-
 import {
   Select,
   SelectInvalidChangedEvent,

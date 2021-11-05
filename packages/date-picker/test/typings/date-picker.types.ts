@@ -1,15 +1,16 @@
+import '../../vaadin-date-picker.js';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
-import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
+import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import '../../vaadin-date-picker.js';
+import { DatePickerMixinClass } from '../../src/vaadin-date-picker-mixin.js';
 import {
   DatePicker,
   DatePickerInvalidChangedEvent,
@@ -22,7 +23,6 @@ import {
   DatePickerLightOpenedChangedEvent,
   DatePickerLightValueChangedEvent
 } from '../../vaadin-date-picker-light.js';
-import { DatePickerMixinClass } from '../../src/vaadin-date-picker-mixin.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

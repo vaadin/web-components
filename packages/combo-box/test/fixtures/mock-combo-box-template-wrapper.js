@@ -1,5 +1,5 @@
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '../../vaadin-combo-box.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 class MockComboBoxTemplateWrapper extends PolymerElement {
   static get template() {

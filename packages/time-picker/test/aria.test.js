@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, arrowDownKeyDown, escKeyDown, nextFrame } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, escKeyDown, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../src/vaadin-time-picker.js';
 
 describe('ARIA', () => {

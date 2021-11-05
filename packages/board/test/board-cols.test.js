@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../vaadin-board-row.js';
 
 describe('board-cols', () => {

@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@polymer/polymer/lib/elements/custom-style.js';
 import '../vaadin-form-item.js';
 

@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, arrowDownKeyDown, escKeyDown, nextFrame } from '@vaadin/testing-helpers';
-import { getAllItems } from './helpers.js';
+import { arrowDownKeyDown, escKeyDown, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
+import { getAllItems } from './helpers.js';
 
 describe('ARIA', () => {
   let comboBox, input, label, helper, error;

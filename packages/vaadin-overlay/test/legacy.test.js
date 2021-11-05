@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { escKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+import sinon from 'sinon';
 import { IronOverlayBehavior } from '@polymer/iron-overlay-behavior/iron-overlay-behavior.js';
+import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
 import { OverlayElement } from '../src/vaadin-overlay.js';
 
 Polymer({

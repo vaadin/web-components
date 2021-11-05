@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent, tabKeyDown, nextRender } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import '@vaadin/button/vaadin-button.js';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '@vaadin/radio-group/vaadin-radio-group.js';
 import '@vaadin/radio-group/vaadin-radio-button.js';
 import '../vaadin-overlay.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 const shadowTemplate = document.createElement('template');
 shadowTemplate.innerHTML = `

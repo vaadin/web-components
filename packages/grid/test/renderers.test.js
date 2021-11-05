@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync, isIOS, keyDownOn } from '@vaadin/testing-helpers';
-import { flushGrid, getBodyCellContent, getCell, getContainerCell } from './helpers.js';
+import sinon from 'sinon';
 import '../vaadin-grid.js';
+import { flushGrid, getBodyCellContent, getCell, getContainerCell } from './helpers.js';
 
 function getHeaderCell(grid, index = 0) {
   return grid.$.header.querySelectorAll('[part~="cell"]')[index];

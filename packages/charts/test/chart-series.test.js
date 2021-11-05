@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
+import { aTimeout, fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync, oneEvent, nextRender } from '@vaadin/testing-helpers';
 import '../vaadin-chart.js';
 
 describe('vaadin-chart-series', () => {

@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { createEventSpy } from './helpers.js';
+import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
+import { createEventSpy } from './helpers.js';
 
 describe('form field', () => {
   let comboBox, input;

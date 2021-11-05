@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import { flushGrid, infiniteDataProvider, scrollToEnd } from './helpers.js';
 import '../vaadin-grid.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { flushGrid, infiniteDataProvider, scrollToEnd } from './helpers.js';
 
 describe('scrolling mode', () => {
   let grid;

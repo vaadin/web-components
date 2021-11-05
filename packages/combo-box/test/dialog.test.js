@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, mousedown, touchstart, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, nextFrame, touchstart } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import '../src/vaadin-combo-box.js';

@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import { flushGrid, getRows, getRowCells, infiniteDataProvider, scrollToEnd } from './helpers.js';
 import '../vaadin-grid.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { flushGrid, getRowCells, getRows, infiniteDataProvider, scrollToEnd } from './helpers.js';
 
 registerStyles(
   'vaadin-grid',

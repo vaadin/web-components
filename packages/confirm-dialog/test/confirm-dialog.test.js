@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
+import { esc, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { fixtureSync, esc, nextFrame } from '@vaadin/testing-helpers';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import './not-animated-styles.js';
 import '../vaadin-confirm-dialog.js';
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 
 describe('vaadin-confirm-dialog', () => {
   describe('custom element definition', () => {

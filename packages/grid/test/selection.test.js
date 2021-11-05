@@ -1,19 +1,19 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
-import {
-  flushGrid,
-  getBodyCellContent,
-  getCellContent,
-  getRows,
-  getRowCells,
-  infiniteDataProvider
-} from './helpers.js';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-selection-column.js';
 import '../vaadin-grid-filter.js';
 import '../vaadin-grid-column-group.js';
+import {
+  flushGrid,
+  getBodyCellContent,
+  getCellContent,
+  getRowCells,
+  getRows,
+  infiniteDataProvider
+} from './helpers.js';
 
 const fixtures = {
   renderer: `

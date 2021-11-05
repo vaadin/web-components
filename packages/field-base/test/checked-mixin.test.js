@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, fire } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { fire, fixtureSync } from '@vaadin/testing-helpers';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { CheckedMixin } from '../src/checked-mixin.js';
 import { DelegateFocusMixin } from '../src/delegate-focus-mixin.js';

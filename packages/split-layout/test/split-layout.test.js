@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, aTimeout, track } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, track } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-split-layout.js';
 

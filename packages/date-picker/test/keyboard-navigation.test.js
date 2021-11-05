@@ -1,5 +1,4 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import {
   arrowDown,
   arrowLeft,
@@ -18,8 +17,9 @@ import {
   pageUp,
   space
 } from '@vaadin/testing-helpers';
-import { getDefaultI18n, getOverlayContent, open } from './common.js';
+import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
+import { getDefaultI18n, getOverlayContent, open } from './common.js';
 
 (isIOS ? describe.skip : describe)('keyboard navigation', () => {
   let target;

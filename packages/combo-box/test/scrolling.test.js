@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, isIOS, aTimeout } from '@vaadin/testing-helpers';
-import { getSelectedItem, onceScrolled } from './helpers.js';
+import { aTimeout, fixtureSync, focusout, isIOS } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
+import { getSelectedItem, onceScrolled } from './helpers.js';
 
 describe('scrolling', () => {
   let comboBox, overlay, scroller, input;

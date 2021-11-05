@@ -1,23 +1,23 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import '../vaadin-grid.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import {
   flushGrid,
   getCellContent,
   getContainerCell,
   getFirstCell,
   getFirstVisibleItem,
-  getRows,
-  getRowCells,
-  infiniteDataProvider,
-  scrollToEnd,
   getLastVisibleItem,
-  getPhysicalAverage
+  getPhysicalAverage,
+  getRowCells,
+  getRows,
+  infiniteDataProvider,
+  scrollToEnd
 } from './helpers.js';
-import '../vaadin-grid.js';
 
 registerStyles(
   'vaadin-grid',

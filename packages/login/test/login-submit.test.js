@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync, tabKeyUp } from '@vaadin/testing-helpers';
-import { fillUsernameAndPassword } from './helpers.js';
+import sinon from 'sinon';
 import '../vaadin-login-overlay.js';
 import '../vaadin-login-form.js';
+import { fillUsernameAndPassword } from './helpers.js';
 
 describe('login form submit', () => {
   let login, iframe;

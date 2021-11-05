@@ -1,4 +1,5 @@
 import {
+  Grid,
   GridActiveItemChangedEvent,
   GridCellActivateEvent,
   GridColumnReorderEvent,
@@ -6,7 +7,6 @@ import {
   GridDragStartEvent,
   GridDropEvent,
   GridDropLocation,
-  Grid,
   GridExpandedItemsChangedEvent,
   GridItemModel,
   GridLoadingChangedEvent,

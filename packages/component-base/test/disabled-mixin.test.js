@@ -1,7 +1,7 @@
-import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import sinon from 'sinon';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '../src/disabled-mixin.js';
 
 customElements.define(

@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
-import { getFirstItem, getViewportItems, selectItem } from './helpers.js';
+import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
+import { getFirstItem, getViewportItems, selectItem } from './helpers.js';
 
 describe('object values', () => {
   let comboBox, input;

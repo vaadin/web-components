@@ -1,7 +1,6 @@
-import { PolymerElement, html } from '@polymer/polymer';
-
 import '@vaadin/grid-pro';
 import '@vaadin/grid-pro/vaadin-grid-pro-edit-column';
+import { html, PolymerElement } from '@polymer/polymer';
 
 export class MockGridProHost extends PolymerElement {
   static get template() {

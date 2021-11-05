@@ -1,6 +1,5 @@
-import { PolymerElement, html } from '@polymer/polymer';
-
 import './mock-list.js';
+import { html, PolymerElement } from '@polymer/polymer';
 
 export class MockListHost extends PolymerElement {
   static get template() {

@@ -1,5 +1,4 @@
 import '../../vaadin-overlay.js';
-
 import { OverlayOpenedChangedEvent } from '../../vaadin-overlay.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

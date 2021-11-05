@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../vaadin-date-time-picker.js';
 
 class DateTimePicker2020Element extends customElements.get('vaadin-date-time-picker') {

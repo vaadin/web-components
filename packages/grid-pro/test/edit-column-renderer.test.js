@@ -1,8 +1,10 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { enter, esc, fixtureSync, focusout, space } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import '../vaadin-grid-pro.js';
+import '../vaadin-grid-pro-edit-column.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   createItems,
   dblclick,
@@ -11,8 +13,6 @@ import {
   getContainerCell,
   getContainerCellContent
 } from './helpers.js';
-import '../vaadin-grid-pro.js';
-import '../vaadin-grid-pro-edit-column.js';
 
 customElements.define(
   'user-editor',

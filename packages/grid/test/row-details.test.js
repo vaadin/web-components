@@ -1,9 +1,10 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { aTimeout, click, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
+import '../vaadin-grid.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   buildDataSet,
   flushGrid,
@@ -14,7 +15,6 @@ import {
   infiniteDataProvider,
   scrollToEnd
 } from './helpers.js';
-import '../vaadin-grid.js';
 
 class GridDetailsWrapper extends PolymerElement {
   static get template() {

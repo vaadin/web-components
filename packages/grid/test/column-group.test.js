@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { flushGrid, getContainerCell } from './helpers.js';
 
 describe('column group', () => {

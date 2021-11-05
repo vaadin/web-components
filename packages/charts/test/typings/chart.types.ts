@@ -1,5 +1,5 @@
-import { Axis, Chart as HighchartsChart, Point, Series } from 'highcharts';
 import '../../vaadin-chart.js';
+import { Axis, Chart as HighchartsChart, Point, Series } from 'highcharts';
 import {
   ChartAddSeriesEvent,
   ChartAfterExportEvent,
@@ -8,9 +8,17 @@ import {
   ChartBeforePrintEvent,
   ChartClickEvent,
   ChartDrilldownEvent,
-  ChartDrillupEvent,
   ChartDrillupallEvent,
+  ChartDrillupEvent,
   ChartLoadEvent,
+  ChartPointClickEvent,
+  ChartPointLegendItemClickEvent,
+  ChartPointMouseOutEvent,
+  ChartPointMouseOverEvent,
+  ChartPointRemoveEvent,
+  ChartPointSelectEvent,
+  ChartPointUnselectEvent,
+  ChartPointUpdateEvent,
   ChartRedrawEvent,
   ChartSelectionEvent,
   ChartSeriesAfterAnimateEvent,
@@ -21,14 +29,6 @@ import {
   ChartSeriesMouseOutEvent,
   ChartSeriesMouseOverEvent,
   ChartSeriesShowEvent,
-  ChartPointClickEvent,
-  ChartPointLegendItemClickEvent,
-  ChartPointMouseOutEvent,
-  ChartPointMouseOverEvent,
-  ChartPointRemoveEvent,
-  ChartPointSelectEvent,
-  ChartPointUnselectEvent,
-  ChartPointUpdateEvent,
   ChartXaxesExtremesSetEvent,
   ChartYaxesExtremesSetEvent
 } from '../../vaadin-chart.js';

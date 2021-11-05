@@ -1,5 +1,4 @@
 import '../../vaadin-notification.js';
-
 import { Notification, NotificationOpenedChangedEvent } from '../../vaadin-notification.js';
 
 const assertType = <TExpected>(value: TExpected) => value;

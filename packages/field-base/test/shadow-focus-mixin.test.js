@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { aTimeout, fixtureSync, focusin, focusout, keyboardEventFor, keyDownOn } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import sinon from 'sinon';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ShadowFocusMixin } from '../src/shadow-focus-mixin.js';
 
 customElements.define(

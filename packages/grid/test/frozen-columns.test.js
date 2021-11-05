@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import { flushGrid, getRows, getRowCells, infiniteDataProvider, isWithinParentConstraints, wheel } from './helpers.js';
 import '../vaadin-grid.js';
+import { flushGrid, getRowCells, getRows, infiniteDataProvider, isWithinParentConstraints, wheel } from './helpers.js';
 
 // Returns true if the element's computed transform style matches with the
 // computed transform style of a div element with the given transform applied

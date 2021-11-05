@@ -11,19 +11,12 @@ import { ScrollMixinClass } from '../../src/vaadin-grid-scroll-mixin';
 import { SelectionMixinClass } from '../../src/vaadin-grid-selection-mixin';
 import { SortMixinClass } from '../../src/vaadin-grid-sort-mixin';
 import { StylingMixinClass } from '../../src/vaadin-grid-styling-mixin';
-import { GridColumnGroup } from '../../vaadin-grid-column-group';
-import { GridFilterColumn } from '../../vaadin-grid-filter-column';
-import { GridFilter, GridFilterValueChangedEvent } from '../../vaadin-grid-filter.js';
-import { GridSelectionColumn, GridSelectionColumnSelectAllChangedEvent } from '../../vaadin-grid-selection-column.js';
-import { GridSortColumnDirectionChangedEvent, GridSortColumn } from '../../vaadin-grid-sort-column.js';
-import { GridSorterDirectionChangedEvent, GridSorter } from '../../vaadin-grid-sorter.js';
-import { GridTreeColumn } from '../../vaadin-grid-tree-column';
-import { GridTreeToggle, GridTreeToggleExpandedChangedEvent } from '../../vaadin-grid-tree-toggle.js';
 import {
   ColumnBaseMixinClass,
+  Grid,
   GridActiveItemChangedEvent,
-  GridCellActivateEvent,
   GridBodyRenderer,
+  GridCellActivateEvent,
   GridCellClassNameGenerator,
   GridCellFocusEvent,
   GridColumn,
@@ -36,7 +29,6 @@ import {
   GridDropEvent,
   GridDropLocation,
   GridDropMode,
-  Grid,
   GridEventContext,
   GridExpandedItemsChangedEvent,
   GridFilterDefinition,
@@ -47,6 +39,14 @@ import {
   GridSorterDefinition,
   GridSorterDirection
 } from '../../vaadin-grid.js';
+import { GridColumnGroup } from '../../vaadin-grid-column-group';
+import { GridFilter, GridFilterValueChangedEvent } from '../../vaadin-grid-filter.js';
+import { GridFilterColumn } from '../../vaadin-grid-filter-column';
+import { GridSelectionColumn, GridSelectionColumnSelectAllChangedEvent } from '../../vaadin-grid-selection-column.js';
+import { GridSortColumn, GridSortColumnDirectionChangedEvent } from '../../vaadin-grid-sort-column.js';
+import { GridSorter, GridSorterDirectionChangedEvent } from '../../vaadin-grid-sorter.js';
+import { GridTreeColumn } from '../../vaadin-grid-tree-column';
+import { GridTreeToggle, GridTreeToggleExpandedChangedEvent } from '../../vaadin-grid-tree-toggle.js';
 
 interface TestGridItem {
   testProperty: string;

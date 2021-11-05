@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { aTimeout, fixtureSync, isIOS, listenOnce, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import { flushGrid, getBodyCellContent } from './helpers.js';
 import '../src/vaadin-crud.js';
+import { flushGrid, getBodyCellContent } from './helpers.js';
 
 describe('crud', () => {
   let crud;

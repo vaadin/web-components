@@ -1,5 +1,4 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import {
   arrowDown,
   arrowUp,
@@ -11,14 +10,15 @@ import {
   nextRender,
   space
 } from '@vaadin/testing-helpers';
-import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
-import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
-import { Select } from '@vaadin/select/src/vaadin-select.js';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell, onceOpened } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
+import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
+import { Select } from '@vaadin/select/src/vaadin-select.js';
+import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
+import { createItems, dblclick, flushGrid, getCellEditor, getContainerCell, onceOpened } from './helpers.js';
 
 describe('edit column editor type', () => {
   describe('with representation template', () => {

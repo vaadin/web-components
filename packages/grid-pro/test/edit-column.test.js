@@ -1,8 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { enter, esc, fixtureSync, focusin, focusout, isIOS, tab } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import '../vaadin-grid-pro.js';
+import '../vaadin-grid-pro-edit-column.js';
 import {
   createItems,
   dblclick,
@@ -15,8 +16,6 @@ import {
   getRows,
   infiniteDataProvider
 } from './helpers.js';
-import '../vaadin-grid-pro.js';
-import '../vaadin-grid-pro-edit-column.js';
 
 describe('edit column', () => {
   (isIOS ? describe.skip : describe)('keyboard navigation', () => {

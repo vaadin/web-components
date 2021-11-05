@@ -1,5 +1,4 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import {
   fire,
   fixtureSync,
@@ -7,14 +6,15 @@ import {
   listenOnce,
   makeSoloTouchEvent,
   middleOfNode,
-  touchstart,
-  touchend
+  touchend,
+  touchstart
 } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { gestures } from '@polymer/polymer/lib/utils/gestures.js';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
+import { gestures } from '@polymer/polymer/lib/utils/gestures.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 class MenuTouchWrapper extends PolymerElement {
   static get template() {

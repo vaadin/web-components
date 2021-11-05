@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { down, fixtureSync, focusin, isFirefox, keyboardEventFor } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../vaadin-rich-text-editor.js';
 
 describe('accessibility', () => {

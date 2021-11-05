@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { dispatchChange } from './helpers.js';
+import sinon from 'sinon';
 import '../vaadin-date-time-picker.js';
+import { dispatchChange } from './helpers.js';
 
 const fixtures = {
   default: '<vaadin-date-time-picker></vaadin-date-time-picker>',

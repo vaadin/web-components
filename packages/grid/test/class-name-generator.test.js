@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { flushGrid, getContainerCell, getRows, infiniteDataProvider, scrollToEnd } from './helpers.js';
+import sinon from 'sinon';
 import '../vaadin-grid.js';
+import { flushGrid, getContainerCell, getRows, infiniteDataProvider, scrollToEnd } from './helpers.js';
 
 describe('class name generator', () => {
   let grid, firstCell, initialCellClasses;

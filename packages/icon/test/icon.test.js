@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { unsafeSvgLiteral } from '../src/vaadin-icon-svg.js';
+import sinon from 'sinon';
 import '../vaadin-icon.js';
+import { unsafeSvgLiteral } from '../src/vaadin-icon-svg.js';
 
 const ANGLE_DOWN = '<path d="M13 4v2l-5 5-5-5v-2l5 5z"></path>';
 const ANGLE_UP = '<path d="M3 12v-2l5-5 5 5v2l-5-5z"></path>';

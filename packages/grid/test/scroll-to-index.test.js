@@ -1,6 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import '../vaadin-grid.js';
+import '../vaadin-grid-tree-column.js';
 import {
   flushGrid,
   getFirstVisibleItem,
@@ -9,8 +11,6 @@ import {
   getPhysicalItems,
   infiniteDataProvider
 } from './helpers.js';
-import '../vaadin-grid.js';
-import '../vaadin-grid-tree-column.js';
 
 const fixtures = {
   small: `

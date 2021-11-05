@@ -1,13 +1,12 @@
 import { expect } from '@esm-bundle/chai';
+import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { fixtureSync, oneEvent, nextRender } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
-import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';
-import { chartDefaultTheme } from '../theme/vaadin-chart-default-theme.js';
-
 import '../vaadin-chart.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';
+import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { chartDefaultTheme } from '../theme/vaadin-chart-default-theme.js';
 
 const chart = css`
   /* Ensure exporting works with complex selectors */

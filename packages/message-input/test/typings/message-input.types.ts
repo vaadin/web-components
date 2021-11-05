@@ -1,5 +1,4 @@
 import '../../vaadin-message-input.js';
-
 import { MessageInputSubmitEvent } from '../../vaadin-message-input.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

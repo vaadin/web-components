@@ -1,5 +1,4 @@
 import '../../vaadin-rich-text-editor.js';
-
 import { RichTextEditorHtmlValueChangedEvent, RichTextEditorValueChangedEvent } from '../../vaadin-rich-text-editor.js';
 
 const customField = document.createElement('vaadin-rich-text-editor');

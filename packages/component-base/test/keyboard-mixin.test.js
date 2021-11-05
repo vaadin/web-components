@@ -1,8 +1,8 @@
-import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
-import { sendKeys } from '@web/test-runner-commands';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { sendKeys } from '@web/test-runner-commands';
+import sinon from 'sinon';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { KeyboardMixin } from '../src/keyboard-mixin.js';
 
 describe('keyboard-mixin', () => {

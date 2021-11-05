@@ -1,9 +1,8 @@
-import { PolymerElement, html } from '@polymer/polymer';
-
 import '@vaadin/grid';
 import '@vaadin/checkbox';
 import '@vaadin/grid/vaadin-grid-column';
 import '@vaadin/grid/vaadin-grid-tree-column';
+import { html, PolymerElement } from '@polymer/polymer';
 
 export class MockGridHost extends PolymerElement {
   static get template() {

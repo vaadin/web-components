@@ -1,5 +1,4 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import {
   arrowDown,
   arrowLeft,
@@ -11,12 +10,13 @@ import {
   isDesktopSafari as isSafari,
   isIOS,
   nextRender,
-  touchstart,
-  touchend
+  touchend,
+  touchstart
 } from '@vaadin/testing-helpers';
-import { onceOpened } from './helpers.js';
+import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-menu-bar.js';
+import { onceOpened } from './helpers.js';
 
 describe('sub-menu', () => {
   let menu, buttons, subMenu, item;

@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, click, fixtureSync, isIOS, makeSoloTouchEvent } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 class MenuWrapper extends PolymerElement {
   static get template() {

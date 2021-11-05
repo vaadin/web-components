@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
+import { fixtureSync, focusout, mousedown } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { fixtureSync, focusout, mousedown } from '@vaadin/testing-helpers';
 import '../src/vaadin-password-field.js';
 
 describe('password-field', () => {

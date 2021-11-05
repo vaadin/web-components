@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
+import { enter, fixtureSync, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { fixtureSync, enter, space } from '@vaadin/testing-helpers';
-
 import '../vaadin-drawer-toggle.js';
 
 describe('drawer-toggle', () => {

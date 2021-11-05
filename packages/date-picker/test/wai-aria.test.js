@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { aTimeout, fixtureSync, isIOS, nextFrame } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
+import '../src/vaadin-date-picker.js';
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
 import { activateScroller, getDefaultI18n, open } from './common.js';
-import '../src/vaadin-date-picker.js';
 
 describe('WAI-ARIA', () => {
   describe('date picker', () => {

@@ -1,5 +1,4 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import {
   arrowDownKeyDown,
   arrowLeftKeyDown,
@@ -14,6 +13,7 @@ import {
   nextRender,
   spaceKeyDown
 } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
 import './not-animated-styles.js';

@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { registerStyles, css, unsafeCSS } from '../register-styles.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, registerStyles, unsafeCSS } from '../register-styles.js';
 import { ThemableMixin } from '../vaadin-themable-mixin.js';
 
 let attachedInstances = [];

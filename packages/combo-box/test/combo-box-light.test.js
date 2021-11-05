@@ -1,24 +1,24 @@
 import { expect } from '@esm-bundle/chai';
-import { sendKeys } from '@web/test-runner-commands';
-import sinon from 'sinon';
 import {
   click,
   fixtureSync,
+  isDesktopSafari,
   isIOS,
   mousedown,
   mouseup,
+  nextFrame,
   touchend,
-  touchstart,
-  isDesktopSafari,
-  nextFrame
+  touchstart
 } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
+import { sendKeys } from '@web/test-runner-commands';
+import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import { createEventSpy, getFirstItem } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';
+import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { createEventSpy, getFirstItem } from './helpers.js';
 
 class MyInput extends PolymerElement {
   static get template() {

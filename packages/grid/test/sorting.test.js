@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import { buildDataSet, flushGrid, getBodyCellContent, getHeaderCellContent, getRows, getRowCells } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-sorter.js';
 import '../vaadin-grid-sort-column.js';
+import { buildDataSet, flushGrid, getBodyCellContent, getHeaderCellContent, getRowCells, getRows } from './helpers.js';
 
 describe('sorting', () => {
   describe('sorter', () => {

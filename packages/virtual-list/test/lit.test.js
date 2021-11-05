@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { html, render } from 'lit';
 import '../vaadin-virtual-list.js';
+import { html, render } from 'lit';
 
 describe('lit', () => {
   describe('renderer', () => {

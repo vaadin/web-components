@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { enter, fixtureSync, tap } from '@vaadin/testing-helpers';
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { fillUsernameAndPassword } from './helpers.js';
+import sinon from 'sinon';
 import '../vaadin-login-form.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { fillUsernameAndPassword } from './helpers.js';
 
 registerStyles(
   'vaadin-login-form-wrapper',

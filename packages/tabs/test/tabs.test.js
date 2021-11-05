@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { arrowRight, enter, fixtureSync, listenOnce, nextRender, space } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../vaadin-tabs.js';
 
 describe('tabs', () => {

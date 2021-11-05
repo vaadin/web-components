@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import '../vaadin-grid-pro.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import { flushGrid, infiniteDataProvider } from './helpers.js';
-import '../vaadin-grid-pro.js';
 
 describe('custom element definition', () => {
   let grid, tagName;

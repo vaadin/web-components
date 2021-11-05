@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { click, fixtureSync } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import { flushGrid, getContainerCell } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
+import { flushGrid, getContainerCell } from './helpers.js';
 
 describe('event context', () => {
   let grid, column, columnGroup;

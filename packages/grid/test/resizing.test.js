@@ -1,21 +1,21 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import '../vaadin-grid.js';
+import '../vaadin-grid-column-group.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   flushGrid,
   getContainerCellContent,
   getHeaderCellContent,
-  getRows,
+  getPhysicalItems,
   getRowCells,
+  getRows,
   infiniteDataProvider,
-  scrollToEnd,
   nextResize,
-  getPhysicalItems
+  scrollToEnd
 } from './helpers.js';
-import '../vaadin-grid.js';
-import '../vaadin-grid-column-group.js';
-import sinon from 'sinon';
 
 class TestComponent extends PolymerElement {
   static get template() {

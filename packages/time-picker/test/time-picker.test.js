@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
+import { arrowDown, arrowUp, enter, esc, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { arrowDown, arrowUp, enter, esc, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-time-picker.js';
 
 describe('time-picker', () => {
