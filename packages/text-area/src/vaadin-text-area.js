@@ -115,6 +115,11 @@ export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(Polymer
           align-self: flex-start;
         }
 
+        /* Workaround https://bugzilla.mozilla.org/show_bug.cgi?id=1739079 */
+        :host([disabled]) ::slotted(textarea) {
+          user-select: none;
+        }
+
         @keyframes vaadin-text-area-appear {
           to {
             opacity: 1;
