@@ -4,7 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
-import { GridDefaultItem, Grid, GridCustomEventMap } from '@vaadin/grid/src/vaadin-grid.js';
+import { Grid, GridCustomEventMap, GridDefaultItem } from '@vaadin/grid/src/vaadin-grid.js';
 import { InlineEditingMixinClass } from './vaadin-grid-pro-inline-editing-mixin.js';
 export { GridProEditorType } from './vaadin-grid-pro-edit-column.js';
 

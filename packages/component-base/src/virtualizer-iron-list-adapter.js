@@ -1,4 +1,4 @@
-import { timeOut, animationFrame } from '@vaadin/component-base/src/async.js';
+import { animationFrame, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer, flush } from '@vaadin/component-base/src/debounce.js';
 import { ironList } from './iron-list-core.js';
 

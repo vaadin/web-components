@@ -4,7 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { deepMerge, Chart } from './vaadin-chart.js';
+import { Chart, deepMerge } from './vaadin-chart.js';
 
 /**
  * `<vaadin-chart-series>` is a custom element for creating series for Vaadin Charts.

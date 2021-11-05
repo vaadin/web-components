@@ -3,13 +3,13 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import './vaadin-menu-bar-submenu.js';
+import './vaadin-menu-bar-button.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
 import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
-import './vaadin-menu-bar-submenu.js';
-import './vaadin-menu-bar-button.js';
 
 /**
  * `<vaadin-menu-bar>` is a Web Component providing a set of horizontally stacked buttons offering

@@ -1,6 +1,6 @@
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { Templatizer } from './template-renderer-templatizer.js';
 import { GridTemplatizer } from './template-renderer-grid-templatizer.js';
+import { Templatizer } from './template-renderer-templatizer.js';
 
 function createRenderer(component, template, TemplatizerClass = Templatizer) {
   const templatizer = TemplatizerClass.create(component, template);

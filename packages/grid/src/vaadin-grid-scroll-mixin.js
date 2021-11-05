@@ -3,8 +3,8 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { animationFrame, microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { animationFrame, timeOut, microTask } from '@vaadin/component-base/src/async.js';
 
 const timeouts = {
   SCROLLING: 500

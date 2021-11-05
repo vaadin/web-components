@@ -3,14 +3,14 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-upload-icons.js';
 import './vaadin-upload-file.js';
+import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * `<vaadin-upload>` is a Web Component for uploading multiple files with drag and drop support.

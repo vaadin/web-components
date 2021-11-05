@@ -3,20 +3,20 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { timeOut } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '@vaadin/avatar/src/vaadin-avatar.js';
 import '@vaadin/item/src/vaadin-item.js';
 import './vaadin-avatar-group-list-box.js';
 import './vaadin-avatar-group-overlay.js';
+import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
+import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
+import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
+import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { timeOut } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const MINIMUM_DISPLAYED_AVATARS = 2;
 

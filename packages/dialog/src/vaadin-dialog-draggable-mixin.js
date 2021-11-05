@@ -1,4 +1,4 @@
-import { getMouseOrFirstTouchEvent, eventInWindow } from './vaadin-dialog-utils.js';
+import { eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
 
 const TOUCH_DEVICE = (() => {
   try {

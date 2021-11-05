@@ -3,8 +3,10 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import './vaadin-grid-column.js';
+import './vaadin-grid-styles.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
@@ -12,21 +14,19 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
 import { ActiveItemMixin } from './vaadin-grid-active-item-mixin.js';
 import { ArrayDataProviderMixin } from './vaadin-grid-array-data-provider-mixin.js';
+import { ColumnReorderingMixin } from './vaadin-grid-column-reordering-mixin.js';
 import { ColumnResizingMixin } from './vaadin-grid-column-resizing-mixin.js';
 import { DataProviderMixin } from './vaadin-grid-data-provider-mixin.js';
+import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
 import { DynamicColumnsMixin } from './vaadin-grid-dynamic-columns-mixin.js';
 import { EventContextMixin } from './vaadin-grid-event-context-mixin.js';
 import { FilterMixin } from './vaadin-grid-filter-mixin.js';
+import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
 import { RowDetailsMixin } from './vaadin-grid-row-details-mixin.js';
 import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
 import { SelectionMixin } from './vaadin-grid-selection-mixin.js';
 import { SortMixin } from './vaadin-grid-sort-mixin.js';
 import { StylingMixin } from './vaadin-grid-styling-mixin.js';
-import { DragAndDropMixin } from './vaadin-grid-drag-and-drop-mixin.js';
-import { KeyboardNavigationMixin } from './vaadin-grid-keyboard-navigation-mixin.js';
-import { ColumnReorderingMixin } from './vaadin-grid-column-reordering-mixin.js';
-import './vaadin-grid-column.js';
-import './vaadin-grid-styles.js';
 
 const TOUCH_DEVICE = (() => {
   try {

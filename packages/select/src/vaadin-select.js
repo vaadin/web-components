@@ -3,8 +3,11 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/iron-media-query/iron-media-query.js';
+import '@vaadin/input-container/src/vaadin-input-container.js';
+import './vaadin-select-overlay.js';
+import './vaadin-select-value-button.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -12,11 +15,8 @@ import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
 import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import '@vaadin/input-container/src/vaadin-input-container.js';
-import './vaadin-select-overlay.js';
-import './vaadin-select-value-button.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 'vaadin-select-styles' });
 
