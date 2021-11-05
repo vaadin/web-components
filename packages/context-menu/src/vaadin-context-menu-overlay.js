@@ -107,25 +107,29 @@ class ContextMenuOverlay extends PositionMixin(OverlayElement) {
   }
 
   _updatePosition() {
-    this.style.transform = '';
     super._updatePosition();
 
-    const isFullScreen = this.offsetWidth === window.innerWidth;
-    if (!isFullScreen && this.positionTarget && this.parentOverlay) {
+    if (this.positionTarget && this.parentOverlay) {
       // This overlay is positioned by a parent menu item,
       // adjust the position by the overlay content paddings
       const content = this.$.content;
       const style = getComputedStyle(content);
 
-      const offsetY = this.hasAttribute('bottom-aligned')
-        ? parseFloat(style.paddingBottom)
-        : -parseFloat(style.paddingTop);
+      // Horizontal adjustment
+      const isLeftAligned = !!this.style.left;
+      if (isLeftAligned) {
+        this.style.left = parseFloat(this.style.left) + parseFloat(style.paddingLeft) + 'px';
+      } else {
+        this.style.right = parseFloat(this.style.right) + parseFloat(style.paddingRight) + 'px';
+      }
 
-      const isLeftAligned =
-        (this.hasAttribute('start-aligned') && !this.__isRTL) || (this.hasAttribute('end-aligned') && this.__isRTL);
-      const offsetX = isLeftAligned ? parseFloat(style.paddingLeft) : -parseFloat(style.paddingRight);
-
-      this.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+      // Vertical adjustment
+      const isBottomAligned = !!this.style.bottom;
+      if (isBottomAligned) {
+        this.style.bottom = parseFloat(this.style.bottom) - parseFloat(style.paddingBottom) + 'px';
+      } else {
+        this.style.top = parseFloat(this.style.top) - parseFloat(style.paddingTop) + 'px';
+      }
     }
   }
 }
