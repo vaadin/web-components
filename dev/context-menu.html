@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Context Menu</title>
+
+    <script type="module">
+      import '@vaadin/context-menu';
+
+      const menu = document.querySelector('vaadin-context-menu');
+      menu.items = [
+        { text: 'Menu Item 1' },
+        { component: 'hr' },
+        {
+          text: 'Menu Item 2',
+          children: [
+            { text: 'Menu Item 2-1' },
+            {
+              text: 'Menu Item 2-2',
+              children: [
+                { text: 'Menu Item 2-2-1' },
+                { text: 'Menu Item 2-2-2', disabled: true },
+                { component: 'hr' },
+                { text: 'Menu Item 2-2-3' }
+              ]
+            }
+          ]
+        },
+        { text: 'Menu Item 3', disabled: true }
+      ];
+    </script>
+  </head>
+
+  <body>
+    <vaadin-context-menu>
+      <div style="padding: 10px">Right click me</div>
+    </vaadin-context-menu>
+  </body>
+</html>
