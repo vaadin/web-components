@@ -15,19 +15,23 @@ const select = css`
     text-align: start;
   }
 
+  [part='input-field'] {
+    cursor: var(--lumo-clickable-cursor);
+  }
+
   [part='input-field'] ::slotted([slot='value']) {
     font-weight: 500;
   }
 
+  [part='input-field'] ::slotted([slot='value']:not([placeholder])) {
+    color: var(--lumo-body-text-color);
+  }
+
   /* placeholder styles */
-  :host [part='input-field'] ::slotted([slot='value'][placeholder]) {
+  [part='input-field'] ::slotted([slot='value'][placeholder]) {
     color: inherit;
     transition: opacity 0.175s 0.1s;
     opacity: 0.5;
-  }
-
-  :host [part='input-field'] ::slotted([slot='value']) {
-    color: var(--lumo-body-text-color);
   }
 
   [part='toggle-button']::before {
