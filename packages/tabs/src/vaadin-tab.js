@@ -51,13 +51,16 @@ class Tab extends ElementMixin(ThemableMixin(ItemMixin(PolymerElement))) {
   }
 
   /**
+   * Override an event listener from `KeyboardMixin`
+   * to handle clicking anchors inside the tabs.
    * @param {!KeyboardEvent} event
    * @protected
+   * @override
    */
-  _onKeyup(event) {
+  _onKeyUp(event) {
     const willClick = this.hasAttribute('active');
 
-    super._onKeyup(event);
+    super._onKeyUp(event);
 
     if (willClick) {
       const anchor = this.querySelector('a');

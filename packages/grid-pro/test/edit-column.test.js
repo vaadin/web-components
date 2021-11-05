@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { enter, esc, fixtureSync, focusin, focusout, isIOS, tab } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import {
   createItems,
@@ -320,7 +321,7 @@ describe('edit column', () => {
   });
 
   (isIOS ? describe.skip : describe)('select column', () => {
-    let grid, input, textCell, selectCell, selectOverlay, checkboxCell;
+    let grid, textCell, selectCell, checkboxCell;
 
     beforeEach(() => {
       grid = fixtureSync(`
@@ -339,32 +340,34 @@ describe('edit column', () => {
       checkboxCell = getContainerCell(grid.$.items, 1, 2);
     });
 
-    it('should focus cell next available for editing in edit mode on Tab', (done) => {
+    it('should focus cell next available for editing in edit mode on Tab', async () => {
       dblclick(textCell._content);
-      input = getCellEditor(textCell);
-      tab(input);
+      expect(getCellEditor(textCell)).to.be.ok;
 
-      selectOverlay = getCellEditor(selectCell)._overlayElement;
-      selectOverlay.addEventListener('vaadin-overlay-open', () => {
-        tab(selectOverlay);
-        input = getCellEditor(checkboxCell);
-        expect(input).to.be.ok;
-        done();
-      });
+      // Press Tab to edit the select cell
+      await sendKeys({ press: 'Tab' });
+      expect(getCellEditor(selectCell)).to.be.ok;
+
+      // Press Tab to edit the checkbox cell
+      await sendKeys({ press: 'Tab' });
+      expect(getCellEditor(checkboxCell)).to.be.ok;
     });
 
-    it('should focus previous cell available for editing in edit mode on Shift Tab', (done) => {
+    it('should focus previous cell available for editing in edit mode on Shift Tab', async () => {
       dblclick(checkboxCell._content);
-      input = getCellEditor(checkboxCell);
-      tab(input, ['shift']);
+      expect(getCellEditor(checkboxCell)).to.be.ok;
 
-      selectOverlay = getCellEditor(selectCell)._overlayElement;
-      selectOverlay.addEventListener('vaadin-overlay-open', () => {
-        tab(selectOverlay, ['shift']);
-        input = getCellEditor(textCell);
-        expect(input).to.be.ok;
-        done();
-      });
+      // Press Shift + Tab to edit the select cell
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      expect(getCellEditor(selectCell)).to.be.ok;
+
+      // Press Shift + Tab to edit the text cell
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      expect(getCellEditor(textCell)).to.be.ok;
     });
   });
 

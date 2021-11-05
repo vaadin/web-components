@@ -1,6 +1,17 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { enter, fire, fixtureSync, spaceKeyDown, spaceKeyUp, space } from '@vaadin/testing-helpers';
+import {
+  enterKeyDown,
+  fixtureSync,
+  focusin,
+  focusout,
+  mousedown,
+  mouseup,
+  spaceKeyDown,
+  spaceKeyUp,
+  space,
+  tabKeyDown
+} from '@vaadin/testing-helpers';
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import { ItemMixin } from '../src/vaadin-item-mixin.js';
 
@@ -70,30 +81,45 @@ describe('vaadin-item-mixin', () => {
         expect(item.hasAttribute('focused')).to.be.false;
       });
 
-      it('should have focused attribute when focused', () => {
-        fire(item, 'focus');
+      it('should have focused attribute on focusin', () => {
+        focusin(item);
         expect(item.hasAttribute('focused')).to.be.true;
       });
 
-      it('should not have focused attribute when blurred', () => {
-        fire(item, 'focus');
-        fire(item, 'blur');
+      it('should not have focused attribute on focusout', () => {
+        focusin(item);
+        focusout(item);
+        expect(item.hasAttribute('focused')).to.be.false;
+      });
+
+      it('should set focused attribute on programmatic focus', () => {
+        item.focus();
+        expect(item.hasAttribute('focused')).to.be.true;
+      });
+
+      it('should not set focused on programmatic focus when disabled', () => {
+        item.disabled = true;
+        item.focus();
         expect(item.hasAttribute('focused')).to.be.false;
       });
     });
 
     describe('active', () => {
-      it('should have active attribute on mousedown', () => {
-        fire(item, 'mousedown');
+      it('should set active attribute on mousedown', () => {
+        mousedown(item);
         expect(item.hasAttribute('active')).to.be.true;
-        expect(item._mousedown).to.be.true;
       });
 
-      it('should not have active attribute after mouseup', () => {
-        fire(item, 'mousedown');
-        fire(item, 'mouseup');
+      it('should remove active attribute on mouseup', () => {
+        mousedown(item);
+        mouseup(item);
         expect(item.hasAttribute('active')).to.be.false;
-        expect(item._mousedown).to.be.false;
+      });
+
+      it('should not set active attribute on mousedown when disabled', () => {
+        item.disabled = true;
+        mousedown(item);
+        expect(item.hasAttribute('active')).to.be.false;
       });
 
       it('should have active attribute on space down', () => {
@@ -125,37 +151,45 @@ describe('vaadin-item-mixin', () => {
       });
 
       it('should have focus-ring attribute when focused with keyboard', () => {
-        fire(item, 'focus');
+        tabKeyDown(item);
+        focusin(item);
         expect(item.hasAttribute('focus-ring')).to.be.true;
       });
 
-      it('should not have focus-ring after blur', () => {
-        fire(item, 'focus');
-        fire(item, 'blur');
+      it('should not have focus-ring after focusout', () => {
+        tabKeyDown(item);
+        focusin(item);
+        focusout(item);
+        expect(item.hasAttribute('focus-ring')).to.be.false;
+      });
+
+      it('should set focus-ring on programmatic focus after keydown', () => {
+        tabKeyDown(item);
+        item.focus();
+        expect(item.hasAttribute('focus-ring')).to.be.true;
+      });
+
+      it('should not set focus-ring on programmatic focus after mousedown', () => {
+        tabKeyDown(item);
+        mousedown(item);
+        item.focus();
         expect(item.hasAttribute('focus-ring')).to.be.false;
       });
     });
 
-    describe('interaction', () => {
-      it('set this._mousedown to false if mouseup was outside', () => {
-        fire(item, 'mousedown');
-        expect(item._mousedown).to.be.true;
-        fire(document, 'mouseup');
-        expect(item._mousedown).to.be.false;
-      });
-
-      it('should fire click event when activated with Enter', () => {
+    describe('click', () => {
+      it('should fire click event on Enter keydown', () => {
         const clickSpy = sinon.spy();
         item.addEventListener('click', clickSpy);
-        enter(item);
+        enterKeyDown(item);
         expect(clickSpy.calledOnce).to.be.true;
       });
 
-      it('should not fire click event if keyup does not happen after a keydown in the element', () => {
+      it('should fire click event on Space keydown', () => {
         const clickSpy = sinon.spy();
         item.addEventListener('click', clickSpy);
-        spaceKeyUp(item);
-        expect(clickSpy.called).to.be.false;
+        spaceKeyDown(item);
+        expect(clickSpy.calledOnce).to.be.true;
       });
     });
 
@@ -202,6 +236,16 @@ describe('vaadin-item-mixin', () => {
       });
       spaceKeyDown(button);
       expect(item.hasAttribute('active')).to.be.false;
+    });
+
+    it('should not call click method if keydown was prevented', () => {
+      const button = item.querySelector('button');
+      button.addEventListener('keydown', (e) => {
+        e.preventDefault();
+      });
+      const spy = sinon.spy(item, 'click');
+      spaceKeyDown(button);
+      expect(spy.called).to.be.false;
     });
   });
 });

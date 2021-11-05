@@ -3,6 +3,8 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 
 /**
  * A mixin providing `focused`, `focus-ring`, `active`, `disabled` and `selected`.
@@ -11,7 +13,7 @@
  * @polymerMixin
  */
 export const ItemMixin = (superClass) =>
-  class VaadinItemMixin extends superClass {
+  class VaadinItemMixin extends ActiveMixin(FocusMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -22,17 +24,6 @@ export const ItemMixin = (superClass) =>
          */
         _hasVaadinItemMixin: {
           value: true
-        },
-
-        /**
-         * If true, the user cannot interact with this element.
-         * @type {boolean}
-         */
-        disabled: {
-          type: Boolean,
-          value: false,
-          observer: '_disabledChanged',
-          reflectToAttribute: true
         },
 
         /**
@@ -49,6 +40,18 @@ export const ItemMixin = (superClass) =>
         /** @private */
         _value: String
       };
+    }
+
+    /**
+     * By default, `Space` is the only possible activation key for a focusable HTML element.
+     * Nonetheless, the item is an exception as it can be also activated by pressing `Enter`.
+     * See the "Keyboard Support" section in https://www.w3.org/TR/wai-aria-practices/examples/menubar/menubar-1/menubar-1.html.
+     *
+     * @protected
+     * @override
+     */
+    get _activeKeys() {
+      return ['Enter', ' '];
     }
 
     /**
@@ -73,31 +76,30 @@ export const ItemMixin = (superClass) =>
       if (attrValue !== null) {
         this.value = attrValue;
       }
-
-      this.addEventListener('focus', () => this._setFocused(true), true);
-      this.addEventListener('blur', () => this._setFocused(false), true);
-      this.addEventListener('mousedown', () => {
-        this._setActive((this._mousedown = true));
-        const mouseUpListener = () => {
-          this._setActive((this._mousedown = false));
-          document.removeEventListener('mouseup', mouseUpListener);
-        };
-        document.addEventListener('mouseup', mouseUpListener);
-      });
-      this.addEventListener('keydown', (e) => this._onKeydown(e));
-      this.addEventListener('keyup', (e) => this._onKeyup(e));
     }
 
-    /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-
-      // in Firefox and Safari, blur does not fire on the element when it is removed,
-      // especially between keydown and keyup events, being active at the same time.
-      // reproducible in `<vaadin-select>` when closing overlay on select.
-      if (this.hasAttribute('active')) {
-        this._setFocused(false);
+    /**
+     * Override native `focus` to set focused attribute
+     * when focusing the item programmatically.
+     * @protected
+     * @override
+     */
+    focus() {
+      if (this.disabled) {
+        return;
       }
+
+      super.focus();
+      this._setFocused(true);
+    }
+
+    /**
+     * @param {KeyboardEvent | MouseEvent} _event
+     * @protected
+     * @override
+     */
+    _shouldSetActive(event) {
+      return !this.disabled && !(event.type === 'keydown' && event.defaultPrevented);
     }
 
     /** @private */
@@ -105,64 +107,40 @@ export const ItemMixin = (superClass) =>
       this.setAttribute('aria-selected', selected);
     }
 
-    /** @private */
+    /**
+     * Override an observer from `DisabledMixin`.
+     * @protected
+     * @override
+     */
     _disabledChanged(disabled) {
+      super._disabledChanged(disabled);
+
       if (disabled) {
         this.selected = false;
-        this.setAttribute('aria-disabled', 'true');
         this.blur();
-      } else {
-        this.removeAttribute('aria-disabled');
       }
     }
 
     /**
-     * @param {boolean} focused
+     * In order to be fully accessible from the keyboard, the item should
+     * manually fire the `click` event once an activation key is pressed.
+     *
+     * According to the UI Events specifications,
+     * the `click` event should be fired exactly on `keydown`:
+     * https://www.w3.org/TR/uievents/#event-type-keydown
+     *
+     * @param {KeyboardEvent} event
      * @protected
+     * @override
      */
-    _setFocused(focused) {
-      if (focused) {
-        this.setAttribute('focused', '');
-        if (!this._mousedown) {
-          this.setAttribute('focus-ring', '');
-        }
-      } else {
-        this.removeAttribute('focused');
-        this.removeAttribute('focus-ring');
-        this._setActive(false);
-      }
-    }
+    _onKeyDown(event) {
+      super._onKeyDown(event);
 
-    /**
-     * @param {boolean} active
-     * @protected
-     */
-    _setActive(active) {
-      if (active) {
-        this.setAttribute('active', '');
-      } else {
-        this.removeAttribute('active');
-      }
-    }
-
-    /**
-     * @param {!KeyboardEvent} event
-     * @protected
-     */
-    _onKeydown(event) {
-      if (/^( |SpaceBar|Enter)$/.test(event.key) && !event.defaultPrevented) {
+      if (this._activeKeys.includes(event.key) && !event.defaultPrevented) {
         event.preventDefault();
-        this._setActive(true);
-      }
-    }
 
-    /**
-     * @param {!KeyboardEvent} event
-     * @protected
-     */
-    _onKeyup() {
-      if (this.hasAttribute('active')) {
-        this._setActive(false);
+        // `DisabledMixin` overrides the standard `click()` method
+        // so that it doesn't fire the `click` event when the element is disabled.
         this.click();
       }
     }

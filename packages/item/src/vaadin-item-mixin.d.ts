@@ -4,13 +4,22 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
+import { ActiveMixinClass } from '@vaadin/component-base/src/active-mixin.js';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 
 /**
  * A mixin providing `focused`, `focus-ring`, `active`, `disabled` and `selected`.
  *
  * `focused`, `active` and `focus-ring` are set as only as attributes.
  */
-export declare function ItemMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ItemMixinClass>;
+export declare function ItemMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T &
+  Constructor<ItemMixinClass> &
+  Constructor<ActiveMixinClass> &
+  Constructor<DisabledMixinClass> &
+  Constructor<FocusMixinClass>;
 
 export declare class ItemMixinClass {
   value: string;
@@ -23,20 +32,7 @@ export declare class ItemMixinClass {
   protected _hasVaadinItemMixin: boolean;
 
   /**
-   * If true, the user cannot interact with this element.
-   */
-  disabled: boolean;
-
-  /**
    * If true, the item is in selected state.
    */
   selected: boolean;
-
-  protected _setFocused(focused: boolean): void;
-
-  protected _setActive(active: boolean): void;
-
-  protected _onKeydown(event: KeyboardEvent): void;
-
-  protected _onKeyup(event: KeyboardEvent): void;
 }
