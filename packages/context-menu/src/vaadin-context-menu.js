@@ -554,7 +554,11 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
     const overlay = this.$.overlay;
 
     if (overlay.positionTarget) {
-      // overlay-position-mixin is used
+      // The overlay is positioned relative to another node, for example, a
+      // menu item in a nested submenu structure where this overlay lists
+      // the items for another submenu.
+      // It means that the overlay positioning is controlled by
+      // vaadin-overlay-position-mixin so no manual alignment is needed.
       return;
     }
 
@@ -567,7 +571,9 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
     // Maximum x and y values are imposed by content size and overlay limits.
     const { xMax, xMin, yMax } = overlay.getBoundaries();
     // Reuse saved x and y event values, in order to this method be used async
-    // in the `vaadin-overlay-change` which guarantees that overlay is ready
+    // in the `vaadin-overlay-change` which guarantees that overlay is ready.
+    // The valus represent an anchor position on the page where the contextmenu
+    // event took place.
     let x = this.__x;
     const y = this.__y;
 
@@ -578,19 +584,19 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
 
     if (!this.__isRTL) {
       if (x < wdthVport / 2 || x < xMax) {
-        // Sub-menu is displayed in the right side of root menu
+        // Menu is displayed in the right side of the anchor
         style.left = x + 'px';
       } else {
-        // Sub-menu is displayed in the left side of root menu
+        // Menu is displayed in the left side of the anchor
         style.right = Math.max(0, wdthVport - x) + 'px';
         this._setEndAligned(overlay);
       }
     } else {
-      // Sub-menu is displayed in the left side of root menu
+      // Menu is displayed in the left side of the anchor
       if (x > wdthVport / 2 || x > xMin) {
         style.right = Math.max(0, wdthVport - x) + 'px';
       } else {
-        // Sub-menu is displayed in the left side of root menu
+        // Menu is displayed in the left side of the anchor
         style.left = x + 'px';
         this._setEndAligned(overlay);
       }
