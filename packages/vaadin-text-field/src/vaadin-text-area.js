@@ -107,6 +107,11 @@ class TextAreaElement extends ElementMixin(TextFieldMixin(ControlStateMixin(Them
         :host {
           animation: 1ms vaadin-text-area-appear;
         }
+
+        /* Workaround https://bugzilla.mozilla.org/show_bug.cgi?id=1739079 */
+        :host([disabled]) [part='value'] {
+          user-select: none;
+        }
       </style>
 
       <div class="vaadin-text-area-container">
