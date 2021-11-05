@@ -1,8 +1,7 @@
-import sinon from 'sinon';
-import { fixtureSync } from '@vaadin/testing-helpers';
 import { expect } from '@esm-bundle/chai';
+import { fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-
 import { processTemplates } from '../src/templates.js';
 
 class ComponentElement extends PolymerElement {

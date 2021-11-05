@@ -1,7 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import '../vaadin-grid.js';
 import {
   flushGrid,
   getBodyCellContent,
@@ -15,7 +16,6 @@ import {
   scrollGrid,
   scrollToEnd
 } from './helpers.js';
-import '../vaadin-grid.js';
 
 describe('basic features', () => {
   let grid;

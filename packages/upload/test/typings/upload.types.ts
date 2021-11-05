@@ -1,10 +1,9 @@
 import '../../vaadin-upload.js';
-
 import {
-  UploadFile,
   UploadAbortEvent,
   UploadBeforeEvent,
   UploadErrorEvent,
+  UploadFile,
   UploadFileRejectEvent,
   UploadFilesChangedEvent,
   UploadMaxFilesReachedChangedEvent,

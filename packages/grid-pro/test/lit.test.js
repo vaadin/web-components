@@ -1,9 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { enter, fixtureSync } from '@vaadin/testing-helpers';
-import { html, render } from 'lit';
-
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
+import { html, render } from 'lit';
 import { flushGrid } from './helpers.js';
 
 describe('lit', () => {

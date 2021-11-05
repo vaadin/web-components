@@ -1,4 +1,4 @@
-import { registerStyles, css } from '../../register-styles.js';
+import { css, registerStyles } from '../../register-styles.js';
 
 registerStyles(
   'vaadin-grid',

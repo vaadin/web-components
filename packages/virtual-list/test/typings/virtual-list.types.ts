@@ -1,5 +1,4 @@
 import '../../vaadin-virtual-list.js';
-
 import { VirtualList, VirtualListItemModel, VirtualListRenderer } from '../../vaadin-virtual-list.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

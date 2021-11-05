@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
-import { getFirstItem } from './helpers.js';
 import './fixtures/mock-combo-box-template-wrapper.js';
 import './fixtures/mock-combo-box-light-template-wrapper.js';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { getFirstItem } from './helpers.js';
 
 describe('item template', () => {
   let wrapper, comboBox, firstItem;

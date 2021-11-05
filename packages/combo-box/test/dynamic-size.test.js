@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { flushComboBox, getViewportItems, scrollToIndex } from './helpers.js';
 import '../src/vaadin-combo-box.js';
+import { flushComboBox, getViewportItems, scrollToIndex } from './helpers.js';
 
 describe('dynamic size change', () => {
   describe('reduce size once scrolled to end', () => {

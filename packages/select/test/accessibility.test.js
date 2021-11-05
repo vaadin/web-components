@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { html, render } from 'lit';
 import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
 import './not-animated-styles.js';
 import '../vaadin-select.js';
+import { html, render } from 'lit';
 
 describe('accessibility', () => {
   let select, valueButton;

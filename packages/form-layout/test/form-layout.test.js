@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import sinon from 'sinon';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '../vaadin-form-layout.js';
 import '../vaadin-form-item.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 customElements.define(
   'mutable-layout',

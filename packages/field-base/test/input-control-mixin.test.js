@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
+import { escKeyDown, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { fixtureSync, escKeyDown } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { InputController } from '../src/input-controller.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
+import { InputController } from '../src/input-controller.js';
 
 customElements.define(
   'input-control-mixin-element',

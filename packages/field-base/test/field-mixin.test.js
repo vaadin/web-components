@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import sinon from 'sinon';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FieldMixin } from '../src/field-mixin.js';
-import { InputMixin } from '../src/input-mixin.js';
 import { InputController } from '../src/input-controller.js';
+import { InputMixin } from '../src/input-mixin.js';
 
 customElements.define(
   'field-mixin-element',

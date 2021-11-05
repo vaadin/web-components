@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import { flushGrid, getCellContent, getRows, getRowCells, getBodyCellContent } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-filter.js';
 import '../vaadin-grid-sorter.js';
+import { flushGrid, getBodyCellContent, getCellContent, getRowCells, getRows } from './helpers.js';
 
 describe('array data provider', () => {
   let grid, body;

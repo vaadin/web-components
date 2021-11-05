@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { getAllItems, onceOpened } from './helpers.js';
+import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { getAllItems, onceOpened } from './helpers.js';
 
 describe('filtering items', () => {
   let comboBox, overlay;

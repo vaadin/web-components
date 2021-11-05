@@ -1,11 +1,11 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
-import { visualDiff } from '@web/test-runner-visual-regression';
 import { sendKeys } from '@web/test-runner-commands';
-import { getContainerCell } from '../../helpers.js';
-import { users } from '../users.js';
+import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-grid-pro.js';
 import '../../../theme/material/vaadin-grid-pro-edit-column.js';
 import '../../not-animated-styles.js';
+import { getContainerCell } from '../../helpers.js';
+import { users } from '../users.js';
 
 describe('grid-pro', () => {
   let div, element;

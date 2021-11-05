@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
+import { aTimeout, fixtureSync, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { fixtureSync, aTimeout, tabKeyDown } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '../src/vaadin-custom-field.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 class XWrapper extends PolymerElement {
   static get template() {

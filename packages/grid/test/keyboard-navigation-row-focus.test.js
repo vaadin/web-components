@@ -3,12 +3,12 @@ import {
   down as mouseDown,
   fixtureSync,
   keyDownOn,
-  nextRender,
   listenOnce,
+  nextRender,
   up as mouseUp
 } from '@vaadin/testing-helpers';
-import { getCellContent } from './helpers.js';
 import '../src/all-imports.js';
+import { getCellContent } from './helpers.js';
 
 let grid, header, footer, body;
 

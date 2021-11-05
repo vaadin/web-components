@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '../vaadin-overlay.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
   'overlay-local-styles',

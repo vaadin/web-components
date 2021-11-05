@@ -3,22 +3,22 @@ import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import { ComboBoxDataProviderMixinClass } from '../../src/vaadin-combo-box-data-provider-mixin';
 import { ComboBoxMixinClass } from '../../src/vaadin-combo-box-mixin';
 import {
+  ComboBox,
+  ComboBoxCustomValueSetEvent,
   ComboBoxFilterChangedEvent,
   ComboBoxInvalidChangedEvent,
   ComboBoxOpenedChangedEvent,
-  ComboBoxValueChangedEvent,
-  ComboBoxCustomValueSetEvent,
   ComboBoxSelectedItemChangedEvent,
-  ComboBox
+  ComboBoxValueChangedEvent
 } from '../../vaadin-combo-box';
 import {
+  ComboBoxLight,
+  ComboBoxLightCustomValueSetEvent,
   ComboBoxLightFilterChangedEvent,
   ComboBoxLightInvalidChangedEvent,
   ComboBoxLightOpenedChangedEvent,
-  ComboBoxLightValueChangedEvent,
-  ComboBoxLightCustomValueSetEvent,
   ComboBoxLightSelectedItemChangedEvent,
-  ComboBoxLight
+  ComboBoxLightValueChangedEvent
 } from '../../vaadin-combo-box-light';
 
 interface TestComboBoxItem {

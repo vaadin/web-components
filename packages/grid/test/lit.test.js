@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
-import { render, html } from 'lit';
 import '../vaadin-grid.js';
+import { html, render } from 'lit';
 import { getPhysicalItems } from './helpers.js';
 
 describe('lit', () => {

@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
+import '../vaadin-upload.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { createFile, createFiles, xhrCreator } from './common.js';
-import '../vaadin-upload.js';
 
 describe('upload', () => {
   let upload, file;

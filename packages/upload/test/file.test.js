@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { createFile } from './common.js';
 import '../vaadin-upload.js';
+import { createFile } from './common.js';
 
 describe('<vaadin-upload-file> element', () => {
   let fileElement, fileObject;

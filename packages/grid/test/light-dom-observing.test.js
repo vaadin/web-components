@@ -1,22 +1,22 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@polymer/polymer/lib/elements/dom-bind.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
+import '../vaadin-grid.js';
+import '../vaadin-grid-column-group.js';
+import '../vaadin-grid-selection-column.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import {
   flushGrid,
   getCellContent,
   getHeaderCellContent,
-  getRows,
   getRowCells,
+  getRows,
   infiniteDataProvider,
   scrollToEnd
 } from './helpers.js';
-import '../vaadin-grid.js';
-import '../vaadin-grid-column-group.js';
-import '../vaadin-grid-selection-column.js';
 
 class XBooleanToggle extends PolymerElement {
   static get template() {

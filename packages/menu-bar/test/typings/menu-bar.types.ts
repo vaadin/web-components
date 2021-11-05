@@ -1,5 +1,4 @@
 import '../../vaadin-menu-bar';
-
 import { MenuBarItem, MenuBarItemSelectedEvent } from '../../vaadin-menu-bar';
 
 const menu = document.createElement('vaadin-menu-bar');

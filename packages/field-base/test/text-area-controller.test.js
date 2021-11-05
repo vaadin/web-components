@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { TextAreaController } from '../src/text-area-controller.js';
 import { InputMixin } from '../src/input-mixin.js';
+import { TextAreaController } from '../src/text-area-controller.js';
 
 customElements.define(
   'textarea-controller-element',

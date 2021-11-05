@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { ElementMixin } from '../src/element-mixin.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { flush } from '../src/debounce.js';
+import { ElementMixin } from '../src/element-mixin.js';
 
 describe('ElementMixin', () => {
   const defineCE = (tagName) => {

@@ -1,9 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
-
+import sinon from 'sinon';
 import '../template-renderer.js';
-
 import './fixtures/mock-component.js';
 
 describe('warning', () => {

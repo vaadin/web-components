@@ -1,5 +1,4 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import {
   enterKeyDown,
   fixtureSync,
@@ -7,12 +6,13 @@ import {
   focusout,
   mousedown,
   mouseup,
+  space,
   spaceKeyDown,
   spaceKeyUp,
-  space,
   tabKeyDown
 } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import sinon from 'sinon';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ItemMixin } from '../src/vaadin-item-mixin.js';
 
 class TestItem extends ItemMixin(PolymerElement) {

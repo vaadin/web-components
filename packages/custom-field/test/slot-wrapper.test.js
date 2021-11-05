@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { dispatchChange } from './common.js';
 import '../src/vaadin-custom-field.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { dispatchChange } from './common.js';
 
 class XField extends PolymerElement {
   static get template() {

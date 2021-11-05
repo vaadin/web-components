@@ -1,7 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import '../vaadin-grid.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import {
   flushGrid,
   getCellContent,
@@ -10,7 +11,6 @@ import {
   getPhysicalItems,
   infiniteDataProvider
 } from './helpers.js';
-import '../vaadin-grid.js';
 
 registerStyles(
   'vaadin-grid',

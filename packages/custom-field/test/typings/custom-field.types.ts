@@ -1,5 +1,5 @@
 import '../../vaadin-custom-field.js';
-import { CustomFieldValueChangedEvent, CustomFieldInvalidChangedEvent } from '../../vaadin-custom-field.js';
+import { CustomFieldInvalidChangedEvent, CustomFieldValueChangedEvent } from '../../vaadin-custom-field.js';
 
 const customField = document.createElement('vaadin-custom-field');
 

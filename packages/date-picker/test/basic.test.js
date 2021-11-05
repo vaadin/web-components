@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
-import { sendKeys } from '@web/test-runner-commands';
 import { aTimeout, click, fixtureSync, oneEvent, tap } from '@vaadin/testing-helpers';
-import { close, getOverlayContent, monthsEqual, open } from './common.js';
+import { sendKeys } from '@web/test-runner-commands';
+import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
+import { close, getOverlayContent, monthsEqual, open } from './common.js';
 
 describe('basic features', () => {
   let datepicker, input, toggleButton;

@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { arrowDown, arrowUp, aTimeout, esc, fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../vaadin-time-picker.js';
 
 describe('keyboard navigation', () => {

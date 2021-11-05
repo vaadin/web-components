@@ -1,18 +1,18 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import '../vaadin-grid.js';
+import '../vaadin-grid-column-group.js';
 import {
   flushGrid,
   getCellContent,
   getContainerCellContent,
-  getRows,
   getRowCells,
+  getRows,
   infiniteDataProvider,
-  scrollToEnd,
-  nextResize
+  nextResize,
+  scrollToEnd
 } from './helpers.js';
-import '../vaadin-grid.js';
-import '../vaadin-grid-column-group.js';
 
 const createColumn = () => {
   const column = document.createElement('vaadin-grid-column');

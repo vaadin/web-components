@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
+import '../vaadin-app-layout.js';
+import '../vaadin-drawer-toggle.js';
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior';
 import { PolymerElement } from '@polymer/polymer';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-import '../vaadin-app-layout.js';
-import '../vaadin-drawer-toggle.js';
 
 describe('vaadin-app-layout', () => {
   let layout;

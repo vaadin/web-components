@@ -1,5 +1,4 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import {
   arrowDown,
   arrowLeft,
@@ -11,9 +10,10 @@ import {
   keyDownChar,
   nextFrame
 } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { MultiSelectListMixin } from '../vaadin-multi-select-list-mixin.js';
+import sinon from 'sinon';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ListMixin } from '../vaadin-list-mixin.js';
+import { MultiSelectListMixin } from '../vaadin-multi-select-list-mixin.js';
 
 customElements.define(
   'test-list-element',

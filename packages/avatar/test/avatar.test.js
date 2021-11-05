@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync, focusin, focusout, mousedown, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
-
+import sinon from 'sinon';
 import '../vaadin-avatar.js';
 
 describe('vaadin-avatar', () => {

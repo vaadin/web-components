@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
+import { aTimeout, fire, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { aTimeout, fixtureSync, fire } from '@vaadin/testing-helpers';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { getAllItems, getFirstItem, onceScrolled, scrollToIndex, selectItem } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { getAllItems, getFirstItem, onceScrolled, scrollToIndex, selectItem } from './helpers.js';
 
 describe('selecting items', () => {
   let comboBox;

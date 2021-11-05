@@ -1,14 +1,14 @@
+import '../../vaadin-radio-button.js';
+import '../../vaadin-radio-group.js';
 import { ActiveMixinClass } from '@vaadin/component-base/src/active-mixin.js';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
-import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js';
 import { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import '../../vaadin-radio-button.js';
-import '../../vaadin-radio-group.js';
 import { RadioButtonCheckedChangedEvent } from '../../vaadin-radio-button.js';
 import { RadioGroupInvalidChangedEvent, RadioGroupValueChangedEvent } from '../../vaadin-radio-group.js';
 

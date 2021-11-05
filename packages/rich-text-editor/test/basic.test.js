@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync, focusout, isDesktopSafari, isFirefox, nextRender } from '@vaadin/testing-helpers';
-import { createImage } from './helpers.js';
+import sinon from 'sinon';
 import '../vaadin-rich-text-editor.js';
+import { createImage } from './helpers.js';
 
 describe('rich text editor', () => {
   'use strict';

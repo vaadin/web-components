@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { flushGrid, infiniteDataProvider } from './helpers.js';
+import sinon from 'sinon';
 import '../vaadin-grid.js';
+import { flushGrid, infiniteDataProvider } from './helpers.js';
 
 describe('missing imports', () => {
   let grid;

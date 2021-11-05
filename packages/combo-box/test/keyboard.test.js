@@ -1,20 +1,20 @@
 import { expect } from '@esm-bundle/chai';
-import { sendKeys } from '@web/test-runner-commands';
-import sinon from 'sinon';
 import {
-  aTimeout,
-  fixtureSync,
-  focusout,
-  keyDownOn,
   arrowDownKeyDown,
   arrowUpKeyDown,
+  aTimeout,
   enterKeyDown,
   escKeyDown,
   fire,
+  fixtureSync,
+  focusout,
+  keyDownOn,
   nextFrame
 } from '@vaadin/testing-helpers';
-import { getViewportItems, getVisibleItemsCount, onceScrolled, scrollToIndex } from './helpers.js';
+import { sendKeys } from '@web/test-runner-commands';
+import sinon from 'sinon';
 import '../src/vaadin-combo-box.js';
+import { getViewportItems, getVisibleItemsCount, onceScrolled, scrollToIndex } from './helpers.js';
 
 describe('keyboard', () => {
   let comboBox, input;

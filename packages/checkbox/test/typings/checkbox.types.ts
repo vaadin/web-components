@@ -1,13 +1,13 @@
+import '../../vaadin-checkbox.js';
 import { ActiveMixinClass } from '@vaadin/component-base/src/active-mixin.js';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
-import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { CheckedMixinClass } from '@vaadin/field-base/src/checked-mixin.js';
 import { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import '../../vaadin-checkbox.js';
 import { CheckboxCheckedChangedEvent, CheckboxIndeterminateChangedEvent } from '../../vaadin-checkbox.js';
 
 const assertType = <TExpected>(value: TExpected) => value;

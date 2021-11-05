@@ -1,5 +1,4 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import {
   arrowDown,
   arrowUp,
@@ -8,17 +7,18 @@ import {
   enterKeyUp,
   escKeyDown,
   fixtureSync,
-  nextFrame,
-  tab,
   keyboardEventFor,
   keyDownChar,
-  spaceKeyDown
+  nextFrame,
+  spaceKeyDown,
+  tab
 } from '@vaadin/testing-helpers';
-import { html, render } from 'lit';
+import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
 import './not-animated-styles.js';
 import '../vaadin-select.js';
+import { html, render } from 'lit';
 
 describe('vaadin-select', () => {
   let select, valueButton;

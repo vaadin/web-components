@@ -1,5 +1,4 @@
 import '../../vaadin-tabs.js';
-
 import { TabsItemsChangedEvent, TabsSelectedChangedEvent } from '../../vaadin-tabs.js';
 
 const tabs = document.createElement('vaadin-tabs');

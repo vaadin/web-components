@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent, nextRender } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '../vaadin-chart.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 customElements.define(
   'chart-series-dom-repeat',

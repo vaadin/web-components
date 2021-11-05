@@ -1,14 +1,14 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import { flushGrid, getBodyCellContent, getHeaderCellContent, scrollToEnd, getVisibleItems } from './helpers.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-filter.js';
 import '../vaadin-grid-filter-column.js';
 import '../vaadin-grid-sorter.js';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { flushGrid, getBodyCellContent, getHeaderCellContent, getVisibleItems, scrollToEnd } from './helpers.js';
 
 class FilterWrapper extends PolymerElement {
   static get template() {

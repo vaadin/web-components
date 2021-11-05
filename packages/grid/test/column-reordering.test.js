@@ -1,7 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import '../vaadin-grid.js';
+import '../vaadin-grid-column-group.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import {
   dragAndDropOver,
@@ -9,13 +11,11 @@ import {
   dragStart,
   flushGrid,
   getContainerCell,
-  getRows,
   getRowCells,
+  getRows,
   infiniteDataProvider,
   makeSoloTouchEvent
 } from './helpers.js';
-import '../vaadin-grid.js';
-import '../vaadin-grid-column-group.js';
 
 function getVisualCellContent(section, row, col) {
   let cell = Array.from(section.querySelectorAll('[part~="cell"]:not([part~="details-cell"])')).pop();

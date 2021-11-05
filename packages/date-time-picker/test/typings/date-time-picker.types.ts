@@ -1,5 +1,5 @@
 import '../../vaadin-date-time-picker.js';
-import { DateTimePickerValueChangedEvent, DateTimePickerInvalidChangedEvent } from '../../vaadin-date-time-picker.js';
+import { DateTimePickerInvalidChangedEvent, DateTimePickerValueChangedEvent } from '../../vaadin-date-time-picker.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

@@ -1,33 +1,33 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import {
   aTimeout,
   down as mouseDown,
   fixtureSync,
   focusin,
+  keyboardEventFor,
   keyDownOn,
   keyUpOn,
-  keyboardEventFor,
   listenOnce,
   nextFrame,
   up as mouseUp
 } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import { sendKeys } from '@web/test-runner-commands';
+import sinon from 'sinon';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import '../vaadin-grid.js';
+import '../vaadin-grid-column-group.js';
+import '../vaadin-grid-selection-column.js';
 import {
   flushGrid,
   getCell,
   getCellContent,
   getContainerCell,
-  getRows,
+  getLastVisibleItem,
   getRowCells,
+  getRows,
   infiniteDataProvider,
-  scrollToEnd,
-  getLastVisibleItem
+  scrollToEnd
 } from './helpers.js';
-import '../vaadin-grid.js';
-import '../vaadin-grid-column-group.js';
-import '../vaadin-grid-selection-column.js';
 
 let grid, focusable, scroller, header, footer, body;
 

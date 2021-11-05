@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { enter, esc, fixtureSync, tap } from '@vaadin/testing-helpers';
-import { fillUsernameAndPassword } from './helpers.js';
+import sinon from 'sinon';
 import '../vaadin-login-overlay.js';
+import { fillUsernameAndPassword } from './helpers.js';
 
 describe('login overlay', () => {
   let overlay;

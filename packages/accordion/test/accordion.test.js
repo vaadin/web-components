@@ -1,16 +1,15 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import {
-  isIOS,
-  fixtureSync,
   arrowDownKeyDown,
   arrowUpKeyDown,
-  keyboardEventFor,
-  homeKeyDown,
   endKeyDown,
+  fixtureSync,
+  homeKeyDown,
+  isIOS,
+  keyboardEventFor,
   nextFrame
 } from '@vaadin/testing-helpers';
-
+import sinon from 'sinon';
 import '../vaadin-accordion.js';
 
 describe('vaadin-accordion', () => {

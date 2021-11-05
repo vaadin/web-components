@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { arrowLeft, arrowRight, end, fixtureSync, focusin, home, nextRender } from '@vaadin/testing-helpers';
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-menu-bar.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
   'vaadin-menu-bar',

@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { open } from './common.js';
 import '../src/vaadin-date-picker.js';
+import { open } from './common.js';
 
 describe('theme attribute', () => {
   let datepicker;

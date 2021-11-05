@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { esc, fixtureSync } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-dialog.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 customElements.define(
   'x-dialog',

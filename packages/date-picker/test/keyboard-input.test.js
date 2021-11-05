@@ -1,5 +1,4 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import {
   arrowDown,
   arrowLeft,
@@ -17,9 +16,10 @@ import {
   tab,
   tap
 } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
+import '../src/vaadin-date-picker.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { close, getOverlayContent, open } from './common.js';
-import '../src/vaadin-date-picker.js';
 
 (isIOS ? describe.skip : describe)('keyboard input', () => {
   let target;

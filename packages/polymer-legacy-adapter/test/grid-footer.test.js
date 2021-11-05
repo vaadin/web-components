@@ -1,12 +1,10 @@
-import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@vaadin/grid';
-import { Templatizer } from '../src/template-renderer-templatizer.js';
-
 import '../template-renderer.js';
-
 import './fixtures/mock-grid-host.js';
+import { Templatizer } from '../src/template-renderer-templatizer.js';
 
 describe('grid footer template', () => {
   function fixtureGrid() {

@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import { getFirstItem } from './helpers.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
+import { getFirstItem } from './helpers.js';
 
 describe('item renderer', () => {
   let comboBox;

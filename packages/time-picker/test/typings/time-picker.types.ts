@@ -1,5 +1,4 @@
 import '../../vaadin-time-picker.js';
-
 import { TimePickerInvalidChangedEvent, TimePickerValueChangedEvent } from '../../vaadin-time-picker.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

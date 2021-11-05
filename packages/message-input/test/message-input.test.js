@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { enterKeyDown, fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../vaadin-message-input.js';
 
 describe('message-input', () => {

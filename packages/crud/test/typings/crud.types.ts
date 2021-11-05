@@ -1,11 +1,11 @@
 import '../../vaadin-crud.js';
 import {
   Crud,
-  CrudEditedItemChangedEvent,
-  CrudEditorOpenedChangedEvent,
   CrudCancelEvent,
   CrudDeleteEvent,
+  CrudEditedItemChangedEvent,
   CrudEditEvent,
+  CrudEditorOpenedChangedEvent,
   CrudItemsChangedEvent,
   CrudNewEvent,
   CrudSaveEvent,

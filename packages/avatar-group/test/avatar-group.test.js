@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { enterKeyDown, escKeyDown, fixtureSync, nextRender, spaceKeyDown, tabKeyDown } from '@vaadin/testing-helpers';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import sinon from 'sinon';
 import '../vaadin-avatar-group.js';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
 describe('avatar-group', () => {
   let group;

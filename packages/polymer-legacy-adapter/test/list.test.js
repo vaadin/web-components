@@ -1,9 +1,7 @@
-import sinon from 'sinon';
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, fire, click } from '@vaadin/testing-helpers';
-
+import { click, fire, fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../template-renderer.js';
-
 import './fixtures/mock-list-host.js';
 import './fixtures/mock-list.js';
 

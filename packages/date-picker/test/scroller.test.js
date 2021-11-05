@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { aTimeout, fixtureSync, listenOnce } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-infinite-scroller.js';
 import { activateScroller, getFirstVisibleItem } from './common.js';
 

@@ -1,6 +1,6 @@
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { visualDiff } from '@web/test-runner-visual-regression';
 import { sendKeys } from '@web/test-runner-commands';
+import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/item/theme/material/vaadin-item.js';
 import '@vaadin/list-box/theme/material/vaadin-list-box.js';
 import '../../not-animated-styles.js';

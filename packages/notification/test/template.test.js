@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-notification.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 class XNotification extends PolymerElement {
   static get template() {

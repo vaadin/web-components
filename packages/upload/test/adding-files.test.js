@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { createFile, createFiles, touchDevice, xhrCreator } from './common.js';
+import sinon from 'sinon';
 import '../vaadin-upload.js';
+import { createFile, createFiles, touchDevice, xhrCreator } from './common.js';
 
 describe('file list', () => {
   let upload, file, files;

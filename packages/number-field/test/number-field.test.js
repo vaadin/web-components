@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import sinon from 'sinon';
 import { arrowDown, arrowUp, fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-number-field.js';
 
 describe('number-field', () => {
