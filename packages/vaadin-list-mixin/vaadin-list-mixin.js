@@ -284,14 +284,27 @@ export const ListMixin = (superClass) =>
       this.items.forEach((e) => (e.focused = e === item));
       this._setFocusable(idx);
       this._scrollToItem(idx);
-      item.focus();
+      this._focusItem(item);
+    }
+
+    /**
+     * Always set focus-ring on the item managed by the list-box
+     * for backwards compatibility with the old implementation.
+     * @param {HTMLElement} item
+     * @protected
+     */
+    _focusItem(item) {
+      if (item) {
+        item.focus();
+        item.setAttribute('focus-ring', '');
+      }
     }
 
     focus() {
       // In initialisation (e.g vaadin-select) observer might not been run yet.
       this._observer && this._observer.flush();
       const firstItem = this.querySelector('[tabindex="0"]') || (this.items ? this.items[0] : null);
-      firstItem && firstItem.focus();
+      this._focusItem(firstItem);
     }
 
     /**

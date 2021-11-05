@@ -380,7 +380,9 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
         this._items.forEach((item) => item.setAttribute('role', 'option'));
       });
       menuElement.addEventListener('selected-changed', () => this.__updateValueButton());
-      menuElement.addEventListener('keydown', (e) => this._onKeyDownInside(e));
+      // Use capture phase to make it possible for `<vaadin-grid-pro-edit-select>`
+      // to override and handle the keydown event before the value change happens.
+      menuElement.addEventListener('keydown', (e) => this._onKeyDownInside(e), true);
       menuElement.addEventListener(
         'click',
         () => {
