@@ -5,6 +5,7 @@
  */
 import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
+import { PositionMixin } from '@vaadin/vaadin-overlay/src/vaadin-overlay-position-mixin.js';
 
 registerStyles(
   'vaadin-context-menu-overlay',
@@ -36,7 +37,7 @@ registerStyles(
  * @extends OverlayElement
  * @protected
  */
-class ContextMenuOverlay extends OverlayElement {
+class ContextMenuOverlay extends PositionMixin(OverlayElement) {
   static get is() {
     return 'vaadin-context-menu-overlay';
   }
@@ -101,12 +102,35 @@ class ContextMenuOverlay extends OverlayElement {
     return {
       xMax: overlayRect.right - contentRect.width,
       xMin: overlayRect.left + contentRect.width,
-      yMax,
-      left: overlayRect.left,
-      right: overlayRect.right,
-      top: overlayRect.top,
-      width: contentRect.width
+      yMax
     };
+  }
+
+  _updatePosition() {
+    super._updatePosition();
+
+    if (this.positionTarget && this.parentOverlay) {
+      // This overlay is positioned by a parent menu item,
+      // adjust the position by the overlay content paddings
+      const content = this.$.content;
+      const style = getComputedStyle(content);
+
+      // Horizontal adjustment
+      const isLeftAligned = !!this.style.left;
+      if (isLeftAligned) {
+        this.style.left = parseFloat(this.style.left) + parseFloat(style.paddingLeft) + 'px';
+      } else {
+        this.style.right = parseFloat(this.style.right) + parseFloat(style.paddingRight) + 'px';
+      }
+
+      // Vertical adjustment
+      const isBottomAligned = !!this.style.bottom;
+      if (isBottomAligned) {
+        this.style.bottom = parseFloat(this.style.bottom) - parseFloat(style.paddingBottom) + 'px';
+      } else {
+        this.style.top = parseFloat(this.style.top) - parseFloat(style.paddingTop) + 'px';
+      }
+    }
   }
 }
 

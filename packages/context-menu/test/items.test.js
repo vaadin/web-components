@@ -33,7 +33,8 @@ describe('items', () => {
       const overlay = menu.$.overlay;
       overlay.__openingHandler && overlay.__openingHandler();
     }
-    fire(openTarget, 'mouseover', {});
+    const { right, bottom } = openTarget.getBoundingClientRect();
+    fire(openTarget, 'mouseover', { x: right, y: bottom });
   };
 
   const getSubMenu = (menu = rootMenu) => {
@@ -133,9 +134,8 @@ describe('items', () => {
 
     (isIOS ? it.skip : it)('should open the subMenu on the top if root menu is bottom-aligned', async () => {
       subMenu.close();
-      const rootItemRect = menuComponents()[0].getBoundingClientRect();
       rootMenu.$.overlay.style.removeProperty('top');
-      rootMenu.$.overlay.style.bottom = rootItemRect.height * 2 + 'px';
+      rootMenu.$.overlay.style.bottom = '0px';
       rootMenu.$.overlay.setAttribute('bottom-aligned', '');
       open(menuComponents()[0]);
       await nextRender(subMenu);

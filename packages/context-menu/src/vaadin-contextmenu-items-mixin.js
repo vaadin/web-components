@@ -156,17 +156,13 @@ export const ItemsMixin = (superClass) =>
       subMenu.items = itemElement._item.children;
       subMenu.listenOn = itemElement;
 
-      const itemRect = itemElement.getBoundingClientRect();
-
-      const content = subMenu.$.overlay.$.content;
-      const style = getComputedStyle(content);
       const parent = this.$.overlay;
-      const y = parent.hasAttribute('bottom-aligned')
-        ? itemRect.bottom + parseFloat(style.paddingBottom)
-        : itemRect.top - parseFloat(style.paddingTop);
 
-      // Store the reference to align based on parent overlay coordinates
-      subMenu.$.overlay._setParentOverlay(parent);
+      const subMenuOverlay = subMenu.$.overlay;
+      subMenuOverlay.positionTarget = itemElement;
+      subMenuOverlay.noHorizontalOverlap = true;
+      // Store the reference parent overlay
+      subMenuOverlay._setParentOverlay(parent);
 
       // Set theme attribute from parent element
       if (parent.theme) {
@@ -175,24 +171,12 @@ export const ItemsMixin = (superClass) =>
         subMenu.removeAttribute('theme');
       }
 
-      let x;
+      const content = subMenu.$.overlay.$.content;
       content.style.minWidth = '';
-      if (document.documentElement.clientWidth - itemRect.right > itemRect.width) {
-        // There's room on the right side
-        x = itemRect.right;
-      } else {
-        // Open on the left side
-        x = itemRect.left - itemRect.width;
-        // Make sure there's no gaps between the menus
-        content.style.minWidth = parent.$.content.clientWidth + 'px';
-      }
-      x = Math.max(x, 0);
 
       itemElement.dispatchEvent(
         new CustomEvent('opensubmenu', {
           detail: {
-            x,
-            y,
             children: itemElement._item.children
           }
         })

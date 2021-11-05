@@ -314,16 +314,16 @@ export const InteractionsMixin = (superClass) =>
 
       subMenu.items = items;
       subMenu.listenOn = button;
-      this._expandedButton = button;
+      const overlay = subMenu.$.overlay;
+      overlay.positionTarget = button;
+      overlay.noVerticalOverlap = true;
 
-      const rect = button.getBoundingClientRect();
+      this._expandedButton = button;
 
       requestAnimationFrame(() => {
         button.dispatchEvent(
           new CustomEvent('opensubmenu', {
             detail: {
-              x: this.__isRTL ? rect.right : rect.left,
-              y: rect.bottom,
               children: items
             }
           })
@@ -342,12 +342,13 @@ export const InteractionsMixin = (superClass) =>
         });
       }
 
-      // do not focus item when open not from keyboard
-      if (event.type !== 'keydown') {
-        this.__onceOpened(() => {
+      this.__onceOpened(() => {
+        // do not focus item when open not from keyboard
+        if (event.type !== 'keydown') {
           subMenu.$.overlay.$.overlay.focus();
-        });
-      }
+        }
+        overlay._updatePosition();
+      });
     }
 
     /** @private */
