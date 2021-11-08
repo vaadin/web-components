@@ -3,10 +3,10 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-material-styles/font-icons.js';
-import { menuOverlay } from '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
 import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-field-shared.js';
+import { menuOverlay } from '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const select = css`
   :host {

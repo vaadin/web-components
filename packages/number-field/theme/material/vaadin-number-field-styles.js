@@ -3,9 +3,9 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { fieldButton } from '@vaadin/vaadin-material-styles/mixins/field-button.js';
 import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-field-shared.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const numberField = css`
   :host {

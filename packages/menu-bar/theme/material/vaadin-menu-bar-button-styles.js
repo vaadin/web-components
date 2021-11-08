@@ -1,5 +1,5 @@
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import { button } from '@vaadin/button/theme/material/vaadin-button-styles';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const menuBarButton = css`
   [part='label'] {

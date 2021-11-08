@@ -1,4 +1,4 @@
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 /*
   DISCLAIMER: These are the styles of an internal implementation of a web

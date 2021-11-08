@@ -11,7 +11,7 @@
  *
  * License: www.highcharts.com/license
  */
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 /* When updating this file do not override vaadin-charts custom properties section */
 

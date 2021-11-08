@@ -1,8 +1,8 @@
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { typography } from '@vaadin/vaadin-material-styles/typography.js';
-import { overlay } from '@vaadin/vaadin-material-styles/mixins/overlay.js';
 import '@vaadin/vaadin-material-styles/color.js';
 import './vaadin-login-form-styles.js';
+import { overlay } from '@vaadin/vaadin-material-styles/mixins/overlay.js';
+import { typography } from '@vaadin/vaadin-material-styles/typography.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const loginOverlayWrapper = css`
   :host {

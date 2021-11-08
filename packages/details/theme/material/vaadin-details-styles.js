@@ -1,8 +1,8 @@
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/font-icons.js';
 import '@vaadin/vaadin-material-styles/shadow.js';
 import '@vaadin/vaadin-material-styles/typography.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const details = css`
   :host {

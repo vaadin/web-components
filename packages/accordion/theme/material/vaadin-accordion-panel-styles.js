@@ -1,6 +1,6 @@
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-material-styles/color.js';
 import { details } from '@vaadin/details/theme/material/vaadin-details-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const accordionPanel = css`
   :host(:not([opened])) [part='summary']::after {
