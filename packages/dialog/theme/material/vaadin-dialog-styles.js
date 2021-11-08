@@ -1,6 +1,6 @@
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { overlay } from '@vaadin/vaadin-material-styles/mixins/overlay.js';
 import '@vaadin/vaadin-material-styles/shadow.js';
+import { overlay } from '@vaadin/vaadin-material-styles/mixins/overlay.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const dialogOverlay = css`
   [part='overlay'] {

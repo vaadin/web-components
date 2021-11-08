@@ -3,11 +3,11 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '../color.js';
 import '../sizing.js';
 import '../style.js';
 import '../typography.js';
+import { css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 export const helper = css`
   :host([has-helper]) [part='helper-text']::before {

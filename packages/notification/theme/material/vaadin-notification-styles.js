@@ -1,7 +1,7 @@
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { colorDark } from '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/typography.js';
 import '@vaadin/vaadin-material-styles/shadow.js';
+import { colorDark } from '@vaadin/vaadin-material-styles/color.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
   'vaadin-notification-container',

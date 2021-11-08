@@ -1,9 +1,9 @@
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { helper } from '@vaadin/vaadin-lumo-styles/mixins/helper.js';
-import { requiredField } from '@vaadin/vaadin-lumo-styles/mixins/required-field.js';
-import { customField } from '@vaadin/custom-field/theme/lumo/vaadin-custom-field-styles.js';
 import '@vaadin/date-picker/theme/lumo/vaadin-date-picker.js';
 import '@vaadin/time-picker/theme/lumo/vaadin-time-picker.js';
+import { customField } from '@vaadin/custom-field/theme/lumo/vaadin-custom-field-styles.js';
+import { helper } from '@vaadin/vaadin-lumo-styles/mixins/helper.js';
+import { requiredField } from '@vaadin/vaadin-lumo-styles/mixins/required-field.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles('vaadin-date-time-picker', [requiredField, helper, customField], {
   moduleId: 'lumo-date-time-picker'

@@ -1,6 +1,6 @@
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import { overlay } from '@vaadin/vaadin-lumo-styles/mixins/overlay.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const dialogOverlay = css`
   /* Optical centering */

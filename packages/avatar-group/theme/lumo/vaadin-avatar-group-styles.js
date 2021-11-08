@@ -1,9 +1,9 @@
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
-import { overlay } from '@vaadin/vaadin-lumo-styles/mixins/overlay.js';
 import { menuOverlayCore } from '@vaadin/vaadin-lumo-styles/mixins/menu-overlay.js';
+import { overlay } from '@vaadin/vaadin-lumo-styles/mixins/overlay.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
   'vaadin-avatar-group',

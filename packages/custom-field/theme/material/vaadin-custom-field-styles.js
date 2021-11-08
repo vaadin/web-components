@@ -3,11 +3,11 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/typography.js';
 import { helper } from '@vaadin/vaadin-material-styles/mixins/helper.js';
 import { requiredField } from '@vaadin/vaadin-material-styles/mixins/required-field.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const customField = css`
   :host {

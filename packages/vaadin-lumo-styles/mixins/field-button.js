@@ -3,11 +3,11 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '../color.js';
 import '../font-icons.js';
 import '../sizing.js';
 import '../style.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const fieldButton = css`
   [part$='button'] {

@@ -1,4 +1,4 @@
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 const verticalLayout = css`
   [theme~='margin'] {
