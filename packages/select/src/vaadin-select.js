@@ -170,6 +170,36 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   static get properties() {
     return {
       /**
+       * Polymer doesn't invoke observer during initialization when all of its dependencies are `undefined`.
+       * This internal property can be used to force Polymer to invoke such an observer during initialization.
+       * @type {boolean}
+       * @private
+       */
+      __initialized: {
+        type: Boolean,
+        value: true
+      },
+
+      /**
+       * An array containing the items, which will be rendered as the select options.
+       *
+       * #### Example
+       ```js
+       * select.items = [
+       *   { label: 'Jose', value: 'jose' },
+       *   { component: 'hr' },
+       *   { label: 'Pedro', value: 'pedro' },
+       *   { label: 'Manolo', value: 'manolo', disabled: true }
+       * ];
+       * ```
+       * @type {!Array<!SelectItem>}
+       */
+      items: {
+        type: Array,
+        value: () => []
+      },
+
+      /**
        * Set when the select is open
        * @type {boolean}
        */
@@ -191,6 +221,17 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
        * @type {!SelectRenderer | undefined}
        */
       renderer: Function,
+
+      /**
+       * Represents the final renderer computed on the set of observable arguments.
+       * It is supposed to be used internally when rendering the select's content.
+       * @type {!SelectRenderer}
+       * @private
+       */
+      __renderer: {
+        type: Function,
+        computed: '__computeRenderer(renderer, __initialized)'
+      },
 
       /**
        * It stores the the `value` property of the selected item, providing the
@@ -268,7 +309,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       '_updateAriaExpanded(opened)',
       '_updateAriaRequired(required)',
       '_updateSelectedItem(value, _items, placeholder)',
-      '_rendererChanged(renderer, _overlayElement)'
+      '__rendererChanged(__renderer, _overlayElement)'
     ];
   }
 
@@ -357,8 +398,12 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     }
   }
 
-  /** @private */
-  _rendererChanged(renderer, overlay) {
+  /**
+   * @param {!SelectRenderer} renderer
+   * @param {SelectOverlay} overlay
+   * @private
+   */
+  __rendererChanged(renderer, overlay) {
     if (!overlay) {
       return;
     }
@@ -532,7 +577,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
     const label = selected.getAttribute('label');
     if (label) {
-      labelItem = this.__createItem(label);
+      labelItem = this.__createItemElement({ label });
     } else {
       labelItem = selected.cloneNode(true);
     }
@@ -540,26 +585,63 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     // store reference to the original item
     labelItem._sourceItem = selected;
 
-    this.__appendItem(labelItem);
+    this.__appendValueItemElement(labelItem);
 
     // ensure the item gets proper styles
     labelItem.selected = true;
   }
 
-  /** @private */
-  __createItem(text) {
-    const item = document.createElement('vaadin-item');
-    item.textContent = text;
-    return item;
+  /**
+   * @param {!SelectItem} item
+   * @private
+   */
+  __createItemElement(item) {
+    let itemElement;
+    if (item.component instanceof HTMLElement) {
+      itemElement = item.component;
+    } else {
+      itemElement = document.createElement(item.component || 'vaadin-item');
+    }
+
+    if (item.label) {
+      itemElement.textContent = item.label;
+    }
+    if (item.value) {
+      itemElement.value = item.value;
+    }
+    if (item.disabled) {
+      itemElement.disabled = item.disabled;
+    }
+
+    return itemElement;
   }
 
-  /** @private */
-  __appendItem(item) {
-    item.removeAttribute('tabindex');
-    item.removeAttribute('role');
-    item.setAttribute('id', this._fieldId);
+  /**
+   * @param {Array<!SelectItem> | undefined} newItems
+   * @param {Array<!SelectItem> | undefined} oldItems
+   * @private
+   */
+  __itemsChanged(newItems, oldItems) {
+    // Skip at initialization.
+    if (!newItems && !oldItems) {
+      return;
+    }
 
-    this._valueButton.appendChild(item);
+    if (this.__renderer === this.__defaultRenderer) {
+      this.requestContentUpdate();
+    }
+  }
+
+  /**
+   * @param {!HTMLElement} itemElement
+   * @private
+   */
+  __appendValueItemElement(itemElement) {
+    itemElement.removeAttribute('tabindex');
+    itemElement.removeAttribute('role');
+    itemElement.setAttribute('id', this._fieldId);
+
+    this._valueButton.appendChild(itemElement);
   }
 
   /** @private */
@@ -576,8 +658,8 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
     if (!selected) {
       if (this.placeholder) {
-        const item = this.__createItem(this.placeholder);
-        this.__appendItem(item);
+        const item = this.__createItemElement({ label: this.placeholder });
+        this.__appendValueItemElement(item);
         this._valueButton.setAttribute('placeholder', '');
       }
     } else {
@@ -642,6 +724,43 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
    */
   validate() {
     return !(this.invalid = !(this.disabled || !this.required || this.value));
+  }
+
+  /**
+   * Computes the final renderer for the `__renderer` property.
+   * @return {!SelectRenderer}
+   * @private
+   */
+  __computeRenderer(renderer) {
+    if (renderer) {
+      return renderer;
+    }
+
+    return this.__defaultRenderer;
+  }
+
+  /**
+   * Renders items provided by the `items` property.
+   * @param {HTMLElement} root
+   * @param {Select} _select
+   * @private
+   */
+  __defaultRenderer(root, _select) {
+    let listBox = root.firstElementChild;
+    if (!listBox) {
+      listBox = document.createElement('vaadin-list-box');
+      root.appendChild(listBox);
+    }
+
+    if (this.items) {
+      listBox.textContent = '';
+      this.items.forEach((item) => {
+        listBox.appendChild(this.__createItemElement(item));
+      });
+    } else {
+      // TODO: Is this necessary to do?
+      listBox.remove();
+    }
   }
 
   /**

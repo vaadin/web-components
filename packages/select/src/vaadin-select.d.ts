@@ -9,6 +9,12 @@ import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+export interface SelectItem {
+  label?: string;
+  component?: string | HTMLElement;
+  disabled?: boolean;
+}
+
 /**
  * Function for rendering the content of the `<vaadin-select>`.
  * Receives two arguments:
@@ -132,6 +138,11 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(ThemableMixin(HTMLElement))))) {
+  /**
+   * An array of items.
+   */
+  items: SelectItem[];
+
   /**
    * Set when the select is open
    */
