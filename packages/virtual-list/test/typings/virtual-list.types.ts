@@ -21,9 +21,9 @@ virtualList.items = [{ testProperty: '1' }, { testProperty: '2' }, { testPropert
 
 assertType<Array<TestVirtualListItem>>(virtualList.items);
 
-virtualList.renderer = (root, virtualList, model) => {
+virtualList.renderer = (root, model) => {
   assertType<HTMLElement>(root);
-  assertType<VirtualList>(virtualList);
+  assertType<VirtualList>(model.owner);
   assertType<VirtualListItemModel<TestVirtualListItem>>(model);
   assertType<number>(model.index);
   assertType<TestVirtualListItem>(model.item);

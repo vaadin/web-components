@@ -14,7 +14,7 @@
 
     <script>
       const select = document.querySelector('vaadin-select');
-      select.renderer = function(root, _, model) {
+      select.renderer = function(root, model) {
         if (!root.firstElementChild) {
           root.innerHTML = `
           <vaadin-list-box>

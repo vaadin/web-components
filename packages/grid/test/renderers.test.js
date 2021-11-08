@@ -27,7 +27,7 @@ describe('renderers', () => {
 
   describe('column cells', () => {
     beforeEach(() => {
-      column.renderer = function (root, owner, model) {
+      column.renderer = function (root, model) {
         root.innerHTML = '';
         const text = document.createTextNode(model.index + ' ' + model.item.foo);
         root.appendChild(text);
@@ -48,14 +48,14 @@ describe('renderers', () => {
     });
 
     it('should pass column as `owner` and `this` to the renderer', () => {
-      column.renderer = function (root, owner) {
+      column.renderer = function (root, { owner }) {
         expect(this).to.eql(owner);
         expect(owner.localName).to.eql('vaadin-grid-column');
       };
     });
 
     it('should allow to change the renderer', () => {
-      column.renderer = function (root, owner, model) {
+      column.renderer = function (root, model) {
         root.innerHTML = model.index + ' test';
       };
       expect(getCell(grid, 0)._content.innerHTML).to.eql('0 test');
@@ -63,14 +63,14 @@ describe('renderers', () => {
     });
 
     it('should clear the content when changing the renderer', () => {
-      column.renderer = (_root, _column, _model) => {};
+      column.renderer = (_root, _model) => {};
 
       expect(getCell(grid, 0)._content.textContent).to.be.empty;
       expect(getCell(grid, 1)._content.textContent).to.be.empty;
     });
 
     it('should initialize with instance properties', () => {
-      column.renderer = function (root, owner, model) {
+      column.renderer = function (root, model) {
         expect(model.selected).to.be.false;
         expect(model.expanded).to.be.false;
         expect(model.detailsOpened).to.be.false;
@@ -95,7 +95,7 @@ describe('renderers', () => {
         expect(getContainerCell(grid.$.items, 1, 1).hidden).to.be.false;
       });
 
-      it('should pass the `root`, `owner`, `model` arguments to the renderer', () => {
+      it('should pass the `root`, `model` arguments to the renderer', () => {
         const detailsCell = getBodyCellContent(grid, 0, 1);
 
         grid.rowDetailsRenderer = sinon.spy();
@@ -104,8 +104,8 @@ describe('renderers', () => {
         expect(grid.rowDetailsRenderer.calledOnce).to.be.true;
         expect(grid.rowDetailsRenderer.thisValues[0]).to.equal(grid);
         expect(grid.rowDetailsRenderer.args[0][0]).to.equal(detailsCell);
-        expect(grid.rowDetailsRenderer.args[0][1]).to.equal(grid);
-        expect(grid.rowDetailsRenderer.args[0][2]).to.deep.equal({
+        expect(grid.rowDetailsRenderer.args[0][1]).to.deep.equal({
+          owner: grid,
           index: 0,
           level: 0,
           expanded: false,
@@ -117,7 +117,7 @@ describe('renderers', () => {
 
       it('should allow to change the renderer', () => {
         grid.detailsOpenedItems = grid.items;
-        grid.rowDetailsRenderer = function (root, owner, model) {
+        grid.rowDetailsRenderer = function (root, model) {
           root.innerHTML = model.index + ' test';
         };
         flushGrid(grid);

@@ -58,7 +58,7 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * ```js
  * const comboBox = document.querySelector('#combo-box');
  * comboBox.items = [{'label': 'Hydrogen', 'value': 'H'}];
- * comboBox.renderer = function(root, comboBox, model) {
+ * comboBox.renderer = function(root, model) {
  *   root.innerHTML = model.index + ': ' +
  *                    model.item.label + ' ' +
  *                    '<b>' + model.item.value + '</b>';

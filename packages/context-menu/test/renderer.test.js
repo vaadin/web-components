@@ -13,7 +13,7 @@ describe('renderer', () => {
         <div id="target"></div>
       </vaadin-context-menu>
     `);
-    menu.renderer = sinon.spy((root, _, context) => {
+    menu.renderer = sinon.spy((root, context) => {
       if (root.firstChild) {
         return;
       }
@@ -52,7 +52,7 @@ describe('renderer', () => {
   it('should have contextMenu owner argument', () => {
     fire(target, 'vaadin-contextmenu');
 
-    expect(menu.renderer.firstCall.args[1]).to.equal(menu);
+    expect(menu.renderer.firstCall.args[1].owner).to.equal(menu);
   });
 
   it('should rerender on reopen', () => {
@@ -72,8 +72,8 @@ describe('renderer', () => {
     fire(otherTarget, 'vaadin-contextmenu');
 
     expect(menu.renderer.callCount).to.equal(2);
-    expect(menu.renderer.getCall(0).args[2].target).to.equal(target);
-    expect(menu.renderer.getCall(1).args[2].target).to.equal(otherTarget);
+    expect(menu.renderer.getCall(0).args[1].target).to.equal(target);
+    expect(menu.renderer.getCall(1).args[1].target).to.equal(otherTarget);
   });
 
   it('should rerender with new detail on reopen', () => {
@@ -82,8 +82,8 @@ describe('renderer', () => {
     fire(target, 'vaadin-contextmenu', { foo: 'two' });
 
     expect(menu.renderer.callCount).to.equal(2);
-    expect(menu.renderer.getCall(0).args[2].detail).to.deep.equal({ foo: 'one' });
-    expect(menu.renderer.getCall(1).args[2].detail).to.deep.equal({ foo: 'two' });
+    expect(menu.renderer.getCall(0).args[1].detail).to.deep.equal({ foo: 'one' });
+    expect(menu.renderer.getCall(1).args[1].detail).to.deep.equal({ foo: 'two' });
   });
 
   it('should run renderers when requesting content update', () => {

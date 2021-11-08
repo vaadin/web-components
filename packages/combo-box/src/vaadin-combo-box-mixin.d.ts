@@ -14,13 +14,12 @@ export type ComboBoxDefaultItem = any;
 export interface ComboBoxItemModel<TItem> {
   index: number;
   item: TItem;
+  focused: boolean;
+  selected: boolean;
+  owner: ComboBox<TItem>;
 }
 
-export type ComboBoxRenderer<TItem> = (
-  root: HTMLElement,
-  comboBox: ComboBox<TItem>,
-  model: ComboBoxItemModel<TItem>
-) => void;
+export type ComboBoxRenderer<TItem> = (root: HTMLElement, model: ComboBoxItemModel<TItem>) => void;
 
 export declare function ComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T

@@ -57,7 +57,7 @@ class GridTreeColumn extends GridColumn {
    *
    * @private
    */
-  __defaultRenderer(root, _column, { item, expanded, level }) {
+  __defaultRenderer(root, { item, expanded, level }) {
     let toggle = root.firstElementChild;
     if (!toggle) {
       toggle = document.createElement('vaadin-grid-tree-toggle');

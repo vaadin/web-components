@@ -39,7 +39,6 @@ class GridProEditColumn extends GridColumn {
        * Receives three arguments:
        *
        * - `root` The cell content DOM element. Append your editor component to it.
-       * - `column` The `<vaadin-grid-pro-edit-column>` element.
        * - `model` The object with the properties related with
        *   the rendered item, contains:
        *   - `model.index` The index of the item.
@@ -48,6 +47,7 @@ class GridProEditColumn extends GridColumn {
        *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
        *   - `model.selected` Selected state.
        *   - `model.detailsOpened` Details opened state.
+       *   - `model.owner` The `<vaadin-grid-pro-edit-column>` element.
        * @type {!GridBodyRenderer | null | undefined}
        */
       editModeRenderer: Function,
@@ -108,7 +108,7 @@ class GridProEditColumn extends GridColumn {
   constructor() {
     super();
 
-    this.__editModeRenderer = function (root, column) {
+    this.__editModeRenderer = function (root, { owner: column }) {
       const cell = root.assignedSlot.parentNode;
 
       const tagName = column._getEditorTagName(cell);

@@ -12,7 +12,7 @@ describe('renderer', () => {
   let rendererContent;
 
   function generateRendererWithItems(items) {
-    return function (root, select) {
+    return function (root, { owner: select }) {
       if (root.firstChild) {
         root.firstChild.items &&
           root.firstChild.items.forEach((item, index) => (item.textContent = items[index] + (select.__testVar || '')));
@@ -45,7 +45,7 @@ describe('renderer', () => {
   });
 
   it('should pass vaadin-select as owner to vaadin-overlay', () => {
-    select.renderer = (_, owner) => {
+    select.renderer = (_, { owner }) => {
       expect(owner).to.eql(select);
     };
   });

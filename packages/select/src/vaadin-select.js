@@ -36,7 +36,7 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 
  * ```
  * ```js
  * const select = document.querySelector('#select');
- * select.renderer = function(root, select) {
+ * select.renderer = function(root) {
  *   const listBox = document.createElement('vaadin-list-box');
  *   // append 3 <vaadin-item> elements
  *   ['Jose', 'Manolo', 'Pedro'].forEach(function(name) {

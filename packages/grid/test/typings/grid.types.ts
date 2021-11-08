@@ -180,9 +180,9 @@ assertType<() => void>(narrowedGrid.requestContentUpdate);
 const genericColumn = document.createElement('vaadin-grid-column');
 assertType<GridColumn>(genericColumn);
 
-const bodyRenderer: GridBodyRenderer<TestGridItem> = (root, column, model) => {
+const bodyRenderer: GridBodyRenderer<TestGridItem> = (root, model) => {
   assertType<HTMLElement>(root);
-  assertType<GridColumn>(column);
+  assertType<GridColumn>(model.owner);
   assertType<TestGridItem>(model.item);
 };
 genericColumn.renderer = bodyRenderer;

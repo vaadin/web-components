@@ -28,11 +28,11 @@ import { ColumnBaseMixinClass } from './vaadin-grid-column.js';
  *
  * const column1 = document.querySelector('#column1');
  * column1.headerRenderer = (root, column) => { ... };
- * column1.renderer = (root, column, model) => { ... };
+ * column1.renderer = (root, model) => { ... };
  *
  * const column2 = document.querySelector('#column2');
  * column2.headerRenderer = (root, column) => { ... };
- * column2.renderer = (root, column, model) => { ... };
+ * column2.renderer = (root, model) => { ... };
  * ```
  */
 declare class GridColumnGroup extends HTMLElement {

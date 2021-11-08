@@ -37,7 +37,7 @@ export class MockList extends HTMLElement {
     const children = this.items.map((item, index) => {
       const root = this.$.items.children[index] ?? document.createElement('div');
 
-      this.__renderer(root, this, { item });
+      this.__renderer(root, { item, owner: this });
 
       return root;
     });

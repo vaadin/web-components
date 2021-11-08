@@ -70,7 +70,7 @@ declare class NotificationCard extends ThemableMixin(HTMLElement) {}
  * ```
  * ```js
  * const notification = document.querySelector('#notification');
- * notification.renderer = function(root, notification) {
+ * notification.renderer = function(root) {
  *   root.textContent = "Your work has been saved";
  * };
  * ```

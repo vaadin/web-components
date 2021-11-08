@@ -132,7 +132,7 @@ class CrudGrid extends IncludedMixin(Grid) {
   __createColumn(parent, path) {
     const col = document.createElement('vaadin-grid-column');
 
-    col.renderer = (root, column, model) => {
+    col.renderer = (root, model) => {
       root.textContent = path ? this.get(path, model.item) : model.item;
     };
 

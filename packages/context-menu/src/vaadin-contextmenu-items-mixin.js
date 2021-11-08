@@ -185,11 +185,11 @@ export const ItemsMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} root
-     * @param {!ContextMenu} menu
      * @param {!ContextMenuRendererContext} context
      * @protected
      */
-    __itemsRenderer(root, menu, context) {
+    __itemsRenderer(root, context) {
+      const menu = context.owner;
       this.__initMenu(root, menu);
 
       const subMenu = root.querySelector(this.constructor.is);

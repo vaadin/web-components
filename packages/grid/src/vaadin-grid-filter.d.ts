@@ -33,7 +33,7 @@ export interface GridFilterEventMap extends HTMLElementEventMap, GridFilterCusto
  *   }
  *   filter.path = 'name.first';
  * };
- * column.renderer = (root, column, model) => {
+ * column.renderer = (root, model) => {
  *   root.textContent = model.item.name.first;
  * };
  * ```

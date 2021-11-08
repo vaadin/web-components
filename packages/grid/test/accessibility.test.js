@@ -73,8 +73,8 @@ describe('accessibility', () => {
 
     col1.headerRenderer = col2.headerRenderer = (root) => (root.textContent = 'header');
     col1.footerRenderer = col2.footerRenderer = (root) => (root.textContent = 'footer');
-    col1.renderer = (root, col, model) => (root.textContent = model.index);
-    col2.renderer = (root, col, model) => (root.textContent = model.item);
+    col1.renderer = (root, model) => (root.textContent = model.index);
+    col2.renderer = (root, model) => (root.textContent = model.item);
     grid.items = ['foo', 'bar'];
     flushGrid(grid);
   }

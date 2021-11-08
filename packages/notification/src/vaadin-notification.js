@@ -204,7 +204,7 @@ class NotificationCard extends ThemableMixin(PolymerElement) {
  * ```
  * ```js
  * const notification = document.querySelector('#notification');
- * notification.renderer = function(root, notification) {
+ * notification.renderer = function(root) {
  *   root.textContent = "Your work has been saved";
  * };
  * ```
@@ -322,7 +322,7 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   requestContentUpdate() {
     if (!this.renderer) return;
 
-    this.renderer(this._card, this);
+    this.renderer(this._card, { owner: this });
   }
 
   /** @private */

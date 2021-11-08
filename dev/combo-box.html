@@ -19,7 +19,7 @@
         const res = await fetch('https://demo.vaadin.com/demo-data/1.0/people?count=200');
         const arr = await res.json();
         comboBox.items = arr.result.map((user) => `${user.firstName} ${user.lastName}`);
-        // comboBox.renderer = (root, owner, model) => (root.innerHTML = `<i>${model.item}</i>`);
+        // comboBox.renderer = (root, model) => (root.innerHTML = `<i>${model.item}</i>`);
       })();
     </script>
   </body>

@@ -29,12 +29,12 @@ describe('item renderer', () => {
       comboBox.opened = true;
     });
 
-    it(`should pass the 'root', 'owner', 'model' arguments to the renderer`, () => {
-      const [root, owner, model] = comboBox.renderer.args[0];
+    it(`should pass the 'root', 'model' arguments to the renderer`, () => {
+      const [root, model] = comboBox.renderer.args[0];
 
       expect(root.localName).to.equal('vaadin-combo-box-item');
-      expect(owner).to.eql(comboBox);
       expect(model).to.deep.equal({
+        owner: comboBox,
         item: 'foo',
         index: 0,
         focused: false,
@@ -45,7 +45,7 @@ describe('item renderer', () => {
     it(`should change the 'model.selected' property`, () => {
       comboBox.value = 'foo';
 
-      const model = comboBox.renderer.lastCall.args[2];
+      const model = comboBox.renderer.lastCall.args[1];
 
       expect(model.selected).to.be.true;
     });
@@ -53,14 +53,14 @@ describe('item renderer', () => {
     it(`should change the 'model.focused' property`, () => {
       comboBox._focusedIndex = 0;
 
-      const model = comboBox.renderer.lastCall.args[2];
+      const model = comboBox.renderer.lastCall.args[1];
 
       expect(model.focused).to.be.true;
     });
   });
 
   it('should use renderer when it is defined', () => {
-    comboBox.renderer = (root, comboBox, model) => {
+    comboBox.renderer = (root, model) => {
       const textNode = document.createTextNode(`${model.item} ${model.index}`);
       root.appendChild(textNode);
     };

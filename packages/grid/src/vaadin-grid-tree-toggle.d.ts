@@ -27,7 +27,7 @@ export interface GridTreeToggleEventMap extends HTMLElementEventMap, GridTreeTog
  * ```
  * ```js
  * const column = document.querySelector('#column');
- * column.renderer = (root, column, model) => {
+ * column.renderer = (root, model) => {
  *   let treeToggle = root.firstElementChild;
  *   if (!treeToggle) {
  *     treeToggle = document.createElement('vaadin-grid-tree-toggle');

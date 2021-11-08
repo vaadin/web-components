@@ -37,6 +37,15 @@ assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ThemableMixinClass>(narrowedComboBox);
 
+narrowedComboBox.renderer = (renderTarget, model) => {
+  assertType<HTMLElement>(renderTarget);
+  assertType<number>(model.index);
+  assertType<TestComboBoxItem>(model.item);
+  assertType<ComboBox>(model.owner);
+  assertType<boolean>(model.focused);
+  assertType<boolean>(model.selected);
+};
+
 narrowedComboBox.addEventListener('custom-value-set', (event) => {
   assertType<ComboBoxCustomValueSetEvent>(event);
   assertType<string>(event.detail);

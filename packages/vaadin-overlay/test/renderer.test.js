@@ -33,10 +33,10 @@ describe('renderer', () => {
       const overlayOwner = {};
       overlay.owner = overlayOwner;
       overlay.model = renderModel;
-      overlay.renderer = (root, owner, model) => {
+      overlay.renderer = (root, model) => {
         expect(root.firstChild).to.be.null;
-        expect(owner).to.eql(overlayOwner);
-        expect(model).to.eql(renderModel);
+        expect(model.owner).to.eql(overlayOwner);
+        expect(model).to.eql({ ...renderModel, owner: overlayOwner });
       };
     });
 
@@ -48,8 +48,8 @@ describe('renderer', () => {
     });
 
     it('should not clean the root on model or owner changed', () => {
-      overlay.renderer = (root, owner, model) => {
-        if (owner !== undefined || model !== undefined) {
+      overlay.renderer = (root, model) => {
+        if (model !== undefined) {
           expect(root.firstChild).not.to.be.null;
         }
         root.appendChild(rendererContent);
@@ -62,7 +62,7 @@ describe('renderer', () => {
     it('should pass owner as this to the renderer', () => {
       overlay.owner = {};
       overlay.model = renderModel;
-      overlay.renderer = function (root, owner) {
+      overlay.renderer = function (root, { owner }) {
         expect(this).to.eql(owner);
       };
     });

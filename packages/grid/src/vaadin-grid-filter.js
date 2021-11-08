@@ -26,7 +26,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
  *   }
  *   filter.path = 'name.first';
  * };
- * column.renderer = (root, column, model) => {
+ * column.renderer = (root, model) => {
  *   root.textContent = model.item.name.first;
  * };
  * ```

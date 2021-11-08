@@ -35,7 +35,6 @@ declare class GridProEditColumn<TItem = GridDefaultItem> extends GridColumn<TIte
    * Receives three arguments:
    *
    * - `root` The cell content DOM element. Append your editor component to it.
-   * - `column` The `<vaadin-grid-pro-edit-column>` element.
    * - `model` The object with the properties related with
    *   the rendered item, contains:
    *   - `model.index` The index of the item.
@@ -44,6 +43,7 @@ declare class GridProEditColumn<TItem = GridDefaultItem> extends GridColumn<TIte
    *   - `model.level` Level of the tree represented with a horizontal offset of the toggle button.
    *   - `model.selected` Selected state.
    *   - `model.detailsOpened` Details opened state.
+   *   - `model.owner` The `<vaadin-grid-pro-edit-column>` element.
    */
   editModeRenderer: GridBodyRenderer<TItem> | null | undefined;
 

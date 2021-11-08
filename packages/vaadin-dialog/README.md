@@ -15,7 +15,7 @@
 
 <script>
   const dialog = document.querySelector('vaadin-dialog');
-  dialog.renderer = function (root, dialog) {
+  dialog.renderer = function (root) {
     root.textContent = 'Sample dialog';
   };
 </script>

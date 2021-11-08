@@ -201,7 +201,7 @@ describe('row details', () => {
 
       openRowDetails(0);
 
-      grid.renderer.args.forEach(([_root, _owner, model], index) => {
+      grid.renderer.args.forEach(([_root, model], index) => {
         if (index === 0) {
           expect(model.detailsOpened).to.be.true;
         } else {
@@ -219,7 +219,7 @@ describe('row details', () => {
 
       closeRowDetails(0);
 
-      grid.renderer.args.forEach(([_root, _owner, model]) => {
+      grid.renderer.args.forEach(([_root, model]) => {
         expect(model.detailsOpened).to.be.false;
       });
     });

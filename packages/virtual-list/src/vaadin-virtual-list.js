@@ -19,7 +19,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * ```js
  * const list = document.querySelector('vaadin-virtual-list');
  * list.items = items; // An array of data items
- * list.renderer = (root, list, {item, index}) => {
+ * list.renderer = (root, {item, index}) => {
  *   root.textContent = `#${index}: ${item.name}`
  * }
  * ```
@@ -129,7 +129,7 @@ class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
 
     if (this.renderer) {
-      this.renderer(el, this, { item: this.items[index], index });
+      this.renderer(el, { item: this.items[index], index, owner: this });
     }
   }
 

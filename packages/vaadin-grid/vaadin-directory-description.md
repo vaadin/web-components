@@ -19,7 +19,7 @@
 
 <script>
   // Customize the "Address" column's renderer
-  document.querySelector('#addresscolumn').renderer = (root, grid, model) => {
+  document.querySelector('#addresscolumn').renderer = (root, model) => {
     root.textContent = `${model.item.address.street}, ${model.item.address.city}`;
   };
 

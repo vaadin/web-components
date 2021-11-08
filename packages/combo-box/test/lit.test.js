@@ -18,7 +18,7 @@ describe('lit', () => {
         return { value: `value-${i}` };
       });
 
-      comboBox.renderer = (root, _, { index }) => {
+      comboBox.renderer = (root, { index }) => {
         render(html`value-${index}`, root);
       };
     });
@@ -30,7 +30,7 @@ describe('lit', () => {
 
     it('should render new content after assigning a new renderer', () => {
       comboBox.opened = true;
-      comboBox.renderer = (root, _, { index }) => {
+      comboBox.renderer = (root, { index }) => {
         render(html`new-${index}`, root);
       };
       expect(getViewportItems(comboBox)[0].textContent).to.equal('new-0');

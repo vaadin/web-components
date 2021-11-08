@@ -453,7 +453,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
    */
   requestContentUpdate() {
     if (this.renderer) {
-      this.renderer.call(this.owner, this.content, this.owner, this.model);
+      this.renderer.call(this.owner, this.content, { ...this.model, owner: this.owner });
     }
   }
 

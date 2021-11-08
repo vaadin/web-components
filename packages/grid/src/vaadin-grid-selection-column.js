@@ -154,7 +154,7 @@ class GridSelectionColumn extends GridColumn {
    *
    * @override
    */
-  _defaultRenderer(root, _column, { item, selected }) {
+  _defaultRenderer(root, { item, selected }) {
     let checkbox = root.firstElementChild;
     if (!checkbox) {
       checkbox = document.createElement('vaadin-checkbox');

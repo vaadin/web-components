@@ -194,21 +194,21 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * columns[0].headerRenderer = function(root) {
  *   root.textContent = 'Name';
  * };
- * columns[0].renderer = function(root, column, model) {
+ * columns[0].renderer = function(root, model) {
  *   root.textContent = model.item.name;
  * };
  *
  * columns[1].headerRenderer = function(root) {
  *   root.textContent = 'Surname';
  * };
- * columns[1].renderer = function(root, column, model) {
+ * columns[1].renderer = function(root, model) {
  *   root.textContent = model.item.surname;
  * };
  *
  * columns[2].headerRenderer = function(root) {
  *   root.textContent = 'Role';
  * };
- * columns[2].renderer = function(root, column, model) {
+ * columns[2].renderer = function(root, model) {
  *   root.textContent = model.item.role;
  * };
  * ```

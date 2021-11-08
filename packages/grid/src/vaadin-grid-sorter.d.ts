@@ -31,7 +31,7 @@ export interface GridSorterEventMap extends HTMLElementEventMap, GridSorterCusto
  * ```
  * ```js
  * const column = document.querySelector('#column');
- * column.renderer = (root, column, model) => {
+ * column.renderer = (root, model) => {
  *   let sorter = root.firstElementChild;
  *   if (!sorter) {
  *     sorter = document.createElement('vaadin-grid-sorter');

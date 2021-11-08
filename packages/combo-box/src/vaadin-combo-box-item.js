@@ -133,10 +133,11 @@ export class ComboBoxItem extends ThemableMixin(DirMixin(PolymerElement)) {
       index: this.index,
       item: this.item,
       focused: this.focused,
-      selected: this.selected
+      selected: this.selected,
+      owner: this._comboBox
     };
 
-    this.renderer(this, this._comboBox, model);
+    this.renderer(this, model);
   }
 
   /** @private */

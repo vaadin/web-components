@@ -45,7 +45,7 @@ describe('virtual-list', () => {
         return { value: `value-${i}` };
       });
 
-      list.renderer = (el, list, model) => (el.textContent = model.item.value);
+      list.renderer = (el, model) => (el.textContent = model.item.value);
     });
 
     it('should include div elements', () => {

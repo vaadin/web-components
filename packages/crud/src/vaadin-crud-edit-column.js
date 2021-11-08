@@ -62,7 +62,7 @@ class CrudEditColumn extends GridColumn {
    *
    * @override
    */
-  _defaultRenderer(root, _column) {
+  _defaultRenderer(root) {
     let edit = root.firstElementChild;
     if (!edit) {
       edit = document.createElement('vaadin-crud-edit');

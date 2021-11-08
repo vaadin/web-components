@@ -68,7 +68,7 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * ```
  * ```js
  * const contextMenu = document.querySelector('#contextMenu');
- * contextMenu.renderer = (root, contextMenu, context) => {
+ * contextMenu.renderer = (root, context) => {
  *   let listBox = root.firstElementChild;
  *   if (!listBox) {
  *     listBox = document.createElement('vaadin-list-box');
@@ -155,7 +155,7 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * ```
  * ```js
  * const contextMenu = document.querySelector('#contextMenu');
- * contextMenu.renderer = (root, contextMenu, context) => {
+ * contextMenu.renderer = (root, context) => {
  *   let listBox = root.firstElementChild;
  *   if (!listBox) {
  *     listBox = document.createElement('vaadin-list-box');

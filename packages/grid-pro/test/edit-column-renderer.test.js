@@ -51,7 +51,7 @@ describe('edit column renderer', () => {
       column = grid.firstElementChild;
       grid.items = createItems();
 
-      column.renderer = function (root, owner, model) {
+      column.renderer = function (root, model) {
         root.innerHTML = '';
         const wrapper = document.createElement('div');
         const text = document.createTextNode(model.index + ' ' + model.item.name);
@@ -196,7 +196,7 @@ describe('edit column renderer', () => {
     });
 
     it('should exit the edit mode on custom editor component focusout event', () => {
-      column.editModeRenderer = function (root, _, model) {
+      column.editModeRenderer = function (root, model) {
         root.innerHTML = '';
         const input = document.createElement('input');
         input.value = model.item.name;

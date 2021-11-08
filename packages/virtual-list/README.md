@@ -15,7 +15,7 @@
 <script>
   const list = document.querySelector('vaadin-virtual-list');
   list.items = items; // An array of data items
-  list.renderer = (root, list, { item, index }) => {
+  list.renderer = (root, { item, index }) => {
     root.textContent = `#${index}: ${item.name}`;
   };
 </script>

@@ -13,13 +13,10 @@ export { ContextMenuItem };
 export interface ContextMenuRendererContext {
   target: HTMLElement;
   detail?: { sourceEvent: Event };
+  contextMenu: ContextMenu;
 }
 
-export type ContextMenuRenderer = (
-  root: HTMLElement,
-  contextMenu?: ContextMenu,
-  context?: ContextMenuRendererContext
-) => void;
+export type ContextMenuRenderer = (root: HTMLElement, context: ContextMenuRendererContext) => void;
 
 /**
  * Fired when the `opened` property changes.
@@ -97,7 +94,7 @@ export interface ContextMenuEventMap extends HTMLElementEventMap, ContextMenuCus
  * ```
  * ```js
  * const contextMenu = document.querySelector('#contextMenu');
- * contextMenu.renderer = (root, contextMenu, context) => {
+ * contextMenu.renderer = (root, context) => {
  *   let listBox = root.firstElementChild;
  *   if (!listBox) {
  *     listBox = document.createElement('vaadin-list-box');
@@ -184,7 +181,7 @@ export interface ContextMenuEventMap extends HTMLElementEventMap, ContextMenuCus
  * ```
  * ```js
  * const contextMenu = document.querySelector('#contextMenu');
- * contextMenu.renderer = (root, contextMenu, context) => {
+ * contextMenu.renderer = (root, context) => {
  *   let listBox = root.firstElementChild;
  *   if (!listBox) {
  *     listBox = document.createElement('vaadin-list-box');

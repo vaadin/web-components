@@ -33,7 +33,7 @@ document.head.appendChild($_documentContainer.content);
  * ```
  * ```js
  * const column = document.querySelector('#column');
- * column.renderer = (root, column, model) => {
+ * column.renderer = (root, model) => {
  *   let treeToggle = root.firstElementChild;
  *   if (!treeToggle) {
  *     treeToggle = document.createElement('vaadin-grid-tree-toggle');

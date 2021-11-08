@@ -11,13 +11,10 @@ export type VirtualListDefaultItem = any;
 export interface VirtualListItemModel<TItem> {
   index: number;
   item: TItem;
+  owner: VirtualList<TItem>;
 }
 
-export type VirtualListRenderer<TItem> = (
-  root: HTMLElement,
-  virtualList: VirtualList<TItem>,
-  model: VirtualListItemModel<TItem>
-) => void;
+export type VirtualListRenderer<TItem> = (root: HTMLElement, model: VirtualListItemModel<TItem>) => void;
 
 /**
  * `<vaadin-virtual-list>` is a Web Component for displaying a virtual/infinite list of items.
@@ -29,7 +26,7 @@ export type VirtualListRenderer<TItem> = (
  * ```js
  * const list = document.querySelector('vaadin-virtual-list');
  * list.items = items; // An array of data items
- * list.renderer = (root, list, {item, index}) => {
+ * list.renderer = (root, {item, index}) => {
  *   root.textContent = `#${index}: ${item.name}`
  * }
  * ```

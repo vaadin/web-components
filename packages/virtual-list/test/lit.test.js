@@ -16,7 +16,7 @@ describe('lit', () => {
         return { value: `value-${i}` };
       });
 
-      list.renderer = (root, _, { index }) => {
+      list.renderer = (root, { index }) => {
         render(html`value-${index}`, root);
       };
     });
@@ -26,7 +26,7 @@ describe('lit', () => {
     });
 
     it('should render new content after assigning a new renderer', () => {
-      list.renderer = (root, _, { index }) => {
+      list.renderer = (root, { index }) => {
         render(html`new-${index}`, root);
       };
 

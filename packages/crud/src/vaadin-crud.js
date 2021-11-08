@@ -96,18 +96,18 @@ const HOST_PROPS = {
  * const crud = document.querySelector('#crud');
  *
  * const column1 = document.querySelector('#column1');
- * column1.headerRenderer = (root, column) => {
+ * column1.headerRenderer = (root) => {
  *   root.textContent = 'Name';
  * };
- * column1.renderer = (root, column, model) => {
+ * column1.renderer = (root, model) => {
  *   root.textContent = model.item.name;
  * };
  *
  * const column2 = document.querySelector('#column2');
- * column2.headerRenderer = (root, column) => {
+ * column2.headerRenderer = (root) => {
  *   root.textContent = 'Surname';
  * };
- * column2.renderer = (root, column, model) => {
+ * column2.renderer = (root, model) => {
  *   root.textContent = model.item.surname;
  * };
  * ```

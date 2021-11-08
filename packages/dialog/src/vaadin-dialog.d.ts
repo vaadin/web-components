@@ -70,7 +70,7 @@ export type DialogEventMap = HTMLElementEventMap & DialogCustomEventMap;
  * ```
  * ```js
  * const dialog = document.querySelector('#dialog');
- * dialog.renderer = function(root, dialog) {
+ * dialog.renderer = function(root) {
  *   root.textContent = "Sample dialog";
  * };
  * ```

@@ -428,9 +428,9 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @protected */
     _runRenderer(renderer, cell, model) {
-      const args = [cell._content, this];
+      const args = [cell._content];
       if (model && model.item) {
-        args.push(model);
+        args.push({ ...model, owner: this });
       }
 
       renderer.apply(this, args);
@@ -569,7 +569,7 @@ export const ColumnBaseMixin = (superClass) =>
      *
      * @protected
      */
-    _defaultRenderer(root, _owner, { item }) {
+    _defaultRenderer(root, { item }) {
       if (!this.path) return;
 
       this.__setTextContent(root, this.get(this.path, item));

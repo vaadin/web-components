@@ -45,7 +45,7 @@ class WrappedGrid extends PolymerElement {
   ready() {
     super.ready();
     this.$.col.headerRenderer = (root) => (root.textContent = 'Header');
-    this.$.col.renderer = (root, col, model) => (root.textContent = model.item.value);
+    this.$.col.renderer = (root, model) => (root.textContent = model.item.value);
   }
 }
 
@@ -345,7 +345,7 @@ describe('data provider', () => {
                   <vaadin-grid-column></vaadin-grid-column>
                 </vaadin-grid>
               `);
-              grid.firstElementChild.renderer = (root, col, model) => (root.textContent = model.index);
+              grid.firstElementChild.renderer = (root, model) => (root.textContent = model.index);
               grid.pageSize = 5;
               grid.dataProvider = sinon.spy(finiteDataProvider);
               flushGrid(grid);
