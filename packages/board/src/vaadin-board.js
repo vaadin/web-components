@@ -3,12 +3,12 @@
  * Copyright (c) 2017 - 2021 Vaadin Ltd
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import './vaadin-board-row.js';
+import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
+import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
 /**
  * `<vaadin-board>` is a web component to create flexible responsive layouts

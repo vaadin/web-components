@@ -3,20 +3,20 @@
  * Copyright (c) 2020 Vaadin Ltd
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
-import { timeOut } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import '../vendor/vaadin-quill.js';
-import { richTextEditorStyles } from './vaadin-rich-text-editor-styles.js';
 import './vaadin-rich-text-editor-toolbar-styles.js';
+import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { timeOut } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { richTextEditorStyles } from './vaadin-rich-text-editor-styles.js';
 
 registerStyles('vaadin-rich-text-editor', richTextEditorStyles, { moduleId: 'vaadin-rich-text-editor-styles' });
 

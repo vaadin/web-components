@@ -1,5 +1,5 @@
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { getMouseOrFirstTouchEvent, eventInWindow } from './vaadin-dialog-utils.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
 
 registerStyles(
   'vaadin-dialog-overlay',

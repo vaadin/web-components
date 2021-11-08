@@ -3,8 +3,8 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ColumnBaseMixinClass } from './vaadin-grid-column.js';
 import { GridDefaultItem } from './vaadin-grid.js';
+import { ColumnBaseMixinClass } from './vaadin-grid-column.js';
 
 /**
  * A `<vaadin-grid-column-group>` is used to make groups of columns in `<vaadin-grid>` and

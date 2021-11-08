@@ -3,17 +3,17 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
-import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
-import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { dateEquals } from '@vaadin/date-picker/src/vaadin-date-picker-helper.js';
 import './vaadin-date-time-picker-date-picker.js';
 import './vaadin-date-time-picker-time-picker.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { dateEquals } from '@vaadin/date-picker/src/vaadin-date-picker-helper.js';
+import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
+import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
+import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles('vaadin-date-time-picker', inputFieldShared, { moduleId: 'vaadin-date-time-picker' });
 

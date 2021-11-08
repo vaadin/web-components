@@ -4,8 +4,8 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
+import { GridBodyRenderer, GridDefaultItem, GridItemModel } from '@vaadin/grid/src/vaadin-grid.js';
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
-import { GridDefaultItem, GridBodyRenderer, GridItemModel } from '@vaadin/grid/src/vaadin-grid.js';
 
 export type GridProEditorType = 'text' | 'checkbox' | 'select' | 'custom';
 

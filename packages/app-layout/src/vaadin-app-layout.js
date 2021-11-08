@@ -3,15 +3,15 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { beforeNextRender, afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import './safe-area-inset.js';
 import './detect-ios-navbar.js';
+import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
+import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
+import { afterNextRender, beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * `<vaadin-app-layout>` is a Web Component providing a quick and easy way to get a common application layout structure done.

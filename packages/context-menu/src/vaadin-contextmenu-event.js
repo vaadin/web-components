@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { register, prevent } from '@polymer/polymer/lib/utils/gestures.js';
+import { prevent, register } from '@polymer/polymer/lib/utils/gestures.js';
 
 register({
   name: 'vaadin-contextmenu',

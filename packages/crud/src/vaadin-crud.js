@@ -3,12 +3,7 @@
  * Copyright (c) 2017 - 2021 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import '@polymer/iron-media-query/iron-media-query.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
@@ -16,6 +11,11 @@ import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import './vaadin-dialog-layout.js';
 import './vaadin-crud-grid.js';
 import './vaadin-crud-form.js';
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const HOST_PROPS = {
   save: [{ attr: 'disabled', prop: '__isDirty', parseProp: '__isSaveBtnDisabled' }, { prop: 'i18n.saveItem' }],

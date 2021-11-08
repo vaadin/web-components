@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
-import { registerStyles, css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 // See https://github.com/vaadin/vaadin-text-field/issues/466
 registerStyles(

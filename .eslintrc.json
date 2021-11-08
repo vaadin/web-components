@@ -10,7 +10,8 @@
   },
   "plugins": [
     "prettier",
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "simple-import-sort"
   ],
   "extends": [
     "eslint:recommended",
@@ -18,6 +19,25 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          [
+            // Side-effects group
+            "^\\u0000",
+            // External group
+            "^",
+            // Vaadin group
+            "^@vaadin",
+            // Parent group
+            "^\\.\\.",
+            // Sibling group
+            "^\\."
+          ]
+        ]
+      }
+    ],
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error", {
       "argsIgnorePattern": "^_"
@@ -33,6 +53,32 @@
       "files": ["scripts/**/*.js", "*.js"],
       "rules": {
         "@typescript-eslint/no-var-requires": "off"
+      }
+    },
+    {
+      "files": ["packages/**/test/**"],
+      "rules": {
+        "simple-import-sort/imports": [
+          "error",
+          {
+            "groups": [
+              [
+                // Testing tools group
+                "^(@esm-bundle|@web|@vaadin/testing-helpers|sinon)",
+                // Side-effects group
+                "^\\u0000",
+                // External group
+                "^",
+                // Vaadin group
+                "^@vaadin",
+                // Parent group
+                "^\\.\\.",
+                // Sibling group
+                "^\\."
+              ]
+            ]
+          }
+        ]
       }
     }
   ]

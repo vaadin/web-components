@@ -3,10 +3,10 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import './vaadin-time-picker-dropdown.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ComboBoxMixin } from '@vaadin/combo-box/src/vaadin-combo-box-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import './vaadin-time-picker-dropdown.js';
 
 /**
  * An element used internally by `<vaadin-time-picker>`. Not intended to be used separately.

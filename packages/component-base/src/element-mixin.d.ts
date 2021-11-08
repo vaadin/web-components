@@ -3,10 +3,10 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Constructor } from '@open-wc/dedupe-mixin';
-import { ReactiveControllerHost } from 'lit';
 import '../custom_typings/vaadin-usage-statistics.js';
 import '../custom_typings/vaadin.js';
+import { Constructor } from '@open-wc/dedupe-mixin';
+import { ReactiveControllerHost } from 'lit';
 import { DirMixinClass } from './dir-mixin.js';
 
 /**

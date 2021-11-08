@@ -4,9 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { DirHelper } from '@vaadin/component-base/src/dir-helper.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { DirHelper } from '@vaadin/component-base/src/dir-helper.js';
 
 /**
  * A mixin for `nav` elements, facilitating navigation and selection of childNodes.

@@ -4,11 +4,11 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
-import { get, set } from '@polymer/polymer/lib/utils/path.js';
-import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 import './vaadin-grid-pro-edit-checkbox.js';
 import './vaadin-grid-pro-edit-select.js';
 import './vaadin-grid-pro-edit-text-field.js';
+import { get, set } from '@polymer/polymer/lib/utils/path.js';
+import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 
 /**
  * `<vaadin-grid-pro-edit-column>` is a helper element for the `<vaadin-grid-pro>`

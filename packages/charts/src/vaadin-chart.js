@@ -3,14 +3,8 @@
  * Copyright (c) 2015 - 2021 Vaadin Ltd
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
-import { ChartSeries } from './vaadin-chart-series.js';
-import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
+import 'highcharts/es-modules/masters/highstock.src.js';
 import 'highcharts/es-modules/masters/modules/accessibility.src.js';
 import 'highcharts/es-modules/masters/highcharts-more.src.js';
 import 'highcharts/es-modules/masters/highcharts-3d.src.js';
@@ -27,6 +21,13 @@ import 'highcharts/es-modules/masters/modules/timeline.src.js';
 import 'highcharts/es-modules/masters/modules/organization.src.js';
 import 'highcharts/es-modules/masters/modules/xrange.src.js';
 import 'highcharts/es-modules/masters/modules/bullet.src.js';
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
+import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ChartSeries } from './vaadin-chart-series.js';
 
 /** @private */
 export const deepMerge = function deepMerge(target, source) {

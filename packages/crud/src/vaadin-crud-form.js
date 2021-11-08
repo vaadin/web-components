@@ -3,8 +3,8 @@
  * Copyright (c) 2017 - 2021 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import { FormLayout } from '@vaadin/form-layout/src/vaadin-form-layout.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
+import { FormLayout } from '@vaadin/form-layout/src/vaadin-form-layout.js';
 import { IncludedMixin } from './vaadin-crud-include-mixin.js';
 
 /**

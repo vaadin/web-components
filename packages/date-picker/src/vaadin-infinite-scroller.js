@@ -3,9 +3,9 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
-import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
