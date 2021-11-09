@@ -398,9 +398,15 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     }
   }
 
-  /** @private */
-  __itemsChanged() {
-    this.requestContentUpdate();
+  /**
+   * @param {SelectItem[]} newItems
+   * @param {SelectItem[] | undefined} oldItems
+   * @private
+   */
+  __itemsChanged(newItems, oldItems) {
+    if (newItems || oldItems) {
+      this.requestContentUpdate();
+    }
   }
 
   /** @private */
