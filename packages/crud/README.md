@@ -2,7 +2,7 @@
 
 A web component for displaying, editing, creating, and deleting items from a dataset.
 
-> ℹ️ 　 A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use CRUD in your project.
+> ℹ️ A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use CRUD in your project.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/crud)
 

@@ -1,6 +1,6 @@
 # @vaadin/grid-pro
 
-> ℹ️ 　 A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Grid Pro in your project.
+> ℹ️ A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Grid Pro in your project.
 
 An extension of the `vaadin-grid` component that provides inline editing with full keyboard navigation.
 
