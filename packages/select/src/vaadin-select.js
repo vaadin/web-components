@@ -344,6 +344,10 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate() {
+    if (!this._overlayElement) {
+      return;
+    }
+
     this._overlayElement.requestContentUpdate();
 
     // Ensure menu element is set

@@ -50,6 +50,11 @@ describe('renderer', () => {
     };
   });
 
+  it('should not throw when requesting content update before attaching to the DOM', () => {
+    const select = document.createElement('vaadin-select');
+    expect(() => select.requestContentUpdate()).not.to.throw(Error);
+  });
+
   it('should run renderers when requesting content update', () => {
     select.renderer = sinon.spy();
     select.opened = true;
