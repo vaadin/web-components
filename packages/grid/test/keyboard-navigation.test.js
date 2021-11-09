@@ -2034,6 +2034,29 @@ describe('keyboard navigation on column groups', () => {
         expect(tabbableBodyCell.parentElement.index).to.equal(0);
         expect(tabbableBodyCell.offsetHeight).not.to.equal(0);
       });
+
+      it('should remain on the first column after a tabbable cell row is hidden', async () => {
+        // Add a second column
+        const column = document.createElement('vaadin-grid-column');
+        grid.appendChild(column);
+        await nextFrame();
+
+        // Focus the second cell on the second row
+        tabToBody();
+        right();
+        down();
+
+        // Hide the second body row
+        grid.items = ['foo'];
+
+        // Focus the first row (should focus the first cell)
+        tabToBody();
+        // Hit down
+        down();
+
+        // Expect the focus to be on the first column
+        expect(getFocusedCellIndex()).to.equal(0);
+      });
     });
   });
 });

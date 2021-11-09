@@ -593,7 +593,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           // scrolling. Focus the row for the stored focused item index instead.
           const columnIndex = Array.from(targetRow.children).indexOf(this._itemsFocusable);
           const focusedItemRow = Array.from(this.$.items.children).filter(
-            (row) => row.index === this._focusedItemIndex
+            (row) => !row.hidden && row.index === this._focusedItemIndex
           )[0];
           if (focusedItemRow) {
             itemsFocusTarget = focusedItemRow.children[columnIndex];
@@ -798,7 +798,6 @@ export const KeyboardNavigationMixin = (superClass) =>
           // Reset memoized column
           delete this._focusedColumnOrder;
           this._itemsFocusable = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
-          this._focusedItemIndex = firstVisibleRow ? firstVisibleRow.index : 0;
         }
       }
     }
