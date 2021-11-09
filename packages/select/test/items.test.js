@@ -9,9 +9,9 @@ describe('items', () => {
   beforeEach(() => {
     select = fixtureSync(`<vaadin-select></vaadin-select>`);
     select.items = [{ label: 'Option 1', value: 'value-1' }];
+    overlay = select.shadowRoot.querySelector('vaadin-select-overlay');
+    listBox = overlay.content.querySelector('vaadin-list-box');
     select.opened = true;
-    overlay = select._overlayElement;
-    listBox = overlay.querySelector('vaadin-list-box');
   });
 
   it('should render items', () => {
@@ -39,7 +39,7 @@ describe('items', () => {
 
   it('should clear the content when clearing items', () => {
     select.items = [];
-    expect(overlay.childNodes).to.be.empty;
+    expect(overlay.content.childNodes).to.be.empty;
   });
 
   it('should render item with a custom component', () => {
@@ -62,12 +62,12 @@ describe('items', () => {
     });
 
     it('should override content with the renderer', () => {
-      expect(overlay.textContent).to.equal('Renderer');
+      expect(overlay.content.textContent).to.equal('Renderer');
     });
 
     it('should render items when removing the renderer', () => {
       select.renderer = null;
-      const newListBox = overlay.querySelector('vaadin-list-box');
+      const newListBox = overlay.content.querySelector('vaadin-list-box');
       expect(newListBox).to.be.ok;
       expect(newListBox.childNodes).to.have.lengthOf(1);
       expect(newListBox.childNodes[0].textContent).to.equal('Option 1');
