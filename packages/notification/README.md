@@ -1,13 +1,10 @@
-# &lt;vaadin-notification&gt;
+# @vaadin/notification
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-notification/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-notification/html-api)
+A web component used to provide feedback to the user.
 
-[&lt;vaadin-notification&gt;](https://vaadin.com/components/vaadin-notification) is a Web Component providing accessible and customizable notifications (toasts), part of the [Vaadin components](https://vaadin.com/components).
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/notification)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/notification)](https://www.npmjs.com/package/@vaadin/notification)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-notification)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -22,41 +19,44 @@
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-notification/master/screenshot.png" width="336" alt="Screenshot of vaadin-notification">](https://vaadin.com/components/vaadin-notification)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/notification/screenshot.png" width="336" alt="Screenshot of vaadin-notification">](https://vaadin.com/docs/latest/ds/components/notification)
 
 ## Installation
 
-Install `vaadin-notification`:
+Install the component:
 
 ```sh
 npm i @vaadin/notification --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/notification/vaadin-notification.js';
+import '@vaadin/notification';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/notification/vaadin-notification.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/notification/theme/material/vaadin-notification.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-notification.js`
+```js
+import '@vaadin/notification/theme/lumo/vaadin-notification.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-notification.js`
-
-- Alias for `theme/lumo/vaadin-notification.js`:
-
-- `vaadin-notification.js`
+```js
+import '@vaadin/notification/src/vaadin-notification.js';
+```
 
 ## Contributing
 
@@ -66,4 +66,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects development time usage statistics to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

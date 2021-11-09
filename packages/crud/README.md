@@ -1,56 +1,54 @@
-# &lt;vaadin-crud&gt;
+# @vaadin/context-menu
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-crud/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-crud/html-api)
+A web component for displaying, editing, creating, and deleting items from a dataset.
 
-[&lt;vaadin-crud&gt;](https://vaadin.com/components/vaadin-crud) is a Web Component for
-[CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
-It is part of the [Vaadin components](https://vaadin.com/components).
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/crud)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/crud)](https://www.npmjs.com/package/@vaadin/crud)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-crud)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-crud items='[{"name": "Juan", "surname": "Garcia"}]'></vaadin-crud>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-crud/master/screenshot.gif" width="700" alt="Screenshot of vaadin-crud">](https://vaadin.com/components/vaadin-crud)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/crud/screenshot.gif" width="702" alt="Screenshot of vaadin-crud">](https://vaadin.com/docs/latest/ds/components/crud)
 
 ## Installation
 
-Install `vaadin-crud`:
+Install the component:
 
 ```sh
 npm i @vaadin/crud --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/crud/vaadin-crud.js';
+import '@vaadin/crud';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/crud/vaadin-crud.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/crud/theme/material/vaadin-crud.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-crud.js`
+```js
+import '@vaadin/crud/theme/lumo/vaadin-crud.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-crud.js`
-
-- Alias for `theme/lumo/vaadin-crud.js`:
-
-  `vaadin-crud.js`
+```js
+import '@vaadin/crud/src/vaadin-crud.js';
+```
 
 ## Contributing
 
@@ -60,4 +58,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects development time usage statistics to improve this product.
+For crud and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

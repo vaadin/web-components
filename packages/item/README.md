@@ -1,13 +1,10 @@
-# &lt;vaadin-item&gt;
+# @vaadin/item
+
+A web component used to create items in a list-box, context-menu or select components.
 
 [Live Demo ↗](https://vaadin.com/components/vaadin-item/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-item/html-api)
-
-[&lt;vaadin-item&gt;](https://vaadin.com/components/vaadin-item) is a Web Component providing a container for item elements, part of the [Vaadin components](https://vaadin.com/components).
 
 [![npm version](https://badgen.net/npm/v/@vaadin/item)](https://www.npmjs.com/package/@vaadin/item)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-item)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -18,37 +15,40 @@
 
 ## Installation
 
-Install `vaadin-item`:
+Install the component:
 
 ```sh
 npm i @vaadin/item --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/item/vaadin-item.js';
+import '@vaadin/item';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/item/vaadin-item.js) of the package uses Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/item/theme/material/vaadin-item.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-item.js`
+```js
+import '@vaadin/item/theme/lumo/vaadin-item.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-item.js`
-
-- Alias for `theme/lumo/vaadin-item.js`:
-
-  `vaadin-item.js`
+```js
+import '@vaadin/item/src/vaadin-item.js';
+```
 
 ## Contributing
 
@@ -57,3 +57,6 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 ## License
 
 Apache License 2.0
+
+Vaadin collects development time usage statistics to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

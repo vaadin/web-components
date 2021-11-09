@@ -1,17 +1,14 @@
 # &lt;vaadin-select&gt;
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-select/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-select/html-api)
+A web component to choose a single value from a list of options presented in an overlay.
 
-[&lt;vaadin-select&gt;](https://vaadin.com/components/vaadin-select) is a Web Component similar to a native browser select element, part of the [Vaadin components](https://vaadin.com/components).
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/select)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/vaadin-select)](https://www.npmjs.com/package/@vaadin/vaadin-select)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-select)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
-<vaadin-select></vaadin-select>
+<vaadin-select label="Sort by"></vaadin-select>
 <script>
   document.querySelector('vaadin-select').renderer = (root) => {
     if (root.firstElementChild) {
@@ -19,55 +16,58 @@
     }
 
     // Note that innerHTML is only used for demo purposes here!
-    // Prefer using a templating library instead.
+    // Consider using Lit or another template library instead.
     root.innerHTML = `
       <vaadin-list-box>
-        <vaadin-item>Option one</vaadin-item>
-        <vaadin-item>Option two</vaadin-item>
-        <vaadin-item>Option three</vaadin-item>
-        <hr>
-        <vaadin-item disabled>Option four</vaadin-item>
+        <vaadin-item value="recent">Most recent first</vaadin-item>
+        <vaadin-item value="rating-desc">Rating: high to low</vaadin-item>
+        <vaadin-item value="rating-asc">Rating: low to high</vaadin-item>
+        <vaadin-item value="price-desc">Price: high to low</vaadin-item>
+        <vaadin-item value="price-asc">Price: low to high</vaadin-item>
       </vaadin-list-box>
     `;
   };
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-select/master/screenshot.gif" width="220" alt="Screenshot of vaadin-select">](https://vaadin.com/components/vaadin-select)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/select/screenshot.png" width="231" alt="Screenshot of vaadin-select">](https://vaadin.com/docs/latest/ds/components/select)
 
 ## Installation
 
-Install `vaadin-select`:
+Install the component:
 
 ```sh
-npm i @vaadin/vaadin-select --save
+npm i @vaadin/select --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/vaadin-select/vaadin-select.js';
+import '@vaadin/select';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/select/vaadin-select.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/select/theme/material/vaadin-select.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-select.js`
+```js
+import '@vaadin/select/theme/lumo/vaadin-select.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-- `theme/material/vaadin-select.js`
-
-- Alias for `theme/lumo/vaadin-select.js`:
-
-- `vaadin-select.js`
+```js
+import '@vaadin/select/src/vaadin-select.js';
+```
 
 ## Contributing
 
@@ -77,4 +77,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects development time usage statistics to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

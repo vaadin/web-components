@@ -1,18 +1,17 @@
-# Vaadin Icons
+# @vaadin/icons
+
+A set of 600+ icons designed for web applications.
+
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons/vaadin)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/icons)](https://www.npmjs.com/package/@vaadin/icons)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-icons)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
-[<img src="https://raw.github.com/vaadin/vaadin-icons/master/screenshot.png" width="611" alt="Screenshot of some icons in the Vaadin Icons collection" />](https://vaadin.com/icons)
-
-[Vaadin Icons](https://vaadin.com/icons) is a set of 600+ icons designed for web applications. Free to use, anywhere!
-
-Visit **https://vaadin.com/icons** for more information and instructions how to get started using them.
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/icons/screenshot.png" width="728" alt="Screenshot of vaadin-icons">](https://vaadin.com/docs/latest/ds/foundation/icons/vaadin)
 
 ## Installation
 
-Install `vaadin-icons`:
+Install the iconset:
 
 ```sh
 npm i @vaadin/icons --save
@@ -21,7 +20,7 @@ npm i @vaadin/icons --save
 Once installed, import it in your application:
 
 ```js
-import '@vaadin/icons/vaadin-icons.js';
+import '@vaadin/icons';
 ```
 
 ## License

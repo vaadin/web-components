@@ -1,13 +1,10 @@
-# &lt;vaadin-avatar&gt;
+# @vaadin/avatar-group
 
-[&lt;vaadin-avatar-group&gt;](https://vaadin.com/components/vaadin-avatar) is a Web Component providing avatar in groups displaying functionality.
+A web component used to group multiple [`<vaadin-avatar>`](https://www.npmjs.com/package/@vaadin/avatar-group) components together.
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-avatar/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-avatar/html-api)
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/avatar/#avatar-group)
 
-[![npm version](https://badgen.net/npm/v/@vaadin/avatar-group)](https://www.npmjs.com/package/@vaadin/avatar)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-avatar)
+[![npm version](https://badgen.net/npm/v/@vaadin/avatar-group)](https://www.npmjs.com/package/@vaadin/avatar-group)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -22,41 +19,44 @@
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/avatar-group/screenshot.png" width="200" alt="Screenshot of vaadin-avatar-group">](https://vaadin.com/components/vaadin-avatar)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/avatar-group/screenshot.png" width="108" alt="Screenshot of vaadin-avatar-group">](https://vaadin.com/docs/latest/ds/components/avatar/#avatar-group)
 
 ## Installation
 
-Install `vaadin-avatar-group`:
+Install the component:
 
 ```sh
 npm i @vaadin/avatar-group --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/avatar-group/vaadin-avatar-group.js';
+import '@vaadin/avatar-group';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/avatar-group/vaadin-avatar-group.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/avatar-group/theme/material/vaadin-avatar-group.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-avatar-group.js`
+```js
+import '@vaadin/avatar-group/theme/lumo/vaadin-avatar-group.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-avatar-group.js`
-
-- Alias for `theme/lumo/vaadin-avatar-group.js`:
-
-  `vaadin-avatar-group.js`
+```js
+import '@vaadin/avatar-group/src/vaadin-avatar-group.js';
+```
 
 ## Contributing
 
@@ -66,4 +66,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects development time usage statistics to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

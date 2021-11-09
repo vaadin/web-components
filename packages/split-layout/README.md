@@ -1,13 +1,10 @@
-# &lt;vaadin-split-layout&gt;
+# @vaadin/split-layout
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-split-layout/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-split-layout/html-api)
+A web component with two content areas and a draggable split handle between them.
 
-[&lt;vaadin-split-layout&gt;](https://vaadin.com/components/vaadin-split-layout) is a Web Component implementing a split layout for two content elements with a draggable splitter between them, part of the [Vaadin components](https://vaadin.com/components).
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/split-layout)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/split-layout)](https://www.npmjs.com/package/@vaadin/split-layout)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-split-layout)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -23,41 +20,44 @@
 </vaadin-split-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-split-layout/master/screenshot.png" width="616" alt="Screenshot of vaadin-split-layout">](https://vaadin.com/components/vaadin-split-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/split-layout/screenshot.png" width="616" alt="Screenshot of vaadin-split-layout">](https://vaadin.com/docs/latest/ds/components/split-layout)
 
 ## Installation
 
-Install `vaadin-split-layout`:
+Install the component:
 
 ```sh
 npm i @vaadin/split-layout --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/split-layout/vaadin-split-layout.js';
+import '@vaadin/split-layout';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/split-layout/vaadin-split-layout.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/split-layout/theme/material/vaadin-split-layout.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-split-layout.js`
+```js
+import '@vaadin/split-layout/theme/lumo/vaadin-split-layout.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-split-layout.js`
-
-- Alias for `theme/lumo/vaadin-split-layout.js`:
-
-  `vaadin-split-layout.js`
+```js
+import '@vaadin/split-layout/src/vaadin-split-layout.js';
+```
 
 ## Contributing
 
@@ -67,4 +67,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects development time usage statistics to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

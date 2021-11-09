@@ -4,6 +4,9 @@ An extension of `vaadin-text-field` component that only accepts email addresses 
 
 [Live Demo ↗](https://vaadin.com/docs/latest/ds/components/email-field)
 
+[![npm version](https://badgen.net/npm/v/@vaadin/email-field)](https://www.npmjs.com/package/@vaadin/email-field)
+[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
+
 ```html
 <vaadin-email-field label="Email"></vaadin-email-field>
 ```
@@ -24,9 +27,8 @@ import '@vaadin/email-field';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes),
-Lumo and Material. The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/email-field/vaadin-email-field.js)
-of the package uses Lumo theme.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/email-field/vaadin-email-field.js) of the package uses Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 
@@ -45,6 +47,10 @@ Finally, you can import the un-themed component from the `src` folder to get a m
 ```js
 import '@vaadin/email-field/src/vaadin-email-field.js';
 ```
+
+## Contributing
+
+Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

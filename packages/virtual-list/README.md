@@ -1,10 +1,8 @@
-# &lt;vaadin-virtual-list&gt;
+# @vaadin/virtual-list
+
+A web component allowing to render a long list of items without sacrificing performance.
 
 [Live Demo ↗](https://vaadin.com/docs/latest/ds/components/virtual-list)
-|
-[API documentation ↗](https://vaadin.com/docs/latest/ds/components/virtual-list/api)
-
-[&lt;vaadin-virtual-list&gt;](https://vaadin.com/docs/latest/ds/components/virtual-list) is a Web Component providing an accessible and customizable virtual-list, part of the [Vaadin components](https://vaadin.com/docs/latest/ds/components).
 
 [![npm version](https://badgen.net/npm/v/@vaadin/virtual-list)](https://www.npmjs.com/package/@vaadin/virtual-list)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -21,41 +19,42 @@
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/virtual-list/screenshot.png" alt="Screenshot of vaadin-virtual-list">](https://vaadin.com/docs/latest/ds/components/virtual-list)
-
 ## Installation
 
-Install `vaadin-virtual-list`:
+Install the component:
 
 ```sh
 npm i @vaadin/virtual-list --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/virtual-list/vaadin-virtual-list.js';
+import '@vaadin/virtual-list';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/virtual-list/vaadin-virtual-list.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/virtual-list/theme/material/vaadin-virtual-list.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-virtual-list.js`
+```js
+import '@vaadin/virtual-list/theme/lumo/vaadin-virtual-list.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-virtual-list.js`
-
-- Alias for `theme/lumo/vaadin-virtual-list.js`:
-
-  `vaadin-virtual-list.js`
+```js
+import '@vaadin/virtual-list/src/vaadin-virtual-list.js';
+```
 
 ## Contributing
 
@@ -65,4 +64,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects development time usage statistics to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

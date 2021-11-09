@@ -1,13 +1,10 @@
-# &lt;vaadin-upload&gt;
+# @vaadin/upload
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-upload/html-examples/upload-basic-demos)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-upload/html-api)
+A web component for uploading files.
 
-[&lt;vaadin-upload&gt;](https://vaadin.com/components/vaadin-upload) is a Web Component for uploading files, part of the [Vaadin components](https://vaadin.com/components).
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/upload)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/upload)](https://www.npmjs.com/package/@vaadin/upload)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-upload)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -16,41 +13,44 @@
 </vaadin-upload>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-upload/master/screenshot.png" alt="Screenshot of vaadin-upload" width="670" />](https://vaadin.com/components/vaadin-upload)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/upload/screenshot.png" width="656" alt="Screenshot of vaadin-upload">](https://vaadin.com/docs/latest/ds/components/upload)
 
 ## Installation
 
-Install `vaadin-upload`:
+Install the component:
 
 ```sh
 npm i @vaadin/upload --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/upload/vaadin-upload.js';
+import '@vaadin/upload';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/upload/vaadin-upload.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/upload/theme/material/vaadin-upload.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-upload.js`
+```js
+import '@vaadin/upload/theme/lumo/vaadin-upload.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-upload.js`
-
-- Alias for `theme/lumo/vaadin-upload.js`:
-
-  `vaadin-upload.js`
+```js
+import '@vaadin/upload/src/vaadin-upload.js';
+```
 
 ## Contributing
 
@@ -60,4 +60,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects development time usage statistics to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

@@ -1,13 +1,10 @@
-# &lt;vaadin-dialog&gt;
+# @vaadin/dialog
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-dialog/html-examples/dialog-basic-demos)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-dialog/html-api)
+A web component used to present information and user interface elements in an overlay.
 
-[&lt;vaadin-dialog&gt;](https://vaadin.com/components/vaadin-dialog) is a Web Component for customized modal dialogs, part of the [Vaadin components](https://vaadin.com/components).
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/dialog)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/dialog)](https://www.npmjs.com/package/@vaadin/dialog)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-dialog)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -21,41 +18,44 @@
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-dialog/master/screenshot.png" width="264" alt="Screenshot of vaadin-dialog">](https://vaadin.com/components/vaadin-dialog)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/dialog/screenshot.png" width="264" alt="Screenshot of vaadin-dialog">](https://vaadin.com/docs/latest/ds/components/dialog)
 
 ## Installation
 
-Install `vaadin-dialog`:
+Install the component:
 
 ```sh
 npm i @vaadin/dialog --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/dialog/vaadin-dialog.js';
+import '@vaadin/dialog';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/dialog/vaadin-dialog.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/dialog/theme/material/vaadin-dialog.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-dialog.js`
+```js
+import '@vaadin/dialog/theme/lumo/vaadin-dialog.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-dialog.js`
-
-- Alias for `theme/lumo/vaadin-dialog.js`:
-
-  `vaadin-dialog.js`
+```js
+import '@vaadin/dialog/src/vaadin-dialog.js';
+```
 
 ## Contributing
 
@@ -65,4 +65,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects development time usage statistics to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

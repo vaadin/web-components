@@ -1,13 +1,8 @@
 # &lt;vaadin-combo-box&gt;
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-combo-box/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-combo-box/html-api)
-
-[&lt;vaadin-combo-box&gt;](https://vaadin.com/components/vaadin-combo-box) is a Web Component combining a dropdown list with an input field for filtering the list of items, part of the [Vaadin components](https://vaadin.com/components).
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/combo-box)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/combo-box)](https://www.npmjs.com/package/@vaadin/combo-box)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-combo-box)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -27,45 +22,44 @@
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-combo-box/master/screenshot.png" width="208" alt="Screenshot of vaadin-combo-box" />](https://vaadin.com/components/vaadin-combo-box)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/combo-box/screenshot.png" width="208" alt="Screenshot of vaadin-combo-box">](https://vaadin.com/docs/latest/ds/components/combo-box)
 
 ## Installation
 
-Install `vaadin-combo-box`:
+Install the component:
 
 ```sh
 npm i @vaadin/combo-box --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/combo-box/vaadin-combo-box.js';
+import '@vaadin/combo-box';
 ```
 
-## Getting Started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/combo-box/vaadin-combo-box.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/combo-box/theme/material/vaadin-combo-box.js';
+```
 
-- The components with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-combo-box.js`
-  `theme/lumo/vaadin-combo-box-light.js`
+```js
+import '@vaadin/combo-box/theme/lumo/vaadin-combo-box.js';
+```
 
-- The components with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-combo-box.js`
-  `theme/material/vaadin-combo-box-light.js`
-
-- Alias for `theme/lumo/vaadin-combo-box.js`
-  `theme/lumo/vaadin-combo-box-light.js`
-
-  `vaadin-combo-box.js`
-  `vaadin-combo-box-light.js`
+```js
+import '@vaadin/combo-box/src/vaadin-combo-box.js';
+```
 
 ## Contributing
 
@@ -75,4 +69,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects development time usage statistics to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

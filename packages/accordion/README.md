@@ -1,13 +1,10 @@
-# &lt;vaadin-accordion&gt;
+# @vaadin/accordion
 
-[&lt;vaadin-accordion&gt;](https://vaadin.com/components/vaadin-accordion) is a Web Component implementing the vertically stacked set of expandable panels, part of the [Vaadin components](https://vaadin.com/components).
+A web component implementing accordion widget: a vertically stacked set of expandable panels.
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-accordion/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-accordion/html-api)
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/accordion)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/accordion)](https://www.npmjs.com/package/@vaadin/accordion)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-accordion)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -23,41 +20,44 @@
 </vaadin-accordion>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-accordion/master/screenshot.png" alt="Screenshot of vaadin-accordion" width="900">](https://vaadin.com/components/vaadin-accordion)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/accordion/screenshot.png" alt="Screenshot of vaadin-accordion" width="900">](https://vaadin.com/docs/latest/ds/components/accordion)
 
 ## Installation
 
-Install `vaadin-accordion`:
+Install the component:
 
 ```sh
 npm i @vaadin/accordion --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/accordion/vaadin-accordion.js';
+import '@vaadin/accordion';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/accordion/vaadin-accordion.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/accordion/theme/material/vaadin-accordion.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-accordion.js`
+```js
+import '@vaadin/accordion/theme/lumo/vaadin-accordion.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-accordion.js`
-
-- Alias for `theme/lumo/vaadin-accordion.js`:
-
-  `vaadin-accordion.js`
+```js
+import '@vaadin/accordion/src/vaadin-accordion.js';
+```
 
 ## Contributing
 
@@ -67,4 +67,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects development time usage statistics to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

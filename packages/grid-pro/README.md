@@ -1,13 +1,12 @@
-# &lt;vaadin-grid-pro&gt;
+# @vaadin/grid-pro
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-grid-pro/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-grid-pro/html-api)
+> ℹ️　A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Grid Pro in your project.
 
-[&lt;vaadin-grid-pro&gt;](https://vaadin.com/components/vaadin-grid-pro) is a high quality data grid / data table Web Component with extended functionality, part of the [Vaadin components](https://vaadin.com/components).
+An extension of the `vaadin-grid` component that provides inline editing with full keyboard navigation.
+
+[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/grid-pro)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/grid-pro)](https://www.npmjs.com/package/@vaadin/grid-pro)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-grid-pro)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -25,41 +24,48 @@
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-grid-pro/master/screenshot.png" width="900" alt="Screenshot of vaadin-grid-pro">](https://vaadin.com/components/vaadin-grid-pro)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/grid-pro/screenshot.png" width="900" alt="Screenshot of vaadin-grid-pro">](https://vaadin.com/docs/latest/ds/components/grid-pro)
 
 ## Installation
 
-Install `vaadin-grid-pro`:
+Install the component:
 
 ```sh
-npm i @vaadin/vaadin-pro --save
+npm i @vaadin/grid-pro --save
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/grid-pro/vaadin-grid-pro.js';
+import '@vaadin/grid-pro';
+import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/grid-pro/vaadin-grid-pro.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the components from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/grid-pro/theme/material/vaadin-grid-pro.js';
+import '@vaadin/grid-pro/theme/material/vaadin-grid-pro-edit-column.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the components explicitly:
 
-  `theme/lumo/vaadin-grid-pro.js`
+```js
+import '@vaadin/grid-pro/theme/lumo/vaadin-grid-pro.js';
+import '@vaadin/grid-pro/theme/lumo/vaadin-grid-pro-edit-column.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed components from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-grid-pro.js`
-
-- Alias for `theme/lumo/vaadin-grid-pro.js`:
-
-  `vaadin-grid-pro.js`
+```js
+import '@vaadin/grid-pro/src/vaadin-grid-pro.js';
+import '@vaadin/grid-pro/src/vaadin-grid-pro-edit-column.js';
+```
 
 ## Contributing
 
@@ -69,4 +75,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects development time usage statistics to improve this product.
+For grid-pro and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

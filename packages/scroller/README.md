@@ -36,9 +36,8 @@ import '@vaadin/scroller';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes),
-Lumo and Material. The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/scroller/vaadin-scroller.js)
-of the package uses the Lumo theme.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/scroller/vaadin-scroller.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 
@@ -57,6 +56,10 @@ Finally, you can import the un-themed component from the `src` folder to get a m
 ```js
 import '@vaadin/scroller/src/vaadin-scroller.js';
 ```
+
+## Contributing
+
+Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 
