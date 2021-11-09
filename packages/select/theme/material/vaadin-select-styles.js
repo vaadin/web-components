@@ -54,12 +54,12 @@ registerStyles(
       display: none;
     }
 
-    ::slotted(vaadin-item) {
+    ::slotted(:not([slot])) {
       font: inherit;
       padding: 4px 0;
     }
 
-    ::slotted(vaadin-item:hover) {
+    ::slotted(:not([slot]):hover) {
       background-color: transparent;
     }
   `,
