@@ -1934,4 +1934,97 @@ describe('keyboard navigation on column groups', () => {
 
     expect(getFocusedRowIndex()).to.equal(0);
   });
+
+  describe('updating tabbable cells', () => {
+    describe('updating tabbable cells - header', () => {
+      let header;
+      let mainGroup;
+      let subGroup;
+      let column;
+
+      beforeEach(() => {
+        header = grid.$.header;
+        mainGroup = grid.querySelector('vaadin-grid-column-group');
+        subGroup = mainGroup.querySelector('vaadin-grid-column-group');
+        column = subGroup.querySelector('vaadin-grid-column');
+      });
+
+      it('should update tabbable header cell on header row hide', async () => {
+        // Hide the first header row
+        mainGroup.headerRenderer = null;
+        await nextFrame();
+
+        const tabbableHeaderCell = getTabbableElements(header)[0];
+        expect(tabbableHeaderCell._column).to.equal(subGroup);
+      });
+
+      it('should have no tabbable header cells when header is hidden', async () => {
+        // Hide all header rows
+        mainGroup.headerRenderer = null;
+        subGroup.headerRenderer = null;
+        column.headerRenderer = null;
+        await nextFrame();
+
+        const tabbableHeaderCell = getTabbableElements(header)[0];
+        expect(tabbableHeaderCell).not.to.be.ok;
+      });
+
+      it('should update tabbable header cell on header row unhide', async () => {
+        // Hide all header rows
+        mainGroup.headerRenderer = null;
+        subGroup.headerRenderer = null;
+        column.headerRenderer = null;
+        await nextFrame();
+
+        column.headerRenderer = 'column';
+        await nextFrame();
+
+        const tabbableHeaderCell = getTabbableElements(header)[0];
+        expect(tabbableHeaderCell._column).to.equal(column);
+      });
+    });
+
+    describe('updating tabbable cells - body', () => {
+      let body;
+
+      beforeEach(() => {
+        body = grid.$.items;
+      });
+
+      it('should update tabbable body cell on body row hide', async () => {
+        grid.items = ['foo', 'bar', 'baz'];
+        // Focus the third body row / make it tabbable
+        tabToBody();
+        down();
+        down();
+
+        // Hide the third body row
+        grid.items = ['foo', 'bar'];
+
+        // Expect the tabbable body cell to be on the second row
+        const tabbableBodyCell = getTabbableElements(body)[0];
+        expect(tabbableBodyCell.parentElement.index).to.equal(1);
+      });
+
+      it('should have no tabbable body cell when there are no rows', async () => {
+        // Remove all body rows
+        grid.items = [];
+
+        const tabbableBodyCell = getTabbableElements(body)[0];
+        expect(tabbableBodyCell).not.to.be.ok;
+      });
+
+      it('should update tabbable body cell on body row unhide', async () => {
+        // Remove all body rows
+        grid.items = [];
+        await nextFrame();
+
+        grid.items = ['foo', 'bar'];
+        await nextFrame();
+
+        const tabbableBodyCell = getTabbableElements(body)[0];
+        expect(tabbableBodyCell.parentElement.index).to.equal(0);
+      });
+    });
+  });
 });
