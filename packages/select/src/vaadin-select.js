@@ -5,6 +5,8 @@
  */
 import '@polymer/iron-media-query/iron-media-query.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
+import './vaadin-select-item.js';
+import './vaadin-select-list-box.js';
 import './vaadin-select-overlay.js';
 import './vaadin-select-value-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -561,7 +563,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
     const label = selected.getAttribute('label');
     if (label) {
-      labelItem = this.__createItemElement({ label });
+      labelItem = this.__createItemElement({ label, component: 'vaadin-item' });
     } else {
       labelItem = selected.cloneNode(true);
     }
@@ -580,7 +582,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
    * @private
    */
   __createItemElement(item) {
-    const itemElement = document.createElement(item.component || 'vaadin-item');
+    const itemElement = document.createElement(item.component || 'vaadin-select-item');
     if (item.label) {
       itemElement.textContent = item.label;
     }
@@ -701,7 +703,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
     let listBox = root.firstElementChild;
     if (!listBox) {
-      listBox = document.createElement('vaadin-list-box');
+      listBox = document.createElement('vaadin-select-list-box');
       root.appendChild(listBox);
     }
 

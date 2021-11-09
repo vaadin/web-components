@@ -10,14 +10,14 @@ describe('items', () => {
     select = fixtureSync(`<vaadin-select></vaadin-select>`);
     select.items = [{ label: 'Option 1', value: 'value-1' }];
     overlay = select.shadowRoot.querySelector('vaadin-select-overlay');
-    listBox = overlay.content.querySelector('vaadin-list-box');
+    listBox = overlay.content.querySelector('vaadin-select-list-box');
     select.opened = true;
   });
 
   it('should render items', () => {
     expect(listBox).to.be.ok;
     expect(listBox.childNodes).to.have.lengthOf(1);
-    expect(listBox.childNodes[0].localName).to.equal('vaadin-item');
+    expect(listBox.childNodes[0].localName).to.equal('vaadin-select-item');
     expect(listBox.childNodes[0].textContent).to.equal('Option 1');
     expect(listBox.childNodes[0].value).to.equal('value-1');
     expect(listBox.childNodes[0].disabled).to.be.false;
@@ -67,7 +67,7 @@ describe('items', () => {
 
     it('should render items when removing the renderer', () => {
       select.renderer = null;
-      const newListBox = overlay.content.querySelector('vaadin-list-box');
+      const newListBox = overlay.content.querySelector('vaadin-select-list-box');
       expect(newListBox).to.be.ok;
       expect(newListBox.childNodes).to.have.lengthOf(1);
       expect(newListBox.childNodes[0].textContent).to.equal('Option 1');
