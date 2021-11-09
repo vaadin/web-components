@@ -606,13 +606,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
    * @private
    */
   __createItemElement(item) {
-    let itemElement;
-    if (item.component instanceof HTMLElement) {
-      itemElement = item.component;
-    } else {
-      itemElement = document.createElement(item.component || 'vaadin-item');
-    }
-
+    const itemElement = document.createElement(item.component || 'vaadin-item');
     if (item.label) {
       itemElement.textContent = item.label;
     }
@@ -622,7 +616,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     if (item.disabled) {
       itemElement.disabled = item.disabled;
     }
-
     return itemElement;
   }
 

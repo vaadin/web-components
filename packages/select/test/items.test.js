@@ -42,17 +42,10 @@ describe('items', () => {
     expect(overlay.childNodes).to.be.empty;
   });
 
-  it('should render item with a custom component passed as string', () => {
+  it('should render item with a custom component', () => {
     select.items = [{ component: 'hr' }];
     expect(listBox.childNodes).to.have.lengthOf(1);
     expect(listBox.childNodes[0].localName).to.equal('hr');
-  });
-
-  it('should render item with a custom component passed as an element reference', () => {
-    const div = document.createElement('div');
-    select.items = [{ component: div }];
-    expect(listBox.childNodes).to.have.lengthOf(1);
-    expect(listBox.childNodes[0]).to.equal(div);
   });
 
   it('should render disabled item', () => {
