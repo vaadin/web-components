@@ -1,4 +1,4 @@
-# &lt;vaadin-icon&gt;
+# @vaadin/icon
 
 A web component for creating SVG icons.
 
