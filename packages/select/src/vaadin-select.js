@@ -688,7 +688,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   }
 
   /**
-   * Renders items provided by the `items` property.
+   * Renders items when they are provided by the `items` property and clears the content otherwise.
    * @param {HTMLElement} root
    * @param {Select} _select
    * @private
