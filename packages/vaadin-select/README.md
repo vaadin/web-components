@@ -3,7 +3,7 @@
 > ⚠️&nbsp; Starting from Vaadin 22, this package is deprecated.
 > Please use [`@vaadin/select`](https://www.npmjs.com/package/@vaadin/select) instead.
 
-A web component to choose a single value from a list of options presented in an overlay.
+A web component for selecting a single value from a list of options presented in an overlay.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/select)
 

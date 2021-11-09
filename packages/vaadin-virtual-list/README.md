@@ -3,7 +3,7 @@
 > ⚠️&nbsp; Starting from Vaadin 22, this package is deprecated.
 > Please use [`@vaadin/virtual-list`](https://www.npmjs.com/package/@vaadin/virtual-list) instead.
 
-A web component allowing to render a long list of items without sacrificing performance.
+A web component for rendering a long list of items without sacrificing performance.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/virtual-list)
 

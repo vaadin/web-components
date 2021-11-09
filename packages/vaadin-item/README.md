@@ -3,7 +3,7 @@
 > ⚠️&nbsp; Starting from Vaadin 22, this package is deprecated.
 > Please use [`@vaadin/item`](https://www.npmjs.com/package/@vaadin/item) instead.
 
-A web component used to create items in a list-box, context-menu or select components.
+A web component for creating items in list-box, context-menu or select components.
 
 [Documentation + Live Demo ↗](https://vaadin.com/components/vaadin-item/html-examples)
 

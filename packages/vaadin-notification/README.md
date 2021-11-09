@@ -3,7 +3,7 @@
 > ⚠️&nbsp; Starting from Vaadin 22, this package is deprecated.
 > Please use [`@vaadin/notification`](https://www.npmjs.com/package/@vaadin/notification) instead.
 
-A web component used to provide feedback to the user.
+A web component for providing feedback to the user.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/notification)
 

@@ -3,7 +3,7 @@
 > ⚠️&nbsp; Starting from Vaadin 22, this package is deprecated.
 > Please use [`@vaadin/tabs`](https://www.npmjs.com/package/@vaadin/tabs) instead.
 
-A web component used to organize and group content into sections.
+A web component for organizing and grouping content into sections.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/tabs)
 

@@ -3,7 +3,7 @@
 > ⚠️&nbsp; Starting from Vaadin 22, this package is deprecated.
 > Please use [`@vaadin/icon`](https://www.npmjs.com/package/@vaadin/icon) instead.
 
-A web component for creating SVG icons.
+A web component for displaying SVG icons.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons)
 

@@ -3,7 +3,7 @@
 > ⚠️&nbsp; Starting from Vaadin 22, this package is deprecated.
 > Please use [`@vaadin/progress-bar`](https://www.npmjs.com/package/@vaadin/progress-bar) instead.
 
-A web component used to show the completion status of a task or process.
+A web component for showing the completion status of a task or process.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/progress-bar)
 

@@ -3,7 +3,7 @@
 > ⚠️&nbsp; Starting from Vaadin 22, this package is deprecated.
 > Please use [`@vaadin/menu-bar`](https://www.npmjs.com/package/@vaadin/menu-bar) instead.
 
-A web component used to create a horizontal button bar with hierarchical drop-down menus.
+A web component for creating a horizontal button bar with hierarchical drop-down menus.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/menu-bar)
 

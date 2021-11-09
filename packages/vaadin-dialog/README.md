@@ -3,7 +3,7 @@
 > ⚠️&nbsp; Starting from Vaadin 22, this package is deprecated.
 > Please use [`@vaadin/dialog`](https://www.npmjs.com/package/@vaadin/dialog) instead.
 
-A web component used to present information and user interface elements in an overlay.
+A web component for presenting information and user interface elements in an overlay.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/dialog)
 

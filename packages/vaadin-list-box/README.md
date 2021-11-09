@@ -3,7 +3,7 @@
 > ⚠️&nbsp; Starting from Vaadin 22, this package is deprecated.
 > Please use [`@vaadin/list-box`](https://www.npmjs.com/package/@vaadin/list-box) instead.
 
-A web component allowing to select one or more values from a scrollable list of items.
+A web component for selecting one or more values from a scrollable list of items.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/list-box)
 

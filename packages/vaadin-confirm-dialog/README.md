@@ -3,7 +3,7 @@
 > ⚠️&nbsp; Starting from Vaadin 22, this package is deprecated.
 > Please use [`@vaadin/confirm-dialog`](https://www.npmjs.com/package/@vaadin/confirm-dialog) instead.
 
-A modal dialog web component used to confirm user actions.
+A modal dialog web component for confirming user actions.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/confirm-dialog)
 
