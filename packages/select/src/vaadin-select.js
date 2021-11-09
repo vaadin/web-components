@@ -175,10 +175,10 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
        * @type {boolean}
        * @private
        */
-      __initialized: {
-        type: Boolean,
-        value: true
-      },
+      // __initialized: {
+      //   type: Boolean,
+      //   value: true
+      // },
 
       /**
        * An array containing items that will be rendered as the select's options.
@@ -229,9 +229,9 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
        * @type {!SelectRenderer}
        * @private
        */
-      __renderer: {
+      __computedRenderer: {
         type: Function,
-        computed: '__computeRenderer(renderer, __initialized)'
+        computed: '__computeRenderer(renderer, __defaultRenderer)'
       },
 
       /**
@@ -310,7 +310,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       '_updateAriaExpanded(opened)',
       '_updateAriaRequired(required)',
       '_updateSelectedItem(value, _items, placeholder)',
-      '__rendererChanged(__renderer, _overlayElement)'
+      '__computedRendererChanged(__computedRenderer, _overlayElement)'
     ];
   }
 
@@ -404,7 +404,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
    * @param {SelectOverlay} overlay
    * @private
    */
-  __rendererChanged(renderer, overlay) {
+  __computedRendererChanged(renderer, overlay) {
     if (!overlay) {
       return;
     }
@@ -721,16 +721,18 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   }
 
   /**
-   * Computes the final renderer for the `__renderer` property.
+   * Computes the final renderer for the `__computedRenderer` property.
+   * @param {SelectRenderer | undefined} renderer
+   * @param {!SelectRenderer} defaultRenderer
    * @return {!SelectRenderer}
    * @private
    */
-  __computeRenderer(renderer) {
+  __computeRenderer(renderer, defaultRenderer) {
     if (renderer) {
       return renderer;
     }
 
-    return this.__defaultRenderer;
+    return defaultRenderer;
   }
 
   /**
