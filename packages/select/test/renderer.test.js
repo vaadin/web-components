@@ -54,7 +54,7 @@ describe('renderer', () => {
 
     it('should clear the content when removing the renderer', () => {
       select.renderer = null;
-      expect(overlay.content.childNodes).to.have.lengthOf(0);
+      expect(overlay.content.childNodes).to.be.empty;
     });
 
     it('should not override the content on items property change', () => {
