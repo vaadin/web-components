@@ -1,6 +1,8 @@
-# &lt;vaadin-icon&gt;
+# @vaadin/icon
 
-[&lt;vaadin-icon&gt;](https://vaadin.com/docs/latest/ds/components/icon) is a Web Component for creating SVG icons, part of the [Vaadin components](https://vaadin.com/docs/latest/ds/components).
+A web component for displaying SVG icons.
+
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/icon)](https://www.npmjs.com/package/@vaadin/icon)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -11,37 +13,40 @@
 
 ## Installation
 
-Install `vaadin-icon`:
+Install the component:
 
 ```sh
-npm i @vaadin/icon --save
+npm i @vaadin/icon
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/icon/vaadin-icon.js';
+import '@vaadin/icon';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/icon/vaadin-icon.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the corresponding file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/icon/theme/material/vaadin-icon.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-icon.js`
+```js
+import '@vaadin/icon/theme/lumo/vaadin-icon.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-icon.js`
-
-- Alias for `theme/lumo/vaadin-icon.js`:
-
-  `vaadin-icon.js`
+```js
+import '@vaadin/icon/src/vaadin-icon.js';
+```
 
 ## Contributing
 
@@ -51,4 +56,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects usage statistics at development time to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

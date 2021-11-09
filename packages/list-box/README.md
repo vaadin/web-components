@@ -1,61 +1,61 @@
-# &lt;vaadin-list-box&gt;
+# @vaadin/list-box
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-list-box/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-list-box/html-api)
+A web component for selecting one or more values from a scrollable list of items.
 
-[&lt;vaadin-list-box&gt;](https://vaadin.com/components/vaadin-list-box) is a Web Component providing reusable list boxes, part of the [Vaadin components](https://vaadin.com/components).
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/list-box)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/list-box)](https://www.npmjs.com/package/@vaadin/list-box)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-list-box)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-list-box selected="2">
-  <b>Select an Item</b>
-  <vaadin-item>Item one</vaadin-item>
-  <vaadin-item>Item two</vaadin-item>
+  <b>Select an list-box</b>
+  <vaadin-list-box>list-box one</vaadin-list-box>
+  <vaadin-list-box>list-box two</vaadin-list-box>
   <hr />
-  <vaadin-item>Item three</vaadin-item>
-  <vaadin-item>Item four</vaadin-item>
+  <vaadin-list-box>list-box three</vaadin-list-box>
+  <vaadin-list-box>list-box four</vaadin-list-box>
 </vaadin-list-box>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-list-box/master/screenshot.png" width="150" alt="Screenshot of vaadin-list-box">](https://vaadin.com/components/vaadin-list-box)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/list-box/screenshot.png" width="150" alt="Screenshot of vaadin-list-box">](https://vaadin.com/docs/latest/ds/components/list-box)
 
 ## Installation
 
-Install `vaadin-list-box`:
+Install the component:
 
 ```sh
-npm i @vaadin/list-box --save
+npm i @vaadin/list-box
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/list-box/vaadin-list-box.js';
+import '@vaadin/list-box';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/list-box/vaadin-list-box.js) of the package uses Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/list-box/theme/material/vaadin-list-box.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-list-box.js`
+```js
+import '@vaadin/list-box/theme/lumo/vaadin-list-box.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-list-box.js`
-
-- Alias for `theme/lumo/vaadin-list-box.js`:
-
-  `vaadin-list-box.js`
+```js
+import '@vaadin/list-box/src/vaadin-list-box.js';
+```
 
 ## Contributing
 
@@ -65,4 +65,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects usage statistics at development time to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

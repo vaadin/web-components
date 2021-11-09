@@ -1,13 +1,10 @@
-# &lt;vaadin-details&gt;
+# @vaadin/custom-field
 
-[&lt;vaadin-details&gt;](https://vaadin.com/components/vaadin-details) is a Web Component providing functionality for expandable details, part of the [Vaadin components](https://vaadin.com/components).
+A web component that provides an expandable panel for showing and hiding content.
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-details/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-details/html-api)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/details)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/details)](https://www.npmjs.com/package/@vaadin/details)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-details)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -17,41 +14,44 @@
 </vaadin-details>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-details/master/screenshot.png" alt="Screenshot of vaadin-details" width="320">](https://vaadin.com/components/vaadin-details)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/details/screenshot.png" alt="Screenshot of vaadin-details" width="320">](https://vaadin.com/docs/latest/ds/components/details)
 
 ## Installation
 
-Install `vaadin-details`:
+Install the component:
 
 ```sh
-npm i @vaadin/details --save
+npm i @vaadin/details
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/details/vaadin-details.js';
+import '@vaadin/details';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/details/vaadin-details.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/details/theme/material/vaadin-details.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-details.js`
+```js
+import '@vaadin/details/theme/lumo/vaadin-details.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-details.js`
-
-- Alias for `theme/lumo/vaadin-details.js`:
-
-  `vaadin-details.js`
+```js
+import '@vaadin/details/src/vaadin-details.js';
+```
 
 ## Contributing
 
@@ -61,4 +61,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects usage statistics at development time to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

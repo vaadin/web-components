@@ -1,33 +1,32 @@
-# &lt;vaadin-cookie-consent&gt;
+# @vaadin/cookie-consent
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-cookie-consent/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-cookie-consent/html-api)
+A web component to display a banner for users to give consent to the usage of cookies.
 
-[&lt;vaadin-cookie-consent&gt;](https://vaadin.com/components/vaadin-cookie-consent) is a web component used for showing a cookie consent banner the first time a user visits the application. Cookie Consent is part of the [Vaadin components](https://vaadin.com/components).
+> ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Cookie Consent in your project.
+
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/cookie-consent)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/cookie-consent)](https://www.npmjs.com/package/@vaadin/cookie-consent)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-cookie-consent)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-cookie-consent></vaadin-cookie-consent>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-cookie-consent/master/screenshot.png" alt="Screenshot of vaadin-details" width="847">](https://vaadin.com/components/vaadin-cookie-consent)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/cookie-consent/screenshot.png" width="847" alt="Screenshot of vaadin-details">](https://vaadin.com/docs/latest/ds/components/cookie-consent)
 
 ## Installation
 
-Install `vaadin-cookie-consent`:
+Install the component:
 
 ```sh
-npm i @vaadin/cookie-consent --save
+npm i @vaadin/cookie-consent
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/cookie-consent/vaadin-cookie-consent.js';
+import '@vaadin/cookie-consent';
 ```
 
 ## Contributing
@@ -38,4 +37,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects usage statistics at development time to improve this product.
+For crud and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

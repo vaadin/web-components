@@ -1,54 +1,56 @@
-# &lt;vaadin-rich-text-editor&gt;
+# @vaadin/rich-text-editor
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-rich-text-editor/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-rich-text-editor/html-api)
+An input field web component for entering rich text.
 
-[&lt;vaadin-rich-text-editor&gt;](https://vaadin.com/components/vaadin-rich-text-editor) is a Web Component providing rich text editor functionality, part of the [Vaadin components](https://vaadin.com/components).
+> ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Rich Text Editor in your project.
+
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/rich-text-editor)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/rich-text-editor)](https://www.npmjs.com/package/@vaadin/rich-text-editor)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-rich-text-editor)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-rich-text-editor></vaadin-rich-text-editor>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-rich-text-editor/master/screenshot.png" width="200" alt="Screenshot of vaadin-rich-text-editor">](https://vaadin.com/components/vaadin-rich-text-editor)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/rich-text-editor/screenshot.png" width="656" alt="Screenshot of vaadin-rich-text-editor">](https://vaadin.com/docs/latest/ds/components/rich-text-editor)
 
 ## Installation
 
-Install `vaadin-rich-text-editor`:
+Install the component:
 
 ```sh
-npm i @vaadin/rich-text-editor --save
+npm i @vaadin/rich-text-editor
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/rich-text-editor/vaadin-rich-text-editor.js';
+import '@vaadin/rich-text-editor';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/rich-text-editor/vaadin-rich-text-editor.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/rich-text-editor/theme/material/vaadin-rich-text-editor.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-rich-text-editor.js`
+```js
+import '@vaadin/rich-text-editor/theme/lumo/vaadin-rich-text-editor.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-rich-text-editor.js`
-
-- Alias for `theme/lumo/vaadin-rich-text-editor.js`:
-
-  `vaadin-rich-text-editor.js`
+```js
+import '@vaadin/rich-text-editor/src/vaadin-rich-text-editor.js';
+```
 
 ## Contributing
 
@@ -58,4 +60,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects usage statistics at development time to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

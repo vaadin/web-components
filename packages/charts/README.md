@@ -1,13 +1,12 @@
-# Vaadin Charts
+# @vaadin/charts
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-charts/examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-charts/html-api)
+A feature-rich interactive charting library providing multiple different chart types.
 
-[Vaadin Charts](https://vaadin.com/components/vaadin-charts) is a Web Component for creating high quality charts, part of the [Vaadin components](https://vaadin.com/components).
+> ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Charts in your project.
+
+[Documentation + Live Demo ↗](https://charts.demo.vaadin.com/vaadin-charts/)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/charts)](https://www.npmjs.com/package/@vaadin/charts)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-element)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -25,32 +24,21 @@
 </vaadin-chart>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-charts/master/screenshot.png" width="530" alt="Screenshot of vaadin-chart">](https://vaadin.com/components/vaadin-chart)
-
-## Relevant links
-
-- **Product page** https://vaadin.com/charts
-- **Trial license** https://vaadin.com/pro/licenses
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/charts/screenshot.png" width="530" alt="Screenshot of vaadin-chart">](https://vaadin.com/docs/latest/ds/components/charts)
 
 ## Installation
 
-Install `vaadin-charts`:
+Install the component:
 
 ```sh
-npm i @vaadin/charts --save
+npm i @vaadin/charts
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/charts/vaadin-chart.js';
+import '@vaadin/charts';
 ```
-
-### Install License Key
-
-After one day using Vaadin Charts in a development environment you will see a pop-up that asks you to enter the license key.
-You can get your trial key from [https://vaadin.com/pro/licenses](https://vaadin.com/pro/licenses).
-If the license is valid, it will be saved to the local storage of the browser and you will not see the pop-up again.
 
 ## Contributing
 
@@ -58,7 +46,7 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 ## License
 
-_Vaadin Charts_ is distributed under the terms of
-[Commercial Vaadin Developer License 4.0](https://vaadin.com/license/cvdl-4.0) ("CVDLv4"). A copy of the license is included as `LICENSE.txt` in this software package.
+Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.txt.
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects usage statistics at development time to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

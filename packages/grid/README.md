@@ -1,13 +1,10 @@
-# &lt;vaadin-grid&gt;
+# @vaadin/grid
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-grid/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-grid/html-api)
+A web component for showing tabular data.
 
-[&lt;vaadin-grid&gt;](https://vaadin.com/components/vaadin-grid) is a free, high quality data grid / data table Web Component, part of the [Vaadin components](https://vaadin.com/components).
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/grid)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/grid)](https://www.npmjs.com/package/@vaadin/grid)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-grid)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -15,12 +12,12 @@
   <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
   <vaadin-grid-sort-column width="9em" path="firstName"></vaadin-grid-sort-column>
   <vaadin-grid-sort-column width="9em" path="lastName"></vaadin-grid-sort-column>
-  <vaadin-grid-column id="addresscolumn" width="15em" flex-grow="2" header="Address"></vaadin-grid-column>
+  <vaadin-grid-column id="address" width="15em" flex-grow="2" header="Address"></vaadin-grid-column>
 </vaadin-grid>
 
 <script>
   // Customize the "Address" column's renderer
-  document.querySelector('#addresscolumn').renderer = (root, grid, model) => {
+  document.querySelector('#address').renderer = (root, grid, model) => {
     root.textContent = `${model.item.address.street}, ${model.item.address.city}`;
   };
 
@@ -32,41 +29,62 @@
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-grid/master/screenshot.png" alt="Screenshot of vaadin-grid, using the default Lumo theme">](https://vaadin.com/components/vaadin-grid)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/grid/screenshot.png" alt="Screenshot of vaadin-grid">](https://vaadin.com/docs/latest/ds/components/grid)
 
 ## Installation
 
-Install `vaadin-grid`:
+Install the component:
 
 ```sh
-npm i @vaadin/grid --save
+npm i @vaadin/grid
 ```
 
-Once installed, import it in your application:
+Once installed, import the components in your application:
 
 ```js
-import '@vaadin/grid/vaadin-grid.js';
+import '@vaadin/grid';
+import '@vaadin/grid/vaadin-grid-column-group.js';
+import '@vaadin/grid/vaadin-grid-filter-column.js';
+import '@vaadin/grid/vaadin-grid-selection-column.js';
+import '@vaadin/grid/vaadin-grid-sort-column.js';
+import '@vaadin/grid/vaadin-grid-tree-column.js';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/grid/vaadin-grid.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the components from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/grid/theme/material/vaadin-grid.js';
+import '@vaadin/grid/theme/material/vaadin-grid-filter-column.js';
+import '@vaadin/grid/theme/material/vaadin-grid-selection-column.js';
+import '@vaadin/grid/theme/material/vaadin-grid-sort-column.js';
+import '@vaadin/grid/theme/material/vaadin-grid-tree-column.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the components explicitly:
 
-  `theme/lumo/vaadin-grid.js`
+```js
+import '@vaadin/grid/theme/lumo/vaadin-grid.js';
+import '@vaadin/grid/theme/lumo/vaadin-grid-filter-column.js';
+import '@vaadin/grid/theme/lumo/vaadin-grid-selection-column.js';
+import '@vaadin/grid/theme/lumo/vaadin-grid-sort-column.js';
+import '@vaadin/grid/theme/lumo/vaadin-grid-tree-column.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed components from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-grid.js`
-
-- Alias for `theme/lumo/vaadin-grid.js`:
-
-  `vaadin-grid.js`
+```js
+import '@vaadin/grid/src/vaadin-grid.js';
+import '@vaadin/grid/src/vaadin-grid-column-group.js';
+import '@vaadin/grid/src/vaadin-grid-filter-column.js';
+import '@vaadin/grid/src/vaadin-grid-selection-column.js';
+import '@vaadin/grid/src/vaadin-grid-sort-column.js';
+import '@vaadin/grid/src/vaadin-grid-tree-column.js';
+```
 
 ## Contributing
 
@@ -76,4 +94,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects usage statistics at development time to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

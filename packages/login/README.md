@@ -1,65 +1,57 @@
-# &lt;vaadin-login&gt;
+# @vaadin/login
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-login/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-login/html-api)
+A web component for displaying a login form, either inline, or as an overlay.
 
-[Vaadin Login](https://vaadin.com/components/vaadin-login) consists of two components:
-
-&lt;vaadin-login-overlay&gt; is a Web Component providing a painless login experience, part of the [Vaadin components](https://vaadin.com/components). Component shows the &lt;vaadin-login-form&gt; inside of an overlay.
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/login)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/login)](https://www.npmjs.com/package/@vaadin/login)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-login)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-login-overlay opened></vaadin-login-overlay>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-login/master/screenshot.png" width="700" alt="Screenshot of vaadin-login-overlay">](https://vaadin.com/components/vaadin-login)
-
-&lt;vaadin-login-form&gt; is a Web Component providing a form to require users to log in into an application.
-
-```html
-<vaadin-login-form></vaadin-login-form>
-```
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/login/screenshot.png" width="456" alt="Screenshot of vaadin-login-overlay">](https://vaadin.com/docs/latest/ds/components/login)
 
 ## Installation
 
-Install `vaadin-login`:
+Install the component:
 
 ```sh
-npm i @vaadin/login --save
+npm i @vaadin/login
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/login/vaadin-login-overlay.js';
+import '@vaadin/login';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/list-box/vaadin-list-box.js) of the package uses Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the components from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/login/theme/material/vaadin-login-overlay.js';
+import '@vaadin/login/theme/material/vaadin-login-form.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the components explicitly:
 
-  `theme/lumo/vaadin-login-overlay.js`
-  `theme/lumo/vaadin-login-form.js`
+```js
+import '@vaadin/login/theme/lumo/vaadin-login-overlay.js';
+import '@vaadin/login/theme/lumo/vaadin-login-form.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed components from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-login-overlay.js`
-  `theme/material/vaadin-login-form.js`
-
-- Aliases for lumo themed components:
-
-  `vaadin-login-overlay.js`
-  `vaadin-login-form.js`
+```js
+import '@vaadin/login/src/vaadin-login-overlay.js';
+import '@vaadin/login/src/vaadin-login-form.js';
+```
 
 ## Contributing
 
@@ -69,4 +61,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects usage statistics at development time to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

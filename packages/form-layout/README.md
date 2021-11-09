@@ -1,13 +1,10 @@
-# &lt;vaadin-form-layout&gt;
+# @vaadin/form-layout
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-form-layout/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-form-layout/html-api)
+A web component for building responsive forms with multiple columns.
 
-[&lt;vaadin-form-layout&gt;](https://vaadin.com/components/vaadin-form-layout) is a Web Component providing configurable responsive layout for form elements, part of the [Vaadin components](https://vaadin.com/components).
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/form-layout)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/form-layout)](https://www.npmjs.com/package/@vaadin/form-layout)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-form-layout)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -18,45 +15,44 @@
 </vaadin-form-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-form-layout/master/screenshot.png" width="880" alt="Screenshot of vaadin-form-layout">](https://vaadin.com/components/vaadin-form-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/form-layout/screenshot.png" width="880" alt="Screenshot of vaadin-form-layout">](https://vaadin.com/docs/latest/ds/components/form-layout)
 
 ## Installation
 
-Install `vaadin-form-layout`:
+Install the component:
 
 ```sh
-npm i @vaadin/form-layout --save
+npm i @vaadin/form-layout
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/form-layout/vaadin-form-layout.js';
+import '@vaadin/form-layout';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/form-layout/vaadin-form-layout.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/form-layout/theme/material/vaadin-form-layout.js';
+```
 
-- The components with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-form-layout.js`
-  `theme/lumo/vaadin-form-item.js`
+```js
+import '@vaadin/form-layout/theme/lumo/vaadin-form-layout.js';
+```
 
-- The components with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-form-layout.js`
-  `theme/material/vaadin-form-item.js`
-
-- Alias for `theme/lumo/vaadin-form-layout.js`
-  `theme/lumo/vaadin-form-item.js`:
-
-  `vaadin-form-layout.js`
-  `vaadin-form-item.js`
+```js
+import '@vaadin/form-layout/src/vaadin-form-layout.js';
+```
 
 ## Contributing
 
@@ -66,4 +62,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects usage statistics at development time to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

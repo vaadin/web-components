@@ -2,7 +2,7 @@
 
 A web component that allows you to show a list of messages, for example, a chat log.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/message-list)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/message-list)
 
 ```html
 <vaadin-message-list></vaadin-message-list>
@@ -23,7 +23,7 @@ A web component that allows you to show a list of messages, for example, a chat 
 Install the component:
 
 ```sh
-npm i @vaadin/message-list --save
+npm i @vaadin/message-list
 ```
 
 Once installed, import the component in your application:
@@ -34,9 +34,8 @@ import '@vaadin/message-list';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes),
-Lumo and Material. The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/message-list/vaadin-message-list.js)
-of the package uses the Lumo theme.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/message-list/vaadin-message-list.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 
@@ -56,9 +55,13 @@ Finally, you can import the un-themed component from the `src` folder to get a m
 import '@vaadin/message-list/src/vaadin-message-list.js';
 ```
 
+## Contributing
+
+Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+
 ## License
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

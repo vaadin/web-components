@@ -1,13 +1,10 @@
-# &lt;vaadin-context-menu&gt;
+# @vaadin/context-menu
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-context-menu/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-context-menu/html-api)
+A web component that can be attached to any component to display a context menu.
 
-[&lt;vaadin-context-menu&gt;](https://vaadin.com/components/vaadin-context-menu) is a Web Component providing a contextual menu, part of the [Vaadin components](https://vaadin.com/components).
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/context-menu)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/context-menu)](https://www.npmjs.com/package/@vaadin/context-menu)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-context-menu)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -36,50 +33,50 @@
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-context-menu/master/screenshot.png" width="493" alt="Screenshot of vaadin-context-menu">](https://vaadin.com/components/vaadin-context-menu)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/context-menu/screenshot.png" width="493" alt="Screenshot of vaadin-context-menu">](https://vaadin.com/docs/latest/ds/components/context-menu)
 
 **Note:** [`<vaadin-list-box>`](https://github.com/vaadin/vaadin-list-box) component used in the above example should be installed and imported separately.
 
 ## Installation
 
-Install `vaadin-context-menu`:
+Install the component:
 
 ```sh
-npm i @vaadin/context-menu --save
+npm i @vaadin/context-menu
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/context-menu/vaadin-context-menu.js';
+import '@vaadin/context-menu';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/context-menu/vaadin-context-menu.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/context-menu/theme/material/vaadin-context-menu.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-context-menu.js`
+```js
+import '@vaadin/context-menu/theme/lumo/vaadin-context-menu.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-context-menu.js`
-
-- Alias for `theme/lumo/vaadin-context-menu.js`:
-
-  `vaadin-context-menu.js`
-
-## Contributing
-
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+```js
+import '@vaadin/context-menu/src/vaadin-context-menu.js';
+```
 
 ## License
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects usage statistics at development time to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

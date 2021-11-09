@@ -1,54 +1,54 @@
-# &lt;vaadin-time-picker&gt;
+# @vaadin/time-picker
 
-[&lt;vaadin-time-picker&gt;](https://vaadin.com/components/vaadin-time-picker) is a [Web Component](http://webcomponents.org) providing a time-selection field, part of the [Vaadin components](https://vaadin.com/components).
+A web component that allows to enter a time, either by typing, or by selecting from a set of pre-defined options.
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-time-picker/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-time-picker/html-api)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/time-picker)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/time-picker)](https://www.npmjs.com/package/@vaadin/time-picker)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-time-picker)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
 <vaadin-time-picker label="Delivery Time"></vaadin-time-picker>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-time-picker/master/screenshot.gif" alt="Screenshot of vaadin-time-picker">](https://vaadin.com/components/vaadin-time-picker)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/time-picker/screenshot.png" width="215" alt="Screenshot of vaadin-time-picker">](https://vaadin.com/docs/latest/ds/components/time-picker)
 
 ## Installation
 
-Install `vaadin-time-picker`:
+Install the component:
 
 ```sh
-npm i @vaadin/time-picker --save
+npm i @vaadin/time-picker
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/time-picker/vaadin-time-picker.js';
+import '@vaadin/time-picker';
 ```
 
-## Getting Started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/time-picker/vaadin-time-picker.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/time-picker/theme/material/vaadin-time-picker.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-time-picker.js`
+```js
+import '@vaadin/time-picker/theme/lumo/vaadin-time-picker.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-time-picker.js`
-
-- Alias for `theme/lumo/vaadin-time-picker.js`:
-
-  `vaadin-time-picker.js`
+```js
+import '@vaadin/time-picker/src/vaadin-time-picker.js';
+```
 
 ## Contributing
 
@@ -58,4 +58,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects usage statistics at development time to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

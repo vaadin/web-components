@@ -1,13 +1,10 @@
-# &lt;vaadin-progress-bar&gt;
+# @vaadin/progress-bar
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-progress-bar/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-progress-bar/html-api)
+A web component for showing the completion status of a task or process.
 
-[&lt;vaadin-progress-bar&gt;](https://vaadin.com/components/vaadin-progress-bar) is a progress bar Web Component, part of the [Vaadin components](https://vaadin.com/components).
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/progress-bar)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/progress-bar)](https://www.npmjs.com/package/@vaadin/progress-bar)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-progress-bar)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -16,41 +13,44 @@
 <vaadin-progress-bar indeterminate></vaadin-progress-bar>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.gif" width="418" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/components/vaadin-progress-bar)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.gif" width="418" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/docs/latest/ds/components/progress-bar)
 
 ## Installation
 
-Install `vaadin-progress-bar`:
+Install the component:
 
 ```sh
-npm i @vaadin/progress-bar --save
+npm i @vaadin/progress-bar
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/progress-bar/vaadin-progress-bar.js';
+import '@vaadin/progress-bar';
 ```
 
-## Getting started
+## Themes
 
-Vaadin components use the Lumo theme by default.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/progress-bar/vaadin-progress-bar.js) of the package uses Lumo theme.
 
-To use the Material theme, import the correspondent file from the `theme/material` folder.
+To use the Material theme, import the component from the `theme/material` folder:
 
-## Entry points
+```js
+import '@vaadin/progress-bar/theme/material/vaadin-progress-bar.js';
+```
 
-- The component with the Lumo theme:
+You can also import the Lumo version of the component explicitly:
 
-  `theme/lumo/vaadin-progress-bar.js`
+```js
+import '@vaadin/progress-bar/theme/lumo/vaadin-progress-bar.js';
+```
 
-- The component with the Material theme:
+Finally, you can import the un-themed component from the `src` folder to get a minimal starting point:
 
-  `theme/material/vaadin-progress-bar.js`
-
-- Alias for `theme/lumo/vaadin-progress-bar.js`:
-
-- `vaadin-progress-bar.js`
+```js
+import '@vaadin/progress-bar/src/vaadin-progress-bar.js';
+```
 
 ## Contributing
 
@@ -60,4 +60,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects usage statistics at development time to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

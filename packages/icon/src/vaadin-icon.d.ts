@@ -8,7 +8,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { IconSvgLiteral } from './vaadin-icon-svg.js';
 
 /**
- * `<vaadin-icon>` is a Web Component for creating SVG icons.
+ * `<vaadin-icon>` is a Web Component for displaying SVG icons.
  *
  * ### Icon property
  *

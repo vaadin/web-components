@@ -1,14 +1,12 @@
-# &lt;vaadin-board&gt;
+# @vaadin/board
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-board/html-examples)
-|
-[API documentation ↗](https://vaadin.com/components/vaadin-board/html-api)
+A powerful and easy to use layout web component for building responsive views.
 
-[&lt;vaadin-board&gt;](https://vaadin.com/components/vaadin-board) is a Web component to create flexible responsive layouts and build nice looking dashboard.
-Vaadin Board key feature is how it effectively reorders the widgets on different screen sizes, maximizing the use of space and looking stunning.
+> ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Board in your project.
 
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-board)](https://www.npmjs.com/package/@vaadin/vaadin-board)
-[![Published on Vaadin Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-board)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/board)
+
+[![npm version](https://badgen.net/npm/v/@vaadin/board)](https://www.npmjs.com/package/@vaadin/board)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
@@ -33,20 +31,20 @@ Vaadin Board key feature is how it effectively reorders the widgets on different
 </vaadin-board>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-board/master/screenshot.png" alt="Screenshot of vaadin-board">](https://vaadin.com/components/vaadin-board)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/board/screenshot.png" alt="Screenshot of vaadin-board">](https://vaadin.com/docs/latest/ds/components/board)
 
 ## Installation
 
-Install `vaadin-board`:
+Install the component:
 
 ```sh
-npm i @vaadin/board --save
+npm i @vaadin/board
 ```
 
-Once installed, import it in your application:
+Once installed, import the component in your application:
 
 ```js
-import '@vaadin/board/vaadin-board.js';
+import '@vaadin/board';
 ```
 
 ## Contributing
@@ -55,6 +53,7 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 ## License
 
-Vaadin Board is distributed under [Commercial Vaadin Developer License 4.0](https://vaadin.com/license/cvdl-4.0) (CVDLv4). For license terms, see LICENSE.txt.
+Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.txt.
 
-Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+Vaadin collects usage statistics at development time to improve this product.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

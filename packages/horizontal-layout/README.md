@@ -2,7 +2,7 @@
 
 A web component that places its content side-by-side in a row.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/basic-layouts/#horizontal-layout)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/basic-layouts/#horizontal-layout)
 
 ```html
 <vaadin-horizontal-layout theme="spacing padding">
@@ -18,7 +18,7 @@ A web component that places its content side-by-side in a row.
 Install the component:
 
 ```sh
-npm i @vaadin/horizontal-layout --save
+npm i @vaadin/horizontal-layout
 ```
 
 Once installed, import the component in your application:
@@ -29,9 +29,8 @@ import '@vaadin/horizontal-layout';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes),
-Lumo and Material. The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/horizontal-layout/vaadin-horizontal-layout.js)
-of the package uses the Lumo theme.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/horizontal-layout/vaadin-horizontal-layout.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
 
@@ -51,9 +50,13 @@ Finally, you can import the un-themed component from the `src` folder to get a m
 import '@vaadin/horizontal-layout/src/vaadin-horizontal-layout.js';
 ```
 
+## Contributing
+
+Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+
 ## License
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
