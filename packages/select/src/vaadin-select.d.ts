@@ -11,7 +11,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 export interface SelectItem {
   label?: string;
-  component?: string | HTMLElement;
+  component?: string;
   disabled?: boolean;
 }
 
@@ -140,9 +140,6 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
 declare class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(ThemableMixin(HTMLElement))))) {
   /**
    * An array containing items that will be rendered as the select's options.
-   *
-   * The item is rendered with a custom component if a tag name or an element reference
-   * is passed by the `component` property.
    *
    * #### Example
    ```js

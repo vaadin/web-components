@@ -183,9 +183,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       /**
        * An array containing items that will be rendered as the select's options.
        *
-       * The item is rendered with a custom component if a tag name or an element reference
-       * is passed by the `component` property.
-       *
        * #### Example
        ```js
        * select.items = [
@@ -427,9 +424,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
    * @private
    */
   __itemsChanged() {
-    if (this.__renderer === this.__defaultRenderer) {
-      this.requestContentUpdate();
-    }
+    this.requestContentUpdate();
   }
 
   /** @private */
