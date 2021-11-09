@@ -1,6 +1,6 @@
 # @vaadin/dialog
 
-A web component used to present information and user interface elements in an overlay.
+A web component for presenting information and user interface elements in an overlay.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/dialog)
 

@@ -1,6 +1,6 @@
 # @vaadin/integer-field
 
-An extension of `vaadin-number-field` component that only accepts entering integer numbers.
+An extension of [`<vaadin-number-field>`](https://www.npmjs.com/package/@vaadin/number-field) component that only allows entering integer numbers.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/number-field/#integer-field)
 

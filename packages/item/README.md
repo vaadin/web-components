@@ -1,6 +1,6 @@
 # @vaadin/item
 
-A web component used to create items in a list-box, context-menu or select components.
+A web component for displaying items in list-box, context-menu or select components.
 
 [Documentation + Live Demo ↗](https://vaadin.com/components/vaadin-item/html-examples)
 

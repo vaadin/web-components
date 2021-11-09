@@ -23,6 +23,12 @@ Once installed, import it in your application:
 import '@vaadin/icons';
 ```
 
+To display an icon, use [`<vaadin-icon>`](https://www.npmjs.com/package/@vaadin/icon) element:
+
+```html
+<vaadin-icon icon="vaadin:phone"></vaadin-icon>
+```
+
 ## License
 
 The icon files (SVG, PNG, fonts) are licensed under Creative Commons [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) license.

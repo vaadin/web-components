@@ -1,6 +1,6 @@
 # @vaadin/time-picker
 
-A web component that allows to enter time by typing or by selecting from a set of pre-defined options.
+A web component that allows to enter a time, either by typing, or by selecting from a set of pre-defined options.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/time-picker)
 

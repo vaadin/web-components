@@ -12,7 +12,7 @@ import { Iconset } from './vaadin-iconset.js';
 const DEFAULT_ICONSET = 'vaadin';
 
 /**
- * `<vaadin-icon>` is a Web Component for creating SVG icons.
+ * `<vaadin-icon>` is a Web Component for displaying SVG icons.
  *
  * ### Icon property
  *

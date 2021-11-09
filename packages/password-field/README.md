@@ -1,6 +1,6 @@
 # @vaadin/password-field
 
-An extension of `vaadin-text-field` component for entering passwords.
+An extension of [`<vaadin-text-field>`](https://www.npmjs.com/package/@vaadin/text-field) component for entering passwords.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/password-field)
 

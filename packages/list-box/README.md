@@ -1,6 +1,6 @@
 # @vaadin/list-box
 
-A web component allowing to select one or more values from a scrollable list of items.
+A web component for selecting one or more values from a scrollable list of items.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/list-box)
 

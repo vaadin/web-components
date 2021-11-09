@@ -1,6 +1,6 @@
 # @vaadin/login
 
-A web component for creating a login form with two input fields and two buttons.
+A web component for displaying a login form, either inline, or as an overlay.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/login)
 

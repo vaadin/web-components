@@ -1,6 +1,6 @@
 # @vaadin/avatar-group
 
-A web component used to group multiple [`<vaadin-avatar>`](https://www.npmjs.com/package/@vaadin/avatar-group) components together.
+A web component for grouping multiple [`<vaadin-avatar>`](https://www.npmjs.com/package/@vaadin/avatar-group) components together.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/avatar/#avatar-group)
 

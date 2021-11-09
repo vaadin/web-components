@@ -1,6 +1,6 @@
 # @vaadin/notification
 
-A web component used to provide feedback to the user.
+A web component for providing feedback to the user.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/notification)
 

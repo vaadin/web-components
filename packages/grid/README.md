@@ -39,10 +39,15 @@ Install the component:
 npm i @vaadin/grid
 ```
 
-Once installed, import the component in your application:
+Once installed, import the components in your application:
 
 ```js
 import '@vaadin/grid';
+import '@vaadin/grid/vaadin-grid-column-group.js';
+import '@vaadin/grid/vaadin-grid-filter-column.js';
+import '@vaadin/grid/vaadin-grid-selection-column.js';
+import '@vaadin/grid/vaadin-grid-sort-column.js';
+import '@vaadin/grid/vaadin-grid-tree-column.js';
 ```
 
 ## Themes
@@ -50,22 +55,35 @@ import '@vaadin/grid';
 Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/grid/vaadin-grid.js) of the package uses the Lumo theme.
 
-To use the Material theme, import the component from the `theme/material` folder:
+To use the Material theme, import the components from the `theme/material` folder:
 
 ```js
 import '@vaadin/grid/theme/material/vaadin-grid.js';
+import '@vaadin/grid/theme/material/vaadin-grid-filter-column.js';
+import '@vaadin/grid/theme/material/vaadin-grid-selection-column.js';
+import '@vaadin/grid/theme/material/vaadin-grid-sort-column.js';
+import '@vaadin/grid/theme/material/vaadin-grid-tree-column.js';
 ```
 
 You can also import the Lumo version of the components explicitly:
 
 ```js
 import '@vaadin/grid/theme/lumo/vaadin-grid.js';
+import '@vaadin/grid/theme/lumo/vaadin-grid-filter-column.js';
+import '@vaadin/grid/theme/lumo/vaadin-grid-selection-column.js';
+import '@vaadin/grid/theme/lumo/vaadin-grid-sort-column.js';
+import '@vaadin/grid/theme/lumo/vaadin-grid-tree-column.js';
 ```
 
 Finally, you can import the un-themed components from the `src` folder to get a minimal starting point:
 
 ```js
 import '@vaadin/grid/src/vaadin-grid.js';
+import '@vaadin/grid/src/vaadin-grid-column-group.js';
+import '@vaadin/grid/src/vaadin-grid-filter-column.js';
+import '@vaadin/grid/src/vaadin-grid-selection-column.js';
+import '@vaadin/grid/src/vaadin-grid-sort-column.js';
+import '@vaadin/grid/src/vaadin-grid-tree-column.js';
 ```
 
 ## Contributing

@@ -1,6 +1,6 @@
 # @vaadin/select
 
-A web component to choose a single value from a list of options presented in an overlay.
+A web component for selecting a single value from a list of options presented in an overlay.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/select)
 

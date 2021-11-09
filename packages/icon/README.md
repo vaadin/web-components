@@ -1,6 +1,6 @@
 # @vaadin/icon
 
-A web component for creating SVG icons.
+A web component for displaying SVG icons.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons)
 
