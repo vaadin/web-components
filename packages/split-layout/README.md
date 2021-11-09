@@ -2,7 +2,7 @@
 
 A web component with two content areas and a draggable split handle between them.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/split-layout)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/split-layout)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/split-layout)](https://www.npmjs.com/package/@vaadin/split-layout)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -27,7 +27,7 @@ A web component with two content areas and a draggable split handle between them
 Install the component:
 
 ```sh
-npm i @vaadin/split-layout --save
+npm i @vaadin/split-layout
 ```
 
 Once installed, import the component in your application:
@@ -67,5 +67,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

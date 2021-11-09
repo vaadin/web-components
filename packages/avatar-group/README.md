@@ -2,7 +2,7 @@
 
 A web component used to group multiple [`<vaadin-avatar>`](https://www.npmjs.com/package/@vaadin/avatar-group) components together.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/avatar/#avatar-group)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/avatar/#avatar-group)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/avatar-group)](https://www.npmjs.com/package/@vaadin/avatar-group)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -26,7 +26,7 @@ A web component used to group multiple [`<vaadin-avatar>`](https://www.npmjs.com
 Install the component:
 
 ```sh
-npm i @vaadin/avatar-group --save
+npm i @vaadin/avatar-group
 ```
 
 Once installed, import the component in your application:
@@ -66,5 +66,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

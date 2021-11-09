@@ -2,7 +2,7 @@
 
 A web component for graphical representation of an object or entity, for example a person or an organization.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/avatar)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/avatar)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/avatar)](https://www.npmjs.com/package/@vaadin/avatar)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -20,7 +20,7 @@ A web component for graphical representation of an object or entity, for example
 Install the component:
 
 ```sh
-npm i @vaadin/avatar --save
+npm i @vaadin/avatar
 ```
 
 Once installed, import the component in your application:
@@ -60,5 +60,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

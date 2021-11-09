@@ -2,7 +2,7 @@
 
 A web component that allows users to author and send messages.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/message-input)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/message-input)
 
 ```html
 <vaadin-message-input></vaadin-message-input>
@@ -15,7 +15,7 @@ A web component that allows users to author and send messages.
 Install the component:
 
 ```sh
-npm i @vaadin/message-input --save
+npm i @vaadin/message-input
 ```
 
 Once installed, import the component in your application:
@@ -55,5 +55,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

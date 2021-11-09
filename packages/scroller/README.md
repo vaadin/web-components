@@ -2,7 +2,7 @@
 
 A component container for creating scrollable areas in the UI.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/scroller)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/scroller)
 
 ```html
 <vaadin-scroller scroll-direction="vertical">
@@ -25,7 +25,7 @@ A component container for creating scrollable areas in the UI.
 Install the component:
 
 ```sh
-npm i @vaadin/scroller --save
+npm i @vaadin/scroller
 ```
 
 Once installed, import the component in your application:
@@ -65,5 +65,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

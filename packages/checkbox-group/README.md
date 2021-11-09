@@ -2,7 +2,7 @@
 
 A web component that allows the user to choose several items from a group of binary choices.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/checkbox)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/checkbox)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/checkbox-group)](https://www.npmjs.com/package/@vaadin/checkbox-group)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -21,7 +21,7 @@ A web component that allows the user to choose several items from a group of bin
 Install the component:
 
 ```sh
-npm i @vaadin/checkbox-group --save
+npm i @vaadin/checkbox-group
 ```
 
 Once installed, import the component in your application:
@@ -61,5 +61,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

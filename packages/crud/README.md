@@ -2,9 +2,9 @@
 
 A web component for displaying, editing, creating, and deleting items from a dataset.
 
-> ℹ️　A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use CRUD in your project.
+> ℹ️ 　A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use CRUD in your project.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/crud)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/crud)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/crud)](https://www.npmjs.com/package/@vaadin/crud)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -20,7 +20,7 @@ A web component for displaying, editing, creating, and deleting items from a dat
 Install the component:
 
 ```sh
-npm i @vaadin/crud --save
+npm i @vaadin/crud
 ```
 
 Once installed, import the component in your application:
@@ -60,5 +60,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For crud and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

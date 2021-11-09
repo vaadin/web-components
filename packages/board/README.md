@@ -2,9 +2,9 @@
 
 A powerful and easy to use layout web component for building responsive views.
 
-> ℹ️　A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Board in your project.
+> ℹ️ 　A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Board in your project.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/board)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/board)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/board)](https://www.npmjs.com/package/@vaadin/board)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -38,7 +38,7 @@ A powerful and easy to use layout web component for building responsive views.
 Install the component:
 
 ```sh
-npm i @vaadin/board --save
+npm i @vaadin/board
 ```
 
 Once installed, import the component in your application:
@@ -55,5 +55,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.txt.
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

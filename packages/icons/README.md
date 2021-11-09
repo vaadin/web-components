@@ -2,7 +2,7 @@
 
 A set of 600+ icons designed for web applications.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons/vaadin)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons/vaadin)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/icons)](https://www.npmjs.com/package/@vaadin/icons)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -14,7 +14,7 @@ A set of 600+ icons designed for web applications.
 Install the iconset:
 
 ```sh
-npm i @vaadin/icons --save
+npm i @vaadin/icons
 ```
 
 Once installed, import it in your application:

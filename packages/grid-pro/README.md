@@ -1,10 +1,10 @@
 # @vaadin/grid-pro
 
-> ℹ️　A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Grid Pro in your project.
+> ℹ️ 　A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Grid Pro in your project.
 
 An extension of the `vaadin-grid` component that provides inline editing with full keyboard navigation.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/grid-pro)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/grid-pro)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/grid-pro)](https://www.npmjs.com/package/@vaadin/grid-pro)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -31,7 +31,7 @@ An extension of the `vaadin-grid` component that provides inline editing with fu
 Install the component:
 
 ```sh
-npm i @vaadin/grid-pro --save
+npm i @vaadin/grid-pro
 ```
 
 Once installed, import the component in your application:
@@ -75,5 +75,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For grid-pro and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

@@ -2,17 +2,13 @@
 
 A web component for wrapping multiple components as a single field.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/custom-field)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/custom-field)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/custom-field)](https://www.npmjs.com/package/@vaadin/custom-field)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
-<vaadin-custom-field
-  label="Enrollment period"
-  helper-text="Cannot be longer than 30 days"
-  required
->
+<vaadin-custom-field label="Enrollment period" helper-text="Cannot be longer than 30 days" required>
   <vaadin-date-picker id="start" placeholder="Start date"></vaadin-date-picker>
   &ndash;
   <vaadin-date-picker id="end" placeholder="End date"></vaadin-date-picker>
@@ -26,7 +22,7 @@ A web component for wrapping multiple components as a single field.
 Install the component:
 
 ```sh
-npm i @vaadin/custom-field --save
+npm i @vaadin/custom-field
 ```
 
 Once installed, import the component in your application:
@@ -66,5 +62,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

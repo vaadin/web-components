@@ -2,9 +2,9 @@
 
 A web component to display a banner for users to give consent to the usage of cookies.
 
-> ℹ️　A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Cookie Consent in your project.
+> ℹ️ 　A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Cookie Consent in your project.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/cookie-consent)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/cookie-consent)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/cookie-consent)](https://www.npmjs.com/package/@vaadin/cookie-consent)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -20,7 +20,7 @@ A web component to display a banner for users to give consent to the usage of co
 Install the component:
 
 ```sh
-npm i @vaadin/cookie-consent --save
+npm i @vaadin/cookie-consent
 ```
 
 Once installed, import the component in your application:
@@ -37,5 +37,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For crud and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

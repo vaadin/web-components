@@ -2,7 +2,7 @@
 
 A web component that can be attached to any component to display a context menu.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/context-menu)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/context-menu)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/context-menu)](https://www.npmjs.com/package/@vaadin/context-menu)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -42,7 +42,7 @@ A web component that can be attached to any component to display a context menu.
 Install the component:
 
 ```sh
-npm i @vaadin/context-menu --save
+npm i @vaadin/context-menu
 ```
 
 Once installed, import the component in your application:
@@ -78,5 +78,5 @@ import '@vaadin/context-menu/src/vaadin-context-menu.js';
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

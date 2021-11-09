@@ -2,7 +2,7 @@
 
 A web component for creating SVG icons.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/icon)](https://www.npmjs.com/package/@vaadin/icon)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -16,7 +16,7 @@ A web component for creating SVG icons.
 Install the component:
 
 ```sh
-npm i @vaadin/icon --save
+npm i @vaadin/icon
 ```
 
 Once installed, import the component in your application:
@@ -56,5 +56,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

@@ -2,7 +2,7 @@
 
 A web component for choosing a value from a filterable list of options presented in an overlay.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/combo-box)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/combo-box)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/combo-box)](https://www.npmjs.com/package/@vaadin/combo-box)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -31,7 +31,7 @@ A web component for choosing a value from a filterable list of options presented
 Install the component:
 
 ```sh
-npm i @vaadin/combo-box --save
+npm i @vaadin/combo-box
 ```
 
 Once installed, import the component in your application:
@@ -71,5 +71,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

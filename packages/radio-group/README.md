@@ -2,7 +2,7 @@
 
 A web component that allows the user to choose one item from a group of choices.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/radio-button)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/radio-button)
 
 ```html
 <vaadin-radio-group label="Travel class">
@@ -13,12 +13,13 @@ A web component that allows the user to choose one item from a group of choices.
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/radio-group/screenshot.png" width="370" alt="Screenshot of vaadin-radio-group">](https://vaadin.com/docs/latest/ds/components/radio-button)
+
 ## Installation
 
 Install the component:
 
 ```sh
-npm i @vaadin/radio-group --save
+npm i @vaadin/radio-group
 ```
 
 Once installed, import the component in your application:
@@ -58,5 +59,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

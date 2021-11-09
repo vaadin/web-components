@@ -2,7 +2,7 @@
 
 A web component that places its content side-by-side in a row.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/basic-layouts/#horizontal-layout)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/basic-layouts/#horizontal-layout)
 
 ```html
 <vaadin-horizontal-layout theme="spacing padding">
@@ -18,7 +18,7 @@ A web component that places its content side-by-side in a row.
 Install the component:
 
 ```sh
-npm i @vaadin/horizontal-layout --save
+npm i @vaadin/horizontal-layout
 ```
 
 Once installed, import the component in your application:
@@ -58,5 +58,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

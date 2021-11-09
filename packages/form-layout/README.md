@@ -2,7 +2,7 @@
 
 A web component for building responsive forms with multiple columns.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/form-layout)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/form-layout)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/form-layout)](https://www.npmjs.com/package/@vaadin/form-layout)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -22,7 +22,7 @@ A web component for building responsive forms with multiple columns.
 Install the component:
 
 ```sh
-npm i @vaadin/form-layout --save
+npm i @vaadin/form-layout
 ```
 
 Once installed, import the component in your application:
@@ -62,5 +62,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

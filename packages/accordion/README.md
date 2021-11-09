@@ -1,8 +1,8 @@
 # @vaadin/accordion
 
-A web component implementing accordion widget: a vertically stacked set of expandable panels.
+A web component for displaying a vertically stacked set of expandable panels.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/accordion)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/accordion)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/accordion)](https://www.npmjs.com/package/@vaadin/accordion)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -27,7 +27,7 @@ A web component implementing accordion widget: a vertically stacked set of expan
 Install the component:
 
 ```sh
-npm i @vaadin/accordion --save
+npm i @vaadin/accordion
 ```
 
 Once installed, import the component in your application:
@@ -67,5 +67,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

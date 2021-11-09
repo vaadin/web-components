@@ -2,7 +2,7 @@
 
 An input field web component for selecting both a date and a time.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/date-time-picker)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/date-time-picker)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/date-time-picker)](https://www.npmjs.com/package/@vaadin/date-time-picker)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -16,7 +16,7 @@ An input field web component for selecting both a date and a time.
 Install the component:
 
 ```sh
-npm i @vaadin/date-time-picker --save
+npm i @vaadin/date-time-picker
 ```
 
 Once installed, import the component in your application:
@@ -56,5 +56,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

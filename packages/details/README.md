@@ -2,7 +2,7 @@
 
 A web component that provides an expandable panel for showing and hiding content.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/details)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/details)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/details)](https://www.npmjs.com/package/@vaadin/details)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -21,7 +21,7 @@ A web component that provides an expandable panel for showing and hiding content
 Install the component:
 
 ```sh
-npm i @vaadin/details --save
+npm i @vaadin/details
 ```
 
 Once installed, import the component in your application:
@@ -61,5 +61,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

@@ -2,7 +2,7 @@
 
 An extension of `vaadin-number-field` component that only accepts entering integer numbers.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/number-field/#integer-field)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/number-field/#integer-field)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/integer-field)](https://www.npmjs.com/package/@vaadin/integer-field)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -16,7 +16,7 @@ An extension of `vaadin-number-field` component that only accepts entering integ
 Install the component:
 
 ```sh
-npm i @vaadin/integer-field --save
+npm i @vaadin/integer-field
 ```
 
 Once installed, import the component in your application:
@@ -56,5 +56,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

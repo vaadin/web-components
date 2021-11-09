@@ -2,9 +2,9 @@
 
 A feature-rich interactive charting library providing multiple different chart types.
 
-> ℹ️　A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Charts in your project.
+> ℹ️ 　A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Charts in your project.
 
-[Live Demo ↗](https://charts.demo.vaadin.com/vaadin-charts/)
+[Documentation + Live Demo ↗](https://charts.demo.vaadin.com/vaadin-charts/)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/charts)](https://www.npmjs.com/package/@vaadin/charts)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -31,7 +31,7 @@ A feature-rich interactive charting library providing multiple different chart t
 Install the component:
 
 ```sh
-npm i @vaadin/charts --save
+npm i @vaadin/charts
 ```
 
 Once installed, import the component in your application:
@@ -48,5 +48,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.txt.
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

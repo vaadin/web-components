@@ -2,7 +2,7 @@
 
 A web component for building common application layouts.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/app-layout)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/app-layout)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/app-layout)](https://www.npmjs.com/package/@vaadin/app-layout)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -38,7 +38,7 @@ A web component for building common application layouts.
 Install the component:
 
 ```sh
-npm i @vaadin/app-layout --save
+npm i @vaadin/app-layout
 ```
 
 Once installed, import the components in your application:
@@ -82,5 +82,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

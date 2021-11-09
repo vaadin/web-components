@@ -2,7 +2,7 @@
 
 A web component that allows to enter time by typing or by selecting from a set of pre-defined options.
 
-[Live Demo ↗](https://vaadin.com/docs/latest/ds/components/time-picker)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/time-picker)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/time-picker)](https://www.npmjs.com/package/@vaadin/time-picker)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -18,7 +18,7 @@ A web component that allows to enter time by typing or by selecting from a set o
 Install the component:
 
 ```sh
-npm i @vaadin/time-picker --save
+npm i @vaadin/time-picker
 ```
 
 Once installed, import the component in your application:
@@ -58,5 +58,5 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 Apache License 2.0
 
-Vaadin collects development time usage statistics to improve this product.
+Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
