@@ -2,7 +2,7 @@
 
 An input field web component for entering rich text.
 
-> ℹ️ A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Rich Text Editor in your project.
+> ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Rich Text Editor in your project.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/rich-text-editor)
 

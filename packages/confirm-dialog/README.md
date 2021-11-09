@@ -2,7 +2,7 @@
 
 A modal dialog web component used to confirm user actions.
 
-> ℹ️ A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Confirm Dialog in your project.
+> ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Confirm Dialog in your project.
 
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/confirm-dialog)
 
