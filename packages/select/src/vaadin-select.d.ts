@@ -139,8 +139,21 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  */
 declare class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(ThemableMixin(HTMLElement))))) {
   /**
-   * An array of items.
-   */
+   * An array containing items that will be rendered as the select's options.
+   *
+   * The item is rendered with a custom component if a tag name or an element reference
+   * is passed by the `component` property.
+   *
+   * #### Example
+   ```js
+    * select.items = [
+    *   { label: 'Jose', value: 'jose' },
+    *   { component: 'hr' },
+    *   { label: 'Pedro', value: 'pedro' },
+    *   { label: 'Manolo', value: 'manolo', disabled: true }
+    * ];
+    * ```
+    */
   items: SelectItem[];
 
   /**

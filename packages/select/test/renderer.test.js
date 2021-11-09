@@ -39,15 +39,37 @@ describe('renderer', () => {
     rendererContent.appendChild(rendererItem);
   });
 
-  it('should use renderer when it is defined', () => {
-    select.renderer = (root) => root.appendChild(rendererContent);
-    expect(select.shadowRoot.querySelector('vaadin-list-box vaadin-item').textContent.trim()).to.equal('renderer item');
+  describe('basic', () => {
+    beforeEach(() => {
+      select.renderer = (root) => {
+        root.innerHTML = 'Content';
+      };
+      select.opened = true;
+    });
+
+    it('should render content by the renderer', () => {
+      expect(overlay.content.childNodes).to.have.lengthOf(1);
+      expect(overlay.content.textContent).to.equal('Content');
+    });
+
+    it('should clear the content when removing the renderer', () => {
+      select.renderer = null;
+      expect(overlay.content.childNodes).to.have.lengthOf(0);
+    });
+
+    it('should not override the content on items property change', () => {
+      select.items = [{ label: 'Item 1', value: 'value-1' }];
+      expect(overlay.content.childNodes).to.have.lengthOf(1);
+      expect(overlay.content.textContent).to.equal('Content');
+    });
   });
 
-  it('should pass vaadin-select as owner to vaadin-overlay', () => {
-    select.renderer = (_, owner) => {
-      expect(owner).to.eql(select);
-    };
+  it('should pass root, owner arguments to the renderer', () => {
+    const spy = sinon.spy();
+    select.renderer = spy;
+    expect(spy.calledOnce).to.be.true;
+    expect(spy.firstCall.args[0]).to.equal(select._overlayElement);
+    expect(spy.firstCall.args[1]).to.equal(select);
   });
 
   it('should not throw when requesting content update before attaching to the DOM', () => {
@@ -110,18 +132,5 @@ describe('renderer', () => {
       document.body.appendChild(select);
       document.body.removeChild(select);
     }).to.not.throw(Error);
-  });
-
-  it('should clear the select content when removing the renderer', () => {
-    select.renderer = (root) => {
-      root.innerHTML = 'foo';
-    };
-    select.opened = true;
-
-    expect(overlay.content.textContent).to.equal('foo');
-
-    select.renderer = null;
-
-    expect(overlay.content.textContent).to.equal('');
   });
 });

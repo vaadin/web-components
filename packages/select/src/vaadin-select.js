@@ -181,7 +181,10 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       },
 
       /**
-       * An array containing the items, which will be rendered as the select options.
+       * An array containing items that will be rendered as the select's options.
+       *
+       * The item is rendered with a custom component if a tag name or an element reference
+       * is passed by the `component` property.
        *
        * #### Example
        ```js
@@ -196,7 +199,8 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
        */
       items: {
         type: Array,
-        value: () => []
+        value: () => [],
+        observer: '__itemsChanged'
       },
 
       /**
@@ -417,6 +421,17 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     }
   }
 
+  /**
+   * @param {Array<!SelectItem> | undefined} newItems
+   * @param {Array<!SelectItem> | undefined} oldItems
+   * @private
+   */
+  __itemsChanged() {
+    if (this.__renderer === this.__defaultRenderer) {
+      this.requestContentUpdate();
+    }
+  }
+
   /** @private */
   _assignMenuElement() {
     const menuElement = this.__getMenuElement();
@@ -617,22 +632,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   }
 
   /**
-   * @param {Array<!SelectItem> | undefined} newItems
-   * @param {Array<!SelectItem> | undefined} oldItems
-   * @private
-   */
-  __itemsChanged(newItems, oldItems) {
-    // Skip at initialization.
-    if (!newItems && !oldItems) {
-      return;
-    }
-
-    if (this.__renderer === this.__defaultRenderer) {
-      this.requestContentUpdate();
-    }
-  }
-
-  /**
    * @param {!HTMLElement} itemElement
    * @private
    */
@@ -746,21 +745,21 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
    * @private
    */
   __defaultRenderer(root, _select) {
+    if (this.items.length === 0) {
+      root.textContent = '';
+      return;
+    }
+
     let listBox = root.firstElementChild;
     if (!listBox) {
       listBox = document.createElement('vaadin-list-box');
       root.appendChild(listBox);
     }
 
-    if (this.items) {
-      listBox.textContent = '';
-      this.items.forEach((item) => {
-        listBox.appendChild(this.__createItemElement(item));
-      });
-    } else {
-      // TODO: Is this necessary to do?
-      listBox.remove();
-    }
+    listBox.textContent = '';
+    this.items.forEach((item) => {
+      listBox.appendChild(this.__createItemElement(item));
+    });
   }
 
   /**
