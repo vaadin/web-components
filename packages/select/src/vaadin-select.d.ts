@@ -142,15 +142,15 @@ declare class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixi
    * An array containing items that will be rendered as the select's options.
    *
    * #### Example
-   ```js
-    * select.items = [
-    *   { label: 'Jose', value: 'jose' },
-    *   { component: 'hr' },
-    *   { label: 'Pedro', value: 'pedro' },
-    *   { label: 'Manolo', value: 'manolo', disabled: true }
-    * ];
-    * ```
-    */
+   * ```js
+   * select.items = [
+   *   { label: 'Jose', value: 'jose' },
+   *   { component: 'hr' },
+   *   { label: 'Pedro', value: 'pedro' },
+   *   { label: 'Manolo', value: 'manolo', disabled: true }
+   * ];
+   * ```
+   */
   items: SelectItem[];
 
   /**

@@ -170,17 +170,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   static get properties() {
     return {
       /**
-       * Polymer doesn't invoke observer during initialization when all of its dependencies are `undefined`.
-       * This internal property can be used to force Polymer to invoke such an observer during initialization.
-       * @type {boolean}
-       * @private
-       */
-      // __initialized: {
-      //   type: Boolean,
-      //   value: true
-      // },
-
-      /**
        * An array containing items that will be rendered as the select's options.
        *
        * #### Example
@@ -222,17 +211,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
        * @type {!SelectRenderer | undefined}
        */
       renderer: Function,
-
-      /**
-       * Represents the final renderer computed on the set of observable arguments.
-       * It is supposed to be used internally when rendering the select's content.
-       * @type {!SelectRenderer}
-       * @private
-       */
-      __computedRenderer: {
-        type: Function,
-        computed: '__computeRenderer(renderer, __defaultRenderer)'
-      },
 
       /**
        * It stores the the `value` property of the selected item, providing the
@@ -310,7 +288,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       '_updateAriaExpanded(opened)',
       '_updateAriaRequired(required)',
       '_updateSelectedItem(value, _items, placeholder)',
-      '__computedRendererChanged(__computedRenderer, _overlayElement)'
+      '_rendererChanged(renderer, _overlayElement)'
     ];
   }
 
@@ -404,12 +382,12 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
    * @param {SelectOverlay} overlay
    * @private
    */
-  __computedRendererChanged(renderer, overlay) {
+  _rendererChanged(renderer, overlay) {
     if (!overlay) {
       return;
     }
 
-    overlay.setProperties({ owner: this, renderer });
+    overlay.setProperties({ owner: this, renderer: renderer || this.__defaultRenderer });
 
     this.requestContentUpdate();
 
@@ -418,11 +396,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     }
   }
 
-  /**
-   * @param {Array<!SelectItem> | undefined} newItems
-   * @param {Array<!SelectItem> | undefined} oldItems
-   * @private
-   */
+  /** @private */
   __itemsChanged() {
     this.requestContentUpdate();
   }
@@ -711,21 +685,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
    */
   validate() {
     return !(this.invalid = !(this.disabled || !this.required || this.value));
-  }
-
-  /**
-   * Computes the final renderer for the `__computedRenderer` property.
-   * @param {SelectRenderer | undefined} renderer
-   * @param {!SelectRenderer} defaultRenderer
-   * @return {!SelectRenderer}
-   * @private
-   */
-  __computeRenderer(renderer, defaultRenderer) {
-    if (renderer) {
-      return renderer;
-    }
-
-    return defaultRenderer;
   }
 
   /**
