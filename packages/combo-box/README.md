@@ -1,4 +1,6 @@
-# &lt;vaadin-combo-box&gt;
+# @vaadin/combo-box
+
+A web component for choosing a value from a filterable list of options presented in an overlay.
 
 [Live Demo ↗](https://vaadin.com/docs/latest/ds/components/combo-box)
 
