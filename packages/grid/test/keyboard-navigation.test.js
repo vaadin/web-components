@@ -177,6 +177,10 @@ function getTabbableElements(root) {
   return root.querySelectorAll('[tabindex]:not([tabindex="-1"])');
 }
 
+function getTabbableCells(root) {
+  return root.querySelectorAll('tr:not([hidden]) *:is(td, th)[tabindex]:not([tabindex="-1"])');
+}
+
 describe('keyboard navigation', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
@@ -1950,12 +1954,15 @@ describe('keyboard navigation on column groups', () => {
       });
 
       it('should update tabbable header cell on header row hide', async () => {
+        const initialTabbableHeaderCell = getTabbableCells(header)[0];
+
         // Hide the first header row
         mainGroup.headerRenderer = null;
         await nextFrame();
 
-        const tabbableHeaderCell = getTabbableElements(header)[0];
-        expect(tabbableHeaderCell._column).to.equal(subGroup);
+        const tabbableHeaderCell = getTabbableCells(header)[0];
+        expect(tabbableHeaderCell.offsetHeight).not.to.equal(0);
+        expect(tabbableHeaderCell).not.to.equal(initialTabbableHeaderCell);
       });
 
       it('should have no tabbable header cells when header is hidden', async () => {
@@ -1965,7 +1972,7 @@ describe('keyboard navigation on column groups', () => {
         column.headerRenderer = null;
         await nextFrame();
 
-        const tabbableHeaderCell = getTabbableElements(header)[0];
+        const tabbableHeaderCell = getTabbableCells(header)[0];
         expect(tabbableHeaderCell).not.to.be.ok;
       });
 
@@ -1976,11 +1983,11 @@ describe('keyboard navigation on column groups', () => {
         column.headerRenderer = null;
         await nextFrame();
 
-        column.headerRenderer = 'column';
+        column.header = 'column';
         await nextFrame();
 
-        const tabbableHeaderCell = getTabbableElements(header)[0];
-        expect(tabbableHeaderCell._column).to.equal(column);
+        const tabbableHeaderCell = getTabbableCells(header)[0];
+        expect(tabbableHeaderCell.offsetHeight).not.to.equal(0);
       });
     });
 
@@ -1992,25 +1999,26 @@ describe('keyboard navigation on column groups', () => {
       });
 
       it('should update tabbable body cell on body row hide', async () => {
-        grid.items = ['foo', 'bar', 'baz'];
-        // Focus the third body row / make it tabbable
+        // Focus the second body row / make it tabbable
         tabToBody();
         down();
-        down();
 
-        // Hide the third body row
-        grid.items = ['foo', 'bar'];
+        // Hide the second body row
+        grid.items = ['foo'];
 
-        // Expect the tabbable body cell to be on the second row
-        const tabbableBodyCell = getTabbableElements(body)[0];
-        expect(tabbableBodyCell.parentElement.index).to.equal(1);
+        await nextFrame();
+
+        // Expect the tabbable body cell to be on the first row
+        const tabbableBodyCell = getTabbableCells(body)[0];
+        expect(tabbableBodyCell.parentElement.index).to.equal(0);
+        expect(tabbableBodyCell.offsetHeight).not.to.equal(0);
       });
 
       it('should have no tabbable body cell when there are no rows', async () => {
         // Remove all body rows
         grid.items = [];
 
-        const tabbableBodyCell = getTabbableElements(body)[0];
+        const tabbableBodyCell = getTabbableCells(body)[0];
         expect(tabbableBodyCell).not.to.be.ok;
       });
 
@@ -2022,8 +2030,9 @@ describe('keyboard navigation on column groups', () => {
         grid.items = ['foo', 'bar'];
         await nextFrame();
 
-        const tabbableBodyCell = getTabbableElements(body)[0];
+        const tabbableBodyCell = getTabbableCells(body)[0];
         expect(tabbableBodyCell.parentElement.index).to.equal(0);
+        expect(tabbableBodyCell.offsetHeight).not.to.equal(0);
       });
     });
   });

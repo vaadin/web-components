@@ -778,19 +778,28 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @protected */
     _resetKeyboardNavigation() {
-      if (!this.__isValidFocusable(this._headerFocusable) && this.$.header.firstElementChild) {
-        this._headerFocusable = Array.from(this.$.header.firstElementChild.children).filter((el) => !el.hidden)[0];
-      }
-
-      if (!this.__isValidFocusable(this._itemsFocusable) && this.$.items.firstElementChild) {
-        const firstVisibleIndexRow = this.__getFirstVisibleItem();
-        if (firstVisibleIndexRow) {
-          this._itemsFocusable = Array.from(firstVisibleIndexRow.children).filter((el) => !el.hidden)[0];
+      // Header / footer
+      ['header', 'footer'].forEach((section) => {
+        if (!this.__isValidFocusable(this[`_${section}Focusable`])) {
+          const firstVisibleRow = [...this.$[section].children].find((row) => row.offsetHeight);
+          const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
+          if (firstVisibleRow && firstVisibleCell) {
+            this[`_${section}Focusable`] = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
+          }
         }
-      }
+      });
 
-      if (!this.__isValidFocusable(this._footerFocusable) && this.$.footer.firstElementChild) {
-        this._footerFocusable = Array.from(this.$.footer.firstElementChild.children).filter((el) => !el.hidden)[0];
+      // Body
+      if (!this.__isValidFocusable(this._itemsFocusable) && this.$.items.firstElementChild) {
+        const firstVisibleRow = this.__getFirstVisibleItem();
+        const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
+
+        if (firstVisibleCell && firstVisibleRow) {
+          // Reset memoized column
+          delete this._focusedColumnOrder;
+          this._itemsFocusable = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
+          this._focusedItemIndex = firstVisibleRow ? firstVisibleRow.index : 0;
+        }
       }
     }
 
