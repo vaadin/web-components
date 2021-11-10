@@ -60,6 +60,10 @@ registerStyles(
 
     /* Focus-ring */
 
+    [part~='row'] {
+      position: relative;
+    }
+
     [part~='row']:focus,
     [part~='cell']:focus {
       outline: none;
