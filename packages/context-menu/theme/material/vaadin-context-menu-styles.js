@@ -71,7 +71,7 @@ registerStyles(
       display: block;
     }
 
-    :host(.vaadin-menu-item[menu-item-checked])::before {
+    :host(.vaadin-menu-item[menu-item-checked]) [part='checkmark']::before {
       content: var(--material-icons-check);
     }
 

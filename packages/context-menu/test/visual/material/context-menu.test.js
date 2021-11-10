@@ -106,7 +106,7 @@ describe('context-menu', () => {
                 {
                   text: 'Menu Item 2-2',
                   children: [
-                    { text: 'Menu Item 2-2-1' },
+                    { text: 'Menu Item 2-2-1', checked: true },
                     { text: 'Menu Item 2-2-2', disabled: true },
                     { component: 'hr' },
                     { text: 'Menu Item 2-2-3' }
