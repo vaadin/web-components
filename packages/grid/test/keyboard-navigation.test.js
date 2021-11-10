@@ -1028,6 +1028,14 @@ describe('keyboard navigation', () => {
 
         flushGrid(grid);
 
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        if (isSafari) {
+          // Workaround a Playwright/Webkit test issue by forcing a reflow
+          grid.hidden = true;
+          await nextFrame();
+          grid.hidden = false;
+        }
+
         expect(grid.$.table.scrollLeft).to.equal(grid.$.table.scrollWidth - grid.$.table.offsetWidth);
       });
 
