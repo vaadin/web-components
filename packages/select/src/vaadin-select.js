@@ -15,8 +15,7 @@ import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
 import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
-import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 'vaadin-select-styles' });
 
