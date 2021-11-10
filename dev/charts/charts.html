@@ -33,7 +33,7 @@
       function changeTheme(theme) {
         var charts = document.getElementsByTagName("vaadin-chart");
         for (i = 0; i < charts.length; i++) {
-          charts[i].setAttribute("theme", charts[i].getAttribute("theme") + ' ' + theme)
+          charts[i].setAttribute("theme", theme)
         }
       }
     </script>
