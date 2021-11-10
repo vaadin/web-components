@@ -96,7 +96,7 @@ registerStyles(
       -webkit-user-select: none;
     }
 
-    :host(.vaadin-menu-item[menu-item-checked])::before {
+    :host(.vaadin-menu-item[menu-item-checked]) [part='checkmark']::before {
       opacity: 1;
     }
 
