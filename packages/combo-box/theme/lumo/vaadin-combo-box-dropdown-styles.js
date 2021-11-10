@@ -4,7 +4,7 @@ import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-overlay/theme/lumo/vaadin-overlay.js';
 import { menuOverlayCore } from '@vaadin/vaadin-lumo-styles/mixins/menu-overlay.js';
 import { overlay } from '@vaadin/vaadin-lumo-styles/mixins/overlay.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const comboBoxOverlay = css`
   [part='content'] {

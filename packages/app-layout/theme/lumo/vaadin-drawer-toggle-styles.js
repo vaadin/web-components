@@ -1,6 +1,6 @@
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import { button } from '@vaadin/button/theme/lumo/vaadin-button-styles.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const drawerToggle = css`
   :host {

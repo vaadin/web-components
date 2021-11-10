@@ -9,7 +9,7 @@ import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
 import { helper } from '@vaadin/vaadin-lumo-styles/mixins/helper.js';
 import { requiredField } from '@vaadin/vaadin-lumo-styles/mixins/required-field.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const customField = css`
   :host {

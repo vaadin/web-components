@@ -7,7 +7,7 @@ import '@vaadin/vaadin-material-styles/color.js';
 import '@vaadin/vaadin-material-styles/typography.js';
 import { helper } from '@vaadin/vaadin-material-styles/mixins/helper.js';
 import { requiredField } from '@vaadin/vaadin-material-styles/mixins/required-field.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const customField = css`
   :host {

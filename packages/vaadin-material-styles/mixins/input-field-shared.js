@@ -6,7 +6,7 @@
 import '../color.js';
 import '../font-icons.js';
 import '../typography.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { fieldButton } from './field-button.js';
 import { helper } from './helper.js';
 import { requiredField } from './required-field.js';

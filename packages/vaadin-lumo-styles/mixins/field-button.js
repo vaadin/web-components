@@ -7,7 +7,7 @@ import '../color.js';
 import '../font-icons.js';
 import '../sizing.js';
 import '../style.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const fieldButton = css`
   [part$='button'] {
