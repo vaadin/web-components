@@ -3,7 +3,7 @@
  * Copyright (c) 2020 Vaadin Ltd
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import { css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { contentStyles } from './vaadin-rich-text-editor-content-styles.js';
 import { toolbarStyles } from './vaadin-rich-text-editor-toolbar-styles.js';
 
