@@ -16,7 +16,7 @@ const select: Select = document.createElement('vaadin-select');
 assertType<SelectItem[] | null | undefined>(select.items);
 assertType<boolean>(select.opened);
 assertType<SelectRenderer | undefined>(select.renderer);
-assertType<string | boolean>(select.value);
+assertType<string>(select.value);
 assertType<string | null | undefined>(select.placeholder);
 assertType<boolean | null | undefined>(select.readonly);
 assertType<() => void>(select.requestContentUpdate);
