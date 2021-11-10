@@ -95,7 +95,7 @@ describe('vaadin-chart styling', () => {
       const rects = chart.$.chart.querySelectorAll('.highcharts-legend-item > rect');
       expect(rects).to.have.lengthOf(2);
       expect(getComputedStyle(rects[0]).fill).to.equal('rgb(0, 255, 0)');
-      expect(getComputedStyle(rects[1]).fill).to.equal('rgb(67, 67, 72)');
+      expect(getComputedStyle(rects[1]).fill).to.equal('rgb(22, 118, 243)');
     });
   });
 });
