@@ -151,7 +151,7 @@ declare class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixi
    * ];
    * ```
    */
-  items: SelectItem[];
+  items: SelectItem[] | null | undefined;
 
   /**
    * Set when the select is open

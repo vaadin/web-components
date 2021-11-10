@@ -37,8 +37,18 @@ describe('items', () => {
     expect(listBox.childNodes[0].value).to.equal('new-value');
   });
 
-  it('should clear the content when clearing items', () => {
+  it('should clear the content when setting items property to an empty array', () => {
     select.items = [];
+    expect(overlay.content.childNodes).to.be.empty;
+  });
+
+  it('should clear the content when setting items property to null', () => {
+    select.items = null;
+    expect(overlay.content.childNodes).to.be.empty;
+  });
+
+  it('should clear the content when setting items property to undefined', () => {
+    select.items = undefined;
     expect(overlay.content.childNodes).to.be.empty;
   });
 

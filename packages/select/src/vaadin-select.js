@@ -187,7 +187,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
        */
       items: {
         type: Array,
-        value: () => [],
         observer: '__itemsChanged'
       },
 
@@ -702,7 +701,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
    * @private
    */
   __defaultRenderer(root, _select) {
-    if (this.items.length === 0) {
+    if (!this.items || this.items.length === 0) {
       root.textContent = '';
       return;
     }
