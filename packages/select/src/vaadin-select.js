@@ -568,7 +568,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
     const label = selected.getAttribute('label');
     if (label) {
-      labelItem = this.__createItemElement({ label, component: 'vaadin-item' });
+      labelItem = this.__createItemElement({ label });
     } else {
       labelItem = selected.cloneNode(true);
     }
