@@ -5,6 +5,8 @@
 
 A feature-rich interactive charting library providing multiple different chart types.
 
+> ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Charts in your project.
+
 [Documentation + Live Demo ↗](https://charts.demo.vaadin.com/vaadin-charts/)
 
 ## Contributing

@@ -5,6 +5,8 @@
 
 A powerful and easy to use layout web component for building responsive views.
 
+> ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Board in your project.
+
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/board)
 
 ## Contributing

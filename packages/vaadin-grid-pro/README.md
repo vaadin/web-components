@@ -5,6 +5,8 @@
 
 An extension of the `vaadin-grid` component that provides inline editing with full keyboard navigation.
 
+> ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Grid Pro in your project.
+
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/grid-pro)
 
 ## Contributing
