@@ -3,7 +3,7 @@ import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-notification.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
   'vaadin-notification-card',

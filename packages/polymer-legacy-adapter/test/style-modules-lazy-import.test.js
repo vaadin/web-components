@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 function defineCustomElement(name) {

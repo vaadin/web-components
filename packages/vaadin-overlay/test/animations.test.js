@@ -3,7 +3,7 @@ import { escKeyDown, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-overlay.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
   'vaadin-overlay',

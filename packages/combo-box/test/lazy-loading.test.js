@@ -6,7 +6,7 @@ import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 import '../vaadin-combo-box-light.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import {
   flushComboBox,
