@@ -3,7 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { IronA11yKeysBehavior } from '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
 import { addListener } from '@polymer/polymer/lib/utils/gestures.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
@@ -824,21 +823,6 @@ export const DatePickerMixin = (subclass) =>
       }
     }
 
-    /**
-     * Keyboard Navigation
-     * @private
-     */
-    _eventKey(e) {
-      const keys = ['down', 'up', 'enter', 'esc', 'tab'];
-
-      for (let i = 0; i < keys.length; i++) {
-        const k = keys[i];
-        if (IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k)) {
-          return k;
-        }
-      }
-    }
-
     /** @private */
     _isValidDate(d) {
       return d && !isNaN(d.getTime());
@@ -893,9 +877,9 @@ export const DatePickerMixin = (subclass) =>
         }
       }
 
-      switch (this._eventKey(e)) {
-        case 'down':
-        case 'up':
+      switch (e.key) {
+        case 'ArrowDown':
+        case 'ArrowUp':
           // prevent scrolling the page with arrows
           e.preventDefault();
 
@@ -908,7 +892,7 @@ export const DatePickerMixin = (subclass) =>
           }
 
           break;
-        case 'enter': {
+        case 'Enter': {
           const parsedDate = this._getParsedDate();
           const isValidDate = this._isValidDate(parsedDate);
           if (this.opened) {
@@ -929,7 +913,7 @@ export const DatePickerMixin = (subclass) =>
           }
           break;
         }
-        case 'esc':
+        case 'Escape':
           if (this.opened) {
             this._focusedDate = this._selectedDate;
             this._close();
@@ -946,7 +930,7 @@ export const DatePickerMixin = (subclass) =>
             this._selectParsedOrFocusedDate();
           }
           break;
-        case 'tab':
+        case 'Tab':
           if (this.opened) {
             e.preventDefault();
             //Clear the selection range (remains visible on IE)
