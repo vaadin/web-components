@@ -17,7 +17,6 @@ registerStyles(
       --vaadin-charts-color-9: #e24932;
       --vaadin-charts-color-positive: var(--vaadin-charts-color-4, #15c15d);
       --vaadin-charts-color-negative: var(--vaadin-charts-color-9, #e24932);
-
       --vaadin-charts-background: var(--lumo-base-color);
       --vaadin-charts-title-label: var(--lumo-header-text-color);
       --vaadin-charts-axis-title: var(--lumo-secondary-text-color);
@@ -28,17 +27,14 @@ registerStyles(
       --vaadin-charts-xaxis-line-width: 0;
       --vaadin-charts-grid-line: var(--lumo-contrast-20pct);
       --vaadin-charts-disabled-label: var(--lumo-disabled-text-color);
-
       --vaadin-charts-contrast: var(--lumo-contrast);
       --vaadin-charts-contrast-5pct: var(--lumo-contrast-5pct);
       --vaadin-charts-contrast-10pct: var(--lumo-contrast-10pct);
       --vaadin-charts-contrast-20pct: var(--lumo-contrast-20pct);
       --vaadin-charts-contrast-60pct: var(--lumo-contrast-60pct);
-
       --vaadin-charts-tooltip-background: var(--lumo-base-color);
       --vaadin-charts-tooltip-background-opacity: 1;
       --vaadin-charts-tooltip-border-color: inherit;
-
       --vaadin-charts-button-label: var(--lumo-primary-text-color);
       --vaadin-charts-button-background: var(--lumo-contrast-5pct);
       --vaadin-charts-button-hover-background: var(--lumo-primary-color-10pct);
@@ -49,7 +45,7 @@ registerStyles(
     :host([theme~='gradient']) {
       --vaadin-charts-color-0: #1676f3;
       --vaadin-charts-color-1: #13bbf0;
-      --vaadin-charts-color-2: #11eeee;
+      --vaadin-charts-color-2: #1ee;
       --vaadin-charts-color-3: #0cd9bf;
       --vaadin-charts-color-4: #06be81;
       --vaadin-charts-color-5: #00a344;
