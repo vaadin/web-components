@@ -712,7 +712,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
     const isCancel = e.composedPath().indexOf(this.$.cancelButton) >= 0;
     const isScroller = !isToday && !isCancel;
 
-    // https://developer.mozilla.org/ru/docs/Web/API/KeyboardEvent/key/Key_Values
+    // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
     const navigationKeys = [
       ' ',
       'ArrowDown',
