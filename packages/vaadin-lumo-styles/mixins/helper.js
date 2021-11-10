@@ -7,7 +7,7 @@ import '../color.js';
 import '../sizing.js';
 import '../style.js';
 import '../typography.js';
-import { css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const helper = css`
   :host([has-helper]) [part='helper-text']::before {
