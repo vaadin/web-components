@@ -379,8 +379,8 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   }
 
   /**
-   * @param {!SelectRenderer} renderer
-   * @param {SelectOverlay} overlay
+   * @param {SelectRenderer | undefined | null} renderer
+   * @param {SelectOverlay | undefined} overlay
    * @private
    */
   _rendererChanged(renderer, overlay) {
@@ -696,8 +696,8 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
   /**
    * Renders items when they are provided by the `items` property and clears the content otherwise.
-   * @param {HTMLElement} root
-   * @param {Select} _select
+   * @param {!HTMLElement} root
+   * @param {!Select} _select
    * @private
    */
   __defaultRenderer(root, _select) {
