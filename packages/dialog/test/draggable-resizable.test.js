@@ -5,7 +5,7 @@ import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/text-area/vaadin-text-area.js';
 import '../src/vaadin-dialog.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
   'vaadin-dialog-overlay',

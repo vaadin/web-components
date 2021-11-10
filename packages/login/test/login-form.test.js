@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { enter, fixtureSync, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-login-form.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { fillUsernameAndPassword } from './helpers.js';
 
 registerStyles(
