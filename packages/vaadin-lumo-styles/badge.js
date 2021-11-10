@@ -6,7 +6,7 @@
 import './style.js';
 import './color.js';
 import './typography.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const badge = css`
   [theme~='badge'] {

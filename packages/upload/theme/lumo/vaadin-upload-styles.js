@@ -7,7 +7,7 @@ import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/button/theme/lumo/vaadin-button.js';
 import '@vaadin/progress-bar/theme/lumo/vaadin-progress-bar.js';
 import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
   'vaadin-upload',

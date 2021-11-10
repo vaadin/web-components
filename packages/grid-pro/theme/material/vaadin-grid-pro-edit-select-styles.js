@@ -1,4 +1,4 @@
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { gridProEditor } from './vaadin-grid-pro-editor-styles.js';
 
 const gridProEditSelect = css`

@@ -1,6 +1,6 @@
 import '@vaadin/vaadin-material-styles/color.js';
 import { button } from '@vaadin/button/theme/material/vaadin-button-styles.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const drawerToggle = css`
   :host {

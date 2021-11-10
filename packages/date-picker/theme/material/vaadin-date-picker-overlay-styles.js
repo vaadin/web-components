@@ -1,5 +1,5 @@
 import { overlay } from '@vaadin/vaadin-material-styles/mixins/overlay.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const datePickerOverlay = css`
   :host([fullscreen]) {

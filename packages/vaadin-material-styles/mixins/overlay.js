@@ -6,7 +6,7 @@
 import '../color.js';
 import '../typography.js';
 import '../shadow.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const overlay = css`
   :host {

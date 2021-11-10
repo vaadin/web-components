@@ -1,6 +1,6 @@
 import '@vaadin/vaadin-material-styles/color.js';
 import { menuOverlay } from '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const comboBoxOverlay = css`
   :host {
