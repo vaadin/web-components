@@ -2057,6 +2057,22 @@ describe('keyboard navigation on column groups', () => {
         // Expect the focus to be on the first column
         expect(getFocusedCellIndex()).to.equal(0);
       });
+
+      it('should tab to body after reducing rows', async () => {
+        // Focus a cell on the second row
+        tabToBody();
+        down();
+
+        // Hide the second body row
+        grid.items = ['foo'];
+
+        // Navigate from header to body with tab
+        tabToHeader();
+        await sendKeys({ press: 'Tab' });
+
+        // Expect the focus to be in the body
+        expect(body.contains(grid.shadowRoot.activeElement)).to.be.true;
+      });
     });
   });
 });
