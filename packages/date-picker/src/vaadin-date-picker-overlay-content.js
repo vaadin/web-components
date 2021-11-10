@@ -8,7 +8,6 @@ import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-month-calendar.js';
 import './vaadin-infinite-scroller.js';
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
-import { IronA11yKeysBehavior } from '@polymer/iron-a11y-keys-behavior/iron-a11y-keys-behavior.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { addListener, setTouchAction } from '@polymer/polymer/lib/utils/gestures.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -704,20 +703,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
     e.preventDefault();
   }
 
-  /**
-   * Keyboard Navigation
-   */
-  _eventKey(e) {
-    var keys = ['down', 'up', 'right', 'left', 'enter', 'space', 'home', 'end', 'pageup', 'pagedown', 'tab', 'esc'];
-
-    for (var i = 0; i < keys.length; i++) {
-      var k = keys[i];
-      if (IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k)) {
-        return k;
-      }
-    }
-  }
-
   _onKeydown(e) {
     var focus = this._currentlyFocusedDate();
 
@@ -727,8 +712,24 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
     const isCancel = e.composedPath().indexOf(this.$.cancelButton) >= 0;
     const isScroller = !isToday && !isCancel;
 
-    var eventKey = this._eventKey(e);
-    if (eventKey === 'tab') {
+    // https://developer.mozilla.org/ru/docs/Web/API/KeyboardEvent/key/Key_Values
+    const navigationKeys = [
+      ' ',
+      'ArrowDown',
+      'ArrowUp',
+      'ArrowRight',
+      'ArrowLeft',
+      'Enter',
+      'End',
+      'Escape',
+      'Home',
+      'PageUp',
+      'PageDown',
+      'Tab'
+    ];
+
+    const eventKey = e.key;
+    if (eventKey === 'Tab') {
       // We handle tabs here and don't want to bubble up.
       e.stopPropagation();
 
@@ -751,36 +752,36 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
         // set to false.
         this._focused = false;
       }
-    } else if (eventKey) {
+    } else if (navigationKeys.includes(eventKey)) {
       e.preventDefault();
       e.stopPropagation();
       switch (eventKey) {
-        case 'down':
+        case 'ArrowDown':
           this._moveFocusByDays(7);
           this.focus();
           break;
-        case 'up':
+        case 'ArrowUp':
           this._moveFocusByDays(-7);
           this.focus();
           break;
-        case 'right':
+        case 'ArrowRight':
           if (isScroller) {
             this._moveFocusByDays(this.__isRTL ? -1 : 1);
           }
           break;
-        case 'left':
+        case 'ArrowLeft':
           if (isScroller) {
             this._moveFocusByDays(this.__isRTL ? 1 : -1);
           }
           break;
-        case 'enter':
+        case 'Enter':
           if (isScroller || isCancel) {
             this._close();
           } else if (isToday) {
             this._onTodayTap();
           }
           break;
-        case 'space':
+        case ' ':
           if (isCancel) {
             this._close();
           } else if (isToday) {
@@ -795,19 +796,19 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
             }
           }
           break;
-        case 'home':
+        case 'Home':
           this._moveFocusInsideMonth(focus, 'minDate');
           break;
-        case 'end':
+        case 'End':
           this._moveFocusInsideMonth(focus, 'maxDate');
           break;
-        case 'pagedown':
+        case 'PageDown':
           this._moveFocusByMonths(e.shiftKey ? 12 : 1);
           break;
-        case 'pageup':
+        case 'PageUp':
           this._moveFocusByMonths(e.shiftKey ? -12 : -1);
           break;
-        case 'esc':
+        case 'Escape':
           this._cancel();
           break;
       }
