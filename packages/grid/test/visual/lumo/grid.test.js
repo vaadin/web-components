@@ -225,8 +225,10 @@ describe('grid', () => {
         before(async () => {
           element = fixtureSync(`
             <vaadin-grid style="width: 550px">
-              <vaadin-grid-column path="name.first" width="200px" flex-shrink="0" frozen></vaadin-grid-column>
-              <vaadin-grid-column path="name.last" width="200px" flex-shrink="0"></vaadin-grid-column>
+              <vaadin-grid-column-group header="Name" frozen>
+                <vaadin-grid-column path="name.first" width="200px" flex-shrink="0"></vaadin-grid-column>
+                <vaadin-grid-column path="name.last" width="200px" flex-shrink="0"></vaadin-grid-column>
+              </vaadin-grid-column-group>
               <vaadin-grid-column path="location.city" width="200px" flex-shrink="0"></vaadin-grid-column>
             </vaadin-grid>
           `);
@@ -255,14 +257,6 @@ describe('grid', () => {
         });
 
         it('row focus - header', async () => {
-          // Add a header group
-          const group = document.createElement('vaadin-grid-column-group');
-          group.header = 'Address';
-          group.appendChild(element.querySelector('[path="location.city"]'));
-          element.appendChild(group);
-          flushGrid(element);
-          await nextRender(element);
-
           // Focus a header row
           element.tabIndex = 0;
           element.focus();
