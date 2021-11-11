@@ -163,6 +163,30 @@ describe('text-area', () => {
     });
   });
 
+  describe('prevent invalid input', () => {
+    beforeEach(() => {
+      textArea.preventInvalidInput = true;
+      textArea.value = '1';
+    });
+
+    function inputText(value) {
+      textArea.inputElement.value = value;
+      textArea.inputElement.dispatchEvent(new CustomEvent('input'));
+    }
+
+    it('should prevent non matching input', () => {
+      textArea.pattern = '[0-9]*';
+      inputText('f');
+      expect(textArea.inputElement.value).to.equal('1');
+    });
+
+    it('should not prevent input when pattern is invalid', () => {
+      textArea.pattern = '[0-9])))]*';
+      inputText('f');
+      expect(textArea.inputElement.value).to.equal('f');
+    });
+  });
+
   describe('multi-line', () => {
     let native, container, inputField;
 
@@ -345,6 +369,93 @@ describe('text-area', () => {
     it('should not dispatch `iron-resize` event on value change if height did not change', () => {
       textArea.value = 'just 1 row';
       expect(spy.callCount).to.equal(0);
+    });
+  });
+
+  describe('pattern', () => {
+    // https://github.com/web-platform-tests/wpt/blob/7b0ebaccc62b566a1965396e5be7bb2bc06f841f/html/semantics/forms/constraints/form-validation-validity-patternMismatch.html
+
+    let element;
+
+    function userSetValue(value) {
+      element.value = value;
+      element.dispatchEvent(new CustomEvent('input'));
+    }
+
+    beforeEach(() => {
+      element = fixtureSync('<vaadin-text-area></vaadin-text-area>');
+    });
+
+    it('should be valid when pattern property is not set', () => {
+      element.pattern = null;
+      userSetValue('abc');
+      expect(element.validate()).to.be.true;
+    });
+
+    it('should be valid when value property is empty', () => {
+      element.pattern = '[A-Z]+';
+      userSetValue('');
+      expect(element.validate()).to.be.true;
+    });
+
+    it('should be valid when value property matches the pattern', () => {
+      element.pattern = '[A-Z]{1}';
+      userSetValue('A');
+      expect(element.validate()).to.be.true;
+    });
+
+    it('should be valid when value property matches the pattern (multiline)', () => {
+      element.pattern = '[A-Z\n]{3}';
+      userSetValue('A\nJ');
+      expect(element.validate()).to.be.true;
+    });
+
+    it('should be valid when unicode value property matches the pattern', () => {
+      element.pattern = '[A-Z]+';
+      userSetValue('\u0041\u0042\u0043');
+      expect(element.validate()).to.be.true;
+    });
+
+    it('should be invalid when value property mismatches the pattern', () => {
+      element.pattern = '[a-z]{3,}';
+      userSetValue('ABCD');
+      expect(element.validate()).to.be.false;
+    });
+
+    it('should be invalid when value property mismatches the pattern, even if a subset matches', () => {
+      element.pattern = '[A-Z]+';
+      userSetValue('ABC123');
+      expect(element.validate()).to.be.false;
+    });
+
+    it('should be valid when pattern contains invalid regular expression', () => {
+      element.pattern = '(abc';
+      userSetValue('de');
+      expect(element.validate()).to.be.true;
+    });
+
+    it('should be valid when pattern tries to escape a group', () => {
+      element.pattern = 'a)(b';
+      userSetValue('de');
+      expect(element.validate()).to.be.true;
+    });
+
+    it('should be valid when pattern uses Unicode features', () => {
+      element.pattern = 'a\u{10FFFF}';
+      userSetValue('a\u{10FFFF}');
+      expect(element.validate()).to.be.true;
+    });
+
+    it('should be valid when value matches JavaScript-specific regular expression', () => {
+      element.pattern = '\\u1234\\cx[5-[]{2}';
+      userSetValue('\u1234\x18[6');
+      expect(element.validate()).to.be.true;
+    });
+
+    it('should be invalid when value mismatches JavaScript-specific regular expression', () => {
+      element.pattern = '\\u1234\\cx[5-[]{2}';
+      userSetValue('\u1234\x18[4');
+      expect(element.validate()).to.be.false;
     });
   });
 });
