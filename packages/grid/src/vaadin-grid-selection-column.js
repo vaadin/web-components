@@ -284,7 +284,7 @@ class GridSelectionColumn extends GridColumn {
    * from the data provider and invokes the callback with the resulting array.
    *
    * @private
-   **/
+   */
   __withFilteredItemsArray(callback) {
     const params = {
       page: 0,
