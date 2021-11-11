@@ -180,7 +180,7 @@ describe('text-area', () => {
       expect(textArea.inputElement.value).to.equal('1');
     });
 
-    it('preventInvalidInput should do nothing for invalid pattern', () => {
+    it('should not prevent input when pattern is invalid', () => {
       textArea.pattern = '[0-9])))]*';
       inputText('f');
       expect(textArea.inputElement.value).to.equal('f');
