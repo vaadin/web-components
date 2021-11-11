@@ -1940,7 +1940,7 @@ describe('keyboard navigation on column groups', () => {
   });
 
   describe('updating tabbable cells', () => {
-    describe('updating tabbable cells - header', () => {
+    describe('header', () => {
       let header;
       let mainGroup;
       let subGroup;
