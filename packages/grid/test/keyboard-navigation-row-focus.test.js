@@ -512,32 +512,42 @@ describe('keyboard navigation on column groups - row focus', () => {
   });
 });
 
-describe('empty grid - row focus', () => {
-  beforeEach(async () => {
-    grid = fixtureSync(`
-      <vaadin-grid>
-        <vaadin-grid-column header="header">
-      </vaadin-grid>
-    `);
-    flushGrid(grid);
-  });
+['header', 'footer', 'body'].forEach((section) => {
+  describe(`empty grid - row focus - ${section}`, () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`<vaadin-grid>
+        <vaadin-grid-column></vaadin-grid-column>
+      </vaadin-grid>`);
+      const column = grid.firstElementChild;
 
-  it('should enter row focus mode', () => {
-    focusFirstHeaderCell();
-    left();
+      if (section === 'header') {
+        column.header = 'header';
+      } else if (section === 'footer') {
+        column.footerRenderer = (root) => (root.textContent = 'footer');
+      } else if (section === 'body') {
+        grid.items = ['foo'];
+      }
 
-    const tabbableHeaderRow = getTabbableRows(grid.shadowRoot.querySelector('#header'))[0];
-    expect(tabbableHeaderRow).to.be.ok;
-  });
+      flushGrid(grid);
+    });
 
-  it('should return to cell focus mode', () => {
-    focusFirstHeaderCell();
-    left();
+    it(`should enter row focus mode - ${section}`, () => {
+      getTabbableElements(grid.$.table)[0].focus();
+      left();
 
-    const tabbableHeaderRow = getTabbableRows(grid.shadowRoot.querySelector('#header'))[0];
-    right();
+      const tabbableRow = getTabbableRows(grid.shadowRoot)[0];
+      expect(tabbableRow).to.be.ok;
+    });
 
-    const tabbableHeaderCell = getTabbableElements(tabbableHeaderRow)[0];
-    expect(tabbableHeaderCell.parentElement).to.equal(tabbableHeaderRow);
+    it(`should return to cell focus mode - ${section}`, () => {
+      getTabbableElements(grid.$.table)[0].focus();
+      left();
+
+      const tabbableRow = getTabbableRows(grid.shadowRoot)[0];
+      right();
+
+      const tabbableCell = getTabbableElements(tabbableRow)[0];
+      expect(tabbableCell.parentElement).to.equal(tabbableRow);
+    });
   });
 });
