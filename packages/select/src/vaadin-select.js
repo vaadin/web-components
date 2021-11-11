@@ -422,8 +422,8 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   }
 
   /**
-   * @param {SelectItem[]} newItems
-   * @param {SelectItem[] | undefined} oldItems
+   * @param {SelectItem[] | undefined | null} newItems
+   * @param {SelectItem[] | undefined | null} oldItems
    * @private
    */
   __itemsChanged(newItems, oldItems) {
