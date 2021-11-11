@@ -183,16 +183,6 @@ const getTestRunnerHtml = (theme) => (testFramework) =>
           margin: 0;
           padding: 0;
         }
-
-        html {
-          --vaadin-user-color-0: #df0b92;
-          --vaadin-user-color-1: #650acc;
-          --vaadin-user-color-2: #097faa;
-          --vaadin-user-color-3: #ad6200;
-          --vaadin-user-color-4: #bf16f3;
-          --vaadin-user-color-5: #084391;
-          --vaadin-user-color-6: #078836;
-        }
       </style>
       ${theme === 'material' ? fontRoboto : ''}
       <script>
