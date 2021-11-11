@@ -2081,7 +2081,7 @@ describe('empty grid', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid>
-        <vaadin-grid-column header="header">
+        <vaadin-grid-column header="header"></vaadin-grid-column>
       </vaadin-grid>
     `);
     flushGrid(grid);
