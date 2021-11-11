@@ -67,7 +67,7 @@ registerStyles(
       box-shadow: none;
     }
 
-    ::slotted(vaadin-item:hover) {
+    ::slotted(:not([slot]):hover) {
       background-color: transparent;
     }
   `,
