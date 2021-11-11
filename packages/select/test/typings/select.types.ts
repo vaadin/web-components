@@ -18,7 +18,7 @@ assertType<boolean>(select.opened);
 assertType<SelectRenderer | undefined>(select.renderer);
 assertType<string>(select.value);
 assertType<string | null | undefined>(select.placeholder);
-assertType<boolean | null | undefined>(select.readonly);
+assertType<boolean>(select.readonly);
 assertType<() => void>(select.requestContentUpdate);
 assertType<() => boolean>(select.validate);
 
