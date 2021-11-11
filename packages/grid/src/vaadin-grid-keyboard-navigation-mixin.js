@@ -597,9 +597,9 @@ export const KeyboardNavigationMixin = (superClass) =>
           // assigned with a new index since last focus, probably because of
           // scrolling. Focus the row for the stored focused item index instead.
           const columnIndex = Array.from(targetRow.children).indexOf(this._itemsFocusable);
-          const focusedItemRow = Array.from(this.$.items.children).filter(
+          const focusedItemRow = Array.from(this.$.items.children).find(
             (row) => !row.hidden && row.index === this._focusedItemIndex
-          )[0];
+          );
           if (focusedItemRow) {
             itemsFocusTarget = focusedItemRow.children[columnIndex];
           }
