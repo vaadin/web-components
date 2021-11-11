@@ -282,15 +282,21 @@ export class TextArea extends PatternMixin(InputFieldMixin(ThemableMixin(Element
     this._dispatchIronResizeEventIfNeeded('InputHeight', inputHeight);
   }
 
+  /**
+   * Returns true if the current textarea value satisfies all constraints (if any).
+   * @return {boolean}
+   */
   checkValidity() {
     if (!super.checkValidity()) {
       return false;
     }
 
-    // Custom pattern validation implementation, according to web standards spec
+    // Native <textarea> does not support pattern attribute, so we have a custom logic
+    // according to WHATWG spec for <input>, with tests inspired by web-platform-tests
+    // https://html.spec.whatwg.org/multipage/input.html#the-pattern-attribute
 
-    // Skip pattern validation if there is no pattern, or the value is empty
     if (!this.pattern || !this.inputElement.value) {
+      // Mark as valid if there is no pattern, or the value is empty
       return true;
     }
 
