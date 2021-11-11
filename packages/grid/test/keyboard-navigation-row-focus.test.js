@@ -447,7 +447,7 @@ describe('keyboard navigation on column groups - row focus', () => {
         await nextFrame();
 
         const tabbableHeaderRow = getTabbableRows(header)[0];
-        expect(tabbableHeaderRow).not.to.be.ok;
+        expect(tabbableHeaderRows).to.be.empty;
       });
 
       it('should update tabbable header row on header row unhide', async () => {
