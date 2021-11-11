@@ -496,19 +496,6 @@ describe('keyboard navigation', () => {
       expect(keydownEvent.defaultPrevented).to.be.false;
     });
 
-    it('should be possible to exit an empty grid with tab', () => {
-      grid = fixtureSync(`<vaadin-grid>
-          <vaadin-grid-column header="header"></vaadin-grid-column>
-        </vaadin-grid>`);
-      flushGrid(grid);
-
-      tabToHeader();
-      tab();
-
-      // Expect programmatic focus on focus exit element
-      expect(grid.shadowRoot.activeElement).to.equal(grid.$.focusexit);
-    });
-
     it('should be possible to enter grid with tab', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
 
@@ -2087,5 +2074,26 @@ describe('keyboard navigation on column groups', () => {
         expect(body.contains(grid.shadowRoot.activeElement)).to.be.true;
       });
     });
+  });
+});
+
+describe('empty grid', () => {
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column header="header">
+      </vaadin-grid>
+    `);
+    flushGrid(grid);
+  });
+
+  it('should be possible to exit an empty grid with tab', () => {
+    flushGrid(grid);
+
+    tabToHeader();
+    tab();
+
+    // Expect programmatic focus on focus exit element
+    expect(grid.shadowRoot.activeElement).to.equal(grid.$.focusexit);
   });
 });
