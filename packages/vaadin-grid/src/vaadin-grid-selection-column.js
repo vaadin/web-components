@@ -184,7 +184,11 @@ class GridSelectionColumnElement extends GridColumnElement {
       return;
     }
 
-    this._grid.selectedItems = selectAll && Array.isArray(this._grid.items) ? this.__getRootLevelItems() : [];
+    if (selectAll && Array.isArray(this._grid.items)) {
+      this.__withFilteredItemsArray((items) => (this._grid.selectedItems = items));
+    } else {
+      this._grid.selectedItems = [];
+    }
   }
 
   /**
@@ -252,25 +256,21 @@ class GridSelectionColumnElement extends GridColumnElement {
   }
 
   /** @private */
-  __getRootLevelItems() {
-    const rootCache = this._grid._cache;
-    return [...Array(rootCache.size)].map((_, idx) => rootCache.items[idx]);
-  }
-
-  /** @private */
   __onSelectedItemsChanged() {
     this._selectAllChangeLock = true;
     if (Array.isArray(this._grid.items)) {
-      if (!this._grid.selectedItems.length) {
-        this.selectAll = false;
-        this.__indeterminate = false;
-      } else if (this.__arrayContains(this._grid.selectedItems, this.__getRootLevelItems())) {
-        this.selectAll = true;
-        this.__indeterminate = false;
-      } else {
-        this.selectAll = false;
-        this.__indeterminate = true;
-      }
+      this.__withFilteredItemsArray((items) => {
+        if (!this._grid.selectedItems.length) {
+          this.selectAll = false;
+          this.__indeterminate = false;
+        } else if (this.__arrayContains(this._grid.selectedItems, items)) {
+          this.selectAll = true;
+          this.__indeterminate = false;
+        } else {
+          this.selectAll = false;
+          this.__indeterminate = true;
+        }
+      });
     }
     this._selectAllChangeLock = false;
   }
@@ -278,6 +278,22 @@ class GridSelectionColumnElement extends GridColumnElement {
   /** @private */
   __onDataProviderChanged() {
     this.__selectAllHidden = !Array.isArray(this._grid.items);
+  }
+
+  /**
+   * Assuming the grid uses an items array data provider, fetches all the filtered items
+   * from the data provider and invokes the callback with the resulting array.
+   *
+   * @private
+   */
+  __withFilteredItemsArray(callback) {
+    const params = {
+      page: 0,
+      pageSize: Infinity,
+      sortOrders: [],
+      filters: this._grid._mapFilters()
+    };
+    this._grid.dataProvider(params, (items) => callback(items));
   }
 }
 

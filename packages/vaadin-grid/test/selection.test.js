@@ -495,4 +495,12 @@ describe('multi selection column', () => {
     expect(firstBodyCellContent.textContent).to.equal('foo');
     expect(firstHeaderCellContent.firstElementChild).to.equal(selectAllCheckbox);
   });
+
+  it('should select all items when select all is set', () => {
+    grid.items = Array.from({ length: 60 }, (_, key) => ++key);
+
+    selectionColumn.selectAll = true;
+
+    expect(grid.selectedItems).to.eql(grid.items);
+  });
 });
