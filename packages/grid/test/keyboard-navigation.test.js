@@ -2004,7 +2004,7 @@ describe('keyboard navigation on column groups', () => {
         down();
 
         // Hide the second body row
-        grid.items = ['foo'];
+        grid.items = [grid.items[0]];
 
         await nextFrame();
 
@@ -2047,7 +2047,7 @@ describe('keyboard navigation on column groups', () => {
         down();
 
         // Hide the second body row
-        grid.items = ['foo'];
+        grid.items = [grid.items[0]];
 
         // Focus the first row (should focus the first cell)
         tabToBody();
@@ -2064,7 +2064,7 @@ describe('keyboard navigation on column groups', () => {
         down();
 
         // Hide the second body row
-        grid.items = ['foo'];
+        grid.items = [grid.items[0]];
 
         // Navigate from header to body with tab
         tabToHeader();

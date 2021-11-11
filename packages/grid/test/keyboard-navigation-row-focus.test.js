@@ -478,7 +478,7 @@ describe('keyboard navigation on column groups - row focus', () => {
         down();
 
         // Hide the second body row
-        grid.items = ['foo'];
+        grid.items = [grid.items[0]];
 
         await nextFrame();
 
