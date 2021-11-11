@@ -177,6 +177,10 @@ function getTabbableElements(root) {
   return root.querySelectorAll('[tabindex]:not([tabindex="-1"])');
 }
 
+function getTabbableCells(root) {
+  return root.querySelectorAll('tr:not([hidden]) *:is(td, th)[tabindex]:not([tabindex="-1"])');
+}
+
 describe('keyboard navigation', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
@@ -1933,5 +1937,163 @@ describe('keyboard navigation on column groups', () => {
     up();
 
     expect(getFocusedRowIndex()).to.equal(0);
+  });
+
+  describe('updating tabbable cells', () => {
+    describe('header', () => {
+      let header;
+      let mainGroup;
+      let subGroup;
+      let column;
+
+      beforeEach(() => {
+        header = grid.$.header;
+        mainGroup = grid.querySelector('vaadin-grid-column-group');
+        subGroup = mainGroup.querySelector('vaadin-grid-column-group');
+        column = subGroup.querySelector('vaadin-grid-column');
+      });
+
+      it('should update tabbable header cell on header row hide', async () => {
+        const initialTabbableHeaderCell = getTabbableCells(header)[0];
+
+        // Hide the first header row
+        mainGroup.headerRenderer = null;
+        await nextFrame();
+
+        const tabbableHeaderCell = getTabbableCells(header)[0];
+        expect(tabbableHeaderCell.offsetHeight).not.to.equal(0);
+        expect(tabbableHeaderCell).not.to.equal(initialTabbableHeaderCell);
+      });
+
+      it('should have no tabbable header cells when header is hidden', async () => {
+        // Hide all header rows
+        mainGroup.headerRenderer = null;
+        subGroup.headerRenderer = null;
+        column.headerRenderer = null;
+        await nextFrame();
+
+        const tabbableHeaderCell = getTabbableCells(header)[0];
+        expect(tabbableHeaderCell).not.to.be.ok;
+      });
+
+      it('should update tabbable header cell on header row unhide', async () => {
+        // Hide all header rows
+        mainGroup.headerRenderer = null;
+        subGroup.headerRenderer = null;
+        column.headerRenderer = null;
+        await nextFrame();
+
+        column.header = 'column';
+        await nextFrame();
+
+        const tabbableHeaderCell = getTabbableCells(header)[0];
+        expect(tabbableHeaderCell.offsetHeight).not.to.equal(0);
+      });
+    });
+
+    describe('body', () => {
+      let body;
+
+      beforeEach(() => {
+        body = grid.$.items;
+      });
+
+      it('should update tabbable body cell on body row hide', async () => {
+        // Focus the second body row / make it tabbable
+        tabToBody();
+        down();
+
+        // Hide the second body row
+        grid.items = [grid.items[0]];
+
+        await nextFrame();
+
+        // Expect the tabbable body cell to be on the first row
+        const tabbableBodyCell = getTabbableCells(body)[0];
+        expect(tabbableBodyCell.parentElement.index).to.equal(0);
+        expect(tabbableBodyCell.offsetHeight).not.to.equal(0);
+      });
+
+      it('should have no tabbable body cell when there are no rows', async () => {
+        // Remove all body rows
+        grid.items = [];
+
+        const tabbableBodyCell = getTabbableCells(body)[0];
+        expect(tabbableBodyCell).not.to.be.ok;
+      });
+
+      it('should update tabbable body cell on body row unhide', async () => {
+        // Remove all body rows
+        grid.items = [];
+        await nextFrame();
+
+        grid.items = ['foo', 'bar'];
+        await nextFrame();
+
+        const tabbableBodyCell = getTabbableCells(body)[0];
+        expect(tabbableBodyCell.parentElement.index).to.equal(0);
+        expect(tabbableBodyCell.offsetHeight).not.to.equal(0);
+      });
+
+      it('should remain on the first column after a tabbable cell row is hidden', async () => {
+        // Add a second column
+        const column = document.createElement('vaadin-grid-column');
+        grid.appendChild(column);
+        await nextFrame();
+
+        // Focus the second cell on the second row
+        tabToBody();
+        right();
+        down();
+
+        // Hide the second body row
+        grid.items = [grid.items[0]];
+
+        // Focus the first row (should focus the first cell)
+        tabToBody();
+        // Hit down
+        down();
+
+        // Expect the focus to be on the first column
+        expect(getFocusedCellIndex()).to.equal(0);
+      });
+
+      it('should tab to body after reducing rows', async () => {
+        // Focus a cell on the second row
+        tabToBody();
+        down();
+
+        // Hide the second body row
+        grid.items = [grid.items[0]];
+
+        // Navigate from header to body with tab
+        tabToHeader();
+        await sendKeys({ press: 'Tab' });
+
+        // Expect the focus to be in the body
+        expect(body.contains(grid.shadowRoot.activeElement)).to.be.true;
+      });
+    });
+  });
+});
+
+describe('empty grid', () => {
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column header="header"></vaadin-grid-column>
+      </vaadin-grid>
+    `);
+    flushGrid(grid);
+  });
+
+  it('should be possible to exit an empty grid with tab', () => {
+    flushGrid(grid);
+
+    tabToHeader();
+    tab();
+
+    // Expect programmatic focus on focus exit element
+    expect(grid.shadowRoot.activeElement).to.equal(grid.$.focusexit);
   });
 });
