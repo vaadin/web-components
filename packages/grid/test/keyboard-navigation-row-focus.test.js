@@ -511,3 +511,33 @@ describe('keyboard navigation on column groups - row focus', () => {
     });
   });
 });
+
+describe('empty grid - row focus', () => {
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-column header="header">
+      </vaadin-grid>
+    `);
+    flushGrid(grid);
+  });
+
+  it('should enter row focus mode', () => {
+    focusFirstHeaderCell();
+    left();
+
+    const tabbableHeaderRow = getTabbableRows(grid.shadowRoot.querySelector('#header'))[0];
+    expect(tabbableHeaderRow).to.be.ok;
+  });
+
+  it('should return to cell focus mode', () => {
+    focusFirstHeaderCell();
+    left();
+
+    const tabbableHeaderRow = getTabbableRows(grid.shadowRoot.querySelector('#header'))[0];
+    right();
+
+    const tabbableHeaderCell = getTabbableElements(tabbableHeaderRow)[0];
+    expect(tabbableHeaderCell.parentElement).to.equal(tabbableHeaderRow);
+  });
+});
