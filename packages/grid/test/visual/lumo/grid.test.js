@@ -253,6 +253,23 @@ describe('grid', () => {
         it('row focus', async () => {
           await visualDiff(element, `${dir}-row-focus`);
         });
+
+        it('row focus - header', async () => {
+          // Add a header group
+          const group = document.createElement('vaadin-grid-column-group');
+          group.header = 'Address';
+          group.appendChild(element.querySelector('[path="location.city"]'));
+          element.appendChild(group);
+          flushGrid(element);
+          await nextRender(element);
+
+          // Focus a header row
+          element.tabIndex = 0;
+          element.focus();
+          await sendKeys({ press: 'Tab' });
+
+          await visualDiff(element, `${dir}-row-focus-header`);
+        });
       });
     });
   });
