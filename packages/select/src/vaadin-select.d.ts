@@ -9,6 +9,12 @@ import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+export interface SelectItem {
+  label?: string;
+  component?: string;
+  disabled?: boolean;
+}
+
 /**
  * Function for rendering the content of the `<vaadin-select>`.
  * Receives two arguments:
@@ -47,17 +53,34 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.
  *
+ * ### Items
+ *
+ * Use the `items` property to define possible options for the select:
+ *
+ * ```html
+ * <vaadin-select id="select"></vaadin-select>
+ * ```
+ * ```js
+ * const select = document.querySelector('#select');
+ * select.items = [
+ *   { label: 'Most recent first', value: 'recent' },
+ *   { component: 'hr' },
+ *   { label: 'Rating: low to high', value: 'rating-asc' },
+ *   { label: 'Rating: high to low', value: 'rating-desc' },
+ *   { component: 'hr' },
+ *   { label: 'Price: low to high', value: 'price-asc', disabled: true },
+ *   { label: 'Price: high to low', value: 'price-desc', disabled: true }
+ * ];
+ * ```
+ *
  * ### Rendering
  *
- * The content of the select can be populated by using the renderer callback function.
+ * Alternatively, the content of the select can be populated by using the renderer callback function.
  *
  * The renderer function provides `root`, `select` arguments.
  * Generate DOM content, append it to the `root` element and control the state
  * of the host element by accessing `select`.
  *
- * ```html
- * <vaadin-select id="select"></vaadin-select>
- * ```
  * ```js
  * const select = document.querySelector('#select');
  * select.renderer = function(root, select) {
@@ -132,6 +155,29 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(ThemableMixin(HTMLElement))))) {
+  /**
+   * An array containing items that will be rendered as the options of the select.
+   *
+   * #### Example
+   * ```js
+   * select.items = [
+   *   { label: 'Most recent first', value: 'recent' },
+   *   { component: 'hr' },
+   *   { label: 'Rating: low to high', value: 'rating-asc' },
+   *   { label: 'Rating: high to low', value: 'rating-desc' },
+   *   { component: 'hr' },
+   *   { label: 'Price: low to high', value: 'price-asc', disabled: true },
+   *   { label: 'Price: high to low', value: 'price-desc', disabled: true }
+   * ];
+   * ```
+   *
+   * Note: each item is rendered by default as the internal `<vaadin-select-item>` that is an extension of `<vaadin-item>`.
+   * To render the item with a custom component, provide a tag name by the `component` property.
+   *
+   * @type {!Array<!SelectItem>}
+   */
+  items: SelectItem[] | null | undefined;
+
   /**
    * Set when the select is open
    */
