@@ -118,6 +118,10 @@ registerStyles(
 
     /* Keyboard navigation */
 
+    [part~='row'] {
+      position: relative;
+    }
+
     [part~='row']:focus,
     [part~='cell']:focus {
       outline: none;
