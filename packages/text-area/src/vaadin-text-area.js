@@ -294,15 +294,13 @@ export class TextArea extends PatternMixin(InputFieldMixin(ThemableMixin(Element
       return true;
     }
 
-    // Skip if pattern is invalid
     try {
-      new RegExp(this.pattern);
-    } catch (error) {
+      const match = this.inputElement.value.match(this.pattern);
+      return match ? match[0] === match.input : false;
+    } catch (_) {
+      // If the pattern can not be compiled, then report as valid
       return true;
     }
-
-    const match = this.inputElement.value.match(this.pattern);
-    return match ? match[0] === match.input : false;
   }
 }
 
