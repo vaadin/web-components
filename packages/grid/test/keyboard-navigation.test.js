@@ -1991,7 +1991,7 @@ describe('keyboard navigation on column groups', () => {
       });
     });
 
-    describe('updating tabbable cells - body', () => {
+    describe('body', () => {
       let body;
 
       beforeEach(() => {
