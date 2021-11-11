@@ -8,6 +8,7 @@ import { html, PolymerElement } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
+import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { TextAreaController } from '@vaadin/field-base/src/text-area-controller.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -56,9 +57,10 @@ registerStyles('vaadin-text-area', inputFieldShared, { moduleId: 'vaadin-text-ar
  * @extends HTMLElement
  * @mixes InputFieldMixin
  * @mixes ElementMixin
+ * @mixes PatternMixin
  * @mixes ThemableMixin
  */
-export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+export class TextArea extends PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-text-area';
   }
@@ -278,6 +280,33 @@ export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(Polymer
     inputField.scrollTop = scrollTop;
 
     this._dispatchIronResizeEventIfNeeded('InputHeight', inputHeight);
+  }
+
+  /**
+   * Returns true if the current textarea value satisfies all constraints (if any).
+   * @return {boolean}
+   */
+  checkValidity() {
+    if (!super.checkValidity()) {
+      return false;
+    }
+
+    // Native <textarea> does not support pattern attribute, so we have a custom logic
+    // according to WHATWG spec for <input>, with tests inspired by web-platform-tests
+    // https://html.spec.whatwg.org/multipage/input.html#the-pattern-attribute
+
+    if (!this.pattern || !this.inputElement.value) {
+      // Mark as valid if there is no pattern, or the value is empty
+      return true;
+    }
+
+    try {
+      const match = this.inputElement.value.match(this.pattern);
+      return match ? match[0] === match.input : false;
+    } catch (_) {
+      // If the pattern can not be compiled, then report as valid
+      return true;
+    }
   }
 }
 
