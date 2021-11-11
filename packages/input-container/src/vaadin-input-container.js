@@ -5,7 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {

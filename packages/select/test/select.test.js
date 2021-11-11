@@ -159,7 +159,7 @@ describe('vaadin-select', () => {
       it('should wrap the selected item `label` string in selected vaadin item', () => {
         menu.selected = 1;
         const item = valueButton.firstElementChild;
-        expect(item.localName).to.equal('vaadin-item');
+        expect(item.localName).to.equal('vaadin-select-item');
         expect(item.textContent).to.equal('o2');
         expect(item.selected).to.be.true;
         expect(item.getAttribute('tabindex')).to.be.null;

@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '../color.js';
-import { css } from '@vaadin/vaadin-themable-mixin/register-styles.js';
+import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export const helper = css`
   [part='helper-text'] {

@@ -5,6 +5,8 @@
  */
 import '@polymer/iron-media-query/iron-media-query.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
+import './vaadin-select-item.js';
+import './vaadin-select-list-box.js';
 import './vaadin-select-overlay.js';
 import './vaadin-select-value-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -22,17 +24,34 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.
  *
+ * ### Items
+ *
+ * Use the `items` property to define possible options for the select:
+ *
+ * ```html
+ * <vaadin-select id="select"></vaadin-select>
+ * ```
+ * ```js
+ * const select = document.querySelector('#select');
+ * select.items = [
+ *   { label: 'Most recent first', value: 'recent' },
+ *   { component: 'hr' },
+ *   { label: 'Rating: low to high', value: 'rating-asc' },
+ *   { label: 'Rating: high to low', value: 'rating-desc' },
+ *   { component: 'hr' },
+ *   { label: 'Price: low to high', value: 'price-asc', disabled: true },
+ *   { label: 'Price: high to low', value: 'price-desc', disabled: true }
+ * ];
+ * ```
+ *
  * ### Rendering
  *
- * The content of the select can be populated by using the renderer callback function.
+ * Alternatively, the content of the select can be populated by using the renderer callback function.
  *
  * The renderer function provides `root`, `select` arguments.
  * Generate DOM content, append it to the `root` element and control the state
  * of the host element by accessing `select`.
  *
- * ```html
- * <vaadin-select id="select"></vaadin-select>
- * ```
  * ```js
  * const select = document.querySelector('#select');
  * select.renderer = function(root, select) {
@@ -169,6 +188,32 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
   static get properties() {
     return {
+      /**
+       * An array containing items that will be rendered as the options of the select.
+       *
+       * #### Example
+       * ```js
+       * select.items = [
+       *   { label: 'Most recent first', value: 'recent' },
+       *   { component: 'hr' },
+       *   { label: 'Rating: low to high', value: 'rating-asc' },
+       *   { label: 'Rating: high to low', value: 'rating-desc' },
+       *   { component: 'hr' },
+       *   { label: 'Price: low to high', value: 'price-asc', disabled: true },
+       *   { label: 'Price: high to low', value: 'price-desc', disabled: true }
+       * ];
+       * ```
+       *
+       * Note: each item is rendered by default as the internal `<vaadin-select-item>` that is an extension of `<vaadin-item>`.
+       * To render the item with a custom component, provide a tag name by the `component` property.
+       *
+       * @type {!Array<!SelectItem>}
+       */
+      items: {
+        type: Array,
+        observer: '__itemsChanged'
+      },
+
       /**
        * Set when the select is open
        * @type {boolean}
@@ -357,18 +402,33 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     }
   }
 
-  /** @private */
+  /**
+   * @param {SelectRenderer | undefined | null} renderer
+   * @param {SelectOverlay | undefined} overlay
+   * @private
+   */
   _rendererChanged(renderer, overlay) {
     if (!overlay) {
       return;
     }
 
-    overlay.setProperties({ owner: this, renderer });
+    overlay.setProperties({ owner: this, renderer: renderer || this.__defaultRenderer });
 
     this.requestContentUpdate();
 
     if (renderer) {
       this._assignMenuElement();
+    }
+  }
+
+  /**
+   * @param {SelectItem[] | undefined | null} newItems
+   * @param {SelectItem[] | undefined | null} oldItems
+   * @private
+   */
+  __itemsChanged(newItems, oldItems) {
+    if (newItems || oldItems) {
+      this.requestContentUpdate();
     }
   }
 
@@ -532,7 +592,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
     const label = selected.getAttribute('label');
     if (label) {
-      labelItem = this.__createItem(label);
+      labelItem = this.__createItemElement({ label });
     } else {
       labelItem = selected.cloneNode(true);
     }
@@ -540,26 +600,40 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     // store reference to the original item
     labelItem._sourceItem = selected;
 
-    this.__appendItem(labelItem);
+    this.__appendValueItemElement(labelItem);
 
     // ensure the item gets proper styles
     labelItem.selected = true;
   }
 
-  /** @private */
-  __createItem(text) {
-    const item = document.createElement('vaadin-item');
-    item.textContent = text;
-    return item;
+  /**
+   * @param {!SelectItem} item
+   * @private
+   */
+  __createItemElement(item) {
+    const itemElement = document.createElement(item.component || 'vaadin-select-item');
+    if (item.label) {
+      itemElement.textContent = item.label;
+    }
+    if (item.value) {
+      itemElement.value = item.value;
+    }
+    if (item.disabled) {
+      itemElement.disabled = item.disabled;
+    }
+    return itemElement;
   }
 
-  /** @private */
-  __appendItem(item) {
-    item.removeAttribute('tabindex');
-    item.removeAttribute('role');
-    item.setAttribute('id', this._fieldId);
+  /**
+   * @param {!HTMLElement} itemElement
+   * @private
+   */
+  __appendValueItemElement(itemElement) {
+    itemElement.removeAttribute('tabindex');
+    itemElement.removeAttribute('role');
+    itemElement.setAttribute('id', this._fieldId);
 
-    this._valueButton.appendChild(item);
+    this._valueButton.appendChild(itemElement);
   }
 
   /** @private */
@@ -576,8 +650,8 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
     if (!selected) {
       if (this.placeholder) {
-        const item = this.__createItem(this.placeholder);
-        this.__appendItem(item);
+        const item = this.__createItemElement({ label: this.placeholder });
+        this.__appendValueItemElement(item);
         this._valueButton.setAttribute('placeholder', '');
       }
     } else {
@@ -642,6 +716,30 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
    */
   validate() {
     return !(this.invalid = !(this.disabled || !this.required || this.value));
+  }
+
+  /**
+   * Renders items when they are provided by the `items` property and clears the content otherwise.
+   * @param {!HTMLElement} root
+   * @param {!Select} _select
+   * @private
+   */
+  __defaultRenderer(root, _select) {
+    if (!this.items || this.items.length === 0) {
+      root.textContent = '';
+      return;
+    }
+
+    let listBox = root.firstElementChild;
+    if (!listBox) {
+      listBox = document.createElement('vaadin-select-list-box');
+      root.appendChild(listBox);
+    }
+
+    listBox.textContent = '';
+    this.items.forEach((item) => {
+      listBox.appendChild(this.__createItemElement(item));
+    });
   }
 
   /**

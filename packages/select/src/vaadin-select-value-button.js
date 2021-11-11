@@ -14,14 +14,14 @@ registerStyles(
       min-width: 0;
     }
 
-    ::slotted(vaadin-item) {
+    ::slotted(:not([slot])) {
       padding-left: 0;
       padding-right: 0;
       flex: auto;
     }
 
     /* placeholder styles */
-    ::slotted(:not([selected])) {
+    ::slotted(:not([slot]):not([selected])) {
       line-height: normal;
     }
 

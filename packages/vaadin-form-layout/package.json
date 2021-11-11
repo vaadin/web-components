@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-form-layout",
-  "version": "22.0.0-beta1",
+  "version": "23.0.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
@@ -32,6 +32,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/form-layout": "22.0.0-beta1"
+    "@vaadin/form-layout": "^23.0.0-alpha0"
   }
 }
