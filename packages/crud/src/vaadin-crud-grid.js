@@ -130,24 +130,32 @@ class CrudGrid extends IncludedMixin(Grid) {
 
   /** @private */
   __createColumn(parent, path) {
-    const col = document.createElement('vaadin-grid-column');
+    let col;
+    if (!this.noFilter && !this.noSort && !parent.__sortColumn) {
+      col = document.createElement('vaadin-grid-column-group');
+      col.__sortColumn = true;
+    } else {
+      col = document.createElement('vaadin-grid-column');
 
-    col.renderer = (root, column, model) => {
-      root.textContent = path ? this.get(path, model.item) : model.item;
-    };
+      col.renderer = (root, column, model) => {
+        root.textContent = path ? this.get(path, model.item) : model.item;
+      };
+    }
+
+    if (this.noFilter && !this.noSort) {
+      col.__sortColumn = true;
+    }
 
     if (!this.noHead && path) {
       col.headerRenderer = (root) => {
         const label = this._generateHeader(path);
 
-        if (!this.noSort) {
+        if (col.__sortColumn) {
           const sorter = window.document.createElement('vaadin-grid-sorter');
           sorter.setAttribute('path', path);
           sorter.textContent = label;
           root.appendChild(sorter);
-        }
-
-        if (!this.noFilter) {
+        } else if (!this.noFilter) {
           const filter = window.document.createElement('vaadin-grid-filter');
           filter.setAttribute('path', path);
           filter.style.display = 'flex';
@@ -164,15 +172,18 @@ class CrudGrid extends IncludedMixin(Grid) {
 
           filter.appendChild(textField);
           root.appendChild(filter);
-        }
-
-        if (this.noSort && this.noFilter) {
+        } else if (this.noSort && this.noFilter) {
           root.textContent = label;
         }
       };
     }
 
     parent.appendChild(col);
+
+    if (col.__sortColumn) {
+      this.__createColumn(col, path);
+    }
+
     return col;
   }
 
