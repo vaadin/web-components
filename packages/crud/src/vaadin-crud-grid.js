@@ -164,7 +164,8 @@ class CrudGrid extends IncludedMixin(Grid) {
       // Make sure the column has enough groups to match the item property depth
       const newParent = document.createElement('vaadin-grid-column-group');
       parent.appendChild(newParent);
-      return this.__createColumn(newParent, path);
+      this.__createColumn(newParent, path);
+      return;
     }
 
     let col;
@@ -180,7 +181,7 @@ class CrudGrid extends IncludedMixin(Grid) {
       // In all other cases, col should be a regular column with a renderer
       col = document.createElement('vaadin-grid-column');
       parent.appendChild(col);
-      col.renderer = (root, column, model) => {
+      col.renderer = (root, _column, model) => {
         root.textContent = path ? this.get(path, model.item) : model.item;
       };
     }
