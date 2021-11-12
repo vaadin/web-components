@@ -191,7 +191,7 @@ describe("column's width with vaadin-grid-column-group", () => {
             </vaadin-grid-column-group>
           </vaadin-grid>
         `);
-    expectColumnsWidthToBeOk(grid, [420], 20);
+    expectColumnsWidthToBeOk(grid, [420], 25);
   });
 
   it('should distribute the excess space to all columns', async () => {
@@ -225,13 +225,13 @@ describe("column's width with vaadin-grid-column-group", () => {
     const grid = createGrid(`
           <vaadin-grid style="width: 200px">
             <vaadin-grid-column-group header="a lengthy header, greater than immediate column-group">
-              <vaadin-grid-column-group header="immediate column-group parent">
+              <vaadin-grid-column-group header="immediate column-group">
                 <vaadin-grid-column auto-width path="a" header="header"></vaadin-grid-column>
               </vaadin-grid-column-group>
             </vaadin-grid-column-group>
           </vaadin-grid>
         `);
-    expectColumnsWidthToBeOk(grid, [403], 20);
+    expectColumnsWidthToBeOk(grid, [403], 30);
   });
 
   it("should consider vaadin-grid-column header when calculating column's width", async () => {
@@ -242,7 +242,7 @@ describe("column's width with vaadin-grid-column-group", () => {
             </vaadin-grid-column-group>
           </vaadin-grid>
         `);
-    expectColumnsWidthToBeOk(grid, [420], 20);
+    expectColumnsWidthToBeOk(grid, [420], 25);
   });
 
   it("should consider vaadin-grid-column-group footer when calculating column's width", async () => {
