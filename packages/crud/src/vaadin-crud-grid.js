@@ -109,6 +109,7 @@ class CrudGrid extends IncludedMixin(Grid) {
    */
   _configure(item) {
     this.innerHTML = '';
+    this.__itemPropertyDepth = this.__getPropertyDepth(item);
     this.__createColumns(this, item);
     this.__toggleEditColumn();
   }
@@ -129,7 +130,24 @@ class CrudGrid extends IncludedMixin(Grid) {
   }
 
   /** @private */
+  __getGroupDepth(column) {
+    if (!column || column === this) {
+      return 0;
+    } else {
+      return 1 + this.__getGroupDepth(column.parentElement);
+    }
+  }
+
+  /** @private */
   __createColumn(parent, path) {
+    // Make sure the column is wrapped under enough groups
+    const parentGroupDepth = this.__getGroupDepth(parent);
+    if (1 + parentGroupDepth < this.__itemPropertyDepth) {
+      const newParent = document.createElement('vaadin-grid-column-group');
+      parent.appendChild(newParent);
+      return this.__createColumn(newParent, path);
+    }
+
     let col;
     if (!this.noFilter && !this.noSort && !parent.__sortColumn) {
       col = document.createElement('vaadin-grid-column-group');
@@ -185,6 +203,23 @@ class CrudGrid extends IncludedMixin(Grid) {
     }
 
     return col;
+  }
+
+  /**
+   * Return the deepest property depth of the object
+   * @private
+   **/
+  __getPropertyDepth(object) {
+    if (object && typeof object === 'object') {
+      return Object.keys(object).reduce((deepest, prop) => {
+        if (this.exclude && this.exclude.test(prop)) {
+          return 0;
+        }
+        return Math.max(deepest, 1 + this.__getPropertyDepth(object[prop]));
+      }, 0);
+    } else {
+      return 0;
+    }
   }
 
   /** @private */
