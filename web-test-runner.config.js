@@ -1,7 +1,8 @@
 /* eslint-env node */
 const { createUnitTestsConfig } = require('./wtr-utils.js');
+const devServerConfig = require('./web-dev-server.config.js');
 
-module.exports = createUnitTestsConfig({
+const unitTestsConfig = createUnitTestsConfig({
   coverageConfig: {
     include: ['packages/**/src/*', 'packages/**/*.js'],
     threshold: {
@@ -12,3 +13,8 @@ module.exports = createUnitTestsConfig({
     }
   }
 });
+
+module.exports = {
+  ...unitTestsConfig,
+  ...devServerConfig
+};
