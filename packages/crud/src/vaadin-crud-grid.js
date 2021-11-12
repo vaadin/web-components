@@ -115,6 +115,24 @@ class CrudGrid extends IncludedMixin(Grid) {
   }
 
   /**
+   * Return the deepest property depth of the object
+   * @private
+   **/
+  __getPropertyDepth(object) {
+    if (object && typeof object === 'object') {
+      return Object.keys(object).reduce((deepest, prop) => {
+        if (this.exclude && this.exclude.test(prop)) {
+          // TODO: Test
+          return deepest;
+        }
+        return Math.max(deepest, 1 + this.__getPropertyDepth(object[prop]));
+      }, 0);
+    } else {
+      return 0;
+    }
+  }
+
+  /**
    * Parse the camelCase column names into sentence case headers.
    * @param {string} path
    * @return {string}
@@ -203,23 +221,6 @@ class CrudGrid extends IncludedMixin(Grid) {
     }
 
     return col;
-  }
-
-  /**
-   * Return the deepest property depth of the object
-   * @private
-   **/
-  __getPropertyDepth(object) {
-    if (object && typeof object === 'object') {
-      return Object.keys(object).reduce((deepest, prop) => {
-        if (this.exclude && this.exclude.test(prop)) {
-          return deepest;
-        }
-        return Math.max(deepest, 1 + this.__getPropertyDepth(object[prop]));
-      }, 0);
-    } else {
-      return 0;
-    }
   }
 
   /** @private */
