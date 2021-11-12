@@ -164,20 +164,26 @@ describe('async recalculateWidth columns', () => {
 });
 
 describe("column's width with vaadin-grid-column-group", () => {
-  function expectColumnWidthToBeOk(grid, expectedWidth, delta = 5) {
-    const columnWidth = parseInt(grid.querySelector('vaadin-grid-column').width);
-    expect(columnWidth).to.be.closeTo(expectedWidth, delta);
+  const num = (str) => parseInt(str, 10);
+
+  function expectColumnsWidthToBeOk(grid, ws, delta = 5) {
+    const columns = grid.querySelectorAll('vaadin-grid-column');
+
+    Array.from(columns).forEach((col, i) => {
+      const columnWidth = num(col.width);
+      expect(columnWidth).to.be.closeTo(ws[i], delta);
+    });
   }
 
   function createGrid(html) {
     const grid = fixtureSync(html);
-    grid.items = [{ a: 'foo' }];
+    grid.items = [{ a: 'm', b: 'mm' }];
     flushGrid(grid);
 
     return grid;
   }
 
-  it("should consider vaadin-grid-column-group header when calculating column's width", async () => {
+  it("should consider vaadin-grid-column-group when calculating column's width", async () => {
     const grid = createGrid(`
           <vaadin-grid style="width: 200px">
             <vaadin-grid-column-group header="a lengthy header that should change the width of the column">
@@ -185,7 +191,47 @@ describe("column's width with vaadin-grid-column-group", () => {
             </vaadin-grid-column-group>
           </vaadin-grid>
         `);
-    expectColumnWidthToBeOk(grid, 420, 20);
+    expectColumnsWidthToBeOk(grid, [420], 20);
+  });
+
+  it('should distribute the excess space to all columns', async () => {
+    const grid = createGrid(`
+          <vaadin-grid style="width: 200px">
+            <vaadin-grid-column-group header="a lengthy header that should change the width of the column">
+              <vaadin-grid-column auto-width path="a" header="small header"></vaadin-grid-column>
+              <vaadin-grid-column auto-width path="b" header="small header"></vaadin-grid-column>
+            </vaadin-grid-column-group>
+          </vaadin-grid>
+        `);
+
+    expectColumnsWidthToBeOk(grid, [217, 217], 20);
+  });
+
+  it('should distribute the excess space to all columns according to their initial width', async () => {
+    const grid = createGrid(`
+          <vaadin-grid style="width: 200px">
+            <vaadin-grid-column-group header="a lengthy header that should change the width of the column">
+              <vaadin-grid-column auto-width path="a" header="header"></vaadin-grid-column>
+              <vaadin-grid-column auto-width path="b" header="headerheader"></vaadin-grid-column>
+            </vaadin-grid-column-group>
+          </vaadin-grid>
+        `);
+
+    const [columnA, columnB] = grid.querySelectorAll('vaadin-grid-column');
+    expect(num(columnB.width)).to.be.greaterThan(num(columnA.width));
+  });
+
+  it('should consider all the parent vaadin-grid-column-groups when calculating the necessary width', async () => {
+    const grid = createGrid(`
+          <vaadin-grid style="width: 200px">
+            <vaadin-grid-column-group header="a lengthy header, greater than immediate column-group">
+              <vaadin-grid-column-group header="immediate column-group parent">
+                <vaadin-grid-column auto-width path="a" header="header"></vaadin-grid-column>
+              </vaadin-grid-column-group>
+            </vaadin-grid-column-group>
+          </vaadin-grid>
+        `);
+    expectColumnsWidthToBeOk(grid, [403], 20);
   });
 
   it("should consider vaadin-grid-column header when calculating column's width", async () => {
@@ -196,7 +242,7 @@ describe("column's width with vaadin-grid-column-group", () => {
             </vaadin-grid-column-group>
           </vaadin-grid>
         `);
-    expectColumnWidthToBeOk(grid, 420, 20);
+    expectColumnsWidthToBeOk(grid, [420], 20);
   });
 
   it("should consider vaadin-grid-column-group footer when calculating column's width", async () => {
@@ -226,7 +272,7 @@ describe("column's width with vaadin-grid-column-group", () => {
     };
 
     grid.recalculateColumnWidths();
-    expectColumnWidthToBeOk(grid, 333);
+    expectColumnsWidthToBeOk(grid, [333]);
   });
 
   it("should consider vaadin-grid-column footer when calculating column's width", async () => {
@@ -256,7 +302,7 @@ describe("column's width with vaadin-grid-column-group", () => {
     };
 
     grid.recalculateColumnWidths();
-    expectColumnWidthToBeOk(grid, 333);
+    expectColumnsWidthToBeOk(grid, [333]);
   });
 
   it("should not error when there's no vaadin-grid-column-group", async () => {
@@ -277,6 +323,6 @@ describe("column's width with vaadin-grid-column-group", () => {
     };
 
     grid.recalculateColumnWidths();
-    expectColumnWidthToBeOk(grid, 333);
+    expectColumnsWidthToBeOk(grid, [333]);
   });
 });
