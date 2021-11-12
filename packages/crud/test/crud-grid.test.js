@@ -86,6 +86,26 @@ describe('crud grid', () => {
         expect(getHeaderCellContent(grid, 0, 1).textContent.trim()).to.be.equal('B');
         expect(getHeaderCellContent(grid, 0, 2).textContent.trim()).to.be.equal('C');
       });
+
+      it('should not generate groups for excluded fields', async () => {
+        // password is in the exclude list so it shouldn't affect the group depth
+        grid.items = [
+          {
+            name: 'foo',
+            password: {
+              hash: '###'
+            }
+          }
+        ];
+        flushGrid(grid);
+        await nextRender(grid);
+
+        // The filter column should end up with only one parent group (the sorter group column)
+        // which in turn should be a direct child of the grid
+        const column = grid.querySelector('vaadin-grid-column');
+        const sorterGroup = column.parentElement;
+        expect(sorterGroup.parentElement).to.equal(grid);
+      });
     });
 
     ['items', 'dataProvider'].forEach((type) => {
