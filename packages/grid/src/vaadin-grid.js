@@ -542,19 +542,16 @@ class Grid extends ElementMixin(
     col.width = 'auto';
     col.flexGrow = 0;
 
-    let width = 0;
-
     // Note: _allCells only contains cells which are currently rendered in DOM
-    col._allCells
-      .filter((c) => {
+    const width = col._allCells
+      .filter((cell) => {
         // Exclude body cells that are out of the visible viewport
-        return !this.$.items.contains(c) || this._isInViewport(c.parentElement);
+        return !this.$.items.contains(cell) || this._isInViewport(cell.parentElement);
       })
-      .forEach((c) => {
+      .reduce((width, cell) => {
         // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
-        const cellWidth = c.offsetWidth + 1;
-        width = Math.max(width, cellWidth);
-      });
+        return Math.max(width, cell.offsetWidth + 1);
+      }, 0);
 
     col.flexGrow = initialFlexGrow;
     col.width = initialWidth;
