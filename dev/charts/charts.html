@@ -189,7 +189,7 @@
 
     <dom-module id="bullet-theme" theme-for="vaadin-chart">
       <template>
-        <style include="vaadin-chart-default-theme">
+        <style include="vaadin-chart-base-theme">
           :host([theme~="steps"]) .highcharts-grid-line {
             stroke-width: 0;
           }
@@ -471,7 +471,7 @@
 
     <dom-module id="speedometer-theme" theme-for="vaadin-chart">
       <template>
-        <style include="vaadin-chart-default-theme">
+        <style include="vaadin-chart-base-theme">
           :host([theme~="speedometer"]) .highcharts-plot-band.band-0 {
             stroke: var(--vaadin-charts-color-positive, #15C15D);
             fill: var(--vaadin-charts-color-positive, #15C15D);
@@ -553,7 +553,7 @@
 
     <dom-module id="speedometer-dual-theme" theme-for="vaadin-chart">
       <template>
-        <style include="vaadin-chart-default-theme">
+        <style include="vaadin-chart-base-theme">
           :host([theme~="speedometer-dual"]) .highcharts-yaxis .highcharts-axis-line {
             stroke-width: 2;
           }
@@ -896,7 +896,7 @@
 
     <dom-module id="polygon" theme-for="vaadin-chart">
       <template>
-        <style include="vaadin-chart-default-theme">
+        <style include="vaadin-chart-base-theme">
           :host([theme~="target-polygon"]) .highcharts-series.targetSeries {
             fill-opacity: .5;
             stroke-width: 0;
@@ -966,7 +966,7 @@
 
     <dom-module id="scatter" theme-for="vaadin-chart">
       <template>
-        <style include="vaadin-chart-default-theme">
+        <style include="vaadin-chart-base-theme">
           :host([theme~="scatter"]) .femaleSeries,
           :host([theme~="scatter"]) .femaleSeries .highcharts-point {
             fill: rgba(223, 83, 83, .5);
@@ -1153,7 +1153,7 @@
 
     <dom-module id="spiderweb-theme" theme-for="vaadin-chart">
       <template>
-        <style include="vaadin-chart-default-theme">
+        <style include="vaadin-chart-base-theme">
           :host([theme~="spiderweb"]) .highcharts-xaxis .highcharts-axis-line {
             stroke-width: 0;
           }
@@ -1302,7 +1302,7 @@
 
     <dom-module id="waterfall" theme-for="vaadin-chart">
       <template>
-        <style include="vaadin-chart-default-theme">
+        <style include="vaadin-chart-base-theme">
           :host([theme~="waterfall"]) .highcharts-data-labels text {
             fill: var(--lumo-contrast, hsl(214, 35%, 15%));
           }
