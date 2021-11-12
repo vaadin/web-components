@@ -46,17 +46,27 @@ export const initOutline = (field) => {
     const style = document.createElement('style');
     style.textContent = `
       :host([active]) [part="outline"],
-      :host([focus-ring]) [part="outline"] {
+      :host([focus-ring]) [part="outline"],
+      :host([focus-ring]) ::slotted([part="outline"]) {
         display: none;
       }
     `;
     field.shadowRoot.appendChild(style);
 
+    const tagName = field.tagName.toLowerCase();
     const outline = document.createElement('vaadin-field-outline');
-    (target === field ? field.shadowRoot : target).appendChild(outline);
+
+    // Append outline to text-area light DOM
+    if (tagName.endsWith('text-area')) {
+      outline.setAttribute('slot', 'textarea');
+      target.style.overflow = 'visible';
+      field.appendChild(outline);
+    } else {
+      (target === field ? field.shadowRoot : target).appendChild(outline);
+    }
 
     // Mimic :host-context to apply styles
-    outline.setAttribute('context', field.tagName.toLowerCase());
+    outline.setAttribute('context', tagName);
 
     fields.set(field, { root: field, target, outline });
   }
