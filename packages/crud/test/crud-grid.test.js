@@ -75,10 +75,12 @@ describe('crud grid', () => {
         expect(getHeaderCellContent(grid, 1, 1).textContent.trim()).to.be.equal('First name');
       });
 
-      it('should configure include fields in the provided order when items is provided', () => {
+      it('should configure include fields in the provided order when items is provided', async () => {
         grid.include = 'a, b, c';
         grid.items = [{ d: 1 }];
         flushGrid(grid);
+        await nextRender(grid);
+
         expect(grid.querySelectorAll('vaadin-grid-column').length).to.be.equal(3);
         expect(getHeaderCellContent(grid, 0, 0).textContent.trim()).to.be.equal('A');
         expect(getHeaderCellContent(grid, 0, 1).textContent.trim()).to.be.equal('B');
@@ -128,7 +130,7 @@ describe('crud grid', () => {
 
         it('should automatically add filters to columns', () => {
           [0, 1, 2].forEach((c) => {
-            expect(getHeaderCellContent(grid, 1, c).lastElementChild.localName).to.be.equal('vaadin-grid-filter');
+            expect(getHeaderCellContent(grid, 2, c).lastElementChild.localName).to.be.equal('vaadin-grid-filter');
           });
         });
 

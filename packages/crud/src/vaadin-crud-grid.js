@@ -213,7 +213,7 @@ class CrudGrid extends IncludedMixin(Grid) {
     if (object && typeof object === 'object') {
       return Object.keys(object).reduce((deepest, prop) => {
         if (this.exclude && this.exclude.test(prop)) {
-          return 0;
+          return deepest;
         }
         return Math.max(deepest, 1 + this.__getPropertyDepth(object[prop]));
       }, 0);
