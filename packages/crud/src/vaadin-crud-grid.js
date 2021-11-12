@@ -168,31 +168,37 @@ class CrudGrid extends IncludedMixin(Grid) {
     }
 
     let col;
-    if (!this.noFilter && !this.noSort && !parent.__sortColumn) {
+    if (!this.noFilter && !this.noSort && !parent.__sortColumnGroup) {
+      // This crud-grid has both a sorter and a filter, but neither has yet been
+      // created => col should become the sorter group column
       col = document.createElement('vaadin-grid-column-group');
-      col.__sortColumn = true;
+      col.__sortColumnGroup = true;
+      parent.appendChild(col);
+      // Create the filter column under this sorter group column
+      this.__createColumn(col, path);
     } else {
+      // In all other cases, col should be a regular column with a renderer
       col = document.createElement('vaadin-grid-column');
-
+      parent.appendChild(col);
       col.renderer = (root, column, model) => {
         root.textContent = path ? this.get(path, model.item) : model.item;
       };
     }
 
-    if (this.noFilter && !this.noSort) {
-      col.__sortColumn = true;
-    }
-
     if (!this.noHead && path) {
+      // Create a header renderer for the column (or column group)
       col.headerRenderer = (root) => {
         const label = this._generateHeader(path);
 
-        if (col.__sortColumn) {
+        if (col.__sortColumnGroup || (this.noFilter && !this.noSort)) {
+          // The column is either the sorter group column or the root level
+          // sort column (in case a filter isn't used at all) => add the sort indicator
           const sorter = window.document.createElement('vaadin-grid-sorter');
           sorter.setAttribute('path', path);
           sorter.textContent = label;
           root.appendChild(sorter);
         } else if (!this.noFilter) {
+          // Filtering is enabled in this crud-grid, create the filter element
           const filter = window.document.createElement('vaadin-grid-filter');
           filter.setAttribute('path', path);
           filter.style.display = 'flex';
@@ -210,18 +216,11 @@ class CrudGrid extends IncludedMixin(Grid) {
           filter.appendChild(textField);
           root.appendChild(filter);
         } else if (this.noSort && this.noFilter) {
+          // Neither sorter nor filter are enabled, just add the label
           root.textContent = label;
         }
       };
     }
-
-    parent.appendChild(col);
-
-    if (col.localName === 'vaadin-grid-column-group') {
-      this.__createColumn(col, path);
-    }
-
-    return col;
   }
 
   /** @private */
