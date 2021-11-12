@@ -1,3 +1,4 @@
+import '../vaadin-chart-base-theme.js';
 import '@vaadin/vaadin-material-styles/color.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
@@ -76,5 +77,5 @@ registerStyles(
       font-family: var(--material-font-family, 'Roboto', sans-serif);
     }
   `,
-  { moduleId: 'material-chart', include: 'vaadin-chart-default-theme' }
+  { moduleId: 'material-chart', include: 'vaadin-chart-base-theme' }
 );

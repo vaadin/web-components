@@ -15,7 +15,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 /* When updating this file do not override vaadin-charts custom properties section */
 
-const chartDefaultTheme = css`
+const chartBaseTheme = css`
   .highcharts-container {
     position: relative;
     overflow: hidden;
@@ -1017,6 +1017,6 @@ const chartDefaultTheme = css`
   }
 `;
 
-registerStyles('vaadin-chart', chartDefaultTheme, { moduleId: 'vaadin-chart-default-theme' });
+registerStyles('vaadin-chart', chartBaseTheme, { moduleId: 'vaadin-chart-base-theme' });
 
-export { chartDefaultTheme };
+export { chartBaseTheme };

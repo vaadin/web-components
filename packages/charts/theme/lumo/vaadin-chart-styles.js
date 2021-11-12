@@ -1,3 +1,4 @@
+import '../vaadin-chart-base-theme.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
@@ -85,5 +86,5 @@ registerStyles(
       );
     }
   `,
-  { moduleId: 'lumo-chart', include: 'vaadin-chart-default-theme' }
+  { moduleId: 'lumo-chart', include: 'vaadin-chart-base-theme' }
 );
