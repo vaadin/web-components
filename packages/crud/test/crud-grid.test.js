@@ -156,6 +156,44 @@ describe('crud grid', () => {
     });
   });
 
+  describe('no-sort', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-crud-grid style="width: 500px;" no-sort>
+          <vaadin-crud-edit-column></vaadin-crud-edit-column>
+        </vaadin-crud-grid>
+      `);
+      grid.items = items;
+      flushGrid(grid);
+      await nextRender(grid);
+    });
+
+    it('should add filters but no sorters', () => {
+      [0, 1, 2].forEach((c) => {
+        expect(getHeaderCellContent(grid, 1, c).firstElementChild.localName).to.be.equal('vaadin-grid-filter');
+      });
+    });
+  });
+
+  describe('no-filter', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-crud-grid style="width: 500px;" no-filter>
+          <vaadin-crud-edit-column></vaadin-crud-edit-column>
+        </vaadin-crud-grid>
+      `);
+      grid.items = items;
+      flushGrid(grid);
+      await nextRender(grid);
+    });
+
+    it('should add sorters but no filters', () => {
+      [0, 1, 2].forEach((c) => {
+        expect(getHeaderCellContent(grid, 1, c).firstElementChild.localName).to.be.equal('vaadin-grid-sorter');
+      });
+    });
+  });
+
   describe('no-sort no-filter', () => {
     beforeEach(async () => {
       grid = fixtureSync(`

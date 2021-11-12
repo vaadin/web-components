@@ -149,7 +149,7 @@ class CrudGrid extends IncludedMixin(Grid) {
 
   /** @private */
   __getGroupDepth(column) {
-    if (!column || column === this) {
+    if (column === this) {
       return 0;
     } else {
       return 1 + this.__getGroupDepth(column.parentElement);
@@ -158,9 +158,10 @@ class CrudGrid extends IncludedMixin(Grid) {
 
   /** @private */
   __createColumn(parent, path) {
-    // Make sure the column is wrapped under enough groups
     const parentGroupDepth = this.__getGroupDepth(parent);
-    if (1 + parentGroupDepth < this.__itemPropertyDepth) {
+    // Deduct 1 from the item property depth to account for the value
+    if (parentGroupDepth < this.__itemPropertyDepth - 1) {
+      // Make sure the column has enough groups to match the item property depth
       const newParent = document.createElement('vaadin-grid-column-group');
       parent.appendChild(newParent);
       return this.__createColumn(newParent, path);
@@ -216,7 +217,7 @@ class CrudGrid extends IncludedMixin(Grid) {
 
     parent.appendChild(col);
 
-    if (col.__sortColumn) {
+    if (col.localName === 'vaadin-grid-column-group') {
       this.__createColumn(col, path);
     }
 
