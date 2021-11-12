@@ -2,10 +2,10 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../vaadin-chart.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { chartDefaultTheme } from '../theme/vaadin-chart-default-theme.js';
+import { chartBaseTheme } from '../theme/vaadin-chart-base-theme.js';
 
 registerStyles('vaadin-chart', [
-  chartDefaultTheme,
+  chartBaseTheme,
   css`
     :host([theme='custom']) .highcharts-column-series rect.highcharts-point {
       stroke: rgb(255, 0, 0);
