@@ -32,8 +32,8 @@ describe('field highlighter', () => {
       expect(outline).to.be.ok;
     });
 
-    it('should attach field highlighter instance to field', () => {
-      expect(highlighter.getRootNode().host).to.equal(field);
+    it('should set field as the field highlighter host', () => {
+      expect(highlighter.host).to.equal(field);
     });
 
     it('should set has-highlighter attribute on the field', () => {
@@ -328,9 +328,10 @@ describe('field highlighter', () => {
         expect(getComputedStyle(tags[1]).backgroundColor).to.equal('rgb(255, 0, 0)');
       });
 
-      it('should not set custom property if index is NaN', () => {
+      it('should not set custom property if index is null', () => {
         addUser({ name: 'xyz', colorIndex: null });
-        expect(getComputedStyle(highlighter).getPropertyValue('--vaadin-user-tag-color')).to.equal('');
+        tags = getTags();
+        expect(getComputedStyle(tags[0]).getPropertyValue('--vaadin-user-tag-color')).to.equal('');
       });
 
       it('should dispatch event on tag mousedown', () => {

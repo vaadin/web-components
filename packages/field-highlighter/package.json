@@ -38,7 +38,8 @@
     "@vaadin/vaadin-lumo-styles": "^23.0.0-alpha0",
     "@vaadin/vaadin-material-styles": "^23.0.0-alpha0",
     "@vaadin/vaadin-overlay": "^23.0.0-alpha0",
-    "@vaadin/vaadin-themable-mixin": "^23.0.0-alpha0"
+    "@vaadin/vaadin-themable-mixin": "^23.0.0-alpha0",
+    "lit": "^2.0.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
