@@ -124,6 +124,7 @@ export class UserTags extends ThemableMixin(DirMixin(PolymerElement)) {
     super.disconnectedCallback();
     window.removeEventListener('resize', this._boundSetPosition);
     window.removeEventListener('scroll', this._boundSetPosition);
+    this.opened = false;
   }
 
   ready() {
