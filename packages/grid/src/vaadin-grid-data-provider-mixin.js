@@ -219,12 +219,40 @@ export const DataProviderMixin = (superClass) =>
       return ['_sizeChanged(size)', '_itemIdPathChanged(itemIdPath)', '_expandedItemsChanged(expandedItems.*)'];
     }
 
+    updated(props) {
+      super.updated(props);
+
+      if (props.has('size')) {
+        this._sizeChanged(this.size);
+      }
+
+      if (props.has('itemIdPath')) {
+        this._itemIdPathChanged(this.itemIdPath);
+      }
+
+      if (props.has('expandedItems')) {
+        this._expandedItemsChanged(this.expandedItems);
+      }
+    }
+
+    constructor() {
+      super();
+      this.pageSize = 50;
+      this.expandedItems = [];
+      this.__expandedKeys = new Set();
+      this._cache = new ItemCache(this);
+    }
+
     /** @private */
     _sizeChanged(size) {
       const delta = size - this._cache.size;
       this._cache.size += delta;
       this._cache.effectiveSize += delta;
       this._effectiveSize = this._cache.effectiveSize;
+    }
+
+    _setLoading(loading) {
+      this.loading = loading;
     }
 
     /**

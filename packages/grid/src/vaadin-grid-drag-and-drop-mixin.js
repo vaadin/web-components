@@ -90,7 +90,9 @@ export const DragAndDropMixin = (superClass) =>
 
     /** @protected */
     ready() {
-      super.ready();
+      if (super.ready) {
+        super.ready();
+      }
       this.$.table.addEventListener('dragstart', this._onDragStart.bind(this));
       this.$.table.addEventListener('dragend', this._onDragEnd.bind(this));
       this.$.table.addEventListener('dragover', this._onDragOver.bind(this));

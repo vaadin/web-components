@@ -27,6 +27,11 @@ export const SelectionMixin = (superClass) =>
       return ['_selectedItemsChanged(selectedItems.*)'];
     }
 
+    constructor() {
+      super();
+      this.selectedItems = [];
+    }
+
     /**
      * @param {!GridItem} item
      * @return {boolean}

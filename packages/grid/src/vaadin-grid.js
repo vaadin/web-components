@@ -5,8 +5,7 @@
  */
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
-import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { isAndroid, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -255,7 +254,7 @@ class Grid extends ElementMixin(
                       A11yMixin(
                         FilterMixin(
                           ColumnReorderingMixin(
-                            ColumnResizingMixin(EventContextMixin(DragAndDropMixin(StylingMixin(PolymerElement))))
+                            ColumnResizingMixin(EventContextMixin(DragAndDropMixin(StylingMixin(LitElement))))
                           )
                         )
                       )
@@ -270,7 +269,7 @@ class Grid extends ElementMixin(
     )
   )
 ) {
-  static get template() {
+  render() {
     return html`
       <div
         id="scroller"
@@ -297,11 +296,21 @@ class Grid extends ElementMixin(
     return 'vaadin-grid';
   }
 
-  static get observers() {
-    return [
-      '_columnTreeChanged(_columnTree, _columnTree.*)',
-      '_effectiveSizeChanged(_effectiveSize, __virtualizer, _hasData, _columnTree)'
-    ];
+  updated(props) {
+    super.updated(props);
+
+    if (props.has('_columnTree')) {
+      this._columnTreeChanged(this._columnTree);
+    }
+
+    if (
+      props.has('_effectiveSize') ||
+      props.has('__virtualizer') ||
+      props.has('_hasData') ||
+      props.has('_columnTree')
+    ) {
+      this._effectiveSizeChanged(this._effectiveSize, this.__virtualizer, this._hasData, this._columnTree);
+    }
   }
 
   static get properties() {
@@ -401,6 +410,15 @@ class Grid extends ElementMixin(
   get _firstVisibleIndex() {
     const firstVisibleItem = this.__getFirstVisibleItem();
     return firstVisibleItem ? firstVisibleItem.index : undefined;
+  }
+
+  firstUpdated() {
+    this.shadowRoot.querySelectorAll('[id]').forEach((el) => {
+      this.$ = this.$ || {};
+      this.$[el.id] = el;
+    });
+
+    this.ready();
   }
 
   /** @private */
@@ -620,7 +638,7 @@ class Grid extends ElementMixin(
       );
     }
 
-    beforeNextRender(this, () => {
+    setTimeout(() => {
       this._updateFirstAndLastColumn();
       this._resetKeyboardNavigation();
       this._afterScroll();

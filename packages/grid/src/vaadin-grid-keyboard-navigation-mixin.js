@@ -552,6 +552,10 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
     }
 
+    _setInteracting(interacting) {
+      this.interacting = interacting;
+    }
+
     /** @private */
     _predictFocusStepTarget(srcElement, step) {
       const tabOrder = [

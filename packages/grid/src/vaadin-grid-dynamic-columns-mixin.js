@@ -18,7 +18,9 @@ export const DynamicColumnsMixin = (superClass) =>
         /**
          * @protected
          */
-        _columnTree: Object
+        _columnTree: {
+          type: Array
+        }
       };
     }
 
@@ -81,7 +83,10 @@ export const DynamicColumnsMixin = (superClass) =>
     _updateColumnTree() {
       const columnTree = this._getColumnTree();
       if (!this._arrayEquals(columnTree, this._columnTree)) {
-        this._columnTree = columnTree;
+        // TODO: Shouldn't need a timeout
+        setTimeout(() => {
+          this._columnTree = columnTree;
+        }, 0);
       }
     }
 

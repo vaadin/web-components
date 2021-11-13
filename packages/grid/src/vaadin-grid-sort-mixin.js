@@ -45,6 +45,8 @@ export const SortMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
+      this._sorters = [];
+      this._previousSorters = [];
       this.addEventListener('sorter-changed', this._onSorterChanged);
     }
 

@@ -24,6 +24,7 @@ export const FilterMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
+      this._filters = [];
       this.addEventListener('filter-changed', this._filterChanged.bind(this));
     }
 
