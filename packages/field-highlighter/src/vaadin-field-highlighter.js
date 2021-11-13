@@ -45,8 +45,6 @@ const initFieldObserver = (field) => {
   return result;
 };
 
-const fields = new WeakMap();
-
 /**
  * A field controller for implementing real-time collaboration features: displaying
  * a colored outline when a field is focused by another user of the application,
@@ -54,40 +52,7 @@ const fields = new WeakMap();
  *
  * See https://vaadin.com/collaboration for Collaboration Engine documentation.
  */
-export class FieldHighlighter {
-  static init(field) {
-    if (!fields.has(field)) {
-      // Create instance
-      const instance = new FieldHighlighter(field);
-
-      // Set attribute for styling
-      field.setAttribute('has-highlighter', '');
-
-      // Store instance
-      fields.set(field, instance);
-
-      // Create observer
-      instance.observer = initFieldObserver(field);
-
-      // Attach controller
-      field.addController(instance);
-    }
-
-    return fields.get(field);
-  }
-
-  static addUser(field, user) {
-    this.init(field).addUser(user);
-  }
-
-  static removeUser(field, user) {
-    this.init(field).removeUser(user);
-  }
-
-  static setUsers(field, users) {
-    this.init(field).setUsers(users);
-  }
-
+export class FieldHighlighterController {
   get user() {
     return this._user;
   }
@@ -168,6 +133,10 @@ export class FieldHighlighter {
     this.observer.redraw([...this.users].reverse());
   }
 
+  /**
+   * @param {string} msg
+   * @protected
+   */
   _announce(msg) {
     const label = this.host.label || '';
     this.host.dispatchEvent(
@@ -181,3 +150,48 @@ export class FieldHighlighter {
     );
   }
 }
+
+const fields = new WeakMap();
+
+/**
+ * A web component for implementing real-time collaboration features
+ * by configuring a reactive controller for a field instance.
+ *
+ * See https://vaadin.com/collaboration for Collaboration Engine documentation.
+ */
+export class FieldHighlighter extends HTMLElement {
+  static init(field) {
+    if (!fields.has(field)) {
+      // Create instance
+      const instance = new FieldHighlighterController(field);
+
+      // Set attribute for styling
+      field.setAttribute('has-highlighter', '');
+
+      // Store instance
+      fields.set(field, instance);
+
+      // Create observer
+      instance.observer = initFieldObserver(field);
+
+      // Attach controller
+      field.addController(instance);
+    }
+
+    return fields.get(field);
+  }
+
+  static addUser(field, user) {
+    this.init(field).addUser(user);
+  }
+
+  static removeUser(field, user) {
+    this.init(field).removeUser(user);
+  }
+
+  static setUsers(field, users) {
+    this.init(field).setUsers(users);
+  }
+}
+
+customElements.define('vaadin-field-highlighter', FieldHighlighter);

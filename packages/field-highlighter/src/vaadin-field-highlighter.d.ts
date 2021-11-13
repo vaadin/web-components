@@ -18,15 +18,7 @@ export interface FieldHighlighterUser {
  *
  * See https://vaadin.com/collaboration for Collaboration Engine documentation.
  */
-declare class FieldHighlighter implements ReactiveController {
-  static init(field: HTMLElement): FieldHighlighter;
-
-  static addUser(field: HTMLElement, user: FieldHighlighterUser): void;
-
-  static removeUser(field: HTMLElement, user: FieldHighlighterUser): void;
-
-  static setUsers(field: HTMLElement, users: FieldHighlighterUser[]): void;
-
+declare class FieldHighlighterController implements ReactiveController {
   /**
    * A user who last interacted with the field.
    */
@@ -42,4 +34,26 @@ declare class FieldHighlighter implements ReactiveController {
   redraw(): void;
 }
 
-export { FieldHighlighter };
+/**
+ * A web component for implementing real-time collaboration features
+ * by configuring a reactive controller for a field instance.
+ *
+ * See https://vaadin.com/collaboration for Collaboration Engine documentation.
+ */
+declare class FieldHighlighter extends HTMLElement {
+  static init(field: HTMLElement): FieldHighlighterController;
+
+  static addUser(field: HTMLElement, user: FieldHighlighterUser): void;
+
+  static removeUser(field: HTMLElement, user: FieldHighlighterUser): void;
+
+  static setUsers(field: HTMLElement, users: FieldHighlighterUser[]): void;
+}
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'vaadin-field-highlighter': FieldHighlighter;
+  }
+}
+
+export { FieldHighlighter, FieldHighlighterController };
