@@ -7,8 +7,6 @@ import './vaadin-field-outline.js';
 import './vaadin-user-tags.js';
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { CheckboxGroupObserver } from './fields/vaadin-checkbox-group-observer.js';
 import { DatePickerObserver } from './fields/vaadin-date-picker-observer.js';
 import { DateTimePickerObserver } from './fields/vaadin-date-time-picker-observer.js';
@@ -27,10 +25,8 @@ const fields = new WeakMap();
  * See https://vaadin.com/collaboration for Collaboration Engine documentation.
  *
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes ThemableMixin
  */
-export class FieldHighlighter extends ThemableMixin(DirMixin(PolymerElement)) {
+export class FieldHighlighter extends PolymerElement {
   static init(field) {
     if (!fields.has(field)) {
       // Create instance

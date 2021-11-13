@@ -9,8 +9,6 @@ import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const DURATION = 200;
 const DELAY = 2000;
@@ -33,7 +31,7 @@ const listenOnce = (elem, type) => {
  * @mixes ThemableMixin
  * @private
  */
-export class UserTags extends ThemableMixin(DirMixin(PolymerElement)) {
+export class UserTags extends PolymerElement {
   static get is() {
     return 'vaadin-user-tags';
   }
@@ -134,8 +132,6 @@ export class UserTags extends ThemableMixin(DirMixin(PolymerElement)) {
       if (!root.firstChild) {
         const tags = document.createElement('div');
         tags.setAttribute('part', 'tags');
-
-        // TODO: apply styles to tags
         root.appendChild(tags);
       }
     };

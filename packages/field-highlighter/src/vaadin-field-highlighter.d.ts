@@ -3,9 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
 export interface FieldHighlighterUser {
   id: number;
   name: string;
@@ -19,7 +16,7 @@ export interface FieldHighlighterUser {
  *
  * See https://vaadin.com/collaboration for Collaboration Engine documentation.
  */
-declare class FieldHighlighter extends ThemableMixin(DirMixin(HTMLElement)) {
+declare class FieldHighlighter extends HTMLElement {
   static init(field: HTMLElement): FieldHighlighter;
 
   static addUser(field: HTMLElement, user: FieldHighlighterUser): void;
