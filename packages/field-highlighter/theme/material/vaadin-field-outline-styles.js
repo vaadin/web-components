@@ -24,15 +24,15 @@ registerStyles(
       background-color: var(--_active-user-color);
     }
 
-    :host([context='vaadin-checkbox']),
-    :host([context='vaadin-radio-button']) {
+    :host([context$='checkbox']),
+    :host([context$='radio-button']) {
       border-radius: 50%;
       background-color: var(--_active-user-color);
       transform: scale(2.5);
       opacity: 0.15;
     }
 
-    :host([context='vaadin-item'])::before {
+    :host([context$='item'])::before {
       display: block;
       height: 100%;
       content: '';

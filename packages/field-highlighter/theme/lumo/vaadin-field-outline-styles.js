@@ -28,16 +28,16 @@ registerStyles(
       transition: box-shadow 0.3s;
     }
 
-    :host([context='vaadin-checkbox'])::before {
+    :host([context$='checkbox'])::before {
       box-shadow: 0 0 0 2px var(--lumo-base-color), 0 0 0 4px var(--_active-user-color);
     }
 
-    :host([context='vaadin-radio-button'])::before {
+    :host([context$='radio-button'])::before {
       border-radius: 50%;
       box-shadow: 0 0 0 3px var(--lumo-base-color), 0 0 0 5px var(--_active-user-color);
     }
 
-    :host([context='vaadin-item'])::before {
+    :host([context$='item'])::before {
       box-shadow: inset 0 0 0 2px var(--_active-user-color);
     }
   `,
