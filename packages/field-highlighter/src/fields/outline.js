@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-const getOutlineTarget = (element) => {
-  switch (element.tagName.toLowerCase()) {
+const getOutlineTarget = (element, tagName) => {
+  switch (tagName) {
     /* c8 ignore next */
     case 'vaadin-big-decimal-field':
     case 'vaadin-combo-box':
@@ -38,32 +38,27 @@ const fields = new WeakMap();
 export const initOutline = (field) => {
   if (!fields.has(field)) {
     // Get target to attach instance
-    const target = getOutlineTarget(field);
+    const tagName = field.tagName.toLowerCase();
+    const target = getOutlineTarget(field, tagName);
 
     // Some components set this, but not all
     target.style.position = 'relative';
 
+    if (tagName.endsWith('text-area')) {
+      target.style.overflow = 'visible';
+    }
+
     const style = document.createElement('style');
     style.textContent = `
       :host([active]) [part="outline"],
-      :host([focus-ring]) [part="outline"],
-      :host([focus-ring]) ::slotted([part="outline"]) {
+      :host([focus-ring]) [part="outline"] {
         display: none;
       }
     `;
     field.shadowRoot.appendChild(style);
 
-    const tagName = field.tagName.toLowerCase();
     const outline = document.createElement('vaadin-field-outline');
-
-    // Append outline to text-area light DOM
-    if (tagName.endsWith('text-area')) {
-      outline.setAttribute('slot', 'textarea');
-      target.style.overflow = 'visible';
-      field.appendChild(outline);
-    } else {
-      (target === field ? field.shadowRoot : target).appendChild(outline);
-    }
+    (target === field ? field.shadowRoot : target).appendChild(outline);
 
     // Mimic :host-context to apply styles
     outline.setAttribute('context', tagName);
