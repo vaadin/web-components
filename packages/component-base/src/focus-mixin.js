@@ -61,7 +61,9 @@ export const FocusMixin = dedupingMixin(
         // added, so we call it after our own ones to ensure they execute first.
         // Issue to watch out: when incorrect, <vaadin-combo-box> refocuses the
         // input field on iOS after “Done” is pressed.
-        super.ready();
+        if (super.ready) {
+          super.ready();
+        }
       }
 
       /** @protected */
