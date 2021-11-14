@@ -36,20 +36,21 @@ class GridTreeColumn extends GridColumn {
        * @attr {string} item-has-children-path
        */
       itemHasChildrenPath: {
-        type: String,
-        value: 'children'
+        type: String
       }
     };
-  }
-
-  static get observers() {
-    return ['_onRendererOrBindingChanged(_renderer, _cells, _cells.*, path, itemHasChildrenPath)'];
   }
 
   constructor() {
     super();
 
+    this.itemHasChildrenPath = 'children';
     this.__boundOnExpandedChanged = this.__onExpandedChanged.bind(this);
+  }
+
+  updated(props) {
+    super.updated(props);
+    this.__runObserver(props, ['_renderer', '_cells', 'path', 'itemHasChildrenPath'], '_onRendererOrBindingChanged');
   }
 
   /**
@@ -81,7 +82,7 @@ class GridTreeColumn extends GridColumn {
    * @override
    */
   _computeRenderer() {
-    return this.__defaultRenderer;
+    this._renderer = this.__defaultRenderer;
   }
 
   /**
@@ -110,7 +111,7 @@ class GridTreeColumn extends GridColumn {
 
   /** @private */
   __getToggleContent(path, item) {
-    return path && this.get(path, item);
+    return path && this.__get(path, item);
   }
 }
 

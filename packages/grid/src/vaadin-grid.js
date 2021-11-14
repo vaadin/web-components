@@ -296,21 +296,17 @@ class Grid extends ElementMixin(
     return 'vaadin-grid';
   }
 
+  /** @protected */
+  __runObserver(props, changedProps, functionName) {
+    if (changedProps.some((prop) => props.has(prop))) {
+      this[functionName].call(this, ...changedProps.map((prop) => this[prop]));
+    }
+  }
+
   updated(props) {
     super.updated(props);
-
-    if (props.has('_columnTree')) {
-      this._columnTreeChanged(this._columnTree);
-    }
-
-    if (
-      props.has('_effectiveSize') ||
-      props.has('__virtualizer') ||
-      props.has('_hasData') ||
-      props.has('_columnTree')
-    ) {
-      this._effectiveSizeChanged(this._effectiveSize, this.__virtualizer, this._hasData, this._columnTree);
-    }
+    this.__runObserver(props, ['_columnTree'], '_columnTreeChanged');
+    this.__runObserver(props, ['_effectiveSize', '__virtualizer', '_hasData', '_columnTree'], '_effectiveSizeChanged');
   }
 
   static get properties() {

@@ -23,8 +23,9 @@ export const SelectionMixin = (superClass) =>
       };
     }
 
-    static get observers() {
-      return ['_selectedItemsChanged(selectedItems.*)'];
+    updated(props) {
+      super.updated(props);
+      this.__runObserver(props, ['selectedItems'], '_selectedItemsChanged');
     }
 
     constructor() {
@@ -82,8 +83,8 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    _selectedItemsChanged(e) {
-      if (this.$.items.children.length && (e.path === 'selectedItems' || e.path === 'selectedItems.splices')) {
+    _selectedItemsChanged() {
+      if (this.$.items.children.length) {
         Array.from(this.$.items.children).forEach((row) => {
           this._updateItem(row, row._item);
         });

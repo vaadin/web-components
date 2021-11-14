@@ -41,8 +41,7 @@ class GridSelectionColumn extends GridColumn {
        * Width of the cells for this column.
        */
       width: {
-        type: String,
-        value: '58px'
+        type: String
       },
 
       /**
@@ -51,8 +50,7 @@ class GridSelectionColumn extends GridColumn {
        * @type {number}
        */
       flexGrow: {
-        type: Number,
-        value: 0
+        type: Number
       },
 
       /**
@@ -91,15 +89,21 @@ class GridSelectionColumn extends GridColumn {
     };
   }
 
-  static get observers() {
-    return [
-      '__onSelectAllChanged(selectAll)',
-      '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, selectAll, __indeterminate, __selectAllHidden)'
-    ];
+  updated(props) {
+    super.updated(props);
+    this.__runObserver(props, ['selectAll'], '__onSelectAllChanged');
+    this.__runObserver(
+      props,
+      ['_headerRenderer', '_headerCell', 'path', 'header', 'selectAll', '__indeterminate', '__selectAllHidden'],
+      '_onHeaderRendererOrBindingChanged'
+    );
   }
 
   constructor() {
     super();
+
+    this.width = '58px';
+    this.flexGrow = 0;
 
     this.__boundOnActiveItemChanged = this.__onActiveItemChanged.bind(this);
     this.__boundOnDataProviderChanged = this.__onDataProviderChanged.bind(this);
@@ -124,6 +128,7 @@ class GridSelectionColumn extends GridColumn {
       this._grid.addEventListener('data-provider-changed', this.__boundOnDataProviderChanged);
       this._grid.addEventListener('filter-changed', this.__boundOnSelectedItemsChanged);
       this._grid.addEventListener('selected-items-changed', this.__boundOnSelectedItemsChanged);
+      this.__boundOnDataProviderChanged();
     }
   }
 

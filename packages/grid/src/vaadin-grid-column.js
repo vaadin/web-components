@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { LitElement } from 'lit';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
@@ -133,8 +133,7 @@ export const ColumnBaseMixin = (superClass) =>
          * @type {GridHeaderFooterRenderer | undefined}
          */
         _headerRenderer: {
-          type: Function,
-          computed: '_computeHeaderRenderer(headerRenderer, header, __initialized)'
+          type: Function
         },
 
         /**
@@ -156,8 +155,7 @@ export const ColumnBaseMixin = (superClass) =>
          * @type {GridHeaderFooterRenderer | undefined}
          */
         _footerRenderer: {
-          type: Function,
-          computed: '_computeFooterRenderer(footerRenderer, __initialized)'
+          type: Function
         },
 
         /**
@@ -173,21 +171,47 @@ export const ColumnBaseMixin = (superClass) =>
       };
     }
 
-    static get observers() {
-      return [
-        '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
-        '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
-        '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
-        '_textAlignChanged(textAlign, _cells.*, _headerCell, _footerCell)',
-        '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
-        '_lastFrozenChanged(_lastFrozen)',
-        '_onRendererOrBindingChanged(_renderer, _cells, _cells.*, path)',
-        '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header)',
-        '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
-        '_resizableChanged(resizable, _headerCell)',
-        '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
-        '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)'
-      ];
+    constructor() {
+      super();
+      this.width = '100px';
+      this.flexGrow = 1;
+      this.__initialized = true;
+      this.frozen = false;
+    }
+
+    /** @protected */
+    __get(path, object) {
+      return path.split('.').reduce((obj, property) => obj[property], object);
+    }
+
+    /** @protected */
+    __runObserver(props, changedProps, functionName) {
+      if (changedProps.some((prop) => props.has(prop))) {
+        this[functionName].call(this, ...changedProps.map((prop) => this[prop]));
+      }
+    }
+
+    updated(props) {
+      super.updated(props);
+      this.__runObserver(props, ['width', '_headerCell', '_footerCell', '_cells'], '_widthChanged');
+      this.__runObserver(props, ['frozen', '_headerCell', '_footerCell', '_cells'], '_frozenChanged');
+      this.__runObserver(props, ['flexGrow', '_headerCell', '_footerCell', '_cells'], '_flexGrowChanged');
+      this.__runObserver(props, ['textAlign', '_cells', '_headerCell', '_footerCell'], '_textAlignChanged');
+      this.__runObserver(props, ['_order', '_headerCell', '_footerCell', '_cells'], '_orderChanged');
+      this.__runObserver(props, ['_lastFrozen'], '_lastFrozenChanged');
+      this.__runObserver(props, ['_renderer', '_cells', '_cells.*', 'path'], '_onRendererOrBindingChanged');
+      this.__runObserver(
+        props,
+        ['_headerRenderer', '_headerCell', 'path', 'header'],
+        '_onHeaderRendererOrBindingChanged'
+      );
+      this.__runObserver(props, ['_footerRenderer', '_footerCell'], '_onFooterRendererOrBindingChanged');
+      this.__runObserver(props, ['resizable', '_headerCell'], '_resizableChanged');
+      this.__runObserver(props, ['_reorderStatus', '_headerCell', '_footerCell', '_cells.*'], '_reorderStatusChanged');
+      this.__runObserver(props, ['hidden', '_headerCell', '_footerCell', '_cells.*'], '_hiddenChanged');
+      this.__runObserver(props, ['renderer', '__initialized'], '_computeRenderer');
+      this.__runObserver(props, ['headerRenderer', 'header', '__initialized'], '_computeHeaderRenderer');
+      this.__runObserver(props, ['footerRenderer', '__initialized'], '_computeFooterRenderer');
     }
 
     /** @protected */
@@ -228,9 +252,15 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @protected */
     ready() {
-      super.ready();
+      if (super.ready) {
+        super.ready();
+      }
 
       processTemplates(this);
+    }
+
+    firstUpdated() {
+      this.ready();
     }
 
     /**
@@ -572,7 +602,7 @@ export const ColumnBaseMixin = (superClass) =>
     _defaultRenderer(root, _owner, { item }) {
       if (!this.path) return;
 
-      this.__setTextContent(root, this.get(this.path, item));
+      this.__setTextContent(root, this.__get(this.path, item));
     }
 
     /**
@@ -592,14 +622,14 @@ export const ColumnBaseMixin = (superClass) =>
      */
     _computeHeaderRenderer(headerRenderer, header) {
       if (headerRenderer) {
-        return headerRenderer;
+        this._headerRenderer = headerRenderer;
       }
 
       if (header !== undefined && header !== null) {
-        return this.__textHeaderRenderer;
+        this._headerRenderer = this.__textHeaderRenderer;
       }
 
-      return this._defaultHeaderRenderer;
+      this._headerRenderer = this._defaultHeaderRenderer;
     }
 
     /**
@@ -612,10 +642,10 @@ export const ColumnBaseMixin = (superClass) =>
      */
     _computeRenderer(renderer) {
       if (renderer) {
-        return renderer;
+        this._renderer = renderer;
       }
 
-      return this._defaultRenderer;
+      this._renderer = this._defaultRenderer;
     }
 
     /**
@@ -628,10 +658,10 @@ export const ColumnBaseMixin = (superClass) =>
      */
     _computeFooterRenderer(footerRenderer) {
       if (footerRenderer) {
-        return footerRenderer;
+        this._footerRenderer = footerRenderer;
       }
 
-      return this._defaultFooterRenderer;
+      this._footerRenderer = this._defaultFooterRenderer;
     }
   };
 
@@ -645,7 +675,7 @@ export const ColumnBaseMixin = (superClass) =>
  * @extends HTMLElement
  * @mixes ColumnBaseMixin
  */
-class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
+class GridColumn extends ColumnBaseMixin(DirMixin(LitElement)) {
   static get is() {
     return 'vaadin-grid-column';
   }
@@ -697,8 +727,7 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        * @type {GridBodyRenderer | undefined}
        */
       _renderer: {
-        type: Function,
-        computed: '_computeRenderer(renderer, __initialized)'
+        type: Function
       },
 
       /**
