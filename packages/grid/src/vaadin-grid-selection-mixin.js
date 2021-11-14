@@ -23,13 +23,9 @@ export const SelectionMixin = (superClass) =>
       };
     }
 
-    updated(props) {
-      super.updated(props);
-      this.__runObserver(props, ['selectedItems'], '_selectedItemsChanged');
-    }
-
     constructor() {
       super();
+      this.__addObserver(['selectedItems'], '_selectedItemsChanged');
       this.selectedItems = [];
     }
 

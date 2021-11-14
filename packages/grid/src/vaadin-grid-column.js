@@ -171,8 +171,54 @@ export const ColumnBaseMixin = (superClass) =>
       };
     }
 
+    /** @protected */
+    __addObserver(props, functionName) {
+      this.__observers = this.__observers || {};
+
+      props.forEach((prop) => {
+        if (!(prop in this.__observers)) {
+          this.__observers[prop] = [];
+        }
+
+        this.__observers[prop].push({
+          functionName,
+          props
+        });
+      });
+    }
+
+    /** @protected */
+    updated(props) {
+      super.updated(props);
+
+      props.forEach((_value, key) => {
+        const observers = this.__observers[key];
+        if (observers) {
+          observers.forEach((observer) => {
+            this[observer.functionName](...observer.props.map((prop) => this[prop]));
+          });
+        }
+      });
+    }
+
     constructor() {
       super();
+      this.__addObserver(['width', '_headerCell', '_footerCell', '_cells'], '_widthChanged');
+      this.__addObserver(['frozen', '_headerCell', '_footerCell', '_cells'], '_frozenChanged');
+      this.__addObserver(['flexGrow', '_headerCell', '_footerCell', '_cells'], '_flexGrowChanged');
+      this.__addObserver(['textAlign', '_cells', '_headerCell', '_footerCell'], '_textAlignChanged');
+      this.__addObserver(['_order', '_headerCell', '_footerCell', '_cells'], '_orderChanged');
+      this.__addObserver(['_lastFrozen'], '_lastFrozenChanged');
+      this.__addObserver(['_renderer', '_cells', '_cells.*', 'path'], '_onRendererOrBindingChanged');
+      this.__addObserver(['_headerRenderer', '_headerCell', 'path', 'header'], '_onHeaderRendererOrBindingChanged');
+      this.__addObserver(['_footerRenderer', '_footerCell'], '_onFooterRendererOrBindingChanged');
+      this.__addObserver(['resizable', '_headerCell'], '_resizableChanged');
+      this.__addObserver(['_reorderStatus', '_headerCell', '_footerCell', '_cells.*'], '_reorderStatusChanged');
+      this.__addObserver(['hidden', '_headerCell', '_footerCell', '_cells.*'], '_hiddenChanged');
+      this.__addObserver(['renderer', '__initialized'], '_computeRenderer');
+      this.__addObserver(['headerRenderer', 'header', '__initialized'], '_computeHeaderRenderer');
+      this.__addObserver(['footerRenderer', '__initialized'], '_computeFooterRenderer');
+
       this.width = '100px';
       this.flexGrow = 1;
       this.__initialized = true;
@@ -182,36 +228,6 @@ export const ColumnBaseMixin = (superClass) =>
     /** @protected */
     __get(path, object) {
       return path.split('.').reduce((obj, property) => obj[property], object);
-    }
-
-    /** @protected */
-    __runObserver(props, changedProps, functionName) {
-      if (changedProps.some((prop) => props.has(prop))) {
-        this[functionName].call(this, ...changedProps.map((prop) => this[prop]));
-      }
-    }
-
-    updated(props) {
-      super.updated(props);
-      this.__runObserver(props, ['width', '_headerCell', '_footerCell', '_cells'], '_widthChanged');
-      this.__runObserver(props, ['frozen', '_headerCell', '_footerCell', '_cells'], '_frozenChanged');
-      this.__runObserver(props, ['flexGrow', '_headerCell', '_footerCell', '_cells'], '_flexGrowChanged');
-      this.__runObserver(props, ['textAlign', '_cells', '_headerCell', '_footerCell'], '_textAlignChanged');
-      this.__runObserver(props, ['_order', '_headerCell', '_footerCell', '_cells'], '_orderChanged');
-      this.__runObserver(props, ['_lastFrozen'], '_lastFrozenChanged');
-      this.__runObserver(props, ['_renderer', '_cells', '_cells.*', 'path'], '_onRendererOrBindingChanged');
-      this.__runObserver(
-        props,
-        ['_headerRenderer', '_headerCell', 'path', 'header'],
-        '_onHeaderRendererOrBindingChanged'
-      );
-      this.__runObserver(props, ['_footerRenderer', '_footerCell'], '_onFooterRendererOrBindingChanged');
-      this.__runObserver(props, ['resizable', '_headerCell'], '_resizableChanged');
-      this.__runObserver(props, ['_reorderStatus', '_headerCell', '_footerCell', '_cells.*'], '_reorderStatusChanged');
-      this.__runObserver(props, ['hidden', '_headerCell', '_footerCell', '_cells.*'], '_hiddenChanged');
-      this.__runObserver(props, ['renderer', '__initialized'], '_computeRenderer');
-      this.__runObserver(props, ['headerRenderer', 'header', '__initialized'], '_computeHeaderRenderer');
-      this.__runObserver(props, ['footerRenderer', '__initialized'], '_computeFooterRenderer');
     }
 
     /** @protected */

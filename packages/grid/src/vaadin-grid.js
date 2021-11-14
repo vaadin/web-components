@@ -297,16 +297,35 @@ class Grid extends ElementMixin(
   }
 
   /** @protected */
-  __runObserver(props, changedProps, functionName) {
-    if (changedProps.some((prop) => props.has(prop))) {
-      this[functionName].call(this, ...changedProps.map((prop) => this[prop]));
-    }
+  __addObserver(props, functionName) {
+    this.__observers = this.__observers || {};
+
+    props.forEach((prop) => {
+      if (!(prop in this.__observers)) {
+        this.__observers[prop] = [];
+      }
+
+      this.__observers[prop].push({
+        functionName,
+        props
+      });
+    });
   }
 
+  /** @protected */
   updated(props) {
     super.updated(props);
-    this.__runObserver(props, ['_columnTree'], '_columnTreeChanged');
-    this.__runObserver(props, ['_effectiveSize', '__virtualizer', '_hasData', '_columnTree'], '_effectiveSizeChanged');
+
+    props.forEach((_value, key) => {
+      const observers = this.__observers[key];
+      if (observers) {
+        observers.forEach((observer) => {
+          // TODO: Observer function should only get called once
+          // if any number of its dependencies change
+          this[observer.functionName](...observer.props.map((prop) => this[prop]));
+        });
+      }
+    });
   }
 
   static get properties() {
@@ -382,6 +401,9 @@ class Grid extends ElementMixin(
   constructor() {
     super();
     this.addEventListener('animationend', this._onAnimationEnd);
+
+    this.__addObserver(['_columnTree'], '_columnTreeChanged');
+    this.__addObserver(['_effectiveSize', '__virtualizer', '_hasData', '_columnTree'], '_effectiveSizeChanged');
   }
 
   /** @protected */

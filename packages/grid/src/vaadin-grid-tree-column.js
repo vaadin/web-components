@@ -44,13 +44,9 @@ class GridTreeColumn extends GridColumn {
   constructor() {
     super();
 
+    this.__addObserver(['_renderer', '_cells', 'path', 'itemHasChildrenPath'], '_onRendererOrBindingChanged');
     this.itemHasChildrenPath = 'children';
     this.__boundOnExpandedChanged = this.__onExpandedChanged.bind(this);
-  }
-
-  updated(props) {
-    super.updated(props);
-    this.__runObserver(props, ['_renderer', '_cells', 'path', 'itemHasChildrenPath'], '_onRendererOrBindingChanged');
   }
 
   /**

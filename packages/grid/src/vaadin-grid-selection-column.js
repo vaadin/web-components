@@ -89,18 +89,14 @@ class GridSelectionColumn extends GridColumn {
     };
   }
 
-  updated(props) {
-    super.updated(props);
-    this.__runObserver(props, ['selectAll'], '__onSelectAllChanged');
-    this.__runObserver(
-      props,
+  constructor() {
+    super();
+
+    this.__addObserver(['selectAll'], '__onSelectAllChanged');
+    this.__addObserver(
       ['_headerRenderer', '_headerCell', 'path', 'header', 'selectAll', '__indeterminate', '__selectAllHidden'],
       '_onHeaderRendererOrBindingChanged'
     );
-  }
-
-  constructor() {
-    super();
 
     this.width = '58px';
     this.flexGrow = 0;
