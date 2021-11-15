@@ -231,7 +231,7 @@ describe('keyboard', () => {
       expect(input.value).to.equal('foobar');
     });
 
-    it('should revert to the custom value after keyboar navigation', () => {
+    it('should revert to the custom value after keyboard navigation', () => {
       comboBox.allowCustomValue = true;
       comboBox.value = 'foobar';
       arrowDownKeyDown(input);
