@@ -69,6 +69,25 @@ describe('keyboard', () => {
 
       expect(getFocusedIndex()).to.equal(0);
     });
+
+    it('should propagate escape key event if dropdown is closed', () => {
+      const keyDownSpy = sinon.spy();
+      document.body.addEventListener('keydown', keyDownSpy);
+      escKeyDown(input);
+      document.body.removeEventListener('keydown', keyDownSpy);
+      expect(keyDownSpy.called).to.be.true;
+    });
+
+    it('should not propagate esc keydown event when overlay is closed, clear button is visible and value is not empty', () => {
+      comboBox.value = 'bar';
+      comboBox.clearButtonVisible = true;
+
+      const keyDownSpy = sinon.spy();
+      document.body.addEventListener('keydown', keyDownSpy);
+      escKeyDown(input);
+      document.body.removeEventListener('keydown', keyDownSpy);
+      expect(keyDownSpy.called).to.be.false;
+    });
   });
 
   describe('navigating after overlay opened', () => {
@@ -556,6 +575,16 @@ describe('keyboard', () => {
       comboBox.opened = true;
       escKeyDown(input);
       expect(comboBox.value).to.equal('bar');
+    });
+
+    it('should not propagate when input value is not empty', () => {
+      inputText('foo');
+
+      const keyDownSpy = sinon.spy();
+      document.body.addEventListener('keydown', keyDownSpy);
+      escKeyDown(input);
+      document.body.removeEventListener('keydown', keyDownSpy);
+      expect(keyDownSpy.called).to.be.false;
     });
   });
 });
