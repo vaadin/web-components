@@ -114,4 +114,15 @@ describe('class name generator', () => {
     expect(() => (grid.cellClassNameGenerator = () => ' foo  bar ')).not.to.throw(Error);
     assertClassList(firstCell, ['foo', 'bar']);
   });
+
+  it('should have the right class names after toggling column visibility', async () => {
+    grid.cellClassNameGenerator = (_column, { index }) => (index % 2 === 0 ? 'even' : 'odd');
+    const column = grid.querySelector('vaadin-grid-column');
+    column.hidden = true;
+    await nextFrame();
+    column.hidden = false;
+    await nextFrame();
+    assertClassList(getContainerCell(grid.$.items, 1, 0), ['odd']);
+    assertClassList(getContainerCell(grid.$.items, 1, 1), ['odd']);
+  });
 });
