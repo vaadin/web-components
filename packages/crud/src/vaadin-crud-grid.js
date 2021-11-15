@@ -199,7 +199,7 @@ class CrudGrid extends IncludedMixin(Grid) {
           root.appendChild(sorter);
         } else if (!this.noFilter) {
           // Filtering is enabled in this crud-grid, create the filter element
-          const filter = window.document.createElement('vaadin-grid-filter');
+          const filter = document.createElement('vaadin-grid-filter');
           filter.setAttribute('path', path);
           filter.style.display = 'flex';
 
