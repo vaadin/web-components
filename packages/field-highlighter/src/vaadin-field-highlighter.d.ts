@@ -9,6 +9,7 @@ export interface FieldHighlighterUser {
   id: number;
   name: string;
   colorIndex: number;
+  fieldIndex?: number;
 }
 
 /**
@@ -20,7 +21,17 @@ export interface FieldHighlighterUser {
  */
 declare class FieldHighlighterController implements ReactiveController {
   /**
-   * A user who last interacted with the field.
+   * An object representing a user currently editing the field.
+   * The user object can have the following properties:
+   *
+   * ```js
+   * Array<{
+   *   id: number,
+   *   name: string;
+   *   colorIndex: number;
+   *   fieldIndex: number;
+   * }>
+   * ```
    */
   user: FieldHighlighterUser | null;
 

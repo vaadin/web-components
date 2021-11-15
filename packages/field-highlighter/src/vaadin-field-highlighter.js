@@ -69,7 +69,18 @@ export class FieldHighlighterController {
     this.host = field;
 
     /**
-     * A user currently editing the field.
+     * An object representing a user currently editing the field.
+     * The user object can have the following properties:
+     *
+     * ```js
+     * Array<{
+     *   id: number,
+     *   name: string;
+     *   colorIndex: number;
+     *   fieldIndex: number;
+     * }>
+     * ```
+     *
      * @type {FieldHighlighterUser | null}
      */
     this.user = null;
