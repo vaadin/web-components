@@ -535,6 +535,7 @@ class Grid extends ElementMixin(
     }
   }
 
+  /** @private */
   __getIntrinsicWidth(col) {
     const initialWidth = col.width;
     const initialFlexGrow = col.flexGrow;
@@ -559,6 +560,7 @@ class Grid extends ElementMixin(
     return width;
   }
 
+  /** @private */
   __getDistributedWidth(col, innerColumn) {
     if (col == null || col === this) return 0;
 
