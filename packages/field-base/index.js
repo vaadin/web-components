@@ -1,4 +1,4 @@
-export { AriaLabelController } from './src/aria-label-controller.js';
+export { LabelForController } from './src/label-for-controller.js';
 export { CheckedMixin } from './src/checked-mixin.js';
 export { DelegateFocusMixin } from './src/delegate-focus-mixin.js';
 export { DelegateStateMixin } from './src/delegate-state-mixin.js';
