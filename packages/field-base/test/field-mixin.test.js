@@ -64,10 +64,6 @@ customElements.define(
       `;
     }
 
-    get _ariaAttr() {
-      return 'aria-labelledby';
-    }
-
     ready() {
       super.ready();
 
@@ -552,52 +548,84 @@ describe('field-mixin', () => {
     });
   });
 
-  describe('aria-describedby', () => {
-    beforeEach(() => {
-      element = fixtureSync(`<field-mixin-element helper-text="Helper"></field-mixin-element>`);
-      label = element.querySelector('[slot=label]');
-      error = element.querySelector('[slot=error-message]');
-      helper = element.querySelector('[slot=helper]');
-      input = element.querySelector('[slot=input]');
+  describe('aria', () => {
+    describe('field', () => {
+      beforeEach(() => {
+        element = fixtureSync(
+          `<field-mixin-element label="Label" helper-text="Helper" error-message="Error Message"></field-mixin-element>`
+        );
+        input = element.querySelector('[slot=input]');
+        label = element.querySelector('[slot=label]');
+        error = element.querySelector('[slot=error-message]');
+        helper = element.querySelector('[slot=helper]');
+      });
+
+      describe('aria-labelledby', () => {
+        it('should only contain label id when the field is valid', () => {
+          const aria = input.getAttribute('aria-labelledby');
+          expect(aria).to.equal(label.id);
+        });
+
+        it('should only contain label id when the field is invalid', () => {
+          element.invalid = true;
+          const aria = input.getAttribute('aria-labelledby');
+          expect(aria).to.equal(label.id);
+        });
+      });
+
+      describe('aria-describedby', () => {
+        it('should only contain helper id when the field is valid', () => {
+          const aria = input.getAttribute('aria-describedby');
+          expect(aria).to.equal(helper.id);
+        });
+
+        it('should contain error id when the field is invalid', () => {
+          element.invalid = true;
+          const aria = input.getAttribute('aria-describedby');
+          expect(aria).to.include(helper.id);
+          expect(aria).to.include(error.id);
+          expect(aria).to.not.include(label.id);
+        });
+      });
     });
 
-    it('should only add helper text to aria-describedby when field is valid', () => {
-      const aria = input.getAttribute('aria-describedby');
-      expect(aria).to.include(helper.id);
-      expect(aria).to.not.include(error.id);
-      expect(aria).to.not.include(label.id);
-    });
+    describe('field group', () => {
+      beforeEach(() => {
+        element = fixtureSync(
+          `<field-mixin-group-element label="Label" helper-text="Helper" error-message="Error Message"></field-mixin-group-element>`
+        );
+        label = element.querySelector('[slot=label]');
+        error = element.querySelector('[slot=error-message]');
+        helper = element.querySelector('[slot=helper]');
+      });
 
-    it('should add error message to aria-describedby when field is invalid', () => {
-      element.invalid = true;
-      const aria = input.getAttribute('aria-describedby');
-      expect(aria).to.include(helper.id);
-      expect(aria).to.include(error.id);
-      expect(aria).to.not.include(label.id);
-    });
-  });
+      describe('aria-labelledby', () => {
+        it('should only contain label id and helper id when the field is valid', () => {
+          const aria = element.getAttribute('aria-labelledby');
+          expect(aria).to.include(label.id);
+          expect(aria).to.include(helper.id);
+          expect(aria).to.not.include(error.id);
+        });
 
-  describe('aria-labelledby', () => {
-    beforeEach(() => {
-      element = fixtureSync(`<field-mixin-group-element helper-text="Helper"></field-mixin-group-element>`);
-      label = element.querySelector('[slot=label]');
-      error = element.querySelector('[slot=error-message]');
-      helper = element.querySelector('[slot=helper]');
-    });
+        it('should contain error id when the field is invalid', () => {
+          element.invalid = true;
+          const aria = element.getAttribute('aria-labelledby');
+          expect(aria).to.include(label.id);
+          expect(aria).to.include(helper.id);
+          expect(aria).to.include(error.id);
+        });
+      });
 
-    it('should add label and helper text to aria-labelledby when field is valid', () => {
-      const aria = element.getAttribute('aria-labelledby');
-      expect(aria).to.include(helper.id);
-      expect(aria).to.not.include(error.id);
-      expect(aria).to.include(label.id);
-    });
+      describe('aria-describedby', () => {
+        it('should be empty when the field is valid', () => {
+          expect(element.hasAttribute('aria-describedby')).to.be.false;
+        });
 
-    it('should add error message to aria-labelledby when field is invalid', () => {
-      element.invalid = true;
-      const aria = element.getAttribute('aria-labelledby');
-      expect(aria).to.include(helper.id);
-      expect(aria).to.include(error.id);
-      expect(aria).to.include(label.id);
+        it('should be empty when the field is invalid', () => {
+          element.invalid = true;
+          expect(element.hasAttribute('aria-describedby')).to.be.false;
+        });
+      });
     });
   });
 

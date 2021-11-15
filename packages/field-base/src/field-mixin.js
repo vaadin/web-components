@@ -6,6 +6,8 @@
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { FieldAriaController } from './field-aria-controller.js';
 import { LabelMixin } from './label-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
 
@@ -15,9 +17,10 @@ import { ValidateMixin } from './validate-mixin.js';
  * @polymerMixin
  * @mixes LabelMixin
  * @mixes ValidateMixin
+ * @mixes ElementMixin
  */
 export const FieldMixin = (superclass) =>
-  class FieldMixinClass extends ValidateMixin(LabelMixin(superclass)) {
+  class FieldMixinClass extends ValidateMixin(LabelMixin(ElementMixin(superclass))) {
     static get properties() {
       return {
         /**
@@ -66,9 +69,11 @@ export const FieldMixin = (superclass) =>
 
     static get observers() {
       return [
-        '__ariaChanged(invalid, _helperId, required)',
         '__observeOffsetHeight(errorMessage, invalid, label, helperText)',
-        '_updateErrorMessage(invalid, errorMessage)'
+        '_updateErrorMessage(invalid, errorMessage)',
+        '_invalidChanged(invalid)',
+        '_requiredChanged(required)',
+        '_helperIdChanged(_helperId)'
       ];
     }
 
@@ -88,14 +93,6 @@ export const FieldMixin = (superclass) =>
       return this._getDirectSlotChild('helper');
     }
 
-    /**
-     * @protected
-     * @return {string}
-     */
-    get _ariaAttr() {
-      return 'aria-describedby';
-    }
-
     constructor() {
       super();
 
@@ -106,6 +103,8 @@ export const FieldMixin = (superclass) =>
 
       // Save generated ID to restore later
       this.__savedHelperId = this._helperId;
+
+      this._fieldAriaController = new FieldAriaController(this);
     }
 
     /** @protected */
@@ -166,6 +165,8 @@ export const FieldMixin = (superclass) =>
           this.__applyDefaultHelper(this.helperText);
         }
       });
+
+      this.addController(this._fieldAriaController);
     }
 
     /** @private */
@@ -206,6 +207,7 @@ export const FieldMixin = (superclass) =>
       }
 
       helper.id = this.__savedHelperId;
+      this._helperId = helper.id;
       this.appendChild(helper);
       this._currentHelper = helper;
 
@@ -267,6 +269,22 @@ export const FieldMixin = (superclass) =>
     }
 
     /**
+     * @protected
+     * @override
+     */
+    _toggleHasLabelAttribute() {
+      super._toggleHasLabelAttribute();
+
+      // Label ID should be only added when the label content is present.
+      // Otherwise, it may conflict with an `aria-label` attribute possibly added by the user.
+      if (this.hasAttribute('has-label')) {
+        this._fieldAriaController.setLabelId(this._labelId);
+      } else {
+        this._fieldAriaController.setLabelId(null);
+      }
+    }
+
+    /**
      * @param {boolean} invalid
      * @param {string} errorMessage
      * @protected
@@ -325,61 +343,37 @@ export const FieldMixin = (superclass) =>
      */
     _ariaTargetChanged(target) {
       if (target) {
-        this._updateAriaAttribute(target, this.invalid, this._helperId);
-        this._updateAriaRequiredAttribute(target, this.required);
+        this._fieldAriaController.setTarget(target);
       }
     }
 
     /**
-     * @param {HTMLElement} target
-     * @param {boolean} invalid
-     * @param {string} helperId
-     * @protected
-     */
-    _updateAriaAttribute(target, invalid, helperId) {
-      const attr = this._ariaAttr;
-
-      if (target && attr) {
-        // For groups, add all IDs to aria-labelledby rather than aria-describedby -
-        // that should guarantee that it's announced when the group is entered.
-        const ariaIds = attr === 'aria-describedby' ? [helperId] : [this._labelId, helperId];
-
-        // Error message ID needs to be dynamically added / removed based on the validity
-        // Otherwise assistive technologies would announce the error, even if we hide it.
-        if (invalid) {
-          ariaIds.push(this._errorId);
-        }
-
-        target.setAttribute(attr, ariaIds.join(' '));
-      }
-    }
-
-    /**
-     * @param {HTMLElement} target
      * @param {boolean} required
      * @protected
      */
-    _updateAriaRequiredAttribute(target, required) {
-      if (target !== this) {
-        // native <input> or <textarea>, required is enough
-        return;
-      }
+    _requiredChanged(required) {
+      this._fieldAriaController.setRequired(required);
+    }
 
-      if (required) {
-        target.setAttribute('aria-required', true);
+    /**
+     * @param {string} helperId
+     * @protected
+     */
+    _helperIdChanged(helperId) {
+      this._fieldAriaController.setHelperId(helperId);
+    }
+
+    /**
+     * @param {boolean} required
+     * @protected
+     */
+    _invalidChanged(invalid) {
+      // Error message ID needs to be dynamically added / removed based on the validity
+      // Otherwise assistive technologies would announce the error, even if we hide it.
+      if (invalid) {
+        this._fieldAriaController.setErrorId(this._errorId);
       } else {
-        target.removeAttribute('aria-required');
+        this._fieldAriaController.setErrorId(null);
       }
-    }
-
-    /**
-     * @param {boolean} invalid
-     * @param {string} helperId
-     * @param {boolean} required
-     * @private
-     */
-    __ariaChanged(invalid, helperId, required) {
-      this._updateAriaAttribute(this.ariaTarget, invalid, helperId);
-      this._updateAriaRequiredAttribute(this.ariaTarget, required);
     }
   };
