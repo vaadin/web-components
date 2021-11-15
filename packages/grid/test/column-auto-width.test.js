@@ -175,9 +175,9 @@ describe("column's width with vaadin-grid-column-group", () => {
     });
   }
 
-  function createGrid(html) {
+  function createGrid(html, items = [{ a: 'm', b: 'mm' }]) {
     const grid = fixtureSync(html);
-    grid.items = [{ a: 'm', b: 'mm' }];
+    grid.items = items;
     flushGrid(grid);
 
     return grid;
@@ -205,6 +205,38 @@ describe("column's width with vaadin-grid-column-group", () => {
         `);
 
     expectColumnsWidthToBeOk(grid, [217, 217], 20);
+  });
+
+  it("should distribute the extra necessary space to all columns regardless of columns' flexGrow", async () => {
+    const items = [{ first: 'fff', last: 'lll' }];
+
+    const grid = createGrid(
+      `
+          <vaadin-grid style="width: 200px">
+              <vaadin-grid-column-group header="HeaderHeaderHeaderHeaderHeaderHeaderHeaderHeaderHeaderHeader">
+                  <vaadin-grid-column auto-width path="first"></vaadin-grid-column>
+                  <vaadin-grid-column auto-width path="last"></vaadin-grid-column>
+              </vaadin-grid-column-group>
+          </vaadin-grid>`,
+      items
+    );
+
+    const gridWithFlexGrow = createGrid(
+      `
+          <vaadin-grid style="width: 200px">
+              <vaadin-grid-column-group header="HeaderHeaderHeaderHeaderHeaderHeaderHeaderHeaderHeaderHeader">
+                  <vaadin-grid-column auto-width flex-grow="3" path="first"></vaadin-grid-column>
+                  <vaadin-grid-column auto-width path="last"></vaadin-grid-column>
+              </vaadin-grid-column-group>
+          </vaadin-grid>`,
+      items
+    );
+
+    const [columnA, columnB] = grid.querySelectorAll('vaadin-grid-column');
+    const [columnA2, columnB2] = gridWithFlexGrow.querySelectorAll('vaadin-grid-column');
+
+    expect(columnA.width).to.equal(columnA2.width);
+    expect(columnB.width).to.equal(columnB2.width);
   });
 
   it('should distribute the excess space to all columns according to their initial width', async () => {
