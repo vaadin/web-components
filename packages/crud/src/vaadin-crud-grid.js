@@ -193,7 +193,7 @@ class CrudGrid extends IncludedMixin(Grid) {
         if (col.__sortColumnGroup || (this.noFilter && !this.noSort)) {
           // The column is either the sorter group column or the root level
           // sort column (in case a filter isn't used at all) => add the sort indicator
-          const sorter = window.document.createElement('vaadin-grid-sorter');
+          const sorter = document.createElement('vaadin-grid-sorter');
           sorter.setAttribute('path', path);
           sorter.textContent = label;
           root.appendChild(sorter);
