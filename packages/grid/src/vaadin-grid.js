@@ -864,6 +864,7 @@ class Grid extends ElementMixin(
     this._a11yUpdateHeaderRows();
     this._a11yUpdateFooterRows();
     this.__updateFooterPositioning();
+    this.generateCellClassNames();
   }
 
   __updateFooterPositioning() {
