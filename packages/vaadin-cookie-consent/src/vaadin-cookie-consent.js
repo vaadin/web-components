@@ -53,7 +53,7 @@ class CookieConsentElement extends ElementMixin(PolymerElement) {
   }
 
   static get version() {
-    return '21.0.3';
+    return '21.0.4';
   }
 
   static get properties() {
