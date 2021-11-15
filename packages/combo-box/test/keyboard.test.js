@@ -8,6 +8,7 @@ import {
   fire,
   fixtureSync,
   focusout,
+  keyboardEventFor,
   keyDownOn,
   nextFrame
 } from '@vaadin/testing-helpers';
@@ -68,6 +69,23 @@ describe('keyboard', () => {
       arrowDownKeyDown(input);
 
       expect(getFocusedIndex()).to.equal(0);
+    });
+
+    it('should propagate escape key event if dropdown is closed', () => {
+      const event = keyboardEventFor('keydown', 27, [], 'Escape');
+      const keyDownSpy = sinon.spy(event, 'stopPropagation');
+      input.dispatchEvent(event);
+      expect(keyDownSpy.called).to.be.false;
+    });
+
+    it('should not propagate esc keydown event when overlay is closed, clear button is visible and value is not empty', () => {
+      comboBox.value = 'bar';
+      comboBox.clearButtonVisible = true;
+
+      const event = keyboardEventFor('keydown', 27, [], 'Escape');
+      const keyDownSpy = sinon.spy(event, 'stopPropagation');
+      input.dispatchEvent(event);
+      expect(keyDownSpy.called).to.be.true;
     });
   });
 
@@ -231,7 +249,7 @@ describe('keyboard', () => {
       expect(input.value).to.equal('foobar');
     });
 
-    it('should revert to the custom value after keyboar navigation', () => {
+    it('should revert to the custom value after keyboard navigation', () => {
       comboBox.allowCustomValue = true;
       comboBox.value = 'foobar';
       arrowDownKeyDown(input);
@@ -556,6 +574,15 @@ describe('keyboard', () => {
       comboBox.opened = true;
       escKeyDown(input);
       expect(comboBox.value).to.equal('bar');
+    });
+
+    it('should not propagate when input value is not empty', () => {
+      inputText('foo');
+
+      const event = keyboardEventFor('keydown', 27, [], 'Escape');
+      const keyDownSpy = sinon.spy(event, 'stopPropagation');
+      input.dispatchEvent(event);
+      expect(keyDownSpy.called).to.be.true;
     });
   });
 });
