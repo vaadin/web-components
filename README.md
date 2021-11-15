@@ -8,11 +8,9 @@
 
 [Vaadin components](https://vaadin.com/components) is an evolving set of high-quality web components for business web applications.
 
-[![Chrome](https://github.com/vaadin/web-components/actions/workflows/chrome.yml/badge.svg)](https://github.com/vaadin/web-components/actions/workflows/chrome.yml)
-[![Firefox](https://github.com/vaadin/web-components/actions/workflows/firefox.yml/badge.svg)](https://github.com/vaadin/web-components/actions/workflows/firefox.yml)
-[![WebKit](https://github.com/vaadin/web-components/actions/workflows/webkit.yml/badge.svg)](https://github.com/vaadin/web-components/actions/workflows/webkit.yml)
+[![Build](https://github.com/vaadin/web-components/actions/workflows/coverage.yml/badge.svg)](https://github.com/vaadin/web-components/actions/workflows/coverage.yml)
 [![Follow on Twitter](https://img.shields.io/twitter/follow/vaadin.svg?label=follow+vaadin)](https://twitter.com/vaadin)
-[![Discord](https://discordapp.com/api/guilds/732335336448852018/widget.png)](https://vaad.in/chat)
+[![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 </div>
 
