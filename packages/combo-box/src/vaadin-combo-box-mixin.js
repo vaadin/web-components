@@ -570,6 +570,7 @@ export const ComboBoxMixin = (subclass) =>
       if (this.autoOpenDisabled) {
         // Auto-open is disabled
         if (this.opened || (this.value !== this._inputElementValue && this._inputElementValue.length > 0)) {
+          // The overlay is open or
           // The input value has changed but the change hasn't been committed, so cancel it.
           e.stopPropagation();
           this._focusedIndex = -1;

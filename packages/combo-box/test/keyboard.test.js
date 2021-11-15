@@ -8,6 +8,7 @@ import {
   fire,
   fixtureSync,
   focusout,
+  keyboardEventFor,
   keyDownOn,
   nextFrame
 } from '@vaadin/testing-helpers';
@@ -71,22 +72,20 @@ describe('keyboard', () => {
     });
 
     it('should propagate escape key event if dropdown is closed', () => {
-      const keyDownSpy = sinon.spy();
-      document.body.addEventListener('keydown', keyDownSpy);
-      escKeyDown(input);
-      document.body.removeEventListener('keydown', keyDownSpy);
-      expect(keyDownSpy.called).to.be.true;
+      const event = keyboardEventFor('keydown', 27, [], 'Escape');
+      const keyDownSpy = sinon.spy(event, 'stopPropagation');
+      input.dispatchEvent(event);
+      expect(keyDownSpy.called).to.be.false;
     });
 
     it('should not propagate esc keydown event when overlay is closed, clear button is visible and value is not empty', () => {
       comboBox.value = 'bar';
       comboBox.clearButtonVisible = true;
 
-      const keyDownSpy = sinon.spy();
-      document.body.addEventListener('keydown', keyDownSpy);
-      escKeyDown(input);
-      document.body.removeEventListener('keydown', keyDownSpy);
-      expect(keyDownSpy.called).to.be.false;
+      const event = keyboardEventFor('keydown', 27, [], 'Escape');
+      const keyDownSpy = sinon.spy(event, 'stopPropagation');
+      input.dispatchEvent(event);
+      expect(keyDownSpy.called).to.be.true;
     });
   });
 
@@ -580,11 +579,10 @@ describe('keyboard', () => {
     it('should not propagate when input value is not empty', () => {
       inputText('foo');
 
-      const keyDownSpy = sinon.spy();
-      document.body.addEventListener('keydown', keyDownSpy);
-      escKeyDown(input);
-      document.body.removeEventListener('keydown', keyDownSpy);
-      expect(keyDownSpy.called).to.be.false;
+      const event = keyboardEventFor('keydown', 27, [], 'Escape');
+      const keyDownSpy = sinon.spy(event, 'stopPropagation');
+      input.dispatchEvent(event);
+      expect(keyDownSpy.called).to.be.true;
     });
   });
 });
