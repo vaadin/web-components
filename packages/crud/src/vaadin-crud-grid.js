@@ -117,7 +117,7 @@ class CrudGrid extends IncludedMixin(Grid) {
   /**
    * Return the deepest property depth of the object
    * @private
-   **/
+   */
   __getPropertyDepth(object) {
     if (object && typeof object === 'object') {
       return Object.keys(object).reduce((deepest, prop) => {
