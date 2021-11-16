@@ -37,10 +37,10 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  *
  * To customize the content of the `<vaadin-combo-box-item>` elements placed in the dropdown, use
  * [`renderer`](#/elements/vaadin-combo-box#property-renderer) property which accepts a function.
- * The renderer function provides `root`, `comboBox`, and `model` arguments.
+ * The renderer function is called with `root`, `comboBox`, and `model` as arguments.
  *
  * Generate DOM content by using `model` object properties if needed, and append it to the `root`
- * element. The `comboBox` reference is provided to get the state of the combo-box element. Do not
+ * element. The `comboBox` reference is provided to access the combo-box element state. Do not
  * set combo-box properties in a `renderer` function.
  *
  * ```js
