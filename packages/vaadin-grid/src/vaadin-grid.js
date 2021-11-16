@@ -550,14 +550,14 @@ class GridElement extends ElementMixin(
 
     // Note: _allCells only contains cells which are currently rendered in DOM
     const width = col._allCells
-        .filter((cell) => {
-          // Exclude body cells that are out of the visible viewport
-          return !this.$.items.contains(cell) || this._isInViewport(cell.parentElement);
-        })
-        .reduce((width, cell) => {
-          // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
-          return Math.max(width, cell.offsetWidth + 1);
-        }, 0);
+      .filter((cell) => {
+        // Exclude body cells that are out of the visible viewport
+        return !this.$.items.contains(cell) || this._isInViewport(cell.parentElement);
+      })
+      .reduce((width, cell) => {
+        // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
+        return Math.max(width, cell.offsetWidth + 1);
+      }, 0);
 
     col.flexGrow = initialFlexGrow;
     col.width = initialWidth;
@@ -583,8 +583,8 @@ class GridElement extends ElementMixin(
     const columnGroup = col;
     const columnGroupWidth = columnWidth;
     const sumOfWidthOfAllChildColumns = columnGroup._visibleChildColumns
-        .map((col) => this.__getIntrinsicWidth(col))
-        .reduce((sum, curr) => sum + curr, 0);
+      .map((col) => this.__getIntrinsicWidth(col))
+      .reduce((sum, curr) => sum + curr, 0);
 
     const extraNecessarySpaceForGridColumnGroup = Math.max(0, columnGroupWidth - sumOfWidthOfAllChildColumns);
 

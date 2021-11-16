@@ -211,7 +211,7 @@ describe('column group', () => {
     const items = [{ first: 'fff', last: 'lll' }];
 
     const grid = createGrid(
-        `
+      `
         <vaadin-grid style="width: 200px">
           <vaadin-grid-column-group header="HeaderHeaderHeaderHeaderHeaderHeaderHeaderHeaderHeaderHeader">
             <vaadin-grid-column auto-width path="first"></vaadin-grid-column>
@@ -219,11 +219,11 @@ describe('column group', () => {
           </vaadin-grid-column-group>
         </vaadin-grid>
       `,
-        items
+      items
     );
 
     const gridWithFlexGrow = createGrid(
-        `
+      `
         <vaadin-grid style="width: 200px">
           <vaadin-grid-column-group header="HeaderHeaderHeaderHeaderHeaderHeaderHeaderHeaderHeaderHeader">
             <vaadin-grid-column auto-width flex-grow="3" path="first"></vaadin-grid-column>
@@ -231,7 +231,7 @@ describe('column group', () => {
           </vaadin-grid-column-group>
         </vaadin-grid>
       `,
-        items
+      items
     );
 
     const [columnA, columnB] = grid.querySelectorAll('vaadin-grid-column');
