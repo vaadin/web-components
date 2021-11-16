@@ -8,6 +8,7 @@ import {
   escKeyDown,
   fire,
   fixtureSync,
+  isChrome,
   isIOS,
   nextFrame,
   nextRender,
@@ -431,7 +432,6 @@ describe('items', () => {
       expect(menuComponents()[0].getAttribute('aria-expanded')).to.equal('false');
     });
 
-    const isChrome = window.chrome || /HeadlessChrome/.test(navigator.userAgent);
     (isChrome ? describe : describe.skip)('scrolling', () => {
       let rootOverlay, subOverlay1, subOverlay2, scrollElm;
 
