@@ -147,10 +147,11 @@ class FormItem extends ThemableMixin(PolymerElement) {
       </style>
       <div id="label" part="label" on-click="_onLabelClick">
         <slot name="label" id="labelSlot"></slot>
+        <span part="required-indicator" aria-hidden="true"></span>
       </div>
       <div id="spacing"></div>
       <div id="content">
-        <slot id="contentSlot"></slot>
+        <slot id="contentSlot" on-slotchange="__onContentSlotChange"></slot>
       </div>
     `;
   }
@@ -159,16 +160,63 @@ class FormItem extends ThemableMixin(PolymerElement) {
     return 'vaadin-form-item';
   }
 
+  constructor() {
+    super();
+    this.__updateInvalidState = this.__updateInvalidState.bind(this);
+  }
+
   /** @private */
   _onLabelClick() {
-    const firstContentElementChild = Array.prototype.find.call(
-      this.$.contentSlot.assignedNodes(),
-      (e) => e.nodeType === Node.ELEMENT_NODE
-    );
+    const firstContentElementChild = this.__getContentChildNodes()[0];
     if (firstContentElementChild) {
       firstContentElementChild.focus();
       firstContentElementChild.click();
     }
+  }
+
+  /** @private */
+  __getContentChildNodes() {
+    return [...this.$.contentSlot.assignedNodes()].filter((e) => e.nodeType === Node.ELEMENT_NODE);
+  }
+
+  /** @private */
+  __onContentSlotChange() {
+    if (this.__contentField) {
+      // Discard the old field
+      this.__updateRequiredState(false);
+      delete this.__contentField;
+      this.__contentField.__vaadinFormItemObserver.disconnect();
+    }
+
+    const contentChildNodes = this.__getContentChildNodes();
+    if (contentChildNodes.length === 1 && 'checkValidity' in contentChildNodes[0]) {
+      // There's only one child element and it's a field
+      this.__contentField = contentChildNodes[0];
+      this.__updateRequiredState(this.__contentField.required);
+      this.__contentField.__vaadinFormItemObserver = new MutationObserver(() =>
+        this.__updateRequiredState(this.__contentField.required)
+      );
+      this.__contentField.__vaadinFormItemObserver.observe(this.__contentField, { attributes: true });
+    }
+  }
+
+  /** @private */
+  __updateRequiredState(required) {
+    if (required) {
+      this.setAttribute('required', '');
+      this.__contentField.addEventListener('blur', this.__updateInvalidState);
+      this.__contentField.addEventListener('change', this.__updateInvalidState);
+    } else {
+      this.removeAttribute('invalid');
+      this.removeAttribute('required');
+      this.__contentField.removeEventListener('blur', this.__updateInvalidState);
+      this.__contentField.removeEventListener('change', this.__updateInvalidState);
+    }
+  }
+
+  /** @private */
+  __updateInvalidState() {
+    this.toggleAttribute('invalid', this.__contentField.checkValidity() === false);
   }
 }
 
