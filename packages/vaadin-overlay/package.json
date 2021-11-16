@@ -44,7 +44,7 @@
     "@polymer/iron-overlay-behavior": "^3.0.0",
     "@vaadin/button": "22.0.0-beta2",
     "@vaadin/radio-group": "22.0.0-beta2",
-    "@vaadin/testing-helpers": "^0.3.0",
+    "@vaadin/testing-helpers": "^0.3.2",
     "@vaadin/text-field": "22.0.0-beta2",
     "lit": "^2.0.0",
     "sinon": "^9.2.1"

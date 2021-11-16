@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, isFirefox } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-upload.js';
 import { createFile, createFiles, touchDevice, xhrCreator } from './common.js';
@@ -34,7 +34,6 @@ describe('file list', () => {
     });
   });
 
-  const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
   (isFirefox ? describe.skip : describe)('with add button', () => {
     it('should open file dialog by click', () => {
       // This test checks if the 'click' event is synchronously dispatched
