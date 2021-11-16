@@ -491,7 +491,7 @@ describe('field components', () => {
     });
   });
 
-  describe.only('list-box', () => {
+  describe('list-box', () => {
     let items;
 
     beforeEach(async () => {
@@ -524,16 +524,14 @@ describe('field components', () => {
       expect(hideSpy.firstCall.args[0].detail.fieldIndex).to.equal(0);
     });
 
-    // TODO un-skip
-    it.skip('should dispatch vaadin-highlight-hide event on other item focus', async () => {
+    it('should dispatch vaadin-highlight-hide event on other item focus', async () => {
       items[0].focus();
       await sendKeys({ press: 'ArrowDown' });
       expect(hideSpy.callCount).to.equal(1);
       expect(hideSpy.firstCall.args[0].detail.fieldIndex).to.equal(0);
     });
 
-    // TODO un-skip
-    it.skip('should dispatch second vaadin-highlight-show event on other item focus', async () => {
+    it('should dispatch second vaadin-highlight-show event on other item focus', async () => {
       items[0].focus();
       await sendKeys({ press: 'ArrowDown' });
       expect(showSpy.callCount).to.equal(2);
