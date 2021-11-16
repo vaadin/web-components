@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { prevent, register } from '@polymer/polymer/lib/utils/gestures.js';
+import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 
 register({
   name: 'vaadin-contextmenu',
@@ -16,10 +17,7 @@ register({
   emits: ['vaadin-contextmenu'],
 
   info: {
-    sourceEvent: null,
-    _ios:
-      (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ||
-      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    sourceEvent: null
   },
 
   reset: function () {
@@ -50,7 +48,7 @@ register({
     this._timerId = setTimeout(() => {
       const ct = e.changedTouches[0];
       if (!e.shiftKey) {
-        if (this.info._ios) {
+        if (isIOS) {
           this._fired = true;
           this.fire(t, ct.clientX, ct.clientY);
         }

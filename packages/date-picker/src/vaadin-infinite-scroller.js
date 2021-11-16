@@ -7,6 +7,7 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
+import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
 /**
@@ -137,7 +138,6 @@ class InfiniteScroller extends PolymerElement {
 
     // Firefox interprets elements with overflow:auto as focusable
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1069739
-    var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
     if (isFirefox) {
       this.$.scroller.tabIndex = -1;
     }
