@@ -2019,10 +2019,10 @@
     "@typescript-eslint/types" "5.3.1"
     eslint-visitor-keys "^3.0.0"
 
-"@vaadin/testing-helpers@^0.3.0", "@vaadin/testing-helpers@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.3.1.tgz#785368988a05a5b354b089e72291775087b68708"
-  integrity sha512-dtSnQcQ2guLWRODOOhI5QF452Mu/3XzZC068EW8sw3kmFutcSCQCeHGszbOniWyIF+3IEn/H2OTpOFQGNLoHsw==
+"@vaadin/testing-helpers@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@vaadin/testing-helpers/-/testing-helpers-0.3.2.tgz#f1a5c35ccaaa3012be419b27823386593927a1d8"
+  integrity sha512-oteeq6wjcnPVfU7IGUXym+/Y0F0wLEhQJmaXsdEqVkX1uPEBQpV4VqaMosFYLmsPd7DYqZYtl3N7tKJHoIdC8g==
   dependencies:
     "@esm-bundle/chai" "^4.3.1"
     "@open-wc/semantic-dom-diff" "^0.19.5-next.1"
