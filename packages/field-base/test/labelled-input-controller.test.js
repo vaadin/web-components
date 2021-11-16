@@ -37,7 +37,7 @@ describe('labelled-input-controller', () => {
         target.setAttribute('slot', el);
         element.appendChild(target);
         element._setInputElement(target);
-        element.addController(new LabelledInputController(element, target, label));
+        element.addController(new LabelledInputController(target, label));
       });
 
       it('should set for attribute on the label', () => {

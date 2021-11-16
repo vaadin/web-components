@@ -8,7 +8,7 @@
  * A controller for linking a `<label>` element with an `<input>` element.
  */
 export class LabelledInputController {
-  constructor(_host, input, label) {
+  constructor(input, label) {
     this.input = input;
     this.__preventDuplicateLabelClick = this.__preventDuplicateLabelClick.bind(this);
 
