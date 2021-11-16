@@ -1,11 +1,16 @@
 /**
- * A controller to associate field slotted elements via ARIA attributes with a target element.
+ * A controller for managing ARIA attributes for a field element:
+ * either the component itself or slotted `<input>` element.
  */
 export class FieldAriaController {
   constructor(host) {
     this.host = host;
+    this.__required = false;
   }
 
+  /**
+   * @param {HTMLElement} target
+   */
   setTarget(target) {
     this.__target = target;
     this.__setAriaRequiredAttribute(this.__required);
@@ -14,37 +19,60 @@ export class FieldAriaController {
     this.__setHelperIdToAriaAttribute(this.__helperId);
   }
 
+  /**
+   * @param {boolean} required
+   */
   setRequired(required) {
     this.__setAriaRequiredAttribute(required);
     this.__required = required;
   }
 
+  /**
+   * @param {string | null} labelId
+   */
   setLabelId(labelId) {
     this.__setLabelIdToAriaAttribute(labelId, this.__labelId);
     this.__labelId = labelId;
   }
 
+  /**
+   * @param {string | null} errorId
+   */
   setErrorId(errorId) {
     this.__setErrorIdToAriaAttribute(errorId, this.__errorId);
     this.__errorId = errorId;
   }
 
+  /**
+   * @param {string | null} helperId
+   */
   setHelperId(helperId) {
     this.__setHelperIdToAriaAttribute(helperId, this.__helperId);
     this.__helperId = helperId;
   }
 
-  /** @private */
+  /**
+   * @return {boolean}
+   * @private
+   */
   get __isGroupField() {
     return this.__target === this.host;
   }
 
-  /** @private */
+  /**
+   * @param {string | null | undefined} labelId
+   * @param {string | null | undefined} oldLabelId
+   * @private
+   */
   __setLabelIdToAriaAttribute(labelId, oldLabelId) {
     this.__setAriaAttributeId('aria-labelledby', labelId, oldLabelId);
   }
 
-  /** @private */
+  /**
+   * @param {string | null | undefined} errorId
+   * @param {string | null | undefined} oldErrorId
+   * @private
+   */
   __setErrorIdToAriaAttribute(errorId, oldErrorId) {
     // For groups, add all IDs to aria-labelledby rather than aria-describedby -
     // that should guarantee that it's announced when the group is entered.
@@ -55,7 +83,11 @@ export class FieldAriaController {
     }
   }
 
-  /** @private */
+  /**
+   * @param {string | null | undefined} helperId
+   * @param {string | null | undefined} oldHelperId
+   * @private
+   */
   __setHelperIdToAriaAttribute(helperId, oldHelperId) {
     // For groups, add all IDs to aria-labelledby rather than aria-describedby -
     // that should guarantee that it's announced when the group is entered.
@@ -66,7 +98,10 @@ export class FieldAriaController {
     }
   }
 
-  /** @private */
+  /**
+   * @param {boolean} required
+   * @private
+   */
   __setAriaRequiredAttribute(required) {
     if (!this.__target) {
       return;
@@ -85,8 +120,8 @@ export class FieldAriaController {
   }
 
   /**
-   * @param {string} newId
-   * @param {string} oldId
+   * @param {string | null | undefined} newId
+   * @param {string | null | undefined} oldId
    * @private
    */
   __setAriaAttributeId(attr, newId, oldId) {
