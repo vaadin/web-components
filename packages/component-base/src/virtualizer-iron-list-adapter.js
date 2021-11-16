@@ -1,5 +1,10 @@
-import { animationFrame, timeOut } from '@vaadin/component-base/src/async.js';
-import { Debouncer, flush } from '@vaadin/component-base/src/debounce.js';
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { animationFrame, timeOut } from './async.js';
+import { Debouncer, flush } from './debounce.js';
 import { ironList } from './iron-list-core.js';
 
 // iron-list can by default handle sizes up to around 100000.
