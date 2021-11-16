@@ -8,13 +8,25 @@
   </head>
 
   <body>
+    <vaadin-checkbox-group label="Language of contact">
+      <vaadin-checkbox value="en" label="English"></vaadin-checkbox>
+      <vaadin-checkbox value="fr" label="Français"></vaadin-checkbox>
+      <vaadin-checkbox value="de" label="Deutsch"></vaadin-checkbox>
+    </vaadin-checkbox-group>
+
+    <!--
+    <vaadin-date-time-picker></vaadin-date-time-picker>
+
     <vaadin-text-area></vaadin-text-area>
+    -->
 
     <script type="module">
-      import '@vaadin/text-area';
+      import '@vaadin/checkbox-group';
+      // import '@vaadin/date-time-picker';
+      // import '@vaadin/text-area';
       import { FieldHighlighter } from '@vaadin/field-highlighter';
 
-      const field = document.querySelector('vaadin-text-area');
+      const field = document.querySelector('vaadin-checkbox-group');
       FieldHighlighter.init(field);
 
       window.requestAnimationFrame(() => {
