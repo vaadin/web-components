@@ -184,14 +184,14 @@ class FormItem extends ThemableMixin(PolymerElement) {
     if (this.__contentField) {
       // Discard the old field
       this.__updateRequiredState(false);
-      delete this.__contentField;
       this.__contentField.__vaadinFormItemObserver.disconnect();
+      delete this.__contentField;
     }
 
-    const contentChildNodes = this.__getContentChildNodes();
-    if (contentChildNodes.length === 1 && 'checkValidity' in contentChildNodes[0]) {
-      // There's only one child element and it's a field
-      this.__contentField = contentChildNodes[0];
+    const contentFields = this.__getContentChildNodes().filter((node) => 'checkValidity' in node);
+    if (contentFields.length === 1) {
+      // There's only one child field
+      this.__contentField = contentFields[0];
       this.__updateRequiredState(this.__contentField.required);
       this.__contentField.__vaadinFormItemObserver = new MutationObserver(() =>
         this.__updateRequiredState(this.__contentField.required)
