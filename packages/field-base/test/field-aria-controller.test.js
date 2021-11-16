@@ -23,6 +23,10 @@ describe('field-aria-controller', () => {
     it('should not set aria-describedby attribute initially', () => {
       expect(element.hasAttribute('aria-describedby')).to.be.false;
     });
+
+    it('should not set aria-required attribute initially', () => {
+      expect(element.hasAttribute('aria-required')).to.be.false;
+    });
   });
 
   describe('field', () => {
@@ -81,6 +85,41 @@ describe('field-aria-controller', () => {
         expect(input.getAttribute('aria-labelledby')).not.to.include('helper-id');
       });
     });
+
+    describe('aria-required', () => {
+      it('should not add aria-required attribute', () => {
+        controller.setRequired(true);
+        controller.setTarget(input);
+        expect(element.hasAttribute('aria-required')).to.be.false;
+      });
+    });
+
+    describe('target is set initially', () => {
+      beforeEach(() => {
+        controller.setTarget(input);
+      });
+
+      it('should set label id to aria-labelledby attribute', () => {
+        controller.setLabelId('label-id');
+        expect(input.getAttribute('aria-labelledby')).equal('custom-id label-id');
+        controller.setLabelId(null);
+        expect(input.getAttribute('aria-labelledby')).equal('custom-id');
+      });
+
+      it('should set error id to aria-describedby attribute', () => {
+        controller.setErrorId('error-id');
+        expect(input.getAttribute('aria-describedby')).equal('custom-id error-id');
+        controller.setErrorId(null);
+        expect(input.getAttribute('aria-describedby')).equal('custom-id');
+      });
+
+      it('should set helper id to aria-describedby attribute', () => {
+        controller.setHelperId('helper-id');
+        expect(input.getAttribute('aria-describedby')).equal('custom-id helper-id');
+        controller.setHelperId(null);
+        expect(input.getAttribute('aria-describedby')).equal('custom-id');
+      });
+    });
   });
 
   describe('field group', () => {
@@ -137,6 +176,14 @@ describe('field-aria-controller', () => {
       });
     });
 
+    describe('aria-required', () => {
+      it('should add aria-required attribute', () => {
+        controller.setRequired(true);
+        controller.setTarget(element);
+        expect(element.getAttribute('aria-required')).to.equal('true');
+      });
+    });
+
     describe('target is set initially', () => {
       beforeEach(() => {
         controller.setTarget(element);
@@ -161,6 +208,13 @@ describe('field-aria-controller', () => {
         expect(element.getAttribute('aria-labelledby')).equal('custom-id helper-id');
         controller.setHelperId(null);
         expect(element.getAttribute('aria-labelledby')).equal('custom-id');
+      });
+
+      it('should toggle aria-required attribute', () => {
+        controller.setRequired(true);
+        expect(element.getAttribute('aria-required')).to.equal('true');
+        controller.setRequired(false);
+        expect(element.hasAttribute('aria-required')).to.be.false;
       });
     });
   });
