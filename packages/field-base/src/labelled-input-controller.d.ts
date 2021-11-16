@@ -6,6 +6,6 @@
 import { ReactiveController } from 'lit';
 
 /**
- * A controller to link a label element with a slotted `<input>` element.
+ * A controller for linking a `<label>` element with an `<input>` element.
  */
-export class LabelForController implements ReactiveController {}
+export class LabelledInputController implements ReactiveController {}

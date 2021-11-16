@@ -4,8 +4,8 @@ import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { InputMixin } from '../src/input-mixin.js';
-import { LabelForController } from '../src/label-for-controller.js';
 import { LabelMixin } from '../src/label-mixin.js';
+import { LabelledInputController } from '../src/labelled-input-controller.js';
 
 customElements.define(
   'label-for-input-mixin-element',
@@ -25,7 +25,7 @@ customElements.define(
   }
 );
 
-describe('label-for-controller', () => {
+describe('labelled-input-controller', () => {
   let element, target, label;
 
   ['input', 'textarea'].forEach((el) => {
@@ -37,7 +37,7 @@ describe('label-for-controller', () => {
         target.setAttribute('slot', el);
         element.appendChild(target);
         element._setInputElement(target);
-        element.addController(new LabelForController(element, target, label));
+        element.addController(new LabelledInputController(element, target, label));
       });
 
       it('should set for attribute on the label', () => {

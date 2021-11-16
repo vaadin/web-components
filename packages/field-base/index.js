@@ -1,4 +1,4 @@
-export { LabelForController } from './src/label-for-controller.js';
+export { LabelledInputController } from './src/labelled-input-controller.js';
 export { CheckedMixin } from './src/checked-mixin.js';
 export { DelegateFocusMixin } from './src/delegate-focus-mixin.js';
 export { DelegateStateMixin } from './src/delegate-state-mixin.js';

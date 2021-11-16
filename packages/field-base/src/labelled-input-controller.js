@@ -5,9 +5,9 @@
  */
 
 /**
- * A controller to link a label element with a slotted `<input>` element.
+ * A controller for linking a `<label>` element with an `<input>` element.
  */
-export class LabelForController {
+export class LabelledInputController {
   constructor(_host, input, label) {
     this.input = input;
     this.__preventDuplicateLabelClick = this.__preventDuplicateLabelClick.bind(this);

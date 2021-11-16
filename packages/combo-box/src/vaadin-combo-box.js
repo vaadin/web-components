@@ -10,7 +10,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
-import { LabelForController } from '@vaadin/field-base/src/label-for-controller.js';
+import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -244,7 +244,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
         this.ariaTarget = input;
       })
     );
-    this.addController(new LabelForController(this, this.inputElement, this._labelNode));
+    this.addController(new LabelledInputController(this, this.inputElement, this._labelNode));
     this._positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
     this._toggleElement = this.$.toggleButton;
   }

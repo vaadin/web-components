@@ -10,7 +10,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
-import { LabelForController } from '@vaadin/field-base/src/label-for-controller.js';
+import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { SlotLabelMixin } from '@vaadin/field-base/src/slot-label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -184,7 +184,7 @@ class RadioButton extends SlotLabelMixin(
         this.ariaTarget = input;
       })
     );
-    this.addController(new LabelForController(this, this.inputElement, this._labelNode));
+    this.addController(new LabelledInputController(this, this.inputElement, this._labelNode));
   }
 }
 
