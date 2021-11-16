@@ -38,6 +38,6 @@
     "lit": "^2.0.0"
   },
   "devDependencies": {
-    "@vaadin/testing-helpers": "^0.3.0"
+    "@vaadin/testing-helpers": "^0.3.2"
   }
 }
