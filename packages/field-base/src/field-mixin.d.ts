@@ -39,8 +39,6 @@ export declare class FieldMixinClass {
    */
   errorMessage: string | null | undefined;
 
-  protected readonly _ariaAttr: 'aria-labelledby' | 'aria-describedby';
-
   protected _ariaTargetChanged(target: HTMLElement): void;
 
   protected readonly _errorNode: HTMLElement;

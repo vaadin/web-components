@@ -405,14 +405,6 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
     this.ariaTarget = this;
   }
 
-  /**
-   * Attribute used by `FieldMixin` to set accessible name.
-   * @protected
-   */
-  get _ariaAttr() {
-    return 'aria-labelledby';
-  }
-
   /** @private */
   __filterElements(node) {
     return node.nodeType === Node.ELEMENT_NODE;
