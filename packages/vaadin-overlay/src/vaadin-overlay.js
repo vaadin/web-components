@@ -7,6 +7,7 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { FocusablesHelper } from './vaadin-focusables-helper.js';
@@ -338,7 +339,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     this._boundIronOverlayCanceledListener = this._ironOverlayCanceled.bind(this);
 
     /* c8 ignore next 3 */
-    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    if (isIOS) {
       this._boundIosResizeListener = () => this._detectIosNavbar();
     }
   }

@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { animationFrame, timeOut } from './async.js';
+import { isSafari } from './browser-utils.js';
 import { Debouncer, flush } from './debounce.js';
 import { ironList } from './iron-list-core.js';
 
@@ -24,8 +25,6 @@ export class IronListAdapter {
     this.reorderElements = reorderElements;
     // Iron-list uses this value to determine how many pages of elements to render
     this._maxPages = 1.3;
-
-    this.__safari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
     this.timeouts = {
       SCROLL_REORDER: 500,
@@ -452,7 +451,7 @@ export class IronListAdapter {
     // Due to a rendering bug, reordering the rows can make parts of the scroll target disappear
     // on Safari when using sticky positioning in case the scroll target is inside a flexbox.
     // This issue manifests with grid (the header can disappear if grid is used inside a flexbox)
-    if (this.__safari) {
+    if (isSafari) {
       const { transform } = this.scrollTarget.style;
       this.scrollTarget.style.transform = 'translateZ(0)';
       setTimeout(() => (this.scrollTarget.style.transform = transform));

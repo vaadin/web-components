@@ -12,6 +12,7 @@ import './vaadin-rich-text-editor-toolbar-styles.js';
 import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
+import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -566,7 +567,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     this.__patchKeyboard();
 
     /* istanbul ignore if */
-    if (navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+    if (isFirefox) {
       this.__patchFirefoxFocus();
     }
 
