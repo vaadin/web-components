@@ -23,6 +23,24 @@ registerStyles(
       transition: color 0.4s;
       line-height: 1.333;
     }
+
+    [part='required-indicator']::after {
+      content: var(--lumo-required-field-indicator, '•');
+      transition: opacity 0.2s;
+      opacity: 0;
+      color: var(--lumo-required-field-indicator-color, var(--lumo-primary-text-color));
+      position: relative;
+      width: 1em;
+      text-align: center;
+    }
+
+    :host([required]) [part='required-indicator']::after {
+      opacity: 1;
+    }
+
+    :host([invalid]) [part='required-indicator']::after {
+      color: var(--lumo-required-field-indicator-color, var(--lumo-error-text-color));
+    }
   `,
   { moduleId: 'lumo-form-item' }
 );
