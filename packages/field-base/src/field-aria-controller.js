@@ -9,6 +9,8 @@ export class FieldAriaController {
   }
 
   /**
+   * Sets a target element to which ARIA attributes are added.
+   *
    * @param {HTMLElement} target
    */
   setTarget(target) {
@@ -20,6 +22,10 @@ export class FieldAriaController {
   }
 
   /**
+   * Toggles the `aria-required` attribute on the target element
+   * if the target is the host component (e.g. a field group).
+   * Otherwise, it does nothing.
+   *
    * @param {boolean} required
    */
   setRequired(required) {
@@ -28,6 +34,11 @@ export class FieldAriaController {
   }
 
   /**
+   * Links the target element with a slotted label element
+   * via the target's attribute `aria-labelledby`.
+   *
+   * To unlink the previous slotted label element, pass `null` as `labelId`.
+   *
    * @param {string | null} labelId
    */
   setLabelId(labelId) {
@@ -36,6 +47,12 @@ export class FieldAriaController {
   }
 
   /**
+   * Links the target element with a slotted error element via the target's attribute:
+   * - `aria-labelledby` if the target is the host component (e.g a field group).
+   * - `aria-describedby` otherwise.
+   *
+   * To unlink the previous slotted error element, pass `null` as `errorId`.
+   *
    * @param {string | null} errorId
    */
   setErrorId(errorId) {
@@ -44,6 +61,12 @@ export class FieldAriaController {
   }
 
   /**
+   * Links the target element with a slotted helper element via the target's attribute:
+   * - `aria-labelledby` if the target is the host component (e.g a field group).
+   * - `aria-describedby` otherwise.
+   *
+   * To unlink the previous slotted helper element, pass `null` as `helperId`.
+   *
    * @param {string | null} helperId
    */
   setHelperId(helperId) {
@@ -52,6 +75,8 @@ export class FieldAriaController {
   }
 
   /**
+   * `true` if the target element is the host component itself, `false` otherwise.
+   *
    * @return {boolean}
    * @private
    */
