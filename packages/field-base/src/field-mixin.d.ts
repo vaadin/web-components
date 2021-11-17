@@ -33,11 +33,11 @@ export declare class FieldMixinClass {
   helperText: string | null | undefined;
 
   /**
-   * Error to show when the field is invalid.
+   * Error message to show when the field is invalid.
    *
    * @attr {string} error-message
    */
-  errorMessage: string;
+  errorMessage: string | null | undefined;
 
   protected readonly _ariaAttr: 'aria-labelledby' | 'aria-describedby';
 
