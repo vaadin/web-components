@@ -1,13 +1,10 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { eventInWindow, getMouseOrFirstTouchEvent } from './vaadin-dialog-utils.js';
-
-const TOUCH_DEVICE = (() => {
-  try {
-    document.createEvent('TouchEvent');
-    return true;
-  } catch (e) {
-    return false;
-  }
-})();
 
 /**
  * @polymerMixin
@@ -37,7 +34,7 @@ export const DialogDraggableMixin = (superClass) =>
         /** @private */
         _touchDevice: {
           type: Boolean,
-          value: TOUCH_DEVICE
+          value: isTouch
         },
 
         /* TODO: Expose as a public property (check naming) */
