@@ -2,14 +2,14 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { AriaLabelController } from '../src/aria-label-controller.js';
 import { InputMixin } from '../src/input-mixin.js';
 import { LabelMixin } from '../src/label-mixin.js';
 
 customElements.define(
   'aria-label-input-mixin-element',
-  class extends LabelMixin(InputMixin(ElementMixin(PolymerElement))) {
+  class extends LabelMixin(InputMixin(ControllerMixin(PolymerElement))) {
     static get template() {
       return html`<slot name="label"></slot><slot name="input"></slot>`;
     }
@@ -18,7 +18,7 @@ customElements.define(
 
 customElements.define(
   'aria-label-textarea-mixin-element',
-  class extends LabelMixin(InputMixin(ElementMixin(PolymerElement))) {
+  class extends LabelMixin(InputMixin(ControllerMixin(PolymerElement))) {
     static get template() {
       return html`<slot name="label"></slot><slot name="textarea"></slot>`;
     }

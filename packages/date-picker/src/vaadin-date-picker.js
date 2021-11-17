@@ -9,6 +9,7 @@ import './vaadin-date-picker-overlay.js';
 import './vaadin-date-picker-overlay-content.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
@@ -112,12 +113,13 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes InputControlMixin
  */
 class DatePicker extends DatePickerMixin(
-  InputControlMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement))))
+  InputControlMixin(GestureEventListeners(ThemableMixin(ElementMixin(ControllerMixin(PolymerElement)))))
 ) {
   static get is() {
     return 'vaadin-date-picker';

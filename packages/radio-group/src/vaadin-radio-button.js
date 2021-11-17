@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
@@ -49,6 +50,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
  * @mixes ActiveMixin
@@ -56,7 +58,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes SlotLabelMixin
  */
 class RadioButton extends SlotLabelMixin(
-  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(PolymerElement)))))
+  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))))))
 ) {
   static get is() {
     return 'vaadin-radio-button';
