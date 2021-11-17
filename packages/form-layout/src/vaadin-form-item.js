@@ -194,7 +194,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
       // There's only one child field
       this.__contentField = contentFields[0];
       this.__updateRequiredState(this.__contentField.required);
-      this.__contentFieldObserver.observe(this.__contentField, { attributes: true });
+      this.__contentFieldObserver.observe(this.__contentField, { attributes: true, attributeFilter: ['required'] });
     }
   }
 
