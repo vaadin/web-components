@@ -154,14 +154,12 @@ export class FieldAriaController {
       return;
     }
 
-    let ids = this.__target.getAttribute(attr);
-    if (ids) {
-      ids = new Set(ids.split(' '));
-      ids.delete(oldId);
-    } else {
-      ids = new Set();
-    }
+    const value = this.__target.getAttribute(attr);
+    const ids = value ? new Set(value.split(' ')) : new Set();
 
+    if (oldId) {
+      ids.delete(oldId);
+    }
     if (newId) {
       ids.add(newId);
     }
