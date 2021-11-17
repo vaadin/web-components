@@ -27,5 +27,7 @@ import './style.js';
 export * from './style.js';
 import './typography.js';
 export * from './typography.js';
+import './user-colors.js';
+export * from './user-colors.js';
 import './utility.js';
 export * from './utility.js';

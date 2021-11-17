@@ -61,18 +61,13 @@ export type OverlayEventMap = HTMLElementEventMap & OverlayElementEventMap;
  *
  * The overlay provides `forwardHostProp` when calling
  * `Polymer.Templatize.templatize` for the template, so that the bindings
- * from the parent scope propagate to the content.  You can also pass
- * custom `instanceProps` object using the `instanceProps` property.
+ * from the parent scope propagate to the content.
  *
  * ```html
  * <vaadin-overlay>
  *   <template>Overlay content</template>
  * </vaadin-overlay>
  * ```
- *
- * **NOTE:** when using `instanceProps`: because of the Polymer limitation,
- * every template can only be templatized once, so it is important
- * to set `instanceProps` before the `template` is assigned to the overlay.
  *
  * ### Styling
  *
@@ -135,11 +130,6 @@ declare class OverlayElement extends ThemableMixin(DirMixin(HTMLElement)) {
    * The template of the overlay content.
    */
   template: HTMLTemplateElement | null | undefined;
-
-  /**
-   * Optional argument for `Polymer.Templatize.templatize`.
-   */
-  instanceProps: object | null | undefined;
 
   /**
    * References the content container after the template is stamped.

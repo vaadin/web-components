@@ -19,3 +19,5 @@ import './shadow.js';
 export * from './shadow.js';
 import './typography.js';
 export * from './typography.js';
+import './user-colors.js';
+export * from './user-colors.js';

@@ -51,7 +51,7 @@
     "@vaadin/date-picker": "^23.0.0-alpha0",
     "@vaadin/dialog": "^23.0.0-alpha0",
     "@vaadin/polymer-legacy-adapter": "^23.0.0-alpha0",
-    "@vaadin/testing-helpers": "^0.3.0",
+    "@vaadin/testing-helpers": "^0.3.2",
     "lit": "^2.0.0",
     "sinon": "^9.2.1"
   }

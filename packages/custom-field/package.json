@@ -49,7 +49,7 @@
     "@vaadin/password-field": "^23.0.0-alpha0",
     "@vaadin/polymer-legacy-adapter": "^23.0.0-alpha0",
     "@vaadin/select": "^23.0.0-alpha0",
-    "@vaadin/testing-helpers": "^0.3.0",
+    "@vaadin/testing-helpers": "^0.3.2",
     "@vaadin/text-area": "^23.0.0-alpha0",
     "@vaadin/text-field": "^23.0.0-alpha0",
     "@vaadin/time-picker": "^23.0.0-alpha0",
