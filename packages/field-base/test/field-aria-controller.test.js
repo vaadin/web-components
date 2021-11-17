@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { FieldAriaController } from '../src/field-aria-controller.js';
 
-customElements.define('field-element', class extends ElementMixin(PolymerElement) {});
+customElements.define('field-element', class extends ControllerMixin(PolymerElement) {});
 
 describe('field-aria-controller', () => {
   let element, input, controller;
