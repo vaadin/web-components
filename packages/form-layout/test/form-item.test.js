@@ -175,7 +175,7 @@ describe('form-item', () => {
         expect(item.hasAttribute('required')).to.be.false;
       });
 
-      it(`should remove the required attribute when another input is added`, async () => {
+      it('should remove the required attribute when another input is added', async () => {
         const otherInput = document.createElement('input');
         item.appendChild(otherInput);
         await nextFrame();
