@@ -5,8 +5,8 @@
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FieldAriaController } from './field-aria-controller.js';
 import { LabelMixin } from './label-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
@@ -15,12 +15,12 @@ import { ValidateMixin } from './validate-mixin.js';
  * A mixin to provide common field logic: label, error message and helper text.
  *
  * @polymerMixin
+ * @mixes ControllerMixin
  * @mixes LabelMixin
  * @mixes ValidateMixin
- * @mixes ElementMixin
  */
 export const FieldMixin = (superclass) =>
-  class FieldMixinClass extends ValidateMixin(LabelMixin(ElementMixin(superclass))) {
+  class FieldMixinClass extends ValidateMixin(LabelMixin(ControllerMixin(superclass))) {
     static get properties() {
       return {
         /**
@@ -338,7 +338,7 @@ export const FieldMixin = (superclass) =>
     }
 
     /**
-     * @param {HTMLElement} target
+     * @param {HTMLElement | undefined | null} target
      * @protected
      */
     _ariaTargetChanged(target) {
