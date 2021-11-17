@@ -5,3 +5,4 @@ export * from './mixins/required-field.js';
 export * from './color.js';
 export * from './shadow.js';
 export * from './typography.js';
+export * from './user-colors.js';

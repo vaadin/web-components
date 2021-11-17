@@ -39,7 +39,7 @@
     "@vaadin/checkbox": "^23.0.0-alpha0",
     "@vaadin/grid": "^23.0.0-alpha0",
     "@vaadin/grid-pro": "^23.0.0-alpha0",
-    "@vaadin/testing-helpers": "^0.3.0",
+    "@vaadin/testing-helpers": "^0.3.2",
     "sinon": "^9.2.4"
   }
 }

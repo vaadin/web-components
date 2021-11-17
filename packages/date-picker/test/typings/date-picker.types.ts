@@ -60,7 +60,7 @@ assertType<boolean>(datePicker.invalid);
 assertType<HTMLElement | null | undefined>(datePicker.focusElement);
 assertType<boolean>(datePicker.disabled);
 assertType<boolean>(datePicker.clearButtonVisible);
-assertType<string>(datePicker.errorMessage);
+assertType<string | null | undefined>(datePicker.errorMessage);
 assertType<string>(datePicker.placeholder);
 assertType<string | null | undefined>(datePicker.helperText);
 assertType<boolean>(datePicker.readonly);

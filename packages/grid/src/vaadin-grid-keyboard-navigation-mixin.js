@@ -97,7 +97,9 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @private */
     get __rowFocusMode() {
-      return this.__isRow(this._itemsFocusable);
+      return (
+        this.__isRow(this._itemsFocusable) || this.__isRow(this._headerFocusable) || this.__isRow(this._footerFocusable)
+      );
     }
 
     set __rowFocusMode(value) {
@@ -561,7 +563,10 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       index += step;
       while (index >= 0 && index <= tabOrder.length - 1) {
-        const rowElement = this.__rowFocusMode ? tabOrder[index] : tabOrder[index].parentNode;
+        let rowElement = tabOrder[index];
+        if (rowElement && !this.__rowFocusMode) {
+          rowElement = tabOrder[index].parentNode;
+        }
 
         if (!rowElement || rowElement.hidden) {
           index += step;
@@ -592,9 +597,9 @@ export const KeyboardNavigationMixin = (superClass) =>
           // assigned with a new index since last focus, probably because of
           // scrolling. Focus the row for the stored focused item index instead.
           const columnIndex = Array.from(targetRow.children).indexOf(this._itemsFocusable);
-          const focusedItemRow = Array.from(this.$.items.children).filter(
-            (row) => row.index === this._focusedItemIndex
-          )[0];
+          const focusedItemRow = Array.from(this.$.items.children).find(
+            (row) => !row.hidden && row.index === this._focusedItemIndex
+          );
           if (focusedItemRow) {
             itemsFocusTarget = focusedItemRow.children[columnIndex];
           }
@@ -778,19 +783,27 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /** @protected */
     _resetKeyboardNavigation() {
-      if (!this.__isValidFocusable(this._headerFocusable) && this.$.header.firstElementChild) {
-        this._headerFocusable = Array.from(this.$.header.firstElementChild.children).filter((el) => !el.hidden)[0];
-      }
-
-      if (!this.__isValidFocusable(this._itemsFocusable) && this.$.items.firstElementChild) {
-        const firstVisibleIndexRow = this.__getFirstVisibleItem();
-        if (firstVisibleIndexRow) {
-          this._itemsFocusable = Array.from(firstVisibleIndexRow.children).filter((el) => !el.hidden)[0];
+      // Header / footer
+      ['header', 'footer'].forEach((section) => {
+        if (!this.__isValidFocusable(this[`_${section}Focusable`])) {
+          const firstVisibleRow = [...this.$[section].children].find((row) => row.offsetHeight);
+          const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
+          if (firstVisibleRow && firstVisibleCell) {
+            this[`_${section}Focusable`] = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
+          }
         }
-      }
+      });
 
-      if (!this.__isValidFocusable(this._footerFocusable) && this.$.footer.firstElementChild) {
-        this._footerFocusable = Array.from(this.$.footer.firstElementChild.children).filter((el) => !el.hidden)[0];
+      // Body
+      if (!this.__isValidFocusable(this._itemsFocusable) && this.$.items.firstElementChild) {
+        const firstVisibleRow = this.__getFirstVisibleItem();
+        const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
+
+        if (firstVisibleCell && firstVisibleRow) {
+          // Reset memoized column
+          delete this._focusedColumnOrder;
+          this._itemsFocusable = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
+        }
       }
     }
 

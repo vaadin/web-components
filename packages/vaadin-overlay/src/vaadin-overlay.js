@@ -7,6 +7,7 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { FocusablesHelper } from './vaadin-focusables-helper.js';
@@ -54,18 +55,7 @@ import { FocusablesHelper } from './vaadin-focusables-helper.js';
  *
  * The overlay provides `forwardHostProp` when calling
  * `Polymer.Templatize.templatize` for the template, so that the bindings
- * from the parent scope propagate to the content.  You can also pass
- * custom `instanceProps` object using the `instanceProps` property.
- *
- * ```html
- * <vaadin-overlay>
- *   <template>Overlay content</template>
- * </vaadin-overlay>
- * ```
- *
- * **NOTE:** when using `instanceProps`: because of the Polymer limitation,
- * every template can only be templatized once, so it is important
- * to set `instanceProps` before the `template` is assigned to the overlay.
+ * from the parent scope propagate to the content.
  *
  * ### Styling
  *
@@ -227,13 +217,6 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       },
 
       /**
-       * Optional argument for `Polymer.Templatize.templatize`.
-       */
-      instanceProps: {
-        type: Object
-      },
-
-      /**
        * References the content container after the template is stamped.
        * @type {!HTMLElement | undefined}
        */
@@ -330,9 +313,6 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       _oldTemplate: Object,
 
       /** @private */
-      _oldInstanceProps: Object,
-
-      /** @private */
       _oldRenderer: Object,
 
       /** @private */
@@ -341,7 +321,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   static get observers() {
-    return ['_templateOrRendererChanged(template, renderer, owner, model, instanceProps, opened)'];
+    return ['_templateOrRendererChanged(template, renderer, owner, model, opened)'];
   }
 
   constructor() {
@@ -359,7 +339,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     this._boundIronOverlayCanceledListener = this._ironOverlayCanceled.bind(this);
 
     /* c8 ignore next 3 */
-    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    if (isIOS) {
       this._boundIosResizeListener = () => this._detectIosNavbar();
     }
   }
@@ -824,15 +804,13 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
   /**
    * @param {!HTMLTemplateElement} template
-   * @param {object} instanceProps
    * @protected
    */
-  _stampOverlayTemplate(template, instanceProps) {
+  _stampOverlayTemplate(template) {
     this._removeOldContent();
 
     if (!template._Templatizer) {
       template._Templatizer = templatize(template, this, {
-        instanceProps: instanceProps,
         forwardHostProp: function (prop, value) {
           if (this._instance) {
             this._instance.forwardHostProp(prop, value);
@@ -885,7 +863,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /** @private */
-  _templateOrRendererChanged(template, renderer, owner, model, instanceProps, opened) {
+  _templateOrRendererChanged(template, renderer, owner, model, opened) {
     if (template && renderer) {
       this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
       throw new Error('You should only use either a renderer or a template for overlay content');
@@ -895,8 +873,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     this._oldModel = model;
     this._oldOwner = owner;
 
-    const templateOrInstancePropsChanged = this._oldInstanceProps !== instanceProps || this._oldTemplate !== template;
-    this._oldInstanceProps = instanceProps;
+    const templateChanged = this._oldTemplate !== template;
     this._oldTemplate = template;
 
     const rendererChanged = this._oldRenderer !== renderer;
@@ -914,8 +891,8 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       delete this.content._$litPart$;
     }
 
-    if (template && templateOrInstancePropsChanged) {
-      this._stampOverlayTemplate(template, instanceProps);
+    if (template && templateChanged) {
+      this._stampOverlayTemplate(template);
     } else if (renderer && (rendererChanged || openedChanged || ownerOrModelChanged)) {
       if (opened) {
         this.requestContentUpdate();

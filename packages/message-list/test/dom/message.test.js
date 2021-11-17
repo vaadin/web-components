@@ -29,6 +29,7 @@ describe('vaadin-message', () => {
   });
 
   it('userColorIndex', async () => {
+    document.documentElement.style.setProperty('--vaadin-user-color-2', 'green');
     message.userColorIndex = 2;
     await expect(message).shadowDom.to.equalSnapshot();
   });

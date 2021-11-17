@@ -67,15 +67,6 @@ describe('renderer', () => {
       };
     });
 
-    it('should not call renderer on instanceProps change', () => {
-      const spy = sinon.spy();
-      overlay.opened = true;
-      overlay.renderer = () => spy();
-      spy.resetHistory();
-      overlay.instanceProps = {};
-      expect(spy.called).to.be.false;
-    });
-
     it('should not call renderer on template change', () => {
       const spy = sinon.spy();
       overlay.opened = true;
@@ -160,13 +151,6 @@ describe('renderer', () => {
 
     it('should throw an error when setting a renderer if there is already a template', () => {
       expect(() => (overlay.renderer = () => {})).to.throw(Error);
-    });
-
-    it('should restamp the template on instanceProps change', () => {
-      const lastInstance = overlay._instance;
-      expect(lastInstance).to.be.ok;
-      overlay.instanceProps = {};
-      expect(overlay._instance).to.not.equal(lastInstance);
     });
 
     it('should not restamp the template on model change', () => {

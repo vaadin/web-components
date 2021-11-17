@@ -5,6 +5,7 @@
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isChrome } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
@@ -279,7 +280,6 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
 
   /** @private */
   __fixChromeFocus() {
-    const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
     this.addEventListener('keydown', (e) => {
       if (e.keyCode === 9) {
         // FIXME(yuriy): remove this workaround once this issue is fixed:

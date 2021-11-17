@@ -7,6 +7,7 @@ import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isAndroid, isFirefox, isIOS, isSafari } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
@@ -326,27 +327,25 @@ class Grid extends ElementMixin(
       /** @private */
       _safari: {
         type: Boolean,
-        value: /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+        value: isSafari
       },
 
       /** @private */
       _ios: {
         type: Boolean,
-        value:
-          (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ||
-          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+        value: isIOS
       },
 
       /** @private */
       _firefox: {
         type: Boolean,
-        value: navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+        value: isFirefox
       },
 
       /** @private */
       _android: {
         type: Boolean,
-        value: /android/i.test(navigator.userAgent)
+        value: isAndroid
       },
 
       /** @private */
@@ -512,6 +511,9 @@ class Grid extends ElementMixin(
 
       // If the focused cell's parent row got hidden by the size change, focus the corresponding new cell
       cellCoordinates && cell.parentElement.hidden && this.__focusBodyCell(cellCoordinates);
+
+      // Make sure the body has a tabbable element
+      this._resetKeyboardNavigation();
     }
   }
 
@@ -532,42 +534,72 @@ class Grid extends ElementMixin(
     }
   }
 
+  /** @private */
+  __getIntrinsicWidth(col) {
+    const initialWidth = col.width;
+    const initialFlexGrow = col.flexGrow;
+
+    col.width = 'auto';
+    col.flexGrow = 0;
+
+    // Note: _allCells only contains cells which are currently rendered in DOM
+    const width = col._allCells
+      .filter((cell) => {
+        // Exclude body cells that are out of the visible viewport
+        return !this.$.items.contains(cell) || this._isInViewport(cell.parentElement);
+      })
+      .reduce((width, cell) => {
+        // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
+        return Math.max(width, cell.offsetWidth + 1);
+      }, 0);
+
+    col.flexGrow = initialFlexGrow;
+    col.width = initialWidth;
+
+    return width;
+  }
+
+  /** @private */
+  __getDistributedWidth(col, innerColumn) {
+    if (col == null || col === this) return 0;
+
+    const columnWidth = Math.max(this.__getIntrinsicWidth(col), this.__getDistributedWidth(col.parentElement, col));
+
+    // we're processing a regular grid-column and not a grid-column-group
+    if (!innerColumn) {
+      return columnWidth;
+    }
+
+    // At the end, the width of each vaadin-grid-column-group is determined by the sum of the width of its children.
+    // Here we determine how much space the vaadin-grid-column-group actually needs to render properly and then we distribute that space
+    // to its children, so when we actually do the summation it will be rendered properly.
+    // Check out vaadin-grid-column-group:_updateFlexAndWidth
+    const columnGroup = col;
+    const columnGroupWidth = columnWidth;
+    const sumOfWidthOfAllChildColumns = columnGroup._visibleChildColumns
+      .map((col) => this.__getIntrinsicWidth(col))
+      .reduce((sum, curr) => sum + curr, 0);
+
+    const extraNecessarySpaceForGridColumnGroup = Math.max(0, columnGroupWidth - sumOfWidthOfAllChildColumns);
+
+    // The distribution of the extra necessary space is done according to the intrinsic width of each child column.
+    // Lets say we need 100 pixels of extra space for the grid-column-group to render properly
+    // it has two grid-column children, |100px|300px| in total 400px
+    // the first column gets 25px of the additional space (100/400)*100 = 25
+    // the second column gets the 75px of the additional space (300/400)*100 = 75
+    const proportionOfExtraSpace = this.__getIntrinsicWidth(innerColumn) / sumOfWidthOfAllChildColumns;
+    const shareOfInnerColumnFromNecessaryExtraSpace = proportionOfExtraSpace * extraNecessarySpaceForGridColumnGroup;
+
+    return this.__getIntrinsicWidth(innerColumn) + shareOfInnerColumnFromNecessaryExtraSpace;
+  }
+
   /**
    * @param {!Array<!GridColumn>} cols the columns to auto size based on their content width
    * @private
    */
   _recalculateColumnWidths(cols) {
-    // Note: The `cols.forEach()` loops below could be implemented as a single loop but this has been
-    // split for performance reasons to batch these similar actions [write/read] together to avoid
-    // unnecessary layout trashing.
-
-    // [write] Set automatic width for all cells (breaks column alignment)
     cols.forEach((col) => {
-      col.width = 'auto';
-      col._origFlexGrow = col.flexGrow;
-      col.flexGrow = 0;
-    });
-    // [read] Measure max cell width in each column
-    cols.forEach((col) => {
-      col._currentWidth = 0;
-      // Note: _allCells only contains cells which are currently rendered in DOM
-      col._allCells
-        .filter((c) => {
-          // Exclude body cells that are out of the visible viewport
-          return !this.$.items.contains(c) || this._isInViewport(c.parentElement);
-        })
-        .forEach((c) => {
-          // Add 1px buffer to the offset width to avoid too narrow columns (sub-pixel rendering)
-          const cellWidth = c.offsetWidth + 1;
-          col._currentWidth = Math.max(col._currentWidth, cellWidth);
-        });
-    });
-    // [write] Set column widths to fit widest measured content
-    cols.forEach((col) => {
-      col.width = `${col._currentWidth}px`;
-      col.flexGrow = col._origFlexGrow;
-      col._currentWidth = undefined;
-      col._origFlexGrow = undefined;
+      col.width = `${this.__getDistributedWidth(col)}px`;
     });
   }
 
@@ -791,6 +823,9 @@ class Grid extends ElementMixin(
     if (row.hidden !== !visibleRowCells.length) {
       row.hidden = !visibleRowCells.length;
     }
+
+    // Make sure the section has a tabbable element
+    this._resetKeyboardNavigation();
   }
 
   /** @private */
@@ -858,6 +893,7 @@ class Grid extends ElementMixin(
     this._a11yUpdateHeaderRows();
     this._a11yUpdateFooterRows();
     this.__updateFooterPositioning();
+    this.generateCellClassNames();
   }
 
   __updateFooterPositioning() {

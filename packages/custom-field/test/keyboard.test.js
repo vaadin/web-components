@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, tabKeyDown } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, isChrome, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-custom-field.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -94,7 +94,6 @@ describe('keyboard navigation', () => {
         customField = wrapper.$.field;
       });
 
-      const isChrome = window.chrome || /HeadlessChrome/.test(window.navigator.userAgent);
       // Skip this test on any platform apart from Chrome
       (isChrome ? it : it.skip)('should properly set tabindex on Shift Tab for wrapping slots', async () => {
         for (let i = 2; i > -1; i--) {
