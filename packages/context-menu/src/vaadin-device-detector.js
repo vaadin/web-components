@@ -5,6 +5,7 @@
  */
 import '@polymer/iron-media-query/iron-media-query.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 
 /**
  * Element for internal use only.
@@ -38,7 +39,7 @@ class DeviceDetector extends PolymerElement {
       touch: {
         type: Boolean,
         notify: true,
-        value: () => this._touch()
+        value: isTouch
       },
 
       /**
@@ -49,15 +50,6 @@ class DeviceDetector extends PolymerElement {
         notify: true
       }
     };
-  }
-
-  static _touch() {
-    try {
-      document.createEvent('TouchEvent');
-      return true;
-    } catch (err) {
-      return false;
-    }
   }
 
   _phone(wide, touch) {
