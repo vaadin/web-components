@@ -62,6 +62,10 @@ registerStyles(
       line-height: 1;
       vertical-align: -0.25em;
     }
+
+    [part='file-list'] > *:not(:first-child) > * {
+      border-top: 1px solid var(--lumo-contrast-10pct);
+    }
   `,
   { moduleId: 'lumo-upload' }
 );
@@ -69,10 +73,6 @@ registerStyles(
 const uploadFile = css`
   :host {
     padding: var(--lumo-space-s) 0;
-  }
-
-  :host(:not(:first-child)) {
-    border-top: 1px solid var(--lumo-contrast-10pct);
   }
 
   :host(:focus) {
