@@ -68,10 +68,10 @@ class UploadFile extends ThemableMixin(PolymerElement) {
         }
       </style>
 
-      <li part="row" tabindex="0">
+      <li part="row">
         <div part="info">
-          <div part="done-icon" hidden$="[[!file.complete]]"></div>
-          <div part="warning-icon" hidden$="[[!file.error]]"></div>
+          <div part="done-icon" hidden$="[[!file.complete]]" aria-hidden="true"></div>
+          <div part="warning-icon" hidden$="[[!file.error]]" aria-hidden="true"></div>
 
           <div part="meta">
             <div part="name" id="name">[[file.name]]</div>
