@@ -168,7 +168,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
 
   /** @private */
   _onLabelClick() {
-    const firstContentElementChild = this.__getContentChildNodes()[0];
+    const firstContentElementChild = this.$.contentSlot.assignedElements()[0];
     if (firstContentElementChild) {
       firstContentElementChild.focus();
       firstContentElementChild.click();
@@ -176,8 +176,8 @@ class FormItem extends ThemableMixin(PolymerElement) {
   }
 
   /** @private */
-  __getContentChildNodes() {
-    return this.$.contentSlot.assignedElements();
+  __getValidateFunction(field) {
+    return field.validate || field.checkValidity;
   }
 
   /** @private */
@@ -189,7 +189,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
       delete this.__contentField;
     }
 
-    const contentFields = this.__getContentChildNodes().filter((node) => 'checkValidity' in node);
+    const contentFields = this.$.contentSlot.assignedElements().filter((node) => !!this.__getValidateFunction(node));
     if (contentFields.length === 1) {
       // There's only one child field
       this.__contentField = contentFields[0];
@@ -214,7 +214,10 @@ class FormItem extends ThemableMixin(PolymerElement) {
 
   /** @private */
   __updateInvalidState() {
-    this.toggleAttribute('invalid', this.__contentField.checkValidity() === false);
+    this.toggleAttribute(
+      'invalid',
+      this.__getValidateFunction(this.__contentField).call(this.__contentField) === false
+    );
   }
 }
 
