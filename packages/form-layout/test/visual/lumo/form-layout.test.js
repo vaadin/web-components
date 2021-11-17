@@ -1,3 +1,4 @@
+import { nextFrame } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-form-layout.js';
@@ -203,6 +204,46 @@ describe('form-layout', () => {
 
     it('single column', async () => {
       await visualDiff(element, 'single-column');
+    });
+  });
+
+  describe('required indicator', () => {
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <vaadin-form-layout>
+          <vaadin-form-item>
+            <label slot="label">First Name</label>
+            <input required value="Jane" />
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Last Name</label>
+            <input required />
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Email</label>
+            <input required value="jane.doe@example.com" />
+          </vaadin-form-item>
+        </vaadin-form-layout>
+      `);
+
+      await nextFrame();
+
+      // Make the second input validate so that it becomes invalid
+      element.querySelectorAll('input')[1].dispatchEvent(new CustomEvent('change'));
+    });
+
+    it('required indicator - labels aside', async () => {
+      await visualDiff(element, 'required-indicator-labels-aside');
+    });
+
+    it('required-indicator - labels on top', async () => {
+      element.responsiveSteps = element.responsiveSteps.map((step) => {
+        step.labelsPosition = 'top';
+        return step;
+      });
+      await visualDiff(element, 'required-indicator-labels-on-top');
     });
   });
 });
