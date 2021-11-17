@@ -4,14 +4,23 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-export const isAndroid = /android/i.test(navigator.userAgent);
+const testUserAgent = (regexp) => regexp.test(navigator.userAgent);
 
-export const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+const testPlatform = (regexp) => regexp.test(navigator.platform);
 
-export const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+const testVendor = (regexp) => regexp.test(navigator.vendor);
 
-export const isIOS =
-  (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ||
-  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+export const isAndroid = testUserAgent(/Android/);
 
-export const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+export const isChrome = testUserAgent(/Chrome/) && testVendor(/Google Inc/);
+
+export const isFirefox = testUserAgent(/Firefox/);
+
+// iPadOS 13 lies and says it's a Mac, but we can distinguish by detecting touch support.
+export const isIPad = testPlatform(/^iPad/) || (testPlatform(/^Mac/) && navigator.maxTouchPoints > 1);
+
+export const isIPhone = testPlatform(/^iPhone/);
+
+export const isIOS = isIPhone || isIPad;
+
+export const isSafari = testUserAgent(/^((?!chrome|android).)*safari/i);
