@@ -82,6 +82,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
         [part='file-list'] {
           padding: 0;
           margin: 0;
+          list-style-type: none;
         }
       </style>
 
@@ -103,7 +104,9 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
       <slot name="file-list">
         <ul id="fileList" part="file-list">
           <template is="dom-repeat" items="[[files]]" as="file">
-            <vaadin-upload-file file="[[file]]" i18n="[[i18n]]"></vaadin-upload-file>
+            <li>
+              <vaadin-upload-file tabindex="0" file="[[file]]" i18n="[[i18n]]"></vaadin-upload-file>
+            </li>
           </template>
         </ul>
       </slot>
