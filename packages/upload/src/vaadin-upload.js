@@ -9,6 +9,7 @@ import './vaadin-upload-icons.js';
 import './vaadin-upload-file.js';
 import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -142,13 +143,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
       nodrop: {
         type: Boolean,
         reflectToAttribute: true,
-        value: function () {
-          try {
-            return !!document.createEvent('TouchEvent');
-          } catch (e) {
-            return false;
-          }
-        }
+        value: isTouch
       },
 
       /**

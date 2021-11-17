@@ -10,15 +10,6 @@ import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-res
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
-const TOUCH_DEVICE = (() => {
-  try {
-    document.createEvent('TouchEvent');
-    return true;
-  } catch (e) {
-    return false;
-  }
-})();
-
 /**
  * Element for internal use only.
  *
@@ -47,13 +38,9 @@ export class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, Poly
   static get properties() {
     return {
       /**
-       * True if the device supports touch events.
+       * True if the combo-box has been activate by the user.
+       * The actual opened state depends on whether the dropdown has items.
        */
-      touchDevice: {
-        type: Boolean,
-        value: TOUCH_DEVICE
-      },
-
       opened: Boolean,
 
       /**
