@@ -196,7 +196,7 @@ describe('form-item', () => {
         expect(item.hasAttribute('invalid')).to.be.false;
       });
 
-      it(`should remove the invalid attribute when another input is added`, async () => {
+      it('should remove the invalid attribute when another input is added', async () => {
         item.setAttribute('invalid', '');
         const otherInput = document.createElement('input');
         item.appendChild(otherInput);
