@@ -75,6 +75,15 @@ const uploadFile = css`
     border-top: 1px solid var(--lumo-contrast-10pct);
   }
 
+  :host(:focus) {
+    outline: none;
+  }
+
+  :host(:focus) [part='row'] {
+    border-radius: var(--lumo-border-radius-s);
+    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+  }
+
   [part='row'] {
     display: flex;
     align-items: baseline;
@@ -129,7 +138,6 @@ const uploadFile = css`
     cursor: var(--lumo-clickable-cursor);
   }
 
-  [part='row']:focus,
   [part$='button']:focus {
     outline: none;
     border-radius: var(--lumo-border-radius-s);
