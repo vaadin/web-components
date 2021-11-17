@@ -6,18 +6,14 @@
 import '../custom_typings/vaadin-usage-statistics.js';
 import '../custom_typings/vaadin.js';
 import { Constructor } from '@open-wc/dedupe-mixin';
-import { ReactiveControllerHost } from 'lit';
 import { DirMixinClass } from './dir-mixin.js';
 
 /**
- * A mixin to provide common logic for Vaadin components.
+ * A mixin providing common logic for Vaadin components.
  */
 export declare function ElementMixin<T extends Constructor<HTMLElement>>(
   superclass: T
-): T &
-  Constructor<DirMixinClass> &
-  Constructor<ElementMixinClass> &
-  Pick<ReactiveControllerHost, 'addController' | 'removeController'>;
+): T & Constructor<DirMixinClass> & Constructor<ElementMixinClass>;
 
 export declare class ElementMixinClass {
   static version: string;
