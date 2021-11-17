@@ -6,7 +6,6 @@
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-combo-box-dropdown.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
@@ -147,7 +146,6 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
  * @extends HTMLElement
- * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes InputControlMixin
@@ -156,7 +154,7 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * @mixes ComboBoxMixin
  */
 class ComboBox extends ComboBoxDataProviderMixin(
-  ComboBoxMixin(PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))))))
+  ComboBoxMixin(PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))))
 ) {
   static get is() {
     return 'vaadin-combo-box';
