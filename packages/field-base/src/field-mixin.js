@@ -286,7 +286,7 @@ export const FieldMixin = (superclass) =>
 
     /**
      * @param {boolean} invalid
-     * @param {string} errorMessage
+     * @param {string | null | undefined} errorMessage
      * @protected
      */
     _updateErrorMessage(invalid, errorMessage) {

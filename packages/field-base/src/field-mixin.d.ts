@@ -39,15 +39,19 @@ export declare class FieldMixinClass {
    */
   errorMessage: string | null | undefined;
 
-  protected _ariaTargetChanged(target: HTMLElement): void;
-
   protected readonly _errorNode: HTMLElement;
 
   protected readonly _helperNode?: HTMLElement;
 
   protected _helperTextChanged(helperText: string | null | undefined): void;
 
-  protected _updateAriaAttribute(target: HTMLElement, invalid: boolean, helperId: string): void;
+  protected _ariaTargetChanged(target: HTMLElement): void;
 
-  protected _updateAriaRequiredAttribute(target: HTMLElement, required: boolean): void;
+  protected _updateErrorMessage(invalid: boolean, errorMessage: string | null | undefined): void;
+
+  protected _requiredChanged(required: boolean): void;
+
+  protected _helperIdChanged(helperId: string): void;
+
+  protected _invalidChanged(invalid: boolean): void;
 }
