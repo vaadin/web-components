@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload</title>
+
+    <script type="module">
+      import '@vaadin/upload';
+
+      const upload = document.querySelector('vaadin-upload');
+      upload.files = [
+        { name: 'Annual Report.docx', complete: true },
+        {
+          name: 'Workflow.pdf',
+          progress: 60,
+          status: '19.7 MB: 60% (remaining time: 00:12:34)'
+        },
+        { name: 'Financials.xlsx', error: 'An error occurred' }
+      ];
+    </script>
+  </head>
+
+  <body>
+    <vaadin-upload target="/api/fileupload"></vaadin-upload>
+  </body>
+</html>

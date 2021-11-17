@@ -68,10 +68,10 @@ class UploadFile extends ThemableMixin(PolymerElement) {
         }
       </style>
 
-      <li part="row" tabindex="0">
+      <div part="row">
         <div part="info">
-          <div part="done-icon" hidden$="[[!file.complete]]"></div>
-          <div part="warning-icon" hidden$="[[!file.error]]"></div>
+          <div part="done-icon" hidden$="[[!file.complete]]" aria-hidden="true"></div>
+          <div part="warning-icon" hidden$="[[!file.error]]" aria-hidden="true"></div>
 
           <div part="meta">
             <div part="name" id="name">[[file.name]]</div>
@@ -107,7 +107,7 @@ class UploadFile extends ThemableMixin(PolymerElement) {
             aria-describedby="name"
           ></button>
         </div>
-      </li>
+      </div>
 
       <vaadin-progress-bar
         part="progress"
