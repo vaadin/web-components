@@ -189,14 +189,6 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
     };
   }
 
-  /**
-   * Attribute used by `FieldMixin` to set accessible name.
-   * @protected
-   */
-  get _ariaAttr() {
-    return 'aria-labelledby';
-  }
-
   /** @protected */
   connectedCallback() {
     super.connectedCallback();

@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
-import { DelegateStateMixinClass } from './delegate-state-mixin.js';
+import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import { LabelMixinClass } from './label-mixin.js';
 import { ValidateMixinClass } from './validate-mixin.js';
 
@@ -14,7 +14,7 @@ import { ValidateMixinClass } from './validate-mixin.js';
 export declare function FieldMixin<T extends Constructor<HTMLElement>>(
   superclass: T
 ): T &
-  Constructor<DelegateStateMixinClass> &
+  Constructor<ControllerMixinClass> &
   Constructor<FieldMixinClass> &
   Constructor<LabelMixinClass> &
   Constructor<ValidateMixinClass>;
@@ -39,17 +39,19 @@ export declare class FieldMixinClass {
    */
   errorMessage: string | null | undefined;
 
-  protected readonly _ariaAttr: 'aria-labelledby' | 'aria-describedby';
-
-  protected _ariaTargetChanged(target: HTMLElement): void;
-
   protected readonly _errorNode: HTMLElement;
 
   protected readonly _helperNode?: HTMLElement;
 
   protected _helperTextChanged(helperText: string | null | undefined): void;
 
-  protected _updateAriaAttribute(target: HTMLElement, invalid: boolean, helperId: string): void;
+  protected _ariaTargetChanged(target: HTMLElement): void;
 
-  protected _updateAriaRequiredAttribute(target: HTMLElement, required: boolean): void;
+  protected _updateErrorMessage(invalid: boolean, errorMessage: string | null | undefined): void;
+
+  protected _requiredChanged(required: boolean): void;
+
+  protected _helperIdChanged(helperId: string): void;
+
+  protected _invalidChanged(invalid: boolean): void;
 }
