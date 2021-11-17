@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -360,7 +361,7 @@ export const ComboBoxMixin = (subclass) =>
         this._openedWithFocusRing = this.hasAttribute('focus-ring');
         // For touch devices, we don't want to popup virtual keyboard
         // unless input element is explicitly focused by the user.
-        if (!this.hasAttribute('focused') && !this.$.dropdown.touchDevice) {
+        if (!this.hasAttribute('focused') && !isTouch) {
           this.focus();
         }
       } else {
@@ -609,7 +610,7 @@ export const ComboBoxMixin = (subclass) =>
         toggleElement.addEventListener('mousedown', (e) => e.preventDefault());
         // Unfocus previously focused element if focus is not inside combo box (on touch devices)
         toggleElement.addEventListener('click', () => {
-          if (this.$.dropdown.touchDevice && !this.hasAttribute('focused')) {
+          if (isTouch && !this.hasAttribute('focused')) {
             document.activeElement.blur();
           }
         });
