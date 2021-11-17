@@ -338,7 +338,7 @@ export const FieldMixin = (superclass) =>
     }
 
     /**
-     * @param {HTMLElement | undefined | null} target
+     * @param {HTMLElement | null | undefined} target
      * @protected
      */
     _ariaTargetChanged(target) {
