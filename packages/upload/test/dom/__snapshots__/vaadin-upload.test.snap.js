@@ -36,18 +36,24 @@ snapshots["vaadin-upload shadow default"] =
     id="fileList"
     part="file-list"
   >
-    <vaadin-upload-file
-      complete=""
-      tabindex="0"
-    >
-    </vaadin-upload-file>
-    <vaadin-upload-file tabindex="0">
-    </vaadin-upload-file>
-    <vaadin-upload-file
-      error=""
-      tabindex="0"
-    >
-    </vaadin-upload-file>
+    <li>
+      <vaadin-upload-file
+        complete=""
+        tabindex="0"
+      >
+      </vaadin-upload-file>
+    </li>
+    <li>
+      <vaadin-upload-file tabindex="0">
+      </vaadin-upload-file>
+    </li>
+    <li>
+      <vaadin-upload-file
+        error=""
+        tabindex="0"
+      >
+      </vaadin-upload-file>
+    </li>
     <dom-repeat
       as="file"
       style="display: none;"

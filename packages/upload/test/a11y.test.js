@@ -26,7 +26,7 @@ describe('a11y', () => {
   });
 
   describe('<vaadin-upload-file>', () => {
-    let uploadFileElement, i18n, button, name, row;
+    let uploadFileElement, i18n, button, name;
 
     beforeEach(() => {
       uploadFileElement = fixtureSync(`<vaadin-upload-file></vaadin-upload-file>`);
@@ -40,14 +40,7 @@ describe('a11y', () => {
       uploadFileElement.i18n = i18n;
       uploadFileElement.file = FAKE_FILE;
 
-      row = uploadFileElement.shadowRoot.querySelector('[part=row]');
       name = uploadFileElement.shadowRoot.querySelector('[part=name]');
-    });
-
-    describe('row', () => {
-      it('should be a <li> element', () => {
-        expect(row).to.be.an.instanceOf(HTMLLIElement);
-      });
     });
 
     describe('start button', () => {

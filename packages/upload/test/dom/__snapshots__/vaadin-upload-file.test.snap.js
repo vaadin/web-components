@@ -2,7 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-upload-file shadow default"] = 
-`<li part="row">
+`<div part="row">
   <div part="info">
     <div
       aria-hidden="true"
@@ -62,7 +62,7 @@ snapshots["vaadin-upload-file shadow default"] =
     >
     </button>
   </div>
-</li>
+</div>
 <vaadin-progress-bar
   aria-valuemax="1"
   aria-valuemin="0"
