@@ -5,6 +5,7 @@
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import { html, PolymerElement } from '@polymer/polymer';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
@@ -44,12 +45,15 @@ registerStyles('vaadin-number-field', inputFieldShared, { moduleId: 'vaadin-numb
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes InputFieldMixin
  * @mixes SlotStylesMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+export class NumberField extends InputFieldMixin(
+  SlotStylesMixin(ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))))
+) {
   static get is() {
     return 'vaadin-number-field';
   }

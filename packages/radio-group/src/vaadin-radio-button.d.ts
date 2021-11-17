@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
@@ -57,7 +58,7 @@ export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonCus
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  */
 declare class RadioButton extends SlotLabelMixin(
-  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(HTMLElement)))))
+  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement))))))
 ) {
   /**
    * The name of the radio button.

@@ -2,14 +2,14 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { FieldMixin } from '../src/field-mixin.js';
 import { InputController } from '../src/input-controller.js';
 import { InputMixin } from '../src/input-mixin.js';
 
 customElements.define(
   'field-mixin-element',
-  class extends FieldMixin(InputMixin(ElementMixin(PolymerElement))) {
+  class extends FieldMixin(InputMixin(ControllerMixin(PolymerElement))) {
     static get template() {
       return html`
         <style>

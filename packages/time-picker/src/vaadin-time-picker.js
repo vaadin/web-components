@@ -6,6 +6,7 @@
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-time-picker-combo-box.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
@@ -66,12 +67,13 @@ registerStyles('vaadin-time-picker', inputFieldShared, { moduleId: 'vaadin-time-
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes InputControlMixin
  * @mixes PatternMixin
  */
-class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))))) {
   static get is() {
     return 'vaadin-time-picker';
   }
