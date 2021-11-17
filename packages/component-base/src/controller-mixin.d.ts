@@ -7,7 +7,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 
 /**
- * A mixin to provide common logic for Vaadin components.
+ * A mixin for connecting controllers to the element.
  */
 export declare function ControllerMixin<T extends Constructor<HTMLElement>>(
   superclass: T
