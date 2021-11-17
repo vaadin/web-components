@@ -2,13 +2,12 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { InputController } from '../src/input-controller.js';
 import { InputFieldMixin } from '../src/input-field-mixin.js';
 
 customElements.define(
   'input-field-mixin-element',
-  class extends InputFieldMixin(ControllerMixin(PolymerElement)) {
+  class extends InputFieldMixin(PolymerElement) {
     static get template() {
       return html`
         <div part="label">

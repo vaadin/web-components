@@ -224,15 +224,6 @@ class RadioGroup extends FieldMixin(
   }
 
   /**
-   * @return {string}
-   * @override
-   * @protected
-   */
-  get _ariaAttr() {
-    return 'aria-labelledby';
-  }
-
-  /**
    * Override method inherited from `KeyboardMixin`
    * to implement the custom keyboard navigation as a replacement for the native one
    * in order for the navigation to work the same way across different browsers.

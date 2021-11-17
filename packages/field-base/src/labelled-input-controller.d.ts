@@ -6,6 +6,6 @@
 import { ReactiveController } from 'lit';
 
 /**
- * A controller to link an input element with a slotted `<label>` element.
+ * A controller for linking a `<label>` element with an `<input>` element.
  */
-export class AriaLabelController implements ReactiveController {}
+export class LabelledInputController implements ReactiveController {}

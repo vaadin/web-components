@@ -3,7 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -126,9 +125,7 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class DatePicker extends DatePickerMixin(
-  InputControlMixin(ThemableMixin(ElementMixin(ControllerMixin(HTMLElement))))
-) {
+declare class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   addEventListener<K extends keyof DatePickerEventMap>(
     type: K,
     listener: (this: DatePicker, ev: DatePickerEventMap[K]) => void,

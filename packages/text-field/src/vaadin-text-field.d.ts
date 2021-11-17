@@ -3,7 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
@@ -89,9 +88,7 @@ export interface TextFieldEventMap extends HTMLElementEventMap, TextFieldCustomE
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class TextField extends PatternMixin(
-  InputFieldMixin(ThemableMixin(ElementMixin(ControllerMixin(HTMLElement))))
-) {
+declare class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   /**
    * Maximum number of characters (in Unicode code points) that the user can enter.
    */

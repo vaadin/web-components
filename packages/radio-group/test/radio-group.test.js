@@ -533,7 +533,7 @@ describe('radio-group', () => {
     let error, helper, label;
 
     beforeEach(() => {
-      group = fixtureSync('<vaadin-radio-group helper-text="Choose one"></vaadin-radio-group>');
+      group = fixtureSync('<vaadin-radio-group helper-text="Choose one" label="Label"></vaadin-radio-group>');
       error = group.querySelector('[slot=error-message]');
       helper = group.querySelector('[slot=helper]');
       label = group.querySelector('[slot=label]');
