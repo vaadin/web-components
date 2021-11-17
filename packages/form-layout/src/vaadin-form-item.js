@@ -163,6 +163,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
   constructor() {
     super();
     this.__updateInvalidState = this.__updateInvalidState.bind(this);
+    this.__contentFieldObserver = new MutationObserver(() => this.__updateRequiredState(this.__contentField.required));
   }
 
   /** @private */
@@ -184,7 +185,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
     if (this.__contentField) {
       // Discard the old field
       this.__updateRequiredState(false);
-      this.__contentField.__vaadinFormItemObserver.disconnect();
+      this.__contentFieldObserver.disconnect();
       delete this.__contentField;
     }
 
@@ -193,10 +194,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
       // There's only one child field
       this.__contentField = contentFields[0];
       this.__updateRequiredState(this.__contentField.required);
-      this.__contentField.__vaadinFormItemObserver = new MutationObserver(() =>
-        this.__updateRequiredState(this.__contentField.required)
-      );
-      this.__contentField.__vaadinFormItemObserver.observe(this.__contentField, { attributes: true });
+      this.__contentFieldObserver.observe(this.__contentField, { attributes: true });
     }
   }
 
