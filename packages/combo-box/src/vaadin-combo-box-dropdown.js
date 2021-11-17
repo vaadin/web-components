@@ -9,15 +9,7 @@ import './vaadin-combo-box-scroller.js';
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-
-const TOUCH_DEVICE = (() => {
-  try {
-    document.createEvent('TouchEvent');
-    return true;
-  } catch (e) {
-    return false;
-  }
-})();
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 
 /**
  * Element for internal use only.
@@ -51,7 +43,7 @@ export class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, Poly
        */
       touchDevice: {
         type: Boolean,
-        value: TOUCH_DEVICE
+        value: isTouch
       },
 
       opened: Boolean,

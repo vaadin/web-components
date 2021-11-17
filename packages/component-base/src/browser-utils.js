@@ -24,3 +24,12 @@ export const isIPhone = testPlatform(/^iPhone/);
 export const isIOS = isIPhone || isIPad;
 
 export const isSafari = testUserAgent(/^((?!chrome|android).)*safari/i);
+
+export const isTouch = (() => {
+  try {
+    document.createEvent('TouchEvent');
+    return true;
+  } catch (e) {
+    return false;
+  }
+})();
