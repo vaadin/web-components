@@ -12,6 +12,11 @@ export class FieldAriaController {
   constructor(host: HTMLElement);
 
   /**
+   * The controller host element.
+   */
+  host: HTMLElement;
+
+  /**
    * Sets a target element to which ARIA attributes are added.
    */
   setTarget(target: HTMLElement): void;
