@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
@@ -225,7 +226,8 @@ interface ComboBox<TItem = ComboBoxDefaultItem>
     PatternMixinClass,
     InputControlMixinClass,
     ThemableMixinClass,
-    ElementMixinClass {}
+    ElementMixinClass,
+    ControllerMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {
