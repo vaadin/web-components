@@ -177,7 +177,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
 
   /** @private */
   __getContentChildNodes() {
-    return [...this.$.contentSlot.assignedNodes()].filter((e) => e.nodeType === Node.ELEMENT_NODE);
+    return this.$.contentSlot.assignedElements();
   }
 
   /** @private */
