@@ -1,6 +1,7 @@
 import '../../vaadin-radio-button.js';
 import '../../vaadin-radio-group.js';
 import { ActiveMixinClass } from '@vaadin/component-base/src/active-mixin.js';
+import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
@@ -25,6 +26,7 @@ assertType<string>(radio.name);
 assertType<string>(radio.value);
 
 // Radio mixins
+assertType<ControllerMixinClass>(radio);
 assertType<ActiveMixinClass>(radio);
 assertType<DisabledMixinClass>(radio);
 assertType<ElementMixinClass>(radio);

@@ -1,4 +1,5 @@
 import '../../vaadin-date-picker.js';
+import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
@@ -70,6 +71,7 @@ assertType<string>(datePicker.name);
 assertType<string | null | undefined>(datePicker.initialPosition);
 
 // DatePicker mixins
+assertType<ControllerMixinClass>(datePicker);
 assertType<ElementMixinClass>(datePicker);
 assertType<FocusMixinClass>(datePicker);
 assertType<DisabledMixinClass>(datePicker);

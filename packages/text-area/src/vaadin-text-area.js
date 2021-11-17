@@ -5,6 +5,7 @@
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import { html, PolymerElement } from '@polymer/polymer';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
@@ -55,12 +56,15 @@ registerStyles('vaadin-text-area', inputFieldShared, { moduleId: 'vaadin-text-ar
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes InputFieldMixin
  * @mixes ElementMixin
  * @mixes PatternMixin
  * @mixes ThemableMixin
  */
-export class TextArea extends PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+export class TextArea extends PatternMixin(
+  InputFieldMixin(ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))))
+) {
   static get is() {
     return 'vaadin-text-area';
   }
