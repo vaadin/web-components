@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-upload.js';
 import { createFile } from './common.js';
 
