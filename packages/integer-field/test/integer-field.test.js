@@ -193,11 +193,6 @@ describe('integer-field', () => {
       expect(integerField.step).to.eql(initialStep);
     });
 
-    it('should allow setting positive integer as string', () => {
-      integerField.step = '5';
-      expect(integerField.step).to.eql(5);
-    });
-
     describe('invalid step', () => {
       beforeEach(() => {
         sinon.stub(console, 'warn');

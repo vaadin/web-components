@@ -59,6 +59,10 @@ export class IntegerField extends NumberField {
     };
   }
 
+  static get observers() {
+    return ['_stepChanged(step)'];
+  }
+
   /**
    * Override an observer from `InputMixin` to clear the value
    * when trying to type invalid characters.
@@ -77,14 +81,11 @@ export class IntegerField extends NumberField {
   }
 
   /**
-   * Override an observer from `NumberField` to reset the step
-   * property when an invalid step is set.
+   * Reset the step property when an invalid step is set.
    * @param {number} newVal
-   * @param {number | undefined} oldVal
-   * @protected
-   * @override
+   * @private
    */
-  _stepChanged(newVal, oldVal) {
+  _stepChanged(newVal) {
     if (!this.__hasOnlyDigits(newVal)) {
       console.warn(
         `Trying to set invalid step size "${newVal}", which is not a positive integer, to <vaadin-integer-field>. Resetting the default value 1.`
@@ -92,8 +93,6 @@ export class IntegerField extends NumberField {
       this.step = 1;
       return;
     }
-
-    super._stepChanged(newVal, oldVal);
   }
 
   /** @private */
