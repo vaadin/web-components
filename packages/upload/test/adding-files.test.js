@@ -41,13 +41,10 @@ describe('file list', () => {
     beforeEach(() => {
       addFiles = upload.$.addFiles;
       input = upload.$.fileInput;
-      // This test suite checks if the 'click' event is synchronously dispatched
-      // on the hidden file input when user clicks Add Files button. The
-      // file dialog is actually not getting opened during testing.
-
-      // While the mock Add Files button click event fired by this test is not
-      // trusted and therefore it should generate a non-trusted click event on
-      // the hidden file input, some browsers (Firefox) can still open dialog.
+      // While the synthetic "Add Files" button click event is not trusted and
+      // it should generate a non-trusted click event on the hidden file input,
+      // at the time of writing Chrome and Firefox still open the file dialog.
+      // Use stub calling `preventDefault` to prevent dialog from opening.
       clickSpy = sinon.stub().callsFake((e) => e.preventDefault());
       input.addEventListener('click', clickSpy);
     });
