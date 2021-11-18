@@ -127,7 +127,7 @@ describe('vaadin-template-renderer', () => {
 
     click(button);
 
-    expect(spy.getCall(0).args[0].model).to.be.ok;
+    expect(spy.getCall(0).args[0].model).to.equal(component.$.content.__templateInstance);
   });
 
   it('should re-render the template instance when changing a parent property', async () => {
