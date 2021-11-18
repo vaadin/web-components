@@ -448,7 +448,7 @@ describe('vaadin-checkbox-group', () => {
     let error, helper, label;
 
     beforeEach(() => {
-      group = fixtureSync('<vaadin-checkbox-group helper-text="Choose one"></vaadin-checkbox-group>');
+      group = fixtureSync('<vaadin-checkbox-group helper-text="Choose one" label="Label"></vaadin-checkbox-group>');
       error = group.querySelector('[slot=error-message]');
       helper = group.querySelector('[slot=helper]');
       label = group.querySelector('[slot=label]');
