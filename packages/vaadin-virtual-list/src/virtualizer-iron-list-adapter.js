@@ -268,6 +268,8 @@ export class IronListAdapter {
       if (!el.hidden) {
         el.__virtualIndex = vidx + (this._vidxOffset || 0);
         this.__updateElement(el, el.__virtualIndex);
+      } else {
+        delete el.__lastUpdatedIndex;
       }
     }, itemSet);
   }
