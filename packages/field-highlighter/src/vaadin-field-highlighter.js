@@ -65,20 +65,20 @@ export class FieldHighlighterController {
     }
   }
 
-  constructor(field) {
-    this.host = field;
+  constructor(host) {
+    this.host = host;
 
     /**
      * An object representing a user currently editing the field.
-     * The user object can have the following properties:
+     * The user object has the following structure:
      *
      * ```js
-     * Array<{
+     * {
      *   id: number,
      *   name: string;
      *   colorIndex: number;
      *   fieldIndex: number;
-     * }>
+     * }
      * ```
      *
      * @type {FieldHighlighterUser | null}
@@ -86,7 +86,7 @@ export class FieldHighlighterController {
     this.user = null;
 
     /**
-     * A list of users who focused the field.
+     * A list of users who have focused the field.
      * @type {FieldHighlighterUsers}
      */
     this.users = [];
@@ -162,8 +162,6 @@ export class FieldHighlighterController {
   }
 }
 
-const fields = new WeakMap();
-
 /**
  * A web component for implementing real-time collaboration features
  * by configuring a reactive controller for a field instance.
@@ -172,24 +170,23 @@ const fields = new WeakMap();
  */
 export class FieldHighlighter extends HTMLElement {
   static init(field) {
-    if (!fields.has(field)) {
+    if (!field._highlighterController) {
       // Create instance
       const instance = new FieldHighlighterController(field);
 
       // Set attribute for styling
       field.setAttribute('has-highlighter', '');
 
-      // Store instance
-      fields.set(field, instance);
-
       // Create observer
       instance.observer = initFieldObserver(field);
 
       // Attach controller
       field.addController(instance);
+
+      field._highlighterController = instance;
     }
 
-    return fields.get(field);
+    return field._highlighterController;
   }
 
   static addUser(field, user) {

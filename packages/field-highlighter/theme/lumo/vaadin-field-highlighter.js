@@ -6,5 +6,4 @@
 import '@vaadin/vaadin-lumo-styles/user-colors.js';
 import './vaadin-field-outline-styles.js';
 import './vaadin-user-tags.js';
-
-export * from '../../src/vaadin-field-highlighter.js';
+import '../../src/vaadin-field-highlighter.js';

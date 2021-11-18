@@ -27,8 +27,6 @@ const listenOnce = (elem, type) => {
  * An element used internally by `<vaadin-field-highlighter>`. Not intended to be used separately.
  *
  * @extends HTMLElement
- * @mixes DirMixin
- * @mixes ThemableMixin
  * @private
  */
 export class UserTags extends PolymerElement {

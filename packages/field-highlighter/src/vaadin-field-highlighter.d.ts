@@ -20,23 +20,30 @@ export interface FieldHighlighterUser {
  * See https://vaadin.com/collaboration for Collaboration Engine documentation.
  */
 declare class FieldHighlighterController implements ReactiveController {
+  constructor(host: HTMLElement);
+
+  /**
+   * The controller host element.
+   */
+  host: HTMLElement;
+
   /**
    * An object representing a user currently editing the field.
-   * The user object can have the following properties:
+   * The user object has the following structure:
    *
-   * ```js
-   * Array<{
+   * ```ts
+   * {
    *   id: number,
    *   name: string;
    *   colorIndex: number;
-   *   fieldIndex: number;
-   * }>
+   *   fieldIndex?: number;
+   * }
    * ```
    */
   user: FieldHighlighterUser | null;
 
   /**
-   * A list of users who focused the field.
+   * A list of users who have focused the field.
    */
   users: FieldHighlighterUser[];
 
