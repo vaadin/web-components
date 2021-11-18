@@ -10,9 +10,9 @@ import './vaadin-date-picker-overlay-content.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
+import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
@@ -212,7 +212,7 @@ class DatePicker extends DatePickerMixin(
         this.ariaTarget = input;
       })
     );
-    this.addController(new AriaLabelController(this, this.inputElement, this._labelNode));
+    this.addController(new LabelledInputController(this.inputElement, this._labelNode));
   }
 
   /** @private */

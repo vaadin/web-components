@@ -1,6 +1,13 @@
+/**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
+
 export const _detectIosNavbar = function () {
   /* c8 ignore next 11 */
-  if (window.navigator.userAgent.match(/iPhone|iPad/i)) {
+  if (isIOS) {
     const innerHeight = window.innerHeight;
     const innerWidth = window.innerWidth;
     const landscape = innerWidth > innerHeight;

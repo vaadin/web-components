@@ -5,11 +5,12 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
+import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { SlotLabelMixin } from '@vaadin/field-base/src/slot-label-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -46,6 +47,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
  * @mixes ActiveMixin
@@ -54,7 +56,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes SlotLabelMixin
  */
 class Checkbox extends SlotLabelMixin(
-  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(PolymerElement)))))
+  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))))))
 ) {
   static get is() {
     return 'vaadin-checkbox';
@@ -174,7 +176,7 @@ class Checkbox extends SlotLabelMixin(
         this.stateTarget = input;
       })
     );
-    this.addController(new AriaLabelController(this, this.inputElement, this._labelNode));
+    this.addController(new LabelledInputController(this.inputElement, this._labelNode));
   }
 
   /**

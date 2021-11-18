@@ -106,8 +106,11 @@ registerStyles(
       padding: 8px;
     }
 
-    [part='row']:focus {
+    :host(:focus) {
       outline: none;
+    }
+
+    :host(:focus) [part='row'] {
       background-color: var(--material-divider-color);
     }
 

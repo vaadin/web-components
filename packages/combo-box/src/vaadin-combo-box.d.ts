@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
@@ -62,76 +63,59 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
 }
 
 /**
- * `<vaadin-combo-box>` is a combo box element combining a dropdown list with an
- * input field for filtering the list of items. If you want to replace the default
- * input field with a custom implementation, you should use the
- * [`<vaadin-combo-box-light>`](#/elements/vaadin-combo-box-light) element.
- *
- * Items in the dropdown list must be provided as a list of `String` values.
- * Defining the items is done using the `items` property, which can be assigned
- * with data-binding, using an attribute or directly with the JavaScript property.
+ * `<vaadin-combo-box>` is a web component for choosing a value from a filterable list of options
+ * presented in a dropdown overlay. The options can be provided as a list of strings or objects
+ * by setting [`items`](#/elements/vaadin-combo-box#property-items) property on the element.
  *
  * ```html
- * <vaadin-combo-box
- *     label="Fruit"
- *     items="[[data]]">
- * </vaadin-combo-box>
+ * <vaadin-combo-box id="combo-box"></vaadin-combo-box>
  * ```
  *
  * ```js
- * combobox.items = ['apple', 'orange', 'banana'];
+ * document.querySelector('#combo-box').items = ['apple', 'orange', 'banana'];
  * ```
  *
  * When the selected `value` is changed, a `value-changed` event is triggered.
  *
  * ### Item rendering
  *
- * `<vaadin-combo-box>` supports using custom renderer callback function for defining the
- * content of `<vaadin-combo-box-item>`.
+ * To customize the content of the `<vaadin-combo-box-item>` elements placed in the dropdown, use
+ * [`renderer`](#/elements/vaadin-combo-box#property-renderer) property which accepts a function.
+ * The renderer function is called with `root`, `comboBox`, and `model` as arguments.
  *
- * The renderer function provides `root`, `comboBox`, `model` arguments when applicable.
- * Generate DOM content by using `model` object properties if needed, append it to the `root`
- * element and control the state of the host element by accessing `comboBox`. Before generating new
- * content, users are able to check if there is already content in `root` for reusing it.
+ * Generate DOM content by using `model` object properties if needed, and append it to the `root`
+ * element. The `comboBox` reference is provided to access the combo-box element state. Do not
+ * set combo-box properties in a `renderer` function.
  *
- * ```html
- * <vaadin-combo-box id="combo-box"></vaadin-combo-box>
- * ```
  * ```js
  * const comboBox = document.querySelector('#combo-box');
  * comboBox.items = [{'label': 'Hydrogen', 'value': 'H'}];
- * comboBox.renderer = function(root, comboBox, model) {
- *   root.innerHTML = model.index + ': ' +
- *                    model.item.label + ' ' +
- *                    '<b>' + model.item.value + '</b>';
+ * comboBox.renderer = (root, comboBox, model) => {
+ *   const item = model.item;
+ *   root.innerHTML = `${model.index}: ${item.label} <b>${item.value}</b>`;
  * };
  * ```
  *
  * Renderer is called on the opening of the combo-box and each time the related model is updated.
- * DOM generated during the renderer call can be reused
- * in the next renderer call and will be provided with the `root` argument.
- * On first call it will be empty.
+ * Before creating new content, it is recommended to check if there is already an existing DOM
+ * element in `root` from a previous renderer call for reusing it. Even though combo-box uses
+ * infinite scrolling, reducing DOM operations might improve performance.
  *
  * The following properties are available in the `model` argument:
  *
- * Property name | Type | Description
- * --------------|------|------------
- * `index`| Number | Index of the item in the `items` array
- * `item` | String or Object | The item reference
- * `selected` | Boolean | True when item is selected
- * `focused` | Boolean | True when item is focused
+ * Property   | Type             | Description
+ * -----------|------------------|-------------
+ * `index`    | Number           | Index of the item in the `items` array
+ * `item`     | String or Object | The item reference
+ * `selected` | Boolean          | True when item is selected
+ * `focused`  | Boolean          | True when item is focused
  *
  * ### Lazy Loading with Function Data Provider
  *
- * In addition to assigning an array to the items property, you can alternatively
- * provide the `<vaadin-combo-box>` data through the
+ * In addition to assigning an array to the items property, you can alternatively use the
  * [`dataProvider`](#/elements/vaadin-combo-box#property-dataProvider) function property.
  * The `<vaadin-combo-box>` calls this function lazily, only when it needs more data
  * to be displayed.
- *
- * See the [`dataProvider`](#/elements/vaadin-combo-box#property-dataProvider) in
- * the API reference below for the detailed data provider arguments description,
- * and the “Lazy Loading“ example on “Basics” page in the demos.
  *
  * __Note that when using function data providers, the total number of items
  * needs to be set manually. The total number of items can be returned
@@ -225,7 +209,8 @@ interface ComboBox<TItem = ComboBoxDefaultItem>
     PatternMixinClass,
     InputControlMixinClass,
     ThemableMixinClass,
-    ElementMixinClass {}
+    ElementMixinClass,
+    ControllerMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {

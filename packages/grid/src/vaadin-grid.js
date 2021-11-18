@@ -7,6 +7,7 @@ import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isAndroid, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
@@ -27,15 +28,6 @@ import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
 import { SelectionMixin } from './vaadin-grid-selection-mixin.js';
 import { SortMixin } from './vaadin-grid-sort-mixin.js';
 import { StylingMixin } from './vaadin-grid-styling-mixin.js';
-
-const TOUCH_DEVICE = (() => {
-  try {
-    document.createEvent('TouchEvent');
-    return true;
-  } catch (e) {
-    return false;
-  }
-})();
 
 /**
  * `<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the
@@ -326,33 +318,31 @@ class Grid extends ElementMixin(
       /** @private */
       _safari: {
         type: Boolean,
-        value: /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+        value: isSafari
       },
 
       /** @private */
       _ios: {
         type: Boolean,
-        value:
-          (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ||
-          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+        value: isIOS
       },
 
       /** @private */
       _firefox: {
         type: Boolean,
-        value: navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+        value: isFirefox
       },
 
       /** @private */
       _android: {
         type: Boolean,
-        value: /android/i.test(navigator.userAgent)
+        value: isAndroid
       },
 
       /** @private */
       _touchDevice: {
         type: Boolean,
-        value: TOUCH_DEVICE
+        value: isTouch
       },
 
       /**

@@ -9,6 +9,7 @@ import './vaadin-upload-icons.js';
 import './vaadin-upload-file.js';
 import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -82,6 +83,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
         [part='file-list'] {
           padding: 0;
           margin: 0;
+          list-style-type: none;
         }
       </style>
 
@@ -103,7 +105,9 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
       <slot name="file-list">
         <ul id="fileList" part="file-list">
           <template is="dom-repeat" items="[[files]]" as="file">
-            <vaadin-upload-file file="[[file]]" i18n="[[i18n]]"></vaadin-upload-file>
+            <li>
+              <vaadin-upload-file tabindex="0" file="[[file]]" i18n="[[i18n]]"></vaadin-upload-file>
+            </li>
           </template>
         </ul>
       </slot>
@@ -139,13 +143,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
       nodrop: {
         type: Boolean,
         reflectToAttribute: true,
-        value: function () {
-          try {
-            return !!document.createEvent('TouchEvent');
-          } catch (e) {
-            return false;
-          }
-        }
+        value: isTouch
       },
 
       /**

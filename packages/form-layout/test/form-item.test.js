@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@polymer/polymer/lib/elements/custom-style.js';
 import '../vaadin-form-item.js';
@@ -116,6 +116,118 @@ describe('form-item', () => {
       input.classList.add('full-width');
       item.setAttribute('label-position', 'top');
       expect(input.getBoundingClientRect().width).to.be.above(testInput.getBoundingClientRect().width + 10);
+    });
+  });
+
+  describe('required input', () => {
+    beforeEach(async () => {
+      input.required = true;
+      await nextFrame();
+    });
+
+    it('should add the required attribute when input is set required', () => {
+      expect(item.hasAttribute('required')).to.be.true;
+    });
+
+    it('should not add the required attribute when a removed input is set required', async () => {
+      input.required = false;
+      input.remove();
+      await nextFrame();
+      input.required = true;
+      await nextFrame();
+      expect(item.hasAttribute('required')).to.be.false;
+    });
+
+    it('should not add the required attribute when input is replaced by a non-field', async () => {
+      input.remove();
+      const nonField = document.createElement('non-field');
+      nonField.required = true;
+      item.appendChild(nonField);
+      await nextFrame();
+      expect(item.hasAttribute('required')).to.be.false;
+    });
+
+    it('should not remove the required attribute when a non-field is added', async () => {
+      const nonField = document.createElement('non-field');
+      item.appendChild(nonField);
+      await nextFrame();
+      expect(item.hasAttribute('required')).to.be.true;
+    });
+
+    it('should remove the required attribute when input is set not required', async () => {
+      input.required = false;
+      await nextFrame();
+      expect(item.hasAttribute('required')).to.be.false;
+    });
+
+    it('should remove the required attribute when input is removed', async () => {
+      input.remove();
+      await nextFrame();
+      expect(item.hasAttribute('required')).to.be.false;
+    });
+
+    it('should remove the required attribute when another input is added', async () => {
+      const otherInput = document.createElement('input');
+      item.appendChild(otherInput);
+      await nextFrame();
+      expect(item.hasAttribute('required')).to.be.false;
+    });
+
+    it('should remove the invalid attribute when input is set not required', async () => {
+      item.setAttribute('invalid', '');
+      input.required = false;
+      await nextFrame();
+      expect(item.hasAttribute('invalid')).to.be.false;
+    });
+
+    it('should remove the invalid attribute when input is removed', async () => {
+      item.setAttribute('invalid', '');
+      input.remove();
+      await nextFrame();
+      expect(item.hasAttribute('invalid')).to.be.false;
+    });
+
+    it('should remove the invalid attribute when another input is added', async () => {
+      item.setAttribute('invalid', '');
+      const otherInput = document.createElement('input');
+      item.appendChild(otherInput);
+      await nextFrame();
+      expect(item.hasAttribute('invalid')).to.be.false;
+    });
+
+    ['change', 'blur'].forEach((event) => {
+      it(`should add the invalid attribute on field ${event}`, () => {
+        input.dispatchEvent(new CustomEvent(event));
+        expect(item.hasAttribute('invalid')).to.be.true;
+      });
+
+      it(`should remove the invalid attribute on field ${event}`, () => {
+        input.value = 'foo';
+        input.dispatchEvent(new CustomEvent(event));
+        expect(item.hasAttribute('invalid')).to.be.false;
+      });
+
+      it(`should not react to ${event} after the input is set not required`, async () => {
+        input.required = false;
+        await nextFrame();
+        input.dispatchEvent(new CustomEvent(event));
+        expect(item.hasAttribute('invalid')).to.be.false;
+      });
+
+      it(`should not react to ${event} after the input is removed`, async () => {
+        input.remove();
+        await nextFrame();
+        input.dispatchEvent(new CustomEvent(event));
+        expect(item.hasAttribute('invalid')).to.be.false;
+      });
+
+      it(`should not react to ${event} after another input is added`, async () => {
+        const otherInput = document.createElement('input');
+        item.appendChild(otherInput);
+        await nextFrame();
+        input.dispatchEvent(new CustomEvent(event));
+        expect(item.hasAttribute('invalid')).to.be.false;
+      });
     });
   });
 });

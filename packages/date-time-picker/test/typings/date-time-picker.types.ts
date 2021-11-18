@@ -19,7 +19,7 @@ assertType<boolean>(picker.required);
 assertType<boolean>(picker.invalid);
 assertType<boolean>(picker.disabled);
 assertType<boolean>(picker.readonly);
-assertType<string>(picker.errorMessage);
+assertType<string | null | undefined>(picker.errorMessage);
 assertType<string>(picker.value);
 assertType<string | null | undefined>(picker.name);
 assertType<string | undefined>(picker.min);

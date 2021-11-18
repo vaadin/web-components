@@ -6,8 +6,8 @@
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { AriaLabelController } from '@vaadin/field-base/src/aria-label-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
+import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { TextAreaController } from '@vaadin/field-base/src/text-area-controller.js';
@@ -212,7 +212,7 @@ export class TextArea extends PatternMixin(InputFieldMixin(ThemableMixin(Element
         this.ariaTarget = input;
       })
     );
-    this.addController(new AriaLabelController(this, this.inputElement, this._labelNode));
+    this.addController(new LabelledInputController(this.inputElement, this._labelNode));
     this.addEventListener('animationend', this._onAnimationEnd);
   }
 

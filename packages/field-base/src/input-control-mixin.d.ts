@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
+import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
@@ -21,6 +22,7 @@ import { ValidateMixinClass } from './validate-mixin.js';
 export declare function InputControlMixin<T extends Constructor<HTMLElement>>(
   base: T
 ): T &
+  Constructor<ControllerMixinClass> &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &

@@ -2,13 +2,13 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DelegateFocusMixin } from '../src/delegate-focus-mixin.js';
 import { InputController } from '../src/input-controller.js';
 
 customElements.define(
   'delegate-focus-mixin-element',
-  class extends DelegateFocusMixin(ElementMixin(PolymerElement)) {
+  class extends DelegateFocusMixin(ControllerMixin(PolymerElement)) {
     static get template() {
       return html`<slot name="input"></slot>`;
     }

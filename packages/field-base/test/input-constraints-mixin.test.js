@@ -2,13 +2,13 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { InputConstraintsMixin } from '../src/input-constraints-mixin.js';
 import { InputController } from '../src/input-controller.js';
 
 customElements.define(
   'input-constraints-mixin-element',
-  class extends InputConstraintsMixin(ElementMixin(PolymerElement)) {
+  class extends InputConstraintsMixin(ControllerMixin(PolymerElement)) {
     static get template() {
       return html`
         <slot name="input"></slot>

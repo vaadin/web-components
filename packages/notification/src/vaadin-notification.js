@@ -6,6 +6,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { render } from 'lit';
 import { isTemplateResult } from 'lit/directive-helpers.js';
+import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -128,7 +129,7 @@ class NotificationContainer extends ThemableMixin(ElementMixin(PolymerElement)) 
   constructor() {
     super();
 
-    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+    if (isIOS) {
       this._boundIosResizeListener = () => this._detectIosNavbar();
     }
   }

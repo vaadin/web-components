@@ -14,6 +14,15 @@ registerStyles(
       margin-top: 16px;
       margin-bottom: 8px;
     }
+
+    :host([required]) [part='required-indicator']::after {
+      content: ' *';
+      color: inherit;
+    }
+
+    :host([invalid]) [part='label'] {
+      color: var(--material-error-text-color);
+    }
   `,
   { moduleId: 'material-form-item' }
 );
