@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Field highlighter</title>
+  </head>
+
+  <body>
+    <vaadin-checkbox-group label="Language of contact">
+      <vaadin-checkbox value="en" label="English"></vaadin-checkbox>
+      <vaadin-checkbox value="fr" label="Français"></vaadin-checkbox>
+      <vaadin-checkbox value="de" label="Deutsch"></vaadin-checkbox>
+    </vaadin-checkbox-group>
+
+    <!--
+    <vaadin-date-time-picker></vaadin-date-time-picker>
+
+    <vaadin-text-area></vaadin-text-area>
+    -->
+
+    <script type="module">
+      import '@vaadin/checkbox-group';
+      // import '@vaadin/date-time-picker';
+      // import '@vaadin/text-area';
+      import { FieldHighlighter } from '@vaadin/field-highlighter';
+
+      const field = document.querySelector('vaadin-checkbox-group');
+      FieldHighlighter.init(field);
+
+      window.requestAnimationFrame(() => {
+        const users = [
+          { id: 'a', name: 'User', colorIndex: 0, fieldIndex: 0 },
+          { id: 'b', name: 'Moderator', colorIndex: 1, fieldIndex: 1 },
+          { id: 'c', name: 'Admin', colorIndex: 2, fieldIndex: 1 }
+        ];
+
+        // Mimic focus to show highlight and badges
+        field.dispatchEvent(new CustomEvent('mouseenter'));
+
+        FieldHighlighter.setUsers(field, users);
+      });
+    </script>
+  </body>
+</html>
