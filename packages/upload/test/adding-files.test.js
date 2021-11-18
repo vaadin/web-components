@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, isFirefox } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-upload.js';
 import { createFile, createFiles, touchDevice, xhrCreator } from './common.js';
@@ -27,36 +27,39 @@ describe('file list', () => {
 
     it('should notify files property changes', () => {
       const spy = sinon.spy();
-      // when setting arrays Polymer mutation observer works differently
       upload.addEventListener('files-changed', spy);
       upload.files = files;
       expect(spy.calledOnce).to.be.true;
     });
   });
 
-  (isFirefox ? describe.skip : describe)('with add button', () => {
-    it('should open file dialog by click', () => {
-      // This test checks if the 'click' event is synchronously dispatched
+  describe('with add button', () => {
+    let input;
+    let addFiles;
+    let clickSpy;
+
+    beforeEach(() => {
+      addFiles = upload.$.addFiles;
+      input = upload.$.fileInput;
+      // This test suite checks if the 'click' event is synchronously dispatched
       // on the hidden file input when user clicks Add Files button. The
       // file dialog is actually not getting opened during testing.
-      //
-      // The mock Add Files button click event fired by this test is not
-      // trusted and hence it should generate a non-trusted click event on
-      // the hidden file input. For security reasons non-IE browsers don't
-      // open file dialog when file input click is non-trusted.
-      const clickSpy = sinon.spy();
-      upload.$.fileInput.addEventListener('click', clickSpy);
 
-      upload.$.addFiles.dispatchEvent(new MouseEvent('click'));
+      // While the mock Add Files button click event fired by this test is not
+      // trusted and therefore it should generate a non-trusted click event on
+      // the hidden file input, some browsers (Firefox) can still open dialog.
+      clickSpy = sinon.stub().callsFake((e) => e.preventDefault());
+      input.addEventListener('click', clickSpy);
+    });
+
+    it('should open file dialog by click', () => {
+      addFiles.dispatchEvent(new MouseEvent('click'));
       expect(clickSpy.calledOnce).to.be.true;
     });
 
     it('should open file dialog by touchend', () => {
-      const clickSpy = sinon.spy();
-      upload.$.fileInput.addEventListener('click', clickSpy);
-
       const e = new CustomEvent('touchend', { cancelable: true });
-      upload.$.addFiles.dispatchEvent(e);
+      addFiles.dispatchEvent(e);
       expect(clickSpy.calledOnce).to.be.true;
       expect(e.defaultPrevented).to.be.true;
     });
@@ -68,35 +71,29 @@ describe('file list', () => {
       const spy = sinon.spy(upload, '__resetMouseCanceller');
 
       const e = new CustomEvent('touchend', { cancelable: true });
-      upload.$.addFiles.dispatchEvent(e);
+      addFiles.dispatchEvent(e);
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should reset input.value before dialog', (done) => {
-      const input = upload.$.fileInput;
+    it('should reset input.value before dialog', () => {
       // We can't simply assign `files` property of input[type="file"].
       // Tweaking __proto__ to make it assignable below.
       input.__proto__ = HTMLElement.prototype;
       delete input.value;
       input.value = 'foo';
 
-      input.addEventListener('click', () => {
-        expect(input.value).to.be.empty;
-        done();
-      });
-
-      upload.$.addFiles.dispatchEvent(new MouseEvent('click'));
+      addFiles.dispatchEvent(new MouseEvent('click'));
+      expect(input.value).to.be.empty;
     });
 
     it('should add files from dialog', () => {
       // We can't simply assign `files` property of input[type="file"].
       // Tweaking __proto__ to make it assignable below.
-      upload.$.fileInput.__proto__ = HTMLElement.prototype;
-      upload.$.fileInput.files = files;
+      input.__proto__ = HTMLElement.prototype;
+      input.files = files;
 
-      const e = document.createEvent('HTMLEvents');
-      e.initEvent('change', false, true);
-      upload.$.fileInput.dispatchEvent(e);
+      const e = new Event('change', { cancelable: true });
+      input.dispatchEvent(e);
 
       expect(upload.files[0]).to.equal(files[1]);
       expect(upload.files[1]).to.equal(files[0]);
@@ -117,9 +114,7 @@ describe('file list', () => {
 
     it('should not open upload dialog when max files added', () => {
       upload.maxFiles = 0;
-      const clickSpy = sinon.spy();
-      upload.$.fileInput.addEventListener('click', clickSpy);
-      upload.$.addFiles.dispatchEvent(new MouseEvent('click'));
+      addFiles.dispatchEvent(new MouseEvent('click'));
       expect(clickSpy.called).to.be.false;
     });
 
