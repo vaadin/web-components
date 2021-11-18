@@ -347,11 +347,9 @@ snapshots["vaadin-integer-field slots default"] =
 <div slot="error-message">
 </div>
 <input
-  max="undefined"
-  min="undefined"
+  inputmode="numeric"
   slot="input"
-  step="any"
-  type="number"
+  type="text"
 >
 `;
 /* end snapshot vaadin-integer-field slots default */
@@ -362,11 +360,9 @@ snapshots["vaadin-integer-field slots helper"] =
 <div slot="error-message">
 </div>
 <input
-  max="undefined"
-  min="undefined"
+  inputmode="numeric"
   slot="input"
-  step="any"
-  type="number"
+  type="text"
 >
 <div slot="helper">
   Helper
