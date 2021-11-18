@@ -14,16 +14,12 @@ describe('number-field', () => {
   });
 
   describe('native', () => {
-    it('should have [type=number]', () => {
-      expect(input.type).to.equal('number');
+    it('should set type attribute to text', () => {
+      expect(input.type).to.equal('text');
     });
 
-    ['min', 'max'].forEach(function (attr) {
-      it('should set numeric attribute ' + attr, () => {
-        const value = 5;
-        numberField[attr] = value;
-        expect(input.getAttribute(attr)).to.be.equal(String(value));
-      });
+    it('should set inputmode attribute to numeric', () => {
+      expect(input.getAttribute('inputmode')).to.equal('numeric');
     });
 
     it('should set value with correct decimal places regardless of step', () => {
@@ -669,13 +665,6 @@ describe('number-field', () => {
       numberField.value = 'foo';
       expect(numberField.value).to.be.empty;
       expect(numberField.validate()).to.be.true;
-    });
-
-    it('should align checkValidity with the native input element', () => {
-      numberField.value = -1;
-      numberField.min = 0;
-
-      expect(numberField.checkValidity()).to.equal(input.checkValidity());
     });
 
     it('should not validate when explicitly set to invalid', () => {

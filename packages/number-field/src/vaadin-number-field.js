@@ -5,6 +5,7 @@
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import { html, PolymerElement } from '@polymer/polymer';
+import { isAndroid, isIPhone } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
@@ -14,6 +15,11 @@ import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shar
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles('vaadin-number-field', inputFieldShared, { moduleId: 'vaadin-number-field-styles' });
+
+const intlOptions = new Intl.NumberFormat().resolvedOptions();
+const hasDecimals = intlOptions.maximumFractionDigits > 0;
+
+const isNumUnset = (n) => !n && n !== 0;
 
 /**
  * `<vaadin-number-field>` is an input field web component that only accepts numeric input.
@@ -151,8 +157,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
        * The maximum value of the field.
        */
       max: {
-        type: Number,
-        observer: '_maxChanged'
+        type: Number
       },
 
       /**
@@ -160,9 +165,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
        * @type {number}
        */
       step: {
-        type: Number,
-        value: 1,
-        observer: '_stepChanged'
+        type: Number
       }
     };
   }
@@ -173,29 +176,21 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
 
   constructor() {
     super();
-    this._setType('number');
+    // TODO: extend text-field
+    this._setType('text');
   }
 
   /** @protected */
   get slotStyles() {
     const tag = this.localName;
+    // TODO: check if placeholder styles are needed
     return [
       `
-        ${tag} input[type="number"]::-webkit-outer-spin-button,
-        ${tag} input[type="number"]::-webkit-inner-spin-button {
-          -webkit-appearance: none;
-          margin: 0;
-        }
-
-        ${tag} input[type="number"] {
-          -moz-appearance: textfield;
-        }
-
-        ${tag}[dir='rtl'] input[type="number"]::placeholder {
+        ${tag}[dir='rtl'] input::placeholder {
           direction: rtl;
         }
 
-        ${tag}[dir='rtl']:not([has-controls]) input[type="number"]::placeholder {
+        ${tag}[dir='rtl']:not([has-controls]) input::placeholder {
           text-align: left;
         }
       `
@@ -215,9 +210,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
     super.connectedCallback();
 
     if (this.inputElement) {
-      this.inputElement.min = this.min;
-      this.inputElement.max = this.max;
-      this.__applyStep(this.step);
+      this.__setInputMode(this.inputElement, this.min);
     }
   }
 
@@ -234,6 +227,42 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
       })
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelNode));
+
+    this.inputElement.addEventListener('wheel', (e) => this._onWheel(e));
+  }
+
+  /**
+   * The `inputmode` attribute influences the software keyboard that is shown on touch devices.
+   * https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inputmode
+   * Browsers and operating systems are quite inconsistent about what keys are available.
+   * We choose between numeric and decimal based on whether negative numbers are allowed,
+   * and based on testing on various devices to determine what keys are available.
+   * @private
+   */
+  __setInputMode(input, min) {
+    const hasNegative = isNaN(min) || min < 0;
+    let inputMode = 'numeric';
+
+    if (isIPhone) {
+      // iPhone doesn't have a minus sign in either numeric or decimal.
+      // Note this is only for iPhone, not iPad, which always has both
+      // minus and decimal in numeric.
+      if (hasNegative) {
+        inputMode = 'text';
+      } else if (hasDecimals) {
+        inputMode = 'decimal';
+      }
+    } else if (isAndroid) {
+      // Android numeric has both a decimal point and minus key.
+      // decimal does not have a minus key.
+      if (hasNegative) {
+        inputMode = 'numeric';
+      } else if (hasDecimals) {
+        inputMode = 'decimal';
+      }
+    }
+
+    input.setAttribute('inputmode', inputMode);
   }
 
   /** @private */
@@ -250,17 +279,39 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
     this._increaseValue();
   }
 
+  /** @private */
+  _onWheel(e) {
+    // Only handle scroll events when field is focused and can be edited
+    if (this.disabled || this.readonly || !this.hasAttribute('focused')) {
+      return;
+    }
+
+    // On a trackpad, users can scroll in both X and Y directions at once.
+    // Check the magnitude and ignore if it's mostly in the X direction.
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) {
+      return;
+    }
+
+    // Cancel the default behavior
+    e.preventDefault();
+
+    if (e.deltaY > 0) {
+      this._increaseValue();
+    } else if (e.deltaY < 0) {
+      this._decreaseValue();
+    }
+  }
+
   /**
    * @protected
    * @override
    */
-  _constraintsChanged(required, min, max, _step) {
+  _constraintsChanged(required, min, max, step) {
     if (!this.invalid) {
       return;
     }
 
-    const isNumUnset = (n) => !n && n !== 0;
-    if (!isNumUnset(min) || !isNumUnset(max)) {
+    if (!isNumUnset(min) || !isNumUnset(max) || !isNumUnset(step)) {
       this.validate();
     } else if (!required) {
       this.invalid = false;
@@ -386,41 +437,9 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
   }
 
   /** @private */
-  __applyStep(step) {
-    if (this.inputElement) {
-      this.inputElement.step = this.__validateByStep ? step : 'any';
-    }
-  }
-
-  /**
-   * @param {number} newVal
-   * @param {number | undefined} oldVal
-   * @protected
-   */
-  _stepChanged(newVal) {
-    // TODO: refactor to not have initial value
-    // https://github.com/vaadin/vaadin-text-field/issues/435
-
-    // Avoid using initial value in validation
-    this.__validateByStep = this.__stepChangedCalled || this.getAttribute('step') !== null;
-
-    this.__applyStep(newVal);
-
-    this.__stepChangedCalled = true;
-    this.setAttribute('step', newVal);
-  }
-
-  /** @private */
   _minChanged(min) {
     if (this.inputElement) {
-      this.inputElement.min = min;
-    }
-  }
-
-  /** @private */
-  _maxChanged(max) {
-    if (this.inputElement) {
-      this.inputElement.max = max;
+      this.__setInputMode(this.inputElement, min);
     }
   }
 
@@ -439,6 +458,16 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
     }
 
     super._valueChanged(this.value, oldVal);
+  }
+
+  /** @private */
+  __isValidByStep(value) {
+    if (isNumUnset(this.step) || this.step === 0) {
+      return true;
+    }
+
+    const stepBasis = isNumUnset(this.min) ? 0 : this.min;
+    return (value - stepBasis) % this.step == 0;
   }
 
   /**
@@ -467,9 +496,14 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
   checkValidity() {
     if (
       this.inputElement &&
-      (this.required || this.min !== undefined || this.max !== undefined || this.__validateByStep)
+      (this.required || this.min !== undefined || this.max !== undefined || this.step !== undefined)
     ) {
-      return this.inputElement.checkValidity();
+      if (this.value == null || this.value == '') {
+        return super.checkValidity();
+      } else {
+        // Mimic validation logic provided by native `<input type="number">` as we don't use it.
+        return !(this.value > this.max || this.value < this.min || !this.__isValidByStep(this.value));
+      }
     } else {
       return !this.invalid;
     }
