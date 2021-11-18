@@ -121,6 +121,17 @@ describe('vaadin-template-renderer', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
+  it('should include model in the event', () => {
+    const host = fixtureSync(`<mock-component-host></mock-component-host>`);
+    const component = host.$.component;
+    const button = component.$.content.querySelector('button');
+    const spy = sinon.spy(host, 'onClick');
+
+    click(button);
+
+    expect(spy.getCall(0).args[0].model).to.equal(component.$.content.__templateInstance);
+  });
+
   it('should re-render the template instance when changing a parent property', async () => {
     const host = fixtureSync(`<mock-component-host></mock-component-host>`);
     const component = host.$.component;
