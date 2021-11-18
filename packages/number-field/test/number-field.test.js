@@ -13,13 +13,9 @@ describe('number-field', () => {
     increaseButton = numberField.shadowRoot.querySelector('[part=increase-button]');
   });
 
-  describe('native', () => {
-    it('should set type attribute to text', () => {
-      expect(input.type).to.equal('text');
-    });
-
-    it('should set inputmode attribute to numeric', () => {
-      expect(input.getAttribute('inputmode')).to.equal('numeric');
+  describe('step', () => {
+    it('should not have initial value for step property', () => {
+      expect(numberField.step).to.be.undefined;
     });
 
     it('should set value with correct decimal places regardless of step', () => {
@@ -28,17 +24,9 @@ describe('number-field', () => {
 
       expect(numberField.value).equal('9.99');
     });
+  });
 
-    it('should increment value to next multiple of step offset by the min', () => {
-      numberField.step = 3;
-      numberField.min = 4;
-      numberField.value = 4;
-
-      increaseButton.click();
-
-      expect(numberField.value).equal('7');
-    });
-
+  describe('arrow keys', () => {
     it('should increment value on arrow up', () => {
       numberField.step = 3;
       arrowUp(input);
@@ -70,6 +58,16 @@ describe('number-field', () => {
       increaseButton.click();
 
       expect(numberField.value).to.be.equal('1');
+    });
+
+    it('should increase value to next multiple of step offset by the min', () => {
+      numberField.step = 3;
+      numberField.min = 4;
+      numberField.value = 4;
+
+      increaseButton.click();
+
+      expect(numberField.value).equal('7');
     });
 
     it('should dispatch change event on minus button click', () => {
