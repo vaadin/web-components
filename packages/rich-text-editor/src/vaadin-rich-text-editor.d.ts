@@ -35,6 +35,13 @@ export interface RichTextEditorI18n {
 }
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type RichTextEditorChangeEvent = Event & {
+  target: RichTextEditor;
+};
+
+/**
  * Fired when the `htmlValue` property changes.
  */
 export type RichTextEditorHtmlValueChangedEvent = CustomEvent<{ value: string }>;
@@ -50,7 +57,9 @@ export interface RichTextEditorCustomEventMap {
   'value-changed': RichTextEditorValueChangedEvent;
 }
 
-export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEditorCustomEventMap {}
+export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEditorCustomEventMap {
+  change: RichTextEditorChangeEvent;
+}
 
 /**
  * `<vaadin-rich-text-editor>` is a Web Component for rich text editing.

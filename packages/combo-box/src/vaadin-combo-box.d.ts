@@ -19,6 +19,13 @@ export {
 export { ComboBoxDefaultItem, ComboBoxItemModel, ComboBoxRenderer } from './vaadin-combo-box-mixin.js';
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type ComboBoxChangeEvent<TItem> = Event & {
+  target: ComboBox<TItem>;
+};
+
+/**
  * Fired when the user sets a custom value.
  */
 export type ComboBoxCustomValueSetEvent = CustomEvent<string>;
@@ -49,6 +56,8 @@ export type ComboBoxFilterChangedEvent = CustomEvent<{ value: string }>;
 export type ComboBoxSelectedItemChangedEvent<TItem> = CustomEvent<{ value: TItem | null | undefined }>;
 
 export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
+  change: ComboBoxChangeEvent<TItem>;
+
   'custom-value-set': ComboBoxCustomValueSetEvent;
 
   'opened-changed': ComboBoxOpenedChangedEvent;

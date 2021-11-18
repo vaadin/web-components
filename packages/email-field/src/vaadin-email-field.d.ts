@@ -6,6 +6,13 @@
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type EmailFieldChangeEvent = Event & {
+  target: EmailField;
+};
+
+/**
  * Fired when the `invalid` property changes.
  */
 export type EmailFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
@@ -21,7 +28,9 @@ export interface EmailFieldCustomEventMap {
   'value-changed': EmailFieldValueChangedEvent;
 }
 
-export interface EmailFieldEventMap extends HTMLElementEventMap, EmailFieldCustomEventMap {}
+export interface EmailFieldEventMap extends HTMLElementEventMap, EmailFieldCustomEventMap {
+  change: EmailFieldChangeEvent;
+}
 
 /**
  * `<vaadin-email-field>` is a Web Component for email field control in forms.

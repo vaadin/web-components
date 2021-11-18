@@ -8,6 +8,13 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 export { DatePickerDate, DatePickerI18n } from './vaadin-date-picker-mixin.js';
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type DatePickerLightChangeEvent = Event & {
+  target: DatePickerLight;
+};
+
+/**
  * Fired when the `opened` property changes.
  */
 export type DatePickerLightOpenedChangedEvent = CustomEvent<{ value: boolean }>;
@@ -30,7 +37,9 @@ export interface DatePickerLightCustomEventMap {
   'value-changed': DatePickerLightValueChangedEvent;
 }
 
-export interface DatePickerLightEventMap extends HTMLElementEventMap, DatePickerLightCustomEventMap {}
+export interface DatePickerLightEventMap extends HTMLElementEventMap, DatePickerLightCustomEventMap {
+  change: DatePickerLightChangeEvent;
+}
 
 /**
  * `<vaadin-date-picker-light>` is a customizable version of the `<vaadin-date-picker>` providing

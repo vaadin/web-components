@@ -4,7 +4,12 @@ import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { InputFieldMixinClass } from '@vaadin/field-base/src/input-field-mixin.js';
 import { SlotStylesMixinClass } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { NumberFieldInvalidChangedEvent, NumberFieldValueChangedEvent } from '../../vaadin-number-field.js';
+import {
+  NumberField,
+  NumberFieldChangeEvent,
+  NumberFieldInvalidChangedEvent,
+  NumberFieldValueChangedEvent
+} from '../../vaadin-number-field.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -18,6 +23,11 @@ assertType<SlotStylesMixinClass>(field);
 assertType<ThemableMixinClass>(field);
 
 // Events
+field.addEventListener('change', (event) => {
+  assertType<NumberFieldChangeEvent>(event);
+  assertType<NumberField>(event.target);
+});
+
 field.addEventListener('invalid-changed', (event) => {
   assertType<NumberFieldInvalidChangedEvent>(event);
   assertType<boolean>(event.detail.value);

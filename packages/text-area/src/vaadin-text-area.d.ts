@@ -8,6 +8,13 @@ import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type TextAreaChangeEvent = Event & {
+  target: TextArea;
+};
+
+/**
  * Fired when the `invalid` property changes.
  */
 export type TextAreaInvalidChangedEvent = CustomEvent<{ value: boolean }>;
@@ -23,7 +30,9 @@ export interface TextAreaCustomEventMap {
   'value-changed': TextAreaValueChangedEvent;
 }
 
-export interface TextAreaEventMap extends HTMLElementEventMap, TextAreaCustomEventMap {}
+export interface TextAreaEventMap extends HTMLElementEventMap, TextAreaCustomEventMap {
+  change: TextAreaChangeEvent;
+}
 
 /**
  * `<vaadin-text-area>` is a web component for multi-line text input.
