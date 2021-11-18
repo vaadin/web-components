@@ -1,3 +1,4 @@
+import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import { ComboBoxDataProviderMixinClass } from '../../src/vaadin-combo-box-data-provider-mixin';
@@ -32,6 +33,7 @@ const genericComboBox = document.createElement('vaadin-combo-box');
 
 const narrowedComboBox = genericComboBox as ComboBox<TestComboBoxItem>;
 assertType<ComboBox>(narrowedComboBox);
+assertType<ControllerMixinClass>(narrowedComboBox);
 assertType<ElementMixinClass>(narrowedComboBox);
 assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBox);

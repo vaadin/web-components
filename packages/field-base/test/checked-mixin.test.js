@@ -1,14 +1,14 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync } from '@vaadin/testing-helpers';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { CheckedMixin } from '../src/checked-mixin.js';
 import { DelegateFocusMixin } from '../src/delegate-focus-mixin.js';
 import { InputController } from '../src/input-controller.js';
 
 customElements.define(
   'checked-mixin-element',
-  class extends CheckedMixin(DelegateFocusMixin(ElementMixin(PolymerElement))) {
+  class extends CheckedMixin(DelegateFocusMixin(ControllerMixin(PolymerElement))) {
     static get template() {
       return html`<div>
         <slot></slot>

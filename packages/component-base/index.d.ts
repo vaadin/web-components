@@ -1,4 +1,5 @@
 export { ActiveMixin } from './src/active-mixin.js';
+export { ControllerMixin } from './src/controller-mixin.js';
 export { DirMixin } from './src/dir-mixin.js';
 export { DisabledMixin } from './src/disabled-mixin.js';
 export { ElementMixin } from './src/element-mixin.js';

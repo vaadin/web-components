@@ -2,13 +2,13 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { InputController } from '../src/input-controller.js';
 import { PatternMixin } from '../src/pattern-mixin.js';
 
 customElements.define(
   'pattern-mixin-element',
-  class extends PatternMixin(ElementMixin(PolymerElement)) {
+  class extends PatternMixin(ControllerMixin(PolymerElement)) {
     static get template() {
       return html`<slot name="label"></slot><slot name="input"></slot>`;
     }
