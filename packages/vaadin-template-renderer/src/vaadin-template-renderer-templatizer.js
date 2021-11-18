@@ -101,6 +101,10 @@ export class Templatizer extends PolymerElement {
     }, {});
 
     this.__TemplateClass = templatize(this.__template, this, {
+      // Events handled by declarative event listeners
+      // (`on-event="handler"`) will be decorated with a `model` property pointing
+      // to the template instance that stamped it.
+      parentModel: true,
       // This property prevents the template instance properties
       // from passing into the `forwardHostProp` callback
       instanceProps,
