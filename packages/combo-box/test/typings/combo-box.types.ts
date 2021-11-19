@@ -22,6 +22,7 @@ import {
   ComboBoxFilterChangedEvent,
   ComboBoxInvalidChangedEvent,
   ComboBoxOpenedChangedEvent,
+  ComboBoxRenderer,
   ComboBoxSelectedItemChangedEvent,
   ComboBoxValueChangedEvent
 } from '../../vaadin-combo-box';
@@ -88,6 +89,7 @@ assertType<() => boolean>(narrowedComboBox.checkValidity);
 assertType<() => boolean>(narrowedComboBox.validate);
 assertType<() => void>(narrowedComboBox.close);
 assertType<() => void>(narrowedComboBox.open);
+assertType<() => void>(narrowedComboBox.requestContentUpdate);
 assertType<boolean>(narrowedComboBox.allowCustomValue);
 assertType<boolean>(narrowedComboBox.autofocus);
 assertType<boolean>(narrowedComboBox.autoselect);
@@ -100,6 +102,7 @@ assertType<string | null | undefined>(narrowedComboBox.itemIdPath);
 assertType<string>(narrowedComboBox.itemLabelPath);
 assertType<string>(narrowedComboBox.itemValuePath);
 assertType<boolean>(narrowedComboBox.loading);
+assertType<ComboBoxRenderer<TestComboBoxItem> | null | undefined>(narrowedComboBox.renderer);
 assertType<TestComboBoxItem | null | undefined>(narrowedComboBox.selectedItem);
 assertType<boolean>(narrowedComboBox.invalid);
 assertType<HTMLElement | null | undefined>(narrowedComboBox.focusElement);
