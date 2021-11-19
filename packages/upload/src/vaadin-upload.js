@@ -456,7 +456,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     const base = this.i18n.units.sizeBase || 1000;
     const unit = ~~(Math.log(bytes) / Math.log(base));
     const dec = Math.max(0, Math.min(3, unit - 1));
-    const size = parseFloat((bytes / Math.pow(base, unit)).toFixed(dec));
+    const size = parseFloat((bytes / base ** unit).toFixed(dec));
     return size + ' ' + this.i18n.units.size[unit];
   }
 
