@@ -74,7 +74,7 @@ function zhRateLimitingAdapter(adapter) {
       } catch (e) {
         if (e.isAxiosError && e.response.status === 403) {
           const resetAtMs = e.response.headers['x-ratelimit-reset'] * 1000;
-          const sentAtMs = new Date(e.response.headers['date']).getTime();
+          const sentAtMs = new Date(e.response.headers.date).getTime();
           const timeoutMs = resetAtMs - sentAtMs;
           console.log(`timeout until ZenHub API request rate reset: ${timeoutMs} ms`);
           await new Promise((r) => {

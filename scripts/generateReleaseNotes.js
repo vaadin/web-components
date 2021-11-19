@@ -172,9 +172,9 @@ function getComponents(c) {
 
 // return ticket links for this commit
 function getTickets(c) {
-  if (c.footers['fixes'] && c.footers['fixes'][0]) {
-    const ticket = `Ticket${c.footers['fixes'].length > 1 ? 's' : ''}`;
-    const links = c.footers['fixes'].reduce((prev, f) => {
+  if (c.footers.fixes && c.footers.fixes[0]) {
+    const ticket = `Ticket${c.footers.fixes.length > 1 ? 's' : ''}`;
+    const links = c.footers.fixes.reduce((prev, f) => {
       let link = f;
       if (/^#?\d/.test(f)) {
         f = f.replace(/^#/, '');
