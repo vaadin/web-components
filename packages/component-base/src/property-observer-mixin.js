@@ -20,6 +20,34 @@ export const PropertyObserverMixin = dedupingMixin(
       }
 
       /** @protected */
+      _addNotifyObserver(prop) {
+        this[`__notify${prop}Change`] = () => this.__notifyChange(prop);
+        this._addObserver([prop], `__notify${prop}Change`);
+      }
+
+      /** @protected */
+      _addReflectObserver(prop) {
+        this[`__reflect${prop}Change`] = () => this.__reflectChange(prop);
+        this._addObserver([prop], `__reflect${prop}Change`);
+      }
+
+      /** @private */
+      __notifyChange(propertyName) {
+        this.dispatchEvent(
+          new CustomEvent(propertyName + '-changed', {
+            detail: {
+              value: this[propertyName]
+            }
+          })
+        );
+      }
+
+      /** @private */
+      __reflectChange(propertyName) {
+        this.toggleAttribute(propertyName, this[propertyName]);
+      }
+
+      /** @protected */
       updated(props) {
         super.updated(props);
 

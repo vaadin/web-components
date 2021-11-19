@@ -3,8 +3,9 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PropertyObserverMixin } from '@vaadin/component-base/src/property-observer-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { isFocusable } from './vaadin-grid-active-item-mixin.js';
 
@@ -74,59 +75,61 @@ document.head.appendChild($_documentContainer.content);
  * @extends HTMLElement
  * @mixes ThemableMixin
  */
-class GridTreeToggle extends ThemableMixin(DirMixin(PolymerElement)) {
-  static get template() {
+class GridTreeToggle extends ThemableMixin(DirMixin(PropertyObserverMixin(LitElement))) {
+  static get styles() {
+    return css`
+      :host {
+        display: inline-flex;
+        align-items: baseline;
+
+        /* CSS API for :host */
+        --vaadin-grid-tree-toggle-level-offset: 1em;
+        --_collapsed-icon: '\\e7be\\00a0';
+      }
+
+      :host([dir='rtl']) {
+        --_collapsed-icon: '\\e7bd\\00a0';
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host(:not([leaf])) {
+        cursor: pointer;
+      }
+
+      #level-spacer,
+      [part='toggle'] {
+        flex: none;
+      }
+
+      #level-spacer {
+        display: inline-block;
+        width: calc(var(---level, '0') * var(--vaadin-grid-tree-toggle-level-offset));
+      }
+
+      [part='toggle']::before {
+        font-family: 'vaadin-grid-tree-icons';
+        line-height: 1em; /* make icon font metrics not affect baseline */
+      }
+
+      :host(:not([expanded])) [part='toggle']::before {
+        content: var(--_collapsed-icon);
+      }
+
+      :host([expanded]) [part='toggle']::before {
+        content: '\\e7bc\\00a0'; /* icon glyph + single non-breaking space */
+      }
+
+      :host([leaf]) [part='toggle'] {
+        visibility: hidden;
+      }
+    `;
+  }
+
+  render() {
     return html`
-      <style>
-        :host {
-          display: inline-flex;
-          align-items: baseline;
-
-          /* CSS API for :host */
-          --vaadin-grid-tree-toggle-level-offset: 1em;
-          --_collapsed-icon: '\\e7be\\00a0';
-        }
-
-        :host([dir='rtl']) {
-          --_collapsed-icon: '\\e7bd\\00a0';
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        :host(:not([leaf])) {
-          cursor: pointer;
-        }
-
-        #level-spacer,
-        [part='toggle'] {
-          flex: none;
-        }
-
-        #level-spacer {
-          display: inline-block;
-          width: calc(var(---level, '0') * var(--vaadin-grid-tree-toggle-level-offset));
-        }
-
-        [part='toggle']::before {
-          font-family: 'vaadin-grid-tree-icons';
-          line-height: 1em; /* make icon font metrics not affect baseline */
-        }
-
-        :host(:not([expanded])) [part='toggle']::before {
-          content: var(--_collapsed-icon);
-        }
-
-        :host([expanded]) [part='toggle']::before {
-          content: '\\e7bc\\00a0'; /* icon glyph + single non-breaking space */
-        }
-
-        :host([leaf]) [part='toggle'] {
-          visibility: hidden;
-        }
-      </style>
-
       <span id="level-spacer"></span>
       <span part="toggle"></span>
       <slot></slot>
@@ -146,8 +149,7 @@ class GridTreeToggle extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       level: {
         type: Number,
-        value: 0,
-        observer: '_levelChanged'
+        value: 0
       },
 
       /**
@@ -167,16 +169,19 @@ class GridTreeToggle extends ThemableMixin(DirMixin(PolymerElement)) {
       expanded: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true,
-        notify: true
+        reflectToAttribute: true
       }
     };
   }
 
-  /** @protected */
-  ready() {
-    super.ready();
+  constructor() {
+    super();
+    this._addObserver(['level'], '_levelChanged');
+    this._addNotifyObserver('expanded');
+    this._addReflectObserver('expanded');
+  }
 
+  firstUpdated() {
     this.addEventListener('click', (e) => this._onClick(e));
   }
 
