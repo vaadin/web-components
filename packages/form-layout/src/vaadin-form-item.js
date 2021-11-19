@@ -145,7 +145,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
           min-width: 0;
         }
       </style>
-      <div id="label" part="label" on-click="_onLabelClick">
+      <div id="label" part="label" on-click="__onLabelClick">
         <slot name="label" id="labelSlot"></slot>
         <span part="required-indicator" aria-hidden="true"></span>
       </div>
@@ -166,12 +166,52 @@ class FormItem extends ThemableMixin(PolymerElement) {
     this.__contentFieldObserver = new MutationObserver(() => this.__updateRequiredState(this.__contentField.required));
   }
 
+  ready() {
+    super.ready();
+
+    // Ensure every instance has unique ID
+    const uniqueId = (FormItem._uniqueLabelId = 1 + FormItem._uniqueLabelId || 0);
+    this.__labelId = `label-${this.localName}-${uniqueId}`;
+
+    if (this.__labelNode) {
+      this.__labelNode.id = this.__labelId;
+      this.__linkLabelToField(this.__labelNode);
+    }
+  }
+
+  get __labelNode() {
+    return this.querySelector('[slot=label]');
+  }
+
+  get __fieldNodes() {
+    return [...this.querySelectorAll(':not([slot])')];
+  }
+
+  get __fieldAriaTarget() {
+    const fieldNode = this.__fieldNodes[0];
+    if (fieldNode && fieldNode.ariaTarget) {
+      return fieldNode.ariaTarget;
+    }
+    return fieldNode;
+  }
+
   /** @private */
-  _onLabelClick() {
-    const firstContentElementChild = this.$.contentSlot.assignedElements()[0];
-    if (firstContentElementChild) {
-      firstContentElementChild.focus();
-      firstContentElementChild.click();
+  __linkLabelToField(labelNode) {
+    const fieldAriaTarget = this.__fieldAriaTarget;
+    if (!fieldAriaTarget) {
+      return;
+    }
+
+    const ariaLabelledBy = fieldAriaTarget.getAttribute('aria-labelledby');
+    fieldAriaTarget.setAttribute('aria-labelledby', `${ariaLabelledBy} ${labelNode.id}`);
+  }
+
+  /** @private */
+  __onLabelClick() {
+    const fieldNode = this.__fieldNodes[0];
+    if (fieldNode) {
+      fieldNode.focus();
+      fieldNode.click();
     }
   }
 
@@ -189,7 +229,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
       delete this.__contentField;
     }
 
-    const contentFields = this.$.contentSlot.assignedElements().filter((node) => !!this.__getValidateFunction(node));
+    const contentFields = this.__fieldNodes.filter((node) => !!this.__getValidateFunction(node));
     if (contentFields.length === 1) {
       // There's only one child field
       this.__contentField = contentFields[0];
