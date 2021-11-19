@@ -46,7 +46,26 @@
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off"
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "accessor-pairs": "error",
+    "default-param-last": "error",
+    "no-implicit-coercion": ["error", { "allow": ["!!"] }],
+    "no-return-await": "error",
+    "no-sequences": "error",
+    "space-in-parens": ["error", "never"],
+    "array-callback-return": "error",
+    "max-params": ["error", 4],
+    "no-eval": "error",
+    "prefer-exponentiation-operator": "error",
+    "no-promise-executor-return": "error",
+    // "no-sync": "error",
+    "dot-notation": ["error", { "allowPattern": "^[a-zA-Z]+([_-][a-zA-Z]+)+$" }],
+    // "no-proto": "error",
+    // "no-useless-return": "error",
+    "prefer-spread": "error",
+    // "max-classes-per-file": ["error", 3],
+    // "no-throw-literal": "error",
+    "prefer-rest-params": "error"
   },
   "overrides": [
     {
@@ -58,6 +77,7 @@
     {
       "files": ["packages/**/test/**"],
       "rules": {
+        "no-await-in-loop": "off",
         "simple-import-sort/imports": [
           "error",
           {
