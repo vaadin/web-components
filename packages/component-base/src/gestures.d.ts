@@ -1,11 +1,6 @@
 // tslint:disable:variable-name Describing an API that's defined elsewhere.
 
-import {timeOut, microTask} from './async.js';
-
-import {Debouncer} from './debounce.js';
-
-export {deepTargetFind};
-
+export { deepTargetFind };
 
 /**
  * Finds the element rendered on the screen at the provided coordinates.
@@ -16,10 +11,9 @@ export {deepTargetFind};
  * @returns Returns the deepest shadowRoot inclusive element
  * found at the screen position given.
  */
-declare function deepTargetFind(x: number, y: number): Element|null;
+declare function deepTargetFind(x: number, y: number): Element | null;
 
-export {addListener};
-
+export { addListener };
 
 /**
  * Adds an event listener to a node for the given gesture type.
@@ -28,8 +22,7 @@ export {addListener};
  */
 declare function addListener(node: EventTarget, evType: string, handler: (p0: Event) => void): boolean;
 
-export {removeListener};
-
+export { removeListener };
 
 /**
  * Removes an event listener from a node for the given gesture type.
@@ -38,8 +31,7 @@ export {removeListener};
  */
 declare function removeListener(node: EventTarget, evType: string, handler: (p0: Event) => void): boolean;
 
-export {register};
-
+export { register };
 
 /**
  * Registers a new gesture event recognizer for adding new custom
@@ -47,8 +39,7 @@ export {register};
  */
 declare function register(recog: GestureRecognizer): void;
 
-export {setTouchAction};
-
+export { setTouchAction };
 
 /**
  * Sets scrolling direction on node.
@@ -58,16 +49,14 @@ export {setTouchAction};
  */
 declare function setTouchAction(node: EventTarget, value: string): void;
 
-export {prevent};
-
+export { prevent };
 
 /**
  * Prevents the dispatch and default action of the given event name.
  */
 declare function prevent(evName: string): void;
 
-export {resetMouseCanceller};
-
+export { resetMouseCanceller };
 
 /**
  * Reset the 2500ms timeout on processing mouse input after detecting touch input.
@@ -78,4 +67,13 @@ export {resetMouseCanceller};
  */
 declare function resetMouseCanceller(): void;
 
-import {GestureRecognizer} from '../../interfaces';
+export interface GestureRecognizer {
+  reset: () => void;
+  mousedown?: (e: MouseEvent) => void;
+  mousemove?: (e: MouseEvent) => void;
+  mouseup?: (e: MouseEvent) => void;
+  touchstart?: (e: TouchEvent) => void;
+  touchmove?: (e: TouchEvent) => void;
+  touchend?: (e: TouchEvent) => void;
+  click?: (e: MouseEvent) => void;
+}
