@@ -58,13 +58,13 @@
     "no-eval": "error",
     "prefer-exponentiation-operator": "error",
     "no-promise-executor-return": "error",
-    // "no-sync": "error",
+    "no-sync": "off",
     "dot-notation": ["error", { "allowPattern": "^[a-zA-Z]+([_-][a-zA-Z]+)+$" }],
     // "no-proto": "error",
     // "no-useless-return": "error",
     "prefer-spread": "error",
     // "max-classes-per-file": ["error", 3],
-    // "no-throw-literal": "error",
+    "no-throw-literal": "error",
     "prefer-rest-params": "error"
   },
   "overrides": [
