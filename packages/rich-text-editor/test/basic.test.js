@@ -235,7 +235,7 @@ describe('rich text editor', () => {
           // We can't simply assign `files` property of input[type="file"].
           // Tweaking __proto__ to make it assignable below.
           const fileInput = rte.shadowRoot.querySelector('input[type="file"]');
-          fileInput.__proto__ = HTMLElement.prototype;
+          Object.setPrototypeOf(fileInput, HTMLElement.prototype);
           // Replacing __proto__ is not enough for Android Chrome, deleting the
           // files property in addition.
           delete fileInput.files;
@@ -260,7 +260,7 @@ describe('rich text editor', () => {
         const markClickedSpy = sinon.spy(rte, '_markToolbarClicked');
 
         const fileInput = rte.shadowRoot.querySelector('input[type="file"]');
-        fileInput.__proto__ = HTMLElement.prototype;
+        Object.setPrototypeOf(fileInput, HTMLElement.prototype);
         delete fileInput.files;
 
         editor.focus();

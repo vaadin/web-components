@@ -30,7 +30,7 @@ const getPropertyFromPrototype = function (clazz, prop) {
     if (clazz.properties && clazz.properties[prop]) {
       return clazz.properties[prop];
     }
-    clazz = clazz.__proto__;
+    clazz = Object.getPrototypeOf(clazz);
   }
 };
 

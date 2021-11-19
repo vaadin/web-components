@@ -76,7 +76,7 @@ describe('file list', () => {
       const input = upload.$.fileInput;
       // We can't simply assign `files` property of input[type="file"].
       // Tweaking __proto__ to make it assignable below.
-      input.__proto__ = HTMLElement.prototype;
+      Object.setPrototypeOf(input, HTMLElement.prototype);
       delete input.value;
       input.value = 'foo';
 
@@ -91,7 +91,7 @@ describe('file list', () => {
     it('should add files from dialog', () => {
       // We can't simply assign `files` property of input[type="file"].
       // Tweaking __proto__ to make it assignable below.
-      upload.$.fileInput.__proto__ = HTMLElement.prototype;
+      Object.setPrototypeOf(upload.$.fileInput, HTMLElement.prototype);
       upload.$.fileInput.files = files;
 
       const e = document.createEvent('HTMLEvents');
