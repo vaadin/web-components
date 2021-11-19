@@ -372,7 +372,7 @@ describe('filtering items', () => {
 
     it('should properly display all items in the selector', () => {
       comboBox.open();
-      comboBox.filteredItems = Array.apply(null, Array(10)).map((_, i) => `item${i}`);
+      comboBox.filteredItems = Array.from({ length: 10 }, (_, i) => `item${i}`);
       flush();
       expect(getAllItems(comboBox).length).to.equal(10);
     });

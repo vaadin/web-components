@@ -3,7 +3,7 @@ import { flush } from '@polymer/polymer/lib/utils/flush.js';
 
 export const infiniteDataProvider = (params, callback) => {
   callback(
-    Array.apply(null, Array(params.pageSize)).map((item, index) => {
+    Array.from({ length: params.pageSize }, (_, index) => {
       const count = params.page * params.pageSize + index;
       return {
         name: 'foo' + count,

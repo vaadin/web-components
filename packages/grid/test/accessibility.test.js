@@ -344,7 +344,7 @@ describe('accessibility', () => {
 
       describe('row numbers', () => {
         function setANumberOfItems(grid, number) {
-          grid.items = Array.apply(null, new Array(number)).map((v, i) => `item ${i}`);
+          grid.items = Array.from({ length: number }, (_, i) => `item ${i}`);
           flushGrid(grid);
         }
 
