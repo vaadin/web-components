@@ -8,7 +8,8 @@
   </head>
   <body>
     <script type="module">
-      import '@vaadin/grid/all-imports';
+      import '@vaadin/grid/vaadin-grid.js';
+      import '@vaadin/grid/vaadin-grid-tree-column.js';
 
       const grid = document.querySelector('vaadin-grid');
 
@@ -27,12 +28,13 @@
 
         cb(pageItems, levelSize);
       };
+
+      grid.columnReorderingAllowed = true;
     </script>
 
     <vaadin-grid item-id-path="name">
-      <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
       <vaadin-grid-tree-column frozen path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
-      <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+      <vaadin-grid-column resizable path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
     </vaadin-grid>
