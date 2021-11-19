@@ -809,6 +809,7 @@ class Grid extends ElementMixin(
           return true;
         }
       }
+      return false;
     });
 
     if (row.hidden !== !visibleRowCells.length) {

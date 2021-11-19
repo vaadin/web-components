@@ -71,12 +71,14 @@ export const DialogDraggableMixin = (superClass) =>
         const isContentPart = e.target === this.$.overlay.$.content;
 
         const isDraggable = e.composedPath().some((node, index) => {
-          if (node.classList) {
-            const isDraggableNode = node.classList.contains(this.__dragHandleClassName || 'draggable');
-            const isDraggableLeafOnly = node.classList.contains('draggable-leaf-only');
-            const isLeafNode = index === 0;
-            return (isDraggableLeafOnly && isLeafNode) || (isDraggableNode && (!isDraggableLeafOnly || isLeafNode));
+          if (!node.classList) {
+            return false;
           }
+
+          const isDraggableNode = node.classList.contains(this.__dragHandleClassName || 'draggable');
+          const isDraggableLeafOnly = node.classList.contains('draggable-leaf-only');
+          const isLeafNode = index === 0;
+          return (isDraggableLeafOnly && isLeafNode) || (isDraggableNode && (!isDraggableLeafOnly || isLeafNode));
         });
 
         if ((isResizerContainer && !isResizerContainerScrollbar) || isContentPart || isDraggable) {
