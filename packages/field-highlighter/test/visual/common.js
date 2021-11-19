@@ -42,4 +42,6 @@ const users = [
 export const setUsers = (field) => {
   FieldHighlighter.init(field);
   FieldHighlighter.setUsers(field, users);
+  // Mimic focus to show highlight and badges
+  field.dispatchEvent(new CustomEvent('mouseenter'));
 };
