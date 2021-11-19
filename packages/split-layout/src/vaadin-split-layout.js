@@ -8,6 +8,7 @@ import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -151,7 +152,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes GestureEventListeners
  */
 class SplitLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement))) {
   static get template() {
@@ -204,13 +204,7 @@ class SplitLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizab
         }
       </style>
       <slot id="primary" name="primary"></slot>
-      <div
-        part="splitter"
-        id="splitter"
-        on-track="_onHandleTrack"
-        on-down="_setPointerEventsNone"
-        on-up="_restorePointerEvents"
-      >
+      <div part="splitter" id="splitter">
         <div part="handle"></div>
       </div>
       <slot id="secondary" name="secondary"></slot>
@@ -245,6 +239,11 @@ class SplitLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizab
   ready() {
     super.ready();
     this.__observer = new FlattenedNodesObserver(this, this._processChildren);
+
+    const splitter = this.shadowRoot.querySelector('[part="splitter"]');
+    addListener(splitter, 'track', this._onHandleTrack.bind(this));
+    addListener(splitter, 'down', this._setPointerEventsNone.bind(this));
+    addListener(splitter, 'up', this._restorePointerEvents.bind(this));
   }
 
   /** @private */

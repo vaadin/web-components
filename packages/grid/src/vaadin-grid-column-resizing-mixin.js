@@ -3,14 +3,13 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 
 /**
  * @polymerMixin
  */
 export const ColumnResizingMixin = (superClass) =>
-  class ColumnResizingMixin extends GestureEventListeners(superClass) {
+  class ColumnResizingMixin extends superClass {
     ready() {
       super.ready();
       const scroller = this.$.scroller;

@@ -163,15 +163,15 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
 
       <div part="overlay-header" on-touchend="_preventDefault" desktop$="[[_desktopMode]]" aria-hidden="true">
         <div part="label">[[_formatDisplayed(selectedDate, i18n.formatDate, label)]]</div>
-        <div part="clear-button" on-tap="_clear" showclear$="[[_showClear(selectedDate)]]"></div>
-        <div part="toggle-button" on-tap="_cancel"></div>
+        <div part="clear-button" showclear$="[[_showClear(selectedDate)]]"></div>
+        <div part="toggle-button"></div>
 
-        <div part="years-toggle-button" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller" aria-hidden="true">
+        <div part="years-toggle-button" desktop$="[[_desktopMode]]" aria-hidden="true">
           [[_yearAfterXMonths(_visibleMonthIndex)]]
         </div>
       </div>
 
-      <div id="scrollers" desktop$="[[_desktopMode]]" on-track="_track">
+      <div id="scrollers" desktop$="[[_desktopMode]]">
         <vaadin-infinite-scroller
           id="monthScroller"
           on-custom-scroll="_onMonthScroll"
@@ -199,7 +199,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
         </vaadin-infinite-scroller>
         <vaadin-infinite-scroller
           id="yearScroller"
-          on-tap="_onYearTap"
           on-custom-scroll="_onYearScroll"
           on-touchstart="_onYearScrollTouchStart"
           buffer-size="12"
@@ -226,13 +225,10 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
           part="today-button"
           theme="tertiary"
           disabled="[[!_isTodayAllowed(minDate, maxDate)]]"
-          on-tap="_onTodayTap"
         >
           [[i18n.today]]
         </vaadin-button>
-        <vaadin-button id="cancelButton" part="cancel-button" theme="tertiary" on-tap="_cancel">
-          [[i18n.cancel]]
-        </vaadin-button>
+        <vaadin-button id="cancelButton" part="cancel-button" theme="tertiary"> [[i18n.cancel]] </vaadin-button>
       </div>
       <iron-media-query query="(min-width: 375px)" query-matches="{{_desktopMode}}"></iron-media-query>
     `;
@@ -329,6 +325,17 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
     addListener(this, 'tap', this._stopPropagation);
     this.addEventListener('focus', this._onOverlayFocus.bind(this));
     this.addEventListener('blur', this._onOverlayBlur.bind(this));
+    addListener(this.$.scrollers, 'track', this._track.bind(this));
+    addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
+    addListener(this.shadowRoot.querySelector('[part="today-button"]'), 'tap', this._onTodayTap.bind(this));
+    addListener(this.shadowRoot.querySelector('[part="cancel-button"]'), 'tap', this._cancel.bind(this));
+    addListener(this.shadowRoot.querySelector('[part="toggle-button"]'), 'tap', this._cancel.bind(this));
+    addListener(this.shadowRoot.querySelector('[part="years"]'), 'tap', this._onYearTap.bind(this));
+    addListener(
+      this.shadowRoot.querySelector('[part="years-toggle-button"]'),
+      'tap',
+      this._toggleYearScroller.bind(this)
+    );
   }
 
   /**

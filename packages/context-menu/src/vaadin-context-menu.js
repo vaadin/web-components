@@ -6,7 +6,6 @@
 import './vaadin-contextmenu-event.js';
 import './vaadin-device-detector.js';
 import './vaadin-context-menu-overlay.js';
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { addListener, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
@@ -199,9 +198,9 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemePropertyMixin
  * @mixes ItemsMixin
- * @mixes GestureEventListeners
+
  */
-class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEventListeners(PolymerElement)))) {
+class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
