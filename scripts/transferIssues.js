@@ -83,7 +83,6 @@ async function getSourceReposList() {
         } catch (e) {
           if (!!e.constructor && e.constructor.name === 'RequestError' && e.status === 404) {
             console.log(`Skipped the package ${package} as it has no separate repo`);
-            return;
           } else {
             throw e;
           }

@@ -372,7 +372,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
         }
       })
     );
-    return;
   }
 
   /**

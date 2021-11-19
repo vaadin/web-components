@@ -88,7 +88,6 @@ export class DatePickerObserver extends ComponentObserver {
     if (event.detail.value === false && this.blurWhileOpened) {
       this.blurWhileOpened = false;
       this.hideOutline(this.datePicker);
-      return;
     }
   }
 }

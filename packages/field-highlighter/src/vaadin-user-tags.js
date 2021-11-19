@@ -279,7 +279,6 @@ export class UserTags extends PolymerElement {
 
     if (this.opened && this.hasFocus) {
       this.updateTags(users, changedTags);
-      return;
     } else if (addedUsers.length && document.visibilityState !== 'hidden') {
       // Avoid adding to queue if window is not visible.
       const tags = changedTags.added;
