@@ -11,6 +11,10 @@ export class MockList extends HTMLElement {
     window.Vaadin.templateRendererCallback?.(this);
   }
 
+  get renderer() {
+    return this.__renderer;
+  }
+
   set renderer(renderer) {
     this.__renderer = renderer;
     this.render();
