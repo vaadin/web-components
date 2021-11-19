@@ -1211,8 +1211,10 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
         const targetProperty = jsonConfiguration[attr];
         if (attr.indexOf('_fn_') === 0 && (typeof targetProperty === 'string' || targetProperty instanceof String)) {
           try {
+            // eslint-disable-next-line no-eval
             jsonConfiguration[attr.substr(4)] = eval('(' + targetProperty + ')');
           } catch (e) {
+            // eslint-disable-next-line no-eval
             jsonConfiguration[attr.substr(4)] = eval('(function(){' + targetProperty + '})');
           }
           delete jsonConfiguration[attr];
