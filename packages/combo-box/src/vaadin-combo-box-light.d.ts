@@ -3,6 +3,9 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
@@ -136,6 +139,9 @@ declare class ComboBoxLight<TItem = ComboBoxDefaultItem> extends HTMLElement {
 interface ComboBoxLight<TItem = ComboBoxDefaultItem>
   extends ComboBoxDataProviderMixinClass<TItem>,
     ComboBoxMixinClass<TItem>,
+    KeyboardMixinClass,
+    InputMixinClass,
+    DisabledMixinClass,
     ThemableMixinClass {}
 
 declare global {
