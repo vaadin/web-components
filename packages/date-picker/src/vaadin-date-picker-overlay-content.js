@@ -8,12 +8,11 @@ import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-month-calendar.js';
 import './vaadin-infinite-scroller.js';
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-import { addListener, setTouchAction } from '@polymer/polymer/lib/utils/gestures.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateEquals, extractDateParts, getClosestDate, getISOWeekNumber } from './vaadin-date-picker-helper.js';
 
@@ -21,7 +20,7 @@ import { dateEquals, extractDateParts, getClosestDate, getISOWeekNumber } from '
  * @extends HTMLElement
  * @private
  */
-class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListeners(PolymerElement))) {
+class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
