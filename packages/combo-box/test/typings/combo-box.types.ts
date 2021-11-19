@@ -44,14 +44,9 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 
 /* ComboBox */
 const genericComboBox = document.createElement('vaadin-combo-box');
+assertType<ComboBox>(genericComboBox);
 
 const narrowedComboBox = genericComboBox as ComboBox<TestComboBoxItem>;
-assertType<ComboBox>(narrowedComboBox);
-assertType<ControllerMixinClass>(narrowedComboBox);
-assertType<ElementMixinClass>(narrowedComboBox);
-assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBox);
-assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBox);
-assertType<ThemableMixinClass>(narrowedComboBox);
 
 narrowedComboBox.addEventListener('change', (event) => {
   assertType<ComboBoxChangeEvent<TestComboBoxItem>>(event);
@@ -93,8 +88,19 @@ assertType<() => boolean>(narrowedComboBox.checkValidity);
 assertType<() => boolean>(narrowedComboBox.validate);
 assertType<() => void>(narrowedComboBox.close);
 assertType<() => void>(narrowedComboBox.open);
+assertType<boolean>(narrowedComboBox.allowCustomValue);
+assertType<boolean>(narrowedComboBox.autofocus);
+assertType<boolean>(narrowedComboBox.autoselect);
 assertType<boolean | null | undefined>(narrowedComboBox.autoOpenDisabled);
-assertType<boolean | null | undefined>(narrowedComboBox.opened);
+assertType<boolean>(narrowedComboBox.opened);
+assertType<string>(narrowedComboBox.filter);
+assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.filteredItems);
+assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.items);
+assertType<string | null | undefined>(narrowedComboBox.itemIdPath);
+assertType<string>(narrowedComboBox.itemLabelPath);
+assertType<string>(narrowedComboBox.itemValuePath);
+assertType<boolean>(narrowedComboBox.loading);
+assertType<TestComboBoxItem | null | undefined>(narrowedComboBox.selectedItem);
 assertType<boolean>(narrowedComboBox.invalid);
 assertType<HTMLElement | null | undefined>(narrowedComboBox.focusElement);
 assertType<boolean>(narrowedComboBox.disabled);
@@ -102,6 +108,8 @@ assertType<boolean>(narrowedComboBox.clearButtonVisible);
 assertType<string | null | undefined>(narrowedComboBox.errorMessage);
 assertType<string>(narrowedComboBox.placeholder);
 assertType<string | null | undefined>(narrowedComboBox.helperText);
+assertType<string>(narrowedComboBox.pattern);
+assertType<boolean | null | undefined>(narrowedComboBox.preventInvalidInput);
 assertType<boolean>(narrowedComboBox.readonly);
 assertType<string | null | undefined>(narrowedComboBox.label);
 assertType<string>(narrowedComboBox.value);
@@ -109,6 +117,8 @@ assertType<boolean>(narrowedComboBox.required);
 assertType<string>(narrowedComboBox.name);
 
 // ComboBox mixins
+assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBox);
+assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ControllerMixinClass>(narrowedComboBox);
 assertType<ElementMixinClass>(narrowedComboBox);
 assertType<DelegateFocusMixinClass>(narrowedComboBox);
@@ -130,9 +140,6 @@ const genericComboBoxLight = document.createElement('vaadin-combo-box-light');
 assertType<ComboBoxLight>(genericComboBoxLight);
 
 const narrowedComboBoxLight = genericComboBoxLight as ComboBoxLight<TestComboBoxItem>;
-assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBoxLight);
-assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBoxLight);
-assertType<ThemableMixinClass>(narrowedComboBoxLight);
 
 narrowedComboBoxLight.addEventListener('change', (event) => {
   assertType<ComboBoxLightChangeEvent<TestComboBoxItem>>(event);
@@ -175,16 +182,16 @@ assertType<() => boolean>(narrowedComboBoxLight.validate);
 assertType<() => void>(narrowedComboBoxLight.close);
 assertType<() => void>(narrowedComboBoxLight.open);
 assertType<boolean | null | undefined>(narrowedComboBoxLight.autoOpenDisabled);
-assertType<boolean | null | undefined>(narrowedComboBoxLight.opened);
+assertType<boolean>(narrowedComboBoxLight.opened);
 assertType<boolean>(narrowedComboBoxLight.invalid);
 assertType<boolean>(narrowedComboBoxLight.disabled);
 assertType<boolean>(narrowedComboBoxLight.readonly);
 assertType<string>(narrowedComboBoxLight.value);
 
 // ComboBoxLight mixins
-assertType<ElementMixinClass>(narrowedComboBoxLight);
+assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBoxLight);
+assertType<ComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBoxLight);
 assertType<DisabledMixinClass>(narrowedComboBoxLight);
-assertType<InputConstraintsMixinClass>(narrowedComboBoxLight);
 assertType<InputMixinClass>(narrowedComboBoxLight);
 assertType<KeyboardMixinClass>(narrowedComboBoxLight);
 assertType<ThemableMixinClass>(narrowedComboBoxLight);
