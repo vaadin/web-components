@@ -19,6 +19,13 @@ export interface CustomFieldI18n {
 }
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type CustomFieldChangeEvent = Event & {
+  target: CustomField;
+};
+
+/**
  * Fired when the `invalid` property changes.
  */
 export type CustomFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
@@ -34,7 +41,9 @@ export interface CustomFieldCustomEventMap {
   'value-changed': CustomFieldValueChangedEvent;
 }
 
-export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldCustomEventMap {}
+export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldCustomEventMap {
+  change: CustomFieldChangeEvent;
+}
 
 /**
  * `<vaadin-custom-field>` is a web component for wrapping multiple components as a single field.

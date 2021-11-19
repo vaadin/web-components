@@ -14,6 +14,13 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 export interface DateTimePickerI18n extends DatePickerI18n, TimePickerI18n {}
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type DateTimePickerChangeEvent = Event & {
+  target: DateTimePicker;
+};
+
+/**
  * Fired when the `invalid` property changes.
  */
 export type DateTimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
@@ -29,7 +36,9 @@ export interface DateTimePickerCustomEventMap {
   'value-changed': DateTimePickerValueChangedEvent;
 }
 
-export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HTMLElementEventMap {}
+export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HTMLElementEventMap {
+  change: DateTimePickerChangeEvent;
+}
 
 /**
  * `<vaadin-date-time-picker>` is a Web Component providing a date time selection field.

@@ -7,6 +7,13 @@ import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type PasswordFieldChangeEvent = Event & {
+  target: PasswordField;
+};
+
+/**
  * Fired when the `invalid` property changes.
  */
 export type PasswordFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
@@ -22,7 +29,9 @@ export interface PasswordFieldCustomEventMap {
   'value-changed': PasswordFieldValueChangedEvent;
 }
 
-export interface PasswordFieldEventMap extends HTMLElementEventMap, PasswordFieldCustomEventMap {}
+export interface PasswordFieldEventMap extends HTMLElementEventMap, PasswordFieldCustomEventMap {
+  change: PasswordFieldChangeEvent;
+}
 
 /**
  * `<vaadin-password-field>` is an extension of `<vaadin-text-field>` component for entering passwords.

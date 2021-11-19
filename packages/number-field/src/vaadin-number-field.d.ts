@@ -9,6 +9,13 @@ import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type NumberFieldChangeEvent = Event & {
+  target: NumberField;
+};
+
+/**
  * Fired when the `invalid` property changes.
  */
 export type NumberFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
@@ -24,7 +31,9 @@ export interface NumberFieldCustomEventMap {
   'value-changed': NumberFieldValueChangedEvent;
 }
 
-export interface NumberFieldEventMap extends HTMLElementEventMap, NumberFieldCustomEventMap {}
+export interface NumberFieldEventMap extends HTMLElementEventMap, NumberFieldCustomEventMap {
+  change: NumberFieldChangeEvent;
+}
 
 /**
  * `<vaadin-number-field>` is an input field web component that only accepts numeric input.

@@ -23,6 +23,13 @@ export interface TimePickerI18n {
 }
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type TimePickerChangeEvent = Event & {
+  target: TimePicker;
+};
+
+/**
  * Fired when the `invalid` property changes.
  */
 export type TimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
@@ -38,7 +45,9 @@ export interface TimePickerCustomEventMap {
   'value-changed': TimePickerValueChangedEvent;
 }
 
-export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerCustomEventMap {}
+export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerCustomEventMap {
+  change: TimePickerChangeEvent;
+}
 
 /**
  * `<vaadin-time-picker>` is a Web Component providing a time-selection field.

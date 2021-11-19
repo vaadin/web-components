@@ -14,12 +14,14 @@ import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themabl
 import { DatePickerMixinClass } from '../../src/vaadin-date-picker-mixin.js';
 import {
   DatePicker,
+  DatePickerChangeEvent,
   DatePickerInvalidChangedEvent,
   DatePickerOpenedChangedEvent,
   DatePickerValueChangedEvent
 } from '../../vaadin-date-picker.js';
 import {
   DatePickerLight,
+  DatePickerLightChangeEvent,
   DatePickerLightInvalidChangedEvent,
   DatePickerLightOpenedChangedEvent,
   DatePickerLightValueChangedEvent
@@ -44,6 +46,11 @@ datePicker.addEventListener('invalid-changed', (event) => {
 datePicker.addEventListener('value-changed', (event) => {
   assertType<DatePickerValueChangedEvent>(event);
   assertType<string>(event.detail.value);
+});
+
+datePicker.addEventListener('change', (event) => {
+  assertType<DatePickerChangeEvent>(event);
+  assertType<DatePicker>(event.target);
 });
 
 // DatePicker properties
@@ -103,6 +110,11 @@ datePickerLight.addEventListener('invalid-changed', (event) => {
 datePickerLight.addEventListener('value-changed', (event) => {
   assertType<DatePickerLightValueChangedEvent>(event);
   assertType<string>(event.detail.value);
+});
+
+datePickerLight.addEventListener('change', (event) => {
+  assertType<DatePickerLightChangeEvent>(event);
+  assertType<DatePickerLight>(event.target);
 });
 
 // DatePickerLight properties

@@ -3,7 +3,12 @@ import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixi
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { InputFieldMixinClass } from '@vaadin/field-base/src/input-field-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { TextAreaInvalidChangedEvent, TextAreaValueChangedEvent } from '../../vaadin-text-area.js';
+import {
+  TextArea,
+  TextAreaChangeEvent,
+  TextAreaInvalidChangedEvent,
+  TextAreaValueChangedEvent
+} from '../../vaadin-text-area.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -16,6 +21,11 @@ assertType<InputFieldMixinClass>(area);
 assertType<ThemableMixinClass>(area);
 
 // Events
+area.addEventListener('change', (event) => {
+  assertType<TextAreaChangeEvent>(event);
+  assertType<TextArea>(event.target);
+});
+
 area.addEventListener('invalid-changed', (event) => {
   assertType<TextAreaInvalidChangedEvent>(event);
   assertType<boolean>(event.detail.value);
