@@ -3,10 +3,29 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { LitElement } from 'lit';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+
+function isSlot(node) {
+  return node.localName === 'slot';
+}
+
+function getFlattenedNodes(node) {
+  if (isSlot(node)) {
+    return node.assignedNodes({ flatten: true });
+  } else {
+    return Array.from(node.childNodes)
+      .map((node) => {
+        if (isSlot(node)) {
+          return node.assignedNodes({ flatten: true });
+        } else {
+          return [node];
+        }
+      })
+      .reduce((a, b) => a.concat(b), []);
+  }
+}
 
 /**
  * @polymerMixin
@@ -47,7 +66,7 @@ export const DynamicColumnsMixin = (superClass) =>
      * @protected
      */
     _getChildColumns(el) {
-      return FlattenedNodesObserver.getFlattenedNodes(el).filter(this._isColumnElement);
+      return getFlattenedNodes(el).filter(this._isColumnElement);
     }
 
     /** @private */
@@ -67,7 +86,7 @@ export const DynamicColumnsMixin = (superClass) =>
 
     /** @private */
     _getColumnTree() {
-      const rootColumns = FlattenedNodesObserver.getFlattenedNodes(this).filter(this._isColumnElement);
+      const rootColumns = getFlattenedNodes(this).filter(this._isColumnElement);
       const columnTree = [rootColumns];
 
       let c = rootColumns;
@@ -92,17 +111,29 @@ export const DynamicColumnsMixin = (superClass) =>
 
     /** @private */
     _addNodeObserver() {
-      this._observer = new FlattenedNodesObserver(this, (info) => {
-        const hasColumnElements = (nodeCollection) => nodeCollection.filter(this._isColumnElement).length > 0;
-        if (hasColumnElements(info.addedNodes) || hasColumnElements(info.removedNodes)) {
-          const allRemovedCells = info.removedNodes.flatMap((c) => c._allCells);
-          const filterNotConnected = (element) =>
-            allRemovedCells.filter((cell) => cell._content.contains(element)).length;
+      this._observer = new MutationObserver((info) => {
+        const addedNodes = info.flatMap((mutation) => [...mutation.addedNodes]);
+        const removedNodes = info.flatMap((mutation) => [...mutation.removedNodes]);
+        this.__processColumnChange(addedNodes, removedNodes);
+      });
 
-          this.__removeSorters(this._sorters.filter(filterNotConnected));
-          this.__removeFilters(this._filters.filter(filterNotConnected));
-          this._updateColumnTree();
-        }
+      this._observer.observe(this, { childList: true });
+      this.__processColumnChange(getFlattenedNodes(this));
+    }
+
+    /** @private */
+    __processColumnChange(addedNodes = [], removedNodes = []) {
+      const addedColumns = addedNodes.filter(this._isColumnElement);
+      const removedColumns = removedNodes.filter(this._isColumnElement);
+
+      if (addedColumns.length || removedColumns.length) {
+        const allRemovedCells = removedNodes.flatMap((c) => c._allCells);
+        const filterNotConnected = (element) =>
+          allRemovedCells.filter((cell) => cell._content.contains(element)).length;
+
+        this.__removeSorters(this._sorters.filter(filterNotConnected));
+        this.__removeFilters(this._filters.filter(filterNotConnected));
+        this._updateColumnTree();
 
         this._debouncerCheckImports = Debouncer.debounce(
           this._debouncerCheckImports,
@@ -111,7 +142,7 @@ export const DynamicColumnsMixin = (superClass) =>
         );
 
         this._ensureFirstPageLoaded();
-      });
+      }
     }
 
     /** @private */
