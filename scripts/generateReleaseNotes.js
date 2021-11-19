@@ -132,7 +132,7 @@ function parseLog(log) {
           pos = 'head';
         } else {
           if (line.startsWith(' ')) {
-            commit.body += '';
+            commit.body = String(commit.body);
           } else if (/^packages\/.*/.test(line)) {
             const wc = line.split('/')[1];
             if (!commit.components.includes(wc)) {

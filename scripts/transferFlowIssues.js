@@ -13,7 +13,7 @@ console.log(
 );
 
 // stop after processing ISSUE_LIMIT issues
-const ISSUE_LIMIT = +process.env.ISSUE_LIMIT || Number.MAX_SAFE_INTEGER;
+const ISSUE_LIMIT = Number(process.env.ISSUE_LIMIT) || Number.MAX_SAFE_INTEGER;
 
 // GitHub API client (both REST and GraphQL)
 const octokit = new Octokit({ auth: process.env.GITHUB_API_TOKEN });
