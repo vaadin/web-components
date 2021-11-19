@@ -22,15 +22,15 @@ async function exe(cmd, quiet) {
   child.stdout.on('data', capture);
   child.stderr.on('data', capture);
 
-  return new Promise((resolve, reject) =>
+  return new Promise((resolve, reject) => {
     child.on('exit', async function (code) {
       if (code == 0) {
         resolve(out);
       } else {
         reject(`${quiet ? out : ''}\n!!! ERROR !!! Process '${cmd}' exited with code ${code}`);
       }
-    })
-  );
+    });
+  });
 }
 
 const version = process.env.npm_config_bump;

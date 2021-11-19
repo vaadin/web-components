@@ -714,7 +714,9 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       document.body.appendChild(this.__fakeTarget);
       // let the focus step out of shadow root!
       this.__fakeTarget.focus();
-      return new Promise((resolve) => setTimeout(resolve));
+      return new Promise((resolve) => {
+        setTimeout(resolve);
+      });
     };
 
     const focusBack = (offsetNode, offset) => {

@@ -77,7 +77,9 @@ function zhRateLimitingAdapter(adapter) {
           const sentAtMs = new Date(e.response.headers['date']).getTime();
           const timeoutMs = resetAtMs - sentAtMs;
           console.log(`timeout until ZenHub API request rate reset: ${timeoutMs} ms`);
-          await new Promise((r) => setTimeout(r, timeoutMs));
+          await new Promise((r) => {
+            setTimeout(r, timeoutMs);
+          });
         } else {
           throw e;
         }

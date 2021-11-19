@@ -249,5 +249,7 @@ export const fire = (type, detail, options) => {
 };
 
 export const nextResize = (target) => {
-  return new Promise((resolve) => new ResizeObserver(() => setTimeout(resolve)).observe(target));
+  return new Promise((resolve) => {
+    new ResizeObserver(() => setTimeout(resolve)).observe(target);
+  });
 };
