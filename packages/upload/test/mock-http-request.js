@@ -88,6 +88,7 @@ MockHttpRequest.prototype = {
 
   /*** Request ***/
 
+  // eslint-disable-next-line max-params
   open: function (method, url, async, user, password) {
     if (typeof method !== 'string') {
       throw 'INVALID_METHOD';

@@ -694,6 +694,7 @@ class Grid extends ElementMixin(
    * @param {boolean} noNotify
    * @protected
    */
+  // eslint-disable-next-line max-params
   _updateRow(row, columns, section, isColumnRow, noNotify) {
     section = section || 'body';
 

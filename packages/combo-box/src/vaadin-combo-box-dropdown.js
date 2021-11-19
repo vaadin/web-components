@@ -262,6 +262,7 @@ export class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, Poly
     }
   }
 
+  // eslint-disable-next-line max-params
   __updateScroller(scroller, items, opened, loading, selectedItem, itemIdPath, focusedIndex, renderer, theme) {
     if (scroller) {
       scroller.setProperties({

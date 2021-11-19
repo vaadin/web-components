@@ -863,6 +863,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /** @private */
+  // eslint-disable-next-line max-params
   _templateOrRendererChanged(template, renderer, owner, model, opened) {
     if (template && renderer) {
       this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
