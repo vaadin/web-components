@@ -91,13 +91,13 @@ MockHttpRequest.prototype = {
   // eslint-disable-next-line max-params
   open: function (method, url, async, user, password) {
     if (typeof method !== 'string') {
-      throw 'INVALID_METHOD';
+      throw new Error('INVALID_METHOD');
     }
     switch (method.toUpperCase()) {
       case 'CONNECT':
       case 'TRACE':
       case 'TRACK':
-        throw 'SECURITY_ERR';
+        throw new Error('SECURITY_ERR');
 
       case 'DELETE':
       case 'GET':
@@ -110,7 +110,7 @@ MockHttpRequest.prototype = {
     this.method = method;
 
     if (typeof url !== 'string') {
-      throw 'INVALID_URL';
+      throw new Error('INVALID_URL');
     }
     this.url = url;
     this.urlParts = this.parseUri(url);
@@ -164,7 +164,7 @@ MockHttpRequest.prototype = {
 
   send: function (data) {
     if (this.readyState !== this.OPENED || this.sent) {
-      throw 'INVALID_STATE_ERR';
+      throw new Error('INVALID_STATE_ERR');
     }
     if (this.method === 'GET' || this.method === 'HEAD') {
       data = null;
@@ -315,7 +315,7 @@ MockHttpRequest.prototype = {
   receive: function (status, data) {
     if (this.readyState !== this.OPENED || !this.sent) {
       // Can't respond to unopened request.
-      throw 'INVALID_STATE_ERR';
+      throw new Error('INVALID_STATE_ERR');
     }
 
     this.status = status;
@@ -341,7 +341,7 @@ MockHttpRequest.prototype = {
   err: function (exception) {
     if (this.readyState !== this.OPENED || !this.sent) {
       // Can't respond to unopened request.
-      throw 'INVALID_STATE_ERR';
+      throw new Error('INVALID_STATE_ERR');
     }
 
     this.responseText = null;
