@@ -92,8 +92,8 @@ class GridSelectionColumn extends GridColumn {
   constructor() {
     super();
 
-    this.__addObserver(['selectAll'], '__onSelectAllChanged');
-    this.__addObserver(
+    this._addObserver(['selectAll'], '__onSelectAllChanged');
+    this._addObserver(
       ['_headerRenderer', '_headerCell', 'path', 'header', 'selectAll', '__indeterminate', '__selectAllHidden'],
       '_onHeaderRendererOrBindingChanged'
     );

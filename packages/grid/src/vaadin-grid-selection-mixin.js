@@ -25,7 +25,7 @@ export const SelectionMixin = (superClass) =>
 
     constructor() {
       super();
-      this.__addObserver(['selectedItems'], '_selectedItemsChanged');
+      this._addObserver(['selectedItems'], '_selectedItemsChanged');
       this.selectedItems = [];
     }
 

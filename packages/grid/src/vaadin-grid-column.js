@@ -7,13 +7,14 @@ import { LitElement } from 'lit';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PropertyObserverMixin } from '@vaadin/component-base/src/property-observer-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 
 /**
  * @polymerMixin
  */
 export const ColumnBaseMixin = (superClass) =>
-  class ColumnBaseMixin extends superClass {
+  class ColumnBaseMixin extends PropertyObserverMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -171,53 +172,23 @@ export const ColumnBaseMixin = (superClass) =>
       };
     }
 
-    /** @protected */
-    __addObserver(props, functionName) {
-      this.__observers = this.__observers || {};
-
-      props.forEach((prop) => {
-        if (!(prop in this.__observers)) {
-          this.__observers[prop] = [];
-        }
-
-        this.__observers[prop].push({
-          functionName,
-          props
-        });
-      });
-    }
-
-    /** @protected */
-    updated(props) {
-      super.updated(props);
-
-      props.forEach((_value, key) => {
-        const observers = this.__observers[key];
-        if (observers) {
-          observers.forEach((observer) => {
-            this[observer.functionName](...observer.props.map((prop) => this[prop]));
-          });
-        }
-      });
-    }
-
     constructor() {
       super();
-      this.__addObserver(['width', '_headerCell', '_footerCell', '_cells'], '_widthChanged');
-      this.__addObserver(['frozen', '_headerCell', '_footerCell', '_cells'], '_frozenChanged');
-      this.__addObserver(['flexGrow', '_headerCell', '_footerCell', '_cells'], '_flexGrowChanged');
-      this.__addObserver(['textAlign', '_cells', '_headerCell', '_footerCell'], '_textAlignChanged');
-      this.__addObserver(['_order', '_headerCell', '_footerCell', '_cells'], '_orderChanged');
-      this.__addObserver(['_lastFrozen'], '_lastFrozenChanged');
-      this.__addObserver(['_renderer', '_cells', '_cells.*', 'path'], '_onRendererOrBindingChanged');
-      this.__addObserver(['_headerRenderer', '_headerCell', 'path', 'header'], '_onHeaderRendererOrBindingChanged');
-      this.__addObserver(['_footerRenderer', '_footerCell'], '_onFooterRendererOrBindingChanged');
-      this.__addObserver(['resizable', '_headerCell'], '_resizableChanged');
-      this.__addObserver(['_reorderStatus', '_headerCell', '_footerCell', '_cells.*'], '_reorderStatusChanged');
-      this.__addObserver(['hidden', '_headerCell', '_footerCell', '_cells.*'], '_hiddenChanged');
-      this.__addObserver(['renderer', '__initialized'], '_computeRenderer');
-      this.__addObserver(['headerRenderer', 'header', '__initialized'], '_computeHeaderRenderer');
-      this.__addObserver(['footerRenderer', '__initialized'], '_computeFooterRenderer');
+      this._addObserver(['width', '_headerCell', '_footerCell', '_cells'], '_widthChanged');
+      this._addObserver(['frozen', '_headerCell', '_footerCell', '_cells'], '_frozenChanged');
+      this._addObserver(['flexGrow', '_headerCell', '_footerCell', '_cells'], '_flexGrowChanged');
+      this._addObserver(['textAlign', '_cells', '_headerCell', '_footerCell'], '_textAlignChanged');
+      this._addObserver(['_order', '_headerCell', '_footerCell', '_cells'], '_orderChanged');
+      this._addObserver(['_lastFrozen'], '_lastFrozenChanged');
+      this._addObserver(['_renderer', '_cells', '_cells.*', 'path'], '_onRendererOrBindingChanged');
+      this._addObserver(['_headerRenderer', '_headerCell', 'path', 'header'], '_onHeaderRendererOrBindingChanged');
+      this._addObserver(['_footerRenderer', '_footerCell'], '_onFooterRendererOrBindingChanged');
+      this._addObserver(['resizable', '_headerCell'], '_resizableChanged');
+      this._addObserver(['_reorderStatus', '_headerCell', '_footerCell', '_cells.*'], '_reorderStatusChanged');
+      this._addObserver(['hidden', '_headerCell', '_footerCell', '_cells.*'], '_hiddenChanged');
+      this._addObserver(['renderer', '__initialized'], '_computeRenderer');
+      this._addObserver(['headerRenderer', 'header', '__initialized'], '_computeHeaderRenderer');
+      this._addObserver(['footerRenderer', '__initialized'], '_computeFooterRenderer');
 
       this.width = '100px';
       this.flexGrow = 1;

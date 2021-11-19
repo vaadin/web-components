@@ -8,6 +8,7 @@ import './vaadin-grid-styles.js';
 import { html, LitElement } from 'lit';
 import { isAndroid, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PropertyObserverMixin } from '@vaadin/component-base/src/property-observer-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -254,7 +255,9 @@ class Grid extends ElementMixin(
                       A11yMixin(
                         FilterMixin(
                           ColumnReorderingMixin(
-                            ColumnResizingMixin(EventContextMixin(DragAndDropMixin(StylingMixin(LitElement))))
+                            ColumnResizingMixin(
+                              EventContextMixin(DragAndDropMixin(StylingMixin(PropertyObserverMixin(LitElement))))
+                            )
                           )
                         )
                       )
@@ -294,38 +297,6 @@ class Grid extends ElementMixin(
 
   static get is() {
     return 'vaadin-grid';
-  }
-
-  /** @protected */
-  __addObserver(props, functionName) {
-    this.__observers = this.__observers || {};
-
-    props.forEach((prop) => {
-      if (!(prop in this.__observers)) {
-        this.__observers[prop] = [];
-      }
-
-      this.__observers[prop].push({
-        functionName,
-        props
-      });
-    });
-  }
-
-  /** @protected */
-  updated(props) {
-    super.updated(props);
-
-    props.forEach((_value, key) => {
-      const observers = this.__observers[key];
-      if (observers) {
-        observers.forEach((observer) => {
-          // TODO: Observer function should only get called once
-          // if any number of its dependencies change
-          this[observer.functionName](...observer.props.map((prop) => this[prop]));
-        });
-      }
-    });
   }
 
   static get properties() {
@@ -402,8 +373,8 @@ class Grid extends ElementMixin(
     super();
     this.addEventListener('animationend', this._onAnimationEnd);
 
-    this.__addObserver(['_columnTree'], '_columnTreeChanged');
-    this.__addObserver(['_effectiveSize', '__virtualizer', '_hasData', '_columnTree'], '_effectiveSizeChanged');
+    this._addObserver(['_columnTree'], '_columnTreeChanged');
+    this._addObserver(['_effectiveSize', '__virtualizer', '_hasData', '_columnTree'], '_effectiveSizeChanged');
   }
 
   /** @protected */
