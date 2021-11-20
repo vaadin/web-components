@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { css, registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
 
 let createStyles =
@@ -9,21 +9,27 @@ let createStyles =
     registerStyles(themeFor, styles, { moduleId });
   });
 
-let defineCustomElement = (name, parentName, content = '') => {
-  class CustomElement extends ThemableMixin(parentName ? customElements.get(parentName) : PolymerElement) {
-    static get is() {
-      return name;
+let defineCustomElement =
+  window.defineCustomElementFunction ||
+  ((name, parentName, content = '') => {
+    class CustomElement extends ThemableMixin(parentName ? customElements.get(parentName) : PolymerElement) {
+      static get is() {
+        return name;
+      }
+
+      static get template() {
+        if (content) {
+          const template = document.createElement('template');
+          template.innerHTML = content;
+          return template;
+        } else {
+          return super.template;
+        }
+      }
     }
 
-    static get template() {
-      const template = document.createElement('template');
-      template.innerHTML = content;
-      return template;
-    }
-  }
-
-  customElements.define(name, CustomElement);
-};
+    customElements.define(name, CustomElement);
+  });
 
 createStyles(
   'test-qux-default-theme',
@@ -165,93 +171,30 @@ createStyles(
   `
 );
 
-class TestFoo extends ThemableMixin(PolymerElement) {
-  static get is() {
-    return 'test-foo';
-  }
+defineCustomElement(
+  'test-foo',
+  '',
+  `
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <div part="text" id="text">text</div>
+  `
+);
 
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: block;
-        }
-      </style>
-      <div part="text" id="text">text</div>
-    `;
-  }
-}
+defineCustomElement('test-bar', '', `<div part="text" id="text">text</div>`);
 
-customElements.define(TestFoo.is, TestFoo);
+defineCustomElement('test-baz', 'test-bar', '');
 
-class TestBar extends ThemableMixin(PolymerElement) {
-  static get is() {
-    return 'test-bar';
-  }
+defineCustomElement('test-qux', '', '<div part="text" id="text">text</div>');
 
-  static get template() {
-    return html`<div part="text" id="text">text</div>`;
-  }
-}
+defineCustomElement('test-own-template', 'test-foo', `<div part="text" id="text">text</div>`);
 
-customElements.define(TestBar.is, TestBar);
+defineCustomElement('test-no-template', '', '');
 
-class TestBaz extends TestBar {
-  static get is() {
-    return 'test-baz';
-  }
-}
-
-customElements.define(TestBaz.is, TestBaz);
-
-class TestQux extends ThemableMixin(PolymerElement) {
-  static get is() {
-    return 'test-qux';
-  }
-
-  static get template() {
-    return html`<div part="text" id="text">text</div>`;
-  }
-}
-
-customElements.define(TestQux.is, TestQux);
-
-class TestOwnTemplate extends TestFoo {
-  static get is() {
-    return 'test-own-template';
-  }
-
-  static get template() {
-    return html`<div part="text" id="text">text</div>`;
-  }
-}
-
-customElements.define(TestOwnTemplate.is, TestOwnTemplate);
-
-class TestNoTemplate extends ThemableMixin(PolymerElement) {
-  static get is() {
-    return 'test-no-template';
-  }
-
-  static get template() {
-    // I don't want your template! Or anyone's template! Leave me alone!
-    return null;
-  }
-}
-
-customElements.define(TestNoTemplate.is, TestNoTemplate);
-
-class TestStyleOverride extends ThemableMixin(PolymerElement) {
-  static get is() {
-    return 'test-style-override';
-  }
-
-  static get template() {
-    return html`<div part="text" id="text">text</div>`;
-  }
-}
-
-customElements.define(TestStyleOverride.is, TestStyleOverride);
+defineCustomElement('test-style-override', '', '<div part="text" id="text">text</div>');
 
 describe('ThemableMixin', () => {
   let wrapper, components;
@@ -352,7 +295,7 @@ describe('ThemableMixin', () => {
 
     // Define the test-duplicate-parent and test-duplicate components
     defineCustomElement(name + '-parent');
-    defineCustomElement(name, name + '-parent');
+    defineCustomElement(name, name + '-parent', '<div></div>');
 
     // Create an instance of the test-duplicate component
     const testComponent = fixtureSync(`<${name}></${name}>`);
