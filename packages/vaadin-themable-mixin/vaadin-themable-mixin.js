@@ -222,10 +222,7 @@ export const ThemableMixin = (superClass) =>
       // Remove duplicates so that the last occurrence remains
       themeStyles = themeStyles.filter((style, index) => index === themeStyles.lastIndexOf(style));
 
-      return [
-        styles, // TODO: test
-        ...themeStyles
-      ];
+      return [styles, ...themeStyles];
     }
   };
 

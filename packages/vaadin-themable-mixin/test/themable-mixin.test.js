@@ -180,33 +180,44 @@ defineCustomElement(
   '',
   '<div part="text" id="text">text</div>',
   `
-  :host {
-    display: block;
-  }
-`
+    :host {
+      display: block;
+    }
+  `
 );
 
-defineCustomElement('test-bar', '', `<div part="text" id="text">text</div>`);
+defineCustomElement('test-bar', '', '<div part="text" id="text">text</div>');
 
 defineCustomElement('test-baz', 'test-bar', '');
 
 defineCustomElement('test-qux', '', '<div part="text" id="text">text</div>');
 
-defineCustomElement('test-own-template', 'test-foo', `<div part="text" id="text">text</div>`);
+defineCustomElement('test-own-template', 'test-foo', '<div part="text" id="text">text</div>');
 
 defineCustomElement('test-no-template', '', '');
 
 defineCustomElement('test-style-override', '', '<div part="text" id="text">text</div>');
+
+defineCustomElement(
+  'test-own-styles',
+  '',
+  '<div part="text" id="text">text</div>',
+  `
+    [part='text'] {
+      color: rgb(255, 0, 0);
+    }
+  `
+);
 
 function getText(element) {
   return element.shadowRoot.querySelector('#text');
 }
 
 describe('ThemableMixin', () => {
-  let wrapper, components;
+  let components;
 
   beforeEach(async () => {
-    wrapper = fixtureSync(`
+    const wrapper = fixtureSync(`
       <div>
         <test-foo></test-foo>
         <test-bar></test-bar>
@@ -215,79 +226,84 @@ describe('ThemableMixin', () => {
         <test-own-template></test-own-template>
         <test-no-template></test-no-template>
         <test-style-override></test-style-override>
+        <test-own-styles></test-own-styles>
       </div>
     `);
-    components = wrapper.children;
-    await nextFrame();
+
+    components = {};
+    [...wrapper.children].forEach((child) => {
+      components[child.localName] = child;
+    });
+
     await nextFrame();
   });
 
   it('should inject simple module', () => {
-    expect(getComputedStyle(getText(components[0])).color).to.equal('rgb(255, 255, 255)');
+    expect(getComputedStyle(getText(components['test-foo'])).color).to.equal('rgb(255, 255, 255)');
   });
 
   it('should inject multiple style modules', () => {
-    expect(getComputedStyle(getText(components[0])).color).to.equal('rgb(255, 255, 255)');
-    expect(getComputedStyle(getText(components[0])).backgroundColor).to.equal('rgb(255, 0, 0)');
+    expect(getComputedStyle(getText(components['test-foo'])).color).to.equal('rgb(255, 255, 255)');
+    expect(getComputedStyle(getText(components['test-foo'])).backgroundColor).to.equal('rgb(255, 0, 0)');
   });
 
   it('should inject to multiple components', () => {
-    expect(getComputedStyle(getText(components[0])).backgroundColor).to.equal('rgb(255, 0, 0)');
-    expect(getComputedStyle(getText(components[1])).backgroundColor).to.equal('rgb(255, 0, 0)');
+    expect(getComputedStyle(getText(components['test-foo'])).backgroundColor).to.equal('rgb(255, 0, 0)');
+    expect(getComputedStyle(getText(components['test-bar'])).backgroundColor).to.equal('rgb(255, 0, 0)');
   });
 
   it('should inject to subclassed components', () => {
-    expect(getComputedStyle(getText(components[2])).backgroundColor).to.equal('rgb(255, 0, 0)');
+    expect(getComputedStyle(getText(components['test-baz'])).backgroundColor).to.equal('rgb(255, 0, 0)');
   });
 
   it('should inject to wildcard styles', () => {
-    expect(getComputedStyle(getText(components[0])).position).to.equal('static');
-    expect(getComputedStyle(getText(components[1])).position).to.equal('relative');
-    expect(getComputedStyle(getText(components[2])).position).to.equal('relative');
+    expect(getComputedStyle(getText(components['test-foo'])).position).to.equal('static');
+    expect(getComputedStyle(getText(components['test-bar'])).position).to.equal('relative');
+    expect(getComputedStyle(getText(components['test-baz'])).position).to.equal('relative');
   });
 
   it('should override default value', () => {
-    expect(getComputedStyle(components[0]).display).to.equal('flex');
+    expect(getComputedStyle(components['test-foo']).display).to.equal('flex');
   });
 
   it('should fall back to default styles', () => {
-    expect(getComputedStyle(getText(components[3])).color).to.equal('rgb(255, 0, 0)');
+    expect(getComputedStyle(getText(components['test-qux'])).color).to.equal('rgb(255, 0, 0)');
   });
 
   it('should work with themable parent', () => {
-    expect(getComputedStyle(getText(components[2])).width).to.equal('100px');
+    expect(getComputedStyle(getText(components['test-baz'])).width).to.equal('100px');
   });
 
   it('should inherit parent themes to own custom template', () => {
-    expect(getComputedStyle(getText(components[4])).backgroundColor).to.equal('rgb(255, 0, 0)');
+    expect(getComputedStyle(getText(components['test-own-template'])).backgroundColor).to.equal('rgb(255, 0, 0)');
   });
 
   it('should override vaadin module styles', () => {
-    expect(getComputedStyle(getText(components[6])).color).to.equal('rgb(0, 0, 0)');
+    expect(getComputedStyle(getText(components['test-style-override'])).color).to.equal('rgb(0, 0, 0)');
   });
 
   it('lumo should override vaadin module styles', () => {
-    expect(getComputedStyle(getText(components[6])).display).to.equal('inline');
+    expect(getComputedStyle(getText(components['test-style-override'])).display).to.equal('inline');
   });
 
   it('material should override vaadin module styles', () => {
-    expect(getComputedStyle(getText(components[6])).opacity).to.equal('0.5');
+    expect(getComputedStyle(getText(components['test-style-override'])).opacity).to.equal('0.5');
   });
 
   it('should override lumo module styles', () => {
-    expect(getComputedStyle(getText(components[6])).color).to.equal('rgb(0, 0, 0)');
+    expect(getComputedStyle(getText(components['test-style-override'])).color).to.equal('rgb(0, 0, 0)');
   });
 
   it('should override material module styles', () => {
-    expect(getComputedStyle(getText(components[6])).color).to.equal('rgb(0, 0, 0)');
+    expect(getComputedStyle(getText(components['test-style-override'])).color).to.equal('rgb(0, 0, 0)');
   });
 
   it('should respect vaadin style module order', () => {
-    expect(getComputedStyle(components[6]).display).to.equal('block');
+    expect(getComputedStyle(components['test-style-override']).display).to.equal('block');
   });
 
   it('should respect custom style module order', () => {
-    expect(getComputedStyle(components[6]).position).to.equal('relative');
+    expect(getComputedStyle(components['test-style-override']).position).to.equal('relative');
   });
 
   it('should not include duplicate styles', () => {
@@ -325,5 +341,9 @@ describe('ThemableMixin', () => {
 
     // There should be only one occurence
     expect(occurrences).to.equal(1);
+  });
+
+  it('should have own styles', async () => {
+    expect(getComputedStyle(getText(components['test-own-styles'])).color).to.equal('rgb(255, 0, 0)');
   });
 });
