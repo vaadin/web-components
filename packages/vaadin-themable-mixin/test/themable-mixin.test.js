@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { css, registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
 
@@ -11,7 +11,7 @@ let createStyles =
 
 let defineCustomElement =
   window.defineCustomElementFunction ||
-  ((name, parentName, content = '') => {
+  ((name, parentName, content = '', styles) => {
     class CustomElement extends ThemableMixin(parentName ? customElements.get(parentName) : PolymerElement) {
       static get is() {
         return name;
@@ -19,6 +19,10 @@ let defineCustomElement =
 
       static get template() {
         if (content) {
+          if (styles) {
+            content = `<style>${styles}</style>${content}`;
+          }
+
           const template = document.createElement('template');
           template.innerHTML = content;
           return template;
@@ -174,14 +178,12 @@ createStyles(
 defineCustomElement(
   'test-foo',
   '',
+  '<div part="text" id="text">text</div>',
   `
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <div part="text" id="text">text</div>
-  `
+  :host {
+    display: block;
+  }
+`
 );
 
 defineCustomElement('test-bar', '', `<div part="text" id="text">text</div>`);
@@ -196,10 +198,14 @@ defineCustomElement('test-no-template', '', '');
 
 defineCustomElement('test-style-override', '', '<div part="text" id="text">text</div>');
 
+function getText(element) {
+  return element.shadowRoot.querySelector('#text');
+}
+
 describe('ThemableMixin', () => {
   let wrapper, components;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     wrapper = fixtureSync(`
       <div>
         <test-foo></test-foo>
@@ -212,30 +218,32 @@ describe('ThemableMixin', () => {
       </div>
     `);
     components = wrapper.children;
+    await nextFrame();
+    await nextFrame();
   });
 
   it('should inject simple module', () => {
-    expect(getComputedStyle(components[0].$.text).color).to.equal('rgb(255, 255, 255)');
+    expect(getComputedStyle(getText(components[0])).color).to.equal('rgb(255, 255, 255)');
   });
 
   it('should inject multiple style modules', () => {
-    expect(getComputedStyle(components[0].$.text).color).to.equal('rgb(255, 255, 255)');
-    expect(getComputedStyle(components[0].$.text).backgroundColor).to.equal('rgb(255, 0, 0)');
+    expect(getComputedStyle(getText(components[0])).color).to.equal('rgb(255, 255, 255)');
+    expect(getComputedStyle(getText(components[0])).backgroundColor).to.equal('rgb(255, 0, 0)');
   });
 
   it('should inject to multiple components', () => {
-    expect(getComputedStyle(components[0].$.text).backgroundColor).to.equal('rgb(255, 0, 0)');
-    expect(getComputedStyle(components[1].$.text).backgroundColor).to.equal('rgb(255, 0, 0)');
+    expect(getComputedStyle(getText(components[0])).backgroundColor).to.equal('rgb(255, 0, 0)');
+    expect(getComputedStyle(getText(components[1])).backgroundColor).to.equal('rgb(255, 0, 0)');
   });
 
   it('should inject to subclassed components', () => {
-    expect(getComputedStyle(components[2].$.text).backgroundColor).to.equal('rgb(255, 0, 0)');
+    expect(getComputedStyle(getText(components[2])).backgroundColor).to.equal('rgb(255, 0, 0)');
   });
 
   it('should inject to wildcard styles', () => {
-    expect(getComputedStyle(components[0].$.text).position).to.equal('static');
-    expect(getComputedStyle(components[1].$.text).position).to.equal('relative');
-    expect(getComputedStyle(components[2].$.text).position).to.equal('relative');
+    expect(getComputedStyle(getText(components[0])).position).to.equal('static');
+    expect(getComputedStyle(getText(components[1])).position).to.equal('relative');
+    expect(getComputedStyle(getText(components[2])).position).to.equal('relative');
   });
 
   it('should override default value', () => {
@@ -243,35 +251,35 @@ describe('ThemableMixin', () => {
   });
 
   it('should fall back to default styles', () => {
-    expect(getComputedStyle(components[3].$.text).color).to.equal('rgb(255, 0, 0)');
+    expect(getComputedStyle(getText(components[3])).color).to.equal('rgb(255, 0, 0)');
   });
 
   it('should work with themable parent', () => {
-    expect(getComputedStyle(components[2].$.text).width).to.equal('100px');
+    expect(getComputedStyle(getText(components[2])).width).to.equal('100px');
   });
 
   it('should inherit parent themes to own custom template', () => {
-    expect(getComputedStyle(components[4].$.text).backgroundColor).to.equal('rgb(255, 0, 0)');
+    expect(getComputedStyle(getText(components[4])).backgroundColor).to.equal('rgb(255, 0, 0)');
   });
 
   it('should override vaadin module styles', () => {
-    expect(getComputedStyle(components[6].$.text).color).to.equal('rgb(0, 0, 0)');
+    expect(getComputedStyle(getText(components[6])).color).to.equal('rgb(0, 0, 0)');
   });
 
   it('lumo should override vaadin module styles', () => {
-    expect(getComputedStyle(components[6].$.text).display).to.equal('inline');
+    expect(getComputedStyle(getText(components[6])).display).to.equal('inline');
   });
 
   it('material should override vaadin module styles', () => {
-    expect(getComputedStyle(components[6].$.text).opacity).to.equal('0.5');
+    expect(getComputedStyle(getText(components[6])).opacity).to.equal('0.5');
   });
 
   it('should override lumo module styles', () => {
-    expect(getComputedStyle(components[6].$.text).color).to.equal('rgb(0, 0, 0)');
+    expect(getComputedStyle(getText(components[6])).color).to.equal('rgb(0, 0, 0)');
   });
 
   it('should override material module styles', () => {
-    expect(getComputedStyle(components[6].$.text).color).to.equal('rgb(0, 0, 0)');
+    expect(getComputedStyle(getText(components[6])).color).to.equal('rgb(0, 0, 0)');
   });
 
   it('should respect vaadin style module order', () => {
@@ -299,10 +307,22 @@ describe('ThemableMixin', () => {
 
     // Create an instance of the test-duplicate component
     const testComponent = fixtureSync(`<${name}></${name}>`);
-    // Get all the styles from the component as one big string (let's assume it may have multiple style tags)
-    const styles = [...testComponent.shadowRoot.querySelectorAll('style')].map((style) => style.textContent).join('');
+
+    // Get all the style rules from the component
+    // Gather from the <style> tags (PolymerElement) and from the adoptedStyleSheets (LitElement)
+    const rules = [
+      ...testComponent.shadowRoot.adoptedStyleSheets,
+      ...[...testComponent.shadowRoot.querySelectorAll('style')].map((style) => style.sheet)
+    ]
+      .map((sheet) => [...sheet.cssRules])
+      .flat();
+
     // Check the number of occurences of the style rule
-    const occurrences = styles.split(duplicateStyle.toString()).length - 1;
+    const occurrences = rules.reduce(
+      (acc, rule) => acc + (rule.cssText === duplicateStyle.styleSheet.cssRules[0].cssText ? 1 : 0),
+      0
+    );
+
     // There should be only one occurence
     expect(occurrences).to.equal(1);
   });

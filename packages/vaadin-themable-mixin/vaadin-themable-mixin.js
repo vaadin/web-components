@@ -212,18 +212,20 @@ export const ThemableMixin = (superClass) =>
     /**
      * Covers LitElement based component styling
      *
-     * NOTE: This is not yet an offically supported API!
-     *
-     * TODO: Add tests (run a variation of themable-mixin.test.js where the components get created as LitElements)
      * @protected
      */
     static finalizeStyles(styles) {
-      return (
-        getThemes(this.is)
-          // Get flattened styles array
-          .reduce((styles, theme) => [...styles, ...theme.styles], [])
-          .concat(styles)
-      );
+      const parent = Object.getPrototypeOf(this.prototype);
+      const inheritedThemes = (parent ? parent.constructor.__themes : []) || [];
+      this.__themes = [...inheritedThemes, ...getThemes(this.is)];
+      let themeStyles = this.__themes.reduce((styles, theme) => [...styles, ...theme.styles], []);
+      // Remove duplicates so that the last occurrence remains
+      themeStyles = themeStyles.filter((style, index) => index === themeStyles.lastIndexOf(style));
+
+      return [
+        styles, // TODO: test
+        ...themeStyles
+      ];
     }
   };
 
