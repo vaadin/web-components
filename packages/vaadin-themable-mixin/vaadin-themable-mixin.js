@@ -44,7 +44,7 @@ export function registerStyles(themeFor, styles, options = {}) {
     }
   }
 
-  styles = recursiveFlattenStyles(styles);
+  styles = flattenStyles(styles);
 
   if (window.Vaadin && window.Vaadin.styleModules) {
     window.Vaadin.styleModules.registerStyles(themeFor, styles, options);
@@ -105,15 +105,14 @@ function getIncludePriority(moduleName = '') {
  * @param {CSSResult[]} result
  * @returns {CSSResult[]}
  */
-function recursiveFlattenStyles(styles = [], result = []) {
-  if (styles instanceof CSSResult) {
-    result.push(styles);
-  } else if (Array.isArray(styles)) {
-    styles.forEach((style) => recursiveFlattenStyles(style, result));
-  } else {
-    console.warn('An item in styles is not of type CSSResult. Use `unsafeCSS` or `css`.');
-  }
-  return result;
+function flattenStyles(styles = []) {
+  return [styles].flat(Infinity).filter((style) => {
+    if (style instanceof CSSResult) {
+      return true;
+    } else {
+      console.warn('An item in styles is not of type CSSResult. Use `unsafeCSS` or `css`.');
+    }
+  });
 }
 
 /**
@@ -143,11 +142,7 @@ function getIncludedStyles(theme) {
  */
 function addStylesToTemplate(styles, template) {
   const styleEl = document.createElement('style');
-  styleEl.innerHTML = styles
-    // Remove duplicates so that the last occurrence remains
-    .filter((style, index) => index === styles.lastIndexOf(style))
-    .map((style) => style.cssText)
-    .join('\n');
+  styleEl.innerHTML = styles.map((style) => style.cssText).join('\n');
   template.content.appendChild(styleEl);
 }
 
@@ -195,18 +190,13 @@ export const ThemableMixin = (superClass) =>
       super.finalize();
 
       const template = this.prototype._template;
-      if (!template || template.__themes) {
+      if (!template || template.__themesApplied) {
         return;
       }
 
-      const inheritedTemplate = Object.getPrototypeOf(this.prototype)._template;
-      const inheritedThemes = (inheritedTemplate ? inheritedTemplate.__themes : []) || [];
+      addStylesToTemplate(this.getStylesForThis(), template);
 
-      template.__themes = [...inheritedThemes, ...getThemes(this.is)];
-
-      // Get flattened styles array
-      const styles = template.__themes.reduce((styles, theme) => [...styles, ...theme.styles], []);
-      addStylesToTemplate(styles, template);
+      template.__themesApplied = true;
     }
 
     /**
@@ -215,14 +205,21 @@ export const ThemableMixin = (superClass) =>
      * @protected
      */
     static finalizeStyles(styles) {
+      return [styles, ...this.getStylesForThis()];
+    }
+
+    /**
+     * Get styles for the component type
+     *
+     * @private
+     */
+    static getStylesForThis() {
       const parent = Object.getPrototypeOf(this.prototype);
       const inheritedThemes = (parent ? parent.constructor.__themes : []) || [];
       this.__themes = [...inheritedThemes, ...getThemes(this.is)];
-      let themeStyles = this.__themes.reduce((styles, theme) => [...styles, ...theme.styles], []);
-      // Remove duplicates so that the last occurrence remains
-      themeStyles = themeStyles.filter((style, index) => index === themeStyles.lastIndexOf(style));
-
-      return [styles, ...themeStyles];
+      const themeStyles = this.__themes.flatMap((theme) => theme.styles);
+      // Remove duplicates
+      return themeStyles.filter((style, index) => index === themeStyles.lastIndexOf(style));
     }
   };
 
