@@ -23,7 +23,7 @@ let define =
     );
   });
 
-define('component-type-test');
+define('register-styles-component-type-test');
 
 function defineAndInstantiate(customElementName) {
   define(customElementName);
@@ -216,7 +216,7 @@ describe('registerStyles', () => {
         expect(console.warn.called).to.be.false;
       });
 
-      if (customElements.get('component-type-test').template) {
+      if (customElements.get('register-styles-component-type-test').template) {
         // Only relevant for PolymerElement based components
         it('should not warn about registering the style too late 2 (Polymer only)', () => {
           define(unique());
