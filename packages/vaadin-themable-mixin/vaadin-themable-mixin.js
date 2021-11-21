@@ -35,8 +35,7 @@ const themeRegistry = [];
  */
 export function registerStyles(themeFor, styles, options = {}) {
   if (themeFor) {
-    const elementClass = customElements.get(themeFor);
-    if (elementClass && Object.prototype.hasOwnProperty.call(elementClass, '__themes')) {
+    if (hasThemes(themeFor)) {
       console.warn(`The custom element definition for "${themeFor}"
       was finalized before a style module was registered.
       Make sure to add component specific style modules before
@@ -177,6 +176,16 @@ function getThemes(tagName) {
 }
 
 /**
+ * Check if the custom element type has themes applied.
+ * @param {string} tagName
+ * @returns {boolean}
+ */
+function hasThemes(tagName) {
+  const elementClass = customElements.get(tagName);
+  return elementClass && Object.prototype.hasOwnProperty.call(elementClass, '__themes');
+}
+
+/**
  * @polymerMixin
  * @mixes ThemePropertyMixin
  */
@@ -190,13 +199,11 @@ export const ThemableMixin = (superClass) =>
       super.finalize();
 
       const template = this.prototype._template;
-      if (!template || template.__themesApplied) {
+      if (!template || hasThemes(this.is)) {
         return;
       }
 
       addStylesToTemplate(this.getStylesForThis(), template);
-
-      template.__themesApplied = true;
     }
 
     /**
