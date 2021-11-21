@@ -164,30 +164,26 @@ describe('registerStyles', () => {
     it('should not include duplicate styles', () => {
       registerStyles(undefined, css``, { moduleId: unique('id') });
 
-      const duplicateStyle = css`
-        :host {
-          color: rgb(255, 0, 0);
-        }
-      `;
+      const duplicateStyle = ':host { color: rgb(255, 0, 0); }';
       // Need to use both moduleId and include to verify the fix in style-modules -adapter
-      registerStyles(unique('component'), duplicateStyle, { include: [unique('id')], moduleId: unique('id2') });
+      registerStyles(unique('component'), unsafeCSS(duplicateStyle), {
+        include: [unique('id')],
+        moduleId: unique('id2')
+      });
 
       const instance = defineAndInstantiate(unique('component'));
 
       // Get all the style rules from the component
       // Gather from the <style> tags (PolymerElement) and from the adoptedStyleSheets (LitElement)
       const rules = [
-        ...instance.shadowRoot.adoptedStyleSheets,
+        ...(instance.shadowRoot.adoptedStyleSheets || []),
         ...[...instance.shadowRoot.querySelectorAll('style')].map((style) => style.sheet)
       ]
         .map((sheet) => [...sheet.cssRules])
         .flat();
 
       // Check the number of occurences of the style rule
-      const occurrences = rules.reduce(
-        (acc, rule) => acc + (rule.cssText === duplicateStyle.styleSheet.cssRules[0].cssText ? 1 : 0),
-        0
-      );
+      const occurrences = rules.reduce((acc, rule) => acc + (rule.cssText === duplicateStyle ? 1 : 0), 0);
 
       // There should be only one occurence
       expect(occurrences).to.equal(1);

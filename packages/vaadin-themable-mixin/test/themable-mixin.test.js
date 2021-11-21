@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { css, registerStyles, ThemableMixin } from '../vaadin-themable-mixin.js';
+import { css, registerStyles, ThemableMixin, unsafeCSS } from '../vaadin-themable-mixin.js';
 
 let createStyles =
   window.createStylesFunction ||
@@ -312,12 +312,8 @@ describe('ThemableMixin', () => {
     const name = 'test-duplicate';
 
     // Create a wildcard style that applies to both the parent and the child
-    const duplicateStyle = css`
-      :host {
-        color: blue;
-      }
-    `;
-    createStyles('vaadin-test-duplicate-styles', 'test-duplicate*', duplicateStyle);
+    const duplicateStyle = ':host { color: blue; }';
+    createStyles('vaadin-test-duplicate-styles', 'test-duplicate*', unsafeCSS(duplicateStyle));
 
     // Define the test-duplicate-parent and test-duplicate components
     defineCustomElement(name + '-parent');
@@ -329,17 +325,14 @@ describe('ThemableMixin', () => {
     // Get all the style rules from the component
     // Gather from the <style> tags (PolymerElement) and from the adoptedStyleSheets (LitElement)
     const rules = [
-      ...testComponent.shadowRoot.adoptedStyleSheets,
+      ...(testComponent.shadowRoot.adoptedStyleSheets || []),
       ...[...testComponent.shadowRoot.querySelectorAll('style')].map((style) => style.sheet)
     ]
       .map((sheet) => [...sheet.cssRules])
       .flat();
 
     // Check the number of occurences of the style rule
-    const occurrences = rules.reduce(
-      (acc, rule) => acc + (rule.cssText === duplicateStyle.styleSheet.cssRules[0].cssText ? 1 : 0),
-      0
-    );
+    const occurrences = rules.reduce((acc, rule) => acc + (rule.cssText === duplicateStyle ? 1 : 0), 0);
 
     // There should be only one occurence
     expect(occurrences).to.equal(1);
