@@ -2,9 +2,9 @@ import { LitElement, unsafeCSS } from 'lit';
 import { ThemableMixin } from '../vaadin-themable-mixin.js';
 
 /**
- * This is used for overriding the function that defined custom elements in themable-mixin.test.js suite.
- * By default, the suite creates PolymerElement based custom elements, but here in the
- * Lit tests, we specifically want to create LitElement based custom elements instead.
+ * This is used for overriding the function that defines custom elements in the test suites.
+ * By default, the suite creates PolymerElement based custom elements, but in the
+ * -lit.test.js tests, we specifically want to create LitElement based custom elements instead.
  */
 window.defineCustomElementFunction = (name, parentName, content = '', styles) => {
   class CustomElement extends ThemableMixin(parentName ? customElements.get(parentName) : LitElement) {

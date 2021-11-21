@@ -36,7 +36,7 @@ const themeRegistry = [];
 export function registerStyles(themeFor, styles, options = {}) {
   if (themeFor) {
     const elementClass = customElements.get(themeFor);
-    if (elementClass && Object.prototype.hasOwnProperty.call(elementClass, '__finalized')) {
+    if (elementClass && Object.prototype.hasOwnProperty.call(elementClass, '__themes')) {
       console.warn(`The custom element definition for "${themeFor}"
       was finalized before a style module was registered.
       Make sure to add component specific style modules before

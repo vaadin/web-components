@@ -186,6 +186,8 @@ defineCustomElement(
   `
 );
 
+defineCustomElement('component-type-test', '', '');
+
 defineCustomElement('test-bar', '', '<div part="text" id="text">text</div>');
 
 defineCustomElement('test-baz', 'test-bar', '');
