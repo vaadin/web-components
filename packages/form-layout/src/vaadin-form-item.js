@@ -217,8 +217,11 @@ class FormItem extends ThemableMixin(PolymerElement) {
       return;
     }
 
-    const aria = fieldAriaTarget.getAttribute('aria-labelledby');
-    fieldAriaTarget.setAttribute('aria-labelledby', `${aria} ${labelNode.id}`);
+    const ariaIds = (fieldAriaTarget.getAttribute('aria-labelledby') || '').split(' ');
+    if (!ariaIds.includes(labelNode.id)) {
+      ariaIds.push(labelNode.id);
+    }
+    fieldAriaTarget.setAttribute('aria-labelledby', ariaIds.filter(Boolean).join(' '));
   }
 
   /** @private */
