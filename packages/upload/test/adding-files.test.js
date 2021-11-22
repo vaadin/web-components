@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { click, fixtureSync, makeSoloTouchEvent, touchend } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-upload.js';
 import { createFile, createFiles, touchDevice, xhrCreator } from './common.js';
@@ -36,7 +36,7 @@ describe('file list', () => {
   describe('with add button', () => {
     let input;
     let addFiles;
-    let clickSpy;
+    let inputClickSpy;
 
     beforeEach(() => {
       addFiles = upload.$.addFiles;
@@ -45,20 +45,19 @@ describe('file list', () => {
       // it should generate a non-trusted click event on the hidden file input,
       // at the time of writing Chrome and Firefox still open the file dialog.
       // Use stub calling `preventDefault` to prevent dialog from opening.
-      clickSpy = sinon.stub().callsFake((e) => e.preventDefault());
-      input.addEventListener('click', clickSpy);
+      inputClickSpy = sinon.stub().callsFake((e) => e.preventDefault());
+      input.addEventListener('click', inputClickSpy);
     });
 
     it('should open file dialog by click', () => {
-      addFiles.dispatchEvent(new MouseEvent('click'));
-      expect(clickSpy.calledOnce).to.be.true;
+      click(addFiles);
+      expect(inputClickSpy.calledOnce).to.be.true;
     });
 
     it('should open file dialog by touchend', () => {
-      const e = new CustomEvent('touchend', { cancelable: true });
-      addFiles.dispatchEvent(e);
-      expect(clickSpy.calledOnce).to.be.true;
-      expect(e.defaultPrevented).to.be.true;
+      const event = makeSoloTouchEvent('touchend', null, addFiles);
+      expect(inputClickSpy.calledOnce).to.be.true;
+      expect(event.defaultPrevented).to.be.true;
     });
 
     it('should invoke Polymer.Gestures.resetMouseCanceller before open file dialog', () => {
@@ -66,9 +65,7 @@ describe('file list', () => {
       // Polymer.Gestures.resetMouseCanceller. Have to use a separate
       // wrapper method for testing.
       const spy = sinon.spy(upload, '__resetMouseCanceller');
-
-      const e = new CustomEvent('touchend', { cancelable: true });
-      addFiles.dispatchEvent(e);
+      touchend(addFiles);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -112,7 +109,7 @@ describe('file list', () => {
     it('should not open upload dialog when max files added', () => {
       upload.maxFiles = 0;
       addFiles.dispatchEvent(new MouseEvent('click'));
-      expect(clickSpy.called).to.be.false;
+      expect(inputClickSpy.called).to.be.false;
     });
 
     it('should set max-files-reached style attribute when max files added', () => {
