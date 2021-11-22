@@ -10,7 +10,6 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -51,11 +50,10 @@ const isNumUnset = (n) => !n && n !== 0;
  *
  * @extends HTMLElement
  * @mixes InputFieldMixin
- * @mixes SlotStylesMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-number-field';
   }
@@ -178,23 +176,6 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
     super();
     // TODO: extend text-field
     this._setType('text');
-  }
-
-  /** @protected */
-  get slotStyles() {
-    const tag = this.localName;
-    // TODO: check if placeholder styles are needed
-    return [
-      `
-        ${tag}[dir='rtl'] input::placeholder {
-          direction: rtl;
-        }
-
-        ${tag}[dir='rtl']:not([has-controls]) input::placeholder {
-          text-align: left;
-        }
-      `
-    ];
   }
 
   /**
