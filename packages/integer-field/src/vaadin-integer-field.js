@@ -91,7 +91,6 @@ export class IntegerField extends NumberField {
         `Trying to set invalid step size "${newVal}", which is not a positive integer, to <vaadin-integer-field>. Resetting the default value 1.`
       );
       this.step = 1;
-      return;
     }
   }
 
