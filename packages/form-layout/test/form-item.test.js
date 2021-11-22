@@ -45,6 +45,18 @@ describe('form-item', () => {
       expect(id).to.match(ID_REGEX);
       expect(id.endsWith(item.constructor._uniqueLabelId)).to.be.true;
     });
+
+    it('should focus input on label click', () => {
+      const spy = sinon.spy(input, 'focus');
+      label.click();
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should click input on label click', () => {
+      const spy = sinon.spy(input, 'click');
+      label.click();
+      expect(spy.calledOnce).to.be.true;
+    });
   });
 
   describe('label positioning', () => {
@@ -88,9 +100,9 @@ describe('form-item', () => {
     });
   });
 
-  describe.only('label', () => {
+  describe('aria-labelledby', () => {
     describe('input', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         item = fixtureSync(`
           <vaadin-form-item>
             <label slot="label">Label</label>
@@ -99,31 +111,33 @@ describe('form-item', () => {
         `);
         label = item.querySelector('label');
         input = item.querySelector('input');
+        await nextFrame();
       });
 
-      it('should focus input on label click', () => {
-        const spy = sinon.spy(input, 'focus');
-        label.click();
-        expect(spy.calledOnce).to.be.true;
+      it('should link the label to the input', () => {
+        expect(input.getAttribute('aria-labelledby')).to.equal(`custom-id ${label.id}`);
       });
 
-      it('should click input on label click', () => {
-        const spy = sinon.spy(input, 'click');
-        label.click();
-        expect(spy.calledOnce).to.be.true;
+      it('should link the label only to the first input', async () => {
+        const newInput = document.createElement('input');
+        item.appendChild(newInput);
+        await nextFrame();
+        expect(input.getAttribute('aria-labelledby')).to.equal(`custom-id ${label.id}`);
+        expect(newInput.hasAttribute('aria-labelledby')).to.be.false;
       });
 
-      it('should link the label to the input via aria-labelledby', () => {
-        const aria = input.getAttribute('aria-labelledby');
-        expect(aria).to.include('custom-id');
-        expect(aria).to.include(label.id);
+      it('should link the label to the new input when replacing the input', async () => {
+        const newInput = document.createElement('input');
+        item.replaceChild(newInput, input);
+        await nextFrame();
+        expect(newInput.getAttribute('aria-labelledby')).to.equal(label.id);
       });
     });
 
     describe('field', () => {
       let field, fieldInput;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         item = fixtureSync(`
           <vaadin-form-item>
             <label slot="label">Label</label>
@@ -135,21 +149,19 @@ describe('form-item', () => {
         label = item.querySelector('label');
         field = item.querySelector('vaadin-text-field');
         fieldInput = field.querySelector('input');
+        await nextFrame();
       });
 
-      it('should link the label to the field input via aria-labelledby', () => {
-        console.log(field, fieldInput);
-        console.log(label.id);
-        const aria = fieldInput.getAttribute('aria-labelledby');
-        expect(aria).to.include('custom-id');
-        expect(aria).to.include(label.id);
+      it('should link the label to the field input', () => {
+        expect(fieldInput.getAttribute('aria-labelledby')).to.include('custom-id');
+        expect(fieldInput.getAttribute('aria-labelledby')).to.include(label.id);
       });
     });
 
     describe('field group', () => {
-      let fieldGroup;
+      let field;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         item = fixtureSync(`
           <vaadin-form-item>
             <label slot="label">Label</label>
@@ -157,13 +169,13 @@ describe('form-item', () => {
           </vaadin-form-item>
         `);
         label = item.querySelector('label');
-        fieldGroup = item.querySelector('vaadin-custom-field');
+        field = item.querySelector('vaadin-custom-field');
+        await nextFrame();
       });
 
-      it('should link the label to the field group via aria-labelledby', () => {
-        const aria = fieldGroup.getAttribute('aria-labelledby');
-        expect(aria).to.include('custom-id');
-        expect(aria).to.include(label.id);
+      it('should link the label to the field group', () => {
+        expect(field.getAttribute('aria-labelledby')).to.include('custom-id');
+        expect(field.getAttribute('aria-labelledby')).to.include(label.id);
       });
     });
   });
@@ -181,6 +193,14 @@ describe('form-item', () => {
     });
 
     beforeEach(() => {
+      item = fixtureSync(`
+        <vaadin-form-item>
+          <label slot="label">Label</label>
+          <input>
+        </vaadin-form-item>
+      `);
+      label = item.querySelector('label');
+      input = item.querySelector('input');
       item.style.width = '100%';
     });
 
@@ -205,6 +225,14 @@ describe('form-item', () => {
 
   describe('required input', () => {
     beforeEach(async () => {
+      item = fixtureSync(`
+        <vaadin-form-item>
+          <label slot="label">Label</label>
+          <input>
+        </vaadin-form-item>
+      `);
+      label = item.querySelector('label');
+      input = item.querySelector('input');
       input.required = true;
       await nextFrame();
     });
