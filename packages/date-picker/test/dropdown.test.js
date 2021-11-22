@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { click, down, fixtureSync, isIOS } from '@vaadin/testing-helpers';
 import '../src/vaadin-date-picker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { open, outsideClick } from './common.js';
 import { isFullscreen } from './common.js';
 
 describe('dropdown', () => {
@@ -37,6 +38,20 @@ describe('dropdown', () => {
       expect(window.getComputedStyle(document.body).webkitOverflowScrolling).to.equal('touch');
       done();
     });
+  });
+
+  it('should restore focus to the field on dropdown close', async () => {
+    datepicker.focus();
+    await open(datepicker);
+    outsideClick();
+    expect(document.activeElement).to.equal(input);
+  });
+
+  it('should focus the field on dropdown close', async () => {
+    expect(document.activeElement).to.equal(document.body);
+    await open(datepicker);
+    outsideClick();
+    expect(document.activeElement).to.equal(input);
   });
 
   describe('sizing', () => {
@@ -90,6 +105,7 @@ describe('wrapped', () => {
   });
 
   it('should restore attribute focus-ring if it was initially set before opening', () => {
+    datepicker.focus();
     datepicker.setAttribute('focus-ring', '');
     datepicker.opened = true;
     datepicker.opened = false;
@@ -97,6 +113,7 @@ describe('wrapped', () => {
   });
 
   it('should remove attribute focus-ring if it was not initially set before opening', () => {
+    datepicker.focus();
     datepicker.opened = true;
     datepicker.setAttribute('focus-ring', '');
     datepicker.opened = false;
