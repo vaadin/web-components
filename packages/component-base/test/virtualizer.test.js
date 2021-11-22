@@ -54,7 +54,9 @@ describe('virtualizer', () => {
     firstItem.style.height = '50px';
 
     // Wait for the resize observer to kick in and adjust the inline style transform
-    await new Promise((resolve) => new MutationObserver(resolve).observe(secondItem, { attributes: true }));
+    await new Promise((resolve) => {
+      new MutationObserver(resolve).observe(secondItem, { attributes: true });
+    });
 
     expect(secondItem.getBoundingClientRect().top).to.equal(firstItem.getBoundingClientRect().bottom);
   });
@@ -140,7 +142,9 @@ describe('virtualizer', () => {
     scrollTarget.style.height = `${scrollTarget.offsetHeight * 2}px`;
 
     // Wait for the resize observer to kick in and add more child elements
-    await new Promise((resolve) => new MutationObserver(resolve).observe(elementsContainer, { childList: true }));
+    await new Promise((resolve) => {
+      new MutationObserver(resolve).observe(elementsContainer, { childList: true });
+    });
 
     expect(elementsContainer.childElementCount).to.be.above(initialItemCount);
   });

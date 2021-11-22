@@ -162,7 +162,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       const childCountDigits = ~~(Math.log(rootColumns.length) / Math.LN10) + 1;
 
       // Final scope for the child columns needs to mind both factors.
-      const scope = Math.pow(10, trailingZeros - childCountDigits);
+      const scope = 10 ** (trailingZeros - childCountDigits);
 
       if (_rootColumns[0] && _rootColumns[0]._order) {
         _rootColumns.sort((a, b) => a._order - b._order);

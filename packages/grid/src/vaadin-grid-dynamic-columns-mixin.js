@@ -66,14 +66,12 @@ export const DynamicColumnsMixin = (superClass) =>
     /** @private */
     _getColumnTree() {
       const rootColumns = FlattenedNodesObserver.getFlattenedNodes(this).filter(this._isColumnElement);
-      const columnTree = [];
+      const columnTree = [rootColumns];
 
-      for (let c = rootColumns; ; ) {
-        columnTree.push(c);
-        if (!this._hasColumnGroups(c)) {
-          break;
-        }
+      let c = rootColumns;
+      while (this._hasColumnGroups(c)) {
         c = this._flattenColumnGroups(c);
+        columnTree.push(c);
       }
 
       return columnTree;

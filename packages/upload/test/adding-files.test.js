@@ -72,7 +72,7 @@ describe('file list', () => {
     it('should reset input.value before dialog', () => {
       // We can't simply assign `files` property of input[type="file"].
       // Tweaking __proto__ to make it assignable below.
-      input.__proto__ = HTMLElement.prototype;
+      Object.setPrototypeOf(input, HTMLElement.prototype);
       delete input.value;
       input.value = 'foo';
 
@@ -83,7 +83,7 @@ describe('file list', () => {
     it('should add files from dialog', () => {
       // We can't simply assign `files` property of input[type="file"].
       // Tweaking __proto__ to make it assignable below.
-      input.__proto__ = HTMLElement.prototype;
+      Object.setPrototypeOf(input, HTMLElement.prototype);
       input.files = files;
 
       change(input);

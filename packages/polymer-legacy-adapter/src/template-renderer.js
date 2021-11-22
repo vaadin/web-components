@@ -47,7 +47,6 @@ function processGridTemplate(grid, template) {
   if (template.matches('.row-details')) {
     const renderer = createRenderer(grid, template, GridTemplatizer);
     assignRenderer(grid, 'rowDetailsRenderer', renderer);
-    return;
   }
 }
 
