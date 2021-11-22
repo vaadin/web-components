@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { arrowDown, arrowUp, fixtureSync } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-number-field.js';
 
@@ -391,6 +392,58 @@ describe('number-field', () => {
           expect(numberField.validate()).to.be.true;
         }
       });
+    });
+  });
+
+  describe('wheel event', () => {
+    function wheel({ element = input, deltaX = 0, deltaY = 0 }) {
+      const e = new CustomEvent('wheel', { bubbles: true, cancelable: true });
+      e.deltaY = deltaY;
+      e.deltaX = deltaX;
+      element.dispatchEvent(e);
+    }
+
+    beforeEach(async () => {
+      numberField.value = 0;
+      await sendKeys({ press: 'Tab' });
+    });
+
+    it('should increase value on wheel with positive deltaY', () => {
+      wheel({ deltaY: 1 });
+      expect(numberField.value).to.be.equal('1');
+    });
+
+    it('should decrease value on wheel with negative deltaY', () => {
+      wheel({ deltaY: -1 });
+      expect(numberField.value).to.be.equal('-1');
+    });
+
+    it('should not change value on wheel with positive deltaX > deltaY', () => {
+      wheel({ deltaX: 2, deltaY: 1 });
+      expect(numberField.value).to.be.equal('0');
+    });
+
+    it('should not change value on wheel with negative deltaX < deltaY', () => {
+      wheel({ deltaX: -2, deltaY: -1 });
+      expect(numberField.value).to.be.equal('0');
+    });
+
+    it('should not change value on wheel when readonly', () => {
+      numberField.readonly = true;
+      wheel({ deltaY: 10 });
+      expect(numberField.value).to.be.equal('0');
+    });
+
+    it('should not change value on wheel when disabled', () => {
+      numberField.disabled = true;
+      wheel({ deltaY: 10 });
+      expect(numberField.value).to.be.equal('0');
+    });
+
+    it('should not change value on wheel when not focused', () => {
+      numberField.blur();
+      wheel({ deltaY: 10 });
+      expect(numberField.value).to.be.equal('0');
     });
   });
 
