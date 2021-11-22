@@ -179,14 +179,26 @@ class FormItem extends ThemableMixin(PolymerElement) {
     }
   }
 
+  /**
+   * @return {HTMLElement}
+   * @private
+   */
   get __labelNode() {
     return this.querySelector('[slot=label]');
   }
 
+  /**
+   * @return {HTMLElement[]}
+   * @private
+   */
   get __fieldNodes() {
     return [...this.querySelectorAll(':not([slot])')];
   }
 
+  /**
+   * @return {HTMLElement | undefined}
+   * @private
+   */
   get __fieldAriaTarget() {
     const fieldNode = this.__fieldNodes[0];
     if (fieldNode && fieldNode.ariaTarget) {
@@ -195,15 +207,18 @@ class FormItem extends ThemableMixin(PolymerElement) {
     return fieldNode;
   }
 
-  /** @private */
+  /**
+   * @param {HTMLElement} labelNode
+   * @private
+   */
   __linkLabelToField(labelNode) {
     const fieldAriaTarget = this.__fieldAriaTarget;
     if (!fieldAriaTarget) {
       return;
     }
 
-    const ariaLabelledBy = fieldAriaTarget.getAttribute('aria-labelledby');
-    fieldAriaTarget.setAttribute('aria-labelledby', `${ariaLabelledBy} ${labelNode.id}`);
+    const aria = fieldAriaTarget.getAttribute('aria-labelledby');
+    fieldAriaTarget.setAttribute('aria-labelledby', `${aria} ${labelNode.id}`);
   }
 
   /** @private */
@@ -222,6 +237,10 @@ class FormItem extends ThemableMixin(PolymerElement) {
 
   /** @private */
   __onContentSlotChange() {
+    if (this.__labelNode) {
+      this.__linkLabelToField(this.__labelNode);
+    }
+
     if (this.__contentField) {
       // Discard the old field
       this.__updateRequiredState(false);
