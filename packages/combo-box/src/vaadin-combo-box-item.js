@@ -140,8 +140,7 @@ export class ComboBoxItem extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /** @private */
-  // eslint-disable-next-line max-params
-  __rendererOrItemChanged(renderer, index, item, _selected, _focused) {
+  __rendererOrItemChanged(renderer, index, item) {
     if (item === undefined || index === undefined) {
       return;
     }
