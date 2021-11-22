@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, fixtureSync, makeSoloTouchEvent, touchend } from '@vaadin/testing-helpers';
+import { change, click, fixtureSync, makeSoloTouchEvent, touchend } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-upload.js';
 import { createFile, createFiles, touchDevice, xhrCreator } from './common.js';
@@ -76,7 +76,7 @@ describe('file list', () => {
       delete input.value;
       input.value = 'foo';
 
-      addFiles.dispatchEvent(new MouseEvent('click'));
+      click(addFiles);
       expect(input.value).to.be.empty;
     });
 
@@ -86,8 +86,7 @@ describe('file list', () => {
       input.__proto__ = HTMLElement.prototype;
       input.files = files;
 
-      const e = new Event('change', { cancelable: true });
-      input.dispatchEvent(e);
+      change(input);
 
       expect(upload.files[0]).to.equal(files[1]);
       expect(upload.files[1]).to.equal(files[0]);
@@ -108,7 +107,7 @@ describe('file list', () => {
 
     it('should not open upload dialog when max files added', () => {
       upload.maxFiles = 0;
-      addFiles.dispatchEvent(new MouseEvent('click'));
+      click(addFiles);
       expect(inputClickSpy.called).to.be.false;
     });
 

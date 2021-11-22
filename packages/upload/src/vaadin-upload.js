@@ -823,7 +823,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     // cancelling the following synthetic click. See also:
     // https://github.com/Polymer/polymer/issues/5289
     this.__resetMouseCanceller();
-    this._onAddFilesClick();
+    this._onAddFilesClick(e);
   }
 
   /** @private */
@@ -832,11 +832,12 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  _onAddFilesClick() {
+  _onAddFilesClick(e) {
     if (this.maxFilesReached) {
       return;
     }
 
+    e.stopPropagation();
     this.$.fileInput.value = '';
     this.$.fileInput.click();
   }
