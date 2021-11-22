@@ -9,6 +9,13 @@ import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type TextFieldChangeEvent = Event & {
+  target: TextField;
+};
+
+/**
  * Fired when the `invalid` property changes.
  */
 export type TextFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
@@ -24,7 +31,9 @@ export interface TextFieldCustomEventMap {
   'value-changed': TextFieldValueChangedEvent;
 }
 
-export interface TextFieldEventMap extends HTMLElementEventMap, TextFieldCustomEventMap {}
+export interface TextFieldEventMap extends HTMLElementEventMap, TextFieldCustomEventMap {
+  change: TextFieldChangeEvent;
+}
 
 /**
  * `<vaadin-text-field>` is a web component that allows the user to input and edit text.

@@ -10,6 +10,13 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 export { DatePickerDate, DatePickerI18n } from './vaadin-date-picker-mixin.js';
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type DatePickerChangeEvent = Event & {
+  target: DatePicker;
+};
+
+/**
  * Fired when the `opened` property changes.
  */
 export type DatePickerOpenedChangedEvent = CustomEvent<{ value: boolean }>;
@@ -32,7 +39,9 @@ export interface DatePickerCustomEventMap {
   'value-changed': DatePickerValueChangedEvent;
 }
 
-export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCustomEventMap {}
+export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCustomEventMap {
+  change: DatePickerChangeEvent;
+}
 
 /**
  * `<vaadin-date-picker>` is an input field that allows to enter a date by typing or by selecting from a calendar overlay.

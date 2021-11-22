@@ -16,6 +16,13 @@ export interface SelectItem {
 }
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type SelectChangeEvent = Event & {
+  target: Select;
+};
+
+/**
  * Function for rendering the content of the `<vaadin-select>`.
  * Receives two arguments:
  *
@@ -48,7 +55,9 @@ export interface SelectCustomEventMap {
   'value-changed': SelectValueChangedEvent;
 }
 
-export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMap {}
+export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMap {
+  change: SelectChangeEvent;
+}
 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.

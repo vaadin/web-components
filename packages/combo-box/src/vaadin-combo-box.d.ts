@@ -4,9 +4,19 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
+import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { DelegateStateMixinClass } from '@vaadin/field-base/src/delegate-state-mixin.js';
+import { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
+import { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
+import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
+import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
+import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
@@ -17,6 +27,13 @@ export {
   ComboBoxDataProviderParams
 } from './vaadin-combo-box-data-provider-mixin.js';
 export { ComboBoxDefaultItem, ComboBoxItemModel, ComboBoxRenderer } from './vaadin-combo-box-mixin.js';
+
+/**
+ * Fired when the user commits a value change.
+ */
+export type ComboBoxChangeEvent<TItem> = Event & {
+  target: ComboBox<TItem>;
+};
 
 /**
  * Fired when the user sets a custom value.
@@ -49,6 +66,8 @@ export type ComboBoxFilterChangedEvent = CustomEvent<{ value: string }>;
 export type ComboBoxSelectedItemChangedEvent<TItem> = CustomEvent<{ value: TItem | null | undefined }>;
 
 export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
+  change: ComboBoxChangeEvent<TItem>;
+
   'custom-value-set': ComboBoxCustomValueSetEvent;
 
   'opened-changed': ComboBoxOpenedChangedEvent;
@@ -206,8 +225,18 @@ declare class ComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
 interface ComboBox<TItem = ComboBoxDefaultItem>
   extends ComboBoxDataProviderMixinClass<TItem>,
     ComboBoxMixinClass<TItem>,
+    ValidateMixinClass,
     PatternMixinClass,
+    LabelMixinClass,
+    KeyboardMixinClass,
+    InputMixinClass,
     InputControlMixinClass,
+    InputConstraintsMixinClass,
+    FocusMixinClass,
+    FieldMixinClass,
+    DisabledMixinClass,
+    DelegateStateMixinClass,
+    DelegateFocusMixinClass,
     ThemableMixinClass,
     ElementMixinClass,
     ControllerMixinClass {}

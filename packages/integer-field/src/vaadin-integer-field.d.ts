@@ -6,6 +6,13 @@
 import { NumberField } from '@vaadin/number-field/src/vaadin-number-field.js';
 
 /**
+ * Fired when the user commits a value change.
+ */
+export type IntegerFieldChangeEvent = Event & {
+  target: IntegerField;
+};
+
+/**
  * Fired when the `invalid` property changes.
  */
 export type IntegerFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
@@ -21,7 +28,9 @@ export interface IntegerFieldCustomEventMap {
   'value-changed': IntegerFieldValueChangedEvent;
 }
 
-export interface IntegerFieldEventMap extends HTMLElementEventMap, IntegerFieldCustomEventMap {}
+export interface IntegerFieldEventMap extends HTMLElementEventMap, IntegerFieldCustomEventMap {
+  change: IntegerFieldChangeEvent;
+}
 
 /**
  * `<vaadin-integer-field>` is an input field web component that only accepts entering integer numbers.

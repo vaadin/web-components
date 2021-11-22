@@ -3,6 +3,9 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
@@ -13,6 +16,13 @@ export {
   ComboBoxDataProviderParams
 } from './vaadin-combo-box-data-provider-mixin.js';
 export { ComboBoxDefaultItem, ComboBoxItemModel, ComboBoxRenderer } from './vaadin-combo-box-mixin.js';
+
+/**
+ * Fired when the user commits a value change.
+ */
+export type ComboBoxLightChangeEvent<TItem> = Event & {
+  target: ComboBoxLight<TItem>;
+};
 
 /**
  * Fired when the user sets a custom value.
@@ -45,6 +55,8 @@ export type ComboBoxLightFilterChangedEvent = CustomEvent<{ value: string }>;
 export type ComboBoxLightSelectedItemChangedEvent<TItem> = CustomEvent<{ value: TItem | null | undefined }>;
 
 export interface ComboBoxLightEventMap<TItem> extends HTMLElementEventMap {
+  change: ComboBoxLightChangeEvent<TItem>;
+
   'custom-value-set': ComboBoxLightCustomValueSetEvent;
 
   'opened-changed': ComboBoxLightOpenedChangedEvent;
@@ -127,6 +139,9 @@ declare class ComboBoxLight<TItem = ComboBoxDefaultItem> extends HTMLElement {
 interface ComboBoxLight<TItem = ComboBoxDefaultItem>
   extends ComboBoxDataProviderMixinClass<TItem>,
     ComboBoxMixinClass<TItem>,
+    KeyboardMixinClass,
+    InputMixinClass,
+    DisabledMixinClass,
     ThemableMixinClass {}
 
 declare global {

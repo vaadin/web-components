@@ -1,0 +1,59 @@
+{
+  "name": "@vaadin/field-highlighter",
+  "version": "23.0.0-alpha1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "vaadin-field-highlighter",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/field-highlighter"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-field-highlighter.js",
+  "module": "vaadin-field-highlighter.js",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
+  "keywords": [
+    "Vaadin",
+    "vaadin-field-highlighter",
+    "web-components",
+    "web-component",
+    "field"
+  ],
+  "dependencies": {
+    "@polymer/iron-a11y-announcer": "^3.0.0",
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/component-base": "23.0.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "23.0.0-alpha1",
+    "@vaadin/vaadin-material-styles": "23.0.0-alpha1",
+    "@vaadin/vaadin-overlay": "23.0.0-alpha1",
+    "@vaadin/vaadin-themable-mixin": "23.0.0-alpha1",
+    "lit": "^2.0.0"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/checkbox": "23.0.0-alpha1",
+    "@vaadin/combo-box": "23.0.0-alpha1",
+    "@vaadin/date-picker": "23.0.0-alpha1",
+    "@vaadin/date-time-picker": "23.0.0-alpha1",
+    "@vaadin/item": "23.0.0-alpha1",
+    "@vaadin/list-box": "23.0.0-alpha1",
+    "@vaadin/radio-group": "23.0.0-alpha1",
+    "@vaadin/select": "23.0.0-alpha1",
+    "@vaadin/testing-helpers": "^0.3.0",
+    "@vaadin/text-field": "23.0.0-alpha1",
+    "@vaadin/time-picker": "23.0.0-alpha1",
+    "sinon": "^9.2.1"
+  }
+}

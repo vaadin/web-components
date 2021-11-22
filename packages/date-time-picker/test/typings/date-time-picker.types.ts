@@ -1,9 +1,19 @@
 import '../../vaadin-date-time-picker.js';
-import { DateTimePickerInvalidChangedEvent, DateTimePickerValueChangedEvent } from '../../vaadin-date-time-picker.js';
+import {
+  DateTimePicker,
+  DateTimePickerChangeEvent,
+  DateTimePickerInvalidChangedEvent,
+  DateTimePickerValueChangedEvent
+} from '../../vaadin-date-time-picker.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
 const picker = document.createElement('vaadin-date-time-picker');
+
+picker.addEventListener('change', (event) => {
+  assertType<DateTimePickerChangeEvent>(event);
+  assertType<DateTimePicker>(event.target);
+});
 
 picker.addEventListener('invalid-changed', (event) => {
   assertType<DateTimePickerInvalidChangedEvent>(event);

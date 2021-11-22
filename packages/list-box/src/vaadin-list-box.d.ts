@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { MultiSelectListMixin } from '@vaadin/vaadin-list-mixin/vaadin-multi-select-list-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -58,7 +59,7 @@ export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxCustomEvent
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  * @fires {CustomEvent} selected-values-changed - Fired when the `selectedValues` property changes.
  */
-declare class ListBox extends MultiSelectListMixin(ThemableMixin(ElementMixin(HTMLElement))) {
+declare class ListBox extends MultiSelectListMixin(ThemableMixin(ElementMixin(ControllerMixin(HTMLElement)))) {
   focused: Element | null;
 
   addEventListener<K extends keyof ListBoxEventMap>(
