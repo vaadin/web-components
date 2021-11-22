@@ -2,7 +2,6 @@ import '../../vaadin-number-field.js';
 import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { InputFieldMixinClass } from '@vaadin/field-base/src/input-field-mixin.js';
-import { SlotStylesMixinClass } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import {
   NumberField,
@@ -19,7 +18,6 @@ const field = document.createElement('vaadin-number-field');
 assertType<ControllerMixinClass>(field);
 assertType<ElementMixinClass>(field);
 assertType<InputFieldMixinClass>(field);
-assertType<SlotStylesMixinClass>(field);
 assertType<ThemableMixinClass>(field);
 
 // Events
