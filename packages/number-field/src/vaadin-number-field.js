@@ -21,6 +21,19 @@ const hasDecimals = intlOptions.maximumFractionDigits > 0;
 const isNumUnset = (n) => !n && n !== 0;
 
 /**
+ * Handle problematic values when calculating a remainder.
+ * Source: Source: https://stackoverflow.com/a/31711034
+ */
+const floatSafeRemainder = (value, step) => {
+  const valDecCount = (value.toString().split('.')[1] || '').length;
+  const stepDecCount = (step.toString().split('.')[1] || '').length;
+  const decCount = valDecCount > stepDecCount ? valDecCount : stepDecCount;
+  const valInt = parseInt(value.toFixed(decCount).replace('.', ''));
+  const stepInt = parseInt(step.toFixed(decCount).replace('.', ''));
+  return (((valInt % stepInt) + stepInt) % stepInt) / 10 ** decCount;
+};
+
+/**
  * `<vaadin-number-field>` is an input field web component that only accepts numeric input.
  *
  * ```html
@@ -448,7 +461,9 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
     }
 
     const stepBasis = isNumUnset(this.min) ? 0 : this.min;
-    return (value - stepBasis) % this.step == 0;
+
+    // Handle problematic fractional values, e.g. 0.9 % 0.3
+    return floatSafeRemainder(Number(value) - stepBasis, this.step) == 0;
   }
 
   /**

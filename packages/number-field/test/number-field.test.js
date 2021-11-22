@@ -369,6 +369,7 @@ describe('number-field', () => {
           Object.assign(numberField, reset, props);
           increaseButton.click();
           expect(numberField.value).to.be.equal(expectedValue);
+          expect(numberField.validate()).to.be.true;
         }
       });
 
@@ -387,6 +388,7 @@ describe('number-field', () => {
           Object.assign(numberField, reset, props);
           decreaseButton.click();
           expect(numberField.value).to.be.equal(expectedValue);
+          expect(numberField.validate()).to.be.true;
         }
       });
     });
