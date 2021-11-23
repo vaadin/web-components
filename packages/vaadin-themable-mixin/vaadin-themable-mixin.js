@@ -212,6 +212,9 @@ export const ThemableMixin = (superClass) =>
      * @protected
      */
     static finalizeStyles(styles) {
+      // The "styles" object originates from the "static get styles()" function of
+      // a LitElement based component. The theme styles are added after it
+      // so that they can override the component styles.
       return [styles, ...this.getStylesForThis()];
     }
 

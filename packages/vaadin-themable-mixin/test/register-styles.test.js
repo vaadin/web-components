@@ -183,7 +183,7 @@ describe('registerStyles', () => {
         .flat();
 
       // Check the number of occurences of the style rule
-      const occurrences = rules.reduce((acc, rule) => acc + (rule.cssText === duplicateStyle ? 1 : 0), 0);
+      const occurrences = rules.filter((rule) => rule.cssText === duplicateStyle).length;
 
       // There should be only one occurence
       expect(occurrences).to.equal(1);
