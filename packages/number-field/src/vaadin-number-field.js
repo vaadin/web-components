@@ -5,7 +5,6 @@
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import { html, PolymerElement } from '@polymer/polymer';
-import { isAndroid, isIPhone } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
@@ -15,14 +14,11 @@ import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaa
 
 registerStyles('vaadin-number-field', inputFieldShared, { moduleId: 'vaadin-number-field-styles' });
 
-const intlOptions = new Intl.NumberFormat().resolvedOptions();
-const hasDecimals = intlOptions.maximumFractionDigits > 0;
-
 const isNumUnset = (n) => !n && n !== 0;
 
 /**
  * Handle problematic values when calculating a remainder.
- * Source: Source: https://stackoverflow.com/a/31711034
+ * Source: https://stackoverflow.com/a/31711034
  */
 const floatSafeRemainder = (value, step) => {
   const valDecCount = (value.toString().split('.')[1] || '').length;
@@ -160,8 +156,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
        * The minimum value of the field.
        */
       min: {
-        type: Number,
-        observer: '_minChanged'
+        type: Number
       },
 
       /**
@@ -187,7 +182,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
   constructor() {
     super();
-    // TODO: extend text-field
+
     this._setType('text');
   }
 
@@ -197,15 +192,6 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
    */
   get clearElement() {
     return this.$.clearButton;
-  }
-
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-
-    if (this.inputElement) {
-      this.__setInputMode(this.inputElement, this.min);
-    }
   }
 
   /** @protected */
@@ -222,41 +208,8 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelNode));
 
+    this.inputElement.setAttribute('inputmode', 'numeric');
     this.inputElement.addEventListener('wheel', (e) => this._onWheel(e));
-  }
-
-  /**
-   * The `inputmode` attribute influences the software keyboard that is shown on touch devices.
-   * https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inputmode
-   * Browsers and operating systems are quite inconsistent about what keys are available.
-   * We choose between numeric and decimal based on whether negative numbers are allowed,
-   * and based on testing on various devices to determine what keys are available.
-   * @private
-   */
-  __setInputMode(input, min) {
-    const hasNegative = isNaN(min) || min < 0;
-    let inputMode = 'numeric';
-
-    if (isIPhone) {
-      // iPhone doesn't have a minus sign in either numeric or decimal.
-      // Note this is only for iPhone, not iPad, which always has both
-      // minus and decimal in numeric.
-      if (hasNegative) {
-        inputMode = 'text';
-      } else if (hasDecimals) {
-        inputMode = 'decimal';
-      }
-    } else if (isAndroid) {
-      // Android numeric has both a decimal point and minus key.
-      // decimal does not have a minus key.
-      if (hasNegative) {
-        inputMode = 'numeric';
-      } else if (hasDecimals) {
-        inputMode = 'decimal';
-      }
-    }
-
-    input.setAttribute('inputmode', inputMode);
   }
 
   /** @private */
@@ -428,13 +381,6 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
     const incr = sign * (this.step || 1);
     const value = parseFloat(this.value);
     return !this.value || (!this.disabled && this._incrementIsInsideTheLimits(incr, value));
-  }
-
-  /** @private */
-  _minChanged(min) {
-    if (this.inputElement) {
-      this.__setInputMode(this.inputElement, min);
-    }
   }
 
   /**
