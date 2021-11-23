@@ -166,6 +166,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
     this.__contentFieldObserver = new MutationObserver(() => this.__updateRequiredState(this.__contentField.required));
   }
 
+  /** @protected */
   ready() {
     super.ready();
 
