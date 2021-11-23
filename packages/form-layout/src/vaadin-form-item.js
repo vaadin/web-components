@@ -5,6 +5,7 @@
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/field-base/src/utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -226,11 +227,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
    */
   __linkLabelToField(field) {
     const ariaTarget = field.ariaTarget || field;
-
-    // TODO: Consider creating a helper like `addValueToAttribute`.
-    let ariaIds = new Set((ariaTarget.getAttribute('aria-labelledby') || '').split(' '));
-    ariaIds.add(this.__labelId);
-    ariaTarget.setAttribute('aria-labelledby', [...ariaIds].filter(Boolean).join(' '));
+    addValueToAttribute(ariaTarget, 'aria-labelledby', this.__labelId);
   }
 
   /**
@@ -242,16 +239,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
    */
   __unlinkLabelFromField(field) {
     const ariaTarget = field.ariaTarget || field;
-
-    // TODO: Consider creating a helper like `removeValueFromAttribute`.
-    let ariaIds = new Set((ariaTarget.getAttribute('aria-labelledby') || '').split(' '));
-    ariaIds.delete('');
-    ariaIds.delete(this.__labelId);
-    if (ariaIds.size > 0) {
-      ariaTarget.setAttribute('aria-labelledby', [...ariaIds].filter(Boolean).join(' '));
-    } else {
-      ariaTarget.removeAttribute('aria-labelledby');
-    }
+    removeValueFromAttribute(ariaTarget, 'aria-labelledby', this.__labelId);
   }
 
   /** @private */
