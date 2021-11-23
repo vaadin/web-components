@@ -90,52 +90,71 @@ registerStyles(
   { moduleId: 'lumo-crud' }
 );
 
+/**
+ * Shared styles used for the CRUD editor content and buttons regardless of `editorPosition`.
+ * `[theme~="crud"]` applies both to `vaadin-dialog-layout` and `vaadin-dialog-overlay`.
+ */
+const editorStyles = css`
+  :host([theme~='crud']) [part='scroller'] {
+    padding: var(--lumo-space-l);
+  }
+
+  :host([theme~='crud']) ::slotted([slot='header']) {
+    margin-top: var(--lumo-space-s);
+    margin-bottom: var(--lumo-space-s);
+  }
+
+  :host([theme~='crud']) [part='footer'] {
+    background-color: var(--lumo-contrast-5pct);
+    padding: var(--lumo-space-s);
+  }
+
+  :host([theme~='crud']) [part='footer'] ::slotted(*) {
+    margin-left: var(--lumo-space-s);
+    margin-right: var(--lumo-space-s);
+  }
+
+  :host(:not([dir='rtl'])[theme~='crud']) [part='footer'] ::slotted([slot='delete-button']) {
+    margin-right: auto;
+  }
+
+  :host([dir='rtl'][theme~='crud']) [part='footer'] ::slotted([slot='delete-button']) {
+    margin-left: auto;
+  }
+`;
+
+registerStyles('vaadin-dialog-overlay', editorStyles, { moduleId: 'lumo-crud-dialog-overlay' });
+
 registerStyles(
   'vaadin-dialog-layout',
-  css`
-    [part='header'] ::slotted(*) {
-      margin-top: var(--lumo-space-s);
-      margin-bottom: var(--lumo-space-s);
-    }
+  [
+    editorStyles,
+    css`
+      [part='editor'] {
+        background: var(--lumo-base-color);
+        box-sizing: border-box;
+      }
 
-    [part='scroller'] {
-      padding: var(--lumo-space-l);
-    }
+      :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
+        box-shadow: var(--lumo-box-shadow-m);
+      }
 
-    [part='footer'] {
-      background-color: var(--lumo-contrast-5pct);
-      padding: var(--lumo-space-s) var(--lumo-space-s);
-    }
+      :host(:not([theme~='no-border']):not([editor-position=''])) [part='editor']:not([hidden]) {
+        border: 1px solid var(--lumo-contrast-20pct);
+      }
 
-    [part='footer'] ::slotted(*) {
-      margin-left: var(--lumo-space-s);
-      margin-right: var(--lumo-space-s);
-    }
+      :host(:not([theme~='no-border'])[editor-position='bottom']) [part='editor']:not([hidden]) {
+        border-top: 0;
+      }
 
-    [part='editor'] {
-      background: var(--lumo-base-color);
-      box-sizing: border-box;
-    }
+      :host(:not([dir='rtl'])[editor-position='aside']) [part='editor']:not([hidden]) {
+        border-left: 0;
+      }
 
-    :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
-      box-shadow: var(--lumo-box-shadow-m);
-    }
-
-    :host(:not([theme~='no-border']):not([editor-position=''])) [part='editor']:not([hidden]) {
-      border: 1px solid var(--lumo-contrast-20pct);
-    }
-
-    :host(:not([theme~='no-border'])[editor-position='bottom']) [part='editor']:not([hidden]) {
-      border-top: 0;
-    }
-
-    :host(:not([dir='rtl'])[editor-position='aside']) [part='editor']:not([hidden]) {
-      border-left: 0;
-    }
-
-    :host([dir='rtl']:not([theme~='no-border'])[editor-position='aside']) [part='editor']:not([hidden]) {
-      border-right: 0;
-    }
-  `,
+      :host([dir='rtl']:not([theme~='no-border'])[editor-position='aside']) [part='editor']:not([hidden]) {
+        border-right: 0;
+      }
+    `
+  ],
   { moduleId: 'lumo-dialog-layout' }
 );
