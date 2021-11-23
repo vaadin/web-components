@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -151,7 +152,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
       </div>
       <div id="spacing"></div>
       <div id="content">
-        <slot id="contentSlot" on-slotchange="__onContentSlotChange"></slot>
+        <slot id="contentSlot"></slot>
       </div>
     `;
   }
@@ -160,32 +161,44 @@ class FormItem extends ThemableMixin(PolymerElement) {
     return 'vaadin-form-item';
   }
 
+  static get properties() {
+    return {
+      __labelNode: {
+        type: HTMLElement
+      },
+
+      __labelId: {
+        type: String
+      }
+    };
+  }
+
   constructor() {
     super();
+    this.__onLabelSlotChange = this.__onLabelSlotChange.bind(this);
+    this.__onContentSlotChange = this.__onContentSlotChange.bind(this);
+    this.__linkLabelToField = this.__linkLabelToField.bind(this);
+    this.__unlinkLabelFromField = this.__unlinkLabelFromField.bind(this);
     this.__updateInvalidState = this.__updateInvalidState.bind(this);
     this.__contentFieldObserver = new MutationObserver(() => this.__updateRequiredState(this.__contentField.required));
+
+    /**
+     * @type {HTMLElement | null | undefined}
+     * @private
+     */
+    this.__labelNode;
+
+    // Ensure every instance has unique ID
+    const uniqueId = (FormItem._uniqueLabelId = 1 + FormItem._uniqueLabelId || 0);
+    this.__labelId = `label-${this.localName}-${uniqueId}`;
   }
 
   /** @protected */
   ready() {
     super.ready();
 
-    // Ensure every instance has unique ID
-    const uniqueId = (FormItem._uniqueLabelId = 1 + FormItem._uniqueLabelId || 0);
-    this.__labelId = `label-${this.localName}-${uniqueId}`;
-
-    if (this.__labelNode) {
-      this.__labelNode.id = this.__labelId;
-      this.__linkLabelToField(this.__labelNode);
-    }
-  }
-
-  /**
-   * @return {HTMLElement}
-   * @private
-   */
-  get __labelNode() {
-    return this.querySelector('[slot=label]');
+    this.__labelSlotObserver = new FlattenedNodesObserver(this.$.labelSlot, this.__onLabelSlotChange);
+    this.__contentSlotObserver = new FlattenedNodesObserver(this.$.contentSlot, this.__onContentSlotChange);
   }
 
   /**
@@ -193,41 +206,57 @@ class FormItem extends ThemableMixin(PolymerElement) {
    * @private
    */
   get __fieldNodes() {
-    return [...this.querySelectorAll(':not([slot])')];
+    return this.$.contentSlot.assignedElements();
   }
 
   /**
-   * @return {HTMLElement | undefined}
+   * @return {HTMLElement}
    * @private
    */
-  get __fieldAriaTarget() {
-    const fieldNode = this.__fieldNodes[0];
-    if (fieldNode && fieldNode.ariaTarget) {
-      return fieldNode.ariaTarget;
-    }
-    return fieldNode;
+  get __fieldNode() {
+    return this.__fieldNodes[0];
   }
 
   /**
-   * @param {HTMLElement} labelNode
+   * Links the label to a field by adding the label's id to
+   * the `aria-labelledby` attribute of the field.
+   *
+   * @param {HTMLElement} field
    * @private
    */
-  __linkLabelToField(labelNode) {
-    const fieldAriaTarget = this.__fieldAriaTarget;
-    if (!fieldAriaTarget) {
-      return;
-    }
+  __linkLabelToField(field) {
+    const ariaTarget = field.ariaTarget || field;
 
-    const ariaIds = (fieldAriaTarget.getAttribute('aria-labelledby') || '').split(' ');
-    if (!ariaIds.includes(labelNode.id)) {
-      ariaIds.push(labelNode.id);
+    // TODO: Consider creating a helper like `addValueToAttribute`.
+    let ariaIds = new Set((ariaTarget.getAttribute('aria-labelledby') || '').split(' '));
+    ariaIds.add(this.__labelId);
+    ariaTarget.setAttribute('aria-labelledby', [...ariaIds].filter(Boolean).join(' '));
+  }
+
+  /**
+   * Unlinks the label from a field by removing the label's id from
+   * the `aria-labelledby` attribute of the field.
+   *
+   * @param {HTMLElement} field
+   * @private
+   */
+  __unlinkLabelFromField(field) {
+    const ariaTarget = field.ariaTarget || field;
+
+    // TODO: Consider creating a helper like `removeValueFromAttribute`.
+    let ariaIds = new Set((ariaTarget.getAttribute('aria-labelledby') || '').split(' '));
+    ariaIds.delete('');
+    ariaIds.delete(this.__labelId);
+    if (ariaIds.size > 0) {
+      ariaTarget.setAttribute('aria-labelledby', [...ariaIds].filter(Boolean).join(' '));
+    } else {
+      ariaTarget.removeAttribute('aria-labelledby');
     }
-    fieldAriaTarget.setAttribute('aria-labelledby', ariaIds.filter(Boolean).join(' '));
   }
 
   /** @private */
   __onLabelClick() {
-    const fieldNode = this.__fieldNodes[0];
+    const fieldNode = this.__fieldNode;
     if (fieldNode) {
       fieldNode.focus();
       fieldNode.click();
@@ -239,11 +268,59 @@ class FormItem extends ThemableMixin(PolymerElement) {
     return field.validate || field.checkValidity;
   }
 
-  /** @private */
-  __onContentSlotChange() {
+  /**
+   * A callback for FlattenedNodesObserver that observes for changes inside the label slot.
+   *
+   * - Ensures the label id is assigned to the label node and un-assigned from the node
+   * as soon as it is removed or replaced by another one.
+   * - Ensures the label node is linked to the first field via the `aria-labelledby` attribute
+   * if both the label and the field node are provided.
+   *
+   * @param {{ addedNodes: HTMLElement[], removeNodes: HTMLElement[] }} info
+   * @private
+   */
+  __onLabelSlotChange(info) {
+    const newLabel = info.addedNodes.find((node) => node !== this.__labelNode);
+
     if (this.__labelNode) {
-      this.__linkLabelToField(this.__labelNode);
+      this.__labelNode.removeAttribute('id');
+      this.__labelNode = null;
+      if (this.__fieldNode) {
+        this.__unlinkLabelFromField(this.__fieldNode);
+      }
     }
+
+    if (newLabel) {
+      this.__labelNode = newLabel;
+      this.__labelNode.setAttribute('id', this.__labelId);
+      if (this.__fieldNode) {
+        this.__linkLabelToField(this.__fieldNode);
+      }
+    }
+  }
+
+  /**
+   * A callback for FlattenedNodesObserver that observes for changes inside the content slot.
+   *
+   * - Ensures the label node is always linked to the first field node via the `aria-labelledby` attribute
+   * and unlinked from the field as soon as it is removed or replaced by another one.
+   * - Sets up an observer for the `required` attribute changes on the first validatable field
+   * to reflect the attribute on the component. Ensures the observer is disconnected from the field
+   * as soon as it is removed or replaced by another one.
+   *
+   * @param {{ addedNodes: HTMLElement[], removeNodes: HTMLElement[] }} info
+   * @private
+   */
+  __onContentSlotChange(info) {
+    info.removedNodes.forEach(this.__unlinkLabelFromField);
+    this.__fieldNodes.forEach((field) => {
+      if (field === this.__fieldNode && this.__labelNode) {
+        this.__linkLabelToField(field);
+        return;
+      }
+
+      this.__unlinkLabelFromField(field);
+    });
 
     if (this.__contentField) {
       // Discard the old field
