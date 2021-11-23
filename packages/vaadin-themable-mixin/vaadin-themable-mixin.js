@@ -35,8 +35,7 @@ const themeRegistry = [];
  */
 export function registerStyles(themeFor, styles, options = {}) {
   if (themeFor) {
-    const elementClass = customElements.get(themeFor);
-    if (elementClass && Object.prototype.hasOwnProperty.call(elementClass, '__finalized')) {
+    if (hasThemes(themeFor)) {
       console.warn(`The custom element definition for "${themeFor}"
       was finalized before a style module was registered.
       Make sure to add component specific style modules before
@@ -44,7 +43,7 @@ export function registerStyles(themeFor, styles, options = {}) {
     }
   }
 
-  styles = recursiveFlattenStyles(styles);
+  styles = flattenStyles(styles);
 
   if (window.Vaadin && window.Vaadin.styleModules) {
     window.Vaadin.styleModules.registerStyles(themeFor, styles, options);
@@ -105,15 +104,15 @@ function getIncludePriority(moduleName = '') {
  * @param {CSSResult[]} result
  * @returns {CSSResult[]}
  */
-function recursiveFlattenStyles(styles = [], result = []) {
-  if (styles instanceof CSSResult) {
-    result.push(styles);
-  } else if (Array.isArray(styles)) {
-    styles.forEach((style) => recursiveFlattenStyles(style, result));
-  } else {
-    console.warn('An item in styles is not of type CSSResult. Use `unsafeCSS` or `css`.');
-  }
-  return result;
+function flattenStyles(styles = []) {
+  return [styles].flat(Infinity).filter((style) => {
+    if (style instanceof CSSResult) {
+      return true;
+    } else {
+      console.warn('An item in styles is not of type CSSResult. Use `unsafeCSS` or `css`.');
+      return false;
+    }
+  });
 }
 
 /**
@@ -143,11 +142,7 @@ function getIncludedStyles(theme) {
  */
 function addStylesToTemplate(styles, template) {
   const styleEl = document.createElement('style');
-  styleEl.innerHTML = styles
-    // Remove duplicates so that the last occurrence remains
-    .filter((style, index) => index === styles.lastIndexOf(style))
-    .map((style) => style.cssText)
-    .join('\n');
+  styleEl.innerHTML = styles.map((style) => style.cssText).join('\n');
   template.content.appendChild(styleEl);
 }
 
@@ -182,6 +177,16 @@ function getThemes(tagName) {
 }
 
 /**
+ * Check if the custom element type has themes applied.
+ * @param {string} tagName
+ * @returns {boolean}
+ */
+function hasThemes(tagName) {
+  const elementClass = customElements.get(tagName);
+  return elementClass && Object.prototype.hasOwnProperty.call(elementClass, '__themes');
+}
+
+/**
  * @polymerMixin
  * @mixes ThemePropertyMixin
  */
@@ -195,35 +200,37 @@ export const ThemableMixin = (superClass) =>
       super.finalize();
 
       const template = this.prototype._template;
-      if (!template || template.__themes) {
+      if (!template || hasThemes(this.is)) {
         return;
       }
 
-      const inheritedTemplate = Object.getPrototypeOf(this.prototype)._template;
-      const inheritedThemes = (inheritedTemplate ? inheritedTemplate.__themes : []) || [];
-
-      template.__themes = [...inheritedThemes, ...getThemes(this.is)];
-
-      // Get flattened styles array
-      const styles = template.__themes.reduce((styles, theme) => [...styles, ...theme.styles], []);
-      addStylesToTemplate(styles, template);
+      addStylesToTemplate(this.getStylesForThis(), template);
     }
 
     /**
      * Covers LitElement based component styling
      *
-     * NOTE: This is not yet an offically supported API!
-     *
-     * TODO: Add tests (run a variation of themable-mixin.test.js where the components get created as LitElements)
      * @protected
      */
     static finalizeStyles(styles) {
-      return (
-        getThemes(this.is)
-          // Get flattened styles array
-          .reduce((styles, theme) => [...styles, ...theme.styles], [])
-          .concat(styles)
-      );
+      // The "styles" object originates from the "static get styles()" function of
+      // a LitElement based component. The theme styles are added after it
+      // so that they can override the component styles.
+      return [styles, ...this.getStylesForThis()];
+    }
+
+    /**
+     * Get styles for the component type
+     *
+     * @private
+     */
+    static getStylesForThis() {
+      const parent = Object.getPrototypeOf(this.prototype);
+      const inheritedThemes = (parent ? parent.constructor.__themes : []) || [];
+      this.__themes = [...inheritedThemes, ...getThemes(this.is)];
+      const themeStyles = this.__themes.flatMap((theme) => theme.styles);
+      // Remove duplicates
+      return themeStyles.filter((style, index) => index === themeStyles.lastIndexOf(style));
     }
   };
 

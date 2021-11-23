@@ -6,20 +6,24 @@ import { ThemableMixin } from '../vaadin-themable-mixin.js';
 
 let attachedInstances = [];
 
-function define(customElementName) {
-  customElements.define(
-    customElementName,
-    class extends ThemableMixin(PolymerElement) {
-      static get is() {
-        return customElementName;
-      }
+let define =
+  window.defineCustomElementFunction ||
+  ((name) => {
+    customElements.define(
+      name,
+      class extends ThemableMixin(PolymerElement) {
+        static get is() {
+          return name;
+        }
 
-      static get template() {
-        return html`foo`;
+        static get template() {
+          return html`foo`;
+        }
       }
-    }
-  );
-}
+    );
+  });
+
+define('register-styles-component-type-test');
 
 function defineAndInstantiate(customElementName) {
   define(customElementName);
@@ -160,19 +164,27 @@ describe('registerStyles', () => {
     it('should not include duplicate styles', () => {
       registerStyles(undefined, css``, { moduleId: unique('id') });
 
-      const duplicateStyle = css`
-        :host {
-          color: rgb(255, 0, 0);
-        }
-      `;
+      const duplicateStyle = ':host { color: rgb(255, 0, 0); }';
       // Need to use both moduleId and include to verify the fix in style-modules -adapter
-      registerStyles(unique('component'), duplicateStyle, { include: [unique('id')], moduleId: unique('id2') });
+      registerStyles(unique('component'), unsafeCSS(duplicateStyle), {
+        include: [unique('id')],
+        moduleId: unique('id2')
+      });
 
       const instance = defineAndInstantiate(unique('component'));
-      // Get all the styles from the component as one big string (let's assume it may have multiple style tags)
-      const styles = [...instance.shadowRoot.querySelectorAll('style')].map((style) => style.textContent).join('');
+
+      // Get all the style rules from the component
+      // Gather from the <style> tags (PolymerElement) and from the adoptedStyleSheets (LitElement)
+      const rules = [
+        ...(instance.shadowRoot.adoptedStyleSheets || []),
+        ...[...instance.shadowRoot.querySelectorAll('style')].map((style) => style.sheet)
+      ]
+        .map((sheet) => [...sheet.cssRules])
+        .flat();
+
       // Check the number of occurences of the style rule
-      const occurrences = styles.split(duplicateStyle.toString()).length - 1;
+      const occurrences = rules.filter((rule) => rule.cssText === duplicateStyle).length;
+
       // There should be only one occurence
       expect(occurrences).to.equal(1);
     });
@@ -200,12 +212,15 @@ describe('registerStyles', () => {
         expect(console.warn.called).to.be.false;
       });
 
-      it('should not warn about registering the style too late 2', () => {
-        define(unique());
-        registerStyles(unique(), styles);
+      if (customElements.get('register-styles-component-type-test').template) {
+        // Only relevant for PolymerElement based components
+        it('should not warn about registering the style too late 2 (Polymer only)', () => {
+          define(unique());
+          registerStyles(unique(), styles);
 
-        expect(console.warn.called).to.be.false;
-      });
+          expect(console.warn.called).to.be.false;
+        });
+      }
     });
   });
 });
