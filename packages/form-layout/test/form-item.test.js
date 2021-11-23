@@ -2,8 +2,8 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@polymer/polymer/lib/elements/custom-style.js';
-import '@vaadin/text-field';
 import '@vaadin/custom-field';
+import '@vaadin/text-field';
 import '../vaadin-form-item.js';
 
 describe('form-item', () => {
