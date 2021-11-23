@@ -238,8 +238,7 @@ class CrudGrid extends IncludedMixin(Grid) {
     } else if (depth > 1) {
       // The object has been fully traversed, but empty wrapping column
       // groups are still needed to complete the full object depth
-      const group = this.noHead ? parent : this.__createGroup(parent);
-      this.__createColumns(group, undefined, path, depth - 1);
+      this.__createColumns(this.__createGroup(parent), undefined, path, depth - 1);
     } else {
       // The column group depth is complete, create the actual leaf column
       this.__createColumn(parent, path);
