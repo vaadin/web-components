@@ -212,6 +212,7 @@ export const PositionMixin = (superClass) =>
       );
     }
 
+    // eslint-disable-next-line max-params
     __shouldAlignStart(targetRect, contentSize, viewportSize, margins, defaultAlignStart, noOverlap, propNames) {
       const spaceForStartAlignment =
         viewportSize - targetRect[noOverlap ? propNames.end : propNames.start] - margins[propNames.end];
@@ -230,6 +231,7 @@ export const PositionMixin = (superClass) =>
      * Returns an object with CSS position properties to set,
      * e.g. { top: "100px", bottom: "" }
      */
+    // eslint-disable-next-line max-params
     __calculatePositionInOneDimension(targetRect, overlayRect, noOverlap, propNames, overlay, shouldAlignStart) {
       const cssPropNameToSet = shouldAlignStart ? propNames.start : propNames.end;
       const cssPropNameToClear = shouldAlignStart ? propNames.end : propNames.start;

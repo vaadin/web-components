@@ -55,7 +55,6 @@ export const PatternMixin = (superclass) =>
           this._inputDebouncer = Debouncer.debounce(this._inputDebouncer, timeOut.after(200), () => {
             this.removeAttribute('input-prevented');
           });
-          return;
         }
       }
     }

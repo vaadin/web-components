@@ -499,7 +499,10 @@ export const KeyboardNavigationMixin = (superClass) =>
           this._focusedColumnOrder = undefined;
         }
 
-        const columnIndexByOrder = dstColumns.reduce((acc, col, i) => ((acc[col._order] = i), acc), {});
+        const columnIndexByOrder = dstColumns.reduce((acc, col, i) => {
+          acc[col._order] = i;
+          return acc;
+        }, {});
         const dstColumnIndex = columnIndexByOrder[dstSortedColumnOrders[dstOrderedColumnIndex]];
         const dstCell = dstRow.children[dstColumnIndex];
 

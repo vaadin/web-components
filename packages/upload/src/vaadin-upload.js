@@ -456,7 +456,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     const base = this.i18n.units.sizeBase || 1000;
     const unit = ~~(Math.log(bytes) / Math.log(base));
     const dec = Math.max(0, Math.min(3, unit - 1));
-    const size = parseFloat((bytes / Math.pow(base, unit)).toFixed(dec));
+    const size = parseFloat((bytes / base ** unit).toFixed(dec));
     return size + ' ' + this.i18n.units.size[unit];
   }
 
@@ -823,7 +823,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     // cancelling the following synthetic click. See also:
     // https://github.com/Polymer/polymer/issues/5289
     this.__resetMouseCanceller();
-    this._onAddFilesClick();
+    this._onAddFilesClick(e);
   }
 
   /** @private */
@@ -832,11 +832,12 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  _onAddFilesClick() {
+  _onAddFilesClick(e) {
     if (this.maxFilesReached) {
       return;
     }
 
+    e.stopPropagation();
     this.$.fileInput.value = '';
     this.$.fileInput.click();
   }

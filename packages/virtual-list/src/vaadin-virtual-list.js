@@ -146,14 +146,14 @@ class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  __itemsOrRendererChanged(items = [], renderer, virtualizer) {
+  __itemsOrRendererChanged(items, renderer, virtualizer) {
     // If the renderer is removed but there are elements created by
     // a previous renderer, we need to request an update from the virtualizer
     // to get the already existing elements properly cleared.
     const hasRenderedItems = this.childElementCount > 0;
 
     if ((renderer || hasRenderedItems) && virtualizer) {
-      virtualizer.size = items.length;
+      virtualizer.size = (items || []).length;
       virtualizer.update();
     }
   }

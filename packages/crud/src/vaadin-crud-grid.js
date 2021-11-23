@@ -109,8 +109,25 @@ class CrudGrid extends IncludedMixin(Grid) {
    */
   _configure(item) {
     this.innerHTML = '';
-    this.__createColumns(this, item);
+    this.__createColumns(this, item, undefined, this.__getPropertyDepth(item));
     this.__toggleEditColumn();
+  }
+
+  /**
+   * Return the deepest property depth of the object
+   * @private
+   */
+  __getPropertyDepth(object) {
+    if (!object || typeof object !== 'object') {
+      return 0;
+    }
+
+    return Object.keys(object).reduce((deepest, prop) => {
+      if (this.exclude && this.exclude.test(prop)) {
+        return deepest;
+      }
+      return Math.max(deepest, 1 + this.__getPropertyDepth(object[prop]));
+    }, 0);
   }
 
   /**
@@ -130,25 +147,38 @@ class CrudGrid extends IncludedMixin(Grid) {
 
   /** @private */
   __createColumn(parent, path) {
-    const col = document.createElement('vaadin-grid-column');
-
-    col.renderer = (root, column, model) => {
-      root.textContent = path ? this.get(path, model.item) : model.item;
-    };
+    let col;
+    if (!this.noFilter && !this.noSort && !parent.__sortColumnGroup) {
+      // This crud-grid has both a sorter and a filter, but neither has yet been
+      // created => col should become the sorter group column
+      col = this.__createGroup(parent);
+      col.__sortColumnGroup = true;
+      // Create the filter column under this sorter group column
+      this.__createColumn(col, path);
+    } else {
+      // In all other cases, col should be a regular column with a renderer
+      col = document.createElement('vaadin-grid-column');
+      parent.appendChild(col);
+      col.renderer = (root, _column, model) => {
+        root.textContent = path ? this.get(path, model.item) : model.item;
+      };
+    }
 
     if (!this.noHead && path) {
+      // Create a header renderer for the column (or column group)
       col.headerRenderer = (root) => {
         const label = this._generateHeader(path);
 
-        if (!this.noSort) {
-          const sorter = window.document.createElement('vaadin-grid-sorter');
+        if (col.__sortColumnGroup || (this.noFilter && !this.noSort)) {
+          // The column is either the sorter group column or the root level
+          // sort column (in case a filter isn't used at all) => add the sort indicator
+          const sorter = document.createElement('vaadin-grid-sorter');
           sorter.setAttribute('path', path);
           sorter.textContent = label;
           root.appendChild(sorter);
-        }
-
-        if (!this.noFilter) {
-          const filter = window.document.createElement('vaadin-grid-filter');
+        } else if (!this.noFilter) {
+          // Filtering is enabled in this crud-grid, create the filter element
+          const filter = document.createElement('vaadin-grid-filter');
           filter.setAttribute('path', path);
           filter.style.display = 'flex';
 
@@ -164,42 +194,63 @@ class CrudGrid extends IncludedMixin(Grid) {
 
           filter.appendChild(textField);
           root.appendChild(filter);
-        }
-
-        if (this.noSort && this.noFilter) {
+        } else if (this.noSort && this.noFilter) {
+          // Neither sorter nor filter are enabled, just add the label
           root.textContent = label;
         }
       };
     }
-
-    parent.appendChild(col);
-    return col;
   }
 
-  /** @private */
-  __createColumns(parent, object, path) {
-    if (typeof object === 'object') {
+  /**
+   * Creates the column structure for the (sub)object.
+   *
+   * @param {HTMLElement} parent May be the crud-grid or a column group.
+   * @param {Object} object The object to create the sub-columns for.
+   * @param {string} path The property path from the root item to the object.
+   * @param {number} depth The depth of the object in the object hierarchy.
+   * @private
+   **/
+  __createColumns(parent, object, path, depth) {
+    if (object && typeof object === 'object') {
+      // Iterate over the object properties
       Object.keys(object).forEach((prop) => {
         if (!this.include && this.exclude && this.exclude.test(prop)) {
           return;
         }
-        const newPath = (path ? `${path}.` : '') + prop;
-        if (object[prop] && typeof object[prop] === 'object') {
-          const group = this.noHead ? parent : this.__createGroup(parent, newPath, object[prop]);
-          this.__createColumns(group, object[prop], newPath);
-        } else {
-          this.__createColumn(parent, newPath);
+        // Sub-object of the current object
+        const subObject = object[prop];
+        // Full path to the sub-object
+        const subObjectPath = path ? `${path}.${prop}` : prop;
+
+        // The column element for the sub-object
+        let subObjectColumn = parent;
+        if (!this.noHead && depth > 1) {
+          const isSubObject = subObject && typeof subObject === 'object';
+          // If the sub-object is an actual object, create a column group with the property
+          // name as the header text, otherwise create a group without a header
+          subObjectColumn = this.__createGroup(parent, isSubObject ? prop : undefined);
         }
+
+        // Run recursively for the sub-object level
+        this.__createColumns(subObjectColumn, subObject, subObjectPath, depth - 1);
       });
+    } else if (depth > 1) {
+      // The object has been fully traversed, but empty wrapping column
+      // groups are still needed to complete the full object depth
+      this.__createColumns(this.__createGroup(parent), undefined, path, depth - 1);
     } else {
-      this.__createColumn(parent, '');
+      // The column group depth is complete, create the actual leaf column
+      this.__createColumn(parent, path);
     }
   }
 
   /** @private */
-  __createGroup(parent, path) {
+  __createGroup(parent, header) {
     const grp = document.createElement('vaadin-grid-column-group');
-    grp.headerRenderer = (root) => (root.textContent = this.__capitalize(path.replace(/^.*\./, '')));
+    if (header) {
+      grp.header = this.__capitalize(header);
+    }
     parent.appendChild(grp);
     return grp;
   }

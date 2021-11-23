@@ -13,7 +13,7 @@ console.log(
 );
 
 // stop after processing ISSUE_LIMIT issues
-const ISSUE_LIMIT = +process.env.ISSUE_LIMIT || Number.MAX_SAFE_INTEGER;
+const ISSUE_LIMIT = Number(process.env.ISSUE_LIMIT) || Number.MAX_SAFE_INTEGER;
 
 // GitHub API client (both REST and GraphQL)
 const octokit = new Octokit({ auth: process.env.GITHUB_API_TOKEN });
@@ -74,10 +74,12 @@ function zhRateLimitingAdapter(adapter) {
       } catch (e) {
         if (e.isAxiosError && e.response.status === 403) {
           const resetAtMs = e.response.headers['x-ratelimit-reset'] * 1000;
-          const sentAtMs = new Date(e.response.headers['date']).getTime();
+          const sentAtMs = new Date(e.response.headers.date).getTime();
           const timeoutMs = resetAtMs - sentAtMs;
           console.log(`timeout until ZenHub API request rate reset: ${timeoutMs} ms`);
-          await new Promise((r) => setTimeout(r, timeoutMs));
+          await new Promise((r) => {
+            setTimeout(r, timeoutMs);
+          });
         } else {
           throw e;
         }

@@ -364,7 +364,7 @@ export const ListMixin = (superClass) =>
      */
     _scroll(pixels) {
       if (this._vertical) {
-        this._scrollerElement['scrollTop'] += pixels;
+        this._scrollerElement.scrollTop += pixels;
       } else {
         const dir = this.getAttribute('dir') || 'ltr';
         const scrollType = DirHelper.detectScrollType();

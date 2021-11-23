@@ -45,7 +45,7 @@ export const onceScrolled = (comboBox) => {
 };
 
 export const makeItems = (length) => {
-  return Array(...new Array(length)).map((_, i) => `item ${i}`);
+  return Array.from({ length }, (_, i) => `item ${i}`);
 };
 
 /**

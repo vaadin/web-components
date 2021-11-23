@@ -33,7 +33,7 @@ export const getFirstCell = (grid) => {
 
 export const infiniteDataProvider = (params, callback) => {
   callback(
-    Array.apply(null, Array(params.pageSize)).map((item, index) => {
+    Array.from({ length: params.pageSize }, (_, index) => {
       return {
         value: 'foo' + (params.page * params.pageSize + index)
       };
@@ -249,5 +249,7 @@ export const fire = (type, detail, options) => {
 };
 
 export const nextResize = (target) => {
-  return new Promise((resolve) => new ResizeObserver(() => setTimeout(resolve)).observe(target));
+  return new Promise((resolve) => {
+    new ResizeObserver(() => setTimeout(resolve)).observe(target);
+  });
 };
