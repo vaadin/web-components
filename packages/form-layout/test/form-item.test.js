@@ -161,14 +161,6 @@ describe('form-item', () => {
         expect(input.getAttribute('aria-labelledby')).to.equal(`custom-id ${label.id}`);
       });
 
-      it('should not link the label to the new input when using appendChild', async () => {
-        const newInput = document.createElement('input');
-        item.appendChild(newInput);
-        await nextFrame();
-        expect(input.getAttribute('aria-labelledby')).to.equal(`custom-id ${label.id}`);
-        expect(newInput.hasAttribute('aria-labelledby')).to.be.false;
-      });
-
       it('should link the label to the new input when using replaceChild', async () => {
         const newInput = document.createElement('input');
         item.replaceChild(newInput, input);
@@ -183,6 +175,14 @@ describe('form-item', () => {
         await nextFrame();
         expect(input.getAttribute('aria-labelledby')).to.equal('custom-id');
         expect(newInput.getAttribute('aria-labelledby')).to.equal(label.id);
+      });
+
+      it('should not link the label to the new input when using appendChild', async () => {
+        const newInput = document.createElement('input');
+        item.appendChild(newInput);
+        await nextFrame();
+        expect(input.getAttribute('aria-labelledby')).to.equal(`custom-id ${label.id}`);
+        expect(newInput.hasAttribute('aria-labelledby')).to.be.false;
       });
     });
 
@@ -201,7 +201,7 @@ describe('form-item', () => {
         expect(input.getAttribute('aria-labelledby')).to.equal('custom-id');
       });
 
-      it('should link the label to the input once the label element is added', async () => {
+      it('should link the label to the input once a label element is added', async () => {
         const label = document.createElement('label');
         label.slot = 'label';
         item.appendChild(label);
