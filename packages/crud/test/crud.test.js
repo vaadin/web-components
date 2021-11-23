@@ -56,7 +56,7 @@ describe('crud', () => {
     });
 
     it('should be able to set items and item declaratively', () => {
-      expect(crud._grid._columnTree.length).to.be.equal(1);
+      expect(crud._grid._columnTree.length).to.be.equal(2);
       expect(crud._form._fields.length).to.be.equal(1);
     });
 

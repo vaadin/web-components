@@ -49,6 +49,28 @@ describe('crud grid', () => {
       expect(grid.querySelectorAll('vaadin-grid-column').length).to.be.equal(1);
     });
 
+    it('should generate a header structure for deep item hierarchy', async () => {
+      grid.items = [
+        {
+          foo: 'foo',
+          bar: {
+            baz: {
+              qux: 'qux'
+            }
+          }
+        }
+      ];
+      flushGrid(grid);
+      await nextRender(grid);
+
+      // First column
+      expect(getHeaderCellContent(grid, 2, 0).textContent.trim()).to.be.equal('Foo');
+      // Second column
+      expect(getHeaderCellContent(grid, 0, 1).textContent.trim()).to.be.equal('Bar');
+      expect(getHeaderCellContent(grid, 1, 1).textContent.trim()).to.be.equal('Baz');
+      expect(getHeaderCellContent(grid, 2, 1).textContent.trim()).to.be.equal('Qux');
+    });
+
     describe('include exclude', () => {
       it('should ignore excluded fields', () => {
         grid.items = items;
@@ -75,14 +97,36 @@ describe('crud grid', () => {
         expect(getHeaderCellContent(grid, 1, 1).textContent.trim()).to.be.equal('First name');
       });
 
-      it('should configure include fields in the provided order when items is provided', () => {
+      it('should configure include fields in the provided order when items is provided', async () => {
         grid.include = 'a, b, c';
         grid.items = [{ d: 1 }];
         flushGrid(grid);
+        await nextRender(grid);
+
         expect(grid.querySelectorAll('vaadin-grid-column').length).to.be.equal(3);
         expect(getHeaderCellContent(grid, 0, 0).textContent.trim()).to.be.equal('A');
         expect(getHeaderCellContent(grid, 0, 1).textContent.trim()).to.be.equal('B');
         expect(getHeaderCellContent(grid, 0, 2).textContent.trim()).to.be.equal('C');
+      });
+
+      it('should not generate groups for excluded fields', async () => {
+        // password is in the exclude list so it shouldn't affect the group depth
+        grid.items = [
+          {
+            name: 'foo',
+            password: {
+              hash: '###'
+            }
+          }
+        ];
+        flushGrid(grid);
+        await nextRender(grid);
+
+        // The filter column should end up with only one parent group (the sorter group column)
+        // which in turn should be a direct child of the grid
+        const column = grid.querySelector('vaadin-grid-column');
+        const sorterGroup = column.parentElement;
+        expect(sorterGroup.parentElement).to.equal(grid);
       });
     });
 
@@ -128,7 +172,7 @@ describe('crud grid', () => {
 
         it('should automatically add filters to columns', () => {
           [0, 1, 2].forEach((c) => {
-            expect(getHeaderCellContent(grid, 1, c).lastElementChild.localName).to.be.equal('vaadin-grid-filter');
+            expect(getHeaderCellContent(grid, 2, c).lastElementChild.localName).to.be.equal('vaadin-grid-filter');
           });
         });
 
@@ -150,6 +194,44 @@ describe('crud grid', () => {
         it('should capitalize correctly', () => {
           expect(grid.__capitalize('aa.bb cc-dd FF')).to.be.equal('Aa bb cc dd ff');
         });
+      });
+    });
+  });
+
+  describe('no-sort', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-crud-grid style="width: 500px;" no-sort>
+          <vaadin-crud-edit-column></vaadin-crud-edit-column>
+        </vaadin-crud-grid>
+      `);
+      grid.items = items;
+      flushGrid(grid);
+      await nextRender(grid);
+    });
+
+    it('should add filters but no sorters', () => {
+      [0, 1, 2].forEach((c) => {
+        expect(getHeaderCellContent(grid, 1, c).firstElementChild.localName).to.be.equal('vaadin-grid-filter');
+      });
+    });
+  });
+
+  describe('no-filter', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-crud-grid style="width: 500px;" no-filter>
+          <vaadin-crud-edit-column></vaadin-crud-edit-column>
+        </vaadin-crud-grid>
+      `);
+      grid.items = items;
+      flushGrid(grid);
+      await nextRender(grid);
+    });
+
+    it('should add sorters but no filters', () => {
+      [0, 1, 2].forEach((c) => {
+        expect(getHeaderCellContent(grid, 1, c).firstElementChild.localName).to.be.equal('vaadin-grid-sorter');
       });
     });
   });
