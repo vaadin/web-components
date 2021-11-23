@@ -49,6 +49,28 @@ describe('crud grid', () => {
       expect(grid.querySelectorAll('vaadin-grid-column').length).to.be.equal(1);
     });
 
+    it('should generate a header structure for deep item hierarchy', async () => {
+      grid.items = [
+        {
+          foo: 'foo',
+          bar: {
+            baz: {
+              qux: 'qux'
+            }
+          }
+        }
+      ];
+      flushGrid(grid);
+      await nextRender(grid);
+
+      // First column
+      expect(getHeaderCellContent(grid, 2, 0).textContent.trim()).to.be.equal('Foo');
+      // Second column
+      expect(getHeaderCellContent(grid, 0, 1).textContent.trim()).to.be.equal('Bar');
+      expect(getHeaderCellContent(grid, 1, 1).textContent.trim()).to.be.equal('Baz');
+      expect(getHeaderCellContent(grid, 2, 1).textContent.trim()).to.be.equal('Qux');
+    });
+
     describe('include exclude', () => {
       it('should ignore excluded fields', () => {
         grid.items = items;
