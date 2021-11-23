@@ -11,7 +11,7 @@ let createStyles =
 
 let defineCustomElement =
   window.defineCustomElementFunction ||
-  ((name, parentName, content = '', styles) => {
+  ((name, parentName, content, styles) => {
     const parentElement = parentName ? customElements.get(parentName) : PolymerElement;
     class CustomElement extends ThemableMixin(parentElement) {
       static get is() {

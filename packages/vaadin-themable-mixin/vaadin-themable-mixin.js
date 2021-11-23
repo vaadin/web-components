@@ -110,6 +110,7 @@ function flattenStyles(styles = []) {
       return true;
     } else {
       console.warn('An item in styles is not of type CSSResult. Use `unsafeCSS` or `css`.');
+      return false;
     }
   });
 }
