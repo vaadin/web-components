@@ -279,12 +279,12 @@ describe('resizable', () => {
   it('should remove mousemove and mouseup event handlers after resize', () => {
     const resizer = overlayPart.querySelector('.n');
     resize(resizer, 0, -dx);
-    dialog._resizeListeners.resize['n'] = sinon.spy();
-    dialog._resizeListeners.stop['n'] = sinon.spy();
+    dialog._resizeListeners.resize.n = sinon.spy();
+    dialog._resizeListeners.stop.n = sinon.spy();
     dispatchMouseEvent(resizer, 'mousemove');
     dispatchMouseEvent(resizer, 'mouseup');
-    expect(dialog._resizeListeners.resize['n'].called).to.be.false;
-    expect(dialog._resizeListeners.stop['n'].called).to.be.false;
+    expect(dialog._resizeListeners.resize.n.called).to.be.false;
+    expect(dialog._resizeListeners.stop.n.called).to.be.false;
   });
 
   it('should not resize dialog past window left edge', () => {

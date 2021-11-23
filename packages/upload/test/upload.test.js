@@ -135,9 +135,9 @@ describe('upload', () => {
 
           // Monkey-patch xhr.open to check the url param passed into
           const originalOpen = e.detail.xhr.open;
-          e.detail.xhr.open = function (method, url) {
+          e.detail.xhr.open = function (method, url, ...args) {
             expect(url).to.equal(modifiedUrl);
-            originalOpen.apply(this, arguments);
+            originalOpen.call(this, method, url, ...args);
             done();
           };
         });

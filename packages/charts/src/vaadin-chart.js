@@ -51,9 +51,9 @@ export const deepMerge = function deepMerge(target, source) {
 };
 
 ['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
-  Highcharts.wrap(Highcharts.Chart.prototype, methodName, function (proceed) {
+  Highcharts.wrap(Highcharts.Chart.prototype, methodName, function (proceed, ...args) {
     Highcharts.fireEvent(this, 'beforeExport');
-    const result = proceed.apply(this, Array.prototype.slice.call(arguments, 1));
+    const result = proceed.apply(this, args);
     Highcharts.fireEvent(this, 'afterExport');
     return result;
   });
@@ -259,11 +259,10 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  static __callHighchartsFunction(functionName, redrawCharts) {
+  static __callHighchartsFunction(functionName, redrawCharts, ...args) {
     const functionToCall = Highcharts[functionName];
-    const argumentsForCall = Array.prototype.splice.call(arguments, 2);
     if (functionToCall && typeof functionToCall === 'function') {
-      functionToCall.apply(this.configuration, argumentsForCall);
+      functionToCall.apply(this.configuration, args);
       if (redrawCharts) {
         Highcharts.charts.forEach((c) => c.redraw());
       }
@@ -1212,8 +1211,10 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
         const targetProperty = jsonConfiguration[attr];
         if (attr.indexOf('_fn_') === 0 && (typeof targetProperty === 'string' || targetProperty instanceof String)) {
           try {
+            // eslint-disable-next-line no-eval
             jsonConfiguration[attr.substr(4)] = eval('(' + targetProperty + ')');
           } catch (e) {
+            // eslint-disable-next-line no-eval
             jsonConfiguration[attr.substr(4)] = eval('(function(){' + targetProperty + '})');
           }
           delete jsonConfiguration[attr];
@@ -1332,7 +1333,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
               // Zoom out a bit to avoid clipping the chart's edge on paper
               effectiveCss =
                 effectiveCss +
-                +'body {' +
+                'body {' +
                 '    -moz-transform: scale(0.9, 0.9);' + // Mozilla
                 '    zoom: 0.9;' + // Others
                 '    zoom: 90%;' + // Webkit
@@ -1655,30 +1656,28 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  __callChartFunction(functionName) {
+  __callChartFunction(functionName, ...args) {
     if (this.configuration) {
       const functionToCall = this.configuration[functionName];
-      const argumentsForCall = Array.prototype.splice.call(arguments, 1);
       if (functionToCall && typeof functionToCall === 'function') {
-        functionToCall.apply(this.configuration, argumentsForCall);
+        functionToCall.apply(this.configuration, args);
       }
     }
   }
 
   /** @private */
-  __callSeriesFunction(functionName, seriesIndex) {
+  __callSeriesFunction(functionName, seriesIndex, ...args) {
     if (this.configuration && this.configuration.series[seriesIndex]) {
       const series = this.configuration.series[seriesIndex];
       const functionToCall = series[functionName];
-      const argumentsForCall = Array.prototype.splice.call(arguments, 2);
       if (functionToCall && typeof functionToCall === 'function') {
-        functionToCall.apply(series, argumentsForCall);
+        functionToCall.apply(series, args);
       }
     }
   }
 
   /** @private */
-  __callAxisFunction(functionName, axisCategory, axisIndex) {
+  __callAxisFunction(functionName, axisCategory, axisIndex, ...args) {
     /*
      * axisCategory:
      * 0 - xAxis
@@ -1705,16 +1704,15 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
       if (axes && axes[axisIndex]) {
         const axis = axes[axisIndex];
         const functionToCall = axis[functionName];
-        const argumentsForCall = Array.prototype.splice.call(arguments, 3);
         if (functionToCall && typeof functionToCall === 'function') {
-          functionToCall.apply(axis, argumentsForCall);
+          functionToCall.apply(axis, args);
         }
       }
     }
   }
 
   /** @private */
-  __callPointFunction(functionName, seriesIndex, pointIndex) {
+  __callPointFunction(functionName, seriesIndex, pointIndex, ...args) {
     if (
       this.configuration &&
       this.configuration.series[seriesIndex] &&
@@ -1722,9 +1720,8 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
     ) {
       const point = this.configuration.series[seriesIndex].data[pointIndex];
       const functionToCall = point[functionName];
-      const argumentsForCall = Array.prototype.splice.call(arguments, 3);
       if (functionToCall && typeof functionToCall === 'function') {
-        functionToCall.apply(point, argumentsForCall);
+        functionToCall.apply(point, args);
       }
     }
   }
