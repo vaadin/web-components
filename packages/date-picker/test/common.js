@@ -61,6 +61,15 @@ export function close(datepicker) {
   });
 }
 
+export function outsideClick() {
+  // Move focus to body
+  document.body.tabIndex = 0;
+  document.body.focus();
+  document.body.tabIndex = -1;
+  // Outside click
+  document.body.click();
+}
+
 export function monthsEqual(date1, date2) {
   return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
 }
