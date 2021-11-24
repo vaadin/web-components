@@ -4,10 +4,10 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const scroller = css`
   :host(:focus) {
     outline: none;
-    box-shadow: inset 0 0 0 2px var(--material-primary-color);
+    box-shadow: 0 0 0 2px var(--material-primary-color);
   }
 `;
 
-registerStyles('vaadin-scroller', scroller, { moduleId: 'lumo-scroller' });
+registerStyles('vaadin-scroller', scroller, { moduleId: 'material-scroller' });
 
 export { scroller };
