@@ -202,27 +202,38 @@ class FormItem extends ThemableMixin(PolymerElement) {
   }
 
   /**
-   * Links the label to a field by adding the label's id to
-   * the `aria-labelledby` attribute of the field.
+   * Returns a target element to add ARIA attributes to for a field.
+   *
+   * - For Vaadin field components, the method returns an element
+   * obtained through the `ariaTarget` property defined in `FieldMixin`.
+   * - In other cases, the method returns the field element itself.
+   *
+   * @protected
+   */
+  _getFieldAriaTarget(field) {
+    return field.ariaTarget || field;
+  }
+
+  /**
+   * Links the label to a field by adding the label id to
+   * the `aria-labelledby` attribute of the field's ARIA target element.
    *
    * @param {HTMLElement} field
    * @private
    */
   __linkLabelToField(field) {
-    const ariaTarget = field.ariaTarget || field;
-    addValueToAttribute(ariaTarget, 'aria-labelledby', this.__labelId);
+    addValueToAttribute(this._getFieldAriaTarget(field), 'aria-labelledby', this.__labelId);
   }
 
   /**
-   * Unlinks the label from a field by removing the label's id from
-   * the `aria-labelledby` attribute of the field.
+   * Unlinks the label from a field by removing the label id from
+   * the `aria-labelledby` attribute of the field's ARIA target element.
    *
    * @param {HTMLElement} field
    * @private
    */
   __unlinkLabelFromField(field) {
-    const ariaTarget = field.ariaTarget || field;
-    removeValueFromAttribute(ariaTarget, 'aria-labelledby', this.__labelId);
+    removeValueFromAttribute(this._getFieldAriaTarget(field), 'aria-labelledby', this.__labelId);
   }
 
   /** @private */

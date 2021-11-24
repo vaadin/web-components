@@ -1,4 +1,10 @@
 /**
+ * @license
+ * Copyright (c) 2021 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+
+/**
  * @param {string} value
  * @return {Set<string>}
  */
@@ -33,6 +39,7 @@ export function addValueToAttribute(element, attr, value) {
 
 /**
  * Removes a value from an attribute containing space-delimited values.
+ * If the value is the last one, the whole attribute is removed.
  *
  * @param {HTMLElement} element
  * @param {string} attr
