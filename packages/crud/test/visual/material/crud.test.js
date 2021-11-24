@@ -34,7 +34,7 @@ describe('crud', () => {
 
       it('editor-position-default', async () => {
         element.editedItem = {};
-        await visualDiff(div, `${dir}-editor-position-default`);
+        await visualDiff(div, `${dir}-editor-position-default-new`);
       });
 
       it('editor-position-default-edit', async () => {
@@ -46,7 +46,7 @@ describe('crud', () => {
         element.editorPosition = 'bottom';
         await nextRender(element);
         element.editedItem = {};
-        await visualDiff(div, `${dir}-editor-position-bottom`);
+        await visualDiff(div, `${dir}-editor-position-bottom-new`);
       });
 
       it('editor-position-bottom-edit', async () => {
@@ -60,7 +60,7 @@ describe('crud', () => {
         element.editorPosition = 'aside';
         await nextRender(element);
         element.editedItem = {};
-        await visualDiff(div, `${dir}-editor-position-aside`);
+        await visualDiff(div, `${dir}-editor-position-aside-new`);
       });
 
       it('editor-position-aside-edit', async () => {
