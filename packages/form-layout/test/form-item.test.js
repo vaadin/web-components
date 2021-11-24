@@ -120,17 +120,16 @@ describe('form-item', () => {
       newLabel.slot = 'label';
       item.replaceChild(newLabel, label);
       await nextFrame();
-      expect(label.id).to.be.empty;
       expect(newLabel.id).to.equal(labelId);
     });
 
-    it('should set id to the new label element when using appendChild', async () => {
+    it('should not set id to the new label element when using appendChild', async () => {
       const newLabel = document.createElement('label');
       newLabel.slot = 'label';
       item.appendChild(newLabel);
       await nextFrame();
-      expect(label.id).to.be.empty;
-      expect(newLabel.id).to.equal(labelId);
+      expect(label.id).to.equal(labelId);
+      expect(newLabel.id).to.be.empty;
     });
 
     it('should set id to the new label element when using insertBefore', async () => {
@@ -138,7 +137,6 @@ describe('form-item', () => {
       newLabel.slot = 'label';
       item.insertBefore(newLabel, label);
       await nextFrame();
-      expect(label.id).to.be.empty;
       expect(newLabel.id).to.equal(labelId);
     });
   });
@@ -165,7 +163,6 @@ describe('form-item', () => {
         const newInput = document.createElement('input');
         item.replaceChild(newInput, input);
         await nextFrame();
-        expect(input.getAttribute('aria-labelledby')).to.equal('custom-id');
         expect(newInput.getAttribute('aria-labelledby')).to.equal(label.id);
       });
 
