@@ -63,6 +63,16 @@ class Scroller extends ElementMixin(ThemableMixin(PolymerElement)) {
       scrollDirection: {
         type: String,
         reflectToAttribute: true
+      },
+
+      /**
+       * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
+       * @protected
+       */
+      tabindex: {
+        type: Number,
+        value: 0,
+        reflectToAttribute: true
       }
     };
   }
