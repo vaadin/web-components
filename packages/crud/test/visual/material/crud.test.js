@@ -14,36 +14,12 @@ describe('crud', () => {
   });
 
   it('basic', async () => {
-    element.editedItem = {};
     await visualDiff(div, 'basic');
-  });
-
-  it('basic-edit', async () => {
-    element.editedItem = element.items[0];
-    await visualDiff(div, 'basic-edit');
-  });
-
-  it('editor-position-bottom', async () => {
-    element.editorPosition = 'bottom';
-    await nextRender(element);
-    element.editedItem = {};
-    await visualDiff(div, 'editor-position-bottom');
-  });
-
-  it('editor-position-bottom-edit', async () => {
-    element.editorPosition = 'bottom';
-    await nextRender(element);
-    element.editedItem = element.items[0];
-    await visualDiff(div, 'editor-position-bottom-edit');
-  });
-
-  it('toolbar-visible-by-default', async () => {
-    await visualDiff(div, 'toolbar-visible');
   });
 
   it('no-toolbar', async () => {
     element.noToolbar = true;
-    await visualDiff(div, 'toolbar-hidden');
+    await visualDiff(div, 'no-toolbar');
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
@@ -54,6 +30,30 @@ describe('crud', () => {
 
       after(() => {
         document.documentElement.removeAttribute('dir');
+      });
+
+      it('editor-position-default', async () => {
+        element.editedItem = {};
+        await visualDiff(div, `${dir}-editor-position-default`);
+      });
+
+      it('editor-position-default-edit', async () => {
+        element.editedItem = element.items[0];
+        await visualDiff(div, `${dir}-editor-position-default-edit`);
+      });
+
+      it('editor-position-bottom', async () => {
+        element.editorPosition = 'bottom';
+        await nextRender(element);
+        element.editedItem = {};
+        await visualDiff(div, `${dir}-editor-position-bottom`);
+      });
+
+      it('editor-position-bottom-edit', async () => {
+        element.editorPosition = 'bottom';
+        await nextRender(element);
+        element.editedItem = element.items[0];
+        await visualDiff(div, `${dir}-editor-position-bottom-edit`);
       });
 
       it('editor-position-aside', async () => {
