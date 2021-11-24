@@ -165,6 +165,7 @@ class DatePicker extends DatePickerMixin(
         theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]"
         on-vaadin-overlay-open="_onOverlayOpened"
         on-vaadin-overlay-close="_onOverlayClosed"
+        on-vaadin-overlay-outside-click="focus"
         disable-upgrade
       >
         <template>

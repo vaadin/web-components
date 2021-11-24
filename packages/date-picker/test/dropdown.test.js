@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { click, down, fixtureSync, isIOS } from '@vaadin/testing-helpers';
 import '../src/vaadin-date-picker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { open, outsideClick } from './common.js';
 import { isFullscreen } from './common.js';
 
 describe('dropdown', () => {
@@ -37,6 +38,20 @@ describe('dropdown', () => {
       expect(window.getComputedStyle(document.body).webkitOverflowScrolling).to.equal('touch');
       done();
     });
+  });
+
+  it('should restore focus to the field on outside click', async () => {
+    datepicker.focus();
+    await open(datepicker);
+    outsideClick();
+    expect(document.activeElement).to.equal(input);
+  });
+
+  it('should focus the field on outside click', async () => {
+    expect(document.activeElement).to.equal(document.body);
+    await open(datepicker);
+    outsideClick();
+    expect(document.activeElement).to.equal(input);
   });
 
   describe('sizing', () => {
