@@ -472,6 +472,12 @@ export const DatePickerMixin = (subclass) =>
 
       this.addEventListener('mousedown', () => this.__bringToFront());
       this.addEventListener('touchstart', () => this.__bringToFront());
+
+      this.$.overlay.addEventListener('vaadin-overlay-outside-click', () => {
+        if (!this._fullscreen && this.getRootNode().activeElement !== this.focusElement) {
+          this.focus();
+        }
+      });
     }
 
     /**
@@ -591,10 +597,6 @@ export const DatePickerMixin = (subclass) =>
       }
       if (this.inputElement) {
         this.inputElement.setAttribute('aria-expanded', opened);
-      }
-      if (!opened && !this._fullscreen && this.getRootNode().activeElement !== this.focusElement) {
-        // Make sure the field is focused when the dropdown closes
-        this.focus();
       }
     }
 
