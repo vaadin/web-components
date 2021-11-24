@@ -18,6 +18,11 @@ describe('crud', () => {
     await visualDiff(div, 'basic');
   });
 
+  it('basic-edit', async () => {
+    element.editedItem = element.items[0];
+    await visualDiff(div, 'basic-edit');
+  });
+
   it('editor-position-bottom', async () => {
     element.editorPosition = 'bottom';
     await nextRender(element);
@@ -25,7 +30,14 @@ describe('crud', () => {
     await visualDiff(div, 'editor-position-bottom');
   });
 
-  it('toolbar-visible-by-defualt', async () => {
+  it('editor-position-bottom-edit', async () => {
+    element.editorPosition = 'bottom';
+    await nextRender(element);
+    element.editedItem = element.items[0];
+    await visualDiff(div, 'editor-position-bottom-edit');
+  });
+
+  it('toolbar-visible-by-default', async () => {
     await visualDiff(div, 'toolbar-visible');
   });
 
@@ -49,6 +61,13 @@ describe('crud', () => {
         await nextRender(element);
         element.editedItem = {};
         await visualDiff(div, `${dir}-editor-position-aside`);
+      });
+
+      it('editor-position-aside-edit', async () => {
+        element.editorPosition = 'aside';
+        await nextRender(element);
+        element.editedItem = element.items[0];
+        await visualDiff(div, `${dir}-editor-position-aside-edit`);
       });
     });
   });
