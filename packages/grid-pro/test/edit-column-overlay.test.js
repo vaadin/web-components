@@ -5,7 +5,7 @@ import '@vaadin/dialog/vaadin-dialog.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
-import { createItems, flushGrid, getCellEditor, getContainerCell } from './helpers.js';
+import { createItems, flushGrid, getCellEditor, getContainerCell, outsideClick } from './helpers.js';
 
 async function clickOverlay(element) {
   focusout(element);
@@ -83,13 +83,16 @@ const fixtures = {
       expect(getCellEditor(dateCell)).to.be.ok;
     });
 
-    it('should stop editing on outside click from input related overlay', () => {
+    it('should stop editing on outside click from input related overlay', async () => {
       enter(dateCell);
       const datePicker = getCellEditor(dateCell).querySelector('vaadin-date-picker');
       datePicker.click();
 
       clickOverlay(datePicker);
-      document.body.click();
+      await nextFrame();
+
+      outsideClick();
+
       grid._debouncerStopEdit && grid._debouncerStopEdit.flush();
 
       expect(getCellEditor(dateCell)).not.to.be.ok;
