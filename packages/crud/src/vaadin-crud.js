@@ -8,7 +8,7 @@ import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
-import './vaadin-dialog-layout.js';
+import './vaadin-crud-dialog.js';
 import './vaadin-crud-grid.js';
 import './vaadin-crud-form.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
@@ -176,7 +176,8 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
           height: 100%;
         }
 
-        :host([hidden]) {
+        :host([hidden]),
+        [hidden] {
           display: none !important;
         }
 
@@ -198,6 +199,39 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
         :host([editor-position='bottom']) #container {
           flex-direction: column;
+        }
+
+        [part='editor'] {
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        :host(:not([editor-position=''])[editor-opened]) [part='editor']:not([mobile]) {
+          flex: 1 0 100%;
+        }
+
+        :host([editor-position='bottom'][editor-opened]) [part='editor']:not([mobile]) {
+          max-height: var(--vaadin-crud-editor-max-height);
+        }
+
+        :host([editor-position='aside'][editor-opened]) [part='editor']:not([mobile]) {
+          min-width: 300px;
+          max-width: var(--vaadin-crud-editor-max-width);
+        }
+
+        [part='scroller'] {
+          display: flex;
+          flex-direction: column;
+          overflow: auto;
+          flex: auto;
+        }
+
+        [part='footer'] {
+          display: flex;
+          flex: none;
+          flex-direction: row-reverse;
         }
       </style>
 
@@ -222,24 +256,37 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
             </slot>
           </div>
         </div>
-        <vaadin-dialog-layout
-          id="dialog"
-          theme$="[[theme]]"
-          form="[[_form]]"
-          no-close-on-outside-click="[[__isDirty]]"
-          no-close-on-esc="[[__isDirty]]"
-          opened="{{editorOpened}}"
-          editor-position="{{editorPosition}}"
-          mobile="[[__mobile]]"
-          theme="crud"
+
+        <div
+          id="editor"
+          part="editor"
+          hidden$="[[__computeEditorHidden(editorOpened, __mobile, editorPosition)]]"
+          mobile$="[[__mobile]]"
         >
-          <slot name="header" slot="header"></slot>
-          <slot name="form" slot="form"></slot>
-          <slot name="save-button" slot="save-button"></slot>
-          <slot name="cancel-button" slot="cancel-button"></slot>
-          <slot name="delete-button" slot="delete-button"></slot>
-        </vaadin-dialog-layout>
+          <div part="scroller" id="scroller" role="group" aria-labelledby="header">
+            <div part="header" id="header">
+              <slot name="header"></slot>
+            </div>
+            <slot name="form"></slot>
+          </div>
+
+          <div part="footer" role="toolbar">
+            <slot name="save-button"></slot>
+            <slot name="cancel-button"></slot>
+            <slot name="delete-button"></slot>
+          </div>
+        </div>
       </div>
+
+      <vaadin-crud-dialog
+        id="dialog"
+        opened="[[__computeDialogOpened(editorOpened, __mobile, editorPosition)]]"
+        aria-label="[[__editorAriaLabel]]"
+        no-close-on-outside-click="[[__isDirty]]"
+        no-close-on-esc="[[__isDirty]]"
+        theme$="[[theme]]"
+        on-opened-changed="__onDialogOpened"
+      ></vaadin-crud-dialog>
 
       <vaadin-confirm-dialog
         theme$="[[theme]]"
@@ -252,6 +299,7 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
         message="[[i18n.confirm.cancel.content]]"
         confirm-theme="primary"
       ></vaadin-confirm-dialog>
+
       <vaadin-confirm-dialog
         theme$="[[theme]]"
         id="confirmDelete"
@@ -436,6 +484,7 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        */
       editorOpened: {
         type: Boolean,
+        reflectToAttribute: true,
         notify: true,
         observer: '__onOpenedChanged'
       },
@@ -533,6 +582,9 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       },
 
       /** @private */
+      __editorAriaLabel: String,
+
+      /** @private */
       __isDirty: Boolean,
 
       /** @private */
@@ -628,8 +680,8 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     this.__gridSizeListener = this.__onGridSizeChanges.bind(this);
     this.__boundEditOnClickListener = this.__editOnClickListener.bind(this);
     this._grid = this.$.grid;
-    this.$.dialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancelBound);
-    this.$.dialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancelBound);
+    this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancelBound);
+    this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancelBound);
     // Initialize the default buttons
     this.__propagateHostAttributes();
   }
@@ -691,12 +743,23 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       this.__onFormChange(this._form);
     }
 
+    if (opened) {
+      this.__ensureChildren();
+    }
+
     this.__toggleToolbar();
+
+    // Make sure to reset scroll position
+    this.$.scroller.scrollTop = 0;
   }
 
   /** @private */
-  __mobileChanged() {
-    this.__toggleToolbar();
+  __mobileChanged(mobile, oldMobile) {
+    if (mobile || oldMobile) {
+      this.__toggleToolbar();
+
+      this.__ensureChildren();
+    }
   }
 
   /** @private */
@@ -705,6 +768,62 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     if (this.editorPosition === 'bottom' && !this.__mobile) {
       this.$.toolbar.style.display = this.editorOpened ? 'none' : '';
     }
+  }
+
+  /** @private */
+  __moveChildNodes(target) {
+    const nodes = [this._headerNode, this._form, this._saveButton, this._cancelButton, this._deleteButton];
+    if (!nodes.every((node) => node instanceof HTMLElement)) {
+      return;
+    }
+
+    // Teleport header node, form, and the buttons to corresponding slots.
+    // NOTE: order in which buttons are moved matches the order of slots.
+    nodes.forEach((node) => {
+      target.appendChild(node);
+    });
+
+    // Wait to set label until slotted element has been moved.
+    setTimeout(() => {
+      this.__dialogAriaLabel = this._headerNode.textContent.trim();
+    });
+  }
+
+  /** @private */
+  __shouldOpenDialog(isMobile, editorPosition) {
+    return editorPosition === '' || isMobile;
+  }
+
+  /** @private */
+  __ensureChildren() {
+    if (this.__shouldOpenDialog(this.__mobile, this.editorPosition)) {
+      // Move form to dialog
+      this.__moveChildNodes(this.$.dialog.$.overlay);
+    } else {
+      // Move form to crud
+      this.__moveChildNodes(this);
+    }
+  }
+
+  /** @private */
+  __computeDialogOpened(opened, isMobile, editorPosition) {
+    // Only open dialog when editorPosition is "" or mobile is set
+    return this.__shouldOpenDialog(isMobile, editorPosition) ? opened : false;
+  }
+
+  /** @private */
+  __computeEditorHidden(opened, mobile, editorPosition) {
+    // Only show editor when editorPosition is "bottom" or "aside"
+    if (['aside', 'bottom'].includes(editorPosition) && !mobile) {
+      return !opened;
+    }
+
+    return true;
+  }
+
+  /** @private */
+  __onDialogOpened(event) {
+    this.editorOpened = event.detail.value;
   }
 
   /** @private */
@@ -729,10 +848,8 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
         } else if (slotAttributeValue.indexOf('button') >= 0) {
           const [button] = slotAttributeValue.split('-');
           this[`_${button}Button`] = node;
-          this.$.dialog[`${button}Button`] = node;
         } else if (slotAttributeValue == 'header') {
           this._headerNode = node;
-          this.$.dialog.header = node;
         }
       });
   }

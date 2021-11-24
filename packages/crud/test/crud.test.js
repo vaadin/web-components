@@ -74,7 +74,7 @@ describe('crud', () => {
         crud._grid,
         crud._form,
         crud.$.dialog,
-        crud.$.dialog.$.dialog,
+        crud.$.dialog.$.overlay,
         crud.$.confirmCancel,
         crud.$.confirmDelete
       ].forEach((e) => expect(e.getAttribute('theme')).to.be.match(/foo/));
@@ -234,8 +234,20 @@ describe('crud', () => {
     });
 
     describe('confirmation', () => {
+      let editorDialog;
+      let confirmCancelDialog;
+      let confirmDeleteDialog;
+
+      beforeEach(() => {
+        editorDialog = crud.$.dialog;
+        confirmCancelDialog = crud.$.confirmCancel;
+        confirmDeleteDialog = crud.$.confirmDelete;
+      });
+
       afterEach(async () => {
-        crud.$.dialog.opened = crud.$.confirmCancel.opened = crud.$.confirmDelete.opened = false;
+        crud.editorOpened = false;
+        confirmCancelDialog.opened = false;
+        confirmDeleteDialog.opened = false;
         await aTimeout(0);
       });
 
@@ -243,58 +255,58 @@ describe('crud', () => {
         it('should not ask for confirmation on cancel when not modified', () => {
           edit(crud.items[0]);
           btnCancel.click();
-          expect(crud.$.confirmCancel.opened).not.to.be.ok;
+          expect(confirmCancelDialog.opened).not.to.be.ok;
         });
 
         it('should not ask for confirmation on cancel when not modified - click out', () => {
           edit(crud.items[0]);
           crud.$.new.click();
-          expect(crud.$.confirmCancel.opened).not.to.be.ok;
+          expect(confirmCancelDialog.opened).not.to.be.ok;
         });
 
         it('should not ask for confirmation on cancel when not modified - esc', () => {
           edit(crud.items[0]);
-          crud.$.dialog.$.dialog.$.overlay.dispatchEvent(new CustomEvent('vaadin-overlay-escape-press'));
-          expect(crud.$.confirmCancel.opened).not.to.be.ok;
+          editorDialog.$.overlay.dispatchEvent(new CustomEvent('vaadin-overlay-escape-press'));
+          expect(confirmCancelDialog.opened).not.to.be.ok;
         });
 
         it('should ask for confirmation on cancel when modified', () => {
           edit(crud.items[0]);
           change(crud._form);
           btnCancel.click();
-          expect(crud.$.confirmCancel.opened).to.be.true;
+          expect(confirmCancelDialog.opened).to.be.true;
         });
 
         it('should ask for confirmation on cancel when modified - click out', () => {
           edit(crud.items[0]);
           change(crud._form);
           crud.$.new.click();
-          expect(crud.$.confirmCancel.opened).to.be.true;
+          expect(confirmCancelDialog.opened).to.be.true;
         });
 
         it('should ask for confirmation on cancel when modified - esc', () => {
           edit(crud.items[0]);
           change(crud._form);
-          crud.$.dialog.$.dialog.$.overlay.dispatchEvent(new CustomEvent('vaadin-overlay-escape-press'));
-          expect(crud.$.confirmCancel.opened).to.be.true;
+          editorDialog.$.overlay.dispatchEvent(new CustomEvent('vaadin-overlay-escape-press'));
+          expect(confirmCancelDialog.opened).to.be.true;
         });
 
         it('should continue editing when closing confirmation with confirm', () => {
           edit(crud.items[0]);
           change(crud._form);
           btnCancel.click();
-          btnConfDialog(crud.$.confirmCancel, 'cancel').click();
-          expect(crud.$.confirmCancel.opened).not.to.be.ok;
-          expect(crud.$.dialog.opened).to.be.true;
+          btnConfDialog(confirmCancelDialog, 'cancel').click();
+          expect(confirmCancelDialog.opened).not.to.be.ok;
+          expect(editorDialog.opened).to.be.true;
         });
 
         it('should cancel editing when closing confirmation with reject', () => {
           edit(crud.items[0]);
           change(crud._form);
           btnCancel.click();
-          btnConfDialog(crud.$.confirmCancel, 'confirm').click();
-          expect(crud.$.confirmCancel.opened).not.to.be.ok;
-          expect(crud.$.dialog.opened).not.to.be.ok;
+          btnConfDialog(confirmCancelDialog, 'confirm').click();
+          expect(confirmCancelDialog.opened).not.to.be.ok;
+          expect(editorDialog.opened).not.to.be.ok;
         });
 
         it('should trigger "cancel" only once after user hits "Cancel"', async () => {
@@ -335,7 +347,7 @@ describe('crud', () => {
           crud.addEventListener('cancel', cancelSpyListener);
 
           crud._grid.activeItem = crud.items[0];
-          crud.$.dialog.$.dialog.$.overlay.dispatchEvent(new CustomEvent('vaadin-overlay-escape-press'));
+          editorDialog.$.overlay.dispatchEvent(new CustomEvent('vaadin-overlay-escape-press'));
           await aTimeout(0);
           expect(cancelSpyListener.calledOnce).to.be.ok;
         });
@@ -359,30 +371,30 @@ describe('crud', () => {
         it('should ask for confirmation on delete', () => {
           edit(crud.items[0]);
           btnDelete.click();
-          expect(crud.$.confirmDelete.opened).to.be.true;
+          expect(confirmDeleteDialog.opened).to.be.true;
         });
 
         it('should continue editing when closing confirmation with cancel', () => {
           edit(crud.items[0]);
           btnDelete.click();
-          btnConfDialog(crud.$.confirmDelete, 'cancel').click();
-          expect(crud.$.confirmDelete.opened).not.to.be.ok;
-          expect(crud.$.dialog.opened).to.be.true;
+          btnConfDialog(confirmDeleteDialog, 'cancel').click();
+          expect(confirmDeleteDialog.opened).not.to.be.ok;
+          expect(editorDialog.opened).to.be.true;
         });
 
         it('should delete when closing confirmation with confirm', () => {
           edit(crud.items[0]);
           btnDelete.click();
-          btnConfDialog(crud.$.confirmDelete, 'confirm').click();
-          expect(crud.$.confirmDelete.opened).not.to.be.ok;
-          expect(crud.$.dialog.opened).not.to.be.ok;
+          btnConfDialog(confirmDeleteDialog, 'confirm').click();
+          expect(confirmDeleteDialog.opened).not.to.be.ok;
+          expect(editorDialog.opened).not.to.be.ok;
         });
       });
     });
 
     describe('flags', () => {
       afterEach(async () => {
-        crud.$.dialog.opened = false;
+        crud.editorOpened = false;
         await aTimeout(0);
         [btnSave, btnCancel, btnDelete] = crud.querySelectorAll('vaadin-button');
       });
@@ -489,7 +501,7 @@ describe('crud', () => {
 
     describe('events', () => {
       afterEach(async () => {
-        crud.$.dialog.opened = false;
+        crud.editorOpened = false;
         await aTimeout(0);
       });
 
@@ -503,14 +515,14 @@ describe('crud', () => {
           expect(crud.editedItem).not.to.be.ok;
           crud.$.new.click();
           expect(crud.editedItem).to.be.ok;
-          expect(crud.$.dialog.opened).to.be.true;
+          expect(crud.editorOpened).to.be.true;
         });
 
         it('on new should not set the item but open dialog if default prevented', () => {
           listenOnce(crud, 'new', (e) => e.preventDefault());
           crud.$.new.click();
           expect(crud.editedItem).not.to.be.ok;
-          expect(crud.$.dialog.opened).to.be.true;
+          expect(crud.editorOpened).to.be.true;
         });
       });
 
@@ -560,14 +572,14 @@ describe('crud', () => {
           edit(crud.items[0]);
           change(crud._form);
           btnSave.click();
-          expect(crud.$.dialog.opened).not.to.be.ok;
+          expect(crud.editorOpened).not.to.be.ok;
         });
 
         it('on save should keep opened dialog if default prevented', () => {
           listenOnce(crud, 'save', (e) => e.preventDefault());
           edit(crud.items[0]);
           btnSave.click();
-          expect(crud.$.dialog.opened).to.be.true;
+          expect(crud.editorOpened).to.be.true;
         });
 
         it('on save should keep item unmodified if default prevented', () => {
@@ -614,7 +626,7 @@ describe('crud', () => {
           listenOnce(crud, 'cancel', (e) => e.preventDefault());
           edit(crud.items[0]);
           btnCancel.click();
-          expect(crud.$.dialog.opened).to.be.true;
+          expect(crud.editorOpened).to.be.true;
         });
       });
 
@@ -633,7 +645,7 @@ describe('crud', () => {
           edit(crud.items[0]);
           btnDelete.click();
           btnConfDialog(crud.$.confirmDelete, 'confirm').click();
-          expect(crud.$.dialog.opened).not.to.be.ok;
+          expect(crud.editorOpened).not.to.be.ok;
         });
 
         it('on delete should keep opened dialog if default prevented', () => {
@@ -641,7 +653,7 @@ describe('crud', () => {
           edit(crud.items[0]);
           btnDelete.click();
           btnConfDialog(crud.$.confirmDelete, 'confirm').click();
-          expect(crud.$.dialog.opened).to.be.true;
+          expect(crud.editorOpened).to.be.true;
         });
       });
     });
@@ -688,7 +700,7 @@ describe('crud', () => {
     });
 
     afterEach(async () => {
-      crud.$.dialog.opened = false;
+      crud.editorOpened = false;
       await aTimeout(0);
     });
 
@@ -815,11 +827,11 @@ describe('crud', () => {
   });
 
   describe('editor-position', () => {
-    let crud, dialogLayout;
+    let crud, editorDialog;
 
     beforeEach(() => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
-      dialogLayout = crud.$.dialog;
+      editorDialog = crud.$.dialog;
     });
 
     afterEach(() => {
@@ -888,7 +900,7 @@ describe('crud', () => {
       crud.editorPosition = 'bottom';
       crud.__mobile = false;
       crud.$.new.click();
-      expect(dialogLayout.$.dialog.opened).to.be.false;
+      expect(editorDialog.opened).to.be.false;
     });
 
     (isIOS ? it.skip : it)('should switch from overlay to below grid if resize happens', async () => {
@@ -896,9 +908,9 @@ describe('crud', () => {
       crud.__mobile = true;
       crud.$.new.click();
       await oneEvent(crud, 'editor-opened-changed');
-      expect(dialogLayout.$.dialog.opened).to.be.true;
+      expect(editorDialog.opened).to.be.true;
       crud.__mobile = false;
-      expect(dialogLayout.$.dialog.opened).to.be.false;
+      expect(editorDialog.opened).to.be.false;
     });
   });
 
@@ -921,7 +933,7 @@ describe('crud', () => {
     it('should not open editor on row click by default', () => {
       crud.editOnClick = false;
       fakeClickOnRow(0);
-      expect(crud.editorOpened).to.be.false;
+      expect(crud.editorOpened).to.be.not.ok;
     });
 
     it('should open editor on row click if edit-on-click is set', () => {

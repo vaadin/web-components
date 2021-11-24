@@ -4,11 +4,11 @@
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { Dialog } from '@vaadin/dialog/src/vaadin-dialog.js';
+import { Dialog, DialogOverlay } from '@vaadin/dialog/src/vaadin-dialog.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
-  'vaadin-dialog-overlay',
+  'vaadin-crud-dialog-overlay',
   css`
     [part='scroller'] {
       display: flex;
@@ -26,6 +26,8 @@ registerStyles(
   { moduleId: 'vaadin-crud-dialog-overlay-styles' }
 );
 
+let memoizedTemplate;
+
 const editorTemplate = html`
   <div part="scroller" role="group" aria-labelledby="header">
     <div part="header" id="header">
@@ -41,15 +43,57 @@ const editorTemplate = html`
   </div>
 `;
 
+class CrudDialogOverlay extends DialogOverlay {
+  static get is() {
+    return 'vaadin-crud-dialog-overlay';
+  }
+
+  static get template() {
+    if (!memoizedTemplate) {
+      memoizedTemplate = super.template.cloneNode(true);
+      const contentPart = memoizedTemplate.content.querySelector('[part="content"]');
+      const defaultSlot = contentPart.querySelector('slot:not([name])');
+      contentPart.removeChild(defaultSlot);
+      contentPart.appendChild(editorTemplate.content.cloneNode(true));
+    }
+    return memoizedTemplate;
+  }
+}
+
+customElements.define('vaadin-crud-dialog-overlay', CrudDialogOverlay);
+
 class CrudDialog extends Dialog {
+  /**
+   * Override template to provide custom overlay tag name.
+   */
+  static get template() {
+    return html`
+      <style>
+        :host {
+          display: none;
+        }
+      </style>
+
+      <vaadin-crud-dialog-overlay
+        id="overlay"
+        on-opened-changed="_onOverlayOpened"
+        on-mousedown="_bringOverlayToFront"
+        on-touchstart="_bringOverlayToFront"
+        theme$="[[theme]]"
+        modeless="[[modeless]]"
+        with-backdrop="[[!modeless]]"
+        resizable$="[[resizable]]"
+        focus-trap
+      ></vaadin-crud-dialog-overlay>
+    `;
+  }
+
   ready() {
     super.ready();
 
-    this.renderer = (root) => {
-      if (!root.__dialogInitialized) {
-        root.__dialogInitialized = true;
-        root.$.content.appendChild(editorTemplate.content.cloneNode(true));
-      }
+    this.renderer = (_root) => {
+      // This is a dumb renderer to initialize overlay.
+      // The actual DOM is created using the template.
     };
   }
 }
