@@ -40,14 +40,14 @@ describe('dropdown', () => {
     });
   });
 
-  it('should restore focus to the field on dropdown close', async () => {
+  it('should restore focus to the field on outside click', async () => {
     datepicker.focus();
     await open(datepicker);
     outsideClick();
     expect(document.activeElement).to.equal(input);
   });
 
-  it('should focus the field on dropdown close', async () => {
+  it('should focus the field on outside click', async () => {
     expect(document.activeElement).to.equal(document.body);
     await open(datepicker);
     outsideClick();
@@ -105,7 +105,6 @@ describe('wrapped', () => {
   });
 
   it('should restore attribute focus-ring if it was initially set before opening', () => {
-    datepicker.focus();
     datepicker.setAttribute('focus-ring', '');
     datepicker.opened = true;
     datepicker.opened = false;
@@ -113,7 +112,6 @@ describe('wrapped', () => {
   });
 
   it('should remove attribute focus-ring if it was not initially set before opening', () => {
-    datepicker.focus();
     datepicker.opened = true;
     datepicker.setAttribute('focus-ring', '');
     datepicker.opened = false;
