@@ -21,6 +21,11 @@ declare class Scroller extends ThemableMixin(ElementMixin(HTMLElement)) {
    * When `scrollDirection` is undefined scrollbars will be shown in both directions.
    */
   scrollDirection: 'horizontal' | 'vertical' | 'none' | undefined;
+
+  /**
+   * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
+   */
+  tabindex: number | undefined | null;
 }
 
 declare global {
