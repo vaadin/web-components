@@ -208,6 +208,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
    * obtained through the `ariaTarget` property defined in `FieldMixin`.
    * - In other cases, the method returns the field element itself.
    *
+   * @param {HTMLElement} field
    * @protected
    */
   _getFieldAriaTarget(field) {
