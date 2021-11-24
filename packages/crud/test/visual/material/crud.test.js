@@ -32,42 +32,25 @@ describe('crud', () => {
         document.documentElement.removeAttribute('dir');
       });
 
-      it('editor-position-default', async () => {
-        element.editedItem = {};
-        await visualDiff(div, `${dir}-editor-position-default-new`);
-      });
+      ['default', 'aside', 'bottom'].forEach((position) => {
+        describe(`${dir}-editor-position-${position}`, () => {
+          beforeEach(async () => {
+            if (position !== 'default') {
+              element.editorPosition = position;
+              await nextRender(element);
+            }
+          });
 
-      it('editor-position-default-edit', async () => {
-        element.editedItem = element.items[0];
-        await visualDiff(div, `${dir}-editor-position-default-edit`);
-      });
+          it(`editor-position-${position}-new`, async () => {
+            element.editedItem = {};
+            await visualDiff(div, `${dir}-editor-position-${position}-new`);
+          });
 
-      it('editor-position-bottom', async () => {
-        element.editorPosition = 'bottom';
-        await nextRender(element);
-        element.editedItem = {};
-        await visualDiff(div, `${dir}-editor-position-bottom-new`);
-      });
-
-      it('editor-position-bottom-edit', async () => {
-        element.editorPosition = 'bottom';
-        await nextRender(element);
-        element.editedItem = element.items[0];
-        await visualDiff(div, `${dir}-editor-position-bottom-edit`);
-      });
-
-      it('editor-position-aside', async () => {
-        element.editorPosition = 'aside';
-        await nextRender(element);
-        element.editedItem = {};
-        await visualDiff(div, `${dir}-editor-position-aside-new`);
-      });
-
-      it('editor-position-aside-edit', async () => {
-        element.editorPosition = 'aside';
-        await nextRender(element);
-        element.editedItem = element.items[0];
-        await visualDiff(div, `${dir}-editor-position-aside-edit`);
+          it(`editor-position-${position}-edit`, async () => {
+            element.editedItem = element.items[0];
+            await visualDiff(div, `${dir}-editor-position-${position}-edit`);
+          });
+        });
       });
     });
   });
