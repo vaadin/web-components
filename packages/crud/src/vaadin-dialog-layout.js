@@ -51,12 +51,6 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
           display: none;
         }
 
-        :host([editor-position='bottom']) [part='editor']:not([hidden]) {
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-        }
-
         [part='scroller'] {
           display: flex;
           flex-direction: column;
