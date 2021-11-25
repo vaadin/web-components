@@ -320,6 +320,14 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       },
 
       /**
+       * A reference to the editor header element will be teleported to the dialog.
+       * @private
+       */
+      _headerNode: {
+        type: HTMLElement
+      },
+
+      /**
        * An array containing the items which will be stamped to the column template instances.
        * @type {Array<unknown> | undefined}
        */
@@ -545,8 +553,8 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   static get observers() {
     return [
-      '__setEditorHeader(__isNew, i18n.newItem, i18n.editItem)',
-      '__formChanged(theme, include, exclude)',
+      '__headerNodeChanged(_headerNode, __isNew, i18n.newItem, i18n.editItem)',
+      '__formChanged(_form, theme, include, exclude)',
       '__onI18Change(i18n, _grid)',
       '__onEditOnClickChange(editOnClick, _grid)',
       '__hostPropsChanged(' +
@@ -579,11 +587,7 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
         return document.createElement('h3');
       },
       form: () => {
-        const form = document.createElement('vaadin-crud-form');
-        if (this.theme) {
-          form.setAttribute('theme', this.theme);
-        }
-        return form;
+        return document.createElement('vaadin-crud-form');
       },
       'save-button': () => {
         const button = document.createElement('vaadin-button');
@@ -638,19 +642,18 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   }
 
   /** @private */
-  __setEditorHeader(isNew, newItem, editItem) {
-    const header = this._headerNode;
-    if (header) {
-      header.textContent = isNew ? newItem : editItem;
+  __headerNodeChanged(headerNode, isNew, newItem, editItem) {
+    if (headerNode) {
+      headerNode.textContent = isNew ? newItem : editItem;
     }
   }
 
   /** @private */
-  __formChanged(theme, include, exclude) {
-    if (this._form) {
-      this._form.include = include;
-      this._form.exclude = exclude;
-      this._form.setAttribute('theme', theme);
+  __formChanged(form, theme, include, exclude) {
+    if (form) {
+      form.include = include;
+      form.exclude = exclude;
+      form.setAttribute('theme', theme);
     }
   }
 
@@ -732,7 +735,6 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
         } else if (slotName == 'header') {
           this._headerNode = node;
           this.$.dialog.header = node;
-          this.__setEditorHeader(this.__isNew, this.i18n.newItem, this.i18n.editItem);
         }
       });
   }
