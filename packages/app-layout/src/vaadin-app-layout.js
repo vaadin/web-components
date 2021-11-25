@@ -3,6 +3,8 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import 'blocking-elements';
+import 'wicg-inert';
 import './safe-area-inset.js';
 import './detect-ios-navbar.js';
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
@@ -12,6 +14,8 @@ import { afterNextRender, beforeNextRender } from '@polymer/polymer/lib/utils/re
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+const blockingElements = document.$blockingElements;
 
 /**
  * `<vaadin-app-layout>` is a Web Component providing a quick and easy way to get a common application layout structure done.
@@ -205,7 +209,6 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
           width: 16em;
           box-sizing: border-box;
           padding: var(--safe-area-inset-top) 0 var(--safe-area-inset-bottom) var(--safe-area-inset-left);
-          outline: none;
         }
 
         :host([drawer-opened]) [part='drawer'] {
@@ -284,11 +287,11 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
       <div part="navbar" id="navbarTop">
         <slot name="navbar"></slot>
       </div>
-      <div part="backdrop" on-click="_close" on-touchstart="_close"></div>
+      <div part="backdrop" id="backdrop" on-click="_close" on-touchstart="_close"></div>
       <div part="drawer" id="drawer">
         <slot name="drawer" id="drawerSlot"></slot>
       </div>
-      <div content>
+      <div id="content" content>
         <slot></slot>
       </div>
       <div part="navbar" id="navbarBottom" bottom hidden>
@@ -430,16 +433,23 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
   }
 
   /** @private */
-  _drawerOpenedObserver() {
-    const drawer = this.$.drawer;
-
-    drawer.removeAttribute('tabindex');
+  _drawerOpenedObserver(drawerOpened, oldDrawerOpened) {
+    this.__setDrawerInert(!drawerOpened);
 
     if (this.overlay) {
-      if (this.drawerOpened) {
-        drawer.setAttribute('tabindex', 0);
-        drawer.focus();
+      // Prevent focusing the content when the drawer is opened as a modal overlay
+      this.__setBlockingModalOverlay(drawerOpened);
+
+      if (drawerOpened) {
+        this.__focusDrawer();
         this._updateDrawerHeight();
+      } else if (oldDrawerOpened) {
+        // Move focus to drawer toggle when exiting overlay mode
+        const toggle = this.querySelector('vaadin-drawer-toggle');
+        if (toggle) {
+          toggle.focus();
+          toggle.setAttribute('focus-ring', 'focus');
+        }
       }
     }
 
@@ -528,11 +538,18 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
       drawer.setAttribute('role', 'dialog');
       drawer.setAttribute('aria-modal', 'true');
       drawer.setAttribute('aria-label', 'drawer');
+
+      if (!this.drawerOpened) {
+        this.__setDrawerInert(true);
+      }
     } else {
       if (this._drawerStateSaved) {
         this.drawerOpened = this._drawerStateSaved;
         this._drawerStateSaved = null;
       }
+
+      this.__setDrawerInert(false);
+      blockingElements.remove(drawer);
 
       drawer.removeAttribute('role');
       drawer.removeAttribute('aria-modal');
@@ -546,6 +563,55 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
     }
 
     // TODO(jouni): ARIA attributes. The drawer should act similar to a modal dialog when in ”overlay” mode
+  }
+
+  /** @private */
+  __focusDrawer() {
+    const drawer = this.$.drawer;
+
+    // Wait for animation before focusing drawer
+    // to make sure VoiceOver has proper outline
+    const focusDrawer = () => {
+      // Move focus to the drawer
+      drawer.setAttribute('tabindex', '0');
+      drawer.focus();
+    };
+
+    if (getComputedStyle(this).getPropertyValue('--vaadin-app-layout-transition') === 'none') {
+      focusDrawer();
+    } else {
+      const listener = () => {
+        drawer.removeEventListener('transitionend', listener);
+        focusDrawer();
+      };
+
+      drawer.addEventListener('transitionend', listener);
+    }
+  }
+
+  /** @private */
+  __setDrawerInert(inert) {
+    const drawer = this.$.drawer;
+
+    if (inert) {
+      drawer.inert = true;
+    } else {
+      drawer.removeAttribute('tabindex');
+      drawer.inert = false;
+    }
+  }
+
+  /** @private */
+  __setBlockingModalOverlay(blocking) {
+    const drawer = this.$.drawer;
+    const backdrop = this.$.backdrop;
+    if (blocking) {
+      blockingElements.push(drawer);
+      // If the backdrop is inert, it can't be clicked to close the overlay
+      backdrop.inert = false;
+    } else {
+      blockingElements.remove(drawer);
+    }
   }
 
   /** @private */
