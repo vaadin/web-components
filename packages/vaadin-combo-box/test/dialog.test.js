@@ -46,9 +46,7 @@ describe('dialog', () => {
       dialog = fixtureSync(`
       <vaadin-dialog>
         <template>
-          <div id="content">
-            <vaadin-combo-box items="[1,2,3]"></vaadin-combo-box>
-          </div>
+          <vaadin-combo-box items="[1,2,3]"></vaadin-combo-box>
         </template>
       </vaadin-dialog>
     `);
