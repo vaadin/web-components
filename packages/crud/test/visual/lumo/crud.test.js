@@ -22,6 +22,17 @@ describe('crud', () => {
     await visualDiff(div, 'no-toolbar');
   });
 
+  it('theme-no-border', async () => {
+    element.setAttribute('theme', 'no-border');
+    await visualDiff(div, 'theme-no-border');
+  });
+
+  it('theme-no-border-edit', async () => {
+    element.setAttribute('theme', 'no-border');
+    element.editedItem = element.items[0];
+    await visualDiff(div, 'theme-no-border-edit');
+  });
+
   ['ltr', 'rtl'].forEach((dir) => {
     describe(dir, () => {
       before(() => {
