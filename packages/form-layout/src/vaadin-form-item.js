@@ -164,41 +164,36 @@ class FormItem extends ThemableMixin(PolymerElement) {
   constructor() {
     super();
     this.__updateInvalidState = this.__updateInvalidState.bind(this);
-    this.__contentFieldObserver = new MutationObserver(() => this.__updateRequiredState(this.__contentField.required));
+
+    /**
+     * An observer for a field node to reflect its `required` and `invalid` attributes to the component.
+     *
+     * @type {MutationObserver}
+     * @private
+     */
+    this.__fieldNodeObserver = new MutationObserver(() => this.__updateRequiredState(this.__fieldNode.required));
+
+    /**
+     * The first label node in the label slot.
+     *
+     * @type {HTMLElement | null}
+     * @private
+     */
+    this.__labelNode = null;
+
+    /**
+     * The first field node in the content slot.
+     *
+     * An element is considered a field when it has the `checkValidity` or `validate` method.
+     *
+     * @type {HTMLElement | null}
+     * @private
+     */
+    this.__fieldNode = null;
 
     // Ensure every instance has unique ID
     const uniqueId = (FormItem._uniqueLabelId = 1 + FormItem._uniqueLabelId || 0);
     this.__labelId = `label-${this.localName}-${uniqueId}`;
-  }
-
-  /**
-   * An array of field nodes of the content slot.
-   *
-   * @return {HTMLElement[]}
-   * @private
-   */
-  get __fieldNodes() {
-    return this.$.contentSlot.assignedElements();
-  }
-
-  /**
-   * The first field node in the content slot.
-   *
-   * @return {HTMLElement | undefined}
-   * @private
-   */
-  get __fieldNode() {
-    return this.__fieldNodes[0];
-  }
-
-  /**
-   * The first label node in the label slot.
-   *
-   * @type {HTMLElement | undefined}
-   * @private
-   */
-  get __labelNode() {
-    return this.$.labelSlot.assignedElements()[0];
   }
 
   /**
@@ -254,7 +249,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
   /**
    * A `slotchange` event handler for the label slot.
    *
-   * - Ensures the label id is assigned to the label node if the node is provided.
+   * - Ensures the label id is only assigned to the first label node.
    * - Ensures the label node is linked to the first field node via the `aria-labelledby` attribute
    * if both nodes are provided, and unlinked otherwise.
    *
@@ -262,10 +257,22 @@ class FormItem extends ThemableMixin(PolymerElement) {
    */
   __onLabelSlotChange() {
     if (this.__labelNode) {
+      this.__labelNode.id = '';
+      this.__labelNode = null;
+
+      if (this.__fieldNode) {
+        this.__unlinkLabelFromField(this.__fieldNode);
+      }
+    }
+
+    const newLabelNode = this.$.labelSlot.assignedElements()[0];
+    if (newLabelNode) {
+      this.__labelNode = newLabelNode;
       this.__labelNode.id = this.__labelId;
-      this.__linkLabelToField(this.__fieldNode);
-    } else {
-      this.__unlinkLabelFromField(this.__fieldNode);
+
+      if (this.__fieldNode) {
+        this.__linkLabelToField(this.__fieldNode);
+      }
     }
   }
 
@@ -273,34 +280,32 @@ class FormItem extends ThemableMixin(PolymerElement) {
    * A `slotchange` event handler for the content slot.
    *
    * - Ensures the label node is only linked to the first field node via the `aria-labelledby` attribute.
-   * - Sets up an observer for the `required` attribute changes on the first validatable field
+   * - Sets up an observer for the `required` attribute changes on the first field
    * to reflect the attribute on the component. Ensures the observer is disconnected from the field
    * as soon as it is removed or replaced by another one.
    *
    * @private
    */
   __onContentSlotChange() {
-    this.__fieldNodes.forEach((field) => {
-      if (field === this.__fieldNode && this.__labelNode) {
-        this.__linkLabelToField(field);
-      } else {
-        this.__unlinkLabelFromField(field);
-      }
-    });
-
-    if (this.__contentField) {
+    if (this.__fieldNode) {
       // Discard the old field
+      this.__unlinkLabelFromField(this.__fieldNode);
       this.__updateRequiredState(false);
-      this.__contentFieldObserver.disconnect();
-      delete this.__contentField;
+      this.__fieldNodeObserver.disconnect();
+      this.__fieldNode = null;
     }
 
-    const contentFields = this.__fieldNodes.filter((node) => !!this.__getValidateFunction(node));
-    if (contentFields.length === 1) {
-      // There's only one child field
-      this.__contentField = contentFields[0];
-      this.__updateRequiredState(this.__contentField.required);
-      this.__contentFieldObserver.observe(this.__contentField, { attributes: true, attributeFilter: ['required'] });
+    const newFieldNode = this.$.contentSlot.assignedElements().find((field) => {
+      return !!this.__getValidateFunction(field);
+    });
+    if (newFieldNode) {
+      this.__fieldNode = newFieldNode;
+      this.__updateRequiredState(this.__fieldNode.required);
+      this.__fieldNodeObserver.observe(this.__fieldNode, { attributes: true, attributeFilter: ['required'] });
+
+      if (this.__labelNode) {
+        this.__linkLabelToField(this.__fieldNode);
+      }
     }
   }
 
@@ -308,22 +313,20 @@ class FormItem extends ThemableMixin(PolymerElement) {
   __updateRequiredState(required) {
     if (required) {
       this.setAttribute('required', '');
-      this.__contentField.addEventListener('blur', this.__updateInvalidState);
-      this.__contentField.addEventListener('change', this.__updateInvalidState);
+      this.__fieldNode.addEventListener('blur', this.__updateInvalidState);
+      this.__fieldNode.addEventListener('change', this.__updateInvalidState);
     } else {
       this.removeAttribute('invalid');
       this.removeAttribute('required');
-      this.__contentField.removeEventListener('blur', this.__updateInvalidState);
-      this.__contentField.removeEventListener('change', this.__updateInvalidState);
+      this.__fieldNode.removeEventListener('blur', this.__updateInvalidState);
+      this.__fieldNode.removeEventListener('change', this.__updateInvalidState);
     }
   }
 
   /** @private */
   __updateInvalidState() {
-    this.toggleAttribute(
-      'invalid',
-      this.__getValidateFunction(this.__contentField).call(this.__contentField) === false
-    );
+    const isValid = this.__getValidateFunction(this.__fieldNode).call(this.__fieldNode);
+    this.toggleAttribute('invalid', isValid === false);
   }
 }
 

@@ -120,6 +120,7 @@ describe('form-item', () => {
       newLabel.slot = 'label';
       item.replaceChild(newLabel, label);
       await nextFrame();
+      expect(label.id).to.be.empty;
       expect(newLabel.id).to.equal(labelId);
     });
 
@@ -137,6 +138,7 @@ describe('form-item', () => {
       newLabel.slot = 'label';
       item.insertBefore(newLabel, label);
       await nextFrame();
+      expect(label.id).to.be.empty;
       expect(newLabel.id).to.equal(labelId);
     });
   });
@@ -163,6 +165,7 @@ describe('form-item', () => {
         const newInput = document.createElement('input');
         item.replaceChild(newInput, input);
         await nextFrame();
+        expect(input.getAttribute('aria-labelledby')).to.equal('custom-id');
         expect(newInput.getAttribute('aria-labelledby')).to.equal(label.id);
       });
 
@@ -181,6 +184,12 @@ describe('form-item', () => {
         expect(input.getAttribute('aria-labelledby')).to.equal(`custom-id ${label.id}`);
         expect(newInput.hasAttribute('aria-labelledby')).to.be.false;
       });
+
+      it('should unlink the label from the input when removing the label element', async () => {
+        label.remove();
+        await nextFrame();
+        expect(input.getAttribute('aria-labelledby')).to.equal('custom-id');
+      });
     });
 
     describe('input without label', () => {
@@ -194,7 +203,7 @@ describe('form-item', () => {
         await nextFrame();
       });
 
-      it('should not link the label to the input by default', () => {
+      it('should not link the label to the input when no label', () => {
         expect(input.getAttribute('aria-labelledby')).to.equal('custom-id');
       });
 
@@ -324,10 +333,9 @@ describe('form-item', () => {
     });
 
     it('should not add the required attribute when input is replaced by a non-field', async () => {
-      input.remove();
       const nonField = document.createElement('non-field');
       nonField.required = true;
-      item.appendChild(nonField);
+      item.replaceChild(nonField, input);
       await nextFrame();
       expect(item.hasAttribute('required')).to.be.false;
     });
@@ -351,11 +359,11 @@ describe('form-item', () => {
       expect(item.hasAttribute('required')).to.be.false;
     });
 
-    it('should remove the required attribute when another input is added', async () => {
+    it('should not remove the required attribute when another input is added', async () => {
       const otherInput = document.createElement('input');
       item.appendChild(otherInput);
       await nextFrame();
-      expect(item.hasAttribute('required')).to.be.false;
+      expect(item.hasAttribute('required')).to.be.true;
     });
 
     it('should remove the invalid attribute when input is set not required', async () => {
@@ -392,26 +400,34 @@ describe('form-item', () => {
         expect(item.hasAttribute('invalid')).to.be.false;
       });
 
-      it(`should not react to ${event} after the input is set not required`, async () => {
+      it(`should stop listening for ${event} after the input is set not required`, async () => {
         input.required = false;
         await nextFrame();
         input.dispatchEvent(new CustomEvent(event));
         expect(item.hasAttribute('invalid')).to.be.false;
       });
 
-      it(`should not react to ${event} after the input is removed`, async () => {
+      it(`should stop listening for ${event} on the input when removing it`, async () => {
         input.remove();
         await nextFrame();
         input.dispatchEvent(new CustomEvent(event));
         expect(item.hasAttribute('invalid')).to.be.false;
       });
 
-      it(`should not react to ${event} after another input is added`, async () => {
+      it(`should stop listening for ${event} on the input when replacing it with another one`, async () => {
+        const otherInput = document.createElement('input');
+        item.replaceChild(otherInput, input);
+        await nextFrame();
+        input.dispatchEvent(new CustomEvent(event));
+        expect(item.hasAttribute('invalid')).to.be.false;
+      });
+
+      it(`should keep listening for ${event} on the old input when adding a new one`, async () => {
         const otherInput = document.createElement('input');
         item.appendChild(otherInput);
         await nextFrame();
         input.dispatchEvent(new CustomEvent(event));
-        expect(item.hasAttribute('invalid')).to.be.false;
+        expect(item.hasAttribute('invalid')).to.be.true;
       });
     });
   });
