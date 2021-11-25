@@ -8,21 +8,21 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-dialog-overlay',
   css`
-    :host([theme~='layout']) [part='overlay'],
-    :host([theme~='layout']) [part='content'] {
+    :host([theme~='crud']) [part='overlay'],
+    :host([theme~='crud']) [part='content'] {
       display: flex;
       flex-direction: column;
       padding: 0;
       max-height: 100vh;
     }
 
-    :host([theme~='layout']) [part='overlay'] {
+    :host([theme~='crud']) [part='overlay'] {
       max-width: 54em;
       min-width: 20em;
     }
 
     @media (max-width: 600px), (max-height: 600px) {
-      :host([theme~='layout']) {
+      :host([theme~='crud']) {
         top: 0;
         left: 0;
         right: 0;
@@ -30,13 +30,13 @@ registerStyles(
         padding: 0;
       }
 
-      :host([theme~='layout']) [part='overlay'] {
+      :host([theme~='crud']) [part='overlay'] {
         height: 100vh;
         width: 100vw;
         border-radius: 0 !important;
       }
 
-      :host([theme~='layout']) [part='content'] {
+      :host([theme~='crud']) [part='content'] {
         flex: 1;
       }
     }

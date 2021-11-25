@@ -93,7 +93,7 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
         aria-label="[[__ariaLabel]]"
         no-close-on-outside-click="[[noCloseOnOutsideClick]]"
         no-close-on-esc="[[noCloseOnEsc]]"
-        theme$="[[theme]] layout"
+        theme$="[[theme]] crud"
       ></vaadin-crud-dialog>
     `;
   }
