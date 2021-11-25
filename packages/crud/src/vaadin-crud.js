@@ -714,24 +714,23 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     addedNodes
       .filter((node) => node.nodeType === Node.ELEMENT_NODE)
       .forEach((node) => {
-        const slotName = node.getAttribute('slot');
-        if (!slotName) {
+        const slotAttributeValue = node.getAttribute('slot');
+        if (!slotAttributeValue) {
           return;
         }
 
-        if (slotName == 'grid') {
+        if (slotAttributeValue == 'grid') {
           // Force to remove listener on previous grid first
           this.__onEditOnClickChange(false, this._grid);
           this._grid = node;
           this.__onEditOnClickChange(this.editOnClick, this._grid);
-        } else if (slotName == 'form') {
+        } else if (slotAttributeValue == 'form') {
           this._form = node;
-        } else if (slotName.indexOf('button') >= 0) {
-          const [button] = slotName.split('-');
-
+        } else if (slotAttributeValue.indexOf('button') >= 0) {
+          const [button] = slotAttributeValue.split('-');
           this[`_${button}Button`] = node;
           this.$.dialog[`${button}Button`] = node;
-        } else if (slotName == 'header') {
+        } else if (slotAttributeValue == 'header') {
           this._headerNode = node;
           this.$.dialog.header = node;
         }
