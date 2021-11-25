@@ -726,7 +726,6 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
           this.__onEditOnClickChange(this.editOnClick, this._grid);
         } else if (slotName == 'form') {
           this._form = node;
-          this.__formChanged(this.theme, this.include, this.exclude);
         } else if (slotName.indexOf('button') >= 0) {
           const [button] = slotName.split('-');
 
