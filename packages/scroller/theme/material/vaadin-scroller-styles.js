@@ -2,7 +2,7 @@ import '@vaadin/vaadin-material-styles/color.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const scroller = css`
-  :host(:focus) {
+  :host([focus-ring]) {
     outline: none;
     box-shadow: 0 0 0 2px var(--material-primary-color);
   }

@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -20,7 +21,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Scroller extends ElementMixin(ThemableMixin(PolymerElement)) {
+class Scroller extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -75,6 +76,10 @@ class Scroller extends ElementMixin(ThemableMixin(PolymerElement)) {
         reflectToAttribute: true
       }
     };
+  }
+
+  _shouldSetFocus(event) {
+    return event.target === this;
   }
 }
 
