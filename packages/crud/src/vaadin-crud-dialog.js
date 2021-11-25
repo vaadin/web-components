@@ -10,6 +10,17 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-crud-dialog-overlay',
   css`
+    [part='overlay'] {
+      max-width: 54em;
+      min-width: 20em;
+    }
+
+    [part='content'] {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+
     [part='scroller'] {
       display: flex;
       flex-direction: column;

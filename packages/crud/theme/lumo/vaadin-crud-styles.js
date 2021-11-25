@@ -155,19 +155,6 @@ registerStyles(
   [
     editorStyles,
     css`
-      [part='overlay'],
-      [part='content'] {
-        display: flex;
-        flex-direction: column;
-        padding: 0;
-        max-height: 100vh;
-      }
-
-      [part='overlay'] {
-        max-width: 54em;
-        min-width: 20em;
-      }
-
       @media (max-width: 600px), (max-height: 600px) {
         :host {
           top: 0;
