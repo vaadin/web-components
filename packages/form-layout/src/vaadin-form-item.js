@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/field-base/src/utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -145,12 +146,13 @@ class FormItem extends ThemableMixin(PolymerElement) {
           min-width: 0;
         }
       </style>
-      <div id="label" part="label" on-click="_onLabelClick">
-        <slot name="label" id="labelSlot"></slot>
+      <div id="label" part="label" on-click="__onLabelClick">
+        <slot name="label" id="labelSlot" on-slotchange="__onLabelSlotChange"></slot>
+        <span part="required-indicator" aria-hidden="true"></span>
       </div>
       <div id="spacing"></div>
       <div id="content">
-        <slot id="contentSlot"></slot>
+        <slot id="contentSlot" on-slotchange="__onContentSlotChange"></slot>
       </div>
     `;
   }
@@ -159,15 +161,137 @@ class FormItem extends ThemableMixin(PolymerElement) {
     return 'vaadin-form-item';
   }
 
+  constructor() {
+    super();
+    /**
+     * The first label node in the label slot.
+     *
+     * @type {HTMLElement | null}
+     * @private
+     */
+    this.__labelNode = null;
+
+    /**
+     * The first field node in the content slot.
+     *
+     * An element is considered a field when it has the `checkValidity` or `validate` method.
+     *
+     * @type {HTMLElement | null}
+     * @private
+     */
+    this.__fieldNode = null;
+
+    // Ensure every instance has unique ID
+    const uniqueId = (FormItem._uniqueLabelId = 1 + FormItem._uniqueLabelId || 0);
+    this.__labelId = `label-${this.localName}-${uniqueId}`;
+  }
+
+  /**
+   * Returns a target element to add ARIA attributes to for a field.
+   *
+   * - For Vaadin field components, the method returns an element
+   * obtained through the `ariaTarget` property defined in `FieldMixin`.
+   * - In other cases, the method returns the field element itself.
+   *
+   * @param {HTMLElement} field
+   * @protected
+   */
+  _getFieldAriaTarget(field) {
+    return field.ariaTarget || field;
+  }
+
+  /**
+   * Links the label to a field by adding the label id to
+   * the `aria-labelledby` attribute of the field's ARIA target element.
+   *
+   * @param {HTMLElement} field
+   * @private
+   */
+  __linkLabelToField(field) {
+    addValueToAttribute(this._getFieldAriaTarget(field), 'aria-labelledby', this.__labelId);
+  }
+
+  /**
+   * Unlinks the label from a field by removing the label id from
+   * the `aria-labelledby` attribute of the field's ARIA target element.
+   *
+   * @param {HTMLElement} field
+   * @private
+   */
+  __unlinkLabelFromField(field) {
+    removeValueFromAttribute(this._getFieldAriaTarget(field), 'aria-labelledby', this.__labelId);
+  }
+
   /** @private */
-  _onLabelClick() {
-    const firstContentElementChild = Array.prototype.find.call(
-      this.$.contentSlot.assignedNodes(),
-      (e) => e.nodeType === Node.ELEMENT_NODE
-    );
-    if (firstContentElementChild) {
-      firstContentElementChild.focus();
-      firstContentElementChild.click();
+  __onLabelClick() {
+    const fieldNode = this.__fieldNode;
+    if (fieldNode) {
+      fieldNode.focus();
+      fieldNode.click();
+    }
+  }
+
+  /** @private */
+  __getValidateFunction(field) {
+    return field.validate || field.checkValidity;
+  }
+
+  /**
+   * A `slotchange` event handler for the label slot.
+   *
+   * - Ensures the label id is only assigned to the first label node.
+   * - Ensures the label node is linked to the first field node via the `aria-labelledby` attribute
+   * if both nodes are provided, and unlinked otherwise.
+   *
+   * @private
+   */
+  __onLabelSlotChange() {
+    if (this.__labelNode) {
+      this.__labelNode.id = '';
+      this.__labelNode = null;
+
+      if (this.__fieldNode) {
+        this.__unlinkLabelFromField(this.__fieldNode);
+      }
+    }
+
+    const newLabelNode = this.$.labelSlot.assignedElements()[0];
+    if (newLabelNode) {
+      this.__labelNode = newLabelNode;
+      this.__labelNode.id = this.__labelId;
+
+      if (this.__fieldNode) {
+        this.__linkLabelToField(this.__fieldNode);
+      }
+    }
+  }
+
+  /**
+   * A `slotchange` event handler for the content slot.
+   *
+   * - Ensures the label node is only linked to the first field node via the `aria-labelledby` attribute.
+   * - Sets up an observer for the `required` attribute changes on the first field
+   * to reflect the attribute on the component. Ensures the observer is disconnected from the field
+   * as soon as it is removed or replaced by another one.
+   *
+   * @private
+   */
+  __onContentSlotChange() {
+    if (this.__fieldNode) {
+      // Discard the old field
+      this.__unlinkLabelFromField(this.__fieldNode);
+      this.__fieldNode = null;
+    }
+
+    const newFieldNode = this.$.contentSlot.assignedElements().find((field) => {
+      return !!this.__getValidateFunction(field);
+    });
+    if (newFieldNode) {
+      this.__fieldNode = newFieldNode;
+
+      if (this.__labelNode) {
+        this.__linkLabelToField(this.__fieldNode);
+      }
     }
   }
 }
