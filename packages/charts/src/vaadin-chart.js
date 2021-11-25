@@ -1036,10 +1036,21 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @private */
   __initChart(options) {
     this.__initEventsListeners(options);
+    this.__updateStyledMode(options);
     if (this.timeline) {
       this.configuration = Highcharts.stockChart(this.$.chart, options);
     } else {
       this.configuration = Highcharts.chart(this.$.chart, options);
+    }
+  }
+
+  /** @private */
+  __updateStyledMode(options) {
+    const styledMode = options.chart.styledMode;
+    if (styledMode) {
+      this.$.chart.setAttribute('styled-mode', '');
+    } else {
+      this.$.chart.removeAttribute('styled-mode');
     }
   }
 
