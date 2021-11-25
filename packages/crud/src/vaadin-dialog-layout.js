@@ -61,7 +61,6 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
           display: flex;
           flex-direction: column;
           overflow: auto;
-          -webkit-overflow-scrolling: touch;
           flex: auto;
         }
 

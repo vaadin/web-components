@@ -14,7 +14,6 @@ registerStyles(
       display: flex;
       flex-direction: column;
       overflow: auto;
-      -webkit-overflow-scrolling: touch;
       flex: auto;
     }
 
