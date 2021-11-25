@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2021 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import '@vaadin/dialog/src/vaadin-dialog.js';
+import './vaadin-crud-dialog.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -51,17 +51,10 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
           display: none;
         }
 
-        :host([editor-position='bottom']) [part='editor']:not([hidden]) {
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-        }
-
         [part='scroller'] {
           display: flex;
           flex-direction: column;
           overflow: auto;
-          -webkit-overflow-scrolling: touch;
           flex: auto;
         }
 
@@ -72,29 +65,29 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
         }
       </style>
 
-      <div id="editor" part="editor" hidden$="[[!_computeEditorOpened(opened, mobile, 'bottom','aside')]]">
+      <div id="editor" part="editor" hidden$="[[__computeEditorHidden(opened, mobile, editorPosition)]]">
         <div part="scroller" id="scroller" role="group" aria-labelledby="header">
           <div part="header" id="header">
             <slot name="header"></slot>
           </div>
-          <slot></slot>
+          <slot name="form"></slot>
         </div>
 
         <div part="footer" role="toolbar">
-          <slot name="footer"></slot>
+          <slot name="save-button"></slot>
+          <slot name="cancel-button"></slot>
+          <slot name="delete-button"></slot>
         </div>
       </div>
 
-      <vaadin-dialog
+      <vaadin-crud-dialog
         id="dialog"
-        opened="[[_computeEditorOpened(opened, mobile, '')]]"
+        opened="[[__computeDialogOpened(opened, mobile, editorPosition)]]"
         aria-label="[[__ariaLabel]]"
         no-close-on-outside-click="[[noCloseOnOutsideClick]]"
         no-close-on-esc="[[noCloseOnEsc]]"
-        theme$="[[theme]] layout"
-      ></vaadin-dialog>
-
-      <template id="dialogTemplate"></template>
+        theme$="[[theme]] crud"
+      ></vaadin-crud-dialog>
     `;
   }
 
@@ -128,6 +121,9 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       /** Reference to the edit form */
       form: Object,
 
+      /** Reference to the header element */
+      header: Object,
+
       /** Reference to the edit save button */
       saveButton: Object,
 
@@ -151,21 +147,17 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
     super.ready();
     this._dialogOpenedChangedListener = this._dialogOpenedChangedListener.bind(this);
     this.$.dialog.addEventListener('opened-changed', this._dialogOpenedChangedListener);
-    this.__header = this.querySelector('[slot=header]');
-    this.__footer = Array.from(this.querySelectorAll('[slot="footer"]'));
+    this._crud = this.getRootNode().host;
   }
 
-  _dialogOpenedChangedListener() {
-    this.opened = this.$.dialog.opened;
+  _dialogOpenedChangedListener(event) {
+    this.opened = event.detail.value;
   }
 
   _openedChanged(opened) {
     if (opened) {
       this._ensureChildren();
     }
-
-    // TODO: A temporary hack as far as `vaadin-dialog` doesn't support the Polymer Template API anymore.
-    this.$.dialog.$.overlay.template = this.$.dialogTemplate;
 
     // Make sure to reset scroll position
     this.$.scroller.scrollTop = 0;
@@ -177,64 +169,55 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   __moveChildNodes(target) {
     // Teleport header node
-    target.appendChild(this.__header);
+    target.appendChild(this.header);
 
-    // For custom form, remove slot attribute
-    // so that it is properly moved to dialog.
-    if (this.form.hasAttribute('slot')) {
-      this.form.removeAttribute('slot');
-    }
-
-    // Teleport edit form
+    // Teleport editor form
     target.appendChild(this.form);
 
-    // This order is important so the spacing (coming from this.__footer) is correctly placed
-    if (this.saveButton) {
-      this.saveButton.setAttribute('slot', 'footer');
-      target.appendChild(this.saveButton);
-    }
-
-    if (this.cancelButton) {
-      this.cancelButton.setAttribute('slot', 'footer');
-      target.appendChild(this.cancelButton);
-    }
-
-    // Teleport footer nodes
-    this.__footer.forEach((node) => target.appendChild(node));
-
-    if (this.deleteButton) {
-      this.deleteButton.setAttribute('slot', 'footer');
-      target.appendChild(this.deleteButton);
-    }
+    // Teleport toolbar buttons
+    // NOTE: order in which buttons are moved matches the order of slots.
+    target.appendChild(this.saveButton);
+    target.appendChild(this.cancelButton);
+    target.appendChild(this.deleteButton);
 
     // Wait to set label until slotted element has been moved.
     setTimeout(() => {
-      this.__ariaLabel = this.__header.textContent.trim();
+      this.__ariaLabel = this.header.textContent.trim();
     });
   }
 
+  _shouldOpenDialog(isMobile, editorPosition) {
+    return editorPosition === '' || isMobile;
+  }
+
   _ensureChildren() {
-    const content = this.$.dialog.$.overlay.$.content;
-    if (!this.form || !content.shadowRoot) {
+    const overlay = this.$.dialog.$.overlay;
+    const hasContent = ['header', 'form', 'saveButton', 'cancelButton', 'deleteButton'].every((prop) => !!this[prop]);
+    if (!hasContent || !overlay) {
       return;
     }
 
-    if (this.editorPosition === '' || this.mobile) {
-      // Move children from editor to dialog
-      Array.from(this.$.editor.childNodes).forEach((node) => content.shadowRoot.appendChild(node));
-      this.__moveChildNodes(content);
+    if (this._shouldOpenDialog(this.mobile, this.editorPosition)) {
+      // Move form to dialog
+      this.__moveChildNodes(overlay);
     } else {
-      // Move children from dialog to editor
-      Array.from(content.shadowRoot.childNodes).forEach((c) => this.$.editor.appendChild(c));
-      this.__moveChildNodes(this);
+      // Move form to crud
+      this.__moveChildNodes(this._crud);
     }
   }
 
-  _computeEditorOpened(opened, isMobile, ...editorPositions) {
-    if (isMobile && editorPositions.indexOf('') !== -1) {
-      return opened;
+  __computeDialogOpened(opened, isMobile, editorPosition) {
+    // Only open dialog when editorPosition is "" or mobile is set
+    return this._shouldOpenDialog(isMobile, editorPosition) ? opened : false;
+  }
+
+  __computeEditorHidden(opened, mobile, editorPosition) {
+    // Only show editor when editorPosition is "bottom" or "aside"
+    if (['aside', 'bottom'].includes(editorPosition) && !mobile) {
+      return !opened;
     }
-    return editorPositions.indexOf(this.editorPosition) !== -1 && opened;
+
+    return true;
   }
 }
 

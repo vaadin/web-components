@@ -81,48 +81,68 @@ registerStyles(
   { moduleId: 'material-crud' }
 );
 
+/**
+ * Shared styles used for the CRUD editor content and buttons regardless of `editorPosition`.
+ * `[theme~="crud"]` applies both to `vaadin-dialog-layout` and `vaadin-dialog-overlay`.
+ */
+const editorStyles = css`
+  :host([theme~='crud']) [part='scroller'] {
+    padding: 16px;
+    background: var(--material-background-color);
+  }
+
+  :host([theme~='crud']) [part='footer'] {
+    background-color: var(--material-secondary-background-color);
+    padding: 8px 4px;
+  }
+
+  :host([theme~='crud']) [part='footer'] ::slotted(*) {
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+
+  :host([theme~='crud']:not([dir='rtl'])) ::slotted([slot='delete-button']) {
+    margin-right: auto;
+  }
+
+  :host([theme~='crud'][dir='rtl']) ::slotted([slot='delete-button']) {
+    margin-left: auto;
+  }
+`;
+
 registerStyles(
   'vaadin-dialog-layout',
-  css`
-    :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
-      box-shadow: var(--material-shadow-elevation-12dp);
-    }
-
-    [part='scroller'] {
-      padding: 16px;
-      background: var(--material-background-color);
-    }
-
-    [part='footer'] {
-      background-color: var(--material-secondary-background-color);
-      padding: 8px 4px;
-    }
-
-    [part='footer'] ::slotted(*) {
-      margin-left: 4px;
-      margin-right: 4px;
-    }
-  `,
+  [
+    editorStyles,
+    css`
+      :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
+        box-shadow: var(--material-shadow-elevation-12dp);
+      }
+    `
+  ],
   { moduleId: 'material-dialog-layout' }
 );
 
 registerStyles(
   'vaadin-dialog-overlay',
-  css`
-    @keyframes material-overlay-dummy-animation {
-      0% {
-        opacity: 1;
+  [
+    editorStyles,
+    css`
+      @keyframes material-overlay-dummy-animation {
+        0% {
+          opacity: 1;
+        }
+
+        100% {
+          opacity: 1;
+        }
       }
 
-      100% {
-        opacity: 1;
+      :host([opening]),
+      :host([closing]) {
+        animation: 0.25s material-overlay-dummy-animation;
       }
-    }
-
-    :host([opening]),
-    :host([closing]) {
-      animation: 0.25s material-overlay-dummy-animation;
-    }
-  `,
+    `
+  ],
   { moduleId: 'material-crud-dialog-overlay' }
 );
