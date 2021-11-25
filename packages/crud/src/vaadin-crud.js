@@ -928,9 +928,7 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       currentButton.parentElement.removeChild(currentButton);
     }
 
-    if (slottedButton.parentElement === this) {
-      slottedButton.addEventListener('click', clickListener);
-    }
+    slottedButton.addEventListener('click', clickListener);
   }
 
   /** @private */
