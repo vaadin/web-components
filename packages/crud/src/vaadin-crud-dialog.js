@@ -33,6 +33,24 @@ registerStyles(
       flex: none;
       flex-direction: row-reverse;
     }
+
+    :host([fullscreen]) {
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0;
+    }
+
+    :host([fullscreen]) [part='overlay'] {
+      height: 100vh;
+      width: 100vw;
+      border-radius: 0 !important;
+    }
+
+    :host([fullscreen]) [part='content'] {
+      flex: 1;
+    }
   `,
   { moduleId: 'vaadin-crud-dialog-overlay-styles' }
 );

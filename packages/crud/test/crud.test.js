@@ -856,7 +856,7 @@ describe('crud', () => {
 
     (isIOS ? it.skip : it)('should hide toolbar when editor position is "bottom" and opened', async () => {
       crud.editorPosition = 'bottom';
-      crud.__mobile = false;
+      crud._fullscreen = false;
       crud.$.new.click();
       await oneEvent(crud, 'editor-opened-changed');
       expect(crud.$.toolbar.style.display).to.be.equal('none');
@@ -886,30 +886,30 @@ describe('crud', () => {
 
     it('should always show the editor in dialog on mobile', () => {
       if (isIOS) {
-        // Only setting crud.__mobile = true is not working on iOS test
-        crud.__mobileMediaQuery = '(max-width: 1000px), (max-height: 1000px)';
+        // Only setting crud._fullscreen = true is not working on iOS test
+        crud._fullscreenMediaQuery = '(max-width: 1000px), (max-height: 1000px)';
       }
-      crud.__mobile = true;
+      crud._fullscreen = true;
       crud.editorPosition = 'bottom';
       crud.$.new.click();
 
-      expect(crud.__mobile).to.be.true;
+      expect(crud._fullscreen).to.be.true;
     });
 
     (isIOS ? it.skip : it)('should not open dialog on desktop if not in default editor position', () => {
       crud.editorPosition = 'bottom';
-      crud.__mobile = false;
+      crud._fullscreen = false;
       crud.$.new.click();
       expect(editorDialog.opened).to.be.false;
     });
 
     (isIOS ? it.skip : it)('should switch from overlay to below grid if resize happens', async () => {
       crud.editorPosition = 'bottom';
-      crud.__mobile = true;
+      crud._fullscreen = true;
       crud.$.new.click();
       await oneEvent(crud, 'editor-opened-changed');
       expect(editorDialog.opened).to.be.true;
-      crud.__mobile = false;
+      crud._fullscreen = false;
       expect(editorDialog.opened).to.be.false;
     });
   });
@@ -976,7 +976,7 @@ describe('crud', () => {
     });
 
     it('should open same row again after item closed after click on "New"', async () => {
-      crud.__mobile = false;
+      crud._fullscreen = false;
 
       fakeClickOnRow(0);
       expect(crud.editorOpened).to.be.true;
@@ -991,7 +991,7 @@ describe('crud', () => {
     });
 
     it('should open same row again after item was discarded after click on "New"', async () => {
-      crud.__mobile = false;
+      crud._fullscreen = false;
 
       fakeClickOnRow(0);
       expect(crud.editorOpened).to.be.true;
