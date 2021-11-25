@@ -98,15 +98,6 @@ class CrudDialog extends Dialog {
       ></vaadin-crud-dialog-overlay>
     `;
   }
-
-  ready() {
-    super.ready();
-
-    this.renderer = (_root) => {
-      // This is a dumb renderer to initialize overlay.
-      // The actual DOM is created using the template.
-    };
-  }
 }
 
 customElements.define('vaadin-crud-dialog', CrudDialog);
