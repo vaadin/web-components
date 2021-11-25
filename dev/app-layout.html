@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>App Layout</title>
+
+    <script type="module">
+      import { color } from '@vaadin/vaadin-lumo-styles';
+      import { typography } from '@vaadin/vaadin-lumo-styles';
+
+      const tpl = document.createElement('template');
+      tpl.innerHTML = `<style>
+        ${color.cssText}
+        ${typography.cssText}
+
+        h1 {
+          font-size: var(--lumo-font-size-l);
+          margin: 0;
+        }
+      </style>`;
+      document.head.appendChild(tpl.content);
+    </script>
+
+    <script type="module">
+      import '@vaadin/app-layout';
+      import '@vaadin/app-layout/vaadin-drawer-toggle';
+      import '@vaadin/tabs';
+    </script>
+  </head>
+
+  <body>
+    <vaadin-app-layout>
+      <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
+      <h1 slot="navbar">MyApp</h1>
+      <vaadin-tabs slot="drawer" orientation="vertical">
+        <vaadin-tab>
+          <a>Dashboard</a>
+        </vaadin-tab>
+        <vaadin-tab>
+          <a>Orders</a>
+        </vaadin-tab>
+      </vaadin-tabs>
+    </vaadin-app-layout>
+  </body>
+</html>
