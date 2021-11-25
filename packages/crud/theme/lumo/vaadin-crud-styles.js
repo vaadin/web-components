@@ -2,7 +2,6 @@ import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
-import '../vaadin-dialog-layout-overlay-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -57,79 +56,67 @@ registerStyles(
   { moduleId: 'lumo-crud-grid-edit' }
 );
 
-registerStyles(
-  'vaadin-crud',
-  css`
-    :host {
-      font-family: var(--lumo-font-family);
-    }
-
-    [part='toolbar'] {
-      padding: var(--lumo-space-s) var(--lumo-space-m);
-      background-color: var(--lumo-contrast-5pct);
-      border: 1px solid var(--lumo-contrast-10pct);
-      border-top: none;
-    }
-
-    :host(:not([dir='rtl'])) [part='toolbar'] ::slotted(*:not(:first-child)) {
-      margin-left: var(--lumo-space-s);
-    }
-
-    :host([dir='rtl']) [part='toolbar'] ::slotted(*:not(:first-child)) {
-      margin-right: var(--lumo-space-s);
-    }
-
-    :host([theme~='no-border']) [part='toolbar'] {
-      border: 0;
-    }
-
-    vaadin-grid-cell-content {
-      text-overflow: ellipsis;
-    }
-  `,
-  { moduleId: 'lumo-crud' }
-);
-
 /**
  * Shared styles used for the CRUD editor content and buttons regardless of `editorPosition`.
- * `[theme~="crud"]` applies both to `vaadin-dialog-layout` and `vaadin-dialog-overlay`.
+ * They are applied to both `vaadin-crud` and `vaadin-crud-dialog-overlay` components.
  */
 const editorStyles = css`
-  :host([theme~='crud']) [part='scroller'] {
+  [part='scroller'] {
     padding: var(--lumo-space-l);
   }
 
-  :host([theme~='crud']) ::slotted([slot='header']) {
+  ::slotted([slot='header']) {
     margin-top: var(--lumo-space-s);
     margin-bottom: var(--lumo-space-s);
   }
 
-  :host([theme~='crud']) [part='footer'] {
+  [part='footer'] {
     background-color: var(--lumo-contrast-5pct);
     padding: var(--lumo-space-s);
   }
 
-  :host([theme~='crud']) [part='footer'] ::slotted(*) {
+  [part='footer'] ::slotted(*) {
     margin-left: var(--lumo-space-s);
     margin-right: var(--lumo-space-s);
   }
 
-  :host(:not([dir='rtl'])[theme~='crud']) [part='footer'] ::slotted([slot='delete-button']) {
+  :host(:not([dir='rtl'])) ::slotted([slot='delete-button']) {
     margin-right: auto;
   }
 
-  :host([dir='rtl'][theme~='crud']) [part='footer'] ::slotted([slot='delete-button']) {
+  :host([dir='rtl']) ::slotted([slot='delete-button']) {
     margin-left: auto;
   }
 `;
 
-registerStyles('vaadin-dialog-overlay', editorStyles, { moduleId: 'lumo-crud-dialog-overlay' });
-
 registerStyles(
-  'vaadin-dialog-layout',
+  'vaadin-crud',
   [
     editorStyles,
     css`
+      :host {
+        font-family: var(--lumo-font-family);
+      }
+
+      [part='toolbar'] {
+        padding: var(--lumo-space-s) var(--lumo-space-m);
+        background-color: var(--lumo-contrast-5pct);
+        border: 1px solid var(--lumo-contrast-10pct);
+        border-top: none;
+      }
+
+      :host(:not([dir='rtl'])) [part='toolbar'] ::slotted(*:not(:first-child)) {
+        margin-left: var(--lumo-space-s);
+      }
+
+      :host([dir='rtl']) [part='toolbar'] ::slotted(*:not(:first-child)) {
+        margin-right: var(--lumo-space-s);
+      }
+
+      :host([theme~='no-border']) [part='toolbar'] {
+        border: 0;
+      }
+
       [part='editor'] {
         background: var(--lumo-base-color);
         box-sizing: border-box;
@@ -154,7 +141,40 @@ registerStyles(
       :host([dir='rtl']:not([theme~='no-border'])[editor-position='aside']) [part='editor']:not([hidden]) {
         border-right: 0;
       }
+
+      vaadin-grid-cell-content {
+        text-overflow: ellipsis;
+      }
     `
   ],
-  { moduleId: 'lumo-dialog-layout' }
+  { moduleId: 'lumo-crud' }
+);
+
+registerStyles(
+  'vaadin-crud-dialog-overlay',
+  [
+    editorStyles,
+    css`
+      @media (max-width: 600px), (max-height: 600px) {
+        :host {
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding: 0;
+        }
+
+        [part='overlay'] {
+          height: 100vh;
+          width: 100vw;
+          border-radius: 0 !important;
+        }
+
+        [part='content'] {
+          flex: 1;
+        }
+      }
+    `
+  ],
+  { moduleId: 'lumo-crud-dialog-overlay' }
 );

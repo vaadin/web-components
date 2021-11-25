@@ -25,8 +25,8 @@ describe('vaadin-crud editor', () => {
         flushGrid(crud._grid);
 
         crud.set('items', [{ foo: 'bar' }, { foo: 'baz' }]);
-        form = crud.$.dialog.form;
-        dialog = crud.$.dialog.$.dialog;
+        form = crud._form;
+        dialog = crud.$.dialog;
         overlay = dialog.$.overlay;
         btnCancel = crud.querySelector('[slot="cancel-button"]');
       });
