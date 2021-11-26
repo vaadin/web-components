@@ -489,13 +489,9 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
       this._menuElement.focus();
     } else if (wasOpened) {
-      if (this._phone) {
-        this._setFocused(false);
-      } else {
-        this.focus();
-        if (this._openedWithFocusRing) {
-          this.setAttribute('focus-ring', '');
-        }
+      this.focus();
+      if (this._openedWithFocusRing) {
+        this.setAttribute('focus-ring', '');
       }
       this.validate();
     }
