@@ -2,7 +2,6 @@ import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
-import '../vaadin-dialog-layout-overlay-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -57,85 +56,125 @@ registerStyles(
   { moduleId: 'lumo-crud-grid-edit' }
 );
 
+/**
+ * Shared styles used for the CRUD editor content and buttons regardless of `editorPosition`.
+ * They are applied to both `vaadin-crud` and `vaadin-crud-dialog-overlay` components.
+ */
+const editorStyles = css`
+  [part='scroller'] {
+    padding: var(--lumo-space-l);
+  }
+
+  ::slotted([slot='header']) {
+    margin-top: var(--lumo-space-s);
+    margin-bottom: var(--lumo-space-s);
+  }
+
+  [part='footer'] {
+    background-color: var(--lumo-contrast-5pct);
+    padding: var(--lumo-space-s);
+  }
+
+  [part='footer'] ::slotted(*) {
+    margin-left: var(--lumo-space-s);
+    margin-right: var(--lumo-space-s);
+  }
+
+  :host(:not([dir='rtl'])) ::slotted([slot='delete-button']) {
+    margin-right: auto;
+  }
+
+  :host([dir='rtl']) ::slotted([slot='delete-button']) {
+    margin-left: auto;
+  }
+`;
+
 registerStyles(
   'vaadin-crud',
-  css`
-    :host {
-      font-family: var(--lumo-font-family);
-    }
+  [
+    editorStyles,
+    css`
+      :host {
+        font-family: var(--lumo-font-family);
+      }
 
-    [part='toolbar'] {
-      padding: var(--lumo-space-s) var(--lumo-space-m);
-      background-color: var(--lumo-contrast-5pct);
-      border: 1px solid var(--lumo-contrast-10pct);
-      border-top: none;
-    }
+      [part='toolbar'] {
+        padding: var(--lumo-space-s) var(--lumo-space-m);
+        background-color: var(--lumo-contrast-5pct);
+        border: 1px solid var(--lumo-contrast-10pct);
+        border-top: none;
+      }
 
-    :host(:not([dir='rtl'])) [part='toolbar'] ::slotted(*:not(:first-child)) {
-      margin-left: var(--lumo-space-s);
-    }
+      :host(:not([dir='rtl'])) [part='toolbar'] ::slotted(*:not(:first-child)) {
+        margin-left: var(--lumo-space-s);
+      }
 
-    :host([dir='rtl']) [part='toolbar'] ::slotted(*:not(:first-child)) {
-      margin-right: var(--lumo-space-s);
-    }
+      :host([dir='rtl']) [part='toolbar'] ::slotted(*:not(:first-child)) {
+        margin-right: var(--lumo-space-s);
+      }
 
-    :host([theme~='no-border']) [part='toolbar'] {
-      border: 0;
-    }
+      :host([theme~='no-border']) [part='toolbar'] {
+        border: 0;
+      }
 
-    vaadin-grid-cell-content {
-      text-overflow: ellipsis;
-    }
-  `,
+      [part='editor'] {
+        background: var(--lumo-base-color);
+        box-sizing: border-box;
+      }
+
+      :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
+        box-shadow: var(--lumo-box-shadow-m);
+      }
+
+      :host(:not([theme~='no-border']):not([editor-position=''])) [part='editor']:not([hidden]) {
+        border: 1px solid var(--lumo-contrast-20pct);
+      }
+
+      :host(:not([theme~='no-border'])[editor-position='bottom']) [part='editor']:not([hidden]) {
+        border-top: 0;
+      }
+
+      :host(:not([dir='rtl'])[editor-position='aside']) [part='editor']:not([hidden]) {
+        border-left: 0;
+      }
+
+      :host([dir='rtl']:not([theme~='no-border'])[editor-position='aside']) [part='editor']:not([hidden]) {
+        border-right: 0;
+      }
+
+      vaadin-grid-cell-content {
+        text-overflow: ellipsis;
+      }
+    `
+  ],
   { moduleId: 'lumo-crud' }
 );
 
 registerStyles(
-  'vaadin-dialog-layout',
-  css`
-    [part='header'] ::slotted(*) {
-      margin-top: var(--lumo-space-s);
-      margin-bottom: var(--lumo-space-s);
-    }
+  'vaadin-crud-dialog-overlay',
+  [
+    editorStyles,
+    css`
+      @media (max-width: 600px), (max-height: 600px) {
+        :host {
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding: 0;
+        }
 
-    [part='scroller'] {
-      padding: var(--lumo-space-l);
-    }
+        [part='overlay'] {
+          height: 100vh;
+          width: 100vw;
+          border-radius: 0 !important;
+        }
 
-    [part='footer'] {
-      background-color: var(--lumo-contrast-5pct);
-      padding: var(--lumo-space-s) var(--lumo-space-s);
-    }
-
-    [part='footer'] ::slotted(*) {
-      margin-left: var(--lumo-space-s);
-      margin-right: var(--lumo-space-s);
-    }
-
-    [part='editor'] {
-      background: var(--lumo-base-color);
-      box-sizing: border-box;
-    }
-
-    :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
-      box-shadow: var(--lumo-box-shadow-m);
-    }
-
-    :host(:not([theme~='no-border']):not([editor-position=''])) [part='editor']:not([hidden]) {
-      border: 1px solid var(--lumo-contrast-20pct);
-    }
-
-    :host(:not([theme~='no-border'])[editor-position='bottom']) [part='editor']:not([hidden]) {
-      border-top: 0;
-    }
-
-    :host(:not([dir='rtl'])[editor-position='aside']) [part='editor']:not([hidden]) {
-      border-left: 0;
-    }
-
-    :host([dir='rtl']:not([theme~='no-border'])[editor-position='aside']) [part='editor']:not([hidden]) {
-      border-right: 0;
-    }
-  `,
-  { moduleId: 'lumo-dialog-layout' }
+        [part='content'] {
+          flex: 1;
+        }
+      }
+    `
+  ],
+  { moduleId: 'lumo-crud-dialog-overlay' }
 );

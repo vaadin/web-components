@@ -40,7 +40,7 @@ let memoizedTemplate;
  * @extends OverlayElement
  * @private
  */
-class DialogOverlay extends mixinBehaviors(IronResizableBehavior, OverlayElement) {
+export class DialogOverlay extends mixinBehaviors(IronResizableBehavior, OverlayElement) {
   static get is() {
     return 'vaadin-dialog-overlay';
   }
