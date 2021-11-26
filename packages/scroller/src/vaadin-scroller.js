@@ -16,10 +16,16 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *   <div>Content</div>
  * </vaadin-scroller>
  * ```
+ * The following attributes are exposed for styling:
+ *
+ * Attribute    | Description
+ * -------------| -----------
+ * `focus-ring` | Set when the element is focused using the keyboard.
  *
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes FocusMixin
  */
 class Scroller extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
