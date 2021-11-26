@@ -525,13 +525,9 @@ class SelectElement extends ElementMixin(
       this._setPosition();
       window.addEventListener('scroll', this._boundSetPosition, true);
     } else if (wasOpened) {
-      if (this._phone) {
-        this._setFocused(false);
-      } else {
-        this.focusElement.focus();
-        if (this._openedWithFocusRing) {
-          this.focusElement.setAttribute('focus-ring', '');
-        }
+      this.focusElement.focus();
+      if (this._openedWithFocusRing) {
+        this.focusElement.setAttribute('focus-ring', '');
       }
       this.validate();
       window.removeEventListener('scroll', this._boundSetPosition, true);
