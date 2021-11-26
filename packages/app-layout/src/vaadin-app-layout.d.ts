@@ -72,7 +72,6 @@ export type AppLayoutEventMap = HTMLElementEventMap & AppLayoutCustomEventMap;
  * --------------|---------------------------------------------------------|
  * `navbar`      | Container for the navigation bar
  * `drawer`      | Container for the drawer area
- * `content`     | Container for page content.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
