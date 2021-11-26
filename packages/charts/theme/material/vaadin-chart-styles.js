@@ -17,27 +17,6 @@ const chartColors = css`
     --vaadin-charts-color-9: #b00020;
     --vaadin-charts-color-positive: var(--vaadin-charts-color-1, #2fa69a);
     --vaadin-charts-color-negative: var(--vaadin-charts-color-9, #b00020);
-    --vaadin-charts-background: var(--material-background-color);
-    --vaadin-charts-title-label: var(--material-body-text-color);
-    --vaadin-charts-axis-title: var(--material-secondary-text-color);
-    --vaadin-charts-axis-label: var(--material-secondary-text-color);
-    --vaadin-charts-data-label: var(--material-body-text-color);
-    --vaadin-charts-secondary-label: var(--material-secondary-text-color);
-    --vaadin-charts-axis-line: var(--vaadin-charts-contrast-5pct);
-    --vaadin-charts-grid-line: var(--vaadin-charts-contrast-10pct);
-    --vaadin-charts-disabled-label: var(--material-disabled-text-color);
-    --vaadin-charts-contrast: var(--material-body-text-color);
-    --vaadin-charts-contrast-5pct: var(--material-secondary-background-color);
-    --vaadin-charts-contrast-10pct: var(--material-divider-color);
-    --vaadin-charts-contrast-20pct: var(--material-disabled-color);
-    --vaadin-charts-contrast-60pct: var(--material-secondary-text-color);
-    --vaadin-charts-tooltip-background: var(--material-background-color);
-    --vaadin-charts-tooltip-border-color: var(--material-background-color);
-    --vaadin-charts-button-label: var(--material-primary-color);
-    --vaadin-charts-button-background: var(--material-background-color);
-    --vaadin-charts-button-hover-background: var(--material-secondary-background-color);
-    --vaadin-charts-button-active-label: var(--material-primary-contrast-color);
-    --vaadin-charts-button-active-background: var(--material-primary-color);
   }
 
   :host([theme~='gradient']) {
@@ -73,6 +52,27 @@ const chartColors = css`
 
 const chartTheme = css`
   :host {
+    --vaadin-charts-background: var(--material-background-color);
+    --vaadin-charts-title-label: var(--material-body-text-color);
+    --vaadin-charts-axis-title: var(--material-secondary-text-color);
+    --vaadin-charts-axis-label: var(--material-secondary-text-color);
+    --vaadin-charts-data-label: var(--material-body-text-color);
+    --vaadin-charts-secondary-label: var(--material-secondary-text-color);
+    --vaadin-charts-axis-line: var(--vaadin-charts-contrast-5pct);
+    --vaadin-charts-grid-line: var(--vaadin-charts-contrast-10pct);
+    --vaadin-charts-disabled-label: var(--material-disabled-text-color);
+    --vaadin-charts-contrast: var(--material-body-text-color);
+    --vaadin-charts-contrast-5pct: var(--material-secondary-background-color);
+    --vaadin-charts-contrast-10pct: var(--material-divider-color);
+    --vaadin-charts-contrast-20pct: var(--material-disabled-color);
+    --vaadin-charts-contrast-60pct: var(--material-secondary-text-color);
+    --vaadin-charts-tooltip-background: var(--material-background-color);
+    --vaadin-charts-tooltip-border-color: var(--material-background-color);
+    --vaadin-charts-button-label: var(--material-primary-color);
+    --vaadin-charts-button-background: var(--material-background-color);
+    --vaadin-charts-button-hover-background: var(--material-secondary-background-color);
+    --vaadin-charts-button-active-label: var(--material-primary-contrast-color);
+    --vaadin-charts-button-active-background: var(--material-primary-color);
     --vaadin-charts-xaxis-line-width: 0;
     --vaadin-charts-tooltip-background-opacity: 1;
     font-family: var(--material-font-family);
