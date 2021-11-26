@@ -21,6 +21,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Attribute    | Description
  * -------------| -----------
  * `focus-ring` | Set when the element is focused using the keyboard.
+ * `focused`    | Set when the element is focused.
  *
  * @extends HTMLElement
  * @mixes ThemableMixin
