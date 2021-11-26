@@ -24,7 +24,7 @@ describe('scroller', () => {
     await visualDiff(div, 'default');
   });
 
-  it('focused', async () => {
+  it('focus-ring', async () => {
     await sendKeys({ press: 'Tab' });
     await visualDiff(div, 'focused');
   });
