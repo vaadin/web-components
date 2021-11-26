@@ -54,7 +54,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * --------------|---------------------------------------------------------|
  * `navbar`      | Container for the navigation bar
  * `drawer`      | Container for the drawer area
- * `content`     | Container for page content.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
@@ -148,7 +147,6 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
 
         :host(:not([no-scroll])) [content] {
           overflow: auto;
-          -webkit-overflow-scrolling: touch;
         }
 
         [content] {

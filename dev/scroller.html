@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scroller</title>
+    <script type="module">
+      import '@vaadin/scroller';
+
+      const content = document.querySelector('#content');
+      content.textContent = new Array(1000).fill('content').join(' ');
+    </script>
+  </head>
+  <body>
+    <vaadin-scroller style="width: 200px; height: 200px;">
+      <div id="content" style="width: 400px;"></div>
+    </vaadin-scroller>
+  </body>
+</html>
