@@ -319,7 +319,7 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
         value: 'navbar',
         notify: true,
         reflectToAttribute: true,
-        observer: '_primarySectionObserver'
+        observer: '_primarySectionChanged'
       },
 
       /**
@@ -335,7 +335,7 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
         notify: true,
         value: true,
         reflectToAttribute: true,
-        observer: '_drawerOpenedObserver'
+        observer: '_drawerOpenedChanged'
       },
 
       /**
@@ -372,6 +372,7 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
     this.__boundResizeListener = this._resize.bind(this);
     this.__drawerToggleClickListener = this._drawerToggleClick.bind(this);
     this.__closeOverlayDrawerListener = this.__closeOverlayDrawer.bind(this);
+    this.__onDrawerKeyDown = this.__onDrawerKeyDown.bind(this);
   }
 
   /** @protected */
@@ -403,12 +404,15 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
     this._updateOverlayMode();
 
     window.addEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
+
+    this.$.drawer.addEventListener('keydown', this.__onDrawerKeyDown);
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
 
+    this.$.drawer.removeEventListener('keydown', this.__onDrawerKeyDown);
     this._navbarChildObserver && this._navbarChildObserver.disconnect();
     this._drawerChildObserver && this._drawerChildObserver.disconnect();
     this._touchChildObserver && this._touchChildObserver.disconnect();
@@ -425,7 +429,7 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
   }
 
   /** @private */
-  _primarySectionObserver(value) {
+  _primarySectionChanged(value) {
     const isValid = ['navbar', 'drawer'].indexOf(value) !== -1;
     if (!isValid) {
       this.set('primarySection', 'navbar');
@@ -433,7 +437,7 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
   }
 
   /** @private */
-  _drawerOpenedObserver(drawerOpened, oldDrawerOpened) {
+  _drawerOpenedChanged(drawerOpened, oldDrawerOpened) {
     this.__setDrawerInert(!drawerOpened);
 
     if (this.overlay) {
@@ -580,12 +584,19 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
     if (getComputedStyle(this).getPropertyValue('--vaadin-app-layout-transition') === 'none') {
       focusDrawer();
     } else {
-      const listener = () => {
-        drawer.removeEventListener('transitionend', listener);
-        focusDrawer();
-      };
+      this.addEventListener('transitionend', focusDrawer, { once: true });
+    }
+  }
 
-      drawer.addEventListener('transitionend', listener);
+  /**
+   * Closes the drawer on Escape if it has been opened in the overlay mode.
+   *
+   * @param {KeyboardEvent} event
+   * @private
+   */
+  __onDrawerKeyDown(event) {
+    if (event.key === 'Escape' && this.overlay) {
+      this.drawerOpened = false;
     }
   }
 
