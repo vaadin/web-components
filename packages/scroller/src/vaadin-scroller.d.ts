@@ -20,6 +20,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Attribute    | Description
  * -------------| -----------
  * `focus-ring` | Set when the element is focused using the keyboard.
+ * `focused`    | Set when the element is focused.
  */
 declare class Scroller extends FocusMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**
@@ -31,7 +32,7 @@ declare class Scroller extends FocusMixin(ThemableMixin(ElementMixin(HTMLElement
   /**
    * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
    */
-  tabindex: number | undefined | null;
+  tabindex: number;
 }
 
 declare global {

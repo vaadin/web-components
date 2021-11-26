@@ -7,4 +7,4 @@ const scroller = document.createElement('vaadin-scroller');
 
 assertType<Scroller>(scroller);
 
-assertType<number | null | undefined>(scroller.tabindex);
+assertType<number>(scroller.tabindex);
