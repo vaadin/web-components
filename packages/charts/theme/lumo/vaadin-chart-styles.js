@@ -79,6 +79,6 @@ const chartTheme = css`
   }
 `;
 
-registerStyles('vaadin-chart', [chartColors.chartTheme], { moduleId: 'lumo-chart' });
+registerStyles('vaadin-chart', [chartColors, chartTheme], { moduleId: 'lumo-chart' });
 
 export { chartColors, chartTheme };
