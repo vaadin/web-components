@@ -375,19 +375,19 @@ describe('vaadin-select', () => {
         expect(focusedSpy.called).to.be.true;
       });
 
-      it('should remove focused state on closing the overlay if phone', () => {
+      it('should restore focused state on closing the overlay if phone', () => {
         select._phone = true;
         click(select._items[1]);
-        expect(select.hasAttribute('focused')).to.be.false;
+        expect(select.hasAttribute('focused')).to.be.true;
       });
 
-      it('should not focus the button on closing the overlay if phone', () => {
+      it('should focus the button on closing the overlay if phone', () => {
         const focusedSpy = sinon.spy();
         select.focusElement.focus = focusedSpy;
 
         select._phone = true;
         click(select._items[1]);
-        expect(focusedSpy.called).to.be.false;
+        expect(focusedSpy.called).to.be.true;
       });
 
       it('should focus the button before moving the focus to next selectable element', () => {
