@@ -1,5 +1,6 @@
 import '../vaadin-chart-base-theme.js';
 import '@vaadin/vaadin-lumo-styles/color.js';
+import '@vaadin/vaadin-lumo-styles/typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
@@ -41,6 +42,7 @@ registerStyles(
       --vaadin-charts-button-hover-background: var(--lumo-primary-color-10pct);
       --vaadin-charts-button-active-label: var(--lumo-primary-contrast-color);
       --vaadin-charts-button-active-background: var(--lumo-primary-color);
+      font-family: var(--lumo-font-family);
     }
 
     :host([theme~='gradient']) {
@@ -72,19 +74,6 @@ registerStyles(
       --vaadin-charts-color-positive: var(--vaadin-charts-color-3);
       --vaadin-charts-color-negative: var(--vaadin-charts-color-9);
     }
-
-    .highcharts-container {
-      font-family: var(
-        --lumo-font-family,
-        -apple-system,
-        BlinkMacSystemFont,
-        'Roboto',
-        'Segoe UI',
-        Helvetica,
-        Arial,
-        sans-serif
-      );
-    }
   `,
-  { moduleId: 'lumo-chart', include: 'vaadin-chart-base-theme' }
+  { moduleId: 'lumo-chart' }
 );

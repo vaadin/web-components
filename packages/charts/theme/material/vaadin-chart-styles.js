@@ -1,5 +1,6 @@
 import '../vaadin-chart-base-theme.js';
 import '@vaadin/vaadin-material-styles/color.js';
+import '@vaadin/vaadin-material-styles/typography.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles.js';
 
 registerStyles(
@@ -41,6 +42,7 @@ registerStyles(
       --vaadin-charts-button-hover-background: var(--material-secondary-background-color);
       --vaadin-charts-button-active-label: var(--material-primary-contrast-color);
       --vaadin-charts-button-active-background: var(--material-primary-color);
+      font-family: var(--material-font-family);
     }
 
     :host([theme~='gradient']) {
@@ -72,10 +74,6 @@ registerStyles(
       --vaadin-charts-color-positive: var(--vaadin-charts-color-8);
       --vaadin-charts-color-negative: var(--vaadin-charts-color-0);
     }
-
-    .highcharts-container {
-      font-family: var(--material-font-family, 'Roboto', sans-serif);
-    }
   `,
-  { moduleId: 'material-chart', include: 'vaadin-chart-base-theme' }
+  { moduleId: 'material-chart' }
 );

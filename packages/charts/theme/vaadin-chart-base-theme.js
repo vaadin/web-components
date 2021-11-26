@@ -16,19 +16,22 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 /* When updating this file do not override vaadin-charts custom properties section */
 
 const chartBaseTheme = css`
+  :host {
+    font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif,
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-size: 12px;
+    line-height: normal;
+  }
+
   .highcharts-container {
     position: relative;
     overflow: hidden;
     width: 100%;
     height: 100%;
     text-align: left;
-    line-height: normal;
     z-index: 0;
     /* #1072 */
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif,
-      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-    font-size: 12px;
   }
 
   :where(div#chart[styled-mode]) .highcharts-root {
