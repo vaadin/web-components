@@ -148,7 +148,6 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
 
         :host(:not([no-scroll])) [content] {
           overflow: auto;
-          -webkit-overflow-scrolling: touch;
         }
 
         [content] {
