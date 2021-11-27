@@ -466,7 +466,6 @@ export class IronListAdapter {
       this._vidxOffset = 0;
     } else if (this.__skipNextVirtualIndexAdjust) {
       this.__skipNextVirtualIndexAdjust = false;
-      return;
     } else if (Math.abs(delta) > 10000) {
       // Process a large scroll position change
       const scale = this._scrollTop / (this.scrollTarget.scrollHeight - this.scrollTarget.offsetHeight);

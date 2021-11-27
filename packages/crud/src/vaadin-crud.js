@@ -8,13 +8,14 @@ import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
-import './vaadin-dialog-layout.js';
+import './vaadin-crud-dialog.js';
 import './vaadin-crud-grid.js';
 import './vaadin-crud-form.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const HOST_PROPS = {
@@ -148,9 +149,10 @@ const HOST_PROPS = {
  *
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes SlotMixin
  * @mixes ThemableMixin
  */
-class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
+class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -174,7 +176,8 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
           height: 100%;
         }
 
-        :host([hidden]) {
+        :host([hidden]),
+        [hidden] {
           display: none !important;
         }
 
@@ -196,6 +199,39 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
 
         :host([editor-position='bottom']) #container {
           flex-direction: column;
+        }
+
+        [part='editor'] {
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        :host(:not([editor-position=''])[editor-opened]) [part='editor']:not([mobile]) {
+          flex: 1 0 100%;
+        }
+
+        :host([editor-position='bottom'][editor-opened]) [part='editor']:not([mobile]) {
+          max-height: var(--vaadin-crud-editor-max-height);
+        }
+
+        :host([editor-position='aside'][editor-opened]) [part='editor']:not([mobile]) {
+          min-width: 300px;
+          max-width: var(--vaadin-crud-editor-max-width);
+        }
+
+        [part='scroller'] {
+          display: flex;
+          flex-direction: column;
+          overflow: auto;
+          flex: auto;
+        }
+
+        [part='footer'] {
+          display: flex;
+          flex: none;
+          flex-direction: row-reverse;
         }
       </style>
 
@@ -220,48 +256,37 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
             </slot>
           </div>
         </div>
-        <vaadin-dialog-layout
-          theme$="[[theme]]"
-          form="[[_form]]"
-          save-button="[[_saveButton]]"
-          cancel-button="[[_cancelButton]]"
-          delete-button="[[_deleteButton]]"
-          id="dialog"
-          no-close-on-outside-click="[[__isDirty]]"
-          no-close-on-esc="[[__isDirty]]"
-          opened="{{editorOpened}}"
-          editor-position$="{{editorPosition}}"
-          mobile="[[__mobile]]"
-          theme="crud"
+
+        <div
+          id="editor"
+          part="editor"
+          hidden$="[[__computeEditorHidden(editorOpened, __mobile, editorPosition)]]"
+          mobile$="[[__mobile]]"
         >
-          <h3 slot="header">[[__computeEditorHeader(__isNew, i18n.newItem, i18n.editItem)]]</h3>
-          <div id="editor">
-            <slot name="form">
-              <vaadin-crud-form
-                theme$="[[theme]]"
-                id="form"
-                include="[[include]]"
-                exclude="[[exclude]]"
-              ></vaadin-crud-form>
-            </slot>
+          <div part="scroller" id="scroller" role="group" aria-labelledby="header">
+            <div part="header" id="header">
+              <slot name="header"></slot>
+            </div>
+            <slot name="form"></slot>
           </div>
 
-          <slot name="save-button">
-            <vaadin-button id="save" on-click="__save" theme="primary" disabled$="[[__isSaveBtnDisabled(__isDirty)]]">
-              [[i18n.saveItem]]
-            </vaadin-button>
-          </slot>
-          <slot name="cancel-button">
-            <vaadin-button id="cancel" on-click="__cancelBound" theme="tertiary">[[i18n.cancel]]</vaadin-button>
-          </slot>
-          <div slot="footer" style="flex: auto;"></div>
-          <slot name="delete-button">
-            <vaadin-button id="delete" on-click="__delete" theme="tertiary error" hidden$="[[__isNew]]"
-              >[[i18n.deleteItem]]</vaadin-button
-            >
-          </slot>
-        </vaadin-dialog-layout>
+          <div part="footer" role="toolbar">
+            <slot name="save-button"></slot>
+            <slot name="cancel-button"></slot>
+            <slot name="delete-button"></slot>
+          </div>
+        </div>
       </div>
+
+      <vaadin-crud-dialog
+        id="dialog"
+        opened="[[__computeDialogOpened(editorOpened, __mobile, editorPosition)]]"
+        aria-label="[[__editorAriaLabel]]"
+        no-close-on-outside-click="[[__isDirty]]"
+        no-close-on-esc="[[__isDirty]]"
+        theme$="[[theme]]"
+        on-opened-changed="__onDialogOpened"
+      ></vaadin-crud-dialog>
 
       <vaadin-confirm-dialog
         theme$="[[theme]]"
@@ -274,6 +299,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
         message="[[i18n.confirm.cancel.content]]"
         confirm-theme="primary"
       ></vaadin-confirm-dialog>
+
       <vaadin-confirm-dialog
         theme$="[[theme]]"
         id="confirmDelete"
@@ -339,6 +365,14 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
       _cancelButton: {
         type: HTMLElement,
         observer: '__onCancelButtonChange'
+      },
+
+      /**
+       * A reference to the editor header element will be teleported to the dialog.
+       * @private
+       */
+      _headerNode: {
+        type: HTMLElement
       },
 
       /**
@@ -450,6 +484,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       editorOpened: {
         type: Boolean,
+        reflectToAttribute: true,
         notify: true,
         observer: '__onOpenedChanged'
       },
@@ -465,7 +500,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
       },
 
       /**
-       * Controls visiblity state of toolbar.
+       * Controls visibility state of toolbar.
        * When set to false toolbar is hidden and shown when set to true.
        * @attr {boolean} no-toolbar
        */
@@ -547,6 +582,9 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
       },
 
       /** @private */
+      __editorAriaLabel: String,
+
+      /** @private */
       __isDirty: Boolean,
 
       /** @private */
@@ -567,6 +605,8 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   static get observers() {
     return [
+      '__headerNodeChanged(_headerNode, __isNew, i18n.newItem, i18n.editItem)',
+      '__formChanged(_form, theme, include, exclude)',
       '__onI18Change(i18n, _grid)',
       '__onEditOnClickChange(editOnClick, _grid)',
       '__hostPropsChanged(' +
@@ -590,6 +630,38 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
+  /** @protected */
+  get slots() {
+    // NOTE: order in which the toolbar buttons are listed matters.
+    return {
+      ...super.slots,
+      header: () => {
+        return document.createElement('h3');
+      },
+      form: () => {
+        return document.createElement('vaadin-crud-form');
+      },
+      'save-button': () => {
+        const button = document.createElement('vaadin-button');
+        button.id = 'save';
+        button.setAttribute('theme', 'primary');
+        return button;
+      },
+      'cancel-button': () => {
+        const button = document.createElement('vaadin-button');
+        button.id = 'cancel';
+        button.setAttribute('theme', 'tertiary');
+        return button;
+      },
+      'delete-button': () => {
+        const button = document.createElement('vaadin-button');
+        button.id = 'delete';
+        button.setAttribute('theme', 'tertiary error');
+        return button;
+      }
+    };
+  }
+
   constructor() {
     super();
     this._observer = new FlattenedNodesObserver(this, (info) => {
@@ -608,24 +680,33 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
     this.__gridSizeListener = this.__onGridSizeChanges.bind(this);
     this.__boundEditOnClickListener = this.__editOnClickListener.bind(this);
     this._grid = this.$.grid;
-    this._form = this.$.form;
-    this._saveButton = this.$.save;
-    this._deleteButton = this.$.delete;
-    this._cancelButton = this.$.cancel;
-    this.$.dialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancelBound);
-    this.$.dialog.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancelBound);
+    this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancelBound);
+    this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancelBound);
+    // Initialize the default buttons
+    this.__propagateHostAttributes();
   }
 
   /** @private */
   __isSaveBtnDisabled(isDirty) {
-    // Used instead of isDirty proprety binding in order to enable overriding of the behaviour
+    // Used instead of isDirty property binding in order to enable overriding of the behavior
     // by overriding the method (i.e. from Flow component)
     return !isDirty;
   }
 
   /** @private */
-  __computeEditorHeader(isNew, newItem, editItem) {
-    return isNew ? newItem : editItem;
+  __headerNodeChanged(headerNode, isNew, newItem, editItem) {
+    if (headerNode) {
+      headerNode.textContent = isNew ? newItem : editItem;
+    }
+  }
+
+  /** @private */
+  __formChanged(form, theme, include, exclude) {
+    if (form) {
+      form.include = include;
+      form.exclude = exclude;
+      form.setAttribute('theme', theme);
+    }
   }
 
   /** @private */
@@ -662,12 +743,23 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
       this.__onFormChange(this._form);
     }
 
+    if (opened) {
+      this.__ensureChildren();
+    }
+
     this.__toggleToolbar();
+
+    // Make sure to reset scroll position
+    this.$.scroller.scrollTop = 0;
   }
 
   /** @private */
-  __mobileChanged() {
-    this.__toggleToolbar();
+  __mobileChanged(mobile, oldMobile) {
+    if (mobile || oldMobile) {
+      this.__toggleToolbar();
+
+      this.__ensureChildren();
+    }
   }
 
   /** @private */
@@ -679,9 +771,68 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  __onDomChange(nodes) {
+  __moveChildNodes(target) {
+    const nodes = [this._headerNode, this._form, this._saveButton, this._cancelButton, this._deleteButton];
+    if (!nodes.every((node) => node instanceof HTMLElement)) {
+      return;
+    }
+
+    // Teleport header node, form, and the buttons to corresponding slots.
+    // NOTE: order in which buttons are moved matches the order of slots.
     nodes.forEach((node) => {
-      if (node.getAttribute) {
+      target.appendChild(node);
+    });
+
+    // Wait to set label until slotted element has been moved.
+    setTimeout(() => {
+      this.__dialogAriaLabel = this._headerNode.textContent.trim();
+    });
+  }
+
+  /** @private */
+  __shouldOpenDialog(isMobile, editorPosition) {
+    return editorPosition === '' || isMobile;
+  }
+
+  /** @private */
+  __ensureChildren() {
+    if (this.__shouldOpenDialog(this.__mobile, this.editorPosition)) {
+      // Move form to dialog
+      this.__moveChildNodes(this.$.dialog.$.overlay);
+    } else {
+      // Move form to crud
+      this.__moveChildNodes(this);
+    }
+  }
+
+  /** @private */
+  __computeDialogOpened(opened, isMobile, editorPosition) {
+    // Only open dialog when editorPosition is "" or mobile is set
+    return this.__shouldOpenDialog(isMobile, editorPosition) ? opened : false;
+  }
+
+  /** @private */
+  __computeEditorHidden(opened, mobile, editorPosition) {
+    // Only show editor when editorPosition is "bottom" or "aside"
+    if (['aside', 'bottom'].includes(editorPosition) && !mobile) {
+      return !opened;
+    }
+
+    return true;
+  }
+
+  /** @private */
+  __onDialogOpened(event) {
+    this.editorOpened = event.detail.value;
+  }
+
+  /** @private */
+  __onDomChange(addedNodes) {
+    // TODO: restore default button when a corresponding slotted button is removed.
+    // Consider creating a controller to reuse custom helper logic from FieldMixin.
+    addedNodes
+      .filter((node) => node.nodeType === Node.ELEMENT_NODE)
+      .forEach((node) => {
         const slotAttributeValue = node.getAttribute('slot');
         if (!slotAttributeValue) {
           return;
@@ -697,9 +848,10 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
         } else if (slotAttributeValue.indexOf('button') >= 0) {
           const [button] = slotAttributeValue.split('-');
           this[`_${button}Button`] = node;
+        } else if (slotAttributeValue == 'header') {
+          this._headerNode = node;
         }
-      }
-    });
+      });
   }
 
   /** @private */
@@ -776,9 +928,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
       currentButton.parentElement.removeChild(currentButton);
     }
 
-    if (slottedButton.parentElement === this) {
-      slottedButton.addEventListener('click', clickListener);
-    }
+    slottedButton.addEventListener('click', clickListener);
   }
 
   /** @private */
@@ -795,6 +945,8 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __propagateHostAttributesToButton(button, props) {
+    // Ensure the slotted button element is present in the DOM.
+    // This is needed because the observer runs before `ready`.
     if (button) {
       props.forEach(({ attr, prop, parseProp }) => {
         if (prop.indexOf('i18n') >= 0) {

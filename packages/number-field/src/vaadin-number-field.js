@@ -363,7 +363,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
   /** @private */
   _getMultiplier(number) {
     if (!isNaN(number)) {
-      return Math.pow(10, this._getDecimalCount(number));
+      return 10 ** this._getDecimalCount(number);
     }
   }
 

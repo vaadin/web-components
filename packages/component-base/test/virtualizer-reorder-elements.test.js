@@ -96,7 +96,7 @@ describe('reorder elements', () => {
 
   it('should not try to reorder an empty virtualizer', async () => {
     virtualizer.size = 0;
-    expect(async () => await scrollRecycle()).not.to.throw(Error);
+    expect(async () => scrollRecycle()).not.to.throw(Error);
   });
 
   it('should not reorder before debouncer flushes', () => {

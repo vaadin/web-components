@@ -139,20 +139,16 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * in the second argument of the data provider callback:__
  *
  * ```javascript
- * grid.dataProvider = function(params, callback) {
- *   const url = 'https://api.example/data' +
- *       '?page=' + params.page +        // the requested page index
- *       '&per_page=' + params.pageSize; // number of items on the page
- *   const xhr = new XMLHttpRequest();
- *   xhr.onload = function() {
- *     const response = JSON.parse(xhr.responseText);
- *     callback(
- *       response.employees, // requested page of items
- *       response.totalSize  // total number of items
- *     );
- *   };
- *   xhr.open('GET', url, true);
- *   xhr.send();
+ * grid.dataProvider = ({page, pageSize}, callback) => {
+ *   // page: the requested page index
+ *   // pageSize: number of items on one page
+ *   const url = `https://api.example/data?page=${page}&per_page=${pageSize}`;
+ *
+ *   fetch(url)
+ *     .then((res) => res.json())
+ *     .then(({ employees, totalSize }) => {
+ *       callback(employees, totalSize);
+ *     });
  * };
  * ```
  *
@@ -160,17 +156,12 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  *
  * ```javascript
  * grid.size = 200; // The total number of items
- * grid.dataProvider = function(params, callback) {
- *   const url = 'https://api.example/data' +
- *       '?page=' + params.page +        // the requested page index
- *       '&per_page=' + params.pageSize; // number of items on the page
- *   const xhr = new XMLHttpRequest();
- *   xhr.onload = function() {
- *     const response = JSON.parse(xhr.responseText);
- *     callback(response.employees);
- *   };
- *   xhr.open('GET', url, true);
- *   xhr.send();
+ * grid.dataProvider = ({page, pageSize}, callback) => {
+ *   const url = `https://api.example/data?page=${page}&per_page=${pageSize}`;
+ *
+ *   fetch(url)
+ *     .then((res) => res.json())
+ *     .then((resJson) => callback(resJson.employees));
  * };
  * ```
  *
@@ -694,6 +685,7 @@ class Grid extends ElementMixin(
    * @param {boolean} noNotify
    * @protected
    */
+  // eslint-disable-next-line max-params
   _updateRow(row, columns, section, isColumnRow, noNotify) {
     section = section || 'body';
 
@@ -809,6 +801,7 @@ class Grid extends ElementMixin(
           return true;
         }
       }
+      return false;
     });
 
     if (row.hidden !== !visibleRowCells.length) {

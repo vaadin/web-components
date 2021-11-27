@@ -74,6 +74,7 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
         opened="{{opened}}"
         on-vaadin-overlay-open="_onOverlayOpened"
         on-vaadin-overlay-close="_onOverlayClosed"
+        on-vaadin-overlay-outside-click="focus"
         theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]"
       >
         <template>

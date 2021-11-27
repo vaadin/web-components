@@ -1,6 +1,5 @@
 import '@vaadin/vaadin-material-styles/typography.js';
 import '@vaadin/vaadin-material-styles/color.js';
-import '../vaadin-dialog-layout-overlay-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -51,78 +50,112 @@ registerStyles(
   { moduleId: 'material-crud-grid-edit' }
 );
 
+/**
+ * Shared styles used for the CRUD editor content and buttons regardless of `editorPosition`.
+ * They are applied to both `vaadin-crud` and `vaadin-crud-dialog-overlay` components.
+ */
+const editorStyles = css`
+  [part='scroller'] {
+    padding: 16px;
+    background: var(--material-background-color);
+  }
+
+  [part='footer'] {
+    background-color: var(--material-secondary-background-color);
+    padding: 8px 4px;
+  }
+
+  [part='footer'] ::slotted(*) {
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+
+  :host(:not([dir='rtl'])) ::slotted([slot='delete-button']) {
+    margin-right: auto;
+  }
+
+  :host([dir='rtl']) ::slotted([slot='delete-button']) {
+    margin-left: auto;
+  }
+`;
+
 registerStyles(
   'vaadin-crud',
-  css`
-    :host {
-      font-family: var(--material-font-family);
-    }
+  [
+    editorStyles,
+    css`
+      :host {
+        font-family: var(--material-font-family);
+      }
 
-    [part='toolbar'] {
-      padding: 8px;
-      background-color: var(--material-secondary-background-color);
-    }
+      [part='toolbar'] {
+        padding: 8px;
+        background-color: var(--material-secondary-background-color);
+      }
 
-    :host(:not([dir='rtl'])) [part='toolbar'] ::slotted(*:not(:first-child)) {
-      margin-left: 0.5em;
-    }
+      :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
+        box-shadow: var(--material-shadow-elevation-12dp);
+      }
 
-    :host([dir='rtl']) [part='toolbar'] ::slotted(*:not(:first-child)) {
-      margin-right: 0.5em;
-    }
+      :host(:not([dir='rtl'])) [part='toolbar'] ::slotted(*:not(:first-child)) {
+        margin-left: 0.5em;
+      }
 
-    vaadin-text-field[theme~='small'] {
-      height: 24px;
-      font-size: var(--material-small-font-size);
-      margin: 0;
-      padding: 0;
-    }
-  `,
+      :host([dir='rtl']) [part='toolbar'] ::slotted(*:not(:first-child)) {
+        margin-right: 0.5em;
+      }
+
+      vaadin-text-field[theme~='small'] {
+        height: 24px;
+        font-size: var(--material-small-font-size);
+        margin: 0;
+        padding: 0;
+      }
+    `
+  ],
   { moduleId: 'material-crud' }
 );
 
 registerStyles(
-  'vaadin-dialog-layout',
-  css`
-    :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
-      box-shadow: var(--material-shadow-elevation-12dp);
-    }
+  'vaadin-crud-dialog-overlay',
+  [
+    editorStyles,
+    css`
+      @keyframes material-overlay-dummy-animation {
+        0% {
+          opacity: 1;
+        }
 
-    [part='scroller'] {
-      padding: 16px;
-      background: var(--material-background-color);
-    }
-
-    [part='footer'] {
-      background-color: var(--material-secondary-background-color);
-      padding: 8px 4px;
-    }
-
-    [part='footer'] ::slotted(*) {
-      margin-left: 4px;
-      margin-right: 4px;
-    }
-  `,
-  { moduleId: 'material-dialog-layout' }
-);
-
-registerStyles(
-  'vaadin-dialog-overlay',
-  css`
-    @keyframes material-overlay-dummy-animation {
-      0% {
-        opacity: 1;
+        100% {
+          opacity: 1;
+        }
       }
 
-      100% {
-        opacity: 1;
+      :host([opening]),
+      :host([closing]) {
+        animation: 0.25s material-overlay-dummy-animation;
       }
-    }
 
-    :host([opening]),
-    :host([closing]) {
-      animation: 0.25s material-overlay-dummy-animation;
-    }
-  `,
+      @media (max-width: 600px), (max-height: 600px) {
+        :host {
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding: 0;
+        }
+
+        [part='overlay'] {
+          height: 100vh;
+          width: 100vw;
+          border-radius: 0 !important;
+        }
+
+        [part='content'] {
+          flex: 1;
+        }
+      }
+    `
+  ],
   { moduleId: 'material-crud-dialog-overlay' }
 );

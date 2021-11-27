@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import '../vaadin-scroller.js';
 
 describe('vaadin-scroller', () => {
@@ -7,6 +8,26 @@ describe('vaadin-scroller', () => {
 
   beforeEach(() => {
     scroller = fixtureSync('<vaadin-scroller></vaadin-scroller>');
+  });
+
+  describe('focus', () => {
+    it('should not add focus-ring to the host on programmatic focus', () => {
+      scroller.focus();
+      expect(scroller.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should add focus-ring to the host on keyboard focus', async () => {
+      await sendKeys({ press: 'Tab' });
+      expect(scroller.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should remove focus-ring when a child node is focused', async () => {
+      scroller.appendChild(document.createElement('input'));
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ press: 'Tab' });
+      expect(document.activeElement.localName).to.equal('input');
+      expect(scroller.hasAttribute('focus-ring')).to.be.false;
+    });
   });
 
   describe('custom element definition', () => {

@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -15,12 +16,19 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *   <div>Content</div>
  * </vaadin-scroller>
  * ```
+ * The following attributes are exposed for styling:
+ *
+ * Attribute    | Description
+ * -------------| -----------
+ * `focus-ring` | Set when the element is focused using the keyboard.
+ * `focused`    | Set when the element is focused.
  *
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes FocusMixin
  */
-class Scroller extends ElementMixin(ThemableMixin(PolymerElement)) {
+class Scroller extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -63,8 +71,29 @@ class Scroller extends ElementMixin(ThemableMixin(PolymerElement)) {
       scrollDirection: {
         type: String,
         reflectToAttribute: true
+      },
+
+      /**
+       * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
+       * @protected
+       */
+      tabindex: {
+        type: Number,
+        value: 0,
+        reflectToAttribute: true
       }
     };
+  }
+
+  /**
+   * Override method inherited from `FocusMixin` to mark the scroller as focused
+   * only when the host is focused.
+   * @param {Event} event
+   * @return {boolean}
+   * @protected
+   */
+  _shouldSetFocus(event) {
+    return event.target === this;
   }
 }
 

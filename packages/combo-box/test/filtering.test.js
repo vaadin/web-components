@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { getAllItems, onceOpened } from './helpers.js';
+import { getAllItems, makeItems, onceOpened } from './helpers.js';
 
 describe('filtering items', () => {
   let comboBox, overlay;
@@ -372,7 +372,7 @@ describe('filtering items', () => {
 
     it('should properly display all items in the selector', () => {
       comboBox.open();
-      comboBox.filteredItems = Array.apply(null, Array(10)).map((_, i) => `item${i}`);
+      comboBox.filteredItems = makeItems(10);
       flush();
       expect(getAllItems(comboBox).length).to.equal(10);
     });

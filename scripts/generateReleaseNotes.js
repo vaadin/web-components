@@ -132,7 +132,7 @@ function parseLog(log) {
           pos = 'head';
         } else {
           if (line.startsWith(' ')) {
-            commit.body += '';
+            commit.body = String(commit.body);
           } else if (/^packages\/.*/.test(line)) {
             const wc = line.split('/')[1];
             if (!commit.components.includes(wc)) {
@@ -172,9 +172,9 @@ function getComponents(c) {
 
 // return ticket links for this commit
 function getTickets(c) {
-  if (c.footers['fixes'] && c.footers['fixes'][0]) {
-    const ticket = `Ticket${c.footers['fixes'].length > 1 ? 's' : ''}`;
-    const links = c.footers['fixes'].reduce((prev, f) => {
+  if (c.footers.fixes && c.footers.fixes[0]) {
+    const ticket = `Ticket${c.footers.fixes.length > 1 ? 's' : ''}`;
+    const links = c.footers.fixes.reduce((prev, f) => {
       let link = f;
       if (/^#?\d/.test(f)) {
         f = f.replace(/^#/, '');

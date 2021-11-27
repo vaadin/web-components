@@ -378,7 +378,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
         }
       })
     );
-    return;
   }
 
   /**

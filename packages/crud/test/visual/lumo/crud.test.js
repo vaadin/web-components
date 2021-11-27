@@ -14,24 +14,23 @@ describe('crud', () => {
   });
 
   it('basic', async () => {
-    element.editedItem = {};
     await visualDiff(div, 'basic');
-  });
-
-  it('editor-position-bottom', async () => {
-    element.editorPosition = 'bottom';
-    await nextRender(element);
-    element.editedItem = {};
-    await visualDiff(div, 'editor-position-bottom');
-  });
-
-  it('toolbar-visible-by-defualt', async () => {
-    await visualDiff(div, 'toolbar-visible');
   });
 
   it('no-toolbar', async () => {
     element.noToolbar = true;
-    await visualDiff(div, 'toolbar-hidden');
+    await visualDiff(div, 'no-toolbar');
+  });
+
+  it('theme-no-border', async () => {
+    element.setAttribute('theme', 'no-border');
+    await visualDiff(div, 'theme-no-border');
+  });
+
+  it('theme-no-border-edit', async () => {
+    element.setAttribute('theme', 'no-border');
+    element.editedItem = element.items[0];
+    await visualDiff(div, 'theme-no-border-edit');
   });
 
   ['ltr', 'rtl'].forEach((dir) => {
@@ -44,11 +43,25 @@ describe('crud', () => {
         document.documentElement.removeAttribute('dir');
       });
 
-      it('editor-position-aside', async () => {
-        element.editorPosition = 'aside';
-        await nextRender(element);
-        element.editedItem = {};
-        await visualDiff(div, `${dir}-editor-position-aside`);
+      ['default', 'aside', 'bottom'].forEach((position) => {
+        describe(`${dir}-editor-position-${position}`, () => {
+          beforeEach(async () => {
+            if (position !== 'default') {
+              element.editorPosition = position;
+              await nextRender(element);
+            }
+          });
+
+          it(`editor-position-${position}-new`, async () => {
+            element.editedItem = {};
+            await visualDiff(div, `${dir}-editor-position-${position}-new`);
+          });
+
+          it(`editor-position-${position}-edit`, async () => {
+            element.editedItem = element.items[0];
+            await visualDiff(div, `${dir}-editor-position-${position}-edit`);
+          });
+        });
       });
     });
   });
