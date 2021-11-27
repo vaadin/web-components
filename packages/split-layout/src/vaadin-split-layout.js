@@ -240,7 +240,7 @@ class SplitLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizab
     super.ready();
     this.__observer = new FlattenedNodesObserver(this, this._processChildren);
 
-    const splitter = this.shadowRoot.querySelector('[part="splitter"]');
+    const splitter = this.$.splitter;
     addListener(splitter, 'track', this._onHandleTrack.bind(this));
     addListener(splitter, 'down', this._setPointerEventsNone.bind(this));
     addListener(splitter, 'up', this._restorePointerEvents.bind(this));

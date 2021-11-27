@@ -90,8 +90,6 @@ function PASSIVE_TOUCH(eventName) {
   }
   if (HAS_NATIVE_TA && supportsPassive && passiveTouchGestures) {
     return { passive: true };
-  } else {
-    return;
   }
 }
 
@@ -711,8 +709,6 @@ export function resetMouseCanceller() {
   }
 }
 
-/* eslint-disable valid-jsdoc */
-
 register({
   name: 'downup',
   deps: ['mousedown', 'touchstart', 'touchend'],
@@ -762,6 +758,7 @@ register({
     trackDocument(this.info, movefn, upfn);
     downupFire('down', t, e);
   },
+
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
@@ -770,6 +767,7 @@ register({
   touchstart: function (e) {
     downupFire('down', _findOriginalTarget(e), e.changedTouches[0], e);
   },
+
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
@@ -891,6 +889,7 @@ register({
     this.info.x = e.clientX;
     this.info.y = e.clientY;
   },
+
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
@@ -901,6 +900,7 @@ register({
     this.info.x = ct.clientX;
     this.info.y = ct.clientY;
   },
+
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
@@ -922,6 +922,7 @@ register({
       this.info.started = true;
     }
   },
+
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
@@ -1006,6 +1007,7 @@ register({
     y: NaN,
     prevent: false
   },
+
   /**
    * @this {GestureRecognizer}
    * @return {void}
@@ -1015,6 +1017,7 @@ register({
     this.info.y = NaN;
     this.info.prevent = false;
   },
+
   /**
    * @this {GestureRecognizer}
    * @param {MouseEvent} e
@@ -1026,6 +1029,7 @@ register({
       this.info.y = e.clientY;
     }
   },
+
   /**
    * @this {GestureRecognizer}
    * @param {MouseEvent} e
@@ -1036,6 +1040,7 @@ register({
       trackForward(this.info, e);
     }
   },
+
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
@@ -1046,6 +1051,7 @@ register({
     this.info.x = touch.clientX;
     this.info.y = touch.clientY;
   },
+
   /**
    * @this {GestureRecognizer}
    * @param {TouchEvent} e
@@ -1083,14 +1089,3 @@ function trackForward(info, e, preventer) {
     }
   }
 }
-
-/* eslint-enable valid-jsdoc */
-
-/** @deprecated */
-export const findOriginalTarget = _findOriginalTarget;
-
-/** @deprecated */
-export const add = addListener;
-
-/** @deprecated */
-export const remove = removeListener;

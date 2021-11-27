@@ -198,7 +198,6 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemePropertyMixin
  * @mixes ItemsMixin
-
  */
 class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElement))) {
   static get template() {
