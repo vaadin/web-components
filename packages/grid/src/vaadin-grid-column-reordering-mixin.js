@@ -3,15 +3,14 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-import { addListener } from '@polymer/polymer/lib/utils/gestures.js';
+import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { updateColumnOrders } from './vaadin-grid-helpers.js';
 
 /**
  * @polymerMixin
  */
 export const ColumnReorderingMixin = (superClass) =>
-  class ColumnReorderingMixin extends GestureEventListeners(superClass) {
+  class ColumnReorderingMixin extends superClass {
     static get properties() {
       return {
         /**

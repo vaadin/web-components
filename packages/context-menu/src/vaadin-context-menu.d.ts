@@ -3,7 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ContextMenuItem, ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
@@ -224,7 +223,7 @@ export interface ContextMenuEventMap extends HTMLElementEventMap, ContextMenuCus
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} item-selected - Fired when an item is selected when the context menu is populated using the `items` API.
  */
-declare class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEventListeners(HTMLElement)))) {
+declare class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(HTMLElement))) {
   /**
    * CSS selector that can be used to target any child element
    * of the context menu to listen for `openOn` events.

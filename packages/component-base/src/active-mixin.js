@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
+import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { DisabledMixin } from './disabled-mixin.js';
 import { KeyboardMixin } from './keyboard-mixin.js';
 
@@ -19,7 +19,7 @@ import { KeyboardMixin } from './keyboard-mixin.js';
  * @polymerMixin
  */
 export const ActiveMixin = (superclass) =>
-  class ActiveMixinClass extends DisabledMixin(GestureEventListeners(KeyboardMixin(superclass))) {
+  class ActiveMixinClass extends DisabledMixin(KeyboardMixin(superclass)) {
     /**
      * An array of activation keys.
      *
@@ -37,13 +37,13 @@ export const ActiveMixin = (superclass) =>
     ready() {
       super.ready();
 
-      this._addEventListenerToNode(this, 'down', (event) => {
+      addListener(this, 'down', (event) => {
         if (this._shouldSetActive(event)) {
           this._setActive(true);
         }
       });
 
-      this._addEventListenerToNode(this, 'up', () => {
+      addListener(this, 'up', () => {
         this._setActive(false);
       });
     }
