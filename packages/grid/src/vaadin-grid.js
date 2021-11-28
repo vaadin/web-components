@@ -5,7 +5,7 @@
  */
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { isAndroid, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PropertyObserverMixin } from '@vaadin/component-base/src/property-observer-mixin.js';
@@ -369,8 +369,14 @@ class Grid extends ElementMixin(
     };
   }
 
+  static get styles() {
+    // TODO: needs a fix in ThemableMixin (styles should not be required)
+    return css``;
+  }
+
   constructor() {
     super();
+    this.$ = {};
     this.addEventListener('animationend', this._onAnimationEnd);
 
     this._addObserver(['_columnTree'], '_columnTreeChanged');
@@ -403,7 +409,6 @@ class Grid extends ElementMixin(
 
   firstUpdated() {
     this.shadowRoot.querySelectorAll('[id]').forEach((el) => {
-      this.$ = this.$ || {};
       this.$[el.id] = el;
     });
 

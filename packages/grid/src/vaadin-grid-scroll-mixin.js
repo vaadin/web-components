@@ -153,6 +153,9 @@ export const ScrollMixin = (superClass) =>
 
     /** @protected */
     _frozenCellsChanged() {
+      if (!this.$.table) {
+        return;
+      }
       this._debouncerCacheElements = Debouncer.debounce(this._debouncerCacheElements, microTask, () => {
         Array.from(this.shadowRoot.querySelectorAll('[part~="cell"]')).forEach(function (cell) {
           cell.style.transform = '';

@@ -8,6 +8,7 @@
   </head>
   <body>
     <script type="module">
+      import '@vaadin/button';
       import '@vaadin/grid/vaadin-grid.js';
       import '@vaadin/grid/vaadin-grid-tree-column.js';
 
@@ -30,6 +31,11 @@
       };
 
       grid.columnReorderingAllowed = true;
+
+      const button = document.querySelector('vaadin-button');
+      button.addEventListener('click', () => {
+        button.textContent = !!customElements.get('dom-module') ? 'YES :(' : 'NO :)';
+      });
     </script>
 
     <vaadin-grid item-id-path="name">
@@ -38,5 +44,7 @@
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
     </vaadin-grid>
+
+    <vaadin-button>Is Polymer imported?</vaadin-button>
   </body>
 </html>
