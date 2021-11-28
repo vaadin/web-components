@@ -14,7 +14,7 @@ window.defineCustomElementFunction = (name, parentName, content, styles) => {
     }
 
     static get styles() {
-      return unsafeCSS(styles);
+      return styles ? unsafeCSS(styles) : undefined;
     }
 
     render() {
