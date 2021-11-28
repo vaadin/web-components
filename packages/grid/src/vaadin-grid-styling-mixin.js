@@ -33,8 +33,9 @@ export const StylingMixin = (superClass) =>
       };
     }
 
-    static get observers() {
-      return ['__cellClassNameGeneratorChanged(cellClassNameGenerator)'];
+    constructor() {
+      super();
+      this._addObserver(['cellClassNameGenerator'], '__cellClassNameGeneratorChanged');
     }
 
     __cellClassNameGeneratorChanged() {

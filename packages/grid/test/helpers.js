@@ -1,6 +1,7 @@
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 
 export const flushGrid = (grid) => {
+  grid.performUpdate();
   grid._observer.flush();
   if (grid._debounceScrolling) {
     grid._debounceScrolling.flush();
@@ -20,7 +21,9 @@ export const flushGrid = (grid) => {
     grid._debouncerApplyCachedData.flush();
   }
 
+  grid.performUpdate();
   grid.__virtualizer.flush();
+  grid.performUpdate();
 };
 
 export const getCell = (grid, index) => {

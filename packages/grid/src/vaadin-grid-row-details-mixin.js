@@ -50,11 +50,10 @@ export const RowDetailsMixin = (superClass) =>
       };
     }
 
-    static get observers() {
-      return [
-        '_detailsOpenedItemsChanged(detailsOpenedItems.*, rowDetailsRenderer)',
-        '_rowDetailsRendererChanged(rowDetailsRenderer)'
-      ];
+    constructor() {
+      super();
+      this._addObserver(['detailsOpenedItems', 'rowDetailsRenderer'], '_detailsOpenedItemsChanged');
+      this._addObserver(['rowDetailsRenderer'], '_rowDetailsRendererChanged');
     }
 
     /** @protected */
@@ -90,12 +89,7 @@ export const RowDetailsMixin = (superClass) =>
     }
 
     /** @private */
-    _detailsOpenedItemsChanged(changeRecord, rowDetailsRenderer) {
-      // Skip to avoid duplicate work of both “.splices” and “.length” updates.
-      if (changeRecord.path === 'detailsOpenedItems.length' || !changeRecord.value) {
-        return;
-      }
-
+    _detailsOpenedItemsChanged(_detailsOpenedItems, rowDetailsRenderer) {
       [...this.$.items.children].forEach((row) => {
         // Re-renders the row to possibly close the previously opened details.
         if (row.hasAttribute('details-opened')) {

@@ -102,10 +102,7 @@ export const DynamicColumnsMixin = (superClass) =>
     _updateColumnTree() {
       const columnTree = this._getColumnTree();
       if (!this._arrayEquals(columnTree, this._columnTree)) {
-        // TODO: Shouldn't need a timeout
-        setTimeout(() => {
-          this._columnTree = columnTree;
-        }, 0);
+        this._columnTree = columnTree;
       }
     }
 
@@ -116,6 +113,10 @@ export const DynamicColumnsMixin = (superClass) =>
         const removedNodes = info.flatMap((mutation) => [...mutation.removedNodes]);
         this.__processColumnChange(addedNodes, removedNodes);
       });
+
+      this._observer.flush = () => {
+        this.__processColumnChange(getFlattenedNodes(this));
+      };
 
       this._observer.observe(this, { childList: true });
       this.__processColumnChange(getFlattenedNodes(this));

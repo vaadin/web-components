@@ -215,10 +215,6 @@ export const DataProviderMixin = (superClass) =>
       };
     }
 
-    static get observers() {
-      return ['_sizeChanged(size)', '_itemIdPathChanged(itemIdPath)', '_expandedItemsChanged(expandedItems.*)'];
-    }
-
     updated(props) {
       super.updated(props);
 
@@ -241,6 +237,9 @@ export const DataProviderMixin = (superClass) =>
       this.expandedItems = [];
       this.__expandedKeys = new Set();
       this._cache = new ItemCache(this);
+      this._addObserver(['size'], '_sizeChanged');
+      this._addObserver(['itemIdPath'], '_itemIdPathChanged');
+      this._addObserver(['expandedItems'], '_expandedItemsChanged');
     }
 
     /** @private */

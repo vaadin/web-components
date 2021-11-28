@@ -365,6 +365,14 @@ class Grid extends ElementMixin(
       __gridElement: {
         type: Boolean,
         value: true
+      },
+
+      _effectiveSize: {
+        type: Number
+      },
+
+      __virtualizer: {
+        type: Object
       }
     };
   }

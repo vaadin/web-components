@@ -23,8 +23,10 @@ describe('class name generator', () => {
     initialCellClasses = Array.from(firstCell.classList);
   });
 
-  const assertClassList = (cell, expectedClasses) =>
+  const assertClassList = (cell, expectedClasses) => {
+    flushGrid(grid);
     expect(Array.from(cell.classList)).to.deep.equal(initialCellClasses.concat(expectedClasses));
+  };
 
   it('should add classes for cells', () => {
     grid.cellClassNameGenerator = () => 'foo';
@@ -94,6 +96,7 @@ describe('class name generator', () => {
     it(`should update classes on ${funcName}`, () => {
       let condition = false;
       grid.cellClassNameGenerator = () => condition && 'foo';
+      flushGrid(grid);
       condition = true;
       assertClassList(firstCell, []);
       grid[funcName]();
@@ -103,6 +106,7 @@ describe('class name generator', () => {
 
   it('should not run generator for hidden rows', () => {
     grid.items = [];
+    flushGrid(grid);
     expect(grid.$.items.firstElementChild).to.have.property('hidden', true);
 
     const spy = sinon.spy();
