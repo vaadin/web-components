@@ -35,6 +35,17 @@ class ComboBoxOverlayElement extends OverlayElement {
     return 'vaadin-combo-box-overlay';
   }
 
+  static get properties() {
+    return {
+      /**
+       * The element to position/align the dropdown by.
+       */
+      positionTarget: {
+        type: Object
+      }
+    };
+  }
+
   static get template() {
     if (!memoizedTemplate) {
       memoizedTemplate = super.template.cloneNode(true);
@@ -63,6 +74,19 @@ class ComboBoxOverlayElement extends OverlayElement {
     const content = this.shadowRoot.querySelector('[part~="content"]');
     content.parentNode.insertBefore(loader, content);
   }
+
+  /**
+   * Override OverlayElement._outsideClickListener to prevent closing the
+   * overlay when clicking into the combo box input element
+   * @param event
+   * @private
+   */
+  _outsideClickListener(event) {
+    const eventPath = event.composedPath();
+    if (!eventPath.includes(this.positionTarget) && !eventPath.includes(this)) {
+      this.close();
+    }
+  }
 }
 
 customElements.define(ComboBoxOverlayElement.is, ComboBoxOverlayElement);
@@ -88,7 +112,8 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
       <vaadin-combo-box-overlay
         id="overlay"
         hidden$="[[hidden]]"
-        opened="[[opened]]"
+        position-target="[[positionTarget]]"
+        opened="{{opened}}"
         style="align-items: stretch; margin: 0;"
         theme$="[[theme]]"
       >
@@ -133,7 +158,6 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
   constructor() {
     super();
     this._boundSetPosition = this._setPosition.bind(this);
-    this._boundOutsideClickListener = this._outsideClickListener.bind(this);
   }
 
   connectedCallback() {
@@ -189,22 +213,10 @@ class ComboBoxDropdownElement extends DisableUpgradeMixin(mixinBehaviors(IronRes
       this._setPosition();
 
       window.addEventListener('scroll', this._boundSetPosition, true);
-      document.addEventListener('click', this._boundOutsideClickListener, true);
       this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', { bubbles: true, composed: true }));
     } else if (!this.__emptyItems) {
       window.removeEventListener('scroll', this._boundSetPosition, true);
-      document.removeEventListener('click', this._boundOutsideClickListener, true);
       this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-closed', { bubbles: true, composed: true }));
-    }
-  }
-
-  // We need to listen on 'click' event and capture it and close the overlay before
-  // propagating the event to the listener in the button. Otherwise, if the clicked button would call
-  // open(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4
-  _outsideClickListener(event) {
-    const eventPath = event.composedPath();
-    if (eventPath.indexOf(this.positionTarget) < 0 && eventPath.indexOf(this.$.overlay) < 0) {
-      this.opened = false;
     }
   }
 

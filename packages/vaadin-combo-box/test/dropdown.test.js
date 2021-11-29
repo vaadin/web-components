@@ -7,6 +7,7 @@ describe('dropdown', () => {
 
   beforeEach(() => {
     dropdown = fixtureSync(`<vaadin-combo-box-dropdown></vaadin-combo-box-dropdown>`);
+    dropdown.positionTarget = document.createElement('button');
     overlay = dropdown.$.overlay;
   });
 
