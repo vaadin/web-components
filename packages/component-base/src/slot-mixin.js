@@ -37,7 +37,9 @@ export const SlotMixin = dedupingMixin(
             const slotFactory = this.slots[slotName];
             const slotContent = slotFactory();
             if (slotContent instanceof Element) {
-              slotContent.setAttribute('slot', slotName);
+              if (slotName !== '') {
+                slotContent.setAttribute('slot', slotName);
+              }
               this.appendChild(slotContent);
             }
           }
@@ -46,7 +48,13 @@ export const SlotMixin = dedupingMixin(
 
       /** @protected */
       _getDirectSlotChild(slotName) {
-        return Array.from(this.children).find((el) => el.slot === slotName);
+        return Array.from(this.childNodes).find((node) => {
+          // Either an element (any slot) or a text node (only un-named slot).
+          return (
+            (node.nodeType === Node.ELEMENT_NODE && node.slot === slotName) ||
+            (node.nodeType === Node.TEXT_NODE && node.textContent.trim() && slotName === '')
+          );
+        });
       }
     }
 );
