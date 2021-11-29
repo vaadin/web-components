@@ -51,8 +51,8 @@ export const SlotMixin = dedupingMixin(
         return Array.from(this.childNodes).find((node) => {
           // Either an element (any slot) or a text node (only un-named slot).
           return (
-            (node.nodeType == Node.ELEMENT_NODE && node.slot === slotName) ||
-            (slotName === '' && node.nodeType == Node.TEXT_NODE && node.textContent.trim() !== '')
+            (node.nodeType === Node.ELEMENT_NODE && node.slot === slotName) ||
+            (node.nodeType === Node.TEXT_NODE && node.textContent.trim() && slotName === '')
           );
         });
       }
