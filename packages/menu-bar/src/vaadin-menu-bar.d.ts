@@ -20,6 +20,7 @@ export interface SubMenuItem {
   text?: string;
   component?: string | HTMLElement;
   disabled?: boolean;
+  theme?: string | string[];
   checked?: boolean;
   children?: SubMenuItem[];
 }
