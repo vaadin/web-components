@@ -8,12 +8,11 @@ import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-month-calendar.js';
 import './vaadin-infinite-scroller.js';
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-import { addListener, setTouchAction } from '@polymer/polymer/lib/utils/gestures.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateEquals, extractDateParts, getClosestDate, getISOWeekNumber } from './vaadin-date-picker-helper.js';
 
@@ -21,7 +20,7 @@ import { dateEquals, extractDateParts, getClosestDate, getISOWeekNumber } from '
  * @extends HTMLElement
  * @private
  */
-class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListeners(PolymerElement))) {
+class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -164,15 +163,15 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
 
       <div part="overlay-header" on-touchend="_preventDefault" desktop$="[[_desktopMode]]" aria-hidden="true">
         <div part="label">[[_formatDisplayed(selectedDate, i18n.formatDate, label)]]</div>
-        <div part="clear-button" on-tap="_clear" showclear$="[[_showClear(selectedDate)]]"></div>
-        <div part="toggle-button" on-tap="_cancel"></div>
+        <div part="clear-button" showclear$="[[_showClear(selectedDate)]]"></div>
+        <div part="toggle-button"></div>
 
-        <div part="years-toggle-button" desktop$="[[_desktopMode]]" on-tap="_toggleYearScroller" aria-hidden="true">
+        <div part="years-toggle-button" desktop$="[[_desktopMode]]" aria-hidden="true">
           [[_yearAfterXMonths(_visibleMonthIndex)]]
         </div>
       </div>
 
-      <div id="scrollers" desktop$="[[_desktopMode]]" on-track="_track">
+      <div id="scrollers" desktop$="[[_desktopMode]]">
         <vaadin-infinite-scroller
           id="monthScroller"
           on-custom-scroll="_onMonthScroll"
@@ -200,7 +199,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
         </vaadin-infinite-scroller>
         <vaadin-infinite-scroller
           id="yearScroller"
-          on-tap="_onYearTap"
           on-custom-scroll="_onYearScroll"
           on-touchstart="_onYearScrollTouchStart"
           buffer-size="12"
@@ -227,13 +225,10 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
           part="today-button"
           theme="tertiary"
           disabled="[[!_isTodayAllowed(minDate, maxDate)]]"
-          on-tap="_onTodayTap"
         >
           [[i18n.today]]
         </vaadin-button>
-        <vaadin-button id="cancelButton" part="cancel-button" theme="tertiary" on-tap="_cancel">
-          [[i18n.cancel]]
-        </vaadin-button>
+        <vaadin-button id="cancelButton" part="cancel-button" theme="tertiary"> [[i18n.cancel]] </vaadin-button>
       </div>
       <iron-media-query query="(min-width: 375px)" query-matches="{{_desktopMode}}"></iron-media-query>
     `;
@@ -330,6 +325,17 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
     addListener(this, 'tap', this._stopPropagation);
     this.addEventListener('focus', this._onOverlayFocus.bind(this));
     this.addEventListener('blur', this._onOverlayBlur.bind(this));
+    addListener(this.$.scrollers, 'track', this._track.bind(this));
+    addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
+    addListener(this.shadowRoot.querySelector('[part="today-button"]'), 'tap', this._onTodayTap.bind(this));
+    addListener(this.shadowRoot.querySelector('[part="cancel-button"]'), 'tap', this._cancel.bind(this));
+    addListener(this.shadowRoot.querySelector('[part="toggle-button"]'), 'tap', this._cancel.bind(this));
+    addListener(this.shadowRoot.querySelector('[part="years"]'), 'tap', this._onYearTap.bind(this));
+    addListener(
+      this.shadowRoot.querySelector('[part="years-toggle-button"]'),
+      'tap',
+      this._toggleYearScroller.bind(this)
+    );
   }
 
   /**

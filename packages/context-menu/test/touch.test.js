@@ -13,8 +13,8 @@ import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
-import { gestures } from '@polymer/polymer/lib/utils/gestures.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { gestures } from '@vaadin/component-base/src/gestures.js';
 
 class MenuTouchWrapper extends PolymerElement {
   static get template() {
