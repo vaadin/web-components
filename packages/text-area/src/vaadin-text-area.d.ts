@@ -5,6 +5,7 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
+import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -75,7 +76,7 @@ export interface TextAreaEventMap extends HTMLElementEventMap, TextAreaCustomEve
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement))) {
+declare class TextArea extends PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   /**
    * Maximum number of characters (in Unicode code points) that the user can enter.
    */

@@ -2,6 +2,7 @@ import '../../vaadin-text-area.js';
 import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { InputFieldMixinClass } from '@vaadin/field-base/src/input-field-mixin.js';
+import { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import {
   TextArea,
@@ -18,6 +19,7 @@ const area = document.createElement('vaadin-text-area');
 assertType<ControllerMixinClass>(area);
 assertType<ElementMixinClass>(area);
 assertType<InputFieldMixinClass>(area);
+assertType<PatternMixinClass>(area);
 assertType<ThemableMixinClass>(area);
 
 // Events
