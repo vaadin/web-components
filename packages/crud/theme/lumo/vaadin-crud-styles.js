@@ -150,31 +150,4 @@ registerStyles(
   { moduleId: 'lumo-crud' }
 );
 
-registerStyles(
-  'vaadin-crud-dialog-overlay',
-  [
-    editorStyles,
-    css`
-      @media (max-width: 600px), (max-height: 600px) {
-        :host {
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          padding: 0;
-        }
-
-        [part='overlay'] {
-          height: 100vh;
-          width: 100vw;
-          border-radius: 0 !important;
-        }
-
-        [part='content'] {
-          flex: 1;
-        }
-      }
-    `
-  ],
-  { moduleId: 'lumo-crud-dialog-overlay' }
-);
+registerStyles('vaadin-crud-dialog-overlay', editorStyles, { moduleId: 'lumo-crud-dialog-overlay' });

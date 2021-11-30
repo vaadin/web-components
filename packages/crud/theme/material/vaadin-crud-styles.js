@@ -135,26 +135,6 @@ registerStyles(
       :host([closing]) {
         animation: 0.25s material-overlay-dummy-animation;
       }
-
-      @media (max-width: 600px), (max-height: 600px) {
-        :host {
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          padding: 0;
-        }
-
-        [part='overlay'] {
-          height: 100vh;
-          width: 100vw;
-          border-radius: 0 !important;
-        }
-
-        [part='content'] {
-          flex: 1;
-        }
-      }
     `
   ],
   { moduleId: 'material-crud-dialog-overlay' }

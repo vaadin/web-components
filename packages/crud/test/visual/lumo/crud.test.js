@@ -43,12 +43,21 @@ describe('crud', () => {
         document.documentElement.removeAttribute('dir');
       });
 
-      ['default', 'aside', 'bottom'].forEach((position) => {
+      ['default', 'aside', 'bottom', 'fullscreen'].forEach((position) => {
         describe(`${dir}-editor-position-${position}`, () => {
           beforeEach(async () => {
-            if (position !== 'default') {
-              element.editorPosition = position;
-              await nextRender(element);
+            switch (position) {
+              case 'aside':
+              case 'bottom':
+                element.editorPosition = position;
+                await nextRender(element);
+                break;
+              case 'fullscreen':
+                element._fullscreen = true;
+                await nextRender(element);
+                break;
+              default:
+              // Do nothing
             }
           });
 
