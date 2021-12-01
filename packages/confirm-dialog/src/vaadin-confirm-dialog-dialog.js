@@ -51,6 +51,11 @@ const dialogTemplate = html`
   </div>
 `;
 
+/**
+ * An extension of `<vaadin-dialog-overlay>` used internally by `<vaadin-confirm-dialog>`.
+ * Not intended to be used separately.
+ * @private
+ */
 class ConfirmDialogOverlay extends DialogOverlay {
   static get is() {
     return 'vaadin-confirm-dialog-overlay';
@@ -80,9 +85,18 @@ class ConfirmDialogOverlay extends DialogOverlay {
   }
 }
 
-customElements.define('vaadin-confirm-dialog-overlay', ConfirmDialogOverlay);
+customElements.define(ConfirmDialogOverlay.is, ConfirmDialogOverlay);
 
+/**
+ * An extension of `<vaadin-dialog>` used internally by `<vaadin-confirm-dialog>`.
+ * Not intended to be used separately.
+ * @private
+ */
 class ConfirmDialogDialog extends Dialog {
+  static get is() {
+    return 'vaadin-confirm-dialog-dialog';
+  }
+
   /**
    * Override template to provide custom overlay tag name.
    */
@@ -109,4 +123,4 @@ class ConfirmDialogDialog extends Dialog {
   }
 }
 
-customElements.define('vaadin-confirm-dialog-dialog', ConfirmDialogDialog);
+customElements.define(ConfirmDialogDialog.is, ConfirmDialogDialog);
