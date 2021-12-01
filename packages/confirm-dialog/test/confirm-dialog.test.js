@@ -440,8 +440,7 @@ describe('vaadin-confirm-dialog', () => {
         confirm._setHeight('500px');
         expect(spy.calledWith('height', '500px')).to.be.true;
         expect(spy.calledWith('height', '500px')).to.be.true;
-        const height = parseInt(getComputedStyle(overlay.$.content).height);
-        expect(height).to.be.closeTo(510, 2);
+        expect(getComputedStyle(overlay.$.content).height).to.equal('500px');
       });
     });
 
@@ -473,8 +472,7 @@ describe('vaadin-confirm-dialog', () => {
         confirm.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
         expect(spy.calledWith('height', '500px')).to.be.true;
-        const height = parseInt(getComputedStyle(overlay.$.content).height);
-        expect(height).to.be.closeTo(510, 2);
+        expect(getComputedStyle(overlay.$.content).height).to.equal('500px');
       });
     });
   });

@@ -43,7 +43,6 @@ export type ConfirmDialogEventMap = HTMLElementEventMap & ConfirmDialogCustomEve
  *
  * Part name        | Description
  * -----------------|-------------------------------------------
- * `container`      | The element that wraps header and message
  * `header`         | The header element wrapper
  * `message`        | The message element wrapper
  * `footer`         | The footer element that wraps the buttons

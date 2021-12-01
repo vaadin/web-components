@@ -11,13 +11,10 @@ registerStyles(
     [part='content'] {
       padding: 8px 24px;
       min-width: 0;
-      height: auto;
-      box-sizing: content-box;
     }
 
-    /* Apply height to the part inside the "content" part */
-    [part='container'] {
-      height: calc(var(--_vaadin-confirm-dialog-content-height) - var(--_vaadin-confirm-dialog-footer-height) - 39px);
+    [part='header'] ::slotted(h3) {
+      margin-top: 0.75em !important;
     }
 
     [part='message'] {

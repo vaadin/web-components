@@ -5,21 +5,8 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-confirm-dialog-overlay',
   css`
-    /* Apply height to the part inside the "content" part */
-    [part='container'] {
-      height: calc(
-        var(--_vaadin-confirm-dialog-content-height) - var(--_vaadin-confirm-dialog-footer-height) - var(--lumo-space-s)
-      );
-    }
-
-    [part='header'] {
-      margin-top: var(--lumo-space-s);
-      margin-bottom: var(--lumo-space-m);
-    }
-
-    /* Reset the default h3 margin */
-    ::slotted([slot='header']) {
-      margin: 0;
+    [part='header'] ::slotted(h3) {
+      margin-top: 0 !important;
     }
 
     [part='message'] {

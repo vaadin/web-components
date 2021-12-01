@@ -6,8 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Confirm dialog</title>
     <script type="module">
+      import '@vaadin/polymer-legacy-adapter/style-modules.js';
+
       import '@vaadin/confirm-dialog';
+      import '@vaadin/vaadin-lumo-styles/color.js';
+      import '@vaadin/vaadin-lumo-styles/typography.js';
     </script>
+    <!-- Global color and typography styles affect the contents of the dialog -->
+    <custom-style>
+      <style include="lumo-color lumo-typography"></style>
+    </custom-style>
   </head>
   <body>
     <vaadin-button id="open">Open</vaadin-button>

@@ -30,7 +30,6 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  *
  * Part name        | Description
  * -----------------|-------------------------------------------
- * `container`      | The element that wraps header and message
  * `header`         | The header element wrapper
  * `message`        | The message element wrapper
  * `footer`         | The footer element that wraps the buttons
@@ -359,9 +358,6 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
     if (confirmButton) {
       confirmButton.focus();
     }
-
-    const { height } = getComputedStyle(overlay.shadowRoot.querySelector('[part=footer]'));
-    overlay.style.setProperty('--_vaadin-confirm-dialog-footer-height', height);
   }
 
   /** @private */

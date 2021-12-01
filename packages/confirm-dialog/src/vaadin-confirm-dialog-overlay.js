@@ -13,13 +13,18 @@ registerStyles(
     :host {
       --_vaadin-confirm-dialog-content-width: auto;
       --_vaadin-confirm-dialog-content-height: auto;
-      --_vaadin-confirm-dialog-footer-height: auto;
     }
 
     [part='content'] {
       width: var(--_vaadin-confirm-dialog-content-width);
-      height: auto;
+      display: flex;
+      flex-direction: column;
+      height: var(--_vaadin-confirm-dialog-content-height);
       box-sizing: content-box;
+    }
+
+    [part='message'] {
+      margin-bottom: auto;
     }
   `,
   { moduleId: 'vaadin-confirm-dialog-overlay-styles' }
@@ -28,14 +33,12 @@ registerStyles(
 let memoizedTemplate;
 
 const dialogTemplate = html`
-  <div part="container">
-    <div part="header">
-      <slot name="header"></slot>
-    </div>
+  <div part="header">
+    <slot name="header"></slot>
+  </div>
 
-    <div part="message">
-      <slot></slot>
-    </div>
+  <div part="message">
+    <slot></slot>
   </div>
 
   <div part="footer">
