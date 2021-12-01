@@ -4,7 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
-import './vaadin-confirm-dialog-dialog.js';
+import './vaadin-confirm-dialog-overlay.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
