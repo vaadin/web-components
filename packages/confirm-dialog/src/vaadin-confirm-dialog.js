@@ -33,6 +33,7 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  * `container`      | The element that wraps header and message
  * `header`         | The header element wrapper
  * `message`        | The message element wrapper
+ * `footer`         | The footer element that wraps the buttons
  * `cancel-button`  | The "Cancel" button wrapper
  * `confirm-button` | The "Confirm" button wrapper
  * `reject-button`  | The "Reject" button wrapper
@@ -422,7 +423,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
   /** @private */
   __setupSlottedButton(slottedButton, currentButton, clickListener) {
     if (currentButton && currentButton.parentElement) {
-      currentButton.parentElement.removeChild(currentButton);
+      currentButton.remove();
     }
 
     slottedButton.addEventListener('click', clickListener);
