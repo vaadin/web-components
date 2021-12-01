@@ -451,7 +451,13 @@ import { close, getOverlayContent, open } from './common.js';
   describe('focus modes', () => {
     let overlayContent;
 
-    beforeEach(() => (overlayContent = getOverlayContent(datepicker)));
+    beforeEach(async () => {
+      overlayContent = getOverlayContent(datepicker);
+      // As a side effect, getOverlayContent opens and closes the dropdown.
+      // Since closing the dropdown focuses the input, we need to blur explicilty
+      // to reset the state.
+      datepicker.blur();
+    });
 
     it('should be tabbable', () => {
       expect(parseInt(overlayContent.getAttribute('tabindex'), 10)).to.equal(0);
