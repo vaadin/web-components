@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
@@ -45,7 +45,7 @@ describe('item template', () => {
       });
 
       it('should update focused property', () => {
-        keyDownOn(comboBox.inputElement, 40); // Press arrow down key
+        arrowDownKeyDown(comboBox.inputElement); // Press arrow down key
         expect(firstItem.innerHTML).to.contain('focused: true');
       });
 

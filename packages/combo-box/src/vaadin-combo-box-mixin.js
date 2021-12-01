@@ -442,25 +442,23 @@ export const ComboBoxMixin = (subclass) =>
     _onKeyDown(e) {
       if (e.key === 'Tab') {
         this.__restoreFocusOnClose = false;
-      }
-
-      if (e.keyCode === 40) {
+      } else if (e.key === 'ArrowDown') {
         this._closeOnBlurIsPrevented = true;
         this._onArrowDown();
         this._closeOnBlurIsPrevented = false;
 
         // prevent caret from moving
         e.preventDefault();
-      } else if (e.keyCode === 38) {
+      } else if (e.key === 'ArrowUp') {
         this._closeOnBlurIsPrevented = true;
         this._onArrowUp();
         this._closeOnBlurIsPrevented = false;
 
         // prevent caret from moving
         e.preventDefault();
-      } else if (e.keyCode === 13) {
+      } else if (e.key === 'Enter') {
         this._onEnter(e);
-      } else if (e.keyCode === 27) {
+      } else if (e.key === 'Escape') {
         this._onEscape(e);
       }
     }
