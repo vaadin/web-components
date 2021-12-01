@@ -190,7 +190,10 @@ export const ComboBoxMixin = (subclass) =>
         },
 
         /** @private */
-        _closeOnBlurIsPrevented: Boolean
+        _closeOnBlurIsPrevented: Boolean,
+
+        /** @private */
+        __restoreFocusOnClose: Boolean
       };
     }
 
@@ -364,6 +367,8 @@ export const ComboBoxMixin = (subclass) =>
         if (!this.hasAttribute('focused') && !isTouch) {
           this.focus();
         }
+
+        this.__restoreFocusOnClose = true;
       } else {
         this._onClosed();
         if (this._openedWithFocusRing && this.hasAttribute('focused')) {
@@ -435,6 +440,10 @@ export const ComboBoxMixin = (subclass) =>
      * @override
      */
     _onKeyDown(e) {
+      if (e.key === 'Tab') {
+        this.__restoreFocusOnClose = false;
+      }
+
       if (e.keyCode === 40) {
         this._closeOnBlurIsPrevented = true;
         this._onArrowDown();

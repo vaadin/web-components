@@ -31,7 +31,7 @@ export class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, Poly
         theme$="[[theme]]"
         position-target="[[positionTarget]]"
         no-vertical-overlap
-        restore-focus-on-close
+        restore-focus-on-close="[[restoreFocusOnClose]]"
         restore-focus-node="[[restoreFocusNode]]"
       ></vaadin-combo-box-overlay>
     `;

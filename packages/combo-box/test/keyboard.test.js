@@ -149,8 +149,6 @@ describe('keyboard', () => {
     });
 
     it('should tab to the next focusable', async () => {
-      // First tab closes the combo-box dropdown
-      await sendKeys({ press: 'Tab' });
       await sendKeys({ press: 'Tab' });
 
       expect(document.activeElement).to.equal(document.body);
@@ -176,9 +174,6 @@ describe('keyboard', () => {
         button.focus();
         input.focus();
         arrowDownKeyDown(input);
-
-        // First tab closes the combo-box dropdown
-        await sendKeys({ press: 'Tab' });
 
         await sendKeys({ press: 'Tab' });
         expect(document.activeElement).to.equal(button);

@@ -80,6 +80,7 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
         opened="[[opened]]"
         position-target="[[inputElement]]"
         restore-focus-node="[[inputElement]]"
+        restore-focus-on-close="[[__restoreFocusOnClose]]"
         renderer="[[renderer]]"
         _focused-index="[[_focusedIndex]]"
         _item-id-path="[[itemIdPath]]"
