@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/button/vaadin-button.js';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '@vaadin/radio-group/vaadin-radio-group.js';
@@ -67,6 +68,16 @@ function isElementFocused(element) {
   return element && element.getRootNode().activeElement === element;
 }
 
+async function tab() {
+  await sendKeys({ press: 'Tab' });
+}
+
+async function shiftTab() {
+  await sendKeys({ down: 'Shift' });
+  await sendKeys({ press: 'Tab' });
+  await sendKeys({ up: 'Shift' });
+}
+
 describe('focus-trap', function () {
   let overlay, parent, overlayPart, focusableElements;
 
@@ -113,7 +124,7 @@ describe('focus-trap', function () {
       });
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
-      tabKeyDown(focusableElements[overlay._focusedIndex()]);
+      await tab();
       expect(overlay._focusedIndex()).to.equal(0);
     });
 
@@ -129,12 +140,12 @@ describe('focus-trap', function () {
         }
 
         expect(overlay._focusedIndex()).to.eql(i);
-        tabKeyDown(focusableElements[overlay._focusedIndex()]);
+        await tab();
       }
       expect(overlay._focusedIndex()).to.eql(0);
 
       // SHIFT+TAB
-      tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
+      await shiftTab();
       for (let i = focusableElements.length - 1; i >= 0; i--) {
         expect(overlay._focusedIndex()).to.eql(i);
 
@@ -143,7 +154,7 @@ describe('focus-trap', function () {
           i--;
         }
 
-        tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
+        await shiftTab();
       }
       expect(overlay._focusedIndex()).to.eql(focusableElements.length - 1);
     });
@@ -153,11 +164,11 @@ describe('focus-trap', function () {
       await oneEvent(overlay, 'vaadin-overlay-open');
       expect(overlay._focusedIndex()).to.eql(0);
 
-      tabKeyDown(document.body);
+      await tab();
       expect(overlay._focusedIndex()).to.eql(1);
 
       focusableElements[0].focus();
-      tabKeyDown(document.body);
+      await tab();
       expect(overlay._focusedIndex()).to.eql(1);
     });
 
@@ -169,7 +180,7 @@ describe('focus-trap', function () {
       button.focus();
       button.blur();
 
-      tabKeyDown(document.body, ['shift']);
+      expect(shiftTab).not.to.throw(Error);
     });
 
     describe('shadow content', () => {
@@ -220,12 +231,12 @@ describe('focus-trap', function () {
           }
 
           expect(overlay._focusedIndex()).to.eql(i);
-          tabKeyDown(focusableElements[overlay._focusedIndex()]);
+          await tab();
         }
         expect(overlay._focusedIndex()).to.eql(0);
 
         // SHIFT+TAB
-        tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
+        await shiftTab();
         for (let i = focusableElements.length - 1; i >= 0; i--) {
           expect(overlay._focusedIndex()).to.eql(i);
 
@@ -234,7 +245,7 @@ describe('focus-trap', function () {
             i--;
           }
 
-          tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
+          await shiftTab();
         }
         expect(overlay._focusedIndex()).to.eql(focusableElements.length - 1);
       });
@@ -323,12 +334,12 @@ describe('focus-trap', function () {
         }
 
         expect(overlay._focusedIndex()).to.eql(i);
-        tabKeyDown(focusableElements[overlay._focusedIndex()]);
+        await tab();
       }
       expect(overlay._focusedIndex()).to.eql(0);
 
       // SHIFT+TAB
-      tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
+      await shiftTab();
       for (let i = focusableElements.length - 1; i >= 0; i--) {
         expect(overlay._focusedIndex()).to.eql(i);
 
@@ -337,7 +348,7 @@ describe('focus-trap', function () {
           i--;
         }
 
-        tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
+        await shiftTab();
       }
       expect(overlay._focusedIndex()).to.eql(focusableElements.length - 1);
     });
@@ -347,11 +358,11 @@ describe('focus-trap', function () {
       await oneEvent(overlay, 'vaadin-overlay-open');
       expect(overlay._focusedIndex()).to.eql(0);
 
-      tabKeyDown(document.body);
+      await tab();
       expect(overlay._focusedIndex()).to.eql(1);
 
       focusableElements[0].focus();
-      tabKeyDown(document.body);
+      await tab();
       expect(overlay._focusedIndex()).to.eql(1);
     });
 
@@ -363,7 +374,7 @@ describe('focus-trap', function () {
       button.focus();
       button.blur();
 
-      tabKeyDown(document.body, ['shift']);
+      expect(shiftTab).not.to.throw(Error);
     });
 
     describe('shadow content', () => {
@@ -422,12 +433,12 @@ describe('focus-trap', function () {
           }
 
           expect(overlay._focusedIndex()).to.eql(i);
-          tabKeyDown(focusableElements[overlay._focusedIndex()]);
+          await tab();
         }
         expect(overlay._focusedIndex()).to.eql(0);
 
         // SHIFT+TAB
-        tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
+        await shiftTab();
         for (let i = focusableElements.length - 1; i >= 0; i--) {
           expect(overlay._focusedIndex()).to.eql(i);
 
@@ -436,7 +447,7 @@ describe('focus-trap', function () {
             i--;
           }
 
-          tabKeyDown(focusableElements[overlay._focusedIndex()], ['shift']);
+          await shiftTab();
         }
         expect(overlay._focusedIndex()).to.eql(focusableElements.length - 1);
       });
