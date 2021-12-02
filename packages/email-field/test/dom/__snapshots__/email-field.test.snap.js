@@ -231,7 +231,10 @@ snapshots["vaadin-email-field shadow theme"] =
 snapshots["vaadin-email-field slots default"] = 
 `<label slot="label">
 </label>
-<div slot="error-message">
+<div
+  hidden=""
+  slot="error-message"
+>
 </div>
 <input
   autocapitalize="off"
@@ -244,7 +247,10 @@ snapshots["vaadin-email-field slots default"] =
 snapshots["vaadin-email-field slots helper"] = 
 `<label slot="label">
 </label>
-<div slot="error-message">
+<div
+  hidden=""
+  slot="error-message"
+>
 </div>
 <input
   autocapitalize="off"
