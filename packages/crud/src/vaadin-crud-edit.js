@@ -3,8 +3,8 @@
  * Copyright (c) 2017 - 2021 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { html } from '@polymer/polymer/polymer-element.js';
+import { Button } from '@vaadin/button/src/vaadin-button.js';
 
 /**
  * `<vaadin-crud-edit>` is a helper element for `<vaadin-grid-column>` that provides
@@ -17,7 +17,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ThemableMixin
  */
-class CrudEdit extends ThemableMixin(PolymerElement) {
+class CrudEdit extends Button {
   static get template() {
     return html`
       <style>
@@ -25,6 +25,7 @@ class CrudEdit extends ThemableMixin(PolymerElement) {
           display: block;
         }
       </style>
+      <div part="icon"></div>
     `;
   }
 
@@ -37,7 +38,6 @@ class CrudEdit extends ThemableMixin(PolymerElement) {
     super.ready();
     this.addEventListener('click', this.__onClick);
     this.setAttribute('aria-label', 'Edit');
-    this.setAttribute('role', 'button');
   }
 
   /** @private */
@@ -57,4 +57,4 @@ class CrudEdit extends ThemableMixin(PolymerElement) {
    */
 }
 
-window.customElements.define(CrudEdit.is, CrudEdit);
+customElements.define(CrudEdit.is, CrudEdit);

@@ -6,6 +6,8 @@ registerStyles(
   'vaadin-crud-edit',
   css`
     :host {
+      display: block;
+      min-width: auto;
       font-size: var(--material-button-font-size);
       line-height: 1;
       color: var(--material-text-color);
@@ -14,9 +16,14 @@ registerStyles(
       border-radius: 4px;
       width: 2em;
       height: 2em;
+      outline: none;
+      /* Reset button styles */
+      letter-spacing: normal;
+      -webkit-font-smoothing: auto;
+      -moz-font-smoothing: auto;
     }
 
-    :host::before {
+    [part='icon']::before {
       font-family: serif;
       font-size: var(--material-button-font-size);
       color: var(--material-primary-text-color);
@@ -26,25 +33,8 @@ registerStyles(
       line-height: 2em;
       text-align: center;
       position: absolute;
-    }
-
-    :host::after {
-      content: '';
-      display: block;
-      width: 100%;
-      height: 100%;
-      border-radius: inherit;
-      background-color: currentColor;
-      opacity: 0;
-      transition: opacity 100ms;
-    }
-
-    :host(:hover)::after {
-      opacity: 0.05;
-    }
-
-    :host(:active)::after {
-      opacity: 0.12;
+      top: 0;
+      left: 0;
     }
   `,
   { moduleId: 'material-crud-grid-edit' }

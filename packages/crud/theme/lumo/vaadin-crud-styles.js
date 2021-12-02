@@ -8,19 +8,18 @@ registerStyles(
   'vaadin-crud-edit',
   css`
     :host {
+      min-width: auto;
+      margin: 0;
       font-family: 'lumo-icons', var(--lumo-font-family);
       font-size: var(--lumo-icon-size-m);
       line-height: 1;
-      color: var(--lumo-primary-text-color);
       position: relative;
-      background-color: var(--lumo-contrast-5pct);
-      border-radius: var(--lumo-border-radius-m);
       width: var(--lumo-size-s);
       height: var(--lumo-size-s);
-      cursor: var(--lumo-clickable-cursor);
+      outline: none;
     }
 
-    :host::before {
+    [part='icon']::before {
       content: var(--lumo-icons-edit);
       width: var(--lumo-size-m);
       height: var(--lumo-size-m);
@@ -29,28 +28,6 @@ registerStyles(
       position: absolute;
       top: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
       left: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
-    }
-
-    :host::after {
-      content: '';
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: inherit;
-      background-color: currentColor;
-      opacity: 0;
-      transition: opacity 100ms;
-    }
-
-    :host(:hover)::after {
-      opacity: 0.05;
-    }
-
-    :host(:active)::after {
-      opacity: 0.12;
     }
   `,
   { moduleId: 'lumo-crud-grid-edit' }
