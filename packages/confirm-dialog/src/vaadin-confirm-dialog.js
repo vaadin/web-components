@@ -86,11 +86,13 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
         no-close-on-esc="[[noCloseOnEsc]]"
       ></vaadin-confirm-dialog-dialog>
 
-      <slot name="header"></slot>
-      <slot></slot>
-      <slot name="cancel-button"></slot>
-      <slot name="reject-button"></slot>
-      <slot name="confirm-button"></slot>
+      <div hidden>
+        <slot name="header"></slot>
+        <slot></slot>
+        <slot name="cancel-button"></slot>
+        <slot name="reject-button"></slot>
+        <slot name="confirm-button"></slot>
+      </div>
     `;
   }
 
