@@ -83,4 +83,30 @@ describe('restore focus', () => {
     await close(overlay);
     expect(overlay._getActiveElement()).to.equal(focusable);
   });
+
+  describe('restoreFocusNode', () => {
+    beforeEach(() => {
+      overlay.restoreFocusNode = focusInput;
+    });
+
+    it('should not restore focus on close by default (restore-focus-on-close=false)', async () => {
+      overlay.restoreFocusOnClose = false;
+      focusInput.focus();
+      await open(overlay);
+      // emulate focus leaving the input
+      focusInput.blur();
+      document.body.focus();
+      await close(overlay);
+      expect(overlay._getActiveElement()).to.not.equal(focusInput);
+    });
+
+    it('should restore focus to the restoreFocusNode', async () => {
+      overlay.restoreFocusOnClose = true;
+      focusable.focus();
+      await open(overlay);
+      document.activeElement.blur();
+      await close(overlay);
+      expect(overlay._getActiveElement() === focusInput).to.be.true;
+    });
+  });
 });

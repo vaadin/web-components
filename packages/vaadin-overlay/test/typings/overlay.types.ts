@@ -1,6 +1,7 @@
 import '../../vaadin-overlay.js';
 import {
   OverlayCloseEvent,
+  OverlayClosingEvent,
   OverlayEscapePressEvent,
   OverlayOpenedChangedEvent,
   OverlayOpenEvent,
@@ -10,6 +11,9 @@ import {
 const assertType = <TExpected>(actual: TExpected) => actual;
 
 const overlay = document.createElement('vaadin-overlay');
+
+assertType<boolean>(overlay.restoreFocusOnClose);
+assertType<HTMLElement | undefined>(overlay.restoreFocusNode);
 
 overlay.addEventListener('opened-changed', (event) => {
   assertType<OverlayOpenedChangedEvent>(event);
@@ -22,6 +26,10 @@ overlay.addEventListener('vaadin-overlay-open', (event) => {
 
 overlay.addEventListener('vaadin-overlay-close', (event) => {
   assertType<OverlayCloseEvent>(event);
+});
+
+overlay.addEventListener('vaadin-overlay-closing', (event) => {
+  assertType<OverlayClosingEvent>(event);
 });
 
 overlay.addEventListener('vaadin-overlay-escape-press', (event) => {

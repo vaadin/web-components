@@ -94,6 +94,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} vaadin-overlay-open - Fired after the overlay is opened.
  * @fires {CustomEvent} vaadin-overlay-close - Fired before the overlay will be closed. If canceled the closing of the overlay is canceled as well.
+ * @fires {CustomEvent} vaadin-overlay-closing - Fired when the overlay will be closed.
  * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay will be closed on outside click. If canceled the closing of the overlay is canceled as well.
  * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
  *
@@ -284,6 +285,15 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       restoreFocusOnClose: {
         type: Boolean,
         value: false
+      },
+
+      /**
+       * Set to specify the element which should be focused on overlay close,
+       * if `restoreFocusOnClose` is set to true.
+       * @type {HTMLElement}
+       */
+      restoreFocusNode: {
+        type: HTMLElement
       },
 
       /** @private */
@@ -652,7 +662,12 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     this.removeAttribute('closing');
   }
 
-  /** @protected */
+  /**
+   * @event vaadin-overlay-closing
+   * Fired when the overlay will be closed.
+   *
+   * @protected
+   */
   _animatedClosing() {
     if (this.hasAttribute('opening')) {
       this._flushAnimation('opening');
@@ -660,7 +675,11 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     if (this._placeholder) {
       this._exitModalState();
 
-      if (this.restoreFocusOnClose && this.__restoreFocusNode) {
+      // Use this.restoreFocusNode if specified, othwerwise fallback to the node
+      // which was focused before opening the overlay.
+      const restoreFocusNode = this.restoreFocusNode || this.__restoreFocusNode;
+
+      if (this.restoreFocusOnClose && restoreFocusNode) {
         // If the activeElement is `<body>` or inside the overlay,
         // we are allowed to restore the focus. In all the other
         // cases focus might have been moved elsewhere by another
@@ -669,12 +688,13 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
         const activeElement = this._getActiveElement();
 
         if (activeElement === document.body || this._deepContains(activeElement)) {
-          this.__restoreFocusNode.focus();
+          restoreFocusNode.focus();
         }
         this.__restoreFocusNode = null;
       }
 
       this.setAttribute('closing', '');
+      this.dispatchEvent(new CustomEvent('vaadin-overlay-closing'));
 
       if (this._shouldAnimate()) {
         this._enqueueAnimation('closing', () => {
