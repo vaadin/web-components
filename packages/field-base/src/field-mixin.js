@@ -42,13 +42,6 @@ export const FieldMixin = (superclass) =>
         },
 
         /**
-         *  Element that holds the error message when the field is invalid.
-         */
-        errorMsgElement: {
-          type: HTMLSpanElement
-        },
-
-        /**
          * String used for the helper text.
          * @attr {string} helper-text
          */
@@ -112,8 +105,6 @@ export const FieldMixin = (superclass) =>
       this.__savedHelperId = this._helperId;
 
       this._fieldAriaController = new FieldAriaController(this);
-      this.errorMsgElement = document.createElement('span');
-      this.errorMsgElement.setAttribute('role', 'alert');
     }
 
     /** @protected */
@@ -308,18 +299,17 @@ export const FieldMixin = (superclass) =>
       if (error.textContent && !errorMessage) {
         this.__errorMessage = error.textContent.trim();
       }
-      // clear "error" slot of children elements
-      while (error.hasChildNodes()) {
-        error.innerHTML = '';
-      }
       const hasError = Boolean(invalid && errorMessage);
+      error.textContent = hasError ? errorMessage : '';
+      error.hidden = !hasError;
       this.toggleAttribute('has-error-message', hasError);
 
+      // Role alert will make the error message announce immediately
+      // as the field becomes invalid
       if (hasError) {
-        // Role alert will make the error message announce immediately
-        // as the field becomes invalid
-        this.errorMsgElement.textContent = errorMessage;
-        error.appendChild(this.errorMsgElement);
+        error.setAttribute('role', 'alert');
+      } else {
+        error.removeAttribute('role');
       }
     }
 
