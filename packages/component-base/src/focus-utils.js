@@ -119,18 +119,6 @@ function collectFocusableNodes(node, result) {
     result.push(element);
   }
 
-  // In ShadowDOM v1, tab order is affected by the order of distribution.
-  // E.g. getTabbableNodes(#root) in ShadowDOM v1 should return [#A, #B];
-  // in ShadowDOM v0 tab order is not affected by the distribution order,
-  // in fact getTabbableNodes(#root) returns [#B, #A].
-  //  <div id="root">
-  //   <!-- shadow -->
-  //     <slot name="a">
-  //     <slot name="b">
-  //   <!-- /shadow -->
-  //   <input id="A" slot="a">
-  //   <input id="B" slot="b" tabindex="1">
-  //  </div>
   let children;
   if (element.localName === 'slot') {
     children = element.assignedNodes({ flatten: true });

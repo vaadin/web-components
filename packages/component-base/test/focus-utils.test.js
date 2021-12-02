@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { getFocusableElements, isElementFocusable, isElementFocused } from '../src/focus-utils.js';
 
 describe('focus-utils', () => {
@@ -85,9 +84,11 @@ describe('focus-utils', () => {
 
     customElements.define(
       'custom-element',
-      class extends PolymerElement {
-        static get template() {
-          return html`
+      class extends HTMLElement {
+        constructor() {
+          super();
+          this.attachShadow({ mode: 'open' });
+          this.shadowRoot.innerHTML = `
             <div id="custom-element-1" tabindex="0"></div>
             <div id="custom-element-2" tabindex="-1"></div>
             <slot>
