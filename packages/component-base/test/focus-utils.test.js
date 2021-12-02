@@ -1,9 +1,85 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { getFocusableElements, isElementFocused } from '../src/focus-utils.js';
+import { getFocusableElements, isElementFocusable, isElementFocused } from '../src/focus-utils.js';
 
 describe('focus-utils', () => {
+  describe('isElementFocusable', () => {
+    ['input', 'select', 'textarea', 'button', 'object'].forEach((tagName) => {
+      it(`should return true for <${tagName}> by default`, () => {
+        const element = document.createElement(tagName);
+        expect(isElementFocusable(element)).to.be.true;
+      });
+
+      it(`should return false for <${tagName}> with [disabled]`, () => {
+        const element = document.createElement(tagName);
+        element.setAttribute('disabled', '');
+        expect(isElementFocusable(element)).to.be.false;
+      });
+
+      it(`should return false for <${tagName}> with [tabindex] = -1`, () => {
+        const element = document.createElement(tagName);
+        element.setAttribute('tabindex', '-1');
+        expect(isElementFocusable(element)).to.be.false;
+      });
+    });
+
+    ['a', 'area'].forEach((tagName) => {
+      it(`should return false for <${tagName}> by default`, () => {
+        const element = document.createElement(tagName);
+        expect(isElementFocusable(element)).to.be.false;
+      });
+
+      it(`should return true for <${tagName}> with [href]`, () => {
+        const element = document.createElement(tagName);
+        element.href = '#';
+        expect(isElementFocusable(element)).to.be.true;
+      });
+
+      it(`should return false for <${tagName}> with [href] and [tabindex] = -1`, () => {
+        const element = document.createElement(tagName);
+        element.href = '#';
+        element.setAttribute('tabindex', '-1');
+        expect(isElementFocusable(element)).to.be.false;
+      });
+    });
+
+    it('should return true for <iframe> by default', () => {
+      const element = document.createElement('iframe');
+      expect(isElementFocusable(element)).to.be.true;
+    });
+
+    it('should return false for <iframe> with [tabindex] = -1', () => {
+      const element = document.createElement('iframe');
+      element.setAttribute('tabindex', '-1');
+      expect(isElementFocusable(element)).to.be.false;
+    });
+
+    it('should return false for <div> by default', () => {
+      const element = document.createElement('div');
+      expect(isElementFocusable(element)).to.be.false;
+    });
+
+    it('should return true for <div> with [tabindex] >= 0', () => {
+      const element = document.createElement('div');
+      element.setAttribute('tabindex', '0');
+      expect(isElementFocusable(element)).to.be.true;
+    });
+
+    it('should return true for <div> with [contenteditable]', () => {
+      const element = document.createElement('div');
+      element.setAttribute('contenteditable', '');
+      expect(isElementFocusable(element)).to.be.true;
+    });
+
+    it('should return false for <div> with [contenteditable] and [tabindex] = -1', () => {
+      const element = document.createElement('div');
+      element.setAttribute('contenteditable', '');
+      element.setAttribute('tabindex', '-1');
+      expect(isElementFocusable(element)).to.be.false;
+    });
+  });
+
   describe('getFocusableElements', () => {
     let root;
 

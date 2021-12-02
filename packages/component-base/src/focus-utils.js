@@ -7,7 +7,7 @@
 /**
  * Returns true if the element is hidden with `visibility: hidden` or `display: none`, false otherwise.
  *
- * @param {!HTMLElement} element
+ * @param {HTMLElement} element
  * @return {boolean}
  */
 function isElementHidden(element) {
@@ -22,38 +22,13 @@ function isElementHidden(element) {
 }
 
 /**
- * Returns true if the element is focusable, otherwise false.
- *
- * @param {!HTMLElement} element
- * @return {boolean}
- */
-function isElementFocusable(element) {
-  // From http://stackoverflow.com/a/1600194/4228703:
-  // There isn't a definite list, it's up to the browser. The only
-  // standard we have is DOM Level 2 HTML
-  // https://www.w3.org/TR/DOM-Level-2-HTML/html.html, according to which the
-  // only elements that have a focus() method are HTMLInputElement,
-  // HTMLSelectElement, HTMLTextAreaElement and HTMLAnchorElement. This
-  // notably omits HTMLButtonElement and HTMLAreaElement. Referring to these
-  // tests with tabbables in different browsers
-  // http://allyjs.io/data-tables/focusable.html
-
-  // Elements that cannot be focused if they have [disabled] attribute.
-  if (element.matches('input, select, textarea, button, object')) {
-    return element.matches(':not([disabled])');
-  }
-  // Elements that can be focused even if they have [disabled] attribute.
-  return element.matches('a[href], area[href], iframe, [tabindex], [contentEditable]');
-}
-
-/**
  * Returns the normalized element tabindex. If not focusable, returns -1.
  * It checks for the attribute "tabindex" instead of the element property
  * `tabIndex` since browsers assign different values to it.
  * e.g. in Firefox `<div contenteditable>` has `tabIndex = -1`
  *
- * @param {!HTMLElement} element
- * @return {!number}
+ * @param {HTMLElement} element
+ * @return {number}
  */
 function normalizeTabIndex(element) {
   if (!isElementFocusable(element)) {
@@ -137,7 +112,7 @@ function collectFocusableNodes(node, result) {
   if (node.nodeType !== Node.ELEMENT_NODE || isElementHidden(node)) {
     return false;
   }
-  const element = /** @type {!HTMLElement} */ (node);
+  const element = /** @type {HTMLElement} */ (node);
   const tabIndex = normalizeTabIndex(element);
   let needsSort = tabIndex > 0;
   if (tabIndex >= 0) {
@@ -173,6 +148,50 @@ function collectFocusableNodes(node, result) {
 }
 
 /**
+ * Returns true if the element is focusable, otherwise false.
+ *
+ * The list of focusable elements is taken from http://stackoverflow.com/a/1600194/4228703.
+ * However, there isn't a definite list, it's up to the browser.
+ * The only standard we have is DOM Level 2 HTML https://www.w3.org/TR/DOM-Level-2-HTML/html.html,
+ * according to which the only elements that have a `focus()` method are:
+ * - HTMLInputElement
+ * - HTMLSelectElement
+ * - HTMLTextAreaElement
+ * - HTMLAnchorElement
+ *
+ * This notably omits HTMLButtonElement and HTMLAreaElement.
+ * Referring to these tests with tabbables in different browsers
+ * http://allyjs.io/data-tables/focusable.html
+ *
+ * @param {HTMLElement} element
+ * @return {boolean}
+ */
+export function isElementFocusable(element) {
+  // The element cannot be focused if its `tabindex` attribute is set to `-1`.
+  if (element.matches('[tabindex="-1"]')) {
+    return false;
+  }
+
+  // Elements that cannot be focused if they have a `disabled` attribute.
+  if (element.matches('input, select, textarea, button, object')) {
+    return element.matches(':not([disabled])');
+  }
+
+  // Elements that can be focused even if they have a `disabled` attribute.
+  return element.matches('a[href], area[href], iframe, [tabindex], [contentEditable]');
+}
+
+/**
+ * Returns true if the element is focused, false otherwise.
+ *
+ * @param {HTMLElement} element
+ * @return {boolean}
+ */
+export function isElementFocused(element) {
+  return element.getRootNode().activeElement === element;
+}
+
+/**
  * Returns a tab-ordered array of focusable elements for a root element.
  * The resulting array will include the root element if it is focusable.
  *
@@ -190,14 +209,4 @@ export function getFocusableElements(element) {
     return sortElementsByTabIndex(focusableElements);
   }
   return focusableElements;
-}
-
-/**
- * Returns true if the element is focused, false otherwise.
- *
- * @param {HTMLElement} element
- * @return {boolean}
- */
-export function isElementFocused(element) {
-  return element.getRootNode().activeElement === element;
 }
