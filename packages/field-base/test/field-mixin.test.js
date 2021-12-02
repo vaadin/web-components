@@ -130,24 +130,24 @@ describe('field-mixin', () => {
         expect(element.hasAttribute('has-error-message')).to.be.false;
       });
 
-      it('should not set alert role with no error', () => {
-        expect(error.hasAttribute('role')).to.be.false;
+      it('should not have children with no error', () => {
+        expect(error.firstChild).to.be.null;
       });
 
       it('should set alert role when attribute is set', () => {
         element.setAttribute('error-message', 'This field is required');
-        expect(error.getAttribute('role')).to.equal('alert');
+        expect(error.firstChild.getAttribute('role')).to.equal('alert');
       });
 
       it('should set alert role when property is set', () => {
         element.errorMessage = 'This field is required';
-        expect(error.getAttribute('role')).to.equal('alert');
+        expect(error.firstChild.getAttribute('role')).to.equal('alert');
       });
 
-      it('should remove alert role when field is valid', () => {
+      it('should remove children when field is valid', () => {
         element.errorMessage = 'This field is required';
         element.invalid = false;
-        expect(error.hasAttribute('role')).to.be.false;
+        expect(error.firstChild).to.be.null;
       });
     });
 

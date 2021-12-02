@@ -299,16 +299,21 @@ export const FieldMixin = (superclass) =>
       if (error.textContent && !errorMessage) {
         this.__errorMessage = error.textContent.trim();
       }
+      // clear "error" slot of children elements
+      while (error.hasChildNodes()) {
+        error.removeChild(error.firstChild);
+      }
       const hasError = Boolean(invalid && errorMessage);
-      error.textContent = hasError ? errorMessage : '';
       this.toggleAttribute('has-error-message', hasError);
 
-      // Role alert will make the error message announce immediately
-      // as the field becomes invalid
       if (hasError) {
-        error.setAttribute('role', 'alert');
-      } else {
-        error.removeAttribute('role');
+        // add a new element with the error message
+        const errorMsg = document.createElement('span');
+        // Role alert will make the error message announce immediately
+        // as the field becomes invalid
+        errorMsg.setAttribute('role', 'alert');
+        errorMsg.textContent = errorMessage;
+        error.appendChild(errorMsg);
       }
     }
 
