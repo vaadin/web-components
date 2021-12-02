@@ -1,29 +1,20 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
-  'vaadin-dialog-overlay',
+  'vaadin-confirm-dialog-overlay',
   css`
-    :host([theme~='_vaadin-confirm-dialog-dialog-overlay-theme']) [part='overlay'] {
+    [part='overlay'] {
       max-width: 100%;
       min-width: 0;
     }
 
-    :host([theme~='_vaadin-confirm-dialog-dialog-overlay-theme']) [part='content'] {
+    [part='content'] {
       padding: 8px 24px;
       min-width: 0;
-      height: auto;
-      box-sizing: content-box;
     }
-  `,
-  { moduleId: 'material-confirm-dialog-overlay' }
-);
 
-registerStyles(
-  'vaadin-confirm-dialog',
-  css`
-    #content {
-      height: calc(var(--_vaadin-confirm-dialog-content-height) - var(--_vaadin-confirm-dialog-footer-height) - 39px);
-      width: var(--_vaadin-confirm-dialog-content-width);
+    [part='header'] ::slotted(h3) {
+      margin-top: 0.75em !important;
     }
 
     [part='message'] {
@@ -40,9 +31,24 @@ registerStyles(
       margin-right: -16px;
     }
 
-    [part='footer']:not([dir='rtl']) div:nth-child(-n + 2) vaadin-button,
-    [part='footer']:not([dir='rtl']) div:nth-child(-n + 2) ::slotted(*) {
+    /* LTR styles */
+    :host(:not([dir='rtl'])) ::slotted([slot$='button']:not([slot^='confirm'])) {
       margin-right: 8px;
+    }
+
+    /* RTL styles */
+    :host([dir='rtl']) [part='message'] {
+      margin-left: 24px;
+      margin-right: 0;
+    }
+
+    :host([dir='rtl']) [part='footer'] {
+      margin-left: -16px;
+      margin-right: 0;
+    }
+
+    :host([dir='rtl']) ::slotted([slot$='button']:not([slot^='confirm'])) {
+      margin-left: 8px;
     }
 
     @media (max-width: 360px) {
@@ -51,39 +57,18 @@ registerStyles(
         align-items: flex-end;
       }
 
-      [part='footer'] div:nth-child(-n + 2) vaadin-button,
-      [part='footer'] div:nth-child(-n + 2) ::slotted(*) {
+      ::slotted([slot$='button']:not([slot^='confirm'])) {
         margin-top: 8px;
+      }
+
+      :host(:not([dir='rtl'])) ::slotted([slot$='button']:not([slot^='confirm'])) {
         margin-right: 0;
       }
 
-      [part='footer'] div:nth-last-child(1) vaadin-button,
-      [part='footer'] div:nth-last-child(1) ::slotted(*) {
-        margin-top: 8px;
-      }
-
-      /* RTL specific styles */
-      [part='footer'][dir='rtl'] div:nth-child(-n + 2) vaadin-button,
-      [part='footer'][dir='rtl'] div:nth-child(-n + 2) ::slotted(*) {
+      :host([dir='rtl']) ::slotted([slot$='button']:not([slot^='confirm'])) {
         margin-left: 0;
       }
     }
-
-    /* RTL specific styles */
-    [dir='rtl'] > [part='message'] {
-      margin-left: 24px;
-      margin-right: 0;
-    }
-
-    [part='footer'][dir='rtl'] {
-      margin-left: -16px;
-      margin-right: 0;
-    }
-
-    [part='footer'][dir='rtl'] div:nth-child(-n + 2) vaadin-button,
-    [part='footer'][dir='rtl'] div:nth-child(-n + 2) ::slotted(*) {
-      margin-left: 8px;
-    }
   `,
-  { moduleId: 'material-confirm-dialog' }
+  { moduleId: 'material-confirm-dialog-overlay' }
 );

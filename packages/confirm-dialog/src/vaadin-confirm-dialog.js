@@ -4,11 +4,12 @@
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
-import '@vaadin/button/src/vaadin-button.js';
-import '@vaadin/dialog/src/vaadin-dialog.js';
+import './vaadin-confirm-dialog-overlay.js';
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
  * `<vaadin-confirm-dialog>` is a Web Component for showing alerts and asking for user confirmation.
@@ -21,27 +22,37 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * ### Styling
  *
- * The following Shadow DOM parts are available for styling the dialog parts:
+ * The `<vaadin-confirm-dialog>` is not themable. Apply styles to `<vaadin-confirm-dialog-overlay>`
+ * component and use its shadow parts for styling.
+ * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) for the overlay styling documentation.
  *
- * Part name  | Description
- * -----------|---------------------------------------------------------|
- * `header`   | Header of the confirmation dialog
- * `message`  | Container for the message of the dialog
- * `footer`   | Container for the buttons
+ * In addition to `<vaadin-overlay>` parts, the following parts are available for theming:
+ *
+ * Part name        | Description
+ * -----------------|-------------------------------------------
+ * `header`         | The header element wrapper
+ * `message`        | The message element wrapper
+ * `footer`         | The footer element that wraps the buttons
+ * `cancel-button`  | The "Cancel" button wrapper
+ * `confirm-button` | The "Confirm" button wrapper
+ * `reject-button`  | The "Reject" button wrapper
+ *
+ * Use `confirmTheme`, `cancelTheme` and `rejectTheme` properties to customize buttons theme.
+ * Also, the `theme` attribute value set on `<vaadin-confirm-dialog>` is propagated to the
+ * `<vaadin-confirm-dialog-overlay>` component.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * ### Custom content
  *
- * The following parts are available for replacement:
+ * The following slots are available for providing custom content:
  *
  * Slot name         | Description
- * ------------------|---------------------------------------------------------|
- * `header`          | Header of the confirmation dialog
- * `message`         | Container for the message of the dialog
- * `cancel-button`   | Container for the Cancel button
- * `reject-button`   | Container for the Reject button
- * `confirm-button`  | Container for the Confirm button
+ * ------------------|---------------------------
+ * `header`          | Slot for header element
+ * `cancel-button`   | Slot for "Cancel" button
+ * `confirm-button`  | Slot for "Confirm" button
+ * `reject-button`   | Slot for "Reject" button
  *
  * @fires {Event} confirm - Fired when Confirm button was pressed.
  * @fires {Event} cancel - Fired when Cancel button or Escape key was pressed.
@@ -49,80 +60,39 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
  * @extends HTMLElement
+ * @mixes SlotMixin
  * @mixes ElementMixin
- * @mixes ThemableMixin
+ * @mixes ThemePropertyMixin
  */
-class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
+class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
         :host {
           display: none;
-          --_vaadin-confirm-dialog-content-width: auto;
-          --_vaadin-confirm-dialog-content-height: auto;
-          --_vaadin-confirm-dialog-footer-height: auto;
+        }
+
+        [hidden] {
+          display: none !important;
         }
       </style>
 
-      <vaadin-dialog
+      <vaadin-confirm-dialog-dialog
         id="dialog"
         opened="{{opened}}"
         aria-label="[[_getAriaLabel(header)]]"
-        theme$="_vaadin-confirm-dialog-dialog-overlay-theme [[theme]]"
+        theme$="[[theme]]"
         no-close-on-outside-click
         no-close-on-esc="[[noCloseOnEsc]]"
-      ></vaadin-dialog>
+      ></vaadin-confirm-dialog-dialog>
 
-      <template id="dialogTemplate">
-        <div id="content">
-          <div part="header">
-            <slot name="header">
-              <h3 class="header">[[header]]</h3>
-            </slot>
-          </div>
-
-          <div part="message" id="message">
-            <slot></slot>
-            [[message]]
-          </div>
-        </div>
-
-        <div part="footer">
-          <div class="cancel-button">
-            <slot name="cancel-button">
-              <vaadin-button
-                id="cancel"
-                theme$="[[cancelTheme]]"
-                on-click="_cancel"
-                hidden$="[[!cancel]]"
-                aria-describedby="message"
-              >
-                [[cancelText]]
-              </vaadin-button>
-            </slot>
-          </div>
-          <div class="reject-button">
-            <slot name="reject-button">
-              <vaadin-button
-                id="reject"
-                theme$="[[rejectTheme]]"
-                on-click="_reject"
-                hidden$="[[!reject]]"
-                aria-describedby="message"
-              >
-                [[rejectText]]
-              </vaadin-button>
-            </slot>
-          </div>
-          <div class="confirm-button">
-            <slot name="confirm-button">
-              <vaadin-button id="confirm" theme$="[[confirmTheme]]" on-click="_confirm" aria-describedby="message">
-                [[confirmText]]
-              </vaadin-button>
-            </slot>
-          </div>
-        </div>
-      </template>
+      <div hidden>
+        <slot name="header"></slot>
+        <slot></slot>
+        <slot name="cancel-button"></slot>
+        <slot name="reject-button"></slot>
+        <slot name="confirm-button"></slot>
+      </div>
     `;
   }
 
@@ -139,8 +109,7 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
       opened: {
         type: Boolean,
         value: false,
-        notify: true,
-        observer: '_openedChanged'
+        notify: true
       },
 
       /**
@@ -156,7 +125,8 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
        * Set the message or confirmation question.
        */
       message: {
-        type: String
+        type: String,
+        value: ''
       },
 
       /**
@@ -249,9 +219,47 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
         value: 'tertiary'
       },
 
-      /** @private */
+      /**
+       * A reference to the "Cancel" button which will be teleported to the overlay.
+       * @private
+       */
+      _cancelButton: {
+        type: HTMLElement,
+        observer: '_cancelButtonChanged'
+      },
+
+      /**
+       * A reference to the "Confirm" button which will be teleported to the overlay.
+       * @private
+       */
       _confirmButton: {
-        type: Element
+        type: HTMLElement,
+        observer: '_confirmButtonChanged'
+      },
+
+      /**
+       * A reference to the "header" node which will be teleported to the overlay.
+       * @private
+       */
+      _headerNode: {
+        type: HTMLElement
+      },
+
+      /**
+       * A reference to the message which will be placed in the overlay default slot.
+       * @private
+       */
+      _messageNode: {
+        type: HTMLElement
+      },
+
+      /**
+       * A reference to the "Reject" button which will be teleported to the overlay.
+       * @private
+       */
+      _rejectButton: {
+        type: HTMLElement,
+        observer: '_rejectButtonChanged'
       }
     };
   }
@@ -268,11 +276,70 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
+  static get observers() {
+    return [
+      '__updateConfirmButton(_confirmButton, confirmText, confirmTheme)',
+      '__updateCancelButton(_cancelButton, cancelText, cancelTheme, cancel)',
+      '__updateHeaderNode(_headerNode, header)',
+      '__updateMessageNode(_messageNode, message)',
+      '__updateRejectButton(_rejectButton, rejectText, rejectTheme, reject)'
+    ];
+  }
+
+  /** @protected */
+  get slots() {
+    // NOTE: order in which slots are listed matches the template.
+    return {
+      ...super.slots,
+      header: () => {
+        const h3 = document.createElement('h3');
+        this.__defaultHeader = h3;
+        return h3;
+      },
+      '': () => {
+        const div = document.createElement('div');
+        this.__defaultMessage = div;
+        return div;
+      },
+      'cancel-button': () => {
+        const button = document.createElement('vaadin-button');
+        button.setAttribute('theme', this.cancelTheme);
+        button.textContent = this.cancelText;
+        return button;
+      },
+      'reject-button': () => {
+        const button = document.createElement('vaadin-button');
+        button.setAttribute('theme', this.rejectTheme);
+        button.textContent = this.rejectText;
+        return button;
+      },
+      'confirm-button': () => {
+        return document.createElement('vaadin-button');
+      }
+    };
+  }
+
+  constructor() {
+    super();
+    this.__slottedNodes = [];
+    this._observer = new FlattenedNodesObserver(this, (info) => {
+      this.__onDomChange(info.addedNodes);
+    });
+  }
+
   /** @protected */
   ready() {
     super.ready();
 
-    this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
+    this.__boundCancel = this._cancel.bind(this);
+    this.__boundConfirm = this._confirm.bind(this);
+    this.__boundReject = this._reject.bind(this);
+
+    this._overlayElement = this.$.dialog.$.overlay;
+    this._overlayElement.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
+    this._overlayElement.addEventListener('vaadin-overlay-open', () => this.__onDialogOpened());
+    this._overlayElement.addEventListener('vaadin-confirm-dialog-close', () => this.__onDialogClosed());
+
     if (this._dimensions) {
       Object.keys(this._dimensions).forEach((name) => {
         this._setDimension(name, this._dimensions[name]);
@@ -280,61 +347,126 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
-  /**
-   * @param {string} name
-   * @param {?string} oldValue
-   * @param {?string} newValue
-   * @protected
-   */
-  attributeChangedCallback(name, oldValue, newValue) {
-    super.attributeChangedCallback(name, oldValue, newValue);
-    if (name === 'dir') {
-      const value = newValue === 'rtl';
-      this.__isRTL = value;
-      this.opened && this.__toggleContentRTL(value);
+  /** @private */
+  __onDialogOpened() {
+    const overlay = this._overlayElement;
+
+    // Teleport slotted nodes to the overlay element.
+    this.__slottedNodes.forEach((node) => {
+      overlay.appendChild(node);
+    });
+
+    const confirmButton = overlay.querySelector('[slot="confirm-button"]');
+    if (confirmButton) {
+      confirmButton.focus();
     }
   }
 
   /** @private */
-  __toggleContentRTL(rtl) {
-    const contentBlock = this.$.dialog.$.overlay.content.querySelector('#content');
-    const footerBlock = this.$.dialog.$.overlay.content.querySelector('[part=footer]');
-    if (rtl) {
-      contentBlock.setAttribute('dir', 'rtl');
-      footerBlock.setAttribute('dir', 'rtl');
-    } else {
-      contentBlock.removeAttribute('dir');
-      footerBlock.removeAttribute('dir');
-    }
+  __onDialogClosed() {
+    const nodes = this.__slottedNodes;
+
+    // Reset the list of nodes, it will be re-created.
+    this.__slottedNodes = [];
+
+    // Move nodes from the overlay back to the host.
+    nodes.forEach((node) => {
+      this.appendChild(node);
+    });
   }
 
   /** @private */
-  _openedChanged() {
-    if (!this.opened) {
-      return;
-    }
+  __onDomChange(addedNodes) {
+    // TODO: restore default element when a corresponding slotted element is removed.
+    // Consider creating a controller to reuse custom helper logic from FieldMixin.
+    addedNodes.forEach((node) => {
+      this.__slottedNodes.push(node);
 
-    // TODO: A temporary hack as far as `vaadin-dialog` doesn't support the Polymer Template API anymore.
-    this.$.dialog.$.overlay.template = this.$.dialogTemplate;
+      const isElementNode = node.nodeType == Node.ELEMENT_NODE;
+      const slotName = isElementNode ? node.getAttribute('slot') : '';
 
-    const overlay = this.$.dialog.$.overlay;
-
-    Array.from(this.childNodes).forEach((c) => {
-      const newChild = overlay.$.content.appendChild(c);
-      if (newChild.getAttribute && newChild.getAttribute('slot') == 'confirm-button' && newChild.focus) {
-        this._confirmButton = newChild;
+      // Handle named slots (header and buttons).
+      if (slotName) {
+        if (slotName.indexOf('button') >= 0) {
+          const [button] = slotName.split('-');
+          this[`_${button}Button`] = node;
+        } else if (slotName == 'header') {
+          this._headerNode = node;
+        }
+      } else {
+        const isNotEmptyText = node.nodeType == Node.TEXT_NODE && node.textContent.trim() !== '';
+        // Handle default slot (message element).
+        if (isNotEmptyText || (isElementNode && node.slot === '')) {
+          this._messageNode = node;
+        }
       }
     });
+  }
 
-    this.__toggleContentRTL(this.__isRTL);
+  /** @private */
+  _cancelButtonChanged(button, oldButton) {
+    this.__setupSlottedButton(button, oldButton, this.__boundCancel);
+  }
 
-    requestAnimationFrame(() => {
-      const confirmButton = this._confirmButton || overlay.content.querySelector('#confirm');
-      confirmButton.focus();
+  /** @private */
+  _confirmButtonChanged(button, oldButton) {
+    this.__setupSlottedButton(button, oldButton, this.__boundConfirm);
+  }
 
-      const { height } = getComputedStyle(overlay.content.querySelector('[part=footer]'));
-      this.$.dialog.$.overlay.style.setProperty('--_vaadin-confirm-dialog-footer-height', height);
-    });
+  /** @private */
+  _rejectButtonChanged(button, oldButton) {
+    this.__setupSlottedButton(button, oldButton, this.__boundReject);
+  }
+
+  /** @private */
+  __setupSlottedButton(slottedButton, currentButton, clickListener) {
+    if (currentButton && currentButton.parentElement) {
+      currentButton.remove();
+    }
+
+    slottedButton.addEventListener('click', clickListener);
+  }
+
+  /** @private */
+  __updateCancelButton(button, cancelText, cancelTheme, showCancel) {
+    if (button) {
+      button.textContent = cancelText;
+      button.setAttribute('theme', cancelTheme);
+      button.toggleAttribute('hidden', !showCancel);
+    }
+  }
+
+  /** @private */
+  __updateConfirmButton(button, confirmText, confirmTheme) {
+    if (button) {
+      button.textContent = confirmText;
+      button.setAttribute('theme', confirmTheme);
+    }
+  }
+
+  /** @private */
+  __updateHeaderNode(headerNode, header) {
+    // Only update text content for the default header node.
+    if (headerNode && headerNode === this.__defaultHeader) {
+      headerNode.textContent = header;
+    }
+  }
+
+  /** @private */
+  __updateMessageNode(messageNode, message) {
+    // Only update text content for the default message node.
+    if (messageNode && messageNode === this.__defaultMessage) {
+      messageNode.textContent = message;
+    }
+  }
+
+  /** @private */
+  __updateRejectButton(button, rejectText, rejectTheme, showReject) {
+    if (button) {
+      button.textContent = rejectText;
+      button.setAttribute('theme', rejectTheme);
+      button.toggleAttribute('hidden', !showReject);
+    }
   }
 
   /** @private */
@@ -379,7 +511,7 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   _setDimensionIfAttached(name, value) {
-    if (this.$ && this.$.dialog) {
+    if (this._overlayElement) {
       this._setDimension(name, value);
     } else {
       this._dimensions = this._dimensions || {};
@@ -389,7 +521,7 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   _setDimension(name, value) {
-    this.$.dialog.$.overlay.style.setProperty(`--_vaadin-confirm-dialog-content-${name}`, value);
+    this._overlayElement.style.setProperty(`--_vaadin-confirm-dialog-content-${name}`, value);
   }
 
   /**
