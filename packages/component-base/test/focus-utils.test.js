@@ -1,8 +1,44 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import { getFocusableElements, isElementFocusable, isElementFocused } from '../src/focus-utils.js';
+import { getFocusableElements, isElementFocusable, isElementFocused, isElementHidden } from '../src/focus-utils.js';
 
 describe('focus-utils', () => {
+  describe('isElementHidden', () => {
+    let element;
+
+    beforeEach(() => {
+      element = fixtureSync(`
+        <div class="parent">
+          <div class="child"></div>
+        </div>
+      `);
+    });
+
+    it('should return true for children of an element hidden with display: none;', () => {
+      element.style.display = 'none';
+      expect(isElementHidden(element.querySelector('.child'))).to.be.true;
+    });
+
+    it('should return true for children of an element hidden with visibility: hidden;', () => {
+      element.style.visibility = 'hidden';
+      expect(isElementHidden(element.querySelector('.child'))).to.be.true;
+    });
+
+    it('should return true for elements hidden with display: none', () => {
+      element.style.display = 'none';
+      expect(isElementHidden(element)).to.be.true;
+    });
+
+    it('should return true for elements hidden with visibility: hidden', () => {
+      element.style.visibility = 'hidden';
+      expect(isElementHidden(element)).to.be.true;
+    });
+
+    it('should return false for visible elements', () => {
+      expect(isElementHidden(element)).to.be.false;
+    });
+  });
+
   describe('isElementFocusable', () => {
     ['input', 'select', 'textarea', 'button', 'object'].forEach((tagName) => {
       it(`should return true for <${tagName}> by default`, () => {
@@ -80,8 +116,6 @@ describe('focus-utils', () => {
   });
 
   describe('getFocusableElements', () => {
-    let root;
-
     customElements.define(
       'custom-element',
       class extends HTMLElement {
@@ -99,14 +133,14 @@ describe('focus-utils', () => {
       }
     );
 
-    beforeEach(() => {
-      root = fixtureSync(`
+    it('should return focusable elements in the tab order', () => {
+      const root = fixtureSync(`
         <div id="root" tabindex="0">
-          content
+          text node
           <button id="element-1"></button>
           <button id="element-2" tabindex="-1"></button>
           <select id="element-3" tabindex="2">
-            <option>tabindex 2</option>
+            <option></option>
           </select>
           <textarea id="element-4" tabindex="1"></textarea>
           <input type="text" id="element-5" />
@@ -117,9 +151,7 @@ describe('focus-utils', () => {
           <custom-element></custom-element>
         </div>
       `);
-    });
 
-    it('should return focusable elements in the tab order', () => {
       const focusableElements = getFocusableElements(root);
       expect(focusableElements.map((element) => element.id)).to.deep.equal([
         'element-4',
@@ -132,6 +164,18 @@ describe('focus-utils', () => {
         'element-9',
         'custom-element-1'
       ]);
+    });
+
+    it('should return focusable elements even if an ancestor has display: none', () => {
+      const ancestor = fixtureSync(`
+        <div id="ancestor" style="display: none">
+          <div id="root" tabindex="0"></div>
+        </div>
+      `);
+
+      const focusableElements = getFocusableElements(ancestor.querySelector('#root'));
+      expect(focusableElements).to.have.lengthOf(1);
+      expect(focusableElements[0].id).to.equal('root');
     });
   });
 

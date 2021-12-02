@@ -5,6 +5,15 @@
  */
 
 /**
+ * Returns true if the element is hidden, false otherwise.
+ *
+ * An element is treated as hidden when any of the following conditions are met:
+ * - the element itself or one of its ancestors has `display: none`.
+ * - the element has or inherits `visibility: hidden`.
+ */
+export declare function isElementHidden(element: HTMLElement): boolean;
+
+/**
  * Returns true if the element is focusable, otherwise false.
  *
  * The list of focusable elements is taken from http://stackoverflow.com/a/1600194/4228703.

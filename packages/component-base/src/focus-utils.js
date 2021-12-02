@@ -5,20 +5,28 @@
  */
 
 /**
- * Returns true if the element is hidden with `visibility: hidden` or `display: none`, false otherwise.
+ * Returns true if the focusable element is hidden with `display: none` or `visibility: hidden`,
+ * false otherwise.
+ *
+ * The method doesn't traverse the element's ancestors, it only checks for the CSS properties
+ * set directly to or inherited by the element.
  *
  * @param {HTMLElement} element
  * @return {boolean}
  */
-function isElementHidden(element) {
-  // Check inline style first to save a re-flow. If looks good, check also
-  // computed style.
-  let style = element.style;
+function isFocusableElementHidden(element) {
+  // Check inline style first to save a re-flow.
+  const style = element.style;
   if (style.visibility === 'hidden' || style.display === 'none') {
     return true;
   }
-  style = window.getComputedStyle(element);
-  return style.visibility === 'hidden' || style.display === 'none';
+
+  const computedStyle = window.getComputedStyle(element);
+  if (computedStyle.visibility === 'hidden' || computedStyle.display === 'none') {
+    return true;
+  }
+
+  return false;
 }
 
 /**
@@ -31,7 +39,7 @@ function isElementHidden(element) {
  * @return {number}
  */
 function normalizeTabIndex(element) {
-  if (!isElementFocusable(element)) {
+  if (!isElementFocusable(element) || isFocusableElementHidden(element)) {
     return -1;
   }
 
@@ -108,10 +116,11 @@ function sortElementsByTabIndex(elements) {
  * @private
  */
 function collectFocusableNodes(node, result) {
-  // If the node is not an element or hidden, no need to traverse children.
-  if (node.nodeType !== Node.ELEMENT_NODE || isElementHidden(node)) {
+  if (node.nodeType !== Node.ELEMENT_NODE) {
+    // Don't traverse children if the node is not an HTML element.
     return false;
   }
+
   const element = /** @type {HTMLElement} */ (node);
   const tabIndex = normalizeTabIndex(element);
   let needsSort = tabIndex > 0;
@@ -119,20 +128,43 @@ function collectFocusableNodes(node, result) {
     result.push(element);
   }
 
-  let children;
+  let children = [];
   if (element.localName === 'slot') {
     children = element.assignedNodes({ flatten: true });
   } else {
     // Use shadow root if possible, will check for distributed nodes.
     children = (element.shadowRoot || element).children;
   }
-  if (children) {
-    for (let i = 0; i < children.length; i++) {
-      // Ensure method is always invoked to collect tabbable children.
-      needsSort = collectFocusableNodes(children[i], result) || needsSort;
-    }
-  }
+  children.forEach((child) => {
+    // Ensure method is always invoked to collect focusable children.
+    needsSort = collectFocusableNodes(child, result) || needsSort;
+  });
   return needsSort;
+}
+
+/**
+ * Returns true if the element is hidden, false otherwise.
+ *
+ * An element is treated as hidden when any of the following conditions are met:
+ * - the element itself or one of its ancestors has `display: none`.
+ * - the element has or inherits `visibility: hidden`.
+ *
+ * @param {HTMLElement} element
+ * @return {boolean}
+ */
+export function isElementHidden(element) {
+  // `offsetParent` is `null` when the element itself
+  // or one of its ancestors is hidden with `display: none`.
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
+  if (element.offsetParent === null) {
+    return true;
+  }
+
+  if (window.getComputedStyle(element).visibility === 'hidden') {
+    return true;
+  }
+
+  return false;
 }
 
 /**
