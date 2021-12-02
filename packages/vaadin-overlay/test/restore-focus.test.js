@@ -104,7 +104,7 @@ describe('restore focus', () => {
       overlay.restoreFocusOnClose = true;
       focusable.focus();
       await open(overlay);
-      document.activeElement.blur();
+      focusable.blur();
       await close(overlay);
       expect(overlay._getActiveElement() === focusInput).to.be.true;
     });
