@@ -301,6 +301,7 @@ export const FieldMixin = (superclass) =>
       }
       const hasError = Boolean(invalid && errorMessage);
       error.textContent = hasError ? errorMessage : '';
+      error.hidden = !hasError;
       this.toggleAttribute('has-error-message', hasError);
 
       // Role alert will make the error message announce immediately

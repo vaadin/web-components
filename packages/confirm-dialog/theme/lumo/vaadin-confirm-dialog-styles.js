@@ -3,30 +3,10 @@ import '@vaadin/vaadin-lumo-styles/spacing.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
-  'vaadin-dialog-overlay',
+  'vaadin-confirm-dialog-overlay',
   css`
-    :host([theme~='_vaadin-confirm-dialog-dialog-overlay-theme']) [part='content'] {
-      height: auto;
-      box-sizing: content-box;
-    }
-  `,
-  { moduleId: 'lumo-confirm-dialog-overlay' }
-);
-
-registerStyles(
-  'vaadin-confirm-dialog',
-  css`
-    #content {
-      height: calc(
-        var(--_vaadin-confirm-dialog-content-height) - var(--_vaadin-confirm-dialog-footer-height) - var(--lumo-space-s)
-      );
-      width: var(--_vaadin-confirm-dialog-content-width);
-    }
-
-    [part='header'],
-    .header {
-      margin-top: var(--lumo-space-s);
-      margin-bottom: var(--lumo-space-m);
+    [part='header'] ::slotted(h3) {
+      margin-top: 0 !important;
     }
 
     [part='message'] {
@@ -45,31 +25,18 @@ registerStyles(
       background-color: var(--lumo-contrast-5pct);
     }
 
-    [part='footer'] div {
+    [part='footer'] > * {
       margin-top: var(--lumo-space-s);
       margin-bottom: var(--lumo-space-s);
     }
 
-    vaadin-button[theme~='tertiary'] {
+    ::slotted([slot$='button'][theme~='tertiary']) {
       padding-left: var(--lumo-space-s);
       padding-right: var(--lumo-space-s);
     }
 
-    .cancel-button {
+    [part='cancel-button'] {
       flex-grow: 1;
-    }
-
-    :not([dir='rtl']) > .cancel-button {
-      margin-left: calc(var(--lumo-space-s) * -1);
-    }
-
-    :not([dir='rtl']) > .confirm-button {
-      margin-right: calc(var(--lumo-space-s) * -1);
-    }
-
-    :not([dir='rtl']) > .reject-button,
-    :not([dir='rtl']) > .confirm-button {
-      margin-left: var(--lumo-space-s);
     }
 
     @media (max-width: 360px) {
@@ -81,35 +48,48 @@ registerStyles(
         margin: var(--lumo-space-xs) calc(var(--lumo-space-l) / -2) calc(var(--lumo-space-xs) * -1);
       }
 
-      [part='footer'] vaadin-button,
-      [part='footer'] ::slotted(*) {
+      ::slotted([slot$='button']) {
         width: 100%;
         margin-top: var(--lumo-space-xs);
         margin-bottom: var(--lumo-space-xs);
       }
 
-      [part='footer'] .confirm-button {
+      [part='confirm-button'] {
         margin-top: var(--lumo-space-s);
       }
 
-      [part='footer'] .cancel-button {
+      [part='cancel-button'] {
         margin-bottom: var(--lumo-space-s);
       }
     }
 
-    /* RTL specific styles */
-    [dir='rtl'] > .cancel-button {
-      margin-right: calc(var(--lumo-space-s) * -1);
-    }
-
-    [dir='rtl'] > .confirm-button {
+    /* LTR styles */
+    :host(:not([dir='rtl'])) [part='cancel-button'] {
       margin-left: calc(var(--lumo-space-s) * -1);
     }
 
-    [dir='rtl'] > .reject-button,
-    [dir='rtl'] > .confirm-button {
+    :host(:not([dir='rtl'])) [part='confirm-button'] {
+      margin-right: calc(var(--lumo-space-s) * -1);
+      margin-left: var(--lumo-space-s);
+    }
+
+    :host(:not([dir='rtl'])) [part='reject-button'] {
+      margin-left: var(--lumo-space-s);
+    }
+
+    /* RTL styles */
+    :host([dir='rtl']) [part='cancel-button'] {
+      margin-right: calc(var(--lumo-space-s) * -1);
+    }
+
+    :host([dir='rtl']) [part='confirm-button'] {
+      margin-right: var(--lumo-space-s);
+      margin-left: calc(var(--lumo-space-s) * -1);
+    }
+
+    :host([dir='rtl']) [part='reject-button'] {
       margin-right: var(--lumo-space-s);
     }
   `,
-  { moduleId: 'lumo-confirm-dialog' }
+  { moduleId: 'lumo-confirm-dialog-overlay' }
 );
