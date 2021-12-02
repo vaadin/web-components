@@ -72,7 +72,7 @@ export class DatePickerObserver extends ComponentObserver {
   }
 
   onOverlayFocusOut(event) {
-    if (event.relatedTarget !== this.datePicker) {
+    if (!this.datePicker.contains(event.relatedTarget)) {
       // Mark as blurred to wait for opened-changed.
       this.blurWhileOpened = true;
     }

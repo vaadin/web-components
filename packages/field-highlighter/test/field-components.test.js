@@ -98,6 +98,17 @@ describe('field components', () => {
         });
       });
 
+      it('should not dispatch vaadin-highlight-hide event on close with focus moved to the field', (done) => {
+        open(field, async () => {
+          listenOnce(field, 'opened-changed', () => {
+            expect(hideSpy.callCount).to.equal(0);
+            done();
+          });
+          field.focus();
+          field.close();
+        });
+      });
+
       it('should not dispatch vaadin-highlight-hide event on re-focusing field', (done) => {
         field.focus();
         open(field, () => {
