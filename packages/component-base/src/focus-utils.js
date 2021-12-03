@@ -160,11 +160,7 @@ export function isElementHidden(element) {
     return true;
   }
 
-  if (isElementHiddenDirectly(element)) {
-    return true;
-  }
-
-  return false;
+  return isElementHiddenDirectly(element);
 }
 
 /**
