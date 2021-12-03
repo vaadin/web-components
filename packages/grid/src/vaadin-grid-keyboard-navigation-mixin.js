@@ -160,6 +160,8 @@ export const KeyboardNavigationMixin = (superClass) =>
         case ' ':
           keyGroup = 'Space';
           break;
+        default:
+          break;
       }
 
       this._detectInteracting(e);
@@ -275,6 +277,8 @@ export const KeyboardNavigationMixin = (superClass) =>
           break;
         case 'PageUp':
           dy = -visibleItemsCount;
+          break;
+        default:
           break;
       }
 
@@ -528,6 +532,8 @@ export const KeyboardNavigationMixin = (superClass) =>
           break;
         case 'F2':
           wantInteracting = !this.interacting;
+          break;
+        default:
           break;
       }
 

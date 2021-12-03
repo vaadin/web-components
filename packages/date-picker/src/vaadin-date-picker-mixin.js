@@ -944,6 +944,8 @@ export const DatePickerMixin = (subclass) =>
             }
           }
           break;
+        default:
+          break;
       }
     }
 

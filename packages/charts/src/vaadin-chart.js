@@ -1700,6 +1700,8 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
         case 3:
           axes = this.configuration.colorAxis;
           break;
+        default:
+          break;
       }
       if (axes && axes[axisIndex]) {
         const axis = axes[axisIndex];

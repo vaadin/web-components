@@ -73,7 +73,8 @@
       "always",
       { "exceptAfterSingleLine": true }
     ],
-    "spaced-comment": ["error", "always"]
+    "spaced-comment": ["error", "always"],
+    "default-case": ["error", { "commentPattern": "^no\\sdefault" }]
   },
   "overrides": [
     {

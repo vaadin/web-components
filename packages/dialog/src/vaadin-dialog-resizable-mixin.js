@@ -211,6 +211,8 @@ export const DialogResizableMixin = (superClass) =>
               }
               break;
             }
+            default:
+              break;
           }
         });
 

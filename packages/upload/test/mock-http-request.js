@@ -98,7 +98,6 @@ MockHttpRequest.prototype = {
       case 'TRACE':
       case 'TRACK':
         throw new Error('SECURITY_ERR');
-
       case 'DELETE':
       case 'GET':
       case 'HEAD':
@@ -106,6 +105,9 @@ MockHttpRequest.prototype = {
       case 'POST':
       case 'PUT':
         method = method.toUpperCase();
+        break;
+      default:
+        break;
     }
     this.method = method;
 
@@ -149,6 +151,8 @@ MockHttpRequest.prototype = {
       case 'user-agent':
       case 'via':
         return;
+      default:
+        break;
     }
     if (header.substr(0, 6) === 'proxy-' || header.substr(0, 4) === 'sec-') {
       return;

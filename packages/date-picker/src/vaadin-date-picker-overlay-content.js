@@ -610,11 +610,9 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
       case 'start':
         this._toggleAnimateClass(false);
         break;
-
       case 'track':
         this._handleTrack(e);
         break;
-
       case 'end':
         this._toggleAnimateClass(true);
         if (this._translateX >= this._yearScrollerWidth / 2) {
@@ -622,6 +620,8 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
         } else {
           this._openYearScroller();
         }
+        break;
+      default:
         break;
     }
   }
@@ -815,6 +815,8 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
           break;
         case 'Escape':
           this._cancel();
+          break;
+        default:
           break;
       }
     }
