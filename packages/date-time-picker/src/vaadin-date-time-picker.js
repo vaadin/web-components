@@ -326,7 +326,7 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
        */
       i18n: {
         type: Object,
-        value: () => Object.assign({}, datePickerI18nDefaults, timePickerI18nDefaults)
+        value: () => ({ ...datePickerI18nDefaults, ...timePickerI18nDefaults })
       }
     };
   }

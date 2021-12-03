@@ -229,7 +229,7 @@ describe('edit column renderer', () => {
 
     it('should close editor and update value when scrolling edited cell out of view', () => {
       grid.items = null;
-      grid.items = Array.from({ length: 30 }, () => Object.assign({}, createItems()[0]));
+      grid.items = Array.from({ length: 30 }, () => ({ ...createItems()[0] }));
       flushGrid(grid);
 
       cell = getContainerCell(grid.$.items, 0, 0);

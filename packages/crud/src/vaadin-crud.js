@@ -1173,7 +1173,7 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       return;
     }
 
-    const item = Object.assign({}, this.editedItem);
+    const item = { ...this.editedItem };
     this._fields.forEach((e) => {
       const path = e.path || e.getAttribute('path');
       path && this.__set(path, e.value, item);

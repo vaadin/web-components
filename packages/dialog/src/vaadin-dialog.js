@@ -73,7 +73,7 @@ export class DialogOverlay extends mixinBehaviors(IronResizableBehavior, Overlay
    */
   setBounds(bounds) {
     const overlay = this.$.overlay;
-    const parsedBounds = Object.assign({}, bounds);
+    const parsedBounds = { ...bounds };
 
     if (overlay.style.position !== 'absolute') {
       overlay.style.position = 'absolute';

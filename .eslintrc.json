@@ -71,7 +71,8 @@
     "prefer-spread": "error",
     "space-in-parens": ["error", "never"],
     "spaced-comment": ["error", "always"],
-    "prefer-const": ["error", { "ignoreReadBeforeAssign": true }]
+    "prefer-const": ["error", { "ignoreReadBeforeAssign": true }],
+    "prefer-object-spread": "error"
   },
   "overrides": [
     {

@@ -56,7 +56,7 @@ describe('crud', () => {
 
     it('should be able to internationalize via `i18n` property', async () => {
       expect(crud.$.new.textContent).to.be.equal('New item');
-      crud.i18n = Object.assign({}, crud.i18n, { newItem: 'Nueva entidad', editLabel: 'Editar entidad' });
+      crud.i18n = { ...crud.i18n, newItem: 'Nueva entidad', editLabel: 'Editar entidad' };
       await nextRender(crud._grid);
       expect(crud.$.new.textContent).to.be.equal('Nueva entidad');
       expect(crud._grid.querySelector('vaadin-crud-edit-column').ariaLabel).to.be.equal('Editar entidad');
@@ -616,7 +616,7 @@ describe('crud', () => {
         it('on save should keep item unmodified if default prevented', () => {
           listenOnce(crud, 'save', (e) => e.preventDefault());
 
-          const originalItem = Object.assign({}, crud.items[0]);
+          const originalItem = { ...crud.items[0] };
           edit(crud.items[0]);
           crud._fields[0].value = 'Modified';
           change(crud._form);
@@ -626,7 +626,7 @@ describe('crud', () => {
         });
 
         it('on save should modify item if not default prevented', () => {
-          const originalItem = Object.assign({}, crud.items[0]);
+          const originalItem = { ...crud.items[0] };
           edit(crud.items[0]);
           crud._fields[0].value = 'Modified';
           change(crud._form);
