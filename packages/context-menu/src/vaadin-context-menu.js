@@ -572,7 +572,7 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElem
     // in the `vaadin-overlay-change` which guarantees that overlay is ready.
     // The valus represent an anchor position on the page where the contextmenu
     // event took place.
-    let x = this.__x;
+    const x = this.__x;
     const y = this.__y;
 
     // Select one overlay corner and move to the event x/y position.

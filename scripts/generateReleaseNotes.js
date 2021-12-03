@@ -64,7 +64,7 @@ async function getReleases() {
 
 // Parse git log string and return an array of parsed commits as a JS object.
 function parseLog(log) {
-  let commits = [];
+  const commits = [];
   let commit, pos, result;
   log.split('\n').forEach((line) => {
     switch (pos) {
@@ -99,7 +99,7 @@ function parseLog(log) {
       case 'body':
         result = /^ +([A-Z][\w-]+): +(.*)$/.exec(line);
         if (result) {
-          let k = result[1].toLowerCase();
+          const k = result[1].toLowerCase();
           if (k == 'warranty') {
             commit.bfp = true;
           }
@@ -247,10 +247,10 @@ function logCommitsByComponent(commits) {
       let log = '';
       let indent = '';
 
-      let search = ',';
-      let replacement = '`,`';
-      let componentsTitle = k.split(search).join(replacement);
-      let components = `\`${componentsTitle}\``;
+      const search = ',';
+      const replacement = '`,`';
+      const componentsTitle = k.split(search).join(replacement);
+      const components = `\`${componentsTitle}\``;
 
       log += `- ${components}\n`;
       indent = '  ';

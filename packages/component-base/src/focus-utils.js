@@ -217,7 +217,7 @@ export function isElementFocused(element) {
  * @return {HTMLElement[]}
  */
 export function getFocusableElements(element) {
-  let focusableElements = [];
+  const focusableElements = [];
   const needsSortByTabIndex = collectFocusableNodes(element, focusableElements);
   // If there is at least one element with tabindex > 0, we need to sort
   // the final array by tabindex.≈

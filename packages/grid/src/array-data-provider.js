@@ -22,7 +22,7 @@ function checkPaths(arrayToCheck, action, items) {
 
   let result = true;
 
-  for (let i in arrayToCheck) {
+  for (const i in arrayToCheck) {
     const path = arrayToCheck[i].path;
 
     // skip simple paths

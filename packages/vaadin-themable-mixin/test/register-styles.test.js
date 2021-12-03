@@ -6,7 +6,7 @@ import { ThemableMixin } from '../vaadin-themable-mixin.js';
 
 let attachedInstances = [];
 
-let define =
+const define =
   window.defineCustomElementFunction ||
   ((name) => {
     customElements.define(

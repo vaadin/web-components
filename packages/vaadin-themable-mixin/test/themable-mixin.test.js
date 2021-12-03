@@ -3,13 +3,13 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { css, registerStyles, ThemableMixin, unsafeCSS } from '../vaadin-themable-mixin.js';
 
-let createStyles =
+const createStyles =
   window.createStylesFunction ||
   ((moduleId, themeFor, styles) => {
     registerStyles(themeFor, styles, { moduleId });
   });
 
-let defineCustomElement =
+const defineCustomElement =
   window.defineCustomElementFunction ||
   ((name, parentName, content, styles) => {
     const parentElement = parentName ? customElements.get(parentName) : PolymerElement;

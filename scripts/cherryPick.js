@@ -15,12 +15,12 @@ const axios = require('axios');
 const https = require('https');
 const exec = require('util').promisify(require('child_process').exec);
 
-let arrPR = [];
-let arrTitle = [];
-let arrURL = [];
-let arrSHA = [];
-let arrBranch = [];
-let arrUser = [];
+const arrPR = [];
+const arrTitle = [];
+const arrURL = [];
+const arrSHA = [];
+const arrBranch = [];
+const arrUser = [];
 
 const repo = 'vaadin/web-components';
 const token = process.env['GITHUB_TOKEN'];
@@ -30,7 +30,7 @@ if (!token) {
 }
 
 async function getAllCommits() {
-  let url = `https://api.github.com/repos/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100`;
+  const url = `https://api.github.com/repos/${repo}/pulls?state=closed&sort=updated&direction=desc&per_page=100`;
   try {
     const options = {
       headers: {
@@ -56,10 +56,10 @@ async function getAllCommits() {
 }
 
 function filterCommits(commits) {
-  for (let commit of commits) {
+  for (const commit of commits) {
     let target = false;
     let picked = false;
-    for (let label of commit.labels) {
+    for (const label of commit.labels) {
       if (label.name.includes('target/')) {
         target = true;
       }
@@ -69,7 +69,7 @@ function filterCommits(commits) {
     }
     if (target === true && picked === false) {
       commit.labels.forEach((label) => {
-        let branch = /target\/(.*)/.exec(label.name);
+        const branch = /target\/(.*)/.exec(label.name);
         if (branch) {
           console.log(commit.number, commit.user.login, commit.url, commit.merge_commit_sha, branch[1]);
           arrPR.push(commit.number);
@@ -86,7 +86,7 @@ function filterCommits(commits) {
 
 async function cherryPickCommits() {
   for (let i = arrPR.length - 1; i >= 0; i--) {
-    let branchName = `cherry-pick-${arrPR[i]}-to-${arrBranch[i]}-${Date.now()}`;
+    const branchName = `cherry-pick-${arrPR[i]}-to-${arrBranch[i]}-${Date.now()}`;
 
     await exec('git checkout master');
     await exec('git pull');
@@ -121,7 +121,7 @@ async function cherryPickCommits() {
 }
 
 async function labelCommit(url, label) {
-  let issueURL = url.replace('pulls', 'issues') + '/labels';
+  const issueURL = url.replace('pulls', 'issues') + '/labels';
   const options = {
     headers: {
       'User-Agent': 'Vaadin Cherry Pick',
@@ -133,7 +133,7 @@ async function labelCommit(url, label) {
 }
 
 async function postComment(url, userName, branch, message) {
-  let issueURL = url.replace('pulls', 'issues') + '/comments';
+  const issueURL = url.replace('pulls', 'issues') + '/comments';
   const options = {
     headers: {
       'User-Agent': 'Vaadin Cherry Pick',
@@ -184,7 +184,7 @@ async function createPR(title, head, base) {
 }
 
 async function main() {
-  let allCommits = await getAllCommits();
+  const allCommits = await getAllCommits();
   filterCommits(allCommits);
   await cherryPickCommits();
 }
