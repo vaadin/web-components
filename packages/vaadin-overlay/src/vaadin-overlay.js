@@ -9,8 +9,8 @@ import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { getFocusableElements, isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { FocusablesHelper } from './vaadin-focusables-helper.js';
 
 /**
  *
@@ -911,22 +911,13 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /**
-   * @param {Element} element
-   * @return {boolean}
-   * @protected
-   */
-  _isFocused(element) {
-    return element && element.getRootNode().activeElement === element;
-  }
-
-  /**
    * @param {Element[]} elements
    * @return {number}
    * @protected
    */
   _focusedIndex(elements) {
     elements = elements || this._getFocusableElements();
-    return elements.indexOf(elements.filter(this._isFocused).pop());
+    return elements.indexOf(elements.filter((element) => element && isElementFocused(element)).pop());
   }
 
   /**
@@ -960,7 +951,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
    */
   _getFocusableElements() {
     // collect all focusable elements
-    return FocusablesHelper.getTabbableNodes(this.$.overlay);
+    return getFocusableElements(this.$.overlay);
   }
 
   /**
