@@ -67,7 +67,12 @@
     "prefer-spread": "error",
     "space-in-parens": ["error", "never"],
     "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
-    "grouped-accessor-pairs": ["error", "getBeforeSet"]
+    "grouped-accessor-pairs": ["error", "getBeforeSet"],
+    "lines-between-class-members": [
+      "error",
+      "always",
+      { "exceptAfterSingleLine": true }
+    ]
   },
   "overrides": [
     {

@@ -30,6 +30,7 @@ customElements.define(
         </vaadin-form-layout>
       `;
     }
+
     static get properties() {
       return {
         items: {

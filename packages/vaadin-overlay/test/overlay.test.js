@@ -15,6 +15,7 @@ customElements.define(
         </vaadin-overlay>
       `;
     }
+
     static get properties() {
       return {
         opened: Boolean
