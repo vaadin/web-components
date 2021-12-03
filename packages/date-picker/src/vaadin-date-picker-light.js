@@ -138,15 +138,15 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
     this._setFocusElement(this.inputElement);
   }
 
+  /** @return {string | undefined} */
+  get _inputValue() {
+    return this.inputElement && this.inputElement[dashToCamelCase(this.attrForValue)];
+  }
+
   set _inputValue(value) {
     if (this.inputElement) {
       this.inputElement[dashToCamelCase(this.attrForValue)] = value;
     }
-  }
-
-  /** @return {string | undefined} */
-  get _inputValue() {
-    return this.inputElement && this.inputElement[dashToCamelCase(this.attrForValue)];
   }
 
   // Workaround https://github.com/vaadin/web-components/issues/2855

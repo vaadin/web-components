@@ -15,13 +15,13 @@ export class MockComponent extends HTMLElement {
     };
   }
 
+  get renderer() {
+    return this.__renderer;
+  }
+
   set renderer(renderer) {
     this.__renderer = renderer;
     this.render();
-  }
-
-  get renderer() {
-    return this.__renderer;
   }
 
   render() {

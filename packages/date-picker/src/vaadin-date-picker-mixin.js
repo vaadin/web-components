@@ -350,15 +350,15 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @protected */
+    get _inputValue() {
+      return this.inputElement ? this.inputElement.value : undefined;
+    }
+
+    /** @protected */
     set _inputValue(value) {
       if (this.inputElement) {
         this.inputElement.value = value;
       }
-    }
-
-    /** @protected */
-    get _inputValue() {
-      return this.inputElement ? this.inputElement.value : undefined;
     }
 
     /** @private */

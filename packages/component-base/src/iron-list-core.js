@@ -186,6 +186,10 @@ export const ironList = {
     return Math.max(0, virtualCount - this._physicalCount);
   },
 
+  get _virtualStart() {
+    return this._virtualStartVal || 0;
+  },
+
   set _virtualStart(val) {
     val = this._clamp(val, 0, this._maxVirtualStart);
     if (this.grid) {
@@ -194,8 +198,8 @@ export const ironList = {
     this._virtualStartVal = val;
   },
 
-  get _virtualStart() {
-    return this._virtualStartVal || 0;
+  get _physicalStart() {
+    return this._physicalStartVal || 0;
   },
 
   /**
@@ -212,10 +216,6 @@ export const ironList = {
     this._physicalStartVal = val;
   },
 
-  get _physicalStart() {
-    return this._physicalStartVal || 0;
-  },
-
   /**
    * The k-th tile that is at the bottom of the scrolling list.
    */
@@ -223,12 +223,12 @@ export const ironList = {
     return (this._physicalStart + this._physicalCount - 1) % this._physicalCount;
   },
 
-  set _physicalCount(val) {
-    this._physicalCountVal = val;
-  },
-
   get _physicalCount() {
     return this._physicalCountVal || 0;
+  },
+
+  set _physicalCount(val) {
+    this._physicalCountVal = val;
   },
 
   /**

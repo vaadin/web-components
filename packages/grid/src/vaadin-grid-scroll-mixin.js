@@ -31,17 +31,17 @@ export const ScrollMixin = (superClass) =>
       };
     }
 
+    /** @private */
+    get _scrollTop() {
+      return this.$.table.scrollTop;
+    }
+
     /**
      * Override (from iron-scroll-target-behavior) to avoid document scroll
      * @private
      */
     set _scrollTop(top) {
       this.$.table.scrollTop = top;
-    }
-
-    /** @private */
-    get _scrollTop() {
-      return this.$.table.scrollTop;
     }
 
     /** @private */
