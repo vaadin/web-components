@@ -65,7 +65,8 @@
     "prefer-exponentiation-operator": "error",
     "prefer-rest-params": "error",
     "prefer-spread": "error",
-    "space-in-parens": ["error", "never"]
+    "space-in-parens": ["error", "never"],
+    "func-style": ["error", "declaration", { "allowArrowFunctions": true }]
   },
   "overrides": [
     {

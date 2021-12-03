@@ -9,29 +9,29 @@ import { DirHelper } from './dir-helper.js';
  * Array of Vaadin custom element classes that have been subscribed to the dir changes.
  */
 const directionSubscribers = [];
-const directionUpdater = function () {
+function directionUpdater() {
   const documentDir = getDocumentDir();
   directionSubscribers.forEach((element) => {
     alignDirs(element, documentDir);
   });
-};
+}
 
 let scrollType;
 
 const directionObserver = new MutationObserver(directionUpdater);
 directionObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['dir'] });
 
-const alignDirs = function (element, documentDir, elementDir = element.getAttribute('dir')) {
+function alignDirs(element, documentDir, elementDir = element.getAttribute('dir')) {
   if (documentDir) {
     element.setAttribute('dir', documentDir);
   } else if (elementDir != null) {
     element.removeAttribute('dir');
   }
-};
+}
 
-const getDocumentDir = function () {
+function getDocumentDir() {
   return document.documentElement.getAttribute('dir');
-};
+}
 
 /**
  * A mixin to handle `dir` attribute based on the one set on the `<html>` element.

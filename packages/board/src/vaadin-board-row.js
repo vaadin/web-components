@@ -245,7 +245,7 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
       breakpoints.mediumSize != this._oldBreakpoints.mediumSize
     ) {
       const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
-      const isElementNode = function (node) {
+      const isElementNode = (node) => {
         return !(node.nodeType === node.TEXT_NODE || node instanceof DomRepeat || node instanceof DomIf);
       };
       const filteredNodes = nodes.filter(isElementNode);

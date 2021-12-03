@@ -30,7 +30,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { ChartSeries } from './vaadin-chart-series.js';
 
 /** @private */
-export const deepMerge = function deepMerge(target, source) {
+export function deepMerge(target, source) {
   const isObject = (item) => item && typeof item === 'object' && !Array.isArray(item);
 
   if (isObject(source) && isObject(target)) {
@@ -48,7 +48,7 @@ export const deepMerge = function deepMerge(target, source) {
   }
 
   return target;
-};
+}
 
 ['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
   Highcharts.wrap(Highcharts.Chart.prototype, methodName, function (proceed, ...args) {

@@ -135,16 +135,16 @@ let debouncerQueue = new Set();
  * @param {!Debouncer} debouncer Debouncer to enqueue
  * @return {void}
  */
-export const enqueueDebouncer = function (debouncer) {
+export function enqueueDebouncer(debouncer) {
   debouncerQueue.add(debouncer);
-};
+}
 
 /**
  * Flushes any enqueued debouncers
  *
  * @return {boolean} Returns whether any debouncers were flushed
  */
-export const flushDebouncers = function () {
+export function flushDebouncers() {
   const didFlush = Boolean(debouncerQueue.size);
   // If new debouncers are added while flushing, Set.forEach will ensure
   // newly added ones are also flushed
@@ -158,7 +158,7 @@ export const flushDebouncers = function () {
     }
   });
   return didFlush;
-};
+}
 
 export const flush = () => {
   let debouncers;
