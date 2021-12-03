@@ -72,7 +72,8 @@
       "error",
       "always",
       { "exceptAfterSingleLine": true }
-    ]
+    ],
+    "spaced-comment": ["error", "always"]
   },
   "overrides": [
     {
