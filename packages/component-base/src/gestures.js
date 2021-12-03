@@ -262,12 +262,11 @@ function hasLeftMouseButton(ev) {
     }
     // buttons is a bitmask, check that the left button bit is set (1)
     return Boolean(buttons & 1);
-  } else {
-    // allow undefined for testing events
-    const button = ev.button === undefined ? 0 : ev.button;
-    // ev.button is 0 in mousedown/mouseup/click for left button activation
-    return button === 0;
   }
+  // allow undefined for testing events
+  const button = ev.button === undefined ? 0 : ev.button;
+  // ev.button is 0 in mousedown/mouseup/click for left button activation
+  return button === 0;
 }
 
 function isSyntheticClick(ev) {

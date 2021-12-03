@@ -300,13 +300,12 @@ export const KeyboardNavigationMixin = (superClass) =>
             // "If focus is on a collapsed row, expands the row."
             this.expandItem(activeRow._item);
             return;
-          } else {
-            // "If focus is on an expanded row or is on a row that does not have child rows,
-            // moves focus to the first cell in the row."
-            this.__rowFocusMode = false;
-            this._onCellNavigation(activeRow.firstElementChild, 0, 0);
-            return;
           }
+          // "If focus is on an expanded row or is on a row that does not have child rows,
+          // moves focus to the first cell in the row."
+          this.__rowFocusMode = false;
+          this._onCellNavigation(activeRow.firstElementChild, 0, 0);
+          return;
         }
       } else if (key === backwardsKey) {
         // "Left Arrow:"
@@ -358,9 +357,8 @@ export const KeyboardNavigationMixin = (superClass) =>
       // Body rows have index property, otherwise DOM child index of the row is used.
       if (rowGroup === this.$.items) {
         return bodyFallbackIndex !== undefined ? bodyFallbackIndex : row.index;
-      } else {
-        return this.__getIndexOfChildElement(row);
       }
+      return this.__getIndexOfChildElement(row);
     }
 
     /**
@@ -396,51 +394,47 @@ export const KeyboardNavigationMixin = (superClass) =>
         this.toggleAttribute('navigating', true);
 
         return { dstRow: activeRowGroup.children[dstRowIndex] };
-      } else {
-        // Navigating body rows
+      }
+      // Navigating body rows
 
-        let dstIsRowDetails = false;
-        if (activeCell) {
-          const isRowDetails = this.__isDetailsCell(activeCell);
-          // Row details navigation logic
-          if (activeRowGroup === this.$.items) {
-            const item = activeRow._item;
-            const dstItem = this._cache.getItemForIndex(dstRowIndex);
-            // Should we navigate to row details?
-            if (isRowDetails) {
-              dstIsRowDetails = dy === 0;
-            } else {
-              dstIsRowDetails =
-                (dy === 1 && this._isDetailsOpened(item)) ||
-                (dy === -1 && dstRowIndex !== currentRowIndex && this._isDetailsOpened(dstItem));
-            }
-            // Should we navigate between details and regular cells of the same row?
-            if (
-              dstIsRowDetails !== isRowDetails &&
-              ((dy === 1 && dstIsRowDetails) || (dy === -1 && !dstIsRowDetails))
-            ) {
-              dstRowIndex = currentRowIndex;
-            }
+      let dstIsRowDetails = false;
+      if (activeCell) {
+        const isRowDetails = this.__isDetailsCell(activeCell);
+        // Row details navigation logic
+        if (activeRowGroup === this.$.items) {
+          const item = activeRow._item;
+          const dstItem = this._cache.getItemForIndex(dstRowIndex);
+          // Should we navigate to row details?
+          if (isRowDetails) {
+            dstIsRowDetails = dy === 0;
+          } else {
+            dstIsRowDetails =
+              (dy === 1 && this._isDetailsOpened(item)) ||
+              (dy === -1 && dstRowIndex !== currentRowIndex && this._isDetailsOpened(dstItem));
+          }
+          // Should we navigate between details and regular cells of the same row?
+          if (dstIsRowDetails !== isRowDetails && ((dy === 1 && dstIsRowDetails) || (dy === -1 && !dstIsRowDetails))) {
+            dstRowIndex = currentRowIndex;
           }
         }
-
-        // Ensure correct vertical scroll position, destination row is visible
-        this._ensureScrolledToIndex(dstRowIndex);
-
-        // When scrolling with repeated keydown, sometimes FocusEvent listeners
-        // are too late to update _focusedItemIndex. Ensure next keydown
-        // listener invocation gets updated _focusedItemIndex value.
-        this._focusedItemIndex = dstRowIndex;
-
-        // This has to be set after scrolling, otherwise it can be removed by
-        // `_preventScrollerRotatingCellFocus(row, index)` during scrolling.
-        this.toggleAttribute('navigating', true);
-
-        return {
-          dstRow: [...activeRowGroup.children].find((el) => !el.hidden && el.index === dstRowIndex),
-          dstIsRowDetails
-        };
       }
+
+      // Ensure correct vertical scroll position, destination row is visible
+      this._ensureScrolledToIndex(dstRowIndex);
+
+      // When scrolling with repeated keydown, sometimes FocusEvent listeners
+      // are too late to update _focusedItemIndex. Ensure next keydown
+      // listener invocation gets updated _focusedItemIndex value.
+      this._focusedItemIndex = dstRowIndex;
+
+      // This has to be set after scrolling, otherwise it can be removed by
+      // `_preventScrollerRotatingCellFocus(row, index)` during scrolling.
+      this.toggleAttribute('navigating', true);
+
+      return {
+        dstRow: [...activeRowGroup.children].find((el) => !el.hidden && el.index === dstRowIndex),
+        dstIsRowDetails
+      };
     }
 
     /**

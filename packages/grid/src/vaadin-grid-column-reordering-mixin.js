@@ -338,9 +338,8 @@ export const ColumnReorderingMixin = (superClass) =>
       const targetRect = targetCell.getBoundingClientRect();
       if (targetRect.left > sourceCellRect.left) {
         return clientX > targetRect.right - sourceCellRect.width;
-      } else {
-        return clientX < targetRect.left + sourceCellRect.width;
       }
+      return clientX < targetRect.left + sourceCellRect.width;
     }
 
     /**
@@ -370,9 +369,8 @@ export const ColumnReorderingMixin = (superClass) =>
         }
         if (candidate.parentElement === draggedColumn.parentElement) {
           return candidate;
-        } else {
-          return targetCell._column;
         }
+        return targetCell._column;
       }
     }
 

@@ -27,9 +27,8 @@ const defineCustomElement =
           const template = document.createElement('template');
           template.innerHTML = content;
           return template;
-        } else {
-          return super.template;
         }
+        return super.template;
       }
     }
 

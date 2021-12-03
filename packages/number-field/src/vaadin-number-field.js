@@ -348,9 +348,8 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
       return (currentValue - margin + step) / multiplier;
     } else if (incr < 0) {
       return (currentValue - (margin || step)) / multiplier;
-    } else {
-      return currentValue / multiplier;
     }
+    return currentValue / multiplier;
   }
 
   /** @private */
@@ -373,9 +372,8 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
       return this.min == null || this._getIncrement(incr, value) >= this.min;
     } else if (incr > 0) {
       return this.max == null || this._getIncrement(incr, value) <= this.max;
-    } else {
-      return this._getIncrement(incr, value) <= this.max && this._getIncrement(incr, value) >= this.min;
     }
+    return this._getIncrement(incr, value) <= this.max && this._getIncrement(incr, value) >= this.min;
   }
 
   /** @private */
@@ -470,9 +468,8 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
       (this.required || this.min !== undefined || this.max !== undefined || this.__validateByStep)
     ) {
       return this.inputElement.checkValidity();
-    } else {
-      return !this.invalid;
     }
+    return !this.invalid;
   }
 }
 

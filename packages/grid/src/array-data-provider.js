@@ -73,9 +73,8 @@ function normalizeEmptyValue(value) {
     return '';
   } else if (isNaN(value)) {
     return value.toString();
-  } else {
-    return value;
   }
+  return value;
 }
 
 /**

@@ -54,9 +54,8 @@ export const DynamicColumnsMixin = (superClass) =>
         .map((col) => {
           if (col.localName === 'vaadin-grid-column-group') {
             return this._getChildColumns(col);
-          } else {
-            return [col];
           }
+          return [col];
         })
         .reduce((prev, curr) => {
           return prev.concat(curr);

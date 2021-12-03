@@ -490,11 +490,10 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       return Notification._createAndShowNotification((root) => {
         render(contents, root);
       }, options);
-    } else {
-      return Notification._createAndShowNotification((root) => {
-        root.innerText = contents;
-      }, options);
     }
+    return Notification._createAndShowNotification((root) => {
+      root.innerText = contents;
+    }, options);
   }
 
   /** @private */

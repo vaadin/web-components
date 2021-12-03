@@ -487,9 +487,8 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElem
       return Array.prototype.filter.call(targets, (el) => {
         return e.composedPath().indexOf(el) > -1;
       })[0];
-    } else {
-      return e.target;
     }
+    return e.target;
   }
 
   /**
@@ -634,10 +633,9 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElem
         // Native keyboard event
         const rect = event.target.getBoundingClientRect();
         return coord === 'x' ? rect.left : rect.top + rect.height;
-      } else {
-        // Native mouse or touch event
-        return position;
       }
+      // Native mouse or touch event
+      return position;
     }
   }
 

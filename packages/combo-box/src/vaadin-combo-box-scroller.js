@@ -221,9 +221,8 @@ export class ComboBoxScroller extends PolymerElement {
       return false;
     } else if (itemIdPath && item !== undefined && selectedItem !== undefined) {
       return this.get(itemIdPath, item) === this.get(itemIdPath, selectedItem);
-    } else {
-      return item === selectedItem;
     }
+    return item === selectedItem;
   }
 
   /** @private */
