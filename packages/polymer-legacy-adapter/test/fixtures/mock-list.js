@@ -36,7 +36,9 @@ export class MockList extends HTMLElement {
   }
 
   render() {
-    if (!this.__renderer) return;
+    if (!this.__renderer) {
+      return;
+    }
 
     const children = this.items.map((item, index) => {
       const root = this.$.items.children[index] ?? document.createElement('div');

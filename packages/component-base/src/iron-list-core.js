@@ -548,7 +548,9 @@ export const ironList = {
   },
 
   _gridChanged: function (newGrid, oldGrid) {
-    if (typeof oldGrid === 'undefined') return;
+    if (typeof oldGrid === 'undefined') {
+      return;
+    }
     this.notifyResize();
     flush();
     newGrid && this._updateGridMetrics();

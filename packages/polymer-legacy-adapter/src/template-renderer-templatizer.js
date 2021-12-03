@@ -94,7 +94,9 @@ export class Templatizer extends PolymerElement {
 
   /** @private */
   __createTemplateClass(properties) {
-    if (this.__TemplateClass) return;
+    if (this.__TemplateClass) {
+      return;
+    }
 
     const instanceProps = Object.keys(properties).reduce((accum, key) => {
       return { ...accum, [key]: true };

@@ -543,7 +543,9 @@ class Grid extends ElementMixin(
 
   /** @private */
   __getDistributedWidth(col, innerColumn) {
-    if (col == null || col === this) return 0;
+    if (col == null || col === this) {
+      return 0;
+    }
 
     const columnWidth = Math.max(this.__getIntrinsicWidth(col), this.__getDistributedWidth(col.parentElement, col));
 

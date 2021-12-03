@@ -733,7 +733,9 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @param {HTMLElement} focusTarget
      */
     _updateGridSectionFocusTarget(focusTarget) {
-      if (!focusTarget) return;
+      if (!focusTarget) {
+        return;
+      }
 
       const section = this._getGridSectionFromFocusTarget(focusTarget);
       const isInteractingWithinActiveSection = this.interacting && section === this._activeRowGroup;
@@ -891,9 +893,15 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @private
      */
     _getGridSectionFromFocusTarget(focusTarget) {
-      if (focusTarget === this._headerFocusable) return this.$.header;
-      if (focusTarget === this._itemsFocusable) return this.$.items;
-      if (focusTarget === this._footerFocusable) return this.$.footer;
+      if (focusTarget === this._headerFocusable) {
+        return this.$.header;
+      }
+      if (focusTarget === this._itemsFocusable) {
+        return this.$.items;
+      }
+      if (focusTarget === this._footerFocusable) {
+        return this.$.footer;
+      }
       return null;
     }
 

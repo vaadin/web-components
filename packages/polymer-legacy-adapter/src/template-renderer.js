@@ -106,7 +106,9 @@ function processTemplates(component) {
 }
 
 function observeTemplates(component) {
-  if (component.__templateObserver) return;
+  if (component.__templateObserver) {
+    return;
+  }
 
   component.__templateObserver = new FlattenedNodesObserver(component, () => {
     processTemplates(component);

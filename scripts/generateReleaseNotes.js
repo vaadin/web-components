@@ -210,7 +210,9 @@ function logCommit(c) {
 
 // log a set of commits, and group by types
 function logCommitsByType(commits) {
-  if (!commits[0]) return;
+  if (!commits[0]) {
+    return;
+  }
   const byType = {};
   commits.forEach((commit) => {
     const type = commit.bfp ? 'bfp' : commit.breaking ? 'break' : commit.type;

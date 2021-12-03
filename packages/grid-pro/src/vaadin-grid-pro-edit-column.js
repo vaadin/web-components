@@ -219,7 +219,9 @@ class GridProEditColumn extends GridColumn {
 
   /** @private */
   _removeEditor(cell, _model) {
-    if (!cell.__savedRenderer) return;
+    if (!cell.__savedRenderer) {
+      return;
+    }
 
     cell._renderer = cell.__savedRenderer;
     cell.__savedRenderer = undefined;
