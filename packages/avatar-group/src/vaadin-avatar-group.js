@@ -594,7 +594,7 @@ class AvatarGroup extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
-  /*
+  /**
    * @deprecated Since Vaadin 23, `notifyResize()` is deprecated. The component uses a
    * ResizeObserver internally and doesn't need to be explicitly notified of resizes.
    */
