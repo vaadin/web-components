@@ -478,9 +478,8 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
   _formatDisplayed(date, formatDate, label) {
     if (date) {
       return formatDate(extractDateParts(date));
-    } else {
-      return label;
     }
+    return label;
   }
 
   _onTodayTap() {

@@ -96,9 +96,8 @@ function getFocusedCellIndex() {
   const focusedCell = grid.shadowRoot.activeElement;
   if (focusedCell instanceof HTMLTableCellElement) {
     return Array.from(focusedCell.parentNode.children).indexOf(focusedCell);
-  } else {
-    return -1;
   }
+  return -1;
 }
 
 function getFocusedRowIndex() {

@@ -371,7 +371,7 @@ class ChartSeries extends PolymerElement {
       if (parent && parent instanceof Chart) {
         if (unit && !parent.__getAxis(unit)) {
           const title = { title: { text: unit } };
-          parent.__addAxis(Object.assign({ id: unit, axisGenerated: true }, title));
+          parent.__addAxis({ id: unit, axisGenerated: true, ...title });
         }
         series.update({ yAxis: unit || 0 });
 

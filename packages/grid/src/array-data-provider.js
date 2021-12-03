@@ -22,7 +22,7 @@ function checkPaths(arrayToCheck, action, items) {
 
   let result = true;
 
-  for (let i in arrayToCheck) {
+  for (const i in arrayToCheck) {
     const path = arrayToCheck[i].path;
 
     // skip simple paths
@@ -73,9 +73,8 @@ function normalizeEmptyValue(value) {
     return '';
   } else if (isNaN(value)) {
     return value.toString();
-  } else {
-    return value;
   }
+  return value;
 }
 
 /**

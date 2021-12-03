@@ -30,9 +30,8 @@ export const ColumnBaseMixin = (superClass) =>
             const parent = this.parentNode;
             if (parent && parent.localName === 'vaadin-grid-column-group') {
               return parent.resizable || false;
-            } else {
-              return false;
             }
+            return false;
           }
         },
 

@@ -748,7 +748,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @private */
   _notifyFileChanges(file) {
     var p = 'files.' + this.files.indexOf(file) + '.';
-    for (let i in file) {
+    for (const i in file) {
       // eslint-disable-next-line no-prototype-builtins
       if (file.hasOwnProperty(i)) {
         this.notifyPath(p + i, file[i]);

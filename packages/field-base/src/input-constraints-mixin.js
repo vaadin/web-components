@@ -49,9 +49,8 @@ export const InputConstraintsMixin = dedupingMixin(
       checkValidity() {
         if (this.inputElement && this._hasValidConstraints(this.constructor.constraints.map((c) => this[c]))) {
           return this.inputElement.checkValidity();
-        } else {
-          return !this.invalid;
         }
+        return !this.invalid;
       }
 
       /**

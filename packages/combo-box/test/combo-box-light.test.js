@@ -294,7 +294,7 @@ describe('custom buttons', () => {
       const y = Math.ceil(rect.top);
       // Get the element which would be targeted, when the user
       // tries to click on this position
-      let target = elementFromPointDeep(x, y, elem.ownerDocument);
+      const target = elementFromPointDeep(x, y, elem.ownerDocument);
       if (!target) {
         return;
       }

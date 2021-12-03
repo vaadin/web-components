@@ -112,10 +112,11 @@ describe('login form', () => {
     expect(additionalInformation.textContent).to.be.equal('');
     expect(formWrapper.$.forgotPasswordButton.textContent).to.be.equal(login.i18n.form.forgotPassword);
 
-    const i18n = Object.assign({}, login.i18n, {
+    const i18n = {
+      ...login.i18n,
       additionalInformation: 'Mais informações',
       form: { forgotPassword: 'Esqueci a senha' }
-    });
+    };
     login.i18n = i18n;
     expect(additionalInformation.textContent).to.be.equal(login.i18n.additionalInformation);
     expect(formWrapper.$.forgotPasswordButton.textContent).to.be.equal(login.i18n.form.forgotPassword);

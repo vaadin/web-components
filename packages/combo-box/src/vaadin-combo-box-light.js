@@ -133,9 +133,8 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
   checkValidity() {
     if (this.inputElement.validate) {
       return this.inputElement.validate();
-    } else {
-      return super.checkValidity();
     }
+    return super.checkValidity();
   }
 
   /**

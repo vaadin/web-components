@@ -111,9 +111,8 @@ async function getZenHubWorkspaceName(workspace_id, repo_id) {
         const idx = workspaces.findIndex((workspace) => workspace.id === workspace_id);
         if (idx > -1) {
           return workspaces[idx].name;
-        } else {
-          throw new Error(`Cannot find ZenHub workspace with ID ${workspace_id} for the repo with ID ${repo_id}`);
         }
+        throw new Error(`Cannot find ZenHub workspace with ID ${workspace_id} for the repo with ID ${repo_id}`);
       })(workspace_id, repo_id)
     );
   }
@@ -174,9 +173,9 @@ async function createLabelInRepo(label, repo) {
 async function transferIssue(issue, targetRepo) {
   if (DRY_RUN) {
     return { ...issue };
-  } else {
-    const response = await octokit.graphql(
-      `mutation TransferIssue($issueNodeId: ID!, $targetRepoNodeId: ID!, $clientMutationId: String) {
+  }
+  const response = await octokit.graphql(
+    `mutation TransferIssue($issueNodeId: ID!, $targetRepoNodeId: ID!, $clientMutationId: String) {
         transferIssue(input: {
           clientMutationId: $clientMutationId,
           issueId: $issueNodeId,
@@ -194,46 +193,43 @@ async function transferIssue(issue, targetRepo) {
           }
         }
       }`,
-      {
-        clientMutationId: issue.url,
-        issueNodeId: issue.node_id,
-        targetRepoNodeId: targetRepo.node_id
-      }
-    );
-    return response.transferIssue.issue;
-  }
+    {
+      clientMutationId: issue.url,
+      issueNodeId: issue.node_id,
+      targetRepoNodeId: targetRepo.node_id
+    }
+  );
+  return response.transferIssue.issue;
 }
 
 async function transferLabels(labels, issue) {
   if (DRY_RUN) {
     return [...labels];
-  } else {
-    const { data } = await octokit.rest.issues.addLabels({
-      owner: issue.repository.owner.login,
-      repo: issue.repository.name,
-      issue_number: issue.number,
-      labels: labels.map((label) => label.name)
-    });
-    return data;
   }
+  const { data } = await octokit.rest.issues.addLabels({
+    owner: issue.repository.owner.login,
+    repo: issue.repository.name,
+    issue_number: issue.number,
+    labels: labels.map((label) => label.name)
+  });
+  return data;
 }
 
 async function transferZhPipelines(pipelines, issue) {
   if (DRY_RUN) {
     return Promise.resolve();
-  } else {
-    await Promise.all(
-      pipelines.map(async (pipeline) => {
-        zhApi.post(
-          `/p2/workspaces/${pipeline.workspace_id}/repositories/${issue.repository.databaseId}/issues/${issue.number}/moves`,
-          {
-            pipeline_id: pipeline.pipeline_id,
-            position: 'bottom'
-          }
-        );
-      })
-    );
   }
+  await Promise.all(
+    pipelines.map(async (pipeline) => {
+      zhApi.post(
+        `/p2/workspaces/${pipeline.workspace_id}/repositories/${issue.repository.databaseId}/issues/${issue.number}/moves`,
+        {
+          pipeline_id: pipeline.pipeline_id,
+          position: 'bottom'
+        }
+      );
+    })
+  );
 }
 
 async function makeRepoLabelsMap(repo) {

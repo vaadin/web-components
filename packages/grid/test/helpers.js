@@ -227,7 +227,7 @@ export const makeSoloTouchEvent = (type, xy, node) => {
     changedTouches: touches
   };
   const event = new CustomEvent(type, { bubbles: true, cancelable: true });
-  for (let property in touchEventInit) {
+  for (const property in touchEventInit) {
     event[property] = touchEventInit[property];
   }
   node.dispatchEvent(event);

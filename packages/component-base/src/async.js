@@ -23,17 +23,17 @@
 // Microtask implemented using Mutation Observer
 let microtaskCurrHandle = 0;
 let microtaskLastHandle = 0;
-let microtaskCallbacks = [];
+const microtaskCallbacks = [];
 let microtaskNodeContent = 0;
 let microtaskScheduled = false;
-let microtaskNode = document.createTextNode('');
+const microtaskNode = document.createTextNode('');
 new window.MutationObserver(microtaskFlush).observe(microtaskNode, { characterData: true });
 
 function microtaskFlush() {
   microtaskScheduled = false;
   const len = microtaskCallbacks.length;
   for (let i = 0; i < len; i++) {
-    let cb = microtaskCallbacks[i];
+    const cb = microtaskCallbacks[i];
     if (cb) {
       try {
         cb();
