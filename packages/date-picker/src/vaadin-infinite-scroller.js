@@ -210,6 +210,13 @@ class InfiniteScroller extends PolymerElement {
   }
 
   /**
+   * @private
+   */
+  get position() {
+    return (this.$.scroller.scrollTop - this._buffers[0].translateY) / this.itemHeight + this._firstIndex;
+  }
+
+  /**
    * Current scroller position as index. Can be a fractional number.
    *
    * @type {Number}
@@ -236,13 +243,6 @@ class InfiniteScroller extends PolymerElement {
         this.$.scroller.classList.remove('notouchscroll');
       }, 10);
     }
-  }
-
-  /**
-   * @private
-   */
-  get position() {
-    return (this.$.scroller.scrollTop - this._buffers[0].translateY) / this.itemHeight + this._firstIndex;
   }
 
   get itemHeight() {

@@ -5,7 +5,7 @@
  */
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 
-export const _detectIosNavbar = function () {
+export function _detectIosNavbar() {
   /* c8 ignore next 11 */
   if (isIOS) {
     const innerHeight = window.innerHeight;
@@ -18,7 +18,7 @@ export const _detectIosNavbar = function () {
       document.documentElement.style.setProperty('--vaadin-viewport-offset-bottom', '');
     }
   }
-};
+}
 
 _detectIosNavbar();
 window.addEventListener('resize', _detectIosNavbar);

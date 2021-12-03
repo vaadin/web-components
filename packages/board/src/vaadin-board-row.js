@@ -94,7 +94,7 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
     this.addEventListener('iron-resize', this._onIronResize, true);
     this.$.insertionPoint.addEventListener('slotchange', this.redraw.bind(this));
     afterNextRender(this, function () {
-      //force this as an interested resizable of parent
+      // force this as an interested resizable of parent
       this.dispatchEvent(
         new CustomEvent('iron-request-resize-notifications', {
           node: this,
@@ -245,7 +245,7 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
       breakpoints.mediumSize != this._oldBreakpoints.mediumSize
     ) {
       const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
-      const isElementNode = function (node) {
+      const isElementNode = (node) => {
         return !(node.nodeType === node.TEXT_NODE || node instanceof DomRepeat || node instanceof DomIf);
       };
       const filteredNodes = nodes.filter(isElementNode);

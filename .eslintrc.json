@@ -49,8 +49,12 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "accessor-pairs": "error",
     "array-callback-return": "error",
+    "default-case": ["error", { "commentPattern": "^no\\sdefault" }],
     "default-param-last": "error",
     "dot-notation": ["error", { "allowPattern": "^[a-zA-Z]+([_-][a-zA-Z]+)+$" }],
+    "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
+    "grouped-accessor-pairs": ["error", "getBeforeSet"],
+    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
     "max-classes-per-file": ["error", 3],
     "max-params": ["error", 4],
     "no-eval": "error",
@@ -65,7 +69,8 @@
     "prefer-exponentiation-operator": "error",
     "prefer-rest-params": "error",
     "prefer-spread": "error",
-    "space-in-parens": ["error", "never"]
+    "space-in-parens": ["error", "never"],
+    "spaced-comment": ["error", "always"]
   },
   "overrides": [
     {

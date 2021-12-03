@@ -163,7 +163,7 @@ function matchingLabels(el) {
 // but this breaks `<input>` focus and link clicks
 // disable mouse handlers for MOUSE_TIMEOUT ms after
 // a touchend to ignore synthetic mouse events
-let mouseCanceller = function (mouseEvent) {
+function mouseCanceller(mouseEvent) {
   // Check for sourceCapabilities, used to distinguish synthetic events
   // if mouseEvent did not come from a device that fires touch events,
   // it was made by a real mouse and should be counted
@@ -202,7 +202,7 @@ let mouseCanceller = function (mouseEvent) {
     mouseEvent.preventDefault();
     mouseEvent.stopPropagation();
   }
-};
+}
 
 /**
  * @param {boolean=} setup True to add, false to remove.
@@ -229,7 +229,7 @@ function ignoreMouse(e) {
   if (!POINTERSTATE.mouse.mouseIgnoreJob) {
     setupTeardownMouseCanceller(true);
   }
-  let unset = function () {
+  let unset = () => {
     setupTeardownMouseCanceller();
     POINTERSTATE.mouse.target = null;
     POINTERSTATE.mouse.mouseIgnoreJob = null;
@@ -743,13 +743,13 @@ register({
     let t = _findOriginalTarget(e);
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     let self = this;
-    let movefn = function movefn(e) {
+    let movefn = (e) => {
       if (!hasLeftMouseButton(e)) {
         downupFire('up', t, e);
         untrackDocument(self.info);
       }
     };
-    let upfn = function upfn(e) {
+    let upfn = (e) => {
       if (hasLeftMouseButton(e)) {
         downupFire('up', t, e);
       }
@@ -854,7 +854,7 @@ register({
     let t = _findOriginalTarget(e);
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     let self = this;
-    let movefn = function movefn(e) {
+    let movefn = (e) => {
       let x = e.clientX,
         y = e.clientY;
       if (trackHasMovedEnough(self.info, x, y)) {
@@ -876,7 +876,7 @@ register({
         self.info.started = true;
       }
     };
-    let upfn = function upfn(e) {
+    let upfn = (e) => {
       if (self.info.started) {
         movefn(e);
       }

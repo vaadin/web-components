@@ -350,15 +350,15 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @protected */
+    get _inputValue() {
+      return this.inputElement ? this.inputElement.value : undefined;
+    }
+
+    /** @protected */
     set _inputValue(value) {
       if (this.inputElement) {
         this.inputElement.value = value;
       }
-    }
-
-    /** @protected */
-    get _inputValue() {
-      return this.inputElement ? this.inputElement.value : undefined;
     }
 
     /** @private */
@@ -921,7 +921,7 @@ export const DatePickerMixin = (subclass) =>
           } else if (this.clearButtonVisible) {
             this._onClearButtonClick();
           } else if (this.autoOpenDisabled) {
-            //Do not restore selected date if Esc was pressed after clearing input field
+            // Do not restore selected date if Esc was pressed after clearing input field
             if (this.inputElement.value === '') {
               this._selectedDate = null;
             }
@@ -934,7 +934,7 @@ export const DatePickerMixin = (subclass) =>
         case 'Tab':
           if (this.opened) {
             e.preventDefault();
-            //Clear the selection range (remains visible on IE)
+            // Clear the selection range (remains visible on IE)
             this._setSelectionRange(0, 0);
             if (e.shiftKey) {
               this._overlayContent.focusCancel();
@@ -943,6 +943,8 @@ export const DatePickerMixin = (subclass) =>
               this._overlayContent.revealDate(this._focusedDate);
             }
           }
+          break;
+        default:
           break;
       }
     }

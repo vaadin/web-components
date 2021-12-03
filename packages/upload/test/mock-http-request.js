@@ -77,7 +77,7 @@ MockHttpRequest.prototype = {
     507: 'Insufficient Storage'
   },
 
-  /*** State ***/
+  /* State */
 
   UNSENT: 0,
   OPENED: 1,
@@ -86,7 +86,7 @@ MockHttpRequest.prototype = {
   DONE: 4,
   readyState: 0,
 
-  /*** Request ***/
+  /* Request */
 
   // eslint-disable-next-line max-params
   open: function (method, url, async, user, password) {
@@ -98,7 +98,6 @@ MockHttpRequest.prototype = {
       case 'TRACE':
       case 'TRACK':
         throw new Error('SECURITY_ERR');
-
       case 'DELETE':
       case 'GET':
       case 'HEAD':
@@ -106,6 +105,9 @@ MockHttpRequest.prototype = {
       case 'POST':
       case 'PUT':
         method = method.toUpperCase();
+        break;
+      default:
+        break;
     }
     this.method = method;
 
@@ -149,6 +151,8 @@ MockHttpRequest.prototype = {
       case 'user-agent':
       case 'via':
         return;
+      default:
+        break;
     }
     if (header.substr(0, 6) === 'proxy-' || header.substr(0, 4) === 'sec-') {
       return;
@@ -191,7 +195,7 @@ MockHttpRequest.prototype = {
     this.readyState = this.UNSENT;
   },
 
-  /*** Response ***/
+  /* Response */
 
   status: 0,
   statusText: '',
@@ -217,7 +221,7 @@ MockHttpRequest.prototype = {
   responseText: '',
   responseXML: undefined,
 
-  /*** See http://www.w3.org/TR/progress-events/ ***/
+  /* See http://www.w3.org/TR/progress-events/ */
 
   onload: function () {
     // Instances should override this.
@@ -239,7 +243,7 @@ MockHttpRequest.prototype = {
     // Instances should override this.
   },
 
-  /*** Properties and methods for test interaction ***/
+  /* Properties and methods for test interaction */
 
   onsend: function () {
     // Instances should override this.

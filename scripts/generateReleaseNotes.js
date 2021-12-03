@@ -45,6 +45,8 @@ async function getReleases() {
       case '--compact':
         compact = true;
         break;
+      default:
+        break;
     }
   }
 

@@ -25,14 +25,14 @@ registerStyles('vaadin-date-time-picker', inputFieldShared, { moduleId: 'vaadin-
  */
 
 // Find a property definition from the prototype chain of a Polymer element class
-const getPropertyFromPrototype = function (clazz, prop) {
+function getPropertyFromPrototype(clazz, prop) {
   while (clazz) {
     if (clazz.properties && clazz.properties[prop]) {
       return clazz.properties[prop];
     }
     clazz = Object.getPrototypeOf(clazz);
   }
-};
+}
 
 const datePickerClass = customElements.get('vaadin-date-time-picker-date-picker');
 const timePickerClass = customElements.get('vaadin-date-time-picker-time-picker');
