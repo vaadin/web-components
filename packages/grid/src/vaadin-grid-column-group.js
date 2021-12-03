@@ -159,7 +159,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       // the child scope must have 1 digit less...
       // Log^a_b = Ln(a)/Ln(b)
       // Number of digits of a number is equal to floor(Log(number)_10) + 1
-      const childCountDigits = ~~(Math.log(rootColumns.length) / Math.LN10) + 1;
+      const childCountDigits = Math.floor(Math.log(rootColumns.length) / Math.LN10) + 1;
 
       // Final scope for the child columns needs to mind both factors.
       const scope = 10 ** (trailingZeros - childCountDigits);

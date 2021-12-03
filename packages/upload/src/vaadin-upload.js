@@ -454,7 +454,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     // https://wiki.ubuntu.com/UnitsPolicy
     const base = this.i18n.units.sizeBase || 1000;
-    const unit = ~~(Math.log(bytes) / Math.log(base));
+    const unit = Math.floor(Math.log(bytes) / Math.log(base));
     const dec = Math.max(0, Math.min(3, unit - 1));
     const size = parseFloat((bytes / base ** unit).toFixed(dec));
     return size + ' ' + this.i18n.units.size[unit];
@@ -567,7 +567,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     file.elapsedStr = this._formatTime(file.elapsed, this._splitTimeByUnits(file.elapsed));
     file.remaining = Math.ceil(elapsed * (total / loaded - 1));
     file.remainingStr = this._formatTime(file.remaining, this._splitTimeByUnits(file.remaining));
-    file.speed = ~~(total / elapsed / 1024);
+    file.speed = Math.floor(total / elapsed / 1024);
     file.totalStr = this._formatSize(total);
     file.loadedStr = this._formatSize(loaded);
     file.status = this._formatFileProgress(file);
@@ -605,7 +605,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
       const elapsed = (last - ini) / 1000;
       const loaded = e.loaded,
         total = e.total,
-        progress = ~~((loaded / total) * 100);
+        progress = Math.floor((loaded / total) * 100);
       file.loaded = loaded;
       file.progress = progress;
       file.indeterminate = loaded <= 0 || loaded >= total;

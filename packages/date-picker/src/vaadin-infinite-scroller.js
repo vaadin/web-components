@@ -181,7 +181,7 @@ class InfiniteScroller extends PolymerElement {
     const scrollTop = this.$.scroller.scrollTop;
     if (scrollTop < this._bufferHeight || scrollTop > this._initialScroll * 2 - this._bufferHeight) {
       // Scrolled near the end/beginning of the scrollable area -> reset.
-      this._initialIndex = ~~this.position;
+      this._initialIndex = Math.floor(this.position);
       this._reset();
     }
 
@@ -226,7 +226,7 @@ class InfiniteScroller extends PolymerElement {
     if (index > this._firstIndex && index < this._firstIndex + this.bufferSize * 2) {
       this.$.scroller.scrollTop = this.itemHeight * (index - this._firstIndex) + this._buffers[0].translateY;
     } else {
-      this._initialIndex = ~~index;
+      this._initialIndex = Math.floor(index);
       this._reset();
       this._scrollDisabled = true;
       this.$.scroller.scrollTop += (index % 1) * this.itemHeight;
@@ -331,7 +331,8 @@ class InfiniteScroller extends PolymerElement {
   }
 
   _updateClones(viewPortOnly) {
-    this._firstIndex = ~~((this._buffers[0].translateY - this._initialScroll) / this.itemHeight) + this._initialIndex;
+    this._firstIndex =
+      Math.floor((this._buffers[0].translateY - this._initialScroll) / this.itemHeight) + this._initialIndex;
 
     var scrollerRect = viewPortOnly ? this.$.scroller.getBoundingClientRect() : undefined;
     this._buffers.forEach((buffer, bufferIndex) => {
