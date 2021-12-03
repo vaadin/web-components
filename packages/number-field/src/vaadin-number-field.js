@@ -299,11 +299,11 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
         incr = 0;
       } else if (this.max < 0) {
         value = this.max;
-        // FIXME(yuriy): find a proper solution to make correct step back
         if (incr < 0) {
           incr = 0;
         } else if (this._getIncrement(1, value - this.step) > this.max) {
           value -= 2 * this.step;
+          // FIXME(yuriy): find a proper solution to make correct step back
         } else {
           value -= this.step;
         }
