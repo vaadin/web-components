@@ -4,7 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 /**
  * Fired when the `opened` property changes.
@@ -34,34 +35,44 @@ export type ConfirmDialogEventMap = HTMLElementEventMap & ConfirmDialogCustomEve
  *
  * ### Styling
  *
- * The following Shadow DOM parts are available for styling the dialog parts:
+ * The `<vaadin-confirm-dialog>` is not themable. Apply styles to `<vaadin-confirm-dialog-overlay>`
+ * component and use its shadow parts for styling.
+ * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) for the overlay styling documentation.
  *
- * Part name  | Description
- * -----------|---------------------------------------------------------|
- * `header`   | Header of the confirmation dialog
- * `message`  | Container for the message of the dialog
- * `footer`   | Container for the buttons
+ * In addition to `<vaadin-overlay>` parts, the following parts are available for theming:
+ *
+ * Part name        | Description
+ * -----------------|-------------------------------------------
+ * `header`         | The header element wrapper
+ * `message`        | The message element wrapper
+ * `footer`         | The footer element that wraps the buttons
+ * `cancel-button`  | The "Cancel" button wrapper
+ * `confirm-button` | The "Confirm" button wrapper
+ * `reject-button`  | The "Reject" button wrapper
+ *
+ * Use `confirmTheme`, `cancelTheme` and `rejectTheme` properties to customize buttons theme.
+ * Also, the `theme` attribute value set on `<vaadin-confirm-dialog>` is propagated to the
+ * `<vaadin-confirm-dialog-overlay>` component.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * ### Custom content
  *
- * The following parts are available for replacement:
+ * The following slots are available for providing custom content:
  *
  * Slot name         | Description
- * ------------------|---------------------------------------------------------|
- * `header`          | Header of the confirmation dialog
- * `message`         | Container for the message of the dialog
- * `cancel-button`   | Container for the Cancel button
- * `reject-button`   | Container for the Reject button
- * `confirm-button`  | Container for the Confirm button
+ * ------------------|---------------------------
+ * `header`          | Slot for header element
+ * `cancel-button`   | Slot for "Cancel" button
+ * `confirm-button`  | Slot for "Confirm" button
+ * `reject-button`   | Slot for "Reject" button
  *
  * @fires {Event} confirm - Fired when Confirm button was pressed.
  * @fires {Event} cancel - Fired when Cancel button or Escape key was pressed.
  * @fires {Event} reject - Fired when Reject button was pressed.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class ConfirmDialog extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(HTMLElement))) {
   /**
    * True if the overlay is currently displayed.
    */
