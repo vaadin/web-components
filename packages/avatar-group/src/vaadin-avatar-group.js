@@ -8,8 +8,6 @@ import '@vaadin/item/src/vaadin-item.js';
 import './vaadin-avatar-group-list-box.js';
 import './vaadin-avatar-group-overlay.js';
 import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -61,7 +59,7 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class AvatarGroup extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement))) {
+class AvatarGroup extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -284,7 +282,8 @@ class AvatarGroup extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizab
 
     this.__boundSetPosition = this.__setPosition.bind(this);
 
-    this.addEventListener('iron-resize', this._onResize.bind(this));
+    this.__resizeObserver = new ResizeObserver(() => this._onResize());
+    this.__resizeObserver.observe(this);
 
     this._overlayElement = this.shadowRoot.querySelector('vaadin-avatar-group-overlay');
 
@@ -593,6 +592,16 @@ class AvatarGroup extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizab
       this._overlayElement.style.removeProperty('bottom');
       this._overlayElement.style.top = btnRect.bottom + 'px';
     }
+  }
+
+  /**
+   * @deprecated Since Vaadin 23, `notifyResize()` is deprecated. The component uses a
+   * ResizeObserver internally and doesn't need to be explicitly notified of resizes.
+   */
+  notifyResize() {
+    console.warn(
+      `WARNING: Since Vaadin 23, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`
+    );
   }
 }
 
