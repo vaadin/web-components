@@ -901,15 +901,13 @@ export const DatePickerMixin = (subclass) =>
               this._selectedDate = this._overlayContent.focusedDate;
             }
             this.close();
+          } else if (!isValidDate && this.inputElement.value !== '') {
+            this.validate();
           } else {
-            if (!isValidDate && this.inputElement.value !== '') {
+            const oldValue = this.value;
+            this._selectParsedOrFocusedDate();
+            if (oldValue === this.value) {
               this.validate();
-            } else {
-              const oldValue = this.value;
-              this._selectParsedOrFocusedDate();
-              if (oldValue === this.value) {
-                this.validate();
-              }
             }
           }
           break;

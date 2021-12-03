@@ -383,12 +383,10 @@ export const ColumnBaseMixin = (superClass) =>
         } else if (textAlign === 'end') {
           textAlignFallback = 'right';
         }
-      } else {
-        if (textAlign === 'start') {
-          textAlignFallback = 'right';
-        } else if (textAlign === 'end') {
-          textAlignFallback = 'left';
-        }
+      } else if (textAlign === 'start') {
+        textAlignFallback = 'right';
+      } else if (textAlign === 'end') {
+        textAlignFallback = 'left';
       }
 
       this._allCells.forEach((cell) => {

@@ -75,7 +75,8 @@
     "space-in-parens": ["error", "never"],
     "spaced-comment": ["error", "always"],
     "no-bitwise": "error",
-    "curly": ["error", "all"]
+    "curly": ["error", "all"],
+    "no-lonely-if": "error"
   },
   "overrides": [
     {

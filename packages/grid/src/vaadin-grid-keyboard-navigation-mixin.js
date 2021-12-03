@@ -242,28 +242,24 @@ export const KeyboardNavigationMixin = (superClass) =>
           if (this.__rowFocusMode) {
             // "If focus is on a row, moves focus to the first row. If focus is in the first row, focus does not move."
             dy = -Infinity;
+          } else if (e.ctrlKey) {
+            // "If focus is on a cell, moves focus to the first cell in the column. If focus is in the first row, focus does not move."
+            dy = -Infinity;
           } else {
-            if (e.ctrlKey) {
-              // "If focus is on a cell, moves focus to the first cell in the column. If focus is in the first row, focus does not move."
-              dy = -Infinity;
-            } else {
-              // "If focus is on a cell, moves focus to the first cell in the row. If focus is in the first cell of the row, focus does not move."
-              dx = -Infinity;
-            }
+            // "If focus is on a cell, moves focus to the first cell in the row. If focus is in the first cell of the row, focus does not move."
+            dx = -Infinity;
           }
           break;
         case 'End':
           if (this.__rowFocusMode) {
             // "If focus is on a row, moves focus to the last row. If focus is in the last row, focus does not move."
             dy = Infinity;
+          } else if (e.ctrlKey) {
+            // "If focus is on a cell, moves focus to the last cell in the column. If focus is in the last row, focus does not move."
+            dy = Infinity;
           } else {
-            if (e.ctrlKey) {
-              // "If focus is on a cell, moves focus to the last cell in the column. If focus is in the last row, focus does not move."
-              dy = Infinity;
-            } else {
-              // "If focus is on a cell, moves focus to the last cell in the row. If focus is in the last cell of the row, focus does not move."
-              dx = Infinity;
-            }
+            // "If focus is on a cell, moves focus to the last cell in the row. If focus is in the last cell of the row, focus does not move."
+            dx = Infinity;
           }
           break;
         case 'ArrowDown':

@@ -132,14 +132,12 @@ function parseLog(log) {
           commits.push(commit);
           commit.commit = result[1];
           pos = 'head';
-        } else {
-          if (line.startsWith(' ')) {
-            commit.body = String(commit.body);
-          } else if (/^packages\/.*/.test(line)) {
-            const wc = line.split('/')[1];
-            if (!commit.components.includes(wc)) {
-              commit.components.push(wc);
-            }
+        } else if (line.startsWith(' ')) {
+          commit.body = String(commit.body);
+        } else if (/^packages\/.*/.test(line)) {
+          const wc = line.split('/')[1];
+          if (!commit.components.includes(wc)) {
+            commit.components.push(wc);
           }
         }
     }

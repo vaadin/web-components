@@ -453,17 +453,15 @@ describe('data provider', () => {
             if (!params.parentItem) {
               // Resolve normally for root level items
               finiteDataProvider(params, callback);
-            } else {
-              if (params.parentItem.value === 'foo0' && params.page === 0) {
-                // Resolve asynchronously for the first expanded item only
-                setTimeout(() => {
-                  finiteDataProvider(params, callback);
-                  // Only the root-level items (10) should be rendered at this point even though the
-                  // data request for the first expanded item resolved
-                  expect(grid._effectiveSize).to.equal(10);
-                  done();
-                }, 0);
-              }
+            } else if (params.parentItem.value === 'foo0' && params.page === 0) {
+              // Resolve asynchronously for the first expanded item only
+              setTimeout(() => {
+                finiteDataProvider(params, callback);
+                // Only the root-level items (10) should be rendered at this point even though the
+                // data request for the first expanded item resolved
+                expect(grid._effectiveSize).to.equal(10);
+                done();
+              }, 0);
             }
           };
 
@@ -479,19 +477,17 @@ describe('data provider', () => {
             if (!params.parentItem) {
               // Resolve normally for root level items
               finiteDataProvider(params, callback);
-            } else {
-              if (params.parentItem.value === 'foo0' && params.page === 0) {
-                // Resolve asynchronously for the first expanded item only
-                setTimeout(() => {
-                  finiteDataProvider(params, callback);
-                  flushGrid(grid);
-                  // The root-level items (10) and the first child item children (10), 20 in total,
-                  // should be rendered at this point even though the data request for the second expanded
-                  // item hasn't still been resolved
-                  expect(grid._effectiveSize).to.equal(20);
-                  done();
-                }, 0);
-              }
+            } else if (params.parentItem.value === 'foo0' && params.page === 0) {
+              // Resolve asynchronously for the first expanded item only
+              setTimeout(() => {
+                finiteDataProvider(params, callback);
+                flushGrid(grid);
+                // The root-level items (10) and the first child item children (10), 20 in total,
+                // should be rendered at this point even though the data request for the second expanded
+                // item hasn't still been resolved
+                expect(grid._effectiveSize).to.equal(20);
+                done();
+              }, 0);
             }
           };
 

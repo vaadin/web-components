@@ -796,12 +796,10 @@ class Grid extends ElementMixin(
           // -> row should be visible
           return true;
         }
-      } else {
-        if (column.footerRenderer) {
-          // The cell is the footer cell of a column that has a footer renderer
-          // -> row should be visible
-          return true;
-        }
+      } else if (column.footerRenderer) {
+        // The cell is the footer cell of a column that has a footer renderer
+        // -> row should be visible
+        return true;
       }
       return false;
     });
