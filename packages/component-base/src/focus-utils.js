@@ -5,7 +5,7 @@
  */
 
 /**
- * Returns true if the focusable element is hidden with `display: none` or `visibility: hidden`,
+ * Returns true if the element is hidden directly with `display: none` or `visibility: hidden`,
  * false otherwise.
  *
  * The method doesn't traverse the element's ancestors, it only checks for the CSS properties
@@ -14,7 +14,7 @@
  * @param {HTMLElement} element
  * @return {boolean}
  */
-function isFocusableElementHidden(element) {
+function isElementHiddenDirectly(element) {
   // Check inline style first to save a re-flow.
   const style = element.style;
   if (style.visibility === 'hidden' || style.display === 'none') {
@@ -39,7 +39,7 @@ function isFocusableElementHidden(element) {
  * @return {number}
  */
 function normalizeTabIndex(element) {
-  if (!isElementFocusable(element) || isFocusableElementHidden(element)) {
+  if (!isElementFocusable(element) || isElementHiddenDirectly(element)) {
     return -1;
   }
 
@@ -160,7 +160,7 @@ export function isElementHidden(element) {
     return true;
   }
 
-  if (window.getComputedStyle(element).visibility === 'hidden') {
+  if (isElementHiddenDirectly(element)) {
     return true;
   }
 
