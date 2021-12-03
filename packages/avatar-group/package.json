@@ -34,7 +34,6 @@
   ],
   "dependencies": {
     "@polymer/iron-a11y-announcer": "^3.0.0",
-    "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/avatar": "23.0.0-alpha1",
     "@vaadin/component-base": "23.0.0-alpha1",
