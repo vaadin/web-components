@@ -5,6 +5,7 @@
  */
 import './vaadin-date-time-picker-date-picker.js';
 import './vaadin-date-time-picker-time-picker.js';
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -327,6 +328,24 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
       i18n: {
         type: Object,
         value: () => Object.assign({}, datePickerI18nDefaults, timePickerI18nDefaults)
+      },
+
+      /**
+       * The current slotted date picker.
+       * @private
+       */
+      __datePicker: {
+        type: HTMLElement,
+        observer: '__datePickerChanged'
+      },
+
+      /**
+       * The current slotted time picker.
+       * @private
+       */
+      __timePicker: {
+        type: HTMLElement,
+        observer: '__timePickerChanged'
       }
     };
   }
@@ -378,6 +397,10 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
 
     this.__changeEventHandler = this.__changeEventHandler.bind(this);
     this.__valueChangedEventHandler = this.__valueChangedEventHandler.bind(this);
+
+    this._observer = new FlattenedNodesObserver(this, (info) => {
+      this.__onDomChange(info.addedNodes);
+    });
   }
 
   /** @protected */
@@ -390,11 +413,8 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
       }
     });
 
-    this.__datePickerChanged();
-    this.__timePickerChanged();
-
-    this.$.dateSlot.addEventListener('slotchange', this.__datePickerChanged.bind(this));
-    this.$.timeSlot.addEventListener('slotchange', this.__timePickerChanged.bind(this));
+    this.__datePicker = this._getDirectSlotChild('date-picker');
+    this.__timePicker = this._getDirectSlotChild('time-picker');
 
     if (this.autofocus && !this.disabled) {
       window.requestAnimationFrame(() => this.focus());
@@ -449,87 +469,98 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
   }
 
   /** @private */
-  __datePickerChanged() {
-    const datePicker = this._getDirectSlotChild('date-picker');
-    if (this.__datePicker === datePicker || !datePicker) {
+  __onDomChange(addedNodes) {
+    addedNodes
+      .filter((node) => node.nodeType === Node.ELEMENT_NODE)
+      .forEach((node) => {
+        const slotAttributeValue = node.getAttribute('slot');
+
+        if (slotAttributeValue === 'date-picker') {
+          this.__datePicker = node;
+        } else if (slotAttributeValue === 'time-picker') {
+          this.__timePicker = node;
+        }
+      });
+  }
+
+  /** @private */
+  __datePickerChanged(newDatePicker, existingDatePicker) {
+    if (!newDatePicker) {
       return;
     }
-    if (this.__datePicker) {
+    if (existingDatePicker) {
       // Remove an existing date picker
-      this.__removeInputListeners(this.__datePicker);
-      this.__datePicker.remove();
+      this.__removeInputListeners(existingDatePicker);
+      existingDatePicker.remove();
     }
 
-    this.__addInputListeners(datePicker);
-    this.__datePicker = datePicker;
+    this.__addInputListeners(newDatePicker);
 
-    if (datePicker.__defaultPicker) {
+    if (newDatePicker.__defaultPicker) {
       // Synchronize properties to default date picker
-      datePicker.placeholder = this.datePlaceholder;
-      datePicker.invalid = this.invalid;
-      datePicker.initialPosition = this.initialPosition;
-      datePicker.showWeekNumbers = this.showWeekNumbers;
-      this.__syncI18n(datePicker, this, datePickerI18nProps);
+      newDatePicker.placeholder = this.datePlaceholder;
+      newDatePicker.invalid = this.invalid;
+      newDatePicker.initialPosition = this.initialPosition;
+      newDatePicker.showWeekNumbers = this.showWeekNumbers;
+      this.__syncI18n(newDatePicker, this, datePickerI18nProps);
     } else {
       // Synchronize properties from slotted date picker
-      this.datePlaceholder = datePicker.placeholder;
-      this.initialPosition = datePicker.initialPosition;
-      this.showWeekNumbers = datePicker.showWeekNumbers;
-      this.__syncI18n(this, datePicker, datePickerI18nProps);
+      this.datePlaceholder = newDatePicker.placeholder;
+      this.initialPosition = newDatePicker.initialPosition;
+      this.showWeekNumbers = newDatePicker.showWeekNumbers;
+      this.__syncI18n(this, newDatePicker, datePickerI18nProps);
     }
 
     // min and max are always synchronized from date time picker (host) to inner fields because time picker
     // min and max need to be dynamically set depending on currently selected date instead of simple propagation
-    datePicker.min = this.__formatDateISO(this.__minDateTime, this.__defaultDateMinMaxValue);
-    datePicker.max = this.__formatDateISO(this.__maxDateTime, this.__defaultDateMinMaxValue);
-    datePicker.required = this.required;
-    datePicker.disabled = this.disabled;
-    datePicker.readonly = this.readonly;
-    datePicker.autoOpenDisabled = this.autoOpenDisabled;
+    newDatePicker.min = this.__formatDateISO(this.__minDateTime, this.__defaultDateMinMaxValue);
+    newDatePicker.max = this.__formatDateISO(this.__maxDateTime, this.__defaultDateMinMaxValue);
+    newDatePicker.required = this.required;
+    newDatePicker.disabled = this.disabled;
+    newDatePicker.readonly = this.readonly;
+    newDatePicker.autoOpenDisabled = this.autoOpenDisabled;
 
     // Disable default internal validation for the component
-    datePicker.validate = () => {};
-    datePicker._validateInput = () => {};
+    newDatePicker.validate = () => {};
+    newDatePicker._validateInput = () => {};
   }
 
   /** @private */
-  __timePickerChanged() {
-    const timePicker = this._getDirectSlotChild('time-picker');
-    if (this.__timePicker === timePicker || !timePicker) {
+  __timePickerChanged(newTimePicker, existingTimePicker) {
+    if (!newTimePicker) {
       return;
     }
-    if (this.__timePicker) {
+    if (existingTimePicker) {
       // Remove an existing time picker
-      this.__removeInputListeners(this.__timePicker);
-      this.__timePicker.remove();
+      this.__removeInputListeners(existingTimePicker);
+      existingTimePicker.remove();
     }
 
-    this.__addInputListeners(timePicker);
-    this.__timePicker = timePicker;
+    this.__addInputListeners(newTimePicker);
 
-    if (timePicker.__defaultPicker) {
+    if (newTimePicker.__defaultPicker) {
       // Synchronize properties to default time picker
-      timePicker.placeholder = this.timePlaceholder;
-      timePicker.step = this.step;
-      timePicker.invalid = this.invalid;
-      this.__syncI18n(timePicker, this, timePickerI18nProps);
+      newTimePicker.placeholder = this.timePlaceholder;
+      newTimePicker.step = this.step;
+      newTimePicker.invalid = this.invalid;
+      this.__syncI18n(newTimePicker, this, timePickerI18nProps);
     } else {
       // Synchronize properties from slotted time picker
-      this.timePlaceholder = timePicker.placeholder;
-      this.step = timePicker.step;
-      this.__syncI18n(this, timePicker, timePickerI18nProps);
+      this.timePlaceholder = newTimePicker.placeholder;
+      this.step = newTimePicker.step;
+      this.__syncI18n(this, newTimePicker, timePickerI18nProps);
     }
 
     // min and max are always synchronized from parent to slotted because time picker min and max
     // need to be dynamically set depending on currently selected date instead of simple propagation
     this.__updateTimePickerMinMax();
-    timePicker.required = this.required;
-    timePicker.disabled = this.disabled;
-    timePicker.readonly = this.readonly;
-    timePicker.autoOpenDisabled = this.autoOpenDisabled;
+    newTimePicker.required = this.required;
+    newTimePicker.disabled = this.disabled;
+    newTimePicker.readonly = this.readonly;
+    newTimePicker.autoOpenDisabled = this.autoOpenDisabled;
 
     // Disable default internal validation for the component
-    timePicker.validate = () => {};
+    newTimePicker.validate = () => {};
   }
 
   /** @private */
@@ -561,12 +592,10 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
 
   /** @private */
   __i18nChanged(changeRecord) {
-    this.__datePickerChanged();
     if (this.__datePicker) {
       this.__datePicker.set(changeRecord.path, changeRecord.value);
     }
 
-    this.__timePickerChanged();
     if (this.__timePicker) {
       this.__timePicker.set(changeRecord.path, changeRecord.value);
     }
