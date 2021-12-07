@@ -209,8 +209,9 @@ describe('focus-trap', function () {
             i++;
           }
 
-          expect(getFocusedElementIndex()).to.eql(i);
-          tabKeyDown(focusableElements[getFocusedElementIndex()]);
+          const focusedIndex = getFocusedElementIndex();
+          expect(focusedIndex).to.equal(i);
+          tabKeyDown(focusableElements[focusedIndex]);
         }
         expect(getFocusedElementIndex()).to.eql(0);
 
