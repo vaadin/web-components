@@ -687,6 +687,20 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     this.__propagateHostAttributes();
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    if (this._observer) {
+      this._observer.connect();
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this._observer) {
+      this._observer.disconnect();
+    }
+  }
+
   /** @private */
   __isSaveBtnDisabled(isDirty) {
     // Used instead of isDirty property binding in order to enable overriding of the behavior

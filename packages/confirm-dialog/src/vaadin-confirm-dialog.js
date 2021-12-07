@@ -347,6 +347,20 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
     }
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    if (this._observer) {
+      this._observer.connect();
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this._observer) {
+      this._observer.disconnect();
+    }
+  }
+
   /** @private */
   __onDialogOpened() {
     const overlay = this._overlayElement;

@@ -417,6 +417,10 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       this._detectIosNavbar();
       window.addEventListener('resize', this._boundIosResizeListener);
     }
+
+    if (this._observer) {
+      this._observer.connect();
+    }
   }
 
   /** @protected */
@@ -426,6 +430,10 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     /* c8 ignore next 3 */
     if (this._boundIosResizeListener) {
       window.removeEventListener('resize', this._boundIosResizeListener);
+    }
+
+    if (this._observer) {
+      this._observer.disconnect();
     }
   }
 

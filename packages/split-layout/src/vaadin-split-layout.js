@@ -246,6 +246,20 @@ class SplitLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizab
     addListener(splitter, 'up', this._restorePointerEvents.bind(this));
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    if (this.__observer) {
+      this.__observer.connect();
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.__observer) {
+      this.__observer.disconnect();
+    }
+  }
+
   /** @private */
   _processChildren() {
     this.getEffectiveChildren().forEach((child, i) => {

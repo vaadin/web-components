@@ -91,6 +91,20 @@ export const ListMixin = (superClass) =>
       });
     }
 
+    connectedCallback() {
+      super.connectedCallback();
+      if (this._observer) {
+        this._observer.connect();
+      }
+    }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      if (this._observer) {
+        this._observer.disconnect();
+      }
+    }
+
     /** @private */
     _enhanceItems(items, orientation, selected, disabled) {
       if (!disabled) {

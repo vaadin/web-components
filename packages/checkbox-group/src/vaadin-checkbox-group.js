@@ -161,6 +161,20 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
     });
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    if (this._observer) {
+      this._observer.connect();
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this._observer) {
+      this._observer.disconnect();
+    }
+  }
+
   /**
    * Override method inherited from `ValidateMixin`
    * to validate the value array.

@@ -169,6 +169,20 @@ export const FieldMixin = (superclass) =>
       this.addController(this._fieldAriaController);
     }
 
+    connectedCallback() {
+      super.connectedCallback();
+      if (this.__helperIdObserver) {
+        this.__helperIdObserver.connect();
+      }
+    }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      if (this.__helperIdObserver) {
+        this.__helperIdObserver.disconnect();
+      }
+    }
+
     /** @private */
     __applyCustomError() {
       const error = this.__errorMessage;

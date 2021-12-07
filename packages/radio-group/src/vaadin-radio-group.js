@@ -186,6 +186,20 @@ class RadioGroup extends FieldMixin(
     });
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    if (this._observer) {
+      this._observer.connect();
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this._observer) {
+      this._observer.disconnect();
+    }
+  }
+
   /**
    * @param {!Array<!Node>} nodes
    * @return {!Array<!RadioButton>}

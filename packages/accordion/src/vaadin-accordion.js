@@ -152,6 +152,20 @@ class Accordion extends ThemableMixin(ElementMixin(PolymerElement)) {
     });
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    if (this._observer) {
+      this._observer.connect();
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this._observer) {
+      this._observer.disconnect();
+    }
+  }
+
   /**
    * @param {!Array<!Element>} array
    * @return {!Array<!AccordionPanel>}

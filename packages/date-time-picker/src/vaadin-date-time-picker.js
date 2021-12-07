@@ -425,6 +425,20 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
     this.ariaTarget = this;
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    if (this._observer) {
+      this._observer.connect();
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this._observer) {
+      this._observer.disconnect();
+    }
+  }
+
   /** @private */
   __filterElements(node) {
     return node.nodeType === Node.ELEMENT_NODE;
