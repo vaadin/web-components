@@ -13,8 +13,6 @@ const fixtures = {
   `,
   'lazy-inputs': `
     <vaadin-date-time-picker>
-      <vaadin-date-picker slot="setAfterReady"></vaadin-date-picker>
-      <vaadin-time-picker slot="setAfterReady"></vaadin-time-picker>
     </vaadin-date-time-picker>
   `,
   'default-values': `
@@ -25,8 +23,6 @@ const fixtures = {
   `,
   'lazy-values': `
     <vaadin-date-time-picker>
-      <vaadin-date-picker slot="setAfterReady" value="2019-09-16"></vaadin-date-picker>
-      <vaadin-time-picker slot="setAfterReady" value="15:00"></vaadin-time-picker>
     </vaadin-date-time-picker>
   `
 };
@@ -303,9 +299,14 @@ describe('Theme attribute', () => {
       timePicker = dateTimePicker.querySelector('vaadin-time-picker');
 
       if (set === 'lazy') {
-        // Assign the slots lazily simulating the case if Flow adds the slotted elements after date time picker is ready
+        // Add slotted children lazily simulating the case where Flow adds the slotted elements after date time picker is ready
+        datePicker = document.createElement('vaadin-date-picker');
         datePicker.slot = 'date-picker';
+        timePicker = document.createElement('vaadin-time-picker');
         timePicker.slot = 'time-picker';
+        dateTimePicker.appendChild(datePicker);
+        dateTimePicker.appendChild(timePicker);
+        // Wait for FlattenedNodeObserver to trigger
         await aTimeout(0);
       }
     });
@@ -358,6 +359,16 @@ describe('Theme attribute', () => {
     });
 
     if (set === 'lazy') {
+      it('should not contain original date picker', () => {
+        expect(originalDatePicker).not.to.be.undefined;
+        expect(dateTimePicker.contains(originalDatePicker)).to.be.false;
+      });
+
+      it('should not contain original time picker', () => {
+        expect(originalTimePicker).not.to.be.undefined;
+        expect(dateTimePicker.contains(originalTimePicker)).to.be.false;
+      });
+
       it('should not react to changes on discarded pickers', () => {
         sinon.spy(dateTimePicker, '__valueChangedEventHandler');
         sinon.spy(dateTimePicker, '__changeEventHandler');
@@ -395,9 +406,16 @@ describe('Theme attribute', () => {
       dateTimePicker = fixtureSync(fixtures[`${set}-values`]);
 
       if (set === 'lazy') {
-        // Assign the slots lazily simulating the case if Flow adds the slotted elements after date time picker is ready
-        dateTimePicker.querySelector('vaadin-date-picker').slot = 'date-picker';
-        dateTimePicker.querySelector('vaadin-time-picker').slot = 'time-picker';
+        // Add slotted children lazily simulating the case where Flow adds the slotted elements after date time picker is ready
+        const datePicker = document.createElement('vaadin-date-picker');
+        datePicker.value = '2019-09-16';
+        datePicker.slot = 'date-picker';
+        const timePicker = document.createElement('vaadin-time-picker');
+        timePicker.value = '15:00';
+        timePicker.slot = 'time-picker';
+        dateTimePicker.appendChild(datePicker);
+        dateTimePicker.appendChild(timePicker);
+        // Wait for FlattenedNodeObserver to trigger
         await aTimeout(0);
       }
     });
