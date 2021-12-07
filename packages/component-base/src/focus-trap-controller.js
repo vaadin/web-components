@@ -58,7 +58,7 @@ export class FocusTrapController {
   }
 
   /**
-   * Deactivates the focus trap set with the `.trapFocus()` method
+   * Deactivates the focus trap set up with the `.trapFocus()` method
    * so that it becomes possible to tab outside the trap node.
    */
   releaseFocus() {
@@ -66,11 +66,12 @@ export class FocusTrapController {
   }
 
   /**
-   * A `keydown` event handler that prevents tabbing from escaping the trap node
-   * when the trap is enabled.
+   * A `keydown` event handler that manages tabbing navigation when the trap is enabled.
    *
-   * When the trap is enabled, the tabbing will cycle to the first/last focusable element
-   * inside the trap node whenever focus moves away from the last/first focusable element.
+   * - Moves focus to the next focusable element of the trap on `Tab` press.
+   * When no next element to focus, the method moves focus to the first focusable element.
+   * - Moves focus to the prev focusable element of the trap on `Shift+Tab` press.
+   * When no prev element to focus, the method moves focus to the last focusable element.
    *
    * @param {KeyboardEvent} event
    * @private
@@ -90,7 +91,7 @@ export class FocusTrapController {
 
   /**
    * - Moves focus to the next focusable element if `backward === false`.
-   * When no next element to focus, the method moves focus to the last focusable element.
+   * When no next element to focus, the method moves focus to the first focusable element.
    * - Moves focus to the prev focusable element if `backward === true`.
    * When no prev element to focus the method moves focus to the last focusable element.
    *
