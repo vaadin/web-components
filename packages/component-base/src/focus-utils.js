@@ -135,7 +135,7 @@ function collectFocusableNodes(node, result) {
     // Use shadow root if possible, will check for distributed nodes.
     children = (element.shadowRoot || element).children;
   }
-  children.forEach((child) => {
+  [...children].forEach((child) => {
     // Ensure method is always invoked to collect focusable children.
     needsSort = collectFocusableNodes(child, result) || needsSort;
   });
