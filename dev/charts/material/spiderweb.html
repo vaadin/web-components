@@ -12,7 +12,13 @@
   <body>
     <theme-switcher></theme-switcher>
 
-    <vaadin-chart title="Budget vs spending" theme="spiderweb" polar categories='["Sales","Marketing","Development","Customer Support", "Information Technology", "Administration"]' tooltip additional-options='{
+    <vaadin-chart
+      title="Budget vs spending"
+      theme="spiderweb"
+      polar
+      categories='["Sales","Marketing","Development","Customer Support", "Information Technology", "Administration"]'
+      tooltip
+      additional-options='{
         "legend": {
           "align": "right",
           "verticalAlign": "top",
@@ -25,9 +31,16 @@
         "yAxis": {
           "gridLineInterpolation": "polygon"
         }
-      }'>
-        <vaadin-chart-series title="Allocated Budget" values="[43000, 19000, 60000, 35000, 17000, 10000]"></vaadin-chart-series>
-        <vaadin-chart-series title="Actual Spending" values="[50000, 39000, 42000, 31000, 26000, 14000]"></vaadin-chart-series>
-      </vaadin-chart>
+      }'
+    >
+      <vaadin-chart-series
+        title="Allocated Budget"
+        values="[43000, 19000, 60000, 35000, 17000, 10000]"
+      ></vaadin-chart-series>
+      <vaadin-chart-series
+        title="Actual Spending"
+        values="[50000, 39000, 42000, 31000, 26000, 14000]"
+      ></vaadin-chart-series>
+    </vaadin-chart>
   </body>
 </html>

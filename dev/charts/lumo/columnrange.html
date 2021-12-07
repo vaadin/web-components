@@ -9,28 +9,32 @@
       import '../theme-switcher.js';
     </script>
     <script defer>
-        fetch('../demo-data/temperature-date-min-max.json')
-        .then(response => response.json())
-        .then(data => {
-            const series = document.querySelector('vaadin-chart-series');
-            series.values = data;
+      fetch('../demo-data/temperature-date-min-max.json')
+        .then((response) => response.json())
+        .then((data) => {
+          const series = document.querySelector('vaadin-chart-series');
+          series.values = data;
         });
-        const series = document.querySelector('vaadin-chart-series');
+      const series = document.querySelector('vaadin-chart-series');
     </script>
   </head>
   <body>
     <theme-switcher></theme-switcher>
 
-    <vaadin-chart type="columnrange" title="Temperature variation by day" timeline additional-options='{
+    <vaadin-chart
+      type="columnrange"
+      title="Temperature variation by day"
+      timeline
+      additional-options='{
         "rangeSelector": {
           "selected": 2
         },
         "tooltip": {
           "valueSuffix": "°C"
         }
-      }'>
-        <vaadin-chart-series title="Temperatures">
-        </vaadin-chart-series>
-      </vaadin-chart>
+      }'
+    >
+      <vaadin-chart-series title="Temperatures"> </vaadin-chart-series>
+    </vaadin-chart>
   </body>
 </html>

@@ -12,7 +12,11 @@
   <body>
     <theme-switcher></theme-switcher>
 
-    <vaadin-chart type="pie" title="Browser market shares in January, 2018" tooltip additional-options='{
+    <vaadin-chart
+      type="pie"
+      title="Browser market shares in January, 2018"
+      tooltip
+      additional-options='{
       "tooltip": {
         "pointFormat": "{series.name}: <b>{point.percentage:.1f}%</b>"
       },
@@ -26,8 +30,11 @@
           }
         }
       }
-    }'>
-      <vaadin-chart-series title="Brands" values='[
+    }'
+    >
+      <vaadin-chart-series
+        title="Brands"
+        values='[
         {
           "name": "Chrome",
           "y": 61.41,
@@ -66,7 +73,8 @@
           "name": "Other",
           "y": 2.61
         }
-    ]'></vaadin-chart-series>
+    ]'
+      ></vaadin-chart-series>
     </vaadin-chart>
   </body>
 </html>

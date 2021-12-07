@@ -11,7 +11,11 @@
   </head>
   <body>
     <theme-switcher></theme-switcher>
-    <vaadin-chart type="pyramid" title="Sales pyramid" no-legend additional-options='{
+    <vaadin-chart
+      type="pyramid"
+      title="Sales pyramid"
+      no-legend
+      additional-options='{
         "plotOptions": {
           "series": {
             "dataLabels": {
@@ -23,15 +27,19 @@
             "width":"80%"
           }
         }
-      }'>
-        <vaadin-chart-series title="Unique users" values='[
+      }'
+    >
+      <vaadin-chart-series
+        title="Unique users"
+        values='[
         ["Website visits", 15654],
         ["Downloads", 4064],
         ["Requested price list", 1987],
         ["Invoice sent", 976],
         ["Finalized", 846]
-      ]'>
-        </vaadin-chart-series>
-      </vaadin-chart>
+      ]'
+      >
+      </vaadin-chart-series>
+    </vaadin-chart>
   </body>
 </html>

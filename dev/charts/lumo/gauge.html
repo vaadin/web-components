@@ -11,7 +11,12 @@
   </head>
   <body>
     <theme-switcher></theme-switcher>
-    <vaadin-chart type="gauge" title="Speedometer" theme="speedometer" tooltip additional-options='{
+    <vaadin-chart
+      type="gauge"
+      title="Speedometer"
+      theme="speedometer"
+      tooltip
+      additional-options='{
         "pane": {
           "startAngle": -150,
           "endAngle": 150
@@ -46,12 +51,17 @@
               "className": "band-2"
             }]
         }
-      }'>
-        <vaadin-chart-series title="Speed" values="[89]" additional-options='{
+      }'
+    >
+      <vaadin-chart-series
+        title="Speed"
+        values="[89]"
+        additional-options='{
         "tooltip": {
             "valueSuffix": " km/h"
         }
-      }'></vaadin-chart-series>
-      </vaadin-chart>
+      }'
+      ></vaadin-chart-series>
+    </vaadin-chart>
   </body>
 </html>
