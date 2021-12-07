@@ -21,11 +21,6 @@ declare class FocusTrapController implements ReactiveController {
   host: HTMLElement;
 
   /**
-   * A node for trapping focus in.
-   */
-  trapNode: HTMLElement | null;
-
-  /**
    * Activates a focus trap for a DOM node that will prevent focus from escaping the node.
    * The trap can be deactivated with the `.releaseFocus()` method.
    *

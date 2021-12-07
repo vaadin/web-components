@@ -24,8 +24,9 @@ export class FocusTrapController {
      * A node for trapping focus in.
      *
      * @type {HTMLElement | null}
+     * @private
      */
-    this.trapNode = null;
+    this.__trapNode = null;
 
     this.__onKeyDown = this.__onKeyDown.bind(this);
   }
@@ -50,7 +51,7 @@ export class FocusTrapController {
    * @param {HTMLElement} trapNode
    */
   trapFocus(trapNode) {
-    this.trapNode = trapNode;
+    this.__trapNode = trapNode;
 
     if (this.__focusedElementIndex === -1 && this.__focusableElements.length > 0) {
       this.__focusableElements[0].focus();
@@ -62,7 +63,7 @@ export class FocusTrapController {
    * so that it becomes possible to tab outside the trap node.
    */
   releaseFocus() {
-    this.trapNode = null;
+    this.__trapNode = null;
   }
 
   /**
@@ -77,7 +78,7 @@ export class FocusTrapController {
    * @private
    */
   __onKeyDown(event) {
-    if (!this.trapNode) {
+    if (!this.__trapNode) {
       return;
     }
 
@@ -119,7 +120,7 @@ export class FocusTrapController {
    * @private
    */
   get __focusableElements() {
-    return getFocusableElements(this.trapNode);
+    return getFocusableElements(this.__trapNode);
   }
 
   /**
