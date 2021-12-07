@@ -5,7 +5,7 @@
  */
 import './vaadin-date-time-picker-date-picker.js';
 import './vaadin-date-time-picker-time-picker.js';
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer';
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
