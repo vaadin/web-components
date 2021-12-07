@@ -58,7 +58,6 @@
     "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
     "max-classes-per-file": ["error", 3],
     "max-params": ["error", 4],
-    "no-bitwise": "error",
     "no-else-return": "error",
     "no-eval": "error",
     "no-implicit-coercion": ["error", { "allow": ["!!"] }],

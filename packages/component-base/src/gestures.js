@@ -261,7 +261,6 @@ function hasLeftMouseButton(ev) {
       buttons = MOUSE_WHICH_TO_BUTTONS[ev.which] || 0;
     }
     // buttons is a bitmask, check that the left button bit is set (1)
-    // eslint-disable-next-line no-bitwise
     return Boolean(buttons & 1);
   }
   // allow undefined for testing events

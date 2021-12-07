@@ -92,7 +92,7 @@ describe('scroll to index', () => {
         let row = Array.from(grid.$.items.children).filter((r) => r.index === index)[0];
         const rowTop = row.getBoundingClientRect().top;
 
-        grid.size -= Math.floor(grid.size / 4);
+        grid.size -= ~~(grid.size / 4);
         row = Array.from(grid.$.items.children).filter((r) => r.index === index)[0];
         expect(row.getBoundingClientRect().top).to.be.closeTo(rowTop, 0.5);
       });
