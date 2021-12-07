@@ -843,20 +843,18 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
 
     if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
       this._focusDate(dateToFocus);
-    } else {
-      if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
-        // Move to min or max date
-        if (days > 0) {
-          // down or right
-          this._focusDate(this.maxDate);
-        } else {
-          // up or left
-          this._focusDate(this.minDate);
-        }
+    } else if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
+      // Move to min or max date
+      if (days > 0) {
+        // down or right
+        this._focusDate(this.maxDate);
       } else {
-        // Move to closest allowed date
-        this._focusClosestDate(focus);
+        // up or left
+        this._focusDate(this.minDate);
       }
+    } else {
+      // Move to closest allowed date
+      this._focusClosestDate(focus);
     }
   }
 
@@ -875,20 +873,18 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
 
     if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
       this.focusedDate = dateToFocus;
-    } else {
-      if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
-        // Move to min or max date
-        if (months > 0) {
-          // pagedown
-          this._focusDate(this.maxDate);
-        } else {
-          // pageup
-          this._focusDate(this.minDate);
-        }
+    } else if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
+      // Move to min or max date
+      if (months > 0) {
+        // pagedown
+        this._focusDate(this.maxDate);
       } else {
-        // Move to closest allowed date
-        this._focusClosestDate(focus);
+        // pageup
+        this._focusDate(this.minDate);
       }
+    } else {
+      // Move to closest allowed date
+      this._focusClosestDate(focus);
     }
   }
 
@@ -906,14 +902,12 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
 
     if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
       this._focusDate(dateToFocus);
+    } else if (this._dateAllowed(focusedDate, this.minDate, this.maxDate)) {
+      // Move to minDate or maxDate
+      this._focusDate(this[property]);
     } else {
-      if (this._dateAllowed(focusedDate, this.minDate, this.maxDate)) {
-        // Move to minDate or maxDate
-        this._focusDate(this[property]);
-      } else {
-        // Move to closest allowed date
-        this._focusClosestDate(focusedDate);
-      }
+      // Move to closest allowed date
+      this._focusClosestDate(focusedDate);
     }
   }
 

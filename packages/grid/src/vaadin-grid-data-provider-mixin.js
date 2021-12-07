@@ -350,10 +350,8 @@ export const DataProviderMixin = (superClass) =>
         this.dataProvider(params, (items, size) => {
           if (size !== undefined) {
             cache.size = size;
-          } else {
-            if (params.parentItem) {
-              cache.size = items.length;
-            }
+          } else if (params.parentItem) {
+            cache.size = items.length;
           }
 
           const currentItems = Array.from(this.$.items.children).map((row) => row._item);

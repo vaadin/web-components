@@ -132,14 +132,12 @@ function parseLog(log) {
           commits.push(commit);
           commit.commit = result[1];
           pos = 'head';
-        } else {
-          if (line.startsWith(' ')) {
-            commit.body = String(commit.body);
-          } else if (/^packages\/.*/.test(line)) {
-            const wc = line.split('/')[1];
-            if (!commit.components.includes(wc)) {
-              commit.components.push(wc);
-            }
+        } else if (line.startsWith(' ')) {
+          commit.body = String(commit.body);
+        } else if (/^packages\/.*/.test(line)) {
+          const wc = line.split('/')[1];
+          if (!commit.components.includes(wc)) {
+            commit.components.push(wc);
           }
         }
     }
@@ -210,7 +208,9 @@ function logCommit(c) {
 
 // log a set of commits, and group by types
 function logCommitsByType(commits) {
-  if (!commits[0]) return;
+  if (!commits[0]) {
+    return;
+  }
   const byType = {};
   commits.forEach((commit) => {
     const type = commit.bfp ? 'bfp' : commit.breaking ? 'break' : commit.type;

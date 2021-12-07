@@ -161,7 +161,9 @@ export class ComboBoxItem extends ThemableMixin(DirMixin(PolymerElement)) {
 
   /** @private */
   __updateLabel(label, renderer) {
-    if (renderer) return;
+    if (renderer) {
+      return;
+    }
 
     this.textContent = label;
   }

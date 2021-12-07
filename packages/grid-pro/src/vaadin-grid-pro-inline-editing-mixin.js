@@ -408,19 +408,15 @@ export const InlineEditingMixin = (superClass) =>
         if (e.shiftKey) {
           if (cols[colIndex - 1]) {
             nextCol = cols[colIndex - 1];
-          } else {
-            if (index > 0) {
-              nextIdx = index - 1;
-              nextCol = cols[cols.length - 1];
-            }
+          } else if (index > 0) {
+            nextIdx = index - 1;
+            nextCol = cols[cols.length - 1];
           }
+        } else if (cols[colIndex + 1]) {
+          nextCol = cols[colIndex + 1];
         } else {
-          if (cols[colIndex + 1]) {
-            nextCol = cols[colIndex + 1];
-          } else {
-            nextIdx = index + 1;
-            nextCol = cols[0];
-          }
+          nextIdx = index + 1;
+          nextCol = cols[0];
         }
       }
 

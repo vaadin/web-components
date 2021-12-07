@@ -588,15 +588,13 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElem
         style.right = Math.max(0, wdthVport - x) + 'px';
         this._setEndAligned(overlay);
       }
+    } else if (x > wdthVport / 2 || x > xMin) {
+      // Menu is displayed in the right side of the anchor
+      style.right = Math.max(0, wdthVport - x) + 'px';
     } else {
       // Menu is displayed in the left side of the anchor
-      if (x > wdthVport / 2 || x > xMin) {
-        style.right = Math.max(0, wdthVport - x) + 'px';
-      } else {
-        // Menu is displayed in the left side of the anchor
-        style.left = x + 'px';
-        this._setEndAligned(overlay);
-      }
+      style.left = x + 'px';
+      this._setEndAligned(overlay);
     }
 
     if (y < hghtVport / 2 || y < yMax) {

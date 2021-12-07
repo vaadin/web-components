@@ -196,7 +196,9 @@ export const ColumnBaseMixin = (superClass) =>
       // Adds the column cells to the grid after the column is attached
       requestAnimationFrame(() => {
         // Skip if the column has been detached
-        if (!this._grid) return;
+        if (!this._grid) {
+          return;
+        }
 
         this._allCells.forEach((cell) => {
           if (!cell._content.parentNode) {
@@ -213,7 +215,9 @@ export const ColumnBaseMixin = (superClass) =>
       // Removes the column cells from the grid after the column is detached
       requestAnimationFrame(() => {
         // Skip if the column has been attached again
-        if (this._grid) return;
+        if (this._grid) {
+          return;
+        }
 
         this._allCells.forEach((cell) => {
           if (cell._content.parentNode) {
@@ -379,12 +383,10 @@ export const ColumnBaseMixin = (superClass) =>
         } else if (textAlign === 'end') {
           textAlignFallback = 'right';
         }
-      } else {
-        if (textAlign === 'start') {
-          textAlignFallback = 'right';
-        } else if (textAlign === 'end') {
-          textAlignFallback = 'left';
-        }
+      } else if (textAlign === 'start') {
+        textAlignFallback = 'right';
+      } else if (textAlign === 'end') {
+        textAlignFallback = 'left';
       }
 
       this._allCells.forEach((cell) => {
@@ -449,7 +451,9 @@ export const ColumnBaseMixin = (superClass) =>
       cells.forEach((cell) => {
         const model = this._grid.__getRowModel(cell.parentElement);
 
-        if (!renderer) return;
+        if (!renderer) {
+          return;
+        }
 
         if (cell._renderer !== renderer) {
           this._clearCellContent(cell);
@@ -557,7 +561,9 @@ export const ColumnBaseMixin = (superClass) =>
      * @protected
      */
     _defaultHeaderRenderer() {
-      if (!this.path) return;
+      if (!this.path) {
+        return;
+      }
 
       this.__setTextContent(this._headerCell._content, this._generateHeader(this.path));
     }
@@ -569,7 +575,9 @@ export const ColumnBaseMixin = (superClass) =>
      * @protected
      */
     _defaultRenderer(root, _owner, { item }) {
-      if (!this.path) return;
+      if (!this.path) {
+        return;
+      }
 
       this.__setTextContent(root, this.get(this.path, item));
     }

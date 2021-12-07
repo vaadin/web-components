@@ -321,7 +321,9 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate() {
-    if (!this.renderer) return;
+    if (!this.renderer) {
+      return;
+    }
 
     this.renderer(this._card, this);
   }

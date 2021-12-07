@@ -301,13 +301,11 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
         value = this.max;
         if (incr < 0) {
           incr = 0;
-        } else {
+        } else if (this._getIncrement(1, value - this.step) > this.max) {
+          value -= 2 * this.step;
           // FIXME(yuriy): find a proper solution to make correct step back
-          if (this._getIncrement(1, value - this.step) > this.max) {
-            value -= 2 * this.step;
-          } else {
-            value -= this.step;
-          }
+        } else {
+          value -= this.step;
         }
       }
     } else if (value < this.min) {

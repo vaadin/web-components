@@ -159,8 +159,9 @@ MockHttpRequest.prototype = {
     }
 
     // it's the first call on this header field
-    if (this.requestHeaders[header] === undefined) this.requestHeaders[header] = value;
-    else {
+    if (this.requestHeaders[header] === undefined) {
+      this.requestHeaders[header] = value;
+    } else {
       var prev = this.requestHeaders[header];
       this.requestHeaders[header] = prev + ', ' + value;
     }
