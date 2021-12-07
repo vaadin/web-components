@@ -87,5 +87,18 @@ describe('<vaadin-upload-file> element', () => {
 
       expect(fileElement.hasAttribute('focus-ring')).to.be.true;
     });
+
+    it('should not set focus-ring on Shift Tab to button', async () => {
+      const button = fileElement.shadowRoot.querySelector('[part="remove-button"]');
+      button.focus();
+      await sendKeys({ press: 'Tab' });
+
+      // Move focus back to the button.
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
+      expect(fileElement.hasAttribute('focus-ring')).to.be.false;
+    });
   });
 });
