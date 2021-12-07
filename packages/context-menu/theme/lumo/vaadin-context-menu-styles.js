@@ -93,6 +93,10 @@ registerStyles(
     :host {
       user-select: none;
       -ms-user-select: none;
+    }
+
+    /* Workaround https://github.com/vaadin/web-components/issues/3133 */
+    :host(:hover) {
       -webkit-user-select: none;
     }
 
