@@ -99,6 +99,10 @@ registerStyles(
 registerStyles(
   'vaadin-upload-file',
   css`
+    :host {
+      outline: none;
+    }
+
     [part='row'] {
       display: flex;
       align-items: flex-start;
@@ -106,11 +110,7 @@ registerStyles(
       padding: 8px;
     }
 
-    :host(:focus) {
-      outline: none;
-    }
-
-    :host(:focus) [part='row'] {
+    :host([focus-ring]) [part='row'] {
       background-color: var(--material-divider-color);
     }
 

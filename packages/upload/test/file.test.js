@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import '../vaadin-upload.js';
 import { createFile } from './common.js';
 
@@ -47,6 +48,44 @@ describe('<vaadin-upload-file> element', () => {
     it('should reflect error', () => {
       fileElement.set('file.error', true);
       expect(fileElement.hasAttribute('error')).to.be.true;
+    });
+  });
+
+  describe('focus', () => {
+    beforeEach(() => {
+      // Show the "Start" button
+      fileElement.set('file.held', true);
+    });
+
+    it('should not add focus-ring to the host on programmatic focus', () => {
+      fileElement.focus();
+      expect(fileElement.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should add focus-ring to the host on keyboard focus', async () => {
+      await sendKeys({ press: 'Tab' });
+      expect(fileElement.hasAttribute('focus-ring')).to.be.true;
+    });
+
+    it('should remove focus-ring when a button is focused', async () => {
+      await sendKeys({ press: 'Tab' });
+
+      // Focus the button
+      await sendKeys({ press: 'Tab' });
+
+      expect(fileElement.hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should restore focus-ring when focus moves back', async () => {
+      const button = fileElement.shadowRoot.querySelector('button');
+      button.focus();
+
+      // Move focus back to the upload file.
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
+      expect(fileElement.hasAttribute('focus-ring')).to.be.true;
     });
   });
 });

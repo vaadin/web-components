@@ -6,6 +6,7 @@
 import '@vaadin/progress-bar/src/vaadin-progress-bar.js';
 import './vaadin-upload-icons.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -15,36 +16,40 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ---|---
- * `row` | File container
- * `info` | Container for file status icon, file name, status and error messages
- * `done-icon` | File done status icon
- * `warning-icon` | File warning status icon
- * `meta` | Container for file name, status and error messages
- * `name` | File name
- * `error` | Error message, shown when error happens
- * `status` | Status message
- * `commands` | Container for file command icons
- * `start-button` | Start file upload button
- * `retry-button` | Retry file upload button
- * `remove-button` | Remove file button
- * `progress`| Progress bar
+ * Part name        | Description
+ * -----------------|-------------
+ * `row`            | File container
+ * `info`           | Container for file status icon, file name, status and error messages
+ * `done-icon`      | File done status icon
+ * `warning-icon`   | File warning status icon
+ * `meta`           | Container for file name, status and error messages
+ * `name`           | File name
+ * `error`          | Error message, shown when error happens
+ * `status`         | Status message
+ * `commands`       | Container for file command buttons
+ * `start-button`   | Start file upload button
+ * `retry-button`   | Retry file upload button
+ * `remove-button`  | Remove file button
+ * `progress`       | Progress bar
  *
  * The following state attributes are available for styling:
  *
- * Attribute | Description | Part name
- * ---|---|---
- * `error` | An error has happened during uploading | `:host`
- * `indeterminate` | Uploading is in progress, but the progress value is unknown | `:host`
- * `uploading` | Uploading is in progress | `:host`
- * `complete` | Uploading has finished successfully | `:host`
+ * Attribute        | Description
+ * -----------------|-------------
+ * `focus-ring`     | Set when the element is focused using the keyboard.
+ * `focused`        | Set when the element is focused.
+ * `error`          | An error has happened during uploading.
+ * `indeterminate`  | Uploading is in progress, but the progress value is unknown.
+ * `uploading`      | Uploading is in progress.
+ * `complete`       | Uploading has finished successfully.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
+ * @extends HTMLElement
+ * @mixes FocusMixin
  * @mixes ThemableMixin
  */
-class UploadFile extends ThemableMixin(PolymerElement) {
+class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -129,7 +134,17 @@ class UploadFile extends ThemableMixin(PolymerElement) {
     return {
       file: Object,
 
-      i18n: Object
+      i18n: Object,
+
+      /**
+       * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
+       * @protected
+       */
+      tabindex: {
+        type: Number,
+        value: 0,
+        reflectToAttribute: true
+      }
     };
   }
 
@@ -141,6 +156,38 @@ class UploadFile extends ThemableMixin(PolymerElement) {
       '_toggleHostAttribute(file.uploading, "uploading")',
       '_toggleHostAttribute(file.complete, "complete")'
     ];
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    // Handle moving focus to the button on Tab.
+    this.shadowRoot.addEventListener('focusin', (e) => {
+      const target = e.composedPath()[0];
+
+      if (target.getAttribute('part').endsWith('button')) {
+        this._setFocused(false);
+      }
+    });
+
+    // Handle moving focus from the button on Shift Tab.
+    this.shadowRoot.addEventListener('focusout', (e) => {
+      if (e.relatedTarget === this) {
+        this._setFocused(true);
+      }
+    });
+  }
+
+  /**
+   * Override method inherited from `FocusMixin` to mark the file as focused
+   * only when the host is focused.
+   * @param {Event} event
+   * @return {boolean}
+   * @protected
+   */
+  _shouldSetFocus(event) {
+    return event.composedPath()[0] === this;
   }
 
   /** @private */
