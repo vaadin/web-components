@@ -90,7 +90,8 @@ registerStyles(
 registerStyles(
   'vaadin-context-menu-item',
   css`
-    :host {
+    /* :hover needed to workaround https://github.com/vaadin/web-components/issues/3133 */
+    :host(:hover) {
       user-select: none;
       -ms-user-select: none;
       -webkit-user-select: none;
