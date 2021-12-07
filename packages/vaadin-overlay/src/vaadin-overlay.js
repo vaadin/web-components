@@ -515,7 +515,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
       return;
     }
 
-    if (event.key === 'Escape' || event.key === 'Esc') {
+    if (event.key === 'Escape') {
       const evt = new CustomEvent('vaadin-overlay-escape-press', {
         bubbles: true,
         cancelable: true,
