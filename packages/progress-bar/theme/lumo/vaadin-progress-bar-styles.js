@@ -96,24 +96,31 @@ registerStyles(
       0% {
         opacity: 1;
       }
+
       10% {
         opacity: 0;
       }
+
       40% {
         opacity: 0;
       }
+
       50% {
         opacity: 1;
       }
+
       50.1% {
         opacity: 1;
       }
+
       60% {
         opacity: 0;
       }
+
       90% {
         opacity: 0;
       }
+
       100% {
         opacity: 1;
       }
