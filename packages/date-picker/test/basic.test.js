@@ -5,6 +5,13 @@ import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import { close, getOverlayContent, monthsEqual, open } from './common.js';
 
+function touchEnd(element) {
+  const e = new CustomEvent('touchend', { cancelable: true, bubbles: true });
+  e.changedTouches = [{}];
+  element.dispatchEvent(e);
+  return e;
+}
+
 describe('basic features', () => {
   let datepicker, input, toggleButton;
 
@@ -98,6 +105,17 @@ describe('basic features', () => {
     await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
   });
 
+  it('should prevent touchend event on the input', () => {
+    const e = touchEnd(datepicker.inputElement);
+    expect(e.defaultPrevented).to.be.true;
+  });
+
+  it('should prevent touchend event when on autoOpenDisabled', () => {
+    datepicker.autoOpenDisabled = true;
+    const e = touchEnd(datepicker.inputElement);
+    expect(e.defaultPrevented).to.be.false;
+  });
+
   it('should not open on input tap when autoOpenDisabled is true and not on mobile', () => {
     datepicker.autoOpenDisabled = true;
     tap(input);
@@ -186,7 +204,7 @@ describe('basic features', () => {
   });
 
   it('should open by tapping the calendar icon', async () => {
-    tap(toggleButton);
+    setTimeout(() => tap(toggleButton));
     await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
   });
 
@@ -526,8 +544,7 @@ describe('clear-button-visible', () => {
 
   it('should not prevent touchend event on clear button', () => {
     datepicker.value = '2000-02-01';
-    const e = new CustomEvent('touchend', { cancelable: true });
-    clearButton.dispatchEvent(e);
+    const e = touchEnd(clearButton);
     expect(e.defaultPrevented).to.be.false;
   });
 
