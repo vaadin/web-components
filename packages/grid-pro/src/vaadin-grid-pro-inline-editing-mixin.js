@@ -283,11 +283,7 @@ export const InlineEditingMixin = (superClass) =>
         )[0];
 
         if (overlay) {
-          overlay.addEventListener('opened-changed', (e) => {
-            if (!e.detail.value) {
-              this.__boundEditorFocusOut();
-            }
-          });
+          overlay.addEventListener('vaadin-overlay-closing', this.__boundEditorFocusOut);
           this._cancelStopEdit();
         }
       }
