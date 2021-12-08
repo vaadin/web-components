@@ -301,7 +301,7 @@ describe('vaadin-overlay', () => {
     });
 
     describe('vaadin-overlay-closing event', () => {
-      it('should dispatch vaadin-overlay-closing the overlay will be closed', () => {
+      it('should dispatch vaadin-overlay-closing when the overlay is closing', () => {
         const spy = sinon.spy();
         overlay.addEventListener('vaadin-overlay-closing', spy);
         click(parent);
