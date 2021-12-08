@@ -208,6 +208,7 @@ describe('toggling dropdown', () => {
       comboBox.focus();
       comboBox.open();
       outsideClick();
+      await aTimeout(0);
       expect(document.activeElement).to.equal(input);
     });
 
@@ -215,6 +216,7 @@ describe('toggling dropdown', () => {
       expect(document.activeElement).to.equal(document.body);
       comboBox.open();
       outsideClick();
+      await aTimeout(0);
       expect(document.activeElement).to.equal(input);
     });
 

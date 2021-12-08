@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, down, fixtureSync, isIOS } from '@vaadin/testing-helpers';
+import { aTimeout, click, down, fixtureSync, isIOS } from '@vaadin/testing-helpers';
 import '../src/vaadin-date-picker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { open, outsideClick } from './common.js';
@@ -44,6 +44,7 @@ describe('dropdown', () => {
     datepicker.focus();
     await open(datepicker);
     outsideClick();
+    await aTimeout(0);
     expect(document.activeElement).to.equal(input);
   });
 
@@ -51,6 +52,7 @@ describe('dropdown', () => {
     expect(document.activeElement).to.equal(document.body);
     await open(datepicker);
     outsideClick();
+    await aTimeout(0);
     expect(document.activeElement).to.equal(input);
   });
 

@@ -688,7 +688,9 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
         const activeElement = this._getActiveElement();
 
         if (activeElement === document.body || this._deepContains(activeElement)) {
-          restoreFocusNode.focus();
+          // Focusing the restoreFocusNode doesn't always work synchronously on Firefox and Safari
+          // (e.g. combo-box overlay close on outside click).
+          setTimeout(() => restoreFocusNode.focus());
         }
         this.__restoreFocusNode = null;
       }
