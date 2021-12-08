@@ -14,6 +14,7 @@ import '@vaadin/text-area/theme/lumo/vaadin-text-area.js';
 import '@vaadin/text-field/theme/lumo/vaadin-text-field.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/time-picker/theme/lumo/vaadin-time-picker.js';
+import '@vaadin/rich-text-editor/theme/lumo/vaadin-rich-text-editor.js';
 import '../../../theme/lumo/vaadin-custom-field.js';
 
 describe('custom-field', () => {
@@ -237,6 +238,23 @@ describe('custom-field', () => {
       it('label in form layout', async () => {
         await visualDiff(layout, 'form-layout-item-text-area');
       });
+    });
+  });
+
+  describe('whitespace theme', () => {
+    let layout;
+
+    beforeEach(() => {
+      layout = fixtureSync(`
+        <vaadin-custom-field theme="whitespace" label="Custom field">
+          <vaadin-rich-text-editor>
+          </vaadin-rich-text-editor>
+        </vaadin-custom-field>
+      `);
+    });
+
+    it('should correctly set label padding bottom', async () => {
+      await visualDiff(layout, 'custom-field-whitespace-theme');
     });
   });
 });
