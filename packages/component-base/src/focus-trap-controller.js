@@ -48,18 +48,26 @@ export class FocusTrapController {
    * The first focusable element can be the trap node itself if it is focusable
    * and comes first in the tab order.
    *
+   * If there are no focusable elements, the method will throw an exception
+   * and the trap will not be set.
+   *
    * @param {HTMLElement} trapNode
    */
   trapFocus(trapNode) {
     this.__trapNode = trapNode;
 
-    if (this.__focusedElementIndex === -1 && this.__focusableElements.length > 0) {
+    if (this.__focusableElements.length === 0) {
+      this.__trapNode = null;
+      throw new Error('The trap node should have at least one focusable descendant or be focusable itself.');
+    }
+
+    if (this.__focusedElementIndex === -1) {
       this.__focusableElements[0].focus();
     }
   }
 
   /**
-   * Deactivates the focus trap set up with the `.trapFocus()` method
+   * Deactivates the focus trap set with the `.trapFocus()` method
    * so that it becomes possible to tab outside the trap node.
    */
   releaseFocus() {
@@ -103,10 +111,6 @@ export class FocusTrapController {
    */
   __focusNextElement(backward = false) {
     const focusableElements = this.__focusableElements;
-    if (focusableElements.length === 0) {
-      return;
-    }
-
     const step = backward ? -1 : 1;
     const currentIndex = this.__focusedElementIndex;
     const nextIndex = (focusableElements.length + currentIndex + step) % focusableElements.length;

@@ -31,6 +31,18 @@ customElements.define(
   }
 );
 
+async function tab() {
+  await sendKeys({ press: 'Tab' });
+  return document.activeElement;
+}
+
+async function shiftTab() {
+  await sendKeys({ down: 'Shift' });
+  await sendKeys({ press: 'Tab' });
+  await sendKeys({ up: 'Shift' });
+  return document.activeElement;
+}
+
 describe('focus-trap-controller', () => {
   let element, controller, trap;
 
@@ -62,19 +74,38 @@ describe('focus-trap-controller', () => {
       expect(document.activeElement).to.equal(trap);
     });
 
-    it('should keep focus outside when no focusable elements are in the trap node', () => {
-      trap.querySelectorAll('input').forEach((input) => {
-        input.tabIndex = -1;
-      });
-      controller.trapFocus(trap);
-      expect(trap.contains(document.activeElement)).to.be.false;
-    });
-
-    it('should keep focus on the element when the element is inside the trap node', () => {
+    it('should keep focus on the element when it is inside the trap node', () => {
       const input = element.querySelector('#trap-input-1');
       input.focus();
       controller.trapFocus(trap);
       expect(document.activeElement).to.equal(input);
+    });
+
+    describe('no focusable elements', () => {
+      beforeEach(() => {
+        trap.querySelectorAll('input').forEach((input) => {
+          input.tabIndex = -1;
+        });
+      });
+
+      it('should throw an exception', () => {
+        expect(() => controller.trapFocus(trap)).to.throw(Error);
+      });
+
+      it('should keep focus outside the trap node', () => {
+        expect(() => controller.trapFocus(trap)).to.throw(Error);
+
+        const input = element.querySelector('#outside-input-1');
+        expect(document.activeElement).to.equal(input);
+      });
+
+      it('should not set a trap', async () => {
+        expect(() => controller.trapFocus(trap)).to.throw(Error);
+
+        await tab();
+        const input = element.querySelector('#outside-input-2');
+        expect(document.activeElement).to.equal(input);
+      });
     });
   });
 
@@ -93,18 +124,6 @@ describe('focus-trap-controller', () => {
 
   describe('keyboard navigation', () => {
     let trapInput1, trapInput2, trapInput3;
-
-    async function tab() {
-      await sendKeys({ press: 'Tab' });
-      return document.activeElement;
-    }
-
-    async function shiftTab() {
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
-      return document.activeElement;
-    }
 
     beforeEach(() => {
       element = fixtureSync(`<focus-trap-element></focus-trap-element>`);
