@@ -42,6 +42,7 @@ describe('basic features', () => {
 
   it('should blur when focused on fullscreen', () => {
     datepicker._fullscreen = true;
+    datepicker.opened = true;
 
     const spy = sinon.spy(input, 'blur');
     input.dispatchEvent(new CustomEvent('focus'));
@@ -66,6 +67,7 @@ describe('basic features', () => {
     datepicker._fullscreen = true;
     datepicker.click();
     await sendKeys({ press: 'Escape' });
+    datepicker.blur();
     expect(datepicker.hasAttribute('focused')).to.be.false;
   });
 

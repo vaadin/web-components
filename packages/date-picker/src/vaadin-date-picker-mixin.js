@@ -302,7 +302,7 @@ export const DatePickerMixin = (subclass) =>
         /** @private */
         _noInput: {
           type: Boolean,
-          computed: '_isNoInput(inputElement, _fullscreen, _ios, i18n, i18n.*)'
+          computed: '_isNoInput(inputElement, _fullscreen, _ios, i18n, opened)'
         },
 
         /** @private */
@@ -422,7 +422,7 @@ export const DatePickerMixin = (subclass) =>
       });
 
       this.addEventListener('touchend', (e) => {
-        if (!this._isClearButton(e)) {
+        if (!this.autoOpenDisabled && !this._isClearButton(e)) {
           e.preventDefault();
         }
       });
@@ -541,8 +541,9 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _isNoInput(inputElement, fullscreen, ios, i18n) {
-      return !inputElement || fullscreen || ios || !i18n.parseDate;
+    // eslint-disable-next-line max-params
+    _isNoInput(inputElement, fullscreen, ios, i18n, opened) {
+      return !inputElement || (fullscreen && opened) || ios || !i18n.parseDate;
     }
 
     /** @private */
