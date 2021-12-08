@@ -175,6 +175,8 @@ describe('keyboard', () => {
         input.focus();
         arrowDownKeyDown(input);
 
+        await aTimeout(0);
+
         await sendKeys({ press: 'Tab' });
         expect(document.activeElement).to.equal(button);
       });
