@@ -113,7 +113,7 @@ describe('keyboard navigation', () => {
 
     it('should keep the drawer content not focusable even if a tabindex attribute is set to 0 inside', async () => {
       drawerLink.tabIndex = 0;
-      await nextRender();
+      await nextFrame();
       toggle.focus();
       await tab();
       expect(document.activeElement).not.to.equal(drawerLink);
