@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -143,7 +144,7 @@ export type OverlayEventMap = HTMLElementEventMap & OverlayElementEventMap;
  * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay will be closed on outside click. If canceled the closing of the overlay is canceled as well.
  * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
  */
-declare class OverlayElement extends ThemableMixin(DirMixin(HTMLElement)) {
+declare class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(HTMLElement))) {
   /**
    * When true, the overlay is visible and attached to body.
    */

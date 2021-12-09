@@ -32,6 +32,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
+    "@vaadin/button": "23.0.0-alpha1",
     "@vaadin/text-field": "23.0.0-alpha1",
     "@vaadin/vaadin-lumo-styles": "23.0.0-alpha1",
     "@vaadin/vaadin-material-styles": "23.0.0-alpha1"
