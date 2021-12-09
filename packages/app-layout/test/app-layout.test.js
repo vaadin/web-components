@@ -213,6 +213,15 @@ describe('vaadin-app-layout', () => {
         expect(getComputedStyle(drawer).visibility).to.equal('hidden');
       });
 
+      it(`should not change the drawer's tabindex attribute on sequential drawer open/close`, async () => {
+        const spy = sinon.spy();
+        new MutationObserver(spy).observe(drawer, { attributes: true, attributeFilter: ['tabindex'] });
+        layout.drawerOpened = true;
+        layout.drawerOpened = false;
+        await nextFrame();
+        expect(spy.called).to.be.false;
+      });
+
       it('should reflect scrollHeight to a custom CSS property when the drawer has overflow', () => {
         const drawer = layout.shadowRoot.querySelector('[part=drawer]');
         drawer.style.height = '50px';
@@ -300,6 +309,14 @@ describe('vaadin-app-layout', () => {
           expect(layout.shadowRoot.activeElement).to.equal(drawer);
           await oneEvent(drawer, 'transitionend');
           expect(document.activeElement).to.equal(toggle);
+        });
+
+        it(`should not call focus() on the drawer toggle on sequential drawer close/open`, async () => {
+          const spy = sinon.spy(toggle, 'focus');
+          layout.drawerOpened = false;
+          layout.drawerOpened = true;
+          await nextFrame();
+          expect(spy.called).to.be.false;
         });
       });
     });

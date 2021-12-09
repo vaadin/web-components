@@ -564,7 +564,7 @@ class AppLayout extends ElementMixin(
   }
 
   /**
-   * Returns a promise that resolves when the drawer opening/closing CSS transition ends.
+   * Returns a promise that resolves when the drawer opening/closing CSS animation completes.
    *
    * The method relies on the `--vaadin-app-layout-transition` CSS variable to detect whether
    * the drawer has a CSS transition that needs to be awaited. If the CSS variable equals `none`,
@@ -573,7 +573,7 @@ class AppLayout extends ElementMixin(
    * @return {Promise}
    * @private
    */
-  __drawerTransitionComplete() {
+  __drawerAnimationComplete() {
     return new Promise((resolve) => {
       if (this._getCustomPropertyValue('--vaadin-app-layout-transition') === 'none') {
         resolve();
@@ -590,6 +590,11 @@ class AppLayout extends ElementMixin(
     // in order for VoiceOver to have a proper outline.
     await this.__drawerTransitionComplete();
 
+    if (!this.drawerOpened) {
+      // The drawer has been closed during the animation.
+      return;
+    }
+
     this.$.drawer.setAttribute('tabindex', '0');
     this.__focusTrapController.trapFocus(this.$.drawer);
   }
@@ -599,6 +604,11 @@ class AppLayout extends ElementMixin(
     // Wait for the drawer CSS transition in order to restore focus to the toggle
     // only after `visibility` becomes `hidden`, that is, the drawer becomes inaccessible by the tabbing navigation.
     await this.__drawerTransitionComplete();
+
+    if (this.drawerOpened) {
+      // The drawer has been opened during the animation.
+      return;
+    }
 
     this.__focusTrapController.releaseFocus();
     this.$.drawer.removeAttribute('tabindex');
