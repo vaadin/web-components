@@ -204,16 +204,20 @@ class AppLayout extends ElementMixin(
           right: auto;
           bottom: var(--vaadin-app-layout-navbar-offset-bottom, var(--vaadin-viewport-offset-bottom, 0));
           left: var(--vaadin-app-layout-navbar-offset-left, 0);
-          transition: transform var(--vaadin-app-layout-transition);
+          transition: transform var(--vaadin-app-layout-transition), visibility var(--vaadin-app-layout-transition);
           transform: translateX(-100%);
           max-width: 90%;
           width: 16em;
           box-sizing: border-box;
           padding: var(--safe-area-inset-top) 0 var(--safe-area-inset-bottom) var(--safe-area-inset-left);
           outline: none;
+          /* The drawer should be inaccessible by the tabbing navigation when it is closed. */
+          visibility: hidden;
         }
 
         :host([drawer-opened]) [part='drawer'] {
+          /* The drawer should be accessible by the tabbing navigation when it is opened. */
+          visibility: visible;
           transform: translateX(0%);
           touch-action: manipulation;
         }

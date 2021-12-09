@@ -5,7 +5,7 @@ import '../vaadin-app-layout.js';
 import '../vaadin-drawer-toggle.js';
 
 describe('keyboard navigation', () => {
-  let layout, toggle, drawer, drawerLink;
+  let layout, toggle, drawer, drawerLink, contentLink;
 
   async function tab() {
     await sendKeys({ press: 'Tab' });
@@ -35,11 +35,88 @@ describe('keyboard navigation', () => {
     toggle = layout.querySelector(':scope > [slot=navbar]');
     drawer = layout.shadowRoot.querySelector('[part=drawer]');
     drawerLink = layout.querySelector(':scope > [slot=drawer] > a');
+    contentLink = layout.querySelector(':scope > :not([slot]) > a');
   }
+
+  describe('desktop layout', () => {
+    beforeEach(async () => {
+      await fixtureLayout('desktop');
+    });
+
+    it('should have focus outside the layout by default', () => {
+      expect(layout.contains(document.activeElement)).to.be.false;
+    });
+
+    it('should move focus from the outside to the drawer toggle on Tab', async () => {
+      await tab();
+      expect(document.activeElement).to.equal(toggle);
+    });
+
+    it('should move focus from the drawer toggle to the drawer content on Tab', async () => {
+      toggle.focus();
+      await tab();
+      expect(document.activeElement).to.equal(drawerLink);
+    });
+
+    it('should move focus from the drawer content to the layout content on Tab', async () => {
+      drawerLink.focus();
+      await tab();
+      expect(document.activeElement).to.equal(contentLink);
+    });
+
+    it('should move focus from the layout content to outside the layout on Tab', async () => {
+      contentLink.focus();
+      await tab();
+      expect(layout.contains(document.activeElement)).to.be.false;
+    });
+
+    describe('drawer is closed', () => {
+      beforeEach(async () => {
+        toggle.focus();
+        toggle.click();
+        await nextFrame();
+      });
+
+      it('should move focus from the drawer toggle to the layout content on Tab', async () => {
+        toggle.focus();
+        await tab();
+        expect(document.activeElement).to.equal(contentLink);
+      });
+    });
+  });
 
   describe('mobile layout', () => {
     beforeEach(async () => {
       await fixtureLayout('mobile');
+    });
+
+    it('should have focus outside the layout by default', () => {
+      expect(layout.contains(document.activeElement)).to.be.false;
+    });
+
+    it('should move focus from the outside to the drawer toggle on Tab', async () => {
+      await tab();
+      expect(document.activeElement).to.equal(toggle);
+    });
+
+    it('should move focus from the drawer toggle to the layout content on Tab', async () => {
+      toggle.focus();
+      await tab();
+      expect(document.activeElement).to.equal(contentLink);
+    });
+
+    it('should move focus from the layout content to outside the layout on Tab', async () => {
+      contentLink.focus();
+      await tab();
+      expect(layout.contains(document.activeElement)).to.be.false;
+    });
+
+    it('should keep the drawer content not focusable even if there is an element with [tabindex] = 0', async () => {
+      drawerLink.tabIndex = 0;
+      await nextFrame();
+      toggle.focus();
+      await tab();
+      expect(document.activeElement).not.to.equal(drawerLink);
     });
 
     describe('drawer is opened', () => {
@@ -84,6 +161,11 @@ describe('keyboard navigation', () => {
 
         it('should have focus on the drawer toggle', () => {
           expect(document.activeElement).to.equal(toggle);
+        });
+
+        it('should move focus from the drawer toggle to the layout content on Tab', async () => {
+          await tab();
+          expect(document.activeElement).to.equal(contentLink);
         });
       });
     });
