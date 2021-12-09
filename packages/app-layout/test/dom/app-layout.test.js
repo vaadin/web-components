@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 import '../../src/vaadin-app-layout.js';
 import '../../vaadin-drawer-toggle.js';
@@ -19,7 +19,7 @@ describe('vaadin-app-layout', () => {
         <main>Page Content</main>
       </vaadin-app-layout>
     `);
-    await nextFrame();
+    await nextRender();
   }
 
   describe('desktop layout', () => {

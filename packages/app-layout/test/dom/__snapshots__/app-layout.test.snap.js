@@ -9,10 +9,7 @@ snapshots["vaadin-app-layout desktop layout shadow default"] =
   <slot name="navbar">
   </slot>
 </div>
-<div
-  id="backdrop"
-  part="backdrop"
->
+<div part="backdrop">
 </div>
 <div
   id="drawer"
@@ -24,10 +21,7 @@ snapshots["vaadin-app-layout desktop layout shadow default"] =
   >
   </slot>
 </div>
-<div
-  content=""
-  id="content"
->
+<div content="">
   <slot>
   </slot>
 </div>
@@ -58,10 +52,7 @@ snapshots["vaadin-app-layout desktop layout shadow drawer closed"] =
   <slot name="navbar">
   </slot>
 </div>
-<div
-  id="backdrop"
-  part="backdrop"
->
+<div part="backdrop">
 </div>
 <div
   id="drawer"
@@ -73,10 +64,7 @@ snapshots["vaadin-app-layout desktop layout shadow drawer closed"] =
   >
   </slot>
 </div>
-<div
-  content=""
-  id="content"
->
+<div content="">
   <slot>
   </slot>
 </div>
@@ -107,10 +95,7 @@ snapshots["vaadin-app-layout mobile layout shadow default"] =
   <slot name="navbar">
   </slot>
 </div>
-<div
-  id="backdrop"
-  part="backdrop"
->
+<div part="backdrop">
 </div>
 <div
   aria-label="drawer"
@@ -125,10 +110,7 @@ snapshots["vaadin-app-layout mobile layout shadow default"] =
   >
   </slot>
 </div>
-<div
-  content=""
-  id="content"
->
+<div content="">
   <slot>
   </slot>
 </div>
@@ -159,10 +141,7 @@ snapshots["vaadin-app-layout mobile layout shadow drawer opened"] =
   <slot name="navbar">
   </slot>
 </div>
-<div
-  id="backdrop"
-  part="backdrop"
->
+<div part="backdrop">
 </div>
 <div
   aria-label="drawer"
@@ -177,10 +156,7 @@ snapshots["vaadin-app-layout mobile layout shadow drawer opened"] =
   >
   </slot>
 </div>
-<div
-  content=""
-  id="content"
->
+<div content="">
   <slot>
   </slot>
 </div>
