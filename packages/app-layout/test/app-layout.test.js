@@ -141,6 +141,17 @@ describe('vaadin-app-layout', () => {
         expect(layout.drawerOpened).to.be.true;
       });
 
+      it('should have visibility: visible by default', () => {
+        expect(getComputedStyle(drawer).visibility).to.equal('visible');
+      });
+
+      it(`should toggle the drawer's CSS visibility on drawerOpened property toggle`, () => {
+        layout.drawerOpened = false;
+        expect(getComputedStyle(drawer).visibility).to.equal('hidden');
+        layout.drawerOpened = true;
+        expect(getComputedStyle(drawer).visibility).to.equal('visible');
+      });
+
       it('should reflect drawerOpened property to the attribute', () => {
         layout.drawerOpened = false;
         expect(layout.hasAttribute('drawer-opened')).to.be.false;
@@ -155,7 +166,7 @@ describe('vaadin-app-layout', () => {
         expect(layout.drawerOpened).to.be.true;
       });
 
-      it('should fire "drawer-opened-changed" event on drawer opened toggle', () => {
+      it('should fire "drawer-opened-changed" event on drawerOpened property toggle', () => {
         const spy = sinon.spy();
         layout.addEventListener('drawer-opened-changed', spy);
         layout.drawerOpened = false;
@@ -189,6 +200,17 @@ describe('vaadin-app-layout', () => {
 
       it('should be closed by default', () => {
         expect(layout.drawerOpened).to.be.false;
+      });
+
+      it('should have visibility: hidden by default', () => {
+        expect(getComputedStyle(drawer).visibility).to.equal('hidden');
+      });
+
+      it(`should toggle the drawer's CSS visibility on drawerOpened property toggle`, () => {
+        layout.drawerOpened = true;
+        expect(getComputedStyle(drawer).visibility).to.equal('visible');
+        layout.drawerOpened = false;
+        expect(getComputedStyle(drawer).visibility).to.equal('hidden');
       });
 
       it('should reflect scrollHeight to a custom CSS property when the drawer has overflow', () => {
