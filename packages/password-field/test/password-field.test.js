@@ -1,8 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, mousedown } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout, makeSoloTouchEvent, mousedown } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-password-field.js';
+import { resetMouseCanceller } from '@vaadin/component-base/src/gestures.js';
 
 describe('password-field', () => {
   let passwordField, input, revealButton;
@@ -11,6 +12,13 @@ describe('password-field', () => {
     passwordField = fixtureSync('<vaadin-password-field></vaadin-password-field>');
     input = passwordField.inputElement;
     revealButton = passwordField.querySelector('[slot=reveal]');
+  });
+
+  // NOTE: because we use emulate touch events in some of the tests,
+  // we need to reset mouseCanceller in Gestures. Otherwise it might
+  // interfere and cancel clicks in totally unrelated tests.
+  afterEach(() => {
+    resetMouseCanceller();
   });
 
   it('should set default accessible label to reveal button', () => {
@@ -56,22 +64,19 @@ describe('password-field', () => {
   });
 
   it('should prevent touchend event on reveal button', () => {
-    const e = new CustomEvent('touchend', { cancelable: true });
-
-    revealButton.dispatchEvent(e);
-    expect(e.defaultPrevented).to.be.true;
+    const event1 = makeSoloTouchEvent('touchend', null, revealButton);
+    expect(event1.defaultPrevented).to.be.true;
     expect(input.type).to.equal('text');
 
-    revealButton.dispatchEvent(e);
-    expect(e.defaultPrevented).to.be.true;
+    const event2 = makeSoloTouchEvent('touchend', null, revealButton);
+    expect(event2.defaultPrevented).to.be.true;
     expect(input.type).to.equal('password');
   });
 
   it('should focus the input on reveal button touchend', () => {
     const spy = sinon.spy(input, 'focus');
 
-    const e = new CustomEvent('touchend', { cancelable: true });
-    revealButton.dispatchEvent(e);
+    makeSoloTouchEvent('touchend', null, revealButton);
 
     expect(spy.calledOnce).to.be.true;
   });
