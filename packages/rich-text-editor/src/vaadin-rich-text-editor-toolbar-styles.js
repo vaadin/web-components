@@ -6,9 +6,7 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { iconsStyles } from './vaadin-rich-text-editor-icons.js';
 
-export const toolbarStyles = css`
-  ${iconsStyles}
-
+export const buttonsStyles = css`
   [part='toolbar'] {
     display: flex;
     flex-wrap: wrap;
@@ -131,6 +129,8 @@ export const toolbarStyles = css`
     font-size: 0.875em;
   }
 `;
+
+export const toolbarStyles = [iconsStyles, buttonsStyles];
 
 // Register a module with ID for backwards compatibility.
 registerStyles('', toolbarStyles, { moduleId: 'vaadin-rich-text-editor-toolbar-styles' });
