@@ -210,12 +210,12 @@ class AppLayout extends ElementMixin(
           width: 16em;
           box-sizing: border-box;
           padding: var(--safe-area-inset-top) 0 var(--safe-area-inset-bottom) var(--safe-area-inset-left);
-          /* Makes the drawer inaccessible by the tabbing navigation when closed. */
+          /* The drawer should be inaccessible by the tabbing navigation when it is closed. */
           visibility: hidden;
         }
 
         :host([drawer-opened]) [part='drawer'] {
-          /* Makes the drawer accessible by the tabbing navigation when opened. */
+          /* The drawer should be accessible by the tabbing navigation when it is opened. */
           visibility: visible;
           transform: translateX(0%);
           touch-action: manipulation;
