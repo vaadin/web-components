@@ -21,11 +21,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  * @summary Module for adding cross-platform gesture event listeners.
  */
 
-import { microTask, timeOut } from './async.js';
-import { Debouncer } from './debounce.js';
+import { microTask } from './async.js';
 
 const passiveTouchGestures = false;
-const cancelSyntheticClickEvents = true;
 const wrap = (node) => node;
 
 // detect native touch action support
@@ -39,8 +37,6 @@ const TRACK_DISTANCE = 5;
 // number of last N track positions to keep
 const TRACK_LENGTH = 2;
 
-// Disabling "mouse" handlers for 2500ms is enough
-const MOUSE_TIMEOUT = 2500;
 const MOUSE_EVENTS = ['mousedown', 'mousemove', 'mouseup', 'click'];
 // an array of bitmask values for mapping MouseEvent.which to MouseEvent.buttons
 const MOUSE_WHICH_TO_BUTTONS = [0, 1, 4, 2];
@@ -96,22 +92,6 @@ function PASSIVE_TOUCH(eventName) {
 // Check for touch-only devices
 const IS_TOUCH_ONLY = navigator.userAgent.match(/iP(?:[oa]d|hone)|Android/);
 
-// keep track of any labels hit by the mouseCanceller
-/** @type {!Array<!HTMLLabelElement>} */
-const clickedLabels = [];
-
-/** @type {!Object<boolean>} */
-const labellable = {
-  button: true,
-  input: true,
-  keygen: true,
-  meter: true,
-  output: true,
-  textarea: true,
-  progress: true,
-  select: true
-};
-
 // Defined at https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#enabling-and-disabling-form-controls:-the-disabled-attribute
 /** @type {!Object<boolean>} */
 const canBeDisabled = {
@@ -125,122 +105,6 @@ const canBeDisabled = {
   select: true,
   textarea: true
 };
-
-/**
- * @param {HTMLElement} el Element to check labelling status
- * @return {boolean} element can have labels
- */
-function canBeLabelled(el) {
-  return labellable[el.localName] || false;
-}
-
-/**
- * @param {HTMLElement} el Element that may be labelled.
- * @return {!Array<!HTMLLabelElement>} Relevant label for `el`
- */
-function matchingLabels(el) {
-  let labels = Array.prototype.slice.call(/** @type {HTMLInputElement} */ (el).labels || []);
-  // IE doesn't have `labels` and Safari doesn't populate `labels`
-  // if element is in a shadowroot.
-  // In this instance, finding the non-ancestor labels is enough,
-  // as the mouseCancellor code will handle ancstor labels
-  if (!labels.length) {
-    labels = [];
-    const root = el.getRootNode();
-    // if there is an id on `el`, check for all labels with a matching `for` attribute
-    if (el.id) {
-      const matching = root.querySelectorAll(`label[for = ${el.id}]`);
-      for (let i = 0; i < matching.length; i++) {
-        labels.push(/** @type {!HTMLLabelElement} */ (matching[i]));
-      }
-    }
-  }
-  return labels;
-}
-
-// touch will make synthetic mouse events
-// `preventDefault` on touchend will cancel them,
-// but this breaks `<input>` focus and link clicks
-// disable mouse handlers for MOUSE_TIMEOUT ms after
-// a touchend to ignore synthetic mouse events
-function mouseCanceller(mouseEvent) {
-  // Check for sourceCapabilities, used to distinguish synthetic events
-  // if mouseEvent did not come from a device that fires touch events,
-  // it was made by a real mouse and should be counted
-  // http://wicg.github.io/InputDeviceCapabilities/#dom-inputdevicecapabilities-firestouchevents
-  const sc = mouseEvent.sourceCapabilities;
-  if (sc && !sc.firesTouchEvents) {
-    return;
-  }
-  // skip synthetic mouse events
-  mouseEvent[HANDLED_OBJ] = { skip: true };
-  // disable "ghost clicks"
-  if (mouseEvent.type === 'click') {
-    let clickFromLabel = false;
-    const path = getComposedPath(mouseEvent);
-    for (let i = 0; i < path.length; i++) {
-      if (path[i].nodeType === Node.ELEMENT_NODE) {
-        if (path[i].localName === 'label') {
-          clickedLabels.push(/** @type {!HTMLLabelElement} */ (path[i]));
-        } else if (canBeLabelled(/** @type {!HTMLElement} */ (path[i]))) {
-          const ownerLabels = matchingLabels(/** @type {!HTMLElement} */ (path[i]));
-          // check if one of the clicked labels is labelling this element
-          for (let j = 0; j < ownerLabels.length; j++) {
-            clickFromLabel = clickFromLabel || clickedLabels.indexOf(ownerLabels[j]) > -1;
-          }
-        }
-      }
-      if (path[i] === POINTERSTATE.mouse.target) {
-        return;
-      }
-    }
-    // if one of the clicked labels was labelling the target element,
-    // this is not a ghost click
-    if (clickFromLabel) {
-      return;
-    }
-    mouseEvent.preventDefault();
-    mouseEvent.stopPropagation();
-  }
-}
-
-/**
- * @param {boolean=} setup True to add, false to remove.
- * @return {void}
- */
-function setupTeardownMouseCanceller(setup) {
-  const events = IS_TOUCH_ONLY ? ['click'] : MOUSE_EVENTS;
-  for (let i = 0, en; i < events.length; i++) {
-    en = events[i];
-    if (setup) {
-      // reset clickLabels array
-      clickedLabels.length = 0;
-      document.addEventListener(en, mouseCanceller, true);
-    } else {
-      document.removeEventListener(en, mouseCanceller, true);
-    }
-  }
-}
-
-function ignoreMouse(e) {
-  if (!cancelSyntheticClickEvents) {
-    return;
-  }
-  if (!POINTERSTATE.mouse.mouseIgnoreJob) {
-    setupTeardownMouseCanceller(true);
-  }
-  const unset = () => {
-    setupTeardownMouseCanceller();
-    POINTERSTATE.mouse.target = null;
-    POINTERSTATE.mouse.mouseIgnoreJob = null;
-  };
-  POINTERSTATE.mouse.target = getComposedPath(e)[0];
-  POINTERSTATE.mouse.mouseIgnoreJob = Debouncer.debounce(
-    POINTERSTATE.mouse.mouseIgnoreJob,
-    timeOut.after(MOUSE_TIMEOUT),
-    unset
-  );
-}
 
 /**
  * @param {MouseEvent} ev event to test for left mouse button down
@@ -294,7 +158,7 @@ function isSyntheticClick(ev) {
   return false;
 }
 
-let POINTERSTATE = {
+const POINTERSTATE = {
   mouse: {
     target: null,
     mouseIgnoreJob: null
@@ -332,12 +196,6 @@ function untrackDocument(stateObj) {
   document.removeEventListener('mouseup', stateObj.upfn);
   stateObj.movefn = null;
   stateObj.upfn = null;
-}
-
-if (cancelSyntheticClickEvents) {
-  // use a document-wide touchend listener to start the ghost-click prevention mechanism
-  // Use passive event listeners, if supported, to not affect scrolling performance
-  document.addEventListener('touchend', ignoreMouse, supportsPassive ? { passive: true } : false);
 }
 
 /**
@@ -689,21 +547,6 @@ export function prevent(evName) {
   const recognizer = _findRecognizerByEvent(evName);
   if (recognizer.info) {
     recognizer.info.prevent = true;
-  }
-}
-
-/**
- * Reset the 2500ms timeout on processing mouse input after detecting touch input.
- *
- * Touch inputs create synthesized mouse inputs anywhere from 0 to 2000ms after the touch.
- * This method should only be called during testing with simulated touch inputs.
- * Calling this method in production may cause duplicate taps or other Gestures.
- *
- * @return {void}
- */
-export function resetMouseCanceller() {
-  if (POINTERSTATE.mouse.mouseIgnoreJob) {
-    POINTERSTATE.mouse.mouseIgnoreJob.flush();
   }
 }
 
