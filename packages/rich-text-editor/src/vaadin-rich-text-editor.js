@@ -14,7 +14,6 @@ import { timeOut } from '@vaadin/component-base/src/async.js';
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { resetMouseCanceller } from '@vaadin/component-base/src/gestures.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { richTextEditorStyles } from './vaadin-rich-text-editor-styles.js';
 
@@ -994,16 +993,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
   _onImageTouchEnd(e) {
     // Cancel the event to avoid the following click event
     e.preventDefault();
-    // FIXME(platosha): workaround for Polymer Gestures mouseCanceller
-    // cancelling the following synthetic click. See also:
-    // https://github.com/Polymer/polymer/issues/5289
-    this.__resetMouseCanceller();
     this._onImageClick();
-  }
-
-  /** @private */
-  __resetMouseCanceller() {
-    resetMouseCanceller();
   }
 
   /** @private */

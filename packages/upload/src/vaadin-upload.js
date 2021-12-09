@@ -10,7 +10,6 @@ import './vaadin-upload-file.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { resetMouseCanceller } from '@vaadin/component-base/src/gestures.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -819,16 +818,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
   _onAddFilesTouchEnd(e) {
     // Cancel the event to avoid the following click event
     e.preventDefault();
-    // FIXME(platosha): workaround for Polymer Gestures mouseCanceller
-    // cancelling the following synthetic click. See also:
-    // https://github.com/Polymer/polymer/issues/5289
-    this.__resetMouseCanceller();
     this._onAddFilesClick(e);
-  }
-
-  /** @private */
-  __resetMouseCanceller() {
-    resetMouseCanceller();
   }
 
   /** @private */

@@ -64,17 +64,6 @@ export { prevent };
  */
 declare function prevent(evName: string): void;
 
-export { resetMouseCanceller };
-
-/**
- * Reset the 2500ms timeout on processing mouse input after detecting touch input.
- *
- * Touch inputs create synthesized mouse inputs anywhere from 0 to 2000ms after the touch.
- * This method should only be called during testing with simulated touch inputs.
- * Calling this method in production may cause duplicate taps or other Gestures.
- */
-declare function resetMouseCanceller(): void;
-
 export interface GestureRecognizer {
   reset: () => void;
   mousedown?: (e: MouseEvent) => void;

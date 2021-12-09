@@ -16,9 +16,11 @@ import '@vaadin/text-field/vaadin-text-field.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';
-import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
+import * as settings from '@polymer/polymer/lib/utils/settings.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { createEventSpy, getFirstItem } from './helpers.js';
+
+settings.setCancelSyntheticClickEvents(false);
 
 class MyInput extends PolymerElement {
   static get template() {
@@ -85,13 +87,6 @@ describe('vaadin-combo-box-light', () => {
   });
 
   describe('toggling', () => {
-    // NOTE(platosha): because we use emulate touch events in these
-    // tests, we need to reset mouseCanceller in Gestures. Otherwise
-    // it might interfere and cancel clicks in totally unrelated tests.
-    afterEach(() => {
-      resetMouseCanceller();
-    });
-
     it('should toggle overlay on input click', () => {
       inputElement.click();
       expect(comboBox.opened).to.be.true;
