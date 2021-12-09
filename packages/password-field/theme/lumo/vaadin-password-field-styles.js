@@ -27,23 +27,6 @@ const passwordField = css`
   [part='reveal-button'][hidden] {
     display: none !important;
   }
-
-  ::slotted([slot='reveal']) {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    background: transparent;
-    border: none;
-  }
-
-  ::slotted([slot='reveal']:focus) {
-    border-radius: var(--lumo-border-radius-s);
-    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
-    outline: none;
-  }
 `;
 
 registerStyles('vaadin-password-field', [inputFieldShared, passwordField], { moduleId: 'lumo-password-field' });

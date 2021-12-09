@@ -271,14 +271,14 @@ snapshots["vaadin-password-field slots default"] =
   slot="error-message"
 >
 </div>
-<button
+<vaadin-password-field-button
   aria-label="Show password"
   aria-pressed="false"
+  role="button"
   slot="reveal"
   tabindex="0"
-  type="button"
 >
-</button>
+</vaadin-password-field-button>
 <input
   autocapitalize="off"
   slot="input"
@@ -295,14 +295,14 @@ snapshots["vaadin-password-field slots helper"] =
   slot="error-message"
 >
 </div>
-<button
+<vaadin-password-field-button
   aria-label="Show password"
   aria-pressed="false"
+  role="button"
   slot="reveal"
   tabindex="0"
-  type="button"
 >
-</button>
+</vaadin-password-field-button>
 <input
   autocapitalize="off"
   slot="input"

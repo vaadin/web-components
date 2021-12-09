@@ -35,52 +35,8 @@ const passwordField = css`
     display: none !important;
   }
 
-  ::slotted([slot='reveal']) {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-  }
-
-  ::slotted([slot='reveal'])::before {
-    position: absolute;
-    content: '';
-    top: 0;
-    left: 0;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: var(--material-body-text-color);
-    transform: scale(0);
-    opacity: 0;
-    transition: transform 0.08s, opacity 0.01s;
-    will-change: transform, opacity;
-  }
-
   :host([focused]) ::slotted([slot='reveal'])::before {
     background-color: var(--material-primary-text-color);
-  }
-
-  ::slotted([slot='reveal']:hover)::before {
-    opacity: 0.08;
-  }
-
-  ::slotted([slot='reveal']:focus)::before {
-    opacity: 0.12;
-  }
-
-  ::slotted([slot='reveal']:active)::before {
-    opacity: 0.16;
-  }
-
-  ::slotted([slot='reveal']:hover)::before,
-  ::slotted([slot='reveal']:focus)::before {
-    transform: scale(1.5);
   }
 `;
 
