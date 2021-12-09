@@ -292,11 +292,11 @@ class AppLayout extends ElementMixin(
       <div part="navbar" id="navbarTop">
         <slot name="navbar"></slot>
       </div>
-      <div part="backdrop" id="backdrop" on-click="_close" on-touchstart="_close"></div>
+      <div part="backdrop" on-click="_close" on-touchstart="_close"></div>
       <div part="drawer" id="drawer">
         <slot name="drawer" id="drawerSlot"></slot>
       </div>
-      <div id="content" content>
+      <div content>
         <slot></slot>
       </div>
       <div part="navbar" id="navbarBottom" bottom hidden>
@@ -324,7 +324,7 @@ class AppLayout extends ElementMixin(
         value: 'navbar',
         notify: true,
         reflectToAttribute: true,
-        observer: '_primarySectionChanged'
+        observer: '_primarySectionObserver'
       },
 
       /**
@@ -340,7 +340,7 @@ class AppLayout extends ElementMixin(
         notify: true,
         value: true,
         reflectToAttribute: true,
-        observer: '_drawerOpenedChanged'
+        observer: '_drawerOpenedObserver'
       },
 
       /**
@@ -444,7 +444,7 @@ class AppLayout extends ElementMixin(
   }
 
   /** @private */
-  _primarySectionChanged(value) {
+  _primarySectionObserver(value) {
     const isValid = ['navbar', 'drawer'].indexOf(value) !== -1;
     if (!isValid) {
       this.set('primarySection', 'navbar');
@@ -452,7 +452,7 @@ class AppLayout extends ElementMixin(
   }
 
   /** @private */
-  _drawerOpenedChanged(drawerOpened, oldDrawerOpened) {
+  _drawerOpenedObserver(drawerOpened, oldDrawerOpened) {
     if (this.overlay) {
       if (drawerOpened) {
         this._updateDrawerHeight();

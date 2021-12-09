@@ -128,8 +128,8 @@ describe('vaadin-app-layout', () => {
       `);
       await nextRender();
       toggle = layout.querySelector('#toggle');
-      drawer = layout.$.drawer;
-      backdrop = layout.$.backdrop;
+      drawer = layout.shadowRoot.querySelector('[part=drawer]');
+      backdrop = layout.shadowRoot.querySelector('[part=backdrop]');
     }
 
     describe('desktop layout', () => {
@@ -192,7 +192,7 @@ describe('vaadin-app-layout', () => {
       });
 
       it('should reflect scrollHeight to a custom CSS property when the drawer has overflow', () => {
-        const drawer = layout.$.drawer;
+        const drawer = layout.shadowRoot.querySelector('[part=drawer]');
         drawer.style.height = '50px';
         layout.drawerOpened = true;
         const height = getComputedStyle(layout).getPropertyValue('--_vaadin-app-layout-drawer-scroll-size');

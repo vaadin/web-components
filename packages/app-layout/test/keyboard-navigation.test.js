@@ -33,7 +33,7 @@ describe('keyboard navigation', () => {
     `);
     await nextRender();
     toggle = layout.querySelector(':scope > [slot=navbar]');
-    drawer = layout.$.drawer;
+    drawer = layout.shadowRoot.querySelector('[part=drawer]');
     drawerLink = layout.querySelector(':scope > [slot=drawer] > a');
     contentLink = layout.querySelector(':scope > :not([slot]) > a');
   }
