@@ -3,7 +3,10 @@ import { aTimeout, click, fixtureSync, oneEvent, tap } from '@vaadin/testing-hel
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
+import * as settings from '@polymer/polymer/lib/utils/settings.js';
 import { close, getOverlayContent, monthsEqual, open } from './common.js';
+
+settings.setCancelSyntheticClickEvents(false);
 
 function touchEnd(element) {
   const e = new CustomEvent('touchend', { cancelable: true, bubbles: true });
