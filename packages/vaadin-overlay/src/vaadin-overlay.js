@@ -8,8 +8,9 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { getFocusableElements, isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
+import { FocusTrapController } from '@vaadin/component-base/src/focus-trap-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -101,8 +102,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DirMixin
+ * @mixes ControllerMixin
  */
-class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
+class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -356,6 +358,8 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     if (isIOS) {
       this._boundIosResizeListener = () => this._detectIosNavbar();
     }
+
+    this.__focusTrapController = new FocusTrapController(this);
   }
 
   /** @protected */
@@ -370,6 +374,8 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     // and <vaadin-context-menu>).
     this.addEventListener('click', () => {});
     this.$.backdrop.addEventListener('click', () => {});
+
+    this.addController(this.__focusTrapController);
   }
 
   /** @private */
@@ -509,15 +515,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       return;
     }
 
-    // TAB
-    if (event.key === 'Tab' && this.focusTrap && !event.defaultPrevented) {
-      // if only tab key is pressed, cycle forward, else cycle backwards.
-      this._cycleTab(event.shiftKey ? -1 : 1);
-
-      event.preventDefault();
-
-      // ESC
-    } else if (event.key === 'Escape' || event.key === 'Esc') {
+    if (event.key === 'Escape') {
       const evt = new CustomEvent('vaadin-overlay-escape-press', {
         bubbles: true,
         cancelable: true,
@@ -553,8 +551,8 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       this._animatedOpening();
 
       afterNextRender(this, () => {
-        if (this.focusTrap && !this.contains(document.activeElement)) {
-          this._cycleTab(0, 0);
+        if (this.focusTrap) {
+          this.__focusTrapController.trapFocus(this.$.overlay);
         }
 
         const evt = new CustomEvent('vaadin-overlay-open', { bubbles: true });
@@ -565,6 +563,8 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
         this._addGlobalListeners();
       }
     } else if (wasOpened) {
+      this.__focusTrapController.releaseFocus();
+
       this._animatedClosing();
 
       if (!this.modeless) {
@@ -928,50 +928,6 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
         this.requestContentUpdate();
       }
     }
-  }
-
-  /**
-   * @param {Element[]} elements
-   * @return {number}
-   * @protected
-   */
-  _focusedIndex(elements) {
-    elements = elements || this._getFocusableElements();
-    return elements.indexOf(elements.filter((element) => element && isElementFocused(element)).pop());
-  }
-
-  /**
-   * @param {number} increment
-   * @param {number | undefined} index
-   * @protected
-   */
-  _cycleTab(increment, index) {
-    const focusableElements = this._getFocusableElements();
-
-    if (index === undefined) {
-      index = this._focusedIndex(focusableElements);
-    }
-
-    index += increment;
-
-    // rollover to first item
-    if (index >= focusableElements.length) {
-      index = 0;
-      // go to last item
-    } else if (index < 0) {
-      index = focusableElements.length - 1;
-    }
-
-    focusableElements[index].focus();
-  }
-
-  /**
-   * @return {!Array<!HTMLElement>}
-   * @protected
-   */
-  _getFocusableElements() {
-    // collect all focusable elements
-    return getFocusableElements(this.$.overlay);
   }
 
   /**
