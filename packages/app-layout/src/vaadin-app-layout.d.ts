@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -118,7 +119,7 @@ export type AppLayoutEventMap = HTMLElementEventMap & AppLayoutCustomEventMap;
  * @fires {CustomEvent} overlay-changed - Fired when the `overlay` property changes.
  * @fires {CustomEvent} primary-section-changed - Fired when the `primarySection` property changes.
  */
-declare class AppLayout extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(HTMLElement))) {
   /**
    * Defines whether navbar or drawer will come first visually.
    * - By default (`primary-section="navbar"`), the navbar takes the full available width and moves the drawer down.
