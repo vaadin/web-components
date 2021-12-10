@@ -94,7 +94,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
             </vaadin-button>
           </slot>
         </div>
-        <div part="drop-label" hidden$="[[nodrop]]" id="dropLabelContainer">
+        <div part="drop-label" hidden$="[[nodrop]]" id="dropLabelContainer" aria-hidden="true">
           <slot name="drop-label-icon">
             <div part="drop-label-icon"></div>
           </slot>
