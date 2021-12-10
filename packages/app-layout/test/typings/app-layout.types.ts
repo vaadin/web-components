@@ -1,4 +1,7 @@
 import '../../vaadin-app-layout.js';
+import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import {
   AppLayoutDrawerOpenedChangedEvent,
   AppLayoutOverlayChangedEvent,
@@ -9,6 +12,18 @@ const assertType = <TExpected>(actual: TExpected) => actual;
 
 const layout = document.createElement('vaadin-app-layout');
 
+// Mixins
+assertType<ElementMixinClass>(layout);
+assertType<ThemableMixinClass>(layout);
+assertType<ControllerMixinClass>(layout);
+
+// Properties
+assertType<'navbar' | 'drawer'>(layout.primarySection);
+assertType<boolean>(layout.drawerOpened);
+assertType<boolean>(layout.overlay);
+assertType<string>(layout.closeDrawerOn);
+
+// Events
 layout.addEventListener('drawer-opened-changed', (event) => {
   assertType<AppLayoutDrawerOpenedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
