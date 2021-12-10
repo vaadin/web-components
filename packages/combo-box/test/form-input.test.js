@@ -58,6 +58,7 @@ describe('form field', () => {
       // Fake a keydown event to mimic form submit.
       keydownEvent = createEventSpy('keydown', preventDefault);
       keydownEvent.keyCode = 13;
+      keydownEvent.key = 'Enter';
     });
 
     it('should prevent default on open combobox', () => {
