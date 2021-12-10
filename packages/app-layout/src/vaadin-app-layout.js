@@ -370,13 +370,12 @@ class AppLayout extends ElementMixin(
 
   constructor() {
     super();
-    this.__trapFocusInDrawer = this.__trapFocusInDrawer.bind(this);
-    this.__releaseFocusFromDrawer = this.__releaseFocusFromDrawer.bind(this);
     // TODO(jouni): might want to debounce
     this.__boundResizeListener = this._resize.bind(this);
     this.__drawerToggleClickListener = this._drawerToggleClick.bind(this);
     this.__closeOverlayDrawerListener = this.__closeOverlayDrawer.bind(this);
-
+    this.__trapFocusInDrawer = this.__trapFocusInDrawer.bind(this);
+    this.__releaseFocusFromDrawer = this.__releaseFocusFromDrawer.bind(this);
     this.__focusTrapController = new FocusTrapController(this);
   }
 
