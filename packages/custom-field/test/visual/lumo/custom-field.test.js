@@ -100,7 +100,8 @@ describe('custom-field', () => {
 
     it('theme-whitespace', async () => {
       element.setAttribute('theme', 'whitespace');
-      await visualDiff(element, 'custom-field-whitespace-theme');
+      element.label = 'Label';
+      await visualDiff(element, 'whitespace-theme');
     });
   });
 
