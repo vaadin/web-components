@@ -141,6 +141,17 @@ describe('vaadin-app-layout', () => {
         expect(layout.drawerOpened).to.be.true;
       });
 
+      it('should have the CSS visibility set to visible by default', () => {
+        expect(getComputedStyle(drawer).visibility).to.equal('visible');
+      });
+
+      it('should toggle the CSS visibility on drawerOpened property toggle', () => {
+        layout.drawerOpened = false;
+        expect(getComputedStyle(drawer).visibility).to.equal('hidden');
+        layout.drawerOpened = true;
+        expect(getComputedStyle(drawer).visibility).to.equal('visible');
+      });
+
       it('should reflect drawerOpened property to the attribute', () => {
         layout.drawerOpened = false;
         expect(layout.hasAttribute('drawer-opened')).to.be.false;
@@ -155,7 +166,7 @@ describe('vaadin-app-layout', () => {
         expect(layout.drawerOpened).to.be.true;
       });
 
-      it('should fire "drawer-opened-changed" event on drawer opened toggle', () => {
+      it('should fire "drawer-opened-changed" event on drawerOpened property toggle', () => {
         const spy = sinon.spy();
         layout.addEventListener('drawer-opened-changed', spy);
         layout.drawerOpened = false;
@@ -189,6 +200,26 @@ describe('vaadin-app-layout', () => {
 
       it('should be closed by default', () => {
         expect(layout.drawerOpened).to.be.false;
+      });
+
+      it('should have the CSS visibility set to hidden by default', () => {
+        expect(getComputedStyle(drawer).visibility).to.equal('hidden');
+      });
+
+      it('should toggle the CSS visibility on drawerOpened property toggle', () => {
+        layout.drawerOpened = true;
+        expect(getComputedStyle(drawer).visibility).to.equal('visible');
+        layout.drawerOpened = false;
+        expect(getComputedStyle(drawer).visibility).to.equal('hidden');
+      });
+
+      it('should not change tabindex attribute on consecutive drawer open/close', async () => {
+        const spy = sinon.spy();
+        new MutationObserver(spy).observe(drawer, { attributes: true, attributeFilter: ['tabindex'] });
+        layout.drawerOpened = true;
+        layout.drawerOpened = false;
+        await nextFrame();
+        expect(spy.called).to.be.false;
       });
 
       it('should reflect scrollHeight to a custom CSS property when the drawer has overflow', () => {
@@ -278,6 +309,14 @@ describe('vaadin-app-layout', () => {
           expect(layout.shadowRoot.activeElement).to.equal(drawer);
           await oneEvent(drawer, 'transitionend');
           expect(document.activeElement).to.equal(toggle);
+        });
+
+        it('should not call focus() on the drawer toggle on consecutive drawer close/open', async () => {
+          const spy = sinon.spy(toggle, 'focus');
+          layout.drawerOpened = false;
+          layout.drawerOpened = true;
+          await nextFrame();
+          expect(spy.called).to.be.false;
         });
       });
     });
