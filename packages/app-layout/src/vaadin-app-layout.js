@@ -448,14 +448,9 @@ class AppLayout extends ElementMixin(
     if (this.overlay) {
       if (drawerOpened) {
         this._updateDrawerHeight();
-        // Wait for the drawer CSS transition before focusing the drawer
-        // to make sure that VoiceOver has proper outline.
-        this.__drawerTransitionComplete().then(this.__trapFocusInDrawer);
+        this.__trapFocusInDrawer();
       } else if (oldDrawerOpened) {
-        // Wait for the drawer CSS transition before releasing focus from the drawer,
-        // to make sure that focus is restored to the toggle only after `visibility` becomes `hidden`
-        // (the drawer becomes inaccessible by the tabbing navigation).
-        this.__drawerTransitionComplete().then(this.__releaseFocusFromDrawer);
+        this.__releaseFocusFromDrawer();
       }
     }
 
@@ -586,13 +581,21 @@ class AppLayout extends ElementMixin(
   }
 
   /** @private */
-  __trapFocusInDrawer() {
+  async __trapFocusInDrawer() {
+    // Wait for the drawer CSS transition before focusing the drawer
+    // in order for VoiceOver to have a proper outline.
+    await this.__drawerTransitionComplete();
+
     this.$.drawer.setAttribute('tabindex', '0');
     this.__focusTrapController.trapFocus(this.$.drawer);
   }
 
   /** @private */
-  __releaseFocusFromDrawer() {
+  async __releaseFocusFromDrawer() {
+    // Wait for the drawer CSS transition in order to restore focus to the toggle
+    // only after `visibility` becomes `hidden`, that is, the drawer becomes inaccessible by the tabbing navigation.
+    await this.__drawerTransitionComplete();
+
     this.__focusTrapController.releaseFocus();
     this.$.drawer.removeAttribute('tabindex');
 
