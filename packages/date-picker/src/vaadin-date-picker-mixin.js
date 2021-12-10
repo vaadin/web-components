@@ -302,7 +302,7 @@ export const DatePickerMixin = (subclass) =>
         /** @private */
         _noInput: {
           type: Boolean,
-          computed: '_isNoInput(inputElement, _fullscreen, _ios, i18n, opened)'
+          computed: '_isNoInput(inputElement, _fullscreen, _ios, i18n, opened, autoOpenDisabled)'
         },
 
         /** @private */
@@ -542,8 +542,11 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     // eslint-disable-next-line max-params
-    _isNoInput(inputElement, fullscreen, ios, i18n, opened) {
-      return !inputElement || (fullscreen && opened) || ios || !i18n.parseDate;
+    _isNoInput(inputElement, fullscreen, ios, i18n, opened, autoOpenDisabled) {
+      // On fullscreen mode, text input is disabled if auto-open isn't disabled or
+      // whenever the dropdown is opened
+      const noInputOnFullscreenMode = fullscreen && (!autoOpenDisabled || opened);
+      return !inputElement || noInputOnFullscreenMode || ios || !i18n.parseDate;
     }
 
     /** @private */
