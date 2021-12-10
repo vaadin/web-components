@@ -199,6 +199,7 @@ class AppLayout extends ElementMixin(
 
         [part='drawer'] {
           overflow: auto;
+          outline: none;
           position: fixed;
           top: var(--vaadin-app-layout-navbar-offset-top, 0);
           right: auto;
