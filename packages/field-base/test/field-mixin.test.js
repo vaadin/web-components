@@ -203,7 +203,7 @@ describe('field-mixin', () => {
     });
   });
 
-  describe('helper', () => {
+  describe.only('helper', () => {
     let element, helper;
 
     const ID_REGEX = /^helper-field-mixin-element-\d+$/;
