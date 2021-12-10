@@ -564,7 +564,7 @@ class AppLayout extends ElementMixin(
   }
 
   /**
-   * Returns a promise that resolves when the drawer opening/closing CSS animation completes.
+   * Returns a promise that resolves when the drawer opening/closing CSS transition ends.
    *
    * The method relies on the `--vaadin-app-layout-transition` CSS variable to detect whether
    * the drawer has a CSS transition that needs to be awaited. If the CSS variable equals `none`,
@@ -573,7 +573,7 @@ class AppLayout extends ElementMixin(
    * @return {Promise}
    * @private
    */
-  __drawerAnimationComplete() {
+  __drawerTransitionComplete() {
     return new Promise((resolve) => {
       if (this._getCustomPropertyValue('--vaadin-app-layout-transition') === 'none') {
         resolve();
@@ -591,7 +591,7 @@ class AppLayout extends ElementMixin(
     await this.__drawerTransitionComplete();
 
     if (!this.drawerOpened) {
-      // The drawer has been closed during the animation.
+      // The drawer has been closed during the CSS transition.
       return;
     }
 
@@ -606,7 +606,7 @@ class AppLayout extends ElementMixin(
     await this.__drawerTransitionComplete();
 
     if (this.drawerOpened) {
-      // The drawer has been opened during the animation.
+      // The drawer has been opened during the CSS transition.
       return;
     }
 
