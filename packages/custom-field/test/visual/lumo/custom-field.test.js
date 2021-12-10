@@ -14,7 +14,6 @@ import '@vaadin/text-area/theme/lumo/vaadin-text-area.js';
 import '@vaadin/text-field/theme/lumo/vaadin-text-field.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/time-picker/theme/lumo/vaadin-time-picker.js';
-import '@vaadin/rich-text-editor/theme/lumo/vaadin-rich-text-editor.js';
 import '../../../theme/lumo/vaadin-custom-field.js';
 
 describe('custom-field', () => {
@@ -247,8 +246,7 @@ describe('custom-field', () => {
     beforeEach(() => {
       layout = fixtureSync(`
         <vaadin-custom-field theme="whitespace" label="Custom field">
-          <vaadin-rich-text-editor>
-          </vaadin-rich-text-editor>
+          <input type="text" />
         </vaadin-custom-field>
       `);
     });
