@@ -546,7 +546,12 @@ export const DatePickerMixin = (subclass) =>
       // On fullscreen mode, text input is disabled if auto-open isn't disabled or
       // whenever the dropdown is opened
       const noInputOnFullscreenMode = fullscreen && (!autoOpenDisabled || opened);
-      return !inputElement || noInputOnFullscreenMode || ios || !i18n.parseDate;
+      // On iOS, text input is disabled whenever the dropdown is opened, because
+      // the virtual keyboard doesn't affect the viewport metrics and thus the
+      // dropdown could get covered by the keyboard.
+      const noInputOnIos = ios && opened;
+
+      return !inputElement || noInputOnFullscreenMode || noInputOnIos || !i18n.parseDate;
     }
 
     /** @private */
