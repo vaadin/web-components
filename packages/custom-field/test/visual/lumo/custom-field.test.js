@@ -97,6 +97,11 @@ describe('custom-field', () => {
       element.setAttribute('theme', 'helper-above-field');
       await visualDiff(element, 'helper-above-field');
     });
+
+    it('theme-whitespace', async () => {
+      element.setAttribute('theme', 'whitespace');
+      await visualDiff(element, 'custom-field-whitespace-theme');
+    });
   });
 
   describe('alignment', () => {
@@ -237,22 +242,6 @@ describe('custom-field', () => {
       it('label in form layout', async () => {
         await visualDiff(layout, 'form-layout-item-text-area');
       });
-    });
-  });
-
-  describe('whitespace theme', () => {
-    let layout;
-
-    beforeEach(() => {
-      layout = fixtureSync(`
-        <vaadin-custom-field theme="whitespace" label="Custom field">
-          <input type="text" />
-        </vaadin-custom-field>
-      `);
-    });
-
-    it('should correctly set label padding bottom', async () => {
-      await visualDiff(layout, 'custom-field-whitespace-theme');
     });
   });
 });
