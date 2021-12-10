@@ -199,7 +199,6 @@ class AppLayout extends ElementMixin(
 
         [part='drawer'] {
           overflow: auto;
-          outline: none;
           position: fixed;
           top: var(--vaadin-app-layout-navbar-offset-top, 0);
           right: auto;
@@ -211,6 +210,7 @@ class AppLayout extends ElementMixin(
           width: 16em;
           box-sizing: border-box;
           padding: var(--safe-area-inset-top) 0 var(--safe-area-inset-bottom) var(--safe-area-inset-left);
+          outline: none;
         }
 
         :host([drawer-opened]) [part='drawer'] {
