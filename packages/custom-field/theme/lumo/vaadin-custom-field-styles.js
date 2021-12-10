@@ -84,7 +84,7 @@ const customField = css`
     font-size: var(--lumo-font-size-xxs);
   }
 
-  /* When custom-field is used with non-optimized components like rich-text-editor */
+  /* When custom-field is used without components without outer margin */
   :host([theme~='whitespace'][has-label]) [part='label'] {
     padding-bottom: 0.5em;
   }
