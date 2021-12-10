@@ -141,11 +141,11 @@ describe('vaadin-app-layout', () => {
         expect(layout.drawerOpened).to.be.true;
       });
 
-      it('should have visibility: visible by default', () => {
+      it('should have the CSS visibility set to visible by default', () => {
         expect(getComputedStyle(drawer).visibility).to.equal('visible');
       });
 
-      it(`should toggle the drawer's CSS visibility on drawerOpened property toggle`, () => {
+      it('should toggle the CSS visibility on drawerOpened property toggle', () => {
         layout.drawerOpened = false;
         expect(getComputedStyle(drawer).visibility).to.equal('hidden');
         layout.drawerOpened = true;
@@ -202,18 +202,18 @@ describe('vaadin-app-layout', () => {
         expect(layout.drawerOpened).to.be.false;
       });
 
-      it('should have visibility: hidden by default', () => {
+      it('should have the CSS visibility set to hidden by default', () => {
         expect(getComputedStyle(drawer).visibility).to.equal('hidden');
       });
 
-      it(`should toggle the drawer's CSS visibility on drawerOpened property toggle`, () => {
+      it('should toggle the CSS visibility on drawerOpened property toggle', () => {
         layout.drawerOpened = true;
         expect(getComputedStyle(drawer).visibility).to.equal('visible');
         layout.drawerOpened = false;
         expect(getComputedStyle(drawer).visibility).to.equal('hidden');
       });
 
-      it(`should not change the drawer's tabindex attribute on sequential drawer open/close`, async () => {
+      it('should not change tabindex attribute on consecutive drawer open/close', async () => {
         const spy = sinon.spy();
         new MutationObserver(spy).observe(drawer, { attributes: true, attributeFilter: ['tabindex'] });
         layout.drawerOpened = true;
@@ -311,7 +311,7 @@ describe('vaadin-app-layout', () => {
           expect(document.activeElement).to.equal(toggle);
         });
 
-        it(`should not call focus() on the drawer toggle on sequential drawer close/open`, async () => {
+        it('should not call focus() on the drawer toggle on consecutive drawer close/open', async () => {
           const spy = sinon.spy(toggle, 'focus');
           layout.drawerOpened = false;
           layout.drawerOpened = true;
