@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, fixtureSync, oneEvent, tap } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, makeSoloTouchEvent, oneEvent, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
@@ -7,13 +7,6 @@ import * as settings from '@polymer/polymer/lib/utils/settings.js';
 import { close, getOverlayContent, monthsEqual, open } from './common.js';
 
 settings.setCancelSyntheticClickEvents(false);
-
-function touchEnd(element) {
-  const e = new CustomEvent('touchend', { cancelable: true, bubbles: true });
-  e.changedTouches = [{}];
-  element.dispatchEvent(e);
-  return e;
-}
 
 describe('basic features', () => {
   let datepicker, input, toggleButton;
@@ -109,13 +102,13 @@ describe('basic features', () => {
   });
 
   it('should prevent touchend event on the input', () => {
-    const e = touchEnd(datepicker.inputElement);
+    const e = makeSoloTouchEvent('touchend', null, datepicker.inputElement);
     expect(e.defaultPrevented).to.be.true;
   });
 
   it('should prevent touchend event when on autoOpenDisabled', () => {
     datepicker.autoOpenDisabled = true;
-    const e = touchEnd(datepicker.inputElement);
+    const e = makeSoloTouchEvent('touchend', null, datepicker.inputElement);
     expect(e.defaultPrevented).to.be.false;
   });
 
@@ -207,7 +200,7 @@ describe('basic features', () => {
   });
 
   it('should open by tapping the calendar icon', async () => {
-    setTimeout(() => tap(toggleButton));
+    tap(toggleButton);
     await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
   });
 
@@ -547,7 +540,7 @@ describe('clear-button-visible', () => {
 
   it('should not prevent touchend event on clear button', () => {
     datepicker.value = '2000-02-01';
-    const e = touchEnd(clearButton);
+    const e = makeSoloTouchEvent('touchend', null, clearButton);
     expect(e.defaultPrevented).to.be.false;
   });
 
