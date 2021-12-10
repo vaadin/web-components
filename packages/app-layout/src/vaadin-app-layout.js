@@ -289,7 +289,7 @@ class AppLayout extends ElementMixin(
         <slot name="navbar"></slot>
       </div>
       <div part="backdrop" on-click="_close" on-touchstart="_close"></div>
-      <div part="drawer" id="drawer">
+      <div part="drawer" id="drawer" on-keydown="__onDrawerKeyDown">
         <slot name="drawer" id="drawerSlot"></slot>
       </div>
       <div content>
@@ -375,7 +375,6 @@ class AppLayout extends ElementMixin(
     this.__boundResizeListener = this._resize.bind(this);
     this.__drawerToggleClickListener = this._drawerToggleClick.bind(this);
     this.__closeOverlayDrawerListener = this.__closeOverlayDrawer.bind(this);
-    this.__onDrawerKeyDown = this.__onDrawerKeyDown.bind(this);
 
     this.__focusTrapController = new FocusTrapController(this);
   }
@@ -409,8 +408,6 @@ class AppLayout extends ElementMixin(
     this._updateOverlayMode();
 
     window.addEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
-
-    this.$.drawer.addEventListener('keydown', this.__onDrawerKeyDown);
   }
 
   /** @protected */
@@ -423,7 +420,6 @@ class AppLayout extends ElementMixin(
   disconnectedCallback() {
     super.disconnectedCallback();
 
-    this.$.drawer.removeEventListener('keydown', this.__onDrawerKeyDown);
     this._navbarChildObserver && this._navbarChildObserver.disconnect();
     this._drawerChildObserver && this._drawerChildObserver.disconnect();
     this._touchChildObserver && this._touchChildObserver.disconnect();
@@ -580,7 +576,7 @@ class AppLayout extends ElementMixin(
    */
   __drawerTransitionComplete() {
     return new Promise((resolve) => {
-      if (getComputedStyle(this).getPropertyValue('--vaadin-app-layout-transition').trim() === 'none') {
+      if (this._getCustomPropertyValue('--vaadin-app-layout-transition') === 'none') {
         resolve();
         return;
       }
