@@ -5,4 +5,17 @@
  */
 import { ReactiveController } from 'lit';
 
-export class SlotController implements ReactiveController {}
+export class SlotController implements ReactiveController {
+  constructor(node: HTMLElement);
+
+  hostConnected(): void;
+
+  /**
+   * The controller host element.
+   */
+  host: HTMLElement;
+
+  slotName: string;
+
+  initialized: boolean;
+}

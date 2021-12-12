@@ -12,7 +12,7 @@ export class SlotController {
   }
 
   hostConnected() {
-    if (!this.__initialized) {
+    if (!this.initialized) {
       const { host, slotName, slotFactory, slotInitializer } = this;
 
       const slotted = host.querySelector(`[slot=${slotName}]`);
@@ -35,7 +35,7 @@ export class SlotController {
         slotInitializer.call(this, host, this.__slotContent);
       }
 
-      this.__initialized = true;
+      this.initialized = true;
     }
   }
 }
