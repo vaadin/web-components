@@ -10,7 +10,8 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  */
 export class TextAreaController extends SlotController {
   constructor(host, callback) {
-    super(host, [
+    super(
+      host,
       'textarea',
       () => document.createElement('textarea'),
       (host, node) => {
@@ -33,6 +34,6 @@ export class TextAreaController extends SlotController {
           callback(node);
         }
       }
-    ]);
+    );
   }
 }

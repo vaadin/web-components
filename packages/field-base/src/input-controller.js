@@ -10,7 +10,8 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  */
 export class InputController extends SlotController {
   constructor(host, callback) {
-    super(host, [
+    super(
+      host,
       'input',
       () => document.createElement('input'),
       (host, node) => {
@@ -30,6 +31,6 @@ export class InputController extends SlotController {
           callback(node);
         }
       }
-    ]);
+    );
   }
 }
