@@ -31,8 +31,10 @@ export class SlotController {
         this.__slotContent = slotted;
       }
 
+      // Don't try to bind `this` to initializer (normally it's arrow function).
+      // Instead, pass the host as a first argument to access component's state.
       if (slotInitializer) {
-        slotInitializer.call(this, host, this.__slotContent);
+        slotInitializer(host, this.__slotContent);
       }
 
       this.initialized = true;
