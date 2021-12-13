@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
-import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
@@ -415,15 +414,9 @@ export const DatePickerMixin = (subclass) =>
     ready() {
       super.ready();
 
-      addListener(this, 'tap', (e) => {
+      this.addEventListener('click', (e) => {
         if (!this._isClearButton(e) && (!this.autoOpenDisabled || this._noInput)) {
           this.open();
-        }
-      });
-
-      this.addEventListener('touchend', (e) => {
-        if (!this.autoOpenDisabled && !this._isClearButton(e)) {
-          e.preventDefault();
         }
       });
     }
