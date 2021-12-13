@@ -6,7 +6,12 @@
 import { ReactiveController } from 'lit';
 
 export class SlotController implements ReactiveController {
-  constructor(node: HTMLElement);
+  constructor(
+    node: HTMLElement,
+    slotName: string,
+    slotFactory: () => HTMLElement,
+    slotInitializer: (host: HTMLElement, node: HTMLElement) => void
+  );
 
   hostConnected(): void;
 
