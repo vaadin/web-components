@@ -17,6 +17,10 @@ async function touchTap(target) {
   }
 }
 
+function isFocused(target) {
+  return target.getRootNode().activeElement === target;
+}
+
 describe('basic features', () => {
   let datepicker, input, toggleButton;
 
@@ -54,7 +58,6 @@ describe('basic features', () => {
 
   it('should blur when focused on fullscreen', () => {
     datepicker._fullscreen = true;
-    datepicker.opened = true;
 
     const spy = sinon.spy(input, 'blur');
     input.dispatchEvent(new CustomEvent('focus'));
@@ -79,7 +82,6 @@ describe('basic features', () => {
     datepicker._fullscreen = true;
     datepicker.click();
     await sendKeys({ press: 'Escape' });
-    datepicker.blur();
     expect(datepicker.hasAttribute('focused')).to.be.false;
   });
 
@@ -112,13 +114,19 @@ describe('basic features', () => {
 
   it('should focus the input on touch tap', () => {
     touchTap(input);
-    expect(input.getRootNode().activeElement).to.equal(input);
+    expect(isFocused(input)).to.be.true;
   });
 
   it('should not focus the input on touch tap on fullscreen', () => {
     datepicker._fullscreen = true;
     touchTap(input);
-    expect(input.getRootNode().activeElement).not.to.equal(input);
+    expect(isFocused(input)).to.be.false;
+  });
+
+  it('should blur the input on fullscreen', () => {
+    datepicker._fullscreen = true;
+    datepicker.focus();
+    expect(isFocused(input)).to.be.false;
   });
 
   it('should pass the placeholder attribute to the input tag', () => {
@@ -240,20 +248,20 @@ describe('basic features', () => {
 
     it('should focus the input on touch tap', () => {
       touchTap(input);
-      expect(input.getRootNode().activeElement).to.equal(input);
+      expect(isFocused(input)).to.be.true;
     });
 
     it('should not blur the input on open', async () => {
       touchTap(input);
       await open(datepicker);
-      expect(input.getRootNode().activeElement).to.equal(input);
+      expect(isFocused(input)).to.be.true;
     });
 
     it('should blur the input on fullscreen open', async () => {
       datepicker._fullscreen = true;
       touchTap(input);
       await open(datepicker);
-      expect(input.getRootNode().activeElement).not.to.equal(input);
+      expect(isFocused(input)).to.be.false;
     });
 
     it('should not open on input tap when autoOpenDisabled is true and not on mobile', () => {
@@ -620,5 +628,26 @@ describe('initial value attribute', () => {
 
   it('should format the input value', () => {
     expect(input.value).to.equal('1/1/2000');
+  });
+});
+
+describe('ios', () => {
+  let datepicker, input;
+
+  beforeEach(() => {
+    datepicker = fixtureSync('<vaadin-date-picker value="2000-01-01"></vaadin-date-picker>');
+    input = datepicker.inputElement;
+    datepicker._ios = true;
+  });
+
+  it('should focus the input when closed', () => {
+    datepicker.focus();
+    expect(isFocused(input)).to.be.true;
+  });
+
+  it('should blur the input when opened', async () => {
+    datepicker.focus();
+    await open(datepicker);
+    expect(isFocused(input)).to.be.false;
   });
 });
