@@ -28,8 +28,9 @@ describe('WAI-ARIA', () => {
       expect(aria).to.not.include(error.id);
     });
 
-    it('should add error message ID to aria-describedby when invalid', () => {
+    it('should add error message ID to aria-describedby when invalid', async () => {
       datepicker.invalid = true;
+      await aTimeout(0);
       const aria = input.getAttribute('aria-describedby');
       expect(aria).to.include(helper.id);
       expect(aria).to.include(error.id);
