@@ -25,7 +25,5 @@ export class SlotController implements ReactiveController {
    */
   node: HTMLElement;
 
-  slotName: string;
-
-  initialized: boolean;
+  protected initialized: boolean;
 }
