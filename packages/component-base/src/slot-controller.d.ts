@@ -20,6 +20,11 @@ export class SlotController implements ReactiveController {
    */
   host: HTMLElement;
 
+  /**
+   * The slotted node managed by the controller.
+   */
+  node: HTMLElement;
+
   slotName: string;
 
   initialized: boolean;

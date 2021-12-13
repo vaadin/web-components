@@ -24,17 +24,17 @@ export class SlotController {
           if (slotContent instanceof Element) {
             slotContent.setAttribute('slot', slotName);
             host.appendChild(slotContent);
-            this.__slotContent = slotContent;
+            this.node = slotContent;
           }
         }
       } else {
-        this.__slotContent = slotted;
+        this.node = slotted;
       }
 
       // Don't try to bind `this` to initializer (normally it's arrow function).
       // Instead, pass the host as a first argument to access component's state.
       if (slotInitializer) {
-        slotInitializer(host, this.__slotContent);
+        slotInitializer(host, this.node);
       }
 
       this.initialized = true;
