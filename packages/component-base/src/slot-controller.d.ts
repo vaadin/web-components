@@ -7,7 +7,7 @@ import { ReactiveController } from 'lit';
 
 export class SlotController implements ReactiveController {
   constructor(
-    node: HTMLElement,
+    host: HTMLElement,
     slotName: string,
     slotFactory: () => HTMLElement,
     slotInitializer: (host: HTMLElement, node: HTMLElement) => void
