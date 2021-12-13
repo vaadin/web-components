@@ -15,7 +15,7 @@ export class SlotController {
     if (!this.initialized) {
       const { host, slotName, slotFactory, slotInitializer } = this;
 
-      const slotted = this.getSlotChild(slotName);
+      const slotted = this.getSlotChild();
 
       if (!slotted) {
         // Slot factory is optional, some slots don't have default content.
@@ -45,10 +45,10 @@ export class SlotController {
 
   /**
    * Return a reference to the node managed by the controller.
-   * @param {string} slotName
    * @return {Node}
    */
-  getSlotChild(slotName) {
+  getSlotChild() {
+    const { slotName } = this;
     return Array.from(this.host.childNodes).find((node) => {
       // Either an element (any slot) or a text node (only un-named slot).
       return (

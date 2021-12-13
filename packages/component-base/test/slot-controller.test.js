@@ -49,7 +49,7 @@ describe('slot-controller', () => {
       });
 
       it('should return a reference to named slot child', () => {
-        expect(controller.getSlotChild('foo')).to.equal(child);
+        expect(controller.getSlotChild()).to.equal(child);
       });
 
       it('should run initializer for named slot child', () => {
@@ -92,7 +92,7 @@ describe('slot-controller', () => {
       });
 
       it('should return a reference to custom named slot child', () => {
-        expect(controller.getSlotChild('foo')).to.equal(child);
+        expect(controller.getSlotChild()).to.equal(child);
       });
 
       it('should run initializer for custom named slot child', () => {
@@ -132,7 +132,7 @@ describe('slot-controller', () => {
       });
 
       it('should return a reference to un-named slot child', () => {
-        expect(controller.getSlotChild('')).to.equal(child);
+        expect(controller.getSlotChild()).to.equal(child);
       });
 
       it('should run initializer for un-named slot child', () => {
@@ -175,7 +175,7 @@ describe('slot-controller', () => {
       });
 
       it('should return a reference to element passed to un-named slot', () => {
-        expect(controller.getSlotChild('')).to.equal(child);
+        expect(controller.getSlotChild()).to.equal(child);
       });
 
       it('should run initializer for un-named slot element', () => {
@@ -214,7 +214,7 @@ describe('slot-controller', () => {
       });
 
       it('should return a reference to the slotted text node', () => {
-        expect(controller.getSlotChild('')).to.equal(child);
+        expect(controller.getSlotChild()).to.equal(child);
       });
 
       it('should run initializer for the slotted text node', () => {
