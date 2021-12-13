@@ -7,6 +7,7 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { FieldAriaController } from './field-aria-controller.js';
 import { LabelMixin } from './label-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
@@ -17,10 +18,11 @@ import { ValidateMixin } from './validate-mixin.js';
  * @polymerMixin
  * @mixes ControllerMixin
  * @mixes LabelMixin
+ * @mixes SlotMixin
  * @mixes ValidateMixin
  */
 export const FieldMixin = (superclass) =>
-  class FieldMixinClass extends ValidateMixin(LabelMixin(ControllerMixin(superclass))) {
+  class FieldMixinClass extends ValidateMixin(LabelMixin(ControllerMixin(SlotMixin(superclass)))) {
     static get properties() {
       return {
         /**
@@ -272,8 +274,8 @@ export const FieldMixin = (superclass) =>
      * @protected
      * @override
      */
-    _toggleHasLabelAttribute() {
-      super._toggleHasLabelAttribute();
+    _toggleHasLabelAttribute(labelNode) {
+      super._toggleHasLabelAttribute(labelNode);
 
       // Label ID should be only added when the label content is present.
       // Otherwise, it may conflict with an `aria-label` attribute possibly added by the user.

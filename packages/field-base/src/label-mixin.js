@@ -4,7 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
  * A mixin to provide label via corresponding property or named slot.
@@ -14,7 +15,7 @@ import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
  */
 export const LabelMixin = dedupingMixin(
   (superclass) =>
-    class LabelMixinClass extends SlotMixin(superclass) {
+    class LabelMixinClass extends ControllerMixin(superclass) {
       static get properties() {
         return {
           /**
@@ -29,20 +30,8 @@ export const LabelMixin = dedupingMixin(
       }
 
       /** @protected */
-      get slots() {
-        return {
-          ...super.slots,
-          label: () => {
-            const label = document.createElement('label');
-            label.textContent = this.label;
-            return label;
-          }
-        };
-      }
-
-      /** @protected */
       get _labelNode() {
-        return this._getDirectSlotChild('label');
+        return this._labelController.getSlotChild('label');
       }
 
       constructor() {
@@ -52,40 +41,47 @@ export const LabelMixin = dedupingMixin(
         const uniqueId = (LabelMixinClass._uniqueLabelId = 1 + LabelMixinClass._uniqueLabelId || 0);
         this._labelId = `label-${this.localName}-${uniqueId}`;
 
-        /**
-         * @type {MutationObserver}
-         * @private
-         */
-        this.__labelNodeObserver = new MutationObserver(() => {
-          this._toggleHasLabelAttribute();
-        });
-      }
+        this._labelController = new SlotController(
+          this,
+          'label',
+          () => document.createElement('label'),
+          (host, node, isCustom) => {
+            // Do not override custom content.
+            if (!isCustom) {
+              node.textContent = host.label;
+            }
 
-      /** @protected */
-      ready() {
-        super.ready();
+            // Do not override custom label id.
+            if (!node.id) {
+              node.id = host._labelId;
+            }
 
-        if (this._labelNode) {
-          this._labelNode.id = this._labelId;
-          this._toggleHasLabelAttribute();
+            this._toggleHasLabelAttribute(node);
 
-          this.__labelNodeObserver.observe(this._labelNode, { childList: true, subtree: true, characterData: true });
-        }
+            const labelNodeObserver = new MutationObserver(() => {
+              this._toggleHasLabelAttribute(node);
+            });
+
+            labelNodeObserver.observe(node, { childList: true, subtree: true, characterData: true });
+          }
+        );
+
+        this.addController(this._labelController);
       }
 
       /** @protected */
       _labelChanged(label) {
-        if (this._labelNode) {
-          this._labelNode.textContent = label;
-          this._toggleHasLabelAttribute();
+        const labelNode = this._labelNode;
+        if (labelNode) {
+          labelNode.textContent = label;
+          this._toggleHasLabelAttribute(labelNode);
         }
       }
 
       /** @protected */
-      _toggleHasLabelAttribute() {
-        if (this._labelNode) {
-          const hasLabel = this._labelNode.children.length > 0 || this._labelNode.textContent.trim() !== '';
-
+      _toggleHasLabelAttribute(labelNode) {
+        if (labelNode) {
+          const hasLabel = labelNode.children.length > 0 || labelNode.textContent.trim() !== '';
           this.toggleAttribute('has-label', hasLabel);
         }
       }

@@ -5,6 +5,7 @@
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
 import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import { SlotMixinClass } from '@vaadin/component-base/src/slot-mixin.js';
 import { LabelMixinClass } from './label-mixin.js';
 import { ValidateMixinClass } from './validate-mixin.js';
 
@@ -17,6 +18,7 @@ export declare function FieldMixin<T extends Constructor<HTMLElement>>(
   Constructor<ControllerMixinClass> &
   Constructor<FieldMixinClass> &
   Constructor<LabelMixinClass> &
+  Constructor<SlotMixinClass> &
   Constructor<ValidateMixinClass>;
 
 export declare class FieldMixinClass {

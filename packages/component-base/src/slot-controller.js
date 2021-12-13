@@ -16,27 +16,27 @@ export class SlotController {
       const { host, slotName, slotFactory, slotInitializer } = this;
 
       const slotted = this.getSlotChild();
+      const isCustom = !!slotted;
 
-      if (!slotted) {
-        // Slot factory is optional, some slots don't have default content.
-        if (slotFactory) {
-          const slotContent = slotFactory(host);
-          if (slotContent instanceof Element) {
-            if (slotName !== '') {
-              slotContent.setAttribute('slot', slotName);
-            }
-            host.appendChild(slotContent);
-            this.node = slotContent;
-          }
-        }
-      } else {
+      if (isCustom) {
         this.node = slotted;
+      } else if (slotFactory) {
+        // Slot factory is optional, some slots don't have default content.
+
+        const slotContent = slotFactory(host);
+        if (slotContent instanceof Element) {
+          if (slotName !== '') {
+            slotContent.setAttribute('slot', slotName);
+          }
+          host.appendChild(slotContent);
+          this.node = slotContent;
+        }
       }
 
       // Don't try to bind `this` to initializer (normally it's arrow function).
       // Instead, pass the host as a first argument to access component's state.
       if (slotInitializer) {
-        slotInitializer(host, this.node);
+        slotInitializer(host, this.node, isCustom);
       }
 
       this.initialized = true;

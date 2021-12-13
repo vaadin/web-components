@@ -26,12 +26,13 @@ export const SlotLabelMixin = dedupingMixin(
       ready() {
         super.ready();
 
-        if (this._labelNode) {
+        const labelNode = this._labelNode;
+        if (labelNode) {
           // The default slot's content is moved to the label node
           // only after `LabelMixin` is initialized which means
           // we should manually toggle the `has-label` attribute
           // respecting the new label content.
-          this._toggleHasLabelAttribute();
+          this._toggleHasLabelAttribute(labelNode);
         }
       }
     }
