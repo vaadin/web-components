@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-date-time-picker.js';
 
 describe('ARIA', () => {
@@ -25,8 +25,9 @@ describe('ARIA', () => {
     expect(aria).to.include(label.id);
   });
 
-  it('should add error message to aria-labelledby when field is invalid', () => {
+  it('should add error message to aria-labelledby when field is invalid', async () => {
     dateTimePicker.invalid = true;
+    await aTimeout(0);
     const aria = dateTimePicker.getAttribute('aria-labelledby');
     expect(aria).to.include(helper.id);
     expect(aria).to.include(error.id);
