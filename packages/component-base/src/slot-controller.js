@@ -44,8 +44,9 @@ export class SlotController {
   }
 
   /**
-   * Get a reference to the node managed by the controller.
+   * Return a reference to the node managed by the controller.
    * @param {string} slotName
+   * @return {Node}
    */
   getSlotChild(slotName) {
     return Array.from(this.host.childNodes).find((node) => {

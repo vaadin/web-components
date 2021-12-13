@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '../src/controller-mixin.js';
 import { SlotController } from '../src/slot-controller.js';
@@ -17,17 +18,23 @@ customElements.define(
 );
 
 describe('slot-controller', () => {
-  let element, child, controller;
+  let element, child, controller, initializeSpy;
 
   describe('named slot', () => {
     describe('default content', () => {
       beforeEach(() => {
         element = fixtureSync('<slot-controller-element></slot-controller-element>');
-        controller = new SlotController(element, 'foo', () => {
-          const div = document.createElement('div');
-          div.textContent = 'foo';
-          return div;
-        });
+        initializeSpy = sinon.spy();
+        controller = new SlotController(
+          element,
+          'foo',
+          () => {
+            const div = document.createElement('div');
+            div.textContent = 'foo';
+            return div;
+          },
+          initializeSpy
+        );
         element.addController(controller);
         child = element.querySelector('[slot="foo"]');
       });
@@ -41,8 +48,14 @@ describe('slot-controller', () => {
         expect(controller.node).to.equal(child);
       });
 
-      it('should get a reference to named slot child', () => {
+      it('should return a reference to named slot child', () => {
         expect(controller.getSlotChild('foo')).to.equal(child);
+      });
+
+      it('should run initializer for named slot child', () => {
+        expect(initializeSpy.calledOnce).to.be.true;
+        expect(initializeSpy.firstCall.args[0]).to.equal(element);
+        expect(initializeSpy.firstCall.args[1]).to.equal(child);
       });
     });
 
@@ -55,11 +68,17 @@ describe('slot-controller', () => {
         `);
         // Get element reference before adding the controller
         child = element.querySelector('[slot="foo"]');
-        controller = new SlotController(element, 'foo', () => {
-          const div = document.createElement('div');
-          div.textContent = 'foo';
-          return div;
-        });
+        initializeSpy = sinon.spy();
+        controller = new SlotController(
+          element,
+          'foo',
+          () => {
+            const div = document.createElement('div');
+            div.textContent = 'foo';
+            return div;
+          },
+          initializeSpy
+        );
         element.addController(controller);
       });
 
@@ -72,8 +91,14 @@ describe('slot-controller', () => {
         expect(controller.node).to.equal(child);
       });
 
-      it('should get a reference to named slot child', () => {
+      it('should return a reference to custom named slot child', () => {
         expect(controller.getSlotChild('foo')).to.equal(child);
+      });
+
+      it('should run initializer for custom named slot child', () => {
+        expect(initializeSpy.calledOnce).to.be.true;
+        expect(initializeSpy.firstCall.args[0]).to.equal(element);
+        expect(initializeSpy.firstCall.args[1]).to.equal(child);
       });
     });
   });
@@ -82,11 +107,17 @@ describe('slot-controller', () => {
     describe('default content', () => {
       beforeEach(() => {
         element = fixtureSync('<slot-controller-element></slot-controller-element>');
-        controller = new SlotController(element, '', () => {
-          const div = document.createElement('div');
-          div.textContent = 'bar';
-          return div;
-        });
+        initializeSpy = sinon.spy();
+        controller = new SlotController(
+          element,
+          '',
+          () => {
+            const div = document.createElement('div');
+            div.textContent = 'bar';
+            return div;
+          },
+          initializeSpy
+        );
         element.addController(controller);
         child = element.querySelector(':not([slot])');
       });
@@ -100,8 +131,14 @@ describe('slot-controller', () => {
         expect(controller.node).to.equal(child);
       });
 
-      it('should get a reference to un-named slot child', () => {
+      it('should return a reference to un-named slot child', () => {
         expect(controller.getSlotChild('')).to.equal(child);
+      });
+
+      it('should run initializer for un-named slot child', () => {
+        expect(initializeSpy.calledOnce).to.be.true;
+        expect(initializeSpy.firstCall.args[0]).to.equal(element);
+        expect(initializeSpy.firstCall.args[1]).to.equal(child);
       });
     });
 
@@ -114,11 +151,17 @@ describe('slot-controller', () => {
         `);
         // Get element reference before adding the controller
         child = element.querySelector(':not([slot])');
-        controller = new SlotController(element, '', () => {
-          const div = document.createElement('div');
-          div.textContent = 'bar';
-          return div;
-        });
+        initializeSpy = sinon.spy();
+        controller = new SlotController(
+          element,
+          '',
+          () => {
+            const div = document.createElement('div');
+            div.textContent = 'bar';
+            return div;
+          },
+          initializeSpy
+        );
         element.addController(controller);
       });
 
@@ -131,19 +174,31 @@ describe('slot-controller', () => {
         expect(controller.node).to.equal(child);
       });
 
-      it('should get a reference to element passed to un-named slot', () => {
+      it('should return a reference to element passed to un-named slot', () => {
         expect(controller.getSlotChild('')).to.equal(child);
+      });
+
+      it('should run initializer for un-named slot element', () => {
+        expect(initializeSpy.calledOnce).to.be.true;
+        expect(initializeSpy.firstCall.args[0]).to.equal(element);
+        expect(initializeSpy.firstCall.args[1]).to.equal(child);
       });
     });
 
     describe('custom text node', () => {
       beforeEach(() => {
         element = fixtureSync('<slot-controller-element>baz</slot-controller-element>');
-        controller = new SlotController(element, '', () => {
-          const div = document.createElement('div');
-          div.textContent = 'bar';
-          return div;
-        });
+        initializeSpy = sinon.spy();
+        controller = new SlotController(
+          element,
+          '',
+          () => {
+            const div = document.createElement('div');
+            div.textContent = 'bar';
+            return div;
+          },
+          initializeSpy
+        );
         element.addController(controller);
         // Check last child to ensure no custom node is added.
         child = element.lastChild;
@@ -158,8 +213,14 @@ describe('slot-controller', () => {
         expect(controller.node).to.equal(child);
       });
 
-      it('should get a reference to the slotted text node', () => {
+      it('should return a reference to the slotted text node', () => {
         expect(controller.getSlotChild('')).to.equal(child);
+      });
+
+      it('should run initializer for the slotted text node', () => {
+        expect(initializeSpy.calledOnce).to.be.true;
+        expect(initializeSpy.firstCall.args[0]).to.equal(element);
+        expect(initializeSpy.firstCall.args[1]).to.equal(child);
       });
     });
 
