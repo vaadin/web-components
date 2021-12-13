@@ -17,18 +17,18 @@ export class Virtualizer {
 
   /**
    * The size of the virtualizer
-   * @param {number} size The size of the virtualizer
-   */
-  set size(size) {
-    this.__adapter.size = size;
-  }
-
-  /**
-   * The size of the virtualizer
    * @return {number | undefined} The size of the virtualizer
    */
   get size() {
     return this.__adapter.size;
+  }
+
+  /**
+   * The size of the virtualizer
+   * @param {number} size The size of the virtualizer
+   */
+  set size(size) {
+    this.__adapter.size = size;
   }
 
   /**

@@ -2,8 +2,30 @@ import { expect } from '@esm-bundle/chai';
 import { enterKeyDown, escKeyDown, fixtureSync, nextRender, spaceKeyDown, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-avatar-group.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+
+/**
+ * Resolves once the function is invoked on the given object.
+ */
+function onceInvoked(object, functionName) {
+  return new Promise((resolve) => {
+    sinon.replace(object, functionName, (...args) => {
+      sinon.restore();
+      object[functionName](...args);
+      resolve();
+    });
+  });
+}
+
+/**
+ * Resolves once the ResizeObserver in AvatarGroup has processed a resize.
+ */
+async function onceResized(group) {
+  // Wait for the _onResize function to be invoked by the ResizeObserver
+  await onceInvoked(group, '_onResize');
+  // Wait for the debouncer callback in _onResize to invoke __setItemsInView
+  await onceInvoked(group, '__setItemsInView');
+}
 
 describe('avatar-group', () => {
   let group;
@@ -139,8 +161,7 @@ describe('avatar-group', () => {
 
       it('should consider element width when maxItemsVisible is set', async () => {
         group.style.width = '100px';
-        group.notifyResize();
-        await nextRender(group);
+        await onceResized(group);
 
         const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
         expect(items.length).to.equal(3);
@@ -148,8 +169,7 @@ describe('avatar-group', () => {
 
       it('should set abbr property correctly if maxItemsVisible and width are set', async () => {
         group.style.width = '100px';
-        group.notifyResize();
-        await nextRender(group);
+        await onceResized(group);
 
         const overflow = group.$.overflow;
         expect(overflow.abbr).to.equal('+3');
@@ -173,50 +193,39 @@ describe('avatar-group', () => {
 
     it('should render avatars to fit width on resize', async () => {
       group.style.width = '110px';
-      group.dispatchEvent(new CustomEvent('iron-resize'));
-      await nextRender(group);
-      flush();
+      await onceResized(group);
       const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
       expect(items.length).to.equal(3);
       expect(overflow.abbr).to.equal('+3');
     });
 
-    it('should render avatars using notifyResize', async () => {
-      group.style.width = '110px';
+    it('should warn when calling deprecated notifyResize()', () => {
+      const stub = sinon.stub(console, 'warn');
       group.notifyResize();
-      await nextRender(group);
-      flush();
-      const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
-      expect(items.length).to.equal(3);
-      expect(overflow.abbr).to.equal('+3');
+      stub.restore();
+
+      expect(stub.calledOnce).to.be.true;
+      expect(stub.args[0][0]).to.include('WARNING: Since Vaadin 23, notifyResize() is deprecated.');
     });
 
     it('should always show at least two avatars', async () => {
       group.set('items', group.items.slice(0, 2));
       group.style.width = '50px';
-      group.notifyResize();
-      await nextRender(group);
-      flush();
+      await onceResized(group);
       const items = group.shadowRoot.querySelectorAll('vaadin-avatar:not([hidden])');
       expect(items.length).to.equal(2);
     });
 
     it('should not show overlay with only one avatar', async () => {
       group.style.width = '170px';
-      group.notifyResize();
-      await nextRender(group);
-      flush();
+      await onceResized(group);
       expect(overflow.hasAttribute('hidden')).to.be.true;
     });
 
     it('should re-render avatars on items change', async () => {
       group.style.width = '110px';
-      group.dispatchEvent(new CustomEvent('iron-resize'));
-      await nextRender(group);
-      flush();
       group.items = group.items.slice(0, 2);
-      await nextRender(group);
-      flush();
+      await onceResized(group);
       expect(overflow.hasAttribute('hidden')).to.be.true;
     });
 
@@ -227,26 +236,20 @@ describe('avatar-group', () => {
         done();
       });
       group.style.width = '110px';
-      group.notifyResize();
-      flush();
-      nextRender(group).then(() => overflow.click());
+      onceResized(group).then(() => overflow.click());
     });
 
     it('should re-render overflowing avatars on resize', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
         group.style.width = '75px';
-        group.notifyResize();
-        nextRender(group).then(() => {
-          flush();
+        onceResized(group).then(() => {
           const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
           expect(items.length).to.equal(4);
           done();
         });
       });
       group.style.width = '110px';
-      group.notifyResize();
-      nextRender(group).then(() => {
-        flush();
+      onceResized(group).then(() => {
         overflow.click();
       });
     });
@@ -254,17 +257,13 @@ describe('avatar-group', () => {
     it('should close overlay on resize when all avatars fit', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
         group.style.width = '';
-        group.notifyResize();
-        flush();
-        nextRender(group).then(() => {
+        onceResized(group).then(() => {
           expect(overlay.opened).to.be.false;
           done();
         });
       });
       group.style.width = '110px';
-      group.notifyResize();
-      flush();
-      nextRender(group).then(() => overflow.click());
+      onceResized(group).then(() => overflow.click());
     });
   });
 

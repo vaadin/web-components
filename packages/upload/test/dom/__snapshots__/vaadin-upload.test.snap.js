@@ -16,6 +16,7 @@ snapshots["vaadin-upload shadow default"] =
     </slot>
   </div>
   <div
+    aria-hidden="true"
     id="dropLabelContainer"
     part="drop-label"
   >

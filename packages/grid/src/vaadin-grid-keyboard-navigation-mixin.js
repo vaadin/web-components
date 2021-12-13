@@ -160,6 +160,8 @@ export const KeyboardNavigationMixin = (superClass) =>
         case ' ':
           keyGroup = 'Space';
           break;
+        default:
+          break;
       }
 
       this._detectInteracting(e);
@@ -240,28 +242,24 @@ export const KeyboardNavigationMixin = (superClass) =>
           if (this.__rowFocusMode) {
             // "If focus is on a row, moves focus to the first row. If focus is in the first row, focus does not move."
             dy = -Infinity;
+          } else if (e.ctrlKey) {
+            // "If focus is on a cell, moves focus to the first cell in the column. If focus is in the first row, focus does not move."
+            dy = -Infinity;
           } else {
-            if (e.ctrlKey) {
-              // "If focus is on a cell, moves focus to the first cell in the column. If focus is in the first row, focus does not move."
-              dy = -Infinity;
-            } else {
-              // "If focus is on a cell, moves focus to the first cell in the row. If focus is in the first cell of the row, focus does not move."
-              dx = -Infinity;
-            }
+            // "If focus is on a cell, moves focus to the first cell in the row. If focus is in the first cell of the row, focus does not move."
+            dx = -Infinity;
           }
           break;
         case 'End':
           if (this.__rowFocusMode) {
             // "If focus is on a row, moves focus to the last row. If focus is in the last row, focus does not move."
             dy = Infinity;
+          } else if (e.ctrlKey) {
+            // "If focus is on a cell, moves focus to the last cell in the column. If focus is in the last row, focus does not move."
+            dy = Infinity;
           } else {
-            if (e.ctrlKey) {
-              // "If focus is on a cell, moves focus to the last cell in the column. If focus is in the last row, focus does not move."
-              dy = Infinity;
-            } else {
-              // "If focus is on a cell, moves focus to the last cell in the row. If focus is in the last cell of the row, focus does not move."
-              dx = Infinity;
-            }
+            // "If focus is on a cell, moves focus to the last cell in the row. If focus is in the last cell of the row, focus does not move."
+            dx = Infinity;
           }
           break;
         case 'ArrowDown':
@@ -275,6 +273,8 @@ export const KeyboardNavigationMixin = (superClass) =>
           break;
         case 'PageUp':
           dy = -visibleItemsCount;
+          break;
+        default:
           break;
       }
 
@@ -296,13 +296,12 @@ export const KeyboardNavigationMixin = (superClass) =>
             // "If focus is on a collapsed row, expands the row."
             this.expandItem(activeRow._item);
             return;
-          } else {
-            // "If focus is on an expanded row or is on a row that does not have child rows,
-            // moves focus to the first cell in the row."
-            this.__rowFocusMode = false;
-            this._onCellNavigation(activeRow.firstElementChild, 0, 0);
-            return;
           }
+          // "If focus is on an expanded row or is on a row that does not have child rows,
+          // moves focus to the first cell in the row."
+          this.__rowFocusMode = false;
+          this._onCellNavigation(activeRow.firstElementChild, 0, 0);
+          return;
         }
       } else if (key === backwardsKey) {
         // "Left Arrow:"
@@ -354,9 +353,8 @@ export const KeyboardNavigationMixin = (superClass) =>
       // Body rows have index property, otherwise DOM child index of the row is used.
       if (rowGroup === this.$.items) {
         return bodyFallbackIndex !== undefined ? bodyFallbackIndex : row.index;
-      } else {
-        return this.__getIndexOfChildElement(row);
       }
+      return this.__getIndexOfChildElement(row);
     }
 
     /**
@@ -392,51 +390,47 @@ export const KeyboardNavigationMixin = (superClass) =>
         this.toggleAttribute('navigating', true);
 
         return { dstRow: activeRowGroup.children[dstRowIndex] };
-      } else {
-        // Navigating body rows
+      }
+      // Navigating body rows
 
-        let dstIsRowDetails = false;
-        if (activeCell) {
-          const isRowDetails = this.__isDetailsCell(activeCell);
-          // Row details navigation logic
-          if (activeRowGroup === this.$.items) {
-            const item = activeRow._item;
-            const dstItem = this._cache.getItemForIndex(dstRowIndex);
-            // Should we navigate to row details?
-            if (isRowDetails) {
-              dstIsRowDetails = dy === 0;
-            } else {
-              dstIsRowDetails =
-                (dy === 1 && this._isDetailsOpened(item)) ||
-                (dy === -1 && dstRowIndex !== currentRowIndex && this._isDetailsOpened(dstItem));
-            }
-            // Should we navigate between details and regular cells of the same row?
-            if (
-              dstIsRowDetails !== isRowDetails &&
-              ((dy === 1 && dstIsRowDetails) || (dy === -1 && !dstIsRowDetails))
-            ) {
-              dstRowIndex = currentRowIndex;
-            }
+      let dstIsRowDetails = false;
+      if (activeCell) {
+        const isRowDetails = this.__isDetailsCell(activeCell);
+        // Row details navigation logic
+        if (activeRowGroup === this.$.items) {
+          const item = activeRow._item;
+          const dstItem = this._cache.getItemForIndex(dstRowIndex);
+          // Should we navigate to row details?
+          if (isRowDetails) {
+            dstIsRowDetails = dy === 0;
+          } else {
+            dstIsRowDetails =
+              (dy === 1 && this._isDetailsOpened(item)) ||
+              (dy === -1 && dstRowIndex !== currentRowIndex && this._isDetailsOpened(dstItem));
+          }
+          // Should we navigate between details and regular cells of the same row?
+          if (dstIsRowDetails !== isRowDetails && ((dy === 1 && dstIsRowDetails) || (dy === -1 && !dstIsRowDetails))) {
+            dstRowIndex = currentRowIndex;
           }
         }
-
-        // Ensure correct vertical scroll position, destination row is visible
-        this._ensureScrolledToIndex(dstRowIndex);
-
-        // When scrolling with repeated keydown, sometimes FocusEvent listeners
-        // are too late to update _focusedItemIndex. Ensure next keydown
-        // listener invocation gets updated _focusedItemIndex value.
-        this._focusedItemIndex = dstRowIndex;
-
-        // This has to be set after scrolling, otherwise it can be removed by
-        // `_preventScrollerRotatingCellFocus(row, index)` during scrolling.
-        this.toggleAttribute('navigating', true);
-
-        return {
-          dstRow: [...activeRowGroup.children].find((el) => !el.hidden && el.index === dstRowIndex),
-          dstIsRowDetails
-        };
       }
+
+      // Ensure correct vertical scroll position, destination row is visible
+      this._ensureScrolledToIndex(dstRowIndex);
+
+      // When scrolling with repeated keydown, sometimes FocusEvent listeners
+      // are too late to update _focusedItemIndex. Ensure next keydown
+      // listener invocation gets updated _focusedItemIndex value.
+      this._focusedItemIndex = dstRowIndex;
+
+      // This has to be set after scrolling, otherwise it can be removed by
+      // `_preventScrollerRotatingCellFocus(row, index)` during scrolling.
+      this.toggleAttribute('navigating', true);
+
+      return {
+        dstRow: [...activeRowGroup.children].find((el) => !el.hidden && el.index === dstRowIndex),
+        dstIsRowDetails
+      };
     }
 
     /**
@@ -528,6 +522,8 @@ export const KeyboardNavigationMixin = (superClass) =>
           break;
         case 'F2':
           wantInteracting = !this.interacting;
+          break;
+        default:
           break;
       }
 
@@ -733,7 +729,9 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @param {HTMLElement} focusTarget
      */
     _updateGridSectionFocusTarget(focusTarget) {
-      if (!focusTarget) return;
+      if (!focusTarget) {
+        return;
+      }
 
       const section = this._getGridSectionFromFocusTarget(focusTarget);
       const isInteractingWithinActiveSection = this.interacting && section === this._activeRowGroup;
@@ -891,9 +889,15 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @private
      */
     _getGridSectionFromFocusTarget(focusTarget) {
-      if (focusTarget === this._headerFocusable) return this.$.header;
-      if (focusTarget === this._itemsFocusable) return this.$.items;
-      if (focusTarget === this._footerFocusable) return this.$.footer;
+      if (focusTarget === this._headerFocusable) {
+        return this.$.header;
+      }
+      if (focusTarget === this._itemsFocusable) {
+        return this.$.items;
+      }
+      if (focusTarget === this._footerFocusable) {
+        return this.$.footer;
+      }
       return null;
     }
 

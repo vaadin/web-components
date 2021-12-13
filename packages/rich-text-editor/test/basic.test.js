@@ -220,15 +220,6 @@ describe('rich text editor', () => {
         expect(e.defaultPrevented).to.be.true;
       });
 
-      it('should invoke Polymer.Gestures.resetMouseCanceller before open file dialog', () => {
-        // NOTE(web-padawan): With ES modules we can’t put a spy on the actual
-        // Polymer.Gestures.resetMouseCanceller. Have to use a separate
-        // wrapper method for testing.
-        const spy = sinon.spy(rte, '__resetMouseCanceller');
-        btn.dispatchEvent(new CustomEvent('touchend', { cancelable: true }));
-        expect(spy.calledOnce).to.be.true;
-      });
-
       (isDesktopSafari ? it.skip : it)(
         'should insert image from the file dialog on file input change event',
         (done) => {

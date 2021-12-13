@@ -1,4 +1,4 @@
-import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/lumo/vaadin-confirm-dialog.js';
 import '../../not-animated-styles.js';
@@ -6,7 +6,7 @@ import '../../not-animated-styles.js';
 describe('confirm-dialog', () => {
   let div, element;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     div = document.createElement('div');
     div.style.height = '100%';
 
@@ -18,6 +18,7 @@ describe('confirm-dialog', () => {
       `,
       div
     );
+    await oneEvent(element.$.dialog.$.overlay, 'vaadin-overlay-open');
   });
 
   it('basic', async () => {

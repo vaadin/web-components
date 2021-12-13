@@ -163,6 +163,9 @@ export const createItems = () => {
   ];
 };
 
+/**
+ * Emulates clicking outside the dropdown overlay
+ */
 export function outsideClick() {
   // Move focus to body
   document.body.tabIndex = 0;

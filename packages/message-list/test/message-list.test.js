@@ -18,7 +18,7 @@ describe('message-list', () => {
   let messageList, messages;
 
   beforeEach(() => {
-    let root = document.documentElement;
+    const root = document.documentElement;
     root.style.setProperty('--vaadin-user-color-1', 'purple');
     root.style.setProperty('--vaadin-user-color-2', 'blue');
 

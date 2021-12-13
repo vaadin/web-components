@@ -181,7 +181,7 @@ export const ButtonsMixin = (superClass) =>
       const button = document.createElement('vaadin-menu-bar-button');
       button.setAttribute('part', 'menu-bar-button');
 
-      const itemCopy = Object.assign({}, item);
+      const itemCopy = { ...item };
       button.item = itemCopy;
 
       if (item.component) {

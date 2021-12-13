@@ -6,10 +6,9 @@
 import './vaadin-contextmenu-event.js';
 import './vaadin-device-detector.js';
 import './vaadin-context-menu-overlay.js';
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
-import { addListener, gestures, removeListener } from '@polymer/polymer/lib/utils/gestures.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { addListener, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
@@ -199,9 +198,8 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemePropertyMixin
  * @mixes ItemsMixin
- * @mixes GestureEventListeners
  */
-class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEventListeners(PolymerElement)))) {
+class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -489,9 +487,8 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
       return Array.prototype.filter.call(targets, (el) => {
         return e.composedPath().indexOf(el) > -1;
       })[0];
-    } else {
-      return e.target;
     }
+    return e.target;
   }
 
   /**
@@ -574,7 +571,7 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
     // in the `vaadin-overlay-change` which guarantees that overlay is ready.
     // The valus represent an anchor position on the page where the contextmenu
     // event took place.
-    let x = this.__x;
+    const x = this.__x;
     const y = this.__y;
 
     // Select one overlay corner and move to the event x/y position.
@@ -591,15 +588,13 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
         style.right = Math.max(0, wdthVport - x) + 'px';
         this._setEndAligned(overlay);
       }
+    } else if (x > wdthVport / 2 || x > xMin) {
+      // Menu is displayed in the right side of the anchor
+      style.right = Math.max(0, wdthVport - x) + 'px';
     } else {
       // Menu is displayed in the left side of the anchor
-      if (x > wdthVport / 2 || x > xMin) {
-        style.right = Math.max(0, wdthVport - x) + 'px';
-      } else {
-        // Menu is displayed in the left side of the anchor
-        style.left = x + 'px';
-        this._setEndAligned(overlay);
-      }
+      style.left = x + 'px';
+      this._setEndAligned(overlay);
     }
 
     if (y < hghtVport / 2 || y < yMax) {
@@ -636,10 +631,9 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
         // Native keyboard event
         const rect = event.target.getBoundingClientRect();
         return coord === 'x' ? rect.left : rect.top + rect.height;
-      } else {
-        // Native mouse or touch event
-        return position;
       }
+      // Native mouse or touch event
+      return position;
     }
   }
 

@@ -466,8 +466,8 @@ describe('column groups', () => {
     });
 
     it('should correctly set column order', async () => {
-      let col19 = grid.querySelector('#col19');
-      let col20 = grid.querySelector('#col20');
+      const col19 = grid.querySelector('#col19');
+      const col20 = grid.querySelector('#col20');
       await nextFrame();
       expect(col19._order).to.be.lessThan(col20._order);
     });
@@ -493,8 +493,8 @@ describe('column groups', () => {
     });
 
     it('should correctly set column order when we have more than 100 columns', async () => {
-      let col99 = grid.querySelector('#col99');
-      let col100 = grid.querySelector('#col100');
+      const col99 = grid.querySelector('#col99');
+      const col100 = grid.querySelector('#col100');
       await nextFrame();
       expect(col99._order).to.be.lessThan(col100._order);
     });

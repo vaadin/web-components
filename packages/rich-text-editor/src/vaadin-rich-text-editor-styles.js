@@ -7,11 +7,8 @@ import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { contentStyles } from './vaadin-rich-text-editor-content-styles.js';
 import { toolbarStyles } from './vaadin-rich-text-editor-toolbar-styles.js';
 
-const richTextEditorStyles = css`
-  ${contentStyles}
-  ${toolbarStyles}
-
-:host([readonly]) [part='toolbar'] {
+export const statesStyles = css`
+  :host([readonly]) [part='toolbar'] {
     display: none;
   }
 
@@ -28,4 +25,4 @@ const richTextEditorStyles = css`
   }
 `;
 
-export { richTextEditorStyles };
+export const richTextEditorStyles = [contentStyles, toolbarStyles, statesStyles];

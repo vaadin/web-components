@@ -17,6 +17,13 @@ describe('crud', () => {
     await visualDiff(div, 'basic');
   });
 
+  it('edit-button-focus', async () => {
+    const button = element.$.grid.querySelector('vaadin-crud-edit');
+    button.focus();
+    button.setAttribute('focus-ring', '');
+    await visualDiff(div, 'edit-button-focus');
+  });
+
   it('no-toolbar', async () => {
     element.noToolbar = true;
     await visualDiff(div, 'no-toolbar');
@@ -32,12 +39,21 @@ describe('crud', () => {
         document.documentElement.removeAttribute('dir');
       });
 
-      ['default', 'aside', 'bottom'].forEach((position) => {
+      ['default', 'aside', 'bottom', 'fullscreen'].forEach((position) => {
         describe(`${dir}-editor-position-${position}`, () => {
           beforeEach(async () => {
-            if (position !== 'default') {
-              element.editorPosition = position;
-              await nextRender(element);
+            switch (position) {
+              case 'aside':
+              case 'bottom':
+                element.editorPosition = position;
+                await nextRender(element);
+                break;
+              case 'fullscreen':
+                element._fullscreen = true;
+                await nextRender(element);
+                break;
+              default:
+              // Do nothing
             }
           });
 

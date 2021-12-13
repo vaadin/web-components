@@ -158,9 +158,8 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       const loadedItem = this.filteredItems[page * this.pageSize];
       if (loadedItem !== undefined) {
         return loadedItem instanceof ComboBoxPlaceholder;
-      } else {
-        return this.size === undefined;
       }
+      return this.size === undefined;
     }
 
     /** @private */

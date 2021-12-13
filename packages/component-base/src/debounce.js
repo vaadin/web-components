@@ -17,6 +17,7 @@ export class Debouncer {
     this._callback = null;
     this._timer = null;
   }
+
   /**
    * Sets the scheduler; that is, a module with the Async interface,
    * a callback and optional arguments to be passed to the run function
@@ -35,6 +36,7 @@ export class Debouncer {
       this._callback();
     });
   }
+
   /**
    * Cancels an active debouncer and returns a reference to itself.
    *
@@ -50,6 +52,7 @@ export class Debouncer {
       debouncerQueue.delete(this);
     }
   }
+
   /**
    * Cancels a debouncer's async callback.
    *
@@ -61,6 +64,7 @@ export class Debouncer {
       this._timer = null;
     }
   }
+
   /**
    * Flushes an active debouncer and returns a reference to itself.
    *
@@ -72,6 +76,7 @@ export class Debouncer {
       this._callback();
     }
   }
+
   /**
    * Returns true if the debouncer is active.
    *
@@ -80,6 +85,7 @@ export class Debouncer {
   isActive() {
     return this._timer != null;
   }
+
   /**
    * Creates a debouncer if no debouncer is passed as a parameter
    * or it cancels an active debouncer otherwise. The following
@@ -135,16 +141,16 @@ let debouncerQueue = new Set();
  * @param {!Debouncer} debouncer Debouncer to enqueue
  * @return {void}
  */
-export const enqueueDebouncer = function (debouncer) {
+export function enqueueDebouncer(debouncer) {
   debouncerQueue.add(debouncer);
-};
+}
 
 /**
  * Flushes any enqueued debouncers
  *
  * @return {boolean} Returns whether any debouncers were flushed
  */
-export const flushDebouncers = function () {
+export function flushDebouncers() {
   const didFlush = Boolean(debouncerQueue.size);
   // If new debouncers are added while flushing, Set.forEach will ensure
   // newly added ones are also flushed
@@ -158,7 +164,7 @@ export const flushDebouncers = function () {
     }
   });
   return didFlush;
-};
+}
 
 export const flush = () => {
   let debouncers;

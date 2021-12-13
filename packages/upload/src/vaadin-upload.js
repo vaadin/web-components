@@ -7,7 +7,6 @@ import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-upload-icons.js';
 import './vaadin-upload-file.js';
-import { resetMouseCanceller } from '@polymer/polymer/lib/utils/gestures.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -95,7 +94,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
             </vaadin-button>
           </slot>
         </div>
-        <div part="drop-label" hidden$="[[nodrop]]" id="dropLabelContainer">
+        <div part="drop-label" hidden$="[[nodrop]]" id="dropLabelContainer" aria-hidden="true">
           <slot name="drop-label-icon">
             <div part="drop-label-icon"></div>
           </slot>
@@ -106,7 +105,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
         <ul id="fileList" part="file-list">
           <template is="dom-repeat" items="[[files]]" as="file">
             <li>
-              <vaadin-upload-file tabindex="0" file="[[file]]" i18n="[[i18n]]"></vaadin-upload-file>
+              <vaadin-upload-file file="[[file]]" i18n="[[i18n]]"></vaadin-upload-file>
             </li>
           </template>
         </ul>
@@ -748,7 +747,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @private */
   _notifyFileChanges(file) {
     var p = 'files.' + this.files.indexOf(file) + '.';
-    for (let i in file) {
+    for (const i in file) {
       // eslint-disable-next-line no-prototype-builtins
       if (file.hasOwnProperty(i)) {
         this.notifyPath(p + i, file[i]);
@@ -819,16 +818,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
   _onAddFilesTouchEnd(e) {
     // Cancel the event to avoid the following click event
     e.preventDefault();
-    // FIXME(platosha): workaround for Polymer Gestures mouseCanceller
-    // cancelling the following synthetic click. See also:
-    // https://github.com/Polymer/polymer/issues/5289
-    this.__resetMouseCanceller();
     this._onAddFilesClick(e);
-  }
-
-  /** @private */
-  __resetMouseCanceller() {
-    resetMouseCanceller();
   }
 
   /** @private */

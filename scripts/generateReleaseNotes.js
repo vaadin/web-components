@@ -45,6 +45,8 @@ async function getReleases() {
       case '--compact':
         compact = true;
         break;
+      default:
+        break;
     }
   }
 
@@ -62,7 +64,7 @@ async function getReleases() {
 
 // Parse git log string and return an array of parsed commits as a JS object.
 function parseLog(log) {
-  let commits = [];
+  const commits = [];
   let commit, pos, result;
   log.split('\n').forEach((line) => {
     switch (pos) {
@@ -97,7 +99,7 @@ function parseLog(log) {
       case 'body':
         result = /^ +([A-Z][\w-]+): +(.*)$/.exec(line);
         if (result) {
-          let k = result[1].toLowerCase();
+          const k = result[1].toLowerCase();
           if (k == 'warranty') {
             commit.bfp = true;
           }
@@ -130,14 +132,12 @@ function parseLog(log) {
           commits.push(commit);
           commit.commit = result[1];
           pos = 'head';
-        } else {
-          if (line.startsWith(' ')) {
-            commit.body = String(commit.body);
-          } else if (/^packages\/.*/.test(line)) {
-            const wc = line.split('/')[1];
-            if (!commit.components.includes(wc)) {
-              commit.components.push(wc);
-            }
+        } else if (line.startsWith(' ')) {
+          commit.body = String(commit.body);
+        } else if (/^packages\/.*/.test(line)) {
+          const wc = line.split('/')[1];
+          if (!commit.components.includes(wc)) {
+            commit.components.push(wc);
           }
         }
     }
@@ -208,7 +208,9 @@ function logCommit(c) {
 
 // log a set of commits, and group by types
 function logCommitsByType(commits) {
-  if (!commits[0]) return;
+  if (!commits[0]) {
+    return;
+  }
   const byType = {};
   commits.forEach((commit) => {
     const type = commit.bfp ? 'bfp' : commit.breaking ? 'break' : commit.type;
@@ -245,10 +247,10 @@ function logCommitsByComponent(commits) {
       let log = '';
       let indent = '';
 
-      let search = ',';
-      let replacement = '`,`';
-      let componentsTitle = k.split(search).join(replacement);
-      let components = `\`${componentsTitle}\``;
+      const search = ',';
+      const replacement = '`,`';
+      const componentsTitle = k.split(search).join(replacement);
+      const components = `\`${componentsTitle}\``;
 
       log += `- ${components}\n`;
       indent = '  ';

@@ -201,6 +201,8 @@ class ComboBox extends ComboBoxDataProviderMixin(
         opened="[[opened]]"
         renderer="[[renderer]]"
         position-target="[[_positionTarget]]"
+        restore-focus-on-close="[[__restoreFocusOnClose]]"
+        restore-focus-node="[[inputElement]]"
         _focused-index="[[_focusedIndex]]"
         _item-id-path="[[itemIdPath]]"
         _item-label-path="[[itemLabelPath]]"

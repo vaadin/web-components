@@ -73,13 +73,10 @@ registerStyles(
 const uploadFile = css`
   :host {
     padding: var(--lumo-space-s) 0;
-  }
-
-  :host(:focus) {
     outline: none;
   }
 
-  :host(:focus) [part='row'] {
+  :host([focus-ring]) [part='row'] {
     border-radius: var(--lumo-border-radius-s);
     box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
   }

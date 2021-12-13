@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@polymer/polymer/lib/elements/dom-repeat.js';
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateAllowed, dateEquals, getISOWeekNumber } from './vaadin-date-picker-helper.js';
 
@@ -13,7 +13,7 @@ import { dateAllowed, dateEquals, getISOWeekNumber } from './vaadin-date-picker-
  * @extends HTMLElement
  * @private
  */
-class MonthCalendar extends ThemableMixin(GestureEventListeners(PolymerElement)) {
+class MonthCalendar extends ThemableMixin(PolymerElement) {
   static get template() {
     return html`
       <style>
@@ -59,7 +59,7 @@ class MonthCalendar extends ThemableMixin(GestureEventListeners(PolymerElement))
       </style>
 
       <div part="month-header" role="heading">[[_getTitle(month, i18n.monthNames)]]</div>
-      <div id="monthGrid" on-tap="_handleTap" on-touchend="_preventDefault" on-touchstart="_onMonthGridTouchStart">
+      <div id="monthGrid" on-touchend="_preventDefault" on-touchstart="_onMonthGridTouchStart">
         <div id="weekdays-container">
           <div hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]" part="weekday"></div>
           <div part="weekdays">
@@ -172,6 +172,12 @@ class MonthCalendar extends ThemableMixin(GestureEventListeners(PolymerElement))
 
   static get observers() {
     return ['_showWeekNumbersChanged(showWeekNumbers, i18n.firstDayOfWeek)'];
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+    addListener(this.$.monthGrid, 'tap', this._handleTap.bind(this));
   }
 
   _dateEquals(date1, date2) {

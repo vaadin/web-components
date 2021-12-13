@@ -74,7 +74,8 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
         opened="{{opened}}"
         on-vaadin-overlay-open="_onOverlayOpened"
         on-vaadin-overlay-close="_onOverlayClosed"
-        on-vaadin-overlay-outside-click="focus"
+        restore-focus-on-close
+        restore-focus-node="[[inputElement]]"
         theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]"
       >
         <template>
@@ -138,15 +139,15 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
     this._setFocusElement(this.inputElement);
   }
 
+  /** @return {string | undefined} */
+  get _inputValue() {
+    return this.inputElement && this.inputElement[dashToCamelCase(this.attrForValue)];
+  }
+
   set _inputValue(value) {
     if (this.inputElement) {
       this.inputElement[dashToCamelCase(this.attrForValue)] = value;
     }
-  }
-
-  /** @return {string | undefined} */
-  get _inputValue() {
-    return this.inputElement && this.inputElement[dashToCamelCase(this.attrForValue)];
   }
 
   // Workaround https://github.com/vaadin/web-components/issues/2855

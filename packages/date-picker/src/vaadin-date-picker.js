@@ -7,9 +7,9 @@ import '@polymer/iron-media-query/iron-media-query.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-date-picker-overlay.js';
 import './vaadin-date-picker-overlay-content.js';
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -116,9 +116,7 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
  * @mixes ThemableMixin
  * @mixes InputControlMixin
  */
-class DatePicker extends DatePickerMixin(
-  InputControlMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement))))
-) {
+class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-date-picker';
   }
@@ -147,7 +145,7 @@ class DatePicker extends DatePickerMixin(
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
           <div id="clearButton" part="clear-button" slot="suffix"></div>
-          <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button"></div>
+          <div part="toggle-button" slot="suffix" role="button"></div>
         </vaadin-input-container>
 
         <div part="helper-text">
@@ -165,7 +163,8 @@ class DatePicker extends DatePickerMixin(
         theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]"
         on-vaadin-overlay-open="_onOverlayOpened"
         on-vaadin-overlay-close="_onOverlayClosed"
-        on-vaadin-overlay-outside-click="focus"
+        restore-focus-on-close
+        restore-focus-node="[[inputElement]]"
         disable-upgrade
       >
         <template>
@@ -214,6 +213,7 @@ class DatePicker extends DatePickerMixin(
       })
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelNode));
+    addListener(this.shadowRoot.querySelector('[part="toggle-button"]'), 'tap', this._toggle.bind(this));
   }
 
   /** @private */

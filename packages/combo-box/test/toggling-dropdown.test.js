@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { createEventSpy } from './helpers.js';
+import { createEventSpy, outsideClick } from './helpers.js';
 
 describe('toggling dropdown', () => {
   let comboBox, overlay, input;
@@ -202,6 +202,22 @@ describe('toggling dropdown', () => {
       focusout(input);
 
       expect(comboBox.opened).to.equal(false);
+    });
+
+    it('should restore focus to the field on outside click', async () => {
+      comboBox.focus();
+      comboBox.open();
+      outsideClick();
+      await aTimeout(0);
+      expect(document.activeElement).to.equal(input);
+    });
+
+    it('should focus the field on outside click', async () => {
+      expect(document.activeElement).to.equal(document.body);
+      comboBox.open();
+      outsideClick();
+      await aTimeout(0);
+      expect(document.activeElement).to.equal(input);
     });
 
     describe('filtered items are empty', () => {

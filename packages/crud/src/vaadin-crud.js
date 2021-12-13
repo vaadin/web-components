@@ -208,15 +208,15 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
           height: 100%;
         }
 
-        :host(:not([editor-position=''])[editor-opened]) [part='editor']:not([mobile]) {
+        :host(:not([editor-position=''])[editor-opened]:not([fullscreen])) [part='editor'] {
           flex: 1 0 100%;
         }
 
-        :host([editor-position='bottom'][editor-opened]) [part='editor']:not([mobile]) {
+        :host([editor-position='bottom'][editor-opened]:not([fullscreen])) [part='editor'] {
           max-height: var(--vaadin-crud-editor-max-height);
         }
 
-        :host([editor-position='aside'][editor-opened]) [part='editor']:not([mobile]) {
+        :host([editor-position='aside'][editor-opened]:not([fullscreen])) [part='editor'] {
           min-width: 300px;
           max-width: var(--vaadin-crud-editor-max-width);
         }
@@ -257,12 +257,7 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
           </div>
         </div>
 
-        <div
-          id="editor"
-          part="editor"
-          hidden$="[[__computeEditorHidden(editorOpened, __mobile, editorPosition)]]"
-          mobile$="[[__mobile]]"
-        >
+        <div id="editor" part="editor" hidden$="[[__computeEditorHidden(editorOpened, _fullscreen, editorPosition)]]">
           <div part="scroller" id="scroller" role="group" aria-labelledby="header">
             <div part="header" id="header">
               <slot name="header"></slot>
@@ -280,7 +275,7 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
       <vaadin-crud-dialog
         id="dialog"
-        opened="[[__computeDialogOpened(editorOpened, __mobile, editorPosition)]]"
+        opened="[[__computeDialogOpened(editorOpened, _fullscreen, editorPosition)]]"
         aria-label="[[__editorAriaLabel]]"
         no-close-on-outside-click="[[__isDirty]]"
         no-close-on-esc="[[__isDirty]]"
@@ -312,7 +307,7 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
         confirm-theme="primary error"
       ></vaadin-confirm-dialog>
 
-      <iron-media-query query="[[__mobileMediaQuery]]" query-matches="{{__mobile}}"></iron-media-query>
+      <iron-media-query query="[[_fullscreenMediaQuery]]" query-matches="{{_fullscreen}}"></iron-media-query>
     `;
   }
 
@@ -590,15 +585,21 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       /** @private */
       __isNew: Boolean,
 
-      /** @private */
-      __mobileMediaQuery: {
-        value: '(max-width: 600px), (max-height: 600px)'
+      /**
+       * @type {boolean}
+       * @protected
+       */
+      _fullscreen: {
+        type: Boolean,
+        observer: '__fullscreenChanged'
       },
 
-      /** @private */
-      __mobile: {
-        type: Boolean,
-        observer: '__mobileChanged'
+      /**
+       * @type {string}
+       * @protected
+       */
+      _fullscreenMediaQuery: {
+        value: '(max-width: 600px), (max-height: 600px)'
       }
     };
   }
@@ -754,18 +755,21 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   }
 
   /** @private */
-  __mobileChanged(mobile, oldMobile) {
-    if (mobile || oldMobile) {
+  __fullscreenChanged(fullscreen, oldFullscreen) {
+    if (fullscreen || oldFullscreen) {
       this.__toggleToolbar();
 
       this.__ensureChildren();
+
+      this.toggleAttribute('fullscreen', fullscreen);
+      this.$.dialog.$.overlay.toggleAttribute('fullscreen', fullscreen);
     }
   }
 
   /** @private */
   __toggleToolbar() {
     // Hide toolbar to give more room for the editor when it's positioned below the grid
-    if (this.editorPosition === 'bottom' && !this.__mobile) {
+    if (this.editorPosition === 'bottom' && !this._fullscreen) {
       this.$.toolbar.style.display = this.editorOpened ? 'none' : '';
     }
   }
@@ -790,13 +794,13 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   }
 
   /** @private */
-  __shouldOpenDialog(isMobile, editorPosition) {
-    return editorPosition === '' || isMobile;
+  __shouldOpenDialog(fullscreen, editorPosition) {
+    return editorPosition === '' || fullscreen;
   }
 
   /** @private */
   __ensureChildren() {
-    if (this.__shouldOpenDialog(this.__mobile, this.editorPosition)) {
+    if (this.__shouldOpenDialog(this._fullscreen, this.editorPosition)) {
       // Move form to dialog
       this.__moveChildNodes(this.$.dialog.$.overlay);
     } else {
@@ -806,15 +810,15 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   }
 
   /** @private */
-  __computeDialogOpened(opened, isMobile, editorPosition) {
-    // Only open dialog when editorPosition is "" or mobile is set
-    return this.__shouldOpenDialog(isMobile, editorPosition) ? opened : false;
+  __computeDialogOpened(opened, fullscreen, editorPosition) {
+    // Only open dialog when editorPosition is "" or fullscreen is set
+    return this.__shouldOpenDialog(fullscreen, editorPosition) ? opened : false;
   }
 
   /** @private */
-  __computeEditorHidden(opened, mobile, editorPosition) {
+  __computeEditorHidden(opened, fullscreen, editorPosition) {
     // Only show editor when editorPosition is "bottom" or "aside"
-    if (['aside', 'bottom'].includes(editorPosition) && !mobile) {
+    if (['aside', 'bottom'].includes(editorPosition) && !fullscreen) {
       return !opened;
     }
 
@@ -1169,7 +1173,7 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       return;
     }
 
-    const item = Object.assign({}, this.editedItem);
+    const item = { ...this.editedItem };
     this._fields.forEach((e) => {
       const path = e.path || e.getAttribute('path');
       path && this.__set(path, e.value, item);

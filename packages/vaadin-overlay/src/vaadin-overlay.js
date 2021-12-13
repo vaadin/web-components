@@ -8,9 +8,10 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { FocusTrapController } from '@vaadin/component-base/src/focus-trap-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { FocusablesHelper } from './vaadin-focusables-helper.js';
 
 /**
  *
@@ -92,12 +93,18 @@ import { FocusablesHelper } from './vaadin-focusables-helper.js';
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} vaadin-overlay-open - Fired after the overlay is opened.
+ * @fires {CustomEvent} vaadin-overlay-close - Fired before the overlay will be closed. If canceled the closing of the overlay is canceled as well.
+ * @fires {CustomEvent} vaadin-overlay-closing - Fired when the overlay will be closed.
+ * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay will be closed on outside click. If canceled the closing of the overlay is canceled as well.
+ * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
  *
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes DirMixin
+ * @mixes ControllerMixin
  */
-class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
+class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -282,6 +289,15 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
         value: false
       },
 
+      /**
+       * Set to specify the element which should be focused on overlay close,
+       * if `restoreFocusOnClose` is set to true.
+       * @type {HTMLElement}
+       */
+      restoreFocusNode: {
+        type: HTMLElement
+      },
+
       /** @private */
       _mouseDownInside: {
         type: Boolean
@@ -342,6 +358,8 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     if (isIOS) {
       this._boundIosResizeListener = () => this._detectIosNavbar();
     }
+
+    this.__focusTrapController = new FocusTrapController(this);
   }
 
   /** @protected */
@@ -356,6 +374,8 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     // and <vaadin-context-menu>).
     this.addEventListener('click', () => {});
     this.$.backdrop.addEventListener('click', () => {});
+
+    this.addController(this.__focusTrapController);
   }
 
   /** @private */
@@ -495,15 +515,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       return;
     }
 
-    // TAB
-    if (event.key === 'Tab' && this.focusTrap && !event.defaultPrevented) {
-      // if only tab key is pressed, cycle forward, else cycle backwards.
-      this._cycleTab(event.shiftKey ? -1 : 1);
-
-      event.preventDefault();
-
-      // ESC
-    } else if (event.key === 'Escape' || event.key === 'Esc') {
+    if (event.key === 'Escape') {
       const evt = new CustomEvent('vaadin-overlay-escape-press', {
         bubbles: true,
         cancelable: true,
@@ -539,8 +551,8 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       this._animatedOpening();
 
       afterNextRender(this, () => {
-        if (this.focusTrap && !this.contains(document.activeElement)) {
-          this._cycleTab(0, 0);
+        if (this.focusTrap) {
+          this.__focusTrapController.trapFocus(this.$.overlay);
         }
 
         const evt = new CustomEvent('vaadin-overlay-open', { bubbles: true });
@@ -551,6 +563,8 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
         this._addGlobalListeners();
       }
     } else if (wasOpened) {
+      this.__focusTrapController.releaseFocus();
+
       this._animatedClosing();
 
       if (!this.modeless) {
@@ -617,16 +631,12 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     }
     this.setAttribute('opening', '');
 
-    const finishOpening = () => {
-      document.addEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
-
-      this.removeAttribute('opening');
-    };
-
     if (this._shouldAnimate()) {
-      this._enqueueAnimation('opening', finishOpening);
+      this._enqueueAnimation('opening', () => {
+        this._finishOpening();
+      });
     } else {
-      finishOpening();
+      this._finishOpening();
     }
   }
 
@@ -639,6 +649,25 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   /** @protected */
+  _finishOpening() {
+    document.addEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
+    this.removeAttribute('opening');
+  }
+
+  /** @protected */
+  _finishClosing() {
+    document.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
+    this._detachOverlay();
+    this.$.overlay.style.removeProperty('pointer-events');
+    this.removeAttribute('closing');
+  }
+
+  /**
+   * @event vaadin-overlay-closing
+   * Fired when the overlay will be closed.
+   *
+   * @protected
+   */
   _animatedClosing() {
     if (this.hasAttribute('opening')) {
       this._flushAnimation('opening');
@@ -646,7 +675,11 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     if (this._placeholder) {
       this._exitModalState();
 
-      if (this.restoreFocusOnClose && this.__restoreFocusNode) {
+      // Use this.restoreFocusNode if specified, othwerwise fallback to the node
+      // which was focused before opening the overlay.
+      const restoreFocusNode = this.restoreFocusNode || this.__restoreFocusNode;
+
+      if (this.restoreFocusOnClose && restoreFocusNode) {
         // If the activeElement is `<body>` or inside the overlay,
         // we are allowed to restore the focus. In all the other
         // cases focus might have been moved elsewhere by another
@@ -655,24 +688,22 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
         const activeElement = this._getActiveElement();
 
         if (activeElement === document.body || this._deepContains(activeElement)) {
-          this.__restoreFocusNode.focus();
+          // Focusing the restoreFocusNode doesn't always work synchronously on Firefox and Safari
+          // (e.g. combo-box overlay close on outside click).
+          setTimeout(() => restoreFocusNode.focus());
         }
         this.__restoreFocusNode = null;
       }
 
       this.setAttribute('closing', '');
-
-      const finishClosing = () => {
-        document.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
-        this._detachOverlay();
-        this.shadowRoot.querySelector('[part="overlay"]').style.removeProperty('pointer-events');
-        this.removeAttribute('closing');
-      };
+      this.dispatchEvent(new CustomEvent('vaadin-overlay-closing'));
 
       if (this._shouldAnimate()) {
-        this._enqueueAnimation('closing', finishClosing);
+        this._enqueueAnimation('closing', () => {
+          this._finishClosing();
+        });
       } else {
-        finishClosing();
+        this._finishClosing();
       }
     }
   }
@@ -899,59 +930,6 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
         this.requestContentUpdate();
       }
     }
-  }
-
-  /**
-   * @param {Element} element
-   * @return {boolean}
-   * @protected
-   */
-  _isFocused(element) {
-    return element && element.getRootNode().activeElement === element;
-  }
-
-  /**
-   * @param {Element[]} elements
-   * @return {number}
-   * @protected
-   */
-  _focusedIndex(elements) {
-    elements = elements || this._getFocusableElements();
-    return elements.indexOf(elements.filter(this._isFocused).pop());
-  }
-
-  /**
-   * @param {number} increment
-   * @param {number | undefined} index
-   * @protected
-   */
-  _cycleTab(increment, index) {
-    const focusableElements = this._getFocusableElements();
-
-    if (index === undefined) {
-      index = this._focusedIndex(focusableElements);
-    }
-
-    index += increment;
-
-    // rollover to first item
-    if (index >= focusableElements.length) {
-      index = 0;
-      // go to last item
-    } else if (index < 0) {
-      index = focusableElements.length - 1;
-    }
-
-    focusableElements[index].focus();
-  }
-
-  /**
-   * @return {!Array<!HTMLElement>}
-   * @protected
-   */
-  _getFocusableElements() {
-    // collect all focusable elements
-    return FocusablesHelper.getTabbableNodes(this.$.overlay);
   }
 
   /**

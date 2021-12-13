@@ -10,7 +10,9 @@ import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { afterNextRender, beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { FocusTrapController } from '@vaadin/component-base/src/focus-trap-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -103,8 +105,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
+ * @mixes ControllerMixin
  */
-class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement))) {
+class AppLayout extends ElementMixin(
+  ThemableMixin(ControllerMixin(mixinBehaviors([IronResizableBehavior], PolymerElement)))
+) {
   static get template() {
     return html`
       <style>
@@ -199,16 +204,20 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
           right: auto;
           bottom: var(--vaadin-app-layout-navbar-offset-bottom, var(--vaadin-viewport-offset-bottom, 0));
           left: var(--vaadin-app-layout-navbar-offset-left, 0);
-          transition: transform var(--vaadin-app-layout-transition);
+          transition: transform var(--vaadin-app-layout-transition), visibility var(--vaadin-app-layout-transition);
           transform: translateX(-100%);
           max-width: 90%;
           width: 16em;
           box-sizing: border-box;
           padding: var(--safe-area-inset-top) 0 var(--safe-area-inset-bottom) var(--safe-area-inset-left);
           outline: none;
+          /* The drawer should be inaccessible by the tabbing navigation when it is closed. */
+          visibility: hidden;
         }
 
         :host([drawer-opened]) [part='drawer'] {
+          /* The drawer should be accessible by the tabbing navigation when it is opened. */
+          visibility: visible;
           transform: translateX(0%);
           touch-action: manipulation;
         }
@@ -285,7 +294,7 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
         <slot name="navbar"></slot>
       </div>
       <div part="backdrop" on-click="_close" on-touchstart="_close"></div>
-      <div part="drawer" id="drawer">
+      <div part="drawer" id="drawer" on-keydown="__onDrawerKeyDown">
         <slot name="drawer" id="drawerSlot"></slot>
       </div>
       <div content>
@@ -369,6 +378,9 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
     this.__boundResizeListener = this._resize.bind(this);
     this.__drawerToggleClickListener = this._drawerToggleClick.bind(this);
     this.__closeOverlayDrawerListener = this.__closeOverlayDrawer.bind(this);
+    this.__trapFocusInDrawer = this.__trapFocusInDrawer.bind(this);
+    this.__releaseFocusFromDrawer = this.__releaseFocusFromDrawer.bind(this);
+    this.__focusTrapController = new FocusTrapController(this);
   }
 
   /** @protected */
@@ -403,6 +415,12 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
   }
 
   /** @protected */
+  ready() {
+    super.ready();
+    this.addController(this.__focusTrapController);
+  }
+
+  /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
 
@@ -430,16 +448,13 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
   }
 
   /** @private */
-  _drawerOpenedObserver() {
-    const drawer = this.$.drawer;
-
-    drawer.removeAttribute('tabindex');
-
+  _drawerOpenedObserver(drawerOpened, oldDrawerOpened) {
     if (this.overlay) {
-      if (this.drawerOpened) {
-        drawer.setAttribute('tabindex', 0);
-        drawer.focus();
+      if (drawerOpened) {
         this._updateDrawerHeight();
+        this.__trapFocusInDrawer();
+      } else if (oldDrawerOpened) {
+        this.__releaseFocusFromDrawer();
       }
     }
 
@@ -513,7 +528,7 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
 
   /** @protected */
   _updateOverlayMode() {
-    const overlay = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') == 'true';
+    const overlay = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') === 'true';
     const drawer = this.$.drawer;
 
     if (!this.overlay && overlay) {
@@ -546,6 +561,76 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
     }
 
     // TODO(jouni): ARIA attributes. The drawer should act similar to a modal dialog when in ”overlay” mode
+  }
+
+  /**
+   * Returns a promise that resolves when the drawer opening/closing CSS transition ends.
+   *
+   * The method relies on the `--vaadin-app-layout-transition` CSS variable to detect whether
+   * the drawer has a CSS transition that needs to be awaited. If the CSS variable equals `none`,
+   * the promise resolves immediately.
+   *
+   * @return {Promise}
+   * @private
+   */
+  __drawerTransitionComplete() {
+    return new Promise((resolve) => {
+      if (this._getCustomPropertyValue('--vaadin-app-layout-transition') === 'none') {
+        resolve();
+        return;
+      }
+
+      this.$.drawer.addEventListener('transitionend', resolve, { once: true });
+    });
+  }
+
+  /** @private */
+  async __trapFocusInDrawer() {
+    // Wait for the drawer CSS transition before focusing the drawer
+    // in order for VoiceOver to have a proper outline.
+    await this.__drawerTransitionComplete();
+
+    if (!this.drawerOpened) {
+      // The drawer has been closed during the CSS transition.
+      return;
+    }
+
+    this.$.drawer.setAttribute('tabindex', '0');
+    this.__focusTrapController.trapFocus(this.$.drawer);
+  }
+
+  /** @private */
+  async __releaseFocusFromDrawer() {
+    // Wait for the drawer CSS transition in order to restore focus to the toggle
+    // only after `visibility` becomes `hidden`, that is, the drawer becomes inaccessible by the tabbing navigation.
+    await this.__drawerTransitionComplete();
+
+    if (this.drawerOpened) {
+      // The drawer has been opened during the CSS transition.
+      return;
+    }
+
+    this.__focusTrapController.releaseFocus();
+    this.$.drawer.removeAttribute('tabindex');
+
+    // Move focus to the drawer toggle when closing the drawer.
+    const toggle = this.querySelector('vaadin-drawer-toggle');
+    if (toggle) {
+      toggle.focus();
+      toggle.setAttribute('focus-ring', 'focus');
+    }
+  }
+
+  /**
+   * Closes the drawer on Escape press if it has been opened in the overlay mode.
+   *
+   * @param {KeyboardEvent} event
+   * @private
+   */
+  __onDrawerKeyDown(event) {
+    if (event.key === 'Escape' && this.overlay) {
+      this.drawerOpened = false;
+    }
   }
 
   /** @private */

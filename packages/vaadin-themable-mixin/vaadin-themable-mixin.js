@@ -65,9 +65,8 @@ export function registerStyles(themeFor, styles, options = {}) {
 function getAllThemes() {
   if (window.Vaadin && window.Vaadin.styleModules) {
     return window.Vaadin.styleModules.getAllThemes();
-  } else {
-    return themeRegistry;
   }
+  return themeRegistry;
 }
 
 /**
@@ -108,10 +107,9 @@ function flattenStyles(styles = []) {
   return [styles].flat(Infinity).filter((style) => {
     if (style instanceof CSSResult) {
       return true;
-    } else {
-      console.warn('An item in styles is not of type CSSResult. Use `unsafeCSS` or `css`.');
-      return false;
     }
+    console.warn('An item in styles is not of type CSSResult. Use `unsafeCSS` or `css`.');
+    return false;
   });
 }
 
@@ -170,10 +168,9 @@ function getThemes(tagName) {
 
   if (themes.length > 0) {
     return themes;
-  } else {
-    // No theme modules found, return the default module if it exists
-    return getAllThemes().filter((theme) => theme.moduleId === defaultModuleName);
   }
+  // No theme modules found, return the default module if it exists
+  return getAllThemes().filter((theme) => theme.moduleId === defaultModuleName);
 }
 
 /**
@@ -216,7 +213,8 @@ export const ThemableMixin = (superClass) =>
       // The "styles" object originates from the "static get styles()" function of
       // a LitElement based component. The theme styles are added after it
       // so that they can override the component styles.
-      return [styles, ...this.getStylesForThis()];
+      const themeStyles = this.getStylesForThis();
+      return styles ? [styles, ...themeStyles] : themeStyles;
     }
 
     /**

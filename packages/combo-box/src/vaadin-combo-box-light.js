@@ -79,6 +79,8 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
         id="dropdown"
         opened="[[opened]]"
         position-target="[[inputElement]]"
+        restore-focus-on-close="[[__restoreFocusOnClose]]"
+        restore-focus-node="[[inputElement]]"
         renderer="[[renderer]]"
         _focused-index="[[_focusedIndex]]"
         _item-id-path="[[itemIdPath]]"
@@ -133,9 +135,8 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
   checkValidity() {
     if (this.inputElement.validate) {
       return this.inputElement.validate();
-    } else {
-      return super.checkValidity();
     }
+    return super.checkValidity();
   }
 
   /**

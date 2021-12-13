@@ -57,8 +57,9 @@ class DirHelper {
         return element.scrollWidth - element.clientWidth + scrollLeft;
       case 'reverse':
         return element.scrollWidth - element.clientWidth - scrollLeft;
+      default:
+        return scrollLeft;
     }
-    return scrollLeft;
   }
 
   /**

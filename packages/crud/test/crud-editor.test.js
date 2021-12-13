@@ -20,7 +20,7 @@ describe('vaadin-crud editor', () => {
       beforeEach(async () => {
         crud = fixtureSync(tpl);
         crud.editOnClick = true;
-        crud.__mobile = false;
+        crud._fullscreen = false;
         await nextRender(crud);
         flushGrid(crud._grid);
 

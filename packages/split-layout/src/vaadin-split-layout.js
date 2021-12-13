@@ -5,10 +5,10 @@
  */
 import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
 import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -152,11 +152,8 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes GestureEventListeners
  */
-class SplitLayout extends ElementMixin(
-  ThemableMixin(GestureEventListeners(mixinBehaviors([IronResizableBehavior], PolymerElement)))
-) {
+class SplitLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -207,13 +204,7 @@ class SplitLayout extends ElementMixin(
         }
       </style>
       <slot id="primary" name="primary"></slot>
-      <div
-        part="splitter"
-        id="splitter"
-        on-track="_onHandleTrack"
-        on-down="_setPointerEventsNone"
-        on-up="_restorePointerEvents"
-      >
+      <div part="splitter" id="splitter">
         <div part="handle"></div>
       </div>
       <slot id="secondary" name="secondary"></slot>
@@ -248,6 +239,11 @@ class SplitLayout extends ElementMixin(
   ready() {
     super.ready();
     this.__observer = new FlattenedNodesObserver(this, this._processChildren);
+
+    const splitter = this.$.splitter;
+    addListener(splitter, 'track', this._onHandleTrack.bind(this));
+    addListener(splitter, 'down', this._setPointerEventsNone.bind(this));
+    addListener(splitter, 'up', this._restorePointerEvents.bind(this));
   }
 
   /** @private */

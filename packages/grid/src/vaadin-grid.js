@@ -543,7 +543,9 @@ class Grid extends ElementMixin(
 
   /** @private */
   __getDistributedWidth(col, innerColumn) {
-    if (col == null || col === this) return 0;
+    if (col == null || col === this) {
+      return 0;
+    }
 
     const columnWidth = Math.max(this.__getIntrinsicWidth(col), this.__getDistributedWidth(col.parentElement, col));
 
@@ -794,12 +796,10 @@ class Grid extends ElementMixin(
           // -> row should be visible
           return true;
         }
-      } else {
-        if (column.footerRenderer) {
-          // The cell is the footer cell of a column that has a footer renderer
-          // -> row should be visible
-          return true;
-        }
+      } else if (column.footerRenderer) {
+        // The cell is the footer cell of a column that has a footer renderer
+        // -> row should be visible
+        return true;
       }
       return false;
     });

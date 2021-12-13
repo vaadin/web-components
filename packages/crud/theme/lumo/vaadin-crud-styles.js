@@ -8,19 +8,18 @@ registerStyles(
   'vaadin-crud-edit',
   css`
     :host {
+      min-width: auto;
+      margin: 0;
       font-family: 'lumo-icons', var(--lumo-font-family);
       font-size: var(--lumo-icon-size-m);
       line-height: 1;
-      color: var(--lumo-primary-text-color);
       position: relative;
-      background-color: var(--lumo-contrast-5pct);
-      border-radius: var(--lumo-border-radius-m);
       width: var(--lumo-size-s);
       height: var(--lumo-size-s);
-      cursor: var(--lumo-clickable-cursor);
+      outline: none;
     }
 
-    :host::before {
+    [part='icon']::before {
       content: var(--lumo-icons-edit);
       width: var(--lumo-size-m);
       height: var(--lumo-size-m);
@@ -29,28 +28,6 @@ registerStyles(
       position: absolute;
       top: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
       left: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
-    }
-
-    :host::after {
-      content: '';
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: inherit;
-      background-color: currentColor;
-      opacity: 0;
-      transition: opacity 100ms;
-    }
-
-    :host(:hover)::after {
-      opacity: 0.05;
-    }
-
-    :host(:active)::after {
-      opacity: 0.12;
     }
   `,
   { moduleId: 'lumo-crud-grid-edit' }
@@ -150,31 +127,4 @@ registerStyles(
   { moduleId: 'lumo-crud' }
 );
 
-registerStyles(
-  'vaadin-crud-dialog-overlay',
-  [
-    editorStyles,
-    css`
-      @media (max-width: 600px), (max-height: 600px) {
-        :host {
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          padding: 0;
-        }
-
-        [part='overlay'] {
-          height: 100vh;
-          width: 100vw;
-          border-radius: 0 !important;
-        }
-
-        [part='content'] {
-          flex: 1;
-        }
-      }
-    `
-  ],
-  { moduleId: 'lumo-crud-dialog-overlay' }
-);
+registerStyles('vaadin-crud-dialog-overlay', editorStyles, { moduleId: 'lumo-crud-dialog-overlay' });

@@ -15,6 +15,7 @@ customElements.define(
         </vaadin-overlay>
       `;
     }
+
     static get properties() {
       return {
         opened: Boolean
@@ -296,6 +297,23 @@ describe('vaadin-overlay', () => {
           }, 1);
         });
         click(parent);
+      });
+    });
+
+    describe('vaadin-overlay-closing event', () => {
+      it('should dispatch vaadin-overlay-closing when the overlay is closing', () => {
+        const spy = sinon.spy();
+        overlay.addEventListener('vaadin-overlay-closing', spy);
+        click(parent);
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not dispatch vaadin-overlay-closing when preventing vaadin-overlay-close', () => {
+        const spy = sinon.spy();
+        overlay.addEventListener('vaadin-overlay-closing', spy);
+        overlay.addEventListener('vaadin-overlay-close', (e) => e.preventDefault());
+        click(parent);
+        expect(spy.called).to.be.false;
       });
     });
 

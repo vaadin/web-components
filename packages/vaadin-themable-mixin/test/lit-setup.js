@@ -14,7 +14,7 @@ window.defineCustomElementFunction = (name, parentName, content, styles) => {
     }
 
     static get styles() {
-      return unsafeCSS(styles);
+      return styles ? unsafeCSS(styles) : undefined;
     }
 
     render() {
@@ -22,9 +22,8 @@ window.defineCustomElementFunction = (name, parentName, content, styles) => {
         const template = document.createElement('template');
         template.innerHTML = content;
         return template.content;
-      } else {
-        return super.render();
       }
+      return super.render();
     }
   }
 

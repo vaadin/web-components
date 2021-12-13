@@ -88,15 +88,13 @@ export const SortMixin = (superClass) =>
           this._sorters.unshift(sorter);
         }
         this.__updateSortOrders();
-      } else {
-        if (sorter.direction) {
-          const otherSorters = this._sorters.filter((s) => s != sorter);
-          this._sorters = [sorter];
-          otherSorters.forEach((sorter) => {
-            sorter._order = null;
-            sorter.direction = null;
-          });
-        }
+      } else if (sorter.direction) {
+        const otherSorters = this._sorters.filter((s) => s != sorter);
+        this._sorters = [sorter];
+        otherSorters.forEach((sorter) => {
+          sorter._order = null;
+          sorter.direction = null;
+        });
       }
     }
 

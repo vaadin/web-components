@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, down, fixtureSync, isIOS } from '@vaadin/testing-helpers';
+import { aTimeout, click, down, fixtureSync, isIOS } from '@vaadin/testing-helpers';
 import '../src/vaadin-date-picker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { open, outsideClick } from './common.js';
@@ -44,6 +44,7 @@ describe('dropdown', () => {
     datepicker.focus();
     await open(datepicker);
     outsideClick();
+    await aTimeout(0);
     expect(document.activeElement).to.equal(input);
   });
 
@@ -51,6 +52,7 @@ describe('dropdown', () => {
     expect(document.activeElement).to.equal(document.body);
     await open(datepicker);
     outsideClick();
+    await aTimeout(0);
     expect(document.activeElement).to.equal(input);
   });
 
@@ -105,6 +107,7 @@ describe('wrapped', () => {
   });
 
   it('should restore attribute focus-ring if it was initially set before opening', () => {
+    datepicker.focus();
     datepicker.setAttribute('focus-ring', '');
     datepicker.opened = true;
     datepicker.opened = false;
@@ -112,6 +115,7 @@ describe('wrapped', () => {
   });
 
   it('should remove attribute focus-ring if it was not initially set before opening', () => {
+    datepicker.focus();
     datepicker.opened = true;
     datepicker.setAttribute('focus-ring', '');
     datepicker.opened = false;

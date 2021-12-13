@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { change, click, fixtureSync, makeSoloTouchEvent, touchend } from '@vaadin/testing-helpers';
+import { change, click, fixtureSync, makeSoloTouchEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-upload.js';
 import { createFile, createFiles, touchDevice, xhrCreator } from './common.js';
@@ -58,15 +58,6 @@ describe('file list', () => {
       const event = makeSoloTouchEvent('touchend', null, addFiles);
       expect(inputClickSpy.calledOnce).to.be.true;
       expect(event.defaultPrevented).to.be.true;
-    });
-
-    it('should invoke Polymer.Gestures.resetMouseCanceller before open file dialog', () => {
-      // NOTE(platosha): With ES modules we can’t put a spy on the actual
-      // Polymer.Gestures.resetMouseCanceller. Have to use a separate
-      // wrapper method for testing.
-      const spy = sinon.spy(upload, '__resetMouseCanceller');
-      touchend(addFiles);
-      expect(spy.calledOnce).to.be.true;
     });
 
     it('should reset input.value before dialog', () => {

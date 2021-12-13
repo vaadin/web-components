@@ -155,6 +155,10 @@ export class IronListAdapter {
     return element ? this.scrollTarget.getBoundingClientRect().top - element.getBoundingClientRect().top : undefined;
   }
 
+  get size() {
+    return this.__size;
+  }
+
   set size(size) {
     if (size === this.size) {
       return;
@@ -202,10 +206,6 @@ export class IronListAdapter {
     // Schedule and flush a resize handler
     this._resizeHandler();
     flush();
-  }
-
-  get size() {
-    return this.__size;
   }
 
   /** @private */

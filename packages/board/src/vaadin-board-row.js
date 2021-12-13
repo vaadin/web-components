@@ -94,7 +94,7 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
     this.addEventListener('iron-resize', this._onIronResize, true);
     this.$.insertionPoint.addEventListener('slotchange', this.redraw.bind(this));
     afterNextRender(this, function () {
-      //force this as an interested resizable of parent
+      // force this as an interested resizable of parent
       this.dispatchEvent(
         new CustomEvent('iron-request-resize-notifications', {
           node: this,
@@ -203,7 +203,7 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
   _removeExtraNodesFromDOM(boardCols, nodes) {
     let isErrorReported = false;
     let spaceLeft = 4;
-    let returnNodes = [];
+    const returnNodes = [];
     nodes.forEach((node, i) => {
       spaceLeft = spaceLeft - boardCols[i];
       if (spaceLeft < 0) {
@@ -245,7 +245,7 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
       breakpoints.mediumSize != this._oldBreakpoints.mediumSize
     ) {
       const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
-      const isElementNode = function (node) {
+      const isElementNode = (node) => {
         return !(node.nodeType === node.TEXT_NODE || node instanceof DomRepeat || node instanceof DomIf);
       };
       const filteredNodes = nodes.filter(isElementNode);
@@ -253,7 +253,7 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
       const boardCols = this._parseBoardCols(filteredNodes);
       const colsInRow = boardCols.reduce((a, b) => a + b, 0);
       this._removeExtraNodesFromDOM(boardCols, filteredNodes).forEach((e, i) => {
-        let newFlexBasis = this._calculateFlexBasis(boardCols[i], width, colsInRow, breakpoints);
+        const newFlexBasis = this._calculateFlexBasis(boardCols[i], width, colsInRow, breakpoints);
         if (forceResize || !this._oldFlexBasis[i] || this._oldFlexBasis[i] != newFlexBasis) {
           this._oldFlexBasis[i] = newFlexBasis;
           e.style.flexBasis = newFlexBasis;

@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -13,8 +14,41 @@ export type OverlayRenderer = (root: HTMLElement, owner: HTMLElement, model?: ob
  */
 export type OverlayOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
+/**
+ * Fired after the overlay is opened.
+ */
+export type OverlayOpenEvent = CustomEvent;
+
+/**
+ * Fired before the overlay will be closed.
+ * If canceled the closing of the overlay is canceled as well.
+ */
+export type OverlayCloseEvent = CustomEvent;
+
+/**
+ * Fired when the overlay will be closed.
+ */
+export type OverlayClosingEvent = CustomEvent;
+
+/**
+ * Fired before the overlay will be closed on outside click.
+ * If canceled the closing of the overlay is canceled as well.
+ */
+export type OverlayOutsideClickEvent = CustomEvent<{ sourceEvent: MouseEvent }>;
+
+/**
+ * Fired before the overlay will be closed on ESC button press.
+ * If canceled the closing of the overlay is canceled as well.
+ */
+export type OverlayEscapePressEvent = CustomEvent<{ sourceEvent: KeyboardEvent }>;
+
 export interface OverlayElementEventMap {
   'opened-changed': OverlayOpenedChangedEvent;
+  'vaadin-overlay-open': OverlayOpenEvent;
+  'vaadin-overlay-close': OverlayCloseEvent;
+  'vaadin-overlay-closing': OverlayClosingEvent;
+  'vaadin-overlay-outside-click': OverlayOutsideClickEvent;
+  'vaadin-overlay-escape-press': OverlayEscapePressEvent;
 }
 
 export type OverlayEventMap = HTMLElementEventMap & OverlayElementEventMap;
@@ -104,8 +138,13 @@ export type OverlayEventMap = HTMLElementEventMap & OverlayElementEventMap;
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
+ * @fires {CustomEvent} vaadin-overlay-open - Fired after the overlay is opened.
+ * @fires {CustomEvent} vaadin-overlay-close - Fired before the overlay will be closed. If canceled the closing of the overlay is canceled as well.
+ * @fires {CustomEvent} vaadin-overlay-closing - Fired when the overlay will be closed.
+ * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay will be closed on outside click. If canceled the closing of the overlay is canceled as well.
+ * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
  */
-declare class OverlayElement extends ThemableMixin(DirMixin(HTMLElement)) {
+declare class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(HTMLElement))) {
   /**
    * When true, the overlay is visible and attached to body.
    */
@@ -168,6 +207,12 @@ declare class OverlayElement extends ThemableMixin(DirMixin(HTMLElement)) {
    * Set to true to enable restoring of focus when overlay is closed.
    */
   restoreFocusOnClose: boolean;
+
+  /**
+   * Set to specify the element which should be focused on overlay close,
+   * if `restoreFocusOnClose` is set to true.
+   */
+  restoreFocusNode?: HTMLElement;
 
   close(sourceEvent?: Event | null): void;
 

@@ -30,7 +30,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { ChartSeries } from './vaadin-chart-series.js';
 
 /** @private */
-export const deepMerge = function deepMerge(target, source) {
+export function deepMerge(target, source) {
   const isObject = (item) => item && typeof item === 'object' && !Array.isArray(item);
 
   if (isObject(source) && isObject(target)) {
@@ -48,7 +48,7 @@ export const deepMerge = function deepMerge(target, source) {
   }
 
   return target;
-};
+}
 
 ['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
   Highcharts.wrap(Highcharts.Chart.prototype, methodName, function (proceed, ...args) {
@@ -526,7 +526,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
         return;
       }
 
-      const options = Object.assign({}, this.options, this._jsonConfigurationBuffer);
+      const options = { ...this.options, ...this._jsonConfigurationBuffer };
       this._jsonConfigurationBuffer = null;
       this.__initChart(options);
       this.__addChildObserver();
@@ -540,7 +540,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
    * @return {!Options}
    */
   get options() {
-    const options = Object.assign({}, this._baseConfig);
+    const options = { ...this._baseConfig };
     deepMerge(options, this.additionalOptions);
 
     if (this.type) {
@@ -635,7 +635,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
     if (this.chart3d) {
       options.chart = options.chart || {};
 
-      options.chart.options3d = Object.assign({}, this._baseChart3d, options.chart.options3d);
+      options.chart.options3d = { ...this._baseChart3d, ...options.chart.options3d };
     }
 
     return options;
@@ -1153,7 +1153,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
       }
 
       if (resetConfiguration) {
-        const initialOptions = Object.assign({}, this.options, this._jsonConfigurationBuffer);
+        const initialOptions = { ...this.options, ...this._jsonConfigurationBuffer };
 
         this.__initChart(initialOptions);
 
@@ -1617,12 +1617,11 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
     if (chart3d) {
       config.update({
         chart: {
-          options3d: Object.assign(
-            {},
-            this._baseChart3d,
-            this.additionalOptions && this.additionalOptions.chart && this.additionalOptions.chart.options3d,
-            { enabled: true }
-          )
+          options3d: {
+            ...this._baseChart3d,
+            ...(this.additionalOptions && this.additionalOptions.chart && this.additionalOptions.chart.options3d),
+            enabled: true
+          }
         }
       });
     } else {
@@ -1706,6 +1705,8 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
           break;
         case 3:
           axes = this.configuration.colorAxis;
+          break;
+        default:
           break;
       }
       if (axes && axes[axisIndex]) {

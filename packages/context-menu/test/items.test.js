@@ -617,7 +617,7 @@ describe('items', () => {
       rootMenu.items[1].theme = ['bar-1', 'bar-2', 'bar-3'];
       await updateItemsAndReopen();
 
-      let rootItems = getMenuItems();
+      const rootItems = getMenuItems();
       expect(rootItems[1].getAttribute('theme')).to.equal('bar-1 bar-2 bar-3');
     });
   });

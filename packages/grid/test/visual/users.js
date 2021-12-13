@@ -2806,7 +2806,7 @@ function capitalize(lower) {
 }
 
 const users = data.map((item) => {
-  const user = Object.assign({}, item);
+  const user = { ...item };
   user.name.first = capitalize(user.name.first);
   user.name.last = capitalize(user.name.last);
   user.location.city = capitalize(user.location.city);
