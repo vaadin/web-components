@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusin, focusout } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, focusin, focusout } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-custom-field.js';
 import { dispatchChange } from './common.js';
@@ -205,8 +205,9 @@ describe('custom field', () => {
       expect(aria).to.include(label.id);
     });
 
-    it('should add error message to aria-labelledby when field is invalid', () => {
+    it('should add error message to aria-labelledby when field is invalid', async () => {
       customField.invalid = true;
+      await aTimeout(0);
       const aria = customField.getAttribute('aria-labelledby');
       expect(aria).to.include(helper.id);
       expect(aria).to.include(error.id);
