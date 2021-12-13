@@ -25,5 +25,10 @@ export class SlotController implements ReactiveController {
    */
   node: HTMLElement;
 
+  /**
+   * Get a reference to the node managed by the controller.
+   */
+  getSlotChild(slotName: string): Node;
+
   protected initialized: boolean;
 }

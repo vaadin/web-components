@@ -15,14 +15,16 @@ export class SlotController {
     if (!this.initialized) {
       const { host, slotName, slotFactory, slotInitializer } = this;
 
-      const slotted = host.querySelector(`[slot=${slotName}]`);
+      const slotted = this.getSlotChild(slotName);
 
       if (!slotted) {
         // Slot factory is optional, some slots don't have default content.
         if (slotFactory) {
           const slotContent = slotFactory(host);
           if (slotContent instanceof Element) {
-            slotContent.setAttribute('slot', slotName);
+            if (slotName !== '') {
+              slotContent.setAttribute('slot', slotName);
+            }
             host.appendChild(slotContent);
             this.node = slotContent;
           }
@@ -39,5 +41,19 @@ export class SlotController {
 
       this.initialized = true;
     }
+  }
+
+  /**
+   * Get a reference to the node managed by the controller.
+   * @param {string} slotName
+   */
+  getSlotChild(slotName) {
+    return Array.from(this.host.childNodes).find((node) => {
+      // Either an element (any slot) or a text node (only un-named slot).
+      return (
+        (node.nodeType === Node.ELEMENT_NODE && node.slot === slotName) ||
+        (node.nodeType === Node.TEXT_NODE && node.textContent.trim() && slotName === '')
+      );
+    });
   }
 }
