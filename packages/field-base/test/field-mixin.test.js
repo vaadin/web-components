@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { FieldMixin } from '../src/field-mixin.js';
@@ -578,8 +578,9 @@ describe('field-mixin', () => {
           expect(aria).to.equal(helper.id);
         });
 
-        it('should contain error id when the field is invalid', () => {
+        it('should add error id asynchronously after the field becomes invalid', async () => {
           element.invalid = true;
+          await aTimeout(0);
           const aria = input.getAttribute('aria-describedby');
           expect(aria).to.include(helper.id);
           expect(aria).to.include(error.id);
@@ -606,8 +607,9 @@ describe('field-mixin', () => {
           expect(aria).to.not.include(error.id);
         });
 
-        it('should contain error id when the field is invalid', () => {
+        it('should add error id asynchronously after the field becomes invalid', async () => {
           element.invalid = true;
+          await aTimeout(0);
           const aria = element.getAttribute('aria-labelledby');
           expect(aria).to.include(label.id);
           expect(aria).to.include(helper.id);
