@@ -241,44 +241,6 @@ describe('basic features', () => {
     expect(datepicker.hasAttribute('has-value')).to.be.true;
   });
 
-  describe('auto open disabled', () => {
-    beforeEach(() => {
-      datepicker.autoOpenDisabled = true;
-    });
-
-    it('should focus the input on touch tap', () => {
-      touchTap(input);
-      expect(isFocused(input)).to.be.true;
-    });
-
-    it('should not blur the input on open', async () => {
-      touchTap(input);
-      await open(datepicker);
-      expect(isFocused(input)).to.be.true;
-    });
-
-    it('should blur the input on fullscreen open', async () => {
-      datepicker._fullscreen = true;
-      touchTap(input);
-      await open(datepicker);
-      expect(isFocused(input)).to.be.false;
-    });
-
-    it('should not open on input tap when autoOpenDisabled is true and not on mobile', () => {
-      tap(input);
-      if (!datepicker._noInput) {
-        expect(datepicker.opened).not.to.be.true;
-      } else {
-        expect(datepicker.opened).to.be.true;
-      }
-    });
-
-    it('should open by tapping the calendar icon even if autoOpenDisabled is true', async () => {
-      tap(toggleButton);
-      await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
-    });
-  });
-
   describe('value property formats', () => {
     it('should accept ISO format', () => {
       const date = new Date(0, 1, 3);
@@ -628,6 +590,49 @@ describe('initial value attribute', () => {
 
   it('should format the input value', () => {
     expect(input.value).to.equal('1/1/2000');
+  });
+});
+
+describe('auto open disabled', () => {
+  let datepicker, input, toggleButton;
+
+  beforeEach(() => {
+    datepicker = fixtureSync('<vaadin-date-picker value="2000-01-01"></vaadin-date-picker>');
+    input = datepicker.inputElement;
+    toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
+    datepicker.autoOpenDisabled = true;
+  });
+
+  it('should focus the input on touch tap', () => {
+    touchTap(input);
+    expect(isFocused(input)).to.be.true;
+  });
+
+  it('should not blur the input on open', async () => {
+    touchTap(input);
+    await open(datepicker);
+    expect(isFocused(input)).to.be.true;
+  });
+
+  it('should blur the input on fullscreen open', async () => {
+    datepicker._fullscreen = true;
+    touchTap(input);
+    await open(datepicker);
+    expect(isFocused(input)).to.be.false;
+  });
+
+  it('should not open on input tap when autoOpenDisabled is true and not on mobile', () => {
+    tap(input);
+    if (!datepicker._noInput) {
+      expect(datepicker.opened).not.to.be.true;
+    } else {
+      expect(datepicker.opened).to.be.true;
+    }
+  });
+
+  it('should open by tapping the calendar icon even if autoOpenDisabled is true', async () => {
+    tap(toggleButton);
+    await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
   });
 });
 
