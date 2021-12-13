@@ -9,8 +9,8 @@ export class SlotController implements ReactiveController {
   constructor(
     host: HTMLElement,
     slotName: string,
-    slotFactory: () => HTMLElement,
-    slotInitializer: (host: HTMLElement, node: HTMLElement) => void
+    slotFactory?: () => HTMLElement,
+    slotInitializer?: (host: HTMLElement, node: HTMLElement) => void
   );
 
   hostConnected(): void;
