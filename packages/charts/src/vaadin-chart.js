@@ -1047,11 +1047,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @private */
   __updateStyledMode(options) {
     const styledMode = options.chart.styledMode;
-    if (styledMode) {
-      this.$.chart.setAttribute('styled-mode', '');
-    } else {
-      this.$.chart.removeAttribute('styled-mode');
-    }
+    this.$.chart.toggleAttribute('styled-mode', !!styledMode);
   }
 
   /** @protected */
