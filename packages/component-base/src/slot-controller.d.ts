@@ -31,4 +31,21 @@ export class SlotController implements ReactiveController {
   getSlotChild(): Node;
 
   protected initialized: boolean;
+
+  protected defaultNode: Node;
+
+  /**
+   * Override to initialize the newly added custom node.
+   */
+  protected initCustomNode(node: Node): void;
+
+  /**
+   * Override to cleanup slotted node when it's removed.
+   */
+  protected teardownNode(node: Node): void;
+
+  /**
+   * Setup the observer to manage slot content changes.
+   */
+  protected observe(): void;
 }
