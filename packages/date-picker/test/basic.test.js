@@ -8,6 +8,15 @@ import { close, getOverlayContent, monthsEqual, open } from './common.js';
 
 settings.setCancelSyntheticClickEvents(false);
 
+async function touchTap(target) {
+  const start = makeSoloTouchEvent('touchstart', null, target);
+  const end = makeSoloTouchEvent('touchend', null, target);
+  if (!start.defaultPrevented && !end.defaultPrevented) {
+    target.click();
+    target.focus();
+  }
+}
+
 describe('basic features', () => {
   let datepicker, input, toggleButton;
 
@@ -101,25 +110,15 @@ describe('basic features', () => {
     await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
   });
 
-  it('should prevent touchend event on the input', () => {
-    const e = makeSoloTouchEvent('touchend', null, datepicker.inputElement);
-    expect(e.defaultPrevented).to.be.true;
+  it('should focus the input on touch tap', () => {
+    touchTap(input);
+    expect(input.getRootNode().activeElement).to.equal(input);
   });
 
-  it('should prevent touchend event when on autoOpenDisabled', () => {
-    datepicker.autoOpenDisabled = true;
-    const e = makeSoloTouchEvent('touchend', null, datepicker.inputElement);
-    expect(e.defaultPrevented).to.be.false;
-  });
-
-  it('should not open on input tap when autoOpenDisabled is true and not on mobile', () => {
-    datepicker.autoOpenDisabled = true;
-    tap(input);
-    if (!datepicker._noInput) {
-      expect(datepicker.opened).not.to.be.true;
-    } else {
-      expect(datepicker.opened).to.be.true;
-    }
+  it('should not focus the input on touch tap on fullscreen', () => {
+    datepicker._fullscreen = true;
+    touchTap(input);
+    expect(input.getRootNode().activeElement).not.to.equal(input);
   });
 
   it('should pass the placeholder attribute to the input tag', () => {
@@ -204,12 +203,6 @@ describe('basic features', () => {
     await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
   });
 
-  it('should open by tapping the calendar icon even if autoOpenDisabled is true', async () => {
-    window.autoOpenDisabled = true;
-    tap(toggleButton);
-    await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
-  });
-
   it('should scroll to a date on open', async () => {
     const overlayContent = getOverlayContent(datepicker);
     // We must scroll to a date on every open because at least IE11 seems to reset
@@ -238,6 +231,44 @@ describe('basic features', () => {
   it('should set has-value attribute when value is set', () => {
     datepicker.value = '2000-02-01';
     expect(datepicker.hasAttribute('has-value')).to.be.true;
+  });
+
+  describe('auto open disabled', () => {
+    beforeEach(() => {
+      datepicker.autoOpenDisabled = true;
+    });
+
+    it('should focus the input on touch tap', () => {
+      touchTap(input);
+      expect(input.getRootNode().activeElement).to.equal(input);
+    });
+
+    it('should not blur the input on open', async () => {
+      touchTap(input);
+      await open(datepicker);
+      expect(input.getRootNode().activeElement).to.equal(input);
+    });
+
+    it('should blur the input on fullscreen open', async () => {
+      datepicker._fullscreen = true;
+      touchTap(input);
+      await open(datepicker);
+      expect(input.getRootNode().activeElement).not.to.equal(input);
+    });
+
+    it('should not open on input tap when autoOpenDisabled is true and not on mobile', () => {
+      tap(input);
+      if (!datepicker._noInput) {
+        expect(datepicker.opened).not.to.be.true;
+      } else {
+        expect(datepicker.opened).to.be.true;
+      }
+    });
+
+    it('should open by tapping the calendar icon even if autoOpenDisabled is true', async () => {
+      tap(toggleButton);
+      await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
+    });
   });
 
   describe('value property formats', () => {
@@ -520,7 +551,7 @@ describe('inside flexbox', () => {
   });
 });
 
-describe('clear-button-visible', () => {
+describe('clear button', () => {
   let datepicker, clearButton;
 
   beforeEach(() => {
@@ -532,16 +563,16 @@ describe('clear-button-visible', () => {
     expect(datepicker).to.have.property('clearButtonVisible', true);
   });
 
-  it('should clear the value', () => {
+  it('should clear the value on click', () => {
     datepicker.value = '2000-02-01';
     click(clearButton);
     expect(datepicker.value).to.equal('');
   });
 
-  it('should not prevent touchend event on clear button', () => {
+  it('should clear the value on touch tap', () => {
     datepicker.value = '2000-02-01';
-    const e = makeSoloTouchEvent('touchend', null, clearButton);
-    expect(e.defaultPrevented).to.be.false;
+    touchTap(clearButton);
+    expect(datepicker.value).to.equal('');
   });
 
   it('should validate on clear', () => {
