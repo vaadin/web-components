@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@polymer/polymer/lib/elements/dom-bind.js';
@@ -461,8 +461,9 @@ describe('vaadin-checkbox-group', () => {
       expect(aria).to.include(label.id);
     });
 
-    it('should add error message to aria-labelledby when field is invalid', () => {
+    it('should add error message to aria-labelledby when field is invalid', async () => {
       group.invalid = true;
+      await aTimeout(0);
       const aria = group.getAttribute('aria-labelledby');
       expect(aria).to.include(helper.id);
       expect(aria).to.include(error.id);

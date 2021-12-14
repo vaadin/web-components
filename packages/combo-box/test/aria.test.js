@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDownKeyDown, escKeyDown, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, aTimeout, escKeyDown, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 import { getAllItems } from './helpers.js';
@@ -39,8 +39,9 @@ describe('ARIA', () => {
       expect(aria).to.not.include(error.id);
     });
 
-    it('should add error message ID to aria-describedby when invalid', () => {
+    it('should add error message ID to aria-describedby when invalid', async () => {
       comboBox.invalid = true;
+      await aTimeout(0);
       const aria = input.getAttribute('aria-describedby');
       expect(aria).to.include(helper.id);
       expect(aria).to.include(error.id);

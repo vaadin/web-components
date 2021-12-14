@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { addValueToAttribute, removeValueFromAttribute } from './utils.js';
 
 /**
  * A controller for managing ARIA attributes for a field element:
@@ -160,16 +161,12 @@ export class FieldAriaController {
       return;
     }
 
-    const value = this.__target.getAttribute(attr);
-    const ids = value ? new Set(value.split(' ')) : new Set();
-
     if (oldId) {
-      ids.delete(oldId);
-    }
-    if (newId) {
-      ids.add(newId);
+      removeValueFromAttribute(this.__target, attr, oldId);
     }
 
-    this.__target.setAttribute(attr, [...ids].join(' '));
+    if (newId) {
+      addValueToAttribute(this.__target, attr, newId);
+    }
   }
 }
