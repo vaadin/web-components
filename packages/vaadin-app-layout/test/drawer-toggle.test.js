@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, enter, space } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 
 import '../vaadin-drawer-toggle.js';
 
@@ -28,37 +29,34 @@ describe('drawer-toggle', () => {
   });
 
   describe('click event', () => {
+    let spy;
+
+    beforeEach(() => {
+      spy = sinon.spy();
+      toggle.addEventListener('drawer-toggle-click', spy);
+      toggle.focus();
+    });
+
     describe('default', () => {
-      let spy;
-
-      beforeEach(() => {
-        spy = sinon.spy();
-        toggle.addEventListener('drawer-toggle-click', spy);
-      });
-
       it('should fire "drawer-toggle-click" event on click', () => {
         toggle.click();
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should fire "drawer-toggle-click" event on Enter', () => {
-        enter(toggle);
+      it('should fire "drawer-toggle-click" event on Enter', async () => {
+        await sendKeys({ press: 'Enter' });
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should fire "drawer-toggle-click" event on Space', () => {
-        space(toggle);
+      it('should fire "drawer-toggle-click" event on Space', async () => {
+        await sendKeys({ press: 'Space' });
         expect(spy.calledOnce).to.be.true;
       });
     });
 
     describe('disabled', () => {
-      let spy;
-
       beforeEach(() => {
         toggle.disabled = true;
-        spy = sinon.spy();
-        toggle.addEventListener('drawer-toggle-click', spy);
       });
 
       it('should not fire "drawer-toggle-click" event on click when disabled', () => {
@@ -67,11 +65,15 @@ describe('drawer-toggle', () => {
       });
 
       it('should not fire "drawer-toggle-click" event on Enter when disabled', () => {
+        // It's not possible to send keys to the disabled element,
+        // so we have to use helper instead of `sendKeys` here.
         enter(toggle);
         expect(spy.called).to.be.false;
       });
 
       it('should not fire "drawer-toggle-click" event on Space when disabled', () => {
+        // It's not possible to send keys to the disabled element,
+        // so we have to use helper instead of `sendKeys` here.
         space(toggle);
         expect(spy.called).to.be.false;
       });
