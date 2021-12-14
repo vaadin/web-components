@@ -93,9 +93,13 @@ class DrawerToggleElement extends ButtonElement {
       }
     });
 
-    this.addEventListener('keyup', (event) => {
-      if (/^( |SpaceBar|Enter)$/.test(event.key) && !this.disabled) {
-        this._fireClick();
+    this.addEventListener('keydown', (event) => {
+      if (/^( |SpaceBar|Enter)$/.test(event.key)) {
+        event.preventDefault();
+
+        if (!this.disabled) {
+          this._fireClick();
+        }
       }
     });
   }

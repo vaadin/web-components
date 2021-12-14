@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import sinon from 'sinon';
 import { fixtureSync, enter, space } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 
 import '../vaadin-drawer-toggle.js';
 
@@ -34,6 +35,7 @@ describe('drawer-toggle', () => {
       beforeEach(() => {
         spy = sinon.spy();
         toggle.addEventListener('drawer-toggle-click', spy);
+        toggle.focus();
       });
 
       it('should fire "drawer-toggle-click" event on click', () => {
@@ -41,13 +43,13 @@ describe('drawer-toggle', () => {
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should fire "drawer-toggle-click" event on Enter', () => {
-        enter(toggle);
+      it('should fire "drawer-toggle-click" event on Enter', async () => {
+        await sendKeys({ press: 'Enter' });
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should fire "drawer-toggle-click" event on Space', () => {
-        space(toggle);
+      it('should fire "drawer-toggle-click" event on Space', async () => {
+        await sendKeys({ press: 'Space' });
         expect(spy.calledOnce).to.be.true;
       });
     });
