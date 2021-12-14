@@ -623,11 +623,7 @@ describe('auto open disabled', () => {
 
   it('should not open on input tap when autoOpenDisabled is true and not on mobile', () => {
     tap(input);
-    if (!datepicker._noInput) {
-      expect(datepicker.opened).not.to.be.true;
-    } else {
-      expect(datepicker.opened).to.be.true;
-    }
+    expect(datepicker.opened).not.to.be.true;
   });
 
   it('should open by tapping the calendar icon even if autoOpenDisabled is true', async () => {
@@ -654,5 +650,42 @@ describe('ios', () => {
     datepicker.focus();
     await open(datepicker);
     expect(isFocused(input)).to.be.false;
+  });
+
+  describe('auto open disabled', () => {
+    let toggleButton;
+
+    beforeEach(() => {
+      datepicker.autoOpenDisabled = true;
+      toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
+    });
+
+    it('should focus the input on touch tap', () => {
+      touchTap(input);
+      expect(isFocused(input)).to.be.true;
+    });
+
+    it('should blur the input on open', async () => {
+      touchTap(input);
+      await open(datepicker);
+      expect(isFocused(input)).to.be.false;
+    });
+
+    it('should blur the input on fullscreen open', async () => {
+      datepicker._fullscreen = true;
+      touchTap(input);
+      await open(datepicker);
+      expect(isFocused(input)).to.be.false;
+    });
+
+    it('should not open on input tap when autoOpenDisabled is true and not on mobile', () => {
+      tap(input);
+      expect(datepicker.opened).not.to.be.true;
+    });
+
+    it('should open by tapping the calendar icon even if autoOpenDisabled is true', async () => {
+      tap(toggleButton);
+      await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
+    });
   });
 });
