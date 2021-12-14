@@ -29,15 +29,15 @@ describe('drawer-toggle', () => {
   });
 
   describe('click event', () => {
+    let spy;
+
+    beforeEach(() => {
+      spy = sinon.spy();
+      toggle.addEventListener('drawer-toggle-click', spy);
+      toggle.focus();
+    });
+
     describe('default', () => {
-      let spy;
-
-      beforeEach(() => {
-        spy = sinon.spy();
-        toggle.addEventListener('drawer-toggle-click', spy);
-        toggle.focus();
-      });
-
       it('should fire "drawer-toggle-click" event on click', () => {
         toggle.click();
         expect(spy.calledOnce).to.be.true;
@@ -55,12 +55,8 @@ describe('drawer-toggle', () => {
     });
 
     describe('disabled', () => {
-      let spy;
-
       beforeEach(() => {
         toggle.disabled = true;
-        spy = sinon.spy();
-        toggle.addEventListener('drawer-toggle-click', spy);
       });
 
       it('should not fire "drawer-toggle-click" event on click when disabled', () => {
@@ -69,11 +65,15 @@ describe('drawer-toggle', () => {
       });
 
       it('should not fire "drawer-toggle-click" event on Enter when disabled', () => {
+        // It's not possible to send keys to the disabled element,
+        // so we have to use helper instead of `sendKeys` here.
         enter(toggle);
         expect(spy.called).to.be.false;
       });
 
       it('should not fire "drawer-toggle-click" event on Space when disabled', () => {
+        // It's not possible to send keys to the disabled element,
+        // so we have to use helper instead of `sendKeys` here.
         space(toggle);
         expect(spy.called).to.be.false;
       });
