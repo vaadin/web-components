@@ -95,7 +95,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * ---|---|---
  * `--vaadin-form-item-label-width` | Width of the label column when the labels are aside | `8em`
  * `--vaadin-form-item-label-spacing` | Spacing between the label column and the input column when the labels are aside | `1em`
- * `--vaadin-form-item-row-spacing` | Height of the spacing between the form item elements | `1em`
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
@@ -107,37 +106,35 @@ class FormItem extends ThemableMixin(PolymerElement) {
     return html`
       <style>
         :host {
-          display: inline-flex;
-          flex-direction: row;
+          display: contents;
           align-items: baseline;
-          margin: calc(0.5 * var(--vaadin-form-item-row-spacing, 1em)) 0;
         }
 
         :host([label-position='top']) {
+          display: flex;
           flex-direction: column;
           align-items: stretch;
         }
 
-        :host([hidden]) {
-          display: none !important;
-        }
-
         #label {
+          grid-column-start: inherit;
           width: var(--vaadin-form-item-label-width, 8em);
-          flex: 0 0 auto;
+          margin-right: var(--vaadin-form-item-label-spacing, 1em);
         }
 
         :host([label-position='top']) #label {
           width: auto;
-        }
-
-        #spacing {
-          width: var(--vaadin-form-item-label-spacing, 1em);
-          flex: 0 0 auto;
+          margin-right: 0;
         }
 
         #content {
+          grid-column-start: var(--_vaadin-form-item-content-start);
+          grid-column-end: inherit;
           flex: 1 1 auto;
+        }
+
+        :host([hidden]) {
+          display: none !important;
         }
 
         #content ::slotted(.full-width) {
@@ -150,7 +147,6 @@ class FormItem extends ThemableMixin(PolymerElement) {
         <slot name="label" id="labelSlot" on-slotchange="__onLabelSlotChange"></slot>
         <span part="required-indicator" aria-hidden="true"></span>
       </div>
-      <div id="spacing"></div>
       <div id="content">
         <slot id="contentSlot" on-slotchange="__onContentSlotChange"></slot>
       </div>

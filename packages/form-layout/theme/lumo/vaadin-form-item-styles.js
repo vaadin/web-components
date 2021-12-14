@@ -7,10 +7,6 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-form-item',
   css`
-    :host {
-      --vaadin-form-item-row-spacing: 0;
-    }
-
     /* font-weight, margin-bottom, transition and line-height same as for part label in text-field */
     [part='label'] {
       color: var(--lumo-secondary-text-color);

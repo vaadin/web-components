@@ -100,6 +100,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Custom CSS property | Description | Default
  * ---|---|---
  * `--vaadin-form-layout-column-spacing` | Length of the spacing between columns | `2em`
+ * `--vaadin-form-layout-row-spacing` | Length of the spacing between rows | `1em`
  *
  * @extends HTMLElement
  * @mixes ElementMixin
@@ -114,10 +115,10 @@ class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizabl
           max-width: 100%;
           animation: 1ms vaadin-form-layout-appear;
           /* CSS API for host */
+          --vaadin-form-layout-row-spacing: var(--vaadin-form-item-row-spacing, 1em);
+          --vaadin-form-layout-column-spacing: 2em; /* (default) */
           --vaadin-form-item-label-width: 8em;
           --vaadin-form-item-label-spacing: 1em;
-          --vaadin-form-item-row-spacing: 1em;
-          --vaadin-form-layout-column-spacing: 2em; /* (default) */
           align-self: stretch;
         }
 
@@ -132,21 +133,10 @@ class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizabl
         }
 
         #layout {
-          display: flex;
-
+          display: grid;
           align-items: baseline; /* default \`stretch\` is not appropriate */
-
-          flex-wrap: wrap; /* the items should wrap */
-        }
-
-        #layout ::slotted(*) {
-          /* Items should neither grow nor shrink. */
-          flex-grow: 0;
-          flex-shrink: 0;
-
-          /* Margins make spacing between the columns */
-          margin-left: calc(0.5 * var(--vaadin-form-layout-column-spacing));
-          margin-right: calc(0.5 * var(--vaadin-form-layout-column-spacing));
+          row-gap: var(--vaadin-form-layout-row-spacing, 1em);
+          margin: calc(0.5 * var(--vaadin-form-layout-row-spacing, 1em)) 0;
         }
 
         #layout ::slotted(br) {
@@ -429,6 +419,26 @@ class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizabl
       // Apply the chosen responsive step’s properties
       this._columnCount = selectedStep.columns;
       this._labelsOnTop = selectedStep.labelsPosition === 'top';
+
+      let colDefs = '';
+      let gapWidth = 'var(--vaadin-form-layout-column-spacing)';
+
+      for (let c = 1; c <= this._columnCount; c++) {
+        // Omit gap after last column:
+        if (c == this._columnCount) gapWidth = 0;
+
+        // Using 2 tracks for labels-on-top mode, 3 for labels-aside mode (including 1 for spacing)
+        if (this._labelsOnTop) {
+          colDefs += `[col${c}-start] auto
+                      [col${c}-end] ${gapWidth} `;
+        } else {
+          colDefs += `[col${c}-start] min-content
+                      [col${c}-content] auto
+                      [col${c}-end] ${gapWidth} `;
+        }
+      }
+
+      this.$.layout.style.setProperty('grid-template-columns', colDefs);
     }
   }
 
@@ -445,76 +455,30 @@ class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizabl
   updateStyles(properties) {
     super.updateStyles(properties);
 
-    /*
-      The item width formula:
+    let startCol = 1;
 
-          itemWidth = colspan / columnCount * 100% - columnSpacing
-
-      We have to subtract columnSpacing, because the column spacing space is taken
-      by item margins of 1/2 * spacing on both sides
-    */
-
-    const style = getComputedStyle(this);
-    const columnSpacing = style.getPropertyValue('--vaadin-form-layout-column-spacing');
-
-    const direction = style.direction;
-    const marginStartProp = 'margin-' + (direction === 'ltr' ? 'left' : 'right');
-    const marginEndProp = 'margin-' + (direction === 'ltr' ? 'right' : 'left');
-
-    const containerWidth = this.offsetWidth;
-
-    let col = 0;
     Array.from(this.children)
       .filter((child) => child.localName === 'br' || getComputedStyle(child).display !== 'none')
-      .forEach((child, index, children) => {
+      .forEach((child) => {
         if (child.localName === 'br') {
-          // Reset column count on line break
-          col = 0;
+          // Reset start line on line break
+          startCol = 1;
           return;
         }
 
-        let colspan;
-        colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('colspan')));
-
-        // Never span further than the number of columns
+        let colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('colspan')));
         colspan = Math.min(colspan, this._columnCount);
 
-        const childRatio = colspan / this._columnCount;
-
-        // Note: using 99.9% for 100% fixes rounding errors in MS Edge
-        // (< v16), otherwise the items might wrap, resizing is wobbly.
-        child.style.width = `calc(${childRatio * 99.9}% - ${1 - childRatio} * ${columnSpacing})`;
-
-        if (col + colspan > this._columnCount) {
-          // Too big to fit on this row, let’s wrap it
-          col = 0;
+        if (startCol + colspan - 1 > this._columnCount) {
+          startCol = 1;
         }
+        const endCol = startCol + colspan - 1;
 
-        // At the start edge
-        if (col === 0) {
-          child.style.setProperty(marginStartProp, '0px');
-        } else {
-          child.style.removeProperty(marginStartProp);
-        }
+        child.style.setProperty('grid-column-start', `col${startCol}-start`);
+        child.style.setProperty('grid-column-end', `col${endCol}-end`);
+        child.style.setProperty('--_vaadin-form-item-content-start', `col${startCol}-content`);
 
-        const nextIndex = index + 1;
-        const nextLineBreak = nextIndex < children.length && children[nextIndex].localName === 'br';
-
-        // At the end edge
-        if (col + colspan === this._columnCount) {
-          child.style.setProperty(marginEndProp, '0px');
-        } else if (nextLineBreak) {
-          const colspanRatio = (this._columnCount - col - colspan) / this._columnCount;
-          child.style.setProperty(
-            marginEndProp,
-            `calc(${colspanRatio * containerWidth}px + ${colspanRatio} * ${columnSpacing})`
-          );
-        } else {
-          child.style.removeProperty(marginEndProp);
-        }
-
-        // Move the column counter
-        col = (col + colspan) % this._columnCount;
+        startCol = endCol + 1;
 
         if (child.localName === 'vaadin-form-item') {
           if (this._labelsOnTop) {
