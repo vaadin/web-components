@@ -57,6 +57,10 @@ describe('slot-controller', () => {
         expect(initializeSpy.firstCall.args[0]).to.equal(element);
         expect(initializeSpy.firstCall.args[1]).to.equal(child);
       });
+
+      it('should pass isCustom: false for default named slot child', () => {
+        expect(initializeSpy.firstCall.args[2]).to.be.false;
+      });
     });
 
     describe('custom content', () => {
@@ -100,6 +104,10 @@ describe('slot-controller', () => {
         expect(initializeSpy.firstCall.args[0]).to.equal(element);
         expect(initializeSpy.firstCall.args[1]).to.equal(child);
       });
+
+      it('should pass isCustom: true for custom named slot child', () => {
+        expect(initializeSpy.firstCall.args[2]).to.be.true;
+      });
     });
   });
 
@@ -139,6 +147,10 @@ describe('slot-controller', () => {
         expect(initializeSpy.calledOnce).to.be.true;
         expect(initializeSpy.firstCall.args[0]).to.equal(element);
         expect(initializeSpy.firstCall.args[1]).to.equal(child);
+      });
+
+      it('should pass isCustom: false for default un-named slot child', () => {
+        expect(initializeSpy.firstCall.args[2]).to.be.false;
       });
     });
 
@@ -183,6 +195,10 @@ describe('slot-controller', () => {
         expect(initializeSpy.firstCall.args[0]).to.equal(element);
         expect(initializeSpy.firstCall.args[1]).to.equal(child);
       });
+
+      it('should pass isCustom: true for custom un-named slot child', () => {
+        expect(initializeSpy.firstCall.args[2]).to.be.true;
+      });
     });
 
     describe('custom text node', () => {
@@ -221,6 +237,10 @@ describe('slot-controller', () => {
         expect(initializeSpy.calledOnce).to.be.true;
         expect(initializeSpy.firstCall.args[0]).to.equal(element);
         expect(initializeSpy.firstCall.args[1]).to.equal(child);
+      });
+
+      it('should pass isCustom: true for the slotted text node', () => {
+        expect(initializeSpy.firstCall.args[2]).to.be.true;
       });
     });
 
