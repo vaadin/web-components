@@ -524,15 +524,13 @@ class AppLayout extends ElementMixin(
   /**
    * A callback for the `i18n` property observer.
    *
-   * The method ensures the drawer has the `aria-label` attribute updated
+   * The method ensures the drawer has ARIA attributes updated
    * once the `i18n` property changes.
    *
    * @private
    */
   __i18nChanged() {
-    if (this.overlay) {
-      this._updateOverlayMode();
-    }
+    this.__updateDrawerAriaAttributes();
   }
 
   /** @protected */
@@ -603,7 +601,6 @@ class AppLayout extends ElementMixin(
   /** @protected */
   _updateOverlayMode() {
     const overlay = this._getCustomPropertyValue('--vaadin-app-layout-drawer-overlay') === 'true';
-    const drawer = this.$.drawer;
 
     if (!this.overlay && overlay) {
       // Changed from not overlay to overlay
@@ -613,28 +610,38 @@ class AppLayout extends ElementMixin(
 
     this._setOverlay(overlay);
 
-    if (this.overlay) {
-      drawer.setAttribute('role', 'dialog');
-      drawer.setAttribute('aria-modal', 'true');
-      drawer.setAttribute('aria-label', this.i18n.drawer);
-    } else {
-      if (this._drawerStateSaved) {
-        this.drawerOpened = this._drawerStateSaved;
-        this._drawerStateSaved = null;
-      }
-
-      drawer.removeAttribute('role');
-      drawer.removeAttribute('aria-modal');
-      drawer.removeAttribute('aria-label');
+    if (!this.overlay && this._drawerStateSaved) {
+      this.drawerOpened = this._drawerStateSaved;
+      this._drawerStateSaved = null;
     }
 
     this._updateDrawerHeight();
+    this.__updateDrawerAriaAttributes();
 
     if (this.overlay !== overlay) {
       this.notifyResize();
     }
 
     // TODO(jouni): ARIA attributes. The drawer should act similar to a modal dialog when in ”overlay” mode
+  }
+
+  /**
+   * Updates ARIA attributes on the drawer depending on
+   * whether the drawer is in the overlay mode or not.
+   *
+   * @private
+   */
+  __updateDrawerAriaAttributes() {
+    const drawer = this.$.drawer;
+    if (this.overlay) {
+      drawer.setAttribute('role', 'dialog');
+      drawer.setAttribute('aria-modal', 'true');
+      drawer.setAttribute('aria-label', this.i18n.drawer);
+    } else {
+      drawer.removeAttribute('role');
+      drawer.removeAttribute('aria-modal');
+      drawer.removeAttribute('aria-label');
+    }
   }
 
   /**
