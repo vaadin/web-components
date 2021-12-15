@@ -7,6 +7,10 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+export interface AppLayoutI18n {
+  drawer: string;
+}
+
 /**
  * Fired when the `drawerOpened` property changes.
  */
@@ -120,6 +124,28 @@ export type AppLayoutEventMap = HTMLElementEventMap & AppLayoutCustomEventMap;
  * @fires {CustomEvent} primary-section-changed - Fired when the `primarySection` property changes.
  */
 declare class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(HTMLElement))) {
+  /**
+   * The object used to localize this component.
+   * To change the default localization, replace the entire
+   * `i18n` object with a custom one.
+   *
+   * To update individual properties, extend the existing i18n object as follows:
+   * ```js
+   * appLayout.i18n = {
+   *   ...appLayout.i18n,
+   *   drawer: 'Drawer'
+   * }
+   * ```
+   *
+   * The object has the following structure and default values:
+   * ```
+   * {
+   *   drawer: 'Drawer'
+   * }
+   * ```
+   */
+  i18n: AppLayoutI18n;
+
   /**
    * Defines whether navbar or drawer will come first visually.
    * - By default (`primary-section="navbar"`), the navbar takes the full available width and moves the drawer down.

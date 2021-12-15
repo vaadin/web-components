@@ -16,6 +16,10 @@ import { FocusTrapController } from '@vaadin/component-base/src/focus-trap-contr
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
+ * @typedef {import('./vaadin-app-layout.js').AppLayoutI18n} AppLayoutI18n
+ */
+
+/**
  * `<vaadin-app-layout>` is a Web Component providing a quick and easy way to get a common application layout structure done.
  *
  * ```
@@ -314,6 +318,39 @@ class AppLayout extends ElementMixin(
   static get properties() {
     return {
       /**
+       * The object used to localize this component.
+       * To change the default localization, replace the entire
+       * `i18n` object with a custom one.
+       *
+       * To update individual properties, extend the existing i18n object as follows:
+       * ```js
+       * appLayout.i18n = {
+       *   ...appLayout.i18n,
+       *   drawer: 'Drawer'
+       * }
+       * ```
+       *
+       * The object has the following structure and default values:
+       * ```
+       * {
+       *   drawer: 'Drawer'
+       * }
+       * ```
+       *
+       * @type {AppLayoutI18n}
+       * @default {English/US}
+       */
+      i18n: {
+        type: Object,
+        observer: '__i18nChanged',
+        value: () => {
+          return {
+            drawer: 'Drawer'
+          };
+        }
+      },
+
+      /**
        * Defines whether navbar or drawer will come first visually.
        * - By default (`primary-section="navbar"`), the navbar takes the full available width and moves the drawer down.
        * - If `primary-section="drawer"` is set, then the drawer will move the navbar, taking the full available height.
@@ -325,7 +362,7 @@ class AppLayout extends ElementMixin(
         value: 'navbar',
         notify: true,
         reflectToAttribute: true,
-        observer: '_primarySectionObserver'
+        observer: '__primarySectionChanged'
       },
 
       /**
@@ -341,7 +378,7 @@ class AppLayout extends ElementMixin(
         notify: true,
         value: true,
         reflectToAttribute: true,
-        observer: '_drawerOpenedObserver'
+        observer: '__drawerOpenedChanged'
       },
 
       /**
@@ -374,6 +411,10 @@ class AppLayout extends ElementMixin(
 
   constructor() {
     super();
+
+    /** @type {AppLayoutI18n} */
+    this.i18n;
+
     // TODO(jouni): might want to debounce
     this.__boundResizeListener = this._resize.bind(this);
     this.__drawerToggleClickListener = this._drawerToggleClick.bind(this);
@@ -439,16 +480,35 @@ class AppLayout extends ElementMixin(
     window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
   }
 
-  /** @private */
-  _primarySectionObserver(value) {
-    const isValid = ['navbar', 'drawer'].indexOf(value) !== -1;
+  /**
+   * A callback for the `primarySection` property observer.
+   *
+   * Ensures the property is set to its default value `navbar`
+   * if the new value is neither of the valid values: `navbar`, `drawer`.
+   *
+   * @param {string} value
+   * @private
+   */
+  __primarySectionChanged(value) {
+    const isValid = ['navbar', 'drawer'].includes(value);
     if (!isValid) {
       this.set('primarySection', 'navbar');
     }
   }
 
-  /** @private */
-  _drawerOpenedObserver(drawerOpened, oldDrawerOpened) {
+  /**
+   * A callback for the `drawerOpened` property observer.
+   *
+   * When the drawer opens, the method ensures the drawer has a proper height and sets focus on it.
+   * As long as the drawer is open, the focus is trapped within the drawer.
+   *
+   * When the drawer closes, the method releases focus from the drawer setting focus on the drawer toggle.
+   *
+   * @param {boolean} drawerOpened
+   * @param {boolean} oldDrawerOpened
+   * @private
+   */
+  __drawerOpenedChanged(drawerOpened, oldDrawerOpened) {
     if (this.overlay) {
       if (drawerOpened) {
         this._updateDrawerHeight();
@@ -459,6 +519,20 @@ class AppLayout extends ElementMixin(
     }
 
     this.notifyResize();
+  }
+
+  /**
+   * A callback for the `i18n` property observer.
+   *
+   * The method ensures the drawer has the `aria-label` attribute updated
+   * once the `i18n` property changes.
+   *
+   * @private
+   */
+  __i18nChanged() {
+    if (this.overlay) {
+      this._updateOverlayMode();
+    }
   }
 
   /** @protected */
@@ -542,7 +616,7 @@ class AppLayout extends ElementMixin(
     if (this.overlay) {
       drawer.setAttribute('role', 'dialog');
       drawer.setAttribute('aria-modal', 'true');
-      drawer.setAttribute('aria-label', 'drawer');
+      drawer.setAttribute('aria-label', this.i18n.drawer);
     } else {
       if (this._drawerStateSaved) {
         this.drawerOpened = this._drawerStateSaved;

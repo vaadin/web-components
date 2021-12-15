@@ -265,6 +265,11 @@ describe('vaadin-app-layout', () => {
         expect(layout.shadowRoot.activeElement).to.equal(drawer);
       });
 
+      it('should update aria-label attribute on the drawer when changing i18n.drawer property', () => {
+        layout.i18n = { ...layout.i18n, drawer: 'New Value' };
+        expect(drawer.getAttribute('aria-label')).to.equal('New Value');
+      });
+
       describe('opened', () => {
         beforeEach(async () => {
           layout.drawerOpened = true;

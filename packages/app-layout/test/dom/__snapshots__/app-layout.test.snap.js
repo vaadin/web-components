@@ -98,7 +98,7 @@ snapshots["vaadin-app-layout mobile layout shadow default"] =
 <div part="backdrop">
 </div>
 <div
-  aria-label="drawer"
+  aria-label="Drawer"
   aria-modal="true"
   id="drawer"
   part="drawer"
@@ -144,7 +144,7 @@ snapshots["vaadin-app-layout mobile layout shadow drawer opened"] =
 <div part="backdrop">
 </div>
 <div
-  aria-label="drawer"
+  aria-label="Drawer"
   aria-modal="true"
   id="drawer"
   part="drawer"
