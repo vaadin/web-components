@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '../src/controller-mixin.js';
@@ -238,6 +238,59 @@ describe('slot-controller', () => {
         });
         element.addController(controller);
       });
+    });
+  });
+
+  describe('DOM changes', () => {
+    let defaultNode;
+
+    beforeEach(async () => {
+      element = fixtureSync('<slot-controller-element></slot-controller-element>');
+      controller = new SlotController(element, 'foo', () => {
+        const div = document.createElement('div');
+        div.textContent = 'foo';
+        return div;
+      });
+      element.addController(controller);
+      defaultNode = element.querySelector('[slot="foo"]');
+      // Wait for flattened nodes observer
+      await nextFrame();
+    });
+
+    it('should remove default node when custom slot child is added', async () => {
+      const custom = document.createElement('div');
+      custom.textContent = 'bar';
+      custom.setAttribute('slot', 'foo');
+      element.appendChild(custom);
+
+      await nextFrame();
+      expect(defaultNode.isConnected).to.be.false;
+    });
+
+    it('should call initCustomNode for custom slot child when it is added', async () => {
+      const initSpy = sinon.spy(controller, 'initCustomNode');
+
+      const custom = document.createElement('div');
+      custom.textContent = 'bar';
+      custom.setAttribute('slot', 'foo');
+      element.appendChild(custom);
+
+      await nextFrame();
+      expect(initSpy.calledOnce).to.be.true;
+      expect(initSpy.firstCall.args[0]).to.equal(custom);
+    });
+
+    it('should call teardownNode for default node when adding custom child', async () => {
+      const teardownSpy = sinon.spy(controller, 'teardownNode');
+
+      const custom = document.createElement('div');
+      custom.textContent = 'bar';
+      custom.setAttribute('slot', 'foo');
+      element.appendChild(custom);
+
+      await nextFrame();
+      expect(teardownSpy.called).to.be.true;
+      expect(teardownSpy.firstCall.args[0]).to.equal(defaultNode);
     });
   });
 });
