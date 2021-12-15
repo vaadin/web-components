@@ -484,7 +484,7 @@ class AppLayout extends ElementMixin(
    * A callback for the `primarySection` property observer.
    *
    * Ensures the property is set to its default value `navbar`
-   * if the new value is neither of the valid values: `navbar`, `drawer`.
+   * whenever the new value is not one of the valid values: `navbar`, `drawer`.
    *
    * @param {string} value
    * @private
@@ -502,7 +502,7 @@ class AppLayout extends ElementMixin(
    * When the drawer opens, the method ensures the drawer has a proper height and sets focus on it.
    * As long as the drawer is open, the focus is trapped within the drawer.
    *
-   * When the drawer closes, the method releases focus from the drawer setting focus on the drawer toggle.
+   * When the drawer closes, the method releases focus from the drawer, setting focus on the drawer toggle.
    *
    * @param {boolean} drawerOpened
    * @param {boolean} oldDrawerOpened
