@@ -83,6 +83,11 @@ const customField = css`
   :host([theme~='small'][has-label]) [part='error-message'] {
     font-size: var(--lumo-font-size-xxs);
   }
+
+  /* When custom-field is used with components without outer margin */
+  :host([theme~='whitespace'][has-label]) [part='label'] {
+    padding-bottom: 0.5em;
+  }
 `;
 
 registerStyles('vaadin-custom-field', [requiredField, helper, customField], {

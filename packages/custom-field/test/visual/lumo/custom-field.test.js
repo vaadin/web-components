@@ -97,6 +97,14 @@ describe('custom-field', () => {
       element.setAttribute('theme', 'helper-above-field');
       await visualDiff(element, 'helper-above-field');
     });
+
+    it('theme-whitespace', async () => {
+      element.setAttribute('theme', 'whitespace');
+      element.label = 'Label';
+      inputs[0].style.display = 'block';
+      inputs[1].style.display = 'none';
+      await visualDiff(element, 'whitespace-theme');
+    });
   });
 
   describe('alignment', () => {
