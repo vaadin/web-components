@@ -369,12 +369,18 @@ export const FieldMixin = (superclass) =>
      * @protected
      */
     _invalidChanged(invalid) {
-      // Error message ID needs to be dynamically added / removed based on the validity
-      // Otherwise assistive technologies would announce the error, even if we hide it.
-      if (invalid) {
-        this._fieldAriaController.setErrorId(this._errorId);
-      } else {
-        this._fieldAriaController.setErrorId(null);
-      }
+      // This timeout is needed to prevent NVDA from announcing the error message twice:
+      // 1. Once adding the `[role=alert]` attribute by the `_updateErrorMessage` method (OK).
+      // 2. Once linking the error ID with the ARIA target here (unwanted).
+      // Related issue: https://github.com/vaadin/web-components/issues/3061.
+      setTimeout(() => {
+        // Error message ID needs to be dynamically added / removed based on the validity
+        // Otherwise assistive technologies would announce the error, even if we hide it.
+        if (invalid) {
+          this._fieldAriaController.setErrorId(this._errorId);
+        } else {
+          this._fieldAriaController.setErrorId(null);
+        }
+      });
     }
   };
