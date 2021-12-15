@@ -265,7 +265,7 @@ describe('vaadin-app-layout', () => {
         expect(layout.shadowRoot.activeElement).to.equal(drawer);
       });
 
-      it('should update aria-label attribute on the drawer when changing i18n.drawer property', () => {
+      it('should update aria-label attribute on the drawer on i18n.drawer property change', () => {
         layout.i18n = { ...layout.i18n, drawer: 'New Value' };
         expect(drawer.getAttribute('aria-label')).to.equal('New Value');
       });
