@@ -12,6 +12,7 @@ import {
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
+import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
