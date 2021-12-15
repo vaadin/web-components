@@ -6,7 +6,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import HttpUtilities from 'highcharts/es-modules/Core/HttpUtilities.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { chartDefaultTheme } from '../theme/vaadin-chart-default-theme.js';
+import { chartBaseTheme } from '../theme/vaadin-chart-base-theme.js';
 
 const chart = css`
   /* Ensure exporting works with complex selectors */
@@ -36,7 +36,7 @@ const chart = css`
   }
 `;
 
-registerStyles('vaadin-chart', [chartDefaultTheme, chart]);
+registerStyles('vaadin-chart', [chartBaseTheme, chart]);
 
 customElements.define(
   'chart-exporting',
