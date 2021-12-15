@@ -5,6 +5,7 @@
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { FieldAriaController } from './field-aria-controller.js';
 import { LabelMixin } from './label-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
@@ -15,10 +16,11 @@ import { ValidateMixin } from './validate-mixin.js';
  * @polymerMixin
  * @mixes ControllerMixin
  * @mixes LabelMixin
+ * @mixes SlotMixin
  * @mixes ValidateMixin
  */
 export const FieldMixin = (superclass) =>
-  class FieldMixinClass extends ValidateMixin(LabelMixin(ControllerMixin(superclass))) {
+  class FieldMixinClass extends ValidateMixin(LabelMixin(ControllerMixin(SlotMixin(superclass)))) {
     static get properties() {
       return {
         /**
@@ -102,6 +104,8 @@ export const FieldMixin = (superclass) =>
       this.__savedHelperId = this._helperId;
 
       this._fieldAriaController = new FieldAriaController(this);
+
+      this._labelController.setLabelChangedCallback(this.__labelChangedCallback.bind(this));
     }
 
     /** @protected */
@@ -240,17 +244,12 @@ export const FieldMixin = (superclass) =>
       this.toggleAttribute('has-helper', hasHelper);
     }
 
-    /**
-     * @protected
-     * @override
-     */
-    _toggleHasLabelAttribute() {
-      super._toggleHasLabelAttribute();
-
+    /** @private */
+    __labelChangedCallback(hasLabel, label) {
       // Label ID should be only added when the label content is present.
       // Otherwise, it may conflict with an `aria-label` attribute possibly added by the user.
-      if (this.hasAttribute('has-label')) {
-        this._fieldAriaController.setLabelId(this._labelId);
+      if (hasLabel) {
+        this._fieldAriaController.setLabelId(label.id);
       } else {
         this._fieldAriaController.setLabelId(null);
       }

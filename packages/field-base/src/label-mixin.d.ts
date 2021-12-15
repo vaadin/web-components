@@ -22,6 +22,4 @@ export declare class LabelMixinClass {
   protected readonly _labelNode: HTMLLabelElement;
 
   protected _labelChanged(label: string | null | undefined): void;
-
-  protected _toggleHasLabelAttribute(): void;
 }
