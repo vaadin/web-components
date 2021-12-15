@@ -105,6 +105,8 @@ export const FieldMixin = (superclass) =>
 
       this._fieldAriaController = new FieldAriaController(this);
       this._helperController = new HelperController(this, this._helperId);
+
+      this._labelController.setLabelChangedCallback(this.__labelChangedCallback.bind(this));
     }
 
     /** @protected */
@@ -158,17 +160,12 @@ export const FieldMixin = (superclass) =>
       );
     }
 
-    /**
-     * @protected
-     * @override
-     */
-    _toggleHasLabelAttribute(labelNode) {
-      super._toggleHasLabelAttribute(labelNode);
-
+    /** @private */
+    __labelChangedCallback(hasLabel, label) {
       // Label ID should be only added when the label content is present.
       // Otherwise, it may conflict with an `aria-label` attribute possibly added by the user.
-      if (this.hasAttribute('has-label')) {
-        this._fieldAriaController.setLabelId(this._labelId);
+      if (hasLabel) {
+        this._fieldAriaController.setLabelId(label.id);
       } else {
         this._fieldAriaController.setLabelId(null);
       }

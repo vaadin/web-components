@@ -5,7 +5,7 @@
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { LabelController } from './label-controller.js';
 
 /**
  * A mixin to provide label via corresponding property or named slot.
@@ -30,8 +30,13 @@ export const LabelMixin = dedupingMixin(
       }
 
       /** @protected */
+      get _labelId() {
+        return this._labelController.labelId;
+      }
+
+      /** @protected */
       get _labelNode() {
-        return this._labelController.getSlotChild('label');
+        return this._labelController.getSlotChild();
       }
 
       constructor() {
@@ -39,51 +44,15 @@ export const LabelMixin = dedupingMixin(
 
         // Ensure every instance has unique ID
         const uniqueId = (LabelMixinClass._uniqueLabelId = 1 + LabelMixinClass._uniqueLabelId || 0);
-        this._labelId = `label-${this.localName}-${uniqueId}`;
+        const labelId = `label-${this.localName}-${uniqueId}`;
 
-        this._labelController = new SlotController(
-          this,
-          'label',
-          () => document.createElement('label'),
-          (host, node, isCustom) => {
-            // Do not override custom content.
-            if (!isCustom) {
-              node.textContent = host.label;
-            }
-
-            // Do not override custom label id.
-            if (!node.id) {
-              node.id = host._labelId;
-            }
-
-            this._toggleHasLabelAttribute(node);
-
-            const labelNodeObserver = new MutationObserver(() => {
-              this._toggleHasLabelAttribute(node);
-            });
-
-            labelNodeObserver.observe(node, { childList: true, subtree: true, characterData: true });
-          }
-        );
-
+        this._labelController = new LabelController(this, labelId);
         this.addController(this._labelController);
       }
 
       /** @protected */
       _labelChanged(label) {
-        const labelNode = this._labelNode;
-        if (labelNode) {
-          labelNode.textContent = label;
-          this._toggleHasLabelAttribute(labelNode);
-        }
-      }
-
-      /** @protected */
-      _toggleHasLabelAttribute(labelNode) {
-        if (labelNode) {
-          const hasLabel = labelNode.children.length > 0 || labelNode.textContent.trim() !== '';
-          this.toggleAttribute('has-label', hasLabel);
-        }
+        this._labelController.setLabel(label);
       }
     }
 );
