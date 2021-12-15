@@ -270,7 +270,10 @@ import { close, getOverlayContent, open } from './common.js';
 
   describe('no parseDate', () => {
     beforeEach(() => {
-      datepicker.set('i18n.parseDate', null);
+      datepicker.i18n = {
+        ...datepicker.i18n,
+        parseDate: null
+      };
     });
 
     it('should prevent key input', () => {
