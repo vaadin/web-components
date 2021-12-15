@@ -626,8 +626,11 @@ class AppLayout extends ElementMixin(
   }
 
   /**
-   * Updates ARIA attributes on the drawer depending on
-   * whether the drawer is in the overlay mode or not.
+   * Updates ARIA attributes on the drawer depending on the drawer mode.
+   *
+   * - In the overlay mode, the method marks the drawer with ARIA attributes as a dialog
+   * labelled with the `i18n.drawer` property.
+   * - In the normal mode, the method removes the ARIA attributes that has been set for the overlay mode.
    *
    * @private
    */
