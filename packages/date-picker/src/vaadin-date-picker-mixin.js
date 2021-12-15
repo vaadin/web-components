@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
-import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
@@ -302,7 +301,7 @@ export const DatePickerMixin = (subclass) =>
         /** @private */
         _noInput: {
           type: Boolean,
-          computed: '_isNoInput(inputElement, _fullscreen, _ios, i18n, i18n.*)'
+          computed: '_isNoInput(inputElement, _fullscreen, _ios, i18n, opened, autoOpenDisabled)'
         },
 
         /** @private */
@@ -415,15 +414,9 @@ export const DatePickerMixin = (subclass) =>
     ready() {
       super.ready();
 
-      addListener(this, 'tap', (e) => {
+      this.addEventListener('click', (e) => {
         if (!this._isClearButton(e) && (!this.autoOpenDisabled || this._noInput)) {
           this.open();
-        }
-      });
-
-      this.addEventListener('touchend', (e) => {
-        if (!this._isClearButton(e)) {
-          e.preventDefault();
         }
       });
     }
@@ -541,8 +534,17 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _isNoInput(inputElement, fullscreen, ios, i18n) {
-      return !inputElement || fullscreen || ios || !i18n.parseDate;
+    // eslint-disable-next-line max-params
+    _isNoInput(inputElement, fullscreen, ios, i18n, opened, autoOpenDisabled) {
+      // On fullscreen mode, text input is disabled if auto-open isn't disabled or
+      // whenever the dropdown is opened
+      const noInputOnFullscreenMode = fullscreen && (!autoOpenDisabled || opened);
+      // On iOS, text input is disabled whenever the dropdown is opened, because
+      // the virtual keyboard doesn't affect the viewport metrics and thus the
+      // dropdown could get covered by the keyboard.
+      const noInputOnIos = ios && opened;
+
+      return !inputElement || noInputOnFullscreenMode || noInputOnIos || !i18n.parseDate;
     }
 
     /** @private */
