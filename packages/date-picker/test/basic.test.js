@@ -621,7 +621,13 @@ describe('auto open disabled', () => {
     expect(isFocused(input)).to.be.false;
   });
 
-  it('should not open on input tap when autoOpenDisabled is true and not on mobile', () => {
+  it('should not open on input tap', () => {
+    tap(input);
+    expect(datepicker.opened).not.to.be.true;
+  });
+
+  it('should not open on input tap on fullscreen', () => {
+    datepicker._fullscreen = true;
     tap(input);
     expect(datepicker.opened).not.to.be.true;
   });
@@ -678,7 +684,13 @@ describe('ios', () => {
       expect(isFocused(input)).to.be.false;
     });
 
-    it('should not open on input tap when autoOpenDisabled is true and not on mobile', () => {
+    it('should not open on input tap', () => {
+      tap(input);
+      expect(datepicker.opened).not.to.be.true;
+    });
+
+    it('should not open on input tap on fullscreen', () => {
+      datepicker._fullscreen = true;
       tap(input);
       expect(datepicker.opened).not.to.be.true;
     });
