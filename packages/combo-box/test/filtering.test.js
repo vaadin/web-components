@@ -350,13 +350,6 @@ describe('filtering items', () => {
       expect(overlay.hasAttribute('loading')).to.be.false;
     });
 
-    it('should not notify resize the dropdown if not opened', () => {
-      const resizeSpy = sinon.spy(comboBox.$.dropdown, 'notifyResize');
-      comboBox.filteredItems = ['foo', 'bar', 'baz'];
-
-      expect(resizeSpy.called).to.be.false;
-    });
-
     it('should not perform measurements when loading changes if not opened', () => {
       const measureSpy = sinon.spy(comboBox.inputElement, 'getBoundingClientRect');
       comboBox.loading = true;

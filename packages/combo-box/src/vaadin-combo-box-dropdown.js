@@ -6,8 +6,6 @@
 import './vaadin-combo-box-item.js';
 import './vaadin-combo-box-overlay.js';
 import './vaadin-combo-box-scroller.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
 /**
@@ -16,7 +14,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
  * @extends HTMLElement
  * @private
  */
-export class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, PolymerElement) {
+export class ComboBoxDropdown extends PolymerElement {
   static get is() {
     return 'vaadin-combo-box-dropdown';
   }
@@ -171,14 +169,6 @@ export class ComboBoxDropdown extends mixinBehaviors(IronResizableBehavior, Poly
 
     // Making sure the overlay is closed and removed from DOM after detaching the dropdown.
     this._overlayOpened = false;
-  }
-
-  notifyResize() {
-    super.notifyResize();
-
-    if (this.positionTarget && this.opened) {
-      this._setOverlayWidth();
-    }
   }
 
   _fireTouchAction(sourceEvent) {

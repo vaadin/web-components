@@ -16,11 +16,9 @@ import '@vaadin/text-field/vaadin-text-field.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';
-import * as settings from '@polymer/polymer/lib/utils/settings.js';
+import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { createEventSpy, getFirstItem } from './helpers.js';
-
-settings.setCancelSyntheticClickEvents(false);
 
 class MyInput extends PolymerElement {
   static get template() {
