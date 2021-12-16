@@ -165,17 +165,19 @@ class Tabs extends ElementMixin(ListMixin(ThemableMixin(PolymerElement))) {
   }
 
   static get observers() {
-    return ['_updateOverflow(items.*)'];
+    return ['__tabsItemsChanged(items, items.*)'];
   }
 
-  ready() {
-    super.ready();
+  constructor() {
+    super();
 
     this.__resizeObserver = new ResizeObserver(() => {
       requestAnimationFrame(() => this._updateOverflow());
     });
-    this.__resizeObserver.observe(this);
+  }
 
+  ready() {
+    super.ready();
     this._scrollerElement.addEventListener('scroll', () => this._updateOverflow());
     this.setAttribute('role', 'tablist');
 
@@ -183,6 +185,20 @@ class Tabs extends ElementMixin(ListMixin(ThemableMixin(PolymerElement))) {
     afterNextRender(this, () => {
       this._updateOverflow();
     });
+  }
+
+  /** @private */
+  __tabsItemsChanged(items) {
+    // Disconnected to unobserve any removed items
+    this.__resizeObserver.disconnect();
+    this.__resizeObserver.observe(this);
+
+    // Observe current items
+    (items || []).forEach((item) => {
+      this.__resizeObserver.observe(item);
+    });
+
+    this._updateOverflow();
   }
 
   /** @private */
