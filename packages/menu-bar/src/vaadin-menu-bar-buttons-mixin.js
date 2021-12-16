@@ -3,8 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
@@ -12,7 +10,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
  * @polymerMixin
  */
 export const ButtonsMixin = (superClass) =>
-  class extends mixinBehaviors(IronResizableBehavior, superClass) {
+  class extends superClass {
     static get properties() {
       return {
         /**
@@ -30,17 +28,14 @@ export const ButtonsMixin = (superClass) =>
       return ['_menuItemsChanged(items, items.splices)'];
     }
 
-    constructor() {
-      super();
-
-      this.__boundOnResize = this.__onResize.bind(this);
-    }
-
     /** @protected */
     ready() {
       super.ready();
 
       this.setAttribute('role', 'menubar');
+
+      this.__resizeObserver = new ResizeObserver(() => this.__onResize());
+      this.__resizeObserver.observe(this);
     }
 
     /** @protected */
@@ -48,14 +43,6 @@ export const ButtonsMixin = (superClass) =>
       super.connectedCallback();
 
       this._initButtonAttrs(this._overflow);
-      this.addEventListener('iron-resize', this.__boundOnResize);
-    }
-
-    /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-
-      this.removeEventListener('iron-resize', this.__boundOnResize);
     }
 
     /**

@@ -17,8 +17,8 @@ export declare class InteractionsMixinClass {
   openOnHover: boolean | null | undefined;
 
   /**
-   * Can be called to manually notify a resizable and its descendant
-   * resizables of a resize change.
+   * @deprecated Since Vaadin 23, `notifyResize()` is deprecated. The component uses a
+   * ResizeObserver internally and doesn't need to be explicitly notified of resizes.
    */
   notifyResize(): void;
 }
