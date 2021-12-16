@@ -1,7 +1,27 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowRight, enter, fixtureSync, listenOnce, nextRender, space } from '@vaadin/testing-helpers';
+import { arrowRight, enter, fixtureSync, listenOnce, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-tabs.js';
+
+/**
+ * Resolves once the function is invoked on the given object.
+ */
+function onceInvoked(object, functionName) {
+  return new Promise((resolve) => {
+    sinon.replace(object, functionName, (...args) => {
+      sinon.restore();
+      object[functionName](...args);
+      resolve();
+    });
+  });
+}
+
+/**
+ * Resolves once the ResizeObserver has processed a resize.
+ */
+async function onceResized(tabs) {
+  await onceInvoked(tabs, '_updateOverflow');
+}
 
 describe('tabs', () => {
   let tabs;
@@ -73,8 +93,7 @@ describe('tabs', () => {
             } else {
               tabs.style.height = '100px';
             }
-            tabs._updateOverflow();
-            await nextRender(tabs);
+            await onceResized(tabs);
           });
 
           it(`when orientation=${orientation} should have overflow="end" if scroll is at the beginning`, () => {
@@ -120,6 +139,13 @@ describe('tabs', () => {
             scroll.dispatchEvent(new CustomEvent('scroll'));
 
             expect(tabs.getAttribute('overflow')).to.be.equal('end');
+          });
+
+          it('should update overflow on resize', async () => {
+            tabs.style.width = 'auto';
+            tabs.style.height = 'auto';
+            await onceResized(tabs);
+            expect(tabs.hasAttribute('overflow')).to.be.false;
           });
         });
       });

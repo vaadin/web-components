@@ -4,8 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-tab.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -51,7 +49,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ListMixin
  * @mixes ThemableMixin
  */
-class Tabs extends ElementMixin(ListMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement)))) {
+class Tabs extends ElementMixin(ListMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -172,7 +170,12 @@ class Tabs extends ElementMixin(ListMixin(ThemableMixin(mixinBehaviors([IronResi
 
   ready() {
     super.ready();
-    this.addEventListener('iron-resize', () => this._updateOverflow());
+
+    this.__resizeObserver = new ResizeObserver(() => {
+      requestAnimationFrame(() => this._updateOverflow());
+    });
+    this.__resizeObserver.observe(this);
+
     this._scrollerElement.addEventListener('scroll', () => this._updateOverflow());
     this.setAttribute('role', 'tablist');
 
