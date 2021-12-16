@@ -411,10 +411,6 @@ class AppLayout extends ElementMixin(
 
   constructor() {
     super();
-
-    /** @type {AppLayoutI18n} */
-    this.i18n;
-
     // TODO(jouni): might want to debounce
     this.__boundResizeListener = this._resize.bind(this);
     this.__drawerToggleClickListener = this._drawerToggleClick.bind(this);
