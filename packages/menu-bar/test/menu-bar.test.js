@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowLeft, arrowRight, end, fixtureSync, focusin, home, nextRender } from '@vaadin/testing-helpers';
+import { arrowLeft, arrowRight, end, fixtureSync, focusin, home, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-menu-bar.js';
@@ -28,6 +28,26 @@ const assertVisible = (elem) => {
   expect(style.visibility).to.equal('visible');
   expect(style.position).to.not.equal('absolute');
 };
+
+/**
+ * Resolves once the function is invoked on the given object.
+ */
+function onceInvoked(object, functionName) {
+  return new Promise((resolve) => {
+    sinon.replace(object, functionName, (...args) => {
+      sinon.restore();
+      object[functionName](...args);
+      resolve();
+    });
+  });
+}
+
+/**
+ * Resolves once the ResizeObserver has processed a resize.
+ */
+async function onceResized(menu) {
+  await onceInvoked(menu, '__setOverflowItems');
+}
 
 describe('custom element definition', () => {
   let menu, tagName;
@@ -332,8 +352,7 @@ describe('overflow button', () => {
 
   it('should show buttons and update overflow items when width increased', async () => {
     menu.style.width = '350px';
-    menu.notifyResize();
-    await nextRender(menu);
+    await onceResized(menu);
     assertVisible(buttons[2]);
     expect(buttons[2].disabled).to.not.be.true;
     assertVisible(buttons[3]);
@@ -345,8 +364,7 @@ describe('overflow button', () => {
   it('should show buttons and update overflow items when width increased in RTL', async () => {
     menu.setAttribute('dir', 'rtl');
     menu.style.width = '350px';
-    menu.notifyResize();
-    await nextRender(menu);
+    await onceResized(menu);
     assertVisible(buttons[2]);
     expect(buttons[2].disabled).to.not.be.true;
     assertVisible(buttons[3]);
@@ -357,8 +375,7 @@ describe('overflow button', () => {
 
   it('should hide buttons and update overflow items when width decreased', async () => {
     menu.style.width = '150px';
-    menu.notifyResize();
-    await nextRender(menu);
+    await onceResized(menu);
     assertHidden(buttons[1]);
     expect(buttons[1].disabled).to.be.true;
     expect(overflow.item.children.length).to.equal(4);
@@ -371,8 +388,7 @@ describe('overflow button', () => {
   it('should hide buttons and update overflow items when width decreased in RTL', async () => {
     menu.setAttribute('dir', 'rtl');
     menu.style.width = '150px';
-    menu.notifyResize();
-    await nextRender(menu);
+    await onceResized(menu);
     assertHidden(buttons[1]);
     expect(buttons[1].disabled).to.be.true;
     expect(overflow.item.children.length).to.equal(4);
@@ -384,8 +400,7 @@ describe('overflow button', () => {
 
   it('should hide overflow button and reset its items when all buttons fit', async () => {
     menu.style.width = 'auto';
-    menu.notifyResize();
-    await nextRender(menu);
+    await onceResized(menu);
     assertVisible(buttons[2]);
     expect(buttons[2].disabled).to.not.be.true;
     assertVisible(buttons[3]);
@@ -410,8 +425,7 @@ describe('overflow button', () => {
 
   it('should show overflow button when theme makes buttons do not fit', async () => {
     menu.style.width = '400px';
-    menu.notifyResize();
-    await nextRender(menu);
+    await onceResized(menu);
     expect(overflow.hasAttribute('hidden')).to.be.true;
     menu.setAttribute('theme', 'big');
     assertHidden(buttons[3]);
@@ -456,16 +470,14 @@ describe('responsive behaviour in container', () => {
     // see https://github.com/vaadin/vaadin-menu-bar/issues/130
     menu.style.minWidth = '0';
     container.style.width = '150px';
-    menu.notifyResize();
-    await nextRender(container);
+    await onceResized(menu);
     assertHidden(buttons[2]);
     expect(buttons[2].disabled).to.be.true;
     assertHidden(buttons[3]);
     expect(buttons[3].disabled).to.be.true;
 
     container.style.width = '390px';
-    menu.notifyResize();
-    await nextRender(container);
+    await onceResized(menu);
     assertVisible(buttons[2]);
     expect(buttons[2].disabled).to.not.be.true;
     assertVisible(buttons[3]);
@@ -532,8 +544,8 @@ describe('item components', () => {
 
   it('should teleport the same component to overflow sub-menu and back', async () => {
     menu.style.width = '250px';
-    menu.notifyResize();
-    await nextRender(menu);
+    await onceResized(menu);
+    await nextFrame();
     const subMenu = menu._subMenu;
     overflow.click();
     await nextRender(subMenu);
@@ -543,8 +555,7 @@ describe('item components', () => {
     expect(listBox.items[0].firstChild.localName).to.equal('div');
     subMenu.close();
     menu.style.width = 'auto';
-    menu.notifyResize();
-    await nextRender(menu);
+    await onceResized(menu);
     const item = buttons[2].firstChild;
     expect(item).to.equal(buttons[2].item.component);
     expect(item.classList.contains('vaadin-menu-item')).to.be.false;
@@ -552,14 +563,12 @@ describe('item components', () => {
 
   it('should close the overflow sub-menu on resize', async () => {
     menu.style.width = '150px';
-    menu.notifyResize();
-    await nextRender(menu);
+    await onceResized(menu);
     const subMenu = menu._subMenu;
     overflow.click();
     await nextRender(subMenu);
     menu.style.width = '300px';
-    menu.notifyResize();
-    await nextRender(subMenu);
+    await onceResized(menu);
     expect(subMenu.opened).to.be.false;
   });
 
@@ -568,5 +577,14 @@ describe('item components', () => {
     const style = getComputedStyle(item);
     expect(style.position).to.equal('relative');
     expect(Number(style.zIndex)).to.equal(1);
+  });
+
+  it('should warn when calling deprecated notifyResize()', () => {
+    const stub = sinon.stub(console, 'warn');
+    menu.notifyResize();
+    stub.restore();
+
+    expect(stub.calledOnce).to.be.true;
+    expect(stub.args[0][0]).to.include('WARNING: Since Vaadin 23, notifyResize() is deprecated.');
   });
 });
