@@ -617,8 +617,6 @@ class AppLayout extends ElementMixin(
     if (this.overlay !== overlay) {
       this.notifyResize();
     }
-
-    // TODO(jouni): ARIA attributes. The drawer should act similar to a modal dialog when in ”overlay” mode
   }
 
   /**
