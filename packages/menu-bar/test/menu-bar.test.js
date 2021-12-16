@@ -47,7 +47,6 @@ function onceInvoked(object, functionName) {
  */
 async function onceResized(menu) {
   await onceInvoked(menu, '__setOverflowItems');
-  await nextFrame();
 }
 
 describe('custom element definition', () => {
@@ -546,6 +545,7 @@ describe('item components', () => {
   it('should teleport the same component to overflow sub-menu and back', async () => {
     menu.style.width = '250px';
     await onceResized(menu);
+    await nextFrame();
     const subMenu = menu._subMenu;
     overflow.click();
     await nextRender(subMenu);
