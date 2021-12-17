@@ -1,7 +1,27 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowRight, enter, fixtureSync, listenOnce, nextRender, space } from '@vaadin/testing-helpers';
+import { arrowRight, aTimeout, enter, fixtureSync, listenOnce, nextFrame, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-tabs.js';
+
+/**
+ * Resolves once the function is invoked on the given object.
+ */
+function onceInvoked(object, functionName) {
+  return new Promise((resolve) => {
+    sinon.replace(object, functionName, (...args) => {
+      sinon.restore();
+      object[functionName](...args);
+      resolve();
+    });
+  });
+}
+
+/**
+ * Resolves once the ResizeObserver has processed a resize.
+ */
+async function onceResized(tabs) {
+  await onceInvoked(tabs, '_updateOverflow');
+}
 
 describe('tabs', () => {
   let tabs;
@@ -44,6 +64,23 @@ describe('tabs', () => {
         expect(item.tagName.toLowerCase()).to.equal('vaadin-tab');
       });
     });
+
+    it('should not resize on detached item resize', async () => {
+      // Remove a tab
+      const item = tabs.items[0];
+      document.body.append(item);
+      await aTimeout(100);
+
+      // Resize the removed tab
+      const stub = sinon.stub(tabs, '_updateOverflow');
+      item.style.width = '100px';
+      await aTimeout(100);
+
+      item.remove();
+      // Expect the resizeobserver not to have been invoked on the
+      // removed tab resize
+      expect(stub.called).to.be.false;
+    });
   });
 
   ['horizontal', 'vertical'].forEach((orientation) => {
@@ -73,8 +110,8 @@ describe('tabs', () => {
             } else {
               tabs.style.height = '100px';
             }
-            tabs._updateOverflow();
-            await nextRender(tabs);
+            await onceResized(tabs);
+            await nextFrame();
           });
 
           it(`when orientation=${orientation} should have overflow="end" if scroll is at the beginning`, () => {
@@ -120,6 +157,30 @@ describe('tabs', () => {
             scroll.dispatchEvent(new CustomEvent('scroll'));
 
             expect(tabs.getAttribute('overflow')).to.be.equal('end');
+          });
+
+          it('should update overflow on resize', async () => {
+            tabs.style.width = 'auto';
+            tabs.style.height = 'auto';
+            await onceResized(tabs);
+            expect(tabs.hasAttribute('overflow')).to.be.false;
+          });
+
+          it('should update overflow on item resize', async () => {
+            tabs.items.forEach((item) => {
+              item.style.height = '1px';
+              item.style.width = '1px';
+              item.style.minHeight = '1px';
+              item.style.minWidth = '1px';
+            });
+            await onceResized(tabs);
+            expect(tabs.hasAttribute('overflow')).to.be.false;
+          });
+
+          it('should update overflow on items change', async () => {
+            tabs.items.forEach((item) => item.remove());
+            await nextFrame();
+            expect(tabs.hasAttribute('overflow')).to.be.false;
           });
         });
       });

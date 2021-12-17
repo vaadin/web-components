@@ -1,3 +1,4 @@
+import { nextFrame } from '@vaadin/testing-helpers';
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-tabs.js';
@@ -107,7 +108,7 @@ describe('tabs', () => {
   describe('scroll', () => {
     ['horizontal', 'vertical'].forEach((orientation) => {
       describe(orientation, () => {
-        beforeEach(() => {
+        beforeEach(async () => {
           if (orientation === 'vertical') {
             div.style.height = '150px';
             div.style.display = 'inline-flex';
@@ -138,6 +139,8 @@ describe('tabs', () => {
             `,
             div
           );
+
+          await nextFrame();
         });
 
         ['ltr', 'rtl'].forEach((dir) => {
