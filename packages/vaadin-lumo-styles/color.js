@@ -174,8 +174,11 @@ const color = css`
     color: var(--lumo-header-text-color);
   }
 
-  a {
+  a:any-link {
     color: var(--lumo-primary-text-color);
+  }
+  a:not(:any-link) {
+    color: var(--lumo-disabled-text-color);
   }
 
   blockquote {
