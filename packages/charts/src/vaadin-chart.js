@@ -51,12 +51,14 @@ export function deepMerge(target, source) {
 }
 
 ['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
+  /* eslint-disable no-invalid-this */
   Highcharts.wrap(Highcharts.Chart.prototype, methodName, function (proceed, ...args) {
     Highcharts.fireEvent(this, 'beforeExport');
     const result = proceed.apply(this, args);
     Highcharts.fireEvent(this, 'afterExport');
     return result;
   });
+  /* eslint-enable no-invalid-this */
 });
 
 /**

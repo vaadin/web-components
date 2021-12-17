@@ -260,7 +260,7 @@ export const ironList = {
       var physicalOffset = this._physicalTop + this._scrollOffset;
 
       idx =
-        this._iterateItems(function (pidx, vidx) {
+        this._iterateItems((pidx, vidx) => {
           physicalOffset += this._getPhysicalSizeIncrement(pidx);
 
           if (physicalOffset > this._scrollPosition) {
@@ -288,7 +288,7 @@ export const ironList = {
         idx = Math.min(this._virtualCount, this.firstVisibleIndex + this._estRowsInView * this._itemsPerRow - 1);
       } else {
         var physicalOffset = this._physicalTop + this._scrollOffset;
-        this._iterateItems(function (pidx, vidx) {
+        this._iterateItems((pidx, vidx) => {
           if (physicalOffset < this._scrollBottom) {
             idx = vidx;
           }
@@ -668,7 +668,7 @@ export const ironList = {
     var prevPhysicalAvg = this._physicalAverage;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    this._iterateItems(function (pidx, vidx) {
+    this._iterateItems((pidx, vidx) => {
       oldPhysicalSize += this._physicalSizes[pidx];
       this._physicalSizes[pidx] = this._physicalItems[pidx].offsetHeight;
       newPhysicalSize += this._physicalSizes[pidx];
@@ -712,7 +712,7 @@ export const ironList = {
       var totalItemWidth = this._itemsPerRow * this._itemWidth;
       var rowOffset = (this._viewportWidth - totalItemWidth) / 2;
 
-      this._iterateItems(function (pidx, vidx) {
+      this._iterateItems((pidx, vidx) => {
         var modulus = vidx % this._itemsPerRow;
         var x = Math.floor(modulus * this._itemWidth + rowOffset);
         if (this._isRTL) {
@@ -726,7 +726,7 @@ export const ironList = {
     } else {
       const order = [];
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      this._iterateItems(function (pidx, vidx) {
+      this._iterateItems((pidx, vidx) => {
         const item = this._physicalItems[pidx];
         this.translate3d(0, y + 'px', 0, item);
         y += this._physicalSizes[pidx];
@@ -875,7 +875,7 @@ export const ironList = {
   _resizeHandler: function () {
     this._debounce(
       '_render',
-      function () {
+      () => {
         // clear cached visible index.
         this._firstVisibleIndexVal = null;
         this._lastVisibleIndexVal = null;

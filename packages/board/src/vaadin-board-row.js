@@ -93,7 +93,7 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
     super.ready();
     this.addEventListener('iron-resize', this._onIronResize, true);
     this.$.insertionPoint.addEventListener('slotchange', this.redraw.bind(this));
-    afterNextRender(this, function () {
+    afterNextRender(this, () => {
       // force this as an interested resizable of parent
       this.dispatchEvent(
         new CustomEvent('iron-request-resize-notifications', {
