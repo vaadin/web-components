@@ -379,11 +379,11 @@ export const KeyboardNavigationMixin = (superClass) =>
         // in vertical keyboard navigation.
         if (dstRowIndex > currentRowIndex) {
           while (dstRowIndex < maxRowIndex && activeRowGroup.children[dstRowIndex].hidden) {
-            dstRowIndex++;
+            dstRowIndex += 1;
           }
         } else if (dstRowIndex < currentRowIndex) {
           while (dstRowIndex > 0 && activeRowGroup.children[dstRowIndex].hidden) {
-            dstRowIndex--;
+            dstRowIndex -= 1;
           }
         }
 

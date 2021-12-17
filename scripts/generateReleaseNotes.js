@@ -37,10 +37,12 @@ async function getReleases() {
   for (let i = 2; process.argv[i]; i++) {
     switch (process.argv[i]) {
       case '--from':
-        from = process.argv[++i];
+        i += 1;
+        from = process.argv[i];
         break;
       case '--to':
-        to = process.argv[++i];
+        i += 1;
+        to = process.argv[i];
         break;
       case '--compact':
         compact = true;

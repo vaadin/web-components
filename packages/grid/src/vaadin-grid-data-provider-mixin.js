@@ -324,7 +324,7 @@ export const DataProviderMixin = (superClass) =>
       let level = 0;
       while (cache.parentCache) {
         cache = cache.parentCache;
-        level++;
+        level += 1;
       }
       return level;
     }

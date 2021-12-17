@@ -15,9 +15,9 @@ export function updateColumnOrders(columns, scope, baseOrder) {
     // avoid multiples of 10 because they introduce and extra zero and
     // causes the underlying calculations for child order goes wrong
     if (c % 10 === 0) {
-      c++;
+      c += 1;
     }
     column._order = baseOrder + c * scope;
-    c++;
+    c += 1;
   });
 }

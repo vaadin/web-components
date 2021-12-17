@@ -62,6 +62,7 @@
     "no-eval": "error",
     "no-implicit-coercion": ["error", { "allow": ["!!"] }],
     "no-lonely-if": "error",
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "no-promise-executor-return": "error",
     "no-proto": "error",
     "no-return-await": "error",

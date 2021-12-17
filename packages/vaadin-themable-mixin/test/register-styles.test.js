@@ -59,7 +59,7 @@ describe('registerStyles', () => {
   });
 
   beforeEach(() => {
-    testId++;
+    testId += 1;
   });
 
   it('should add theme for a component', () => {

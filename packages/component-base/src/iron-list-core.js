@@ -849,7 +849,7 @@ export const ironList = {
     while (currentVirtualItem < idx && targetOffsetTop <= hiddenContentSize) {
       targetOffsetTop += this._getPhysicalSizeIncrement(currentTopItem);
       currentTopItem = (currentTopItem + 1) % this._physicalCount;
-      currentVirtualItem++;
+      currentVirtualItem += 1;
     }
     this._updateScrollerSize(true);
     this._positionItems();

@@ -417,7 +417,8 @@ MockHttpRequest.prototype = {
     var match = pattern.exec(str);
     var uri = {};
     var i = 14;
-    while (i--) {
+    while (i) {
+      i -= 1;
       uri[key[i]] = match[i] || '';
     }
 
