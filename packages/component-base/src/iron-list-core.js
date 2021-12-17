@@ -193,7 +193,7 @@ export const ironList = {
   set _virtualStart(val) {
     val = this._clamp(val, 0, this._maxVirtualStart);
     if (this.grid) {
-      val = val - (val % this._itemsPerRow);
+      val -= val % this._itemsPerRow;
     }
     this._virtualStartVal = val;
   },
@@ -206,12 +206,12 @@ export const ironList = {
    * The k-th tile that is at the top of the scrolling list.
    */
   set _physicalStart(val) {
-    val = val % this._physicalCount;
+    val %= this._physicalCount;
     if (val < 0) {
       val = this._physicalCount + val;
     }
     if (this.grid) {
-      val = val - (val % this._itemsPerRow);
+      val -= val % this._itemsPerRow;
     }
     this._physicalStartVal = val;
   },
@@ -334,10 +334,10 @@ export const ironList = {
     this._lastVisibleIndexVal = null;
     // Random access.
     if (Math.abs(delta) > this._physicalSize && this._physicalSize > 0) {
-      delta = delta - this._scrollOffset;
+      delta -= this._scrollOffset;
       var idxAdjustment = Math.round(delta / this._physicalAverage) * this._itemsPerRow;
-      this._virtualStart = this._virtualStart + idxAdjustment;
-      this._physicalStart = this._physicalStart + idxAdjustment;
+      this._virtualStart += idxAdjustment;
+      this._physicalStart += idxAdjustment;
       // Estimate new physical offset based on the virtual start index.
       // adjusts the physical start position to stay in sync with the clamped
       // virtual start index. It's critical not to let this value be
@@ -353,11 +353,11 @@ export const ironList = {
       var reusables = this._getReusables(isScrollingDown);
       if (isScrollingDown) {
         this._physicalTop = reusables.physicalTop;
-        this._virtualStart = this._virtualStart + reusables.indexes.length;
-        this._physicalStart = this._physicalStart + reusables.indexes.length;
+        this._virtualStart += reusables.indexes.length;
+        this._physicalStart += reusables.indexes.length;
       } else {
-        this._virtualStart = this._virtualStart - reusables.indexes.length;
-        this._physicalStart = this._physicalStart - reusables.indexes.length;
+        this._virtualStart -= reusables.indexes.length;
+        this._physicalStart -= reusables.indexes.length;
       }
       this._update(reusables.indexes, isScrollingDown ? null : reusables.indexes);
       this._debounce('_increasePoolIfNeeded', this._increasePoolIfNeeded.bind(this, 0), microTask);
@@ -396,7 +396,7 @@ export const ironList = {
     // eslint-disable-next-line no-constant-condition
     while (true) {
       physicalItemHeight = this._getPhysicalSizeIncrement(ith);
-      offsetContent = offsetContent - physicalItemHeight;
+      offsetContent -= physicalItemHeight;
       if (idxs.length >= physicalCount || offsetContent <= protectedOffsetContent) {
         break;
       }
@@ -410,7 +410,7 @@ export const ironList = {
           break;
         }
         idxs.push(ith);
-        top = top + physicalItemHeight;
+        top += physicalItemHeight;
         ith = (ith + 1) % physicalCount;
       } else {
         // Check that index is within the valid range.
@@ -422,7 +422,7 @@ export const ironList = {
           break;
         }
         idxs.push(ith);
-        top = top - physicalItemHeight;
+        top -= physicalItemHeight;
         ith = ith === 0 ? physicalCount - 1 : ith - 1;
       }
     }
@@ -492,7 +492,7 @@ export const ironList = {
       for (var i = 0; i < delta; i++) {
         this._physicalSizes.push(0);
       }
-      this._physicalCount = this._physicalCount + delta;
+      this._physicalCount += delta;
       // Update the physical start if it needs to preserve the model of the
       // focused item. In this situation, the focused item is currently rendered
       // and its model would have changed after increasing the pool if the
@@ -502,7 +502,7 @@ export const ironList = {
         this._isIndexRendered(this._focusedVirtualIndex) &&
         this._getPhysicalIndex(this._focusedVirtualIndex) < this._physicalEnd
       ) {
-        this._physicalStart = this._physicalStart + delta;
+        this._physicalStart += delta;
       }
       this._update();
       this._templateCost = (window.performance.now() - ts) / delta;
@@ -535,8 +535,8 @@ export const ironList = {
     if (this._physicalCount !== 0) {
       var reusables = this._getReusables(true);
       this._physicalTop = reusables.physicalTop;
-      this._virtualStart = this._virtualStart + reusables.indexes.length;
-      this._physicalStart = this._physicalStart + reusables.indexes.length;
+      this._virtualStart += reusables.indexes.length;
+      this._physicalStart += reusables.indexes.length;
       this._update(reusables.indexes);
       this._update();
       this._increasePoolIfNeeded(0);
@@ -716,7 +716,7 @@ export const ironList = {
         var modulus = vidx % this._itemsPerRow;
         var x = Math.floor(modulus * this._itemWidth + rowOffset);
         if (this._isRTL) {
-          x = x * -1;
+          x *= -1;
         }
         this.translate3d(x + 'px', y + 'px', 0, this._physicalItems[pidx]);
         if (this._shouldRenderNextRow(vidx)) {
@@ -771,7 +771,7 @@ export const ironList = {
       this._virtualStart === 0 ? this._physicalTop : Math.min(this._scrollPosition + this._physicalTop, 0);
     // Note: the delta can be positive or negative.
     if (deltaHeight !== 0) {
-      this._physicalTop = this._physicalTop - deltaHeight;
+      this._physicalTop -= deltaHeight;
       // This may be called outside of a scrollHandler, so use last cached position
       var scrollTop = this._scrollPosition;
       // juking scroll position during interial scrolling on iOS is no bueno
@@ -847,7 +847,7 @@ export const ironList = {
     var hiddenContentSize = this._hiddenContentSize;
     // scroll to the item as much as we can.
     while (currentVirtualItem < idx && targetOffsetTop <= hiddenContentSize) {
-      targetOffsetTop = targetOffsetTop + this._getPhysicalSizeIncrement(currentTopItem);
+      targetOffsetTop += this._getPhysicalSizeIncrement(currentTopItem);
       currentTopItem = (currentTopItem + 1) % this._physicalCount;
       currentVirtualItem++;
     }

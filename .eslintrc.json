@@ -69,6 +69,7 @@
     "no-sync": "off",
     "no-throw-literal": "error",
     "no-useless-return": "error",
+    "operator-assignment": ["error", "always"],
     "prefer-const": ["error", { "ignoreReadBeforeAssign": true }],
     "prefer-exponentiation-operator": "error",
     "prefer-object-spread": "error",

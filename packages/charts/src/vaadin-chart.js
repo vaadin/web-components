@@ -1328,7 +1328,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
 
               const shadowStyles = this.shadowRoot.querySelectorAll('style');
               for (let i = 0; i < shadowStyles.length; i++) {
-                effectiveCss = effectiveCss + shadowStyles[i].textContent;
+                effectiveCss += shadowStyles[i].textContent;
               }
 
               // Strip off host selectors that target individual instances

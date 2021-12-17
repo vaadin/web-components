@@ -177,9 +177,9 @@ describe('virtualizer', () => {
   it('should restore scroll position on size change', async () => {
     // Scroll to item 50 and an additional 10 pixels
     virtualizer.scrollToIndex(50);
-    scrollTarget.scrollTop = scrollTarget.scrollTop + 10;
+    scrollTarget.scrollTop += 10;
 
-    virtualizer.size = virtualizer.size * 2;
+    virtualizer.size *= 2;
     const item = elementsContainer.querySelector('#item-50');
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top - 10);
   });

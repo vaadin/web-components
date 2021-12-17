@@ -177,7 +177,7 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
     let spaceLeft = 4;
     let returnBoardCols = [];
     nodes.forEach((node, i) => {
-      spaceLeft = spaceLeft - boardCols[i];
+      spaceLeft -= boardCols[i];
     });
 
     if (spaceLeft < 0) {
@@ -205,7 +205,7 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
     let spaceLeft = 4;
     const returnNodes = [];
     nodes.forEach((node, i) => {
-      spaceLeft = spaceLeft - boardCols[i];
+      spaceLeft -= boardCols[i];
       if (spaceLeft < 0) {
         if (!isErrorReported) {
           isErrorReported = true;
