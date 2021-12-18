@@ -3,8 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -105,7 +103,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement))) {
+class FormLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -243,7 +241,7 @@ class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizabl
   }
 
   static get observers() {
-    return ['_invokeUpdateStyles(_columnCount, _labelsOnTop)'];
+    return ['_invokeUpdateLayout(_columnCount, _labelsOnTop)'];
   }
 
   /** @protected */
@@ -254,13 +252,12 @@ class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizabl
     // `super.ready()`, because `super.ready()` invokes property observers,
     // and the observer for `responsiveSteps` does CSS value validation.
     this._styleElement = document.createElement('style');
-    this.root.appendChild(this._styleElement);
+    this.appendChild(this._styleElement);
     // Ensure there is a child text node in the style element
     this._styleElement.textContent = ' ';
 
     super.ready();
 
-    this.addEventListener('iron-resize', this._selectResponsiveStep);
     this.addEventListener('animationend', this.__onAnimationEnd);
   }
 
@@ -269,7 +266,7 @@ class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizabl
     super.connectedCallback();
 
     beforeNextRender(this, this._selectResponsiveStep);
-    beforeNextRender(this, this.updateStyles);
+    beforeNextRender(this, () => this.__updateLayout());
 
     this._observeChildrenColspanChange();
   }
@@ -280,10 +277,16 @@ class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizabl
 
     this.__mutationObserver.disconnect();
     this.__childObserver.disconnect();
+    this.__resizeObserver.disconnect();
   }
 
   /** @private */
   _observeChildrenColspanChange() {
+    this.__resizeObserver = new ResizeObserver(() => {
+      requestAnimationFrame(() => this._selectResponsiveStep());
+    });
+    this.__resizeObserver.observe(this);
+
     // Observe changes in form items' `colspan` attribute and update styles
     const mutationObserverConfig = { attributes: true };
 
@@ -293,7 +296,7 @@ class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizabl
           mutation.type === 'attributes' &&
           (mutation.attributeName === 'colspan' || mutation.attributeName === 'hidden')
         ) {
-          this.updateStyles();
+          this.__updateLayout();
         }
       });
     });
@@ -304,10 +307,11 @@ class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizabl
 
       addedNodes.forEach((child) => {
         this.__mutationObserver.observe(child, mutationObserverConfig);
+        this.__resizeObserver.observe(child);
       });
 
       if (addedNodes.length > 0 || removedNodes.length > 0) {
-        this.updateStyles();
+        this.__updateLayout();
       }
     });
   }
@@ -433,18 +437,33 @@ class FormLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizabl
   }
 
   /** @private */
-  _invokeUpdateStyles() {
-    this.updateStyles();
+  _invokeUpdateLayout() {
+    this.__updateLayout();
   }
 
   /**
    * Set custom CSS property values and update the layout.
-   * @param {Object<string, string>=} properties
-   * @protected
+   *
+   * @deprecated Since Vaadin 23, `updateStyles()` is deprecated.
+   * Use the native element.style.setProperty API to set custom CSS property values.
    */
   updateStyles(properties) {
-    super.updateStyles(properties);
+    console.warn(
+      `WARNING: Since Vaadin 23, updateStyles() is deprecated. Use the native element.style.setProperty API to set custom CSS property values.`
+    );
 
+    for (const p in properties) {
+      this.style.setProperty(p, properties[p]);
+    }
+
+    this.__updateLayout();
+  }
+
+  /**
+   * Update the layout.
+   * @private
+   */
+  __updateLayout() {
     /*
       The item width formula:
 

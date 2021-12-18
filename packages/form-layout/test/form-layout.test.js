@@ -1,11 +1,31 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '../vaadin-form-layout.js';
 import '../vaadin-form-item.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+
+/**
+ * Resolves once the function is invoked on the given object.
+ */
+function onceInvoked(object, functionName) {
+  return new Promise((resolve) => {
+    sinon.replace(object, functionName, (...args) => {
+      sinon.restore();
+      object[functionName](...args);
+      resolve();
+    });
+  });
+}
+
+/**
+ * Resolves once the ResizeObserver in FormLayout has processed a resize.
+ */
+async function onceResized(layout) {
+  await onceInvoked(layout, '__updateLayout');
+}
 
 customElements.define(
   'mutable-layout',
@@ -79,6 +99,15 @@ describe('form layout', () => {
       expect(textField).to.be.ok;
       expect(slot.assignedNodes()).to.contain(textField);
     });
+
+    it('should warn when calling deprecated updateStyles()', () => {
+      const stub = sinon.stub(console, 'warn');
+      layout.updateStyles();
+      stub.restore();
+
+      expect(stub.calledOnce).to.be.true;
+      expect(stub.args[0][0]).to.include('WARNING: Since Vaadin 23, updateStyles() is deprecated.');
+    });
   });
 
   describe('CSS properties', () => {
@@ -101,13 +130,13 @@ describe('form layout', () => {
     });
 
     it('should apply label-width', () => {
-      item.updateStyles({ '--vaadin-form-item-label-width': '100px' });
+      item.style.setProperty('--vaadin-form-item-label-width', '100px');
       expect(getComputedStyle(item.$.label).width).to.equal('100px');
     });
 
     it('should not apply label-width when label-position="top" attribute is set', () => {
       item.setAttribute('label-position', 'top');
-      item.updateStyles({ '--vaadin-form-item-label-width': '100px' });
+      item.style.setProperty('--vaadin-form-item-label-width', '100px');
       expect(getComputedStyle(item.$.label).width).to.not.equal('100px');
     });
 
@@ -117,7 +146,7 @@ describe('form layout', () => {
     });
 
     it('should apply label-spacing', () => {
-      item.updateStyles({ '--vaadin-form-item-label-spacing': '8px' });
+      item.style.setProperty('--vaadin-form-item-label-spacing', '8px');
       expect(getComputedStyle(item.$.spacing).width).to.equal('8px');
     });
 
@@ -238,9 +267,9 @@ describe('form layout', () => {
     });
 
     describe('no spacing on edges (rtl)', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         container.dir = 'rtl';
-        layout.updateStyles();
+        await aTimeout(100);
       });
 
       it('should not have spacing on the right edge', () => {
@@ -262,7 +291,7 @@ describe('form layout', () => {
   describe('responsiveSteps property', () => {
     var layout;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       layout = fixtureSync(`
         <vaadin-form-layout>
           <vaadin-text-field></vaadin-text-field>
@@ -270,6 +299,7 @@ describe('form layout', () => {
           <vaadin-form-item></vaadin-form-item>
         </vaadin-form-layout>
       `);
+      await aTimeout(100);
     });
 
     it('should have default value', () => {
@@ -316,43 +346,43 @@ describe('form layout', () => {
         return 100 / parseFloat(getParsedWidth(layout.firstElementChild).percentage);
       }
 
-      it('should be responsive by default', () => {
+      it('should be responsive by default', async () => {
         document.body.style.width = '10em';
-        layout.dispatchEvent(new CustomEvent('iron-resize'));
+        await onceResized(layout);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.equal('top');
 
         document.body.style.width = '20em';
-        layout.dispatchEvent(new CustomEvent('iron-resize'));
+        await onceResized(layout);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.be.null;
 
         document.body.style.width = '40em';
-        layout.dispatchEvent(new CustomEvent('iron-resize'));
+        await onceResized(layout);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(2, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.be.null;
       });
 
-      it('should allow specifying non-responsive', () => {
+      it('should allow specifying non-responsive', async () => {
         layout.responsiveSteps = [{ columns: 3 }];
 
         document.body.style.width = '10em';
-        layout.dispatchEvent(new CustomEvent('iron-resize'));
+        await aTimeout(100);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(3, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.be.null;
 
         document.body.style.width = '20em';
-        layout.dispatchEvent(new CustomEvent('iron-resize'));
+        await aTimeout(100);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(3, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.be.null;
 
         document.body.style.width = '40em';
-        layout.dispatchEvent(new CustomEvent('iron-resize'));
+        await aTimeout(100);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(3, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.be.null;
       });
 
-      it('should allow specifying more steps', () => {
+      it('should allow specifying more steps', async () => {
         layout.responsiveSteps = [
           { columns: 1 },
           { minWidth: '20em', columns: 2, labelsPosition: 'top' },
@@ -360,17 +390,17 @@ describe('form layout', () => {
         ];
 
         document.body.style.width = '10em';
-        layout.dispatchEvent(new CustomEvent('iron-resize'));
+        await onceResized(layout);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(1, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.be.null;
 
         document.body.style.width = '20em';
-        layout.dispatchEvent(new CustomEvent('iron-resize'));
+        await onceResized(layout);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(2, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.equal('top');
 
         document.body.style.width = '40em';
-        layout.dispatchEvent(new CustomEvent('iron-resize'));
+        await onceResized(layout);
         expect(estimateEffectiveColumnCount(layout)).to.be.closeTo(5, 0.1);
         expect(layout.children[2].getAttribute('label-position')).to.be.null;
       });
