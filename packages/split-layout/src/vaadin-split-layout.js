@@ -3,8 +3,6 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -153,7 +151,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class SplitLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizableBehavior], PolymerElement))) {
+class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -248,7 +246,11 @@ class SplitLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizab
 
   /** @private */
   _processChildren() {
-    this.getEffectiveChildren().forEach((child, i) => {
+    const effectiveChildren = FlattenedNodesObserver.getFlattenedNodes(this).filter(
+      (node) => node.nodeType === Node.ELEMENT_NODE
+    );
+
+    effectiveChildren.forEach((child, i) => {
       if (i === 0) {
         this._primaryChild = child;
         child.setAttribute('slot', 'primary');
@@ -317,8 +319,6 @@ class SplitLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizab
     this._setFlexBasis(this._primaryChild, this._startSize.primary + dirDistance, this._startSize.container);
     this._setFlexBasis(this._secondaryChild, this._startSize.secondary - dirDistance, this._startSize.container);
 
-    this.notifyResize();
-
     if (event.detail.state === 'end') {
       this.dispatchEvent(new CustomEvent('splitter-dragend'));
 
@@ -327,13 +327,13 @@ class SplitLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizab
   }
 
   /**
-   * Can be called to manually notify a resizable and its descendant
-   * resizables of a resize change.
+   * @deprecated Since Vaadin 23, `notifyResize()` is deprecated. The component uses a
+   * ResizeObserver internally and doesn't need to be explicitly notified of resizes.
    */
   notifyResize() {
-    // NOTE: we have this method here to include it to the API docs,
-    // as we do not use `IronResizableBehavior` in type definitions.
-    super.notifyResize();
+    console.warn(
+      `WARNING: Since Vaadin 23, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`
+    );
   }
 
   /**
