@@ -306,7 +306,6 @@ class FormLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
 
       addedNodes.forEach((child) => {
         this.__mutationObserver.observe(child, mutationObserverConfig);
-        this.__resizeObserver.observe(child);
       });
 
       if (addedNodes.length > 0 || removedNodes.length > 0) {
