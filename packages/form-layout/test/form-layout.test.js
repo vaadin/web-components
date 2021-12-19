@@ -24,7 +24,7 @@ function onceInvoked(object, functionName) {
  * Resolves once the ResizeObserver in FormLayout has processed a resize.
  */
 async function onceResized(layout) {
-  await onceInvoked(layout, '__updateLayout');
+  await onceInvoked(layout, '_updateLayout');
 }
 
 customElements.define(

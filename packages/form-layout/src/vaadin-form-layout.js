@@ -266,7 +266,7 @@ class FormLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
     super.connectedCallback();
 
     beforeNextRender(this, this._selectResponsiveStep);
-    beforeNextRender(this, () => this.__updateLayout());
+    beforeNextRender(this, () => this._updateLayout());
 
     this._observeChildrenColspanChange();
   }
@@ -296,7 +296,7 @@ class FormLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
           mutation.type === 'attributes' &&
           (mutation.attributeName === 'colspan' || mutation.attributeName === 'hidden')
         ) {
-          this.__updateLayout();
+          this._updateLayout();
         }
       });
     });
@@ -311,7 +311,7 @@ class FormLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       });
 
       if (addedNodes.length > 0 || removedNodes.length > 0) {
-        this.__updateLayout();
+        this._updateLayout();
       }
     });
   }
@@ -438,7 +438,7 @@ class FormLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   _invokeUpdateLayout() {
-    this.__updateLayout();
+    this._updateLayout();
   }
 
   /**
@@ -456,14 +456,14 @@ class FormLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       this.style.setProperty(p, properties[p]);
     }
 
-    this.__updateLayout();
+    this._updateLayout();
   }
 
   /**
    * Update the layout.
-   * @private
+   * @protected
    */
-  __updateLayout() {
+  _updateLayout() {
     /*
       The item width formula:
 

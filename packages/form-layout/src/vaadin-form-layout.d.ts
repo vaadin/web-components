@@ -151,6 +151,11 @@ declare class FormLayout extends ElementMixin(ThemableMixin(HTMLElement)) {
    * Use the native element.style.setProperty API to set custom CSS property values.
    */
   updateStyles(properties?: { [key: string]: string }): void;
+
+  /**
+   * Update the layout.
+   */
+  protected _updateLayout(): void;
 }
 
 declare global {
