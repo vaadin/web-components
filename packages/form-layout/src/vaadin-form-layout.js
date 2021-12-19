@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -265,8 +264,8 @@ class FormLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   connectedCallback() {
     super.connectedCallback();
 
-    beforeNextRender(this, this._selectResponsiveStep);
-    beforeNextRender(this, () => this._updateLayout());
+    requestAnimationFrame(() => this._selectResponsiveStep());
+    requestAnimationFrame(() => this._updateLayout());
 
     this._observeChildrenColspanChange();
   }
