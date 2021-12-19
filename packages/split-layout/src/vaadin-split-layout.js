@@ -246,11 +246,7 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   _processChildren() {
-    const effectiveChildren = FlattenedNodesObserver.getFlattenedNodes(this).filter(
-      (node) => node.nodeType === Node.ELEMENT_NODE
-    );
-
-    effectiveChildren.forEach((child, i) => {
+    [...this.children].forEach((child, i) => {
       if (i === 0) {
         this._primaryChild = child;
         child.setAttribute('slot', 'primary');
