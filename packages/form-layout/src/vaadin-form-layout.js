@@ -447,14 +447,14 @@ class FormLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
    * @deprecated Since Vaadin 23, `updateStyles()` is deprecated.
    * Use the native element.style.setProperty API to set custom CSS property values.
    */
-  updateStyles(properties) {
+  updateStyles(properties = {}) {
     console.warn(
       `WARNING: Since Vaadin 23, updateStyles() is deprecated. Use the native element.style.setProperty API to set custom CSS property values.`
     );
 
-    for (const p in properties) {
-      this.style.setProperty(p, properties[p]);
-    }
+    Object.entries(properties).forEach(([key, value]) => {
+      this.style.setProperty(key, value);
+    });
 
     this._updateLayout();
   }
