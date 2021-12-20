@@ -114,7 +114,7 @@ describe('focus-trap', function () {
       for (let i = 0; i < focusableElements.length; i++) {
         // Emulating control-state-mixin moving focus
         if (focusableElements.filter(isElementFocused).length > 1) {
-          i++;
+          i += 1;
         }
 
         const focusedIndex = getFocusedElementIndex();
@@ -130,7 +130,7 @@ describe('focus-trap', function () {
 
         // Emulating control-state-mixin moving focus
         if (focusableElements.filter(isElementFocused).length > 1) {
-          i--;
+          i -= 1;
         }
 
         tabKeyDown(focusableElements[getFocusedElementIndex()], ['shift']);
@@ -206,7 +206,7 @@ describe('focus-trap', function () {
         for (let i = 0; i < focusableElements.length; i++) {
           // Emulating control-state-mixin moving focus
           if (focusableElements.filter(isElementFocused).length > 1) {
-            i++;
+            i += 1;
           }
 
           const focusedIndex = getFocusedElementIndex();
@@ -222,7 +222,7 @@ describe('focus-trap', function () {
 
           // Emulating control-state-mixin moving focus
           if (focusableElements.filter(isElementFocused).length > 1) {
-            i--;
+            i -= 1;
           }
 
           tabKeyDown(focusableElements[getFocusedElementIndex()], ['shift']);
@@ -311,7 +311,7 @@ describe('focus-trap', function () {
       for (let i = 0; i < focusableElements.length; i++) {
         // Emulating control-state-mixin moving focus
         if (focusableElements.filter(isElementFocused).length > 1) {
-          i++;
+          i += 1;
         }
 
         expect(getFocusedElementIndex()).to.eql(i);
@@ -326,7 +326,7 @@ describe('focus-trap', function () {
 
         // Emulating control-state-mixin moving focus
         if (focusableElements.filter(isElementFocused).length > 1) {
-          i--;
+          i -= 1;
         }
 
         tabKeyDown(focusableElements[getFocusedElementIndex()], ['shift']);
@@ -410,7 +410,7 @@ describe('focus-trap', function () {
         for (let i = 0; i < focusableElements.length; i++) {
           // Emulating control-state-mixin moving focus
           if (focusableElements.filter(isElementFocused).length > 1) {
-            i++;
+            i += 1;
           }
 
           expect(getFocusedElementIndex()).to.eql(i);
@@ -425,7 +425,7 @@ describe('focus-trap', function () {
 
           // Emulating control-state-mixin moving focus
           if (focusableElements.filter(isElementFocused).length > 1) {
-            i--;
+            i -= 1;
           }
 
           tabKeyDown(focusableElements[getFocusedElementIndex()], ['shift']);

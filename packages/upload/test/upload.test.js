@@ -419,7 +419,8 @@ describe('upload', () => {
         expect(e.detail.file).to.be.ok;
         expect(e.detail.file.uploading).to.be.ok;
 
-        if (++counter === upload.files.length - 1) {
+        counter += 1;
+        if (counter === upload.files.length - 1) {
           done();
         }
       });

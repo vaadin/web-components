@@ -55,7 +55,7 @@ describe('static helpers', () => {
   it('show should support Lit event handlers', () => {
     let clicked = 0;
     const doClose = () => {
-      clicked++;
+      clicked += 1;
     };
     const notification = Notification.show(html`Click <button @click=${doClose}>this</button> to count`);
     notification._card.querySelector('button').click();

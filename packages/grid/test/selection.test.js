@@ -497,7 +497,7 @@ describe('multi selection column', () => {
   });
 
   it('should select all items when select all is set', () => {
-    grid.items = Array.from({ length: 60 }, (_, key) => ++key);
+    grid.items = Array.from({ length: 60 }, (_, key) => key + 1);
 
     selectionColumn.selectAll = true;
 

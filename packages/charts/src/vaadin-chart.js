@@ -51,12 +51,14 @@ export function deepMerge(target, source) {
 }
 
 ['exportChart', 'exportChartLocal', 'getSVG'].forEach((methodName) => {
+  /* eslint-disable no-invalid-this */
   Highcharts.wrap(Highcharts.Chart.prototype, methodName, function (proceed, ...args) {
     Highcharts.fireEvent(this, 'beforeExport');
     const result = proceed.apply(this, args);
     Highcharts.fireEvent(this, 'afterExport');
     return result;
   });
+  /* eslint-enable no-invalid-this */
 });
 
 /**
@@ -1328,7 +1330,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
 
               const shadowStyles = this.shadowRoot.querySelectorAll('style');
               for (let i = 0; i < shadowStyles.length; i++) {
-                effectiveCss = effectiveCss + shadowStyles[i].textContent;
+                effectiveCss += shadowStyles[i].textContent;
               }
 
               // Strip off host selectors that target individual instances

@@ -93,7 +93,7 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
     super.ready();
     this.addEventListener('iron-resize', this._onIronResize, true);
     this.$.insertionPoint.addEventListener('slotchange', this.redraw.bind(this));
-    afterNextRender(this, function () {
+    afterNextRender(this, () => {
       // force this as an interested resizable of parent
       this.dispatchEvent(
         new CustomEvent('iron-request-resize-notifications', {
@@ -177,7 +177,7 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
     let spaceLeft = 4;
     let returnBoardCols = [];
     nodes.forEach((node, i) => {
-      spaceLeft = spaceLeft - boardCols[i];
+      spaceLeft -= boardCols[i];
     });
 
     if (spaceLeft < 0) {
@@ -205,7 +205,7 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
     let spaceLeft = 4;
     const returnNodes = [];
     nodes.forEach((node, i) => {
-      spaceLeft = spaceLeft - boardCols[i];
+      spaceLeft -= boardCols[i];
       if (spaceLeft < 0) {
         if (!isErrorReported) {
           isErrorReported = true;

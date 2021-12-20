@@ -182,10 +182,13 @@ const microTask = {
   run(callback) {
     if (!microtaskScheduled) {
       microtaskScheduled = true;
-      microtaskNode.textContent = microtaskNodeContent++;
+      microtaskNode.textContent = microtaskNodeContent;
+      microtaskNodeContent += 1;
     }
     microtaskCallbacks.push(callback);
-    return microtaskCurrHandle++;
+    const result = microtaskCurrHandle;
+    microtaskCurrHandle += 1;
+    return result;
   },
 
   /**

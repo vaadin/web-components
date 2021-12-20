@@ -29,7 +29,8 @@ let moduleIdIndex = 0;
  * @return {void}
  */
 function registerStyles(themeFor, styles = [], options = {}) {
-  const themeId = options.moduleId || `custom-style-module-${moduleIdIndex++}`;
+  const themeId = options.moduleId || `custom-style-module-${moduleIdIndex}`;
+  moduleIdIndex += 1;
 
   /** @type {DomModuleWithCachedStyles} */
   const module = document.createElement('dom-module');

@@ -644,11 +644,14 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
         e.preventDefault();
         let index = buttons.indexOf(e.target);
         buttons[index].setAttribute('tabindex', '-1');
-        if (e.keyCode === 39 && ++index === buttons.length) {
-          index = 0;
-        } else if (e.keyCode === 37 && --index === -1) {
-          index = buttons.length - 1;
+
+        let step;
+        if (e.keyCode === 39) {
+          step = 1;
+        } else if (e.keyCode === 37) {
+          step = -1;
         }
+        index = (buttons.length + index + step) % buttons.length;
         buttons[index].removeAttribute('tabindex');
         buttons[index].focus();
       }

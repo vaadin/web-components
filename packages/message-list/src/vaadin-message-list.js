@@ -154,10 +154,10 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     switch (event.key) {
       case 'ArrowUp':
-        currentIndex--;
+        currentIndex -= 1;
         break;
       case 'ArrowDown':
-        currentIndex++;
+        currentIndex += 1;
         break;
       case 'Home':
         currentIndex = 0;
