@@ -137,13 +137,6 @@ export interface SplitLayoutEventMap extends HTMLElementEventMap, SplitLayoutCus
  * </vaadin-split-layout>
  * ```
  *
- * ### Resize Notification
- *
- * This element implements `IronResizableBehavior` to notify the nested resizables
- * when the splitter is dragged. In order to define a resizable and receive that
- * notification in a nested element, include `IronResizableBehavior` and listen
- * for the `iron-resize` event.
- *
  * ### Styling
  *
  * The following shadow DOM parts are available for styling:
@@ -164,8 +157,8 @@ declare class SplitLayout extends ElementMixin(ThemableMixin(HTMLElement)) {
   orientation: 'horizontal' | 'vertical';
 
   /**
-   * Can be called to manually notify a resizable and its descendant
-   * resizables of a resize change.
+   * @deprecated Since Vaadin 23, `notifyResize()` is deprecated. The component uses a
+   * ResizeObserver internally and doesn't need to be explicitly notified of resizes.
    */
   notifyResize(): void;
 
