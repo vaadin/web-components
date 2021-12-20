@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizableMixin } from '@vaadin/component-base/src/resizable-mixin.js';
 import { ListMixin } from '@vaadin/vaadin-list-mixin/vaadin-list-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -61,7 +62,7 @@ export interface TabsEventMap extends HTMLElementEventMap, TabsCustomEventMap {}
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  */
-declare class Tabs extends ElementMixin(ListMixin(ThemableMixin(HTMLElement))) {
+declare class Tabs extends ResizableMixin(ElementMixin(ListMixin(ThemableMixin(HTMLElement)))) {
   /**
    * The index of the selected tab.
    */

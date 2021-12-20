@@ -199,15 +199,6 @@ describe('avatar-group', () => {
       expect(overflow.abbr).to.equal('+3');
     });
 
-    it('should warn when calling deprecated notifyResize()', () => {
-      const stub = sinon.stub(console, 'warn');
-      group.notifyResize();
-      stub.restore();
-
-      expect(stub.calledOnce).to.be.true;
-      expect(stub.args[0][0]).to.include('WARNING: Since Vaadin 23, notifyResize() is deprecated.');
-    });
-
     it('should always show at least two avatars', async () => {
       group.set('items', group.items.slice(0, 2));
       group.style.width = '50px';

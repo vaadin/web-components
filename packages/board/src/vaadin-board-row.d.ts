@@ -4,6 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizableMixin } from '@vaadin/component-base/src/resizable-mixin';
 
 /**
  * `<vaadin-board-row>` is a web component that together with `<vaadin-board>` component allows
@@ -39,7 +40,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  * `--vaadin-board-width-small` | Determines the width where mode changes from `small` to `medium` | `600px`
  * `--vaadin-board-width-medium` | Determines the width where mode changes from `medium` to `large` | `960px`
  */
-declare class BoardRow extends ElementMixin(HTMLElement) {
+declare class BoardRow extends ResizableMixin(ElementMixin(HTMLElement)) {
   /**
    * Redraws the row, if necessary.
    *

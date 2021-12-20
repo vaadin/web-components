@@ -3,14 +3,16 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { animationFrame } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+
+import { ResizableMixin } from '@vaadin/component-base/src/resizable-mixin.js';
 
 /**
  * @polymerMixin
+ *
+ * @mixes ResizableMixin
  */
 export const ButtonsMixin = (superClass) =>
-  class extends superClass {
+  class extends ResizableMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -33,9 +35,6 @@ export const ButtonsMixin = (superClass) =>
       super.ready();
 
       this.setAttribute('role', 'menubar');
-
-      this.__resizeObserver = new ResizeObserver(() => this.__onResize());
-      this.__resizeObserver.observe(this);
     }
 
     /** @protected */
@@ -285,12 +284,11 @@ export const ButtonsMixin = (superClass) =>
       this.__applyTheme(this.theme);
     }
 
-    /** @private */
-    __onResize() {
-      this.__debounceOverflow = Debouncer.debounce(
-        this.__debounceOverflow,
-        animationFrame,
-        this.__detectOverflow.bind(this)
-      );
+    /**
+     * @protected
+     * @override
+     */
+    _onResize() {
+      this.__detectOverflow();
     }
   };

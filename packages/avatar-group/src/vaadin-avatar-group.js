@@ -14,6 +14,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizableMixin } from '@vaadin/component-base/src/resizable-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const MINIMUM_DISPLAYED_AVATARS = 2;
@@ -58,8 +59,9 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
+ * @mixes ResizableMixin
  */
-class AvatarGroup extends ElementMixin(ThemableMixin(PolymerElement)) {
+class AvatarGroup extends ResizableMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -282,9 +284,6 @@ class AvatarGroup extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     this.__boundSetPosition = this.__setPosition.bind(this);
 
-    this.__resizeObserver = new ResizeObserver(() => this._onResize());
-    this.__resizeObserver.observe(this);
-
     this._overlayElement = this.shadowRoot.querySelector('vaadin-avatar-group-overlay');
 
     afterNextRender(this, () => {
@@ -358,7 +357,10 @@ class AvatarGroup extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
-  /** @private */
+  /**
+   * @protected
+   * @override
+   */
   _onResize() {
     this.__debounceResize = Debouncer.debounce(this.__debounceResize, timeOut.after(0), () => {
       this.__setItemsInView();
@@ -592,16 +594,6 @@ class AvatarGroup extends ElementMixin(ThemableMixin(PolymerElement)) {
       this._overlayElement.style.removeProperty('bottom');
       this._overlayElement.style.top = btnRect.bottom + 'px';
     }
-  }
-
-  /**
-   * @deprecated Since Vaadin 23, `notifyResize()` is deprecated. The component uses a
-   * ResizeObserver internally and doesn't need to be explicitly notified of resizes.
-   */
-  notifyResize() {
-    console.warn(
-      `WARNING: Since Vaadin 23, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`
-    );
   }
 }
 

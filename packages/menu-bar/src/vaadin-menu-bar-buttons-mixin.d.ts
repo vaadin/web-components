@@ -4,8 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
+import { ResizableMixinClass } from '@vaadin/component-base/src/resizable-mixin';
 
-export declare function ButtonsMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ButtonsMixinClass>;
+export declare function ButtonsMixin<T extends Constructor<HTMLElement>>(
+  base: T
+): T & Constructor<ButtonsMixinClass> & Constructor<ResizableMixinClass>;
 
 export declare class ButtonsMixinClass {
   protected readonly _buttons: HTMLElement[];

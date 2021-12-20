@@ -578,13 +578,4 @@ describe('item components', () => {
     expect(style.position).to.equal('relative');
     expect(Number(style.zIndex)).to.equal(1);
   });
-
-  it('should warn when calling deprecated notifyResize()', () => {
-    const stub = sinon.stub(console, 'warn');
-    menu.notifyResize();
-    stub.restore();
-
-    expect(stub.calledOnce).to.be.true;
-    expect(stub.args[0][0]).to.include('WARNING: Since Vaadin 23, notifyResize() is deprecated.');
-  });
 });

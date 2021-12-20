@@ -5,6 +5,7 @@
  */
 import { AvatarI18n } from '@vaadin/avatar/src/vaadin-avatar.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizableMixin } from '@vaadin/component-base/src/resizable-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export { AvatarI18n };
@@ -62,7 +63,7 @@ export interface AvatarGroupItem {
  * - `<vaadin-avatar-group-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  * - `<vaadin-avatar-group-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  */
-declare class AvatarGroup extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class AvatarGroup extends ResizableMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   readonly _avatars: HTMLElement[];
 
   /**

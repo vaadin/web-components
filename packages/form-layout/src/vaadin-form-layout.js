@@ -6,6 +6,7 @@
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizableMixin } from '@vaadin/component-base/src/resizable-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -101,8 +102,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
+ * @mixes ResizableMixin
  */
-class FormLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
+class FormLayout extends ResizableMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -276,16 +278,10 @@ class FormLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     this.__mutationObserver.disconnect();
     this.__childObserver.disconnect();
-    this.__resizeObserver.disconnect();
   }
 
   /** @private */
   _observeChildrenColspanChange() {
-    this.__resizeObserver = new ResizeObserver(() => {
-      requestAnimationFrame(() => this._selectResponsiveStep());
-    });
-    this.__resizeObserver.observe(this);
-
     // Observe changes in form items' `colspan` attribute and update styles
     const mutationObserverConfig = { attributes: true };
 
@@ -541,6 +537,14 @@ class FormLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
           }
         }
       });
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _onResize() {
+    this._selectResponsiveStep();
   }
 }
 

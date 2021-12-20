@@ -408,14 +408,4 @@ export const InteractionsMixin = (superClass) =>
       this.__deactivateButton(restoreFocus);
       this._subMenu.opened && this._subMenu.close();
     }
-
-    /**
-     * @deprecated Since Vaadin 23, `notifyResize()` is deprecated. The component uses a
-     * ResizeObserver internally and doesn't need to be explicitly notified of resizes.
-     */
-    notifyResize() {
-      console.warn(
-        `WARNING: Since Vaadin 23, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`
-      );
-    }
   };
