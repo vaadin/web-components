@@ -3,9 +3,6 @@ import { aTimeout, esc, fixtureSync, nextFrame, nextRender, oneEvent } from '@va
 import sinon from 'sinon';
 import '../vaadin-app-layout.js';
 import '../vaadin-drawer-toggle.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior';
-import { PolymerElement } from '@polymer/polymer';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 
 describe('vaadin-app-layout', () => {
   let layout;
@@ -324,84 +321,6 @@ describe('vaadin-app-layout', () => {
           expect(spy.called).to.be.false;
         });
       });
-    });
-  });
-
-  describe('notify children about resize', () => {
-    class ResizeAwareElement extends mixinBehaviors([IronResizableBehavior], PolymerElement) {
-      static get is() {
-        return 'resize-aware';
-      }
-    }
-
-    customElements.define(ResizeAwareElement.is, ResizeAwareElement);
-
-    let resizeAwareChild;
-
-    beforeEach(async () => {
-      layout = fixtureSync(`
-        <vaadin-app-layout>
-          <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
-          <h2 slot="navbar">App name</h2>
-          <section slot="drawer">
-            <p>Item 1</p>
-            <p>Item 2</p>
-            <p>Item 3</p>
-          </section>
-          <resize-aware></resize-aware>
-        </vaadin-app-layout>
-      `);
-      // force non-overlay mode as default
-      layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
-      layout._updateOverlayMode();
-      await nextRender();
-      resizeAwareChild = layout.querySelector('resize-aware');
-      sinon.stub(resizeAwareChild, 'notifyResize');
-    });
-
-    afterEach(() => {
-      resizeAwareChild.notifyResize.restore();
-    });
-
-    it('should notify when drawer opens or closes', () => {
-      layout.drawerOpened = false;
-      expect(resizeAwareChild.notifyResize.calledOnce).to.be.true;
-
-      resizeAwareChild.notifyResize.resetHistory();
-      layout.drawerOpened = true;
-      expect(resizeAwareChild.notifyResize.calledOnce).to.be.true;
-    });
-
-    it('should notify when drawer is hidden due to empty content', () => {
-      const section = layout.querySelector('[slot="drawer"]');
-      section.parentNode.removeChild(section);
-      layout._drawerChildObserver.flush();
-
-      expect(resizeAwareChild.notifyResize.calledOnce).to.be.true;
-    });
-
-    it('should notify when content is added to drawer', () => {
-      const newContent = document.createElement('div');
-      newContent.setAttribute('slot', 'drawer');
-      layout.appendChild(newContent);
-      layout._drawerChildObserver.flush();
-
-      expect(resizeAwareChild.notifyResize.calledOnce).to.be.true;
-    });
-
-    it('should notify when switching between regular and overlay mode', () => {
-      // force overlay mode
-      layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'true');
-      layout._updateOverlayMode();
-
-      expect(resizeAwareChild.notifyResize.calledOnce).to.be.true;
-
-      // remove overlay mode
-      resizeAwareChild.notifyResize.resetHistory();
-      layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
-      layout._updateOverlayMode();
-
-      expect(resizeAwareChild.notifyResize.calledOnce).to.be.true;
     });
   });
 });

@@ -5,8 +5,6 @@
  */
 import './safe-area-inset.js';
 import './detect-ios-navbar.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { afterNextRender, beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -111,9 +109,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ThemableMixin
  * @mixes ControllerMixin
  */
-class AppLayout extends ElementMixin(
-  ThemableMixin(ControllerMixin(mixinBehaviors([IronResizableBehavior], PolymerElement)))
-) {
+class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -513,8 +509,6 @@ class AppLayout extends ElementMixin(
         this.__releaseFocusFromDrawer();
       }
     }
-
-    this.notifyResize();
   }
 
   /**
@@ -583,8 +577,6 @@ class AppLayout extends ElementMixin(
     const drawerRect = drawer.getBoundingClientRect();
 
     this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', drawerRect.width + 'px');
-
-    this.notifyResize();
   }
 
   /** @protected */
@@ -613,10 +605,6 @@ class AppLayout extends ElementMixin(
 
     this._updateDrawerHeight();
     this.__updateDrawerAriaAttributes();
-
-    if (this.overlay !== overlay) {
-      this.notifyResize();
-    }
   }
 
   /**
