@@ -44,7 +44,7 @@ class CrudForm extends IncludedMixin(FormLayout) {
     this.innerHTML = '';
     this._fields = [];
     this.__createFields(this, object);
-    this.notifyResize();
+    this._updateLayout();
   }
 
   /** @private */
