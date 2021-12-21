@@ -46,12 +46,19 @@ describe('resizable-mixin', () => {
     await element.nextResize();
   });
 
-  it('should warn when calling deprecated notifyResize()', () => {
-    const stub = sinon.stub(console, 'warn');
-    element.notifyResize();
-    stub.restore();
+  describe('console warnings', () => {
+    beforeEach(() => {
+      sinon.stub(console, 'warn');
+    });
 
-    expect(stub.calledOnce).to.be.true;
-    expect(stub.args[0][0]).to.include('WARNING: Since Vaadin 23, notifyResize() is deprecated.');
+    afterEach(() => {
+      console.warn.restore();
+    });
+
+    it('should warn when calling deprecated notifyResize()', () => {
+      element.notifyResize();
+      expect(console.warn.calledOnce).to.be.true;
+      expect(console.warn.args[0][0]).to.include('WARNING: Since Vaadin 23, notifyResize() is deprecated.');
+    });
   });
 });
