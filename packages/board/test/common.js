@@ -5,8 +5,8 @@ import sinon from 'sinon';
  */
 function onceInvoked(object, functionName) {
   return new Promise((resolve) => {
-    sinon.replace(object, functionName, (...args) => {
-      sinon.restore();
+    const stub = sinon.stub(object, functionName).callsFake((...args) => {
+      stub.restore();
       object[functionName](...args);
       resolve();
     });
@@ -18,4 +18,11 @@ function onceInvoked(object, functionName) {
  */
 export async function onceResized(boardRow) {
   await onceInvoked(boardRow, '_onResize');
+}
+
+/**
+ * Resolves once the ResizeObserver in all the BoardRows has processed a resize.
+ */
+export function allResized(boardRows) {
+  return Promise.all(boardRows.map((boardRow) => onceResized(boardRow)));
 }
