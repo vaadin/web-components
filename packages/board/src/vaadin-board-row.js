@@ -3,11 +3,8 @@
  * Copyright (c) 2017 - 2021 Vaadin Ltd
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
 import { DomIf } from '@polymer/polymer/lib/elements/dom-if.js';
 import { DomRepeat } from '@polymer/polymer/lib/elements/dom-repeat.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 
@@ -54,7 +51,7 @@ const CLASSES = {
  * @extends HTMLElement
  * @mixes ElementMixin
  */
-class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], PolymerElement)) {
+class BoardRow extends ElementMixin(PolymerElement) {
   static get template() {
     return html`
       <style>
@@ -82,7 +79,6 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
 
   constructor() {
     super();
-    this._onIronResize = this._onIronResize.bind(this);
     this._oldWidth = 0;
     this._oldBreakpoints = { smallSize: 600, mediumSize: 960 };
     this._oldFlexBasis = [];
@@ -91,26 +87,19 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
   /** @protected */
   ready() {
     super.ready();
-    this.addEventListener('iron-resize', this._onIronResize, true);
-    this.$.insertionPoint.addEventListener('slotchange', this.redraw.bind(this));
-    afterNextRender(this, () => {
-      // force this as an interested resizable of parent
-      this.dispatchEvent(
-        new CustomEvent('iron-request-resize-notifications', {
-          node: this,
-          bubbles: true,
-          cancelable: true,
-          composed: true,
-          detail: {}
-        })
-      );
+
+    this.$.insertionPoint.addEventListener('slotchange', () => this.redraw());
+
+    this.__resizeObserver = new ResizeObserver(() => {
+      requestAnimationFrame(() => this._onResize());
     });
+    this.__resizeObserver.observe(this);
   }
 
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
-    afterNextRender(this, this._onIronResize);
+    this._onResize();
   }
 
   /**
@@ -223,14 +212,16 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
    * Redraws the row, if necessary.
    *
    * In most cases, a board row will redraw itself if your reconfigure it.
-   * If you dynamically change CSS which affects the row, then you need to call this method.
+   * If you dynamically change breakpoints
+   * --vaadin-board-width-small or --vaadin-board-width-medium,
+   * then you need to call this method.
    */
   redraw() {
     this._recalculateFlexBasis(true);
   }
 
   /** @private */
-  _onIronResize() {
+  _onResize() {
     this._recalculateFlexBasis(false);
   }
 

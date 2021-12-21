@@ -28,8 +28,9 @@ declare class Board extends ElementMixin(HTMLElement) {
   /**
    * Redraws the board and all rows inside it, if necessary.
    *
-   * In most cases, board will redraw itself if your reconfigure it. If you dynamically change CSS
-   * which affects this element, then you need to call this method.
+   * In most cases, board will redraw itself if your reconfigure it. If you dynamically change
+   * breakpoints `--vaadin-board-width-small` or `--vaadin-board-width-medium`,
+   * then you need to call this method.
    */
   redraw(): void;
 }

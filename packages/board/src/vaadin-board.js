@@ -5,10 +5,9 @@
  */
 import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import './vaadin-board-row.js';
-import { IronResizableBehavior } from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import { mixinBehaviors } from '@polymer/polymer/lib/legacy/class.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { BoardRow } from './vaadin-board-row.js';
 
 /**
  * `<vaadin-board>` is a web component to create flexible responsive layouts
@@ -32,7 +31,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
  * @extends HTMLElement
  * @mixes ElementMixin
  */
-class Board extends ElementMixin(mixinBehaviors([IronResizableBehavior], PolymerElement)) {
+class Board extends ElementMixin(PolymerElement) {
   static get template() {
     return html`
       <style>
@@ -65,11 +64,12 @@ class Board extends ElementMixin(mixinBehaviors([IronResizableBehavior], Polymer
   /**
    * Redraws the board and all rows inside it, if necessary.
    *
-   * In most cases, board will redraw itself if your reconfigure it. If you dynamically change CSS
-   * which affects this element, then you need to call this method.
+   * In most cases, board will redraw itself if your reconfigure it. If you dynamically change
+   * breakpoints `--vaadin-board-width-small` or `--vaadin-board-width-medium`,
+   * then you need to call this method.
    */
   redraw() {
-    this.notifyResize();
+    [...this.querySelectorAll('*')].filter((node) => node instanceof BoardRow).forEach((row) => row.redraw());
   }
 }
 

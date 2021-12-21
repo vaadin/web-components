@@ -1,11 +1,12 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-board.js';
+import { allResized } from './common.js';
 
 describe('size', () => {
-  let container, board, rows, rowDefault, rowSmaller, rowLarger;
+  let container, rows, rowDefault, rowSmaller, rowLarger;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     container = fixtureSync(`
       <div>
         <style>
@@ -58,11 +59,12 @@ describe('size', () => {
         </vaadin-board>
       </div>
     `);
-    board = container.querySelector('vaadin-board');
-    rows = container.querySelectorAll('vaadin-board-row');
+    rows = [...container.querySelectorAll('vaadin-board-row')];
     rowDefault = rows[0].querySelector('div');
     rowSmaller = rows[1].querySelector('div');
     rowLarger = rows[2].querySelector('div');
+
+    await allResized(rows);
   });
 
   const large = 'rgb(255, 0, 0)';
@@ -75,63 +77,63 @@ describe('size', () => {
     expect(getComputedStyle(rowLarger).backgroundColor).to.equal(largerColor);
   }
 
-  it('should apply correct styles for 900px width', () => {
+  it('should apply correct styles for 900px width', async () => {
     container.style.width = '920px';
-    board.redraw();
+    await allResized(rows);
     testSize(large, large, medium);
 
     container.style.width = '880px';
-    board.redraw();
+    await allResized(rows);
     testSize(medium, large, medium);
   });
 
-  it('should style items correctly for 500px width', () => {
+  it('should style items correctly for 500px width', async () => {
     container.style.width = '520px';
-    board.redraw();
+    await allResized(rows);
     testSize(medium, medium, small);
 
     container.style.width = '480px';
-    board.redraw();
+    await allResized(rows);
     testSize(small, medium, small);
   });
 
-  it('should style items correctly for 700px width', () => {
+  it('should style items correctly for 700px width', async () => {
     container.style.width = '720px';
-    board.redraw();
+    await allResized(rows);
     testSize(medium, large, small);
 
     container.style.width = '680px';
-    board.redraw();
+    await allResized(rows);
     testSize(medium, medium, small);
   });
 
-  it('should style items correctly for 300px width', () => {
+  it('should style items correctly for 300px width', async () => {
     container.style.width = '320px';
-    board.redraw();
+    await allResized(rows);
     testSize(small, medium, small);
 
     container.style.width = '280px';
-    board.redraw();
+    await allResized(rows);
     testSize(small, small, small);
   });
 
-  it('should style items correctly for 1300px width', () => {
+  it('should style items correctly for 1300px width', async () => {
     container.style.width = '1320px';
-    board.redraw();
+    await allResized(rows);
     testSize(large, large, large);
 
     container.style.width = '1280px';
-    board.redraw();
+    await allResized(rows);
     testSize(large, large, medium);
   });
 
-  it('should style items correctly for 800px width', () => {
+  it('should style items correctly for 800px width', async () => {
     container.style.width = '820px';
-    board.redraw();
+    await allResized(rows);
     testSize(medium, large, medium);
 
     container.style.width = '780px';
-    board.redraw();
+    await allResized(rows);
     testSize(medium, large, small);
   });
 });
