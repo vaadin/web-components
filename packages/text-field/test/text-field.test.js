@@ -388,61 +388,6 @@ describe('text-field', () => {
     });
   });
 
-  describe('resize notification', () => {
-    let spy;
-
-    function flushTextField(textField) {
-      textField.__observeOffsetHeightDebouncer.flush();
-    }
-
-    beforeEach(() => {
-      spy = sinon.spy();
-      textField.addEventListener('iron-resize', spy);
-    });
-
-    it('should not dispatch `iron-resize` event on init', () => {
-      expect(spy.called).to.be.false;
-    });
-
-    it('should dispatch `iron-resize` event on invalid height change', () => {
-      textField.errorMessage = 'Error';
-      flushTextField(textField);
-      textField.invalid = true;
-      flushTextField(textField);
-      expect(spy.called).to.be.true;
-    });
-
-    it('should be a composed event', () => {
-      textField.errorMessage = 'Error';
-      flushTextField(textField);
-      textField.invalid = true;
-      flushTextField(textField);
-      const event = spy.lastCall.lastArg;
-      expect(event.composed).to.be.true;
-    });
-
-    it('should dispatch `iron-resize` event on error message height change', () => {
-      textField.errorMessage = 'Error';
-      flushTextField(textField);
-      textField.invalid = true;
-      flushTextField(textField);
-      spy.resetHistory();
-
-      // Long message that spans on multiple lines
-      textField.errorMessage = [...new Array(42)].map(() => 'bla').join(' ');
-      flushTextField(textField);
-
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should dispatch `iron-resize` event on label height change', () => {
-      flushTextField(textField);
-      textField.label = 'Label';
-      flushTextField(textField);
-      expect(spy.calledOnce).to.be.true;
-    });
-  });
-
   describe('theme attribute', () => {
     it('should propagate theme attribute to input container', () => {
       const container = textField.shadowRoot.querySelector('[part="input-field"]');

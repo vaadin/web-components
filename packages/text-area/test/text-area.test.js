@@ -342,36 +342,6 @@ describe('text-area', () => {
     });
   });
 
-  describe('resize', () => {
-    let spy;
-
-    beforeEach(() => {
-      spy = sinon.spy();
-      textArea.addEventListener('iron-resize', spy);
-    });
-
-    it('should not dispatch `iron-resize` event on init', () => {
-      expect(spy.callCount).to.equal(0);
-    });
-
-    it('should dispatch `iron-resize` event on height change', () => {
-      textArea.value = `
-        there
-        should
-        be
-        a
-        lot
-        of
-        rows`;
-      expect(spy.callCount).to.equal(1);
-    });
-
-    it('should not dispatch `iron-resize` event on value change if height did not change', () => {
-      textArea.value = 'just 1 row';
-      expect(spy.callCount).to.equal(0);
-    });
-  });
-
   describe('pattern', () => {
     // https://github.com/web-platform-tests/wpt/blob/7b0ebaccc62b566a1965396e5be7bb2bc06f841f/html/semantics/forms/constraints/form-validation-validity-patternMismatch.html
 

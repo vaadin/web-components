@@ -278,8 +278,6 @@ export class TextArea extends PatternMixin(InputFieldMixin(ThemableMixin(Element
     inputField.style.removeProperty('display');
     inputField.style.removeProperty('height');
     inputField.scrollTop = scrollTop;
-
-    this._dispatchIronResizeEventIfNeeded('InputHeight', inputHeight);
   }
 
   /**
