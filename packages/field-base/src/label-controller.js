@@ -19,7 +19,7 @@ export class LabelController extends SlotController {
         this.__updateLabelId(node);
 
         // Set text content for the default label.
-        this.__applyDefaultLabel(this.label, node);
+        this.__updateDefaultLabel(this.label);
 
         this.__observeLabel(node);
       }
@@ -58,8 +58,11 @@ export class LabelController extends SlotController {
 
     // Default label is removed, do nothing.
     if (node !== this.defaultNode) {
-      this.__applyDefaultLabel(this.label, this.defaultNode);
+      this.__applyDefaultLabel();
     }
+
+    const hasLabel = this.__hasLabel(this.getSlotChild());
+    this.__toggleHasLabel(hasLabel);
   }
 
   /**
@@ -70,9 +73,7 @@ export class LabelController extends SlotController {
   setLabel(label) {
     this.label = label;
 
-    if (this.defaultNode && this.node === this.defaultNode) {
-      this.__applyDefaultLabel(label, this.defaultNode);
-    }
+    this.__updateDefaultLabel(label);
   }
 
   /**
@@ -94,6 +95,21 @@ export class LabelController extends SlotController {
     this.__toggleHasLabel(hasLabel);
   }
 
+  /** @private */
+  __applyDefaultLabel() {
+    let labelNode = this.getSlotChild();
+
+    // Restore the default label element.
+    if (!labelNode) {
+      labelNode = this.defaultNode;
+      labelNode.id = this.defaultId;
+      this.__observeLabel(labelNode);
+      this.host.appendChild(labelNode);
+    }
+
+    this.__updateDefaultLabel(this.label);
+  }
+
   /**
    * @param {HTMLElement} labelNode
    * @return {boolean}
@@ -113,36 +129,6 @@ export class LabelController extends SlotController {
    */
   __isNotEmpty(label) {
     return Boolean(label && label.trim() !== '');
-  }
-
-  /**
-   * @param {string} label
-   * @param {HTMLElement} labelNode
-   * @private
-   */
-  __applyDefaultLabel(label) {
-    const { defaultId, defaultNode } = this;
-
-    let currentLabel = this.getSlotChild();
-    const hasSlottedLabel = this.__hasLabel(currentLabel);
-
-    if (!currentLabel) {
-      // Restore the default label element.
-      currentLabel = defaultNode;
-      currentLabel.id = defaultId;
-      this.__observeLabel(currentLabel);
-      this.host.appendChild(currentLabel);
-    }
-
-    const isDefaultLabel = currentLabel === this.defaultNode;
-
-    // Only set text content for default label.
-    if (isDefaultLabel) {
-      currentLabel.textContent = label;
-    }
-
-    const hasLabel = isDefaultLabel ? this.__isNotEmpty(label) : hasSlottedLabel;
-    this.__toggleHasLabel(hasLabel);
   }
 
   /**
@@ -192,6 +178,22 @@ export class LabelController extends SlotController {
     // Make it possible for other mixins to observe change
     if (typeof this.labelChangedCallback === 'function') {
       this.labelChangedCallback(hasLabel, this.node);
+    }
+  }
+
+  /**
+   * @param {string} label
+   * @private
+   */
+  __updateDefaultLabel(label) {
+    if (this.defaultNode) {
+      this.defaultNode.textContent = label;
+
+      // Update has-label if default label is used
+      if (this.defaultNode === this.node) {
+        const hasLabel = this.__isNotEmpty(label);
+        this.__toggleHasLabel(hasLabel);
+      }
     }
   }
 
