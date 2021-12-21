@@ -21,9 +21,6 @@ function onceInvoked(object, functionName) {
  * Resolves once the ResizeObserver in AvatarGroup has processed a resize.
  */
 async function onceResized(group) {
-  // Wait for the _onResize function to be invoked by the ResizeObserver
-  await onceInvoked(group, '_onResize');
-  // Wait for the debouncer callback in _onResize to invoke __setItemsInView
   await onceInvoked(group, '__setItemsInView');
 }
 

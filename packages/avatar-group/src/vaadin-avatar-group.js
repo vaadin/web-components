@@ -11,8 +11,6 @@ import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announ
 import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { timeOut } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizableMixin } from '@vaadin/component-base/src/resizable-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -362,10 +360,8 @@ class AvatarGroup extends ResizableMixin(ElementMixin(ThemableMixin(PolymerEleme
    * @override
    */
   _onResize() {
-    this.__debounceResize = Debouncer.debounce(this.__debounceResize, timeOut.after(0), () => {
-      this.__setItemsInView();
-      this.__setPosition();
-    });
+    this.__setItemsInView();
+    this.__setPosition();
   }
 
   /** @private */
