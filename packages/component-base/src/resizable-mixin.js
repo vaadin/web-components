@@ -4,13 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { timeOut } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-
-let debounce;
 
 const observer = new ResizeObserver((entries) => {
-  debounce = Debouncer.debounce(debounce, timeOut.after(0), () => {
+  setTimeout(() => {
     entries.forEach((entry) => {
       entry.target._onResize(entry.contentRect);
     });
