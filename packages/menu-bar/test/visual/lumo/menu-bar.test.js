@@ -79,7 +79,6 @@ describe('menu-bar', () => {
         it('primary', async () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'primary');
-          element.notifyResize();
           arrowDown(element._buttons[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-primary`);
@@ -88,7 +87,6 @@ describe('menu-bar', () => {
         it('secondary', async () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'secondary');
-          element.notifyResize();
           arrowDown(element._buttons[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-secondary`);
@@ -97,7 +95,6 @@ describe('menu-bar', () => {
         it('tertiary', async () => {
           div.style.width = '265px';
           element.setAttribute('theme', 'tertiary');
-          element.notifyResize();
           arrowDown(element._buttons[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-tertiary`);
@@ -106,7 +103,6 @@ describe('menu-bar', () => {
         it('tertiary-inline', async () => {
           div.style.width = '200px';
           element.setAttribute('theme', 'tertiary-inline');
-          element.notifyResize();
           arrowDown(element._buttons[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-tertiary-inline`);
@@ -115,7 +111,6 @@ describe('menu-bar', () => {
         it('small', async () => {
           div.style.width = '265px';
           element.setAttribute('theme', 'small');
-          element.notifyResize();
           arrowDown(element._buttons[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-small`);
