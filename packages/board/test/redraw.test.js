@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-board.js';
-import { onceResized } from './common.js';
+import { allResized, onceResized } from './common.js';
 
 describe('redraw', () => {
   describe('board', () => {
@@ -155,7 +155,7 @@ describe('redraw', () => {
       second = container.querySelector('#second');
       third = container.querySelector('#third');
 
-      await onceResized(first);
+      await allResized([first, second, third]);
     });
 
     it('should set correct class name to rows by default', () => {
@@ -227,7 +227,7 @@ describe('redraw', () => {
       outer = container.querySelector('#outer');
       inner = container.querySelector('#inner');
 
-      await onceResized(inner);
+      await allResized([inner, outer]);
     });
 
     it('should update nested rows on redraw after breakpoint change', () => {

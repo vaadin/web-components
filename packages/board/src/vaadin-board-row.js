@@ -88,12 +88,12 @@ class BoardRow extends ElementMixin(PolymerElement) {
   ready() {
     super.ready();
 
+    this.$.insertionPoint.addEventListener('slotchange', () => this.redraw());
+
     this.__resizeObserver = new ResizeObserver(() => {
       requestAnimationFrame(() => this._onResize());
     });
     this.__resizeObserver.observe(this);
-
-    this.$.insertionPoint.addEventListener('slotchange', this.redraw.bind(this));
   }
 
   /** @protected */
