@@ -1,12 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-board.js';
+import { onceResized } from './common.js';
 
 describe('redraw', () => {
   describe('board', () => {
-    let board;
+    let board, row;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       board = fixtureSync(`
         <vaadin-board style="width: 1200px;">
           <vaadin-board-row id="top">
@@ -17,6 +18,8 @@ describe('redraw', () => {
           </vaadin-board-row>
         </vaadin-board>
       `);
+      row = board.firstElementChild;
+      await onceResized(row);
     });
 
     it('should trigger layout after board style is changed', () => {
@@ -37,7 +40,7 @@ describe('redraw', () => {
   describe('row', () => {
     let row;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       row = fixtureSync(`
         <vaadin-board-row style="width: 1200px;">
           <div>top A</div>
@@ -46,6 +49,7 @@ describe('redraw', () => {
           <div>top D</div>
         </vaadin-board-row>
       `);
+      await onceResized(row);
     });
 
     it('should trigger layout after board row style is changed', () => {
@@ -65,7 +69,7 @@ describe('redraw', () => {
   describe('nested row', () => {
     let board, row;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       board = fixtureSync(`
         <vaadin-board style="width: 1200px;">
           <vaadin-board-row id="top" board-cols="2">
@@ -80,6 +84,8 @@ describe('redraw', () => {
         </vaadin-board>
       `);
       row = board.querySelector('#nested');
+
+      await onceResized(row);
     });
 
     it('should trigger layout for nested rows after board style is changed', () => {
@@ -119,7 +125,7 @@ describe('redraw', () => {
   describe('row class names', () => {
     let container, board, first, second, third;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       container = fixtureSync(`
         <div style="width: 1000px;">
           <vaadin-board>
@@ -148,6 +154,8 @@ describe('redraw', () => {
       first = container.querySelector('#first');
       second = container.querySelector('#second');
       third = container.querySelector('#third');
+
+      await onceResized(first);
     });
 
     it('should set correct class name to rows by default', () => {
@@ -185,13 +193,13 @@ describe('redraw', () => {
       expect(third.className).to.equal('medium');
     });
 
-    it('should only update class on resize or breakpoint change', () => {
+    it('should only update class on resize or breakpoint change', async () => {
       first.className = '';
-      board.redraw();
+      await aTimeout(100);
       expect(first.className).to.equal('');
 
       container.style.width = '1001px';
-      board.redraw();
+      await onceResized(first);
       expect(first.className).to.equal('large');
     });
   });
@@ -199,7 +207,7 @@ describe('redraw', () => {
   describe('nested row class names', () => {
     let container, board, outer, inner;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       container = fixtureSync(`
         <div style="width: 1000px;">
           <vaadin-board>
@@ -218,6 +226,8 @@ describe('redraw', () => {
       board = container.querySelector('vaadin-board');
       outer = container.querySelector('#outer');
       inner = container.querySelector('#inner');
+
+      await onceResized(inner);
     });
 
     it('should update nested rows on redraw after breakpoint change', () => {
