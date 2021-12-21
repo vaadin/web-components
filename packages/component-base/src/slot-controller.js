@@ -14,6 +14,24 @@ export class SlotController {
     this.slotName = slotName;
     this.slotFactory = slotFactory;
     this.slotInitializer = slotInitializer;
+    this.defaultId = SlotController.generateId(slotName, host);
+  }
+
+  /**
+   * Ensure that every instance has unique ID.
+   *
+   * @param {string} slotName
+   * @param {HTMLElement} host
+   * @return {string}
+   * @protected
+   */
+  static generateId(slotName, host) {
+    const prefix = slotName || 'default';
+
+    // Maintain the unique ID counter for a given prefix.
+    this[`${prefix}Id`] = 1 + this[`${prefix}Id`] || 0;
+
+    return `${prefix}-${host.localName}-${this[`${prefix}Id`]}`;
   }
 
   hostConnected() {
@@ -39,6 +57,7 @@ export class SlotController {
         }
       } else {
         this.node = slotted;
+        this.initCustomNode(slotted);
       }
 
       // Don't try to bind `this` to initializer (normally it's arrow function).

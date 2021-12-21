@@ -12,16 +12,22 @@ export class LabelController extends SlotController {
   /**
    * String used for the label.
    */
-  label: string | null | undefined;
+  protected label: string | null | undefined;
 
   /**
    * Set label based on corresponding host property.
-
    */
-  setLabel(label): void;
+  setLabel(label: string | null | undefined): void;
+
+  /**
+   * ID attribute value set on the label element.
+   */
+  labelId: string;
+
+  protected uniqueId: string;
 
   /**
    * Set callback to be called when label changes.
    */
-  setLabelChangedCallback(callback: (hasLabel: boolean, label: HTMLElement) => void): void;
+  setLabelChangedCallback(callback: (hasLabel: boolean, labelNode: HTMLElement) => void): void;
 }

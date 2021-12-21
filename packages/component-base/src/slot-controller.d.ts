@@ -34,6 +34,8 @@ export class SlotController implements ReactiveController {
 
   protected defaultNode: Node;
 
+  protected defaultId: string;
+
   /**
    * Override to initialize the newly added custom node.
    */

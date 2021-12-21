@@ -9,16 +9,12 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  * A controller to manage the label element.
  */
 export class LabelController extends SlotController {
-  constructor(host, labelId) {
+  constructor(host) {
     super(
       host,
       'label',
       () => document.createElement('label'),
-      (host, node) => {
-        this.label = host.label;
-
-        this.__savedLabelId = labelId;
-
+      (_host, node) => {
         // Set ID attribute or use the existing one.
         this.__updateLabelId(node);
 
@@ -30,13 +26,9 @@ export class LabelController extends SlotController {
     );
   }
 
-  hostConnected() {
-    super.hostConnected();
-
-    const labelNode = this.getSlotChild();
-    if (labelNode !== this.defaultNode) {
-      this.initCustomNode(labelNode);
-    }
+  /** @protected */
+  get uniqueId() {
+    return SlotController.labelId;
   }
 
   /**
@@ -55,20 +47,24 @@ export class LabelController extends SlotController {
   /**
    * Override to cleanup label node when it's removed.
    *
-   * @param {Node} _node
+   * @param {Node} node
    * @protected
    * @override
    */
-  teardownNode(_node) {
+  teardownNode(node) {
     if (this.__labelObserver) {
       this.__labelObserver.disconnect();
     }
 
-    this.__applyDefaultLabel(this.label, this.defaultNode);
+    // Default label is removed, do nothing.
+    if (node !== this.defaultNode) {
+      this.__applyDefaultLabel(this.label, this.defaultNode);
+    }
   }
 
   /**
    * Set label based on corresponding host property.
+   *
    * @param {string} label
    */
   setLabel(label) {
@@ -81,7 +77,8 @@ export class LabelController extends SlotController {
 
   /**
    * Set callback to be called when label changes.
-   * @param {function()} callback
+   *
+   * @param {Function} callback
    */
   setLabelChangedCallback(callback) {
     this.labelChangedCallback = callback;
@@ -103,7 +100,11 @@ export class LabelController extends SlotController {
    * @private
    */
   __hasLabel(labelNode) {
-    return Boolean(labelNode && (labelNode.children.length > 0 || this.__isNotEmpty(labelNode.textContent)));
+    if (!labelNode) {
+      return false;
+    }
+
+    return labelNode.children.length > 0 || this.__isNotEmpty(labelNode.textContent);
   }
 
   /**
@@ -119,15 +120,17 @@ export class LabelController extends SlotController {
    * @param {HTMLElement} labelNode
    * @private
    */
-  __applyDefaultLabel(label, labelNode) {
+  __applyDefaultLabel(label) {
+    const { defaultId, defaultNode } = this;
+
     let currentLabel = this.getSlotChild();
     const hasSlottedLabel = this.__hasLabel(currentLabel);
 
     if (!currentLabel) {
       // Restore the default label element.
-      currentLabel = labelNode;
-      currentLabel.id = this.__savedLabelId;
-      this.__observeLabel(labelNode);
+      currentLabel = defaultNode;
+      currentLabel.id = defaultId;
+      this.__observeLabel(currentLabel);
       this.host.appendChild(currentLabel);
     }
 
@@ -156,12 +159,9 @@ export class LabelController extends SlotController {
         const isLabelMutation = target === this.node;
 
         if (mutation.type === 'attributes') {
-          if (
-            isLabelMutation &&
-            mutation.type === 'attributes' &&
-            mutation.attributeName === 'id' &&
-            target.id !== this.__savedLabelId
-          ) {
+          // We use attributeFilter to only observe ID mutation,
+          // no need to check for attribute name separately.
+          if (isLabelMutation && target.id !== this.defaultId) {
             this.__updateLabelId(target);
           }
         } else if (isLabelMutation || target.parentElement === this.node) {
@@ -173,7 +173,13 @@ export class LabelController extends SlotController {
     });
 
     // Observe changes to label ID attribute, text content and children.
-    this.__labelObserver.observe(labelNode, { attributes: true, childList: true, subtree: true, characterData: true });
+    this.__labelObserver.observe(labelNode, {
+      attributes: true,
+      attributeFilter: ['id'],
+      childList: true,
+      subtree: true,
+      characterData: true
+    });
   }
 
   /**
@@ -199,7 +205,7 @@ export class LabelController extends SlotController {
     if (labelNode.id) {
       newId = labelNode.id;
     } else {
-      newId = this.__savedLabelId;
+      newId = this.defaultId;
       labelNode.id = newId;
     }
 

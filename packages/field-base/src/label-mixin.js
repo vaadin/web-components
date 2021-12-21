@@ -42,11 +42,7 @@ export const LabelMixin = dedupingMixin(
       constructor() {
         super();
 
-        // Ensure every instance has unique ID
-        const uniqueId = (LabelMixinClass._uniqueLabelId = 1 + LabelMixinClass._uniqueLabelId || 0);
-        const labelId = `label-${this.localName}-${uniqueId}`;
-
-        this._labelController = new LabelController(this, labelId);
+        this._labelController = new LabelController(this);
         this.addController(this._labelController);
       }
 
