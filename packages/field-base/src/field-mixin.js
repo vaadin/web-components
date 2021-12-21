@@ -4,9 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { FieldAriaController } from './field-aria-controller.js';
 import { LabelMixin } from './label-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
@@ -69,7 +67,6 @@ export const FieldMixin = (superclass) =>
 
     static get observers() {
       return [
-        '__observeOffsetHeight(errorMessage, invalid, label, helperText)',
         '_updateErrorMessage(invalid, errorMessage)',
         '_invalidChanged(invalid)',
         '_requiredChanged(required)',
@@ -241,31 +238,6 @@ export const FieldMixin = (superclass) =>
      */
     __toggleHasHelper(hasHelper) {
       this.toggleAttribute('has-helper', hasHelper);
-    }
-
-    /**
-     * Dispatch an event if a specific size measurement property has changed.
-     * Supporting multiple properties here is needed for `vaadin-text-area`.
-     * @protected
-     */
-    _dispatchIronResizeEventIfNeeded(prop, value) {
-      const oldSize = '__old' + prop;
-      if (this[oldSize] !== undefined && this[oldSize] !== value) {
-        this.dispatchEvent(new CustomEvent('iron-resize', { bubbles: true, composed: true }));
-      }
-
-      this[oldSize] = value;
-    }
-
-    /** @private */
-    __observeOffsetHeight() {
-      this.__observeOffsetHeightDebouncer = Debouncer.debounce(
-        this.__observeOffsetHeightDebouncer,
-        animationFrame,
-        () => {
-          this._dispatchIronResizeEventIfNeeded('Height', this.offsetHeight);
-        }
-      );
     }
 
     /**
