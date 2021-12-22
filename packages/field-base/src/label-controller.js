@@ -26,6 +26,10 @@ export class LabelController extends SlotController {
     );
   }
 
+  get labelId() {
+    return this.node.id;
+  }
+
   /** @protected */
   get uniqueId() {
     return SlotController.labelId;
@@ -56,12 +60,17 @@ export class LabelController extends SlotController {
       this.__labelObserver.disconnect();
     }
 
-    // Default label is removed, do nothing.
-    if (node !== this.defaultNode) {
-      this.__applyDefaultLabel();
+    let labelNode = this.getSlotChild();
+
+    // If custom label was removed, restore the default one.
+    if (!labelNode && node !== this.defaultNode) {
+      labelNode = this.attachDefaultNode();
+
+      // Run initializer to update default label and ID.
+      this.initNode();
     }
 
-    const hasLabel = this.__hasLabel(this.getSlotChild());
+    const hasLabel = this.__hasLabel(labelNode);
     this.__toggleHasLabel(hasLabel);
   }
 
@@ -93,21 +102,6 @@ export class LabelController extends SlotController {
     this.__updateLabelId(labelNode);
     const hasLabel = this.__hasLabel(labelNode);
     this.__toggleHasLabel(hasLabel);
-  }
-
-  /** @private */
-  __applyDefaultLabel() {
-    let labelNode = this.getSlotChild();
-
-    // Restore the default label element.
-    if (!labelNode) {
-      labelNode = this.defaultNode;
-      labelNode.id = this.defaultId;
-      this.__observeLabel(labelNode);
-      this.host.appendChild(labelNode);
-    }
-
-    this.__updateDefaultLabel(this.label);
   }
 
   /**
@@ -210,7 +204,5 @@ export class LabelController extends SlotController {
       newId = this.defaultId;
       labelNode.id = newId;
     }
-
-    this.labelId = newId;
   }
 }

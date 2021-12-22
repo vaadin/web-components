@@ -83,13 +83,14 @@ describe('label-mixin', () => {
 
   describe('slotted', () => {
     describe('basic', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         element = fixtureSync(`
           <label-mixin-element>
             <label slot="label">Custom</label>
           </label-mixin-element>
         `);
         label = element.querySelector('label');
+        await nextFrame();
       });
 
       it('should set id on the slotted label element', () => {
@@ -117,6 +118,13 @@ describe('label-mixin', () => {
         label.textContent = '';
         await nextFrame();
         expect(element.hasAttribute('has-label')).to.be.false;
+      });
+
+      it('should attach default label when removing the custom label', async () => {
+        element.label = 'Fallback';
+        element.removeChild(label);
+        await nextFrame();
+        expect(element._labelNode.textContent).to.equal('Fallback');
       });
     });
 

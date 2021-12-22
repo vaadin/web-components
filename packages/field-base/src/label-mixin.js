@@ -36,7 +36,7 @@ export const LabelMixin = dedupingMixin(
 
       /** @protected */
       get _labelNode() {
-        return this._labelController.getSlotChild();
+        return this._labelController.node;
       }
 
       constructor() {

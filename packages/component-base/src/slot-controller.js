@@ -36,41 +36,52 @@ export class SlotController {
 
   hostConnected() {
     if (!this.initialized) {
-      const { host, slotName, slotFactory, slotInitializer } = this;
-
       const slotted = this.getSlotChild();
 
       if (!slotted) {
-        // Slot factory is optional, some slots don't have default content.
-        if (slotFactory) {
-          const slotContent = slotFactory(host);
-          if (slotContent instanceof Element) {
-            if (slotName !== '') {
-              slotContent.setAttribute('slot', slotName);
-            }
-            host.appendChild(slotContent);
-            this.node = slotContent;
-
-            // Store reference to not pass default node to `initCustomNode`.
-            this.defaultNode = slotContent;
-          }
-        }
+        this.attachDefaultNode();
       } else {
         this.node = slotted;
         this.initCustomNode(slotted);
       }
 
-      // Don't try to bind `this` to initializer (normally it's arrow function).
-      // Instead, pass the host as a first argument to access component's state.
-      if (slotInitializer) {
-        slotInitializer(host, this.node);
-      }
+      this.initNode();
 
       // TODO: Consider making this behavior opt-in to improve performance.
       this.observe();
 
       this.initialized = true;
     }
+  }
+
+  /**
+   * Create and attach default node using the slot factory.
+   * @return {Node | undefined}
+   * @protected
+   */
+  attachDefaultNode() {
+    const { host, slotName, slotFactory } = this;
+
+    // Check if the node was created previously and if so, reuse it.
+    let node = this.defaultNode;
+
+    // Slot factory is optional, some slots don't have default content.
+    if (!node && slotFactory) {
+      node = slotFactory(host);
+      if (node instanceof Element) {
+        if (slotName !== '') {
+          node.setAttribute('slot', slotName);
+        }
+        this.node = node;
+        this.defaultNode = node;
+      }
+    }
+
+    if (node) {
+      host.appendChild(node);
+    }
+
+    return node;
   }
 
   /**
@@ -86,6 +97,18 @@ export class SlotController {
         (node.nodeType === Node.TEXT_NODE && node.textContent.trim() && slotName === '')
       );
     });
+  }
+
+  /**
+   * @protected
+   */
+  initNode() {
+    const { slotInitializer } = this;
+    // Don't try to bind `this` to initializer (normally it's arrow function).
+    // Instead, pass the host as a first argument to access component's state.
+    if (slotInitializer) {
+      slotInitializer(this.host, this.node);
+    }
   }
 
   /**
