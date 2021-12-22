@@ -174,7 +174,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     super();
 
     this.__itemsResizeObserver = new ResizeObserver(() => {
-      requestAnimationFrame(() => this._updateOverflow());
+      setTimeout(() => this._updateOverflow());
     });
   }
 
