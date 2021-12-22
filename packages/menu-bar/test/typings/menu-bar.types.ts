@@ -1,6 +1,6 @@
-import '../../vaadin-menu-bar';
-import { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin';
-import { MenuBarItem, MenuBarItemSelectedEvent } from '../../vaadin-menu-bar';
+import '../../vaadin-menu-bar.js';
+import { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
+import { MenuBarItem, MenuBarItemSelectedEvent } from '../../vaadin-menu-bar.js';
 
 const menu = document.createElement('vaadin-menu-bar');
 

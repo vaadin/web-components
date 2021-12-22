@@ -4,7 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 /**
  * `<vaadin-board-row>` is a web component that together with `<vaadin-board>` component allows
