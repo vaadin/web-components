@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ResizeMixin } from '../src/resize-mixin.js';
@@ -44,6 +44,14 @@ describe('resize-mixin', () => {
   it('should notify resize', async () => {
     element.style.width = '100px';
     await element.nextResize();
+  });
+
+  it('should not notify resize for detached element', async () => {
+    const spy = sinon.spy(element, '_onResize');
+    element.remove();
+    element.style.width = '100px';
+    await aTimeout(100);
+    expect(spy.called).to.be.false;
   });
 
   describe('console warnings', () => {
