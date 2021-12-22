@@ -185,13 +185,8 @@ export class LabelController extends SlotController {
    * @private
    */
   __updateLabelId(labelNode) {
-    let newId;
-
-    if (labelNode.id) {
-      newId = labelNode.id;
-    } else {
-      newId = this.defaultId;
-      labelNode.id = newId;
+    if (!labelNode.id) {
+      labelNode.id = this.defaultId;
     }
   }
 }
