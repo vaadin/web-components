@@ -26,8 +26,10 @@ describe('radio-button', () => {
 
   // TODO: A legacy suit. Replace with snapshot tests when possible.
   describe('default', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       radio = fixtureSync('<vaadin-radio-button>Label</vaadin-radio-button>');
+      // Wait for MutationObserver
+      await nextFrame();
       label = radio.querySelector('[slot=label]');
     });
 
@@ -286,8 +288,10 @@ describe('radio-button', () => {
       console.warn.restore();
     });
 
-    it('should warn about using default slot label', () => {
+    it('should warn about using default slot label', async () => {
       fixtureSync('<vaadin-radio-button>label</vaadin-radio-button>');
+      // Wait for MutationObserver
+      await nextFrame();
 
       expect(console.warn.calledOnce).to.be.true;
       expect(console.warn.args[0][0]).to.include(

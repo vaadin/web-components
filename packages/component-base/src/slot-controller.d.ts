@@ -5,7 +5,7 @@
  */
 import { ReactiveController } from 'lit';
 
-export class SlotController implements ReactiveController {
+export class SlotController extends EventTarget implements ReactiveController {
   constructor(
     host: HTMLElement,
     slotName: string,
@@ -33,6 +33,12 @@ export class SlotController implements ReactiveController {
   protected initialized: boolean;
 
   protected defaultNode: Node;
+
+  protected defaultId: string;
+
+  protected attachDefaultNode(): Node | undefined;
+
+  protected initNode(node: Node): void;
 
   /**
    * Override to initialize the newly added custom node.

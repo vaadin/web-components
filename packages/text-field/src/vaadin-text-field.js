@@ -174,7 +174,7 @@ export class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(Elemen
         this.ariaTarget = input;
       })
     );
-    this.addController(new LabelledInputController(this.inputElement, this._labelNode));
+    this.addController(new LabelledInputController(this.inputElement, this._labelController));
   }
 }
 
