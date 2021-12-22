@@ -26,6 +26,9 @@ export class LabelController extends SlotController {
     );
   }
 
+  /**
+   * @return {string}
+   */
   get labelId() {
     return this.node.id;
   }
