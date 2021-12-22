@@ -233,7 +233,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
         this.ariaTarget = input;
       })
     );
-    this.addController(new LabelledInputController(this.inputElement, this._labelNode));
+    this.addController(new LabelledInputController(this.inputElement, this._labelController));
   }
 
   /** @private */

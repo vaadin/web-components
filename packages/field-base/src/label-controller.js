@@ -70,7 +70,7 @@ export class LabelController extends SlotController {
       labelNode = this.attachDefaultNode();
 
       // Run initializer to update default label and ID.
-      this.initNode();
+      this.initNode(labelNode);
     }
 
     const hasLabel = this.__hasLabel(labelNode);
@@ -86,15 +86,6 @@ export class LabelController extends SlotController {
     this.label = label;
 
     this.__updateDefaultLabel(label);
-  }
-
-  /**
-   * Set callback to be called when label changes.
-   *
-   * @param {Function} callback
-   */
-  setLabelChangedCallback(callback) {
-    this.labelChangedCallback = callback;
   }
 
   /**
@@ -163,9 +154,14 @@ export class LabelController extends SlotController {
     this.host.toggleAttribute('has-label', hasLabel);
 
     // Make it possible for other mixins to observe change
-    if (typeof this.labelChangedCallback === 'function') {
-      this.labelChangedCallback(hasLabel, this.node);
-    }
+    this.dispatchEvent(
+      new CustomEvent('label-changed', {
+        detail: {
+          hasLabel,
+          node: this.node
+        }
+      })
+    );
   }
 
   /**

@@ -5,6 +5,7 @@
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
 import { SlotMixinClass } from '@vaadin/component-base/src/slot-mixin.js';
+import { LabelController } from './label-controller.js';
 
 /**
  * A mixin to provide label via corresponding property or named slot.
@@ -20,6 +21,8 @@ export declare class LabelMixinClass {
   label: string | null | undefined;
 
   protected readonly _labelNode: HTMLLabelElement;
+
+  protected _labelController: LabelController;
 
   protected _labelChanged(label: string | null | undefined): void;
 }

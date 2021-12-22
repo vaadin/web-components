@@ -8,8 +8,10 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 /**
  * A controller for providing content to slot element and observing changes.
  */
-export class SlotController {
+export class SlotController extends EventTarget {
   constructor(host, slotName, slotFactory, slotInitializer) {
+    super();
+
     this.host = host;
     this.slotName = slotName;
     this.slotFactory = slotFactory;
@@ -36,16 +38,16 @@ export class SlotController {
 
   hostConnected() {
     if (!this.initialized) {
-      const slotted = this.getSlotChild();
+      let node = this.getSlotChild();
 
-      if (!slotted) {
-        this.attachDefaultNode();
+      if (!node) {
+        node = this.attachDefaultNode();
       } else {
-        this.node = slotted;
-        this.initCustomNode(slotted);
+        this.node = node;
+        this.initCustomNode(node);
       }
 
-      this.initNode();
+      this.initNode(node);
 
       // TODO: Consider making this behavior opt-in to improve performance.
       this.observe();
@@ -100,14 +102,15 @@ export class SlotController {
   }
 
   /**
+   * @param {Node} node
    * @protected
    */
-  initNode() {
+  initNode(node) {
     const { slotInitializer } = this;
     // Don't try to bind `this` to initializer (normally it's arrow function).
     // Instead, pass the host as a first argument to access component's state.
     if (slotInitializer) {
-      slotInitializer(this.host, this.node);
+      slotInitializer(this.host, node);
     }
   }
 

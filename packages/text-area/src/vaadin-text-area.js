@@ -212,7 +212,7 @@ export class TextArea extends PatternMixin(InputFieldMixin(ThemableMixin(Element
         this.ariaTarget = input;
       })
     );
-    this.addController(new LabelledInputController(this.inputElement, this._labelNode));
+    this.addController(new LabelledInputController(this.inputElement, this._labelController));
     this.addEventListener('animationend', this._onAnimationEnd);
   }
 

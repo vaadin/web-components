@@ -25,9 +25,4 @@ export class LabelController extends SlotController {
   labelId: string;
 
   protected uniqueId: string;
-
-  /**
-   * Set callback to be called when label changes.
-   */
-  setLabelChangedCallback(callback: (hasLabel: boolean, labelNode: HTMLElement) => void): void;
 }

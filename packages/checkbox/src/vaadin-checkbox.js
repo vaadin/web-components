@@ -177,7 +177,7 @@ class Checkbox extends SlotLabelMixin(
         this.ariaTarget = input;
       });
       this.addController(this._inputController);
-      this.addController(new LabelledInputController(this.inputElement, this._labelNode));
+      this.addController(new LabelledInputController(this.inputElement, this._labelController));
     }
   }
 

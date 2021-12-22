@@ -105,7 +105,10 @@ export const FieldMixin = (superclass) =>
 
       this._fieldAriaController = new FieldAriaController(this);
 
-      this._labelController.setLabelChangedCallback(this.__labelChangedCallback.bind(this));
+      this._labelController.addEventListener('label-changed', (event) => {
+        const { hasLabel, node } = event.detail;
+        this.__labelChanged(hasLabel, node);
+      });
     }
 
     /** @protected */
@@ -245,7 +248,7 @@ export const FieldMixin = (superclass) =>
     }
 
     /** @private */
-    __labelChangedCallback(hasLabel, labelNode) {
+    __labelChanged(hasLabel, labelNode) {
       // Label ID should be only added when the label content is present.
       // Otherwise, it may conflict with an `aria-label` attribute possibly added by the user.
       if (hasLabel) {
