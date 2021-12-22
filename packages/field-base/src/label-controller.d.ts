@@ -23,6 +23,4 @@ export class LabelController extends SlotController {
    * ID attribute value set on the label element.
    */
   labelId: string;
-
-  protected uniqueId: string;
 }
