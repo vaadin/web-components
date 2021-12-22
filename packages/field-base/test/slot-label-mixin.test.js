@@ -26,8 +26,10 @@ describe('slot-label-mixin', () => {
   let element;
 
   describe('slot label', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       element = fixtureSync(`<slot-label-mixin-element>Slot Label</slot-label-mixin-element>`);
+      // Wait for MutationObserver.
+      await nextFrame();
     });
 
     it('should display the slot label', () => {
@@ -62,8 +64,10 @@ describe('slot-label-mixin', () => {
   });
 
   describe('label property and slot label', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       element = fixtureSync(`<slot-label-mixin-element label="Label Property">Slot Label</slot-label-mixin-element>`);
+      // Wait for MutationObserver.
+      await nextFrame();
     });
 
     it('should display the slot label', () => {

@@ -219,9 +219,7 @@ snapshots["vaadin-select shadow theme"] =
 /* end snapshot vaadin-select shadow theme */
 
 snapshots["vaadin-select slots default"] = 
-`<label slot="label">
-</label>
-<div
+`<div
   hidden=""
   slot="error-message"
 >
@@ -235,13 +233,13 @@ snapshots["vaadin-select slots default"] =
   tabindex="0"
 >
 </vaadin-select-value-button>
+<label slot="label">
+</label>
 `;
 /* end snapshot vaadin-select slots default */
 
 snapshots["vaadin-select slots helper"] = 
-`<label slot="label">
-</label>
-<div
+`<div
   hidden=""
   slot="error-message"
 >
@@ -255,6 +253,8 @@ snapshots["vaadin-select slots helper"] =
   tabindex="0"
 >
 </vaadin-select-value-button>
+<label slot="label">
+</label>
 <div slot="helper">
   Helper
 </div>

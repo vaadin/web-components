@@ -213,7 +213,7 @@ class DatePicker extends DatePickerMixin(
         this.ariaTarget = input;
       })
     );
-    this.addController(new LabelledInputController(this.inputElement, this._labelNode));
+    this.addController(new LabelledInputController(this.inputElement, this._labelController));
   }
 
   /** @private */

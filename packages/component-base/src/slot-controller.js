@@ -8,50 +8,82 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 /**
  * A controller for providing content to slot element and observing changes.
  */
-export class SlotController {
+export class SlotController extends EventTarget {
   constructor(host, slotName, slotFactory, slotInitializer) {
+    super();
+
     this.host = host;
     this.slotName = slotName;
     this.slotFactory = slotFactory;
     this.slotInitializer = slotInitializer;
+    this.defaultId = SlotController.generateId(slotName, host);
+  }
+
+  /**
+   * Ensure that every instance has unique ID.
+   *
+   * @param {string} slotName
+   * @param {HTMLElement} host
+   * @return {string}
+   * @protected
+   */
+  static generateId(slotName, host) {
+    const prefix = slotName || 'default';
+
+    // Maintain the unique ID counter for a given prefix.
+    this[`${prefix}Id`] = 1 + this[`${prefix}Id`] || 0;
+
+    return `${prefix}-${host.localName}-${this[`${prefix}Id`]}`;
   }
 
   hostConnected() {
     if (!this.initialized) {
-      const { host, slotName, slotFactory, slotInitializer } = this;
+      let node = this.getSlotChild();
 
-      const slotted = this.getSlotChild();
-
-      if (!slotted) {
-        // Slot factory is optional, some slots don't have default content.
-        if (slotFactory) {
-          const slotContent = slotFactory(host);
-          if (slotContent instanceof Element) {
-            if (slotName !== '') {
-              slotContent.setAttribute('slot', slotName);
-            }
-            host.appendChild(slotContent);
-            this.node = slotContent;
-
-            // Store reference to not pass default node to `initCustomNode`.
-            this.defaultNode = slotContent;
-          }
-        }
+      if (!node) {
+        node = this.attachDefaultNode();
       } else {
-        this.node = slotted;
+        this.node = node;
+        this.initCustomNode(node);
       }
 
-      // Don't try to bind `this` to initializer (normally it's arrow function).
-      // Instead, pass the host as a first argument to access component's state.
-      if (slotInitializer) {
-        slotInitializer(host, this.node);
-      }
+      this.initNode(node);
 
       // TODO: Consider making this behavior opt-in to improve performance.
       this.observe();
 
       this.initialized = true;
     }
+  }
+
+  /**
+   * Create and attach default node using the slot factory.
+   * @return {Node | undefined}
+   * @protected
+   */
+  attachDefaultNode() {
+    const { host, slotName, slotFactory } = this;
+
+    // Check if the node was created previously and if so, reuse it.
+    let node = this.defaultNode;
+
+    // Slot factory is optional, some slots don't have default content.
+    if (!node && slotFactory) {
+      node = slotFactory(host);
+      if (node instanceof Element) {
+        if (slotName !== '') {
+          node.setAttribute('slot', slotName);
+        }
+        this.node = node;
+        this.defaultNode = node;
+      }
+    }
+
+    if (node) {
+      host.appendChild(node);
+    }
+
+    return node;
   }
 
   /**
@@ -67,6 +99,19 @@ export class SlotController {
         (node.nodeType === Node.TEXT_NODE && node.textContent.trim() && slotName === '')
       );
     });
+  }
+
+  /**
+   * @param {Node} node
+   * @protected
+   */
+  initNode(node) {
+    const { slotInitializer } = this;
+    // Don't try to bind `this` to initializer (normally it's arrow function).
+    // Instead, pass the host as a first argument to access component's state.
+    if (slotInitializer) {
+      slotInitializer(this.host, node);
+    }
   }
 
   /**
@@ -115,6 +160,8 @@ export class SlotController {
 
         if (newNode !== this.defaultNode) {
           this.initCustomNode(newNode);
+
+          this.initNode(newNode);
         }
       }
     });

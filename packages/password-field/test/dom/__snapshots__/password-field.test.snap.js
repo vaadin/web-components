@@ -264,9 +264,7 @@ snapshots["vaadin-password-field shadow theme"] =
 /* end snapshot vaadin-password-field shadow theme */
 
 snapshots["vaadin-password-field slots default"] = 
-`<label slot="label">
-</label>
-<div
+`<div
   hidden=""
   slot="error-message"
 >
@@ -284,13 +282,13 @@ snapshots["vaadin-password-field slots default"] =
   slot="input"
   type="password"
 >
+<label slot="label">
+</label>
 `;
 /* end snapshot vaadin-password-field slots default */
 
 snapshots["vaadin-password-field slots helper"] = 
-`<label slot="label">
-</label>
-<div
+`<div
   hidden=""
   slot="error-message"
 >
@@ -308,6 +306,8 @@ snapshots["vaadin-password-field slots helper"] =
   slot="input"
   type="password"
 >
+<label slot="label">
+</label>
 <div slot="helper">
   Helper
 </div>

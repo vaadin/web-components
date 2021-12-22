@@ -8,15 +8,28 @@
  * A controller for linking a `<label>` element with an `<input>` element.
  */
 export class LabelledInputController {
-  constructor(input, label) {
+  constructor(input, labelController) {
     this.input = input;
     this.__preventDuplicateLabelClick = this.__preventDuplicateLabelClick.bind(this);
 
+    labelController.addEventListener('label-changed', (event) => {
+      this.__initLabel(event.detail.node);
+    });
+
+    // Initialize the default label element
+    this.__initLabel(labelController.node);
+  }
+
+  /**
+   * @param {HTMLElement} label
+   * @private
+   */
+  __initLabel(label) {
     if (label) {
       label.addEventListener('click', this.__preventDuplicateLabelClick);
 
-      if (input) {
-        label.setAttribute('for', input.id);
+      if (this.input) {
+        label.setAttribute('for', this.input.id);
       }
     }
   }
