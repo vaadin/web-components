@@ -160,6 +160,8 @@ export class SlotController extends EventTarget {
 
         if (newNode !== this.defaultNode) {
           this.initCustomNode(newNode);
+
+          this.initNode(newNode);
         }
       }
     });
