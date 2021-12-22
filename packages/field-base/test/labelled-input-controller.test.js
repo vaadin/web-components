@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -37,7 +37,7 @@ describe('labelled-input-controller', () => {
         target.setAttribute('slot', el);
         element.appendChild(target);
         element._setInputElement(target);
-        element.addController(new LabelledInputController(target, label));
+        element.addController(new LabelledInputController(target, element._labelController));
       });
 
       it('should set for attribute on the label', () => {
@@ -49,6 +49,29 @@ describe('labelled-input-controller', () => {
         element.addEventListener('click', spy);
         label.click();
         expect(spy.calledOnce).to.be.true;
+      });
+
+      describe('lazy label', () => {
+        let lazyLabel;
+
+        beforeEach(async () => {
+          lazyLabel = document.createElement('label');
+          lazyLabel.setAttribute('slot', 'label');
+          lazyLabel.textContent = 'Lazy';
+          element.appendChild(lazyLabel);
+          await nextFrame();
+        });
+
+        it('should set for attribute on the lazily added label', () => {
+          expect(lazyLabel.getAttribute('for')).to.equal(target.id);
+        });
+
+        it('should only run click handler once on lazy label click', () => {
+          const spy = sinon.spy();
+          element.addEventListener('click', spy);
+          lazyLabel.click();
+          expect(spy.calledOnce).to.be.true;
+        });
       });
     });
   });

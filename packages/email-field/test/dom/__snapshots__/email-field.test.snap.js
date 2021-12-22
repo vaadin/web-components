@@ -229,9 +229,7 @@ snapshots["vaadin-email-field shadow theme"] =
 /* end snapshot vaadin-email-field shadow theme */
 
 snapshots["vaadin-email-field slots default"] = 
-`<label slot="label">
-</label>
-<div
+`<div
   hidden=""
   slot="error-message"
 >
@@ -241,13 +239,13 @@ snapshots["vaadin-email-field slots default"] =
   slot="input"
   type="email"
 >
+<label slot="label">
+</label>
 `;
 /* end snapshot vaadin-email-field slots default */
 
 snapshots["vaadin-email-field slots helper"] = 
-`<label slot="label">
-</label>
-<div
+`<div
   hidden=""
   slot="error-message"
 >
@@ -257,6 +255,8 @@ snapshots["vaadin-email-field slots helper"] =
   slot="input"
   type="email"
 >
+<label slot="label">
+</label>
 <div slot="helper">
   Helper
 </div>

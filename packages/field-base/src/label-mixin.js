@@ -4,7 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { LabelController } from './label-controller.js';
 
 /**
  * A mixin to provide label via corresponding property or named slot.
@@ -14,7 +15,7 @@ import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
  */
 export const LabelMixin = dedupingMixin(
   (superclass) =>
-    class LabelMixinClass extends SlotMixin(superclass) {
+    class LabelMixinClass extends ControllerMixin(superclass) {
       static get properties() {
         return {
           /**
@@ -29,65 +30,25 @@ export const LabelMixin = dedupingMixin(
       }
 
       /** @protected */
-      get slots() {
-        return {
-          ...super.slots,
-          label: () => {
-            const label = document.createElement('label');
-            label.textContent = this.label;
-            return label;
-          }
-        };
+      get _labelId() {
+        return this._labelController.labelId;
       }
 
       /** @protected */
       get _labelNode() {
-        return this._getDirectSlotChild('label');
+        return this._labelController.node;
       }
 
       constructor() {
         super();
 
-        // Ensure every instance has unique ID
-        const uniqueId = (LabelMixinClass._uniqueLabelId = 1 + LabelMixinClass._uniqueLabelId || 0);
-        this._labelId = `label-${this.localName}-${uniqueId}`;
-
-        /**
-         * @type {MutationObserver}
-         * @private
-         */
-        this.__labelNodeObserver = new MutationObserver(() => {
-          this._toggleHasLabelAttribute();
-        });
-      }
-
-      /** @protected */
-      ready() {
-        super.ready();
-
-        if (this._labelNode) {
-          this._labelNode.id = this._labelId;
-          this._toggleHasLabelAttribute();
-
-          this.__labelNodeObserver.observe(this._labelNode, { childList: true, subtree: true, characterData: true });
-        }
+        this._labelController = new LabelController(this);
+        this.addController(this._labelController);
       }
 
       /** @protected */
       _labelChanged(label) {
-        if (this._labelNode) {
-          this._labelNode.textContent = label;
-          this._toggleHasLabelAttribute();
-        }
-      }
-
-      /** @protected */
-      _toggleHasLabelAttribute() {
-        if (this._labelNode) {
-          const hasLabel = this._labelNode.children.length > 0 || this._labelNode.textContent.trim() !== '';
-
-          this.toggleAttribute('has-label', hasLabel);
-        }
+        this._labelController.setLabel(label);
       }
     }
 );

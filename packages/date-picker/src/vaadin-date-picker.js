@@ -212,7 +212,7 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
         this.ariaTarget = input;
       })
     );
-    this.addController(new LabelledInputController(this.inputElement, this._labelNode));
+    this.addController(new LabelledInputController(this.inputElement, this._labelController));
     addListener(this.shadowRoot.querySelector('[part="toggle-button"]'), 'tap', this._toggle.bind(this));
   }
 
