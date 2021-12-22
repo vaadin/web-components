@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ResizableMixin } from '@vaadin/component-base/src/resizable-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export type FormLayoutLabelsPosition = 'aside' | 'top';
@@ -105,7 +105,7 @@ export type FormLayoutResponsiveStep = {
  * ---|---|---
  * `--vaadin-form-layout-column-spacing` | Length of the spacing between columns | `2em`
  */
-declare class FormLayout extends ResizableMixin(ElementMixin(ThemableMixin(HTMLElement))) {
+declare class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
    * Allows specifying a responsive behavior with the number of columns
    * and the label position depending on the layout width.

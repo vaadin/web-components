@@ -12,7 +12,7 @@ import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ResizableMixin } from '@vaadin/component-base/src/resizable-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const MINIMUM_DISPLAYED_AVATARS = 2;
@@ -57,9 +57,9 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes ResizableMixin
+ * @mixes ResizeMixin
  */
-class AvatarGroup extends ResizableMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>

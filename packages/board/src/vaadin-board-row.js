@@ -7,7 +7,7 @@ import { DomIf } from '@polymer/polymer/lib/elements/dom-if.js';
 import { DomRepeat } from '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ResizableMixin } from '@vaadin/component-base/src/resizable-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 const CLASSES = {
   SMALL: 'small',
@@ -51,9 +51,9 @@ const CLASSES = {
  *
  * @extends HTMLElement
  * @mixes ElementMixin
- * @mixes ResizableMixin
+ * @mixes ResizeMixin
  */
-class BoardRow extends ResizableMixin(ElementMixin(PolymerElement)) {
+class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>

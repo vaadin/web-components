@@ -4,15 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-import { ResizableMixin } from '@vaadin/component-base/src/resizable-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 /**
  * @polymerMixin
  *
- * @mixes ResizableMixin
+ * @mixes ResizeMixin
  */
 export const ButtonsMixin = (superClass) =>
-  class extends ResizableMixin(superClass) {
+  class extends ResizeMixin(superClass) {
     static get properties() {
       return {
         /**

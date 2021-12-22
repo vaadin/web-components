@@ -2,15 +2,15 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ResizableMixin } from '../src/resizable-mixin.js';
+import { ResizeMixin } from '../src/resize-mixin.js';
 
-describe('resizable-mixin', () => {
+describe('resize-mixin', () => {
   let element;
 
   before(() => {
     customElements.define(
-      'resizable-mixin-element',
-      class extends ResizableMixin(PolymerElement) {
+      'resize-mixin-element',
+      class extends ResizeMixin(PolymerElement) {
         static get template() {
           return html`
             <style>
@@ -36,7 +36,7 @@ describe('resizable-mixin', () => {
   });
 
   beforeEach(async () => {
-    element = fixtureSync(`<resizable-mixin-element></resizable-mixin-element>`);
+    element = fixtureSync(`<resize-mixin-element></resize-mixin-element>`);
     // Wait for the initial resize.
     await element.nextResize();
   });

@@ -1,12 +1,12 @@
 import '../../vaadin-tabs.js';
-import { ResizableMixinClass } from '@vaadin/component-base/src/resizable-mixin.js';
+import { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import { TabsItemsChangedEvent, TabsSelectedChangedEvent } from '../../vaadin-tabs.js';
 
 const tabs = document.createElement('vaadin-tabs');
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
-assertType<ResizableMixinClass>(tabs);
+assertType<ResizeMixinClass>(tabs);
 
 tabs.addEventListener('items-changed', (event) => {
   assertType<TabsItemsChangedEvent>(event);

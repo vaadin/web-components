@@ -7,7 +7,7 @@ import './vaadin-tab.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { ResizableMixin } from '@vaadin/component-base/src/resizable-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ListMixin } from '@vaadin/vaadin-list-mixin/vaadin-list-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -49,9 +49,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ElementMixin
  * @mixes ListMixin
  * @mixes ThemableMixin
- * @mixes ResizableMixin
+ * @mixes ResizeMixin
  */
-class Tabs extends ResizableMixin(ElementMixin(ListMixin(ThemableMixin(PolymerElement)))) {
+class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>

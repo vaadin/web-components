@@ -18,9 +18,9 @@ const observer = new ResizeObserver((entries) => {
  *
  * @polymerMixin
  */
-export const ResizableMixin = dedupingMixin(
+export const ResizeMixin = dedupingMixin(
   (superclass) =>
-    class ResizableMixinClass extends superclass {
+    class ResizeMixinClass extends superclass {
       connectedCallback() {
         super.connectedCallback();
         observer.observe(this);
