@@ -30,11 +30,6 @@ export class LabelController extends SlotController {
     return this.node.id;
   }
 
-  /** @protected */
-  get uniqueId() {
-    return SlotController.labelId;
-  }
-
   /**
    * Override to initialize the newly added custom label.
    *

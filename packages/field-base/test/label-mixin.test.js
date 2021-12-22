@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { LabelMixin } from '../src/label-mixin.js';
 
 customElements.define(
@@ -34,7 +35,7 @@ describe('label-mixin', () => {
     it('should set id on the label element', () => {
       const id = label.getAttribute('id');
       expect(id).to.match(ID_REGEX);
-      expect(id.endsWith(element._labelController.uniqueId)).to.be.true;
+      expect(id.endsWith(SlotController.labelId)).to.be.true;
     });
 
     describe('label property', () => {
@@ -96,7 +97,7 @@ describe('label-mixin', () => {
       it('should set id on the slotted label element', () => {
         const id = label.getAttribute('id');
         expect(id).to.match(ID_REGEX);
-        expect(id.endsWith(element._labelController.uniqueId)).to.be.true;
+        expect(id.endsWith(SlotController.labelId)).to.be.true;
       });
 
       it('should not update slotted label content on property change', () => {
