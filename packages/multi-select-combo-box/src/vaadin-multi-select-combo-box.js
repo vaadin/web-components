@@ -8,6 +8,7 @@ import './vaadin-multi-select-combo-box-internal.js';
 import './vaadin-multi-select-combo-box-tokens.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -38,6 +39,7 @@ class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(E
           auto-open-disabled="[[autoOpenDisabled]]"
           allow-custom-value="[[allowCustomValues]]"
           position-target="[[_inputContainer]]"
+          renderer="[[renderer]]"
           theme$="[[theme]]"
           on-combo-box-item-selected="_onComboBoxItemSelected"
           on-change="_onComboBoxItemSelected"
@@ -136,6 +138,19 @@ class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(E
       itemValuePath: String,
 
       /**
+       * Custom function for rendering the content of every item.
+       * Receives three arguments:
+       *
+       * - `root` The `<vaadin-combo-box-item>` internal container DOM element.
+       * - `comboBox` The reference to the `<vaadin-combo-box>` element.
+       * - `model` The object with the properties related with the rendered
+       *   item, contains:
+       *   - `model.index` The index of the rendered item.
+       *   - `model.item` The item.
+       */
+      renderer: Function,
+
+      /**
        * The list of selected items.
        * Note: modifying the selected items creates a new array each time.
        */
@@ -178,6 +193,8 @@ class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(E
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
 
     this._inputContainer = this.$.comboBox;
+
+    processTemplates(this);
   }
 
   /**
