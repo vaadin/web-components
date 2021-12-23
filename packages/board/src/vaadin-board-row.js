@@ -7,6 +7,7 @@ import { DomIf } from '@polymer/polymer/lib/elements/dom-if.js';
 import { DomRepeat } from '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 const CLASSES = {
   SMALL: 'small',
@@ -50,8 +51,9 @@ const CLASSES = {
  *
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes ResizeMixin
  */
-class BoardRow extends ElementMixin(PolymerElement) {
+class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -89,11 +91,6 @@ class BoardRow extends ElementMixin(PolymerElement) {
     super.ready();
 
     this.$.insertionPoint.addEventListener('slotchange', () => this.redraw());
-
-    this.__resizeObserver = new ResizeObserver(() => {
-      requestAnimationFrame(() => this._onResize());
-    });
-    this.__resizeObserver.observe(this);
   }
 
   /** @protected */
@@ -220,7 +217,10 @@ class BoardRow extends ElementMixin(PolymerElement) {
     this._recalculateFlexBasis(true);
   }
 
-  /** @private */
+  /**
+   * @protected
+   * @override
+   */
   _onResize() {
     this._recalculateFlexBasis(false);
   }

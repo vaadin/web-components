@@ -21,9 +21,6 @@ function onceInvoked(object, functionName) {
  * Resolves once the ResizeObserver in AvatarGroup has processed a resize.
  */
 async function onceResized(group) {
-  // Wait for the _onResize function to be invoked by the ResizeObserver
-  await onceInvoked(group, '_onResize');
-  // Wait for the debouncer callback in _onResize to invoke __setItemsInView
   await onceInvoked(group, '__setItemsInView');
 }
 
@@ -197,15 +194,6 @@ describe('avatar-group', () => {
       const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
       expect(items.length).to.equal(3);
       expect(overflow.abbr).to.equal('+3');
-    });
-
-    it('should warn when calling deprecated notifyResize()', () => {
-      const stub = sinon.stub(console, 'warn');
-      group.notifyResize();
-      stub.restore();
-
-      expect(stub.calledOnce).to.be.true;
-      expect(stub.args[0][0]).to.include('WARNING: Since Vaadin 23, notifyResize() is deprecated.');
     });
 
     it('should always show at least two avatars', async () => {

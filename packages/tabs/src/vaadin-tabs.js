@@ -7,6 +7,7 @@ import './vaadin-tab.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ListMixin } from '@vaadin/vaadin-list-mixin/vaadin-list-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -48,8 +49,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ElementMixin
  * @mixes ListMixin
  * @mixes ThemableMixin
+ * @mixes ResizeMixin
  */
-class Tabs extends ElementMixin(ListMixin(ThemableMixin(PolymerElement))) {
+class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -171,8 +173,8 @@ class Tabs extends ElementMixin(ListMixin(ThemableMixin(PolymerElement))) {
   constructor() {
     super();
 
-    this.__resizeObserver = new ResizeObserver(() => {
-      requestAnimationFrame(() => this._updateOverflow());
+    this.__itemsResizeObserver = new ResizeObserver(() => {
+      setTimeout(() => this._updateOverflow());
     });
   }
 
@@ -187,15 +189,22 @@ class Tabs extends ElementMixin(ListMixin(ThemableMixin(PolymerElement))) {
     });
   }
 
+  /**
+   * @protected
+   * @override
+   */
+  _onResize() {
+    this._updateOverflow();
+  }
+
   /** @private */
   __tabsItemsChanged(items) {
     // Disconnected to unobserve any removed items
-    this.__resizeObserver.disconnect();
-    this.__resizeObserver.observe(this);
+    this.__itemsResizeObserver.disconnect();
 
     // Observe current items
     (items || []).forEach((item) => {
-      this.__resizeObserver.observe(item);
+      this.__itemsResizeObserver.observe(item);
     });
 
     this._updateOverflow();

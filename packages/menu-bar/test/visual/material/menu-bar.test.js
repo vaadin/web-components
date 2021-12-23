@@ -79,7 +79,6 @@ describe('menu-bar', () => {
         it('outlined', async () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'outlined');
-          element.notifyResize();
           arrowDown(element._buttons[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-outlined`);
@@ -88,7 +87,6 @@ describe('menu-bar', () => {
         it('contained', async () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'contained');
-          element.notifyResize();
           arrowDown(element._buttons[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-contained`);
@@ -97,7 +95,6 @@ describe('menu-bar', () => {
         it('text', async () => {
           div.style.width = '320px';
           element.setAttribute('theme', 'text');
-          element.notifyResize();
           arrowDown(element._buttons[1]);
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-text`);
