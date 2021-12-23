@@ -39,6 +39,8 @@ class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(E
           allow-custom-value="[[allowCustomValues]]"
           position-target="[[_inputContainer]]"
           theme$="[[theme]]"
+          on-combo-box-item-selected="_onComboBoxItemSelected"
+          on-change="_onComboBoxItemSelected"
         >
           <vaadin-input-container
             part="input-field"
@@ -48,10 +50,13 @@ class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(E
             theme$="[[theme]]"
           >
             <vaadin-multi-select-combo-box-tokens
+              id="tokens"
               compact-mode="[[compactMode]]"
               compact-mode-label-generator="[[compactModeLabelGenerator]]"
               items="[[selectedItems]]"
               slot="prefix"
+              on-item-removed="_onItemRemoved"
+              on-mousedown="_preventBlur"
             ></vaadin-multi-select-combo-box-tokens>
             <slot name="input"></slot>
             <div id="clearButton" part="clear-button" slot="suffix"></div>
@@ -145,6 +150,10 @@ class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(E
     };
   }
 
+  static get observers() {
+    return ['_selectedItemsObserver(selectedItems, selectedItems.*)'];
+  }
+
   /**
    * Used by `ClearButtonMixin` as a reference to the clear button element.
    * @protected
@@ -195,6 +204,101 @@ class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(E
     if (!focused) {
       this.validate();
     }
+  }
+
+  /** @private */
+  _selectedItemsObserver(selectedItems) {
+    this.toggleAttribute('has-value', Boolean(selectedItems && selectedItems.length));
+
+    // TODO: Implement "ordered" property
+    // if (this.ordered && !this.compactMode) {
+    //   this._sortSelectedItems(selectedItems);
+    // }
+
+    // TODO: Do we actually need "title" at all?
+    // this.compactMode && (this.title = this._getDisplayValue(selectedItems, this.itemLabelPath, ', '));
+
+    // Re-render tokens
+    this.$.tokens.requestUpdate();
+
+    // Re-render scroller
+    this.$.comboBox.$.dropdown._scroller.__virtualizer.update();
+
+    // Wait for tokens to render
+    requestAnimationFrame(() => {
+      this.$.comboBox.$.dropdown._setOverlayWidth();
+    });
+  }
+
+  /** @private */
+  _findIndex(item, selectedItems, itemIdPath) {
+    if (itemIdPath && item) {
+      for (let index = 0; index < selectedItems.length; index++) {
+        if (selectedItems[index] && selectedItems[index][itemIdPath] === item[itemIdPath]) {
+          return index;
+        }
+      }
+      return -1;
+    }
+
+    return selectedItems.indexOf(item);
+  }
+
+  /** @private */
+  _onComboBoxItemSelected(event) {
+    // TODO: use separate listener for change event to make it less confusing
+    const item = event.detail ? event.detail.item : this.$.comboBox.selectedItem;
+
+    if (!item) {
+      return;
+    }
+
+    const update = this.selectedItems.slice(0);
+    const index = this._findIndex(item, this.selectedItems, this.itemIdPath);
+    if (index !== -1) {
+      update.splice(index, 1);
+    } else {
+      update.push(item);
+    }
+
+    this.inputElement.value = null;
+
+    this.selectedItems = update;
+
+    // TODO: validate and dispatch change
+
+    // if (this.validate()) {
+    //   this._dispatchChangeEvent();
+    // }
+
+    // Avoid firing `value-changed` event.
+    this.$.comboBox._focusedIndex = -1;
+
+    // Avoid firing `custom-value-set` event.
+    if (this.allowCustomValues) {
+      this.inputElement.value = '';
+    }
+  }
+
+  /** @private */
+  _onItemRemoved(event) {
+    const item = event.detail.item;
+    const update = this.selectedItems.slice(0);
+    update.splice(update.indexOf(item), 1);
+    this.selectedItems = update;
+
+    // TODO: validate and dispatch change
+
+    // if (this.validate()) {
+    //   this._dispatchChangeEvent();
+    // }
+  }
+
+  /** @private */
+  _preventBlur(event) {
+    // Prevent mousedown event to keep the input focused
+    // and keep the overlay opened when clicking a token.
+    event.preventDefault();
   }
 }
 

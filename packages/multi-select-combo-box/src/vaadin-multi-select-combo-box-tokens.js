@@ -55,6 +55,11 @@ class MultiSelectComboBoxTokens extends ThemableMixin(LitElement) {
         type: Object
       },
 
+      /**
+       * The list of items.
+       */
+      items: Array,
+
       itemLabelPath: {
         type: String
       }
@@ -88,9 +93,20 @@ class MultiSelectComboBoxTokens extends ThemableMixin(LitElement) {
 
     const token = event.target.parentElement;
     const index = token.dataset.index;
-    console.log(index);
 
-    // this._removeSelected(event.model.item);
+    const item = this.items.indexOf(index);
+    this._removeSelected(item);
+  }
+
+  /** @private */
+  _removeSelected(item) {
+    this.dispatchEvent(
+      new CustomEvent('item-removed', {
+        detail: {
+          item
+        }
+      })
+    );
   }
 }
 

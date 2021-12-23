@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
 import { ComboBoxScroller } from '@vaadin/combo-box/src/vaadin-combo-box-scroller.js';
 
 /**
@@ -14,6 +15,16 @@ import { ComboBoxScroller } from '@vaadin/combo-box/src/vaadin-combo-box-scrolle
 class MultiSelectComboBoxScroller extends ComboBoxScroller {
   static get is() {
     return 'vaadin-multi-select-combo-box-scroller';
+  }
+
+  /** @private */
+  __isItemSelected(item, _selectedItem, itemIdPath) {
+    if (item instanceof ComboBoxPlaceholder) {
+      return false;
+    }
+
+    const host = this.comboBox.getRootNode().host;
+    return host._findIndex(item, host.selectedItems, itemIdPath) > -1;
   }
 }
 

@@ -7,6 +7,7 @@ import './vaadin-multi-select-combo-box-dropdown.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ComboBoxDataProviderMixin } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixin } from '@vaadin/combo-box/src/vaadin-combo-box-mixin.js';
+import { ComboBoxPlaceholder } from '@vaadin/combo-box/src/vaadin-combo-box-placeholder.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -96,6 +97,30 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
 
     if (this._isClearButton(event)) {
       this._clear();
+    }
+  }
+
+  /**
+   * @param {CustomEvent} event
+   * @protected
+   * @override
+   */
+  _overlaySelectedItemChanged(event) {
+    event.stopPropagation();
+
+    if (event.detail.item instanceof ComboBoxPlaceholder) {
+      return;
+    }
+
+    if (this.opened) {
+      this.dispatchEvent(
+        new CustomEvent('combo-box-item-selected', {
+          detail: {
+            item: event.detail.item,
+            sourceEvent: event
+          }
+        })
+      );
     }
   }
 }
