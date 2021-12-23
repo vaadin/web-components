@@ -12,23 +12,34 @@ import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.js';
 
 registerStyles('vaadin-multi-select-combo-box', inputFieldShared, { moduleId: 'vaadin-multi-select-combo-box-styles' });
 
-class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+class MultiSelectComboBox extends MultiSelectComboBoxMixin(
+  InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))
+) {
   static get is() {
     return 'vaadin-multi-select-combo-box';
   }
 
   static get template() {
     return html`
+      <style>
+        [hidden] {
+          display: none !important;
+        }
+      </style>
       <div class="vaadin-multi-select-combo-box-container">
         <div part="label">
           <slot name="label"></slot>
           <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
+        </div>
+
+        <div part="readonly-container" hidden$="[[!readonly]]">
+          [[_getReadonlyValue(selectedItems, itemLabelPath, compactMode, readonlyValueSeparator)]]
         </div>
 
         <vaadin-multi-select-combo-box-internal
@@ -36,6 +47,7 @@ class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(E
           items="[[items]]"
           disabled="[[disabled]]"
           readonly="[[readonly]]"
+          hidden$="[[readonly]]"
           auto-open-disabled="[[autoOpenDisabled]]"
           allow-custom-value="[[allowCustomValues]]"
           position-target="[[_inputContainer]]"
@@ -95,25 +107,6 @@ class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(E
       autoOpenDisabled: Boolean,
 
       /**
-       * When true, the component does not render tokens for every selected value.
-       * Instead, only the number of currently selected items is shown.
-       */
-      compactMode: {
-        type: Boolean,
-        reflectToAttribute: true
-      },
-
-      /**
-       * Custom function for generating the display label when in compact mode.
-       *
-       * This function receives the array of selected items and should return
-       * a string value that will be used as the display label.
-       */
-      compactModeLabelGenerator: {
-        type: Object
-      },
-
-      /**
        * When true, the user can input a value that is not present in the items list.
        * @attr {boolean} allow-custom-values
        */
@@ -123,19 +116,17 @@ class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(E
       },
 
       /**
-       * The list of items.
-       */
-      items: Array,
-
-      /**
-       * The item property to be used as the `label` in combo-box.
-       */
-      itemLabelPath: String,
-
-      /**
        * The item property to be used as the `value` of combo-box.
        */
       itemValuePath: String,
+
+      /**
+       * The join separator used for the 'display value' when in read-only mode.
+       */
+      readonlyValueSeparator: {
+        type: String,
+        value: ', '
+      },
 
       /**
        * Custom function for rendering the content of every item.
@@ -245,6 +236,18 @@ class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(E
     requestAnimationFrame(() => {
       this.$.comboBox.$.dropdown._setOverlayWidth();
     });
+  }
+
+  /** @private */
+  _getReadonlyValue(selectedItems, itemLabelPath, compactMode, readonlyValueSeparator) {
+    return compactMode
+      ? this._getCompactModeLabel(selectedItems)
+      : this._getDisplayValue(selectedItems, itemLabelPath, readonlyValueSeparator);
+  }
+
+  /** @private */
+  _getDisplayValue(selectedItems, itemLabelPath, valueSeparator) {
+    return selectedItems.map((item) => this._getItemLabel(item, itemLabelPath)).join(valueSeparator);
   }
 
   /** @private */
