@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multi Select Combo box</title>
+    <script type="module">
+      import '@vaadin/multi-select-combo-box';
+    </script>
+  </head>
+  <body>
+    <vaadin-multi-select-combo-box label="Element"></vaadin-multi-select-combo-box>
+
+    <script>
+      const comboBox = document.querySelector('vaadin-multi-select-combo-box');
+
+      comboBox.items = [
+        'Hydrogen',
+        'Helium',
+        'Lithium',
+        'Beryllium',
+        'Boron',
+        'Carbon',
+        'Nitrogen',
+        'Oxygen',
+        'Fluorine',
+        'Neon',
+        'Sodium',
+        'Magnesium',
+        'Aluminum',
+        'Silicon',
+        'Phosphorus',
+        'Sulfur',
+        'Chlorine',
+        'Argon',
+        'Potassium',
+        'Calcium',
+        'Scandium',
+        'Titanium',
+        'Vanadium',
+        'Chromium',
+        'Manganese',
+        'Iron',
+        'Cobalt',
+        'Nickel',
+        'Copper',
+        'Zinc'
+      ];
+
+      comboBox.selectedItems = [
+        'Hydrogen',
+        'Helium',
+        'Lithium'
+      ];
+    </script>
+  </body>
+</html>
