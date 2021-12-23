@@ -61,7 +61,7 @@ class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(E
               on-mousedown="_preventBlur"
             ></vaadin-multi-select-combo-box-tokens>
             <slot name="input"></slot>
-            <div id="clearButton" part="clear-button" slot="suffix"></div>
+            <div id="clearButton" part="clear-button" slot="suffix" on-click="_onClearButtonClick"></div>
             <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix"></div>
           </vaadin-input-container>
         </vaadin-multi-select-combo-box-internal>
@@ -259,6 +259,17 @@ class MultiSelectComboBox extends PatternMixin(InputControlMixin(ThemableMixin(E
     }
 
     return selectedItems.indexOf(item);
+  }
+
+  /** @private */
+  _onClearButtonClick(event) {
+    event.stopPropagation();
+
+    this.selectedItems = [];
+
+    // if (this.validate()) {
+    //   this._dispatchChangeEvent();
+    // }
   }
 
   /** @private */
