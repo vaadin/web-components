@@ -21,11 +21,13 @@ const observer = new ResizeObserver((entries) => {
 export const ResizeMixin = dedupingMixin(
   (superclass) =>
     class ResizeMixinClass extends superclass {
+      /** @protected */
       connectedCallback() {
         super.connectedCallback();
         observer.observe(this);
       }
 
+      /** @protected */
       disconnectedCallback() {
         super.disconnectedCallback();
         observer.unobserve(this);
