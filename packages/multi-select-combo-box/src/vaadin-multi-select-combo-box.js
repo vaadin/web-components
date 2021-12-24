@@ -53,7 +53,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
           hidden$="[[readonly]]"
           auto-open-disabled="[[autoOpenDisabled]]"
           allow-custom-value="[[allowCustomValues]]"
-          position-target="[[_inputContainer]]"
           renderer="[[renderer]]"
           theme$="[[theme]]"
           on-combo-box-item-selected="_onComboBoxItemSelected"
@@ -176,10 +175,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         type: Boolean,
         value: false,
         reflectToAttribute: true
-      },
-
-      /** @private */
-      _inputContainer: Object
+      }
     };
   }
 
@@ -220,8 +216,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
       })
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
-
-    this._inputContainer = this.$.comboBox;
 
     processTemplates(this);
   }

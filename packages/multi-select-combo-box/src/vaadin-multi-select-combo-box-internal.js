@@ -76,6 +76,7 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   ready() {
     super.ready();
 
+    this.positionTarget = this;
     this._toggleElement = this.querySelector('.toggle-button');
   }
 
