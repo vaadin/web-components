@@ -69,6 +69,11 @@
         const item = event.detail;
         comboBox.items.push(item);
         comboBox.selectedItems = [...comboBox.selectedItems, item];
+        console.log('custom-values-set', item);
+      });
+
+      comboBox.addEventListener('change', () => {
+        console.log('change', comboBox.selectedItems);
       });
 
       /*

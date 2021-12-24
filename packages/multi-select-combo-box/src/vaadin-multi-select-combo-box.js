@@ -57,7 +57,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
           renderer="[[renderer]]"
           theme$="[[theme]]"
           on-combo-box-item-selected="_onComboBoxItemSelected"
-          on-change="_onComboBoxItemSelected"
+          on-change="_onComboBoxChange"
           on-custom-value-set="_onCustomValueSet"
         >
           <vaadin-input-container
@@ -78,7 +78,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
               on-mousedown="_preventBlur"
             ></vaadin-multi-select-combo-box-tokens>
             <slot name="input"></slot>
-            <div id="clearButton" part="clear-button" slot="suffix" on-click="_onClearButtonClick"></div>
+            <div id="clearButton" part="clear-button" slot="suffix"></div>
             <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix"></div>
           </vaadin-input-container>
         </vaadin-multi-select-combo-box-internal>
@@ -313,6 +313,33 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   /** @private */
+  __clearInput() {
+    this.inputElement.value = '';
+  }
+
+  /** @private */
+  __selectItem(item) {
+    const itemsCopy = [...this.selectedItems];
+
+    const index = this._findIndex(item, itemsCopy, this.itemIdPath);
+    if (index !== -1) {
+      itemsCopy.splice(index, 1);
+    } else {
+      itemsCopy.push(item);
+    }
+
+    this.__updateSelection(itemsCopy);
+
+    // Avoid firing `value-changed` event.
+    this.$.comboBox._focusedIndex = -1;
+
+    // Avoid firing `custom-value-set` event.
+    if (this.allowCustomValues) {
+      this.__clearInput();
+    }
+  }
+
+  /** @private */
   _sortSelectedItems(selectedItems) {
     this.selectedItems = selectedItems.sort((item1, item2) => {
       const item1Str = String(this._getItemLabel(item1, this.itemLabelPath));
@@ -337,7 +364,11 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
     this.$.tokens.requestUpdate();
   }
 
-  /** @private */
+  /**
+   * Override method inherited from `ClearButtonMixin` and clear items.
+   * @protected
+   * @override
+   */
   _onClearButtonClick(event) {
     event.stopPropagation();
 
@@ -345,33 +376,16 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   /** @private */
+  _onComboBoxChange() {
+    const item = this.$.comboBox.selectedItem;
+    if (item) {
+      this.__selectItem(item);
+    }
+  }
+
+  /** @private */
   _onComboBoxItemSelected(event) {
-    // TODO: use separate listener for change event to make it less confusing
-    const item = event.detail ? event.detail.item : this.$.comboBox.selectedItem;
-
-    if (!item) {
-      return;
-    }
-
-    const update = this.selectedItems.slice(0);
-    const index = this._findIndex(item, this.selectedItems, this.itemIdPath);
-    if (index !== -1) {
-      update.splice(index, 1);
-    } else {
-      update.push(item);
-    }
-
-    this.inputElement.value = null;
-
-    this.__updateSelection(update);
-
-    // Avoid firing `value-changed` event.
-    this.$.comboBox._focusedIndex = -1;
-
-    // Avoid firing `custom-value-set` event.
-    if (this.allowCustomValues) {
-      this.inputElement.value = '';
-    }
+    this.__selectItem(event.detail.item);
   }
 
   /** @private */
@@ -379,7 +393,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
     // Do not set combo-box value
     event.preventDefault();
 
-    this.inputElement.value = null;
+    this.__clearInput();
 
     this.dispatchEvent(
       new CustomEvent('custom-values-set', {
@@ -392,11 +406,9 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
   /** @private */
   _onItemRemoved(event) {
-    const item = event.detail.item;
-    const update = this.selectedItems.slice(0);
-    update.splice(update.indexOf(item), 1);
-
-    this.__updateSelection(update);
+    const itemsCopy = [...this.selectedItems];
+    itemsCopy.splice(itemsCopy.indexOf(event.detail.item), 1);
+    this.__updateSelection(itemsCopy);
   }
 
   /** @private */
