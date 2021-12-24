@@ -18,6 +18,82 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
 
 registerStyles('vaadin-multi-select-combo-box', inputFieldShared, { moduleId: 'vaadin-multi-select-combo-box-styles' });
 
+/**
+ * `<vaadin-multi-select-combo-box>` is a web component that wraps `<vaadin-combo-box>` and extends
+ * its functionality to allow selecting multiple items, in addition to basic features.
+ *
+ * ```html
+ * <vaadin-multi-select-combo-box id="comboBox"></vaadin-multi-select-combo-box>
+ * ```
+ *
+ * ```js
+ * const comboBox = document.querySelector('#comboBox');
+ * comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
+ * comboBox.selectedItems = ['lemon', 'orange'];
+ * ```
+ *
+ * ### Styling
+ *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name            | Description
+ * ---------------------|----------------
+ * `label`              | The label element
+ * `input-field`        | The element that wraps prefix, value and suffix
+ * `clear-button`       | The clear button
+ * `error-message`      | The error message element
+ * `helper-text`        | The helper text element wrapper
+ * `readonly-container` | The element used to represent readonly mode
+ * `required-indicator` | The `required` state indicator element
+ * `toggle-button`      | The toggle button
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute           | Description
+ * --------------------|-----------------
+ * `disabled`          | Set to a disabled element
+ * `has-value`         | Set when the element has a value
+ * `has-label`         | Set when the element has a label
+ * `has-helper`        | Set when the element has helper text or slot
+ * `has-error-message` | Set when the element has an error message
+ * `invalid`           | Set when the element is invalid
+ * `focused`           | Set when the element is focused
+ * `focus-ring`        | Set when the element is keyboard focused
+ * `readonly`          | Set to a readonly element
+ *
+ * ### Tokens
+ *
+ * To change how selected items are presented, apply styles to the following components:
+ *
+ * - `<vaadin-multi-select-combo-box-tokens>` - Wrapper for a list of tokens.
+ * - `<vaadin-multi-select-combo-box-token>` - An individual token element.
+ *
+ * ### Internal components
+ *
+ * In addition to `<vaadin-multi-select-combo-box>` and tokens, the following internal
+ * components are themable:
+ *
+ * - `<vaadin-multi-select-combo-box-overlay>` - has the same API as `<vaadin-overlay>`.
+ * - `<vaadin-multi-select-combo-box-item>` - has the same API as `<vaadin-item>`.
+ * - `<vaadin-input-container>` - an internal element wrapping the input.
+ *
+ * Note: the `theme` attribute value set on `<vaadin-multi-select-combo-box>` is
+ * propagated to these components.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ *
+ * @fires {Event} change - Fired when the user commits a value change.
+ * @fires {CustomEvent} custom-values-set - Fired when the user sets a custom value.
+ * @fires {CustomEvent} filter-value-changed - Fired when the `filterValue` property changes.
+ * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
+ *
+ * @extends HTMLElement
+ * @mixes ElementMixin
+ * @mixes ThemableMixin
+ * @mixes InputControlMixin
+ * @mixes MultiSelectComboBoxMixin
+ */
 class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))
 ) {

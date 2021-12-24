@@ -17,6 +17,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ComboBoxDataProviderMixin
  * @mixes ComboBoxMixin
  * @mixes ThemableMixin
+ * @private
  */
 class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixin(PolymerElement))) {
   static get is() {
