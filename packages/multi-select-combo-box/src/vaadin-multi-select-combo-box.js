@@ -58,6 +58,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
           theme$="[[theme]]"
           on-combo-box-item-selected="_onComboBoxItemSelected"
           on-change="_onComboBoxItemSelected"
+          on-custom-value-set="_onCustomValueSet"
         >
           <vaadin-input-container
             part="input-field"
@@ -371,6 +372,22 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
     if (this.allowCustomValues) {
       this.inputElement.value = '';
     }
+  }
+
+  /** @private */
+  _onCustomValueSet(event) {
+    // Do not set combo-box value
+    event.preventDefault();
+
+    this.inputElement.value = null;
+
+    this.dispatchEvent(
+      new CustomEvent('custom-values-set', {
+        detail: event.detail,
+        composed: true,
+        bubbles: true
+      })
+    );
   }
 
   /** @private */
