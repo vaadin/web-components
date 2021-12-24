@@ -132,7 +132,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
           data-provider="[[dataProvider]]"
           filter="{{filterValue}}"
           filtered-items="[[filteredItems]]"
-          page-size="[[pageSize]]"
           renderer="[[renderer]]"
           theme$="[[theme]]"
           on-combo-box-item-selected="_onComboBoxItemSelected"
@@ -386,6 +385,8 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
       this.pageSize = oldPageSize;
       console.error('"pageSize" value must be an integer > 0');
     }
+
+    this.$.comboBox.pageSize = this.pageSize;
   }
 
   /** @private */

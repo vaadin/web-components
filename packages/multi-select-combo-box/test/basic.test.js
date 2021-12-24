@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { arrowDown, enter, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-// import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
+import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
 
 describe('basic', () => {
@@ -32,6 +32,10 @@ describe('basic', () => {
   });
 
   describe('properties and attributes', () => {
+    it('should propagate inputElement property to combo-box', () => {
+      expect(internal.inputElement).to.equal(comboBox.inputElement);
+    });
+
     it('should propagate placeholder property to input', () => {
       expect(inputElement.placeholder).to.be.not.ok;
       comboBox.placeholder = 'foo';
@@ -67,6 +71,59 @@ describe('basic', () => {
     it('should reflect readonly property to attribute', () => {
       comboBox.readonly = true;
       expect(comboBox.hasAttribute('readonly')).to.be.true;
+    });
+
+    it('should propagate renderer property to combo-box', () => {
+      const renderer = (root, _, model) => (root.textContent = model);
+      comboBox.renderer = renderer;
+      expect(internal.renderer).to.equal(renderer);
+    });
+  });
+
+  describe('selecting items', () => {
+    beforeEach(() => {
+      inputElement.focus();
+    });
+
+    it('should update selectedItems when selecting an item on Enter', () => {
+      arrowDown(inputElement);
+      arrowDown(inputElement);
+      enter(inputElement);
+      expect(comboBox.selectedItems).to.deep.equal(['apple']);
+    });
+
+    it('should update selectedItems when selecting an item on click', () => {
+      arrowDown(inputElement);
+      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      item.click();
+      expect(comboBox.selectedItems).to.deep.equal(['apple']);
+    });
+
+    it('should update has-value attribute on selected items change', () => {
+      expect(comboBox.hasAttribute('has-value')).to.be.false;
+      comboBox.selectedItems = ['apple', 'banana'];
+      expect(comboBox.hasAttribute('has-value')).to.be.true;
+    });
+  });
+
+  describe('pageSize', () => {
+    beforeEach(() => {
+      sinon.stub(console, 'error');
+    });
+
+    afterEach(() => {
+      console.error.restore();
+    });
+
+    it('should propagate pageSize property to combo-box', () => {
+      comboBox.pageSize = 25;
+      expect(internal.pageSize).to.equal(25);
+    });
+
+    it('should log error when incorrect pageSize is set', () => {
+      comboBox.pageSize = 0;
+      expect(internal.pageSize).to.equal(50);
+      expect(console.error.calledOnce).to.be.true;
     });
   });
 
@@ -192,6 +249,17 @@ describe('basic', () => {
   describe('required', () => {
     beforeEach(() => {
       comboBox.required = true;
+    });
+
+    it('should be invalid when selectedItems is empty', () => {
+      expect(comboBox.validate()).to.be.false;
+      expect(comboBox.invalid).to.be.true;
+    });
+
+    it('should be valid when selectedItems is not empty', () => {
+      comboBox.selectedItems = ['apple'];
+      expect(comboBox.validate()).to.be.true;
+      expect(comboBox.invalid).to.be.false;
     });
 
     it('should focus on required indicator click', () => {
