@@ -171,7 +171,10 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   static get observers() {
-    return ['_selectedItemsChanged(selectedItems, selectedItems.*)'];
+    return [
+      '_selectedItemsChanged(selectedItems, selectedItems.*)',
+      '_updateTitle(compactMode, itemLabelPath, selectedItems, selectedItems.*)'
+    ];
   }
 
   /**
@@ -245,6 +248,12 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   /** @private */
+  _updateTitle(compactMode, itemLabelPath, selectedItems) {
+    // Set title when in compact mode to indicate which items are selected.
+    this.title = compactMode ? this._getDisplayValue(selectedItems, itemLabelPath, ', ') : undefined;
+  }
+
+  /** @private */
   _selectedItemsChanged() {
     this.toggleAttribute('has-value', this._hasValue);
 
@@ -252,9 +261,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
     // if (this.ordered && !this.compactMode) {
     //   this._sortSelectedItems(selectedItems);
     // }
-
-    // TODO: Do we actually need "title" at all?
-    // this.compactMode && (this.title = this._getDisplayValue(selectedItems, this.itemLabelPath, ', '));
 
     // Re-render tokens
     this.$.tokens.requestUpdate();
