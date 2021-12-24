@@ -318,6 +318,13 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   /** @private */
+  __removeItem(item) {
+    const itemsCopy = [...this.selectedItems];
+    itemsCopy.splice(itemsCopy.indexOf(item), 1);
+    this.__updateSelection(itemsCopy);
+  }
+
+  /** @private */
   __selectItem(item) {
     const itemsCopy = [...this.selectedItems];
 
@@ -375,6 +382,19 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
     this.__updateSelection([]);
   }
 
+  /**
+   * Override an event listener from `KeyboardMixin`.
+   * @param {KeyboardEvent} event
+   * @protected
+   * @override
+   */
+  _onKeyDown(event) {
+    const count = this.items.length;
+    if (event.key === 'Backspace' && count && this.inputElement.value === '') {
+      this.__removeItem(this.items[count - 1]);
+    }
+  }
+
   /** @private */
   _onComboBoxChange() {
     const item = this.$.comboBox.selectedItem;
@@ -406,9 +426,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
   /** @private */
   _onItemRemoved(event) {
-    const itemsCopy = [...this.selectedItems];
-    itemsCopy.splice(itemsCopy.indexOf(event.detail.item), 1);
-    this.__updateSelection(itemsCopy);
+    this.__removeItem(event.detail.item);
   }
 
   /** @private */
