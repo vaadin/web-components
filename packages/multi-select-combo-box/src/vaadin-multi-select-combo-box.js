@@ -176,15 +176,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   static get properties() {
     return {
       /**
-       * The value for this element.
-       */
-      value: {
-        type: String,
-        notify: true,
-        value: ''
-      },
-
-      /**
        * Set true to prevent the overlay from opening automatically.
        * @attr {boolean} auto-open-disabled
        */
@@ -199,7 +190,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
       /**
        * Path for the id of the item, used to detect whether the item is selected.
-       * * @attr {string} item-id-path
+       * @attr {string} item-id-path
        */
       itemIdPath: {
         type: String
@@ -229,6 +220,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
       /**
        * Number of items fetched at a time from the data provider.
+       * @attr {number} page-size
        */
       pageSize: {
         type: Number,
@@ -255,6 +247,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
       /**
        * The join separator used for the 'display value' when in read-only mode.
+       * @attr {string} readonly-value-separator
        */
       readonlyValueSeparator: {
         type: String,
@@ -274,7 +267,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
        * Custom function for rendering the content of every item.
        * Receives three arguments:
        *
-       * - `root` The `<vaadin-combo-box-item>` internal container DOM element.
+       * - `root` The `<vaadin-multi-select-combo-box-item>` internal container DOM element.
        * - `comboBox` The reference to the `<vaadin-combo-box>` element.
        * - `model` The object with the properties related with the rendered
        *   item, contains:
@@ -285,6 +278,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
       /**
        * Filtering string the user has typed into the input field.
+       * @attr {string} filter-value
        */
       filterValue: {
         type: String,

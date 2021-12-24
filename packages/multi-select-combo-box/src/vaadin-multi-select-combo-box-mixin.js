@@ -14,6 +14,7 @@ export const MultiSelectComboBoxMixin = (base) =>
         /**
          * When true, the component does not render tokens for every selected value.
          * Instead, only the number of currently selected items is shown.
+         * @attr {boolean} compact-mode
          */
         compactMode: {
           type: Boolean
@@ -30,7 +31,8 @@ export const MultiSelectComboBoxMixin = (base) =>
         },
 
         /**
-         * The list of items.
+         * A full set of items to filter the visible options from.
+         * The items can be of either `String` or `Object` type.
          */
         items: {
           type: Array
