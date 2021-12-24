@@ -11,31 +11,8 @@ import '@vaadin/vaadin-lumo-styles/typography.js';
 import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-const multiSelectComboBoxTokens = css`
+const token = css`
   :host {
-    font-family: var(--lumo-font-family);
-  }
-
-  [part='compact-mode-label'] {
-    display: flex;
-    flex-grow: 1;
-    align-items: center;
-    margin: var(--lumo-space-xs);
-    padding: 0 calc(0.375em + var(--lumo-border-radius) / 4 - 1px);
-    color: var(--lumo-body-text-color);
-    font-weight: 500;
-    cursor: var(--lumo-clickable-cursor);
-  }
-
-  [part='tokens'] {
-    display: flex;
-    flex-wrap: wrap;
-    flex-grow: 1;
-    width: 100%;
-    min-width: 0;
-  }
-
-  [part='token'] {
     display: flex;
     align-items: center;
     padding-left: var(--lumo-space-s);
@@ -47,13 +24,10 @@ const multiSelectComboBoxTokens = css`
     height: calc(var(--lumo-size-m) - 2 * var(--lumo-space-xs));
     box-sizing: border-box;
     min-width: 0;
+    font-family: var(--lumo-font-family);
   }
 
-  [part='token'] + [part='token'] {
-    margin-left: 0;
-  }
-
-  [part='token-label'] {
+  [part='label'] {
     display: flex;
     align-items: center;
     font-size: var(--lumo-font-size-s);
@@ -62,23 +36,61 @@ const multiSelectComboBoxTokens = css`
     overflow: hidden;
   }
 
-  [part='token-remove-button'] {
+  [part='remove-button'] {
     font-size: var(--lumo-icon-size-s);
     padding-right: var(--lumo-space-xs);
   }
 
-  [part='token-remove-button']::before {
+  [part='remove-button']::before {
     content: var(--lumo-icons-cross);
   }
 
-  :host([disabled]) [part$='label'],
-  :host([disabled]) [part$='button'] {
+  :host([disabled]) [part='label'],
+  :host([disabled]) [part='remove-button'] {
     color: var(--lumo-disabled-text-color);
     -webkit-text-fill-color: var(--lumo-disabled-text-color);
     pointer-events: none;
   }
 `;
 
-registerStyles('vaadin-multi-select-combo-box-tokens', [fieldButton, multiSelectComboBoxTokens], {
-  moduleId: 'lumo-multi-select-combo-box-tokens'
+registerStyles('vaadin-multi-select-combo-box-token', [fieldButton, token], {
+  moduleId: 'lumo-multi-select-combo-box-token'
 });
+
+registerStyles(
+  'vaadin-multi-select-combo-box-tokens',
+  css`
+    [part='compact-mode-label'] {
+      display: flex;
+      flex-grow: 1;
+      align-items: center;
+      margin: var(--lumo-space-xs);
+      padding: 0 calc(0.375em + var(--lumo-border-radius) / 4 - 1px);
+      color: var(--lumo-body-text-color);
+      font-family: var(--lumo-font-family);
+      font-weight: 500;
+      cursor: var(--lumo-clickable-cursor);
+    }
+
+    [part='tokens'] {
+      display: flex;
+      flex-wrap: wrap;
+      flex-grow: 1;
+      width: 100%;
+      min-width: 0;
+    }
+
+    [part='token'] + [part='token'] {
+      margin-left: 0;
+    }
+
+    :host([disabled]) [part='compact-mode-label'] {
+      color: var(--lumo-disabled-text-color);
+      -webkit-text-fill-color: var(--lumo-disabled-text-color);
+      pointer-events: none;
+    }
+  `,
+  {
+    moduleId: 'lumo-multi-select-combo-box-tokens'
+  }
+);

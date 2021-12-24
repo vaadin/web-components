@@ -165,6 +165,18 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         notify: true
       },
 
+      /**
+       * When true, the list of selected items is kept ordered in ascending lexical order.
+       *
+       * When `itemLabelPath` is specified, corresponding property is used for ordering.
+       * Otherwise the items themselves are compared using `localCompare`.
+       */
+      ordered: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true
+      },
+
       /** @private */
       _inputContainer: Object
     };
@@ -173,7 +185,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   static get observers() {
     return [
       '_selectedItemsChanged(selectedItems, selectedItems.*)',
-      '_updateTitle(compactMode, itemLabelPath, selectedItems, selectedItems.*)'
+      '_updateItems(ordered, compactMode, itemLabelPath, selectedItems, selectedItems.*)'
     ];
   }
 
@@ -248,22 +260,21 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   /** @private */
-  _updateTitle(compactMode, itemLabelPath, selectedItems) {
+  _updateItems(ordered, compactMode, itemLabelPath, selectedItems) {
     // Set title when in compact mode to indicate which items are selected.
     this.title = compactMode ? this._getDisplayValue(selectedItems, itemLabelPath, ', ') : undefined;
+
+    if (ordered && !compactMode) {
+      this._sortSelectedItems(selectedItems);
+    }
   }
 
   /** @private */
   _selectedItemsChanged() {
     this.toggleAttribute('has-value', this._hasValue);
 
-    // TODO: Implement "ordered" property
-    // if (this.ordered && !this.compactMode) {
-    //   this._sortSelectedItems(selectedItems);
-    // }
-
     // Re-render tokens
-    this.$.tokens.requestUpdate();
+    this.__updateTokens();
 
     // Re-render scroller
     this.$.comboBox.$.dropdown._scroller.__virtualizer.update();
@@ -301,12 +312,28 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   /** @private */
+  _sortSelectedItems(selectedItems) {
+    this.selectedItems = selectedItems.sort((item1, item2) => {
+      const item1Str = String(this._getItemLabel(item1, this.itemLabelPath));
+      const item2Str = String(this._getItemLabel(item2, this.itemLabelPath));
+      return item1Str.localeCompare(item2Str);
+    });
+
+    this.__updateTokens();
+  }
+
+  /** @private */
   __updateSelection(selectedItems) {
     this.selectedItems = selectedItems;
 
     this.validate();
 
     this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+  }
+
+  /** @private */
+  __updateTokens() {
+    this.$.tokens.requestUpdate();
   }
 
   /** @private */

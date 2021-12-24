@@ -9,30 +9,8 @@ import '@vaadin/vaadin-material-styles/typography.js';
 import { fieldButton } from '@vaadin/vaadin-material-styles/mixins/field-button.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-const multiSelectComboBoxTokens = css`
+const token = css`
   :host {
-    font-family: var(--material-font-family);
-  }
-
-  [part='compact-mode-label'] {
-    display: flex;
-    flex-grow: 1;
-    align-items: center;
-    margin: 0.5rem;
-    color: var(--material-body-text-color);
-    font-size: var(--material-body-font-size);
-    cursor: default;
-  }
-
-  [part='tokens'] {
-    display: flex;
-    flex-wrap: wrap;
-    flex-grow: 1;
-    width: 100%;
-    min-width: 0;
-  }
-
-  [part='token'] {
     display: flex;
     align-items: center;
     padding-left: 0.5rem;
@@ -43,16 +21,17 @@ const multiSelectComboBoxTokens = css`
     white-space: nowrap;
     height: 26px;
     box-sizing: border-box;
+    font-family: var(--material-font-family);
   }
 
-  [part='token-label'] {
+  [part='label'] {
     display: flex;
     align-items: center;
     font-size: var(--material-small-font-size);
   }
 
   /* Override field button */
-  [part='token-remove-button'] {
+  [part='remove-button'] {
     flex: none;
     width: 20px;
     height: 20px;
@@ -64,37 +43,70 @@ const multiSelectComboBoxTokens = css`
     text-align: unset;
   }
 
-  [part='token-remove-button']::before {
+  [part='remove-button']::before {
     content: var(--material-icons-clear);
     border-radius: 50%;
     background-color: hsla(214, 45%, 20%, 0.5);
   }
 
-  :host(:not([disabled])) [part='token-remove-button']:hover {
+  :host(:not([disabled])) [part='remove-button']:hover {
     color: hsla(0, 0%, 100%, 0.9);
   }
 
-  [part='token-remove-button']:hover::before {
+  [part='remove-button']:hover::before {
     background-color: hsla(214, 41%, 17%, 0.83);
   }
 
   /* Disabled */
-  :host([disabled]) [part$='label'],
-  :host([disabled]) [part$='button'] {
+  :host([disabled]) [part='label'],
+  :host([disabled]) [part='remove-button'] {
     pointer-events: none;
   }
 
-  :host([disabled]) [part$='label'] {
+  :host([disabled]) [part='label'] {
     color: var(--material-disabled-text-color);
     -webkit-text-fill-color: var(--material-disabled-text-color);
   }
 
-  :host([disabled]) [part='token-remove-button'] {
+  :host([disabled]) [part='remove-button'] {
     color: hsla(0, 0%, 100%, 0.75);
     -webkit-text-fill-color: hsla(0, 0%, 100%, 0.75);
   }
 `;
 
-registerStyles('vaadin-multi-select-combo-box-tokens', [fieldButton, multiSelectComboBoxTokens], {
-  moduleId: 'material-multi-select-combo-box-tokens'
+registerStyles('vaadin-multi-select-combo-box-token', [fieldButton, token], {
+  moduleId: 'material-multi-select-combo-box-token'
 });
+
+registerStyles(
+  'vaadin-multi-select-combo-box-tokens',
+  css`
+    [part='compact-mode-label'] {
+      display: flex;
+      flex-grow: 1;
+      align-items: center;
+      margin: 0.5rem;
+      color: var(--material-body-text-color);
+      font-family: var(--material-font-family);
+      font-size: var(--material-body-font-size);
+      cursor: default;
+    }
+
+    [part='tokens'] {
+      display: flex;
+      flex-wrap: wrap;
+      flex-grow: 1;
+      width: 100%;
+      min-width: 0;
+    }
+
+    :host([disabled]) [part='compact-mode-label'] {
+      color: var(--material-disabled-text-color);
+      -webkit-text-fill-color: var(--material-disabled-text-color);
+      pointer-events: none;
+    }
+  `,
+  {
+    moduleId: 'material-multi-select-combo-box-tokens'
+  }
+);
