@@ -115,15 +115,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
       autoOpenDisabled: Boolean,
 
       /**
-       * When true, the user can input a value that is not present in the items list.
-       * @attr {boolean} allow-custom-values
-       */
-      allowCustomValues: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
        * Path for the value of the item. If `items` is an array of objects,
        * this property is used as a string value for the selected item.
        * @attr {string} item-value-path
@@ -137,27 +128,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
       itemIdPath: {
         type: String
       },
-
-      /**
-       * The join separator used for the 'display value' when in read-only mode.
-       */
-      readonlyValueSeparator: {
-        type: String,
-        value: ', '
-      },
-
-      /**
-       * Custom function for rendering the content of every item.
-       * Receives three arguments:
-       *
-       * - `root` The `<vaadin-combo-box-item>` internal container DOM element.
-       * - `comboBox` The reference to the `<vaadin-combo-box>` element.
-       * - `model` The object with the properties related with the rendered
-       *   item, contains:
-       *   - `model.index` The index of the rendered item.
-       *   - `model.item` The item.
-       */
-      renderer: Function,
 
       /**
        * The list of selected items.
@@ -206,6 +176,36 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         type: Object,
         observer: '_dataProviderChanged'
       },
+
+      /**
+       * The join separator used for the 'display value' when in read-only mode.
+       */
+      readonlyValueSeparator: {
+        type: String,
+        value: ', '
+      },
+
+      /**
+       * When true, the user can input a value that is not present in the items list.
+       * @attr {boolean} allow-custom-values
+       */
+      allowCustomValues: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
+       * Custom function for rendering the content of every item.
+       * Receives three arguments:
+       *
+       * - `root` The `<vaadin-combo-box-item>` internal container DOM element.
+       * - `comboBox` The reference to the `<vaadin-combo-box>` element.
+       * - `model` The object with the properties related with the rendered
+       *   item, contains:
+       *   - `model.index` The index of the rendered item.
+       *   - `model.item` The item.
+       */
+      renderer: Function,
 
       /**
        * Filtering string the user has typed into the input field.
