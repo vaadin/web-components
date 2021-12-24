@@ -171,7 +171,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   static get observers() {
-    return ['_selectedItemsObserver(selectedItems, selectedItems.*)'];
+    return ['_selectedItemsChanged(selectedItems, selectedItems.*)'];
   }
 
   /**
@@ -181,6 +181,14 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
    */
   get clearElement() {
     return this.$.clearButton;
+  }
+
+  /**
+   * @protected
+   * @return {boolean}
+   */
+  get _hasValue() {
+    return Boolean(this.selectedItems && this.selectedItems.length);
   }
 
   /** @protected */
@@ -200,6 +208,14 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
     this._inputContainer = this.$.comboBox;
 
     processTemplates(this);
+  }
+
+  /**
+   * Returns true if the current input value satisfies all constraints (if any).
+   * @return {boolean}
+   */
+  checkValidity() {
+    return this.required ? this._hasValue : true;
   }
 
   /**
@@ -229,8 +245,8 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   /** @private */
-  _selectedItemsObserver(selectedItems) {
-    this.toggleAttribute('has-value', Boolean(selectedItems && selectedItems.length));
+  _selectedItemsChanged() {
+    this.toggleAttribute('has-value', this._hasValue);
 
     // TODO: Implement "ordered" property
     // if (this.ordered && !this.compactMode) {
@@ -279,14 +295,19 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   /** @private */
+  __updateSelection(selectedItems) {
+    this.selectedItems = selectedItems;
+
+    this.validate();
+
+    this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+  }
+
+  /** @private */
   _onClearButtonClick(event) {
     event.stopPropagation();
 
-    this.selectedItems = [];
-
-    // if (this.validate()) {
-    //   this._dispatchChangeEvent();
-    // }
+    this.__updateSelection([]);
   }
 
   /** @private */
@@ -308,13 +329,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
     this.inputElement.value = null;
 
-    this.selectedItems = update;
-
-    // TODO: validate and dispatch change
-
-    // if (this.validate()) {
-    //   this._dispatchChangeEvent();
-    // }
+    this.__updateSelection(update);
 
     // Avoid firing `value-changed` event.
     this.$.comboBox._focusedIndex = -1;
@@ -330,13 +345,8 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
     const item = event.detail.item;
     const update = this.selectedItems.slice(0);
     update.splice(update.indexOf(item), 1);
-    this.selectedItems = update;
 
-    // TODO: validate and dispatch change
-
-    // if (this.validate()) {
-    //   this._dispatchChangeEvent();
-    // }
+    this.__updateSelection(update);
   }
 
   /** @private */

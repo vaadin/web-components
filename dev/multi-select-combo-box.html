@@ -6,11 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Multi Select Combo box</title>
     <script type="module">
-      import '@vaadin/multi-select-combo-box/theme/material/vaadin-multi-select-combo-box.js';
+      import '@vaadin/multi-select-combo-box';
     </script>
   </head>
   <body>
-    <vaadin-multi-select-combo-box label="Element" clear-button-visible></vaadin-multi-select-combo-box>
+    <vaadin-multi-select-combo-box
+      label="Element"
+      clear-button-visible
+      required
+      error-message="Select at least one"
+    ></vaadin-multi-select-combo-box>
 
     <!--
     <vaadin-multi-select-combo-box
