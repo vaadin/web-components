@@ -45,6 +45,9 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         <vaadin-multi-select-combo-box-internal
           id="comboBox"
           items="[[items]]"
+          item-id-path="[[itemIdPath]]"
+          item-label-path="[[itemLabelPath]]"
+          item-value-path="[[itemValuePath]]"
           disabled="[[disabled]]"
           readonly="[[readonly]]"
           hidden$="[[readonly]]"
@@ -68,6 +71,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
               compact-mode="[[compactMode]]"
               compact-mode-label-generator="[[compactModeLabelGenerator]]"
               items="[[selectedItems]]"
+              item-label-path="[[itemLabelPath]]"
               slot="prefix"
               on-item-removed="_onItemRemoved"
               on-mousedown="_preventBlur"
@@ -116,9 +120,19 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
       },
 
       /**
-       * The item property to be used as the `value` of combo-box.
+       * Path for the value of the item. If `items` is an array of objects,
+       * this property is used as a string value for the selected item.
+       * @attr {string} item-value-path
        */
       itemValuePath: String,
+
+      /**
+       * Path for the id of the item, used to detect whether the item is selected.
+       * * @attr {string} item-id-path
+       */
+      itemIdPath: {
+        type: String
+      },
 
       /**
        * The join separator used for the 'display value' when in read-only mode.
