@@ -53,6 +53,10 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
           hidden$="[[readonly]]"
           auto-open-disabled="[[autoOpenDisabled]]"
           allow-custom-value="[[allowCustomValues]]"
+          data-provider="[[dataProvider]]"
+          filter="{{filterValue}}"
+          filtered-items="[[filteredItems]]"
+          page-size="[[pageSize]]"
           renderer="[[renderer]]"
           theme$="[[theme]]"
           on-combo-box-item-selected="_onComboBoxItemSelected"
@@ -175,7 +179,49 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         type: Boolean,
         value: false,
         reflectToAttribute: true
-      }
+      },
+
+      /**
+       * Number of items fetched at a time from the data provider.
+       */
+      pageSize: {
+        type: Number,
+        value: 50,
+        observer: '_pageSizeChanged'
+      },
+
+      /**
+       * Function that provides items lazily. Receives two arguments:
+       *
+       * - `params` - Object with the following properties:
+       *   - `params.page` Requested page index
+       *   - `params.pageSize` Current page size
+       *   - `params.filter` Currently applied filter
+       *
+       * - `callback(items, size)` - Callback function with arguments:
+       *   - `items` Current page of items
+       *   - `size` Total number of items.
+       */
+      dataProvider: {
+        type: Object,
+        observer: '_dataProviderChanged'
+      },
+
+      /**
+       * Filtering string the user has typed into the input field.
+       */
+      filterValue: {
+        type: String,
+        value: '',
+        notify: true
+      },
+
+      /**
+       * A subset of items, filtered based on the user input. Filtered items
+       * can be assigned directly to omit the internal filtering functionality.
+       * The items can be of either `String` or `Object` type.
+       */
+      filteredItems: Array
     };
   }
 
@@ -261,6 +307,14 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
     if (ordered && !compactMode) {
       this._sortSelectedItems(selectedItems);
+    }
+  }
+
+  /** @private */
+  _pageSizeChanged(pageSize, oldPageSize) {
+    if (Math.floor(pageSize) !== pageSize || pageSize <= 0) {
+      this.pageSize = oldPageSize;
+      console.error('"pageSize" value must be an integer > 0');
     }
   }
 
