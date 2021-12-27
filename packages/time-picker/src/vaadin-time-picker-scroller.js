@@ -8,7 +8,7 @@ import { ComboBoxScroller } from '@vaadin/combo-box/src/vaadin-combo-box-scrolle
 /**
  * An element used internally by `<vaadin-time-picker>`. Not intended to be used separately.
  *
- * @extends ComboBoxOverlay
+ * @extends ComboBoxScroller
  * @private
  */
 class TimePickerScroller extends ComboBoxScroller {

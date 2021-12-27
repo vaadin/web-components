@@ -12,7 +12,7 @@ import { ComboBoxDropdown } from '@vaadin/combo-box/src/vaadin-combo-box-dropdow
 /**
  * An element used internally by `<vaadin-time-picker>`. Not intended to be used separately.
  *
- * @extends ComboBoxOverlay
+ * @extends ComboBoxDropdown
  * @private
  */
 class TimePickerDropdown extends ComboBoxDropdown {
