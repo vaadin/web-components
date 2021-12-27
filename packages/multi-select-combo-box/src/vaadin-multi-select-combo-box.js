@@ -13,10 +13,27 @@ import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
-import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.js';
 
-registerStyles('vaadin-multi-select-combo-box', inputFieldShared, { moduleId: 'vaadin-multi-select-combo-box-styles' });
+const multiSelectComboBox = css`
+  :host(:not([has-value])) #tokens,
+  [hidden] {
+    display: none !important;
+  }
+
+  [part='readonly-container'] {
+    padding: 0 0.25em;
+  }
+
+  :host([has-value]) ::slotted(input:placeholder-shown) {
+    color: transparent !important;
+  }
+`;
+
+registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectComboBox], {
+  moduleId: 'vaadin-multi-select-combo-box-styles'
+});
 
 /**
  * `<vaadin-multi-select-combo-box>` is a web component that wraps `<vaadin-combo-box>` and extends
@@ -104,11 +121,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
   static get template() {
     return html`
-      <style>
-        [hidden] {
-          display: none !important;
-        }
-      </style>
       <div class="vaadin-multi-select-combo-box-container">
         <div part="label">
           <slot name="label"></slot>

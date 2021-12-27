@@ -10,13 +10,9 @@ import { inputFieldShared } from '@vaadin/vaadin-lumo-styles/mixins/input-field-
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const multiSelectComboBox = css`
-  :host {
+  :host([has-value]:not([compact-mode]):not([readonly])) {
     --vaadin-field-default-width: auto;
-  }
-
-  /* TODO: RTL support */
-  :host(:not([compact-mode])) [part='input-field'] {
-    padding-left: 0;
+    padding-inline-start: 0;
   }
 
   [part='toggle-button']::before {
@@ -29,7 +25,7 @@ const multiSelectComboBox = css`
     color: var(--lumo-secondary-text-color);
     border: 1px dashed var(--lumo-contrast-30pct);
     border-radius: var(--lumo-border-radius);
-    padding: 0 calc(0.375em + var(--lumo-border-radius) / 4 - 1px);
+    padding: 0 calc(0.625em + var(--lumo-border-radius) / 4 - 1px);
     font-weight: 500;
     min-height: var(--lumo-text-field-size);
     cursor: var(--lumo-clickable-cursor);

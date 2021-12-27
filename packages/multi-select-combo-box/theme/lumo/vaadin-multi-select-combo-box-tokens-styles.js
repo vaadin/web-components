@@ -15,8 +15,7 @@ const token = css`
   :host {
     display: flex;
     align-items: center;
-    padding-left: var(--lumo-space-s);
-    margin: var(--lumo-space-xs);
+    padding-inline-start: var(--lumo-space-s);
     border-radius: var(--lumo-border-radius);
     background-color: var(--lumo-contrast-20pct);
     cursor: var(--lumo-clickable-cursor);
@@ -61,11 +60,7 @@ registerStyles(
   'vaadin-multi-select-combo-box-tokens',
   css`
     [part='compact-mode-label'] {
-      display: flex;
-      flex-grow: 1;
-      align-items: center;
-      margin: var(--lumo-space-xs);
-      padding: 0 calc(0.375em + var(--lumo-border-radius) / 4 - 1px);
+      padding: 0 0.25em;
       color: var(--lumo-body-text-color);
       font-family: var(--lumo-font-family);
       font-weight: 500;
@@ -80,8 +75,8 @@ registerStyles(
       min-width: 0;
     }
 
-    [part='token'] + [part='token'] {
-      margin-left: 0;
+    [part='token']:not(:last-of-type) {
+      margin-inline-end: var(--lumo-space-xs);
     }
 
     :host([disabled]) [part='compact-mode-label'] {
