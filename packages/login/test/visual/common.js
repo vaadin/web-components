@@ -5,7 +5,7 @@ registerStyles(
   'vaadin-text-field',
   css`
     ::slotted(input) {
-      font-size: 0 !important;
+      caret-color: transparent;
     }
   `
 );
