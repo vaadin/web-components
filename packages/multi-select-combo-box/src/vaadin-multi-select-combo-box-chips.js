@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './vaadin-multi-select-combo-box-token.js';
+import './vaadin-multi-select-combo-box-chip.js';
 import { css, html, LitElement } from 'lit';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.js';
@@ -16,9 +16,9 @@ import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.
  * @mixes ThemableMixin
  * @private
  */
-class MultiSelectComboBoxTokens extends MultiSelectComboBoxMixin(ThemableMixin(LitElement)) {
+class MultiSelectComboBoxChips extends MultiSelectComboBoxMixin(ThemableMixin(LitElement)) {
   static get is() {
-    return 'vaadin-multi-select-combo-box-tokens';
+    return 'vaadin-multi-select-combo-box-chips';
   }
 
   static get styles() {
@@ -41,15 +41,15 @@ class MultiSelectComboBoxTokens extends MultiSelectComboBoxMixin(ThemableMixin(L
       ${this.items.map(
         (item) =>
           html`
-            <vaadin-multi-select-combo-box-token
-              part="token"
+            <vaadin-multi-select-combo-box-chip
+              part="chip"
               .item="${item}"
               .label="${this._getItemLabel(item, this.itemLabelPath)}"
-            ></vaadin-multi-select-combo-box-token>
+            ></vaadin-multi-select-combo-box-chip>
           `
       )}
     `;
   }
 }
 
-customElements.define(MultiSelectComboBoxTokens.is, MultiSelectComboBoxTokens);
+customElements.define(MultiSelectComboBoxChips.is, MultiSelectComboBoxChips);

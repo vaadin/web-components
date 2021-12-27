@@ -5,14 +5,14 @@ import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
 
 describe('basic', () => {
-  let comboBox, internal, tokens, inputElement;
+  let comboBox, internal, chips, inputElement;
 
   beforeEach(() => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
     comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
     internal = comboBox.$.comboBox;
     inputElement = comboBox.inputElement;
-    tokens = comboBox.$.tokens;
+    chips = comboBox.$.chips;
   });
 
   describe('custom element definition', () => {
@@ -157,35 +157,35 @@ describe('basic', () => {
     });
   });
 
-  describe('tokens', () => {
+  describe('chips', () => {
     let spy;
 
     beforeEach(async () => {
       spy = sinon.spy();
       comboBox.addEventListener('change', spy);
       comboBox.selectedItems = ['orange'];
-      await tokens.updateComplete;
+      await chips.updateComplete;
     });
 
-    it('should render tokens on updating selectedItems', async () => {
+    it('should render chips on updating selectedItems', async () => {
       comboBox.selectedItems = ['apple', 'banana'];
-      await tokens.updateComplete;
-      expect(tokens.shadowRoot.querySelectorAll('[part="token"]').length).to.equal(2);
+      await chips.updateComplete;
+      expect(chips.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(2);
     });
 
-    it('should re-render tokens when selecting the item', async () => {
+    it('should re-render chips when selecting the item', async () => {
       arrowDown(inputElement);
       arrowDown(inputElement);
       enter(inputElement);
-      await tokens.updateComplete;
-      expect(tokens.shadowRoot.querySelectorAll('[part="token"]').length).to.equal(2);
+      await chips.updateComplete;
+      expect(chips.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(2);
     });
 
-    it('should remove token on remove button click', async () => {
-      const token = tokens.shadowRoot.querySelector('[part="token"]');
-      token.shadowRoot.querySelector('[part="remove-button"]').click();
-      await tokens.updateComplete;
-      expect(tokens.shadowRoot.querySelectorAll('[part="token"]').length).to.equal(0);
+    it('should remove chip on remove button click', async () => {
+      const chip = chips.shadowRoot.querySelector('[part="chip"]');
+      chip.shadowRoot.querySelector('[part="remove-button"]').click();
+      await chips.updateComplete;
+      expect(chips.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(0);
     });
   });
 
@@ -196,7 +196,7 @@ describe('basic', () => {
       spy = sinon.spy();
       comboBox.addEventListener('change', spy);
       comboBox.selectedItems = ['apple'];
-      await tokens.updateComplete;
+      await chips.updateComplete;
     });
 
     it('should fire change on user arrow input commit', () => {
@@ -212,9 +212,9 @@ describe('basic', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should fire change when token is removed', () => {
-      const token = tokens.shadowRoot.querySelector('[part="token"]');
-      token.shadowRoot.querySelector('[part="remove-button"]').click();
+    it('should fire change when chip is removed', () => {
+      const chip = chips.shadowRoot.querySelector('[part="chip"]');
+      chip.shadowRoot.querySelector('[part="remove-button"]').click();
       expect(spy.calledOnce).to.be.true;
     });
   });

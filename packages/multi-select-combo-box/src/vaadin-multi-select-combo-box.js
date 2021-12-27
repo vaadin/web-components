@@ -5,7 +5,7 @@
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-multi-select-combo-box-internal.js';
-import './vaadin-multi-select-combo-box-tokens.js';
+import './vaadin-multi-select-combo-box-chips.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -83,12 +83,12 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  *
  * To change how selected items are presented, apply styles to the following components:
  *
- * - `<vaadin-multi-select-combo-box-tokens>` - Wrapper for a list of tokens.
- * - `<vaadin-multi-select-combo-box-token>` - An individual token element.
+ * - `<vaadin-multi-select-combo-box-chips>` - Wrapper for a list of chips.
+ * - `<vaadin-multi-select-combo-box-chip>` - An individual chip element.
  *
  * ### Internal components
  *
- * In addition to `<vaadin-multi-select-combo-box>` and tokens, the following internal
+ * In addition to `<vaadin-multi-select-combo-box>` and chips, the following internal
  * components are themable:
  *
  * - `<vaadin-multi-select-combo-box-overlay>` - has the same API as `<vaadin-overlay>`.
@@ -160,15 +160,15 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
             >
               [[_getCompactModeLabel(selectedItems, compactModeLabelGenerator)]]
             </div>
-            <vaadin-multi-select-combo-box-tokens
-              id="tokens"
+            <vaadin-multi-select-combo-box-chips
+              id="chips"
               hidden$="[[_isTokensHidden(readonly, compactMode, _hasValue)]]"
               items="[[selectedItems]]"
               item-label-path="[[itemLabelPath]]"
               slot="prefix"
               on-item-removed="_onItemRemoved"
               on-mousedown="_preventBlur"
-            ></vaadin-multi-select-combo-box-tokens>
+            ></vaadin-multi-select-combo-box-chips>
             <slot name="input"></slot>
             <div id="clearButton" part="clear-button" slot="suffix"></div>
             <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix"></div>
@@ -195,7 +195,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
       autoOpenDisabled: Boolean,
 
       /**
-       * When true, the component does not render tokens for every selected value.
+       * When true, the component does not render chips for every selected value.
        * Instead, only the number of currently selected items is shown.
        * @attr {boolean} compact-mode
        */
@@ -449,13 +449,13 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
     this.toggleAttribute('has-value', hasValue);
 
-    // Re-render tokens
-    this.__updateTokens();
+    // Re-render chips
+    this.__updateChips();
 
     // Re-render scroller
     this.$.comboBox.$.dropdown._scroller.__virtualizer.update();
 
-    // Wait for tokens to render
+    // Wait for chips to render
     requestAnimationFrame(() => {
       this.$.comboBox.$.dropdown._setOverlayWidth();
     });
@@ -539,7 +539,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
       return item1Str.localeCompare(item2Str);
     });
 
-    this.__updateTokens();
+    this.__updateChips();
   }
 
   /** @private */
@@ -552,8 +552,8 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   /** @private */
-  __updateTokens() {
-    this.$.tokens.requestUpdate();
+  __updateChips() {
+    this.$.chips.requestUpdate();
   }
 
   /**
@@ -617,7 +617,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   /** @private */
   _preventBlur(event) {
     // Prevent mousedown event to keep the input focused
-    // and keep the overlay opened when clicking a token.
+    // and keep the overlay opened when clicking a chip.
     event.preventDefault();
   }
 }

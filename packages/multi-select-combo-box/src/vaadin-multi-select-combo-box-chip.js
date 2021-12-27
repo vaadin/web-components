@@ -16,16 +16,16 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Part name        | Description
  * -----------------|-------------
  * `label`          | Element containing the label
- * `remove-button`  | Remove token button
+ * `remove-button`  | Remove button
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @extends HTMLElement
  * @private
  */
-class MultiSelectComboBoxToken extends ThemableMixin(LitElement) {
+class MultiSelectComboBoxChip extends ThemableMixin(LitElement) {
   static get is() {
-    return 'vaadin-multi-select-combo-box-token';
+    return 'vaadin-multi-select-combo-box-chip';
   }
 
   static get properties() {
@@ -63,4 +63,4 @@ class MultiSelectComboBoxToken extends ThemableMixin(LitElement) {
   }
 }
 
-customElements.define(MultiSelectComboBoxToken.is, MultiSelectComboBoxToken);
+customElements.define(MultiSelectComboBoxChip.is, MultiSelectComboBoxChip);

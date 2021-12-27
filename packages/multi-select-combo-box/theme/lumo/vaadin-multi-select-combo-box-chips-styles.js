@@ -11,7 +11,7 @@ import '@vaadin/vaadin-lumo-styles/typography.js';
 import { fieldButton } from '@vaadin/vaadin-lumo-styles/mixins/field-button.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-const token = css`
+const chip = css`
   :host {
     display: flex;
     align-items: center;
@@ -55,18 +55,18 @@ const token = css`
   }
 `;
 
-registerStyles('vaadin-multi-select-combo-box-token', [fieldButton, token], {
-  moduleId: 'lumo-multi-select-combo-box-token'
+registerStyles('vaadin-multi-select-combo-box-chip', [fieldButton, chip], {
+  moduleId: 'lumo-multi-select-combo-box-chip'
 });
 
 registerStyles(
-  'vaadin-multi-select-combo-box-tokens',
+  'vaadin-multi-select-combo-box-chips',
   css`
-    [part='token']:not(:last-of-type) {
+    [part='chip']:not(:last-of-type) {
       margin-inline-end: var(--lumo-space-xs);
     }
   `,
   {
-    moduleId: 'lumo-multi-select-combo-box-tokens'
+    moduleId: 'lumo-multi-select-combo-box-chips'
   }
 );

@@ -110,12 +110,12 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  *
  * To change how selected items are presented, apply styles to the following components:
  *
- * - `<vaadin-multi-select-combo-box-tokens>` - Wrapper for a list of tokens.
- * - `<vaadin-multi-select-combo-box-token>` - An individual token element.
+ * - `<vaadin-multi-select-combo-box-chips>` - Wrapper for a list of chips.
+ * - `<vaadin-multi-select-combo-box-chip>` - An individual chip element.
  *
  * ### Internal components
  *
- * In addition to `<vaadin-multi-select-combo-box>` and tokens, the following internal
+ * In addition to `<vaadin-multi-select-combo-box>` and chips, the following internal
  * components are themable:
  *
  * - `<vaadin-multi-select-combo-box-overlay>` - has the same API as `<vaadin-overlay>`.
@@ -147,7 +147,7 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
   autoOpenDisabled: boolean;
 
   /**
-   * When true, the component does not render tokens for every selected value.
+   * When true, the component does not render chips for every selected value.
    * Instead, only the number of currently selected items is shown.
    * @attr {boolean} compact-mode
    */
