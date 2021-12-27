@@ -76,6 +76,7 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * `invalid`           | Set when the element is invalid
  * `focused`           | Set when the element is focused
  * `focus-ring`        | Set when the element is keyboard focused
+ * `ordered`           | Set when the element uses ordered mode
  * `readonly`          | Set to a readonly element
  *
  * ### Tokens
