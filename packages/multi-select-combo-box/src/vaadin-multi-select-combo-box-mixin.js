@@ -41,6 +41,7 @@ export const MultiSelectComboBoxMixin = (base) =>
 
         /**
          * The item property used for a visual representation of the item.
+         * @attr {string} item-label-path
          */
         itemLabelPath: {
           type: String
