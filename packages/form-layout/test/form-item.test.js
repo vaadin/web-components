@@ -431,4 +431,60 @@ describe('form-item', () => {
       });
     });
   });
+
+  describe('warnings', () => {
+    let stub;
+
+    beforeEach(() => {
+      stub = sinon.stub(console, 'warn');
+    });
+
+    afterEach(() => {
+      stub.restore();
+    });
+
+    it('should not warn when a single field is placed to an item', async () => {
+      fixtureSync(`
+        <vaadin-form-item>
+          <input />
+        </vaadin-form-item>
+      `);
+      await nextFrame();
+
+      expect(stub.calledOnce).to.be.false;
+    });
+
+    it('should warn when multiple fields are placed to an item initially', async () => {
+      fixtureSync(`
+        <vaadin-form-item>
+          <input />
+          <input />
+        </vaadin-form-item>
+      `);
+      await nextFrame();
+
+      expect(stub.calledOnce).to.be.true;
+      expect(stub.args[0][0]).to.include(
+        'WARNING: Since Vaadin 23, placing multiple fields directly to a <vaadin-form-item> is deprecated.'
+      );
+    });
+
+    it('should warn when multiple fields are placed to an item dynamically', async () => {
+      const item = fixtureSync(`
+        <vaadin-form-item>
+          <input />
+        </vaadin-form-item>
+      `);
+      await nextFrame();
+
+      const input = document.createElement('input');
+      item.appendChild(input);
+      await nextFrame();
+
+      expect(stub.calledOnce).to.be.true;
+      expect(stub.args[0][0]).to.include(
+        'WARNING: Since Vaadin 23, placing multiple fields directly to a <vaadin-form-item> is deprecated.'
+      );
+    });
+  });
 });

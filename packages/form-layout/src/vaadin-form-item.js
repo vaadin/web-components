@@ -11,26 +11,13 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `<vaadin-form-item>` is a Web Component providing labelled form item wrapper
  * for using inside `<vaadin-form-layout>`.
  *
- * `<vaadin-form-item>` accepts any number of children as the input content,
+ * `<vaadin-form-item>` accepts a single child as the input content,
  * and also has a separate named `label` slot:
  *
  * ```html
  * <vaadin-form-item>
  *   <label slot="label">Label aside</label>
  *   <input>
- * </vaadin-form-item>
- * ```
- *
- * Any content can be used. For instance, you can have multiple input elements
- * with surrounding text. The label can be an element of any type:
- *
- * ```html
- * <vaadin-form-item>
- *   <span slot="label">Date of Birth</span>
- *   <input placeholder="YYYY" size="4"> -
- *   <input placeholder="MM" size="2"> -
- *   <input placeholder="DD" size="2"><br>
- *   <em>Example: 1900-01-01</em>
  * </vaadin-form-item>
  * ```
  *
@@ -60,7 +47,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * ### Input Width
  *
  * By default, `<vaadin-form-item>` does not manipulate the width of the slotted
- * input elements. Optionally you can stretch the child input element to fill
+ * input element. Optionally you can stretch the child input element to fill
  * the available width for the input content by adding the `full-width` class:
  *
  * ```html
@@ -295,7 +282,15 @@ class FormItem extends ThemableMixin(PolymerElement) {
       this.__fieldNode = null;
     }
 
-    const newFieldNode = this.$.contentSlot.assignedElements().find((field) => {
+    const fieldNodes = this.$.contentSlot.assignedElements();
+    if (fieldNodes.length > 1) {
+      console.warn(
+        `WARNING: Since Vaadin 23, placing multiple fields directly to a <vaadin-form-item> is deprecated.
+Please wrap fields with a <vaadin-custom-field> instead.`
+      );
+    }
+
+    const newFieldNode = fieldNodes.find((field) => {
       return !!this.__getValidateFunction(field);
     });
     if (newFieldNode) {
