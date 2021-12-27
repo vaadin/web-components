@@ -27,25 +27,28 @@ const token = css`
   }
 
   [part='label'] {
-    display: flex;
-    align-items: center;
     font-size: var(--lumo-font-size-s);
+    line-height: var(--lumo-line-height-m);
     color: var(--lumo-body-text-color);
     font-weight: 500;
     overflow: hidden;
   }
 
   [part='remove-button'] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--lumo-icon-size-m);
+    height: var(--lumo-icon-size-m);
+    min-width: var(--lumo-icon-size-m);
     font-size: var(--lumo-icon-size-s);
-    padding-right: var(--lumo-space-xs);
   }
 
   [part='remove-button']::before {
     content: var(--lumo-icons-cross);
   }
 
-  :host([disabled]) [part='label'],
-  :host([disabled]) [part='remove-button'] {
+  :host([disabled]) [part] {
     color: var(--lumo-disabled-text-color);
     -webkit-text-fill-color: var(--lumo-disabled-text-color);
     pointer-events: none;

@@ -14,7 +14,7 @@ const token = css`
     display: flex;
     align-items: center;
     padding-left: 0.5rem;
-    margin: 0.25rem;
+    margin: 0.25rem 0;
     border-radius: 1.25rem;
     background-color: hsla(214, 53%, 23%, 0.1);
     cursor: default;
@@ -25,22 +25,14 @@ const token = css`
   }
 
   [part='label'] {
-    display: flex;
-    align-items: center;
     font-size: var(--material-small-font-size);
   }
 
   /* Override field button */
   [part='remove-button'] {
-    flex: none;
-    width: 20px;
-    height: 20px;
-    padding: unset;
-    padding-left: 4px;
+    padding: 0 0.125rem;
     color: hsla(0, 0%, 100%, 0.9);
     font-size: inherit;
-    line-height: 20px;
-    text-align: unset;
   }
 
   [part='remove-button']::before {
@@ -58,8 +50,7 @@ const token = css`
   }
 
   /* Disabled */
-  :host([disabled]) [part='label'],
-  :host([disabled]) [part='remove-button'] {
+  :host([disabled]) [part] {
     pointer-events: none;
   }
 
@@ -82,10 +73,6 @@ registerStyles(
   'vaadin-multi-select-combo-box-tokens',
   css`
     [part='compact-mode-label'] {
-      display: flex;
-      flex-grow: 1;
-      align-items: center;
-      margin: 0.5rem;
       color: var(--material-body-text-color);
       font-family: var(--material-font-family);
       font-size: var(--material-body-font-size);
@@ -98,6 +85,10 @@ registerStyles(
       flex-grow: 1;
       width: 100%;
       min-width: 0;
+    }
+
+    [part='token']:not(:last-of-type) {
+      margin-inline-end: 0.25rem;
     }
 
     :host([disabled]) [part='compact-mode-label'] {
