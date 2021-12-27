@@ -37,7 +37,7 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       <vaadin-multi-select-combo-box-dropdown
         id="dropdown"
         opened="[[opened]]"
-        position-target="[[positionTarget]]"
+        position-target="[[_target]]"
         renderer="[[renderer]]"
         _focused-index="[[_focusedIndex]]"
         _item-id-path="[[itemIdPath]]"
@@ -50,7 +50,7 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
 
   static get properties() {
     return {
-      positionTarget: {
+      _target: {
         type: Object
       }
     };
@@ -77,7 +77,7 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   ready() {
     super.ready();
 
-    this.positionTarget = this;
+    this._target = this;
     this._toggleElement = this.querySelector('.toggle-button');
   }
 
