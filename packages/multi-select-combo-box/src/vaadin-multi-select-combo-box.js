@@ -76,6 +76,7 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * `invalid`           | Set when the element is invalid
  * `focused`           | Set when the element is focused
  * `focus-ring`        | Set when the element is keyboard focused
+ * `opened`            | Set when the dropdown is open
  * `ordered`           | Set when the element uses ordered mode
  * `readonly`          | Set to a readonly element
  *
@@ -140,6 +141,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
           data-provider="[[dataProvider]]"
           filter="{{filterValue}}"
           filtered-items="[[filteredItems]]"
+          opened="{{opened}}"
           renderer="[[renderer]]"
           theme$="[[theme]]"
           on-combo-box-item-selected="_onComboBoxItemSelected"
@@ -237,6 +239,16 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
         type: Array,
         value: () => [],
         notify: true
+      },
+
+      /**
+       * True if the dropdown is open, false otherwise.
+       */
+      opened: {
+        type: Boolean,
+        notify: true,
+        value: false,
+        reflectToAttribute: true
       },
 
       /**

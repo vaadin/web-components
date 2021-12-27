@@ -36,6 +36,22 @@ describe('basic', () => {
       expect(internal.inputElement).to.equal(comboBox.inputElement);
     });
 
+    it('should propagate opened property to input', () => {
+      comboBox.opened = true;
+      expect(internal.opened).to.be.true;
+
+      comboBox.opened = false;
+      expect(internal.opened).to.be.false;
+    });
+
+    it('should reflect opened property to attribute', () => {
+      comboBox.opened = true;
+      expect(comboBox.hasAttribute('opened')).to.be.true;
+
+      comboBox.opened = false;
+      expect(comboBox.hasAttribute('opened')).to.be.false;
+    });
+
     it('should propagate placeholder property to input', () => {
       expect(inputElement.placeholder).to.be.not.ok;
       comboBox.placeholder = 'foo';
@@ -76,6 +92,9 @@ describe('basic', () => {
     it('should reflect compactMode property to attribute', () => {
       comboBox.compactMode = true;
       expect(comboBox.hasAttribute('compact-mode')).to.be.true;
+
+      comboBox.compactMode = false;
+      expect(comboBox.hasAttribute('compact-mode')).to.be.false;
     });
 
     it('should propagate renderer property to combo-box', () => {

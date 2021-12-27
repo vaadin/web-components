@@ -103,6 +103,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `invalid`           | Set when the element is invalid
  * `focused`           | Set when the element is focused
  * `focus-ring`        | Set when the element is keyboard focused
+ * `opened`            | Set when the dropdown is open
  * `ordered`           | Set when the element uses ordered mode
  * `readonly`          | Set to a readonly element
  *
@@ -200,6 +201,11 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    * @attr {string} item-value-path
    */
   itemValuePath: string;
+
+  /**
+   * True if the dropdown is open, false otherwise.
+   */
+  opened: boolean;
 
   /**
    * When true, the list of selected items is kept ordered in ascending lexical order.
