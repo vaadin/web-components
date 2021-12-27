@@ -85,7 +85,6 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper
- * `readonly-container` | The element used to represent readonly mode
  * `required-indicator` | The `required` state indicator element
  * `toggle-button`      | The toggle button
  *

@@ -22,12 +22,12 @@ const multiSelectComboBox = css`
     display: none !important;
   }
 
-  [part='readonly-container'] {
-    padding: 0 0.25em;
-  }
-
   :host([has-value]) ::slotted(input:placeholder-shown) {
     color: transparent !important;
+  }
+
+  :host([has-value]:not([compact-mode]):not([readonly])) {
+    --vaadin-field-default-width: auto;
   }
 `;
 
@@ -60,7 +60,6 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * `clear-button`       | The clear button
  * `error-message`      | The error message element
  * `helper-text`        | The helper text element wrapper
- * `readonly-container` | The element used to represent readonly mode
  * `required-indicator` | The `required` state indicator element
  * `toggle-button`      | The toggle button
  *
@@ -127,10 +126,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
           <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
         </div>
 
-        <div part="readonly-container" hidden$="[[!readonly]]">
-          [[_getReadonlyValue(selectedItems, itemLabelPath, compactMode, readonlyValueSeparator)]]
-        </div>
-
         <vaadin-multi-select-combo-box-internal
           id="comboBox"
           items="[[items]]"
@@ -139,7 +134,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
           item-value-path="[[itemValuePath]]"
           disabled="[[disabled]]"
           readonly="[[readonly]]"
-          hidden$="[[readonly]]"
           auto-open-disabled="[[autoOpenDisabled]]"
           allow-custom-value="[[allowCustomValues]]"
           data-provider="[[dataProvider]]"
@@ -160,6 +154,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
           >
             <vaadin-multi-select-combo-box-tokens
               id="tokens"
+              hidden$="[[readonly]]"
               compact-mode="[[compactMode]]"
               compact-mode-label-generator="[[compactModeLabelGenerator]]"
               items="[[selectedItems]]"
@@ -310,6 +305,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   static get observers() {
     return [
       '_selectedItemsChanged(selectedItems, selectedItems.*)',
+      '_updateReadOnlyMode(inputElement, readonly, itemLabelPath, compactMode, readonlyValueSeparator, selectedItems, selectedItems.*)',
       '_updateItems(ordered, compactMode, itemLabelPath, selectedItems, selectedItems.*)'
     ];
   }
@@ -390,6 +386,16 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
     if (ordered && !compactMode) {
       this._sortSelectedItems(selectedItems);
     }
+  }
+
+  /** @private */
+  // eslint-disable-next-line max-params
+  _updateReadOnlyMode(inputElement, readonly, itemLabelPath, compactMode, separator, selectedItems) {
+    if (inputElement) {
+      inputElement.value = readonly ? this._getReadonlyValue(selectedItems, itemLabelPath, compactMode, separator) : '';
+    }
+
+    this.__oldReadOnly = readonly;
   }
 
   /** @private */
