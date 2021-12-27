@@ -17,7 +17,8 @@ export const MultiSelectComboBoxMixin = (base) =>
          * @attr {boolean} compact-mode
          */
         compactMode: {
-          type: Boolean
+          type: Boolean,
+          reflectToAttribute: true
         },
 
         /**

@@ -51,6 +51,7 @@ registerStyles('vaadin-multi-select-combo-box', inputFieldShared, { moduleId: 'v
  *
  * Attribute           | Description
  * --------------------|-----------------
+ * `compact-mode`      | Set when the element uses compact mode
  * `disabled`          | Set to a disabled element
  * `has-value`         | Set when the element has a value
  * `has-label`         | Set when the element has a label

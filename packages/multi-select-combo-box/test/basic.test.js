@@ -73,6 +73,11 @@ describe('basic', () => {
       expect(comboBox.hasAttribute('readonly')).to.be.true;
     });
 
+    it('should reflect compactMode property to attribute', () => {
+      comboBox.compactMode = true;
+      expect(comboBox.hasAttribute('compact-mode')).to.be.true;
+    });
+
     it('should propagate renderer property to combo-box', () => {
       const renderer = (root, _, model) => (root.textContent = model);
       comboBox.renderer = renderer;
