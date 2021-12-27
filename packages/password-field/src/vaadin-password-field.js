@@ -170,7 +170,6 @@ export class PasswordField extends SlotStylesMixin(TextField) {
 
     if (this._revealNode) {
       this.__updateAriaLabel(this.i18n);
-      this._revealNode.setAttribute('aria-label', 'Show password');
       this._revealNode.addEventListener('click', this.__boundRevealButtonClick);
       this._revealNode.addEventListener('touchend', this.__boundRevealButtonTouchend);
     }
