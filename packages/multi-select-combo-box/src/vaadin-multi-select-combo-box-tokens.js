@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-multi-select-combo-box-token.js';
-import { html, LitElement } from 'lit';
+import { css, html, LitElement } from 'lit';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.js';
 
@@ -21,28 +21,33 @@ class MultiSelectComboBoxTokens extends MultiSelectComboBoxMixin(ThemableMixin(L
     return 'vaadin-multi-select-combo-box-tokens';
   }
 
+  static get styles() {
+    return css`
+      :host {
+        display: flex;
+        flex-wrap: wrap;
+        flex-grow: 1;
+        min-width: 0;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+    `;
+  }
+
   render() {
     return html`
-      ${this.compactMode
-        ? html`
-            <div part="compact-mode-label">
-              ${this._getCompactModeLabel(this.items, this.compactModeLabelGenerator)}
-            </div>
+      ${this.items.map(
+        (item) =>
+          html`
+            <vaadin-multi-select-combo-box-token
+              part="token"
+              .item="${item}"
+              .label="${this._getItemLabel(item, this.itemLabelPath)}"
+            ></vaadin-multi-select-combo-box-token>
           `
-        : html`
-            <div part="tokens">
-              ${this.items.map(
-                (item) =>
-                  html`
-                    <vaadin-multi-select-combo-box-token
-                      part="token"
-                      .item="${item}"
-                      .label="${this._getItemLabel(item, this.itemLabelPath)}"
-                    ></vaadin-multi-select-combo-box-token>
-                  `
-              )}
-            </div>
-          `}
+      )}
     `;
   }
 }

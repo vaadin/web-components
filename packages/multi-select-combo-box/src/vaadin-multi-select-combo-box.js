@@ -17,7 +17,6 @@ import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixi
 import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.js';
 
 const multiSelectComboBox = css`
-  :host(:not([has-value])) #tokens,
   [hidden] {
     display: none !important;
   }
@@ -55,6 +54,7 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  *
  * Part name            | Description
  * ---------------------|----------------
+ * `compact-mode-count` | The items count shown when using compact mode
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and suffix
  * `clear-button`       | The clear button
@@ -153,11 +153,16 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
             invalid="[[invalid]]"
             theme$="[[theme]]"
           >
+            <div
+              part="compact-mode-count"
+              hidden$="[[_isCompactModeHidden(readonly, compactMode, _hasValue)]]"
+              slot="prefix"
+            >
+              [[_getCompactModeLabel(selectedItems, compactModeLabelGenerator)]]
+            </div>
             <vaadin-multi-select-combo-box-tokens
               id="tokens"
-              hidden$="[[readonly]]"
-              compact-mode="[[compactMode]]"
-              compact-mode-label-generator="[[compactModeLabelGenerator]]"
+              hidden$="[[_isTokensHidden(readonly, compactMode, _hasValue)]]"
               items="[[selectedItems]]"
               item-label-path="[[itemLabelPath]]"
               slot="prefix"
@@ -188,6 +193,26 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
        * @attr {boolean} auto-open-disabled
        */
       autoOpenDisabled: Boolean,
+
+      /**
+       * When true, the component does not render tokens for every selected value.
+       * Instead, only the number of currently selected items is shown.
+       * @attr {boolean} compact-mode
+       */
+      compactMode: {
+        type: Boolean,
+        reflectToAttribute: true
+      },
+
+      /**
+       * Custom function for generating the display label when in compact mode.
+       *
+       * This function receives the array of selected items and should return
+       * a string value that will be used as the display label.
+       */
+      compactModeLabelGenerator: {
+        type: Object
+      },
 
       /**
        * Path for the value of the item. If `items` is an array of objects,
@@ -299,7 +324,13 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
        * can be assigned directly to omit the internal filtering functionality.
        * The items can be of either `String` or `Object` type.
        */
-      filteredItems: Array
+      filteredItems: Array,
+
+      /** @protected */
+      _hasValue: {
+        type: Boolean,
+        value: false
+      }
     };
   }
 
@@ -318,14 +349,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
    */
   get clearElement() {
     return this.$.clearButton;
-  }
-
-  /**
-   * @protected
-   * @return {boolean}
-   */
-  get _hasValue() {
-    return Boolean(this.selectedItems && this.selectedItems.length);
   }
 
   /** @protected */
@@ -380,6 +403,16 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   /** @private */
+  _isCompactModeHidden(readonly, compactMode, hasValue) {
+    return readonly || !compactMode || !hasValue;
+  }
+
+  /** @private */
+  _isTokensHidden(readonly, compactMode, hasValue) {
+    return readonly || compactMode || !hasValue;
+  }
+
+  /** @private */
   _updateItems(ordered, compactMode, itemLabelPath, selectedItems) {
     // Set title when in compact mode to indicate which items are selected.
     this.title = compactMode ? this._getDisplayValue(selectedItems, itemLabelPath, ', ') : undefined;
@@ -410,8 +443,11 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   /** @private */
-  _selectedItemsChanged() {
-    this.toggleAttribute('has-value', this._hasValue);
+  _selectedItemsChanged(selectedItems) {
+    const hasValue = Boolean(selectedItems && selectedItems.length);
+    this._hasValue = hasValue;
+
+    this.toggleAttribute('has-value', hasValue);
 
     // Re-render tokens
     this.__updateTokens();
@@ -423,6 +459,16 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
     requestAnimationFrame(() => {
       this.$.comboBox.$.dropdown._setOverlayWidth();
     });
+  }
+
+  /** @private */
+  _getCompactModeLabel(items) {
+    if (typeof this.compactModeLabelGenerator === 'function') {
+      return this.compactModeLabelGenerator(items);
+    }
+
+    const suffix = items.length === 0 || items.length > 1 ? 'values' : 'value';
+    return `${items.length} ${suffix}`;
   }
 
   /** @private */

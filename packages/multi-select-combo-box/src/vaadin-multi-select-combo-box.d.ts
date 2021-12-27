@@ -19,7 +19,8 @@ import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { MultiSelectComboBoxMixinClass } from './vaadin-multi-select-combo-box-mixin.js';
-export { MultiSelectComboBoxCompactModeLabelGenerator } from './vaadin-multi-select-combo-box-mixin.js';
+
+export type MultiSelectComboBoxCompactModeLabelGenerator<TItem> = (items: Array<TItem>) => string;
 
 /**
  * Fired when the user commits a value change.
@@ -80,6 +81,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  *
  * Part name            | Description
  * ---------------------|----------------
+ * `compact-mode-count` | The items count shown when using compact mode
  * `label`              | The label element
  * `input-field`        | The element that wraps prefix, value and suffix
  * `clear-button`       | The clear button
@@ -143,6 +145,21 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    * @attr {boolean} auto-open-disabled
    */
   autoOpenDisabled: boolean;
+
+  /**
+   * When true, the component does not render tokens for every selected value.
+   * Instead, only the number of currently selected items is shown.
+   * @attr {boolean} compact-mode
+   */
+  compactMode: boolean;
+
+  /**
+   * Custom function for generating the display label when in compact mode.
+   *
+   * This function receives the array of selected items and should return
+   * a string value that will be used as the display label.
+   */
+  compactModeLabelGenerator: MultiSelectComboBoxCompactModeLabelGenerator<TItem>;
 
   /**
    * Function that provides items lazily. Receives two arguments:

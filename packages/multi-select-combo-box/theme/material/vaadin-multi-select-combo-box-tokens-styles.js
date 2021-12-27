@@ -72,29 +72,8 @@ registerStyles('vaadin-multi-select-combo-box-token', [fieldButton, token], {
 registerStyles(
   'vaadin-multi-select-combo-box-tokens',
   css`
-    [part='compact-mode-label'] {
-      color: var(--material-body-text-color);
-      font-family: var(--material-font-family);
-      font-size: var(--material-body-font-size);
-      cursor: default;
-    }
-
-    [part='tokens'] {
-      display: flex;
-      flex-wrap: wrap;
-      flex-grow: 1;
-      width: 100%;
-      min-width: 0;
-    }
-
     [part='token']:not(:last-of-type) {
       margin-inline-end: 0.25rem;
-    }
-
-    :host([disabled]) [part='compact-mode-label'] {
-      color: var(--material-disabled-text-color);
-      -webkit-text-fill-color: var(--material-disabled-text-color);
-      pointer-events: none;
     }
   `,
   {
