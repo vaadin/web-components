@@ -45,7 +45,7 @@ class MultiSelectComboBoxChips extends MultiSelectComboBoxMixin(ThemableMixin(Po
         <vaadin-multi-select-combo-box-chip
           part="chip"
           item="[[item]]"
-          label="[[_getItemLabel(item, this.itemLabelPath)]]"
+          label="[[_getItemLabel(item, itemLabelPath)]]"
         ></vaadin-multi-select-combo-box-chip>
       </template>
     `;
