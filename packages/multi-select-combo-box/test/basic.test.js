@@ -183,12 +183,12 @@ describe('basic', () => {
       spy = sinon.spy();
       comboBox.addEventListener('change', spy);
       comboBox.selectedItems = ['orange'];
-      await chips.updateComplete;
+      await nextFrame();
     });
 
     it('should render chips on updating selectedItems', async () => {
       comboBox.selectedItems = ['apple', 'banana'];
-      await chips.updateComplete;
+      await nextFrame();
       expect(chips.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(2);
     });
 
@@ -196,14 +196,14 @@ describe('basic', () => {
       arrowDown(inputElement);
       arrowDown(inputElement);
       enter(inputElement);
-      await chips.updateComplete;
+      await nextFrame();
       expect(chips.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(2);
     });
 
     it('should remove chip on remove button click', async () => {
       const chip = chips.shadowRoot.querySelector('[part="chip"]');
       chip.shadowRoot.querySelector('[part="remove-button"]').click();
-      await chips.updateComplete;
+      await nextFrame();
       expect(chips.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(0);
     });
   });
@@ -215,7 +215,7 @@ describe('basic', () => {
       spy = sinon.spy();
       comboBox.addEventListener('change', spy);
       comboBox.selectedItems = ['apple'];
-      await chips.updateComplete;
+      await nextFrame();
     });
 
     it('should fire change on user arrow input commit', () => {

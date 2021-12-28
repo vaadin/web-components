@@ -3,7 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, LitElement } from 'lit';
+import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -23,7 +23,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @private
  */
-class MultiSelectComboBoxChip extends ThemableMixin(LitElement) {
+class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
   static get is() {
     return 'vaadin-multi-select-combo-box-chip';
   }
@@ -40,10 +40,10 @@ class MultiSelectComboBoxChip extends ThemableMixin(LitElement) {
     };
   }
 
-  render() {
+  static get template() {
     return html`
-      <div part="label">${this.label}</div>
-      <div part="remove-button" role="button" @click="${this._onRemoveClick}"></div>
+      <div part="label">[[label]]</div>
+      <div part="remove-button" role="button" on-click="_onRemoveClick"></div>
     `;
   }
 

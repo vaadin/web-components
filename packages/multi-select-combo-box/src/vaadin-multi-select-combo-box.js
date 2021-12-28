@@ -565,7 +565,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
   /** @private */
   __updateChips() {
-    this.$.chips.requestUpdate();
+    this.$.chips.requestContentUpdate();
   }
 
   /**
