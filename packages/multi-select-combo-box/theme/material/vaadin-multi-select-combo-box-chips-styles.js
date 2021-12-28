@@ -13,19 +13,20 @@ const chip = css`
   :host {
     display: flex;
     align-items: center;
-    padding-left: 0.5rem;
-    margin: 0.25rem 0;
+    box-sizing: border-box;
+    height: 1.5rem;
+    margin-top: 0.0625rem;
+    padding-inline-start: 0.5rem;
     border-radius: 1.25rem;
     background-color: hsla(214, 53%, 23%, 0.1);
     cursor: default;
     white-space: nowrap;
-    height: 26px;
-    box-sizing: border-box;
     font-family: var(--material-font-family);
   }
 
   [part='label'] {
     font-size: var(--material-small-font-size);
+    color: var(--material-body-text-color);
   }
 
   /* Override field button */
@@ -72,7 +73,7 @@ registerStyles('vaadin-multi-select-combo-box-chip', [fieldButton, chip], {
 registerStyles(
   'vaadin-multi-select-combo-box-chips',
   css`
-    [part='chip']:not(:last-of-type) {
+    [part='chip'] {
       margin-inline-end: 0.25rem;
     }
   `,
