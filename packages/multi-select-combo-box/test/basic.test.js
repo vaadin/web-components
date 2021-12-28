@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, enter, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
@@ -109,15 +110,15 @@ describe('basic', () => {
       inputElement.focus();
     });
 
-    it('should update selectedItems when selecting an item on Enter', () => {
-      arrowDown(inputElement);
-      arrowDown(inputElement);
-      enter(inputElement);
+    it('should update selectedItems when selecting an item on Enter', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
     });
 
-    it('should update selectedItems when selecting an item on click', () => {
-      arrowDown(inputElement);
+    it('should update selectedItems when selecting an item on click', async () => {
+      await sendKeys({ down: 'ArrowDown' });
       const item = document.querySelector('vaadin-multi-select-combo-box-item');
       item.click();
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
@@ -127,6 +128,26 @@ describe('basic', () => {
       expect(comboBox.hasAttribute('has-value')).to.be.false;
       comboBox.selectedItems = ['apple', 'banana'];
       expect(comboBox.hasAttribute('has-value')).to.be.true;
+    });
+
+    it('should clear last selected item on Backspace if input has no value', async () => {
+      comboBox.selectedItems = ['apple', 'banana'];
+      await nextFrame();
+
+      await sendKeys({ down: 'Backspace' });
+      expect(comboBox.selectedItems).to.deep.equal(['apple']);
+
+      await sendKeys({ down: 'Backspace' });
+      expect(comboBox.selectedItems).to.deep.equal([]);
+    });
+
+    it('should not clear last selected items on Backspace if input has value', async () => {
+      comboBox.selectedItems = ['apple', 'banana'];
+      await nextFrame();
+      await sendKeys({ type: 'lemon' });
+
+      await sendKeys({ down: 'Backspace' });
+      expect(comboBox.selectedItems).to.deep.equal(['apple', 'banana']);
     });
   });
 
@@ -184,6 +205,7 @@ describe('basic', () => {
       comboBox.addEventListener('change', spy);
       comboBox.selectedItems = ['orange'];
       await nextFrame();
+      inputElement.focus();
     });
 
     it('should render chips on updating selectedItems', async () => {
@@ -193,9 +215,9 @@ describe('basic', () => {
     });
 
     it('should re-render chips when selecting the item', async () => {
-      arrowDown(inputElement);
-      arrowDown(inputElement);
-      enter(inputElement);
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
       await nextFrame();
       expect(chips.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(2);
     });
@@ -216,12 +238,13 @@ describe('basic', () => {
       comboBox.addEventListener('change', spy);
       comboBox.selectedItems = ['apple'];
       await nextFrame();
+      inputElement.focus();
     });
 
-    it('should fire change on user arrow input commit', () => {
-      arrowDown(inputElement);
-      arrowDown(inputElement);
-      enter(inputElement);
+    it('should fire change on user arrow input commit', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
       expect(spy.calledOnce).to.be.true;
     });
 
