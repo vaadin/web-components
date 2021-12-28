@@ -8,6 +8,13 @@ import '../vaadin-multi-select-combo-box.js';
 describe('basic', () => {
   let comboBox, internal, chips, inputElement;
 
+  const getChipContent = (idx) => {
+    const chip = chips.shadowRoot.querySelectorAll('[part="chip"]')[idx];
+    if (chip) {
+      return chip.shadowRoot.querySelector('[part="label"]').textContent;
+    }
+  };
+
   beforeEach(() => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
     comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
@@ -221,6 +228,8 @@ describe('basic', () => {
       comboBox.selectedItems = ['apple', 'banana'];
       await nextFrame();
       expect(chips.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(2);
+      expect(getChipContent(0)).to.equal('apple');
+      expect(getChipContent(1)).to.equal('banana');
     });
 
     it('should re-render chips when selecting the item', async () => {
@@ -236,6 +245,34 @@ describe('basic', () => {
       chip.shadowRoot.querySelector('[part="remove-button"]').click();
       await nextFrame();
       expect(chips.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(0);
+    });
+  });
+
+  describe('ordered', () => {
+    beforeEach(async () => {
+      comboBox.selectedItems = ['lemon', 'banana', 'apple'];
+      await nextFrame();
+    });
+
+    it('should sort selectedItems when ordered property is set to true', async () => {
+      comboBox.ordered = true;
+      await nextFrame();
+      expect(comboBox.selectedItems).to.deep.equal(['apple', 'banana', 'lemon']);
+    });
+
+    it('should re-render chips after setting ordered property to true', async () => {
+      comboBox.ordered = true;
+      await nextFrame();
+      expect(getChipContent(0)).to.equal('apple');
+      expect(getChipContent(1)).to.equal('banana');
+      expect(getChipContent(2)).to.equal('lemon');
+    });
+
+    it('should not sort selectedItems when compactMode property is set to true', async () => {
+      comboBox.compactMode = true;
+      comboBox.ordered = true;
+      await nextFrame();
+      expect(comboBox.selectedItems).to.deep.equal(['lemon', 'banana', 'apple']);
     });
   });
 
