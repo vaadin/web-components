@@ -511,8 +511,8 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   /** @private */
-  __clearInput() {
-    this.inputElement.value = '';
+  __clearFilter() {
+    this.$.comboBox.clear();
   }
 
   /** @private */
@@ -535,13 +535,11 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
     this.__updateSelection(itemsCopy);
 
-    // Avoid firing `value-changed` event.
+    // Reset the overlay focused index.
     this.$.comboBox._focusedIndex = -1;
 
-    // Avoid firing `custom-value-set` event.
-    if (this.allowCustomValues) {
-      this.__clearInput();
-    }
+    // Suppress `value-changed` event.
+    this.__clearFilter();
   }
 
   /** @private */
@@ -611,7 +609,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
     // Do not set combo-box value
     event.preventDefault();
 
-    this.__clearInput();
+    this.__clearFilter();
 
     this.dispatchEvent(
       new CustomEvent('custom-values-set', {

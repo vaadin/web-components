@@ -165,6 +165,23 @@ describe('basic', () => {
       await sendKeys({ down: 'Backspace' });
       expect(comboBox.selectedItems).to.deep.equal(['apple', 'banana']);
     });
+
+    it('should clear internal combo-box value when selecting an item', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ type: 'apple' });
+      await sendKeys({ down: 'Enter' });
+      expect(internal.value).to.equal('');
+      expect(inputElement.value).to.equal('');
+    });
+
+    it('should not fire internal value-changed event when selecting an item', async () => {
+      const spy = sinon.spy();
+      internal.addEventListener('value-changed', spy);
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ type: 'apple' });
+      await sendKeys({ down: 'Enter' });
+      expect(spy.calledOnce).to.be.false;
+    });
   });
 
   describe('pageSize', () => {
