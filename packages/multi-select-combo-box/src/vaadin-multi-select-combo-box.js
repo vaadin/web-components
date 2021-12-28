@@ -588,7 +588,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
    */
   _onKeyDown(event) {
     const items = this.selectedItems || [];
-    if (event.key === 'Backspace' && items.length && this.inputElement.value === '') {
+    if (!this.compactMode && event.key === 'Backspace' && items.length && this.inputElement.value === '') {
       this.__removeItem(items[items.length - 1]);
     }
   }

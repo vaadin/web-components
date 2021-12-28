@@ -141,10 +141,19 @@ describe('basic', () => {
       expect(comboBox.selectedItems).to.deep.equal([]);
     });
 
-    it('should not clear last selected items on Backspace if input has value', async () => {
+    it('should not clear last selected item on Backspace if input has value', async () => {
       comboBox.selectedItems = ['apple', 'banana'];
       await nextFrame();
       await sendKeys({ type: 'lemon' });
+
+      await sendKeys({ down: 'Backspace' });
+      expect(comboBox.selectedItems).to.deep.equal(['apple', 'banana']);
+    });
+
+    it('should not clear last selected item on Backspace in compact mode', async () => {
+      comboBox.compactMode = true;
+      comboBox.selectedItems = ['apple', 'banana'];
+      await nextFrame();
 
       await sendKeys({ down: 'Backspace' });
       expect(comboBox.selectedItems).to.deep.equal(['apple', 'banana']);
