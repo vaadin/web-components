@@ -79,35 +79,35 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name            | Description
- * ---------------------|----------------
- * `compact-mode-count` | The items count shown when using compact mode
- * `label`              | The label element
- * `input-field`        | The element that wraps prefix, value and suffix
- * `clear-button`       | The clear button
- * `error-message`      | The error message element
- * `helper-text`        | The helper text element wrapper
- * `required-indicator` | The `required` state indicator element
- * `toggle-button`      | The toggle button
+ * Part name              | Description
+ * -----------------------|----------------
+ * `compact-mode-prefix`  | The selected items counter shown in compact mode
+ * `label`                | The label element
+ * `input-field`          | The element that wraps prefix, value and suffix
+ * `clear-button`         | The clear button
+ * `error-message`        | The error message element
+ * `helper-text`          | The helper text element wrapper
+ * `required-indicator`   | The `required` state indicator element
+ * `toggle-button`        | The toggle button
  *
  * The following state attributes are available for styling:
  *
- * Attribute           | Description
- * --------------------|-----------------
- * `compact-mode`      | Set when the element uses compact mode
- * `disabled`          | Set to a disabled element
- * `has-value`         | Set when the element has a value
- * `has-label`         | Set when the element has a label
- * `has-helper`        | Set when the element has helper text or slot
- * `has-error-message` | Set when the element has an error message
- * `invalid`           | Set when the element is invalid
- * `focused`           | Set when the element is focused
- * `focus-ring`        | Set when the element is keyboard focused
- * `opened`            | Set when the dropdown is open
- * `ordered`           | Set when the element uses ordered mode
- * `readonly`          | Set to a readonly element
+ * Attribute              | Description
+ * -----------------------|-----------------
+ * `compact-mode`         | Set when the element uses compact mode
+ * `disabled`             | Set to a disabled element
+ * `has-value`            | Set when the element has a value
+ * `has-label`            | Set when the element has a label
+ * `has-helper`           | Set when the element has helper text or slot
+ * `has-error-message`    | Set when the element has an error message
+ * `invalid`              | Set when the element is invalid
+ * `focused`              | Set when the element is focused
+ * `focus-ring`           | Set when the element is keyboard focused
+ * `opened`               | Set when the dropdown is open
+ * `ordered`              | Set when the element uses ordered mode
+ * `readonly`             | Set to a readonly element
  *
- * ### Tokens
+ * ### Chips
  *
  * To change how selected items are presented, apply styles to the following components:
  *

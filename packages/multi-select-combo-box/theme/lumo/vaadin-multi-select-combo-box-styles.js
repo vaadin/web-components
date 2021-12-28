@@ -15,7 +15,7 @@ const multiSelectComboBox = css`
     padding-inline-start: 0;
   }
 
-  [part='compact-mode-count'] {
+  [part='compact-mode-prefix'] {
     padding: 0 0.25em;
     color: var(--lumo-body-text-color);
     font-family: var(--lumo-font-family);
@@ -23,7 +23,7 @@ const multiSelectComboBox = css`
     cursor: var(--lumo-clickable-cursor);
   }
 
-  :host([disabled]) [part='compact-mode-count'] {
+  :host([disabled]) [part='compact-mode-prefix'] {
     color: var(--lumo-disabled-text-color);
     -webkit-text-fill-color: var(--lumo-disabled-text-color);
     pointer-events: none;

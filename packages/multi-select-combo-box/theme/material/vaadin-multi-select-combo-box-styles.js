@@ -15,14 +15,14 @@ const multiSelectComboBox = css`
     transform: scale(0.75) !important;
   }
 
-  [part='compact-mode-count'] {
+  [part='compact-mode-prefix'] {
     color: var(--material-body-text-color);
     font-family: var(--material-font-family);
     font-size: var(--material-body-font-size);
     cursor: default;
   }
 
-  :host([disabled]) [part='compact-mode-count'] {
+  :host([disabled]) [part='compact-mode-prefix'] {
     color: var(--material-disabled-text-color);
     -webkit-text-fill-color: var(--material-disabled-text-color);
     pointer-events: none;
