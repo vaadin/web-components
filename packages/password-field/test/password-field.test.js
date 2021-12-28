@@ -13,15 +13,6 @@ describe('password-field', () => {
     revealButton = passwordField.querySelector('[slot=reveal]');
   });
 
-  it('should set default accessible label to reveal button', () => {
-    expect(revealButton.getAttribute('aria-label')).to.equal('Show password');
-  });
-
-  it('should translate accessible label when setting new i18n object', () => {
-    passwordField.i18n = { reveal: 'Näytä salasana' };
-    expect(revealButton.getAttribute('aria-label')).to.equal('Näytä salasana');
-  });
-
   it('should reveal the password on reveal button click', () => {
     revealButton.click();
     expect(input.type).to.equal('text');
@@ -257,6 +248,44 @@ describe('disabled', () => {
       passwordField.disabled = true;
       await shiftTab();
       expect(document.activeElement).not.to.equal(revealButton);
+    });
+  });
+});
+
+describe('i18n', () => {
+  let passwordField, revealButton;
+
+  describe('default', () => {
+    beforeEach(() => {
+      passwordField = fixtureSync('<vaadin-password-field></vaadin-password-field>');
+      revealButton = passwordField.querySelector('[slot=reveal]');
+    });
+
+    it('should set default accessible label to reveal button', () => {
+      expect(revealButton.getAttribute('aria-label')).to.equal('Show password');
+    });
+
+    it('should translate accessible label when setting new i18n object', () => {
+      passwordField.i18n = { reveal: 'Näytä salasana' };
+      expect(revealButton.getAttribute('aria-label')).to.equal('Näytä salasana');
+    });
+  });
+
+  describe('set before attach', () => {
+    beforeEach(() => {
+      passwordField = document.createElement('vaadin-password-field');
+    });
+
+    afterEach(() => {
+      passwordField.remove();
+    });
+
+    it('should not override i18n object set before attaching to the DOM', () => {
+      passwordField.i18n = { reveal: 'Näytä salasana' };
+      document.body.appendChild(passwordField);
+
+      revealButton = passwordField.querySelector('[slot=reveal]');
+      expect(revealButton.getAttribute('aria-label')).to.equal('Näytä salasana');
     });
   });
 });
