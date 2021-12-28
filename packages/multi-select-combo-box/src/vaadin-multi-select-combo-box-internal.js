@@ -118,8 +118,7 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       this.dispatchEvent(
         new CustomEvent('combo-box-item-selected', {
           detail: {
-            item: event.detail.item,
-            sourceEvent: event
+            item: event.detail.item
           }
         })
       );

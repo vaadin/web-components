@@ -341,7 +341,8 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
       /** @protected */
       _hasValue: {
         type: Boolean,
-        value: false
+        value: false,
+        observer: '_hasValueChanged'
       }
     };
   }
@@ -415,6 +416,11 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
   }
 
   /** @private */
+  _hasValueChanged(hasValue) {
+    this.toggleAttribute('has-value', hasValue);
+  }
+
+  /** @private */
   _isCompactModeHidden(readonly, compactMode, hasValue) {
     return readonly || !compactMode || !hasValue;
   }
@@ -440,8 +446,6 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
     if (inputElement) {
       inputElement.value = readonly ? this._getReadonlyValue(selectedItems, itemLabelPath, compactMode, separator) : '';
     }
-
-    this.__oldReadOnly = readonly;
   }
 
   /** @private */
@@ -456,10 +460,7 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
   /** @private */
   _selectedItemsChanged(selectedItems) {
-    const hasValue = Boolean(selectedItems && selectedItems.length);
-    this._hasValue = hasValue;
-
-    this.toggleAttribute('has-value', hasValue);
+    this._hasValue = Boolean(selectedItems && selectedItems.length);
 
     // Re-render chips
     this.__updateChips();
