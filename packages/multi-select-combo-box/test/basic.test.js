@@ -324,6 +324,35 @@ describe('basic', () => {
     });
   });
 
+  describe('allowCustomValues', () => {
+    beforeEach(async () => {
+      comboBox.allowCustomValues = true;
+      comboBox.selectedItems = ['apple'];
+      await nextFrame();
+      inputElement.focus();
+    });
+
+    it('should fire custom-values-set event when entering custom value', async () => {
+      const spy = sinon.spy();
+      comboBox.addEventListener('custom-values-set', spy);
+      await sendKeys({ type: 'pear' });
+      await sendKeys({ down: 'Enter' });
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should clear input element value after entering custom value', async () => {
+      await sendKeys({ type: 'pear' });
+      await sendKeys({ down: 'Enter' });
+      expect(internal.value).to.equal('');
+    });
+
+    it('should not add custom value to selectedItems automatically', async () => {
+      await sendKeys({ type: 'pear' });
+      await sendKeys({ down: 'Enter' });
+      expect(comboBox.selectedItems).to.deep.equal(['apple']);
+    });
+  });
+
   describe('helper text', () => {
     it('should set helper text content using helperText property', async () => {
       comboBox.helperText = 'foo';
