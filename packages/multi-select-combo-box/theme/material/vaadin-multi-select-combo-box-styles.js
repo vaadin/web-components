@@ -10,11 +10,6 @@ import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-fi
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const multiSelectComboBox = css`
-  /* Make label always float */
-  [part='label'] {
-    transform: scale(0.75) !important;
-  }
-
   [part='compact-mode-prefix'] {
     color: var(--material-body-text-color);
     font-family: var(--material-font-family);
