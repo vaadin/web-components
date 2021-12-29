@@ -11,12 +11,7 @@
     <script type="module">
       import '@vaadin/crud';
       import '@vaadin/radio-group';
-      import { color, typography } from '@vaadin/vaadin-lumo-styles';
-
-      // Global color and typography styles affect the contents of the dialog
-      const style = document.createElement('style');
-      style.innerHTML = `${color.toString()} ${typography.toString()}`;
-      document.head.appendChild(style);
+      import '@vaadin/vaadin-lumo-styles/autoload.js';
 
       const crud = document.querySelector('vaadin-crud');
       crud.items = [

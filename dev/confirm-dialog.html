@@ -7,12 +7,7 @@
     <title>Confirm dialog</title>
     <script type="module">
       import '@vaadin/confirm-dialog';
-      import { color, typography } from '@vaadin/vaadin-lumo-styles';
-
-      // Global color and typography styles affect the contents of the dialog
-      const style = document.createElement('style');
-      style.innerHTML = `${color.toString()} ${typography.toString()}`;
-      document.head.appendChild(style);
+      import '@vaadin/vaadin-lumo-styles/autoload.js';
     </script>
   </head>
   <body>
