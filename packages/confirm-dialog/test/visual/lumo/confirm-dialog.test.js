@@ -1,5 +1,6 @@
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/vaadin-lumo-styles/test/autoload.js';
 import '../../../theme/lumo/vaadin-confirm-dialog.js';
 import '../../not-animated-styles.js';
 
