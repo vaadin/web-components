@@ -42,11 +42,6 @@ const editorStyles = css`
     padding: var(--lumo-space-l);
   }
 
-  ::slotted([slot='header']) {
-    margin-top: var(--lumo-space-s);
-    margin-bottom: var(--lumo-space-s);
-  }
-
   [part='footer'] {
     background-color: var(--lumo-contrast-5pct);
     padding: var(--lumo-space-s);
@@ -73,6 +68,11 @@ registerStyles(
     css`
       :host {
         font-family: var(--lumo-font-family);
+      }
+
+      ::slotted([slot='header']) {
+        margin-top: var(--lumo-space-s);
+        margin-bottom: var(--lumo-space-s);
       }
 
       [part='toolbar'] {
@@ -127,4 +127,12 @@ registerStyles(
   { moduleId: 'lumo-crud' }
 );
 
-registerStyles('vaadin-crud-dialog-overlay', editorStyles, { moduleId: 'lumo-crud-dialog-overlay' });
+const crudDialogOverlay = css`
+  [part='header'] ::slotted(h3) {
+    margin-top: 0 !important;
+  }
+`;
+
+registerStyles('vaadin-crud-dialog-overlay', [editorStyles, crudDialogOverlay], {
+  moduleId: 'lumo-crud-dialog-overlay'
+});
