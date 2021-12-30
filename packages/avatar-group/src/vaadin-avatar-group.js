@@ -3,14 +3,15 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@vaadin/avatar/src/vaadin-avatar.js';
 import '@vaadin/item/src/vaadin-item.js';
 import './vaadin-avatar-group-list-box.js';
 import './vaadin-avatar-group-overlay.js';
-import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
 import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -278,8 +279,6 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
   ready() {
     super.ready();
 
-    IronA11yAnnouncer.requestAvailability();
-
     this.__boundSetPosition = this.__setPosition.bind(this);
 
     this._overlayElement = this.shadowRoot.querySelector('vaadin-avatar-group-overlay');
@@ -308,19 +307,6 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
    */
   get _avatars() {
     return this.shadowRoot.querySelectorAll('vaadin-avatar');
-  }
-
-  /** @private */
-  __announce(text) {
-    this.dispatchEvent(
-      new CustomEvent('iron-announce', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          text
-        }
-      })
-    );
   }
 
   /** @private */
@@ -473,7 +459,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
 
     const messages = removedMsg.concat(addedMsg);
     if (messages.length > 0) {
-      this.__announce(messages.join(', '));
+      announce(messages.join(', '));
     }
   }
 

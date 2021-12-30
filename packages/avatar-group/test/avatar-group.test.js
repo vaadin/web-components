@@ -591,74 +591,77 @@ describe('avatar-group', () => {
   });
 
   describe('announcements', () => {
-    // NOTE: See <iron-a11y-announcer> API
-    function waitForAnnounce(callback) {
-      var listener = (event) => {
-        document.body.removeEventListener('iron-announce', listener);
-        callback(event.detail.text);
-      };
-      document.body.addEventListener('iron-announce', listener);
-    }
+    let clock;
+    let region;
+
+    before(() => {
+      region = document.querySelector('[aria-live]');
+    });
 
     beforeEach(async () => {
       group.items = [{ name: 'AA' }, { name: 'BB' }, { name: 'CC' }];
       await nextRender(group);
+      clock = sinon.useFakeTimers();
     });
 
-    it('should announce when adding single item', (done) => {
-      waitForAnnounce((text) => {
-        expect(text).to.equal('DD joined');
-        done();
-      });
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should announce when adding single item', () => {
       group.splice('items', 2, 0, { name: 'DD' });
+
+      clock.tick(150);
+
+      expect(region.textContent).to.equal('DD joined');
     });
 
-    it('should announce when removing single item', (done) => {
-      waitForAnnounce((text) => {
-        expect(text).to.equal('CC left');
-        done();
-      });
+    it('should announce when removing single item', () => {
       group.splice('items', 2, 1);
+
+      clock.tick(150);
+
+      expect(region.textContent).to.equal('CC left');
     });
 
-    it('should announce when adding multiple items', (done) => {
-      waitForAnnounce((text) => {
-        expect(text).to.equal('DD joined, EE joined');
-        done();
-      });
+    it('should announce when adding multiple items', () => {
       group.splice('items', 2, 0, { name: 'DD' }, { name: 'EE' });
+
+      clock.tick(150);
+
+      expect(region.textContent).to.equal('DD joined, EE joined');
     });
 
-    it('should announce when removing multiple items', (done) => {
-      waitForAnnounce((text) => {
-        expect(text).to.equal('BB left, CC left');
-        done();
-      });
+    it('should announce when removing multiple items', () => {
       group.splice('items', 1, 2);
+
+      clock.tick(150);
+
+      expect(region.textContent).to.equal('BB left, CC left');
     });
 
-    it('should announce when adding and removing single item', (done) => {
-      waitForAnnounce((text) => {
-        expect(text).to.equal('CC left, DD joined');
-        done();
-      });
+    it('should announce when adding and removing single item', () => {
       group.splice('items', 2, 1, { name: 'DD' });
+
+      clock.tick(150);
+
+      expect(region.textContent).to.equal('CC left, DD joined');
     });
 
-    it('should announce when adding and removing multiple items', (done) => {
-      waitForAnnounce((text) => {
-        expect(text).to.equal('BB left, CC left, DD joined, EE joined');
-        done();
-      });
+    it('should announce when adding and removing multiple items', () => {
       group.splice('items', 1, 2, { name: 'DD' }, { name: 'EE' });
+
+      clock.tick(150);
+
+      expect(region.textContent).to.equal('BB left, CC left, DD joined, EE joined');
     });
 
-    it('should announce when the items property is reset', (done) => {
-      waitForAnnounce((text) => {
-        expect(text).to.equal('BB left, CC left');
-        done();
-      });
+    it('should announce when the items property is reset', () => {
       group.set('items', [group.items[0]]);
+
+      clock.tick(150);
+
+      expect(region.textContent).to.equal('BB left, CC left');
     });
   });
 });
