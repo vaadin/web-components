@@ -24,8 +24,8 @@ const textArea = css`
 
   /* Do not show inherited underline from vaadin-text-field */
   /* See: https://github.com/vaadin/web-components/issues/1333 */
-  [part="input-field"]::before,
-  [part="input-field"]::after {
+  [part='input-field']::before,
+  [part='input-field']::after {
     display: none;
   }
 
@@ -34,7 +34,7 @@ const textArea = css`
   .vaadin-text-area-container::before,
   .vaadin-text-area-container::after {
     order: 3;
-    content: "";
+    content: '';
     display: block;
     height: 1px;
     background-color: var(--_material-text-field-input-line-background-color, #000);
@@ -57,17 +57,17 @@ const textArea = css`
     transition: transform 0.175s, opacity 0.175s;
   }
 
-  [part="label"] {
+  [part='label'] {
     order: 1;
   }
 
-  [part="input-field"] {
+  [part='input-field'] {
     order: 2;
   }
 
-  [part="error-message"] {
+  [part='error-message'] {
     order: 4;
-  }  
+  }
 `;
 
 registerStyles('vaadin-text-area', [inputFieldShared, textArea], { moduleId: 'material-text-area' });
