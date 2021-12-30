@@ -101,4 +101,54 @@ describe('a11y announcer', () => {
       expect(eventSpy.firstCall.args[0].detail.text).to.equal(element.textContent);
     });
   });
+
+  describe('mode', () => {
+    let region;
+
+    before(() => {
+      region = announcer.shadowRoot.querySelector('div');
+    });
+
+    it('should set announcer mode property to polite by default', () => {
+      expect(announcer.mode).to.equal('polite');
+    });
+
+    it('should set aria-live attribute to polite by default', () => {
+      expect(region.getAttribute('aria-live')).to.equal('polite');
+    });
+
+    it('should update aria-live attribute when mode changes', () => {
+      announcer.mode = 'assertive';
+      expect(region.getAttribute('aria-live')).to.equal('assertive');
+    });
+  });
+
+  describe('timeout', () => {
+    let region;
+    let clock;
+
+    before(() => {
+      region = announcer.shadowRoot.querySelector('div');
+    });
+
+    beforeEach(() => {
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should set announcer timeout property to 150 by default', () => {
+      expect(announcer.timeout).to.equal(150);
+    });
+
+    it('should update region text content after the timeout', () => {
+      controller.announce('Test');
+      expect(region.textContent).to.equal('');
+
+      clock.tick(150);
+      expect(region.textContent).to.equal('Test');
+    });
+  });
 });
