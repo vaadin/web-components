@@ -25,11 +25,11 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
  * ```
  *
  * Alternatively, you can make announcements on any component by dispatching bubbling
- * `vaadin-announce` event with `detail` object containing a `text` property:
+ * `vaadin-a11y-announce` event with `detail` object containing a `text` property:
  *
  * ```js
  *   this.dispatchEvent(
- *     new CustomEvent('vaadin-announce', {
+ *     new CustomEvent('vaadin-a11y-announce', {
  *       bubbles: true,
  *       composed: true,
  *       detail: {
@@ -97,7 +97,7 @@ export class A11yAnnouncer extends PolymerElement {
       A11yAnnouncer.instance = this;
     }
 
-    document.addEventListener('vaadin-announce', this._onVaadinAnnounce.bind(this));
+    document.addEventListener('vaadin-a11y-announce', this._onVaadinAnnounce.bind(this));
   }
 
   /**
@@ -133,7 +133,7 @@ export class A11yAnnouncerController {
 
   hostConnected() {
     if (!A11yAnnouncer.instance) {
-      const instance = document.createElement('vaadin-a11y-announcer');
+      const instance = document.createElement(A11yAnnouncer.is);
       A11yAnnouncer.instance = instance;
       document.body.appendChild(instance);
     }
@@ -146,7 +146,7 @@ export class A11yAnnouncerController {
    */
   announce(text) {
     this.host.dispatchEvent(
-      new CustomEvent('vaadin-announce', {
+      new CustomEvent('vaadin-a11y-announce', {
         bubbles: true,
         composed: true,
         detail: {

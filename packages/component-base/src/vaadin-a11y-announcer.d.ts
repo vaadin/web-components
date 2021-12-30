@@ -25,11 +25,11 @@ import { ReactiveController } from 'lit';
  * ```
  *
  * Alternatively, you can make announcements on any component by dispatching bubbling
- * `vaadin-announce` event with `detail` object containing a `text` property:
+ * `vaadin-a11y-announce` event with `detail` object containing a `text` property:
  *
  * ```js
  *   this.dispatchEvent(
- *     new CustomEvent('vaadin-announce', {
+ *     new CustomEvent('vaadin-a11y-announce', {
  *       bubbles: true,
  *       composed: true,
  *       detail: {

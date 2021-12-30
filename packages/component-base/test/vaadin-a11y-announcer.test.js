@@ -69,23 +69,23 @@ describe('a11y announcer', () => {
       expect(announceSpy.firstCall.args[0]).to.equal(element.textContent);
     });
 
-    it('should  be called on the instance when vaadin-event is dispatched manually', () => {
-      fire(element, 'vaadin-announce', { text: 'Test' });
+    it('should be called on the instance on vaadin-a11y-announce event', () => {
+      fire(element, 'vaadin-a11y-announce', { text: 'Test' });
       expect(announceSpy.calledOnce).to.be.true;
       expect(announceSpy.firstCall.args[0]).to.equal('Test');
     });
   });
 
-  describe('vaadin-announce event', () => {
+  describe('vaadin-a11y-announce event', () => {
     let eventSpy;
 
     beforeEach(() => {
       eventSpy = sinon.spy();
-      document.addEventListener('vaadin-announce', eventSpy);
+      document.addEventListener('vaadin-a11y-announce', eventSpy);
     });
 
     afterEach(() => {
-      document.removeEventListener('vaadin-announce', eventSpy);
+      document.removeEventListener('vaadin-a11y-announce', eventSpy);
     });
 
     it('should dispatch bubbling event when controller announce() is called', () => {
