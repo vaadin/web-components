@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Avatar group</title>
+
+    <script type="module">
+      import '@vaadin/avatar-group';
+
+      const group = document.querySelector('vaadin-avatar-group');
+      group.items = [{ name: 'AA' }, { name: 'BB' }, { name: 'CC' }];
+
+      document.querySelector('#add').addEventListener('click', () => {
+        const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+        const randomChar = alphabet[Math.floor(Math.random() * alphabet.length)];
+        group.items = [...group.items, { name: randomChar.toUpperCase().repeat(2) }];
+      });
+
+      document.querySelector('#remove').addEventListener('click', () => {
+        const items = [...group.items].splice(0, group.items.length - 1);
+        group.items = items;
+      });
+    </script>
+  </head>
+
+  <body>
+    <vaadin-avatar-group></vaadin-avatar-group>
+
+    <p>
+      <button id="add">Add item</button>
+      <button id="remove">Remove item</button>
+    </p>
+  </body>
+</html>
