@@ -407,33 +407,36 @@ describe('field highlighter', () => {
     });
 
     describe('announcements', () => {
-      // NOTE: See <iron-a11y-announcer> API
+      let clock;
+      let region;
 
-      function waitForAnnounce(callback) {
-        var listener = (event) => {
-          document.body.removeEventListener('iron-announce', listener);
-          callback(event.detail.text);
-        };
-        document.body.addEventListener('iron-announce', listener);
-      }
-
-      it('should announce adding a new user', (done) => {
-        waitForAnnounce((text) => {
-          expect(text).to.equal(`${user1.name} started editing`);
-          done();
-        });
-
-        addUser(user1);
+      before(() => {
+        region = document.querySelector('[aria-live]');
       });
 
-      it('should announce field label, if any', (done) => {
-        waitForAnnounce((text) => {
-          expect(text).to.equal(`${user1.name} started editing ${field.label}`);
-          done();
-        });
+      beforeEach(() => {
+        clock = sinon.useFakeTimers();
+      });
 
+      afterEach(() => {
+        clock.restore();
+      });
+
+      it('should announce adding a new user', () => {
+        addUser(user1);
+
+        clock.tick(150);
+
+        expect(region.textContent).to.equal(`${user1.name} started editing`);
+      });
+
+      it('should announce field label, if any', () => {
         field.label = 'Username';
         addUser(user1);
+
+        clock.tick(150);
+
+        expect(region.textContent).to.equal(`${user1.name} started editing ${field.label}`);
       });
     });
   });

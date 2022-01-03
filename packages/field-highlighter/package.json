@@ -32,7 +32,6 @@
     "field"
   ],
   "dependencies": {
-    "@polymer/iron-a11y-announcer": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/component-base": "23.0.0-alpha2",
     "@vaadin/vaadin-lumo-styles": "23.0.0-alpha2",
