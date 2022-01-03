@@ -5,7 +5,7 @@
  */
 import './vaadin-field-outline.js';
 import './vaadin-user-tags.js';
-import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
+import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
 import { CheckboxGroupObserver } from './fields/vaadin-checkbox-group-observer.js';
 import { DatePickerObserver } from './fields/vaadin-date-picker-observer.js';
 import { DateTimePickerObserver } from './fields/vaadin-date-time-picker-observer.js';
@@ -61,7 +61,9 @@ export class FieldHighlighterController {
     this._user = user;
 
     if (user) {
-      this._announce(`${user.name} started editing`);
+      const msg = `${user.name} started editing`;
+      const { label } = this.host;
+      announce(label ? `${msg} ${label}` : msg);
     }
   }
 
@@ -94,7 +96,6 @@ export class FieldHighlighterController {
 
   hostConnected() {
     this.redraw();
-    IronA11yAnnouncer.requestAvailability();
   }
 
   addUser(user) {
@@ -142,23 +143,6 @@ export class FieldHighlighterController {
 
   redraw() {
     this.observer.redraw([...this.users].reverse());
-  }
-
-  /**
-   * @param {string} msg
-   * @protected
-   */
-  _announce(msg) {
-    const label = this.host.label || '';
-    this.host.dispatchEvent(
-      new CustomEvent('iron-announce', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          text: label ? `${msg} ${label}` : msg
-        }
-      })
-    );
   }
 }
 
