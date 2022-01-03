@@ -6,7 +6,7 @@
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
- * A controller manage the helper node content.
+ * A controller to manage the helper node content.
  */
 export class HelperController extends SlotController {
   /**

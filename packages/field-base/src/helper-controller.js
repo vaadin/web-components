@@ -6,7 +6,7 @@
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
- * A controller manage the helper node content.
+ * A controller to manage the helper node content.
  */
 export class HelperController extends SlotController {
   constructor(host) {
@@ -16,11 +16,6 @@ export class HelperController extends SlotController {
 
   get helperId() {
     return this.node && this.node.id;
-  }
-
-  /** @protected */
-  get uniqueId() {
-    return SlotController.helperId;
   }
 
   /**
@@ -62,18 +57,9 @@ export class HelperController extends SlotController {
   setHelperText(helperText) {
     this.helperText = helperText;
 
-    this.__applyDefaultHelper(helperText);
-  }
-
-  /**
-   * @param {HTMLElement} helperNode
-   * @private
-   */
-  __applyCustomHelper(helperNode) {
-    this.__updateHelperId(helperNode);
-
-    const hasHelper = this.__hasHelper(helperNode);
-    this.__toggleHasHelper(hasHelper);
+    if (this.node === this.defaultNode) {
+      this.__applyDefaultHelper(helperText);
+    }
   }
 
   /**
@@ -82,7 +68,11 @@ export class HelperController extends SlotController {
    * @private
    */
   __hasHelper(helperNode) {
-    return Boolean(helperNode && (helperNode.children.length > 0 || this.__isNotEmpty(helperNode.textContent)));
+    if (!helperNode) {
+      return false;
+    }
+
+    return helperNode.children.length > 0 || this.__isNotEmpty(helperNode.textContent);
   }
 
   /**
@@ -98,29 +88,27 @@ export class HelperController extends SlotController {
    * @private
    */
   __applyDefaultHelper(helperText) {
-    let helper = this.getSlotChild();
+    let helperNode = this.getSlotChild();
 
     const hasHelperText = this.__isNotEmpty(helperText);
 
-    if (hasHelperText && !helper) {
-      // Set slot factory lazily to only create helper node when needed.
-      this.slotFactory = () => document.createElement('div');
+    if (hasHelperText) {
+      if (!helperNode) {
+        // Set slot factory lazily to only create helper node when needed.
+        this.slotFactory = () => document.createElement('div');
 
-      helper = this.attachDefaultNode();
+        helperNode = this.attachDefaultNode();
 
-      this.__updateHelperId(helper);
-      this.__observeHelper(helper);
+        this.__updateHelperId(helperNode);
+        this.__observeHelper(helperNode);
+      }
+
+      if (helperNode === this.defaultNode) {
+        helperNode.textContent = helperText;
+      }
     }
 
-    const isDefaultHelper = helper === this.defaultNode;
-
-    // Only set text content for default helper
-    if (helper && isDefaultHelper) {
-      helper.textContent = helperText;
-    }
-
-    const hasHelper = isDefaultHelper ? hasHelperText : this.__hasHelper(helper);
-    this.__toggleHasHelper(hasHelper);
+    this.__toggleHasHelper(hasHelperText);
   }
 
   /**

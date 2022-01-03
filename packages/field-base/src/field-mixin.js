@@ -140,9 +140,9 @@ export const FieldMixin = (superclass) =>
     }
 
     /** @private */
-    __helperChanged(hasHelper) {
+    __helperChanged(hasHelper, helperNode) {
       if (hasHelper) {
-        this._fieldAriaController.setHelperId(this._helperId);
+        this._fieldAriaController.setHelperId(helperNode.id);
       } else {
         this._fieldAriaController.setHelperId(null);
       }
