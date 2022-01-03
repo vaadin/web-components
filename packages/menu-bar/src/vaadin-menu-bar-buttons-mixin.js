@@ -84,7 +84,7 @@ export const ButtonsMixin = (superClass) =>
     __restoreButtons(buttons) {
       for (let i = 0; i < buttons.length; i++) {
         const btn = buttons[i];
-        btn.disabled = btn.item && btn.item.disabled;
+        btn.disabled = (btn.item && btn.item.disabled) || this.disabled;
         btn.style.visibility = '';
         btn.style.position = '';
 
