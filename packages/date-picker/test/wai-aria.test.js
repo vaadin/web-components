@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, isIOS, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './not-animated-styles.js';
 import '../src/vaadin-date-picker.js';
-import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
-import { activateScroller, getDefaultI18n, open } from './common.js';
+import { activateScroller, getDefaultI18n } from './common.js';
 
 describe('WAI-ARIA', () => {
   describe('date picker', () => {
@@ -263,113 +263,85 @@ describe('WAI-ARIA', () => {
   });
 
   describe('announcements', () => {
-    // NOTE: See <iron-a11y-announcer> API
+    let region;
     let datepicker;
+
+    let clock;
+
+    afterEach(() => {
+      clock.restore();
+    });
 
     beforeEach(() => {
       datepicker = fixtureSync(`<vaadin-date-picker label="ariatest"></vaadin-date-picker>`);
+      region = document.querySelector('[aria-live]');
+      clock = sinon.useFakeTimers();
     });
 
-    function waitForAnnounce(callback) {
-      const listener = (event) => {
-        document.body.removeEventListener('iron-announce', listener);
-        callback(event.detail.text);
-      };
-      document.body.addEventListener('iron-announce', listener);
-    }
-
-    it('should request availability from IronA11yAnnouncer', async () => {
-      const spy = sinon.spy(IronA11yAnnouncer, 'requestAvailability');
-      datepicker.open();
-      await nextFrame();
-      expect(spy.called).to.be.true;
-    });
-
-    it('should announce focused date on open', (done) => {
-      waitForAnnounce((text) => {
-        expect(text).to.equal('Monday 1 February 2016');
-        done();
-      });
-
+    it('should announce focused date on open', () => {
       datepicker._focusedDate = new Date(2016, 1, 1);
       datepicker.open();
+
+      clock.tick(200);
+
+      expect(region.textContent).to.equal('Monday 1 February 2016');
     });
 
-    it('should announce focused date changes when opened', (done) => {
+    it('should announce focused date changes when opened', () => {
       datepicker.open();
-
-      waitForAnnounce((text) => {
-        expect(text).to.equal('Tuesday 2 February 2016');
-        done();
-      });
-
       datepicker._focusedDate = new Date(2016, 1, 2);
+
+      clock.tick(200);
+
+      expect(region.textContent).to.equal('Tuesday 2 February 2016');
     });
 
     it('should not announce focused date changes when closed', () => {
-      const announceSpy = sinon.spy();
-      document.body.addEventListener('iron-announce', announceSpy);
-
+      // Reset live region state
+      region.textContent = '';
       datepicker._focusedDate = new Date(2016, 1, 2);
 
-      expect(announceSpy.called).to.be.false;
-      document.body.removeEventListener('iron-announce', announceSpy);
+      clock.tick(200);
+
+      expect(region.textContent).to.equal('');
     });
 
-    it('should announce value on open', (done) => {
-      waitForAnnounce((text) => {
-        expect(text).to.equal('Monday 1 February 2016');
-        done();
-      });
-
+    it('should announce value on open', () => {
       datepicker.value = '2016-02-01';
       datepicker.open();
+
+      clock.tick(200);
+
+      expect(region.textContent).to.equal('Monday 1 February 2016');
     });
 
-    it('should announce initial position on open', (done) => {
-      waitForAnnounce((text) => {
-        expect(text).to.equal('Monday 1 February 2016');
-        done();
-      });
-
+    it('should announce initial position on open', () => {
       datepicker.initialPosition = '2016-02-01';
       datepicker.open();
+
+      clock.tick(200);
+
+      expect(region.textContent).to.equal('Monday 1 February 2016');
     });
 
-    it('should announce today', (done) => {
-      waitForAnnounce((text) => {
-        expect(text.indexOf('Today')).to.equal(0);
-        done();
-      });
-
+    it('should announce today', () => {
       datepicker.open();
+
+      clock.tick(200);
+
+      expect(region.textContent.indexOf('Today')).to.equal(0);
     });
 
-    it('should announce week numbers if enabled', (done) => {
+    it('should announce week numbers if enabled', () => {
       datepicker._focusedDate = new Date(2016, 1, 1);
       datepicker.showWeekNumbers = true;
       datepicker.set('i18n.firstDayOfWeek', 1);
-
-      waitForAnnounce((text) => {
-        expect(text).to.match(/ Week 5$/);
-        done();
-      });
-
       datepicker.open();
-    });
 
-    if (!isIOS) {
-      it('should announce once', async () => {
-        datepicker._focusedDate = new Date(2016, 1, 1);
-        await open(datepicker);
-        const announceSpy = sinon.spy();
-        document.body.addEventListener('iron-announce', announceSpy);
-        datepicker._focusedDate = new Date(2016, 1, 2);
-        await aTimeout(1);
-        expect(announceSpy.callCount).to.be.equal(1);
-        document.body.removeEventListener('iron-announce', announceSpy);
-      });
-    }
+      clock.tick(200);
+
+      expect(region.textContent).to.match(/ Week 5$/);
+    });
 
     describe('i18n', () => {
       beforeEach(() => {
@@ -382,36 +354,32 @@ describe('WAI-ARIA', () => {
         datepicker.set('i18n.today', 'Tänään');
       });
 
-      it('should announce dates in correct locale', (done) => {
-        waitForAnnounce((text) => {
-          expect(text).to.equal('maanantai 1 helmikuu 2016');
-          done();
-        });
-
+      it('should announce dates in correct locale', () => {
         datepicker._focusedDate = new Date(2016, 1, 1);
         datepicker.open();
+
+        clock.tick(200);
+
+        expect(region.textContent).to.equal('maanantai 1 helmikuu 2016');
       });
 
-      it('should announce today in correct locale', (done) => {
-        waitForAnnounce((text) => {
-          expect(text.indexOf('Tänään')).to.equal(0);
-          done();
-        });
-
+      it('should announce today in correct locale', () => {
         datepicker.open();
+
+        clock.tick(200);
+
+        expect(region.textContent.indexOf('Tänään')).to.equal(0);
       });
 
-      it('should announce week numbers in correct locale', (done) => {
+      it('should announce week numbers in correct locale', () => {
         datepicker._focusedDate = new Date(2016, 1, 1);
         datepicker.showWeekNumbers = true;
         datepicker.set('i18n.firstDayOfWeek', 1);
-
-        waitForAnnounce((text) => {
-          expect(text).to.match(/ viikko 5$/);
-          done();
-        });
-
         datepicker.open();
+
+        clock.tick(200);
+
+        expect(region.textContent).to.match(/ viikko 5$/);
       });
     });
   });

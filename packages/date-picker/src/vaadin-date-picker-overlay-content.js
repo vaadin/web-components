@@ -7,8 +7,8 @@ import '@polymer/iron-media-query/iron-media-query.js';
 import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-month-calendar.js';
 import './vaadin-infinite-scroller.js';
-import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
@@ -350,34 +350,25 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
     this._closeYearScroller();
     this._toggleAnimateClass(true);
     setTouchAction(this.$.scrollers, 'pan-y');
-    IronA11yAnnouncer.requestAvailability();
   }
 
   announceFocusedDate() {
-    var focusedDate = this._currentlyFocusedDate();
-    var announce = [];
+    const focusedDate = this._currentlyFocusedDate();
+    let messages = [];
     if (dateEquals(focusedDate, new Date())) {
-      announce.push(this.i18n.today);
+      messages.push(this.i18n.today);
     }
-    announce = announce.concat([
+    messages = messages.concat([
       this.i18n.weekdays[focusedDate.getDay()],
       focusedDate.getDate(),
       this.i18n.monthNames[focusedDate.getMonth()],
       focusedDate.getFullYear()
     ]);
     if (this.showWeekNumbers && this.i18n.firstDayOfWeek === 1) {
-      announce.push(this.i18n.week);
-      announce.push(getISOWeekNumber(focusedDate));
+      messages.push(this.i18n.week);
+      messages.push(getISOWeekNumber(focusedDate));
     }
-    this.dispatchEvent(
-      new CustomEvent('iron-announce', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          text: announce.join(' ')
-        }
-      })
-    );
+    announce(messages.join(' '));
   }
 
   /**
