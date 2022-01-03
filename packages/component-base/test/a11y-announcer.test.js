@@ -38,7 +38,7 @@ describe('a11y announcer', () => {
     });
 
     it('should update region text content after the default timeout', () => {
-      announce('Test', { mode: 'assertive' });
+      announce('Test');
       expect(region.textContent).to.equal('');
 
       clock.tick(150);
@@ -50,6 +50,14 @@ describe('a11y announcer', () => {
       expect(region.textContent).to.equal('');
 
       clock.tick(100);
+      expect(region.textContent).to.equal('Test');
+    });
+
+    it('should use zero timeout when corresponding option is passed', () => {
+      announce('Test', { timeout: 0 });
+      expect(region.textContent).to.equal('');
+
+      clock.tick(0);
       expect(region.textContent).to.equal('Test');
     });
 

@@ -20,7 +20,7 @@ document.body.appendChild(region);
  */
 export function announce(text, options = {}) {
   const mode = options.mode || 'polite';
-  const timeout = options.timeout || 150;
+  const timeout = options.timeout === undefined ? 150 : options.timeout;
 
   region.setAttribute('aria-live', mode);
 
