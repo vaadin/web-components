@@ -97,6 +97,27 @@ describe('root menu layout', () => {
     });
   });
 
+  it('should disable all buttons in the menu-bar', () => {
+    menu.disabled = true;
+    buttons.forEach((btn) => {
+      expect(btn.disabled).to.be.true;
+    });
+  });
+
+  it('should keep previously disabled buttons disabled when re-enabling the menu-bar', () => {
+    expect(buttons[2].disabled).to.be.true;
+    menu.disabled = true;
+    expect(buttons[2].disabled).to.be.true;
+    menu.disabled = false;
+    expect(buttons[2].disabled).to.be.true;
+  });
+
+  it('should also disable the overflow button', () => {
+    menu.disabled = true;
+    const overflow = buttons[menu.items.length];
+    expect(overflow.disabled).to.be.true;
+  });
+
   it('should render disabled button if disabled property is true', () => {
     expect(buttons[2].disabled).to.be.true;
   });
@@ -486,6 +507,15 @@ describe('responsive behaviour in container', () => {
     expect(buttons[4].disabled).to.be.true;
     expect(overflow.hasAttribute('hidden')).to.be.true;
     expect(overflow.item.children.length).to.equal(0);
+  });
+
+  it('should keep buttons disabled when resizing', async () => {
+    menu.disabled = true;
+    container.style.width = '150px';
+    await onceResized(menu);
+    buttons.forEach((btn) => {
+      expect(btn.disabled).to.be.true;
+    });
   });
 });
 
