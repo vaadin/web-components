@@ -6,6 +6,7 @@
 import './vaadin-menu-bar-submenu.js';
 import './vaadin-menu-bar-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
@@ -58,7 +59,7 @@ import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class MenuBar extends ButtonsMixin(InteractionsMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
+class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
   static get template() {
     return html`
       <style>
@@ -198,6 +199,31 @@ class MenuBar extends ButtonsMixin(InteractionsMixin(ElementMixin(ThemableMixin(
         }
       }
     };
+  }
+
+  /**
+   * Override method inherited from `DisabledMixin`
+   * to update the `disabled` property for the buttons
+   * whenever the property changes on the menu bar.
+   *
+   * @param {boolean} newValue the new disabled value
+   * @param {boolean} oldValue the previous disabled value
+   * @override
+   * @protected
+   */
+  _disabledChanged(newValue, oldValue) {
+    super._disabledChanged(newValue, oldValue);
+    if (oldValue !== newValue) {
+      this.__updateButtonsDisabled(newValue);
+    }
+  }
+
+  /** @private */
+  __updateButtonsDisabled(disabled) {
+    this._buttons.forEach((btn) => {
+      // disable the button if the entire menu-bar is disabled or the item alone is disabled
+      btn.disabled = disabled || (btn.item && btn.item.disabled);
+    });
   }
 
   /**
