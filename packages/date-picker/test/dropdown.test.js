@@ -64,7 +64,7 @@ describe('dropdown', () => {
       expect(input.inputMode).to.equal('none');
     });
 
-    it('should re-enable virtual keyboard on touchstart', async () => {
+    it('should re-enable virtual keyboard on touchstart', () => {
       await open(datepicker);
       datepicker.close();
       touchstart(datepicker);
