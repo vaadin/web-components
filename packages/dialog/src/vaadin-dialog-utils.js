@@ -1,4 +1,10 @@
 /**
+ * @license
+ * Copyright (c) 2017 - 2022 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+
+/**
  * Checks if the argument is a touch event and if so, returns a first touch.
  * Otherwise, if the mouse event was passed, returns it as is.
  * @param {!MouseEvent | !TouchEvent} e
