@@ -48,6 +48,10 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
           flex-shrink: 0;
         }
 
+        [focused] {
+          outline: none;
+        }
+
         [part='week-number'][hidden],
         [part='week-numbers'][hidden],
         [part='weekday'][hidden] {
@@ -215,6 +219,20 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
   ready() {
     super.ready();
     addListener(this.$.monthGrid, 'tap', this._handleTap.bind(this));
+
+    this.addEventListener('focusin', () => {
+      this.setAttribute('focused', '');
+    });
+
+    this.addEventListener('focusout', () => {
+      this.removeAttribute('focused');
+    });
+  }
+
+  get focusableDateElement() {
+    return [...this.shadowRoot.querySelectorAll('[part=date]')].find((datePart) => {
+      return dateEquals(datePart.date, this.focusedDate);
+    });
   }
 
   /* Returns true if all the dates in the month are out of the allowed range */

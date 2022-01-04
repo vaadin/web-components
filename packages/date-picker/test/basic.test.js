@@ -339,10 +339,6 @@ describe('basic features', () => {
       expect(overlayContent.$.todayButton.textContent.trim()).to.equal('Tänään');
       expect(overlayContent.$.cancelButton.textContent.trim()).to.equal('Peruuta');
     });
-
-    it('should translate the overlay title', () => {
-      expect(overlayContent.$.announcer.textContent.trim()).to.equal('Kalenteri');
-    });
   });
 
   describe('Disabled', () => {
