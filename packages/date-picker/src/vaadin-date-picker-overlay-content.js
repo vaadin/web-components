@@ -7,14 +7,14 @@ import '@polymer/iron-media-query/iron-media-query.js';
 import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-month-calendar.js';
 import './vaadin-infinite-scroller.js';
-import { IronA11yAnnouncer } from '@polymer/iron-a11y-announcer/iron-a11y-announcer.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dateEquals, extractDateParts, getClosestDate, getISOWeekNumber } from './vaadin-date-picker-helper.js';
+import { dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
 
 /**
  * @extends HTMLElement
@@ -159,7 +159,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
         }
       </style>
 
-      <div id="announcer" role="alert" aria-live="polite">[[i18n.calendar]]</div>
+      <!-- <div id="announcer" role="alert" aria-live="polite">[[i18n.calendar]]</div> -->
 
       <div part="overlay-header" on-touchend="_preventDefault" desktop$="[[_desktopMode]]" aria-hidden="true">
         <div part="label">[[_formatDisplayed(selectedDate, i18n.formatDate, label)]]</div>
@@ -204,6 +204,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
           buffer-size="12"
           active="[[initialPosition]]"
           part="years"
+          aria-hidden="true"
         >
           <template>
             <div
@@ -320,7 +321,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
 
   ready() {
     super.ready();
-    this.setAttribute('tabindex', 0);
     this.addEventListener('keydown', this._onKeydown.bind(this));
     addListener(this, 'tap', this._stopPropagation);
     this.addEventListener('focus', this._onOverlayFocus.bind(this));
@@ -350,35 +350,35 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
     this._closeYearScroller();
     this._toggleAnimateClass(true);
     setTouchAction(this.$.scrollers, 'pan-y');
-    IronA11yAnnouncer.requestAvailability();
+    // IronA11yAnnouncer.requestAvailability();
   }
 
-  announceFocusedDate() {
-    var focusedDate = this._currentlyFocusedDate();
-    var announce = [];
-    if (dateEquals(focusedDate, new Date())) {
-      announce.push(this.i18n.today);
-    }
-    announce = announce.concat([
-      this.i18n.weekdays[focusedDate.getDay()],
-      focusedDate.getDate(),
-      this.i18n.monthNames[focusedDate.getMonth()],
-      focusedDate.getFullYear()
-    ]);
-    if (this.showWeekNumbers && this.i18n.firstDayOfWeek === 1) {
-      announce.push(this.i18n.week);
-      announce.push(getISOWeekNumber(focusedDate));
-    }
-    this.dispatchEvent(
-      new CustomEvent('iron-announce', {
-        bubbles: true,
-        composed: true,
-        detail: {
-          text: announce.join(' ')
-        }
-      })
-    );
-  }
+  // announceFocusedDate() {
+  //   var focusedDate = this.focusedDate;
+  //   var announce = [];
+  //   if (dateEquals(focusedDate, new Date())) {
+  //     announce.push(this.i18n.today);
+  //   }
+  //   announce = announce.concat([
+  //     this.i18n.weekdays[focusedDate.getDay()],
+  //     focusedDate.getDate(),
+  //     this.i18n.monthNames[focusedDate.getMonth()],
+  //     focusedDate.getFullYear()
+  //   ]);
+  //   if (this.showWeekNumbers && this.i18n.firstDayOfWeek === 1) {
+  //     announce.push(this.i18n.week);
+  //     announce.push(getISOWeekNumber(focusedDate));
+  //   }
+  //   this.dispatchEvent(
+  //     new CustomEvent('iron-announce', {
+  //       bubbles: true,
+  //       composed: true,
+  //       detail: {
+  //         text: announce.join(' ')
+  //       }
+  //     })
+  //   );
+  // }
 
   /**
    * Focuses the cancel button
@@ -708,7 +708,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   _onKeydown(e) {
-    var focus = this._currentlyFocusedDate();
+    var focus = this.focusedDate;
 
     // Cannot use (today/cancel).focused flag because vaadin-text-field removes it
     // previously in the keydown event.
@@ -750,7 +750,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
         // Browser returns focus back to the scrollable area. We need to set
         // the focused flag, and move the scroll to focused date.
         this._focused = true;
-        setTimeout(() => this.revealDate(this.focusedDate), 1);
+        this.focusDate(this.focusedDate);
       } else {
         // Browser moves the focus out of the scroller, hence focused flag must
         // set to false.
@@ -762,11 +762,9 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
       switch (eventKey) {
         case 'ArrowDown':
           this._moveFocusByDays(7);
-          this.focus();
           break;
         case 'ArrowUp':
           this._moveFocusByDays(-7);
-          this.focus();
           break;
         case 'ArrowRight':
           if (isScroller) {
@@ -791,6 +789,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
           } else if (isToday) {
             this._onTodayTap();
           } else {
+            // TODO: Use the `focusDate()` method
             var focusedDate = this.focusedDate;
             if (dateEquals(focusedDate, this.selectedDate)) {
               this.selectedDate = '';
@@ -821,36 +820,68 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
     }
   }
 
-  _currentlyFocusedDate() {
-    return this.focusedDate || this.selectedDate || this.initialPosition || new Date();
+  get focusableDateElement() {
+    return [...this.shadowRoot.querySelectorAll('vaadin-month-calendar')]
+      .map((calendar) => calendar.focusableDateElement)
+      .find(Boolean);
   }
 
-  _focusDate(dateToFocus) {
-    this.focusedDate = dateToFocus;
-    this._focusedMonthDate = dateToFocus.getDate();
+  get _focusedMonthDate() {
+    if (!this.focusedDate) {
+      return null;
+    }
+
+    return this.focusedDate.getDate();
+  }
+
+  async focusDate(date) {
+    this.focusedDate = date;
+    await this.focusDateElement();
+  }
+
+  async focusDateElement() {
+    await new Promise((resolve) => {
+      afterNextRender(this, resolve);
+    });
+
+    if (this.focusableDateElement) {
+      this.focusableDateElement.focus();
+      return;
+    }
+
+    return new Promise((resolve) => {
+      this.addEventListener(
+        'scroll-animation-finished',
+        () => {
+          this.focusableDateElement.focus();
+          resolve();
+        },
+        { once: true }
+      );
+    });
   }
 
   _focusClosestDate(focus) {
-    this._focusDate(getClosestDate(focus, [this.minDate, this.maxDate]));
+    this.focusDate(getClosestDate(focus, [this.minDate, this.maxDate]));
   }
 
   _moveFocusByDays(days) {
-    var focus = this._currentlyFocusedDate();
+    var focus = this.focusedDate;
     var dateToFocus = new Date(0, 0);
     dateToFocus.setFullYear(focus.getFullYear());
     dateToFocus.setMonth(focus.getMonth());
     dateToFocus.setDate(focus.getDate() + days);
 
     if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
-      this._focusDate(dateToFocus);
+      this.focusDate(dateToFocus);
     } else if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
       // Move to min or max date
       if (days > 0) {
         // down or right
-        this._focusDate(this.maxDate);
+        this.focusDate(this.maxDate);
       } else {
         // up or left
-        this._focusDate(this.minDate);
+        this.focusDate(this.minDate);
       }
     } else {
       // Move to closest allowed date
@@ -859,28 +890,28 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
   }
 
   _moveFocusByMonths(months) {
-    var focus = this._currentlyFocusedDate();
+    var focus = this.focusedDate;
     var dateToFocus = new Date(0, 0);
     dateToFocus.setFullYear(focus.getFullYear());
     dateToFocus.setMonth(focus.getMonth() + months);
 
     var targetMonth = dateToFocus.getMonth();
 
-    dateToFocus.setDate(this._focusedMonthDate || (this._focusedMonthDate = focus.getDate()));
+    dateToFocus.setDate(this._focusedMonthDate || focus.getDate());
     if (dateToFocus.getMonth() !== targetMonth) {
       dateToFocus.setDate(0);
     }
 
     if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
-      this.focusedDate = dateToFocus;
+      this.focusDate(dateToFocus);
     } else if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
       // Move to min or max date
       if (months > 0) {
         // pagedown
-        this._focusDate(this.maxDate);
+        this.focusDate(this.maxDate);
       } else {
         // pageup
-        this._focusDate(this.minDate);
+        this.focusDate(this.minDate);
       }
     } else {
       // Move to closest allowed date
@@ -901,10 +932,10 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
     }
 
     if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
-      this._focusDate(dateToFocus);
+      this.focusDate(dateToFocus);
     } else if (this._dateAllowed(focusedDate, this.minDate, this.maxDate)) {
       // Move to minDate or maxDate
-      this._focusDate(this[property]);
+      this.focusDate(this[property]);
     } else {
       // Move to closest allowed date
       this._focusClosestDate(focusedDate);

@@ -241,6 +241,14 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
 
     this.$.overlay.positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
     this.$.overlay.noVerticalOverlap = true;
+
+    // TODO: Find a better workaround to prevent announcing input date changes
+    // while navigating through days in the calendar.
+    if (opened) {
+      this.inputElement.setAttribute('aria-hidden', 'true');
+    } else {
+      this.inputElement.removeAttribute('aria-hidden');
+    }
   }
 }
 
