@@ -287,7 +287,7 @@ export class ComboBoxScroller extends PolymerElement {
     el.id = `${this.__hostTagName}-item-${index}`;
     el.setAttribute('role', this.__getAriaRole(index));
     el.setAttribute('aria-selected', this.__getAriaSelected(focusedIndex, index));
-    el.setAttribute('aria-posinset', index);
+    el.setAttribute('aria-posinset', index + 1);
 
     if (this.theme) {
       el.setAttribute('theme', this.theme);
