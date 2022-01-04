@@ -228,7 +228,7 @@ describe('toggling dropdown', () => {
         expect(input.inputMode).to.equal('none');
       });
 
-      it('should re-enable virtual keyboard on touchstart', async () => {
+      it('should re-enable virtual keyboard on touchstart', () => {
         comboBox.open();
         comboBox.close();
         touchstart(comboBox);
