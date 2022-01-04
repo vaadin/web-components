@@ -107,6 +107,7 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
                   date="[[item]]"
                   today$="[[__isToday(item)]]"
                   focused$="[[__isDayFocused(item, focusedDate)]]"
+                  selected$="[[__isDaySelected(item, selectedDate)]]"
                   disabled$="[[__isDayDisabled(item, minDate, maxDate)]]"
                   tabindex$="[[__getDayTabindex(item, focusedDate)]]"
                   aria-disabled$="[[__getDayAriaDisabled(item, minDate, maxDate)]]"
@@ -381,6 +382,10 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
 
   __isDayFocused(date, focusedDate) {
     return dateEquals(date, focusedDate);
+  }
+
+  __isDaySelected(date, selectedDate) {
+    return dateEquals(date, selectedDate);
   }
 
   __isDayDisabled(date, minDate, maxDate) {

@@ -193,6 +193,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
               focused$="[[_focused]]"
               part="month"
               theme$="[[theme]]"
+              on-keydown="__onMonthCalendarKeyDown"
             >
             </vaadin-month-calendar>
           </template>
@@ -226,10 +227,13 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
           part="today-button"
           theme="tertiary"
           disabled="[[!_isTodayAllowed(minDate, maxDate)]]"
+          on-keydown="__onTodayButtonKeyDown"
         >
           [[i18n.today]]
         </vaadin-button>
-        <vaadin-button id="cancelButton" part="cancel-button" theme="tertiary"> [[i18n.cancel]] </vaadin-button>
+        <vaadin-button id="cancelButton" part="cancel-button" theme="tertiary" on-keydown="__onCancelButtonKeyDown">
+          [[i18n.cancel]]
+        </vaadin-button>
       </div>
       <iron-media-query query="(min-width: 375px)" query-matches="{{_desktopMode}}"></iron-media-query>
     `;
@@ -321,13 +325,12 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
 
   ready() {
     super.ready();
-    this.addEventListener('keydown', this._onKeydown.bind(this));
     addListener(this, 'tap', this._stopPropagation);
     this.addEventListener('focus', this._onOverlayFocus.bind(this));
     this.addEventListener('blur', this._onOverlayBlur.bind(this));
     addListener(this.$.scrollers, 'track', this._track.bind(this));
     addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
-    addListener(this.shadowRoot.querySelector('[part="today-button"]'), 'tap', this._onTodayTap.bind(this));
+    addListener(this.shadowRoot.querySelector('[part="today-button"]'), 'tap', this.__onTodayButtonTap.bind(this));
     addListener(this.shadowRoot.querySelector('[part="cancel-button"]'), 'tap', this._cancel.bind(this));
     addListener(this.shadowRoot.querySelector('[part="toggle-button"]'), 'tap', this._cancel.bind(this));
     addListener(this.shadowRoot.querySelector('[part="years"]'), 'tap', this._onYearTap.bind(this));
@@ -480,19 +483,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
       return formatDate(extractDateParts(date));
     }
     return label;
-  }
-
-  _onTodayTap() {
-    var today = new Date();
-
-    if (Math.abs(this.$.monthScroller.position - this._differenceInMonths(today, this._originDate)) < 0.001) {
-      // Select today only if the month scroller is positioned approximately
-      // at the beginning of the current month
-      this.selectedDate = today;
-      this._close();
-    } else {
-      this._scrollToCurrentMonth();
-    }
   }
 
   _scrollToCurrentMonth() {
@@ -707,116 +697,110 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
     e.preventDefault();
   }
 
-  _onKeydown(e) {
-    var focus = this.focusedDate;
+  __toggleDate(date) {
+    if (dateEquals(date, this.selectedDate)) {
+      this.selectedDate = '';
+      this.focusedDate = date;
+    } else {
+      this.selectedDate = date;
+    }
+  }
 
-    // Cannot use (today/cancel).focused flag because vaadin-text-field removes it
-    // previously in the keydown event.
-    const isToday = e.composedPath().indexOf(this.$.todayButton) >= 0;
-    const isCancel = e.composedPath().indexOf(this.$.cancelButton) >= 0;
-    const isScroller = !isToday && !isCancel;
+  __selectDate(date) {
+    this.selectedDate = date;
+  }
 
-    // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
-    const navigationKeys = [
-      ' ',
-      'ArrowDown',
-      'ArrowUp',
-      'ArrowRight',
-      'ArrowLeft',
-      'Enter',
-      'End',
-      'Escape',
-      'Home',
-      'PageUp',
-      'PageDown',
-      'Tab'
-    ];
+  __onMonthCalendarKeyDown(event) {
+    let handled = false;
 
-    const eventKey = e.key;
-    if (eventKey === 'Tab') {
-      // We handle tabs here and don't want to bubble up.
-      e.stopPropagation();
+    switch (event.key) {
+      case 'ArrowDown':
+        this._moveFocusByDays(7);
+        handled = true;
+        break;
+      case 'ArrowUp':
+        this._moveFocusByDays(-7);
+        handled = true;
+        break;
+      case 'ArrowRight':
+        this._moveFocusByDays(this.__isRTL ? -1 : 1);
+        handled = true;
+        break;
+      case 'ArrowLeft':
+        this._moveFocusByDays(this.__isRTL ? 1 : -1);
+        handled = true;
+        break;
+      case 'Enter':
+        this.__selectDate(this.focusedDate);
+        this._close();
+        handled = true;
+        break;
+      case ' ':
+        this.__toggleDate(this.focusedDate);
+        handled = true;
+        break;
+      case 'Home':
+        this._moveFocusInsideMonth(this.focusedDate, 'minDate');
+        handled = true;
+        break;
+      case 'End':
+        this._moveFocusInsideMonth(this.focusedDate, 'maxDate');
+        handled = true;
+        break;
+      case 'PageDown':
+        this._moveFocusByMonths(event.shiftKey ? 12 : 1);
+        handled = true;
+        break;
+      case 'PageUp':
+        this._moveFocusByMonths(event.shiftKey ? -12 : -1);
+        handled = true;
+        break;
+      default:
+        break;
+    }
 
-      const isFullscreen = this.hasAttribute('fullscreen');
-      const isShift = e.shiftKey;
+    if (handled) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
 
-      if (isFullscreen) {
-        e.preventDefault();
-      } else if ((isShift && isScroller) || (!isShift && isCancel)) {
-        // Return focus back to the input field
-        e.preventDefault();
-        this.dispatchEvent(new CustomEvent('focus-input', { bubbles: true, composed: true }));
-      } else if (isShift && isToday) {
-        // Browser returns focus back to the scrollable area. We need to set
-        // the focused flag, and move the scroll to focused date.
-        this._focused = true;
-        this.focusDate(this.focusedDate);
-      } else {
-        // Browser moves the focus out of the scroller, hence focused flag must
-        // set to false.
-        this._focused = false;
-      }
-    } else if (navigationKeys.includes(eventKey)) {
-      e.preventDefault();
-      e.stopPropagation();
-      switch (eventKey) {
-        case 'ArrowDown':
-          this._moveFocusByDays(7);
-          break;
-        case 'ArrowUp':
-          this._moveFocusByDays(-7);
-          break;
-        case 'ArrowRight':
-          if (isScroller) {
-            this._moveFocusByDays(this.__isRTL ? -1 : 1);
-          }
-          break;
-        case 'ArrowLeft':
-          if (isScroller) {
-            this._moveFocusByDays(this.__isRTL ? 1 : -1);
-          }
-          break;
-        case 'Enter':
-          if (isScroller || isCancel) {
-            this._close();
-          } else if (isToday) {
-            this._onTodayTap();
-          }
-          break;
-        case ' ':
-          if (isCancel) {
-            this._close();
-          } else if (isToday) {
-            this._onTodayTap();
-          } else {
-            // TODO: Use the `focusDate()` method
-            var focusedDate = this.focusedDate;
-            if (dateEquals(focusedDate, this.selectedDate)) {
-              this.selectedDate = '';
-              this.focusedDate = focusedDate;
-            } else {
-              this.selectedDate = focusedDate;
-            }
-          }
-          break;
-        case 'Home':
-          this._moveFocusInsideMonth(focus, 'minDate');
-          break;
-        case 'End':
-          this._moveFocusInsideMonth(focus, 'maxDate');
-          break;
-        case 'PageDown':
-          this._moveFocusByMonths(e.shiftKey ? 12 : 1);
-          break;
-        case 'PageUp':
-          this._moveFocusByMonths(e.shiftKey ? -12 : -1);
-          break;
-        case 'Escape':
-          this._cancel();
-          break;
-        default:
-          break;
-      }
+  __onTodayButtonTap() {
+    var today = new Date();
+
+    if (Math.abs(this.$.monthScroller.position - this._differenceInMonths(today, this._originDate)) < 0.001) {
+      // Select today only if the month scroller is positioned approximately
+      // at the beginning of the current month
+      this.selectedDate = today;
+      this._close();
+    } else {
+      this._scrollToCurrentMonth();
+    }
+  }
+
+  __onTodayButtonKeyDown(event) {
+    if (this.hasAttribute('fullscreen')) {
+      event.stopPropagation();
+      return;
+    }
+
+    if (event.key === 'Escape') {
+      this._cancel();
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
+
+  __onCancelButtonKeyDown(event) {
+    if (this.hasAttribute('fullscreen')) {
+      event.stopPropagation();
+      return;
+    }
+
+    if (event.key === 'Escape') {
+      this._cancel();
+      event.preventDefault();
+      event.stopPropagation();
     }
   }
 
