@@ -38,6 +38,10 @@ registerStyles(
  * They are applied to both `vaadin-crud` and `vaadin-crud-dialog-overlay` components.
  */
 const editorStyles = css`
+  [part='header'] ::slotted(h3) {
+    margin-top: 0 !important;
+  }
+
   [part='scroller'] {
     padding: var(--lumo-space-l);
   }
@@ -68,11 +72,6 @@ registerStyles(
     css`
       :host {
         font-family: var(--lumo-font-family);
-      }
-
-      ::slotted([slot='header']) {
-        margin-top: var(--lumo-space-s);
-        margin-bottom: var(--lumo-space-s);
       }
 
       [part='toolbar'] {
@@ -127,12 +126,6 @@ registerStyles(
   { moduleId: 'lumo-crud' }
 );
 
-const crudDialogOverlay = css`
-  [part='header'] ::slotted(h3) {
-    margin-top: 0 !important;
-  }
-`;
-
-registerStyles('vaadin-crud-dialog-overlay', [editorStyles, crudDialogOverlay], {
+registerStyles('vaadin-crud-dialog-overlay', editorStyles, {
   moduleId: 'lumo-crud-dialog-overlay'
 });
