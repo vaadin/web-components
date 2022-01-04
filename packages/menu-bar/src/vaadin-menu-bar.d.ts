@@ -3,6 +3,7 @@
  * Copyright (c) 2021 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
@@ -81,7 +82,7 @@ export interface MenuBarEventMap extends HTMLElementEventMap, MenuBarCustomEvent
  *
  * @fires {CustomEvent} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  */
-declare class MenuBar extends ButtonsMixin(InteractionsMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
+declare class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(ThemableMixin(HTMLElement))))) {
   /**
    * Defines a hierarchical structure, where root level items represent menu bar buttons,
    * and `children` property configures a submenu with items to be opened below

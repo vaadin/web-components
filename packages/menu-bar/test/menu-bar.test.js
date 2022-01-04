@@ -97,7 +97,7 @@ describe('root menu layout', () => {
     });
   });
 
-  it('should disable all buttons in the menu-bar', () => {
+  it('should disable all buttons when menu-bar disabled is set to true', () => {
     menu.disabled = true;
     buttons.forEach((btn) => {
       expect(btn.disabled).to.be.true;
@@ -110,12 +110,6 @@ describe('root menu layout', () => {
     expect(buttons[2].disabled).to.be.true;
     menu.disabled = false;
     expect(buttons[2].disabled).to.be.true;
-  });
-
-  it('should also disable the overflow button', () => {
-    menu.disabled = true;
-    const overflow = buttons[menu.items.length];
-    expect(overflow.disabled).to.be.true;
   });
 
   it('should render disabled button if disabled property is true', () => {
