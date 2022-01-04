@@ -241,13 +241,6 @@ describe('toggling dropdown', () => {
         await sendKeys({ press: 'Tab' });
         expect(input.inputMode).to.equal('');
       });
-
-      it('should re-enable virtual keyboard on outside-click close', async () => {
-        comboBox.open();
-        outsideClick();
-        await aTimeout(0);
-        expect(input.inputMode).to.equal('');
-      });
     });
 
     describe('filtered items are empty', () => {

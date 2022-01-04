@@ -59,29 +59,22 @@ describe('dropdown', () => {
 
   describe('virtual keyboard', () => {
     it('should disable virtual keyboard on close', async () => {
-      datepicker.open();
+      await open(datepicker);
       datepicker.close();
       expect(input.inputMode).to.equal('none');
     });
 
     it('should re-enable virtual keyboard on touchstart', async () => {
-      datepicker.open();
+      await open(datepicker);
       datepicker.close();
       touchstart(datepicker);
       expect(input.inputMode).to.equal('');
     });
 
     it('should re-enable virtual keyboard on blur', async () => {
-      datepicker.open();
+      await open(datepicker);
       datepicker.close();
       await sendKeys({ press: 'Tab' });
-      expect(input.inputMode).to.equal('');
-    });
-
-    it('should re-enable virtual keyboard on outside-click close', async () => {
-      datepicker.open();
-      outsideClick();
-      await aTimeout(0);
       expect(input.inputMode).to.equal('');
     });
   });
