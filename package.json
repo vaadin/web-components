@@ -72,8 +72,5 @@
   },
   "workspaces": [
     "packages/*"
-  ],
-  "resolutions": {
-    "playwright": "1.17.0-next-alpha-nov-5-2021"
-  }
+  ]
 }
