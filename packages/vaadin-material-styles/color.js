@@ -7,8 +7,7 @@ import './version.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const colorLight = css`
-  :host,
-  #host-fix {
+  :host {
     /* Text colors */
     --material-body-text-color: var(--light-theme-text-color, rgba(0, 0, 0, 0.87));
     --material-secondary-text-color: var(--light-theme-secondary-color, rgba(0, 0, 0, 0.54));
@@ -106,8 +105,7 @@ const colorLight = css`
 registerStyles('', colorLight, { moduleId: 'material-color-light' });
 
 const colorDark = css`
-  :host,
-  #host-fix {
+  :host {
     /* Text colors */
     --material-body-text-color: var(--dark-theme-text-color, rgba(255, 255, 255, 1));
     --material-secondary-text-color: var(--dark-theme-secondary-color, rgba(255, 255, 255, 0.7));
