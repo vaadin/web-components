@@ -408,6 +408,9 @@ export const DatePickerMixin = (subclass) =>
           this.validate();
         }
       }
+
+      // Re-enable virtual keyboard for when the field gets the focus back
+      this.__setVirtualKeyboardEnabled(true);
     }
 
     /** @protected */
@@ -443,6 +446,9 @@ export const DatePickerMixin = (subclass) =>
     close() {
       if (this._overlayInitialized || this.autoOpenDisabled) {
         this.$.overlay.close();
+
+        // Avoid opening the virtual keyboard when the input gets re-focused on dropdown close
+        this.__setVirtualKeyboardEnabled(false);
       }
     }
 
@@ -465,6 +471,9 @@ export const DatePickerMixin = (subclass) =>
 
       this.addEventListener('mousedown', () => this.__bringToFront());
       this.addEventListener('touchstart', () => this.__bringToFront());
+
+      // Re-enable the virtual keyboard whenever the field is touched
+      this.addEventListener('touchstart', () => this.__setVirtualKeyboardEnabled(true));
     }
 
     /**
@@ -516,6 +525,11 @@ export const DatePickerMixin = (subclass) =>
       requestAnimationFrame(() => {
         this.$.overlay.bringToFront();
       });
+    }
+
+    /** @private */
+    __setVirtualKeyboardEnabled(value) {
+      this.inputElement.inputMode = value ? '' : 'none';
     }
 
     /** @private */

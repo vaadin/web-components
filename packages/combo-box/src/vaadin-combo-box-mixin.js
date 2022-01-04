@@ -294,6 +294,9 @@ export const ComboBoxMixin = (subclass) =>
       this.addEventListener('mousedown', bringToFrontListener);
       this.addEventListener('touchstart', bringToFrontListener);
 
+      // Re-enable the virtual keyboard whenever the field is touched
+      this.addEventListener('touchstart', () => this.__setVirtualKeyboardEnabled(true));
+
       processTemplates(this);
     }
 
@@ -430,6 +433,11 @@ export const ComboBoxMixin = (subclass) =>
       }
 
       this._closeOnBlurIsPrevented = false;
+    }
+
+    /** @private */
+    __setVirtualKeyboardEnabled(value) {
+      this.inputElement.inputMode = value ? '' : 'none';
     }
 
     /**
@@ -670,6 +678,9 @@ export const ComboBoxMixin = (subclass) =>
       if (!this.loading || this.allowCustomValue) {
         this._commitValue();
       }
+
+      // Avoid opening the virtual keyboard when the input gets re-focused on dropdown close
+      this.__setVirtualKeyboardEnabled(false);
     }
 
     /** @private */
@@ -1047,6 +1058,9 @@ export const ComboBoxMixin = (subclass) =>
       if (!this.readonly && !this._closeOnBlurIsPrevented) {
         this._closeOrCommit();
       }
+
+      // Re-enable virtual keyboard for when the field gets the focus back
+      this.__setVirtualKeyboardEnabled(true);
     }
 
     /** @private */
