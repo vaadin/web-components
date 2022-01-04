@@ -106,7 +106,7 @@ describe('ARIA', () => {
 
     it('should set aria-posinset attribute on the dropdown items', () => {
       items.forEach((item, idx) => {
-        expect(item.getAttribute('aria-posinset')).to.equal(idx.toString());
+        expect(item.getAttribute('aria-posinset')).to.equal((idx + 1).toString());
       });
     });
 
