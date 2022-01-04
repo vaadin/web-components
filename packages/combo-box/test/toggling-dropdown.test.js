@@ -222,7 +222,7 @@ describe('toggling dropdown', () => {
     });
 
     describe('virtual keyboard', () => {
-      it('should disable virtual keyboard on close', async () => {
+      it('should disable virtual keyboard on close', () => {
         comboBox.open();
         comboBox.close();
         expect(input.inputMode).to.equal('none');
