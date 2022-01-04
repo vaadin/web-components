@@ -58,7 +58,7 @@ describe('dropdown', () => {
   });
 
   describe('virtual keyboard', () => {
-    it('should disable virtual keyboard on close', async () => {
+    it('should disable virtual keyboard on close', () => {
       await open(datepicker);
       datepicker.close();
       expect(input.inputMode).to.equal('none');
