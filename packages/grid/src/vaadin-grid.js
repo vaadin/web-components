@@ -279,7 +279,7 @@ class Grid extends ElementMixin(
         loading$="[[loading]]"
         column-reordering-allowed$="[[columnReorderingAllowed]]"
       >
-        <table id="table" role="grid" aria-multiselectable="true" tabindex="0">
+        <table id="table" role="treegrid" aria-multiselectable="true" tabindex="0">
           <caption id="sizer" part="row"></caption>
           <thead id="header" role="rowgroup"></thead>
           <tbody id="items" role="rowgroup"></tbody>
