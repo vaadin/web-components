@@ -4,17 +4,20 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
+import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
  * @polymerMixin
+ * @param {function(new:HTMLElement)} subclass
  */
 export const ComboBoxMixin = (subclass) =>
-  class VaadinComboBoxMixinElement extends KeyboardMixin(InputMixin(DisabledMixin(subclass))) {
+  class VaadinComboBoxMixinElement extends ControllerMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass)))) {
     static get properties() {
       return {
         /**
@@ -264,6 +267,8 @@ export const ComboBoxMixin = (subclass) =>
         if (this.clearElement) {
           this.clearElement.addEventListener('mousedown', this._boundOnClearButtonMouseDown);
         }
+
+        this.addController(new VirtualKeyboardController(this, input));
       }
     }
 
@@ -293,9 +298,6 @@ export const ComboBoxMixin = (subclass) =>
 
       this.addEventListener('mousedown', bringToFrontListener);
       this.addEventListener('touchstart', bringToFrontListener);
-
-      // Re-enable the virtual keyboard whenever the field is touched
-      this.addEventListener('touchstart', () => this.__setVirtualKeyboardEnabled(true));
 
       processTemplates(this);
     }
@@ -433,11 +435,6 @@ export const ComboBoxMixin = (subclass) =>
       }
 
       this._closeOnBlurIsPrevented = false;
-    }
-
-    /** @private */
-    __setVirtualKeyboardEnabled(value) {
-      this.inputElement.inputMode = value ? '' : 'none';
     }
 
     /**
@@ -678,9 +675,6 @@ export const ComboBoxMixin = (subclass) =>
       if (!this.loading || this.allowCustomValue) {
         this._commitValue();
       }
-
-      // Avoid opening the virtual keyboard when the input gets re-focused on dropdown close
-      this.__setVirtualKeyboardEnabled(false);
     }
 
     /** @private */
@@ -1058,9 +1052,6 @@ export const ComboBoxMixin = (subclass) =>
       if (!this.readonly && !this._closeOnBlurIsPrevented) {
         this._closeOrCommit();
       }
-
-      // Re-enable virtual keyboard for when the field gets the focus back
-      this.__setVirtualKeyboardEnabled(true);
     }
 
     /** @private */

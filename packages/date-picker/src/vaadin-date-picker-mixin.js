@@ -4,16 +4,19 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
+import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import { dateAllowed, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
 
 /**
  * @polymerMixin
+ * @param {function(new:HTMLElement)} subclass
  */
 export const DatePickerMixin = (subclass) =>
-  class VaadinDatePickerMixin extends DelegateFocusMixin(InputMixin(KeyboardMixin(subclass))) {
+  class VaadinDatePickerMixin extends ControllerMixin(DelegateFocusMixin(InputMixin(KeyboardMixin(subclass)))) {
     static get properties() {
       return {
         /**
@@ -408,9 +411,6 @@ export const DatePickerMixin = (subclass) =>
           this.validate();
         }
       }
-
-      // Re-enable virtual keyboard for when the field gets the focus back
-      this.__setVirtualKeyboardEnabled(true);
     }
 
     /** @protected */
@@ -446,9 +446,6 @@ export const DatePickerMixin = (subclass) =>
     close() {
       if (this._overlayInitialized || this.autoOpenDisabled) {
         this.$.overlay.close();
-
-        // Avoid opening the virtual keyboard when the input gets re-focused on dropdown close
-        this.__setVirtualKeyboardEnabled(false);
       }
     }
 
@@ -471,9 +468,6 @@ export const DatePickerMixin = (subclass) =>
 
       this.addEventListener('mousedown', () => this.__bringToFront());
       this.addEventListener('touchstart', () => this.__bringToFront());
-
-      // Re-enable the virtual keyboard whenever the field is touched
-      this.addEventListener('touchstart', () => this.__setVirtualKeyboardEnabled(true));
     }
 
     /**
@@ -525,11 +519,6 @@ export const DatePickerMixin = (subclass) =>
       requestAnimationFrame(() => {
         this.$.overlay.bringToFront();
       });
-    }
-
-    /** @private */
-    __setVirtualKeyboardEnabled(value) {
-      this.inputElement.inputMode = value ? '' : 'none';
     }
 
     /** @private */
@@ -594,6 +583,8 @@ export const DatePickerMixin = (subclass) =>
         input.setAttribute('role', 'combobox');
         input.setAttribute('aria-expanded', !!this.opened);
         this._applyInputValue(this._selectedDate);
+
+        this.addController(new VirtualKeyboardController(this, input));
       }
     }
 
