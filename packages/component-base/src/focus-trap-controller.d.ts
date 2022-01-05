@@ -8,7 +8,7 @@ import { ReactiveController } from 'lit';
 /**
  * A controller for trapping focus within a DOM node.
  */
-declare class FocusTrapController implements ReactiveController {
+export class FocusTrapController implements ReactiveController {
   constructor(node: HTMLElement);
 
   hostConnected(): void;
