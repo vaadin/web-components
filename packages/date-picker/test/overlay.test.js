@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, fixtureSync, listenOnce, nextRender, tap } from '@vaadin/testing-helpers';
+import { click, fixtureSync, listenOnce, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker-overlay-content.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
@@ -325,6 +325,86 @@ describe('overlay', () => {
       var offset = overlay.$.yearScroller.clientHeight / 2;
       overlay.$.yearScroller._debouncerUpdateClones.flush();
       expect(getFirstVisibleItem(overlay.$.yearScroller, offset).firstElementChild.textContent).to.contain('2000');
+    });
+  });
+
+  describe('revealDate', () => {
+    let overlay, monthScroller;
+
+    async function fixtureOverlayContent({ monthScrollerItems, monthScrollerOffset }) {
+      overlay = fixtureSync(`
+        <vaadin-date-picker-overlay-content
+          style="position: absolute; top: 0;"
+        ></vaadin-date-picker-overlay-content>
+      `);
+      monthScroller = overlay.$.monthScroller;
+      monthScroller.style.setProperty('--vaadin-infinite-scroller-buffer-offset', monthScrollerOffset);
+      monthScroller.style.height = `calc(var(--vaadin-infinite-scroller-item-height) * ${monthScrollerItems})`;
+      overlay.i18n = getDefaultI18n();
+      overlay.$.monthScroller.bufferSize = 3;
+      overlay.$.yearScroller.bufferSize = 3;
+      overlay.initialPosition = new Date(2021, 1, 1);
+      await nextRender();
+    }
+
+    describe('default', () => {
+      beforeEach(async () => {
+        await fixtureOverlayContent({
+          monthScrollerItems: 2,
+          monthScrollerOffset: 0
+        });
+      });
+
+      it('should scroll to the date above when it is not visible', async () => {
+        const position = overlay.$.monthScroller.position;
+        overlay.revealDate(new Date(2021, 0, 1));
+        await oneEvent(overlay, 'scroll-animation-finished');
+        expect(overlay.$.monthScroller.position).to.equal(position - 1);
+      });
+
+      it('should not scroll to the date when it is fully visible', async () => {
+        const position = overlay.$.monthScroller.position;
+        overlay.revealDate(new Date(2021, 2, 1));
+        await nextRender();
+        expect(overlay.$.monthScroller.position).to.equal(position);
+      });
+
+      it('should scroll to the date below when it is not visible', async () => {
+        const position = overlay.$.monthScroller.position;
+        overlay.revealDate(new Date(2021, 3, 1));
+        await oneEvent(overlay, 'scroll-animation-finished');
+        expect(overlay.$.monthScroller.position).to.equal(position + 1);
+      });
+    });
+
+    describe('offset', () => {
+      beforeEach(async () => {
+        await fixtureOverlayContent({
+          monthScrollerItems: 3,
+          monthScrollerOffset: '20%'
+        });
+      });
+
+      it('should scroll to the date above when it is not visible', async () => {
+        const position = overlay.$.monthScroller.position;
+        overlay.revealDate(new Date(2021, 0, 1));
+        await oneEvent(overlay, 'scroll-animation-finished');
+        expect(overlay.$.monthScroller.position).to.equal(position - 1 /* 20% is ensured by CSS */);
+      });
+
+      it('should not scroll to the date when it is fully visible', async () => {
+        const position = overlay.$.monthScroller.position;
+        overlay.revealDate(new Date(2021, 2, 1));
+        await nextRender();
+        expect(overlay.$.monthScroller.position).to.equal(position);
+      });
+
+      it('should scroll to the date below when it is not visible', async () => {
+        const position = overlay.$.monthScroller.position;
+        overlay.revealDate(new Date(2021, 3, 1));
+        await oneEvent(overlay, 'scroll-animation-finished');
+        expect(overlay.$.monthScroller.position).to.equal(position + 1 + 0.2 /* 20% is ensured by JS */);
+      });
     });
   });
 });
