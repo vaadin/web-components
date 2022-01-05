@@ -159,8 +159,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
         }
       </style>
 
-      <!-- <div id="announcer" role="alert" aria-live="polite">[[i18n.calendar]]</div> -->
-
       <div part="overlay-header" on-touchend="_preventDefault" desktop$="[[_desktopMode]]" aria-hidden="true">
         <div part="label">[[_formatDisplayed(selectedDate, i18n.formatDate, label)]]</div>
         <div part="clear-button" showclear$="[[_showClear(selectedDate)]]"></div>
