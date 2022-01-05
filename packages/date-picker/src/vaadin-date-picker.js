@@ -184,7 +184,6 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
             theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]"
             role="dialog"
             aria-label="Choose date"
-            aria-modal="true"
           ></vaadin-date-picker-overlay-content>
         </template>
       </vaadin-date-picker-overlay>

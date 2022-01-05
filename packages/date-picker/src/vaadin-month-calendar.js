@@ -75,7 +75,6 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
         <thead id="weekdays-container">
           <tr role="row">
             <th
-              role="columnheader"
               part="weekday"
               aria-hidden="true"
               hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]"
@@ -92,7 +91,6 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
           <template is="dom-repeat" items="[[_weeks]]">
             <tr role="row">
               <td
-                role="gridcell"
                 part="week-number"
                 aria-hidden="true"
                 hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]"
