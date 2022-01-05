@@ -62,7 +62,6 @@ const button = css`
     background-color: currentColor;
     border-radius: inherit;
     opacity: 0;
-    transition: opacity 0.2s;
     pointer-events: none;
   }
 
