@@ -267,8 +267,6 @@ export const ComboBoxMixin = (subclass) =>
         if (this.clearElement) {
           this.clearElement.addEventListener('mousedown', this._boundOnClearButtonMouseDown);
         }
-
-        this.addController(new VirtualKeyboardController(this, input));
       }
     }
 
@@ -300,6 +298,8 @@ export const ComboBoxMixin = (subclass) =>
       this.addEventListener('touchstart', bringToFrontListener);
 
       processTemplates(this);
+
+      this.addController(new VirtualKeyboardController(this));
     }
 
     /**

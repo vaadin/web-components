@@ -10,5 +10,5 @@ import { ReactiveController } from 'lit';
  * when the field's overlay is closed.
  */
 export class VirtualKeyboardController implements ReactiveController {
-  constructor(host: HTMLElement, input: HTMLInputElement);
+  constructor(host: { inputElement: HTMLElement } & HTMLElement);
 }

@@ -9,12 +9,18 @@ customElements.define(
   'virtual-keyboard-controller-element',
   class extends ControllerMixin(PolymerElement) {
     static get template() {
-      return html`<input id="input" />`;
+      return html`<slot></slot>`;
+    }
+
+    constructor() {
+      super();
+      this.inputElement = document.createElement('input');
+      this.appendChild(this.inputElement);
     }
 
     ready() {
       super.ready();
-      this.addController(new VirtualKeyboardController(this, this.$.input));
+      this.addController(new VirtualKeyboardController(this));
     }
 
     open() {
@@ -27,12 +33,12 @@ customElements.define(
   }
 );
 
-describe('virtual-keyboard-controller-element', () => {
+describe('virtual-keyboard-controller', () => {
   let element, input;
 
   beforeEach(() => {
     element = fixtureSync('<virtual-keyboard-controller-element></virtual-keyboard-controller-element>');
-    input = element.$.input;
+    input = element.inputElement;
   });
 
   it('should disable virtual keyboard on close', async () => {
@@ -51,7 +57,8 @@ describe('virtual-keyboard-controller-element', () => {
   it('should re-enable virtual keyboard on blur', async () => {
     element.open();
     element.close();
-    input.focus();
+    element.tabIndex = 1;
+    element.focus();
     await sendKeys({ press: 'Tab' });
     expect(input.inputMode).to.equal('');
   });

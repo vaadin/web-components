@@ -422,6 +422,8 @@ export const DatePickerMixin = (subclass) =>
           this.open();
         }
       });
+
+      this.addController(new VirtualKeyboardController(this));
     }
 
     /** @protected */
@@ -583,8 +585,6 @@ export const DatePickerMixin = (subclass) =>
         input.setAttribute('role', 'combobox');
         input.setAttribute('aria-expanded', !!this.opened);
         this._applyInputValue(this._selectedDate);
-
-        this.addController(new VirtualKeyboardController(this, input));
       }
     }
 

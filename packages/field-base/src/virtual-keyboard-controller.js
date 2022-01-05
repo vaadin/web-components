@@ -10,11 +10,10 @@
  */
 export class VirtualKeyboardController {
   /**
-   * @param {HTMLElement} host
-   * @param {HTMLInputElement} input
+   * @param {{ inputElement: HTMLElement } & HTMLElement} host
    */
-  constructor(host, input) {
-    this.input = input;
+  constructor(host) {
+    this.host = host;
 
     host.addEventListener('opened-changed', (event) => {
       if (event instanceof CustomEvent && !event.detail.value) {
@@ -32,6 +31,8 @@ export class VirtualKeyboardController {
 
   /** @private */
   __setVirtualKeyboardEnabled(value) {
-    this.input.inputMode = value ? '' : 'none';
+    if (this.host.inputElement) {
+      this.host.inputElement.inputMode = value ? '' : 'none';
+    }
   }
 }
