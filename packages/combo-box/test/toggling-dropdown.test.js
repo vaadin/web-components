@@ -238,6 +238,7 @@ describe('toggling dropdown', () => {
       it('should re-enable virtual keyboard on blur', async () => {
         comboBox.open();
         comboBox.close();
+        await aTimeout(0);
         await sendKeys({ press: 'Tab' });
         expect(input.inputMode).to.equal('');
       });

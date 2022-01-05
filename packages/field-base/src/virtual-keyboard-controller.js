@@ -10,14 +10,14 @@
  */
 export class VirtualKeyboardController {
   /**
-   * @param {{ inputElement: HTMLElement } & HTMLElement} host
+   * @param {{ inputElement: HTMLElement; opened: boolean } & HTMLElement} host
    */
   constructor(host) {
     this.host = host;
 
-    host.addEventListener('opened-changed', (event) => {
-      if (event instanceof CustomEvent && !event.detail.value) {
-        // Avoid opening the virtual keyboard when the input gets re-focused on dropdown close
+    host.addEventListener('opened-changed', () => {
+      if (!host.opened) {
+        // Prevent opening the virtual keyboard when the input gets re-focused on dropdown close
         this.__setVirtualKeyboardEnabled(false);
       }
     });
