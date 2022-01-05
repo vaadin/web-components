@@ -23,11 +23,6 @@ class DatePickerOverlay extends DisableUpgradeMixin(PositionMixin(OverlayElement
   static get is() {
     return 'vaadin-date-picker-overlay';
   }
-
-  ready() {
-    super.ready();
-    this.$.overlay.removeAttribute('tabindex');
-  }
 }
 
 customElements.define(DatePickerOverlay.is, DatePickerOverlay);

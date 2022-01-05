@@ -211,6 +211,14 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
   ready() {
     super.ready();
     addListener(this.$.monthGrid, 'tap', this._handleTap.bind(this));
+
+    this.addEventListener('focusin', () => {
+      this.setAttribute('focused', '');
+    });
+
+    this.addEventListener('focusout', () => {
+      this.removeAttribute('focused');
+    });
   }
 
   get focusableDateElement() {

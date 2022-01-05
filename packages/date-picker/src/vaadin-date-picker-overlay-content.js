@@ -190,7 +190,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
               show-week-numbers="[[showWeekNumbers]]"
               min-date="[[minDate]]"
               max-date="[[maxDate]]"
-              focused$="[[_focused]]"
               part="month"
               theme$="[[theme]]"
               on-keydown="__onMonthCalendarKeyDown"
@@ -310,8 +309,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       maxDate: Date,
 
-      _focused: Boolean,
-
       /**
        * Input label
        */
@@ -326,8 +323,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
   ready() {
     super.ready();
     addListener(this, 'tap', this._stopPropagation);
-    this.addEventListener('focus', this._onOverlayFocus.bind(this));
-    this.addEventListener('blur', this._onOverlayBlur.bind(this));
     addListener(this.$.scrollers, 'track', this._track.bind(this));
     addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
     addListener(this.shadowRoot.querySelector('[part="today-button"]'), 'tap', this.__onTodayButtonTap.bind(this));
@@ -428,14 +423,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
         this._scrollToPosition(diff - visibleItems + 1, true);
       }
     }
-  }
-
-  _onOverlayFocus() {
-    this._focused = true;
-  }
-
-  _onOverlayBlur() {
-    this._focused = false;
   }
 
   _initialPositionChanged(initialPosition) {
