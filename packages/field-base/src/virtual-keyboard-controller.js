@@ -10,7 +10,7 @@
  */
 export class VirtualKeyboardController {
   /**
-   * @param {{ inputElement: HTMLElement; opened: boolean } & HTMLElement} host
+   * @param {{ inputElement?: HTMLElement; opened: boolean } & HTMLElement} host
    */
   constructor(host) {
     this.host = host;
