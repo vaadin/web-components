@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, fixtureSync, focusout, isIOS, tap } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, focusout, isIOS, tap, touchstart } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
@@ -218,6 +219,29 @@ describe('toggling dropdown', () => {
       outsideClick();
       await aTimeout(0);
       expect(document.activeElement).to.equal(input);
+    });
+
+    describe('virtual keyboard', () => {
+      it('should disable virtual keyboard on close', () => {
+        comboBox.open();
+        comboBox.close();
+        expect(input.inputMode).to.equal('none');
+      });
+
+      it('should re-enable virtual keyboard on touchstart', () => {
+        comboBox.open();
+        comboBox.close();
+        touchstart(comboBox);
+        expect(input.inputMode).to.equal('');
+      });
+
+      it('should re-enable virtual keyboard on blur', async () => {
+        comboBox.open();
+        comboBox.close();
+        await aTimeout(0);
+        await sendKeys({ press: 'Tab' });
+        expect(input.inputMode).to.equal('');
+      });
     });
 
     describe('filtered items are empty', () => {

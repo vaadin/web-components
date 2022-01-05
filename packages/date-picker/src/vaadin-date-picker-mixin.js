@@ -4,16 +4,19 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
+import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import { dateAllowed, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
 
 /**
  * @polymerMixin
+ * @param {function(new:HTMLElement)} subclass
  */
 export const DatePickerMixin = (subclass) =>
-  class VaadinDatePickerMixin extends DelegateFocusMixin(InputMixin(KeyboardMixin(subclass))) {
+  class VaadinDatePickerMixin extends ControllerMixin(DelegateFocusMixin(InputMixin(KeyboardMixin(subclass)))) {
     static get properties() {
       return {
         /**
@@ -419,6 +422,8 @@ export const DatePickerMixin = (subclass) =>
           this.open();
         }
       });
+
+      this.addController(new VirtualKeyboardController(this));
     }
 
     /** @protected */

@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, down, fixtureSync, isIOS } from '@vaadin/testing-helpers';
+import { aTimeout, click, down, fixtureSync, isIOS, touchstart } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import '../src/vaadin-date-picker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { open, outsideClick } from './common.js';
@@ -54,6 +55,28 @@ describe('dropdown', () => {
     outsideClick();
     await aTimeout(0);
     expect(document.activeElement).to.equal(input);
+  });
+
+  describe('virtual keyboard', () => {
+    it('should disable virtual keyboard on close', async () => {
+      await open(datepicker);
+      datepicker.close();
+      expect(input.inputMode).to.equal('none');
+    });
+
+    it('should re-enable virtual keyboard on touchstart', async () => {
+      await open(datepicker);
+      datepicker.close();
+      touchstart(datepicker);
+      expect(input.inputMode).to.equal('');
+    });
+
+    it('should re-enable virtual keyboard on blur', async () => {
+      await open(datepicker);
+      datepicker.close();
+      await sendKeys({ press: 'Tab' });
+      expect(input.inputMode).to.equal('');
+    });
   });
 
   describe('sizing', () => {

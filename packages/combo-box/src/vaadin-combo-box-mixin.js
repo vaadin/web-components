@@ -4,17 +4,20 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
+import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
  * @polymerMixin
+ * @param {function(new:HTMLElement)} subclass
  */
 export const ComboBoxMixin = (subclass) =>
-  class VaadinComboBoxMixinElement extends KeyboardMixin(InputMixin(DisabledMixin(subclass))) {
+  class VaadinComboBoxMixinElement extends ControllerMixin(KeyboardMixin(InputMixin(DisabledMixin(subclass)))) {
     static get properties() {
       return {
         /**
@@ -295,6 +298,8 @@ export const ComboBoxMixin = (subclass) =>
       this.addEventListener('touchstart', bringToFrontListener);
 
       processTemplates(this);
+
+      this.addController(new VirtualKeyboardController(this));
     }
 
     /**
