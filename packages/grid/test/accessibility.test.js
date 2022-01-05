@@ -111,8 +111,8 @@ describe('accessibility', () => {
     });
 
     describe('structural roles', () => {
-      it('should have role grid on table', () => {
-        expect(grid.$.table.getAttribute('role')).to.equal('grid');
+      it('should have role treegrid on table', () => {
+        expect(grid.$.table.getAttribute('role')).to.equal('treegrid');
       });
 
       it('should have role rowgroup on row groups', () => {
