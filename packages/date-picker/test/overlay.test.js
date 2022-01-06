@@ -355,21 +355,21 @@ describe('overlay', () => {
         });
       });
 
-      it('should scroll to the date above when it is not visible', async () => {
+      it('should scroll to the month above when it is not visible', async () => {
         const position = overlay.$.monthScroller.position;
         overlay.revealDate(new Date(2021, 0, 1));
         await oneEvent(overlay, 'scroll-animation-finished');
         expect(overlay.$.monthScroller.position).to.equal(position - 1);
       });
 
-      it('should not scroll to the date when it is fully visible', async () => {
+      it('should not scroll to the month when it is fully visible', async () => {
         const position = overlay.$.monthScroller.position;
         overlay.revealDate(new Date(2021, 2, 1));
         await nextRender();
         expect(overlay.$.monthScroller.position).to.equal(position);
       });
 
-      it('should scroll to the date below when it is not visible', async () => {
+      it('should scroll to the month below when it is not visible', async () => {
         const position = overlay.$.monthScroller.position;
         overlay.revealDate(new Date(2021, 3, 1));
         await oneEvent(overlay, 'scroll-animation-finished');
@@ -385,21 +385,21 @@ describe('overlay', () => {
         });
       });
 
-      it('should scroll to the date above when it is not visible', async () => {
+      it('should scroll to the month above when it is not visible', async () => {
         const position = overlay.$.monthScroller.position;
         overlay.revealDate(new Date(2021, 0, 1));
         await oneEvent(overlay, 'scroll-animation-finished');
         expect(overlay.$.monthScroller.position).to.equal(position - 1 /* 20% is ensured by CSS */);
       });
 
-      it('should not scroll to the date when it is fully visible', async () => {
+      it('should not scroll to the month when it is fully visible', async () => {
         const position = overlay.$.monthScroller.position;
         overlay.revealDate(new Date(2021, 2, 1));
         await nextRender();
         expect(overlay.$.monthScroller.position).to.equal(position);
       });
 
-      it('should scroll to the date below when it is not visible', async () => {
+      it('should scroll to the month below when it is not visible', async () => {
         const position = overlay.$.monthScroller.position;
         overlay.revealDate(new Date(2021, 3, 1));
         await oneEvent(overlay, 'scroll-animation-finished');
