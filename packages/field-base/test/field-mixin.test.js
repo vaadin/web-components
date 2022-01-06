@@ -262,7 +262,7 @@ describe('field-mixin', () => {
         expect(helper.textContent).to.equal('');
       });
 
-      it('should remove has has-helper when helperText is cleared', () => {
+      it('should remove has-helper attribute when helperText is cleared', () => {
         element.helperText = '3 digits';
         helper = element.querySelector('[slot=helper]');
 
