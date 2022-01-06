@@ -204,8 +204,6 @@ registerStyles(
     }
 
     [part~='row'][dragstart] {
-      /* Add bottom-space to the row so the drag number doesn't get clipped. Needed for IE/Edge */
-      border-bottom: 100px solid transparent;
       z-index: 100 !important;
       opacity: 0.9;
     }
