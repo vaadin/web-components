@@ -227,7 +227,7 @@ describe('scroll to index', () => {
     // Issue https://github.com/vaadin/vaadin-grid/issues/2107
     it('should display correctly when scrolled to bottom immediately after setting dataProvider', (done) => {
       grid.size = 1;
-      const numberOfChidren = 250;
+      const numberOfChildren = 250;
       grid.itemIdPath = 'name';
       const PARENT = { name: 'PARENT', hasChildren: true };
       grid.dataProvider = ({ page, parentItem }, cb) => {
@@ -242,7 +242,7 @@ describe('scroll to index', () => {
             [...new Array(grid.pageSize)].map((_, index) => {
               return { name: 'Child ' + (offset + index), hasChildren: false };
             }),
-            numberOfChidren
+            numberOfChildren
           );
           if (page > 0) {
             expect(getPhysicalItems(grid).length).to.be.above(10);

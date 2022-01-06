@@ -359,7 +359,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
     /**
      * Returns the target row after navigating by the given dy offset.
-     * Also returns infromation whether the details cell should be the target on the target row.
+     * Also returns information whether the details cell should be the target on the target row.
      * If the row is not in the viewport, it is first scrolled to.
      * @private
      **/

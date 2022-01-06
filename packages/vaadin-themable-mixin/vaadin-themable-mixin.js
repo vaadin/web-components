@@ -58,7 +58,7 @@ export function registerStyles(themeFor, styles, options = {}) {
 }
 
 /**
- * Returns all registered themes. By default the themeRegistry is returend as is.
+ * Returns all registered themes. By default the themeRegistry is returned as is.
  * In case the style-modules adapter is imported, the themes are obtained from there instead
  * @returns {Theme[]}
  */
