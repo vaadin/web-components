@@ -578,6 +578,7 @@ export const DatePickerMixin = (subclass) =>
       super._inputElementChanged(input);
       if (input) {
         input.setAttribute('role', 'combobox');
+        input.setAttribute('aria-haspopup', 'dialog');
         input.setAttribute('aria-expanded', !!this.opened);
         this._applyInputValue(this._selectedDate);
       }
@@ -885,12 +886,14 @@ export const DatePickerMixin = (subclass) =>
         case 'ArrowUp':
           // prevent scrolling the page with arrows
           e.preventDefault();
-
-          if (!this.opened) {
+          if (this.opened) {
+            // The overlay can be opened with ctrl + option + shift in VoiceOver
+            // and without this logic, it won't be possible to focus the dialog opened this way.
+            this._overlayContent.focusDateElement();
+          } else {
             this._focusOverlayOnOpen = true;
             this.open();
           }
-
           break;
         case 'Enter': {
           const parsedDate = this._getParsedDate();
