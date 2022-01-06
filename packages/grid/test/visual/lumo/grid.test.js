@@ -330,5 +330,12 @@ describe('grid', () => {
       element.$.items.children[1].setAttribute('dragstart', '123');
       await visualDiff(element, 'row-dragstart');
     });
+
+    it('dragover below last row when all rows visible', async () => {
+      element.allRowsVisible = true;
+      element.items = element.items.slice(0, 2);
+      element.$.items.children[1].setAttribute('dragover', 'below');
+      await visualDiff(element, 'dragover-below-last-row-all-rows-visible');
+    });
   });
 });

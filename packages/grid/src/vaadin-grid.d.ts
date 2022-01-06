@@ -308,7 +308,7 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * `reorder-status` | Reflects the status of a cell while columns are being reordered | cell
  * `frozen` | Frozen cell | cell
  * `last-frozen` | Last frozen cell | cell
- * * `first-column` | First visible cell on a row | cell
+ * `first-column` | First visible cell on a row | cell
  * `last-column` | Last visible cell on a row | cell
  * `selected` | Selected row | row
  * `expanded` | Expanded row | row
@@ -316,6 +316,7 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * `loading` | Row that is waiting for data from data provider | row
  * `odd` | Odd row | row
  * `first` | The first body row | row
+ * `last` | The last body row | row
  * `dragstart` | Set for one frame when drag of a row is starting. The value is a number when multiple rows are dragged | row
  * `dragover` | Set when the row is dragged over | row
  * `drag-disabled` | Set to a row that isn't available for dragging | row
