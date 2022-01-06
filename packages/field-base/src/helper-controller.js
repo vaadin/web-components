@@ -6,7 +6,7 @@
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
- * A controller to manage the helper node content.
+ * A controller that manages the helper node content.
  */
 export class HelperController extends SlotController {
   constructor(host) {
@@ -47,7 +47,16 @@ export class HelperController extends SlotController {
       this.__helperIdObserver.disconnect();
     }
 
-    this.__applyDefaultHelper(this.helperText);
+    const helperNode = this.getSlotChild();
+
+    // Custom node is added to helper slot
+    if (helperNode && helperNode !== this.defaultNode) {
+      const hasHelper = this.__hasHelper(helperNode);
+      this.__toggleHasHelper(hasHelper);
+    } else {
+      // Restore default helper if needed
+      this.__applyDefaultHelper(this.helperText, helperNode);
+    }
   }
 
   /**
@@ -58,7 +67,7 @@ export class HelperController extends SlotController {
     this.helperText = helperText;
 
     if (this.node === this.defaultNode) {
-      this.__applyDefaultHelper(helperText);
+      this.__applyDefaultHelper(helperText, this.defaultNode);
     }
   }
 
@@ -85,27 +94,24 @@ export class HelperController extends SlotController {
 
   /**
    * @param {string} helperText
+   * @param {Node} helperNode
    * @private
    */
-  __applyDefaultHelper(helperText) {
-    let helperNode = this.getSlotChild();
-
+  __applyDefaultHelper(helperText, helperNode) {
     const hasHelperText = this.__isNotEmpty(helperText);
 
-    if (hasHelperText) {
-      if (!helperNode) {
-        // Set slot factory lazily to only create helper node when needed.
-        this.slotFactory = () => document.createElement('div');
+    if (hasHelperText && !helperNode) {
+      // Set slot factory lazily to only create helper node when needed.
+      this.slotFactory = () => document.createElement('div');
 
-        helperNode = this.attachDefaultNode();
+      helperNode = this.attachDefaultNode();
 
-        this.__updateHelperId(helperNode);
-        this.__observeHelper(helperNode);
-      }
+      this.__updateHelperId(helperNode);
+      this.__observeHelper(helperNode);
+    }
 
-      if (helperNode === this.defaultNode) {
-        helperNode.textContent = helperText;
-      }
+    if (helperNode) {
+      helperNode.textContent = helperText;
     }
 
     this.__toggleHasHelper(hasHelperText);

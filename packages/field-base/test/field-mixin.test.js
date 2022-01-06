@@ -253,6 +253,22 @@ describe('field-mixin', () => {
         element.helperText = ' ';
         expect(element.hasAttribute('has-helper')).to.be.false;
       });
+
+      it('should clear helper when helperText is set to empty string', () => {
+        element.helperText = '3 digits';
+        helper = element.querySelector('[slot=helper]');
+
+        element.helperText = '';
+        expect(helper.textContent).to.equal('');
+      });
+
+      it('should remove has has-helper when helperText is cleared', () => {
+        element.helperText = '3 digits';
+        helper = element.querySelector('[slot=helper]');
+
+        element.helperText = '';
+        expect(element.hasAttribute('has-helper')).to.be.false;
+      });
     });
 
     describe('property', () => {
