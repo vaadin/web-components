@@ -331,9 +331,11 @@ describe('grid', () => {
       await visualDiff(element, 'row-dragstart');
     });
 
-    it('dragover below last row when all rows visible', async () => {
+    it('dragover below last row with all rows visible', async () => {
       element.allRowsVisible = true;
       element.items = element.items.slice(0, 2);
+      flushGrid(element);
+      await nextRender(element);
       element.$.items.children[1].setAttribute('dragover', 'below');
       await visualDiff(element, 'dragover-below-last-row-all-rows-visible');
     });
