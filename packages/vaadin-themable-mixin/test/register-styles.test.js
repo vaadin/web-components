@@ -182,10 +182,10 @@ describe('registerStyles', () => {
         .map((sheet) => [...sheet.cssRules])
         .flat();
 
-      // Check the number of occurences of the style rule
+      // Check the number of occurrences of the style rule
       const occurrences = rules.filter((rule) => rule.cssText === duplicateStyle).length;
 
-      // There should be only one occurence
+      // There should be only one occurrence
       expect(occurrences).to.equal(1);
     });
 

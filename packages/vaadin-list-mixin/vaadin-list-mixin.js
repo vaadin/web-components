@@ -301,7 +301,7 @@ export const ListMixin = (superClass) =>
     }
 
     focus() {
-      // In initialisation (e.g vaadin-select) observer might not been run yet.
+      // In initialization (e.g vaadin-select) observer might not been run yet.
       this._observer && this._observer.flush();
       const firstItem = this.querySelector('[tabindex="0"]') || (this.items ? this.items[0] : null);
       this._focusItem(firstItem);

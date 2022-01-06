@@ -56,7 +56,7 @@ export class Templatizer extends PolymerElement {
     // The Polymer uses `===` to check whether a property is changed and should be re-rendered.
     // This means, object properties won't be re-rendered when mutated inside.
     // This workaround forces the `item` property to re-render even
-    // the new item is stricly equal to the old item.
+    // the new item is strictly equal to the old item.
     if (instance.item === properties.item) {
       instance._setPendingProperty('item');
     }

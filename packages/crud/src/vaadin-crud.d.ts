@@ -335,7 +335,7 @@ declare class Crud<Item> extends ElementMixin(ThemableMixin(HTMLElement)) {
   readonly size: number | null | undefined;
 
   /**
-   * Controls visiblity state of toolbar.
+   * Controls visibility state of toolbar.
    * When set to false toolbar is hidden and shown when set to true.
    * @attr {boolean} no-toolbar
    */

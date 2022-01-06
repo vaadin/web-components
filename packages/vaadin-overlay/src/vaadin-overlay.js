@@ -675,7 +675,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
     if (this._placeholder) {
       this._exitModalState();
 
-      // Use this.restoreFocusNode if specified, othwerwise fallback to the node
+      // Use this.restoreFocusNode if specified, otherwise fallback to the node
       // which was focused before opening the overlay.
       const restoreFocusNode = this.restoreFocusNode || this.__restoreFocusNode;
 
