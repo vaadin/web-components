@@ -3,12 +3,12 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { FieldAriaController } from './field-aria-controller.js';
+import { HelperController } from './helper-controller.js';
 import { LabelMixin } from './label-mixin.js';
 import { ValidateMixin } from './validate-mixin.js';
 
@@ -74,8 +74,7 @@ export const FieldMixin = (superclass) =>
         '__observeOffsetHeight(errorMessage, invalid, label, helperText)',
         '_updateErrorMessage(invalid, errorMessage)',
         '_invalidChanged(invalid)',
-        '_requiredChanged(required)',
-        '_helperIdChanged(_helperId)'
+        '_requiredChanged(required)'
       ];
     }
 
@@ -87,12 +86,17 @@ export const FieldMixin = (superclass) =>
       return this._getDirectSlotChild('error-message');
     }
 
+    /** @protected */
+    get _helperId() {
+      return this._helperController.helperId;
+    }
+
     /**
      * @protected
      * @return {HTMLElement}
      */
     get _helperNode() {
-      return this._getDirectSlotChild('helper');
+      return this._helperController.node;
     }
 
     constructor() {
@@ -101,16 +105,21 @@ export const FieldMixin = (superclass) =>
       // Ensure every instance has unique ID
       const uniqueId = (FieldMixinClass._uniqueFieldId = 1 + FieldMixinClass._uniqueFieldId || 0);
       this._errorId = `error-${this.localName}-${uniqueId}`;
-      this._helperId = `helper-${this.localName}-${uniqueId}`;
-
-      // Save generated ID to restore later
-      this.__savedHelperId = this._helperId;
 
       this._fieldAriaController = new FieldAriaController(this);
+      this._helperController = new HelperController(this);
+
+      this.addController(this._fieldAriaController);
+      this.addController(this._helperController);
 
       this._labelController.addEventListener('label-changed', (event) => {
         const { hasLabel, node } = event.detail;
         this.__labelChanged(hasLabel, node);
+      });
+
+      this._helperController.addEventListener('helper-changed', (event) => {
+        const { hasHelper, node } = event.detail;
+        this.__helperChanged(hasHelper, node);
       });
     }
 
@@ -126,54 +135,6 @@ export const FieldMixin = (superclass) =>
 
         this._updateErrorMessage(this.invalid, this.errorMessage);
       }
-
-      const helper = this._helperNode;
-      if (helper) {
-        this.__applyCustomHelper(helper);
-      }
-
-      this.__helperSlot = this.shadowRoot.querySelector('[name="helper"]');
-
-      this.__helperSlotObserver = new FlattenedNodesObserver(this.__helperSlot, (info) => {
-        const helper = this._currentHelper;
-
-        const newHelper = info.addedNodes.find((node) => node !== helper);
-        const oldHelper = info.removedNodes.find((node) => node === helper);
-
-        if (newHelper) {
-          // Custom helper is added, remove the previous one.
-          if (helper && helper.isConnected) {
-            this.removeChild(helper);
-          }
-
-          this.__applyCustomHelper(newHelper);
-
-          this.__helperIdObserver = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-              // only handle helper nodes
-              if (
-                mutation.type === 'attributes' &&
-                mutation.attributeName === 'id' &&
-                mutation.target === this._currentHelper &&
-                mutation.target.id !== this.__savedHelperId
-              ) {
-                this.__updateHelperId(mutation.target);
-              }
-            });
-          });
-
-          this.__helperIdObserver.observe(newHelper, { attributes: true });
-        } else if (oldHelper) {
-          // The observer does not exist when default helper is removed.
-          if (this.__helperIdObserver) {
-            this.__helperIdObserver.disconnect();
-          }
-
-          this.__applyDefaultHelper(this.helperText);
-        }
-      });
-
-      this.addController(this._fieldAriaController);
     }
 
     /** @private */
@@ -185,69 +146,13 @@ export const FieldMixin = (superclass) =>
       }
     }
 
-    /**
-     * @param {HTMLElement} helper
-     * @private
-     */
-    __applyCustomHelper(helper) {
-      this.__updateHelperId(helper);
-      this._currentHelper = helper;
-      this.__toggleHasHelper(helper.children.length > 0 || this.__isNotEmpty(helper.textContent));
-    }
-
-    /**
-     * @param {string} helperText
-     * @private
-     */
-    __isNotEmpty(helperText) {
-      return helperText && helperText.trim() !== '';
-    }
-
     /** @private */
-    __attachDefaultHelper() {
-      let helper = this.__defaultHelper;
-
-      if (!helper) {
-        helper = document.createElement('div');
-        helper.setAttribute('slot', 'helper');
-        this.__defaultHelper = helper;
+    __helperChanged(hasHelper, helperNode) {
+      if (hasHelper) {
+        this._fieldAriaController.setHelperId(helperNode.id);
+      } else {
+        this._fieldAriaController.setHelperId(null);
       }
-
-      helper.id = this.__savedHelperId;
-      this._helperId = helper.id;
-      this.appendChild(helper);
-      this._currentHelper = helper;
-
-      return helper;
-    }
-
-    /**
-     * @param {string} helperText
-     * @private
-     */
-    __applyDefaultHelper(helperText) {
-      let helper = this._helperNode;
-
-      const hasHelperText = this.__isNotEmpty(helperText);
-      if (hasHelperText && !helper) {
-        // Create helper lazily
-        helper = this.__attachDefaultHelper();
-      }
-
-      // Only set text content for default helper
-      if (helper && helper === this.__defaultHelper) {
-        helper.textContent = helperText;
-      }
-
-      this.__toggleHasHelper(hasHelperText);
-    }
-
-    /**
-     * @param {boolean} hasHelper
-     * @private
-     */
-    __toggleHasHelper(hasHelper) {
-      this.toggleAttribute('has-helper', hasHelper);
     }
 
     /**
@@ -316,28 +221,11 @@ export const FieldMixin = (superclass) =>
     }
 
     /**
-     * @param {HTMLElement} customHelper
-     * @private
-     */
-    __updateHelperId(customHelper) {
-      let newId;
-
-      if (customHelper.id) {
-        newId = customHelper.id;
-      } else {
-        newId = this.__savedHelperId;
-        customHelper.id = newId;
-      }
-
-      this._helperId = newId;
-    }
-
-    /**
      * @param {string} helperText
      * @protected
      */
     _helperTextChanged(helperText) {
-      this.__applyDefaultHelper(helperText);
+      this._helperController.setHelperText(helperText);
     }
 
     /**
@@ -356,14 +244,6 @@ export const FieldMixin = (superclass) =>
      */
     _requiredChanged(required) {
       this._fieldAriaController.setRequired(required);
-    }
-
-    /**
-     * @param {string} helperId
-     * @protected
-     */
-    _helperIdChanged(helperId) {
-      this._fieldAriaController.setHelperId(helperId);
     }
 
     /**

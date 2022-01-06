@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
@@ -50,9 +50,10 @@ describe('accessibility', () => {
     expect(valueButton.getAttribute('aria-labelledby')).to.not.be.empty;
   });
 
-  it('should set aria-describedby on the value button when invalid', () => {
+  it('should set aria-describedby on the value button when invalid', async () => {
     select.errorMessage = 'invalid';
     select.invalid = true;
+    await aTimeout(0);
     expect(valueButton.getAttribute('aria-describedby')).to.not.be.empty;
   });
 

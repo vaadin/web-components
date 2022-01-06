@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { FieldMixin } from '../src/field-mixin.js';
 import { InputController } from '../src/input-controller.js';
 import { InputMixin } from '../src/input-mixin.js';
@@ -253,6 +254,22 @@ describe('field-mixin', () => {
         element.helperText = ' ';
         expect(element.hasAttribute('has-helper')).to.be.false;
       });
+
+      it('should clear helper when helperText is set to empty string', () => {
+        element.helperText = '3 digits';
+        helper = element.querySelector('[slot=helper]');
+
+        element.helperText = '';
+        expect(helper.textContent).to.equal('');
+      });
+
+      it('should remove has-helper attribute when helperText is cleared', () => {
+        element.helperText = '3 digits';
+        helper = element.querySelector('[slot=helper]');
+
+        element.helperText = '';
+        expect(element.hasAttribute('has-helper')).to.be.false;
+      });
     });
 
     describe('property', () => {
@@ -269,7 +286,7 @@ describe('field-mixin', () => {
       it('should set id on the generated helper element', () => {
         const id = helper.getAttribute('id');
         expect(id).to.match(ID_REGEX);
-        expect(id.endsWith(element.constructor._uniqueFieldId)).to.be.true;
+        expect(id.endsWith(SlotController.helperId)).to.be.true;
       });
 
       it('should set content to the generated helper element', () => {
@@ -329,7 +346,7 @@ describe('field-mixin', () => {
       it('should set id on the slotted helper element', () => {
         const id = helper.getAttribute('id');
         expect(id).to.match(ID_REGEX);
-        expect(id.endsWith(element.constructor._uniqueFieldId)).to.be.true;
+        expect(id.endsWith(SlotController.helperId)).to.be.true;
       });
 
       it('should set has-helper attribute with slotted helper', () => {
@@ -696,6 +713,7 @@ describe('field-mixin', () => {
       helper = document.createElement('div');
       helper.setAttribute('slot', 'helper');
       helper.id = 'helper-component';
+      helper.textContent = 'Helper';
       element.appendChild(helper);
       await nextFrame();
       expect(input.getAttribute('aria-describedby')).to.include('helper-component');
@@ -705,6 +723,7 @@ describe('field-mixin', () => {
       helper = document.createElement('div');
       helper.setAttribute('slot', 'helper');
       helper.id = 'helper-component';
+      helper.textContent = 'Helper';
       element.appendChild(helper);
       await nextFrame();
       helper.removeAttribute('id');
