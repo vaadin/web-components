@@ -186,8 +186,9 @@ class InfiniteScroller extends PolymerElement {
     }
 
     // Check if we scrolled enough to translate the buffer positions.
-    const upperThresholdReached = scrollTop > this._buffers[1].translateY + this.itemHeight + this.bufferOffset;
-    const lowerThresholdReached = scrollTop < this._buffers[0].translateY + this.itemHeight + this.bufferOffset;
+    const offset = this.itemHeight + this.bufferOffset;
+    const upperThresholdReached = scrollTop > this._buffers[1].translateY + offset;
+    const lowerThresholdReached = scrollTop < this._buffers[0].translateY + offset;
 
     if (upperThresholdReached || lowerThresholdReached) {
       this._translateBuffer(lowerThresholdReached);
@@ -212,7 +213,7 @@ class InfiniteScroller extends PolymerElement {
    * @return {number}
    */
   get bufferOffset() {
-    return this.root.querySelector('.buffer').offsetTop;
+    return this._buffers[0].offsetTop;
   }
 
   /**
