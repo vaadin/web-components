@@ -376,10 +376,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     super.ready();
 
     this._overlayElement = this.shadowRoot.querySelector('vaadin-select-overlay');
-
-    // Store reference to assign menu
-    this._overlayElement.host = this;
-
     this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
 
     processTemplates(this);

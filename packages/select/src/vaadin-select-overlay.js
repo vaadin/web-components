@@ -32,10 +32,10 @@ class SelectOverlay extends PositionMixin(OverlayElement) {
   requestContentUpdate() {
     super.requestContentUpdate();
 
-    if (this.host) {
-      // Ensure menu element is set
+    if (this.owner) {
+      // Ensure menuElement reference is correct.
       const menuElement = this._getMenuElement();
-      this.host._assignMenuElement(menuElement);
+      this.owner._assignMenuElement(menuElement);
     }
   }
 
