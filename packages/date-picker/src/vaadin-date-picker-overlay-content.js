@@ -402,18 +402,22 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
   /**
    * Scrolls the month and year scrollers enough to reveal the given date.
    */
-  revealDate(date) {
+  revealDate(date, animate = true) {
     if (date) {
-      var diff = this._differenceInMonths(date, this._originDate);
-      var scrolledAboveViewport = this.$.monthScroller.position > diff;
+      const diff = this._differenceInMonths(date, this._originDate);
+      const scrolledAboveViewport = this.$.monthScroller.position > diff;
 
-      var visibleItems = this.$.monthScroller.clientHeight / this.$.monthScroller.itemHeight;
-      var scrolledBelowViewport = this.$.monthScroller.position + visibleItems - 1 < diff;
+      const visibleArea = Math.max(
+        this.$.monthScroller.itemHeight,
+        this.$.monthScroller.clientHeight - this.$.monthScroller.bufferOffset * 2
+      );
+      const visibleItems = visibleArea / this.$.monthScroller.itemHeight;
+      const scrolledBelowViewport = this.$.monthScroller.position + visibleItems - 1 < diff;
 
       if (scrolledAboveViewport) {
-        this._scrollToPosition(diff, true);
+        this._scrollToPosition(diff, animate);
       } else if (scrolledBelowViewport) {
-        this._scrollToPosition(diff - visibleItems + 1, true);
+        this._scrollToPosition(diff - visibleItems + 1, animate);
       }
     }
   }

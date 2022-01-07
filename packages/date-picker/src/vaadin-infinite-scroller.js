@@ -186,9 +186,9 @@ class InfiniteScroller extends PolymerElement {
     }
 
     // Check if we scrolled enough to translate the buffer positions.
-    const bufferOffset = this.root.querySelector('.buffer').offsetTop;
-    const upperThresholdReached = scrollTop > this._buffers[1].translateY + this.itemHeight + bufferOffset;
-    const lowerThresholdReached = scrollTop < this._buffers[0].translateY + this.itemHeight + bufferOffset;
+    const offset = this.itemHeight + this.bufferOffset;
+    const upperThresholdReached = scrollTop > this._buffers[1].translateY + offset;
+    const lowerThresholdReached = scrollTop < this._buffers[0].translateY + offset;
 
     if (upperThresholdReached || lowerThresholdReached) {
       this._translateBuffer(lowerThresholdReached);
@@ -210,7 +210,14 @@ class InfiniteScroller extends PolymerElement {
   }
 
   /**
-   * @private
+   * @return {number}
+   */
+  get bufferOffset() {
+    return this._buffers[0].offsetTop;
+  }
+
+  /**
+   * @return {number}
    */
   get position() {
     return (this.$.scroller.scrollTop - this._buffers[0].translateY) / this.itemHeight + this._firstIndex;
@@ -219,7 +226,7 @@ class InfiniteScroller extends PolymerElement {
   /**
    * Current scroller position as index. Can be a fractional number.
    *
-   * @type {Number}
+   * @type {number}
    */
   set position(index) {
     this._preventScrollEvent = true;
@@ -245,6 +252,9 @@ class InfiniteScroller extends PolymerElement {
     }
   }
 
+  /**
+   * @return {number}
+   */
   get itemHeight() {
     if (!this._itemHeightVal) {
       const itemHeight = getComputedStyle(this).getPropertyValue('--vaadin-infinite-scroller-item-height');
