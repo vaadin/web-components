@@ -114,12 +114,14 @@ class NotificationContainer extends ThemableMixin(ElementMixin(PolymerElement)) 
   _openedChanged(opened) {
     if (opened) {
       document.body.appendChild(this);
+      document.addEventListener('vaadin-overlay-close', this._boundVaadinOverlayClose);
       if (this._boundIosResizeListener) {
         this._detectIosNavbar();
         window.addEventListener('resize', this._boundIosResizeListener);
       }
     } else {
       document.body.removeChild(this);
+      document.removeEventListener('vaadin-overlay-close', this._boundVaadinOverlayClose);
       if (this._boundIosResizeListener) {
         window.removeEventListener('resize', this._boundIosResizeListener);
       }
@@ -129,6 +131,7 @@ class NotificationContainer extends ThemableMixin(ElementMixin(PolymerElement)) 
   constructor() {
     super();
 
+    this._boundVaadinOverlayClose = this._onVaadinOverlayClose.bind(this);
     if (isIOS) {
       this._boundIosResizeListener = () => this._detectIosNavbar();
     }
@@ -144,6 +147,17 @@ class NotificationContainer extends ThemableMixin(ElementMixin(PolymerElement)) 
       this.style.bottom = clientHeight - innerHeight + 'px';
     } else {
       this.style.bottom = '0';
+    }
+  }
+
+  /** @private */
+  _onVaadinOverlayClose(event) {
+    // Notifications are a separate overlay mechanism from vaadin-overlay, and
+    // interacting with them should not close modal overlays
+    const sourceEvent = event.detail.sourceEvent;
+    const isFromNotification = sourceEvent && sourceEvent.composedPath().indexOf(this) >= 0;
+    if (isFromNotification) {
+      event.preventDefault();
     }
   }
 }
