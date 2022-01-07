@@ -108,6 +108,7 @@ export class ErrorController extends SlotController {
     // Update both default and custom error message node.
     if (errorNode) {
       errorNode.textContent = hasError ? this.errorMessage : '';
+      errorNode.hidden = !hasError;
 
       // Role alert will make the error message announce immediately
       // as the field becomes invalid

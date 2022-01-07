@@ -342,12 +342,7 @@ snapshots["vaadin-number-field shadow theme"] =
 /* end snapshot vaadin-number-field shadow theme */
 
 snapshots["vaadin-number-field slots default"] = 
-`<div
-  hidden=""
-  slot="error-message"
->
-</div>
-<input
+`<input
   max="undefined"
   min="undefined"
   slot="input"
@@ -356,16 +351,16 @@ snapshots["vaadin-number-field slots default"] =
 >
 <label slot="label">
 </label>
+<div
+  hidden=""
+  slot="error-message"
+>
+</div>
 `;
 /* end snapshot vaadin-number-field slots default */
 
 snapshots["vaadin-number-field slots helper"] = 
-`<div
-  hidden=""
-  slot="error-message"
->
-</div>
-<input
+`<input
   max="undefined"
   min="undefined"
   slot="input"
@@ -374,6 +369,11 @@ snapshots["vaadin-number-field slots helper"] =
 >
 <label slot="label">
 </label>
+<div
+  hidden=""
+  slot="error-message"
+>
+</div>
 <div slot="helper">
   Helper
 </div>
