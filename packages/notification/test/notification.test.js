@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, listenOnce } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-notification.js';
@@ -55,6 +55,34 @@ describe('vaadin-notification', () => {
     it('should be visible after opening', () => {
       var isVisible = (elem) => !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
       expect(isVisible(document.body.querySelector('vaadin-notification-container'))).to.be.true;
+    });
+
+    it('should cancel vaadin-overlay-close events when the source event occurred within the container', (done) => {
+      listenOnce(document, 'click', (clickEvent) => {
+        const overlayCloseEvent = new CustomEvent('vaadin-overlay-close', {
+          cancelable: true,
+          detail: { sourceEvent: clickEvent }
+        });
+        document.dispatchEvent(overlayCloseEvent);
+
+        expect(overlayCloseEvent.defaultPrevented).to.be.true;
+        done();
+      });
+      notification._card.click();
+    });
+
+    it('should not cancel vaadin-overlay-close events when the source event occurred outside of the container', (done) => {
+      listenOnce(document, 'click', (clickEvent) => {
+        const overlayCloseEvent = new CustomEvent('vaadin-overlay-close', {
+          cancelable: true,
+          detail: { sourceEvent: clickEvent }
+        });
+        document.dispatchEvent(overlayCloseEvent);
+
+        expect(overlayCloseEvent.defaultPrevented).to.be.false;
+        done();
+      });
+      document.body.click();
     });
 
     const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
