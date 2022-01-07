@@ -194,7 +194,7 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `reorder-status` | Reflects the status of a cell while columns are being reordered | cell
  * `frozen` | Frozen cell | cell
  * `last-frozen` | Last frozen cell | cell
- * * `first-column` | First visible cell on a row | cell
+ * `first-column` | First visible cell on a row | cell
  * `last-column` | Last visible cell on a row | cell
  * `selected` | Selected row | row
  * `expanded` | Expanded row | row
@@ -202,6 +202,7 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `loading` | Row that is waiting for data from data provider | row
  * `odd` | Odd row | row
  * `first` | The first body row | row
+ * `last` | The last body row | row
  * `dragstart` | Set for one frame when drag of a row is starting. The value is a number when multiple rows are dragged | row
  * `dragover` | Set when the row is dragged over | row
  * `drag-disabled` | Set to a row that isn't available for dragging | row
@@ -489,6 +490,7 @@ class Grid extends ElementMixin(
       const cellCoordinates = this.__getBodyCellCoordinates(cell);
 
       virtualizer.size = effectiveSize;
+      virtualizer.update();
       virtualizer.flush();
 
       // If the focused cell's parent row got hidden by the size change, focus the corresponding new cell
@@ -819,6 +821,7 @@ class Grid extends ElementMixin(
     }
 
     row.toggleAttribute('first', index === 0);
+    row.toggleAttribute('last', index === this._effectiveSize - 1);
     row.toggleAttribute('odd', index % 2);
     this._a11yUpdateRowRowindex(row, index);
     this._getItem(index, row);

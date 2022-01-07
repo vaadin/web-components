@@ -133,6 +133,10 @@ registerStyles(
       margin-top: -1px;
     }
 
+    :host([all-rows-visible]) [part~='row'][last][dragover='below'] [part~='cell']::after {
+      height: 1px;
+    }
+
     [part~='row'][dragover='above'] [part~='cell']::after {
       top: auto;
       bottom: 100%;

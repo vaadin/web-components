@@ -1,11 +1,11 @@
-import { click, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers/dist/index-no-side-effects.js';
+import { click, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../../../theme/lumo/vaadin-grid.js';
 import '../../../theme/lumo/vaadin-grid-column-group.js';
 import '../../../theme/lumo/vaadin-grid-sorter.js';
-import { flushGrid, nextResize } from '../../helpers.js';
+import { flushGrid } from '../../helpers.js';
 import { users } from '../users.js';
 
 describe('grid', () => {
@@ -22,7 +22,7 @@ describe('grid', () => {
       });
 
       describe('header and footer', () => {
-        before(async () => {
+        beforeEach(async () => {
           element = fixtureSync(`
             <vaadin-grid size="200" style="width: 200px; height: 100px">
               <template class="row-details">[[index]]</template>
@@ -38,17 +38,13 @@ describe('grid', () => {
           await nextRender(element);
         });
 
-        after(() => {
-          element.remove();
-        });
-
         it('header footer', async () => {
           await visualDiff(element, `${dir}-header-footer`);
         });
       });
 
       describe('column groups', () => {
-        before(async () => {
+        beforeEach(async () => {
           element = fixtureSync(`
             <vaadin-grid style="height: 250px" column-reordering-allowed>
               <vaadin-grid-column width="30px" flex-grow="0" resizable>
@@ -95,17 +91,13 @@ describe('grid', () => {
           await nextRender(element);
         });
 
-        after(() => {
-          element.remove();
-        });
-
         it('column groups', async () => {
           await visualDiff(element, `${dir}-column-groups`);
         });
       });
 
       describe('row details', () => {
-        before(async () => {
+        beforeEach(async () => {
           element = fixtureSync(`
             <vaadin-grid>
               <template class="row-details">
@@ -150,10 +142,6 @@ describe('grid', () => {
           await nextRender(element);
         });
 
-        after(() => {
-          element.remove();
-        });
-
         it('row details', async () => {
           element.openItemDetails(element.items[0]);
           await visualDiff(element, `${dir}-row-details`);
@@ -163,7 +151,7 @@ describe('grid', () => {
       describe('sorting', () => {
         let firstSorter, secondSorter;
 
-        before(async () => {
+        beforeEach(async () => {
           element = fixtureSync(`
             <vaadin-grid style="height: 250px" multi-sort>
               <vaadin-grid-column width="50px">
@@ -191,10 +179,6 @@ describe('grid', () => {
           secondSorter = document.querySelector('#last-name-sorter');
         });
 
-        after(() => {
-          element.remove();
-        });
-
         it('initial', async () => {
           await visualDiff(element, `${dir}-sorting-initial`);
         });
@@ -205,24 +189,27 @@ describe('grid', () => {
         });
 
         it('multi asc asc', async () => {
+          click(firstSorter);
           click(secondSorter);
           await visualDiff(element, `${dir}-sorting-multi-asc-asc`);
         });
 
         it('multi asc desc', async () => {
+          click(firstSorter);
+          click(secondSorter);
           click(secondSorter);
           await visualDiff(element, `${dir}-sorting-multi-asc-desc`);
         });
 
         it('single desc', async () => {
-          click(secondSorter);
+          click(firstSorter);
           click(firstSorter);
           await visualDiff(element, `${dir}-sorting-single-desc`);
         });
       });
 
       describe('row focus', () => {
-        before(async () => {
+        beforeEach(async () => {
           element = fixtureSync(`
             <vaadin-grid style="width: 550px">
               <vaadin-grid-column-group header="Name" frozen>
@@ -248,10 +235,6 @@ describe('grid', () => {
           await nextRender(element);
         });
 
-        after(() => {
-          element.remove();
-        });
-
         it('row focus', async () => {
           await visualDiff(element, `${dir}-row-focus`);
         });
@@ -269,7 +252,7 @@ describe('grid', () => {
   });
 
   describe('drag and drop', () => {
-    before(async () => {
+    beforeEach(async () => {
       element = fixtureSync(`
         <vaadin-grid drop-mode="on-top-or-between" rows-draggable>
           <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
@@ -285,17 +268,12 @@ describe('grid', () => {
       await nextRender(element);
     });
 
-    after(() => {
-      element.remove();
-    });
-
     it('dragover', async () => {
       element.setAttribute('dragover', '');
       await visualDiff(element, 'dragover');
     });
 
     it('dragover on top', async () => {
-      element.removeAttribute('dragover');
       element.$.items.children[1].setAttribute('dragover', 'on-top');
       await visualDiff(element, 'row-dragover-on-top');
     });
@@ -323,12 +301,15 @@ describe('grid', () => {
     });
 
     it('dragover row dragstart', async () => {
-      element.detailsOpenedItems = [];
-      await nextResize(element);
-      element.$.items.children[1].removeAttribute('dragover');
-      await nextFrame();
       element.$.items.children[1].setAttribute('dragstart', '123');
       await visualDiff(element, 'row-dragstart');
+    });
+
+    it('dragover below last row with all rows visible', async () => {
+      element.allRowsVisible = true;
+      element.items = element.items.slice(0, 2);
+      element.$.items.children[1].setAttribute('dragover', 'below');
+      await visualDiff(element, 'dragover-below-last-row-all-rows-visible');
     });
   });
 });

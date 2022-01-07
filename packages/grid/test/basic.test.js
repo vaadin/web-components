@@ -206,6 +206,18 @@ describe('basic features', () => {
     expect(parseInt(window.getComputedStyle(grid).getPropertyValue('flex-grow'))).to.equal(1);
     expect(window.getComputedStyle(grid).getPropertyValue('flex-basis')).to.equal('auto');
   });
+
+  it('should have attribute last on the last body row', () => {
+    grid.scrollToIndex(grid.size - 1);
+    const lastRowSlot = grid.shadowRoot.querySelector('[part~="row"][last] slot');
+    expect(lastRowSlot.assignedNodes()[0].textContent).to.equal(String(grid.size - 1));
+  });
+
+  it('should have attribute last on the last body row after resize', () => {
+    grid.size = 2;
+    const lastRowSlot = grid.shadowRoot.querySelector('[part~="row"][last] slot');
+    expect(lastRowSlot.assignedNodes()[0].textContent).to.equal(String(grid.size - 1));
+  });
 });
 
 describe('flex child', () => {
