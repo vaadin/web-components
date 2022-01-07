@@ -4,6 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon/theme/material/vaadin-icon.js';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '../../../theme/material/vaadin-button.js';
+import { hover, resetHover } from '../helpers.js';
 
 describe('button', () => {
   let div, element;
@@ -13,6 +14,10 @@ describe('button', () => {
     div.style.display = 'inline-block';
     div.style.padding = '10px';
     element = fixtureSync('<vaadin-button>Button</vaadin-button>', div);
+  });
+
+  afterEach(async () => {
+    await resetHover();
   });
 
   describe('basic', () => {
@@ -44,6 +49,12 @@ describe('button', () => {
         element.setAttribute('theme', `${variant}`);
         element.disabled = true;
         await visualDiff(div, `theme-${variant}-disabled`);
+      });
+
+      it(`${variant} hover`, async () => {
+        element.setAttribute('theme', `${variant}`);
+        await hover(element);
+        await visualDiff(div, `theme-${variant}-hover`);
       });
     });
   });
