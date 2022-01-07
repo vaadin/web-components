@@ -28,6 +28,21 @@ class SelectOverlay extends PositionMixin(OverlayElement) {
   static get is() {
     return 'vaadin-select-overlay';
   }
+
+  requestContentUpdate() {
+    super.requestContentUpdate();
+
+    if (this.host) {
+      // Ensure menu element is set
+      const menuElement = this._getMenuElement();
+      this.host._assignMenuElement(menuElement);
+    }
+  }
+
+  /** @protected */
+  _getMenuElement() {
+    return Array.from(this.children).find((el) => el.localName !== 'style');
+  }
 }
 
 customElements.define(SelectOverlay.is, SelectOverlay);
