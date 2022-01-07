@@ -75,7 +75,7 @@ describe('field-mixin', () => {
   let element, label, error, helper, input;
 
   describe('error message', () => {
-    const ID_REGEX = /^error-field-mixin-element-\d+$/;
+    const ID_REGEX = /^error-message-field-mixin-element-\d+$/;
 
     describe('default', () => {
       beforeEach(() => {
@@ -91,7 +91,7 @@ describe('field-mixin', () => {
       it('should set id on the error message element', () => {
         const id = error.getAttribute('id');
         expect(id).to.match(ID_REGEX);
-        expect(id.endsWith(element.constructor._uniqueFieldId)).to.be.true;
+        expect(id.endsWith(SlotController.errorMessageId)).to.be.true;
       });
 
       it('should update error message content on attribute change', () => {
@@ -189,7 +189,7 @@ describe('field-mixin', () => {
       it('should set id on the slotted error message element', () => {
         const id = error.getAttribute('id');
         expect(id).to.match(ID_REGEX);
-        expect(id.endsWith(element.constructor._uniqueFieldId)).to.be.true;
+        expect(id.endsWith(SlotController.errorMessageId)).to.be.true;
       });
 
       it('should set has-error-message attribute with slotted error message', () => {
