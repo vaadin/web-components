@@ -29,8 +29,8 @@ describe('overlay', () => {
       overlay.i18n = getDefaultI18n();
       overlay.$.monthScroller.bufferSize = 1;
       overlay.$.yearScroller.bufferSize = 1;
-      overlay.initialPosition = new Date();
-      afterNextRender(overlay.$.monthScroller, () => waitUntilScrolledTo(overlay, new Date(), done));
+      overlay.initialPosition = new Date(2021, 1, 1);
+      afterNextRender(overlay.$.monthScroller, () => waitUntilScrolledTo(overlay, overlay.initialPosition, done));
     });
 
     it('should stop tap events from bubbling outside the overlay', () => {
@@ -300,7 +300,7 @@ describe('overlay', () => {
       overlay.i18n = getDefaultI18n();
       overlay.$.monthScroller.bufferSize = 1;
       overlay.$.yearScroller.bufferSize = 1;
-      overlay.initialPosition = new Date();
+      overlay.initialPosition = new Date(2021, 1, 1);
       await nextRender();
     });
 
@@ -322,7 +322,7 @@ describe('overlay', () => {
       const date = new Date(2000, 1, 1);
       overlay.scrollToDate(date);
       await nextRender();
-      var offset = overlay.$.yearScroller.clientHeight / 2;
+      const offset = overlay.$.yearScroller.clientHeight / 2;
       overlay.$.yearScroller._debouncerUpdateClones.flush();
       expect(getFirstVisibleItem(overlay.$.yearScroller, offset).firstElementChild.textContent).to.contain('2000');
     });
