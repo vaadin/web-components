@@ -394,9 +394,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
     this._overlayElement.requestContentUpdate();
 
-    // Ensure menu element is set
-    this._assignMenuElement();
-
     if (this._menuElement && this._menuElement.items) {
       this._updateSelectedItem(this.value, this._menuElement.items);
     }
@@ -415,10 +412,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     overlay.setProperties({ owner: this, renderer: renderer || this.__defaultRenderer });
 
     this.requestContentUpdate();
-
-    if (renderer) {
-      this._assignMenuElement();
-    }
   }
 
   /**
@@ -432,10 +425,11 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     }
   }
 
-  /** @private */
-  _assignMenuElement() {
-    const menuElement = this.__getMenuElement();
-
+  /**
+   * @param {HTMLElement} menuElement
+   * @protected
+   */
+  _assignMenuElement(menuElement) {
     if (menuElement && menuElement !== this.__lastMenuElement) {
       this._menuElement = menuElement;
       menuElement.addEventListener('items-changed', () => {
@@ -460,12 +454,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       // Store the menu element reference
       this.__lastMenuElement = menuElement;
     }
-  }
-
-  /** @private */
-  __getMenuElement() {
-    const content = this._overlayElement && this._overlayElement.content;
-    return content ? Array.from(content.children).find((el) => el.localName !== 'style') : null;
   }
 
   /** @private */
