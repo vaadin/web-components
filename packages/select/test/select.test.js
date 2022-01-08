@@ -58,15 +58,27 @@ describe('vaadin-select', () => {
       select.renderer = renderer;
       expect(select._menuElement).to.not.be.undefined;
     });
+
+    it('should assign menu element set using innerHTML after opening', () => {
+      const renderer = (root) => {
+        root.innerHTML = `
+          <vaadin-list-box>
+            <vaadin-item>Test<vaadin-item>
+          </vaadin-list-box>
+        `;
+      };
+      select.renderer = renderer;
+      select.opened = true;
+      const listBox = select._menuElement;
+      expect(listBox.isConnected).to.be.true;
+      expect(listBox.parentNode).to.equal(select._overlayElement);
+    });
   });
 
   describe('with items', () => {
     beforeEach(async () => {
       select = fixtureSync('<vaadin-select></vaadin-select>');
       select.renderer = (root) => {
-        if (root.firstElementChild) {
-          return;
-        }
         render(
           html`
             <vaadin-list-box>
@@ -628,9 +640,6 @@ describe('vaadin-select', () => {
     beforeEach(async () => {
       select = fixtureSync(`<vaadin-select value="v2"></vaadin-select>`);
       select.renderer = (root) => {
-        if (root.firstElementChild) {
-          return;
-        }
         render(
           html`
             <vaadin-list-box>
