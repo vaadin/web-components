@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-icons/issues"
   },
   "main": "vaadin-icons.js",
-  "type": "module",
   "module": "vaadin-icons.js",
+  "type": "module",
   "files": [
     "iconset.js",
     "vaadin-icons.js",

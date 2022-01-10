@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-notification/issues"
   },
   "main": "vaadin-notification.js",
-  "type": "module",
   "module": "vaadin-notification.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

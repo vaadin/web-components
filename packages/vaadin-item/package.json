@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-item/issues"
   },
   "main": "vaadin-item.js",
-  "type": "module",
   "module": "vaadin-item.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-login/issues"
   },
   "main": "vaadin-login-overlay.js",
-  "type": "module",
   "module": "vaadin-login-overlay.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

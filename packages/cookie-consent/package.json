@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-cookie-consent.js",
-  "type": "module",
   "module": "vaadin-cookie-consent.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

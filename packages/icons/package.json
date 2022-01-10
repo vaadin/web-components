@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-iconset.js",
-  "type": "module",
   "module": "vaadin-iconset.js",
+  "type": "module",
   "scripts": {
     "icons": "gulp icons"
   },

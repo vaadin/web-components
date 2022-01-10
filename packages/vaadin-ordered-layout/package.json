@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-ordered-layout/issues"
   },
   "main": "imports.js",
-  "type": "module",
   "module": "imports.js",
+  "type": "module",
   "files": [
     "imports.d.ts",
     "imports.js",

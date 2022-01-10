@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-board/issues"
   },
   "main": "vaadin-board.js",
-  "type": "module",
   "module": "vaadin-board.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

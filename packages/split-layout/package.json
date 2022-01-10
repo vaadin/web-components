@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-split-layout.js",
-  "type": "module",
   "module": "vaadin-split-layout.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

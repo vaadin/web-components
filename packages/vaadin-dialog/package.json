@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-dialog/issues"
   },
   "main": "vaadin-dialog.js",
-  "type": "module",
   "module": "vaadin-dialog.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

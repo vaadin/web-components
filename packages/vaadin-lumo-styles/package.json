@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-lumo-styles/issues"
   },
   "main": "all-imports.js",
-  "type": "module",
   "module": "all-imports.js",
+  "type": "module",
   "scripts": {
     "icons": "gulp icons"
   },

@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-input-container.js",
-  "type": "module",
   "module": "vaadin-input-container.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

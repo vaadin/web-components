@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-grid/issues"
   },
   "main": "vaadin-grid.js",
-  "type": "module",
   "module": "vaadin-grid.js",
+  "type": "module",
   "files": [
     "all-imports.js",
     "src",

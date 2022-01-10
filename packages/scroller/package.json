@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-scroller.js",
-  "type": "module",
   "module": "vaadin-scroller.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

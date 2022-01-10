@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-messages/issues"
   },
   "main": "all-imports.js",
-  "type": "module",
   "module": "all-imports.js",
+  "type": "module",
   "files": [
     "all-imports.d.ts",
     "all-imports.js",

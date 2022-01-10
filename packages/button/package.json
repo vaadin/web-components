@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-button/issues"
   },
   "main": "vaadin-button.js",
-  "type": "module",
   "module": "vaadin-button.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

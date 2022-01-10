@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-avatar.js",
-  "type": "module",
   "module": "vaadin-avatar.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

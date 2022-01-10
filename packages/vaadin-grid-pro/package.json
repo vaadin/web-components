@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-grid-pro/issues"
   },
   "main": "vaadin-grid-pro.js",
-  "type": "module",
   "module": "vaadin-grid-pro.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

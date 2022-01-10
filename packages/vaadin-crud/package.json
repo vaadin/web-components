@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-crud.js",
-  "type": "module",
   "module": "vaadin-crud.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

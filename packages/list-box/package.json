@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-list-box.js",
-  "type": "module",
   "module": "vaadin-list-box.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-icon.js",
-  "type": "module",
   "module": "vaadin-icon.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-template-renderer.js",
-  "type": "module",
   "module": "vaadin-template-renderer.js",
+  "type": "module",
   "files": [
     "vaadin-*.js"
   ],

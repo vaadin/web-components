@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-date-picker.js",
-  "type": "module",
   "module": "vaadin-date-picker.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

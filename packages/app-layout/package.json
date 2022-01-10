@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-app-layout.js",
-  "type": "module",
   "module": "vaadin-app-layout.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

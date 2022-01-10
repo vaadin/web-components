@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-confirm-dialog/issues"
   },
   "main": "vaadin-confirm-dialog.js",
-  "type": "module",
   "module": "vaadin-confirm-dialog.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

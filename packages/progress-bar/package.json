@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-progress-bar.js",
-  "type": "module",
   "module": "vaadin-progress-bar.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

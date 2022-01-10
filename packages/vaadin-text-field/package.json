@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/vaadin-text-field/issues"
   },
   "main": "vaadin-text-field.js",
-  "type": "module",
   "module": "vaadin-text-field.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-text-area.js",
-  "type": "module",
   "module": "vaadin-text-area.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

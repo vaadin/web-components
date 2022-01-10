@@ -17,8 +17,8 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-context-menu.js",
-  "type": "module",
   "module": "vaadin-context-menu.js",
+  "type": "module",
   "files": [
     "src",
     "theme",
