@@ -110,7 +110,7 @@ registerStyles(
     /* Month scroller */
 
     [part='months'] {
-      --vaadin-infinite-scroller-item-height: 320px;
+      --vaadin-infinite-scroller-item-height: 328px;
       text-align: center;
     }
 
