@@ -35,21 +35,11 @@
 
       const select = document.querySelector('vaadin-select');
       select.focusElement.setAttribute('aria-label', 'Country code');
-      select.renderer = (root) => {
-        if (root.firstChild) {
-          return;
-        }
-
-        const listBox = document.createElement('vaadin-list-box');
-        ['+358', '+46', '+34', '+380'].forEach((name) => {
-          const item = document.createElement('vaadin-item');
-          item.textContent = name;
-          item.setAttribute('label', name);
-          listBox.appendChild(item);
-        });
-
-        root.appendChild(listBox);
-      };
+      select.items = ['+358', '+46', '+34', '+380'].map((value) => {
+        return {
+          label: value
+        };
+      });
 
       document.querySelector('vaadin-text-field').focusElement.setAttribute('aria-label', 'Area code');
 
