@@ -487,6 +487,20 @@ describe('field-mixin', () => {
           expect(element._helperNode).to.equal(defaultHelper);
         });
 
+        it('should restore the default helper when helperText property is restored', async () => {
+          element.appendChild(helper);
+          await nextFrame();
+
+          element.helperText = '';
+
+          element.removeChild(helper);
+          await nextFrame();
+
+          element.helperText = 'Helper';
+          await nextFrame();
+          expect(element._helperNode).to.equal(defaultHelper);
+        });
+
         it('should keep has-helper attribute when the default helper is restored', async () => {
           element.appendChild(helper);
           await nextFrame();
