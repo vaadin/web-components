@@ -358,6 +358,22 @@ describe('field-mixin', () => {
       });
     });
 
+    describe('slotted with property', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`
+          <field-mixin-element helper-text="Default">
+            <div slot="helper">Custom</div>
+          </field-mixin-element>
+        `);
+        await nextFrame();
+        helper = element.querySelector('[slot=helper]');
+      });
+
+      it('should not override slotted helper with property on attach', () => {
+        expect(helper.textContent).to.equal('Custom');
+      });
+    });
+
     describe('slotted empty', () => {
       beforeEach(() => {
         element = fixtureSync(`
@@ -467,6 +483,20 @@ describe('field-mixin', () => {
           await nextFrame();
 
           element.removeChild(helper);
+          await nextFrame();
+          expect(element._helperNode).to.equal(defaultHelper);
+        });
+
+        it('should restore the default helper when helperText property is restored', async () => {
+          element.appendChild(helper);
+          await nextFrame();
+
+          element.helperText = '';
+
+          element.removeChild(helper);
+          await nextFrame();
+
+          element.helperText = 'Helper';
           await nextFrame();
           expect(element._helperNode).to.equal(defaultHelper);
         });
