@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-password-field.js",
+  "type": "module",
   "module": "vaadin-password-field.js",
   "files": [
     "src",

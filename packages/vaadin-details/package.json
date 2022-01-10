@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/vaadin-details/issues"
   },
   "main": "vaadin-details.js",
+  "type": "module",
   "module": "vaadin-details.js",
   "files": [
     "src",

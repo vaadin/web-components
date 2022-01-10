@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/vaadin-checkbox/issues"
   },
   "main": "vaadin-checkbox.js",
+  "type": "module",
   "module": "vaadin-checkbox.js",
   "files": [
     "src",

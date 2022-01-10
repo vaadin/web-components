@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/vaadin-upload/issues"
   },
   "main": "vaadin-upload.js",
+  "type": "module",
   "module": "vaadin-upload.js",
   "files": [
     "src",

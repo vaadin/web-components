@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-virtual-list.js",
+  "type": "module",
   "module": "vaadin-virtual-list.js",
   "files": [
     "src",

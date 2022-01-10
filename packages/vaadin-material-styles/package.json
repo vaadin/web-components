@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/vaadin-material-styles/issues"
   },
   "main": "all-imports.js",
+  "type": "module",
   "module": "all-imports.js",
   "scripts": {
     "icons": "gulp icons"

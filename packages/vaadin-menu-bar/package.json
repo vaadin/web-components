@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-menu-bar.js",
+  "type": "module",
   "module": "vaadin-menu-bar.js",
   "files": [
     "src",

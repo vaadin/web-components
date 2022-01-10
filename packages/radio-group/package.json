@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-radio-group.js",
+  "type": "module",
   "module": "vaadin-radio-group.js",
   "files": [
     "src",

@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/vaadin-tabs/issues"
   },
   "main": "vaadin-tabs.js",
+  "type": "module",
   "module": "vaadin-tabs.js",
   "files": [
     "src",

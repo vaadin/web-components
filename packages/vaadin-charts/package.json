@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/vaadin-charts/issues"
   },
   "main": "vaadin-chart.js",
+  "type": "module",
   "module": "vaadin-chart.js",
   "files": [
     "src",

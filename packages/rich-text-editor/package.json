@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-rich-text-editor.js",
+  "type": "module",
   "module": "vaadin-rich-text-editor.js",
   "scripts": {
     "icons": "gulp icons"

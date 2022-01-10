@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/vaadin-cookie-consent/issues"
   },
   "main": "vaadin-cookie-consent.js",
+  "type": "module",
   "module": "vaadin-cookie-consent.js",
   "files": [
     "src",

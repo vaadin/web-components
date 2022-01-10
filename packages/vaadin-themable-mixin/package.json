@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/vaadin-themable-mixin/issues"
   },
   "main": "vaadin-themable-mixin.js",
+  "type": "module",
   "module": "vaadin-themable-mixin.js",
   "files": [
     "*.d.ts",

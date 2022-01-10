@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-message-input.js",
+  "type": "module",
   "module": "vaadin-message-input.js",
   "files": [
     "src",

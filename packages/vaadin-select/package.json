@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/vaadin-select/issues"
   },
   "main": "vaadin-select.js",
+  "type": "module",
   "module": "vaadin-select.js",
   "files": [
     "src",

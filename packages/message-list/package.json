@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-message-list.js",
+  "type": "module",
   "module": "vaadin-message-list.js",
   "files": [
     "src",

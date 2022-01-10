@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/vaadin-radio-button/issues"
   },
   "main": "vaadin-radio-button.js",
+  "type": "module",
   "module": "vaadin-radio-button.js",
   "files": [
     "src",

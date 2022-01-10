@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-form-layout.js",
+  "type": "module",
   "module": "vaadin-form-layout.js",
   "files": [
     "src",

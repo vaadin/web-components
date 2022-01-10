@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/vaadin-rich-text-editor/issues"
   },
   "main": "vaadin-rich-text-editor.js",
+  "type": "module",
   "module": "vaadin-rich-text-editor.js",
   "files": [
     "src",

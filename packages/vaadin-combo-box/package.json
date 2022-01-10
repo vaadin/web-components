@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/vaadin-combo-box/issues"
   },
   "main": "vaadin-combo-box.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

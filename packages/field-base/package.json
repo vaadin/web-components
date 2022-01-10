@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/web-components"
   },
   "main": "index.js",
+  "type": "module",
   "module": "index.js",
   "files": [
     "index.d.ts",

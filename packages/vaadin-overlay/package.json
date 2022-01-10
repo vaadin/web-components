@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/vaadin-overlay/issues"
   },
   "main": "vaadin-overlay.js",
+  "type": "module",
   "module": "vaadin-overlay.js",
   "files": [
     "src",

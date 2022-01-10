@@ -17,6 +17,7 @@
     "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-number-field.js",
+  "type": "module",
   "module": "vaadin-number-field.js",
   "files": [
     "src",
