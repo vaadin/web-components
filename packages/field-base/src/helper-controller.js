@@ -66,8 +66,9 @@ export class HelperController extends SlotController {
   setHelperText(helperText) {
     this.helperText = helperText;
 
-    if (!this.node || this.node === this.defaultNode) {
-      this.__applyDefaultHelper(helperText, this.defaultNode);
+    const helperNode = this.getSlotChild();
+    if (!helperNode || helperNode === this.defaultNode) {
+      this.__applyDefaultHelper(helperText, helperNode);
     }
   }
 
