@@ -18,6 +18,7 @@
   },
   "main": "vaadin-date-picker.js",
   "module": "vaadin-date-picker.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

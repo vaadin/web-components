@@ -18,6 +18,7 @@
   },
   "main": "vaadin-confirm-dialog.js",
   "module": "vaadin-confirm-dialog.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

@@ -18,6 +18,7 @@
   },
   "main": "vaadin-menu-bar.js",
   "module": "vaadin-menu-bar.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

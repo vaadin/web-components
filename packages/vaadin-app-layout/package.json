@@ -18,6 +18,7 @@
   },
   "main": "vaadin-app-layout.js",
   "module": "vaadin-app-layout.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

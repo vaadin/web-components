@@ -18,6 +18,7 @@
   },
   "main": "vaadin-field-highlighter.js",
   "module": "vaadin-field-highlighter.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

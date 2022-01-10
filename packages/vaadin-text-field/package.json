@@ -18,6 +18,7 @@
   },
   "main": "vaadin-text-field.js",
   "module": "vaadin-text-field.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

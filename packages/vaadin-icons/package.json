@@ -18,6 +18,7 @@
   },
   "main": "vaadin-icons.js",
   "module": "vaadin-icons.js",
+  "type": "module",
   "files": [
     "iconset.js",
     "vaadin-icons.js",

@@ -18,6 +18,7 @@
   },
   "main": "vaadin-message-list.js",
   "module": "vaadin-message-list.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

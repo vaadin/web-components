@@ -18,6 +18,7 @@
   },
   "main": "vaadin-grid-pro.js",
   "module": "vaadin-grid-pro.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

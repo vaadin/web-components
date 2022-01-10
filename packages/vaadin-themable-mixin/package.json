@@ -18,6 +18,7 @@
   },
   "main": "vaadin-themable-mixin.js",
   "module": "vaadin-themable-mixin.js",
+  "type": "module",
   "files": [
     "*.d.ts",
     "register-styles.js",

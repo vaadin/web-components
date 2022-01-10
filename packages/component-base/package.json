@@ -18,6 +18,7 @@
   },
   "main": "index.js",
   "module": "index.js",
+  "type": "module",
   "files": [
     "custom_typings",
     "index.d.ts",

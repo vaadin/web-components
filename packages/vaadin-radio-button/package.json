@@ -18,6 +18,7 @@
   },
   "main": "vaadin-radio-button.js",
   "module": "vaadin-radio-button.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

@@ -18,6 +18,7 @@
   },
   "main": "vaadin-form-layout.js",
   "module": "vaadin-form-layout.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

@@ -18,6 +18,7 @@
   },
   "main": "vaadin-password-field.js",
   "module": "vaadin-password-field.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

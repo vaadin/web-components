@@ -18,6 +18,7 @@
   },
   "main": "vaadin-login-overlay.js",
   "module": "vaadin-login-overlay.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

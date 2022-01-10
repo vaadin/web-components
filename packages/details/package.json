@@ -18,6 +18,7 @@
   },
   "main": "vaadin-details.js",
   "module": "vaadin-details.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

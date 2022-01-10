@@ -18,6 +18,7 @@
   },
   "main": "all-imports.js",
   "module": "all-imports.js",
+  "type": "module",
   "scripts": {
     "icons": "gulp icons"
   },

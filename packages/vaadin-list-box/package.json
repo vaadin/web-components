@@ -18,6 +18,7 @@
   },
   "main": "vaadin-list-box.js",
   "module": "vaadin-list-box.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

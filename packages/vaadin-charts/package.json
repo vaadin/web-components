@@ -18,6 +18,7 @@
   },
   "main": "vaadin-chart.js",
   "module": "vaadin-chart.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

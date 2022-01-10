@@ -18,6 +18,7 @@
   },
   "main": "vaadin-tabs.js",
   "module": "vaadin-tabs.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

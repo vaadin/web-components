@@ -18,6 +18,7 @@
   },
   "main": "imports.js",
   "module": "imports.js",
+  "type": "module",
   "files": [
     "imports.d.ts",
     "imports.js",

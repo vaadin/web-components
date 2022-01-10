@@ -18,6 +18,7 @@
   },
   "main": "vaadin-accordion.js",
   "module": "vaadin-accordion.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

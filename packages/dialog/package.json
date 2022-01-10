@@ -18,6 +18,7 @@
   },
   "main": "vaadin-dialog.js",
   "module": "vaadin-dialog.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

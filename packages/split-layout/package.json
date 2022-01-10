@@ -18,6 +18,7 @@
   },
   "main": "vaadin-split-layout.js",
   "module": "vaadin-split-layout.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

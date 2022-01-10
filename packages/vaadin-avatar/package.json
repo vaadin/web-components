@@ -18,6 +18,7 @@
   },
   "main": "vaadin-avatar-group.js",
   "module": "vaadin-avatar-group.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

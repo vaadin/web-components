@@ -18,6 +18,7 @@
   },
   "main": "vaadin-number-field.js",
   "module": "vaadin-number-field.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

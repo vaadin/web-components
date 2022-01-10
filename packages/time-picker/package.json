@@ -18,6 +18,7 @@
   },
   "main": "vaadin-time-picker.js",
   "module": "vaadin-time-picker.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

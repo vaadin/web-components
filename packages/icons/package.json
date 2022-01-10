@@ -18,6 +18,7 @@
   },
   "main": "vaadin-iconset.js",
   "module": "vaadin-iconset.js",
+  "type": "module",
   "scripts": {
     "icons": "gulp icons"
   },

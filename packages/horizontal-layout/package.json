@@ -18,6 +18,7 @@
   },
   "main": "vaadin-horizontal-layout.js",
   "module": "vaadin-horizontal-layout.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

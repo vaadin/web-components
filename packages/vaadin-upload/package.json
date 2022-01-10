@@ -18,6 +18,7 @@
   },
   "main": "vaadin-upload.js",
   "module": "vaadin-upload.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

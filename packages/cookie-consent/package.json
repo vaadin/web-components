@@ -18,6 +18,7 @@
   },
   "main": "vaadin-cookie-consent.js",
   "module": "vaadin-cookie-consent.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

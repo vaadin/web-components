@@ -18,6 +18,7 @@
   },
   "main": "vaadin-notification.js",
   "module": "vaadin-notification.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

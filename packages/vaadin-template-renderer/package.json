@@ -18,6 +18,7 @@
   },
   "main": "vaadin-template-renderer.js",
   "module": "vaadin-template-renderer.js",
+  "type": "module",
   "files": [
     "vaadin-*.js"
   ],

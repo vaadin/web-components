@@ -18,6 +18,7 @@
   },
   "main": "vaadin-list-mixin.js",
   "module": "vaadin-list-mixin.js",
+  "type": "module",
   "files": [
     "*.d.ts",
     "vaadin-*.js"

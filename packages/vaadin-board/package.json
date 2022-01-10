@@ -18,6 +18,7 @@
   },
   "main": "vaadin-board.js",
   "module": "vaadin-board.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

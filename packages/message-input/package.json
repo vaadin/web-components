@@ -18,6 +18,7 @@
   },
   "main": "vaadin-message-input.js",
   "module": "vaadin-message-input.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

@@ -18,6 +18,7 @@
   },
   "main": "vaadin-scroller.js",
   "module": "vaadin-scroller.js",
+  "type": "module",
   "files": [
     "src",
     "theme",

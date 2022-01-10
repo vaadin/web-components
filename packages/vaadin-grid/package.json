@@ -18,6 +18,7 @@
   },
   "main": "vaadin-grid.js",
   "module": "vaadin-grid.js",
+  "type": "module",
   "files": [
     "all-imports.js",
     "src",
