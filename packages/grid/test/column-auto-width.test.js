@@ -68,6 +68,18 @@ describe('column auto-width', function () {
     expectColumnWidthsToBeOk(columns);
   });
 
+  it('should have correct column widths when items are set after setting an empty items array', async () => {
+    // Set an empty items array to the grid
+    grid.items = [];
+    flushGrid(grid);
+
+    // Assign new items with the second one having a long value
+    grid.items = [{ a: 'a' }, { a: 'aaaaaaaa' }];
+    await nextFrame();
+
+    expectColumnWidthsToBeOk(grid.querySelectorAll('vaadin-grid-column'), [101]);
+  });
+
   it('should have correct column widths when the grid is visually scaled', async () => {
     grid.style.transform = 'scale(0.5)';
     grid.items = testItems;
