@@ -53,7 +53,10 @@ describe('button', () => {
 
       it(`${variant} hover`, async () => {
         element.setAttribute('theme', `${variant}`);
-        await hover(element);
+        await new Promise((resolve) => {
+          element.addEventListener('transitionend', resolve, { once: true });
+          hover(element);
+        });
         await visualDiff(div, `theme-${variant}-hover`);
       });
     });
