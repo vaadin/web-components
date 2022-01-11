@@ -4,6 +4,7 @@ import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon/theme/lumo/vaadin-icon.js';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '../../../theme/lumo/vaadin-button.js';
+import { hover, resetHover } from '../helpers.js';
 
 describe('button', () => {
   let div, element;
@@ -13,6 +14,10 @@ describe('button', () => {
     div.style.display = 'inline-block';
     div.style.padding = '10px';
     element = fixtureSync('<vaadin-button>Button</vaadin-button>', div);
+  });
+
+  afterEach(async () => {
+    await resetHover();
   });
 
   describe('basic', () => {
@@ -50,6 +55,12 @@ describe('button', () => {
       await visualDiff(div, 'theme-primary-disabled');
     });
 
+    it('primary hover', async () => {
+      element.setAttribute('theme', 'primary');
+      await hover(element);
+      await visualDiff(div, 'theme-primary-hover');
+    });
+
     it('primary active', async () => {
       element.setAttribute('theme', 'primary');
       mousedown(element);
@@ -67,6 +78,12 @@ describe('button', () => {
       await visualDiff(div, 'theme-secondary');
     });
 
+    it('secondary hover', async () => {
+      element.setAttribute('theme', 'secondary');
+      await hover(element);
+      await visualDiff(div, 'theme-secondary-hover');
+    });
+
     it('secondary disabled', async () => {
       element.setAttribute('theme', 'secondary');
       element.disabled = true;
@@ -76,6 +93,12 @@ describe('button', () => {
     it('tertiary', async () => {
       element.setAttribute('theme', 'tertiary');
       await visualDiff(div, 'theme-tertiary');
+    });
+
+    it('tertiary hover', async () => {
+      element.setAttribute('theme', 'tertiary');
+      await hover(element);
+      await visualDiff(div, 'theme-tertiary-hover');
     });
 
     it('tertiary disabled', async () => {

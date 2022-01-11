@@ -2096,7 +2096,15 @@
     "@web/test-runner-core" "^0.10.20"
     mkdirp "^1.0.4"
 
-"@web/test-runner-commands@^0.6.0", "@web/test-runner-commands@^0.6.1":
+"@web/test-runner-commands@^0.6.0":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@web/test-runner-commands/-/test-runner-commands-0.6.1.tgz#2df5d98430d4b61161bab778e0929dbc467610c0"
+  integrity sha512-P4aQqp0duumeGdGxQ8TwLnplkrXzpLqb47eSEEqBRS//C1H7s6VskaqEng+k0dbk+cSpEa4RuZGY/G5k8aTjTw==
+  dependencies:
+    "@web/test-runner-core" "^0.10.20"
+    mkdirp "^1.0.4"
+
+"@web/test-runner-commands@^0.6.1":
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/@web/test-runner-commands/-/test-runner-commands-0.6.1.tgz#2df5d98430d4b61161bab778e0929dbc467610c0"
   integrity sha512-P4aQqp0duumeGdGxQ8TwLnplkrXzpLqb47eSEEqBRS//C1H7s6VskaqEng+k0dbk+cSpEa4RuZGY/G5k8aTjTw==
