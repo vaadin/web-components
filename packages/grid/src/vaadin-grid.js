@@ -582,6 +582,9 @@ class Grid extends ElementMixin(
    * @private
    */
   _recalculateColumnWidths(cols) {
+    // Flush to make sure DOM is up-to-date when measuring the column widths
+    this.__virtualizer.flush();
+
     cols.forEach((col) => {
       col.width = `${this.__getDistributedWidth(col)}px`;
     });
