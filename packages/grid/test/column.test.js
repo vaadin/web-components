@@ -542,3 +542,30 @@ describe('column', () => {
     expect(grid.size).to.equal(11);
   });
 });
+
+describe('column - simple grid', () => {
+  let grid, column;
+
+  beforeEach(async () => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+          <vaadin-grid-column path="value"></vaadin-grid-column>
+      </vaadin-grid>`);
+    column = grid.querySelector('vaadin-grid-column');
+    grid.size = 1;
+    grid.dataProvider = infiniteDataProvider;
+    await nextFrame();
+  });
+
+  it('should have intact cell structure after changing size and column visibility', async () => {
+    column.hidden = true;
+    await nextFrame();
+
+    column.hidden = false;
+    grid.size = 2;
+    await nextFrame();
+
+    expect(getBodyCellContent(grid, 0, 0).textContent.trim()).to.equal('foo0');
+    expect(getBodyCellContent(grid, 1, 0).textContent.trim()).to.equal('foo1');
+  });
+});
