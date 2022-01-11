@@ -448,6 +448,10 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       cells.forEach((cell) => {
+        if (!cell.parentElement) {
+          return;
+        }
+
         const model = this._grid.__getRowModel(cell.parentElement);
 
         if (!renderer) return;
