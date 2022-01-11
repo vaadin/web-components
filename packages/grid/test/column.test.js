@@ -549,8 +549,9 @@ describe('column - simple grid', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid>
-          <vaadin-grid-column path="value"></vaadin-grid-column>
-      </vaadin-grid>`);
+        <vaadin-grid-column path="value"></vaadin-grid-column>
+      </vaadin-grid>
+    `);
     column = grid.querySelector('vaadin-grid-column');
     grid.size = 1;
     grid.dataProvider = infiniteDataProvider;
