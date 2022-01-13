@@ -23,6 +23,13 @@ assertType<boolean>(select.readonly);
 assertType<() => void>(select.requestContentUpdate);
 assertType<() => boolean>(select.validate);
 
+// Item properties
+const item: SelectItem = select.items![0];
+assertType<string | undefined>(item.label);
+assertType<string | undefined>(item.value);
+assertType<boolean | undefined>(item.disabled);
+assertType<string | undefined>(item.component);
+
 // Events
 select.addEventListener('change', (event) => {
   assertType<SelectChangeEvent>(event);

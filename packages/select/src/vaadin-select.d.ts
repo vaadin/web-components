@@ -11,6 +11,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 export interface SelectItem {
   label?: string;
+  value?: string;
   component?: string;
   disabled?: boolean;
 }
