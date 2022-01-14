@@ -25,8 +25,12 @@ const multiSelectComboBox = css`
     color: transparent !important;
   }
 
-  :host([has-value]:not([compact-mode]):not([readonly])) {
-    --vaadin-field-default-width: auto;
+  :host([has-value]:not([compact-mode]):not([readonly])) [class$='container'] {
+    width: auto;
+  }
+
+  #chips {
+    max-width: calc(100% - var(--vaadin-field-default-width, 12em));
   }
 `;
 

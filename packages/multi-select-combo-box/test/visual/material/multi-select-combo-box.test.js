@@ -99,6 +99,12 @@ describe('multi-select-combo-box', () => {
       element.disabled = true;
       await visualDiff(div, 'selected-disabled');
     });
+
+    it('multi-line', async () => {
+      element.style.maxWidth = '400px';
+      element.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
+      await visualDiff(div, 'selected-multi-line');
+    });
   });
 
   describe('compact mode', () => {
@@ -131,7 +137,6 @@ describe('multi-select-combo-box', () => {
   describe('opened', () => {
     beforeEach(() => {
       div.style.height = '200px';
-      div.style.width = '200px';
       element.$.comboBox.click();
     });
 

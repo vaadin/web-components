@@ -15,6 +15,7 @@ const chip = css`
   :host {
     display: flex;
     align-items: center;
+    margin: 0 0 var(--lumo-space-xs);
     padding-inline-start: var(--lumo-space-s);
     border-radius: var(--lumo-border-radius);
     background-color: var(--lumo-contrast-20pct);
@@ -62,6 +63,10 @@ registerStyles('vaadin-multi-select-combo-box-chip', [fieldButton, chip], {
 registerStyles(
   'vaadin-multi-select-combo-box-chips',
   css`
+    :host {
+      margin: var(--lumo-space-xs) 0 0;
+    }
+
     [part='chip']:not(:last-of-type) {
       margin-inline-end: var(--lumo-space-xs);
     }

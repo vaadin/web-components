@@ -10,6 +10,15 @@ import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-fi
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const multiSelectComboBox = css`
+  [part='input-field'] {
+    height: auto;
+    min-height: 32px;
+  }
+
+  [part='input-field'] ::slotted(input) {
+    padding: 6px 0;
+  }
+
   [part='compact-mode-prefix'] {
     color: var(--material-body-text-color);
     font-family: var(--material-font-family);
