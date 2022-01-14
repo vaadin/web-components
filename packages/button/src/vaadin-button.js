@@ -3,10 +3,11 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -45,62 +46,65 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
+class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement)))))) {
   static get is() {
     return 'vaadin-button';
   }
 
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: inline-block;
-          position: relative;
-          outline: none;
-          white-space: nowrap;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          user-select: none;
-        }
+  static get styles() {
+    return css`
+      :host {
+        display: inline-block;
+        position: relative;
+        outline: none;
+        white-space: nowrap;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
 
-        :host([hidden]) {
-          display: none !important;
-        }
+      :host([hidden]) {
+        display: none !important;
+      }
 
-        /* Aligns the button with form fields when placed on the same line.
+      /* Aligns the button with form fields when placed on the same line.
           Note, to make it work, the form fields should have the same "::before" pseudo-element. */
-        .vaadin-button-container::before {
-          content: '\\2003';
-          display: inline-block;
-          width: 0;
-        }
+      .vaadin-button-container::before {
+        content: '\\2003';
+        display: inline-block;
+        width: 0;
+      }
 
-        .vaadin-button-container {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          width: 100%;
-          height: 100%;
-          min-height: inherit;
-          text-shadow: inherit;
-          background: transparent;
-          padding: 0;
-          border: none;
-          box-shadow: none;
-        }
+      .vaadin-button-container {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+        height: 100%;
+        min-height: inherit;
+        text-shadow: inherit;
+        background: transparent;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+      }
 
-        [part='prefix'],
-        [part='suffix'] {
-          flex: none;
-        }
+      [part='prefix'],
+      [part='suffix'] {
+        flex: none;
+      }
 
-        [part='label'] {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-      </style>
+      [part='label'] {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    `;
+  }
+
+  render() {
+    return html`
       <div class="vaadin-button-container">
         <span part="prefix">
           <slot name="prefix"></slot>

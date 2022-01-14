@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-button.js';
@@ -26,8 +26,9 @@ describe('vaadin-button', () => {
 
   describe('role', () => {
     describe('default', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         element = fixtureSync('<vaadin-button>Press me</vaadin-button>');
+        await nextFrame();
       });
 
       it('should set role attribute to button by default', () => {
@@ -47,8 +48,9 @@ describe('vaadin-button', () => {
   });
 
   describe('keyboard', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       element = fixtureSync('<vaadin-button>Press me</vaadin-button>');
+      await nextFrame();
       element.focus();
     });
 
