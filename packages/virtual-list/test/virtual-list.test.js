@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-virtual-list.js';
 
 describe('virtual-list', () => {
@@ -38,7 +38,7 @@ describe('virtual-list', () => {
   });
 
   describe('with items', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const size = 100;
 
       list.items = new Array(size).fill().map((e, i) => {
@@ -46,6 +46,7 @@ describe('virtual-list', () => {
       });
 
       list.renderer = (el, list, model) => (el.textContent = model.item.value);
+      await nextFrame();
     });
 
     it('should include div elements', () => {
@@ -53,27 +54,31 @@ describe('virtual-list', () => {
       expect(list.children[0].localName).to.equal('div');
     });
 
-    it('should hide all the item elements', () => {
+    it('should hide all the item elements', async () => {
       list.items = undefined;
+      await nextFrame();
       [...list.children].forEach((el) => expect(el.hidden).to.be.true);
     });
 
-    it('should not throw on missing renderer', () => {
+    it('should not throw on missing renderer', async () => {
       list.renderer = undefined;
+      await nextFrame();
       expect(() => list.scrollToIndex(50)).not.to.throw();
     });
 
-    it('should change the items to an array of same size', () => {
+    it('should change the items to an array of same size', async () => {
       list.items = new Array(list.items.length).fill().map((e, i) => {
         return { value: `text-${i}` };
       });
+      await nextFrame();
       expect(list.children[0].textContent.trim()).to.equal('text-0');
     });
 
-    it('should change the items to a shorter array', () => {
+    it('should change the items to a shorter array', async () => {
       list.items = new Array(list.items.length - 1).fill().map((e, i) => {
         return { value: `text-${i}` };
       });
+      await nextFrame();
       expect(list.children[0].textContent.trim()).to.equal('text-0');
     });
 
@@ -101,19 +106,22 @@ describe('virtual-list', () => {
       expect(list.getBoundingClientRect().bottom).to.be.within(itemRect.top, itemRect.bottom);
     });
 
-    it('should clear the old content after assigning a new renderer', () => {
+    it('should clear the old content after assigning a new renderer', async () => {
       list.renderer = () => {};
+      await nextFrame();
       expect(list.children[0].textContent.trim()).to.equal('');
     });
 
-    it('should clear the old content after removing the renderer', () => {
+    it('should clear the old content after removing the renderer', async () => {
       list.renderer = null;
+      await nextFrame();
       expect(list.children[0].textContent.trim()).to.equal('');
     });
 
-    it('should update content on request', () => {
+    it('should update content on request', async () => {
       let name = 'foo';
       list.renderer = (root) => (root.textContent = name);
+      await nextFrame();
       expect(list.children[0].textContent.trim()).to.equal('foo');
 
       name = 'bar';

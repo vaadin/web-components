@@ -3,8 +3,9 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -30,27 +31,29 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
-  static get template() {
+class VirtualList extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) {
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+        height: 400px;
+        overflow: auto;
+        flex: auto;
+        align-self: stretch;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host(:not([grid])) #items > ::slotted(*) {
+        width: 100%;
+      }
+    `;
+  }
+
+  render() {
     return html`
-      <style>
-        :host {
-          display: block;
-          height: 400px;
-          overflow: auto;
-          flex: auto;
-          align-self: stretch;
-        }
-
-        :host([hidden]) {
-          display: none !important;
-        }
-
-        :host(:not([grid])) #items > ::slotted(*) {
-          width: 100%;
-        }
-      </style>
-
       <div id="items">
         <slot></slot>
       </div>

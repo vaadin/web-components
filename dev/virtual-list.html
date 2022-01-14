@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtual list</title>
+  </head>
+  <body>
+    <script type="module">
+      import '@vaadin/virtual-list';
+
+      const virtualList = document.querySelector('vaadin-virtual-list');
+
+      virtualList.renderer = (root, _, { item }) => {
+        root.textContent = item.name;
+      };
+      
+      virtualList.items = [...Array(1000).keys()].map(i => ({
+        name: `Item ${i}`
+      }));
+    </script>
+
+    <vaadin-virtual-list></vaadin-virtual-list>
+  </body>
+</html>
