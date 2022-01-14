@@ -137,6 +137,14 @@ describe('basic', () => {
       expect(comboBox.hasAttribute('has-value')).to.be.true;
     });
 
+    it('should keep has-value attribute after user clears input value', async () => {
+      comboBox.selectedItems = ['apple', 'banana'];
+      await nextFrame();
+      await sendKeys({ type: 'o' });
+      await sendKeys({ down: 'Backspace' });
+      expect(comboBox.hasAttribute('has-value')).to.be.true;
+    });
+
     it('should clear last selected item on Backspace if input has no value', async () => {
       comboBox.selectedItems = ['apple', 'banana'];
       await nextFrame();
