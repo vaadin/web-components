@@ -27,6 +27,11 @@ const PolylitMixinImplementation = (superclass) => {
 
       let result = defaultDescriptor;
 
+      if ('value' in options) {
+        // Set the default value
+        this.addInitializer((instance) => (instance[name] = options.value));
+      }
+
       if (options.readOnly) {
         const setter = defaultDescriptor.set;
 
