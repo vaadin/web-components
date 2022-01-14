@@ -360,6 +360,100 @@ describe('PolylitMixin', () => {
     });
   });
 
+  describe('complex observer', () => {
+    let element;
+    let valueOrLoadingChangedSpy, countOrLoadingChangedSpy;
+
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        static get properties() {
+          return {
+            value: {
+              type: String
+            },
+
+            loading: {
+              type: Boolean
+            },
+
+            count: {
+              type: Number,
+              value: 0
+            },
+
+            id: {
+              type: Number
+            }
+          };
+        }
+
+        static get observers() {
+          return ['_valueOrLoadingChanged(value, loading)', '_countOrLoadingChanged(count, loading)', '_idChanged(id)'];
+        }
+
+        render() {
+          return html`${this.value}`;
+        }
+
+        _valueOrLoadingChanged(_value, _loading) {}
+
+        _countOrLoadingChanged(_count, _loading) {}
+      }
+    );
+
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      valueOrLoadingChangedSpy = sinon.spy(element, '_valueOrLoadingChanged');
+      countOrLoadingChangedSpy = sinon.spy(element, '_countOrLoadingChanged');
+      await element.updateComplete;
+    });
+
+    it('should run complex observer once a property value changes', async () => {
+      element.value = 'foo';
+      await element.updateComplete;
+      expect(valueOrLoadingChangedSpy.calledOnce).to.be.true;
+    });
+
+    it('should run complex observer only once on multiple property changes', async () => {
+      element.value = 'foo';
+      element.loading = true;
+      await element.updateComplete;
+      expect(valueOrLoadingChangedSpy.calledOnce).to.be.true;
+    });
+
+    it('should pass the dependencies as arguments to the complex observer function', async () => {
+      element.value = 'foo';
+      element.loading = true;
+      await element.updateComplete;
+      expect(valueOrLoadingChangedSpy.getCall(0).args).to.eql(['foo', true]);
+    });
+
+    it('should not run complex observer whose dependencies have not intialized', async () => {
+      expect(valueOrLoadingChangedSpy.called).to.be.false;
+    });
+
+    it('should run a complex observer whose dependency has a default value', async () => {
+      expect(countOrLoadingChangedSpy.calledOnce).to.be.true;
+    });
+
+    describe('missing', () => {
+      before(() => {
+        sinon.stub(console, 'warn');
+      });
+
+      after(() => {
+        console.warn.restore();
+      });
+
+      it('should warn for each missing observer', async () => {
+        element.id = 1;
+        await element.updateComplete;
+        expect(console.warn.calledOnce).to.be.true;
+        expect(console.warn.firstCall.args[0]).to.include('_idChanged');
+      });
+    });
+  });
+
   describe('notify', () => {
     let element;
 

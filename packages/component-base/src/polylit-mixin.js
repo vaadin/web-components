@@ -22,6 +22,33 @@ const PolylitMixinImplementation = (superclass) => {
       super.createProperty(name, options);
     }
 
+    /*
+     * @protected
+     * @override
+     */
+    static finalize() {
+      super.finalize();
+
+      if (Array.isArray(this.observers)) {
+        if (!this.__complexObservers) {
+          this.__complexObservers = [];
+
+          this.observers.forEach((observer) => {
+            const [method, rest] = observer.split('(');
+            const observerProps = rest
+              .replace(')', '')
+              .split(',')
+              .map((prop) => prop.trim());
+
+            this.__complexObservers.push({
+              method,
+              observerProps
+            });
+          });
+        }
+      }
+    }
+
     static getPropertyDescriptor(name, key, options) {
       const defaultDescriptor = super.getPropertyDescriptor(name, key, options);
 
@@ -71,10 +98,7 @@ const PolylitMixinImplementation = (superclass) => {
         this.addInitializer((instance) => {
           if (!instance[method]) {
             console.warn(`observer method ${method} not defined`);
-            return;
           }
-
-          instance.__patchUpdate();
         });
       }
 
@@ -90,10 +114,6 @@ const PolylitMixinImplementation = (superclass) => {
 
         // set this method
         this.__notifyProps.add(name);
-
-        this.addInitializer((instance) => {
-          instance.__patchUpdate();
-        });
       }
 
       return result;
@@ -113,29 +133,32 @@ const PolylitMixinImplementation = (superclass) => {
       this.ready();
     }
 
-    /** @private */
-    __patchUpdate() {
-      if (this.__updatePatched) {
-        return;
+    /** @protected */
+    willUpdate(props) {
+      if (this.constructor.__observers) {
+        this.__runObservers(props, this.constructor.__observers);
       }
 
-      // Use willUpdate to make sure property changes triggered
-      // by observers are included to the same update batch.
-      const willUpdate = Object.getPrototypeOf(this).willUpdate;
+      if (this.constructor.__notifyProps) {
+        this.__runNotifyProps(props, this.constructor.__notifyProps);
+      }
 
-      this.willUpdate = function (props) {
-        willUpdate.call(this, props);
+      if (this.constructor.__complexObservers) {
+        this.__runComplexObservers(props, this.constructor.__complexObservers);
+      }
+    }
 
-        if (this.constructor.__observers) {
-          this.__runObservers(props, this.constructor.__observers);
+    /** @private */
+    __runComplexObservers(props, observers) {
+      observers.forEach(({ method, observerProps }) => {
+        if (observerProps.some((prop) => props.has(prop))) {
+          if (!this[method]) {
+            console.warn(`observer method ${method} not defined`);
+          } else {
+            this[method](...observerProps.map((prop) => this[prop]));
+          }
         }
-
-        if (this.constructor.__notifyProps) {
-          this.__runNotifyProps(props, this.constructor.__notifyProps);
-        }
-      };
-
-      this.__updatePatched = true;
+      });
     }
 
     /** @private */
