@@ -425,4 +425,33 @@ describe('PolylitMixin', () => {
       expect(spy.calledOnce).to.be.true;
     });
   });
+
+  describe('value', () => {
+    let element;
+
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        static get properties() {
+          return {
+            value: {
+              type: Number,
+              value: 0
+            }
+          };
+        }
+      }
+    );
+
+    it('should have a default value', async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await element.updateComplete;
+      expect(element.value).to.equal(0);
+    });
+
+    it('should not override initial value', async () => {
+      element = fixtureSync(`<${tag} value="1"></${tag}>`);
+      await element.updateComplete;
+      expect(element.value).to.equal(1);
+    });
+  });
 });
