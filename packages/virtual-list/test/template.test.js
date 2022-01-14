@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-virtual-list.js';
 
 describe('template', () => {
   let list;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     list = fixtureSync(`
       <vaadin-virtual-list>
         <template>
@@ -16,6 +16,7 @@ describe('template', () => {
     `);
 
     list.items = [0, 1, 2];
+    await nextFrame();
   });
 
   it('should use the template to render the items', () => {
