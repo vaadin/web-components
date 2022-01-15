@@ -12,6 +12,19 @@ function upper(name) {
   return name[0].toUpperCase() + name.substring(1);
 }
 
+function parseObserver(observerString) {
+  const [method, rest] = observerString.split('(');
+  const observerProps = rest
+    .replace(')', '')
+    .split(',')
+    .map((prop) => prop.trim());
+
+  return {
+    method,
+    observerProps
+  };
+}
+
 const PolylitMixinImplementation = (superclass) => {
   class PolylitMixinClass extends superclass {
     static createProperty(name, options) {
@@ -34,16 +47,7 @@ const PolylitMixinImplementation = (superclass) => {
           this.__complexObservers = [];
 
           this.observers.forEach((observer) => {
-            const [method, rest] = observer.split('(');
-            const observerProps = rest
-              .replace(')', '')
-              .split(',')
-              .map((prop) => prop.trim());
-
-            this.__complexObservers.push({
-              method,
-              observerProps
-            });
+            this.__complexObservers.push(parseObserver(observer));
           });
         }
       }
@@ -114,6 +118,23 @@ const PolylitMixinImplementation = (superclass) => {
 
         // set this method
         this.__notifyProps.add(name);
+      }
+
+      if (options.computed) {
+        const assignComputedMethod = `__assignComputed${name}`;
+        const observer = parseObserver(options.computed);
+        this.prototype[assignComputedMethod] = function (...props) {
+          this[name] = this[observer.method](...props);
+        };
+
+        if (!this.__complexObservers) {
+          this.__complexObservers = [];
+        }
+
+        this.__complexObservers.push({
+          observerProps: observer.observerProps,
+          method: assignComputedMethod
+        });
       }
 
       return result;
