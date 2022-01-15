@@ -530,6 +530,11 @@ describe('PolylitMixin', () => {
             value: {
               type: Number,
               value: 0
+            },
+
+            count: {
+              type: Number,
+              value: () => 0
             }
           };
         }
@@ -546,6 +551,12 @@ describe('PolylitMixin', () => {
       element = fixtureSync(`<${tag} value="1"></${tag}>`);
       await element.updateComplete;
       expect(element.value).to.equal(1);
+    });
+
+    it('should get the default value from a function', async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await element.updateComplete;
+      expect(element.count).to.equal(0);
     });
   });
 
