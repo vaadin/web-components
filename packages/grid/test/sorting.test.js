@@ -100,6 +100,7 @@ describe('sorting', () => {
       ];
 
       flushGrid(grid);
+      await nextFrame();
     });
 
     it('should preserve sort order for sorters when grid is re-attached', () => {
@@ -407,40 +408,46 @@ describe('sorting', () => {
     describe('sort-column', () => {
       let sortColumn, sortCellContent, sorter;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         sortColumn = grid.querySelector('vaadin-grid-sort-column');
         sortCellContent = getHeaderCellContent(grid, 0, 2);
         sorter = sortCellContent.querySelector('vaadin-grid-sorter');
+        await nextFrame();
       });
 
-      it('should propagate path property to the internal grid sorter', () => {
+      it('should propagate path property to the internal grid sorter', async () => {
         sortColumn.path = 'last';
+        await nextFrame();
         expect(sorter.path).to.equal('last');
       });
 
-      it('should propagate direction property to the internal grid sorter', () => {
+      it('should propagate direction property to the internal grid sorter', async () => {
         sortColumn.direction = 'asc';
+        await nextFrame();
         expect(sorter.direction).to.equal('asc');
       });
 
-      it('should fire direction-changed when changing the internal grid sorter direction', () => {
+      it('should fire direction-changed when changing the internal grid sorter direction', async () => {
         const spy = sinon.spy();
         sortColumn.addEventListener('direction-changed', spy);
 
         sorter.direction = 'desc';
 
+        await nextFrame();
         const event = spy.args[0][0];
         expect(spy.calledOnce).to.be.true;
         expect(event.detail.value).to.be.equal('desc');
       });
 
-      it('should use header property to determine the text that gets slotted inside the sorter', () => {
+      it('should use header property to determine the text that gets slotted inside the sorter', async () => {
         sortColumn.header = 'Last column';
+        await nextFrame();
         expect(sorter.textContent).to.equal('Last column');
       });
 
-      it('should generate the text content based on path property, if header is not defined', () => {
+      it('should generate the text content based on path property, if header is not defined', async () => {
         sortColumn.path = 'last';
+        await nextFrame();
         expect(sorter.textContent).to.equal('Last');
       });
 
@@ -457,7 +464,7 @@ describe('sorting', () => {
   describe('multiple sorters', () => {
     let grid;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid style="width: 200px; height: 200px;">
           <vaadin-grid-column>
@@ -479,6 +486,7 @@ describe('sorting', () => {
         </vaadin-grid>
       `);
       flushGrid(grid);
+      await nextFrame();
     });
 
     it('should set direction to also other than last sorter', () => {

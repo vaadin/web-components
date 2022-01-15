@@ -50,8 +50,19 @@ export const dragStart = (source) => {
   );
 };
 
+function getHostGrid(content) {
+  let grid = content.parentElement;
+  while (grid) {
+    if (grid.localName === 'vaadin-grid-pro') {
+      return grid;
+    }
+    grid = grid.parentNode || grid.host;
+  }
+}
+
 export const dragOver = (source, target, clientX) => {
   dragStart(source);
+  flushGrid(getHostGrid(target));
   const targetRect = target.getBoundingClientRect();
   fire(
     'track',
@@ -84,6 +95,12 @@ export const dragAndDropOver = (source, target) => {
 };
 
 export const flushGrid = (grid) => {
+  if (grid._columnTree) {
+    grid._columnTree[grid._columnTree.length - 1].forEach((column) => {
+      column.performUpdate && column.performUpdate();
+    });
+  }
+
   grid._observer.flush();
   if (grid._debounceScrolling) {
     grid._debounceScrolling.flush();
@@ -104,6 +121,12 @@ export const flushGrid = (grid) => {
   }
 
   grid.__virtualizer.flush();
+
+  if (grid._columnTree) {
+    grid._columnTree[grid._columnTree.length - 1].forEach((column) => {
+      column.performUpdate && column.performUpdate();
+    });
+  }
 };
 
 export const getRows = (container) => {

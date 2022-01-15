@@ -65,6 +65,7 @@ class GridSortColumn extends GridColumn {
     let sorter = root.firstElementChild;
     if (!sorter) {
       sorter = document.createElement('vaadin-grid-sorter');
+      sorter.direction = this.direction;
       sorter.addEventListener('direction-changed', this.__boundOnDirectionChanged);
       root.appendChild(sorter);
     }

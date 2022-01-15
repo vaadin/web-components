@@ -7,6 +7,7 @@ import {
   focusin,
   focusout,
   keyDownChar,
+  nextFrame,
   nextRender,
   space
 } from '@vaadin/testing-helpers';
@@ -287,7 +288,7 @@ describe('edit column editor type', () => {
   describe('edit on typing', () => {
     let grid, cell, columns, column, editor;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="married"></vaadin-grid-pro-edit-column>
@@ -302,6 +303,7 @@ describe('edit column editor type', () => {
       grid.items = createItems();
       flushGrid(grid);
       columns = grid._columnTree[0];
+      await nextFrame();
     });
 
     it('should start edit on typing if numeric key pressed', () => {
@@ -320,31 +322,34 @@ describe('edit column editor type', () => {
       expect(editor).to.be.ok;
     });
 
-    it('should not start edit on typing when editor type set to checkbox', () => {
+    it('should not start edit on typing when editor type set to checkbox', async () => {
       column = grid.querySelector('[path="married"]');
       cell = getContainerCell(grid.$.items, 0, columns.indexOf(column));
       column.editorType = 'checkbox';
+      await nextFrame();
       keyDownChar(cell._content, 'a');
       editor = column._getEditorComponent(cell);
       expect(editor).to.be.not.ok;
     });
 
-    it('should not start edit on typing when editor type set to select', () => {
+    it('should not start edit on typing when editor type set to select', async () => {
       column = grid.querySelector('[path="title"]');
       cell = getContainerCell(grid.$.items, 0, columns.indexOf(column));
       column.editorType = 'select';
       column.editorOptions = ['mr', 'mrs', 'ms'];
+      await nextFrame();
       keyDownChar(cell._content, 'a');
       editor = column._getEditorComponent(cell);
       expect(editor).to.be.not.ok;
     });
 
-    it('should not start edit on typing when editor type set to custom', () => {
+    it('should not start edit on typing when editor type set to custom', async () => {
       column = grid.querySelector('[path="married"]');
       cell = getContainerCell(grid.$.items, 0, columns.indexOf(column));
       column.editModeRenderer = (root) => {
         root.innerHTML = '<input type="checkbox">';
       };
+      await nextFrame();
       keyDownChar(cell._content, 'a');
       editor = column._getEditorComponent(cell);
       expect(editor).to.be.not.ok;

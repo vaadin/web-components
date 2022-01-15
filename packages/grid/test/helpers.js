@@ -2,6 +2,12 @@ import sinon from 'sinon';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 
 export const flushGrid = (grid) => {
+  if (grid._columnTree) {
+    grid._columnTree[grid._columnTree.length - 1].forEach((column) => {
+      column.performUpdate && column.performUpdate();
+    });
+  }
+
   grid._observer.flush();
   if (grid._debounceScrolling) {
     grid._debounceScrolling.flush();
@@ -22,6 +28,12 @@ export const flushGrid = (grid) => {
   }
 
   grid.__virtualizer.flush();
+
+  if (grid._columnTree) {
+    grid._columnTree[grid._columnTree.length - 1].forEach((column) => {
+      column.performUpdate && column.performUpdate();
+    });
+  }
 };
 
 export const getCell = (grid, index) => {
@@ -180,8 +192,21 @@ export const dragStart = (source) => {
   );
 };
 
+function getHostGrid(content) {
+  let grid = content.parentElement;
+  while (grid) {
+    if (grid.localName === 'vaadin-grid') {
+      return grid;
+    }
+    grid = grid.parentNode || grid.host;
+  }
+}
+
 export const dragOver = (source, target, clientX) => {
   dragStart(source);
+
+  flushGrid(getHostGrid(target));
+
   const targetRect = target.getBoundingClientRect();
   fire(
     'track',

@@ -90,14 +90,16 @@ describe('reordering simple grid', () => {
     expectVisualOrder(grid, [1, 2, 3, 4]);
   });
 
-  it('should indicate dragged cells', () => {
+  it('should indicate dragged cells', async () => {
     dragStart(headerContent[0]);
+    await nextFrame();
     const cell = getCellByCellContent(headerContent[0]);
     expect(cell.getAttribute('reorder-status')).to.equal('dragging');
   });
 
-  it('should clear reorder status on dragend', () => {
+  it('should clear reorder status on dragend', async () => {
     dragAndDropOver(headerContent[0], headerContent[1]);
+    await nextFrame();
     const cell = getCellByCellContent(headerContent[0]);
     expect(cell.getAttribute('reorder-status')).to.equal('');
     expect(grid.hasAttribute('reordering')).to.be.false;
@@ -219,18 +221,21 @@ describe('reordering simple grid', () => {
   });
 
   describe('basic reordering', () => {
-    it('should reorder the columns', () => {
+    it('should reorder the columns', async () => {
       dragAndDropOver(headerContent[0], headerContent[1]);
+      await nextFrame();
       expectVisualOrder(grid, [2, 1]);
     });
 
-    it('should allow dropping over body cell of another column', () => {
+    it('should allow dropping over body cell of another column', async () => {
       dragAndDropOver(headerContent[0], getVisualCellContent(grid.$.items, 0, 1));
+      await nextFrame();
       expectVisualOrder(grid, [2, 1]);
     });
 
-    it('should reorder the columns while dragging', () => {
+    it('should reorder the columns while dragging', async () => {
       dragOver(headerContent[0], headerContent[1]);
+      await nextFrame();
       expectVisualOrder(grid, [2, 1]);
     });
 
@@ -307,25 +312,29 @@ describe('reordering simple grid', () => {
       columns[1].frozen = true;
     });
 
-    it('should allow reordering frozen columns', () => {
+    it('should allow reordering frozen columns', async () => {
       dragAndDropOver(headerContent[0], headerContent[1]);
+      await nextFrame();
       expectVisualOrder(grid, [2, 1]);
     });
 
-    it('should not allow reordering frozen and non-frozen columns', () => {
+    it('should not allow reordering frozen and non-frozen columns', async () => {
       dragAndDropOver(headerContent[1], headerContent[2]);
+      await nextFrame();
       expectVisualOrder(grid, [1, 2, 3, 4]);
     });
 
-    it('should not allow reordering non-frozen and frozen columns', () => {
+    it('should not allow reordering non-frozen and frozen columns', async () => {
       dragAndDropOver(headerContent[3], headerContent[0]);
+      await nextFrame();
       expectVisualOrder(grid, [1, 2, 3, 4]);
     });
 
-    it('should update last-frozen while dragging', () => {
+    it('should update last-frozen while dragging', async () => {
       const cell = getCellByCellContent(headerContent[0]);
       expect(cell.hasAttribute('last-frozen')).to.be.false;
       dragOver(headerContent[0], headerContent[1]);
+      await nextFrame();
       expect(cell.hasAttribute('last-frozen')).to.be.true;
     });
 
@@ -410,36 +419,42 @@ describe('reordering grid with columns groups', () => {
     expectVisualOrder(grid, [11, 12, 21, 22]);
   });
 
-  it('should reorder the sub-columns', () => {
+  it('should reorder the sub-columns', async () => {
     dragAndDropOver(getVisualHeaderCellContent(grid, 1, 0), getVisualHeaderCellContent(grid, 1, 1));
+    await nextFrame();
     expectVisualOrder(grid, [12, 11]);
   });
 
-  it('should not allow dragging columns between groups', () => {
+  it('should not allow dragging columns between groups', async () => {
     dragAndDropOver(getVisualHeaderCellContent(grid, 1, 1), getVisualHeaderCellContent(grid, 1, 2));
+    await nextFrame();
     expectVisualOrder(grid, [11, 12, 21, 22]);
   });
 
-  it('should reorder the groups', () => {
+  it('should reorder the groups', async () => {
     dragAndDropOver(getVisualHeaderCellContent(grid, 0, 0), getVisualHeaderCellContent(grid, 0, 3));
+    await nextFrame();
     const firstGroupCell = getVisualHeaderCellContent(grid, 0, 0);
     expect(firstGroupCell.innerText).to.equal('2');
     expectVisualOrder(grid, [21, 22, 11, 12]);
   });
 
-  it('should allow dropping group over other groups column header', () => {
+  it('should allow dropping group over other groups column header', async () => {
     dragAndDropOver(getVisualHeaderCellContent(grid, 0, 0), getVisualHeaderCellContent(grid, 1, 3));
+    await nextFrame();
     expectVisualOrder(grid, [21, 22, 11, 12]);
   });
 
-  it('should allow dropping group over body cell of another group', () => {
+  it('should allow dropping group over body cell of another group', async () => {
     dragAndDropOver(getVisualHeaderCellContent(grid, 0, 0), getVisualCellContent(grid.$.items, 0, 3));
+    await nextFrame();
     expectVisualOrder(grid, [21, 22, 11, 12]);
   });
 
-  it('should maintain order of child columns on parent reorder', () => {
+  it('should maintain order of child columns on parent reorder', async () => {
     dragAndDropOver(getVisualHeaderCellContent(grid, 1, 0), getVisualHeaderCellContent(grid, 1, 1));
     dragAndDropOver(getVisualHeaderCellContent(grid, 0, 0), getVisualHeaderCellContent(grid, 0, 3));
+    await nextFrame();
     expectVisualOrder(grid, [21, 22, 12, 11]);
   });
 
@@ -466,6 +481,7 @@ describe('reordering grid with columns groups', () => {
 
     it('should reset drag orders on physical order', async () => {
       dragAndDropOver(getVisualHeaderCellContent(grid, 1, 2), getVisualHeaderCellContent(grid, 1, 3));
+      await nextFrame();
       expectVisualOrder(grid, [11, 12, 22, 21]);
       const columns = groups[0].querySelectorAll('vaadin-grid-column');
 
@@ -502,13 +518,15 @@ describe('reordering grid with different column widths', () => {
     content1rect = headerContent1.getBoundingClientRect();
   });
 
-  it('should not reorder', () => {
+  it('should not reorder', async () => {
     dragOver(headerContent0, headerContent1, content1rect.right - content0rect.width);
+    await nextFrame();
     expect(headerContent1.getBoundingClientRect().left).to.equal(content1rect.left);
   });
 
-  it('should reorder', () => {
+  it('should reorder', async () => {
     dragOver(headerContent0, headerContent1, content1rect.right - content0rect.width + 1);
+    await nextFrame();
     expect(headerContent1.getBoundingClientRect().left).not.to.equal(content1rect.left);
   });
 });
@@ -627,13 +645,15 @@ describe('group with empty headers', () => {
     await nextFrame();
   });
 
-  it('should swap a column and a column of a group with empty header', () => {
+  it('should swap a column and a column of a group with empty header', async () => {
     dragAndDropOver(getVisualHeaderCellContent(grid, 0, 1), getVisualHeaderCellContent(grid, 0, 0));
+    await nextFrame();
     expectVisualOrder(grid, [2, 1]);
   });
 
-  it('should swap a column of a group with empty header and a column', () => {
+  it('should swap a column of a group with empty header and a column', async () => {
     dragAndDropOver(getVisualHeaderCellContent(grid, 0, 0), getVisualHeaderCellContent(grid, 0, 1));
+    await nextFrame();
     expectVisualOrder(grid, [2, 1]);
   });
 });

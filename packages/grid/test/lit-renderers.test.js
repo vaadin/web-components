@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column.js';
 import { html, render } from 'lit';
@@ -27,10 +27,11 @@ describe('lit renderers', () => {
   describe('header renderer', () => {
     let cell;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       column.headerRenderer = (root) => {
         render(html`Header`, root);
       };
+      await nextFrame();
 
       cell = getCell(grid.$.header, { row: 0, col: 0 });
     });
@@ -39,10 +40,11 @@ describe('lit renderers', () => {
       expect(cell._content.textContent).to.equal('Header');
     });
 
-    it('should render new content after assigning a new renderer', () => {
+    it('should render new content after assigning a new renderer', async () => {
       column.headerRenderer = (root) => {
         render(html`New Header`, root);
       };
+      await nextFrame();
 
       expect(cell._content.textContent).to.equal('New Header');
     });
@@ -51,10 +53,11 @@ describe('lit renderers', () => {
   describe('footer renderer', () => {
     let cell;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       column.footerRenderer = (root) => {
         render(html`Footer`, root);
       };
+      await nextFrame();
 
       cell = getCell(grid.$.footer, { row: 0, col: 0 });
     });
@@ -63,10 +66,11 @@ describe('lit renderers', () => {
       expect(cell._content.textContent).to.equal('Footer');
     });
 
-    it('should render new content after assigning a new renderer', () => {
+    it('should render new content after assigning a new renderer', async () => {
       column.footerRenderer = (root) => {
         render(html`New Footer`, root);
       };
+      await nextFrame();
 
       expect(cell._content.textContent).to.equal('New Footer');
     });
@@ -75,10 +79,11 @@ describe('lit renderers', () => {
   describe('body renderer', () => {
     let cell;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       column.renderer = (root) => {
         render(html`Item`, root);
       };
+      await nextFrame();
 
       cell = getCell(grid.$.items, { row: 0, col: 0 });
     });
@@ -87,10 +92,11 @@ describe('lit renderers', () => {
       expect(cell._content.textContent).to.equal('Item');
     });
 
-    it('should render new content after assigning a new renderer', () => {
+    it('should render new content after assigning a new renderer', async () => {
       column.renderer = (root) => {
         render(html`New Item`, root);
       };
+      await nextFrame();
 
       expect(cell._content.textContent).to.equal('New Item');
     });

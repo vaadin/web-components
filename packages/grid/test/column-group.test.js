@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
@@ -28,7 +28,7 @@ describe('column group', () => {
     columns = group.querySelectorAll('vaadin-grid-column');
   });
 
-  it('should sum child column flex-grow', () => {
+  it('should sum child column flex-grow', async () => {
     expect(group.flexGrow).to.eql(3);
   });
 
@@ -36,32 +36,36 @@ describe('column group', () => {
     expect(group.width).to.eql('calc(20% + 200px)');
   });
 
-  it('should strip nested `calc` keywords', () => {
+  it('should strip nested `calc` keywords', async () => {
     columns[0].width = 'calc(50% + 10px)';
+    await nextFrame();
 
     expect(group.width).to.eql('calc((50% + 10px) + 200px)');
   });
 
-  it('should react to child column flex-grow changes', () => {
+  it('should react to child column flex-grow changes', async () => {
     columns[0].flexGrow = 3;
+    await nextFrame();
 
     expect(group.flexGrow).to.eql(5);
   });
 
-  it('should react to child column width changes', () => {
+  it('should react to child column width changes', async () => {
     columns[0].width = '10%';
+    await nextFrame();
 
     expect(group.width).to.eql('calc(10% + 200px)');
   });
 
-  it('should get frozen when child column freezes', () => {
+  it('should get frozen when child column freezes', async () => {
     columns[0].frozen = true;
+    await nextFrame();
 
     expect(group.frozen).to.be.true;
   });
 
   // this test is aimed for Safari 9, see #552
-  it('should propagate frozen from children when attached', () => {
+  it('should propagate frozen from children when attached', async () => {
     const parent = group.parentElement;
     parent.removeChild(group);
 
@@ -69,6 +73,7 @@ describe('column group', () => {
 
     parent.appendChild(group);
     flush();
+    await nextFrame();
 
     expect(group.frozen).to.be.true;
   });
@@ -81,16 +86,18 @@ describe('column group', () => {
     expect(columns[1].frozen).to.be.true;
   });
 
-  it('should hide group column', () => {
+  it('should hide group column', async () => {
     columns[0].hidden = true;
     columns[1].hidden = true;
+    await nextFrame();
 
     expect(group.hidden).to.be.true;
   });
 
-  it('should unhide group column', () => {
+  it('should unhide group column', async () => {
     group.hidden = true;
     columns[0].hidden = false;
+    await nextFrame();
 
     expect(group.hidden).to.be.false;
   });
@@ -152,14 +159,16 @@ describe('column group', () => {
     expect(group.hidden).to.be.true;
   });
 
-  it('should calculate column group width after hiding a column', () => {
+  it('should calculate column group width after hiding a column', async () => {
     columns[0].hidden = true;
+    await nextFrame();
 
     expect(group.width).to.eql('calc(200px)');
   });
 
-  it('should calculate column group flexGrow after hiding a column', () => {
+  it('should calculate column group flexGrow after hiding a column', async () => {
     columns[0].hidden = true;
+    await nextFrame();
 
     expect(group.flexGrow).to.eql(2);
   });

@@ -86,14 +86,15 @@ describe('accessibility', () => {
     }
   }
 
-  function initTemplateFixture(fixtureName) {
+  async function initTemplateFixture(fixtureName) {
     grid = fixtureSync(fixtures[fixtureName]);
     grid.items = ['foo', 'bar'];
+    await nextFrame();
     flushGrid(grid);
   }
 
-  function initFixture(type, fixtureName) {
-    type === 'template' ? initTemplateFixture(fixtureName) : initRendererFixture(fixtureName);
+  async function initFixture(type, fixtureName) {
+    type === 'template' ? await initTemplateFixture(fixtureName) : await initRendererFixture(fixtureName);
   }
 
   function uniqueAttrValues(elements, attr) {
@@ -106,8 +107,8 @@ describe('accessibility', () => {
 
   describe('default', () => {
     // These tests pass in both template and renderer modes. Running one to speed up
-    beforeEach(() => {
-      initTemplateFixture('default');
+    beforeEach(async () => {
+      await initTemplateFixture('default');
     });
 
     describe('structural roles', () => {
@@ -195,7 +196,7 @@ describe('accessibility', () => {
       callback(items, itemsOnEachLevel);
     }
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid item-id-path="name">
           <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
@@ -203,6 +204,7 @@ describe('accessibility', () => {
       `);
       grid.dataProvider = hierarchicalDataProvider;
       flushGrid(grid);
+      await nextFrame();
     });
 
     it('should have aria-expanded false on expandable rows', () => {
@@ -289,11 +291,12 @@ describe('accessibility', () => {
   describe('path and header', () => {
     let col;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync('<vaadin-grid></vaadin-grid>');
       col = document.createElement('vaadin-grid-column');
       grid.appendChild(col);
       grid.items = [{ value: 'foo' }, { value: 'bar' }];
+      await nextFrame();
     });
 
     it('should have aria-rowcount on the table (path)', () => {
@@ -305,9 +308,9 @@ describe('accessibility', () => {
       expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('3');
     });
 
-    it('should have aria-rowcount on the table (header)', () => {
+    it('should have aria-rowcount on the table (header)', async () => {
       col.header = 'Foo';
-      flushGrid(grid);
+      await nextFrame();
 
       expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('3');
     });
@@ -316,7 +319,9 @@ describe('accessibility', () => {
   // Most tests from here need to be run in template and renderer modes
   ['template', 'renderer'].forEach((type) => {
     describe(`${type}: size`, () => {
-      beforeEach(() => initFixture(type, 'default'));
+      beforeEach(async () => {
+        await initFixture(type, 'default');
+      });
 
       it('should have aria-rowcount on the table', () => {
         // 2 item rows + header row + footer row = 4 in total
@@ -332,7 +337,9 @@ describe('accessibility', () => {
     });
 
     describe(`${type}: group`, () => {
-      beforeEach(() => initFixture(type, 'group'));
+      beforeEach(async () => {
+        await initFixture(type, 'group');
+      });
 
       describe('row numbers', () => {
         function setANumberOfItems(grid, number) {
@@ -340,7 +347,7 @@ describe('accessibility', () => {
           flushGrid(grid);
         }
 
-        it('should have aria-rowindex on rows', () => {
+        it('should have aria-rowindex on rows', async () => {
           Array.from(grid.$.table.querySelectorAll('tr')).forEach((row, index) => {
             expect(row.getAttribute('aria-rowindex')).to.equal((index + 1).toString());
           });

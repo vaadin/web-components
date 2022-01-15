@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
 import { html, render } from 'lit';
@@ -14,7 +14,7 @@ describe('lit', () => {
         return container.children[row].querySelectorAll('[part~="cell"]')[col];
       }
 
-      beforeEach(() => {
+      beforeEach(async () => {
         grid = fixtureSync(`
           <vaadin-grid-pro>
             <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
@@ -30,7 +30,7 @@ describe('lit', () => {
           render(html`<input /> Edit Item`, root);
         };
 
-        flushGrid(grid);
+        await nextFrame();
 
         cell = getCell(grid.$.items, { row: 0, col: 0 });
       });

@@ -29,6 +29,10 @@ export const A11yMixin = (superClass) =>
         return;
       }
 
+      _columnTree.forEach((level) => {
+        level.forEach((col) => col.performUpdate && col.performUpdate());
+      });
+
       const bodyColumns = _columnTree[_columnTree.length - 1];
       this.$.table.setAttribute(
         'aria-rowcount',

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, esc, fixtureSync, focusout, space } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, focusout, nextFrame, space } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-pro.js';
@@ -212,18 +212,21 @@ describe('edit column renderer', () => {
       expect(cell._content.textContent).to.equal('Foo');
     });
 
-    it('should set the column `editorType` to custom when renderer is defined', () => {
+    it('should set the column `editorType` to custom when renderer is defined', async () => {
       column.editModeRenderer = function (root) {
         root.innerHTML = '<input>';
       };
+      await nextFrame();
       expect(column.editorType).to.be.equal('custom');
     });
 
-    it('should reset the column `editorType` to text when renderer is removed', () => {
+    it('should reset the column `editorType` to text when renderer is removed', async () => {
       column.editModeRenderer = function (root) {
         root.innerHTML = '<input>';
       };
+      await nextFrame();
       column.editModeRenderer = null;
+      await nextFrame();
       expect(column.editorType).to.be.equal('text');
     });
 

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, fixtureSync } from '@vaadin/testing-helpers';
+import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
@@ -113,7 +113,7 @@ describe('tree toggle', () => {
   describe('tree column', () => {
     let grid, column, toggle;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid>
           <vaadin-grid-tree-column></vaadin-grid-tree-column>
@@ -124,15 +124,18 @@ describe('tree toggle', () => {
         cb([{ name: 'foo', hasChildren: true }], 1);
       };
       flushGrid(grid);
+      await nextFrame();
       toggle = getBodyCellContent(grid, 0, 0).firstElementChild;
+      await nextFrame();
     });
 
     it('should be empty', () => {
       expect(toggle.textContent.trim()).to.be.empty;
     });
 
-    it('should not be empty', () => {
+    it('should not be empty', async () => {
       column.path = 'name';
+      await nextFrame();
       expect(toggle.textContent.trim()).to.equal('foo');
     });
 
@@ -148,6 +151,7 @@ describe('tree toggle', () => {
       column.renderer = (root) => {
         root.innerHTML = 'cell';
       };
+      await nextFrame();
 
       expect(getBodyCellContent(grid, 0, 0).firstElementChild).to.equal(toggle);
     });

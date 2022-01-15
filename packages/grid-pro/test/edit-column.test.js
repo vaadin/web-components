@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, esc, fixtureSync, focusin, focusout, isIOS, tab } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, focusin, focusout, isIOS, nextFrame, tab } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
@@ -22,7 +22,7 @@ describe('edit column', () => {
   (isIOS ? describe.skip : describe)('keyboard navigation', () => {
     let grid, input;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name">
@@ -35,7 +35,7 @@ describe('edit column', () => {
         </vaadin-grid-pro>
       `);
       grid.items = createItems();
-      flushGrid(grid);
+      await nextFrame();
     });
 
     describe('when `singleCellEdit` is true', () => {
@@ -285,9 +285,10 @@ describe('edit column', () => {
       expect(focusSpy.calledAfter(stopSpy)).to.be.true;
     });
 
-    it('should focus correct editable cell after column reordering', () => {
+    it('should focus correct editable cell after column reordering', async () => {
       grid.singleCellEdit = true;
       grid.columnReorderingAllowed = true;
+      await nextFrame();
       const headerContent = [
         getContainerCell(grid.$.header, 0, 0)._content,
         getContainerCell(grid.$.header, 0, 1)._content
@@ -323,7 +324,7 @@ describe('edit column', () => {
   (isIOS ? describe.skip : describe)('select column', () => {
     let grid, textCell, selectCell, checkboxCell;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
@@ -335,6 +336,7 @@ describe('edit column', () => {
       grid.items = createItems();
       grid.querySelector('[path="title"]').editorOptions = ['mr', 'mrs', 'ms'];
       flushGrid(grid);
+      await nextFrame();
       textCell = getContainerCell(grid.$.items, 1, 0);
       selectCell = getContainerCell(grid.$.items, 1, 1);
       checkboxCell = getContainerCell(grid.$.items, 1, 2);
@@ -374,7 +376,7 @@ describe('edit column', () => {
   describe('wrapped fields in custom editor', () => {
     let grid, inputWrapper;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
@@ -391,12 +393,14 @@ describe('edit column', () => {
         </vaadin-grid-pro>
       `);
       grid.items = createItems();
-      flushGrid(grid);
+      await nextFrame();
     });
 
-    it('should not stop editing when focusing the input within the same cell', () => {
+    it('should not stop editing when focusing the input within the same cell', async () => {
+      await nextFrame();
       const customCell = getContainerCell(grid.$.items, 1, 1);
       dblclick(customCell._content);
+      await nextFrame();
       inputWrapper = getCellEditor(customCell);
       const inputs = inputWrapper.querySelectorAll('input');
 
@@ -413,7 +417,7 @@ describe('edit column', () => {
   describe('horizontal scrolling to cell', () => {
     let grid, input;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name">
@@ -427,7 +431,7 @@ describe('edit column', () => {
       `);
       grid.items = createItems();
       grid.style.width = '100px'; // column default min width is 100px
-      flushGrid(grid);
+      await nextFrame();
     });
 
     it('should scroll to the right on tab when editable cell is outside the viewport', () => {
@@ -650,7 +654,7 @@ describe('edit column', () => {
   describe('grid behaviour', () => {
     let grid, cell;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name">
@@ -665,16 +669,24 @@ describe('edit column', () => {
       `);
       grid.items = createItems();
       flushGrid(grid);
+      await nextFrame();
     });
 
     it('should throw an error when no path is set for the edit column', () => {
       const column = grid.querySelector('vaadin-grid-pro-edit-column');
-      expect(() => (column.path = undefined)).to.throw(Error);
+      expect(() => {
+        column.path = undefined;
+        column.performUpdate();
+      }).to.throw(Error);
     });
 
-    it('should throw an error when path is set to empty string for the edit column', () => {
+    it('should throw an error when path is set to empty string for the edit column', async () => {
       const column = grid.querySelector('vaadin-grid-pro-edit-column');
-      expect(() => (column.path = '')).to.throw(Error);
+      await nextFrame();
+      expect(() => {
+        column.path = '';
+        column.performUpdate();
+      }).to.throw(Error);
     });
 
     describe('active-item-changed event', () => {
@@ -709,7 +721,7 @@ describe('edit column', () => {
   describe('part attribute', () => {
     let grid, rows;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name">
@@ -723,6 +735,7 @@ describe('edit column', () => {
       `);
       grid.items = createItems();
       flushGrid(grid);
+      await nextFrame();
       rows = Array.from(getRows(grid.$.items));
     });
 

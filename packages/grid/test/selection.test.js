@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
@@ -122,10 +122,12 @@ describe('selection', () => {
         configureGrid();
       });
 
-      (type == 'template' ? it : it.skip)('should reflect cell instance value', () => {
+      (type == 'template' ? it : it.skip)('should reflect cell instance value', async () => {
         if (type == 'template') {
+          await nextFrame();
           const cells = getRowCells(rows[0]);
           cells[0]._content.__templateInstance.selected = false;
+          await nextFrame();
           expect(cells[0]._content.__templateInstance.selected).to.be.false;
           expect(grid.selectedItems).to.be.empty;
         }
@@ -216,38 +218,46 @@ describe('multi selection column', () => {
     expect(firstBodyCheckbox.localName).to.eql('vaadin-checkbox');
   });
 
-  it('should select item when checkbox is checked', () => {
+  it('should select item when checkbox is checked', async () => {
     firstBodyCheckbox.checked = true;
+    await nextFrame();
     expect(grid._isSelected(cachedItems[0])).to.be.true;
   });
 
-  it('should dispatch one event on selection', () => {
+  it('should dispatch one event on selection', async () => {
     const spy = sinon.spy();
     grid.addEventListener('selected-items-changed', spy);
     firstBodyCheckbox.checked = true;
+    await nextFrame();
+
     expect(spy.callCount).to.equal(1);
     expect(spy.getCall(0).args[0].detail.value).to.equal(grid.selectedItems);
   });
 
-  it('should add the item to selectedItems when row is clicked and auto-select is enabled', () => {
+  it('should add the item to selectedItems when row is clicked and auto-select is enabled', async () => {
     const cell = getRowCells(rows[1])[1];
     cell.click();
+    await nextFrame();
 
     expect(grid.selectedItems).to.eql([getCellContent(cell).textContent]);
   });
 
-  it('should remove the item from selectedItems when row is clicked and auto-select is enabled', () => {
+  it('should remove the item from selectedItems when row is clicked and auto-select is enabled', async () => {
     grid.selectItem(grid.items[1]);
     const cell = getRowCells(rows[1])[1];
     cell.click();
+    await nextFrame();
     expect(grid.selectedItems).to.eql([]);
   });
 
-  it('should toggle the item in selectedItems when row is clicked and auto-select is enabled', () => {
+  it('should toggle the item in selectedItems when row is clicked and auto-select is enabled', async () => {
     const cell = getRowCells(rows[1])[1];
     cell.click();
+    await nextFrame();
     expect(grid.selectedItems).to.eql([getCellContent(cell).textContent]);
+
     cell.click();
+    await nextFrame();
     expect(grid.selectedItems).to.eql([]);
   });
 
@@ -272,17 +282,19 @@ describe('multi selection column', () => {
     expect(selectionColumn.selectAll).to.be.true;
   });
 
-  it('should select all items when select all is set', () => {
+  it('should select all items when select all is set', async () => {
     selectionColumn.selectAll = true;
+    await nextFrame();
 
     expect(grid.selectedItems).to.eql(grid.items);
   });
 
-  it('should take filter into account when selecting all items', () => {
+  it('should take filter into account when selecting all items', async () => {
     grid.items = [{ value: 'foo' }, { value: 'bar' }];
     grid._filters = [{ path: 'value', value: 'f' }];
 
     selectionColumn.selectAll = true;
+    await nextFrame();
 
     expect(grid.selectedItems).to.eql([grid.items[0]]);
   });
@@ -312,9 +324,10 @@ describe('multi selection column', () => {
     expect(grid.selectedItems).to.be.empty;
   });
 
-  it('should hide select all checkbox when data provider is used', () => {
+  it('should hide select all checkbox when data provider is used', async () => {
     grid.items = undefined;
     grid.dataProvider = infiniteDataProvider;
+    await nextFrame();
 
     expect(selectAllCheckbox.hidden).to.be.true;
   });
@@ -362,27 +375,32 @@ describe('multi selection column', () => {
     expect(selectAllCheckbox.indeterminate).to.be.true;
   });
 
-  it('should have indeterminate true when an item is deselected', () => {
+  it('should have indeterminate true when an item is deselected', async () => {
     selectAllCheckbox.click();
+    await nextFrame();
     expect(selectAllCheckbox.indeterminate).to.be.false;
 
     firstBodyCheckbox.checked = false;
+    await nextFrame();
     expect(selectAllCheckbox.indeterminate).to.be.true;
   });
 
-  it('should have indeterminate false if selectedItems contains all items, no matter the order', () => {
+  it('should have indeterminate false if selectedItems contains all items, no matter the order', async () => {
     grid.set('selectedItems', ['baz', 'foo', 'bar', 'hi']);
 
+    await nextFrame();
     expect(selectionColumn.selectAll).to.be.true;
     expect(selectAllCheckbox.indeterminate).to.be.false;
   });
 
-  it('should have select-all false if selectedItems does not contain all items', () => {
+  it('should have select-all false if selectedItems does not contain all items', async () => {
     selectAllCheckbox.click();
+    await nextFrame();
     expect(selectionColumn.selectAll).to.be.true;
     expect(selectAllCheckbox.indeterminate).to.be.false;
 
     grid.set('selectedItems', ['baz', 'foo', 'hi']);
+    await nextFrame();
     expect(selectionColumn.selectAll).to.be.false;
     expect(selectAllCheckbox.indeterminate).to.be.true;
   });
@@ -393,30 +411,32 @@ describe('multi selection column', () => {
     expect(selectionColumn.selectAll).to.be.false;
   });
 
-  it('should not have selectAll after deselecting a single item', () => {
+  it('should not have selectAll after deselecting a single item', async () => {
     selectAllCheckbox.click();
-
+    await nextFrame();
     firstBodyCheckbox.checked = false;
+    await nextFrame();
 
     expect(selectionColumn.selectAll).to.be.false;
   });
 
-  it('should not clear pre-selected items', () => {
+  it('should not clear pre-selected items', async () => {
     const grid = fixtureSync(`
       <vaadin-grid selected-items='[{"value": "foo"}]'>
-        <vaadin-grid-selection-column></vaadin-grid-selection-column>
+        <vaadin-grid-selection-column id="foo"></vaadin-grid-selection-column>
         <vaadin-grid-column path="value"></vaadin-grid-column>
       </vaadin-grid>
     `);
+    await nextFrame();
     expect(grid.selectedItems).to.have.length(1);
   });
 
-  it('should have selectAll after selecting all manually', () => {
-    selectAllCheckbox.click();
-    firstBodyCheckbox.checked = true;
+  it('should have selectAll after selecting all manually', async () => {
+    [...grid.querySelectorAll('vaadin-checkbox:not(.vaadin-grid-select-all-checkbox)')].forEach((checkbox) => {
+      checkbox.checked = true;
+    });
 
-    firstBodyCheckbox.checked = true;
-
+    await nextFrame();
     expect(selectionColumn.selectAll).to.be.true;
     expect(selectAllCheckbox.indeterminate).to.be.false;
   });
@@ -432,9 +452,10 @@ describe('multi selection column', () => {
     expect(selectAllCheckbox.indeterminate).to.be.false;
   });
 
-  it('should deselect-all when all items are deselected', () => {
+  it('should deselect-all when all items are deselected', async () => {
     selectAllCheckbox.click();
 
+    await nextFrame();
     rows.forEach((row) => {
       const cellContent = getCellContent(getRowCells(row)[0]);
       const checkbox = cellContent.children[0];
@@ -467,48 +488,54 @@ describe('multi selection column', () => {
     expect(() => checkbox.click()).not.to.throw(Error);
   });
 
-  it('should override the header content with a header text', () => {
+  it('should override the header content with a header text', async () => {
     selectionColumn.header = 'foo';
 
+    await nextFrame();
     expect(firstHeaderCellContent.textContent).to.equal('foo');
     expect(firstBodyCellContent.firstElementChild).to.equal(firstBodyCheckbox);
   });
 
-  it('should not override the header content with a path', () => {
+  it('should not override the header content with a path', async () => {
     selectionColumn.path = 'length';
 
+    await nextFrame();
     expect(firstHeaderCellContent.firstElementChild).to.equal(selectAllCheckbox);
   });
 
-  it('should not override the body content with a path', () => {
+  it('should not override the body content with a path', async () => {
     selectionColumn.path = 'length';
 
+    await nextFrame();
     expect(firstBodyCellContent.firstElementChild).to.equal(firstBodyCheckbox);
   });
 
-  it('should override the header content with a header renderer', () => {
+  it('should override the header content with a header renderer', async () => {
     selectionColumn.headerRenderer = (root) => {
       root.textContent = 'foo';
     };
 
+    await nextFrame();
     expect(firstHeaderCellContent.textContent).to.equal('foo');
     expect(firstBodyCellContent.firstElementChild).to.equal(firstBodyCheckbox);
   });
 
-  it('should override the body content with a renderer', () => {
+  it('should override the body content with a renderer', async () => {
     selectionColumn.renderer = (root) => {
       root.textContent = 'foo';
     };
 
+    await nextFrame();
     expect(firstBodyCellContent.textContent).to.equal('foo');
     expect(firstHeaderCellContent.firstElementChild).to.equal(selectAllCheckbox);
   });
 
-  it('should select all items when select all is set', () => {
+  it('should select all items when select all is set', async () => {
     grid.items = Array.from({ length: 60 }, (_, key) => key + 1);
 
     selectionColumn.selectAll = true;
 
+    await nextFrame();
     expect(grid.selectedItems).to.eql(grid.items);
   });
 });

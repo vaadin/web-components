@@ -37,6 +37,7 @@ describe('column resizing', () => {
     `);
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
+    await nextFrame();
     headerCells = getRowCells(getRows(grid.$.header)[0]);
     handle = headerCells[0].querySelector('[part~="resize-handle"]');
     await nextRender();
@@ -63,7 +64,7 @@ describe('column resizing', () => {
   });
 
   ['rtl', 'ltr'].forEach((direction) => {
-    it(`should resize on track in ${direction}`, () => {
+    it(`should resize on track in ${direction}`, async () => {
       grid.setAttribute('dir', direction);
       const options = { node: handle };
       const rect = headerCells[0].getBoundingClientRect();
@@ -71,6 +72,7 @@ describe('column resizing', () => {
       fire('track', { state: 'start' }, options);
       fire('track', { state: 'track', x: rect.left + (direction === 'rtl' ? -200 : 200), y: 0 }, options);
 
+      await nextFrame();
       expect(headerCells[0].clientWidth).to.equal(direction === 'rtl' ? 349 : 200);
     });
 
@@ -173,12 +175,15 @@ describe('column resizing', () => {
     expect(grid._columnTree[0][1].flexGrow).to.equal(1);
   });
 
-  it('should fix width for preceding columns', () => {
+  it('should fix width for preceding columns', async () => {
     grid._columnTree[0][1].resizable = true;
 
     grid._columnTree[0][0].width = '50%';
     grid._columnTree[0][0].flexGrow = 1;
+    await nextFrame();
     fire('track', { state: 'start' }, { node: headerCells[1].querySelector('[part~="resize-handle"]') });
+
+    await nextFrame();
     expect(grid._columnTree[0][0].width.indexOf('px')).not.to.equal(-1);
     expect(grid._columnTree[0][0].flexGrow).to.equal(0);
   });
@@ -288,7 +293,7 @@ describe('column group resizing', () => {
         grid.setAttribute('dir', direction);
       });
 
-      it('should resize the child column', () => {
+      it('should resize the child column', async () => {
         const headerRows = getRows(grid.$.header);
         const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
 
@@ -297,12 +302,14 @@ describe('column group resizing', () => {
         const options = { node: handle };
         fire('track', { state: 'start' }, options);
         fire('track', { state: 'track', x: rect.right + (direction === 'rtl' ? -100 : 100), y: 0 }, options);
+        await nextFrame();
 
         expect(cell.clientWidth).to.equal(direction === 'rtl' ? 100 : 200);
       });
 
-      it('should resize the last non-hidden child column', () => {
+      it('should resize the last non-hidden child column', async () => {
         grid._columnTree[1][1].hidden = true;
+        await nextFrame();
         const headerRows = getRows(grid.$.header);
         const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
 
@@ -312,6 +319,7 @@ describe('column group resizing', () => {
         fire('track', { state: 'start' }, options);
         fire('track', { state: 'track', x: rect.right + (direction === 'rtl' ? -100 : 100), y: 0 }, options);
 
+        await nextFrame();
         expect(cell.clientWidth).to.equal(direction === 'rtl' ? 100 : 200);
       });
     });
@@ -351,7 +359,7 @@ describe('group inside group', () => {
     await nextFrame();
   });
 
-  it('should resize the child groups child column', () => {
+  it('should resize the child groups child column', async () => {
     const headerRows = getRows(grid.$.header);
     const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
 
@@ -361,6 +369,7 @@ describe('group inside group', () => {
     fire('track', { state: 'start' }, options);
     fire('track', { state: 'track', x: rect.right + 100, y: 0 }, options);
 
+    await nextFrame();
     expect(cell.clientWidth).to.equal(100);
   });
 });

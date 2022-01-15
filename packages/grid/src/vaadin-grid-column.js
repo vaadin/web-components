@@ -3,10 +3,11 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { LitElement } from 'lit';
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 
 /**
@@ -198,20 +199,20 @@ export const ColumnBaseMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
-        '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
-        '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells.*)',
-        '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
-        '_textAlignChanged(textAlign, _cells.*, _headerCell, _footerCell)',
-        '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
+        '_widthChanged(width, _headerCell, _footerCell, _cells)',
+        '_frozenChanged(frozen, _headerCell, _footerCell, _cells)',
+        '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells)',
+        '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells)',
+        '_textAlignChanged(textAlign, _cells, _headerCell, _footerCell)',
+        '_orderChanged(_order, _headerCell, _footerCell, _cells)',
         '_lastFrozenChanged(_lastFrozen)',
         '_firstFrozenToEndChanged(_firstFrozenToEnd)',
-        '_onRendererOrBindingChanged(_renderer, _cells, _cells.*, path)',
+        '_onRendererOrBindingChanged(_renderer, _cells, _cells, path)',
         '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header)',
         '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
-        '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
-        '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)'
+        '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells)',
+        '_hiddenChanged(hidden, _headerCell, _footerCell, _cells)'
       ];
     }
 
@@ -564,6 +565,12 @@ export const ColumnBaseMixin = (superClass) =>
     /** @protected */
     _onHeaderRendererOrBindingChanged(headerRenderer, headerCell, ..._bindings) {
       this._renderHeaderCellContent(headerRenderer, headerCell);
+
+      if (this._grid) {
+        this._grid.__virtualizer && this._grid.__virtualizer.update();
+        this._grid.__updateHeaderFooterRowVisibility();
+        this._grid._a11yUpdateGridSize(this._grid.size, this._grid._columnTree);
+      }
     }
 
     /**
@@ -646,7 +653,7 @@ export const ColumnBaseMixin = (superClass) =>
         return;
       }
 
-      this.__setTextContent(root, this.get(this.path, item));
+      this.__setTextContent(root, this._get(this.path, item));
     }
 
     /**
@@ -707,6 +714,11 @@ export const ColumnBaseMixin = (superClass) =>
 
       return this._defaultFooterRenderer;
     }
+
+    /** @protected */
+    _get(path, object) {
+      return path.split('.').reduce((obj, property) => (obj ? obj[property] : undefined), object);
+    }
   };
 
 /**
@@ -719,7 +731,7 @@ export const ColumnBaseMixin = (superClass) =>
  * @extends HTMLElement
  * @mixes ColumnBaseMixin
  */
-class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
+class GridColumn extends ColumnBaseMixin(DirMixin(PolylitMixin(LitElement))) {
   static get is() {
     return 'vaadin-grid-column';
   }
@@ -741,7 +753,8 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        */
       flexGrow: {
         type: Number,
-        value: 1
+        value: 1,
+        attribute: 'flex-grow'
       },
 
       /**
@@ -802,7 +815,8 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        */
       autoWidth: {
         type: Boolean,
-        value: false
+        value: false,
+        attribute: 'auto-width'
       },
 
       /**
