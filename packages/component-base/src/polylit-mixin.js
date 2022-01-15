@@ -60,7 +60,13 @@ const PolylitMixinImplementation = (superclass) => {
 
       if ('value' in options) {
         // Set the default value
-        this.addInitializer((instance) => (instance[name] = options.value));
+        this.addInitializer((instance) => {
+          if (typeof options.value === 'function') {
+            instance[name] = options.value();
+          } else {
+            instance[name] = options.value;
+          }
+        });
       }
 
       if (options.readOnly) {
