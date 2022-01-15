@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { defineCE, fixtureSync } from '@vaadin/testing-helpers';
+import { defineCE, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, LitElement } from 'lit';
 import { PolylitMixin } from '../src/polylit-mixin.js';
@@ -507,7 +507,7 @@ describe('PolylitMixin', () => {
       const spy = sinon.spy();
       element.addEventListener('has-value-changed', spy);
       element.value = 'foo';
-      await element.updateComplete;
+      await nextFrame();
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -534,7 +534,9 @@ describe('PolylitMixin', () => {
 
             count: {
               type: Number,
-              value: () => 0
+              value: function () {
+                return this.value;
+              }
             }
           };
         }
