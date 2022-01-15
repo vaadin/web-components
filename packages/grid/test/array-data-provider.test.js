@@ -146,7 +146,7 @@ describe('array data provider', () => {
 describe('invalid paths', () => {
   let grid;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid>
         <vaadin-grid-column>
@@ -177,6 +177,7 @@ describe('invalid paths', () => {
       }
     ];
     flushGrid(grid);
+    await nextFrame();
   });
 
   beforeEach(() => {
@@ -232,10 +233,10 @@ describe('invalid paths', () => {
   describe('invalid filters paths', () => {
     let filter;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       filter = grid.querySelector('vaadin-grid-filter');
       filter.path = '';
-      filter._debouncerFilterChanged.flush();
+      await nextFrame();
     });
 
     it('should warn about invalid path with undefined parent property', () => {
@@ -271,17 +272,17 @@ describe('items with a custom data provider', () => {
     `);
   });
 
-  it('should use the items array', () => {
+  it('should use the items array', async () => {
     grid.dataProvider = dataProvider;
     grid.items = items;
-    flushGrid(grid);
+    await nextFrame();
     expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('bar');
   });
 
-  it('should use the custom data provider', () => {
+  it('should use the custom data provider', async () => {
     grid.items = items;
     grid.dataProvider = dataProvider;
-    flushGrid(grid);
+    await nextFrame();
     expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('foo');
     expect(grid.items).to.be.undefined;
   });

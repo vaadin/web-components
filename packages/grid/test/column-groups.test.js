@@ -267,12 +267,13 @@ describe('column groups', () => {
       }
     });
 
-    it('the group header cell should adapt to changes of child columns', () => {
+    it('the group header cell should adapt to changes of child columns', async () => {
       const cellGroup0 = getHeaderCell(0, 1);
       const cellHeader1 = getHeaderCell(1, 1);
 
       expect(cellGroup0.style.flexGrow).to.equal('2');
       cellHeader1._column.flexGrow = 3;
+      await nextFrame();
       expect(cellGroup0.style.flexGrow).to.equal('4');
     });
 

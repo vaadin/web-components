@@ -45,13 +45,14 @@ customElements.define('grid-container', GridContainer);
 describe('column', () => {
   let container, column, grid, emptyColumn;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     container = fixtureSync('<grid-container></grid-container>');
     grid = container.$.grid;
     grid.dataProvider = infiniteDataProvider;
     column = grid.querySelector('vaadin-grid-column');
     emptyColumn = grid.querySelector('#emptycolumn');
     flushGrid(grid);
+    await nextFrame();
   });
 
   describe('properties', () => {
@@ -60,23 +61,25 @@ describe('column', () => {
         expect(column.flexGrow).to.eql(1);
       });
 
-      it('should be bound to header cells', () => {
+      it('should be bound to header cells', async () => {
         column.flexGrow = 2;
-
+        await nextFrame();
         const header = grid.$.header;
 
         expect(getContainerCell(header, 0, 0).style.flexGrow).to.eql('3'); // colspan 2 + 1
         expect(getContainerCell(header, 1, 0).style.flexGrow).to.eql('2');
       });
 
-      it('should be bound to row cells', () => {
+      it('should be bound to row cells', async () => {
         column.flexGrow = 2;
+        await nextFrame();
 
         expect(getContainerCell(grid.$.items, 0, 0).style.flexGrow).to.eql('2');
       });
 
-      it('should be bound to footer cells', () => {
+      it('should be bound to footer cells', async () => {
         column.flexGrow = 2;
+        await nextFrame();
 
         expect(getContainerCell(grid.$.footer, 0, 0).style.flexGrow).to.eql('2');
       });
@@ -87,21 +90,24 @@ describe('column', () => {
         expect(column.width).to.eql('100px');
       });
 
-      it('should be bound to header cells', () => {
+      it('should be bound to header cells', async () => {
         column.width = '20%';
 
+        await nextFrame();
         const width = getContainerCell(grid.$.header, 0, 0).style.width;
         expect(width).to.be.oneOf(['calc(20% + 100px)', 'calc(100px + 20%)']);
       });
 
-      it('should be bound to row cells', () => {
+      it('should be bound to row cells', async () => {
         column.width = '200px';
+        await nextFrame();
 
         expect(getContainerCell(grid.$.items, 0, 0).style.width).to.eql('200px');
       });
 
-      it('should be bound to footer cells', () => {
+      it('should be bound to footer cells', async () => {
         column.width = '200px';
+        await nextFrame();
 
         expect(getContainerCell(grid.$.footer, 0, 0).style.width).to.eql('200px');
       });
@@ -118,10 +124,11 @@ describe('column', () => {
         expect(getContainerCell(grid.$.header, 0, 0).style.display).to.eql('');
       });
 
-      it('should bind colSpan to column-group header cells', () => {
+      it('should bind colSpan to column-group header cells', async () => {
         expect(getContainerCell(grid.$.header, 0, 0).colSpan).to.eql(2);
 
         column.hidden = true;
+        await nextFrame();
 
         expect(getContainerCell(grid.$.header, 0, 0).colSpan).to.eql(1);
       });
@@ -147,9 +154,10 @@ describe('column', () => {
         expect(column._footerCell.parentElement).to.be.not.ok;
       });
 
-      it('should detach cells from a hidden column', () => {
+      it('should detach cells from a hidden column', async () => {
         const childCountBefore = grid.childElementCount;
         column.hidden = true;
+        await nextFrame();
         const childCountAfter = grid.childElementCount;
         expect(childCountAfter).to.be.below(childCountBefore);
       });
@@ -172,7 +180,6 @@ describe('column', () => {
         // Re-attach the grid
         parentNode.appendChild(grid);
 
-        await nextFrame();
         flushGrid(grid);
 
         // Expect the two rows (the second one was hidden) to have the same amount of cells
@@ -207,27 +214,31 @@ describe('column', () => {
     });
 
     describe('path', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         emptyColumn.path = 'value';
+        await nextFrame();
       });
 
       it('should use path as the header', () => {
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Value');
       });
 
-      it('should format proper header from the last path token', () => {
+      it('should format proper header from the last path token', async () => {
         emptyColumn.path = 'foo.barBaz';
+        await nextFrame();
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Bar baz');
       });
 
-      it('should format three part header text', () => {
+      it('should format three part header text', async () => {
         emptyColumn.path = 'fooBarBaz';
+        await nextFrame();
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Foo bar baz');
       });
 
-      it('should not override header renderer content', () => {
+      it('should not override header renderer content', async () => {
         emptyColumn.headerRenderer = (root) => (root.textContent = 'foo');
         emptyColumn.path = 'foo';
+        await nextFrame();
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
       });
 
@@ -255,9 +266,10 @@ describe('column', () => {
         expect(getBodyCellContent(grid, 0, 2).firstElementChild).not.to.be.ok;
       });
 
-      it('should not override renderer content', () => {
+      it('should not override renderer content', async () => {
         emptyColumn.renderer = (root) => (root.textContent = 'foo');
         emptyColumn.path = 'foo';
+        await nextFrame();
         expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo');
       });
 
@@ -270,9 +282,10 @@ describe('column', () => {
         expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo');
       });
 
-      it('should use path if renderer is removed', () => {
+      it('should use path if renderer is removed', async () => {
         emptyColumn.renderer = (root) => (root.textContent = 'foo');
         emptyColumn.renderer = null;
+        await nextFrame();
         expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo0');
       });
 
@@ -311,6 +324,7 @@ describe('column', () => {
           }
         });
         emptyColumn.path = 'header';
+        await nextFrame();
         const callCount = spy.callCount;
         emptyColumn.header = undefined;
         await nextFrame();
@@ -319,17 +333,19 @@ describe('column', () => {
     });
 
     describe('header', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         emptyColumn.header = 'Header';
+        await nextFrame();
       });
 
       it('should show the header text in the header cell', () => {
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Header');
       });
 
-      it('should not override header renderer text content', () => {
+      it('should not override header renderer text content', async () => {
         emptyColumn.headerRenderer = (root) => (root.textContent = 'foo');
         emptyColumn.header = 'Bar';
+        await nextFrame();
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
       });
 
@@ -343,14 +359,16 @@ describe('column', () => {
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
       });
 
-      it('should override path generated header', () => {
+      it('should override path generated header', async () => {
         emptyColumn.path = 'foo';
+        await nextFrame();
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Header');
       });
 
-      it('should use path generated header if header is removed', () => {
+      it('should use path generated header if header is removed', async () => {
         emptyColumn.path = 'foo';
         emptyColumn.header = undefined;
+        await nextFrame();
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Foo');
       });
 
@@ -375,9 +393,10 @@ describe('column', () => {
         expect(grid.$.header.children[0].hidden).to.be.ok;
       });
 
-      it('should produce an empty header cell', () => {
+      it('should produce an empty header cell', async () => {
         emptyColumn.path = 'foo';
         emptyColumn.header = '';
+        await nextFrame();
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('');
       });
 
@@ -399,6 +418,7 @@ describe('column', () => {
         });
         emptyColumn.header = undefined;
         emptyColumn.path = 'foo';
+        await nextFrame();
         const callCount = spy.callCount;
         emptyColumn.header = 'Foo';
         await nextFrame();
@@ -407,23 +427,26 @@ describe('column', () => {
     });
 
     describe('Text align', () => {
-      it('should align visually to right', () => {
+      it('should align visually to right', async () => {
         emptyColumn.textAlign = 'end';
+        await nextFrame();
         expect(getComputedStyle(getHeaderCellContent(grid, 1, 2)).textAlign).to.be.oneOf(['end', 'right']);
         expect(getComputedStyle(getBodyCellContent(grid, 0, 2)).textAlign).to.be.oneOf(['end', 'right']);
         expect(getComputedStyle(getContainerCellContent(grid.$.footer, 0, 2)).textAlign).to.be.oneOf(['end', 'right']);
       });
 
-      it('should align visually to left', () => {
+      it('should align visually to left', async () => {
         grid.style.direction = 'rtl';
         emptyColumn.textAlign = 'end';
+        await nextFrame();
         expect(getComputedStyle(getHeaderCellContent(grid, 1, 2)).textAlign).to.be.oneOf(['end', 'left']);
         expect(getComputedStyle(getBodyCellContent(grid, 0, 2)).textAlign).to.be.oneOf(['end', 'left']);
         expect(getComputedStyle(getContainerCellContent(grid.$.footer, 0, 2)).textAlign).to.be.oneOf(['end', 'left']);
       });
 
-      it('should align visually to center', () => {
+      it('should align visually to center', async () => {
         emptyColumn.textAlign = 'center';
+        await nextFrame();
         expect(getComputedStyle(getHeaderCellContent(grid, 1, 2)).textAlign).to.equal('center');
         expect(getComputedStyle(getBodyCellContent(grid, 0, 2)).textAlign).to.equal('center');
         expect(getComputedStyle(getContainerCellContent(grid.$.footer, 0, 2)).textAlign).to.equal('center');
@@ -438,18 +461,21 @@ describe('column', () => {
           console.warn.restore();
         });
 
-        it('should warn about invalid text-align value', () => {
+        it('should warn about invalid text-align value', async () => {
           emptyColumn.textAlign = 'right';
+          await nextFrame();
           expect(console.warn.callCount).to.equal(1);
         });
 
-        it('should not warn about valid text-align value', () => {
+        it('should not warn about valid text-align value', async () => {
           emptyColumn.textAlign = 'center';
+          await nextFrame();
           expect(console.warn.callCount).to.equal(0);
         });
 
-        it('invalid value should not change the effective value', () => {
+        it('invalid value should not change the effective value', async () => {
           emptyColumn.textAlign = 'right';
+          await nextFrame();
           expect(getComputedStyle(getBodyCellContent(grid, 0, 2)).textAlign).not.to.equal('right');
         });
       });
@@ -463,7 +489,7 @@ describe('column', () => {
   });
 
   describe('header templates', () => {
-    it('should read templates from light DOM', () => {
+    it('should read templates from light DOM', async () => {
       expect(getHeaderCellContent(grid, 0, 0).textContent).to.contain('group header1');
       expect(getHeaderCellContent(grid, 1, 0).textContent).to.contain('header1');
     });
@@ -564,7 +590,7 @@ describe('column - simple grid', () => {
 
     column.hidden = false;
     grid.size = 2;
-    await nextFrame();
+    flushGrid(grid);
 
     expect(getBodyCellContent(grid, 0, 0).textContent.trim()).to.equal('foo0');
     expect(getBodyCellContent(grid, 1, 0).textContent.trim()).to.equal('foo1');

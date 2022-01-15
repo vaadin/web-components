@@ -43,7 +43,7 @@ class GridTreeColumn extends GridColumn {
   }
 
   static get observers() {
-    return ['_onRendererOrBindingChanged(_renderer, _cells, _cells.*, path, itemHasChildrenPath)'];
+    return ['_onRendererOrBindingChanged(_renderer, _cells, _cells, path, itemHasChildrenPath)'];
   }
 
   constructor() {
@@ -110,7 +110,7 @@ class GridTreeColumn extends GridColumn {
 
   /** @private */
   __getToggleContent(path, item) {
-    return path && this.get(path, item);
+    return path && this._get(path, item);
   }
 }
 

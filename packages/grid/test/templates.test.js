@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@polymer/polymer/lib/elements/dom-bind.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
@@ -133,10 +133,11 @@ describe('templates', () => {
   let container, grid;
 
   describe('formatting', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       container = fixtureSync('<grid-with-slots></grid-with-slots>');
       grid = container.$.grid;
       flushGrid(grid);
+      await nextFrame();
     });
 
     it('should fire an event when a non-focusable element is clicked', () => {
@@ -266,7 +267,7 @@ describe('templates', () => {
 
     describe('using parent paths inside templates', () => {
       let fooSetter;
-      beforeEach(() => {
+      beforeEach(async () => {
         // Observe the model
         const observedModel = container.parentPath;
         let foo = observedModel.foo;
@@ -281,6 +282,7 @@ describe('templates', () => {
 
         // Change the object, notify Polymer
         container.set('parentPath.foo', 'bar');
+        await nextFrame();
       });
 
       it('should bind inside cell templates', () => {
@@ -320,7 +322,7 @@ describe('templates', () => {
   describe('using instance paths inside templates', () => {
     let input;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       container = fixtureSync('<grid-with-slots></grid-with-slots>');
       grid = container.$.grid;
 
@@ -330,23 +332,25 @@ describe('templates', () => {
       grid.items = [{ value: 'item0' }, { value: 'item1' }];
 
       flushGrid(grid);
-
+      await nextFrame();
       input = getCellContent(getCell(grid, 3)).querySelector('vaadin-text-field');
     });
 
-    it('should two-way bind instance path inside cell templates', () => {
+    it('should two-way bind instance path inside cell templates', async () => {
       const cell = getCell(grid, 3);
 
       input.value = 'bar0';
 
+      await nextFrame();
       expect(getCellContent(cell).__templateInstance.item.value).to.eql('bar0');
     });
 
-    it('should notify other cell templates for instance path changes', () => {
+    it('should notify other cell templates for instance path changes', async () => {
       const cell = getCell(grid, 4);
 
       input.value = 'bar0';
 
+      await nextFrame();
       expect(getCellContent(cell).textContent).to.contain('bar0');
     });
   });
@@ -355,7 +359,7 @@ describe('templates', () => {
 describe('using items array', () => {
   let div, grid;
 
-  before(() => {
+  before(async () => {
     fixtureSync(`
       <dom-bind>
         <template>
@@ -376,22 +380,25 @@ describe('using items array', () => {
     const bind = grid.nextElementSibling;
     bind.set('items', [{ foo: 'bar' }]);
     flushGrid(grid);
+    await nextFrame();
   });
 
-  it('should notify items array path', () => {
+  it('should notify items array path', async () => {
     const input = getBodyCellContent(grid, 0, 0).querySelector('input');
     input.value = 'baz';
     input.dispatchEvent(new CustomEvent('input'));
+    await nextFrame();
     expect(div.textContent).to.equal('baz');
   });
 
-  it('should not notify for non-item properties', () => {
+  it('should not notify for non-item properties', async () => {
     const input = grid.querySelector('input[type="checkbox"]');
     const spy = sinon.spy(grid, 'notifyPath');
 
     input.checked = true;
     input.dispatchEvent(new CustomEvent('change'));
 
+    await nextFrame();
     spy.getCalls().forEach((call) => {
       expect(call.args[0]).to.not.contain('items');
     });
@@ -401,7 +408,7 @@ describe('using items array', () => {
 describe('slotted templates', () => {
   let slotted, wrapper, grid;
 
-  before(() => {
+  before(async () => {
     slotted = fixtureSync(`
       <slotted-templates>
         <template slot="grid-column-template">body-[[index]]</template>
@@ -410,17 +417,20 @@ describe('slotted templates', () => {
     wrapper = slotted.$.wrapper;
     grid = wrapper.$.grid;
     flushGrid(grid);
+    await nextFrame();
   });
 
   it('should slot column template', () => {
     expect(getContainerCellContent(grid.$.items, 0, 5).textContent).to.equal('body-0');
   });
 
-  it('should support data-binding in slotted templates', () => {
+  it('should support data-binding in slotted templates', async () => {
     slotted.foo = 'foo';
+    await nextFrame();
     expect(getContainerCellContent(grid.$.header, 0, 5).textContent).to.equal('header-foo');
 
     slotted.bar = 'bar';
+    await nextFrame();
     expect(getContainerCellContent(grid.$.footer, 0, 5).textContent).to.equal('footer-bar');
   });
 

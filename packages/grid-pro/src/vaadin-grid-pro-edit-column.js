@@ -75,7 +75,8 @@ class GridProEditColumn extends GridColumn {
       editorType: {
         type: String,
         notify: true, // FIXME(web-padawan): needed by Flow counterpart
-        value: 'text'
+        value: 'text',
+        attribute: 'editor-type'
       },
 
       /**
@@ -102,13 +103,13 @@ class GridProEditColumn extends GridColumn {
   }
 
   static get observers() {
-    return ['_editModeRendererChanged(editModeRenderer, __initialized)', '_cellsChanged(_cells.*)'];
+    return ['_editModeRendererChanged(editModeRenderer, __initialized)', '_cellsChanged(_cells)'];
   }
 
   constructor() {
     super();
 
-    this.__editModeRenderer = function (root, column) {
+    this.__defaultEditModeRenderer = function (root, column) {
       const cell = root.assignedSlot.parentNode;
 
       const tagName = column._getEditorTagName(cell);
@@ -211,8 +212,9 @@ class GridProEditColumn extends GridColumn {
   /** @private */
   _renderEditor(cell, model) {
     cell.__savedRenderer = this._renderer || cell._renderer;
-    cell._renderer = this.editModeRenderer || this.__editModeRenderer;
+    cell._renderer = this.editModeRenderer || this.__defaultEditModeRenderer;
 
+    this.performUpdate();
     this._clearCellContent(cell);
     this._runRenderer(cell._renderer, cell, model);
   }

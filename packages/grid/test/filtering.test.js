@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
@@ -70,7 +70,7 @@ describe('filter', () => {
 describe('filtering', () => {
   let grid, filter;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid>
         <vaadin-grid-column>
@@ -91,6 +91,7 @@ describe('filtering', () => {
         <vaadin-grid-filter-column></vaadin-grid-filter-column>
       </vaadin-grid>
     `);
+    await nextFrame();
     flushGrid(grid);
     flushFilters(grid);
     if (grid._observer.flush) {
@@ -173,7 +174,7 @@ describe('filtering', () => {
   describe('filter-column', () => {
     let filterColumn, filterCellContent, filter, filterTextField;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       filterColumn = grid.querySelector('vaadin-grid-filter-column');
       filterCellContent = getHeaderCellContent(grid, 0, 2);
 
@@ -181,23 +182,27 @@ describe('filtering', () => {
       filterTextField = filter.firstElementChild;
     });
 
-    it('should propagate path property to the internal vaadin-grid-filter', () => {
+    it('should propagate path property to the internal vaadin-grid-filter', async () => {
       filterColumn.path = 'last';
+      await nextFrame();
       expect(filter.path).to.equal('last');
     });
 
-    it('should use header property to determine the filter text-fields label', () => {
+    it('should use header property to determine the filter text-fields label', async () => {
       filterColumn.header = 'Last column';
+      await nextFrame();
       expect(filterTextField.label).to.equal('Last column');
     });
 
-    it('should generate the label based on path property, if header is not defined', () => {
+    it('should generate the label based on path property, if header is not defined', async () => {
       filterColumn.path = 'last';
+      await nextFrame();
       expect(filterTextField.label).to.equal('Last');
     });
 
-    it('should apply the input fields value to the filter', () => {
+    it('should apply the input fields value to the filter', async () => {
       filterTextField.value = 'foo';
+      await nextFrame();
       expect(filter.value).to.equal('foo');
     });
 
@@ -214,7 +219,7 @@ describe('filtering', () => {
 describe('array data provider', () => {
   let grid, filterFirst, filterSecond;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid>
         <vaadin-grid-column>
@@ -237,6 +242,7 @@ describe('array data provider', () => {
     `);
     flushGrid(grid);
 
+    await nextFrame();
     flushFilters(grid);
     filterFirst = grid._filters[0];
     filterSecond = grid._filters[1];

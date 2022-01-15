@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, isIOS, keyDownOn } from '@vaadin/testing-helpers';
+import { fixtureSync, isIOS, keyDownOn, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import { flushGrid, getBodyCellContent, getCell, getContainerCell } from './helpers.js';
@@ -26,7 +26,7 @@ describe('renderers', () => {
   });
 
   describe('column cells', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       column.renderer = function (root, owner, model) {
         root.innerHTML = '';
         const text = document.createTextNode(model.index + ' ' + model.item.foo);
@@ -34,6 +34,7 @@ describe('renderers', () => {
       };
 
       flushGrid(grid);
+      await nextFrame();
     });
 
     it('should have valid content when renderer is set', () => {
@@ -54,16 +55,19 @@ describe('renderers', () => {
       };
     });
 
-    it('should allow to change the renderer', () => {
+    it('should allow to change the renderer', async () => {
       column.renderer = function (root, owner, model) {
         root.innerHTML = model.index + ' test';
       };
+      await nextFrame();
+
       expect(getCell(grid, 0)._content.innerHTML).to.eql('0 test');
       expect(getCell(grid, 1)._content.innerHTML).to.eql('1 test');
     });
 
-    it('should clear the content when changing the renderer', () => {
+    it('should clear the content when changing the renderer', async () => {
       column.renderer = (_root, _column, _model) => {};
+      await nextFrame();
 
       expect(getCell(grid, 0)._content.textContent).to.be.empty;
       expect(getCell(grid, 1)._content.textContent).to.be.empty;
@@ -188,12 +192,13 @@ describe('renderers', () => {
   describe('header cell', () => {
     let headerCell;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       column.headerRenderer = (root) => {
         root.textContent = 'header';
       };
 
       flushGrid(grid);
+      await nextFrame();
 
       headerCell = getHeaderCell(grid);
     });
@@ -202,30 +207,33 @@ describe('renderers', () => {
       expect(headerCell._content.textContent).to.eql('header');
     });
 
-    it('should have a visible header with headerRenderer', () => {
+    it('should have a visible header with headerRenderer', async () => {
       column.headerRenderer = (root) => (root.textContent = 'foo');
       const newColumn = document.createElement('vaadin-grid-column');
       newColumn.headerRenderer = (root) => (root.textContent = 'bar');
       grid.appendChild(newColumn);
       flushGrid(grid);
+      await nextFrame();
       grid.removeChild(newColumn);
       flushGrid(grid);
       expect(grid.$.header.firstElementChild.hidden).to.be.false;
     });
 
-    it('should have a visible header with header', () => {
+    it('should have a visible header with header', async () => {
       column.header = 'foo';
       const newColumn = document.createElement('vaadin-grid-column');
       newColumn.header = 'bar';
       grid.appendChild(newColumn);
       flushGrid(grid);
+      await nextFrame();
       grid.removeChild(newColumn);
       flushGrid(grid);
       expect(grid.$.header.firstElementChild.hidden).to.be.false;
     });
 
-    it('should clear the content when changing the renderer', () => {
+    it('should clear the content when changing the renderer', async () => {
       column.headerRenderer = (_root, _column) => {};
+      await nextFrame();
 
       expect(headerCell._content.textContent).to.be.empty;
     });
@@ -234,7 +242,7 @@ describe('renderers', () => {
   describe('footer cell', () => {
     let footerCell;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       column.footerRenderer = (root) => {
         root.textContent = 'footer';
       };
@@ -242,20 +250,22 @@ describe('renderers', () => {
       flushGrid(grid);
 
       footerCell = getFooterCell(grid);
+      await nextFrame();
     });
 
     it('should have valid content when renderer is set', () => {
       expect(footerCell._content.textContent).to.eql('footer');
     });
 
-    it('should clear the content when changing the renderer', () => {
+    it('should clear the content when changing the renderer', async () => {
       column.footerRenderer = (_root, _column) => {};
+      await nextFrame();
 
       expect(footerCell._content.textContent).to.be.empty;
     });
   });
 
-  it('should run renderers when requesting content update', () => {
+  it('should run renderers when requesting content update', async () => {
     column.renderer = sinon.spy();
     column.headerRenderer = sinon.spy();
     column.footerRenderer = sinon.spy();
@@ -266,6 +276,7 @@ describe('renderers', () => {
 
     renderers.forEach((renderer) => renderer.resetHistory());
     grid.requestContentUpdate();
+    await nextFrame();
 
     renderers.forEach((renderer) => {
       expect(renderer.called).to.be.true;

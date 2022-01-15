@@ -73,7 +73,8 @@ class GridSelectionColumn extends GridColumn {
        */
       autoSelect: {
         type: Boolean,
-        value: false
+        value: false,
+        attribute: 'auto-select'
       },
 
       /** @private */
@@ -271,6 +272,7 @@ class GridSelectionColumn extends GridColumn {
         }
       });
     }
+    this.performUpdate();
     this._selectAllChangeLock = false;
   }
 

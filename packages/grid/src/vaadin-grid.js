@@ -525,6 +525,7 @@ class Grid extends ElementMixin(
 
     col.width = 'auto';
     col.flexGrow = 0;
+    col.performUpdate && col.performUpdate();
 
     // Note: _allCells only contains cells which are currently rendered in DOM
     const width = col._allCells
@@ -539,6 +540,7 @@ class Grid extends ElementMixin(
 
     col.flexGrow = initialFlexGrow;
     col.width = initialWidth;
+    col.performUpdate && col.performUpdate();
 
     return width;
   }
@@ -588,6 +590,10 @@ class Grid extends ElementMixin(
     this.__virtualizer.flush();
 
     cols.forEach((col) => {
+      col.performUpdate && col.performUpdate();
+    });
+
+    cols.forEach((col) => {
       col.width = `${this.__getDistributedWidth(col)}px`;
     });
   }
@@ -622,9 +628,9 @@ class Grid extends ElementMixin(
     }
 
     if (this._columnTree) {
-      this._columnTree[this._columnTree.length - 1].forEach(
-        (c) => c.isConnected && c.notifyPath && c.notifyPath('_cells.*', c._cells)
-      );
+      this._columnTree[this._columnTree.length - 1].forEach((column) => {
+        column._cells = [...column._cells];
+      });
     }
 
     beforeNextRender(this, () => {
@@ -734,7 +740,7 @@ class Grid extends ElementMixin(
           }
 
           if (column.notifyPath && !noNotify) {
-            column.notifyPath('_cells.*', column._cells);
+            column._cells = [...column._cells];
           }
         } else {
           // Header & footer

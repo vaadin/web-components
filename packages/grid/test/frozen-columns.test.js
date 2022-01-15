@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import { flushGrid, getRowCells, getRows, infiniteDataProvider, isWithinParentConstraints, wheel } from './helpers.js';
@@ -57,10 +57,11 @@ const transformsEqual = (element, transform) => {
         expect(() => wheel(grid, 1, 1)).not.to.throw(Error);
       });
 
-    it('should have last frozen only when there are frozen columns', () => {
+    it('should have last frozen only when there are frozen columns', async () => {
       expect(columns[0]._lastFrozen).to.be.true;
 
       columns[0].frozen = false;
+      await nextFrame();
 
       expect(columns[0]._lastFrozen).to.be.false;
     });
@@ -89,8 +90,9 @@ const transformsEqual = (element, transform) => {
           expect(cells[2].hasAttribute('frozen')).not.to.be.true;
         });
 
-        it('should have the correct last-frozen cell in a row', () => {
+        it('should have the correct last-frozen cell in a row', async () => {
           grid._columnTree[0][1].frozen = true;
+          await nextFrame();
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
           expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
@@ -118,6 +120,7 @@ const transformsEqual = (element, transform) => {
             expect(transformsEqual(cells[0], 'translate(' + translateValue + 'px, 0px)')).to.be.true;
 
             grid._columnTree[0][0].frozen = false;
+            flushGrid(grid);
             cells = getRowCells(getRows(containerElement)[0]);
             grid._debouncerCacheElements.flush();
 
@@ -134,6 +137,7 @@ const transformsEqual = (element, transform) => {
             expect(transformsEqual(cells[1], '')).to.be.true;
 
             grid._columnTree[0][1].frozen = true;
+            flushGrid(grid);
             cells = getRowCells(getRows(containerElement)[0]);
             grid._debouncerCacheElements.flush();
 
@@ -143,8 +147,9 @@ const transformsEqual = (element, transform) => {
           grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
         });
 
-        it('should have the correct last-frozen cell in a row with hidden columns', () => {
+        it('should have the correct last-frozen cell in a row with hidden columns', async () => {
           grid._columnTree[0][1].frozen = grid._columnTree[0][2].frozen = true;
+          await nextFrame();
 
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
@@ -154,6 +159,7 @@ const transformsEqual = (element, transform) => {
           expect(cells[2].hasAttribute('last-frozen')).to.be.true;
 
           grid._columnTree[0][2].hidden = true;
+          await nextFrame();
 
           expect(cells[0].hasAttribute('last-frozen')).not.to.be.true;
           expect(cells[1].hasAttribute('last-frozen')).to.be.true;

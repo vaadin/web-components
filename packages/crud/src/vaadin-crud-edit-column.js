@@ -54,7 +54,7 @@ class CrudEditColumn extends GridColumn {
   }
 
   static get observers() {
-    return ['_onRendererOrBindingChanged(_renderer, _cells, _cells.*, path, ariaLabel)'];
+    return ['_onRendererOrBindingChanged(_renderer, _cells, _cells, path, ariaLabel)'];
   }
 
   /**

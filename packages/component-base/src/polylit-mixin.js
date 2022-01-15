@@ -35,6 +35,19 @@ const PolylitMixinImplementation = (superclass) => {
       super.createProperty(name, options);
     }
 
+    static getOrCreateMap(name) {
+      if (!this[name]) {
+        this[name] = new Map();
+        // eslint-disable-next-line no-prototype-builtins
+      } else if (!this.hasOwnProperty(name)) {
+        // clone any existing entries (superclasses)
+        const map = this[name];
+        this[name] = new Map();
+        map.forEach((v, k) => this[name].set(k, v));
+      }
+      return this[name];
+    }
+
     /*
      * @protected
      * @override
@@ -43,14 +56,22 @@ const PolylitMixinImplementation = (superclass) => {
       super.finalize();
 
       if (Array.isArray(this.observers)) {
-        if (!this.__complexObservers) {
-          this.__complexObservers = [];
+        const complexObservers = this.getOrCreateMap('__complexObservers');
 
-          this.observers.forEach((observer) => {
-            this.__complexObservers.push(parseObserver(observer));
-          });
-        }
+        this.observers.forEach((observer) => {
+          const { method, observerProps } = parseObserver(observer);
+          complexObservers.set(method, observerProps);
+        });
       }
+    }
+
+    static addInitializer(initializer) {
+      super.addInitializer((instance) => {
+        // TODO: Why is this check needed?
+        if (instance instanceof this) {
+          initializer(instance);
+        }
+      });
     }
 
     static getPropertyDescriptor(name, key, options) {
@@ -62,7 +83,7 @@ const PolylitMixinImplementation = (superclass) => {
         // Set the default value
         this.addInitializer((instance) => {
           if (typeof options.value === 'function') {
-            instance[name] = options.value();
+            instance[name] = options.value.call(instance);
           } else {
             instance[name] = options.value;
           }
@@ -92,18 +113,8 @@ const PolylitMixinImplementation = (superclass) => {
       if (options.observer) {
         const method = options.observer;
 
-        if (!this.__observers) {
-          this.__observers = new Map();
-          // eslint-disable-next-line no-prototype-builtins
-        } else if (!this.hasOwnProperty('__observers')) {
-          // clone any existing observers (superclasses)
-          const observers = this.__observers;
-          this.__observers = new Map();
-          observers.forEach((v, k) => this.__observers.set(k, v));
-        }
-
         // set this method
-        this.__observers.set(name, method);
+        this.getOrCreateMap('__observers').set(name, method);
 
         this.addInitializer((instance) => {
           if (!instance[method]) {
@@ -133,14 +144,7 @@ const PolylitMixinImplementation = (superclass) => {
           this[name] = this[observer.method](...props);
         };
 
-        if (!this.__complexObservers) {
-          this.__complexObservers = [];
-        }
-
-        this.__complexObservers.push({
-          observerProps: observer.observerProps,
-          method: assignComputedMethod
-        });
+        this.getOrCreateMap('__complexObservers').set(assignComputedMethod, observer.observerProps);
       }
 
       return result;
@@ -161,7 +165,8 @@ const PolylitMixinImplementation = (superclass) => {
     }
 
     /** @protected */
-    willUpdate(props) {
+    // willUpdate(props) {
+    updated(props) {
       if (this.constructor.__observers) {
         this.__runObservers(props, this.constructor.__observers);
       }
@@ -177,7 +182,7 @@ const PolylitMixinImplementation = (superclass) => {
 
     /** @private */
     __runComplexObservers(props, observers) {
-      observers.forEach(({ method, observerProps }) => {
+      observers.forEach((observerProps, method) => {
         if (observerProps.some((prop) => props.has(prop))) {
           if (!this[method]) {
             console.warn(`observer method ${method} not defined`);
