@@ -1,4 +1,5 @@
 import '@vaadin/vaadin-lumo-styles/color.js';
+import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
@@ -52,31 +53,26 @@ registerStyles(
 
     /* Checkmark */
     [part='checkbox']::after {
-      content: '';
       pointer-events: none;
       display: inline-block;
-      width: 0;
-      height: 0;
-      border: 0 solid var(--lumo-primary-contrast-color);
-      border-width: 0.1875em 0 0 0.1875em;
-      box-sizing: border-box;
-      transform-origin: 0 0;
       position: absolute;
-      top: 0.8125em;
-      left: 0.5em;
-      transform: scale(0.55) rotate(-135deg);
       opacity: 0;
     }
 
     :host([checked]) [part='checkbox']::after {
+      font-family: 'lumo-icons';
+      content: var(--lumo-icons-checkmark);
+      color: var(--lumo-primary-contrast-color);
+      font-size: var(--lumo-font-size-l);
+      line-height: 1;
+      top: 0;
+      left: 0;
       opacity: 1;
-      width: 0.625em;
-      height: 1.0625em;
     }
 
     /* Indeterminate checkmark */
     :host([indeterminate]) [part='checkbox']::after {
-      transform: none;
+      content: '';
       opacity: 1;
       top: 45%;
       height: 10%;
@@ -108,7 +104,7 @@ registerStyles(
     }
 
     :host([disabled]) [part='checkbox']::after {
-      border-color: var(--lumo-contrast-30pct);
+      color: var(--lumo-contrast-30pct);
     }
 
     :host([indeterminate][disabled]) [part='checkbox']::after {
