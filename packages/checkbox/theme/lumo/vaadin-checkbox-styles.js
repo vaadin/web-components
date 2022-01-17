@@ -63,10 +63,11 @@ registerStyles(
       font-family: 'lumo-icons';
       content: var(--lumo-icons-checkmark);
       color: var(--lumo-primary-contrast-color);
-      font-size: var(--lumo-font-size-l);
+      font-size: var(--lumo-icon-size-s);
       line-height: 1;
-      top: 0;
-      left: 0;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       opacity: 1;
     }
 
