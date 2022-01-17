@@ -295,7 +295,7 @@ class RadioGroup extends FieldMixin(
     radioButton.name = this._fieldName;
     radioButton.addEventListener('checked-changed', this.__onRadioButtonCheckedChange);
 
-    if (this.disabled) {
+    if (this.disabled || this.readonly) {
       radioButton.disabled = true;
     }
 
