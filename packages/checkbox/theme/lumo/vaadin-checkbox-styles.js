@@ -57,6 +57,7 @@ registerStyles(
       display: inline-block;
       position: absolute;
       opacity: 0;
+      contain: content;
     }
 
     :host([checked]) [part='checkbox']::after {
