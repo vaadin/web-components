@@ -695,17 +695,20 @@ export const ComboBoxMixin = (subclass) =>
         }
       } else {
         const toLowerCase = (item) => item && item.toLowerCase && item.toLowerCase();
-        const itemsMatchedByLabel =
-          (this.filteredItems &&
-            this.filteredItems.filter(
-              (item) => toLowerCase(this._getItemLabel(item)) === toLowerCase(this._inputElementValue)
-            )) ||
-          [];
+
+        // Try to find an item whose label matches the input value. A matching item is searched from
+        // the filteredItems array (if available) and the selectedItem (if available).
+        const itemMatchingByLabel = [...(this.filteredItems || []), this.selectedItem].find((item) => {
+          return toLowerCase(this._getItemLabel(item)) === toLowerCase(this._inputElementValue);
+        });
+
         if (
           this.allowCustomValue &&
           // to prevent a repetitive input value being saved after pressing ESC and Tab.
-          !itemsMatchedByLabel.length
+          !itemMatchingByLabel
         ) {
+          // An item matching by label was not found, but custom values are allowed.
+          // Dispatch a custom-value-set event with the input value.
           const e = new CustomEvent('custom-value-set', {
             detail: this._inputElementValue,
             composed: true,
@@ -718,9 +721,11 @@ export const ComboBoxMixin = (subclass) =>
             this._selectItemForValue(customValue);
             this.value = customValue;
           }
-        } else if (!this.allowCustomValue && !this.opened && itemsMatchedByLabel.length > 0) {
-          this.value = this._getItemValue(itemsMatchedByLabel[0]);
+        } else if (!this.allowCustomValue && !this.opened && itemMatchingByLabel) {
+          // An item matching by label was found, select it.
+          this.value = this._getItemValue(itemMatchingByLabel);
         } else {
+          // Revert the input value
           this._inputElementValue = this.selectedItem ? this._getItemLabel(this.selectedItem) : this.value || '';
         }
       }
