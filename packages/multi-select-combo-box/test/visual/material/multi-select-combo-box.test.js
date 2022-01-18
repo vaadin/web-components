@@ -101,7 +101,7 @@ describe('multi-select-combo-box', () => {
     });
 
     it('multi-line', async () => {
-      element.style.maxWidth = '400px';
+      element.style.maxWidth = '300px';
       element.selectedItems = ['Apple', 'Banana', 'Lemon', 'Orange'];
       await visualDiff(div, 'selected-multi-line');
     });

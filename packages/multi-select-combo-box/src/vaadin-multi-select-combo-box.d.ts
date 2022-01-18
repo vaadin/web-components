@@ -81,6 +81,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  *
  * Part name              | Description
  * -----------------------|----------------
+ * `chip`                 | Chip shown for every selected item in default mode
  * `compact-mode-prefix`  | The selected items counter shown in compact mode
  * `label`                | The label element
  * `input-field`          | The element that wraps prefix, value and suffix
@@ -107,21 +108,14 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `ordered`              | Set when the element uses ordered mode
  * `readonly`             | Set to a readonly element
  *
- * ### Chips
- *
- * To change how selected items are presented, apply styles to the following components:
- *
- * - `<vaadin-multi-select-combo-box-chips>` - Wrapper for a list of chips.
- * - `<vaadin-multi-select-combo-box-chip>` - An individual chip element.
- *
  * ### Internal components
  *
- * In addition to `<vaadin-multi-select-combo-box>` and chips, the following internal
+ * In addition to `<vaadin-multi-select-combo-box>` itself, the following internal
  * components are themable:
  *
  * - `<vaadin-multi-select-combo-box-overlay>` - has the same API as `<vaadin-overlay>`.
  * - `<vaadin-multi-select-combo-box-item>` - has the same API as `<vaadin-item>`.
- * - `<vaadin-input-container>` - an internal element wrapping the input.
+ * - `<vaadin-multi-select-combo-box-container>` - has the same API as `<vaadin-input-container>`.
  *
  * Note: the `theme` attribute value set on `<vaadin-multi-select-combo-box>` is
  * propagated to these components.

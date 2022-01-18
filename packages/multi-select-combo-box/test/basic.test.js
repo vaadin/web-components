@@ -6,21 +6,15 @@ import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
 
 describe('basic', () => {
-  let comboBox, internal, chips, inputElement;
+  let comboBox, internal, inputElement;
 
-  const getChipContent = (idx) => {
-    const chip = chips.shadowRoot.querySelectorAll('[part="chip"]')[idx];
-    if (chip) {
-      return chip.shadowRoot.querySelector('[part="label"]').textContent;
-    }
-  };
+  const getChipContent = (chip) => chip.shadowRoot.querySelector('[part="label"]').textContent;
 
   beforeEach(() => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
     comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
     internal = comboBox.$.comboBox;
     inputElement = comboBox.inputElement;
-    chips = comboBox.$.chips;
   });
 
   describe('custom element definition', () => {
@@ -252,9 +246,10 @@ describe('basic', () => {
     it('should render chips on updating selectedItems', async () => {
       comboBox.selectedItems = ['apple', 'banana'];
       await nextFrame();
-      expect(chips.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(2);
-      expect(getChipContent(0)).to.equal('apple');
-      expect(getChipContent(1)).to.equal('banana');
+      const chips = comboBox.shadowRoot.querySelectorAll('[part="chip"]');
+      expect(chips.length).to.equal(2);
+      expect(getChipContent(chips[0])).to.equal('apple');
+      expect(getChipContent(chips[1])).to.equal('banana');
     });
 
     it('should re-render chips when selecting the item', async () => {
@@ -262,14 +257,14 @@ describe('basic', () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'Enter' });
       await nextFrame();
-      expect(chips.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(2);
+      expect(comboBox.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(2);
     });
 
     it('should remove chip on remove button click', async () => {
-      const chip = chips.shadowRoot.querySelector('[part="chip"]');
+      const chip = comboBox.shadowRoot.querySelector('[part="chip"]');
       chip.shadowRoot.querySelector('[part="remove-button"]').click();
       await nextFrame();
-      expect(chips.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(0);
+      expect(comboBox.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(0);
     });
   });
 
@@ -288,9 +283,10 @@ describe('basic', () => {
     it('should re-render chips after setting ordered property to true', async () => {
       comboBox.ordered = true;
       await nextFrame();
-      expect(getChipContent(0)).to.equal('apple');
-      expect(getChipContent(1)).to.equal('banana');
-      expect(getChipContent(2)).to.equal('lemon');
+      const chips = comboBox.shadowRoot.querySelectorAll('[part="chip"]');
+      expect(getChipContent(chips[0])).to.equal('apple');
+      expect(getChipContent(chips[1])).to.equal('banana');
+      expect(getChipContent(chips[2])).to.equal('lemon');
     });
 
     it('should not sort selectedItems when compactMode property is set to true', async () => {
@@ -326,7 +322,7 @@ describe('basic', () => {
     });
 
     it('should fire change when chip is removed', () => {
-      const chip = chips.shadowRoot.querySelector('[part="chip"]');
+      const chip = comboBox.shadowRoot.querySelector('[part="chip"]');
       chip.shadowRoot.querySelector('[part="remove-button"]').click();
       expect(spy.calledOnce).to.be.true;
     });

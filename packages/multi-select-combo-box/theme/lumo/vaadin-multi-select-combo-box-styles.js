@@ -15,7 +15,13 @@ const multiSelectComboBox = css`
     padding-inline-start: 0;
   }
 
+  [part='chip']:not(:last-of-type) {
+    margin-inline-end: var(--lumo-space-xs);
+  }
+
   [part='compact-mode-prefix'] {
+    box-sizing: border-box;
+    min-width: 70px;
     padding: 0 0.25em;
     color: var(--lumo-body-text-color);
     font-family: var(--lumo-font-family);

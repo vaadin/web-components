@@ -6,6 +6,6 @@
 import '@vaadin/combo-box/theme/lumo/vaadin-combo-box-item-styles.js';
 import '@vaadin/combo-box/theme/lumo/vaadin-combo-box-dropdown-styles.js';
 import '@vaadin/input-container/theme/lumo/vaadin-input-container.js';
-import './vaadin-multi-select-combo-box-chips-styles.js';
+import './vaadin-multi-select-combo-box-chip-styles.js';
 import './vaadin-multi-select-combo-box-styles.js';
 import '../../src/vaadin-multi-select-combo-box.js';

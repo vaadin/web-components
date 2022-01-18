@@ -15,7 +15,8 @@ const chip = css`
     align-items: center;
     box-sizing: border-box;
     height: 1.5rem;
-    margin-top: 0.0625rem;
+    margin-top: 0.25rem;
+    margin-inline-end: 0.25rem;
     padding-inline-start: 0.5rem;
     border-radius: 1.25rem;
     background-color: hsla(214, 53%, 23%, 0.1);
@@ -69,15 +70,3 @@ const chip = css`
 registerStyles('vaadin-multi-select-combo-box-chip', [fieldButton, chip], {
   moduleId: 'material-multi-select-combo-box-chip'
 });
-
-registerStyles(
-  'vaadin-multi-select-combo-box-chips',
-  css`
-    [part='chip'] {
-      margin-inline-end: 0.25rem;
-    }
-  `,
-  {
-    moduleId: 'material-multi-select-combo-box-chips'
-  }
-);
