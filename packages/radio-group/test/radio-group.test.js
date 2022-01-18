@@ -159,6 +159,31 @@ describe('radio-group', () => {
       group.readonly = true;
       expect(group.hasAttribute('readonly')).to.be.true;
     });
+
+    it('should disable a new button when added to a readonly group', async () => {
+      group.readonly = true;
+
+      const newRadioButton = document.createElement('vaadin-radio-button');
+      newRadioButton.label = 'Button 3';
+      newRadioButton.value = '3';
+      group.appendChild(newRadioButton);
+      await nextFrame();
+
+      expect(newRadioButton.disabled).to.be.true;
+    });
+
+    it('should not disable a checked button when added to a readonly group', async () => {
+      group.readonly = true;
+
+      const newRadioButton = document.createElement('vaadin-radio-button');
+      newRadioButton.label = 'Button 3';
+      newRadioButton.value = '3';
+      newRadioButton.checked = true;
+      group.appendChild(newRadioButton);
+      await nextFrame();
+
+      expect(newRadioButton.disabled).to.be.false;
+    });
   });
 
   describe('label property', () => {
