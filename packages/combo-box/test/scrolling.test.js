@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, focusout, isIOS } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout, isIOS, nextFrame } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 import { getSelectedItem, onceScrolled } from './helpers.js';
@@ -95,13 +95,13 @@ describe('scrolling', () => {
 
     it('should make selected item visible after reopen', async () => {
       comboBox.open();
-      await aTimeout(0);
+      await nextFrame();
 
       comboBox.value = comboBox.items[50];
       comboBox.close();
 
       comboBox.open();
-      await aTimeout(0);
+      await nextFrame();
 
       expectSelectedItemPositionToBeVisible();
     });
