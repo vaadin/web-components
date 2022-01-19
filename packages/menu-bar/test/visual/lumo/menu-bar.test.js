@@ -46,6 +46,32 @@ describe('menu-bar', () => {
         });
       });
 
+      describe('column flex', () => {
+        beforeEach(() => {
+          div = document.createElement('div');
+          div.style.display = 'flex';
+          div.style.padding = '10px';
+          div.style.maxWidth = '400px';
+          div.style.flexDirection = 'column';
+          div.style.alignItems = 'flex-start';
+
+          element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
+          element.items = [
+            { text: 'Item 1' },
+            { text: 'Item 2' },
+            { text: 'Item 3' },
+            { text: 'Item 4' },
+            { text: 'Item 5' },
+            { text: 'Item 6' },
+            { text: 'Item 7' }
+          ];
+        });
+
+        it('flex-overflow', async () => {
+          await visualDiff(div, `${dir}-flex-overflow`);
+        });
+      });
+
       describe('theme', () => {
         function makeIcon(img) {
           const item = document.createElement('vaadin-context-menu-item');
