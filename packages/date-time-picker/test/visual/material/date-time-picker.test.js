@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-date-time-picker.js';
+import '../common.js';
 
 describe('date-time-picker', () => {
   let div, element;
@@ -30,6 +31,12 @@ describe('date-time-picker', () => {
     it('label', async () => {
       element.label = 'Label';
       await visualDiff(div, 'label');
+    });
+
+    it('focused', async () => {
+      element.label = 'Label';
+      element.focus();
+      await visualDiff(div, 'focused');
     });
 
     it('placeholder', async () => {
