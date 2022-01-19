@@ -54,21 +54,19 @@ registerStyles(
     /* Checkmark */
     [part='checkbox']::after {
       pointer-events: none;
-      display: inline-block;
-      position: absolute;
-      opacity: 0;
-      contain: content;
-    }
-
-    :host([checked]) [part='checkbox']::after {
       font-family: 'lumo-icons';
       content: var(--lumo-icons-checkmark);
       color: var(--lumo-primary-contrast-color);
-      font-size: var(--lumo-icon-size-s);
+      font-size: calc(var(--lumo-size-m) / 2 + 2px);
       line-height: 1;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      contain: content;
+      opacity: 0;
+    }
+
+    :host([checked]) [part='checkbox']::after {
       opacity: 1;
     }
 
@@ -83,7 +81,6 @@ registerStyles(
       width: auto;
       border: 0;
       background-color: var(--lumo-primary-contrast-color);
-      transition: opacity 0.25s;
     }
 
     /* Focus ring */
@@ -116,11 +113,6 @@ registerStyles(
     /* RTL specific styles */
     :host([dir='rtl'][has-label]) ::slotted(label) {
       padding: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
-    }
-
-    /* Transition the checkmark if activated with the mouse (disabled for grid select-all this way) */
-    :host(:hover) [part='checkbox']::after {
-      transition: width 0.1s, height 0.25s;
     }
 
     /* Used for activation "halo" */
