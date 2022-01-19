@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, focusin, focusout, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-date-time-picker.js';
 import { changeInputValue } from './helpers.js';
@@ -92,6 +92,43 @@ describe('Basic features', () => {
   it('should delegate focus() to date picker', () => {
     dateTimePicker.focus();
     expect(datePicker.hasAttribute('focused')).to.be.true;
+  });
+
+  describe('focused', () => {
+    it('should set focused attribute on date-picker focusin', () => {
+      focusin(datePicker);
+      expect(dateTimePicker.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should set focused attribute on time-picker focusin', () => {
+      focusin(timePicker);
+      expect(dateTimePicker.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should remove focused attribute on focusout', () => {
+      focusin(datePicker);
+      focusout(datePicker);
+      expect(dateTimePicker.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should not remove focused attribute when moving focus to time-picker', () => {
+      focusin(datePicker);
+      focusout(datePicker, timePicker.inputElement);
+      expect(dateTimePicker.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should not remove focused attribute when moving focus to date-picker', () => {
+      focusin(timePicker);
+      focusout(timePicker, datePicker.inputElement);
+      expect(dateTimePicker.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should not remove focused attribute when moving focus to overlay', () => {
+      focusin(datePicker);
+      datePicker.open();
+      focusout(datePicker, datePicker.$.overlay);
+      expect(dateTimePicker.hasAttribute('focused')).to.be.true;
+    });
   });
 
   describe('change event', () => {

@@ -9,6 +9,7 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { dateEquals } from '@vaadin/date-picker/src/vaadin-date-picker-helper.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
@@ -71,6 +72,8 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  * Attribute           | Description                               | Part name
  * --------------------|-------------------------------------------|------------
  * `disabled`          | Set when the element is disabled          | :host
+ * `focused`           | Set when the element is focused           | :host
+ * `focus-ring`        | Set when the element is keyboard focused  | :host
  * `readonly`          | Set when the element is readonly          | :host
  * `invalid`           | Set when the element is invalid           | :host
  * `has-label`         | Set when the element has a label          | :host
@@ -98,11 +101,14 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
+ * @mixes FocusMixin
  * @mixes DisabledMixin
  * @mixes SlotMixin
  * @mixes FieldMixin
  */
-class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(ElementMixin(PolymerElement))))) {
+class DateTimePicker extends FieldMixin(
+  SlotMixin(DisabledMixin(FocusMixin(ThemableMixin(ElementMixin(PolymerElement)))))
+) {
   static get template() {
     return html`
       <style>
@@ -432,6 +438,28 @@ class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(El
 
   focus() {
     this.__datePicker.focus();
+  }
+
+  /**
+   * Override method inherited from `FocusMixin` to not remove focused
+   * state when focus moves between pickers or to the overlay.
+   * @param {FocusEvent} event
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _shouldRemoveFocus(event) {
+    const target = event.relatedTarget;
+
+    if (
+      this.__datePicker.contains(target) ||
+      this.__timePicker.contains(target) ||
+      target === this.__datePicker.$.overlay
+    ) {
+      return false;
+    }
+
+    return true;
   }
 
   /** @private */
