@@ -91,3 +91,18 @@ describe('combo-box', () => {
     expect(comboBox.autoOpenDisabled).to.be.true;
   });
 });
+
+describe('autoOpenDisabled', () => {
+  let timePicker, comboBox;
+
+  beforeEach(() => {
+    timePicker = fixtureSync(`<vaadin-time-picker auto-open-disabled value="05:00"></vaadin-time-picker>`);
+    comboBox = timePicker.$.comboBox;
+  });
+
+  it('should set correct focused index when opened', () => {
+    comboBox.open();
+
+    expect(comboBox._focusedIndex).to.eql(5);
+  });
+});
