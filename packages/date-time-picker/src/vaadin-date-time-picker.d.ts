@@ -5,6 +5,7 @@
  */
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { DatePickerI18n } from '@vaadin/date-picker/src/vaadin-date-picker.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
@@ -69,6 +70,8 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  * Attribute           | Description                               | Part name
  * --------------------|-------------------------------------------|------------
  * `disabled`          | Set when the element is disabled          | :host
+ * `focused`           | Set when the element is focused           | :host
+ * `focus-ring`        | Set when the element is keyboard focused  | :host
  * `readonly`          | Set when the element is readonly          | :host
  * `invalid`           | Set when the element is invalid           | :host
  * `has-label`         | Set when the element has a label          | :host
@@ -93,7 +96,9 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class DateTimePicker extends FieldMixin(SlotMixin(DisabledMixin(ThemableMixin(ElementMixin(HTMLElement))))) {
+declare class DateTimePicker extends FieldMixin(
+  SlotMixin(DisabledMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement)))))
+) {
   /**
    * The name of the control, which is submitted with the form data.
    */
