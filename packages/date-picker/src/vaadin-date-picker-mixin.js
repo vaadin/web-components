@@ -582,6 +582,7 @@ export const DatePickerMixin = (subclass) =>
     _inputElementChanged(input) {
       super._inputElementChanged(input);
       if (input) {
+        input.autocomplete = 'off';
         input.setAttribute('role', 'combobox');
         input.setAttribute('aria-expanded', !!this.opened);
         this._applyInputValue(this._selectedDate);

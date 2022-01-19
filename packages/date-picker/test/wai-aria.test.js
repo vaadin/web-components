@@ -18,6 +18,14 @@ describe('WAI-ARIA', () => {
       helper = datepicker.querySelector('[slot=helper]');
     });
 
+    it('should set role attribute on the native input', () => {
+      expect(input.getAttribute('role')).to.equal('combobox');
+    });
+
+    it('should disable browser autocomplete on the native input', () => {
+      expect(input.getAttribute('autocomplete')).to.equal('off');
+    });
+
     it('should set aria-labelledby attribute on the native input', () => {
       expect(input.getAttribute('aria-labelledby')).to.equal(label.id);
     });
