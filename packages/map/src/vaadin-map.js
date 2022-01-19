@@ -91,7 +91,9 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
     // configuration object and assume that the types will be the same
     target.id = configuration.id;
 
-    synchronize(target, configuration);
+    const context = { synchronize };
+
+    synchronize(target, configuration, context);
     // TODO: layers don't render on initialization in some cases, needs investigation
     this.configuration.updateSize();
   }
