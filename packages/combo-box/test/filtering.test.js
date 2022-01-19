@@ -416,7 +416,7 @@ describe('autoOpenDisabled', () => {
     comboBox.filteredItems = ['foo', 'bar', 'baz'];
   });
 
-  it.only('should set correct focused index when opened', () => {
+  it('should set correct focused index when opened', () => {
     comboBox.open();
 
     expect(comboBox._focusedIndex).to.eql(1);
