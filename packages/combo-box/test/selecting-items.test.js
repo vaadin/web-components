@@ -282,6 +282,16 @@ describe('clearing a selection', () => {
     expect(comboBox.opened).to.eql(true);
   });
 
+  it('should de-select dropdown item after clearing a selection', () => {
+    comboBox.open();
+
+    const item = document.querySelector('vaadin-combo-box-item');
+    expect(item.hasAttribute('selected')).to.be.true;
+
+    clearIcon.click();
+    expect(item.hasAttribute('selected')).to.be.false;
+  });
+
   it('should not open the dropdown after clearing a selection', () => {
     clearIcon.click();
 
