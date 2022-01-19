@@ -313,6 +313,8 @@ export const ComboBoxMixin = (subclass) =>
         return;
       }
 
+      this.$.dropdown._scroller.requestContentUpdate();
+
       this._getItemElements().forEach((item) => {
         item.requestContentUpdate();
       });
@@ -414,6 +416,11 @@ export const ComboBoxMixin = (subclass) =>
     _handleClearButtonClick(event) {
       event.preventDefault();
       this._clear();
+
+      // De-select dropdown item
+      if (this.opened) {
+        this.requestContentUpdate();
+      }
     }
 
     /** @private */
