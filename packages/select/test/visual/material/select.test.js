@@ -67,6 +67,18 @@ describe('select', () => {
     await visualDiff(div, 'value');
   });
 
+  it('value-overflow', async () => {
+    element.renderer = (root) => {
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item value="long">Very long item text content</vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
+    element.value = 'long';
+    await visualDiff(div, 'value-overflow');
+  });
+
   it('required', async () => {
     element.label = 'Label';
     element.required = true;

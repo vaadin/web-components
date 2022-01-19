@@ -12,6 +12,7 @@ registerStyles(
     :host {
       margin: 0;
       min-width: 0;
+      width: 0;
     }
 
     ::slotted(vaadin-item) {
