@@ -416,9 +416,10 @@ describe('autoOpenDisabled', () => {
     comboBox.filteredItems = ['foo', 'bar', 'baz'];
   });
 
-  it('should set correct focused index when opened', () => {
+  it('should focus the correct item when opened', () => {
     comboBox.open();
 
-    expect(comboBox._focusedIndex).to.eql(1);
+    const items = getAllItems(comboBox);
+    expect(items[1].hasAttribute('focused')).to.be.true;
   });
 });

@@ -100,9 +100,10 @@ describe('autoOpenDisabled', () => {
     comboBox = timePicker.$.comboBox;
   });
 
-  it('should set correct focused index when opened', () => {
+  it('should focus the correct item when opened', () => {
     comboBox.open();
 
-    expect(comboBox._focusedIndex).to.eql(5);
+    const items = document.querySelectorAll('vaadin-time-picker-item');
+    expect(items[5].hasAttribute('focused')).to.be.true;
   });
 });
