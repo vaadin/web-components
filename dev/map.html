@@ -14,14 +14,14 @@
 </head>
 <body>
 <script type="module">
+  import "@vaadin/map/enable";
   import "@vaadin/map";
-  import TileLayer from "ol/layer/Tile.js";
-  import OSM from "ol/source/OSM.js";
-  import View from "ol/View.js";
+  import TileLayer from "ol/layer/Tile";
+  import OSM from "ol/source/OSM";
+  import View from "ol/View";
 
   const map = document.querySelector("vaadin-map");
   customElements.whenDefined("vaadin-map").then(() => {
-
     map.configuration.addLayer(new TileLayer({
       source: new OSM()
     }));
@@ -30,7 +30,6 @@
       zoom: 3
     }));
   });
-
 </script>
 
 <vaadin-map></vaadin-map>

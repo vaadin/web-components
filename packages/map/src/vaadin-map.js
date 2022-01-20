@@ -8,6 +8,10 @@ import OpenLayersMap from 'ol/Map.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+function isEnabled() {
+  return window.Vaadin && window.Vaadin.experimental && !!window.Vaadin.experimental.enableMapComponent;
+}
+
 class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
@@ -59,6 +63,12 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 }
 
-customElements.define(Map.is, Map);
+if (isEnabled()) {
+  customElements.define(Map.is, Map);
+} else {
+  console.warn(
+    'WARNING: The map component is currently an experimental feature and needs to be explicitly enabled. To enable the component, `import "@vaadin/map/enable.js"` *before* importing the map module itself.'
+  );
+}
 
 export { Map };
