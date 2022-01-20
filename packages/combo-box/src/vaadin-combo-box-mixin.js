@@ -946,10 +946,14 @@ export const ComboBoxMixin = (subclass) =>
       if (e.path === 'filteredItems' || e.path === 'filteredItems.splices') {
         this._setOverlayItems(this.filteredItems);
 
-        this._focusedIndex =
-          this.opened || this.autoOpenDisabled
-            ? this.$.dropdown.indexOfLabel(this.filter)
-            : this._indexOfValue(this.value, this.filteredItems);
+        const filterIndex = this.$.dropdown.indexOfLabel(this.filter);
+        if (this.opened) {
+          this._focusedIndex = filterIndex;
+        } else {
+          // Pre-select item matching the filter to focus it later when overlay opens
+          const valueIndex = this._indexOfValue(this.value, this.filteredItems);
+          this._focusedIndex = filterIndex === -1 ? valueIndex : filterIndex;
+        }
 
         // see https://github.com/vaadin/web-components/issues/2615
         if (this.selectedItem === null && this._focusedIndex >= 0) {

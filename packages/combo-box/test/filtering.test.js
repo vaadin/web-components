@@ -407,3 +407,19 @@ describe('value attribute', () => {
     expect(comboBox.value).to.equal('');
   });
 });
+
+describe('autoOpenDisabled', () => {
+  let comboBox;
+
+  beforeEach(() => {
+    comboBox = fixtureSync(`<vaadin-combo-box auto-open-disabled value="bar"></vaadin-combo-box>`);
+    comboBox.filteredItems = ['foo', 'bar', 'baz'];
+  });
+
+  it('should focus the correct item when opened', () => {
+    comboBox.open();
+
+    const items = getAllItems(comboBox);
+    expect(items[1].hasAttribute('focused')).to.be.true;
+  });
+});

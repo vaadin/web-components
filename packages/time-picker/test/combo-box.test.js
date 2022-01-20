@@ -91,3 +91,19 @@ describe('combo-box', () => {
     expect(comboBox.autoOpenDisabled).to.be.true;
   });
 });
+
+describe('autoOpenDisabled', () => {
+  let timePicker, comboBox;
+
+  beforeEach(() => {
+    timePicker = fixtureSync(`<vaadin-time-picker auto-open-disabled value="05:00"></vaadin-time-picker>`);
+    comboBox = timePicker.$.comboBox;
+  });
+
+  it('should focus the correct item when opened', () => {
+    comboBox.open();
+
+    const items = document.querySelectorAll('vaadin-time-picker-item');
+    expect(items[5].hasAttribute('focused')).to.be.true;
+  });
+});
