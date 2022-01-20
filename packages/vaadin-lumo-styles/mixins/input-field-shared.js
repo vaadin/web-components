@@ -121,11 +121,11 @@ const inputField = css`
     --lumo-text-field-size: var(--lumo-size-s);
   }
 
-  :host([theme~='small'][has-label]) [part='label'] {
+  :host([theme~='small']) [part='label'] {
     font-size: var(--lumo-font-size-xs);
   }
 
-  :host([theme~='small'][has-label]) [part='error-message'] {
+  :host([theme~='small']) [part='error-message'] {
     font-size: var(--lumo-font-size-xxs);
   }
 
