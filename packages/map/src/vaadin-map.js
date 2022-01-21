@@ -9,7 +9,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 function isEnabled() {
-  return window.Vaadin && window.Vaadin.experimental && !!window.Vaadin.experimental.enableMapComponent;
+  return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.mapComponent;
 }
 
 class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
