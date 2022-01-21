@@ -80,6 +80,7 @@ class Checkbox extends SlotLabelMixin(
         .vaadin-checkbox-container {
           display: inline-flex;
           align-items: baseline;
+          width: 100%;
         }
 
         .vaadin-checkbox-wrapper {
@@ -100,7 +101,7 @@ class Checkbox extends SlotLabelMixin(
           margin: 0;
         }
       </style>
-      <div class="vaadin-checkbox-container">
+      <div class="vaadin-checkbox-container" on-click="_onContainerClick">
         <div class="vaadin-checkbox-wrapper">
           <div part="checkbox"></div>
           <slot name="input"></slot>
@@ -238,6 +239,16 @@ Please use <label slot="label"> wrapper or the label property instead.`
     }
 
     super._toggleChecked(checked);
+  }
+
+  /** @private */
+  _onContainerClick(event) {
+    const path = event.composedPath();
+
+    // Forward clicks outside the <input> and <label> elements to handle them
+    if (!this.disabled && !path.includes(this._labelNode) && !path.includes(this.inputElement)) {
+      this._labelNode.click();
+    }
   }
 }
 
