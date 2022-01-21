@@ -2145,7 +2145,7 @@ describe('hierarchical data', () => {
     // Enter row focus mode
     left();
     expect(grid.shadowRoot.activeElement.index).to.equal(itemsOnEachLevel - 1);
-    // Press space to expand the row
+    // Press ArrowRight to expand the row
     await sendKeys({ press: 'ArrowRight' });
     // Expect the focus to not have changed
     expect(grid.shadowRoot.activeElement.index).to.equal(itemsOnEachLevel - 1);
