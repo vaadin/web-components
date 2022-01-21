@@ -254,6 +254,42 @@ describe('radio-button', () => {
     });
   });
 
+  describe('container click', () => {
+    let container;
+
+    beforeEach(() => {
+      radio = fixtureSync(`<vaadin-radio-button label="Label"></vaadin-radio-button>`);
+      input = radio.querySelector('[slot=input]');
+      label = radio.querySelector('[slot=label]');
+      container = radio.shadowRoot.querySelector('[class$=container]');
+    });
+
+    it('should forward container click to label element', () => {
+      const spy = sinon.spy(label, 'click');
+      container.click();
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should not forward container click when disabled', () => {
+      const spy = sinon.spy(label, 'click');
+      radio.disabled = true;
+      container.click();
+      expect(spy.calledOnce).to.be.false;
+    });
+
+    it('should not forward click bubbling from the input', () => {
+      const spy = sinon.spy(label, 'click');
+      fire(input, 'click');
+      expect(spy.calledOnce).to.be.false;
+    });
+
+    it('should not forward click bubbling from the label', () => {
+      const spy = sinon.spy(label, 'click');
+      fire(label, 'click');
+      expect(spy.calledOnce).to.be.false;
+    });
+  });
+
   describe('has-label attribute', () => {
     beforeEach(() => {
       radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
