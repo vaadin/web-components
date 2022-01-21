@@ -136,7 +136,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * This function updates the reference to the correct element after a possible index change.
      * @private
      */
-    __updateItemFocusable() {
+    __updateItemsFocusable() {
       if (!this._itemsFocusable) {
         return;
       }
@@ -837,7 +837,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           this._itemsFocusable = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
         }
       } else {
-        this.__updateItemFocusable();
+        this.__updateItemsFocusable();
       }
     }
 
