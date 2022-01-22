@@ -220,12 +220,16 @@ export const DataProviderMixin = (superClass) =>
         __expandedKeys: {
           type: Object,
           value: () => new Set()
+        },
+
+        _effectiveSize: {
+          type: Number
         }
       };
     }
 
     static get observers() {
-      return ['_sizeChanged(size)', '_itemIdPathChanged(itemIdPath)', '_expandedItemsChanged(expandedItems.*)'];
+      return ['_sizeChanged(size)', '_itemIdPathChanged(itemIdPath)', '_expandedItemsChanged(expandedItems)'];
     }
 
     /** @private */
@@ -268,7 +272,7 @@ export const DataProviderMixin = (superClass) =>
      * @return {!GridItem | !unknown}
      */
     getItemId(item) {
-      return this.itemIdPath ? this.get(this.itemIdPath, item) : item;
+      return this.itemIdPath ? this._get(this.itemIdPath, item) : item;
     }
 
     /**
@@ -421,10 +425,10 @@ export const DataProviderMixin = (superClass) =>
       this._cache = new ItemCache(this);
       this._cache.size = this.size || 0;
       this._cache.updateSize();
-      this._hasData = false;
-      this.__updateVisibleRows();
-
-      if (!this._effectiveSize) {
+      if (this._effectiveSize) {
+        this.__updateVisibleRows();
+      } else {
+        this._hasData = false;
         this._loadPage(0, this._cache);
       }
     }
@@ -499,14 +503,25 @@ export const DataProviderMixin = (superClass) =>
     }
 
     scrollToIndex(index) {
+      this.performUpdate();
+      this.performUpdate();
       super.scrollToIndex(index);
+
+      if (!this.__virtualizer || this.__virtualizer.size !== this._effectiveSize) {
+        this.__pendingScrollToIndex = index;
+      }
       if (!isNaN(index) && (this._cache.isLoading() || !this.clientHeight)) {
         this.__pendingScrollToIndex = index;
       }
     }
 
     __scrollToPendingIndex() {
-      if (this.__pendingScrollToIndex && this.$.items.children.length) {
+      if (
+        this.__virtualizer &&
+        this.__virtualizer.size === this._effectiveSize &&
+        this.__pendingScrollToIndex &&
+        this.$.items.children.length
+      ) {
         const index = this.__pendingScrollToIndex;
         delete this.__pendingScrollToIndex;
         this.scrollToIndex(index);

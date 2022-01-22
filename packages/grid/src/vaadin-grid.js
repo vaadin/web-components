@@ -6,9 +6,10 @@
 import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin';
 import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
@@ -258,7 +259,7 @@ class Grid extends ElementMixin(
                         FilterMixin(
                           ColumnReorderingMixin(
                             ColumnResizingMixin(
-                              EventContextMixin(DragAndDropMixin(StylingMixin(TabindexMixin(PolymerElement))))
+                              EventContextMixin(DragAndDropMixin(StylingMixin(TabindexMixin(PolylitMixin(LitElement)))))
                             )
                           )
                         )
@@ -274,14 +275,14 @@ class Grid extends ElementMixin(
     )
   )
 ) {
-  static get template() {
+  render() {
     return html`
       <div
         id="scroller"
-        safari$="[[_safari]]"
-        ios$="[[_ios]]"
-        loading$="[[loading]]"
-        column-reordering-allowed$="[[columnReorderingAllowed]]"
+        safari="${isSafari}"
+        ios="${isIOS}"
+        ?loading="${this.loading}"
+        column-reordering-allowed="${this.columnReorderingAllowed}"
       >
         <table id="table" role="treegrid" aria-multiselectable="true" tabindex="0">
           <caption id="sizer" part="row"></caption>
@@ -303,7 +304,7 @@ class Grid extends ElementMixin(
 
   static get observers() {
     return [
-      '_columnTreeChanged(_columnTree, _columnTree.*)',
+      '_columnTreeChanged(_columnTree)',
       '_effectiveSizeChanged(_effectiveSize, __virtualizer, _hasData, _columnTree)'
     ];
   }
@@ -374,6 +375,11 @@ class Grid extends ElementMixin(
       __gridElement: {
         type: Boolean,
         value: true
+      },
+
+      /** @private */
+      __virtualizer: {
+        type: Object
       }
     };
   }
@@ -453,6 +459,7 @@ class Grid extends ElementMixin(
     new ResizeObserver(() => setTimeout(() => this.__updateFooterPositioning())).observe(this.$.footer);
 
     processTemplates(this);
+    this.__scrollToPendingIndex();
   }
 
   /**
@@ -501,6 +508,8 @@ class Grid extends ElementMixin(
 
       // Make sure the body has a tabbable element
       this._resetKeyboardNavigation();
+
+      this.__scrollToPendingIndex();
     }
   }
 
@@ -526,9 +535,10 @@ class Grid extends ElementMixin(
     const initialWidth = col.width;
     const initialFlexGrow = col.flexGrow;
 
-    col.width = 'auto';
-    col.flexGrow = 0;
-    col.performUpdate && col.performUpdate();
+    col._setWidth ? col._setWidth('auto') : (col.width = 'auto');
+    col._setFlexGrow ? col._setFlexGrow(0) : (col.flexGrow = 0);
+    col.performUpdate();
+    col.performUpdate();
 
     // Note: _allCells only contains cells which are currently rendered in DOM
     const width = col._allCells
@@ -541,9 +551,9 @@ class Grid extends ElementMixin(
         return Math.max(width, cell.offsetWidth + 1);
       }, 0);
 
-    col.flexGrow = initialFlexGrow;
-    col.width = initialWidth;
-    col.performUpdate && col.performUpdate();
+    col._setFlexGrow ? col._setFlexGrow(initialFlexGrow) : (col.flexGrow = initialFlexGrow);
+    col._setWidth ? col._setWidth(initialWidth) : (col.width = initialWidth);
+    col.performUpdate();
 
     return width;
   }
@@ -592,9 +602,7 @@ class Grid extends ElementMixin(
     // Flush to make sure DOM is up-to-date when measuring the column widths
     this.__virtualizer.flush();
 
-    cols.forEach((col) => {
-      col.performUpdate && col.performUpdate();
-    });
+    cols.forEach((col) => col.performUpdate());
 
     cols.forEach((col) => {
       col.width = `${this.__getDistributedWidth(col)}px`;
@@ -608,6 +616,7 @@ class Grid extends ElementMixin(
     if (!this._columnTree) {
       return; // No columns
     }
+    this.performUpdate();
     if (this._cache.isLoading()) {
       this._recalculateColumnWidthOnceLoadingFinished = true;
     } else {
@@ -745,7 +754,7 @@ class Grid extends ElementMixin(
             detailsCell._vacant = false;
           }
 
-          if (column.notifyPath && !noNotify) {
+          if (!noNotify) {
             column._cells = [...column._cells];
           }
         } else {

@@ -288,13 +288,25 @@ class GridSelectionColumn extends GridColumn {
    * @private
    */
   __withFilteredItemsArray(callback) {
+    if (!this._grid) {
+      return;
+    }
+
     const params = {
       page: 0,
       pageSize: Infinity,
       sortOrders: [],
       filters: this._grid._mapFilters()
     };
-    this._grid.dataProvider(params, (items) => callback(items));
+
+    if (this._grid.items) {
+      if (!this._grid.dataProvider) {
+        this._grid.performUpdate();
+        requestAnimationFrame(() => this.__withFilteredItemsArray(callback));
+      } else {
+        this._grid.dataProvider(params, (items) => callback(items));
+      }
+    }
   }
 }
 

@@ -714,11 +714,6 @@ export const ColumnBaseMixin = (superClass) =>
 
       return this._defaultFooterRenderer;
     }
-
-    /** @protected */
-    _get(path, object) {
-      return path.split('.').reduce((obj, property) => (obj ? obj[property] : undefined), object);
-    }
   };
 
 /**

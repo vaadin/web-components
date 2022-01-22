@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import { flushGrid, infiniteDataProvider } from './helpers.js';
@@ -7,11 +7,12 @@ import { flushGrid, infiniteDataProvider } from './helpers.js';
 describe('missing imports', () => {
   let grid;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 200px; height: 300px;" size="1000">
       </vaadin-grid>
     `);
+    await nextFrame();
   });
 
   [

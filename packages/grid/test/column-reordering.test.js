@@ -516,6 +516,7 @@ describe('reordering grid with different column widths', () => {
     headerContent1 = getContainerCell(grid.$.header, 0, 1);
     content0rect = headerContent0.getBoundingClientRect();
     content1rect = headerContent1.getBoundingClientRect();
+    await nextFrame();
   });
 
   it('should not reorder', async () => {

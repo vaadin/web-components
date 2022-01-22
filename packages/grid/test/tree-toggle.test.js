@@ -11,8 +11,9 @@ describe('tree toggle', () => {
   let toggle;
 
   describe('default', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       toggle = fixtureSync('<vaadin-grid-tree-toggle></vaadin-grid-tree-toggle>');
+      await nextFrame();
     });
 
     describe('properties', () => {
@@ -42,12 +43,13 @@ describe('tree toggle', () => {
         expect(clickEvent.defaultPrevented).to.be.true;
       });
 
-      it('should notify for expanded on toggle', () => {
+      it('should notify for expanded on toggle', async () => {
         const spy = sinon.spy();
         toggle.addEventListener('expanded-changed', spy);
 
         click(toggle);
 
+        await nextFrame();
         expect(spy.callCount).to.equal(1);
 
         toggle.removeEventListener('expanded-changed', spy);
@@ -64,11 +66,12 @@ describe('tree toggle', () => {
         expect(spacer.getBoundingClientRect().width).to.equal(0);
       });
 
-      it('should increase spacer width for each level step', () => {
+      it('should increase spacer width for each level step', async () => {
         const spacer = toggle.shadowRoot.querySelector('#level-spacer');
         let prevWidth = 0;
         for (let i = 1; i < 3; i++) {
           toggle.level = i;
+          await nextFrame();
           const width = spacer.getBoundingClientRect().width;
           expect(width).to.be.gt(prevWidth);
           prevWidth = width;
@@ -89,12 +92,13 @@ describe('tree toggle', () => {
   });
 
   describe('with content', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       toggle = fixtureSync(`
         <vaadin-grid-tree-toggle>
           <input><div>foo</div>
         </vaadin-grid-tree-toggle>
       `);
+      await nextFrame();
     });
 
     it('should not toggle on internal focusable click', () => {

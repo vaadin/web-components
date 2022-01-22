@@ -2,38 +2,55 @@ import sinon from 'sinon';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 
 export const flushGrid = (grid) => {
+  // TODO: Cleanup this helper
+  grid.performUpdate();
+  if (!grid.$) {
+    return;
+  }
+
   if (grid._columnTree) {
     grid._columnTree[grid._columnTree.length - 1].forEach((column) => {
       column.performUpdate && column.performUpdate();
     });
   }
+  grid.performUpdate();
 
-  grid._observer.flush();
+  if (grid._observer) {
+    grid._observer.flush();
+  }
+  grid.performUpdate();
   if (grid._debounceScrolling) {
     grid._debounceScrolling.flush();
   }
+  grid.performUpdate();
   if (grid._debouncerForceReflow) {
     grid._debouncerForceReflow.flush();
   }
   flush();
+  grid.performUpdate();
   grid._afterScroll();
   if (grid._debounceOverflow) {
     grid._debounceOverflow.flush();
   }
+  grid.performUpdate();
   if (grid._debouncerHiddenChanged) {
     grid._debouncerHiddenChanged.flush();
   }
+  grid.performUpdate();
   if (grid._debouncerApplyCachedData) {
     grid._debouncerApplyCachedData.flush();
   }
+  grid.performUpdate();
 
   grid.__virtualizer.flush();
 
+  grid.performUpdate();
   if (grid._columnTree) {
     grid._columnTree[grid._columnTree.length - 1].forEach((column) => {
       column.performUpdate && column.performUpdate();
     });
   }
+  grid.performUpdate();
 };
 
 export const getCell = (grid, index) => {

@@ -41,6 +41,7 @@ describe('selection', () => {
 
   function configureGrid() {
     grid.dataProvider = infiniteDataProvider;
+    grid.performUpdate();
     cachedItems = grid._cache.items;
     grid.selectedItems = [cachedItems[0]];
     flushGrid(grid);
@@ -77,8 +78,9 @@ describe('selection', () => {
     });
 
     describe('selectedItems', () => {
-      it('should reflect changes', () => {
-        grid.push('selectedItems', cachedItems[1]);
+      it('should reflect changes', async () => {
+        grid.selectedItems = [...grid.selectedItems, cachedItems[1]];
+        await nextFrame();
         expect(rows[1].hasAttribute('selected')).to.be.true;
       });
 
@@ -112,7 +114,7 @@ describe('selection', () => {
 
   ['renderer', 'template'].forEach((type) => {
     describe(`${type} cells`, () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         grid = fixtureSync(fixtures[type]);
         if (type == 'renderer') {
           const cols = grid.children;
@@ -120,6 +122,7 @@ describe('selection', () => {
           cols[1].renderer = (root) => (root.textContent = 'bar');
         }
         configureGrid();
+        await nextFrame();
       });
 
       (type == 'template' ? it : it.skip)('should reflect cell instance value', async () => {
@@ -148,10 +151,11 @@ describe('selection', () => {
         expect(model.selected).to.be.false;
       });
 
-      it('should select an equaling item', () => {
+      it('should select an equaling item', async () => {
         grid.itemIdPath = 'value';
         const cells = getRowCells(rows[0]);
         grid.selectedItems = [{ value: 'foo0' }];
+        await nextFrame();
         const cell = cells[0];
         const model = cell._content.__templateInstance ?? grid.__getRowModel(cell.parentElement);
         expect(model.selected).to.be.true;
@@ -169,7 +173,7 @@ describe('multi selection column', () => {
   let selectionColumn;
   let selectAllCheckbox, firstBodyCheckbox;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 200px; height: 200px;">
         <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
@@ -193,7 +197,7 @@ describe('multi selection column', () => {
 
     grid.items = ['foo', 'bar', 'baz'];
 
-    flushGrid(grid);
+    await nextFrame();
 
     selectionColumn = grid._columnTree[0][0];
     cachedItems = grid._cache.items;
@@ -261,10 +265,11 @@ describe('multi selection column', () => {
     expect(grid.selectedItems).to.eql([]);
   });
 
-  it('should have bound the body checkbox to selected items', () => {
+  it('should have bound the body checkbox to selected items', async () => {
     const selectCheckbox = firstBodyCheckbox;
 
-    grid.push('selectedItems', cachedItems[0]);
+    grid.selectedItems = [...grid.selectedItems, cachedItems[0]];
+    await nextFrame();
 
     expect(selectCheckbox.checked).to.be.true;
   });
@@ -307,18 +312,19 @@ describe('multi selection column', () => {
     expect(grid.selectedItems).to.be.empty;
   });
 
-  it('should set a copy of items when all items are selected', () => {
+  it('should set a copy of items when all items are selected', async () => {
     selectionColumn.selectAll = true;
 
-    grid.pop('selectedItems');
+    grid.selectedItems = grid.selectedItems.slice(0, -1);
 
     expect(grid.items).not.to.eql(grid.selectedItems);
   });
 
-  it('should not set selection when data provider is used', () => {
+  it('should not set selection when data provider is used', async () => {
     grid.items = undefined;
     grid.dataProvider = infiniteDataProvider;
 
+    await nextFrame();
     selectionColumn.selectAll = true;
 
     expect(grid.selectedItems).to.be.empty;
@@ -359,18 +365,20 @@ describe('multi selection column', () => {
     expect(selectAllCheckbox.checked).to.be.false;
   });
 
-  it('should have indeterminate when an item is selected', () => {
+  it('should have indeterminate when an item is selected', async () => {
     firstBodyCheckbox.checked = true;
+    await nextFrame();
 
     expect(selectAllCheckbox.indeterminate).to.be.true;
   });
 
   // iOS needs both to show the indeterminate status
-  it('should have indeterminate and select-all when an item is selected', () => {
+  it('should have indeterminate and select-all when an item is selected', async () => {
     expect(selectAllCheckbox.checked).to.be.false;
     expect(selectAllCheckbox.indeterminate).not.to.be.ok;
 
     firstBodyCheckbox.checked = true;
+    await nextFrame();
     expect(selectAllCheckbox.checked).to.be.true;
     expect(selectAllCheckbox.indeterminate).to.be.true;
   });
@@ -386,7 +394,7 @@ describe('multi selection column', () => {
   });
 
   it('should have indeterminate false if selectedItems contains all items, no matter the order', async () => {
-    grid.set('selectedItems', ['baz', 'foo', 'bar', 'hi']);
+    grid.selectedItems = ['baz', 'foo', 'bar', 'hi'];
 
     await nextFrame();
     expect(selectionColumn.selectAll).to.be.true;
@@ -399,7 +407,7 @@ describe('multi selection column', () => {
     expect(selectionColumn.selectAll).to.be.true;
     expect(selectAllCheckbox.indeterminate).to.be.false;
 
-    grid.set('selectedItems', ['baz', 'foo', 'hi']);
+    grid.selectedItems = ['baz', 'foo', 'hi'];
     await nextFrame();
     expect(selectionColumn.selectAll).to.be.false;
     expect(selectAllCheckbox.indeterminate).to.be.true;
@@ -441,12 +449,13 @@ describe('multi selection column', () => {
     expect(selectAllCheckbox.indeterminate).to.be.false;
   });
 
-  it('should select-all when all items are selected', () => {
+  it('should select-all when all items are selected', async () => {
     rows.forEach((row) => {
       const cellContent = getCellContent(getRowCells(row)[0]);
       const checkbox = cellContent.children[0];
       checkbox.checked = true;
     });
+    await nextFrame();
 
     expect(selectionColumn.selectAll).to.be.true;
     expect(selectAllCheckbox.indeterminate).to.be.false;
@@ -461,20 +470,24 @@ describe('multi selection column', () => {
       const checkbox = cellContent.children[0];
       checkbox.checked = false;
     });
+    await nextFrame();
 
     expect(selectionColumn.selectAll).to.be.false;
     expect(selectAllCheckbox.indeterminate).to.be.false;
   });
 
-  it('should update select all when filters change', () => {
+  it('should update select all when filters change', async () => {
     grid.items = [{ value: 'foo' }, { value: 'bar' }];
 
+    await nextFrame();
     firstBodyCheckbox.checked = true;
+    await nextFrame();
 
     const filter = grid.querySelector('#filter');
     filter.value = 'foo';
     filter.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
 
+    await nextFrame();
     filter.parentElement._debouncerFilterChanged.flush();
     expect(selectionColumn.selectAll).to.be.true;
   });

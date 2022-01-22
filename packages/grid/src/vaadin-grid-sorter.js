@@ -3,8 +3,9 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const $_documentContainer = document.createElement('template');
@@ -63,54 +64,56 @@ document.head.appendChild($_documentContainer.content);
  *
  * @extends HTMLElement
  */
-class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
-  static get template() {
+class GridSorter extends ThemableMixin(DirMixin(PolylitMixin(LitElement))) {
+  static get styles() {
+    return css`
+      :host {
+        display: inline-flex;
+        cursor: pointer;
+        max-width: 100%;
+      }
+
+      [part='content'] {
+        flex: 1 1 auto;
+      }
+
+      [part='indicators'] {
+        position: relative;
+        align-self: center;
+        flex: none;
+      }
+
+      [part='order'] {
+        display: inline;
+        vertical-align: super;
+      }
+
+      [part='indicators']::before {
+        font-family: 'vaadin-grid-sorter-icons';
+        display: inline-block;
+      }
+
+      :host(:not([direction])) [part='indicators']::before {
+        content: '\\e901';
+      }
+
+      :host([direction='asc']) [part='indicators']::before {
+        content: '\\e900';
+      }
+
+      :host([direction='desc']) [part='indicators']::before {
+        content: '\\e902';
+      }
+    `;
+  }
+
+  render() {
     return html`
-      <style>
-        :host {
-          display: inline-flex;
-          cursor: pointer;
-          max-width: 100%;
-        }
-
-        [part='content'] {
-          flex: 1 1 auto;
-        }
-
-        [part='indicators'] {
-          position: relative;
-          align-self: center;
-          flex: none;
-        }
-
-        [part='order'] {
-          display: inline;
-          vertical-align: super;
-        }
-
-        [part='indicators']::before {
-          font-family: 'vaadin-grid-sorter-icons';
-          display: inline-block;
-        }
-
-        :host(:not([direction])) [part='indicators']::before {
-          content: '\\e901';
-        }
-
-        :host([direction='asc']) [part='indicators']::before {
-          content: '\\e900';
-        }
-
-        :host([direction='desc']) [part='indicators']::before {
-          content: '\\e902';
-        }
-      </style>
-
       <div part="content">
         <slot></slot>
       </div>
       <div part="indicators">
-        <span part="order">[[_getDisplayOrder(_order)]]</span>
+        <span part="order">${this._getDisplayOrder(this._order)}</span>
       </div>
     `;
   }

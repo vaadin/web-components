@@ -11,14 +11,16 @@ describe('sorting', () => {
   describe('sorter', () => {
     let sorter, button, orderIndicator;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       sorter = fixtureSync(`
         <vaadin-grid-sorter path="path">
           <span class="title">title</span><button>Button</button>
         </vaadin-grid-sorter>
       `);
+      await nextFrame();
       button = sorter.querySelector('button');
       orderIndicator = sorter.shadowRoot.querySelector('[part="order"]');
+      await nextFrame();
     });
 
     it('should have default direction', () => {
@@ -40,28 +42,33 @@ describe('sorting', () => {
       expect(sorter.direction).to.equal(null);
     });
 
-    it('should fire a sorter-changed event', () => {
+    it('should fire a sorter-changed event', async () => {
       const spy = sinon.spy();
       sorter.addEventListener('sorter-changed', spy);
 
       sorter.direction = 'asc';
+      await nextFrame();
 
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should show order indicator', () => {
+    it('should show order indicator', async () => {
       expect(orderIndicator.innerText).to.equal('');
       sorter._order = 0;
+      await nextFrame();
       expect(orderIndicator.innerText).to.equal('1');
       sorter._order = 4;
+      await nextFrame();
       expect(orderIndicator.innerText).to.equal('5');
     });
 
-    it('should show direction indicator', () => {
+    it('should show direction indicator', async () => {
       expect(sorter.getAttribute('direction')).to.equal(null);
       sorter.direction = 'asc';
+      await nextFrame();
       expect(sorter.getAttribute('direction')).to.equal('asc');
       sorter.direction = 'desc';
+      await nextFrame();
       expect(sorter.getAttribute('direction')).to.equal('desc');
     });
 
@@ -103,11 +110,14 @@ describe('sorting', () => {
       await nextFrame();
     });
 
-    it('should preserve sort order for sorters when grid is re-attached', () => {
+    it('should preserve sort order for sorters when grid is re-attached', async () => {
       click(sorterSecond);
+      await nextFrame();
       const parentNode = grid.parentNode;
       parentNode.removeChild(grid);
+      await nextFrame();
       parentNode.appendChild(grid);
+      await nextFrame();
 
       expect(sorterFirst._order).to.equal(2);
       expect(sorterSecond._order).to.equal(0);
@@ -193,10 +203,12 @@ describe('sorting', () => {
       ];
 
       flushGrid(grid);
+      await nextFrame();
     });
 
-    it('should ignore sorter', () => {
+    it('should ignore sorter', async () => {
       sorterFirst.direction = '';
+      await nextFrame();
       const sortOrders = grid._mapSorters();
       expect(sortOrders).to.have.length(1);
       expect(sortOrders[0].path).to.equal('last');
@@ -208,15 +220,17 @@ describe('sorting', () => {
       expect(sorterLast._order).to.equal(0);
     });
 
-    it('should not show order indicators for one sorter', () => {
+    it('should not show order indicators for one sorter', async () => {
       sorterLast.direction = '';
+      await nextFrame();
       expect(sorterFirst._order).to.equal(null);
       expect(sorterLast._order).to.equal(null);
     });
 
-    it('should not show order indicators', () => {
+    it('should not show order indicators', async () => {
       sorterFirst.direction = null;
       sorterLast.direction = null;
+      await nextFrame();
       expect(sorterFirst._order).to.equal(null);
       expect(sorterLast._order).to.equal(null);
     });
@@ -232,79 +246,86 @@ describe('sorting', () => {
         expect(getBodyCellContent(grid, 2, 1).innerText).to.equal('bar');
       });
 
-      it('should sort automatically on sort', () => {
+      it('should sort automatically on sort', async () => {
         sorterFirst.direction = null;
+        await nextFrame();
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('foo');
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
         expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('bar');
       });
 
-      it('should not sort the items if sorter directions are not defined', () => {
+      it('should not sort the items if sorter directions are not defined', async () => {
         sorterFirst.direction = null;
         sorterLast.direction = null;
         grid.items = buildDataSet(100);
+        await nextFrame();
         const bodyRows = getRows(grid.$.items);
         const cells = getRowCells(bodyRows[0]);
         expect(cells[0]._content.__templateInstance.item).to.equal(grid.items[0]);
       });
 
-      it('should sort empty values', () => {
+      it('should sort empty values', async () => {
         grid.items = [
           { first: 'foo', last: 'bar' },
           { first: '', last: '' },
           { first: 'bar', last: 'bar' }
         ];
 
+        await nextFrame();
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
         expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('');
       });
 
-      it('should sort null values', () => {
+      it('should sort null values', async () => {
         grid.items = [
           { first: 'foo', last: 'bar' },
           { first: null, last: null },
           { first: 'bar', last: 'bar' }
         ];
 
+        await nextFrame();
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
         expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('');
       });
 
-      it('should sort undefined values', () => {
+      it('should sort undefined values', async () => {
         grid.items = [
           { first: 'foo', last: 'bar' },
           { first: undefined, last: undefined },
           { first: 'bar', last: 'bar' }
         ];
 
+        await nextFrame();
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
         expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('');
       });
 
-      it('should sort NaN values', () => {
+      it('should sort NaN values', async () => {
         grid.items = [
           { first: 'foo', last: 'bar' },
           { first: NaN, last: NaN },
           { first: 'bar', last: 'bar' }
         ];
 
+        await nextFrame();
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
         expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('NaN');
       });
 
-      it('should sort numbers correctly', () => {
+      it('should sort numbers correctly', async () => {
         grid.items = [{ first: 1 }, { first: 2 }, { first: 11 }];
 
+        await nextFrame();
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('1');
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('2');
         expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('11');
       });
 
-      it('should sort dates correctly', () => {
+      it('should sort dates correctly', async () => {
         grid.items = [
           { first: 1, last: new Date(2000, 1, 2) },
           { first: 2, last: new Date(2000, 1, 3) },
@@ -312,7 +333,9 @@ describe('sorting', () => {
         ];
 
         sorterFirst.direction = '';
+        await nextFrame();
         sorterLast.direction = 'asc';
+        await nextFrame();
 
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('3');
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('1');
@@ -321,12 +344,13 @@ describe('sorting', () => {
     });
 
     describe('data provider', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         grid.dataProvider = sinon.spy(grid.dataProvider);
         grid.clearCache();
+        await nextFrame();
       });
 
-      it('should request with default sorting', () => {
+      it('should request with default sorting', async () => {
         const lastCall = grid.dataProvider.lastCall;
         const params = lastCall.args[0];
         expect(params.sortOrders).to.eql([
@@ -335,8 +359,9 @@ describe('sorting', () => {
         ]);
       });
 
-      it('should request new data on sort', () => {
+      it('should request new data on sort', async () => {
         sorterFirst.direction = 'desc';
+        await nextFrame();
         const lastCall = grid.dataProvider.lastCall;
         const params = lastCall.args[0];
         expect(params.sortOrders).to.eql([
@@ -345,41 +370,46 @@ describe('sorting', () => {
         ]);
       });
 
-      it('should request new data on change in existing sorters', () => {
+      it('should request new data on change in existing sorters', async () => {
         grid.dataProvider.resetHistory();
         sorterLast.direction = 'asc';
+        await nextFrame();
         expect(grid.dataProvider.called).to.be.true;
       });
     });
 
     describe('single column sorting', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         grid.multiSort = false;
         grid.dataProvider = sinon.spy(grid.dataProvider);
+        await nextFrame();
       });
 
-      it('should only using single sorter', () => {
+      it('should only using single sorter', async () => {
         grid.dataProvider.resetHistory();
         sorterFirst.direction = 'desc';
+        await nextFrame();
 
         expect(grid.dataProvider.args[0][0].sortOrders.length).to.eql(1);
       });
 
-      it('should remove order from sorters', () => {
+      it('should remove order from sorters', async () => {
         // initial order before multiSort was set
         expect(sorterLast._order).to.eql(0);
         expect(sorterFirst._order).to.eql(1);
 
         sorterFirst.direction = 'desc';
+        await nextFrame();
 
         expect(sorterFirst._order).to.be.null;
         expect(sorterLast._order).to.be.null;
       });
 
-      it('should remove direction from previous sorter', () => {
+      it('should remove direction from previous sorter', async () => {
         sorterFirst.direction = 'desc';
-
+        await nextFrame();
         sorterLast.direction = 'desc';
+        await nextFrame();
 
         expect(sorterFirst.direction).to.be.null;
         expect(sorterLast.direction).to.eql('desc');
@@ -391,14 +421,15 @@ describe('sorting', () => {
         return sorter.parentNode.assignedSlot.parentNode;
       }
 
-      it('should set aria-sort on cells', () => {
+      it('should set aria-sort on cells', async () => {
         expect(getSorterCell(sorterFirst).getAttribute('aria-sort')).to.equal('ascending');
         expect(getSorterCell(sorterLast).getAttribute('aria-sort')).to.equal('descending');
       });
 
-      it('should update aria-sort on sorter change', () => {
+      it('should update aria-sort on sorter change', async () => {
         sorterFirst.direction = 'desc';
         sorterLast.direction = null;
+        await nextFrame();
 
         expect(getSorterCell(sorterFirst).getAttribute('aria-sort')).to.equal('descending');
         expect(getSorterCell(sorterLast).getAttribute('aria-sort')).to.equal('none');

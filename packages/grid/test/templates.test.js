@@ -383,25 +383,13 @@ describe('using items array', () => {
     await nextFrame();
   });
 
-  it('should notify items array path', async () => {
+  // No longer works with LitElement based vaadin-grid
+  it.skip('should notify items array path', async () => {
     const input = getBodyCellContent(grid, 0, 0).querySelector('input');
     input.value = 'baz';
     input.dispatchEvent(new CustomEvent('input'));
     await nextFrame();
     expect(div.textContent).to.equal('baz');
-  });
-
-  it('should not notify for non-item properties', async () => {
-    const input = grid.querySelector('input[type="checkbox"]');
-    const spy = sinon.spy(grid, 'notifyPath');
-
-    input.checked = true;
-    input.dispatchEvent(new CustomEvent('change'));
-
-    await nextFrame();
-    spy.getCalls().forEach((call) => {
-      expect(call.args[0]).to.not.contain('items');
-    });
   });
 });
 
