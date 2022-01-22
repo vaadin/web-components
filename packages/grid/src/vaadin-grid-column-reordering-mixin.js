@@ -32,7 +32,7 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_updateOrders(_columnTree, _columnTree.*)'];
+      return ['_updateOrders(_columnTree)'];
     }
 
     ready() {
@@ -267,8 +267,8 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /** @private */
-    _updateOrders(columnTree, splices) {
-      if (columnTree === undefined || splices === undefined) {
+    _updateOrders(columnTree) {
+      if (columnTree === undefined) {
         return;
       }
 

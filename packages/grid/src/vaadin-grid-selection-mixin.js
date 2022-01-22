@@ -18,13 +18,14 @@ export const SelectionMixin = (superClass) =>
         selectedItems: {
           type: Object,
           notify: true,
-          value: () => []
+          value: () => [],
+          attribute: 'selected-items'
         }
       };
     }
 
     static get observers() {
-      return ['_selectedItemsChanged(selectedItems.*)'];
+      return ['_selectedItemsChanged(selectedItems)'];
     }
 
     /**

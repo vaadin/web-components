@@ -18,7 +18,8 @@ export const SortMixin = (superClass) =>
          */
         multiSort: {
           type: Boolean,
-          value: false
+          value: false,
+          attribute: 'multi-sort'
         },
 
         /**

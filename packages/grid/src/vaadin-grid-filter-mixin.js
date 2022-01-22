@@ -21,9 +21,8 @@ export const FilterMixin = (superClass) =>
       };
     }
 
-    /** @protected */
-    ready() {
-      super.ready();
+    constructor() {
+      super();
       this.addEventListener('filter-changed', this._filterChanged.bind(this));
     }
 

@@ -4,9 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/text-field/src/vaadin-text-field.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 
 /**
  * `<vaadin-grid-filter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,
@@ -35,22 +36,29 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
  *
  * @extends HTMLElement
  */
-class GridFilter extends class extends PolymerElement {} {
-  static get template() {
-    return html`
-      <style>
-        :host {
-          display: inline-flex;
-          max-width: 100%;
-        }
+class GridFilter extends class extends PolylitMixin(LitElement) {} {
+  static get styles() {
+    return css`
+      :host {
+        display: inline-flex;
+        max-width: 100%;
+      }
 
-        #filter {
-          width: 100%;
-          box-sizing: border-box;
-        }
-      </style>
+      #filter {
+        width: 100%;
+        box-sizing: border-box;
+      }
+    `;
+  }
+
+  render() {
+    return html`
       <slot name="filter">
-        <vaadin-text-field id="filter" value="{{value}}"></vaadin-text-field>
+        <vaadin-text-field
+          id="filter"
+          .value="${this.value}"
+          @value-changed="${(e) => (this.value = e.detail.value)}"
+        ></vaadin-text-field>
       </slot>
     `;
   }

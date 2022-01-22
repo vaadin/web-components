@@ -180,19 +180,22 @@ describe('row details', () => {
       expect(grid._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
     });
 
-    it('should open details for equaling item', () => {
+    it('should open details for equaling item', async () => {
       const cells = getRowCells(bodyRows[0]);
       grid.itemIdPath = 'value';
       grid.openItemDetails({ value: 'foo0' });
+      await nextFrame();
       expect(cells[1].hidden).to.be.false;
     });
 
-    it('should close details for equaling item', () => {
+    it('should close details for equaling item', async () => {
       const cells = getRowCells(bodyRows[0]);
       grid.itemIdPath = 'value';
       grid.openItemDetails(bodyRows[0]._item);
+      await nextFrame();
       expect(cells[1].hidden).to.be.false;
       grid.closeItemDetails({ value: 'foo0' });
+      await nextFrame();
       expect(cells[1].hidden).to.be.true;
     });
 
@@ -236,13 +239,14 @@ describe('row details', () => {
       bodyRows = getRows(grid.$.items);
     });
 
-    it('should have the correct index on details template', () => {
+    it('should have the correct index on details template', async () => {
       // open details for item 0
       grid.openItemDetails('foo');
 
       // open details for item 1
       grid.openItemDetails('bar');
 
+      await nextFrame();
       const firstRowCells = getRowCells(bodyRows[0]);
       const secondRowCells = getRowCells(bodyRows[1]);
       expect(getCellContent(firstRowCells[1]).textContent.trim()).to.equal('0-details');
@@ -265,8 +269,9 @@ describe('row details', () => {
       bodyRows = getRows(grid.$.items);
     });
 
-    it('should support slotted details templates', () => {
+    it('should support slotted details templates', async () => {
       grid.openItemDetails('foo');
+      await nextFrame();
       expect(getBodyCellContent(grid, 0, 1).textContent.trim()).to.equal('0-details');
     });
 

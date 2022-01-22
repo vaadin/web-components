@@ -36,12 +36,13 @@ describe('column auto-width', function () {
     }
   }
 
-  function recalculateWidths() {
-    return new Promise((resolve) => {
+  async function recalculateWidths() {
+    await new Promise((resolve) => {
       whenColumnWidthsCalculated(() => {
         resolve();
       });
     });
+    await nextFrame();
   }
 
   beforeEach(async () => {
@@ -149,7 +150,7 @@ describe('async recalculateWidth columns', () => {
     `);
   });
 
-  it('should recalculate column widths when child items loaded', () => {
+  it('should recalculate column widths when child items loaded', async () => {
     const data = [
       {
         name: 'foo',
@@ -163,14 +164,16 @@ describe('async recalculateWidth columns', () => {
     grid.dataProvider = (params, cb) => {
       grid._getData = () => cb(params.parentItem ? params.parentItem.children : data, 1);
     };
+    await nextFrame();
     grid._getData();
-    flushGrid(grid);
+    await nextFrame();
     sinon.spy(grid, '_recalculateColumnWidths');
     grid.expandItem(data[0]);
     grid.recalculateColumnWidths();
+    await nextFrame();
     expect(grid._recalculateColumnWidths.called).to.be.false;
     grid._getData();
-    flushGrid(grid);
+    await nextFrame();
     expect(grid._recalculateColumnWidths.called).to.be.true;
   });
 });
@@ -291,7 +294,7 @@ describe('column group', () => {
     expectColumnsWidthToBeOk(grid, [420], 25);
   });
 
-  it('should consider vaadin-grid-column-group footer when calculating column width', () => {
+  it('should consider vaadin-grid-column-group footer when calculating column width', async () => {
     const grid = createGrid(`
       <vaadin-grid style="width: 200px">
         <vaadin-grid-column-group>
@@ -318,6 +321,7 @@ describe('column group', () => {
     };
 
     grid.recalculateColumnWidths();
+    await nextFrame();
     expectColumnsWidthToBeOk(grid, [333]);
   });
 

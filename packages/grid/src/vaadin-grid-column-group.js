@@ -4,8 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { LitElement } from 'lit';
 import { microTask } from '@vaadin/component-base/src/async.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ColumnBaseMixin } from './vaadin-grid-column.js';
 import { updateColumnOrders } from './vaadin-grid-helpers.js';
 
@@ -41,7 +42,7 @@ import { updateColumnOrders } from './vaadin-grid-helpers.js';
  * @extends HTMLElement
  * @mixes ColumnBaseMixin
  */
-class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
+class GridColumnGroup extends ColumnBaseMixin(PolylitMixin(LitElement)) {
   static get is() {
     return 'vaadin-grid-column-group';
   }

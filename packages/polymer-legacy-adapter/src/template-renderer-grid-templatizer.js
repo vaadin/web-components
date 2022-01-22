@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { Templatizer } from './template-renderer-templatizer.js';
 
 export class GridTemplatizer extends Templatizer {
@@ -34,12 +35,29 @@ export class GridTemplatizer extends Templatizer {
       return;
     }
 
-    const index = this.__grid.items.indexOf(instance.item);
+    // Notify instances of other column templates of the path change
+    this.__grid._columnTree[this.__grid._columnTree.length - 1].forEach((col) => {
+      FlattenedNodesObserver.getFlattenedNodes(col)
+        .filter((child) => {
+          return child instanceof HTMLTemplateElement;
+        })
+        .forEach((template) => {
+          if (template.__templatizer) {
+            template.__templatizer.__templateInstances.forEach((otherInstance) => {
+              if (otherInstance.item === instance.item) {
+                otherInstance.notifyPath(path, value);
+              }
+            });
+          }
+        });
+    });
 
+    // Notify the grid of the path change in items array
+    const index = this.__grid.items.indexOf(instance.item);
     path = path.replace(/^item\./, '');
     path = `items.${index}.${path}`;
 
-    this.__grid.notifyPath(path, value);
+    this.__grid.notifyPath && this.__grid.notifyPath(path, value);
   }
 
   /**
