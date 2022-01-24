@@ -182,8 +182,8 @@ describe('field-mixin', () => {
         element.invalid = true;
       });
 
-      it('should return slotted message content as an errorMessage', () => {
-        expect(element.errorMessage).to.equal('Required field');
+      it('should not return return slotted message content as an errorMessage', () => {
+        expect(element.errorMessage).to.be.not.ok;
       });
 
       it('should set id on the slotted error message element', () => {

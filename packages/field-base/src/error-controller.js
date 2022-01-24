@@ -65,7 +65,7 @@ export class ErrorController extends SlotController {
 
     // Save the custom error message content on the host.
     if (errorNode.textContent && !this.errorMessage) {
-      this.host.errorMessage = errorNode.textContent.trim();
+      this.errorMessage = errorNode.textContent.trim();
     }
 
     this.__updateHasError();
