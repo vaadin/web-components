@@ -10,8 +10,9 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
+import { LabelMixin } from '@vaadin/field-base/src/label-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { SlotLabelMixin } from '@vaadin/field-base/src/slot-label-mixin.js';
+import { SlotTargetController } from '@vaadin/field-base/src/slot-target-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -55,9 +56,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ElementMixin
  * @mixes ActiveMixin
  * @mixes CheckedMixin
- * @mixes SlotLabelMixin
+ * @mixes LabelMixin
  */
-class RadioButton extends SlotLabelMixin(
+class RadioButton extends LabelMixin(
   CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))))))
 ) {
   static get is() {
@@ -147,32 +148,6 @@ class RadioButton extends SlotLabelMixin(
     this.value = 'on';
   }
 
-  /**
-   * A reference to the default slot from which nodes are copied to the label node.
-   *
-   * @override
-   * @protected
-   * @type {HTMLSlotElement}
-   */
-  get _sourceSlot() {
-    return this.$.noop;
-  }
-
-  /**
-   * Override __copyNodesToSlotTarget from SlotTargetMixin to show a warning.
-   * @override
-   * @protected
-   * @param {!Array<!Node>} nodes
-   **/
-  __copyNodesToSlotTarget(nodes) {
-    super.__copyNodesToSlotTarget(nodes);
-
-    console.warn(
-      `WARNING: Since Vaadin 22, placing the label as a direct child of a <vaadin-radio-button> is deprecated.
-  Please use <label slot="label"> wrapper or the label property instead.`
-    );
-  }
-
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
@@ -186,7 +161,22 @@ class RadioButton extends SlotLabelMixin(
       });
       this.addController(this._inputController);
       this.addController(new LabelledInputController(this.inputElement, this._labelController));
+      this.addController(
+        new SlotTargetController(
+          this.$.noop,
+          () => this._labelController.node,
+          () => this.__warnDeprecated()
+        )
+      );
     }
+  }
+
+  /** @private */
+  __warnDeprecated() {
+    console.warn(
+      `WARNING: Since Vaadin 22, placing the label as a direct child of a <vaadin-radio-button> is deprecated.
+  Please use <label slot="label"> wrapper or the label property instead.`
+    );
   }
 }
 
