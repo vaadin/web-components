@@ -531,7 +531,11 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       if (this.interacting !== wantInteracting && cell !== null) {
         if (wantInteracting) {
-          const focusTarget = cell._content.querySelector('[focus-target]') || cell._content.firstElementChild;
+          const focusTarget =
+            cell._content.querySelector('[focus-target]') ||
+            // If a child element hasn't been explicitly marked as a focus target,
+            // fall back to any focusable element inside the cell.
+            [...cell._content.querySelectorAll('*')].find((node) => this._isFocusable(node));
           if (focusTarget) {
             e.preventDefault();
             focusTarget.focus();
