@@ -78,13 +78,14 @@ class Checkbox extends SlotLabelMixin(
         }
 
         .vaadin-checkbox-container {
-          display: inline-flex;
+          display: grid;
+          grid-template-columns: auto 1fr;
           align-items: baseline;
         }
 
         .vaadin-checkbox-wrapper {
           position: relative;
-          flex: none;
+          height: 100%;
         }
 
         /* visually hidden */
