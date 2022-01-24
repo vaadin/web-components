@@ -80,13 +80,15 @@ class RadioButton extends SlotLabelMixin(
         }
 
         .vaadin-radio-button-container {
-          display: flex;
+          display: grid;
+          grid-auto-rows: 1fr;
+          grid-template-columns: auto 1fr;
           align-items: baseline;
-          position: relative;
         }
 
         .vaadin-radio-button-wrapper {
-          flex: none;
+          position: relative;
+          height: 100%;
         }
 
         /* visually hidden */
@@ -100,10 +102,6 @@ class RadioButton extends SlotLabelMixin(
           opacity: 0;
           cursor: inherit;
           margin: 0;
-        }
-
-        ::slotted(label) {
-          flex: auto;
         }
       </style>
       <div class="vaadin-radio-button-container">
