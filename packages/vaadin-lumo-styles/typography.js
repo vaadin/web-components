@@ -103,7 +103,7 @@ const typography = css`
     text-decoration: none;
   }
 
-  a:any-link:hover {
+  a:where(:any-link):hover {
     text-decoration: underline;
   }
 
