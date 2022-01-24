@@ -1,4 +1,5 @@
 import '@vaadin/vaadin-lumo-styles/color.js';
+import '@vaadin/vaadin-lumo-styles/font-icons.js';
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
@@ -52,31 +53,26 @@ registerStyles(
 
     /* Checkmark */
     [part='checkbox']::after {
-      content: '';
       pointer-events: none;
-      display: inline-block;
-      width: 0;
-      height: 0;
-      border: 0 solid var(--lumo-primary-contrast-color);
-      border-width: 0.1875em 0 0 0.1875em;
-      box-sizing: border-box;
-      transform-origin: 0 0;
+      font-family: 'lumo-icons';
+      content: var(--lumo-icons-checkmark);
+      color: var(--lumo-primary-contrast-color);
+      font-size: calc(var(--lumo-size-m) / 2 + 2px);
+      line-height: 1;
       position: absolute;
-      top: 0.8125em;
-      left: 0.5em;
-      transform: scale(0.55) rotate(-135deg);
+      top: -1px;
+      left: -1px;
+      contain: content;
       opacity: 0;
     }
 
     :host([checked]) [part='checkbox']::after {
       opacity: 1;
-      width: 0.625em;
-      height: 1.0625em;
     }
 
     /* Indeterminate checkmark */
     :host([indeterminate]) [part='checkbox']::after {
-      transform: none;
+      content: '';
       opacity: 1;
       top: 45%;
       height: 10%;
@@ -85,7 +81,6 @@ registerStyles(
       width: auto;
       border: 0;
       background-color: var(--lumo-primary-contrast-color);
-      transition: opacity 0.25s;
     }
 
     /* Focus ring */
@@ -108,7 +103,7 @@ registerStyles(
     }
 
     :host([disabled]) [part='checkbox']::after {
-      border-color: var(--lumo-contrast-30pct);
+      color: var(--lumo-contrast-30pct);
     }
 
     :host([indeterminate][disabled]) [part='checkbox']::after {
@@ -118,11 +113,6 @@ registerStyles(
     /* RTL specific styles */
     :host([dir='rtl'][has-label]) ::slotted(label) {
       padding: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
-    }
-
-    /* Transition the checkmark if activated with the mouse (disabled for grid select-all this way) */
-    :host(:hover) [part='checkbox']::after {
-      transition: width 0.1s, height 0.25s;
     }
 
     /* Used for activation "halo" */
