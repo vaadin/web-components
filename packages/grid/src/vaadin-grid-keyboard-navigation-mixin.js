@@ -131,6 +131,37 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /**
+     * Since the focused cell/row state is stored as an element reference, the reference may get
+     * out of sync when the virtual indexes for elements update due to effective size change.
+     * This function updates the reference to the correct element after a possible index change.
+     * @private
+     */
+    __updateItemsFocusable() {
+      if (!this._itemsFocusable) {
+        return;
+      }
+
+      const wasFocused = this.shadowRoot.activeElement === this._itemsFocusable;
+
+      this._getVisibleRows().forEach((row) => {
+        if (row.index === this._focusedItemIndex) {
+          if (this.__rowFocusMode) {
+            // Row focus mode
+            this._itemsFocusable = row;
+          } else if (this._itemsFocusable.parentElement) {
+            // Cell focus mode
+            const cellIndex = [...this._itemsFocusable.parentElement.children].indexOf(this._itemsFocusable);
+            this._itemsFocusable = row.children[cellIndex];
+          }
+        }
+      });
+
+      if (wasFocused) {
+        this._itemsFocusable.focus();
+      }
+    }
+
+    /**
      * @param {!KeyboardEvent} e
      * @protected
      */
@@ -804,6 +835,8 @@ export const KeyboardNavigationMixin = (superClass) =>
           delete this._focusedColumnOrder;
           this._itemsFocusable = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
         }
+      } else {
+        this.__updateItemsFocusable();
       }
     }
 
