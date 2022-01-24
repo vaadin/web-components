@@ -81,7 +81,6 @@ class RadioButton extends SlotLabelMixin(
 
         .vaadin-radio-button-container {
           display: grid;
-          grid-auto-rows: 1fr;
           grid-template-columns: auto 1fr;
           align-items: baseline;
         }
