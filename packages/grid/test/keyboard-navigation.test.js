@@ -349,6 +349,17 @@ describe('keyboard navigation', () => {
 
       expect(grid.hasAttribute('navigating')).to.be.true;
     });
+
+    it('should not leave navigation mode on enter in a cell with only non-focusable elements', async () => {
+      // Focus a cell with only non-focusable elements
+      focusItem(0);
+      await sendKeys({ press: 'ArrowRight' });
+      await sendKeys({ press: 'ArrowRight' });
+      // Press Enter
+      await sendKeys({ press: 'Enter' });
+      // Since the element (span) in the cell isn't focusable, the grid should stay in navigation mode
+      expect(grid.hasAttribute('navigating')).to.be.true;
+    });
   });
 
   describe('navigating with tab', () => {
