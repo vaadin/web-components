@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { InputController } from '../src/input-controller.js';
@@ -80,6 +81,16 @@ describe('input-field-mixin', () => {
       const spy = sinon.spy(element, 'validate');
       input.dispatchEvent(new Event('blur'));
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should validate on input event', async () => {
+      const spy = sinon.spy(element, 'validate');
+      element.required = true;
+      element.invalid = true;
+      input.focus();
+      await sendKeys({ type: 'f' });
+      expect(spy.calledOnce).to.be.true;
+      expect(element.invalid).to.be.false;
     });
 
     it('should validate on value change when field is invalid', () => {

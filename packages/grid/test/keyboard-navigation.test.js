@@ -15,6 +15,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
+import '../vaadin-grid-tree-column.js';
 import '../vaadin-grid-column-group.js';
 import '../vaadin-grid-selection-column.js';
 import {
@@ -346,6 +347,17 @@ describe('keyboard navigation', () => {
 
       right();
 
+      expect(grid.hasAttribute('navigating')).to.be.true;
+    });
+
+    it('should not leave navigation mode on enter in a cell with only non-focusable elements', async () => {
+      // Focus a cell with only non-focusable elements
+      focusItem(0);
+      await sendKeys({ press: 'ArrowRight' });
+      await sendKeys({ press: 'ArrowRight' });
+      // Press Enter
+      await sendKeys({ press: 'Enter' });
+      // Since the element (span) in the cell isn't focusable, the grid should stay in navigation mode
       expect(grid.hasAttribute('navigating')).to.be.true;
     });
   });
@@ -2095,5 +2107,58 @@ describe('empty grid', () => {
 
     // Expect programmatic focus on focus exit element
     expect(grid.shadowRoot.activeElement).to.equal(grid.$.focusexit);
+  });
+});
+
+describe('hierarchical data', () => {
+  // Let's use a count that equals the pageSize so we can ignore page + pageSize in the data provider
+  const itemsOnEachLevel = 50;
+
+  function hierarchicalDataProvider({ parentItem }, callback) {
+    const items = [...Array(itemsOnEachLevel).keys()].map((i) => {
+      return {
+        name: `${parentItem ? parentItem.name + '-' : ''}${i}`,
+        children: true
+      };
+    });
+
+    callback(items, itemsOnEachLevel);
+  }
+
+  beforeEach(() => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-tree-column path="name"></vaadin-grid-tree-column>
+      </vaadin-grid>
+    `);
+
+    grid.dataProvider = hierarchicalDataProvider;
+    flushGrid(grid);
+  });
+
+  it('should not change focused cell on expand', async () => {
+    // Focus the first cell/row
+    focusItem(0);
+    // Press ctrl+end to move the focus to the last cell/row
+    ctrlEnd();
+    expect(grid.shadowRoot.activeElement.parentNode.index).to.equal(itemsOnEachLevel - 1);
+    // Press space to expand the row
+    await sendKeys({ press: 'Space' });
+    // Expect the focus to not have changed
+    expect(grid.shadowRoot.activeElement.parentNode.index).to.equal(itemsOnEachLevel - 1);
+  });
+
+  it('should not change focused cell on expand - row focus mode', async () => {
+    // Focus the first cell/row
+    focusItem(0);
+    // Press ctrl+end to move the focus to the last cell/row
+    ctrlEnd();
+    // Enter row focus mode
+    left();
+    expect(grid.shadowRoot.activeElement.index).to.equal(itemsOnEachLevel - 1);
+    // Press ArrowRight to expand the row
+    await sendKeys({ press: 'ArrowRight' });
+    // Expect the focus to not have changed
+    expect(grid.shadowRoot.activeElement.index).to.equal(itemsOnEachLevel - 1);
   });
 });
