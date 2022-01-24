@@ -86,5 +86,10 @@ describe('chart', () => {
       element.setAttribute('theme', 'monotone');
       await visualDiff(element, 'pie-monotone');
     });
+
+    it('pie-classic', async () => {
+      element.setAttribute('theme', 'classic');
+      await visualDiff(element, 'pie-classic');
+    });
   });
 });
