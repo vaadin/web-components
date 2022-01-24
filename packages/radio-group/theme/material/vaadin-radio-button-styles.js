@@ -17,6 +17,10 @@ registerStyles(
       padding: 4px 0.875em 4px 0.375em;
     }
 
+    ::slotted(input) {
+      width: 28px;
+    }
+
     [part='radio'] {
       display: inline-block;
       width: 16px;
