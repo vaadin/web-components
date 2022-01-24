@@ -80,13 +80,12 @@ class RadioButton extends SlotLabelMixin(
         }
 
         .vaadin-radio-button-container {
-          display: inline-flex;
+          display: flex;
           align-items: baseline;
-          width: 100%;
+          position: relative;
         }
 
         .vaadin-radio-button-wrapper {
-          position: relative;
           flex: none;
         }
 
@@ -102,8 +101,12 @@ class RadioButton extends SlotLabelMixin(
           cursor: inherit;
           margin: 0;
         }
+
+        ::slotted(label) {
+          flex: auto;
+        }
       </style>
-      <div class="vaadin-radio-button-container" on-click="_onContainerClick">
+      <div class="vaadin-radio-button-container">
         <div class="vaadin-radio-button-wrapper">
           <div part="radio"></div>
           <slot name="input"></slot>
@@ -186,16 +189,6 @@ class RadioButton extends SlotLabelMixin(
       });
       this.addController(this._inputController);
       this.addController(new LabelledInputController(this.inputElement, this._labelController));
-    }
-  }
-
-  /** @private */
-  _onContainerClick(event) {
-    const path = event.composedPath();
-
-    // Forward clicks outside the <input> and <label> elements to handle them
-    if (!this.disabled && !path.includes(this._labelNode) && !path.includes(this.inputElement)) {
-      this._labelNode.click();
     }
   }
 }

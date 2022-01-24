@@ -40,6 +40,10 @@ registerStyles(
       cursor: var(--lumo-clickable-cursor);
     }
 
+    ::slotted(input) {
+      width: calc(var(--lumo-size-m) / 2 + var(--lumo-space-s));
+    }
+
     /* Used for activation "halo" */
     [part='radio']::before {
       /* Needed to align the radio-button nicely on the baseline */
