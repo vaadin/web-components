@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, mousedown, mouseup, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, mousedown, mouseup, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-checkbox.js';
@@ -226,42 +226,6 @@ describe('checkbox', () => {
         const event = changeSpy.firstCall.args[0];
         expect(event).to.have.property('composed', false);
       });
-    });
-  });
-
-  describe('container click', () => {
-    let container;
-
-    beforeEach(() => {
-      checkbox = fixtureSync(`<vaadin-checkbox label="Label"></vaadin-checkbox>`);
-      input = checkbox.querySelector('[slot=input]');
-      label = checkbox.querySelector('[slot=label]');
-      container = checkbox.shadowRoot.querySelector('[class$=container]');
-    });
-
-    it('should forward container click to label element', () => {
-      const spy = sinon.spy(label, 'click');
-      container.click();
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should not forward container click when disabled', () => {
-      const spy = sinon.spy(label, 'click');
-      checkbox.disabled = true;
-      container.click();
-      expect(spy.calledOnce).to.be.false;
-    });
-
-    it('should not forward click bubbling from the input', () => {
-      const spy = sinon.spy(label, 'click');
-      fire(input, 'click');
-      expect(spy.calledOnce).to.be.false;
-    });
-
-    it('should not forward click bubbling from the label', () => {
-      const spy = sinon.spy(label, 'click');
-      fire(label, 'click');
-      expect(spy.calledOnce).to.be.false;
     });
   });
 
