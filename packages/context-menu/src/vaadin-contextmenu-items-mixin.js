@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Item } from '@vaadin/item/src/vaadin-item.js';
 import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
 
@@ -361,7 +362,10 @@ export const ItemsMixin = (superClass) =>
           }
         };
 
-        menu.$.overlay.addEventListener('mouseover', openSubMenu);
+        // Open a submenu on click event when a touch device is used.
+        // On desktop, a submenu opens on hover.
+        menu.$.overlay.addEventListener(isTouch ? 'click' : 'mouseover', openSubMenu);
+
         menu.$.overlay.addEventListener('keydown', (e) => {
           const isRTL = this.__isRTL;
           const shouldOpenSubMenu =

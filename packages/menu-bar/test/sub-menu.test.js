@@ -16,7 +16,13 @@ import {
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-menu-bar.js';
+import { setCancelSyntheticClickEvents } from '@polymer/polymer/lib/utils/settings.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { onceOpened } from './helpers.js';
+
+setCancelSyntheticClickEvents(false);
+
+const menuOpenEvent = isTouch ? 'click' : 'mouseover';
 
 describe('sub-menu', () => {
   let menu, buttons, subMenu, item;
@@ -436,6 +442,8 @@ describe('sub-menu', () => {
 describe('open on hover', () => {
   let menu, buttons, subMenu;
 
+  const openOnHoverEvent = 'mouseover';
+
   beforeEach(async () => {
     menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
     menu.items = [
@@ -464,11 +472,11 @@ describe('open on hover', () => {
   it('should set pointer events to `auto` when opened and remove when closed', async () => {
     expect(menu.style.pointerEvents).to.be.empty;
 
-    buttons[0].dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+    buttons[0].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
     await nextRender(subMenu);
     expect(menu.style.pointerEvents).to.equal('auto');
 
-    buttons[2].dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+    buttons[2].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
     await nextRender(subMenu);
     expect(menu.style.pointerEvents).to.equal('auto');
 
@@ -478,16 +486,16 @@ describe('open on hover', () => {
   });
 
   it('should open sub-menu on mouseover on button with nested items', async () => {
-    buttons[0].dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+    buttons[0].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.true;
     expect(subMenu.listenOn).to.equal(buttons[0]);
   });
 
   it('should close open sub-menu on mouseover on button without nested items', async () => {
-    buttons[0].dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+    buttons[0].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
     await nextRender(subMenu);
-    buttons[1].dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+    buttons[1].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.false;
   });
@@ -496,7 +504,7 @@ describe('open on hover', () => {
     menu.openOnHover = false;
     buttons[0].click();
     await nextRender(subMenu);
-    buttons[2].dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+    buttons[2].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.true;
     expect(subMenu.listenOn).to.equal(buttons[2]);
@@ -505,14 +513,14 @@ describe('open on hover', () => {
   it('should not select value of button without nested items', async () => {
     const spy = sinon.spy();
     menu.addEventListener('item-selected', spy);
-    buttons[1].dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+    buttons[1].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
     expect(spy.called).to.be.false;
   });
 
   it('should not close sub-menu on expanded button mouseover', async () => {
-    buttons[0].dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+    buttons[0].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
     await nextRender(subMenu);
-    buttons[0].dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+    buttons[0].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.true;
   });
@@ -604,7 +612,7 @@ describe('theme attribute', () => {
 
     // open submenu
     menu.openOnHover = true;
-    buttons[0].dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+    buttons[0].dispatchEvent(new CustomEvent(menuOpenEvent, { bubbles: true, composed: true }));
     await nextRender(subMenu);
   });
 
@@ -631,7 +639,7 @@ describe('theme attribute', () => {
 
     subMenu.close();
     menu.removeAttribute('theme');
-    buttons[0].dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+    buttons[0].dispatchEvent(new CustomEvent(menuOpenEvent, { bubbles: true, composed: true }));
     await nextRender(subMenu);
 
     items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
@@ -651,7 +659,7 @@ describe('touch', () => {
       const overlay = menu.$.overlay;
       overlay.__openingHandler && overlay.__openingHandler();
     }
-    openTarget.dispatchEvent(new CustomEvent('mouseover', { bubbles: true, composed: true }));
+    openTarget.dispatchEvent(new CustomEvent(menuOpenEvent, { bubbles: true, composed: true }));
   };
 
   beforeEach(async () => {

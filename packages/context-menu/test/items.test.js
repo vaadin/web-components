@@ -8,8 +8,6 @@ import {
   escKeyDown,
   fire,
   fixtureSync,
-  isChrome,
-  isIOS,
   nextFrame,
   nextRender,
   spaceKeyDown
@@ -19,6 +17,9 @@ import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+
+const menuOpenEvent = isTouch ? 'click' : 'mouseover';
 
 describe('items', () => {
   let rootMenu, subMenu, target;
@@ -35,7 +36,7 @@ describe('items', () => {
       overlay.__openingHandler && overlay.__openingHandler();
     }
     const { right, bottom } = openTarget.getBoundingClientRect();
-    fire(openTarget, 'mouseover', { x: right, y: bottom });
+    fire(openTarget, menuOpenEvent, { x: right, y: bottom });
   };
 
   const getSubMenu = (menu = rootMenu) => {
@@ -66,7 +67,7 @@ describe('items', () => {
           <button id="target"></button>
         </vaadin-context-menu>
       `);
-      rootMenu.openOn = 'mouseover';
+      rootMenu.openOn = menuOpenEvent;
       target = rootMenu.firstElementChild;
       rootMenu.items = [
         {
@@ -117,13 +118,13 @@ describe('items', () => {
       expect(spy.called).to.be.false;
     });
 
-    (isIOS ? it.skip : it)('should open the subMenu on the right side', async () => {
+    (isTouch ? it.skip : it)('should open the subMenu on the right side', async () => {
       const rootItemRect = menuComponents()[0].getBoundingClientRect();
       const subItemRect = menuComponents(subMenu)[0].getBoundingClientRect();
       expect(subItemRect.left).to.be.above(rootItemRect.right);
     });
 
-    (isIOS ? it.skip : it)('should open the subMenu on the left side', () => {
+    (isTouch ? it.skip : it)('should open the subMenu on the left side', () => {
       subMenu.close();
       let rootItemRect = menuComponents()[0].getBoundingClientRect();
       rootMenu.$.overlay.style.left = window.innerWidth - rootItemRect.width * 1.5 + 'px';
@@ -133,7 +134,7 @@ describe('items', () => {
       expect(subItemRect.right).to.be.below(rootItemRect.left);
     });
 
-    (isIOS ? it.skip : it)('should open the subMenu on the top if root menu is bottom-aligned', async () => {
+    (isTouch ? it.skip : it)('should open the subMenu on the top if root menu is bottom-aligned', async () => {
       subMenu.close();
       rootMenu.$.overlay.style.removeProperty('top');
       rootMenu.$.overlay.style.bottom = '0px';
@@ -145,7 +146,7 @@ describe('items', () => {
       expect(subMenuRect.bottom).to.be.below(rootMenuRect.bottom);
     });
 
-    (isIOS ? it.skip : it)('should open the subMenu on the left if root menu is end-aligned', async () => {
+    (isTouch ? it.skip : it)('should open the subMenu on the left if root menu is end-aligned', async () => {
       subMenu.close();
       await nextRender(subMenu);
       const rootItem = menuComponents()[0];
@@ -250,7 +251,7 @@ describe('items', () => {
       expect(subMenu.opened).to.be.false;
     });
 
-    it('should focus closed parent item when hovering on non-parent item', () => {
+    (isTouch ? it.skip : it)('should focus closed parent item when hovering on non-parent item', () => {
       const parent = menuComponents()[0];
       const nonParent = menuComponents()[1];
       const focusSpy = sinon.spy(parent, 'focus');
@@ -349,6 +350,7 @@ describe('items', () => {
       open(menuComponents()[0]);
       await nextRender(subMenu);
       expect(subMenu.opened).to.be.true;
+      await nextRender(subMenu);
       expect(menuComponents(subMenu)[0].hasAttribute('focused')).to.be.false;
     });
 
@@ -432,7 +434,7 @@ describe('items', () => {
       expect(menuComponents()[0].getAttribute('aria-expanded')).to.equal('false');
     });
 
-    (isChrome ? describe : describe.skip)('scrolling', () => {
+    (isTouch ? describe.skip : describe)('scrolling', () => {
       let rootOverlay, subOverlay1, subOverlay2, scrollElm;
 
       beforeEach(async () => {
@@ -502,7 +504,7 @@ describe('items', () => {
           <button id="target"></button>
         </vaadin-context-menu>
       `);
-      rootMenu.openOn = 'mouseover';
+      rootMenu.openOn = menuOpenEvent;
       target = rootMenu.firstElementChild;
       rootMenu.items = [
         {
