@@ -1,0 +1,47 @@
+{
+  "name": "@vaadin/map",
+  "version": "23.0.0-alpha5",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "vaadin-map",
+  "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/map/LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/map"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-map.js",
+  "module": "vaadin-map.js",
+  "type": "module",
+  "files": [
+    "src",
+    "theme",
+    "enable.js",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
+  "keywords": [
+    "Vaadin",
+    "vaadin-map",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/component-base": "23.0.0-alpha5",
+    "@vaadin/vaadin-license-checker": "^2.1.0",
+    "ol": "6.11.0"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/testing-helpers": "^0.3.2",
+    "sinon": "^9.2.4"
+  }
+}
