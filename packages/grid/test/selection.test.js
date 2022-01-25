@@ -61,6 +61,14 @@ describe('selection', () => {
       expect(rows[1].hasAttribute('selected')).to.be.false;
     });
 
+    it('should not update selected attribute for hidden rows', () => {
+      grid.size = 0;
+      grid.selectedItems = [];
+      // Even though all selections were cleared, the first row is hidden / not in use
+      // because the grid's size was set to 0. Unused rows should never be updated.
+      expect(rows[0].hasAttribute('selected')).to.be.true;
+    });
+
     it('should deselect an equaling item', () => {
       grid.itemIdPath = 'value';
       grid.selectedItems = [rows[0]._item];
