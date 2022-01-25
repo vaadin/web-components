@@ -133,12 +133,16 @@ describe('WAI-ARIA', () => {
     });
 
     describe('year scroller contents', () => {
-      let yearScrollerContents;
+      let scroller, yearScrollerContents;
 
       beforeEach(async () => {
-        const scroller = overlay.$.yearScroller;
+        scroller = overlay.$.yearScroller;
         await activateScroller(scroller);
         yearScrollerContents = scroller.querySelectorAll('div > [part="year-number"]');
+      });
+
+      it('should set aria-hidden on the year scroller', () => {
+        expect(scroller.getAttribute('aria-hidden')).to.equal('true');
       });
 
       it('should contain button role for years', () => {

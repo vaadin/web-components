@@ -206,6 +206,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
           buffer-size="12"
           active="[[initialPosition]]"
           part="years"
+          aria-hidden="true"
         >
           <template>
             <div
