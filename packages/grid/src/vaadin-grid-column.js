@@ -497,7 +497,9 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       this.__renderCellsContent(headerRenderer, [headerCell]);
-      this._grid.__updateHeaderFooterRowVisibility(headerCell.parentElement);
+      if (this._grid) {
+        this._grid.__updateHeaderFooterRowVisibility(headerCell.parentElement);
+      }
     }
 
     /** @protected */
@@ -536,7 +538,9 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       this.__renderCellsContent(footerRenderer, [footerCell]);
-      this._grid.__updateHeaderFooterRowVisibility(footerCell.parentElement);
+      if (this._grid) {
+        this._grid.__updateHeaderFooterRowVisibility(footerCell.parentElement);
+      }
     }
 
     /** @protected */
