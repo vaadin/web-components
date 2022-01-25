@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/map",
-  "version": "23.0.0-alpha3",
+  "version": "23.0.0-alpha5",
   "publishConfig": {
     "access": "public"
   },
@@ -34,7 +34,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "23.0.0-alpha3",
+    "@vaadin/component-base": "23.0.0-alpha5",
     "@vaadin/vaadin-license-checker": "^2.1.0",
     "ol": "6.11.0"
   },

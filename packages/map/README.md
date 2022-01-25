@@ -1,6 +1,6 @@
 # @vaadin/map
 
-A component for displaying maps.
+A component for displaying web maps.
 
 > ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Map in your project.
 
@@ -13,7 +13,7 @@ A component for displaying maps.
 <vaadin-map></vaadin-map>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/map/screenshot.png" width="530" alt="Screenshot of vaadin-map">](https://vaadin.com/docs/latest/ds/components/map)
+<!--[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/map/screenshot.png" width="530" alt="Screenshot of vaadin-map">](https://vaadin.com/docs/latest/ds/components/map)-->
 
 ## Installation
 
@@ -26,6 +26,14 @@ npm i @vaadin/map
 Once installed, import the component in your application:
 
 ```js
+import '@vaadin/map';
+```
+
+Map is currently an experimental feature and must be explicitly enabled through a feature flag.
+To do so, import the enabler module before the map component module itself:
+
+```js
+import '@vaadin/map/enable';
 import '@vaadin/map';
 ```
 
