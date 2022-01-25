@@ -77,12 +77,8 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    _selectedItemsChanged(e) {
-      if (this.$.items.children.length && (e.path === 'selectedItems' || e.path === 'selectedItems.splices')) {
-        Array.from(this.$.items.children).forEach((row) => {
-          this._updateItem(row, row._item);
-        });
-      }
+    _selectedItemsChanged() {
+      this.requestContentUpdate();
     }
 
     /**
