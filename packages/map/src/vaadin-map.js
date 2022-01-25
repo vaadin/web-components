@@ -64,6 +64,10 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
           width: 100%;
           height: 100%;
         }
+
+        :host([hidden]) {
+          display: none !important;
+        }
       </style>
       <div id="map"></div>
     `;
@@ -83,27 +87,18 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
     return this._configuration;
   }
 
-  constructor() {
-    super();
-  }
-
   /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
+  ready() {
+    super.ready();
 
     this.__initMap();
   }
 
   /** @private */
   __initMap() {
-    if (this.__initialized) {
-      return;
-    }
-
     this._configuration = new OpenLayersMap({
       target: this.$.map
     });
-    this.__initialized = true;
   }
 }
 
