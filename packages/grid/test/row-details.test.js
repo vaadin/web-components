@@ -385,4 +385,44 @@ describe('row details', () => {
       expect(countRowsMarkedAsDetailsOpened(grid)).to.equal(0);
     });
   });
+
+  describe('lazily set details renderer', () => {
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column path="name"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      grid.items = [{ name: 'foo' }];
+      await nextFrame();
+      bodyRows = getRows(grid.$.items);
+    });
+
+    it('should have the details cell initially hidden', async () => {
+      grid.rowDetailsRenderer = () => {};
+      await nextFrame();
+      const detailsCell = bodyRows[0].querySelector('[part~="details-cell"]');
+      expect(detailsCell.hidden).to.be.true;
+      expect(detailsCell.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('should have the details cell initially visible', async () => {
+      grid.detailsOpenedItems = [...grid.items];
+      grid.rowDetailsRenderer = () => {};
+      await nextFrame();
+      const detailsCell = bodyRows[0].querySelector('[part~="details-cell"]');
+      expect(detailsCell.hidden).to.be.false;
+      expect(detailsCell.getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    it('should have the details cell become visible when details opened', async () => {
+      grid.rowDetailsRenderer = () => {};
+      await nextFrame();
+      grid.detailsOpenedItems = [...grid.items];
+      await nextFrame();
+      const detailsCell = bodyRows[0].querySelector('[part~="details-cell"]');
+      expect(detailsCell.hidden).to.be.false;
+      expect(detailsCell.getAttribute('aria-expanded')).to.equal('true');
+    });
+  });
 });
