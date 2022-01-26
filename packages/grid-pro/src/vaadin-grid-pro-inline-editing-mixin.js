@@ -456,6 +456,62 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /**
+     * @param {Number} row
+     * @param {Number} col
+     * @param {Boolean} userOriginated
+     * @public
+     */
+    editCell(row, col, userOriginated) {
+      if (isNaN(row) || isNaN(col) || (userOriginated && this.hasAttribute('disabled'))) {
+        throw new Error('Invalid row/col or grid is disabled.');
+      }
+
+      const columns = this._getColumns().filter(col => !col.hidden);
+
+      let colIdx = -1;
+      if (isNaN(col)) { // If col is not a number, maybe it's because the id was passed instead
+        const matchingColumn = columns.filter(c => c.id == col);
+        if (!matchingColumn || matchingColumn.length == 0) {
+          throw new Error(`col with id ${col} was not found`);
+        }
+        colIdx = columns.indexOf(matchingColumn[0]);
+      } else {
+        colIdx = col;
+      }
+
+      let rowIdx = -1;
+      if (isNaN(row)) { // If row is not a number, maybe it's because the item was passed instead
+        if (!row.hasOwnProperty('key')) {
+          throw new Error('Invalid object passed as row item.');
+        }
+        rowIdx = row.key - 1;
+      } else {
+        rowIdx = row;
+      }
+
+      // Make sure col[colIdx] exists and is editable:
+      if (colIdx > columns.length) {
+        throw new Error('Invalid colIdx (out of bounds)');
+      }
+
+      const column = columns[colIdx];
+      if (!this._isEditColumn(column)) {
+        throw new Error('Column is not editable');
+      }
+
+      // Get rows (excluding header)
+      const tRows = this.$.table.getElementsByTagName('tbody').items.rows;
+
+
+      // Make sure row[rowIdx] exists
+      if (rowIdx > tRows.length) {
+        throw new Error('Invalid rowIdx (out of bounds)');
+      }
+
+      this._startEdit(tRows[rowIdx].cells[colIdx], column);
+    }
+
+    /**
      * Fired before exiting the cell edit mode, if the value has been changed.
      * If the default is prevented, value change would not be applied.
      *

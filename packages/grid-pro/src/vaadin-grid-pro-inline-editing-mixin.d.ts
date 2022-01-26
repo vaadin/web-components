@@ -39,4 +39,6 @@ export declare class InlineEditingMixinClass {
   protected _stopEdit(shouldCancel?: boolean, shouldRestoreFocus?: boolean): void;
 
   protected _switchEditCell(e: KeyboardEvent): void;
+
+  public editCell(row: Number, col: Number, userOriginated: Boolean): void;
 }
