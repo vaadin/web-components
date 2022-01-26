@@ -83,7 +83,9 @@ export const RowDetailsMixin = (superClass) =>
         Array.from(this.$.items.children).forEach((row) => {
           if (!row.querySelector('[part~=details-cell]')) {
             this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
-            this._a11yUpdateRowDetailsOpened(row, false);
+            const isDetailsOpened = this._isDetailsOpened(row._item);
+            this._a11yUpdateRowDetailsOpened(row, isDetailsOpened);
+            this._toggleDetailsCell(row, isDetailsOpened);
           }
         });
       }
