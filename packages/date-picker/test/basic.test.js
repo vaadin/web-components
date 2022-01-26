@@ -326,17 +326,7 @@ describe('basic features', () => {
     it('should notify i18n mutation to children', () => {
       const monthCalendar = overlayContent.$.monthScroller.querySelector('vaadin-month-calendar');
       const weekdays = monthCalendar.$.monthGrid.querySelectorAll('[part="weekday"]:not(:empty)');
-      const weekdayLabels = Array.prototype.map.call(weekdays, (weekday) => weekday.getAttribute('aria-label'));
       const weekdayTitles = Array.prototype.map.call(weekdays, (weekday) => weekday.textContent);
-      expect(weekdayLabels).to.eql([
-        'maanantai',
-        'tiistai',
-        'keskiviikko',
-        'torstai',
-        'perjantai',
-        'lauantai',
-        'sunnuntai'
-      ]);
       expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
     });
 

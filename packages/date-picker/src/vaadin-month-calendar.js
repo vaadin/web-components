@@ -21,15 +21,23 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
           display: block;
         }
 
-        [part='weekdays'],
-        #days {
+        #monthGrid {
+          display: block;
+        }
+
+        #monthGrid thead,
+        #monthGrid tbody {
+          display: block;
+          width: 100%;
+        }
+
+        [part='weekdays'] {
           display: flex;
-          flex-wrap: wrap;
           flex-grow: 1;
         }
 
-        #days-container,
-        #weekdays-container {
+        #days-container tr,
+        #weekdays-container tr {
           display: flex;
         }
 
@@ -40,6 +48,7 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
           flex-shrink: 0;
         }
 
+        [part='week-number'][hidden],
         [part='week-numbers'][hidden],
         [part='weekday'][hidden] {
           display: none;
@@ -47,8 +56,11 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
 
         [part='weekday'],
         [part='date'] {
+          display: block;
           /* Would use calc(100% / 7) but it doesn't work nice on IE */
           width: 14.285714286%;
+          padding: 0;
+          font-weight: normal;
         }
 
         [part='weekday']:empty,
@@ -58,42 +70,58 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
         }
       </style>
 
-      <div part="month-header" role="heading">[[_getTitle(month, i18n.monthNames)]]</div>
-      <div id="monthGrid" on-touchend="_preventDefault" on-touchstart="_onMonthGridTouchStart">
-        <div id="weekdays-container">
-          <div hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]" part="weekday"></div>
-          <div part="weekdays">
+      <div part="month-header" id="month-header" aria-hidden="true">[[_getTitle(month, i18n.monthNames)]]</div>
+      <table
+        id="monthGrid"
+        role="grid"
+        aria-labelledby="month-header"
+        on-touchend="_preventDefault"
+        on-touchstart="_onMonthGridTouchStart"
+      >
+        <thead id="weekdays-container">
+          <tr role="row" part="weekdays">
+            <th
+              part="weekday"
+              aria-hidden="true"
+              hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]"
+            ></th>
             <template
               is="dom-repeat"
               items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]"
             >
-              <div part="weekday" role="heading" aria-label$="[[item.weekDay]]">[[item.weekDayShort]]</div>
+              <th role="columnheader" part="weekday" scope="col" abbr$="[[item.weekDay]]">[[item.weekDayShort]]</th>
             </template>
-          </div>
-        </div>
-        <div id="days-container">
-          <div part="week-numbers" hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]">
-            <template is="dom-repeat" items="[[_getWeekNumbers(_days)]]">
-              <div part="week-number" role="heading" aria-label$="[[i18n.week]] [[item]]">[[item]]</div>
-            </template>
-          </div>
-          <div id="days">
-            <template is="dom-repeat" items="[[_days]]">
-              <!-- prettier-ignore -->
-              <div
-                part="date"
-                today$="[[_isToday(item)]]"
-                selected$="[[_dateEquals(item, selectedDate)]]"
-                focused$="[[_dateEquals(item, focusedDate)]]"
-                date="[[item]]"
-                disabled$="[[!_dateAllowed(item, minDate, maxDate)]]"
-                role$="[[_getRole(item)]]"
-                aria-label$="[[_getAriaLabel(item)]]"
-                aria-disabled$="[[_getAriaDisabled(item, minDate, maxDate)]]">[[_getDate(item)]]</div>
-            </template>
-          </div>
-        </div>
-      </div>
+          </tr>
+        </thead>
+        <tbody id="days-container">
+          <template is="dom-repeat" items="[[_weeks]]" as="week">
+            <tr role="row">
+              <td
+                part="week-number"
+                aria-hidden="true"
+                hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]"
+              >
+                [[__getWeekNumber(week)]]
+              </td>
+              <template is="dom-repeat" items="[[week]]">
+                <td
+                  role="gridcell"
+                  part="date"
+                  date="[[item]]"
+                  today$="[[_isToday(item)]]"
+                  focused$="[[__isDayFocused(item, focusedDate)]]"
+                  tabindex$="[[__getDayTabindex(item, focusedDate)]]"
+                  selected$="[[__isDaySelected(item, selectedDate)]]"
+                  disabled$="[[__isDayDisabled(item, minDate, maxDate)]]"
+                  aria-selected$="[[__getDayAriaSelected(item, selectedDate)]]"
+                  aria-disabled$="[[__getDayAriaDisabled(item, minDate, maxDate)]]"
+                  >[[_getDate(item)]]</td
+                >
+              </template>
+            </tr>
+          </template>
+        </tbody>
+      </table>
     `;
   }
 
@@ -162,6 +190,11 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
         computed: '_getDays(month, i18n.firstDayOfWeek, minDate, maxDate)'
       },
 
+      _weeks: {
+        type: Array,
+        computed: '_getWeeks(_days)'
+      },
+
       disabled: {
         type: Boolean,
         reflectToAttribute: true,
@@ -171,21 +204,16 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
   }
 
   static get observers() {
-    return ['_showWeekNumbersChanged(showWeekNumbers, i18n.firstDayOfWeek)'];
+    return [
+      '_showWeekNumbersChanged(showWeekNumbers, i18n.firstDayOfWeek)',
+      '__focusedDateChanged(focusedDate, _days)'
+    ];
   }
 
   /** @protected */
   ready() {
     super.ready();
     addListener(this.$.monthGrid, 'tap', this._handleTap.bind(this));
-  }
-
-  _dateEquals(date1, date2) {
-    return dateEquals(date1, date2);
-  }
-
-  _dateAllowed(date, min, max) {
-    return dateAllowed(date, min, max);
   }
 
   /* Returns true if all the dates in the month are out of the allowed range */
@@ -212,7 +240,7 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
       return false;
     }
 
-    return !this._dateAllowed(firstDate, minDate, maxDate) && !this._dateAllowed(lastDate, minDate, maxDate);
+    return !dateAllowed(firstDate, minDate, maxDate) && !dateAllowed(lastDate, minDate, maxDate);
   }
 
   _getTitle(month, monthNames) {
@@ -260,6 +288,14 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
     return weekDayNames;
   }
 
+  __focusedDateChanged(focusedDate, days) {
+    if (days.some((date) => dateEquals(date, focusedDate))) {
+      this.removeAttribute('aria-hidden');
+    } else {
+      this.setAttribute('aria-hidden', 'true');
+    }
+  }
+
   _getDate(date) {
     return date ? date.getDate() : '';
   }
@@ -278,7 +314,7 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
   }
 
   _isToday(date) {
-    return this._dateEquals(new Date(), date);
+    return dateEquals(new Date(), date);
   }
 
   _getDays(month, firstDayOfWeek) {
@@ -308,25 +344,14 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
     return days;
   }
 
-  _getWeekNumber(date, days) {
-    if (date === undefined || days === undefined) {
-      return;
-    }
-
-    if (!date) {
-      // Get the first non-null date from the days array.
-      date = days.reduce((acc, d) => {
-        return !acc && d ? d : acc;
-      });
-    }
-
-    return getISOWeekNumber(date);
-  }
-
-  _getWeekNumbers(dates) {
-    return dates
-      .map((date) => this._getWeekNumber(date, dates))
-      .filter((week, index, arr) => arr.indexOf(week) === index);
+  _getWeeks(days) {
+    return days.reduce((acc, day, i) => {
+      if (i % 7 === 0) {
+        acc.push([]);
+      }
+      acc[acc.length - 1].push(day);
+      return acc;
+    }, []);
   }
 
   _handleTap(e) {
@@ -340,36 +365,54 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
     e.preventDefault();
   }
 
-  _getRole(date) {
-    return date ? 'button' : 'presentation';
+  __getWeekNumber(days) {
+    const date = days.reduce((acc, d) => {
+      return !acc && d ? d : acc;
+    });
+
+    return getISOWeekNumber(date);
   }
 
-  _getAriaLabel(date) {
-    if (!date) {
-      return '';
-    }
-
-    var ariaLabel =
-      this._getDate(date) +
-      ' ' +
-      this.i18n.monthNames[date.getMonth()] +
-      ' ' +
-      date.getFullYear() +
-      ', ' +
-      this.i18n.weekdays[date.getDay()];
-
-    if (this._isToday(date)) {
-      ariaLabel += ', ' + this.i18n.today;
-    }
-
-    return ariaLabel;
+  __isDayFocused(date, focusedDate) {
+    return dateEquals(date, focusedDate);
   }
 
-  _getAriaDisabled(date, min, max) {
+  __isDaySelected(date, selectedDate) {
+    return dateEquals(date, selectedDate);
+  }
+
+  __getDayAriaSelected(date, selectedDate) {
+    if (this.__isDaySelected(date, selectedDate)) {
+      return 'true';
+    }
+  }
+
+  __isDayDisabled(date, minDate, maxDate) {
+    return !dateAllowed(date, minDate, maxDate);
+  }
+
+  __getDayAriaDisabled(date, min, max) {
     if (date === undefined || min === undefined || max === undefined) {
       return;
     }
-    return this._dateAllowed(date, min, max) ? 'false' : 'true';
+
+    if (this.__isDayDisabled(date, min, max)) {
+      return 'true';
+    }
+  }
+
+  __getDayTabindex(date, focusedDate) {
+    if (this.__isDayFocused(date, focusedDate)) {
+      return '0';
+    }
+
+    return '-1';
+  }
+
+  __getWeekNumbers(dates) {
+    return dates
+      .map((date) => this.__getWeekNumber(date, dates))
+      .filter((week, index, arr) => arr.indexOf(week) === index);
   }
 }
 
