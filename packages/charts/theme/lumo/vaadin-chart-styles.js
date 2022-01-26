@@ -48,6 +48,19 @@ const chartColors = css`
     --vaadin-charts-color-positive: var(--vaadin-charts-color-3);
     --vaadin-charts-color-negative: var(--vaadin-charts-color-9);
   }
+
+  :host([theme~='classic']) {
+    --vaadin-charts-color-0: #7cb5ec;
+    --vaadin-charts-color-1: #434348;
+    --vaadin-charts-color-2: #90ed7d;
+    --vaadin-charts-color-3: #f7a35c;
+    --vaadin-charts-color-4: #8085e9;
+    --vaadin-charts-color-5: #f15c80;
+    --vaadin-charts-color-6: #e4d354;
+    --vaadin-charts-color-7: #2b908f;
+    --vaadin-charts-color-8: #f45b5b;
+    --vaadin-charts-color-9: #91e8e1;
+  }
 `;
 
 const chartTheme = css`
