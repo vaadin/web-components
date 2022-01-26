@@ -466,11 +466,12 @@ export const InlineEditingMixin = (superClass) =>
         throw new Error('Invalid row/col or grid is disabled.');
       }
 
-      const columns = this._getColumns().filter(col => !col.hidden);
+      const columns = this._getColumns().filter((col) => !col.hidden);
 
       let colIdx = -1;
-      if (isNaN(col)) { // If col is not a number, maybe it's because the id was passed instead
-        const matchingColumn = columns.filter(c => c.id == col);
+      // If col is not a number, maybe it's because the id was passed instead
+      if (isNaN(col)) {
+        const matchingColumn = columns.filter((c) => c.id == col);
         if (!matchingColumn || matchingColumn.length == 0) {
           throw new Error(`col with id ${col} was not found`);
         }
@@ -480,8 +481,9 @@ export const InlineEditingMixin = (superClass) =>
       }
 
       let rowIdx = -1;
-      if (isNaN(row)) { // If row is not a number, maybe it's because the item was passed instead
-        if (!row.hasOwnProperty('key')) {
+      // If row is not a number, maybe it's because the item was passed instead
+      if (isNaN(row)) {
+        if (!Object.prototype.hasOwnProperty(row, 'key')) {
           throw new Error('Invalid object passed as row item.');
         }
         rowIdx = row.key - 1;
@@ -501,7 +503,6 @@ export const InlineEditingMixin = (superClass) =>
 
       // Get rows (excluding header)
       const tRows = this.$.table.getElementsByTagName('tbody').items.rows;
-
 
       // Make sure row[rowIdx] exists
       if (rowIdx > tRows.length) {
