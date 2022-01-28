@@ -454,6 +454,58 @@ describe('PolylitMixin', () => {
     });
   });
 
+  describe('dynamic method observer', () => {
+    let element;
+    let valueOrLoadingChangedSpy;
+
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        static get properties() {
+          return {
+            value: {
+              type: String
+            },
+
+            loading: {
+              type: Boolean
+            }
+          };
+        }
+
+        render() {
+          return html`${this.value}`;
+        }
+
+        _valueOrLoadingChanged(_value, _loading) {}
+      }
+    );
+
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      valueOrLoadingChangedSpy = sinon.spy(element, '_valueOrLoadingChanged');
+      await element.updateComplete;
+    });
+
+    it('should run dynamic method observer once a property value changes', async () => {
+      element.value = 'foo';
+      await element.updateComplete;
+      expect(valueOrLoadingChangedSpy.calledOnce).to.be.false;
+
+      element._createMethodObserver('_valueOrLoadingChanged(value, loading)');
+      element.value = 'bar';
+      await element.updateComplete;
+      expect(valueOrLoadingChangedSpy.calledOnce).to.be.true;
+    });
+
+    it('should pass the dependencies as arguments to the dynamic observer function', async () => {
+      element._createMethodObserver('_valueOrLoadingChanged(value, loading)');
+      element.value = 'foo';
+      element.loading = true;
+      await element.updateComplete;
+      expect(valueOrLoadingChangedSpy.getCall(0).args).to.eql(['foo', true]);
+    });
+  });
+
   describe('notify', () => {
     let element;
 

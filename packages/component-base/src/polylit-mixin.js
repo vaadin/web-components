@@ -184,6 +184,13 @@ const PolylitMixinImplementation = (superclass) => {
       }
     }
 
+    /** @protected */
+    _createMethodObserver(observer) {
+      const complexObservers = this.constructor.getOrCreateMap('__complexObservers');
+      const { method, observerProps } = parseObserver(observer);
+      complexObservers.set(method, observerProps);
+    }
+
     /** @private */
     __runComplexObservers(props, observers) {
       observers.forEach((observerProps, method) => {
