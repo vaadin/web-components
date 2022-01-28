@@ -88,22 +88,25 @@ describe('renderers', () => {
         flushGrid(grid);
       });
 
-      it('should have valid content when renderer is set', () => {
+      it('should have valid content when renderer is set', async () => {
         grid.detailsOpenedItems = grid.items;
+        await nextFrame();
         expect(getBodyCellContent(grid, 0, 1).innerHTML).to.eql('0 bar');
         expect(getBodyCellContent(grid, 1, 1).innerHTML).to.eql('1 baz');
       });
 
-      it('should be open when renderer is set', () => {
+      it('should be open when renderer is set', async () => {
         grid.detailsOpenedItems = grid.items;
+        await nextFrame();
         expect(getContainerCell(grid.$.items, 1, 1).hidden).to.be.false;
       });
 
-      it('should pass the `root`, `owner`, `model` arguments to the renderer', () => {
+      it('should pass the `root`, `owner`, `model` arguments to the renderer', async () => {
         const detailsCell = getBodyCellContent(grid, 0, 1);
 
         grid.rowDetailsRenderer = sinon.spy();
         grid.detailsOpenedItems = [grid.items[0]];
+        await nextFrame();
 
         expect(grid.rowDetailsRenderer.calledOnce).to.be.true;
         expect(grid.rowDetailsRenderer.thisValues[0]).to.equal(grid);
@@ -119,44 +122,49 @@ describe('renderers', () => {
         });
       });
 
-      it('should allow to change the renderer', () => {
+      it('should allow to change the renderer', async () => {
         grid.detailsOpenedItems = grid.items;
         grid.rowDetailsRenderer = function (root, owner, model) {
           root.innerHTML = model.index + ' test';
         };
-        flushGrid(grid);
+        await nextFrame();
         expect(getBodyCellContent(grid, 0, 1).innerHTML).to.eql('0 test');
         expect(getBodyCellContent(grid, 1, 1).innerHTML).to.eql('1 test');
       });
 
-      it('should not invoke body cell renderer on assign', () => {
+      it('should not invoke body cell renderer on assign', async () => {
         column.renderer = sinon.spy();
+        await nextFrame();
         column.renderer.resetHistory();
         grid.rowDetailsRenderer = () => {};
+        await nextFrame();
         expect(column.renderer.called).to.be.false;
       });
 
-      it('should invoke body cell renderer on assign if there are open details', () => {
+      it('should invoke body cell renderer on assign if there are open details', async () => {
         grid.detailsOpenedItems = grid.items;
         column.renderer = sinon.spy();
         column.renderer.resetHistory();
         grid.rowDetailsRenderer = () => {};
-        flushGrid(grid);
+        await nextFrame();
         expect(column.renderer.called).to.be.true;
       });
 
-      it('should invoke only once per open details cell', () => {
+      it('should invoke only once per open details cell', async () => {
         grid.rowDetailsRenderer = sinon.spy();
         grid.rowDetailsRenderer.resetHistory();
         grid.detailsOpenedItems = [grid.items[0]];
+        await nextFrame();
         expect(grid.rowDetailsRenderer.calledOnce).to.be.true;
       });
 
-      it('should not invoke body renderers on detailsOpenedItems assign', () => {
+      it('should not invoke body renderers on detailsOpenedItems assign', async () => {
         grid.rowDetailsRenderer = undefined;
         column.renderer = sinon.spy();
+        await nextFrame();
         column.renderer.resetHistory();
         grid.detailsOpenedItems = [grid.items[0]];
+        await nextFrame();
         expect(column.renderer.called).to.be.false;
       });
     });

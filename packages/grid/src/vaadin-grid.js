@@ -352,7 +352,8 @@ class Grid extends ElementMixin(
       allRowsVisible: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        attribute: 'all-rows-visible'
       },
 
       /** @private */

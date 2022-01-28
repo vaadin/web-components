@@ -197,8 +197,9 @@ describe('column', () => {
         expect(() => grid.requestContentUpdate()).not.to.throw(Error);
       });
 
-      it('should not remove details row when a column is hidden', () => {
+      it('should not remove details row when a column is hidden', async () => {
         grid.rowDetailsRenderer = (root) => (root.textContent = 'row-details');
+        await nextFrame();
         grid.detailsOpenedItems = [grid._cache.items[0]];
         column.hidden = true;
         flushGrid(grid);

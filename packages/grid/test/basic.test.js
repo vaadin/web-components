@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
@@ -32,14 +32,15 @@ describe('basic features', () => {
     flushGrid(grid);
   });
 
-  it('should notify `size` property', () => {
+  it('should notify `size` property', async () => {
     const spy = sinon.spy();
     grid.addEventListener('size-changed', spy);
     grid.size = 10;
+    await nextFrame();
     expect(spy.calledOnce).to.be.true;
   });
 
-  it('check physical item heights', () => {
+  it('check physical item heights', async () => {
     const physicalItems = getPhysicalItems(grid);
     const rowHeight = physicalItems[0].offsetHeight;
     expect(rowHeight).to.be.above(0);
@@ -213,8 +214,9 @@ describe('basic features', () => {
     expect(lastRowSlot.assignedNodes()[0].textContent).to.equal(String(grid.size - 1));
   });
 
-  it('should have attribute last on the last body row after resize', () => {
+  it('should have attribute last on the last body row after resize', async () => {
     grid.size = 2;
+    await nextFrame();
     const lastRowSlot = grid.shadowRoot.querySelector('[part~="row"][last] slot');
     expect(lastRowSlot.assignedNodes()[0].textContent).to.equal(String(grid.size - 1));
   });
