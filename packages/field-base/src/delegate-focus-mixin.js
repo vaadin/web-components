@@ -213,6 +213,7 @@ export const DelegateFocusMixin = dedupingMixin(
           // Preserve tabindex="-1" on the host element
           if (tabindex !== -1) {
             this.tabindex = undefined;
+            this.removeAttribute('tabindex');
           }
         }
 

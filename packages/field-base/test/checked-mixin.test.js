@@ -1,25 +1,64 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CheckedMixin } from '../src/checked-mixin.js';
 import { DelegateFocusMixin } from '../src/delegate-focus-mixin.js';
 import { InputController } from '../src/input-controller.js';
 
 customElements.define(
-  'checked-mixin-element',
+  'checked-mixin-polymer-element',
   class extends CheckedMixin(DelegateFocusMixin(ControllerMixin(PolymerElement))) {
     static get template() {
-      return html`<div>
-        <slot></slot>
-        <slot name="input"></slot>
-      </div>`;
+      return legacyHtml`
+        <div>
+          <slot></slot>
+          <slot name="input"></slot>
+        </div>
+      `;
     }
 
     constructor() {
       super();
-
       this._setType('checkbox');
+    }
+
+    ready() {
+      super.ready();
+
+      this.addController(
+        new InputController(this, (input) => {
+          this._setInputElement(input);
+          this._setFocusElement(input);
+          this.stateTarget = input;
+        })
+      );
+    }
+  }
+);
+
+customElements.define(
+  'checked-mixin-lit-element',
+  class extends CheckedMixin(DelegateFocusMixin(PolylitMixin(LitElement))) {
+    render() {
+      return html`
+        <div>
+          <slot></slot>
+          <slot name="input"></slot>
+        </div>
+      `;
+    }
+
+    constructor() {
+      super();
+      this._setType('checkbox');
+    }
+
+    ready() {
+      super.ready();
+
       this.addController(
         new InputController(this, (input) => {
           this._setInputElement(input);
@@ -31,17 +70,21 @@ customElements.define(
   },
 );
 
-describe('checked-mixin', () => {
+const runTests = (baseClass) => {
+  const tag = `checked-mixin-${baseClass}-element`;
+
+  const updateComplete = () => (baseClass === 'lit' ? element.updateComplete : Promise.resolve());
+
   let element, input, link;
 
   describe('default', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       element = fixtureSync(`
-        <checked-mixin-element>
+        <${tag}>
           I accept <a href="#">the terms and conditions</a>
-        </checked-mixin-element>
+        </<${tag}>
       `);
-
+      await updateComplete();
       link = element.querySelector('a');
       input = element.querySelector('[slot=input]');
     });
@@ -54,11 +97,13 @@ describe('checked-mixin', () => {
       expect(element.hasAttribute('checked')).to.be.false;
     });
 
-    it('should reflect checked property to the attribute', () => {
+    it('should reflect checked property to the attribute', async () => {
       element.checked = true;
+      await updateComplete();
       expect(element.hasAttribute('checked')).to.be.true;
 
       element.checked = false;
+      await updateComplete();
       expect(element.hasAttribute('checked')).to.be.false;
     });
 
@@ -85,8 +130,9 @@ describe('checked-mixin', () => {
       expect(element.checked).to.be.false;
     });
 
-    it('should not toggle checked property when disabled', () => {
+    it('should not toggle checked property when disabled', async () => {
       element.disabled = true;
+      await updateComplete();
       input.click();
       expect(element.checked).to.be.false;
     });
@@ -94,17 +140,27 @@ describe('checked-mixin', () => {
 
   describe('delegation', () => {
     describe('checked property', () => {
-      beforeEach(() => {
-        element = fixtureSync(`<checked-mixin-element checked></checked-mixin-element>`);
+      beforeEach(async () => {
+        element = fixtureSync(`<${tag} checked></${tag}>`);
+        await updateComplete();
         input = element.querySelector('[slot=input]');
       });
 
-      it('should delegate checked property to the input', () => {
+      it('should delegate checked property to the input', async () => {
         expect(input.checked).to.be.true;
 
         element.checked = false;
+        await updateComplete();
         expect(input.checked).to.be.false;
       });
     });
   });
+};
+
+describe('CheckedMixin + Polymer', () => {
+  runTests('polymer');
+});
+
+describe('CheckedMixin + Lit', () => {
+  runTests('lit');
 });
