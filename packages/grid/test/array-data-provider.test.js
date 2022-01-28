@@ -61,24 +61,24 @@ describe('array data provider', () => {
       expect(getContent(1, 0)).to.equal('baz');
     });
 
-    it('should be observed for shift', () => {
-      grid.unshift('items', {
-        name: {
-          first: 'a',
-          last: 'b'
-        }
-      });
+    it('should be observed for shift', async () => {
+      grid.items = [
+        {
+          name: {
+            first: 'a',
+            last: 'b'
+          }
+        },
+        ...grid.items
+      ];
+      await nextFrame();
       expect(grid.size).to.equal(3);
       expect(getContent(0, 0)).to.equal('a');
     });
 
-    it('should be observed for mutation', () => {
-      grid.set('items.0.name.first', 'new');
-      expect(getContent(0, 0)).to.equal('new');
-    });
-
-    it('should handle null', () => {
+    it('should handle null', async () => {
       grid.items = null;
+      await nextFrame();
       expect(grid.size).to.equal(0);
       expect(grid.items).to.be.null;
     });
@@ -93,13 +93,15 @@ describe('array data provider', () => {
       expect(grid.dataProvider).to.equal(grid._arrayDataProvider);
     });
 
-    it('should override custom data provider', () => {
+    it('should override custom data provider', async () => {
       const ds = (grid.dataProvider = () => {});
+      await nextFrame();
       grid.items = [1, 2, 3];
+      await nextFrame();
       expect(grid.dataProvider).not.to.equal(ds);
     });
 
-    it('should handle new array of same length', () => {
+    it('should handle new array of same length', async () => {
       grid.items = [
         {
           name: {
@@ -112,6 +114,7 @@ describe('array data provider', () => {
           }
         }
       ];
+      await nextFrame();
       expect(getContent(0, 0)).to.equal('a');
     });
   });
@@ -195,9 +198,11 @@ describe('invalid paths', () => {
       sorter = grid.querySelector('vaadin-grid-sorter');
     });
 
-    it('should warn about invalid path with undefined parent property', () => {
+    it('should warn about invalid path with undefined parent property', async () => {
       sorter.path = 'foo.bar';
+      await nextFrame();
       click(sorter);
+      await nextFrame();
       expect(console.warn.called).to.be.true;
     });
 
@@ -281,6 +286,7 @@ describe('items with a custom data provider', () => {
 
   it('should use the custom data provider', async () => {
     grid.items = items;
+    await nextFrame();
     grid.dataProvider = dataProvider;
     await nextFrame();
     expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('foo');

@@ -105,10 +105,11 @@ describe('lit renderers', () => {
   describe('row details renderer', () => {
     let cell;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid.rowDetailsRenderer = (root) => {
         render(html`Row Details`, root);
       };
+      await nextFrame();
 
       grid.openItemDetails(grid.items[0]);
 
@@ -119,10 +120,11 @@ describe('lit renderers', () => {
       expect(cell._content.textContent).to.equal('Row Details');
     });
 
-    it('should render new content after assigning a new renderer', () => {
+    it('should render new content after assigning a new renderer', async () => {
       grid.rowDetailsRenderer = (root) => {
         render(html`New Row Details`, root);
       };
+      await nextFrame();
 
       expect(cell._content.textContent).to.equal('New Row Details');
     });

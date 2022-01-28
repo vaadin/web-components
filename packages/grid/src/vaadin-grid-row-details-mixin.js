@@ -87,6 +87,7 @@ export const RowDetailsMixin = (superClass) =>
             const isDetailsOpened = this._isDetailsOpened(row._item);
             this._a11yUpdateRowDetailsOpened(row, isDetailsOpened);
             this._toggleDetailsCell(row, isDetailsOpened);
+            this.generateCellClassNames();
           }
         });
       }

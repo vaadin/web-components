@@ -26,31 +26,36 @@ describe('class name generator', () => {
   const assertClassList = (cell, expectedClasses) =>
     expect(Array.from(cell.classList)).to.deep.equal(initialCellClasses.concat(expectedClasses));
 
-  it('should add classes for cells', () => {
+  it('should add classes for cells', async () => {
     grid.cellClassNameGenerator = () => 'foo';
+    await nextFrame();
     assertClassList(firstCell, ['foo']);
     assertClassList(getContainerCell(grid.$.items, 1, 1), ['foo']);
   });
 
-  it('should add all classes separated by whitespaces', () => {
+  it('should add all classes separated by whitespaces', async () => {
     grid.cellClassNameGenerator = () => 'foo bar baz';
+    await nextFrame();
     assertClassList(firstCell, ['foo', 'bar', 'baz']);
   });
 
-  it('should not remove existing classes', () => {
+  it('should not remove existing classes', async () => {
     firstCell.classList.add('bar');
     grid.cellClassNameGenerator = () => 'foo';
+    await nextFrame();
     assertClassList(firstCell, ['bar', 'foo']);
   });
 
-  it('should remove old generated classes', () => {
+  it('should remove old generated classes', async () => {
     grid.cellClassNameGenerator = () => 'foo';
     grid.cellClassNameGenerator = () => 'bar';
+    await nextFrame();
     assertClassList(firstCell, ['bar']);
   });
 
-  it('should provide column and model as parameters', () => {
+  it('should provide column and model as parameters', async () => {
     grid.cellClassNameGenerator = (column, model) => model.index + ' ' + model.item.value + ' ' + column.header;
+    await nextFrame();
     assertClassList(getContainerCell(grid.$.items, 5, 1), ['5', 'foo5', 'col1']);
     assertClassList(getContainerCell(grid.$.items, 10, 0), ['10', 'foo10', 'col0']);
   });
@@ -59,7 +64,6 @@ describe('class name generator', () => {
     grid.rowDetailsRenderer = () => {};
     grid.cellClassNameGenerator = (column, model) => model.index + ' ' + column;
     await nextFrame();
-    flushGrid(grid);
     assertClassList(getContainerCell(grid.$.items, 0, 2), ['0', 'undefined']);
   });
 
@@ -78,40 +82,47 @@ describe('class name generator', () => {
     expect(() => (grid.cellClassNameGenerator = () => {})).not.to.throw(Error);
   });
 
-  it('should clear generated classes with falsy return value', () => {
+  it('should clear generated classes with falsy return value', async () => {
     grid.cellClassNameGenerator = () => 'foo';
     grid.cellClassNameGenerator = () => {};
+    await nextFrame();
     assertClassList(firstCell, []);
   });
 
-  it('should clear generated classes with falsy property value', () => {
+  it('should clear generated classes with falsy property value', async () => {
     grid.cellClassNameGenerator = () => 'foo';
     grid.cellClassNameGenerator = undefined;
+    await nextFrame();
     assertClassList(firstCell, []);
   });
 
   ['generateCellClassNames', 'clearCache', 'requestContentUpdate'].forEach((funcName) => {
-    it(`should update classes on ${funcName}`, () => {
+    it(`should update classes on ${funcName}`, async () => {
       let condition = false;
       grid.cellClassNameGenerator = () => condition && 'foo';
+      await nextFrame();
       condition = true;
       assertClassList(firstCell, []);
       grid[funcName]();
+      await nextFrame();
       assertClassList(firstCell, ['foo']);
     });
   });
 
-  it('should not run generator for hidden rows', () => {
+  it('should not run generator for hidden rows', async () => {
     grid.items = [];
+    await nextFrame();
     expect(grid.$.items.firstElementChild).to.have.property('hidden', true);
 
     const spy = sinon.spy();
     grid.cellClassNameGenerator = spy;
+    await nextFrame();
     expect(spy.called).to.be.false;
   });
 
-  it('should not throw with extra whitespace in the result', () => {
+  it('should not throw with extra whitespace in the result', async () => {
     expect(() => (grid.cellClassNameGenerator = () => ' foo  bar ')).not.to.throw(Error);
+    await nextFrame();
     assertClassList(firstCell, ['foo', 'bar']);
   });
 

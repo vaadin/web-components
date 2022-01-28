@@ -153,8 +153,9 @@ describe('accessibility', () => {
         expect(uniqueAttrValues(grid.$.items.querySelectorAll('td'), 'aria-selected')).to.eql(['false']);
       });
 
-      it('should set aria-selected true for selected items', () => {
+      it('should set aria-selected true for selected items', async () => {
         grid.selectedItems = grid.items.slice(1);
+        await nextFrame();
 
         expect(grid.$.items.children[0].getAttribute('aria-selected')).to.equal('false');
         expect(uniqueAttrValues(grid.$.items.children[0].children, 'aria-selected')).to.eql(['false']);
@@ -162,9 +163,11 @@ describe('accessibility', () => {
         expect(uniqueAttrValues(grid.$.items.children[1].children, 'aria-selected')).to.eql(['true']);
       });
 
-      it('should set aria-selected false for deselected items', () => {
+      it('should set aria-selected false for deselected items', async () => {
         grid.selectedItems = grid.items.slice(1);
+        await nextFrame();
         grid.selectedItems = [];
+        await nextFrame();
 
         expect(grid.$.items.children[0].getAttribute('aria-selected')).to.equal('false');
         expect(uniqueAttrValues(grid.$.items.children[0].children, 'aria-selected')).to.eql(['false']);
@@ -217,8 +220,9 @@ describe('accessibility', () => {
       expect(grid.$.items.children[0].getAttribute('aria-expanded')).to.equal('false');
     });
 
-    it('should have aria-expanded true on expanded rows', () => {
+    it('should have aria-expanded true on expanded rows', async () => {
       grid.expandItem({ name: '0' });
+      await nextFrame();
       expect(grid.$.items.children[0].getAttribute('aria-expanded')).to.equal('true');
     });
 
@@ -265,8 +269,9 @@ describe('accessibility', () => {
         expect(uniqueAttrValues(grid.$.items.querySelectorAll('td'), 'aria-expanded')).to.eql(['false']);
       });
 
-      it('should have aria-controls referencing detail cell id on body cells', () => {
-        Array.from(grid.$.items.children).forEach((row) => {
+      it('should have aria-controls referencing detail cell id on body cells', async () => {
+        await nextFrame();
+        for (const row in grid.$.items.children) {
           const detailsCell = row.querySelector('td[part~="details-cell"]');
 
           expect(detailsCell.id).to.be.ok;
@@ -274,20 +279,23 @@ describe('accessibility', () => {
           expect(uniqueAttrValues(row.querySelectorAll('td:not([part~="details-cell"])'), 'aria-controls')).to.eql([
             detailsCell.id
           ]);
-        });
+        }
       });
 
-      it('should set aria-expanded true on cells after row details opened', () => {
+      it('should set aria-expanded true on cells after row details opened', async () => {
         grid.openItemDetails(grid.items[0]);
+        await nextFrame();
 
         expect(uniqueAttrValues(grid.$.items.children[0].children, 'aria-expanded')).to.eql(['true']);
 
         expect(uniqueAttrValues(grid.$.items.children[1].children, 'aria-expanded')).to.eql(['false']);
       });
 
-      it('should set aria-expanded false on cells after row details closed', () => {
+      it('should set aria-expanded false on cells after row details closed', async () => {
         grid.openItemDetails(grid.items[0]);
+        await nextFrame();
         grid.closeItemDetails(grid.items[0]);
+        await nextFrame();
 
         expect(uniqueAttrValues(grid.$.items.children[0].children, 'aria-expanded')).to.eql(['false']);
 
@@ -336,8 +344,9 @@ describe('accessibility', () => {
         expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('4');
       });
 
-      it('should update aria-rowcount on after size change', () => {
+      it('should update aria-rowcount on after size change', async () => {
         grid.items = Array(...new Array(10)).map(() => 'foo');
+        await nextFrame();
 
         // 10 item rows + header row + footer row = 12 in total
         expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('12');
