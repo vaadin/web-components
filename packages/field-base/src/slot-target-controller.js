@@ -41,7 +41,11 @@ export class SlotTargetController {
 
     // Ensure the content is up to date when host is connected
     // to handle e.g. mutating text content while disconnected.
-    this.__checkAndCopyNodesToSlotTarget();
+    // Note, `hostConnected()` is called twice if the controller
+    // is initialized in `ready()` when using `ControllerMixin`.
+    if (!this.__copying) {
+      this.__checkAndCopyNodesToSlotTarget();
+    }
   }
 
   /**
