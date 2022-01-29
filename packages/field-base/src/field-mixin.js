@@ -92,10 +92,6 @@ export const FieldMixin = (superclass) =>
       this._helperController = new HelperController(this);
       this._errorController = new ErrorController(this);
 
-      this.addController(this._fieldAriaController);
-      this.addController(this._helperController);
-      this.addController(this._errorController);
-
       this._labelController.addEventListener('label-changed', (event) => {
         const { hasLabel, node } = event.detail;
         this.__labelChanged(hasLabel, node);
@@ -105,6 +101,15 @@ export const FieldMixin = (superclass) =>
         const { hasHelper, node } = event.detail;
         this.__helperChanged(hasHelper, node);
       });
+    }
+
+    /** @protected */
+    ready() {
+      super.ready();
+
+      this.addController(this._fieldAriaController);
+      this.addController(this._helperController);
+      this.addController(this._errorController);
     }
 
     /** @private */
