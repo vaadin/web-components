@@ -38,6 +38,7 @@ export const InputControlMixin = (superclass) =>
         clearButtonVisible: {
           type: Boolean,
           reflectToAttribute: true,
+          attribute: 'clear-button-visible',
           value: false
         },
 
