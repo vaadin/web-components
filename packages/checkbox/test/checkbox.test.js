@@ -2,16 +2,19 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, mousedown, mouseup, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
+import '../src/vaadin-lit-checkbox.js';
 import '../vaadin-checkbox.js';
 
-describe('checkbox', () => {
+const runTests = (tag) => {
+  const updateComplete = () => (tag.includes('lit') ? checkbox.updateComplete : Promise.resolve());
+
   let checkbox, input, label, link;
 
   describe('custom element definition', () => {
     let tagName;
 
     beforeEach(() => {
-      checkbox = fixtureSync('<vaadin-checkbox></vaadin-checkbox>');
+      checkbox = fixtureSync(`<${tag}></${tag}>`);
       tagName = checkbox.tagName.toLowerCase();
     });
 
@@ -27,9 +30,9 @@ describe('checkbox', () => {
   describe('default', () => {
     beforeEach(async () => {
       checkbox = fixtureSync(`
-        <vaadin-checkbox>
+        <${tag}>
           <label slot="label">I accept <a href="#">the terms and conditions</a></label>
-        </vaadin-checkbox>
+        </${tag}>
       `);
       // Wait for MutationObserver.
       await nextFrame();
@@ -112,18 +115,21 @@ describe('checkbox', () => {
       expect(checkbox.indeterminate).to.be.false;
     });
 
-    it('should be checked on click when initially checked is false and indeterminate is true', () => {
+    it('should be checked on click when initially checked is false and indeterminate is true', async () => {
       checkbox.checked = false;
       checkbox.indeterminate = true;
+      await updateComplete();
+
       checkbox.click();
 
       expect(checkbox.checked).to.be.true;
       expect(checkbox.indeterminate).to.be.false;
     });
 
-    it('should not be checked on click when initially checked is true and indeterminate is true', () => {
+    it('should not be checked on click when initially checked is true and indeterminate is true', async () => {
       checkbox.checked = true;
       checkbox.indeterminate = true;
+      await updateComplete();
       checkbox.click();
 
       expect(checkbox.checked).to.be.false;
@@ -216,8 +222,9 @@ describe('checkbox', () => {
   });
 
   describe('has-label attribute', () => {
-    beforeEach(() => {
-      checkbox = fixtureSync('<vaadin-checkbox></vaadin-checkbox>');
+    beforeEach(async () => {
+      checkbox = fixtureSync(`<${tag}></${tag}>`);
+      await updateComplete();
     });
 
     it('should not set has-label attribute when label content is empty', () => {
@@ -242,29 +249,33 @@ describe('checkbox', () => {
 
   describe('delegation', () => {
     describe('name attribute', () => {
-      beforeEach(() => {
-        checkbox = fixtureSync(`<vaadin-checkbox name="Name"></vaadin-checkbox>`);
+      beforeEach(async () => {
+        checkbox = fixtureSync(`<${tag} name="Name"></${tag}>`);
+        await updateComplete();
         input = checkbox.inputElement;
       });
 
-      it('should delegate name attribute to the input', () => {
+      it('should delegate name attribute to the input', async () => {
         expect(input.getAttribute('name')).to.equal('Name');
 
         checkbox.removeAttribute('name');
+        await updateComplete();
         expect(input.hasAttribute('name')).to.be.false;
       });
     });
 
     describe('indeterminate property', () => {
-      beforeEach(() => {
-        checkbox = fixtureSync(`<vaadin-checkbox indeterminate></vaadin-checkbox>`);
+      beforeEach(async () => {
+        checkbox = fixtureSync(`<${tag} indeterminate></${tag}>`);
+        await updateComplete();
         input = checkbox.inputElement;
       });
 
-      it('should delegate indeterminate property to the input', () => {
+      it('should delegate indeterminate property to the input', async () => {
         expect(input.indeterminate).to.be.true;
 
         checkbox.indeterminate = false;
+        await updateComplete();
         expect(input.indeterminate).to.be.false;
       });
     });
@@ -280,7 +291,7 @@ describe('checkbox', () => {
     });
 
     it('should warn about using default slot label', async () => {
-      fixtureSync('<vaadin-checkbox>label</vaadin-checkbox>');
+      fixtureSync(`<${tag}>label</${tag}>`);
       await nextFrame();
 
       expect(console.warn.calledOnce).to.be.true;
@@ -289,4 +300,12 @@ describe('checkbox', () => {
       );
     });
   });
+};
+
+describe('Checkbox + Polymer', () => {
+  runTests('vaadin-checkbox');
+});
+
+describe('Checkbox + Lit', () => {
+  runTests('vaadin-lit-checkbox');
 });

@@ -2,16 +2,19 @@ import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync, mousedown, mouseup, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
+import '../src/vaadin-lit-radio-button.js';
 import '../vaadin-radio-button.js';
 
-describe('radio-button', () => {
+const runTests = (tag) => {
+  const updateComplete = () => (tag.includes('lit') ? radio.updateComplete : Promise.resolve());
+
   let radio, input, label;
 
   describe('custom element definition', () => {
     let tagName;
 
     beforeEach(() => {
-      radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+      radio = fixtureSync(`<${tag}></${tag}>`);
       tagName = radio.tagName.toLowerCase();
     });
 
@@ -25,8 +28,10 @@ describe('radio-button', () => {
   });
 
   describe('default', () => {
-    beforeEach(() => {
-      radio = fixtureSync('<vaadin-radio-button label="Label"></vaadin-radio-button>');
+    beforeEach(async () => {
+      radio = fixtureSync(`<${tag}>Label</${tag}>`);
+      // Wait for MutationObserver
+      await updateComplete();
       label = radio.querySelector('[slot=label]');
     });
 
@@ -44,8 +49,9 @@ describe('radio-button', () => {
   });
 
   describe('native input', () => {
-    beforeEach(() => {
-      radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+    beforeEach(async () => {
+      radio = fixtureSync(`<${tag}></${tag}>`);
+      await updateComplete();
       input = radio.querySelector('[slot=input]');
       label = radio.querySelector('[slot=label]');
     });
@@ -98,8 +104,9 @@ describe('radio-button', () => {
   });
 
   describe('disabled attribute', () => {
-    beforeEach(() => {
-      radio = fixtureSync('<vaadin-radio-button disabled></vaadin-radio-button>');
+    beforeEach(async () => {
+      radio = fixtureSync(`<${tag} disabled></${tag}>`);
+      await updateComplete();
       input = radio.querySelector('[slot=input]');
       label = radio.querySelector('[slot=label]');
     });
@@ -126,8 +133,9 @@ describe('radio-button', () => {
 
   // TODO: A legacy suit. Replace with snapshot tests when possible.
   describe('active attribute', () => {
-    beforeEach(() => {
-      radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+    beforeEach(async () => {
+      radio = fixtureSync(`<${tag}></${tag}>`);
+      await updateComplete();
       input = radio.querySelector('[slot=input]');
     });
 
@@ -155,8 +163,9 @@ describe('radio-button', () => {
   describe('change event', () => {
     let spy;
 
-    beforeEach(() => {
-      radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+    beforeEach(async () => {
+      radio = fixtureSync(`<${tag}></${tag}>`);
+      await updateComplete();
       label = radio.querySelector('[slot=label]');
       input = radio.querySelector('[slot=input]');
 
@@ -183,19 +192,22 @@ describe('radio-button', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should not fire on programmatic toggle', () => {
+    it('should not fire on programmatic toggle', async () => {
       radio.checked = true;
+      await updateComplete();
       expect(spy.called).to.be.false;
     });
 
-    it('should not fire on input click when checked', () => {
+    it('should not fire on input click when checked', async () => {
       radio.checked = true;
+      await updateComplete();
       input.click();
       expect(spy.called).to.be.false;
     });
 
-    it('should not fire on label click when checked', () => {
+    it('should not fire on label click when checked', async () => {
       radio.checked = true;
+      await updateComplete();
       label.click();
       expect(spy.called).to.be.false;
     });
@@ -215,23 +227,26 @@ describe('radio-button', () => {
 
   describe('delegation', () => {
     describe('name attribute', () => {
-      beforeEach(() => {
-        radio = fixtureSync(`<vaadin-radio-button name="Name"></vaadin-radio-button>`);
+      beforeEach(async () => {
+        radio = fixtureSync(`<${tag} name="Name"></${tag}>`);
+        await updateComplete();
         input = radio.querySelector('[slot=input]');
       });
 
-      it('should delegate name attribute to the input', () => {
+      it('should delegate name attribute to the input', async () => {
         expect(input.getAttribute('name')).to.equal('Name');
 
         radio.removeAttribute('name');
+        await updateComplete();
         expect(input.hasAttribute('name')).to.be.false;
       });
     });
   });
 
   describe('has-label attribute', () => {
-    beforeEach(() => {
-      radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+    beforeEach(async () => {
+      radio = fixtureSync(`<${tag}></${tag}>`);
+      await updateComplete();
     });
 
     it('should not set has-label attribute when label content is empty', () => {
@@ -264,7 +279,7 @@ describe('radio-button', () => {
     });
 
     it('should warn about using default slot label', async () => {
-      fixtureSync('<vaadin-radio-button>label</vaadin-radio-button>');
+      radio = fixtureSync(`<${tag}>label</${tag}>`);
       // Wait for MutationObserver
       await nextFrame();
 
@@ -274,4 +289,12 @@ describe('radio-button', () => {
       );
     });
   });
+};
+
+describe('RadioButton + Polymer', () => {
+  runTests('vaadin-radio-button');
+});
+
+describe('RadioButton + Lit', () => {
+  runTests('vaadin-lit-radio-button');
 });
