@@ -26,7 +26,7 @@ describe('vaadin-month-calendar', () => {
     return (done) => {
       monthCalendar.month = new Date(2016, monthNumber, 1);
       setTimeout(() => {
-        const numberOfDays = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)').length;
+        const numberOfDays = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)').length;
         expect(numberOfDays).to.equal(expectedDays[monthNumber]);
         done();
       });
@@ -55,13 +55,13 @@ describe('vaadin-month-calendar', () => {
   it('should re-render after changing the month', async () => {
     monthCalendar.month = new Date(2000, 0, 1); // Feb 2016 -> Jan 2000
     await aTimeout();
-    const days = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)').length;
+    const days = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)').length;
     expect(days).to.equal(31);
     expect(monthCalendar.shadowRoot.querySelector('[part="month-header"]').textContent).to.equal('January 2000');
   });
 
   it('should fire value change on tap', () => {
-    const dateElements = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)');
+    const dateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
     tap(dateElements[10]);
     expect(valueChangedSpy.calledOnce).to.be.true;
   });
@@ -69,7 +69,7 @@ describe('vaadin-month-calendar', () => {
   it('should fire date-tap on tap', () => {
     const tapSpy = sinon.spy();
     monthCalendar.addEventListener('date-tap', tapSpy);
-    const dateElements = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)');
+    const dateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
     tap(dateElements[10]);
     expect(tapSpy.calledOnce).to.be.true;
     tap(dateElements[10]);
@@ -77,13 +77,13 @@ describe('vaadin-month-calendar', () => {
   });
 
   it('should not fire value change on tapping an empty cell', () => {
-    const emptyDateElement = monthCalendar.$.days.querySelector('[part="date"]:empty');
+    const emptyDateElement = monthCalendar.shadowRoot.querySelector('[part="date"]:empty');
     tap(emptyDateElement);
     expect(valueChangedSpy.called).to.be.false;
   });
 
   it('should update value on tap', () => {
-    const dateElements = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)');
+    const dateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
     for (let i = 0; i < dateElements.length; i++) {
       if (dateElements[i].date.getDate() === 10) {
         // Tenth of February.
@@ -98,7 +98,7 @@ describe('vaadin-month-calendar', () => {
   it('should not react if the tap takes more than 300ms', async () => {
     const tapSpy = sinon.spy();
     monthCalendar.addEventListener('date-tap', tapSpy);
-    const dateElement = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)')[10];
+    const dateElement = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)')[10];
     monthCalendar._onMonthGridTouchStart();
     await aTimeout(350);
     tap(dateElement);
@@ -109,7 +109,7 @@ describe('vaadin-month-calendar', () => {
     const tapSpy = sinon.spy();
     monthCalendar.addEventListener('date-tap', tapSpy);
     monthCalendar.ignoreTaps = true;
-    const dateElement = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)')[10];
+    const dateElement = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)')[10];
     tap(dateElement);
     expect(tapSpy.called).to.be.false;
   });
@@ -124,7 +124,7 @@ describe('vaadin-month-calendar', () => {
     touchendEvent.preventDefault = preventDefaultSpy;
 
     // Dispatch a fake touchend event from a date element.
-    const dateElement = monthCalendar.$.days.querySelector('[part="date"]:not(:empty)');
+    const dateElement = monthCalendar.shadowRoot.querySelector('[part="date"]:not(:empty)');
     dateElement.dispatchEvent(touchendEvent);
     expect(preventDefaultSpy.called).to.be.true;
   });
@@ -134,14 +134,14 @@ describe('vaadin-month-calendar', () => {
     month.setFullYear(99);
     monthCalendar.month = month;
     await aTimeout();
-    const date = monthCalendar.$.days.querySelector('[part="date"]:not(:empty)').date;
+    const date = monthCalendar.shadowRoot.querySelector('[part="date"]:not(:empty)').date;
     expect(date.getFullYear()).to.equal(month.getFullYear());
   });
 
   it('should not update value on disabled date tap', async () => {
     monthCalendar.maxDate = new Date('2016-02-09');
     await aTimeout();
-    const dateElements = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)');
+    const dateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
     for (let i = 0; i < dateElements.length; i++) {
       if (dateElements[i].date.getDate() === 10) {
         // Tenth of February.
@@ -171,48 +171,11 @@ describe('vaadin-month-calendar', () => {
     it('should render weekdays in correct locale', () => {
       const weekdays = monthCalendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)');
       const weekdayTitles = Array.from(weekdays).map((weekday) => weekday.textContent);
-      const weekdayLabels = Array.from(weekdays).map((weekday) => weekday.getAttribute('aria-label'));
-      expect(weekdayLabels).to.eql([
-        'maanantai',
-        'tiistai',
-        'keskiviikko',
-        'torstai',
-        'perjantai',
-        'lauantai',
-        'sunnuntai'
-      ]);
       expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
-    });
-
-    it('should label dates in correct locale', () => {
-      const dates = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)');
-      Array.from(dates)
-        .slice(0, 7)
-        .forEach((date, index) => {
-          const label = date.getAttribute('aria-label');
-          const day = ['maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai', 'sunnuntai'][index];
-          expect(label).to.equal(`${index + 1} helmikuu 2016, ${day}`);
-        });
-    });
-
-    it('should label today in correct locale', async () => {
-      monthCalendar.month = new Date();
-      await aTimeout();
-      const today = monthCalendar.$.monthGrid.querySelector('[part="date"]:not(:empty)[today]');
-      expect(today.getAttribute('aria-label').split(', ').pop()).to.equal('Tänään');
     });
 
     it('should render month name in correct locale', () => {
       expect(monthCalendar.shadowRoot.querySelector('[part="month-header"]').textContent).to.equal('helmikuu-2016');
-    });
-
-    it('should label week numbers in correct locale', async () => {
-      monthCalendar.showWeekNumbers = 1;
-      monthCalendar.month = new Date(2016, 1, 1);
-      await aTimeout();
-      const weekNumberElements = monthCalendar.shadowRoot.querySelectorAll('[part="week-number"]');
-      expect(weekNumberElements[0].getAttribute('aria-label')).to.equal('viikko 5');
-      expect(weekNumberElements[1].getAttribute('aria-label')).to.equal('viikko 6');
     });
   });
 

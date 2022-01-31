@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
-import '../src/vaadin-date-picker.js';
-import { activateScroller, getDefaultI18n } from './common.js';
+import '../vaadin-date-picker.js';
+import { activateScroller, getDefaultI18n, open } from './common.js';
 
 describe('WAI-ARIA', () => {
   describe('date picker', () => {
@@ -70,6 +70,16 @@ describe('WAI-ARIA', () => {
       datepicker.open();
 
       expect(input.getAttribute('aria-expanded')).to.equal('true');
+    });
+
+    it('should set aria-hidden on all calendars except focused one', async () => {
+      await open(datepicker);
+      await nextRender(datepicker);
+      const calendars = datepicker._overlayContent.querySelectorAll('vaadin-month-calendar');
+      calendars.forEach((calendar) => {
+        const focused = calendar.shadowRoot.querySelector('[part="date"][focused]');
+        expect(calendar.getAttribute('aria-hidden')).to.equal(focused ? null : 'true');
+      });
     });
   });
 
@@ -178,45 +188,26 @@ describe('WAI-ARIA', () => {
       await aTimeout(1);
     });
 
-    it('should have heading role on the title', () => {
-      // Consistency and convenience. Announces title as a header.
-      expect(monthCalendar.shadowRoot.querySelector('[part="month-header"]').getAttribute('role')).to.equal('heading');
+    it('should set aria-hidden on the month header', () => {
+      const monthHeader = monthCalendar.shadowRoot.querySelector('[part="month-header"]');
+      expect(monthHeader.getAttribute('aria-hidden')).to.equal('true');
     });
 
-    it('should have heading roles on the weekdays', () => {
-      // iOS VoiceOver bug: visible text is spoken instead of aria-label otherwise.
+    it('should have columnheader roles on the weekdays', () => {
       const weekdays = monthCalendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)');
       Array.from(weekdays).forEach((weekday) => {
-        expect(weekday.getAttribute('role')).to.equal('heading');
+        expect(weekday.getAttribute('role')).to.equal('columnheader');
       });
     });
 
-    it('should have label properties on the weekdays', () => {
-      // Speak week days with full words instead of acronyms.
-      const weekdays = monthCalendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)');
-      const weekdayLabels = Array.from(weekdays).map((weekday) => weekday.getAttribute('aria-label'));
-
-      expect(weekdayLabels).to.eql(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']);
-    });
-
-    it('should have button roles and labels on date cells', () => {
+    it('should have gridcell roles on date cells', () => {
       // The date cells should be spoken with a full date.
       const dateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
       expect(dateElements).to.not.be.empty;
 
       Array.from(dateElements).forEach((dateElement) => {
-        expect(dateElement.getAttribute('role')).to.equal('button');
-        expect(dateElement.getAttribute('aria-label')).to.be.ok;
+        expect(dateElement.getAttribute('role')).to.equal('gridcell');
       });
-      expect(dateElements[0].getAttribute('aria-label')).to.equal('1 February 2016, Monday');
-      expect(dateElements[1].getAttribute('aria-label')).to.equal('2 February 2016, Tuesday');
-    });
-
-    it('should indicate today on date cells', async () => {
-      monthCalendar.month = new Date();
-      await nextFrame();
-      const todayElement = monthCalendar.shadowRoot.querySelector('[part="date"]:not(:empty)[today]');
-      expect(todayElement.getAttribute('aria-label')).to.match(/, Today$/);
     });
 
     it('should have disabled state on disabled date cells', () => {
@@ -229,26 +220,6 @@ describe('WAI-ARIA', () => {
       expect(dateElements[10].getAttribute('aria-disabled')).to.equal('true');
     });
 
-    it('should not have button roles and label properties on empty cells', () => {
-      // The empty cells should not be spoken.
-      var emptyDateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:empty');
-
-      expect(emptyDateElements).to.not.be.empty;
-      Array.from(emptyDateElements).forEach((emptyDateElement) => {
-        expect(emptyDateElement.getAttribute('role')).to.not.equal('button');
-        expect(emptyDateElement.getAttribute('aria-label')).to.not.be.ok;
-      });
-    });
-
-    it('should have presentation roles on empty date cells', () => {
-      const emptyDateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:empty');
-
-      Array.from(emptyDateElements).forEach((emptyElement) => {
-        expect(emptyElement.getAttribute('role')).to.equal('presentation');
-        expect(emptyElement.getAttribute('aria-label')).to.be.empty;
-      });
-    });
-
     describe('week numbers', () => {
       beforeEach(async () => {
         monthCalendar.showWeekNumbers = true;
@@ -256,20 +227,12 @@ describe('WAI-ARIA', () => {
         await nextFrame();
       });
 
-      it('should have heading roles on week numbers', () => {
-        // iOS VoiceOver bug: visible text is spoken instead of aria-label otherwise.
+      it('should set aria-hidden on the week numbers', () => {
         const weekNumberElements = monthCalendar.shadowRoot.querySelectorAll('[part="week-number"]');
 
         Array.from(weekNumberElements).forEach((weekNumberElement) => {
-          expect(weekNumberElement.getAttribute('role')).to.equal('heading');
+          expect(weekNumberElement.getAttribute('aria-hidden')).to.equal('true');
         });
-      });
-
-      it('should have label properties on week numbers', () => {
-        const weekNumberElements = monthCalendar.shadowRoot.querySelectorAll('[part="week-number"]');
-
-        expect(weekNumberElements[0].getAttribute('aria-label')).to.equal('Week 5');
-        expect(weekNumberElements[1].getAttribute('aria-label')).to.equal('Week 6');
       });
     });
   });
