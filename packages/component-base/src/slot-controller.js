@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 
 /**
@@ -30,10 +31,13 @@ export class SlotController extends EventTarget {
   static generateId(slotName, host) {
     const prefix = slotName || 'default';
 
-    // Maintain the unique ID counter for a given prefix.
-    this[`${prefix}Id`] = 1 + this[`${prefix}Id`] || 0;
+    // Support dash-case slot names e.g. "error-message"
+    const field = `${dashToCamelCase(prefix)}Id`;
 
-    return `${prefix}-${host.localName}-${this[`${prefix}Id`]}`;
+    // Maintain the unique ID counter for a given prefix.
+    this[field] = 1 + this[field] || 0;
+
+    return `${prefix}-${host.localName}-${this[field]}`;
   }
 
   hostConnected() {
