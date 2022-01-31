@@ -22,8 +22,8 @@ const textArea = css`
     align-self: stretch; /* override "baseline" from <vaadin-text-field> */
   }
 
-  :host vaadin-input-container::before,
-  :host vaadin-input-container::after {
+  :host [part='input-field']::before,
+  :host [part='input-field']::after {
     bottom: calc(var(--_text-area-vertical-scroll-position) * -1);
   }
 `;
