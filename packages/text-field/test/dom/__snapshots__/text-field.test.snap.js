@@ -229,32 +229,32 @@ snapshots["vaadin-text-field shadow theme"] =
 /* end snapshot vaadin-text-field shadow theme */
 
 snapshots["vaadin-text-field slots default"] = 
-`<div
-  hidden=""
-  slot="error-message"
->
-</div>
-<input
+`<input
   slot="input"
   type="text"
 >
 <label slot="label">
 </label>
+<div
+  hidden=""
+  slot="error-message"
+>
+</div>
 `;
 /* end snapshot vaadin-text-field slots default */
 
 snapshots["vaadin-text-field slots helper"] = 
-`<div
-  hidden=""
-  slot="error-message"
->
-</div>
-<input
+`<input
   slot="input"
   type="text"
 >
 <label slot="label">
 </label>
+<div
+  hidden=""
+  slot="error-message"
+>
+</div>
 <div slot="helper">
   Helper
 </div>
