@@ -23,6 +23,8 @@ registerStyles(
       margin-top: var(--lumo-space-l);
       padding: 0 var(--lumo-space-l);
       background-color: var(--lumo-contrast-5pct);
+      border-bottom-left-radius: var(--lumo-border-radius-l);
+      border-bottom-right-radius: var(--lumo-border-radius-l);
     }
 
     [part='footer'] > * {
