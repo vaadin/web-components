@@ -1,5 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../common.js';
 import '../../../theme/lumo/vaadin-text-area.js';
 
 describe('text-area', () => {
@@ -56,6 +57,13 @@ describe('text-area', () => {
   it('invalid', async () => {
     element.invalid = true;
     await visualDiff(div, 'invalid');
+  });
+
+  it('scrolled', async () => {
+    element.style.height = '70px';
+    element.value = 'a\nb\nc\nd\ne';
+    element.focus();
+    await visualDiff(div, 'scrolled');
   });
 
   it('error message', async () => {
