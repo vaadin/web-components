@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-text-area.js';
 
@@ -315,6 +315,60 @@ describe('text-area', () => {
             parseFloat(getComputedStyle(inputField).borderBottomWidth)
         )
       );
+    });
+
+    describe('--_text-area-vertical-scroll-position CSS variable', () => {
+      function wheel({ element = inputField, deltaY = 0 }) {
+        const e = new CustomEvent('wheel', { bubbles: true, cancelable: true });
+        e.deltaY = deltaY;
+        e.deltaX = 0;
+        element.dispatchEvent(e);
+        return e;
+      }
+
+      function getVerticalScrollPosition() {
+        return textArea.shadowRoot
+          .querySelector('[part="input-field"]')
+          .style.getPropertyValue('--_text-area-vertical-scroll-position');
+      }
+
+      beforeEach(() => {
+        textArea.style.height = '100px';
+        textArea.value = 'a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\np\nq\nr\ns\nt\nu\nv\nw\nx\ny\nz';
+      });
+
+      it('should be 0 initially', () => {
+        expect(getVerticalScrollPosition()).to.equal('0px');
+      });
+
+      it('should update value on scroll', async () => {
+        inputField.scrollTop = 10;
+        await nextFrame();
+        expect(getVerticalScrollPosition()).to.equal('10px');
+      });
+
+      it('should update value on wheel', async () => {
+        wheel({ deltaY: 10 });
+        expect(getVerticalScrollPosition()).to.equal('10px');
+      });
+
+      it('should scroll on wheel', async () => {
+        wheel({ deltaY: 10 });
+        expect(inputField.scrollTop).to.equal(10);
+      });
+
+      it('should cancel wheel event', () => {
+        const e = wheel({ deltaY: 10 });
+        expect(e.defaultPrevented).to.be.true;
+      });
+
+      it('should update value on resize', async () => {
+        inputField.scrollTop = 10;
+        await nextFrame();
+        textArea.style.height = `${inputField.scrollHeight}px`;
+        await nextFrame();
+        expect(getVerticalScrollPosition()).to.equal('0px');
+      });
     });
   });
 
