@@ -21,6 +21,11 @@ const textArea = css`
     white-space: pre-wrap; /* override "nowrap" from <vaadin-text-field> */
     align-self: stretch; /* override "baseline" from <vaadin-text-field> */
   }
+
+  [part='input-field']::before,
+  [part='input-field']::after {
+    bottom: calc(var(--_text-area-vertical-scroll-position) * -1);
+  }
 `;
 
 registerStyles('vaadin-text-area', [inputFieldShared, textArea], { moduleId: 'material-text-area' });
