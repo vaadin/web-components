@@ -7,7 +7,6 @@ import {
   aTimeout,
   end,
   enter,
-  esc,
   fixtureSync,
   home,
   isIOS,
@@ -33,40 +32,6 @@ import { getDefaultI18n, getOverlayContent, open } from './common.js';
 
     beforeEach(() => {
       datepicker = fixtureSync('<vaadin-date-picker value="2000-01-01"></vaadin-date-picker>');
-    });
-
-    it('should open overlay on down', () => {
-      target = datepicker.inputElement;
-      arrowDown(target);
-      expect(datepicker.opened).to.be.true;
-    });
-
-    it('should open overlay on down if autoOpenDisabled is true', () => {
-      datepicker.autoOpenDisabled = true;
-      target = datepicker.inputElement;
-      arrowDown(target);
-      expect(datepicker.opened).to.be.true;
-    });
-
-    it('should open overlay on up', () => {
-      target = datepicker.inputElement;
-      arrowUp(target);
-      expect(datepicker.opened).to.be.true;
-    });
-
-    it('should open overlay on up even if autoOpenDisabled is true', () => {
-      datepicker.autoOpenDisabled = true;
-      target = datepicker.inputElement;
-      arrowUp(target);
-      expect(datepicker.opened).to.be.true;
-    });
-
-    it('should close overlay on esc', async () => {
-      datepicker.open();
-      target = datepicker.$.overlay;
-      await aTimeout(1);
-      esc(target);
-      expect(datepicker.opened).to.be.false;
     });
 
     it('should be focused on selected value when overlay is opened', () => {

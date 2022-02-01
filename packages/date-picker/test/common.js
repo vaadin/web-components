@@ -109,3 +109,30 @@ export function getOverlayContent(datepicker) {
   overlayContent.$.yearScroller.bufferSize = 0;
   return overlayContent;
 }
+
+export function getFocusedMonth(overlayContent) {
+  const months = Array.from(overlayContent.shadowRoot.querySelectorAll('vaadin-month-calendar'));
+  return months.find((month) => {
+    const focused = month.shadowRoot.querySelector('[part="date"][focused]');
+    return !!focused;
+  });
+}
+
+export function getFocusedCell(datepicker) {
+  const overlayContent = getOverlayContent(datepicker);
+
+  const months = Array.from(overlayContent.shadowRoot.querySelectorAll('vaadin-month-calendar'));
+
+  // Date that is currently focused
+  let focusedCell;
+
+  for (let i = 0; i < months.length; i++) {
+    focusedCell = months[i].shadowRoot.querySelector('[part="date"][focused]');
+
+    if (focusedCell) {
+      break;
+    }
+  }
+
+  return focusedCell;
+}
