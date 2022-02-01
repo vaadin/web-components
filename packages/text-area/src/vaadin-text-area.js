@@ -6,6 +6,7 @@
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
@@ -59,8 +60,9 @@ registerStyles('vaadin-text-area', inputFieldShared, { moduleId: 'vaadin-text-ar
  * @mixes ElementMixin
  * @mixes PatternMixin
  * @mixes ThemableMixin
+ * @mixes ResizeMixin
  */
-export class TextArea extends PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement))))) {
   static get is() {
     return 'vaadin-text-area';
   }
@@ -212,6 +214,14 @@ export class TextArea extends PatternMixin(InputFieldMixin(ThemableMixin(Element
     this.__scrollPositionUpdated();
   }
 
+  /**
+   * @protected
+   * @override
+   */
+  _onResize() {
+    this.__scrollPositionUpdated();
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -230,6 +240,7 @@ export class TextArea extends PatternMixin(InputFieldMixin(ThemableMixin(Element
 
   /** @private */
   __scrollPositionUpdated() {
+    this._inputField.style.setProperty('--_text-area-vertical-scroll-position', '0px');
     this._inputField.style.setProperty('--_text-area-vertical-scroll-position', this._inputField.scrollTop + 'px');
   }
 
