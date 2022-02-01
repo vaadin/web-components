@@ -4,6 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { Attribution, Zoom } from 'ol/control';
 import OpenLayersMap from 'ol/Map.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -60,13 +61,279 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
           overflow: hidden;
         }
 
+        :host([hidden]) {
+          display: none !important;
+        }
+
         #map {
           width: 100%;
           height: 100%;
         }
 
-        :host([hidden]) {
-          display: none !important;
+        #map,
+        .ol-viewport,
+        .ol-layers {
+          border-radius: inherit;
+          overflow: hidden;
+        }
+
+        #map:fullscreen {
+          border-radius: 0;
+        }
+
+        #map:-webkit-full-screen {
+          border-radius: 0;
+        }
+
+        /* Functional styles, copied from 'ol/ol.css' */
+
+        .ol-box {
+          box-sizing: border-box;
+        }
+
+        .ol-unsupported {
+          display: none;
+        }
+
+        .ol-viewport,
+        .ol-unselectable {
+          -webkit-touch-callout: none;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        .ol-viewport canvas {
+          all: unset;
+        }
+
+        .ol-selectable {
+          -webkit-touch-callout: default;
+          -webkit-user-select: text;
+          -moz-user-select: text;
+          -ms-user-select: text;
+          user-select: text;
+        }
+
+        .ol-grabbing {
+          cursor: -webkit-grabbing;
+          cursor: -moz-grabbing;
+          cursor: grabbing;
+        }
+
+        .ol-grab {
+          cursor: move;
+          cursor: -webkit-grab;
+          cursor: -moz-grab;
+          cursor: grab;
+        }
+
+        .ol-mouse-position {
+          top: 0.5em;
+          right: 0.5em;
+          position: absolute;
+        }
+
+        /* Control positioning and styling */
+
+        .ol-overlaycontainer-stopevent {
+          display: grid;
+          grid-template-columns: min-content 1fr min-content;
+          grid-template-rows: min-content 1fr min-content min-content min-content;
+          padding: var(--vaadin-map-controls-inset, 0.25em);
+          box-sizing: border-box;
+          grid-template-areas:
+            'scale scale fullscreen'
+            'overview-map . .'
+            'overview-map . compass'
+            'overview-map . zoom'
+            'overview-map attribution attribution';
+        }
+
+        .ol-scale-line,
+        .ol-scale-bar {
+          grid-area: scale;
+          position: relative;
+          pointer-events: none !important;
+          color: #000;
+        }
+
+        .ol-scale-line-inner {
+          border: 1px solid rgba(0, 0, 0, 0.5);
+          border-top: none;
+          font-size: 0.625em;
+          text-align: center;
+          will-change: contents, width, filter;
+          transition: all 0.25s;
+          filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
+        }
+
+        .ol-scale-bar-inner {
+          border: 1px solid rgba(0, 0, 0, 0.5);
+          overflow: hidden;
+        }
+
+        .ol-scale-step-marker {
+          display: none;
+        }
+
+        .ol-scale-step-text {
+          position: absolute;
+          top: 0.75em;
+          font-size: 0.625em;
+          color: #000;
+          filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
+          white-space: nowrap;
+          overflow: hidden;
+        }
+
+        .ol-scale-text {
+          position: absolute;
+          font-size: 0.625em;
+          top: 2em;
+          color: #000;
+          white-space: nowrap;
+          filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
+        }
+
+        .ol-scale-singlebar {
+          height: 0.25em;
+          opacity: 0.5;
+        }
+
+        .ol-control {
+          margin: 0.25em;
+        }
+
+        .ol-control button {
+          -webkit-appearance: none;
+          border: 0;
+          margin: 0;
+          padding: 0;
+          background: #fff;
+          font: inherit;
+          color: inherit;
+          width: 1.5em;
+          height: 1.5em;
+        }
+
+        .ol-control button::-moz-focus-inner {
+          border: none;
+          padding: 0;
+        }
+
+        .ol-compass {
+          grid-area: compass;
+          display: block;
+          will-change: transform;
+        }
+
+        .ol-zoom {
+          grid-area: zoom;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .ol-zoom-in:empty::before {
+          content: var(--vaadin-map-icon-zoom-in, '+');
+        }
+
+        .ol-zoom-out:empty::before {
+          content: var(--vaadin-map-icon-zoom-out, '–');
+        }
+
+        .ol-attribution {
+          grid-area: attribution;
+          margin-inline-start: auto !important;
+          display: flex;
+          flex-flow: row-reverse;
+        }
+
+        .ol-attribution.ol-uncollapsible {
+          margin-inline-end: calc(var(--vaadin-map-controls-inset, 0.25em) * -1);
+          margin-block-end: calc(var(--vaadin-map-controls-inset, 0.25em) * -1);
+        }
+
+        .ol-attribution button span:empty::before {
+          content: var(--vaadin-map-icon-attribution-collapse, '▸');
+        }
+
+        .ol-attribution.ol-collapsed button span:empty::before {
+          content: var(--vaadin-map-icon-attribution-expand, 'ℹ');
+        }
+
+        .ol-attribution ul {
+          display: flex;
+          align-items: center;
+          gap: 1em;
+          list-style: none;
+          margin: 0;
+          padding: 0.25em 0.5em;
+          font-size: 0.8em;
+        }
+
+        .ol-attribution.ol-collapsed ul {
+          display: none;
+        }
+
+        .ol-attribution.ol-uncollapsible button {
+          display: none;
+        }
+
+        .ol-rotate {
+          grid-area: compass;
+        }
+
+        .ol-compass:empty::before {
+          content: var(--vaadin-map-icon-compass, '↑');
+        }
+
+        .ol-full-screen {
+          grid-area: fullscreen;
+        }
+
+        .ol-full-screen button:empty::before {
+          content: var(--vaadin-map-icon-fullscreen, '⤢');
+        }
+
+        .ol-full-screen .ol-full-screen-true:empty::before {
+          content: var(--vaadin-map-icon-close, '×');
+        }
+
+        .ol-overviewmap {
+          grid-area: overview-map;
+          align-self: end;
+        }
+
+        .ol-overviewmap button span:empty::before {
+          content: var(--vaadin-map-icon-overview-map-collapse, '▾');
+        }
+
+        .ol-overviewmap.ol-collapsed button span:empty::before {
+          content: var(--vaadin-map-icon-overview-map-expand, '▴');
+        }
+
+        .ol-overviewmap-map {
+          height: 10em;
+          width: 10em;
+          border: 1px solid rgba(0, 0, 0, 0.5);
+        }
+
+        .ol-overviewmap.ol-collapsed .ol-overviewmap-map,
+        .ol-overviewmap.ol-uncollapsible button {
+          display: none;
+        }
+
+        .ol-overviewmap-box {
+          border: 1px dashed rgba(0, 0, 0, 0.5);
+          filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
+          will-change: filter;
+        }
+
+        .ol-overviewmap-box:hover {
+          cursor: move;
         }
       </style>
       <div id="map"></div>
@@ -99,6 +366,10 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
     this._configuration = new OpenLayersMap({
       target: this.$.map
     });
+    // Set default controls
+    this._configuration.getControls().clear();
+    this._configuration.getControls().push(new Zoom({ zoomInLabel: '', zoomOutLabel: '' }));
+    this._configuration.getControls().push(new Attribution());
   }
 }
 
