@@ -112,7 +112,7 @@ export class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(Elemen
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
           <slot name="suffix" slot="suffix"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix"></div>
+          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
         </vaadin-input-container>
 
         <div part="helper-text">
