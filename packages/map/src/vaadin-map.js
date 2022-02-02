@@ -4,7 +4,8 @@
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { Attribution, Zoom } from 'ol/control';
+import Attribution from 'ol/control/Attribution';
+import Zoom from 'ol/control/Zoom';
 import OpenLayersMap from 'ol/Map.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -89,6 +90,10 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
 
         .ol-box {
           box-sizing: border-box;
+          border-radius: 2px;
+          border: 1px solid rgba(0, 0, 0, 0.5);
+          background-color: rgba(255, 255, 255, 0.2);
+          box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
         }
 
         .ol-unsupported {
