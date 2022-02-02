@@ -146,8 +146,8 @@ class DatePicker extends DatePickerMixin(
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix"></div>
-          <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button"></div>
+          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
+          <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-hidden="true"></div>
         </vaadin-input-container>
 
         <div part="helper-text">

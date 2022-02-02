@@ -105,7 +105,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
           <slot name="suffix" slot="suffix"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix"></div>
+          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
           <div
             disabled$="[[!_allowed(1, value, min, max, step)]]"
             part="increase-button"

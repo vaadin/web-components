@@ -143,7 +143,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="value"></slot>
-          <div part="toggle-button" slot="suffix"></div>
+          <div part="toggle-button" slot="suffix" aria-hidden="true"></div>
         </vaadin-input-container>
 
         <div part="helper-text">

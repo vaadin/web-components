@@ -26,6 +26,7 @@ snapshots["vaadin-password-field shadow default"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
@@ -79,6 +80,7 @@ snapshots["vaadin-password-field shadow disabled"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
@@ -132,6 +134,7 @@ snapshots["vaadin-password-field shadow readonly"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
@@ -185,6 +188,7 @@ snapshots["vaadin-password-field shadow invalid"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
@@ -238,6 +242,7 @@ snapshots["vaadin-password-field shadow theme"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
