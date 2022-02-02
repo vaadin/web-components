@@ -8,6 +8,7 @@ import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-upload-icons.js';
 import './vaadin-upload-file.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -443,6 +444,10 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     this.addEventListener('file-abort', this._onFileAbort.bind(this));
     this.addEventListener('file-remove', this._onFileRemove.bind(this));
     this.addEventListener('file-start', this._onFileStart.bind(this));
+    this.addEventListener('file-reject', this._onFileReject.bind(this));
+    this.addEventListener('upload-start', this._onUploadStart.bind(this));
+    this.addEventListener('upload-success', this._onUploadSuccess.bind(this));
+    this.addEventListener('upload-error', this._onUploadError.bind(this));
   }
 
   /** @private */
@@ -855,6 +860,26 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @private */
   _onFileRemove(event) {
     this._removeFile(event.detail.file);
+  }
+
+  /** @private */
+  _onFileReject(event) {
+    announce(`${event.detail.file.name}: ${event.detail.file.error}`, { mode: 'alert' });
+  }
+
+  /** @private */
+  _onUploadStart(event) {
+    announce(`${event.detail.file.name}: 0%`, { mode: 'alert' });
+  }
+
+  /** @private */
+  _onUploadSuccess(event) {
+    announce(`${event.detail.file.name}: 100%`, { mode: 'alert' });
+  }
+
+  /** @private */
+  _onUploadError(event) {
+    announce(`${event.detail.file.name}: ${event.detail.file.error}`, { mode: 'alert' });
   }
 
   /** @private */
