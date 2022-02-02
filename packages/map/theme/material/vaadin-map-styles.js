@@ -103,9 +103,8 @@ registerStyles(
 
     .ol-overviewmap-map {
       margin: 2px;
-      margin-bottom: 0;
       border: 0;
-      border-radius: 4px;
+      border-radius: 2px;
     }
   `,
   { moduleId: 'material-map' }

@@ -51,7 +51,7 @@ registerStyles(
     .ol-control {
       border-radius: var(--lumo-border-radius-m);
       overflow: hidden;
-      transition: 0.2s box-shadow, 0.2s background-color;
+      transition: 0.15s box-shadow, 0.15s background-color;
       -webkit-backdrop-filter: blur(8px);
       backdrop-filter: blur(8px);
     }
@@ -72,10 +72,10 @@ registerStyles(
 
     .ol-control button,
     .ol-attribution:not(.ol-uncollapsible) ul {
-      transition: 0.2s opacity;
+      transition: 0.15s opacity;
       background-color: var(--lumo-base-color);
-      color: var(--lumo-secondary-text-color);
-      opacity: 0.7;
+      color: var(--lumo-body-text-color);
+      opacity: 0.65;
     }
 
     .ol-control:hover button,
@@ -128,13 +128,18 @@ registerStyles(
     .ol-overviewmap:not(.ol-collapsed),
     .ol-overviewmap:not(.ol-collapsed):hover {
       background-color: var(--lumo-base-color);
+      box-shadow: var(--lumo-box-shadow-s);
+      transition: 0.15s box-shadow;
     }
 
     .ol-overviewmap-map {
       margin: var(--lumo-space-xs);
-      margin-bottom: 0;
       border: 0;
       border-radius: var(--lumo-border-radius-s);
+    }
+
+    .ol-overviewmap:not(.ol-uncollapsible) .ol-overviewmap-map {
+      margin-bottom: 0;
     }
   `,
   { moduleId: 'lumo-map' }
