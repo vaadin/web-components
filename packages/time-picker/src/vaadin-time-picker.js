@@ -120,8 +120,8 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
           >
             <slot name="prefix" slot="prefix"></slot>
             <slot name="input"></slot>
-            <div id="clearButton" part="clear-button" slot="suffix"></div>
-            <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix"></div>
+            <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
+            <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix" aria-hidden="true"></div>
           </vaadin-input-container>
         </vaadin-time-picker-combo-box>
 

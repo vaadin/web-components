@@ -143,7 +143,7 @@ export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(Polymer
           <slot name="prefix" slot="prefix"></slot>
           <slot name="textarea"></slot>
           <slot name="suffix" slot="suffix"></slot>
-          <div id="clearButton" part="clear-button" slot="suffix"></div>
+          <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
         </vaadin-input-container>
 
         <div part="helper-text">
