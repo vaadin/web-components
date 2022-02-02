@@ -4,7 +4,8 @@
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { Attribution, Zoom } from 'ol/control';
+import Attribution from 'ol/control/Attribution';
+import Zoom from 'ol/control/Zoom';
 import OpenLayersMap from 'ol/Map.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
