@@ -87,6 +87,10 @@ registerStyles(
       color: var(--lumo-primary-text-color);
     }
 
+    .ol-control button:active {
+      background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+    }
+
     .ol-zoom {
       gap: 2px;
     }

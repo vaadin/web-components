@@ -66,6 +66,10 @@ registerStyles(
       color: var(--material-primary-text-color);
     }
 
+    .ol-control button:active {
+      background-color: var(--material-secondary-background-color);
+    }
+
     .ol-zoom {
       gap: 1px;
     }
