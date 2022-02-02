@@ -14,14 +14,6 @@ registerStyles(
     :host {
       font-family: var(--material-font-family);
       font-size: var(--material-body-font-size);
-      /* --vaadin-map-controls-inset: var(--lumo-space-xs);
-      --vaadin-map-icon-zoom-in: var(--lumo-icons-plus);
-      --vaadin-map-icon-zoom-out: var(--lumo-icons-minus);
-      --vaadin-map-icon-compass: var(--lumo-icons-arrow-up);
-      --vaadin-map-icon-overview-map-collapse: var(--lumo-icons-angle-down);
-      --vaadin-map-icon-overview-map-expand: var(--lumo-icons-angle-up);
-      --vaadin-map-icon-close: var(--lumo-icons-cross);
-      --vaadin-map-icon-attribution-collapse: var(--lumo-icons-angle-right); */
     }
 
     :host(:not([theme~='borderless'])) {
@@ -33,8 +25,6 @@ registerStyles(
       border-radius: 4px;
       overflow: hidden;
       transition: 0.1s box-shadow;
-      -webkit-backdrop-filter: blur(8px);
-      backdrop-filter: blur(8px);
       box-shadow: var(--material-shadow-elevation-2dp);
     }
 
@@ -109,6 +99,21 @@ registerStyles(
       margin: 2px;
       border: 0;
       border-radius: 2px;
+    }
+
+    .ol-zoomslider,
+    .ol-zoomslider:not(.ol-uncollapsible):hover {
+      box-shadow: none;
+      overflow: visible;
+    }
+
+    .ol-zoomslider button {
+      height: 16px;
+      box-shadow: var(--material-shadow-elevation-2dp);
+    }
+
+    .ol-zoomslider:hover button {
+      box-shadow: var(--material-shadow-elevation-4dp);
     }
   `,
   { moduleId: 'material-map' }

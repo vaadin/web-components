@@ -53,7 +53,6 @@ registerStyles(
       overflow: hidden;
       transition: 0.15s box-shadow, 0.15s background-color;
       -webkit-backdrop-filter: blur(8px);
-      backdrop-filter: blur(8px);
     }
 
     .ol-control:hover {
@@ -144,6 +143,19 @@ registerStyles(
 
     .ol-overviewmap:not(.ol-uncollapsible) .ol-overviewmap-map {
       margin-bottom: 0;
+    }
+
+    .ol-zoomslider:not(.ol-uncollapsible):hover {
+      box-shadow: none;
+      overflow: visible;
+    }
+
+    .ol-zoomslider button {
+      height: var(--lumo-space-m);
+    }
+
+    .ol-zoomslider:hover button {
+      box-shadow: var(--lumo-box-shadow-s);
     }
   `,
   { moduleId: 'lumo-map' }
