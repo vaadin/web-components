@@ -1,75 +1,89 @@
 import { expect } from '@esm-bundle/chai';
-import {
-  arrowDown,
-  arrowLeft,
-  arrowRight,
-  arrowUp,
-  aTimeout,
-  end,
-  enter,
-  fixtureSync,
-  home,
-  isIOS,
-  nextRender,
-  oneEvent,
-  pageDown,
-  pageUp,
-  space
-} from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, isIOS, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-date-picker.js';
-import { getDefaultI18n, getOverlayContent, open } from './common.js';
+import './not-animated-styles.js';
+import '../vaadin-date-picker.js';
+import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './common.js';
 
 (isIOS ? describe.skip : describe)('keyboard navigation', () => {
-  let target;
-
-  function focusedDate(datepicker) {
-    return getOverlayContent(datepicker).focusedDate;
-  }
-
   describe('date-picker', () => {
     let datepicker;
+    let input;
 
-    beforeEach(() => {
-      datepicker = fixtureSync('<vaadin-date-picker value="2000-01-01"></vaadin-date-picker>');
+    describe('default', () => {
+      beforeEach(() => {
+        datepicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
+        input = datepicker.inputElement;
+        input.focus();
+      });
+
+      it('should be focused on today if no value / initial position is set', async () => {
+        const today = new Date();
+        await open(datepicker);
+        await nextRender(datepicker);
+
+        // Move focus to the calendar
+        await sendKeys({ press: 'Tab' });
+
+        const cell = getFocusedCell(getOverlayContent(datepicker));
+        expect(cell.date).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+      });
     });
 
-    it('should be focused on selected value when overlay is opened', () => {
-      datepicker.value = '2001-01-01';
-      datepicker.open();
-      target = getOverlayContent(datepicker);
-      arrowRight(target);
-      expect(focusedDate(datepicker)).to.eql(new Date(2001, 0, 2));
+    describe('value', () => {
+      beforeEach(() => {
+        datepicker = fixtureSync('<vaadin-date-picker value="2001-01-01"></vaadin-date-picker>');
+        input = datepicker.inputElement;
+        input.focus();
+      });
+
+      it('should be focused on selected value when overlay is opened', async () => {
+        await open(datepicker);
+        await nextRender(datepicker);
+
+        // Move focus to the calendar
+        await sendKeys({ press: 'Tab' });
+
+        const cell = getFocusedCell(getOverlayContent(datepicker));
+        expect(cell.date).to.eql(new Date(2001, 0, 1));
+      });
+
+      it('should not lose focused date after deselecting', async () => {
+        await open(datepicker);
+        await nextRender(datepicker);
+
+        const content = getOverlayContent(datepicker);
+        const focused = content.focusedDate;
+
+        // Move focus to the calendar
+        await sendKeys({ press: 'Tab' });
+
+        // De-select the selected date
+        await sendKeys({ press: 'Space' });
+        await sendKeys({ press: 'Space' });
+
+        expect(content.focusedDate.getTime()).to.equal(focused.getTime());
+      });
     });
 
-    it('should be focused on initial position when no value is set', async () => {
-      datepicker.value = null;
-      datepicker.initialPosition = '2001-01-01';
+    describe('initial position', () => {
+      beforeEach(() => {
+        datepicker = fixtureSync('<vaadin-date-picker initial-position="2001-01-01"></vaadin-date-picker>');
+        input = datepicker.inputElement;
+        input.focus();
+      });
 
-      await open(datepicker);
-      target = getOverlayContent(datepicker);
-      arrowRight(target);
-      expect(focusedDate(datepicker)).to.eql(new Date(2001, 0, 2));
-    });
+      it('should be focused on initial position when opened', async () => {
+        await open(datepicker);
+        await nextRender(datepicker);
 
-    it('should be focused on today if no initial position is set', () => {
-      const today = new Date();
-      datepicker.value = null;
-      datepicker.initialPosition = null;
-      datepicker.open();
-      target = getOverlayContent(datepicker);
-      arrowRight(target);
-      expect(focusedDate(datepicker)).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
-    });
+        // Move focus to the calendar
+        await sendKeys({ press: 'Tab' });
 
-    // FIXME: fails with src, probably depends on Lumo
-    it.skip('should not lose focused date after deselecting', () => {
-      const focused = focusedDate(datepicker);
-      datepicker.open();
-      target = getOverlayContent(datepicker);
-      space(target);
-      space(target);
-      expect(focusedDate(datepicker).getTime()).to.equal(focused.getTime());
+        const cell = getFocusedCell(getOverlayContent(datepicker));
+        expect(cell.date).to.eql(new Date(2001, 0, 1));
+      });
     });
   });
 
@@ -82,24 +96,24 @@ import { getDefaultI18n, getOverlayContent, open } from './common.js';
         style="position: absolute; top: 0"
       ></vaadin-date-picker-overlay-content>`);
       overlay.i18n = getDefaultI18n();
-      target = overlay;
 
-      overlay.initialPosition = new Date();
-      overlay.focusedDate = new Date(2000, 0, 1);
-
-      overlay.scrollToDate(overlay.focusedDate);
-      await oneEvent(overlay, 'scroll-animation-finished');
-      await nextRender(target);
+      const initialDate = new Date(2000, 0, 1);
+      overlay.initialPosition = initialDate;
+      overlay.focusedDate = initialDate;
+      await nextRender(overlay);
+      overlay.focus();
     });
 
-    it('should focus one week forward with arrow down', () => {
-      arrowDown(overlay);
-      expect(overlay.focusedDate).to.eql(new Date(2000, 0, 8));
+    it('should focus one week forward with arrow down', async () => {
+      await sendKeys({ press: 'ArrowDown' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(2000, 0, 8));
     });
 
-    it('should focus one week backward with arrow up', () => {
-      arrowUp(overlay);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+    it('should focus one week backward with arrow up', async () => {
+      await sendKeys({ press: 'ArrowUp' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
 
     ['ltr', 'rtl'].forEach((direction) => {
@@ -116,113 +130,127 @@ import { getDefaultI18n, getOverlayContent, open } from './common.js';
           }
         });
 
-        it(`should focus one day ${isRTL ? 'backward' : 'forward'} with arrow 'right'`, () => {
-          arrowRight(target);
-          expect(overlay.focusedDate).to.eql(isRTL ? new Date(1999, 11, 31) : new Date(2000, 0, 2));
+        it(`should focus one day ${isRTL ? 'backward' : 'forward'} with arrow 'right'`, async () => {
+          await sendKeys({ press: 'ArrowRight' });
+          const cell = getFocusedCell(overlay);
+          expect(cell.date).to.eql(isRTL ? new Date(1999, 11, 31) : new Date(2000, 0, 2));
         });
 
-        it(`should focus one day ${isRTL ? 'forward' : 'backward'} with arrow left`, () => {
-          arrowLeft(target);
-          expect(overlay.focusedDate).to.eql(isRTL ? new Date(2000, 0, 2) : new Date(1999, 11, 31));
+        it(`should focus one day ${isRTL ? 'forward' : 'backward'} with arrow left`, async () => {
+          await sendKeys({ press: 'ArrowLeft' });
+          const cell = getFocusedCell(overlay);
+          expect(cell.date).to.eql(isRTL ? new Date(2000, 0, 2) : new Date(1999, 11, 31));
         });
       });
     });
 
-    it('should close overlay with enter', () => {
+    it('should close overlay with enter', async () => {
       const spy = sinon.spy(overlay, '_close');
-      enter(target);
+      await sendKeys({ press: 'Enter' });
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should scroll to focused month', (done) => {
-      overlay.addEventListener('scroll-animation-finished', (e) => {
-        expect(e.detail.position).to.be.closeTo(e.detail.oldPosition - 1, 1);
-        done();
-      });
-
-      arrowUp(target);
+    it('should scroll to focused month', async () => {
+      await sendKeys({ press: 'ArrowUp' });
+      const e = await oneEvent(overlay, 'scroll-animation-finished');
+      expect(e.detail.position).to.be.closeTo(e.detail.oldPosition - 1, 1);
     });
 
-    it('should select a date with space', () => {
-      arrowRight(target);
-      space(target);
-      expect(overlay.selectedDate).to.eql(new Date(2000, 0, 2));
+    it('should select a date with space', async () => {
+      await sendKeys({ press: 'ArrowRight' });
+      await sendKeys({ press: 'Space' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(2000, 0, 2));
     });
 
-    it('should deselect selected date with space', () => {
-      space(target);
-      space(target);
+    it('should deselect selected date with space', async () => {
+      await sendKeys({ press: 'Space' });
       expect(overlay.selectedDate).to.be.empty;
     });
 
-    it('should focus first day of the month with home', () => {
-      arrowLeft(target);
-      home(target);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 1));
+    it('should focus first day of the month with home', async () => {
+      await sendKeys({ press: 'ArrowLeft' });
+      await sendKeys({ press: 'Home' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 1));
     });
 
-    it('should focus last day of the month with end', () => {
-      end(target);
-      expect(overlay.focusedDate).to.eql(new Date(2000, 0, 31));
+    it('should focus last day of the month with end', async () => {
+      await sendKeys({ press: 'End' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(2000, 0, 31));
     });
 
-    it('should focus next month with pagedown', () => {
-      pageDown(target);
-      expect(overlay.focusedDate).to.eql(new Date(2000, 1, 1));
+    it('should focus next month with pagedown', async () => {
+      await sendKeys({ press: 'PageDown' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(2000, 1, 1));
     });
 
-    it('should focus previous month with pageup', () => {
-      pageUp(target);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 1));
+    it('should focus previous month with pageup', async () => {
+      await sendKeys({ press: 'PageUp' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 1));
     });
 
-    it('should not skip a month', () => {
+    it('should not skip a month', async () => {
       overlay.focusedDate = new Date(2000, 0, 31);
-      pageDown(target);
-      expect(overlay.focusedDate).to.eql(new Date(2000, 1, 29));
+      await nextRender(overlay);
+      await sendKeys({ press: 'PageDown' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(2000, 1, 29));
     });
 
-    it('should focus the previously focused date number if available', () => {
+    it('should focus the previously focused date number if available', async () => {
       overlay.focusedDate = new Date(2000, 0, 31);
-      pageDown(target);
-      pageDown(target);
+      await nextRender(overlay);
+      await sendKeys({ press: 'PageDown' });
+      await sendKeys({ press: 'PageDown' });
       expect(overlay.focusedDate).to.eql(new Date(2000, 2, 31));
     });
 
-    it('should focus next year with shift and pagedown', () => {
-      pageDown(target, ['shift']);
+    it('should focus next year with shift and pagedown', async () => {
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'PageDown' });
+      await sendKeys({ up: 'Shift' });
+
+      await oneEvent(overlay, 'scroll-animation-finished');
       expect(overlay.focusedDate).to.eql(new Date(2001, 0, 1));
     });
 
-    it('should focus previous year with shift and pageup', () => {
-      pageUp(target, ['shift']);
+    it('should focus previous year with shift and pageup', async () => {
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'PageUp' });
+      await sendKeys({ up: 'Shift' });
+
+      await oneEvent(overlay, 'scroll-animation-finished');
       expect(overlay.focusedDate).to.eql(new Date(1999, 0, 1));
     });
 
-    it('should scroll up when focus goes invisible', (done) => {
-      overlay.addEventListener('scroll-animation-finished', (e) => {
-        expect(e.detail.position).to.be.closeTo(e.detail.oldPosition - 12, 1);
-        done();
-      });
+    it('should scroll up when focus goes invisible', async () => {
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'PageUp' });
+      await sendKeys({ up: 'Shift' });
 
-      pageUp(target, ['shift']);
+      const e = await oneEvent(overlay, 'scroll-animation-finished');
+      expect(e.detail.position).to.be.closeTo(e.detail.oldPosition - 12, 1);
     });
 
     it('should not scroll down when focus keeps visible', async () => {
       const initialPosition = overlay.$.monthScroller.position;
-      pageDown(target);
+      await sendKeys({ press: 'PageDown' });
       await aTimeout();
       // FF sometimes reports subpixel differences
       expect(overlay.$.monthScroller.position).to.be.closeTo(initialPosition, 1);
     });
 
-    it('should scroll down when focus goes invisible', (done) => {
-      overlay.addEventListener('scroll-animation-finished', (e) => {
-        expect(e.detail.position).to.be.greaterThan(e.detail.oldPosition);
-        done();
-      });
+    it('should scroll down when focus goes invisible', async () => {
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'PageDown' });
+      await sendKeys({ up: 'Shift' });
 
-      pageDown(target, ['shift']);
+      const e = await oneEvent(overlay, 'scroll-animation-finished');
+      expect(e.detail.position).to.be.greaterThan(e.detail.oldPosition);
     });
 
     it('should not focus on today click if no date focused', () => {
@@ -231,156 +259,205 @@ import { getDefaultI18n, getOverlayContent, open } from './common.js';
       expect(overlay.focusedDate).to.be.null;
     });
 
-    it('should focus on today click if a date is focused', () => {
-      arrowRight(target);
+    it('should focus on today click if a date is focused', async () => {
+      await sendKeys({ down: 'ArrowRight' });
       overlay._scrollToCurrentMonth();
       expect(overlay.focusedDate.getFullYear()).to.eql(new Date().getFullYear());
       expect(overlay.focusedDate.getMonth()).to.eql(new Date().getMonth());
       expect(overlay.focusedDate.getDate()).to.eql(new Date().getDate());
     });
 
-    it('should move to max date when targeted date is disabled', () => {
+    it('should move to max date when targeted date is disabled', async () => {
       overlay.maxDate = new Date(2000, 0, 7);
-      arrowDown(overlay);
+      await sendKeys({ down: 'ArrowDown' });
       expect(overlay.focusedDate).to.eql(new Date(2000, 0, 7));
     });
 
-    it('should move to min date when targeted date is disabled', () => {
+    it('should move to min date when targeted date is disabled', async () => {
       overlay.minDate = new Date(1999, 11, 26);
-      arrowUp(overlay);
+      await sendKeys({ down: 'ArrowUp' });
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 26));
     });
 
-    it('should focus min date with home', () => {
+    it('should focus min date with home', async () => {
       overlay.minDate = new Date(1999, 11, 3);
-      arrowLeft(target);
-      home(target);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 3));
+      await sendKeys({ down: 'ArrowLeft' });
+      await sendKeys({ down: 'Home' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 3));
     });
 
-    it('should focus max date with end', () => {
+    it('should focus max date with end', async () => {
       overlay.maxDate = new Date(2000, 0, 26);
-      end(target);
-      expect(overlay.focusedDate).to.eql(new Date(2000, 0, 26));
+      await sendKeys({ down: 'End' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(2000, 0, 26));
     });
 
-    it('should focus max date with pagedown', () => {
+    it('should focus max date with pagedown', async () => {
       overlay.maxDate = new Date(2000, 0, 28);
-      pageDown(target);
-      expect(overlay.focusedDate).to.eql(new Date(2000, 0, 28));
+      await sendKeys({ press: 'PageDown' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(2000, 0, 28));
     });
 
-    it('should focus min date with pageup', () => {
+    it('should focus min date with pageup', async () => {
       overlay.minDate = new Date(1999, 11, 3);
-      pageUp(target);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 3));
+      await sendKeys({ press: 'PageUp' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 3));
     });
 
-    it('should focus max date with shift and pagedown', () => {
+    it('should focus max date with shift and pagedown', async () => {
       overlay.maxDate = new Date(2000, 11, 28);
-      pageDown(target, ['shift']);
-      expect(overlay.focusedDate).to.eql(new Date(2000, 11, 28));
+
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'PageDown' });
+      await sendKeys({ up: 'Shift' });
+
+      await oneEvent(overlay, 'scroll-animation-finished');
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(2000, 11, 28));
     });
 
-    it('should focus min date with shift and pageup', () => {
+    it('should focus min date with shift and pageup', async () => {
       overlay.minDate = new Date(1999, 5, 3);
-      pageUp(target, ['shift']);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 5, 3));
+
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'PageUp' });
+      await sendKeys({ up: 'Shift' });
+
+      await oneEvent(overlay, 'scroll-animation-finished');
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 5, 3));
     });
 
-    it('should focus the closest allowed date with pageup when selected date is disabled', () => {
+    it('should focus the closest allowed date with pageup when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      pageUp(target);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+      await nextRender(overlay);
+
+      await sendKeys({ press: 'PageUp' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
 
-    it('should focus the closest allowed date with pagedown when selected date is disabled', () => {
+    it('should focus the closest allowed date with pagedown when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      pageDown(target);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+      await nextRender(overlay);
+
+      await sendKeys({ press: 'PageDown' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
 
-    it('should focus the closest allowed date with shift pageup when selected date is disabled', () => {
+    it('should focus the closest allowed date with shift pageup when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      pageUp(target, ['shift']);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+      await nextRender(overlay);
+
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'PageUp' });
+      await sendKeys({ up: 'Shift' });
+
+      await oneEvent(overlay, 'scroll-animation-finished');
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
 
-    it('should focus the closest allowed date with shift pagedown when selected date is disabled', () => {
+    it('should focus the closest allowed date with shift pagedown when selected date is disabled', async () => {
+      overlay.focusedDate = new Date(1999, 5, 10);
+      overlay.maxDate = new Date(1999, 11, 25);
+      await nextRender(overlay);
+
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'PageDown' });
+      await sendKeys({ up: 'Shift' });
+
+      await oneEvent(overlay, 'scroll-animation-finished');
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 25));
+    });
+
+    it('should focus the closest allowed date with home when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      pageUp(target, ['shift']);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+      await sendKeys({ press: 'Home' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
 
-    it('should focus the closest allowed date with home when selected date is disabled', () => {
+    it('should focus the closest allowed date with end when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      home(target);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+      await sendKeys({ press: 'End' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
 
-    it('should focus the closest allowed date with end when selected date is disabled', () => {
+    it('should focus the closest allowed date with arrow up when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      end(target);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+      await nextRender(overlay);
+      await sendKeys({ press: 'ArrowUp' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
 
-    it('should focus the closest allowed date with arrow up when selected date is disabled', () => {
+    it('should focus the closest allowed date with arrow down when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      arrowUp(overlay);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+      await nextRender(overlay);
+      await sendKeys({ press: 'ArrowDown' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
 
-    it('should focus the closest allowed date with arrow down when selected date is disabled', () => {
+    it('should focus the closest allowed date with arrow left when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      arrowDown(overlay);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+      await nextRender(overlay);
+      await sendKeys({ press: 'ArrowLeft' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
 
-    it('should focus the closest allowed date with arrow left when selected date is disabled', () => {
+    it('should focus the closest allowed date with arrow right when selected date is disabled', async () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
-      arrowLeft(overlay);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
+      await nextRender(overlay);
+      await sendKeys({ press: 'ArrowRight' });
+      const cell = getFocusedCell(overlay);
+      expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
 
-    it('should focus the closest allowed date with arrow right when selected date is disabled', () => {
-      overlay.focusedDate = new Date(1999, 5, 10);
-      overlay.minDate = new Date(1999, 11, 25);
-      arrowRight(overlay);
-      expect(overlay.focusedDate).to.eql(new Date(1999, 11, 25));
-    });
-
-    it('should focus two-digit years while navigating days', () => {
+    it('should focus two-digit years while navigating days', async () => {
       const date = new Date(99, 0, 1);
       date.setFullYear(99);
       overlay.focusedDate = date;
-      arrowRight(overlay);
+      await oneEvent(overlay, 'scroll-animation-finished');
+      await sendKeys({ press: 'ArrowRight' });
       date.setDate(2);
       expect(overlay.focusedDate).to.eql(date);
     });
 
-    it('should focus two-digit years while navigating months', () => {
+    it('should focus two-digit years while navigating months', async () => {
       const date = new Date(99, 0, 1);
       date.setFullYear(99);
       overlay.focusedDate = date;
-      pageDown(target);
+      await oneEvent(overlay, 'scroll-animation-finished');
+      await sendKeys({ press: 'PageDown' });
       date.setMonth(1);
       expect(overlay.focusedDate).to.eql(date);
     });
 
-    it('should focus two-digit years while navigating in month', () => {
+    it('should focus two-digit years while navigating in month', async () => {
       const date = new Date(99, 0, 1);
       date.setFullYear(99);
       overlay.focusedDate = date;
-      end(target);
+      await oneEvent(overlay, 'scroll-animation-finished');
+      await sendKeys({ press: 'End' });
       date.setDate(31);
       expect(overlay.focusedDate).to.eql(date);
     });

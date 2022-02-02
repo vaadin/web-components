@@ -118,9 +118,7 @@ export function getFocusedMonth(overlayContent) {
   });
 }
 
-export function getFocusedCell(datepicker) {
-  const overlayContent = getOverlayContent(datepicker);
-
+export function getFocusedCell(overlayContent) {
   const months = Array.from(overlayContent.shadowRoot.querySelectorAll('vaadin-month-calendar'));
 
   // Date that is currently focused
