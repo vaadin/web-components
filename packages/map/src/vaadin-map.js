@@ -135,26 +135,29 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
           cursor: grab;
         }
 
-        .ol-mouse-position {
-          top: 0.5em;
-          right: 0.5em;
-          position: absolute;
-        }
-
         /* Control positioning and styling */
 
         .ol-overlaycontainer-stopevent {
           display: grid;
           grid-template-columns: min-content 1fr min-content;
-          grid-template-rows: min-content 1fr min-content min-content min-content;
+          grid-template-rows: min-content 1fr min-content min-content min-content min-content;
           padding: var(--vaadin-map-controls-inset, 0.25em);
           box-sizing: border-box;
           grid-template-areas:
-            'scale scale fullscreen'
-            'overview-map . .'
+            'scale mouse-position fullscreen'
+            'overview-map . zoom-extent'
             'overview-map . compass'
+            'overview-map . zoom-slider'
             'overview-map . zoom'
             'overview-map attribution attribution';
+        }
+
+        .ol-mouse-position {
+          grid-area: mouse-position;
+          align-self: start;
+          text-align: center;
+          font-size: 0.625em;
+          filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
         }
 
         .ol-scale-line,
@@ -310,6 +313,7 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
         .ol-overviewmap {
           grid-area: overview-map;
           align-self: end;
+          width: max-content;
         }
 
         .ol-overviewmap button span:empty::before {
@@ -335,10 +339,24 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
           border: 1px dashed rgba(0, 0, 0, 0.5);
           filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
           will-change: filter;
+          cursor: move;
         }
 
-        .ol-overviewmap-box:hover {
-          cursor: move;
+        .ol-zoomslider {
+          grid-area: zoom-slider;
+          height: 8em;
+        }
+
+        .ol-zoomslider button {
+          position: relative;
+          height: 0.5em;
+          display: block;
+          border-radius: inherit;
+        }
+
+        .ol-zoom-extent {
+          grid-area: zoom-extent;
+          align-self: end;
         }
       </style>
       <div id="map"></div>
