@@ -226,10 +226,13 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
           part="today-button"
           theme="tertiary"
           disabled="[[!_isTodayAllowed(minDate, maxDate)]]"
+          on-keydown="__onTodayButtonKeyDown"
         >
           [[i18n.today]]
         </vaadin-button>
-        <vaadin-button id="cancelButton" part="cancel-button" theme="tertiary"> [[i18n.cancel]] </vaadin-button>
+        <vaadin-button id="cancelButton" part="cancel-button" theme="tertiary" on-keydown="__onCancelButtonKeyDown">
+          [[i18n.cancel]]
+        </vaadin-button>
       </div>
       <iron-media-query query="(min-width: 375px)" query-matches="{{_desktopMode}}"></iron-media-query>
     `;
@@ -703,14 +706,25 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
     e.preventDefault();
   }
 
-  _onKeydown(e) {
-    var focus = this._currentlyFocusedDate();
+  __toggleDate(date) {
+    if (dateEquals(date, this.selectedDate)) {
+      this.selectedDate = '';
+      this.focusedDate = date;
+    } else {
+      this.selectedDate = date;
+    }
+  }
 
+  _onKeydown(e) {
     // Cannot use (today/cancel).focused flag because vaadin-text-field removes it
     // previously in the keydown event.
     const isToday = e.composedPath().indexOf(this.$.todayButton) >= 0;
     const isCancel = e.composedPath().indexOf(this.$.cancelButton) >= 0;
-    const isScroller = !isToday && !isCancel;
+
+    // Handle buttons separately
+    if (isToday || isCancel) {
+      return;
+    }
 
     // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
     const navigationKeys = [
@@ -724,8 +738,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
       'Escape',
       'Home',
       'PageUp',
-      'PageDown',
-      'Tab'
+      'PageDown'
     ];
 
     const eventKey = e.key;
@@ -738,82 +751,121 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
 
       if (isFullscreen) {
         e.preventDefault();
-      } else if ((isShift && isScroller) || (!isShift && isCancel)) {
+      } else if (isShift) {
         // Return focus back to the input field
         e.preventDefault();
         this.dispatchEvent(new CustomEvent('focus-input', { bubbles: true, composed: true }));
-      } else if (isShift && isToday) {
-        // Browser returns focus back to the scrollable area. We need to set
-        // the focused flag, and move the scroll to focused date.
-        this._focused = true;
-        setTimeout(() => this.revealDate(this.focusedDate), 1);
       } else {
         // Browser moves the focus out of the scroller, hence focused flag must
         // set to false.
         this._focused = false;
       }
     } else if (navigationKeys.includes(eventKey)) {
-      e.preventDefault();
-      e.stopPropagation();
-      switch (eventKey) {
-        case 'ArrowDown':
-          this._moveFocusByDays(7);
-          this.focus();
-          break;
-        case 'ArrowUp':
-          this._moveFocusByDays(-7);
-          this.focus();
-          break;
-        case 'ArrowRight':
-          if (isScroller) {
-            this._moveFocusByDays(this.__isRTL ? -1 : 1);
-          }
-          break;
-        case 'ArrowLeft':
-          if (isScroller) {
-            this._moveFocusByDays(this.__isRTL ? 1 : -1);
-          }
-          break;
-        case 'Enter':
-          if (isScroller || isCancel) {
-            this._close();
-          } else if (isToday) {
-            this._onTodayTap();
-          }
-          break;
-        case ' ':
-          if (isCancel) {
-            this._close();
-          } else if (isToday) {
-            this._onTodayTap();
-          } else {
-            var focusedDate = this.focusedDate;
-            if (dateEquals(focusedDate, this.selectedDate)) {
-              this.selectedDate = '';
-              this.focusedDate = focusedDate;
-            } else {
-              this.selectedDate = focusedDate;
-            }
-          }
-          break;
-        case 'Home':
-          this._moveFocusInsideMonth(focus, 'minDate');
-          break;
-        case 'End':
-          this._moveFocusInsideMonth(focus, 'maxDate');
-          break;
-        case 'PageDown':
-          this._moveFocusByMonths(e.shiftKey ? 12 : 1);
-          break;
-        case 'PageUp':
-          this._moveFocusByMonths(e.shiftKey ? -12 : -1);
-          break;
-        case 'Escape':
-          this._cancel();
-          break;
-        default:
-          break;
-      }
+      this.__onMonthCalendarKeyDown(e);
+    }
+  }
+
+  __onMonthCalendarKeyDown(event) {
+    const focus = this._currentlyFocusedDate();
+
+    let handled = false;
+
+    switch (event.key) {
+      case 'ArrowDown':
+        this._moveFocusByDays(7);
+        this.focus();
+        handled = true;
+        break;
+      case 'ArrowUp':
+        this._moveFocusByDays(-7);
+        this.focus();
+        handled = true;
+        break;
+      case 'ArrowRight':
+        this._moveFocusByDays(this.__isRTL ? -1 : 1);
+        handled = true;
+        break;
+      case 'ArrowLeft':
+        this._moveFocusByDays(this.__isRTL ? 1 : -1);
+        handled = true;
+        break;
+      case 'Enter':
+        this._close();
+        handled = true;
+        break;
+      case ' ':
+        this.__toggleDate(this.focusedDate);
+        handled = true;
+        break;
+      case 'Home':
+        this._moveFocusInsideMonth(focus, 'minDate');
+        handled = true;
+        break;
+      case 'End':
+        this._moveFocusInsideMonth(focus, 'maxDate');
+        handled = true;
+        break;
+      case 'PageDown':
+        this._moveFocusByMonths(event.shiftKey ? 12 : 1);
+        handled = true;
+        break;
+      case 'PageUp':
+        this._moveFocusByMonths(event.shiftKey ? -12 : -1);
+        handled = true;
+        break;
+      case 'Escape':
+        this._cancel();
+        handled = true;
+        break;
+      default:
+        break;
+    }
+
+    if (handled) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
+
+  __onTodayButtonKeyDown(event) {
+    if (this.hasAttribute('fullscreen')) {
+      event.stopPropagation();
+      return;
+    }
+
+    if (event.key === 'Tab' && event.shiftKey) {
+      event.stopPropagation();
+
+      // Browser returns focus back to the scrollable area. We need to set
+      // the focused flag, and move the scroll to focused date.
+      this._focused = true;
+      setTimeout(() => this.revealDate(this.focusedDate), 1);
+    }
+
+    if (event.key === 'Escape') {
+      this._cancel();
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }
+
+  __onCancelButtonKeyDown(event) {
+    if (this.hasAttribute('fullscreen')) {
+      event.stopPropagation();
+      return;
+    }
+
+    if (event.key === 'Tab' && !event.shiftKey) {
+      // Return focus back to the input field
+      event.preventDefault();
+      event.stopPropagation();
+      this.dispatchEvent(new CustomEvent('focus-input', { bubbles: true, composed: true }));
+    }
+
+    if (event.key === 'Escape') {
+      this._cancel();
+      event.preventDefault();
+      event.stopPropagation();
     }
   }
 
