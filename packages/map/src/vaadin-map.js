@@ -90,6 +90,10 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
 
         .ol-box {
           box-sizing: border-box;
+          border-radius: 2px;
+          border: 1px solid rgba(0, 0, 0, 0.5);
+          background-color: rgba(255, 255, 255, 0.2);
+          box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
         }
 
         .ol-unsupported {
