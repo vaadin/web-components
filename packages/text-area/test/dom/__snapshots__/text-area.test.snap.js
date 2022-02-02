@@ -29,6 +29,7 @@ snapshots["vaadin-text-area shadow default"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
@@ -76,6 +77,7 @@ snapshots["vaadin-text-area shadow disabled"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
@@ -123,6 +125,7 @@ snapshots["vaadin-text-area shadow readonly"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
@@ -170,6 +173,7 @@ snapshots["vaadin-text-area shadow invalid"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
@@ -217,6 +221,7 @@ snapshots["vaadin-text-area shadow theme"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"

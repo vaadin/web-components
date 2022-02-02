@@ -32,6 +32,7 @@ snapshots["vaadin-integer-field shadow default"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
@@ -86,6 +87,7 @@ snapshots["vaadin-integer-field shadow controls"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
@@ -143,6 +145,7 @@ snapshots["vaadin-integer-field shadow disabled"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
@@ -201,6 +204,7 @@ snapshots["vaadin-integer-field shadow readonly"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
@@ -259,6 +263,7 @@ snapshots["vaadin-integer-field shadow invalid"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
@@ -317,6 +322,7 @@ snapshots["vaadin-integer-field shadow theme"] =
     >
     </slot>
     <div
+      aria-hidden="true"
       id="clearButton"
       part="clear-button"
       slot="suffix"
