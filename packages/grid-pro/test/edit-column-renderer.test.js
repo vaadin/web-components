@@ -350,7 +350,7 @@ describe('edit column renderer', () => {
 
     it('enter edit mode programatically should fail for non-existing row (by key)', () => {
       expect(() => {
-        grid.editCell({key: 1}, 0, false);
+        grid.editCell({ key: 1 }, 0, false);
       }).to.not.throw(Error, 'Invalid object passed as row item.');
 
       expect(() => {
@@ -358,11 +358,11 @@ describe('edit column renderer', () => {
       }).to.throw(Error, 'Invalid object passed as row item.');
 
       expect(() => {
-        grid.editCell({key: 'invalid'}, 0, false);
+        grid.editCell({ key: 'invalid' }, 0, false);
       }).to.throw(Error, 'Invalid object passed as row item.');
 
       expect(() => {
-        grid.editCell({key: -1}, 0, false);
+        grid.editCell({ key: -1 }, 0, false);
       }).to.throw(Error, 'Invalid rowIdx (out of bounds)');
     });
 
@@ -393,16 +393,15 @@ describe('edit column renderer', () => {
     it('enter edit mode programatically (rowKey,y) should call _startEdit', () => {
       const spy = sinon.spy();
       grid._startEdit = spy;
-      grid.editCell({key: 1}, 0, false);
+      grid.editCell({ key: 1 }, 0, false);
       expect(spy.called).to.be.true;
     });
 
     it('enter edit mode programatically (rowKey,colId) should call _startEdit', () => {
       const spy = sinon.spy();
       grid._startEdit = spy;
-      grid.editCell({key: 1}, 'name', false);
+      grid.editCell({ key: 1 }, 'name', false);
       expect(spy.called).to.be.true;
     });
-
   });
 });
