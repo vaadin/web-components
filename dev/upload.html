@@ -9,8 +9,28 @@
 
     <script type="module">
       import '@vaadin/upload';
+      import '@vaadin/radio-group';
+      import { xhrCreator } from '@vaadin/upload/test/common.js'
+
+      const nextUpload = document.querySelector('#next-upload');
 
       const upload = document.querySelector('vaadin-upload');
+      // Use a fake xhr for testing
+      upload._createXhr = () => {
+        if (nextUpload.value === 'successful') {
+          return xhrCreator({ size: 512, uploadTime: 3000, stepTime: 1000 })();
+        } else if (nextUpload.value === 'rejected') {
+          return new XMLHttpRequest();
+        } else if (nextUpload.value === 'error') {
+          return xhrCreator({ serverValidation: () => {
+            return {
+              statusText: 'Error'
+            };
+          }})();
+        }
+      }
+
+
       upload.files = [
         { name: 'Annual Report.docx', complete: true },
         {
@@ -20,10 +40,19 @@
         },
         { name: 'Financials.xlsx', error: 'An error occurred' }
       ];
+
     </script>
   </head>
 
   <body>
     <vaadin-upload target="/api/fileupload"></vaadin-upload>
+
+    <br>
+
+    <vaadin-radio-group label="Next file upload" theme="vertical" id="next-upload">
+      <vaadin-radio-button value="successful" checked label="Successful"></vaadin-radio-button>
+      <vaadin-radio-button value="rejected" label="Rejected"></vaadin-radio-button>
+      <vaadin-radio-button value="error" label="Server error"></vaadin-radio-button>
+    </vaadin-radio-group>
   </body>
 </html>

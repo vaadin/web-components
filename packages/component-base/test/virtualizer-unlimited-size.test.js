@@ -178,7 +178,10 @@ describe('unlimited size', () => {
   it('should have a last visible index at start', () => {
     const item = elementsContainer.querySelector(`#item-${virtualizer.lastVisibleIndex}`);
     const itemRect = item.getBoundingClientRect();
-    expect(scrollTarget.getBoundingClientRect().bottom).to.be.within(itemRect.top, itemRect.bottom);
+    expect(scrollTarget.getBoundingClientRect().bottom).to.be.within(
+      Math.round(itemRect.top),
+      Math.round(itemRect.bottom)
+    );
   });
 
   it('should have a first visible index at end', () => {
@@ -194,6 +197,9 @@ describe('unlimited size', () => {
 
     const item = elementsContainer.querySelector(`#item-${virtualizer.lastVisibleIndex}`);
     const itemRect = item.getBoundingClientRect();
-    expect(scrollTarget.getBoundingClientRect().bottom).to.be.within(itemRect.top, itemRect.bottom);
+    expect(scrollTarget.getBoundingClientRect().bottom).to.be.within(
+      Math.round(itemRect.top),
+      Math.round(itemRect.bottom)
+    );
   });
 });

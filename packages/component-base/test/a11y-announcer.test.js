@@ -5,7 +5,7 @@ import { announce } from '../src/a11y-announcer.js';
 describe('a11y announcer', () => {
   let region;
 
-  beforeEach(() => {
+  before(() => {
     region = document.querySelector('[aria-live]');
   });
 
@@ -64,6 +64,42 @@ describe('a11y announcer', () => {
     it('should update region aria-live attribute when mode is passed', () => {
       announce('Test', { mode: 'assertive' });
       expect(region.getAttribute('aria-live')).to.equal('assertive');
+    });
+
+    it('should clear region aria-live attribute when mode is alert', () => {
+      announce('Test', { mode: 'alert' });
+      expect(region.hasAttribute('aria-live')).to.be.false;
+    });
+
+    it('should update region role attribute when mode is alert', async () => {
+      announce('Test', { mode: 'alert' });
+      clock.tick(100);
+      expect(region.getAttribute('role')).to.equal('alert');
+    });
+
+    it('should not update region role attribute synchronously when mode is alert', async () => {
+      announce('Test', { mode: 'alert' });
+      expect(region.hasAttribute('role')).to.be.false;
+    });
+
+    it('should restore region aria-live attribute', async () => {
+      announce('Test', { mode: 'alert' });
+      announce('Test', { mode: 'assertive' });
+      expect(region.getAttribute('aria-live')).to.equal('assertive');
+    });
+
+    it('should clear region role attribute', async () => {
+      announce('Test', { mode: 'alert' });
+      clock.tick(100);
+      announce('Test', { mode: 'assertive' });
+      expect(region.hasAttribute('role')).to.be.false;
+    });
+
+    it('should not set region role back to alert', async () => {
+      announce('Test', { mode: 'alert' });
+      announce('Test', { mode: 'assertive' });
+      clock.tick(100);
+      expect(region.hasAttribute('role')).to.be.false;
     });
   });
 });
