@@ -381,10 +381,10 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
   constructor() {
     super();
     // Create map container element and initialize OL map instance
-    this.mapTarget = document.createElement('div');
-    this.mapTarget.id = 'map';
+    this._mapTarget = document.createElement('div');
+    this._mapTarget.id = 'map';
     this._configuration = new OpenLayersMap({
-      target: this.mapTarget
+      target: this._mapTarget
     });
     // Override default controls to remove default labels, which is required to
     // correctly display icons through pseudo-element
@@ -397,7 +397,7 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
   ready() {
     super.ready();
     // Add map container to shadow root, trigger OL resize calculation
-    this.shadowRoot.appendChild(this.mapTarget);
+    this.shadowRoot.appendChild(this._mapTarget);
     this._configuration.updateSize();
   }
 }
