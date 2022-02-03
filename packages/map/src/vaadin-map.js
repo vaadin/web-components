@@ -361,7 +361,6 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
           align-self: end;
         }
       </style>
-      <div id="map"></div>
     `;
   }
 
@@ -379,23 +378,27 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
     return this._configuration;
   }
 
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this.__initMap();
-  }
-
-  /** @private */
-  __initMap() {
+  constructor() {
+    super();
+    // Create map container element and initialize OL map instance
+    this.mapTarget = document.createElement('div');
+    this.mapTarget.id = 'map';
     this._configuration = new OpenLayersMap({
-      target: this.$.map
+      target: this.mapTarget
     });
     // Override default controls to remove default labels, which is required to
     // correctly display icons through pseudo-element
     this._configuration.getControls().clear();
     this._configuration.getControls().push(new Zoom({ zoomInLabel: '', zoomOutLabel: '' }));
     this._configuration.getControls().push(new Attribution());
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+    // Add map container to shadow root, trigger OL resize calculation
+    this.shadowRoot.appendChild(this.mapTarget);
+    this._configuration.updateSize();
   }
 }
 
