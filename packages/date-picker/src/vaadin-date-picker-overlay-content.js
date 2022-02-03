@@ -763,9 +763,8 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
     if (event.key === 'Tab' && event.shiftKey) {
       event.stopPropagation();
 
-      // Browser returns focus back to the scrollable area. We need to set
-      // the focused flag, and move the scroll to focused date.
-      this._focused = true;
+      // Browser returns focus back to the calendar.
+      // We need to move the scroll to focused date.
       setTimeout(() => this.revealDate(this.focusedDate), 1);
     }
 
