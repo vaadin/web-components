@@ -40,6 +40,7 @@ registerStyles(
     .ol-control button {
       width: 2em;
       height: 2em;
+      background-color: var(--material-background-color);
     }
 
     .ol-control button,

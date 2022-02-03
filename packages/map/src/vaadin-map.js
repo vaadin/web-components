@@ -157,6 +157,7 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
           align-self: start;
           text-align: center;
           font-size: 0.625em;
+          color: #000;
           filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff);
         }
 
@@ -180,6 +181,7 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
 
         .ol-scale-bar-inner {
           border: 1px solid rgba(0, 0, 0, 0.5);
+          box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
           overflow: hidden;
         }
 
