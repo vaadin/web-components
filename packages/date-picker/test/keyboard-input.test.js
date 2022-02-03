@@ -203,7 +203,7 @@ describe('keyboard', () => {
     it('should move focus back to the input on calendar date tap', async () => {
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
-      const cell = getFocusedCell(datepicker);
+      const cell = getFocusedCell(overlayContent);
       const spy = sinon.spy(input, 'focus');
       tap(cell);
       expect(spy.calledOnce).to.be.true;
