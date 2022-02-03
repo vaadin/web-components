@@ -65,7 +65,7 @@ registerStyles(
     }
 
     .ol-attribution.ol-uncollapsible {
-      border-radius: 4px 0 0 0;
+      border-radius: 4px 0 0;
     }
 
     .ol-attribution ul {
