@@ -716,7 +716,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
         handled = true;
         break;
       case 'Enter':
-        this.__selectDate(this.focusedDate);
+        this.selectedDate = this.focusedDate;
         this._close();
         handled = true;
         break;
@@ -794,10 +794,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
       event.preventDefault();
       event.stopPropagation();
     }
-  }
-
-  __selectDate(date) {
-    this.selectedDate = date;
   }
 
   __tryFocusDate() {
