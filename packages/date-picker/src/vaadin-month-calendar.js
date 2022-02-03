@@ -49,7 +49,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
           flex-shrink: 0;
         }
 
-        [focused] {
+        [part='date'] {
           outline: none;
         }
 
