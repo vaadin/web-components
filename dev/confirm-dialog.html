@@ -5,14 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Confirm dialog</title>
+    <script type="module" src="./lumo-globals.js"></script>
+
     <script type="module">
       import '@vaadin/confirm-dialog';
-      import { color, typography } from '@vaadin/vaadin-lumo-styles';
-
-      // Global color and typography styles affect the contents of the dialog
-      const style = document.createElement('style');
-      style.innerHTML = `${color.toString()} ${typography.toString()}`;
-      document.head.appendChild(style);
     </script>
   </head>
   <body>

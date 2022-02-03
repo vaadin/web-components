@@ -5,23 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>App Layout</title>
+    <script type="module" src="./lumo-globals.js"></script>
 
-    <script type="module">
-      import { color } from '@vaadin/vaadin-lumo-styles';
-      import { typography } from '@vaadin/vaadin-lumo-styles';
-
-      const tpl = document.createElement('template');
-      tpl.innerHTML = `<style>
-        ${color.cssText}
-        ${typography.cssText}
-
-        h1 {
-          font-size: var(--lumo-font-size-l);
-          margin: 0;
-        }
-      </style>`;
-      document.head.appendChild(tpl.content);
-    </script>
+    <style>
+      h1 {
+        font-size: var(--lumo-font-size-l);
+        margin: 0;
+      }
+    </style>
 
     <script type="module">
       import '@vaadin/app-layout';
