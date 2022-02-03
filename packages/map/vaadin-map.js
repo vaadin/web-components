@@ -1,2 +1,2 @@
-import './theme/vaadin-map-base-theme.js';
+import './theme/lumo/vaadin-map.js';
 export * from './src/vaadin-map.js';
