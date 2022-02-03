@@ -289,4 +289,89 @@ describe('edit column renderer', () => {
       expect(grid.items[0].name).to.equal('New');
     });
   });
+
+  describe('programatically enter edit mode', () => {
+    let grid;
+
+    beforeEach(() => {
+      grid = fixtureSync(`
+        <vaadin-grid-pro>
+          <vaadin-grid-pro-edit-column path="name" id="name"></vaadin-grid-pro-edit-column>
+          <vaadin-grid-pro-column path="age"></vaadin-grid-pro-column>
+          <vaadin-grid-column>
+            <template>[[item.name]]</template>
+          </vaadin-grid-column>
+        </vaadin-grid-pro>
+      `);
+      let column = grid.firstElementChild;
+      grid.items = createItems();
+
+      column.renderer = function (root, owner, model) {
+        root.innerHTML = '';
+        const wrapper = document.createElement('div');
+        const text = document.createTextNode(model.index + ' ' + model.item.name);
+        wrapper.appendChild(text);
+        root.appendChild(wrapper);
+      };
+
+      flushGrid(grid);
+    });
+
+    it('enter edit mode programatically should fail for user originated call when grid is disabled', () => {
+      grid.setAttribute('disabled', true);
+      expect(() => { grid.editCell(10, 10, true) }).to.throw(Error, 'Grid is disabled.');
+      expect(() => { grid.editCell(0, 0, false) }).to.not.throw(Error, 'Grid is disabled.');
+    });
+
+    it('enter edit mode programatically should fail for non-existing indexes', () => {
+      expect(() => { grid.editCell(0, 10, false) }).to.throw(Error, /out of bounds/);
+      expect(() => { grid.editCell(10, 0, false) }).to.throw(Error, /out of bounds/);
+    });
+
+    it('enter edit mode programatically should fail for non-existing column (by id)', () => {
+      expect(() => { grid.editCell(0, 'name', false) }).to.not.throw(Error, 'col with id name was not found');
+      expect(() => { grid.editCell(10, 'invalid', false) }).to.throw(Error, 'col with id invalid was not found');
+    });
+
+    it('enter edit mode programatically should fail for non-existing row (by key)', () => {
+      expect(() => { grid.editCell({key: 1}, 0, false) }).to.not.throw(Error, 'Invalid object passed as row item.');
+      expect(() => { grid.editCell('invalid', 0, false) }).to.throw(Error, 'Invalid object passed as row item.');
+      expect(() => { grid.editCell({key: 'invalid'}, 0, false) }).to.throw(Error, 'Invalid object passed as row item.');
+      expect(() => { grid.editCell({key: -1}, 0, false) }).to.throw(Error, 'Invalid rowIdx (out of bounds)');
+    });
+
+    it('enter edit mode programatically should fail for non-editable columns', () => {
+      expect(() => { grid.editCell(0, 0, false) }).to.not.throw(Error, 'Column is not editable');
+      expect(() => { grid.editCell(0, 1, false) }).to.throw(Error, 'Column is not editable');
+    });
+
+    it('enter edit mode programatically (x,y) should call _startEdit', () => {
+      const spy = sinon.spy();
+      grid._startEdit = spy;
+      grid.editCell(0, 0, false)
+      expect(spy.called).to.be.true;
+    });
+
+    it('enter edit mode programatically (x,colId) should call _startEdit', () => {
+      const spy = sinon.spy();
+      grid._startEdit = spy;
+      grid.editCell(0, 'name', false)
+      expect(spy.called).to.be.true;
+    });
+
+    it('enter edit mode programatically (rowKey,y) should call _startEdit', () => {
+      const spy = sinon.spy();
+      grid._startEdit = spy;
+      grid.editCell({key: 1}, 0, false)
+      expect(spy.called).to.be.true;
+    });
+
+    it('enter edit mode programatically (rowKey,colId) should call _startEdit', () => {
+      const spy = sinon.spy();
+      grid._startEdit = spy;
+      grid.editCell({key: 1}, 'name', false)
+      expect(spy.called).to.be.true;
+    });
+
+  });
 });

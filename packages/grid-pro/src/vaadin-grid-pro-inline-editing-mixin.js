@@ -456,16 +456,16 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /**
-     * @param {Number} row
-     * @param {Number} col
+     * @param {Number | String} row
+     * @param {Number | String} col
      * @param {Boolean} userOriginated
      * @public
      */
     editCell(row, col, userOriginated) {
-      if (isNaN(row) || isNaN(col) || (userOriginated && this.hasAttribute('disabled'))) {
-        throw new Error('Invalid row/col or grid is disabled.');
+      if (userOriginated && this.hasAttribute('disabled')) {
+        throw new Error('Grid is disabled.');
       }
-
+      
       const columns = this._getColumns().filter((col) => !col.hidden);
 
       let colIdx = -1;
@@ -483,7 +483,7 @@ export const InlineEditingMixin = (superClass) =>
       let rowIdx = -1;
       // If row is not a number, maybe it's because the item was passed instead
       if (isNaN(row)) {
-        if (!Object.prototype.hasOwnProperty.call(row, 'key')) {
+        if (!row.hasOwnProperty('key') || isNaN(row.key)) {
           throw new Error('Invalid object passed as row item.');
         }
         rowIdx = row.key - 1;
@@ -492,7 +492,7 @@ export const InlineEditingMixin = (superClass) =>
       }
 
       // Make sure col[colIdx] exists and is editable:
-      if (colIdx > columns.length) {
+      if (colIdx > columns.length || colIdx < 0) {
         throw new Error('Invalid colIdx (out of bounds)');
       }
 
@@ -505,7 +505,7 @@ export const InlineEditingMixin = (superClass) =>
       const tRows = this.$.table.getElementsByTagName('tbody').items.rows;
 
       // Make sure row[rowIdx] exists
-      if (rowIdx > tRows.length) {
+      if (rowIdx > tRows.length || rowIdx < 0) {
         throw new Error('Invalid rowIdx (out of bounds)');
       }
 
