@@ -465,7 +465,7 @@ export const InlineEditingMixin = (superClass) =>
       if (userOriginated && this.hasAttribute('disabled')) {
         throw new Error('Grid is disabled.');
       }
-      
+
       const columns = this._getColumns().filter((col) => !col.hidden);
 
       let colIdx = -1;
