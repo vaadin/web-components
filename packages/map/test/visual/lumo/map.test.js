@@ -36,10 +36,10 @@ describe('map', () => {
   describe('controls', () => {
     it('all controls', async () => {
       // Add non-default controls
-      element.configuration.getControls().push(new FullScreen());
-      element.configuration.getControls().push(new Rotate());
+      element.configuration.getControls().push(new FullScreen({ label: '', labelActive: '' }));
+      element.configuration.getControls().push(new Rotate({ label: '' }));
       element.configuration.getControls().push(new ScaleLine());
-      element.configuration.getControls().push(new OverviewMap());
+      element.configuration.getControls().push(new OverviewMap({ label: '', collapseLabel: '' }));
       await visualDiff(div, 'controls-all-controls');
     });
   });
