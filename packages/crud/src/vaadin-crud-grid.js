@@ -167,6 +167,10 @@ class CrudGrid extends IncludedMixin(Grid) {
     if (!this.noHead && path) {
       // Create a header renderer for the column (or column group)
       col.headerRenderer = (root) => {
+        if (root.firstElementChild) {
+          return;
+        }
+
         const label = this._generateHeader(path);
 
         if (col.__sortColumnGroup || (this.noFilter && !this.noSort)) {
