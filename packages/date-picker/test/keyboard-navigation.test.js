@@ -29,6 +29,23 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
         const cell = getFocusedCell(getOverlayContent(datepicker));
         expect(cell.date).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
       });
+
+      it('should be focused on today when focused date is empty', async () => {
+        const today = new Date();
+
+        input.click();
+        await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
+        await nextRender(datepicker);
+
+        // Reset overlay focused date
+        input.click();
+
+        // Move focus to the calendar
+        await sendKeys({ press: 'Tab' });
+
+        const cell = getFocusedCell(getOverlayContent(datepicker));
+        expect(cell.date).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+      });
     });
 
     describe('value', () => {
@@ -77,6 +94,21 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
       it('should be focused on initial position when opened', async () => {
         await open(datepicker);
         await nextRender(datepicker);
+
+        // Move focus to the calendar
+        await sendKeys({ press: 'Tab' });
+
+        const cell = getFocusedCell(getOverlayContent(datepicker));
+        expect(cell.date).to.eql(new Date(2001, 0, 1));
+      });
+
+      it('should be focused on initial position when focused date is empty', async () => {
+        input.click();
+        await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
+        await nextRender(datepicker);
+
+        // Reset overlay focused date
+        input.click();
 
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });

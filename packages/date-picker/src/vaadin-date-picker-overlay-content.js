@@ -793,7 +793,8 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
     }
   }
 
-  async focusDate(dateToFocus, keepMonth) {
+  async focusDate(date, keepMonth) {
+    const dateToFocus = date || this.selectedDate || this.initialPosition || new Date();
     this.focusedDate = dateToFocus;
     if (!keepMonth) {
       this._focusedMonthDate = dateToFocus.getDate();
