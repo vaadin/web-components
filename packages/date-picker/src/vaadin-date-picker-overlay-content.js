@@ -679,7 +679,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
 
   _cancel() {
     this.focusedDate = this.selectedDate;
-    this.dispatchEvent(new CustomEvent('cancel', { bubbles: true, composed: true }));
     this._close();
   }
 

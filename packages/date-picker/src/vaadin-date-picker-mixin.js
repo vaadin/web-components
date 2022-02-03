@@ -454,7 +454,6 @@ export const DatePickerMixin = (subclass) =>
 
       this._overlayContent.addEventListener('close', this._close.bind(this));
       this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
-      this._overlayContent.addEventListener('cancel', () => this._restoreInputValue(this._selectedDate));
 
       // Keep focus attribute in focusElement for styling
       this._overlayContent.addEventListener('focus', () => {
@@ -813,12 +812,6 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _restoreInputValue(date) {
-      this._focusedDate = date;
-      this._applyInputValue(date);
-    }
-
-    /** @private */
     _getFormattedDate(formatDate, date) {
       return formatDate(extractDateParts(date));
     }
@@ -919,7 +912,7 @@ export const DatePickerMixin = (subclass) =>
         }
         case 'Escape':
           if (this.opened) {
-            this._restoreInputValue(this._selectedDate);
+            this._focusedDate = this._selectedDate;
             this._close();
           } else if (this.clearButtonVisible) {
             this._onClearButtonClick();
@@ -930,7 +923,7 @@ export const DatePickerMixin = (subclass) =>
             }
             this._applyInputValue(this._selectedDate);
           } else {
-            this._restoreInputValue(this._selectedDate);
+            this._focusedDate = this._selectedDate;
             this._selectParsedOrFocusedDate();
           }
           break;
