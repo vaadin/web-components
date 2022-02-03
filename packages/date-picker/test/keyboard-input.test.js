@@ -749,8 +749,7 @@ describe('keyboard', () => {
         expect(changeSpy.calledAfter(validateSpy)).to.be.true;
       });
 
-      // FIXME: fails with new logic, investigate
-      it.skip('should change after validate on Backspace & Esc', async () => {
+      it('should change after validate on Backspace & Esc', async () => {
         input.select();
         await sendKeys({ press: 'Backspace' });
         await sendKeys({ press: 'Escape' });
