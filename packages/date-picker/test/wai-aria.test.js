@@ -60,6 +60,10 @@ describe('WAI-ARIA', () => {
       expect(toggleButton.getAttribute('aria-label')).to.equal('kalenteri');
     });
 
+    it('should set aria-haspopup attribute on the input', () => {
+      expect(input.getAttribute('aria-haspopup')).to.equal('dialog');
+    });
+
     it('should have expanded state false on the input', () => {
       // Indicate that there is a collapsible calendar, closed by default.
       expect(input.getAttribute('aria-expanded')).to.equal('false');
