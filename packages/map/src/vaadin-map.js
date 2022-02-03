@@ -389,7 +389,8 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
     this._configuration = new OpenLayersMap({
       target: this.$.map
     });
-    // Set default controls
+    // Override default controls to remove default labels, which is required to
+    // correctly display icons through pseudo-element
     this._configuration.getControls().clear();
     this._configuration.getControls().push(new Zoom({ zoomInLabel: '', zoomOutLabel: '' }));
     this._configuration.getControls().push(new Attribution());
