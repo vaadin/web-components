@@ -29,11 +29,7 @@ describe('configuration in detached state', () => {
     // OL instance should be initialized
     expect(mapElement.configuration).to.be.instanceOf(Map);
     // Configure map
-    mapElement.configuration.addLayer(
-      new TileLayer({
-        source: new OSM()
-      })
-    );
+    mapElement.configuration.addLayer(new TileLayer({ source: new OSM() }));
     mapElement.configuration.setView(new View({ center: [0, 0], zoom: 3 }));
     // Attach and wait for layer to be rendered
     document.body.appendChild(mapElement);
