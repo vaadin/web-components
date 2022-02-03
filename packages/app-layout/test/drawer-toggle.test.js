@@ -78,8 +78,8 @@ describe('drawer-toggle', () => {
   });
 
   describe('aria-label', () => {
-    it('should set aria-label attribute to "Toggle" by default', () => {
-      expect(toggle.getAttribute('aria-label')).to.equal('Toggle');
+    it('should set correct aria-label attribute by default', () => {
+      expect(toggle.getAttribute('aria-label')).to.equal('Toggle navigation panel');
     });
 
     it('should reflect ariaLabel property to the attribute', () => {
