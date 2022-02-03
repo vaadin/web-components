@@ -24,7 +24,7 @@ assertType<() => void>(select.requestContentUpdate);
 assertType<() => boolean>(select.validate);
 
 // Item properties
-const item: SelectItem = select.items![0];
+const item: SelectItem = select.items ? select.items[0] : {};
 assertType<string | undefined>(item.label);
 assertType<string | undefined>(item.value);
 assertType<boolean | undefined>(item.disabled);
