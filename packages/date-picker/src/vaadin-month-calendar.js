@@ -115,6 +115,7 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
                   disabled$="[[__isDayDisabled(item, minDate, maxDate)]]"
                   aria-selected$="[[__getDayAriaSelected(item, selectedDate)]]"
                   aria-disabled$="[[__getDayAriaDisabled(item, minDate, maxDate)]]"
+                  aria-label$="[[__getDayAriaLabel(item)]]"
                   >[[_getDate(item)]]</td
                 >
               </template>
@@ -399,6 +400,27 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
     if (this.__isDayDisabled(date, min, max)) {
       return 'true';
     }
+  }
+
+  __getDayAriaLabel(date) {
+    if (!date) {
+      return '';
+    }
+
+    var ariaLabel =
+      this._getDate(date) +
+      ' ' +
+      this.i18n.monthNames[date.getMonth()] +
+      ' ' +
+      date.getFullYear() +
+      ', ' +
+      this.i18n.weekdays[date.getDay()];
+
+    if (this._isToday(date)) {
+      ariaLabel += ', ' + this.i18n.today;
+    }
+
+    return ariaLabel;
   }
 
   __getDayTabindex(date, focusedDate) {

@@ -201,13 +201,31 @@ describe('WAI-ARIA', () => {
     });
 
     it('should have gridcell roles on date cells', () => {
-      // The date cells should be spoken with a full date.
       const dateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
       expect(dateElements).to.not.be.empty;
 
       Array.from(dateElements).forEach((dateElement) => {
         expect(dateElement.getAttribute('role')).to.equal('gridcell');
       });
+    });
+
+    it('should have aria-label attribute on date cells', () => {
+      // The date cells should be spoken with a full date.
+      const dateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
+
+      Array.from(dateElements).forEach((dateElement) => {
+        expect(dateElement.getAttribute('aria-label')).to.be.ok;
+      });
+
+      expect(dateElements[0].getAttribute('aria-label')).to.equal('1 February 2016, Monday');
+      expect(dateElements[1].getAttribute('aria-label')).to.equal('2 February 2016, Tuesday');
+    });
+
+    it('should indicate today on date cells', async () => {
+      monthCalendar.month = new Date();
+      await nextFrame();
+      const todayElement = monthCalendar.shadowRoot.querySelector('[part="date"]:not(:empty)[today]');
+      expect(todayElement.getAttribute('aria-label')).to.match(/, Today$/);
     });
 
     it('should have disabled state on disabled date cells', () => {
@@ -218,6 +236,16 @@ describe('WAI-ARIA', () => {
       const dateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
       expect(dateElements[9].getAttribute('aria-disabled')).to.not.equal('true');
       expect(dateElements[10].getAttribute('aria-disabled')).to.equal('true');
+    });
+
+    it('should not have aria-label attributes on empty cells', () => {
+      // The empty cells should not be spoken.
+      const emptyDateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:empty');
+
+      expect(emptyDateElements).to.not.be.empty;
+      Array.from(emptyDateElements).forEach((emptyDateElement) => {
+        expect(emptyDateElement.getAttribute('aria-label')).to.not.be.ok;
+      });
     });
 
     describe('week numbers', () => {
