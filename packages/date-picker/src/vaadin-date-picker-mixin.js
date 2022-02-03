@@ -627,12 +627,9 @@ export const DatePickerMixin = (subclass) =>
         return;
       }
       this.__userInputOccurred = true;
-      // TODO: updating the input value here interrupts the screen
-      // reader announcement for the month calendar focused date
-
-      // if (!this._ignoreFocusedDateChange && !this._noInput) {
-      //  this._applyInputValue(focusedDate);
-      //
+      if (!this._ignoreFocusedDateChange && !this._noInput) {
+        this._applyInputValue(focusedDate);
+      }
     }
 
     /** @private */

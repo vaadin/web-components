@@ -7,7 +7,6 @@ import '@polymer/iron-media-query/iron-media-query.js';
 import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-month-calendar.js';
 import './vaadin-infinite-scroller.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
@@ -504,6 +503,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
       this.$.monthScroller.position = targetPosition;
       this._targetPosition = undefined;
       this._repositionYearScroller();
+      this.__tryFocusDate();
       return;
     }
 
@@ -545,6 +545,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
 
         this.$.monthScroller.position = this._targetPosition;
         this._targetPosition = undefined;
+        this.__tryFocusDate();
       }
 
       setTimeout(this._repositionYearScroller.bind(this), 1);
@@ -800,34 +801,32 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
     this.selectedDate = date;
   }
 
+  __tryFocusDate() {
+    const dateToFocus = this.__pendingDateFocus;
+    if (dateToFocus) {
+      // Check the date element with tabindex="0"
+      const dateElement = this.focusableDateElement;
+
+      if (dateElement && dateEquals(dateElement.date, this.__pendingDateFocus)) {
+        delete this.__pendingDateFocus;
+        dateElement.focus();
+      }
+    }
+  }
+
   async focusDate(date) {
     this.focusedDate = date;
     await this.focusDateElement();
   }
 
   async focusDateElement() {
+    this.__pendingDateFocus = this.focusedDate;
+
     await new Promise((resolve) => {
-      afterNextRender(this, resolve);
+      requestAnimationFrame(resolve);
     });
 
-    if (this.focusableDateElement) {
-      this.focusableDateElement.focus();
-      return;
-    }
-
-    return new Promise((resolve) => {
-      this.addEventListener(
-        'scroll-animation-finished',
-        () => {
-          // TODO: this code seems to be flaky
-          if (this.focusableDateElement) {
-            this.focusableDateElement.focus();
-          }
-          resolve();
-        },
-        { once: true }
-      );
-    });
+    this.__tryFocusDate();
   }
 
   _focusClosestDate(focus) {
