@@ -323,14 +323,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
       .find(Boolean);
   }
 
-  get _focusedMonthDate() {
-    if (!this.focusedDate) {
-      return null;
-    }
-
-    return this.focusedDate.getDate();
-  }
-
   ready() {
     super.ready();
     addListener(this, 'tap', this._stopPropagation);
@@ -808,8 +800,11 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
     }
   }
 
-  async focusDate(date) {
-    this.focusedDate = date;
+  async focusDate(dateToFocus, keepMonth) {
+    this.focusedDate = dateToFocus;
+    if (!keepMonth) {
+      this._focusedMonthDate = dateToFocus.getDate();
+    }
     await this.focusDateElement();
   }
 
@@ -859,13 +854,13 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
 
     var targetMonth = dateToFocus.getMonth();
 
-    dateToFocus.setDate(this._focusedMonthDate || focus.getDate());
+    dateToFocus.setDate(this._focusedMonthDate || (this._focusedMonthDate = focus.getDate()));
     if (dateToFocus.getMonth() !== targetMonth) {
       dateToFocus.setDate(0);
     }
 
     if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
-      this.focusDate(dateToFocus);
+      this.focusDate(dateToFocus, true);
     } else if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
       // Move to min or max date
       if (months > 0) {

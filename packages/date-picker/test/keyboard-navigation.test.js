@@ -193,16 +193,15 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
     });
 
     it('should not skip a month', async () => {
-      overlay.focusedDate = new Date(2000, 0, 31);
+      await overlay.focusDate(new Date(2000, 0, 31));
       await nextRender(overlay);
       await sendKeys({ press: 'PageDown' });
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 1, 29));
     });
 
-    // FIXME: fails with the new logic
-    it.skip('should focus the previously focused date number if available', async () => {
-      overlay.focusedDate = new Date(2000, 0, 31);
+    it('should focus the previously focused date number if available', async () => {
+      await overlay.focusDate(new Date(2000, 0, 31));
       await nextRender(overlay);
       await sendKeys({ press: 'PageDown' });
       await sendKeys({ press: 'PageDown' });
