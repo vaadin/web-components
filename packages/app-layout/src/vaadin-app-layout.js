@@ -451,6 +451,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
   ready() {
     super.ready();
     this.addController(this.__focusTrapController);
+    this.__setAriaExpanded();
   }
 
   /** @protected */
@@ -509,6 +510,8 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         this.__releaseFocusFromDrawer();
       }
     }
+
+    this.__setAriaExpanded();
   }
 
   /**
@@ -539,6 +542,14 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
   __closeOverlayDrawer() {
     if (this.overlay) {
       this.drawerOpened = false;
+    }
+  }
+
+  /** @private */
+  __setAriaExpanded() {
+    const toggle = this.querySelector('vaadin-drawer-toggle');
+    if (toggle) {
+      toggle.setAttribute('aria-expanded', this.drawerOpened);
     }
   }
 

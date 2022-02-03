@@ -188,6 +188,19 @@ describe('vaadin-app-layout', () => {
         esc(drawer);
         expect(layout.drawerOpened).to.be.true;
       });
+
+      it('should set aria-expanded on the toggle to true by default', () => {
+        expect(toggle.getAttribute('aria-expanded')).to.equal('true');
+        layout.drawerOpened = true;
+        expect(getComputedStyle(drawer).visibility).to.equal('visible');
+      });
+
+      it('should update aria-expanded on drawerOpened property change', () => {
+        layout.drawerOpened = false;
+        expect(toggle.getAttribute('aria-expanded')).to.equal('false');
+        layout.drawerOpened = true;
+        expect(toggle.getAttribute('aria-expanded')).to.equal('true');
+      });
     });
 
     describe('mobile layout', () => {
