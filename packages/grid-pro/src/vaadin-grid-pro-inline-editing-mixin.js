@@ -483,7 +483,7 @@ export const InlineEditingMixin = (superClass) =>
       let rowIdx = -1;
       // If row is not a number, maybe it's because the item was passed instead
       if (isNaN(row)) {
-        if (!Object.hasOwnProperty.call(row,'key') || isNaN(row.key)) {
+        if (!Object.hasOwnProperty.call(row, 'key') || isNaN(row.key)) {
           throw new Error('Invalid object passed as row item.');
         }
         rowIdx = row.key - 1;
