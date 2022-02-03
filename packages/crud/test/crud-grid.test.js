@@ -151,11 +151,10 @@ describe('crud grid', () => {
           expect(grid.__capitalize('aa.bb cc-dd FF')).to.be.equal('Aa bb cc dd ff');
         });
 
-        it('should only render one control in a cell', async () => {
+        it('should only render two controls in a cell', async () => {
           grid.requestContentUpdate();
           await nextRender(grid);
-          expect(getHeaderCellContent(grid, 1, 0).childElementCount).to.equal(1);
-          expect(getHeaderCellContent(grid, 2, 0).childElementCount).to.equal(1);
+          expect(getHeaderCellContent(grid, 1, 0).childElementCount).to.equal(2);
         });
       });
     });
