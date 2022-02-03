@@ -377,31 +377,31 @@ describe('edit column renderer', () => {
     });
 
     it('enter edit mode programatically (x,y) should call _startEdit', () => {
-      const spy = sinon.spy();
-      grid._startEdit = spy;
+      const cell = getContainerCell(grid.$.items, 0, 0);
       grid.editCell(0, 0, false);
-      expect(spy.called).to.be.true;
+      const editor = getCellEditor(cell);
+      expect(editor).to.be.ok;
     });
 
     it('enter edit mode programatically (x,colId) should call _startEdit', () => {
-      const spy = sinon.spy();
-      grid._startEdit = spy;
+      const cell = getContainerCell(grid.$.items, 0, 0);
       grid.editCell(0, 'name', false);
-      expect(spy.called).to.be.true;
+      const editor = getCellEditor(cell);
+      expect(editor).to.be.ok;
     });
 
     it('enter edit mode programatically (rowKey,y) should call _startEdit', () => {
-      const spy = sinon.spy();
-      grid._startEdit = spy;
+      const cell = getContainerCell(grid.$.items, 0, 0);
       grid.editCell({ key: 1 }, 0, false);
-      expect(spy.called).to.be.true;
+      const editor = getCellEditor(cell);
+      expect(editor).to.be.ok;
     });
 
     it('enter edit mode programatically (rowKey,colId) should call _startEdit', () => {
-      const spy = sinon.spy();
-      grid._startEdit = spy;
+      const cell = getContainerCell(grid.$.items, 0, 0);
       grid.editCell({ key: 1 }, 'name', false);
-      expect(spy.called).to.be.true;
+      const editor = getCellEditor(cell);
+      expect(editor).to.be.ok;
     });
   });
 });
