@@ -149,13 +149,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
           z-index: 1;
           padding: 8px;
         }
-
-        #announcer {
-          display: inline-block;
-          position: fixed;
-          clip: rect(0, 0, 0, 0);
-          clip-path: inset(100%);
-        }
       </style>
 
       <div part="overlay-header" on-touchend="_preventDefault" desktop$="[[_desktopMode]]" aria-hidden="true">
