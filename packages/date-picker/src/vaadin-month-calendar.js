@@ -5,6 +5,7 @@
  */
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateAllowed, dateEquals, getISOWeekNumber } from './vaadin-date-picker-helper.js';
@@ -13,7 +14,7 @@ import { dateAllowed, dateEquals, getISOWeekNumber } from './vaadin-date-picker-
  * @extends HTMLElement
  * @private
  */
-class MonthCalendar extends ThemableMixin(PolymerElement) {
+class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
   static get template() {
     return html`
       <style>
@@ -46,6 +47,10 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
           flex-direction: column;
           justify-content: space-between;
           flex-shrink: 0;
+        }
+
+        [part='date'] {
+          outline: none;
         }
 
         [part='week-number'][hidden],
@@ -215,6 +220,12 @@ class MonthCalendar extends ThemableMixin(PolymerElement) {
   ready() {
     super.ready();
     addListener(this.$.monthGrid, 'tap', this._handleTap.bind(this));
+  }
+
+  get focusableDateElement() {
+    return [...this.shadowRoot.querySelectorAll('[part=date]')].find((datePart) => {
+      return dateEquals(datePart.date, this.focusedDate);
+    });
   }
 
   /* Returns true if all the dates in the month are out of the allowed range */

@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
 import { activateScroller, getDefaultI18n, open } from './common.js';
@@ -61,6 +60,10 @@ describe('WAI-ARIA', () => {
       expect(toggleButton.getAttribute('aria-label')).to.equal('kalenteri');
     });
 
+    it('should set aria-haspopup attribute on the input', () => {
+      expect(input.getAttribute('aria-haspopup')).to.equal('dialog');
+    });
+
     it('should have expanded state false on the input', () => {
       // Indicate that there is a collapsible calendar, closed by default.
       expect(input.getAttribute('aria-expanded')).to.equal('false');
@@ -92,54 +95,6 @@ describe('WAI-ARIA', () => {
       overlay.$.yearScroller.bufferSize = 1;
       overlay.i18n = getDefaultI18n();
       await nextFrame();
-    });
-
-    describe('title announcer', () => {
-      beforeEach(async () => {
-        overlay.initialPosition = new Date();
-        await nextFrame();
-      });
-
-      // Title announcer notifies the user when the overlay opens with
-      // an explicit “<alert> Calender” announce.
-
-      it('should be present in the overlay', () => {
-        expect(overlay.$.announcer).to.be.ok;
-      });
-
-      it('should be the first child of the overlay', () => {
-        // Always introduce calendar contents with “Calendar”.
-        expect(overlay.shadowRoot.querySelector(':not(style):not(:empty)')).to.equal(overlay.$.announcer);
-      });
-
-      it('should not have hidden state', () => {
-        // Otherwise is not spoken.
-        expect(overlay.$.announcer.getAttribute('aria-hidden')).to.not.equal('true');
-      });
-
-      it('should be visible', () => {
-        expect(overlay.$.announcer.offsetWidth).to.be.at.least(1);
-        expect(overlay.$.announcer.offsetHeight).to.be.at.least(1);
-      });
-
-      it('should have role alert', () => {
-        expect(overlay.$.announcer.getAttribute('role')).to.equal('alert');
-      });
-
-      it('should have live property polite', () => {
-        // By default alerts are assertive and interrupt screen readers.
-        // Polite mode makes the announce in normal order.
-        expect(overlay.$.announcer.getAttribute('aria-live')).to.equal('polite');
-      });
-
-      it('should have text', () => {
-        expect(overlay.$.announcer.textContent.trim()).to.equal('Calendar');
-      });
-
-      it('should have text in correct locale', () => {
-        overlay.set('i18n.calendar', 'kalenteri');
-        expect(overlay.$.announcer.textContent.trim()).to.equal('kalenteri');
-      });
     });
 
     describe('year scroller contents', () => {
@@ -261,128 +216,6 @@ describe('WAI-ARIA', () => {
         Array.from(weekNumberElements).forEach((weekNumberElement) => {
           expect(weekNumberElement.getAttribute('aria-hidden')).to.equal('true');
         });
-      });
-    });
-  });
-
-  describe('announcements', () => {
-    let region;
-    let datepicker;
-
-    let clock;
-
-    afterEach(() => {
-      clock.restore();
-    });
-
-    beforeEach(() => {
-      datepicker = fixtureSync(`<vaadin-date-picker label="ariatest"></vaadin-date-picker>`);
-      region = document.querySelector('[aria-live]');
-      clock = sinon.useFakeTimers();
-    });
-
-    it('should announce focused date on open', () => {
-      datepicker._focusedDate = new Date(2016, 1, 1);
-      datepicker.open();
-
-      clock.tick(200);
-
-      expect(region.textContent).to.equal('Monday 1 February 2016');
-    });
-
-    it('should announce focused date changes when opened', () => {
-      datepicker.open();
-      datepicker._focusedDate = new Date(2016, 1, 2);
-
-      clock.tick(200);
-
-      expect(region.textContent).to.equal('Tuesday 2 February 2016');
-    });
-
-    it('should not announce focused date changes when closed', () => {
-      // Reset live region state
-      region.textContent = '';
-      datepicker._focusedDate = new Date(2016, 1, 2);
-
-      clock.tick(200);
-
-      expect(region.textContent).to.equal('');
-    });
-
-    it('should announce value on open', () => {
-      datepicker.value = '2016-02-01';
-      datepicker.open();
-
-      clock.tick(200);
-
-      expect(region.textContent).to.equal('Monday 1 February 2016');
-    });
-
-    it('should announce initial position on open', () => {
-      datepicker.initialPosition = '2016-02-01';
-      datepicker.open();
-
-      clock.tick(200);
-
-      expect(region.textContent).to.equal('Monday 1 February 2016');
-    });
-
-    it('should announce today', () => {
-      datepicker.open();
-
-      clock.tick(200);
-
-      expect(region.textContent.indexOf('Today')).to.equal(0);
-    });
-
-    it('should announce week numbers if enabled', () => {
-      datepicker._focusedDate = new Date(2016, 1, 1);
-      datepicker.showWeekNumbers = true;
-      datepicker.set('i18n.firstDayOfWeek', 1);
-      datepicker.open();
-
-      clock.tick(200);
-
-      expect(region.textContent).to.match(/ Week 5$/);
-    });
-
-    describe('i18n', () => {
-      beforeEach(() => {
-        const monthNames =
-          'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu';
-        const weekdays = 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai';
-        datepicker.set('i18n.monthNames', monthNames.split('_'));
-        datepicker.set('i18n.weekdays', weekdays.split('_'));
-        datepicker.set('i18n.week', 'viikko');
-        datepicker.set('i18n.today', 'Tänään');
-      });
-
-      it('should announce dates in correct locale', () => {
-        datepicker._focusedDate = new Date(2016, 1, 1);
-        datepicker.open();
-
-        clock.tick(200);
-
-        expect(region.textContent).to.equal('maanantai 1 helmikuu 2016');
-      });
-
-      it('should announce today in correct locale', () => {
-        datepicker.open();
-
-        clock.tick(200);
-
-        expect(region.textContent.indexOf('Tänään')).to.equal(0);
-      });
-
-      it('should announce week numbers in correct locale', () => {
-        datepicker._focusedDate = new Date(2016, 1, 1);
-        datepicker.showWeekNumbers = true;
-        datepicker.set('i18n.firstDayOfWeek', 1);
-        datepicker.open();
-
-        clock.tick(200);
-
-        expect(region.textContent).to.match(/ viikko 5$/);
       });
     });
   });

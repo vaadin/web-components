@@ -13,6 +13,8 @@ registerStyles('vaadin-date-picker-overlay', datePickerOverlayStyles, {
   moduleId: 'vaadin-date-picker-overlay-styles'
 });
 
+let memoizedTemplate;
+
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
  *
@@ -22,6 +24,15 @@ registerStyles('vaadin-date-picker-overlay', datePickerOverlayStyles, {
 class DatePickerOverlay extends DisableUpgradeMixin(PositionMixin(OverlayElement)) {
   static get is() {
     return 'vaadin-date-picker-overlay';
+  }
+
+  static get template() {
+    if (!memoizedTemplate) {
+      memoizedTemplate = super.template.cloneNode(true);
+      memoizedTemplate.content.querySelector('[part~="overlay"]').removeAttribute('tabindex');
+    }
+
+    return memoizedTemplate;
   }
 }
 

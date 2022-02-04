@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce, nextRender, tap } from '@vaadin/testing-helpers';
+import { aTimeout, enter, fixtureSync, listenOnce, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -55,6 +55,34 @@ describe('keyboard', () => {
       expect(focusedDate().getMonth()).to.equal(0);
       expect(focusedDate().getDate()).to.equal(1);
       expect(focusedDate().getFullYear()).to.equal(2000);
+    });
+
+    it('should display focused date while overlay focused', async () => {
+      await sendKeys({ type: '1/2/2000' });
+      const content = getOverlayContent(datepicker);
+      await oneEvent(content, 'scroll-animation-finished');
+
+      // Move focus to the calendar
+      await sendKeys({ press: 'Tab' });
+
+      await nextRender(datepicker);
+
+      await sendKeys({ press: 'ArrowDown' });
+      expect(input.value).not.to.equal('1/2/2000');
+    });
+
+    it('should reflect focused date to input', async () => {
+      datepicker.value = '2000-01-01';
+      await open(datepicker);
+      await nextRender(datepicker);
+
+      // Move focus to the calendar
+      await sendKeys({ press: 'Tab' });
+
+      await nextRender(datepicker);
+
+      await sendKeys({ press: 'ArrowDown' });
+      expect(input.value).to.equal('1/8/2000');
     });
   });
 
@@ -121,6 +149,32 @@ describe('keyboard', () => {
     });
   });
 
+  describe('no parseDate', () => {
+    beforeEach(() => {
+      datepicker.i18n = {
+        ...datepicker.i18n,
+        parseDate: null
+      };
+    });
+
+    it('should prevent key input', () => {
+      const e = new CustomEvent('keydown', {
+        bubbles: true,
+        composed: true
+      });
+
+      const spy = sinon.spy(e, 'preventDefault');
+      input.dispatchEvent(e);
+      expect(spy.called).to.be.true;
+    });
+
+    it('should select focused date on close', async () => {
+      await open(datepicker);
+      await close(datepicker);
+      expect(datepicker._selectedDate).to.equal(datepicker._focusedDate);
+    });
+  });
+
   describe('open overlay', () => {
     it('should open the overlay on input', async () => {
       await sendKeys({ type: 'j' });
@@ -162,6 +216,13 @@ describe('keyboard', () => {
     it('should not open the overlay on Enter', async () => {
       await sendKeys({ press: 'Enter' });
       expect(datepicker.opened).to.be.not.ok;
+    });
+
+    it('should not throw on Enter before opening overlay', () => {
+      expect(() => {
+        datepicker.focus();
+        enter(input);
+      }).not.to.throw(Error);
     });
   });
 
@@ -207,6 +268,39 @@ describe('keyboard', () => {
       const spy = sinon.spy(input, 'focus');
       tap(cell);
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should move focus to the input on Cancel button Tab', async () => {
+      overlayContent.$.cancelButton.focus();
+      const spy = sinon.spy(input, 'focus');
+      await sendKeys({ press: 'Tab' });
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should move focus to Cancel button on input Shift Tab', async () => {
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      expect(overlayContent.$.cancelButton.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should reveal the focused date on Today button Shift Tab', async () => {
+      const spy = sinon.spy(overlayContent, 'revealDate');
+      overlayContent.$.todayButton.focus();
+
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
+      await aTimeout(1);
+      expect(spy.called).to.be.true;
+    });
+
+    it('should clear selection on close', async () => {
+      input.select();
+
+      await close(datepicker);
+      expect(input.selectionStart).to.equal(input.selectionEnd);
     });
   });
 

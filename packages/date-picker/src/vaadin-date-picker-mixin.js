@@ -320,11 +320,6 @@ export const DatePickerMixin = (subclass) =>
         },
 
         /** @private */
-        _ignoreAnnounce: {
-          value: true
-        },
-
-        /** @private */
         _focusOverlayOnOpen: Boolean,
 
         /** @protected */
@@ -335,8 +330,7 @@ export const DatePickerMixin = (subclass) =>
     static get observers() {
       return [
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
-        '_focusedDateChanged(_focusedDate, i18n.formatDate)',
-        '_announceFocusedDate(_focusedDate, opened, _ignoreAnnounce)'
+        '_focusedDateChanged(_focusedDate, i18n.formatDate)'
       ];
     }
 
@@ -584,6 +578,7 @@ export const DatePickerMixin = (subclass) =>
       if (input) {
         input.autocomplete = 'off';
         input.setAttribute('role', 'combobox');
+        input.setAttribute('aria-haspopup', 'dialog');
         input.setAttribute('aria-expanded', !!this.opened);
         this._applyInputValue(this._selectedDate);
       }
@@ -710,7 +705,7 @@ export const DatePickerMixin = (subclass) =>
       }
 
       if (this._focusOverlayOnOpen) {
-        this._overlayContent.focus();
+        this._overlayContent.focusDateElement();
         this._focusOverlayOnOpen = false;
       } else {
         this._focus();
@@ -719,8 +714,6 @@ export const DatePickerMixin = (subclass) =>
       if (this._noInput && this.focusElement) {
         this.focusElement.blur();
       }
-
-      this._ignoreAnnounce = false;
     }
 
     // A hack needed for iOS to prevent dropdown from being clipped in an
@@ -765,8 +758,6 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayClosed() {
-      this._ignoreAnnounce = true;
-
       window.removeEventListener('scroll', this._boundOnScroll, true);
 
       if (this._touchPrevented) {
@@ -891,15 +882,14 @@ export const DatePickerMixin = (subclass) =>
         case 'ArrowUp':
           // prevent scrolling the page with arrows
           e.preventDefault();
-
           if (this.opened) {
-            this._overlayContent.focus();
-            this._overlayContent._onKeydown(e);
+            // The overlay can be opened with ctrl + option + shift in VoiceOver
+            // and without this logic, it won't be possible to focus the dialog opened this way.
+            this._overlayContent.focusDateElement();
           } else {
             this._focusOverlayOnOpen = true;
             this.open();
           }
-
           break;
         case 'Enter': {
           const parsedDate = this._getParsedDate();
@@ -945,8 +935,7 @@ export const DatePickerMixin = (subclass) =>
             if (e.shiftKey) {
               this._overlayContent.focusCancel();
             } else {
-              this._overlayContent.focus();
-              this._overlayContent.revealDate(this._focusedDate);
+              this._overlayContent.focusDate(this._focusedDate);
             }
           }
           break;
@@ -991,13 +980,6 @@ export const DatePickerMixin = (subclass) =>
           }
           this._ignoreFocusedDateChange = false;
         }
-      }
-    }
-
-    /** @private */
-    _announceFocusedDate(_focusedDate, opened, _ignoreAnnounce) {
-      if (opened && !_ignoreAnnounce) {
-        this._overlayContent.announceFocusedDate();
       }
     }
 
