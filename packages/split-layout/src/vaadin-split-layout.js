@@ -236,12 +236,22 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @protected */
   ready() {
     super.ready();
-    this.__observer = new FlattenedNodesObserver(this, this._processChildren);
+    this.__observer = new FlattenedNodesObserver(this, (info) => {
+      this._cleanupNodes(info.removedNodes);
+      this._processChildren();
+    });
 
     const splitter = this.$.splitter;
     addListener(splitter, 'track', this._onHandleTrack.bind(this));
     addListener(splitter, 'down', this._setPointerEventsNone.bind(this));
     addListener(splitter, 'up', this._restorePointerEvents.bind(this));
+  }
+
+  /** @private */
+  _cleanupNodes(nodes) {
+    nodes.forEach((node) => {
+      node.removeAttribute('slot');
+    });
   }
 
   /** @private */
