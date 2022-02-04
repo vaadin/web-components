@@ -178,12 +178,16 @@ class CrudGrid extends IncludedMixin(Grid) {
           // sort column (in case a filter isn't used at all) => add the sort indicator
           const sorter = document.createElement('vaadin-grid-sorter');
           sorter.setAttribute('path', path);
+          // TODO: Localize aria labels
+          sorter.setAttribute('aria-label', `Sort by ${label}`);
           sorter.textContent = label;
           root.appendChild(sorter);
         } else if (!this.noFilter) {
           // Filtering is enabled in this crud-grid, create the filter element
           const filter = document.createElement('vaadin-grid-filter');
           filter.setAttribute('path', path);
+          // TODO: Localize aria labels
+          filter.setAttribute('aria-label', `Filter by ${label}`);
           filter.style.display = 'flex';
 
           const textField = window.document.createElement('vaadin-text-field');
