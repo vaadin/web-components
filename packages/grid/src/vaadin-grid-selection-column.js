@@ -73,8 +73,7 @@ class GridSelectionColumn extends GridColumn {
        */
       autoSelect: {
         type: Boolean,
-        value: false,
-        attribute: 'auto-select'
+        value: false
       },
 
       /** @private */

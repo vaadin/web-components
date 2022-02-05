@@ -19,8 +19,7 @@ export const RowDetailsMixin = (superClass) =>
           type: Array,
           value: function () {
             return [];
-          },
-          attribute: 'details-opened-items'
+          }
         },
 
         /**

@@ -75,8 +75,7 @@ class GridProEditColumn extends GridColumn {
       editorType: {
         type: String,
         notify: true, // FIXME(web-padawan): needed by Flow counterpart
-        value: 'text',
-        attribute: 'editor-type'
+        value: 'text'
       },
 
       /**
