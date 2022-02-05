@@ -748,8 +748,7 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolylitMixin(LitElement))) {
        */
       flexGrow: {
         type: Number,
-        value: 1,
-        attribute: 'flex-grow'
+        value: 1
       },
 
       /**
@@ -810,8 +809,7 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolylitMixin(LitElement))) {
        */
       autoWidth: {
         type: Boolean,
-        value: false,
-        attribute: 'auto-width'
+        value: false
       },
 
       /**
