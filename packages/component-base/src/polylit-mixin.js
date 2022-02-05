@@ -147,6 +147,10 @@ const PolylitMixinImplementation = (superclass) => {
         this.getOrCreateMap('__complexObservers').set(assignComputedMethod, observer.observerProps);
       }
 
+      if (!options.attribute) {
+        options.attribute = name.replace(/([A-Z])/g, '-$1').toLowerCase();
+      }
+
       return result;
     }
 
