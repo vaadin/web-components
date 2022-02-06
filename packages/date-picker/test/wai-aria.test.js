@@ -6,11 +6,10 @@ import { activateScroller, getDefaultI18n, open } from './common.js';
 
 describe('WAI-ARIA', () => {
   describe('date picker', () => {
-    let datepicker, toggleButton, input, label, helper, error;
+    let datepicker, input, label, helper, error;
 
     beforeEach(() => {
       datepicker = fixtureSync(`<vaadin-date-picker helper-text="Week day" label="Date"></vaadin-date-picker>`);
-      toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
       input = datepicker.inputElement;
       label = datepicker.querySelector('[slot=label]');
       error = datepicker.querySelector('[slot=error-message]');
@@ -41,23 +40,6 @@ describe('WAI-ARIA', () => {
       const aria = input.getAttribute('aria-describedby');
       expect(aria).to.include(helper.id);
       expect(aria).to.include(error.id);
-    });
-
-    it('should have button roles on buttons', () => {
-      // Indicate icon buttons as clickable. Especially helpful on touch devices.
-      expect(toggleButton.getAttribute('role')).to.equal('button');
-    });
-
-    // TODO: clarify if this is still needed
-    it.skip('should have label properties on buttons', () => {
-      // Give spoken names for the icon buttons.
-      expect(toggleButton.getAttribute('aria-label')).to.equal('Calendar');
-    });
-
-    // TODO: clarify if this is still needed
-    it.skip('should have label properties on buttons in correct locale', () => {
-      datepicker.set('i18n.calendar', 'kalenteri');
-      expect(toggleButton.getAttribute('aria-label')).to.equal('kalenteri');
     });
 
     it('should set aria-haspopup attribute on the input', () => {
@@ -108,16 +90,6 @@ describe('WAI-ARIA', () => {
 
       it('should set aria-hidden on the year scroller', () => {
         expect(scroller.getAttribute('aria-hidden')).to.equal('true');
-      });
-
-      it('should contain button role for years', () => {
-        // Indicate years as clickable.
-        const years = Array.from(yearScrollerContents).filter((el) => /\d+/.test(el.textContent));
-
-        expect(years).to.not.be.empty;
-        years.forEach((year) => {
-          expect(year.getAttribute('role')).to.equal('button');
-        });
       });
 
       it('should have hidden state for dots', () => {
