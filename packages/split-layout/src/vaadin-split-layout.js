@@ -247,7 +247,17 @@ class SplitLayout extends ElementMixin(
   /** @protected */
   ready() {
     super.ready();
-    this.__observer = new FlattenedNodesObserver(this, this._processChildren);
+    this.__observer = new FlattenedNodesObserver(this, (info) => {
+      this._cleanupNodes(info.removedNodes);
+      this._processChildren();
+    });
+  }
+
+  /** @private */
+  _cleanupNodes(nodes) {
+    nodes.forEach((node) => {
+      node.removeAttribute('slot');
+    });
   }
 
   /** @private */

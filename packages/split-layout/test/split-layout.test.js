@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, track } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, track } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-split-layout.js';
 
@@ -317,5 +317,25 @@ describe('layout with one child', () => {
     };
 
     expect(downAndUp).to.not.throw(Error);
+  });
+});
+
+describe('removing nodes', () => {
+  beforeEach(async () => {
+    splitLayout = fixtureSync(`
+      <vaadin-split-layout>
+        <div id="first">some content</div>
+        <div id="second">some content</div>
+      </vaadin-split-layout>
+    `);
+    await aTimeout(0);
+    first = splitLayout.$.primary.assignedNodes({ flatten: true })[0];
+    second = splitLayout.$.secondary.assignedNodes({ flatten: true })[0];
+  });
+
+  it('should remove slot attribute from the removed node', async () => {
+    splitLayout.removeChild(first);
+    await nextFrame();
+    expect(first.hasAttribute('slot')).to.be.false;
   });
 });
