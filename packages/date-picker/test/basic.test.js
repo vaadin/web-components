@@ -71,6 +71,13 @@ describe('basic features', () => {
     expect(datepicker.hasAttribute('focused')).to.be.true;
   });
 
+  it('should not blur when toggle button is clicked', async () => {
+    const e = new CustomEvent('mousedown', { bubbles: true });
+    const spy = sinon.spy(e, 'preventDefault');
+    toggleButton.dispatchEvent(e);
+    expect(spy.calledOnce).to.be.true;
+  });
+
   it('should have focused attribute when closed and focused', async () => {
     datepicker.focus();
     await sendKeys({ press: 'ArrowDown' });
