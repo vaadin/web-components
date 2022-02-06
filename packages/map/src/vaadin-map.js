@@ -419,11 +419,11 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
   }
 
   /**
-   * Registers focus listeners on the map container to manually trigger the
-   * set focused logic in FocusMixin. FocusMixin currently assumes that the
-   * focusable element will be in the light DOM and set event target.
-   * However the map container is in the shadow DOM and the event target on
-   * the host will always be the host itself.
+   * Registers focus listeners on the map container to manually manage focus in
+   * FocusMixin. FocusMixin currently assumes that the focusable element will
+   * be in the light DOM and is available as event target.
+   * The map container however is in the shadow DOM and thus focus events will
+   * always have the host element as target.
    * @private
    */
   __addMapFocusListeners() {
@@ -435,6 +435,18 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
     this._mapTarget.addEventListener('focusout', () => {
       this._setFocused(false);
     });
+  }
+
+  /**
+   * Overrides method from `FocusMixin` to disable automatic focus management.
+   * See custom logic in __addMapFocusListeners
+   *
+   * @param {FocusEvent} _event
+   * @return {boolean}
+   * @protected
+   */
+  _shouldSetFocus(_event) {
+    return false;
   }
 }
 
