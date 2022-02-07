@@ -199,7 +199,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
           <template>
             <div
               part="year-number"
-              role="button"
               current$="[[_isCurrentYear(index)]]"
               selected$="[[_isSelectedYear(index, selectedDate)]]"
             >
