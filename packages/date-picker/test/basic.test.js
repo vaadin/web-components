@@ -218,6 +218,14 @@ describe('basic features', () => {
     await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
   });
 
+  it('should close on subsequent toggle button click', () => {
+    toggleButton.click();
+    expect(datepicker.opened).to.be.true;
+
+    toggleButton.click();
+    expect(datepicker.opened).to.be.false;
+  });
+
   it('should scroll to a date on open', async () => {
     const overlayContent = getOverlayContent(datepicker);
     // We must scroll to a date on every open because at least IE11 seems to reset

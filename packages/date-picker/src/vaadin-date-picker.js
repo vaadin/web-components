@@ -9,7 +9,6 @@ import './vaadin-date-picker-overlay.js';
 import './vaadin-date-picker-overlay-content.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { addListener } from '@vaadin/component-base/src/gestures.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -145,7 +144,7 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
           <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
-          <div part="toggle-button" slot="suffix" aria-hidden="true"></div>
+          <div part="toggle-button" slot="suffix" aria-hidden="true" on-click="_toggle"></div>
         </vaadin-input-container>
 
         <div part="helper-text">
@@ -215,7 +214,6 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
 
     const toggleButton = this.shadowRoot.querySelector('[part="toggle-button"]');
-    addListener(toggleButton, 'tap', this._toggle.bind(this));
     toggleButton.addEventListener('mousedown', (e) => e.preventDefault());
   }
 
