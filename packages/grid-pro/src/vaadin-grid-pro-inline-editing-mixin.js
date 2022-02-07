@@ -456,11 +456,11 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /**
-     * Triggers the editor for a given (row,col)
+     * Triggers the editor for a given (row, col)
      * row should be a number (element index)
      * column can be either a number (element index) or a string (columnId)
-     * @param {number|object} row
-     * @param {number|string} col
+     * @param {number} row
+     * @param {number | string} col
      * @public
      */
     editCell(row, col) {

@@ -45,8 +45,8 @@ export declare class InlineEditingMixinClass {
    * row should be a number (element index)
    * column can be either a number (element index) or a string (columnId)
    * @param {number} row
-   * @param {number|string} col
+   * @param {number | string} col
    * @public
    */
-  editCell(row: number, col: number|string): void;
+  editCell(row: number, col: number | string): void;
 }
