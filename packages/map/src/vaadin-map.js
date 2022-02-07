@@ -72,6 +72,7 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
         #map {
           width: 100%;
           height: 100%;
+          outline: none;
         }
 
         #map,
@@ -392,6 +393,7 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
       // Override default controls to remove default labels, which is required to
       // correctly display icons through pseudo-element
       controls: defaultControls({
+        rotate: false,
         zoomOptions: { zoomInLabel: '', zoomOutLabel: '' }
       }),
       // Override default interactions to allow mouse-wheel zoom + drag-pan when not focused
