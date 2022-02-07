@@ -459,7 +459,7 @@ export const InlineEditingMixin = (superClass) =>
      * Triggers the editor for a given (row, col)
      * row should be a number (element index)
      * column can be either a number (element index) or a string (columnId)
-     * @param {number} row
+     * @param {number | string} row
      * @param {number | string} col
      * @public
      */
@@ -497,7 +497,7 @@ export const InlineEditingMixin = (superClass) =>
       }
 
       // Get rows (excluding header)
-      const tRows = this.$.table.getElementsByTagName('tbody').items.rows;
+      const tRows = this._getVisibleRows();
 
       // Make sure row[rowIdx] exists
       if (rowIdx > tRows.length || rowIdx < 0) {
