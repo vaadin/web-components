@@ -214,6 +214,9 @@ class DatePicker extends DatePickerMixin(
       })
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
+
+    const toggleButton = this.shadowRoot.querySelector('[part="toggle-button"]');
+    toggleButton.addEventListener('mousedown', (e) => e.preventDefault());
   }
 
   /** @private */
