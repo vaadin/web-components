@@ -456,16 +456,11 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /**
-     * @param {Number | String} row
-     * @param {Number | String} col
-     * @param {Boolean} userOriginated
+     * @param {number|object} row
+     * @param {number|string} col
      * @public
      */
-    editCell(row, col, userOriginated) {
-      if (userOriginated && this.hasAttribute('disabled')) {
-        throw new Error('Grid is disabled.');
-      }
-
+    editCell(row, col) {
       const columns = this._getColumns().filter((col) => !col.hidden);
 
       let colIdx = -1;

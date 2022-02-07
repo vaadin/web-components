@@ -40,5 +40,14 @@ export declare class InlineEditingMixinClass {
 
   protected _switchEditCell(e: KeyboardEvent): void;
 
-  public editCell(row: Number, col: Number, userOriginated: Boolean): void;
+  /**
+   * Triggers the editor for a given (row,col)
+   * row can be either a number (element index) or an object
+   * with the property 'key' = index+1 (e.g. {key: 1} is equivalent to pass it 0)
+   * column can be either a number (element index) or a string (columnId)
+   * @param {number|object} row
+   * @param {number|string} col
+   * @public
+   */
+  editCell(row: number|object, col: number|string): void;
 }

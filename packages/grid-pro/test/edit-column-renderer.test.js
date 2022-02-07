@@ -317,17 +317,6 @@ describe('edit column renderer', () => {
       flushGrid(grid);
     });
 
-    it('enter edit mode programatically should fail for user originated call when grid is disabled', () => {
-      grid.setAttribute('disabled', true);
-      expect(() => {
-        grid.editCell(10, 10, true);
-      }).to.throw(Error, 'Grid is disabled.');
-
-      expect(() => {
-        grid.editCell(0, 0, false);
-      }).to.not.throw(Error, 'Grid is disabled.');
-    });
-
     it('enter edit mode programatically should fail for non-existing indexes', () => {
       expect(() => {
         grid.editCell(0, 10, false);
@@ -376,28 +365,28 @@ describe('edit column renderer', () => {
       }).to.throw(Error, 'Column is not editable');
     });
 
-    it('enter edit mode programatically (x,y) should call _startEdit', () => {
+    it('enter edit mode programatically (x,y) should show the editor', () => {
       const cell = getContainerCell(grid.$.items, 0, 0);
       grid.editCell(0, 0, false);
       const editor = getCellEditor(cell);
       expect(editor).to.be.ok;
     });
 
-    it('enter edit mode programatically (x,colId) should call _startEdit', () => {
+    it('enter edit mode programatically (x,colId) should show the editor', () => {
       const cell = getContainerCell(grid.$.items, 0, 0);
       grid.editCell(0, 'name', false);
       const editor = getCellEditor(cell);
       expect(editor).to.be.ok;
     });
 
-    it('enter edit mode programatically (rowKey,y) should call _startEdit', () => {
+    it('enter edit mode programatically (rowKey,y) should show the editor', () => {
       const cell = getContainerCell(grid.$.items, 0, 0);
       grid.editCell({ key: 1 }, 0, false);
       const editor = getCellEditor(cell);
       expect(editor).to.be.ok;
     });
 
-    it('enter edit mode programatically (rowKey,colId) should call _startEdit', () => {
+    it('enter edit mode programatically (rowKey,colId) should show the editor', () => {
       const cell = getContainerCell(grid.$.items, 0, 0);
       grid.editCell({ key: 1 }, 'name', false);
       const editor = getCellEditor(cell);
