@@ -457,8 +457,7 @@ export const InlineEditingMixin = (superClass) =>
 
     /**
      * Triggers the editor for a given (row,col)
-     * row can be either a number (element index) or an object
-     * with the property 'key' = index+1 (e.g. {key: 1} is equivalent to pass it 0)
+     * row should be a number (element index)
      * column can be either a number (element index) or a string (columnId)
      * @param {number|object} row
      * @param {number|string} col
@@ -482,10 +481,7 @@ export const InlineEditingMixin = (superClass) =>
       let rowIdx = -1;
       // If row is not a number, maybe it's because the item was passed instead
       if (isNaN(row)) {
-        if (!Object.hasOwnProperty.call(row, 'key') || isNaN(row.key)) {
-          throw new Error('Invalid object passed as row item.');
-        }
-        rowIdx = row.key - 1;
+        throw new Error('Invalid argument type passed as row index.');
       } else {
         rowIdx = row;
       }

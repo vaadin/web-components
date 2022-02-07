@@ -337,24 +337,6 @@ describe('edit column renderer', () => {
       }).to.throw(Error, 'col with id invalid was not found');
     });
 
-    it('enter edit mode programatically should fail for non-existing row (by key)', () => {
-      expect(() => {
-        grid.editCell({ key: 1 }, 0, false);
-      }).to.not.throw(Error, 'Invalid object passed as row item.');
-
-      expect(() => {
-        grid.editCell('invalid', 0, false);
-      }).to.throw(Error, 'Invalid object passed as row item.');
-
-      expect(() => {
-        grid.editCell({ key: 'invalid' }, 0, false);
-      }).to.throw(Error, 'Invalid object passed as row item.');
-
-      expect(() => {
-        grid.editCell({ key: -1 }, 0, false);
-      }).to.throw(Error, 'Invalid rowIdx (out of bounds)');
-    });
-
     it('enter edit mode programatically should fail for non-editable columns', () => {
       expect(() => {
         grid.editCell(0, 0, false);
@@ -375,20 +357,6 @@ describe('edit column renderer', () => {
     it('enter edit mode programatically (x,colId) should show the editor', () => {
       const cell = getContainerCell(grid.$.items, 0, 0);
       grid.editCell(0, 'name', false);
-      const editor = getCellEditor(cell);
-      expect(editor).to.be.ok;
-    });
-
-    it('enter edit mode programatically (rowKey,y) should show the editor', () => {
-      const cell = getContainerCell(grid.$.items, 0, 0);
-      grid.editCell({ key: 1 }, 0, false);
-      const editor = getCellEditor(cell);
-      expect(editor).to.be.ok;
-    });
-
-    it('enter edit mode programatically (rowKey,colId) should show the editor', () => {
-      const cell = getContainerCell(grid.$.items, 0, 0);
-      grid.editCell({ key: 1 }, 'name', false);
       const editor = getCellEditor(cell);
       expect(editor).to.be.ok;
     });
