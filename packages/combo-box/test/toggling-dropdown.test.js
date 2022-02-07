@@ -75,6 +75,19 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.true;
     });
 
+    it('should not open the overlay on helper click', () => {
+      comboBox.helperText = 'Helper Text';
+      comboBox.querySelector('[slot=helper]').click();
+      expect(comboBox.opened).to.be.false;
+    });
+
+    it('should not open the overlay on error message click', () => {
+      comboBox.invalid = true;
+      comboBox.errorMessage = 'Error message';
+      comboBox.querySelector('[slot=error-message]').click();
+      expect(comboBox.opened).to.be.false;
+    });
+
     it('should open on function call', () => {
       comboBox.open();
 
