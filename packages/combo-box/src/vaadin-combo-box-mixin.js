@@ -423,6 +423,16 @@ export const ComboBoxMixin = (subclass) =>
       }
     }
 
+    /**
+     * @param {Event} event
+     * @protected
+     */
+    _onHostClick(_event) {
+      if (!this.autoOpenDisabled) {
+        this.open();
+      }
+    }
+
     /** @private */
     _onClick(e) {
       this._closeOnBlurIsPrevented = true;
@@ -437,8 +447,8 @@ export const ComboBoxMixin = (subclass) =>
         } else {
           this.open();
         }
-      } else if (!this.autoOpenDisabled) {
-        this.open();
+      } else {
+        this._onHostClick(e);
       }
 
       this._closeOnBlurIsPrevented = false;

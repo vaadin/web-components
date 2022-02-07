@@ -293,6 +293,19 @@ class ComboBox extends ComboBoxDataProviderMixin(
 
     this._handleClearButtonClick(event);
   }
+
+  /**
+   * @param {Event} event
+   * @protected
+   */
+  _onHostClick(event) {
+    const path = event.composedPath();
+
+    // Open dropdown only when clicking on the label or input field
+    if (path.includes(this._labelNode) || path.includes(this._positionTarget)) {
+      super._onHostClick(event);
+    }
+  }
 }
 
 customElements.define(ComboBox.is, ComboBox);
