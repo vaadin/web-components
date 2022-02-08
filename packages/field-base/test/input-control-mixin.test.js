@@ -114,6 +114,17 @@ describe('input-control-mixin', () => {
       expect(input.value).to.equal('foo');
     });
 
+    it('should dispatch input event when clearing value on Esc', () => {
+      const spy = sinon.spy();
+      input.addEventListener('input', spy);
+      element.clearButtonVisible = true;
+      escKeyDown(button);
+      expect(spy.calledOnce).to.be.true;
+      const event = spy.firstCall.args[0];
+      expect(event.bubbles).to.be.true;
+      expect(event.composed).to.be.true;
+    });
+
     it('should dispatch change event when clearing value on Esc', () => {
       const spy = sinon.spy();
       input.addEventListener('change', spy);
