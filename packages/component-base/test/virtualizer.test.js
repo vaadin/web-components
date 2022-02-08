@@ -310,4 +310,56 @@ describe('virtualizer', () => {
       expect(elementsContainer.childElementCount).to.be.above(initialCount);
     });
   });
+
+  describe('lazy height update', () => {
+    const ITEM_HEIGHT = 80;
+
+    beforeEach(async () => {
+      init({
+        size: 10,
+        updateElement: (el, index) => {
+          el.textContent = `item-${index}`;
+          el.id = `item-${index}`;
+
+          // Synchronously set a smaller height
+          el.style.height = `${ITEM_HEIGHT / 2}px`;
+          requestAnimationFrame(() => {
+            // Restore the larger height asynchronously,
+            // but still fast enough so a resize observer doesn't trigger
+            el.style.height = `${ITEM_HEIGHT}px`;
+          });
+        }
+      });
+
+      // Wait for possibly active resize observers to flush
+      await aTimeout(100);
+    });
+
+    it('should position elements after manual update and flush', async () => {
+      virtualizer.update();
+      virtualizer.flush();
+
+      await nextFrame();
+      await nextFrame();
+
+      const firstItemTop = elementsContainer.querySelector('#item-0').getBoundingClientRect().top;
+      const secondItemTop = elementsContainer.querySelector('#item-1').getBoundingClientRect().top;
+      expect(secondItemTop).to.equal(firstItemTop + ITEM_HEIGHT);
+    });
+
+    it('should position elements after scrolling', async () => {
+      // Scroll to end
+      virtualizer.scrollToIndex(virtualizer.size - 1);
+      // Slowly scroll back to start
+      while (scrollTarget.scrollTop) {
+        scrollTarget.scrollTop -= 100;
+        await nextFrame();
+      }
+
+      await nextFrame();
+      const firstItemTop = elementsContainer.querySelector('#item-0').getBoundingClientRect().top;
+      const secondItemTop = elementsContainer.querySelector('#item-1').getBoundingClientRect().top;
+      expect(secondItemTop).to.equal(firstItemTop + ITEM_HEIGHT);
+    });
+  });
 });

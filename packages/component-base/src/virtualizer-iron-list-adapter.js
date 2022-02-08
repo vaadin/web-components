@@ -136,17 +136,30 @@ export class IronListAdapter {
       el.style.minHeight = '';
     }
 
+    let didUpdate = false;
     if (!this.__preventElementUpdates && (el.__lastUpdatedIndex !== index || forceSameIndexUpdates)) {
       this.updateElement(el, index);
       el.__lastUpdatedIndex = index;
+      didUpdate = true;
     }
 
-    if (el.offsetHeight === 0) {
+    const elementHeightAfterUpdate = el.offsetHeight;
+    if (elementHeightAfterUpdate === 0) {
       // If the elements have 0 height after update (for example due to lazy rendering),
       // it results in iron-list requesting to create an unlimited count of elements.
       // Assign a temporary min height to elements that would otherwise end up having
       // no height.
       el.style.minHeight = '200px';
+    } else if (didUpdate) {
+      // Check if the element's height changes on the next frame after update.
+      // This is needed, since the native ResizeObserver doesn't necessarily
+      // trigger when the element's height changes, and then restores immediately.
+      requestAnimationFrame(() => {
+        if (el.offsetHeight && el.offsetHeight !== elementHeightAfterUpdate) {
+          this._updateMetrics();
+          this._positionItems();
+        }
+      });
     }
   }
 

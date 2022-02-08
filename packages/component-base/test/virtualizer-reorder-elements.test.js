@@ -60,9 +60,9 @@ describe('reorder elements', () => {
   }
 
   beforeEach(() => {
+    clock = Sinon.useFakeTimers();
     init({ reorderElements: true });
     recycledElement = elementsContainer.children[2];
-    clock = Sinon.useFakeTimers();
   });
 
   afterEach(() => {
