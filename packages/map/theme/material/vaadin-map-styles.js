@@ -23,7 +23,6 @@ registerStyles(
 
     .ol-control {
       border-radius: 4px;
-      overflow: hidden;
       transition: 0.1s box-shadow;
       box-shadow: var(--material-shadow-elevation-2dp);
     }
@@ -41,6 +40,7 @@ registerStyles(
       width: 2em;
       height: 2em;
       background-color: var(--material-background-color);
+      border-radius: inherit;
     }
 
     .ol-control button,
@@ -61,8 +61,30 @@ registerStyles(
       background-color: var(--material-secondary-background-color);
     }
 
+    @supports not selector(:focus-visible) {
+      .ol-control button:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--material-primary-color);
+      }
+    }
+
+    .ol-control button:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--material-primary-color);
+    }
+
     .ol-zoom {
       gap: 1px;
+    }
+
+    button.ol-zoom-in {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    button.ol-zoom-out {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
     }
 
     .ol-attribution.ol-uncollapsible {

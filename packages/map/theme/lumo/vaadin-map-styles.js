@@ -50,7 +50,6 @@ registerStyles(
 
     .ol-control {
       border-radius: var(--lumo-border-radius-m);
-      overflow: hidden;
       transition: 0.15s box-shadow, 0.15s background-color;
       -webkit-backdrop-filter: blur(8px);
     }
@@ -67,6 +66,10 @@ registerStyles(
     .ol-control button {
       width: var(--lumo-size-s);
       height: var(--lumo-size-s);
+      border-radius: inherit;
+      font-family: 'lumo-icons';
+      font-size: var(--lumo-icon-size-s);
+      font-weight: 400;
     }
 
     .ol-control button,
@@ -78,6 +81,7 @@ registerStyles(
     }
 
     .ol-control:hover button,
+    .ol-control button:focus,
     .ol-attribution:hover ul {
       opacity: 1;
     }
@@ -90,14 +94,30 @@ registerStyles(
       background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
     }
 
+    @supports not selector(:focus-visible) {
+      .ol-control button:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+      }
+    }
+
+    .ol-control button:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+    }
+
     .ol-zoom {
       gap: 2px;
     }
 
-    .ol-control button {
-      font-family: 'lumo-icons';
-      font-size: var(--lumo-icon-size-s);
-      font-weight: 400;
+    button.ol-zoom-in {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    button.ol-zoom-out {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
     }
 
     .ol-attribution.ol-uncollapsible {
