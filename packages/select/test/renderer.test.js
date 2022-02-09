@@ -133,4 +133,26 @@ describe('renderer', () => {
       document.body.removeChild(select);
     }).to.not.throw(Error);
   });
+
+  describe('child list-box', () => {
+    beforeEach(async () => {
+      // Mimic the Flow component behavior
+      select.appendChild(rendererContent);
+      // Wait for list-box items to be set
+      await nextFrame();
+    });
+
+    it('should work with list-box connected before renderer is set', () => {
+      select.renderer = (root) => {
+        const listBox = Array.from(select.children).find((el) => el.tagName.toLowerCase() === 'vaadin-list-box');
+        if (listBox) {
+          if (root.firstChild) {
+            root.removeChild(root.firstChild);
+          }
+          root.appendChild(listBox);
+        }
+      };
+      expect(select._items).to.eql(rendererContent.items);
+    });
+  });
 });
