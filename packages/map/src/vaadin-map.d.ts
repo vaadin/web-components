@@ -4,7 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import OpenLayersMap from 'ol/Map.js';
-import { ElementMixin } from '@vaadin/component-base';
+import { ElementMixin, ResizeMixin } from '@vaadin/component-base';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 
 /**
@@ -45,7 +45,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-declare class Map extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class Map extends ResizeMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**
    * The internal OpenLayers map instance used to configure the map.
    * See the OpenLayers [API](https://openlayers.org/en/latest/apidoc/) and
