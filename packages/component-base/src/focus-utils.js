@@ -39,7 +39,7 @@ function isElementHiddenDirectly(element) {
  * @return {number}
  */
 function normalizeTabIndex(element) {
-  if (!isElementFocusable(element) || isElementHiddenDirectly(element)) {
+  if (!isElementFocusable(element)) {
     return -1;
   }
 
@@ -116,8 +116,8 @@ function sortElementsByTabIndex(elements) {
  * @private
  */
 function collectFocusableNodes(node, result) {
-  if (node.nodeType !== Node.ELEMENT_NODE) {
-    // Don't traverse children if the node is not an HTML element.
+  if (node.nodeType !== Node.ELEMENT_NODE || isElementHiddenDirectly(node)) {
+    // Don't traverse children if the node is not an HTML element or not visible.
     return false;
   }
 
