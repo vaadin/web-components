@@ -369,10 +369,14 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   _assignMenuElement(menuElement) {
     if (menuElement && menuElement !== this.__lastMenuElement) {
       this._menuElement = menuElement;
+
+      // Ensure items are initialized
+      this.__initMenuItems(menuElement);
+
       menuElement.addEventListener('items-changed', () => {
-        this._items = menuElement.items;
-        this._items.forEach((item) => item.setAttribute('role', 'option'));
+        this.__initMenuItems(menuElement);
       });
+
       menuElement.addEventListener('selected-changed', () => this.__updateValueButton());
       // Use capture phase to make it possible for `<vaadin-grid-pro-edit-select>`
       // to override and handle the keydown event before the value change happens.
@@ -390,6 +394,14 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
       // Store the menu element reference
       this.__lastMenuElement = menuElement;
+    }
+  }
+
+  /** @private */
+  __initMenuItems(menuElement) {
+    if (menuElement.items) {
+      this._items = menuElement.items;
+      this._items.forEach((item) => item.setAttribute('role', 'option'));
     }
   }
 
