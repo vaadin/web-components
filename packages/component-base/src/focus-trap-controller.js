@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { getFocusableElements, isElementFocused } from './focus-utils.js';
+import { getFocusableElements, isElementFocused, isElementHidden } from './focus-utils.js';
 
 /**
  * A controller for trapping focus within a DOM node.
@@ -110,7 +110,10 @@ export class FocusTrapController {
    * @private
    */
   __focusNextElement(backward = false) {
-    const focusableElements = this.__focusableElements;
+    // Filter out hidden elements before detecting which element to focus next.
+    // We can't do that during initialization, because by the time `trapFocus()`
+    // is called in case of overlay, focusable items might not yet be visible.
+    const focusableElements = this.__focusableElements.filter((el) => !isElementHidden(el));
     const step = backward ? -1 : 1;
     const currentIndex = this.__focusedElementIndex;
     const nextIndex = (focusableElements.length + currentIndex + step) % focusableElements.length;
