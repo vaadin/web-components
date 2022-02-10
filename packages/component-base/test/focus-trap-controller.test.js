@@ -21,7 +21,9 @@ customElements.define(
           <div id="trap">
             <input id="trap-input-1" />
             <input id="trap-input-2" />
-            <input id="trap-input-3" />
+            <div id="parent">
+              <input id="trap-input-3" />
+            </div>
           </div>
 
           <input id="outside-input-2" />
@@ -199,6 +201,51 @@ describe('focus-trap-controller', () => {
             'trap-input-1',
             'trap-input-2',
             'trap-input-1'
+          ]);
+        });
+      });
+
+      describe('hidden elements', () => {
+        beforeEach(() => {
+          controller.trapFocus(trap);
+        });
+
+        it('should exclude elements hidden with display: none', async () => {
+          trapInput3.style.display = 'none';
+
+          const activeElement1 = await tab();
+          const activeElement2 = await tab();
+          const activeElement3 = await tab();
+          expect([activeElement1.id, activeElement2.id, activeElement3.id]).to.deep.equal([
+            'trap-input-2',
+            'trap-input-1',
+            'trap-input-2'
+          ]);
+        });
+
+        it('should exclude elements hidden with visibility: hidden', async () => {
+          trapInput3.style.visibility = 'hidden';
+
+          const activeElement1 = await tab();
+          const activeElement2 = await tab();
+          const activeElement3 = await tab();
+          expect([activeElement1.id, activeElement2.id, activeElement3.id]).to.deep.equal([
+            'trap-input-2',
+            'trap-input-1',
+            'trap-input-2'
+          ]);
+        });
+
+        it('should exclude elements whose parent node is not visible', async () => {
+          trapInput3.parentNode.style.display = 'none';
+
+          const activeElement1 = await tab();
+          const activeElement2 = await tab();
+          const activeElement3 = await tab();
+          expect([activeElement1.id, activeElement2.id, activeElement3.id]).to.deep.equal([
+            'trap-input-2',
+            'trap-input-1',
+            'trap-input-2'
           ]);
         });
       });

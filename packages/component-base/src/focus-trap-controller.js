@@ -134,6 +134,7 @@ export class FocusTrapController {
    * @private
    */
   get __focusedElementIndex() {
-    return this.__focusableElements.findIndex(isElementFocused);
+    const focusableElements = this.__focusableElements;
+    return focusableElements.indexOf(focusableElements.filter(isElementFocused).pop());
   }
 }
