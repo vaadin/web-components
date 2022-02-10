@@ -53,6 +53,7 @@ function isEnabled() {
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes FocusMixin
  * @mixes ResizeMixin
  */
 class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
@@ -445,6 +446,7 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
    *
    * @param {FocusEvent} _event
    * @return {boolean}
+   * @override
    * @protected
    */
   _shouldSetFocus(_event) {
