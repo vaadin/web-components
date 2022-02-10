@@ -44,6 +44,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes ResizeMixin
  */
 declare class Map extends ResizeMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**

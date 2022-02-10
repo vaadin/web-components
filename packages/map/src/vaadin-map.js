@@ -52,6 +52,7 @@ function isEnabled() {
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes ResizeMixin
  */
 class Map extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
