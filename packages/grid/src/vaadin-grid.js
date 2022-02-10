@@ -9,6 +9,7 @@ import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isAndroid, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -256,7 +257,9 @@ class Grid extends ElementMixin(
                       A11yMixin(
                         FilterMixin(
                           ColumnReorderingMixin(
-                            ColumnResizingMixin(EventContextMixin(DragAndDropMixin(StylingMixin(PolymerElement))))
+                            ColumnResizingMixin(
+                              EventContextMixin(DragAndDropMixin(StylingMixin(TabindexMixin(PolymerElement))))
+                            )
                           )
                         )
                       )
@@ -335,6 +338,11 @@ class Grid extends ElementMixin(
       _touchDevice: {
         type: Boolean,
         value: isTouch
+      },
+
+      /** @protected */
+      tabindex: {
+        value: undefined
       },
 
       /**
@@ -462,6 +470,23 @@ class Grid extends ElementMixin(
     super.attributeChangedCallback(name, oldValue, newValue);
     if (name === 'dir') {
       this.__isRTL = newValue === 'rtl';
+    }
+  }
+
+  /**
+   * Override an observer from `DisabledMixin` to not
+   * set `tabindex` on the grid when it is re-enabled.
+   *
+   * @param {boolean} disabled
+   * @param {boolean} oldDisabled
+   * @protected
+   * @override
+   */
+  _disabledChanged(disabled, oldDisabled) {
+    super._disabledChanged(disabled, oldDisabled);
+
+    if (oldDisabled) {
+      this.removeAttribute('tabindex');
     }
   }
 

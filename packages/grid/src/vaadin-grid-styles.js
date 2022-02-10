@@ -27,6 +27,10 @@ registerStyles(
       display: none !important;
     }
 
+    :host([disabled]) {
+      pointer-events: none;
+    }
+
     #scroller {
       display: block;
       transform: translateY(0);

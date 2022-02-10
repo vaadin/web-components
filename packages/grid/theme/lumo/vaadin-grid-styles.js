@@ -35,6 +35,10 @@ registerStyles(
       border: var(--_lumo-grid-border-width) solid var(--_lumo-grid-border-color);
     }
 
+    :host([disabled]) {
+      opacity: 0.7;
+    }
+
     /* Cell styles */
 
     [part~='cell'] {

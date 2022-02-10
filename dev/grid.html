@@ -28,7 +28,15 @@
 
         cb(pageItems, levelSize);
       };
+
+      document.querySelector('#grid-disabled').addEventListener('checked-changed', () => {
+        grid.disabled = !grid.disabled;
+      });
+
+      document.querySelector('#grid-disabled').checked = true;
     </script>
+
+    <vaadin-text-field label="before grid"></vaadin-text-field>
 
     <vaadin-grid item-id-path="name">
       <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
@@ -37,5 +45,9 @@
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
     </vaadin-grid>
+
+    <vaadin-text-field label="after grid"></vaadin-text-field>
+
+    <vaadin-checkbox id="grid-disabled" label="Grid disabled">Grid disabled</vaadin-checkbox>
   </body>
 </html>
