@@ -8,6 +8,7 @@ import Attribution from 'ol/control/Attribution';
 import Zoom from 'ol/control/Zoom';
 import OpenLayersMap from 'ol/Map.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 function isEnabled() {
@@ -51,8 +52,9 @@ function isEnabled() {
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes ResizeMixin
  */
-class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
+class Map extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -398,6 +400,14 @@ class Map extends ElementMixin(ThemableMixin(PolymerElement)) {
     super.ready();
     // Add map container to shadow root, trigger OL resize calculation
     this.shadowRoot.appendChild(this._mapTarget);
+  }
+
+  /**
+   * Implements resize callback from ResizeMixin to update size of OL map instance
+   * @override
+   * @protected
+   */
+  _onResize(_contentRect) {
     this._configuration.updateSize();
   }
 }
