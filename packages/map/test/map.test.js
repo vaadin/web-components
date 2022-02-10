@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import '../enable.js';
 import '../vaadin-map.js';
 import TileLayer from 'ol/layer/Tile';
@@ -13,30 +14,55 @@ async function nextMapRender(map) {
   });
 }
 
-describe('configuration in detached state', () => {
-  let mapElement;
+describe('focus', () => {
+  let map;
 
   beforeEach(() => {
-    mapElement = document.createElement('vaadin-map');
-    mapElement.style.width = '100px';
-    mapElement.style.height = '100px';
+    map = fixtureSync(`<vaadin-map></vaadin-map>`);
+  });
+
+  it('should not add focus-ring to the host on programmatic focus', () => {
+    map.focus();
+    expect(map.hasAttribute('focus-ring')).to.be.false;
+  });
+
+  it('should add focus-ring to the host on keyboard focus', async () => {
+    await sendKeys({ press: 'Tab' });
+    expect(map.hasAttribute('focus-ring')).to.be.true;
+  });
+
+  it('should remove focus-ring when a child node is focused', async () => {
+    await sendKeys({ press: 'Tab' });
+    // moves focus to one of the buttons created by the OL controls
+    await sendKeys({ press: 'Tab' });
+    expect(map.hasAttribute('focus-ring')).to.be.false;
+  });
+});
+
+describe('configuration in detached state', () => {
+  let map;
+
+  beforeEach(() => {
+    map = document.createElement('vaadin-map');
+    map.style.width = '100px';
+    map.style.height = '100px';
   });
 
   afterEach(() => {
-    mapElement.remove();
+    map.remove();
   });
 
   it('should be configurable when detached', async () => {
     // OL instance should be initialized
-    expect(mapElement.configuration).to.be.instanceOf(Map);
+    expect(map.configuration).to.be.instanceOf(Map);
     // Configure map
-    mapElement.configuration.addLayer(new TileLayer({ source: new OSM() }));
-    mapElement.configuration.setView(new View({ center: [0, 0], zoom: 3 }));
+    map.configuration.addLayer(new TileLayer({ source: new OSM() }));
+    map.configuration.setView(new View({ center: [0, 0], zoom: 3 }));
     // Attach and wait for layer to be rendered
-    document.body.appendChild(mapElement);
-    await nextMapRender(mapElement);
+    document.body.appendChild(map);
+    await nextMapRender(map);
     // Verify layer is set up
-    const layers = mapElement.shadowRoot.querySelectorAll('.ol-layer');
+    const layers = map.shadowRoot.querySelectorAll('.ol-layer');
     expect(layers.length).to.equal(1);
   });
 });

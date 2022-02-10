@@ -42,6 +42,10 @@ registerStyles(
       pointer-events: none;
     }
 
+    :host([focus-ring]) {
+      box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+    }
+
     .ol-control,
     .ol-scale-bar,
     .ol-scale-line {

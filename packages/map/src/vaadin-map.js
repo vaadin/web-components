@@ -4,10 +4,11 @@
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import Attribution from 'ol/control/Attribution';
-import Zoom from 'ol/control/Zoom';
+import { defaults as defaultControls } from 'ol/control';
+import { defaults as defaultInteractions } from 'ol/interaction';
 import OpenLayersMap from 'ol/Map.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -52,9 +53,10 @@ function isEnabled() {
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes FocusMixin
  * @mixes ResizeMixin
  */
-class Map extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -71,6 +73,7 @@ class Map extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
         #map {
           width: 100%;
           height: 100%;
+          outline: none;
         }
 
         #map,
@@ -385,14 +388,20 @@ class Map extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     // Create map container element and initialize OL map instance
     this._mapTarget = document.createElement('div');
     this._mapTarget.id = 'map';
-    this._configuration = new OpenLayersMap({
+    // Ensure accessible keyboard controls are enabled
+    this._mapTarget.setAttribute('tabindex', '0');
+    const options = {
+      // Override default controls to remove default labels, which is required to
+      // correctly display icons through pseudo-element
+      controls: defaultControls({
+        rotate: false,
+        zoomOptions: { zoomInLabel: '', zoomOutLabel: '' }
+      }),
+      // Override default interactions to allow mouse-wheel zoom + drag-pan when not focused
+      interactions: defaultInteractions({ onFocusOnly: false }),
       target: this._mapTarget
-    });
-    // Override default controls to remove default labels, which is required to
-    // correctly display icons through pseudo-element
-    this._configuration.getControls().clear();
-    this._configuration.getControls().push(new Zoom({ zoomInLabel: '', zoomOutLabel: '' }));
-    this._configuration.getControls().push(new Attribution());
+    };
+    this._configuration = new OpenLayersMap(options);
   }
 
   /** @protected */
@@ -400,6 +409,7 @@ class Map extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     super.ready();
     // Add map container to shadow root, trigger OL resize calculation
     this.shadowRoot.appendChild(this._mapTarget);
+    this.__addMapFocusListeners();
   }
 
   /**
@@ -409,6 +419,38 @@ class Map extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
    */
   _onResize(_contentRect) {
     this._configuration.updateSize();
+  }
+
+  /**
+   * Registers focus listeners on the map container to manually manage focus in
+   * FocusMixin. FocusMixin currently assumes that the focusable element will
+   * be in the light DOM and is available as event target.
+   * The map container however is in the shadow DOM and thus focus events will
+   * always have the host element as target.
+   * @private
+   */
+  __addMapFocusListeners() {
+    this._mapTarget.addEventListener('focusin', (e) => {
+      if (e.target === this._mapTarget) {
+        this._setFocused(true);
+      }
+    });
+    this._mapTarget.addEventListener('focusout', () => {
+      this._setFocused(false);
+    });
+  }
+
+  /**
+   * Overrides method from `FocusMixin` to disable automatic focus management.
+   * See custom logic in __addMapFocusListeners
+   *
+   * @param {FocusEvent} _event
+   * @return {boolean}
+   * @override
+   * @protected
+   */
+  _shouldSetFocus(_event) {
+    return false;
   }
 }
 

@@ -1,4 +1,5 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../enable';
 import '../../../theme/lumo/vaadin-map.js';
@@ -48,6 +49,13 @@ describe('map', () => {
     it('borderless', async () => {
       element.setAttribute('theme', 'borderless');
       await visualDiff(div, 'theme-borderless');
+    });
+  });
+
+  describe('accessibility', () => {
+    it('focus-ring', async () => {
+      await sendKeys({ press: 'Tab' });
+      await visualDiff(div, 'accessibility-focus-ring');
     });
   });
 });

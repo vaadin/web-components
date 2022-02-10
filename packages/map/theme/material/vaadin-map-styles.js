@@ -21,6 +21,10 @@ registerStyles(
       border: 1px solid var(--material-divider-color);
     }
 
+    :host([focus-ring]) {
+      box-shadow: 0 0 0 2px var(--material-primary-color);
+    }
+
     .ol-control {
       border-radius: 4px;
       transition: 0.1s box-shadow;
