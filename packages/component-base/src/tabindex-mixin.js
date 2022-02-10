@@ -56,7 +56,9 @@ export const TabindexMixin = (superclass) =>
       super._disabledChanged(disabled, oldDisabled);
 
       if (disabled) {
-        this.__lastTabIndex = this.tabindex;
+        if (this.tabindex !== undefined) {
+          this.__lastTabIndex = this.tabindex;
+        }
         this.tabindex = -1;
       } else if (oldDisabled) {
         this.tabindex = this.__lastTabIndex;
