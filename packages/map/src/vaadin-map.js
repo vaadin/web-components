@@ -3,6 +3,7 @@
  * Copyright (c) 2022 - 2022 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
+import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { defaults as defaultControls } from 'ol/control';
 import { defaults as defaultInteractions } from 'ol/interaction';
@@ -371,6 +372,17 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
 
   static get is() {
     return 'vaadin-map';
+  }
+
+  /** @protected */
+  static _finalizeClass() {
+    super._finalizeClass();
+
+    const devModeCallback = window.Vaadin.developmentModeCallback;
+    const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
+    if (typeof licenseChecker === 'function') {
+      licenseChecker(Map);
+    }
   }
 
   /**
