@@ -210,4 +210,62 @@ describe('delegate-focus-mixin', () => {
       expect(element.hasAttribute('focus-ring')).to.be.false;
     });
   });
+
+  describe('tabindex', () => {
+    describe('default', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<delegate-focus-mixin-element></delegate-focus-mixin-element>`);
+        input = element.querySelector('input');
+      });
+
+      it('should forward tabindex set using property to the input', () => {
+        element.tabIndex = -1;
+        expect(input.getAttribute('tabindex')).to.equal('-1');
+      });
+
+      it('should forward tabindex set using attribute to the input', () => {
+        element.setAttribute('tabindex', '-1');
+        expect(input.getAttribute('tabindex')).to.equal('-1');
+      });
+
+      it('should set input tabindex to -1 when host element is disabled', () => {
+        element.disabled = true;
+        expect(input.getAttribute('tabindex')).to.equal('-1');
+      });
+
+      it('should restore input tabindex when host element is re-enabled', () => {
+        element.disabled = true;
+        element.disabled = false;
+        expect(input.tabIndex).to.equal(0);
+      });
+
+      it('should keep tabindex value changed while element is disabled', () => {
+        element.disabled = true;
+        element.setAttribute('tabindex', '1');
+        element.disabled = false;
+        expect(input.getAttribute('tabindex')).to.equal('1');
+      });
+    });
+
+    describe('attribute', () => {
+      beforeEach(() => {
+        element = fixtureSync(`<delegate-focus-mixin-element tabindex="-1"></delegate-focus-mixin-element>`);
+        input = element.querySelector('input');
+      });
+
+      it('should forward tabindex attribute value to the input', () => {
+        expect(input.getAttribute('tabindex')).to.equal('-1');
+      });
+
+      it('should update input tabindex when host attribute changed', () => {
+        element.setAttribute('tabindex', '0');
+        expect(input.getAttribute('tabindex')).to.equal('0');
+      });
+
+      it('should remove tabindex attribute from the host when changed', () => {
+        element.setAttribute('tabindex', '0');
+        expect(element.getAttribute('tabindex')).to.equal(null);
+      });
+    });
+  });
 });
