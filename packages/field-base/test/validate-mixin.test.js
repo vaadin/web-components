@@ -15,6 +15,26 @@ customElements.define(
 describe('validate-mixin', () => {
   let element;
 
+  describe('properties', () => {
+    beforeEach(() => {
+      element = fixtureSync(`<validate-mixin-element></validate-mixin-element>`);
+    });
+
+    it('should reflect required property to attribute', () => {
+      expect(element.hasAttribute('required')).to.be.false;
+
+      element.required = true;
+      expect(element.hasAttribute('required')).to.be.true;
+    });
+
+    it('should reflect invalid property to attribute', () => {
+      expect(element.hasAttribute('invalid')).to.be.false;
+
+      element.invalid = true;
+      expect(element.hasAttribute('invalid')).to.be.true;
+    });
+  });
+
   describe('checkValidity', () => {
     beforeEach(() => {
       element = fixtureSync(`<validate-mixin-element></validate-mixin-element>`);
