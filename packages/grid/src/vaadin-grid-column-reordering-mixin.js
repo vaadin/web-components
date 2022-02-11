@@ -131,11 +131,13 @@ export const ColumnReorderingMixin = (superClass) =>
       this.toggleAttribute('reordering', true);
       this._draggedColumn = headerCell._column;
       while (this._draggedColumn.parentElement.childElementCount === 1) {
+        this._draggedColumn.performUpdate();
         // This is the only column in the group, drag the whole group instead
         this._draggedColumn = this._draggedColumn.parentElement;
       }
       this._setSiblingsReorderStatus(this._draggedColumn, 'allowed');
       this._draggedColumn._reorderStatus = 'dragging';
+      this._draggedColumn.performUpdate();
 
       this._updateGhost(headerCell);
       this._reorderGhost.style.visibility = 'visible';

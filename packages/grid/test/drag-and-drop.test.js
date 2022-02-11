@@ -13,7 +13,7 @@ describe('drag and drop', () => {
   ];
 
   const getDraggable = (grid, rowIndex = 0) => {
-    const row = Array.from(grid.$.items.children).filter((row) => row.index === rowIndex)[0];
+    const row = grid._getVisibleRows().filter((row) => row.index === rowIndex)[0];
     const cellContent = row.querySelector('slot').assignedNodes()[0];
     return [row, cellContent].filter((node) => node.getAttribute('draggable') === 'true')[0];
   };
@@ -121,6 +121,7 @@ describe('drag and drop', () => {
     if (grid._safari) {
       await aTimeout();
     }
+    await nextFrame();
   });
 
   it('should not be draggable by default', () => {
@@ -128,17 +129,19 @@ describe('drag and drop', () => {
   });
 
   describe('draggable', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       grid.rowsDraggable = true;
       flushGrid(grid);
+      await nextFrame();
     });
 
     it('should be draggable', () => {
       expect(getDraggable(grid)).to.be.ok;
     });
 
-    it('should not be draggable', () => {
+    it('should not be draggable', async () => {
       grid.rowsDraggable = false;
+      await nextFrame();
       expect(getDraggable(grid)).not.to.be.ok;
     });
 
@@ -390,8 +393,9 @@ describe('drag and drop', () => {
         expect(spy.called).to.be.true;
       });
 
-      it('should stop the native event', () => {
+      it('should stop the native event', async () => {
         grid.dropMode = 'between';
+        await nextFrame();
 
         const spy = sinon.spy();
         listenOnce(grid, 'dragover', spy);
@@ -404,29 +408,33 @@ describe('drag and drop', () => {
         expect(e.defaultPrevented).to.be.false;
       });
 
-      it('should cancel the native event', () => {
+      it('should cancel the native event', async () => {
         grid.dropMode = 'between';
+        await nextFrame();
 
         const e = fireDragOver();
         expect(e.defaultPrevented).to.be.true;
       });
 
-      it('should indicate drop over an empty grid', () => {
+      it('should indicate drop over an empty grid', async () => {
         grid.dropMode = 'between';
         grid.items = [];
-        fireDragOver();
+        await nextFrame();
+        fireDragOver(grid.$.items);
         expect(grid.hasAttribute('dragover')).to.be.true;
       });
 
-      it('should indicate drop below the last row when dragging over body', () => {
+      it('should indicate drop below the last row when dragging over body', async () => {
         grid.dropMode = 'between';
+        await nextFrame();
         const row = grid.$.items.children[1];
         fireDragOver(grid.$.items);
         expect(row.getAttribute('dragover')).to.equal('below');
       });
 
-      it('should not indicate drop when dragging over body on on-top mode', () => {
+      it('should not indicate drop when dragging over body on on-top mode', async () => {
         grid.dropMode = 'on-top';
+        await nextFrame();
         const row = grid.$.items.children[1];
         const e = fireDragOver(grid.$.items);
         expect(grid.hasAttribute('dragover')).to.be.false;
@@ -434,8 +442,9 @@ describe('drag and drop', () => {
         expect(e.defaultPrevented).to.be.false;
       });
 
-      it('should not allow drop over header when there are items', () => {
+      it('should not allow drop over header when there are items', async () => {
         grid.dropMode = 'between';
+        await nextFrame();
         const row = grid.$.items.children[1];
         const e = fireDragOver(grid.$.header.children[0]);
         expect(grid.hasAttribute('dragover')).to.be.false;
@@ -443,71 +452,81 @@ describe('drag and drop', () => {
         expect(e.defaultPrevented).to.be.false;
       });
 
-      it('should allow drop over header when there are no items', () => {
+      it('should allow drop over header when there are no items', async () => {
         grid.dropMode = 'between';
         grid.items = [];
+        await nextFrame();
         const e = fireDragOver(grid.$.header.children[0]);
         expect(grid.hasAttribute('dragover')).to.be.true;
         expect(e.defaultPrevented).to.be.true;
       });
 
-      it('should set dragover attribute to grid on on-grid dropmode', () => {
+      it('should set dragover attribute to grid on on-grid dropmode', async () => {
         grid.dropMode = 'on-grid';
+        await nextFrame();
         fireDragOver();
         expect(grid.hasAttribute('dragover')).to.be.true;
       });
 
-      it('should not set dragover attribute to the grid', () => {
+      it('should not set dragover attribute to the grid', async () => {
         grid.dropMode = 'on-top';
+        await nextFrame();
         const row = grid.$.items.children[0];
         fireDragOver(row, 'above');
         expect(grid.hasAttribute('dragover')).to.be.false;
       });
 
-      it('should set dragover=on-top attribute to the row', () => {
+      it('should set dragover=on-top attribute to the row', async () => {
         grid.dropMode = 'on-top';
+        await nextFrame();
         const row = grid.$.items.children[0];
         fireDragOver(row, 'above');
         expect(row.getAttribute('dragover')).to.equal('on-top');
       });
 
-      it('should set dragover=on-top attribute to the row 2', () => {
+      it('should set dragover=on-top attribute to the row 2', async () => {
         grid.dropMode = 'on-top-or-between';
+        await nextFrame();
         const row = grid.$.items.children[0];
         fireDragOver(row, 'on-top');
         expect(row.getAttribute('dragover')).to.equal('on-top');
       });
 
-      it('should set dragover=above attribute to the row', () => {
+      it('should set dragover=above attribute to the row', async () => {
         grid.dropMode = 'between';
+        await nextFrame();
         const row = grid.$.items.children[0];
         fireDragOver(row, 'above');
         expect(row.getAttribute('dragover')).to.equal('above');
       });
 
-      it('should set dragover=below attribute to the row', () => {
+      it('should set dragover=below attribute to the row', async () => {
         grid.dropMode = 'between';
+        await nextFrame();
         const row = grid.$.items.children[0];
         fireDragOver(row, 'below');
         expect(row.getAttribute('dragover')).to.equal('below');
       });
 
-      it('should set dragover=above attribute to the row 2', () => {
+      it('should set dragover=above attribute to the row 2', async () => {
         grid.dropMode = 'on-top-or-between';
+        await nextFrame();
         const row = grid.$.items.children[0];
         fireDragOver(row, 'above');
         expect(row.getAttribute('dragover')).to.equal('above');
       });
 
-      it('should set dragover=below attribute to the row 2', () => {
+      it('should set dragover=below attribute to the row 2', async () => {
         grid.dropMode = 'on-top-or-between';
+        await nextFrame();
         const row = grid.$.items.children[0];
         fireDragOver(row, 'below');
         expect(row.getAttribute('dragover')).to.equal('below');
       });
 
-      it('should set dragover=below attribute to the last row', () => {
+      it('should set dragover=below attribute to the last row', async () => {
         grid.dropMode = 'on-top-or-between';
+        await nextFrame();
         const row = grid.$.items.children[1];
         fireDragOver(row, 'under');
         expect(row.getAttribute('dragover')).to.equal('below');
@@ -522,16 +541,18 @@ describe('drag and drop', () => {
         expect(spy.called).to.be.false;
       });
 
-      it('should clear the grid drag styles', () => {
+      it('should clear the grid drag styles', async () => {
         grid.dropMode = 'on-grid';
+        await nextFrame();
         fireDragOver();
         expect(grid.hasAttribute('dragover')).to.be.true;
         fireDragLeave();
         expect(grid.hasAttribute('dragover')).to.be.false;
       });
 
-      it('should clear the row drag styles', () => {
+      it('should clear the row drag styles', async () => {
         grid.dropMode = 'on-top';
+        await nextFrame();
         fireDragOver();
         const row = grid.$.items.children[0];
         expect(row.hasAttribute('dragover')).to.be.true;
@@ -563,10 +584,11 @@ describe('drag and drop', () => {
     describe('drop', () => {
       let dropSpy;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         grid.dropMode = 'on-top';
         dropSpy = sinon.spy();
         listenOnce(grid, 'grid-drop', dropSpy);
+        await nextFrame();
       });
 
       it('should stop the native event', () => {
@@ -581,16 +603,18 @@ describe('drag and drop', () => {
         expect(event.defaultPrevented).to.be.true;
       });
 
-      it('should clear the grid drag styles', () => {
+      it('should clear the grid drag styles', async () => {
         grid.dropMode = 'on-grid';
+        await nextFrame();
         fireDragOver();
         expect(grid.hasAttribute('dragover')).to.be.true;
         fireDrop();
         expect(grid.hasAttribute('dragover')).to.be.false;
       });
 
-      it('should clear the row drag styles', () => {
+      it('should clear the row drag styles', async () => {
         grid.dropMode = 'on-top';
+        await nextFrame();
         fireDragOver();
         const row = grid.$.items.children[0];
         expect(row.hasAttribute('dragover')).to.be.true;
@@ -610,16 +634,18 @@ describe('drag and drop', () => {
         expect(event.cancelable).to.be.true;
       });
 
-      it('should reference the drop target item', () => {
+      it('should reference the drop target item', async () => {
         grid.dropMode = 'on-top';
+        await nextFrame();
         fireDragOver();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
         expect(event.detail.dropTargetItem).to.eql(grid.items[0]);
       });
 
-      it('should have the drop location', () => {
+      it('should have the drop location', async () => {
         grid.dropMode = 'between';
+        await nextFrame();
         const row = grid.$.items.children[0];
         fireDragOver(row, 'above');
         fireDrop();
@@ -627,9 +653,10 @@ describe('drag and drop', () => {
         expect(event.detail.dropLocation).to.eql('above');
       });
 
-      it('should have the payload data', () => {
+      it('should have the payload data', async () => {
         grid.rowsDraggable = true;
         grid.dropMode = 'on-top';
+        await nextFrame();
         fireDragStart();
         fireDragOver();
         fireDrop();
@@ -646,9 +673,10 @@ describe('drag and drop', () => {
   });
 
   describe('filtering row drag', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       grid.dragFilter = ({ item }) => item.first !== 'foo';
       grid.rowsDraggable = true;
+      await nextFrame();
     });
 
     it('should not disable row drag', () => {
@@ -661,24 +689,28 @@ describe('drag and drop', () => {
       expect(grid.$.items.children[0].hasAttribute('drag-disabled')).to.be.true;
     });
 
-    it('should re-run the row drag filter', () => {
+    it('should re-run the row drag filter', async () => {
       grid.items[1].first = 'foo';
       grid.filterDragAndDrop();
+      await nextFrame();
       expect(getDraggable(grid, 1)).not.to.be.ok;
     });
 
-    it('should re-enable row drag', () => {
+    it('should re-enable row drag', async () => {
       grid.dragFilter = ({ item }) => item.first === 'foo';
+      await nextFrame();
       expect(getDraggable(grid, 0)).to.be.ok;
     });
 
-    it('should re-enable row drag 2', () => {
+    it('should re-enable row drag 2', async () => {
       grid.dragFilter = undefined;
+      await nextFrame();
       expect(getDraggable(grid, 0)).to.be.ok;
     });
 
-    it('should exclude non-draggable items from dragged items', () => {
+    it('should exclude non-draggable items from dragged items', async () => {
       grid.dragFilter = ({ item }) => item.first === 'foo';
+      await nextFrame();
       grid.selectedItems = grid.items;
       const dragStartSpy = sinon.spy();
       listenOnce(grid, 'grid-dragstart', dragStartSpy);
@@ -687,8 +719,9 @@ describe('drag and drop', () => {
       expect(event.detail.draggedItems).to.eql([grid.items[0]]);
     });
 
-    it('should exclude non-draggable items from dragged row count', () => {
+    it('should exclude non-draggable items from dragged row count', async () => {
       grid.dragFilter = ({ item }) => item.first === 'foo';
+      await nextFrame();
       grid.selectedItems = grid.items;
       fireDragStart();
       const row = getRows(grid.$.items)[0];
@@ -698,10 +731,11 @@ describe('drag and drop', () => {
     describe('filtering row drag - lazy loading', () => {
       let finishLoadingItems;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         grid.dataProvider = (_params, callback) => {
           finishLoadingItems = (items) => callback(items || getTestItems());
         };
+        await nextFrame();
       });
 
       it('should disable row drag while loading items', () => {
@@ -736,9 +770,10 @@ describe('drag and drop', () => {
   });
 
   describe('filtering row drop', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       grid.dropFilter = ({ item }) => item.first !== 'foo';
       grid.dropMode = 'on-top';
+      await nextFrame();
     });
 
     it('should not disable drop on row', () => {
@@ -755,16 +790,18 @@ describe('drag and drop', () => {
       expect(row.hasAttribute('drop-disabled')).to.be.true;
     });
 
-    it('should re-enable drop on row', () => {
+    it('should re-enable drop on row', async () => {
       grid.dropFilter = ({ item }) => item.first === 'foo';
+      await nextFrame();
       const row = grid.$.items.children[0];
       fireDragOver(row, 'above');
       expect(row.hasAttribute('dragover')).to.be.true;
       expect(row.hasAttribute('drop-disabled')).to.be.false;
     });
 
-    it('should re-enable drop on row 2', () => {
+    it('should re-enable drop on row 2', async () => {
       grid.dropFilter = undefined;
+      await nextFrame();
       const row = grid.$.items.children[0];
       fireDragOver(row, 'above');
       expect(row.hasAttribute('dragover')).to.be.true;
@@ -793,10 +830,11 @@ describe('drag and drop', () => {
     describe('filtering row drop - lazy loading', () => {
       let finishLoadingItems;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         grid.dataProvider = (_params, callback) => {
           finishLoadingItems = (items) => callback(items || getTestItems());
         };
+        await nextFrame();
       });
 
       it('should disable drop on row while loading items', () => {
