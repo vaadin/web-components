@@ -298,9 +298,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       _overlayElement: Object,
 
       /** @private */
-      _inputElement: Object,
-
-      /** @private */
       _inputContainer: Object,
 
       /** @private */
