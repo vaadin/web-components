@@ -230,8 +230,9 @@ describe('accessibility', () => {
       expect(grid.$.items.children[1].getAttribute('aria-expanded')).to.be.null;
     });
 
-    it('should add aria-expanded to a row that becomes expandable', () => {
+    it('should add aria-expanded to a row that becomes expandable', async () => {
       grid.expandItem({ name: '0' });
+      await nextFrame();
       expect(grid.$.items.children[1].getAttribute('aria-expanded')).to.equal('false');
     });
 
@@ -244,8 +245,9 @@ describe('accessibility', () => {
 
   describe('details', () => {
     // These tests pass in both template and renderer modes. Running one to speed up
-    beforeEach(() => {
+    beforeEach(async () => {
       initRendererFixture('details');
+      await nextFrame();
     });
 
     describe('column count', () => {
@@ -271,7 +273,7 @@ describe('accessibility', () => {
 
       it('should have aria-controls referencing detail cell id on body cells', async () => {
         await nextFrame();
-        for (const row in grid.$.items.children) {
+        for (const row of grid.$.items.children) {
           const detailsCell = row.querySelector('td[part~="details-cell"]');
 
           expect(detailsCell.id).to.be.ok;
