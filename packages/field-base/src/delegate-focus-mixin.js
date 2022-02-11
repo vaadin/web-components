@@ -11,8 +11,8 @@ import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
  * A mixin to forward focus to an element in the light DOM.
  *
  * @polymerMixin
- * @mixes DisabledMixin
  * @mixes FocusMixin
+ * @mixes TabindexMixin
  */
 export const DelegateFocusMixin = dedupingMixin(
   (superclass) =>
