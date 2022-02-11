@@ -47,6 +47,7 @@ snapshots["vaadin-message-input disabled"] =
     rows="1"
     slot="textarea"
     style="min-height: 0px;"
+    tabindex="-1"
   >
   </textarea>
   <label slot="label">

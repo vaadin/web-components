@@ -4,19 +4,19 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 
 /**
  * A mixin to forward focus to an element in the light DOM.
  *
  * @polymerMixin
- * @mixes DisabledMixin
  * @mixes FocusMixin
+ * @mixes TabindexMixin
  */
 export const DelegateFocusMixin = dedupingMixin(
   (superclass) =>
-    class DelegateFocusMixinClass extends FocusMixin(DisabledMixin(superclass)) {
+    class DelegateFocusMixinClass extends FocusMixin(TabindexMixin(superclass)) {
       static get properties() {
         return {
           /**
@@ -40,6 +40,19 @@ export const DelegateFocusMixin = dedupingMixin(
             type: Object,
             readOnly: true,
             observer: '_focusElementChanged'
+          },
+
+          /**
+           * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
+           *
+           * By default, the host element does not have tabindex attribute. Instead, `focusElement` should have it.
+           * Toggling `tabindex` attribute on the host element propagates its value to `focusElement`.
+           *
+           * @protected
+           */
+          tabindex: {
+            type: Number,
+            value: undefined
           }
         };
       }
@@ -103,6 +116,7 @@ export const DelegateFocusMixin = dedupingMixin(
         if (element) {
           element.disabled = this.disabled;
           this._addFocusListeners(element);
+          this.__forwardTabIndex(this.tabindex);
         } else if (oldElement) {
           this._removeFocusListeners(oldElement);
         }
@@ -162,10 +176,12 @@ export const DelegateFocusMixin = dedupingMixin(
 
       /**
        * @param {boolean} disabled
+       * @param {boolean} oldDisabled
        * @protected
+       * @override
        */
-      _disabledChanged(disabled) {
-        super._disabledChanged(disabled);
+      _disabledChanged(disabled, oldDisabled) {
+        super._disabledChanged(disabled, oldDisabled);
 
         if (this.focusElement) {
           this.focusElement.disabled = disabled;
@@ -173,6 +189,38 @@ export const DelegateFocusMixin = dedupingMixin(
 
         if (disabled) {
           this.blur();
+        }
+      }
+
+      /**
+       * Override an observer from `TabindexMixin`.
+       * Do not call super to remove tabindex attribute
+       * from the host after it has been forwarded.
+       * @param {string} tabindex
+       * @protected
+       * @override
+       */
+      _tabindexChanged(tabindex) {
+        this.__forwardTabIndex(tabindex);
+      }
+
+      /** @private */
+      __forwardTabIndex(tabindex) {
+        if (tabindex !== undefined && this.focusElement) {
+          this.focusElement.tabIndex = tabindex;
+
+          // Preserve tabindex="-1" on the host element
+          if (tabindex !== -1) {
+            this.tabindex = undefined;
+          }
+        }
+
+        if (this.disabled && tabindex) {
+          // If tabindex attribute was changed while component was disabled
+          if (tabindex !== -1) {
+            this.__lastTabIndex = tabindex;
+          }
+          this.tabindex = undefined;
         }
       }
     }

@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 
 /**
@@ -13,10 +12,23 @@ import { DelegateFocusMixin } from './delegate-focus-mixin.js';
  * @polymerMixin
  * @mixes DelegateFocusMixin
  * @mixes KeyboardMixin
- * @mixes TabindexMixin
  */
 export const ShadowFocusMixin = (superClass) =>
-  class ShadowFocusMixinClass extends TabindexMixin(DelegateFocusMixin(KeyboardMixin(superClass))) {
+  class ShadowFocusMixinClass extends DelegateFocusMixin(KeyboardMixin(superClass)) {
+    static get properties() {
+      return {
+        /**
+         * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
+         *
+         * @protected
+         */
+        tabindex: {
+          type: Number,
+          value: 0
+        }
+      };
+    }
+
     /**
      * Override an event listener from `KeyboardMixin`
      * to prevent setting `focused` on Shift Tab.
