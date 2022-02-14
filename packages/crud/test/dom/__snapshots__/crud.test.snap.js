@@ -70,12 +70,14 @@ snapshots["vaadin-crud shadow default"] =
           >
             <vaadin-text-field
               focus-target="true"
+              placeholder="Filter"
               slot="filter"
               style="width: 100%;"
               theme="small"
             >
               <input
                 id="vaadin-text-field-5"
+                placeholder="Filter"
                 slot="input"
                 type="text"
               >
@@ -102,12 +104,14 @@ snapshots["vaadin-crud shadow default"] =
           >
             <vaadin-text-field
               focus-target="true"
+              placeholder="Filter"
               slot="filter"
               style="width: 100%;"
               theme="small"
             >
               <input
                 id="vaadin-text-field-7"
+                placeholder="Filter"
                 slot="input"
                 type="text"
               >
