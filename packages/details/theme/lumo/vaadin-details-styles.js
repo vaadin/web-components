@@ -26,7 +26,7 @@ const details = css`
     color: var(--lumo-secondary-text-color);
     background-color: inherit;
     border-radius: var(--lumo-border-radius-m);
-    cursor: default;
+    cursor: var(--lumo-clickable-cursor);
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
