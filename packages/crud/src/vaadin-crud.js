@@ -520,6 +520,7 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        *   cancel: 'Cancel',
        *   deleteItem: 'Delete...',
        *   editLabel: 'Edit',
+       *   filter: 'Filter',
        *   confirm: {
        *     delete: {
        *       title: 'Confirm delete',
@@ -554,6 +555,7 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
             cancel: 'Cancel',
             deleteItem: 'Delete...',
             editLabel: 'Edit',
+            filter: 'Filter',
             confirm: {
               delete: {
                 title: 'Delete item',
@@ -714,6 +716,12 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   __onI18Change(i18n, grid) {
     if (!grid) {
       return;
+    }
+
+    if (i18n && i18n.filter) {
+      grid.i18n = {
+        filter: i18n.filter
+      };
     }
 
     afterNextRender(grid, () => {

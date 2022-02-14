@@ -27,6 +27,7 @@ export interface CrudI18n {
   cancel: string;
   deleteItem: string;
   editLabel: string;
+  filter: string;
   confirm: {
     delete: {
       title: string;
@@ -356,6 +357,7 @@ declare class Crud<Item> extends ElementMixin(ThemableMixin(HTMLElement)) {
    *   cancel: 'Cancel',
    *   deleteItem: 'Delete...',
    *   editLabel: 'Edit',
+   *   filter: 'Filter',
    *   confirm: {
    *     delete: {
    *       title: 'Confirm delete',

@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, change, fixtureSync, isIOS, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-crud.js';
-import { flushGrid, getBodyCellContent } from './helpers.js';
+import { flushGrid, getBodyCellContent, getHeaderCellContent } from './helpers.js';
 
 describe('crud', () => {
   let crud, header, btnSave, btnCancel, btnDelete;
@@ -1053,6 +1053,33 @@ describe('crud', () => {
       fakeClickOnRow(0);
       expect(crud.editorOpened).to.be.true;
       expect(crud.editedItem).to.be.equal(crud.items[0]);
+    });
+  });
+
+  describe('i18n', () => {
+    const getFilterField = (grid, column) => {
+      const filter = getHeaderCellContent(grid, 1, column).lastElementChild;
+      return filter.querySelector('vaadin-text-field');
+    };
+
+    beforeEach(async () => {
+      crud = fixtureSync(`
+        <vaadin-crud style="width: 300px;" items='[{"foo": "bar"}]'></vaadin-crud>
+      `);
+      await nextRender(crud);
+      flushGrid(crud._grid);
+    });
+
+    it('should set default placeholder for the filter text field', () => {
+      const field = getFilterField(crud._grid, 0);
+      expect(field.placeholder).to.equal('Filter');
+    });
+
+    it('should update filter field placeholder when i18n property changes', () => {
+      const i18n = { ...crud.i18n, filter: 'Filter...' };
+      crud.i18n = i18n;
+      const field = getFilterField(crud._grid, 0);
+      expect(field.placeholder).to.equal('Filter...');
     });
   });
 });

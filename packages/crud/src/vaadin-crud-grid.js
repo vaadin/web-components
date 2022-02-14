@@ -43,13 +43,30 @@ class CrudGrid extends IncludedMixin(Grid) {
        */
       noHead: Boolean,
 
+      /**
+       * Object used to localize elements in grid.
+       */
+      i18n: {
+        type: Object
+      },
+
       /** @private */
-      __hideEditColumn: Boolean
+      __hideEditColumn: Boolean,
+
+      /** @private */
+      _filterFields: {
+        type: Array,
+        value: () => []
+      }
     };
   }
 
   static get observers() {
-    return ['__onItemsChange(items)', '__onHideEditColumnChange(hideEditColumn)'];
+    return [
+      '__onItemsChange(items)',
+      '__onHideEditColumnChange(hideEditColumn)',
+      '__i18nFilterChanged(i18n, _filterFields)'
+    ];
   }
 
   /** @private */
@@ -63,6 +80,15 @@ class CrudGrid extends IncludedMixin(Grid) {
   __onHideEditColumnChange() {
     if (this.firstChild) {
       this.__toggleEditColumn();
+    }
+  }
+
+  /** @private */
+  __i18nFilterChanged(i18n, filterFields) {
+    if (!this.noSort) {
+      filterFields.forEach((field) => {
+        field.placeholder = i18n && i18n.filter;
+      });
     }
   }
 
@@ -195,12 +221,22 @@ class CrudGrid extends IncludedMixin(Grid) {
           textField.setAttribute('slot', 'filter');
           textField.setAttribute('focus-target', true);
           textField.style.width = '100%';
-          this.noSort && (textField.placeholder = label);
+
+          if (this.noSort) {
+            textField.placeholder = label;
+          } else {
+            textField.placeholder = this.i18n && this.i18n.filter;
+          }
+
           textField.addEventListener('value-changed', function (event) {
             filter.value = event.detail.value;
           });
 
           filter.appendChild(textField);
+
+          // Store reference to simplify updates
+          this._filterFields.push(textField);
+
           root.appendChild(filter);
         } else if (this.noSort && this.noFilter) {
           // Neither sorter nor filter are enabled, just add the label
