@@ -3,15 +3,16 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@polymer/iron-media-query/iron-media-query.js';
 import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-month-calendar.js';
 import './vaadin-infinite-scroller.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
+import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
 
@@ -19,7 +20,7 @@ import { dateEquals, extractDateParts, getClosestDate } from './vaadin-date-pick
  * @extends HTMLElement
  * @private
  */
-class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
+class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -223,7 +224,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
           [[i18n.cancel]]
         </vaadin-button>
       </div>
-      <iron-media-query query="(min-width: 375px)" query-matches="{{_desktopMode}}"></iron-media-query>
     `;
   }
 
@@ -267,6 +267,11 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
       _visibleMonthIndex: Number,
 
       _desktopMode: Boolean,
+
+      _desktopMediaQuery: {
+        type: String,
+        value: '(min-width: 375px)'
+      },
 
       _translateX: {
         observer: '_translateXChanged'
@@ -328,6 +333,12 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolymerElement)) {
       this.shadowRoot.querySelector('[part="years-toggle-button"]'),
       'tap',
       this._toggleYearScroller.bind(this)
+    );
+
+    this.addController(
+      new MediaQueryController(this._desktopMediaQuery, (matches) => {
+        this._desktopMode = matches;
+      })
     );
   }
 

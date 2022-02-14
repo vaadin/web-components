@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@polymer/iron-media-query/iron-media-query.js';
 import './vaadin-date-picker-overlay.js';
 import './vaadin-date-picker-overlay-content.js';
 import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
@@ -98,8 +97,6 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
           </vaadin-date-picker-overlay-content>
         </template>
       </vaadin-date-picker-overlay>
-
-      <iron-media-query query="[[_fullscreenMediaQuery]]" query-matches="{{_fullscreen}}"> </iron-media-query>
     `;
   }
 
