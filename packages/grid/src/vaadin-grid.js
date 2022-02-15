@@ -908,7 +908,6 @@ class Grid extends ElementMixin(
 
     this._a11yUpdateRowLevel(row, model.level);
     this._a11yUpdateRowSelected(row, model.selected);
-    this._a11yUpdateRowDetailsOpened(row, model.detailsOpened);
 
     row.toggleAttribute('expanded', model.expanded);
     row.toggleAttribute('selected', model.selected);
