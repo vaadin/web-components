@@ -4,11 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-contextmenu-event.js';
-import './vaadin-device-detector.js';
 import './vaadin-context-menu-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { addListener, gestures, removeListener } from '@vaadin/component-base/src/gestures.js';
+import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
@@ -196,10 +198,11 @@ import { ItemsMixin } from './vaadin-contextmenu-items-mixin.js';
  *
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes ControllerMixin
  * @mixes ThemePropertyMixin
  * @mixes ItemsMixin
  */
-class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElement))) {
+class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -213,8 +216,6 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElem
       </style>
 
       <slot id="slot"></slot>
-
-      <vaadin-device-detector phone="{{_phone}}" touch="{{_touch}}"></vaadin-device-detector>
 
       <vaadin-context-menu-overlay
         id="overlay"
@@ -314,12 +315,36 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElem
       _boundOpen: Object,
 
       /** @private */
-      _touch: Boolean
+      _phone: {
+        type: Boolean
+      },
+
+      /** @private */
+      _touch: {
+        type: Boolean,
+        value: isTouch
+      },
+
+      /** @private */
+      _wide: {
+        type: Boolean
+      },
+
+      /** @private */
+      _wideMediaQuery: {
+        type: String,
+        value: '(min-device-width: 750px)'
+      }
     };
   }
 
   static get observers() {
-    return ['_openedChanged(opened)', '_targetOrOpenOnChanged(listenOn, openOn)', '_rendererChanged(renderer, items)'];
+    return [
+      '_openedChanged(opened)',
+      '_targetOrOpenOnChanged(listenOn, openOn)',
+      '_rendererChanged(renderer, items)',
+      '_touchOrWideChanged(_touch, _wide)'
+    ];
   }
 
   constructor() {
@@ -348,6 +373,12 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElem
   /** @protected */
   ready() {
     super.ready();
+
+    this.addController(
+      new MediaQueryController(this._wideMediaQuery, (matches) => {
+        this._wide = matches;
+      })
+    );
 
     processTemplates(this);
   }
@@ -390,6 +421,11 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(PolymerElem
       this._oldListenOn = listenOn;
       this._oldOpenOn = openOn;
     }
+  }
+
+  /** @private */
+  _touchOrWideChanged(touch, wide) {
+    this._phone = !wide && touch;
   }
 
   /** @private */
