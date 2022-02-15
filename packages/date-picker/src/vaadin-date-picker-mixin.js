@@ -6,6 +6,7 @@
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
@@ -416,6 +417,12 @@ export const DatePickerMixin = (subclass) =>
           this.open();
         }
       });
+
+      this.addController(
+        new MediaQueryController(this._fullscreenMediaQuery, (matches) => {
+          this._fullscreen = matches;
+        })
+      );
 
       this.addController(new VirtualKeyboardController(this));
     }
