@@ -84,7 +84,7 @@ class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(PolymerElement
           aria-expanded$="[[_getAriaExpanded(opened)]]"
           aria-controls$="[[_contentId]]"
         >
-          <span part="toggle"></span>
+          <span part="toggle" aria-hidden="true"></span>
           <span part="summary-content"><slot name="summary"></slot></span>
         </div>
       </div>
