@@ -38,8 +38,6 @@ snapshots["vaadin-select shadow default"] =
 </div>
 <vaadin-select-overlay>
 </vaadin-select-overlay>
-<iron-media-query style="display: none;">
-</iron-media-query>
 `;
 /* end snapshot vaadin-select shadow default */
 
@@ -83,8 +81,6 @@ snapshots["vaadin-select shadow disabled"] =
 </div>
 <vaadin-select-overlay>
 </vaadin-select-overlay>
-<iron-media-query style="display: none;">
-</iron-media-query>
 `;
 /* end snapshot vaadin-select shadow disabled */
 
@@ -128,8 +124,6 @@ snapshots["vaadin-select shadow readonly"] =
 </div>
 <vaadin-select-overlay>
 </vaadin-select-overlay>
-<iron-media-query style="display: none;">
-</iron-media-query>
 `;
 /* end snapshot vaadin-select shadow readonly */
 
@@ -173,8 +167,6 @@ snapshots["vaadin-select shadow invalid"] =
 </div>
 <vaadin-select-overlay>
 </vaadin-select-overlay>
-<iron-media-query style="display: none;">
-</iron-media-query>
 `;
 /* end snapshot vaadin-select shadow invalid */
 
@@ -218,8 +210,6 @@ snapshots["vaadin-select shadow theme"] =
 </div>
 <vaadin-select-overlay theme="align-right">
 </vaadin-select-overlay>
-<iron-media-query style="display: none;">
-</iron-media-query>
 `;
 /* end snapshot vaadin-select shadow theme */
 

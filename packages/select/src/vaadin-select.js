@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@polymer/iron-media-query/iron-media-query.js';
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-select-item.js';
 import './vaadin-select-list-box.js';
@@ -11,6 +10,7 @@ import './vaadin-select-overlay.js';
 import './vaadin-select-value-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
@@ -181,8 +181,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
         phone$="[[_phone]]"
         theme$="[[theme]]"
       ></vaadin-select-overlay>
-
-      <iron-media-query query="[[_phoneMediaQuery]]" query-matches="{{_phone}}"></iron-media-query>
     `;
   }
 
@@ -374,6 +372,12 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
     this._overlayElement = this.shadowRoot.querySelector('vaadin-select-overlay');
     this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
+
+    this.addController(
+      new MediaQueryController(this._phoneMediaQuery, (matches) => {
+        this._phone = matches;
+      })
+    );
 
     processTemplates(this);
   }
