@@ -34,7 +34,6 @@
   ],
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
-    "@polymer/iron-media-query": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/button": "23.0.0-beta2",
     "@vaadin/component-base": "23.0.0-beta2",

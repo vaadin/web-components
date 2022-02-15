@@ -3,7 +3,6 @@
  * Copyright (c) 2018 - 2022 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import '@polymer/iron-media-query/iron-media-query.js';
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
@@ -14,7 +13,9 @@ import './vaadin-crud-form.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -148,11 +149,12 @@ const HOST_PROPS = {
  * @fires {CustomEvent} cancel - Fired when user discards edition.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes SlotMixin
  * @mixes ThemableMixin
  */
-class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -306,8 +308,6 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
         message="[[i18n.confirm.delete.content]]"
         confirm-theme="primary error"
       ></vaadin-confirm-dialog>
-
-      <iron-media-query query="[[_fullscreenMediaQuery]]" query-matches="{{_fullscreen}}"></iron-media-query>
     `;
   }
 
@@ -685,6 +685,12 @@ class Crud extends SlotMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancelBound);
     // Initialize the default buttons
     this.__propagateHostAttributes();
+
+    this.addController(
+      new MediaQueryController(this._fullscreenMediaQuery, (matches) => {
+        this._fullscreen = matches;
+      })
+    );
   }
 
   /** @private */

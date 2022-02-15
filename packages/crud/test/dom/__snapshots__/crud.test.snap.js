@@ -305,8 +305,6 @@ snapshots["vaadin-crud shadow default"] =
     Delete
   </vaadin-button>
 </vaadin-confirm-dialog>
-<iron-media-query style="display: none;">
-</iron-media-query>
 `;
 /* end snapshot vaadin-crud shadow default */
 

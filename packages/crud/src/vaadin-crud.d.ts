@@ -3,6 +3,7 @@
  * Copyright (c) 2018 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { GridFilterDefinition, GridSorterDefinition } from '@vaadin/grid/src/vaadin-grid.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -237,7 +238,7 @@ export type CrudEventMap<T> = HTMLElementEventMap & CrudCustomEventMap<T>;
  * @fires {CustomEvent} save - Fired when user wants to save a new or an existing item.
  * @fires {CustomEvent} cancel - Fired when user discards edition.
  */
-declare class Crud<Item> extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class Crud<Item> extends ControllerMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
    * A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element
    */
