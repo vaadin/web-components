@@ -173,10 +173,6 @@ describe('accessibility', () => {
     });
 
     describe('row details not in use', () => {
-      it('should not have aria-expanded on body cells', () => {
-        expect(uniqueAttrValues(grid.$.items.querySelectorAll('td'), 'aria-expanded')).to.eql([null]);
-      });
-
       it('should not have aria-controls on body cells', () => {
         expect(uniqueAttrValues(grid.$.items.querySelectorAll('td'), 'aria-controls')).to.eql([null]);
       });
@@ -259,10 +255,6 @@ describe('accessibility', () => {
     });
 
     describe('row details in use', () => {
-      it('should have aria-expanded false on body cells', () => {
-        expect(uniqueAttrValues(grid.$.items.querySelectorAll('td'), 'aria-expanded')).to.eql(['false']);
-      });
-
       it('should have aria-controls referencing detail cell id on body cells', () => {
         Array.from(grid.$.items.children).forEach((row) => {
           const detailsCell = row.querySelector('td[part~="details-cell"]');
@@ -273,23 +265,6 @@ describe('accessibility', () => {
             detailsCell.id
           ]);
         });
-      });
-
-      it('should set aria-expanded true on cells after row details opened', () => {
-        grid.openItemDetails(grid.items[0]);
-
-        expect(uniqueAttrValues(grid.$.items.children[0].children, 'aria-expanded')).to.eql(['true']);
-
-        expect(uniqueAttrValues(grid.$.items.children[1].children, 'aria-expanded')).to.eql(['false']);
-      });
-
-      it('should set aria-expanded false on cells after row details closed', () => {
-        grid.openItemDetails(grid.items[0]);
-        grid.closeItemDetails(grid.items[0]);
-
-        expect(uniqueAttrValues(grid.$.items.children[0].children, 'aria-expanded')).to.eql(['false']);
-
-        expect(uniqueAttrValues(grid.$.items.children[1].children, 'aria-expanded')).to.eql(['false']);
       });
     });
   });

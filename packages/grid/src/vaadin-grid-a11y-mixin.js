@@ -99,23 +99,6 @@ export const A11yMixin = (superClass) =>
 
     /**
      * @param {!HTMLElement} row
-     * @param {boolean} detailsOpened
-     * @protected
-     */
-    _a11yUpdateRowDetailsOpened(row, detailsOpened) {
-      const detailsCell = row.querySelector('[part~=details-cell]');
-
-      Array.from(row.children).forEach((cell) => {
-        if (detailsCell) {
-          cell.setAttribute('aria-expanded', detailsOpened);
-        } else {
-          cell.removeAttribute('aria-expanded');
-        }
-      });
-    }
-
-    /**
-     * @param {!HTMLElement} row
      * @param {!HTMLElement} detailsCell
      * @protected
      */
