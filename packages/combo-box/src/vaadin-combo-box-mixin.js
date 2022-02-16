@@ -660,8 +660,6 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _onOpened() {
-      setTimeout(() => this._resizeDropdown(), 1);
-
       // Defer scroll position adjustment to improve performance.
       requestAnimationFrame(() => {
         this.$.dropdown.adjustScrollPosition();
@@ -840,11 +838,6 @@ export const ComboBoxMixin = (subclass) =>
       } else {
         this._inputElementValue = this._getItemLabel(this.selectedItem);
       }
-    }
-
-    /** @private */
-    _resizeDropdown() {
-      this.$.dropdown.notifyResize();
     }
 
     /** @private */
