@@ -324,7 +324,6 @@ describe('basic features', () => {
           return [d.day, d.month + 1, d.year].join('.');
         }
       });
-      datepicker.set('i18n.calendar', 'Kalenteri');
       datepicker.set('i18n.clear', 'Tyhjennä');
       datepicker.set('i18n.today', 'Tänään');
       datepicker.set('i18n.cancel', 'Peruuta');
