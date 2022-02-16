@@ -29,6 +29,28 @@ describe('crud', () => {
     await visualDiff(div, 'no-toolbar');
   });
 
+  describe('flex', () => {
+    beforeEach(async () => {
+      div.style.display = 'flex';
+      // Reset height to default
+      div.style.height = 'auto';
+      element.style.height = '400px';
+      element.editorPosition = 'aside';
+      await nextRender(element);
+    });
+
+    it('row', async () => {
+      element.editedItem = element.items[0];
+      await visualDiff(div, 'flex-layout');
+    });
+
+    it('column', async () => {
+      div.style.flexDirection = 'column';
+      element.editedItem = element.items[0];
+      await visualDiff(div, 'flex-column-layout');
+    });
+  });
+
   ['ltr', 'rtl'].forEach((dir) => {
     describe(dir, () => {
       before(() => {

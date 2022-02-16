@@ -159,6 +159,8 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     return html`
       <style>
         :host {
+          width: 100%;
+          height: 400px;
           --vaadin-crud-editor-max-height: 40%;
           --vaadin-crud-editor-max-width: 40%;
         }
@@ -167,14 +169,13 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
         #main {
           display: flex;
           flex-direction: column;
-          height: 400px;
-          flex: 1 1 100%;
           align-self: stretch;
           position: relative;
           overflow: hidden;
         }
 
         #main {
+          flex: 1 1 100%;
           height: 100%;
         }
 
