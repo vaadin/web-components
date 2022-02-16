@@ -674,6 +674,26 @@ describe('field-mixin', () => {
         });
       });
     });
+
+    describe('slotted label', () => {
+      beforeEach(async () => {
+        element = fixtureSync(`
+          <field-mixin-element>
+            <label slot="label">Label</label>
+            <input slot="input">
+          </field-mixin-element>
+        `);
+        input = element.querySelector('[slot=input]');
+        label = element.querySelector('[slot=label]');
+        await nextFrame();
+      });
+
+      it('should set aria-labelledby on the custom slotted label', () => {
+        const aria = input.getAttribute('aria-labelledby');
+        expect(aria).to.be.ok;
+        expect(aria).to.equal(label.id);
+      });
+    });
   });
 
   describe('aria-required', () => {
