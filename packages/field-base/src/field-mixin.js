@@ -6,7 +6,7 @@
 import { animationFrame } from '@vaadin/component-base/src/async.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { ErrorController } from './error-controller.js';
 import { FieldAriaController } from './field-aria-controller.js';
 import { HelperController } from './helper-controller.js';
 import { LabelMixin } from './label-mixin.js';
@@ -18,11 +18,10 @@ import { ValidateMixin } from './validate-mixin.js';
  * @polymerMixin
  * @mixes ControllerMixin
  * @mixes LabelMixin
- * @mixes SlotMixin
  * @mixes ValidateMixin
  */
 export const FieldMixin = (superclass) =>
-  class FieldMixinClass extends ValidateMixin(LabelMixin(ControllerMixin(SlotMixin(superclass)))) {
+  class FieldMixinClass extends ValidateMixin(LabelMixin(ControllerMixin(superclass))) {
     static get properties() {
       return {
         /**
@@ -40,7 +39,8 @@ export const FieldMixin = (superclass) =>
          * @attr {string} error-message
          */
         errorMessage: {
-          type: String
+          type: String,
+          observer: '_errorMessageChanged'
         },
 
         /**
@@ -57,25 +57,17 @@ export const FieldMixin = (superclass) =>
       };
     }
 
-    /** @protected */
-    get slots() {
-      return {
-        ...super.slots,
-        'error-message': () => {
-          const error = document.createElement('div');
-          error.textContent = this.errorMessage;
-          return error;
-        }
-      };
-    }
-
     static get observers() {
       return [
         '__observeOffsetHeight(errorMessage, invalid, label, helperText)',
-        '_updateErrorMessage(invalid, errorMessage)',
         '_invalidChanged(invalid)',
         '_requiredChanged(required)'
       ];
+    }
+
+    /** @protected */
+    get _errorId() {
+      return this._errorController.errorId;
     }
 
     /**
@@ -83,7 +75,7 @@ export const FieldMixin = (superclass) =>
      * @return {HTMLElement}
      */
     get _errorNode() {
-      return this._getDirectSlotChild('error-message');
+      return this._errorController.node;
     }
 
     /** @protected */
@@ -102,15 +94,13 @@ export const FieldMixin = (superclass) =>
     constructor() {
       super();
 
-      // Ensure every instance has unique ID
-      const uniqueId = (FieldMixinClass._uniqueFieldId = 1 + FieldMixinClass._uniqueFieldId || 0);
-      this._errorId = `error-${this.localName}-${uniqueId}`;
-
       this._fieldAriaController = new FieldAriaController(this);
       this._helperController = new HelperController(this);
+      this._errorController = new ErrorController(this);
 
       this.addController(this._fieldAriaController);
       this.addController(this._helperController);
+      this.addController(this._errorController);
 
       this._labelController.addEventListener('label-changed', (event) => {
         const { hasLabel, node } = event.detail;
@@ -121,29 +111,6 @@ export const FieldMixin = (superclass) =>
         const { hasHelper, node } = event.detail;
         this.__helperChanged(hasHelper, node);
       });
-    }
-
-    /** @protected */
-    ready() {
-      super.ready();
-
-      const error = this._errorNode;
-      if (error) {
-        error.id = this._errorId;
-
-        this.__applyCustomError();
-
-        this._updateErrorMessage(this.invalid, this.errorMessage);
-      }
-    }
-
-    /** @private */
-    __applyCustomError() {
-      const error = this.__errorMessage;
-      if (error && error !== this.errorMessage) {
-        this.errorMessage = error;
-        delete this.__errorMessage;
-      }
     }
 
     /** @private */
@@ -192,32 +159,11 @@ export const FieldMixin = (superclass) =>
     }
 
     /**
-     * @param {boolean} invalid
      * @param {string | null | undefined} errorMessage
      * @protected
      */
-    _updateErrorMessage(invalid, errorMessage) {
-      const error = this._errorNode;
-      if (!error) {
-        return;
-      }
-
-      // save the custom error message content
-      if (error.textContent && !errorMessage) {
-        this.__errorMessage = error.textContent.trim();
-      }
-      const hasError = Boolean(invalid && errorMessage);
-      error.textContent = hasError ? errorMessage : '';
-      error.hidden = !hasError;
-      this.toggleAttribute('has-error-message', hasError);
-
-      // Role alert will make the error message announce immediately
-      // as the field becomes invalid
-      if (hasError) {
-        error.setAttribute('role', 'alert');
-      } else {
-        error.removeAttribute('role');
-      }
+    _errorMessageChanged(errorMessage) {
+      this._errorController.setErrorMessage(errorMessage);
     }
 
     /**
@@ -251,6 +197,8 @@ export const FieldMixin = (superclass) =>
      * @protected
      */
     _invalidChanged(invalid) {
+      this._errorController.setInvalid(invalid);
+
       // This timeout is needed to prevent NVDA from announcing the error message twice:
       // 1. Once adding the `[role=alert]` attribute by the `_updateErrorMessage` method (OK).
       // 2. Once linking the error ID with the ARIA target here (unwanted).
@@ -259,7 +207,7 @@ export const FieldMixin = (superclass) =>
         // Error message ID needs to be dynamically added / removed based on the validity
         // Otherwise assistive technologies would announce the error, even if we hide it.
         if (invalid) {
-          this._fieldAriaController.setErrorId(this._errorId);
+          this._fieldAriaController.setErrorId(this._errorController.errorId);
         } else {
           this._fieldAriaController.setErrorId(null);
         }
