@@ -312,4 +312,24 @@ describe('grid', () => {
       await visualDiff(element, 'dragover-below-last-row-all-rows-visible');
     });
   });
+
+  describe('disabled', () => {
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column path="name.first" header="First name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last name"></vaadin-grid-column>
+          <vaadin-grid-column path="email"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      element.items = users;
+      flushGrid(element);
+      await nextRender(element);
+    });
+
+    it('disabled', async () => {
+      element.disabled = true;
+      await visualDiff(element, 'disabled');
+    });
+  });
 });

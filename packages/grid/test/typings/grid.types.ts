@@ -1,3 +1,4 @@
+import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import { ActiveItemMixinClass } from '../../src/vaadin-grid-active-item-mixin';
@@ -59,6 +60,7 @@ const genericGrid = document.createElement('vaadin-grid');
 assertType<Grid>(genericGrid);
 
 const narrowedGrid = genericGrid as Grid<TestGridItem>;
+assertType<DisabledMixinClass>(narrowedGrid);
 assertType<ElementMixinClass>(narrowedGrid);
 assertType<ThemableMixinClass>(narrowedGrid);
 assertType<ActiveItemMixinClass<TestGridItem>>(narrowedGrid);
@@ -132,6 +134,8 @@ narrowedGrid.dataProvider = (params, callback) => {
   assertType<GridSorterDefinition[]>(params.sortOrders);
   assertType<GridDataProviderCallback<TestGridItem>>(callback);
 };
+
+assertType<boolean>(narrowedGrid.disabled);
 
 assertType<number>(narrowedGrid.pageSize);
 assertType<number>(narrowedGrid.size);

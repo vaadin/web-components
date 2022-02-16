@@ -13,6 +13,10 @@ registerStyles(
       color: var(--material-body-text-color);
     }
 
+    :host([disabled]) {
+      opacity: 0.7;
+    }
+
     [part~='cell'] {
       min-height: 48px;
       -webkit-tap-highlight-color: transparent;
