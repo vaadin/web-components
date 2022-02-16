@@ -541,6 +541,22 @@ describe('edit column', () => {
       const input = getCellEditor(cell);
       expect(input).to.be.not.ok;
     });
+
+    it('should not show editor when disabled is set to true', () => {
+      const cell = getContainerCell(grid.$.items, 1, 0);
+      grid.disabled = true;
+      enter(cell);
+      const input = getCellEditor(cell);
+      expect(input).to.be.not.ok;
+    });
+
+    it('should cancel editing when disabled is set to true', () => {
+      const cell = getContainerCell(grid.$.items, 1, 0);
+      const oldContent = cell._content.textContent;
+      enter(cell);
+      grid.disabled = true;
+      expect(cell._content.textContent).to.equal(oldContent);
+    });
   });
 
   describe('vertical scrolling', () => {

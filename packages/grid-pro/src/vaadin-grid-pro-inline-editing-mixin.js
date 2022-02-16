@@ -148,6 +148,23 @@ export const InlineEditingMixin = (superClass) =>
       }
     }
 
+    /**
+     * Override an observer from `DisabledMixin` to stop
+     * editing when grid element becomes disabled.
+     *
+     * @param {boolean} disabled
+     * @param {boolean} oldDisabled
+     * @protected
+     * @override
+     */
+    _disabledChanged(disabled, oldDisabled) {
+      super._disabledChanged(disabled, oldDisabled);
+
+      if (disabled && this.__edited) {
+        this._stopEdit(true);
+      }
+    }
+
     /** @protected */
     _checkImports() {
       super._checkImports();
@@ -291,7 +308,8 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @private */
     _startEdit(cell, column) {
-      if (this._editingDisabled) {
+      // TODO: remove `_editingDisabled` after Flow counterpart is updated.
+      if (this.disabled || this._editingDisabled) {
         return;
       }
       // cancel debouncer enqueued on focusout
