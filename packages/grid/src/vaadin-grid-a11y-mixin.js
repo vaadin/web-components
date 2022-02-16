@@ -94,7 +94,12 @@ export const A11yMixin = (superClass) =>
      * @protected
      */
     _a11yUpdateRowLevel(row, level) {
-      row.setAttribute('aria-level', level + 1);
+      // Set level for the expandable rows itself, and all the nested rows.
+      if (level > 0 || this.__isRowCollapsible(row) || this.__isRowExpandable(row)) {
+        row.setAttribute('aria-level', level + 1);
+      } else {
+        row.removeAttribute('aria-level');
+      }
     }
 
     /**

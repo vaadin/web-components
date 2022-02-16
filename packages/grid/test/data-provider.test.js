@@ -13,7 +13,6 @@ import {
   getFirstVisibleItem,
   getLastVisibleItem,
   getPhysicalAverage,
-  getRowCells,
   getRows,
   infiniteDataProvider,
   scrollToEnd
@@ -410,17 +409,6 @@ describe('data provider', () => {
         expect(getRows(grid.$.items)[0].hasAttribute('expanded')).to.be.true;
         collapseIndex(grid, 0);
         expect(getRows(grid.$.items)[0].hasAttribute('expanded')).to.be.false;
-      });
-
-      it('should toggle aria-level attribute on the row', () => {
-        expect(getRowCells(getRows(grid.$.items)[2])[0].getAttribute('aria-level')).to.equal(null);
-        expect(getRows(grid.$.items)[2].getAttribute('aria-level')).to.equal('1');
-        expandIndex(grid, 0);
-        expect(getRowCells(getRows(grid.$.items)[2])[0].getAttribute('aria-level')).to.equal(null);
-        expect(getRows(grid.$.items)[2].getAttribute('aria-level')).to.equal('2');
-        expandIndex(grid, 1);
-        expect(getRowCells(getRows(grid.$.items)[2])[0].getAttribute('aria-level')).to.equal(null);
-        expect(getRows(grid.$.items)[2].getAttribute('aria-level')).to.equal('3');
       });
 
       it('should request pages from 0', () => {

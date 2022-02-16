@@ -230,6 +230,25 @@ describe('accessibility', () => {
       grid.collapseItem({ name: '0' });
       expect(grid.$.items.children[1].getAttribute('aria-expanded')).to.be.null;
     });
+
+    it('should have aria-level on expandable rows', () => {
+      expect(grid.$.items.children[0].getAttribute('aria-level')).to.equal('1');
+    });
+
+    it('should not have aria-level on non expandable rows', () => {
+      expect(grid.$.items.children[1].getAttribute('aria-level')).to.be.null;
+    });
+
+    it('should add aria-level to a row that becomes expandable', () => {
+      grid.expandItem({ name: '0' });
+      expect(grid.$.items.children[1].getAttribute('aria-level')).to.equal('2');
+    });
+
+    it('should remove aria-expanded from a row that becomes non expandable', () => {
+      grid.expandItem({ name: '0' });
+      grid.collapseItem({ name: '0' });
+      expect(grid.$.items.children[1].getAttribute('aria-level')).to.be.null;
+    });
   });
 
   describe('details', () => {
