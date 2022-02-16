@@ -41,6 +41,8 @@ export class LabelController extends SlotController {
    * @override
    */
   initCustomNode(labelNode) {
+    this.__updateLabelId(labelNode);
+
     const hasLabel = this.__hasLabel(labelNode);
     this.__toggleHasLabel(hasLabel);
   }
