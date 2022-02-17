@@ -5,6 +5,7 @@
  */
 import { Axis, Chart as HighchartsChart, ExtremesObject, Options, Point, Series } from 'highcharts';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export type ChartCategories = Array<string> | { [key: number]: string };
@@ -418,7 +419,7 @@ export type ChartEventMap = HTMLElementEventMap & ChartCustomEventMap;
  * @fires {CustomEvent} xaxes-extremes-set - Fired when when the minimum and maximum is set for the X axis.
  * @fires {CustomEvent} yaxes-extremes-set - Fired when when the minimum and maximum is set for the Y axis.
  */
-declare class Chart extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class Chart extends ResizeMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   readonly options: Options;
 
   /**

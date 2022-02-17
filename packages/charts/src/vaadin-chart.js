@@ -26,6 +26,7 @@ import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ChartSeries } from './vaadin-chart-series.js';
 
@@ -234,10 +235,11 @@ export function deepMerge(target, source) {
  * @fires {CustomEvent} yaxes-extremes-set - Fired when when the minimum and maximum is set for the Y axis.
  *
  * @extends HTMLElement
+ * @mixes ResizeMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
+class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -512,8 +514,6 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
       beta: 15,
       depth: 50
     };
-
-    this.__mutationCallback = this.__mutationCallback.bind(this);
   }
 
   /** @protected */
@@ -532,9 +532,6 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
       this._jsonConfigurationBuffer = null;
       this.__initChart(options);
       this.__addChildObserver();
-      const config = { attributes: true, characterData: true };
-      this.__mutationObserver = new MutationObserver(this.__mutationCallback);
-      this.__mutationObserver.observe(this, config);
     });
   }
 
@@ -918,22 +915,31 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
     };
   }
 
+  /**
+   * Implements resize callback from `ResizeMixin`
+   * to reflow when the chart element is resized.
+   * @protected
+   * @override
+   */
+  _onResize(contentRect) {
+    if (!this.configuration) {
+      return;
+    }
+
+    const { height, width } = contentRect;
+    const { chartHeight, chartWidth } = this.configuration;
+
+    if (height !== chartHeight || width !== chartWidth) {
+      this.__reflow();
+    }
+  }
+
   /** @private */
   __reflow() {
     if (!this.configuration) {
       return;
     }
     this.configuration.reflow();
-  }
-
-  /** @private */
-  __mutationCallback() {
-    const { height: componentHeight } = this.getBoundingClientRect();
-    const { chartHeight } = this.configuration;
-
-    if (componentHeight !== chartHeight) {
-      this.__reflow();
-    }
   }
 
   /** @private */
@@ -1055,7 +1061,6 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.__mutationObserver && this.__mutationObserver.disconnect();
     this._childObserver && this._childObserver.disconnect();
   }
 

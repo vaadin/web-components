@@ -1017,7 +1017,7 @@ const chartBaseTheme = css`
   }
 
   /* https://github.com/highcharts/highcharts/issues/16282 */
-  /* without this __mutationCallback always calls __reflow */
+  /* without this the resize callback always calls __reflow */
   ul[aria-hidden='false'] {
     margin: 0px;
   }

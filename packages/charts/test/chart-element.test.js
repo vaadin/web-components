@@ -3,6 +3,27 @@ import { aTimeout, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/
 import sinon from 'sinon';
 import '../vaadin-chart.js';
 
+/**
+ * Resolves once the function is invoked on the given object.
+ */
+function onceInvoked(object, functionName) {
+  return new Promise((resolve) => {
+    sinon.replace(object, functionName, (...args) => {
+      sinon.restore();
+      object[functionName](...args);
+      resolve();
+    });
+  });
+}
+
+/**
+ * Resolves once the ResizeObserver in AvatarGroup has processed a resize.
+ */
+async function onceResized(el) {
+  // Wait for the _onResize function to be invoked by the ResizeObserver
+  await onceInvoked(el, '_onResize');
+}
+
 describe('vaadin-chart', () => {
   describe('custom element definition', () => {
     let chart, tagName;
@@ -255,6 +276,29 @@ describe('vaadin-chart', () => {
     });
   });
 
+  describe('width', () => {
+    let chart;
+
+    beforeEach(async () => {
+      chart = fixtureSync('<vaadin-chart style="width: 400px"></vaadin-chart>');
+      await oneEvent(chart, 'chart-load');
+    });
+
+    it('should propagate height to the chart container', () => {
+      const rect = chart.$.chart.getBoundingClientRect();
+      expect(rect.width).to.be.equal(400);
+      expect(chart.configuration.chartWidth).to.be.equal(400);
+    });
+
+    it('should update container height on chart resize', async () => {
+      chart.style.width = '300px';
+      await oneEvent(chart, 'chart-redraw');
+      const rect = chart.$.chart.getBoundingClientRect();
+      expect(rect.width).to.be.equal(300);
+      expect(chart.configuration.chartWidth).to.be.equal(300);
+    });
+  });
+
   describe('height', () => {
     let chart;
 
@@ -283,7 +327,7 @@ describe('vaadin-chart', () => {
 
     beforeEach(async () => {
       layout = fixtureSync(`
-        <div style="display: flex; width: 1000px;">
+        <div style="display: flex; width: 1000px; height: 300px;">
           <vaadin-chart>
             <vaadin-chart-series values="[1,7,3,1,5,6]"></vaadin-chart-series>
           </vaadin-chart>
@@ -292,22 +336,34 @@ describe('vaadin-chart', () => {
           </vaadin-chart>
         </div>
       `);
-      charts = layout.querySelectorAll('vaadin-chart');
+      charts = Array.from(layout.querySelectorAll('vaadin-chart'));
       await oneEvent(charts[0], 'chart-load');
     });
 
-    it('should update chart size on window resize', async () => {
+    it('should update chart width when container width changes', async () => {
       expect(layout.getBoundingClientRect().width).to.be.equal(1000);
       expect(charts[0].configuration.chartWidth).to.be.equal(500);
       expect(charts[1].configuration.chartWidth).to.be.equal(500);
 
       layout.style.width = '500px';
-      window.dispatchEvent(new Event('resize'));
+      await onceResized(charts[0]);
 
-      await aTimeout(100);
       expect(layout.getBoundingClientRect().width).to.be.equal(500);
       expect(charts[0].configuration.chartWidth).to.be.equal(250);
       expect(charts[1].configuration.chartWidth).to.be.equal(250);
+    });
+
+    it('should update chart height when container height changes', async () => {
+      expect(layout.getBoundingClientRect().height).to.be.equal(300);
+      expect(charts[0].configuration.chartHeight).to.be.equal(300);
+      expect(charts[1].configuration.chartHeight).to.be.equal(300);
+
+      layout.style.height = '200px';
+      await onceResized(charts[0]);
+
+      expect(layout.getBoundingClientRect().height).to.be.equal(200);
+      expect(charts[0].configuration.chartHeight).to.be.equal(200);
+      expect(charts[1].configuration.chartHeight).to.be.equal(200);
     });
   });
 
