@@ -506,24 +506,36 @@ describe('items', () => {
       `);
       rootMenu.openOn = menuOpenEvent;
       target = rootMenu.firstElementChild;
+
+      const itemWithTheme = document.createElement('span');
+      itemWithTheme.textContent = 'Item with theme';
+      itemWithTheme.setAttribute('theme', 'bar');
+
       rootMenu.items = [
         {
           text: 'foo-0',
-          children: [{ text: 'foo-0-0' }, { text: 'foo-0-1', children: [{ text: 'foo-0-1-0' }] }]
+          children: [
+            { text: 'foo-0-0' },
+            {
+              text: 'foo-0-1',
+              children: [{ text: 'foo-0-1-0' }]
+            },
+            { component: itemWithTheme }
+          ]
         },
         { text: 'foo-1' }
       ];
       open();
-      await nextFrame();
+      await nextRender();
       open(menuComponents()[0]);
       subMenu = getSubMenu();
-      await nextFrame();
+      await nextRender();
       open(menuComponents(subMenu)[1]);
       subMenu2 = getSubMenu();
-      await nextFrame();
+      await nextRender();
     });
 
-    it('should propagate theme attribute to the nested elements', () => {
+    it('should propagate host theme attribute to the nested elements', () => {
       [rootMenu, subMenu, subMenu2].forEach((subMenu) => {
         const overlay = subMenu.$.overlay;
         const listBox = overlay.querySelector('vaadin-context-menu-list-box');
@@ -567,7 +579,7 @@ describe('items', () => {
       });
     });
 
-    it('should override the component theme with the item theme', async () => {
+    it('should override the host theme with the item theme', async () => {
       rootMenu.items[1].theme = 'bar-1';
       rootMenu.items[0].children[0].theme = 'bar-0-0';
       await updateItemsAndReopen();
@@ -586,7 +598,7 @@ describe('items', () => {
       expect(subItems[1].getAttribute('theme')).to.equal('foo');
     });
 
-    it('should use the component theme if the item theme is removed', async () => {
+    it('should use the host theme if the item theme is removed', async () => {
       rootMenu.items[1].theme = 'bar-1';
       await updateItemsAndReopen();
 
@@ -621,6 +633,24 @@ describe('items', () => {
 
       const rootItems = getMenuItems();
       expect(rootItems[1].getAttribute('theme')).to.equal('bar-1 bar-2 bar-3');
+    });
+
+    it('should not remove theme provided on the item component', () => {
+      const item = menuComponents(subMenu2)[2];
+      expect(item.getAttribute('theme')).to.equal('bar');
+    });
+
+    it('should override component theme with the item theme', async () => {
+      subMenu.items[2].theme = 'bar-1';
+      subMenu.close();
+      subMenu.items = [...subMenu.items];
+
+      open(menuComponents()[0]);
+      await nextRender(subMenu);
+
+      const item = menuComponents(subMenu2)[2];
+
+      expect(item.getAttribute('theme')).to.equal('bar-1');
     });
   });
 });
