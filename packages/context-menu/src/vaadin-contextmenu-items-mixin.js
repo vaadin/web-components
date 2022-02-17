@@ -242,9 +242,11 @@ export const ItemsMixin = (superClass) =>
 
     /** @protected */
     _setMenuItemTheme(component, item, hostTheme) {
-      let theme = hostTheme;
+      // Use existing component theme when it is provided
+      let theme = component.getAttribute('theme') || hostTheme;
 
-      // item theme takes precedence over host theme even if it's empty, as long as it's not undefined or null
+      // Item theme takes precedence over host theme / component theme
+      // even if it's empty, as long as it's not undefined or null
       if (item.theme != null) {
         theme = Array.isArray(item.theme) ? item.theme.join(' ') : item.theme;
       }
