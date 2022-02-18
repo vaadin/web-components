@@ -37,6 +37,7 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/component-base": "23.0.0-beta3",
     "@vaadin/vaadin-license-checker": "^2.1.0",
+    "@vaadin/vaadin-themable-mixin": "23.0.0-beta3",
     "ol": "6.11.0"
   },
   "devDependencies": {
