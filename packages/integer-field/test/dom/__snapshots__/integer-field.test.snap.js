@@ -14,6 +14,7 @@ snapshots["vaadin-integer-field shadow default"] =
   </div>
   <vaadin-input-container part="input-field">
     <div
+      aria-hidden="true"
       hidden=""
       part="decrease-button"
       slot="prefix"
@@ -39,6 +40,7 @@ snapshots["vaadin-integer-field shadow default"] =
     >
     </div>
     <div
+      aria-hidden="true"
       hidden=""
       part="increase-button"
       slot="suffix"
@@ -70,6 +72,7 @@ snapshots["vaadin-integer-field shadow controls"] =
   </div>
   <vaadin-input-container part="input-field">
     <div
+      aria-hidden="true"
       part="decrease-button"
       slot="prefix"
     >
@@ -94,6 +97,7 @@ snapshots["vaadin-integer-field shadow controls"] =
     >
     </div>
     <div
+      aria-hidden="true"
       part="increase-button"
       slot="suffix"
     >
@@ -127,6 +131,7 @@ snapshots["vaadin-integer-field shadow disabled"] =
     part="input-field"
   >
     <div
+      aria-hidden="true"
       hidden=""
       part="decrease-button"
       slot="prefix"
@@ -152,6 +157,7 @@ snapshots["vaadin-integer-field shadow disabled"] =
     >
     </div>
     <div
+      aria-hidden="true"
       hidden=""
       part="increase-button"
       slot="suffix"
@@ -186,6 +192,7 @@ snapshots["vaadin-integer-field shadow readonly"] =
     readonly=""
   >
     <div
+      aria-hidden="true"
       hidden=""
       part="decrease-button"
       slot="prefix"
@@ -211,6 +218,7 @@ snapshots["vaadin-integer-field shadow readonly"] =
     >
     </div>
     <div
+      aria-hidden="true"
       hidden=""
       part="increase-button"
       slot="suffix"
@@ -245,6 +253,7 @@ snapshots["vaadin-integer-field shadow invalid"] =
     part="input-field"
   >
     <div
+      aria-hidden="true"
       hidden=""
       part="decrease-button"
       slot="prefix"
@@ -270,6 +279,7 @@ snapshots["vaadin-integer-field shadow invalid"] =
     >
     </div>
     <div
+      aria-hidden="true"
       hidden=""
       part="increase-button"
       slot="suffix"
@@ -304,6 +314,7 @@ snapshots["vaadin-integer-field shadow theme"] =
     theme="align-right"
   >
     <div
+      aria-hidden="true"
       hidden=""
       part="decrease-button"
       slot="prefix"
@@ -329,6 +340,7 @@ snapshots["vaadin-integer-field shadow theme"] =
     >
     </div>
     <div
+      aria-hidden="true"
       hidden=""
       part="increase-button"
       slot="suffix"

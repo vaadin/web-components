@@ -100,6 +100,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
             on-click="_decreaseValue"
             on-touchend="_decreaseButtonTouchend"
             hidden$="[[!hasControls]]"
+            aria-hidden="true"
             slot="prefix"
           ></div>
           <slot name="prefix" slot="prefix"></slot>
@@ -112,6 +113,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
             on-click="_increaseValue"
             on-touchend="_increaseButtonTouchend"
             hidden$="[[!hasControls]]"
+            aria-hidden="true"
             slot="suffix"
           ></div>
         </vaadin-input-container>
