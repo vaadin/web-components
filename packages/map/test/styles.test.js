@@ -18,4 +18,10 @@ describe('vaadin-map styles', () => {
     displayValue = getComputedStyle(map).display;
     expect(displayValue).to.equal('none');
   });
+
+  it('should have a default size', () => {
+    const computedStyles = getComputedStyle(map);
+    expect(parseInt(computedStyles.width)).to.be.gt(0);
+    expect(parseInt(computedStyles.height)).to.equal(400);
+  });
 });

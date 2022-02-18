@@ -44,8 +44,6 @@ describe('configuration in detached state', () => {
 
   beforeEach(() => {
     map = document.createElement('vaadin-map');
-    map.style.width = '100px';
-    map.style.height = '100px';
   });
 
   afterEach(() => {

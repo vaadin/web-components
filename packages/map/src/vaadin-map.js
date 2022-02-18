@@ -63,7 +63,9 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
       <style>
         :host {
           display: block;
-          width: 100%;
+          height: 400px;
+          flex: 1 1 auto;
+          align-self: stretch;
           overflow: hidden;
         }
 
