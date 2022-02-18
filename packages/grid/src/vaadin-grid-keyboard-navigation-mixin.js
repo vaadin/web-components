@@ -222,12 +222,6 @@ export const KeyboardNavigationMixin = (superClass) =>
         const item = row._item;
         return item && this.get(this.itemHasChildrenPath, item) && !this._isExpanded(item);
       }
-
-      const treeToggle = [...row.children].reduce(
-        (value, cell) => value || cell._content.querySelector('vaadin-grid-tree-toggle'),
-        null
-      );
-      return treeToggle && !treeToggle.expanded && !treeToggle.leaf;
     }
 
     /** @private */
