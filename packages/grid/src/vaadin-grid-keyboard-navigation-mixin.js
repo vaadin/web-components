@@ -216,9 +216,13 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
     }
 
-    // TODO: A tree toggle component should not be the way to determine if the row is expandable
     /** @private */
     __isRowExpandable(row) {
+      if (this.itemHasChildrenPath) {
+        const item = row._item;
+        return item && this.get(this.itemHasChildrenPath, item) && !this._isExpanded(item);
+      }
+
       const treeToggle = [...row.children].reduce(
         (value, cell) => value || cell._content.querySelector('vaadin-grid-tree-toggle'),
         null

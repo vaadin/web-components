@@ -144,24 +144,44 @@ describe('tree toggle', () => {
       expect(toggle.level).to.equal(0);
     });
 
-    it('should have a higher level', () => {
-      column.itemHasChildrenPath = 'hasChildren';
-      toggle.expanded = true;
-      const childToggle = getBodyCellContent(grid, 1, 0).firstElementChild;
-      expect(childToggle.level).to.equal(1);
-    });
-
-    it('should not be a leaf', () => {
-      column.itemHasChildrenPath = 'hasChildren';
-      expect(toggle.leaf).to.be.false;
-    });
-
     it('should ignore a custom renderer', () => {
       column.renderer = (root) => {
         root.innerHTML = 'cell';
       };
 
       expect(getBodyCellContent(grid, 0, 0).firstElementChild).to.equal(toggle);
+    });
+
+    describe('itemHasChildrenPath', () => {
+      beforeEach(() => {
+        sinon.stub(console, 'warn');
+      });
+
+      afterEach(() => {
+        console.warn.restore();
+      });
+
+      it('should have a higher level', () => {
+        column.itemHasChildrenPath = 'hasChildren';
+        toggle.expanded = true;
+        const childToggle = getBodyCellContent(grid, 1, 0).firstElementChild;
+        expect(childToggle.level).to.equal(1);
+      });
+
+      it('should not be a leaf', () => {
+        column.itemHasChildrenPath = 'hasChildren';
+        expect(toggle.leaf).to.be.false;
+      });
+
+      it('should warn when setting column property', () => {
+        column.itemHasChildrenPath = 'hasChildren';
+        expect(console.warn.called).to.be.true;
+      });
+
+      it('should forward column property to the grid', () => {
+        column.itemHasChildrenPath = 'hasChildren';
+        expect(grid.itemHasChildrenPath).to.equal('hasChildren');
+      });
     });
   });
 });

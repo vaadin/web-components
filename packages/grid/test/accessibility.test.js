@@ -198,10 +198,32 @@ describe('accessibility', () => {
     beforeEach(() => {
       grid = fixtureSync(`
         <vaadin-grid item-id-path="name">
-          <vaadin-grid-tree-column path="name" header="" width="100px" flex-shrink="0"></vaadin-grid-tree-column>
+          <vaadin-grid-column></vaadin-grid-column>
           <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
         </vaadin-grid>
       `);
+
+      const column = grid.querySelector('vaadin-grid-column');
+
+      // Do not rely on `vaadin-grid-tree-toggle` presence.
+      column.renderer = (root, col, model) => {
+        let btn = root.firstElementChild;
+        if (!btn) {
+          btn = document.createElement('button');
+          btn.addEventListener('click', () => {
+            grid[btn.getAttribute('aria-pressed') == 'false' ? 'expandItem' : 'collapseItem'](btn.item);
+          });
+          root.appendChild(btn);
+        }
+
+        btn.textContent = model.item.name + ' ' + (model.expanded ? 'Collapse' : 'Expand');
+        btn.item = model.item;
+
+        btn.style.display = model.item.hasChildren ? 'block' : 'none';
+        btn.style.marginLeft = `${model.level * 20}px`;
+
+        btn.setAttribute('aria-pressed', String(model.expanded));
+      };
 
       grid.dataProvider = hierarchicalDataProvider;
       flushGrid(grid);
