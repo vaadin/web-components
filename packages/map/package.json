@@ -38,7 +38,7 @@
     "@vaadin/component-base": "23.0.0-beta3",
     "@vaadin/vaadin-license-checker": "^2.1.0",
     "@vaadin/vaadin-themable-mixin": "23.0.0-beta3",
-    "ol": "6.11.0"
+    "ol": "6.12.1-dev.1645111187932"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
