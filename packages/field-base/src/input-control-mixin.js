@@ -170,4 +170,17 @@ export const InputControlMixin = (superclass) =>
       this.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       this.inputElement.dispatchEvent(new Event('change', { bubbles: true }));
     }
+
+    /**
+     * Fired when the user commits a value change.
+     *
+     * @event change
+     */
+
+    /**
+     * Fired when the value is changed by the user: on every typing keystroke,
+     * and the value is cleared using the clear button.
+     *
+     * @event input
+     */
   };
