@@ -1,0 +1,6 @@
+*.js
+*.js.map
+!/src/**/*.js
+*-bundle.json
+!tsconfig.json
+!package.json
