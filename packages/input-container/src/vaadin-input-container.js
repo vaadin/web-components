@@ -3,17 +3,17 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer';
+import { html, LitElement } from 'lit';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
+export class InputContainer extends ThemableMixin(DirMixin(LitElement)) {
   static get is() {
     return 'vaadin-input-container';
   }
 
-  static get template() {
+  render() {
     return html`
       <style>
         :host {
@@ -76,7 +76,7 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       disabled: {
         type: Boolean,
-        reflectToAttribute: true
+        reflect: true
       },
 
       /**
@@ -84,7 +84,7 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       readonly: {
         type: Boolean,
-        reflectToAttribute: true
+        reflect: true
       },
 
       /**
@@ -92,15 +92,13 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       invalid: {
         type: Boolean,
-        reflectToAttribute: true
+        reflect: true
       }
     };
   }
 
   /** @protected */
-  ready() {
-    super.ready();
-
+  firstUpdated() {
     this.addEventListener('pointerdown', (event) => {
       if (event.target === this) {
         // Prevent direct clicks to the input container from blurring the input
