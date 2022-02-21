@@ -250,6 +250,10 @@ describe('data provider', () => {
     });
 
     describe('first level', () => {
+      it('should set itemHasChildren path by default', () => {
+        expect(grid.itemHasChildrenPath).to.equal('children');
+      });
+
       it('should have collapsed items by default', () => {
         for (let i = 0; i < grid._effectiveSize; i++) {
           expect(isIndexExpanded(grid, i)).to.be.false;

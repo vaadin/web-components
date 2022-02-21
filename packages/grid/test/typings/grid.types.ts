@@ -141,6 +141,7 @@ assertType<number>(narrowedGrid.pageSize);
 assertType<number>(narrowedGrid.size);
 assertType<boolean | null | undefined>(narrowedGrid.loading);
 assertType<string | null | undefined>(narrowedGrid.itemIdPath);
+assertType<string>(narrowedGrid.itemHasChildrenPath);
 
 assertType<TestGridItem[] | undefined | null>(narrowedGrid.items);
 assertType<TestGridItem | null>(narrowedGrid.activeItem);

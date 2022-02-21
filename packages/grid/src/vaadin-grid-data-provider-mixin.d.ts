@@ -102,6 +102,12 @@ export declare class DataProviderMixinClass<TItem> {
   readonly loading: boolean | null | undefined;
 
   /**
+   * Path to an item sub-property that indicates whether the item has child items.
+   * @attr {string} item-has-children-path
+   */
+  itemHasChildrenPath: string;
+
+  /**
    * Path to an item sub-property that identifies the item.
    * @attr {string} item-id-path
    */

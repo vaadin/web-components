@@ -34,10 +34,11 @@ class GridTreeColumn extends GridColumn {
       /**
        * JS Path of the property in the item that indicates whether the item has child items.
        * @attr {string} item-has-children-path
+       * @deprecated Use `grid.itemHasChildrenPath` instead.
        */
       itemHasChildrenPath: {
         type: String,
-        value: 'children'
+        observer: '_itemHasChildrenPathChanged'
       }
     };
   }
@@ -68,7 +69,7 @@ class GridTreeColumn extends GridColumn {
     toggle.__item = item;
     toggle.__rendererExpanded = expanded;
     toggle.expanded = expanded;
-    toggle.leaf = this.__isLeafItem(item, this.itemHasChildrenPath);
+    toggle.leaf = this.__isLeafItem(item, this._grid.itemHasChildrenPath);
     toggle.textContent = this.__getToggleContent(this.path, item);
     toggle.level = level;
   }
@@ -82,6 +83,19 @@ class GridTreeColumn extends GridColumn {
    */
   _computeRenderer() {
     return this.__defaultRenderer;
+  }
+
+  /** @private */
+  _itemHasChildrenPathChanged(itemHasChildrenPath) {
+    if (itemHasChildrenPath) {
+      console.warn(
+        `WARNING: Since Vaadin 23, itemHasChildrenPath on <vaadin-grid-tree-column> is deprecated. Please set this property on the <vaadin-grid> instead.`
+      );
+
+      if (this._grid) {
+        this._grid.itemHasChildrenPath = itemHasChildrenPath;
+      }
+    }
   }
 
   /**

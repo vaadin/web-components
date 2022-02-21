@@ -187,6 +187,15 @@ export const DataProviderMixin = (superClass) =>
         },
 
         /**
+         * Path to an item sub-property that indicates whether the item has child items.
+         * @attr {string} item-has-children-path
+         */
+        itemHasChildrenPath: {
+          type: String,
+          value: 'children'
+        },
+
+        /**
          * Path to an item sub-property that identifies the item.
          * @attr {string} item-id-path
          */

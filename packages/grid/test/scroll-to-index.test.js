@@ -30,8 +30,8 @@ const fixtures = {
     </vaadin-grid>
   `,
   treeGrid: `
-    <vaadin-grid style="width: 200px; height: 500px;">
-      <vaadin-grid-tree-column path="name" header="foo" item-has-children-path="hasChildren"></vaadin-grid-tree-column>
+    <vaadin-grid style="width: 200px; height: 500px;" item-has-children-path="hasChildren">
+      <vaadin-grid-tree-column path="name" header="foo"></vaadin-grid-tree-column>
     </vaadin-grid>
   `
 };
