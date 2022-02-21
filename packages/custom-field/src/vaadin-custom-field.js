@@ -377,6 +377,12 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
       this.validate();
     }
   }
+
+  /**
+   * Fired when the user commits a value change for any of the internal inputs.
+   *
+   * @event change
+   */
 }
 
 customElements.define(CustomField.is, CustomField);
