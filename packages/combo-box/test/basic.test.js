@@ -300,7 +300,7 @@ describe('Properties', () => {
 
         input.value = 'bar';
         input.dispatchEvent(new CustomEvent('input'));
-        input.blur();
+        focusout(input);
 
         expect(spy.calledTwice).to.be.true;
       });
