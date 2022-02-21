@@ -1,5 +1,6 @@
 *.js
 *.js.map
+./vaadin-bundles-*.tgz
 !/src/**/*.js
 *-bundle.json
 !tsconfig.json
