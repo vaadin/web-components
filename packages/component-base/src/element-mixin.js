@@ -32,7 +32,7 @@ const registered = new Set();
 export const ElementMixin = (superClass) =>
   class VaadinElementMixin extends DirMixin(superClass) {
     static get version() {
-      return '23.0.0-beta4';
+      return '23.0.0-beta5';
     }
 
     /** @protected */
