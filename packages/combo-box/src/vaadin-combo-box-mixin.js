@@ -698,6 +698,7 @@ export const ComboBoxMixin = (subclass) =>
         this.selectedItem = null;
 
         if (this.allowCustomValue) {
+          delete this._lastCustomValue;
           this.value = '';
         }
       } else {
@@ -714,17 +715,27 @@ export const ComboBoxMixin = (subclass) =>
           // to prevent a repetitive input value being saved after pressing ESC and Tab.
           !itemMatchingByLabel
         ) {
+          const customValue = this._inputElementValue;
+
+          // User's logic in `custom-value-set` event listener might cause input to blur,
+          // which will result in attempting to commit the same custom value once again.
+          if (this._lastCustomValue === customValue) {
+            return;
+          }
+
+          // Store reference to the last custom value for checking it
+          this._lastCustomValue = customValue;
+
           // An item matching by label was not found, but custom values are allowed.
           // Dispatch a custom-value-set event with the input value.
           const e = new CustomEvent('custom-value-set', {
-            detail: this._inputElementValue,
+            detail: customValue,
             composed: true,
             cancelable: true,
             bubbles: true
           });
           this.dispatchEvent(e);
           if (!e.defaultPrevented) {
-            const customValue = this._inputElementValue;
             this._selectItemForValue(customValue);
             this.value = customValue;
           }
