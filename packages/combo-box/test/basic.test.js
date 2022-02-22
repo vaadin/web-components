@@ -271,59 +271,6 @@ describe('Properties', () => {
 
         expect(spy.calledOnce).to.be.true;
       });
-
-      it('should not fire twice when the custom value set listener causes blur', () => {
-        const spy = sinon.spy();
-        comboBox.addEventListener('custom-value-set', spy);
-
-        // Emulate opening the overlay that causes blur
-        comboBox.addEventListener('custom-value-set', () => {
-          comboBox.blur();
-        });
-
-        comboBox.open();
-        input.value = 'foo';
-        input.dispatchEvent(new CustomEvent('input'));
-        comboBox.close();
-
-        expect(spy.calledOnce).to.be.true;
-      });
-
-      it('should fire twice when another custom value is committed by the user', () => {
-        const spy = sinon.spy();
-        comboBox.addEventListener('custom-value-set', spy);
-
-        comboBox.open();
-        input.value = 'foo';
-        input.dispatchEvent(new CustomEvent('input'));
-        comboBox.close();
-
-        input.value = 'bar';
-        input.dispatchEvent(new CustomEvent('input'));
-        focusout(input);
-
-        expect(spy.calledTwice).to.be.true;
-      });
-
-      it('should fire when setting the same custom value after clearing', () => {
-        const spy = sinon.spy();
-        comboBox.addEventListener('custom-value-set', spy);
-
-        input.value = 'foo';
-        input.dispatchEvent(new CustomEvent('input'));
-        focusout(input);
-
-        input.value = '';
-        input.dispatchEvent(new CustomEvent('input'));
-        focusout(input);
-
-        spy.resetHistory();
-        input.value = 'foo';
-        input.dispatchEvent(new CustomEvent('input'));
-        focusout(input);
-
-        expect(spy.calledOnce).to.be.true;
-      });
     });
   });
 
