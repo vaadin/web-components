@@ -304,6 +304,26 @@ describe('Properties', () => {
 
         expect(spy.calledTwice).to.be.true;
       });
+      
+      it('should fire when setting the same custom value after clearing', () => {
+        const spy = sinon.spy();
+        comboBox.addEventListener('custom-value-set', spy);
+
+        input.value = 'foo';
+        input.dispatchEvent(new CustomEvent('input'));
+        focusout(input);
+
+        input.value = '';
+        input.dispatchEvent(new CustomEvent('input'));
+        focusout(input);
+
+        spy.resetHistory();
+        input.value = 'foo';
+        input.dispatchEvent(new CustomEvent('input'));
+        focusout(input);
+
+        expect(spy.calledOnce).to.be.true;
+      });
     });
   });
 
