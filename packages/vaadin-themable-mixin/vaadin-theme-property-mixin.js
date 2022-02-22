@@ -29,17 +29,8 @@ export const ThemePropertyMixin = (superClass) =>
          */
         theme: {
           type: String,
-          readOnly: true
+          reflectToAttribute: true
         }
       };
-    }
-
-    /** @protected */
-    attributeChangedCallback(name, oldValue, newValue) {
-      super.attributeChangedCallback(name, oldValue, newValue);
-
-      if (name === 'theme') {
-        this._setTheme(newValue);
-      }
     }
   };
