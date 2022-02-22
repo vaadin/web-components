@@ -304,7 +304,7 @@ describe('Properties', () => {
 
         expect(spy.calledTwice).to.be.true;
       });
-      
+
       it('should fire when setting the same custom value after clearing', () => {
         const spy = sinon.spy();
         comboBox.addEventListener('custom-value-set', spy);
