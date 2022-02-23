@@ -698,7 +698,6 @@ export const ComboBoxMixin = (subclass) =>
         this.selectedItem = null;
 
         if (this.allowCustomValue) {
-          delete this._lastCustomValue;
           this.value = '';
         }
       } else {
@@ -717,13 +716,7 @@ export const ComboBoxMixin = (subclass) =>
         ) {
           const customValue = this._inputElementValue;
 
-          // User's logic in `custom-value-set` event listener might cause input to blur,
-          // which will result in attempting to commit the same custom value once again.
-          if (this._lastCustomValue === customValue) {
-            return;
-          }
-
-          // Store reference to the last custom value for checking it
+          // Store reference to the last custom value for checking it on focusout.
           this._lastCustomValue = customValue;
 
           // An item matching by label was not found, but custom values are allowed.
@@ -1073,6 +1066,13 @@ export const ComboBoxMixin = (subclass) =>
         return;
       }
       if (!this.readonly && !this._closeOnBlurIsPrevented) {
+        // User's logic in `custom-value-set` event listener might cause input to blur,
+        // which will result in attempting to commit the same custom value once again.
+        if (!this.opened && this.allowCustomValue && this._inputElementValue === this._lastCustomValue) {
+          delete this._lastCustomValue;
+          return;
+        }
+
         this._closeOrCommit();
       }
     }
