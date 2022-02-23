@@ -318,9 +318,9 @@ describe('vaadin-confirm-dialog', () => {
     beforeEach(() => {
       confirm = fixtureSync(`
         <vaadin-confirm-dialog>
-          <button slot="confirm-button">Confirm</button>
-          <button slot="cancel-button">Cancel</button>
-          <button slot="reject-button">Reject</button>
+          <button slot="confirm-button" theme="custom-confirm-theme">Custom Confirm</button>
+          <button slot="cancel-button" theme="custom-cancel-theme">Custom Cancel</button>
+          <button slot="reject-button" theme="custom-reject-theme">Custom Reject</button>
         </vaadin-confirm-dialog>
       `);
       overlay = confirm.$.dialog.$.overlay;
@@ -341,6 +341,34 @@ describe('vaadin-confirm-dialog', () => {
       confirm.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should not override custom button content and theme', async () => {
+      const confirmButton = confirm.querySelector('[slot="confirm-button"]');
+      const cancelButton = confirm.querySelector('[slot="cancel-button"]');
+      const rejectButton = confirm.querySelector('[slot="reject-button"]');
+      confirm.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      function verifyButtonsAreNotModified() {
+        expect(confirmButton.textContent).to.equal('Custom Confirm');
+        expect(confirmButton.getAttribute('theme')).to.equal('custom-confirm-theme');
+        expect(cancelButton.textContent).to.equal('Custom Cancel');
+        expect(cancelButton.getAttribute('theme')).to.equal('custom-cancel-theme');
+        expect(rejectButton.textContent).to.equal('Custom Reject');
+        expect(rejectButton.getAttribute('theme')).to.equal('custom-reject-theme');
+      }
+
+      // Using default text and theme values, buttons should not be modified
+      verifyButtonsAreNotModified();
+      // Using custom text and theme values, buttons should not be modified
+      confirm.confirmText = 'Override Confirm Text';
+      confirm.confirmTheme = 'override-confirm-theme';
+      confirm.cancelText = 'Override Cancel Text';
+      confirm.cancelTheme = 'override-cancel-theme';
+      confirm.rejectText = 'Override Reject Text';
+      confirm.rejectTheme = 'override-reject-theme';
+      verifyButtonsAreNotModified();
     });
   });
 
