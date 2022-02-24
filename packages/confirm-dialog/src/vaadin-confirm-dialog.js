@@ -131,6 +131,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
       /**
        * Text displayed on confirm-button.
+       * This only affects the default button, custom slotted buttons will not be altered.
        * @attr {string} confirm-text
        * @type {string}
        */
@@ -141,6 +142,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
       /**
        * Theme for a confirm-button.
+       * This only affects the default button, custom slotted buttons will not be altered.
        * @attr {string} confirm-theme
        * @type {string}
        */
@@ -171,6 +173,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
       /**
        * Text displayed on reject-button.
+       * This only affects the default button, custom slotted buttons will not be altered.
        * @attr {string} reject-text
        * @type {string}
        */
@@ -181,6 +184,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
       /**
        * Theme for a reject-button.
+       * This only affects the default button, custom slotted buttons will not be altered.
        * @attr {string} reject-theme
        * @type {string}
        */
@@ -201,6 +205,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
       /**
        * Text displayed on cancel-button.
+       * This only affects the default button, custom slotted buttons will not be altered.
        * @attr {string} cancel-text
        * @type {string}
        */
@@ -211,6 +216,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
       /**
        * Theme for a cancel-button.
+       * This only affects the default button, custom slotted buttons will not be altered.
        * @attr {string} cancel-theme
        * @type {string}
        */
