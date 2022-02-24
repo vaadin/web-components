@@ -131,6 +131,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
       /**
        * Text displayed on confirm-button.
+       * This only affects the default button, custom slotted buttons will not be altered.
        * @attr {string} confirm-text
        * @type {string}
        */
@@ -141,6 +142,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
       /**
        * Theme for a confirm-button.
+       * This only affects the default button, custom slotted buttons will not be altered.
        * @attr {string} confirm-theme
        * @type {string}
        */
@@ -171,6 +173,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
       /**
        * Text displayed on reject-button.
+       * This only affects the default button, custom slotted buttons will not be altered.
        * @attr {string} reject-text
        * @type {string}
        */
@@ -181,6 +184,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
       /**
        * Theme for a reject-button.
+       * This only affects the default button, custom slotted buttons will not be altered.
        * @attr {string} reject-theme
        * @type {string}
        */
@@ -201,6 +205,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
       /**
        * Text displayed on cancel-button.
+       * This only affects the default button, custom slotted buttons will not be altered.
        * @attr {string} cancel-text
        * @type {string}
        */
@@ -211,6 +216,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
 
       /**
        * Theme for a cancel-button.
+       * This only affects the default button, custom slotted buttons will not be altered.
        * @attr {string} cancel-theme
        * @type {string}
        */
@@ -305,16 +311,20 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
         const button = document.createElement('vaadin-button');
         button.setAttribute('theme', this.cancelTheme);
         button.textContent = this.cancelText;
+        button._isDefaultButton = true;
         return button;
       },
       'reject-button': () => {
         const button = document.createElement('vaadin-button');
         button.setAttribute('theme', this.rejectTheme);
         button.textContent = this.rejectText;
+        button._isDefaultButton = true;
         return button;
       },
       'confirm-button': () => {
-        return document.createElement('vaadin-button');
+        const button = document.createElement('vaadin-button');
+        button._isDefaultButton = true;
+        return button;
       }
     };
   }
@@ -430,15 +440,17 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
   /** @private */
   __updateCancelButton(button, cancelText, cancelTheme, showCancel) {
     if (button) {
-      button.textContent = cancelText;
-      button.setAttribute('theme', cancelTheme);
+      if (button._isDefaultButton) {
+        button.textContent = cancelText;
+        button.setAttribute('theme', cancelTheme);
+      }
       button.toggleAttribute('hidden', !showCancel);
     }
   }
 
   /** @private */
   __updateConfirmButton(button, confirmText, confirmTheme) {
-    if (button) {
+    if (button && button._isDefaultButton) {
       button.textContent = confirmText;
       button.setAttribute('theme', confirmTheme);
     }
@@ -463,8 +475,10 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
   /** @private */
   __updateRejectButton(button, rejectText, rejectTheme, showReject) {
     if (button) {
-      button.textContent = rejectText;
-      button.setAttribute('theme', rejectTheme);
+      if (button._isDefaultButton) {
+        button.textContent = rejectText;
+        button.setAttribute('theme', rejectTheme);
+      }
       button.toggleAttribute('hidden', !showReject);
     }
   }
