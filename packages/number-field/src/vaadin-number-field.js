@@ -4,8 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
-import { html, PolymerElement } from '@polymer/polymer';
+import { html, LitElement } from 'lit';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -45,16 +46,19 @@ registerStyles('vaadin-number-field', inputFieldShared, { moduleId: 'vaadin-numb
  *
  * @extends HTMLElement
  * @mixes InputFieldMixin
+ * @mixes PolylitMixin
  * @mixes SlotStylesMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+export class NumberField extends InputFieldMixin(
+  SlotStylesMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement))))
+) {
   static get is() {
     return 'vaadin-number-field';
   }
 
-  static get template() {
+  render() {
     return html`
       <style>
         :host([readonly]) [part$='button'] {
@@ -84,22 +88,22 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
       <div class="vaadin-field-container">
         <div part="label">
           <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true" on-click="focus"></span>
+          <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
         </div>
 
         <vaadin-input-container
           part="input-field"
-          readonly="[[readonly]]"
-          disabled="[[disabled]]"
-          invalid="[[invalid]]"
-          theme$="[[theme]]"
+          .readonly="${this.readonly}"
+          .disabled="${this.disabled}"
+          .invalid="${this.invalid}"
+          theme="${this.theme}"
         >
           <div
-            disabled$="[[!_allowed(-1, value, min, max, step)]]"
             part="decrease-button"
-            on-click="_decreaseValue"
-            on-touchend="_decreaseButtonTouchend"
-            hidden$="[[!hasControls]]"
+            ?disabled="${!this._allowed(-1, this.value, this.min, this.max, this.step)}"
+            ?hidden="${!this.hasControls}"
+            @click="${this._decreaseValue}"
+            @touchend="${this._decreaseButtonTouchend}"
             slot="prefix"
           ></div>
           <slot name="prefix" slot="prefix"></slot>
@@ -107,11 +111,11 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
           <slot name="suffix" slot="suffix"></slot>
           <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
           <div
-            disabled$="[[!_allowed(1, value, min, max, step)]]"
             part="increase-button"
-            on-click="_increaseValue"
-            on-touchend="_increaseButtonTouchend"
-            hidden$="[[!hasControls]]"
+            ?disabled="${!this._allowed(1, this.value, this.min, this.max, this.step)}"
+            ?hidden="${!this.hasControls}"
+            @click="${this._increaseValue}"
+            @touchend="${this._increaseButtonTouchend}"
             slot="suffix"
           ></div>
         </vaadin-input-container>
@@ -136,7 +140,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
       hasControls: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflect: true
       },
 
       /**
@@ -211,17 +215,6 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
   }
 
   /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-
-    if (this.inputElement) {
-      this.inputElement.min = this.min;
-      this.inputElement.max = this.max;
-      this.__applyStep(this.step);
-    }
-  }
-
-  /** @protected */
   ready() {
     super.ready();
 
@@ -233,6 +226,13 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
         this.ariaTarget = input;
       })
     );
+
+    if (this.inputElement) {
+      this.inputElement.min = this.min;
+      this.inputElement.max = this.max;
+      this.__applyStep(this.step);
+    }
+
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
   }
 
@@ -248,6 +248,18 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
     // Cancel the following click and focus events
     e.preventDefault();
     this._increaseValue();
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  async _createConstraintsObserver() {
+    // Delay creating constraints observer until initial update
+    // is completed to not reset invalid state set as attribute
+    await this.updateComplete;
+
+    super._createConstraintsObserver();
   }
 
   /**

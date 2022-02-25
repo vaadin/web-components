@@ -6,8 +6,9 @@ import '../src/vaadin-integer-field.js';
 describe('integer-field', () => {
   let integerField, input;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     integerField = fixtureSync('<vaadin-integer-field></vaadin-integer-field>');
+    await integerField.updateComplete;
     input = integerField.inputElement;
   });
 
@@ -135,31 +136,36 @@ describe('integer-field', () => {
   describe('value property', () => {
     const initialValue = '1';
 
-    beforeEach(() => {
+    beforeEach(async () => {
       integerField.value = initialValue;
+      await integerField.updateComplete;
     });
 
     it('should accept integer value as string', () => {
       expect(integerField.value).to.eql(initialValue);
     });
 
-    it('should accept integer value as number and convert to string', () => {
+    it('should accept integer value as number and convert to string', async () => {
       integerField.value = 2;
+      await integerField.updateComplete;
       expect(integerField.value).to.eql('2');
     });
 
-    it('should accept negative integer value as string', () => {
+    it('should accept negative integer value as string', async () => {
       integerField.value = '-2';
+      await integerField.updateComplete;
       expect(integerField.value).to.eql('-2');
     });
 
-    it('should accept negative integer value as number and convert to string', () => {
+    it('should accept negative integer value as number and convert to string', async () => {
       integerField.value = -2;
+      await integerField.updateComplete;
       expect(integerField.value).to.eql('-2');
     });
 
-    it('should accept empty string', () => {
+    it('should accept empty string', async () => {
       integerField.value = '';
+      await integerField.updateComplete;
       expect(integerField.value).to.eql('');
     });
 
@@ -173,8 +179,9 @@ describe('integer-field', () => {
       });
 
       ['foo', '1.2', 1.2, '+2', '2-', '2-2', '-', '+', '1e1', undefined, null, {}].forEach((invalidValue) => {
-        it(`should clear the value when setting ${typeof invalidValue} value: ${invalidValue}`, () => {
+        it(`should clear the value when setting ${typeof invalidValue} value: ${invalidValue}`, async () => {
           integerField.value = invalidValue;
+          await integerField.updateComplete;
           expect(integerField.value).to.eql('');
           expect(console.warn.called).to.be.true;
         });
@@ -185,16 +192,18 @@ describe('integer-field', () => {
   describe('step property', () => {
     const initialStep = 3;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       integerField.step = initialStep;
+      await integerField.updateComplete;
     });
 
     it('should allow setting positive integer', () => {
       expect(integerField.step).to.eql(initialStep);
     });
 
-    it('should allow setting positive integer as string', () => {
+    it('should allow setting positive integer as string', async () => {
       integerField.step = '5';
+      await integerField.updateComplete;
       expect(integerField.step).to.eql(5);
     });
 
@@ -208,8 +217,9 @@ describe('integer-field', () => {
       });
 
       ['foo', '-1', -1, '1.2', 1.2, '+1', '1e1', undefined, null, {}].forEach((invalidStep) => {
-        it(`should reset default step when setting ${typeof invalidStep} value: ${invalidStep}`, () => {
+        it(`should reset default step when setting ${typeof invalidStep} value: ${invalidStep}`, async () => {
           integerField.step = invalidStep;
+          await integerField.updateComplete;
           expect(integerField.step).to.eql(1);
           expect(console.warn.called).to.be.true;
         });

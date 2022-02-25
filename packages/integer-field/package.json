@@ -32,7 +32,6 @@
     "web-component"
   ],
   "dependencies": {
-    "@polymer/polymer": "^3.0.0",
     "@vaadin/number-field": "23.0.0-beta2",
     "@vaadin/vaadin-lumo-styles": "23.0.0-beta2",
     "@vaadin/vaadin-material-styles": "23.0.0-beta2"
