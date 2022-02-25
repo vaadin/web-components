@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
@@ -47,12 +47,13 @@ describe('filter', () => {
     filter.value = 'foo';
   });
 
-  it('should fire `filter-changed` on path change', (done) => {
+  it('should fire `filter-changed` on path change', async () => {
     filter.value = 'foo';
+    await nextFrame();
     filter._debouncerFilterChanged.flush();
 
-    listenOnce(filter, 'filter-changed', () => done());
     filter.path = 'bar';
+    await oneEvent(filter, 'filter-changed');
   });
 
   it('should update value', (done) => {
@@ -309,9 +310,10 @@ describe('array data provider', () => {
     expect(Object.keys(grid._cache.items).length).to.equal(3);
   });
 
-  it('should sort filtered items', () => {
+  it('should sort filtered items', async () => {
     grid._filters[1].value = 'r';
     grid.querySelector('vaadin-grid-sorter').direction = 'asc';
+    await nextFrame();
     expect(grid.size).to.equal(2);
     expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
     expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
