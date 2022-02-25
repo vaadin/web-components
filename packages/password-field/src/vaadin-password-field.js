@@ -5,7 +5,7 @@
  */
 import './vaadin-password-field-button.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 
@@ -51,7 +51,7 @@ let memoizedTemplate;
  * @extends TextField
  * @mixes SlotStylesMixin
  */
-export class PasswordField extends SlotStylesMixin(SlotMixin(TextField)) {
+export class PasswordField extends SlotStylesMixin(TextField) {
   static get is() {
     return 'vaadin-password-field';
   }
@@ -123,18 +123,6 @@ export class PasswordField extends SlotStylesMixin(SlotMixin(TextField)) {
   }
 
   /** @protected */
-  get slots() {
-    return {
-      ...super.slots,
-      reveal: () => {
-        const btn = document.createElement('vaadin-password-field-button');
-        btn.disabled = this.disabled;
-        return btn;
-      }
-    };
-  }
-
-  /** @protected */
   get slotStyles() {
     const tag = this.localName;
     return [
@@ -148,7 +136,7 @@ export class PasswordField extends SlotStylesMixin(SlotMixin(TextField)) {
 
   /** @protected */
   get _revealNode() {
-    return this._getDirectSlotChild('reveal');
+    return this._revealButtonController && this._revealButtonController.node;
   }
 
   constructor() {
@@ -163,33 +151,27 @@ export class PasswordField extends SlotStylesMixin(SlotMixin(TextField)) {
     super.ready();
 
     this._revealPart = this.shadowRoot.querySelector('[part="reveal-button"]');
-  }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
+    this._revealButtonController = new SlotController(
+      this,
+      'reveal',
+      () => document.createElement('vaadin-password-field-button'),
+      (host, btn) => {
+        btn.disabled = host.disabled;
 
-    if (this._revealNode) {
-      this.__updateAriaLabel(this.i18n);
-      this._revealNode.addEventListener('click', this.__boundRevealButtonClick);
-      this._revealNode.addEventListener('touchend', this.__boundRevealButtonTouchend);
-    }
+        btn.addEventListener('click', host.__boundRevealButtonClick);
+        btn.addEventListener('touchend', host.__boundRevealButtonTouchend);
+      }
+    );
+    this.addController(this._revealButtonController);
+
+    this.__updateAriaLabel(this.i18n);
+
+    this._updateToggleState(false);
+    this._toggleRevealHidden(this.revealButtonHidden);
 
     if (this.inputElement) {
       this.inputElement.autocapitalize = 'off';
-    }
-
-    this._toggleRevealHidden(this.revealButtonHidden);
-    this._updateToggleState(false);
-  }
-
-  /** @protected */
-  disconnectedCallback() {
-    super.disconnectedCallback();
-
-    if (this._revealNode) {
-      this._revealNode.removeEventListener('click', this.__boundRevealButtonClick);
-      this._revealNode.removeEventListener('touchend', this.__boundRevealButtonTouchend);
     }
   }
 
