@@ -142,6 +142,7 @@ describe('keyboard navigation - row focus', () => {
     grid.firstElementChild.footerRenderer = (root) => (root.textContent = 'footer');
     grid.rowDetailsRenderer = (root) => (root.textContent = 'details');
 
+    await nextFrame();
     header = grid.$.header;
     body = grid.$.items;
     footer = grid.$.footer;
@@ -235,28 +236,31 @@ describe('keyboard navigation - row focus', () => {
         expect(getFocusedCellIndex()).to.equal(-1);
       });
 
-      it('should expand an expandable row on forwards', () => {
+      it('should expand an expandable row on forwards', async () => {
         tabToBody();
         // Ensure we're still in row focus mode
         backwards();
         expect(isRowExpanded(0)).to.be.false;
         forwards();
+        await nextFrame();
         expect(isRowExpanded(0)).to.be.true;
       });
 
-      it('should remain in row focus mode on forwards over an expandable row', () => {
+      it('should remain in row focus mode on forwards over an expandable row', async () => {
         tabToBody();
         // Ensure we're still in row focus mode
         backwards();
+        await nextFrame();
         forwards();
         expect(getFocusedCellIndex()).to.equal(-1);
       });
 
-      it('should enter cell focus mode on an expanded row on forwards', () => {
+      it('should enter cell focus mode on an expanded row on forwards', async () => {
         tabToBody();
         // Ensure we're still in row focus mode
         backwards();
         forwards();
+        await nextFrame();
         forwards();
         expect(getFocusedCellIndex()).to.equal(0);
       });
@@ -489,6 +493,7 @@ describe('keyboard navigation on column groups - row focus', () => {
       it('should have no tabbable body row when there are no rows', async () => {
         // Remove all body rows
         grid.items = [];
+        await nextFrame();
 
         const tabbableBodyRow = getTabbableRows(body)[0];
         expect(tabbableBodyRow).not.to.be.ok;
@@ -529,21 +534,24 @@ describe('keyboard navigation on column groups - row focus', () => {
       flushGrid(grid);
     });
 
-    it(`should enter row focus mode - ${section}`, () => {
+    it(`should enter row focus mode - ${section}`, async () => {
       getTabbableElements(grid.$.table)[0].focus();
       left();
 
+      await nextFrame();
       const tabbableRow = getTabbableRows(grid.shadowRoot)[0];
       expect(tabbableRow).to.be.ok;
     });
 
-    it(`should return to cell focus mode - ${section}`, () => {
+    it(`should return to cell focus mode - ${section}`, async () => {
       getTabbableElements(grid.$.table)[0].focus();
       left();
 
+      await nextFrame();
       const tabbableRow = getTabbableRows(grid.shadowRoot)[0];
       right();
 
+      await nextFrame();
       const tabbableCell = getTabbableElements(tabbableRow)[0];
       expect(tabbableCell.parentElement).to.equal(tabbableRow);
     });
