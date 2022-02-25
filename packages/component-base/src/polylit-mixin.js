@@ -25,6 +25,19 @@ function parseObserver(observerString) {
   };
 }
 
+function getOrCreateMap(obj, name) {
+  if (!obj[name]) {
+    obj[name] = new Map();
+    // eslint-disable-next-line no-prototype-builtins
+  } else if (!obj.hasOwnProperty(name)) {
+    // clone any existing entries (superclasses)
+    const map = obj[name];
+    obj[name] = new Map();
+    map.forEach((v, k) => obj[name].set(k, v));
+  }
+  return obj[name];
+}
+
 const PolylitMixinImplementation = (superclass) => {
   class PolylitMixinClass extends superclass {
     static createProperty(name, options) {
@@ -36,16 +49,7 @@ const PolylitMixinImplementation = (superclass) => {
     }
 
     static getOrCreateMap(name) {
-      if (!this[name]) {
-        this[name] = new Map();
-        // eslint-disable-next-line no-prototype-builtins
-      } else if (!this.hasOwnProperty(name)) {
-        // clone any existing entries (superclasses)
-        const map = this[name];
-        this[name] = new Map();
-        map.forEach((v, k) => this[name].set(k, v));
-      }
-      return this[name];
+      return getOrCreateMap(this, name);
     }
 
     /*
@@ -186,13 +190,17 @@ const PolylitMixinImplementation = (superclass) => {
       if (this.constructor.__complexObservers) {
         this.__runComplexObservers(props, this.constructor.__complexObservers);
       }
+
+      if (this.__dynamicObservers) {
+        this.__runComplexObservers(props, this.__dynamicObservers);
+      }
     }
 
     /** @protected */
     _createMethodObserver(observer) {
-      const complexObservers = this.constructor.getOrCreateMap('__complexObservers');
+      const dynamicObservers = getOrCreateMap(this, '__dynamicObservers');
       const { method, observerProps } = parseObserver(observer);
-      complexObservers.set(method, observerProps);
+      dynamicObservers.set(method, observerProps);
     }
 
     /** @private */

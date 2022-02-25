@@ -504,6 +504,21 @@ describe('PolylitMixin', () => {
       await element.updateComplete;
       expect(valueOrLoadingChangedSpy.getCall(0).args).to.eql(['foo', true]);
     });
+
+    it('should not call dynamic method observers for another element instance', async () => {
+      element._createMethodObserver('_valueOrLoadingChanged(value, loading)');
+
+      const other = document.createElement(tag);
+      element.parentNode.appendChild(other);
+      await other.updateComplete;
+
+      valueOrLoadingChangedSpy = sinon.spy(other, '_valueOrLoadingChanged');
+      other.value = 'foo';
+      other.loading = true;
+      await other.updateComplete;
+
+      expect(valueOrLoadingChangedSpy.called).to.be.false;
+    });
   });
 
   describe('notify', () => {
