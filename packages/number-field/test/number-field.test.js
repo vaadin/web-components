@@ -227,22 +227,22 @@ describe('number-field', () => {
       numberField.min = -1;
       numberField.value = 0;
 
-      for (var i = 0; i < 5; i++) {
-        decreaseButton.click();
-        expect(decreaseButton.hasAttribute('disabled')).to.be.true;
-        expect(numberField.value).to.be.equal('-1');
-      }
+      decreaseButton.click();
+      expect(numberField.value).to.be.equal('-1');
+
+      decreaseButton.click();
+      expect(numberField.value).to.be.equal('-1');
     });
 
     it('should not change value on plus button click when max limit is reached', () => {
       numberField.max = 1;
       numberField.value = 0;
 
-      for (var i = 0; i < 5; i++) {
-        increaseButton.click();
-        expect(increaseButton.hasAttribute('disabled')).to.be.true;
-        expect(numberField.value).to.be.equal('1');
-      }
+      increaseButton.click();
+      expect(numberField.value).to.be.equal('1');
+
+      increaseButton.click();
+      expect(numberField.value).to.be.equal('1');
     });
 
     it('should not change value on plus button click when max limit will be reached with the next step', () => {
@@ -251,11 +251,11 @@ describe('number-field', () => {
       numberField.step = 6;
       numberField.value = 2;
 
-      for (var i = 0; i < 5; i++) {
-        increaseButton.click();
-        expect(increaseButton.hasAttribute('disabled')).to.be.true;
-        expect(numberField.value).to.be.equal('8');
-      }
+      increaseButton.click();
+      expect(numberField.value).to.be.equal('8');
+
+      increaseButton.click();
+      expect(numberField.value).to.be.equal('8');
     });
 
     it('should prevent touchend event on value control buttons', () => {
@@ -741,32 +741,44 @@ describe('number-field', () => {
       expect(changeSpy.calledAfter(validateSpy)).to.be.true;
     });
 
-    it('should validate by step when defined by user', () => {
-      numberField.step = 1.5;
+    describe('step values', () => {
+      beforeEach(() => {
+        numberField.step = 1.5;
+      });
 
       [-6, -1.5, 0, 1.5, 4.5].forEach((validValue) => {
-        numberField.value = validValue;
-        expect(numberField.validate()).to.be.true;
+        it(`should validate valid value "${validValue}" by step when defined by user`, () => {
+          numberField.value = validValue;
+          expect(numberField.validate()).to.be.true;
+        });
       });
 
       [-3.5, -1, 2, 2.5].forEach((invalidValue) => {
-        numberField.value = invalidValue;
-        expect(numberField.validate()).to.be.false;
+        it(`should validate invalid value "${invalidValue}" by step when defined by user`, () => {
+          numberField.value = invalidValue;
+          expect(numberField.validate()).to.be.false;
+        });
       });
     });
 
-    it('should use min as step basis in validation when both are defined', () => {
-      numberField.min = 1;
-      numberField.step = 1.5;
+    describe('step basis', () => {
+      beforeEach(() => {
+        numberField.min = 1;
+        numberField.step = 1.5;
+      });
 
       [1, 2.5, 4, 5.5].forEach((validValue) => {
-        numberField.value = validValue;
-        expect(numberField.validate()).to.be.true;
+        it(`should validate valid value "${validValue}" using min as basis`, () => {
+          numberField.value = validValue;
+          expect(numberField.validate()).to.be.true;
+        });
       });
 
       [1.5, 3, 5].forEach((invalidValue) => {
-        numberField.value = invalidValue;
-        expect(numberField.validate()).to.be.false;
+        it(`should validate invalid value "${invalidValue}" using min as basis`, () => {
+          numberField.value = invalidValue;
+          expect(numberField.validate()).to.be.false;
+        });
       });
     });
 
