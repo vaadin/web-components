@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '../vaadin-grid.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import {
   flushGrid,
@@ -32,10 +31,14 @@ registerStyles(
   `
 );
 
+import('../vaadin-grid.js');
+
 describe('dynamic physical count', () => {
   let scroller, grid;
 
-  beforeEach(() => {
+  before(() => customElements.whenDefined('vaadin-grid'));
+
+  beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 200px; height: 200px;" size="200" theme="no-border">
         <vaadin-grid-column>
@@ -44,6 +47,7 @@ describe('dynamic physical count', () => {
       </vaadin-grid>
     `);
     grid.dataProvider = infiniteDataProvider;
+    await nextFrame();
     scroller = grid.$.scroller;
     flushGrid(grid);
   });
