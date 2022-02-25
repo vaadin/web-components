@@ -79,6 +79,14 @@ const PolylitMixinImplementation = (superclass) => {
     }
 
     static getPropertyDescriptor(name, key, options) {
+      [String, Boolean, Number].forEach((type) => {
+        if (options === type) {
+          options = {
+            type: type
+          };
+        }
+      });
+
       const defaultDescriptor = super.getPropertyDescriptor(name, key, options);
 
       let result = defaultDescriptor;
