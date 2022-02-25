@@ -38,7 +38,9 @@ export const ThemePropertyMixin = (superClass) =>
     attributeChangedCallback(name, oldValue, newValue) {
       super.attributeChangedCallback(name, oldValue, newValue);
 
-      if (name === 'theme') {
+      // TODO: with Lit + PolylitMixin, this method is not yet defined
+      // during the first execution of `attributeChangedCallback`
+      if (name === 'theme' && this._setTheme) {
         this._setTheme(newValue);
       }
     }
