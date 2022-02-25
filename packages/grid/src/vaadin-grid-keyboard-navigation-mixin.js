@@ -842,7 +842,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
         if (firstVisibleCell && firstVisibleRow) {
           // Reset memoized column
-          delete this._focusedColumnOrder;
+          this._focusedColumnOrder = undefined;
           this._itemsFocusable = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
         }
       } else {

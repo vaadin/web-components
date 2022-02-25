@@ -221,6 +221,7 @@ describe('keyboard navigation', () => {
         </vaadin-grid-column>
       </vaadin-grid>
     `);
+    await nextFrame();
 
     scroller = grid.$.scroller;
     header = grid.$.header;
@@ -552,27 +553,30 @@ describe('keyboard navigation', () => {
       expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[3]);
     });
 
-    it('should move header tabbable cell when navigating with keys', () => {
+    it('should move header tabbable cell when navigating with keys', async () => {
       tabToHeader();
 
       right();
 
+      await nextFrame();
       expect(getTabbableElements(header)[0]).to.equal(header.children[0].children[1]);
     });
 
-    it('should move body tabbable cell when navigating with keys', () => {
+    it('should move body tabbable cell when navigating with keys', async () => {
       tabToBody();
 
       right();
 
+      await nextFrame();
       expect(getTabbableElements(body)[0]).to.equal(body.children[0].children[1]);
     });
 
-    it('should move footer tabbable cell when navigating with keys', () => {
+    it('should move footer tabbable cell when navigating with keys', async () => {
       shiftTabToFooter();
 
       right();
 
+      await nextFrame();
       expect(getTabbableElements(footer)[0]).to.equal(footer.children[0].children[1]);
     });
   });
@@ -803,11 +807,12 @@ describe('keyboard navigation', () => {
     });
 
     describe('with row details', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         flushGrid(grid);
         grid.openItemDetails(grid.items[0]);
 
         tabToBody();
+        await nextFrame();
       });
 
       function findRowDetailsCell(scope) {
@@ -1361,10 +1366,11 @@ describe('keyboard navigation', () => {
       expect(grid.activeItem).to.equal('foo');
     });
 
-    it('should toggle when equaling item is clicked', () => {
+    it('should toggle when equaling item is clicked', async () => {
       grid.itemIdPath = 'name';
       grid.items = [{ name: 'foo' }, { name: 'bar' }];
       grid.activeItem = { name: 'foo' };
+      await nextFrame();
       clickItem(0);
 
       expect(grid.activeItem).to.be.null;
@@ -1515,6 +1521,7 @@ describe('keyboard navigation', () => {
       </vaadin-grid>
     `);
 
+      await nextFrame();
       scroller = grid.$.scroller;
       header = grid.$.header;
       body = grid.$.items;
@@ -1527,15 +1534,17 @@ describe('keyboard navigation', () => {
 
       grid.items = ['foo', 'bar'];
 
+      await nextFrame();
       focusItem(0);
       clickItem(0);
     });
 
-    it('should enter interaction mode with enter', () => {
+    it('should enter interaction mode with enter', async () => {
       right();
 
       enter();
 
+      await nextFrame();
       expect(grid.hasAttribute('interacting')).to.be.true;
     });
 
@@ -1576,7 +1585,7 @@ describe('keyboard navigation', () => {
       spy.restore();
     });
 
-    it('should exit interaction mode from focused single-line input with enter', () => {
+    it('should exit interaction mode from focused single-line input with enter', async () => {
       const cell = getRowCell(0, 1);
       const input = getCellContent(cell).children[0];
       input.type = 'text';
@@ -1586,10 +1595,11 @@ describe('keyboard navigation', () => {
 
       enter(input);
 
+      await nextFrame();
       expect(grid.hasAttribute('interacting')).to.be.false;
     });
 
-    it('should not exit interaction mode from focused non-single-line input with enter', () => {
+    it('should not exit interaction mode from focused non-single-line input with enter', async () => {
       const cell = getRowCell(0, 1);
       const input = getCellContent(cell).children[0];
       input.type = 'button';
@@ -1599,6 +1609,7 @@ describe('keyboard navigation', () => {
 
       enter(input);
 
+      await nextFrame();
       expect(grid.hasAttribute('interacting')).to.be.true;
     });
 
@@ -1785,11 +1796,12 @@ describe('keyboard navigation', () => {
       expect(grid.activeItem).to.be.null;
     });
 
-    it('should enter interaction mode with F2', () => {
+    it('should enter interaction mode with F2', async () => {
       right();
 
       f2();
 
+      await nextFrame();
       expect(grid.hasAttribute('interacting')).to.be.true;
     });
 
@@ -1861,9 +1873,10 @@ describe('keyboard navigation', () => {
       expect(grid.hasAttribute('navigating')).to.be.false;
     });
 
-    it('should enter interaction mode when cell contents are focused', () => {
+    it('should enter interaction mode when cell contents are focused', async () => {
       focusFirstBodyInput(0);
 
+      await nextFrame();
       expect(grid.hasAttribute('interacting')).to.be.true;
     });
 
@@ -2102,6 +2115,7 @@ describe('keyboard navigation on column groups', () => {
       it('should have no tabbable body cell when there are no rows', async () => {
         // Remove all body rows
         grid.items = [];
+        await nextFrame();
 
         const tabbableBodyCell = getTabbableCells(body)[0];
         expect(tabbableBodyCell).not.to.be.ok;
@@ -2133,6 +2147,7 @@ describe('keyboard navigation on column groups', () => {
 
         // Hide the second body row
         grid.items = [grid.items[0]];
+        await nextFrame();
 
         // Focus the first row (should focus the first cell)
         tabToBody();
