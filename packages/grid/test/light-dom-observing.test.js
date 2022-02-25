@@ -300,8 +300,9 @@ const fixtures = {
 describe('light dom observing', () => {
   let wrapper, grid, header, body, footer, repeater;
 
-  function init(fixtureName, options) {
+  async function init(fixtureName, options) {
     grid = fixtureSync(fixtures[fixtureName]);
+    await nextFrame();
 
     if (grid.$.grid) {
       // unwrap the <grid-wrapper>
@@ -362,7 +363,7 @@ describe('light dom observing', () => {
   describe('generic operations', () => {
     describe('columns inside grid', () => {
       beforeEach(async () => {
-        init('columns');
+        await init('columns');
         flushGrid(grid);
         await nextFrame();
       });
@@ -458,7 +459,7 @@ describe('light dom observing', () => {
       let firstGroup;
 
       beforeEach(async () => {
-        init('plain-groups');
+        await init('plain-groups');
         firstGroup = grid.querySelector('vaadin-grid-column-group');
         await nextFrame();
       });
@@ -479,8 +480,8 @@ describe('light dom observing', () => {
     });
 
     describe('groups inside grid', () => {
-      beforeEach(() => {
-        init('plain-groups');
+      beforeEach(async () => {
+        await init('plain-groups');
       });
 
       it('should support adding late', async () => {
@@ -511,8 +512,8 @@ describe('light dom observing', () => {
     describe('groups inside group', () => {
       let firstGroup;
 
-      beforeEach(() => {
-        init('nested-groups');
+      beforeEach(async () => {
+        await init('nested-groups');
         firstGroup = grid.querySelector('vaadin-grid-column-group');
       });
 
@@ -593,7 +594,7 @@ describe('light dom observing', () => {
 
     describe('columns inside grid', () => {
       beforeEach(async () => {
-        init('dom-repeat-columns', { columns: columns });
+        await init('dom-repeat-columns', { columns: columns });
         await aTimeout(0);
       });
 
@@ -602,7 +603,7 @@ describe('light dom observing', () => {
 
     describe('columns inside group', () => {
       beforeEach(async () => {
-        init('dom-repeat-columns-in-group', { columns: columns });
+        await init('dom-repeat-columns-in-group', { columns: columns });
         await aTimeout(0);
       });
 
@@ -611,7 +612,7 @@ describe('light dom observing', () => {
 
     describe('groups inside grid', () => {
       beforeEach(async () => {
-        init('dom-repeat-groups', { columns: columns });
+        await init('dom-repeat-groups', { columns: columns });
         await aTimeout(0);
       });
 
@@ -620,7 +621,7 @@ describe('light dom observing', () => {
 
     describe('groups inside group', () => {
       beforeEach(async () => {
-        init('dom-repeat-groups-in-group', { columns: columns });
+        await init('dom-repeat-groups-in-group', { columns: columns });
         await aTimeout(0);
       });
 
@@ -628,8 +629,8 @@ describe('light dom observing', () => {
     });
 
     describe('with row detail', () => {
-      beforeEach(() => {
-        init('dom-repeat-columns-detailed', { columns: columns });
+      beforeEach(async () => {
+        await init('dom-repeat-columns-detailed', { columns: columns });
       });
 
       it('should obey the "detailsOpened" template property', async () => {
@@ -649,8 +650,8 @@ describe('light dom observing', () => {
     function shouldSupportEffectiveChildren(inGroup) {
       describe('children mutations', () => {
         describe('with columns', () => {
-          beforeEach(() => {
-            init('effective-children-columns', { inGroup: inGroup });
+          beforeEach(async () => {
+            await init('effective-children-columns', { inGroup: inGroup });
           });
 
           it('should provide initial state', async () => {
@@ -680,8 +681,8 @@ describe('light dom observing', () => {
         describe('with groups', () => {
           let firstGroup;
 
-          beforeEach(() => {
-            init('effective-children-groups', { inGroup: inGroup });
+          beforeEach(async () => {
+            await init('effective-children-groups', { inGroup: inGroup });
             firstGroup = wrapper.querySelector('vaadin-grid-column-group');
           });
 
@@ -712,8 +713,8 @@ describe('light dom observing', () => {
       describe('nested group mutations', () => {
         let firstGroup;
 
-        beforeEach(() => {
-          init('effective-children-groups', { inGroup: inGroup });
+        beforeEach(async () => {
+          await init('effective-children-groups', { inGroup: inGroup });
           firstGroup = wrapper.querySelector('vaadin-grid-column-group');
         });
 
