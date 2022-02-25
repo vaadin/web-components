@@ -259,9 +259,10 @@ describe('column group resizing', () => {
     await nextFrame();
   });
 
-  it('should cascade resizable property to child columns', () => {
+  it('should cascade resizable property to child columns', async () => {
     expect(grid._columnTree[1][0].resizable).to.be.true;
     grid._columnTree[0][0].resizable = false;
+    await nextFrame();
     expect(grid._columnTree[1][0].resizable).to.be.false;
   });
 
