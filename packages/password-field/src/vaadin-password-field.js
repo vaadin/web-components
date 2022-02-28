@@ -288,10 +288,11 @@ export class PasswordField extends SlotStylesMixin(TextField) {
    * Override method inherited from `DisabledMixin` to synchronize the reveal button
    * disabled state with the password field disabled state.
    * @param {boolean} disabled
+   * @param {boolean} oldDisabled
    * @protected
    */
-  _disabledChanged(disabled) {
-    super._disabledChanged(disabled);
+  _disabledChanged(disabled, oldDisabled) {
+    super._disabledChanged(disabled, oldDisabled);
 
     if (this._revealNode) {
       this._revealNode.disabled = disabled;
