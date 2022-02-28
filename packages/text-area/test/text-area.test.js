@@ -386,6 +386,11 @@ describe('text-area', () => {
         expect(e.defaultPrevented).to.be.true;
       });
 
+      it('should not cancel wheel event if text area is not scrolled', () => {
+        const e = wheel({ deltaY: -10 });
+        expect(e.defaultPrevented).to.be.false;
+      });
+
       it('should update value on resize', async () => {
         inputField.scrollTop = 10;
         await nextFrame();

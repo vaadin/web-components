@@ -205,9 +205,13 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
     // event, scrolling manually and then synchronously updating the scroll position CSS variable
     // allows us to avoid some jumpy behavior that would occur on wheel otherwise.
     this._inputField.addEventListener('wheel', (e) => {
-      e.preventDefault();
+      const scrollTopBefore = this._inputField.scrollTop;
       this._inputField.scrollTop += e.deltaY;
-      this.__scrollPositionUpdated();
+
+      if (scrollTopBefore !== this._inputField.scrollTop) {
+        e.preventDefault();
+        this.__scrollPositionUpdated();
+      }
     });
 
     this._updateHeight();
