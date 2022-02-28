@@ -6,6 +6,24 @@ import { ControllerMixin } from '../src/controller-mixin.js';
 import { FocusTrapController } from '../src/focus-trap-controller.js';
 
 customElements.define(
+  'focus-trap-wrapper',
+  class FocusTrapWrapper extends ControllerMixin(PolymerElement) {
+    static get template() {
+      return html`<slot></slot>`;
+    }
+
+    ready() {
+      super.ready();
+      this.innerHTML = `
+        <div id="outer-trap">
+          <focus-trap-element></focus-trap-element>
+        </div>
+      `;
+    }
+  }
+);
+
+customElements.define(
   'focus-trap-element',
   class FocusTrapElement extends ControllerMixin(PolymerElement) {
     static get template() {
@@ -276,6 +294,35 @@ describe('focus-trap-controller', () => {
         await tab();
         expect(document.activeElement).to.equal(outsideInput2);
       });
+    });
+  });
+
+  describe('nested', () => {
+    let wrapper, wrapperController, wrapperTrap, trapInput1, trapInput2;
+
+    beforeEach(() => {
+      wrapper = fixtureSync(`<focus-trap-wrapper></focus-trap-wrapper>`);
+      wrapperController = new FocusTrapController(element);
+      wrapper.addController(wrapperController);
+      wrapperTrap = wrapper.querySelector('#outer-trap');
+
+      element = wrapper.querySelector('focus-trap-element');
+      controller = new FocusTrapController(element);
+      element.addController(controller);
+      trap = element.querySelector('#trap');
+
+      trapInput1 = trap.querySelector('#trap-input-1');
+      trapInput2 = trap.querySelector('#trap-input-2');
+    });
+
+    it('should only take last active controller instance into account', async () => {
+      wrapperController.trapFocus(wrapperTrap);
+      controller.trapFocus(trap);
+
+      trapInput1.focus();
+      await tab();
+
+      expect(document.activeElement).to.equal(trapInput2);
     });
   });
 });
