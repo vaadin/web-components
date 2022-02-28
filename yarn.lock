@@ -8386,22 +8386,22 @@ octokit@^1.7.1:
     "@octokit/plugin-throttling" "^3.5.1"
     "@octokit/types" "^6.26.0"
 
-ol-mapbox-style@^6.8.2:
-  version "6.9.0"
-  resolved "https://registry.yarnpkg.com/ol-mapbox-style/-/ol-mapbox-style-6.9.0.tgz#b9587e390d8cc2037481ecdea53f0a6b9ba1d46c"
-  integrity sha512-Isxk+IPB6pCBD2Pubz9cpQcZjEeuPhxyk/QsLZjb2+KwvyGaIFltdlxnxx/QXJ7rOxUiLvS/XhsOyiK0c7prEw==
+ol-mapbox-style@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/ol-mapbox-style/-/ol-mapbox-style-7.0.0.tgz#99b734fe1bf8d161f8ba7795a574e2adb9e8bd38"
+  integrity sha512-y0OrKfx/TBcbGUf0UefDuYPSfMCCjPz0aUttm/kG461CNwzJpGavvf/lJ7nyNfeHSJFr0iEEdAbB98UUUQQkww==
   dependencies:
     "@mapbox/mapbox-gl-style-spec" "^13.20.1"
     mapbox-to-css-font "^2.4.1"
     webfont-matcher "^1.1.0"
 
-ol@6.12.1-dev.1645111187932:
-  version "6.12.1-dev.1645111187932"
-  resolved "https://registry.yarnpkg.com/ol/-/ol-6.12.1-dev.1645111187932.tgz#daf364224f9a743393424ec409292b71249c5114"
-  integrity sha512-5+aG2CMms52LaUKZMQbr+GTCjI7UIB5TfYzrloemRItbmqJ5XCtpA7dKSUBMLAHiT3LCcpTucjR4+jB/JejzKA==
+ol@6.13.0:
+  version "6.13.0"
+  resolved "https://registry.yarnpkg.com/ol/-/ol-6.13.0.tgz#275b0d70a01b05ea11931c5480db9f25145d467c"
+  integrity sha512-Fa6yt+FArWE9fwYRRhi/8+ULcFDRS2ZuDcLp3R9bQeDVa5T4E4TT9iqLeJhmHG+bzWiLWJHIeFUqw8GD2gW0YA==
   dependencies:
     geotiff "^2.0.2"
-    ol-mapbox-style "^6.8.2"
+    ol-mapbox-style "^7.0.0"
     pbf "3.2.1"
     rbush "^3.0.1"
 
