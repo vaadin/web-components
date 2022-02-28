@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dialog</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/dialog';
+    </script>
+  </head>
+
+  <body>
+    <vaadin-dialog></vaadin-dialog>
+
+    <button>Open dialog 1</button>
+
+    <script type="module">
+      const dialog1 = document.querySelector('vaadin-dialog');
+
+      dialog1.renderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+
+        // Second dialog
+        const dialog2 = document.createElement('vaadin-dialog');
+        dialog2.renderer = (root2) => {
+          if (root2.firstChild) {
+            return;
+          }
+
+          // Close second dialog
+          const btnClose2 = document.createElement('button');
+          btnClose2.textContent = 'Close dialog 2';
+          btnClose2.addEventListener('click', () => {
+            dialog2.opened = false;
+          });
+
+          root2.appendChild(btnClose2);
+        };
+
+        root.appendChild(dialog2);
+
+        // Close first dialog
+        const btnClose1 = document.createElement('button');
+        btnClose1.textContent = 'Close dialog 1';
+        btnClose1.addEventListener('click', () => {
+          dialog1.opened = false;
+        });
+
+        root.appendChild(btnClose1);
+
+        // Open second dialog
+        const btnOpen2 = document.createElement('button');
+        btnOpen2.textContent = 'Open dialog 2';
+        btnOpen2.addEventListener('click', () => {
+          dialog2.opened = true;
+        });
+
+        root.appendChild(btnOpen2);
+      };
+
+      // Open first dialog
+      const btnOpen1 = document.querySelector('button');
+      btnOpen1.addEventListener('click', () => {
+        dialog1.opened = true;
+      });
+    </script>
+  </body>
+</html>
