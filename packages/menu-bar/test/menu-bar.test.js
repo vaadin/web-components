@@ -570,3 +570,22 @@ describe('item components', () => {
     expect(Number(style.zIndex)).to.equal(1);
   });
 });
+
+describe('menu-bar in flex', () => {
+  let wrapper;
+  let menu;
+
+  beforeEach(() => {
+    wrapper = fixtureSync(`
+      <div style="display: flex; width: 400px;">
+        <vaadin-menu-bar></vaadin-menu-bar>
+      </div>
+    `);
+    menu = wrapper.firstElementChild;
+    menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }];
+  });
+
+  it('should not expand to full width of the container', () => {
+    expect(menu.offsetWidth).to.be.lessThan(wrapper.offsetWidth);
+  });
+});
