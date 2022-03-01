@@ -5,6 +5,8 @@
  */
 import { getFocusableElements, isElementFocused } from './focus-utils.js';
 
+const instances = [];
+
 /**
  * A controller for trapping focus within a DOM node.
  */
@@ -61,6 +63,8 @@ export class FocusTrapController {
       throw new Error('The trap node should have at least one focusable descendant or be focusable itself.');
     }
 
+    instances.push(this);
+
     if (this.__focusedElementIndex === -1) {
       this.__focusableElements[0].focus();
     }
@@ -72,6 +76,8 @@ export class FocusTrapController {
    */
   releaseFocus() {
     this.__trapNode = null;
+
+    instances.pop();
   }
 
   /**
@@ -87,6 +93,11 @@ export class FocusTrapController {
    */
   __onKeyDown(event) {
     if (!this.__trapNode) {
+      return;
+    }
+
+    // Only handle events for the last instance
+    if (this !== Array.from(instances).pop()) {
       return;
     }
 
