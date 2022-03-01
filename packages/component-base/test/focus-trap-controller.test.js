@@ -298,7 +298,7 @@ describe('focus-trap-controller', () => {
   });
 
   describe('nested', () => {
-    let wrapper, wrapperController, wrapperTrap, trapInput1, trapInput2;
+    let wrapper, wrapperController, wrapperTrap, trapInput1, trapInput2, trapInput3;
 
     beforeEach(() => {
       wrapper = fixtureSync(`<focus-trap-wrapper></focus-trap-wrapper>`);
@@ -313,6 +313,7 @@ describe('focus-trap-controller', () => {
 
       trapInput1 = trap.querySelector('#trap-input-1');
       trapInput2 = trap.querySelector('#trap-input-2');
+      trapInput3 = trap.querySelector('#trap-input-3');
     });
 
     it('should only take last active controller instance into account', async () => {
@@ -323,6 +324,24 @@ describe('focus-trap-controller', () => {
       await tab();
 
       expect(document.activeElement).to.equal(trapInput2);
+    });
+
+    it('should use outer trap when nested controller is de-activated', async () => {
+      wrapperController.trapFocus(wrapperTrap);
+      controller.trapFocus(trap);
+
+      trapInput1.focus();
+      await shiftTab();
+
+      expect(document.activeElement).to.equal(trapInput3);
+
+      controller.releaseFocus();
+
+      await tab();
+      await tab();
+      await tab();
+
+      expect(document.activeElement).to.equal(trapInput1);
     });
   });
 });

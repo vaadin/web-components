@@ -77,7 +77,7 @@ export class FocusTrapController {
   releaseFocus() {
     this.__trapNode = null;
 
-    instances.splice(instances.indexOf(this), 1);
+    instances.pop();
   }
 
   /**
