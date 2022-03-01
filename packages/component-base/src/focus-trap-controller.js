@@ -58,12 +58,12 @@ export class FocusTrapController {
   trapFocus(trapNode) {
     this.__trapNode = trapNode;
 
-    instances.push(this);
-
     if (this.__focusableElements.length === 0) {
       this.__trapNode = null;
       throw new Error('The trap node should have at least one focusable descendant or be focusable itself.');
     }
+
+    instances.push(this);
 
     if (this.__focusedElementIndex === -1) {
       this.__focusableElements[0].focus();
