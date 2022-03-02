@@ -89,6 +89,13 @@ describe('checkbox-group', () => {
       });
       await visualDiff(div, 'full-width');
     });
+
+    it('vertical overflow', async () => {
+      element.helperText = 'Helper text';
+      element.setAttribute('theme', 'vertical');
+      element.style.height = '80px';
+      await visualDiff(div, 'vertical-overflow');
+    });
   });
 
   describe('RTL', () => {
