@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, touchend, touchstart } from '@vaadin/testing-helpers';
+import { click, fixtureSync, touchend, touchstart } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { flush } from '../src/debounce.js';
@@ -34,22 +34,10 @@ describe('ElementMixin', () => {
       expect(window.Vaadin.developmentModeCallback).to.be.instanceOf(Object);
       expect(window.Vaadin.developmentModeCallback['vaadin-usage-statistics']).to.be.instanceOf(Function);
     });
-  });
 
-  describe('cancelSyntheticClickEvents', () => {
-    let button;
-
-    beforeEach(() => {
-      button = document.createElement('div');
-      document.body.appendChild(button);
-    });
-
-    afterEach(() => {
-      button.remove();
-    });
-
-    it('should disable cancelSyntheticClickEvents globally', async () => {
+    it('should set the Polymer cancelSyntheticClickEvents setting to false', async () => {
       await import('@polymer/polymer/lib/utils/gestures.js');
+      const button = fixtureSync('<button></button>');
       touchstart(button);
       touchend(button);
       const event = click(button);
