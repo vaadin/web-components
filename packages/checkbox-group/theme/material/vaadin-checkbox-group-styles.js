@@ -29,6 +29,7 @@ const checkboxGroup = css`
   :host([theme~='vertical']) [part='group-field'] {
     display: flex;
     flex-direction: column;
+    overflow: auto;
   }
 
   :host([disabled]) [part='label'] {
