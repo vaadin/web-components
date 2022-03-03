@@ -14,9 +14,9 @@ describe('checkbox-group', () => {
     element = fixtureSync(
       `
         <vaadin-checkbox-group>
-          <vaadin-checkbox value="a">A</vaadin-checkbox>
-          <vaadin-checkbox value="b">B</vaadin-checkbox>
-          <vaadin-checkbox value="c">C</vaadin-checkbox>
+          <vaadin-checkbox value="a" label="A"></vaadin-checkbox>
+          <vaadin-checkbox value="b" label="B"></vaadin-checkbox>
+          <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
         </vaadin-checkbox-group>
       `,
       div
