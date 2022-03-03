@@ -27,7 +27,7 @@ describe('radio-button', () => {
   // TODO: A legacy suit. Replace with snapshot tests when possible.
   describe('default', () => {
     beforeEach(async () => {
-      radio = fixtureSync('<vaadin-radio-button>Label</vaadin-radio-button>');
+      radio = fixtureSync('<vaadin-radio-button label="Label"></vaadin-radio-button>');
       // Wait for MutationObserver
       await nextFrame();
       label = radio.querySelector('[slot=label]');

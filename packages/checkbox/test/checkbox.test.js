@@ -26,7 +26,7 @@ describe('checkbox', () => {
 
   describe('default', () => {
     beforeEach(async () => {
-      checkbox = fixtureSync('<vaadin-checkbox>I accept <a href="#">the terms and conditions</a></vaadin-checkbox>');
+      checkbox = fixtureSync('<vaadin-checkbox label="I accept the terms and conditions"></vaadin-checkbox>');
       // Wait for MutationObserver.
       await nextFrame();
       input = checkbox.inputElement;
