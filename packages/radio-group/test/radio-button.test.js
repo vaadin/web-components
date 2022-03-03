@@ -24,12 +24,9 @@ describe('radio-button', () => {
     });
   });
 
-  // TODO: A legacy suit. Replace with snapshot tests when possible.
   describe('default', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       radio = fixtureSync('<vaadin-radio-button label="Label"></vaadin-radio-button>');
-      // Wait for MutationObserver
-      await nextFrame();
       label = radio.querySelector('[slot=label]');
     });
 
@@ -44,10 +41,6 @@ describe('radio-button', () => {
     it('should set value property to "on"', () => {
       expect(radio.value).to.equal('on');
     });
-
-    it('should display the label', () => {
-      expect(label.textContent).to.equal('Label');
-    });
   });
 
   describe('native input', () => {
@@ -57,14 +50,8 @@ describe('radio-button', () => {
       label = radio.querySelector('[slot=label]');
     });
 
-    // TODO: A legacy test. Replace with snapshot tests when possible.
     it('should set input checked to false by default', () => {
       expect(input.checked).to.be.false;
-    });
-
-    // TODO: A legacy test. Replace with snapshot tests when possible.
-    it('should set input value to "on" by default', () => {
-      expect(input.value).to.equal('on');
     });
 
     it('should set checked property on input click', () => {
@@ -134,18 +121,6 @@ describe('radio-button', () => {
       await sendKeys({ press: 'Space' });
 
       expect(radio.checked).to.be.false;
-    });
-  });
-
-  // TODO: A legacy suit. Replace with snapshot tests when possible.
-  describe('label attribute', () => {
-    beforeEach(() => {
-      radio = fixtureSync('<vaadin-radio-button label="Label"></vaadin-radio-button>');
-      label = radio.querySelector('[slot=label]');
-    });
-
-    it('should display the label', () => {
-      expect(label.textContent).to.equal('Label');
     });
   });
 

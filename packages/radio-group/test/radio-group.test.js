@@ -44,10 +44,6 @@ describe('radio-group', () => {
       expect(group.readonly).to.be.false;
     });
 
-    it('should set role to radiogroup', () => {
-      expect(group.getAttribute('role')).to.equal('radiogroup');
-    });
-
     it('should keep initial disabled property for radio buttons', () => {
       expect(buttons[0].disabled).to.be.false;
       expect(buttons[1].disabled).to.be.true;
