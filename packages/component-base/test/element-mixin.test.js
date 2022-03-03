@@ -33,6 +33,11 @@ describe('ElementMixin', () => {
       expect(window.Vaadin.developmentModeCallback).to.be.instanceOf(Object);
       expect(window.Vaadin.developmentModeCallback['vaadin-usage-statistics']).to.be.instanceOf(Function);
     });
+
+    it('should set the Polymer cancelSyntheticClickEvents setting to false', async () => {
+      const { cancelSyntheticClickEvents } = await import('@polymer/polymer/lib/utils/settings.js');
+      expect(cancelSyntheticClickEvents).to.be.false;
+    });
   });
 
   describe('version', () => {
