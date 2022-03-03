@@ -42,9 +42,9 @@ customElements.define(
             <textarea tabindex="1">tabindex 1</textarea>
             <input type="text" id="text" value="tabindex 0" />
             <vaadin-radio-group>
-              <vaadin-radio-button id="radioButton1">Button 1</vaadin-radio-button>
-              <vaadin-radio-button id="radioButton2">Button 2</vaadin-radio-button>
-              <vaadin-radio-button id="radioButton3">Button 3</vaadin-radio-button>
+              <vaadin-radio-button id="radioButton1" label="Button 1"></vaadin-radio-button>
+              <vaadin-radio-button id="radioButton2" label="Button 2"></vaadin-radio-button>
+              <vaadin-radio-button id="radioButton3" label="Button 3"></vaadin-radio-button>
             </vaadin-radio-group>
             <vaadin-button>tabindex 0</vaadin-button>
           </template>
@@ -270,9 +270,9 @@ describe('focus-trap', function () {
               <textarea tabindex="1">tabindex 1</textarea>
               <input type="text" id="text" value="tabindex 0">
               <vaadin-radio-group>
-                <vaadin-radio-button id="radioButton1">Button 1</vaadin-radio-button>
-                <vaadin-radio-button id="radioButton2">Button 2</vaadin-radio-button>
-                <vaadin-radio-button id="radioButton3">Button 3</vaadin-radio-button>
+                <vaadin-radio-button id="radioButton1" label="Button 1"></vaadin-radio-button>
+                <vaadin-radio-button id="radioButton2" label="Button 2"></vaadin-radio-button>
+                <vaadin-radio-button id="radioButton3" label="Button 3"></vaadin-radio-button>
               </vaadin-radio-group>
               <vaadin-button>tabindex 0</vaadin-button>
             </template>

@@ -14,9 +14,9 @@ describe('radio-group', () => {
     element = fixtureSync(
       `
         <vaadin-radio-group>
-          <vaadin-radio-button value="a">A</vaadin-radio-button>
-          <vaadin-radio-button value="b">B</vaadin-radio-button>
-          <vaadin-radio-button value="c">C</vaadin-radio-button>
+          <vaadin-radio-button value="a" label="A"></vaadin-radio-button>
+          <vaadin-radio-button value="b" label="B"></vaadin-radio-button>
+          <vaadin-radio-button value="c" label="C"></vaadin-radio-button>
         </vaadin-radio-group>
       `,
       div
