@@ -412,7 +412,9 @@ class AvatarGroup extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizab
     const result = [];
     for (let i = limit; i < items; i++) {
       const item = this.items[i];
-      result.push(item.name || item.abbr || 'anonymous');
+      if (item) {
+        result.push(item.name || item.abbr || 'anonymous');
+      }
     }
     // override generated title attribute
     this.$.overflow.setAttribute('title', result.join('\n'));
