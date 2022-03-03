@@ -665,9 +665,9 @@ describe('radio-group', () => {
             <vaadin-radio-button label="Radio button 7" value="r_7"></vaadin-radio-button>
             <vaadin-radio-button label="Radio button 8" value="r_8"></vaadin-radio-button>
             <vaadin-radio-button label="Radio button 9" value="r_9"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 10 value="r_10"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 11 value="r_11"></vaadin-radio-button>
-            <vaadin-radio-button label="Radio button 12 value="r_12"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 10" value="r_10"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 11" value="r_11"></vaadin-radio-button>
+            <vaadin-radio-button label="Radio button 12" value="r_12"></vaadin-radio-button>
           </vaadin-radio-group>
         </div>
       `);

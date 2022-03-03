@@ -29,8 +29,8 @@ describe('vaadin-checkbox-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-checkbox-group>
-          <vaadin-checkbox value="1">Checkbox 1</vaadin-checkbox>
-          <vaadin-checkbox value="2" disabled>Checkbox 2</vaadin-checkbox>
+          <vaadin-checkbox value="1" label="Checkbox 1"></vaadin-checkbox>
+          <vaadin-checkbox value="2" label="Checkbox 2" disabled></vaadin-checkbox>
         </vaadin-checkbox-group>
       `);
       checkboxes = group.querySelectorAll('vaadin-checkbox');
@@ -61,8 +61,8 @@ describe('vaadin-checkbox-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-checkbox-group disabled>
-          <vaadin-checkbox value="1">Checkbox 1</vaadin-checkbox>
-          <vaadin-checkbox value="2">Checkbox 2</vaadin-checkbox>
+          <vaadin-checkbox value="1" label="Checkbox 1"></vaadin-checkbox>
+          <vaadin-checkbox value="2" label="Checkbox 2"></vaadin-checkbox>
         </vaadin-checkbox-group>
       `);
       await nextFrame();
@@ -97,9 +97,9 @@ describe('vaadin-checkbox-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-checkbox-group>
-          <vaadin-checkbox value="1">Checkbox 1</vaadin-checkbox>
-          <vaadin-checkbox value="2">Checkbox 2</vaadin-checkbox>
-          <vaadin-checkbox value="3">Checkbox 3</vaadin-checkbox>
+          <vaadin-checkbox value="1" label="Checkbox 1"></vaadin-checkbox>
+          <vaadin-checkbox value="2" label="Checkbox 2"></vaadin-checkbox>
+          <vaadin-checkbox value="3" label="Checkbox 3"></vaadin-checkbox>
         </vaadin-checkbox-group>
       `);
       await nextFrame();
@@ -207,7 +207,7 @@ describe('vaadin-checkbox-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-checkbox-group>
-          <vaadin-checkbox value="1">Checkbox 1</vaadin-checkbox>
+          <vaadin-checkbox value="1" label="Checkbox 1"></vaadin-checkbox>
         </vaadin-checkbox-group>
       `);
       await nextFrame();
@@ -258,7 +258,7 @@ describe('vaadin-checkbox-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-checkbox-group>
-          <vaadin-checkbox value="1">Checkbox 1</vaadin-checkbox>
+          <vaadin-checkbox value="1" label="Checkbox 1"></vaadin-checkbox>
         </vaadin-checkbox-group>
       `);
       await nextFrame();
@@ -475,9 +475,9 @@ describe('vaadin-checkbox-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-checkbox-group>
-          <vaadin-checkbox name="language" value="en">English</vaadin-checkbox>
-          <vaadin-checkbox name="language" value="fr">Français</vaadin-checkbox>
-          <vaadin-checkbox name="language" value="de">Deutsch</vaadin-checkbox>
+          <vaadin-checkbox name="language" value="en" label="English">/vaadin-checkbox>
+          <vaadin-checkbox name="language" value="fr" label="Français"></vaadin-checkbox>
+          <vaadin-checkbox name="language" value="de" label="Deutsch">/vaadin-checkbox>
         </vaadin-checkbox-group>
       `);
       checkboxes = group.querySelectorAll('vaadin-checkbox');
@@ -559,9 +559,9 @@ describe('vaadin-checkbox-group', () => {
         <dom-bind>
           <template>
             <vaadin-checkbox-group id="group" value="{{value}}">
-              <vaadin-checkbox value="a">Checkbox <b>a</b></vaadin-checkbox>
-              <vaadin-checkbox value="b">Checkbox <b>b</b></vaadin-checkbox>
-              <vaadin-checkbox value="c">Checkbox <b>c</b></vaadin-checkbox>
+              <vaadin-checkbox value="a" label="Checkbox A"></vaadin-checkbox>
+              <vaadin-checkbox value="b" label="Checkbox B"></vaadin-checkbox>
+              <vaadin-checkbox value="c" label="Checkbox C"></vaadin-checkbox>
             </vaadin-checkbox-group>
           </template>
         </template>
@@ -619,18 +619,18 @@ describe('vaadin-checkbox-group', () => {
     beforeEach(async () => {
       group = fixtureSync(`
         <vaadin-checkbox-group>
-          <vaadin-checkbox value="c_1">Checkbox 1</vaadin-checkbox>
-          <vaadin-checkbox value="c_2">Checkbox 2</vaadin-checkbox>
-          <vaadin-checkbox value="c_3">Checkbox 3</vaadin-checkbox>
-          <vaadin-checkbox value="c_4">Checkbox 4</vaadin-checkbox>
-          <vaadin-checkbox value="c_5">Checkbox 5</vaadin-checkbox>
-          <vaadin-checkbox value="c_6">Checkbox 6</vaadin-checkbox>
-          <vaadin-checkbox value="c_7">Checkbox 7</vaadin-checkbox>
-          <vaadin-checkbox value="c_8">Checkbox 8</vaadin-checkbox>
-          <vaadin-checkbox value="c_9">Checkbox 9</vaadin-checkbox>
-          <vaadin-checkbox value="c_10">Checkbox 10</vaadin-checkbox>
-          <vaadin-checkbox value="c_11">Checkbox 11</vaadin-checkbox>
-          <vaadin-checkbox value="c_12">Checkbox 12</vaadin-checkbox>
+          <vaadin-checkbox value="c_1" label="Checkbox 1"></vaadin-checkbox>
+          <vaadin-checkbox value="c_2" label="Checkbox 2"></vaadin-checkbox>
+          <vaadin-checkbox value="c_3" label="Checkbox 3"></vaadin-checkbox>
+          <vaadin-checkbox value="c_4" label="Checkbox 4"></vaadin-checkbox>
+          <vaadin-checkbox value="c_5" label="Checkbox 5"></vaadin-checkbox>
+          <vaadin-checkbox value="c_6" label="Checkbox 6"></vaadin-checkbox>
+          <vaadin-checkbox value="c_7" label="Checkbox 7"></vaadin-checkbox>
+          <vaadin-checkbox value="c_8" label="Checkbox 8"></vaadin-checkbox>
+          <vaadin-checkbox value="c_9" label="Checkbox 9"></vaadin-checkbox>
+          <vaadin-checkbox value="c_10" label="Checkbox 10"></vaadin-checkbox>
+          <vaadin-checkbox value="c_11" label="Checkbox 11"></vaadin-checkbox>
+          <vaadin-checkbox value="c_12" label="Checkbox 12"></vaadin-checkbox>
         </vaadin-checkbox-group>
       `);
       await nextFrame();
