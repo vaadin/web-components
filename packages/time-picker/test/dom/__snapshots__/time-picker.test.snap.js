@@ -1,0 +1,324 @@
+/* @web/test-runner snapshot v1 */
+export const snapshots = {};
+
+snapshots["vaadin-time-picker shadow default"] = 
+`<div class="vaadin-time-picker-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <vaadin-time-picker-combo-box
+    dir="ltr"
+    id="comboBox"
+  >
+    <vaadin-input-container part="input-field">
+      <slot
+        name="prefix"
+        slot="prefix"
+      >
+      </slot>
+      <slot name="input">
+      </slot>
+      <div
+        aria-hidden="true"
+        id="clearButton"
+        part="clear-button"
+        slot="suffix"
+      >
+      </div>
+      <div
+        aria-hidden="true"
+        class="toggle-button"
+        id="toggleButton"
+        part="toggle-button"
+        slot="suffix"
+      >
+      </div>
+    </vaadin-input-container>
+  </vaadin-time-picker-combo-box>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-time-picker shadow default */
+
+snapshots["vaadin-time-picker shadow disabled"] = 
+`<div class="vaadin-time-picker-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <vaadin-time-picker-combo-box
+    aria-disabled="true"
+    dir="ltr"
+    disabled=""
+    id="comboBox"
+  >
+    <vaadin-input-container
+      disabled=""
+      part="input-field"
+    >
+      <slot
+        name="prefix"
+        slot="prefix"
+      >
+      </slot>
+      <slot name="input">
+      </slot>
+      <div
+        aria-hidden="true"
+        id="clearButton"
+        part="clear-button"
+        slot="suffix"
+      >
+      </div>
+      <div
+        aria-hidden="true"
+        class="toggle-button"
+        id="toggleButton"
+        part="toggle-button"
+        slot="suffix"
+      >
+      </div>
+    </vaadin-input-container>
+  </vaadin-time-picker-combo-box>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-time-picker shadow disabled */
+
+snapshots["vaadin-time-picker shadow readonly"] = 
+`<div class="vaadin-time-picker-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <vaadin-time-picker-combo-box
+    dir="ltr"
+    id="comboBox"
+    readonly=""
+  >
+    <vaadin-input-container
+      part="input-field"
+      readonly=""
+    >
+      <slot
+        name="prefix"
+        slot="prefix"
+      >
+      </slot>
+      <slot name="input">
+      </slot>
+      <div
+        aria-hidden="true"
+        id="clearButton"
+        part="clear-button"
+        slot="suffix"
+      >
+      </div>
+      <div
+        aria-hidden="true"
+        class="toggle-button"
+        id="toggleButton"
+        part="toggle-button"
+        slot="suffix"
+      >
+      </div>
+    </vaadin-input-container>
+  </vaadin-time-picker-combo-box>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-time-picker shadow readonly */
+
+snapshots["vaadin-time-picker shadow invalid"] = 
+`<div class="vaadin-time-picker-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <vaadin-time-picker-combo-box
+    dir="ltr"
+    id="comboBox"
+  >
+    <vaadin-input-container
+      invalid=""
+      part="input-field"
+    >
+      <slot
+        name="prefix"
+        slot="prefix"
+      >
+      </slot>
+      <slot name="input">
+      </slot>
+      <div
+        aria-hidden="true"
+        id="clearButton"
+        part="clear-button"
+        slot="suffix"
+      >
+      </div>
+      <div
+        aria-hidden="true"
+        class="toggle-button"
+        id="toggleButton"
+        part="toggle-button"
+        slot="suffix"
+      >
+      </div>
+    </vaadin-input-container>
+  </vaadin-time-picker-combo-box>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-time-picker shadow invalid */
+
+snapshots["vaadin-time-picker shadow theme"] = 
+`<div class="vaadin-time-picker-container">
+  <div part="label">
+    <slot name="label">
+    </slot>
+    <span
+      aria-hidden="true"
+      part="required-indicator"
+    >
+    </span>
+  </div>
+  <vaadin-time-picker-combo-box
+    dir="ltr"
+    id="comboBox"
+    theme="align-right"
+  >
+    <vaadin-input-container
+      part="input-field"
+      theme="align-right"
+    >
+      <slot
+        name="prefix"
+        slot="prefix"
+      >
+      </slot>
+      <slot name="input">
+      </slot>
+      <div
+        aria-hidden="true"
+        id="clearButton"
+        part="clear-button"
+        slot="suffix"
+      >
+      </div>
+      <div
+        aria-hidden="true"
+        class="toggle-button"
+        id="toggleButton"
+        part="toggle-button"
+        slot="suffix"
+      >
+      </div>
+    </vaadin-input-container>
+  </vaadin-time-picker-combo-box>
+  <div part="helper-text">
+    <slot name="helper">
+    </slot>
+  </div>
+  <div part="error-message">
+    <slot name="error-message">
+    </slot>
+  </div>
+</div>
+`;
+/* end snapshot vaadin-time-picker shadow theme */
+
+snapshots["vaadin-time-picker slots default"] = 
+`<input
+  aria-autocomplete="list"
+  aria-expanded="false"
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  role="combobox"
+  slot="input"
+  spellcheck="false"
+>
+<label slot="label">
+</label>
+<div
+  hidden=""
+  slot="error-message"
+>
+</div>
+`;
+/* end snapshot vaadin-time-picker slots default */
+
+snapshots["vaadin-time-picker slots helper"] = 
+`<input
+  aria-autocomplete="list"
+  aria-expanded="false"
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  role="combobox"
+  slot="input"
+  spellcheck="false"
+>
+<label slot="label">
+</label>
+<div
+  hidden=""
+  slot="error-message"
+>
+</div>
+<div slot="helper">
+  Helper
+</div>
+`;
+/* end snapshot vaadin-time-picker slots helper */
+
