@@ -37,10 +37,6 @@ describe('vaadin-checkbox-group', () => {
       await nextFrame();
     });
 
-    it('should set role attribute to group', () => {
-      expect(group.getAttribute('role')).to.equal('group');
-    });
-
     it('should keep initial disabled property for checkboxes', () => {
       expect(checkboxes[0].disabled).to.be.false;
       expect(checkboxes[1].disabled).to.be.true;
@@ -67,10 +63,6 @@ describe('vaadin-checkbox-group', () => {
       `);
       await nextFrame();
       checkboxes = [...group.querySelectorAll('vaadin-checkbox')];
-    });
-
-    it('should set aria-disabled to true when disabled', () => {
-      expect(group.getAttribute('aria-disabled')).to.eq('true');
     });
 
     it('should propagate disabled property to checkboxes', () => {
