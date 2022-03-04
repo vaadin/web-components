@@ -38,28 +38,10 @@ describe('checkbox', () => {
       link = label.children[0];
     });
 
-    // TODO: A legacy test. Replace with snapshot tests when possible.
-    it('should display the label', () => {
-      expect(label.textContent).to.equal('I accept the terms and conditions');
-    });
-
-    // TODO: A legacy test. Replace with snapshot tests when possible.
-    it('should be possible to disabled imperatively', () => {
-      checkbox.disabled = true;
-      expect(input.hasAttribute('disabled')).to.be.true;
-    });
-
-    // TODO: A legacy test. Replace with snapshot tests when possible.
     it('should set value property to "on"', () => {
       expect(checkbox.value).to.equal('on');
     });
 
-    // TODO: A legacy test. Replace with snapshot tests when possible.
-    it('should set input value property to "on"', () => {
-      expect(input.value).to.equal('on');
-    });
-
-    // TODO: A legacy test. Replace with snapshot tests when possible.
     it('should set the name to the empty string', () => {
       expect(checkbox.name).to.equal('');
     });
@@ -152,7 +134,7 @@ describe('checkbox', () => {
       label.innerHTML = '';
       await nextFrame();
 
-      expect(checkbox.hasAttribute('has-input')).to.be.false;
+      expect(checkbox.hasAttribute('has-label')).to.be.false;
     });
 
     describe('active attribute', () => {
