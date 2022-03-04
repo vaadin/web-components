@@ -502,11 +502,6 @@ describe('theme attribute', () => {
     comboBox = fixtureSync('<vaadin-combo-box theme="foo"></vaadin-combo-box>');
   });
 
-  it('should propagate theme attribute to input container', () => {
-    const inputField = comboBox.shadowRoot.querySelector('[part="input-field"]');
-    expect(inputField.getAttribute('theme')).to.equal('foo');
-  });
-
   it('should propagate theme attribute to overlay', () => {
     expect(comboBox.$.dropdown.$.overlay.getAttribute('theme')).to.equal('foo');
   });
