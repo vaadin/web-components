@@ -16,6 +16,16 @@ describe('vaadin-time-picker', () => {
   });
 
   describe('host', () => {
+    it('disabled', async () => {
+      timePicker.disabled = true;
+      await expect(timePicker).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('readonly', async () => {
+      timePicker.readonly = true;
+      await expect(timePicker).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
     it('placeholder', async () => {
       timePicker.placeholder = 'Placeholder';
       await expect(timePicker).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
