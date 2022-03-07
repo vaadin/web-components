@@ -15,6 +15,18 @@ describe('vaadin-combo-box', () => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
   });
 
+  describe('host', () => {
+    it('placeholder', async () => {
+      comboBox.placeholder = 'Placeholder';
+      await expect(comboBox).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('pattern', async () => {
+      comboBox.pattern = '[0-9]*';
+      await expect(comboBox).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+  });
+
   describe('shadow', () => {
     it('default', async () => {
       await expect(comboBox).shadowDom.to.equalSnapshot();
@@ -46,8 +58,19 @@ describe('vaadin-combo-box', () => {
       await expect(comboBox).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
+    it('label', async () => {
+      comboBox.label = 'Label';
+      await expect(comboBox).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
     it('helper', async () => {
       comboBox.helperText = 'Helper';
+      await expect(comboBox).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('error', async () => {
+      comboBox.errorMessage = 'Error';
+      comboBox.invalid = true;
       await expect(comboBox).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
   });
