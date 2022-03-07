@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-ordered-layout",
-  "version": "22.0.6",
+  "version": "22.0.7",
   "publishConfig": {
     "access": "public"
   },
@@ -34,9 +34,9 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/horizontal-layout": "^22.0.6",
-    "@vaadin/scroller": "^22.0.6",
-    "@vaadin/vertical-layout": "^22.0.6"
+    "@vaadin/horizontal-layout": "^22.0.7",
+    "@vaadin/scroller": "^22.0.7",
+    "@vaadin/vertical-layout": "^22.0.7"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
