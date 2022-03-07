@@ -163,24 +163,12 @@ describe('time-picker', () => {
   });
 
   describe('properties and attributes', () => {
-    it('should propagate placeholder property to input', () => {
-      expect(inputElement.placeholder).to.be.not.ok;
-      timePicker.placeholder = 'foo';
-      expect(inputElement.placeholder).to.be.equal('foo');
-    });
-
     it('should propagate required property to input', () => {
       timePicker.required = true;
       expect(inputElement.required).to.be.true;
 
       timePicker.required = false;
       expect(inputElement.required).to.be.false;
-    });
-
-    it('should propagate pattern property to input', () => {
-      expect(inputElement.pattern).to.be.not.ok;
-      timePicker.pattern = '^1\\d:.*';
-      expect(inputElement.pattern).to.be.equal('^1\\d:.*');
     });
 
     it('should propagate disabled property to input', () => {
