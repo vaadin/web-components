@@ -171,18 +171,6 @@ describe('time-picker', () => {
       expect(inputElement.required).to.be.false;
     });
 
-    it('should propagate disabled property to input', () => {
-      expect(inputElement.disabled).to.be.false;
-      timePicker.disabled = true;
-      expect(inputElement.disabled).to.be.true;
-    });
-
-    it('should propagate readonly property to input', () => {
-      expect(inputElement.readOnly).to.be.not.ok;
-      timePicker.readonly = true;
-      expect(inputElement.readOnly).to.be.true;
-    });
-
     it('should reflect readonly property to attribute', () => {
       timePicker.readonly = true;
       expect(timePicker.hasAttribute('readonly')).to.be.true;
