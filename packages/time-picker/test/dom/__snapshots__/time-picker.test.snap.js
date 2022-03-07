@@ -322,3 +322,97 @@ snapshots["vaadin-time-picker slots helper"] =
 `;
 /* end snapshot vaadin-time-picker slots helper */
 
+snapshots["vaadin-time-picker host placeholder"] = 
+`<vaadin-time-picker placeholder="Placeholder">
+  <input
+    aria-autocomplete="list"
+    aria-expanded="false"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    placeholder="Placeholder"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+  <label slot="label">
+  </label>
+  <div
+    hidden=""
+    slot="error-message"
+  >
+  </div>
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host placeholder */
+
+snapshots["vaadin-time-picker host pattern"] = 
+`<vaadin-time-picker>
+  <input
+    aria-autocomplete="list"
+    aria-expanded="false"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    pattern="[0-9]*"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+  <label slot="label">
+  </label>
+  <div
+    hidden=""
+    slot="error-message"
+  >
+  </div>
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host pattern */
+
+snapshots["vaadin-time-picker slots label"] = 
+`<input
+  aria-autocomplete="list"
+  aria-expanded="false"
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  role="combobox"
+  slot="input"
+  spellcheck="false"
+>
+<label slot="label">
+  Label
+</label>
+<div
+  hidden=""
+  slot="error-message"
+>
+</div>
+`;
+/* end snapshot vaadin-time-picker slots label */
+
+snapshots["vaadin-time-picker slots error"] = 
+`<input
+  aria-autocomplete="list"
+  aria-expanded="false"
+  aria-invalid="true"
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  invalid=""
+  role="combobox"
+  slot="input"
+  spellcheck="false"
+>
+<label slot="label">
+</label>
+<div
+  role="alert"
+  slot="error-message"
+>
+  Error
+</div>
+`;
+/* end snapshot vaadin-time-picker slots error */
+

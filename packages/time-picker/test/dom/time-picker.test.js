@@ -15,6 +15,18 @@ describe('vaadin-time-picker', () => {
     timePicker = fixtureSync('<vaadin-time-picker></vaadin-time-picker>');
   });
 
+  describe('host', () => {
+    it('placeholder', async () => {
+      timePicker.placeholder = 'Placeholder';
+      await expect(timePicker).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('pattern', async () => {
+      timePicker.pattern = '[0-9]*';
+      await expect(timePicker).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+  });
+
   describe('shadow', () => {
     it('default', async () => {
       await expect(timePicker).shadowDom.to.equalSnapshot();
@@ -46,8 +58,19 @@ describe('vaadin-time-picker', () => {
       await expect(timePicker).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
 
+    it('label', async () => {
+      timePicker.label = 'Label';
+      await expect(timePicker).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
     it('helper', async () => {
       timePicker.helperText = 'Helper';
+      await expect(timePicker).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('error', async () => {
+      timePicker.errorMessage = 'Error';
+      timePicker.invalid = true;
       await expect(timePicker).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
   });
