@@ -391,6 +391,17 @@ This will symlink the individual component packages into the `node_modules` fold
 
 After that you can start / restart your application and it should use the source code from the monorepo.
 
+### Fixing npm dist-tag
+
+When maintaining two stable majors (e.g. 22.0.x and 23.0.x), it is important to maintain `latest` npm tag.
+For example, we release 22.0.7 after 23.0.1 but we still want to keep `latest` pointing to 23.0.1.
+
+Use the following script on `master` branch to run `npm dist-tag` for all packages:
+
+```sh
+./scripts/fixDistTag.sh
+```
+
 ## LICENSE
 
 For specific package(s), check the LICENSE file under the package folder.

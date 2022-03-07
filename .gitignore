@@ -5,6 +5,9 @@ analysis.json
 yarn-error.log
 .env
 
+# List of packages
+scripts/packages.txt
+
 # Failures from visual tests
 packages/*/test/visual/*/screenshots/*/failed
 
