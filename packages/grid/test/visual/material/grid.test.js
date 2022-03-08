@@ -5,6 +5,7 @@ import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../../../theme/material/vaadin-grid.js';
 import '../../../theme/material/vaadin-grid-column-group.js';
 import '../../../theme/material/vaadin-grid-sorter.js';
+import '../../../theme/material/vaadin-grid-tree-column.js';
 import { flushGrid } from '../../helpers.js';
 import { users } from '../users.js';
 
@@ -330,6 +331,43 @@ describe('grid', () => {
     it('disabled', async () => {
       element.disabled = true;
       await visualDiff(element, 'disabled');
+    });
+  });
+
+  describe('tree', () => {
+    beforeEach(async () => {
+      element = fixtureSync(`
+        <vaadin-grid item-id-path="name">
+          <vaadin-grid-tree-column path="name" width="200px" flex-shrink="0"></vaadin-grid-tree-column>
+          <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      element.dataProvider = ({ parentItem, page, pageSize }, cb) => {
+        // Let's have 10 root-level items and 3 items on every child level
+        const levelSize = parentItem ? 3 : 10;
+
+        const pageItems = [...Array(Math.min(levelSize, pageSize))].map((_, i) => {
+          const indexInLevel = page * pageSize + i;
+
+          return {
+            name: `Very long grid item name ${parentItem ? parentItem.name + '-' : ''}${indexInLevel}`,
+            children: true
+          };
+        });
+
+        cb(pageItems, levelSize);
+      };
+      flushGrid(element);
+      await nextRender(element);
+    });
+
+    it('default', async () => {
+      await visualDiff(element, 'tree-default');
+    });
+
+    it('overflow', async () => {
+      element.style.maxWidth = '400px';
+      await visualDiff(element, 'tree-overflow');
     });
   });
 });
