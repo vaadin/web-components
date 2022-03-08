@@ -123,8 +123,12 @@ registerStyles(
 
     /* Centered */
 
-    :host([theme~='centered'][orientation='horizontal']) [part='tabs'] {
-      justify-content: center;
+    :host([theme~='centered'][orientation='horizontal']) ::slotted(vaadin-tab:first-of-type) {
+      margin-inline-start: auto;
+    }
+
+    :host([theme~='centered'][orientation='horizontal']) ::slotted(vaadin-tab:last-of-type) {
+      margin-inline-end: auto;
     }
 
     /* Small */
