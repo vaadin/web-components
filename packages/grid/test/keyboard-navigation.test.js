@@ -708,6 +708,24 @@ describe('keyboard navigation', () => {
       });
     });
 
+    describe('mixing keyboard and mouse', () => {
+      it('should update column after mousedown on other cell', () => {
+        // Focus cell in third column
+        focusWithMouse(getRowCell(0, 2));
+
+        down();
+
+        expect(getFocusedCellIndex()).to.equal(2);
+
+        // Focus cell in first column
+        focusWithMouse(getRowCell(0, 0));
+
+        down();
+
+        expect(getFocusedCellIndex()).to.equal(0);
+      });
+    });
+
     describe('with hidden columns', () => {
       it('should skip over hidden column with right arrow', () => {
         grid._columnTree[0][1].hidden = true;

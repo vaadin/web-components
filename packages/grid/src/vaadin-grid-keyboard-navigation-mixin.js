@@ -91,6 +91,9 @@ export const KeyboardNavigationMixin = (superClass) =>
       this.addEventListener('mousedown', () => {
         this.toggleAttribute('navigating', false);
         this._isMousedown = true;
+
+        // Reset stored order when moving focus with mouse.
+        this._focusedColumnOrder = undefined;
       });
       this.addEventListener('mouseup', () => (this._isMousedown = false));
     }
