@@ -163,48 +163,12 @@ describe('time-picker', () => {
   });
 
   describe('properties and attributes', () => {
-    it('should propagate placeholder property to input', () => {
-      expect(inputElement.placeholder).to.be.not.ok;
-      timePicker.placeholder = 'foo';
-      expect(inputElement.placeholder).to.be.equal('foo');
-    });
-
     it('should propagate required property to input', () => {
       timePicker.required = true;
       expect(inputElement.required).to.be.true;
 
       timePicker.required = false;
       expect(inputElement.required).to.be.false;
-    });
-
-    it('should propagate pattern property to input', () => {
-      expect(inputElement.pattern).to.be.not.ok;
-      timePicker.pattern = '^1\\d:.*';
-      expect(inputElement.pattern).to.be.equal('^1\\d:.*');
-    });
-
-    it('should propagate disabled property to combo-box', () => {
-      expect(comboBox.disabled).to.be.false;
-      timePicker.disabled = true;
-      expect(comboBox.disabled).to.be.true;
-    });
-
-    it('should propagate disabled property to input', () => {
-      expect(inputElement.disabled).to.be.false;
-      timePicker.disabled = true;
-      expect(inputElement.disabled).to.be.true;
-    });
-
-    it('should propagate readonly property to combo-box', () => {
-      expect(comboBox.readonly).to.be.false;
-      timePicker.readonly = true;
-      expect(comboBox.readonly).to.be.true;
-    });
-
-    it('should propagate readonly property to input', () => {
-      expect(inputElement.readonly).to.be.not.ok;
-      timePicker.readonly = true;
-      expect(inputElement.readOnly).to.be.true;
     });
 
     it('should reflect readonly property to attribute', () => {
@@ -565,21 +529,6 @@ describe('time-picker', () => {
       timePicker.appendChild(helper);
       await nextFrame();
       expect(timePicker.querySelector('[slot="helper"]').textContent).to.eql('foo');
-    });
-  });
-
-  describe('theme attribute', () => {
-    beforeEach(() => {
-      timePicker.setAttribute('theme', 'foo');
-    });
-
-    it('should propagate theme attribute to input container', () => {
-      const inputField = timePicker.shadowRoot.querySelector('[part="input-field"]');
-      expect(inputField.getAttribute('theme')).to.equal('foo');
-    });
-
-    it('should propagate theme attribute to combo-box', () => {
-      expect(timePicker.$.comboBox.getAttribute('theme')).to.equal('foo');
     });
   });
 
