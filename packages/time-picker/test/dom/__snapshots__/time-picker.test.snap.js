@@ -1,6 +1,108 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
+snapshots["vaadin-time-picker host default"] = 
+`<vaadin-time-picker>
+  <input
+    aria-autocomplete="list"
+    aria-expanded="false"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+  <label slot="label">
+  </label>
+  <div
+    hidden=""
+    slot="error-message"
+  >
+  </div>
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host default */
+
+snapshots["vaadin-time-picker host label"] = 
+`<vaadin-time-picker has-label="">
+  <input
+    aria-autocomplete="list"
+    aria-expanded="false"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+  <label slot="label">
+    Label
+  </label>
+  <div
+    hidden=""
+    slot="error-message"
+  >
+  </div>
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host label */
+
+snapshots["vaadin-time-picker host helper"] = 
+`<vaadin-time-picker has-helper="">
+  <input
+    aria-autocomplete="list"
+    aria-expanded="false"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+  <label slot="label">
+  </label>
+  <div
+    hidden=""
+    slot="error-message"
+  >
+  </div>
+  <div slot="helper">
+    Helper
+  </div>
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host helper */
+
+snapshots["vaadin-time-picker host error"] = 
+`<vaadin-time-picker
+  has-error-message=""
+  invalid=""
+>
+  <input
+    aria-autocomplete="list"
+    aria-expanded="false"
+    aria-invalid="true"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    invalid=""
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+  <label slot="label">
+  </label>
+  <div
+    role="alert"
+    slot="error-message"
+  >
+    Error
+  </div>
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host error */
+
 snapshots["vaadin-time-picker host disabled"] = 
 `<vaadin-time-picker
   aria-disabled="true"
@@ -376,95 +478,4 @@ snapshots["vaadin-time-picker shadow theme"] =
 </div>
 `;
 /* end snapshot vaadin-time-picker shadow theme */
-
-snapshots["vaadin-time-picker slots default"] = 
-`<input
-  aria-autocomplete="list"
-  aria-expanded="false"
-  autocapitalize="off"
-  autocomplete="off"
-  autocorrect="off"
-  role="combobox"
-  slot="input"
-  spellcheck="false"
->
-<label slot="label">
-</label>
-<div
-  hidden=""
-  slot="error-message"
->
-</div>
-`;
-/* end snapshot vaadin-time-picker slots default */
-
-snapshots["vaadin-time-picker slots label"] = 
-`<input
-  aria-autocomplete="list"
-  aria-expanded="false"
-  autocapitalize="off"
-  autocomplete="off"
-  autocorrect="off"
-  role="combobox"
-  slot="input"
-  spellcheck="false"
->
-<label slot="label">
-  Label
-</label>
-<div
-  hidden=""
-  slot="error-message"
->
-</div>
-`;
-/* end snapshot vaadin-time-picker slots label */
-
-snapshots["vaadin-time-picker slots helper"] = 
-`<input
-  aria-autocomplete="list"
-  aria-expanded="false"
-  autocapitalize="off"
-  autocomplete="off"
-  autocorrect="off"
-  role="combobox"
-  slot="input"
-  spellcheck="false"
->
-<label slot="label">
-</label>
-<div
-  hidden=""
-  slot="error-message"
->
-</div>
-<div slot="helper">
-  Helper
-</div>
-`;
-/* end snapshot vaadin-time-picker slots helper */
-
-snapshots["vaadin-time-picker slots error"] = 
-`<input
-  aria-autocomplete="list"
-  aria-expanded="false"
-  aria-invalid="true"
-  autocapitalize="off"
-  autocomplete="off"
-  autocorrect="off"
-  invalid=""
-  role="combobox"
-  slot="input"
-  spellcheck="false"
->
-<label slot="label">
-</label>
-<div
-  role="alert"
-  slot="error-message"
->
-  Error
-</div>
-`;
-/* end snapshot vaadin-time-picker slots error */
 

@@ -16,6 +16,26 @@ describe('vaadin-time-picker', () => {
   });
 
   describe('host', () => {
+    it('default', async () => {
+      await expect(timePicker).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('label', async () => {
+      timePicker.label = 'Label';
+      await expect(timePicker).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('helper', async () => {
+      timePicker.helperText = 'Helper';
+      await expect(timePicker).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
+    it('error', async () => {
+      timePicker.errorMessage = 'Error';
+      timePicker.invalid = true;
+      await expect(timePicker).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    });
+
     it('disabled', async () => {
       timePicker.disabled = true;
       await expect(timePicker).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
@@ -60,28 +80,6 @@ describe('vaadin-time-picker', () => {
     it('theme', async () => {
       timePicker.setAttribute('theme', 'align-right');
       await expect(timePicker).shadowDom.to.equalSnapshot();
-    });
-  });
-
-  describe('slots', () => {
-    it('default', async () => {
-      await expect(timePicker).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
-    });
-
-    it('label', async () => {
-      timePicker.label = 'Label';
-      await expect(timePicker).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
-    });
-
-    it('helper', async () => {
-      timePicker.helperText = 'Helper';
-      await expect(timePicker).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
-    });
-
-    it('error', async () => {
-      timePicker.errorMessage = 'Error';
-      timePicker.invalid = true;
-      await expect(timePicker).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
     });
   });
 });
