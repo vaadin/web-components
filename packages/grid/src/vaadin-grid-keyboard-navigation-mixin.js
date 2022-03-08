@@ -92,10 +92,8 @@ export const KeyboardNavigationMixin = (superClass) =>
         this.toggleAttribute('navigating', false);
         this._isMousedown = true;
 
-        if (this._focusedColumnOrder !== undefined) {
-          // Reset stored order when moving focus with mouse.
-          this._focusedColumnOrder = undefined;
-        }
+        // Reset stored order when moving focus with mouse.
+        this._focusedColumnOrder = undefined;
       });
       this.addEventListener('mouseup', () => (this._isMousedown = false));
     }
