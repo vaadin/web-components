@@ -47,6 +47,17 @@ describe('tabs', () => {
           element.selected = 2;
           await visualDiff(div, `${dir}-horizontal-end`);
         });
+
+        it('centered', async () => {
+          element.setAttribute('theme', 'centered');
+          await visualDiff(div, `${dir}-horizontal-centered`);
+        });
+
+        it('centered', async () => {
+          element.setAttribute('theme', 'centered');
+          element.style.maxWidth = '150px';
+          await visualDiff(div, `${dir}-horizontal-centered-scroll`);
+        });
       });
 
       describe(`${dir}-vertical`, () => {
