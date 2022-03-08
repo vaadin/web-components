@@ -10,7 +10,6 @@ import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
-import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
 
 /**
  * `<vaadin-menu-bar>` is a Web Component providing a set of horizontally stacked buttons offering
@@ -59,7 +58,7 @@ import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
+class MenuBar extends ButtonsMixin(DisabledMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>

@@ -220,7 +220,7 @@ class RadioGroup extends FieldMixin(
    * @private
    */
   get isHorizontalRTL() {
-    return this.getAttribute('dir') === 'rtl' && this.theme !== 'vertical';
+    return this.getAttribute('dir') === 'rtl' && this._theme !== 'vertical';
   }
 
   /**

@@ -166,8 +166,8 @@ export const ItemsMixin = (superClass) =>
       subMenuOverlay._setParentOverlay(parent);
 
       // Set theme attribute from parent element
-      if (parent.theme) {
-        subMenu.setAttribute('theme', parent.theme);
+      if (parent.hasAttribute('theme')) {
+        subMenu.setAttribute('theme', parent.getAttribute('theme'));
       } else {
         subMenu.removeAttribute('theme');
       }
@@ -217,7 +217,7 @@ export const ItemsMixin = (superClass) =>
           component.setAttribute('role', 'separator');
         }
 
-        this._setMenuItemTheme(component, item, this.theme);
+        this._setMenuItemTheme(component, item, this._theme);
 
         component._item = item;
 
@@ -280,7 +280,7 @@ export const ItemsMixin = (superClass) =>
       `;
         flush();
         const listBox = root.querySelector('vaadin-context-menu-list-box');
-        this.theme && listBox.setAttribute('theme', this.theme);
+        this._theme && listBox.setAttribute('theme', this._theme);
         listBox.classList.add('vaadin-menu-list-box');
         requestAnimationFrame(() => listBox.setAttribute('role', 'menu'));
 
@@ -377,8 +377,8 @@ export const ItemsMixin = (superClass) =>
         });
       } else {
         const listBox = root.querySelector('vaadin-context-menu-list-box');
-        if (this.theme) {
-          listBox.setAttribute('theme', this.theme);
+        if (this._theme) {
+          listBox.setAttribute('theme', this._theme);
         } else {
           listBox.removeAttribute('theme');
         }

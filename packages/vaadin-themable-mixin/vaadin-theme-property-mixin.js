@@ -27,11 +27,36 @@ export const ThemePropertyMixin = (superClass) =>
          *
          * @protected
          */
-        theme: {
+        _theme: {
           type: String,
           readOnly: true
         }
       };
+    }
+
+    static get observedAttributes() {
+      return [...super.observedAttributes, 'theme'];
+    }
+
+    /**
+     * A helper property with the `theme` attribute value facilitating propagation in shadow DOM.
+     *
+     * @deprecated The `theme` property is not supposed for public use and will be dropped in Vaadin 24.
+     * Please, use the `theme` attribute instead.
+     */
+    get theme() {
+      return this.getAttribute('theme');
+    }
+
+    set theme(newValue) {
+      if (!newValue) {
+        this.removeAttribute('theme');
+        return;
+      }
+
+      if (this.getAttribute('theme') !== newValue) {
+        this.setAttribute('theme', newValue);
+      }
     }
 
     /** @protected */
@@ -39,7 +64,7 @@ export const ThemePropertyMixin = (superClass) =>
       super.attributeChangedCallback(name, oldValue, newValue);
 
       if (name === 'theme') {
-        this._setTheme(newValue);
+        this._set_theme(newValue);
       }
     }
   };

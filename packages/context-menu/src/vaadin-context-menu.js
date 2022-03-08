@@ -224,7 +224,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
         with-backdrop="[[_phone]]"
         phone$="[[_phone]]"
         model="[[_context]]"
-        theme$="[[theme]]"
+        theme$="[[_theme]]"
       >
       </vaadin-context-menu-overlay>
     `;

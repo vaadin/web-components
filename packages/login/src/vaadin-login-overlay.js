@@ -55,7 +55,7 @@ class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement)
         with-backdrop
         title="[[title]]"
         description="[[description]]"
-        theme$="[[theme]]"
+        theme$="[[_theme]]"
       >
         <vaadin-login-form
           theme="with-overlay"

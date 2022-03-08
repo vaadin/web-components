@@ -55,7 +55,7 @@ class ContextMenuOverlay extends PositionMixin(OverlayElement) {
   }
 
   static get observers() {
-    return ['_themeChanged(theme)'];
+    return ['_themeChanged(_theme)'];
   }
 
   ready() {

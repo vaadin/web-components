@@ -27,7 +27,7 @@ export const InteractionsMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_itemsChanged(items, items.splices)', '_themeChanged(theme)'];
+      return ['_itemsChanged(items, items.splices)', '_themeChanged(_theme)'];
     }
 
     /** @protected */

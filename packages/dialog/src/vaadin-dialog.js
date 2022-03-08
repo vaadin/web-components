@@ -184,7 +184,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
         on-opened-changed="_onOverlayOpened"
         on-mousedown="_bringOverlayToFront"
         on-touchstart="_bringOverlayToFront"
-        theme$="[[theme]]"
+        theme$="[[_theme]]"
         modeless="[[modeless]]"
         with-backdrop="[[!modeless]]"
         resizable$="[[resizable]]"

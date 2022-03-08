@@ -108,7 +108,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
           readonly="[[readonly]]"
           auto-open-disabled="[[autoOpenDisabled]]"
           position-target="[[_inputContainer]]"
-          theme$="[[theme]]"
+          theme$="[[_theme]]"
           on-change="__onChange"
         >
           <vaadin-input-container
@@ -116,7 +116,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
             readonly="[[readonly]]"
             disabled="[[disabled]]"
             invalid="[[invalid]]"
-            theme$="[[theme]]"
+            theme$="[[_theme]]"
           >
             <slot name="prefix" slot="prefix"></slot>
             <slot name="input"></slot>

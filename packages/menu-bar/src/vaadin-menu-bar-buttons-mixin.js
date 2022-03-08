@@ -4,13 +4,14 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
 
 /**
  * @polymerMixin
  * @mixes ResizeMixin
  */
 export const ButtonsMixin = (superClass) =>
-  class extends ResizeMixin(superClass) {
+  class extends InteractionsMixin(ResizeMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -202,8 +203,8 @@ export const ButtonsMixin = (superClass) =>
      * @protected
      * @override
      */
-    _setTheme(theme) {
-      super._setTheme(theme);
+    _themeChanged(theme) {
+      super._themeChanged(theme);
 
       // Initializing, do nothing
       if (!this.shadowRoot) {
@@ -279,7 +280,7 @@ export const ButtonsMixin = (superClass) =>
         this._initButtonAttrs(button);
       });
 
-      this.__applyTheme(this.theme);
+      this.__applyTheme(this._theme);
     }
 
     /**

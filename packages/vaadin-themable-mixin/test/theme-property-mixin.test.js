@@ -9,7 +9,7 @@ class ThemeHostElement extends ThemePropertyMixin(PolymerElement) {
   }
 
   static get template() {
-    return html`<div id="target" theme$="[[theme]]"></div>`;
+    return html`<div id="target" theme$="[[_theme]]"></div>`;
   }
 }
 
@@ -24,8 +24,8 @@ describe('ThemePropertyMixin', () => {
       target = host.$.target;
     });
 
-    it('should have undefined theme property on host', () => {
-      expect(host.theme).to.be.undefined;
+    it('should have undefined _theme property on host', () => {
+      expect(host._theme).to.be.undefined;
     });
 
     it('should have null theme attribute on target', () => {
@@ -38,7 +38,7 @@ describe('ThemePropertyMixin', () => {
     });
 
     it('should not propagate host property to target attribute', () => {
-      host.theme = 'foo';
+      host._theme = 'foo';
       expect(target.getAttribute('theme')).to.be.null;
     });
   });
@@ -50,7 +50,7 @@ describe('ThemePropertyMixin', () => {
     });
 
     it('should have initial theme property on host', () => {
-      expect(host.theme).to.equal('initial');
+      expect(host._theme).to.equal('initial');
     });
 
     it('should have null theme attribute on target', () => {
@@ -63,7 +63,7 @@ describe('ThemePropertyMixin', () => {
     });
 
     it('should not propagate host property to target attribute', () => {
-      host.theme = 'foo';
+      host._theme = 'foo';
       expect(target.getAttribute('theme')).to.equal('initial');
     });
 

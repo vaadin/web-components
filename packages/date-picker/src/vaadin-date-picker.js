@@ -138,7 +138,7 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
           readonly="[[readonly]]"
           disabled="[[disabled]]"
           invalid="[[invalid]]"
-          theme$="[[theme]]"
+          theme$="[[_theme]]"
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
@@ -158,7 +158,7 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
       <vaadin-date-picker-overlay
         id="overlay"
         fullscreen$="[[_fullscreen]]"
-        theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]"
+        theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
         on-vaadin-overlay-open="_onOverlayOpened"
         on-vaadin-overlay-close="_onOverlayClosed"
         restore-focus-on-close
@@ -180,7 +180,7 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
             role="dialog"
             on-date-tap="_close"
             part="overlay-content"
-            theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]"
+            theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
           ></vaadin-date-picker-overlay-content>
         </template>
       </vaadin-date-picker-overlay>

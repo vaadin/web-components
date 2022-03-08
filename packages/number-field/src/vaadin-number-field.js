@@ -92,7 +92,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
           readonly="[[readonly]]"
           disabled="[[disabled]]"
           invalid="[[invalid]]"
-          theme$="[[theme]]"
+          theme$="[[_theme]]"
         >
           <div
             disabled$="[[!_allowed(-1, value, min, max, step)]]"

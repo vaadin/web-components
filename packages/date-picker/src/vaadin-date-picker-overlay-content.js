@@ -182,7 +182,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
               min-date="[[minDate]]"
               max-date="[[maxDate]]"
               part="month"
-              theme$="[[theme]]"
+              theme$="[[_theme]]"
               on-keydown="__onMonthCalendarKeyDown"
             >
             </vaadin-month-calendar>

@@ -39,7 +39,7 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
         _item-id-path="[[itemIdPath]]"
         _item-label-path="[[itemLabelPath]]"
         loading="[[loading]]"
-        theme="[[theme]]"
+        theme="[[_theme]]"
       ></vaadin-time-picker-dropdown>
     `;
   }

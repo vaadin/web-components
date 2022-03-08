@@ -27,7 +27,7 @@ class TimePickerDropdown extends ComboBoxDropdown {
         hidden$="[[_isOverlayHidden(_items.*, loading)]]"
         loading$="[[loading]]"
         opened="{{_overlayOpened}}"
-        theme$="[[theme]]"
+        theme$="[[_theme]]"
         position-target="[[positionTarget]]"
         no-vertical-overlap
       ></vaadin-time-picker-overlay>

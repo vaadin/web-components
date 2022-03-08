@@ -157,7 +157,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
           readonly="[[readonly]]"
           disabled="[[disabled]]"
           invalid="[[invalid]]"
-          theme$="[[theme]]"
+          theme$="[[_theme]]"
           on-click="_onClick"
         >
           <slot name="prefix" slot="prefix"></slot>
@@ -179,7 +179,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
         opened="{{opened}}"
         with-backdrop="[[_phone]]"
         phone$="[[_phone]]"
-        theme$="[[theme]]"
+        theme$="[[_theme]]"
       ></vaadin-select-overlay>
     `;
   }

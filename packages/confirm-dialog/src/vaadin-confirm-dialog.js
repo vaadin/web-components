@@ -81,7 +81,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
         id="dialog"
         opened="{{opened}}"
         aria-label="[[_getAriaLabel(header)]]"
-        theme$="[[theme]]"
+        theme$="[[_theme]]"
         no-close-on-outside-click
         no-close-on-esc="[[noCloseOnEsc]]"
       ></vaadin-confirm-dialog-dialog>
