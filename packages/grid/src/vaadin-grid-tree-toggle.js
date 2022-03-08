@@ -81,6 +81,7 @@ class GridTreeToggle extends ThemableMixin(DirMixin(PolymerElement)) {
         :host {
           display: inline-flex;
           align-items: baseline;
+          max-width: 100%;
 
           /* CSS API for :host */
           --vaadin-grid-tree-toggle-level-offset: 1em;
@@ -124,6 +125,12 @@ class GridTreeToggle extends ThemableMixin(DirMixin(PolymerElement)) {
 
         :host([leaf]) [part='toggle'] {
           visibility: hidden;
+        }
+
+        slot {
+          display: block;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       </style>
 
