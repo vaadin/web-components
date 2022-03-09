@@ -237,8 +237,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
        * The value for this element.
        */
       selectedDate: {
-        type: Date,
-        notify: true
+        type: Date
       },
 
       /**
@@ -370,6 +369,17 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     this._scrollToPosition(this._differenceInMonths(date, this._originDate), animate);
   }
 
+  /**
+   * Select a date and fire event indicating user interaction.
+   * @protected
+   */
+  _selectDate(dateToSelect) {
+    this.selectedDate = dateToSelect;
+    this.dispatchEvent(
+      new CustomEvent('date-selected', { detail: { date: dateToSelect }, bubbles: true, composed: true })
+    );
+  }
+
   _focusedDateChanged(focusedDate) {
     this.revealDate(focusedDate);
   }
@@ -460,7 +470,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     if (Math.abs(this.$.monthScroller.position - this._differenceInMonths(today, this._originDate)) < 0.001) {
       // Select today only if the month scroller is positioned approximately
       // at the beginning of the current month
-      this.selectedDate = today;
+      this._selectDate(today);
       this._close();
     } else {
       this._scrollToCurrentMonth();
@@ -659,7 +669,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   }
 
   _clear() {
-    this.selectedDate = '';
+    this._selectDate('');
   }
 
   _close() {
@@ -683,10 +693,10 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
   __toggleDate(date) {
     if (dateEquals(date, this.selectedDate)) {
-      this.selectedDate = '';
+      this._clear();
       this.focusedDate = date;
     } else {
-      this.selectedDate = date;
+      this._selectDate(date);
     }
   }
 
@@ -711,7 +721,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
         handled = true;
         break;
       case 'Enter':
-        this.selectedDate = this.focusedDate;
+        this._selectDate(this.focusedDate);
         this._close();
         handled = true;
         break;

@@ -369,7 +369,9 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
   _handleTap(e) {
     if (!this.ignoreTaps && !this._notTapping && e.target.date && !e.target.hasAttribute('disabled')) {
       this.selectedDate = e.target.date;
-      this.dispatchEvent(new CustomEvent('date-tap', { bubbles: true, composed: true }));
+      this.dispatchEvent(
+        new CustomEvent('date-tap', { detail: { date: e.target.date }, bubbles: true, composed: true })
+      );
     }
   }
 

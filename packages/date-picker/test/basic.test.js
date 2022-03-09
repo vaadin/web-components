@@ -190,7 +190,8 @@ describe('basic features', () => {
   it('should close on overlay date tap', async () => {
     await open(datepicker);
     const spy = sinon.spy(datepicker, 'close');
-    getOverlayContent(datepicker).dispatchEvent(new CustomEvent('date-tap', { bubbles: true, composed: true }));
+    const evt = new CustomEvent('date-tap', { detail: { date: new Date() }, bubbles: true, composed: true });
+    getOverlayContent(datepicker).dispatchEvent(evt);
     expect(spy.called).to.be.true;
   });
 
@@ -424,7 +425,7 @@ describe('basic features', () => {
       });
 
       datepicker.open();
-      getOverlayContent(datepicker).selectedDate = new Date('2017-01-01'); // invalid
+      getOverlayContent(datepicker)._selectDate(new Date('2017-01-01')); // invalid
     });
 
     it('should change invalid state only once', (done) => {
@@ -436,7 +437,7 @@ describe('basic features', () => {
       const invalidChangedSpy = sinon.spy();
       datepicker.addEventListener('invalid-changed', invalidChangedSpy);
       datepicker.open();
-      getOverlayContent(datepicker).selectedDate = new Date('2017-01-01');
+      getOverlayContent(datepicker)._selectDate(new Date('2017-01-01'));
     });
 
     it('should scroll to min date when today is not allowed', (done) => {
