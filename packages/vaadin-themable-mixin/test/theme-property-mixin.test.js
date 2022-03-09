@@ -72,4 +72,34 @@ describe('ThemePropertyMixin', () => {
       expect(target.getAttribute('theme')).to.be.null;
     });
   });
+
+  describe('deprecated theme property', () => {
+    beforeEach(() => {
+      host = fixtureSync('<theme-host theme="initial"></theme-host>');
+      target = host.$.target;
+    });
+
+    describe('getter', () => {
+      it('should return theme attribute', () => {
+        expect(host.theme).to.equal('initial');
+      });
+    });
+
+    describe('setter', () => {
+      it('should update theme attribute when setting a non-empty value', () => {
+        host.theme = 'custom';
+        expect(target.getAttribute('theme')).to.equal('custom');
+      });
+
+      it('should reset theme attribute when setting null', () => {
+        host.theme = null;
+        expect(target.hasAttribute('theme')).to.be.false;
+      });
+
+      it('should reset theme attribute when setting an empty string', () => {
+        host.theme = '';
+        expect(target.hasAttribute('theme')).to.be.false;
+      });
+    });
+  });
 });
