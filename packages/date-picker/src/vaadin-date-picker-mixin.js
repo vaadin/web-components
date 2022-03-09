@@ -435,6 +435,25 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
+     * Override Polymer lifecycle callback to dispatch `change` event if needed.
+     * This is necessary to ensure `change` is fired after `value-changed`.
+     *
+     * @param {!Object} currentProps Current accessor values
+     * @param {?Object} changedProps Properties changed since the last call
+     * @param {?Object} oldProps Previous values for each changed property
+     * @protected
+     * @override
+     */
+    _propertiesChanged(currentProps, changedProps, oldProps) {
+      super._propertiesChanged(currentProps, changedProps, oldProps);
+
+      if ('value' in changedProps && this.__dispatchChange) {
+        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+        this.__dispatchChange = false;
+      }
+    }
+
+    /**
      * Opens the dropdown.
      */
     open() {
@@ -691,10 +710,6 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     _valueChanged(value, oldValue) {
-      if (this.__dispatchChange) {
-        this.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-        this.__dispatchChange = false;
-      }
       this._handleDateChange('_selectedDate', value, oldValue);
 
       this._toggleHasValue(!!value);

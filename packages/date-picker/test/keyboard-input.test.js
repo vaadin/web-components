@@ -511,6 +511,17 @@ describe('keyboard', () => {
       expect(spy.called).to.be.true;
     });
 
+    it('should fire change after value-changed event', async () => {
+      const valueChangedSpy = sinon.spy();
+      datepicker.addEventListener('value-changed', valueChangedSpy);
+
+      await sendKeys({ type: '1/2/2000' });
+      await sendKeys({ press: 'Enter' });
+
+      expect(valueChangedSpy.calledOnce).to.be.true;
+      expect(spy.calledAfter(valueChangedSpy)).to.be.true;
+    });
+
     it('should fire change on selecting date with Enter', async () => {
       // Open the overlay
       await sendKeys({ press: 'ArrowDown' });
