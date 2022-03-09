@@ -49,7 +49,7 @@ describe('ThemePropertyMixin', () => {
       target = host.$.target;
     });
 
-    it('should have initial theme property on host', () => {
+    it('should have initial _theme property on host', () => {
       expect(host._theme).to.equal('initial');
     });
 
@@ -79,27 +79,15 @@ describe('ThemePropertyMixin', () => {
       target = host.$.target;
     });
 
-    describe('getter', () => {
-      it('should return theme attribute', () => {
-        expect(host.theme).to.equal('initial');
-      });
+    it('should have the initial value', () => {
+      expect(host.theme).to.equal('initial');
     });
 
-    describe('setter', () => {
-      it('should update theme attribute when setting a non-empty value', () => {
-        host.theme = 'custom';
-        expect(target.getAttribute('theme')).to.equal('custom');
-      });
-
-      it('should reset theme attribute when setting null', () => {
-        host.theme = null;
-        expect(target.hasAttribute('theme')).to.be.false;
-      });
-
-      it('should reset theme attribute when setting an empty string', () => {
-        host.theme = '';
-        expect(target.hasAttribute('theme')).to.be.false;
-      });
+    it('should reflect the value to the theme attribute', () => {
+      host.theme = 'custom';
+      expect(host.getAttribute('theme')).to.equal('custom');
+      host.theme = null;
+      expect(host.hasAttribute('theme')).to.be.false;
     });
   });
 });
