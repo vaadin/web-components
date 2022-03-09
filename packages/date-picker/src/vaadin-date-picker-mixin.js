@@ -394,7 +394,7 @@ export const DatePickerMixin = (subclass) =>
         if (this.autoOpenDisabled) {
           const parsedDate = this._getParsedDate();
           if (this._isValidDate(parsedDate)) {
-            this._selectedDate = parsedDate;
+            this._selectDate(parsedDate);
           }
         }
 
@@ -462,6 +462,20 @@ export const DatePickerMixin = (subclass) =>
       this._overlayContent.addEventListener('close', this._close.bind(this));
       this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
 
+      // User confirmed selected date by clicking the calendar.
+      this._overlayContent.addEventListener('date-tap', (e) => {
+        this.__userConfirmedDate = true;
+
+        this._selectDate(e.detail.date);
+      });
+
+      // User confirmed selected date by pressing Enter or Today.
+      this._overlayContent.addEventListener('date-selected', (e) => {
+        this.__userConfirmedDate = true;
+
+        this._selectDate(e.detail.date);
+      });
+
       // Keep focus attribute in focusElement for styling
       this._overlayContent.addEventListener('focus', () => {
         this._setFocused(true);
@@ -506,6 +520,24 @@ export const DatePickerMixin = (subclass) =>
       }
 
       return inputValid && minMaxValid && inputValidity;
+    }
+
+    /**
+     * Select date on user interaction and set the flag
+     * to fire change event if necessary.
+     *
+     * @param {Date} dateToSelect
+     * @protected
+     */
+    _selectDate(dateToSelect) {
+      const value = this._formatISO(dateToSelect);
+
+      // Only set flag if the value will change.
+      if (this.value !== value) {
+        this.__dispatchChange = true;
+      }
+
+      this._selectedDate = dateToSelect;
     }
 
     /** @private */
@@ -609,9 +641,6 @@ export const DatePickerMixin = (subclass) =>
       if (selectedDate === undefined || formatDate === undefined) {
         return;
       }
-      if (this.__userInputOccurred) {
-        this.__dispatchChange = true;
-      }
       const value = this._formatISO(selectedDate);
 
       this.__keepInputValue || this._applyInputValue(selectedDate);
@@ -620,8 +649,6 @@ export const DatePickerMixin = (subclass) =>
         this.validate();
         this.value = value;
       }
-      this.__userInputOccurred = false;
-      this.__dispatchChange = false;
       this._ignoreFocusedDateChange = true;
       this._focusedDate = selectedDate;
       this._ignoreFocusedDateChange = false;
@@ -632,7 +659,6 @@ export const DatePickerMixin = (subclass) =>
       if (focusedDate === undefined || formatDate === undefined) {
         return;
       }
-      this.__userInputOccurred = true;
       if (!this._ignoreFocusedDateChange && !this._noInput) {
         this._applyInputValue(focusedDate);
       }
@@ -751,14 +777,15 @@ export const DatePickerMixin = (subclass) =>
         const parsedDate = this._getParsedDate(inputValue);
 
         if (this._isValidDate(parsedDate)) {
-          this._selectedDate = parsedDate;
+          this._selectDate(parsedDate);
         } else {
           this.__keepInputValue = true;
+          this._selectDate(null);
           this._selectedDate = null;
           this.__keepInputValue = false;
         }
       } else if (this._focusedDate) {
-        this._selectedDate = this._focusedDate;
+        this._selectDate(this._focusedDate);
       }
       this._ignoreFocusedDateChange = false;
     }
@@ -774,7 +801,12 @@ export const DatePickerMixin = (subclass) =>
         this._touchPrevented = [];
       }
 
-      this._selectParsedOrFocusedDate();
+      // No need to select date on close if it was confirmed by the user.
+      if (this.__userConfirmedDate) {
+        this.__userConfirmedDate = false;
+      } else {
+        this._selectParsedOrFocusedDate();
+      }
 
       if (this._nativeInput && this._nativeInput.selectionStart) {
         this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
@@ -903,7 +935,7 @@ export const DatePickerMixin = (subclass) =>
           const isValidDate = this._isValidDate(parsedDate);
           if (this.opened) {
             if (this._overlayInitialized && this._overlayContent.focusedDate && isValidDate) {
-              this._selectedDate = this._overlayContent.focusedDate;
+              this._selectDate(this._overlayContent.focusedDate);
             }
             this.close();
           } else if (!isValidDate && this.inputElement.value !== '') {
@@ -926,7 +958,7 @@ export const DatePickerMixin = (subclass) =>
           } else if (this.autoOpenDisabled) {
             // Do not restore selected date if Esc was pressed after clearing input field
             if (this.inputElement.value === '') {
-              this._selectedDate = null;
+              this._selectDate(null);
             }
             this._applyInputValue(this._selectedDate);
           } else {
