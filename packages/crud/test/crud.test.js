@@ -120,6 +120,7 @@ describe('crud', () => {
 
   describe('dataProvider', () => {
     const items = [{ foo: 'bar' }];
+
     beforeEach(async () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
       crud.dataProvider = (_, callback) => callback(items, items.length);
@@ -127,7 +128,7 @@ describe('crud', () => {
       [btnSave, btnCancel, btnDelete] = crud.querySelectorAll('vaadin-button');
     });
 
-    it('should save a new item', async (done) => {
+    it('should save a new item', (done) => {
       listenOnce(crud, 'save', (e) => {
         expect(e.detail.item.foo).to.be.equal('baz');
         done();
@@ -139,7 +140,7 @@ describe('crud', () => {
       expect(crud.editedItem.foo).to.be.equal('baz');
     });
 
-    it('should save an edited item', async (done) => {
+    it('should save an edited item', (done) => {
       listenOnce(crud, 'save', (e) => {
         expect(e.detail.item.foo).to.be.equal('baz');
         done();
