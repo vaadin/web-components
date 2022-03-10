@@ -1031,6 +1031,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
           this.items.push(item);
         }
       } else {
+        this.editedItem = this.editedItem || {};
         Object.assign(this.editedItem, item);
       }
       this._grid.clearCache();
