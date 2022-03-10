@@ -4,14 +4,13 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
-import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
 
 /**
  * @polymerMixin
  * @mixes ResizeMixin
  */
 export const ButtonsMixin = (superClass) =>
-  class extends InteractionsMixin(ResizeMixin(superClass)) {
+  class extends ResizeMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -198,29 +197,6 @@ export const ButtonsMixin = (superClass) =>
       button.setAttribute('tabindex', disabled ? '-1' : '0');
     }
 
-    /**
-     * @param {string | null} theme
-     * @protected
-     * @override
-     */
-    _themeChanged(theme) {
-      super._themeChanged(theme);
-
-      // Initializing, do nothing
-      if (!this.shadowRoot) {
-        return;
-      }
-
-      this.__applyTheme(theme);
-    }
-
-    /** @private */
-    __applyTheme(theme) {
-      this._buttons.forEach((btn) => this._setButtonTheme(btn, theme));
-
-      this.__detectOverflow();
-    }
-
     /** @protected */
     _setButtonTheme(btn, hostTheme) {
       let theme = hostTheme;
@@ -278,9 +254,10 @@ export const ButtonsMixin = (superClass) =>
         this._appendButton(button);
         this._setButtonDisabled(button, item.disabled);
         this._initButtonAttrs(button);
+        this._setButtonTheme(button, this._theme);
       });
 
-      this.__applyTheme(this._theme);
+      this.__detectOverflow();
     }
 
     /**

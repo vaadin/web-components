@@ -10,6 +10,7 @@ import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
+import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
 
 /**
  * `<vaadin-menu-bar>` is a Web Component providing a set of horizontally stacked buttons offering
@@ -58,7 +59,7 @@ import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class MenuBar extends ButtonsMixin(DisabledMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
+class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
   static get template() {
     return html`
       <style>
@@ -201,6 +202,10 @@ class MenuBar extends ButtonsMixin(DisabledMixin(ElementMixin(ThemableMixin(Poly
     };
   }
 
+  static get observers() {
+    return ['_themeChanged(_theme)'];
+  }
+
   /**
    * Override method inherited from `DisabledMixin`
    * to update the `disabled` property for the buttons
@@ -215,6 +220,26 @@ class MenuBar extends ButtonsMixin(DisabledMixin(ElementMixin(ThemableMixin(Poly
     super._disabledChanged(newValue, oldValue);
     if (oldValue !== newValue) {
       this.__updateButtonsDisabled(newValue);
+    }
+  }
+
+  /**
+   * A callback for the `_theme` property observer.
+   * It propagates the host theme to the buttons and the sub menu.
+   *
+   * @param {string | null} theme
+   * @protected
+   */
+  _themeChanged(theme) {
+    if (this.shadowRoot) {
+      this._buttons.forEach((btn) => this._setButtonTheme(btn, theme));
+      this.__detectOverflow();
+    }
+
+    if (theme) {
+      this._subMenu.setAttribute('theme', theme);
+    } else {
+      this._subMenu.removeAttribute('theme');
     }
   }
 

@@ -7,6 +7,7 @@ import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
+import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
 
 export interface MenuBarItem {
   text?: string;
@@ -81,7 +82,7 @@ export interface MenuBarEventMap extends HTMLElementEventMap, MenuBarCustomEvent
  *
  * @fires {CustomEvent} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  */
-declare class MenuBar extends ButtonsMixin(DisabledMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
+declare class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(ThemableMixin(HTMLElement))))) {
   /**
    * Defines a hierarchical structure, where root level items represent menu bar buttons,
    * and `children` property configures a submenu with items to be opened below
@@ -133,6 +134,12 @@ declare class MenuBar extends ButtonsMixin(DisabledMixin(ElementMixin(ThemableMi
    * ```
    */
   i18n: MenuBarI18n;
+
+  /**
+   * A callback for the `_theme` property observer.
+   * It propagates the host theme to the buttons and the sub menu.
+   */
+  protected _themeChanged(theme: string | null): void;
 
   addEventListener<K extends keyof MenuBarEventMap>(
     type: K,

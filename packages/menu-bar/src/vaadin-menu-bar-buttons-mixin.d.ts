@@ -5,11 +5,10 @@
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
 import { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
-import { InteractionsMixinClass } from './vaadin-menu-bar-interactions-mixin.js';
 
 export declare function ButtonsMixin<T extends Constructor<HTMLElement>>(
   base: T
-): T & Constructor<ButtonsMixinClass> & Constructor<ResizeMixinClass> & Constructor<InteractionsMixinClass>;
+): T & Constructor<ButtonsMixinClass> & Constructor<ResizeMixinClass>;
 
 export declare class ButtonsMixinClass {
   protected readonly _buttons: HTMLElement[];
