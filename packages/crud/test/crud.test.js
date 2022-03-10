@@ -144,7 +144,6 @@ describe('crud', () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
       crud.dataProvider = (_, callback) => callback(items, items.length);
       await nextRender(crud);
-      [btnSave, btnCancel, btnDelete] = crud.querySelectorAll('vaadin-button');
     });
 
     it('should save a new item', (done) => {
@@ -155,7 +154,7 @@ describe('crud', () => {
       crud.$.new.click();
       crud._form._fields[0].value = 'baz';
       change(crud._form);
-      btnSave.click();
+      btnSave().click();
       expect(crud.editedItem.foo).to.be.equal('baz');
     });
 
@@ -167,7 +166,7 @@ describe('crud', () => {
       edit(items[0]);
       crud._form._fields[0].value = 'baz';
       change(crud._form);
-      btnSave.click();
+      btnSave().click();
       expect(crud.editedItem.foo).to.be.equal('baz');
     });
   });
