@@ -99,12 +99,26 @@ describe('date-picker', () => {
         await visualDiff(div, `${dir}-prefix`);
       });
 
-      it('dropdown', async () => {
-        element.value = '2000-01-01';
-        element.opened = true;
-        div.style.height = element.offsetHeight + element.$.overlay.$.overlay.offsetHeight + 'px';
-        div.style.width = element.$.overlay.$.overlay.offsetWidth + 'px';
-        await visualDiff(div, `${dir}-dropdown`);
+      describe('dropdown', () => {
+        function openOverlay() {
+          element.opened = true;
+          div.style.height = element.offsetHeight + element.$.overlay.$.overlay.offsetHeight + 'px';
+          div.style.width = element.$.overlay.$.overlay.offsetWidth + 'px';
+        }
+
+        it('default', async () => {
+          element.value = '2000-01-01';
+          openOverlay();
+          await visualDiff(div, `${dir}-dropdown`);
+        });
+
+        it('week numbers', async () => {
+          element.value = '2000-01-01';
+          element.showWeekNumbers = true;
+          element.i18n.firstDayOfWeek = 1;
+          openOverlay();
+          await visualDiff(div, `${dir}-week-numbers`);
+        });
       });
     });
   });

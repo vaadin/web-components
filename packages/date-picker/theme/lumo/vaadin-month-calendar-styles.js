@@ -33,7 +33,7 @@ registerStyles(
 
     [part='weekdays'],
     [part='weekday'],
-    [part='week-numbers'] {
+    [part='week-number'] {
       font-size: var(--lumo-font-size-xxs);
       line-height: 1;
       color: var(--lumo-secondary-text-color);
@@ -43,9 +43,8 @@ registerStyles(
       margin-bottom: var(--lumo-space-s);
     }
 
-    /* TODO should have part="week-number" for the cell in weekdays-container */
     [part='weekday']:empty,
-    [part='week-numbers'] {
+    [part='week-number'] {
       width: var(--lumo-size-xs);
     }
 
@@ -107,8 +106,7 @@ registerStyles(
       }
     }
 
-    /* TODO should not rely on the role attribute */
-    [part='date'][role='button']:not([disabled]):not([selected]):hover::before {
+    [part='date']:not(:empty):not([disabled]):not([selected]):hover::before {
       background-color: var(--lumo-primary-color-10pct);
     }
 
@@ -130,7 +128,7 @@ registerStyles(
         display: none;
       }
 
-      [part='date'][role='button']:not([disabled]):active::before {
+      [part='date']:not(:empty):not([disabled]):active::before {
         display: block;
       }
 
