@@ -1,7 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, listenOnce, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, listenOnce, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-crud-grid.js';
-import { flushGrid, getBodyCellContent, getHeaderCellContent } from './helpers.js';
+import { flushGrid } from '../../grid/test/helpers.js';
+import { getBodyCellContent, getHeaderCellContent } from './helpers.js';
 
 describe('crud grid', () => {
   let grid;
@@ -36,16 +37,18 @@ describe('crud grid', () => {
   });
 
   describe('basic', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync('<vaadin-crud-grid style="width: 500px;" exclude="_id,password"></vaadin-crud-grid>');
+      await nextFrame();
     });
 
     it('should not generate any column when providing an empty item list', () => {
       expect(grid.querySelectorAll('vaadin-grid-column')).to.be.empty;
     });
 
-    it('should generate one column when providing list of primitives', () => {
+    it('should generate one column when providing list of primitives', async () => {
       grid.items = ['foo', 'bar'];
+      await nextFrame();
       expect(grid.querySelectorAll('vaadin-grid-column').length).to.be.equal(1);
     });
 
