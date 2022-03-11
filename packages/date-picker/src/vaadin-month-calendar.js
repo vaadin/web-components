@@ -42,19 +42,11 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
           display: flex;
         }
 
-        [part='week-numbers'] {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          flex-shrink: 0;
-        }
-
         [part='date'] {
           outline: none;
         }
 
         [part='week-number'][hidden],
-        [part='week-numbers'][hidden],
         [part='weekday'][hidden] {
           display: none;
         }
@@ -69,7 +61,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
         }
 
         [part='weekday']:empty,
-        [part='week-numbers'] {
+        [part='week-number'] {
           width: 12.5%;
           flex-shrink: 0;
         }
