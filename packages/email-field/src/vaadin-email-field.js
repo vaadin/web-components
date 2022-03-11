@@ -54,8 +54,8 @@ export class EmailField extends TextField {
   }
 
   /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
+  ready() {
+    super.ready();
 
     if (this.inputElement) {
       this.inputElement.autocapitalize = 'off';
@@ -63,9 +63,16 @@ export class EmailField extends TextField {
   }
 
   /** @protected */
-  _createConstraintsObserver() {
+  async _createConstraintsObserver() {
+    // Delay creating constraints observer until initial update
+    // is completed to not reset invalid state set as attribute
+    await this.updateComplete;
+
     // NOTE: pattern needs to be set before constraints observer is initialized
     this.pattern = this.pattern || '^([a-zA-Z0-9_\\.\\-+])+@[a-zA-Z0-9-.]+\\.[a-zA-Z0-9-]{2,}$';
+
+    // Wait for another update triggered by setting pattern property
+    await this.updateComplete;
 
     super._createConstraintsObserver();
   }

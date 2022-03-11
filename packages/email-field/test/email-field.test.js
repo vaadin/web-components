@@ -34,14 +34,16 @@ describe('email-field', () => {
   describe('default', () => {
     let emailField;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       emailField = fixtureSync('<vaadin-email-field></vaadin-email-field>');
+      await emailField.updateComplete;
     });
 
     describe('valid email addresses', () => {
       validAddresses.forEach((address) => {
-        it(`should treat ${address} as valid`, () => {
+        it(`should treat ${address} as valid`, async () => {
           emailField.value = address;
+          await emailField.updateComplete;
           emailField.validate();
           expect(emailField.invalid).to.be.false;
         });
@@ -50,8 +52,9 @@ describe('email-field', () => {
 
     describe('invalid email addresses', () => {
       invalidAddresses.forEach((address) => {
-        it(`should treat ${address} as invalid`, () => {
+        it(`should treat ${address} as invalid`, async () => {
           emailField.value = address;
+          await emailField.updateComplete;
           emailField.validate();
           expect(emailField.invalid).to.be.true;
         });
@@ -62,8 +65,9 @@ describe('email-field', () => {
   describe('custom pattern', () => {
     let emailField;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       emailField = fixtureSync('<vaadin-email-field pattern=".+@example.com"></vaadin-email-field>');
+      await emailField.updateComplete;
     });
 
     it('should not override custom pattern', () => {
@@ -74,8 +78,9 @@ describe('email-field', () => {
   describe('invalid', () => {
     let field;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       field = fixtureSync('<vaadin-email-field invalid></vaadin-email-field>');
+      await field.updateComplete;
     });
 
     it('should not remove "invalid" state when ready', () => {
@@ -86,8 +91,9 @@ describe('email-field', () => {
   describe('invalid with value', () => {
     let field;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       field = fixtureSync('<vaadin-email-field invalid value="foo@example.com"></vaadin-email-field>');
+      await field.updateComplete;
     });
 
     it('should not remove "invalid" state when ready', () => {
