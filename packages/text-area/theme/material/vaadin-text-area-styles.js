@@ -17,11 +17,6 @@ const textArea = css`
     margin-top: 4px;
   }
 
-  [part='input-field'] ::slotted(textarea) {
-    white-space: pre-wrap; /* override "nowrap" from <vaadin-text-field> */
-    align-self: stretch; /* override "baseline" from <vaadin-text-field> */
-  }
-
   [part='input-field']::before,
   [part='input-field']::after {
     bottom: calc(var(--_text-area-vertical-scroll-position) * -1);

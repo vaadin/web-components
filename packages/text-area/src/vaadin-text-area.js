@@ -110,7 +110,13 @@ export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(Polymer
           box-shadow: none;
         }
 
-        [part='input-field'] ::slotted(*) {
+        /* Override styles from <vaadin-input-container> */
+        [part='input-field'] ::slotted(textarea) {
+          align-self: stretch;
+          white-space: pre-wrap;
+        }
+
+        [part='input-field'] ::slotted(:not(textarea)) {
           align-self: flex-start;
         }
 
