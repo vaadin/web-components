@@ -5,12 +5,12 @@ import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
+import { flushGrid } from '../../grid/test/helpers.js';
 import {
   createItems,
   dblclick,
   dragAndDropOver,
   flatMap,
-  flushGrid,
   getCellEditor,
   getContainerCell,
   getRowCells,
@@ -39,8 +39,9 @@ describe('edit column', () => {
     });
 
     describe('when `singleCellEdit` is true', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         grid.singleCellEdit = true;
+        await nextFrame();
       });
 
       it('should focus cell next available for editing within a same row in non-edit mode on Tab', () => {
@@ -335,6 +336,7 @@ describe('edit column', () => {
       `);
       grid.items = createItems();
       grid.querySelector('[path="title"]').editorOptions = ['mr', 'mrs', 'ms'];
+      await nextFrame();
       flushGrid(grid);
       await nextFrame();
       textCell = getContainerCell(grid.$.items, 1, 0);
@@ -460,7 +462,7 @@ describe('edit column', () => {
   describe('item-property-changed event', () => {
     let grid, column, firstCell, input;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name">
@@ -475,6 +477,7 @@ describe('edit column', () => {
       column = grid.firstElementChild;
       grid.items = createItems();
 
+      await nextFrame();
       flushGrid(grid);
       firstCell = getContainerCell(grid.$.items, 0, 0);
     });
@@ -522,7 +525,7 @@ describe('edit column', () => {
   describe('disable editing', () => {
     let grid;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name">
@@ -535,6 +538,7 @@ describe('edit column', () => {
         </vaadin-grid-pro>
       `);
       grid.items = createItems();
+      await nextFrame();
       flushGrid(grid);
     });
 
@@ -550,7 +554,7 @@ describe('edit column', () => {
   describe('vertical scrolling', () => {
     let grid, input, firstCell;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name">
@@ -564,6 +568,7 @@ describe('edit column', () => {
       `);
       grid.size = 1000;
       grid.dataProvider = infiniteDataProvider;
+      await nextFrame();
       flushGrid(grid);
     });
 
@@ -589,7 +594,7 @@ describe('edit column', () => {
   describe('cell focusing', () => {
     let grid, cell;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name">
@@ -602,6 +607,7 @@ describe('edit column', () => {
         </vaadin-grid-pro>
       `);
       grid.items = createItems();
+      await nextFrame();
       flushGrid(grid);
     });
 
@@ -652,6 +658,7 @@ describe('edit column', () => {
         </vaadin-grid-pro>
       `);
       grid.items = createItems();
+      await nextFrame();
       flushGrid(grid);
       await nextFrame();
     });
@@ -684,19 +691,22 @@ describe('edit column', () => {
       it('should not fire the event on cell click in the editable column', async () => {
         cell = getContainerCell(grid.$.items, 0, 1);
         cell._content.click();
+        await nextFrame();
         expect(activeItemChangedSpy.called).to.be.false;
       });
 
-      it('should not fire the event on checkbox click in the editable column', () => {
+      it('should not fire the event on checkbox click in the editable column', async () => {
         cell = getContainerCell(grid.$.items, 0, 1);
         dblclick(cell._content);
         cell._content.querySelector('input[type=checkbox]').click();
+        await nextFrame();
         expect(activeItemChangedSpy.called).to.be.false;
       });
 
-      it('should fire the event on cell click in the not editable column', () => {
+      it('should fire the event on cell click in the not editable column', async () => {
         cell = getContainerCell(grid.$.items, 0, 3);
         cell._content.click();
+        await nextFrame();
         expect(activeItemChangedSpy.called).to.be.true;
       });
     });
@@ -718,8 +728,8 @@ describe('edit column', () => {
         </vaadin-grid-pro>
       `);
       grid.items = createItems();
-      flushGrid(grid);
       await nextFrame();
+      flushGrid(grid);
       rows = Array.from(getRows(grid.$.items));
     });
 
@@ -739,7 +749,7 @@ describe('edit column', () => {
   describe('row details', () => {
     let grid, rows;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       grid = fixtureSync(`
         <vaadin-grid-pro>
           <vaadin-grid-pro-edit-column path="name">
@@ -753,6 +763,7 @@ describe('edit column', () => {
       `);
       grid.items = createItems();
       grid.rowDetailsRenderer = (root) => (root.textContent = 'foo');
+      await nextFrame();
       flushGrid(grid);
       rows = Array.from(getRows(grid.$.items));
     });

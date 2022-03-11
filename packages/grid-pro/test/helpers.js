@@ -1,5 +1,5 @@
 import { isIOS } from '@vaadin/testing-helpers';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { flushGrid } from '../../grid/test/helpers.js';
 
 export const infiniteDataProvider = (params, callback) => {
   callback(
@@ -92,41 +92,6 @@ export const dragAndDropOver = (source, target) => {
       bubbles: true
     }
   );
-};
-
-export const flushGrid = (grid) => {
-  if (grid._columnTree) {
-    grid._columnTree[grid._columnTree.length - 1].forEach((column) => {
-      column.performUpdate && column.performUpdate();
-    });
-  }
-
-  grid._observer.flush();
-  if (grid._debounceScrolling) {
-    grid._debounceScrolling.flush();
-  }
-  if (grid._debouncerForceReflow) {
-    grid._debouncerForceReflow.flush();
-  }
-  flush();
-  grid._afterScroll();
-  if (grid._debounceOverflow) {
-    grid._debounceOverflow.flush();
-  }
-  if (grid._debouncerHiddenChanged) {
-    grid._debouncerHiddenChanged.flush();
-  }
-  if (grid._debouncerApplyCachedData) {
-    grid._debouncerApplyCachedData.flush();
-  }
-
-  grid.__virtualizer.flush();
-
-  if (grid._columnTree) {
-    grid._columnTree[grid._columnTree.length - 1].forEach((column) => {
-      column.performUpdate && column.performUpdate();
-    });
-  }
 };
 
 export const getRows = (container) => {

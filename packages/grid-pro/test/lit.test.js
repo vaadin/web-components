@@ -3,7 +3,6 @@ import { enter, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
 import { html, render } from 'lit';
-import { flushGrid } from './helpers.js';
 
 describe('lit', () => {
   describe('edit column', () => {

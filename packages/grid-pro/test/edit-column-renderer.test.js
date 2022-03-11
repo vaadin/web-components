@@ -5,14 +5,8 @@ import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import {
-  createItems,
-  dblclick,
-  flushGrid,
-  getCellEditor,
-  getContainerCell,
-  getContainerCellContent
-} from './helpers.js';
+import { flushGrid } from '../../grid/test/helpers.js';
+import { createItems, dblclick, getCellEditor, getContainerCell, getContainerCellContent } from './helpers.js';
 
 customElements.define(
   'user-editor',

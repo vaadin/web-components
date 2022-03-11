@@ -5,7 +5,8 @@ import '@vaadin/dialog/vaadin-dialog.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-pro.js';
 import '../vaadin-grid-pro-edit-column.js';
-import { createItems, flushGrid, getCellEditor, getContainerCell, outsideClick } from './helpers.js';
+import { flushGrid } from '../../grid/test/helpers.js';
+import { createItems, getCellEditor, getContainerCell, outsideClick } from './helpers.js';
 
 async function clickOverlay(element) {
   focusout(element);
