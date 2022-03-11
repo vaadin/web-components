@@ -179,7 +179,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
           readonly="[[readonly]]"
           disabled="[[disabled]]"
           invalid="[[invalid]]"
-          theme$="[[theme]]"
+          theme$="[[_theme]]"
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>
@@ -207,7 +207,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
         _item-id-path="[[itemIdPath]]"
         _item-label-path="[[itemLabelPath]]"
         loading="[[loading]]"
-        theme="[[theme]]"
+        theme="[[_theme]]"
       ></vaadin-combo-box-dropdown>
     `;
   }

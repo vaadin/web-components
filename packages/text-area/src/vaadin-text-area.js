@@ -141,7 +141,7 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
           readonly="[[readonly]]"
           disabled="[[disabled]]"
           invalid="[[invalid]]"
-          theme$="[[theme]]"
+          theme$="[[_theme]]"
           on-scroll="__scrollPositionUpdated"
         >
           <slot name="prefix" slot="prefix"></slot>

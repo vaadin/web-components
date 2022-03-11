@@ -197,29 +197,6 @@ export const ButtonsMixin = (superClass) =>
       button.setAttribute('tabindex', disabled ? '-1' : '0');
     }
 
-    /**
-     * @param {string | null} theme
-     * @protected
-     * @override
-     */
-    _setTheme(theme) {
-      super._setTheme(theme);
-
-      // Initializing, do nothing
-      if (!this.shadowRoot) {
-        return;
-      }
-
-      this.__applyTheme(theme);
-    }
-
-    /** @private */
-    __applyTheme(theme) {
-      this._buttons.forEach((btn) => this._setButtonTheme(btn, theme));
-
-      this.__detectOverflow();
-    }
-
     /** @protected */
     _setButtonTheme(btn, hostTheme) {
       let theme = hostTheme;
@@ -277,9 +254,10 @@ export const ButtonsMixin = (superClass) =>
         this._appendButton(button);
         this._setButtonDisabled(button, item.disabled);
         this._initButtonAttrs(button);
+        this._setButtonTheme(button, this._theme);
       });
 
-      this.__applyTheme(this.theme);
+      this.__detectOverflow();
     }
 
     /**

@@ -27,7 +27,7 @@ export const InteractionsMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_itemsChanged(items, items.splices)', '_themeChanged(theme)'];
+      return ['_itemsChanged(items, items.splices)'];
     }
 
     /** @protected */
@@ -52,15 +52,6 @@ export const InteractionsMixin = (superClass) =>
     /** @private */
     get __isRTL() {
       return this.getAttribute('dir') === 'rtl';
-    }
-
-    /** @private */
-    _themeChanged(theme) {
-      if (theme) {
-        this._subMenu.setAttribute('theme', theme);
-      } else {
-        this._subMenu.removeAttribute('theme');
-      }
     }
 
     /** @protected */

@@ -58,7 +58,7 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         }
       </style>
       <vaadin-login-form-wrapper
-        theme$="[[theme]]"
+        theme$="[[_theme]]"
         part="vaadin-login-native-form-wrapper"
         action="{{action}}"
         disabled="{{disabled}}"

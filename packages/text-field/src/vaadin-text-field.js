@@ -107,7 +107,7 @@ export class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(Elemen
           readonly="[[readonly]]"
           disabled="[[disabled]]"
           invalid="[[invalid]]"
-          theme$="[[theme]]"
+          theme$="[[_theme]]"
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="input"></slot>

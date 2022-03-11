@@ -9,7 +9,7 @@ class ThemeHostElement extends ThemePropertyMixin(PolymerElement) {
   }
 
   static get template() {
-    return html`<div id="target" theme$="[[theme]]"></div>`;
+    return html`<div id="target" theme$="[[_theme]]"></div>`;
   }
 }
 
@@ -24,8 +24,8 @@ describe('ThemePropertyMixin', () => {
       target = host.$.target;
     });
 
-    it('should have undefined theme property on host', () => {
-      expect(host.theme).to.be.undefined;
+    it('should have undefined _theme property on host', () => {
+      expect(host._theme).to.be.undefined;
     });
 
     it('should have null theme attribute on target', () => {
@@ -38,7 +38,7 @@ describe('ThemePropertyMixin', () => {
     });
 
     it('should not propagate host property to target attribute', () => {
-      host.theme = 'foo';
+      host._theme = 'foo';
       expect(target.getAttribute('theme')).to.be.null;
     });
   });
@@ -49,8 +49,8 @@ describe('ThemePropertyMixin', () => {
       target = host.$.target;
     });
 
-    it('should have initial theme property on host', () => {
-      expect(host.theme).to.equal('initial');
+    it('should have initial _theme property on host', () => {
+      expect(host._theme).to.equal('initial');
     });
 
     it('should have null theme attribute on target', () => {
@@ -63,13 +63,31 @@ describe('ThemePropertyMixin', () => {
     });
 
     it('should not propagate host property to target attribute', () => {
-      host.theme = 'foo';
+      host._theme = 'foo';
       expect(target.getAttribute('theme')).to.equal('initial');
     });
 
     it('should remove target attribute when removing host attribute', () => {
       host.removeAttribute('theme');
       expect(target.getAttribute('theme')).to.be.null;
+    });
+  });
+
+  describe('deprecated theme property', () => {
+    beforeEach(() => {
+      host = fixtureSync('<theme-host theme="initial"></theme-host>');
+      target = host.$.target;
+    });
+
+    it('should have the initial value', () => {
+      expect(host.theme).to.equal('initial');
+    });
+
+    it('should reflect the value to the theme attribute', () => {
+      host.theme = 'custom';
+      expect(host.getAttribute('theme')).to.equal('custom');
+      host.theme = null;
+      expect(host.hasAttribute('theme')).to.be.false;
     });
   });
 });

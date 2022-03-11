@@ -242,7 +242,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
         <div id="main">
           <slot name="grid">
             <vaadin-crud-grid
-              theme$="[[theme]]"
+              theme$="[[_theme]]"
               id="grid"
               include="[[include]]"
               exclude="[[exclude]]"
@@ -282,12 +282,12 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
         aria-label="[[__editorAriaLabel]]"
         no-close-on-outside-click="[[__isDirty]]"
         no-close-on-esc="[[__isDirty]]"
-        theme$="[[theme]]"
+        theme$="[[_theme]]"
         on-opened-changed="__onDialogOpened"
       ></vaadin-crud-dialog>
 
       <vaadin-confirm-dialog
-        theme$="[[theme]]"
+        theme$="[[_theme]]"
         id="confirmCancel"
         on-confirm="__confirmCancel"
         cancel
@@ -299,7 +299,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       ></vaadin-confirm-dialog>
 
       <vaadin-confirm-dialog
-        theme$="[[theme]]"
+        theme$="[[_theme]]"
         id="confirmDelete"
         on-confirm="__confirmDelete"
         cancel
@@ -608,7 +608,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   static get observers() {
     return [
       '__headerNodeChanged(_headerNode, __isNew, i18n.newItem, i18n.editItem)',
-      '__formChanged(_form, theme, include, exclude)',
+      '__formChanged(_form, _theme, include, exclude)',
       '__onI18Change(i18n, _grid)',
       '__onEditOnClickChange(editOnClick, _grid)',
       '__hostPropsChanged(' +

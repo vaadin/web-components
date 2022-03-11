@@ -86,7 +86,7 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
         _item-id-path="[[itemIdPath]]"
         _item-label-path="[[itemLabelPath]]"
         loading="[[loading]]"
-        theme="[[theme]]"
+        theme="[[_theme]]"
       ></vaadin-combo-box-dropdown>
     `;
   }

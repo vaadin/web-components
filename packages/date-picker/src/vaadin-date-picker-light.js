@@ -75,7 +75,7 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
         on-vaadin-overlay-close="_onOverlayClosed"
         restore-focus-on-close
         restore-focus-node="[[inputElement]]"
-        theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]"
+        theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
       >
         <template>
           <vaadin-date-picker-overlay-content
@@ -92,7 +92,7 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
             on-date-tap="_close"
             role="dialog"
             part="overlay-content"
-            theme$="[[__getOverlayTheme(theme, _overlayInitialized)]]"
+            theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
           >
           </vaadin-date-picker-overlay-content>
         </template>

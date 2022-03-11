@@ -201,6 +201,10 @@ class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(
     };
   }
 
+  static get observers() {
+    return ['_themeChanged(_theme)'];
+  }
+
   /**
    * Override method inherited from `DisabledMixin`
    * to update the `disabled` property for the buttons
@@ -215,6 +219,26 @@ class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(
     super._disabledChanged(newValue, oldValue);
     if (oldValue !== newValue) {
       this.__updateButtonsDisabled(newValue);
+    }
+  }
+
+  /**
+   * A callback for the `_theme` property observer.
+   * It propagates the host theme to the buttons and the sub menu.
+   *
+   * @param {string | null} theme
+   * @protected
+   */
+  _themeChanged(theme) {
+    if (this.shadowRoot) {
+      this._buttons.forEach((btn) => this._setButtonTheme(btn, theme));
+      this.__detectOverflow();
+    }
+
+    if (theme) {
+      this._subMenu.setAttribute('theme', theme);
+    } else {
+      this._subMenu.removeAttribute('theme');
     }
   }
 

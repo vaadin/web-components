@@ -370,7 +370,7 @@ class DateTimePicker extends FieldMixin(
       '__readonlyChanged(readonly)',
       '__i18nChanged(i18n.*)',
       '__autoOpenDisabledChanged(autoOpenDisabled)',
-      '__themeChanged(theme, __datePicker, __timePicker)',
+      '__themeChanged(_theme, __datePicker, __timePicker)',
       '__pickersChanged(__datePicker, __timePicker)'
     ];
   }
