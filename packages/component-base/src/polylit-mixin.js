@@ -251,6 +251,14 @@ const PolylitMixinImplementation = (superclass) => {
     _get(path, object) {
       return path.split('.').reduce((obj, property) => (obj ? obj[property] : undefined), object);
     }
+
+    /** @protected */
+    _set(path, value, object) {
+      const pathParts = path.split('.');
+      const lastPart = pathParts.pop();
+      const target = pathParts.reduce((target, part) => target[part], object);
+      target[lastPart] = value;
+    }
   }
 
   return PolylitMixinClass;
