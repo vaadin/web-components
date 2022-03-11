@@ -4,8 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
-import { html, PolymerElement } from '@polymer/polymer';
+import { html, LitElement } from 'lit';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -58,16 +59,19 @@ registerStyles('vaadin-text-area', inputFieldShared, { moduleId: 'vaadin-text-ar
  * @extends HTMLElement
  * @mixes InputFieldMixin
  * @mixes ElementMixin
+ * @mixes PolylitMixin
  * @mixes PatternMixin
  * @mixes ThemableMixin
  * @mixes ResizeMixin
  */
-export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement))))) {
+export class TextArea extends ResizeMixin(
+  PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(PolylitMixin(LitElement)))))
+) {
   static get is() {
     return 'vaadin-text-area';
   }
 
-  static get template() {
+  render() {
     return html`
       <style>
         :host {
@@ -86,6 +90,8 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
         }
 
         [part='input-field'] {
+          height: auto;
+          box-sizing: border-box;
           flex: auto;
           overflow: auto;
           -webkit-overflow-scrolling: touch;
@@ -114,7 +120,11 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
           box-shadow: none;
         }
 
-        [part='input-field'] ::slotted(*) {
+        [part='input-field'] ::slotted(textarea) {
+          align-self: stretch; /* override "baseline" from <vaadin-input-container> */
+        }
+
+        [part='input-field'] ::slotted(:not(textarea)) {
           align-self: flex-start;
         }
 
@@ -133,16 +143,16 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
       <div class="vaadin-text-area-container">
         <div part="label">
           <slot name="label"></slot>
-          <span part="required-indicator" aria-hidden="true"></span>
+          <span part="required-indicator" aria-hidden="true" @click="${this.focus}"></span>
         </div>
 
         <vaadin-input-container
           part="input-field"
-          readonly="[[readonly]]"
-          disabled="[[disabled]]"
-          invalid="[[invalid]]"
-          theme$="[[theme]]"
-          on-scroll="__scrollPositionUpdated"
+          .readonly="${this.readonly}"
+          .disabled="${this.disabled}"
+          .invalid="${this.invalid}"
+          theme="${this.theme}"
+          @scroll="${this.__scrollPositionUpdated}"
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="textarea"></slot>
@@ -195,25 +205,6 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
     return this.$.clearButton;
   }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-
-    this._inputField = this.shadowRoot.querySelector('[part=input-field]');
-
-    // Wheel scrolling results in async scroll events. Preventing the wheel
-    // event, scrolling manually and then synchronously updating the scroll position CSS variable
-    // allows us to avoid some jumpy behavior that would occur on wheel otherwise.
-    this._inputField.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      this._inputField.scrollTop += e.deltaY;
-      this.__scrollPositionUpdated();
-    });
-
-    this._updateHeight();
-    this.__scrollPositionUpdated();
-  }
-
   /**
    * @protected
    * @override
@@ -236,6 +227,20 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
     this.addEventListener('animationend', this._onAnimationEnd);
+
+    this._inputField = this.shadowRoot.querySelector('[part=input-field]');
+
+    // Wheel scrolling results in async scroll events. Preventing the wheel
+    // event, scrolling manually and then synchronously updating the scroll position CSS variable
+    // allows us to avoid some jumpy behavior that would occur on wheel otherwise.
+    this._inputField.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      this._inputField.scrollTop += e.deltaY;
+      this.__scrollPositionUpdated();
+    });
+
+    this._updateHeight();
+    this.__scrollPositionUpdated();
   }
 
   /** @private */
