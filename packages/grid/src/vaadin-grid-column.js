@@ -66,7 +66,8 @@ export const ColumnBaseMixin = (superClass) =>
          */
         hidden: {
           type: Boolean,
-          value: false
+          value: false,
+          reflectToAttribute: true
         },
 
         /**

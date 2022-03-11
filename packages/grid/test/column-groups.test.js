@@ -155,8 +155,9 @@ describe('column groups', () => {
     return getCellContent(getRowCells(bodyRows[row])[col]).innerHTML.trim();
   }
 
-  function init(fixture) {
+  async function init(fixture) {
     grid = fixtureSync(fixtures[fixture]);
+    await nextFrame();
     header = grid.$.header;
     body = grid.$.items;
     footer = grid.$.footer;
@@ -171,8 +172,8 @@ describe('column groups', () => {
   }
 
   describe('No templates', () => {
-    beforeEach(() => {
-      init('no-headers');
+    beforeEach(async () => {
+      await init('no-headers');
     });
 
     it('should have empty header', () => {
@@ -197,18 +198,20 @@ describe('column groups', () => {
     describe('header', () => {
       let emptyGroup;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         emptyGroup = grid.querySelector('vaadin-grid-column-group');
         emptyGroup.header = 'Header';
+        await nextFrame();
       });
 
       it('should show the `header` property value in the header cell', () => {
         expect(getHeaderCellContent(0, 1).trim()).to.equal('Header');
       });
 
-      it('should not override header renderer content', () => {
+      it('should not override header renderer content', async () => {
         emptyGroup.headerRenderer = (root) => (root.textContent = 'foo');
         emptyGroup.header = 'Bar';
+        await nextFrame();
         expect(getHeaderCellContent(0, 1).trim()).to.equal('foo');
       });
 
@@ -219,6 +222,7 @@ describe('column groups', () => {
         emptyGroup.appendChild(template);
         await nextRender();
         emptyGroup.header = 'Bar';
+        await nextFrame();
         expect(getHeaderCellContent(0, 1).trim()).to.equal('foo');
       });
     });
@@ -226,27 +230,31 @@ describe('column groups', () => {
     describe('Text align', () => {
       let emptyGroup;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         emptyGroup = grid.querySelector('vaadin-grid-column-group');
         emptyGroup.headerRenderer = (root) => (root.textContent = 'header');
         emptyGroup.footerRenderer = (root) => (root.textContent = 'footer');
+        await nextFrame();
       });
 
-      it('should align visually to right', () => {
+      it('should align visually to right', async () => {
         emptyGroup.textAlign = 'end';
+        await nextFrame();
         expect(getComputedStyle(getContainerCellContent(grid.$.header, 0, 1)).textAlign).to.be.oneOf(['end', 'right']);
         expect(getComputedStyle(getContainerCellContent(grid.$.footer, 1, 1)).textAlign).to.be.oneOf(['end', 'right']);
       });
 
-      it('should align visually to left', () => {
+      it('should align visually to left', async () => {
         grid.style.direction = 'rtl';
         emptyGroup.textAlign = 'end';
+        await nextFrame();
         expect(getComputedStyle(getContainerCellContent(grid.$.header, 0, 1)).textAlign).to.be.oneOf(['end', 'left']);
         expect(getComputedStyle(getContainerCellContent(grid.$.footer, 1, 1)).textAlign).to.be.oneOf(['end', 'left']);
       });
 
-      it('should align visually to center', () => {
+      it('should align visually to center', async () => {
         emptyGroup.textAlign = 'center';
+        await nextFrame();
         expect(getComputedStyle(getContainerCellContent(grid.$.header, 0, 1)).textAlign).to.equal('center');
         expect(getComputedStyle(getContainerCellContent(grid.$.footer, 1, 1)).textAlign).to.equal('center');
       });
@@ -256,10 +264,10 @@ describe('column groups', () => {
   describe('1 column 1 group', () => {
     let extraColumn;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       //  |          | group-0             |
       //  | header-0 | header-1 | header-2 |
-      init('1-column-1-group');
+      await init('1-column-1-group');
 
       extraColumn = createColumn();
       if (grid._observer.flush) {
@@ -369,7 +377,7 @@ describe('column groups', () => {
       //  |           |         |          |         | footer-4 | footer-5 | footer-6 |
       //  |           |         | group-2            | group-3             |          |
       //  | group-0             | group-1                                  |          |
-      init('nested');
+      await init('nested');
       await nextResize(grid);
     });
 
@@ -478,14 +486,14 @@ describe('column groups', () => {
 
   describe('hidden group', () => {
     it('should hide children', async () => {
-      init('hidden-group');
+      await init('hidden-group');
       await nextFrame();
       expect(grid.querySelector('vaadin-grid-column').hidden).to.be.true;
       expect(grid.querySelector('vaadin-grid-column-group').hidden).to.be.true;
     });
 
     it('should hide self', async () => {
-      init('hidden-column');
+      await init('hidden-column');
       await nextFrame();
       expect(grid.querySelector('vaadin-grid-column-group').hidden).not.to.be.true;
       const columns = grid.querySelectorAll('vaadin-grid-column');

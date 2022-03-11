@@ -10,7 +10,7 @@ import { flushGrid, getContainerCell } from './helpers.js';
 describe('column group', () => {
   let group, columns;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     group = fixtureSync(`
       <vaadin-grid-column-group>
         <template class="header"></template>
@@ -26,6 +26,7 @@ describe('column group', () => {
       </vaadin-grid-column-group>
     `);
     columns = group.querySelectorAll('vaadin-grid-column');
+    await nextFrame();
   });
 
   it('should sum child column flex-grow', async () => {
@@ -78,9 +79,10 @@ describe('column group', () => {
     expect(group.frozen).to.be.true;
   });
 
-  it('should propagate frozen to child columns', () => {
+  it('should propagate frozen to child columns', async () => {
     columns[0].frozen = false;
     group.frozen = true;
+    await nextFrame();
 
     expect(columns[0].frozen).to.be.true;
     expect(columns[1].frozen).to.be.true;
@@ -96,65 +98,75 @@ describe('column group', () => {
 
   it('should unhide group column', async () => {
     group.hidden = true;
+    await nextFrame();
     columns[0].hidden = false;
     await nextFrame();
 
     expect(group.hidden).to.be.false;
   });
 
-  it('should not unhide other columns', () => {
+  it('should not unhide other columns', async () => {
     group.hidden = true;
     columns[0].hidden = false;
+    await nextFrame();
 
     expect(columns[1].hidden).to.be.true;
   });
 
-  it('should propagate hidden to child columns', () => {
+  it('should propagate hidden to child columns', async () => {
     columns[0].hidden = false;
     group.hidden = true;
+    await nextFrame();
 
     expect(columns[0].hidden).to.be.true;
     expect(columns[1].hidden).to.be.true;
     expect(group.hidden).to.be.true;
   });
 
-  it('should propagate hidden to child columns 2', () => {
+  it('should propagate hidden to child columns 2', async () => {
     group.hidden = true;
+    await nextFrame();
     group.hidden = false;
+    await nextFrame();
 
     expect(columns[0].hidden).to.be.false;
     expect(columns[1].hidden).to.be.false;
     expect(group.hidden).to.be.false;
   });
 
-  it('should hide the group', () => {
+  it('should hide the group', async () => {
     group.removeChild(columns[0]);
     group.removeChild(columns[1]);
     flush();
     group._observer.flush();
+    await nextFrame();
 
     expect(group.hidden).to.be.true;
   });
 
-  it('should unhide the group', () => {
+  it('should unhide the group', async () => {
     group.removeChild(columns[0]);
     group.removeChild(columns[1]);
     group._observer.flush();
+    await nextFrame();
 
     group.appendChild(columns[0]);
     group._observer.flush();
+    await nextFrame();
 
     expect(group.hidden).to.be.false;
   });
 
-  it('should not unhide the group', () => {
+  it('should not unhide the group', async () => {
     group.removeChild(columns[0]);
     group.removeChild(columns[1]);
     group._observer.flush();
+    await nextFrame();
 
     columns[0].hidden = true;
     group.appendChild(columns[0]);
     group._observer.flush();
+    await nextFrame();
 
     expect(group.hidden).to.be.true;
   });
@@ -237,10 +249,11 @@ describe('column group', () => {
   });
 
   describe('inheritance', () => {
-    it('both, class and super observers, should be called', () => {
+    it('both, class and super observers, should be called', async () => {
       const superSpy = sinon.spy(group, '_resizableChanged');
       const thisSpy = sinon.spy(group, '_groupResizableChanged');
       group.resizable = true;
+      await nextFrame();
       expect(superSpy.called).to.be.true;
       expect(thisSpy.called).to.be.true;
     });

@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '../vaadin-grid.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import {
@@ -26,6 +25,8 @@ registerStyles(
     }
   `
 );
+
+import('../vaadin-grid.js');
 
 class WrappedGrid extends PolymerElement {
   static get template() {
@@ -119,6 +120,8 @@ function simulateScrollToEnd(grid) {
 
 describe('data provider', () => {
   let grid;
+
+  before(() => customElements.whenDefined('vaadin-grid'));
 
   beforeEach(() => {
     grid = fixtureSync(`
