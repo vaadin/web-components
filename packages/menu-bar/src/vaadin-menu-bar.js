@@ -64,7 +64,6 @@ class MenuBar extends ButtonsMixin(InteractionsMixin(ElementMixin(ThemableMixin(
       <style>
         :host {
           display: block;
-          align-self: stretch; /* make overflow work in flex */
         }
 
         :host([hidden]) {
