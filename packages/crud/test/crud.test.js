@@ -1,8 +1,18 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, change, fixtureSync, isIOS, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import {
+  aTimeout,
+  change,
+  fixtureSync,
+  isIOS,
+  listenOnce,
+  nextFrame,
+  nextRender,
+  oneEvent
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-crud.js';
-import { flushGrid, getBodyCellContent } from './helpers.js';
+import '../vaadin-crud.js';
+import { flushGrid } from '../../grid/test/helpers.js';
+import { getBodyCellContent } from './helpers.js';
 
 describe('crud', () => {
   let crud, header, btnSave, btnCancel, btnDelete;
@@ -253,9 +263,10 @@ describe('crud', () => {
         let confirmCancelDialog;
         let confirmCancelOverlay;
 
-        beforeEach(() => {
+        beforeEach(async () => {
           confirmCancelDialog = crud.$.confirmCancel;
           confirmCancelOverlay = confirmCancelDialog.$.dialog.$.overlay;
+          await nextFrame();
         });
 
         afterEach(() => {
@@ -328,6 +339,7 @@ describe('crud', () => {
           crud.addEventListener('cancel', cancelSpyListener);
 
           crud._grid.activeItem = crud.items[0];
+          await nextFrame();
           btnCancel.click();
           await aTimeout(0);
           expect(cancelSpyListener.calledOnce).to.be.ok;
@@ -340,6 +352,7 @@ describe('crud', () => {
           crud.addEventListener('cancel', cancelSpyListener);
 
           crud._grid.activeItem = crud.items[0];
+          await nextFrame();
           crud.$.new.dispatchEvent(
             new CustomEvent('click', {
               bubbles: true,
@@ -348,7 +361,7 @@ describe('crud', () => {
             })
           );
 
-          await aTimeout(0);
+          await nextFrame();
           expect(cancelSpyListener.calledOnce).to.be.ok;
         });
 
@@ -486,27 +499,32 @@ describe('crud', () => {
           confirmCancelDialog.opened = false;
         });
 
-        it('should prevent changing edited items if dirty', () => {
+        it('should prevent changing edited items if dirty', async () => {
           crud._grid.activeItem = crud.items[0];
+          await nextFrame();
           expect(crud.editorOpened).to.be.true;
 
           change(crud._form);
           crud._grid.activeItem = crud.items[1];
+          await nextFrame();
           expect(confirmCancelDialog.opened).to.be.true;
           expect(crud.editedItem).to.be.equal(crud.items[0]);
         });
 
-        it('should prompt confirm if dirty and new button is clicked', () => {
+        it('should prompt confirm if dirty and new button is clicked', async () => {
           crud._grid.activeItem = crud.items[0];
+          await nextFrame();
           expect(crud.editorOpened).to.be.true;
 
           change(crud._form);
           crud.$.new.click();
+          await nextFrame();
           expect(confirmCancelDialog.opened).to.be.true;
         });
 
         it('should keep editor opened if dirty, new button is clicked and changes are discarded', async () => {
           crud._grid.activeItem = crud.items[0];
+          await nextFrame();
           expect(crud.editorOpened).to.be.true;
 
           change(crud._form);
@@ -519,6 +537,7 @@ describe('crud', () => {
 
         it('should change edited items if dirty when user discard changes', async () => {
           crud._grid.activeItem = crud.items[0];
+          await nextFrame();
           change(crud._form);
 
           crud._grid.activeItem = crud.items[1];
@@ -739,6 +758,7 @@ describe('crud', () => {
       grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
         root.textContent = model.item;
       };
+      grid.remove();
       await nextRender(grid);
     });
 
@@ -971,34 +991,41 @@ describe('crud', () => {
       flushGrid(crud._grid);
       confirmCancelDialog = crud.$.confirmCancel;
       confirmCancelOverlay = confirmCancelDialog.$.dialog.$.overlay;
+      await nextFrame();
     });
 
     function fakeClickOnRow(idx) {
       crud._grid.activeItem = crud.items[idx];
     }
 
-    it('should not open editor on row click by default', () => {
+    it('should not open editor on row click by default', async () => {
       crud.editOnClick = false;
       fakeClickOnRow(0);
+      await nextFrame();
       expect(crud.editorOpened).to.be.not.ok;
     });
 
-    it('should open editor on row click if edit-on-click is set', () => {
+    it('should open editor on row click if edit-on-click is set', async () => {
       fakeClickOnRow(0);
+      await nextFrame();
       expect(crud.editorOpened).to.be.true;
     });
 
-    it('should be able to open rows in sequence', () => {
+    it('should be able to open rows in sequence', async () => {
+      await nextFrame();
       fakeClickOnRow(0);
+      await nextFrame();
       expect(crud.editorOpened).to.be.true;
       expect(crud.editedItem).to.be.equal(crud.items[0]);
       fakeClickOnRow(1);
+      await nextFrame();
       expect(crud.editorOpened).to.be.true;
       expect(crud.editedItem).to.be.equal(crud.items[1]);
     });
 
-    it('should show edit column by default', () => {
+    it('should show edit column by default', async () => {
       crud.editOnClick = false; // Default
+      await nextFrame();
       expect(crud._grid.querySelector('vaadin-crud-edit-column')).to.be.not.null;
     });
 
@@ -1006,19 +1033,23 @@ describe('crud', () => {
       expect(crud._grid.querySelector('vaadin-crud-edit-column')).to.be.null;
     });
 
-    it('should close editor after a second click on the same row', () => {
+    it('should close editor after a second click on the same row', async () => {
       fakeClickOnRow(0);
+      await nextFrame();
       expect(crud.editorOpened).to.be.true;
       crud._grid.activeItem = null; // A second click will set grid active item to null
+      await nextFrame();
       expect(crud.editorOpened).to.be.false;
     });
 
     it('should close editor after a second click on the same row after dirty editor is discarded', async () => {
       fakeClickOnRow(0);
+      await nextFrame();
       expect(crud.editorOpened).to.be.true;
       crud.__isDirty = true;
       crud._grid.activeItem = null; // A second click will set grid active item to null
       await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
+      await nextFrame();
       confirmCancelOverlay.querySelector('[slot^="confirm"]').click();
       expect(crud.editorOpened).to.be.false;
     });
@@ -1027,30 +1058,35 @@ describe('crud', () => {
       crud._fullscreen = false;
 
       fakeClickOnRow(0);
+      await nextFrame();
       expect(crud.editorOpened).to.be.true;
       crud.$.new.click();
-      await aTimeout(0);
+      await nextFrame();
       expect(crud.editorOpened).to.be.true;
-      await aTimeout(0);
+      await nextFrame();
       expect(crud._grid.activeItem).to.be.undefined;
       fakeClickOnRow(0);
+      await nextFrame();
       expect(crud.editorOpened).to.be.true;
       expect(crud.editedItem).to.be.equal(crud.items[0]);
     });
 
     it('should open same row again after item was discarded after click on "New"', async () => {
       crud._fullscreen = false;
-
+      await nextFrame();
       fakeClickOnRow(0);
+      await nextFrame();
       expect(crud.editorOpened).to.be.true;
       crud.__isDirty = true;
       crud.$.new.click();
       await oneEvent(confirmCancelOverlay, 'vaadin-overlay-open');
       confirmCancelOverlay.querySelector('[slot^="confirm"]').click();
+      await nextFrame();
       expect(crud.editorOpened).to.be.true;
       await aTimeout(0);
       expect(crud._grid.activeItem).to.be.undefined;
       fakeClickOnRow(0);
+      await nextFrame();
       expect(crud.editorOpened).to.be.true;
       expect(crud.editedItem).to.be.equal(crud.items[0]);
     });

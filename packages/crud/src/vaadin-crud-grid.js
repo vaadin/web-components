@@ -29,22 +29,28 @@ class CrudGrid extends IncludedMixin(Grid) {
        * Disable filtering in the generated columns.
        * @attr {boolean} no-filter
        */
-      noFilter: Boolean,
+      noFilter: {
+        type: Boolean
+      },
 
       /**
        * Disable sorting in the generated columns.
        * @attr {boolean} no-sort
        */
-      noSort: Boolean,
+      noSort: {
+        type: Boolean
+      },
 
       /**
        * Do not add headers to columns.
        * @attr {boolean} no-head
        */
-      noHead: Boolean,
+      noHead: {
+        type: Boolean
+      },
 
       /** @private */
-      __hideEditColumn: Boolean
+      hideEditColumn: Boolean
     };
   }
 
@@ -78,7 +84,7 @@ class CrudGrid extends IncludedMixin(Grid) {
 
   /** @private */
   __dataProviderWrapper(params, callback) {
-    this.__dataProvider(params, (items, size) => {
+    this.__cachedDataProvider(params, (items, size) => {
       if (this.innerHTML == '' && !this.include && items[0]) {
         this._configure(items[0]);
       }
@@ -95,7 +101,7 @@ class CrudGrid extends IncludedMixin(Grid) {
       super._dataProviderChanged(dataProvider, oldDataProvider);
     } else if (this.__dataProviderWrapper != dataProvider) {
       this.innerHTML = '';
-      this.__dataProvider = dataProvider;
+      this.__cachedDataProvider = dataProvider;
       this.dataProvider = this.__dataProviderWrapper;
       super._dataProviderChanged(this.__dataProviderWrapper, oldDataProvider);
     }
@@ -160,7 +166,7 @@ class CrudGrid extends IncludedMixin(Grid) {
       col = document.createElement('vaadin-grid-column');
       parent.appendChild(col);
       col.renderer = (root, _column, model) => {
-        root.textContent = path ? this.get(path, model.item) : model.item;
+        root.textContent = path ? this._get(path, model.item) : model.item;
       };
     }
 
@@ -279,7 +285,7 @@ class CrudGrid extends IncludedMixin(Grid) {
         .split('.')
         .slice(0, -1)
         .reduce((o, p) => (o[p] = o[p] || {}), obj);
-      this.set(path, val, obj);
+      this._set(path, val, obj);
     }
   }
 }

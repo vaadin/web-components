@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../vaadin-crud.js';
-import { flushGrid } from './helpers.js';
+import { flushGrid } from '../../grid/test/helpers.js';
 
 describe('vaadin-crud editor', () => {
   ['default', 'custom'].forEach((type) => {
@@ -31,20 +31,23 @@ describe('vaadin-crud editor', () => {
         btnCancel = crud.querySelector('[slot="cancel-button"]');
       });
 
-      it(`should move ${type} form to dialog content with default editorPosition`, () => {
+      it(`should move ${type} form to dialog content with default editorPosition`, async () => {
         crud._grid.activeItem = crud.items[0];
+        await nextFrame();
         expect(form.parentElement).to.equal(overlay);
       });
 
-      it(`should move ${type} form to crud when editorPosition set to bottom`, () => {
+      it(`should move ${type} form to crud when editorPosition set to bottom`, async () => {
         crud.editorPosition = 'bottom';
         crud._grid.activeItem = crud.items[0];
+        await nextFrame();
         expect(form.parentElement).to.equal(crud);
       });
 
-      it(`should move ${type} form to crud when editorPosition set to aside`, () => {
+      it(`should move ${type} form to crud when editorPosition set to aside`, async () => {
         crud.editorPosition = 'aside';
         crud._grid.activeItem = crud.items[0];
+        await nextFrame();
         expect(form.parentElement).to.equal(crud);
       });
 
