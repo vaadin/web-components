@@ -51,8 +51,6 @@ const textArea = css`
   }
 
   [part='input-field'] ::slotted(textarea) {
-    white-space: pre-wrap; /* override "nowrap" from <vaadin-text-field> */
-    align-self: stretch; /* override "baseline" from <vaadin-text-field> */
     line-height: inherit;
     --_lumo-text-field-overflow-mask-image: none;
   }
