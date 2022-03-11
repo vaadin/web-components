@@ -48,7 +48,7 @@ const isLockfileChanged = () => {
  * Get packages changed since master.
  */
 const getChangedPackages = () => {
-  const output = execSync('./node_modules/.bin/lerna ls --since origin/master --json --loglevel silent');
+  const output = execSync('./node_modules/.bin/lerna ls --since origin/23.0 --json --loglevel silent');
   return JSON.parse(output.toString()).map((project) => project.name.replace('@vaadin/', ''));
 };
 
