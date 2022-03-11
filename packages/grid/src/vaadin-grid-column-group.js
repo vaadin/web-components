@@ -193,6 +193,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolylitMixin(LitElement)) {
   /** @private */
   _updateVisibleChildColumns(childColumns) {
     this._visibleChildColumns = Array.prototype.filter.call(childColumns, (col) => !col.hidden);
+    this.performUpdate();
   }
 
   /** @private */
@@ -242,6 +243,11 @@ class GridColumnGroup extends ColumnBaseMixin(PolylitMixin(LitElement)) {
 
   /** @private */
   _groupHiddenChanged(hidden, rootColumns) {
+    if (!this.__hiddenInitialized) {
+      this.__hiddenInitialized = hidden !== undefined;
+      return;
+    }
+
     if (rootColumns && !this._preventHiddenCascade) {
       this._ignoreVisibleChildColumns = true;
       rootColumns.forEach((column) => (column.hidden = hidden));

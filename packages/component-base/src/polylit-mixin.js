@@ -79,7 +79,7 @@ const PolylitMixinImplementation = (superclass) => {
     }
 
     static getPropertyDescriptor(name, key, options) {
-      if ([String, Boolean, Number].includes(options)) {
+      if ([String, Boolean, Number, Array].includes(options)) {
         options = {
           type: options
         };

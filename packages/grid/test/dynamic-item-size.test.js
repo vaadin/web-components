@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '../vaadin-grid.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { flushGrid, getFirstVisibleItem, infiniteDataProvider } from './helpers.js';
 
@@ -23,8 +22,14 @@ registerStyles(
   `
 );
 
+// TODO: Since LitElement finalizes immediately, all styles _must_ be registered before
+// the component gets imported.
+import('../vaadin-grid.js');
+
 describe('dynamic item size', () => {
   let grid;
+
+  before(() => customElements.whenDefined('vaadin-grid'));
 
   beforeEach(() => {
     grid = fixtureSync(`

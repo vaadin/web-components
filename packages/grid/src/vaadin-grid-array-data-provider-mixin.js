@@ -17,7 +17,9 @@ export const ArrayDataProviderMixin = (superClass) =>
          *
          * @type {Array<!GridItem> | undefined}
          */
-        items: Array
+        items: {
+          type: Array
+        }
       };
     }
 
