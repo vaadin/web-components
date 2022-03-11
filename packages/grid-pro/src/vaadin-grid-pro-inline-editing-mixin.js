@@ -177,9 +177,9 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /** @private */
-    _applyEdit({ path, value, index, item }) {
-      this.set(path, value, item);
-      this.notifyPath('items.' + index + '.' + path, value);
+    _applyEdit({ path, value, _index, item }) {
+      this._set(path, value, item);
+      this.requestContentUpdate();
     }
 
     /** @private */
@@ -349,7 +349,7 @@ export const InlineEditingMixin = (superClass) =>
         const editor = column._getEditorComponent(cell);
         if (editor) {
           const value = column._getEditorValue(editor);
-          if (value !== this.get(column.path, model.item)) {
+          if (value !== this._get(column.path, model.item)) {
             // In some cases, where the value comes from the editor's change
             // event (eg. custom editor in vaadin-grid-pro-flow), the event is
             // not dispatched in FF/Safari/Edge. That's due the change event

@@ -1,11 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-pro.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
-import { flushGrid, infiniteDataProvider } from './helpers.js';
+import { flushGrid } from '../../grid/test/helpers.js';
+import { infiniteDataProvider } from './helpers.js';
 
 describe('custom element definition', () => {
   let grid, tagName;
@@ -78,20 +79,24 @@ describe('missing imports', () => {
         console.warn.restore();
       });
 
-      it('should not warn if not in use', () => {
+      it('should not warn if not in use', async () => {
+        await nextFrame();
         flushDebouncers();
         expect(console.warn.called).to.be.false;
       });
 
-      it('should warn once if in use', () => {
+      it('should warn once if in use', async () => {
         grid.appendChild(document.createElement(elementName));
         grid.appendChild(document.createElement(elementName));
+        await nextFrame();
         flushDebouncers();
+        await nextFrame();
         expect(console.warn.callCount).to.equal(1);
       });
 
-      it('should warn and not throw after adding', () => {
+      it('should warn and not throw after adding', async () => {
         grid.appendChild(document.createElement(elementName));
+        await nextFrame();
         flushDebouncers();
 
         let error;
