@@ -24,7 +24,7 @@ registerStyles(
 
     /* placeholder styles */
     ::slotted(:not([slot]):not([selected])) {
-      line-height: normal;
+      line-height: 1;
     }
 
     /* TODO: unsupported selector */

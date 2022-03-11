@@ -45,6 +45,7 @@ const select = css`
 
   :host([theme~='small']) [part='input-field'] ::slotted([slot='value']) {
     --lumo-button-size: var(--lumo-size-s);
+    --_lumo-selected-item-padding: 0;
   }
 `;
 
@@ -54,8 +55,8 @@ registerStyles(
   'vaadin-select-value-button',
   css`
     :host {
-      min-height: var(--lumo-size-m);
       padding: 0 0.25em;
+      --_lumo-selected-item-padding: 0.5em;
     }
 
     :host::before,
@@ -65,6 +66,12 @@ registerStyles(
 
     :host([focus-ring]) {
       box-shadow: none;
+    }
+
+    ::slotted(:not([slot])) {
+      min-height: var(--lumo-button-size);
+      padding-top: var(--_lumo-selected-item-padding);
+      padding-bottom: var(--_lumo-selected-item-padding);
     }
 
     ::slotted(:not([slot]):hover) {
