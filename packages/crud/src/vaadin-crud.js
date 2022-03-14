@@ -682,7 +682,6 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     this.__gridSizeListener = this.__onGridSizeChanges.bind(this);
     this.__boundEditOnClickListener = this.__editOnClickListener.bind(this);
     this._grid = this.$.grid;
-    this.__onDataProviderChange(this.dataProvider);
     this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancelBound);
     this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancelBound);
     // Initialize the default buttons
@@ -855,7 +854,6 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
           this.__onEditOnClickChange(false, this._grid);
           this._grid = node;
           this.__onEditOnClickChange(this.editOnClick, this._grid);
-          this.__onDataProviderChange(this.dataProvider);
         } else if (slotAttributeValue == 'form') {
           this._form = node;
         } else if (slotAttributeValue.indexOf('button') >= 0) {
@@ -888,6 +886,9 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     if (old) {
       old.removeEventListener('edit', this.__editListener);
       old.removeEventListener('size-changed', this.__gridSizeListener);
+    }
+    if (this.dataProvider) {
+      this.__onDataProviderChange(this.dataProvider);
     }
     if (this.items) {
       this.__onItemsChange(this.items);
