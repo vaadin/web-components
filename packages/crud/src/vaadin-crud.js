@@ -1061,19 +1061,17 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
 
   /** @private */
   __createDataProviderProxy(dataProvider) {
-    return !dataProvider
-      ? undefined
-      : (params, callback) => {
-          const callbackProxy = (chunk, size) => {
-            if (chunk && chunk[0]) {
-              this.__model = chunk[0];
-            }
+    return (params, callback) => {
+      const callbackProxy = (chunk, size) => {
+        if (chunk && chunk[0]) {
+          this.__model = chunk[0];
+        }
 
-            callback(chunk, size);
-          };
+        callback(chunk, size);
+      };
 
-          dataProvider(params, callbackProxy);
-        };
+      dataProvider(params, callbackProxy);
+    };
   }
 
   /** @private */
