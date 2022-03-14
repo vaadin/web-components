@@ -13,6 +13,7 @@ registerStyles(
       margin: 0;
       min-width: 0;
       width: 0;
+      height: auto;
     }
 
     ::slotted(:not([slot])) {
@@ -23,7 +24,7 @@ registerStyles(
 
     /* placeholder styles */
     ::slotted(:not([slot]):not([selected])) {
-      line-height: normal;
+      line-height: 1;
     }
 
     /* TODO: unsupported selector */
