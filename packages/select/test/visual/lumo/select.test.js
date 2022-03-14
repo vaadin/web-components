@@ -79,6 +79,24 @@ describe('select', () => {
     await visualDiff(div, 'value-overflow');
   });
 
+  it('value-custom', async () => {
+    element.renderer = (root) => {
+      root.innerHTML = `
+        <vaadin-list-box>
+          <vaadin-item value="custom">
+            <div>
+              Line 1
+              <br>
+              Line 2
+            </div>
+          </vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
+    element.value = 'custom';
+    await visualDiff(div, 'value-custom');
+  });
+
   it('required', async () => {
     element.label = 'Label';
     element.required = true;
