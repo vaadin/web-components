@@ -682,6 +682,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     this.__gridSizeListener = this.__onGridSizeChanges.bind(this);
     this.__boundEditOnClickListener = this.__editOnClickListener.bind(this);
     this._grid = this.$.grid;
+    this.__onDataProviderChange(this.dataProvider);
     this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancelBound);
     this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancelBound);
     // Initialize the default buttons
@@ -854,6 +855,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
           this.__onEditOnClickChange(false, this._grid);
           this._grid = node;
           this.__onEditOnClickChange(this.editOnClick, this._grid);
+          this.__onDataProviderChange(this.dataProvider);
         } else if (slotAttributeValue == 'form') {
           this._form = node;
         } else if (slotAttributeValue.indexOf('button') >= 0) {
@@ -1058,17 +1060,19 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
 
   /** @private */
   __createDataProviderProxy(dataProvider) {
-    return (params, callback) => {
-      const callbackProxy = (chunk, size) => {
-        if (chunk && chunk[0]) {
-          this.__model = chunk[0];
-        }
+    return !dataProvider
+      ? undefined
+      : (params, callback) => {
+          const callbackProxy = (chunk, size) => {
+            if (chunk && chunk[0]) {
+              this.__model = chunk[0];
+            }
 
-        callback(chunk, size);
-      };
+            callback(chunk, size);
+          };
 
-      dataProvider(params, callbackProxy);
-    };
+          dataProvider(params, callbackProxy);
+        };
   }
 
   /** @private */
