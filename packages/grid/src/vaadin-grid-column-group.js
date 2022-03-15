@@ -88,6 +88,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       '_updateVisibleChildColumns(_childColumns)',
       '_childColumnsChanged(_childColumns)',
       '_groupFrozenChanged(frozen, _rootColumns)',
+      '_groupFrozenToEndChanged(frozenToEnd, _rootColumns)',
       '_groupHiddenChanged(hidden, _rootColumns)',
       '_visibleChildColumnsChanged(_visibleChildColumns)',
       '_colSpanChanged(_colSpan, _headerCell, _footerCell)',
@@ -134,6 +135,16 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
     if (path === 'lastFrozen') {
       // Don’t unfreeze the frozen group because of a non-frozen child
       this._lastFrozen = this._lastFrozen || value;
+    }
+
+    if (path === 'frozenToEnd') {
+      // Don’t unfreeze the frozen group because of a non-frozen child
+      this.frozenToEnd = this.frozenToEnd || value;
+    }
+
+    if (path === 'firstFrozenToEnd') {
+      // Don’t unfreeze the frozen group because of a non-frozen child
+      this._firstFrozenToEnd = this._firstFrozenToEnd || value;
     }
   }
 
@@ -236,6 +247,17 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
     // Don’t propagate the default `false` value.
     if (frozen !== false) {
       Array.from(rootColumns).forEach((col) => (col.frozen = frozen));
+    }
+  }
+
+  _groupFrozenToEndChanged(frozenToEnd, rootColumns) {
+    if (rootColumns === undefined || frozenToEnd === undefined) {
+      return;
+    }
+
+    // Don’t propagate the default `false` value.
+    if (frozenToEnd !== false) {
+      Array.from(rootColumns).forEach((col) => (col.frozenToEnd = frozenToEnd));
     }
   }
 

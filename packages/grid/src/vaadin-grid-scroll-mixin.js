@@ -179,11 +179,11 @@ export const ScrollMixin = (superClass) =>
         this._frozenCells = Array.prototype.slice.call(this.$.table.querySelectorAll('[frozen]'));
         this.__updateHorizontalScrollPosition();
       });
-      this._updateLastFrozen();
+      this._updateFrozenColumn();
     }
 
     /** @protected */
-    _updateLastFrozen() {
+    _updateFrozenColumn() {
       if (!this._columnTree) {
         return;
       }
@@ -192,17 +192,45 @@ export const ScrollMixin = (superClass) =>
       columnsRow.sort((a, b) => {
         return a._order - b._order;
       });
-      const lastFrozen = columnsRow.reduce((prev, col, index) => {
+
+      let lastFrozen;
+      let firstFrozenToEnd;
+
+      // Use for loop to only iterate columns once
+      for (let i = 0; i < columnsRow.length; i++) {
+        const col = columnsRow[i];
+
         col._lastFrozen = false;
-        return col.frozen && !col.hidden ? index : prev;
-      }, undefined);
+        col._firstFrozenToEnd = false;
+
+        if (firstFrozenToEnd === undefined && col.frozenToEnd && !col.hidden) {
+          firstFrozenToEnd = i;
+        }
+
+        if (col.frozen && !col.hidden) {
+          lastFrozen = i;
+        }
+      }
+
       if (lastFrozen !== undefined) {
         columnsRow[lastFrozen]._lastFrozen = true;
+      }
+
+      if (firstFrozenToEnd !== undefined) {
+        columnsRow[firstFrozenToEnd]._firstFrozenToEnd = true;
       }
     }
 
     /** @private */
     __updateHorizontalScrollPosition() {
+      const scrollWidth = this.$.table.scrollWidth;
+      const clientWidth = this.$.table.clientWidth;
+      const scrollLeft = this._scrollLeft;
+
+      // Position cells frozen to end
+      const remaining = scrollLeft + clientWidth - scrollWidth;
+
+      this.$.table.style.setProperty('--_grid-horizontal-scroll-remaining', remaining + 'px');
       this.$.table.style.setProperty('--_grid-horizontal-scroll-position', -this._scrollLeft + 'px');
 
       if (this.__isRTL) {

@@ -33,6 +33,17 @@ export declare class ColumnBaseMixinClass<TItem> {
   frozen: boolean;
 
   /**
+   * When true, the column is frozen to end of grid.
+   *
+   * When a column inside of a column group is frozen to end, all of the sibling columns
+   * inside the group will get frozen to end also.
+   *
+   * Column can not be set as `frozen` and `frozenToEnd` at the same time.
+   * @attr {boolean} frozen-to-end
+   */
+  frozenToEnd: boolean;
+
+  /**
    * When set to true, the cells for this column are hidden.
    */
   hidden: boolean;

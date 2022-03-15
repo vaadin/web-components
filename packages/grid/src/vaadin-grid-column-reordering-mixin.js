@@ -317,7 +317,10 @@ export const ColumnReorderingMixin = (superClass) =>
       if (column1 && column2) {
         const differentColumns = column1 !== column2;
         const sameParent = column1.parentElement === column2.parentElement;
-        const sameFrozen = column1.frozen === column2.frozen;
+        const sameFrozen =
+          (column1.frozen && column2.frozen) || // both columns are frozen
+          (column1.frozenToEnd && column2.frozenToEnd) || // both columns are frozen to end
+          (!column1.frozen && !column1.frozenToEnd && !column2.frozen && !column2.frozenToEnd);
         return differentColumns && sameParent && sameFrozen;
       }
     }
@@ -351,7 +354,7 @@ export const ColumnReorderingMixin = (superClass) =>
       const _order = column1._order;
       column1._order = column2._order;
       column2._order = _order;
-      this._updateLastFrozen();
+      this._updateFrozenColumn();
       this._updateFirstAndLastColumn();
     }
 

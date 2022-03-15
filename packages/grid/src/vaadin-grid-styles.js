@@ -170,6 +170,12 @@ registerStyles(
       will-change: transform;
     }
 
+    [frozen-to-end] {
+      z-index: 2;
+      transform: translateX(var(--_grid-horizontal-scroll-remaining));
+      will-change: transform;
+    }
+
     [no-scrollbars][safari] #table,
     [no-scrollbars][firefox] #table {
       overflow: hidden;
