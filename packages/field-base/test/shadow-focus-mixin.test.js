@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, focusin, focusout, keyboardEventFor, keyDownOn } from '@vaadin/testing-helpers';
-import { sendKeys, sendMouse } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ShadowFocusMixin } from '../src/shadow-focus-mixin.js';
@@ -188,6 +188,10 @@ describe('shadow-focus-mixin', () => {
   });
 
   describe('focus', () => {
+    afterEach(async () => {
+      await resetMouse();
+    });
+
     it('should call focus on focusElement', () => {
       const spy = sinon.spy(focusElement, 'focus');
       customElement.focus();
