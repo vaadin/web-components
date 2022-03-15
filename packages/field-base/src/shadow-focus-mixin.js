@@ -62,7 +62,9 @@ export const ShadowFocusMixin = (superClass) =>
         const path = event.composedPath();
 
         // When focus moves from outside and not with Shift + Tab, delegate it to focusElement.
-        if (path[0] === this && !this.contains(event.relatedTarget) && !this._isShiftTabbing) {
+        // This should only move focus when using keyboard navigation, for clicks we don't want to interfere,
+        // for example when the user tries to select some text
+        if (this._keyboardActive && path[0] === this && !this.contains(event.relatedTarget) && !this._isShiftTabbing) {
           this.focusElement.focus();
           return true;
         }
