@@ -273,7 +273,7 @@ registerStyles(
 
     /* RTL specific styles */
 
-    :host([dir='rtl']) *:is(#items, #header, #footer, [frozen]) {
+    :host([dir='rtl']) *:is(#items, #header, #footer, [frozen], [frozen-to-end]) {
       transform: none;
     }
 

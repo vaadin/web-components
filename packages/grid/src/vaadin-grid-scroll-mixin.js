@@ -26,6 +26,15 @@ export const ScrollMixin = (superClass) =>
           value: () => []
         },
 
+        /**
+         * Cached array of cells frozen to end
+         * @private
+         */
+        _frozenToEndCells: {
+          type: Array,
+          value: () => []
+        },
+
         /** @private */
         _rowWithFocusedElement: Element
       };
@@ -177,6 +186,7 @@ export const ScrollMixin = (superClass) =>
           cell.style.transform = '';
         });
         this._frozenCells = Array.prototype.slice.call(this.$.table.querySelectorAll('[frozen]'));
+        this._frozenToEndCells = Array.prototype.slice.call(this.$.table.querySelectorAll('[frozen-to-end]'));
         this.__updateHorizontalScrollPosition();
       });
       this._updateFrozenColumn();
@@ -225,21 +235,25 @@ export const ScrollMixin = (superClass) =>
     __updateHorizontalScrollPosition() {
       const scrollWidth = this.$.table.scrollWidth;
       const clientWidth = this.$.table.clientWidth;
-      const scrollLeft = this._scrollLeft;
+      const scrollLeft = this.__getNormalizedScrollLeft(this.$.table);
 
       // Position cells frozen to end
       const remaining = scrollLeft + clientWidth - scrollWidth;
 
       this.$.table.style.setProperty('--_grid-horizontal-scroll-remaining', remaining + 'px');
-      this.$.table.style.setProperty('--_grid-horizontal-scroll-position', -this._scrollLeft + 'px');
+      this.$.table.style.setProperty('--_grid-horizontal-scroll-position', -scrollLeft + 'px');
 
       if (this.__isRTL) {
         // Translating the sticky sections using a CSS variable works nicely on LTR.
         // On RTL, it causes jumpy behavior (on Desktop Safari) so we need to translate manually.
-        const x = this.__getNormalizedScrollLeft(this.$.table) + this.$.table.clientWidth - this.$.table.scrollWidth;
-        const transform = `translate(${x}px, 0)`;
+        const transformFrozen = `translate(${remaining}px, 0)`;
         for (let i = 0; i < this._frozenCells.length; i++) {
-          this._frozenCells[i].style.transform = transform;
+          this._frozenCells[i].style.transform = transformFrozen;
+        }
+
+        const transformFrozenToEnd = `translate(${scrollLeft}px, 0)`;
+        for (let i = 0; i < this._frozenToEndCells.length; i++) {
+          this._frozenToEndCells[i].style.transform = transformFrozenToEnd;
         }
       }
     }
