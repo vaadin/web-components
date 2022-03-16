@@ -226,6 +226,19 @@ describe('shadow-focus-mixin', () => {
       expect(spy.called).to.be.false;
     });
 
+    it('should skip host element in tab order when shift-tabbing', async () => {
+      const siblingInput = document.createElement('input');
+      customElement.parentElement.insertBefore(siblingInput, customElement);
+
+      customElement.focus();
+      expect(document.activeElement).to.equal(customElement);
+      // Move focus back to body
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      expect(document.activeElement).to.equal(siblingInput);
+    });
+
     it('should set focused attribute when clicking on non-focusable slotted element', async () => {
       const span = document.createElement('span');
       span.textContent = 'test';
