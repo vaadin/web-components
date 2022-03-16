@@ -136,6 +136,22 @@ export const ScrollMixin = (superClass) =>
         overflow += ' top';
       }
 
+      const scrollLeft = this.__getNormalizedScrollLeft(table);
+      if (scrollLeft > 0) {
+        overflow += ' start';
+      }
+
+      if (scrollLeft < table.scrollWidth - table.clientWidth) {
+        overflow += ' end';
+      }
+
+      if (this.__isRTL) {
+        overflow = overflow.replace(/start|end/gi, (matched) => {
+          return matched === 'start' ? 'end' : 'start';
+        });
+      }
+
+      // TODO: Remove "right" and "left" values in the next major.
       if (table.scrollLeft < table.scrollWidth - table.clientWidth) {
         overflow += ' right';
       }
