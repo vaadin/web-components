@@ -31,7 +31,7 @@ export const ShadowFocusMixin = (superClass) =>
 
     /**
      * Override an event listener from `KeyboardMixin`
-     * to prevent setting `focused` on Shift Tab.
+     * to prevent focusing the host element on Shift Tab.
      * @param {KeyboardEvent} event
      * @protected
      * @override
@@ -39,13 +39,10 @@ export const ShadowFocusMixin = (superClass) =>
     _onKeyDown(event) {
       super._onKeyDown(event);
 
-      // When focus moves with Shift + Tab, do not mark host as focused.
-      // The flag set here will be later used in focusin event listener.
+      // When focus moves with Shift + Tab, skip focusing the host element
+      // by focusing it before the default browser focus handling runs
       if (!event.defaultPrevented && event.keyCode === 9 && event.shiftKey) {
-        this._isShiftTabbing = true;
         HTMLElement.prototype.focus.apply(this);
-        this._setFocused(false);
-        setTimeout(() => (this._isShiftTabbing = false), 0);
       }
     }
 
@@ -61,15 +58,13 @@ export const ShadowFocusMixin = (superClass) =>
       if (!this.disabled && this.focusElement) {
         const path = event.composedPath();
 
-        // When focus moves from outside and not with Shift + Tab, delegate it to focusElement.
+        // When focus moves to the host element itself, then delegate it to the focusElement
         // This should only move focus when using keyboard navigation, for clicks we don't want to interfere,
         // for example when the user tries to select some text
-        if (this._keyboardActive && path[0] === this && !this.contains(event.relatedTarget) && !this._isShiftTabbing) {
+        if (path[0] === this && this._keyboardActive) {
           this.focusElement.focus();
-          return true;
         }
-
-        if (path.includes(this.focusElement)) {
+        if (path[0] === this || path.includes(this.focusElement)) {
           return true;
         }
       }
