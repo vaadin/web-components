@@ -209,6 +209,7 @@ describe('shadow-focus-mixin', () => {
     });
 
     it('should delegate focus if the focus is received from outside using keyboard navigation', async () => {
+      document.body.focus();
       const spy = sinon.spy(focusElement, 'focus');
       await sendKeys({ press: 'Tab' });
       expect(spy.called).to.be.true;
