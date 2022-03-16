@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, focusin, focusout, keyboardEventFor, keyDownOn } from '@vaadin/testing-helpers';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ShadowFocusMixin } from '../src/shadow-focus-mixin.js';
@@ -11,6 +12,7 @@ customElements.define(
       return html`
         <input id="input" />
         <input id="secondInput" />
+        <slot></slot>
       `;
     }
 
@@ -47,7 +49,7 @@ describe('shadow-focus-mixin', () => {
       expect(focusElement.getAttribute('tabindex')).to.be.equal('1');
     });
 
-    it('should se tabindex to 0 by default', () => {
+    it('should set tabindex to 0 by default', () => {
       expect(customElement.getAttribute('tabindex')).to.be.equal('0');
     });
 
@@ -186,6 +188,10 @@ describe('shadow-focus-mixin', () => {
   });
 
   describe('focus', () => {
+    afterEach(async () => {
+      await resetMouse();
+    });
+
     it('should call focus on focusElement', () => {
       const spy = sinon.spy(focusElement, 'focus');
       customElement.focus();
@@ -202,7 +208,29 @@ describe('shadow-focus-mixin', () => {
       expect(customElement.hasAttribute('focused')).to.be.true;
     });
 
-    it('should not focus if the focus is not received from outside', () => {
+    it('should delegate focus if the focus is received from outside using keyboard navigation', async () => {
+      document.body.focus();
+      const spy = sinon.spy(focusElement, 'focus');
+      await sendKeys({ press: 'Tab' });
+      expect(spy.called).to.be.true;
+    });
+
+    it('should not delegate focus when clicking on non-focusable child', async () => {
+      const span = document.createElement('span');
+      span.textContent = 'test';
+      customElement.appendChild(span);
+
+      const spy = sinon.spy(focusElement, 'focus');
+      // Click center of span child element
+      const rect = span.getBoundingClientRect();
+      const middleX = Math.floor(rect.x + rect.width / 2);
+      const middleY = Math.floor(rect.y + rect.height / 2);
+      await sendMouse({ type: 'click', position: [middleX, middleY] });
+      // Clicking on some text content should not move focus
+      expect(spy.called).to.be.false;
+    });
+
+    it('should not delegate focus if the focus is not received from outside', () => {
       const child = document.createElement('div');
       customElement.appendChild(child);
 
