@@ -235,7 +235,7 @@ registerStyles(
       right: auto;
     }
 
-    [frozen-to-end] [part~='resize-handle']:before {
+    [frozen-to-end] [part~='resize-handle']::before {
       left: 0;
       right: auto;
     }
