@@ -2,7 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
-import { flushGrid, getRowCells, getRows, infiniteDataProvider, isWithinParentConstraints, wheel } from './helpers.js';
+import { flushGrid, getRowCells, getRows, infiniteDataProvider, isWithinParentConstraints } from './helpers.js';
 
 // Returns true if the element's computed transform style matches with the
 // computed transform style of a div element with the given transform applied
@@ -47,15 +47,6 @@ const transformsEqual = (element, transform) => {
     });
 
     after(() => document.documentElement.removeAttribute('dir'));
-
-    !isRTL &&
-      it('should not throw on scrolling when dir changed to rtl after frozen columns set', () => {
-        columns[0].frozen = true;
-        grid._debouncerCacheElements.flush();
-        grid.setAttribute('dir', 'rtl');
-        // Emulate scrolling with the wheel
-        expect(() => wheel(grid, 1, 1)).not.to.throw(Error);
-      });
 
     it('should have last frozen only when there are frozen columns', () => {
       expect(columns[0]._lastFrozen).to.be.true;
