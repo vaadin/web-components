@@ -66,11 +66,20 @@ export const ColumnResizingMixin = (superClass) =>
             parseInt(style.borderRightWidth) +
             parseInt(style.marginLeft) +
             parseInt(style.marginRight);
-          const maxWidth =
-            targetCell.offsetWidth +
-            (this.__isRTL
-              ? targetCell.getBoundingClientRect().left - e.detail.x
-              : e.detail.x - targetCell.getBoundingClientRect().right);
+
+          let maxWidth;
+
+          const eventX = e.detail.x;
+          const cellWidth = targetCell.offsetWidth;
+          const cellRect = targetCell.getBoundingClientRect();
+
+          // For cells frozen to end, resize handle is flipped horizontally.
+          if (targetCell.hasAttribute('frozen-to-end')) {
+            maxWidth = cellWidth + (this.__isRTL ? eventX - cellRect.right : cellRect.left - eventX);
+          } else {
+            maxWidth = cellWidth + (this.__isRTL ? cellRect.left - eventX : eventX - cellRect.right);
+          }
+
           column.width = Math.max(minWidth, maxWidth) + 'px';
           column.flexGrow = 0;
         }

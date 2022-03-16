@@ -73,6 +73,25 @@ describe('column resizing', () => {
 
       expect(headerCells[0].clientWidth).to.equal(direction === 'rtl' ? 349 : 200);
     });
+
+    it(`should resize on frozen to end cell track in ${direction}`, () => {
+      grid.setAttribute('dir', direction);
+      const column = grid._columnTree[0][1];
+      column.resizable = true;
+      column.frozenToEnd = true;
+      handle = headerCells[1].querySelector('[part~="resize-handle"]');
+
+      const options = { node: handle };
+      const rect = headerCells[1].getBoundingClientRect();
+
+      fire('track', { state: 'start' }, options);
+
+      // Increase column width by 50px
+      const x = direction === 'rtl' ? rect.right + 50 : rect.left - 50;
+      fire('track', { state: 'track', x, y: 0 }, options);
+
+      expect(headerCells[1].clientWidth).to.equal(198);
+    });
   });
 
   it('should not listen to track event on scroller', () => {

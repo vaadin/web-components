@@ -230,6 +230,21 @@ registerStyles(
       right: 0;
     }
 
+    [frozen-to-end] [part~='resize-handle'] {
+      left: 0;
+      right: auto;
+    }
+
+    [frozen-to-end] [part~='resize-handle']:before {
+      left: 0;
+      right: auto;
+    }
+
+    [first-frozen-to-end] [part~='resize-handle']::before {
+      width: 18px;
+      transform: none;
+    }
+
     #scroller[column-resizing] {
       -ms-user-select: none;
       -moz-user-select: none;
@@ -301,6 +316,16 @@ registerStyles(
     :host([dir='rtl']) [last-frozen] [part~='resize-handle']::before {
       left: 0;
       right: auto;
+    }
+
+    :host([dir='rtl']) [frozen-to-end] [part~='resize-handle'] {
+      right: 0;
+      left: auto;
+    }
+
+    :host([dir='rtl']) [frozen-to-end] [part~='resize-handle']::before {
+      right: 0;
+      left: auto;
     }
   `,
   { moduleId: 'vaadin-grid-styles' }
