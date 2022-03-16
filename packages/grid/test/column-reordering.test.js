@@ -336,6 +336,43 @@ describe('reordering simple grid', () => {
       expect(grid.hasAttribute('reordering')).to.be.false;
     });
   });
+
+  describe('columns frozen to end', () => {
+    beforeEach(() => {
+      const columns = grid.querySelectorAll('vaadin-grid-column');
+      columns[2].frozenToEnd = true;
+      columns[3].frozenToEnd = true;
+    });
+
+    it('should allow reordering columns frozen to end', () => {
+      dragAndDropOver(headerContent[3], headerContent[2]);
+      expectVisualOrder(grid, [1, 2, 4, 3]);
+    });
+
+    it('should not allow reordering frozen to end and non-frozen columns', () => {
+      dragAndDropOver(headerContent[2], headerContent[1]);
+      expectVisualOrder(grid, [1, 2, 3, 4]);
+    });
+
+    it('should not allow reordering non-frozen and frozen to end columns', () => {
+      dragAndDropOver(headerContent[1], headerContent[2]);
+      expectVisualOrder(grid, [1, 2, 3, 4]);
+    });
+
+    it('should update first-frozen-to-end while dragging', () => {
+      const cell = getCellByCellContent(headerContent[3]);
+      expect(cell.hasAttribute('first-frozen-to-end')).to.be.false;
+      dragOver(headerContent[3], headerContent[2]);
+      expect(cell.hasAttribute('first-frozen-to-end')).to.be.true;
+    });
+
+    it('should not start reordering on frozen column resize handle move', () => {
+      const handle = getCellByCellContent(headerContent[2]).querySelector('[part~="resize-handle"]');
+      const cell = getCellByCellContent(headerContent[3]);
+      dragOver(handle, cell);
+      expect(grid.hasAttribute('reordering')).to.be.false;
+    });
+  });
 });
 
 describe('reordering grid with columns groups', () => {
