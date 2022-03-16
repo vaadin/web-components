@@ -241,7 +241,7 @@ export const ScrollMixin = (superClass) =>
       const remaining = scrollLeft + clientWidth - scrollWidth;
 
       this.$.table.style.setProperty('--_grid-horizontal-scroll-remaining', remaining + 'px');
-      this.$.table.style.setProperty('--_grid-horizontal-scroll-position', -scrollLeft + 'px');
+      this.$.table.style.setProperty('--_grid-horizontal-scroll-position', -this._scrollLeft + 'px');
 
       if (this.__isRTL) {
         // Translating the sticky sections using a CSS variable works nicely on LTR.
