@@ -249,6 +249,35 @@ describe('grid', () => {
           await visualDiff(element, `${dir}-row-focus-header`);
         });
       });
+
+      describe('frozen', () => {
+        beforeEach(async () => {
+          element = fixtureSync(`
+            <vaadin-grid style="max-width: 600px">
+              <vaadin-grid-column path="name.first" width="200px" flex-shrink="0" frozen></vaadin-grid-column>
+              <vaadin-grid-column path="name.last" width="200px" flex-shrink="0" ></vaadin-grid-column>
+              <vaadin-grid-column path="location.city" width="200px" flex-shrink="0"></vaadin-grid-column>
+              <vaadin-grid-column path="location.state" width="200px" flex-shrink="0" frozen-to-end></vaadin-grid-column>
+            </vaadin-grid>
+          `);
+          element.items = users;
+          flushGrid(element);
+        });
+
+        it('start', async () => {
+          await visualDiff(element, `${dir}-frozen-start`);
+        });
+
+        it('middle', async () => {
+          element.$.table.scrollLeft = element.__isRTL ? -180 : 180;
+          await visualDiff(element, `${dir}-frozen-middle`);
+        });
+
+        it('end', async () => {
+          element.$.table.scrollLeft = element.__isRTL ? -400 : 400;
+          await visualDiff(element, `${dir}-frozen-end`);
+        });
+      });
     });
   });
 
