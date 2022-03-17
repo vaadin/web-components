@@ -47,17 +47,17 @@ describe('scrolling mode', () => {
   });
 
   describe('overflow attribute', () => {
-    it('bottom right', () => {
+    it('bottom end right', () => {
       grid.scrollToIndex(0);
       flushGrid(grid);
-      expect(grid.getAttribute('overflow')).to.equal('bottom right');
+      expect(grid.getAttribute('overflow')).to.equal('bottom end right');
     });
 
-    it('bottom left', () => {
+    it('bottom start left', () => {
       grid.scrollToIndex(0);
       grid.$.table.scrollLeft = grid.$.table.scrollWidth;
       flushGrid(grid);
-      expect(grid.getAttribute('overflow')).to.equal('bottom left');
+      expect(grid.getAttribute('overflow')).to.equal('bottom start left');
     });
 
     it('bottom top', () => {
@@ -74,17 +74,49 @@ describe('scrolling mode', () => {
       expect(grid.getAttribute('overflow')).to.contain('right');
     });
 
-    it('top right', () => {
-      scrollToEnd(grid);
+    it('start end', () => {
+      grid.$.table.scrollLeft = 1;
       flushGrid(grid);
-      expect(grid.getAttribute('overflow')).to.equal('top right');
+      expect(grid.getAttribute('overflow')).to.contain('start');
+      expect(grid.getAttribute('overflow')).to.contain('end');
     });
 
-    it('top left', () => {
+    it('top end right', () => {
+      scrollToEnd(grid);
+      flushGrid(grid);
+      expect(grid.getAttribute('overflow')).to.equal('top end right');
+    });
+
+    it('top start left', () => {
       scrollToEnd(grid);
       grid.$.table.scrollLeft = grid.$.table.scrollWidth;
       flushGrid(grid);
-      expect(grid.getAttribute('overflow')).to.equal('top left');
+      expect(grid.getAttribute('overflow')).to.equal('top start left');
+    });
+
+    describe('RTL', () => {
+      beforeEach(() => {
+        grid.setAttribute('dir', 'rtl');
+      });
+
+      it('end', () => {
+        expect(grid.getAttribute('overflow')).to.contain('end');
+        expect(grid.getAttribute('overflow')).to.not.contain('start');
+      });
+
+      it('start end', () => {
+        grid.$.table.scrollLeft = -1;
+        flushGrid(grid);
+        expect(grid.getAttribute('overflow')).to.contain('start');
+        expect(grid.getAttribute('overflow')).to.contain('end');
+      });
+
+      it('start', () => {
+        grid.$.table.scrollLeft = -grid.$.table.scrollWidth;
+        flushGrid(grid);
+        expect(grid.getAttribute('overflow')).to.contain('start');
+        expect(grid.getAttribute('overflow')).to.not.contain('end');
+      });
     });
   });
 });

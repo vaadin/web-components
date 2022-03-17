@@ -299,7 +299,7 @@ registerStyles(
       overflow: hidden;
     }
 
-    :host([overflow~='left']) [part~='cell'][last-frozen]:not([part~='details-cell']) {
+    :host([overflow~='end']) [part~='cell'][last-frozen]:not([part~='details-cell']) {
       border-right-color: var(--_lumo-grid-border-color);
     }
 
@@ -372,7 +372,7 @@ registerStyles(
       border-left: var(--_lumo-grid-border-width) solid transparent;
     }
 
-    :host([dir='rtl'][overflow~='right']) [part~='cell'][last-frozen]:not([part~='details-cell']) {
+    :host([dir='rtl'][overflow~='start']) [part~='cell'][last-frozen]:not([part~='details-cell']) {
       border-left-color: var(--_lumo-grid-border-color);
     }
   `,

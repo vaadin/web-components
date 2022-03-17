@@ -302,7 +302,7 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * `loading` | Set when the grid is loading data from data provider | :host
  * `interacting` | Keyboard navigation in interaction mode | :host
  * `navigating` | Keyboard navigation in navigation mode | :host
- * `overflow` | Set when rows are overflowing the grid viewport. Possible values: `top`, `bottom`, `left`, `right` | :host
+ * `overflow` | Set when rows are overflowing the grid viewport. Possible values: `top`, `bottom`, `start`, `end` | :host
  * `reordering` | Set when the grid's columns are being reordered | :host
  * `dragover` | Set when the grid (not a specific row) is dragged over | :host
  * `dragging-rows` : Set when grid rows are dragged  | :host
