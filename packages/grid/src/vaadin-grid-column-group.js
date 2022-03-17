@@ -250,6 +250,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
     }
   }
 
+  /** @private */
   _groupFrozenToEndChanged(frozenToEnd, rootColumns) {
     if (rootColumns === undefined || frozenToEnd === undefined) {
       return;
