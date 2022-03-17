@@ -121,35 +121,90 @@ describe('crud', () => {
   describe('dataProvider', () => {
     const items = [{ foo: 'bar' }];
 
-    beforeEach(async () => {
-      crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
-      crud.dataProvider = (_, callback) => callback(items, items.length);
-      await nextRender(crud);
-      [btnSave, btnCancel, btnDelete] = crud.querySelectorAll('vaadin-button');
+    describe('passing to grid', () => {
+      let customGrid;
+
+      beforeEach(() => {
+        crud = document.createElement('vaadin-crud');
+        customGrid = fixtureSync(`
+          <vaadin-grid>
+            <vaadin-grid-column path="foo"></vaadin-grid-column>
+          </vaadin-grid>
+        `);
+        customGrid.setAttribute('slot', 'grid');
+      });
+
+      afterEach(() => {
+        crud.remove();
+      });
+
+      it('should apply data provider when setting data provider before initializing the grid', async () => {
+        // Set data provider before `ready` is called, which means the grid is not initialized yet
+        crud.dataProvider = (_, callback) => callback(items, items.length);
+        // This should initialize the grid and pass the data provider
+        document.body.appendChild(crud);
+        // Verify item from data provider is rendered
+        await nextRender(crud);
+        flushGrid(crud._grid);
+        expect(getBodyCellContent(crud._grid, 0, 0).textContent).to.be.equal('bar');
+      });
+
+      it('should apply data provider when initializing with a custom grid', async () => {
+        // Add a custom grid, set data provider, add CRUD to DOM
+        crud.appendChild(customGrid);
+        crud.dataProvider = (_, callback) => callback(items, items.length);
+        document.body.appendChild(crud);
+
+        // Verify item from data provider is rendered
+        await nextRender(crud);
+        flushGrid(customGrid);
+        expect(getBodyCellContent(customGrid, 0, 0).textContent).to.be.equal('bar');
+      });
+
+      it('should apply data provider when replacing the grid', async () => {
+        document.body.appendChild(crud);
+        // Set data provider
+        crud.dataProvider = (_, callback) => callback(items, items.length);
+        // Replace default grid with custom one after setting the data provider
+        crud.appendChild(customGrid);
+        // Verify item from data provider is rendered
+        await nextRender(crud);
+        flushGrid(customGrid);
+        expect(getBodyCellContent(customGrid, 0, 0).textContent).to.be.equal('bar');
+      });
     });
 
-    it('should save a new item', (done) => {
-      listenOnce(crud, 'save', (e) => {
-        expect(e.detail.item.foo).to.be.equal('baz');
-        done();
+    describe('create and edit', () => {
+      beforeEach(async () => {
+        crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
+        crud.dataProvider = (_, callback) => callback(items, items.length);
+        await nextRender(crud);
+        [btnSave, btnCancel, btnDelete] = crud.querySelectorAll('vaadin-button');
       });
-      crud.$.new.click();
-      crud._form._fields[0].value = 'baz';
-      change(crud._form);
-      btnSave.click();
-      expect(crud.editedItem.foo).to.be.equal('baz');
-    });
 
-    it('should save an edited item', (done) => {
-      listenOnce(crud, 'save', (e) => {
-        expect(e.detail.item.foo).to.be.equal('baz');
-        done();
+      it('should save a new item', (done) => {
+        listenOnce(crud, 'save', (e) => {
+          expect(e.detail.item.foo).to.be.equal('baz');
+          done();
+        });
+        crud.$.new.click();
+        crud._form._fields[0].value = 'baz';
+        change(crud._form);
+        btnSave.click();
+        expect(crud.editedItem.foo).to.be.equal('baz');
       });
-      edit(items[0]);
-      crud._form._fields[0].value = 'baz';
-      change(crud._form);
-      btnSave.click();
-      expect(crud.editedItem.foo).to.be.equal('baz');
+
+      it('should save an edited item', (done) => {
+        listenOnce(crud, 'save', (e) => {
+          expect(e.detail.item.foo).to.be.equal('baz');
+          done();
+        });
+        edit(items[0]);
+        crud._form._fields[0].value = 'baz';
+        change(crud._form);
+        btnSave.click();
+        expect(crud.editedItem.foo).to.be.equal('baz');
+      });
     });
   });
 

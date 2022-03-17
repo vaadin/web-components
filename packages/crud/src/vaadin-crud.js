@@ -887,6 +887,9 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       old.removeEventListener('edit', this.__editListener);
       old.removeEventListener('size-changed', this.__gridSizeListener);
     }
+    if (this.dataProvider) {
+      this.__onDataProviderChange(this.dataProvider);
+    }
     if (this.items) {
       this.__onItemsChange(this.items);
     }
