@@ -193,22 +193,15 @@ const transformsEqual = (element, transform) => {
       expect(columns[2]._firstFrozenToEnd).to.be.false;
     });
 
-    it('should not set frozen-to-end on sizer cells', (done) => {
-      listenOnce(grid.$.table, 'scroll', () => {
-        const sizerCell = grid.$.sizer.lastElementChild;
-        expect(getComputedStyle(sizerCell).transform).to.equal('none');
-        done();
-      });
-      grid.__setNormalizedScrollLeft(grid.$.table, 100);
+    it('should not set frozen-to-end on sizer cells', () => {
+      const sizerCell = grid.$.sizer.lastElementChild;
+      expect(sizerCell.hasAttribute('frozen-to-end')).to.be.false;
+      expect(sizerCell.hasAttribute('first-frozen-to-end')).to.be.false;
     });
 
-    it('should not transform frozen-to-end sizer cells', (done) => {
-      listenOnce(grid.$.table, 'scroll', () => {
-        const outerCell = grid.$.sizer.lastElementChild;
-        expect(getComputedStyle(outerCell).transform).to.equal('none');
-        done();
-      });
-      grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? -100 : 100);
+    it('should not transform frozen-to-end sizer cells', () => {
+      const sizerCell = grid.$.sizer.lastElementChild;
+      expect(getComputedStyle(sizerCell).transform).to.equal('none');
     });
 
     ['header', 'body'].forEach((container) => {
