@@ -149,6 +149,18 @@ describe('crud', () => {
         expect(getBodyCellContent(crud._grid, 0, 0).textContent).to.be.equal('bar');
       });
 
+      it('should apply data provider when initializing with a custom grid', async () => {
+        // Add a custom grid, set data provider, add CRUD to DOM
+        crud.appendChild(customGrid);
+        crud.dataProvider = (_, callback) => callback(items, items.length);
+        document.body.appendChild(crud);
+
+        // Verify item from data provider is rendered
+        await nextRender(crud);
+        flushGrid(customGrid);
+        expect(getBodyCellContent(customGrid, 0, 0).textContent).to.be.equal('bar');
+      });
+
       it('should apply data provider when replacing the grid', async () => {
         document.body.appendChild(crud);
         // Set data provider
