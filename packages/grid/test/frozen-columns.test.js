@@ -2,7 +2,14 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, listenOnce, nextRender } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
-import { flushGrid, getRowCells, getRows, infiniteDataProvider, isWithinParentConstraints } from './helpers.js';
+import {
+  flushGrid,
+  getRowCells,
+  getRows,
+  infiniteDataProvider,
+  isWithinParentConstraints,
+  onceResized
+} from './helpers.js';
 
 // Returns true if the element's computed transform style matches with the
 // computed transform style of a div element with the given transform applied
@@ -256,6 +263,16 @@ const transformsEqual = (element, transform) => {
           grid._debouncerCacheElements.flush();
 
           expect(transformsEqual(cells[1], 'translate(' + translateValue + 'px, 0px)')).to.be.true;
+        });
+
+        it('should re-position cells on grid element resize', async () => {
+          const cells = getRowCells(getRows(containerElement)[0]);
+          const x = cells[2].getBoundingClientRect().x;
+
+          grid.style.width = '300px';
+          await onceResized(grid);
+
+          expect(cells[2].getBoundingClientRect().x).to.equal(isRTL ? x - 100 : x + 100);
         });
 
         it('should have the correct first-frozen-to-end cell in a row with hidden columns', () => {

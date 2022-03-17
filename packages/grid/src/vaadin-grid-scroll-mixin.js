@@ -5,6 +5,7 @@
  */
 import { animationFrame, microTask, timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 const timeouts = {
   SCROLLING: 500
@@ -14,7 +15,7 @@ const timeouts = {
  * @polymerMixin
  */
 export const ScrollMixin = (superClass) =>
-  class ScrollMixin extends superClass {
+  class ScrollMixin extends ResizeMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -74,6 +75,15 @@ export const ScrollMixin = (superClass) =>
       this.$.items.addEventListener('focusout', () => (this._rowWithFocusedElement = undefined));
 
       this.$.table.addEventListener('scroll', () => this._afterScroll());
+    }
+
+    /**
+     * @protected
+     * @override
+     */
+    _onResize() {
+      this._updateOverflow();
+      this.__updateHorizontalScrollPosition();
     }
 
     /**
