@@ -245,6 +245,11 @@ registerStyles(
       transform: none;
     }
 
+    /* Hide resize handle if scrolled to end */
+    :host(:not([overflow~='end'])) [first-frozen-to-end] [part~='resize-handle'] {
+      display: none;
+    }
+
     #scroller[column-resizing] {
       -ms-user-select: none;
       -moz-user-select: none;
