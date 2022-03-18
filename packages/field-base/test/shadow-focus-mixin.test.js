@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, focusin, focusout, keyboardEventFor, keyDownOn } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, focusin, focusout, keyDownOn } from '@vaadin/testing-helpers';
 import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -12,6 +12,7 @@ customElements.define(
       return html`
         <input id="input" />
         <input id="secondInput" />
+        <input id="thirdInput" />
         <slot></slot>
       `;
     }
@@ -34,6 +35,13 @@ customElements.define(
     }
   }
 );
+
+async function click(element) {
+  const rect = element.getBoundingClientRect();
+  const middleX = Math.floor(rect.x + rect.width / 2);
+  const middleY = Math.floor(rect.y + rect.height / 2);
+  await sendMouse({ type: 'click', position: [middleX, middleY] });
+}
 
 describe('shadow-focus-mixin', () => {
   let customElement, focusElement;
@@ -97,19 +105,6 @@ describe('shadow-focus-mixin', () => {
   });
 
   describe('focus-ring', () => {
-    it('should set _isShiftTabbing when pressing shift-tab', () => {
-      const event = keyboardEventFor('keydown', 9, 'shift');
-      customElement.dispatchEvent(event);
-      expect(customElement._isShiftTabbing).to.be.true;
-    });
-
-    it('should skip setting _isShiftTabbing if event is defaultPrevented', () => {
-      const evt = keyboardEventFor('keydown', 9, 'shift');
-      evt.preventDefault();
-      customElement.dispatchEvent(evt);
-      expect(customElement._isShiftTabbing).not.to.be.ok;
-    });
-
     it('should set the focus-ring attribute when TAB is pressed and focus is received', () => {
       keyDownOn(document.body, 9);
       focusin(focusElement);
@@ -198,11 +193,6 @@ describe('shadow-focus-mixin', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should not set focused attribute on host click', () => {
-      customElement.click();
-      expect(customElement.hasAttribute('focused')).to.be.false;
-    });
-
     it('should set focused attribute on focusin event', () => {
       focusin(focusElement);
       expect(customElement.hasAttribute('focused')).to.be.true;
@@ -213,6 +203,7 @@ describe('shadow-focus-mixin', () => {
       const spy = sinon.spy(focusElement, 'focus');
       await sendKeys({ press: 'Tab' });
       expect(spy.called).to.be.true;
+      expect(customElement.hasAttribute('focused')).to.be.true;
     });
 
     it('should not delegate focus when clicking on non-focusable child', async () => {
@@ -221,21 +212,48 @@ describe('shadow-focus-mixin', () => {
       customElement.appendChild(span);
 
       const spy = sinon.spy(focusElement, 'focus');
-      // Click center of span child element
-      const rect = span.getBoundingClientRect();
-      const middleX = Math.floor(rect.x + rect.width / 2);
-      const middleY = Math.floor(rect.y + rect.height / 2);
-      await sendMouse({ type: 'click', position: [middleX, middleY] });
-      // Clicking on some text content should not move focus
+      await click(span);
+      // Clicking on some text content should not move focus to focus element
       expect(spy.called).to.be.false;
     });
 
     it('should not delegate focus if the focus is not received from outside', () => {
-      const child = document.createElement('div');
-      customElement.appendChild(child);
+      customElement.focusElement.focus();
+      const spy = sinon.spy(focusElement, 'focus');
+      customElement.$.secondInput.focus();
+      customElement.$.thirdInput.focus();
+      customElement.$.secondInput.focus();
+      expect(spy.called).to.be.false;
+    });
 
-      focusin(customElement, child);
+    it('should skip host element in tab order when shift-tabbing', async () => {
+      const siblingInput = document.createElement('input');
+      customElement.parentElement.insertBefore(siblingInput, customElement);
 
+      customElement.focusElement.focus();
+      // Move focus back to body
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      expect(document.activeElement).to.equal(siblingInput);
+    });
+
+    it('should set focused attribute when clicking on non-focusable slotted element', async () => {
+      const span = document.createElement('span');
+      span.textContent = 'test';
+      customElement.appendChild(span);
+
+      await click(span);
+      expect(customElement.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should remove focused attribute when moving to focusable slotted element', async () => {
+      const input = document.createElement('input');
+      customElement.appendChild(input);
+
+      customElement.focus();
+      expect(customElement.hasAttribute('focused')).to.be.true;
+      input.focus();
       expect(customElement.hasAttribute('focused')).to.be.false;
     });
 
