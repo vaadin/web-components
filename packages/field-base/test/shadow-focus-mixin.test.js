@@ -230,8 +230,7 @@ describe('shadow-focus-mixin', () => {
       const siblingInput = document.createElement('input');
       customElement.parentElement.insertBefore(siblingInput, customElement);
 
-      customElement.focus();
-      expect(document.activeElement).to.equal(customElement);
+      customElement.focusElement.focus();
       // Move focus back to body
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
