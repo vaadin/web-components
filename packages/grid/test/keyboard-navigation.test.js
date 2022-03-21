@@ -4,6 +4,7 @@ import {
   down as mouseDown,
   fixtureSync,
   focusin,
+  isChrome,
   keyboardEventFor,
   keyDownOn,
   keyUpOn,
@@ -18,7 +19,6 @@ import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
 import '../vaadin-grid-column-group.js';
 import '../vaadin-grid-selection-column.js';
-import { isChrome } from '@vaadin/component-base/src/browser-utils.js';
 import {
   flushGrid,
   getCell,
