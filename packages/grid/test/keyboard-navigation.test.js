@@ -18,6 +18,7 @@ import '../vaadin-grid.js';
 import '../vaadin-grid-tree-column.js';
 import '../vaadin-grid-column-group.js';
 import '../vaadin-grid-selection-column.js';
+import { isChrome } from '@vaadin/component-base/src/browser-utils.js';
 import {
   flushGrid,
   getCell,
@@ -1888,6 +1889,31 @@ describe('keyboard navigation', () => {
       expect(e.detail.context).to.be.deep.equal(expectedContext);
 
       grid.removeEventListener('cell-focus', spy);
+    });
+
+    // Chrome uses a workaround to dispatch cell-focus in mouse up,
+    // should dispatch event on mouse up events on cell itself
+    (isChrome ? it : it.skip)('should dispatch cell-focus on mouse up inside of cell', () => {
+      const spy = sinon.spy();
+      grid.addEventListener('cell-focus', spy);
+
+      // Mouse down and release on cell content
+      const cell = getRowFirstCell(0);
+      mouseDown(cell._content);
+      mouseUp(cell._content);
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    // Chrome uses a workaround to dispatch cell-focus in mouse up,
+    // should not dispatch event on mouse up events outside of cell
+    // Regression test for https://github.com/vaadin/flow-components/issues/2863
+    (isChrome ? it : it.skip)('should not dispatch cell-focus on mouse up outside of cell', () => {
+      const spy = sinon.spy();
+      grid.addEventListener('cell-focus', spy);
+
+      mouseDown(getRowFirstCell(0)._content);
+      mouseUp(document.body);
+      expect(spy.calledOnce).to.be.false;
     });
   });
 });

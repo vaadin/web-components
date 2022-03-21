@@ -7,7 +7,7 @@ import './vaadin-grid-column.js';
 import './vaadin-grid-styles.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { isAndroid, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -685,13 +685,16 @@ class Grid extends ElementMixin(
     // focusable slot wrapper, that is why cells are not focused with
     // mousedown. Workaround: listen for mousedown and focus manually.
     cellContent.addEventListener('mousedown', () => {
-      if (window.chrome) {
+      if (isChrome) {
         // Chrome bug: focusing before mouseup prevents text selection, see http://crbug.com/771903
-        const mouseUpListener = () => {
-          if (!cellContent.contains(this.getRootNode().activeElement)) {
+        const mouseUpListener = (event) => {
+          // If focus is on element within the cell content — respect it, do not change
+          const contentContainsFocusedElement = cellContent.contains(this.getRootNode().activeElement);
+          // Only focus if mouse is released on cell content itself
+          const mouseUpWithinCell = event.target === cellContent || cellContent.contains(event.target);
+          if (!contentContainsFocusedElement && mouseUpWithinCell) {
             cell.focus();
           }
-          // If focus is in the cell content — respect it, do not change.
           document.removeEventListener('mouseup', mouseUpListener, true);
         };
         document.addEventListener('mouseup', mouseUpListener, true);
