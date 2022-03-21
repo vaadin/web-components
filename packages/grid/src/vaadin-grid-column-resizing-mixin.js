@@ -53,6 +53,7 @@ export const ColumnResizingMixin = (superClass) =>
             .pop();
         }
 
+        const eventX = e.detail.x;
         const columnRowCells = Array.from(this.$.header.querySelectorAll('[part~="row"]:last-child [part~="cell"]'));
         const targetCell = columnRowCells.filter((cell) => cell._column === column)[0];
         // Resize the target column
@@ -69,7 +70,6 @@ export const ColumnResizingMixin = (superClass) =>
 
           let maxWidth;
 
-          const eventX = e.detail.x;
           const cellWidth = targetCell.offsetWidth;
           const cellRect = targetCell.getBoundingClientRect();
 
@@ -82,18 +82,6 @@ export const ColumnResizingMixin = (superClass) =>
 
           column.width = Math.max(minWidth, maxWidth) + 'px';
           column.flexGrow = 0;
-
-          const cellFrozenToEnd = this._frozenToEndCells[0];
-
-          // When handle moves below the cell frozen to end, scroll into view.
-          if (cellFrozenToEnd && this.$.table.scrollWidth > this.$.table.offsetWidth) {
-            const frozenRect = cellFrozenToEnd.getBoundingClientRect();
-            const offset = eventX - (this.__isRTL ? frozenRect.right : frozenRect.left);
-
-            if ((this.__isRTL && offset <= 0) || (!this.__isRTL && offset >= 0)) {
-              this.$.table.scrollLeft += offset;
-            }
-          }
         }
         // Fix width and flex-grow for all preceding columns
         columnRowCells
@@ -106,6 +94,18 @@ export const ColumnResizingMixin = (superClass) =>
               cell._column.flexGrow = 0;
             }
           });
+
+        const cellFrozenToEnd = this._frozenToEndCells[0];
+
+        // When handle moves below the cell frozen to end, scroll into view.
+        if (cellFrozenToEnd && this.$.table.scrollWidth > this.$.table.offsetWidth) {
+          const frozenRect = cellFrozenToEnd.getBoundingClientRect();
+          const offset = eventX - (this.__isRTL ? frozenRect.right : frozenRect.left);
+
+          if ((this.__isRTL && offset <= 0) || (!this.__isRTL && offset >= 0)) {
+            this.$.table.scrollLeft += offset;
+          }
+        }
 
         if (e.detail.state === 'end') {
           this.$.scroller.toggleAttribute('column-resizing', false);
