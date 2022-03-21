@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
@@ -39,7 +39,7 @@ describe('column resizing', () => {
     flushGrid(grid);
     headerCells = getRowCells(getRows(grid.$.header)[0]);
     handle = headerCells[0].querySelector('[part~="resize-handle"]');
-    await nextFrame();
+    await nextRender();
   });
 
   it('should be resizable', () => {
@@ -91,6 +91,28 @@ describe('column resizing', () => {
       fire('track', { state: 'track', x, y: 0 }, options);
 
       expect(headerCells[1].clientWidth).to.equal(198);
+    });
+
+    it(`should scroll when handle moves below frozen to end cell in ${direction}`, async () => {
+      grid.setAttribute('dir', direction);
+
+      const column = grid._columnTree[0][1];
+      column.frozenToEnd = true;
+      grid.style.border = '0px';
+      grid.style.width = '190px';
+      await nextRender();
+      expect(grid.$.table.scrollLeft).to.equal(0);
+
+      const options = { node: handle };
+      const rect = headerCells[0].getBoundingClientRect();
+
+      fire('track', { state: 'start' }, options);
+
+      // Increase column width by 10px
+      const x = direction === 'rtl' ? rect.left - 10 : rect.right + 10;
+      fire('track', { state: 'track', x, y: 0 }, options);
+
+      expect(grid.$.table.scrollLeft).to.equal(direction === 'rtl' ? -10 : 10);
     });
   });
 

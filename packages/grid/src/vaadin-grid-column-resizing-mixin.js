@@ -82,6 +82,18 @@ export const ColumnResizingMixin = (superClass) =>
 
           column.width = Math.max(minWidth, maxWidth) + 'px';
           column.flexGrow = 0;
+
+          const cellFrozenToEnd = this._frozenToEndCells[0];
+
+          // When handle moves below the cell frozen to end, scroll into view.
+          if (cellFrozenToEnd && this.$.table.scrollWidth > this.$.table.offsetWidth) {
+            const frozenRect = cellFrozenToEnd.getBoundingClientRect();
+            const offset = eventX - (this.__isRTL ? frozenRect.right : frozenRect.left);
+
+            if ((this.__isRTL && offset <= 0) || (!this.__isRTL && offset >= 0)) {
+              this.$.table.scrollLeft += offset;
+            }
+          }
         }
         // Fix width and flex-grow for all preceding columns
         columnRowCells
