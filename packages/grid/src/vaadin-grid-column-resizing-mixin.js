@@ -58,11 +58,9 @@ export const ColumnResizingMixin = (superClass) =>
         const targetCell = columnRowCells.filter((cell) => cell._column === column)[0];
         // Resize the target column
         if (targetCell.offsetWidth) {
-          // Resize handle uses pseudo-element as its clickable area
-          const handleStyle = getComputedStyle(handle, '::before');
           const style = getComputedStyle(targetCell._content);
           const minWidth =
-            parseInt(handleStyle.width) +
+            10 +
             parseInt(style.paddingLeft) +
             parseInt(style.paddingRight) +
             parseInt(style.borderLeftWidth) +

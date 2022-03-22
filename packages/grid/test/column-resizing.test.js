@@ -116,19 +116,17 @@ describe('column resizing', () => {
     });
   });
 
-  it('should set min width based on handle and cell content padding', () => {
+  it('should set min width based on cell content padding', () => {
     const options = { node: handle };
     const rect = headerCells[0].getBoundingClientRect();
 
-    const handleStyle = getComputedStyle(handle, '::before');
     const contentStyle = getComputedStyle(headerCells[0]._content);
-    const minWidth =
-      parseInt(contentStyle.paddingLeft) + parseInt(contentStyle.paddingRight) + parseInt(handleStyle.width);
+    const padding = parseInt(contentStyle.paddingLeft) + parseInt(contentStyle.paddingRight);
 
     fire('track', { state: 'start' }, options);
     fire('track', { state: 'track', x: rect.left - 100, y: 0 }, options);
 
-    expect(headerCells[0].clientWidth).to.be.equal(minWidth);
+    expect(headerCells[0].clientWidth).to.be.greaterThan(padding);
   });
 
   it('should not listen to track event on scroller', () => {
