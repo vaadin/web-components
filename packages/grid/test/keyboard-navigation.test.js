@@ -1892,8 +1892,8 @@ describe('keyboard navigation', () => {
     });
 
     // Chrome uses a workaround to dispatch cell-focus in mouse up,
-    // should dispatch event on mouse up events on cell itself
-    (isChrome ? it : it.skip)('should dispatch cell-focus on mouse up inside of cell', () => {
+    // should dispatch event when releasing mouse on cell content itself
+    (isChrome ? it : it.skip)('should dispatch cell-focus on mouse up on cell content', () => {
       const spy = sinon.spy();
       grid.addEventListener('cell-focus', spy);
 
@@ -1905,7 +1905,7 @@ describe('keyboard navigation', () => {
     });
 
     // Chrome uses a workaround to dispatch cell-focus in mouse up,
-    // should not dispatch event on mouse up events outside of cell
+    // should not dispatch event when releasing mouse outside of cell
     // Regression test for https://github.com/vaadin/flow-components/issues/2863
     (isChrome ? it : it.skip)('should not dispatch cell-focus on mouse up outside of cell', () => {
       const spy = sinon.spy();
