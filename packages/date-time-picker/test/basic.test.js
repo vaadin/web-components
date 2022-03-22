@@ -305,18 +305,50 @@ describe('Theme attribute', () => {
   let datePicker;
   let timePicker;
 
-  beforeEach(() => {
-    dateTimePicker = fixtureSync('<vaadin-date-time-picker theme="foo"></vaadin-date-time-picker>');
-    datePicker = getDatePicker(dateTimePicker);
-    timePicker = getTimePicker(dateTimePicker);
+  describe('default', () => {
+    beforeEach(() => {
+      dateTimePicker = fixtureSync('<vaadin-date-time-picker theme="foo"></vaadin-date-time-picker>');
+      datePicker = getDatePicker(dateTimePicker);
+      timePicker = getTimePicker(dateTimePicker);
+    });
+
+    it('should propagate theme attribute to date-picker', () => {
+      expect(datePicker.getAttribute('theme')).to.equal('foo');
+    });
+
+    it('should propagate theme attribute to time-picker', () => {
+      expect(timePicker.getAttribute('theme')).to.equal('foo');
+    });
   });
 
-  it('should propagate theme attribute to date-picker', () => {
-    expect(datePicker.getAttribute('theme')).to.equal('foo');
-  });
+  describe('slotted', () => {
+    beforeEach(() => {
+      dateTimePicker = document.createElement('vaadin-date-time-picker');
 
-  it('should propagate theme attribute to time-picker', () => {
-    expect(timePicker.getAttribute('theme')).to.equal('foo');
+      datePicker = document.createElement('vaadin-date-time-picker-date-picker');
+      datePicker.setAttribute('slot', 'date-picker');
+      dateTimePicker.appendChild(datePicker);
+
+      timePicker = document.createElement('vaadin-date-time-picker-time-picker');
+      timePicker.setAttribute('slot', 'time-picker');
+      dateTimePicker.appendChild(timePicker);
+    });
+
+    afterEach(() => {
+      dateTimePicker.remove();
+    });
+
+    it('should propagate theme attribute to date-picker when set before adding to DOM', () => {
+      dateTimePicker.setAttribute('theme', 'foo');
+      document.body.appendChild(dateTimePicker);
+      expect(datePicker.getAttribute('theme')).to.equal('foo');
+    });
+
+    it('should propagate theme attribute to time-picker when set before adding to DOM', () => {
+      dateTimePicker.setAttribute('theme', 'foo');
+      document.body.appendChild(dateTimePicker);
+      expect(timePicker.getAttribute('theme')).to.equal('foo');
+    });
   });
 });
 
