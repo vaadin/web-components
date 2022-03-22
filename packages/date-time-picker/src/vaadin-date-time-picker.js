@@ -1009,13 +1009,16 @@ class DateTimePicker extends FieldMixin(
 
   /** @private */
   __themeChanged(theme, datePicker, timePicker) {
+    if (!datePicker || !timePicker) {
+      // Both pickers are not ready yet
+      return;
+    }
+
     [datePicker, timePicker].forEach((picker) => {
-      if (picker) {
-        if (theme) {
-          picker.setAttribute('theme', theme);
-        } else {
-          picker.removeAttribute('theme');
-        }
+      if (theme) {
+        picker.setAttribute('theme', theme);
+      } else {
+        picker.removeAttribute('theme');
       }
     });
   }
