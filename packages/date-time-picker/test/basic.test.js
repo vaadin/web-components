@@ -338,13 +338,13 @@ describe('Theme attribute', () => {
       dateTimePicker.remove();
     });
 
-    it('should propagate theme attribute to date-picker', () => {
+    it('should propagate theme attribute to date-picker when set before adding to DOM', () => {
       dateTimePicker.setAttribute('theme', 'foo');
       document.body.appendChild(dateTimePicker);
       expect(datePicker.getAttribute('theme')).to.equal('foo');
     });
 
-    it('should propagate theme attribute to time-picker', () => {
+    it('should propagate theme attribute to time-picker when set before adding to DOM', () => {
       dateTimePicker.setAttribute('theme', 'foo');
       document.body.appendChild(dateTimePicker);
       expect(timePicker.getAttribute('theme')).to.equal('foo');
