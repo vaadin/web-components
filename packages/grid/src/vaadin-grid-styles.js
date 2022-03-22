@@ -170,6 +170,12 @@ registerStyles(
       will-change: transform;
     }
 
+    [frozen-to-end] {
+      z-index: 2;
+      transform: translateX(var(--_grid-horizontal-scroll-remaining));
+      will-change: transform;
+    }
+
     [no-scrollbars][safari] #table,
     [no-scrollbars][firefox] #table {
       overflow: hidden;
@@ -224,6 +230,26 @@ registerStyles(
       right: 0;
     }
 
+    [frozen-to-end] [part~='resize-handle'] {
+      left: 0;
+      right: auto;
+    }
+
+    [frozen-to-end] [part~='resize-handle']::before {
+      left: 0;
+      right: auto;
+    }
+
+    [first-frozen-to-end] [part~='resize-handle']::before {
+      width: 18px;
+      transform: none;
+    }
+
+    /* Hide resize handle if scrolled to end */
+    :host(:not([overflow~='end'])) [first-frozen-to-end] [part~='resize-handle'] {
+      display: none;
+    }
+
     #scroller[column-resizing] {
       -ms-user-select: none;
       -moz-user-select: none;
@@ -267,7 +293,7 @@ registerStyles(
 
     /* RTL specific styles */
 
-    :host([dir='rtl']) *:is(#items, #header, #footer, [frozen]) {
+    :host([dir='rtl']) *:is(#items, #header, #footer, [frozen], [frozen-to-end]) {
       transform: none;
     }
 
@@ -295,6 +321,16 @@ registerStyles(
     :host([dir='rtl']) [last-frozen] [part~='resize-handle']::before {
       left: 0;
       right: auto;
+    }
+
+    :host([dir='rtl']) [frozen-to-end] [part~='resize-handle'] {
+      right: 0;
+      left: auto;
+    }
+
+    :host([dir='rtl']) [frozen-to-end] [part~='resize-handle']::before {
+      right: 0;
+      left: auto;
     }
   `,
   { moduleId: 'vaadin-grid-styles' }

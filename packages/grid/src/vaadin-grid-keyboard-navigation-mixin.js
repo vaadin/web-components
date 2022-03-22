@@ -854,7 +854,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @protected
      */
     _scrollHorizontallyToCell(dstCell) {
-      if (dstCell.hasAttribute('frozen') || this.__isDetailsCell(dstCell)) {
+      if (dstCell.hasAttribute('frozen') || dstCell.hasAttribute('frozen-to-end') || this.__isDetailsCell(dstCell)) {
         // These cells are, by design, always visible, no need to scroll.
         return;
       }
@@ -870,7 +870,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         if (cell.hasAttribute('hidden') || this.__isDetailsCell(cell)) {
           continue;
         }
-        if (cell.hasAttribute('frozen')) {
+        if (cell.hasAttribute('frozen') || cell.hasAttribute('frozen-to-end')) {
           leftBoundary = cell.getBoundingClientRect().right;
           break;
         }
@@ -880,7 +880,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         if (cell.hasAttribute('hidden') || this.__isDetailsCell(cell)) {
           continue;
         }
-        if (cell.hasAttribute('frozen')) {
+        if (cell.hasAttribute('frozen') || cell.hasAttribute('frozen-to-end')) {
           rightBoundary = cell.getBoundingClientRect().left;
           break;
         }

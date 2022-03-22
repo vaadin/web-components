@@ -46,6 +46,21 @@ export const ColumnBaseMixin = (superClass) =>
         },
 
         /**
+         * When true, the column is frozen to end of grid.
+         *
+         * When a column inside of a column group is frozen to end, all of the sibling columns
+         * inside the group will get frozen to end also.
+         *
+         * Column can not be set as `frozen` and `frozenToEnd` at the same time.
+         * @attr {boolean} frozen-to-end
+         * @type {boolean}
+         */
+        frozenToEnd: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
          * When set to true, the cells for this column are hidden.
          */
         hidden: {
@@ -75,6 +90,15 @@ export const ColumnBaseMixin = (superClass) =>
          * @protected
          */
         _lastFrozen: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * @type {boolean}
+         * @protected
+         */
+        _firstFrozenToEnd: {
           type: Boolean,
           value: false
         },
@@ -176,10 +200,12 @@ export const ColumnBaseMixin = (superClass) =>
       return [
         '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
+        '_frozenToEndChanged(frozenToEnd, _headerCell, _footerCell, _cells.*)',
         '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
         '_textAlignChanged(textAlign, _cells.*, _headerCell, _footerCell)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
+        '_firstFrozenToEndChanged(_firstFrozenToEnd)',
         '_onRendererOrBindingChanged(_renderer, _cells, _cells.*, path)',
         '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header)',
         '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
@@ -315,11 +341,44 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
+    _frozenToEndChanged(frozenToEnd) {
+      if (this.parentElement && this.parentElement._columnPropChanged) {
+        this.parentElement._columnPropChanged('frozenToEnd', frozenToEnd);
+      }
+
+      this._allCells.forEach((cell) => {
+        // Skip sizer cells to keep correct scrollWidth.
+        if (this._grid && cell.parentElement === this._grid.$.sizer) {
+          return;
+        }
+        cell.toggleAttribute('frozen-to-end', frozenToEnd);
+      });
+
+      this._grid && this._grid._frozenCellsChanged && this._grid._frozenCellsChanged();
+    }
+
+    /** @private */
     _lastFrozenChanged(lastFrozen) {
       this._allCells.forEach((cell) => cell.toggleAttribute('last-frozen', lastFrozen));
 
       if (this.parentElement && this.parentElement._columnPropChanged) {
         this.parentElement._lastFrozen = lastFrozen;
+      }
+    }
+
+    /** @private */
+    _firstFrozenToEndChanged(firstFrozenToEnd) {
+      this._allCells.forEach((cell) => {
+        // Skip sizer cells to keep correct scrollWidth.
+        if (this._grid && cell.parentElement === this._grid.$.sizer) {
+          return;
+        }
+
+        cell.toggleAttribute('first-frozen-to-end', firstFrozenToEnd);
+      });
+
+      if (this.parentElement && this.parentElement._columnPropChanged) {
+        this.parentElement._firstFrozenToEnd = firstFrozenToEnd;
       }
     }
 
@@ -421,7 +480,7 @@ export const ColumnBaseMixin = (superClass) =>
           }
         );
 
-        this._grid._updateLastFrozen && this._grid._updateLastFrozen();
+        this._grid._updateFrozenColumn && this._grid._updateFrozenColumn();
         this._grid._resetKeyboardNavigation && this._grid._resetKeyboardNavigation();
       }
       this._previousHidden = hidden;

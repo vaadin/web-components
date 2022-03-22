@@ -959,6 +959,7 @@ class Grid extends ElementMixin(
   _resizeHandler() {
     this._updateDetailsCellHeights();
     this.__updateFooterPositioning();
+    this.__updateHorizontalScrollPosition();
   }
 
   /** @private */

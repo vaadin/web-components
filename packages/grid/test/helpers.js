@@ -1,3 +1,4 @@
+import sinon from 'sinon';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 
 export const flushGrid = (grid) => {
@@ -253,3 +254,23 @@ export const nextResize = (target) => {
     new ResizeObserver(() => setTimeout(resolve)).observe(target);
   });
 };
+
+/**
+ * Resolves once the function is invoked on the given object.
+ */
+function onceInvoked(object, functionName) {
+  return new Promise((resolve) => {
+    const stub = sinon.stub(object, functionName).callsFake((...args) => {
+      stub.restore();
+      object[functionName](...args);
+      resolve();
+    });
+  });
+}
+
+/**
+ * Resolves once the ResizeObserver in grid has processed a resize.
+ */
+export async function onceResized(grid) {
+  await onceInvoked(grid, '_onResize');
+}

@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, listenOnce } from '@vaadin/testing-helpers';
+import { fixtureSync, listenOnce, nextFrame } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { flushGrid, infiniteDataProvider, scrollToEnd } from './helpers.js';
+import { flushGrid, infiniteDataProvider, onceResized, scrollToEnd } from './helpers.js';
 
 describe('scrolling mode', () => {
   let grid;
@@ -92,6 +92,18 @@ describe('scrolling mode', () => {
       grid.$.table.scrollLeft = grid.$.table.scrollWidth;
       flushGrid(grid);
       expect(grid.getAttribute('overflow')).to.equal('top start left');
+    });
+
+    it('update on resize', async () => {
+      grid.style.width = '200px';
+      await onceResized(grid);
+      await nextFrame();
+      expect(grid.getAttribute('overflow')).to.equal('bottom');
+
+      grid.style.width = '50px';
+      await onceResized(grid);
+      await nextFrame();
+      expect(grid.getAttribute('overflow')).to.equal('bottom end right');
     });
 
     describe('RTL', () => {

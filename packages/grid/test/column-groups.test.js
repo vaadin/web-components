@@ -317,6 +317,23 @@ describe('column groups', () => {
       expect(getHeaderCell(1, 2).hasAttribute('frozen')).to.be.true;
     });
 
+    it('should have a column frozen to end', () => {
+      const col = grid.querySelector('vaadin-grid-column');
+      col.frozen = false;
+      col.frozenToEnd = true;
+      expect(getHeaderCell(0, 0).hasAttribute('frozen-to-end')).to.be.true;
+      expect(getHeaderCell(1, 0).hasAttribute('frozen-to-end')).to.be.true;
+    });
+
+    it('should have a group frozen to end', () => {
+      const group = grid.querySelector('vaadin-grid-column-group');
+      group.frozen = false;
+      group.frozenToEnd = true;
+      expect(getHeaderCell(0, 1).hasAttribute('frozen-to-end')).to.be.true;
+      expect(getHeaderCell(1, 1).hasAttribute('frozen-to-end')).to.be.true;
+      expect(getHeaderCell(1, 2).hasAttribute('frozen-to-end')).to.be.true;
+    });
+
     it('should have no hidden header rows', () => {
       headerRows.forEach((row) => expect(row.hidden).to.be.false);
     });
@@ -420,6 +437,41 @@ describe('column groups', () => {
       const lastRowBottom = bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom;
       const footerTop = footer.getBoundingClientRect().top;
       expect(lastRowBottom).to.be.closeTo(footerTop, 2);
+    });
+  });
+
+  describe('Nested groups with frozen to end', () => {
+    before(() => {
+      fixtures['nested-2'] = fixtures.nested.replace('frozen', 'frozen-to-end');
+    });
+
+    beforeEach(async () => {
+      init('nested-2');
+      await nextResize(grid);
+    });
+
+    it('frozen-to-end in a group should propagate frozen-to-end attribute up and down in headers', () => {
+      [
+        [0, 1],
+        [1, 2],
+        [1, 3],
+        [2, 2],
+        [2, 3],
+        [2, 4],
+        [2, 5]
+      ].forEach((a) => expect(getHeaderCell(a[0], a[1]).hasAttribute('frozen-to-end')).to.be.true);
+    });
+
+    it('frozen-to-end in a group should propagate frozen-to-end attribute up and down in footers', () => {
+      [
+        [0, 2],
+        [0, 3],
+        [0, 4],
+        [0, 5],
+        [1, 2],
+        [1, 3],
+        [2, 1]
+      ].forEach((a) => expect(getFooterCell(a[0], a[1]).hasAttribute('frozen-to-end')).to.be.true);
     });
   });
 

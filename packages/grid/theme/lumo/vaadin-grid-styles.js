@@ -299,8 +299,16 @@ registerStyles(
       overflow: hidden;
     }
 
-    :host([overflow~='end']) [part~='cell'][last-frozen]:not([part~='details-cell']) {
+    :host([overflow~='start']) [part~='cell'][last-frozen]:not([part~='details-cell']) {
       border-right-color: var(--_lumo-grid-border-color);
+    }
+
+    [first-frozen-to-end] {
+      border-left: var(--_lumo-grid-border-width) solid transparent;
+    }
+
+    :host([overflow~='end']) [part~='cell'][first-frozen-to-end]:not([part~='details-cell']) {
+      border-left-color: var(--_lumo-grid-border-color);
     }
 
     /* Row stripes */
@@ -372,8 +380,17 @@ registerStyles(
       border-left: var(--_lumo-grid-border-width) solid transparent;
     }
 
+    :host([dir='rtl']) [first-frozen-to-end] {
+      border-left: none;
+      border-right: var(--_lumo-grid-border-width) solid transparent;
+    }
+
     :host([dir='rtl'][overflow~='start']) [part~='cell'][last-frozen]:not([part~='details-cell']) {
       border-left-color: var(--_lumo-grid-border-color);
+    }
+
+    :host([dir='rtl'][overflow~='end']) [part~='cell'][first-frozen-to-end]:not([part~='details-cell']) {
+      border-right-color: var(--_lumo-grid-border-color);
     }
   `,
   { moduleId: 'lumo-grid' }

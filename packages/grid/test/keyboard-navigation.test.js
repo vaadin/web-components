@@ -1062,14 +1062,6 @@ describe('keyboard navigation', () => {
 
         flushGrid(grid);
 
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        if (isSafari) {
-          // Workaround a Playwright/Webkit test issue by forcing a reflow
-          grid.hidden = true;
-          await nextFrame();
-          grid.hidden = false;
-        }
-
         expect(grid.$.table.scrollLeft).to.equal(grid.$.table.scrollWidth - grid.$.table.offsetWidth);
       });
 
@@ -1085,6 +1077,21 @@ describe('keyboard navigation', () => {
         await aTimeout(0);
         left();
         expect(grid.$.table.scrollLeft).to.equal(0);
+      });
+
+      it('should scroll cell visible under from frozen to end cells with right arrow', async () => {
+        const scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
+        grid.style.width = `${200 + scrollbarWidth}px`; // column default min width is 100px
+        grid.style.border = 'none';
+        grid._columnTree[0][2].frozenToEnd = true;
+        await aTimeout(0);
+
+        getRowCell(0, 2).focus();
+        left();
+        left();
+        await aTimeout(0);
+        right();
+        expect(grid.$.table.scrollLeft).to.equal(grid.$.table.scrollWidth - grid.$.table.offsetWidth);
       });
 
       it('should scroll cells visible with left arrow on footer', async () => {
