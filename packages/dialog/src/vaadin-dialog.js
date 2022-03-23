@@ -175,7 +175,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
     return html`
       <style>
         :host {
-          display: none;
+          display: none !important;
         }
       </style>
 
