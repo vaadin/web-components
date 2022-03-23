@@ -22,6 +22,19 @@ describe('vaadin-confirm-dialog', () => {
     });
   });
 
+  describe('host element', () => {
+    let confirm;
+
+    beforeEach(() => {
+      confirm = fixtureSync('<vaadin-confirm-dialog></vaadin-confirm-dialog>');
+    });
+
+    it('should enforce display: none to hide the host element', () => {
+      confirm.style.display = 'block';
+      expect(getComputedStyle(confirm).display).to.equal('none');
+    });
+  });
+
   describe('properties', () => {
     let confirm, dialog, overlay;
 
