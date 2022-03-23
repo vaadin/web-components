@@ -257,7 +257,7 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     return html`
       <style>
         :host {
-          display: none;
+          display: none !important;
         }
       </style>
       <vaadin-notification-card theme$="[[_theme]]"> </vaadin-notification-card>

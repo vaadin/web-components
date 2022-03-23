@@ -34,6 +34,11 @@ describe('vaadin-notification', () => {
     expect(notification._card.getAttribute('id')).to.be.null;
   });
 
+  it('should enforce display: none to hide the host element', () => {
+    notification.style.display = 'block';
+    expect(getComputedStyle(notification).display).to.equal('none');
+  });
+
   describe('vaadin-notification-container', () => {
     it('should be in the body when notification opens', () => {
       expect(document.body.querySelectorAll('vaadin-notification-container').length).to.be.equal(1);
