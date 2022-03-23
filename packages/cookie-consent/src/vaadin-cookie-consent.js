@@ -42,7 +42,7 @@ class CookieConsent extends ElementMixin(PolymerElement) {
     return html`
       <style>
         :host {
-          display: none;
+          display: none !important;
         }
       </style>
     `;

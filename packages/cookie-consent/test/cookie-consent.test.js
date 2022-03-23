@@ -20,6 +20,19 @@ describe('vaadin-cookie-consent', () => {
     });
   });
 
+  describe('host element', () => {
+    let consent;
+
+    beforeEach(() => {
+      consent = fixtureSync('<vaadin-cookie-consent></vaadin-cookie-consent>');
+    });
+
+    it('should enforce display: none to hide the host element', () => {
+      consent.style.display = 'block';
+      expect(getComputedStyle(consent).display).to.equal('none');
+    });
+  });
+
   describe('cooke consent window', () => {
     let consent, ccWindow;
 
