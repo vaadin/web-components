@@ -1893,8 +1893,8 @@ describe('keyboard navigation', () => {
 
     // Separate test suite for Chrome, where we use a workaround to dispatch
     // cell-focus on mouse up
-    describe('chrome', () => {
-      (isChrome ? it : it.skip)('should dispatch cell-focus on mouse up on cell content', () => {
+    (isChrome ? describe : describe.skip)('chrome', () => {
+      it('should dispatch cell-focus on mouse up on cell content', () => {
         const spy = sinon.spy();
         grid.addEventListener('cell-focus', spy);
 
@@ -1905,7 +1905,7 @@ describe('keyboard navigation', () => {
         expect(spy.calledOnce).to.be.true;
       });
 
-      (isChrome ? it : it.skip)('should dispatch cell-focus on mouse up within cell content', () => {
+      it('should dispatch cell-focus on mouse up within cell content', () => {
         const spy = sinon.spy();
         grid.addEventListener('cell-focus', spy);
 
@@ -1920,7 +1920,7 @@ describe('keyboard navigation', () => {
       });
 
       // Regression test for https://github.com/vaadin/flow-components/issues/2863
-      (isChrome ? it : it.skip)('should not dispatch cell-focus on mouse up outside of cell', () => {
+      it('should not dispatch cell-focus on mouse up outside of cell', () => {
         const spy = sinon.spy();
         grid.addEventListener('cell-focus', spy);
 
