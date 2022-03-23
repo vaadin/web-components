@@ -68,10 +68,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
   static get template() {
     return html`
       <style>
-        :host {
-          display: none;
-        }
-
+        :host,
         [hidden] {
           display: none !important;
         }
