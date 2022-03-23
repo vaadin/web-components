@@ -57,7 +57,7 @@ export const ColumnResizingMixin = (superClass) =>
         const targetCell = columnRowCells.filter((cell) => cell._column === column)[0];
         // Resize the target column
         if (targetCell.offsetWidth) {
-          const style = window.getComputedStyle(targetCell);
+          const style = getComputedStyle(targetCell._content);
           const minWidth =
             10 +
             parseInt(style.paddingLeft) +
