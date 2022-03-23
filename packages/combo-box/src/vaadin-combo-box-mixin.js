@@ -376,6 +376,10 @@ export const ComboBoxMixin = (subclass) =>
         }
 
         this.__restoreFocusOnClose = true;
+
+        if (!this.filter) {
+          this._focusedIndex = this._indexOfValue(this.value, this.filteredItems);
+        }
       } else {
         this._onClosed();
         if (this._openedWithFocusRing && this.hasAttribute('focused')) {
@@ -967,13 +971,10 @@ export const ComboBoxMixin = (subclass) =>
       if (e.path === 'filteredItems' || e.path === 'filteredItems.splices') {
         this._setOverlayItems(this.filteredItems);
 
-        const filterIndex = this.$.dropdown.indexOfLabel(this.filter);
-        if (this.opened) {
-          this._focusedIndex = filterIndex;
+        if (this.opened || this.autoOpenDisabled) {
+          this._focusedIndex = this.$.dropdown.indexOfLabel(this.filter);
         } else {
-          // Pre-select item matching the filter to focus it later when overlay opens
-          const valueIndex = this._indexOfValue(this.value, this.filteredItems);
-          this._focusedIndex = filterIndex === -1 ? valueIndex : filterIndex;
+          this._focusedIndex = this._indexOfValue(this.value, this.filteredItems);
         }
 
         // see https://github.com/vaadin/web-components/issues/2615
