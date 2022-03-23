@@ -4,6 +4,7 @@ import {
   down as mouseDown,
   fixtureSync,
   focusin,
+  isChrome,
   keyboardEventFor,
   keyDownOn,
   keyUpOn,
@@ -1895,6 +1896,45 @@ describe('keyboard navigation', () => {
       expect(e.detail.context).to.be.deep.equal(expectedContext);
 
       grid.removeEventListener('cell-focus', spy);
+    });
+
+    // Separate test suite for Chrome, where we use a workaround to dispatch
+    // cell-focus on mouse up
+    (isChrome ? describe : describe.skip)('chrome', () => {
+      it('should dispatch cell-focus on mouse up on cell content', () => {
+        const spy = sinon.spy();
+        grid.addEventListener('cell-focus', spy);
+
+        // Mouse down and release on cell content element
+        const cell = getRowFirstCell(0);
+        mouseDown(cell._content);
+        mouseUp(cell._content);
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should dispatch cell-focus on mouse up within cell content', () => {
+        const spy = sinon.spy();
+        grid.addEventListener('cell-focus', spy);
+
+        // Mouse down and release on cell content child
+        const cell = getRowFirstCell(0);
+        const contentSpan = document.createElement('span');
+        cell._content.appendChild(contentSpan);
+
+        mouseDown(contentSpan);
+        mouseUp(contentSpan);
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      // Regression test for https://github.com/vaadin/flow-components/issues/2863
+      it('should not dispatch cell-focus on mouse up outside of cell', () => {
+        const spy = sinon.spy();
+        grid.addEventListener('cell-focus', spy);
+
+        mouseDown(getRowFirstCell(0)._content);
+        mouseUp(document.body);
+        expect(spy.calledOnce).to.be.false;
+      });
     });
   });
 });
