@@ -377,7 +377,7 @@ export const ComboBoxMixin = (subclass) =>
 
         this.__restoreFocusOnClose = true;
 
-        if (!this.filter) {
+        if (this.autoOpenDisabled && !this.filter) {
           this._focusedIndex = this._indexOfValue(this.value, this.filteredItems);
         }
       } else {
