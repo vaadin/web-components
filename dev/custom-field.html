@@ -9,9 +9,12 @@
   </head>
 
   <body>
-
-
-    <div style="border: solid 1px gray">
+    <vaadin-custom-field
+      label="Phone number"
+      required
+      error-message="This field is required"
+      helper-text="Your public phone number"
+    >
       <vaadin-select style="width: 6rem" value="+358" required></vaadin-select>
       <vaadin-text-field
         prevent-invalid-input
@@ -21,19 +24,15 @@
         required
       ></vaadin-text-field>
       <vaadin-number-field required></vaadin-number-field>
-      <vaadin-button theme="outlined">Baseline</vaadin-button>
-
-    </div>
+    </vaadin-custom-field>
 
     <script type="module">
       import '@vaadin/custom-field';
       import '@vaadin/item';
       import '@vaadin/list-box';
-
-      import '@vaadin/number-field/theme/material/vaadin-number-field.js';
-      import '@vaadin/text-field/theme/material/vaadin-text-field.js';
-      import '@vaadin/select/theme/material/vaadin-select.js';
-      import '@vaadin/button/theme/material/vaadin-button.js';
+      import '@vaadin/number-field';
+      import '@vaadin/text-field';
+      import '@vaadin/select';
 
       const select = document.querySelector('vaadin-select');
       select.focusElement.setAttribute('aria-label', 'Country code');
