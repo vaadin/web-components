@@ -73,6 +73,7 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
           content: '\\2003';
           display: inline-block;
           width: 0;
+          max-height: 100%;
         }
 
         .vaadin-button-container {
