@@ -4,6 +4,7 @@
   "author": "Vaadin Ltd",
   "scripts": {
     "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js",
+    "build": "tsc -p tsconfig.build.json",
     "debug": "web-test-runner --watch",
     "dist": "rimraf dist && yarn analyze && rollup -c rollup.config.js && cp analysis.json dist",
     "docs": "yarn analyze && web-dev-server --node-resolve --open",
@@ -12,6 +13,7 @@
     "lint:css": "stylelint packages/**/src/*.js packages/**/theme/**/*-styles.js",
     "lint:js": "eslint --ext .js,.ts *.js scripts packages",
     "lint:types": "tsc",
+    "postinstall": "npm run build",
     "prepare": "husky install",
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
     "start": "web-dev-server --node-resolve --open /dev",

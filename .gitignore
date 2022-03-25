@@ -13,3 +13,13 @@ packages/*/test/visual/*/screenshots/*/failed
 
 # VSCode user configuration folders
 .vscode
+
+# TypeScript build output
+packages/lit-renderer/src/*.d.ts
+packages/lit-renderer/src/*.js
+packages/lit-renderer/src/*.map
+
+packages/**/src/*-lit-renderer.js
+packages/**/src/*-lit-renderer.d.ts
+packages/**/src/*-lit-renderer.js.map
+packages/**/src/*-lit-renderer.d.ts.map
