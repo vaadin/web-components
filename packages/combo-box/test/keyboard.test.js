@@ -225,12 +225,12 @@ describe('keyboard', () => {
         expect(keydownSpy.called).to.be.false;
       });
 
-      it('should not stop propagation of the keyboard enter event when input value is invalid', () => {
+      it('should stop propagation of the keyboard enter event when input value is invalid', () => {
         filter('foobar');
         const keydownSpy = sinon.spy();
         document.addEventListener('keydown', keydownSpy);
         enterKeyDown(input);
-        expect(keydownSpy.called).to.be.true;
+        expect(keydownSpy.called).to.be.false;
       });
 
       it('should not close the overlay with enter when custom values are not allowed', () => {
@@ -415,6 +415,14 @@ describe('keyboard', () => {
         comboBox.autoOpenDisabled = true;
         comboBox.focus();
         await aTimeout(1);
+      });
+
+      it('should stop propagation of the keyboard enter event when input value is invalid', () => {
+        filter('foobar');
+        const keydownSpy = sinon.spy();
+        document.addEventListener('keydown', keydownSpy);
+        enterKeyDown(input);
+        expect(keydownSpy.called).to.be.false;
       });
 
       it('should not stop propagation of the keyboard enter event when input has a predefined option', async () => {
