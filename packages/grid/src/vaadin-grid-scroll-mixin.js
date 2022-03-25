@@ -245,26 +245,33 @@ export const ScrollMixin = (superClass) =>
     __updateHorizontalScrollPosition() {
       const scrollWidth = this.$.table.scrollWidth;
       const clientWidth = this.$.table.clientWidth;
-      const scrollLeft = this.__getNormalizedScrollLeft(this.$.table);
+      const scrollLeft = Math.max(0, this.$.table.scrollLeft);
+      const normalizedScrollLeft = this.__getNormalizedScrollLeft(this.$.table);
+
+      // Position header, footer and items container
+      const transform = `translate(${-scrollLeft}px, 0)`;
+      this.$.header.style.transform = transform;
+      this.$.footer.style.transform = transform;
+      this.$.items.style.transform = transform;
+
+      // Position frozen cells
+      const x = this.__isRTL ? normalizedScrollLeft + clientWidth - scrollWidth : scrollLeft;
+      const transformFrozen = `translate(${x}px, 0)`;
+      for (let i = 0; i < this._frozenCells.length; i++) {
+        this._frozenCells[i].style.transform = transformFrozen;
+      }
 
       // Position cells frozen to end
-      const remaining = scrollLeft + clientWidth - scrollWidth;
+      const remaining = this.__isRTL ? normalizedScrollLeft : scrollLeft + clientWidth - scrollWidth;
+      const transformFrozenToEnd = `translate(${remaining}px, 0)`;
+      for (let i = 0; i < this._frozenToEndCells.length; i++) {
+        this._frozenToEndCells[i].style.transform = transformFrozenToEnd;
+      }
 
-      this.$.table.style.setProperty('--_grid-horizontal-scroll-remaining', remaining + 'px');
-      this.$.table.style.setProperty('--_grid-horizontal-scroll-position', -this._scrollLeft + 'px');
-
-      if (this.__isRTL) {
-        // Translating the sticky sections using a CSS variable works nicely on LTR.
-        // On RTL, it causes jumpy behavior (on Desktop Safari) so we need to translate manually.
-        const transformFrozen = `translate(${remaining}px, 0)`;
-        for (let i = 0; i < this._frozenCells.length; i++) {
-          this._frozenCells[i].style.transform = transformFrozen;
-        }
-
-        const transformFrozenToEnd = `translate(${scrollLeft}px, 0)`;
-        for (let i = 0; i < this._frozenToEndCells.length; i++) {
-          this._frozenToEndCells[i].style.transform = transformFrozenToEnd;
-        }
+      // Only update the --_grid-horizontal-scroll-position custom property when navigating
+      // on row focus mode to avoid performance issues.
+      if (this.hasAttribute('navigating') && this.__rowFocusMode) {
+        this.$.table.style.setProperty('--_grid-horizontal-scroll-position', -x + 'px');
       }
     }
   };

@@ -751,6 +751,7 @@ export const KeyboardNavigationMixin = (superClass) =>
     _detectInteracting(e) {
       const isInteracting = e.composedPath().some((el) => el.localName === 'vaadin-grid-cell-content');
       this._setInteracting(isInteracting);
+      this.__updateHorizontalScrollPosition();
     }
 
     /** @private */

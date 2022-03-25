@@ -5,6 +5,7 @@ import {
   fixtureSync,
   focusin,
   isChrome,
+  isDesktopSafari,
   keyboardEventFor,
   keyDownOn,
   keyUpOn,
@@ -1062,6 +1063,13 @@ describe('keyboard navigation', () => {
         await nextFrame();
 
         flushGrid(grid);
+
+        // Force reflow to workaround a Safari rendering issue
+        if (isDesktopSafari) {
+          grid.style.display = 'flex';
+          await nextFrame();
+          grid.style.display = '';
+        }
 
         expect(grid.$.table.scrollLeft).to.equal(grid.$.table.scrollWidth - grid.$.table.offsetWidth);
       });
