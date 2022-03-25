@@ -45,6 +45,19 @@ describe('vaadin-dialog', () => {
     });
   });
 
+  describe('host element', () => {
+    let dialog;
+
+    beforeEach(() => {
+      dialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+    });
+
+    it('should enforce display: none to hide the host element', () => {
+      dialog.style.display = 'block';
+      expect(getComputedStyle(dialog).display).to.equal('none');
+    });
+  });
+
   describe('opened', () => {
     let dialog, backdrop, overlay;
 
