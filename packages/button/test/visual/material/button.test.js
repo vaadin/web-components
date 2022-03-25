@@ -75,4 +75,12 @@ describe('button', () => {
       await visualDiff(div, 'icon-only');
     });
   });
+
+  describe('modified line-height', () => {
+    it('should keep label center-aligned when increasing line-height on container', async () => {
+      element.setAttribute('theme', 'outlined');
+      div.style['line-height'] = 4;
+      await visualDiff(div, 'modified-line-height-label-center-aligned');
+    });
+  });
 });
