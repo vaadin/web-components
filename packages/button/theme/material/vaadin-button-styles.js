@@ -27,12 +27,6 @@ const button = css`
     -moz-osx-font-smoothing: grayscale;
   }
 
-  @-moz-document url-prefix() {
-    :host {
-      vertical-align: -13px;
-    }
-  }
-
   :host::before,
   :host::after {
     content: '';
