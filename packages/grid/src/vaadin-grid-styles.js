@@ -162,11 +162,7 @@ registerStyles(
       display: none !important;
     }
 
-    [frozen] {
-      z-index: 2;
-      will-change: transform;
-    }
-
+    [frozen],
     [frozen-to-end] {
       z-index: 2;
       will-change: transform;
