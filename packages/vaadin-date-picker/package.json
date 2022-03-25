@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-date-picker",
-  "version": "22.0.9",
+  "version": "22.0.10",
   "publishConfig": {
     "access": "public"
   },
@@ -31,6 +31,6 @@
     "web-component"
   ],
   "dependencies": {
-    "@vaadin/date-picker": "^22.0.9"
+    "@vaadin/date-picker": "^22.0.10"
   }
 }
