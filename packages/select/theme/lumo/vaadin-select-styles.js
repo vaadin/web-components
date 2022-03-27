@@ -48,7 +48,7 @@ const select = css`
   }
 
   :host([theme~='small']) [part='input-field'] ::slotted([slot='value']) {
-    --lumo-button-size: var(--lumo-size-s);
+    --_lumo-selected-item-height: var(--lumo-size-s);
     --_lumo-selected-item-padding: 0;
   }
 `;
@@ -59,21 +59,15 @@ registerStyles(
   'vaadin-select-value-button',
   css`
     :host {
+      font-family: var(--lumo-font-family);
+      font-size: var(--lumo-font-size-m);
       padding: 0 0.25em;
+      --_lumo-selected-item-height: var(--lumo-size-m);
       --_lumo-selected-item-padding: 0.5em;
     }
 
-    :host::before,
-    :host::after {
-      display: none;
-    }
-
-    :host([focus-ring]) {
-      box-shadow: none;
-    }
-
     ::slotted(:not([slot])) {
-      min-height: var(--lumo-button-size);
+      min-height: var(--_lumo-selected-item-height);
       padding-top: var(--_lumo-selected-item-padding);
       padding-bottom: var(--_lumo-selected-item-padding);
     }

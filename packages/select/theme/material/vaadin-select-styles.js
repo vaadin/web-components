@@ -49,11 +49,6 @@ registerStyles(
       text-transform: none;
     }
 
-    :host::before,
-    :host::after {
-      display: none;
-    }
-
     ::slotted(:not([slot])) {
       font: inherit;
       padding: 4px 0;

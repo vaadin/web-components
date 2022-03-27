@@ -142,7 +142,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       <style>
         ::slotted([slot='value']) {
           flex-grow: 1;
-          background-color: transparent;
         }
       </style>
 
@@ -318,6 +317,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       ...super.slots,
       value: () => {
         const button = document.createElement('vaadin-select-value-button');
+        button.setAttribute('role', 'button');
         button.setAttribute('aria-haspopup', 'listbox');
         return button;
       }
