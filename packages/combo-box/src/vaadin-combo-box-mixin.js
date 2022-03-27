@@ -971,18 +971,19 @@ export const ComboBoxMixin = (subclass) =>
       if (e.path === 'filteredItems' || e.path === 'filteredItems.splices') {
         this._setOverlayItems(this.filteredItems);
 
+        // When `filteredItems` is the source of data (= neither `items` nor data provider is provided)
+        // and `value` has been set before `filteredItems`, we need to ensure the selected item
+        // is initialized with the current value once the filtered items are provided.
+        // In other cases, it is already initialized in such observers as `valueChanged`, `_itemsOrPathsChanged`.
+        const valueIndex = this._indexOfValue(this.value, this.filteredItems);
+        if (this.selectedItem === null && valueIndex >= 0) {
+          this._selectItemForValue(this.value);
+        }
+
         if (this.opened || this.autoOpenDisabled) {
           this._focusedIndex = this.$.dropdown.indexOfLabel(this.filter);
         } else {
-          this._focusedIndex = this._indexOfValue(this.value, this.filteredItems);
-        }
-
-        // see https://github.com/vaadin/web-components/issues/2615
-        if (this.selectedItem === null && this._focusedIndex >= 0) {
-          const filteredItem = this.filteredItems[this._focusedIndex];
-          if (this._getItemValue(filteredItem) === this.value) {
-            this._selectItemForValue(this.value);
-          }
+          this._focusedIndex = valueIndex;
         }
       }
     }
@@ -1007,12 +1008,13 @@ export const ComboBoxMixin = (subclass) =>
       const valueIndex = this._indexOfValue(value, this.filteredItems);
       const previouslySelectedItem = this.selectedItem;
 
-      this.selectedItem =
-        valueIndex >= 0
-          ? this.filteredItems[valueIndex]
-          : this.dataProvider && this.selectedItem === undefined
-          ? undefined
-          : null;
+      if (valueIndex >= 0) {
+        this.selectedItem = this.filteredItems[valueIndex];
+      } else if (this.dataProvider && this.selectedItem === undefined) {
+        this.selectedItem = undefined;
+      } else {
+        this.selectedItem = null;
+      }
 
       if (this.selectedItem === null && previouslySelectedItem === null) {
         this._selectedItemChanged(this.selectedItem);
