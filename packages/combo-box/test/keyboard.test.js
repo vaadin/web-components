@@ -182,220 +182,273 @@ describe('keyboard', () => {
   });
 
   describe('selecting items', () => {
-    beforeEach(async () => {
-      comboBox.value = 'bar';
+    describe('auto-open', () => {
+      beforeEach(async () => {
+        comboBox.value = 'bar';
 
-      comboBox.focus();
-      comboBox.open();
-      await aTimeout(1);
+        comboBox.focus();
+        comboBox.open();
+        await aTimeout(1);
+      });
+
+      it('should select focused item with enter', async () => {
+        arrowDownKeyDown(input);
+        await aTimeout(1);
+        enterKeyDown(input);
+        await aTimeout(1);
+        expect(comboBox.value).to.equal('baz');
+      });
+
+      it('should clear the selection with enter when input is cleared', () => {
+        filter('');
+        enterKeyDown(input);
+
+        expect(comboBox.value).to.eql('');
+      });
+
+      it('should close the overlay with enter when custom values are allowed', () => {
+        comboBox.allowCustomValue = true;
+        filter('foobar');
+
+        enterKeyDown(input);
+
+        expect(comboBox.value).to.equal('foobar');
+        expect(comboBox.opened).to.equal(false);
+      });
+
+      it('should stop propagation of the keyboard enter event when dropdown is opened', () => {
+        const keydownSpy = sinon.spy();
+        document.addEventListener('keydown', keydownSpy);
+        enterKeyDown(input);
+        expect(keydownSpy.called).to.be.false;
+      });
+
+      it('should stop propagation of the keyboard enter event when input value is invalid', () => {
+        filter('foobar');
+        const keydownSpy = sinon.spy();
+        document.addEventListener('keydown', keydownSpy);
+        enterKeyDown(input);
+        expect(keydownSpy.called).to.be.false;
+      });
+
+      it('should not close the overlay with enter when custom values are not allowed', () => {
+        filter('foobar');
+
+        enterKeyDown(input);
+
+        expect(comboBox.value).to.equal('bar');
+        expect(comboBox.opened).to.equal(true);
+      });
+
+      it('should revert to the custom value after filtering', () => {
+        comboBox.allowCustomValue = true;
+        comboBox.value = 'foobar';
+        filter('bar');
+        escKeyDown(input);
+        expect(input.value).to.eql('bar');
+        escKeyDown(input);
+        expect(input.value).to.equal('foobar');
+      });
+
+      it('should revert a non-listed value to the custom value after filtering', () => {
+        comboBox.allowCustomValue = true;
+        comboBox.value = 'foobar';
+        filter('barbaz');
+        escKeyDown(input);
+        expect(input.value).to.equal('foobar');
+      });
+
+      it('should revert to the custom value after keyboard navigation', () => {
+        comboBox.allowCustomValue = true;
+        comboBox.value = 'foobar';
+        arrowDownKeyDown(input);
+        escKeyDown(input);
+        expect(input.value).to.eql('foobar');
+        escKeyDown(input);
+        expect(input.value).to.equal('foobar');
+      });
+
+      it('should close the overlay with enter', () => {
+        enterKeyDown(input);
+
+        expect(comboBox.opened).to.equal(false);
+      });
+
+      it('should remove focus with escape', () => {
+        comboBox._focusedIndex = 0;
+
+        escKeyDown(input);
+
+        expect(comboBox.opened).to.equal(true);
+        expect(comboBox._focusedIndex).to.eql(-1);
+      });
+
+      it('should close the overlay with escape if there is no focus', () => {
+        comboBox._focusedIndex = -1;
+
+        escKeyDown(input);
+
+        expect(comboBox.opened).to.equal(false);
+      });
+
+      it('escape key event should not be propagated', () => {
+        const spy = sinon.spy();
+
+        document.body.addEventListener('keydown', spy);
+        escKeyDown(input);
+        document.body.removeEventListener('keydown', spy);
+
+        expect(spy.called).to.be.false;
+      });
+
+      it('should cancel typing with escape', () => {
+        filter('baz');
+
+        escKeyDown(input);
+
+        expect(comboBox.value).to.equal('bar');
+      });
+
+      it('should select typed item', () => {
+        filter('baz');
+
+        enterKeyDown(input);
+
+        expect(comboBox.value).to.equal('baz');
+      });
+
+      it('should prefill the input field when navigating down', () => {
+        arrowDownKeyDown(input);
+        expect(input.value).to.eql('baz');
+      });
+
+      it('should select the input field text when navigating down', () => {
+        arrowDownKeyDown(input);
+        expect(input.selectionStart).to.eql(0);
+        expect(input.selectionEnd).to.eql(3);
+      });
+
+      it('should prefill the input field when navigating up', () => {
+        arrowUpKeyDown(input);
+        expect(input.value).to.eql('foo');
+      });
+
+      it('should not prefill the input when there are no items to navigate', () => {
+        filter('invalid filter');
+
+        arrowDownKeyDown(input);
+        expect(input.value).to.eql('invalid filter');
+      });
+
+      it('should select the input field text when navigating up', () => {
+        arrowUpKeyDown(input);
+        expect(input.selectionStart).to.eql(0);
+        expect(input.selectionEnd).to.eql(3);
+      });
+
+      it('should revert back to filter with escape', async () => {
+        filter('b');
+
+        arrowDownKeyDown(input);
+        await aTimeout(1);
+        expect(input.value).to.eql('bar');
+        escKeyDown(input);
+        expect(input.value).to.eql('b');
+      });
+
+      it('should remove selection from the input value when reverting', () => {
+        filter('b');
+        arrowDownKeyDown(input);
+        escKeyDown(input);
+
+        expect(input.selectionStart).to.eql(input.selectionEnd);
+      });
+
+      it('should revert back to value if there is no filter', () => {
+        arrowDownKeyDown(input);
+
+        escKeyDown(input);
+
+        expect(input.value).to.eql('bar');
+      });
+
+      it('should keep selected item on escape when custom value allowed', () => {
+        comboBox.allowCustomValue = true;
+        escKeyDown(input);
+        escKeyDown(input);
+        expect(comboBox.selectedItem).to.eql('bar');
+      });
+
+      it('should remove selection from the input value selecting value', async () => {
+        arrowDownKeyDown(input);
+        await aTimeout(1);
+        enterKeyDown(input);
+
+        expect(input.selectionStart).to.eql(3);
+        expect(input.selectionEnd).to.eql(3);
+      });
+
+      it('should not clear the value on esc if clear button is not visible', () => {
+        escKeyDown(input);
+        expect(comboBox.value).to.equal('bar');
+      });
+
+      it('should clear the value on esc if clear button is visible', () => {
+        comboBox.close();
+        comboBox.clearButtonVisible = true;
+        escKeyDown(input);
+        expect(comboBox.value).to.equal('');
+      });
+
+      it('should not clear the value on esc if the overlay is open', () => {
+        comboBox.clearButtonVisible = true;
+        comboBox.opened = true;
+        escKeyDown(input);
+        expect(comboBox.value).to.equal('bar');
+      });
     });
 
-    it('should select focused item with enter', async () => {
-      arrowDownKeyDown(input);
-      await aTimeout(1);
-      enterKeyDown(input);
-      await aTimeout(1);
-      expect(comboBox.value).to.equal('baz');
-    });
+    describe('auto-open disabled', () => {
+      beforeEach(async () => {
+        comboBox.autoOpenDisabled = true;
+        comboBox.focus();
+        await aTimeout(1);
+      });
 
-    it('should clear the selection with enter when input is cleared', () => {
-      filter('');
-      enterKeyDown(input);
+      it('should stop propagation of the keyboard enter event when input value is invalid', () => {
+        filter('foobar');
+        const keydownSpy = sinon.spy();
+        document.addEventListener('keydown', keydownSpy);
+        enterKeyDown(input);
+        expect(keydownSpy.called).to.be.false;
+      });
 
-      expect(comboBox.value).to.eql('');
-    });
+      it('should not stop propagation of the keyboard enter event when input has a predefined option', async () => {
+        filter('foo');
+        expect(comboBox.opened).to.be.false;
+        const keydownSpy = sinon.spy();
+        document.addEventListener('keydown', keydownSpy);
+        enterKeyDown(input);
+        expect(keydownSpy.called).to.be.true;
+      });
 
-    it('should close the overlay with enter when custom values are allowed', () => {
-      comboBox.allowCustomValue = true;
-      filter('foobar');
+      it('should not stop propagation of the keyboard enter event when input has a custom value', () => {
+        comboBox.allowCustomValue = true;
+        filter('foobar');
+        const keydownSpy = sinon.spy();
+        document.addEventListener('keydown', keydownSpy);
+        enterKeyDown(input);
+        expect(keydownSpy.called).to.be.true;
+      });
 
-      enterKeyDown(input);
-
-      expect(comboBox.value).to.equal('foobar');
-      expect(comboBox.opened).to.equal(false);
-    });
-
-    it('should stop propagation of the keyboard enter event', () => {
-      const keydownSpy = sinon.spy();
-      document.addEventListener('keydown', keydownSpy);
-      enterKeyDown(input);
-      expect(keydownSpy.called).to.be.false;
-    });
-
-    it('should not close the overlay with enter when custom values are not allowed', () => {
-      filter('foobar');
-
-      enterKeyDown(input);
-
-      expect(comboBox.value).to.equal('bar');
-      expect(comboBox.opened).to.equal(true);
-    });
-
-    it('should revert to the custom value after filtering', () => {
-      comboBox.allowCustomValue = true;
-      comboBox.value = 'foobar';
-      filter('bar');
-      escKeyDown(input);
-      expect(input.value).to.eql('bar');
-      escKeyDown(input);
-      expect(input.value).to.equal('foobar');
-    });
-
-    it('should revert a non-listed value to the custom value after filtering', () => {
-      comboBox.allowCustomValue = true;
-      comboBox.value = 'foobar';
-      filter('barbaz');
-      escKeyDown(input);
-      expect(input.value).to.equal('foobar');
-    });
-
-    it('should revert to the custom value after keyboard navigation', () => {
-      comboBox.allowCustomValue = true;
-      comboBox.value = 'foobar';
-      arrowDownKeyDown(input);
-      escKeyDown(input);
-      expect(input.value).to.eql('foobar');
-      escKeyDown(input);
-      expect(input.value).to.equal('foobar');
-    });
-
-    it('should close the overlay with enter', () => {
-      enterKeyDown(input);
-
-      expect(comboBox.opened).to.equal(false);
-    });
-
-    it('should remove focus with escape', () => {
-      comboBox._focusedIndex = 0;
-
-      escKeyDown(input);
-
-      expect(comboBox.opened).to.equal(true);
-      expect(comboBox._focusedIndex).to.eql(-1);
-    });
-
-    it('should close the overlay with escape if there is no focus', () => {
-      comboBox._focusedIndex = -1;
-
-      escKeyDown(input);
-
-      expect(comboBox.opened).to.equal(false);
-    });
-
-    it('escape key event should not be propagated', () => {
-      const spy = sinon.spy();
-
-      document.body.addEventListener('keydown', spy);
-      escKeyDown(input);
-      document.body.removeEventListener('keydown', spy);
-
-      expect(spy.called).to.be.false;
-    });
-
-    it('should cancel typing with escape', () => {
-      filter('baz');
-
-      escKeyDown(input);
-
-      expect(comboBox.value).to.equal('bar');
-    });
-
-    it('should select typed item', () => {
-      filter('baz');
-
-      enterKeyDown(input);
-
-      expect(comboBox.value).to.equal('baz');
-    });
-
-    it('should prefill the input field when navigating down', () => {
-      arrowDownKeyDown(input);
-      expect(input.value).to.eql('baz');
-    });
-
-    it('should select the input field text when navigating down', () => {
-      arrowDownKeyDown(input);
-      expect(input.selectionStart).to.eql(0);
-      expect(input.selectionEnd).to.eql(3);
-    });
-
-    it('should prefill the input field when navigating up', () => {
-      arrowUpKeyDown(input);
-      expect(input.value).to.eql('foo');
-    });
-
-    it('should not prefill the input when there are no items to navigate', () => {
-      filter('invalid filter');
-
-      arrowDownKeyDown(input);
-      expect(input.value).to.eql('invalid filter');
-    });
-
-    it('should select the input field text when navigating up', () => {
-      arrowUpKeyDown(input);
-      expect(input.selectionStart).to.eql(0);
-      expect(input.selectionEnd).to.eql(3);
-    });
-
-    it('should revert back to filter with escape', async () => {
-      filter('b');
-
-      arrowDownKeyDown(input);
-      await aTimeout(1);
-      expect(input.value).to.eql('bar');
-      escKeyDown(input);
-      expect(input.value).to.eql('b');
-    });
-
-    it('should remove selection from the input value when reverting', () => {
-      filter('b');
-      arrowDownKeyDown(input);
-      escKeyDown(input);
-
-      expect(input.selectionStart).to.eql(input.selectionEnd);
-    });
-
-    it('should revert back to value if there is no filter', () => {
-      arrowDownKeyDown(input);
-
-      escKeyDown(input);
-
-      expect(input.value).to.eql('bar');
-    });
-
-    it('should keep selected item on escape when custom value allowed', () => {
-      comboBox.allowCustomValue = true;
-      escKeyDown(input);
-      escKeyDown(input);
-      expect(comboBox.selectedItem).to.eql('bar');
-    });
-
-    it('should remove selection from the input value selecting value', async () => {
-      arrowDownKeyDown(input);
-      await aTimeout(1);
-      enterKeyDown(input);
-
-      expect(input.selectionStart).to.eql(3);
-      expect(input.selectionEnd).to.eql(3);
-    });
-
-    it('should not clear the value on esc if clear button is not visible', () => {
-      escKeyDown(input);
-      expect(comboBox.value).to.equal('bar');
-    });
-
-    it('should clear the value on esc if clear button is visible', () => {
-      comboBox.close();
-      comboBox.clearButtonVisible = true;
-      escKeyDown(input);
-      expect(comboBox.value).to.equal('');
-    });
-
-    it('should not clear the value on esc if the overlay is open', () => {
-      comboBox.clearButtonVisible = true;
-      comboBox.opened = true;
-      escKeyDown(input);
-      expect(comboBox.value).to.equal('bar');
+      it('should not stop propagation of the keyboard enter event when input is empty', () => {
+        comboBox.allowCustomValue = true;
+        filter('');
+        const keydownSpy = sinon.spy();
+        document.addEventListener('keydown', keydownSpy);
+        enterKeyDown(input);
+        expect(keydownSpy.called).to.be.true;
+      });
     });
   });
 
