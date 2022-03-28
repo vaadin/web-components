@@ -576,20 +576,27 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _onEnter(e) {
-      // should close on enter when custom values are allowed, input field is cleared, or when an existing
-      // item is focused with keyboard. If auto open is disabled, under the same conditions, commit value.
-      if (
-        (this.opened || this.autoOpenDisabled) &&
-        (this.allowCustomValue || this._inputElementValue === '' || this._focusedIndex > -1)
-      ) {
-        this._closeOrCommit();
-
+      // do not commit value when custom values are disallowed and input value is not a valid option
+      // also stop propagation of the event, otherwise the user could submit a form while the input
+      // still contains an invalid value
+      if (!this.allowCustomValue && this._inputElementValue !== '' && this._focusedIndex < 0) {
         // Do not submit the surrounding form.
         e.preventDefault();
+        // Do not trigger global listeners
+        e.stopPropagation();
+        return;
+      }
 
+      // stop propagation of the enter event only if the dropdown is opened, this
+      // "consumes" the enter event for the action of closing the dropdown
+      if (this.opened) {
+        // Do not submit the surrounding form.
+        e.preventDefault();
         // Do not trigger global listeners
         e.stopPropagation();
       }
+
+      this._closeOrCommit();
     }
 
     /**
