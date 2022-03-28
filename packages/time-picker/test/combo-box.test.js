@@ -109,14 +109,14 @@ describe('autoOpenDisabled', () => {
     expect(items[5].hasAttribute('focused')).to.be.true;
   });
 
-  it('should apply a custom value', async () => {
+  it('should commit a custom value', async () => {
     inputElement.focus();
     inputElement.value = '05:10';
     await sendKeys({ press: 'Enter' });
     expect(timePicker.value).to.equal('05:10');
   });
 
-  it('should apply the empty value', async () => {
+  it('should commit the empty value', async () => {
     inputElement.focus();
     inputElement.value = '';
     await sendKeys({ press: 'Enter' });
