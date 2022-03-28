@@ -42,6 +42,7 @@ describe('select', () => {
   });
 
   it('readonly', async () => {
+    element.value = 'item 1';
     element.readonly = true;
     await visualDiff(div, 'readonly');
   });
