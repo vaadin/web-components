@@ -251,8 +251,15 @@ export class ComboBoxScroller extends PolymerElement {
 
   /** @private */
   __focusedIndexChanged(index, oldIndex) {
-    if (this.__virtualizer && index !== oldIndex) {
+    if (!this.__virtualizer) {
+      return;
+    }
+
+    if (index !== oldIndex) {
       this.requestContentUpdate();
+    }
+
+    if (index >= 0) {
       this.scrollIntoView(index);
     }
   }
