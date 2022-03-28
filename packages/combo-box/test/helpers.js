@@ -114,3 +114,26 @@ export const selectItem = (comboBox, index) => {
     item: comboBox.items[index]
   });
 };
+
+/**
+ * Emulates the user filling in something in the combo-box input.
+ *
+ * @param {Element} comboBox
+ * @param {string} value
+ */
+export function setInputValue(comboBox, value) {
+  comboBox.inputElement.value = value;
+  fire(comboBox.inputElement, 'input');
+}
+
+/**
+ * Returns the index of the currently focused item for a combo-box.
+ *
+ * @param {Element} comboBox
+ * @return {number}
+ */
+export function getFocusedItemIndex(comboBox) {
+  return getAllItems(comboBox).findIndex((item) => {
+    return item.hasAttribute('focused');
+  });
+}
