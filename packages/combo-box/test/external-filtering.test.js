@@ -13,6 +13,12 @@ describe('external filtering', () => {
     fire(comboBox.inputElement, 'input');
   }
 
+  function getFocusedItemIndex() {
+    return getAllItems(comboBox).findIndex((item) => {
+      return item.hasAttribute('focused');
+    });
+  }
+
   describe('basic', () => {
     beforeEach(() => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
@@ -35,29 +41,29 @@ describe('external filtering', () => {
     it('should remove focus while loading', () => {
       setInputValue('foo');
       comboBox.filteredItems = ['foo'];
-      expect(comboBox._focusedIndex).to.eql(0);
+      expect(getFocusedItemIndex()).to.equal(0);
 
       comboBox.loading = true;
 
-      expect(comboBox._focusedIndex).to.eql(-1);
+      expect(getFocusedItemIndex()).to.equal(-1);
     });
 
     it('should focus on filtered value', () => {
       comboBox.filteredItems = ['foo'];
       setInputValue('bar');
-      expect(comboBox._focusedIndex).to.eql(-1);
+      expect(getFocusedItemIndex()).to.equal(-1);
 
       comboBox.filteredItems = ['foo', 'bar', 'baz'];
 
-      expect(comboBox._focusedIndex).to.eql(1);
+      expect(getFocusedItemIndex()).to.equal(1);
     });
 
-    it('should focus on value when filter is empty', () => {
+    it('should focus on value when opened', () => {
       comboBox.value = 'bar';
-
       comboBox.filteredItems = ['foo', 'bar', 'baz'];
+      comboBox.open();
 
-      expect(comboBox._focusedIndex).to.eql(1);
+      expect(getFocusedItemIndex()).to.equal(1);
     });
 
     it('should update focus when opening with filling filter', () => {
@@ -67,7 +73,7 @@ describe('external filtering', () => {
       setInputValue('bar');
 
       expect(comboBox.opened).to.be.true;
-      expect(comboBox._focusedIndex).to.equal(1);
+      expect(getFocusedItemIndex()).to.equal(1);
     });
 
     it('should reset focus when opening with filter cleared', () => {
@@ -78,7 +84,7 @@ describe('external filtering', () => {
       setInputValue('');
 
       expect(comboBox.opened).to.be.true;
-      expect(comboBox._focusedIndex).to.equal(-1);
+      expect(getFocusedItemIndex()).to.equal(-1);
     });
 
     it('should not hide the overlay while loading', () => {
@@ -126,14 +132,13 @@ describe('external filtering', () => {
   });
 
   describe('filtered items attribute', () => {
-    let comboBox;
-
     beforeEach(() => {
       comboBox = fixtureSync(`<vaadin-combo-box filtered-items='["a", "b", "c"]' value='b'></vaadin-combo-box>`);
     });
 
     it('should not throw when passing filteredItems and value as attributes', () => {
-      expect(comboBox._focusedIndex).to.eql(1);
+      comboBox.open();
+      expect(getFocusedItemIndex()).to.equal(1);
     });
   });
 

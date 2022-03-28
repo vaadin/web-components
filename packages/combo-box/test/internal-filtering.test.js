@@ -18,6 +18,12 @@ describe('internal filtering', () => {
     return comboBox.inputElement.value;
   }
 
+  function getFocusedItemIndex() {
+    return getAllItems(comboBox).findIndex((item) => {
+      return item.hasAttribute('focused');
+    });
+  }
+
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
     comboBox.items = ['foo', 'bar', 'baz'];
@@ -121,7 +127,7 @@ describe('internal filtering', () => {
     it('should focus on an exact match', () => {
       setInputValue('bar');
 
-      expect(comboBox._focusedIndex).to.eql(0);
+      expect(getFocusedItemIndex()).to.equal(0);
     });
 
     it('should not scroll to selected value when filtering', (done) => {
@@ -146,7 +152,7 @@ describe('internal filtering', () => {
       setInputValue('bar');
 
       expect(comboBox.opened).to.be.true;
-      expect(comboBox._focusedIndex).to.equal(0);
+      expect(getFocusedItemIndex()).to.equal(0);
     });
 
     it('should reset focus when opening with filter cleared', () => {
@@ -156,7 +162,7 @@ describe('internal filtering', () => {
       setInputValue('');
 
       expect(comboBox.opened).to.be.true;
-      expect(comboBox._focusedIndex).to.equal(-1);
+      expect(getFocusedItemIndex()).to.equal(-1);
     });
   });
 
@@ -212,18 +218,18 @@ describe('internal filtering', () => {
     it('should focus filtered items on match case insensitively', () => {
       setInputValue('BA');
 
-      expect(comboBox._focusedIndex).to.equal(-1);
+      expect(getFocusedItemIndex()).to.equal(-1);
 
       setInputValue('BAR');
 
-      expect(comboBox._focusedIndex).to.equal(0);
+      expect(getFocusedItemIndex()).to.equal(0);
     });
 
     it('should reset focus when filter changes', () => {
       setInputValue('BAR');
       setInputValue('BA');
 
-      expect(comboBox._focusedIndex).to.equal(-1);
+      expect(getFocusedItemIndex()).to.equal(-1);
     });
 
     it('should not filter with a null filter', () => {
