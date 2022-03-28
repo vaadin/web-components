@@ -27,6 +27,10 @@ const select = css`
     color: var(--lumo-body-text-color);
   }
 
+  :host([readonly]) [part='input-field'] ::slotted([slot='value']:not([placeholder])) {
+    color: var(--lumo-secondary-text-color);
+  }
+
   /* placeholder styles */
   [part='input-field'] ::slotted([slot='value'][placeholder]) {
     color: inherit;
