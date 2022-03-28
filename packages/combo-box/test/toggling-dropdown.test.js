@@ -5,15 +5,10 @@ import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { createEventSpy, outsideClick } from './helpers.js';
+import { createEventSpy, outsideClick, setInputValue } from './helpers.js';
 
 describe('toggling dropdown', () => {
   let comboBox, overlay, input;
-
-  function setInputValue(value) {
-    input.value = value;
-    input.dispatchEvent(new CustomEvent('input'));
-  }
 
   function clickToggleIcon() {
     tap(comboBox._toggleElement);
@@ -262,12 +257,12 @@ describe('toggling dropdown', () => {
         comboBox.open();
 
         // Existent value
-        setInputValue('1');
+        setInputValue(comboBox, '1');
         expect(overlay.opened).to.be.true;
         expect(comboBox.opened).to.be.true;
 
         // Non-existent value
-        setInputValue('3');
+        setInputValue(comboBox, '3');
         expect(overlay.opened).to.be.false;
         expect(comboBox.opened).to.be.true;
       });
@@ -275,7 +270,7 @@ describe('toggling dropdown', () => {
       it('should not commit value the input on dropdown closing', () => {
         comboBox.open();
 
-        setInputValue('3');
+        setInputValue(comboBox, '3');
         expect(input.value).to.equal('3');
         expect(comboBox.value).to.be.empty;
 
