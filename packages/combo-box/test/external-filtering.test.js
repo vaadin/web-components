@@ -1,23 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { getAllItems } from './helpers.js';
+import { getFocusedItemIndex, setInputValue } from './helpers.js';
 
 describe('external filtering', () => {
   let comboBox, overlay;
-
-  function setInputValue(value) {
-    comboBox.inputElement.value = value;
-    fire(comboBox.inputElement, 'input');
-  }
-
-  function getFocusedItemIndex() {
-    return getAllItems(comboBox).findIndex((item) => {
-      return item.hasAttribute('focused');
-    });
-  }
 
   describe('basic', () => {
     beforeEach(() => {
@@ -33,29 +22,29 @@ describe('external filtering', () => {
     });
 
     it('should not filter items', () => {
-      setInputValue('foo');
+      setInputValue(comboBox, 'foo');
 
       expect(comboBox._getOverlayItems()).to.eql(['foo', 'bar', 'baz']);
     });
 
     it('should remove focus while loading', () => {
-      setInputValue('foo');
+      setInputValue(comboBox, 'foo');
       comboBox.filteredItems = ['foo'];
-      expect(getFocusedItemIndex()).to.equal(0);
+      expect(getFocusedItemIndex(comboBox)).to.equal(0);
 
       comboBox.loading = true;
 
-      expect(getFocusedItemIndex()).to.equal(-1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
     it('should focus on filtered value', () => {
       comboBox.filteredItems = ['foo'];
-      setInputValue('bar');
-      expect(getFocusedItemIndex()).to.equal(-1);
+      setInputValue(comboBox, 'bar');
+      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
 
       comboBox.filteredItems = ['foo', 'bar', 'baz'];
 
-      expect(getFocusedItemIndex()).to.equal(1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
 
     it('should focus on value when opened', () => {
@@ -63,17 +52,17 @@ describe('external filtering', () => {
       comboBox.filteredItems = ['foo', 'bar', 'baz'];
       comboBox.open();
 
-      expect(getFocusedItemIndex()).to.equal(1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
 
     it('should update focus when opening with filling filter', () => {
       comboBox.filteredItems = ['foo', 'bar', 'baz'];
       comboBox.close();
 
-      setInputValue('bar');
+      setInputValue(comboBox, 'bar');
 
       expect(comboBox.opened).to.be.true;
-      expect(getFocusedItemIndex()).to.equal(1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
 
     it('should reset focus when opening with filter cleared', () => {
@@ -81,14 +70,14 @@ describe('external filtering', () => {
       comboBox.value = 'bar';
       comboBox.close();
 
-      setInputValue('');
+      setInputValue(comboBox, '');
 
       expect(comboBox.opened).to.be.true;
-      expect(getFocusedItemIndex()).to.equal(-1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
     it('should not hide the overlay while loading', () => {
-      setInputValue('foo');
+      setInputValue(comboBox, 'foo');
 
       comboBox.loading = true;
 
@@ -99,7 +88,7 @@ describe('external filtering', () => {
     // FIXME(@platosha): Hiding does not play nice with lazy loading.
     // Should display a loading indicator instead.
     it.skip('should hide the scroller while loading', () => {
-      setInputValue('foo');
+      setInputValue(comboBox, 'foo');
 
       comboBox.loading = true;
 
@@ -138,7 +127,7 @@ describe('external filtering', () => {
 
     it('should not throw when passing filteredItems and value as attributes', () => {
       comboBox.open();
-      expect(getFocusedItemIndex()).to.equal(1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
   });
 
@@ -176,9 +165,7 @@ describe('external filtering', () => {
 
     it('should focus the correct item when opened', () => {
       comboBox.open();
-
-      const items = getAllItems(comboBox);
-      expect(items[1].hasAttribute('focused')).to.be.true;
+      expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
   });
 });

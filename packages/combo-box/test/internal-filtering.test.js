@@ -1,28 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { getAllItems, makeItems, onceOpened } from './helpers.js';
+import { getAllItems, getFocusedItemIndex, makeItems, onceOpened, setInputValue } from './helpers.js';
 
 describe('internal filtering', () => {
   let comboBox, overlay;
-
-  function setInputValue(value) {
-    comboBox.inputElement.value = value;
-    fire(comboBox.inputElement, 'input');
-  }
-
-  function getInputValue() {
-    return comboBox.inputElement.value;
-  }
-
-  function getFocusedItemIndex() {
-    return getAllItems(comboBox).findIndex((item) => {
-      return item.hasAttribute('focused');
-    });
-  }
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
@@ -34,7 +19,7 @@ describe('internal filtering', () => {
     it('should open the popup if closed', () => {
       comboBox.close();
 
-      setInputValue('foo');
+      setInputValue(comboBox, 'foo');
 
       expect(comboBox.opened).to.equal(true);
     });
@@ -43,7 +28,7 @@ describe('internal filtering', () => {
       comboBox.autoOpenDisabled = true;
       comboBox.close();
 
-      setInputValue('foo');
+      setInputValue(comboBox, 'foo');
 
       expect(comboBox.opened).to.equal(false);
     });
@@ -54,7 +39,7 @@ describe('internal filtering', () => {
 
       comboBox.value = 'foo';
       comboBox.open();
-      setInputValue('foo ');
+      setInputValue(comboBox, 'foo ');
 
       expect(comboBox._getOverlayItems()).to.be.empty;
     });
@@ -64,7 +49,7 @@ describe('internal filtering', () => {
       comboBox.close();
       expect(comboBox.opened).to.equal(false);
 
-      setInputValue('');
+      setInputValue(comboBox, '');
 
       expect(comboBox.opened).to.equal(true);
     });
@@ -75,20 +60,20 @@ describe('internal filtering', () => {
       comboBox.close();
       expect(comboBox.opened).to.equal(false);
 
-      setInputValue('');
+      setInputValue(comboBox, '');
 
       expect(comboBox.opened).to.equal(false);
     });
 
     it('should not change the value of the combobox', () => {
       comboBox.value = 'foo';
-      setInputValue('bar');
+      setInputValue(comboBox, 'bar');
       expect(comboBox.value).to.equal('foo');
     });
 
     it('should set the combobox value when closing', () => {
       comboBox.value = 'foo';
-      setInputValue('bar');
+      setInputValue(comboBox, 'bar');
 
       comboBox.close();
 
@@ -97,7 +82,7 @@ describe('internal filtering', () => {
 
     it('should set the combobox value when closing case insensitively', () => {
       comboBox.value = 'foo';
-      setInputValue('BAR');
+      setInputValue(comboBox, 'BAR');
 
       comboBox.close();
 
@@ -107,27 +92,27 @@ describe('internal filtering', () => {
     it('should be reverted to the combobox value when cancelled', () => {
       comboBox.value = 'foo';
 
-      setInputValue('b');
+      setInputValue(comboBox, 'b');
       comboBox.cancel();
 
-      expect(getInputValue()).to.equal('foo');
+      expect(comboBox.inputElement.value).to.equal('foo');
     });
 
     it('should be revert to the combobox value when selecting the same value', () => {
       comboBox.value = 'foo';
 
-      setInputValue('FOO');
+      setInputValue(comboBox, 'FOO');
       comboBox.close();
 
-      expect(getInputValue()).to.equal('foo');
+      expect(comboBox.inputElement.value).to.equal('foo');
     });
   });
 
   describe('focusing items while filtering', () => {
     it('should focus on an exact match', () => {
-      setInputValue('bar');
+      setInputValue(comboBox, 'bar');
 
-      expect(getFocusedItemIndex()).to.equal(0);
+      expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
     it('should not scroll to selected value when filtering', (done) => {
@@ -135,7 +120,7 @@ describe('internal filtering', () => {
 
       onceOpened(comboBox).then(() => {
         const spy = sinon.spy(comboBox.$.dropdown, '_scrollIntoView');
-        setInputValue('b');
+        setInputValue(comboBox, 'b');
 
         requestAnimationFrame(() => {
           expect(spy.firstCall.firstArg).to.eql(0);
@@ -143,44 +128,44 @@ describe('internal filtering', () => {
         });
       });
 
-      setInputValue('ba');
+      setInputValue(comboBox, 'ba');
     });
 
     it('should update focus when opening with filling filter', () => {
       comboBox.close();
 
-      setInputValue('bar');
+      setInputValue(comboBox, 'bar');
 
       expect(comboBox.opened).to.be.true;
-      expect(getFocusedItemIndex()).to.equal(0);
+      expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
     it('should reset focus when opening with filter cleared', () => {
       comboBox.value = 'bar';
       comboBox.close();
 
-      setInputValue('');
+      setInputValue(comboBox, '');
 
       expect(comboBox.opened).to.be.true;
-      expect(getFocusedItemIndex()).to.equal(-1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
   });
 
   describe('filtering items', () => {
     it('should filter items using contains', () => {
-      setInputValue('a');
+      setInputValue(comboBox, 'a');
 
       expect(comboBox._getOverlayItems()).to.eql(['bar', 'baz']);
     });
 
     it('should filter out all items with a invalid filter', () => {
-      setInputValue('qux');
+      setInputValue(comboBox, 'qux');
 
       expect(comboBox._getOverlayItems()).to.be.empty;
     });
 
     it('should be reset after closing the dropdown', () => {
-      setInputValue('foo');
+      setInputValue(comboBox, 'foo');
 
       comboBox.close();
 
@@ -190,7 +175,7 @@ describe('internal filtering', () => {
     it('should filter boolean', () => {
       comboBox.items = [true, false];
 
-      setInputValue('t');
+      setInputValue(comboBox, 't');
 
       expect(comboBox._getOverlayItems()).to.eql([true]);
     });
@@ -204,36 +189,36 @@ describe('internal filtering', () => {
 
     it('should not lose the selected value', () => {
       comboBox.value = 'foo';
-      setInputValue('bar');
+      setInputValue(comboBox, 'bar');
 
       expect(comboBox.$.dropdown._selectedItem).to.eql('foo');
     });
 
     it('should ignore case', () => {
-      setInputValue('FOO');
+      setInputValue(comboBox, 'FOO');
 
       expect(comboBox._getOverlayItems()).to.eql(['foo']);
     });
 
     it('should focus filtered items on match case insensitively', () => {
-      setInputValue('BA');
+      setInputValue(comboBox, 'BA');
 
-      expect(getFocusedItemIndex()).to.equal(-1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
 
-      setInputValue('BAR');
+      setInputValue(comboBox, 'BAR');
 
-      expect(getFocusedItemIndex()).to.equal(0);
+      expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
     it('should reset focus when filter changes', () => {
-      setInputValue('BAR');
-      setInputValue('BA');
+      setInputValue(comboBox, 'BAR');
+      setInputValue(comboBox, 'BA');
 
-      expect(getFocusedItemIndex()).to.equal(-1);
+      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
     it('should not filter with a null filter', () => {
-      setInputValue(null);
+      setInputValue(comboBox, null);
 
       expect(comboBox._getOverlayItems()).to.eql(['foo', 'bar', 'baz']);
     });
@@ -241,13 +226,13 @@ describe('internal filtering', () => {
     it('should not throw an error when items arent set', () => {
       comboBox.items = null;
 
-      setInputValue('foo');
+      setInputValue(comboBox, 'foo');
 
       expect(comboBox._getOverlayItems()).to.be.null;
     });
 
     it('should hide overlay when filtered items length is 0', () => {
-      setInputValue('THIS IS NOT FOUND');
+      setInputValue(comboBox, 'THIS IS NOT FOUND');
 
       expect(comboBox.opened && overlay.hidden).to.be.true;
     });
