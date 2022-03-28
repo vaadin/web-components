@@ -587,17 +587,16 @@ export const ComboBoxMixin = (subclass) =>
         return;
       }
 
-      const wasOpened = this.opened;
-      this._closeOrCommit();
-
-      // stop propagation of the enter event only if the dropdown was closed, this
+      // stop propagation of the enter event only if the dropdown is opened, this
       // "consumes" the enter event for the action of closing the dropdown
-      if (wasOpened) {
+      if (this.opened) {
         // Do not submit the surrounding form.
         e.preventDefault();
         // Do not trigger global listeners
         e.stopPropagation();
       }
+
+      this._closeOrCommit();
     }
 
     /**
