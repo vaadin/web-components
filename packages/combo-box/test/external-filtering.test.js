@@ -179,33 +179,33 @@ describe('external filtering', () => {
 
   describe('value is set before + autoOpenDisabled', () => {
     beforeEach(() => {
-      comboBox = fixtureSync(`<vaadin-combo-box auto-open-disabled value="foo"></vaadin-combo-box>`);
+      comboBox = fixtureSync(`<vaadin-combo-box auto-open-disabled value="bar"></vaadin-combo-box>`);
       comboBox.filteredItems = ['foo', 'bar'];
     });
 
     it('should have the selected item', () => {
-      expect(comboBox.selectedItem).to.equal('foo');
+      expect(comboBox.selectedItem).to.equal('bar');
     });
 
     it('should have the input value', () => {
-      expect(comboBox.inputElement.value).to.equal('foo');
+      expect(comboBox.inputElement.value).to.equal('bar');
     });
 
     it('should have the value item focused when opened', () => {
       comboBox.open();
-      expect(getFocusedItemIndex(comboBox)).to.equal(0);
-    });
-
-    it('should have the filtered item focused when opened after changing the filter', () => {
-      setInputValue(comboBox, 'bar');
-      comboBox.open();
       expect(getFocusedItemIndex(comboBox)).to.equal(1);
     });
 
+    it('should have the filtered item focused when opened after changing the filter', () => {
+      setInputValue(comboBox, 'foo');
+      comboBox.open();
+      expect(getFocusedItemIndex(comboBox)).to.equal(0);
+    });
+
     it('should commit the filtered value', async () => {
-      setInputValue(comboBox, 'bar');
+      setInputValue(comboBox, 'foo');
       enter(comboBox.inputElement);
-      expect(comboBox.value).to.equal('bar');
+      expect(comboBox.value).to.equal('foo');
     });
 
     it('should have no item focused when opened after clearing the filter', () => {
