@@ -4,9 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
-import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
+import { ButtonMixin } from '@vaadin/button/src/vaadin-button-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -42,13 +40,11 @@ registerStyles(
  * An element used internally by `<vaadin-select>`. Not intended to be used separately.
  *
  * @extends HTMLElement
- * @mixes ActiveMixin
- * @mixes TabindexMixin
- * @mixes FocusMixin
+ * @mixes ButtonMixin
  * @mixes ThemableMixin
  * @protected
  */
-class SelectValueButton extends ActiveMixin(TabindexMixin(FocusMixin(ThemableMixin(PolymerElement)))) {
+class SelectValueButton extends ButtonMixin(ThemableMixin(PolymerElement)) {
   static get is() {
     return 'vaadin-select-value-button';
   }

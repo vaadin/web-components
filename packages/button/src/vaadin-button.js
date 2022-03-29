@@ -4,11 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
-import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { ButtonMixin } from './vaadin-button-mixin.js';
 
 /**
  * `<vaadin-button>` is an accessible and customizable button that allows users to perform actions.
@@ -39,13 +37,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @extends HTMLElement
- * @mixes ActiveMixin
- * @mixes TabindexMixin
- * @mixes FocusMixin
+ * @mixes ButtonMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
+class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-button';
   }
@@ -128,56 +124,6 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
         </span>
       </div>
     `;
-  }
-
-  /**
-   * By default, `Space` is the only possible activation key for a focusable HTML element.
-   * Nonetheless, the button is an exception as it can be also activated by pressing `Enter`.
-   * See the "Keyboard Support" section in https://www.w3.org/TR/wai-aria-practices/examples/button/button.html.
-   *
-   * @protected
-   * @override
-   */
-  get _activeKeys() {
-    return ['Enter', ' '];
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    // By default, if the user hasn't provided a custom role,
-    // the role attribute is set to "button".
-    if (!this.hasAttribute('role')) {
-      this.setAttribute('role', 'button');
-    }
-  }
-
-  /**
-   * Since the button component is designed on the base of the `[role=button]` attribute,
-   * and doesn't have a native <button> inside, in order to be fully accessible from the keyboard,
-   * it should manually fire the `click` event once an activation key is pressed,
-   * as it follows from the WAI-ARIA specifications:
-   * https://www.w3.org/TR/wai-aria-practices-1.1/#button
-   *
-   * According to the UI Events specifications,
-   * the `click` event should be fired exactly on `keydown`:
-   * https://www.w3.org/TR/uievents/#event-type-keydown
-   *
-   * @param {KeyboardEvent} event
-   * @protected
-   * @override
-   */
-  _onKeyDown(event) {
-    super._onKeyDown(event);
-
-    if (this._activeKeys.includes(event.key)) {
-      event.preventDefault();
-
-      // `DisabledMixin` overrides the standard `click()` method
-      // so that it doesn't fire the `click` event when the element is disabled.
-      this.click();
-    }
   }
 }
 

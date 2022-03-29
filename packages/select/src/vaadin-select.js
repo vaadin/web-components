@@ -317,7 +317,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       ...super.slots,
       value: () => {
         const button = document.createElement('vaadin-select-value-button');
-        button.setAttribute('role', 'button');
         button.setAttribute('aria-haspopup', 'listbox');
         return button;
       }
@@ -448,6 +447,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       menuElement.addEventListener(
         'click',
         () => {
+          console.log('click');
           this.__userInteraction = true;
           this.opened = false;
         },
