@@ -15,6 +15,34 @@ import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
 registerStyles(
   'vaadin-dialog-overlay',
   css`
+    [part='header'] {
+      display: flex;
+      gap: 0.5em;
+    }
+
+    [part='header-content'] {
+      flex: 1;
+    }
+
+    [part='footer'] {
+      display: flex;
+    }
+
+    @media (min-height: 320px) {
+      :host([has-title]) .resizer-container,
+      :host([has-header]) .resizer-container {
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      :host([has-title]) [part='content'],
+      :host([has-header]) [part='content'] {
+        flex: 1;
+        overflow: auto;
+      }
+    }
+
     /*
       NOTE(platosha): Make some min-width to prevent collapsing of the content
       taking the parent width, e. g., <vaadin-grid> and such.
@@ -53,16 +81,155 @@ export class DialogOverlay extends OverlayElement {
       resizerContainer.classList.add('resizer-container');
       resizerContainer.appendChild(contentPart);
       overlayPart.appendChild(resizerContainer);
+
+      const headerContainer = document.createElement('div');
+      headerContainer.setAttribute('part', 'header');
+      resizerContainer.insertBefore(headerContainer, contentPart);
+
+      const titleContainer = document.createElement('div');
+      titleContainer.setAttribute('part', 'title');
+      headerContainer.appendChild(titleContainer);
+
+      const titleSlot = document.createElement('slot');
+      titleSlot.setAttribute('name', 'title');
+      titleContainer.appendChild(titleSlot);
+
+      const headerContentContainer = document.createElement('div');
+      headerContentContainer.setAttribute('part', 'header-content');
+      headerContainer.appendChild(headerContentContainer);
+
+      const headerSlot = document.createElement('slot');
+      headerSlot.setAttribute('name', 'header');
+      headerContentContainer.appendChild(headerSlot);
+
+      const footerContainer = document.createElement('div');
+      footerContainer.setAttribute('part', 'footer');
+      resizerContainer.appendChild(footerContainer);
+
+      const footerSlot = document.createElement('slot');
+      footerSlot.setAttribute('name', 'footer');
+      footerContainer.appendChild(footerSlot);
     }
     return memoizedTemplate;
+  }
+
+  static get observers() {
+    return ['_headerRendererChange(headerRenderer, opened)', '_headerTitleChanged(headerTitle, opened)'];
   }
 
   static get properties() {
     return {
       modeless: Boolean,
 
-      withBackdrop: Boolean
+      withBackdrop: Boolean,
+
+      headerTitle: String,
+
+      headerRenderer: Function
     };
+  }
+
+  _headerRendererChange(headerRenderer, opened) {
+    const headerRendererChanged = this.__oldHeaderRenderer !== headerRenderer;
+    this.__oldHeaderRenderer = headerRenderer;
+
+    const openedChanged = this._oldOpened !== opened;
+    this._oldOpened = opened;
+
+    if (headerRendererChanged) {
+      const headerContainer = this.headerContainer;
+      headerContainer.innerHTML = '';
+      // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
+      // When clearing the rendered content, this part needs to be manually disposed of.
+      // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
+      delete headerContainer._$litPart$;
+    }
+
+    if (headerRenderer && (headerRendererChanged || openedChanged)) {
+      if (opened) {
+        this.requestContentUpdate();
+      }
+    }
+    this._toggleHasHeaderAttribute();
+  }
+
+  _toggleHasHeaderAttribute() {
+    if (this.headerRenderer) {
+      this.setAttribute('has-header', '');
+    } else {
+      this.removeAttribute('has-header');
+    }
+  }
+
+  _headerTitleChanged(headerTitle, opened) {
+    const headerTitleChanged = this._oldHeaderTitle !== headerTitle;
+    this._oldHeaderTitle = headerTitle;
+
+    const openedChanged = this._oldOpened !== opened;
+    this._oldOpened = opened;
+
+    if (headerTitleChanged || openedChanged) {
+      if (this.opened) {
+        this.requestContentUpdate();
+      }
+    }
+    this._toggleHasTitleAttribute();
+  }
+
+  _toggleHasTitleAttribute() {
+    if (this.headerTitle) {
+      this.setAttribute('has-title', '');
+    } else {
+      this.removeAttribute('has-title');
+    }
+  }
+
+  _headerTitleRenderer() {
+    const headerTitleElement = this.getHeaderTitleElement();
+    if (this.headerTitle) {
+      headerTitleElement.style.display = '';
+      headerTitleElement.textContent = this.headerTitle;
+    } else {
+      headerTitleElement.style.display = 'none';
+    }
+  }
+
+  /**
+   *
+   * @returns HTMLElement header title element
+   */
+  getHeaderTitleElement() {
+    let headerTitleElement = this.querySelector('[slot=title]');
+
+    if (!headerTitleElement) {
+      headerTitleElement = document.createElement('span');
+      headerTitleElement.id = 'title';
+      headerTitleElement.setAttribute('slot', 'title');
+      this.setAttribute('aria-labelledby', 'title');
+      this.appendChild(headerTitleElement);
+    }
+
+    return headerTitleElement;
+  }
+
+  requestContentUpdate() {
+    super.requestContentUpdate();
+
+    if (this.headerRenderer) {
+      this.headerRenderer.call(this.owner, this.headerContainer);
+    }
+
+    this._headerTitleRenderer();
+  }
+
+  get headerContainer() {
+    let headerContainer = this.querySelector('vaadin-dialog-header');
+    if (!headerContainer) {
+      headerContainer = document.createElement('vaadin-dialog-header');
+      headerContainer.setAttribute('slot', 'header');
+      this.appendChild(headerContainer);
+    }
+    return headerContainer;
   }
 
   /**
@@ -120,6 +287,22 @@ export class DialogOverlay extends OverlayElement {
 }
 
 customElements.define(DialogOverlay.is, DialogOverlay);
+
+class DialogHeader extends PolymerElement {
+  static get is() {
+    return 'vaadin-dialog-header';
+  }
+
+  static get template() {
+    return html`
+      <div>
+        <slot></slot>
+      </div>
+    `;
+  }
+}
+
+customElements.define(DialogHeader.is, DialogHeader);
 
 /**
  * `<vaadin-dialog>` is a Web Component for creating customized modal dialogs.
@@ -249,6 +432,12 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
        */
       renderer: Function,
 
+      headerTitle: String,
+
+      headerRenderer: Function,
+
+      footerRenderer: Function,
+
       /**
        * Set to true to remove backdrop and allow click events on background elements.
        * @type {boolean}
@@ -261,7 +450,12 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
   }
 
   static get observers() {
-    return ['_openedChanged(opened)', '_ariaLabelChanged(ariaLabel)', '_rendererChanged(renderer)'];
+    return [
+      '_openedChanged(opened)',
+      '_ariaLabelChanged(ariaLabel)',
+      '_rendererChanged(renderer, headerRenderer)',
+      '_headerTitleChanged(headerTitle)'
+    ];
   }
 
   /** @protected */
@@ -285,8 +479,12 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
   }
 
   /** @private */
-  _rendererChanged(renderer) {
-    this.$.overlay.setProperties({ owner: this, renderer });
+  _rendererChanged(renderer, headerRenderer) {
+    this.$.overlay.setProperties({ owner: this, renderer, headerRenderer });
+  }
+
+  _headerTitleChanged(headerTitle) {
+    this.$.overlay.setProperties({ headerTitle });
   }
 
   /** @protected */
