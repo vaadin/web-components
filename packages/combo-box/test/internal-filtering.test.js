@@ -251,16 +251,16 @@ describe('internal filtering', () => {
     });
   });
 
-  describe('setting filtered items when opened', () => {
+  describe('setting items when opened', () => {
     beforeEach(() => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       comboBox.items = [];
-      comboBox.open();
-      comboBox.filteredItems = makeItems(10);
-      flush();
     });
 
     it('should properly display all items in the selector', () => {
+      comboBox.open();
+      comboBox.filteredItems = makeItems(10);
+      flush();
       expect(getAllItems(comboBox).length).to.equal(10);
     });
   });
