@@ -971,10 +971,10 @@ export const ComboBoxMixin = (subclass) =>
       if (e.path === 'filteredItems' || e.path === 'filteredItems.splices') {
         this._setOverlayItems(this.filteredItems);
 
-        // When `filteredItems` is the source of data (= neither `items` nor data provider is provided)
-        // and `value` has been set before `filteredItems`, we need to ensure the selected item
-        // is initialized with the current value once the filtered items are provided.
-        // In other cases, it is already initialized in such observers as `valueChanged`, `_itemsOrPathsChanged`.
+        // When the external filtering is used and `value` was provided before `filteredItems`,
+        // initialize the selected item with the current value here. This will also cause
+        // the input element value to sync. In other cases, the selected item is already initialized
+        // in other observers such as `valueChanged`, `_itemsOrPathsChanged`.
         const valueIndex = this._indexOfValue(this.value, this.filteredItems);
         if (this.selectedItem === null && valueIndex >= 0) {
           this._selectItemForValue(this.value);
