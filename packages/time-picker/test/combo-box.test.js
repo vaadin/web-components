@@ -109,7 +109,7 @@ describe('autoOpenDisabled', () => {
     expect(items[5].hasAttribute('focused')).to.be.true;
   });
 
-  it('should commit a custom value', async () => {
+  it('should commit a custom value after setting a predefined value', async () => {
     inputElement.focus();
     inputElement.value = '05:10';
     await sendKeys({ press: 'Enter' });
