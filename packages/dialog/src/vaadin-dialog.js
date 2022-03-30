@@ -19,7 +19,6 @@ registerStyles(
   css`
     [part='header'] {
       display: flex;
-      gap: 0.5em;
     }
 
     [part='header-content'] {
@@ -29,6 +28,11 @@ registerStyles(
     [part='footer'] {
       display: flex;
       justify-content: flex-end;
+    }
+
+    [part='content'] {
+      min-height: 100%;
+      height: auto;
     }
 
     @media (min-height: 320px) {
@@ -45,6 +49,11 @@ registerStyles(
       :host([has-footer]) [part='content'] {
         flex: 1;
         overflow: auto;
+      }
+
+      [part='content'] {
+        min-height: auto;
+        height: 100%;
       }
     }
 

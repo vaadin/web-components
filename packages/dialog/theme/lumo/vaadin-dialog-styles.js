@@ -27,8 +27,32 @@ const dialogOverlay = css`
     padding: var(--lumo-space-l);
   }
 
+  [part='header'] {
+    gap: var(--lumo-space-s);
+  }
+
+  :host([has-header]) [part='header'],
+  :host([has-title]) [part='header'] {
+    padding: var(--lumo-space-m);
+    border-bottom: 1px solid var(--lumo-contrast-10pct);
+  }
+
+  :host([has-footer]) [part='footer'] {
+    padding: var(--lumo-space-m);
+    border-top: 1px solid var(--lumo-contrast-10pct);
+  }
+
   /* No padding */
   :host([theme~='no-padding']) [part='content'] {
+    padding: 0;
+  }
+
+  :host([theme~='no-padding'][has-header]) [part='header'],
+  :host([theme~='no-padding'][has-title]) [part='header'] {
+    padding: 0;
+  }
+
+  :host([theme~='no-padding'][has-footer]) [part='footer'] {
     padding: 0;
   }
 
