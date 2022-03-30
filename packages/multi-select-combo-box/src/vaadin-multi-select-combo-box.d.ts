@@ -18,7 +18,6 @@ import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { MultiSelectComboBoxMixinClass } from './vaadin-multi-select-combo-box-mixin.js';
 
 export type MultiSelectComboBoxCompactModeLabelGenerator<TItem> = (items: Array<TItem>) => string;
 
@@ -184,6 +183,18 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
   filterValue: string;
 
   /**
+   * A full set of items to filter the visible options from.
+   * The items can be of either `String` or `Object` type.
+   */
+  items: Array<TItem> | undefined;
+
+  /**
+   * The item property used for a visual representation of the item.
+   * @attr {string} item-label-path
+   */
+  itemLabelPath: string;
+
+  /**
    * Path for the id of the item, used to detect whether the item is selected.
    * @attr {string} item-id-path
    */
@@ -253,9 +264,8 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
   ): void;
 }
 
-interface MultiSelectComboBox<TItem = ComboBoxDefaultItem>
-  extends MultiSelectComboBoxMixinClass<TItem>,
-    ValidateMixinClass,
+interface MultiSelectComboBox
+  extends ValidateMixinClass,
     LabelMixinClass,
     KeyboardMixinClass,
     InputMixinClass,

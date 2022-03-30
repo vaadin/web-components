@@ -16,7 +16,6 @@ import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { MultiSelectComboBoxMixin } from './vaadin-multi-select-combo-box-mixin.js';
 
 const multiSelectComboBox = css`
   [hidden] {
@@ -116,11 +115,8 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes InputControlMixin
- * @mixes MultiSelectComboBoxMixin
  */
-class MultiSelectComboBox extends MultiSelectComboBoxMixin(
-  InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))
-) {
+class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-multi-select-combo-box';
   }
@@ -225,11 +221,29 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
       },
 
       /**
+       * A full set of items to filter the visible options from.
+       * The items can be of either `String` or `Object` type.
+       */
+      items: {
+        type: Array
+      },
+
+      /**
+       * The item property used for a visual representation of the item.
+       * @attr {string} item-label-path
+       */
+      itemLabelPath: {
+        type: String
+      },
+
+      /**
        * Path for the value of the item. If `items` is an array of objects,
        * this property is used as a string value for the selected item.
        * @attr {string} item-value-path
        */
-      itemValuePath: String,
+      itemValuePath: {
+        type: String
+      },
 
       /**
        * Path for the id of the item, used to detect whether the item is selected.
@@ -496,6 +510,11 @@ class MultiSelectComboBox extends MultiSelectComboBoxMixin(
 
     const suffix = items.length === 0 || items.length > 1 ? 'values' : 'value';
     return `${items.length} ${suffix}`;
+  }
+
+  /** @private */
+  _getItemLabel(item, itemLabelPath) {
+    return item && Object.prototype.hasOwnProperty.call(item, itemLabelPath) ? item[itemLabelPath] : item;
   }
 
   /** @private */
