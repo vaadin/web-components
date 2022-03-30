@@ -116,7 +116,7 @@ describe('autoOpenDisabled', () => {
     expect(timePicker.value).to.equal('05:10');
   });
 
-  it('should commit the empty value', async () => {
+  it('should commit an empty value after setting a predefined value', async () => {
     inputElement.focus();
     inputElement.value = '';
     await sendKeys({ press: 'Enter' });
