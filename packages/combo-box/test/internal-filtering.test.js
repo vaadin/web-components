@@ -4,18 +4,18 @@ import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import { getAllItems, getFocusedItemIndex, makeItems, onceOpened, setInputValue } from './helpers.js';
 
 describe('internal filtering', () => {
-  let comboBox, overlay;
-
-  beforeEach(() => {
-    comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
-    comboBox.items = ['foo', 'bar', 'baz'];
-    overlay = comboBox.$.dropdown.$.overlay;
-  });
+  let comboBox;
 
   describe('setting the input field value', () => {
+    beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      comboBox.items = ['foo', 'bar', 'baz'];
+    });
+
     it('should open the popup if closed', () => {
       comboBox.close();
 
@@ -109,6 +109,11 @@ describe('internal filtering', () => {
   });
 
   describe('focusing items while filtering', () => {
+    beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      comboBox.items = ['foo', 'bar', 'baz'];
+    });
+
     it('should focus on an exact match', () => {
       setInputValue(comboBox, 'bar');
 
@@ -152,6 +157,14 @@ describe('internal filtering', () => {
   });
 
   describe('filtering items', () => {
+    let overlay;
+
+    beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      comboBox.items = ['foo', 'bar', 'baz'];
+      overlay = comboBox.$.dropdown.$.overlay;
+    });
+
     it('should filter items using contains', () => {
       setInputValue(comboBox, 'a');
 
@@ -240,6 +253,7 @@ describe('internal filtering', () => {
 
   describe('setting items when opened', () => {
     beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       comboBox.items = [];
     });
 
@@ -248,6 +262,17 @@ describe('internal filtering', () => {
       comboBox.filteredItems = makeItems(10);
       flush();
       expect(getAllItems(comboBox).length).to.equal(10);
+    });
+  });
+
+  describe('setting placeholder items', () => {
+    beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      comboBox.items = [new ComboBoxPlaceholder(), new ComboBoxPlaceholder()];
+    });
+
+    it('should have no selected item when value is empty', () => {
+      expect(comboBox.selectedItem).to.not.be.instanceOf(ComboBoxPlaceholder);
     });
   });
 });
