@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import { getAllItems, getFocusedItemIndex, makeItems, onceOpened, setInputValue } from './helpers.js';
 
 describe('internal filtering', () => {
@@ -261,6 +262,17 @@ describe('internal filtering', () => {
 
     it('should properly display all items in the selector', () => {
       expect(getAllItems(comboBox).length).to.equal(10);
+    });
+  });
+
+  describe('setting placeholder items', () => {
+    beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      comboBox.items = [new ComboBoxPlaceholder(), new ComboBoxPlaceholder()];
+    });
+
+    it('should have no selected item', () => {
+      expect(comboBox.selectedItem).to.not.be.instanceOf(ComboBoxPlaceholder);
     });
   });
 });
