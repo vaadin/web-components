@@ -159,21 +159,35 @@ export class DialogOverlay extends OverlayElement {
     this._oldOpened = opened;
 
     if (headerRendererChanged) {
-      const headerContainer = this.headerContainer;
-      headerContainer.innerHTML = '';
-      // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
-      // When clearing the rendered content, this part needs to be manually disposed of.
-      // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
-      delete headerContainer._$litPart$;
+      if (!this.headerContainer && this.headerRenderer) {
+        this.headerContainer = document.createElement('header');
+        this.headerContainer.setAttribute('slot', 'header');
+        this.appendChild(this.headerContainer);
+      } else if (this.headerRenderer) {
+        this.headerContainer.innerHTML = '';
+        // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
+        // When clearing the rendered content, this part needs to be manually disposed of.
+        // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
+        delete this.headerContainer._$litPart$;
+      } else if (this.headerContainer && !this.headerRenderer) {
+        this.headerContainer.remove();
+      }
     }
 
     if (footerRendererChanged) {
-      const footerContainer = this.footerContainer;
-      footerContainer.innerHTML = '';
-      // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
-      // When clearing the rendered content, this part needs to be manually disposed of.
-      // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
-      delete footerContainer._$litPart$;
+      if (!this.footerContainer && this.footerRenderer) {
+        this.footerContainer = document.createElement('footer');
+        this.footerContainer.setAttribute('slot', 'footer');
+        this.appendChild(this.footerContainer);
+      } else if (this.footerRenderer) {
+        this.footerContainer.innerHTML = '';
+        // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
+        // When clearing the rendered content, this part needs to be manually disposed of.
+        // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
+        delete this.footerContainer._$litPart$;
+      } else if (this.footerContainer && !this.footerRenderer) {
+        this.footerContainer.remove();
+      }
     }
 
     if (
@@ -230,10 +244,9 @@ export class DialogOverlay extends OverlayElement {
   _headerTitleRenderer() {
     const headerTitleElement = this.getHeaderTitleElement();
     if (this.headerTitle) {
-      headerTitleElement.style.display = '';
       headerTitleElement.textContent = this.headerTitle;
     } else {
-      headerTitleElement.style.display = 'none';
+      headerTitleElement.remove();
     }
   }
 
@@ -268,26 +281,6 @@ export class DialogOverlay extends OverlayElement {
     }
 
     this._headerTitleRenderer();
-  }
-
-  get headerContainer() {
-    let headerContainer = this.querySelector('vaadin-dialog-header');
-    if (!headerContainer) {
-      headerContainer = document.createElement('vaadin-dialog-header');
-      headerContainer.setAttribute('slot', 'header');
-      this.appendChild(headerContainer);
-    }
-    return headerContainer;
-  }
-
-  get footerContainer() {
-    let footerContainer = this.querySelector('vaadin-dialog-footer');
-    if (!footerContainer) {
-      footerContainer = document.createElement('vaadin-dialog-footer');
-      footerContainer.setAttribute('slot', 'footer');
-      this.appendChild(footerContainer);
-    }
-    return footerContainer;
   }
 
   /**
