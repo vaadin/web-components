@@ -3,6 +3,8 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import './vaadin-dialog-header';
+import './vaadin-dialog-footer';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -26,18 +28,21 @@ registerStyles(
 
     [part='footer'] {
       display: flex;
+      justify-content: flex-end;
     }
 
     @media (min-height: 320px) {
       :host([has-title]) .resizer-container,
-      :host([has-header]) .resizer-container {
+      :host([has-header]) .resizer-container,
+      :host([has-footer]) .resizer-container {
         overflow: hidden;
         display: flex;
         flex-direction: column;
       }
 
       :host([has-title]) [part='content'],
-      :host([has-header]) [part='content'] {
+      :host([has-header]) [part='content'],
+      :host([has-footer]) [part='content'] {
         flex: 1;
         overflow: auto;
       }
@@ -114,7 +119,10 @@ export class DialogOverlay extends OverlayElement {
   }
 
   static get observers() {
-    return ['_headerRendererChange(headerRenderer, opened)', '_headerTitleChanged(headerTitle, opened)'];
+    return [
+      '_headerRendererChange(headerRenderer, footerRenderer, opened)',
+      '_headerTitleChanged(headerTitle, opened)'
+    ];
   }
 
   static get properties() {
@@ -125,13 +133,18 @@ export class DialogOverlay extends OverlayElement {
 
       headerTitle: String,
 
-      headerRenderer: Function
+      headerRenderer: Function,
+
+      footerRenderer: Function
     };
   }
 
-  _headerRendererChange(headerRenderer, opened) {
+  _headerRendererChange(headerRenderer, footerRenderer, opened) {
     const headerRendererChanged = this.__oldHeaderRenderer !== headerRenderer;
     this.__oldHeaderRenderer = headerRenderer;
+
+    const footerRendererChanged = this.__oldFooterRenderer !== footerRenderer;
+    this.__oldFooterRenderer = footerRenderer;
 
     const openedChanged = this._oldOpened !== opened;
     this._oldOpened = opened;
@@ -145,12 +158,25 @@ export class DialogOverlay extends OverlayElement {
       delete headerContainer._$litPart$;
     }
 
-    if (headerRenderer && (headerRendererChanged || openedChanged)) {
+    if (footerRendererChanged) {
+      const footerContainer = this.footerContainer;
+      footerContainer.innerHTML = '';
+      // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
+      // When clearing the rendered content, this part needs to be manually disposed of.
+      // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
+      delete footerContainer._$litPart$;
+    }
+
+    if (
+      (headerRenderer && (headerRendererChanged || openedChanged)) ||
+      (footerRenderer && (footerRendererChanged || openedChanged))
+    ) {
       if (opened) {
         this.requestContentUpdate();
       }
     }
     this._toggleHasHeaderAttribute();
+    this._toggleHasFooterAttribute();
   }
 
   _toggleHasHeaderAttribute() {
@@ -158,6 +184,14 @@ export class DialogOverlay extends OverlayElement {
       this.setAttribute('has-header', '');
     } else {
       this.removeAttribute('has-header');
+    }
+  }
+
+  _toggleHasFooterAttribute() {
+    if (this.footerRenderer) {
+      this.setAttribute('has-footer', '');
+    } else {
+      this.removeAttribute('has-footer');
     }
   }
 
@@ -219,6 +253,10 @@ export class DialogOverlay extends OverlayElement {
       this.headerRenderer.call(this.owner, this.headerContainer);
     }
 
+    if (this.footerRenderer) {
+      this.footerRenderer.call(this.owner, this.footerContainer);
+    }
+
     this._headerTitleRenderer();
   }
 
@@ -230,6 +268,16 @@ export class DialogOverlay extends OverlayElement {
       this.appendChild(headerContainer);
     }
     return headerContainer;
+  }
+
+  get footerContainer() {
+    let footerContainer = this.querySelector('vaadin-dialog-footer');
+    if (!footerContainer) {
+      footerContainer = document.createElement('vaadin-dialog-footer');
+      footerContainer.setAttribute('slot', 'footer');
+      this.appendChild(footerContainer);
+    }
+    return footerContainer;
   }
 
   /**
@@ -287,22 +335,6 @@ export class DialogOverlay extends OverlayElement {
 }
 
 customElements.define(DialogOverlay.is, DialogOverlay);
-
-class DialogHeader extends PolymerElement {
-  static get is() {
-    return 'vaadin-dialog-header';
-  }
-
-  static get template() {
-    return html`
-      <div>
-        <slot></slot>
-      </div>
-    `;
-  }
-}
-
-customElements.define(DialogHeader.is, DialogHeader);
 
 /**
  * `<vaadin-dialog>` is a Web Component for creating customized modal dialogs.
@@ -453,7 +485,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
     return [
       '_openedChanged(opened)',
       '_ariaLabelChanged(ariaLabel)',
-      '_rendererChanged(renderer, headerRenderer)',
+      '_rendererChanged(renderer, headerRenderer, footerRenderer)',
       '_headerTitleChanged(headerTitle)'
     ];
   }
@@ -479,8 +511,8 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
   }
 
   /** @private */
-  _rendererChanged(renderer, headerRenderer) {
-    this.$.overlay.setProperties({ owner: this, renderer, headerRenderer });
+  _rendererChanged(renderer, headerRenderer, footerRenderer) {
+    this.$.overlay.setProperties({ owner: this, renderer, headerRenderer, footerRenderer });
   }
 
   _headerTitleChanged(headerTitle) {
