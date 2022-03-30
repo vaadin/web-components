@@ -34,9 +34,9 @@ export type MultiSelectComboBoxChangeEvent<TItem> = Event & {
 export type MultiSelectComboBoxCustomValuesSetEvent = CustomEvent<string>;
 
 /**
- * Fired when the `filterValue` property changes.
+ * Fired when the `filter` property changes.
  */
-export type MultiSelectComboBoxFilterValueChangedEvent = CustomEvent<{ value: string }>;
+export type MultiSelectComboBoxFilterChangedEvent = CustomEvent<{ value: string }>;
 
 /**
  * Fired when the `invalid` property changes.
@@ -53,7 +53,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
 
   'custom-values-set': MultiSelectComboBoxCustomValuesSetEvent;
 
-  'filter-value-changed': MultiSelectComboBoxFilterValueChangedEvent;
+  'filter-changed': MultiSelectComboBoxFilterChangedEvent;
 
   'invalid-changed': MultiSelectComboBoxInvalidChangedEvent;
 
@@ -178,9 +178,8 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
 
   /**
    * Filtering string the user has typed into the input field.
-   * @attr {string} filter-value
    */
-  filterValue: string;
+  filter: string;
 
   /**
    * A full set of items to filter the visible options from.

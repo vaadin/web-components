@@ -18,7 +18,7 @@ import {
   MultiSelectComboBoxChangeEvent,
   MultiSelectComboBoxCompactModeLabelGenerator,
   MultiSelectComboBoxCustomValuesSetEvent,
-  MultiSelectComboBoxFilterValueChangedEvent,
+  MultiSelectComboBoxFilterChangedEvent,
   MultiSelectComboBoxInvalidChangedEvent,
   MultiSelectComboBoxSelectedItemsChangedEvent
 } from '../../vaadin-multi-select-combo-box.js';
@@ -45,8 +45,8 @@ narrowedComboBox.addEventListener('custom-values-set', (event) => {
   assertType<string>(event.detail);
 });
 
-narrowedComboBox.addEventListener('filter-value-changed', (event) => {
-  assertType<MultiSelectComboBoxFilterValueChangedEvent>(event);
+narrowedComboBox.addEventListener('filter-changed', (event) => {
+  assertType<MultiSelectComboBoxFilterChangedEvent>(event);
   assertType<string>(event.detail.value);
 });
 
@@ -65,7 +65,7 @@ assertType<() => boolean>(narrowedComboBox.checkValidity);
 assertType<() => boolean>(narrowedComboBox.validate);
 assertType<boolean>(narrowedComboBox.allowCustomValues);
 assertType<boolean | null | undefined>(narrowedComboBox.autoOpenDisabled);
-assertType<string>(narrowedComboBox.filterValue);
+assertType<string>(narrowedComboBox.filter);
 assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.filteredItems);
 assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.items);
 assertType<string | null | undefined>(narrowedComboBox.itemIdPath);
