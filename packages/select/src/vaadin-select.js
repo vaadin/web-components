@@ -447,7 +447,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       menuElement.addEventListener(
         'click',
         () => {
-          console.log('click');
           this.__userInteraction = true;
           this.opened = false;
         },
