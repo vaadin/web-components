@@ -271,7 +271,7 @@ describe('internal filtering', () => {
       comboBox.items = [new ComboBoxPlaceholder(), new ComboBoxPlaceholder()];
     });
 
-    it('should have no selected item', () => {
+    it('should have no selected item when value is empty', () => {
       expect(comboBox.selectedItem).to.not.be.instanceOf(ComboBoxPlaceholder);
     });
   });
