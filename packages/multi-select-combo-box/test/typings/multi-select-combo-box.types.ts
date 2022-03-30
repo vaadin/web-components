@@ -13,7 +13,6 @@ import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
-import { MultiSelectComboBoxMixinClass } from '../../src/vaadin-multi-select-combo-box-mixin.js';
 import {
   MultiSelectComboBox,
   MultiSelectComboBoxChangeEvent,
@@ -88,7 +87,6 @@ assertType<MultiSelectComboBoxCompactModeLabelGenerator<TestComboBoxItem>>(narro
 assertType<string>(narrowedComboBox.readonlyValueSeparator);
 
 // Mixins
-assertType<MultiSelectComboBoxMixinClass<TestComboBoxItem>>(narrowedComboBox);
 assertType<ControllerMixinClass>(narrowedComboBox);
 assertType<ElementMixinClass>(narrowedComboBox);
 assertType<DelegateFocusMixinClass>(narrowedComboBox);
