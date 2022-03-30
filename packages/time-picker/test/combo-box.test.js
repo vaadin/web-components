@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { enter, fire, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-time-picker.js';
 
 describe('combo-box', () => {
@@ -110,16 +109,16 @@ describe('autoOpenDisabled', () => {
   });
 
   it('should commit a custom value after setting a predefined value', async () => {
-    inputElement.focus();
     inputElement.value = '05:10';
-    await sendKeys({ press: 'Enter' });
+    fire(inputElement, 'input');
+    enter(inputElement);
     expect(timePicker.value).to.equal('05:10');
   });
 
   it('should commit an empty value after setting a predefined value', async () => {
-    inputElement.focus();
     inputElement.value = '';
-    await sendKeys({ press: 'Enter' });
+    fire(inputElement, 'input');
+    enter(inputElement);
     expect(timePicker.value).to.equal('');
   });
 });

@@ -376,10 +376,6 @@ export const ComboBoxMixin = (subclass) =>
         }
 
         this.__restoreFocusOnClose = true;
-
-        if (this.autoOpenDisabled && !this.filter) {
-          this._focusedIndex = this._indexOfValue(this.value, this.filteredItems);
-        }
       } else {
         this._onClosed();
         if (this._openedWithFocusRing && this.hasAttribute('focused')) {
@@ -980,10 +976,14 @@ export const ComboBoxMixin = (subclass) =>
           this._selectItemForValue(this.value);
         }
 
-        if (this.opened || this.autoOpenDisabled) {
-          this._focusedIndex = this.$.dropdown.indexOfLabel(this.filter);
+        if (this._inputElementValue === undefined || this._inputElementValue === this.value) {
+          // When the input element value is the same as the current value or not defined,
+          // set the focused index to the item that matches the value.
+          this._focusedIndex = this._indexOfValue(this.value, this.filteredItems);
         } else {
-          this._focusedIndex = valueIndex;
+          // When the user filled in something that is different from the current value = filtering is enabled,
+          // set the focused index to the item that matches the filter query.
+          this._focusedIndex = this.$.dropdown.indexOfLabel(this.filter);
         }
       }
     }
