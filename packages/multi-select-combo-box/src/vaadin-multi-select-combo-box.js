@@ -30,11 +30,6 @@ const multiSelectComboBox = css`
     width: auto;
   }
 
-  [part='compact-mode-prefix'] {
-    display: flex;
-    align-items: center;
-  }
-
   ::slotted(input) {
     flex-basis: 80px;
   }
@@ -64,8 +59,7 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  *
  * Part name              | Description
  * -----------------------|----------------
- * `chip`                 | Chip shown for every selected item in default mode
- * `compact-mode-prefix`  | The selected items counter shown in compact mode
+ * `chip`                 | Chip shown for every selected item
  * `label`                | The label element
  * `input-field`          | The element that wraps prefix, value and suffix
  * `clear-button`         | The clear button
@@ -78,7 +72,6 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  *
  * Attribute              | Description
  * -----------------------|-----------------
- * `compact-mode`         | Set when the element uses compact mode
  * `disabled`             | Set to a disabled element
  * `has-value`            | Set when the element has a value
  * `has-label`            | Set when the element has a label
@@ -88,7 +81,6 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * `focused`              | Set when the element is focused
  * `focus-ring`           | Set when the element is keyboard focused
  * `opened`               | Set when the dropdown is open
- * `ordered`              | Set when the element uses ordered mode
  * `readonly`             | Set to a readonly element
  *
  * ### Internal components
@@ -157,20 +149,13 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
             invalid="[[invalid]]"
             theme$="[[theme]]"
           >
-            <div
-              part="compact-mode-prefix"
-              hidden$="[[_isCompactModeHidden(readonly, compactMode, _hasValue)]]"
-              slot="prefix"
-            >
-              [[_getCompactModeLabel(selectedItems, compactModeLabelGenerator)]]
-            </div>
             <template id="repeat" is="dom-repeat" items="[[selectedItems]]" slot="prefix">
               <vaadin-multi-select-combo-box-chip
                 slot="prefix"
                 part="chip"
                 item="[[item]]"
                 label="[[_getItemLabel(item, itemLabelPath)]]"
-                hidden$="[[_isTokensHidden(readonly, compactMode, _hasValue)]]"
+                hidden$="[[_isTokensHidden(readonly, _hasValue)]]"
                 on-item-removed="_onItemRemoved"
                 on-mousedown="_preventBlur"
               ></vaadin-multi-select-combo-box-chip>
@@ -199,26 +184,6 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
        * @attr {boolean} auto-open-disabled
        */
       autoOpenDisabled: Boolean,
-
-      /**
-       * When true, the component does not render chips for every selected value.
-       * Instead, only the number of currently selected items is shown.
-       * @attr {boolean} compact-mode
-       */
-      compactMode: {
-        type: Boolean,
-        reflectToAttribute: true
-      },
-
-      /**
-       * Custom function for generating the display label when in compact mode.
-       *
-       * This function receives the array of selected items and should return
-       * a string value that will be used as the display label.
-       */
-      compactModeLabelGenerator: {
-        type: Object
-      },
 
       /**
        * A full set of items to filter the visible options from.
@@ -269,18 +234,6 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
       opened: {
         type: Boolean,
         notify: true,
-        value: false,
-        reflectToAttribute: true
-      },
-
-      /**
-       * When true, the list of selected items is kept ordered in ascending lexical order.
-       *
-       * When `itemLabelPath` is specified, corresponding property is used for ordering.
-       * Otherwise the items themselves are compared using `localCompare`.
-       */
-      ordered: {
-        type: Boolean,
         value: false,
         reflectToAttribute: true
       },
@@ -370,8 +323,7 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
   static get observers() {
     return [
       '_selectedItemsChanged(selectedItems, selectedItems.*)',
-      '_updateReadOnlyMode(inputElement, readonly, itemLabelPath, compactMode, readonlyValueSeparator, selectedItems, selectedItems.*)',
-      '_updateItems(ordered, compactMode, itemLabelPath, selectedItems, selectedItems.*)'
+      '_updateReadOnlyMode(inputElement, readonly, itemLabelPath, readonlyValueSeparator, selectedItems, selectedItems.*)'
     ];
   }
 
@@ -446,30 +398,15 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
   }
 
   /** @private */
-  _isCompactModeHidden(readonly, compactMode, hasValue) {
-    return readonly || !compactMode || !hasValue;
-  }
-
-  /** @private */
-  _isTokensHidden(readonly, compactMode, hasValue) {
-    return readonly || compactMode || !hasValue;
-  }
-
-  /** @private */
-  _updateItems(ordered, compactMode, itemLabelPath, selectedItems) {
-    // Set title when in compact mode to indicate which items are selected.
-    this.title = compactMode ? this._getDisplayValue(selectedItems, itemLabelPath, ', ') : undefined;
-
-    if (ordered && !compactMode) {
-      this._sortSelectedItems(selectedItems);
-    }
+  _isTokensHidden(readonly, hasValue) {
+    return readonly || !hasValue;
   }
 
   /** @private */
   // eslint-disable-next-line max-params
-  _updateReadOnlyMode(inputElement, readonly, itemLabelPath, compactMode, separator, selectedItems) {
+  _updateReadOnlyMode(inputElement, readonly, itemLabelPath, separator, selectedItems) {
     if (inputElement) {
-      inputElement.value = readonly ? this._getReadonlyValue(selectedItems, itemLabelPath, compactMode, separator) : '';
+      inputElement.value = readonly ? this._getReadonlyValue(selectedItems, itemLabelPath, separator) : '';
     }
   }
 
@@ -502,25 +439,13 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
   }
 
   /** @private */
-  _getCompactModeLabel(items) {
-    if (typeof this.compactModeLabelGenerator === 'function') {
-      return this.compactModeLabelGenerator(items);
-    }
-
-    const suffix = items.length === 0 || items.length > 1 ? 'values' : 'value';
-    return `${items.length} ${suffix}`;
-  }
-
-  /** @private */
   _getItemLabel(item, itemLabelPath) {
     return item && Object.prototype.hasOwnProperty.call(item, itemLabelPath) ? item[itemLabelPath] : item;
   }
 
   /** @private */
-  _getReadonlyValue(selectedItems, itemLabelPath, compactMode, readonlyValueSeparator) {
-    return compactMode
-      ? this._getCompactModeLabel(selectedItems)
-      : this._getDisplayValue(selectedItems, itemLabelPath, readonlyValueSeparator);
+  _getReadonlyValue(selectedItems, itemLabelPath, readonlyValueSeparator) {
+    return this._getDisplayValue(selectedItems, itemLabelPath, readonlyValueSeparator);
   }
 
   /** @private */
@@ -575,17 +500,6 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
   }
 
   /** @private */
-  _sortSelectedItems(selectedItems) {
-    this.selectedItems = selectedItems.sort((item1, item2) => {
-      const item1Str = String(this._getItemLabel(item1, this.itemLabelPath));
-      const item2Str = String(this._getItemLabel(item2, this.itemLabelPath));
-      return item1Str.localeCompare(item2Str);
-    });
-
-    this.__updateChips();
-  }
-
-  /** @private */
   __updateSelection(selectedItems) {
     this.selectedItems = selectedItems;
 
@@ -618,7 +532,7 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
    */
   _onKeyDown(event) {
     const items = this.selectedItems || [];
-    if (!this.compactMode && event.key === 'Backspace' && items.length && this.inputElement.value === '') {
+    if (event.key === 'Backspace' && items.length && this.inputElement.value === '') {
       this.__removeItem(items[items.length - 1]);
     }
   }

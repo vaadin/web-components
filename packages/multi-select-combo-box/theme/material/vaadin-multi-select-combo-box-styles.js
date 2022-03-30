@@ -19,19 +19,6 @@ const multiSelectComboBox = css`
     padding: 6px 0;
   }
 
-  [part='compact-mode-prefix'] {
-    color: var(--material-body-text-color);
-    font-family: var(--material-font-family);
-    font-size: var(--material-body-font-size);
-    cursor: default;
-  }
-
-  :host([disabled]) [part='compact-mode-prefix'] {
-    color: var(--material-disabled-text-color);
-    -webkit-text-fill-color: var(--material-disabled-text-color);
-    pointer-events: none;
-  }
-
   [part='toggle-button']::before {
     content: var(--material-icons-dropdown);
   }
