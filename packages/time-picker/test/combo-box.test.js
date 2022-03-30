@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { enter, fire, fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-time-picker.js';
 
 describe('combo-box', () => {
@@ -93,11 +93,12 @@ describe('combo-box', () => {
 });
 
 describe('autoOpenDisabled', () => {
-  let timePicker, comboBox;
+  let timePicker, comboBox, inputElement;
 
   beforeEach(() => {
     timePicker = fixtureSync(`<vaadin-time-picker auto-open-disabled value="05:00"></vaadin-time-picker>`);
     comboBox = timePicker.$.comboBox;
+    inputElement = timePicker.inputElement;
   });
 
   it('should focus the correct item when opened', () => {
@@ -105,5 +106,19 @@ describe('autoOpenDisabled', () => {
 
     const items = document.querySelectorAll('vaadin-time-picker-item');
     expect(items[5].hasAttribute('focused')).to.be.true;
+  });
+
+  it('should commit a custom value after setting a predefined value', async () => {
+    inputElement.value = '05:10';
+    fire(inputElement, 'input');
+    enter(inputElement);
+    expect(timePicker.value).to.equal('05:10');
+  });
+
+  it('should commit an empty value after setting a predefined value', async () => {
+    inputElement.value = '';
+    fire(inputElement, 'input');
+    enter(inputElement);
+    expect(timePicker.value).to.equal('');
   });
 });
