@@ -91,14 +91,6 @@ describe('basic', () => {
       expect(comboBox.hasAttribute('readonly')).to.be.true;
     });
 
-    it('should reflect compactMode property to attribute', () => {
-      comboBox.compactMode = true;
-      expect(comboBox.hasAttribute('compact-mode')).to.be.true;
-
-      comboBox.compactMode = false;
-      expect(comboBox.hasAttribute('compact-mode')).to.be.false;
-    });
-
     it('should propagate renderer property to combo-box', () => {
       const renderer = (root, _, model) => (root.textContent = model);
       comboBox.renderer = renderer;
@@ -154,15 +146,6 @@ describe('basic', () => {
       comboBox.selectedItems = ['apple', 'banana'];
       await nextFrame();
       await sendKeys({ type: 'lemon' });
-
-      await sendKeys({ down: 'Backspace' });
-      expect(comboBox.selectedItems).to.deep.equal(['apple', 'banana']);
-    });
-
-    it('should not clear last selected item on Backspace in compact mode', async () => {
-      comboBox.compactMode = true;
-      comboBox.selectedItems = ['apple', 'banana'];
-      await nextFrame();
 
       await sendKeys({ down: 'Backspace' });
       expect(comboBox.selectedItems).to.deep.equal(['apple', 'banana']);
@@ -265,35 +248,6 @@ describe('basic', () => {
       chip.shadowRoot.querySelector('[part="remove-button"]').click();
       await nextFrame();
       expect(comboBox.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(0);
-    });
-  });
-
-  describe('ordered', () => {
-    beforeEach(async () => {
-      comboBox.selectedItems = ['lemon', 'banana', 'apple'];
-      await nextFrame();
-    });
-
-    it('should sort selectedItems when ordered property is set to true', async () => {
-      comboBox.ordered = true;
-      await nextFrame();
-      expect(comboBox.selectedItems).to.deep.equal(['apple', 'banana', 'lemon']);
-    });
-
-    it('should re-render chips after setting ordered property to true', async () => {
-      comboBox.ordered = true;
-      await nextFrame();
-      const chips = comboBox.shadowRoot.querySelectorAll('[part="chip"]');
-      expect(getChipContent(chips[0])).to.equal('apple');
-      expect(getChipContent(chips[1])).to.equal('banana');
-      expect(getChipContent(chips[2])).to.equal('lemon');
-    });
-
-    it('should not sort selectedItems when compactMode property is set to true', async () => {
-      comboBox.compactMode = true;
-      comboBox.ordered = true;
-      await nextFrame();
-      expect(comboBox.selectedItems).to.deep.equal(['lemon', 'banana', 'apple']);
     });
   });
 

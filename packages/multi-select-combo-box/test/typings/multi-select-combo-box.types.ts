@@ -16,7 +16,6 @@ import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import {
   MultiSelectComboBox,
   MultiSelectComboBoxChangeEvent,
-  MultiSelectComboBoxCompactModeLabelGenerator,
   MultiSelectComboBoxCustomValuesSetEvent,
   MultiSelectComboBoxFilterChangedEvent,
   MultiSelectComboBoxInvalidChangedEvent,
@@ -82,8 +81,6 @@ assertType<string | null | undefined>(narrowedComboBox.helperText);
 assertType<boolean>(narrowedComboBox.readonly);
 assertType<string | null | undefined>(narrowedComboBox.label);
 assertType<boolean>(narrowedComboBox.required);
-assertType<boolean>(narrowedComboBox.compactMode);
-assertType<MultiSelectComboBoxCompactModeLabelGenerator<TestComboBoxItem>>(narrowedComboBox.compactModeLabelGenerator);
 assertType<string>(narrowedComboBox.readonlyValueSeparator);
 
 // Mixins

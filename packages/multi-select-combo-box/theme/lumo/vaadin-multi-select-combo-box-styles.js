@@ -11,28 +11,12 @@ import { inputFieldShared } from '@vaadin/vaadin-lumo-styles/mixins/input-field-
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const multiSelectComboBox = css`
-  :host([has-value]:not([compact-mode]):not([readonly])) {
+  :host([has-value]:not([readonly])) {
     padding-inline-start: 0;
   }
 
   [part='chip']:not(:last-of-type) {
     margin-inline-end: var(--lumo-space-xs);
-  }
-
-  [part='compact-mode-prefix'] {
-    box-sizing: border-box;
-    min-width: 70px;
-    padding: 0 0.25em;
-    color: var(--lumo-body-text-color);
-    font-family: var(--lumo-font-family);
-    font-weight: 500;
-    cursor: var(--lumo-clickable-cursor);
-  }
-
-  :host([disabled]) [part='compact-mode-prefix'] {
-    color: var(--lumo-disabled-text-color);
-    -webkit-text-fill-color: var(--lumo-disabled-text-color);
-    pointer-events: none;
   }
 
   [part='toggle-button']::before {
