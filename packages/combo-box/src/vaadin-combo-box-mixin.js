@@ -1038,15 +1038,21 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _indexOfValue(value, items) {
-      if (items && this._isValidValue(value)) {
-        for (let i = 0; i < items.length; i++) {
-          if (items[i] !== this.__placeHolder && this._getItemValue(items[i]) === value) {
-            return i;
-          }
-        }
+      if (!items || !this._isValidValue(value)) {
+        return -1;
       }
 
-      return -1;
+      return items.findIndex((item) => {
+        if (item instanceof ComboBoxPlaceholder) {
+          return false;
+        }
+
+        if (this._getItemValue(item) === value) {
+          return true;
+        }
+
+        return false;
+      });
     }
 
     /**
