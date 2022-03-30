@@ -967,21 +967,23 @@ export const ComboBoxMixin = (subclass) =>
       if (e.path === 'filteredItems' || e.path === 'filteredItems.splices') {
         this._setOverlayItems(this.filteredItems);
 
-        const filterIndex = this.$.dropdown.indexOfLabel(this.filter);
-        if (this.opened) {
-          this._focusedIndex = filterIndex;
-        } else {
-          // Pre-select item matching the filter to focus it later when overlay opens
-          const valueIndex = this._indexOfValue(this.value, this.filteredItems);
-          this._focusedIndex = filterIndex === -1 ? valueIndex : filterIndex;
+        // When the external filtering is used and `value` was provided before `filteredItems`,
+        // initialize the selected item with the current value here. This will also cause
+        // the input element value to sync. In other cases, the selected item is already initialized
+        // in other observers such as `valueChanged`, `_itemsOrPathsChanged`.
+        const valueIndex = this._indexOfValue(this.value, this.filteredItems);
+        if (this.selectedItem === null && valueIndex >= 0) {
+          this._selectItemForValue(this.value);
         }
 
-        // see https://github.com/vaadin/web-components/issues/2615
-        if (this.selectedItem === null && this._focusedIndex >= 0) {
-          const filteredItem = this.filteredItems[this._focusedIndex];
-          if (this._getItemValue(filteredItem) === this.value) {
-            this._selectItemForValue(this.value);
-          }
+        if (this._inputElementValue === undefined || this._inputElementValue === this.value) {
+          // When the input element value is the same as the current value or not defined,
+          // set the focused index to the item that matches the value.
+          this._focusedIndex = this._indexOfValue(this.value, this.filteredItems);
+        } else {
+          // When the user filled in something that is different from the current value = filtering is enabled,
+          // set the focused index to the item that matches the filter query.
+          this._focusedIndex = this.$.dropdown.indexOfLabel(this.filter);
         }
       }
     }
@@ -1006,12 +1008,13 @@ export const ComboBoxMixin = (subclass) =>
       const valueIndex = this._indexOfValue(value, this.filteredItems);
       const previouslySelectedItem = this.selectedItem;
 
-      this.selectedItem =
-        valueIndex >= 0
-          ? this.filteredItems[valueIndex]
-          : this.dataProvider && this.selectedItem === undefined
-          ? undefined
-          : null;
+      if (valueIndex >= 0) {
+        this.selectedItem = this.filteredItems[valueIndex];
+      } else if (this.dataProvider && this.selectedItem === undefined) {
+        this.selectedItem = undefined;
+      } else {
+        this.selectedItem = null;
+      }
 
       if (this.selectedItem === null && previouslySelectedItem === null) {
         this._selectedItemChanged(this.selectedItem);
@@ -1035,15 +1038,17 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _indexOfValue(value, items) {
-      if (items && this._isValidValue(value)) {
-        for (let i = 0; i < items.length; i++) {
-          if (items[i] !== this.__placeHolder && this._getItemValue(items[i]) === value) {
-            return i;
-          }
-        }
+      if (!items || !this._isValidValue(value)) {
+        return -1;
       }
 
-      return -1;
+      return items.findIndex((item) => {
+        if (item instanceof ComboBoxPlaceholder) {
+          return false;
+        }
+
+        return this._getItemValue(item) === value;
+      });
     }
 
     /**
