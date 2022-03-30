@@ -13,38 +13,36 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const chip = css`
   :host {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    margin: var(--lumo-space-xs) 0 0;
-    padding-inline-start: var(--lumo-space-s);
-    border-radius: var(--lumo-border-radius);
+    font-family: var(--lumo-font-family);
+    font-size: var(--lumo-font-size-xxs);
+    line-height: 1;
+    padding: 0.4em calc(0.5em + var(--lumo-border-radius-s) / 4);
+    border-radius: var(--lumo-border-radius-s);
     background-color: var(--lumo-contrast-20pct);
     cursor: var(--lumo-clickable-cursor);
     white-space: nowrap;
-    height: calc(var(--lumo-size-m) - 2 * var(--lumo-space-xs));
     box-sizing: border-box;
     min-width: 0;
-    font-family: var(--lumo-font-family);
   }
 
   [part='label'] {
-    font-size: var(--lumo-font-size-s);
-    line-height: var(--lumo-line-height-m);
     color: var(--lumo-body-text-color);
     font-weight: 500;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   [part='remove-button'] {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--lumo-icon-size-m);
-    height: var(--lumo-icon-size-m);
-    min-width: var(--lumo-icon-size-m);
-    font-size: var(--lumo-icon-size-s);
+    width: 1em;
+    height: 1em;
+    min-width: var(--lumo-icon-size-s);
+    font-size: inherit;
   }
-
   [part='remove-button']::before {
     content: var(--lumo-icons-cross);
   }

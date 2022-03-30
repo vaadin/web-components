@@ -26,12 +26,15 @@ const multiSelectComboBox = css`
     color: transparent !important;
   }
 
+  /*
   :host([has-value]:not([readonly])) [class$='container'] {
     width: auto;
   }
+  */
 
   ::slotted(input) {
-    flex-basis: 80px;
+    width: 0;
+    min-width: 4em;
   }
 `;
 
@@ -497,6 +500,8 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
 
     // Suppress `value-changed` event.
     this.__clearFilter();
+
+    this.inputElement.scrollIntoView({ behavior: 'smooth' });
   }
 
   /** @private */

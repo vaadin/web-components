@@ -9,10 +9,24 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-multi-select-combo-box-container',
   css`
+    :host {
+      height: 36px;
+      overflow: hidden;
+    }
+
+    .outer {
+      display: block;
+      width: 100%;
+      height: calc(100% + 20px);
+      overflow-x: scroll;
+      overflow-y: hidden;
+      align-self: flex-start;
+    }
+
     [part='wrapper'] {
       display: flex;
-      flex-wrap: wrap;
-      width: 100%;
+      width: max-content;
+      align-items: center;
     }
   `,
   {
@@ -39,9 +53,13 @@ class MultiSelectComboBoxContainer extends InputContainer {
       const content = memoizedTemplate.content;
       const slots = content.querySelectorAll('slot');
 
+      const outer = document.createElement('div');
+      outer.classList.add('outer');
+      content.insertBefore(outer, slots[2]);
+
       const wrapper = document.createElement('div');
       wrapper.setAttribute('part', 'wrapper');
-      content.insertBefore(wrapper, slots[2]);
+      outer.appendChild(wrapper);
 
       wrapper.appendChild(slots[0]);
       wrapper.appendChild(slots[1]);
