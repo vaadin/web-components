@@ -7,15 +7,14 @@ import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { getAllItems, getFocusedItemIndex, makeItems, onceOpened, setInputValue } from './helpers.js';
 
 describe('internal filtering', () => {
-  let comboBox, overlay;
-
-  beforeEach(() => {
-    comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
-    comboBox.items = ['foo', 'bar', 'baz'];
-    overlay = comboBox.$.dropdown.$.overlay;
-  });
+  let comboBox;
 
   describe('setting the input field value', () => {
+    beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      comboBox.items = ['foo', 'bar', 'baz'];
+    });
+
     it('should open the popup if closed', () => {
       comboBox.close();
 
@@ -109,6 +108,11 @@ describe('internal filtering', () => {
   });
 
   describe('focusing items while filtering', () => {
+    beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      comboBox.items = ['foo', 'bar', 'baz'];
+    });
+
     it('should focus on an exact match', () => {
       setInputValue(comboBox, 'bar');
 
@@ -152,6 +156,14 @@ describe('internal filtering', () => {
   });
 
   describe('filtering items', () => {
+    let overlay;
+
+    beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
+      comboBox.items = ['foo', 'bar', 'baz'];
+      overlay = comboBox.$.dropdown.$.overlay;
+    });
+
     it('should filter items using contains', () => {
       setInputValue(comboBox, 'a');
 
@@ -238,15 +250,16 @@ describe('internal filtering', () => {
     });
   });
 
-  describe('setting items when opened', () => {
+  describe('setting filtered items when opened', () => {
     beforeEach(() => {
+      comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       comboBox.items = [];
-    });
-
-    it('should properly display all items in the selector', () => {
       comboBox.open();
       comboBox.filteredItems = makeItems(10);
       flush();
+    });
+
+    it('should properly display all items in the selector', () => {
       expect(getAllItems(comboBox).length).to.equal(10);
     });
   });
