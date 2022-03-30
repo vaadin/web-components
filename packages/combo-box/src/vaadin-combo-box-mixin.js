@@ -1047,11 +1047,7 @@ export const ComboBoxMixin = (subclass) =>
           return false;
         }
 
-        if (this._getItemValue(item) === value) {
-          return true;
-        }
-
-        return false;
+        return this._getItemValue(item) === value;
       });
     }
 
