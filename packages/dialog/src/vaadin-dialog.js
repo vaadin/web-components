@@ -248,6 +248,7 @@ export class DialogOverlay extends OverlayElement {
       headerTitleElement = document.createElement('span');
       headerTitleElement.id = 'title';
       headerTitleElement.setAttribute('slot', 'title');
+      headerTitleElement.classList.add('draggable');
       this.setAttribute('aria-labelledby', 'title');
       this.appendChild(headerTitleElement);
     }
