@@ -208,12 +208,6 @@ describe('external filtering', () => {
       expect(comboBox.value).to.equal('foo');
     });
 
-    it('should have no item focused when opened after clearing the filter', () => {
-      setInputValue(comboBox, '');
-      comboBox.open();
-      expect(getFocusedItemIndex(comboBox)).to.equal(-1);
-    });
-
     it('should commit the empty value', async () => {
       setInputValue(comboBox, '');
       enter(comboBox.inputElement);
