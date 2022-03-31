@@ -30,8 +30,8 @@ registerStyles(
       justify-content: flex-end;
     }
 
-    :host(:not([has-title])) header[part='header'],
-    :host(:not([has-header])) header[part='header'] {
+    :host(:not([has-title]):not([has-header])) header[part='header'],
+    :host(:not([has-title])) [part='title'] {
       display: none;
     }
 
