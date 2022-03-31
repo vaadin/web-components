@@ -25,6 +25,11 @@ export declare class TabindexMixinClass {
   tabindex: number | undefined | null;
 
   /**
+   * Stores the last known tabindex since the element has been disabled.
+   */
+  protected _lastTabIndex: number | undefined | null;
+
+  /**
    * When the user has changed tabindex while the element is disabled,
    * the observer reverts tabindex to -1 and rather saves the new tabindex value to apply it later.
    * The new value will be applied as soon as the element becomes enabled.

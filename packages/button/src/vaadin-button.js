@@ -50,6 +50,19 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
     return 'vaadin-button';
   }
 
+  static get properties() {
+    return {
+      /**
+       * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
+       *
+       * @protected
+       */
+      tabindex: {
+        value: 0
+      }
+    };
+  }
+
   static get template() {
     return html`
       <style>

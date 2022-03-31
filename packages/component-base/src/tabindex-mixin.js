@@ -22,11 +22,11 @@ export const TabindexMixin = (superclass) =>
       return {
         /**
          * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
+         *
          * @protected
          */
         tabindex: {
           type: Number,
-          value: 0,
           reflectToAttribute: true,
           observer: '_tabindexChanged'
         },
@@ -34,11 +34,10 @@ export const TabindexMixin = (superclass) =>
         /**
          * Stores the last known tabindex since the element has been disabled.
          *
-         * @private
+         * @protected
          */
-        __lastTabIndex: {
-          type: Number,
-          value: 0
+        _lastTabIndex: {
+          type: Number
         }
       };
     }
@@ -57,11 +56,11 @@ export const TabindexMixin = (superclass) =>
 
       if (disabled) {
         if (this.tabindex !== undefined) {
-          this.__lastTabIndex = this.tabindex;
+          this._lastTabIndex = this.tabindex;
         }
         this.tabindex = -1;
       } else if (oldDisabled) {
-        this.tabindex = this.__lastTabIndex;
+        this.tabindex = this._lastTabIndex;
       }
     }
 
@@ -74,7 +73,7 @@ export const TabindexMixin = (superclass) =>
      */
     _tabindexChanged(tabindex) {
       if (this.disabled && tabindex !== -1) {
-        this.__lastTabIndex = tabindex;
+        this._lastTabIndex = tabindex;
         this.tabindex = -1;
       }
     }

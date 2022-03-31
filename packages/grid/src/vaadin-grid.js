@@ -340,11 +340,6 @@ class Grid extends ElementMixin(
         value: isTouch
       },
 
-      /** @protected */
-      tabindex: {
-        value: undefined
-      },
-
       /**
        * If true, the grid's height is defined by its rows.
        *
