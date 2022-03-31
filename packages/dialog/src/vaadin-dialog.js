@@ -272,6 +272,15 @@ export class DialogOverlay extends OverlayElement {
   requestContentUpdate() {
     super.requestContentUpdate();
 
+    // If a new renderer has been set, make sure to reattach the header/footer roots
+    if (this.headerContainer && !this.headerContainer.parentElement) {
+      this.appendChild(this.headerContainer);
+    }
+
+    if (this.footerContainer && !this.footerContainer.parentElement) {
+      this.appendChild(this.footerContainer);
+    }
+
     if (this.headerRenderer) {
       this.headerRenderer.call(this.owner, this.headerContainer);
     }
