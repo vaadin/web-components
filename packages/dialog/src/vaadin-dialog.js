@@ -98,7 +98,7 @@ export class DialogOverlay extends OverlayElement {
       resizerContainer.appendChild(contentPart);
       overlayPart.appendChild(resizerContainer);
 
-      const headerContainer = document.createElement('div');
+      const headerContainer = document.createElement('header');
       headerContainer.setAttribute('part', 'header');
       resizerContainer.insertBefore(headerContainer, contentPart);
 
@@ -118,7 +118,7 @@ export class DialogOverlay extends OverlayElement {
       headerSlot.setAttribute('name', 'header');
       headerContentContainer.appendChild(headerSlot);
 
-      const footerContainer = document.createElement('div');
+      const footerContainer = document.createElement('footer');
       footerContainer.setAttribute('part', 'footer');
       resizerContainer.appendChild(footerContainer);
 
