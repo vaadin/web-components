@@ -233,6 +233,12 @@ describe('delegate-focus-mixin', () => {
         expect(input.getAttribute('tabindex')).to.equal('-1');
       });
 
+      it('should remove tabindex when host element is re-enabled', () => {
+        element.disabled = true;
+        element.disabled = false;
+        expect(element.hasAttribute('tabindex')).to.be.false;
+      });
+
       it('should restore input tabindex when host element is re-enabled', () => {
         element.disabled = true;
         element.disabled = false;
