@@ -15,7 +15,8 @@ import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
 registerStyles(
   'vaadin-dialog-overlay',
   css`
-    [part='header'] {
+    /* prefixing with the element tag to avoid styling confirm-dialog header part */
+    header[part='header'] {
       display: flex;
     }
 
@@ -23,9 +24,19 @@ registerStyles(
       flex: 1;
     }
 
-    [part='footer'] {
+    /* prefixing with the element tag to avoid styling confirm-dialog footer part */
+    footer[part='footer'] {
       display: flex;
       justify-content: flex-end;
+    }
+
+    :host(:not([has-title])) header[part='header'],
+    :host(:not([has-header])) header[part='header'] {
+      display: none;
+    }
+
+    :host(:not([has-footer])) footer[part='footer'] {
+      display: none;
     }
 
     :host([has-title]) [part='content'],
@@ -115,7 +126,7 @@ export class DialogOverlay extends OverlayElement {
       headerContainer.appendChild(headerContentContainer);
 
       const headerSlot = document.createElement('slot');
-      headerSlot.setAttribute('name', 'header');
+      headerSlot.setAttribute('name', 'header-content');
       headerContentContainer.appendChild(headerSlot);
 
       const footerContainer = document.createElement('footer');
@@ -163,7 +174,7 @@ export class DialogOverlay extends OverlayElement {
     if (headerRendererChanged) {
       if (!this.headerContainer && this.headerRenderer) {
         this.headerContainer = document.createElement('header');
-        this.headerContainer.setAttribute('slot', 'header');
+        this.headerContainer.setAttribute('slot', 'header-content');
         this.appendChild(this.headerContainer);
       } else if (this.headerRenderer) {
         this.headerContainer.innerHTML = '';
