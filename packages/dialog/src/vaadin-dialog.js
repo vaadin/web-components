@@ -142,7 +142,7 @@ export class DialogOverlay extends OverlayElement {
 
   static get observers() {
     return [
-      '_headerRendererChange(headerRenderer, footerRenderer, opened)',
+      '_headerFooterRendererChange(headerRenderer, footerRenderer, opened)',
       '_headerTitleChanged(headerTitle, opened)'
     ];
   }
@@ -161,21 +161,21 @@ export class DialogOverlay extends OverlayElement {
     };
   }
 
-  _headerRendererChange(headerRenderer, footerRenderer, opened) {
+  _headerFooterRendererChange(headerRenderer, footerRenderer, opened) {
     const headerRendererChanged = this.__oldHeaderRenderer !== headerRenderer;
     this.__oldHeaderRenderer = headerRenderer;
 
     const footerRendererChanged = this.__oldFooterRenderer !== footerRenderer;
     this.__oldFooterRenderer = footerRenderer;
 
-    const openedChanged = this._oldOpened !== opened;
-    this._oldOpened = opened;
+    const openedChanged = this._oldOpenedFooterHeader !== opened;
+    this._oldOpenedFooterHeader = opened;
 
     if (headerRendererChanged) {
       if (!this.headerContainer && this.headerRenderer) {
+        // Create the container, but wait to append it when requestContentUpdate is called
         this.headerContainer = document.createElement('header');
         this.headerContainer.setAttribute('slot', 'header-content');
-        this.appendChild(this.headerContainer);
       } else if (this.headerRenderer) {
         this.headerContainer.innerHTML = '';
         // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
@@ -184,14 +184,15 @@ export class DialogOverlay extends OverlayElement {
         delete this.headerContainer._$litPart$;
       } else if (this.headerContainer && !this.headerRenderer) {
         this.headerContainer.remove();
+        this.headerContainer = null;
       }
     }
 
     if (footerRendererChanged) {
       if (!this.footerContainer && this.footerRenderer) {
+        // Create the container, but wait to append it when requestContentUpdate is called
         this.footerContainer = document.createElement('footer');
         this.footerContainer.setAttribute('slot', 'footer');
-        this.appendChild(this.footerContainer);
       } else if (this.footerRenderer) {
         this.footerContainer.innerHTML = '';
         // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
@@ -200,6 +201,7 @@ export class DialogOverlay extends OverlayElement {
         delete this.footerContainer._$litPart$;
       } else if (this.footerContainer && !this.footerRenderer) {
         this.footerContainer.remove();
+        this.footerContainer = null;
       }
     }
 
@@ -235,8 +237,8 @@ export class DialogOverlay extends OverlayElement {
     const headerTitleChanged = this._oldHeaderTitle !== headerTitle;
     this._oldHeaderTitle = headerTitle;
 
-    const openedChanged = this._oldOpened !== opened;
-    this._oldOpened = opened;
+    const openedChanged = this._oldOpenedTitle !== opened;
+    this._oldOpenedTitle = opened;
 
     if (headerTitleChanged || openedChanged) {
       if (this.opened) {
@@ -255,31 +257,21 @@ export class DialogOverlay extends OverlayElement {
   }
 
   _headerTitleRenderer() {
-    const headerTitleElement = this.getHeaderTitleElement();
     if (this.headerTitle) {
-      headerTitleElement.textContent = this.headerTitle;
-    } else {
-      headerTitleElement.remove();
+      if (!this.headerTitleElement) {
+        this.headerTitleElement = document.createElement('span');
+        this.headerTitleElement.id = 'title';
+        this.headerTitleElement.setAttribute('slot', 'title');
+        this.headerTitleElement.classList.add('draggable');
+
+        this.setAttribute('aria-labelledby', 'title');
+        this.appendChild(this.headerTitleElement);
+      }
+      this.headerTitleElement.textContent = this.headerTitle;
+    } else if (this.headerTitleElement) {
+      this.headerTitleElement.remove();
+      this.headerTitleElement = null;
     }
-  }
-
-  /**
-   *
-   * @returns HTMLElement header title element
-   */
-  getHeaderTitleElement() {
-    let headerTitleElement = this.querySelector('[slot=title]');
-
-    if (!headerTitleElement) {
-      headerTitleElement = document.createElement('span');
-      headerTitleElement.id = 'title';
-      headerTitleElement.setAttribute('slot', 'title');
-      headerTitleElement.classList.add('draggable');
-      this.setAttribute('aria-labelledby', 'title');
-      this.appendChild(headerTitleElement);
-    }
-
-    return headerTitleElement;
   }
 
   requestContentUpdate() {
