@@ -48,13 +48,17 @@ export const DelegateFocusMixin = dedupingMixin(
            * By default, the host element does not have tabindex attribute. Instead, `focusElement` should have it.
            * Toggling `tabindex` attribute on the host element propagates its value to `focusElement`.
            *
+           * @override
            * @protected
            */
           tabindex: {
             type: Number
           },
 
-          /** @private */
+          /**
+           * @protected
+           * @override
+           */
           _lastTabIndex: {
             value: 0
           }
