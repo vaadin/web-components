@@ -33,12 +33,12 @@ const dialogOverlay = css`
 
   :host([has-header]) [part='header'],
   :host([has-title]) [part='header'] {
-    padding: var(--lumo-space-m);
+    padding: var(--lumo-space-m) var(--lumo-space-l);
     border-bottom: 1px solid var(--lumo-contrast-10pct);
   }
 
   :host([has-footer]) [part='footer'] {
-    padding: var(--lumo-space-m);
+    padding: var(--lumo-space-s) var(--lumo-space-m);
     border-top: 1px solid var(--lumo-contrast-10pct);
   }
 
