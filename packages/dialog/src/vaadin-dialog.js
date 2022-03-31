@@ -30,7 +30,9 @@ registerStyles(
       justify-content: flex-end;
     }
 
-    [part='content'] {
+    :host([has-title]) [part='content'],
+    :host([has-header]) [part='content'],
+    :host([has-footer]) [part='content'] {
       min-height: 100%;
       height: auto;
     }
@@ -51,7 +53,9 @@ registerStyles(
         overflow: auto;
       }
 
-      [part='content'] {
+      :host([has-title]) [part='content'],
+      :host([has-header]) [part='content'],
+      :host([has-footer]) [part='content'] {
         min-height: auto;
         height: 100%;
       }
