@@ -44,7 +44,9 @@ describe('disabled', () => {
 
   it('should remove tabindex from the host when re-enabled', () => {
     grid.disabled = true;
+
     grid.disabled = false;
+
     expect(grid.hasAttribute('tabindex')).to.be.false;
   });
 
