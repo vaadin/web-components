@@ -137,6 +137,31 @@ declare class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixi
   renderer: DialogRenderer | null | undefined;
 
   /**
+   * String used for rendering a dialog title.
+   * @attr {string} header-title
+   */
+  headerTitle: string | null | undefined;
+
+  /**
+   * Custom function for rendering the dialog header.
+   * Receives two arguments:
+   *
+   * - `root` The root container DOM element. Append your content to it.
+   * - `dialog` The reference to the `<vaadin-dialog>` element.
+   */
+  headerRenderer: DialogRenderer | null | undefined;
+
+  /**
+   * Custom function for rendering the dialog footer.
+   * Receives two arguments:
+   *
+   * - `root` The root container DOM element. Append your content to it.
+   * - `dialog` The reference to the `<vaadin-dialog>` element.
+   * @type {DialogRenderer | undefined}
+   */
+  footerRenderer: DialogRenderer | null | undefined;
+
+  /**
    * Set to true to remove backdrop and allow click events on background elements.
    */
   modeless: boolean;

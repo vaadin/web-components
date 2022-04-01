@@ -481,10 +481,30 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
        */
       renderer: Function,
 
+      /**
+       * String used for rendering a dialog title.
+       * @attr {string} header-title
+       */
       headerTitle: String,
 
+      /**
+       * Custom function for rendering the dialog header.
+       * Receives two arguments:
+       *
+       * - `root` The root container DOM element. Append your content to it.
+       * - `dialog` The reference to the `<vaadin-dialog>` element.
+       * @type {DialogRenderer | undefined}
+       */
       headerRenderer: Function,
 
+      /**
+       * Custom function for rendering the dialog footer.
+       * Receives two arguments:
+       *
+       * - `root` The root container DOM element. Append your content to it.
+       * - `dialog` The reference to the `<vaadin-dialog>` element.
+       * @type {DialogRenderer | undefined}
+       */
       footerRenderer: Function,
 
       /**
