@@ -174,6 +174,18 @@ export class DialogOverlay extends OverlayElement {
   }
 
   /** @private */
+  __initContainer(container, slot) {
+    if (container) {
+      // Reset existing container in case if a new renderer is set.
+      this.__clearContainer(container);
+    } else {
+      // Create the container, but wait to append it until requestContentUpdate is called.
+      container = this.__createContainer(slot);
+    }
+    return container;
+  }
+
+  /** @private */
   _headerFooterRendererChange(headerRenderer, footerRenderer, opened) {
     const headerRendererChanged = this.__oldHeaderRenderer !== headerRenderer;
     this.__oldHeaderRenderer = headerRenderer;
@@ -186,7 +198,7 @@ export class DialogOverlay extends OverlayElement {
 
     if (headerRendererChanged) {
       if (headerRenderer) {
-        this.headerContainer = this.prepareContainerForRenderer(this.headerContainer, 'header-content');
+        this.headerContainer = this.__initContainer(this.headerContainer, 'header-content');
       } else if (this.headerContainer) {
         this.headerContainer.remove();
         this.headerContainer = null;
@@ -195,7 +207,7 @@ export class DialogOverlay extends OverlayElement {
 
     if (footerRendererChanged) {
       if (footerRenderer) {
-        this.footerContainer = this.prepareContainerForRenderer(this.footerContainer, 'footer');
+        this.footerContainer = this.__initContainer(this.footerContainer, 'footer');
       } else if (this.footerContainer) {
         this.footerContainer.remove();
         this.footerContainer = null;
@@ -213,17 +225,6 @@ export class DialogOverlay extends OverlayElement {
 
     this.toggleAttribute('has-header', !!headerRenderer);
     this.toggleAttribute('has-footer', !!footerRenderer);
-  }
-
-  prepareContainerForRenderer(container, slot) {
-    if (container) {
-      // Reset existing container in case if a new renderer is set.
-      this.__clearContainer(container);
-    } else {
-      // Create the container, but wait to append it until requestContentUpdate is called.
-      container = this.__createContainer(slot);
-    }
-    return container;
   }
 
   /** @private */
