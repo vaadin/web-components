@@ -3,22 +3,9 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/text-area/vaadin-text-area.js';
+import './not-animated-styles.js';
 import '../src/vaadin-dialog.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-registerStyles(
-  'vaadin-dialog-overlay',
-  css`
-    :host([opening]),
-    :host([closing]),
-    :host([opening]) [part='overlay'],
-    :host([closing]) [part='overlay'] {
-      animation: none !important;
-    }
-  `,
-  { moduleId: 'not-animated-dialog-overlay' }
-);
 
 customElements.define(
   'internally-draggable',
