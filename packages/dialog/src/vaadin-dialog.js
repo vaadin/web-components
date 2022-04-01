@@ -234,17 +234,12 @@ export class DialogOverlay extends OverlayElement {
   }
 
   _headerTitleChanged(headerTitle, opened) {
-    const headerTitleChanged = this._oldHeaderTitle !== headerTitle;
-    this._oldHeaderTitle = headerTitle;
-
-    const openedChanged = this._oldOpenedTitle !== opened;
-    this._oldOpenedTitle = opened;
-
-    if (headerTitleChanged || openedChanged) {
-      if (this.opened) {
+    if (headerTitle || this._oldHeaderTitle) {
+      if (opened) {
         this.requestContentUpdate();
       }
     }
+    this._oldHeaderTitle = headerTitle;
     this._toggleHasTitleAttribute();
   }
 
@@ -287,11 +282,11 @@ export class DialogOverlay extends OverlayElement {
     }
 
     if (this.headerRenderer) {
-      this.headerRenderer.call(this.owner, this.headerContainer);
+      this.headerRenderer.call(this.owner, this.headerContainer, this.owner);
     }
 
     if (this.footerRenderer) {
-      this.footerRenderer.call(this.owner, this.footerContainer);
+      this.footerRenderer.call(this.owner, this.footerContainer, this.owner);
     }
 
     this._headerTitleRenderer();
@@ -483,12 +478,25 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
 
       /**
        * String used for rendering a dialog title.
+
+       * If both `headerTitle` and `headerRenderer` are defined, the title
+       * and the elements created by the renderer will be placed next to
+       * each other, with the title coming first.
+       *
+       * When `headerTitle` is set, the attribute `has-title` is added to the overlay element.
        * @attr {string} header-title
        */
       headerTitle: String,
 
       /**
        * Custom function for rendering the dialog header.
+       *
+       * If both `headerTitle` and `headerRenderer` are defined, the title
+       * and the elements created by the renderer will be placed next to
+       * each other, with the title coming first.
+       *
+       * When `headerRenderer` is set, the attribute `has-header` is added to the overlay element.
+       *
        * Receives two arguments:
        *
        * - `root` The root container DOM element. Append your content to it.
@@ -499,6 +507,9 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
 
       /**
        * Custom function for rendering the dialog footer.
+       *
+       * When `footerRenderer` is set, the attribute `has-footer` is added to the overlay element.
+       *
        * Receives two arguments:
        *
        * - `root` The root container DOM element. Append your content to it.
