@@ -1,18 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-dialog.js';
-
-function createRenderer(text) {
-  return (root) => {
-    if (root.firstChild) {
-      return;
-    }
-
-    const span = document.createElement('span');
-    span.textContent = text;
-    root.appendChild(span);
-  };
-}
+import { createRenderer } from './helpers.js';
 
 describe('header/footer feature', () => {
   let dialog, overlay;
