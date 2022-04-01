@@ -39,32 +39,21 @@ registerStyles(
       display: none;
     }
 
-    :host([has-title]) [part='content'],
-    :host([has-header]) [part='content'],
-    :host([has-footer]) [part='content'] {
+    :host(:is([has-title], [has-header], [has-footer])) [part='content'] {
       min-height: 100%;
       height: auto;
     }
 
     @media (min-height: 320px) {
-      :host([has-title]) .resizer-container,
-      :host([has-header]) .resizer-container,
-      :host([has-footer]) .resizer-container {
+      :host(:is([has-title], [has-header], [has-footer])) .resizer-container {
         overflow: hidden;
         display: flex;
         flex-direction: column;
       }
 
-      :host([has-title]) [part='content'],
-      :host([has-header]) [part='content'],
-      :host([has-footer]) [part='content'] {
+      :host(:is([has-title], [has-header], [has-footer])) [part='content'] {
         flex: 1;
         overflow: auto;
-      }
-
-      :host([has-title]) [part='content'],
-      :host([has-header]) [part='content'],
-      :host([has-footer]) [part='content'] {
         min-height: auto;
         height: 100%;
       }
