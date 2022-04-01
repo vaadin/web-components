@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/icons",
-  "version": "22.0.10",
+  "version": "22.0.11",
   "publishConfig": {
     "access": "public"
   },
@@ -37,7 +37,7 @@
     "@polymer/iron-icon": "^3.0.0",
     "@polymer/iron-iconset-svg": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/icon": "^22.0.10"
+    "@vaadin/icon": "^22.0.11"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.10",

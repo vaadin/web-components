@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/date-picker",
-  "version": "22.0.10",
+  "version": "22.0.11",
   "publishConfig": {
     "access": "public"
   },
@@ -35,19 +35,19 @@
     "@polymer/iron-a11y-announcer": "^3.0.0",
     "@polymer/iron-media-query": "^3.0.0",
     "@polymer/polymer": "^3.2.0",
-    "@vaadin/button": "^22.0.10",
-    "@vaadin/component-base": "^22.0.10",
-    "@vaadin/field-base": "^22.0.10",
-    "@vaadin/input-container": "^22.0.10",
-    "@vaadin/vaadin-lumo-styles": "^22.0.10",
-    "@vaadin/vaadin-material-styles": "^22.0.10",
-    "@vaadin/vaadin-overlay": "^22.0.10",
-    "@vaadin/vaadin-themable-mixin": "^22.0.10"
+    "@vaadin/button": "^22.0.11",
+    "@vaadin/component-base": "^22.0.11",
+    "@vaadin/field-base": "^22.0.11",
+    "@vaadin/input-container": "^22.0.11",
+    "@vaadin/vaadin-lumo-styles": "^22.0.11",
+    "@vaadin/vaadin-material-styles": "^22.0.11",
+    "@vaadin/vaadin-overlay": "^22.0.11",
+    "@vaadin/vaadin-themable-mixin": "^22.0.11"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/dialog": "^22.0.10",
-    "@vaadin/polymer-legacy-adapter": "^22.0.10",
+    "@vaadin/dialog": "^22.0.11",
+    "@vaadin/polymer-legacy-adapter": "^22.0.11",
     "@vaadin/testing-helpers": "^0.3.2",
     "sinon": "^9.2.0"
   }

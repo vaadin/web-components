@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-messages",
-  "version": "22.0.10",
+  "version": "22.0.11",
   "publishConfig": {
     "access": "public"
   },
@@ -36,8 +36,8 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/message-input": "^22.0.10",
-    "@vaadin/message-list": "^22.0.10"
+    "@vaadin/message-input": "^22.0.11",
+    "@vaadin/message-list": "^22.0.11"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
