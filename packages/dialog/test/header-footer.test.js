@@ -2,6 +2,18 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../vaadin-dialog.js';
 
+function createRenderer(text) {
+  return (root) => {
+    if (root.firstChild) {
+      return;
+    }
+
+    const span = document.createElement('span');
+    span.textContent = text;
+    root.appendChild(span);
+  };
+}
+
 describe('header/footer feature', () => {
   let dialog, overlay;
 
@@ -85,15 +97,7 @@ describe('header/footer feature', () => {
 
   describe('vaadin-dialog headerRenderer', () => {
     const HEADER_CONTENT = '__HEADER_CONTENT__';
-    const headerRenderer = (root) => {
-      if (root.firstChild) {
-        return;
-      }
-
-      const span = document.createElement('span');
-      span.textContent = HEADER_CONTENT;
-      root.appendChild(span);
-    };
+    const headerRenderer = createRenderer(HEADER_CONTENT);
 
     it('should not have header[slot=header-content] if headerRenderer is not set', () => {
       dialog.opened = true;
@@ -122,17 +126,10 @@ describe('header/footer feature', () => {
       dialog.headerRenderer = headerRenderer;
       dialog.opened = true;
 
-      dialog.headerRenderer = (root) => {
-        if (root.firstChild) {
-          return;
-        }
+      const NEW_HEADER_CONTENT = '__NEW_HEADER_CONTENT__';
+      dialog.headerRenderer = createRenderer(NEW_HEADER_CONTENT);
 
-        const span = document.createElement('span');
-        span.textContent = '__LOREM_IPSUM__';
-        root.appendChild(span);
-      };
-
-      expect(overlay.textContent).to.include('__LOREM_IPSUM__');
+      expect(overlay.textContent).to.include(NEW_HEADER_CONTENT);
       expect(overlay.textContent).to.not.include(HEADER_CONTENT);
     });
 
@@ -173,15 +170,7 @@ describe('header/footer feature', () => {
 
   describe('vaadin-dialog footerRenderer', () => {
     const FOOTER_CONTENT = '__FOOTER_CONTENT__';
-    const footerRenderer = (root) => {
-      if (root.firstChild) {
-        return;
-      }
-
-      const span = document.createElement('span');
-      span.textContent = FOOTER_CONTENT;
-      root.appendChild(span);
-    };
+    const footerRenderer = createRenderer(FOOTER_CONTENT);
 
     it('should not have footer[slot=footer] if footerRenderer is not set', () => {
       dialog.opened = true;
@@ -209,18 +198,11 @@ describe('header/footer feature', () => {
     it('should render new content if another footerRenderer is set', () => {
       dialog.footerRenderer = footerRenderer;
       dialog.opened = true;
+      const NEW_FOOTER_CONTENT = '__NEW_FOOTER_CONTENT__';
 
-      dialog.footerRenderer = (root) => {
-        if (root.firstChild) {
-          return;
-        }
+      dialog.footerRenderer = createRenderer(NEW_FOOTER_CONTENT);
 
-        const span = document.createElement('span');
-        span.textContent = 'LOREM_IPSUM';
-        root.appendChild(span);
-      };
-
-      expect(overlay.textContent).to.include('LOREM_IPSUM');
+      expect(overlay.textContent).to.include(NEW_FOOTER_CONTENT);
       expect(overlay.textContent).to.not.include(FOOTER_CONTENT);
     });
 
@@ -261,37 +243,13 @@ describe('header/footer feature', () => {
 
   describe('header/footer renderer with default renderer', () => {
     const HEADER_CONTENT = '__HEADER_CONTENT__';
-    const headerRenderer = (root) => {
-      if (root.firstChild) {
-        return;
-      }
-
-      const span = document.createElement('span');
-      span.textContent = HEADER_CONTENT;
-      root.appendChild(span);
-    };
+    const headerRenderer = createRenderer(HEADER_CONTENT);
 
     const FOOTER_CONTENT = '__FOOTER_CONTENT__';
-    const footerRenderer = (root) => {
-      if (root.firstChild) {
-        return;
-      }
-
-      const span = document.createElement('span');
-      span.textContent = FOOTER_CONTENT;
-      root.appendChild(span);
-    };
+    const footerRenderer = createRenderer(FOOTER_CONTENT);
 
     const BODY_CONTENT = '__BODY_CONTENT__';
-    const renderer = (root) => {
-      if (root.firstChild) {
-        return;
-      }
-
-      const span = document.createElement('span');
-      span.textContent = BODY_CONTENT;
-      root.appendChild(span);
-    };
+    const renderer = createRenderer(BODY_CONTENT);
 
     it('header and footer renderer should work with default renderer', () => {
       dialog.renderer = renderer;
@@ -311,14 +269,7 @@ describe('header/footer feature', () => {
       dialog.opened = true;
 
       const NEW_BODY_CONTENT = '__NEW_BODY_CONTENT__';
-      dialog.renderer = (root) => {
-        if (root.firstChild) {
-          return;
-        }
-        const span = document.createElement('span');
-        span.textContent = NEW_BODY_CONTENT;
-        root.appendChild(span);
-      };
+      dialog.renderer = createRenderer(NEW_BODY_CONTENT);
 
       expect(overlay.textContent).to.include(HEADER_CONTENT);
 
@@ -335,24 +286,10 @@ describe('header/footer feature', () => {
       dialog.opened = true;
 
       const NEW_HEADER_CONTENT = '__NEW_HEADER_CONTENT__';
-      dialog.headerRenderer = (root) => {
-        if (root.firstChild) {
-          return;
-        }
-        const span = document.createElement('span');
-        span.textContent = NEW_HEADER_CONTENT;
-        root.appendChild(span);
-      };
+      dialog.headerRenderer = createRenderer(NEW_HEADER_CONTENT);
 
       const NEW_FOOTER_CONTENT = '__NEW_FOOTER_CONTENT__';
-      dialog.footerRenderer = (root) => {
-        if (root.firstChild) {
-          return;
-        }
-        const span = document.createElement('span');
-        span.textContent = NEW_FOOTER_CONTENT;
-        root.appendChild(span);
-      };
+      dialog.footerRenderer = createRenderer(NEW_FOOTER_CONTENT);
 
       expect(overlay.textContent).to.not.include(HEADER_CONTENT);
       expect(overlay.textContent).to.include(NEW_HEADER_CONTENT);
@@ -366,15 +303,7 @@ describe('header/footer feature', () => {
 
   describe('header-title with headerRenderer', () => {
     const HEADER_CONTENT = '__HEADER_CONTENT__';
-    const headerRenderer = (root) => {
-      if (root.firstChild) {
-        return;
-      }
-
-      const span = document.createElement('span');
-      span.textContent = HEADER_CONTENT;
-      root.appendChild(span);
-    };
+    const headerRenderer = createRenderer(HEADER_CONTENT);
     const HEADER_TITLE = '__HEADER_TITLE__';
 
     it('should have both header-title and headerRenderer rendered', () => {
