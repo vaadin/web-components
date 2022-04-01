@@ -173,6 +173,7 @@ export class DialogOverlay extends OverlayElement {
     delete container._$litPart$;
   }
 
+  /** @private */
   _headerFooterRendererChange(headerRenderer, footerRenderer, opened) {
     const headerRendererChanged = this.__oldHeaderRenderer !== headerRenderer;
     this.__oldHeaderRenderer = headerRenderer;
@@ -226,6 +227,7 @@ export class DialogOverlay extends OverlayElement {
     this.toggleAttribute('has-footer', !!footerRenderer);
   }
 
+  /** @private */
   _headerTitleChanged(headerTitle, opened) {
     if (opened && (headerTitle || this._oldHeaderTitle)) {
       this.requestContentUpdate();
@@ -234,6 +236,7 @@ export class DialogOverlay extends OverlayElement {
     this.toggleAttribute('has-title', !!headerTitle);
   }
 
+  /** @private */
   _headerTitleRenderer() {
     if (this.headerTitle) {
       if (!this.headerTitleElement) {
