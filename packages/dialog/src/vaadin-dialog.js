@@ -150,6 +150,13 @@ export class DialogOverlay extends OverlayElement {
     };
   }
 
+  ready() {
+    super.ready();
+
+    const uniqueId = (DialogOverlay._uniqueId = 1 + DialogOverlay._uniqueId || 0);
+    this._titleId = `${this.constructor.is}-title-${uniqueId}`;
+  }
+
   _headerFooterRendererChange(headerRenderer, footerRenderer, opened) {
     const headerRendererChanged = this.__oldHeaderRenderer !== headerRenderer;
     this.__oldHeaderRenderer = headerRenderer;
@@ -163,7 +170,7 @@ export class DialogOverlay extends OverlayElement {
     if (headerRendererChanged) {
       if (!this.headerContainer && this.headerRenderer) {
         // Create the container, but wait to append it when requestContentUpdate is called
-        this.headerContainer = document.createElement('header');
+        this.headerContainer = document.createElement('div');
         this.headerContainer.setAttribute('slot', 'header-content');
       } else if (this.headerRenderer) {
         this.headerContainer.innerHTML = '';
@@ -180,7 +187,7 @@ export class DialogOverlay extends OverlayElement {
     if (footerRendererChanged) {
       if (!this.footerContainer && this.footerRenderer) {
         // Create the container, but wait to append it when requestContentUpdate is called
-        this.footerContainer = document.createElement('footer');
+        this.footerContainer = document.createElement('div');
         this.footerContainer.setAttribute('slot', 'footer');
       } else if (this.footerRenderer) {
         this.footerContainer.innerHTML = '';
@@ -215,10 +222,8 @@ export class DialogOverlay extends OverlayElement {
   }
 
   _headerTitleChanged(headerTitle, opened) {
-    if (headerTitle || this._oldHeaderTitle) {
-      if (opened) {
-        this.requestContentUpdate();
-      }
+    if (opened && (headerTitle || this._oldHeaderTitle)) {
+      this.requestContentUpdate();
     }
     this._oldHeaderTitle = headerTitle;
     this._toggleHasTitleAttribute();
@@ -232,17 +237,18 @@ export class DialogOverlay extends OverlayElement {
     if (this.headerTitle) {
       if (!this.headerTitleElement) {
         this.headerTitleElement = document.createElement('span');
-        this.headerTitleElement.id = 'title';
+        this.headerTitleElement.id = this._titleId;
         this.headerTitleElement.setAttribute('slot', 'title');
         this.headerTitleElement.classList.add('draggable');
 
-        this.setAttribute('aria-labelledby', 'title');
-        this.appendChild(this.headerTitleElement);
+        this.setAttribute('aria-labelledby', this._titleId);
       }
+      this.appendChild(this.headerTitleElement);
       this.headerTitleElement.textContent = this.headerTitle;
     } else if (this.headerTitleElement) {
       this.headerTitleElement.remove();
       this.headerTitleElement = null;
+      this.removeAttribute('aria-labelledby');
     }
   }
 
@@ -385,6 +391,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
 
       <vaadin-dialog-overlay
         id="overlay"
+        header-title="[[headerTitle]]"
         on-opened-changed="_onOverlayOpened"
         on-mousedown="_bringOverlayToFront"
         on-touchstart="_bringOverlayToFront"
@@ -508,8 +515,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
     return [
       '_openedChanged(opened)',
       '_ariaLabelChanged(ariaLabel)',
-      '_rendererChanged(renderer, headerRenderer, footerRenderer)',
-      '_headerTitleChanged(headerTitle)'
+      '_rendererChanged(renderer, headerRenderer, footerRenderer)'
     ];
   }
 
@@ -536,10 +542,6 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
   /** @private */
   _rendererChanged(renderer, headerRenderer, footerRenderer) {
     this.$.overlay.setProperties({ owner: this, renderer, headerRenderer, footerRenderer });
-  }
-
-  _headerTitleChanged(headerTitle) {
-    this.$.overlay.setProperties({ headerTitle });
   }
 
   /** @protected */

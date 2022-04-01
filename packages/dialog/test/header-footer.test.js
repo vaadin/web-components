@@ -28,7 +28,7 @@ describe('header/footer feature', () => {
       dialog.headerTitle = HEADER_TITLE;
       dialog.opened = true;
 
-      expect(overlay.querySelector('#title')).to.exist;
+      expect(overlay.querySelector('[slot=title]')).to.exist;
       expect(overlay.textContent).to.include(HEADER_TITLE);
     });
 
@@ -37,7 +37,7 @@ describe('header/footer feature', () => {
       dialog.opened = true;
 
       dialog.headerTitle = null;
-      expect(overlay.querySelector('#title')).to.not.exist;
+      expect(overlay.querySelector('[slot=title]')).to.not.exist;
     });
 
     it('should remove title element if header-title is set to empty string', () => {
@@ -45,7 +45,7 @@ describe('header/footer feature', () => {
       dialog.opened = true;
 
       dialog.headerTitle = '';
-      expect(overlay.querySelector('#title')).to.not.exist;
+      expect(overlay.querySelector('[slot=title]')).to.not.exist;
     });
 
     it('should not have [has-title] attribute on overlay element if header-title is not set', () => {
@@ -82,6 +82,39 @@ describe('header/footer feature', () => {
 
       expect(getComputedStyle(overlay.shadowRoot.querySelector('[part=header]')).display).to.not.be.equal('none');
     });
+
+    describe('accessibility', () => {
+      it('should add arial-labelledby to overlay if header-title is set', () => {
+        expect(overlay.hasAttribute('aria-labelledby')).to.be.false;
+
+        dialog.headerTitle = HEADER_TITLE;
+        dialog.opened = true;
+
+        expect(overlay.hasAttribute('aria-labelledby')).to.be.true;
+        const title = overlay.querySelector('[slot=title]');
+        expect(overlay.getAttribute('aria-labelledby')).to.equal(title.id);
+      });
+
+      it('should remove aria-labelledby if header-title is unset', () => {
+        dialog.headerTitle = HEADER_TITLE;
+        dialog.opened = true;
+
+        dialog.headerTitle = null;
+        expect(overlay.hasAttribute('aria-labelledby')).to.be.false;
+      });
+
+      it('two dialogs should not have the same `aria-labelledby` value', () => {
+        const anotherDialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
+        const anotherOverlay = anotherDialog.$.overlay;
+        anotherDialog.headerTitle = HEADER_TITLE;
+        anotherDialog.opened = true;
+
+        dialog.headerTitle = HEADER_TITLE;
+        dialog.opened = true;
+
+        expect(anotherOverlay.getAttribute('aria-labelledby')).to.be.not.equal(overlay.getAttribute('aria-labelledby'));
+      });
+    });
   });
 
   describe('vaadin-dialog headerRenderer', () => {
@@ -98,7 +131,7 @@ describe('header/footer feature', () => {
       dialog.opened = true;
 
       expect(overlay.textContent).to.include(HEADER_CONTENT);
-      expect(overlay.querySelector('header[slot=header-content]')).to.exist;
+      expect(overlay.querySelector('div[slot=header-content]')).to.exist;
     });
 
     it('should remove header element if headerRenderer is removed', () => {
@@ -108,7 +141,7 @@ describe('header/footer feature', () => {
       dialog.headerRenderer = null;
 
       expect(overlay.textContent).to.not.include(HEADER_CONTENT);
-      expect(overlay.querySelector('header[slot=header-content]')).to.not.exist;
+      expect(overlay.querySelector('div[slot=header-content]')).to.not.exist;
     });
 
     it('should render new content if another headerRenderer is set', () => {
@@ -171,7 +204,7 @@ describe('header/footer feature', () => {
       dialog.opened = true;
 
       expect(overlay.textContent).to.include(FOOTER_CONTENT);
-      expect(overlay.querySelector('footer[slot=footer]')).to.exist;
+      expect(overlay.querySelector('div[slot=footer]')).to.exist;
     });
 
     it('should remove footer element if footerRenderer is removed', () => {
@@ -181,7 +214,7 @@ describe('header/footer feature', () => {
       dialog.footerRenderer = null;
 
       expect(overlay.textContent).to.not.include(FOOTER_CONTENT);
-      expect(overlay.querySelector('footer[slot=footer]')).to.not.exist;
+      expect(overlay.querySelector('div[slot=footer]')).to.not.exist;
     });
 
     it('should render new content if another footerRenderer is set', () => {
@@ -287,6 +320,43 @@ describe('header/footer feature', () => {
 
       expect(overlay.textContent).to.not.include(FOOTER_CONTENT);
       expect(overlay.textContent).to.include(NEW_FOOTER_CONTENT);
+    });
+  });
+
+  describe('header-title with default renderer', () => {
+    const HEADER_TITLE = '__HEADER_TITLE__';
+    const BODY_CONTENT = '__BODY_CONTENT__';
+    const NEW_BODY_CONTENT = '__NEW_BODY_CONTENT__';
+
+    it('should keep header-title if renderer is added', () => {
+      dialog.headerTitle = HEADER_TITLE;
+      dialog.renderer = createRenderer(BODY_CONTENT);
+      dialog.opened = true;
+
+      expect(overlay.textContent).to.include(HEADER_TITLE);
+      expect(overlay.textContent).to.include(BODY_CONTENT);
+    });
+
+    it('should keep header-title if renderer is changed', () => {
+      dialog.headerTitle = HEADER_TITLE;
+      dialog.renderer = createRenderer(BODY_CONTENT);
+      dialog.renderer = createRenderer(NEW_BODY_CONTENT);
+      dialog.opened = true;
+
+      expect(overlay.textContent).to.include(HEADER_TITLE);
+      expect(overlay.textContent).to.not.include(BODY_CONTENT);
+      expect(overlay.textContent).to.include(NEW_BODY_CONTENT);
+    });
+
+    it('should keep header-title if renderer is changed while dialog is opened', () => {
+      dialog.headerTitle = HEADER_TITLE;
+      dialog.renderer = createRenderer(BODY_CONTENT);
+      dialog.opened = true;
+      dialog.renderer = createRenderer(NEW_BODY_CONTENT);
+
+      expect(overlay.textContent).to.include(HEADER_TITLE);
+      expect(overlay.textContent).to.not.include(BODY_CONTENT);
+      expect(overlay.textContent).to.include(NEW_BODY_CONTENT);
     });
   });
 
