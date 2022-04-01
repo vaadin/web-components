@@ -157,6 +157,22 @@ export class DialogOverlay extends OverlayElement {
     this._titleId = `${this.constructor.is}-title-${uniqueId}`;
   }
 
+  /** @private */
+  __createContainer(slot) {
+    const container = document.createElement('div');
+    container.setAttribute('slot', slot);
+    return container;
+  }
+
+  /** @private */
+  __clearContainer(container) {
+    container.innerHTML = '';
+    // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
+    // When clearing the rendered content, this part needs to be manually disposed of.
+    // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
+    delete container._$litPart$;
+  }
+
   _headerFooterRendererChange(headerRenderer, footerRenderer, opened) {
     const headerRendererChanged = this.__oldHeaderRenderer !== headerRenderer;
     this.__oldHeaderRenderer = headerRenderer;
@@ -168,34 +184,30 @@ export class DialogOverlay extends OverlayElement {
     this._oldOpenedFooterHeader = opened;
 
     if (headerRendererChanged) {
-      if (!this.headerContainer && this.headerRenderer) {
-        // Create the container, but wait to append it when requestContentUpdate is called
-        this.headerContainer = document.createElement('div');
-        this.headerContainer.setAttribute('slot', 'header-content');
-      } else if (this.headerRenderer) {
-        this.headerContainer.innerHTML = '';
-        // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
-        // When clearing the rendered content, this part needs to be manually disposed of.
-        // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
-        delete this.headerContainer._$litPart$;
-      } else if (this.headerContainer && !this.headerRenderer) {
+      if (headerRenderer) {
+        if (this.headerContainer) {
+          // Reset existing container in case if a new renderer is set.
+          this.__clearContainer(this.headerContainer);
+        } else {
+          // Create the container, but wait to append it until requestContentUpdate is called.
+          this.headerContainer = this.__createContainer('header-content');
+        }
+      } else if (this.headerContainer) {
         this.headerContainer.remove();
         this.headerContainer = null;
       }
     }
 
     if (footerRendererChanged) {
-      if (!this.footerContainer && this.footerRenderer) {
-        // Create the container, but wait to append it when requestContentUpdate is called
-        this.footerContainer = document.createElement('div');
-        this.footerContainer.setAttribute('slot', 'footer');
-      } else if (this.footerRenderer) {
-        this.footerContainer.innerHTML = '';
-        // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
-        // When clearing the rendered content, this part needs to be manually disposed of.
-        // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
-        delete this.footerContainer._$litPart$;
-      } else if (this.footerContainer && !this.footerRenderer) {
+      if (footerRenderer) {
+        if (this.footerContainer) {
+          // Reset existing container in case if a new renderer is set.
+          this.__clearContainer(this.footerContainer);
+        } else {
+          // Create the container, but wait to append it until requestContentUpdate is called.
+          this.footerContainer = this.__createContainer('footer');
+        }
+      } else if (this.footerContainer) {
         this.footerContainer.remove();
         this.footerContainer = null;
       }
@@ -209,16 +221,9 @@ export class DialogOverlay extends OverlayElement {
         this.requestContentUpdate();
       }
     }
-    this._toggleHasHeaderAttribute();
-    this._toggleHasFooterAttribute();
-  }
 
-  _toggleHasHeaderAttribute() {
-    this.toggleAttribute('has-header', !!this.headerRenderer);
-  }
-
-  _toggleHasFooterAttribute() {
-    this.toggleAttribute('has-footer', !!this.footerRenderer);
+    this.toggleAttribute('has-header', !!headerRenderer);
+    this.toggleAttribute('has-footer', !!footerRenderer);
   }
 
   _headerTitleChanged(headerTitle, opened) {
@@ -226,11 +231,7 @@ export class DialogOverlay extends OverlayElement {
       this.requestContentUpdate();
     }
     this._oldHeaderTitle = headerTitle;
-    this._toggleHasTitleAttribute();
-  }
-
-  _toggleHasTitleAttribute() {
-    this.toggleAttribute('has-title', !!this.headerTitle);
+    this.toggleAttribute('has-title', !!headerTitle);
   }
 
   _headerTitleRenderer() {
