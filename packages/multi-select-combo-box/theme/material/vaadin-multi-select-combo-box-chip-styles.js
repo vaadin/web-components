@@ -13,12 +13,12 @@ const chip = css`
   :host {
     display: flex;
     align-items: center;
+    align-self: center;
     box-sizing: border-box;
-    height: 1.5rem;
-    margin-top: 0.25rem;
+    height: 1.25rem;
     margin-inline-end: 0.25rem;
     padding-inline-start: 0.5rem;
-    border-radius: 1.25rem;
+    border-radius: 4px;
     background-color: hsla(214, 53%, 23%, 0.1);
     cursor: default;
     white-space: nowrap;
@@ -26,29 +26,26 @@ const chip = css`
   }
 
   [part='label'] {
-    font-size: var(--material-small-font-size);
+    font-size: var(--material-caption-font-size);
+    line-height: 1;
     color: var(--material-body-text-color);
   }
 
   /* Override field button */
   [part='remove-button'] {
-    padding: 0 0.125rem;
-    color: hsla(0, 0%, 100%, 0.9);
-    font-size: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    padding: 0;
+    font-size: 0.75em;
   }
 
   [part='remove-button']::before {
     content: var(--material-icons-clear);
-    border-radius: 50%;
-    background-color: hsla(214, 45%, 20%, 0.5);
-  }
-
-  :host(:not([disabled])) [part='remove-button']:hover {
-    color: hsla(0, 0%, 100%, 0.9);
-  }
-
-  [part='remove-button']:hover::before {
-    background-color: hsla(214, 41%, 17%, 0.83);
   }
 
   /* Disabled */

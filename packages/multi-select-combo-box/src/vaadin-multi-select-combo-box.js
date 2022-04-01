@@ -31,7 +31,12 @@ const multiSelectComboBox = css`
   }
 
   ::slotted(input) {
-    flex-basis: 80px;
+    box-sizing: border-box;
+    flex: 1 0 4em;
+  }
+
+  [part='chip'] {
+    flex: 0 1 auto;
   }
 `;
 

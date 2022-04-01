@@ -11,7 +11,6 @@ registerStyles(
   css`
     [part='wrapper'] {
       display: flex;
-      flex-wrap: wrap;
       width: 100%;
     }
   `,
