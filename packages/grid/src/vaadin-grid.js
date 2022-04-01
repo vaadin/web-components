@@ -468,6 +468,23 @@ class Grid extends ElementMixin(
     }
   }
 
+  /**
+   * Override an observer from `DisabledMixin` to not
+   * set `tabindex` on the grid when it is re-enabled.
+   *
+   * @param {boolean} disabled
+   * @param {boolean} oldDisabled
+   * @protected
+   * @override
+   */
+  _disabledChanged(disabled, oldDisabled) {
+    super._disabledChanged(disabled, oldDisabled);
+
+    if (oldDisabled) {
+      this.removeAttribute('tabindex');
+    }
+  }
+
   /** @private */
   __getBodyCellCoordinates(cell) {
     if (this.$.items.contains(cell) && cell.localName === 'td') {
