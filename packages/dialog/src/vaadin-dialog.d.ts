@@ -94,6 +94,23 @@ export type DialogEventMap = HTMLElementEventMap & DialogCustomEventMap;
  * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation.
  * for `<vaadin-dialog-overlay>` parts.
  *
+ * In addition to `<vaadin-overlay>` parts, the following parts are available for styling:
+ *
+ * Part name        | Description
+ * -----------------|-------------------------------------------
+ * `header`         | Element wrapping title and header content
+ * `header-content` | Element wrapping the header content slot
+ * `title`          | Element wrapping the title slot
+ * `footer`         | Element wrapping the footer slot
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute        | Description
+ * -----------------|--------------------------------------------
+ * `has-title`      | Set when the element has a title
+ * `has-header`     | Set when the element has header renderer
+ * `has-footer`     | Set when the element has footer renderer
+ *
  * Note: the `theme` attribute value set on `<vaadin-dialog>` is
  * propagated to the internal `<vaadin-dialog-overlay>` component.
  *
