@@ -186,13 +186,7 @@ export class DialogOverlay extends OverlayElement {
 
     if (headerRendererChanged) {
       if (headerRenderer) {
-        if (this.headerContainer) {
-          // Reset existing container in case if a new renderer is set.
-          this.__clearContainer(this.headerContainer);
-        } else {
-          // Create the container, but wait to append it until requestContentUpdate is called.
-          this.headerContainer = this.__createContainer('header-content');
-        }
+        this.headerContainer = this.prepareContainerForRenderer(this.headerContainer, 'header-content');
       } else if (this.headerContainer) {
         this.headerContainer.remove();
         this.headerContainer = null;
@@ -201,13 +195,7 @@ export class DialogOverlay extends OverlayElement {
 
     if (footerRendererChanged) {
       if (footerRenderer) {
-        if (this.footerContainer) {
-          // Reset existing container in case if a new renderer is set.
-          this.__clearContainer(this.footerContainer);
-        } else {
-          // Create the container, but wait to append it until requestContentUpdate is called.
-          this.footerContainer = this.__createContainer('footer');
-        }
+        this.footerContainer = this.prepareContainerForRenderer(this.footerContainer, 'footer');
       } else if (this.footerContainer) {
         this.footerContainer.remove();
         this.footerContainer = null;
@@ -225,6 +213,17 @@ export class DialogOverlay extends OverlayElement {
 
     this.toggleAttribute('has-header', !!headerRenderer);
     this.toggleAttribute('has-footer', !!footerRenderer);
+  }
+
+  prepareContainerForRenderer(container, slot) {
+    if (container) {
+      // Reset existing container in case if a new renderer is set.
+      this.__clearContainer(container);
+    } else {
+      // Create the container, but wait to append it until requestContentUpdate is called.
+      container = this.__createContainer(slot);
+    }
+    return container;
   }
 
   /** @private */
