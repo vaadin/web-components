@@ -138,6 +138,12 @@ declare class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixi
 
   /**
    * String used for rendering a dialog title.
+   *
+   * If both `headerTitle` and `headerRenderer` are defined, the title
+   * and the elements created by the renderer will be placed next to
+   * each other, with the title coming first.
+   *
+   * When `headerTitle` is set, the attribute `has-title` is added to the overlay element.
    * @attr {string} header-title
    */
   headerTitle: string | null | undefined;
@@ -148,6 +154,12 @@ declare class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixi
    *
    * - `root` The root container DOM element. Append your content to it.
    * - `dialog` The reference to the `<vaadin-dialog>` element.
+   *
+   * If both `headerTitle` and `headerRenderer` are defined, the title
+   * and the elements created by the renderer will be placed next to
+   * each other, with the title coming first.
+   *
+   * When `headerRenderer` is set, the attribute `has-header` is added to the overlay element.
    */
   headerRenderer: DialogRenderer | null | undefined;
 
@@ -157,7 +169,8 @@ declare class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixi
    *
    * - `root` The root container DOM element. Append your content to it.
    * - `dialog` The reference to the `<vaadin-dialog>` element.
-   * @type {DialogRenderer | undefined}
+   *
+   * When `footerRenderer` is set, the attribute `has-footer` is added to the overlay element.
    */
   footerRenderer: DialogRenderer | null | undefined;
 

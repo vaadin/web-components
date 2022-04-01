@@ -222,7 +222,7 @@ export class DialogOverlay extends OverlayElement {
   }
 
   _toggleHasFooterAttribute() {
-    this.toggleAttribute('has-footer', !!this. footerRenderer);
+    this.toggleAttribute('has-footer', !!this.footerRenderer);
   }
 
   _headerTitleChanged(headerTitle, opened) {
@@ -236,7 +236,7 @@ export class DialogOverlay extends OverlayElement {
   }
 
   _toggleHasTitleAttribute() {
-    this.toggleAttribute('has-title', !!this. headerTitle);
+    this.toggleAttribute('has-title', !!this.headerTitle);
   }
 
   _headerTitleRenderer() {
@@ -466,7 +466,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
 
       /**
        * String used for rendering a dialog title.
-
+       *
        * If both `headerTitle` and `headerRenderer` are defined, the title
        * and the elements created by the renderer will be placed next to
        * each other, with the title coming first.
@@ -478,30 +478,28 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
 
       /**
        * Custom function for rendering the dialog header.
+       * Receives two arguments:
+       *
+       * - `root` The root container DOM element. Append your content to it.
+       * - `dialog` The reference to the `<vaadin-dialog>` element.
        *
        * If both `headerTitle` and `headerRenderer` are defined, the title
        * and the elements created by the renderer will be placed next to
        * each other, with the title coming first.
        *
        * When `headerRenderer` is set, the attribute `has-header` is added to the overlay element.
-       *
-       * Receives two arguments:
-       *
-       * - `root` The root container DOM element. Append your content to it.
-       * - `dialog` The reference to the `<vaadin-dialog>` element.
        * @type {DialogRenderer | undefined}
        */
       headerRenderer: Function,
 
       /**
        * Custom function for rendering the dialog footer.
-       *
-       * When `footerRenderer` is set, the attribute `has-footer` is added to the overlay element.
-       *
        * Receives two arguments:
        *
        * - `root` The root container DOM element. Append your content to it.
        * - `dialog` The reference to the `<vaadin-dialog>` element.
+       *
+       * When `footerRenderer` is set, the attribute `has-footer` is added to the overlay element.
        * @type {DialogRenderer | undefined}
        */
       footerRenderer: Function,
