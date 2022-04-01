@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/radio-group",
-  "version": "23.0.3",
+  "version": "23.0.4",
   "publishConfig": {
     "access": "public"
   },
@@ -36,11 +36,11 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^23.0.3",
-    "@vaadin/field-base": "^23.0.3",
-    "@vaadin/vaadin-lumo-styles": "^23.0.3",
-    "@vaadin/vaadin-material-styles": "^23.0.3",
-    "@vaadin/vaadin-themable-mixin": "^23.0.3"
+    "@vaadin/component-base": "^23.0.4",
+    "@vaadin/field-base": "^23.0.4",
+    "@vaadin/vaadin-lumo-styles": "^23.0.4",
+    "@vaadin/vaadin-material-styles": "^23.0.4",
+    "@vaadin/vaadin-themable-mixin": "^23.0.4"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

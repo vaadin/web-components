@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/integer-field",
-  "version": "23.0.3",
+  "version": "23.0.4",
   "publishConfig": {
     "access": "public"
   },
@@ -33,9 +33,9 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/number-field": "^23.0.3",
-    "@vaadin/vaadin-lumo-styles": "^23.0.3",
-    "@vaadin/vaadin-material-styles": "^23.0.3"
+    "@vaadin/number-field": "^23.0.4",
+    "@vaadin/vaadin-lumo-styles": "^23.0.4",
+    "@vaadin/vaadin-material-styles": "^23.0.4"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
