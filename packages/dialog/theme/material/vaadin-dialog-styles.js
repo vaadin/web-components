@@ -20,12 +20,12 @@ const dialogOverlay = css`
     padding: 9px 24px;
     font-weight: 500;
     gap: 8px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid var(--material-divider-color);
   }
 
   :host([has-footer]) [part='footer'] {
     padding: 8px;
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    border-top: 1px solid var(--material-divider-color);
   }
 
   /* No padding */

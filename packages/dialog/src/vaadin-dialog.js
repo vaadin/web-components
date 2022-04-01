@@ -218,19 +218,11 @@ export class DialogOverlay extends OverlayElement {
   }
 
   _toggleHasHeaderAttribute() {
-    if (this.headerRenderer) {
-      this.setAttribute('has-header', '');
-    } else {
-      this.removeAttribute('has-header');
-    }
+    this.toggleAttribute('has-header', !!this.headerRenderer);
   }
 
   _toggleHasFooterAttribute() {
-    if (this.footerRenderer) {
-      this.setAttribute('has-footer', '');
-    } else {
-      this.removeAttribute('has-footer');
-    }
+    this.toggleAttribute('has-footer', !!this. footerRenderer);
   }
 
   _headerTitleChanged(headerTitle, opened) {
@@ -244,11 +236,7 @@ export class DialogOverlay extends OverlayElement {
   }
 
   _toggleHasTitleAttribute() {
-    if (this.headerTitle) {
-      this.setAttribute('has-title', '');
-    } else {
-      this.removeAttribute('has-title');
-    }
+    this.toggleAttribute('has-title', !!this. headerTitle);
   }
 
   _headerTitleRenderer() {

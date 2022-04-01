@@ -20,7 +20,7 @@ describe('header/footer feature', () => {
     it('should not have title element if header-title is not set', () => {
       dialog.opened = true;
 
-      expect(overlay.querySelector('#title')).to.not.exist;
+      expect(overlay.querySelector('[slot="title"]')).to.not.exist;
     });
 
     it('should render header-title when set', () => {
@@ -60,7 +60,7 @@ describe('header/footer feature', () => {
       expect(overlay.hasAttribute('has-title')).to.be.ok;
     });
 
-    it('should remove [has-title] attribute on overlay element if header-title is set', () => {
+    it('should remove [has-title] attribute on overlay element if header-title is unset', () => {
       dialog.headerTitle = HEADER_TITLE;
       dialog.opened = true;
 
@@ -75,7 +75,7 @@ describe('header/footer feature', () => {
       expect(getComputedStyle(overlay.shadowRoot.querySelector('[part=header]')).display).to.be.equal('none');
     });
 
-    it('[part=header] should have be displayed if no header-title is set', () => {
+    it('[part=header] should be displayed if header-title is set', () => {
       dialog.headerTitle = HEADER_TITLE;
       dialog.opened = true;
 
@@ -163,7 +163,7 @@ describe('header/footer feature', () => {
       expect(getComputedStyle(overlay.shadowRoot.querySelector('[part=header]')).display).to.be.equal('none');
     });
 
-    it('[part=header] should have be displayed if no headerRenderer is set', () => {
+    it('[part=header] should be displayed if headerRenderer is set', () => {
       dialog.headerRenderer = headerRenderer;
       dialog.opened = true;
 
@@ -251,7 +251,7 @@ describe('header/footer feature', () => {
       expect(getComputedStyle(overlay.shadowRoot.querySelector('[part=footer]')).display).to.be.equal('none');
     });
 
-    it('[part=footer] should have be displayed if no footerRenderer is set', () => {
+    it('[part=footer] should be displayed if footerRenderer is set', () => {
       dialog.footerRenderer = footerRenderer;
       dialog.opened = true;
 
