@@ -50,13 +50,6 @@ describe('disabled', () => {
     expect(grid.hasAttribute('tabindex')).to.be.false;
   });
 
-  it('should restore the previous tabindex when re-enabled', () => {
-    grid.setAttribute('tabindex', '2');
-    grid.disabled = true;
-    grid.disabled = false;
-    expect(grid.getAttribute('tabindex')).to.equal('2');
-  });
-
   it('should set pointer-events: none when disabled', () => {
     grid.disabled = true;
     expect(getComputedStyle(grid).pointerEvents).to.equal('none');
