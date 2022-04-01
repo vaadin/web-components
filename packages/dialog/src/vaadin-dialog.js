@@ -548,7 +548,8 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
 
   /**
    * Requests an update for the content of the dialog.
-   * While performing the update, it invokes the renderer passed in the `renderer` property.
+   * While performing the update, it invokes the renderer passed in the `renderer` property,
+   * as well as `headerRender` and `footerRenderer` properties, if these are defined.
    *
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
