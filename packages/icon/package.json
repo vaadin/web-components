@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/icon",
-  "version": "23.1.0-alpha0",
+  "version": "23.1.0-alpha1",
   "publishConfig": {
     "access": "public"
   },
@@ -33,9 +33,9 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^23.1.0-alpha0",
-    "@vaadin/vaadin-lumo-styles": "^23.1.0-alpha0",
-    "@vaadin/vaadin-themable-mixin": "^23.1.0-alpha0",
+    "@vaadin/component-base": "23.1.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "23.1.0-alpha1",
+    "@vaadin/vaadin-themable-mixin": "23.1.0-alpha1",
     "lit": "^2.0.0"
   },
   "devDependencies": {

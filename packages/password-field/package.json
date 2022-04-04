@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/password-field",
-  "version": "23.1.0-alpha0",
+  "version": "23.1.0-alpha1",
   "publishConfig": {
     "access": "public"
   },
@@ -33,10 +33,10 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/button": "^23.1.0-alpha0",
-    "@vaadin/text-field": "^23.1.0-alpha0",
-    "@vaadin/vaadin-lumo-styles": "^23.1.0-alpha0",
-    "@vaadin/vaadin-material-styles": "^23.1.0-alpha0"
+    "@vaadin/button": "23.1.0-alpha1",
+    "@vaadin/text-field": "23.1.0-alpha1",
+    "@vaadin/vaadin-lumo-styles": "23.1.0-alpha1",
+    "@vaadin/vaadin-material-styles": "23.1.0-alpha1"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
