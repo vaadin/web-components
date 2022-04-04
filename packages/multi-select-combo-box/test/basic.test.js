@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -7,8 +7,6 @@ import '../vaadin-multi-select-combo-box.js';
 
 describe('basic', () => {
   let comboBox, internal, inputElement;
-
-  const getChipContent = (chip) => chip.shadowRoot.querySelector('[part="label"]').textContent;
 
   beforeEach(() => {
     comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
@@ -125,7 +123,7 @@ describe('basic', () => {
 
     it('should keep has-value attribute after user clears input value', async () => {
       comboBox.selectedItems = ['apple', 'banana'];
-      await nextFrame();
+      await nextRender();
       await sendKeys({ type: 'o' });
       await sendKeys({ down: 'Backspace' });
       expect(comboBox.hasAttribute('has-value')).to.be.true;
@@ -133,7 +131,7 @@ describe('basic', () => {
 
     it('should clear last selected item on Backspace if input has no value', async () => {
       comboBox.selectedItems = ['apple', 'banana'];
-      await nextFrame();
+      await nextRender();
 
       await sendKeys({ down: 'Backspace' });
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
@@ -144,7 +142,7 @@ describe('basic', () => {
 
     it('should not clear last selected item on Backspace if input has value', async () => {
       comboBox.selectedItems = ['apple', 'banana'];
-      await nextFrame();
+      await nextRender();
       await sendKeys({ type: 'lemon' });
 
       await sendKeys({ down: 'Backspace' });
@@ -153,7 +151,7 @@ describe('basic', () => {
 
     it('should not clear last selected item on Backspace when readonly', async () => {
       comboBox.selectedItems = ['apple', 'banana'];
-      await nextFrame();
+      await nextRender();
       comboBox.readonly = true;
 
       await sendKeys({ down: 'Backspace' });
@@ -225,20 +223,26 @@ describe('basic', () => {
   });
 
   describe('chips', () => {
-    let spy;
+    const getChips = (combo) => combo.shadowRoot.querySelectorAll('[part~="chip"]');
+
+    const getChipContent = (chip) => chip.shadowRoot.querySelector('[part="label"]').textContent;
 
     beforeEach(async () => {
-      spy = sinon.spy();
-      comboBox.addEventListener('change', spy);
       comboBox.selectedItems = ['orange'];
-      await nextFrame();
+      await nextRender();
       inputElement.focus();
     });
 
-    it('should render chips on updating selectedItems', async () => {
+    it('should render chips when selectedItems is set', async () => {
+      const chips = getChips(comboBox);
+      expect(chips.length).to.equal(1);
+      expect(getChipContent(chips[0])).to.equal('orange');
+    });
+
+    it('should re-render chips when selectedItems is updated', async () => {
       comboBox.selectedItems = ['apple', 'banana'];
-      await nextFrame();
-      const chips = comboBox.shadowRoot.querySelectorAll('[part="chip"]');
+      await nextRender();
+      const chips = getChips(comboBox);
       expect(chips.length).to.equal(2);
       expect(getChipContent(chips[0])).to.equal('apple');
       expect(getChipContent(chips[1])).to.equal('banana');
@@ -248,15 +252,15 @@ describe('basic', () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'Enter' });
-      await nextFrame();
-      expect(comboBox.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(2);
+      await nextRender();
+      expect(getChips(comboBox).length).to.equal(2);
     });
 
     it('should remove chip on remove button click', async () => {
-      const chip = comboBox.shadowRoot.querySelector('[part="chip"]');
+      const chip = getChips(comboBox)[0];
       chip.shadowRoot.querySelector('[part="remove-button"]').click();
-      await nextFrame();
-      expect(comboBox.shadowRoot.querySelectorAll('[part="chip"]').length).to.equal(0);
+      await nextRender();
+      expect(getChips(comboBox).length).to.equal(0);
     });
   });
 
@@ -267,7 +271,7 @@ describe('basic', () => {
       spy = sinon.spy();
       comboBox.addEventListener('change', spy);
       comboBox.selectedItems = ['apple'];
-      await nextFrame();
+      await nextRender();
       inputElement.focus();
     });
 
@@ -295,7 +299,7 @@ describe('basic', () => {
     beforeEach(async () => {
       comboBox.allowCustomValues = true;
       comboBox.selectedItems = ['apple'];
-      await nextFrame();
+      await nextRender();
       inputElement.focus();
     });
 
@@ -323,7 +327,7 @@ describe('basic', () => {
   describe('helper text', () => {
     it('should set helper text content using helperText property', async () => {
       comboBox.helperText = 'foo';
-      await nextFrame();
+      await nextRender();
       expect(comboBox.querySelector('[slot="helper"]').textContent).to.eql('foo');
     });
 
@@ -332,7 +336,7 @@ describe('basic', () => {
       helper.setAttribute('slot', 'helper');
       helper.textContent = 'foo';
       comboBox.appendChild(helper);
-      await nextFrame();
+      await nextRender();
       expect(comboBox.querySelector('[slot="helper"]').textContent).to.eql('foo');
     });
   });
