@@ -233,34 +233,55 @@ describe('basic', () => {
       inputElement.focus();
     });
 
-    it('should render chips when selectedItems is set', async () => {
-      const chips = getChips(comboBox);
-      expect(chips.length).to.equal(1);
-      expect(getChipContent(chips[0])).to.equal('orange');
+    describe('programmatic update', () => {
+      beforeEach(() => {
+        comboBox.style.width = '100%';
+      });
+
+      it('should re-render chips when selectedItems is updated', async () => {
+        comboBox.selectedItems = ['apple', 'banana'];
+        await nextRender();
+        const chips = getChips(comboBox);
+        expect(chips.length).to.equal(2);
+        expect(getChipContent(chips[0])).to.equal('apple');
+        expect(getChipContent(chips[1])).to.equal('banana');
+      });
+
+      it('should re-render chips when selectedItems is cleared', async () => {
+        comboBox.selectedItems = [];
+        await nextRender();
+        const chips = getChips(comboBox);
+        expect(chips.length).to.equal(0);
+      });
     });
 
-    it('should re-render chips when selectedItems is updated', async () => {
-      comboBox.selectedItems = ['apple', 'banana'];
-      await nextRender();
-      const chips = getChips(comboBox);
-      expect(chips.length).to.equal(2);
-      expect(getChipContent(chips[0])).to.equal('apple');
-      expect(getChipContent(chips[1])).to.equal('banana');
-    });
+    describe('manual selection', () => {
+      beforeEach(() => {
+        comboBox.style.width = '100%';
+      });
 
-    it('should re-render chips when selecting the item', async () => {
-      await sendKeys({ down: 'ArrowDown' });
-      await sendKeys({ down: 'ArrowDown' });
-      await sendKeys({ down: 'Enter' });
-      await nextRender();
-      expect(getChips(comboBox).length).to.equal(2);
-    });
+      it('should re-render chips when selecting the item', async () => {
+        await sendKeys({ down: 'ArrowDown' });
+        await sendKeys({ down: 'ArrowDown' });
+        await sendKeys({ down: 'Enter' });
+        await nextRender();
+        expect(getChips(comboBox).length).to.equal(2);
+      });
 
-    it('should remove chip on remove button click', async () => {
-      const chip = getChips(comboBox)[0];
-      chip.shadowRoot.querySelector('[part="remove-button"]').click();
-      await nextRender();
-      expect(getChips(comboBox).length).to.equal(0);
+      it('should re-render chips when un-selecting the item', async () => {
+        await sendKeys({ down: 'ArrowDown' });
+        await sendKeys({ type: 'orange' });
+        await sendKeys({ down: 'Enter' });
+        await nextRender();
+        expect(getChips(comboBox).length).to.equal(0);
+      });
+
+      it('should remove chip on remove button click', async () => {
+        const chip = getChips(comboBox)[0];
+        chip.shadowRoot.querySelector('[part="remove-button"]').click();
+        await nextRender();
+        expect(getChips(comboBox).length).to.equal(0);
+      });
     });
   });
 
