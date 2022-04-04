@@ -151,6 +151,15 @@ describe('basic', () => {
       expect(comboBox.selectedItems).to.deep.equal(['apple', 'banana']);
     });
 
+    it('should not clear last selected item on Backspace when readonly', async () => {
+      comboBox.selectedItems = ['apple', 'banana'];
+      await nextFrame();
+      comboBox.readonly = true;
+
+      await sendKeys({ down: 'Backspace' });
+      expect(comboBox.selectedItems).to.deep.equal(['apple', 'banana']);
+    });
+
     it('should clear internal combo-box value when selecting an item', async () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ type: 'apple' });

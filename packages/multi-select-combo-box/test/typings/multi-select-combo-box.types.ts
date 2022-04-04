@@ -81,7 +81,6 @@ assertType<string | null | undefined>(narrowedComboBox.helperText);
 assertType<boolean>(narrowedComboBox.readonly);
 assertType<string | null | undefined>(narrowedComboBox.label);
 assertType<boolean>(narrowedComboBox.required);
-assertType<string>(narrowedComboBox.readonlyValueSeparator);
 
 // Mixins
 assertType<ControllerMixinClass>(narrowedComboBox);

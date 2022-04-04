@@ -11,8 +11,13 @@ import { inputFieldShared } from '@vaadin/vaadin-lumo-styles/mixins/input-field-
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const multiSelectComboBox = css`
-  :host([has-value]:not([readonly])) {
+  :host([has-value]) {
     padding-inline-start: 0;
+  }
+
+  :host([readonly]) [part='chip'],
+  :host([disabled]) [part='chip'] {
+    opacity: 0.5;
   }
 
   [part='chip']:not(:last-of-type) {

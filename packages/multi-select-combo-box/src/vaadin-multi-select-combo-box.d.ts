@@ -198,12 +198,6 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
   pageSize: number;
 
   /**
-   * The join separator used for the 'display value' when in read-only mode.
-   * @attr {string} readonly-value-separator
-   */
-  readonlyValueSeparator: string;
-
-  /**
    * Custom function for rendering the content of every item.
    * Receives three arguments:
    *

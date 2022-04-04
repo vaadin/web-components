@@ -26,7 +26,7 @@ const multiSelectComboBox = css`
     color: transparent !important;
   }
 
-  :host([has-value]:not([readonly])) [class$='container'] {
+  :host([has-value]) [class$='container'] {
     width: auto;
   }
 
@@ -37,6 +37,10 @@ const multiSelectComboBox = css`
 
   [part='chip'] {
     flex: 0 1 auto;
+  }
+
+  :host([readonly]) [part='chip'] {
+    pointer-events: none;
   }
 `;
 
@@ -160,7 +164,7 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
                 part="chip"
                 item="[[item]]"
                 label="[[_getItemLabel(item, itemLabelPath)]]"
-                hidden$="[[_isTokensHidden(readonly, _hasValue)]]"
+                hidden$="[[_isChipsHidden(_hasValue)]]"
                 on-item-removed="_onItemRemoved"
                 on-mousedown="_preventBlur"
               ></vaadin-multi-select-combo-box-chip>
@@ -271,15 +275,6 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
       },
 
       /**
-       * The join separator used for the 'display value' when in read-only mode.
-       * @attr {string} readonly-value-separator
-       */
-      readonlyValueSeparator: {
-        type: String,
-        value: ', '
-      },
-
-      /**
        * When true, the user can input a value that is not present in the items list.
        * @attr {boolean} allow-custom-values
        */
@@ -326,10 +321,7 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
   }
 
   static get observers() {
-    return [
-      '_selectedItemsChanged(selectedItems, selectedItems.*)',
-      '_updateReadOnlyMode(inputElement, readonly, itemLabelPath, readonlyValueSeparator, selectedItems, selectedItems.*)'
-    ];
+    return ['_selectedItemsChanged(selectedItems, selectedItems.*)'];
   }
 
   /**
@@ -403,16 +395,8 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
   }
 
   /** @private */
-  _isTokensHidden(readonly, hasValue) {
-    return readonly || !hasValue;
-  }
-
-  /** @private */
-  // eslint-disable-next-line max-params
-  _updateReadOnlyMode(inputElement, readonly, itemLabelPath, separator, selectedItems) {
-    if (inputElement) {
-      inputElement.value = readonly ? this._getReadonlyValue(selectedItems, itemLabelPath, separator) : '';
-    }
+  _isChipsHidden(hasValue) {
+    return !hasValue;
   }
 
   /** @private */
@@ -446,16 +430,6 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
   /** @private */
   _getItemLabel(item, itemLabelPath) {
     return item && Object.prototype.hasOwnProperty.call(item, itemLabelPath) ? item[itemLabelPath] : item;
-  }
-
-  /** @private */
-  _getReadonlyValue(selectedItems, itemLabelPath, readonlyValueSeparator) {
-    return this._getDisplayValue(selectedItems, itemLabelPath, readonlyValueSeparator);
-  }
-
-  /** @private */
-  _getDisplayValue(selectedItems, itemLabelPath, valueSeparator) {
-    return selectedItems.map((item) => this._getItemLabel(item, itemLabelPath)).join(valueSeparator);
   }
 
   /** @private */
@@ -537,7 +511,7 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
    */
   _onKeyDown(event) {
     const items = this.selectedItems || [];
-    if (event.key === 'Backspace' && items.length && this.inputElement.value === '') {
+    if (!this.readonly && event.key === 'Backspace' && items.length && this.inputElement.value === '') {
       this.__removeItem(items[items.length - 1]);
     }
   }
