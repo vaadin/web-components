@@ -29,7 +29,7 @@ registerStyles(
     }
 
     :host([primary-section='drawer']) [part='drawer'] {
-      z-index: 1;
+      z-index: 2;
     }
 
     :host([primary-section='navbar']:not([overlay])) [part='navbar'] {
