@@ -10,8 +10,7 @@ import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-fi
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const multiSelectComboBox = css`
-  :host([readonly]) [part='chip'],
-  :host([disabled]) [part='chip'] {
+  :host([readonly]) [part~='chip'] {
     opacity: 0.5;
   }
 

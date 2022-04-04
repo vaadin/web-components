@@ -15,12 +15,11 @@ const multiSelectComboBox = css`
     padding-inline-start: 0;
   }
 
-  :host([readonly]) [part='chip'],
-  :host([disabled]) [part='chip'] {
-    opacity: 0.5;
+  :host([readonly]) [part~='chip'] {
+    opacity: 0.7;
   }
 
-  [part='chip']:not(:last-of-type) {
+  [part~='chip']:not(:last-of-type) {
     margin-inline-end: var(--lumo-space-xs);
   }
 

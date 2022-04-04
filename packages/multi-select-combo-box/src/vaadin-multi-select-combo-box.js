@@ -35,11 +35,11 @@ const multiSelectComboBox = css`
     flex: 1 0 4em;
   }
 
-  [part='chip'] {
+  [part~='chip'] {
     flex: 0 1 auto;
   }
 
-  :host([readonly]) [part='chip'] {
+  :host([readonly]) [part~='chip'] {
     pointer-events: none;
   }
 `;
@@ -163,6 +163,7 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
                 slot="prefix"
                 part="chip"
                 item="[[item]]"
+                disabled$="[[disabled]]"
                 label="[[_getItemLabel(item, itemLabelPath)]]"
                 hidden$="[[_isChipsHidden(_hasValue)]]"
                 on-item-removed="_onItemRemoved"
