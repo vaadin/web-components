@@ -1,7 +1,8 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import '../../not-animated-styles.js';
 import '../../../theme/lumo/vaadin-dialog.js';
+import { createRenderer } from '../../helpers.js';
 
 describe('dialog', () => {
   let div, element;
@@ -10,16 +11,9 @@ describe('dialog', () => {
     div = document.createElement('div');
     div.style.height = '100%';
 
-    element = fixtureSync(
-      `
-        <vaadin-dialog opened>
-          <template>
-            <div>Simple dialog with text</div>
-          </template>
-        </vaadin-dialog>
-      `,
-      div
-    );
+    element = fixtureSync(`<vaadin-dialog></vaadin-dialog>`, div);
+    element.renderer = createRenderer('Simple dialog with text');
+    element.opened = true;
   });
 
   it('basic', async () => {
@@ -29,5 +23,32 @@ describe('dialog', () => {
   it('modeless', async () => {
     element.modeless = true;
     await visualDiff(div, 'modeless');
+  });
+
+  it('title', async () => {
+    element.headerTitle = 'Title';
+    await visualDiff(div, 'header-title');
+  });
+
+  it('header renderer', async () => {
+    element.headerRenderer = createRenderer('Header');
+    await visualDiff(div, 'header-renderer');
+  });
+
+  it('title and header renderer', async () => {
+    element.headerTitle = 'Title';
+    element.headerRenderer = createRenderer('Header');
+    await visualDiff(div, 'header-title-renderer');
+  });
+
+  it('footer renderer', async () => {
+    element.footerRenderer = createRenderer('Footer');
+    await visualDiff(div, 'footer-renderer');
+  });
+
+  it('header and footer renderer', async () => {
+    element.headerRenderer = createRenderer('Header');
+    element.footerRenderer = createRenderer('Footer');
+    await visualDiff(div, 'header-footer-renderer');
   });
 });

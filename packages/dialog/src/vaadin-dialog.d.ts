@@ -94,6 +94,23 @@ export type DialogEventMap = HTMLElementEventMap & DialogCustomEventMap;
  * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation.
  * for `<vaadin-dialog-overlay>` parts.
  *
+ * In addition to `<vaadin-overlay>` parts, the following parts are available for styling:
+ *
+ * Part name        | Description
+ * -----------------|-------------------------------------------
+ * `header`         | Element wrapping title and header content
+ * `header-content` | Element wrapping the header content slot
+ * `title`          | Element wrapping the title slot
+ * `footer`         | Element wrapping the footer slot
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute        | Description
+ * -----------------|--------------------------------------------
+ * `has-title`      | Set when the element has a title
+ * `has-header`     | Set when the element has header renderer
+ * `has-footer`     | Set when the element has footer renderer
+ *
  * Note: the `theme` attribute value set on `<vaadin-dialog>` is
  * propagated to the internal `<vaadin-dialog-overlay>` component.
  *
@@ -137,13 +154,51 @@ declare class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixi
   renderer: DialogRenderer | null | undefined;
 
   /**
+   * String used for rendering a dialog title.
+   *
+   * If both `headerTitle` and `headerRenderer` are defined, the title
+   * and the elements created by the renderer will be placed next to
+   * each other, with the title coming first.
+   *
+   * When `headerTitle` is set, the attribute `has-title` is added to the overlay element.
+   * @attr {string} header-title
+   */
+  headerTitle: string | null | undefined;
+
+  /**
+   * Custom function for rendering the dialog header.
+   * Receives two arguments:
+   *
+   * - `root` The root container DOM element. Append your content to it.
+   * - `dialog` The reference to the `<vaadin-dialog>` element.
+   *
+   * If both `headerTitle` and `headerRenderer` are defined, the title
+   * and the elements created by the renderer will be placed next to
+   * each other, with the title coming first.
+   *
+   * When `headerRenderer` is set, the attribute `has-header` is added to the overlay element.
+   */
+  headerRenderer: DialogRenderer | null | undefined;
+
+  /**
+   * Custom function for rendering the dialog footer.
+   * Receives two arguments:
+   *
+   * - `root` The root container DOM element. Append your content to it.
+   * - `dialog` The reference to the `<vaadin-dialog>` element.
+   *
+   * When `footerRenderer` is set, the attribute `has-footer` is added to the overlay element.
+   */
+  footerRenderer: DialogRenderer | null | undefined;
+
+  /**
    * Set to true to remove backdrop and allow click events on background elements.
    */
   modeless: boolean;
 
   /**
-   * Requests an update for the content of the dialog.
-   * While performing the update, it invokes the renderer passed in the `renderer` property.
+   * While performing the update, it invokes the renderer passed in the `renderer` property,
+   * as well as `headerRender` and `footerRenderer` properties, if these are defined.
    *
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
