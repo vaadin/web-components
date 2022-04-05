@@ -498,8 +498,8 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
     chip.setAttribute('slot', 'prefix');
 
     chip.item = item;
-    chip.disabled = this.disabled;
     chip.label = this._getItemLabel(item, this.itemLabelPath);
+    chip.toggleAttribute('disabled', this.disabled);
 
     chip.addEventListener('item-removed', (e) => this._onItemRemoved(e));
     chip.addEventListener('mousedown', (e) => this._preventBlur(e));
