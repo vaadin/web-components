@@ -230,14 +230,9 @@ describe('basic', () => {
     beforeEach(async () => {
       comboBox.selectedItems = ['orange'];
       await nextRender();
-      inputElement.focus();
     });
 
     describe('programmatic update', () => {
-      beforeEach(() => {
-        comboBox.style.width = '100%';
-      });
-
       it('should re-render chips when selectedItems is updated', async () => {
         comboBox.selectedItems = ['apple', 'banana'];
         await nextRender();
@@ -257,7 +252,7 @@ describe('basic', () => {
 
     describe('manual selection', () => {
       beforeEach(() => {
-        comboBox.style.width = '100%';
+        inputElement.focus();
       });
 
       it('should re-render chips when selecting the item', async () => {
@@ -281,6 +276,27 @@ describe('basic', () => {
         chip.shadowRoot.querySelector('[part="remove-button"]').click();
         await nextRender();
         expect(getChips(comboBox).length).to.equal(0);
+      });
+    });
+
+    describe('disabled', () => {
+      beforeEach(async () => {
+        comboBox.selectedItems = ['apple', 'banana'];
+        await nextRender();
+        comboBox.disabled = true;
+      });
+
+      it('should set disabled attribute on all chips when disabled', () => {
+        const chips = getChips(comboBox);
+        expect(chips[0].hasAttribute('disabled')).to.be.true;
+        expect(chips[1].hasAttribute('disabled')).to.be.true;
+      });
+
+      it('should remove disabled attribute from chips when re-enabled', () => {
+        comboBox.disabled = false;
+        const chips = getChips(comboBox);
+        expect(chips[0].hasAttribute('disabled')).to.be.false;
+        expect(chips[1].hasAttribute('disabled')).to.be.false;
       });
     });
   });

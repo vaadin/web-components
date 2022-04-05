@@ -3,8 +3,6 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@polymer/polymer/lib/elements/dom-repeat.js';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './vaadin-multi-select-combo-box-chip.js';
 import './vaadin-multi-select-combo-box-container.js';
 import './vaadin-multi-select-combo-box-internal.js';
@@ -146,7 +144,6 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
           opened="{{opened}}"
           renderer="[[renderer]]"
           theme$="[[theme]]"
-          suppress-template-warning
           on-combo-box-item-selected="_onComboBoxItemSelected"
           on-change="_onComboBoxChange"
           on-custom-value-set="_onCustomValueSet"
@@ -158,18 +155,6 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
             invalid="[[invalid]]"
             theme$="[[theme]]"
           >
-            <template id="repeat" is="dom-repeat" items="[[selectedItems]]" slot="prefix">
-              <vaadin-multi-select-combo-box-chip
-                slot="prefix"
-                part="chip"
-                item="[[item]]"
-                disabled$="[[disabled]]"
-                label="[[_getItemLabel(item, itemLabelPath)]]"
-                hidden$="[[_isChipsHidden(_hasValue)]]"
-                on-item-removed="_onItemRemoved"
-                on-mousedown="_preventBlur"
-              ></vaadin-multi-select-combo-box-chip>
-            </template>
             <slot name="input"></slot>
             <div id="clearButton" part="clear-button" slot="suffix"></div>
             <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix"></div>
@@ -335,6 +320,11 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
   }
 
   /** @protected */
+  get _chips() {
+    return this.shadowRoot.querySelectorAll('[part~="chip"]');
+  }
+
+  /** @protected */
   ready() {
     super.ready();
 
@@ -348,6 +338,9 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
 
+    this._inputField = this.shadowRoot.querySelector('[part="input-field"]');
+    this.__updateChips();
+
     processTemplates(this);
   }
 
@@ -357,6 +350,21 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
    */
   checkValidity() {
     return this.required ? this._hasValue : true;
+  }
+
+  /**
+   * Override method inherited from `DisabledMixin` to forward disabled to chips.
+   * @protected
+   * @override
+   */
+  _disabledChanged(disabled, oldDisabled) {
+    super._disabledChanged(disabled, oldDisabled);
+
+    if (disabled || oldDisabled) {
+      this._chips.forEach((chip) => {
+        chip.toggleAttribute('disabled', disabled);
+      });
+    }
   }
 
   /**
@@ -393,11 +401,6 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
    */
   _toggleHasValue() {
     super._toggleHasValue(this._hasValue);
-  }
-
-  /** @private */
-  _isChipsHidden(hasValue) {
-    return !hasValue;
   }
 
   /** @private */
@@ -489,8 +492,37 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
   }
 
   /** @private */
+  __createChip(item) {
+    const chip = document.createElement('vaadin-multi-select-combo-box-chip');
+    chip.setAttribute('part', 'chip');
+    chip.setAttribute('slot', 'prefix');
+
+    chip.item = item;
+    chip.disabled = this.disabled;
+    chip.label = this._getItemLabel(item, this.itemLabelPath);
+
+    chip.addEventListener('item-removed', (e) => this._onItemRemoved(e));
+    chip.addEventListener('mousedown', (e) => this._preventBlur(e));
+
+    return chip;
+  }
+
+  /** @private */
   __updateChips() {
-    this.$.repeat.render();
+    if (!this._inputField) {
+      return;
+    }
+
+    this._chips.forEach((chip) => {
+      chip.remove();
+    });
+
+    const items = [...this.selectedItems];
+
+    for (let i = items.length - 1; i >= 0; i--) {
+      const chip = this.__createChip(items[i]);
+      this._inputField.insertBefore(chip, this._inputField.firstElementChild);
+    }
   }
 
   /**
