@@ -258,31 +258,42 @@ describe('basic', () => {
 
     const getChipContent = (chip) => chip.shadowRoot.querySelector('[part="label"]').textContent;
 
+    const nextResize = (target) => {
+      return new Promise((resolve) => {
+        new ResizeObserver(() => setTimeout(resolve)).observe(target);
+      });
+    };
+
     beforeEach(async () => {
       comboBox.selectedItems = ['orange'];
       await nextRender();
     });
 
     describe('programmatic update', () => {
+      beforeEach(() => {
+        comboBox.style.width = '100%';
+      });
+
       it('should re-render chips when selectedItems is updated', async () => {
         comboBox.selectedItems = ['apple', 'banana'];
         await nextRender();
         const chips = getChips(comboBox);
-        expect(chips.length).to.equal(2);
-        expect(getChipContent(chips[0])).to.equal('apple');
-        expect(getChipContent(chips[1])).to.equal('banana');
+        expect(chips.length).to.equal(3);
+        expect(getChipContent(chips[1])).to.equal('apple');
+        expect(getChipContent(chips[2])).to.equal('banana');
       });
 
       it('should re-render chips when selectedItems is cleared', async () => {
         comboBox.selectedItems = [];
         await nextRender();
         const chips = getChips(comboBox);
-        expect(chips.length).to.equal(0);
+        expect(chips.length).to.equal(1);
       });
     });
 
     describe('manual selection', () => {
       beforeEach(() => {
+        comboBox.style.width = '100%';
         inputElement.focus();
       });
 
@@ -291,7 +302,7 @@ describe('basic', () => {
         await sendKeys({ down: 'ArrowDown' });
         await sendKeys({ down: 'Enter' });
         await nextRender();
-        expect(getChips(comboBox).length).to.equal(2);
+        expect(getChips(comboBox).length).to.equal(3);
       });
 
       it('should re-render chips when un-selecting the item', async () => {
@@ -299,19 +310,20 @@ describe('basic', () => {
         await sendKeys({ down: 'ArrowUp' });
         await sendKeys({ down: 'Enter' });
         await nextRender();
-        expect(getChips(comboBox).length).to.equal(0);
+        expect(getChips(comboBox).length).to.equal(1);
       });
 
       it('should remove chip on remove button click', async () => {
-        const chip = getChips(comboBox)[0];
+        const chip = getChips(comboBox)[1];
         chip.shadowRoot.querySelector('[part="remove-button"]').click();
         await nextRender();
-        expect(getChips(comboBox).length).to.equal(0);
+        expect(getChips(comboBox).length).to.equal(1);
       });
     });
 
     describe('disabled', () => {
       beforeEach(async () => {
+        comboBox.style.width = '100%';
         comboBox.selectedItems = ['apple', 'banana'];
         await nextRender();
         comboBox.disabled = true;
@@ -319,15 +331,78 @@ describe('basic', () => {
 
       it('should set disabled attribute on all chips when disabled', () => {
         const chips = getChips(comboBox);
-        expect(chips[0].hasAttribute('disabled')).to.be.true;
         expect(chips[1].hasAttribute('disabled')).to.be.true;
+        expect(chips[2].hasAttribute('disabled')).to.be.true;
       });
 
       it('should remove disabled attribute from chips when re-enabled', () => {
         comboBox.disabled = false;
         const chips = getChips(comboBox);
-        expect(chips[0].hasAttribute('disabled')).to.be.false;
         expect(chips[1].hasAttribute('disabled')).to.be.false;
+        expect(chips[2].hasAttribute('disabled')).to.be.false;
+      });
+    });
+
+    describe('overflow', () => {
+      let overflow;
+
+      beforeEach(() => {
+        overflow = getChips(comboBox)[0];
+      });
+
+      it('should render chip for each item, plus overflow chip', () => {
+        const chips = getChips(comboBox);
+        expect(chips.length).to.equal(2);
+        expect(getChipContent(chips[1])).to.equal('orange');
+      });
+
+      it('should hide overflow chip when all chips are visible', () => {
+        expect(overflow.hasAttribute('hidden')).to.be.true;
+      });
+
+      it('should show overflow chip when all chips no longer fit', async () => {
+        comboBox.selectedItems = ['apple', 'banana'];
+        await nextRender();
+        expect(getChips(comboBox).length).to.equal(2);
+        expect(overflow.hasAttribute('hidden')).to.be.false;
+      });
+
+      it('should set overflow chip label as not fitting chips count', async () => {
+        comboBox.selectedItems = ['apple', 'banana', 'orange'];
+        await nextRender();
+        expect(overflow.label).to.equal('2');
+      });
+
+      describe('resize', () => {
+        beforeEach(async () => {
+          comboBox.selectedItems = ['apple', 'banana', 'orange'];
+          await nextRender();
+        });
+
+        it('should update overflow chip on resize when width changes', async () => {
+          expect(overflow.hasAttribute('hidden')).to.be.false;
+
+          comboBox.style.width = '320px';
+          await nextResize(comboBox);
+          expect(overflow.hasAttribute('hidden')).to.be.true;
+
+          comboBox.style.width = 'auto';
+          await nextResize(comboBox);
+          expect(overflow.hasAttribute('hidden')).to.be.false;
+        });
+
+        it('should update overflow chip on clear button state change', async () => {
+          comboBox.style.width = '320px';
+          await nextResize(comboBox);
+
+          comboBox.clearButtonVisible = true;
+          await nextRender();
+          expect(overflow.hasAttribute('hidden')).to.be.false;
+
+          comboBox.clearButtonVisible = false;
+          await nextRender();
+          expect(overflow.hasAttribute('hidden')).to.be.true;
+        });
       });
     });
   });

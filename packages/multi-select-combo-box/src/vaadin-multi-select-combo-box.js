@@ -8,6 +8,7 @@ import './vaadin-multi-select-combo-box-container.js';
 import './vaadin-multi-select-combo-box-internal.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
@@ -16,16 +17,20 @@ import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shar
 import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const multiSelectComboBox = css`
+  [part='container'] {
+    --_multi-select-combo-box-input-width: calc(100% - 1.5rem);
+  }
+
+  :host([has-clear-button]) [part='container'] {
+    --_multi-select-combo-box-input-width: calc(100% - 3rem);
+  }
+
   [hidden] {
     display: none !important;
   }
 
   :host([has-value]) ::slotted(input:placeholder-shown) {
     color: transparent !important;
-  }
-
-  :host([has-value]) [class$='container'] {
-    width: auto;
   }
 
   ::slotted(input) {
@@ -114,8 +119,9 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes InputControlMixin
+ * @mixes ResizeMixin
  */
-class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-multi-select-combo-box';
   }
@@ -155,6 +161,14 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
             invalid="[[invalid]]"
             theme$="[[theme]]"
           >
+            <vaadin-multi-select-combo-box-chip
+              slot="prefix"
+              part="chip overflow"
+              disabled="[[disabled]]"
+              label$="[[_getOverflowLabel(_overflowItems.length)]]"
+              hidden$="[[_isOverflowHidden(_overflowItems.length)]]"
+              on-mousedown="_preventBlur"
+            ></vaadin-multi-select-combo-box-chip>
             <slot name="input"></slot>
             <div id="clearButton" part="clear-button" slot="suffix"></div>
             <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix"></div>
@@ -179,6 +193,17 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
        * @attr {boolean} auto-open-disabled
        */
       autoOpenDisabled: Boolean,
+
+      /**
+       * Set to true to display the clear icon which clears the input.
+       * @attr {boolean} clear-button-visible
+       */
+      clearButtonVisible: {
+        type: Boolean,
+        reflectToAttribute: true,
+        observer: '_clearButtonVisibleChanged',
+        value: false
+      },
 
       /**
        * A full set of items to filter the visible options from.
@@ -302,6 +327,12 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
       _hasValue: {
         type: Boolean,
         value: false
+      },
+
+      /** @private */
+      _overflowItems: {
+        type: Array,
+        value: () => []
       }
     };
   }
@@ -403,6 +434,26 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
     super._toggleHasValue(this._hasValue);
   }
 
+  /**
+   * Implement callback from `ResizeMixin` to update chips.
+   * @protected
+   * @override
+   */
+  _onResize() {
+    this.__updateChips();
+  }
+
+  /**
+   * Setting clear button visible reduces total space available
+   * for rendering chips, and making it hidden increases it.
+   * @private
+   */
+  _clearButtonVisibleChanged(visible, oldVisible) {
+    if (visible || oldVisible) {
+      this.__updateChips();
+    }
+  }
+
   /** @private */
   _pageSizeChanged(pageSize, oldPageSize) {
     if (Math.floor(pageSize) !== pageSize || pageSize <= 0) {
@@ -434,6 +485,16 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
   /** @private */
   _getItemLabel(item, itemLabelPath) {
     return item && Object.prototype.hasOwnProperty.call(item, itemLabelPath) ? item[itemLabelPath] : item;
+  }
+
+  /** @private */
+  _getOverflowLabel(length) {
+    return length;
+  }
+
+  /** @private */
+  _isOverflowHidden(length) {
+    return length === 0;
   }
 
   /** @private */
@@ -517,16 +578,36 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
       return;
     }
 
-    this._chips.forEach((chip) => {
+    // Clear all chips except the overflow
+    const chips = Array.from(this._chips).reverse();
+    const overflow = chips.pop();
+
+    chips.forEach((chip) => {
       chip.remove();
     });
 
     const items = [...this.selectedItems];
 
+    let refNode = overflow.nextElementSibling;
+
+    // Input flex-basis (4em = 64px)
+    const INPUT_MIN_WIDTH = 64;
+    const CHIP_MIN_WIDTH = 60;
+
     for (let i = items.length - 1; i >= 0; i--) {
-      const chip = this.__createChip(items[i]);
-      this._inputField.insertBefore(chip, this._inputField.firstElementChild);
+      // Ensure there is enough space for input if we add one more chip
+      if (this.inputElement.offsetWidth < INPUT_MIN_WIDTH + CHIP_MIN_WIDTH - overflow.offsetWidth) {
+        break;
+      }
+
+      const item = items.pop();
+      const chip = this.__createChip(item);
+      this._inputField.insertBefore(chip, refNode);
+
+      refNode = chip;
     }
+
+    this._overflowItems = items;
   }
 
   /**

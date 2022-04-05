@@ -25,6 +25,48 @@ const chip = css`
     font-family: var(--material-font-family);
   }
 
+  :host([part~='overflow']) {
+    position: relative;
+    margin-inline-start: 0.5rem;
+    padding-inline-end: 0.5rem;
+  }
+
+  :host([part~='overflow'])::before,
+  :host([part~='overflow'])::after {
+    position: absolute;
+    content: '';
+    width: 3px;
+    height: 20px;
+    border-left: 2px solid;
+    border-radius: 4px 0 0 4px;
+    border-color: hsla(214, 53%, 23%, 0.1);
+  }
+
+  :host([part~='overflow'])::before {
+    left: -4px;
+  }
+
+  :host([part~='overflow'])::after {
+    left: -8px;
+  }
+
+  :host([part~='overflow'][label='2']) {
+    margin-inline-start: 0.25rem;
+  }
+
+  :host([part~='overflow'][label='2'])::after {
+    display: none;
+  }
+
+  :host([part~='overflow'][label='1']) {
+    margin-inline-start: 0;
+  }
+
+  :host([part~='overflow'][label='1'])::before,
+  :host([part~='overflow'][label='1'])::after {
+    display: none;
+  }
+
   [part='label'] {
     font-size: var(--material-caption-font-size);
     line-height: 1;

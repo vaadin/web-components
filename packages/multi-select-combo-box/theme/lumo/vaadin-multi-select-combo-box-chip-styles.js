@@ -19,7 +19,7 @@ const chip = css`
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-xxs);
     line-height: 1;
-    padding: 0.3125em 0 0.3125em calc(0.5em + var(--lumo-border-radius-s) / 4);
+    padding: 0.3125em calc(0.5em + var(--lumo-border-radius-s) / 4);
     border-radius: var(--lumo-border-radius-s);
     border-radius: var(--lumo-border-radius);
     background-color: var(--lumo-contrast-20pct);
@@ -27,6 +27,52 @@ const chip = css`
     white-space: nowrap;
     box-sizing: border-box;
     min-width: 0;
+  }
+
+  :host(:not([part~='overflow'])) {
+    padding-inline-end: 0;
+  }
+
+  :host([part~='overflow']) {
+    position: relative;
+    min-width: var(--lumo-size-xxs);
+    margin-inline-start: var(--lumo-space-s);
+  }
+
+  :host([part~='overflow'])::before,
+  :host([part~='overflow'])::after {
+    position: absolute;
+    content: '';
+    width: 3px;
+    height: 21px;
+    border-left: 2px solid;
+    border-radius: 4px 0 0 4px;
+    border-color: var(--lumo-contrast-30pct);
+  }
+
+  :host([part~='overflow'])::before {
+    left: -4px;
+  }
+
+  :host([part~='overflow'])::after {
+    left: -8px;
+  }
+
+  :host([part~='overflow'][label='2']) {
+    margin-inline-start: calc(var(--lumo-space-s) / 2);
+  }
+
+  :host([part~='overflow'][label='2'])::after {
+    display: none;
+  }
+
+  :host([part~='overflow'][label='1']) {
+    margin-inline-start: 0;
+  }
+
+  :host([part~='overflow'][label='1'])::before,
+  :host([part~='overflow'][label='1'])::after {
+    display: none;
   }
 
   [part='label'] {

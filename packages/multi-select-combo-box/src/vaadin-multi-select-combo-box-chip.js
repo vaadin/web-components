@@ -42,6 +42,11 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
 
   static get template() {
     return html`
+      <style>
+        :host([part~='overflow']) [part='remove-button'] {
+          display: none !important;
+        }
+      </style>
       <div part="label">[[label]]</div>
       <div part="remove-button" role="button" on-click="_onRemoveClick"></div>
     `;

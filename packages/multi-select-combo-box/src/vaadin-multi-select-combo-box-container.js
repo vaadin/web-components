@@ -12,6 +12,7 @@ registerStyles(
     .wrapper {
       display: flex;
       width: 100%;
+      max-width: var(--_multi-select-combo-box-input-width);
     }
   `,
   {

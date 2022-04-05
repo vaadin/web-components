@@ -9,6 +9,7 @@ import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixinClass } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
@@ -241,6 +242,7 @@ interface MultiSelectComboBox
     DisabledMixinClass,
     DelegateStateMixinClass,
     DelegateFocusMixinClass,
+    ResizeMixinClass,
     ThemableMixinClass,
     ElementMixinClass,
     ControllerMixinClass {}
