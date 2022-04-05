@@ -118,7 +118,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} custom-values-set - Fired when the user sets a custom value.
- * @fires {CustomEvent} filter-value-changed - Fired when the `filterValue` property changes.
+ * @fires {CustomEvent} filter-changed - Fired when the `filter` property changes.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
  */
