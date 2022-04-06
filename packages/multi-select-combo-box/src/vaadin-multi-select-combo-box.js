@@ -17,14 +17,6 @@ import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shar
 import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const multiSelectComboBox = css`
-  [part='container'] {
-    --_multi-select-combo-box-input-width: calc(100% - 1.5rem);
-  }
-
-  :host([has-clear-button]) [part='container'] {
-    --_multi-select-combo-box-input-width: calc(100% - 3rem);
-  }
-
   [hidden] {
     display: none !important;
   }

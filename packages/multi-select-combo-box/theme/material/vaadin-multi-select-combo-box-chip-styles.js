@@ -23,6 +23,7 @@ const chip = css`
     cursor: default;
     white-space: nowrap;
     font-family: var(--material-font-family);
+    min-width: 0;
   }
 
   :host([part~='overflow']) {
