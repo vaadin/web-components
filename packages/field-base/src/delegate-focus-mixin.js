@@ -33,6 +33,8 @@ export const DelegateFocusMixin = dedupingMixin(
            * Any component implementing this mixin is expected to provide it
            * by using `this._setFocusElement(input)` Polymer API.
            *
+           * Toggling `tabindex` attribute on the host element propagates its value to `focusElement`.
+           *
            * @protected
            * @type {!HTMLElement}
            */
@@ -43,16 +45,15 @@ export const DelegateFocusMixin = dedupingMixin(
           },
 
           /**
-           * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
-           *
-           * By default, the host element does not have tabindex attribute. Instead, `focusElement` should have it.
-           * Toggling `tabindex` attribute on the host element propagates its value to `focusElement`.
+           * Override the property from `TabIndexMixin`
+           * to ensure the `tabindex` attribute of the focus element
+           * will be restored to `0` after re-enabling the element.
            *
            * @protected
+           * @override
            */
-          tabindex: {
-            type: Number,
-            value: undefined
+          _lastTabIndex: {
+            value: 0
           }
         };
       }
@@ -218,7 +219,7 @@ export const DelegateFocusMixin = dedupingMixin(
         if (this.disabled && tabindex) {
           // If tabindex attribute was changed while component was disabled
           if (tabindex !== -1) {
-            this.__lastTabIndex = tabindex;
+            this._lastTabIndex = tabindex;
           }
           this.tabindex = undefined;
         }
