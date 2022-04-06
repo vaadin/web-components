@@ -373,6 +373,13 @@ describe('basic', () => {
         expect(overflow.label).to.equal('2');
       });
 
+      it('should set overflow chip title as not fitting chips labels', async () => {
+        comboBox.selectedItems = ['apple', 'banana', 'orange'];
+        await nextRender();
+        const title = overflow.getAttribute('title');
+        expect(title).to.equal('apple, banana');
+      });
+
       describe('resize', () => {
         beforeEach(async () => {
           comboBox.selectedItems = ['apple', 'banana', 'orange'];

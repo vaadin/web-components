@@ -166,6 +166,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
               part="chip overflow"
               disabled="[[disabled]]"
               label$="[[_getOverflowLabel(_overflowItems.length)]]"
+              title$="[[_getOverflowTitle(_overflowItems)]]"
               hidden$="[[_isOverflowHidden(_overflowItems.length)]]"
               on-mousedown="_preventBlur"
             ></vaadin-multi-select-combo-box-chip>
@@ -490,6 +491,11 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   /** @private */
   _getOverflowLabel(length) {
     return length;
+  }
+
+  /** @private */
+  _getOverflowTitle(items) {
+    return items.map((item) => this._getItemLabel(item, this.itemLabelPath)).join(', ');
   }
 
   /** @private */
