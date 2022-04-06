@@ -24,6 +24,7 @@ registerStyles(
     .resizer-container {
       overflow: auto;
       flex-grow: 1;
+      border-radius: inherit; /* prevent child elements being drawn outside part=overlay */
     }
 
     [part='overlay'][style] .resizer-container {
