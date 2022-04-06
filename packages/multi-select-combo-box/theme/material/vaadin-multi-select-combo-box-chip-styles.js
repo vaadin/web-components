@@ -50,20 +50,20 @@ const chip = css`
     left: -8px;
   }
 
-  :host([part~='overflow'][label='2']) {
+  :host([part~='overflow-two']) {
     margin-inline-start: 0.25rem;
   }
 
-  :host([part~='overflow'][label='2'])::after {
+  :host([part~='overflow-two'])::after {
     display: none;
   }
 
-  :host([part~='overflow'][label='1']) {
+  :host([part~='overflow-one']) {
     margin-inline-start: 0;
   }
 
-  :host([part~='overflow'][label='1'])::before,
-  :host([part~='overflow'][label='1'])::after {
+  :host([part~='overflow-one'])::before,
+  :host([part~='overflow-one'])::after {
     display: none;
   }
 

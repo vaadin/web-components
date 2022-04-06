@@ -79,6 +79,8 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
  * `overflow`             | The chip shown when component width is not enough to fit all chips
+ * `overflow-one`         | Set on the overflow chip when only one chip does not fit
+ * `overflow-two`         | Set on the overflow chip when two chips do not fit
  * `toggle-button`        | The toggle button
  *
  * The following state attributes are available for styling:
@@ -164,9 +166,9 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           >
             <vaadin-multi-select-combo-box-chip
               slot="prefix"
-              part="chip overflow"
+              part$="[[_getOverflowPart(_overflowItems.length)]]"
               disabled="[[disabled]]"
-              label$="[[_getOverflowLabel(_overflowItems.length)]]"
+              label="[[_getOverflowLabel(_overflowItems.length)]]"
               title$="[[_getOverflowTitle(_overflowItems)]]"
               hidden$="[[_isOverflowHidden(_overflowItems.length)]]"
               on-mousedown="_preventBlur"
@@ -492,6 +494,19 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   /** @private */
   _getOverflowLabel(length) {
     return length;
+  }
+
+  /** @private */
+  _getOverflowPart(length) {
+    let part = `chip overflow`;
+
+    if (length === 1) {
+      part += ' overflow-one';
+    } else if (length === 2) {
+      part += ' overflow-two';
+    }
+
+    return part;
   }
 
   /** @private */

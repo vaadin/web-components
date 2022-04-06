@@ -87,6 +87,8 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
  * `overflow`             | The chip shown when component width is not enough to fit all chips
+ * `overflow-one`         | Set on the overflow chip when only one chip does not fit
+ * `overflow-two`         | Set on the overflow chip when two chips do not fit
  * `toggle-button`        | The toggle button
  *
  * The following state attributes are available for styling:
