@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { esc, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, esc, fixtureSync } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-dialog.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -137,9 +137,19 @@ describe('vaadin-dialog', () => {
     });
 
     describe('detaching', () => {
-      it('should close the overlay when detached', () => {
+      it('should close the overlay when detached', async () => {
         dialog.parentNode.removeChild(dialog);
+        await aTimeout(0);
         expect(dialog.opened).to.be.false;
+      });
+
+      it('should not close the overlay when moved within the DOM', async () => {
+        const newParent = document.createElement('div');
+        document.body.appendChild(newParent);
+
+        newParent.appendChild(dialog);
+        await aTimeout(0);
+        expect(dialog.opened).to.be.true;
       });
     });
 

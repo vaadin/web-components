@@ -569,7 +569,13 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    this.opened = false;
+    // Delay closing the dialog in case it, or an ancestor, was just
+    // attached to a different node
+    setTimeout(() => {
+      if (!this.isConnected) {
+        this.opened = false;
+      }
+    });
   }
 
   /** @private */
