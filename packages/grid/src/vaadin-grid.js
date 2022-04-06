@@ -340,11 +340,6 @@ class Grid extends ElementMixin(
         value: isTouch
       },
 
-      /** @protected */
-      tabindex: {
-        value: undefined
-      },
-
       /**
        * If true, the grid's height is defined by its rows.
        *
@@ -470,23 +465,6 @@ class Grid extends ElementMixin(
     super.attributeChangedCallback(name, oldValue, newValue);
     if (name === 'dir') {
       this.__isRTL = newValue === 'rtl';
-    }
-  }
-
-  /**
-   * Override an observer from `DisabledMixin` to not
-   * set `tabindex` on the grid when it is re-enabled.
-   *
-   * @param {boolean} disabled
-   * @param {boolean} oldDisabled
-   * @protected
-   * @override
-   */
-  _disabledChanged(disabled, oldDisabled) {
-    super._disabledChanged(disabled, oldDisabled);
-
-    if (oldDisabled) {
-      this.removeAttribute('tabindex');
     }
   }
 
