@@ -99,10 +99,6 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
           height: 100%;
           min-height: inherit;
           text-shadow: inherit;
-          background: transparent;
-          padding: 0;
-          border: none;
-          box-shadow: none;
         }
 
         [part='prefix'],
