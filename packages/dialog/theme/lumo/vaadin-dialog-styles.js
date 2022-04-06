@@ -93,7 +93,7 @@ const dialogOverlay = css`
       display: block;
       width: calc(100% + var(--lumo-space-l) * 2);
       height: 200px;
-      background: white;
+      background: var(--lumo-base-color);
       margin-top: -199px;
       margin-left: calc(var(--lumo-space-l) * -1);
       margin-right: calc(var(--lumo-space-l) * -1);
