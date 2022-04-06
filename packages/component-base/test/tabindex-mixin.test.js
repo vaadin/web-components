@@ -20,8 +20,8 @@ describe('tabindex-mixin', () => {
       element = fixtureSync(`<tabindex-mixin-element></tabindex-mixin-element>`);
     });
 
-    it('should set tabindex attribute to 0 by default', () => {
-      expect(element.getAttribute('tabindex')).to.be.equal('0');
+    it('should not have tabindex attribute by default', () => {
+      expect(element.hasAttribute('tabindex')).to.be.false;
     });
 
     it('should reflect tabindex property to the attribute', () => {
@@ -43,6 +43,12 @@ describe('tabindex-mixin', () => {
       element.tabIndex = 1;
       element.disabled = true;
       expect(element.getAttribute('tabindex')).to.be.equal('-1');
+    });
+
+    it('should remove tabindex attribute when enabled if no tabindex was before', () => {
+      element.disabled = true;
+      element.disabled = false;
+      expect(element.hasAttribute('tabindex')).to.be.false;
     });
 
     it('should restore tabindex attribute when enabled', () => {
