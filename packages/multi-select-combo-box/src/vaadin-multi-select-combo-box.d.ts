@@ -86,6 +86,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `error-message`        | The error message element
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
+ * `overflow`             | The chip shown when component width is not enough to fit all chips
  * `toggle-button`        | The toggle button
  *
  * The following state attributes are available for styling:
