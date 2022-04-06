@@ -36,6 +36,12 @@ registerStyles(
       display: none;
     }
 
+    :host([resizable]) [part='title'] {
+      cursor: move;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
     .resizer {
       position: absolute;
       height: 16px;
