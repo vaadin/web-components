@@ -13,9 +13,6 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const chip = css`
   :host {
-    display: inline-flex;
-    align-items: center;
-    align-self: center;
     font-family: var(--lumo-font-family);
     font-size: var(--lumo-font-size-xxs);
     line-height: 1;
@@ -24,9 +21,6 @@ const chip = css`
     border-radius: var(--lumo-border-radius);
     background-color: var(--lumo-contrast-20pct);
     cursor: var(--lumo-clickable-cursor);
-    white-space: nowrap;
-    box-sizing: border-box;
-    min-width: 0;
   }
 
   :host(:not([part~='overflow'])) {
@@ -78,8 +72,6 @@ const chip = css`
   [part='label'] {
     color: var(--lumo-body-text-color);
     font-weight: 500;
-    overflow: hidden;
-    text-overflow: ellipsis;
     line-height: 1.25;
   }
 

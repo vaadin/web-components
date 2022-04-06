@@ -11,19 +11,13 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const chip = css`
   :host {
-    display: flex;
-    align-items: center;
-    align-self: center;
-    box-sizing: border-box;
     height: 1.25rem;
     margin-inline-end: 0.25rem;
     padding-inline-start: 0.5rem;
     border-radius: 4px;
     background-color: hsla(214, 53%, 23%, 0.1);
     cursor: default;
-    white-space: nowrap;
     font-family: var(--material-font-family);
-    min-width: 0;
   }
 
   :host([part~='overflow']) {
@@ -72,8 +66,6 @@ const chip = css`
     font-size: var(--material-caption-font-size);
     line-height: 1;
     color: var(--material-body-text-color);
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   /* Override field button */
