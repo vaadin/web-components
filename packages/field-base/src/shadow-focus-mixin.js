@@ -20,6 +20,7 @@ export const ShadowFocusMixin = (superClass) =>
         /**
          * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
          *
+         * @override
          * @protected
          */
         tabindex: {
@@ -88,7 +89,7 @@ export const ShadowFocusMixin = (superClass) =>
       if (this.disabled && tabindex) {
         // If tabindex attribute was changed while component was disabled
         if (tabindex !== -1) {
-          this.__lastTabIndex = tabindex;
+          this._lastTabIndex = tabindex;
         }
         this.tabindex = undefined;
       }
