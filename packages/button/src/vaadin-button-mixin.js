@@ -17,6 +17,20 @@ import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
  */
 export const ButtonMixin = (superClass) =>
   class ButtonMixinClass extends ActiveMixin(TabindexMixin(FocusMixin(superClass))) {
+    static get properties() {
+      return {
+        /**
+         * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
+         *
+         * @override
+         * @protected
+         */
+        tabindex: {
+          value: 0
+        }
+      };
+    }
+
     /**
      * By default, `Space` is the only possible activation key for a focusable HTML element.
      * Nonetheless, the button is an exception as it can be also activated by pressing `Enter`.

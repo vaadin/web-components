@@ -46,20 +46,6 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     return 'vaadin-button';
   }
 
-  static get properties() {
-    return {
-      /**
-       * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
-       *
-       * @override
-       * @protected
-       */
-      tabindex: {
-        value: 0
-      }
-    };
-  }
-
   static get template() {
     return html`
       <style>
