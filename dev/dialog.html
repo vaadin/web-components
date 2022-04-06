@@ -5,25 +5,33 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dialog</title>
-    <script type="module" src="./common.js"></script>
 
     <script type="module">
+      import './common.js'; // A separate <script type="module"> for this import crashes Safari often
       import '@vaadin/dialog';
+      import '@vaadin/button';
+      import '@vaadin/icon';
+      import '@vaadin/vaadin-lumo-styles/iconset';
     </script>
   </head>
 
   <body>
     <vaadin-dialog></vaadin-dialog>
 
-    <button>Open dialog 1</button>
+    <vaadin-button>Open dialog 1</vaadin-button>
 
     <script type="module">
       const dialog1 = document.querySelector('vaadin-dialog');
+      dialog1.headerTitle = 'Title';
+      dialog1.draggable = true;
+      dialog1.resizable = true;
 
       dialog1.renderer = (root) => {
         if (root.firstChild) {
           return;
         }
+
+        root.style.maxWidth = '40em';
 
         // Second dialog
         const dialog2 = document.createElement('vaadin-dialog');
@@ -33,7 +41,7 @@
           }
 
           // Close second dialog
-          const btnClose2 = document.createElement('button');
+          const btnClose2 = document.createElement('vaadin-button');
           btnClose2.textContent = 'Close dialog 2';
           btnClose2.addEventListener('click', () => {
             dialog2.opened = false;
@@ -44,27 +52,57 @@
 
         root.appendChild(dialog2);
 
-        // Close first dialog
-        const btnClose1 = document.createElement('button');
-        btnClose1.textContent = 'Close dialog 1';
-        btnClose1.addEventListener('click', () => {
-          dialog1.opened = false;
-        });
-
-        root.appendChild(btnClose1);
-
         // Open second dialog
-        const btnOpen2 = document.createElement('button');
+        const btnOpen2 = document.createElement('vaadin-button');
         btnOpen2.textContent = 'Open dialog 2';
         btnOpen2.addEventListener('click', () => {
           dialog2.opened = true;
         });
 
-        root.appendChild(btnOpen2);
+        const text = document.createElement('p');
+        text.textContent =
+          'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio laborum optio quo perferendis unde, fuga reprehenderit molestias cum laboriosam ipsa enim voluptatem iusto fugit. Sed, veniam repudiandae consectetur recusandae laudantium.';
+        text.style.marginTop = '0';
+
+        root.append(text, btnOpen2);
+      };
+
+      dialog1.headerRenderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        const button = document.createElement('vaadin-button');
+        button.innerHTML = '<vaadin-icon icon="lumo:cross" aria-label="close dialog"></vaadin-icon>';
+        button.theme = 'tertiary-inline icon';
+        button.addEventListener('click', () => {
+          dialog1.opened = false;
+        });
+
+        const text = document.createElement('span');
+        text.textContent = 'Header content';
+
+        root.append(text, button);
+      };
+
+      dialog1.footerRenderer = (root) => {
+        if (root.firstChild) {
+          return;
+        }
+        const button = document.createElement('vaadin-button');
+        button.textContent = 'Action';
+        button.theme = 'primary';
+
+        const button2 = document.createElement('vaadin-button');
+        button2.textContent = 'Action';
+
+        const text = document.createElement('span');
+        text.textContent = 'Footer content';
+
+        root.append(text, button2, button);
       };
 
       // Open first dialog
-      const btnOpen1 = document.querySelector('button');
+      const btnOpen1 = document.querySelector('vaadin-button');
       btnOpen1.addEventListener('click', () => {
         dialog1.opened = true;
       });

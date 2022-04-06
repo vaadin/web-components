@@ -15,9 +15,24 @@ import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
 registerStyles(
   'vaadin-dialog-overlay',
   css`
-    /* prefixing with the element tag to avoid styling confirm-dialog header part */
-    header[part='header'] {
+    /* prefixing with the element tags to avoid styling confirm-dialog header part */
+    header[part='header'],
+    [part='header-content'],
+    footer[part='footer'] {
       display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      flex: none;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    ::slotted([slot='header']),
+    ::slotted([slot='header-content']),
+    ::slotted([slot='title']),
+    ::slotted([slot='footer']) {
+      display: contents;
+      pointer-events: auto;
     }
 
     [part='header-content'] {
@@ -25,8 +40,8 @@ registerStyles(
     }
 
     /* prefixing with the element tag to avoid styling confirm-dialog footer part */
+    [part='header-content'],
     footer[part='footer'] {
-      display: flex;
       justify-content: flex-end;
     }
 
@@ -40,7 +55,6 @@ registerStyles(
     }
 
     :host(:is([has-title], [has-header], [has-footer])) [part='content'] {
-      min-height: 100%;
       height: auto;
     }
 
@@ -54,8 +68,6 @@ registerStyles(
       :host(:is([has-title], [has-header], [has-footer])) [part='content'] {
         flex: 1;
         overflow: auto;
-        min-height: auto;
-        height: 100%;
       }
     }
 
