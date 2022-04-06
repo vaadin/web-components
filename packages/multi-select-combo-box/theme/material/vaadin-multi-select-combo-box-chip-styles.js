@@ -71,6 +71,8 @@ const chip = css`
     font-size: var(--material-caption-font-size);
     line-height: 1;
     color: var(--material-body-text-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* Override field button */
