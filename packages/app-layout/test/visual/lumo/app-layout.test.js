@@ -48,6 +48,14 @@ describe('app-layout', () => {
         window.dispatchEvent(new Event('resize'));
         await visualDiff(div, `${dir}-overlay`);
       });
+
+      it('primary-drawer-overlay-opened', async () => {
+        element.primarySection = 'drawer';
+        element.style.setProperty('--vaadin-app-layout-drawer-overlay', ' true');
+        window.dispatchEvent(new Event('resize'));
+        element.drawerOpened = true;
+        await visualDiff(div, `${dir}-primary-drawer-overlay-opened`);
+      });
     });
   });
 });
