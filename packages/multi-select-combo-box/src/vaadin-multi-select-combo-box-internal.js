@@ -103,6 +103,38 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /**
+   * Override Enter handler to keep overlay open
+   * when item is selected or unselected.
+   * @param {!Event} event
+   * @protected
+   * @override
+   */
+  _onEnter(event) {
+    this.__enterPressed = true;
+
+    super._onEnter(event);
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _closeOrCommit() {
+    if (this.__enterPressed) {
+      this.__enterPressed = null;
+
+      // Keep focused index after committing
+      const focusedIndex = this._focusedIndex;
+      this._commitValue();
+      this._focusedIndex = focusedIndex;
+
+      return;
+    }
+
+    super._closeOrCommit();
+  }
+
+  /**
    * @param {CustomEvent} event
    * @protected
    * @override

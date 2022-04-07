@@ -174,6 +174,21 @@ describe('basic', () => {
       await sendKeys({ down: 'Enter' });
       expect(spy.calledOnce).to.be.false;
     });
+
+    it('should keep overlay open when selecting an item', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
+      expect(internal.opened).to.be.true;
+    });
+
+    it('should keep overlay focused index when selecting an item', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
+      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      expect(item.hasAttribute('focused')).to.be.true;
+    });
   });
 
   describe('pageSize', () => {
