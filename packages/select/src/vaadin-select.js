@@ -142,7 +142,6 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       <style>
         ::slotted([slot='value']) {
           flex-grow: 1;
-          background-color: transparent;
         }
       </style>
 

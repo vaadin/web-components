@@ -49,17 +49,12 @@ registerStyles(
       text-transform: none;
     }
 
-    :host::before,
-    :host::after {
-      display: none;
-    }
-
-    ::slotted(:not([slot])) {
+    ::slotted(*) {
       font: inherit;
       padding: 4px 0;
     }
 
-    ::slotted(:not([slot]):hover) {
+    ::slotted(*:hover) {
       background-color: transparent;
     }
   `,
