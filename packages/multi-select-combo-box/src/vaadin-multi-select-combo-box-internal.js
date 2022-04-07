@@ -123,10 +123,10 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     if (this.__enterPressed) {
       this.__enterPressed = null;
 
-      // Keep focused index after committing
-      const focusedIndex = this._focusedIndex;
+      // Keep selected item focused after committing on Enter.
+      const focusedItem = this.filteredItems[this._focusedIndex];
       this._commitValue();
-      this._focusedIndex = focusedIndex;
+      this._focusedIndex = this.filteredItems.indexOf(focusedItem);
 
       return;
     }
