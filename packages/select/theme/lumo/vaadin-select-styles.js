@@ -66,13 +66,13 @@ registerStyles(
       --_lumo-selected-item-padding: 0.5em;
     }
 
-    ::slotted(:not([slot])) {
+    ::slotted(*) {
       min-height: var(--_lumo-selected-item-height);
       padding-top: var(--_lumo-selected-item-padding);
       padding-bottom: var(--_lumo-selected-item-padding);
     }
 
-    ::slotted(:not([slot]):hover) {
+    ::slotted(*:hover) {
       background-color: transparent;
     }
   `,

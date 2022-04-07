@@ -35,14 +35,14 @@ class SelectValueButton extends ButtonMixin(ThemableMixin(PolymerElement)) {
           width: 0;
         }
 
-        ::slotted(:not([slot])) {
+        ::slotted(*) {
           padding-left: 0;
           padding-right: 0;
           flex: auto;
         }
 
         /* placeholder styles */
-        ::slotted(:not([slot]):not([selected])) {
+        ::slotted(*:not([selected])) {
           line-height: 1;
         }
 
