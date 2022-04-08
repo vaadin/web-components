@@ -9,7 +9,7 @@ interface PolylitMixinConstructor {
 }
 
 interface PolylitMixin {
-  ready: void;
+  ready(): void;
 }
 
 export { PolylitMixin, PolylitMixinConstructor };
