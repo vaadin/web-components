@@ -423,7 +423,7 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
     this.__updateChips();
 
     // Re-render scroller
-    this.$.comboBox.$.dropdown._scroller.__virtualizer.update();
+    this.$.comboBox.$.dropdown._scroller.requestContentUpdate();
 
     // Wait for chips to render
     requestAnimationFrame(() => {
@@ -468,15 +468,18 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
 
     const index = this._findIndex(item, itemsCopy, this.itemIdPath);
     if (index !== -1) {
+      // Do not unselect when manually typing and committing an already selected item.
+      if (this.filter.toLowerCase() === this._getItemLabel(item, this.itemLabelPath).toLowerCase()) {
+        this.__clearFilter();
+        return;
+      }
+
       itemsCopy.splice(index, 1);
     } else {
       itemsCopy.push(item);
     }
 
     this.__updateSelection(itemsCopy);
-
-    // Reset the overlay focused index.
-    this.$.comboBox._focusedIndex = -1;
 
     // Suppress `value-changed` event.
     this.__clearFilter();

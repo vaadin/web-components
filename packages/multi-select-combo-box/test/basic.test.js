@@ -115,6 +115,14 @@ describe('basic', () => {
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
     });
 
+    it('should not un-select item when typing its value manually', async () => {
+      comboBox.selectedItems = ['orange'];
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ type: 'orange' });
+      await sendKeys({ down: 'Enter' });
+      expect(comboBox.selectedItems).to.deep.equal(['orange']);
+    });
+
     it('should update has-value attribute on selected items change', () => {
       expect(comboBox.hasAttribute('has-value')).to.be.false;
       comboBox.selectedItems = ['apple', 'banana'];
@@ -187,6 +195,14 @@ describe('basic', () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ down: 'Enter' });
       const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      expect(item.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should keep overlay focused index when entering and committing', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ type: 'banana' });
+      await sendKeys({ down: 'Enter' });
+      const item = document.querySelectorAll('vaadin-multi-select-combo-box-item')[1];
       expect(item.hasAttribute('focused')).to.be.true;
     });
   });
@@ -280,7 +296,7 @@ describe('basic', () => {
 
       it('should re-render chips when un-selecting the item', async () => {
         await sendKeys({ down: 'ArrowDown' });
-        await sendKeys({ type: 'orange' });
+        await sendKeys({ down: 'ArrowUp' });
         await sendKeys({ down: 'Enter' });
         await nextRender();
         expect(getChips(comboBox).length).to.equal(0);
