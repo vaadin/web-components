@@ -27,10 +27,10 @@ registerStyles(
       z-index: 1;
     }
 
-    ::slotted([slot='header']),
+    :host(:is([has-title], [has-header])) ::slotted([slot='header']),
     ::slotted([slot='header-content']),
     ::slotted([slot='title']),
-    ::slotted([slot='footer']) {
+    :host([has-footer]) ::slotted([slot='footer']) {
       display: contents;
       pointer-events: auto;
     }

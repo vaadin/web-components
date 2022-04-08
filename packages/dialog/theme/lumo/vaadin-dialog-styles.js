@@ -31,9 +31,9 @@ const dialogOverlay = css`
     padding-top: 0;
   }
 
-  [part='header'],
-  [part='header-content'],
-  [part='footer'] {
+  :host(:is([has-header], [has-title])) [part='header'],
+  :host([has-header]) [part='header-content'],
+  :host([has-footer]) [part='footer'] {
     gap: var(--lumo-space-xs) var(--lumo-space-s);
     line-height: var(--lumo-line-height-s);
   }
