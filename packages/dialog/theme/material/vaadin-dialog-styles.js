@@ -13,10 +13,6 @@ const dialogOverlay = css`
     border-radius: 8px;
   }
 
-  [part='overlay']:focus-visible {
-    box-shadow: 0 0 0 2px var(--material-primary-color), var(--material-shadow-elevation-24dp);
-  }
-
   [part='content'] {
     padding: 24px;
   }

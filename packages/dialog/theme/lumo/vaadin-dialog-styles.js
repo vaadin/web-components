@@ -23,10 +23,6 @@ const dialogOverlay = css`
     -webkit-tap-highlight-color: transparent;
   }
 
-  [part='overlay']:focus-visible {
-    box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct), 0 0 0 1px var(--lumo-shade-5pct), var(--lumo-box-shadow-xl);
-  }
-
   [part='content'] {
     padding: var(--lumo-space-l);
   }
