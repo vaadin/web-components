@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-radio-button",
-  "version": "23.0.4",
+  "version": "23.0.5",
   "publishConfig": {
     "access": "public"
   },
@@ -34,6 +34,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/radio-group": "^23.0.4"
+    "@vaadin/radio-group": "^23.0.5"
   }
 }
