@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-context-menu",
-  "version": "22.0.11",
+  "version": "22.0.12",
   "publishConfig": {
     "access": "public"
   },
@@ -32,6 +32,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/context-menu": "^22.0.11"
+    "@vaadin/context-menu": "^22.0.12"
   }
 }

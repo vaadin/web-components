@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vertical-layout",
-  "version": "22.0.11",
+  "version": "22.0.12",
   "publishConfig": {
     "access": "public"
   },
@@ -33,10 +33,10 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^22.0.11",
-    "@vaadin/vaadin-lumo-styles": "^22.0.11",
-    "@vaadin/vaadin-material-styles": "^22.0.11",
-    "@vaadin/vaadin-themable-mixin": "^22.0.11"
+    "@vaadin/component-base": "^22.0.12",
+    "@vaadin/vaadin-lumo-styles": "^22.0.12",
+    "@vaadin/vaadin-material-styles": "^22.0.12",
+    "@vaadin/vaadin-themable-mixin": "^22.0.12"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

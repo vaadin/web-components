@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/board",
-  "version": "22.0.11",
+  "version": "22.0.12",
   "publishConfig": {
     "access": "public"
   },
@@ -37,7 +37,7 @@
   "dependencies": {
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^22.0.11",
+    "@vaadin/component-base": "^22.0.12",
     "@vaadin/vaadin-license-checker": "^2.1.0"
   },
   "devDependencies": {
