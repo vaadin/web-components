@@ -295,7 +295,7 @@ const createVisualTestsConfig = (theme) => {
       sauceLabsLauncher({
         browserName: 'chrome',
         platformName: 'Windows 10',
-        browserVersion: '88'
+        browserVersion: '99'
       })
     ],
     plugins: [
