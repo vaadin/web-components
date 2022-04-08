@@ -64,8 +64,7 @@ const dialogOverlay = css`
     color: var(--lumo-header-text-color);
   }
 
-  [part='title'],
-  [part='header-content'] {
+  [part='title'] {
     margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
   }
 
