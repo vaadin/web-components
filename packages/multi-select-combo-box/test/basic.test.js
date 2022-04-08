@@ -116,6 +116,7 @@ describe('basic', () => {
     });
 
     it('should not un-select item when typing its value manually', async () => {
+      comboBox.selectedItems = ['orange'];
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ type: 'orange' });
       await sendKeys({ down: 'Enter' });
