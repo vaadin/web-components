@@ -3,18 +3,11 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { Constructor } from '@open-wc/dedupe-mixin';
 import { LitElement } from 'lit';
 
-declare type Constructor<T> = new (...args: any[]) => T;
+export declare function PolylitMixin<T extends Constructor<LitElement>>(base: T): T & Constructor<PolylitMixinClass>;
 
-declare function PolylitMixin<T extends Constructor<LitElement>>(base: T): T & PolylitMixinConstructor;
-
-interface PolylitMixinConstructor {
-  new (...args: any[]): PolylitMixin;
-}
-
-interface PolylitMixin {
+export declare class PolylitMixinClass {
   ready(): void;
 }
-
-export { PolylitMixin, PolylitMixinConstructor };
