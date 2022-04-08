@@ -32,6 +32,48 @@ describe('PolylitMixin', () => {
     });
   });
 
+  describe('convenience', () => {
+    let element;
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        render() {
+          return html`<div id="foo">Component</div>`;
+        }
+
+        get(path, object) {
+          return this._get(path, object);
+        }
+
+        set(path, value, object) {
+          this._set(path, value, object);
+        }
+      }
+    );
+
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await element.updateComplete;
+    });
+
+    it('should reference elements with id', async () => {
+      expect(element.$.foo).to.be.instanceOf(HTMLDivElement);
+    });
+
+    it('should get the nested value', async () => {
+      expect(element.get('foo.bar', { foo: { bar: 'baz' } })).to.equal('baz');
+    });
+
+    it('should return undefined for a non-existent value', async () => {
+      expect(element.get('foo.bar', {})).to.be.undefined;
+    });
+
+    it('should set the nested value', async () => {
+      const object = { foo: {} };
+      element.set('foo.bar', 'baz', object);
+      expect(object.foo.bar).to.equal('baz');
+    });
+  });
+
   describe('reflectToAttribute', () => {
     let element;
 
@@ -45,6 +87,11 @@ describe('PolylitMixin', () => {
             },
 
             disabled: {
+              type: Boolean,
+              reflectToAttribute: true
+            },
+
+            longName: {
               type: Boolean,
               reflectToAttribute: true
             }
@@ -80,6 +127,12 @@ describe('PolylitMixin', () => {
       element.disabled = false;
       await element.updateComplete;
       expect(element.hasAttribute('disabled')).to.be.false;
+    });
+
+    it('should transfrom camelCase properties as dash-case attributes', async () => {
+      element.longName = true;
+      await element.updateComplete;
+      expect(element.hasAttribute('long-name')).to.be.true;
     });
   });
 
