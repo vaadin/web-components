@@ -158,11 +158,13 @@ const color = css`
   html {
     color: var(--lumo-body-text-color);
     background-color: var(--lumo-base-color);
+    color-scheme: light;
   }
 
   [theme~='dark'] {
     color: var(--lumo-body-text-color);
     background-color: var(--lumo-base-color);
+    color-scheme: dark;
   }
 
   h1,
