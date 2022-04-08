@@ -246,7 +246,7 @@ describe('PolylitMixin', () => {
     });
 
     describe('superclass', () => {
-      class AbstractClass extends PolylitMixin(LitElement) {
+      class SuperClass extends PolylitMixin(LitElement) {
         static get properties() {
           return {
             value: {
@@ -256,6 +256,11 @@ describe('PolylitMixin', () => {
 
             calls: {
               type: Array
+            },
+
+            name: {
+              type: String,
+              value: 'superclass-name'
             }
           };
         }
@@ -270,8 +275,10 @@ describe('PolylitMixin', () => {
         }
       }
 
+      const superClassTag = defineCE(SuperClass);
+
       const tag = defineCE(
-        class extends AbstractClass {
+        class extends SuperClass {
           static get properties() {
             return {
               text: {
@@ -281,6 +288,10 @@ describe('PolylitMixin', () => {
 
               count: {
                 type: Number
+              },
+
+              name: {
+                value: 'subclass-name'
               }
             };
           }
@@ -313,6 +324,15 @@ describe('PolylitMixin', () => {
         await element.updateComplete;
         expect(element.calls[0]).to.deep.equal(['foo', undefined]);
         expect(element.count).to.equal(3);
+      });
+
+      it('should get a default value defined for the subclass', () => {
+        expect(element.name).to.equal('subclass-name');
+      });
+
+      it('should not get a default value defined for the subclass', () => {
+        const superClassInstance = fixtureSync(`<${superClassTag}></${superClassTag}>`);
+        expect(superClassInstance.name).to.equal('superclass-name');
       });
     });
 

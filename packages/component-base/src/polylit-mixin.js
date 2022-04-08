@@ -74,9 +74,9 @@ const PolylitMixinImplementation = (superclass) => {
       }
     }
 
-    static addInitializer(initializer) {
+    static addCheckedInitializer(initializer) {
       super.addInitializer((instance) => {
-        // TODO: Why is this check needed?
+        // Prevent initializer from affecting superclass
         if (instance instanceof this) {
           initializer(instance);
         }
@@ -96,7 +96,7 @@ const PolylitMixinImplementation = (superclass) => {
 
       if ('value' in options) {
         // Set the default value
-        this.addInitializer((instance) => {
+        this.addCheckedInitializer((instance) => {
           if (typeof options.value === 'function') {
             instance[name] = options.value.call(instance);
           } else {
@@ -108,7 +108,7 @@ const PolylitMixinImplementation = (superclass) => {
       if (options.readOnly) {
         const setter = defaultDescriptor.set;
 
-        this.addInitializer((instance) => {
+        this.addCheckedInitializer((instance) => {
           // This is run during construction of the element
           instance['_set' + upper(name)] = function (value) {
             setter.call(instance, value);
@@ -131,7 +131,7 @@ const PolylitMixinImplementation = (superclass) => {
         // set this method
         this.getOrCreateMap('__observers').set(name, method);
 
-        this.addInitializer((instance) => {
+        this.addCheckedInitializer((instance) => {
           if (!instance[method]) {
             console.warn(`observer method ${method} not defined`);
           }
