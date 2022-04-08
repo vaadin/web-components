@@ -31,14 +31,9 @@ function parseObserver(observerString) {
 }
 
 function getOrCreateMap(obj, name) {
-  if (!obj[name]) {
-    obj[name] = new Map();
-    // eslint-disable-next-line no-prototype-builtins
-  } else if (!obj.hasOwnProperty(name)) {
+  if (!Object.prototype.hasOwnProperty.call(obj, name)) {
     // clone any existing entries (superclasses)
-    const map = obj[name];
-    obj[name] = new Map();
-    map.forEach((v, k) => obj[name].set(k, v));
+    obj[name] = new Map(obj[name]);
   }
   return obj[name];
 }
@@ -163,7 +158,7 @@ const PolylitMixinImplementation = (superclass) => {
       }
 
       if (!options.attribute) {
-        options.attribute = name.replace(/([A-Z])/g, '-$1').toLowerCase();
+        options.attribute = camelToDash(name);
       }
 
       return result;
