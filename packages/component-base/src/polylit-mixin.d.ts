@@ -10,4 +10,14 @@ export declare function PolylitMixin<T extends Constructor<LitElement>>(base: T)
 
 export declare class PolylitMixinClass {
   ready(): void;
+
+  /**
+   * Reads a value from a path.
+   */
+  protected _get(root: Object, path: String): any;
+
+  /**
+   * Sets a value to a path.
+   */
+  protected _set(root: Object, path: String, value: any): void;
 }
