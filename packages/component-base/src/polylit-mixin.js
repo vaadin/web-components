@@ -57,7 +57,7 @@ const PolylitMixinImplementation = (superclass) => {
       return getOrCreateMap(this, name);
     }
 
-    /*
+    /**
      * @protected
      * @override
      */
