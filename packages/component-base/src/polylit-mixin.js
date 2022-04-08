@@ -194,16 +194,16 @@ const PolylitMixinImplementation = (superclass) => {
         this.__runObservers(props, this.constructor.__observers);
       }
 
-      if (this.constructor.__notifyProps) {
-        this.__runNotifyProps(props, this.constructor.__notifyProps);
-      }
-
       if (this.constructor.__complexObservers) {
         this.__runComplexObservers(props, this.constructor.__complexObservers);
       }
 
       if (this.__dynamicObservers) {
         this.__runComplexObservers(props, this.__dynamicObservers);
+      }
+
+      if (this.constructor.__notifyProps) {
+        this.__runNotifyProps(props, this.constructor.__notifyProps);
       }
     }
 
