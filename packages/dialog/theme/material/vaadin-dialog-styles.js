@@ -10,7 +10,6 @@ const dialogOverlay = css`
     max-width: 560px;
     min-width: 280px;
     -webkit-tap-highlight-color: transparent;
-    border-radius: 8px;
   }
 
   [part='content'] {
@@ -25,9 +24,9 @@ const dialogOverlay = css`
     padding-top: 0;
   }
 
-  [part='header'],
-  [part='header-content'],
-  [part='footer'] {
+  :host(:is([has-header], [has-title])) [part='header'],
+  :host([has-header]) [part='header-content'],
+  :host([has-footer]) [part='footer'] {
     gap: 8px;
     line-height: 1.2;
   }
