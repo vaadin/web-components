@@ -266,8 +266,8 @@ const createUnitTestsConfig = (config) => {
 };
 
 const createVisualTestsConfig = (theme) => {
-  const visualPackages = getAllVisualPackages();
-  const packages = getTestPackages(visualPackages);
+  // const visualPackages = getAllVisualPackages();
+  const packages = getAllVisualPackages();
   const groups = getVisualTestGroups(packages, theme);
 
   const sauceLabsLauncher = createSauceLabsLauncher(
