@@ -39,9 +39,6 @@ const dialogOverlay = css`
   [part='title'] {
     font-size: var(--material-h5-font-size);
     font-weight: 500;
-  }
-
-  [part='title'] {
     margin-inline-start: 8px;
   }
 
