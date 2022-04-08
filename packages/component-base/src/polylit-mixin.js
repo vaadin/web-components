@@ -188,7 +188,6 @@ const PolylitMixinImplementation = (superclass) => {
     }
 
     /** @protected */
-    // willUpdate(props) {
     updated(props) {
       if (this.constructor.__observers) {
         this.__runObservers(props, this.constructor.__observers);
