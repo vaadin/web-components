@@ -46,6 +46,12 @@ function getOrCreateMap(obj, name) {
 const PolylitMixinImplementation = (superclass) => {
   class PolylitMixinClass extends superclass {
     static createProperty(name, options) {
+      if ([String, Boolean, Number, Array].includes(options)) {
+        options = {
+          type: options
+        };
+      }
+
       if (options.reflectToAttribute) {
         options.reflect = true;
       }
@@ -84,12 +90,6 @@ const PolylitMixinImplementation = (superclass) => {
     }
 
     static getPropertyDescriptor(name, key, options) {
-      if ([String, Boolean, Number, Array].includes(options)) {
-        options = {
-          type: options
-        };
-      }
-
       const defaultDescriptor = super.getPropertyDescriptor(name, key, options);
 
       let result = defaultDescriptor;

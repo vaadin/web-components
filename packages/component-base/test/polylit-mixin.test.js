@@ -688,4 +688,46 @@ describe('PolylitMixin', () => {
       expect(element.value).to.equal(0);
     });
   });
+
+  describe('type as property', () => {
+    const tag = defineCE(
+      class extends PolylitMixin(LitElement) {
+        static get properties() {
+          return {
+            name: String,
+
+            opened: Boolean,
+
+            count: Number,
+
+            items: Array
+          };
+        }
+      }
+    );
+
+    it('should support String as property type', async () => {
+      const element = fixtureSync(`<${tag} name="foo"></${tag}>`);
+      await element.updateComplete;
+      expect(element.name).to.equal('foo');
+    });
+
+    it('should support Boolean as property type', async () => {
+      const element = fixtureSync(`<${tag} opened></${tag}>`);
+      await element.updateComplete;
+      expect(element.opened).to.equal(true);
+    });
+
+    it('should support Number as property type', async () => {
+      const element = fixtureSync(`<${tag} count="4"></${tag}>`);
+      await element.updateComplete;
+      expect(element.count).to.equal(4);
+    });
+
+    it('should support Array as property type', async () => {
+      const element = fixtureSync(`<${tag} items="[1,2,3]"></${tag}>`);
+      await element.updateComplete;
+      expect(element.items).to.eql([1, 2, 3]);
+    });
+  });
 });
