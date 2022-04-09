@@ -111,11 +111,13 @@ describe('scrolling mode', () => {
     });
 
     describe('RTL', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         grid.setAttribute('dir', 'rtl');
+        await onceResized(grid);
       });
 
-      it('end', () => {
+      it('end', async () => {
+        await nextFrame();
         expect(grid.getAttribute('overflow')).to.contain('end');
         expect(grid.getAttribute('overflow')).to.not.contain('start');
       });

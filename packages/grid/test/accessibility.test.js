@@ -244,8 +244,9 @@ describe('accessibility', () => {
       expect(grid.$.items.children[1].getAttribute('aria-level')).to.be.null;
     });
 
-    it('should add aria-level to a row that becomes expandable', () => {
+    it('should add aria-level to a row that becomes expandable', async () => {
       grid.expandItem({ name: '0' });
+      await nextFrame();
       expect(grid.$.items.children[1].getAttribute('aria-level')).to.equal('2');
     });
 

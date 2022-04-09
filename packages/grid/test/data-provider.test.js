@@ -439,7 +439,7 @@ describe('data provider', () => {
         expect(getRows(grid.$.items)[0].hasAttribute('expanded')).to.be.false;
       });
 
-      it('should request pages from 0', () => {
+      it('should request pages from 0', async () => {
         expandIndex(grid, 7); // pageSize is 5, index 7 is on the second page
         await nextFrame();
         expect(grid.dataProvider.getCall(0).args[0].page).to.equal(0);

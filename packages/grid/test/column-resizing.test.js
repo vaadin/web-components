@@ -76,11 +76,12 @@ describe('column resizing', () => {
       expect(headerCells[0].clientWidth).to.equal(direction === 'rtl' ? 349 : 200);
     });
 
-    it(`should resize on frozen to end cell track in ${direction}`, () => {
+    it(`should resize on frozen to end cell track in ${direction}`, async () => {
       grid.setAttribute('dir', direction);
       const column = grid._columnTree[0][1];
       column.resizable = true;
       column.frozenToEnd = true;
+      await nextFrame();
       handle = headerCells[1].querySelector('[part~="resize-handle"]');
 
       const options = { node: handle };
@@ -92,6 +93,7 @@ describe('column resizing', () => {
       const x = direction === 'rtl' ? rect.right + 50 : rect.left - 50;
       fire('track', { state: 'track', x, y: 0 }, options);
 
+      await nextFrame();
       expect(headerCells[1].clientWidth).to.equal(198);
     });
 

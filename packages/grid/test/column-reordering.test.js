@@ -353,25 +353,29 @@ describe('reordering simple grid', () => {
       columns[3].frozenToEnd = true;
     });
 
-    it('should allow reordering columns frozen to end', () => {
+    it('should allow reordering columns frozen to end', async () => {
       dragAndDropOver(headerContent[3], headerContent[2]);
+      await nextFrame();
       expectVisualOrder(grid, [1, 2, 4, 3]);
     });
 
-    it('should not allow reordering frozen to end and non-frozen columns', () => {
+    it('should not allow reordering frozen to end and non-frozen columns', async () => {
       dragAndDropOver(headerContent[2], headerContent[1]);
+      await nextFrame();
       expectVisualOrder(grid, [1, 2, 3, 4]);
     });
 
-    it('should not allow reordering non-frozen and frozen to end columns', () => {
+    it('should not allow reordering non-frozen and frozen to end columns', async () => {
       dragAndDropOver(headerContent[1], headerContent[2]);
+      await nextFrame();
       expectVisualOrder(grid, [1, 2, 3, 4]);
     });
 
-    it('should update first-frozen-to-end while dragging', () => {
+    it('should update first-frozen-to-end while dragging', async () => {
       const cell = getCellByCellContent(headerContent[3]);
       expect(cell.hasAttribute('first-frozen-to-end')).to.be.false;
       dragOver(headerContent[3], headerContent[2]);
+      await nextFrame();
       expect(cell.hasAttribute('first-frozen-to-end')).to.be.true;
     });
 

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import '../vaadin-grid.js';
 import '../vaadin-grid-filter-column.js';
@@ -29,29 +29,35 @@ describe('disabled', () => {
     expect(grid.disabled).to.be.false;
   });
 
-  it('should reflect disabled property to attribute', () => {
+  it('should reflect disabled property to attribute', async () => {
     grid.disabled = true;
+    await nextFrame();
     expect(grid.hasAttribute('disabled')).to.be.true;
 
     grid.disabled = false;
+    await nextFrame();
     expect(grid.hasAttribute('disabled')).to.be.false;
   });
 
-  it('should set tabindex to -1 on the host when disabled', () => {
+  it('should set tabindex to -1 on the host when disabled', async () => {
     grid.disabled = true;
+    await nextFrame();
     expect(grid.getAttribute('tabindex')).to.equal('-1');
   });
 
-  it('should remove tabindex from the host when re-enabled', () => {
+  it('should remove tabindex from the host when re-enabled', async () => {
     grid.disabled = true;
+    await nextFrame();
 
     grid.disabled = false;
+    await nextFrame();
 
     expect(grid.hasAttribute('tabindex')).to.be.false;
   });
 
-  it('should set pointer-events: none when disabled', () => {
+  it('should set pointer-events: none when disabled', async () => {
     grid.disabled = true;
+    await nextFrame();
     expect(getComputedStyle(grid).pointerEvents).to.equal('none');
   });
 

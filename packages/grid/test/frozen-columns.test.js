@@ -56,7 +56,7 @@ const transformsEqual = (element, transform) => {
 
     after(() => document.documentElement.removeAttribute('dir'));
 
-    it('should have last frozen only when there are frozen columns', () => {
+    it('should have last frozen only when there are frozen columns', async () => {
       expect(columns[0]._lastFrozen).to.be.true;
 
       columns[0].frozen = false;
@@ -198,10 +198,11 @@ const transformsEqual = (element, transform) => {
       await nextRender(grid);
     });
 
-    it('should have first frozen to end only when there are frozen columns', () => {
+    it('should have first frozen to end only when there are frozen columns', async () => {
       expect(columns[2]._firstFrozenToEnd).to.be.true;
 
       columns[2].frozenToEnd = false;
+      await nextFrame();
 
       expect(columns[2]._firstFrozenToEnd).to.be.false;
     });
@@ -242,8 +243,9 @@ const transformsEqual = (element, transform) => {
           expect(cells[2].hasAttribute('frozen-to-end')).to.be.true;
         });
 
-        it('should have the correct first-frozen-to-end cell in a row', () => {
+        it('should have the correct first-frozen-to-end cell in a row', async () => {
           grid._columnTree[0][1].frozenToEnd = true;
+          await nextFrame();
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
           expect(cells[0].hasAttribute('first-frozen-to-end')).not.to.be.true;
@@ -251,22 +253,24 @@ const transformsEqual = (element, transform) => {
           expect(cells[2].hasAttribute('first-frozen-to-end')).not.to.be.true;
         });
 
-        it('should update transforms when frozen columns decrease', () => {
+        it('should update transforms when frozen columns decrease', async () => {
           const cells = getRowCells(getRows(containerElement)[0]);
           expect(transformsEqual(cells[2], 'translate(' + translateValue + 'px, 0px)')).to.be.true;
 
           grid._columnTree[0][2].frozenToEnd = false;
           grid._debouncerCacheElements.flush();
+          await nextFrame();
 
           expect(transformsEqual(cells[2], '')).to.be.true;
         });
 
-        it('should update transforms when frozen columns increase', () => {
+        it('should update transforms when frozen columns increase', async () => {
           const cells = getRowCells(getRows(containerElement)[0]);
           expect(transformsEqual(cells[1], '')).to.be.true;
 
           grid._columnTree[0][1].frozenToEnd = true;
           grid._debouncerCacheElements.flush();
+          await nextFrame();
 
           expect(transformsEqual(cells[1], 'translate(' + translateValue + 'px, 0px)')).to.be.true;
         });
@@ -281,8 +285,9 @@ const transformsEqual = (element, transform) => {
           expect(cells[2].getBoundingClientRect().x).to.equal(isRTL ? x - 100 : x + 100);
         });
 
-        it('should have the correct first-frozen-to-end cell in a row with hidden columns', () => {
+        it('should have the correct first-frozen-to-end cell in a row with hidden columns', async () => {
           grid._columnTree[0][0].frozenToEnd = grid._columnTree[0][1].frozenToEnd = true;
+          await nextFrame();
 
           containerRows = getRows(containerElement);
           const cells = getRowCells(containerRows[0]);
@@ -292,6 +297,7 @@ const transformsEqual = (element, transform) => {
           expect(cells[2].hasAttribute('first-frozen-to-end')).not.to.be.true;
 
           grid._columnTree[0][0].hidden = true;
+          await nextFrame();
 
           expect(cells[0].hasAttribute('first-frozen-to-end')).not.to.be.true;
           expect(cells[1].hasAttribute('first-frozen-to-end')).to.be.true;

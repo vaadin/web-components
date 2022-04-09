@@ -151,7 +151,7 @@ describe('tree toggle', () => {
       expect(toggle.level).to.equal(0);
     });
 
-    it('should ignore a custom renderer', () => {
+    it('should ignore a custom renderer', async () => {
       column.renderer = (root) => {
         root.innerHTML = 'cell';
       };
@@ -169,25 +169,30 @@ describe('tree toggle', () => {
         console.warn.restore();
       });
 
-      it('should have a higher level', () => {
+      it('should have a higher level', async () => {
         column.itemHasChildrenPath = 'hasChildren';
+        await nextFrame();
         toggle.expanded = true;
+        await nextFrame();
         const childToggle = getBodyCellContent(grid, 1, 0).firstElementChild;
         expect(childToggle.level).to.equal(1);
       });
 
-      it('should not be a leaf', () => {
+      it('should not be a leaf', async () => {
         column.itemHasChildrenPath = 'hasChildren';
+        await nextFrame();
         expect(toggle.leaf).to.be.false;
       });
 
-      it('should warn when setting column property', () => {
+      it('should warn when setting column property', async () => {
         column.itemHasChildrenPath = 'hasChildren';
+        await nextFrame();
         expect(console.warn.called).to.be.true;
       });
 
-      it('should forward column property to the grid', () => {
+      it('should forward column property to the grid', async () => {
         column.itemHasChildrenPath = 'hasChildren';
+        await nextFrame();
         expect(grid.itemHasChildrenPath).to.equal('hasChildren');
       });
     });

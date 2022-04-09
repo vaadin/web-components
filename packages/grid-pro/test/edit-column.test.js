@@ -558,11 +558,12 @@ describe('edit column', () => {
       expect(input).to.be.not.ok;
     });
 
-    it('should cancel editing when disabled is set to true', () => {
+    it('should cancel editing when disabled is set to true', async () => {
       const cell = getContainerCell(grid.$.items, 1, 0);
       const oldContent = cell._content.textContent;
       enter(cell);
       grid.disabled = true;
+      await nextFrame();
       expect(cell._content.textContent).to.equal(oldContent);
     });
   });

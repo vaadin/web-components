@@ -223,7 +223,7 @@ export const KeyboardNavigationMixin = (superClass) =>
     __isRowExpandable(row) {
       if (this.itemHasChildrenPath) {
         const item = row._item;
-        return item && this.get(this.itemHasChildrenPath, item) && !this._isExpanded(item);
+        return item && this._get(this.itemHasChildrenPath, item) && !this._isExpanded(item);
       }
     }
 

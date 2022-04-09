@@ -326,18 +326,20 @@ describe('column groups', () => {
       expect(getHeaderCell(1, 2).hasAttribute('frozen')).to.be.true;
     });
 
-    it('should have a column frozen to end', () => {
+    it('should have a column frozen to end', async () => {
       const col = grid.querySelector('vaadin-grid-column');
       col.frozen = false;
       col.frozenToEnd = true;
+      await nextFrame();
       expect(getHeaderCell(0, 0).hasAttribute('frozen-to-end')).to.be.true;
       expect(getHeaderCell(1, 0).hasAttribute('frozen-to-end')).to.be.true;
     });
 
-    it('should have a group frozen to end', () => {
+    it('should have a group frozen to end', async () => {
       const group = grid.querySelector('vaadin-grid-column-group');
       group.frozen = false;
       group.frozenToEnd = true;
+      await nextFrame();
       expect(getHeaderCell(0, 1).hasAttribute('frozen-to-end')).to.be.true;
       expect(getHeaderCell(1, 1).hasAttribute('frozen-to-end')).to.be.true;
       expect(getHeaderCell(1, 2).hasAttribute('frozen-to-end')).to.be.true;
