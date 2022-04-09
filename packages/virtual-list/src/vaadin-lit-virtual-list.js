@@ -3,8 +3,9 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { htmlLiteral } from '@polymer/polymer/lib/utils/html-tag.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+
+import { html, LitElement } from 'lit';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { VirtualListMixin } from './vaadin-virtual-list-mixin.js';
 
 /**
@@ -28,13 +29,9 @@ import { VirtualListMixin } from './vaadin-virtual-list-mixin.js';
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class VirtualList extends VirtualListMixin(PolymerElement) {
-  static get template() {
+class VirtualList extends VirtualListMixin(PolylitMixin(LitElement)) {
+  render() {
     return html`
-      <style>
-        ${htmlLiteral([super.styles.cssText])}
-      </style>
-
       <div id="items">
         <slot></slot>
       </div>
