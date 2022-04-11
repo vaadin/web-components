@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import './not-animated-styles.js';
 import '../vaadin-dialog.js';
 import { createRenderer } from './helpers.js';
 
@@ -412,6 +413,104 @@ describe('header/footer feature', () => {
       dialog.headerTitle = null;
       dialog.headerRenderer = null;
       expect(getComputedStyle(headerPart).display).to.be.equal('none');
+    });
+  });
+
+  describe('overflow attribute', () => {
+    let content;
+
+    beforeEach(() => {
+      dialog.headerRenderer = createRenderer('Header');
+      dialog.footerRenderer = createRenderer('Footer');
+      dialog.renderer = createRenderer(Array(10).join('Lorem ipsum dolor sit amet\n'));
+      dialog.resizable = true;
+      dialog.opened = true;
+      content = overlay.$.content;
+      overlay.style.maxWidth = '300px';
+    });
+
+    describe('resize', () => {
+      const nextResize = (target) => {
+        return new Promise((resolve) => {
+          new ResizeObserver(() => setTimeout(resolve)).observe(target);
+        });
+      };
+
+      it('should not set overflow attribute when content has no scrollbar', () => {
+        expect(overlay.hasAttribute('overflow')).to.be.false;
+      });
+
+      it('should set overflow attribute when scrollbar appears on resize', async () => {
+        overlay.style.maxHeight = '320px';
+        await nextResize(overlay);
+
+        expect(overlay.getAttribute('overflow')).to.equal('bottom');
+      });
+
+      it('should remove overflow attribute when header renderer is removed', async () => {
+        overlay.style.maxHeight = '320px';
+        await nextResize(overlay);
+
+        dialog.headerRenderer = null;
+
+        expect(overlay.hasAttribute('overflow')).to.be.false;
+      });
+
+      it('should remove overflow attribute when footer renderer is removed', async () => {
+        overlay.style.maxHeight = '320px';
+        await nextResize(overlay);
+
+        dialog.footerRenderer = null;
+
+        expect(overlay.hasAttribute('overflow')).to.be.false;
+      });
+
+      it('should set overflow attribute when header title property is set', async () => {
+        dialog.headerRenderer = null;
+
+        overlay.style.maxHeight = '320px';
+        await nextResize(overlay);
+        expect(overlay.hasAttribute('overflow')).to.be.false;
+
+        dialog.headerTitle = 'Title';
+        expect(overlay.getAttribute('overflow')).to.equal('bottom');
+      });
+
+      it('should remove overflow attribute when header title is removed', async () => {
+        dialog.headerRenderer = null;
+        dialog.headerTitle = 'Title';
+
+        overlay.style.maxHeight = '320px';
+        await nextResize(overlay);
+
+        dialog.headerTitle = null;
+
+        expect(overlay.hasAttribute('overflow')).to.be.false;
+      });
+    });
+
+    describe('scroll', () => {
+      beforeEach(() => {
+        dialog.renderer = createRenderer(Array(100).join('Lorem ipsum dolor sit amet\n'));
+      });
+
+      it('should set overflow to "bottom" when scrollbar appears after re-render', () => {
+        expect(overlay.getAttribute('overflow')).to.equal('bottom');
+      });
+
+      it('should update overflow to "top bottom" on partial content scroll', () => {
+        content.scrollTop += 200;
+        content.dispatchEvent(new CustomEvent('scroll'));
+
+        expect(overlay.getAttribute('overflow')).to.equal('top bottom');
+      });
+
+      it('should update overflow to "top" when content is fully scrolled', () => {
+        content.scrollTop += content.scrollHeight - content.clientHeight;
+        content.dispatchEvent(new CustomEvent('scroll'));
+
+        expect(overlay.getAttribute('overflow')).to.equal('top');
+      });
     });
   });
 });
