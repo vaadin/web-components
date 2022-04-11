@@ -22,12 +22,12 @@ describe('crud editor', () => {
     });
 
     it('should have edit item title', () => {
-      crud._grid.activeItem = crud.items[0];
+      crud.editedItem = crud.items[0];
       expect(header.textContent).to.be.equal('Edit item');
     });
 
     it('should change to new item title', () => {
-      crud._grid.activeItem = crud.items[0];
+      crud.editedItem = crud.items[0];
       expect(header.textContent).to.be.equal('Edit item');
       crud.$.new.click();
       expect(header.textContent).to.be.equal('New item');
