@@ -137,12 +137,12 @@ describe('vaadin-dialog', () => {
     });
 
     describe('detaching', () => {
-      it('should close the overlay when detached', async () => {
+      it('should close the overlay when detached', () => {
         dialog.parentNode.removeChild(dialog);
         expect(dialog.opened).to.be.false;
       });
 
-      it('should not close the overlay when moved within the DOM', async () => {
+      it('should not close the overlay when moved within the DOM', () => {
         const newParent = document.createElement('div');
         document.body.appendChild(newParent);
 
