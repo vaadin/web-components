@@ -42,50 +42,12 @@ const dialogOverlay = css`
   }
 
   @media (min-height: 320px) {
-    :host(:is([has-header], [has-title])) [part='header'] {
+    :host(:is([has-header], [has-title])[overflow~='top']) [part='header'] {
       box-shadow: 0 1px 0 0 var(--material-divider-color);
     }
 
-    :host([has-footer]) [part='footer'] {
+    :host([has-footer][overflow~='bottom']) [part='footer'] {
       box-shadow: 0 -1px 0 0 var(--material-divider-color);
-    }
-
-    /* "scroll divider" */
-
-    :host([has-footer]) [part='content'] {
-      height: 100%;
-      padding-bottom: 0;
-    }
-
-    :host([has-footer]) [part='content'] slot {
-      display: block;
-      min-height: calc(100% - 26px);
-    }
-
-    :host(:is([has-header], [has-title])) [part='content']::before {
-      content: '';
-      display: block;
-      width: calc(100% + 24px * 2);
-      height: 200px;
-      background: var(--material-background-color);
-      margin-top: -199px;
-      margin-left: -24px;
-      margin-right: -24px;
-      position: relative;
-      z-index: 1;
-    }
-
-    :host([has-footer]) [part='content']::after {
-      content: '';
-      display: block;
-      width: calc(100% + 24px * 2);
-      height: 1px;
-      background: var(--material-background-color);
-      margin-top: 24px;
-      margin-left: -24px;
-      margin-right: -24px;
-      position: relative;
-      z-index: 2;
     }
   }
 
