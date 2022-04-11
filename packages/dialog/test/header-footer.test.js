@@ -487,6 +487,18 @@ describe('header/footer feature', () => {
 
         expect(overlay.hasAttribute('overflow')).to.be.false;
       });
+
+      it('should remove overflow attribute if no header, footer or title is set', async () => {
+        dialog.headerTitle = 'Title';
+        overlay.style.maxHeight = '200px';
+        await nextResize(overlay);
+
+        dialog.headerRenderer = null;
+        dialog.footerRenderer = null;
+        dialog.headerTitle = null;
+
+        expect(overlay.hasAttribute('overflow')).to.be.false;
+      });
     });
 
     describe('scroll', () => {
