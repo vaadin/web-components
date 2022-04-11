@@ -567,15 +567,20 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
   }
 
   /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+    // Restore opened state if overlay was opened when disconnecting
+    if (this.__restoreOpened) {
+      this.opened = true;
+    }
+  }
+
+  /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    // Delay closing the dialog in case it, or an ancestor, was just
-    // attached to a different node
-    setTimeout(() => {
-      if (!this.isConnected) {
-        this.opened = false;
-      }
-    });
+    // Close overlay and memorize opened state
+    this.__restoreOpened = this.opened;
+    this.opened = false;
   }
 
   /** @private */
