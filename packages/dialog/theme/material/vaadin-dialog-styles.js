@@ -55,10 +55,6 @@ const dialogOverlay = css`
   :host([theme~='no-padding']) [part='content'] {
     padding: 0;
   }
-
-  :host([theme~='no-padding'][has-footer]) [part='content']::after {
-    margin-top: 0;
-  }
 `;
 
 registerStyles('vaadin-dialog-overlay', [overlay, dialogOverlay], {
