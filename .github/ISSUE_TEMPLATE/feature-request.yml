@@ -1,0 +1,31 @@
+name: 🚀 Feature Request
+description: I have a specific suggestion for the TypeScript and HTML API of Vaadin components!
+body:
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Describe your motivation
+      description: A concise description of why you are proposing a change. For example, you would like a new feature to solve a use-case, or you want an existing feature changed because it is difficult to use.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you'd like
+      description: Provide a clear and concise description of what you want to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Describe alternatives you've considered
+      description: Provide information about other solutions you've tried or researched.
+    validations:
+      required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Is there anything else you can add about the proposal?
+    validations:
+      required: false

@@ -1,0 +1,16 @@
+name: 🤗 Support Question
+description: If you have a question 💬, please check out our Discord or StackOverflow!
+body:
+  - type: markdown
+    attributes:
+      value: "We primarily use GitHub as an issue tracker. For support questions, please check out these resources below. Thank you!"
+  - type: markdown
+    attributes:
+      value: "* StackOverflow: https://stackoverflow.com/questions/tagged/vaadin using the tag `vaadin`\n* Discord: If it's just a quick question you can ask it on our Discord channel: https://discord.com/invite/MYFq5RTbBn\n* Also have a look at our website for more information on how to get support: https://vaadin.com/support"
+  - type: input
+    id: ignore
+    attributes:
+      label: Ignore
+      description: Ignore
+    validations:
+      required: true

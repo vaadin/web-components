@@ -1,0 +1,56 @@
+name: 🐛 Bug Report
+description: Please report issues related to the TypeScript and HTML API of Vaadin components here.
+body:
+  - type: textarea
+    id: problem-description
+    attributes:
+      label: Description
+      description: Describe the issue that you're seeing.
+      placeholder: "Example: I added a `vaadin-button` to the page and added a `<vaadin-icon>` as a child. However when clicking on the icon in the button, the button's click listener is not called."
+    validations:
+      required: true
+  - type: textarea
+    id: expected-outcome
+    attributes:
+      label: Expected outcome
+      description: What did you expect to happen instead?
+      placeholder: "Example: I would expect the click listener to be called, regardless of which child of the button is clicked."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproducible example
+      description: "A code snippet, demo project, or link that reproduces the issue."
+      placeholder: "Example:\n```html\n<vaadin-button><vaadin-icon icon=\"vaadin:phone\"></vaadin-icon> Call<vaadin-button>\n<script>\n  document.querySelector(\"vaadin-button\").addEventListener(\"click\", () => console.log(\"Clicked\"));\n</script>\n```"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Clear steps describing how to reproduce the issue with the reproduction provided above.
+      placeholder: "Example:\n1. Add the snippet above to a HTML page\n2. Click icon in the button\n3. Notice how nothing is logged to the console"
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Environment in which the issue reproduces. Feel free to add further information that might help with debugging the issue.
+      value: "Vaadin version(s): \nOS: "
+    validations:
+      required: true
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: Browsers
+      description: Which browsers did this problem occur in?
+      multiple: true
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Safari on iOS
+        - Edge
+        - Issue is not browser related
