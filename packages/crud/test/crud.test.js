@@ -180,7 +180,7 @@ describe('crud', () => {
         crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
         crud.dataProvider = (_, callback) => callback(items, items.length);
         await nextRender(crud);
-        [btnSave] = crud.querySelectorAll('[slot=save-button]');
+        btnSave = crud.querySelector('[slot=save-button]');
       });
 
       it('should save a new item', (done) => {
