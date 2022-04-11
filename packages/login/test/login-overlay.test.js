@@ -43,12 +43,20 @@ describe('opened overlay', () => {
 
   it('should set opened using attribute', () => {
     expect(overlay.opened).to.be.true;
-    expect(document.querySelector('vaadin-login-form-wrapper')).to.be.ok;
+    expect(document.querySelector('vaadin-login-form-wrapper')).to.exist;
   });
 
   it('should remove form wrapper when closed', () => {
     overlay.opened = false;
-    expect(document.querySelector('vaadin-login-form-wrapper')).to.be.not.ok;
+    expect(document.querySelector('vaadin-login-form-wrapper')).not.to.exist;
+  });
+
+  it('should not remove form wrapper when moved within DOM', () => {
+    const newParent = document.createElement('div');
+    document.body.appendChild(newParent);
+    newParent.appendChild(overlay);
+
+    expect(document.querySelector('vaadin-login-form-wrapper')).to.exist;
   });
 
   it('should propagate theme to a wrapper', () => {
