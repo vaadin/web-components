@@ -127,6 +127,11 @@ class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement)
 
     this.$.vaadinLoginOverlayWrapper.addEventListener('vaadin-overlay-outside-click', this._preventClosingLogin);
     this.$.vaadinLoginOverlayWrapper.addEventListener('vaadin-overlay-escape-press', this._preventClosingLogin);
+
+    // Restore opened state if overlay was open when disconnecting
+    if (this.__restoreOpened) {
+      this.$.vaadinLoginOverlayWrapper.opened = true;
+    }
   }
 
   /** @protected */
@@ -135,6 +140,9 @@ class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement)
 
     this.$.vaadinLoginOverlayWrapper.removeEventListener('vaadin-overlay-outside-click', this._preventClosingLogin);
     this.$.vaadinLoginOverlayWrapper.removeEventListener('vaadin-overlay-escape-press', this._preventClosingLogin);
+
+    // Close overlay and memorize opened state
+    this.__restoreOpened = this.$.vaadinLoginOverlayWrapper.opened;
     this.$.vaadinLoginOverlayWrapper.opened = false;
   }
 
