@@ -1,4 +1,4 @@
-import { listenOnce } from '@vaadin/testing-helpers';
+import { listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
 export function activateScroller(scroller) {
@@ -133,4 +133,18 @@ export function getFocusedCell(overlayContent) {
   }
 
   return focusedCell;
+}
+
+/**
+ * Waits for the scroll to finish in the date-picker overlay content.
+ *
+ * @param {HTMLElement} overlayContent
+ */
+export async function waitForScrollToFinish(overlayContent) {
+  if (overlayContent._targetPosition) {
+    // The overlay content is scrolling.
+    await oneEvent(overlayContent, 'scroll-animation-finished');
+  }
+
+  await nextRender(overlayContent);
 }
