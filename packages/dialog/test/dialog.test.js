@@ -128,6 +128,14 @@ describe('vaadin-dialog', () => {
         dialog.parentNode.removeChild(dialog);
         expect(dialog.opened).to.be.false;
       });
+
+      it('should not close the overlay when moved within the DOM', () => {
+        const newParent = document.createElement('div');
+        document.body.appendChild(newParent);
+
+        newParent.appendChild(dialog);
+        expect(dialog.opened).to.be.true;
+      });
     });
 
     describe('modeless', () => {
