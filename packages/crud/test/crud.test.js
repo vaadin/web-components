@@ -83,7 +83,7 @@ describe('crud', () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
       crud.include = 'foo';
       await nextRender(crud);
-      [btnSave] = crud.querySelectorAll('[slot=save-button]');
+      btnSave = crud.querySelector('[slot=save-button]');
     });
 
     it('should save a new item when list is empty but `include` is set', (done) => {
