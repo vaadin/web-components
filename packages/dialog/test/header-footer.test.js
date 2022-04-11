@@ -441,14 +441,14 @@ describe('header/footer feature', () => {
       });
 
       it('should set overflow attribute when scrollbar appears on resize', async () => {
-        overlay.style.maxHeight = '320px';
+        overlay.style.maxHeight = '300px';
         await nextResize(overlay);
 
         expect(overlay.getAttribute('overflow')).to.equal('bottom');
       });
 
       it('should remove overflow attribute when header renderer is removed', async () => {
-        overlay.style.maxHeight = '320px';
+        overlay.style.maxHeight = '300px';
         await nextResize(overlay);
 
         dialog.headerRenderer = null;
@@ -457,7 +457,7 @@ describe('header/footer feature', () => {
       });
 
       it('should remove overflow attribute when footer renderer is removed', async () => {
-        overlay.style.maxHeight = '320px';
+        overlay.style.maxHeight = '300px';
         await nextResize(overlay);
 
         dialog.footerRenderer = null;
@@ -481,7 +481,7 @@ describe('header/footer feature', () => {
         dialog.headerRenderer = null;
         dialog.headerTitle = 'Title';
 
-        overlay.style.maxHeight = '320px';
+        overlay.style.maxHeight = '300px';
         await nextResize(overlay);
 
         dialog.headerTitle = null;
