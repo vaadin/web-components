@@ -467,8 +467,9 @@ describe('header/footer feature', () => {
 
       it('should set overflow attribute when header title property is set', async () => {
         dialog.headerRenderer = null;
+        dialog.footerRenderer = null;
 
-        overlay.style.maxHeight = '320px';
+        overlay.style.maxHeight = '200px';
         await nextResize(overlay);
         expect(overlay.hasAttribute('overflow')).to.be.false;
 
