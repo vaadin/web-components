@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, enter, fixtureSync, listenOnce, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
+import { aTimeout, enter, fixtureSync, listenOnce, nextRender, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { close, getFocusedCell, getOverlayContent, open } from './common.js';
+import { close, getFocusedCell, getOverlayContent, open, waitForScrollToFinish } from './common.js';
 
 describe('keyboard', () => {
   let datepicker;
@@ -60,7 +60,7 @@ describe('keyboard', () => {
     it('should display focused date while overlay focused', async () => {
       await sendKeys({ type: '1/2/2000' });
       const content = getOverlayContent(datepicker);
-      await oneEvent(content, 'scroll-animation-finished');
+      await waitForScrollToFinish(content);
 
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });

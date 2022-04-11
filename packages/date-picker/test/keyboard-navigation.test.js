@@ -4,7 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './common.js';
+import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollToFinish } from './common.js';
 
 (isIOS ? describe.skip : describe)('keyboard navigation', () => {
   describe('date-picker', () => {
@@ -137,12 +137,14 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
 
     it('should focus one week forward with arrow down', async () => {
       await sendKeys({ press: 'ArrowDown' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 0, 8));
     });
 
     it('should focus one week backward with arrow up', async () => {
       await sendKeys({ press: 'ArrowUp' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
@@ -182,8 +184,13 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
     });
 
     it('should scroll to focused month', async () => {
+      const spy = sinon.spy();
+      overlay.addEventListener('scroll-animation-finished', spy);
+
       await sendKeys({ press: 'ArrowUp' });
-      const e = await oneEvent(overlay, 'scroll-animation-finished');
+
+      await waitForScrollToFinish(overlay);
+      const e = spy.firstCall.args[0];
       expect(e.detail.position).to.be.closeTo(e.detail.oldPosition - 1, 1);
     });
 
@@ -214,12 +221,14 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
 
     it('should focus next month with pagedown', async () => {
       await sendKeys({ press: 'PageDown' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 1, 1));
     });
 
     it('should focus previous month with pageup', async () => {
       await sendKeys({ press: 'PageUp' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 1));
     });
@@ -228,6 +237,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
       await overlay.focusDate(new Date(2000, 0, 31));
       await nextRender(overlay);
       await sendKeys({ press: 'PageDown' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 1, 29));
     });
@@ -237,6 +247,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
       await nextRender(overlay);
       await sendKeys({ press: 'PageDown' });
       await sendKeys({ press: 'PageDown' });
+      await waitForScrollToFinish(overlay);
       expect(overlay.focusedDate).to.eql(new Date(2000, 2, 31));
     });
 
@@ -244,8 +255,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'PageDown' });
       await sendKeys({ up: 'Shift' });
-
-      await oneEvent(overlay, 'scroll-animation-finished');
+      await waitForScrollToFinish(overlay);
       expect(overlay.focusedDate).to.eql(new Date(2001, 0, 1));
     });
 
@@ -253,17 +263,20 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'PageUp' });
       await sendKeys({ up: 'Shift' });
-
-      await oneEvent(overlay, 'scroll-animation-finished');
+      await waitForScrollToFinish(overlay);
       expect(overlay.focusedDate).to.eql(new Date(1999, 0, 1));
     });
 
     it('should scroll up when focus goes invisible', async () => {
+      const spy = sinon.spy();
+      overlay.addEventListener('scroll-animation-finished', spy);
+
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'PageUp' });
       await sendKeys({ up: 'Shift' });
 
-      const e = await oneEvent(overlay, 'scroll-animation-finished');
+      await waitForScrollToFinish(overlay);
+      const e = spy.firstCall.args[0];
       expect(e.detail.position).to.be.closeTo(e.detail.oldPosition - 12, 1);
     });
 
@@ -276,11 +289,15 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
     });
 
     it('should scroll down when focus goes invisible', async () => {
+      const spy = sinon.spy();
+      overlay.addEventListener('scroll-animation-finished', spy);
+
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'PageDown' });
       await sendKeys({ up: 'Shift' });
 
-      const e = await oneEvent(overlay, 'scroll-animation-finished');
+      await waitForScrollToFinish(overlay);
+      const e = spy.firstCall.args[0];
       expect(e.detail.position).to.be.greaterThan(e.detail.oldPosition);
     });
 
@@ -346,7 +363,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
       await sendKeys({ press: 'PageDown' });
       await sendKeys({ up: 'Shift' });
 
-      await oneEvent(overlay, 'scroll-animation-finished');
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 11, 28));
     });
@@ -358,7 +375,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
       await sendKeys({ press: 'PageUp' });
       await sendKeys({ up: 'Shift' });
 
-      await oneEvent(overlay, 'scroll-animation-finished');
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 5, 3));
     });
@@ -392,7 +409,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
       await sendKeys({ press: 'PageUp' });
       await sendKeys({ up: 'Shift' });
 
-      await oneEvent(overlay, 'scroll-animation-finished');
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
@@ -406,7 +423,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
       await sendKeys({ press: 'PageDown' });
       await sendKeys({ up: 'Shift' });
 
-      await oneEvent(overlay, 'scroll-animation-finished');
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
@@ -467,7 +484,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
       const date = new Date(99, 0, 1);
       date.setFullYear(99);
       overlay.focusedDate = date;
-      await oneEvent(overlay, 'scroll-animation-finished');
+      await waitForScrollToFinish(overlay);
       await sendKeys({ press: 'ArrowRight' });
       date.setDate(2);
       expect(overlay.focusedDate).to.eql(date);
@@ -477,7 +494,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
       const date = new Date(99, 0, 1);
       date.setFullYear(99);
       overlay.focusedDate = date;
-      await oneEvent(overlay, 'scroll-animation-finished');
+      await waitForScrollToFinish(overlay);
       await sendKeys({ press: 'PageDown' });
       date.setMonth(1);
       expect(overlay.focusedDate).to.eql(date);
@@ -487,7 +504,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open } from './commo
       const date = new Date(99, 0, 1);
       date.setFullYear(99);
       overlay.focusedDate = date;
-      await oneEvent(overlay, 'scroll-animation-finished');
+      await waitForScrollToFinish(overlay);
       await sendKeys({ press: 'End' });
       date.setDate(31);
       expect(overlay.focusedDate).to.eql(date);
