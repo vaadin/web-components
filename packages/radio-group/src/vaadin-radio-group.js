@@ -4,11 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { RadioButton } from './vaadin-radio-button.js';
@@ -61,15 +62,16 @@ import { RadioButton } from './vaadin-radio-button.js';
  * @mixes FocusMixin
  * @mixes FieldMixin
  * @mixes KeyboardMixin
+ * @mixes PolylitMixin
  */
 class RadioGroup extends FieldMixin(
-  FocusMixin(DisabledMixin(KeyboardMixin(ElementMixin(ThemableMixin(PolymerElement)))))
+  FocusMixin(DisabledMixin(KeyboardMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))))
 ) {
   static get is() {
     return 'vaadin-radio-group';
   }
 
-  static get template() {
+  render() {
     return html`
       <style>
         :host {

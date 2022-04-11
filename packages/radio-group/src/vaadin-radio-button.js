@@ -3,10 +3,10 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, LitElement } from 'lit';
 import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
@@ -51,21 +51,21 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  *
  * @extends HTMLElement
- * @mixes ControllerMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
  * @mixes ActiveMixin
  * @mixes CheckedMixin
  * @mixes LabelMixin
+ * @mixes PolylitMixin
  */
 class RadioButton extends LabelMixin(
-  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))))))
+  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElement))))))
 ) {
   static get is() {
     return 'vaadin-radio-button';
   }
 
-  static get template() {
+  render() {
     return html`
       <style>
         :host {
@@ -149,26 +149,24 @@ class RadioButton extends LabelMixin(
   }
 
   /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
+  ready() {
+    super.ready();
 
-    if (!this._inputController) {
-      this._inputController = new InputController(this, (input) => {
-        this._setInputElement(input);
-        this._setFocusElement(input);
-        this.stateTarget = input;
-        this.ariaTarget = input;
-      });
-      this.addController(this._inputController);
-      this.addController(new LabelledInputController(this.inputElement, this._labelController));
-      this.addController(
-        new SlotTargetController(
-          this.$.noop,
-          () => this._labelController.node,
-          () => this.__warnDeprecated()
-        )
-      );
-    }
+    this._inputController = new InputController(this, (input) => {
+      this._setInputElement(input);
+      this._setFocusElement(input);
+      this.stateTarget = input;
+      this.ariaTarget = input;
+    });
+    this.addController(this._inputController);
+    this.addController(new LabelledInputController(this.inputElement, this._labelController));
+    this.addController(
+      new SlotTargetController(
+        this.$.noop,
+        () => this._labelController.node,
+        () => this.__warnDeprecated()
+      )
+    );
   }
 
   /** @private */

@@ -25,8 +25,9 @@ describe('radio-button', () => {
   });
 
   describe('default', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       radio = fixtureSync('<vaadin-radio-button label="Label"></vaadin-radio-button>');
+      await radio.updateComplete;
       label = radio.querySelector('[slot=label]');
     });
 
@@ -44,8 +45,9 @@ describe('radio-button', () => {
   });
 
   describe('native input', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+      await radio.updateComplete;
       input = radio.querySelector('[slot=input]');
       label = radio.querySelector('[slot=label]');
     });
@@ -98,8 +100,9 @@ describe('radio-button', () => {
   });
 
   describe('disabled attribute', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       radio = fixtureSync('<vaadin-radio-button disabled></vaadin-radio-button>');
+      await radio.updateComplete;
       input = radio.querySelector('[slot=input]');
       label = radio.querySelector('[slot=label]');
     });
@@ -126,8 +129,9 @@ describe('radio-button', () => {
 
   // TODO: A legacy suit. Replace with snapshot tests when possible.
   describe('active attribute', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+      await radio.updateComplete;
       input = radio.querySelector('[slot=input]');
     });
 
@@ -155,8 +159,9 @@ describe('radio-button', () => {
   describe('change event', () => {
     let spy;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+      await radio.updateComplete;
       label = radio.querySelector('[slot=label]');
       input = radio.querySelector('[slot=input]');
 
@@ -183,19 +188,22 @@ describe('radio-button', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should not fire on programmatic toggle', () => {
+    it('should not fire on programmatic toggle', async () => {
       radio.checked = true;
+      await radio.updateComplete;
       expect(spy.called).to.be.false;
     });
 
-    it('should not fire on input click when checked', () => {
+    it('should not fire on input click when checked', async () => {
       radio.checked = true;
+      await radio.updateComplete;
       input.click();
       expect(spy.called).to.be.false;
     });
 
-    it('should not fire on label click when checked', () => {
+    it('should not fire on label click when checked', async () => {
       radio.checked = true;
+      await radio.updateComplete;
       label.click();
       expect(spy.called).to.be.false;
     });
@@ -215,23 +223,26 @@ describe('radio-button', () => {
 
   describe('delegation', () => {
     describe('name attribute', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         radio = fixtureSync(`<vaadin-radio-button name="Name"></vaadin-radio-button>`);
+        await radio.updateComplete;
         input = radio.querySelector('[slot=input]');
       });
 
-      it('should delegate name attribute to the input', () => {
+      it('should delegate name attribute to the input', async () => {
         expect(input.getAttribute('name')).to.equal('Name');
 
         radio.removeAttribute('name');
+        await radio.updateComplete;
         expect(input.hasAttribute('name')).to.be.false;
       });
     });
   });
 
   describe('has-label attribute', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       radio = fixtureSync('<vaadin-radio-button></vaadin-radio-button>');
+      await radio.updateComplete;
     });
 
     it('should not set has-label attribute when label content is empty', () => {
