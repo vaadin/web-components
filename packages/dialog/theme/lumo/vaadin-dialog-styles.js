@@ -75,22 +75,8 @@ const dialogOverlay = css`
   }
 
   @media (min-height: 320px) {
-    :host(:is([has-header], [has-title])) [part='header'] {
+    :host(:is([has-header], [has-title])[overflow~='top']) [part='header'] {
       box-shadow: 0 1px 0 0 var(--lumo-contrast-10pct);
-    }
-
-    /* "scroll divider" */
-    :host(:is([has-header], [has-title])) [part='content']::before {
-      content: '';
-      display: block;
-      width: calc(100% + var(--lumo-space-l) * 2);
-      height: 200px;
-      background: var(--lumo-base-color);
-      margin-top: -199px;
-      margin-left: calc(var(--lumo-space-l) * -1);
-      margin-right: calc(var(--lumo-space-l) * -1);
-      position: relative;
-      z-index: 1;
     }
   }
 
