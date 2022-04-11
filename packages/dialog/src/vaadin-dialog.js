@@ -150,11 +150,23 @@ export class DialogOverlay extends OverlayElement {
     };
   }
 
+  /** @protected */
   ready() {
     super.ready();
 
     const uniqueId = (DialogOverlay._uniqueId = 1 + DialogOverlay._uniqueId || 0);
     this._titleId = `${this.constructor.is}-title-${uniqueId}`;
+
+    // Update overflow attribute on resize
+    this.__resizeObserver = new ResizeObserver(() => {
+      this.__updateOverflow();
+    });
+    this.__resizeObserver.observe(this.$.resizerContainer);
+
+    // Update overflow attribute on scroll
+    this.$.content.addEventListener('scroll', () => {
+      this.__updateOverflow();
+    });
   }
 
   /** @private */
@@ -196,12 +208,17 @@ export class DialogOverlay extends OverlayElement {
     const openedChanged = this._oldOpenedFooterHeader !== opened;
     this._oldOpenedFooterHeader = opened;
 
+    // Set attributes here to update styles before detecting content overflow
+    this.toggleAttribute('has-header', !!headerRenderer);
+    this.toggleAttribute('has-footer', !!footerRenderer);
+
     if (headerRendererChanged) {
       if (headerRenderer) {
         this.headerContainer = this.__initContainer(this.headerContainer, 'header-content');
       } else if (this.headerContainer) {
         this.headerContainer.remove();
         this.headerContainer = null;
+        this.__updateOverflow();
       }
     }
 
@@ -211,6 +228,7 @@ export class DialogOverlay extends OverlayElement {
       } else if (this.footerContainer) {
         this.footerContainer.remove();
         this.footerContainer = null;
+        this.__updateOverflow();
       }
     }
 
@@ -222,18 +240,16 @@ export class DialogOverlay extends OverlayElement {
         this.requestContentUpdate();
       }
     }
-
-    this.toggleAttribute('has-header', !!headerRenderer);
-    this.toggleAttribute('has-footer', !!footerRenderer);
   }
 
   /** @private */
   _headerTitleChanged(headerTitle, opened) {
+    this.toggleAttribute('has-title', !!headerTitle);
+
     if (opened && (headerTitle || this._oldHeaderTitle)) {
       this.requestContentUpdate();
     }
     this._oldHeaderTitle = headerTitle;
-    this.toggleAttribute('has-title', !!headerTitle);
   }
 
   /** @private */
@@ -277,6 +293,8 @@ export class DialogOverlay extends OverlayElement {
     }
 
     this._headerTitleRenderer();
+
+    this.__updateOverflow();
   }
 
   /**
@@ -330,6 +348,32 @@ export class DialogOverlay extends OverlayElement {
       overlay.style.display = '';
       this.$.resizerContainer.scrollTop = scrollPosition;
     });
+  }
+
+  /** @private */
+  __updateOverflow() {
+    let overflow = '';
+
+    // Only set "overflow" attribute if the dialog has a header, title or footer.
+    // Check for state attributes as extending components might not use renderers.
+    if (this.hasAttribute('has-header') || this.hasAttribute('has-footer') || this.headerTitle) {
+      const content = this.$.content;
+
+      if (content.scrollTop > 0) {
+        overflow += ' top';
+      }
+
+      if (content.scrollTop < content.scrollHeight - content.clientHeight) {
+        overflow += ' bottom';
+      }
+    }
+
+    const value = overflow.trim();
+    if (value.length > 0 && this.getAttribute('overflow') !== value) {
+      this.setAttribute('overflow', value);
+    } else if (value.length === 0 && this.hasAttribute('overflow')) {
+      this.removeAttribute('overflow');
+    }
   }
 }
 
@@ -386,6 +430,7 @@ customElements.define(DialogOverlay.is, DialogOverlay);
  * `has-title`      | Set when the element has a title
  * `has-header`     | Set when the element has header renderer
  * `has-footer`     | Set when the element has footer renderer
+ * `overflow`       | Set to `top`, `bottom`, none or both
  *
  * Note: the `theme` attribute value set on `<vaadin-dialog>` is
  * propagated to the internal `<vaadin-dialog-overlay>` component.

@@ -110,6 +110,7 @@ export type DialogEventMap = HTMLElementEventMap & DialogCustomEventMap;
  * `has-title`      | Set when the element has a title
  * `has-header`     | Set when the element has header renderer
  * `has-footer`     | Set when the element has footer renderer
+ * `overflow`       | Set to `top`, `bottom`, none or both
  *
  * Note: the `theme` attribute value set on `<vaadin-dialog>` is
  * propagated to the internal `<vaadin-dialog-overlay>` component.
