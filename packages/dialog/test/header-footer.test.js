@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-dialog.js';
 import { createRenderer } from './helpers.js';
@@ -525,5 +526,50 @@ describe('header/footer feature', () => {
         expect(overlay.getAttribute('overflow')).to.equal('top');
       });
     });
+  });
+});
+
+describe('renderer set before attach', () => {
+  let dialog;
+
+  beforeEach(() => {
+    dialog = document.createElement('vaadin-dialog');
+    dialog.renderer = createRenderer('Content');
+  });
+
+  afterEach(() => {
+    document.body.removeChild(dialog);
+  });
+
+  it('should not throw when setting header renderer before adding to DOM', () => {
+    dialog.headerRenderer = createRenderer('Header');
+    dialog.opened = true;
+    expect(() => {
+      document.body.appendChild(dialog);
+    }).to.not.throw(Error);
+  });
+
+  it('should not throw when setting footer renderer before adding to DOM', () => {
+    dialog.footerRenderer = createRenderer('Footer');
+    dialog.opened = true;
+    expect(() => {
+      document.body.appendChild(dialog);
+    }).to.not.throw(Error);
+  });
+
+  it('should only call header renderer once after adding dialog to DOM', () => {
+    const spy = sinon.spy();
+    dialog.headerRenderer = spy;
+    dialog.opened = true;
+    document.body.appendChild(dialog);
+    expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should only call footer renderer once after adding dialog to DOM', () => {
+    const spy = sinon.spy();
+    dialog.footerRenderer = spy;
+    dialog.opened = true;
+    document.body.appendChild(dialog);
+    expect(spy.calledOnce).to.be.true;
   });
 });
