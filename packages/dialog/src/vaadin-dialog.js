@@ -287,21 +287,28 @@ export class DialogOverlay extends OverlayElement {
   requestContentUpdate() {
     super.requestContentUpdate();
 
-    // If a new renderer has been set, make sure to reattach the header/footer roots
-    if (this.headerContainer && !this.headerContainer.parentElement) {
-      this.appendChild(this.headerContainer);
+    if (this.headerContainer) {
+      // If a new renderer has been set, make sure to reattach the container
+      if (!this.headerContainer.parentElement) {
+        this.appendChild(this.headerContainer);
+      }
+
+      if (this.headerRenderer) {
+        // Only call header renderer after the container has been initialized
+        this.headerRenderer.call(this.owner, this.headerContainer, this.owner);
+      }
     }
 
-    if (this.footerContainer && !this.footerContainer.parentElement) {
-      this.appendChild(this.footerContainer);
-    }
+    if (this.footerContainer) {
+      // If a new renderer has been set, make sure to reattach the container
+      if (!this.footerContainer.parentElement) {
+        this.appendChild(this.footerContainer);
+      }
 
-    if (this.headerRenderer) {
-      this.headerRenderer.call(this.owner, this.headerContainer, this.owner);
-    }
-
-    if (this.footerRenderer) {
-      this.footerRenderer.call(this.owner, this.footerContainer, this.owner);
+      if (this.footerRenderer) {
+        // Only call header renderer after the container has been initialized
+        this.footerRenderer.call(this.owner, this.footerContainer, this.owner);
+      }
     }
 
     this._headerTitleRenderer();
