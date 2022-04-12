@@ -704,9 +704,9 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
    * @param {string} i18nEditItem
    * @private
    */
-  __headerPropsChanged(headerNode, isNew, newItem, editItem) {
+  __headerPropsChanged(headerNode, isNew, i18nNewItem, i18nEditItem) {
     if (headerNode) {
-      headerNode.textContent = isNew ? newItem : editItem;
+      headerNode.textContent = isNew ? i18nNewItem : i18nEditItem;
     }
   }
 
