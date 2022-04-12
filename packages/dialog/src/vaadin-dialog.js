@@ -40,7 +40,7 @@ registerStyles(
     }
 
     /* prefixing with the element tag to avoid styling confirm-dialog footer part */
-    [part='header-content'],
+    :host([has-title]) [part='header-content'],
     footer[part='footer'] {
       justify-content: flex-end;
     }
