@@ -15,12 +15,10 @@ registerStyles(
       --_vaadin-confirm-dialog-content-height: auto;
     }
 
-    [part='content'] {
-      width: var(--_vaadin-confirm-dialog-content-width);
-      display: flex;
-      flex-direction: column;
-      height: var(--_vaadin-confirm-dialog-content-height);
+    [part='overlay'] {
       box-sizing: content-box;
+      width: var(--_vaadin-confirm-dialog-content-width);
+      height: var(--_vaadin-confirm-dialog-content-height);
     }
 
     /* Override display: contents */

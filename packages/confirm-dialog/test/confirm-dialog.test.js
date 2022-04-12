@@ -474,14 +474,14 @@ describe('vaadin-confirm-dialog', () => {
       it('should update width after opening the dialog', () => {
         confirm._setWidth('300px');
         expect(spy.calledWith('width', '300px')).to.be.true;
-        expect(getComputedStyle(overlay.$.content).width).to.be.equal('300px');
+        expect(getComputedStyle(overlay.$.overlay).width).to.be.equal('300px');
       });
 
       it('should update height after opening the dialog', () => {
         confirm._setHeight('500px');
         expect(spy.calledWith('height', '500px')).to.be.true;
         expect(spy.calledWith('height', '500px')).to.be.true;
-        expect(getComputedStyle(overlay.$.content).height).to.equal('500px');
+        expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
       });
     });
 
@@ -503,7 +503,7 @@ describe('vaadin-confirm-dialog', () => {
         confirm.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
         expect(spy.calledWith('width', '200px')).to.be.true;
-        expect(getComputedStyle(overlay.$.content).width).to.be.equal('200px');
+        expect(getComputedStyle(overlay.$.overlay).width).to.be.equal('200px');
       });
 
       it('should update height after opening the dialog', async () => {
@@ -513,7 +513,7 @@ describe('vaadin-confirm-dialog', () => {
         confirm.opened = true;
         await oneEvent(overlay, 'vaadin-overlay-open');
         expect(spy.calledWith('height', '500px')).to.be.true;
-        expect(getComputedStyle(overlay.$.content).height).to.equal('500px');
+        expect(getComputedStyle(overlay.$.overlay).height).to.equal('500px');
       });
     });
   });
