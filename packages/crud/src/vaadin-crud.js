@@ -711,21 +711,6 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /**
-   * @param {HTMLElement | undefined} form
-   * @param {string} theme
-   * @param {string | string[] | undefined} include
-   * @param {string | RegExp} exclude
-   * @private
-   */
-  __formPropsChanged(form, theme, include, exclude) {
-    if (form) {
-      form.include = include;
-      form.exclude = exclude;
-      form.setAttribute('theme', theme);
-    }
-  }
-
-  /**
    * @param {CrudI18n} i18n
    * @param {CrudGrid | Grid} grid
    * @private
@@ -941,6 +926,21 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /**
+   * @param {HTMLElement | undefined} form
+   * @param {string} theme
+   * @param {string | string[] | undefined} include
+   * @param {string | RegExp} exclude
+   * @private
+   */
+  __formPropsChanged(form, theme, include, exclude) {
+    if (form) {
+      form.include = include;
+      form.exclude = exclude;
+      form.setAttribute('theme', theme);
+    }
+  }
+
+  /**
    * @param {HTMLElement} saveButton
    * @param {HTMLElement} oldSaveButton
    * @private
@@ -950,7 +950,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /**
-   * @param {HTMLElement} saveButton
+   * @param {HTMLElement | undefined} saveButton
    * @param {string} i18nLabel
    * @param {boolean} isDirty
    * @private
@@ -972,7 +972,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /**
-   * @param {HTMLElement} deleteButton
+   * @param {HTMLElement | undefined} deleteButton
    * @param {string} i18nLabel
    * @param {boolean} isNew
    * @private
@@ -994,7 +994,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /**
-   * @param {HTMLElement} saveButton
+   * @param {HTMLElement | undefined} saveButton
    * @param {string} i18nLabel
    * @private
    */
