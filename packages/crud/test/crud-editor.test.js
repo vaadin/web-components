@@ -103,6 +103,21 @@ describe('crud editor', () => {
         crud._grid.activeItem = crud.items[1];
         expect(form.parentElement).to.equal(overlay);
       });
+
+      it('should support replacing the form when the dialog is open', async () => {
+        const newForm = fixtureSync(`
+          <vaadin-form-layout slot="form">
+            <vaadin-text-field path="foo" required></vaadin-text-field>
+          </vaadin-form-layout>
+        `);
+
+        crud._grid.activeItem = crud.items[0];
+        crud.appendChild(newForm);
+        await nextRender(crud);
+
+        expect(form.parentElement).to.be.null;
+        expect(newForm.parentElement).to.equal(overlay);
+      });
     });
   });
 });

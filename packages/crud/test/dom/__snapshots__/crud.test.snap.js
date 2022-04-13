@@ -15,12 +15,15 @@ snapshots["vaadin-crud host default"] =
   >
   </vaadin-crud-form>
   <vaadin-button
+    aria-disabled="true"
+    disabled=""
     id="save"
     role="button"
     slot="save-button"
-    tabindex="0"
+    tabindex="-1"
     theme="primary"
   >
+    Save
   </vaadin-button>
   <vaadin-button
     id="cancel"
@@ -29,14 +32,17 @@ snapshots["vaadin-crud host default"] =
     tabindex="0"
     theme="tertiary"
   >
+    Cancel
   </vaadin-button>
   <vaadin-button
+    hidden=""
     id="delete"
     role="button"
     slot="delete-button"
     tabindex="0"
     theme="tertiary error"
   >
+    Delete...
   </vaadin-button>
 </vaadin-crud>
 `;
