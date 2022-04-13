@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/combo-box",
-  "version": "23.0.5",
+  "version": "23.0.6",
   "publishConfig": {
     "access": "public"
   },
@@ -34,21 +34,21 @@
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^23.0.5",
-    "@vaadin/field-base": "^23.0.5",
-    "@vaadin/input-container": "^23.0.5",
-    "@vaadin/item": "^23.0.5",
-    "@vaadin/vaadin-lumo-styles": "^23.0.5",
-    "@vaadin/vaadin-material-styles": "^23.0.5",
-    "@vaadin/vaadin-overlay": "^23.0.5",
-    "@vaadin/vaadin-themable-mixin": "^23.0.5"
+    "@vaadin/component-base": "^23.0.6",
+    "@vaadin/field-base": "^23.0.6",
+    "@vaadin/input-container": "^23.0.6",
+    "@vaadin/item": "^23.0.6",
+    "@vaadin/vaadin-lumo-styles": "^23.0.6",
+    "@vaadin/vaadin-material-styles": "^23.0.6",
+    "@vaadin/vaadin-overlay": "^23.0.6",
+    "@vaadin/vaadin-themable-mixin": "^23.0.6"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/dialog": "^23.0.5",
-    "@vaadin/polymer-legacy-adapter": "^23.0.5",
+    "@vaadin/dialog": "^23.0.6",
+    "@vaadin/polymer-legacy-adapter": "^23.0.6",
     "@vaadin/testing-helpers": "^0.3.2",
-    "@vaadin/text-field": "^23.0.5",
+    "@vaadin/text-field": "^23.0.6",
     "lit": "^2.0.0",
     "sinon": "^9.2.0"
   }

@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-grid-pro",
-  "version": "23.0.5",
+  "version": "23.0.6",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/grid-pro": "^23.0.5"
+    "@vaadin/grid-pro": "^23.0.6"
   }
 }
