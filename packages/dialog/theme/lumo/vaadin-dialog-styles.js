@@ -39,17 +39,13 @@ const dialogOverlay = css`
   }
 
   :host(:is([has-header], [has-title])) [part='header'] {
-    padding: var(--lumo-space-s) var(--lumo-space-m);
-    min-height: var(--lumo-size-xl);
-    box-sizing: border-box;
+    padding: var(--lumo-space-m);
     background-color: var(--lumo-base-color);
     border-radius: var(--lumo-border-radius-l) var(--lumo-border-radius-l) 0 0; /* Needed for Safari */
   }
 
   :host([has-footer]) [part='footer'] {
     padding: var(--lumo-space-s) var(--lumo-space-m);
-    min-height: var(--lumo-size-l);
-    box-sizing: border-box;
     background-color: var(--lumo-contrast-5pct);
     border-radius: 0 0 var(--lumo-border-radius-l) var(--lumo-border-radius-l); /* Needed for Safari */
   }
