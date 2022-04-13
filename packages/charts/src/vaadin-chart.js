@@ -1668,7 +1668,8 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
    * Force the no data text element to become visible if the chart has no data.
    * This is necessary in cases where Highcharts does not update the element
    * automatically, for example when setting the language config
-   * @private */
+   * @private
+   */
   __updateNoDataElement(config) {
     const isEmpty =
       config.series.length === 0 || config.series.map((e) => e.data.length === 0).reduce((e1, e2) => e1 && e2, true);
