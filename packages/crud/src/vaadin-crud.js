@@ -942,10 +942,10 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
 
   /**
    * @param {HTMLElement} saveButton
-   * @param {HTMLElement} oldSaveButton
+   * @param {HTMLElement | undefined} oldSaveButton
    * @private
    */
-  __onSaveButtonChange(saveButton, oldSaveButton) {
+  __saveButtonChanged(saveButton, oldSaveButton) {
     this.__setupSlottedButton(saveButton, oldSaveButton, this.__save);
   }
 
@@ -964,10 +964,10 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
 
   /**
    * @param {HTMLElement} deleteButton
-   * @param {HTMLElement} oldDeleteButton
+   * @param {HTMLElement | undefined} oldDeleteButton
    * @private
    */
-  __onDeleteButtonChange(deleteButton, oldDeleteButton) {
+  __deleteButtonChanged(deleteButton, oldDeleteButton) {
     this.__setupSlottedButton(deleteButton, oldDeleteButton, this.__delete);
   }
 
@@ -986,10 +986,10 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
 
   /**
    * @param {HTMLElement} cancelButton
-   * @param {HTMLElement} oldCancelButton
+   * @param {HTMLElement | undefined} oldCancelButton
    * @private
    */
-  __onCancelButtonChange(cancelButton, oldCancelButton) {
+  __cancelButtonChanged(cancelButton, oldCancelButton) {
     this.__setupSlottedButton(cancelButton, oldCancelButton, this.__cancel);
   }
 
