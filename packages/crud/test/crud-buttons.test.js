@@ -27,7 +27,9 @@ describe('crud buttons', () => {
         }
         crud.items = [{ foo: 'bar' }];
         await nextRender(crud._grid);
-        [saveButton, cancelButton, deleteButton] = crud.querySelectorAll('vaadin-button');
+        saveButton = crud.querySelector('[slot=save-button]');
+        cancelButton = crud.querySelector('[slot=cancel-button]');
+        deleteButton = crud.querySelector('[slot=delete-button]');
       });
 
       describe('i18n', () => {
@@ -315,7 +317,9 @@ describe('crud buttons', () => {
         afterEach(async () => {
           crud.editorOpened = false;
           await aTimeout(0);
-          [saveButton, cancelButton, deleteButton] = crud.querySelectorAll('vaadin-button');
+          saveButton = crud.querySelector('[slot=save-button]');
+          cancelButton = crud.querySelector('[slot=cancel-button]');
+          deleteButton = crud.querySelector('[slot=delete-button]');
         });
 
         it('should configure dirty and new flags on new', () => {
@@ -604,7 +608,9 @@ describe('crud buttons', () => {
     beforeEach(async () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
       await nextRender(crud._grid);
-      [saveButton, cancelButton, deleteButton] = crud.querySelectorAll('vaadin-button');
+      saveButton = crud.querySelector('[slot=save-button]');
+      cancelButton = crud.querySelector('[slot=cancel-button]');
+      deleteButton = crud.querySelector('[slot=delete-button]');
     });
 
     it('should set the label for the delete button when it is added lazily', async () => {
