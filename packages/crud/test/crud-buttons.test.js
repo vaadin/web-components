@@ -607,29 +607,26 @@ describe('crud buttons', () => {
   describe('lazy', () => {
     beforeEach(async () => {
       crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
-      await nextRender(crud._grid);
-      saveButton = crud.querySelector('[slot=save-button]');
-      cancelButton = crud.querySelector('[slot=cancel-button]');
-      deleteButton = crud.querySelector('[slot=delete-button]');
+      await nextRender(crud);
     });
 
     it('should set the label for the delete button when it is added lazily', async () => {
       const newButton = fixtureSync(`<vaadin-button slot="delete-button"></vaadin-button>`);
-      crud.replaceChild(newButton, deleteButton);
+      crud.appendChild(newButton);
       await nextRender(crud);
       expect(newButton.textContent).to.equal(crud.i18n.deleteItem);
     });
 
     it('should set the label for the save button when it is added lazily', async () => {
       const newButton = fixtureSync(`<vaadin-button slot="save-button"></vaadin-button>`);
-      crud.replaceChild(newButton, saveButton);
+      crud.appendChild(newButton);
       await nextRender(crud);
       expect(newButton.textContent).to.equal(crud.i18n.saveItem);
     });
 
     it('should set the label for the cancel button when it is added lazily', async () => {
       const newButton = fixtureSync(`<vaadin-button slot="cancel-button"></vaadin-button>`);
-      crud.replaceChild(newButton, cancelButton);
+      crud.appendChild(newButton);
       await nextRender(crud);
       expect(newButton.textContent).to.equal(crud.i18n.cancel);
     });
