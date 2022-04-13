@@ -324,7 +324,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       _grid: {
         type: HTMLElement,
-        observer: '__onGridChange'
+        observer: '__gridChanged'
       },
 
       /**
@@ -333,7 +333,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       _form: {
         type: HTMLElement,
-        observer: '__onFormChange'
+        observer: '__formChanged'
       },
 
       /**
@@ -342,7 +342,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       _saveButton: {
         type: HTMLElement,
-        observer: '__onSaveButtonChange'
+        observer: '__saveButtonChanged'
       },
 
       /**
@@ -351,7 +351,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       _deleteButton: {
         type: HTMLElement,
-        observer: '__onDeleteButtonChange'
+        observer: '__deleteButtonChanged'
       },
 
       /**
@@ -360,7 +360,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       _cancelButton: {
         type: HTMLElement,
-        observer: '__onCancelButtonChange'
+        observer: '__cancelButtonChanged'
       },
 
       /**
@@ -378,7 +378,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       items: {
         type: Array,
         notify: true,
-        observer: '__onItemsChange'
+        observer: '__itemsChanged'
       },
 
       /**
@@ -387,7 +387,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       editedItem: {
         type: Object,
-        observer: '__onItemChange',
+        observer: '__editedItemChanged',
         notify: true
       },
 
@@ -405,7 +405,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
         type: String,
         value: '',
         reflectToAttribute: true,
-        observer: '__onEditorPositionChange'
+        observer: '__editorPositionChanged'
       },
 
       /**
@@ -434,7 +434,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       dataProvider: {
         type: Function,
-        observer: '__onDataProviderChange'
+        observer: '__dataProviderChanged'
       },
 
       /**
@@ -482,7 +482,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
         type: Boolean,
         reflectToAttribute: true,
         notify: true,
-        observer: '__onOpenedChanged'
+        observer: '__editorOpenedChanged'
       },
 
       /**
@@ -607,10 +607,10 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
 
   static get observers() {
     return [
-      '__headerNodeChanged(_headerNode, __isNew, i18n.newItem, i18n.editItem)',
-      '__formChanged(_form, _theme, include, exclude)',
-      '__onI18Change(i18n, _grid)',
-      '__onEditOnClickChange(editOnClick, _grid)',
+      '__headerPropsChanged(_headerNode, __isNew, i18n.newItem, i18n.editItem)',
+      '__formPropsChanged(_form, _theme, include, exclude)',
+      '__i18nChanged(i18n, _grid)',
+      '__editOnClickChanged(editOnClick, _grid)',
       '__hostPropsChanged(' +
         HOST_PROPS.save.map(({ prop }) => prop).join(',') +
         ',' +
@@ -630,6 +630,11 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     if (typeof licenseChecker === 'function') {
       licenseChecker(Crud);
     }
+  }
+
+  /** @private */
+  static _isValidEditorPosition(editorPosition) {
+    return ['bottom', 'aside'].indexOf(editorPosition) != -1;
   }
 
   /** @protected */
@@ -674,16 +679,16 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   /** @protected */
   ready() {
     super.ready();
-    this.__editListener = (e) => this.__onCrudGridEdit(e);
-    this.__changeListener = (e) => this.__onFormChanges(e);
-    this.__saveBound = this.__save.bind(this);
-    this.__cancelBound = this.__cancel.bind(this);
-    this.__deleteBound = this.__delete.bind(this);
-    this.__gridSizeListener = this.__onGridSizeChanges.bind(this);
-    this.__boundEditOnClickListener = this.__editOnClickListener.bind(this);
+    this.__save = this.__save.bind(this);
+    this.__cancel = this.__cancel.bind(this);
+    this.__delete = this.__delete.bind(this);
+    this.__onFormChange = this.__onFormChange.bind(this);
+    this.__onGridEdit = this.__onGridEdit.bind(this);
+    this.__onGridSizeChanged = this.__onGridSizeChanged.bind(this);
+    this.__onGridActiveItemChanged = this.__onGridActiveItemChanged.bind(this);
     this._grid = this.$.grid;
-    this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancelBound);
-    this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancelBound);
+    this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancel);
+    this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancel);
     // Initialize the default buttons
     this.__propagateHostAttributes();
 
@@ -694,22 +699,37 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     );
   }
 
-  /** @private */
+  /**
+   * @param {boolean} isDirty
+   * @private
+   */
   __isSaveBtnDisabled(isDirty) {
     // Used instead of isDirty property binding in order to enable overriding of the behavior
     // by overriding the method (i.e. from Flow component)
     return !isDirty;
   }
 
-  /** @private */
-  __headerNodeChanged(headerNode, isNew, newItem, editItem) {
+  /**
+   * @param {HTMLElement | undefined} headerNode
+   * @param {boolean} isNew
+   * @param {string} i18nNewItem
+   * @param {string} i18nEditItem
+   * @private
+   */
+  __headerPropsChanged(headerNode, isNew, newItem, editItem) {
     if (headerNode) {
       headerNode.textContent = isNew ? newItem : editItem;
     }
   }
 
-  /** @private */
-  __formChanged(form, theme, include, exclude) {
+  /**
+   * @param {HTMLElement | undefined} form
+   * @param {string} theme
+   * @param {string | string[] | undefined} include
+   * @param {string | RegExp} exclude
+   * @private
+   */
+  __formPropsChanged(form, theme, include, exclude) {
     if (form) {
       form.include = include;
       form.exclude = exclude;
@@ -717,8 +737,12 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     }
   }
 
-  /** @private */
-  __onI18Change(i18n, grid) {
+  /**
+   * @param {CrudI18n} i18n
+   * @param {CrudGrid | Grid} grid
+   * @private
+   */
+  __i18nChanged(i18n, grid) {
     if (!grid) {
       return;
     }
@@ -731,7 +755,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /** @private */
-  __onEditorPositionChange(editorPosition) {
+  __editorPositionChanged(editorPosition) {
     if (Crud._isValidEditorPosition(editorPosition)) {
       return;
     }
@@ -739,16 +763,11 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /** @private */
-  static _isValidEditorPosition(editorPosition) {
-    return ['bottom', 'aside'].indexOf(editorPosition) != -1;
-  }
-
-  /** @private */
-  __onOpenedChanged(opened, old) {
-    if (!opened && old) {
+  __editorOpenedChanged(opened, oldOpened) {
+    if (!opened && oldOpened) {
       this.__closeEditor();
     } else {
-      this.__onFormChange(this._form);
+      this.__formChanged(this._form);
     }
 
     if (opened) {
@@ -851,9 +870,9 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
 
         if (slotAttributeValue == 'grid') {
           // Force to remove listener on previous grid first
-          this.__onEditOnClickChange(false, this._grid);
+          this.__editOnClickChanged(false, this._grid);
           this._grid = node;
-          this.__onEditOnClickChange(this.editOnClick, this._grid);
+          this.__editOnClickChanged(this.editOnClick, this._grid);
         } else if (slotAttributeValue == 'form') {
           this._form = node;
         } else if (slotAttributeValue.indexOf('button') >= 0) {
@@ -866,83 +885,108 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /** @private */
-  __onCrudGridEdit(e) {
-    e.stopPropagation();
-    this.__confirmBeforeChangingEditedItem(e.detail.item);
+  __onGridEdit(event) {
+    event.stopPropagation();
+    this.__confirmBeforeChangingEditedItem(event.detail.item);
   }
 
   /** @private */
-  __onFormChanges() {
+  __onFormChange() {
     this.__isDirty = true;
   }
 
   /** @private */
-  __onGridSizeChanges() {
+  __onGridSizeChanged() {
     this._setSize(this._grid.size);
   }
 
-  /** @private */
-  __onGridChange(grid, old) {
-    if (old) {
-      old.removeEventListener('edit', this.__editListener);
-      old.removeEventListener('size-changed', this.__gridSizeListener);
+  /**
+   * @param {CrudGrid | Grid} grid
+   * @param {CrudGrid | Grid | undefined} oldGrid
+   * @private
+   */
+  __gridChanged(grid, oldGrid) {
+    if (oldGrid) {
+      oldGrid.removeEventListener('edit', this.__onGridEdit);
+      oldGrid.removeEventListener('size-changed', this.__onGridSizeChanged);
     }
     if (this.dataProvider) {
-      this.__onDataProviderChange(this.dataProvider);
+      this.__dataProviderChanged(this.dataProvider);
     }
     if (this.items) {
-      this.__onItemsChange(this.items);
+      this.__itemsChanged(this.items);
     }
     if (this.editedItem) {
-      this.__onItemChange(this.editedItem);
+      this.__editedItemChanged(this.editedItem);
     }
-    grid.addEventListener('edit', this.__editListener);
-    grid.addEventListener('size-changed', this.__gridSizeListener);
-    this.__onGridSizeChanges();
+    grid.addEventListener('edit', this.__onGridEdit);
+    grid.addEventListener('size-changed', this.__onGridSizeChanged);
+    this.__onGridSizeChanged();
   }
 
-  /** @private */
-  __onFormChange(form, old) {
-    if (old && old.parentElement) {
-      old.parentElement && old.parentElement.removeChild(old);
-      old.removeEventListener('change', this.__changeListener);
-      old.removeEventListener('input', this.__changeListener);
+  /**
+   * @param {HTMLElement | undefined | null} form
+   * @param {HTMLElement | undefined | null} oldForm
+   * @private
+   */
+  __formChanged(form, oldForm) {
+    if (oldForm && oldForm.parentElement) {
+      oldForm.parentElement.removeChild(oldForm);
+      oldForm.removeEventListener('change', this.__onFormChange);
+      oldForm.removeEventListener('input', this.__onFormChange);
     }
     if (!form) {
       return;
     }
     if (this.items) {
-      this.__onItemsChange(this.items);
+      this.__itemsChanged(this.items);
     }
     if (this.editedItem) {
-      this.__onItemChange(this.editedItem);
+      this.__editedItemChanged(this.editedItem);
     }
-    form.addEventListener('change', this.__changeListener);
-    form.addEventListener('input', this.__changeListener);
+    form.addEventListener('change', this.__onFormChange);
+    form.addEventListener('input', this.__onFormChange);
   }
 
-  /** @private */
-  __onSaveButtonChange(save, old) {
-    this.__setupSlottedButton(save, old, this.__saveBound);
+  /**
+   * @param {HTMLElement} saveButton
+   * @param {HTMLElement | undefined} oldSaveButton
+   * @private
+   */
+  __saveButtonChanged(saveButton, oldSaveButton) {
+    this.__setupSlottedButton(saveButton, oldSaveButton, this.__save);
   }
 
-  /** @private */
-  __onDeleteButtonChange(deleteButton, old) {
-    this.__setupSlottedButton(deleteButton, old, this.__deleteBound);
+  /**
+   * @param {HTMLElement} deleteButton
+   * @param {HTMLElement | undefined} oldDeleteButton
+   * @private
+   */
+  __deleteButtonChanged(deleteButton, oldDeleteButton) {
+    this.__setupSlottedButton(deleteButton, oldDeleteButton, this.__delete);
   }
 
-  /** @private */
-  __onCancelButtonChange(cancel, old) {
-    this.__setupSlottedButton(cancel, old, this.__cancelBound);
+  /**
+   * @param {HTMLElement} cancelButton
+   * @param {HTMLElement | undefined} oldCancelButton
+   * @private
+   */
+  __cancelButtonChanged(cancelButton, oldCancelButton) {
+    this.__setupSlottedButton(cancelButton, oldCancelButton, this.__cancel);
   }
 
-  /** @private */
-  __setupSlottedButton(slottedButton, currentButton, clickListener) {
-    if (currentButton && currentButton.parentElement) {
-      currentButton.parentElement.removeChild(currentButton);
+  /**
+   * @param {HTMLElement} newButton
+   * @param {HTMLElement | undefined | null} oldButton
+   * @param {Function} clickListener
+   * @private
+   */
+  __setupSlottedButton(newButton, oldButton, clickListener) {
+    if (oldButton && oldButton.parentElement) {
+      oldButton.parentElement.removeChild(oldButton);
     }
 
-    slottedButton.addEventListener('click', clickListener);
+    newButton.addEventListener('click', clickListener);
   }
 
   /** @private */
@@ -991,27 +1035,27 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /** @private */
-  __onDataProviderChange(dataProvider) {
+  __dataProviderChanged(dataProvider) {
     if (this._grid) {
       this._grid.dataProvider = this.__createDataProviderProxy(dataProvider);
     }
   }
 
   /** @private */
-  __onEditOnClickChange(rowToEditChange, _grid) {
+  __editOnClickChanged(editOnClick, _grid) {
     if (!_grid) {
       return;
     }
 
-    if (rowToEditChange) {
-      _grid.addEventListener('active-item-changed', this.__boundEditOnClickListener);
+    if (editOnClick) {
+      _grid.addEventListener('active-item-changed', this.__onGridActiveItemChanged);
     } else {
-      _grid.removeEventListener('active-item-changed', this.__boundEditOnClickListener);
+      _grid.removeEventListener('active-item-changed', this.__onGridActiveItemChanged);
     }
   }
 
   /** @private */
-  __editOnClickListener(event) {
+  __onGridActiveItemChanged(event) {
     const item = event.detail.value;
     if (this.editorOpened && this.__isDirty) {
       this.__confirmBeforeChangingEditedItem(item);
@@ -1075,7 +1119,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /** @private */
-  __onItemsChange(items) {
+  __itemsChanged(items) {
     if (this.items && this.items[0]) {
       this.__model = items[0];
     }
@@ -1086,7 +1130,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /** @private */
-  __onItemChange(item) {
+  __editedItemChanged(item) {
     if (!this._form) {
       return;
     }
