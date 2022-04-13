@@ -62,6 +62,10 @@ export function deepMerge(target, source) {
   /* eslint-enable no-invalid-this */
 });
 
+// Init Highcharts global language defaults
+// No data message should be empty by default
+Highcharts.setOptions({ lang: { noData: '' } });
+
 /**
  * `<vaadin-chart>` is a Web Component for creating high quality charts.
  *
@@ -428,7 +432,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        */
       emptyText: {
         type: String,
-        value: ' ',
         reflectToAttribute: true
       },
 
@@ -1032,13 +1035,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     // Best effort to make chart display custom empty-text messages when series are removed.
     // This is needed because Highcharts currently doesn't react. A condition not catered for is
     // when all points are removed from all series without removing any series.
-    const isEmpty =
-      this.configuration.series.length === 0 ||
-      this.configuration.series.map((e) => e.data.length === 0).reduce((e1, e2) => e1 && e2, true);
-    if (isEmpty) {
-      this.configuration.hideNoData();
-      this.configuration.showNoData(this.emptyText);
-    }
+    this.__updateNoDataElement(this.configuration);
   }
 
   /** @private */
@@ -1664,8 +1661,21 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
         noData: emptyText
       }
     });
-    config.hideNoData();
-    config.showNoData(emptyText);
+    this.__updateNoDataElement(config);
+  }
+
+  /**
+   * Force the no data text element to become visible if the chart has no data.
+   * This is necessary in cases where Highcharts does not update the element
+   * automatically, for example when setting the language config
+   * @private */
+  __updateNoDataElement(config) {
+    const isEmpty =
+      config.series.length === 0 || config.series.map((e) => e.data.length === 0).reduce((e1, e2) => e1 && e2, true);
+    if (isEmpty) {
+      config.hideNoData();
+      config.showNoData(this.emptyText);
+    }
   }
 
   /** @private */
