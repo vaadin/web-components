@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-chart.js';
+import Highcharts from 'highcharts/es-modules/masters/highstock.src.js';
 
 describe('vaadin-chart properties', () => {
   describe('subtitle', () => {
@@ -256,11 +257,13 @@ describe('vaadin-chart properties', () => {
 
     it('should support changing category minimum value', (done) => {
       const newCategoryMin = 2;
+
       function extremesListener(event) {
         expect(event.detail.originalEvent.min).to.be.equal(newCategoryMin);
         chart.removeEventListener('xaxes-extremes-set', extremesListener);
         done();
       }
+
       chart.addEventListener('xaxes-extremes-set', extremesListener);
       chart.setAttribute('category-min', newCategoryMin);
     });
@@ -294,11 +297,13 @@ describe('vaadin-chart properties', () => {
 
     it('should support changing category maximum value', (done) => {
       const newCategoryMax = 5;
+
       function extremesListener(event) {
         expect(event.detail.originalEvent.max).to.be.equal(newCategoryMax);
         chart.removeEventListener('xaxes-extremes-set', extremesListener);
         done();
       }
+
       chart.addEventListener('xaxes-extremes-set', extremesListener);
       chart.setAttribute('category-max', newCategoryMax);
     });
@@ -497,10 +502,32 @@ describe('vaadin-chart properties', () => {
         expect(message.textContent.trim()).to.be.empty;
       });
 
-      it('should show a message when emptyText property is set', () => {
+      it('should show an element-specific message when emptyText property is set', () => {
         chart.emptyText = 'Empty Vaadin Chart';
         const message = chart.$.chart.querySelector('.highcharts-no-data > text');
         expect(message.textContent).to.be.equal(chart.emptyText);
+      });
+
+      describe('with global language setting', () => {
+        const defaultGlobalNoDataMessage = Highcharts.getOptions().lang.noData;
+
+        before(() => {
+          Highcharts.setOptions({ lang: { noData: 'Global empty chart' } });
+        });
+        after(() => {
+          Highcharts.setOptions({ lang: { noData: defaultGlobalNoDataMessage } });
+        });
+
+        it('should show custom global message for empty chart', () => {
+          const message = chart.$.chart.querySelector('.highcharts-no-data > text');
+          expect(message.textContent.trim()).to.equal('Global empty chart');
+        });
+
+        it('should show an element-specific message when emptyText property is set', () => {
+          chart.emptyText = 'Empty Vaadin Chart';
+          const message = chart.$.chart.querySelector('.highcharts-no-data > text');
+          expect(message.textContent).to.be.equal(chart.emptyText);
+        });
       });
     });
 
@@ -509,7 +536,7 @@ describe('vaadin-chart properties', () => {
 
       beforeEach(async () => {
         chart = fixtureSync(`
-          <vaadin-chart empty-text="Empty Vaadin Chart">
+          <vaadin-chart>
             <vaadin-chart-series values="[1,2,3]"></vaadin-chart-series>
             <vaadin-chart-series values="[4,5,6]"></vaadin-chart-series>
             <vaadin-chart-series values="[]"></vaadin-chart-series>
@@ -518,7 +545,13 @@ describe('vaadin-chart properties', () => {
         await oneEvent(chart, 'chart-load');
       });
 
+      it('should not show a message when lazily setting the property and the chart has data', async () => {
+        chart.emptyText = 'Empty Vaadin Chart';
+        expect(chart.$.chart.querySelector('.highcharts-no-data > text')).not.to.exist;
+      });
+
       it('should show a message when all series are removed from chart', async () => {
+        chart.emptyText = 'Empty Vaadin Chart';
         const series = chart.querySelectorAll('vaadin-chart-series');
         series.forEach((element) => chart.removeChild(element));
         await oneEvent(chart, 'chart-redraw');
@@ -527,6 +560,7 @@ describe('vaadin-chart properties', () => {
       });
 
       it('should show a message when data-containing series are removed from chart', async () => {
+        chart.emptyText = 'Empty Vaadin Chart';
         const series = chart.querySelectorAll('vaadin-chart-series');
         chart.removeChild(series[0]);
         chart.removeChild(series[1]);
