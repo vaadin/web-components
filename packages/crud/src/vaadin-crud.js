@@ -19,12 +19,6 @@ import { MediaQueryController } from '@vaadin/component-base/src/media-query-con
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-const HOST_PROPS = {
-  save: [{ attr: 'disabled', prop: '__isDirty', parseProp: '__isSaveBtnDisabled' }, { prop: 'i18n.saveItem' }],
-  cancel: [{ prop: 'i18n.cancel' }],
-  delete: [{ attr: 'hidden', prop: '__isNew', parseProp: (prop) => prop }, { prop: 'i18n.deleteItem' }]
-};
-
 /**
  * `<vaadin-crud>` is a Web Component for [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
  *
@@ -611,13 +605,9 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       '__formPropsChanged(_form, theme, include, exclude)',
       '__i18nChanged(i18n, _grid)',
       '__editOnClickChanged(editOnClick, _grid)',
-      '__hostPropsChanged(' +
-        HOST_PROPS.save.map(({ prop }) => prop).join(',') +
-        ',' +
-        HOST_PROPS.cancel.map(({ prop }) => prop).join(',') +
-        ',' +
-        HOST_PROPS.delete.map(({ prop }) => prop).join(',') +
-        ')'
+      '__saveButtonPropsChanged(_saveButton, i18n.saveItem, __isDirty)',
+      '__cancelButtonPropsChanged(_cancelButton, i18n.cancel)',
+      '__deleteButtonPropsChanged(_deleteButton, i18n.deleteItem, __isNew)'
     ];
   }
 
@@ -689,8 +679,6 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     this._grid = this.$.grid;
     this.$.dialog.$.overlay.addEventListener('vaadin-overlay-outside-click', this.__cancel);
     this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this.__cancel);
-    // Initialize the default buttons
-    this.__propagateHostAttributes();
 
     this.addController(
       new MediaQueryController(this._fullscreenMediaQuery, (matches) => {
@@ -716,24 +704,9 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
    * @param {string} i18nEditItem
    * @private
    */
-  __headerPropsChanged(headerNode, isNew, newItem, editItem) {
+  __headerPropsChanged(headerNode, isNew, i18nNewItem, i18nEditItem) {
     if (headerNode) {
-      headerNode.textContent = isNew ? newItem : editItem;
-    }
-  }
-
-  /**
-   * @param {HTMLElement | undefined} form
-   * @param {string} theme
-   * @param {string | string[] | undefined} include
-   * @param {string | RegExp} exclude
-   * @private
-   */
-  __formPropsChanged(form, theme, include, exclude) {
-    if (form) {
-      form.include = include;
-      form.exclude = exclude;
-      form.setAttribute('theme', theme);
+      headerNode.textContent = isNew ? i18nNewItem : i18nEditItem;
     }
   }
 
@@ -882,6 +855,10 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
           this._headerNode = node;
         }
       });
+
+    if (this.editorOpened) {
+      this.__ensureChildren();
+    }
   }
 
   /** @private */
@@ -949,12 +926,40 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /**
+   * @param {HTMLElement | undefined} form
+   * @param {string} theme
+   * @param {string | string[] | undefined} include
+   * @param {string | RegExp} exclude
+   * @private
+   */
+  __formPropsChanged(form, theme, include, exclude) {
+    if (form) {
+      form.include = include;
+      form.exclude = exclude;
+      form.setAttribute('theme', theme);
+    }
+  }
+
+  /**
    * @param {HTMLElement} saveButton
    * @param {HTMLElement | undefined} oldSaveButton
    * @private
    */
   __saveButtonChanged(saveButton, oldSaveButton) {
     this.__setupSlottedButton(saveButton, oldSaveButton, this.__save);
+  }
+
+  /**
+   * @param {HTMLElement | undefined} saveButton
+   * @param {string} i18nLabel
+   * @param {boolean} isDirty
+   * @private
+   */
+  __saveButtonPropsChanged(saveButton, i18nLabel, isDirty) {
+    if (saveButton) {
+      saveButton.toggleAttribute('disabled', this.__isSaveBtnDisabled(isDirty));
+      saveButton.textContent = i18nLabel;
+    }
   }
 
   /**
@@ -967,12 +972,36 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /**
+   * @param {HTMLElement | undefined} deleteButton
+   * @param {string} i18nLabel
+   * @param {boolean} isNew
+   * @private
+   */
+  __deleteButtonPropsChanged(deleteButton, i18nLabel, isNew) {
+    if (deleteButton) {
+      deleteButton.textContent = i18nLabel;
+      deleteButton.toggleAttribute('hidden', isNew);
+    }
+  }
+
+  /**
    * @param {HTMLElement} cancelButton
    * @param {HTMLElement | undefined} oldCancelButton
    * @private
    */
   __cancelButtonChanged(cancelButton, oldCancelButton) {
     this.__setupSlottedButton(cancelButton, oldCancelButton, this.__cancel);
+  }
+
+  /**
+   * @param {HTMLElement | undefined} saveButton
+   * @param {string} i18nLabel
+   * @private
+   */
+  __cancelButtonPropsChanged(cancelButton, i18nLabel) {
+    if (cancelButton) {
+      cancelButton.textContent = i18nLabel;
+    }
   }
 
   /**
@@ -987,51 +1016,6 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     }
 
     newButton.addEventListener('click', clickListener);
-  }
-
-  /** @private */
-  __hostPropsChanged() {
-    this.__propagateHostAttributes();
-  }
-
-  /** @private */
-  __propagateHostAttributes() {
-    this.__propagateHostAttributesToButton(this._saveButton, HOST_PROPS.save);
-    this.__propagateHostAttributesToButton(this._cancelButton, HOST_PROPS.cancel);
-    this.__propagateHostAttributesToButton(this._deleteButton, HOST_PROPS.delete);
-  }
-
-  /** @private */
-  __propagateHostAttributesToButton(button, props) {
-    // Ensure the slotted button element is present in the DOM.
-    // This is needed because the observer runs before `ready`.
-    if (button) {
-      props.forEach(({ attr, prop, parseProp }) => {
-        if (prop.indexOf('i18n') >= 0) {
-          button.textContent = this.i18n[prop.split('.')[1]];
-        } else {
-          if (typeof parseProp === 'string') {
-            this._setOrToggleAttribute(attr, this[parseProp](this[prop]), button);
-            return;
-          }
-
-          this._setOrToggleAttribute(attr, parseProp(this[prop]), button);
-        }
-      });
-    }
-  }
-
-  /** @private */
-  _setOrToggleAttribute(name, value, node) {
-    if (!name || !node) {
-      return;
-    }
-
-    if (value) {
-      node.setAttribute(name, typeof value === 'boolean' ? '' : value);
-    } else {
-      node.removeAttribute(name);
-    }
   }
 
   /** @private */
