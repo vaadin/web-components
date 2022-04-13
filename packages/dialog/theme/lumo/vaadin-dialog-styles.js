@@ -62,14 +62,6 @@ const dialogOverlay = css`
     padding: 0;
   }
 
-  :host([theme~='no-padding']:is([has-header], [has-title])) [part='header'] {
-    padding: 0;
-  }
-
-  :host([theme~='no-padding'][has-footer]) [part='footer'] {
-    padding: 0;
-  }
-
   @media (min-height: 320px) {
     :host(:is([has-header], [has-title])[overflow~='top']) [part='header'] {
       box-shadow: 0 1px 0 0 var(--lumo-contrast-10pct);
