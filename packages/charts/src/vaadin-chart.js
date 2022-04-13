@@ -1671,8 +1671,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
    * @private
    */
   __updateNoDataElement(config) {
-    const isEmpty =
-      config.series.length === 0 || config.series.map((e) => e.data.length === 0).reduce((e1, e2) => e1 && e2, true);
+    const isEmpty = config.series.every((e) => e.data.length === 0);
     if (isEmpty) {
       config.hideNoData();
       config.showNoData(this.emptyText);
