@@ -17,6 +17,11 @@ import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shar
 import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const multiSelectComboBox = css`
+  :host {
+    --vaadin-multi-select-combo-box-chip-min-width: 60px;
+    --vaadin-multi-select-combo-box-input-min-width: 4em;
+  }
+
   [hidden] {
     display: none !important;
   }
@@ -27,11 +32,12 @@ const multiSelectComboBox = css`
 
   ::slotted(input) {
     box-sizing: border-box;
-    flex: 1 0 4em;
+    flex: 1 0 var(--vaadin-multi-select-combo-box-input-min-width);
   }
 
-  [part~='chip'] {
+  [part='chip'] {
     flex: 0 1 auto;
+    min-width: var(--vaadin-multi-select-combo-box-chip-min-width);
   }
 
   :host([readonly]) [part~='chip'] {
@@ -89,6 +95,15 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * `focus-ring`           | Set when the element is keyboard focused
  * `opened`               | Set when the dropdown is open
  * `readonly`             | Set to a readonly element
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom property                                      | Description                | Default
+ * -----------------------------------------------------|----------------------------|--------
+ * `--vaadin-field-default-width`                       | Default width of the field | `12em`
+ * `--vaadin-multi-select-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
+ * `--vaadin-multi-select-combo-box-chip-min-width`     | Min width of the chip      | `60px`
+ * `--vaadin-multi-select-combo-box-input-min-width`    | Min width of the chip      | `4em`
  *
  * ### Internal components
  *
@@ -604,13 +619,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     let refNode = overflow.nextElementSibling;
 
-    // Input flex-basis (4em = 64px)
-    const INPUT_MIN_WIDTH = 64;
-    const CHIP_MIN_WIDTH = 60;
+    const chipMinWidth = parseInt(
+      getComputedStyle(this).getPropertyValue('--vaadin-multi-select-combo-box-chip-min-width')
+    );
+
+    const inputMinWidth = parseInt(getComputedStyle(this.inputElement).flexBasis);
 
     for (let i = items.length - 1; i >= 0; i--) {
       // Ensure there is enough space for input if we add one more chip
-      if (this.inputElement.offsetWidth < INPUT_MIN_WIDTH + CHIP_MIN_WIDTH - overflow.offsetWidth) {
+      if (this.inputElement.offsetWidth < inputMinWidth + chipMinWidth - overflow.offsetWidth) {
         break;
       }
 

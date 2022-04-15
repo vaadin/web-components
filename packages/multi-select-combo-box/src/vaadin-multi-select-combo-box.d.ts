@@ -106,6 +106,15 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `opened`               | Set when the dropdown is open
  * `readonly`             | Set to a readonly element
  *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom property                                      | Description                | Default
+ * -----------------------------------------------------|----------------------------|--------
+ * `--vaadin-field-default-width`                       | Default width of the field | `12em`
+ * `--vaadin-multi-select-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
+ * `--vaadin-multi-select-combo-box-chip-min-width`     | Min width of the chip      | `60px`
+ * `--vaadin-multi-select-combo-box-input-min-width`    | Min width of the chip      | `4em`
+ *
  * ### Internal components
  *
  * In addition to `<vaadin-multi-select-combo-box>` itself, the following internal
