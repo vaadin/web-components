@@ -16,7 +16,6 @@ registerStyles(
     }
 
     [part='overlay'] {
-      box-sizing: content-box;
       width: var(--_vaadin-confirm-dialog-content-width);
       height: var(--_vaadin-confirm-dialog-content-height);
     }
@@ -29,10 +28,6 @@ registerStyles(
     /* Make buttons clickable */
     [part='footer'] > * {
       pointer-events: all;
-    }
-
-    [part='message'] {
-      margin-bottom: auto;
     }
   `,
   { moduleId: 'vaadin-confirm-dialog-overlay-styles' }
