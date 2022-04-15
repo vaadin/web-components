@@ -691,11 +691,6 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _onClosed() {
-      // Happens when the overlay is closed by clicking outside
-      if (this.opened) {
-        this.close();
-      }
-
       if (!this.loading || this.allowCustomValue) {
         this._commitValue();
       }
