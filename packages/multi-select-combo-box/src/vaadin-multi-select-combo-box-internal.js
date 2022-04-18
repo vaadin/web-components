@@ -82,6 +82,8 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /**
+   * Override method from `InputMixin`.
+   *
    * @protected
    * @override
    */
