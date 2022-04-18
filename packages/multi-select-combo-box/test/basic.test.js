@@ -383,6 +383,22 @@ describe('basic', () => {
       await sendKeys({ type: 'pear' });
       await sendKeys({ down: 'Enter' });
       expect(internal.value).to.equal('');
+      expect(inputElement.value).to.equal('');
+    });
+
+    it('should clear input element value after clicking matching value', async () => {
+      await sendKeys({ type: 'ora' });
+      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      item.click();
+      expect(internal.value).to.equal('');
+      expect(inputElement.value).to.equal('');
+    });
+
+    it('should clear filter property after clicking matching value', async () => {
+      await sendKeys({ type: 'ora' });
+      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      item.click();
+      expect(comboBox.filter).to.equal('');
     });
 
     it('should not add custom value to selectedItems automatically', async () => {

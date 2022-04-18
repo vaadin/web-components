@@ -81,6 +81,20 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     this._toggleElement = this.querySelector('.toggle-button');
   }
 
+  /**
+   * Override method from `InputMixin`.
+   *
+   * @protected
+   * @override
+   */
+  clear() {
+    super.clear();
+
+    if (this.inputElement) {
+      this.inputElement.value = '';
+    }
+  }
+
   /** @protected */
   _isClearButton(event) {
     return (
