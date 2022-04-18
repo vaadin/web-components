@@ -38,6 +38,6 @@
     "@esm-bundle/chai": "^4.3.4",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/testing-helpers": "^0.3.2",
-    "sinon": "^9.2.4"
+    "sinon": "^13.0.2"
   }
 }

@@ -41,6 +41,6 @@
     "@vaadin/grid": "23.1.0-alpha2",
     "@vaadin/grid-pro": "23.1.0-alpha2",
     "@vaadin/testing-helpers": "^0.3.2",
-    "sinon": "^9.2.4"
+    "sinon": "^13.0.2"
   }
 }
