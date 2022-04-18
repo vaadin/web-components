@@ -10,6 +10,20 @@ import '@vaadin/vaadin-lumo-styles/typography.js';
 import { inputFieldShared } from '@vaadin/vaadin-lumo-styles/mixins/input-field-shared.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+registerStyles(
+  'vaadin-multi-select-combo-box-item',
+  css`
+    @media (any-hover: hover) {
+      :host(:hover[readonly]) {
+        background-color: transparent;
+      }
+    }
+  `,
+  {
+    moduleId: 'lumo-multi-select-combo-box-item'
+  }
+);
+
 const multiSelectComboBox = css`
   :host([has-value]) {
     padding-inline-start: 0;

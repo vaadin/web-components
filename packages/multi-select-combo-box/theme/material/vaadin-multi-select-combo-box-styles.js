@@ -9,6 +9,20 @@ import '@vaadin/vaadin-material-styles/typography.js';
 import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-field-shared.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+registerStyles(
+  'vaadin-multi-select-combo-box-item',
+  css`
+    @media (any-hover: hover) {
+      :host(:hover[readonly]) {
+        background-color: transparent;
+      }
+    }
+  `,
+  {
+    moduleId: 'material-multi-select-combo-box-item'
+  }
+);
+
 const multiSelectComboBox = css`
   :host([readonly]) [part~='chip'] {
     opacity: 0.5;

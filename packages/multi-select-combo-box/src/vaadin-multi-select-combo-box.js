@@ -250,6 +250,16 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       },
 
       /**
+       * When present, it specifies that the field is read-only.
+       */
+      readonly: {
+        type: Boolean,
+        value: false,
+        observer: '_readOnlyChanged',
+        reflectToAttribute: true
+      },
+
+      /**
        * The list of selected items.
        * Note: modifying the selected items creates a new array each time.
        */
@@ -466,6 +476,19 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
+  _readOnlyChanged(readOnly, oldReadOnly) {
+    if (this.selectedItems.length) {
+      if (readOnly) {
+        this.__savedItems = this.$.comboBox._getOverlayItems();
+        this.$.comboBox._setOverlayItems(Array.from(this.selectedItems));
+      } else if (oldReadOnly) {
+        this.$.comboBox._setOverlayItems(this.__savedItems);
+        this.__savedItems = null;
+      }
+    }
+  }
+
+  /** @private */
   _pageSizeChanged(pageSize, oldPageSize) {
     if (Math.floor(pageSize) !== pageSize || pageSize <= 0) {
       this.pageSize = oldPageSize;
@@ -483,6 +506,10 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     // Re-render chips
     this.__updateChips();
+
+    if (this.readonly) {
+      this.$.comboBox._setOverlayItems(selectedItems);
+    }
 
     // Re-render scroller
     this.$.comboBox.$.dropdown._scroller.requestContentUpdate();
