@@ -95,27 +95,6 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     }
   }
 
-  /** @protected */
-  _isClearButton(event) {
-    return (
-      super._isClearButton(event) ||
-      (event.type === 'input' && !event.isTrusted) || // fake input event dispatched by clear button
-      event.composedPath()[0].getAttribute('part') === 'clear-button'
-    );
-  }
-
-  /**
-   * @param {!Event} event
-   * @protected
-   */
-  _onChange(event) {
-    super._onChange(event);
-
-    if (this._isClearButton(event)) {
-      this._clear();
-    }
-  }
-
   /**
    * Override Enter handler to keep overlay open
    * when item is selected or unselected.
