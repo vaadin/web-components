@@ -31,10 +31,12 @@ registerStyles(
         flex-direction: column-reverse;
         align-items: stretch;
         padding: var(--lumo-space-s) var(--lumo-space-l);
+        gap: var(--lumo-space-s);
       }
 
       ::slotted([slot$='button']) {
         width: 100%;
+        margin: 0;
       }
     }
   `,
