@@ -137,8 +137,17 @@ The components below are licensed under [CVDL 4.0 license](https://vaadin.com/li
 
 ## Browser support
 
-Vaadin components use [Custom Elements](https://caniuse.com/#feat=custom-elementsv1) and [Shadow DOM](https://caniuse.com/#feat=shadowdomv1)
-that are natively supported by modern browsers.
+**Desktop:**
+
+- Chrome (evergreen)
+- Firefox (evergreen)
+- Safari 14.1 or newer
+- Edge (Chromium, evergreen)
+
+**Mobile:**
+
+- Chrome (evergreen) for Android (4.4 or newer)
+- Safari for iOS (14.5 or newer)
 
 ## Documentation
 
