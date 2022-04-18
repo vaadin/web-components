@@ -452,6 +452,7 @@ class MultiSelectComboBox extends InputControlMixin(ThemableMixin(ElementMixin(P
 
   /** @private */
   __clearFilter() {
+    this.filter = '';
     this.$.comboBox.clear();
   }
 
