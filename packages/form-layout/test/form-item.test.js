@@ -120,8 +120,7 @@ describe('form-item', () => {
       newLabel.slot = 'label';
       item.replaceChild(newLabel, label);
       await nextFrame();
-      expect(label.id).to.be.empty;
-      expect(newLabel.id).to.equal(labelId);
+      expect(newLabel.id).to.equal(input.getAttribute('aria-labelledby'));
     });
 
     it('should not set id to the new label element when using appendChild', async () => {
@@ -138,8 +137,36 @@ describe('form-item', () => {
       newLabel.slot = 'label';
       item.insertBefore(newLabel, label);
       await nextFrame();
-      expect(label.id).to.be.empty;
-      expect(newLabel.id).to.equal(labelId);
+      expect(newLabel.id).to.equal(input.getAttribute('aria-labelledby'));
+    });
+
+    it('should not overwrite a custom label id', async () => {
+      const newLabel = document.createElement('label');
+      newLabel.id = 'custom-label-id';
+      newLabel.slot = 'label';
+      item.replaceChild(newLabel, label);
+      await nextFrame();
+      expect(newLabel.id).to.equal('custom-label-id');
+    });
+
+    it('should bind the input with a custom label id ', async () => {
+      const newLabel = document.createElement('label');
+      newLabel.id = 'custom-label-id';
+      newLabel.slot = 'label';
+      item.replaceChild(newLabel, label);
+      await nextFrame();
+      expect(input.getAttribute('aria-labelledby')).to.equal(newLabel.id);
+    });
+
+    it('should not remove id from a label', async () => {
+      const newLabel = document.createElement('label');
+      newLabel.id = 'custom-label-id';
+      newLabel.slot = 'label';
+      item.replaceChild(newLabel, label);
+      await nextFrame();
+      item.replaceChild(label, newLabel);
+      await nextFrame();
+      expect(newLabel.id).to.equal('custom-label-id');
     });
   });
 
