@@ -11,3 +11,14 @@ registerStyles(
     }
   `
 );
+
+registerStyles(
+  'vaadin-menu-bar-button',
+  css`
+    :host,
+    :host::before,
+    :host::after {
+      transition: none !important;
+    }
+  `
+);
