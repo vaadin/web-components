@@ -170,12 +170,12 @@ describe('turbo-mode warning', () => {
     });
 
     describe('production mode', () => {
-      const originalDevmodeCallback = window.Vaadin.developmentModeCallback;
+      const originalDevelopmentMode = window.Vaadin.developmentMode;
       before(() => {
-        window.Vaadin.developmentModeCallback = null;
+        window.Vaadin.developmentMode = false;
       });
       after(() => {
-        window.Vaadin.developmentModeCallback = originalDevmodeCallback;
+        window.Vaadin.developmentMode = originalDevelopmentMode;
       });
 
       it('should not log warning in production', async () => {

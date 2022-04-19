@@ -1797,7 +1797,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __checkTurboMode() {
-    const isDevelopmentMode = !!window.Vaadin.developmentModeCallback;
+    const isDevelopmentMode = !!window.Vaadin.developmentMode;
 
     if (!this.configuration || !isDevelopmentMode || this.__turboModeWarningAlreadyLogged) {
       return;
