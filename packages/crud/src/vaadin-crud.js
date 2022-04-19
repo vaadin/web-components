@@ -785,11 +785,6 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     nodes.forEach((node) => {
       target.appendChild(node);
     });
-
-    // Wait to set label until slotted element has been moved.
-    setTimeout(() => {
-      this.__dialogAriaLabel = this._headerNode.textContent.trim();
-    });
   }
 
   /** @private */
