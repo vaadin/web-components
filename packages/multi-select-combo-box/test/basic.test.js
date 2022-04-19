@@ -431,6 +431,27 @@ describe('basic', () => {
         });
       });
     });
+
+    describe('readonly', () => {
+      beforeEach(async () => {
+        comboBox.selectedItems = ['apple', 'banana'];
+        await nextRender();
+        comboBox.readonly = true;
+      });
+
+      it('should set readonly attribute on all chips when disabled', () => {
+        const chips = getChips(comboBox);
+        expect(chips[0].hasAttribute('readonly')).to.be.true;
+        expect(chips[1].hasAttribute('readonly')).to.be.true;
+      });
+
+      it('should remove readonly attribute from chips when re-enabled', () => {
+        comboBox.readonly = false;
+        const chips = getChips(comboBox);
+        expect(chips[0].hasAttribute('readonly')).to.be.false;
+        expect(chips[1].hasAttribute('readonly')).to.be.false;
+      });
+    });
   });
 
   describe('change event', () => {

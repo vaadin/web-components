@@ -68,6 +68,10 @@ const chip = css`
     display: none;
   }
 
+  :host(:not([readonly]):not([disabled])) {
+    padding-inline-end: 0;
+  }
+
   [part='label'] {
     font-weight: 500;
     line-height: 1.25;
@@ -88,10 +92,15 @@ const chip = css`
     content: var(--lumo-icons-cross);
   }
 
-  :host([disabled]) [part] {
+  :host([disabled]) [part='label'] {
     color: var(--lumo-disabled-text-color);
     -webkit-text-fill-color: var(--lumo-disabled-text-color);
     pointer-events: none;
+  }
+
+  :host([readonly]) [part='remove-button'],
+  :host([disabled]) [part='remove-button'] {
+    display: none;
   }
 `;
 

@@ -481,9 +481,18 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       if (readOnly) {
         this.__savedItems = this.$.comboBox._getOverlayItems();
         this.$.comboBox._setOverlayItems(Array.from(this.selectedItems));
+
+        // Update chips to hide remove button
+        this._chips.forEach((chip) => {
+          chip.setAttribute('readonly', '');
+        });
       } else if (oldReadOnly) {
         this.$.comboBox._setOverlayItems(this.__savedItems);
         this.__savedItems = null;
+
+        this._chips.forEach((chip) => {
+          chip.removeAttribute('readonly');
+        });
       }
     }
   }

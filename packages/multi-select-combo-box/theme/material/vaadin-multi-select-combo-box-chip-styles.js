@@ -13,7 +13,7 @@ const chip = css`
   :host {
     height: 1.25rem;
     margin-inline-end: 0.25rem;
-    padding-inline-start: 0.5rem;
+    padding: 0 0.5rem;
     border-radius: 4px;
     background-color: hsla(214, 53%, 23%, 0.1);
     cursor: default;
@@ -62,6 +62,10 @@ const chip = css`
     display: none;
   }
 
+  :host(:not([readonly]):not([disabled])) {
+    padding-inline-end: 0;
+  }
+
   [part='label'] {
     font-size: var(--material-caption-font-size);
     line-height: 1;
@@ -85,19 +89,15 @@ const chip = css`
     content: var(--material-icons-clear);
   }
 
-  /* Disabled */
-  :host([disabled]) [part] {
-    pointer-events: none;
-  }
-
   :host([disabled]) [part='label'] {
     color: var(--material-disabled-text-color);
     -webkit-text-fill-color: var(--material-disabled-text-color);
+    pointer-events: none;
   }
 
+  :host([readonly]) [part='remove-button'],
   :host([disabled]) [part='remove-button'] {
-    color: hsla(0, 0%, 100%, 0.75);
-    -webkit-text-fill-color: hsla(0, 0%, 100%, 0.75);
+    display: none;
   }
 `;
 
