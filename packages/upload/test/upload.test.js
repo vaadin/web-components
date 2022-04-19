@@ -497,7 +497,9 @@ describe('upload', () => {
     beforeEach(() => {
       upload._createXhr = xhrCreator({ size: file.size, uploadTime: 200, stepTime: 50 });
       files = createFiles(2, 512, 'application/json');
-      clock = sinon.useFakeTimers();
+      clock = sinon.useFakeTimers({
+        shouldClearNativeTimers: true
+      });
     });
 
     afterEach(() => {
