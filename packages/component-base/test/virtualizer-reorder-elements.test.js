@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, mousedown, mouseup } from '@vaadin/testing-helpers';
-import Sinon from 'sinon';
+import sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
 describe('reorder elements', () => {
@@ -62,7 +62,9 @@ describe('reorder elements', () => {
   beforeEach(() => {
     init({ reorderElements: true });
     recycledElement = elementsContainer.children[2];
-    clock = Sinon.useFakeTimers();
+    clock = sinon.useFakeTimers({
+      shouldClearNativeTimers: true
+    });
   });
 
   afterEach(() => {

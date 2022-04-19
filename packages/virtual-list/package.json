@@ -44,6 +44,6 @@
     "@vaadin/polymer-legacy-adapter": "23.1.0-alpha2",
     "@vaadin/testing-helpers": "^0.3.2",
     "lit": "^2.0.0",
-    "sinon": "^9.2.4"
+    "sinon": "^13.0.2"
   }
 }
