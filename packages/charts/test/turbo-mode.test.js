@@ -64,7 +64,7 @@ describe('turbo-mode warning', () => {
         expect(console.warn.called).to.be.false;
       });
       it('should log warning when initializing with a series that exceeds the turbo threshold', async () => {
-        addSeries(11, true);
+        addSeries(11);
         document.body.appendChild(chart);
         await waitUntilChartInitialized();
         expect(console.warn.called).to.be.true;
@@ -80,7 +80,7 @@ describe('turbo-mode warning', () => {
         expect(console.warn.called).to.be.false;
       });
       it('should log warning when initializing with a series that exceeds the turbo threshold', async () => {
-        addSeriesWithJS(11, true);
+        addSeriesWithJS(11);
         document.body.appendChild(chart);
         await waitUntilChartInitialized();
         expect(console.warn.called).to.be.true;
