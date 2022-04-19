@@ -40,6 +40,11 @@ const multiSelectComboBox = css`
   [part='toggle-button']::before {
     content: var(--lumo-icons-dropdown);
   }
+
+  :host([readonly]) [part='toggle-button'] {
+    color: var(--lumo-contrast-60pct);
+    cursor: var(--lumo-clickable-cursor);
+  }
 `;
 
 registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectComboBox], {

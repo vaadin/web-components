@@ -44,6 +44,10 @@ const multiSelectComboBox = css`
   :host([opened]) [part='toggle-button'] {
     transform: rotate(180deg);
   }
+
+  :host([readonly]) [part='toggle-button'] {
+    color: var(--material-secondary-text-color);
+  }
 `;
 
 registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectComboBox], {
