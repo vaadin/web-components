@@ -131,6 +131,10 @@ registerStyles(
     }
 
     /* RTL specific styles */
+    :host([dir='rtl'])::after {
+      transform-origin: 0% 0;
+    }
+
     :host([theme~='align-left'][dir='rtl']) ::slotted(:not([slot$='fix'])) {
       --_lumo-text-field-overflow-mask-image: none;
     }
