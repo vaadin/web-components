@@ -356,6 +356,11 @@ describe('basic', () => {
         expect(getChipContent(chips[1])).to.equal('orange');
       });
 
+      it('should set title attribute on chips matching their label', () => {
+        const chips = getChips(comboBox);
+        expect(chips[1].getAttribute('title')).to.equal('orange');
+      });
+
       it('should hide overflow chip when all chips are visible', () => {
         expect(overflow.hasAttribute('hidden')).to.be.true;
       });
