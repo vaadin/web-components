@@ -408,7 +408,7 @@ describe('basic', () => {
         it('should update overflow chip on resize when width changes', async () => {
           expect(overflow.hasAttribute('hidden')).to.be.false;
 
-          comboBox.style.width = '320px';
+          comboBox.style.width = '250px';
           await nextResize(comboBox);
           expect(overflow.hasAttribute('hidden')).to.be.true;
 
@@ -418,7 +418,7 @@ describe('basic', () => {
         });
 
         it('should update overflow chip on clear button state change', async () => {
-          comboBox.style.width = '320px';
+          comboBox.style.width = '250px';
           await nextResize(comboBox);
 
           comboBox.clearButtonVisible = true;
