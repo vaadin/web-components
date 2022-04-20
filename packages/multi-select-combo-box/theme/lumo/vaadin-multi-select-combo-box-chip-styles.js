@@ -15,7 +15,7 @@ const chip = css`
   :host {
     font-size: var(--lumo-font-size-xxs);
     line-height: 1;
-    padding: 0.5em calc(0.5em + var(--lumo-border-radius-s) / 4);
+    padding: 0.3125em calc(0.5em + var(--lumo-border-radius-s) / 4);
     color: var(--lumo-body-text-color);
     border-radius: var(--lumo-border-radius-s);
     background-color: var(--lumo-contrast-20pct);
@@ -37,7 +37,7 @@ const chip = css`
     position: absolute;
     content: '';
     width: 3px;
-    height: calc(2em - 1px);
+    height: calc(1.875em - 1px);
     border-left: 2px solid;
     border-radius: 4px 0 0 4px;
     border-color: var(--lumo-contrast-30pct);
@@ -70,6 +70,7 @@ const chip = css`
 
   [part='label'] {
     font-weight: 500;
+    line-height: 1.25;
   }
 
   [part='remove-button'] {
