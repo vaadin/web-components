@@ -3,7 +3,7 @@ import { fixtureSync, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-chart.js';
 
-describe('turbo-mode warning', () => {
+describe('turbo-mode', () => {
   let chart;
 
   beforeEach(async () => {
@@ -32,18 +32,6 @@ describe('turbo-mode warning', () => {
     });
   }
 
-  function addPoint(seriesIndex, data) {
-    chart.configuration.series[seriesIndex].addPoint(data);
-  }
-
-  async function waitUntilChartInitialized() {
-    while (!chart.configuration) {
-      await new Promise((resolve) => {
-        setTimeout(resolve, 100);
-      });
-    }
-  }
-
   describe('when initializing chart', () => {
     beforeEach(async () => {
       chart = document.createElement('vaadin-chart');
@@ -54,20 +42,21 @@ describe('turbo-mode warning', () => {
           }
         }
       });
+      await nextRender();
     });
 
     describe('add series', () => {
       it('should not log warning when no series exceeds the turbo threshold', async () => {
         addSeries(9);
         document.body.appendChild(chart);
-        await waitUntilChartInitialized();
+        await nextRender();
         expect(console.warn.called).to.be.false;
       });
       it('should log warning when initializing with a series that exceeds the turbo threshold', async () => {
         addSeries(11);
         document.body.appendChild(chart);
-        await waitUntilChartInitialized();
-        expect(console.warn.called).to.be.true;
+        await nextRender();
+        expect(console.warn.calledOnce).to.be.true;
         expect(console.warn.args[0][0]).to.include('<vaadin-chart> Turbo mode has been enabled for one or more series');
       });
     });
@@ -76,14 +65,14 @@ describe('turbo-mode warning', () => {
       it('should not log warning when no series exceeds the turbo threshold', async () => {
         addSeriesWithJS(9);
         document.body.appendChild(chart);
-        await waitUntilChartInitialized();
+        await nextRender();
         expect(console.warn.called).to.be.false;
       });
       it('should log warning when initializing with a series that exceeds the turbo threshold', async () => {
         addSeriesWithJS(11);
         document.body.appendChild(chart);
-        await waitUntilChartInitialized();
-        expect(console.warn.called).to.be.true;
+        await nextRender();
+        expect(console.warn.calledOnce).to.be.true;
         expect(console.warn.args[0][0]).to.include('<vaadin-chart> Turbo mode has been enabled for one or more series');
       });
     });
@@ -112,7 +101,7 @@ describe('turbo-mode warning', () => {
       it('should log warning when a series exceeds the turbo threshold', async () => {
         addSeries(11);
         await oneEvent(chart, 'chart-redraw');
-        expect(console.warn.called).to.be.true;
+        expect(console.warn.calledOnce).to.be.true;
         expect(console.warn.args[0][0]).to.include('<vaadin-chart> Turbo mode has been enabled for one or more series');
       });
     });
@@ -127,12 +116,16 @@ describe('turbo-mode warning', () => {
       it('should log warning when a series exceeds the turbo threshold', async () => {
         addSeriesWithJS(11);
         await oneEvent(chart, 'chart-redraw');
-        expect(console.warn.called).to.be.true;
+        expect(console.warn.calledOnce).to.be.true;
         expect(console.warn.args[0][0]).to.include('<vaadin-chart> Turbo mode has been enabled for one or more series');
       });
     });
 
     describe('adding points', () => {
+      function addPoint(seriesIndex, data) {
+        chart.configuration.series[seriesIndex].addPoint(data);
+      }
+
       it('should not log warning when total number of items does not exceed the turbo threshold', async () => {
         addSeriesWithJS(4);
         await oneEvent(chart, 'chart-redraw');
@@ -150,7 +143,7 @@ describe('turbo-mode warning', () => {
 
         addPoint(0, 11);
         chart.configuration.redraw();
-        expect(console.warn.called).to.be.true;
+        expect(console.warn.calledOnce).to.be.true;
         expect(console.warn.args[0][0]).to.include('<vaadin-chart> Turbo mode has been enabled for one or more series');
       });
     });
@@ -159,7 +152,7 @@ describe('turbo-mode warning', () => {
       it('should only log the warning once', async () => {
         addSeriesWithJS(13);
         await oneEvent(chart, 'chart-redraw');
-        expect(console.warn.called).to.be.true;
+        expect(console.warn.calledOnce).to.be.true;
         expect(console.warn.args[0][0]).to.include('<vaadin-chart> Turbo mode has been enabled for one or more series');
 
         console.warn.resetHistory();
