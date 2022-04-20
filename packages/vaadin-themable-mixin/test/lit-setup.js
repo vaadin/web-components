@@ -13,15 +13,14 @@ window.defineCustomElementFunction = (name, parentName, content, styles, noIs) =
     static get styles() {
       return styles ? unsafeCSS(styles) : undefined;
     }
+  }
 
-    render() {
-      if (content) {
-        const template = document.createElement('template');
-        template.innerHTML = content;
-        return template.content;
-      }
-      return super.render();
-    }
+  if (content) {
+    CustomElement.prototype.render = function () {
+      const template = document.createElement('template');
+      template.innerHTML = content;
+      return template.content;
+    };
   }
 
   if (!noIs) {
