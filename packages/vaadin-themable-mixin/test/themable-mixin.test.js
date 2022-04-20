@@ -11,13 +11,10 @@ const createStyles =
 
 const defineCustomElement =
   window.defineCustomElementFunction ||
-  ((name, parentName, content, styles) => {
+  // eslint-disable-next-line max-params
+  ((name, parentName, content, styles, noIs) => {
     const parentElement = parentName ? customElements.get(parentName) : PolymerElement;
     class CustomElement extends ThemableMixin(parentElement) {
-      static get is() {
-        return name;
-      }
-
       static get template() {
         if (content) {
           if (styles) {
@@ -30,6 +27,14 @@ const defineCustomElement =
         }
         return super.template;
       }
+    }
+
+    if (!noIs) {
+      Object.defineProperty(CustomElement, 'is', {
+        get() {
+          return name;
+        }
+      });
     }
 
     customElements.define(name, CustomElement);
@@ -196,6 +201,8 @@ defineCustomElement('test-qux', '', '<div part="text" id="text">text</div>');
 
 defineCustomElement('test-own-template', 'test-foo', '<div part="text" id="text">text</div>');
 
+defineCustomElement('test-own-template-no-is', 'test-foo', '<div part="text" id="text">text</div>', undefined, true);
+
 defineCustomElement('test-no-template', '', '');
 
 defineCustomElement('test-style-override', '', '<div part="text" id="text">text</div>');
@@ -226,6 +233,7 @@ describe('ThemableMixin', () => {
         <test-baz></test-baz>
         <test-qux></test-qux>
         <test-own-template></test-own-template>
+        <test-own-template-no-is></test-own-template-no-is>
         <test-no-template></test-no-template>
         <test-style-override></test-style-override>
         <test-own-styles></test-own-styles>
@@ -278,6 +286,10 @@ describe('ThemableMixin', () => {
 
   it('should inherit parent themes to own custom template', () => {
     expect(getComputedStyle(getText(components['test-own-template'])).backgroundColor).to.equal('rgb(255, 0, 0)');
+  });
+
+  it('should inherit parent themes to own custom template with no is defined', async () => {
+    expect(getComputedStyle(getText(components['test-own-template-no-is'])).backgroundColor).to.equal('rgb(255, 0, 0)');
   });
 
   it('should override vaadin module styles', () => {

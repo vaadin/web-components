@@ -6,13 +6,10 @@ import { ThemableMixin } from '../vaadin-themable-mixin.js';
  * By default, the suite creates PolymerElement based custom elements, but in the
  * -lit.test.js tests, we specifically want to create LitElement based custom elements instead.
  */
-window.defineCustomElementFunction = (name, parentName, content, styles) => {
+// eslint-disable-next-line max-params
+window.defineCustomElementFunction = (name, parentName, content, styles, noIs) => {
   const parentElement = parentName ? customElements.get(parentName) : LitElement;
   class CustomElement extends ThemableMixin(parentElement) {
-    static get is() {
-      return name;
-    }
-
     static get styles() {
       return styles ? unsafeCSS(styles) : undefined;
     }
@@ -25,6 +22,14 @@ window.defineCustomElementFunction = (name, parentName, content, styles) => {
       }
       return super.render();
     }
+  }
+
+  if (!noIs) {
+    Object.defineProperty(CustomElement, 'is', {
+      get() {
+        return name;
+      }
+    });
   }
 
   customElements.define(name, CustomElement);
