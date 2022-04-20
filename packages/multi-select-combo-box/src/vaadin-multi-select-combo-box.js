@@ -255,7 +255,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       readonly: {
         type: Boolean,
         value: false,
-        observer: '_readOnlyChanged',
+        observer: '_readonlyChanged',
         reflectToAttribute: true
       },
 
@@ -476,24 +476,22 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  _readOnlyChanged(readOnly, oldReadOnly) {
-    if (this.selectedItems.length) {
-      if (readOnly) {
-        this.__savedItems = this.$.comboBox._getOverlayItems();
-        this.$.comboBox._setOverlayItems(Array.from(this.selectedItems));
+  _readonlyChanged(readonly, oldReadonly) {
+    if (readonly) {
+      this.__savedItems = this.$.comboBox._getOverlayItems();
+      this.$.comboBox._setOverlayItems(Array.from(this.selectedItems));
 
-        // Update chips to hide remove button
-        this._chips.forEach((chip) => {
-          chip.setAttribute('readonly', '');
-        });
-      } else if (oldReadOnly) {
-        this.$.comboBox._setOverlayItems(this.__savedItems);
-        this.__savedItems = null;
+      // Update chips to hide remove button
+      this._chips.forEach((chip) => {
+        chip.setAttribute('readonly', '');
+      });
+    } else if (oldReadonly) {
+      this.$.comboBox._setOverlayItems(this.__savedItems);
+      this.__savedItems = null;
 
-        this._chips.forEach((chip) => {
-          chip.removeAttribute('readonly');
-        });
-      }
+      this._chips.forEach((chip) => {
+        chip.removeAttribute('readonly');
+      });
     }
   }
 

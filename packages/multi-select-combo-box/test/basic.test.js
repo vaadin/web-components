@@ -630,6 +630,15 @@ describe('basic', () => {
       inputElement.click();
       expect(internal.opened).to.be.false;
     });
+
+    it('should not open the dropdown if readonly is set after clearing', () => {
+      comboBox.readonly = false;
+      comboBox.selectedItems = [];
+
+      comboBox.readonly = true;
+      inputElement.click();
+      expect(internal.opened).to.be.false;
+    });
   });
 
   describe('helper text', () => {
