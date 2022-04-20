@@ -45,7 +45,7 @@ const multiSelectComboBox = css`
     transform: rotate(180deg);
   }
 
-  :host([readonly]) [part='toggle-button'] {
+  :host([readonly][has-value]) [part='toggle-button'] {
     color: var(--material-secondary-text-color);
   }
 `;

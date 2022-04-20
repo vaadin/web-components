@@ -41,7 +41,7 @@ const multiSelectComboBox = css`
     content: var(--lumo-icons-dropdown);
   }
 
-  :host([readonly]) [part='toggle-button'] {
+  :host([readonly][has-value]) [part='toggle-button'] {
     color: var(--lumo-contrast-60pct);
     cursor: var(--lumo-clickable-cursor);
   }
