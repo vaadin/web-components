@@ -177,10 +177,6 @@ class FormItem extends ThemableMixin(PolymerElement) {
      * @private
      */
     this.__fieldNode = null;
-
-    // Ensure every instance has unique ID
-    const uniqueId = (FormItem._uniqueLabelId = 1 + FormItem._uniqueLabelId || 0);
-    this.__labelId = `label-${this.localName}-${uniqueId}`;
   }
 
   /**
@@ -244,7 +240,6 @@ class FormItem extends ThemableMixin(PolymerElement) {
    */
   __onLabelSlotChange() {
     if (this.__labelNode) {
-      this.__labelNode.id = '';
       this.__labelNode = null;
 
       if (this.__fieldNode) {
@@ -255,7 +250,16 @@ class FormItem extends ThemableMixin(PolymerElement) {
     const newLabelNode = this.$.labelSlot.assignedElements()[0];
     if (newLabelNode) {
       this.__labelNode = newLabelNode;
-      this.__labelNode.id = this.__labelId;
+
+      if (this.__labelNode.id) {
+        // The new label node already has an id. Let's use it.
+        this.__labelId = this.__labelNode.id;
+      } else {
+        // The new label node doesn't have an id yet. Generate a unique one.
+        const uniqueId = (FormItem._uniqueLabelId = 1 + FormItem._uniqueLabelId || 0);
+        this.__labelId = `label-${this.localName}-${uniqueId}`;
+        this.__labelNode.id = this.__labelId;
+      }
 
       if (this.__fieldNode) {
         this.__linkLabelToField(this.__fieldNode);
