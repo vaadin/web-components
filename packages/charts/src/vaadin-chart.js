@@ -535,7 +535,15 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       this._jsonConfigurationBuffer = null;
       this.__initChart(options);
       this.__addChildObserver();
+      this.__checkTurboMode();
     });
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.addEventListener('chart-redraw', this.__onRedraw.bind(this));
   }
 
   /**
@@ -1780,6 +1788,34 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   /** @private */
   __showWarn(propertyName, acceptedValues) {
     console.warn('<vaadin-chart> Acceptable values for "' + propertyName + '" are ' + acceptedValues);
+  }
+
+  /** @private */
+  __onRedraw() {
+    this.__checkTurboMode();
+  }
+
+  /** @private */
+  __checkTurboMode() {
+    const isDevelopmentMode = !!window.Vaadin.developmentMode;
+
+    if (!this.configuration || !isDevelopmentMode || this.__turboModeWarningAlreadyLogged) {
+      return;
+    }
+
+    const exceedsTurboThreshold = this.configuration.series.some((series) => {
+      const threshold = (series.options && series.options.turboThreshold) || 0;
+      const dataLength = series.data.length;
+
+      return threshold > 0 && dataLength > threshold;
+    });
+
+    if (exceedsTurboThreshold) {
+      this.__turboModeWarningAlreadyLogged = true;
+      console.warn(
+        '<vaadin-chart> Turbo mode has been enabled for one or more series, because the number of data items exceeds the configured threshold. Turbo mode improves the performance of charts with lots of data, but is not compatible with every type of series. Please consult the documentation on compatibility, or how to disable turbo mode.'
+      );
+    }
   }
 }
 
