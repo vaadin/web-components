@@ -26,7 +26,7 @@ registerStyles(
     }
 
     /* Make buttons clickable */
-    [part='footer'] ::slotted(*) {
+    [part='footer'] ::slotted(:not([disabled])) {
       pointer-events: all;
     }
 
