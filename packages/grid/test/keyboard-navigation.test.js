@@ -1920,7 +1920,7 @@ describe('keyboard navigation', () => {
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should dispatch cell-focus on mouse up on cell content, when grid is in shadow DOM', () => {
+      it('should dispatch cell-focus on mouse up on cell content when grid is in shadow DOM', () => {
         const spy = sinon.spy();
         grid.addEventListener('cell-focus', spy);
 
