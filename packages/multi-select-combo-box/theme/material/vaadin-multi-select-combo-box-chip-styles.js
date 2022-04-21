@@ -11,18 +11,55 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const chip = css`
   :host {
-    display: flex;
-    align-items: center;
-    align-self: center;
-    box-sizing: border-box;
     height: 1.25rem;
     margin-inline-end: 0.25rem;
     padding-inline-start: 0.5rem;
     border-radius: 4px;
     background-color: hsla(214, 53%, 23%, 0.1);
     cursor: default;
-    white-space: nowrap;
     font-family: var(--material-font-family);
+  }
+
+  :host([part~='overflow']) {
+    position: relative;
+    margin-inline-start: 0.5rem;
+    padding-inline-end: 0.5rem;
+  }
+
+  :host([part~='overflow'])::before,
+  :host([part~='overflow'])::after {
+    position: absolute;
+    content: '';
+    width: 3px;
+    height: 20px;
+    border-left: 2px solid;
+    border-radius: 4px 0 0 4px;
+    border-color: hsla(214, 53%, 23%, 0.1);
+  }
+
+  :host([part~='overflow'])::before {
+    left: -4px;
+  }
+
+  :host([part~='overflow'])::after {
+    left: -8px;
+  }
+
+  :host([part~='overflow-two']) {
+    margin-inline-start: 0.25rem;
+  }
+
+  :host([part~='overflow-two'])::after {
+    display: none;
+  }
+
+  :host([part~='overflow-one']) {
+    margin-inline-start: 0;
+  }
+
+  :host([part~='overflow-one'])::before,
+  :host([part~='overflow-one'])::after {
+    display: none;
   }
 
   [part='label'] {

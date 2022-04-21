@@ -9,6 +9,7 @@ import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 import { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixinClass } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
@@ -85,6 +86,9 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `error-message`        | The error message element
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
+ * `overflow`             | The chip shown when component width is not enough to fit all chips
+ * `overflow-one`         | Set on the overflow chip when only one chip does not fit
+ * `overflow-two`         | Set on the overflow chip when two chips do not fit
  * `toggle-button`        | The toggle button
  *
  * The following state attributes are available for styling:
@@ -101,6 +105,15 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `focus-ring`           | Set when the element is keyboard focused
  * `opened`               | Set when the dropdown is open
  * `readonly`             | Set to a readonly element
+ *
+ * The following custom CSS properties are available for styling:
+ *
+ * Custom property                                      | Description                | Default
+ * -----------------------------------------------------|----------------------------|--------
+ * `--vaadin-field-default-width`                       | Default width of the field | `12em`
+ * `--vaadin-multi-select-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
+ * `--vaadin-multi-select-combo-box-chip-min-width`     | Min width of the chip      | `60px`
+ * `--vaadin-multi-select-combo-box-input-min-width`    | Min width of the input     | `4em`
  *
  * ### Internal components
  *
@@ -241,6 +254,7 @@ interface MultiSelectComboBox
     DisabledMixinClass,
     DelegateStateMixinClass,
     DelegateFocusMixinClass,
+    ResizeMixinClass,
     ThemableMixinClass,
     ElementMixinClass,
     ControllerMixinClass {}
