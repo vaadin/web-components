@@ -11,15 +11,14 @@ const createStyles =
 
 const defineCustomElement =
   window.defineCustomElementFunction ||
-  ((name, parentName, content, styles) => {
+  // eslint-disable-next-line max-params
+  ((name, parentName, content, styles, noIs) => {
     const parentElement = parentName ? customElements.get(parentName) : PolymerElement;
-    class CustomElement extends ThemableMixin(parentElement) {
-      static get is() {
-        return name;
-      }
+    class CustomElement extends ThemableMixin(parentElement) {}
 
-      static get template() {
-        if (content) {
+    if (content) {
+      Object.defineProperty(CustomElement, 'template', {
+        get() {
           if (styles) {
             content = `<style>${styles}</style>${content}`;
           }
@@ -28,8 +27,15 @@ const defineCustomElement =
           template.innerHTML = content;
           return template;
         }
-        return super.template;
-      }
+      });
+    }
+
+    if (!noIs) {
+      Object.defineProperty(CustomElement, 'is', {
+        get() {
+          return name;
+        }
+      });
     }
 
     customElements.define(name, CustomElement);
@@ -196,7 +202,11 @@ defineCustomElement('test-qux', '', '<div part="text" id="text">text</div>');
 
 defineCustomElement('test-own-template', 'test-foo', '<div part="text" id="text">text</div>');
 
+defineCustomElement('test-own-template-no-is', 'test-foo', '<div part="text" id="text">text</div>', undefined, true);
+
 defineCustomElement('test-no-template', '', '');
+
+defineCustomElement('test-inherited-no-content-no-is', 'test-foo', '', undefined, true);
 
 defineCustomElement('test-style-override', '', '<div part="text" id="text">text</div>');
 
@@ -226,7 +236,9 @@ describe('ThemableMixin', () => {
         <test-baz></test-baz>
         <test-qux></test-qux>
         <test-own-template></test-own-template>
+        <test-own-template-no-is></test-own-template-no-is>
         <test-no-template></test-no-template>
+        <test-inherited-no-content-no-is></test-inherited-no-content-no-is>
         <test-style-override></test-style-override>
         <test-own-styles></test-own-styles>
       </div>
@@ -278,6 +290,16 @@ describe('ThemableMixin', () => {
 
   it('should inherit parent themes to own custom template', () => {
     expect(getComputedStyle(getText(components['test-own-template'])).backgroundColor).to.equal('rgb(255, 0, 0)');
+  });
+
+  it('should inherit parent themes to own custom template with no is defined', async () => {
+    expect(getComputedStyle(getText(components['test-own-template-no-is'])).backgroundColor).to.equal('rgb(255, 0, 0)');
+  });
+
+  it('should inherit parent themes with no is nor content defined', async () => {
+    expect(getComputedStyle(getText(components['test-inherited-no-content-no-is'])).backgroundColor).to.equal(
+      'rgb(255, 0, 0)'
+    );
   });
 
   it('should override vaadin module styles', () => {
