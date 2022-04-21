@@ -179,7 +179,15 @@ function getThemes(tagName) {
  * @returns {boolean}
  */
 function hasThemes(tagName) {
-  const elementClass = customElements.get(tagName);
+  return classHasThemes(customElements.get(tagName));
+}
+
+/**
+ * Check if the custom element type has themes applied.
+ * @param {Function} elementClass
+ * @returns {boolean}
+ */
+function classHasThemes(elementClass) {
   return elementClass && Object.prototype.hasOwnProperty.call(elementClass, '__themes');
 }
 
@@ -197,7 +205,7 @@ export const ThemableMixin = (superClass) =>
       super.finalize();
 
       const template = this.prototype._template;
-      if (!template || hasThemes(this.is)) {
+      if (!template || classHasThemes(this)) {
         return;
       }
 
