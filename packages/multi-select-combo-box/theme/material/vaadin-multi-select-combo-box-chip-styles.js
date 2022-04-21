@@ -20,10 +20,13 @@ const chip = css`
     font-family: var(--material-font-family);
   }
 
+  :host(:not([part~='overflow']):not([readonly]):not([disabled])) {
+    padding-inline-end: 0;
+  }
+
   :host([part~='overflow']) {
     position: relative;
     margin-inline-start: 0.5rem;
-    padding-inline-end: 0.5rem;
   }
 
   :host([part~='overflow'])::before,
@@ -60,10 +63,6 @@ const chip = css`
   :host([part~='overflow-one'])::before,
   :host([part~='overflow-one'])::after {
     display: none;
-  }
-
-  :host(:not([readonly]):not([disabled])) {
-    padding-inline-end: 0;
   }
 
   [part='label'] {

@@ -16,6 +16,7 @@ registerStyles(
     @media (any-hover: hover) {
       :host(:hover[readonly]) {
         background-color: transparent;
+        cursor: default;
       }
     }
   `,

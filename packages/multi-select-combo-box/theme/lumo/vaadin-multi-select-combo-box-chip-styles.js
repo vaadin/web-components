@@ -22,7 +22,7 @@ const chip = css`
     cursor: var(--lumo-clickable-cursor);
   }
 
-  :host(:not([part~='overflow'])) {
+  :host(:not([part~='overflow']):not([readonly]):not([disabled])) {
     padding-inline-end: 0;
   }
 
@@ -66,10 +66,6 @@ const chip = css`
   :host([part~='overflow-one'])::before,
   :host([part~='overflow-one'])::after {
     display: none;
-  }
-
-  :host(:not([readonly]):not([disabled])) {
-    padding-inline-end: 0;
   }
 
   [part='label'] {
