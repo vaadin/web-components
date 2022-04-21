@@ -669,7 +669,7 @@ class Grid extends ElementMixin(
           // If focus is on element within the cell content — respect it, do not change
           const contentContainsFocusedElement = cellContent.contains(this.getRootNode().activeElement);
           // Only focus if mouse is released on cell content itself
-          const mouseUpWithinCell = cellContent.contains(event.target);
+          const mouseUpWithinCell = event.composedPath().indexOf(cellContent) >= 0;
           if (!contentContainsFocusedElement && mouseUpWithinCell) {
             cell.focus();
           }

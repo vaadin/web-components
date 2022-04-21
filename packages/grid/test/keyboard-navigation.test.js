@@ -1920,6 +1920,23 @@ describe('keyboard navigation', () => {
         expect(spy.calledOnce).to.be.true;
       });
 
+      it('should dispatch cell-focus on mouse up on cell content, when grid is in shadow DOM', () => {
+        const spy = sinon.spy();
+        grid.addEventListener('cell-focus', spy);
+
+        // Move grid into a shadow DOM
+        const container = document.createElement('div');
+        document.body.appendChild(container);
+        container.attachShadow({ mode: 'open' });
+        container.shadowRoot.appendChild(grid);
+
+        // Mouse down and release on cell content element
+        const cell = getRowFirstCell(0);
+        mouseDown(cell._content);
+        mouseUp(cell._content);
+        expect(spy.calledOnce).to.be.true;
+      });
+
       it('should dispatch cell-focus on mouse up within cell content', () => {
         const spy = sinon.spy();
         grid.addEventListener('cell-focus', spy);
