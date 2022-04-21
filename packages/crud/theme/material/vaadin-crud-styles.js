@@ -132,7 +132,10 @@ registerStyles(
       :host([has-header]) [part='header'] ::slotted(h3) {
         margin-top: 0 !important;
         margin-bottom: 0 !important;
-        margin-inline-start: 8px;
+      }
+
+      [part='content'] {
+        padding: 0 16px 16px;
       }
     `
   ],
