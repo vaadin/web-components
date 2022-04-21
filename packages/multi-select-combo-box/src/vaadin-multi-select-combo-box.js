@@ -627,6 +627,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     chip.item = item;
     chip.toggleAttribute('disabled', this.disabled);
+    chip.toggleAttribute('readonly', this.readonly);
 
     const label = this._getItemLabel(item, this.itemLabelPath);
     chip.label = label;

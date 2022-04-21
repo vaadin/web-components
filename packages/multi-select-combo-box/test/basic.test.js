@@ -439,17 +439,24 @@ describe('basic', () => {
         comboBox.readonly = true;
       });
 
-      it('should set readonly attribute on all chips when disabled', () => {
+      it('should set readonly attribute on all chips when readonly', () => {
         const chips = getChips(comboBox);
         expect(chips[0].hasAttribute('readonly')).to.be.true;
         expect(chips[1].hasAttribute('readonly')).to.be.true;
       });
 
-      it('should remove readonly attribute from chips when re-enabled', () => {
+      it('should remove readonly attribute from chips when not readonly', () => {
         comboBox.readonly = false;
         const chips = getChips(comboBox);
         expect(chips[0].hasAttribute('readonly')).to.be.false;
         expect(chips[1].hasAttribute('readonly')).to.be.false;
+      });
+
+      it('should set readonly attribute on added chips while readonly', () => {
+        comboBox.selectedItems = ['lemon', 'orange'];
+        const chips = getChips(comboBox);
+        expect(chips[0].hasAttribute('readonly')).to.be.true;
+        expect(chips[1].hasAttribute('readonly')).to.be.true;
       });
     });
   });
