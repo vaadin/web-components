@@ -15,23 +15,19 @@ registerStyles(
       min-width: 20em;
     }
 
-    [part='content'] {
-      display: flex;
-      flex-direction: column;
-      padding: 0;
-    }
-
-    [part='scroller'] {
-      display: flex;
-      flex-direction: column;
-      overflow: auto;
-      flex: auto;
-    }
-
-    [part='footer'] {
-      display: flex;
-      flex: none;
+    footer[part='footer'] {
+      justify-content: flex-start;
       flex-direction: row-reverse;
+    }
+
+    /* Override display: contents */
+    :host([has-header]) ::slotted([slot='header']) {
+      display: block;
+    }
+
+    /* Make buttons clickable */
+    [part='footer'] ::slotted(*) {
+      pointer-events: all;
     }
 
     :host([fullscreen]) {
@@ -57,19 +53,10 @@ registerStyles(
 
 let memoizedTemplate;
 
-const editorTemplate = html`
-  <div part="scroller" role="group" aria-labelledby="header">
-    <div part="header" id="header">
-      <slot name="header"></slot>
-    </div>
-    <slot name="form"></slot>
-  </div>
-
-  <div part="footer" role="toolbar">
-    <slot name="save-button"></slot>
-    <slot name="cancel-button"></slot>
-    <slot name="delete-button"></slot>
-  </div>
+const footerTemplate = html`
+  <slot name="save-button"></slot>
+  <slot name="cancel-button"></slot>
+  <slot name="delete-button"></slot>
 `;
 
 class CrudDialogOverlay extends DialogOverlay {
@@ -80,12 +67,39 @@ class CrudDialogOverlay extends DialogOverlay {
   static get template() {
     if (!memoizedTemplate) {
       memoizedTemplate = super.template.cloneNode(true);
+
+      // Replace two header slots with a single one
+      const headerPart = memoizedTemplate.content.querySelector('[part="header"]');
+      headerPart.innerHTML = '';
+      const headerSlot = document.createElement('slot');
+      headerSlot.setAttribute('name', 'header');
+      headerPart.appendChild(headerSlot);
+
+      // Replace default slot with "form" named slot
       const contentPart = memoizedTemplate.content.querySelector('[part="content"]');
       const defaultSlot = contentPart.querySelector('slot:not([name])');
-      contentPart.removeChild(defaultSlot);
-      contentPart.appendChild(editorTemplate.content.cloneNode(true));
+      defaultSlot.setAttribute('name', 'form');
+
+      // Replace footer slot with button named slots
+      const footerPart = memoizedTemplate.content.querySelector('[part="footer"]');
+      footerPart.setAttribute('role', 'toolbar');
+      const footerSlot = footerPart.querySelector('slot');
+      footerPart.removeChild(footerSlot);
+      footerPart.appendChild(footerTemplate.content.cloneNode(true));
     }
     return memoizedTemplate;
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _headerFooterRendererChange(headerRenderer, footerRenderer, opened) {
+    super._headerFooterRendererChange(headerRenderer, footerRenderer, opened);
+
+    // CRUD has header and footer but does not use renderers
+    this.setAttribute('has-header', '');
+    this.setAttribute('has-footer', '');
   }
 }
 
