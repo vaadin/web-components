@@ -4,7 +4,6 @@ import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { flushGrid, getContainerCell } from './helpers.js';
 
 describe('column group', () => {
@@ -68,7 +67,6 @@ describe('column group', () => {
     columns[0].frozen = true;
 
     parent.appendChild(group);
-    flush();
 
     expect(group.frozen).to.be.true;
   });
@@ -123,7 +121,6 @@ describe('column group', () => {
   it('should hide the group', () => {
     group.removeChild(columns[0]);
     group.removeChild(columns[1]);
-    flush();
     group._observer.flush();
 
     expect(group.hidden).to.be.true;

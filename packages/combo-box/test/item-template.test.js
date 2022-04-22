@@ -5,7 +5,6 @@ import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import './fixtures/mock-combo-box-template-wrapper.js';
 import './fixtures/mock-combo-box-light-template-wrapper.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { getFirstItem } from './helpers.js';
 
 describe('item template', () => {
@@ -18,8 +17,6 @@ describe('item template', () => {
         comboBox = wrapper.$.comboBox;
         comboBox.items = ['foo', 'bar'];
         comboBox.open();
-
-        flush();
         firstItem = getFirstItem(comboBox);
       });
 

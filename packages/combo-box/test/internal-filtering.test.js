@@ -3,7 +3,6 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import { getAllItems, getFocusedItemIndex, makeItems, onceOpened, setInputValue } from './helpers.js';
 
@@ -260,7 +259,6 @@ describe('internal filtering', () => {
     it('should properly display all items in the selector', () => {
       comboBox.open();
       comboBox.filteredItems = makeItems(10);
-      flush();
       expect(getAllItems(comboBox).length).to.equal(10);
     });
   });

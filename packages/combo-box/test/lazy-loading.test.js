@@ -5,7 +5,6 @@ import '@vaadin/text-field/vaadin-text-field.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 import '../vaadin-combo-box-light.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import {
@@ -131,7 +130,6 @@ describe('lazy loading', () => {
         comboBox.clearButtonVisible = true;
         comboBox.$.clearButton.click();
         comboBox.opened = true;
-        flush();
         expect(comboBox.value).to.be.empty;
         expect(comboBox.selectedItem).to.be.null;
       });
@@ -146,7 +144,6 @@ describe('lazy loading', () => {
           setInputValue('item 1');
           fire(comboBox.inputElement, 'input');
           comboBox.opened = true;
-          flush();
           expect(comboBox.filter).to.equal('item 1');
           const { filter } = spyDataProvider.lastCall.args[0];
           expect(filter).to.equal('item 1');
@@ -234,7 +231,6 @@ describe('lazy loading', () => {
           comboBox.filter = 'item 1';
           comboBox.value = 'item 1';
           comboBox.value = '';
-          flush();
           expect(comboBox.filter).to.equal('');
         });
 
@@ -242,7 +238,6 @@ describe('lazy loading', () => {
           comboBox.dataProvider = dataProvider;
           comboBox.filter = 'item 1';
           comboBox.opened = false;
-          flush();
           expect(comboBox.filter).to.equal('');
         });
 
@@ -277,7 +272,6 @@ describe('lazy loading', () => {
           comboBox.filter = 'it';
           spyDataProvider.resetHistory();
           comboBox.cancel();
-          flush();
           comboBox.opened = true;
           const params = spyDataProvider.lastCall.args[0];
           expect(params.filter).to.equal('');
@@ -346,7 +340,6 @@ describe('lazy loading', () => {
         beforeEach(() => {
           comboBox.dataProvider = spyDataProvider;
           comboBox.open();
-          flush();
         });
 
         it('should not be invoked', () => {
@@ -361,7 +354,6 @@ describe('lazy loading', () => {
           setInputValue('1');
           fire(comboBox.inputElement, 'input');
 
-          flush();
           spyDataProvider.resetHistory();
 
           getFirstItem(comboBox).click();
@@ -760,7 +752,6 @@ describe('lazy loading', () => {
         comboBox.dataProvider = objectDataProvider;
         comboBox.opened = true;
         await nextFrame();
-        flush();
         const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
         // doesn't work when run on SauceLabs, work locally
         // expect(selectedRenderedItemElements).to.have.lengthOf(1);
@@ -783,7 +774,6 @@ describe('lazy loading', () => {
         };
         comboBox.opened = true;
         await nextFrame();
-        flush();
         const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
         // doesn't work when run on SauceLabs, work locally
         // expect(selectedRenderedItemElements).to.have.lengthOf(1);
@@ -1083,7 +1073,6 @@ describe('lazy loading', () => {
 
         comboBox.dataProvider = getDataProvider(allItems);
         comboBox.opened = true;
-        flush();
 
         // Scroll to the end, as though if we drag the scrollbar and move it
         // to the bottom
@@ -1092,7 +1081,6 @@ describe('lazy loading', () => {
 
         // Flush the pending changes after the scrolling
         await nextFrame();
-        flush();
 
         const lastVisibleIndex = getViewportItems(comboBox).pop().index;
         // Check if the next few items after the last visible item are not empty

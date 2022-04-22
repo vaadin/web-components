@@ -4,7 +4,6 @@ import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import {
   dragAndDropOver,
   fire,
@@ -263,7 +262,6 @@ describe('column group resizing', () => {
   it('should inherit resizable value from parent group', async () => {
     const newColumn = document.createElement('vaadin-grid-column');
     grid._columnTree[0][0].appendChild(newColumn);
-    flush();
     grid._columnTree[0][0]._observer.flush();
 
     await nextFrame();

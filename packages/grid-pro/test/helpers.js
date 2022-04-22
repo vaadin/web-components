@@ -1,5 +1,4 @@
 import { isIOS } from '@vaadin/testing-helpers';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 
 export const infiniteDataProvider = (params, callback) => {
   callback(
@@ -88,10 +87,6 @@ export const flushGrid = (grid) => {
   if (grid._debounceScrolling) {
     grid._debounceScrolling.flush();
   }
-  if (grid._debouncerForceReflow) {
-    grid._debouncerForceReflow.flush();
-  }
-  flush();
   grid._afterScroll();
   if (grid._debounceOverflow) {
     grid._debounceOverflow.flush();

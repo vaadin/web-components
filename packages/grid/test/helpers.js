@@ -1,15 +1,10 @@
 import sinon from 'sinon';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 
 export const flushGrid = (grid) => {
   grid._observer.flush();
   if (grid._debounceScrolling) {
     grid._debounceScrolling.flush();
   }
-  if (grid._debouncerForceReflow) {
-    grid._debouncerForceReflow.flush();
-  }
-  flush();
   grid._afterScroll();
   if (grid._debounceOverflow) {
     grid._debounceOverflow.flush();
