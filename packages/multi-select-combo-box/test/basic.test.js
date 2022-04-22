@@ -431,6 +431,34 @@ describe('basic', () => {
         });
       });
     });
+
+    describe('readonly', () => {
+      beforeEach(async () => {
+        comboBox.selectedItems = ['apple', 'banana'];
+        await nextRender();
+        comboBox.readonly = true;
+      });
+
+      it('should set readonly attribute on all chips when readonly', () => {
+        const chips = getChips(comboBox);
+        expect(chips[0].hasAttribute('readonly')).to.be.true;
+        expect(chips[1].hasAttribute('readonly')).to.be.true;
+      });
+
+      it('should remove readonly attribute from chips when not readonly', () => {
+        comboBox.readonly = false;
+        const chips = getChips(comboBox);
+        expect(chips[0].hasAttribute('readonly')).to.be.false;
+        expect(chips[1].hasAttribute('readonly')).to.be.false;
+      });
+
+      it('should set readonly attribute on added chips while readonly', () => {
+        comboBox.selectedItems = ['lemon', 'orange'];
+        const chips = getChips(comboBox);
+        expect(chips[0].hasAttribute('readonly')).to.be.true;
+        expect(chips[1].hasAttribute('readonly')).to.be.true;
+      });
+    });
   });
 
   describe('change event', () => {
@@ -506,6 +534,117 @@ describe('basic', () => {
       await sendKeys({ type: 'pear' });
       await sendKeys({ down: 'Enter' });
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
+    });
+  });
+
+  describe('readonly', () => {
+    beforeEach(() => {
+      comboBox.selectedItems = ['apple', 'orange'];
+      comboBox.readonly = true;
+      inputElement.focus();
+    });
+
+    it('should open the dropdown on input click when readonly', () => {
+      inputElement.click();
+      expect(internal.opened).to.be.true;
+    });
+
+    it('should open the dropdown on Arrow Down when readonly', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      expect(internal.opened).to.be.true;
+    });
+
+    it('should open the dropdown on Arrow Up when readonly', async () => {
+      await sendKeys({ down: 'ArrowUp' });
+      expect(internal.opened).to.be.true;
+    });
+
+    it('should close the dropdown on Tab when readonly', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Tab' });
+      expect(internal.opened).to.be.false;
+    });
+
+    it('should close the dropdown on Enter when readonly', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
+      expect(internal.opened).to.be.false;
+    });
+
+    it('should close the dropdown on Esc when readonly', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Escape' });
+      expect(internal.opened).to.be.false;
+    });
+
+    it('should not pre-fill focused item label on Arrow Down', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      expect(inputElement.value).to.equal('');
+    });
+
+    it('should not pre-fill focused item label on Arrow Up', async () => {
+      await sendKeys({ down: 'ArrowUp' });
+      await sendKeys({ down: 'ArrowUp' });
+      expect(inputElement.value).to.equal('');
+    });
+
+    it('should not set item focus-ring attribute on Arrow Down', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      expect(items[0].hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should not set item focus-ring attribute on Arrow Up', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      expect(items[1].hasAttribute('focus-ring')).to.be.false;
+    });
+
+    it('should only render selected items in the dropdown', () => {
+      inputElement.click();
+      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      expect(items.length).to.equal(2);
+      expect(items[0].textContent).to.equal('apple');
+      expect(items[1].textContent).to.equal('orange');
+    });
+
+    it('should not set selected attribute on the dropdown items', () => {
+      inputElement.click();
+      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      expect(items[0].hasAttribute('selected')).to.be.false;
+      expect(items[1].hasAttribute('selected')).to.be.false;
+    });
+
+    it('should set readonly attribute on the dropdown items', () => {
+      inputElement.click();
+      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      expect(items[0].hasAttribute('readonly')).to.be.true;
+      expect(items[1].hasAttribute('readonly')).to.be.true;
+    });
+
+    it('should not un-select item on click when readonly', () => {
+      inputElement.click();
+      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      item.click();
+      expect(comboBox.selectedItems.length).to.equal(2);
+    });
+
+    it('should not open the dropdown if selected items are empty', () => {
+      comboBox.selectedItems = [];
+      inputElement.click();
+      expect(internal.opened).to.be.false;
+    });
+
+    it('should not open the dropdown if readonly is set after clearing', () => {
+      comboBox.readonly = false;
+      comboBox.selectedItems = [];
+
+      comboBox.readonly = true;
+      inputElement.click();
+      expect(internal.opened).to.be.false;
     });
   });
 

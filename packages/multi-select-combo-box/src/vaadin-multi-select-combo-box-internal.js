@@ -66,6 +66,17 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /**
+   * Override method inherited from the combo-box
+   * to allow opening dropdown when readonly.
+   * @override
+   */
+  open() {
+    if (!this.disabled && !(this.readonly && this._getOverlayItems().length === 0)) {
+      this.opened = true;
+    }
+  }
+
+  /**
    * @protected
    * @override
    */
@@ -113,6 +124,11 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
    * @override
    */
   _closeOrCommit() {
+    if (this.readonly) {
+      this.close();
+      return;
+    }
+
     if (this.__enterPressed) {
       this.__enterPressed = null;
 
@@ -128,12 +144,60 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /**
+   * Override method inherited from the combo-box
+   * to not update focused item when readonly.
+   * @protected
+   * @override
+   */
+  _onArrowDown() {
+    if (!this.readonly) {
+      super._onArrowDown();
+    } else if (!this.opened) {
+      this.open();
+    }
+  }
+
+  /**
+   * Override method inherited from the combo-box
+   * to not update focused item when readonly.
+   * @protected
+   * @override
+   */
+  _onArrowUp() {
+    if (!this.readonly) {
+      super._onArrowUp();
+    } else if (!this.opened) {
+      this.open();
+    }
+  }
+
+  /**
+   * Override method inherited from the combo-box
+   * to close dropdown on blur when readonly.
+   * @param {FocusEvent} event
+   * @protected
+   * @override
+   */
+  _onFocusout(event) {
+    super._onFocusout(event);
+
+    if (this.readonly && !this._closeOnBlurIsPrevented) {
+      this.close();
+    }
+  }
+
+  /**
    * @param {CustomEvent} event
    * @protected
    * @override
    */
   _overlaySelectedItemChanged(event) {
     event.stopPropagation();
+
+    // Do not un-select on click when readonly
+    if (this.readonly) {
+      return;
+    }
 
     if (event.detail.item instanceof ComboBoxPlaceholder) {
       return;

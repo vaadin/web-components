@@ -22,7 +22,7 @@ const chip = css`
     cursor: var(--lumo-clickable-cursor);
   }
 
-  :host(:not([part~='overflow'])) {
+  :host(:not([part~='overflow']):not([readonly]):not([disabled])) {
     padding-inline-end: 0;
   }
 
@@ -88,10 +88,15 @@ const chip = css`
     content: var(--lumo-icons-cross);
   }
 
-  :host([disabled]) [part] {
+  :host([disabled]) [part='label'] {
     color: var(--lumo-disabled-text-color);
     -webkit-text-fill-color: var(--lumo-disabled-text-color);
     pointer-events: none;
+  }
+
+  :host([readonly]) [part='remove-button'],
+  :host([disabled]) [part='remove-button'] {
+    display: none;
   }
 `;
 

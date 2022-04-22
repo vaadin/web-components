@@ -23,8 +23,19 @@ class MultiSelectComboBoxScroller extends ComboBoxScroller {
       return false;
     }
 
+    if (this.comboBox.readonly) {
+      return false;
+    }
+
     const host = this.comboBox.getRootNode().host;
     return host._findIndex(item, host.selectedItems, itemIdPath) > -1;
+  }
+
+  /** @private */
+  __updateElement(el, index) {
+    super.__updateElement(el, index);
+
+    el.toggleAttribute('readonly', this.comboBox.readonly);
   }
 }
 

@@ -250,6 +250,16 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       },
 
       /**
+       * When present, it specifies that the field is read-only.
+       */
+      readonly: {
+        type: Boolean,
+        value: false,
+        observer: '_readonlyChanged',
+        reflectToAttribute: true
+      },
+
+      /**
        * The list of selected items.
        * Note: modifying the selected items creates a new array each time.
        */
@@ -466,6 +476,26 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
+  _readonlyChanged(readonly, oldReadonly) {
+    if (readonly) {
+      this.__savedItems = this.$.comboBox._getOverlayItems();
+      this.$.comboBox._setOverlayItems(Array.from(this.selectedItems));
+
+      // Update chips to hide remove button
+      this._chips.forEach((chip) => {
+        chip.setAttribute('readonly', '');
+      });
+    } else if (oldReadonly) {
+      this.$.comboBox._setOverlayItems(this.__savedItems);
+      this.__savedItems = null;
+
+      this._chips.forEach((chip) => {
+        chip.removeAttribute('readonly');
+      });
+    }
+  }
+
+  /** @private */
   _pageSizeChanged(pageSize, oldPageSize) {
     if (Math.floor(pageSize) !== pageSize || pageSize <= 0) {
       this.pageSize = oldPageSize;
@@ -483,6 +513,10 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     // Re-render chips
     this.__updateChips();
+
+    if (this.readonly) {
+      this.$.comboBox._setOverlayItems(selectedItems);
+    }
 
     // Re-render scroller
     this.$.comboBox.$.dropdown._scroller.requestContentUpdate();
@@ -593,6 +627,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     chip.item = item;
     chip.toggleAttribute('disabled', this.disabled);
+    chip.toggleAttribute('readonly', this.readonly);
 
     const label = this._getItemLabel(item, this.itemLabelPath);
     chip.label = label;
