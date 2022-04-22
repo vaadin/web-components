@@ -1,5 +1,3 @@
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
-
 export const flushGrid = (grid) => {
   grid._observer.flush();
   if (grid._debounceScrolling) {
@@ -8,7 +6,6 @@ export const flushGrid = (grid) => {
   if (grid._debounceScrollPeriod) {
     grid._debounceScrollPeriod.flush();
   }
-  flush();
   if (grid._debouncerLoad) {
     grid._debouncerLoad.flush();
   }
@@ -18,7 +15,6 @@ export const flushGrid = (grid) => {
   while (grid._debounceIncreasePool) {
     grid._debounceIncreasePool.flush();
     grid._debounceIncreasePool = null;
-    flush();
   }
 };
 

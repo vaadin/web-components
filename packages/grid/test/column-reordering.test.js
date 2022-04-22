@@ -4,7 +4,6 @@ import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import {
   dragAndDropOver,
   dragOver,
@@ -142,7 +141,6 @@ describe('reordering simple grid', () => {
   it('should have the ghost visible again', () => {
     dragAndDropOver(headerContent[0], headerContent[1]);
     dragStart(headerContent[0]);
-    flush();
     expect(grid._reorderGhost.style.visibility).to.equal('visible');
   });
 

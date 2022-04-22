@@ -6,7 +6,6 @@ import '../vaadin-grid.js';
 import '../vaadin-grid-filter.js';
 import '../vaadin-grid-filter-column.js';
 import '../vaadin-grid-sorter.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { flushGrid, getBodyCellContent, getHeaderCellContent, getVisibleItems, scrollToEnd } from './helpers.js';
 
@@ -338,7 +337,6 @@ describe('lazy init', () => {
     grid.dataProvider = () => {
       // Don't provide any data
     };
-    flush();
     expect(flushFilters.bind(window, grid)).to.not.throw(Error);
   });
 });
