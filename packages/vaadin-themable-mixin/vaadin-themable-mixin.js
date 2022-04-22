@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { css, CSSResult, LitElement, unsafeCSS } from 'lit';
+import { css, CSSResult, unsafeCSS } from 'lit';
 import { ThemePropertyMixin } from './vaadin-theme-property-mixin.js';
 
 export { css, unsafeCSS };
@@ -205,7 +205,7 @@ export const ThemableMixin = (superClass) =>
       super.finalize();
 
       // Make sure not to run the logic intended for PolymerElement when LitElement is used.
-      if (this.prototype instanceof LitElement) {
+      if (this.elementStyles) {
         return;
       }
 
