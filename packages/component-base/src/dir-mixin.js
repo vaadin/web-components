@@ -48,7 +48,15 @@ export const DirMixin = (superClass) =>
         dir: {
           type: String,
           value: '',
-          reflectToAttribute: true
+          reflectToAttribute: true,
+          converter: {
+            fromAttribute: (attr) => {
+              return !attr ? '' : attr;
+            },
+            toAttribute: (prop) => {
+              return prop === '' ? null : prop;
+            }
+          }
         }
       };
     }
