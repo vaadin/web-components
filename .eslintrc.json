@@ -78,13 +78,15 @@
     "prefer-rest-params": "error",
     "prefer-spread": "error",
     "space-in-parens": ["error", "never"],
-    "spaced-comment": ["error", "always"]
+    "spaced-comment": ["error", "always"],
+    "no-console": ["error", { "allow": ["warn", "error"] }]
   },
   "overrides": [
     {
       "files": ["scripts/**/*.js", "*.js"],
       "rules": {
-        "@typescript-eslint/no-var-requires": "off"
+        "@typescript-eslint/no-var-requires": "off",
+        "no-console": "off"
       }
     },
     {
