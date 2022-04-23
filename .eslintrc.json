@@ -81,7 +81,8 @@
     "space-in-parens": ["error", "never"],
     "spaced-comment": ["error", "always"],
     "no-console": ["error", { "allow": ["warn", "error"] }],
-    "consistent-this": ["error", "self"]
+    "consistent-this": ["error", "self"],
+    "no-bitwise": "off"
   },
   "overrides": [
     {
