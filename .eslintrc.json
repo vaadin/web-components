@@ -43,16 +43,17 @@
       "argsIgnorePattern": "^_"
     }],
     "@typescript-eslint/ban-types": "off",
-    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-explicit-any": "off",
     "accessor-pairs": "error",
     "array-callback-return": "error",
     "curly": ["error", "all"],
     "default-case": ["error", { "commentPattern": "^no\\sdefault" }],
     "default-param-last": "error",
     "dot-notation": ["error", { "allowPattern": "^[a-zA-Z]+([_-][a-zA-Z]+)+$" }],
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
     "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
     "grouped-accessor-pairs": ["error", "getBeforeSet"],
     "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
@@ -78,8 +79,7 @@
     "prefer-rest-params": "error",
     "prefer-spread": "error",
     "space-in-parens": ["error", "never"],
-    "spaced-comment": ["error", "always"],
-    "eqeqeq": ["error", "always", { "null": "ignore" }]
+    "spaced-comment": ["error", "always"]
   },
   "overrides": [
     {
