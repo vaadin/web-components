@@ -352,7 +352,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
 
   /** @private */
   _onVaadinOverlayClose(e) {
-    if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().indexOf(this) !== -1) {
+    if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().includes(this)) {
       e.preventDefault();
     }
   }

@@ -12,6 +12,6 @@ export class RadioGroupObserver extends FieldObserver {
 
   getFocusTarget(event) {
     const fields = this.getFields();
-    return Array.from(event.composedPath()).filter((node) => fields.indexOf(node) !== -1)[0];
+    return Array.from(event.composedPath()).filter((node) => fields.includes(node))[0];
   }
 }

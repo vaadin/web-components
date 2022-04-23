@@ -624,7 +624,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
 
   /** @private */
   static _isValidEditorPosition(editorPosition) {
-    return ['bottom', 'aside'].indexOf(editorPosition) !== -1;
+    return ['bottom', 'aside'].includes(editorPosition);
   }
 
   /** @protected */

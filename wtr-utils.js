@@ -32,9 +32,9 @@ const filterBrowserLogs = (log) => {
   return !isHidden;
 };
 
-const hasGroupParam = process.argv.indexOf('--group') !== -1;
-const hasCoverageParam = process.argv.indexOf('--coverage') !== -1;
-const hasAllParam = process.argv.indexOf('--all') !== -1;
+const hasGroupParam = process.argv.includes('--group');
+const hasCoverageParam = process.argv.includes('--coverage');
+const hasAllParam = process.argv.includes('--all');
 
 /**
  * Check if lockfile has changed.

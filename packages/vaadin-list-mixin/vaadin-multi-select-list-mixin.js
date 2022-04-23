@@ -60,7 +60,7 @@ export const MultiSelectListMixin = (superClass) =>
 
       if (selectedValues) {
         const selectedItems = selectedValues.map((selectedId) => items[selectedId]);
-        items.forEach((item) => (item.selected = selectedItems.indexOf(item) !== -1));
+        items.forEach((item) => (item.selected = selectedItems.includes(item)));
       }
 
       this._scrollToLastSelectedItem();
@@ -86,7 +86,7 @@ export const MultiSelectListMixin = (superClass) =>
       }
 
       event.preventDefault();
-      if (this.selectedValues.indexOf(idx) !== -1) {
+      if (this.selectedValues.includes(idx)) {
         this.selectedValues = this.selectedValues.filter((v) => v !== idx);
       } else {
         this.selectedValues = this.selectedValues.concat(idx);

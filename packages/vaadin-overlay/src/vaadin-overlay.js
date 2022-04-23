@@ -483,7 +483,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
    * @private
    */
   _outsideClickListener(event) {
-    if (event.composedPath().indexOf(this.$.overlay) !== -1 || this._mouseDownInside || this._mouseUpInside) {
+    if (event.composedPath().includes(this.$.overlay) || this._mouseDownInside || this._mouseUpInside) {
       this._mouseDownInside = false;
       this._mouseUpInside = false;
       return;
