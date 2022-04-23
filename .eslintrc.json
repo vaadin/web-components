@@ -47,6 +47,7 @@
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/explicit-member-accessibility": ["error", { "accessibility": "no-public" }],
     "accessor-pairs": "error",
     "array-callback-return": "error",
     "curly": ["error", "all"],
