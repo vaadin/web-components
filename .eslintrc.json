@@ -96,6 +96,8 @@
       "files": ["packages/**/test/**"],
       "rules": {
         "no-await-in-loop": "off",
+        // TODO: Use chai-friendly plugin
+        "no-unused-expressions": "off",
         "max-classes-per-file": "off",
         "simple-import-sort/imports": [
           "error",
