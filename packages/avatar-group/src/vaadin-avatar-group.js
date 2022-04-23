@@ -545,7 +545,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
     const { marginLeft, marginRight } = getComputedStyle(avatars[1]);
 
     const offset =
-      this.getAttribute('dir') == 'rtl'
+      this.getAttribute('dir') === 'rtl'
         ? parseInt(marginRight, 0) - parseInt(marginLeft, 0)
         : parseInt(marginLeft, 0) - parseInt(marginRight, 0);
 

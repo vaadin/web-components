@@ -80,8 +80,8 @@ describe('accessibility', () => {
   }
 
   function initRendererFixture(fixtureName) {
-    initGridRenderer(fixtureName == 'group');
-    if (fixtureName == 'details') {
+    initGridRenderer(fixtureName === 'group');
+    if (fixtureName === 'details') {
       grid.rowDetailsRenderer = (root) => (root.textContent = 'details');
     }
   }

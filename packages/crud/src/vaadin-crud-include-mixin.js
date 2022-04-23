@@ -40,14 +40,14 @@ export const IncludedMixin = (superClass) =>
 
     /** @private */
     __onExcludeChange(exclude) {
-      if (typeof exclude == 'string') {
+      if (typeof exclude === 'string') {
         this.exclude = exclude ? RegExp(exclude.replace(/, */g, '|'), 'i') : undefined;
       }
     }
 
     /** @private */
     __onIncludeChange(include) {
-      if (typeof include == 'string') {
+      if (typeof include === 'string') {
         this.include = include ? include.split(/, */) : undefined;
       } else if (!this._fields && Array.isArray(include)) {
         const item = {};

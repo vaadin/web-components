@@ -145,7 +145,7 @@ describe('tabs', () => {
 
             // Cannot set negative values to native scroll, monkey patching the properties
             let pixels = 0;
-            Object.defineProperty(scroll, orientation == 'horizontal' ? 'scrollLeft' : 'scrollTop', {
+            Object.defineProperty(scroll, orientation === 'horizontal' ? 'scrollLeft' : 'scrollTop', {
               get: () => pixels,
               set: (v) => {
                 pixels = v;

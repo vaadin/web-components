@@ -508,7 +508,7 @@ describe('upload', () => {
 
     it('should fire `file-remove` and remove from files', async () => {
       upload.addEventListener('upload-progress', (e) => {
-        if (e.detail.file == files[0] && e.detail.file.progress == 50) {
+        if (e.detail.file === files[0] && e.detail.file.progress === 50) {
           upload._abortFileUpload(e.detail.file);
         }
       });

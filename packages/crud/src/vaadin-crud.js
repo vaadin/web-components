@@ -624,7 +624,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
 
   /** @private */
   static _isValidEditorPosition(editorPosition) {
-    return ['bottom', 'aside'].indexOf(editorPosition) != -1;
+    return ['bottom', 'aside'].indexOf(editorPosition) !== -1;
   }
 
   /** @protected */
@@ -841,17 +841,17 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
           return;
         }
 
-        if (slotAttributeValue == 'grid') {
+        if (slotAttributeValue === 'grid') {
           // Force to remove listener on previous grid first
           this.__editOnClickChanged(false, this._grid);
           this._grid = node;
           this.__editOnClickChanged(this.editOnClick, this._grid);
-        } else if (slotAttributeValue == 'form') {
+        } else if (slotAttributeValue === 'form') {
           this._form = node;
         } else if (slotAttributeValue.indexOf('button') >= 0) {
           const [button] = slotAttributeValue.split('-');
           this[`_${button}Button`] = node;
-        } else if (slotAttributeValue == 'header') {
+        } else if (slotAttributeValue === 'header') {
           this._headerNode = node;
         }
       });
@@ -1177,7 +1177,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   /** @private */
   __new(event) {
     // This allows listening to parent element and fire only when clicking on default or custom new-button.
-    if (event.composedPath().filter((e) => e.nodeType == 1 && e.hasAttribute('new-button'))[0]) {
+    if (event.composedPath().filter((e) => e.nodeType === 1 && e.hasAttribute('new-button'))[0]) {
       this.__confirmBeforeChangingEditedItem(null, true);
     }
   }

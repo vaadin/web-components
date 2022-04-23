@@ -35,7 +35,7 @@ describe('login form submit', () => {
     const input = element.querySelector('input');
     tabKeyUp(input);
     setTimeout(() => {
-      const selected = input.selectionEnd - input.selectionStart == input.value.length;
+      const selected = input.selectionEnd - input.selectionStart === input.value.length;
       expect(selected).to.be.true;
       done();
     }, 1);

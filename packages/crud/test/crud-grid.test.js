@@ -133,7 +133,7 @@ describe('crud grid', () => {
     ['items', 'dataProvider'].forEach((type) => {
       describe(type, () => {
         beforeEach(async () => {
-          if (type == 'items') {
+          if (type === 'items') {
             grid.items = items;
           } else {
             grid.dataProvider = (_, callback) => {

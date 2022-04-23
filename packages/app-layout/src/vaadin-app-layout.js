@@ -733,7 +733,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
 
   /** @protected */
   _updateTouchOptimizedMode() {
-    const touchOptimized = this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') == 'true';
+    const touchOptimized = this._getCustomPropertyValue('--vaadin-app-layout-touch-optimized') === 'true';
 
     const navbarItems = this.querySelectorAll('[slot*="navbar"]');
 

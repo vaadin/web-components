@@ -288,7 +288,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
     let value = parseFloat(this.value);
 
     if (!this.value) {
-      if ((this.min == 0 && incr < 0) || (this.max == 0 && incr > 0) || (this.max == 0 && this.min == 0)) {
+      if ((this.min === 0 && incr < 0) || (this.max === 0 && incr > 0) || (this.max === 0 && this.min === 0)) {
         incr = 0;
         value = 0;
       } else if ((this.max == null || this.max >= 0) && (this.min == null || this.min <= 0)) {
@@ -319,7 +319,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
     }
 
     const newValue = this._getIncrement(incr, value);
-    if (!this.value || incr == 0 || this._incrementIsInsideTheLimits(incr, value)) {
+    if (!this.value || incr === 0 || this._incrementIsInsideTheLimits(incr, value)) {
       this._setValue(newValue);
     }
   }

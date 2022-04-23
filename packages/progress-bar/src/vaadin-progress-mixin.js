@@ -92,7 +92,7 @@ export const ProgressMixin = (superClass) =>
     _normalizeValue(value, min, max) {
       let nV;
 
-      if (!value && value != 0) {
+      if (!value && value !== 0) {
         nV = 0;
       } else if (min >= max) {
         nV = 1;

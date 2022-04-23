@@ -454,7 +454,7 @@ export const ironList = {
 
   _isClientFull: function () {
     return (
-      this._scrollBottom != 0 &&
+      this._scrollBottom !== 0 &&
       this._physicalBottom - 1 >= this._scrollBottom &&
       this._physicalTop <= this._scrollPosition
     );

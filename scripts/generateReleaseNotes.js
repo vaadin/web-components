@@ -102,7 +102,7 @@ function parseLog(log) {
         result = /^ +([A-Z][\w-]+): +(.*)$/.exec(line);
         if (result) {
           const k = result[1].toLowerCase();
-          if (k == 'warranty') {
+          if (k === 'warranty') {
             commit.bfp = true;
           }
           if (/(fixes|fix|related-to|connected-to|warranty)/i.test(k)) {

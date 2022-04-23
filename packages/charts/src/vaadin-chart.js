@@ -1766,7 +1766,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   __updateStyles() {
     // Chrome returns default value if property is not set
     // check if flex is defined for chart, and different than default value
-    const isFlex = getComputedStyle(this).flex != '0 1 auto';
+    const isFlex = getComputedStyle(this).flex !== '0 1 auto';
 
     // If chart element is a flexible item the chartContainer should be flex too
     if (isFlex) {

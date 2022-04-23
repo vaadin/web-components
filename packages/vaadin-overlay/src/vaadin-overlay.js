@@ -587,7 +587,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
   _shouldAnimate() {
     const name = getComputedStyle(this).getPropertyValue('animation-name');
     const hidden = getComputedStyle(this).getPropertyValue('display') === 'none';
-    return !hidden && name && name != 'none';
+    return !hidden && name && name !== 'none';
   }
 
   /**

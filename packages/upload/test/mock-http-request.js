@@ -269,9 +269,9 @@ MockHttpRequest.prototype = {
     mimetype = mimetype && mimetype.split(';', 1)[0];
     if (
       mimetype == null ||
-      mimetype == 'text/xml' ||
-      mimetype == 'application/xml' ||
-      (mimetype && mimetype.substring(mimetype.length - 4) == '+xml')
+      mimetype === 'text/xml' ||
+      mimetype === 'application/xml' ||
+      (mimetype && mimetype.substring(mimetype.length - 4) === '+xml')
     ) {
       // Attempt to produce an xml response
       // and it will fail if not a good xml
@@ -297,15 +297,15 @@ MockHttpRequest.prototype = {
       }
       // parse errors also yield a null.
       if (
-        (xmlDoc && xmlDoc.parseError && xmlDoc.parseError.errorCode != 0) ||
-        (xmlDoc && xmlDoc.documentElement && xmlDoc.documentElement.nodeName == 'parsererror') ||
+        (xmlDoc && xmlDoc.parseError && xmlDoc.parseError.errorCode !== 0) ||
+        (xmlDoc && xmlDoc.documentElement && xmlDoc.documentElement.nodeName === 'parsererror') ||
         (xmlDoc &&
           xmlDoc.documentElement &&
-          xmlDoc.documentElement.nodeName == 'html' &&
+          xmlDoc.documentElement.nodeName === 'html' &&
           xmlDoc.documentElement.firstChild &&
-          xmlDoc.documentElement.firstChild.nodeName == 'body' &&
+          xmlDoc.documentElement.firstChild.nodeName === 'body' &&
           xmlDoc.documentElement.firstChild.firstChild &&
-          xmlDoc.documentElement.firstChild.firstChild.nodeName == 'parsererror')
+          xmlDoc.documentElement.firstChild.firstChild.nodeName === 'parsererror')
       ) {
         xmlDoc = null;
       }

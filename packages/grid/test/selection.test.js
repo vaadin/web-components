@@ -114,7 +114,7 @@ describe('selection', () => {
     describe(`${type} cells`, () => {
       beforeEach(() => {
         grid = fixtureSync(fixtures[type]);
-        if (type == 'renderer') {
+        if (type === 'renderer') {
           const cols = grid.children;
           cols[0].renderer = (root) => (root.textContent = 'foo');
           cols[1].renderer = (root) => (root.textContent = 'bar');
@@ -122,8 +122,8 @@ describe('selection', () => {
         configureGrid();
       });
 
-      (type == 'template' ? it : it.skip)('should reflect cell instance value', () => {
-        if (type == 'template') {
+      (type === 'template' ? it : it.skip)('should reflect cell instance value', () => {
+        if (type === 'template') {
           const cells = getRowCells(rows[0]);
           cells[0]._content.__templateInstance.selected = false;
           expect(cells[0]._content.__templateInstance.selected).to.be.false;

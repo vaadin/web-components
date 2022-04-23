@@ -183,7 +183,7 @@ export const ScrollMixin = (superClass) =>
         const value = overflow.trim();
         if (value.length > 0 && this.getAttribute('overflow') !== value) {
           this.setAttribute('overflow', value);
-        } else if (value.length == 0 && this.hasAttribute('overflow')) {
+        } else if (value.length === 0 && this.hasAttribute('overflow')) {
           this.removeAttribute('overflow');
         }
       });

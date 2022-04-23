@@ -240,7 +240,7 @@ export const ListMixin = (superClass) =>
      */
     _getAvailableIndex(idx, increment, condition) {
       const totalItems = this.items.length;
-      for (let i = 0; typeof idx == 'number' && i < totalItems; i++, idx += increment || 1) {
+      for (let i = 0; typeof idx === 'number' && i < totalItems; i++, idx += increment || 1) {
         if (idx < 0) {
           idx = totalItems - 1;
         } else if (idx >= totalItems) {

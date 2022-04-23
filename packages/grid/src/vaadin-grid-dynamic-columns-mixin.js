@@ -8,6 +8,25 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
+function arrayEquals(arr1, arr2) {
+  if (!arr1 || !arr2 || arr1.length !== arr2.length) {
+    return false;
+  }
+
+  for (let i = 0, l = arr1.length; i < l; i++) {
+    // Check if we have nested arrays
+    if (arr1[i] instanceof Array && arr2[i] instanceof Array) {
+      // recurse into the nested arrays
+      if (!arrayEquals(arr1[i], arr2[i])) {
+        return false;
+      }
+    } else if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 /**
  * @polymerMixin
  */
@@ -79,7 +98,7 @@ export const DynamicColumnsMixin = (superClass) =>
     /** @protected */
     _updateColumnTree() {
       const columnTree = this._getColumnTree();
-      if (!this._arrayEquals(columnTree, this._columnTree)) {
+      if (!arrayEquals(columnTree, this._columnTree)) {
         this._columnTree = columnTree;
       }
     }
@@ -106,26 +125,6 @@ export const DynamicColumnsMixin = (superClass) =>
 
         this._ensureFirstPageLoaded();
       });
-    }
-
-    /** @private */
-    _arrayEquals(arr1, arr2) {
-      if (!arr1 || !arr2 || arr1.length != arr2.length) {
-        return false;
-      }
-
-      for (let i = 0, l = arr1.length; i < l; i++) {
-        // Check if we have nested arrays
-        if (arr1[i] instanceof Array && arr2[i] instanceof Array) {
-          // recurse into the nested arrays
-          if (!this._arrayEquals(arr1[i], arr2[i])) {
-            return false;
-          }
-        } else if (arr1[i] != arr2[i]) {
-          return false;
-        }
-      }
-      return true;
     }
 
     /** @protected */

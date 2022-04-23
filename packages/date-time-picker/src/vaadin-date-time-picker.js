@@ -851,7 +851,7 @@ class DateTimePicker extends FieldMixin(
   /** @private */
   // eslint-disable-next-line getter-return
   get __stepSegment() {
-    const step = this.step == undefined ? 60 : parseFloat(this.step);
+    const step = this.step == null ? 60 : parseFloat(this.step);
     if (step % 3600 === 0) {
       // Accept hours
       return 1;

@@ -131,7 +131,7 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
   _calculateFlexBasis(colSpan, width, colsInRow, breakpoints) {
     if (width < breakpoints.smallSize) {
       colsInRow = 1;
-    } else if (width < breakpoints.mediumSize && colsInRow == 4) {
+    } else if (width < breakpoints.mediumSize && colsInRow === 4) {
       colsInRow = 2;
     }
     let flexBasis = (colSpan / colsInRow) * 100;
@@ -231,9 +231,9 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
     const breakpoints = this._measureBreakpointsInPx();
     if (
       forceResize ||
-      width != this._oldWidth ||
-      breakpoints.smallSize != this._oldBreakpoints.smallSize ||
-      breakpoints.mediumSize != this._oldBreakpoints.mediumSize
+      width !== this._oldWidth ||
+      breakpoints.smallSize !== this._oldBreakpoints.smallSize ||
+      breakpoints.mediumSize !== this._oldBreakpoints.mediumSize
     ) {
       const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
       const isElementNode = (node) => {
@@ -245,7 +245,7 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
       const colsInRow = boardCols.reduce((a, b) => a + b, 0);
       this._removeExtraNodesFromDOM(boardCols, filteredNodes).forEach((e, i) => {
         const newFlexBasis = this._calculateFlexBasis(boardCols[i], width, colsInRow, breakpoints);
-        if (forceResize || !this._oldFlexBasis[i] || this._oldFlexBasis[i] != newFlexBasis) {
+        if (forceResize || !this._oldFlexBasis[i] || this._oldFlexBasis[i] !== newFlexBasis) {
           this._oldFlexBasis[i] = newFlexBasis;
           e.style.flexBasis = newFlexBasis;
         }

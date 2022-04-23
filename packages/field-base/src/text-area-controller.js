@@ -30,7 +30,7 @@ export class TextAreaController extends SlotController {
         host._textareaId = `${host.localName}-${uniqueId}`;
         node.id = host._textareaId;
 
-        if (typeof callback == 'function') {
+        if (typeof callback === 'function') {
           callback(node);
         }
       }

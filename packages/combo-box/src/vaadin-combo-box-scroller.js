@@ -218,7 +218,7 @@ export class ComboBoxScroller extends PolymerElement {
 
   /** @private */
   __isItemFocused(focusedIndex, itemIndex) {
-    return focusedIndex == itemIndex;
+    return focusedIndex === itemIndex;
   }
 
   /** @private */

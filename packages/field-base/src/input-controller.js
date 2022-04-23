@@ -27,7 +27,7 @@ export class InputController extends SlotController {
         host._inputId = `${host.localName}-${uniqueId}`;
         node.id = host._inputId;
 
-        if (typeof callback == 'function') {
+        if (typeof callback === 'function') {
           callback(node);
         }
       }

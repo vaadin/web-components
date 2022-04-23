@@ -122,7 +122,7 @@ class GridProEditColumn extends GridColumn {
 
   /** @private */
   _pathChanged(path) {
-    if (!path || path.length == 0) {
+    if (!path || path.length === 0) {
       throw new Error('You should specify the path for the edit column');
     }
   }
@@ -243,7 +243,7 @@ class GridProEditColumn extends GridColumn {
   _setEditorValue(editor, value) {
     const path = this.editorType === 'checkbox' ? 'checked' : this.editorValuePath;
     // FIXME(yuriy): Required for the flow counterpart as it is passing the string value to webcomponent
-    value = this.editorType === 'checkbox' && typeof value === 'string' ? value == 'true' : value;
+    value = this.editorType === 'checkbox' && typeof value === 'string' ? value === 'true' : value;
     set(editor, path, value);
     editor.notifyPath && editor.notifyPath(path, value);
   }

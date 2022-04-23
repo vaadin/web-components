@@ -687,7 +687,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __createFakeFocusTarget() {
-    const isRTL = document.documentElement.getAttribute('dir') == 'rtl';
+    const isRTL = document.documentElement.getAttribute('dir') === 'rtl';
     const elem = document.createElement('textarea');
     // Reset box model
     elem.style.border = '0';
@@ -1056,7 +1056,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       return;
     }
 
-    if (value == null || value == '[{"insert":"\\n"}]') {
+    if (value == null || value === '[{"insert":"\\n"}]') {
       this.value = '';
       return;
     }
