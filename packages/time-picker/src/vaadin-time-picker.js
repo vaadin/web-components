@@ -256,8 +256,12 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
               // Always display hour and minute
               let timeString = `${pad(time.hours)}:${pad(time.minutes)}`;
               // Adding second and millisecond depends on resolution
-              time.seconds !== undefined && (timeString += `:${pad(time.seconds)}`);
-              time.milliseconds !== undefined && (timeString += `.${pad(time.milliseconds, '000')}`);
+              if (time.seconds !== undefined) {
+                timeString += `:${pad(time.seconds)}`;
+              }
+              if (time.milliseconds !== undefined) {
+                timeString += `.${pad(time.milliseconds, '000')}`;
+              }
               return timeString;
             },
             parseTime: (text) => {

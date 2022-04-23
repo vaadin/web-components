@@ -337,7 +337,9 @@ export const ColumnBaseMixin = (superClass) =>
 
       this._allCells.forEach((cell) => cell.toggleAttribute('frozen', frozen));
 
-      this._grid && this._grid._frozenCellsChanged && this._grid._frozenCellsChanged();
+      if (this._grid && this._grid._frozenCellsChanged) {
+        this._grid._frozenCellsChanged();
+      }
     }
 
     /** @private */
@@ -354,7 +356,9 @@ export const ColumnBaseMixin = (superClass) =>
         cell.toggleAttribute('frozen-to-end', frozenToEnd);
       });
 
-      this._grid && this._grid._frozenCellsChanged && this._grid._frozenCellsChanged();
+      if (this._grid && this._grid._frozenCellsChanged) {
+        this._grid._frozenCellsChanged();
+      }
     }
 
     /** @private */
@@ -480,8 +484,13 @@ export const ColumnBaseMixin = (superClass) =>
           }
         );
 
-        this._grid._updateFrozenColumn && this._grid._updateFrozenColumn();
-        this._grid._resetKeyboardNavigation && this._grid._resetKeyboardNavigation();
+        if (this._grid._updateFrozenColumn) {
+          this._grid._updateFrozenColumn();
+        }
+
+        if (this._grid._resetKeyboardNavigation) {
+          this._grid._resetKeyboardNavigation();
+        }
       }
       this._previousHidden = hidden;
     }
@@ -609,7 +618,9 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     __setTextContent(node, textContent) {
-      node.textContent !== textContent && (node.textContent = textContent);
+      if (node.textContent !== textContent) {
+        node.textContent = textContent;
+      }
     }
 
     /**

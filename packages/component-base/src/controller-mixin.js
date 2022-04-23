@@ -27,7 +27,9 @@ export const ControllerMixin = dedupingMixin(
         super.connectedCallback();
 
         this.__controllers.forEach((c) => {
-          c.hostConnected && c.hostConnected();
+          if (c.hostConnected) {
+            c.hostConnected();
+          }
         });
       }
 
@@ -36,7 +38,9 @@ export const ControllerMixin = dedupingMixin(
         super.disconnectedCallback();
 
         this.__controllers.forEach((c) => {
-          c.hostDisconnected && c.hostDisconnected();
+          if (c.hostDisconnected) {
+            c.hostDisconnected();
+          }
         });
       }
 

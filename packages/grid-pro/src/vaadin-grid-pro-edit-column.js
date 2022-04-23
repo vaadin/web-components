@@ -245,7 +245,9 @@ class GridProEditColumn extends GridColumn {
     // FIXME(yuriy): Required for the flow counterpart as it is passing the string value to webcomponent
     value = this.editorType === 'checkbox' && typeof value === 'string' ? value == 'true' : value;
     set(editor, path, value);
-    editor.notifyPath && editor.notifyPath(path, value);
+    if (editor.notifyPath) {
+      editor.notifyPath(path, value);
+    }
   }
 
   /**

@@ -280,7 +280,9 @@ export const ItemsMixin = (superClass) =>
       `;
         flush();
         const listBox = root.querySelector('vaadin-context-menu-list-box');
-        this._theme && listBox.setAttribute('theme', this._theme);
+        if (this._theme) {
+          listBox.setAttribute('theme', this._theme);
+        }
         listBox.classList.add('vaadin-menu-list-box');
         requestAnimationFrame(() => listBox.setAttribute('role', 'menu'));
 
@@ -373,7 +375,9 @@ export const ItemsMixin = (superClass) =>
           const shouldOpenSubMenu =
             (!isRTL && e.keyCode === 39) || (isRTL && e.keyCode === 37) || e.keyCode === 13 || e.keyCode === 32;
 
-          shouldOpenSubMenu && openSubMenu(e);
+          if (shouldOpenSubMenu) {
+            openSubMenu(e);
+          }
         });
       } else {
         const listBox = root.querySelector('vaadin-context-menu-list-box');

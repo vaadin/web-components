@@ -183,7 +183,9 @@ class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
    * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
    */
   requestContentUpdate() {
-    this.__virtualizer && this.__virtualizer.update();
+    if (this.__virtualizer) {
+      this.__virtualizer.update();
+    }
   }
 }
 

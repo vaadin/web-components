@@ -153,7 +153,11 @@ const idlePeriod = {
    * @return {void}
    */
   cancel(handle) {
-    window.cancelIdleCallback ? window.cancelIdleCallback(handle) : window.clearTimeout(handle);
+    if (window.cancelIdleCallback) {
+      window.cancelIdleCallback(handle);
+    } else {
+      window.clearTimeout(handle);
+    }
   }
 };
 export { idlePeriod };

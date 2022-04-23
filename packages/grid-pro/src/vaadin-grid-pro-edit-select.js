@@ -72,7 +72,9 @@ class GridProEditSelect extends Select {
     }
 
     if (event.keyCode === 9) {
-      !this._grid.singleCellEdit && this._grid._switchEditCell(event);
+      if (!this._grid.singleCellEdit) {
+        this._grid._switchEditCell(event);
+      }
     }
 
     // Call `super` to close overlay on Tab.

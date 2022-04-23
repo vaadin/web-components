@@ -257,7 +257,11 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
       });
     }
 
-    overflow ? this.setAttribute('overflow', overflow.trim()) : this.removeAttribute('overflow');
+    if (overflow) {
+      this.setAttribute('overflow', overflow.trim());
+    } else {
+      this.removeAttribute('overflow');
+    }
   }
 }
 

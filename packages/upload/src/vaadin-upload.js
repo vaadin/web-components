@@ -884,12 +884,20 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   _dragoverChanged(dragover) {
-    dragover ? this.setAttribute('dragover', dragover) : this.removeAttribute('dragover');
+    if (dragover) {
+      this.setAttribute('dragover', dragover);
+    } else {
+      this.removeAttribute('dragover');
+    }
   }
 
   /** @private */
   _dragoverValidChanged(dragoverValid) {
-    dragoverValid ? this.setAttribute('dragover-valid', dragoverValid) : this.removeAttribute('dragover-valid');
+    if (dragoverValid) {
+      this.setAttribute('dragover-valid', dragoverValid);
+    } else {
+      this.removeAttribute('dragover-valid');
+    }
   }
 
   /** @private */

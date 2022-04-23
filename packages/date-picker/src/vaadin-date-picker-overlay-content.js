@@ -618,7 +618,11 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   }
 
   _toggleYearScroller() {
-    this._isYearScrollerVisible() ? this._closeYearScroller() : this._openYearScroller();
+    if (this._isYearScrollerVisible()) {
+      this._closeYearScroller();
+    } else {
+      this._openYearScroller();
+    }
   }
 
   _openYearScroller() {
