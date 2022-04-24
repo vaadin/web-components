@@ -221,16 +221,11 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       return;
     }
 
-    if (this._visibleChildColumns.length) {
-      this._setWidth(
-        `calc(${Array.prototype.reduce
-          .call(
-            this._visibleChildColumns,
-            (prev, curr) => (prev += ` + ${(curr.width || '0px').replace('calc', '')}`),
-            ''
-          )
-          .substring(3)})`
-      );
+    if (this._visibleChildColumns.length > 0) {
+      const width = this._visibleChildColumns
+        .reduce((prev, curr) => (prev += ` + ${(curr.width || '0px').replace('calc', '')}`), '')
+        .substring(3);
+      this._setWidth(`calc(${width})`);
     } else {
       this._setWidth('0px');
     }
