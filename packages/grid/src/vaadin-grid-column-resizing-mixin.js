@@ -44,10 +44,10 @@ export const ColumnResizingMixin = (superClass) =>
         while (column.localName === 'vaadin-grid-column-group') {
           column = Array.prototype.slice
             .call(column._childColumns, 0)
-            .sort(function (a, b) {
+            .sort((a, b) => {
               return a._order - b._order;
             })
-            .filter(function (column) {
+            .filter((column) => {
               return !column.hidden;
             })
             .pop();
@@ -85,10 +85,10 @@ export const ColumnResizingMixin = (superClass) =>
         }
         // Fix width and flex-grow for all preceding columns
         columnRowCells
-          .sort(function (a, b) {
+          .sort((a, b) => {
             return a._column._order - b._column._order;
           })
-          .forEach(function (cell, index, array) {
+          .forEach((cell, index, array) => {
             if (index < array.indexOf(targetCell)) {
               cell._column.width = cell.offsetWidth + 'px';
               cell._column.flexGrow = 0;

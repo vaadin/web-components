@@ -200,7 +200,7 @@ class CrudGrid extends IncludedMixin(Grid) {
           if (this.noSort) {
             textField.placeholder = label;
           }
-          textField.addEventListener('value-changed', function (event) {
+          textField.addEventListener('value-changed', (event) => {
             filter.value = event.detail.value;
           });
 

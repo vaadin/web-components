@@ -56,7 +56,7 @@ describe('mobile support', () => {
     menu._setOpened(true);
   });
 
-  it('should prevent tap', function () {
+  it('should prevent tap', () => {
     expect(gestures.tap.info.prevent).to.be.false;
     target.dispatchEvent(new CustomEvent('contextmenu', { bubbles: true }));
     expect(gestures.tap.info.prevent).to.be.true;

@@ -583,7 +583,7 @@ export const ironList = {
       this._adjustVirtualIndex(change.value.indexSplices);
       this._virtualCount = this.items ? this.items.length : 0;
       // Only blur if at least one item is added or removed.
-      var itemAddedOrRemoved = change.value.indexSplices.some(function (splice) {
+      var itemAddedOrRemoved = change.value.indexSplices.some((splice) => {
         return splice.addedCount > 0 || splice.removed.length > 0;
       });
       if (itemAddedOrRemoved) {
@@ -595,9 +595,9 @@ export const ironList = {
         }
       }
       // Render only if the affected index is rendered.
-      var affectedIndexRendered = change.value.indexSplices.some(function (splice) {
+      var affectedIndexRendered = change.value.indexSplices.some((splice) => {
         return splice.index + splice.addedCount >= this._virtualStart && splice.index <= this._virtualEnd;
-      }, this);
+      });
       if (!this._isClientFull() || affectedIndexRendered) {
         this._debounce('_render', this._render, animationFrame);
       }

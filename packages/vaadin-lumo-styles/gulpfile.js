@@ -34,7 +34,7 @@ function createCopyright() {
 
 function createIconset(folder, filenames, idPrefix = '') {
   let output = `<svg xmlns="http://www.w3.org/2000/svg">\n<defs>\n`;
-  filenames.forEach(function (filename) {
+  filenames.forEach((filename) => {
     // Skip non-svg files
     if (filename.indexOf('.svg') === -1) {
       return;
@@ -59,7 +59,7 @@ function createIconset(folder, filenames, idPrefix = '') {
   return output;
 }
 
-gulp.task('icons', async function () {
+gulp.task('icons', async () => {
   const folder = 'icons/svg/';
   let glyphs;
 
@@ -89,9 +89,9 @@ gulp.task('icons', async function () {
       })
     )
     .pipe(gulp.dest(folder))
-    .on('finish', function () {
+    .on('finish', () => {
       // iron-iconset-svg
-      fs.readdir(folder, function (err, filenames) {
+      fs.readdir(folder, (err, filenames) => {
         if (err) {
           console.error(err);
           return;
@@ -109,7 +109,7 @@ $_documentContainer.innerHTML = \`<iron-iconset-svg size="1000" name="lumo">
 ${createIconset(folder, filenames)}
 </iron-iconset-svg>\`;\n\ndocument.head.appendChild($_documentContainer.content);\n`;
 
-        fs.writeFile('iconset.js', ironIcons, function (err) {
+        fs.writeFile('iconset.js', ironIcons, (err) => {
           if (err) {
             return console.error(err);
           }
@@ -125,7 +125,7 @@ $_documentContainer.innerHTML = \`<vaadin-iconset name="lumo" size="1000">
 ${createIconset(folder, filenames, 'lumo:')}
 </vaadin-iconset>\`;\n\ndocument.head.appendChild($_documentContainer.content);\n`;
 
-        fs.writeFile('vaadin-iconset.js', vaadinIcons, function (err) {
+        fs.writeFile('vaadin-iconset.js', vaadinIcons, (err) => {
           if (err) {
             return console.error(err);
           }
@@ -154,12 +154,12 @@ ${createIconset(folder, filenames, 'lumo:')}
             timestamp: 1 // Truthy!
           })
         )
-        .on('glyphs', function (glyphData) {
+        .on('glyphs', (glyphData) => {
           // Store for later use
           glyphs = glyphData;
         })
         .pipe(gulp.dest('.'))
-        .on('finish', function () {
+        .on('finish', () => {
           // Generate base64 version of the font
           const lumoIconsWoff = fs.readFileSync('lumo-icons.woff');
 
@@ -192,21 +192,21 @@ $_documentContainer.innerHTML = \`
 
 document.head.appendChild($_documentContainer.content);
 `;
-          fs.writeFile('font-icons.js', output, function (err) {
+          fs.writeFile('font-icons.js', output, (err) => {
             if (err) {
               return console.error(err);
             }
           });
 
           const list = glyphs.map((g) => g.name);
-          fs.writeFile('test/glyphs.json', JSON.stringify(list, null, 2), function (err) {
+          fs.writeFile('test/glyphs.json', JSON.stringify(list, null, 2), (err) => {
             if (err) {
               return console.error(err);
             }
           });
 
           // Cleanup
-          fs.unlink('lumo-icons.woff', function (err) {
+          fs.unlink('lumo-icons.woff', (err) => {
             if (err) {
               return console.error(err);
             }
