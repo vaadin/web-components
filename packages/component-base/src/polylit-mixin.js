@@ -105,7 +105,7 @@ const PolylitMixinImplementation = (superclass) => {
 
         this.addCheckedInitializer((instance) => {
           // This is run during construction of the element
-          instance['_set' + upper(name)] = function (value) {
+          instance[`_set${upper(name)}`] = function (value) {
             setter.call(instance, value);
           };
         });

@@ -588,13 +588,13 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     const navbarBottom = this.$.navbarBottom;
     const navbarBottomRect = navbarBottom.getBoundingClientRect();
 
-    this.style.setProperty('--_vaadin-app-layout-navbar-offset-size', navbarRect.height + 'px');
-    this.style.setProperty('--_vaadin-app-layout-navbar-offset-size-bottom', navbarBottomRect.height + 'px');
+    this.style.setProperty('--_vaadin-app-layout-navbar-offset-size', `${navbarRect.height}px`);
+    this.style.setProperty('--_vaadin-app-layout-navbar-offset-size-bottom', `${navbarBottomRect.height}px`);
 
     const drawer = this.$.drawer;
     const drawerRect = drawer.getBoundingClientRect();
 
-    this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', drawerRect.width + 'px');
+    this.style.setProperty('--_vaadin-app-layout-drawer-offset-size', `${drawerRect.width}px`);
   }
 
   /** @protected */

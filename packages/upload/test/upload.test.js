@@ -308,13 +308,13 @@ describe('upload', () => {
       }
 
       [400, 401, 403, 404, 451].forEach((status) => {
-        it('should fail with forbidden error for status code ' + status, async () => {
+        it(`should fail with forbidden error for status code ${status}`, async () => {
           await expectResponseErrorForStatus(upload.i18n.uploading.error.forbidden, status);
         });
       });
 
       [500, 501, 502, 503, 504].forEach((status) => {
-        it('should fail with unexpected error for status code ' + status, async () => {
+        it(`should fail with unexpected error for status code ${status}`, async () => {
           await expectResponseErrorForStatus(upload.i18n.uploading.error.unexpectedServerError, status);
         });
       });

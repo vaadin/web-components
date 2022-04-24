@@ -72,11 +72,11 @@ describe('renderer', () => {
     it('should clear the root when renderer changed', () => {
       for (let i = 0; i < 2; i++) {
         notification.renderer = (root) => {
-          const generatedContent = document.createTextNode('rendered-' + i);
+          const generatedContent = document.createTextNode(`rendered-${i}`);
           root.appendChild(generatedContent);
         };
         notification.opened = true;
-        expect(notification._card.textContent.trim()).to.equal('rendered-' + i);
+        expect(notification._card.textContent.trim()).to.equal(`rendered-${i}`);
       }
     });
 

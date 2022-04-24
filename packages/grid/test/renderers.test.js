@@ -29,7 +29,7 @@ describe('renderers', () => {
     beforeEach(() => {
       column.renderer = function (root, owner, model) {
         root.innerHTML = '';
-        const text = document.createTextNode(model.index + ' ' + model.item.foo);
+        const text = document.createTextNode(`${model.index} ${model.item.foo}`);
         root.appendChild(text);
       };
 
@@ -56,7 +56,7 @@ describe('renderers', () => {
 
     it('should allow to change the renderer', () => {
       column.renderer = function (root, owner, model) {
-        root.innerHTML = model.index + ' test';
+        root.innerHTML = `${model.index} test`;
       };
       expect(getCell(grid, 0)._content.innerHTML).to.eql('0 test');
       expect(getCell(grid, 1)._content.innerHTML).to.eql('1 test');
@@ -118,7 +118,7 @@ describe('renderers', () => {
       it('should allow to change the renderer', () => {
         grid.detailsOpenedItems = grid.items;
         grid.rowDetailsRenderer = function (root, owner, model) {
-          root.innerHTML = model.index + ' test';
+          root.innerHTML = `${model.index} test`;
         };
         flushGrid(grid);
         expect(getBodyCellContent(grid, 0, 1).innerHTML).to.eql('0 test');

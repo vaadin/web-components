@@ -223,15 +223,13 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
 
     if (this._visibleChildColumns.length) {
       this._setWidth(
-        'calc(' +
-          Array.prototype.reduce
-            .call(
-              this._visibleChildColumns,
-              (prev, curr) => (prev += ' + ' + (curr.width || '0px').replace('calc', '')),
-              ''
-            )
-            .substring(3) +
-          ')'
+        `calc(${Array.prototype.reduce
+          .call(
+            this._visibleChildColumns,
+            (prev, curr) => (prev += ` + ${(curr.width || '0px').replace('calc', '')}`),
+            ''
+          )
+          .substring(3)})`
       );
     } else {
       this._setWidth('0px');

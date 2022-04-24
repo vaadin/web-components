@@ -412,17 +412,12 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
       return '';
     }
 
-    var ariaLabel =
-      this._getDate(date) +
-      ' ' +
-      this.i18n.monthNames[date.getMonth()] +
-      ' ' +
-      date.getFullYear() +
-      ', ' +
-      this.i18n.weekdays[date.getDay()];
+    var ariaLabel = `${this._getDate(date)} ${this.i18n.monthNames[date.getMonth()]} ${date.getFullYear()}, ${
+      this.i18n.weekdays[date.getDay()]
+    }`;
 
     if (this._isToday(date)) {
-      ariaLabel += ', ' + this.i18n.today;
+      ariaLabel += `, ${this.i18n.today}`;
     }
 
     return ariaLabel;

@@ -338,8 +338,8 @@ describe('ThemableMixin', () => {
     createStyles('vaadin-test-duplicate-styles', 'test-duplicate*', unsafeCSS(duplicateStyle));
 
     // Define the test-duplicate-parent and test-duplicate components
-    defineCustomElement(name + '-parent');
-    defineCustomElement(name, name + '-parent', '<div></div>');
+    defineCustomElement(`${name}-parent`);
+    defineCustomElement(name, `${name}-parent`, '<div></div>');
 
     // Create an instance of the test-duplicate component
     const testComponent = fixtureSync(`<${name}></${name}>`);

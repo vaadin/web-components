@@ -186,7 +186,7 @@ describe('accessibility', () => {
 
       const items = [...Array(itemsOnEachLevel)].map((_, i) => {
         return {
-          name: `${parentItem ? parentItem.name + '-' : ''}${i}`,
+          name: `${parentItem ? `${parentItem.name}-` : ''}${i}`,
           // Let's only have child items on every second item
           children: i % 2 === 0
         };

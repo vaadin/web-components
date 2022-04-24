@@ -2207,7 +2207,7 @@ describe('hierarchical data', () => {
   function hierarchicalDataProvider({ parentItem }, callback) {
     const items = [...Array(itemsOnEachLevel).keys()].map((i) => {
       return {
-        name: `${parentItem ? parentItem.name + '-' : ''}${i}`,
+        name: `${parentItem ? `${parentItem.name}-` : ''}${i}`,
         children: true
       };
     });

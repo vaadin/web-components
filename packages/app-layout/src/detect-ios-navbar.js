@@ -13,7 +13,7 @@ export function _detectIosNavbar() {
     const landscape = innerWidth > innerHeight;
     const clientHeight = document.documentElement.clientHeight;
     if (landscape && clientHeight > innerHeight) {
-      document.documentElement.style.setProperty('--vaadin-viewport-offset-bottom', clientHeight - innerHeight + 'px');
+      document.documentElement.style.setProperty('--vaadin-viewport-offset-bottom', `${clientHeight - innerHeight}px`);
     } else {
       document.documentElement.style.setProperty('--vaadin-viewport-offset-bottom', '');
     }

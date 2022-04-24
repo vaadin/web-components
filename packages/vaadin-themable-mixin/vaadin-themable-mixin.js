@@ -77,7 +77,7 @@ function getAllThemes() {
  */
 function matchesThemeFor(themeFor, tagName) {
   return (themeFor || '').split(' ').some((themeForToken) => {
-    return new RegExp('^' + themeForToken.split('*').join('.*') + '$').test(tagName);
+    return new RegExp(`^${themeForToken.split('*').join('.*')}$`).test(tagName);
   });
 }
 
@@ -151,7 +151,7 @@ function addStylesToTemplate(styles, template) {
  * @returns {Theme[]}
  */
 function getThemes(tagName) {
-  const defaultModuleName = tagName + '-default-theme';
+  const defaultModuleName = `${tagName}-default-theme`;
 
   const themes = getAllThemes()
     // Filter by matching themeFor properties

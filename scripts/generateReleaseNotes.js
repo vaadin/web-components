@@ -168,7 +168,7 @@ function parseLinks(message) {
 // return web-components affected by this commit
 function getComponents(c) {
   if (c.components[0]) {
-    return `- ${c.components.map((k) => '`' + k + '`').join(', ')}`;
+    return `- ${c.components.map((k) => `\`${k}\``).join(', ')}`;
   }
 }
 
@@ -203,7 +203,7 @@ function logCommit(c) {
     }
     indent = '  ';
   }
-  log += `${indent}- ` + parseLinks(c.commit.substring(0, 7) + ' ' + c.title[0].toUpperCase() + c.title.slice(1));
+  log += `${indent}- ${parseLinks(`${c.commit.substring(0, 7)} ${c.title[0].toUpperCase()}${c.title.slice(1)}`)}`;
   const tickets = getTickets(c);
   if (tickets) {
     log += `. ${tickets}`;
@@ -268,7 +268,7 @@ function logCommitsByComponent(commits) {
         if (lineBrake > 1) {
           log += `\n`;
         }
-        log += `${indent}- ` + parseLinks(c.commit.substring(0, 7) + ' ' + c.title[0].toUpperCase() + c.title.slice(1));
+        log += `${indent}- ${parseLinks(`${c.commit.substring(0, 7)} ${c.title[0].toUpperCase()}${c.title.slice(1)}`)}`;
         const tickets = getTickets(c);
         if (tickets) {
           log += `. ${tickets}`;

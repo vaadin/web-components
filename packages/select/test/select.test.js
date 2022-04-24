@@ -356,7 +356,7 @@ describe('vaadin-select', () => {
         const prop = '--vaadin-select-text-field-width';
         const inputRect = select._inputContainer.getBoundingClientRect();
         const value = getComputedStyle(select._overlayElement).getPropertyValue(prop);
-        expect(value).to.be.equal(inputRect.width + 'px');
+        expect(value).to.be.equal(`${inputRect.width}px`);
       });
     });
 

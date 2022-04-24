@@ -35,7 +35,7 @@ describe('vaadin-month-calendar', () => {
 
   // Create 12 tests for each month of 2016.
   for (let i = 0; i < 12; i++) {
-    it('should render correct number of days for 2016/' + (i + 1), createMonthTest(i));
+    it(`should render correct number of days for 2016/${i + 1}`, createMonthTest(i));
   }
 
   it('should render days in correct order by default', () => {
@@ -163,7 +163,7 @@ describe('vaadin-month-calendar', () => {
         firstDayOfWeek: 1,
         week: 'viikko',
         today: 'Tänään',
-        formatTitle: (monthName, fullYear) => monthName + '-' + fullYear
+        formatTitle: (monthName, fullYear) => `${monthName}-${fullYear}`
       };
       await aTimeout();
     });

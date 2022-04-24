@@ -102,8 +102,8 @@ describe('date-picker', () => {
       describe('dropdown', () => {
         function openOverlay() {
           element.opened = true;
-          div.style.height = element.offsetHeight + element.$.overlay.$.overlay.offsetHeight + 'px';
-          div.style.width = element.$.overlay.$.overlay.offsetWidth + 'px';
+          div.style.height = `${element.offsetHeight + element.$.overlay.$.overlay.offsetHeight}px`;
+          div.style.width = `${element.$.overlay.$.overlay.offsetWidth}px`;
         }
 
         it('default', async () => {

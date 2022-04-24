@@ -5,7 +5,7 @@ export const infiniteDataProvider = (params, callback) => {
     Array.from({ length: params.pageSize }, (_, index) => {
       const count = params.page * params.pageSize + index;
       return {
-        name: 'foo' + count,
+        name: `foo${count}`,
         age: count
       };
     })

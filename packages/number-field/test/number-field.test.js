@@ -19,7 +19,7 @@ describe('number-field', () => {
     });
 
     ['min', 'max'].forEach(function (attr) {
-      it('should set numeric attribute ' + attr, () => {
+      it(`should set numeric attribute ${attr}`, () => {
         const value = 5;
         numberField[attr] = value;
         expect(input.getAttribute(attr)).to.be.equal(String(value));

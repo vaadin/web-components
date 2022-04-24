@@ -36,37 +36,37 @@ describe('text-field', () => {
       }
 
       ['pattern', 'placeholder', 'value', 'title'].forEach((prop) => {
-        it('should set string property ' + prop, () => {
+        it(`should set string property ${prop}`, () => {
           assertPropCanBeSet(prop, 'foo');
         });
       });
 
       ['disabled'].forEach((prop) => {
-        it('should set boolean property ' + prop, () => {
+        it(`should set boolean property ${prop}`, () => {
           assertPropCanBeSet(prop, true);
         });
       });
 
       ['maxlength', 'minlength'].forEach((prop) => {
-        it('should set numeric attribute ' + prop, () => {
+        it(`should set numeric attribute ${prop}`, () => {
           assertAttrCanBeSet(prop, 2);
         });
       });
 
       ['autocomplete'].forEach((prop) => {
-        it('should set boolean attribute ' + prop, () => {
+        it(`should set boolean attribute ${prop}`, () => {
           assertAttrCanBeSet(prop, 'on');
         });
       });
 
       ['autocapitalize'].forEach((prop) => {
-        it('should set boolean attribute ' + prop, () => {
+        it(`should set boolean attribute ${prop}`, () => {
           assertAttrCanBeSet(prop, 'none');
         });
       });
 
       ['autocomplete', 'autocorrect', 'readonly', 'required'].forEach((prop) => {
-        it('should set boolean attribute ' + prop, () => {
+        it(`should set boolean attribute ${prop}`, () => {
           assertAttrCanBeSet(prop, true);
           assertAttrCanBeSet(prop, false);
         });

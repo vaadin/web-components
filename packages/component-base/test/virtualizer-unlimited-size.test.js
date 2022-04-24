@@ -140,7 +140,7 @@ describe('unlimited size', () => {
       scrollTarget.scrollTop -= (elementHeight * elementCount) / 2;
       await oneEvent(scrollTarget, 'scroll');
 
-      const item = elementsContainer.querySelector('#item-' + smallestIndex);
+      const item = elementsContainer.querySelector(`#item-${smallestIndex}`);
       expect(item).to.be.ok;
     }
 
@@ -161,7 +161,7 @@ describe('unlimited size', () => {
       scrollTarget.scrollTop += (elementHeight * elementCount) / 2;
       await oneEvent(scrollTarget, 'scroll');
 
-      const item = elementsContainer.querySelector('#item-' + largestIndex);
+      const item = elementsContainer.querySelector(`#item-${largestIndex}`);
       expect(item).to.be.ok;
     }
 

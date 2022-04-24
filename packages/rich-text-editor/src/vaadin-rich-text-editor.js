@@ -1072,7 +1072,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       if (Array.isArray(parsedValue)) {
         this.__oldValue = value;
       } else {
-        throw new Error('expected JSON string with array of objects, got: ' + value);
+        throw new Error(`expected JSON string with array of objects, got: ${value}`);
       }
     } catch (err) {
       // Use old value in case new one is not suitable

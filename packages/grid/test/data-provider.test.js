@@ -392,7 +392,7 @@ describe('data provider', () => {
 
           it('should restore tree after cache is cleared', () => {
             grid.getItemId = (item) => {
-              return item !== undefined ? item.level + '-' + item.value : undefined;
+              return item !== undefined ? `${item.level}-${item.value}` : undefined;
             };
             expandIndex(grid, 0);
 
@@ -780,7 +780,7 @@ describe('wrapped grid', () => {
       const lastRowCenterX = rect.left + grid.offsetWidth / 2;
       const lastRowCenterY = rect.bottom - getPhysicalAverage(grid) / 2;
       const lastVisibleItem = grid.getRootNode().elementFromPoint(lastRowCenterX, lastRowCenterY);
-      expect(lastVisibleItem.innerText.trim()).to.equal('foo' + (grid.size - 1));
+      expect(lastVisibleItem.innerText.trim()).to.equal(`foo${grid.size - 1}`);
     });
   });
 });

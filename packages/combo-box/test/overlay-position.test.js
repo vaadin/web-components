@@ -26,9 +26,9 @@ describe('overlay position', () => {
   // window.onresize event is equivalent.
   function moveComboBox(left, top, width) {
     comboBox.style.position = 'fixed';
-    comboBox.style.width = width + 'px';
-    comboBox.style.top = top + 'px';
-    comboBox.style.left = left + 'px';
+    comboBox.style.width = `${width}px`;
+    comboBox.style.top = `${top}px`;
+    comboBox.style.left = `${left}px`;
     window.dispatchEvent(new Event('resize'));
   }
 
@@ -132,7 +132,7 @@ describe('overlay position', () => {
       const inputWidth = 150;
 
       beforeEach(() => {
-        dropdown.style.setProperty('--vaadin-combo-box-overlay-width', inputWidth * 2 + 'px');
+        dropdown.style.setProperty('--vaadin-combo-box-overlay-width', `${inputWidth * 2}px`);
       });
 
       it('should be on the left side of the input', async () => {

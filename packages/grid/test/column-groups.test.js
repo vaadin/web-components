@@ -298,12 +298,12 @@ describe('column groups', () => {
     });
 
     it('should have the right content', () => {
-      [0, 1, 2].forEach((index) => expect(getHeaderCellContent(1, index)).to.equal('header-' + index));
+      [0, 1, 2].forEach((index) => expect(getHeaderCellContent(1, index)).to.equal(`header-${index}`));
       expect(getHeaderCellContent(0, 1)).to.equal('group-0');
     });
 
     it('should have the right body template', () => {
-      [0, 1, 2].forEach((index) => expect(getBodyCellContent(0, index)).to.equal('body-' + index));
+      [0, 1, 2].forEach((index) => expect(getBodyCellContent(0, index)).to.equal(`body-${index}`));
     });
 
     it('should have a frozen column', () => {

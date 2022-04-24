@@ -247,7 +247,7 @@ export const DatePickerMixin = (subclass) =>
                 }
               },
               formatTitle: (monthName, fullYear) => {
-                return monthName + ' ' + fullYear;
+                return `${monthName} ${fullYear}`;
               }
             };
           }
@@ -1009,8 +1009,7 @@ export const DatePickerMixin = (subclass) =>
     /** @private */
     _getParsedDate(inputValue = this._inputValue) {
       const dateObject = this.i18n.parseDate && this.i18n.parseDate(inputValue);
-      const parsedDate =
-        dateObject && this._parseDate(dateObject.year + '-' + (dateObject.month + 1) + '-' + dateObject.day);
+      const parsedDate = dateObject && this._parseDate(`${dateObject.year}-${dateObject.month + 1}-${dateObject.day}`);
       return parsedDate;
     }
 

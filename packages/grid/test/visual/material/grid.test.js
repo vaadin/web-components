@@ -369,7 +369,7 @@ describe('grid', () => {
           const indexInLevel = page * pageSize + i;
 
           return {
-            name: `Very long grid item name ${parentItem ? parentItem.name + '-' : ''}${indexInLevel}`,
+            name: `Very long grid item name ${parentItem ? `${parentItem.name}-` : ''}${indexInLevel}`,
             children: true
           };
         });

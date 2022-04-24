@@ -115,8 +115,8 @@ function testDimensions(isVertical) {
       const initialTotalSize = initialSizes[size] - 8;
       const cssPrimarySize = 0.25;
       const cssSecondarySize = 1 - cssPrimarySize;
-      first.style[size] = cssPrimarySize * 100 + '%';
-      second.style[size] = cssSecondarySize * 100 + '%';
+      first.style[size] = `${cssPrimarySize * 100}%`;
+      second.style[size] = `${cssSecondarySize * 100}%`;
 
       expect(Math.abs(first.getBoundingClientRect()[size] / initialTotalSize - cssPrimarySize)).to.be.at.most(0.01);
       expect(Math.abs(second.getBoundingClientRect()[size] / initialTotalSize - cssSecondarySize)).to.be.at.most(0.01);
@@ -217,14 +217,14 @@ function testDimensions(isVertical) {
       }
 
       it('should be respected on the first element', () => {
-        first.style[minSize] = min + 'px';
-        first.style[maxSize] = max + 'px';
+        first.style[minSize] = `${min}px`;
+        first.style[maxSize] = `${max}px`;
         testCssLimits(first, -1);
       });
 
       it('should be  respected on the second element', () => {
-        second.style[minSize] = min + 'px';
-        second.style[maxSize] = max + 'px';
+        second.style[minSize] = `${min}px`;
+        second.style[maxSize] = `${max}px`;
         testCssLimits(second, 1);
       });
     });
@@ -271,8 +271,8 @@ describe('horizontal mode', () => {
         <div id="second">some content</div>
       </vaadin-split-layout>
     `);
-    splitLayout.style.width = initialSizes.width + 'px';
-    splitLayout.style.height = initialSizes.height + 'px';
+    splitLayout.style.width = `${initialSizes.width}px`;
+    splitLayout.style.height = `${initialSizes.height}px`;
     await aTimeout(1);
     first = splitLayout.$.primary.assignedNodes({ flatten: true })[0];
     second = splitLayout.$.secondary.assignedNodes({ flatten: true })[0];
@@ -289,8 +289,8 @@ describe('vertical mode', () => {
         <div id="second">some content</div>
       </vaadin-split-layout>
     `);
-    splitLayout.style.width = initialSizes.width + 'px';
-    splitLayout.style.height = initialSizes.height + 'px';
+    splitLayout.style.width = `${initialSizes.width}px`;
+    splitLayout.style.height = `${initialSizes.height}px`;
     splitLayout.orientation = 'vertical';
     await aTimeout(1);
     first = splitLayout.$.primary.assignedNodes({ flatten: true })[0];

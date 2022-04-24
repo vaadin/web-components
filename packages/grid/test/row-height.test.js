@@ -77,7 +77,7 @@ describe('rows', () => {
 
   it('should have higher cells on each row', async () => {
     await init('twoColumns');
-    cells[0].style.height = cells[0].clientHeight * 2 + 'px';
+    cells[0].style.height = `${cells[0].clientHeight * 2}px`;
     await nextFrame();
     expect(cells[1].clientHeight).to.equal(cells[0].clientHeight);
   });
