@@ -83,9 +83,9 @@
     "prefer-object-spread": "error",
     "prefer-rest-params": "error",
     "prefer-spread": "error",
+    "prefer-template": "error",
     "space-in-parens": ["error", "never"],
-    "spaced-comment": ["error", "always"],
-    "prefer-template": "error"
+    "spaced-comment": ["error", "always"]
   },
   "overrides": [
     {
