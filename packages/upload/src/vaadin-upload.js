@@ -498,11 +498,12 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   _formatFileProgress(file) {
-    return `${file.totalStr}: ${file.progress}% (${
+    const remainingTime =
       file.loaded > 0
         ? this.i18n.uploading.remainingTime.prefix + file.remainingStr
-        : this.i18n.uploading.remainingTime.unknown
-    })`;
+        : this.i18n.uploading.remainingTime.unknown;
+
+    return `${file.totalStr}: ${file.progress}% (${remainingTime})`;
   }
 
   /** @private */
