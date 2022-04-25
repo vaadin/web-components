@@ -458,9 +458,16 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
   disconnectedCallback() {
     super.disconnectedCallback();
 
-    this._navbarChildObserver && this._navbarChildObserver.disconnect();
-    this._drawerChildObserver && this._drawerChildObserver.disconnect();
-    this._touchChildObserver && this._touchChildObserver.disconnect();
+    if (this._navbarChildObserver) {
+      this._navbarChildObserver.disconnect();
+    }
+    if (this._drawerChildObserver) {
+      this._drawerChildObserver.disconnect();
+    }
+    if (this._touchChildObserver) {
+      this._touchChildObserver.disconnect();
+    }
+
     window.removeEventListener('resize', this.__boundResizeListener);
     this.removeEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
     window.removeEventListener('close-overlay-drawer', this.__drawerToggleClickListener);

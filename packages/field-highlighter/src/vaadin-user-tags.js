@@ -357,8 +357,12 @@ export class UserTags extends PolymerElement {
   }
 
   stopFlash() {
-    this._debounceFlashStart && this._debounceFlashStart.flush();
-    this._debounceFlashEnd && this._debounceFlashEnd.flush();
+    if (this._debounceFlashStart) {
+      this._debounceFlashStart.flush();
+    }
+    if (this._debounceFlashEnd) {
+      this._debounceFlashEnd.flush();
+    }
     this.$.overlay._flushAnimation('closing');
   }
 

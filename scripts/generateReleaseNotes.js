@@ -198,13 +198,19 @@ function logCommit(c) {
   let indent = '';
   if (!compact) {
     const components = getComponents(c);
-    components && (log += `${components}\n`);
+    if (components) {
+      log += `${components}\n`;
+    }
     indent = '  ';
   }
   log += `${indent}- ` + parseLinks(c.commit.substring(0, 7) + ' ' + c.title[0].toUpperCase() + c.title.slice(1));
   const tickets = getTickets(c);
-  tickets && (log += `. ${tickets}`);
-  c.body && (log += `\n\n        _${c.body}_`);
+  if (tickets) {
+    log += `. ${tickets}`;
+  }
+  if (c.body) {
+    log += `\n\n        _${c.body}_`;
+  }
   console.log(log);
 }
 
@@ -264,7 +270,9 @@ function logCommitsByComponent(commits) {
         }
         log += `${indent}- ` + parseLinks(c.commit.substring(0, 7) + ' ' + c.title[0].toUpperCase() + c.title.slice(1));
         const tickets = getTickets(c);
-        tickets && (log += `. ${tickets}`);
+        if (tickets) {
+          log += `. ${tickets}`;
+        }
       });
       console.log(log.replace(/^\s*[\r\n]/gm, ''));
     });

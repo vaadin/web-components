@@ -80,19 +80,31 @@ export const InlineEditingMixin = (superClass) =>
       this.addEventListener('keydown', (e) => {
         switch (e.keyCode) {
           case 27:
-            this.__edited && this._stopEdit(true);
+            if (this.__edited) {
+              this._stopEdit(true);
+            }
             break;
           case 9:
-            this.__edited && this._switchEditCell(e);
+            if (this.__edited) {
+              this._switchEditCell(e);
+            }
             break;
           case 13:
-            this.__edited ? this._switchEditCell(e) : this._enterEditFromEvent(e);
+            if (this.__edited) {
+              this._switchEditCell(e);
+            } else {
+              this._enterEditFromEvent(e);
+            }
             break;
           case 32:
-            !this.__edited && this._enterEditFromEvent(e);
+            if (!this.__edited) {
+              this._enterEditFromEvent(e);
+            }
             break;
           default:
-            e.key && e.key.length === 1 && this._enterEditFromEvent(e, 'text');
+            if (e.key && e.key.length === 1) {
+              this._enterEditFromEvent(e, 'text');
+            }
             break;
         }
       });

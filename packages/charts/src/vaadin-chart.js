@@ -1066,7 +1066,9 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    this._childObserver && this._childObserver.disconnect();
+    if (this._childObserver) {
+      this._childObserver.disconnect();
+    }
   }
 
   /**

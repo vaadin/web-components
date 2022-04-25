@@ -352,7 +352,9 @@ export const InteractionsMixin = (superClass) =>
     _focusLastItem() {
       const list = this._subMenu.$.overlay.firstElementChild;
       const item = list.items[list.items.length - 1];
-      item && item.focus();
+      if (item) {
+        item.focus();
+      }
     }
 
     /** @private */
@@ -397,6 +399,8 @@ export const InteractionsMixin = (superClass) =>
     _close(restoreFocus) {
       this.style.pointerEvents = '';
       this.__deactivateButton(restoreFocus);
-      this._subMenu.opened && this._subMenu.close();
+      if (this._subMenu.opened) {
+        this._subMenu.close();
+      }
     }
   };

@@ -482,7 +482,9 @@ class Grid extends ElementMixin(
   __focusBodyCell({ item, column }) {
     const row = this._getVisibleRows().find((row) => row._item === item);
     const cell = row && [...row.children].find((cell) => cell._column === column);
-    cell && cell.focus();
+    if (cell) {
+      cell.focus();
+    }
   }
 
   /** @private */
@@ -497,7 +499,9 @@ class Grid extends ElementMixin(
       virtualizer.flush();
 
       // If the focused cell's parent row got hidden by the size change, focus the corresponding new cell
-      cellCoordinates && cell.parentElement.hidden && this.__focusBodyCell(cellCoordinates);
+      if (cellCoordinates && cell.parentElement.hidden) {
+        this.__focusBodyCell(cellCoordinates);
+      }
 
       // Make sure the body has a tabbable element
       this._resetKeyboardNavigation();
@@ -1001,7 +1005,9 @@ class Grid extends ElementMixin(
 
   /** @protected */
   __updateVisibleRows(start, end) {
-    this.__virtualizer && this.__virtualizer.update(start, end);
+    if (this.__virtualizer) {
+      this.__virtualizer.update(start, end);
+    }
   }
 
   /**

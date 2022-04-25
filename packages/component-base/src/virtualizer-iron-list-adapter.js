@@ -118,8 +118,12 @@ export class IronListAdapter {
     this._resizeHandler();
     flush();
     this._scrollHandler();
-    this.__scrollReorderDebouncer && this.__scrollReorderDebouncer.flush();
-    this.__debouncerWheelAnimationFrame && this.__debouncerWheelAnimationFrame.flush();
+    if (this.__scrollReorderDebouncer) {
+      this.__scrollReorderDebouncer.flush();
+    }
+    if (this.__debouncerWheelAnimationFrame) {
+      this.__debouncerWheelAnimationFrame.flush();
+    }
   }
 
   update(startIndex = 0, endIndex = this.size - 1) {
@@ -245,7 +249,9 @@ export class IronListAdapter {
     this._viewportWidth = this.elementsContainer.offsetWidth;
     this._viewportHeight = this.scrollTarget.offsetHeight;
     this._scrollPageHeight = this._viewportHeight - this._scrollLineHeight;
-    this.grid && this._updateGridMetrics();
+    if (this.grid) {
+      this._updateGridMetrics();
+    }
   }
 
   /** @private */
