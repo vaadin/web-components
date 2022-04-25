@@ -15,10 +15,9 @@ import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
 registerStyles(
   'vaadin-dialog-overlay',
   css`
-    /* prefixing with the element tags to avoid styling confirm-dialog header part */
-    header[part='header'],
+    [part='header'],
     [part='header-content'],
-    footer[part='footer'] {
+    [part='footer'] {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
@@ -27,10 +26,9 @@ registerStyles(
       z-index: 1;
     }
 
-    :host(:is([has-title], [has-header])) ::slotted([slot='header']),
     ::slotted([slot='header-content']),
     ::slotted([slot='title']),
-    :host([has-footer]) ::slotted([slot='footer']) {
+    ::slotted([slot='footer']) {
       display: contents;
       pointer-events: auto;
     }
@@ -39,19 +37,16 @@ registerStyles(
       flex: 1;
     }
 
-    /* prefixing with the element tag to avoid styling confirm-dialog footer part */
     :host([has-title]) [part='header-content'],
-    footer[part='footer'] {
+    [part='footer'] {
       justify-content: flex-end;
     }
 
-    :host(:not([has-title]):not([has-header])) header[part='header'],
-    :host(:not([has-title])) [part='title'] {
-      display: none;
-    }
-
-    :host(:not([has-footer])) footer[part='footer'] {
-      display: none;
+    :host(:not([has-title]):not([has-header])) [part='header'],
+    :host(:not([has-header])) [part='header-content'],
+    :host(:not([has-title])) [part='title'],
+    :host(:not([has-footer])) [part='footer'] {
+      display: none !important;
     }
 
     :host(:is([has-title], [has-header], [has-footer])) [part='content'] {

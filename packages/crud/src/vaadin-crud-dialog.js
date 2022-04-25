@@ -15,14 +15,9 @@ registerStyles(
       min-width: 20em;
     }
 
-    footer[part='footer'] {
+    [part='footer'] {
       justify-content: flex-start;
       flex-direction: row-reverse;
-    }
-
-    /* Override display: contents */
-    :host([has-header]) ::slotted([slot='header']) {
-      display: block;
     }
 
     /* Make buttons clickable */

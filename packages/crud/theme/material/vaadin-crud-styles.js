@@ -129,7 +129,7 @@ registerStyles(
         animation: 0.25s material-overlay-dummy-animation;
       }
 
-      :host([has-header]) [part='header'] ::slotted(h3) {
+      [part='header'] ::slotted(h3) {
         margin-top: 0 !important;
         margin-bottom: 0 !important;
       }
