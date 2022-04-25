@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, enterKeyDown, fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, enterKeyDown, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import './not-animated-styles.js';
@@ -14,7 +14,8 @@ import {
   getSelectedItem,
   getViewportItems,
   getVisibleItemsCount,
-  makeItems
+  makeItems,
+  setInputValue
 } from './helpers.js';
 
 registerStyles(
@@ -55,15 +56,6 @@ describe('lazy loading', () => {
       return { id: i, value: `value ${i}`, label: `label ${i}` };
     });
     callback(dataProviderItems, SIZE);
-  };
-
-  const setInputValue = (value) => {
-    if (comboBox.inputElement.tagName === 'IRON-INPUT') {
-      comboBox.inputElement._initSlottedInput();
-      comboBox.inputElement.inputElement.value = value;
-    } else {
-      comboBox.inputElement.value = value;
-    }
   };
 
   before(() => {
@@ -141,8 +133,7 @@ describe('lazy loading', () => {
           expect(comboBox.autoOpenDisabled).to.be.true;
           expect(comboBox.opened).to.be.false;
           comboBox.dataProvider = spyDataProvider;
-          setInputValue('item 1');
-          fire(comboBox.inputElement, 'input');
+          setInputValue(comboBox, 'item 1');
           comboBox.opened = true;
           expect(comboBox.filter).to.equal('item 1');
           const { filter } = spyDataProvider.lastCall.args[0];
@@ -351,8 +342,7 @@ describe('lazy loading', () => {
 
         // FIXME: fails for combo-box-light (items are not updated)
         (isComboBoxLight ? it.skip : it)('should not be invoked if items are filtered', () => {
-          setInputValue('1');
-          fire(comboBox.inputElement, 'input');
+          setInputValue(comboBox, '1');
 
           spyDataProvider.resetHistory();
 
@@ -414,8 +404,7 @@ describe('lazy loading', () => {
           comboBox.dataProvider = spyAsyncDataProvider;
           comboBox.opened = true;
 
-          setInputValue('custom value');
-          fire(comboBox.inputElement, 'input');
+          setInputValue(comboBox, 'custom value');
 
           enterKeyDown(comboBox.inputElement);
           expect(comboBox.value).to.eql('custom value');
@@ -888,6 +877,7 @@ describe('lazy loading', () => {
 
       describe('using data provider, lost focus before data is returned', () => {
         let returnedItems;
+
         const bluringDataProvider = (params, callback) => {
           comboBox.blur();
           callback(returnedItems, returnedItems.length);
@@ -899,16 +889,15 @@ describe('lazy loading', () => {
           comboBox.opened = true;
           comboBox.dataProvider = bluringDataProvider;
           comboBox.opened = false;
-          comboBox.focus();
+          comboBox.inputElement.focus();
         });
 
         it('should set value without auto-open-disabled', () => {
           comboBox.autoOpenDisabled = false;
           expect(comboBox.autoOpenDisabled).to.be.false;
 
-          const filterValue = 'item 12';
-          comboBox._inputElementValue = filterValue;
-          comboBox.filter = filterValue;
+          setInputValue(comboBox, 'item 12');
+
           expect(comboBox.opened).to.be.false;
           expect(comboBox.hasAttribute('focused')).to.be.false;
           expect(comboBox.value).to.equal('item 12');
@@ -918,9 +907,8 @@ describe('lazy loading', () => {
           comboBox.autoOpenDisabled = true;
           expect(comboBox.autoOpenDisabled).to.be.true;
 
-          const filterValue = 'item 12';
-          comboBox._inputElementValue = filterValue;
-          comboBox.filter = filterValue;
+          setInputValue(comboBox, 'item 12');
+
           expect(comboBox.opened).to.be.false;
           expect(comboBox.hasAttribute('focused')).to.be.false;
           expect(comboBox.value).to.equal('item 12');
@@ -930,9 +918,8 @@ describe('lazy loading', () => {
           comboBox.autoOpenDisabled = false;
           expect(comboBox.autoOpenDisabled).to.be.false;
 
-          const filterValue = 'ItEm 12';
-          comboBox._inputElementValue = filterValue;
-          comboBox.filter = filterValue;
+          setInputValue(comboBox, 'ItEm 12');
+
           expect(comboBox.opened).to.be.false;
           expect(comboBox.hasAttribute('focused')).to.be.false;
           expect(comboBox.value).to.equal('item 12');
@@ -942,9 +929,8 @@ describe('lazy loading', () => {
           comboBox.autoOpenDisabled = true;
           expect(comboBox.autoOpenDisabled).to.be.true;
 
-          const filterValue = 'iTem 12';
-          comboBox._inputElementValue = filterValue;
-          comboBox.filter = filterValue;
+          setInputValue(comboBox, 'iTem 12');
+
           expect(comboBox.opened).to.be.false;
           expect(comboBox.hasAttribute('focused')).to.be.false;
           expect(comboBox.value).to.equal('item 12');
@@ -953,17 +939,15 @@ describe('lazy loading', () => {
         it('should set first value of multiple matches that differ only in case', () => {
           returnedItems = ['item 12', 'IteM 12'];
 
-          const filterValue = 'IteM 12';
-          comboBox._inputElementValue = filterValue;
-          comboBox.filter = filterValue;
+          setInputValue(comboBox, 'IteM 12');
+
           expect(comboBox.opened).to.be.false;
           expect(comboBox.hasAttribute('focused')).to.be.false;
           expect(comboBox.value).to.equal('item 12');
         });
 
         it('should keep empty value if it is not an exact match', () => {
-          comboBox._inputElementValue = 'item';
-          comboBox.filter = 'item';
+          setInputValue(comboBox, 'item');
           expect(comboBox.opened).to.be.false;
           expect(comboBox.hasAttribute('focused')).to.be.false;
           expect(comboBox.value).to.equal('');
@@ -975,9 +959,8 @@ describe('lazy loading', () => {
           expect(comboBox.value).to.equal('other value');
 
           returnedItems = ['item 12'];
-          const filterValue = 'item 1';
-          comboBox._inputElementValue = filterValue;
-          comboBox.filter = filterValue;
+          setInputValue(comboBox, 'item 1');
+
           expect(comboBox.opened).to.be.false;
           expect(comboBox.hasAttribute('focused')).to.be.false;
           expect(comboBox.value).to.equal('other value');
@@ -986,14 +969,15 @@ describe('lazy loading', () => {
         it('should keep previous value if allow-custom-value is set', () => {
           comboBox.allowCustomValue = true;
           comboBox.open();
-          setInputValue('other value');
-          fire(comboBox.inputElement, 'input');
+          setInputValue(comboBox, 'other value');
           comboBox.close();
           expect(comboBox.value).to.eql('other value');
 
           comboBox.focus();
-          setInputValue('item 12');
-          comboBox.filter = 'item 12';
+          // FIXME: fails when using `setInputValue()`
+          const filterValue = 'item 12';
+          comboBox.inputElement.value = filterValue;
+          comboBox.filter = filterValue;
 
           expect(comboBox.value).to.eql('other value');
           expect(comboBox.inputElement.value).to.eql('other value');

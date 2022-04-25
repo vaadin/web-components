@@ -15,15 +15,10 @@ import {
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-combo-box.js';
-import { getViewportItems, getVisibleItemsCount, onceScrolled, scrollToIndex } from './helpers.js';
+import { getViewportItems, getVisibleItemsCount, onceScrolled, scrollToIndex, setInputValue } from './helpers.js';
 
 describe('keyboard', () => {
   let comboBox, input;
-
-  function filter(value) {
-    input.value = value;
-    fire(input, 'input');
-  }
 
   function getFocusedIndex() {
     return comboBox._focusedIndex;
@@ -138,7 +133,7 @@ describe('keyboard', () => {
     });
 
     it('should focus only on filtered items', () => {
-      filter('foo');
+      setInputValue(comboBox, 'foo');
       arrowDownKeyDown(input);
 
       expect(getFocusedIndex()).to.equal(0);
@@ -202,7 +197,7 @@ describe('keyboard', () => {
       });
 
       it('should clear the selection with enter when input is cleared', () => {
-        filter('');
+        setInputValue(comboBox, '');
         enterKeyDown(input);
 
         expect(comboBox.value).to.eql('');
@@ -210,7 +205,7 @@ describe('keyboard', () => {
 
       it('should close the overlay with enter when custom values are allowed', () => {
         comboBox.allowCustomValue = true;
-        filter('foobar');
+        setInputValue(comboBox, 'foobar');
 
         enterKeyDown(input);
 
@@ -226,7 +221,7 @@ describe('keyboard', () => {
       });
 
       it('should stop propagation of the keyboard enter event when input value is invalid', () => {
-        filter('foobar');
+        setInputValue(comboBox, 'foobar');
         const keydownSpy = sinon.spy();
         document.addEventListener('keydown', keydownSpy);
         enterKeyDown(input);
@@ -234,7 +229,7 @@ describe('keyboard', () => {
       });
 
       it('should not close the overlay with enter when custom values are not allowed', () => {
-        filter('foobar');
+        setInputValue(comboBox, 'foobar');
 
         enterKeyDown(input);
 
@@ -245,7 +240,7 @@ describe('keyboard', () => {
       it('should revert to the custom value after filtering', () => {
         comboBox.allowCustomValue = true;
         comboBox.value = 'foobar';
-        filter('bar');
+        setInputValue(comboBox, 'bar');
         escKeyDown(input);
         expect(input.value).to.eql('bar');
         escKeyDown(input);
@@ -255,7 +250,7 @@ describe('keyboard', () => {
       it('should revert a non-listed value to the custom value after filtering', () => {
         comboBox.allowCustomValue = true;
         comboBox.value = 'foobar';
-        filter('barbaz');
+        setInputValue(comboBox, 'barbaz');
         escKeyDown(input);
         expect(input.value).to.equal('foobar');
       });
@@ -304,7 +299,7 @@ describe('keyboard', () => {
       });
 
       it('should cancel typing with escape', () => {
-        filter('baz');
+        setInputValue(comboBox, 'baz');
 
         escKeyDown(input);
 
@@ -312,7 +307,7 @@ describe('keyboard', () => {
       });
 
       it('should select typed item', () => {
-        filter('baz');
+        setInputValue(comboBox, 'baz');
 
         enterKeyDown(input);
 
@@ -336,7 +331,7 @@ describe('keyboard', () => {
       });
 
       it('should not prefill the input when there are no items to navigate', () => {
-        filter('invalid filter');
+        setInputValue(comboBox, 'invalid filter');
 
         arrowDownKeyDown(input);
         expect(input.value).to.eql('invalid filter');
@@ -349,7 +344,7 @@ describe('keyboard', () => {
       });
 
       it('should revert back to filter with escape', async () => {
-        filter('b');
+        setInputValue(comboBox, 'b');
 
         arrowDownKeyDown(input);
         await aTimeout(1);
@@ -359,7 +354,7 @@ describe('keyboard', () => {
       });
 
       it('should remove selection from the input value when reverting', () => {
-        filter('b');
+        setInputValue(comboBox, 'b');
         arrowDownKeyDown(input);
         escKeyDown(input);
 
@@ -418,7 +413,7 @@ describe('keyboard', () => {
       });
 
       it('should stop propagation of the keyboard enter event when input value is invalid', () => {
-        filter('foobar');
+        setInputValue(comboBox, 'foobar');
         const keydownSpy = sinon.spy();
         document.addEventListener('keydown', keydownSpy);
         enterKeyDown(input);
@@ -426,7 +421,7 @@ describe('keyboard', () => {
       });
 
       it('should not stop propagation of the keyboard enter event when input has a predefined option', async () => {
-        filter('foo');
+        setInputValue(comboBox, 'foo');
         expect(comboBox.opened).to.be.false;
         const keydownSpy = sinon.spy();
         document.addEventListener('keydown', keydownSpy);
@@ -436,7 +431,7 @@ describe('keyboard', () => {
 
       it('should not stop propagation of the keyboard enter event when input has a custom value', () => {
         comboBox.allowCustomValue = true;
-        filter('foobar');
+        setInputValue(comboBox, 'foobar');
         const keydownSpy = sinon.spy();
         document.addEventListener('keydown', keydownSpy);
         enterKeyDown(input);
@@ -445,7 +440,7 @@ describe('keyboard', () => {
 
       it('should not stop propagation of the keyboard enter event when input is empty', () => {
         comboBox.allowCustomValue = true;
-        filter('');
+        setInputValue(comboBox, '');
         const keydownSpy = sinon.spy();
         document.addEventListener('keydown', keydownSpy);
         enterKeyDown(input);
