@@ -113,6 +113,7 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes InputControlMixin
+ * @mixes DatePickerMixin
  */
 class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
