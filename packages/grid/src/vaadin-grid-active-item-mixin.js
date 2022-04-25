@@ -112,6 +112,6 @@ export const isFocusable = (target) => {
     )
   ).filter((element) => element.getAttribute('part') !== 'cell body-cell');
 
-  const isFocusableElement = focusables.indexOf(target) !== -1;
+  const isFocusableElement = focusables.includes(target);
   return !target.disabled && isFocusableElement;
 };

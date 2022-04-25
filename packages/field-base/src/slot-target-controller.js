@@ -73,7 +73,7 @@ export class SlotTargetController {
     // Exclude whitespace text nodes
     const nodes = this.sourceSlot
       .assignedNodes({ flatten: true })
-      .filter((node) => !(node.nodeType == Node.TEXT_NODE && node.textContent.trim() === ''));
+      .filter((node) => !(node.nodeType === Node.TEXT_NODE && node.textContent.trim() === ''));
 
     if (nodes.length > 0) {
       slotTarget.innerHTML = '';

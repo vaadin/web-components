@@ -55,6 +55,7 @@
     "default-case": ["error", { "commentPattern": "^no\\sdefault" }],
     "default-param-last": "error",
     "dot-notation": ["error", { "allowPattern": "^[a-zA-Z]+([_-][a-zA-Z]+)+$" }],
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
     "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
     "grouped-accessor-pairs": ["error", "getBeforeSet"],
     "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],

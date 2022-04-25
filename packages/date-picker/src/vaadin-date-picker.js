@@ -222,7 +222,7 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
     } else if (!this.hasAttribute('focused')) {
       this.blur();
     }
-    if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().indexOf(this) !== -1) {
+    if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().includes(this)) {
       e.preventDefault();
     }
   }

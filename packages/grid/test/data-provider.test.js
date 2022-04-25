@@ -342,7 +342,7 @@ describe('data provider', () => {
       ['renderer', 'template'].forEach((type) => {
         describe(`${type}`, () => {
           beforeEach(() => {
-            if (type == 'renderer') {
+            if (type === 'renderer') {
               grid = fixtureSync(`
                 <vaadin-grid>
                   <vaadin-grid-column></vaadin-grid-column>

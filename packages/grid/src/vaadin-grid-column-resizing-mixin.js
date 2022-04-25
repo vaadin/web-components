@@ -21,7 +21,7 @@ export const ColumnResizingMixin = (superClass) =>
       // Disable contextmenu on any resize separator.
       scroller.addEventListener(
         'contextmenu',
-        (e) => e.target.getAttribute('part') == 'resize-handle' && e.preventDefault()
+        (e) => e.target.getAttribute('part') === 'resize-handle' && e.preventDefault()
       );
 
       // Disable native cell focus when resizing

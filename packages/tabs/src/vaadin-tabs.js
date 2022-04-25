@@ -251,7 +251,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     let overflow = scrollPosition > 0 ? 'start' : '';
     overflow += scrollPosition + this._scrollOffset < scrollSize ? ' end' : '';
 
-    if (this.__direction == 1) {
+    if (this.__direction === 1) {
       overflow = overflow.replace(/start|end/gi, (matched) => {
         return matched === 'start' ? 'end' : 'start';
       });

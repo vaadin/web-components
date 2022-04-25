@@ -206,8 +206,8 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   _getIndexOfFocusableElement() {
-    const index = this._messages.findIndex((e) => e.tabIndex == 0);
-    return index != -1 ? index : 0;
+    const index = this._messages.findIndex((e) => e.tabIndex === 0);
+    return index !== -1 ? index : 0;
   }
 }
 

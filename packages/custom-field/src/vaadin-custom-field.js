@@ -369,7 +369,7 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
     this.__toggleHasValue(value);
 
     const valuesArray = this.i18n.parseValue(value);
-    if (!valuesArray || valuesArray.length == 0) {
+    if (!valuesArray || valuesArray.length === 0) {
       console.warn('Value parser has not provided values array');
       return;
     }

@@ -37,7 +37,7 @@ export const FilterMixin = (superClass) =>
 
     /** @private */
     __removeFilters(filtersToRemove) {
-      if (filtersToRemove.length == 0) {
+      if (filtersToRemove.length === 0) {
         return;
       }
 

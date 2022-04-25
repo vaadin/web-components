@@ -260,7 +260,7 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       if (i === 0) {
         this._primaryChild = child;
         child.setAttribute('slot', 'primary');
-      } else if (i == 1) {
+      } else if (i === 1) {
         this._secondaryChild = child;
         child.setAttribute('slot', 'secondary');
       } else {

@@ -26,7 +26,7 @@ async function exe(cmd, quiet) {
 
   return new Promise((resolve, reject) => {
     child.on('exit', async function (code) {
-      if (code == 0) {
+      if (code === 0) {
         resolve(out);
       } else {
         reject(`${quiet ? out : ''}\n!!! ERROR !!! Process '${cmd}' exited with code ${code}`);

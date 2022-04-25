@@ -105,7 +105,7 @@ export const InputMixin = dedupingMixin(
           return;
         }
 
-        if (value != undefined) {
+        if (value != null) {
           this.inputElement.value = value;
         } else {
           this.inputElement.value = '';

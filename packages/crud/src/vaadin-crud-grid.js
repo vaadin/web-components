@@ -54,7 +54,7 @@ class CrudGrid extends IncludedMixin(Grid) {
 
   /** @private */
   __onItemsChange(items) {
-    if ((!this.dataProvider || this.dataProvider == this._arrayDataProvider) && !this.include && items && items[0]) {
+    if ((!this.dataProvider || this.dataProvider === this._arrayDataProvider) && !this.include && items && items[0]) {
       this._configure(items[0]);
     }
   }
@@ -81,7 +81,7 @@ class CrudGrid extends IncludedMixin(Grid) {
   /** @private */
   __dataProviderWrapper(params, callback) {
     this.__dataProvider(params, (items, size) => {
-      if (this.innerHTML == '' && !this.include && items[0]) {
+      if (this.innerHTML === '' && !this.include && items[0]) {
         this._configure(items[0]);
       }
       callback(items, size);
@@ -93,9 +93,9 @@ class CrudGrid extends IncludedMixin(Grid) {
    * @private
    */
   _dataProviderChanged(dataProvider, oldDataProvider) {
-    if (this._arrayDataProvider == dataProvider) {
+    if (this._arrayDataProvider === dataProvider) {
       super._dataProviderChanged(dataProvider, oldDataProvider);
-    } else if (this.__dataProviderWrapper != dataProvider) {
+    } else if (this.__dataProviderWrapper !== dataProvider) {
       this.innerHTML = '';
       this.__dataProvider = dataProvider;
       this.dataProvider = this.__dataProviderWrapper;

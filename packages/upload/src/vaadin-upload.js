@@ -549,7 +549,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   _configureXhr(xhr) {
-    if (typeof this.headers == 'string') {
+    if (typeof this.headers === 'string') {
       try {
         this.headers = JSON.parse(this.headers);
       } catch (e) {
@@ -635,7 +635,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     // More reliable than xhr.onload
     xhr.onreadystatechange = () => {
-      if (xhr.readyState == 4) {
+      if (xhr.readyState === 4) {
         clearTimeout(stalledId);
         file.indeterminate = file.uploading = false;
         if (file.abort) {
@@ -902,12 +902,12 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   _i18nPlural(value, plural) {
-    return value == 1 ? plural.one : plural.many;
+    return value === 1 ? plural.one : plural.many;
   }
 
   /** @private */
   _isMultiple(maxFiles) {
-    return maxFiles != 1;
+    return maxFiles !== 1;
   }
 
   /**

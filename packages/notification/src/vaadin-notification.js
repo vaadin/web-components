@@ -456,7 +456,7 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   _animatedRemoveNotificationCard() {
     this._card.setAttribute('closing', '');
     const name = getComputedStyle(this._card).getPropertyValue('animation-name');
-    if (name && name != 'none') {
+    if (name && name !== 'none') {
       const listener = () => {
         this._removeNotificationCard();
         this._card.removeEventListener('animationend', listener);

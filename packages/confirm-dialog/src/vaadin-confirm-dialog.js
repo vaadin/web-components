@@ -389,7 +389,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
     addedNodes.forEach((node) => {
       this.__slottedNodes.push(node);
 
-      const isElementNode = node.nodeType == Node.ELEMENT_NODE;
+      const isElementNode = node.nodeType === Node.ELEMENT_NODE;
       const slotName = isElementNode ? node.getAttribute('slot') : '';
 
       // Handle named slots (header and buttons).
@@ -397,11 +397,11 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
         if (slotName.indexOf('button') >= 0) {
           const [button] = slotName.split('-');
           this[`_${button}Button`] = node;
-        } else if (slotName == 'header') {
+        } else if (slotName === 'header') {
           this._headerNode = node;
         }
       } else {
-        const isNotEmptyText = node.nodeType == Node.TEXT_NODE && node.textContent.trim() !== '';
+        const isNotEmptyText = node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '';
         // Handle default slot (message element).
         if (isNotEmptyText || (isElementNode && node.slot === '')) {
           this._messageNode = node;
