@@ -45,19 +45,8 @@ registerStyles(
  * They are applied to both `vaadin-crud` and `vaadin-crud-dialog-overlay` components.
  */
 const editorStyles = css`
-  [part='scroller'] {
-    padding: 16px;
-    background: var(--material-background-color);
-  }
-
   [part='footer'] {
     background-color: var(--material-secondary-background-color);
-    padding: 8px 4px;
-  }
-
-  [part='footer'] ::slotted(*) {
-    margin-left: 4px;
-    margin-right: 4px;
   }
 
   :host(:not([dir='rtl'])) ::slotted([slot='delete-button']) {
@@ -78,9 +67,23 @@ registerStyles(
         font-family: var(--material-font-family);
       }
 
+      [part='scroller'] {
+        padding: 16px;
+        background: var(--material-background-color);
+      }
+
       [part='toolbar'] {
         padding: 8px;
         background-color: var(--material-secondary-background-color);
+      }
+
+      [part='footer'] {
+        padding: 8px 4px;
+      }
+
+      [part='footer'] ::slotted(*) {
+        margin-left: 4px;
+        margin-right: 4px;
       }
 
       :host(:not([editor-position=''])) [part='editor']:not([hidden]) {
@@ -124,6 +127,15 @@ registerStyles(
       :host([opening]),
       :host([closing]) {
         animation: 0.25s material-overlay-dummy-animation;
+      }
+
+      :host([has-header]) [part='header'] ::slotted(h3) {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+      }
+
+      [part='content'] {
+        padding: 0 16px 16px;
       }
     `
   ],
