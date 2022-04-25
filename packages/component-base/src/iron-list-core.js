@@ -553,7 +553,9 @@ export const ironList = {
     }
     this.notifyResize();
     flush();
-    newGrid && this._updateGridMetrics();
+    if (newGrid) {
+      this._updateGridMetrics();
+    }
   },
 
   /**

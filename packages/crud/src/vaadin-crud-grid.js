@@ -70,7 +70,9 @@ class CrudGrid extends IncludedMixin(Grid) {
   __toggleEditColumn() {
     const el = this.querySelector('vaadin-crud-edit-column');
     if (this.hideEditColumn) {
-      el && this.removeChild(el);
+      if (el) {
+        this.removeChild(el);
+      }
     } else if (!el) {
       this.appendChild(document.createElement('vaadin-crud-edit-column'));
     }
@@ -195,7 +197,9 @@ class CrudGrid extends IncludedMixin(Grid) {
           textField.setAttribute('slot', 'filter');
           textField.setAttribute('focus-target', true);
           textField.style.width = '100%';
-          this.noSort && (textField.placeholder = label);
+          if (this.noSort) {
+            textField.placeholder = label;
+          }
           textField.addEventListener('value-changed', function (event) {
             filter.value = event.detail.value;
           });

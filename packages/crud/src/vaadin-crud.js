@@ -1132,7 +1132,9 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       this._form.item = item;
       this._fields.forEach((e) => {
         const path = e.path || e.getAttribute('path');
-        path && (e.value = this.get(path, item));
+        if (path) {
+          e.value = this.get(path, item);
+        }
       });
 
       this.__isNew = this.__isNew || (this.items && this.items.indexOf(item) < 0);
@@ -1214,7 +1216,9 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     const item = { ...this.editedItem };
     this._fields.forEach((e) => {
       const path = e.path || e.getAttribute('path');
-      path && this.__set(path, e.value, item);
+      if (path) {
+        this.__set(path, e.value, item);
+      }
     });
     const evt = this.dispatchEvent(new CustomEvent('save', { detail: { item: item }, cancelable: true }));
     if (evt) {

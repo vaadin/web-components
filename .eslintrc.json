@@ -43,12 +43,14 @@
       "argsIgnorePattern": "^_"
     }],
     "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/explicit-member-accessibility": ["error", { "accessibility": "no-public" }],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "accessor-pairs": "error",
     "array-callback-return": "error",
+    "consistent-this": ["error", "self"],
     "curly": ["error", "all"],
     "default-case": ["error", { "commentPattern": "^no\\sdefault" }],
     "default-param-last": "error",
@@ -59,6 +61,8 @@
     "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
     "max-classes-per-file": ["error", 3],
     "max-params": ["error", 4],
+    "no-bitwise": "off",
+    "no-console": ["error", { "allow": ["warn", "error"] }],
     "no-else-return": "error",
     "no-eval": "error",
     "no-implicit-coercion": ["error", { "allow": ["!!"] }],
@@ -71,6 +75,7 @@
     "no-sequences": "error",
     "no-sync": "off",
     "no-throw-literal": "error",
+    "no-unused-expressions": "error",
     "no-useless-return": "error",
     "operator-assignment": ["error", "always"],
     "prefer-const": ["error", { "ignoreReadBeforeAssign": true }],
@@ -85,13 +90,16 @@
     {
       "files": ["scripts/**/*.js", "*.js"],
       "rules": {
-        "@typescript-eslint/no-var-requires": "off"
+        "@typescript-eslint/no-var-requires": "off",
+        "no-console": "off"
       }
     },
     {
       "files": ["packages/**/test/**"],
       "rules": {
         "no-await-in-loop": "off",
+        // TODO: Use chai-friendly plugin
+        "no-unused-expressions": "off",
         "max-classes-per-file": "off",
         "simple-import-sort/imports": [
           "error",

@@ -81,6 +81,7 @@ class Item extends ItemMixin(ThemableMixin(DirMixin(PolymerElement))) {
      * Submittable string value. The default value is the trimmed text content of the element.
      * @type {string}
      */
+    // eslint-disable-next-line no-unused-expressions
     this.value;
   }
 }

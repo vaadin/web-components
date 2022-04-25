@@ -380,7 +380,9 @@ export const DatePickerMixin = (subclass) =>
     _onFocus(event) {
       super._onFocus(event);
 
-      this._noInput && event.target.blur();
+      if (this._noInput) {
+        event.target.blur();
+      }
     }
 
     /**
@@ -662,7 +664,9 @@ export const DatePickerMixin = (subclass) =>
       }
       const value = this._formatISO(selectedDate);
 
-      this.__keepInputValue || this._applyInputValue(selectedDate);
+      if (!this.__keepInputValue) {
+        this._applyInputValue(selectedDate);
+      }
 
       if (value !== this.value) {
         this.validate();
@@ -704,7 +708,9 @@ export const DatePickerMixin = (subclass) =>
       }
       if (!dateEquals(this[property], date)) {
         this[property] = date;
-        this.value && this.validate();
+        if (this.value) {
+          this.validate();
+        }
       }
     }
 
@@ -848,7 +854,9 @@ export const DatePickerMixin = (subclass) =>
     /** @protected */
     _focus() {
       if (this._noInput) {
-        this._overlayInitialized && this._overlayContent.focus();
+        if (this._overlayInitialized) {
+          this._overlayContent.focus();
+        }
       } else {
         this.inputElement.focus();
       }

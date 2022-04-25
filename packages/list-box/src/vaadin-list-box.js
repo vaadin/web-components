@@ -88,6 +88,7 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(Controller
      * @type {Element | null}
      * @protected
      */
+    // eslint-disable-next-line no-unused-expressions
     this.focused;
   }
 

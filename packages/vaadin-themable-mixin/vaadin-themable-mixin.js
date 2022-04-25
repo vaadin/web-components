@@ -204,6 +204,11 @@ export const ThemableMixin = (superClass) =>
     static finalize() {
       super.finalize();
 
+      // Make sure not to run the logic intended for PolymerElement when LitElement is used.
+      if (this.elementStyles) {
+        return;
+      }
+
       const template = this.prototype._template;
       if (!template || classHasThemes(this)) {
         return;

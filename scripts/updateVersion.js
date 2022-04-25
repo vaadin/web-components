@@ -15,7 +15,9 @@ async function exe(cmd, quiet) {
   let out = '';
   const capture = (data) => {
     const s = data.toString('utf-8');
-    !quiet && process.stdout.write(s);
+    if (!quiet) {
+      process.stdout.write(s);
+    }
     out += s;
   };
 

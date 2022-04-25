@@ -82,7 +82,9 @@ export const DialogDraggableMixin = (superClass) =>
         });
 
         if ((isResizerContainer && !isResizerContainerScrollbar) || isContentPart || isDraggable) {
-          !isDraggable && e.preventDefault();
+          if (!isDraggable) {
+            e.preventDefault();
+          }
           this._originalBounds = this.$.overlay.getBounds();
           const event = getMouseOrFirstTouchEvent(e);
           this._originalMouseCoords = { top: event.pageY, left: event.pageX };

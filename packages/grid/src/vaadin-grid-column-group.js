@@ -108,7 +108,9 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    this._observer && this._observer.disconnect();
+    if (this._observer) {
+      this._observer.disconnect();
+    }
   }
 
   /**
@@ -290,11 +292,15 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   _colSpanChanged(colSpan, headerCell, footerCell) {
     if (headerCell) {
       headerCell.setAttribute('colspan', colSpan);
-      this._grid && this._grid._a11yUpdateCellColspan(headerCell, colSpan);
+      if (this._grid) {
+        this._grid._a11yUpdateCellColspan(headerCell, colSpan);
+      }
     }
     if (footerCell) {
       footerCell.setAttribute('colspan', colSpan);
-      this._grid && this._grid._a11yUpdateCellColspan(footerCell, colSpan);
+      if (this._grid) {
+        this._grid._a11yUpdateCellColspan(footerCell, colSpan);
+      }
     }
   }
 
@@ -321,7 +327,9 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
 
         // Update the column tree with microtask timing to avoid shady style scope issues
         microTask.run(() => {
-          this._grid && this._grid._updateColumnTree && this._grid._updateColumnTree();
+          if (this._grid && this._grid._updateColumnTree) {
+            this._grid._updateColumnTree();
+          }
         });
       }
     });

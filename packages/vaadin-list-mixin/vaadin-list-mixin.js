@@ -97,7 +97,11 @@ export const ListMixin = (superClass) =>
         if (items) {
           this.setAttribute('aria-orientation', orientation || 'vertical');
           this.items.forEach((item) => {
-            orientation ? item.setAttribute('orientation', orientation) : item.removeAttribute('orientation');
+            if (orientation) {
+              item.setAttribute('orientation', orientation);
+            } else {
+              item.removeAttribute('orientation');
+            }
           });
 
           this._setFocusable(selected || 0);
@@ -302,7 +306,9 @@ export const ListMixin = (superClass) =>
 
     focus() {
       // In initialization (e.g vaadin-select) observer might not been run yet.
-      this._observer && this._observer.flush();
+      if (this._observer) {
+        this._observer.flush();
+      }
       const firstItem = this.querySelector('[tabindex="0"]') || (this.items ? this.items[0] : null);
       this._focusItem(firstItem);
     }

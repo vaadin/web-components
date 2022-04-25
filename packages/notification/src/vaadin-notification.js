@@ -437,14 +437,18 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   _removeNotificationCard() {
-    this._card.parentNode && this._card.parentNode.removeChild(this._card);
+    if (this._card.parentNode) {
+      this._card.parentNode.removeChild(this._card);
+    }
     this._card.removeAttribute('closing');
     this._container.opened = Boolean(this._container.firstElementChild);
   }
 
   /** @private */
   _closeNotificationCard() {
-    this._durationTimeoutId && clearTimeout(this._durationTimeoutId);
+    if (this._durationTimeoutId) {
+      clearTimeout(this._durationTimeoutId);
+    }
     this._animatedRemoveNotificationCard();
   }
 

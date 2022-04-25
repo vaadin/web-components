@@ -226,7 +226,9 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
 
   /** @protected */
   focus() {
-    this.inputs && this.inputs[0] && this.inputs[0].focus();
+    if (this.inputs && this.inputs[0]) {
+      this.inputs[0].focus();
+    }
   }
 
   /**

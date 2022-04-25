@@ -135,9 +135,11 @@ export const DirMixin = (superClass) =>
     /** @private */
     __subscribe(push = true) {
       if (push) {
-        directionSubscribers.indexOf(this) === -1 && directionSubscribers.push(this);
-      } else {
-        directionSubscribers.indexOf(this) > -1 && directionSubscribers.splice(directionSubscribers.indexOf(this), 1);
+        if (!directionSubscribers.includes(this)) {
+          directionSubscribers.push(this);
+        }
+      } else if (directionSubscribers.includes(this)) {
+        directionSubscribers.splice(directionSubscribers.indexOf(this), 1);
       }
     }
 
