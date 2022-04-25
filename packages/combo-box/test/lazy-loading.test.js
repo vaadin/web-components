@@ -884,7 +884,7 @@ describe('lazy loading', () => {
         };
 
         const setFilterValue = (filterValue) => {
-          comboBox._inputElementValue = filterValue;
+          comboBox.inputElement.value = filterValue;
           comboBox.filter = filterValue;
         };
 
