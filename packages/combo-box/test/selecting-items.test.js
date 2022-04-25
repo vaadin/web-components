@@ -3,7 +3,7 @@ import { aTimeout, fire, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { getAllItems, getFirstItem, onceScrolled, scrollToIndex, selectItem } from './helpers.js';
+import { getAllItems, getFirstItem, onceScrolled, scrollToIndex, selectItem, setInputValue } from './helpers.js';
 
 describe('selecting items', () => {
   let comboBox;
@@ -308,11 +308,6 @@ describe('clearing a selection', () => {
 describe('selecting a custom value', () => {
   let comboBox;
 
-  function filter(value) {
-    comboBox.inputElement.value = value;
-    fire(comboBox.inputElement, 'input');
-  }
-
   beforeEach(async () => {
     comboBox = fixtureSync('<vaadin-combo-box style="width: 320px" allow-custom-value></vaadin-combo-box>');
     comboBox.items = ['foo', 'bar', 'barbar'];
@@ -321,7 +316,7 @@ describe('selecting a custom value', () => {
   });
 
   it('should select a value when closing when having a single exact match', () => {
-    filter('barbar');
+    setInputValue(comboBox, 'barbar');
 
     comboBox.close();
 
@@ -329,7 +324,7 @@ describe('selecting a custom value', () => {
   });
 
   it('should select a value when closing when having multiple matches', () => {
-    filter('BAR');
+    setInputValue(comboBox, 'BAR');
 
     comboBox.close();
 
@@ -339,7 +334,7 @@ describe('selecting a custom value', () => {
   it('should clear the selection when closing the overlay and input is cleared', () => {
     comboBox.value = 'foo';
 
-    filter('');
+    setInputValue(comboBox, '');
 
     comboBox.close();
 
@@ -362,7 +357,7 @@ describe('selecting a custom value', () => {
   it('should clear the custom value on clear', () => {
     comboBox.value = 'foobar';
 
-    filter('');
+    setInputValue(comboBox, '');
 
     comboBox.close();
 

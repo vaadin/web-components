@@ -1,8 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fire, fixtureSync, isIOS } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, isIOS } from '@vaadin/testing-helpers';
 import '../src/vaadin-combo-box.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { makeItems } from './helpers.js';
+import { makeItems, setInputValue } from './helpers.js';
 
 class XFixed extends PolymerElement {
   static get template() {
@@ -17,7 +17,7 @@ class XFixed extends PolymerElement {
 customElements.define('x-fixed', XFixed);
 
 describe('overlay position', () => {
-  let comboBox, dropdown, overlayPart, inputField, input;
+  let comboBox, dropdown, overlayPart, inputField;
 
   let wh, ww, xCenter, xStart, xEnd, yCenter, yTop, yBottom;
 
@@ -39,7 +39,6 @@ describe('overlay position', () => {
     inputField = comboBox.shadowRoot.querySelector('[part="input-field"]');
     dropdown = comboBox.$.dropdown;
     overlayPart = dropdown.$.overlay.$.overlay;
-    input = comboBox.inputElement;
 
     // Subtract the combo-box size from the coordinates range in order not to
     // move it outside the viewport boundaries when changing top and left.
@@ -164,8 +163,7 @@ describe('overlay position', () => {
     it('should reposition after filtering', async () => {
       moveComboBox(xCenter, yBottom, 300);
 
-      input.value = 'item 1';
-      fire(input, 'input');
+      setInputValue(comboBox, 'item 1');
 
       comboBox.open();
       await aTimeout(0);
