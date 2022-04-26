@@ -16,7 +16,7 @@ const dialogOverlay = css`
     padding: 24px;
   }
 
-  :host(:is([has-header], [has-title])) [part='header'] {
+  [part='header'] {
     padding: 16px;
   }
 
@@ -24,9 +24,9 @@ const dialogOverlay = css`
     padding-top: 0;
   }
 
-  :host(:is([has-header], [has-title])) [part='header'],
-  :host([has-header]) [part='header-content'],
-  :host([has-footer]) [part='footer'] {
+  [part='header'],
+  [part='header-content'],
+  [part='footer'] {
     gap: 8px;
     line-height: 1.2;
   }
@@ -37,16 +37,16 @@ const dialogOverlay = css`
     margin-inline-start: 8px;
   }
 
-  :host([has-footer]) [part='footer'] {
+  [part='footer'] {
     padding: 8px;
   }
 
   @media (min-height: 320px) {
-    :host(:is([has-header], [has-title])[overflow~='top']) [part='header'] {
+    :host([overflow~='top']) [part='header'] {
       box-shadow: 0 1px 0 0 var(--material-divider-color);
     }
 
-    :host([has-footer][overflow~='bottom']) [part='footer'] {
+    :host([overflow~='bottom']) [part='footer'] {
       box-shadow: 0 -1px 0 0 var(--material-divider-color);
     }
   }

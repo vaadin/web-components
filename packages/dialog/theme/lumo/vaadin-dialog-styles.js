@@ -31,20 +31,20 @@ const dialogOverlay = css`
     padding-top: 0;
   }
 
-  :host(:is([has-header], [has-title])) [part='header'],
-  :host([has-header]) [part='header-content'],
-  :host([has-footer]) [part='footer'] {
+  [part='header'],
+  [part='header-content'],
+  [part='footer'] {
     gap: var(--lumo-space-xs) var(--lumo-space-s);
     line-height: var(--lumo-line-height-s);
   }
 
-  :host(:is([has-header], [has-title])) [part='header'] {
+  [part='header'] {
     padding: var(--lumo-space-m);
     background-color: var(--lumo-base-color);
     border-radius: var(--lumo-border-radius-l) var(--lumo-border-radius-l) 0 0; /* Needed for Safari */
   }
 
-  :host([has-footer]) [part='footer'] {
+  [part='footer'] {
     padding: var(--lumo-space-s) var(--lumo-space-m);
     background-color: var(--lumo-contrast-5pct);
     border-radius: 0 0 var(--lumo-border-radius-l) var(--lumo-border-radius-l); /* Needed for Safari */
@@ -63,7 +63,7 @@ const dialogOverlay = css`
   }
 
   @media (min-height: 320px) {
-    :host(:is([has-header], [has-title])[overflow~='top']) [part='header'] {
+    :host([overflow~='top']) [part='header'] {
       box-shadow: 0 1px 0 0 var(--lumo-contrast-10pct);
     }
   }

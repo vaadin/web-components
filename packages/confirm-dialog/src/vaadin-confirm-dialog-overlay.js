@@ -20,11 +20,6 @@ registerStyles(
       height: var(--_vaadin-confirm-dialog-content-height);
     }
 
-    /* Override display: contents */
-    :host([has-header]) ::slotted([slot='header']) {
-      display: block;
-    }
-
     /* Make buttons clickable */
     [part='footer'] > * {
       pointer-events: all;

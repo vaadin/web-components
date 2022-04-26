@@ -5,7 +5,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-confirm-dialog-overlay',
   css`
-    :host([has-header]) [part='header'] ::slotted(h3) {
+    [part='header'] ::slotted(h3) {
       margin-top: 0 !important;
       margin-bottom: 0 !important;
       margin-inline-start: calc(var(--lumo-space-l) - var(--lumo-space-m));
@@ -27,7 +27,7 @@ registerStyles(
     }
 
     @media (max-width: 360px) {
-      :host([has-footer]) [part='footer'] {
+      [part='footer'] {
         flex-direction: column-reverse;
         align-items: stretch;
         padding: var(--lumo-space-s) var(--lumo-space-l);
