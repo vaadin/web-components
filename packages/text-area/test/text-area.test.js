@@ -307,8 +307,8 @@ describe('text-area', () => {
             parseFloat(getComputedStyle(inputField).paddingLeft) -
             parseFloat(getComputedStyle(inputField).paddingRight) -
             parseFloat(getComputedStyle(inputField).borderLeftWidth) -
-            parseFloat(getComputedStyle(inputField).borderRightWidth)
-        )
+            parseFloat(getComputedStyle(inputField).borderRightWidth),
+        ),
       );
     });
 
@@ -336,8 +336,8 @@ describe('text-area', () => {
             parseFloat(getComputedStyle(inputField).paddingTop) -
             parseFloat(getComputedStyle(inputField).paddingBottom) -
             parseFloat(getComputedStyle(inputField).borderTopWidth) -
-            parseFloat(getComputedStyle(inputField).borderBottomWidth)
-        )
+            parseFloat(getComputedStyle(inputField).borderBottomWidth),
+        ),
       );
     });
 

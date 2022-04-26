@@ -24,7 +24,7 @@ const fixtures = {
   'lazy-values': `
     <vaadin-date-time-picker>
     </vaadin-date-time-picker>
-  `
+  `,
 };
 
 function getDatePicker(dateTimePicker) {
@@ -202,7 +202,7 @@ describe('Basic features', () => {
         '03/02/2010T08:30',
         '3 Feb 2010T08:30',
         'Feb 3, 2010T08:30',
-        '2019-09-19T08.30'
+        '2019-09-19T08.30',
       ];
       for (const invalidValue of invalidValues) {
         dateTimePicker.value = invalidValue;

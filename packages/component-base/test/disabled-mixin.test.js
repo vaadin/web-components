@@ -10,7 +10,7 @@ customElements.define(
     static get template() {
       return html`<slot></slot>`;
     }
-  }
+  },
 );
 
 describe('disabled-mixin', () => {

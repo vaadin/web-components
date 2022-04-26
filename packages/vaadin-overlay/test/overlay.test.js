@@ -18,10 +18,10 @@ customElements.define(
 
     static get properties() {
       return {
-        opened: Boolean
+        opened: Boolean,
       };
     }
-  }
+  },
 );
 
 describe('vaadin-overlay', () => {

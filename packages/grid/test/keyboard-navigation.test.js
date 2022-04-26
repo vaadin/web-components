@@ -11,7 +11,7 @@ import {
   keyUpOn,
   listenOnce,
   nextFrame,
-  up as mouseUp
+  up as mouseUp,
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
@@ -29,7 +29,7 @@ import {
   getRowCells,
   getRows,
   infiniteDataProvider,
-  scrollToEnd
+  scrollToEnd,
 } from './helpers.js';
 
 let grid, focusable, scroller, header, footer, body;
@@ -820,7 +820,7 @@ describe('keyboard navigation', () => {
 
         right();
         expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(
-          grid.shadowRoot.activeElement
+          grid.shadowRoot.activeElement,
         );
         expect(getFocusedCellIndex()).to.equal(2);
       });
@@ -830,7 +830,7 @@ describe('keyboard navigation', () => {
 
         expect(getFocusedCellIndex()).to.equal(2);
         expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(
-          grid.shadowRoot.activeElement
+          grid.shadowRoot.activeElement,
         );
       });
 
@@ -847,7 +847,7 @@ describe('keyboard navigation', () => {
         down();
 
         expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(
-          grid.shadowRoot.activeElement
+          grid.shadowRoot.activeElement,
         );
         expect(getFocusedRowIndex()).to.equal(1);
         expect(getFocusedCellIndex()).to.equal(0);
@@ -913,7 +913,7 @@ describe('keyboard navigation', () => {
         up();
 
         expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(
-          grid.shadowRoot.activeElement
+          grid.shadowRoot.activeElement,
         );
         expect(getFocusedRowIndex()).to.equal(0);
         expect(getFocusedCellIndex()).to.equal(0);
@@ -1885,7 +1885,7 @@ describe('keyboard navigation', () => {
         item: 'foo',
         level: 0,
         section: 'body',
-        selected: false
+        selected: false,
       };
 
       tabToBody();
@@ -2208,7 +2208,7 @@ describe('hierarchical data', () => {
     const items = [...Array(itemsOnEachLevel).keys()].map((i) => {
       return {
         name: `${parentItem ? `${parentItem.name}-` : ''}${i}`,
-        children: true
+        children: true,
       };
     });
 

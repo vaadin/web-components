@@ -11,11 +11,11 @@ describe('crud grid', () => {
       _id: 1,
       name: {
         first: 'Grant',
-        last: 'Andrews'
+        last: 'Andrews',
       },
       password: 'lorem',
-      role: 'operator'
-    }
+      role: 'operator',
+    },
   ];
 
   describe('custom element definition', () => {
@@ -55,10 +55,10 @@ describe('crud grid', () => {
           foo: 'foo',
           bar: {
             baz: {
-              qux: 'qux'
-            }
-          }
-        }
+              qux: 'qux',
+            },
+          },
+        },
       ];
       flushGrid(grid);
       await nextRender(grid);
@@ -115,9 +115,9 @@ describe('crud grid', () => {
           {
             name: 'foo',
             password: {
-              hash: '###'
-            }
-          }
+              hash: '###',
+            },
+          },
         ];
         flushGrid(grid);
         await nextRender(grid);

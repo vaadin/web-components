@@ -9,7 +9,7 @@ import {
   getLastVisibleItem,
   getPhysicalAverage,
   getPhysicalItems,
-  infiniteDataProvider
+  infiniteDataProvider,
 } from './helpers.js';
 
 const fixtures = {
@@ -33,7 +33,7 @@ const fixtures = {
     <vaadin-grid style="width: 200px; height: 500px;" item-has-children-path="hasChildren">
       <vaadin-grid-tree-column path="name" header="foo"></vaadin-grid-tree-column>
     </vaadin-grid>
-  `
+  `,
 };
 
 describe('scroll to index', () => {
@@ -80,7 +80,7 @@ describe('scroll to index', () => {
         flushGrid(grid);
         expect(grid.$.table.scrollTop).to.be.closeTo(
           (grid.$.table.scrollHeight - grid.$.table.offsetHeight) / 2,
-          grid.$.table.scrollHeight / 20
+          grid.$.table.scrollHeight / 20,
         );
       });
 
@@ -242,7 +242,7 @@ describe('scroll to index', () => {
             [...new Array(grid.pageSize)].map((_, index) => {
               return { name: `Child ${offset + index}`, hasChildren: false };
             }),
-            numberOfChildren
+            numberOfChildren,
           );
           if (page > 0) {
             expect(getPhysicalItems(grid).length).to.be.above(10);
@@ -267,7 +267,7 @@ describe('scroll to index', () => {
             const { name: parentName } = parentItem;
             const children = Array.from({ length: 10 }).map((_, i) => ({
               name: `${parentName * 10 + i}`,
-              hasChildren: false
+              hasChildren: false,
             }));
             cb(children, children.length);
 

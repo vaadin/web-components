@@ -44,7 +44,7 @@ const fixtures = {
         <vaadin-text-field></vaadin-text-field>
       </template>
     </vaadin-dialog>
-  `
+  `,
 };
 
 ['default', 'template'].forEach((type) => {

@@ -15,7 +15,7 @@ function defineCustomElement(name) {
       static get template() {
         return html`foo`;
       }
-    }
+    },
   );
 }
 
@@ -46,7 +46,7 @@ describe('lazy import', () => {
         :host {
           --register-styles-style: 'true';
         }
-      `
+      `,
     );
 
     // A <dom-module> theme without theme-for
@@ -57,7 +57,7 @@ describe('lazy import', () => {
           --included-dom-module-style: 'true';
         }
       `,
-      { moduleId: 'dom-module-style' }
+      { moduleId: 'dom-module-style' },
     );
 
     // A theme using registerStyles with an include of a dom-module defined above
@@ -71,13 +71,13 @@ describe('lazy import', () => {
           --included-register-styles-style: 'true';
         }
       `,
-      { moduleId: 'registered-style' }
+      { moduleId: 'registered-style' },
     );
 
     // A <dom-module> theme with an include of a registerStyle theme defined above
     registerStyleModule(customElementName, css``, {
       moduleId: 'dom-module-style-include-only',
-      include: 'registered-style'
+      include: 'registered-style',
     });
 
     // Import the adapter lazily

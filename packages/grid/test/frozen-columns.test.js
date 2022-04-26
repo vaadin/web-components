@@ -8,7 +8,7 @@ import {
   getRows,
   infiniteDataProvider,
   isWithinParentConstraints,
-  onceResized
+  onceResized,
 } from './helpers.js';
 
 // Returns true if the element's computed transform style matches with the

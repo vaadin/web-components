@@ -247,7 +247,7 @@ describe('Properties', () => {
         comboBox.addEventListener('custom-value-set', spy);
         comboBox.selectedItem = {
           label: 'foo',
-          value: 'bar'
+          value: 'bar',
         };
 
         comboBox.open();
@@ -262,7 +262,7 @@ describe('Properties', () => {
         comboBox.addEventListener('custom-value-set', spy);
         comboBox.selectedItem = {
           label: 'foo',
-          value: 'bar'
+          value: 'bar',
         };
 
         comboBox.open();

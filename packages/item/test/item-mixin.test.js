@@ -9,7 +9,7 @@ import {
   space,
   spaceKeyDown,
   spaceKeyUp,
-  tabKeyDown
+  tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';

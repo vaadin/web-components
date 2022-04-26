@@ -10,7 +10,7 @@ customElements.define(
     static get template() {
       return html`<slot name="input"></slot>`;
     }
-  }
+  },
 );
 
 describe('input-mixin', () => {
@@ -114,7 +114,7 @@ describe('input-mixin', () => {
           _onChange() {
             changeSpy();
           }
-        }
+        },
       );
     });
 

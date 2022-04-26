@@ -15,7 +15,7 @@ customElements.define(
         <span>draggable</span>
       </div>`;
     }
-  }
+  },
 );
 
 function dispatchMouseEvent(target, type, coords = { x: 0, y: 0 }, button = 0) {
@@ -27,7 +27,7 @@ function dispatchMouseEvent(target, type, coords = { x: 0, y: 0 }, button = 0) {
     clientY: coords.y,
     composed: true,
     buttons: 1,
-    button
+    button,
   });
   target.dispatchEvent(e);
 }
@@ -36,7 +36,7 @@ function resize(target, dx, dy, mouseButton = 0) {
   const bounds = target.getBoundingClientRect();
   const fromXY = {
     x: Math.floor(bounds.left + bounds.width / 2),
-    y: Math.floor(bounds.top + bounds.height / 2)
+    y: Math.floor(bounds.top + bounds.height / 2),
   };
   const toXY = { x: fromXY.x + dx, y: fromXY.y + dy };
   dispatchMouseEvent(target, 'mousedown', fromXY, mouseButton);
@@ -334,7 +334,7 @@ describe('draggable', () => {
     const bounds = target.getBoundingClientRect();
     const fromXY = {
       x: Math.floor(bounds.left + bounds.width / 2),
-      y: Math.floor(bounds.top + bounds.height / 2)
+      y: Math.floor(bounds.top + bounds.height / 2),
     };
     const toXY = { x: fromXY.x + dx, y: fromXY.y + dx };
     dispatchMouseEvent(target, 'mousedown', fromXY, mouseButton);
@@ -464,7 +464,7 @@ describe('draggable', () => {
     const containerBounds = container.getBoundingClientRect();
     dispatchMouseEvent(container, 'mousedown', {
       x: containerBounds.left + containerBounds.width / 2,
-      y: containerBounds.top + containerBounds.height - scrollbarHeight / 2
+      y: containerBounds.top + containerBounds.height - scrollbarHeight / 2,
     });
     expect(boundsSpy.called).to.equal(!scrollbarHeight);
   });
@@ -528,15 +528,15 @@ describe('touch', () => {
     const e = new CustomEvent(type, {
       bubbles: true,
       cancelable: true,
-      composed: true
+      composed: true,
     });
     e.touches = [
       {
         clientX: coords.x,
         clientY: coords.y,
         pageX: coords.x,
-        pageY: coords.y
-      }
+        pageY: coords.y,
+      },
     ];
 
     if (multitouch) {
@@ -544,7 +544,7 @@ describe('touch', () => {
         clientX: coords.x + 10,
         clientY: coords.y + 10,
         pageX: coords.x + 10,
-        pageY: coords.y + 10
+        pageY: coords.y + 10,
       });
     }
     target.dispatchEvent(e);
@@ -555,7 +555,7 @@ describe('touch', () => {
     const bounds = target.getBoundingClientRect();
     const fromXY = {
       x: Math.floor(bounds.left + bounds.width / 2),
-      y: Math.floor(bounds.top + bounds.height / 2)
+      y: Math.floor(bounds.top + bounds.height / 2),
     };
     const toXY = { x: fromXY.x + dx, y: fromXY.y + dy };
     dispatchTouchEvent(target, 'touchstart', fromXY, multitouch);
@@ -567,7 +567,7 @@ describe('touch', () => {
     const bounds = target.getBoundingClientRect();
     const fromXY = {
       x: Math.floor(bounds.left + bounds.width / 2),
-      y: Math.floor(bounds.top + bounds.height / 2)
+      y: Math.floor(bounds.top + bounds.height / 2),
     };
 
     const toXY = { x: fromXY.x + dx, y: fromXY.y + dy };
@@ -649,7 +649,7 @@ describe('touch', () => {
     touchResize(resizableOverlayPart.querySelector('.ne'), d, -d, true);
     const resizedBounds = resizableContainer.getBoundingClientRect();
     ['top', 'left', 'width', 'height'].forEach((prop) =>
-      expect(Math.floor(resizedBounds[prop])).to.be.eql(Math.floor(bounds[prop]))
+      expect(Math.floor(resizedBounds[prop])).to.be.eql(Math.floor(bounds[prop])),
     );
   });
 

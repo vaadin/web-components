@@ -13,7 +13,7 @@ import {
   getCellContent,
   getContainerCellContent,
   getFirstCell,
-  infiniteDataProvider
+  infiniteDataProvider,
 } from './helpers.js';
 
 class GridWithSlots extends PolymerElement {
@@ -65,15 +65,15 @@ class GridWithSlots extends PolymerElement {
         type: Object,
         value: function () {
           return {
-            foo: 'foo'
+            foo: 'foo',
           };
-        }
+        },
       },
       dataProvider: {
         value: function () {
           return infiniteDataProvider;
-        }
-      }
+        },
+      },
     };
   }
 
@@ -110,7 +110,7 @@ class SlottedTemplates extends PolymerElement {
   static get properties() {
     return {
       foo: String,
-      bar: String
+      bar: String,
     };
   }
 
@@ -276,7 +276,7 @@ describe('templates', () => {
             fooSetter(newVal);
             foo = newVal;
           },
-          get: () => foo
+          get: () => foo,
         });
 
         // Change the object, notify Polymer

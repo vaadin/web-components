@@ -9,7 +9,7 @@ describe('vaadin-email-field', () => {
   // when running snapshot tests in a different order
   // Also ignore pattern because of escape characters
   const SNAPSHOT_CONFIG = {
-    ignoreAttributes: ['id', 'aria-describedby', 'aria-labelledby', 'for', 'pattern']
+    ignoreAttributes: ['id', 'aria-describedby', 'aria-labelledby', 'for', 'pattern'],
   };
 
   beforeEach(() => {

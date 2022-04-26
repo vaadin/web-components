@@ -236,7 +236,7 @@ describe('custom field', () => {
         'i18n.parseValue',
         sinon.stub().callsFake((value) => {
           return value.split(' ').map((value) => parseInt(value) + 1);
-        })
+        }),
       );
 
       customField.value = '1 1';
@@ -251,7 +251,7 @@ describe('custom field', () => {
         'i18n.formatValue',
         sinon.stub().callsFake((inputValues) => {
           return inputValues.map((value) => parseInt(value) + 1 || '').join(' ');
-        })
+        }),
       );
 
       customField.inputs.forEach((el) => {

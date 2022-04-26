@@ -31,7 +31,7 @@ describe('resize-mixin', () => {
             this.__resolveResize = resolve;
           });
         }
-      }
+      },
     );
   });
 

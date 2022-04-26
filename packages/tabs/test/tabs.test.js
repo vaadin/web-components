@@ -137,7 +137,7 @@ describe('tabs', () => {
                 done();
               });
               tabs._scroll(horizontalRtl ? -200 : 200);
-            }
+            },
           );
 
           it(`when orientation=${orientation} should not have overflow="start" when over-scrolling`, () => {
@@ -149,7 +149,7 @@ describe('tabs', () => {
               get: () => pixels,
               set: (v) => {
                 pixels = v;
-              }
+              },
             });
 
             // Simulate over-scrolling

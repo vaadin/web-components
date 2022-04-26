@@ -11,7 +11,7 @@ import {
   keyDownChar,
   nextFrame,
   spaceKeyDown,
-  tab
+  tab,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
@@ -90,7 +90,7 @@ describe('vaadin-select', () => {
               <vaadin-item value="v4" disabled>Disabled</vaadin-item>
             </vaadin-list-box>
           `,
-          root
+          root,
         );
       };
       valueButton = select._valueButton;
@@ -647,7 +647,7 @@ describe('vaadin-select', () => {
               <vaadin-item value="v2" label="o2">t2</vaadin-item>
             </vaadin-list-box>
           `,
-          root
+          root,
         );
       };
       menu = select._menuElement;

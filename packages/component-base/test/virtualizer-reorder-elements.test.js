@@ -53,7 +53,7 @@ describe('reorder elements', () => {
       },
       scrollTarget,
       scrollContainer,
-      ...config
+      ...config,
     });
 
     virtualizer.size = 100;
@@ -63,7 +63,7 @@ describe('reorder elements', () => {
     init({ reorderElements: true });
     recycledElement = elementsContainer.children[2];
     clock = sinon.useFakeTimers({
-      shouldClearNativeTimers: true
+      shouldClearNativeTimers: true,
     });
   });
 

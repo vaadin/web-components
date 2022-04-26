@@ -13,7 +13,7 @@ registerStyles(
     :host([theme='green']) [part='error-message-description'] {
       color: rgb(0, 128, 0);
     }
-  `
+  `,
 );
 
 describe('login form with csrf', () => {
@@ -115,7 +115,7 @@ describe('login form', () => {
     const i18n = {
       ...login.i18n,
       additionalInformation: 'Mais informações',
-      form: { forgotPassword: 'Esqueci a senha' }
+      form: { forgotPassword: 'Esqueci a senha' },
     };
     login.i18n = i18n;
     expect(additionalInformation.textContent).to.be.equal(login.i18n.additionalInformation);

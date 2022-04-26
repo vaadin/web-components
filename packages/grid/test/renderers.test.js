@@ -111,7 +111,7 @@ describe('renderers', () => {
           expanded: false,
           selected: false,
           detailsOpened: true,
-          item: grid.items[0]
+          item: grid.items[0],
         });
       });
 

@@ -291,9 +291,9 @@ describe('upload', () => {
           serverValidation: () => {
             return {
               status: status,
-              statusText: 'Error'
+              statusText: 'Error',
             };
-          }
+          },
         });
 
         const spy = sinon.spy();
@@ -330,7 +330,7 @@ describe('upload', () => {
         connectTime: 500,
         uploadTime: 200,
         stepTime: 100,
-        serverTime: 500
+        serverTime: 500,
       });
 
       clock = sinon.useFakeTimers();
@@ -372,7 +372,7 @@ describe('upload', () => {
       upload._createXhr = xhrCreator({
         size: file.size,
         uploadTime: 2500,
-        stepTime: 2500
+        stepTime: 2500,
       });
 
       clock = sinon.useFakeTimers();
@@ -484,8 +484,8 @@ describe('upload', () => {
         upload.dispatchEvent(
           new CustomEvent('file-start', {
             detail: { file },
-            cancelable: true
-          })
+            cancelable: true,
+          }),
         );
       });
     });
@@ -498,7 +498,7 @@ describe('upload', () => {
       upload._createXhr = xhrCreator({ size: file.size, uploadTime: 200, stepTime: 50 });
       files = createFiles(2, 512, 'application/json');
       clock = sinon.useFakeTimers({
-        shouldClearNativeTimers: true
+        shouldClearNativeTimers: true,
       });
     });
 

@@ -83,7 +83,7 @@ describe('vaadin-cookie-consent', () => {
       const link = ccWindow.querySelector('.cc-link');
 
       expect(message.textContent).to.equal(
-        'This website uses cookies to ensure you get the best experience. Learn more'
+        'This website uses cookies to ensure you get the best experience. Learn more',
       );
       expect(dismiss.textContent).to.be.equal('Got it!');
       expect(link.textContent).to.be.equal('Learn more');
