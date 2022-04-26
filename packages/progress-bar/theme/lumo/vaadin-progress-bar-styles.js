@@ -272,7 +272,7 @@ registerStyles(
       );
     }
   `,
-  { moduleId: 'lumo-progress-bar' }
+  { moduleId: 'lumo-progress-bar' },
 );
 
 const $_documentContainer = document.createElement('template');

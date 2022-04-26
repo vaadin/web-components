@@ -19,8 +19,8 @@ export const ActiveItemMixin = (superClass) =>
         activeItem: {
           type: Object,
           notify: true,
-          value: null
-        }
+          value: null,
+        },
       };
     }
 
@@ -68,9 +68,9 @@ export const ActiveItemMixin = (superClass) =>
         this.dispatchEvent(
           new CustomEvent('cell-activate', {
             detail: {
-              model: this.__getRowModel(cell.parentElement)
-            }
-          })
+              model: this.__getRowModel(cell.parentElement),
+            },
+          }),
         );
       }
     }
@@ -108,8 +108,8 @@ export const isFocusable = (target) => {
   }
   const focusables = Array.from(
     target.parentNode.querySelectorAll(
-      '[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]'
-    )
+      '[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]',
+    ),
   ).filter((element) => element.getAttribute('part') !== 'cell body-cell');
 
   const isFocusableElement = focusables.includes(target);

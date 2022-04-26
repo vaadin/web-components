@@ -32,7 +32,7 @@ export const ColumnBaseMixin = (superClass) =>
               return parent.resizable || false;
             }
             return false;
-          }
+          },
         },
 
         /**
@@ -42,7 +42,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         frozen: {
           type: Boolean,
-          value: false
+          value: false,
         },
 
         /**
@@ -57,7 +57,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         frozenToEnd: {
           type: Boolean,
-          value: false
+          value: false,
         },
 
         /**
@@ -65,14 +65,14 @@ export const ColumnBaseMixin = (superClass) =>
          */
         hidden: {
           type: Boolean,
-          value: false
+          value: false,
         },
 
         /**
          * Text content to display in the header cell of the column.
          */
         header: {
-          type: String
+          type: String,
         },
 
         /**
@@ -82,7 +82,7 @@ export const ColumnBaseMixin = (superClass) =>
          * @type {GridColumnTextAlign | null | undefined}
          */
         textAlign: {
-          type: String
+          type: String,
         },
 
         /**
@@ -91,7 +91,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         _lastFrozen: {
           type: Boolean,
-          value: false
+          value: false,
         },
 
         /**
@@ -100,7 +100,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         _firstFrozenToEnd: {
           type: Boolean,
-          value: false
+          value: false,
         },
 
         /** @protected */
@@ -134,7 +134,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         __initialized: {
           type: Boolean,
-          value: true
+          value: true,
         },
 
         /**
@@ -157,7 +157,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         _headerRenderer: {
           type: Function,
-          computed: '_computeHeaderRenderer(headerRenderer, header, __initialized)'
+          computed: '_computeHeaderRenderer(headerRenderer, header, __initialized)',
         },
 
         /**
@@ -180,7 +180,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         _footerRenderer: {
           type: Function,
-          computed: '_computeFooterRenderer(footerRenderer, __initialized)'
+          computed: '_computeFooterRenderer(footerRenderer, __initialized)',
         },
 
         /**
@@ -191,8 +191,8 @@ export const ColumnBaseMixin = (superClass) =>
          */
         __gridColumnElement: {
           type: Boolean,
-          value: true
-        }
+          value: true,
+        },
       };
     }
 
@@ -211,7 +211,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
-        '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)'
+        '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
       ];
     }
 
@@ -481,7 +481,7 @@ export const ColumnBaseMixin = (superClass) =>
             if (this._grid && this._grid._renderColumnTree) {
               this._grid._renderColumnTree(this._grid._columnTree);
             }
-          }
+          },
         );
 
         if (this._grid._updateFrozenColumn) {
@@ -742,7 +742,7 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        */
       width: {
         type: String,
-        value: '100px'
+        value: '100px',
       },
 
       /**
@@ -752,7 +752,7 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        */
       flexGrow: {
         type: Number,
-        value: 1
+        value: 1,
       },
 
       /**
@@ -783,7 +783,7 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        */
       _renderer: {
         type: Function,
-        computed: '_computeRenderer(renderer, __initialized)'
+        computed: '_computeRenderer(renderer, __initialized)',
       },
 
       /**
@@ -791,7 +791,7 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        * The property name is also shown in the column header if an explicit header or renderer isn't defined.
        */
       path: {
-        type: String
+        type: String,
       },
 
       /**
@@ -813,14 +813,14 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
        */
       autoWidth: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
        * @type {Array<!HTMLElement>}
        * @protected
        */
-      _cells: Array
+      _cells: Array,
     };
   }
 }

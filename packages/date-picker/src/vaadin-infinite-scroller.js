@@ -83,7 +83,7 @@ class InfiniteScroller extends PolymerElement {
        */
       bufferSize: {
         type: Number,
-        value: 20
+        value: 20,
       },
 
       /**
@@ -91,14 +91,14 @@ class InfiniteScroller extends PolymerElement {
        * user to be able to scroll backwards.
        */
       _initialScroll: {
-        value: 500000
+        value: 500000,
       },
 
       /**
        * The index/position mapped at _initialScroll point.
        */
       _initialIndex: {
-        value: 0
+        value: 0,
       },
 
       _buffers: Array,
@@ -111,8 +111,8 @@ class InfiniteScroller extends PolymerElement {
 
       active: {
         type: Boolean,
-        observer: '_activated'
-      }
+        observer: '_activated',
+      },
     };
   }
 
@@ -133,7 +133,7 @@ class InfiniteScroller extends PolymerElement {
             });
           });
         }
-      }
+      },
     });
 
     // Firefox interprets elements with overflow:auto as focusable

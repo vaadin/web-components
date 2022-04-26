@@ -70,23 +70,23 @@ gulp.task('icons', async () => {
       svgmin({
         plugins: [
           {
-            removeTitle: true
+            removeTitle: true,
           },
           {
-            removeViewBox: false
+            removeViewBox: false,
           },
           {
             cleanupNumericValues: {
-              floatPrecision: 6
-            }
+              floatPrecision: 6,
+            },
           },
           {
             convertPathData: {
-              floatPrecision: 6
-            }
-          }
-        ]
-      })
+              floatPrecision: 6,
+            },
+          },
+        ],
+      }),
     )
     .pipe(gulp.dest(folder))
     .on('finish', () => {
@@ -139,8 +139,8 @@ ${createIconset(folder, filenames, 'lumo:')}
           sort({
             comparator: function (file1, file2) {
               return sortIconFilesNormalized(file1.relative, file2.relative);
-            }
-          })
+            },
+          }),
         )
         .pipe(
           iconfont({
@@ -151,8 +151,8 @@ ${createIconset(folder, filenames, 'lumo:')}
             descent: 150,
             fixedWidth: true,
             normalize: true,
-            timestamp: 1 // Truthy!
-          })
+            timestamp: 1, // Truthy!
+          }),
         )
         .on('glyphs', (glyphData) => {
           // Store for later use

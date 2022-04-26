@@ -237,7 +237,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
        * The value for this element.
        */
       selectedDate: {
-        type: Date
+        type: Date,
       },
 
       /**
@@ -246,7 +246,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       focusedDate: {
         type: Date,
         notify: true,
-        observer: '_focusedDateChanged'
+        observer: '_focusedDateChanged',
       },
 
       _focusedMonthDate: Number,
@@ -256,11 +256,11 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
        */
       initialPosition: {
         type: Date,
-        observer: '_initialPositionChanged'
+        observer: '_initialPositionChanged',
       },
 
       _originDate: {
-        value: new Date()
+        value: new Date(),
       },
 
       _visibleMonthIndex: Number,
@@ -269,23 +269,23 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
       _desktopMediaQuery: {
         type: String,
-        value: '(min-width: 375px)'
+        value: '(min-width: 375px)',
       },
 
       _translateX: {
-        observer: '_translateXChanged'
+        observer: '_translateXChanged',
       },
 
       _yearScrollerWidth: {
-        value: 50
+        value: 50,
       },
 
       i18n: {
-        type: Object
+        type: Object,
       },
 
       showWeekNumbers: {
-        type: Boolean
+        type: Boolean,
       },
 
       _ignoreTaps: Boolean,
@@ -305,7 +305,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       /**
        * Input label
        */
-      label: String
+      label: String,
     };
   }
 
@@ -331,13 +331,13 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     addListener(
       this.shadowRoot.querySelector('[part="years-toggle-button"]'),
       'tap',
-      this._toggleYearScroller.bind(this)
+      this._toggleYearScroller.bind(this),
     );
 
     this.addController(
       new MediaQueryController(this._desktopMediaQuery, (matches) => {
         this._desktopMode = matches;
-      })
+      }),
     );
   }
 
@@ -376,7 +376,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   _selectDate(dateToSelect) {
     this.selectedDate = dateToSelect;
     this.dispatchEvent(
-      new CustomEvent('date-selected', { detail: { date: dateToSelect }, bubbles: true, composed: true })
+      new CustomEvent('date-selected', { detail: { date: dateToSelect }, bubbles: true, composed: true }),
     );
   }
 
@@ -404,7 +404,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
       const visibleArea = Math.max(
         this.$.monthScroller.itemHeight,
-        this.$.monthScroller.clientHeight - this.$.monthScroller.bufferOffset * 2
+        this.$.monthScroller.clientHeight - this.$.monthScroller.bufferOffset * 2,
       );
       const visibleItems = visibleArea / this.$.monthScroller.itemHeight;
       const scrolledBelowViewport = this.$.monthScroller.position + visibleItems - 1 < diff;
@@ -543,9 +543,9 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
             composed: true,
             detail: {
               position: this._targetPosition,
-              oldPosition: initialPosition
-            }
-          })
+              oldPosition: initialPosition,
+            },
+          }),
         );
 
         this.$.monthScroller.position = this._targetPosition;
@@ -579,7 +579,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     var newTranslateX = this._translateX + e.detail.ddx;
     this._translateX = this._limit(newTranslateX, {
       min: 0,
-      max: this._yearScrollerWidth
+      max: this._yearScrollerWidth,
     });
   }
 

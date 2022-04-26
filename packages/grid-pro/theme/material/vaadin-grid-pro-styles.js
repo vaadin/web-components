@@ -20,5 +20,5 @@ registerStyles(
       background-clip: padding-box;
     }
   `,
-  { moduleId: 'material-grid-pro' }
+  { moduleId: 'material-grid-pro' },
 );

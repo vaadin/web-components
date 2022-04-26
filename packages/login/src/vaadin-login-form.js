@@ -149,8 +149,8 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       cancelable: true,
       detail: {
         username: this.$.vaadinLoginUsername.value,
-        password: this.$.vaadinLoginPassword.value
-      }
+        password: this.$.vaadinLoginPassword.value,
+      },
     };
 
     const firedEvent = this.dispatchEvent(new CustomEvent('login', loginEventDetails));

@@ -241,7 +241,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
        * of the context menu to listen for `openOn` events.
        */
       selector: {
-        type: String
+        type: String,
       },
 
       /**
@@ -252,7 +252,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
         type: Boolean,
         value: false,
         notify: true,
-        readOnly: true
+        readOnly: true,
       },
 
       /**
@@ -262,7 +262,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
        */
       openOn: {
         type: String,
-        value: 'vaadin-contextmenu'
+        value: 'vaadin-contextmenu',
       },
 
       /**
@@ -276,7 +276,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
         type: Object,
         value: function () {
           return this;
-        }
+        },
       },
 
       /**
@@ -287,7 +287,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
       closeOn: {
         type: String,
         value: 'click',
-        observer: '_closeOnChanged'
+        observer: '_closeOnChanged',
       },
 
       /**
@@ -302,7 +302,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
        * @type {ContextMenuRenderer | undefined}
        */
       renderer: {
-        type: Function
+        type: Function,
       },
 
       /** @private */
@@ -316,25 +316,25 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
 
       /** @private */
       _phone: {
-        type: Boolean
+        type: Boolean,
       },
 
       /** @private */
       _touch: {
         type: Boolean,
-        value: isTouch
+        value: isTouch,
       },
 
       /** @private */
       _wide: {
-        type: Boolean
+        type: Boolean,
       },
 
       /** @private */
       _wideMediaQuery: {
         type: String,
-        value: '(min-device-width: 750px)'
-      }
+        value: '(min-device-width: 750px)',
+      },
     };
   }
 
@@ -343,7 +343,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
       '_openedChanged(opened)',
       '_targetOrOpenOnChanged(listenOn, openOn)',
       '_rendererChanged(renderer, items)',
-      '_touchOrWideChanged(_touch, _wide)'
+      '_touchOrWideChanged(_touch, _wide)',
     ];
   }
 
@@ -377,7 +377,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
     this.addController(
       new MediaQueryController(this._wideMediaQuery, (matches) => {
         this._wide = matches;
-      })
+      }),
     );
 
     processTemplates(this);
@@ -535,7 +535,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
     if (e && !this.opened) {
       this._context = {
         detail: e.detail,
-        target: this._contextTarget(e)
+        target: this._contextTarget(e),
       };
 
       if (this._context.target) {

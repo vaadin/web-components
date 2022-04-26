@@ -59,7 +59,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes LabelMixin
  */
 class RadioButton extends LabelMixin(
-  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))))))
+  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))))),
 ) {
   static get is() {
     return 'vaadin-radio-button';
@@ -128,8 +128,8 @@ class RadioButton extends LabelMixin(
        */
       name: {
         type: String,
-        value: ''
-      }
+        value: '',
+      },
     };
   }
 
@@ -165,8 +165,8 @@ class RadioButton extends LabelMixin(
         new SlotTargetController(
           this.$.noop,
           () => this._labelController.node,
-          () => this.__warnDeprecated()
-        )
+          () => this.__warnDeprecated(),
+        ),
       );
     }
   }
@@ -175,7 +175,7 @@ class RadioButton extends LabelMixin(
   __warnDeprecated() {
     console.warn(
       `WARNING: Since Vaadin 22, placing the label as a direct child of a <vaadin-radio-button> is deprecated.
-  Please use <label slot="label"> wrapper or the label property instead.`
+  Please use <label slot="label"> wrapper or the label property instead.`,
     );
   }
 }

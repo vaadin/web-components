@@ -30,7 +30,7 @@ export class InputController extends SlotController {
         if (typeof callback === 'function') {
           callback(node);
         }
-      }
+      },
     );
   }
 }

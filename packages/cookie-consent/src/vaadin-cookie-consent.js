@@ -60,7 +60,7 @@ class CookieConsent extends ElementMixin(PolymerElement) {
        */
       message: {
         type: String,
-        value: 'This website uses cookies to ensure you get the best experience.'
+        value: 'This website uses cookies to ensure you get the best experience.',
       },
 
       /**
@@ -69,7 +69,7 @@ class CookieConsent extends ElementMixin(PolymerElement) {
        */
       dismiss: {
         type: String,
-        value: 'Got it!'
+        value: 'Got it!',
       },
 
       /**
@@ -79,7 +79,7 @@ class CookieConsent extends ElementMixin(PolymerElement) {
        */
       learnMore: {
         type: String,
-        value: 'Learn more'
+        value: 'Learn more',
       },
 
       /**
@@ -89,13 +89,13 @@ class CookieConsent extends ElementMixin(PolymerElement) {
        */
       learnMoreLink: {
         type: String,
-        value: 'https://cookiesandyou.com/'
+        value: 'https://cookiesandyou.com/',
       },
 
       /** @private */
       _showLearnMore: {
         type: Boolean,
-        computed: '_showLink(learnMoreLink)'
+        computed: '_showLink(learnMoreLink)',
       },
 
       /**
@@ -108,7 +108,7 @@ class CookieConsent extends ElementMixin(PolymerElement) {
        */
       position: {
         type: String,
-        value: 'top'
+        value: 'top',
       },
 
       /**
@@ -120,13 +120,13 @@ class CookieConsent extends ElementMixin(PolymerElement) {
        */
       cookieName: {
         type: String,
-        value: 'cookieconsent_status'
+        value: 'cookieconsent_status',
       },
 
       /** @private */
       _css: {
-        type: Object
-      }
+        type: Object,
+      },
     };
   }
 
@@ -160,27 +160,27 @@ class CookieConsent extends ElementMixin(PolymerElement) {
     window.cookieconsent.initialise({
       palette: {
         popup: {
-          background: '#000'
+          background: '#000',
         },
         button: {
           // Cannot use a lumo color 'as is' due to
           // https://github.com/vaadin/vaadin-lumo-styles/issues/22
           // var(--lumo-primary-color) at 0.95 opacity
           background: 'rgba(22, 118, 243, 0.95)',
-          hover: 'rgba(22, 118, 243, 1)'
-        }
+          hover: 'rgba(22, 118, 243, 1)',
+        },
       },
       showLink: this._showLearnMore,
       content: {
         message: this.message,
         dismiss: this.dismiss,
         link: this.learnMore,
-        href: this.learnMoreLink
+        href: this.learnMoreLink,
       },
       cookie: {
-        name: this.cookieName
+        name: this.cookieName,
       },
-      position: this.position
+      position: this.position,
     });
 
     const popup = this._getPopup();

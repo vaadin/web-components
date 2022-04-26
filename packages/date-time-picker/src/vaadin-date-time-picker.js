@@ -107,7 +107,7 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  * @mixes FieldMixin
  */
 class DateTimePicker extends FieldMixin(
-  SlotMixin(DisabledMixin(FocusMixin(ThemableMixin(ElementMixin(PolymerElement)))))
+  SlotMixin(DisabledMixin(FocusMixin(ThemableMixin(ElementMixin(PolymerElement))))),
 ) {
   static get template() {
     return html`
@@ -168,7 +168,7 @@ class DateTimePicker extends FieldMixin(
        * The name of the control, which is submitted with the form data.
        */
       name: {
-        type: String
+        type: String,
       },
 
       /**
@@ -184,7 +184,7 @@ class DateTimePicker extends FieldMixin(
         type: String,
         notify: true,
         value: '',
-        observer: '__valueChanged'
+        observer: '__valueChanged',
       },
 
       /**
@@ -199,7 +199,7 @@ class DateTimePicker extends FieldMixin(
        */
       min: {
         type: String,
-        observer: '__minChanged'
+        observer: '__minChanged',
       },
 
       /**
@@ -214,7 +214,7 @@ class DateTimePicker extends FieldMixin(
        */
       max: {
         type: String,
-        observer: '__maxChanged'
+        observer: '__maxChanged',
       },
 
       /**
@@ -223,7 +223,7 @@ class DateTimePicker extends FieldMixin(
        */
       __minDateTime: {
         type: Date,
-        value: ''
+        value: '',
       },
 
       /**
@@ -232,7 +232,7 @@ class DateTimePicker extends FieldMixin(
        */
       __maxDateTime: {
         type: Date,
-        value: ''
+        value: '',
       },
 
       /**
@@ -240,7 +240,7 @@ class DateTimePicker extends FieldMixin(
        * @attr {string} date-placeholder
        */
       datePlaceholder: {
-        type: String
+        type: String,
       },
 
       /**
@@ -248,7 +248,7 @@ class DateTimePicker extends FieldMixin(
        * @attr {string} time-placeholder
        */
       timePlaceholder: {
-        type: String
+        type: String,
       },
 
       /**
@@ -268,7 +268,7 @@ class DateTimePicker extends FieldMixin(
        * not recommended to use it for better UX.
        */
       step: {
-        type: Number
+        type: Number,
       },
 
       /**
@@ -286,7 +286,7 @@ class DateTimePicker extends FieldMixin(
        * @attr {boolean} show-week-numbers
        */
       showWeekNumbers: {
-        type: Boolean
+        type: Boolean,
       },
 
       /**
@@ -302,7 +302,7 @@ class DateTimePicker extends FieldMixin(
       readonly: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -310,7 +310,7 @@ class DateTimePicker extends FieldMixin(
        * @type {boolean}
        */
       autofocus: {
-        type: Boolean
+        type: Boolean,
       },
 
       /**
@@ -318,7 +318,7 @@ class DateTimePicker extends FieldMixin(
        * @private
        */
       __selectedDateTime: {
-        type: Date
+        type: Date,
       },
 
       /**
@@ -333,7 +333,7 @@ class DateTimePicker extends FieldMixin(
        */
       i18n: {
         type: Object,
-        value: () => ({ ...datePickerI18nDefaults, ...timePickerI18nDefaults })
+        value: () => ({ ...datePickerI18nDefaults, ...timePickerI18nDefaults }),
       },
 
       /**
@@ -342,7 +342,7 @@ class DateTimePicker extends FieldMixin(
        */
       __datePicker: {
         type: HTMLElement,
-        observer: '__datePickerChanged'
+        observer: '__datePickerChanged',
       },
 
       /**
@@ -351,8 +351,8 @@ class DateTimePicker extends FieldMixin(
        */
       __timePicker: {
         type: HTMLElement,
-        observer: '__timePickerChanged'
-      }
+        observer: '__timePickerChanged',
+      },
     };
   }
 
@@ -371,7 +371,7 @@ class DateTimePicker extends FieldMixin(
       '__i18nChanged(i18n.*)',
       '__autoOpenDisabledChanged(autoOpenDisabled)',
       '__themeChanged(_theme, __datePicker, __timePicker)',
-      '__pickersChanged(__datePicker, __timePicker)'
+      '__pickersChanged(__datePicker, __timePicker)',
     ];
   }
 
@@ -388,7 +388,7 @@ class DateTimePicker extends FieldMixin(
         const element = document.createElement('vaadin-date-time-picker-time-picker');
         element.__defaultPicker = true;
         return element;
-      }
+      },
     };
   }
 
@@ -808,8 +808,8 @@ class DateTimePicker extends FieldMixin(
         hours: date.getHours(),
         minutes: date.getMinutes(),
         seconds: date.getSeconds(),
-        milliseconds: date.getMilliseconds()
-      })
+        milliseconds: date.getMilliseconds(),
+      }),
     );
   }
 

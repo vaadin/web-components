@@ -56,5 +56,5 @@ registerStyles(
       }
     }
   `,
-  { moduleId: 'material-app-layout' }
+  { moduleId: 'material-app-layout' },
 );

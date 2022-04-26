@@ -33,7 +33,7 @@ export class TextAreaController extends SlotController {
         if (typeof callback === 'function') {
           callback(node);
         }
-      }
+      },
     );
   }
 }

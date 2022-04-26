@@ -107,7 +107,7 @@ export class SlotTargetController {
         attributes: true,
         childList: true,
         subtree: true,
-        characterData: true
+        characterData: true,
       });
     });
 

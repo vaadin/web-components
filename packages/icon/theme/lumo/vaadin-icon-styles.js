@@ -9,5 +9,5 @@ registerStyles(
       height: var(--lumo-icon-size-m);
     }
   `,
-  { moduleId: 'lumo-icon' }
+  { moduleId: 'lumo-icon' },
 );

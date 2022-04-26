@@ -63,5 +63,5 @@ const textArea = css`
 `;
 
 registerStyles('vaadin-text-area', [inputFieldShared, textArea], {
-  moduleId: 'lumo-text-area'
+  moduleId: 'lumo-text-area',
 });

@@ -70,7 +70,7 @@ class Scroller extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        */
       scrollDirection: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -80,8 +80,8 @@ class Scroller extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       tabindex: {
         type: Number,
         value: 0,
-        reflectToAttribute: true
-      }
+        reflectToAttribute: true,
+      },
     };
   }
 

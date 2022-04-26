@@ -31,7 +31,7 @@ export class MockList extends HTMLElement {
 
   get $() {
     return {
-      items: this.shadowRoot.querySelector('#items')
+      items: this.shadowRoot.querySelector('#items'),
     };
   }
 

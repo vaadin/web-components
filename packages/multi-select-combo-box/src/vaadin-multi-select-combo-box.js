@@ -46,7 +46,7 @@ const multiSelectComboBox = css`
 `;
 
 registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectComboBox], {
-  moduleId: 'vaadin-multi-select-combo-box-styles'
+  moduleId: 'vaadin-multi-select-combo-box-styles',
 });
 
 /**
@@ -213,7 +213,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         type: Boolean,
         reflectToAttribute: true,
         observer: '_clearButtonVisibleChanged',
-        value: false
+        value: false,
       },
 
       /**
@@ -221,7 +221,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        * The items can be of either `String` or `Object` type.
        */
       items: {
-        type: Array
+        type: Array,
       },
 
       /**
@@ -229,7 +229,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        * @attr {string} item-label-path
        */
       itemLabelPath: {
-        type: String
+        type: String,
       },
 
       /**
@@ -238,7 +238,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        * @attr {string} item-value-path
        */
       itemValuePath: {
-        type: String
+        type: String,
       },
 
       /**
@@ -246,7 +246,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        * @attr {string} item-id-path
        */
       itemIdPath: {
-        type: String
+        type: String,
       },
 
       /**
@@ -256,7 +256,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         type: Boolean,
         value: false,
         observer: '_readonlyChanged',
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -266,7 +266,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       selectedItems: {
         type: Array,
         value: () => [],
-        notify: true
+        notify: true,
       },
 
       /**
@@ -276,7 +276,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         type: Boolean,
         notify: true,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -286,7 +286,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       pageSize: {
         type: Number,
         value: 50,
-        observer: '_pageSizeChanged'
+        observer: '_pageSizeChanged',
       },
 
       /**
@@ -303,7 +303,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        */
       dataProvider: {
         type: Object,
-        observer: '_dataProviderChanged'
+        observer: '_dataProviderChanged',
       },
 
       /**
@@ -312,7 +312,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        */
       allowCustomValues: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -334,7 +334,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       filter: {
         type: String,
         value: '',
-        notify: true
+        notify: true,
       },
 
       /**
@@ -347,14 +347,14 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       /** @protected */
       _hasValue: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /** @private */
       _overflowItems: {
         type: Array,
-        value: () => []
-      }
+        value: () => [],
+      },
     };
   }
 
@@ -386,7 +386,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         this._setFocusElement(input);
         this.stateTarget = input;
         this.ariaTarget = input;
-      })
+      }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
 
@@ -754,8 +754,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       new CustomEvent('custom-values-set', {
         detail: event.detail,
         composed: true,
-        bubbles: true
-      })
+        bubbles: true,
+      }),
     );
   }
 

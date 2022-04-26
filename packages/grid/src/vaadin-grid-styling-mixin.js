@@ -29,7 +29,7 @@ export const StylingMixin = (superClass) =>
          *
          * @type {GridCellClassNameGenerator | null | undefined}
          */
-        cellClassNameGenerator: Function
+        cellClassNameGenerator: Function,
       };
     }
 

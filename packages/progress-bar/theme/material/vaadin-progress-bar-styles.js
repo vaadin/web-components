@@ -114,5 +114,5 @@ registerStyles(
       }
     }
   `,
-  { moduleId: 'material-progress-bar' }
+  { moduleId: 'material-progress-bar' },
 );

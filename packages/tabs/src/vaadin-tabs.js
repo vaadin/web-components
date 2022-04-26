@@ -153,7 +153,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
        */
       orientation: {
         value: 'horizontal',
-        type: String
+        type: String,
       },
 
       /**
@@ -161,8 +161,8 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
        */
       selected: {
         value: 0,
-        type: Number
-      }
+        type: Number,
+      },
     };
   }
 

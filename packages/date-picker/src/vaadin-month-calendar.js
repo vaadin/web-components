@@ -129,7 +129,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
        */
       month: {
         type: Date,
-        value: new Date()
+        value: new Date(),
       },
 
       /**
@@ -137,7 +137,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
        */
       selectedDate: {
         type: Date,
-        notify: true
+        notify: true,
       },
 
       /**
@@ -147,11 +147,11 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
 
       showWeekNumbers: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       i18n: {
-        type: Object
+        type: Object,
       },
 
       /**
@@ -166,7 +166,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
        */
       minDate: {
         type: Date,
-        value: null
+        value: null,
       },
 
       /**
@@ -174,31 +174,31 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
        */
       maxDate: {
         type: Date,
-        value: null
+        value: null,
       },
 
       _days: {
         type: Array,
-        computed: '_getDays(month, i18n.firstDayOfWeek, minDate, maxDate)'
+        computed: '_getDays(month, i18n.firstDayOfWeek, minDate, maxDate)',
       },
 
       _weeks: {
         type: Array,
-        computed: '_getWeeks(_days)'
+        computed: '_getWeeks(_days)',
       },
 
       disabled: {
         type: Boolean,
         reflectToAttribute: true,
-        computed: '_isDisabled(month, minDate, maxDate)'
-      }
+        computed: '_isDisabled(month, minDate, maxDate)',
+      },
     };
   }
 
   static get observers() {
     return [
       '_showWeekNumbersChanged(showWeekNumbers, i18n.firstDayOfWeek)',
-      '__focusedDateChanged(focusedDate, _days)'
+      '__focusedDateChanged(focusedDate, _days)',
     ];
   }
 
@@ -279,7 +279,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     weekDayNames = weekDayNames.map((day, index) => {
       return {
         weekDay: day,
-        weekDayShort: weekDayNamesShort[index]
+        weekDayShort: weekDayNamesShort[index],
       };
     });
 
@@ -356,7 +356,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     if (!this.ignoreTaps && !this._notTapping && e.target.date && !e.target.hasAttribute('disabled')) {
       this.selectedDate = e.target.date;
       this.dispatchEvent(
-        new CustomEvent('date-tap', { detail: { date: e.target.date }, bubbles: true, composed: true })
+        new CustomEvent('date-tap', { detail: { date: e.target.date }, bubbles: true, composed: true }),
       );
     }
   }

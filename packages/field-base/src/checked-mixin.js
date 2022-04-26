@@ -29,8 +29,8 @@ export const CheckedMixin = dedupingMixin(
             type: Boolean,
             value: false,
             notify: true,
-            reflectToAttribute: true
-          }
+            reflectToAttribute: true,
+          },
         };
       }
 
@@ -50,5 +50,5 @@ export const CheckedMixin = dedupingMixin(
       _toggleChecked(checked) {
         this.checked = checked;
       }
-    }
+    },
 );

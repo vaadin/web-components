@@ -14,7 +14,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         /** @private */
         _headerFocusable: {
           type: Object,
-          observer: '_focusableChanged'
+          observer: '_focusableChanged',
         },
 
         /**
@@ -23,13 +23,13 @@ export const KeyboardNavigationMixin = (superClass) =>
          */
         _itemsFocusable: {
           type: Object,
-          observer: '_focusableChanged'
+          observer: '_focusableChanged',
         },
 
         /** @private */
         _footerFocusable: {
           type: Object,
-          observer: '_focusableChanged'
+          observer: '_focusableChanged',
         },
 
         /** @private */
@@ -41,7 +41,7 @@ export const KeyboardNavigationMixin = (superClass) =>
          */
         _focusedItemIndex: {
           type: Number,
-          value: 0
+          value: 0,
         },
 
         /** @private */
@@ -64,8 +64,8 @@ export const KeyboardNavigationMixin = (superClass) =>
           value: false,
           reflectToAttribute: true,
           readOnly: true,
-          observer: '_interactingChanged'
-        }
+          observer: '_interactingChanged',
+        },
       };
     }
 
@@ -461,7 +461,7 @@ export const KeyboardNavigationMixin = (superClass) =>
 
       return {
         dstRow: [...activeRowGroup.children].find((el) => !el.hidden && el.index === dstRowIndex),
-        dstIsRowDetails
+        dstIsRowDetails,
       };
     }
 
@@ -511,7 +511,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         const orderedColumnIndex = dstSortedColumnOrders.indexOf(
           dstSortedColumnOrders
             .slice(0)
-            .sort((b, a) => Math.abs(b - this._focusedColumnOrder) - Math.abs(a - this._focusedColumnOrder))[0]
+            .sort((b, a) => Math.abs(b - this._focusedColumnOrder) - Math.abs(a - this._focusedColumnOrder))[0],
         );
 
         // Index of the destination column order
@@ -591,7 +591,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         this._headerFocusable,
         this._itemsFocusable,
         this._footerFocusable,
-        this.$.focusexit
+        this.$.focusexit,
       ];
 
       let index = tabOrder.indexOf(srcElement);
@@ -636,7 +636,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           // scrolling. Focus the row for the stored focused item index instead.
           const columnIndex = Array.from(targetRow.children).indexOf(this._itemsFocusable);
           const focusedItemRow = Array.from(this.$.items.children).find(
-            (row) => !row.hidden && row.index === this._focusedItemIndex
+            (row) => !row.hidden && row.index === this._focusedItemIndex,
           );
           if (focusedItemRow) {
             itemsFocusTarget = focusedItemRow.children[columnIndex];
@@ -662,9 +662,9 @@ export const KeyboardNavigationMixin = (superClass) =>
         this.dispatchEvent(
           new CustomEvent(isRow ? 'row-activate' : 'cell-activate', {
             detail: {
-              model: this.__getRowModel(isRow ? element : element.parentElement)
-            }
-          })
+              model: this.__getRowModel(isRow ? element : element.parentElement),
+            },
+          }),
         );
       }
     }
@@ -735,7 +735,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           // Fire a public event for cell.
           const context = this.getEventContext(e);
           cell.dispatchEvent(
-            new CustomEvent('cell-focus', { bubbles: true, composed: true, detail: { context: context } })
+            new CustomEvent('cell-focus', { bubbles: true, composed: true, detail: { context: context } }),
           );
         }
       }
@@ -920,7 +920,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       return {
         section,
         row,
-        cell
+        cell,
       };
     }
 

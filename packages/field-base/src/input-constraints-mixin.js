@@ -108,11 +108,11 @@ export const InputConstraintsMixin = dedupingMixin(
         this.dispatchEvent(
           new CustomEvent('change', {
             detail: {
-              sourceEvent: event
+              sourceEvent: event,
             },
             bubbles: event.bubbles,
-            cancelable: event.cancelable
-          })
+            cancelable: event.cancelable,
+          }),
         );
       }
 
@@ -121,5 +121,5 @@ export const InputConstraintsMixin = dedupingMixin(
         // 0 is valid for `minlength` and `maxlength`
         return Boolean(constraint) || constraint === 0;
       }
-    }
+    },
 );

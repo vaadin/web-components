@@ -24,5 +24,5 @@ registerStyles(
       color: var(--material-error-text-color);
     }
   `,
-  { moduleId: 'material-form-item' }
+  { moduleId: 'material-form-item' },
 );

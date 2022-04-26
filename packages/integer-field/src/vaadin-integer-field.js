@@ -54,8 +54,8 @@ export class IntegerField extends NumberField {
        * @protected
        */
       _enabledCharPattern: {
-        value: '[-+\\d]'
-      }
+        value: '[-+\\d]',
+      },
     };
   }
 
@@ -87,7 +87,7 @@ export class IntegerField extends NumberField {
   _stepChanged(newVal, oldVal) {
     if (!this.__hasOnlyDigits(newVal)) {
       console.warn(
-        `Trying to set invalid step size "${newVal}", which is not a positive integer, to <vaadin-integer-field>. Resetting the default value 1.`
+        `Trying to set invalid step size "${newVal}", which is not a positive integer, to <vaadin-integer-field>. Resetting the default value 1.`,
       );
       this.step = 1;
       return;

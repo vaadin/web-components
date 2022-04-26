@@ -22,7 +22,7 @@ export const ListMixin = (superClass) =>
          * @type {boolean}
          */
         _hasVaadinListMixin: {
-          value: true
+          value: true,
         },
 
         /**
@@ -32,7 +32,7 @@ export const ListMixin = (superClass) =>
         selected: {
           type: Number,
           reflectToAttribute: true,
-          notify: true
+          notify: true,
         },
 
         /**
@@ -44,7 +44,7 @@ export const ListMixin = (superClass) =>
         orientation: {
           type: String,
           reflectToAttribute: true,
-          value: ''
+          value: '',
         },
 
         /**
@@ -62,7 +62,7 @@ export const ListMixin = (superClass) =>
         items: {
           type: Array,
           readOnly: true,
-          notify: true
+          notify: true,
         },
 
         /**
@@ -71,8 +71,8 @@ export const ListMixin = (superClass) =>
          */
         _searchBuf: {
           type: String,
-          value: ''
-        }
+          value: '',
+        },
       };
     }
 
@@ -170,7 +170,7 @@ export const ListMixin = (superClass) =>
             item.textContent
               .replace(/[^\p{L}\p{Nd}]/gu, '')
               .toLowerCase()
-              .indexOf(this._searchBuf) === 0
+              .indexOf(this._searchBuf) === 0,
         )
       ) {
         this._searchBuf = key.toLowerCase();

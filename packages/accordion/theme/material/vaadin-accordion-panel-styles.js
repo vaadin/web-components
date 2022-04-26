@@ -50,5 +50,5 @@ const accordionPanel = css`
 `;
 
 registerStyles('vaadin-accordion-panel', [details, accordionPanel], {
-  moduleId: 'material-accordion-panel'
+  moduleId: 'material-accordion-panel',
 });

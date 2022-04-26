@@ -66,14 +66,14 @@ export class UserTag extends ThemableMixin(DirMixin(PolymerElement)) {
        * Name of the user.
        */
       name: {
-        type: String
+        type: String,
       },
 
       /**
        * Id of the user.
        */
       uid: {
-        type: String
+        type: String,
       },
 
       /**
@@ -81,8 +81,8 @@ export class UserTag extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       colorIndex: {
         type: Number,
-        observer: '_colorIndexChanged'
-      }
+        observer: '_colorIndexChanged',
+      },
     };
   }
 
@@ -114,9 +114,9 @@ export class UserTag extends ThemableMixin(DirMixin(PolymerElement)) {
         bubbles: true,
         composed: true,
         detail: {
-          name: this.name
-        }
-      })
+          name: this.name,
+        },
+      }),
     );
   }
 }

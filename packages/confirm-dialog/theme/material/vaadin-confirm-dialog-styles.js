@@ -31,5 +31,5 @@ registerStyles(
       }
     }
   `,
-  { moduleId: 'material-confirm-dialog-overlay' }
+  { moduleId: 'material-confirm-dialog-overlay' },
 );

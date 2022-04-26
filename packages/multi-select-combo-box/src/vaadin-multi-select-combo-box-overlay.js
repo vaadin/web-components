@@ -16,7 +16,7 @@ registerStyles(
       );
     }
   `,
-  { moduleId: 'vaadin-multi-select-combo-box-overlay-styles' }
+  { moduleId: 'vaadin-multi-select-combo-box-overlay-styles' },
 );
 
 /**

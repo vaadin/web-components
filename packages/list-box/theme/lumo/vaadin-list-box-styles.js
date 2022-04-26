@@ -20,5 +20,5 @@ registerStyles(
       background-color: var(--lumo-contrast-10pct);
     }
   `,
-  { moduleId: 'lumo-list-box' }
+  { moduleId: 'lumo-list-box' },
 );

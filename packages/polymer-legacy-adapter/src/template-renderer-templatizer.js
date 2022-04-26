@@ -137,7 +137,7 @@ export class Templatizer extends PolymerElement {
         if (this[callback]) {
           this[callback](instance, path, value);
         }
-      }
+      },
     });
   }
 }

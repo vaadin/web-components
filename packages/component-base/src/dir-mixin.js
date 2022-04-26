@@ -55,9 +55,9 @@ export const DirMixin = (superClass) =>
             },
             toAttribute: (prop) => {
               return prop === '' ? null : prop;
-            }
-          }
-        }
+            },
+          },
+        },
       };
     }
 

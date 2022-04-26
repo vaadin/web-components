@@ -21,7 +21,7 @@ export const InputFieldMixin = (superclass) =>
          * https://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete
          */
         autocomplete: {
-          type: String
+          type: String,
         },
 
         /**
@@ -32,7 +32,7 @@ export const InputFieldMixin = (superclass) =>
          * off: Disable autocorrection.
          */
         autocorrect: {
-          type: String
+          type: String,
         },
 
         /**
@@ -45,7 +45,7 @@ export const InputFieldMixin = (superclass) =>
          * none: No capitalization.
          */
         autocapitalize: {
-          type: String
+          type: String,
         },
 
         /**
@@ -61,8 +61,8 @@ export const InputFieldMixin = (superclass) =>
          */
         _enabledCharPattern: {
           type: String,
-          observer: '_enabledCharPatternChanged'
-        }
+          observer: '_enabledCharPatternChanged',
+        },
       };
     }
 

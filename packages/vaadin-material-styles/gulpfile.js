@@ -34,23 +34,23 @@ gulp.task('icons', async () => {
       svgmin({
         plugins: [
           {
-            removeTitle: true
+            removeTitle: true,
           },
           {
-            removeViewBox: false
+            removeViewBox: false,
           },
           {
             cleanupNumericValues: {
-              floatPrecision: 6
-            }
+              floatPrecision: 6,
+            },
           },
           {
             convertPathData: {
-              floatPrecision: 6
-            }
-          }
-        ]
-      })
+              floatPrecision: 6,
+            },
+          },
+        ],
+      }),
     )
     .pipe(gulp.dest(folder))
     .on('finish', () => {
@@ -61,8 +61,8 @@ gulp.task('icons', async () => {
           sort({
             comparator: function (file1, file2) {
               return sortIconFilesNormalized(file1.relative, file2.relative);
-            }
-          })
+            },
+          }),
         )
         .pipe(
           iconfont({
@@ -71,8 +71,8 @@ gulp.task('icons', async () => {
             fontHeight: 2400,
             descent: 400,
             normalize: true,
-            timestamp: 1 // Truthy!
-          })
+            timestamp: 1, // Truthy!
+          }),
         )
         .on('glyphs', (glyphData) => {
           // Store for later use

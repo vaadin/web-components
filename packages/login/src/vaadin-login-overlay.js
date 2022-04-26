@@ -86,7 +86,7 @@ class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement)
       description: {
         type: String,
         value: 'Application description',
-        notify: true
+        notify: true,
       },
 
       /**
@@ -96,7 +96,7 @@ class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement)
       opened: {
         type: Boolean,
         value: false,
-        observer: '_onOpenedChange'
+        observer: '_onOpenedChange',
       },
 
       /**
@@ -105,8 +105,8 @@ class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement)
        */
       title: {
         type: String,
-        value: 'App name'
-      }
+        value: 'App name',
+      },
     };
   }
 

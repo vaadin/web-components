@@ -26,7 +26,7 @@ function parseObserver(observerString) {
 
   return {
     method,
-    observerProps
+    observerProps,
   };
 }
 
@@ -43,7 +43,7 @@ const PolylitMixinImplementation = (superclass) => {
     static createProperty(name, options) {
       if ([String, Boolean, Number, Array].includes(options)) {
         options = {
-          type: options
+          type: options,
         };
       }
 
@@ -116,7 +116,7 @@ const PolylitMixinImplementation = (superclass) => {
             // Do nothing, property is read-only.
           },
           configurable: true,
-          enumerable: true
+          enumerable: true,
         };
       }
 
@@ -238,9 +238,9 @@ const PolylitMixinImplementation = (superclass) => {
           this.dispatchEvent(
             new CustomEvent(`${camelToDash(k)}-changed`, {
               detail: {
-                value: this[k]
-              }
-            })
+                value: this[k],
+              },
+            }),
           );
         }
       });

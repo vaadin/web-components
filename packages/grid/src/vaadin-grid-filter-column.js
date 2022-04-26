@@ -34,7 +34,7 @@ class GridFilterColumn extends GridColumn {
       /**
        * Text to display as the label of the column filter text-field.
        */
-      header: String
+      header: String,
     };
   }
 

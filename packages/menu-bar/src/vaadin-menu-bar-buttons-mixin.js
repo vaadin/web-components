@@ -19,8 +19,8 @@ export const ButtonsMixin = (superClass) =>
          */
         _hasOverflow: {
           type: Boolean,
-          value: false
-        }
+          value: false,
+        },
       };
     }
 
@@ -128,7 +128,7 @@ export const ButtonsMixin = (superClass) =>
           btn.style.width = btnStyle.width;
         }
         overflow.item = {
-          children: buttons.filter((b, idx) => idx >= i).map((b) => b.item)
+          children: buttons.filter((b, idx) => idx >= i).map((b) => b.item),
         };
       }
     }

@@ -22,7 +22,7 @@ export class LabelController extends SlotController {
         this.__updateDefaultLabel(this.label);
 
         this.__observeLabel(node);
-      }
+      },
     );
   }
 
@@ -138,7 +138,7 @@ export class LabelController extends SlotController {
       attributeFilter: ['id'],
       childList: true,
       subtree: true,
-      characterData: true
+      characterData: true,
     });
   }
 
@@ -154,9 +154,9 @@ export class LabelController extends SlotController {
       new CustomEvent('label-changed', {
         detail: {
           hasLabel,
-          node: this.node
-        }
-      })
+          node: this.node,
+        },
+      }),
     );
   }
 

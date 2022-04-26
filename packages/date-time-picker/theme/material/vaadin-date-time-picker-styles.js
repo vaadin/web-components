@@ -6,5 +6,5 @@ import { requiredField } from '@vaadin/vaadin-material-styles/mixins/required-fi
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles('vaadin-date-time-picker', [requiredField, helper, customField], {
-  moduleId: 'material-date-time-picker'
+  moduleId: 'material-date-time-picker',
 });

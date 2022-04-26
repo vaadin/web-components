@@ -321,5 +321,5 @@ registerStyles(
       left: auto;
     }
   `,
-  { moduleId: 'vaadin-grid-styles' }
+  { moduleId: 'vaadin-grid-styles' },
 );

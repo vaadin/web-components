@@ -51,5 +51,5 @@ registerStyles(
       );
     }
   `,
-  { moduleId: 'lumo-grid-pro' }
+  { moduleId: 'lumo-grid-pro' },
 );

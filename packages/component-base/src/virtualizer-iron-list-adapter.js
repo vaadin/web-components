@@ -28,7 +28,7 @@ export class IronListAdapter {
 
     this.timeouts = {
       SCROLL_REORDER: 500,
-      IGNORE_WHEEL: 500
+      IGNORE_WHEEL: 500,
     };
 
     this.__resizeObserver = new ResizeObserver(() => this._resizeHandler());
@@ -187,7 +187,7 @@ export class IronListAdapter {
     flush();
 
     this._itemsChanged({
-      path: 'items'
+      path: 'items',
     });
     flush();
 
@@ -225,7 +225,7 @@ export class IronListAdapter {
   /** @private */
   get items() {
     return {
-      length: Math.min(this.size, MAX_VIRTUAL_COUNT)
+      length: Math.min(this.size, MAX_VIRTUAL_COUNT),
     };
   }
 
@@ -237,7 +237,7 @@ export class IronListAdapter {
   /** @private */
   get $() {
     return {
-      items: this.scrollContainer
+      items: this.scrollContainer,
     };
   }
 
@@ -308,7 +308,7 @@ export class IronListAdapter {
       this.__scrollReorderDebouncer = Debouncer.debounce(
         this.__scrollReorderDebouncer,
         timeOut.after(this.timeouts.SCROLL_REORDER),
-        () => this.__reorderElements()
+        () => this.__reorderElements(),
       );
     }
 
@@ -346,7 +346,7 @@ export class IronListAdapter {
     this.__debouncerWheelAnimationFrame = Debouncer.debounce(
       this.__debouncerWheelAnimationFrame,
       animationFrame,
-      () => (this._wheelAnimationFrame = false)
+      () => (this._wheelAnimationFrame = false),
     );
 
     const momentum = Math.abs(e.deltaX) + Math.abs(deltaY);
@@ -362,7 +362,7 @@ export class IronListAdapter {
       this._debouncerIgnoreNewWheel = Debouncer.debounce(
         this._debouncerIgnoreNewWheel,
         timeOut.after(this.timeouts.IGNORE_WHEEL),
-        () => (this._ignoreNewWheel = false)
+        () => (this._ignoreNewWheel = false),
       );
     } else if ((this._hasResidualMomentum && momentum <= this._previousMomentum) || this._ignoreNewWheel) {
       e.preventDefault();
@@ -433,7 +433,7 @@ export class IronListAdapter {
     const elementWithFocus = visibleElements.find(
       (element) =>
         element.contains(this.elementsContainer.getRootNode().activeElement) ||
-        element.contains(this.scrollTarget.getRootNode().activeElement)
+        element.contains(this.scrollTarget.getRootNode().activeElement),
     );
     const targetElement = elementWithFocus || visibleElements[0];
     if (!targetElement) {

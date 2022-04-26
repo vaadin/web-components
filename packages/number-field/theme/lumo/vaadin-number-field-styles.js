@@ -51,5 +51,5 @@ const numberField = css`
 `;
 
 registerStyles('vaadin-number-field', [inputFieldShared, fieldButton, numberField], {
-  moduleId: 'lumo-number-field'
+  moduleId: 'lumo-number-field',
 });

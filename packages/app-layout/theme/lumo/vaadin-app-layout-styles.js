@@ -68,5 +68,5 @@ registerStyles(
       }
     }
   `,
-  { moduleId: 'lumo-app-layout' }
+  { moduleId: 'lumo-app-layout' },
 );

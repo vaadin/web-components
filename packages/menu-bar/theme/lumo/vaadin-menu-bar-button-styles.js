@@ -98,5 +98,5 @@ const menuBarButton = css`
 `;
 
 registerStyles('vaadin-menu-bar-button', [button, menuBarButton], {
-  moduleId: 'lumo-menu-bar-button'
+  moduleId: 'lumo-menu-bar-button',
 });

@@ -32,7 +32,7 @@ export const LoginMixin = (superClass) =>
         action: {
           type: String,
           value: null,
-          notify: true
+          notify: true,
         },
 
         /**
@@ -44,7 +44,7 @@ export const LoginMixin = (superClass) =>
         disabled: {
           type: Boolean,
           value: false,
-          notify: true
+          notify: true,
         },
 
         /**
@@ -56,7 +56,7 @@ export const LoginMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-          notify: true
+          notify: true,
         },
 
         /**
@@ -67,7 +67,7 @@ export const LoginMixin = (superClass) =>
         noForgotPassword: {
           type: Boolean,
           value: false,
-          notify: true
+          notify: true,
         },
 
         /**
@@ -77,7 +77,7 @@ export const LoginMixin = (superClass) =>
          */
         noAutofocus: {
           type: Boolean,
-          value: false
+          value: false,
         },
 
         /**
@@ -119,15 +119,15 @@ export const LoginMixin = (superClass) =>
                 username: 'Username',
                 password: 'Password',
                 submit: 'Log in',
-                forgotPassword: 'Forgot password'
+                forgotPassword: 'Forgot password',
               },
               errorMessage: {
                 title: 'Incorrect username or password',
-                message: 'Check that you have entered the correct username and password and try again.'
-              }
+                message: 'Check that you have entered the correct username and password and try again.',
+              },
             };
           },
-          notify: true
+          notify: true,
         },
 
         /**
@@ -136,8 +136,8 @@ export const LoginMixin = (superClass) =>
          */
         _preventAutoEnable: {
           type: Boolean,
-          value: false
-        }
+          value: false,
+        },
       };
     }
 

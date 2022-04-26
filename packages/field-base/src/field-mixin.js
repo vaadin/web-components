@@ -28,7 +28,7 @@ export const FieldMixin = (superclass) =>
          */
         ariaTarget: {
           type: Object,
-          observer: '_ariaTargetChanged'
+          observer: '_ariaTargetChanged',
         },
 
         /**
@@ -38,7 +38,7 @@ export const FieldMixin = (superclass) =>
          */
         errorMessage: {
           type: String,
-          observer: '_errorMessageChanged'
+          observer: '_errorMessageChanged',
         },
 
         /**
@@ -47,11 +47,11 @@ export const FieldMixin = (superclass) =>
          */
         helperText: {
           type: String,
-          observer: '_helperTextChanged'
+          observer: '_helperTextChanged',
         },
 
         /** @protected */
-        _helperId: String
+        _helperId: String,
       };
     }
 

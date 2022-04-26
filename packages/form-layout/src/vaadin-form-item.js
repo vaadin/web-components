@@ -290,7 +290,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
     if (fieldNodes.length > 1) {
       console.warn(
         `WARNING: Since Vaadin 23, placing multiple fields directly to a <vaadin-form-item> is deprecated.
-Please wrap fields with a <vaadin-custom-field> instead.`
+Please wrap fields with a <vaadin-custom-field> instead.`,
       );
     }
 

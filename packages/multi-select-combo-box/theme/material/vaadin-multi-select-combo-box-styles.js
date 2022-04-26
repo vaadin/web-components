@@ -20,8 +20,8 @@ registerStyles(
     }
   `,
   {
-    moduleId: 'material-multi-select-combo-box-item'
-  }
+    moduleId: 'material-multi-select-combo-box-item',
+  },
 );
 
 const multiSelectComboBox = css`
@@ -52,5 +52,5 @@ const multiSelectComboBox = css`
 `;
 
 registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectComboBox], {
-  moduleId: 'material-multi-select-combo-box'
+  moduleId: 'material-multi-select-combo-box',
 });
