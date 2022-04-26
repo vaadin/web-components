@@ -434,7 +434,7 @@ class ChartSeries extends PolymerElement {
 
   /** @private */
   __showWarn(propertyName, acceptedValues) {
-    console.warn('<vaadin-chart-series> Acceptable values for "' + propertyName + '" are ' + acceptedValues);
+    console.warn(`<vaadin-chart-series> Acceptable values for "${propertyName}" are ${acceptedValues}`);
   }
 }
 

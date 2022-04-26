@@ -27,7 +27,7 @@ describe('combo-box', () => {
     const pad = (num = 0, fmt = '00') => (fmt + num).substr((fmt + num).length - fmt.length);
     // With default step 1, value should be set to `hh:00`
     for (var i = 0; i < 24; i++) {
-      const expected = pad(i) + ':00';
+      const expected = `${pad(i)}:00`;
       expect(comboBox.filteredItems[i].label).to.be.equal(expected);
       expect(comboBox.filteredItems[i].value).to.be.equal(expected);
     }

@@ -26,7 +26,7 @@ function registerStyleModule(themeFor, style, { moduleId, include = undefined })
   domModule.id = moduleId;
   domModule.innerHTML = `
     <template>
-      <style ${include ? 'include = ' + include : ''}>${style.cssText}</style>
+      <style ${include ? `include = ${include}` : ''}>${style.cssText}</style>
     </template>
   `;
   domModule.register(moduleId);

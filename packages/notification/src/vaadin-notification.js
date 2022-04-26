@@ -144,7 +144,7 @@ class NotificationContainer extends ThemableMixin(ElementMixin(PolymerElement)) 
     const landscape = innerWidth > innerHeight;
     const clientHeight = document.documentElement.clientHeight;
     if (landscape && clientHeight > innerHeight) {
-      this.style.bottom = clientHeight - innerHeight + 'px';
+      this.style.bottom = `${clientHeight - innerHeight}px`;
     } else {
       this.style.bottom = '0';
     }

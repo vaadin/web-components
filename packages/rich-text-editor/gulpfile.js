@@ -55,7 +55,7 @@ $_documentContainer.innerHTML = \`
 `;
       glyphs.forEach((g) => {
         const name = g.name.replace(/\s/g, '-').toLowerCase();
-        const unicode = '\\\\' + g.unicode[0].charCodeAt(0).toString(16);
+        const unicode = `\\\\${g.unicode[0].charCodeAt(0).toString(16)}`;
         output += `      --${fontName}-${name}: "${unicode}";\n`;
       });
       output += `    }

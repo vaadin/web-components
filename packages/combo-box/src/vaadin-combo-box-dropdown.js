@@ -285,7 +285,7 @@ export class ComboBoxDropdown extends PolymerElement {
     if (!this.positionTarget) {
       return;
     }
-    const inputWidth = this.positionTarget.clientWidth + 'px';
+    const inputWidth = `${this.positionTarget.clientWidth}px`;
     const propPrefix = `${this.__hostTagName}-overlay`;
     const customWidth = getComputedStyle(this).getPropertyValue(`--${propPrefix}-width`);
 

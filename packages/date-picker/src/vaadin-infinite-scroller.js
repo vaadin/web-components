@@ -121,7 +121,7 @@ class InfiniteScroller extends PolymerElement {
 
     this._buffers = Array.prototype.slice.call(this.root.querySelectorAll('.buffer'));
 
-    this.$.fullHeight.style.height = this._initialScroll * 2 + 'px';
+    this.$.fullHeight.style.height = `${this._initialScroll * 2}px`;
 
     const tpl = this.querySelector('template');
     this._TemplateClass = templatize(tpl, this, {
@@ -168,7 +168,7 @@ class InfiniteScroller extends PolymerElement {
   _translateBuffer(up) {
     const index = up ? 1 : 0;
     this._buffers[index].translateY = this._buffers[index ? 0 : 1].translateY + this._bufferHeight * (index ? -1 : 1);
-    this._buffers[index].style.transform = 'translate3d(0, ' + this._buffers[index].translateY + 'px, 0)';
+    this._buffers[index].style.transform = `translate3d(0, ${this._buffers[index].translateY}px, 0)`;
     this._buffers[index].updated = false;
     this._buffers.reverse();
   }
@@ -279,7 +279,7 @@ class InfiniteScroller extends PolymerElement {
     this._buffers[0].translateY = this._initialScroll - this._bufferHeight;
     this._buffers[1].translateY = this._initialScroll;
     this._buffers.forEach((buffer) => {
-      buffer.style.transform = 'translate3d(0, ' + buffer.translateY + 'px, 0)';
+      buffer.style.transform = `translate3d(0, ${buffer.translateY}px, 0)`;
     });
     this._buffers[0].updated = this._buffers[1].updated = false;
     this._updateClones(true);
@@ -297,11 +297,11 @@ class InfiniteScroller extends PolymerElement {
     this._buffers.forEach((buffer) => {
       for (let i = 0; i < this.bufferSize; i++) {
         const itemWrapper = document.createElement('div');
-        itemWrapper.style.height = this.itemHeight + 'px';
+        itemWrapper.style.height = `${this.itemHeight}px`;
         itemWrapper.instance = {};
 
         const contentId = (InfiniteScroller._contentIndex = InfiniteScroller._contentIndex + 1 || 0);
-        const slotName = 'vaadin-infinite-scroller-item-content-' + contentId;
+        const slotName = `vaadin-infinite-scroller-item-content-${contentId}`;
 
         const insertionPoint = document.createElement('slot');
         insertionPoint.setAttribute('name', slotName);

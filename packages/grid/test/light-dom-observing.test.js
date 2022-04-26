@@ -331,19 +331,19 @@ describe('light dom observing', () => {
 
   function expectFirstColumnHeader(columnName, level) {
     level = level || 0;
-    expect(getCellContent(getRows(header)[level].cells[0]).textContent).to.contain(columnName + ' header');
+    expect(getCellContent(getRows(header)[level].cells[0]).textContent).to.contain(`${columnName} header`);
   }
 
   function expectFirstColumnFooter(columnName, level) {
     level = level || 0;
     const lastLevel = getRows(header).length - 1;
-    expect(getCellContent(getRows(footer)[lastLevel - level].cells[0]).textContent).to.contain(columnName + ' footer');
+    expect(getCellContent(getRows(footer)[lastLevel - level].cells[0]).textContent).to.contain(`${columnName} footer`);
   }
 
   function expectFirstColumnBody(columnName) {
-    expect(getCellContent(getRows(body)[0].cells[0]).textContent).to.contain(columnName + ' body foo0');
-    expect(getCellContent(getRows(body)[1].cells[0]).textContent).to.contain(columnName + ' body foo1');
-    expect(getCellContent(getRows(body)[2].cells[0]).textContent).to.contain(columnName + ' body foo2');
+    expect(getCellContent(getRows(body)[0].cells[0]).textContent).to.contain(`${columnName} body foo0`);
+    expect(getCellContent(getRows(body)[1].cells[0]).textContent).to.contain(`${columnName} body foo1`);
+    expect(getCellContent(getRows(body)[2].cells[0]).textContent).to.contain(`${columnName} body foo2`);
   }
 
   function expectFirstColumn(columnName, level) {
@@ -545,7 +545,7 @@ describe('light dom observing', () => {
     it('should provide initial state', async () => {
       repeater.render();
       await nextFrame();
-      expectFirstColumn(prefix + ' a', columnsLevel);
+      expectFirstColumn(`${prefix} a`, columnsLevel);
       expectFirstColumn('', columnsLevel);
       expectNumberOfColumns(3);
     });
@@ -556,7 +556,7 @@ describe('light dom observing', () => {
       repeater.render();
       await nextFrame();
       flushGrid(grid);
-      expectFirstColumn(prefix + ' d', columnsLevel);
+      expectFirstColumn(`${prefix} d`, columnsLevel);
       expectFirstColumn('', columnsLevel);
       expectNumberOfColumns(4);
     });
@@ -567,7 +567,7 @@ describe('light dom observing', () => {
       repeater.render();
       await nextFrame();
       flushGrid(grid);
-      expectFirstColumn(prefix + ' b', columnsLevel);
+      expectFirstColumn(`${prefix} b`, columnsLevel);
       expectFirstColumn('', columnsLevel);
       expectNumberOfColumns(2);
     });

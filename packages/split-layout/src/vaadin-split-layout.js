@@ -276,7 +276,7 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       // Pure zero does not play well in Safari
       flexBasis = 0.000001;
     }
-    element.style.flex = '1 1 ' + flexBasis + 'px';
+    element.style.flex = `1 1 ${flexBasis}px`;
   }
 
   /** @private */

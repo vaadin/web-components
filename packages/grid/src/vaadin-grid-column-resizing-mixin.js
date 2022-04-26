@@ -80,7 +80,7 @@ export const ColumnResizingMixin = (superClass) =>
             maxWidth = cellWidth + (this.__isRTL ? cellRect.left - eventX : eventX - cellRect.right);
           }
 
-          column.width = Math.max(minWidth, maxWidth) + 'px';
+          column.width = `${Math.max(minWidth, maxWidth)}px`;
           column.flexGrow = 0;
         }
         // Fix width and flex-grow for all preceding columns
@@ -90,7 +90,7 @@ export const ColumnResizingMixin = (superClass) =>
           })
           .forEach(function (cell, index, array) {
             if (index < array.indexOf(targetCell)) {
-              cell._column.width = cell.offsetWidth + 'px';
+              cell._column.width = `${cell.offsetWidth}px`;
               cell._column.flexGrow = 0;
             }
           });

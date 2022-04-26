@@ -49,7 +49,7 @@ describe('rich text editor', () => {
         content = `[{"insert":"\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n"}]`;
       });
 
-      it('rich text editor height should be ' + conditionValues[key] + ' the ' + definedValue, () => {
+      it(`rich text editor height should be ${conditionValues[key]} the ${definedValue}`, () => {
         // Includes borders and indents
         compareValue(rte.offsetHeight, 500, key);
       });
@@ -65,22 +65,18 @@ describe('rich text editor', () => {
         expect(editorContentContainer.clientHeight).to.be.equal(editorContent.clientHeight);
       });
 
-      it(
-        'all height constrains should be ' +
-          conditionValues[key] +
-          (key === 2 ? ' the ' + definedValue + ' and greater than ' : ' ') +
-          ' the previous values after the content was inserted',
-        () => {
-          const elementsArray = [rte, editorContainer, editorContentContainer, editorContent];
-          getAndSaveHeightConstrains(elementsArray);
-          rte.value = content;
-          // If the max-height is defined RTE height should equal max-height after inserting the content.
-          if (key === 2) {
-            compareValue(rte.offsetHeight, 500, 0);
-          }
-          getAndCompareHeightConstrains(elementsArray, key);
+      it(`all height constrains should be ${conditionValues[key]}${
+        key === 2 ? ` the ${definedValue} and greater than ` : ' '
+      } the previous values after the content was inserted`, () => {
+        const elementsArray = [rte, editorContainer, editorContentContainer, editorContent];
+        getAndSaveHeightConstrains(elementsArray);
+        rte.value = content;
+        // If the max-height is defined RTE height should equal max-height after inserting the content.
+        if (key === 2) {
+          compareValue(rte.offsetHeight, 500, 0);
         }
-      );
+        getAndCompareHeightConstrains(elementsArray, key);
+      });
     });
   });
 });

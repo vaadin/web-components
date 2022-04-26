@@ -144,7 +144,7 @@ describe('overlay', () => {
       });
 
       it('should reflect value in label', () => {
-        overlay.i18n.formatDate = (date) => date.month + 1 + '/' + date.day + '/' + date.year;
+        overlay.i18n.formatDate = (date) => `${date.month + 1}/${date.day}/${date.year}`;
         overlay.selectedDate = new Date(2000, 1, 1);
         expect(overlay.root.querySelector('[part="label"]').textContent.trim()).to.equal('2/1/2000');
       });

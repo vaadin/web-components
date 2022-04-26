@@ -54,7 +54,7 @@ describe('edit column renderer', () => {
       column.renderer = function (root, owner, model) {
         root.innerHTML = '';
         const wrapper = document.createElement('div');
-        const text = document.createTextNode(model.index + ' ' + model.item.name);
+        const text = document.createTextNode(`${model.index} ${model.item.name}`);
         wrapper.appendChild(text);
         root.appendChild(wrapper);
       };

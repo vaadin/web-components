@@ -31,7 +31,7 @@ export const infiniteDataProvider = (params, callback) => {
   callback(
     Array.from({ length: params.pageSize }, (_, index) => {
       return {
-        value: 'foo' + (params.page * params.pageSize + index)
+        value: `foo${params.page * params.pageSize + index}`
       };
     })
   );

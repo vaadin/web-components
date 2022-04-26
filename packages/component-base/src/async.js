@@ -206,7 +206,7 @@ const microTask = {
     const idx = handle - microtaskLastHandle;
     if (idx >= 0) {
       if (!microtaskCallbacks[idx]) {
-        throw new Error('invalid async handle: ' + handle);
+        throw new Error(`invalid async handle: ${handle}`);
       }
       microtaskCallbacks[idx] = null;
     }

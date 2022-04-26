@@ -121,7 +121,7 @@ async function cherryPickCommits() {
 }
 
 async function labelCommit(url, label) {
-  const issueURL = url.replace('pulls', 'issues') + '/labels';
+  const issueURL = `${url.replace('pulls', 'issues')}/labels`;
   const options = {
     headers: {
       'User-Agent': 'Vaadin Cherry Pick',
@@ -133,7 +133,7 @@ async function labelCommit(url, label) {
 }
 
 async function postComment(url, userName, branch, message) {
-  const issueURL = url.replace('pulls', 'issues') + '/comments';
+  const issueURL = `${url.replace('pulls', 'issues')}/comments`;
   const options = {
     headers: {
       'User-Agent': 'Vaadin Cherry Pick',

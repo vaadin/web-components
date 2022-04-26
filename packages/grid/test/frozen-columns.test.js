@@ -114,7 +114,7 @@ const transformsEqual = (element, transform) => {
           let cells = getRowCells(containerRows[0]);
 
           listenOnce(grid.$.table, 'scroll', () => {
-            expect(transformsEqual(cells[0], 'translate(' + translateValue + 'px, 0px)')).to.be.true;
+            expect(transformsEqual(cells[0], `translate(${translateValue}px, 0px)`)).to.be.true;
 
             grid._columnTree[0][0].frozen = false;
             cells = getRowCells(getRows(containerElement)[0]);
@@ -136,7 +136,7 @@ const transformsEqual = (element, transform) => {
             cells = getRowCells(getRows(containerElement)[0]);
             grid._debouncerCacheElements.flush();
 
-            expect(transformsEqual(cells[1], 'translate(' + translateValue + 'px, 0px)')).to.be.true;
+            expect(transformsEqual(cells[1], `translate(${translateValue}px, 0px)`)).to.be.true;
             done();
           });
           grid.__setNormalizedScrollLeft(grid.$.table, isRTL ? scrollbarWidth : defaultCellWidth);
@@ -247,7 +247,7 @@ const transformsEqual = (element, transform) => {
 
         it('should update transforms when frozen columns decrease', () => {
           const cells = getRowCells(getRows(containerElement)[0]);
-          expect(transformsEqual(cells[2], 'translate(' + translateValue + 'px, 0px)')).to.be.true;
+          expect(transformsEqual(cells[2], `translate(${translateValue}px, 0px)`)).to.be.true;
 
           grid._columnTree[0][2].frozenToEnd = false;
           grid._debouncerCacheElements.flush();
@@ -262,7 +262,7 @@ const transformsEqual = (element, transform) => {
           grid._columnTree[0][1].frozenToEnd = true;
           grid._debouncerCacheElements.flush();
 
-          expect(transformsEqual(cells[1], 'translate(' + translateValue + 'px, 0px)')).to.be.true;
+          expect(transformsEqual(cells[1], `translate(${translateValue}px, 0px)`)).to.be.true;
         });
 
         it('should re-position cells on grid element resize', async () => {

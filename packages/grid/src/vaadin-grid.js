@@ -646,7 +646,7 @@ class Grid extends ElementMixin(
   /** @private */
   _createCell(tagName) {
     const contentId = (this._contentIndex = this._contentIndex + 1 || 0);
-    const slotName = 'vaadin-grid-cell-content-' + contentId;
+    const slotName = `vaadin-grid-cell-content-${contentId}`;
 
     const cellContent = document.createElement('vaadin-grid-cell-content');
     cellContent.setAttribute('slot', slotName);

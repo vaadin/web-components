@@ -244,7 +244,7 @@ export const PositionMixin = (superClass) =>
         targetRect[noOverlap === shouldAlignStart ? propNames.end : propNames.start];
 
       return {
-        [cssPropNameToSet]: currentValue + diff * (shouldAlignStart ? -1 : 1) + 'px',
+        [cssPropNameToSet]: `${currentValue + diff * (shouldAlignStart ? -1 : 1)}px`,
         [cssPropNameToClear]: ''
       };
     }

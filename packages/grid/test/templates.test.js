@@ -78,7 +78,7 @@ class GridWithSlots extends PolymerElement {
   }
 
   _format(value) {
-    return 'foo' + value;
+    return `foo${value}`;
   }
 
   _formatItem(item) {

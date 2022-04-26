@@ -238,8 +238,8 @@ export const InputFieldMixin = (superclass) =>
     /** @private */
     _enabledCharPatternChanged(charPattern) {
       if (charPattern) {
-        this.__enabledCharRegExp = new RegExp('^' + charPattern + '$');
-        this.__enabledTextRegExp = new RegExp('^' + charPattern + '*$');
+        this.__enabledCharRegExp = new RegExp(`^${charPattern}$`);
+        this.__enabledTextRegExp = new RegExp(`^${charPattern}*$`);
       }
     }
   };

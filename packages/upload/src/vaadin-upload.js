@@ -461,7 +461,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     const unit = ~~(Math.log(bytes) / Math.log(base));
     const dec = Math.max(0, Math.min(3, unit - 1));
     const size = parseFloat((bytes / base ** unit).toFixed(dec));
-    return size + ' ' + this.i18n.units.size[unit];
+    return `${size} ${this.i18n.units.size[unit]}`;
   }
 
   /** @private */
@@ -498,16 +498,12 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   _formatFileProgress(file) {
-    return (
-      file.totalStr +
-      ': ' +
-      file.progress +
-      '% (' +
-      (file.loaded > 0
+    const remainingTime =
+      file.loaded > 0
         ? this.i18n.uploading.remainingTime.prefix + file.remainingStr
-        : this.i18n.uploading.remainingTime.unknown) +
-      ')'
-    );
+        : this.i18n.uploading.remainingTime.unknown;
+
+    return `${file.totalStr}: ${file.progress}% (${remainingTime})`;
   }
 
   /** @private */
@@ -751,7 +747,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   _notifyFileChanges(file) {
-    var p = 'files.' + this.files.indexOf(file) + '.';
+    var p = `files.${this.files.indexOf(file)}.`;
     for (const i in file) {
       // eslint-disable-next-line no-prototype-builtins
       if (file.hasOwnProperty(i)) {
@@ -789,7 +785,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
       return;
     }
     const fileExt = file.name.match(/\.[^.]*$|$/)[0];
-    const re = new RegExp('^(' + this.accept.replace(/[, ]+/g, '|').replace(/\/\*/g, '/.*') + ')$', 'i');
+    const re = new RegExp(`^(${this.accept.replace(/[, ]+/g, '|').replace(/\/\*/g, '/.*')})$`, 'i');
     if (this.accept && !(re.test(file.type) || re.test(fileExt))) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {

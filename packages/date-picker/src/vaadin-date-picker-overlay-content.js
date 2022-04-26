@@ -641,8 +641,8 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
   _translateXChanged(x) {
     if (!this._desktopMode) {
-      this.$.monthScroller.style.transform = 'translateX(' + (x - this._yearScrollerWidth) + 'px)';
-      this.$.yearScroller.style.transform = 'translateX(' + x + 'px)';
+      this.$.monthScroller.style.transform = `translateX(${x - this._yearScrollerWidth}px)`;
+      this.$.yearScroller.style.transform = `translateX(${x}px)`;
     }
   }
 

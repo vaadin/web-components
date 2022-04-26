@@ -564,19 +564,19 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
     const isRtl = this.getAttribute('dir') === 'rtl';
 
     if (isRtl) {
-      this._overlayElement.style.right = document.documentElement.clientWidth - btnRect.right + 'px';
+      this._overlayElement.style.right = `${document.documentElement.clientWidth - btnRect.right}px`;
     } else {
-      this._overlayElement.style.left = btnRect.left + 'px';
+      this._overlayElement.style.left = `${btnRect.left}px`;
     }
 
     if (bottomAlign) {
       this._overlayElement.setAttribute('bottom-aligned', '');
       this._overlayElement.style.removeProperty('top');
-      this._overlayElement.style.bottom = viewportHeight - btnRect.top + 'px';
+      this._overlayElement.style.bottom = `${viewportHeight - btnRect.top}px`;
     } else {
       this._overlayElement.removeAttribute('bottom-aligned');
       this._overlayElement.style.removeProperty('bottom');
-      this._overlayElement.style.top = btnRect.bottom + 'px';
+      this._overlayElement.style.top = `${btnRect.bottom}px`;
     }
   }
 }

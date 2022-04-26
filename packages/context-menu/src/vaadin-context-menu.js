@@ -579,7 +579,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
     const overlay = this.$.overlay;
     const style = overlay.style;
 
-    style[coord] = (parseInt(style[coord]) || 0) + diff + 'px';
+    style[coord] = `${(parseInt(style[coord]) || 0) + diff}px`;
   }
 
   /** @private */
@@ -618,25 +618,25 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
     if (!this.__isRTL) {
       if (x < wdthVport / 2 || x < xMax) {
         // Menu is displayed in the right side of the anchor
-        style.left = x + 'px';
+        style.left = `${x}px`;
       } else {
         // Menu is displayed in the left side of the anchor
-        style.right = Math.max(0, wdthVport - x) + 'px';
+        style.right = `${Math.max(0, wdthVport - x)}px`;
         this._setEndAligned(overlay);
       }
     } else if (x > wdthVport / 2 || x > xMin) {
       // Menu is displayed in the right side of the anchor
-      style.right = Math.max(0, wdthVport - x) + 'px';
+      style.right = `${Math.max(0, wdthVport - x)}px`;
     } else {
       // Menu is displayed in the left side of the anchor
-      style.left = x + 'px';
+      style.left = `${x}px`;
       this._setEndAligned(overlay);
     }
 
     if (y < hghtVport / 2 || y < yMax) {
-      style.top = y + 'px';
+      style.top = `${y}px`;
     } else {
-      style.bottom = Math.max(0, hghtVport - y) + 'px';
+      style.bottom = `${Math.max(0, hghtVport - y)}px`;
       overlay.setAttribute('bottom-aligned', '');
     }
   }
@@ -660,7 +660,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
         return this._getEventCoordinate(event.detail.sourceEvent, coord);
       }
     } else {
-      const prop = 'client' + coord.toUpperCase();
+      const prop = `client${coord.toUpperCase()}`;
       const position = event.changedTouches ? event.changedTouches[0][prop] : event[prop];
 
       if (position === 0) {

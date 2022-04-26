@@ -251,7 +251,7 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
   /** @private */
   __scrollPositionUpdated() {
     this._inputField.style.setProperty('--_text-area-vertical-scroll-position', '0px');
-    this._inputField.style.setProperty('--_text-area-vertical-scroll-position', this._inputField.scrollTop + 'px');
+    this._inputField.style.setProperty('--_text-area-vertical-scroll-position', `${this._inputField.scrollTop}px`);
   }
 
   /** @private */
@@ -308,7 +308,7 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
 
     const inputHeight = input.scrollHeight;
     if (inputHeight > input.clientHeight) {
-      input.style.height = inputHeight + 'px';
+      input.style.height = `${inputHeight}px`;
     }
 
     // Restore
