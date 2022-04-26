@@ -229,7 +229,7 @@ const getFailedScreenshotName = (args) => getScreenshotFileName(args, 'failed');
 
 const createSnapshotTestsConfig = (config) => {
   const snapshotPackages = getAllSnapshotPackages();
-  const packages = getTestPackages(snapshotPackages);
+  const packages = [] ?? getTestPackages(snapshotPackages);
   const groups = getSnapshotTestGroups(packages);
 
   return {
@@ -243,7 +243,7 @@ const createSnapshotTestsConfig = (config) => {
 
 const createUnitTestsConfig = (config) => {
   const allPackages = getAllUnitPackages();
-  const testPackages = getTestPackages(allPackages);
+  const testPackages = allPackages ?? getTestPackages(allPackages);
   const groups = getUnitTestGroups(testPackages);
 
   return {
@@ -267,7 +267,7 @@ const createUnitTestsConfig = (config) => {
 
 const createVisualTestsConfig = (theme) => {
   const visualPackages = getAllVisualPackages();
-  const packages = getTestPackages(visualPackages);
+  const packages = [] ?? getTestPackages(visualPackages);
   const groups = getVisualTestGroups(packages, theme);
 
   const sauceLabsLauncher = createSauceLabsLauncher(
