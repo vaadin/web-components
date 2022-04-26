@@ -8,7 +8,7 @@ import {
   TextArea,
   TextAreaChangeEvent,
   TextAreaInvalidChangedEvent,
-  TextAreaValueChangedEvent
+  TextAreaValueChangedEvent,
 } from '../../vaadin-text-area.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

@@ -7,5 +7,5 @@ registerStyles(
       color: var(--lumo-contrast-color);
       background-color: var(--lumo-base-color);
     }
-  `
+  `,
 );

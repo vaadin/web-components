@@ -3,7 +3,7 @@ import {
   DialogOpenedChangedEvent,
   DialogRenderer,
   DialogResizeDimensions,
-  DialogResizeEvent
+  DialogResizeEvent,
 } from '../../vaadin-dialog.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

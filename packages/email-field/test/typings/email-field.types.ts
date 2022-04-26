@@ -3,7 +3,7 @@ import {
   EmailField,
   EmailFieldChangeEvent,
   EmailFieldInvalidChangedEvent,
-  EmailFieldValueChangedEvent
+  EmailFieldValueChangedEvent,
 } from '../../vaadin-email-field.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

@@ -3,7 +3,7 @@ import {
   RichTextEditor,
   RichTextEditorChangeEvent,
   RichTextEditorHtmlValueChangedEvent,
-  RichTextEditorValueChangedEvent
+  RichTextEditorValueChangedEvent,
 } from '../../vaadin-rich-text-editor.js';
 
 const richTextEditor = document.createElement('vaadin-rich-text-editor');

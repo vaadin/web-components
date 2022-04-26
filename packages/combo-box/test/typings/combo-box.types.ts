@@ -24,7 +24,7 @@ import {
   ComboBoxOpenedChangedEvent,
   ComboBoxRenderer,
   ComboBoxSelectedItemChangedEvent,
-  ComboBoxValueChangedEvent
+  ComboBoxValueChangedEvent,
 } from '../../vaadin-combo-box';
 import {
   ComboBoxLight,
@@ -34,7 +34,7 @@ import {
   ComboBoxLightInvalidChangedEvent,
   ComboBoxLightOpenedChangedEvent,
   ComboBoxLightSelectedItemChangedEvent,
-  ComboBoxLightValueChangedEvent
+  ComboBoxLightValueChangedEvent,
 } from '../../vaadin-combo-box-light';
 
 interface TestComboBoxItem {

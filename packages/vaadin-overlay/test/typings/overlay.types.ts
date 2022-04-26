@@ -8,7 +8,7 @@ import {
   OverlayEscapePressEvent,
   OverlayOpenedChangedEvent,
   OverlayOpenEvent,
-  OverlayOutsideClickEvent
+  OverlayOutsideClickEvent,
 } from '../../vaadin-overlay.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

@@ -9,7 +9,7 @@ import {
   CrudItemsChangedEvent,
   CrudNewEvent,
   CrudSaveEvent,
-  CrudSizeChangedEvent
+  CrudSizeChangedEvent,
 } from '../../vaadin-crud.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

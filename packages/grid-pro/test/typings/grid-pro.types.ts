@@ -10,7 +10,7 @@ import {
   GridExpandedItemsChangedEvent,
   GridItemModel,
   GridLoadingChangedEvent,
-  GridSelectedItemsChangedEvent
+  GridSelectedItemsChangedEvent,
 } from '@vaadin/grid';
 import { GridColumn } from '@vaadin/grid/vaadin-grid-column';
 import { InlineEditingMixinClass } from '../../src/vaadin-grid-pro-inline-editing-mixin';

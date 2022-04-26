@@ -19,7 +19,7 @@ import {
   MultiSelectComboBoxCustomValuesSetEvent,
   MultiSelectComboBoxFilterChangedEvent,
   MultiSelectComboBoxInvalidChangedEvent,
-  MultiSelectComboBoxSelectedItemsChangedEvent
+  MultiSelectComboBoxSelectedItemsChangedEvent,
 } from '../../vaadin-multi-select-combo-box.js';
 
 interface TestComboBoxItem {

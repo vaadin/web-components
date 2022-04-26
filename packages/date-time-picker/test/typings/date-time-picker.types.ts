@@ -3,7 +3,7 @@ import {
   DateTimePicker,
   DateTimePickerChangeEvent,
   DateTimePickerInvalidChangedEvent,
-  DateTimePickerValueChangedEvent
+  DateTimePickerValueChangedEvent,
 } from '../../vaadin-date-time-picker.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
