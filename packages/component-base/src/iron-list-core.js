@@ -720,7 +720,7 @@ export const ironList = {
         if (this._isRTL) {
           x *= -1;
         }
-        this.translate3d(x + 'px', y + 'px', 0, this._physicalItems[pidx]);
+        this.translate3d(`${x}px`, `${y}px`, 0, this._physicalItems[pidx]);
         if (this._shouldRenderNextRow(vidx)) {
           y += this._rowHeight;
         }
@@ -730,7 +730,7 @@ export const ironList = {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       this._iterateItems((pidx, vidx) => {
         const item = this._physicalItems[pidx];
-        this.translate3d(0, y + 'px', 0, item);
+        this.translate3d(0, `${y}px`, 0, item);
         y += this._physicalSizes[pidx];
         const itemId = item.id;
         if (itemId) {
@@ -811,7 +811,7 @@ export const ironList = {
     forceUpdate = forceUpdate || (this.grid && this.$.items.style.height < this._estScrollHeight);
     // Amortize height adjustment, so it won't trigger large repaints too often.
     if (forceUpdate || Math.abs(this._estScrollHeight - this._scrollHeight) >= this._viewportHeight) {
-      this.$.items.style.height = this._estScrollHeight + 'px';
+      this.$.items.style.height = `${this._estScrollHeight}px`;
       this._scrollHeight = this._estScrollHeight;
     }
   },

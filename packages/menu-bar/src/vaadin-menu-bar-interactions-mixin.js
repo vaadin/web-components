@@ -214,14 +214,14 @@ export const InteractionsMixin = (superClass) =>
       const overlay = e.target;
       const { width, height, left } = this._expandedButton.getBoundingClientRect();
       if (overlay.hasAttribute('bottom-aligned')) {
-        overlay.style.bottom = parseInt(getComputedStyle(overlay).bottom) + height + 'px';
+        overlay.style.bottom = `${parseInt(getComputedStyle(overlay).bottom) + height}px`;
       }
       const endAligned = overlay.hasAttribute('end-aligned');
       if (endAligned) {
         if (this.__isRTL) {
-          overlay.style.left = left + 'px';
+          overlay.style.left = `${left}px`;
         } else {
-          overlay.style.right = parseInt(getComputedStyle(overlay).right) - width + 'px';
+          overlay.style.right = `${parseInt(getComputedStyle(overlay).right) - width}px`;
         }
       }
     }

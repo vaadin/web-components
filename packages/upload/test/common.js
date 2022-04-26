@@ -20,7 +20,7 @@ export function createFile(fileSize, contentType) {
     array.push('A');
   }
   var file = new Blob([new Uint8Array(array)], { type: contentType || 'application/x-octet-stream' });
-  file.name = 'file-' + fileCounter;
+  file.name = `file-${fileCounter}`;
   fileCounter += 1;
   return file;
 }

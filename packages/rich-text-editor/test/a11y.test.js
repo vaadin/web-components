@@ -34,11 +34,11 @@ describe('accessibility', () => {
       const defaultI18n = rte.i18n;
 
       const localized = {};
-      Object.keys(defaultI18n).forEach((key) => (localized[key] = defaultI18n[key] + ' localized'));
+      Object.keys(defaultI18n).forEach((key) => (localized[key] = `${defaultI18n[key]} localized`));
       rte.i18n = localized;
 
       buttons.forEach((button, index) => {
-        const expectedLabel = defaultI18n[Object.keys(defaultI18n)[index]] + ' localized';
+        const expectedLabel = `${defaultI18n[Object.keys(defaultI18n)[index]]} localized`;
         expect(button.getAttribute('title')).to.equal(expectedLabel);
       });
     });
@@ -176,7 +176,7 @@ describe('accessibility', () => {
         const style = getComputedStyle(fake);
         expect(style.position).to.equal('absolute');
         expect(style.left).to.equal('-9999px');
-        expect(style.top).to.equal(document.documentElement.scrollTop + 'px');
+        expect(style.top).to.equal(`${document.documentElement.scrollTop}px`);
         done();
       });
       focusin(content);
@@ -190,7 +190,7 @@ describe('accessibility', () => {
         const style = getComputedStyle(fake);
         expect(style.position).to.equal('absolute');
         expect(style.left).to.equal('-9999px');
-        expect(style.top).to.equal(document.documentElement.scrollTop + 'px');
+        expect(style.top).to.equal(`${document.documentElement.scrollTop}px`);
         done();
       });
       down(content);

@@ -127,7 +127,7 @@ describe('items', () => {
     (isTouch ? it.skip : it)('should open the subMenu on the left side', () => {
       subMenu.close();
       let rootItemRect = menuComponents()[0].getBoundingClientRect();
-      rootMenu.$.overlay.style.left = window.innerWidth - rootItemRect.width * 1.5 + 'px';
+      rootMenu.$.overlay.style.left = `${window.innerWidth - rootItemRect.width * 1.5}px`;
       open(menuComponents()[0]);
       rootItemRect = menuComponents()[0].getBoundingClientRect();
       const subItemRect = menuComponents(subMenu)[0].getBoundingClientRect();
@@ -153,7 +153,7 @@ describe('items', () => {
       const rootItemRect = rootItem.getBoundingClientRect();
       const rootOverlay = rootMenu.$.overlay;
       rootOverlay.style.removeProperty('left');
-      rootOverlay.style.right = rootItemRect.width + 'px';
+      rootOverlay.style.right = `${rootItemRect.width}px`;
       rootOverlay.setAttribute('end-aligned', '');
       open(rootItem);
       await nextRender(subMenu);
@@ -175,7 +175,7 @@ describe('items', () => {
       const rootItemRect = rootItem.getBoundingClientRect();
       const rootOverlay = rootMenu.$.overlay;
       rootOverlay.style.removeProperty('left');
-      rootOverlay.style.right = rootItemRect.width + 'px';
+      rootOverlay.style.right = `${rootItemRect.width}px`;
       rootOverlay.setAttribute('end-aligned', '');
       padding = parseFloat(getComputedStyle(rootOverlay.$.content).paddingLeft) * 2;
 

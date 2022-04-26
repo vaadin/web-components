@@ -361,7 +361,7 @@ describe('crud buttons', () => {
         });
 
         ['change', 'input'].forEach((type) => {
-          it('should enable save button on ' + type, async () => {
+          it(`should enable save button on ${type}`, async () => {
             edit(crud.items[0]);
             await nextRender(crud.$.dialog.$.overlay);
             crud._form.dispatchEvent(new Event(type, { bubbles: true }));

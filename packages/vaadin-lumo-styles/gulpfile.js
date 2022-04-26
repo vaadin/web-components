@@ -65,7 +65,7 @@ gulp.task('icons', async () => {
 
   // Optimize the source files
   gulp
-    .src(folder + '*.svg')
+    .src(`${folder}*.svg`)
     .pipe(
       svgmin({
         plugins: [
@@ -134,7 +134,7 @@ ${createIconset(folder, filenames, 'lumo:')}
 
       // icon font
       gulp
-        .src(folder + '*.svg')
+        .src(`${folder}*.svg`)
         .pipe(
           sort({
             comparator: function (file1, file2) {
@@ -183,7 +183,7 @@ $_documentContainer.innerHTML = \`
 `;
           glyphs.forEach((g) => {
             const name = g.name.replace(/\s/g, '-').toLowerCase();
-            const unicode = '\\\\' + g.unicode[0].charCodeAt(0).toString(16);
+            const unicode = `\\\\${g.unicode[0].charCodeAt(0).toString(16)}`;
             output += `      --lumo-icons-${name}: "${unicode}";\n`;
           });
           output += `    }

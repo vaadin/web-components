@@ -29,7 +29,7 @@ gulp.task('icons', async () => {
 
   // Optimize the source files
   gulp
-    .src(folder + '*.svg')
+    .src(`${folder}*.svg`)
     .pipe(
       svgmin({
         plugins: [
@@ -56,7 +56,7 @@ gulp.task('icons', async () => {
     .on('finish', () => {
       // icon font
       gulp
-        .src(folder + '*.svg')
+        .src(`${folder}*.svg`)
         .pipe(
           sort({
             comparator: function (file1, file2) {
@@ -105,7 +105,7 @@ $_documentContainer.innerHTML = \`
 `;
           glyphs.forEach((g) => {
             const name = g.name.replace(/\s/g, '-').toLowerCase();
-            const unicode = '\\\\' + g.unicode[0].charCodeAt(0).toString(16);
+            const unicode = `\\\\${g.unicode[0].charCodeAt(0).toString(16)}`;
             output += `      --material-icons-${name}: "${unicode}";\n`;
           });
           output += `    }

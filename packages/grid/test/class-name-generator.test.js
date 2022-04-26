@@ -50,14 +50,14 @@ describe('class name generator', () => {
   });
 
   it('should provide column and model as parameters', () => {
-    grid.cellClassNameGenerator = (column, model) => model.index + ' ' + model.item.value + ' ' + column.header;
+    grid.cellClassNameGenerator = (column, model) => `${model.index} ${model.item.value} ${column.header}`;
     assertClassList(getContainerCell(grid.$.items, 5, 1), ['5', 'foo5', 'col1']);
     assertClassList(getContainerCell(grid.$.items, 10, 0), ['10', 'foo10', 'col0']);
   });
 
   it('should be called for details cell with undefined column', async () => {
     grid.rowDetailsRenderer = () => {};
-    grid.cellClassNameGenerator = (column, model) => model.index + ' ' + column;
+    grid.cellClassNameGenerator = (column, model) => `${model.index} ${column}`;
     await nextFrame();
     flushGrid(grid);
     assertClassList(getContainerCell(grid.$.items, 0, 2), ['0', 'undefined']);

@@ -191,7 +191,7 @@ export const InlineEditingMixin = (superClass) =>
     /** @private */
     _applyEdit({ path, value, index, item }) {
       this.set(path, value, item);
-      this.notifyPath('items.' + index + '.' + path, value);
+      this.notifyPath(`items.${index}.${path}`, value);
     }
 
     /** @private */

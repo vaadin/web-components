@@ -39,10 +39,10 @@ export function getDefaultI18n() {
     today: 'Today',
     cancel: 'Cancel',
     formatDate: function (d) {
-      return d.month + 1 + '/' + d.day + '/' + d.year;
+      return `${d.month + 1}/${d.day}/${d.year}`;
     },
     formatTitle: function (monthName, fullYear) {
-      return monthName + ' ' + fullYear;
+      return `${monthName} ${fullYear}`;
     }
   };
 }

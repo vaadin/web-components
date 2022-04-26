@@ -1233,10 +1233,10 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
         if (attr.indexOf('_fn_') === 0 && (typeof targetProperty === 'string' || targetProperty instanceof String)) {
           try {
             // eslint-disable-next-line no-eval
-            jsonConfiguration[attr.substr(4)] = eval('(' + targetProperty + ')');
+            jsonConfiguration[attr.substr(4)] = eval(`(${targetProperty})`);
           } catch (e) {
             // eslint-disable-next-line no-eval
-            jsonConfiguration[attr.substr(4)] = eval('(function(){' + targetProperty + '})');
+            jsonConfiguration[attr.substr(4)] = eval(`(function(){${targetProperty}})`);
           }
           delete jsonConfiguration[attr];
         } else if (targetProperty instanceof Object) {
@@ -1353,12 +1353,11 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
               // Zoom out a bit to avoid clipping the chart's edge on paper
               effectiveCss =
-                effectiveCss +
-                'body {' +
-                '    -moz-transform: scale(0.9, 0.9);' + // Mozilla
-                '    zoom: 0.9;' + // Others
-                '    zoom: 90%;' + // Webkit
-                '}';
+                `${effectiveCss}body {` +
+                `    -moz-transform: scale(0.9, 0.9);` + // Mozilla
+                `    zoom: 0.9;` + // Others
+                `    zoom: 90%;` + // Webkit
+                `}`;
 
               this.tempBodyStyle = document.createElement('style');
               this.tempBodyStyle.textContent = effectiveCss;
@@ -1789,7 +1788,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __showWarn(propertyName, acceptedValues) {
-    console.warn('<vaadin-chart> Acceptable values for "' + propertyName + '" are ' + acceptedValues);
+    console.warn(`<vaadin-chart> Acceptable values for "${propertyName}" are ${acceptedValues}`);
   }
 
   /** @private */

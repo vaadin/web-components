@@ -118,17 +118,17 @@ class ContextMenuOverlay extends PositionMixin(OverlayElement) {
       // Horizontal adjustment
       const isLeftAligned = !!this.style.left;
       if (isLeftAligned) {
-        this.style.left = parseFloat(this.style.left) + parseFloat(style.paddingLeft) + 'px';
+        this.style.left = `${parseFloat(this.style.left) + parseFloat(style.paddingLeft)}px`;
       } else {
-        this.style.right = parseFloat(this.style.right) + parseFloat(style.paddingRight) + 'px';
+        this.style.right = `${parseFloat(this.style.right) + parseFloat(style.paddingRight)}px`;
       }
 
       // Vertical adjustment
       const isBottomAligned = !!this.style.bottom;
       if (isBottomAligned) {
-        this.style.bottom = parseFloat(this.style.bottom) - parseFloat(style.paddingBottom) + 'px';
+        this.style.bottom = `${parseFloat(this.style.bottom) - parseFloat(style.paddingBottom)}px`;
       } else {
-        this.style.top = parseFloat(this.style.top) - parseFloat(style.paddingTop) + 'px';
+        this.style.top = `${parseFloat(this.style.top) - parseFloat(style.paddingTop)}px`;
       }
     }
   }

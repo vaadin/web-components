@@ -471,8 +471,8 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
     const columnSpacing = style.getPropertyValue('--vaadin-form-layout-column-spacing');
 
     const direction = style.direction;
-    const marginStartProp = 'margin-' + (direction === 'ltr' ? 'left' : 'right');
-    const marginEndProp = 'margin-' + (direction === 'ltr' ? 'right' : 'left');
+    const marginStartProp = `margin-${direction === 'ltr' ? 'left' : 'right'}`;
+    const marginEndProp = `margin-${direction === 'ltr' ? 'right' : 'left'}`;
 
     const containerWidth = this.offsetWidth;
 

@@ -263,10 +263,10 @@ export const ItemsMixin = (superClass) =>
     __toggleMenuComponentAttribute(component, attribute, on) {
       if (on) {
         component.setAttribute(attribute, '');
-        component['__has-' + attribute] = true;
-      } else if (component['__has-' + attribute]) {
+        component[`__has-${attribute}`] = true;
+      } else if (component[`__has-${attribute}`]) {
         component.removeAttribute(attribute);
-        component['__has-' + attribute] = false;
+        component[`__has-${attribute}`] = false;
       }
     }
 

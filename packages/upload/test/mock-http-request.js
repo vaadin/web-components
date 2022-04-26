@@ -163,7 +163,7 @@ MockHttpRequest.prototype = {
       this.requestHeaders[header] = value;
     } else {
       var prev = this.requestHeaders[header];
-      this.requestHeaders[header] = prev + ', ' + value;
+      this.requestHeaders[header] = `${prev}, ${value}`;
     }
   },
 
@@ -214,7 +214,7 @@ MockHttpRequest.prototype = {
       if (header === 'set-cookie' || header === 'set-cookie2') {
         continue;
       }
-      r += header + ': ' + this.responseHeaders[header] + '\r\n';
+      r += `${header}: ${this.responseHeaders[header]}\r\n`;
     }
     return r;
   },
@@ -324,7 +324,7 @@ MockHttpRequest.prototype = {
     }
 
     this.status = status;
-    this.statusText = status + ' ' + this.statusReasons[status];
+    this.statusText = `${status} ${this.statusReasons[status]}`;
     this.readyState = this.HEADERS_RECEIVED;
     this.onprogress();
     this.onreadystatechange();

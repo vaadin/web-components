@@ -271,7 +271,7 @@ export const ScrollMixin = (superClass) =>
       // Only update the --_grid-horizontal-scroll-position custom property when navigating
       // on row focus mode to avoid performance issues.
       if (this.hasAttribute('navigating') && this.__rowFocusMode) {
-        this.$.table.style.setProperty('--_grid-horizontal-scroll-position', -x + 'px');
+        this.$.table.style.setProperty('--_grid-horizontal-scroll-position', `${-x}px`);
       }
     }
   };

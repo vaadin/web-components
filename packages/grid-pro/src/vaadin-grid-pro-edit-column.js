@@ -132,7 +132,7 @@ class GridProEditColumn extends GridColumn {
     this._cells.forEach((cell) => {
       const part = cell.getAttribute('part');
       if (part.indexOf('editable-cell') < 0) {
-        cell.setAttribute('part', part + ' editable-cell');
+        cell.setAttribute('part', `${part} editable-cell`);
       }
     });
   }

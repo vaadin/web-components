@@ -211,7 +211,7 @@ const getScreenshotFileName = ({ name, testFile }, type, diff) => {
   let folder;
   if (testFile.includes('-styles')) {
     const match = testFile.match(/\/packages\/(vaadin-(lumo|material)-styles\/test\/visual\/)(.+)/);
-    folder = match[1] + 'screenshots';
+    folder = `${match[1]}screenshots`;
   } else if (testFile.includes('icons')) {
     folder = 'icons/test/visual/screenshots';
   } else {

@@ -138,45 +138,45 @@ describe('position target', () => {
     });
 
     it('should flip to align bottom when out of space', () => {
-      target.style.top = targetPositionToFlipOverlay + 3 + 'px';
+      target.style.top = `${targetPositionToFlipOverlay + 3}px`;
       updatePosition();
       expectEdgesAligned(BOTTOM, BOTTOM);
     });
 
     it('should set bottom-aligned attribute when out of space', () => {
-      target.style.top = targetPositionToFlipOverlay + 3 + 'px';
+      target.style.top = `${targetPositionToFlipOverlay + 3}px`;
       updatePosition();
       expect(overlay.hasAttribute('top-aligned')).to.be.false;
       expect(overlay.hasAttribute('bottom-aligned')).to.be.true;
     });
 
     it('should flip when out of space and squeezed smaller than current available space', () => {
-      target.style.top = targetPositionToFlipOverlay + 3 + 'px';
+      target.style.top = `${targetPositionToFlipOverlay + 3}px`;
 
       // Move overlay a bit further, which causes it to squeeze smaller than its current available space.
       // This may happen in certain window resize scenarios.
-      overlay.style.top = targetPositionToFlipOverlay + 6 + 'px';
+      overlay.style.top = `${targetPositionToFlipOverlay + 6}px`;
       updatePosition();
       expectEdgesAligned(BOTTOM, BOTTOM);
     });
 
     it('should flip back to default when it fits again', () => {
-      target.style.top = targetPositionToFlipOverlay + 3 + 'px';
+      target.style.top = `${targetPositionToFlipOverlay + 3}px`;
       updatePosition();
-      target.style.top = targetPositionToFlipOverlay - 3 + 'px';
+      target.style.top = `${targetPositionToFlipOverlay - 3}px`;
       updatePosition();
       expectEdgesAligned(TOP, TOP);
     });
 
     it('should choose the bigger side when it fits neither', () => {
-      overlayContent.style.height = document.documentElement.clientHeight + 'px';
+      overlayContent.style.height = `${document.documentElement.clientHeight}px`;
 
-      target.style.top = targetPositionForCentering - 3 + 'px';
+      target.style.top = `${targetPositionForCentering - 3}px`;
       updatePosition();
       expectEdgesAligned(TOP, TOP);
       expect(overlay.hasAttribute('top-aligned')).to.be.true;
 
-      target.style.top = targetPositionForCentering + 3 + 'px';
+      target.style.top = `${targetPositionForCentering + 3}px`;
       updatePosition();
       expectEdgesAligned(BOTTOM, BOTTOM);
       expect(overlay.hasAttribute('bottom-aligned')).to.be.true;
@@ -194,27 +194,27 @@ describe('position target', () => {
       });
 
       it('should flip to align bottom when out of space', () => {
-        target.style.top = targetPositionToFlipOverlay + 3 + 'px';
+        target.style.top = `${targetPositionToFlipOverlay + 3}px`;
         updatePosition();
         expectEdgesAligned(BOTTOM, TOP);
       });
 
       it('should flip back to default when it fits again', () => {
-        target.style.top = targetPositionToFlipOverlay + 3 + 'px';
+        target.style.top = `${targetPositionToFlipOverlay + 3}px`;
         updatePosition();
-        target.style.top = targetPositionToFlipOverlay - 3 + 'px';
+        target.style.top = `${targetPositionToFlipOverlay - 3}px`;
         updatePosition();
         expectEdgesAligned(TOP, BOTTOM);
       });
 
       it('should choose the bigger side when fits neither', () => {
-        overlayContent.style.height = document.documentElement.clientHeight + 'px';
+        overlayContent.style.height = `${document.documentElement.clientHeight}px`;
 
-        target.style.top = targetPositionForCentering - 3 + 'px';
+        target.style.top = `${targetPositionForCentering - 3}px`;
         updatePosition();
         expectEdgesAligned(TOP, BOTTOM);
 
-        target.style.top = targetPositionForCentering + 3 + 'px';
+        target.style.top = `${targetPositionForCentering + 3}px`;
         updatePosition();
         expectEdgesAligned(BOTTOM, TOP);
       });
@@ -234,38 +234,39 @@ describe('position target', () => {
     });
 
     it('should flip to align top when out of space', () => {
-      target.style.top = targetPositionToFlipOverlay - 3 + 'px';
+      target.style.top = `${targetPositionToFlipOverlay - 3}px`;
       updatePosition();
       expectEdgesAligned(TOP, TOP);
     });
 
     it('should flip when out of space and squeezed smaller than current available space', () => {
-      target.style.top = targetPositionToFlipOverlay - 3 + 'px';
+      target.style.top = `${targetPositionToFlipOverlay - 3}px`;
 
       // Move overlay a bit further, which causes it to squeeze smaller than its current available space.
       // This may happen in certain window resize scenarios.
-      overlay.style.bottom =
-        document.documentElement.clientHeight - targetPositionToFlipOverlay - target.clientHeight + 6 + 'px';
+      overlay.style.bottom = `${
+        document.documentElement.clientHeight - targetPositionToFlipOverlay - target.clientHeight + 6
+      }px`;
       updatePosition();
       expectEdgesAligned(TOP, TOP);
     });
 
     it('should flip back to default when it fits again', () => {
-      target.style.top = targetPositionToFlipOverlay - 3 + 'px';
+      target.style.top = `${targetPositionToFlipOverlay - 3}px`;
       updatePosition();
-      target.style.top = targetPositionToFlipOverlay + 3 + 'px';
+      target.style.top = `${targetPositionToFlipOverlay + 3}px`;
       updatePosition();
       expectEdgesAligned(BOTTOM, BOTTOM);
     });
 
     it('should choose the bigger side when it fits neither', () => {
-      overlayContent.style.height = document.documentElement.clientHeight + 'px';
+      overlayContent.style.height = `${document.documentElement.clientHeight}px`;
 
-      target.style.top = targetPositionForCentering + 3 + 'px';
+      target.style.top = `${targetPositionForCentering + 3}px`;
       updatePosition();
       expectEdgesAligned(BOTTOM, BOTTOM);
 
-      target.style.top = targetPositionForCentering - 3 + 'px';
+      target.style.top = `${targetPositionForCentering - 3}px`;
       updatePosition();
       expectEdgesAligned(TOP, TOP);
     });
@@ -281,27 +282,27 @@ describe('position target', () => {
       });
 
       it('should flip to align bottom when out of space', () => {
-        target.style.top = targetPositionToFlipOverlay - 3 + 'px';
+        target.style.top = `${targetPositionToFlipOverlay - 3}px`;
         updatePosition();
         expectEdgesAligned(TOP, BOTTOM);
       });
 
       it('should flip back to default when it fits again', () => {
-        target.style.top = targetPositionToFlipOverlay - 3 + 'px';
+        target.style.top = `${targetPositionToFlipOverlay - 3}px`;
         updatePosition();
-        target.style.top = targetPositionToFlipOverlay + 3 + 'px';
+        target.style.top = `${targetPositionToFlipOverlay + 3}px`;
         updatePosition();
         expectEdgesAligned(BOTTOM, TOP);
       });
 
       it('should choose the bigger side when fits neither', () => {
-        overlayContent.style.height = document.documentElement.clientHeight + 'px';
+        overlayContent.style.height = `${document.documentElement.clientHeight}px`;
 
-        target.style.top = targetPositionForCentering + 3 + 'px';
+        target.style.top = `${targetPositionForCentering + 3}px`;
         updatePosition();
         expectEdgesAligned(BOTTOM, TOP);
 
-        target.style.top = targetPositionForCentering - 3 + 'px';
+        target.style.top = `${targetPositionForCentering - 3}px`;
         updatePosition();
         expectEdgesAligned(TOP, BOTTOM);
       });
@@ -337,38 +338,38 @@ describe('position target', () => {
     });
 
     it('should flip to align end when out of space', () => {
-      target.style.left = targetPositionToFlipOverlay + 3 + 'px';
+      target.style.left = `${targetPositionToFlipOverlay + 3}px`;
       updatePosition();
       expectEdgesAligned(RIGHT, RIGHT);
     });
 
     it('should flip when out of space and squeezed smaller than current available space', () => {
-      target.style.left = targetPositionToFlipOverlay + 3 + 'px';
+      target.style.left = `${targetPositionToFlipOverlay + 3}px`;
 
       // Move overlay a bit further, which causes it to squeeze smaller than its current available space.
       // This may happen in certain window resize scenarios.
-      overlay.style.left = targetPositionToFlipOverlay + 6 + 'px';
+      overlay.style.left = `${targetPositionToFlipOverlay + 6}px`;
       updatePosition();
       expectEdgesAligned(RIGHT, RIGHT);
     });
 
     it('should flip back to default when it fits again', () => {
-      target.style.left = targetPositionToFlipOverlay + 3 + 'px';
+      target.style.left = `${targetPositionToFlipOverlay + 3}px`;
       updatePosition();
-      target.style.left = targetPositionToFlipOverlay - 3 + 'px';
+      target.style.left = `${targetPositionToFlipOverlay - 3}px`;
       updatePosition();
       expectEdgesAligned(LEFT, LEFT);
     });
 
     it('should choose the bigger side when it fits neither', () => {
-      overlayContent.style.width = document.documentElement.clientWidth + 'px';
+      overlayContent.style.width = `${document.documentElement.clientWidth}px`;
 
-      target.style.left = targetPositionForCentering - 3 + 'px';
+      target.style.left = `${targetPositionForCentering - 3}px`;
       updatePosition();
       expectEdgesAligned(LEFT, LEFT);
       expect(overlay.hasAttribute('start-aligned')).to.be.true;
 
-      target.style.left = targetPositionForCentering + 3 + 'px';
+      target.style.left = `${targetPositionForCentering + 3}px`;
       updatePosition();
       expectEdgesAligned(RIGHT, RIGHT);
       expect(overlay.hasAttribute('end-aligned')).to.be.true;
@@ -386,27 +387,27 @@ describe('position target', () => {
       });
 
       it('should flip to align end when out of space', () => {
-        target.style.left = targetPositionToFlipOverlay + 3 + 'px';
+        target.style.left = `${targetPositionToFlipOverlay + 3}px`;
         updatePosition();
         expectEdgesAligned(RIGHT, LEFT);
       });
 
       it('should flip back to default when it fits again', () => {
-        target.style.left = targetPositionToFlipOverlay + 3 + 'px';
+        target.style.left = `${targetPositionToFlipOverlay + 3}px`;
         updatePosition();
-        target.style.left = targetPositionToFlipOverlay - 3 + 'px';
+        target.style.left = `${targetPositionToFlipOverlay - 3}px`;
         updatePosition();
         expectEdgesAligned(LEFT, RIGHT);
       });
 
       it('should choose the bigger side when fits neither', () => {
-        overlayContent.style.width = document.documentElement.clientWidth + 'px';
+        overlayContent.style.width = `${document.documentElement.clientWidth}px`;
 
-        target.style.left = targetPositionForCentering - 3 + 'px';
+        target.style.left = `${targetPositionForCentering - 3}px`;
         updatePosition();
         expectEdgesAligned(LEFT, RIGHT);
 
-        target.style.left = targetPositionForCentering + 3 + 'px';
+        target.style.left = `${targetPositionForCentering + 3}px`;
         updatePosition();
         expectEdgesAligned(RIGHT, LEFT);
       });
@@ -442,38 +443,39 @@ describe('position target', () => {
     });
 
     it('should flip to align start when out of space', () => {
-      target.style.left = targetPositionToFlipOverlay - 3 + 'px';
+      target.style.left = `${targetPositionToFlipOverlay - 3}px`;
       updatePosition();
       expectEdgesAligned(LEFT, LEFT);
     });
 
     it('should flip when out of space and squeezed smaller than current available space', () => {
-      target.style.left = targetPositionToFlipOverlay - 3 + 'px';
+      target.style.left = `${targetPositionToFlipOverlay - 3}px`;
 
       // Move overlay a bit further, which causes it to squeeze smaller than its current available space.
       // This may happen in certain window resize scenarios.
-      overlay.style.right =
-        document.documentElement.clientWidth - targetPositionToFlipOverlay - target.clientWidth + 6 + 'px';
+      overlay.style.right = `${
+        document.documentElement.clientWidth - targetPositionToFlipOverlay - target.clientWidth + 6
+      }px`;
       updatePosition();
       expectEdgesAligned(LEFT, LEFT);
     });
 
     it('should flip back to default when it fits again', () => {
-      target.style.left = targetPositionToFlipOverlay - 3 + 'px';
+      target.style.left = `${targetPositionToFlipOverlay - 3}px`;
       updatePosition();
-      target.style.left = targetPositionToFlipOverlay + 3 + 'px';
+      target.style.left = `${targetPositionToFlipOverlay + 3}px`;
       updatePosition();
       expectEdgesAligned(RIGHT, RIGHT);
     });
 
     it('should choose the bigger side when it fits neither', () => {
-      overlayContent.style.width = document.documentElement.clientWidth + 'px';
+      overlayContent.style.width = `${document.documentElement.clientWidth}px`;
 
-      target.style.left = targetPositionForCentering + 3 + 'px';
+      target.style.left = `${targetPositionForCentering + 3}px`;
       updatePosition();
       expectEdgesAligned(RIGHT, RIGHT);
 
-      target.style.left = targetPositionForCentering - 3 + 'px';
+      target.style.left = `${targetPositionForCentering - 3}px`;
       updatePosition();
       expectEdgesAligned(LEFT, LEFT);
     });
@@ -489,27 +491,27 @@ describe('position target', () => {
       });
 
       it('should flip to align start when out of space', () => {
-        target.style.left = targetPositionToFlipOverlay - 3 + 'px';
+        target.style.left = `${targetPositionToFlipOverlay - 3}px`;
         updatePosition();
         expectEdgesAligned(LEFT, RIGHT);
       });
 
       it('should flip back to default when it fits again', () => {
-        target.style.left = targetPositionToFlipOverlay - 3 + 'px';
+        target.style.left = `${targetPositionToFlipOverlay - 3}px`;
         updatePosition();
-        target.style.left = targetPositionToFlipOverlay + 3 + 'px';
+        target.style.left = `${targetPositionToFlipOverlay + 3}px`;
         updatePosition();
         expectEdgesAligned(RIGHT, LEFT);
       });
 
       it('should choose the bigger side when fits neither', () => {
-        overlayContent.style.width = document.documentElement.clientWidth + 'px';
+        overlayContent.style.width = `${document.documentElement.clientWidth}px`;
 
-        target.style.left = targetPositionForCentering + 3 + 'px';
+        target.style.left = `${targetPositionForCentering + 3}px`;
         updatePosition();
         expectEdgesAligned(RIGHT, LEFT);
 
-        target.style.left = targetPositionForCentering - 3 + 'px';
+        target.style.left = `${targetPositionForCentering - 3}px`;
         updatePosition();
         expectEdgesAligned(LEFT, RIGHT);
       });

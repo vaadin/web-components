@@ -120,7 +120,7 @@ function hierarchicalDataProvider({ parentItem }, callback) {
 
   const items = [...Array(itemsOnEachLevel)].map((_, i) => {
     return {
-      name: `${parentItem ? parentItem.name + '-' : ''}${i}`,
+      name: `${parentItem ? `${parentItem.name}-` : ''}${i}`,
       // Let's only have child items on every second item
       children: i % 2 === 0
     };
@@ -205,7 +205,7 @@ describe('keyboard navigation - row focus', () => {
     { direction: 'ltr', forwards: right, backwards: left },
     { direction: 'rtl', forwards: left, backwards: right }
   ].forEach(({ direction, forwards, backwards }) => {
-    describe('interacting with keys - ' + direction, () => {
+    describe(`interacting with keys - ${direction}`, () => {
       beforeEach(async () => {
         document.dir = direction;
         await nextRender(grid);

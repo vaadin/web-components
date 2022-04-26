@@ -136,13 +136,13 @@ class BoardRow extends ResizeMixin(ElementMixin(PolymerElement)) {
     }
     let flexBasis = (colSpan / colsInRow) * 100;
     flexBasis = flexBasis > 100 ? 100 : flexBasis;
-    return flexBasis + '%';
+    return `${flexBasis}%`;
   }
 
   /** @private */
   _reportError() {
     const errorMessage = 'The column configuration is not valid; column count should add up to 3 or 4.';
-    console.warn(errorMessage, 'check: \r\n' + this.outerHTML);
+    console.warn(errorMessage, `check: \r\n${this.outerHTML}`);
   }
 
   /**

@@ -91,7 +91,7 @@ class LoginOverlayWrapper extends OverlayElement {
       memoizedTemplate = super.template.cloneNode(true);
 
       // Retrieve the elements from component's template
-      const thisTemplate = DomModule.import(this.is + '-template', 'template');
+      const thisTemplate = DomModule.import(`${this.is}-template`, 'template');
       const card = thisTemplate.content.querySelector('[part=card]');
       const styles = thisTemplate.content.querySelector('style');
 

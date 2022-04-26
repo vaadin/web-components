@@ -393,7 +393,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
     const clientHeight = document.documentElement.clientHeight;
 
     if (landscape && clientHeight > innerHeight) {
-      this.style.setProperty('--vaadin-overlay-viewport-bottom', clientHeight - innerHeight + 'px');
+      this.style.setProperty('--vaadin-overlay-viewport-bottom', `${clientHeight - innerHeight}px`);
     } else {
       this.style.setProperty('--vaadin-overlay-viewport-bottom', '0');
     }

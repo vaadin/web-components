@@ -74,10 +74,10 @@ describe('helper methods', () => {
   it('should set bounds correctly', () => {
     const overlayBounds = dialog1.$.overlay.getBounds();
     dialog1.$.overlay.setBounds(overlayBounds);
-    expect(Math.floor(overlayPart.style.top)).to.be.eql(Math.floor(overlayBounds.top + 'px'));
-    expect(Math.floor(overlayPart.style.left)).to.be.eql(Math.floor(overlayBounds.left + 'px'));
-    expect(Math.floor(overlayPart.style.width)).to.be.eql(Math.floor(overlayBounds.width + 'px'));
-    expect(Math.floor(overlayPart.style.height)).to.be.eql(Math.floor(overlayBounds.height + 'px'));
+    expect(parseFloat(overlayPart.style.top)).to.be.closeTo(overlayBounds.top, 1);
+    expect(parseFloat(overlayPart.style.left)).to.be.closeTo(overlayBounds.left, 1);
+    expect(parseFloat(overlayPart.style.width)).to.be.closeTo(overlayBounds.width, 1);
+    expect(parseFloat(overlayPart.style.height)).to.be.closeTo(overlayBounds.height, 1);
   });
 
   it('should move dialog to top when dragged', () => {
@@ -459,7 +459,7 @@ describe('draggable', () => {
 
   it('should not drag dialog if mousedown on .resizer-container scrollbar', () => {
     const boundsSpy = sinon.spy(dialog.$.overlay, 'setBounds');
-    content.style.width = content.clientWidth * 4 + 'px';
+    content.style.width = `${content.clientWidth * 4}px`;
     const scrollbarHeight = container.offsetHeight - container.clientHeight;
     const containerBounds = container.getBoundingClientRect();
     dispatchMouseEvent(container, 'mousedown', {

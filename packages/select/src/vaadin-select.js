@@ -535,7 +535,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
       this._overlayElement.style.setProperty(
         '--vaadin-select-text-field-width',
-        this._inputContainer.offsetWidth + 'px'
+        `${this._inputContainer.offsetWidth}px`
       );
 
       // Preserve focus-ring to restore it later

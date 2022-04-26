@@ -287,7 +287,7 @@ describe('lazy loading', () => {
         });
 
         it('should render all visible items after delayed response', (done) => {
-          const items = [...Array(10)].map((_, i) => 'item ' + i);
+          const items = [...Array(10)].map((_, i) => `item ${i}`);
           comboBox.dataProvider = (params, callback) => {
             setTimeout(() => {
               callback(items, 10);
