@@ -26,7 +26,7 @@ describe('accordion', () => {
           </vaadin-accordion-panel>
         </vaadin-accordion>
       `,
-      div
+      div,
     );
   });
 

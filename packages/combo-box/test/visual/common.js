@@ -8,5 +8,5 @@ registerStyles(
     :host([opened]) ::slotted(input) {
       caret-color: transparent;
     }
-  `
+  `,
 );

@@ -15,7 +15,7 @@ describe('scroller', () => {
       <vaadin-scroller style="width: 200px; height: 200px;">
         <div id="content" style="width: 400px;"></div>
       </vaadin-scroller>`,
-      div
+      div,
     );
     element.firstElementChild.textContent = new Array(1000).fill('content').join(' ');
   });

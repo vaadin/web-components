@@ -7,5 +7,5 @@ registerStyles(
     ::slotted(input) {
       caret-color: transparent;
     }
-  `
+  `,
 );
