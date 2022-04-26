@@ -653,4 +653,43 @@ describe('items', () => {
       expect(item.getAttribute('theme')).to.equal('bar-1');
     });
   });
+
+  describe('open on click', () => {
+    let wrapper, menus, buttons;
+
+    beforeEach(() => {
+      wrapper = fixtureSync(`
+        <div>
+          <vaadin-context-menu open-on="click">
+            <button>Menu 1</button>
+          </vaadin-context-menu>
+          <vaadin-context-menu open-on="click">
+            <button>Menu 2</button>
+          </vaadin-context-menu>
+        </div>
+      `);
+      menus = wrapper.querySelectorAll('vaadin-context-menu');
+      buttons = wrapper.querySelectorAll('button');
+
+      menus[0].items = [{ text: 'Menu Item 1' }, { text: 'Menu Item 2' }];
+      menus[1].items = [{ text: 'Menu Item 3' }, { text: 'Menu Item 4' }];
+
+      // Disable outside click listener
+      menus[0].$.overlay.modeless = true;
+      menus[1].$.overlay.modeless = true;
+    });
+
+    it('should close modeless menu when opening another menu on click', () => {
+      buttons[0].click();
+      expect(menus[0].opened).to.be.true;
+
+      buttons[1].click();
+      expect(menus[0].opened).to.be.false;
+      expect(menus[1].opened).to.be.true;
+
+      buttons[0].click();
+      expect(menus[0].opened).to.be.true;
+      expect(menus[1].opened).to.be.false;
+    });
+  });
 });

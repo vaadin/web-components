@@ -118,13 +118,13 @@ export const ItemsMixin = (superClass) =>
       super.connectedCallback();
       // Firefox leaks click to document on contextmenu even if prevented
       // https://bugzilla.mozilla.org/show_bug.cgi?id=990614
-      document.documentElement.addEventListener('click', this.__itemsOutsideClickListener);
+      document.documentElement.addEventListener('click', this.__itemsOutsideClickListener, true);
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener);
+      document.documentElement.removeEventListener('click', this.__itemsOutsideClickListener, true);
     }
 
     /**
