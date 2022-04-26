@@ -5,7 +5,7 @@ const analysis = require('../analysis.json');
 const elements = analysis.elements.filter((el) => el.privacy === 'public');
 
 const result = {
-  schema_version: '1.0.0'
+  schema_version: '1.0.0',
 };
 
 result.mixins = analysis.mixins;

@@ -46,7 +46,7 @@ async function main() {
   const results = await replace({
     files: ['packages/**/version.{js,ts}', 'packages/component-base/src/*.{js,ts}'],
     from: fromRegex,
-    to: newVersion
+    to: newVersion,
   });
   const changes = results.filter((result) => result.hasChanged).map((result) => result.file);
 
