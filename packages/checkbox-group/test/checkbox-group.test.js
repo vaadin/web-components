@@ -363,19 +363,19 @@ describe('vaadin-checkbox-group', () => {
       group = fixtureSync(`<vaadin-checkbox-group></vaadin-checkbox-group>`);
     });
 
-    it('setting errorMessage updates has-error-message attribute', function () {
+    it('setting errorMessage updates has-error-message attribute', () => {
       group.invalid = true;
       group.errorMessage = 'foo';
       expect(group.hasAttribute('has-error-message')).to.be.true;
     });
 
-    it('setting errorMessage to empty string does not update has-error-message attribute', function () {
+    it('setting errorMessage to empty string does not update has-error-message attribute', () => {
       group.invalid = true;
       group.errorMessage = '';
       expect(group.hasAttribute('has-error-message')).to.be.false;
     });
 
-    it('setting errorMessage to null does not update has-error-message attribute', function () {
+    it('setting errorMessage to null does not update has-error-message attribute', () => {
       group.invalid = true;
       group.errorMessage = null;
       expect(group.hasAttribute('has-error-message')).to.be.false;
@@ -387,17 +387,17 @@ describe('vaadin-checkbox-group', () => {
       group = fixtureSync(`<vaadin-checkbox-group></vaadin-checkbox-group>`);
     });
 
-    it('setting helper updates has-helper attribute', function () {
+    it('setting helper updates has-helper attribute', () => {
       group.helperText = 'foo';
       expect(group.hasAttribute('has-helper')).to.be.true;
     });
 
-    it('setting helper to empty string does not update has-helper attribute', function () {
+    it('setting helper to empty string does not update has-helper attribute', () => {
       group.helperText = '';
       expect(group.hasAttribute('has-helper')).to.be.false;
     });
 
-    it('setting helper to null does not update has-helper attribute', function () {
+    it('setting helper to null does not update has-helper attribute', () => {
       group.helperText = null;
       expect(group.hasAttribute('has-helper')).to.be.false;
     });

@@ -81,13 +81,13 @@ export function getFirstVisibleItem(scroller, bufferOffset) {
   var children = [];
   bufferOffset = bufferOffset || 0;
 
-  scroller._buffers.forEach(function (buffer) {
-    [].forEach.call(buffer.children, function (insertionPoint) {
+  scroller._buffers.forEach((buffer) => {
+    [].forEach.call(buffer.children, (insertionPoint) => {
       children.push(insertionPoint._itemWrapper);
     });
   });
   var scrollerRect = scroller.getBoundingClientRect();
-  return children.reduce(function (prev, current) {
+  return children.reduce((prev, current) => {
     return Math.floor(current.getBoundingClientRect().top) - Math.floor(scrollerRect.top + bufferOffset) <= 0
       ? current
       : prev;

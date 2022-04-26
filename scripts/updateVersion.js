@@ -25,7 +25,7 @@ async function exe(cmd, quiet) {
   child.stderr.on('data', capture);
 
   return new Promise((resolve, reject) => {
-    child.on('exit', async function (code) {
+    child.on('exit', async (code) => {
       if (code === 0) {
         resolve(out);
       } else {

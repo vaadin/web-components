@@ -63,7 +63,7 @@ describe('class name generator', () => {
     assertClassList(getContainerCell(grid.$.items, 0, 2), ['0', 'undefined']);
   });
 
-  it('should add classes when loading new items', function (done) {
+  it('should add classes when loading new items', (done) => {
     grid.cellClassNameGenerator = (column, model) => model.item.value;
     scrollToEnd(grid, () => {
       const rows = getRows(grid.$.items);

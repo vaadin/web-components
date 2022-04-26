@@ -5,7 +5,7 @@ const gulp = require('gulp');
 const iconfont = require('gulp-iconfont');
 const fs = require('fs');
 
-gulp.task('icons', function (done) {
+gulp.task('icons', (done) => {
   let glyphs;
   const fontName = 'vaadin-rte-icons';
   const fileName = 'vaadin-rich-text-editor-icons';
@@ -24,12 +24,12 @@ gulp.task('icons', function (done) {
         timestamp: 1 // Truthy!
       })
     )
-    .on('glyphs', function (glyphData) {
+    .on('glyphs', (glyphData) => {
       // Store for later use
       glyphs = glyphData;
     })
     .pipe(gulp.dest('.'))
-    .on('finish', function () {
+    .on('finish', () => {
       // Generate base64 version of the font
       const iconsWoff = fs.readFileSync('vaadin-rich-text-editor-icons.woff');
 
@@ -88,14 +88,14 @@ export const iconsStyles = css\`\n`;
       output += `
 // Register a module with ID for backwards compatibility.
 registerStyles('', iconsStyles, { moduleId: 'vaadin-rich-text-editor-icons' });\n`;
-      fs.writeFile(`src/${fileName}.js`, output, function (err) {
+      fs.writeFile(`src/${fileName}.js`, output, (err) => {
         if (err) {
           return console.error(err);
         }
       });
 
       // Cleanup
-      fs.unlink(`${fileName}.woff`, function (err) {
+      fs.unlink(`${fileName}.woff`, (err) => {
         if (err) {
           return console.error(err);
         }

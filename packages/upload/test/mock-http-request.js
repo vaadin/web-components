@@ -423,7 +423,7 @@ MockHttpRequest.prototype = {
     }
 
     uri.queryKey = {};
-    uri[key[12]].replace(querypattern, function ($0, $1, $2) {
+    uri[key[12]].replace(querypattern, ($0, $1, $2) => {
       if ($1) {
         uri.queryKey[$1] = $2;
       }

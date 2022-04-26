@@ -27,7 +27,7 @@ function iconFileModifier(prefix) {
   };
 }
 
-gulp.task('iron-icons', function () {
+gulp.task('iron-icons', () => {
   return gulp
     .src(['assets/svg/*.svg'], { base: '.' })
     .pipe(
@@ -56,7 +56,7 @@ document.head.appendChild($_documentContainer.content);\n`;
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('vaadin-icons', function () {
+gulp.task('vaadin-icons', () => {
   return gulp
     .src(['assets/svg/*.svg'], { base: '.' })
     .pipe(

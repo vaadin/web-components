@@ -475,14 +475,14 @@ describe('time-picker', () => {
   });
 
   describe('custom functions', () => {
-    it('should use custom parser if that exists', function () {
+    it('should use custom parser if that exists', () => {
       timePicker.set('i18n.parseTime', sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }));
       timePicker.value = '12';
       expect(timePicker.i18n.parseTime.args[0][0]).to.be.equal('12:00');
       expect(timePicker.value).to.be.equal('12:00');
     });
 
-    it('should align values of dropdown and input when i18n was reassigned', function () {
+    it('should align values of dropdown and input when i18n was reassigned', () => {
       timePicker.value = '12';
       timePicker.set('i18n', {
         formatTime: sinon.stub().withArgs({ hours: 12, minutes: 0 }).returns('12:00 AM'),
@@ -494,7 +494,7 @@ describe('time-picker', () => {
       expect(timePicker.value).to.be.equal('12:00');
     });
 
-    it('should use custom formatter if that exists', function () {
+    it('should use custom formatter if that exists', () => {
       timePicker.set('i18n', {
         formatTime: sinon.stub().withArgs({ hours: 12, minutes: 0 }).returns('12:00 AM'),
         parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 })
@@ -504,7 +504,7 @@ describe('time-picker', () => {
       expect(comboBox.value).to.be.equal('12:00 AM');
     });
 
-    it('should accept custom time formatter', function () {
+    it('should accept custom time formatter', () => {
       timePicker.set('i18n.formatTime', sinon.stub().returns('1200'));
       const parseTime = sinon.stub();
       parseTime.withArgs('1200').returns({ hours: 12, minutes: 0 });

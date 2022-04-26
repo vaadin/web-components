@@ -23,7 +23,7 @@ function sortIconFilesNormalized(file1, file2) {
   return file1.replace(/-/g, '~').localeCompare(file2.replace(/-/g, '~'), 'en-US');
 }
 
-gulp.task('icons', async function () {
+gulp.task('icons', async () => {
   const folder = 'icons/svg/';
   let glyphs;
 
@@ -53,7 +53,7 @@ gulp.task('icons', async function () {
       })
     )
     .pipe(gulp.dest(folder))
-    .on('finish', function () {
+    .on('finish', () => {
       // icon font
       gulp
         .src(`${folder}*.svg`)
@@ -74,12 +74,12 @@ gulp.task('icons', async function () {
             timestamp: 1 // Truthy!
           })
         )
-        .on('glyphs', function (glyphData) {
+        .on('glyphs', (glyphData) => {
           // Store for later use
           glyphs = glyphData;
         })
         .pipe(gulp.dest('.'))
-        .on('finish', function () {
+        .on('finish', () => {
           // Generate base64 version of the font
           const materialIconsWoff = fs.readFileSync('material-icons.woff');
           // Write the output to font-icons.js
@@ -114,21 +114,21 @@ $_documentContainer.innerHTML = \`
 
 document.head.appendChild($_documentContainer.content);
 `;
-          fs.writeFile('font-icons.js', output, function (err) {
+          fs.writeFile('font-icons.js', output, (err) => {
             if (err) {
               return console.error(err);
             }
           });
 
           const list = glyphs.map((g) => g.name);
-          fs.writeFile('test/glyphs.json', JSON.stringify(list, null, 2), function (err) {
+          fs.writeFile('test/glyphs.json', JSON.stringify(list, null, 2), (err) => {
             if (err) {
               return console.error(err);
             }
           });
 
           // Cleanup
-          fs.unlink('material-icons.woff', function (err) {
+          fs.unlink('material-icons.woff', (err) => {
             if (err) {
               return console.error(err);
             }

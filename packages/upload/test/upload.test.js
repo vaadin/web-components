@@ -29,7 +29,7 @@ describe('upload', () => {
         expect(upload.$.fileInput.getAttribute('multiple')).to.be.null;
       });
 
-      it('should apply the capture attribute to the input', function () {
+      it('should apply the capture attribute to the input', () => {
         var input = upload.$.fileInput;
         var captureType = 'camera';
         upload.capture = captureType;

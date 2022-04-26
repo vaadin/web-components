@@ -64,7 +64,7 @@ customElements.define(
   }
 );
 
-describe('focus-trap', function () {
+describe('focus-trap', () => {
   let overlay, parent, overlayPart, focusableElements;
 
   function getFocusedElementIndex() {

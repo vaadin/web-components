@@ -6,7 +6,7 @@ import '../vaadin-grid-column-group.js';
 import '../vaadin-grid-tree-column.js';
 import { flushGrid } from './helpers.js';
 
-describe('column auto-width', function () {
+describe('column auto-width', () => {
   let grid;
   let columns;
   let spy;
