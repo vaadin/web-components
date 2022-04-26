@@ -68,6 +68,11 @@ registerStyles(
       cursor: var(--lumo-clickable-cursor);
     }
 
+    :host([week-numbers]) [part='weekday']:not(:empty),
+    :host([week-numbers]) [part='date'] {
+      width: calc((100% - var(--lumo-size-xs)) / 7);
+    }
+
     /* Today date */
 
     [part='date'][today] {
