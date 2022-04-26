@@ -23,18 +23,8 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
         }
 
         #monthGrid {
-          display: block;
-        }
-
-        #monthGrid thead,
-        #monthGrid tbody {
-          display: block;
           width: 100%;
-        }
-
-        [part='weekdays'] {
-          display: flex;
-          flex-grow: 1;
+          border-collapse: collapse;
         }
 
         #days-container tr,
@@ -53,9 +43,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
 
         [part='weekday'],
         [part='date'] {
-          display: block;
-          /* Would use calc(100% / 7) but it doesn't work nice on IE */
-          width: 14.285714286%;
+          width: calc(100% / 7);
           padding: 0;
           font-weight: normal;
         }
@@ -64,6 +52,12 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
         [part='week-number'] {
           width: 12.5%;
           flex-shrink: 0;
+          padding: 0;
+        }
+
+        :host([week-numbers]) [part='weekday']:not(:empty),
+        :host([week-numbers]) [part='date'] {
+          width: 12.5%;
         }
       </style>
 
