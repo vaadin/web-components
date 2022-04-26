@@ -17,7 +17,7 @@ import { KeyboardMixinClass } from './keyboard-mixin.js';
  * by the pointer or by releasing the activation key.
  */
 export declare function ActiveMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<ActiveMixinClass> & Constructor<DisabledMixinClass> & Constructor<KeyboardMixinClass>;
 
 export declare class ActiveMixinClass {

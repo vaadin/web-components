@@ -6,7 +6,7 @@ import {
   listenOnce,
   nextFrame,
   nextRender,
-  up as mouseUp
+  up as mouseUp,
 } from '@vaadin/testing-helpers';
 import '../src/all-imports.js';
 import { flushGrid, getCellContent } from './helpers.js';
@@ -122,7 +122,7 @@ function hierarchicalDataProvider({ parentItem }, callback) {
     return {
       name: `${parentItem ? `${parentItem.name}-` : ''}${i}`,
       // Let's only have child items on every second item
-      children: i % 2 === 0
+      children: i % 2 === 0,
     };
   });
 
@@ -203,7 +203,7 @@ describe('keyboard navigation - row focus', () => {
 
   [
     { direction: 'ltr', forwards: right, backwards: left },
-    { direction: 'rtl', forwards: left, backwards: right }
+    { direction: 'rtl', forwards: left, backwards: right },
   ].forEach(({ direction, forwards, backwards }) => {
     describe(`interacting with keys - ${direction}`, () => {
       beforeEach(async () => {

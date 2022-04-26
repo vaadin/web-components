@@ -23,16 +23,16 @@ class GridProEditSelect extends Select {
     return {
       options: {
         type: Array,
-        value: () => []
+        value: () => [],
       },
 
       _grid: {
-        type: Object
+        type: Object,
       },
 
       _initialized: {
-        type: Boolean
-      }
+        type: Boolean,
+      },
     };
   }
 

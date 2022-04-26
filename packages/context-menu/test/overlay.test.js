@@ -34,7 +34,7 @@ describe('overlay', () => {
       cancelable: true,
       clientX: x,
       clientY: y,
-      shiftKey: shiftKey
+      shiftKey: shiftKey,
     });
     (target || menu.listenOn).dispatchEvent(e);
     return e;
@@ -200,7 +200,7 @@ describe('overlay', () => {
           menu.openOn = 'foobar';
 
           fire(menu.listenOn, 'foobar', {
-            sourceEvent: { changedTouches: [{ clientX: isRTL ? 450 : 10, clientY: 20 }] }
+            sourceEvent: { changedTouches: [{ clientX: isRTL ? 450 : 10, clientY: 20 }] },
           });
           await oneEvent(overlay, 'vaadin-overlay-open');
 

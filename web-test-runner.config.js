@@ -9,12 +9,12 @@ const unitTestsConfig = createUnitTestsConfig({
       statements: 95,
       branches: 90,
       functions: 92,
-      lines: 95
-    }
-  }
+      lines: 95,
+    },
+  },
 });
 
 module.exports = {
   ...unitTestsConfig,
-  ...devServerConfig
+  ...devServerConfig,
 };

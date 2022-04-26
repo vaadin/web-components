@@ -18,8 +18,8 @@ export const SelectionMixin = (superClass) =>
         selectedItems: {
           type: Object,
           notify: true,
-          value: () => []
-        }
+          value: () => [],
+        },
       };
     }
 

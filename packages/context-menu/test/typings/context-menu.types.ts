@@ -2,7 +2,7 @@ import '../../vaadin-context-menu.js';
 import {
   ContextMenuItem,
   ContextMenuItemSelectedEvent,
-  ContextMenuOpenedChangedEvent
+  ContextMenuOpenedChangedEvent,
 } from '../../vaadin-context-menu.js';
 
 const menu = document.createElement('vaadin-context-menu');

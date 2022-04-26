@@ -84,7 +84,7 @@ class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
       renderer: Function,
 
       /** @private */
-      __virtualizer: Object
+      __virtualizer: Object,
     };
   }
 
@@ -101,7 +101,7 @@ class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
       updateElement: this.__updateElement.bind(this),
       elementsContainer: this,
       scrollTarget: this,
-      scrollContainer: this.shadowRoot.querySelector('#items')
+      scrollContainer: this.shadowRoot.querySelector('#items'),
     });
 
     processTemplates(this);

@@ -22,7 +22,7 @@ export const MultiSelectListMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-          observer: '_multipleChanged'
+          observer: '_multipleChanged',
         },
 
         /**
@@ -35,8 +35,8 @@ export const MultiSelectListMixin = (superClass) =>
           notify: true,
           value: function () {
             return [];
-          }
-        }
+          },
+        },
       };
     }
 

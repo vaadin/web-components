@@ -2,7 +2,7 @@ import '../../vaadin-list-box.js';
 import {
   ListBoxItemsChangedEvent,
   ListBoxSelectedChangedEvent,
-  ListBoxSelectedValuesChangedEvent
+  ListBoxSelectedValuesChangedEvent,
 } from '../../vaadin-list-box.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

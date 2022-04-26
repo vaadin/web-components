@@ -54,5 +54,5 @@ const datePickerOverlay = css`
 `;
 
 registerStyles('vaadin-date-picker-overlay', [menuOverlay, datePickerOverlay], {
-  moduleId: 'lumo-date-picker-overlay'
+  moduleId: 'lumo-date-picker-overlay',
 });

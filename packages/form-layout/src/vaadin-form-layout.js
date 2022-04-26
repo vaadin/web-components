@@ -217,10 +217,10 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
           return [
             { minWidth: 0, columns: 1, labelsPosition: 'top' },
             { minWidth: '20em', columns: 1 },
-            { minWidth: '40em', columns: 2 }
+            { minWidth: '40em', columns: 2 },
           ];
         },
-        observer: '_responsiveStepsChanged'
+        observer: '_responsiveStepsChanged',
       },
 
       /**
@@ -228,7 +228,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
        * @private
        */
       _columnCount: {
-        type: Number
+        type: Number,
       },
 
       /**
@@ -236,8 +236,8 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
        * @private
        */
       _labelsOnTop: {
-        type: Boolean
-      }
+        type: Boolean,
+      },
     };
   }
 
@@ -314,7 +314,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
   _getObservableNodes(nodeList) {
     const ignore = ['template', 'style', 'dom-repeat', 'dom-if'];
     return Array.from(nodeList).filter(
-      (node) => node.nodeType === Node.ELEMENT_NODE && ignore.indexOf(node.localName.toLowerCase()) === -1
+      (node) => node.nodeType === Node.ELEMENT_NODE && ignore.indexOf(node.localName.toLowerCase()) === -1,
     );
   }
 
@@ -376,7 +376,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
 
         if (step.labelsPosition !== undefined && ['aside', 'top'].indexOf(step.labelsPosition) === -1) {
           throw new Error(
-            `Invalid 'labelsPosition' value of ${step.labelsPosition}, 'aside' or 'top' string is required.`
+            `Invalid 'labelsPosition' value of ${step.labelsPosition}, 'aside' or 'top' string is required.`,
           );
         }
       });
@@ -389,7 +389,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
         this.responsiveSteps = [
           { minWidth: 0, columns: 1, labelsPosition: 'top' },
           { minWidth: '20em', columns: 1 },
-          { minWidth: '40em', columns: 2 }
+          { minWidth: '40em', columns: 2 },
         ];
       }
     }
@@ -443,7 +443,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
    */
   updateStyles(properties = {}) {
     console.warn(
-      `WARNING: Since Vaadin 23, updateStyles() is deprecated. Use the native element.style.setProperty API to set custom CSS property values.`
+      `WARNING: Since Vaadin 23, updateStyles() is deprecated. Use the native element.style.setProperty API to set custom CSS property values.`,
     );
 
     Object.entries(properties).forEach(([key, value]) => {
@@ -520,7 +520,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
           const colspanRatio = (this._columnCount - col - colspan) / this._columnCount;
           child.style.setProperty(
             marginEndProp,
-            `calc(${colspanRatio * containerWidth}px + ${colspanRatio} * ${columnSpacing})`
+            `calc(${colspanRatio * containerWidth}px + ${colspanRatio} * ${columnSpacing})`,
           );
         } else {
           child.style.removeProperty(marginEndProp);

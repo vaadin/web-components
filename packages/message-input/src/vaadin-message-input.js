@@ -40,7 +40,7 @@ class MessageInput extends ElementMixin(ThemableMixin(PolymerElement)) {
        * Current content of the text input field
        */
       value: {
-        type: String
+        type: String,
       },
 
       /**
@@ -68,8 +68,8 @@ class MessageInput extends ElementMixin(ThemableMixin(PolymerElement)) {
         type: Object,
         value: () => ({
           send: 'Send',
-          message: 'Message'
-        })
+          message: 'Message',
+        }),
       },
 
       /**
@@ -79,8 +79,8 @@ class MessageInput extends ElementMixin(ThemableMixin(PolymerElement)) {
       disabled: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
-      }
+        reflectToAttribute: true,
+      },
     };
   }
 

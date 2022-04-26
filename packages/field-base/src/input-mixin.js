@@ -31,7 +31,7 @@ export const InputMixin = dedupingMixin(
           inputElement: {
             type: Object,
             readOnly: true,
-            observer: '_inputElementChanged'
+            observer: '_inputElementChanged',
           },
 
           /**
@@ -40,7 +40,7 @@ export const InputMixin = dedupingMixin(
            */
           type: {
             type: String,
-            readOnly: true
+            readOnly: true,
           },
 
           /**
@@ -50,8 +50,8 @@ export const InputMixin = dedupingMixin(
             type: String,
             value: '',
             observer: '_valueChanged',
-            notify: true
-          }
+            notify: true,
+          },
         };
       }
 
@@ -176,5 +176,5 @@ export const InputMixin = dedupingMixin(
         // Setting a value programmatically, sync it to input element.
         this._forwardInputValue(newVal);
       }
-    }
+    },
 );

@@ -73,7 +73,7 @@ describe('crud', () => {
         crud.$.dialog,
         crud.$.dialog.$.overlay,
         crud.$.confirmCancel,
-        crud.$.confirmDelete
+        crud.$.confirmDelete,
       ].forEach((e) => expect(e.getAttribute('theme')).to.be.match(/foo/));
     });
   });

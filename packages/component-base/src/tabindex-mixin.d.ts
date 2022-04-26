@@ -13,7 +13,7 @@ import { DisabledMixinClass } from './disabled-mixin.js';
  * and restored with the last known value once the element is enabled.
  */
 export declare function TabindexMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<DisabledMixinClass> & Constructor<TabindexMixinClass>;
 
 export declare class TabindexMixinClass {

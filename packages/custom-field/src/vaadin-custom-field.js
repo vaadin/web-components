@@ -129,7 +129,7 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
       value: {
         type: String,
         observer: '__valueChanged',
-        notify: true
+        notify: true,
       },
 
       /**
@@ -138,7 +138,7 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
        */
       inputs: {
         type: Array,
-        readOnly: true
+        readOnly: true,
       },
 
       /**
@@ -182,10 +182,10 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
             },
             formatValue: function (inputValues) {
               return inputValues.join('\t');
-            }
+            },
           };
-        }
-      }
+        },
+      },
     };
   }
 
@@ -308,9 +308,9 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
         bubbles: true,
         cancelable: false,
         detail: {
-          value: this.value
-        }
-      })
+          value: this.value,
+        },
+      }),
     );
   }
 

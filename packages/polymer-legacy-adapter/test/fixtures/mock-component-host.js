@@ -16,7 +16,7 @@ export class MockComponentHost extends PolymerElement {
 
   static get properties() {
     return {
-      value: String
+      value: String,
     };
   }
 

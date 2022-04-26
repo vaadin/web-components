@@ -42,7 +42,7 @@ class GridSelectionColumn extends GridColumn {
        */
       width: {
         type: String,
-        value: '58px'
+        value: '58px',
       },
 
       /**
@@ -52,7 +52,7 @@ class GridSelectionColumn extends GridColumn {
        */
       flexGrow: {
         type: Number,
-        value: 0
+        value: 0,
       },
 
       /**
@@ -63,7 +63,7 @@ class GridSelectionColumn extends GridColumn {
       selectAll: {
         type: Boolean,
         value: false,
-        notify: true
+        notify: true,
       },
 
       /**
@@ -73,7 +73,7 @@ class GridSelectionColumn extends GridColumn {
        */
       autoSelect: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /** @private */
@@ -87,14 +87,14 @@ class GridSelectionColumn extends GridColumn {
       __previousActiveItem: Object,
 
       /** @private */
-      __selectAllHidden: Boolean
+      __selectAllHidden: Boolean,
     };
   }
 
   static get observers() {
     return [
       '__onSelectAllChanged(selectAll)',
-      '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, selectAll, __indeterminate, __selectAllHidden)'
+      '_onHeaderRendererOrBindingChanged(_headerRenderer, _headerCell, path, header, selectAll, __indeterminate, __selectAllHidden)',
     ];
   }
 
@@ -290,7 +290,7 @@ class GridSelectionColumn extends GridColumn {
       page: 0,
       pageSize: Infinity,
       sortOrders: [],
-      filters: this._grid._mapFilters()
+      filters: this._grid._mapFilters(),
     };
     this._grid.dataProvider(params, (items) => callback(items));
   }

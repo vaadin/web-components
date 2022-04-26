@@ -19,7 +19,7 @@ describe('disabled', () => {
 
     grid.items = [
       { foo: '1', bar: '1' },
-      { foo: '2', bar: '2' }
+      { foo: '2', bar: '2' },
     ];
 
     flushGrid(grid);

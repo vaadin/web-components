@@ -37,7 +37,7 @@ export const DynamicColumnsMixin = (superClass) =>
         /**
          * @protected
          */
-        _columnTree: Object
+        _columnTree: Object,
       };
     }
 
@@ -120,7 +120,7 @@ export const DynamicColumnsMixin = (superClass) =>
         this._debouncerCheckImports = Debouncer.debounce(
           this._debouncerCheckImports,
           timeOut.after(2000),
-          this._checkImports.bind(this)
+          this._checkImports.bind(this),
         );
 
         this._ensureFirstPageLoaded();
@@ -136,7 +136,7 @@ export const DynamicColumnsMixin = (superClass) =>
         'vaadin-grid-tree-toggle',
         'vaadin-grid-selection-column',
         'vaadin-grid-sort-column',
-        'vaadin-grid-sorter'
+        'vaadin-grid-sorter',
       ].forEach((elementName) => {
         const element = this.querySelector(elementName);
         if (element && !(element instanceof PolymerElement)) {

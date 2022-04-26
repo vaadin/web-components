@@ -486,7 +486,7 @@ describe('time-picker', () => {
       timePicker.value = '12';
       timePicker.set('i18n', {
         formatTime: sinon.stub().withArgs({ hours: 12, minutes: 0 }).returns('12:00 AM'),
-        parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 })
+        parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }),
       });
       expect(comboBox.selectedItem).to.be.deep.equal({ label: '12:00 AM', value: '12:00 AM' });
       expect(comboBox.value).to.be.equal('12:00 AM');
@@ -497,7 +497,7 @@ describe('time-picker', () => {
     it('should use custom formatter if that exists', () => {
       timePicker.set('i18n', {
         formatTime: sinon.stub().withArgs({ hours: 12, minutes: 0 }).returns('12:00 AM'),
-        parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 })
+        parseTime: sinon.stub().returns({ hours: 12, minutes: 0, seconds: 0 }),
       });
       timePicker.value = '12';
       expect(timePicker.value).to.be.equal('12:00');

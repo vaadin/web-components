@@ -65,7 +65,7 @@ let supportsPassive = false;
       // eslint-disable-next-line getter-return
       get() {
         supportsPassive = true;
-      }
+      },
     });
     window.addEventListener('test', null, opts);
     window.removeEventListener('test', null, opts);
@@ -103,7 +103,7 @@ const canBeDisabled = {
   optgroup: true,
   option: true,
   select: true,
-  textarea: true
+  textarea: true,
 };
 
 /**
@@ -161,14 +161,14 @@ function isSyntheticClick(ev) {
 const POINTERSTATE = {
   mouse: {
     target: null,
-    mouseIgnoreJob: null
+    mouseIgnoreJob: null,
   },
   touch: {
     x: 0,
     y: 0,
     id: -1,
-    scrollDecided: false
-  }
+    scrollDecided: false,
+  },
 };
 
 function firstTouchAction(ev) {
@@ -555,13 +555,13 @@ register({
   deps: ['mousedown', 'touchstart', 'touchend'],
   flow: {
     start: ['mousedown', 'touchstart'],
-    end: ['mouseup', 'touchend']
+    end: ['mouseup', 'touchend'],
   },
   emits: ['down', 'up'],
 
   info: {
     movefn: null,
-    upfn: null
+    upfn: null,
   },
 
   /**
@@ -616,7 +616,7 @@ register({
    */
   touchend: function (e) {
     downupFire('up', _findOriginalTarget(e), e.changedTouches[0], e);
-  }
+  },
 });
 
 /**
@@ -637,7 +637,7 @@ function downupFire(type, target, event, preventer) {
     preventer: preventer,
     prevent: function (e) {
       return prevent(e);
-    }
+    },
   });
 }
 
@@ -647,7 +647,7 @@ register({
   deps: ['mousedown', 'touchstart', 'touchmove', 'touchend'],
   flow: {
     start: ['mousedown', 'touchstart'],
-    end: ['mouseup', 'touchend']
+    end: ['mouseup', 'touchend'],
   },
   emits: ['track'],
 
@@ -666,7 +666,7 @@ register({
     },
     movefn: null,
     upfn: null,
-    prevent: false
+    prevent: false,
   },
 
   /**
@@ -779,7 +779,7 @@ register({
       this.info.addMove({ x: ct.clientX, y: ct.clientY });
       trackFire(this.info, t, ct);
     }
-  }
+  },
 });
 
 /**
@@ -831,7 +831,7 @@ function trackFire(info, target, touch) {
     sourceEvent: touch,
     hover: function () {
       return deepTargetFind(touch.clientX, touch.clientY);
-    }
+    },
   });
 }
 
@@ -840,13 +840,13 @@ register({
   deps: ['mousedown', 'click', 'touchstart', 'touchend'],
   flow: {
     start: ['mousedown', 'touchstart'],
-    end: ['click', 'touchend']
+    end: ['click', 'touchend'],
   },
   emits: ['tap'],
   info: {
     x: NaN,
     y: NaN,
-    prevent: false
+    prevent: false,
   },
 
   /**
@@ -900,7 +900,7 @@ register({
    */
   touchend: function (e) {
     trackForward(this.info, e.changedTouches[0], e);
-  }
+  },
 });
 
 /**
@@ -925,7 +925,7 @@ function trackForward(info, e, preventer) {
         x: e.clientX,
         y: e.clientY,
         sourceEvent: e,
-        preventer: preventer
+        preventer: preventer,
       });
     }
   }

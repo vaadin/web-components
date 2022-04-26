@@ -15,7 +15,7 @@ customElements.define(
         <div id="other"></div>
       `;
     }
-  }
+  },
 );
 
 describe('slot-target-mixin', () => {

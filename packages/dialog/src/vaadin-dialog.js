@@ -83,7 +83,7 @@ registerStyles(
       max-width: none;
     }
   `,
-  { moduleId: 'vaadin-dialog-overlay-styles' }
+  { moduleId: 'vaadin-dialog-overlay-styles' },
 );
 
 let memoizedTemplate;
@@ -144,7 +144,7 @@ export class DialogOverlay extends OverlayElement {
   static get observers() {
     return [
       '_headerFooterRendererChange(headerRenderer, footerRenderer, opened)',
-      '_headerTitleChanged(headerTitle, opened)'
+      '_headerTitleChanged(headerTitle, opened)',
     ];
   }
 
@@ -158,7 +158,7 @@ export class DialogOverlay extends OverlayElement {
 
       headerRenderer: Function,
 
-      footerRenderer: Function
+      footerRenderer: Function,
     };
   }
 
@@ -502,7 +502,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
       opened: {
         type: Boolean,
         value: false,
-        notify: true
+        notify: true,
       },
 
       /**
@@ -512,7 +512,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
        */
       noCloseOnOutsideClick: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -522,7 +522,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
        */
       noCloseOnEsc: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -532,7 +532,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
        */
       ariaLabel: {
         type: String,
-        value: ''
+        value: '',
       },
 
       /**
@@ -591,8 +591,8 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
        */
       modeless: {
         type: Boolean,
-        value: false
-      }
+        value: false,
+      },
     };
   }
 
@@ -600,7 +600,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
     return [
       '_openedChanged(opened)',
       '_ariaLabelChanged(ariaLabel)',
-      '_rendererChanged(renderer, headerRenderer, footerRenderer)'
+      '_rendererChanged(renderer, headerRenderer, footerRenderer)',
     ];
   }
 

@@ -9,7 +9,7 @@ export class SlotTargetController implements ReactiveController {
   constructor(
     sourceSlot: HTMLSlotElement,
     targetFactory: () => HTMLElement,
-    copyCallback?: (nodes: HTMLElement[]) => void
+    copyCallback?: (nodes: HTMLElement[]) => void,
   );
 
   hostConnected(): void;

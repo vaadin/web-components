@@ -23,7 +23,7 @@ export const ItemMixin = (superClass) =>
          * @type {boolean}
          */
         _hasVaadinItemMixin: {
-          value: true
+          value: true,
         },
 
         /**
@@ -34,11 +34,11 @@ export const ItemMixin = (superClass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-          observer: '_selectedChanged'
+          observer: '_selectedChanged',
         },
 
         /** @private */
-        _value: String
+        _value: String,
       };
     }
 

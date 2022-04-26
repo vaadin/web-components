@@ -6,7 +6,7 @@ const html = require('@web/rollup-plugin-html').default;
 module.exports = {
   input: './index.html',
   output: {
-    dir: './dist'
+    dir: './dist',
   },
-  plugins: [html(), nodeResolve(), terser()]
+  plugins: [html(), nodeResolve(), terser()],
 };

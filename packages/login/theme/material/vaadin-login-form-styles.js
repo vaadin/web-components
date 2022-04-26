@@ -17,5 +17,5 @@ registerStyles(
       }
     }
   `,
-  { moduleId: 'material-login-form' }
+  { moduleId: 'material-login-form' },
 );

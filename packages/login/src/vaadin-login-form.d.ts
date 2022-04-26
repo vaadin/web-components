@@ -60,13 +60,13 @@ declare class LoginForm extends ElementMixin(ThemableMixin(LoginMixin(HTMLElemen
   addEventListener<K extends keyof LoginFormEventMap>(
     type: K,
     listener: (this: LoginForm, ev: LoginFormEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof LoginFormEventMap>(
     type: K,
     listener: (this: LoginForm, ev: LoginFormEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

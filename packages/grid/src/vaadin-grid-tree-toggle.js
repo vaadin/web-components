@@ -154,7 +154,7 @@ class GridTreeToggle extends ThemableMixin(DirMixin(PolymerElement)) {
       level: {
         type: Number,
         value: 0,
-        observer: '_levelChanged'
+        observer: '_levelChanged',
       },
 
       /**
@@ -164,7 +164,7 @@ class GridTreeToggle extends ThemableMixin(DirMixin(PolymerElement)) {
       leaf: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -175,8 +175,8 @@ class GridTreeToggle extends ThemableMixin(DirMixin(PolymerElement)) {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
-        notify: true
-      }
+        notify: true,
+      },
     };
   }
 

@@ -27,7 +27,7 @@ window.defineCustomElementFunction = (name, parentName, content, styles, noIs) =
     Object.defineProperty(CustomElement, 'is', {
       get() {
         return name;
-      }
+      },
     });
   }
 

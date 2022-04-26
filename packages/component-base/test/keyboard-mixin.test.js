@@ -26,7 +26,7 @@ describe('keyboard-mixin', () => {
         _onKeyUp(event) {
           keyUpSpy(event);
         }
-      }
+      },
     );
   });
 

@@ -30,7 +30,7 @@ import {
   ChartSeriesMouseOverEvent,
   ChartSeriesShowEvent,
   ChartXaxesExtremesSetEvent,
-  ChartYaxesExtremesSetEvent
+  ChartYaxesExtremesSetEvent,
 } from '../../vaadin-chart.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

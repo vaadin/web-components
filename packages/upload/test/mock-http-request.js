@@ -74,7 +74,7 @@ MockHttpRequest.prototype = {
     503: 'Service Unavailable',
     504: 'Gateway Time-out',
     505: 'HTTP Version not supported',
-    507: 'Insufficient Storage'
+    507: 'Insufficient Storage',
   },
 
   /* State */
@@ -410,7 +410,7 @@ MockHttpRequest.prototype = {
       'directory',
       'file',
       'query',
-      'anchor'
+      'anchor',
     ];
     var querypattern = /(?:^|&)([^&=]*)=?([^&]*)/g;
 
@@ -430,5 +430,5 @@ MockHttpRequest.prototype = {
     });
 
     return uri;
-  }
+  },
 };

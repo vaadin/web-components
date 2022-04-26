@@ -58,7 +58,7 @@ registerStyles(
       background-color: transparent;
     }
   `,
-  { moduleId: 'material-select-value-button' }
+  { moduleId: 'material-select-value-button' },
 );
 
 const selectOverlay = css`

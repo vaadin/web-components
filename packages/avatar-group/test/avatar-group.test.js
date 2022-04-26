@@ -263,7 +263,7 @@ describe('avatar-group', () => {
         { abbr: 'PM' },
         { name: 'Yuriy Yevstihnyeyev' },
         { name: 'Serhii Kulykov' },
-        { name: 'Jens Jansson' }
+        { name: 'Jens Jansson' },
       ];
       group.maxItemsVisible = 2;
       await nextRender(group);
@@ -427,7 +427,7 @@ describe('avatar-group', () => {
       group.items = [
         { abbr: 'PM', colorIndex: 0 },
         { name: 'Yuriy Yevstihnyeyev', colorIndex: 1 },
-        { name: 'Serhii Kulykov', colorIndex: 2 }
+        { name: 'Serhii Kulykov', colorIndex: 2 },
       ];
       await nextRender(group);
       overlay = group.$.overlay;
@@ -460,8 +460,8 @@ describe('avatar-group', () => {
       anonymous: 'someone',
       activeUsers: {
         one: 'One active user',
-        many: '{count} active users'
-      }
+        many: '{count} active users',
+      },
     };
 
     beforeEach(async () => {
@@ -523,7 +523,7 @@ describe('avatar-group', () => {
         { abbr: 'PM' },
         { name: 'Yuriy Yevstihnyeyev' },
         { name: 'Serhii Kulykov' },
-        { name: 'Jens Jansson' }
+        { name: 'Jens Jansson' },
       ];
       group.maxItemsVisible = 2;
       await nextRender(group);
@@ -682,7 +682,7 @@ describe('avatar group in column flex', () => {
       { name: 'Yuriy Yevstihnyeyev' },
       { abbr: 'SK' },
       { abbr: 'LA' },
-      { name: 'Jens Jansson' }
+      { name: 'Jens Jansson' },
     ];
     await nextRender(group);
   });

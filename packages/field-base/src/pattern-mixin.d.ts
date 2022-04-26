@@ -14,7 +14,7 @@ import { ValidateMixinClass } from './validate-mixin.js';
  * A mixin to provide `pattern` and `preventInvalidInput` properties.
  */
 export declare function PatternMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &

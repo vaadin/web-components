@@ -28,7 +28,7 @@ customElements.define('filter-wrapper', FilterWrapper);
 
 function flushFilters(grid) {
   Array.from(grid.querySelectorAll('vaadin-grid-filter')).forEach(
-    (filter) => filter._debouncerFilterChanged && filter._debouncerFilterChanged.flush()
+    (filter) => filter._debouncerFilterChanged && filter._debouncerFilterChanged.flush(),
   );
 }
 
@@ -246,16 +246,16 @@ describe('array data provider', () => {
     grid.items = [
       {
         first: 'foo',
-        last: 'bar'
+        last: 'bar',
       },
       {
         first: 'foo',
-        last: 'baz'
+        last: 'baz',
       },
       {
         first: 'bar',
-        last: 'bar'
-      }
+        last: 'bar',
+      },
     ];
 
     flushGrid(grid);

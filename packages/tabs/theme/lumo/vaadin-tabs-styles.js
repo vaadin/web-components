@@ -247,5 +247,5 @@ registerStyles(
       --_lumo-tabs-overflow-mask-image: linear-gradient(-90deg, transparent, #000 2em);
     }
   `,
-  { moduleId: 'lumo-tabs' }
+  { moduleId: 'lumo-tabs' },
 );

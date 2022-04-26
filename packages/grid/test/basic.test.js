@@ -14,7 +14,7 @@ import {
   getPhysicalItems,
   infiniteDataProvider,
   scrollGrid,
-  scrollToEnd
+  scrollToEnd,
 } from './helpers.js';
 
 describe('basic features', () => {

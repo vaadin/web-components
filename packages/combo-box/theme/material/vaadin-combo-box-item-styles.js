@@ -14,5 +14,5 @@ const comboBoxItem = css`
 `;
 
 registerStyles('vaadin-combo-box-item', [item, comboBoxItem], {
-  moduleId: 'material-combo-box-item'
+  moduleId: 'material-combo-box-item',
 });

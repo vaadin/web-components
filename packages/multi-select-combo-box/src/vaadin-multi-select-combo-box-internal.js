@@ -51,8 +51,8 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   static get properties() {
     return {
       _target: {
-        type: Object
-      }
+        type: Object,
+      },
     };
   }
 
@@ -207,9 +207,9 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       this.dispatchEvent(
         new CustomEvent('combo-box-item-selected', {
           detail: {
-            item: event.detail.item
-          }
-        })
+            item: event.detail.item,
+          },
+        }),
       );
     }
   }

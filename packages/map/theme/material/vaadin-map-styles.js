@@ -143,5 +143,5 @@ registerStyles(
       box-shadow: var(--material-shadow-elevation-4dp);
     }
   `,
-  { moduleId: 'material-map' }
+  { moduleId: 'material-map' },
 );

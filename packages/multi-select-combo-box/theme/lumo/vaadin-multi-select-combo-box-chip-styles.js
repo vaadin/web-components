@@ -101,5 +101,5 @@ const chip = css`
 `;
 
 registerStyles('vaadin-multi-select-combo-box-chip', [fieldButton, chip], {
-  moduleId: 'lumo-multi-select-combo-box-chip'
+  moduleId: 'lumo-multi-select-combo-box-chip',
 });

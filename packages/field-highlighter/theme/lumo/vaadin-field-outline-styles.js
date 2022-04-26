@@ -41,5 +41,5 @@ registerStyles(
       box-shadow: inset 0 0 0 2px var(--_active-user-color);
     }
   `,
-  { moduleId: 'lumo-field-outline' }
+  { moduleId: 'lumo-field-outline' },
 );

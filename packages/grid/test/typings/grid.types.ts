@@ -38,7 +38,7 @@ import {
   GridRowDetailsRenderer,
   GridSelectedItemsChangedEvent,
   GridSorterDefinition,
-  GridSorterDirection
+  GridSorterDirection,
 } from '../../vaadin-grid.js';
 import { GridColumnGroup } from '../../vaadin-grid-column-group';
 import { GridFilter, GridFilterValueChangedEvent } from '../../vaadin-grid-filter.js';

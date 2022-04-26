@@ -15,7 +15,7 @@ import {
   getViewportItems,
   getVisibleItemsCount,
   makeItems,
-  setInputValue
+  setInputValue,
 } from './helpers.js';
 
 registerStyles(
@@ -24,7 +24,7 @@ registerStyles(
     :host {
       --vaadin-combo-box-overlay-max-height: 400px;
     }
-  `
+  `,
 );
 
 describe('lazy loading', () => {
@@ -758,8 +758,8 @@ describe('lazy loading', () => {
                 i.db = { key: `#${i.id}` };
                 return i;
               }),
-              size
-            )
+              size,
+            ),
           );
         };
         comboBox.opened = true;
@@ -771,7 +771,7 @@ describe('lazy loading', () => {
           id: 0,
           value: 'value 0',
           label: 'label 0',
-          db: { key: '#0' }
+          db: { key: '#0' },
         });
       });
     });

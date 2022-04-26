@@ -13,7 +13,7 @@ customElements.define(
         </vaadin-overlay>
       `;
     }
-  }
+  },
 );
 
 customElements.define(
@@ -32,17 +32,17 @@ customElements.define(
         opened: Boolean,
         hostProp: {
           type: String,
-          value: 'foo'
+          value: 'foo',
         },
         hostPath: {
           type: Object,
           value: () => {
             return { subPath: 'foo' };
-          }
-        }
+          },
+        },
       };
     }
-  }
+  },
 );
 
 function createTemplate(html) {

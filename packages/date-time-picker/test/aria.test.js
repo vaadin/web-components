@@ -7,7 +7,7 @@ describe('ARIA', () => {
 
   beforeEach(() => {
     dateTimePicker = fixtureSync(
-      `<vaadin-date-time-picker helper-text="Helper text" label="Date and time"></vaadin-date-time-picker>`
+      `<vaadin-date-time-picker helper-text="Helper text" label="Date and time"></vaadin-date-time-picker>`,
     );
     label = dateTimePicker.querySelector(':scope > [slot=label]');
     helper = dateTimePicker.querySelector(':scope > [slot=helper]');

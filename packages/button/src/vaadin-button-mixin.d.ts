@@ -14,7 +14,7 @@ import { TabindexMixinClass } from '@vaadin/component-base/src/tabindex-mixin.js
  * A mixin providing common button functionality.
  */
 export declare function ButtonMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T &
   Constructor<ActiveMixinClass> &
   Constructor<DisabledMixinClass> &

@@ -67,5 +67,5 @@ export const ControllerMixin = dedupingMixin(
       removeController(controller) {
         this.__controllers.delete(controller);
       }
-    }
+    },
 );

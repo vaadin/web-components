@@ -27,5 +27,5 @@ registerStyles(
       min-width: 1.75em;
     }
   `,
-  { moduleId: 'material-user-tag' }
+  { moduleId: 'material-user-tag' },
 );

@@ -14,7 +14,7 @@ import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
  * `focused`, `active` and `focus-ring` are set as only as attributes.
  */
 export declare function ItemMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T &
   Constructor<ItemMixinClass> &
   Constructor<ActiveMixinClass> &

@@ -169,7 +169,7 @@ describe('rich text editor', () => {
         const delta = new window.Quill.imports.delta([
           { attributes: { bold: true }, insert: 'Foo\n' },
           { attributes: { italic: true }, insert: 'Bar\n' },
-          { attributes: { link: 'https://vaadin.com' }, insert: 'Vaadin\n' }
+          { attributes: { link: 'https://vaadin.com' }, insert: 'Vaadin\n' },
         ]);
         editor.setContents(delta, 'user');
 
@@ -244,7 +244,7 @@ describe('rich text editor', () => {
 
           // trigger mock image upload
           fileInput.dispatchEvent(new Event('change'));
-        }
+        },
       );
 
       (isDesktopSafari ? it.skip : it)('should mark image button as clicked for subsequent change event', (done) => {
@@ -901,7 +901,7 @@ describe('rich text editor', () => {
         { insert: '12' },
         { attributes: { list: 'bullet' }, insert: '\n' },
         { insert: '34' },
-        { attributes: { list: 'bullet' }, insert: '\n' }
+        { attributes: { list: 'bullet' }, insert: '\n' },
       ]);
       editor.focus();
       editor.setSelection(4, 0);
@@ -915,8 +915,8 @@ describe('rich text editor', () => {
           { insert: '3' },
           { attributes: { list: 'bullet' }, insert: '\n' },
           { insert: '4' },
-          { attributes: { list: 'bullet' }, insert: '\n' }
-        ])
+          { attributes: { list: 'bullet' }, insert: '\n' },
+        ]),
       );
     });
   });

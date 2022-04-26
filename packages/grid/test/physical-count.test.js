@@ -9,7 +9,7 @@ import {
   getLastVisibleItem,
   getPhysicalAverage,
   getPhysicalItems,
-  infiniteDataProvider
+  infiniteDataProvider,
 } from './helpers.js';
 
 registerStyles(
@@ -29,7 +29,7 @@ registerStyles(
     ::slotted(vaadin-grid-cell-content) {
       padding: 0 !important;
     }
-  `
+  `,
 );
 
 describe('dynamic physical count', () => {

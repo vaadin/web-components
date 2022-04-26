@@ -31,12 +31,12 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
   static get properties() {
     return {
       label: {
-        type: String
+        type: String,
       },
 
       item: {
-        type: Object
-      }
+        type: Object,
+      },
     };
   }
 
@@ -73,11 +73,11 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
     this.dispatchEvent(
       new CustomEvent('item-removed', {
         detail: {
-          item: this.item
+          item: this.item,
         },
         bubbles: true,
-        composed: true
-      })
+        composed: true,
+      }),
     );
   }
 }

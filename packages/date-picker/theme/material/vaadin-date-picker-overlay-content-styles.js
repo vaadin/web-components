@@ -172,5 +172,5 @@ registerStyles(
       margin: 0 4px;
     }
   `,
-  { moduleId: 'material-date-picker-overlay-content' }
+  { moduleId: 'material-date-picker-overlay-content' },
 );

@@ -10,7 +10,7 @@ registerStyles('vaadin-chart', [
     :host([theme='custom']) .highcharts-column-series rect.highcharts-point {
       stroke: rgb(255, 0, 0);
     }
-  `
+  `,
 ]);
 
 describe('vaadin-chart styling', () => {
@@ -58,7 +58,7 @@ describe('vaadin-chart styling', () => {
       chart.configuration.xAxis[0].setCategories(MONTHS);
       chart.configuration.addSeries({
         type: 'column',
-        data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+        data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
       });
       const rects = chart.$.chart.querySelectorAll('.highcharts-series > rect');
       expect(rects).to.have.lengthOf(12);
@@ -83,13 +83,13 @@ describe('vaadin-chart styling', () => {
       // As the first series, this should pick the --vaadin-charts-color-0 css configuration
       configuration.addSeries({
         type: 'column',
-        data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+        data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
       });
 
       // As there's no --vaadin-charts-color-1 this should pick default styling
       configuration.addSeries({
         type: 'column',
-        data: [19.9, 61.5, 96.4, 119.2, 134.0, 166.0, 125.6, 138.5, 206.4, 184.1, 85.6, 44.4]
+        data: [19.9, 61.5, 96.4, 119.2, 134.0, 166.0, 125.6, 138.5, 206.4, 184.1, 85.6, 44.4],
       });
 
       const rects = chart.$.chart.querySelectorAll('.highcharts-legend-item > rect');

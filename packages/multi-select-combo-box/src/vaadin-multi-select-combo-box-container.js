@@ -16,8 +16,8 @@ registerStyles(
     }
   `,
   {
-    moduleId: 'vaadin-multi-select-combo-box-container-styles'
-  }
+    moduleId: 'vaadin-multi-select-combo-box-container-styles',
+  },
 );
 
 let memoizedTemplate;

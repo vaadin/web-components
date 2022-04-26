@@ -58,7 +58,7 @@ export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonCus
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  */
 declare class RadioButton extends LabelMixin(
-  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement))))))
+  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))))),
 ) {
   /**
    * The name of the radio button.
@@ -68,13 +68,13 @@ declare class RadioButton extends LabelMixin(
   addEventListener<K extends keyof RadioButtonEventMap>(
     type: K,
     listener: (this: RadioButton, ev: RadioButtonEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof RadioButtonEventMap>(
     type: K,
     listener: (this: RadioButton, ev: RadioButtonEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

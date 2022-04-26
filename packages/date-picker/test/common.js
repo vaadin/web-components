@@ -28,7 +28,7 @@ export function getDefaultI18n() {
       'September',
       'October',
       'November',
-      'December'
+      'December',
     ],
     weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -43,7 +43,7 @@ export function getDefaultI18n() {
     },
     formatTitle: function (monthName, fullYear) {
       return `${monthName} ${fullYear}`;
-    }
+    },
   };
 }
 

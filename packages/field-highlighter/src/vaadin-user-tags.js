@@ -59,7 +59,7 @@ export class UserTags extends PolymerElement {
       hasFocus: {
         type: Boolean,
         value: false,
-        observer: '_hasFocusChanged'
+        observer: '_hasFocusChanged',
       },
 
       /**
@@ -68,7 +68,7 @@ export class UserTags extends PolymerElement {
       opened: {
         type: Boolean,
         value: false,
-        observer: '_openedChanged'
+        observer: '_openedChanged',
       },
 
       /**
@@ -77,14 +77,14 @@ export class UserTags extends PolymerElement {
        */
       flashing: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
        * A target element that the overlay is positioned to.
        */
       target: {
-        type: Object
+        type: Object,
       },
 
       /**
@@ -92,14 +92,14 @@ export class UserTags extends PolymerElement {
        */
       users: {
         type: Array,
-        value: () => []
+        value: () => [],
       },
 
       /** @private */
       _flashQueue: {
         type: Array,
-        value: () => []
-      }
+        value: () => [],
+      },
     };
   }
 

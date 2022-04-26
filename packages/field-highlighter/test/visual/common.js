@@ -8,7 +8,7 @@ registerStyles(
     :host([focus-ring]) ::slotted(input) {
       caret-color: transparent;
     }
-  `
+  `,
 );
 
 registerStyles(
@@ -17,7 +17,7 @@ registerStyles(
     :host([focus-ring]) ::slotted(textarea) {
       caret-color: transparent;
     }
-  `
+  `,
 );
 
 registerStyles(
@@ -30,13 +30,13 @@ registerStyles(
       animation: none !important;
     }
   `,
-  { moduleId: 'not-animated-user-tags-overlay' }
+  { moduleId: 'not-animated-user-tags-overlay' },
 );
 
 const users = [
   { id: 'a', name: 'User', colorIndex: 0, fieldIndex: 2 },
   { id: 'b', name: 'Moderator', colorIndex: 1, fieldIndex: 1 },
-  { id: 'c', name: 'Admin', colorIndex: 2, fieldIndex: 0 }
+  { id: 'c', name: 'Admin', colorIndex: 2, fieldIndex: 0 },
 ];
 
 export const setUsers = (field) => {

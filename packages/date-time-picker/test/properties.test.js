@@ -55,7 +55,7 @@ const fixtures = {
         step="1800"
       ></vaadin-time-picker>
     </vaadin-date-time-picker>
-  `
+  `,
 };
 
 function getDatePicker(dateTimePicker) {

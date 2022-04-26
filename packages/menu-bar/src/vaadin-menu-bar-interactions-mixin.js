@@ -16,8 +16,8 @@ export const InteractionsMixin = (superClass) =>
          * @attr {boolean} open-on-hover
          */
         openOnHover: {
-          type: Boolean
-        }
+          type: Boolean,
+        },
       };
     }
 
@@ -315,9 +315,9 @@ export const InteractionsMixin = (superClass) =>
         button.dispatchEvent(
           new CustomEvent('opensubmenu', {
             detail: {
-              children: items
-            }
-          })
+              children: items,
+            },
+          }),
         );
 
         this._setExpanded(button, true);

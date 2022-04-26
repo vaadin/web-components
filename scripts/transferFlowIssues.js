@@ -9,7 +9,7 @@ const DRY_RUN = process.env.PRODUCTION_RUN !== 'true';
 console.log(
   DRY_RUN
     ? `PRODUCTION_RUN is not set to 'true', no actuall changes will be made`
-    : `PRODUCTION_RUN is set to 'true', making changes for real`
+    : `PRODUCTION_RUN is set to 'true', making changes for real`,
 );
 
 // stop after processing ISSUE_LIMIT issues
@@ -22,21 +22,21 @@ const octokit = new Octokit({ auth: process.env.GITHUB_API_TOKEN });
 const zhApi = axios.create({
   baseURL: 'https://api.zenhub.com/',
   headers: {
-    'X-Authentication-Token': process.env.ZENHUB_API_TOKEN
+    'X-Authentication-Token': process.env.ZENHUB_API_TOKEN,
   },
-  adapter: zhRateLimitingAdapter(axios.defaults.adapter)
+  adapter: zhRateLimitingAdapter(axios.defaults.adapter),
 });
 
 // All open issues from the source repos will be transferred to _this_ repo:
 const TARGET_REPO = {
   owner: 'vaadin',
-  name: 'flow-components'
+  name: 'flow-components',
 };
 
 async function getSourceRepo() {
   const { data: repo } = await octokit.rest.repos.get({
     owner: 'vaadin',
-    repo: 'web-components'
+    repo: 'web-components',
   });
   return repo;
 }
@@ -53,7 +53,7 @@ async function getZenHubWorkspaceName(workspace_id, repo_id) {
           return workspaces[idx].name;
         }
         throw new Error(`Cannot find ZenHub workspace with ID ${workspace_id} for the repo with ID ${repo_id}`);
-      })(workspace_id, repo_id)
+      })(workspace_id, repo_id),
     );
   }
 
@@ -99,14 +99,14 @@ async function createLabelInRepo(label, repo) {
       repo: repo.name,
       name: label.name,
       description: label.description,
-      color: label.color
+      color: label.color,
     });
     newLabel = data;
   }
 
   return {
     ...newLabel,
-    transferred: true
+    transferred: true,
   };
 }
 
@@ -136,8 +136,8 @@ async function transferIssue(issue, targetRepo) {
     {
       clientMutationId: issue.url,
       issueNodeId: issue.node_id,
-      targetRepoNodeId: targetRepo.node_id
-    }
+      targetRepoNodeId: targetRepo.node_id,
+    },
   );
   return response.transferIssue.issue;
 }
@@ -150,7 +150,7 @@ async function transferLabels(labels, issue) {
     owner: issue.repository.owner.login,
     repo: issue.repository.name,
     issue_number: issue.number,
-    labels: labels.map((label) => label.name)
+    labels: labels.map((label) => label.name),
   });
   return data;
 }
@@ -165,10 +165,10 @@ async function transferZhPipelines(pipelines, issue) {
         `/p2/workspaces/${pipeline.workspace_id}/repositories/${issue.repository.databaseId}/issues/${issue.number}/moves`,
         {
           pipeline_id: pipeline.pipeline_id,
-          position: 'bottom'
-        }
+          position: 'bottom',
+        },
       );
-    })
+    }),
   );
 }
 
@@ -193,14 +193,14 @@ async function makeRepoLabelsMap(repo) {
         console.log(`waiting until the label '${label.name}' is created in the ${repo.full_name} repo`);
         await repoLabels.get(label.name);
       }
-    }
+    },
   };
 
   // fetch the list of all existing labels on the target repo
   const iterator = octokit.paginate.iterator(octokit.rest.issues.listLabelsForRepo, {
     owner: repo.owner.login,
     repo: repo.name,
-    per_page: 100
+    per_page: 100,
   });
 
   for await (const { data: labels } of iterator) {
@@ -214,13 +214,13 @@ async function makeRepoLabelsMap(repo) {
 
 async function main() {
   const {
-    data: { login }
+    data: { login },
   } = await octokit.rest.users.getAuthenticated();
   console.log(`Logged-in to GitHub as ${login}`);
 
   const { data: targetRepo } = await octokit.rest.repos.get({
     owner: TARGET_REPO.owner,
-    repo: TARGET_REPO.name
+    repo: TARGET_REPO.name,
   });
   console.log(`Transferring issues to the ${targetRepo.full_name} repo (GraphQL Node ID: ${targetRepo.node_id})`);
 
@@ -244,7 +244,7 @@ async function main() {
     owner: repo.owner.login,
     repo: repo.name,
     labels: ['flow'],
-    per_page: 100
+    per_page: 100,
   });
 
   // iterate through each page of issues
@@ -272,7 +272,7 @@ async function main() {
         octokit.rest.issues.listLabelsOnIssue({
           owner: repo.owner.login,
           repo: repo.name,
-          issue_number: issue.number
+          issue_number: issue.number,
         }),
         // AND at the same time fetch ZenHub pipelines for the issue
         (async () => {
@@ -280,11 +280,11 @@ async function main() {
           const pipelinesWithWorkspaceName = await Promise.all(
             zhIssue.pipelines.map(async (pipeline) => ({
               ...pipeline,
-              workspace: await getZenHubWorkspaceName(pipeline.workspace_id, repo.id)
-            }))
+              workspace: await getZenHubWorkspaceName(pipeline.workspace_id, repo.id),
+            })),
           );
           return { ...zhIssue, pipelines: pipelinesWithWorkspaceName };
-        })()
+        })(),
       ]);
 
       if (zhIssue.is_epic) {
@@ -296,7 +296,7 @@ async function main() {
       if (zhIssue.estimate) {
         console.log(
           `${repo.name}#${issue.number} has a ZH estimate of ${zhIssue.estimate.value}. ` +
-            `The estimate won't be transferred automatically, please do it manually.`
+            `The estimate won't be transferred automatically, please do it manually.`,
         );
         totalIssuesWithZhEstimate += 1;
       }
@@ -322,12 +322,12 @@ async function main() {
                 `ZenHub pipeline ${pipeline.name} in ${pipeline.workspace} on the ` +
                   `issue ${repo.name}#${issue.number} cannot be transferred because ` +
                   `the target repo ${targetRepo.name} is not included into the ` +
-                  `${pipeline.workspace} ZenHub workspace.`
+                  `${pipeline.workspace} ZenHub workspace.`,
               );
             }
             return isTargetRepoInPipelineWorkspace;
           }),
-          transferredIssue
+          transferredIssue,
         );
       }
 
@@ -337,7 +337,7 @@ async function main() {
         console.log(
           `\tlabels: [${labels
             .map((label) => label.name + (targetRepoLabels.get(label.name).transferred ? ' [CREATED]' : ''))
-            .join(', ')}]`
+            .join(', ')}]`,
         );
       }
       if (zhIssue.pipelines.length > 0) {
@@ -350,7 +350,7 @@ async function main() {
                 isTargetRepoInPipelineWorkspace ? '' : ' [UNTRANSFERRED]'
               }`;
             })
-            .join(', ')}]`
+            .join(', ')}]`,
         );
       }
       issueCount += 1;

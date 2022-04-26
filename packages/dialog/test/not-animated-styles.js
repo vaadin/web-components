@@ -10,5 +10,5 @@ registerStyles(
       animation: none !important;
     }
   `,
-  { moduleId: 'not-animated-dialog-overlay' }
+  { moduleId: 'not-animated-dialog-overlay' },
 );

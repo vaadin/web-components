@@ -91,13 +91,13 @@ declare class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(Themable
   addEventListener<K extends keyof TextAreaEventMap>(
     type: K,
     listener: (this: TextArea, ev: TextAreaEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof TextAreaEventMap>(
     type: K,
     listener: (this: TextArea, ev: TextAreaEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

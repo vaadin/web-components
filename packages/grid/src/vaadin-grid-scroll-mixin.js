@@ -8,7 +8,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 
 const timeouts = {
-  SCROLLING: 500
+  SCROLLING: 500,
 };
 
 /**
@@ -24,7 +24,7 @@ export const ScrollMixin = (superClass) =>
          */
         _frozenCells: {
           type: Array,
-          value: () => []
+          value: () => [],
         },
 
         /**
@@ -33,11 +33,11 @@ export const ScrollMixin = (superClass) =>
          */
         _frozenToEndCells: {
           type: Array,
-          value: () => []
+          value: () => [],
         },
 
         /** @private */
-        _rowWithFocusedElement: Element
+        _rowWithFocusedElement: Element,
       };
     }
 

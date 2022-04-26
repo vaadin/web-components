@@ -11,7 +11,7 @@ import {
   getHeaderCellContent,
   getRowCells,
   getRows,
-  infiniteDataProvider
+  infiniteDataProvider,
 } from './helpers.js';
 
 function getElementFromPoint(context, x, y) {

@@ -108,5 +108,5 @@ registerStyles(
       content: var(--lumo-icons-angle-left);
     }
   `,
-  { moduleId: 'lumo-grid-tree-toggle' }
+  { moduleId: 'lumo-grid-tree-toggle' },
 );

@@ -11,5 +11,5 @@ registerStyles(
       margin: 0 0 0 var(--lumo-space-s);
     }
   `,
-  { moduleId: 'lumo-message-input-text-area' }
+  { moduleId: 'lumo-message-input-text-area' },
 );

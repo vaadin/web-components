@@ -42,7 +42,7 @@ function showTemplateWarning(component) {
   }
 
   console.warn(
-    `WARNING: <template> inside <${component.localName}> is deprecated. Use a renderer function instead (see https://vaad.in/template-renderer)`
+    `WARNING: <template> inside <${component.localName}> is deprecated. Use a renderer function instead (see https://vaad.in/template-renderer)`,
   );
 
   component.__suppressTemplateWarning = true;

@@ -318,7 +318,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       _grid: {
         type: HTMLElement,
-        observer: '__gridChanged'
+        observer: '__gridChanged',
       },
 
       /**
@@ -327,7 +327,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       _form: {
         type: HTMLElement,
-        observer: '__formChanged'
+        observer: '__formChanged',
       },
 
       /**
@@ -336,7 +336,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       _saveButton: {
         type: HTMLElement,
-        observer: '__saveButtonChanged'
+        observer: '__saveButtonChanged',
       },
 
       /**
@@ -345,7 +345,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       _deleteButton: {
         type: HTMLElement,
-        observer: '__deleteButtonChanged'
+        observer: '__deleteButtonChanged',
       },
 
       /**
@@ -354,7 +354,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       _cancelButton: {
         type: HTMLElement,
-        observer: '__cancelButtonChanged'
+        observer: '__cancelButtonChanged',
       },
 
       /**
@@ -362,7 +362,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        * @private
        */
       _headerNode: {
-        type: HTMLElement
+        type: HTMLElement,
       },
 
       /**
@@ -372,7 +372,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       items: {
         type: Array,
         notify: true,
-        observer: '__itemsChanged'
+        observer: '__itemsChanged',
       },
 
       /**
@@ -382,7 +382,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       editedItem: {
         type: Object,
         observer: '__editedItemChanged',
-        notify: true
+        notify: true,
       },
 
       /**
@@ -399,7 +399,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
         type: String,
         value: '',
         reflectToAttribute: true,
-        observer: '__editorPositionChanged'
+        observer: '__editorPositionChanged',
       },
 
       /**
@@ -410,7 +410,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       editOnClick: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -428,7 +428,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       dataProvider: {
         type: Function,
-        observer: '__dataProviderChanged'
+        observer: '__dataProviderChanged',
       },
 
       /**
@@ -476,7 +476,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
         type: Boolean,
         reflectToAttribute: true,
         notify: true,
-        observer: '__editorOpenedChanged'
+        observer: '__editorOpenedChanged',
       },
 
       /**
@@ -486,7 +486,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       size: {
         type: Number,
         readOnly: true,
-        notify: true
+        notify: true,
       },
 
       /**
@@ -497,7 +497,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       noToolbar: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -555,20 +555,20 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
                 content: 'Are you sure you want to delete this item? This action cannot be undone.',
                 button: {
                   confirm: 'Delete',
-                  dismiss: 'Cancel'
-                }
+                  dismiss: 'Cancel',
+                },
               },
               cancel: {
                 title: 'Discard changes',
                 content: 'There are unsaved changes to this item.',
                 button: {
                   confirm: 'Discard',
-                  dismiss: 'Cancel'
-                }
-              }
-            }
+                  dismiss: 'Cancel',
+                },
+              },
+            },
           };
-        }
+        },
       },
 
       /** @private */
@@ -586,7 +586,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       _fullscreen: {
         type: Boolean,
-        observer: '__fullscreenChanged'
+        observer: '__fullscreenChanged',
       },
 
       /**
@@ -594,8 +594,8 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        * @protected
        */
       _fullscreenMediaQuery: {
-        value: '(max-width: 600px), (max-height: 600px)'
-      }
+        value: '(max-width: 600px), (max-height: 600px)',
+      },
     };
   }
 
@@ -607,7 +607,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       '__editOnClickChanged(editOnClick, _grid)',
       '__saveButtonPropsChanged(_saveButton, i18n.saveItem, __isDirty)',
       '__cancelButtonPropsChanged(_cancelButton, i18n.cancel)',
-      '__deleteButtonPropsChanged(_deleteButton, i18n.deleteItem, __isNew)'
+      '__deleteButtonPropsChanged(_deleteButton, i18n.deleteItem, __isNew)',
     ];
   }
 
@@ -655,7 +655,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
         button.id = 'delete';
         button.setAttribute('theme', 'tertiary error');
         return button;
-      }
+      },
     };
   }
 
@@ -683,7 +683,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     this.addController(
       new MediaQueryController(this._fullscreenMediaQuery, (matches) => {
         this._fullscreen = matches;
-      })
+      }),
     );
   }
 
@@ -1125,7 +1125,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
         } else {
           console.warn(
             '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. ' +
-              'Either specify `include` or ensure at least one item is available beforehand.'
+              'Either specify `include` or ensure at least one item is available beforehand.',
           );
         }
       }
@@ -1198,7 +1198,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     this.__isDirty = false;
     this.__isNew = !item;
     const evt = this.dispatchEvent(
-      new CustomEvent(this.__isNew ? 'new' : 'edit', { detail: { item: item }, cancelable: true })
+      new CustomEvent(this.__isNew ? 'new' : 'edit', { detail: { item: item }, cancelable: true }),
     );
     if (evt) {
       this.editedItem = item || {};

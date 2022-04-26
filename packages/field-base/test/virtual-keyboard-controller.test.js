@@ -30,7 +30,7 @@ customElements.define(
     close() {
       this.dispatchEvent(new CustomEvent('opened-changed', { detail: { value: false } }));
     }
-  }
+  },
 );
 
 describe('virtual-keyboard-controller', () => {

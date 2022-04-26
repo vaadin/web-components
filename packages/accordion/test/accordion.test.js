@@ -7,7 +7,7 @@ import {
   homeKeyDown,
   isIOS,
   keyboardEventFor,
-  nextFrame
+  nextFrame,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-accordion.js';

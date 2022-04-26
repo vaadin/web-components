@@ -20,5 +20,5 @@ registerStyles(
       box-sizing: border-box !important;
     }
   `,
-  { moduleId: 'material-menu-bar-item' }
+  { moduleId: 'material-menu-bar-item' },
 );

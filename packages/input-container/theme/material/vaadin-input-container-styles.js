@@ -74,5 +74,5 @@ registerStyles(
       transition: transform 0.175s, opacity 0.175s;
     }
   `,
-  { moduleId: 'material-input-container' }
+  { moduleId: 'material-input-container' },
 );

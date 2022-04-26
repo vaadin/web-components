@@ -17,7 +17,7 @@ export interface ContextMenuRendererContext {
 export type ContextMenuRenderer = (
   root: HTMLElement,
   contextMenu?: ContextMenu,
-  context?: ContextMenuRendererContext
+  context?: ContextMenuRendererContext,
 ) => void;
 
 /**
@@ -289,13 +289,13 @@ declare class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(HTM
   addEventListener<K extends keyof ContextMenuEventMap>(
     type: K,
     listener: (this: ContextMenu, ev: ContextMenuEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof ContextMenuEventMap>(
     type: K,
     listener: (this: ContextMenu, ev: ContextMenuEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

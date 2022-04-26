@@ -7,14 +7,14 @@ const DropMode = {
   BETWEEN: 'between',
   ON_TOP: 'on-top',
   ON_TOP_OR_BETWEEN: 'on-top-or-between',
-  ON_GRID: 'on-grid'
+  ON_GRID: 'on-grid',
 };
 
 const DropLocation = {
   ON_TOP: 'on-top',
   ABOVE: 'above',
   BELOW: 'below',
-  EMPTY: 'empty'
+  EMPTY: 'empty',
 };
 
 /**
@@ -79,8 +79,8 @@ export const DragAndDropMixin = (superClass) =>
 
         /** @private */
         __dndAutoScrollThreshold: {
-          value: 50
-        }
+          value: 50,
+        },
       };
     }
 
@@ -162,8 +162,8 @@ export const DragAndDropMixin = (superClass) =>
           detail: {
             draggedItems: rows.map((row) => row._item),
             setDragData: (type, data) => e.dataTransfer.setData(type, data),
-            setDraggedItemsCount: (count) => row.setAttribute('dragstart', count)
-          }
+            setDraggedItemsCount: (count) => row.setAttribute('dragstart', count),
+          },
         });
         event.originalEvent = e;
         this.dispatchEvent(event);
@@ -313,7 +313,7 @@ export const DragAndDropMixin = (superClass) =>
           Array.from(e.dataTransfer.types).map((type) => {
             return {
               type,
-              data: e.dataTransfer.getData(type)
+              data: e.dataTransfer.getData(type),
             };
           });
 
@@ -325,8 +325,8 @@ export const DragAndDropMixin = (superClass) =>
           detail: {
             dropTargetItem: this._dragOverItem,
             dropLocation: this._dropLocation,
-            dragData
-          }
+            dragData,
+          },
         });
         event.originalEvent = e;
         this.dispatchEvent(event);

@@ -22,7 +22,7 @@ registerStyles(
       }
     }
   `,
-  { moduleId: 'material-notification-container' }
+  { moduleId: 'material-notification-container' },
 );
 
 const notificationCard = css`
@@ -152,5 +152,5 @@ const notificationCard = css`
 `;
 
 registerStyles('vaadin-notification-card', [colorDark, notificationCard], {
-  moduleId: 'material-notification-card'
+  moduleId: 'material-notification-card',
 });

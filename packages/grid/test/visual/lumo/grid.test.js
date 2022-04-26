@@ -380,7 +380,7 @@ describe('grid', () => {
 
           return {
             name: `Very long grid item name ${parentItem ? `${parentItem.name}-` : ''}${indexInLevel}`,
-            children: true
+            children: true,
           };
         });
 

@@ -49,8 +49,8 @@ export const ResizeMixin = dedupingMixin(
        */
       notifyResize() {
         console.warn(
-          `WARNING: Since Vaadin 23, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`
+          `WARNING: Since Vaadin 23, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`,
         );
       }
-    }
+    },
 );

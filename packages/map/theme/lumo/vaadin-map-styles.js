@@ -182,5 +182,5 @@ registerStyles(
       box-shadow: var(--lumo-box-shadow-s);
     }
   `,
-  { moduleId: 'lumo-map' }
+  { moduleId: 'lumo-map' },
 );

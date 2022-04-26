@@ -21,7 +21,7 @@ import { ValidateMixinClass } from './validate-mixin.js';
  * A mixin to provide logic for vaadin-text-field and related components.
  */
 export declare function InputFieldMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T &
   Constructor<ControllerMixinClass> &
   Constructor<DelegateFocusMixinClass> &

@@ -492,7 +492,7 @@ describe('form-item', () => {
 
       expect(stub.calledOnce).to.be.true;
       expect(stub.args[0][0]).to.include(
-        'WARNING: Since Vaadin 23, placing multiple fields directly to a <vaadin-form-item> is deprecated.'
+        'WARNING: Since Vaadin 23, placing multiple fields directly to a <vaadin-form-item> is deprecated.',
       );
     });
 
@@ -510,7 +510,7 @@ describe('form-item', () => {
 
       expect(stub.calledOnce).to.be.true;
       expect(stub.args[0][0]).to.include(
-        'WARNING: Since Vaadin 23, placing multiple fields directly to a <vaadin-form-item> is deprecated.'
+        'WARNING: Since Vaadin 23, placing multiple fields directly to a <vaadin-form-item> is deprecated.',
       );
     });
   });

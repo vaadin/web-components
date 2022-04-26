@@ -3,7 +3,7 @@ import {
   PasswordField,
   PasswordFieldChangeEvent,
   PasswordFieldInvalidChangedEvent,
-  PasswordFieldValueChangedEvent
+  PasswordFieldValueChangedEvent,
 } from '../../vaadin-password-field.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

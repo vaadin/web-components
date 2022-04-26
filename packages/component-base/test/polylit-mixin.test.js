@@ -18,7 +18,7 @@ describe('PolylitMixin', () => {
         render() {
           return html`Ready!`;
         }
-      }
+      },
     );
 
     beforeEach(() => {
@@ -47,7 +47,7 @@ describe('PolylitMixin', () => {
         set(path, value, object) {
           this._set(path, value, object);
         }
-      }
+      },
     );
 
     beforeEach(async () => {
@@ -83,25 +83,25 @@ describe('PolylitMixin', () => {
           return {
             name: {
               type: String,
-              reflectToAttribute: true
+              reflectToAttribute: true,
             },
 
             disabled: {
               type: Boolean,
-              reflectToAttribute: true
+              reflectToAttribute: true,
             },
 
             longName: {
               type: Boolean,
-              reflectToAttribute: true
-            }
+              reflectToAttribute: true,
+            },
           };
         }
 
         render() {
           return html`<button ?disabled="${this.disabled}">${this.name}</button>`;
         }
-      }
+      },
     );
 
     beforeEach(async () => {
@@ -144,20 +144,20 @@ describe('PolylitMixin', () => {
         static get properties() {
           return {
             helper: {
-              type: String
+              type: String,
             },
 
             value: {
               type: String,
-              readOnly: true
-            }
+              readOnly: true,
+            },
           };
         }
 
         render() {
           return html`${this.value}${this.helper}`;
         }
-      }
+      },
     );
 
     beforeEach(async () => {
@@ -197,31 +197,31 @@ describe('PolylitMixin', () => {
             return {
               value: {
                 type: String,
-                observer: '_valueChanged'
+                observer: '_valueChanged',
               },
 
               label: {
                 type: String,
-                observer: '_labelChanged'
+                observer: '_labelChanged',
               },
 
               hasLabel: {
-                type: Boolean
+                type: Boolean,
               },
 
               text: {
                 type: String,
                 readOnly: true,
-                observer: '_textChanged'
+                observer: '_textChanged',
               },
 
               count: {
-                type: Number
+                type: Number,
               },
 
               calls: {
-                type: Array
-              }
+                type: Array,
+              },
             };
           }
 
@@ -254,7 +254,7 @@ describe('PolylitMixin', () => {
               this.count = value.length;
             }
           }
-        }
+        },
       );
 
       beforeEach(async () => {
@@ -304,17 +304,17 @@ describe('PolylitMixin', () => {
           return {
             value: {
               type: String,
-              observer: '_valueChanged'
+              observer: '_valueChanged',
             },
 
             calls: {
-              type: Array
+              type: Array,
             },
 
             name: {
               type: String,
-              value: 'superclass-name'
-            }
+              value: 'superclass-name',
+            },
           };
         }
 
@@ -336,16 +336,16 @@ describe('PolylitMixin', () => {
             return {
               text: {
                 type: String,
-                observer: '_textChanged'
+                observer: '_textChanged',
               },
 
               count: {
-                type: Number
+                type: Number,
               },
 
               name: {
-                value: 'subclass-name'
-              }
+                value: 'subclass-name',
+              },
             };
           }
 
@@ -363,7 +363,7 @@ describe('PolylitMixin', () => {
               this.count = value.length;
             }
           }
-        }
+        },
       );
 
       beforeEach(async () => {
@@ -396,20 +396,20 @@ describe('PolylitMixin', () => {
             return {
               label: {
                 type: String,
-                observer: '_labelChanged'
+                observer: '_labelChanged',
               },
 
               value: {
                 type: String,
-                observer: '_valueChanged'
-              }
+                observer: '_valueChanged',
+              },
             };
           }
 
           render() {
             return html`${this.value}`;
           }
-        }
+        },
       );
 
       before(() => {
@@ -442,21 +442,21 @@ describe('PolylitMixin', () => {
         static get properties() {
           return {
             value: {
-              type: String
+              type: String,
             },
 
             loading: {
-              type: Boolean
+              type: Boolean,
             },
 
             count: {
               type: Number,
-              value: 0
+              value: 0,
             },
 
             id: {
-              type: Number
-            }
+              type: Number,
+            },
           };
         }
 
@@ -471,7 +471,7 @@ describe('PolylitMixin', () => {
         _valueOrLoadingChanged(_value, _loading) {}
 
         _countOrLoadingChanged(_count, _loading) {}
-      }
+      },
     );
 
     beforeEach(async () => {
@@ -536,12 +536,12 @@ describe('PolylitMixin', () => {
         static get properties() {
           return {
             value: {
-              type: String
+              type: String,
             },
 
             loading: {
-              type: Boolean
-            }
+              type: Boolean,
+            },
           };
         }
 
@@ -550,7 +550,7 @@ describe('PolylitMixin', () => {
         }
 
         _valueOrLoadingChanged(_value, _loading) {}
-      }
+      },
     );
 
     beforeEach(async () => {
@@ -604,19 +604,19 @@ describe('PolylitMixin', () => {
             value: {
               type: String,
               observer: '_valueChanged',
-              notify: true
+              notify: true,
             },
 
             hasValue: {
               type: String,
-              notify: true
+              notify: true,
             },
 
             loading: {
               type: Boolean,
               readOnly: true,
-              notify: true
-            }
+              notify: true,
+            },
           };
         }
 
@@ -627,7 +627,7 @@ describe('PolylitMixin', () => {
         _valueChanged(value) {
           this.hasValue = !!value;
         }
-      }
+      },
     );
 
     beforeEach(async () => {
@@ -669,18 +669,18 @@ describe('PolylitMixin', () => {
           return {
             value: {
               type: Number,
-              value: 0
+              value: 0,
             },
 
             count: {
               type: Number,
               value: function () {
                 return this.value;
-              }
-            }
+              },
+            },
           };
         }
-      }
+      },
     );
 
     it('should have a default value', async () => {
@@ -711,20 +711,20 @@ describe('PolylitMixin', () => {
           return {
             loading: {
               type: Boolean,
-              value: true
+              value: true,
             },
 
             value: {
               type: Number,
-              computed: '__computeValue(loading)'
-            }
+              computed: '__computeValue(loading)',
+            },
           };
         }
 
         __computeValue(loading) {
           return loading ? 1 : 0;
         }
-      }
+      },
     );
 
     it('should compute value', async () => {
@@ -753,10 +753,10 @@ describe('PolylitMixin', () => {
 
             count: Number,
 
-            items: Array
+            items: Array,
           };
         }
-      }
+      },
     );
 
     it('should support String as property type', async () => {

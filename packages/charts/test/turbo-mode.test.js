@@ -26,9 +26,9 @@ describe('turbo-mode', () => {
       series: [
         {
           type: 'column',
-          data
-        }
-      ]
+          data,
+        },
+      ],
     });
   }
 
@@ -38,9 +38,9 @@ describe('turbo-mode', () => {
       chart.updateConfiguration({
         plotOptions: {
           series: {
-            turboThreshold: 10
-          }
-        }
+            turboThreshold: 10,
+          },
+        },
       });
       await nextRender();
     });
@@ -84,9 +84,9 @@ describe('turbo-mode', () => {
       chart.updateConfiguration({
         plotOptions: {
           series: {
-            turboThreshold: 10
-          }
-        }
+            turboThreshold: 10,
+          },
+        },
       });
       await nextRender();
     });

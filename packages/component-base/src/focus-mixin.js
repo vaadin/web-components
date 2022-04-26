@@ -16,7 +16,7 @@ window.addEventListener(
   () => {
     keyboardActive = true;
   },
-  { capture: true }
+  { capture: true },
 );
 
 window.addEventListener(
@@ -24,7 +24,7 @@ window.addEventListener(
   () => {
     keyboardActive = false;
   },
-  { capture: true }
+  { capture: true },
 );
 
 /**
@@ -110,5 +110,5 @@ export const FocusMixin = dedupingMixin(
       _shouldRemoveFocus(_event) {
         return true;
       }
-    }
+    },
 );

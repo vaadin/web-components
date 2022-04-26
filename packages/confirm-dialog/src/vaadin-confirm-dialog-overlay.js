@@ -30,7 +30,7 @@ registerStyles(
       pointer-events: all;
     }
   `,
-  { moduleId: 'vaadin-confirm-dialog-overlay-styles' }
+  { moduleId: 'vaadin-confirm-dialog-overlay-styles' },
 );
 
 let memoizedTemplate;

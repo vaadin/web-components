@@ -148,7 +148,7 @@ registerStyles(
       color: var(--lumo-disabled-text-color) !important;
     }
   `,
-  { moduleId: 'lumo-month-calendar' }
+  { moduleId: 'lumo-month-calendar' },
 );
 
 const $_documentContainer = document.createElement('template');

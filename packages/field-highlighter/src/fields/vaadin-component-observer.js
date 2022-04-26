@@ -109,8 +109,8 @@ export class ComponentObserver {
       new CustomEvent(`vaadin-highlight-${action}`, {
         bubbles: true,
         composed: true,
-        detail: { fieldIndex: this.getFieldIndex(field) }
-      })
+        detail: { fieldIndex: this.getFieldIndex(field) },
+      }),
     );
   }
 

@@ -132,15 +132,15 @@ export class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(Elemen
        * Maximum number of characters (in Unicode code points) that the user can enter.
        */
       maxlength: {
-        type: Number
+        type: Number,
       },
 
       /**
        * Minimum number of characters (in Unicode code points) that the user can enter.
        */
       minlength: {
-        type: Number
-      }
+        type: Number,
+      },
     };
   }
 
@@ -172,7 +172,7 @@ export class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(Elemen
         this._setFocusElement(input);
         this.stateTarget = input;
         this.ariaTarget = input;
-      })
+      }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
   }

@@ -32,7 +32,7 @@ export interface DatePickerI18n {
 }
 
 export declare function DatePickerMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T &
   Constructor<DatePickerMixinClass> &
   Constructor<DelegateFocusMixinClass> &

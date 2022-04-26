@@ -190,7 +190,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
        * @type {!Array<!AvatarGroupItem> | undefined}
        */
       items: {
-        type: Array
+        type: Array,
       },
 
       /**
@@ -199,7 +199,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
        * a dropdown. Setting 0 or 1 has no effect so there are always at least two avatars visible.
        */
       maxItemsVisible: {
-        type: Number
+        type: Number,
       },
 
       /**
@@ -238,32 +238,32 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
             anonymous: 'anonymous',
             activeUsers: {
               one: 'Currently one active user',
-              many: 'Currently {count} active users'
+              many: 'Currently {count} active users',
             },
             joined: '{user} joined',
-            left: '{user} left'
+            left: '{user} left',
           };
-        }
+        },
       },
 
       /** @private */
       __maxReached: {
         type: Boolean,
-        computed: '__computeMaxReached(items.length, maxItemsVisible)'
+        computed: '__computeMaxReached(items.length, maxItemsVisible)',
       },
 
       /** @private */
       __itemsInView: {
         type: Number,
-        value: null
+        value: null,
       },
 
       /** @private */
       _opened: {
         type: Boolean,
         observer: '__openedChanged',
-        value: false
-      }
+        value: false,
+      },
     };
   }
 
@@ -271,7 +271,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
     return [
       '__computeMoreTitle(items.length, __itemsInView, maxItemsVisible)',
       '__itemsChanged(items.splices, items.*)',
-      '__i18nItemsChanged(i18n.*, items.length)'
+      '__i18nItemsChanged(i18n.*, items.length)',
     ];
   }
 

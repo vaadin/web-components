@@ -21,8 +21,8 @@ registerStyles(
     }
   `,
   {
-    moduleId: 'lumo-multi-select-combo-box-item'
-  }
+    moduleId: 'lumo-multi-select-combo-box-item',
+  },
 );
 
 const multiSelectComboBox = css`
@@ -49,5 +49,5 @@ const multiSelectComboBox = css`
 `;
 
 registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectComboBox], {
-  moduleId: 'lumo-multi-select-combo-box'
+  moduleId: 'lumo-multi-select-combo-box',
 });

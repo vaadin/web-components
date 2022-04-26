@@ -23,7 +23,7 @@ describe('accessibility', () => {
             <vaadin-item>Option 2</vaadin-item>
           </vaadin-list-box>
         `,
-        root
+        root,
       );
     };
     await nextFrame();

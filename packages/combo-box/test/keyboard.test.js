@@ -10,7 +10,7 @@ import {
   focusout,
   keyboardEventFor,
   keyDownOn,
-  nextFrame
+  nextFrame,
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';

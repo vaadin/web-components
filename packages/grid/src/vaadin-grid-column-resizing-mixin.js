@@ -21,13 +21,13 @@ export const ColumnResizingMixin = (superClass) =>
       // Disable contextmenu on any resize separator.
       scroller.addEventListener(
         'contextmenu',
-        (e) => e.target.getAttribute('part') === 'resize-handle' && e.preventDefault()
+        (e) => e.target.getAttribute('part') === 'resize-handle' && e.preventDefault(),
       );
 
       // Disable native cell focus when resizing
       scroller.addEventListener(
         'mousedown',
-        (e) => e.target.getAttribute('part') === 'resize-handle' && e.preventDefault()
+        (e) => e.target.getAttribute('part') === 'resize-handle' && e.preventDefault(),
       );
     }
 
@@ -105,8 +105,8 @@ export const ColumnResizingMixin = (superClass) =>
           this.$.scroller.toggleAttribute('column-resizing', false);
           this.dispatchEvent(
             new CustomEvent('column-resize', {
-              detail: { resizedColumn: column }
-            })
+              detail: { resizedColumn: column },
+            }),
           );
         }
 

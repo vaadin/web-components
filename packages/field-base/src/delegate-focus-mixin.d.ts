@@ -12,7 +12,7 @@ import { TabindexMixinClass } from '@vaadin/component-base/src/tabindex-mixin.js
  * A mixin to forward focus to an element in the light DOM.
  */
 export declare function DelegateFocusMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DisabledMixinClass> &

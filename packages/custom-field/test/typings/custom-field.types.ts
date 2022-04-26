@@ -3,7 +3,7 @@ import {
   CustomField,
   CustomFieldChangeEvent,
   CustomFieldInvalidChangedEvent,
-  CustomFieldValueChangedEvent
+  CustomFieldValueChangedEvent,
 } from '../../vaadin-custom-field.js';
 
 const customField = document.createElement('vaadin-custom-field');

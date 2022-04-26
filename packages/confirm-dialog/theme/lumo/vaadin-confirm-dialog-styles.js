@@ -40,5 +40,5 @@ registerStyles(
       }
     }
   `,
-  { moduleId: 'lumo-confirm-dialog-overlay' }
+  { moduleId: 'lumo-confirm-dialog-overlay' },
 );

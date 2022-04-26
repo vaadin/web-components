@@ -24,7 +24,7 @@ describe('unlimited size', () => {
         el.textContent = el.id;
       },
       scrollTarget,
-      scrollContainer
+      scrollContainer,
     });
 
     virtualizer.size = 1000000;
@@ -180,7 +180,7 @@ describe('unlimited size', () => {
     const itemRect = item.getBoundingClientRect();
     expect(scrollTarget.getBoundingClientRect().bottom).to.be.within(
       Math.round(itemRect.top),
-      Math.round(itemRect.bottom)
+      Math.round(itemRect.bottom),
     );
   });
 
@@ -199,7 +199,7 @@ describe('unlimited size', () => {
     const itemRect = item.getBoundingClientRect();
     expect(scrollTarget.getBoundingClientRect().bottom).to.be.within(
       Math.round(itemRect.top),
-      Math.round(itemRect.bottom)
+      Math.round(itemRect.bottom),
     );
   });
 });

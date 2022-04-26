@@ -16,7 +16,7 @@ export interface VirtualListItemModel<TItem> {
 export type VirtualListRenderer<TItem> = (
   root: HTMLElement,
   virtualList: VirtualList<TItem>,
-  model: VirtualListItemModel<TItem>
+  model: VirtualListItemModel<TItem>,
 ) => void;
 
 /**

@@ -73,15 +73,15 @@ class LoginOverlayWrapper extends OverlayElement {
        * Title of the application.
        */
       title: {
-        type: String
+        type: String,
       },
 
       /**
        * Application description. Displayed under the title.
        */
       description: {
-        type: String
-      }
+        type: String,
+      },
     };
   }
 

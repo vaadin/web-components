@@ -32,7 +32,7 @@ export const ThemePropertyMixin = (superClass) =>
         theme: {
           type: String,
           reflectToAttribute: true,
-          observer: '__deprecatedThemePropertyChanged'
+          observer: '__deprecatedThemePropertyChanged',
         },
 
         /**
@@ -54,8 +54,8 @@ export const ThemePropertyMixin = (superClass) =>
          */
         _theme: {
           type: String,
-          readOnly: true
-        }
+          readOnly: true,
+        },
       };
     }
 

@@ -109,5 +109,5 @@ registerStyles(
       padding: 4px 0.375em 4px 0.875em;
     }
   `,
-  { moduleId: 'material-radio-button' }
+  { moduleId: 'material-radio-button' },
 );
