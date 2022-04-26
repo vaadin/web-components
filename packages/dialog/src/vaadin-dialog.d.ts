@@ -208,13 +208,13 @@ declare class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixi
   addEventListener<K extends keyof DialogEventMap>(
     type: K,
     listener: (this: Dialog, ev: DialogEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof DialogEventMap>(
     type: K,
     listener: (this: Dialog, ev: DialogEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

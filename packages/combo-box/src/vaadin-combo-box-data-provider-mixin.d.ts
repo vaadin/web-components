@@ -15,11 +15,11 @@ export interface ComboBoxDataProviderParams {
 
 export type ComboBoxDataProvider<TItem> = (
   params: ComboBoxDataProviderParams,
-  callback: ComboBoxDataProviderCallback<TItem>
+  callback: ComboBoxDataProviderCallback<TItem>,
 ) => void;
 
 export declare function ComboBoxDataProviderMixin<TItem, T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<ComboBoxDataProviderMixinClass<TItem>>;
 
 export declare class ComboBoxDataProviderMixinClass<TItem> {

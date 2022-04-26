@@ -87,13 +87,13 @@ declare class Accordion extends ElementMixin(ThemableMixin(HTMLElement)) {
   addEventListener<K extends keyof AccordionEventMap>(
     type: K,
     listener: (this: Accordion, ev: AccordionEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof AccordionEventMap>(
     type: K,
     listener: (this: Accordion, ev: AccordionEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

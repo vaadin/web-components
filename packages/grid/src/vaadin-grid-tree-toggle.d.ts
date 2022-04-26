@@ -85,13 +85,13 @@ declare class GridTreeToggle extends ThemableMixin(DirMixin(HTMLElement)) {
   addEventListener<K extends keyof GridTreeToggleEventMap>(
     type: K,
     listener: (this: GridTreeToggle, ev: GridTreeToggleEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof GridTreeToggleEventMap>(
     type: K,
     listener: (this: GridTreeToggle, ev: GridTreeToggleEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

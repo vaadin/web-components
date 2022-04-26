@@ -7,7 +7,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
 import { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
 
 export declare function ButtonsMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<ButtonsMixinClass> & Constructor<ResizeMixinClass>;
 
 export declare class ButtonsMixinClass {

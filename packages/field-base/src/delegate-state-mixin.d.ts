@@ -9,7 +9,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
  * A mixin to delegate properties and attributes to a target element.
  */
 export declare function DelegateStateMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<DelegateStateMixinClass>;
 
 export declare class DelegateStateMixinClass {

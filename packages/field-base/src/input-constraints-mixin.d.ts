@@ -13,7 +13,7 @@ import { ValidateMixinClass } from './validate-mixin.js';
  * A mixin to combine multiple input validation constraints.
  */
 export declare function InputConstraintsMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &

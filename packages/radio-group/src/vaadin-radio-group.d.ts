@@ -70,7 +70,7 @@ export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupCusto
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class RadioGroup extends FieldMixin(
-  FocusMixin(DisabledMixin(KeyboardMixin(ElementMixin(ThemableMixin(HTMLElement)))))
+  FocusMixin(DisabledMixin(KeyboardMixin(ElementMixin(ThemableMixin(HTMLElement))))),
 ) {
   /**
    * The value of the radio group.
@@ -88,13 +88,13 @@ declare class RadioGroup extends FieldMixin(
   addEventListener<K extends keyof RadioGroupEventMap>(
     type: K,
     listener: (this: RadioGroup, ev: RadioGroupEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof RadioGroupEventMap>(
     type: K,
     listener: (this: RadioGroup, ev: RadioGroupEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

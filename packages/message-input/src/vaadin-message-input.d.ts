@@ -68,13 +68,13 @@ declare class MessageInput extends ThemableMixin(ElementMixin(HTMLElement)) {
   addEventListener<K extends keyof MessageInputEventMap>(
     type: K,
     listener: (this: MessageInput, ev: MessageInputEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof MessageInputEventMap>(
     type: K,
     listener: (this: MessageInput, ev: MessageInputEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

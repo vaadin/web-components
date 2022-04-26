@@ -11,7 +11,7 @@ import { ThemePropertyMixinClass } from './vaadin-theme-property-mixin.js';
  * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
  */
 export declare function ThemableMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<ThemableMixinClass> & Constructor<ThemePropertyMixinClass>;
 
 export declare class ThemableMixinClass {
