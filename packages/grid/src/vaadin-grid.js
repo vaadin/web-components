@@ -951,8 +951,6 @@ class Grid extends ElementMixin(
 
       requestAnimationFrame(() => {
         this.__scrollToPendingIndex();
-        // This needs to be set programmatically in order to avoid an iOS 10 bug (disappearing grid)
-        this.$.table.style.webkitOverflowScrolling = 'touch';
       });
     }
   }
