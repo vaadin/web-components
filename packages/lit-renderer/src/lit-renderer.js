@@ -23,16 +23,8 @@ export class LitRendererDirective extends AsyncDirective {
     super(part);
     if (part.type !== PartType.ELEMENT) {
       // TODO: Improve the error message by mentioning the actual name of the renderer directive.
-      throw new Error('The renderer can be only bound to an element.');
+      throw new Error('Renderer can be only bound to an element.');
     }
-  }
-
-  /**
-   * @param {R} _renderer
-   * @param {unknown} _value
-   */
-  render(_renderer, _value) {
-    return nothing;
   }
 
   /**
@@ -66,7 +58,6 @@ export class LitRendererDirective extends AsyncDirective {
 
   disconnected() {
     this.disposeOfRenderer();
-
     this.host = null;
     this.element = null;
     this.renderer = null;
@@ -80,8 +71,8 @@ export class LitRendererDirective extends AsyncDirective {
     throw new Error('The `runRenderer` method must be implemented.');
   }
 
-  removeRenderer() {
-    throw new Error('The `removeRenderer` method must be implemented.');
+  disposeOfRenderer() {
+    throw new Error('The `disposeOfRenderer` method must be implemented.');
   }
 
   /**
