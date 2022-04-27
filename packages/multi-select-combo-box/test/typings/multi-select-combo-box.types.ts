@@ -18,6 +18,7 @@ import {
   MultiSelectComboBoxChangeEvent,
   MultiSelectComboBoxCustomValuesSetEvent,
   MultiSelectComboBoxFilterChangedEvent,
+  MultiSelectComboBoxI18n,
   MultiSelectComboBoxInvalidChangedEvent,
   MultiSelectComboBoxSelectedItemsChangedEvent,
 } from '../../vaadin-multi-select-combo-box.js';
@@ -70,6 +71,7 @@ assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.items);
 assertType<string | null | undefined>(narrowedComboBox.itemIdPath);
 assertType<string>(narrowedComboBox.itemLabelPath);
 assertType<string>(narrowedComboBox.itemValuePath);
+assertType<MultiSelectComboBoxI18n>(narrowedComboBox.i18n);
 assertType<ComboBoxRenderer<TestComboBoxItem> | null | undefined>(narrowedComboBox.renderer);
 assertType<boolean>(narrowedComboBox.invalid);
 assertType<HTMLElement | null | undefined>(narrowedComboBox.focusElement);

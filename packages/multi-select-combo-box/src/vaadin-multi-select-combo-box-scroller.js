@@ -17,6 +17,19 @@ class MultiSelectComboBoxScroller extends ComboBoxScroller {
     return 'vaadin-multi-select-combo-box-scroller';
   }
 
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.setAttribute('aria-multiselectable', 'true');
+  }
+
+  /** @private */
+  __getAriaSelected(_focusedIndex, itemIndex) {
+    const item = this.items[itemIndex];
+    return this.__isItemSelected(item, null, this.itemIdPath).toString();
+  }
+
   /** @private */
   __isItemSelected(item, _selectedItem, itemIdPath) {
     if (item instanceof ComboBoxPlaceholder) {

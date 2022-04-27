@@ -20,6 +20,13 @@ import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+export interface MultiSelectComboBoxI18n {
+  cleared: string;
+  selected: string;
+  deselected: string;
+  total: string;
+}
+
 /**
  * Fired when the user commits a value change.
  */
@@ -198,6 +205,28 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    * @attr {string} item-value-path
    */
   itemValuePath: string;
+
+  /**
+   * The object used to localize this component.
+   * To change the default localization, replace the entire
+   * _i18n_ object or just the property you want to modify.
+   *
+   * The object has the following JSON structure and default values:
+   * ```
+   * {
+   *   // Screen reader announcement on clear button click.
+   *   cleared: 'Selection cleared',
+   *   // Screen reader announcement when item is selected.
+   *   selected: 'added to selection',
+   *   // Screen reader announcement when item is deselected.
+   *   deselected: 'removed from selection',
+   *   // Screen reader announcement of the selected items count.
+   *   // {count} is replaced with the actual count of items.
+   *   total: '{count} items selected',
+   * }
+   * ```
+   */
+  i18n: MultiSelectComboBoxI18n;
 
   /**
    * True if the dropdown is open, false otherwise.
