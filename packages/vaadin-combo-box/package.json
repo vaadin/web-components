@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-combo-box",
-  "version": "23.1.0-alpha3",
+  "version": "23.1.0-alpha4",
   "publishConfig": {
     "access": "public"
   },
@@ -32,6 +32,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/combo-box": "23.1.0-alpha3"
+    "@vaadin/combo-box": "23.1.0-alpha4"
   }
 }
