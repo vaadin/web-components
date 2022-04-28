@@ -79,6 +79,7 @@ const chip = css`
     justify-content: center;
     margin-top: -0.3125em;
     margin-bottom: -0.3125em;
+    margin-inline-start: auto;
     width: 1.25em;
     height: 1.25em;
     font-size: 1.5em;
