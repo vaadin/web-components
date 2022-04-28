@@ -397,7 +397,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
    * @return {boolean}
    */
   checkValidity() {
-    return this.required ? this._hasValue : true;
+    return this.required && !this.readonly ? this._hasValue : true;
   }
 
   /**

@@ -700,5 +700,11 @@ describe('basic', () => {
       comboBox.shadowRoot.querySelector('[part="required-indicator"]').click();
       expect(comboBox.hasAttribute('focused')).to.be.true;
     });
+
+    it('should not be invalid when empty and readonly', () => {
+      comboBox.readonly = true;
+      expect(comboBox.validate()).to.be.true;
+      expect(comboBox.invalid).to.be.false;
+    });
   });
 });
