@@ -79,6 +79,7 @@ const chip = css`
     box-sizing: border-box;
     width: 20px;
     height: 20px;
+    margin-inline-start: auto;
     line-height: 20px;
     padding: 0;
     font-size: 0.75em;

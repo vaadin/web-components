@@ -687,7 +687,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     for (let i = items.length - 1; i >= 0; i--) {
       // Ensure there is enough space for another chip
-      if (totalWidth < chipMinWidth) {
+      if (totalWidth <= chipMinWidth) {
         break;
       }
 
