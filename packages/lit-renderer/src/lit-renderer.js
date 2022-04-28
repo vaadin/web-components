@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { nothing } from 'lit';
+import { nothing, render } from 'lit';
 import { AsyncDirective } from 'lit/async-directive.js';
 import { PartType } from 'lit/directive.js';
 
@@ -26,7 +26,7 @@ export class LitRendererDirective extends AsyncDirective {
       return nothing;
     }
 
-    this.host = part.options?.host;
+    this.host = part.options && part.options.host;
     this.element = part.element;
     this.renderer = renderer;
 
@@ -62,6 +62,11 @@ export class LitRendererDirective extends AsyncDirective {
 
   removeRenderer() {
     throw new Error('The `removeRenderer` method must be implemented.');
+  }
+
+  renderRenderer(container, ...args) {
+    const templateResult = this.renderer.call(this.host, ...args);
+    render(templateResult, container, { host: this.host });
   }
 
   /**

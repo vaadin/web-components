@@ -3,17 +3,32 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { RenderOptions } from 'lit';
-import { Directive } from 'lit/directive.js';
+import { RenderOptions, TemplateResult } from 'lit';
+import { AsyncDirective } from 'lit/async-directive.js';
 
-export abstract class LitRendererDirective<E extends Element, R extends LitRenderer> extends Directive {
+export type LitRenderer = (...args: any[]) => TemplateResult;
+
+export abstract class LitRendererDirective<E extends Element, R extends LitRenderer> extends AsyncDirective {
+  protected host: RenderOptions['host'];
+
+  protected element: E;
+
+  protected renderer: R;
+
+  protected renderRenderer(container: Element, ...args: Parameters<R>): void;
+
   /**
-   * Adds a renderer callback to the element.
+   * Adds the renderer callback to the element.
    */
-  abstract addRenderer(element: E, renderer: R, options: RenderOptions): void;
+  abstract addRenderer(): void;
 
   /**
    * Runs the renderer callback on the element.
    */
-  abstract runRenderer(element: E): void;
+  abstract runRenderer(): void;
+
+  /**
+   * Removes the renderer callback from the element.
+   */
+  abstract removeRenderer(): void;
 }
