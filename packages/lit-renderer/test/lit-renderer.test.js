@@ -89,7 +89,7 @@ describe('lit-renderer', () => {
   });
 
   describe('multiple dependencies', () => {
-    let container;
+    let container, initialDependencies;
 
     function doRender(content, dependencies) {
       return render(
@@ -100,7 +100,8 @@ describe('lit-renderer', () => {
 
     beforeEach(() => {
       container = fixtureSync('<div></div>');
-      doRender('content', ['dep']);
+      initialDependencies = ['dep'];
+      doRender('content', initialDependencies);
       component = container.querySelector('mock-component');
     });
 
@@ -125,6 +126,12 @@ describe('lit-renderer', () => {
 
     it('should re-render the content when removing a dependency', () => {
       doRender('new content', []);
+      expect(component.$.content.textContent).to.equal('new content');
+    });
+
+    it('should re-render the content after mutating the depedencies array', () => {
+      initialDependencies.push('dep 2');
+      doRender('new content', initialDependencies);
       expect(component.$.content.textContent).to.equal('new content');
     });
   });
