@@ -25,6 +25,10 @@ registerStyles(
 );
 
 const multiSelectComboBox = css`
+  :host {
+    --chip-min-width: var(--vaadin-multi-select-combo-box-chip-min-width, 3em);
+  }
+
   [part='input-field'] {
     height: auto;
     min-height: 32px;
