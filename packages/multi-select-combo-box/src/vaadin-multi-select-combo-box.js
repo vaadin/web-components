@@ -39,10 +39,6 @@ const multiSelectComboBox = css`
     flex: 0 1 auto;
     min-width: var(--chip-min-width);
   }
-
-  :host([readonly]) [part~='chip'] {
-    pointer-events: none;
-  }
 `;
 
 registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectComboBox], {
