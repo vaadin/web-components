@@ -27,6 +27,13 @@ customElements.define('host-component', HostComponent);
 describe('lit-renderer', () => {
   let component;
 
+  it('should throw when binding the directive to a not element part', () => {
+    const container = fixtureSync('<div></div>');
+    expect(() => {
+      render(html`<div>${mockRenderer(() => html`Content`)}</div>`, container);
+    }).to.throw('The `mockRenderer` directive must be bound to an element');
+  });
+
   describe('basic', () => {
     let container;
 

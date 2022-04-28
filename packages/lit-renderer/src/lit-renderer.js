@@ -17,8 +17,7 @@ export class LitRendererDirective extends AsyncDirective {
   constructor(part) {
     super(part);
     if (part.type !== PartType.ELEMENT) {
-      // TODO: Improve the error message by mentioning the actual name of the renderer directive.
-      throw new Error('Renderer can be only bound to an element.');
+      throw new Error(`The \`${this.name}\` directive must be bound to an element.`);
     }
   }
 
@@ -54,6 +53,11 @@ export class LitRendererDirective extends AsyncDirective {
   /** @override */
   disconnected() {
     this.removeRenderer();
+  }
+
+  /** @abstract */
+  get name() {
+    throw new Error('The `name` getter must be implemented.');
   }
 
   /** @abstract */

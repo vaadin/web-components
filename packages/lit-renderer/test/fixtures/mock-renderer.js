@@ -2,6 +2,10 @@ import { directive } from 'lit/directive.js';
 import { LitRendererDirective } from '../../src/lit-renderer.js';
 
 class MockRendererDirective extends LitRendererDirective {
+  get name() {
+    return 'mockRenderer';
+  }
+
   addRenderer() {
     this.element.renderer = (root) => {
       this.renderRenderer(root);
