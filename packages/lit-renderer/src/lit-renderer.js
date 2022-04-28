@@ -2,23 +2,12 @@ import { nothing } from 'lit';
 import { AsyncDirective } from 'lit/async-directive.js';
 import { PartType } from 'lit/directive.js';
 
-/**
- * @typedef {import('lit/directive.js').PartInfo} PartInfo
- * @typedef {import('lit/directive.js').ElementPart} ElementPart
- */
-
-// A symbol that indicates that the renderer hasn't been initialized.
+// A symbol indicating that the directive hasn't been initialized.
 const VALUE_NOT_INITIALIZED = Symbol('valueNotInitialized');
 
 export class LitRendererDirective extends AsyncDirective {
-  /**
-   * @type {unknown}
-   */
   previousValue = VALUE_NOT_INITIALIZED;
 
-  /**
-   * @param {PartInfo} part
-   */
   constructor(part) {
     super(part);
     if (part.type !== PartType.ELEMENT) {
@@ -27,14 +16,7 @@ export class LitRendererDirective extends AsyncDirective {
     }
   }
 
-  /**
-   * @param {ElementPart} part
-   * @param {[R, unknown]}
-   * @return {unknown}
-   */
   update(part, [renderer, value]) {
-    const firstRender = this.previousValue === VALUE_NOT_INITIALIZED;
-
     if (!this.__hasChanged(value)) {
       return nothing;
     }
@@ -43,24 +25,26 @@ export class LitRendererDirective extends AsyncDirective {
     this.element = part.element;
     this.renderer = renderer;
 
-    // Copy the value if it's an array so that if it's mutated we don't forget
-    // what the previous values were.
-    this.previousValue = Array.isArray(value) ? Array.from(value) : value;
-
+    const firstRender = this.previousValue === VALUE_NOT_INITIALIZED;
     if (firstRender) {
       this.addRenderer();
     } else {
       this.runRenderer();
     }
 
+    // Copy the value if it is an array in order to keep it
+    // from possible outside mutations.
+    this.previousValue = Array.isArray(value) ? [...value] : value;
+
     return nothing;
   }
 
+  reconnected() {
+    this.addRenderer();
+  }
+
   disconnected() {
-    this.disposeOfRenderer();
-    this.host = null;
-    this.element = null;
-    this.renderer = null;
+    this.removeRenderer();
   }
 
   addRenderer() {
@@ -71,8 +55,8 @@ export class LitRendererDirective extends AsyncDirective {
     throw new Error('The `runRenderer` method must be implemented.');
   }
 
-  disposeOfRenderer() {
-    throw new Error('The `disposeOfRenderer` method must be implemented.');
+  removeRenderer() {
+    throw new Error('The `removeRenderer` method must be implemented.');
   }
 
   /**

@@ -5,19 +5,38 @@ import './fixtures/mock-component.js';
 import { html, LitElement, render } from 'lit';
 import { mockRenderer } from './fixtures/mock-renderer.js';
 
+class HostComponent extends LitElement {
+  render() {
+    return html`<mock-component
+      ${mockRenderer(() => html`<button @click=${this.onButtonClick}>Button</button>`)}
+    ></mock-component>`;
+  }
+
+  onButtonClick(event) {
+    const customEvent = new CustomEvent('button-click', {
+      detail: {
+        target: event.target,
+      },
+    });
+    this.dispatchEvent(customEvent);
+  }
+}
+
+customElements.define('host-component', HostComponent);
+
 describe('lit-renderer', () => {
   let component;
 
   describe('basic', () => {
     let container;
 
-    function renderComponent(content) {
-      render(html`<mock-component ${mockRenderer(() => html`${content}`)}></mock-component>`, container);
+    function doRender(content) {
+      return render(html`<mock-component ${mockRenderer(() => html`${content}`)}></mock-component>`, container);
     }
 
     beforeEach(() => {
       container = fixtureSync('<div></div>');
-      renderComponent('content');
+      doRender('content');
       component = container.querySelector('mock-component');
     });
 
@@ -26,7 +45,7 @@ describe('lit-renderer', () => {
     });
 
     it('should not re-render the content when no dependencies are specified', () => {
-      renderComponent('new content');
+      doRender('new content');
       expect(component.$.content.textContent).to.equal('content');
     });
   });
@@ -34,13 +53,16 @@ describe('lit-renderer', () => {
   describe('single dependency', () => {
     let container;
 
-    function renderComponent(content, dependency) {
-      render(html`<mock-component ${mockRenderer(() => html`${content}`, dependency)}></mock-component>`, container);
+    function doRender(content, dependency) {
+      return render(
+        html`<mock-component ${mockRenderer(() => html`${content}`, dependency)}></mock-component>`,
+        container,
+      );
     }
 
     beforeEach(() => {
       container = fixtureSync('<div></div>');
-      renderComponent('content', 'dep');
+      doRender('content', 'dep');
       component = container.querySelector('mock-component');
     });
 
@@ -49,12 +71,12 @@ describe('lit-renderer', () => {
     });
 
     it('should re-render the content when the dependency has changed', () => {
-      renderComponent('new content', 'new dep');
+      doRender('new content', 'new dep');
       expect(component.$.content.textContent).to.equal('new content');
     });
 
     it('should not re-render the content when the dependency has not changed', () => {
-      renderComponent('new content', 'dep');
+      doRender('new content', 'dep');
       expect(component.$.content.textContent).to.equal('content');
     });
   });
@@ -62,13 +84,16 @@ describe('lit-renderer', () => {
   describe('multiple dependencies', () => {
     let container;
 
-    function renderComponent(content, dependencies) {
-      render(html`<mock-component ${mockRenderer(() => html`${content}`, dependencies)}></mock-component>`, container);
+    function doRender(content, dependencies) {
+      return render(
+        html`<mock-component ${mockRenderer(() => html`${content}`, dependencies)}></mock-component>`,
+        container,
+      );
     }
 
     beforeEach(() => {
       container = fixtureSync('<div></div>');
-      renderComponent('content', ['dep']);
+      doRender('content', ['dep']);
       component = container.querySelector('mock-component');
     });
 
@@ -77,39 +102,41 @@ describe('lit-renderer', () => {
     });
 
     it('should not re-render the content when no dependencies have changed', () => {
-      renderComponent('new content', ['dep']);
+      doRender('new content', ['dep']);
       expect(component.$.content.textContent).to.equal('content');
     });
 
     it('should re-render the content when a dependency has changed', () => {
-      renderComponent('new content', ['new dep']);
+      doRender('new content', ['new dep']);
       expect(component.$.content.textContent).to.equal('new content');
     });
 
     it('should re-render the content when adding a dependency', () => {
-      renderComponent('new content', ['dep', 'dep 2']);
+      doRender('new content', ['dep', 'dep 2']);
       expect(component.$.content.textContent).to.equal('new content');
     });
 
     it('should re-render the content when removing a dependency', () => {
-      renderComponent('new content', []);
+      doRender('new content', []);
       expect(component.$.content.textContent).to.equal('new content');
     });
   });
 
   describe('conditional', () => {
-    let container;
+    let container, part;
 
-    function renderComponent(content, condition) {
-      render(
-        html`<mock-component ${condition ? mockRenderer(() => html`${content}`, content) : null}></mock-component>`,
+    function doRender({ component, directive }) {
+      return render(
+        component
+          ? html`<mock-component ${directive ? mockRenderer(() => html`Content`) : null}></mock-component>`
+          : null,
         container,
       );
     }
 
     beforeEach(() => {
       container = fixtureSync('<div></div>');
-      renderComponent('content', true);
+      part = doRender({ component: true, directive: true });
       component = container.querySelector('mock-component');
     });
 
@@ -118,32 +145,25 @@ describe('lit-renderer', () => {
     });
 
     it('should remove the renderer when the directive is detached', () => {
-      renderComponent('content', false);
+      doRender({ component: true, directive: false });
       expect(component.renderer).not.to.exist;
+    });
+
+    it('should remove the renderer when the component is removed from the DOM', () => {
+      doRender({ component: false, directive: true });
+      expect(component.renderer).not.to.exist;
+    });
+
+    it(`should toggle the renderer when toggling the connected state of the component's part`, () => {
+      part.setConnected(false);
+      expect(component.renderer).not.to.exist;
+      part.setConnected(true);
+      expect(component.renderer).to.exist;
     });
   });
 
   describe('events', () => {
     let hostComponent;
-
-    class HostComponent extends LitElement {
-      render() {
-        return html`<mock-component
-          ${mockRenderer(() => html`<button @click=${this.onButtonClick}>Button</button>`)}
-        ></mock-component>`;
-      }
-
-      onButtonClick(event) {
-        const customEvent = new CustomEvent('button-click', {
-          detail: {
-            target: event.target,
-          },
-        });
-        this.dispatchEvent(customEvent);
-      }
-    }
-
-    customElements.define('host-component', HostComponent);
 
     beforeEach(async () => {
       hostComponent = fixtureSync('<host-component></host-component>');

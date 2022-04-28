@@ -13,7 +13,7 @@ class MockRendererDirective extends LitRendererDirective {
     this.element.requestContentUpdate();
   }
 
-  disposeOfRenderer() {
+  removeRenderer() {
     this.element.renderer = null;
   }
 }
