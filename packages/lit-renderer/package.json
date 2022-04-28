@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "vaadin-lit-renderer",
+  "description": "An abstract Lit directive for adding a renderer to a Vaadin web component",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
