@@ -25,10 +25,6 @@ registerStyles(
 );
 
 const multiSelectComboBox = css`
-  :host([readonly]) [part~='chip'] {
-    opacity: 0.5;
-  }
-
   [part='input-field'] {
     height: auto;
     min-height: 32px;
