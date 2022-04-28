@@ -30,6 +30,16 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
 
   static get properties() {
     return {
+      disabled: {
+        type: Boolean,
+        reflectToAttribute: true,
+      },
+
+      readonly: {
+        type: Boolean,
+        reflectToAttribute: true,
+      },
+
       label: {
         type: String,
       },
