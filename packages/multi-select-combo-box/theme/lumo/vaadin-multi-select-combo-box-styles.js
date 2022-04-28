@@ -30,10 +30,6 @@ const multiSelectComboBox = css`
     padding-inline-start: 0;
   }
 
-  :host([readonly]) [part~='chip'] {
-    opacity: 0.7;
-  }
-
   [part~='chip']:not(:last-of-type) {
     margin-inline-end: var(--lumo-space-xs);
   }
