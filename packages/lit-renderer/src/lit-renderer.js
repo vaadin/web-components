@@ -11,6 +11,7 @@ import { PartType } from 'lit/directive.js';
 const VALUE_NOT_INITIALIZED = Symbol('valueNotInitialized');
 
 export class LitRendererDirective extends AsyncDirective {
+  /** @protected */
   previousValue = VALUE_NOT_INITIALIZED;
 
   constructor(part) {
@@ -21,8 +22,9 @@ export class LitRendererDirective extends AsyncDirective {
     }
   }
 
+  /** @override */
   update(part, [renderer, value]) {
-    if (!this.__hasChanged(value)) {
+    if (!this.hasChanged(value)) {
       return nothing;
     }
 
@@ -44,36 +46,39 @@ export class LitRendererDirective extends AsyncDirective {
     return nothing;
   }
 
+  /** @override */
   reconnected() {
     this.addRenderer();
   }
 
+  /** @override */
   disconnected() {
     this.removeRenderer();
   }
 
+  /** @abstract */
   addRenderer() {
     throw new Error('The `addRenderer` method must be implemented.');
   }
 
+  /** @abstract */
   runRenderer() {
     throw new Error('The `runRenderer` method must be implemented.');
   }
 
+  /** @abstract */
   removeRenderer() {
     throw new Error('The `removeRenderer` method must be implemented.');
   }
 
+  /** @protected */
   renderRenderer(container, ...args) {
     const templateResult = this.renderer.call(this.host, ...args);
     render(templateResult, container, { host: this.host });
   }
 
-  /**
-   * @param {unknown} value
-   * @return {boolean}
-   */
-  __hasChanged(value) {
+  /** @protected */
+  hasChanged(value) {
     if (Array.isArray(value)) {
       if (!Array.isArray(this.previousValue)) {
         return true;
