@@ -37,7 +37,6 @@ const multiSelectComboBox = css`
 
   [part='chip'] {
     flex: 0 1 auto;
-    min-width: var(--chip-min-width);
   }
 `;
 
