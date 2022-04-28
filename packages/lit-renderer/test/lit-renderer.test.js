@@ -31,7 +31,7 @@ describe('lit-renderer', () => {
     const container = fixtureSync('<div></div>');
     expect(() => {
       render(html`<div>${mockRenderer(() => html`Content`)}</div>`, container);
-    }).to.throw('The `mockRenderer` directive must be bound to an element');
+    }).to.throw('`MockRendererDirective` must be bound to an element');
   });
 
   describe('basic', () => {
