@@ -7,6 +7,11 @@ export type DialogLitRenderer = (dialog: Dialog) => TemplateResult;
 
 export class DialogRendererDirective extends LitRendererDirective<Dialog, DialogLitRenderer> {
   /**
+   * A property to that the renderer callback is assigned.
+   */
+  protected rendererProperty: string;
+
+  /**
    * Adds the renderer callback to the dialog.
    */
   addRenderer(): void;
@@ -22,4 +27,10 @@ export class DialogRendererDirective extends LitRendererDirective<Dialog, Dialog
   removeRenderer(): void;
 }
 
+export class DialogHeaderRendererDirective extends DialogRendererDirective {}
+
+export class DialogFooterRendererDirective extends DialogRendererDirective {}
+
 export declare const dialogRenderer: LitRendererDirectiveFactory<typeof DialogRendererDirective>;
+export declare const dialogHeaderRenderer: LitRendererDirectiveFactory<typeof DialogHeaderRendererDirective>;
+export declare const dialogFooterRenderer: LitRendererDirectiveFactory<typeof DialogFooterRendererDirective>;

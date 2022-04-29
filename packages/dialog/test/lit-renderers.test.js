@@ -1,0 +1,98 @@
+import { expect } from '@esm-bundle/chai';
+import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import '../vaadin-dialog.js';
+import { html, render } from 'lit';
+import { dialogFooterRenderer, dialogHeaderRenderer, dialogRenderer } from '../vaadin-dialog.js';
+
+function renderDialog(container, { header, content, footer }) {
+  render(
+    html`<vaadin-dialog
+      ${content ? dialogRenderer(() => html`${content}`, content) : null}
+      ${header ? dialogHeaderRenderer(() => html`${header}`, header) : null}
+      ${footer ? dialogFooterRenderer(() => html`${footer}`, footer) : null}
+    ></vaadin-dialog>`,
+    container,
+  );
+}
+
+describe('lit renderers', () => {
+  let container, dialog, overlay, header, footer;
+
+  beforeEach(() => {
+    container = fixtureSync('<div></div>');
+  });
+
+  describe('dialogRenderer', () => {
+    beforeEach(async () => {
+      renderDialog(container, { content: 'Content' });
+      dialog = container.querySelector('vaadin-dialog');
+      overlay = dialog.$.overlay;
+      dialog.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+    });
+
+    it('should render the dialog content with the renderer', () => {
+      expect(overlay.textContent).to.equal('Content');
+    });
+
+    it('should re-render the dialog content when a renderer dependency changes', () => {
+      renderDialog(container, { content: 'New Content' });
+      expect(overlay.textContent).to.equal('New Content');
+    });
+
+    it('should clear the dialog content when the directive is detached', () => {
+      renderDialog(container, {});
+      expect(overlay.textContent).to.be.empty;
+    });
+  });
+
+  describe('dialogHeaderRenderer', () => {
+    beforeEach(async () => {
+      renderDialog(container, { header: 'Header' });
+      dialog = container.querySelector('vaadin-dialog');
+      overlay = dialog.$.overlay;
+      dialog.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      header = overlay.querySelector('[slot=header-content]');
+    });
+
+    it('should render the dialog header with the renderer', () => {
+      expect(header.textContent).to.equal('Header');
+    });
+
+    it('should re-render the dialog header when a renderer dependency changes', () => {
+      renderDialog(container, { header: 'New Header' });
+      expect(header.textContent).to.equal('New Header');
+    });
+
+    it('should clear the dialog header when the directive is detached', () => {
+      renderDialog(container, {});
+      expect(overlay.querySelector('[slot=header-content]')).to.be.null;
+    });
+  });
+
+  describe('dialogFooterRenderer', () => {
+    beforeEach(async () => {
+      renderDialog(container, { footer: 'Footer' });
+      dialog = container.querySelector('vaadin-dialog');
+      overlay = dialog.$.overlay;
+      dialog.opened = true;
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      footer = overlay.querySelector('[slot=footer]');
+    });
+
+    it('should render the dialog footer with the renderer', () => {
+      expect(footer.textContent).to.equal('Footer');
+    });
+
+    it('should re-render the dialog footer when a renderer dependency changes', () => {
+      renderDialog(container, { footer: 'New Footer' });
+      expect(footer.textContent).to.equal('New Footer');
+    });
+
+    it('should clear the dialog footer when the directive is detached', () => {
+      renderDialog(container, {});
+      expect(overlay.querySelector('[slot=footer]')).to.be.null;
+    });
+  });
+});

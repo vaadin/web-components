@@ -8,10 +8,17 @@ import { LitRendererDirective } from '@vaadin/lit-renderer';
 
 export class DialogRendererDirective extends LitRendererDirective {
   /**
+   * A property to that the renderer callback will be assigned.
+   *
+   * @protected
+   */
+  rendererProperty = 'renderer';
+
+  /**
    * Adds the renderer callback to the dialog.
    */
   addRenderer() {
-    this.element.renderer = (root, dialog) => {
+    this.element[this.rendererProperty] = (root, dialog) => {
       this.renderRenderer(root, dialog);
     };
   }
@@ -27,8 +34,18 @@ export class DialogRendererDirective extends LitRendererDirective {
    * Removes the renderer callback from the dialog.
    */
   removeRenderer() {
-    this.element.renderer = null;
+    this.element[this.rendererProperty] = null;
   }
 }
 
+export class DialogHeaderRendererDirective extends DialogRendererDirective {
+  rendererProperty = 'headerRenderer';
+}
+
+export class DialogFooterRendererDirective extends DialogRendererDirective {
+  rendererProperty = 'footerRenderer';
+}
+
 export const dialogRenderer = directive(DialogRendererDirective);
+export const dialogHeaderRenderer = directive(DialogHeaderRendererDirective);
+export const dialogFooterRenderer = directive(DialogFooterRendererDirective);

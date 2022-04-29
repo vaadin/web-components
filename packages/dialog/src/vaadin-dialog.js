@@ -688,4 +688,4 @@ customElements.define(Dialog.is, Dialog);
 
 export { Dialog };
 
-export * from './vaadin-dialog-lit-renderer.js';
+export * from './vaadin-dialog-lit-renderers.js';
