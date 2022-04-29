@@ -42,6 +42,7 @@ const multiSelectComboBox = css`
   :host(:is([readonly], [disabled])) ::slotted(input) {
     flex-grow: 0;
     flex-basis: 0;
+    padding: 0;
   }
 `;
 
