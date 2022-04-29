@@ -22,6 +22,11 @@ export class LitRendererDirective extends AsyncDirective {
   }
 
   /** @override */
+  render(_renderer, _value) {
+    return nothing;
+  }
+
+  /** @override */
   update(part, [renderer, value]) {
     if (!this.hasChanged(value)) {
       return nothing;
