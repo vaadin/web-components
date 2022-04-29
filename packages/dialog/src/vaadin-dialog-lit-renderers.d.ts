@@ -12,7 +12,7 @@ export type DialogLitRenderer = (dialog: Dialog) => TemplateResult;
 
 export class DialogRendererDirective extends LitRendererDirective<Dialog, DialogLitRenderer> {
   /**
-   * A property to that the renderer callback is assigned.
+   * A property to that the renderer callback will be assigned.
    */
   protected rendererProperty: string;
 
