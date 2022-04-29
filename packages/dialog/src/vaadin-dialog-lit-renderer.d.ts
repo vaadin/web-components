@@ -1,16 +1,25 @@
 import { TemplateResult } from 'lit';
-import { DirectiveResult } from 'lit/directive.js';
+import type { LitRendererDirectiveFactory } from '@vaadin/lit-renderer';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 import { Dialog } from './vaadin-dialog.js';
 
 export type DialogLitRenderer = (dialog: Dialog) => TemplateResult;
 
-class DialogRendererDirective extends LitRendererDirective<Element, DialogLitRenderer> {
+export class DialogRendererDirective extends LitRendererDirective<Dialog, DialogLitRenderer> {
+  /**
+   * Adds the renderer callback to the dialog.
+   */
   addRenderer(): void;
 
+  /**
+   * Runs the renderer callback to the dialog.
+   */
   runRenderer(): void;
 
+  /**
+   * Removes the renderer callback to the dialog.
+   */
   removeRenderer(): void;
 }
 
-export function dialogRenderer(renderer: DialogLitRenderer, value?: unknown): DirectiveResult<DialogRendererDirective>;
+export declare const dialogRenderer: LitRendererDirectiveFactory<typeof DialogRendererDirective>;

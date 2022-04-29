@@ -1,36 +1,34 @@
-// /**
-//  * @license
-//  * Copyright (c) 2017 - 2022 Vaadin Ltd.
-//  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
-//  */
-//  import { render, RenderOptions, TemplateResult } from 'lit';
-//  import { directive, DirectiveResult } from 'lit/directive.js';
-//  import { LitRendererDirective } from '@vaadin/lit-renderer';
-//  import { Dialog } from './vaadin-dialog.js';
+/**
+ * @license
+ * Copyright (c) 2017 - 2022 Vaadin Ltd.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+ */
+import { directive } from 'lit/directive.js';
+import { LitRendererDirective } from '@vaadin/lit-renderer';
 
-//  export type DialogLitRenderer = (dialog: Dialog) => TemplateResult;
+export class DialogRendererDirective extends LitRendererDirective {
+  /**
+   * Adds the renderer callback to the dialog.
+   */
+  addRenderer() {
+    this.element.renderer = (root, dialog) => {
+      this.renderRenderer(root, dialog);
+    };
+  }
 
-//  class DialogRendererDirective extends LitRendererDirective<Dialog, DialogLitRenderer> {
-//    /**
-//     * Set renderer callback to the element.
-//     */
-//    addRenderer(element: Dialog, renderer: DialogLitRenderer, options: RenderOptions) {
-//      element.renderer = (root: HTMLElement, dialog?: Dialog) => {
-//        render(renderer.call(options.host, dialog as Dialog), root, options);
-//      };
-//    }
+  /**
+   * Runs the renderer callback on the dialog.
+   */
+  runRenderer() {
+    this.element.requestContentUpdate();
+  }
 
-//    /**
-//     * Run renderer callback on the element.
-//     */
-//    runRenderer(element: Dialog) {
-//      element.requestContentUpdate();
-//    }
-//  }
+  /**
+   * Removes the renderer callback from the dialog.
+   */
+  removeRenderer() {
+    this.element.renderer = null;
+  }
+}
 
-//  const rendererDirective = directive(DialogRendererDirective);
-
-//  export const dialogRenderer = (
-//    renderer: DialogLitRenderer,
-//    value?: unknown
-//  ): DirectiveResult<typeof DialogRendererDirective> => rendererDirective(renderer, value);
+export const dialogRenderer = directive(DialogRendererDirective);
