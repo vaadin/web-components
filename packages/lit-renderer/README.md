@@ -1,4 +1,4 @@
-# @vaadin/vaadin-lit-renderer
+# @vaadin/lit-renderer
 
 An abstract Lit directive for adding a renderer to a Vaadin web component.
 
