@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/tabs",
-  "version": "22.0.12",
+  "version": "22.0.13",
   "publishConfig": {
     "access": "public"
   },
@@ -34,12 +34,12 @@
   "dependencies": {
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^22.0.12",
-    "@vaadin/item": "^22.0.12",
-    "@vaadin/vaadin-list-mixin": "^22.0.12",
-    "@vaadin/vaadin-lumo-styles": "^22.0.12",
-    "@vaadin/vaadin-material-styles": "^22.0.12",
-    "@vaadin/vaadin-themable-mixin": "^22.0.12"
+    "@vaadin/component-base": "^22.0.13",
+    "@vaadin/item": "^22.0.13",
+    "@vaadin/vaadin-list-mixin": "^22.0.13",
+    "@vaadin/vaadin-lumo-styles": "^22.0.13",
+    "@vaadin/vaadin-material-styles": "^22.0.13",
+    "@vaadin/vaadin-themable-mixin": "^22.0.13"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
