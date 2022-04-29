@@ -17,7 +17,6 @@ registerStyles(
     [part~='row'] > [part~='editable-cell']:hover,
     [part~='row'] > [part~='editable-cell']:focus {
       background: var(--material-background-color) linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08));
-      background-clip: padding-box;
     }
   `,
   { moduleId: 'material-grid-pro' }

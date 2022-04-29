@@ -24,14 +24,12 @@ registerStyles(
     [part~='editable-cell']:hover,
     [part~='editable-cell']:focus {
       background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
-      background-clip: padding-box;
     }
 
     /* Indicate editable cells */
 
     :host([theme~='highlight-editable-cells']) [part~='editable-cell'] {
       background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
-      background-clip: border-box;
     }
 
     :host([theme~='highlight-editable-cells']) [part~='editable-cell']:hover,
