@@ -158,7 +158,7 @@ describe('lit renderers', () => {
       });
     });
 
-    it('should request a content update only once when triggering directives to update', async () => {
+    it('should request one content update when triggering multiple renderers to update', async () => {
       const spy = sinon.spy(dialog, 'requestContentUpdate');
       await renderOpenedDialog(container, {
         header: 'New Header',
