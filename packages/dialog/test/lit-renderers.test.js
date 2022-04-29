@@ -86,7 +86,7 @@ describe('lit renderers', () => {
 
       it('should clear the dialog header when the directive is detached', async () => {
         await renderOpenedDialog(container, {});
-        expect(overlay.querySelector('[slot=header-content]')).to.be.null;
+        expect(overlay.querySelector('[slot=header-content]')).not.to.exist;
       });
     });
 
@@ -128,7 +128,7 @@ describe('lit renderers', () => {
 
       it('should clear the dialog footer when the directive is detached', async () => {
         await renderOpenedDialog(container, {});
-        expect(overlay.querySelector('[slot=footer]')).to.be.null;
+        expect(overlay.querySelector('[slot=footer]')).not.to.exist;
       });
     });
 
