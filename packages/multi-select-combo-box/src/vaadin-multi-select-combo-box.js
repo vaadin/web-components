@@ -37,7 +37,12 @@ const multiSelectComboBox = css`
 
   [part='chip'] {
     flex: 0 1 auto;
-    min-width: var(--chip-min-width);
+  }
+
+  :host(:is([readonly], [disabled])) ::slotted(input) {
+    flex-grow: 0;
+    flex-basis: 0;
+    padding: 0;
   }
 `;
 
@@ -171,6 +176,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
               slot="prefix"
               part$="[[_getOverflowPart(_overflowItems.length)]]"
               disabled="[[disabled]]"
+              readonly="[[readonly]]"
               label="[[_getOverflowLabel(_overflowItems.length)]]"
               title$="[[_getOverflowTitle(_overflowItems)]]"
               hidden$="[[_isOverflowHidden(_overflowItems.length)]]"
@@ -409,9 +415,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     super._disabledChanged(disabled, oldDisabled);
 
     if (disabled || oldDisabled) {
-      this._chips.forEach((chip) => {
-        chip.toggleAttribute('disabled', disabled);
-      });
+      this.__updateChips();
     }
   }
 
@@ -476,18 +480,11 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     if (readonly) {
       this.__savedItems = this.$.comboBox._getOverlayItems();
       this.$.comboBox._setOverlayItems(Array.from(this.selectedItems));
-
-      // Update chips to hide remove button
-      this._chips.forEach((chip) => {
-        chip.setAttribute('readonly', '');
-      });
+      this.__updateChips();
     } else if (oldReadonly) {
       this.$.comboBox._setOverlayItems(this.__savedItems);
       this.__savedItems = null;
-
-      this._chips.forEach((chip) => {
-        chip.removeAttribute('readonly');
-      });
+      this.__updateChips();
     }
   }
 
@@ -622,8 +619,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     chip.setAttribute('slot', 'prefix');
 
     chip.item = item;
-    chip.toggleAttribute('disabled', this.disabled);
-    chip.toggleAttribute('readonly', this.readonly);
+    chip.disabled = this.disabled;
+    chip.readonly = this.readonly;
 
     const label = this._getItemLabel(item, this.itemLabelPath);
     chip.label = label;

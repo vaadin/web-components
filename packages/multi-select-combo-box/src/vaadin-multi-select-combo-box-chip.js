@@ -30,6 +30,16 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
 
   static get properties() {
     return {
+      disabled: {
+        type: Boolean,
+        reflectToAttribute: true,
+      },
+
+      readonly: {
+        type: Boolean,
+        reflectToAttribute: true,
+      },
+
       label: {
         type: String,
       },
@@ -57,7 +67,11 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
           text-overflow: ellipsis;
         }
 
-        :host([part~='overflow']) [part='remove-button'] {
+        :host(:not([part~='overflow'])) {
+          min-width: var(--chip-min-width);
+        }
+
+        :host(:is([readonly], [disabled], [part~='overflow'])) [part='remove-button'] {
           display: none !important;
         }
       </style>
