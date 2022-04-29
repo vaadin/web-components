@@ -22,12 +22,12 @@ export class DialogRendererDirective extends LitRendererDirective<Dialog, Dialog
   addRenderer(): void;
 
   /**
-   * Runs the renderer callback to the dialog.
+   * Runs the renderer callback on the dialog.
    */
   runRenderer(): void;
 
   /**
-   * Removes the renderer callback to the dialog.
+   * Removes the renderer callback from the dialog.
    */
   removeRenderer(): void;
 }
