@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dialog.js';
 import { html, render } from 'lit';
 import { dialogFooterRenderer, dialogHeaderRenderer, dialogRenderer } from '../vaadin-dialog.js';
 
-function renderDialog(container, { header, content, footer }) {
+async function renderDialog(container, { header, content, footer }) {
   render(
     html`<vaadin-dialog
       ${content ? dialogRenderer(() => html`${content}`, content) : null}
@@ -14,6 +14,7 @@ function renderDialog(container, { header, content, footer }) {
     ></vaadin-dialog>`,
     container,
   );
+  await nextFrame();
 }
 
 describe('lit renderers', () => {
@@ -25,7 +26,7 @@ describe('lit renderers', () => {
 
   describe('dialogRenderer', () => {
     beforeEach(async () => {
-      renderDialog(container, { content: 'Content' });
+      await renderDialog(container, { content: 'Content' });
       dialog = container.querySelector('vaadin-dialog');
       overlay = dialog.$.overlay;
       dialog.opened = true;
@@ -36,20 +37,20 @@ describe('lit renderers', () => {
       expect(overlay.textContent).to.equal('Content');
     });
 
-    it('should re-render the dialog content when a renderer dependency changes', () => {
-      renderDialog(container, { content: 'New Content' });
+    it('should re-render the dialog content when a renderer dependency changes', async () => {
+      await renderDialog(container, { content: 'New Content' });
       expect(overlay.textContent).to.equal('New Content');
     });
 
-    it('should clear the dialog content when the directive is detached', () => {
-      renderDialog(container, {});
+    it('should clear the dialog content when the directive is detached', async () => {
+      await renderDialog(container, {});
       expect(overlay.textContent).to.be.empty;
     });
   });
 
   describe('dialogHeaderRenderer', () => {
     beforeEach(async () => {
-      renderDialog(container, { header: 'Header' });
+      await renderDialog(container, { header: 'Header' });
       dialog = container.querySelector('vaadin-dialog');
       overlay = dialog.$.overlay;
       dialog.opened = true;
@@ -61,20 +62,20 @@ describe('lit renderers', () => {
       expect(header.textContent).to.equal('Header');
     });
 
-    it('should re-render the dialog header when a renderer dependency changes', () => {
-      renderDialog(container, { header: 'New Header' });
+    it('should re-render the dialog header when a renderer dependency changes', async () => {
+      await renderDialog(container, { header: 'New Header' });
       expect(header.textContent).to.equal('New Header');
     });
 
-    it('should clear the dialog header when the directive is detached', () => {
-      renderDialog(container, {});
+    it('should clear the dialog header when the directive is detached', async () => {
+      await renderDialog(container, {});
       expect(overlay.querySelector('[slot=header-content]')).to.be.null;
     });
   });
 
   describe('dialogFooterRenderer', () => {
     beforeEach(async () => {
-      renderDialog(container, { footer: 'Footer' });
+      await renderDialog(container, { footer: 'Footer' });
       dialog = container.querySelector('vaadin-dialog');
       overlay = dialog.$.overlay;
       dialog.opened = true;
@@ -86,20 +87,20 @@ describe('lit renderers', () => {
       expect(footer.textContent).to.equal('Footer');
     });
 
-    it('should re-render the dialog footer when a renderer dependency changes', () => {
-      renderDialog(container, { footer: 'New Footer' });
+    it('should re-render the dialog footer when a renderer dependency changes', async () => {
+      await renderDialog(container, { footer: 'New Footer' });
       expect(footer.textContent).to.equal('New Footer');
     });
 
-    it('should clear the dialog footer when the directive is detached', () => {
-      renderDialog(container, {});
+    it('should clear the dialog footer when the directive is detached', async () => {
+      await renderDialog(container, {});
       expect(overlay.querySelector('[slot=footer]')).to.be.null;
     });
   });
 
   describe('multiple renderers', () => {
     beforeEach(async () => {
-      renderDialog(container, {
+      await renderDialog(container, {
         header: 'Header',
         footer: 'Footer',
         content: 'Content',
@@ -109,9 +110,9 @@ describe('lit renderers', () => {
       await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
     });
 
-    it('should request a content update only once when triggering directives to update', () => {
+    it('should request a content update only once when triggering directives to update', async () => {
       const spy = sinon.spy(dialog, 'requestContentUpdate');
-      renderDialog(container, {
+      await renderDialog(container, {
         header: 'New Header',
         footer: 'New Footer',
         content: 'New Content',

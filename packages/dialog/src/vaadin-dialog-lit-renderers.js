@@ -4,7 +4,11 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { directive } from 'lit/directive.js';
+import { microTask } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
+
+const RUN_RENDERER_DEBOUNCER = Symbol('runRendererDebouncer');
 
 export class DialogRendererDirective extends LitRendererDirective {
   /**
@@ -27,7 +31,9 @@ export class DialogRendererDirective extends LitRendererDirective {
    * Runs the renderer callback on the dialog.
    */
   runRenderer() {
-    this.element.requestContentUpdate();
+    this.element[RUN_RENDERER_DEBOUNCER] = Debouncer.debounce(this.element[RUN_RENDERER_DEBOUNCER], microTask, () => {
+      this.element.requestContentUpdate();
+    });
   }
 
   /**
