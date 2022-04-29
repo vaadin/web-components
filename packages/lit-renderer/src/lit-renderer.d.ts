@@ -5,13 +5,10 @@
  */
 import { nothing, RenderOptions, TemplateResult } from 'lit';
 import { AsyncDirective } from 'lit/async-directive.js';
-import { PartInfo } from 'lit/directive.js';
 
 export type LitRenderer = (...args: any[]) => TemplateResult;
 
 export abstract class LitRendererDirective<E extends Element, R extends LitRenderer> extends AsyncDirective {
-  constructor(info: PartInfo);
-
   protected host: RenderOptions['host'];
 
   protected element: E;
