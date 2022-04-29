@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../vaadin-dialog.js';
 import { html, render } from 'lit';
 import { dialogFooterRenderer, dialogHeaderRenderer, dialogRenderer } from '../vaadin-dialog.js';
@@ -93,6 +94,29 @@ describe('lit renderers', () => {
     it('should clear the dialog footer when the directive is detached', () => {
       renderDialog(container, {});
       expect(overlay.querySelector('[slot=footer]')).to.be.null;
+    });
+  });
+
+  describe('multiple renderers', () => {
+    beforeEach(async () => {
+      renderDialog(container, {
+        header: 'Header',
+        footer: 'Footer',
+        content: 'Content',
+      });
+      dialog = container.querySelector('vaadin-dialog');
+      dialog.opened = true;
+      await oneEvent(dialog.$.overlay, 'vaadin-overlay-open');
+    });
+
+    it('should request a content update only once when triggering directives to update', () => {
+      const spy = sinon.spy(dialog, 'requestContentUpdate');
+      renderDialog(container, {
+        header: 'New Header',
+        footer: 'New Footer',
+        content: 'New Content',
+      });
+      expect(spy.callCount).to.equal(1);
     });
   });
 });
