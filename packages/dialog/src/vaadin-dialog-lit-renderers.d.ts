@@ -6,7 +6,6 @@
 /* eslint-disable max-classes-per-file */
 import { TemplateResult } from 'lit';
 import { DirectiveResult } from 'lit/directive.js';
-// import type { LitRendererDirectiveFactory } from '@vaadin/lit-renderer';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 import { Dialog } from './vaadin-dialog.js';
 
