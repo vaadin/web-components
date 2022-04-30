@@ -3,18 +3,20 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+/* eslint-disable max-classes-per-file */
 import { TemplateResult } from 'lit';
-import type { LitRendererDirectiveFactory } from '@vaadin/lit-renderer';
+import { DirectiveResult } from 'lit/directive.js';
+// import type { LitRendererDirectiveFactory } from '@vaadin/lit-renderer';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 import { Dialog } from './vaadin-dialog.js';
 
 export type DialogLitRenderer = (dialog: Dialog) => TemplateResult;
 
-export class DialogRendererDirective extends LitRendererDirective<Dialog, DialogLitRenderer> {
+declare abstract class AbstractDialogRendererDirective extends LitRendererDirective<Dialog, DialogLitRenderer> {
   /**
    * A property to that the renderer callback will be assigned.
    */
-  protected rendererProperty: string;
+  abstract rendererProperty: string;
 
   /**
    * Adds the renderer callback to the dialog.
@@ -32,10 +34,56 @@ export class DialogRendererDirective extends LitRendererDirective<Dialog, Dialog
   removeRenderer(): void;
 }
 
-export class DialogHeaderRendererDirective extends DialogRendererDirective {}
+export class DialogRendererDirective extends AbstractDialogRendererDirective {
+  rendererProperty: string;
+}
 
-export class DialogFooterRendererDirective extends DialogRendererDirective {}
+export class DialogHeaderRendererDirective extends AbstractDialogRendererDirective {
+  rendererProperty: string;
+}
 
-export declare const dialogRenderer: LitRendererDirectiveFactory<typeof DialogRendererDirective>;
-export declare const dialogHeaderRenderer: LitRendererDirectiveFactory<typeof DialogHeaderRendererDirective>;
-export declare const dialogFooterRenderer: LitRendererDirectiveFactory<typeof DialogFooterRendererDirective>;
+export class DialogFooterRendererDirective extends AbstractDialogRendererDirective {
+  rendererProperty: string;
+}
+
+/**
+ * A Lit directive for populating the content of the dialog.
+ *
+ * ```js
+ * `<vaadin-dialog
+ *   ${dialogRenderer((dialog) => html`...`)}
+ * ></vaadin-dialog>`
+ * ```
+ */
+export declare function dialogRenderer(
+  renderer: DialogLitRenderer,
+  value?: unknown,
+): DirectiveResult<typeof DialogRendererDirective>;
+
+/**
+ * A Lit directive for populating the content of the dialog header.
+ *
+ * ```js
+ * `<vaadin-dialog
+ *   ${dialogHeaderRenderer((dialog) => html`...`)}
+ * ></vaadin-dialog>`
+ * ```
+ */
+export declare function dialogHeaderRenderer(
+  renderer: DialogLitRenderer,
+  value?: unknown,
+): DirectiveResult<typeof DialogHeaderRendererDirective>;
+
+/**
+ * A Lit directive for populating the content of the dialog footer.
+ *
+ * ```js
+ * `<vaadin-dialog
+ *   ${dialogFooterRenderer((dialog) => html`...`)}
+ * ></vaadin-dialog>`
+ * ```
+ */
+export declare function dialogFooterRenderer(
+  renderer: DialogLitRenderer,
+  value?: unknown,
+): DirectiveResult<typeof DialogFooterRendererDirective>;
