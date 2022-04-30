@@ -5,7 +5,6 @@
  */
 import { ElementPart, nothing, RenderOptions, TemplateResult } from 'lit';
 import { AsyncDirective } from 'lit/async-directive.js';
-import { DirectiveClass, DirectiveResult } from 'lit/directive';
 
 export type LitRenderer = (...args: any[]) => TemplateResult;
 
@@ -37,7 +36,3 @@ export abstract class LitRendererDirective<E extends Element, R extends LitRende
    */
   abstract removeRenderer(): void;
 }
-
-export type LitRendererDirectiveFactory<D extends DirectiveClass> = (
-  ...args: Parameters<InstanceType<D>['render']>
-) => DirectiveResult<D>;
