@@ -467,7 +467,7 @@ export const ColumnBaseMixin = (superClass) =>
       }
 
       if (!!hidden !== !!this._previousHidden && this._grid) {
-        if (hidden === true) {
+        if (!this._isVisible) {
           this._allCells.forEach((cell) => {
             if (cell._content.parentNode) {
               cell._content.parentNode.removeChild(cell._content);
@@ -495,6 +495,31 @@ export const ColumnBaseMixin = (superClass) =>
       this._previousHidden = hidden;
     }
 
+    get _isVisible() {
+      if (!this.parentElement) {
+        return false;
+      }
+      if (this.hidden) {
+        return false;
+      }
+      const parentColumns = [];
+      let currentParent = this.parentElement;
+      while (currentParent && this._isColumnElement(currentParent)) {
+        parentColumns.push(currentParent);
+        currentParent = currentParent.parentElement;
+      }
+      return !parentColumns.some((parentColumn) => !!parentColumn.hidden);
+    }
+
+    /**
+     * @param {!Node} node
+     * @return {boolean}
+     * @protected
+     */
+    _isColumnElement(node) {
+      return node.nodeType === Node.ELEMENT_NODE && /\bcolumn\b/.test(node.localName);
+    }
+
     /** @protected */
     _runRenderer(renderer, cell, model) {
       const args = [cell._content, this];
@@ -512,7 +537,7 @@ export const ColumnBaseMixin = (superClass) =>
      */
     __renderCellsContent(renderer, cells) {
       // Skip if the column is hidden or not attached to a grid.
-      if (this.hidden || !this._grid) {
+      if (!this._isVisible || !this._grid) {
         return;
       }
 

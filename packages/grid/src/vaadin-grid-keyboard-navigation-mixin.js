@@ -488,7 +488,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         if (isCurrentCellRowDetails) {
           this._focusedColumnOrder = 0;
         } else {
-          this._focusedColumnOrder = this._getColumns(activeRowGroup, currentRowIndex).filter((c) => !c.hidden)[
+          this._focusedColumnOrder = this._getColumns(activeRowGroup, currentRowIndex).filter((c) => c._isVisible)[
             columnIndex
           ]._order;
         }
@@ -505,7 +505,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         // original _focusedColumnOrder in the sorted array of orders
         // of the visible columns on the destination row.
         const dstRowIndex = this.__getIndexInGroup(dstRow, this._focusedItemIndex);
-        const dstColumns = this._getColumns(activeRowGroup, dstRowIndex).filter((c) => !c.hidden);
+        const dstColumns = this._getColumns(activeRowGroup, dstRowIndex).filter((c) => c._isVisible);
         const dstSortedColumnOrders = dstColumns.map((c) => c._order).sort((b, a) => b - a);
         const maxOrderedColumnIndex = dstSortedColumnOrders.length - 1;
         const orderedColumnIndex = dstSortedColumnOrders.indexOf(

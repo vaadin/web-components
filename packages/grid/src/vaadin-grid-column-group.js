@@ -86,7 +86,6 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   static get observers() {
     return [
       '_updateVisibleChildColumns(_childColumns)',
-      '_childColumnsChanged(_childColumns)',
       '_groupFrozenChanged(frozen, _rootColumns)',
       '_groupFrozenToEndChanged(frozenToEnd, _rootColumns)',
       '_groupHiddenChanged(hidden, _rootColumns)',
@@ -120,9 +119,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
    */
   _columnPropChanged(path, value) {
     if (path === 'hidden') {
-      this._preventHiddenCascade = true;
       this._updateVisibleChildColumns(this._childColumns);
-      this._preventHiddenCascade = false;
     }
 
     if (/flexGrow|width|hidden|_childColumns/.test(path)) {
@@ -204,15 +201,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
 
   /** @private */
   _updateVisibleChildColumns(childColumns) {
-    this._visibleChildColumns = Array.prototype.filter.call(childColumns, (col) => !col.hidden);
-  }
-
-  /** @private */
-  _childColumnsChanged(childColumns) {
-    if (!this._autoHidden && this.hidden) {
-      Array.prototype.forEach.call(childColumns, (column) => (column.hidden = true));
-      this._updateVisibleChildColumns(childColumns);
-    }
+    this._visibleChildColumns = Array.prototype.filter.call(childColumns, (col) => col._isVisible);
   }
 
   /** @protected */
@@ -258,27 +247,13 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   }
 
   /** @private */
-  _groupHiddenChanged(hidden, rootColumns) {
-    if (rootColumns && !this._preventHiddenCascade) {
-      this._ignoreVisibleChildColumns = true;
-      rootColumns.forEach((column) => (column.hidden = hidden));
-      this._ignoreVisibleChildColumns = false;
-    }
-
+  _groupHiddenChanged() {
     this._columnPropChanged('hidden');
   }
 
   /** @private */
   _visibleChildColumnsChanged(visibleChildColumns) {
     this._colSpan = visibleChildColumns.length;
-
-    if (!this._ignoreVisibleChildColumns) {
-      if (visibleChildColumns.length === 0) {
-        this._autoHidden = this.hidden = true;
-      } else if (this.hidden && this._autoHidden) {
-        this._autoHidden = this.hidden = false;
-      }
-    }
   }
 
   /** @private */
@@ -313,10 +288,8 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
         info.addedNodes.filter(this._isColumnElement).length > 0 ||
         info.removedNodes.filter(this._isColumnElement).length > 0
       ) {
-        this._preventHiddenCascade = true;
         this._rootColumns = this._getChildColumns(this);
         this._childColumns = this._rootColumns;
-        this._preventHiddenCascade = false;
 
         // Update the column tree with microtask timing to avoid shady style scope issues
         microTask.run(() => {
@@ -327,6 +300,16 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       }
     });
     this._observer.flush();
+  }
+
+  get _isVisible() {
+    if (!this.parentElement) {
+      return false;
+    }
+    if (this.hidden) {
+      return false;
+    }
+    return this._childColumns.some((column) => column._isVisible);
   }
 
   /**
