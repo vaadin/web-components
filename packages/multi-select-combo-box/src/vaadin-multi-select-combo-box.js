@@ -721,13 +721,12 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     chip.style.visibility = 'hidden';
     chip.removeAttribute('hidden');
-    chip.setAttribute('part', 'chip overflow');
 
     // Detect max possible width of the overflow chip
+    chip.setAttribute('part', 'chip overflow');
     const overflowStyle = getComputedStyle(chip);
     const overflowWidth = chip.clientWidth + parseInt(overflowStyle.marginInlineStart);
 
-    chip.setAttribute('part', 'chip overflow');
     chip.setAttribute('hidden', '');
     chip.style.visibility = '';
 
