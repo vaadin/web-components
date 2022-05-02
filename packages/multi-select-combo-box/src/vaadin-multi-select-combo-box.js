@@ -733,28 +733,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     return overflowWidth;
   }
 
-  /**
-   * Detect available max-width for item chips,
-   * excluding the overflow chip.
-   * @private
-   */
-  __getChipsMaxWidth() {
-    const containerStyle = getComputedStyle(this._inputField);
-
-    let result =
-      parseInt(containerStyle.width) -
-      parseInt(containerStyle.paddingLeft) -
-      parseInt(containerStyle.paddingRight) -
-      parseInt(getComputedStyle(this.inputElement).flexBasis) -
-      this.$.toggleButton.clientWidth;
-
-    if (this.clearButtonVisible) {
-      result -= this.$.clearButton.clientWidth;
-    }
-
-    return result;
-  }
-
   /** @private */
   __updateChips() {
     if (!this._inputField) {
@@ -771,7 +749,10 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     const items = [...this.selectedItems];
 
     // Detect available max-width for chips
-    let maxWidth = this.__getChipsMaxWidth();
+    const totalWidth = this._inputField.$.wrapper.clientWidth;
+    const inputWidth = parseInt(getComputedStyle(this.inputElement).flexBasis);
+
+    let maxWidth = totalWidth - inputWidth;
 
     if (items.length > 1) {
       maxWidth -= this.__getOverflowWidth();
