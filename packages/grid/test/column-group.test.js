@@ -79,76 +79,6 @@ describe('column group', () => {
     expect(columns[1].frozen).to.be.true;
   });
 
-  it('should hide group column', () => {
-    columns[0].hidden = true;
-    columns[1].hidden = true;
-
-    expect(group.hidden).to.be.true;
-  });
-
-  it('should unhide group column', () => {
-    group.hidden = true;
-    columns[0].hidden = false;
-
-    expect(group.hidden).to.be.false;
-  });
-
-  it('should not unhide other columns', () => {
-    group.hidden = true;
-    columns[0].hidden = false;
-
-    expect(columns[1].hidden).to.be.true;
-  });
-
-  it('should propagate hidden to child columns', () => {
-    columns[0].hidden = false;
-    group.hidden = true;
-
-    expect(columns[0].hidden).to.be.true;
-    expect(columns[1].hidden).to.be.true;
-    expect(group.hidden).to.be.true;
-  });
-
-  it('should propagate hidden to child columns 2', () => {
-    group.hidden = true;
-    group.hidden = false;
-
-    expect(columns[0].hidden).to.be.false;
-    expect(columns[1].hidden).to.be.false;
-    expect(group.hidden).to.be.false;
-  });
-
-  it('should hide the group', () => {
-    group.removeChild(columns[0]);
-    group.removeChild(columns[1]);
-    group._observer.flush();
-
-    expect(group.hidden).to.be.true;
-  });
-
-  it('should unhide the group', () => {
-    group.removeChild(columns[0]);
-    group.removeChild(columns[1]);
-    group._observer.flush();
-
-    group.appendChild(columns[0]);
-    group._observer.flush();
-
-    expect(group.hidden).to.be.false;
-  });
-
-  it('should not unhide the group', () => {
-    group.removeChild(columns[0]);
-    group.removeChild(columns[1]);
-    group._observer.flush();
-
-    columns[0].hidden = true;
-    group.appendChild(columns[0]);
-    group._observer.flush();
-
-    expect(group.hidden).to.be.true;
-  });
-
   it('should calculate column group width after hiding a column', () => {
     columns[0].hidden = true;
 
@@ -231,6 +161,135 @@ describe('column group', () => {
       group.resizable = true;
       expect(superSpy.called).to.be.true;
       expect(thisSpy.called).to.be.true;
+    });
+  });
+
+  describe('hidden', () => {
+    it('should propagate hidden to child columns', () => {
+      group.hidden = true;
+      expect(columns[0].hidden).to.be.true;
+      expect(columns[1].hidden).to.be.true;
+      expect(group.hidden).to.be.true;
+
+      group.hidden = false;
+      expect(columns[0].hidden).to.be.false;
+      expect(columns[1].hidden).to.be.false;
+      expect(group.hidden).to.be.false;
+    });
+
+    it('should propagate hidden to added column when group is set to hidden', () => {
+      group.hidden = true;
+      expect(group.hidden).to.be.true;
+      expect(group._autoHidden).not.to.be.true;
+
+      const visibleColumn = document.createElement('vaadin-grid-column');
+      visibleColumn.hidden = false;
+      group.appendChild(visibleColumn);
+      group._observer.flush();
+
+      expect(visibleColumn.hidden).to.be.true;
+    });
+
+    it('should not unhide when adding a visible column', () => {
+      group.hidden = true;
+
+      const visibleColumn = document.createElement('vaadin-grid-column');
+      visibleColumn.hidden = false;
+      group.appendChild(visibleColumn);
+      group._observer.flush();
+
+      expect(columns[1].hidden).to.be.true;
+    });
+
+    it('should not unhide when column is made visible', () => {
+      group.hidden = true;
+      columns[0].hidden = false;
+
+      expect(group.hidden).to.be.true;
+    });
+
+    it('should not unhide other columns when a column is made visible', () => {
+      group.hidden = true;
+      columns[0].hidden = false;
+
+      expect(columns[1].hidden).to.be.true;
+    });
+  });
+
+  describe('auto-hide', () => {
+    it('should auto-hide group when all columns are hidden', () => {
+      columns[0].hidden = true;
+      columns[1].hidden = true;
+
+      expect(group.hidden).to.be.true;
+      expect(group._autoHidden).to.be.true;
+    });
+
+    it('should auto-hide the group when removing all columns', () => {
+      group.removeChild(columns[0]);
+      group.removeChild(columns[1]);
+      group._observer.flush();
+
+      expect(group.hidden).to.be.true;
+      expect(group._autoHidden).to.be.true;
+    });
+
+    it('should unhide when column is made visible while auto-hidden', () => {
+      columns[0].hidden = true;
+      columns[1].hidden = true;
+      expect(group.hidden).to.be.true;
+      expect(group._autoHidden).to.be.true;
+
+      columns[0].hidden = false;
+      expect(group.hidden).to.be.false;
+      expect(group._autoHidden).to.be.false;
+    });
+
+    it('should unhide when adding a visible column while auto-hidden', () => {
+      group.removeChild(columns[0]);
+      group.removeChild(columns[1]);
+      group._observer.flush();
+
+      group.appendChild(columns[0]);
+      group._observer.flush();
+
+      expect(group.hidden).to.be.false;
+    });
+
+    it('should not unhide the group when adding a hidden column while auto-hidden', () => {
+      group.removeChild(columns[0]);
+      group.removeChild(columns[1]);
+      group._observer.flush();
+
+      columns[0].hidden = true;
+      group.appendChild(columns[0]);
+      group._observer.flush();
+
+      expect(group.hidden).to.be.true;
+    });
+
+    it('should not propagate hidden to added columns when group is auto-hidden', () => {
+      // auto-hide group
+      columns[0].hidden = true;
+      columns[1].hidden = true;
+      expect(group.hidden).to.be.true;
+      expect(group._autoHidden).to.be.true;
+
+      // add a visible and a hidden column
+      const visibleColumn = document.createElement('vaadin-grid-column');
+      const hiddenColumn = document.createElement('vaadin-grid-column');
+      hiddenColumn.hidden = true;
+
+      group.appendChild(visibleColumn);
+      group.appendChild(hiddenColumn);
+      group._observer.flush();
+
+      // group becomes visible because it was only auto-hidden, and now has a visible column
+      expect(group.hidden).to.be.false;
+      // visible column is still visible
+      expect(visibleColumn.hidden).to.be.false;
+      // hidden column is still hidden
+      expect(hiddenColumn.hidden).to.be.true;
     });
   });
 });
