@@ -99,7 +99,7 @@ export class DialogOverlay extends OverlayElement {
       memoizedTemplate = super.template.cloneNode(true);
       const contentPart = memoizedTemplate.content.querySelector('[part="content"]');
       const overlayPart = memoizedTemplate.content.querySelector('[part="overlay"]');
-      const resizerContainer = document.createElement('div');
+      const resizerContainer = document.createElement('section');
       resizerContainer.id = 'resizerContainer';
       resizerContainer.classList.add('resizer-container');
       resizerContainer.appendChild(contentPart);
@@ -160,9 +160,6 @@ export class DialogOverlay extends OverlayElement {
   /** @protected */
   ready() {
     super.ready();
-
-    const uniqueId = (DialogOverlay._uniqueId = 1 + DialogOverlay._uniqueId || 0);
-    this._titleId = `${this.constructor.is}-title-${uniqueId}`;
 
     // Update overflow attribute on resize
     this.__resizeObserver = new ResizeObserver(() => {
@@ -264,18 +261,14 @@ export class DialogOverlay extends OverlayElement {
     if (this.headerTitle) {
       if (!this.headerTitleElement) {
         this.headerTitleElement = document.createElement('span');
-        this.headerTitleElement.id = this._titleId;
         this.headerTitleElement.setAttribute('slot', 'title');
         this.headerTitleElement.classList.add('draggable');
-
-        this.setAttribute('aria-labelledby', this._titleId);
       }
       this.appendChild(this.headerTitleElement);
       this.headerTitleElement.textContent = this.headerTitle;
     } else if (this.headerTitleElement) {
       this.headerTitleElement.remove();
       this.headerTitleElement = null;
-      this.removeAttribute('aria-labelledby');
     }
   }
 
@@ -594,7 +587,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
   static get observers() {
     return [
       '_openedChanged(opened)',
-      '_ariaLabelChanged(ariaLabel)',
+      '_ariaLabelChanged(ariaLabel, headerTitle)',
       '_rendererChanged(renderer, headerRenderer, footerRenderer)',
     ];
   }
@@ -648,9 +641,9 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
   }
 
   /** @private */
-  _ariaLabelChanged(ariaLabel) {
-    if (ariaLabel) {
-      this.$.overlay.setAttribute('aria-label', ariaLabel);
+  _ariaLabelChanged(ariaLabel, headerTitle) {
+    if (ariaLabel || headerTitle) {
+      this.$.overlay.setAttribute('aria-label', ariaLabel || headerTitle);
     } else {
       this.$.overlay.removeAttribute('aria-label');
     }

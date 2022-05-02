@@ -86,35 +86,31 @@ describe('header/footer feature', () => {
     });
 
     describe('accessibility', () => {
-      it('should add arial-labelledby to overlay if header-title is set', () => {
-        expect(overlay.hasAttribute('aria-labelledby')).to.be.false;
+      it('should set arial-label to overlay if header-title is set', () => {
+        expect(overlay.hasAttribute('aria-label')).to.be.false;
 
         dialog.headerTitle = HEADER_TITLE;
         dialog.opened = true;
 
-        expect(overlay.hasAttribute('aria-labelledby')).to.be.true;
-        const title = overlay.querySelector('[slot=title]');
-        expect(overlay.getAttribute('aria-labelledby')).to.equal(title.id);
+        expect(overlay.hasAttribute('aria-label')).to.be.true;
+        expect(overlay.getAttribute('aria-label')).to.equal(HEADER_TITLE);
       });
 
-      it('should remove aria-labelledby if header-title is unset', () => {
+      it('should remove aria-label if header-title is unset', () => {
         dialog.headerTitle = HEADER_TITLE;
         dialog.opened = true;
 
         dialog.headerTitle = null;
-        expect(overlay.hasAttribute('aria-labelledby')).to.be.false;
+        expect(overlay.hasAttribute('aria-label')).to.be.false;
       });
 
-      it('two dialogs should not have the same `aria-labelledby` value', () => {
-        const anotherDialog = fixtureSync('<vaadin-dialog></vaadin-dialog>');
-        const anotherOverlay = anotherDialog.$.overlay;
-        anotherDialog.headerTitle = HEADER_TITLE;
-        anotherDialog.opened = true;
-
+      it('overlay should get the value from aria-label attribute if aria-label and header-title are set', () => {
+        const ARIA_LABEL = '__ARIA_LABEL__';
         dialog.headerTitle = HEADER_TITLE;
+        dialog.ariaLabel = ARIA_LABEL;
         dialog.opened = true;
 
-        expect(anotherOverlay.getAttribute('aria-labelledby')).to.be.not.equal(overlay.getAttribute('aria-labelledby'));
+        expect(overlay.getAttribute('aria-label')).to.be.equal(ARIA_LABEL);
       });
     });
   });
