@@ -226,5 +226,3 @@ declare global {
 }
 
 export { Dialog };
-
-export * from './vaadin-dialog-lit-renderers.js';

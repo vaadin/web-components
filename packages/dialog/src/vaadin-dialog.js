@@ -687,5 +687,3 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
 customElements.define(Dialog.is, Dialog);
 
 export { Dialog };
-
-export * from './vaadin-dialog-lit-renderers.js';

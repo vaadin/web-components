@@ -1,12 +1,7 @@
 import '../../vaadin-dialog.js';
-import { DirectiveResult } from 'lit/directive.js';
 import {
-  dialogFooterRenderer,
-  dialogHeaderRenderer,
-  DialogLitRenderer,
   DialogOpenedChangedEvent,
   DialogRenderer,
-  dialogRenderer,
   DialogResizeDimensions,
   DialogResizeEvent,
 } from '../../vaadin-dialog.js';
@@ -31,7 +26,3 @@ assertType<DialogRenderer | null | undefined>(dialog.renderer);
 assertType<DialogRenderer | null | undefined>(dialog.headerRenderer);
 assertType<DialogRenderer | null | undefined>(dialog.footerRenderer);
 assertType<() => void>(dialog.requestContentUpdate);
-
-assertType<(renderer: DialogLitRenderer, value?: unknown) => DirectiveResult>(dialogRenderer);
-assertType<(renderer: DialogLitRenderer, value?: unknown) => DirectiveResult>(dialogHeaderRenderer);
-assertType<(renderer: DialogLitRenderer, value?: unknown) => DirectiveResult>(dialogFooterRenderer);

@@ -3,7 +3,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-dialog.js';
 import { html, render } from 'lit';
-import { dialogFooterRenderer, dialogHeaderRenderer, dialogRenderer } from '../vaadin-dialog.js';
+import { dialogFooterRenderer, dialogHeaderRenderer, dialogRenderer } from '../lit.js';
 
 async function renderOpenedDialog(container, { header, content, footer }) {
   render(
@@ -19,7 +19,7 @@ async function renderOpenedDialog(container, { header, content, footer }) {
   return container.querySelector('vaadin-dialog');
 }
 
-describe('lit renderers', () => {
+describe('lit renderer directives', () => {
   let container, dialog, overlay;
 
   beforeEach(() => {

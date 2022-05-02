@@ -7,7 +7,7 @@
 import { TemplateResult } from 'lit';
 import { DirectiveResult } from 'lit/directive.js';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
-import { Dialog } from './vaadin-dialog.js';
+import { Dialog } from '../vaadin-dialog.js';
 
 export type DialogLitRenderer = (dialog: Dialog) => TemplateResult;
 
