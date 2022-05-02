@@ -34,6 +34,10 @@ const multiSelectComboBox = css`
     margin-inline-end: var(--lumo-space-xs);
   }
 
+  [part~='overflow']:not([hidden]) + :not(:empty) {
+    margin-inline-start: var(--lumo-space-xs);
+  }
+
   [part='toggle-button']::before {
     content: var(--lumo-icons-dropdown);
   }

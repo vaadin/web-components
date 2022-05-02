@@ -59,16 +59,11 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
           align-self: center;
           white-space: nowrap;
           box-sizing: border-box;
-          min-width: 0;
         }
 
         [part='label'] {
           overflow: hidden;
           text-overflow: ellipsis;
-        }
-
-        :host(:not([part~='overflow'])) {
-          min-width: var(--chip-min-width);
         }
 
         :host(:is([readonly], [disabled], [part~='overflow'])) [part='remove-button'] {

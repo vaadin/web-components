@@ -19,12 +19,16 @@ import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixi
 
 const multiSelectComboBox = css`
   :host {
-    --chip-min-width: var(--vaadin-multi-select-combo-box-chip-min-width, 4em);
     --input-min-width: var(--vaadin-multi-select-combo-box-input-min-width, 4em);
   }
 
   [hidden] {
     display: none !important;
+  }
+
+  #chips {
+    display: flex;
+    align-items: center;
   }
 
   :host([has-value]) ::slotted(input:placeholder-shown) {
@@ -104,7 +108,6 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * -----------------------------------------------------|----------------------------|--------
  * `--vaadin-field-default-width`                       | Default width of the field | `12em`
  * `--vaadin-multi-select-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
- * `--vaadin-multi-select-combo-box-chip-min-width`     | Min width of the chip      | `60px`
  * `--vaadin-multi-select-combo-box-input-min-width`    | Min width of the input     | `4em`
  *
  * ### Internal components
@@ -174,6 +177,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
             theme$="[[theme]]"
           >
             <vaadin-multi-select-combo-box-chip
+              id="overflow"
               slot="prefix"
               part$="[[_getOverflowPart(_overflowItems.length)]]"
               disabled="[[disabled]]"
@@ -183,6 +187,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
               hidden$="[[_isOverflowHidden(_overflowItems.length)]]"
               on-mousedown="_preventBlur"
             ></vaadin-multi-select-combo-box-chip>
+            <div id="chips" slot="prefix"></div>
             <slot name="input"></slot>
             <div id="clearButton" part="clear-button" slot="suffix"></div>
             <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix"></div>
@@ -711,18 +716,42 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  __getMinWidth(chip) {
+  __getOverflowWidth() {
+    const chip = this.$.overflow;
+
     chip.style.visibility = 'hidden';
-    chip.style.display = 'block';
-    chip.style.minWidth = 'var(--chip-min-width)';
+    chip.removeAttribute('hidden');
+    chip.setAttribute('part', 'chip overflow');
 
-    const result = parseInt(getComputedStyle(chip).minWidth);
+    // Detect max possible width of the overflow chip
+    const overflowStyle = getComputedStyle(chip);
+    const overflowWidth = chip.clientWidth + parseInt(overflowStyle.marginInlineStart);
 
-    chip.style.minWidth = '';
-    chip.style.display = '';
+    chip.setAttribute('part', 'chip overflow');
+    chip.setAttribute('hidden', '');
     chip.style.visibility = '';
 
-    return result;
+    return overflowWidth;
+  }
+
+  /** @private */
+  __getChipsMaxWidth() {
+    const inputMinWidth = parseInt(getComputedStyle(this.inputElement).flexBasis);
+    const containerStyle = getComputedStyle(this._inputField);
+
+    // Detect available max-width for chips
+    let maxWidth =
+      parseInt(containerStyle.width) -
+      parseInt(containerStyle.paddingLeft) -
+      parseInt(containerStyle.paddingRight) -
+      this.$.toggleButton.clientWidth -
+      inputMinWidth;
+
+    if (this.clearButtonVisible) {
+      maxWidth -= this.$.clearButton.clientWidth;
+    }
+
+    return maxWidth;
   }
 
   /** @private */
@@ -732,46 +761,37 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     }
 
     // Clear all chips except the overflow
-    const chips = Array.from(this._chips).reverse();
-    const overflow = chips.pop();
-
-    chips.forEach((chip) => {
-      chip.remove();
+    Array.from(this._chips).forEach((chip) => {
+      if (chip !== this.$.overflow) {
+        chip.remove();
+      }
     });
 
     const items = [...this.selectedItems];
 
-    let refNode = overflow.nextElementSibling;
+    // Detect available max-width for chips
+    let maxWidth = this.__getChipsMaxWidth();
 
-    // Use overflow chip to measure min-width
-    const chipMinWidth = this.__getMinWidth(overflow);
-    const inputMinWidth = parseInt(getComputedStyle(this.inputElement).flexBasis);
-    const containerStyle = getComputedStyle(this._inputField);
-
-    // Detect available width for chips
-    let totalWidth =
-      parseInt(containerStyle.width) -
-      parseInt(containerStyle.paddingLeft) -
-      parseInt(containerStyle.paddingRight) -
-      this.$.toggleButton.clientWidth -
-      inputMinWidth;
-
-    if (this.clearButtonVisible) {
-      totalWidth -= this.$.clearButton.clientWidth;
+    if (items.length > 1) {
+      maxWidth -= this.__getOverflowWidth();
     }
 
-    for (let i = items.length - 1; i >= 0; i--) {
-      // Ensure there is enough space for another chip
-      if (totalWidth <= chipMinWidth) {
+    this.$.chips.style.maxWidth = `${maxWidth}px`;
+
+    // Add chips until max width is exceeded
+    for (let i = items.length - 1, totalWidth = 0, refNode = null; i >= 0; i--) {
+      const chip = this.__createChip(items[i]);
+      this.$.chips.insertBefore(chip, refNode);
+
+      totalWidth += chip.clientWidth + parseInt(getComputedStyle(chip).marginInlineEnd);
+
+      if (totalWidth > maxWidth) {
+        chip.remove();
         break;
       }
 
-      const item = items.pop();
-      const chip = this.__createChip(item);
-      this._inputField.insertBefore(chip, refNode);
-
+      items.pop();
       refNode = chip;
-      totalWidth -= chipMinWidth;
     }
 
     this._overflowItems = items;

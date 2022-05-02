@@ -262,8 +262,9 @@ describe('basic', () => {
     });
 
     describe('programmatic update', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         comboBox.style.width = '100%';
+        await nextResize(comboBox);
       });
 
       it('should re-render chips when selectedItems is updated', async () => {
@@ -284,8 +285,9 @@ describe('basic', () => {
     });
 
     describe('manual selection', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         comboBox.style.width = '100%';
+        await nextResize(comboBox);
         inputElement.focus();
       });
 
@@ -315,6 +317,8 @@ describe('basic', () => {
 
     describe('disabled', () => {
       beforeEach(async () => {
+        comboBox.style.width = '250px';
+        await nextResize(comboBox);
         comboBox.selectedItems = ['apple', 'banana'];
         await nextRender();
         comboBox.disabled = true;
@@ -351,7 +355,9 @@ describe('basic', () => {
     describe('overflow', () => {
       let overflow;
 
-      beforeEach(() => {
+      beforeEach(async () => {
+        comboBox.style.width = '250px';
+        await nextResize(comboBox);
         overflow = getChips(comboBox)[0];
       });
 
@@ -406,6 +412,8 @@ describe('basic', () => {
 
       describe('resize', () => {
         beforeEach(async () => {
+          comboBox.style.width = '250px';
+          await nextResize(comboBox);
           comboBox.selectedItems = ['apple', 'banana', 'orange'];
           await nextRender();
         });
@@ -413,7 +421,7 @@ describe('basic', () => {
         it('should update overflow chip on resize when width changes', async () => {
           expect(overflow.hasAttribute('hidden')).to.be.false;
 
-          comboBox.style.width = '250px';
+          comboBox.style.width = '350px';
           await nextResize(comboBox);
           expect(overflow.hasAttribute('hidden')).to.be.true;
 
@@ -423,7 +431,7 @@ describe('basic', () => {
         });
 
         it('should update overflow chip on clear button state change', async () => {
-          comboBox.style.width = '250px';
+          comboBox.style.width = '350px';
           await nextResize(comboBox);
 
           comboBox.clearButtonVisible = true;
@@ -439,6 +447,8 @@ describe('basic', () => {
 
     describe('readonly', () => {
       beforeEach(async () => {
+        comboBox.style.width = '250px';
+        await nextResize(comboBox);
         comboBox.selectedItems = ['apple', 'banana'];
         await nextRender();
         comboBox.readonly = true;
