@@ -73,6 +73,7 @@ describe('multi-select-combo-box', () => {
 
   describe('selected items', () => {
     beforeEach(() => {
+      element.style.width = '250px';
       element.selectedItems = ['Apple', 'Banana'];
     });
 
@@ -117,6 +118,7 @@ describe('multi-select-combo-box', () => {
     });
 
     it('opened selected', async () => {
+      element.style.width = '250px';
       element.selectedItems = ['Apple', 'Banana'];
       await visualDiff(div, 'opened-selected');
     });
