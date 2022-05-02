@@ -179,8 +179,6 @@ describe('column group', () => {
 
     it('should propagate hidden to added column when group is set to hidden', () => {
       group.hidden = true;
-      expect(group.hidden).to.be.true;
-      expect(group._autoHidden).not.to.be.true;
 
       const visibleColumn = document.createElement('vaadin-grid-column');
       visibleColumn.hidden = false;
@@ -188,6 +186,15 @@ describe('column group', () => {
       group._observer.flush();
 
       expect(visibleColumn.hidden).to.be.true;
+    });
+
+    it('should not propagate hidden to added column when group is visible', () => {
+      const hiddenColumn = document.createElement('vaadin-grid-column');
+      hiddenColumn.hidden = true;
+      group.appendChild(hiddenColumn);
+      group._observer.flush();
+
+      expect(hiddenColumn.hidden).to.be.true;
     });
 
     it('should not unhide when adding a visible column', () => {
@@ -268,7 +275,7 @@ describe('column group', () => {
       expect(group.hidden).to.be.true;
     });
 
-    it('should not propagate hidden to added columns when group is auto-hidden', () => {
+    it('should not propagate hidden to added columns while auto-hidden', () => {
       // auto-hide group
       columns[0].hidden = true;
       columns[1].hidden = true;
