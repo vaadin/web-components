@@ -9,7 +9,7 @@ import { microTask } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 
-const RUN_RENDERER_DEBOUNCER = Symbol('runRendererDebouncer');
+const CONTENT_UPDATE_DEBOUNCER = Symbol('contentUpdateDebouncer');
 
 class AbstractDialogRendererDirective extends LitRendererDirective {
   /**
@@ -32,9 +32,13 @@ class AbstractDialogRendererDirective extends LitRendererDirective {
    * Runs the renderer callback on the dialog.
    */
   runRenderer() {
-    this.element[RUN_RENDERER_DEBOUNCER] = Debouncer.debounce(this.element[RUN_RENDERER_DEBOUNCER], microTask, () => {
-      this.element.requestContentUpdate();
-    });
+    this.element[CONTENT_UPDATE_DEBOUNCER] = Debouncer.debounce(
+      this.element[CONTENT_UPDATE_DEBOUNCER],
+      microTask,
+      () => {
+        this.element.requestContentUpdate();
+      },
+    );
   }
 
   /**
