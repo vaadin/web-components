@@ -778,16 +778,12 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       maxWidth -= this.__getOverflowWidth();
     }
 
-    this.$.chips.style.maxWidth = `${maxWidth}px`;
-
     // Add chips until max width is exceeded
-    for (let i = items.length - 1, totalWidth = 0, refNode = null; i >= 0; i--) {
+    for (let i = items.length - 1, refNode = null; i >= 0; i--) {
       const chip = this.__createChip(items[i]);
       this.$.chips.insertBefore(chip, refNode);
 
-      totalWidth += chip.clientWidth + parseInt(getComputedStyle(chip).marginInlineEnd);
-
-      if (totalWidth > maxWidth) {
+      if (this.$.chips.clientWidth > maxWidth) {
         chip.remove();
         break;
       }
