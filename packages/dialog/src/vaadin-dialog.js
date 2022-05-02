@@ -33,10 +33,6 @@ registerStyles(
       pointer-events: auto;
     }
 
-    ::slotted([slot='title']) {
-      pointer-events: auto;
-    }
-
     [part='header-content'] {
       flex: 1;
     }
