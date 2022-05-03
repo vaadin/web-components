@@ -68,7 +68,7 @@ export class DialogFooterRendererDirective extends AbstractDialogRendererDirecti
  *
  * @param renderer the renderer callback that returns a Lit template.
  * @param dependencies a single dependency or an array of dependencies
- *                     whose changing triggers the renderer to re-call.
+ *                     which trigger a re-render when changed.
  */
 export declare function dialogRenderer(
   renderer: DialogLitRenderer,
@@ -98,7 +98,7 @@ export declare function dialogRenderer(
  *
  * @param renderer the renderer callback.
  * @param dependencies a single dependency or an array of dependencies
- *                     whose changing triggers the renderer to re-call.
+ *                     which trigger a re-render when changed.
  */
 export declare function dialogHeaderRenderer(
   renderer: DialogLitRenderer,
@@ -128,7 +128,7 @@ export declare function dialogHeaderRenderer(
  *
  * @param renderer the renderer callback.
  * @param dependencies a single dependency or an array of dependencies
- *                     whose changing triggers the renderer to re-call.
+ *                     which trigger a re-render when changed.
  */
 export declare function dialogFooterRenderer(
   renderer: DialogLitRenderer,
