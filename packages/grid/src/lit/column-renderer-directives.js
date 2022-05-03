@@ -90,7 +90,6 @@ export class GridColumnFooterRendererDirective extends AbstractGridColumnRendere
  * @param dependencies a single dependency or an array of dependencies
  *                     which trigger a re-render when changed.
  */
-
 export const columnBodyRenderer = directive(GridColumnBodyRendererDirective);
 
 /**
