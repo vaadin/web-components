@@ -27,7 +27,7 @@ declare abstract class AbstractGridColumnRendererDirective<R extends LitRenderer
   /**
    * A property to that the renderer callback will be assigned.
    */
-  abstract rendererProperty: string;
+  abstract rendererProperty: 'renderer' | 'headerRenderer' | 'footerRenderer';
 
   /**
    * Adds the renderer callback to the grid column.
@@ -48,55 +48,106 @@ declare abstract class AbstractGridColumnRendererDirective<R extends LitRenderer
 export declare class GridColumnBodyRendererDirective<TItem> extends AbstractGridColumnRendererDirective<
   GridColumnBodyLitRenderer<TItem>
 > {
-  rendererProperty: string;
+  rendererProperty: 'renderer';
 }
 
 export declare class GridColumnHeaderRendererDirective extends AbstractGridColumnRendererDirective<GridColumnHeaderLitRenderer> {
-  rendererProperty: string;
+  rendererProperty: 'headerRenderer';
 }
 
 export declare class GridColumnFooterRendererDirective extends AbstractGridColumnRendererDirective<GridColumnFooterLitRenderer> {
-  rendererProperty: string;
+  rendererProperty: 'footerRenderer';
 }
 
 /**
  * A Lit directive for populating the content of the column's body cells.
  *
+ * The directive accepts a renderer callback returning a Lit template and assigns it to the grid column
+ * via the `renderer` property. The renderer is called for each grid item to populate the content
+ * when assigned and whenever a single dependency or an array of dependencies changes.
+ * It is not guaranteed that the renderer will be called immediately (synchronously) in both cases.
+ *
+ * Dependencies can be a single value or an array of values.
+ * Values are checked against previous values with strict equality (`===`),
+ * so the check won't detect nested property changes inside objects or arrays.
+ * When dependencies are provided as an array, each item is checked against the previous value
+ * at the same index with strict equality. Nested arrays are also checked only by strict
+ * equality.
+ *
+ * Example of usage:
  * ```js
  * `<vaadin-grid-column
  *   ${columnBodyRenderer((item, model, column) => html`...`)}
  * ></vaadin-grid-column>`
  * ```
+ *
+ * @param renderer the renderer callback.
+ * @param dependencies a single dependency or an array of dependencies
+ *                     which trigger a re-render when changed.
  */
 export declare function columnBodyRenderer<TItem>(
   renderer: GridColumnBodyLitRenderer<TItem>,
-  value?: unknown,
+  dependencies?: unknown,
 ): DirectiveResult<typeof GridColumnBodyRendererDirective>;
 
 /**
  * A Lit directive for populating the content of the column's header cell.
  *
+ * The directive accepts a renderer callback returning a Lit template and assigns it to the grid column
+ * via the `headerRenderer` property. The renderer is called once to populate the content
+ * when assigned and whenever a single dependency or an array of dependencies changes.
+ * It is not guaranteed that the renderer will be called immediately (synchronously) in both cases.
+ *
+ * Dependencies can be a single value or an array of values.
+ * Values are checked against previous values with strict equality (`===`),
+ * so the check won't detect nested property changes inside objects or arrays.
+ * When dependencies are provided as an array, each item is checked against the previous value
+ * at the same index with strict equality. Nested arrays are also checked only by strict
+ * equality.
+ *
+ * Example of usage:
  * ```js
  * `<vaadin-grid-column
  *   ${columnHeaderRenderer((column) => html`...`)}
  * ></vaadin-grid-column>`
  * ```
+ *
+ * @param renderer the renderer callback.
+ * @param dependencies a single dependency or an array of dependencies
+ *                     which trigger a re-render when changed.
  */
 export declare function columnHeaderRenderer(
   renderer: GridColumnHeaderLitRenderer,
-  value?: unknown,
+  dependencies?: unknown,
 ): DirectiveResult<typeof GridColumnHeaderRendererDirective>;
 
 /**
  * A Lit directive for populating the content of the column's footer cell.
  *
+ * The directive accepts a renderer callback returning a Lit template and assigns it to the grid column
+ * via the `footerRenderer` property. The renderer is called once to populate the content
+ * when assigned and whenever a single dependency or an array of dependencies changes.
+ * It is not guaranteed that the renderer will be called immediately (synchronously) in both cases.
+ *
+ * Dependencies can be a single value or an array of values.
+ * Values are checked against previous values with strict equality (`===`),
+ * so the check won't detect nested property changes inside objects or arrays.
+ * When dependencies are provided as an array, each item is checked against the previous value
+ * at the same index with strict equality. Nested arrays are also checked only by strict
+ * equality.
+ *
+ * Example of usage:
  * ```js
  * `<vaadin-grid-column
  *   ${columnFooterRenderer((column) => html`...`)}
  * ></vaadin-grid-column>`
  * ```
+ *
+ * @param renderer the renderer callback.
+ * @param dependencies a single dependency or an array of dependencies
+ *                     which trigger a re-render when changed.
  */
 export declare function columnFooterRenderer(
   renderer: GridColumnFooterLitRenderer,
-  value?: unknown,
+  dependencies?: unknown,
 ): DirectiveResult<typeof GridColumnFooterRendererDirective>;
