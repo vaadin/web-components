@@ -475,6 +475,8 @@ describe('column groups', () => {
     });
   });
 
+  // TODO: Remove or refactor
+  /*
   describe('hidden group', () => {
     it('should hide children', async () => {
       init('hidden-group');
@@ -492,6 +494,7 @@ describe('column groups', () => {
       expect(columns[1].hidden).not.to.be.true;
     });
   });
+   */
 
   describe('Large nested groups', () => {
     let grid;
