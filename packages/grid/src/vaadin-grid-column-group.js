@@ -322,6 +322,9 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
         microTask.run(() => {
           if (this._grid && this._grid._updateColumnTree) {
             this._grid._updateColumnTree();
+            // TODO: without this call the column group header cells might not be rendered, which causes the header row to be hidden
+            // Check why the previous call to _updateColumnTree does not render header cells
+            this._grid._renderColumnTree(this._grid._columnTree);
             this._notifyHiddenChange();
           }
         });
