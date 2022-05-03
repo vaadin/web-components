@@ -6,8 +6,7 @@
 /* eslint-disable max-classes-per-file */
 import { TemplateResult } from 'lit';
 import { DirectiveResult } from 'lit/directive';
-import type { LitRenderer } from '@vaadin/lit-renderer';
-import { LitRendererDirective } from '@vaadin/lit-renderer';
+import { LitRenderer, LitRendererDirective } from '@vaadin/lit-renderer';
 import { GridItemModel } from '../vaadin-grid.js';
 import { GridColumn } from '../vaadin-grid-column.js';
 
