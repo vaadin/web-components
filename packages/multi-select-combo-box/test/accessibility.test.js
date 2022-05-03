@@ -17,21 +17,40 @@ describe('accessibility', () => {
     let scroller, items;
 
     describe('input', () => {
-      beforeEach(() => {
-        comboBox.required = true;
+      describe('required', () => {
+        beforeEach(() => {
+          comboBox.required = true;
+        });
+
+        it('should set aria-required attribute on the input when required', () => {
+          expect(inputElement.getAttribute('aria-required')).to.equal('true');
+        });
+
+        it('should not set required attribute on the input when required', () => {
+          expect(inputElement.hasAttribute('required')).to.be.false;
+        });
+
+        it('should remove aria-required attribute from the input when not required', () => {
+          comboBox.required = false;
+          expect(inputElement.hasAttribute('aria-required')).to.be.false;
+        });
       });
 
-      it('should set aria-required attribute on the input when required', () => {
-        expect(inputElement.getAttribute('aria-required')).to.equal('true');
-      });
+      describe('placeholder', () => {
+        beforeEach(() => {
+          comboBox.placeholder = 'Fruits';
+        });
 
-      it('should not set required attribute on the input when required', () => {
-        expect(inputElement.hasAttribute('required')).to.be.false;
-      });
+        it('should set input placeholder when selected items are changed', () => {
+          comboBox.selectedItems = ['Apple', 'Banana'];
+          expect(inputElement.getAttribute('placeholder')).to.equal('Apple, Banana');
+        });
 
-      it('should remove aria-required attribute from the input when not required', () => {
-        comboBox.required = false;
-        expect(inputElement.hasAttribute('aria-required')).to.be.false;
+        it('should restore original placeholder when selected items are removed', () => {
+          comboBox.selectedItems = ['Apple', 'Banana'];
+          comboBox.selectedItems = [];
+          expect(inputElement.getAttribute('placeholder')).to.equal('Fruits');
+        });
       });
     });
 

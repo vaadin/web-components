@@ -559,6 +559,14 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     this._toggleHasValue();
 
+    // Use placeholder for announcing items
+    if (this._hasValue) {
+      this.__savedPlaceholder = this.placeholder;
+      this.placeholder = selectedItems.map((item) => this._getItemLabel(item, this.itemLabelPath)).join(', ');
+    } else {
+      this.placeholder = this.__savedPlaceholder;
+    }
+
     // Re-render chips
     this.__updateChips();
 
