@@ -20,10 +20,6 @@ const chip = css`
     font-family: var(--material-font-family);
   }
 
-  :host(:is([readonly], [disabled]):not([part~='overflow'])) {
-    min-width: calc(var(--chip-min-width) - 20px);
-  }
-
   :host(:not([part~='overflow']):not([readonly]):not([disabled])) {
     padding-inline-end: 0;
   }

@@ -86,6 +86,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  *
  * Part name              | Description
  * -----------------------|----------------
+ * `chips`                | The element that wraps chips for selected items
  * `chip`                 | Chip shown for every selected item
  * `label`                | The label element
  * `input-field`          | The element that wraps prefix, value and suffix
@@ -119,7 +120,6 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * -----------------------------------------------------|----------------------------|--------
  * `--vaadin-field-default-width`                       | Default width of the field | `12em`
  * `--vaadin-multi-select-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
- * `--vaadin-multi-select-combo-box-chip-min-width`     | Min width of the chip      | `60px`
  * `--vaadin-multi-select-combo-box-input-min-width`    | Min width of the input     | `4em`
  *
  * ### Internal components

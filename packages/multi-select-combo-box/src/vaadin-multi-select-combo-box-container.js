@@ -9,10 +9,9 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-multi-select-combo-box-container',
   css`
-    .wrapper {
+    #wrapper {
       display: flex;
       width: 100%;
-      min-width: 0;
     }
   `,
   {
@@ -40,7 +39,7 @@ class MultiSelectComboBoxContainer extends InputContainer {
       const slots = content.querySelectorAll('slot');
 
       const wrapper = document.createElement('div');
-      wrapper.setAttribute('class', 'wrapper');
+      wrapper.setAttribute('id', 'wrapper');
       content.insertBefore(wrapper, slots[2]);
 
       wrapper.appendChild(slots[0]);
