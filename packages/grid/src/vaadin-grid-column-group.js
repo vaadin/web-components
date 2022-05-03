@@ -241,6 +241,13 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   }
 
   /**
+   * Computes the whether the column group should effectively be hidden or not.
+   * A column group is effectively hidden if:
+   * - it is not attached
+   * - it is hidden
+   * - it does not have any child columns or groups
+   * - if all child columns or groups are effectively hidden
+   *
    * @override
    * @protected
    */
@@ -255,6 +262,11 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   }
 
   /**
+   * Overrides hidden update logic from `ColumnBaseMixin` to additionally:
+   * - recalculate which child columns or groups are visible
+   * - update width related styles
+   * - recursively update the hidden state of child columns or groups
+   *
    * @override
    * @protected
    */

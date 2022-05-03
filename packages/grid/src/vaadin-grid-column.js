@@ -461,7 +461,14 @@ export const ColumnBaseMixin = (superClass) =>
       });
     }
 
-    /** @protected */
+    /**
+     * Computes the whether the column should effectively be hidden or not.
+     * A column is effectively hidden if:
+     * - it is not attached
+     * - itself, or any of its ancestors is hidden
+     *
+     * @protected
+     */
     get _effectiveHidden() {
       if (!this.parentElement) {
         return true;
@@ -470,6 +477,12 @@ export const ColumnBaseMixin = (superClass) =>
       return columnHierarchy.some((column) => !!column.hidden);
     }
 
+    /**
+     * Returns an array of all ancestor columns or groups, including the
+     * current columns itself. Does not include any children.
+     *
+     * @protected
+     */
     _getColumnHierarchy() {
       const hierarchy = [this];
       let currentElement = this.parentElement;
@@ -505,9 +518,15 @@ export const ColumnBaseMixin = (superClass) =>
       }
     }
 
+    /**
+     * Notifies the top-level column or group in this column hierarchy that
+     * the hidden state of a column or group has changed. This causes a
+     * recursive update through the hierarchy to update each column
+     * or group based on its effective hidden state.
+     *
+     * @private
+     */
     _notifyHiddenChange() {
-      // Recursively update hidden state for the whole hierarchy,
-      // starting from the root column / group
       const columnHierarchy = this._getColumnHierarchy();
       const topLevelColumnOrGroup = columnHierarchy[0];
       if (topLevelColumnOrGroup._updateHiddenState) {
@@ -515,7 +534,11 @@ export const ColumnBaseMixin = (superClass) =>
       }
     }
 
-    /** @protected */
+    /**
+     * Updates the column based on its current effective hidden state
+     *
+     * @protected
+     */
     _updateHiddenState() {
       if (this._effectiveHidden) {
         this._allCells.forEach((cell) => {
