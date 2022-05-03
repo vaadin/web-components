@@ -66,6 +66,7 @@ export const ColumnBaseMixin = (superClass) =>
         hidden: {
           type: Boolean,
           value: false,
+          observer: '_hiddenChanged',
         },
 
         /**
@@ -211,7 +212,7 @@ export const ColumnBaseMixin = (superClass) =>
         '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
-        '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
+        '_hiddenChanged(hidden)',
       ];
     }
 
@@ -232,6 +233,7 @@ export const ColumnBaseMixin = (superClass) =>
           }
         });
       });
+      this._notifyHiddenChange();
     }
 
     /** @protected */
@@ -461,12 +463,9 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     /** @private */
-    _hiddenChanged(hidden) {
-      if (hidden !== this._previousHidden) {
-        console.log('_hiddenChanged', hidden, this._previousHidden);
-        if (this.parentElement && this.parentElement._columnPropChanged) {
-          this.parentElement._columnPropChanged('hidden', hidden);
-        }
+    _hiddenChanged(hidden, oldValue) {
+      if (!!hidden !== !!oldValue) {
+        console.log('_hiddenChanged', hidden, oldValue);
         if (this._grid) {
           this._grid._debouncerHiddenChanged = Debouncer.debounce(
             this._grid._debouncerHiddenChanged,
@@ -485,15 +484,18 @@ export const ColumnBaseMixin = (superClass) =>
             this._grid._resetKeyboardNavigation();
           }
         }
-        // Recursively update hidden cells for the whole hierarchy,
-        // starting from the root column / group
-        const columnHierarchy = this._getColumnHierarchy();
-        const topLevelColumnOrGroup = columnHierarchy[0];
-        if (topLevelColumnOrGroup._updateHiddenCells) {
-          topLevelColumnOrGroup._updateHiddenCells();
-        }
+        this._notifyHiddenChange();
       }
-      this._previousHidden = hidden;
+    }
+
+    _notifyHiddenChange() {
+      // Recursively update hidden cells for the whole hierarchy,
+      // starting from the root column / group
+      const columnHierarchy = this._getColumnHierarchy();
+      const topLevelColumnOrGroup = columnHierarchy[0];
+      if (topLevelColumnOrGroup._updateHiddenCells) {
+        topLevelColumnOrGroup._updateHiddenCells();
+      }
     }
 
     /** @protected */
