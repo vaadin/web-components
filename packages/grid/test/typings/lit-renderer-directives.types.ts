@@ -4,10 +4,14 @@ import {
   columnFooterRenderer,
   columnHeaderRenderer,
   GridColumnBodyLitRenderer,
+  GridColumnBodyRendererDirective,
   GridColumnFooterLitRenderer,
+  GridColumnFooterRendererDirective,
   GridColumnHeaderLitRenderer,
+  GridColumnHeaderRendererDirective,
   GridRowDetailsLitRenderer,
   gridRowDetailsRenderer,
+  GridRowDetailsRendererDirective,
 } from '../../lit.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
@@ -16,9 +20,30 @@ interface TestGridItem {
   testProperty: string;
 }
 
-assertType<(renderer: GridRowDetailsLitRenderer<TestGridItem>, value?: unknown) => DirectiveResult>(
-  gridRowDetailsRenderer,
-);
-assertType<(renderer: GridColumnBodyLitRenderer<TestGridItem>, value?: unknown) => DirectiveResult>(columnBodyRenderer);
-assertType<(renderer: GridColumnHeaderLitRenderer, value?: unknown) => DirectiveResult>(columnHeaderRenderer);
-assertType<(renderer: GridColumnFooterLitRenderer, value?: unknown) => DirectiveResult>(columnFooterRenderer);
+assertType<
+  (
+    renderer: GridRowDetailsLitRenderer<TestGridItem>,
+    dependencies?: unknown,
+  ) => DirectiveResult<typeof GridRowDetailsRendererDirective>
+>(gridRowDetailsRenderer);
+
+assertType<
+  (
+    renderer: GridColumnBodyLitRenderer<TestGridItem>,
+    dependencies?: unknown,
+  ) => DirectiveResult<typeof GridColumnBodyRendererDirective>
+>(columnBodyRenderer);
+
+assertType<
+  (
+    renderer: GridColumnHeaderLitRenderer,
+    dependencies?: unknown,
+  ) => DirectiveResult<typeof GridColumnHeaderRendererDirective>
+>(columnHeaderRenderer);
+
+assertType<
+  (
+    renderer: GridColumnFooterLitRenderer,
+    dependencies?: unknown,
+  ) => DirectiveResult<typeof GridColumnFooterRendererDirective>
+>(columnFooterRenderer);
