@@ -971,7 +971,12 @@ export const ComboBoxMixin = (subclass) =>
           this._selectItemForValue(this.value);
         }
 
-        if (this._inputElementValue === undefined || this._inputElementValue === this.value) {
+        const inputValue = this._inputElementValue;
+        if (
+          inputValue === undefined ||
+          inputValue === this.value ||
+          inputValue === this._getItemLabel(this.selectedItem)
+        ) {
           // When the input element value is the same as the current value or not defined,
           // set the focused index to the item that matches the value.
           this._focusedIndex = this._indexOfValue(this.value, this.filteredItems);
