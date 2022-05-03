@@ -462,21 +462,43 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @private */
     _hiddenChanged(hidden) {
-      if (this.parentElement && this.parentElement._columnPropChanged) {
-        this.parentElement._columnPropChanged('hidden', hidden);
-      }
+      if (hidden !== this._previousHidden) {
+        console.log('_hiddenChanged', hidden, this._previousHidden);
+        if (this.parentElement && this.parentElement._columnPropChanged) {
+          this.parentElement._columnPropChanged('hidden', hidden);
+        }
+        if (this._grid) {
+          this._grid._debouncerHiddenChanged = Debouncer.debounce(
+            this._grid._debouncerHiddenChanged,
+            animationFrame,
+            () => {
+              if (this._grid && this._grid._renderColumnTree) {
+                this._grid._renderColumnTree(this._grid._columnTree);
+              }
+            },
+          );
+          if (this._grid._updateFrozenColumn) {
+            this._grid._updateFrozenColumn();
+          }
 
-      if (!!hidden !== !!this._previousHidden) {
-        this._updateHiddenState();
+          if (this._grid._resetKeyboardNavigation) {
+            this._grid._resetKeyboardNavigation();
+          }
+        }
+        // Recursively update hidden cells for the whole hierarchy,
+        // starting from the root column / group
+        const columnHierarchy = this._getColumnHierarchy();
+        const topLevelColumnOrGroup = columnHierarchy[0];
+        if (topLevelColumnOrGroup._updateHiddenCells) {
+          topLevelColumnOrGroup._updateHiddenCells();
+        }
       }
       this._previousHidden = hidden;
     }
 
     /** @protected */
-    _updateHiddenState() {
-      if (!this._grid) {
-        return;
-      }
+    _updateHiddenCells() {
+      console.log('_updateHiddenCells');
       if (!this._isVisible) {
         this._allCells.forEach((cell) => {
           if (cell._content.parentNode) {
@@ -484,39 +506,24 @@ export const ColumnBaseMixin = (superClass) =>
           }
         });
       }
-      this._grid._debouncerHiddenChanged = Debouncer.debounce(
-        this._grid._debouncerHiddenChanged,
-        animationFrame,
-        () => {
-          if (this._grid && this._grid._renderColumnTree) {
-            this._grid._renderColumnTree(this._grid._columnTree);
-          }
-        },
-      );
-
-      if (this._grid._updateFrozenColumn) {
-        this._grid._updateFrozenColumn();
-      }
-
-      if (this._grid._resetKeyboardNavigation) {
-        this._grid._resetKeyboardNavigation();
-      }
     }
 
     get _isVisible() {
       if (!this.parentElement) {
         return false;
       }
-      if (this.hidden) {
-        return false;
+      const columnHierarchy = this._getColumnHierarchy();
+      return !columnHierarchy.some((column) => !!column.hidden);
+    }
+
+    _getColumnHierarchy() {
+      const hierarchy = [this];
+      let currentElement = this.parentElement;
+      while (currentElement && this._isColumnElement(currentElement)) {
+        hierarchy.unshift(currentElement);
+        currentElement = currentElement.parentElement;
       }
-      const parentColumns = [];
-      let currentParent = this.parentElement;
-      while (currentParent && this._isColumnElement(currentParent)) {
-        parentColumns.push(currentParent);
-        currentParent = currentParent.parentElement;
-      }
-      return !parentColumns.some((parentColumn) => !!parentColumn.hidden);
+      return hierarchy;
     }
 
     /**

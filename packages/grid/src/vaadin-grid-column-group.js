@@ -118,7 +118,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   _columnPropChanged(path, value) {
     if (path === 'hidden') {
       this._updateVisibleChildColumns();
-      this._updateHiddenState();
+      this._updateHiddenCells();
     }
 
     if (/flexGrow|width|hidden|_childColumns/.test(path)) {
@@ -249,17 +249,20 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   /** @private */
   _groupHiddenChanged() {
     this._updateVisibleChildColumns();
-    this._updateHiddenState();
   }
 
   /**
    * @override
    * @protected
    * */
-  _updateHiddenState() {
-    super._updateHiddenState();
-    // Recursive update to child columns
-    this._childColumns.forEach((column) => column._updateHiddenState());
+  _updateHiddenCells() {
+    super._updateHiddenCells();
+    // Recursively update child columns
+    this._childColumns.forEach((column) => {
+      if (column._updateHiddenCells) {
+        column._updateHiddenCells();
+      }
+    });
   }
 
   /** @private */
@@ -302,6 +305,13 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
         microTask.run(() => {
           if (this._grid && this._grid._updateColumnTree) {
             this._grid._updateColumnTree();
+            // Recursively update hidden cells for the whole hierarchy,
+            // starting from the root column / group
+            const columnHierarchy = this._getColumnHierarchy();
+            const topLevelColumnOrGroup = columnHierarchy[0];
+            if (topLevelColumnOrGroup._updateHiddenCells) {
+              topLevelColumnOrGroup._updateHiddenCells();
+            }
           }
         });
       }
