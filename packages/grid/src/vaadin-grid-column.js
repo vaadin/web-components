@@ -466,33 +466,41 @@ export const ColumnBaseMixin = (superClass) =>
         this.parentElement._columnPropChanged('hidden', hidden);
       }
 
-      if (!!hidden !== !!this._previousHidden && this._grid) {
-        if (!this._isVisible) {
-          this._allCells.forEach((cell) => {
-            if (cell._content.parentNode) {
-              cell._content.parentNode.removeChild(cell._content);
-            }
-          });
-        }
-        this._grid._debouncerHiddenChanged = Debouncer.debounce(
-          this._grid._debouncerHiddenChanged,
-          animationFrame,
-          () => {
-            if (this._grid && this._grid._renderColumnTree) {
-              this._grid._renderColumnTree(this._grid._columnTree);
-            }
-          },
-        );
-
-        if (this._grid._updateFrozenColumn) {
-          this._grid._updateFrozenColumn();
-        }
-
-        if (this._grid._resetKeyboardNavigation) {
-          this._grid._resetKeyboardNavigation();
-        }
+      if (!!hidden !== !!this._previousHidden) {
+        this._updateHiddenState();
       }
       this._previousHidden = hidden;
+    }
+
+    /** @protected */
+    _updateHiddenState() {
+      if (!this._grid) {
+        return;
+      }
+      if (!this._isVisible) {
+        this._allCells.forEach((cell) => {
+          if (cell._content.parentNode) {
+            cell._content.parentNode.removeChild(cell._content);
+          }
+        });
+      }
+      this._grid._debouncerHiddenChanged = Debouncer.debounce(
+        this._grid._debouncerHiddenChanged,
+        animationFrame,
+        () => {
+          if (this._grid && this._grid._renderColumnTree) {
+            this._grid._renderColumnTree(this._grid._columnTree);
+          }
+        },
+      );
+
+      if (this._grid._updateFrozenColumn) {
+        this._grid._updateFrozenColumn();
+      }
+
+      if (this._grid._resetKeyboardNavigation) {
+        this._grid._resetKeyboardNavigation();
+      }
     }
 
     get _isVisible() {

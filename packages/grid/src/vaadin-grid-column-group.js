@@ -85,11 +85,9 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
 
   static get observers() {
     return [
-      '_updateVisibleChildColumns(_childColumns)',
       '_groupFrozenChanged(frozen, _rootColumns)',
       '_groupFrozenToEndChanged(frozenToEnd, _rootColumns)',
       '_groupHiddenChanged(hidden, _rootColumns)',
-      '_visibleChildColumnsChanged(_visibleChildColumns)',
       '_colSpanChanged(_colSpan, _headerCell, _footerCell)',
       '_groupOrderChanged(_order, _rootColumns)',
       '_groupReorderStatusChanged(_reorderStatus, _rootColumns)',
@@ -119,7 +117,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
    */
   _columnPropChanged(path, value) {
     if (path === 'hidden') {
-      this._updateVisibleChildColumns(this._childColumns);
+      this._updateVisibleChildColumns();
     }
 
     if (/flexGrow|width|hidden|_childColumns/.test(path)) {
@@ -200,8 +198,9 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   }
 
   /** @private */
-  _updateVisibleChildColumns(childColumns) {
-    this._visibleChildColumns = Array.prototype.filter.call(childColumns, (col) => col._isVisible);
+  _updateVisibleChildColumns() {
+    this._visibleChildColumns = Array.prototype.filter.call(this._childColumns, (col) => col._isVisible);
+    this._colSpan = this._visibleChildColumns.length;
   }
 
   /** @protected */
@@ -248,12 +247,18 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
 
   /** @private */
   _groupHiddenChanged() {
-    this._columnPropChanged('hidden');
+    this._updateVisibleChildColumns();
+    this._updateHiddenState();
   }
 
-  /** @private */
-  _visibleChildColumnsChanged(visibleChildColumns) {
-    this._colSpan = visibleChildColumns.length;
+  /**
+   * @override
+   * @protected
+   * */
+  _updateHiddenState() {
+    super._updateHiddenState();
+    // Recursive update to child columns
+    this._childColumns.forEach((column) => column._updateHiddenState());
   }
 
   /** @private */
@@ -290,6 +295,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       ) {
         this._rootColumns = this._getChildColumns(this);
         this._childColumns = this._rootColumns;
+        this._updateVisibleChildColumns();
 
         // Update the column tree with microtask timing to avoid shady style scope issues
         microTask.run(() => {
