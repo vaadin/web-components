@@ -32,10 +32,10 @@ export class ComboBoxRendererDirective<TItem> extends LitRendererDirective<Combo
 }
 
 /**
- * A Lit directive for populating the content of the combo-box.
+ * A Lit directive for populating the list of combo-box options.
  *
  * The directive accepts a renderer callback returning a Lit template and assigns it to the combo-box
- * via the `renderer` property. The renderer is called for each combo-box item to populate the content
+ * via the `renderer` property. The renderer is called for each combo-box item to populate options
  * when assigned and whenever a single dependency or an array of dependencies changes.
  * It is not guaranteed that the renderer will be called immediately (synchronously) in both cases.
  *
