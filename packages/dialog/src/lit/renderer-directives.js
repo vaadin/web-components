@@ -68,6 +68,7 @@ export class DialogFooterRendererDirective extends AbstractDialogRendererDirecti
  * The directive accepts a renderer callback returning a Lit template and assigns it to the dialog
  * via the `renderer` property. The renderer is called to populate the content once when assigned
  * and whenever a single dependency or an array of dependencies changes.
+ * It is not guaranteed that the renderer will be called immediately (synchronously) in both cases.
  *
  * Dependencies can be a single value or an array of values.
  * Values are checked against previous values with strict equality (`===`),
@@ -95,6 +96,7 @@ export const dialogRenderer = directive(DialogRendererDirective);
  * The directive accepts a renderer callback returning a Lit template and assigns it to the dialog
  * via the `headerRenderer` property. The renderer is called to populate the content once when assigned
  * and whenever a single dependency or an array of dependencies changes.
+ * It is not guaranteed that the renderer will be called immediately (synchronously) in both cases.
  *
  * Dependencies can be a single value or an array of values.
  * Values are checked against previous values with strict equality (`===`),
@@ -122,6 +124,7 @@ export const dialogHeaderRenderer = directive(DialogHeaderRendererDirective);
  * The directive accepts a renderer callback returning a Lit template and assigns it to the dialog
  * via the `footerRenderer` property. The renderer is called to populate the content once when assigned
  * and whenever a single dependency or an array of dependencies changes.
+ * It is not guaranteed that the renderer will be called immediately (synchronously) in both cases.
  *
  * Dependencies can be a single value or an array of values.
  * Values are checked against previous values with strict equality (`===`),
