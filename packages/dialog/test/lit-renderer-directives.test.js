@@ -27,10 +27,19 @@ describe('lit renderer directives', () => {
   });
 
   describe('dialogRenderer', () => {
-    describe('rendering', () => {
+    describe('basic', () => {
       beforeEach(async () => {
         dialog = await renderOpenedDialog(container, { content: 'Content' });
         overlay = dialog.$.overlay;
+      });
+
+      it('should set `renderer` property when the directive is attached', () => {
+        expect(dialog.renderer).to.exist;
+      });
+
+      it('should unset `renderer` property when the directive is detached', async () => {
+        await renderOpenedDialog(container, {});
+        expect(dialog.renderer).not.to.exist;
       });
 
       it('should render the dialog content with the renderer', () => {
@@ -40,11 +49,6 @@ describe('lit renderer directives', () => {
       it('should re-render the dialog content when a renderer dependency changes', async () => {
         await renderOpenedDialog(container, { content: 'New Content' });
         expect(overlay.textContent).to.equal('New Content');
-      });
-
-      it('should clear the dialog content when the directive is detached', async () => {
-        await renderOpenedDialog(container, {});
-        expect(overlay.textContent).to.be.empty;
       });
     });
 
@@ -66,13 +70,22 @@ describe('lit renderer directives', () => {
   });
 
   describe('dialogHeaderRenderer', () => {
-    describe('rendering', () => {
+    describe('basic', () => {
       let header;
 
       beforeEach(async () => {
         dialog = await renderOpenedDialog(container, { header: 'Header' });
         overlay = dialog.$.overlay;
         header = overlay.querySelector('[slot=header-content]');
+      });
+
+      it('should set `headerRenderer` property when the directive is attached', () => {
+        expect(dialog.headerRenderer).to.exist;
+      });
+
+      it('should unset `headerRenderer` property when the directive is detached', async () => {
+        await renderOpenedDialog(container, {});
+        expect(dialog.headerRenderer).not.to.exist;
       });
 
       it('should render the dialog header with the renderer', () => {
@@ -82,11 +95,6 @@ describe('lit renderer directives', () => {
       it('should re-render the dialog header when a renderer dependency changes', async () => {
         await renderOpenedDialog(container, { header: 'New Header' });
         expect(header.textContent).to.equal('New Header');
-      });
-
-      it('should clear the dialog header when the directive is detached', async () => {
-        await renderOpenedDialog(container, {});
-        expect(overlay.querySelector('[slot=header-content]')).not.to.exist;
       });
     });
 
@@ -108,13 +116,22 @@ describe('lit renderer directives', () => {
   });
 
   describe('dialogFooterRenderer', () => {
-    describe('rendering', () => {
+    describe('basic', () => {
       let footer;
 
       beforeEach(async () => {
         dialog = await renderOpenedDialog(container, { footer: 'Footer' });
         overlay = dialog.$.overlay;
         footer = overlay.querySelector('[slot=footer]');
+      });
+
+      it('should set `footerRenderer` property when the directive is attached', () => {
+        expect(dialog.footerRenderer).to.exist;
+      });
+
+      it('should unset `footerRenderer` property when the directive is detached', async () => {
+        await renderOpenedDialog(container, {});
+        expect(dialog.footerRenderer).not.to.exist;
       });
 
       it('should render the dialog footer with the renderer', () => {
@@ -124,11 +141,6 @@ describe('lit renderer directives', () => {
       it('should re-render the dialog footer when a renderer dependency changes', async () => {
         await renderOpenedDialog(container, { footer: 'New Footer' });
         expect(footer.textContent).to.equal('New Footer');
-      });
-
-      it('should clear the dialog footer when the directive is detached', async () => {
-        await renderOpenedDialog(container, {});
-        expect(overlay.querySelector('[slot=footer]')).not.to.exist;
       });
     });
 
