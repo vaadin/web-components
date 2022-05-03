@@ -128,6 +128,11 @@ export const getRowCells = (row) => {
   return Array.prototype.slice.call(row.querySelectorAll('[part~="cell"]'));
 };
 
+export const hasCellForColumn = (container, column) => {
+  const cells = container.querySelectorAll('[part~="cell"]');
+  return Array.from(cells).some((cell) => cell._column === column);
+};
+
 export const getCellContent = (cell) => {
   return cell ? cell.querySelector('slot').assignedNodes()[0] : null;
 };

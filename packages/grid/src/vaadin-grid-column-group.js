@@ -118,6 +118,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   _columnPropChanged(path, value) {
     if (path === 'hidden') {
       this._updateVisibleChildColumns();
+      this._updateHiddenState();
     }
 
     if (/flexGrow|width|hidden|_childColumns/.test(path)) {

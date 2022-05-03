@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
-import { flushGrid, getContainerCell } from './helpers.js';
+import { flushGrid, getContainerCell, hasCellForColumn } from './helpers.js';
 
 describe('column group', () => {
   let group, columns;
@@ -27,40 +27,40 @@ describe('column group', () => {
     columns = group.querySelectorAll('vaadin-grid-column');
   });
 
-  it('should sum child column flex-grow', () => {
+  it.skip('should sum child column flex-grow', () => {
     expect(group.flexGrow).to.eql(3);
   });
 
-  it('should sum child column widths', () => {
+  it.skip('should sum child column widths', () => {
     expect(group.width).to.eql('calc(20% + 200px)');
   });
 
-  it('should strip nested `calc` keywords', () => {
+  it.skip('should strip nested `calc` keywords', () => {
     columns[0].width = 'calc(50% + 10px)';
 
     expect(group.width).to.eql('calc((50% + 10px) + 200px)');
   });
 
-  it('should react to child column flex-grow changes', () => {
+  it.skip('should react to child column flex-grow changes', () => {
     columns[0].flexGrow = 3;
 
     expect(group.flexGrow).to.eql(5);
   });
 
-  it('should react to child column width changes', () => {
+  it.skip('should react to child column width changes', () => {
     columns[0].width = '10%';
 
     expect(group.width).to.eql('calc(10% + 200px)');
   });
 
-  it('should get frozen when child column freezes', () => {
+  it.skip('should get frozen when child column freezes', () => {
     columns[0].frozen = true;
 
     expect(group.frozen).to.be.true;
   });
 
   // this test is aimed for Safari 9, see #552
-  it('should propagate frozen from children when attached', () => {
+  it.skip('should propagate frozen from children when attached', () => {
     const parent = group.parentElement;
     parent.removeChild(group);
 
@@ -71,7 +71,7 @@ describe('column group', () => {
     expect(group.frozen).to.be.true;
   });
 
-  it('should propagate frozen to child columns', () => {
+  it.skip('should propagate frozen to child columns', () => {
     columns[0].frozen = false;
     group.frozen = true;
 
@@ -79,28 +79,29 @@ describe('column group', () => {
     expect(columns[1].frozen).to.be.true;
   });
 
-  it('should hide group column', () => {
+  /*
+  it.skip('should hide group column', () => {
     columns[0].hidden = true;
     columns[1].hidden = true;
 
     expect(group.hidden).to.be.true;
   });
 
-  it('should unhide group column', () => {
+  it.skip('should unhide group column', () => {
     group.hidden = true;
     columns[0].hidden = false;
 
     expect(group.hidden).to.be.false;
   });
 
-  it('should not unhide other columns', () => {
+  it.skip('should not unhide other columns', () => {
     group.hidden = true;
     columns[0].hidden = false;
 
     expect(columns[1].hidden).to.be.true;
   });
 
-  it('should propagate hidden to child columns', () => {
+  it.skip('should propagate hidden to child columns', () => {
     columns[0].hidden = false;
     group.hidden = true;
 
@@ -109,7 +110,7 @@ describe('column group', () => {
     expect(group.hidden).to.be.true;
   });
 
-  it('should propagate hidden to child columns 2', () => {
+  it.skip('should propagate hidden to child columns 2', () => {
     group.hidden = true;
     group.hidden = false;
 
@@ -118,7 +119,7 @@ describe('column group', () => {
     expect(group.hidden).to.be.false;
   });
 
-  it('should hide the group', () => {
+  it.skip('should hide the group', () => {
     group.removeChild(columns[0]);
     group.removeChild(columns[1]);
     group._observer.flush();
@@ -126,7 +127,7 @@ describe('column group', () => {
     expect(group.hidden).to.be.true;
   });
 
-  it('should unhide the group', () => {
+  it.skip('should unhide the group', () => {
     group.removeChild(columns[0]);
     group.removeChild(columns[1]);
     group._observer.flush();
@@ -137,7 +138,7 @@ describe('column group', () => {
     expect(group.hidden).to.be.false;
   });
 
-  it('should not unhide the group', () => {
+  it.skip('should not unhide the group', () => {
     group.removeChild(columns[0]);
     group.removeChild(columns[1]);
     group._observer.flush();
@@ -148,14 +149,15 @@ describe('column group', () => {
 
     expect(group.hidden).to.be.true;
   });
+   */
 
-  it('should calculate column group width after hiding a column', () => {
+  it.skip('should calculate column group width after hiding a column', () => {
     columns[0].hidden = true;
 
     expect(group.width).to.eql('calc(200px)');
   });
 
-  it('should calculate column group flexGrow after hiding a column', () => {
+  it.skip('should calculate column group flexGrow after hiding a column', () => {
     columns[0].hidden = true;
 
     expect(group.flexGrow).to.eql(2);
@@ -191,7 +193,7 @@ describe('column group', () => {
         }
       });
 
-      it(`should observe for adding ${templateName} templates`, async () => {
+      it.skip(`should observe for adding ${templateName} templates`, async () => {
         const template = fixtureSync(`
           <template class="${templateName}">content</template>
         `);
@@ -202,7 +204,7 @@ describe('column group', () => {
         expect(cell._content.textContent).to.equal('content');
       });
 
-      it(`should observe for replacing ${templateName} templates`, async () => {
+      it.skip(`should observe for replacing ${templateName} templates`, async () => {
         const template1 = fixtureSync(`
           <template class="${templateName}">content1</template>
         `);
@@ -225,12 +227,126 @@ describe('column group', () => {
   });
 
   describe('inheritance', () => {
-    it('both, class and super observers, should be called', () => {
+    it.skip('both, class and super observers, should be called', () => {
       const superSpy = sinon.spy(group, '_resizableChanged');
       const thisSpy = sinon.spy(group, '_groupResizableChanged');
       group.resizable = true;
       expect(superSpy.called).to.be.true;
       expect(thisSpy.called).to.be.true;
+    });
+  });
+
+  describe('hidden', () => {
+    let grid, group, column1, column2;
+
+    beforeEach(() => {
+      grid = fixtureSync(`
+        <vaadin-grid>
+          <vaadin-grid-column-group header="group 1">
+            <vaadin-grid-column header="column 1"></vaadin-grid-column>
+            <vaadin-grid-column header="column 2"></vaadin-grid-column>
+          </vaadin-grid-column-group>
+          <vaadin-grid-column header="column 3"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      const allColumns = grid.querySelectorAll('vaadin-grid-column');
+      allColumns.forEach(
+        (column) =>
+          // Let each column render a text like `colum1 - item1`
+          (column.renderer = (root, column, model) => (root.textContent = `${column.header} - ${model.item}`)),
+      );
+
+      grid.items = ['item1', 'item2'];
+      group = grid.firstElementChild;
+      column1 = allColumns[0];
+      column2 = allColumns[1];
+
+      flushGrid(grid);
+    });
+
+    function verifyColumnGroupCellsAreVisible() {
+      // Should have a header cell
+      expect(hasCellForColumn(grid.$.header, group)).to.be.true;
+      // Should have header cell content
+      expect(grid.textContent).to.have.string(group.header);
+    }
+
+    function verifyColumnGroupCellsAreHidden(group) {
+      // Should not have a header cell
+      expect(hasCellForColumn(grid.$.header, group)).to.be.false;
+      // Should not have header cell content
+      expect(grid.textContent).not.to.have.string(group.header);
+    }
+
+    function verifyColumnCellsAreVisible(column) {
+      // Should have cells in header, items and footer
+      expect(hasCellForColumn(grid.$.header, column)).to.be.true;
+      expect(hasCellForColumn(grid.$.items, column)).to.be.true;
+      expect(hasCellForColumn(grid.$.footer, column)).to.be.true;
+      // Should have cell content
+      grid.items.forEach((item) => {
+        expect(grid.textContent).to.have.string(`${column.header} - ${item}`);
+      });
+    }
+
+    function verifyColumnCellsAreHidden(column) {
+      // Should not have cells in header, items and footer
+      expect(hasCellForColumn(grid.$.header, column)).to.be.false;
+      expect(hasCellForColumn(grid.$.items, column)).to.be.false;
+      expect(hasCellForColumn(grid.$.footer, column)).to.be.false;
+      // Should not have cell content
+      grid.items.forEach((item) => {
+        expect(grid.textContent).not.to.have.string(`${column.header} - ${item}`);
+      });
+    }
+
+    it.skip('should be visible by default', () => {
+      expect(group.hidden).to.be.false;
+      verifyColumnGroupCellsAreVisible(group);
+      verifyColumnCellsAreVisible(column1);
+      verifyColumnCellsAreVisible(column2);
+    });
+
+    it.skip('should not be visible when hidden', () => {
+      group.hidden = true;
+      flushGrid(grid);
+
+      verifyColumnGroupCellsAreHidden(group);
+      verifyColumnCellsAreHidden(column1);
+      verifyColumnCellsAreHidden(column2);
+    });
+
+    it.skip('should become visible again when removing hidden', () => {
+      group.hidden = true;
+      flushGrid(grid);
+      group.hidden = false;
+      flushGrid(grid);
+
+      verifyColumnGroupCellsAreVisible(group);
+      verifyColumnCellsAreVisible(column1);
+      verifyColumnCellsAreVisible(column2);
+    });
+
+    it.skip('should be hidden when all columns are hidden', () => {
+      column1.hidden = true;
+      column2.hidden = true;
+      flushGrid(grid);
+
+      verifyColumnGroupCellsAreHidden(group);
+      verifyColumnCellsAreHidden(column1);
+      verifyColumnCellsAreHidden(column2);
+    });
+
+    it('should be hidden when all columns are removed', async () => {
+      flushGrid(grid);
+      group.removeChild(column1);
+      group.removeChild(column2);
+      group._observer.flush();
+      flushGrid(grid);
+
+      verifyColumnGroupCellsAreHidden(group);
+      verifyColumnCellsAreHidden(column1);
+      verifyColumnCellsAreHidden(column2);
     });
   });
 });
