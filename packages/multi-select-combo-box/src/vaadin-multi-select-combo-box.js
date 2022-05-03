@@ -500,6 +500,26 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /**
+   * Override method from `DelegateStateMixin` to set required state
+   * using `aria-required` attribute instead of `required`, in order
+   * to prevent screen readers from announcing "invalid entry".
+   * @protected
+   * @override
+   */
+  _delegateAttribute(name, value) {
+    if (!this.stateTarget) {
+      return;
+    }
+
+    if (name === 'required') {
+      this._delegateAttribute('aria-required', value ? 'true' : false);
+      return;
+    }
+
+    super._delegateAttribute(name, value);
+  }
+
+  /**
    * Setting clear button visible reduces total space available
    * for rendering chips, and making it hidden increases it.
    * @private

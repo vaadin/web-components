@@ -16,32 +16,53 @@ describe('accessibility', () => {
   describe('ARIA', () => {
     let scroller, items;
 
-    beforeEach(() => {
-      comboBox.selectedItems = ['Apple', 'Lemon'];
-      inputElement.click();
-      scroller = comboBox.$.comboBox.$.dropdown._scroller;
-      items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+    describe('input', () => {
+      beforeEach(() => {
+        comboBox.required = true;
+      });
+
+      it('should set aria-required attribute on the input when required', () => {
+        expect(inputElement.getAttribute('aria-required')).to.equal('true');
+      });
+
+      it('should not set required attribute on the input when required', () => {
+        expect(inputElement.hasAttribute('required')).to.be.false;
+      });
+
+      it('should remove aria-required attribute from the input when not required', () => {
+        comboBox.required = false;
+        expect(inputElement.hasAttribute('aria-required')).to.be.false;
+      });
     });
 
-    it('should set aria-multiselectable attribute on the scroller', () => {
-      expect(scroller.getAttribute('aria-multiselectable')).to.equal('true');
-    });
+    describe('items', () => {
+      beforeEach(() => {
+        comboBox.selectedItems = ['Apple', 'Lemon'];
+        inputElement.click();
+        scroller = comboBox.$.comboBox.$.dropdown._scroller;
+        items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      });
 
-    it('should set aria-selected on the selected item elements', () => {
-      expect(items[0].getAttribute('aria-selected')).to.equal('true');
-      expect(items[1].getAttribute('aria-selected')).to.equal('false');
-      expect(items[2].getAttribute('aria-selected')).to.equal('true');
-      expect(items[3].getAttribute('aria-selected')).to.equal('false');
-    });
+      it('should set aria-multiselectable attribute on the scroller', () => {
+        expect(scroller.getAttribute('aria-multiselectable')).to.equal('true');
+      });
 
-    it('should update aria-selected when item is selected', () => {
-      items[1].click();
-      expect(items[1].getAttribute('aria-selected')).to.equal('true');
-    });
+      it('should set aria-selected on the selected item elements', () => {
+        expect(items[0].getAttribute('aria-selected')).to.equal('true');
+        expect(items[1].getAttribute('aria-selected')).to.equal('false');
+        expect(items[2].getAttribute('aria-selected')).to.equal('true');
+        expect(items[3].getAttribute('aria-selected')).to.equal('false');
+      });
 
-    it('should update aria-selected when item is deselected', () => {
-      items[0].click();
-      expect(items[0].getAttribute('aria-selected')).to.equal('false');
+      it('should update aria-selected when item is selected', () => {
+        items[1].click();
+        expect(items[1].getAttribute('aria-selected')).to.equal('true');
+      });
+
+      it('should update aria-selected when item is deselected', () => {
+        items[0].click();
+        expect(items[0].getAttribute('aria-selected')).to.equal('false');
+      });
     });
   });
 
