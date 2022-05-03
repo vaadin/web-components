@@ -115,7 +115,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
    * @protected
    */
   _columnPropChanged(path, value) {
-    if (/flexGrow|width|hidden|_childColumns/.test(path)) {
+    if (/flexGrow|width|_childColumns/.test(path)) {
       this._updateFlexAndWidth();
     }
 
@@ -244,13 +244,14 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
    * @override
    * @protected
    * */
-  _updateHiddenCells() {
-    super._updateHiddenCells();
+  _updateHiddenState() {
+    super._updateHiddenState();
     this._updateVisibleChildColumns();
+    this._updateFlexAndWidth();
     // Recursively update child columns
     this._childColumns.forEach((column) => {
-      if (column._updateHiddenCells) {
-        column._updateHiddenCells();
+      if (column._updateHiddenState) {
+        column._updateHiddenState();
       }
     });
   }

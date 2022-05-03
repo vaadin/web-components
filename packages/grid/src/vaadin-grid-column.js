@@ -462,10 +462,27 @@ export const ColumnBaseMixin = (superClass) =>
       });
     }
 
+    get _isVisible() {
+      if (!this.parentElement) {
+        return false;
+      }
+      const columnHierarchy = this._getColumnHierarchy();
+      return !columnHierarchy.some((column) => !!column.hidden);
+    }
+
+    _getColumnHierarchy() {
+      const hierarchy = [this];
+      let currentElement = this.parentElement;
+      while (currentElement && this._isColumnElement(currentElement)) {
+        hierarchy.unshift(currentElement);
+        currentElement = currentElement.parentElement;
+      }
+      return hierarchy;
+    }
+
     /** @private */
     _hiddenChanged(hidden, oldValue) {
       if (!!hidden !== !!oldValue) {
-        console.log('_hiddenChanged', hidden, oldValue);
         if (this._grid) {
           this._grid._debouncerHiddenChanged = Debouncer.debounce(
             this._grid._debouncerHiddenChanged,
@@ -489,18 +506,17 @@ export const ColumnBaseMixin = (superClass) =>
     }
 
     _notifyHiddenChange() {
-      // Recursively update hidden cells for the whole hierarchy,
+      // Recursively update hidden state for the whole hierarchy,
       // starting from the root column / group
       const columnHierarchy = this._getColumnHierarchy();
       const topLevelColumnOrGroup = columnHierarchy[0];
-      if (topLevelColumnOrGroup._updateHiddenCells) {
-        topLevelColumnOrGroup._updateHiddenCells();
+      if (topLevelColumnOrGroup._updateHiddenState) {
+        topLevelColumnOrGroup._updateHiddenState();
       }
     }
 
     /** @protected */
-    _updateHiddenCells() {
-      console.log('_updateHiddenCells');
+    _updateHiddenState() {
       if (!this._isVisible) {
         this._allCells.forEach((cell) => {
           if (cell._content.parentNode) {
@@ -508,24 +524,6 @@ export const ColumnBaseMixin = (superClass) =>
           }
         });
       }
-    }
-
-    get _isVisible() {
-      if (!this.parentElement) {
-        return false;
-      }
-      const columnHierarchy = this._getColumnHierarchy();
-      return !columnHierarchy.some((column) => !!column.hidden);
-    }
-
-    _getColumnHierarchy() {
-      const hierarchy = [this];
-      let currentElement = this.parentElement;
-      while (currentElement && this._isColumnElement(currentElement)) {
-        hierarchy.unshift(currentElement);
-        currentElement = currentElement.parentElement;
-      }
-      return hierarchy;
     }
 
     /**
