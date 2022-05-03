@@ -212,7 +212,6 @@ export const ColumnBaseMixin = (superClass) =>
         '_onFooterRendererOrBindingChanged(_footerRenderer, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
-        '_hiddenChanged(hidden)',
       ];
     }
 
