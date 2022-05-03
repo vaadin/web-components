@@ -462,12 +462,13 @@ export const ColumnBaseMixin = (superClass) =>
       });
     }
 
-    get _isVisible() {
+    /** @protected */
+    get _effectiveHidden() {
       if (!this.parentElement) {
-        return false;
+        return true;
       }
       const columnHierarchy = this._getColumnHierarchy();
-      return !columnHierarchy.some((column) => !!column.hidden);
+      return columnHierarchy.some((column) => !!column.hidden);
     }
 
     _getColumnHierarchy() {
@@ -517,7 +518,7 @@ export const ColumnBaseMixin = (superClass) =>
 
     /** @protected */
     _updateHiddenState() {
-      if (!this._isVisible) {
+      if (this._effectiveHidden) {
         this._allCells.forEach((cell) => {
           if (cell._content.parentNode) {
             cell._content.parentNode.removeChild(cell._content);
@@ -552,7 +553,7 @@ export const ColumnBaseMixin = (superClass) =>
      */
     __renderCellsContent(renderer, cells) {
       // Skip if the column is hidden or not attached to a grid.
-      if (!this._isVisible || !this._grid) {
+      if (this._effectiveHidden || !this._grid) {
         return;
       }
 

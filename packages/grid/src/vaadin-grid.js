@@ -609,7 +609,7 @@ class Grid extends ElementMixin(
     if (this._cache.isLoading()) {
       this._recalculateColumnWidthOnceLoadingFinished = true;
     } else {
-      const cols = this._getColumns().filter((col) => col._isVisible && col.autoWidth);
+      const cols = this._getColumns().filter((col) => !col._effectiveHidden && col.autoWidth);
       this._recalculateColumnWidths(cols);
     }
   }
@@ -712,7 +712,7 @@ class Grid extends ElementMixin(
     row.innerHTML = '';
 
     columns
-      .filter((column) => column._isVisible)
+      .filter((column) => !column._effectiveHidden)
       .forEach((column, index, cols) => {
         let cell;
 

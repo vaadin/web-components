@@ -194,7 +194,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
 
   /** @private */
   _updateVisibleChildColumns() {
-    this._visibleChildColumns = Array.prototype.filter.call(this._childColumns, (col) => col._isVisible);
+    this._visibleChildColumns = Array.prototype.filter.call(this._childColumns, (col) => !col._effectiveHidden);
     this._colSpan = this._visibleChildColumns.length;
   }
 
@@ -243,7 +243,21 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   /**
    * @override
    * @protected
-   * */
+   */
+  get _effectiveHidden() {
+    if (!this.parentElement) {
+      return true;
+    }
+    if (this.hidden) {
+      return true;
+    }
+    return this._childColumns.every((column) => column._effectiveHidden);
+  }
+
+  /**
+   * @override
+   * @protected
+   */
   _updateHiddenState() {
     super._updateHiddenState();
     this._updateVisibleChildColumns();
@@ -302,16 +316,6 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       }
     });
     this._observer.flush();
-  }
-
-  get _isVisible() {
-    if (!this.parentElement) {
-      return false;
-    }
-    if (this.hidden) {
-      return false;
-    }
-    return this._childColumns.some((column) => column._isVisible);
   }
 
   /**

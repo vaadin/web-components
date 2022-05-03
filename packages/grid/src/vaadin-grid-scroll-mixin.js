@@ -227,7 +227,7 @@ export const ScrollMixin = (superClass) =>
           firstFrozenToEnd = i;
         }
 
-        if (col.frozen && col._isVisible) {
+        if (col.frozen && !col._effectiveHidden) {
           lastFrozen = i;
         }
       }

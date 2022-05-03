@@ -45,7 +45,7 @@ export const ColumnResizingMixin = (superClass) =>
           column = column._childColumns
             .slice(0)
             .sort((a, b) => a._order - b._order)
-            .filter((column) => column._isVisible)
+            .filter((column) => !column._effectiveHidden)
             .pop();
         }
 

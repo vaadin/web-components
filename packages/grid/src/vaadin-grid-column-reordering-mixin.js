@@ -198,7 +198,7 @@ export const ColumnReorderingMixin = (superClass) =>
       return this._columnTree
         .slice(0)
         .pop()
-        .filter((c) => c._isVisible)
+        .filter((c) => !c._effectiveHidden)
         .sort((b, a) => b._order - a._order);
     }
 
