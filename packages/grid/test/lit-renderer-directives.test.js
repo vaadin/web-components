@@ -4,6 +4,7 @@ import sinon from 'sinon';
 import '../vaadin-grid.js';
 import { html, render } from 'lit';
 import { columnBodyRenderer, columnFooterRenderer, columnHeaderRenderer, gridRowDetailsRenderer } from '../lit.js';
+import { getCellContent, getContainerCell } from './helpers.js';
 
 async function renderGrid(container, { items, header, footer, rowDetails }) {
   render(
@@ -22,14 +23,6 @@ async function renderGrid(container, { items, header, footer, rowDetails }) {
   return container.querySelector('vaadin-grid');
 }
 
-function getCell(container, { row, col }) {
-  return container.children[row].querySelectorAll('[part~="cell"]')[col];
-}
-
-function getRowDetailsCell(container, { row }) {
-  return container.children[row].querySelector('[part~="details-cell"]');
-}
-
 describe('lit renderer directives', () => {
   let container, grid, column;
 
@@ -44,7 +37,7 @@ describe('lit renderer directives', () => {
       beforeEach(async () => {
         grid = await renderGrid(container, { items: ['Item'], rowDetails: 'Row Details' });
         grid.openItemDetails(grid.items[0]);
-        cell = getRowDetailsCell(grid.$.items, { row: 0 });
+        cell = getContainerCell(grid.$.items, 0, 1 /* column count + 1 = the row details cell */);
       });
 
       it('should set `rowDetailsRenderer` property when the directive is attached', () => {
@@ -57,12 +50,12 @@ describe('lit renderer directives', () => {
       });
 
       it('should render the row details cell content with the renderer', () => {
-        expect(cell._content.textContent).to.equal('Row Details');
+        expect(getCellContent(cell).textContent).to.equal('Row Details');
       });
 
       it('should re-render the row details cell content when a renderer dependency changes', async () => {
         await renderGrid(container, { items: ['Item'], rowDetails: 'New Row Details' });
-        expect(cell._content.textContent).to.equal('New Row Details');
+        expect(getCellContent(cell).textContent).to.equal('New Row Details');
       });
     });
 
@@ -86,7 +79,7 @@ describe('lit renderer directives', () => {
       });
 
       it('should pass the model to the renderer', () => {
-        const cell = getRowDetailsCell(grid.$.items, { row: 0 });
+        const cell = getContainerCell(grid.$.items, 0, 1 /* column count + 1 = the row details cell */);
         const model = grid.__getRowModel(cell.parentElement);
         expect(rendererSpy.firstCall.args[1]).to.deep.equal(model);
       });
@@ -103,7 +96,7 @@ describe('lit renderer directives', () => {
 
       beforeEach(async () => {
         grid = await renderGrid(container, { items: ['Item'] });
-        cell = getCell(grid.$.items, { row: 0, col: 0 });
+        cell = getContainerCell(grid.$.items, 0, 0);
         column = grid.querySelector('vaadin-grid-column');
       });
 
@@ -117,12 +110,12 @@ describe('lit renderer directives', () => {
       });
 
       it('should render the body cells content with the renderer', () => {
-        expect(cell._content.textContent).to.equal('Item');
+        expect(getCellContent(cell).textContent).to.equal('Item');
       });
 
       it('should re-render the body cells content when a renderer dependency changes', async () => {
         await renderGrid(container, { items: ['New Item'] });
-        expect(cell._content.textContent).to.equal('New Item');
+        expect(getCellContent(cell).textContent).to.equal('New Item');
       });
     });
 
@@ -145,7 +138,7 @@ describe('lit renderer directives', () => {
       });
 
       it('should pass the model to the renderer', () => {
-        const cell = getCell(grid.$.items, { row: 0, col: 0 });
+        const cell = getContainerCell(grid.$.items, 0, 0);
         const model = grid.__getRowModel(cell.parentElement);
         expect(rendererSpy.firstCall.args[1]).to.deep.equal(model);
       });
@@ -163,7 +156,7 @@ describe('lit renderer directives', () => {
 
       beforeEach(async () => {
         grid = await renderGrid(container, { header: 'Header' });
-        cell = getCell(grid.$.header, { row: 0, col: 0 });
+        cell = getContainerCell(grid.$.header, 0, 0);
         column = grid.querySelector('vaadin-grid-column');
       });
 
@@ -177,12 +170,12 @@ describe('lit renderer directives', () => {
       });
 
       it('should render the header cell content with the renderer', () => {
-        expect(cell._content.textContent).to.equal('Header');
+        expect(getCellContent(cell).textContent).to.equal('Header');
       });
 
       it('should re-render the header cell content when a renderer dependency changes', async () => {
         await renderGrid(container, { header: 'New Header' });
-        expect(cell._content.textContent).to.equal('New Header');
+        expect(getCellContent(cell).textContent).to.equal('New Header');
       });
     });
 
@@ -213,7 +206,7 @@ describe('lit renderer directives', () => {
 
       beforeEach(async () => {
         grid = await renderGrid(container, { footer: 'Footer' });
-        cell = getCell(grid.$.footer, { row: 0, col: 0 });
+        cell = getContainerCell(grid.$.footer, 0, 0);
         column = grid.querySelector('vaadin-grid-column');
       });
 
@@ -227,12 +220,12 @@ describe('lit renderer directives', () => {
       });
 
       it('should render the footer cell content with the renderer', () => {
-        expect(cell._content.textContent).to.equal('Footer');
+        expect(getCellContent(cell).textContent).to.equal('Footer');
       });
 
       it('should re-render the footer cell content when a renderer dependency changes', async () => {
         await renderGrid(container, { footer: 'New Footer' });
-        expect(cell._content.textContent).to.equal('New Footer');
+        expect(getCellContent(cell).textContent).to.equal('New Footer');
       });
     });
 
