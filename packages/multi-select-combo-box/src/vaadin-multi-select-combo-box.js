@@ -75,6 +75,7 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  *
  * Part name              | Description
  * -----------------------|----------------
+ * `chips`                | The element that wraps chips for selected items
  * `chip`                 | Chip shown for every selected item
  * `label`                | The label element
  * `input-field`          | The element that wraps prefix, value and suffix
@@ -187,7 +188,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
               hidden$="[[_isOverflowHidden(_overflowItems.length)]]"
               on-mousedown="_preventBlur"
             ></vaadin-multi-select-combo-box-chip>
-            <div id="chips" slot="prefix"></div>
+            <div id="chips" part="chips" slot="prefix"></div>
             <slot name="input"></slot>
             <div id="clearButton" part="clear-button" slot="suffix"></div>
             <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix"></div>

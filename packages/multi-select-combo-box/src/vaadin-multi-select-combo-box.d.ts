@@ -86,6 +86,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  *
  * Part name              | Description
  * -----------------------|----------------
+ * `chips`                | The element that wraps chips for selected items
  * `chip`                 | Chip shown for every selected item
  * `label`                | The label element
  * `input-field`          | The element that wraps prefix, value and suffix
