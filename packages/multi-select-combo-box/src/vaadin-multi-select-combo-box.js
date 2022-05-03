@@ -7,6 +7,7 @@ import './vaadin-multi-select-combo-box-chip.js';
 import './vaadin-multi-select-combo-box-container.js';
 import './vaadin-multi-select-combo-box-internal.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
@@ -252,6 +253,40 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       },
 
       /**
+       * The object used to localize this component.
+       * To change the default localization, replace the entire
+       * _i18n_ object or just the property you want to modify.
+       *
+       * The object has the following JSON structure and default values:
+       * ```
+       * {
+       *   // Screen reader announcement on clear button click.
+       *   cleared: 'Selection cleared',
+       *   // Screen reader announcement when item is selected.
+       *   selected: 'added to selection',
+       *   // Screen reader announcement when item is deselected.
+       *   deselected: 'removed from selection',
+       *   // Screen reader announcement of the selected items count.
+       *   // {count} is replaced with the actual count of items.
+       *   total: '{count} items selected',
+       * }
+       * ```
+       * @type {!MultiSelectComboBoxI18n}
+       * @default {English/US}
+       */
+      i18n: {
+        type: Object,
+        value: () => {
+          return {
+            cleared: 'Selection cleared',
+            selected: 'added to selection',
+            deselected: 'removed from selection',
+            total: '{count} items selected',
+          };
+        },
+      },
+
+      /**
        * When present, it specifies that the field is read-only.
        */
       readonly: {
@@ -465,6 +500,26 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /**
+   * Override method from `DelegateStateMixin` to set required state
+   * using `aria-required` attribute instead of `required`, in order
+   * to prevent screen readers from announcing "invalid entry".
+   * @protected
+   * @override
+   */
+  _delegateAttribute(name, value) {
+    if (!this.stateTarget) {
+      return;
+    }
+
+    if (name === 'required') {
+      this._delegateAttribute('aria-required', value ? 'true' : false);
+      return;
+    }
+
+    super._delegateAttribute(name, value);
+  }
+
+  /**
    * Setting clear button visible reduces total space available
    * for rendering chips, and making it hidden increases it.
    * @private
@@ -503,6 +558,14 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     this._hasValue = Boolean(selectedItems && selectedItems.length);
 
     this._toggleHasValue();
+
+    // Use placeholder for announcing items
+    if (this._hasValue) {
+      this.__savedPlaceholder = this.placeholder;
+      this.placeholder = selectedItems.map((item) => this._getItemLabel(item, this.itemLabelPath)).join(', ');
+    } else {
+      this.placeholder = this.__savedPlaceholder;
+    }
 
     // Re-render chips
     this.__updateChips();
@@ -574,10 +637,18 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
+  __announceItem(itemLabel, isSelected, itemCount) {
+    const state = isSelected ? 'selected' : 'deselected';
+    const total = this.i18n.total.replace('{count}', itemCount || 0);
+    announce(`${itemLabel} ${this.i18n[state]} ${total}`);
+  }
+
+  /** @private */
   __removeItem(item) {
     const itemsCopy = [...this.selectedItems];
     itemsCopy.splice(itemsCopy.indexOf(item), 1);
     this.__updateSelection(itemsCopy);
+    this.__announceItem(item, false, itemsCopy.length);
   }
 
   /** @private */
@@ -585,9 +656,13 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     const itemsCopy = [...this.selectedItems];
 
     const index = this._findIndex(item, itemsCopy, this.itemIdPath);
+    const itemLabel = this._getItemLabel(item, this.itemLabelPath);
+
+    let isSelected = false;
+
     if (index !== -1) {
       // Do not unselect when manually typing and committing an already selected item.
-      if (this.filter.toLowerCase() === this._getItemLabel(item, this.itemLabelPath).toLowerCase()) {
+      if (this.filter.toLowerCase() === itemLabel.toLowerCase()) {
         this.__clearFilter();
         return;
       }
@@ -595,12 +670,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       itemsCopy.splice(index, 1);
     } else {
       itemsCopy.push(item);
+      isSelected = true;
     }
 
     this.__updateSelection(itemsCopy);
 
     // Suppress `value-changed` event.
     this.__clearFilter();
+
+    this.__announceItem(itemLabel, isSelected, itemsCopy.length);
   }
 
   /** @private */
@@ -708,6 +786,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     event.stopPropagation();
 
     this.__updateSelection([]);
+
+    announce(this.i18n.cleared);
   }
 
   /**

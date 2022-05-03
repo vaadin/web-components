@@ -58,14 +58,6 @@ describe('basic', () => {
       expect(inputElement.placeholder).to.be.equal('foo');
     });
 
-    it('should propagate required property to input', () => {
-      comboBox.required = true;
-      expect(inputElement.required).to.be.true;
-
-      comboBox.required = false;
-      expect(inputElement.required).to.be.false;
-    });
-
     it('should propagate disabled property to combo-box', () => {
       expect(internal.disabled).to.be.false;
       comboBox.disabled = true;
