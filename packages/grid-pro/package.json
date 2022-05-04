@@ -22,6 +22,8 @@
   "files": [
     "src",
     "theme",
+    "lit.js",
+    "lit.d.ts",
     "vaadin-*.d.ts",
     "vaadin-*.js"
   ],
@@ -40,6 +42,7 @@
     "@vaadin/grid": "23.1.0-beta1",
     "@vaadin/item": "23.1.0-beta1",
     "@vaadin/list-box": "23.1.0-beta1",
+    "@vaadin/lit-renderer": "23.1.0-beta1",
     "@vaadin/select": "23.1.0-beta1",
     "@vaadin/text-field": "23.1.0-beta1",
     "@vaadin/vaadin-license-checker": "^2.1.0",
