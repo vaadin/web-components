@@ -51,6 +51,27 @@ describe('accessibility', () => {
           comboBox.selectedItems = [];
           expect(inputElement.getAttribute('placeholder')).to.equal('Fruits');
         });
+
+        it('should keep input placeholder when placeholder property is updated', () => {
+          comboBox.selectedItems = ['Apple', 'Banana'];
+          comboBox.placeholder = 'Options';
+          expect(inputElement.getAttribute('placeholder')).to.equal('Apple, Banana');
+        });
+
+        it('should restore updated placeholder when placeholder property is updated', () => {
+          comboBox.selectedItems = ['Apple', 'Banana'];
+          comboBox.placeholder = 'Options';
+          comboBox.selectedItems = [];
+          expect(inputElement.getAttribute('placeholder')).to.equal('Options');
+        });
+
+        it('should restore empty placeholder when selected items are removed', () => {
+          comboBox.placeholder = '';
+          comboBox.selectedItems = ['Apple', 'Banana'];
+          comboBox.selectedItems = [];
+          expect(comboBox.placeholder).to.be.equal('');
+          expect(inputElement.hasAttribute('placeholder')).to.be.false;
+        });
       });
     });
 
