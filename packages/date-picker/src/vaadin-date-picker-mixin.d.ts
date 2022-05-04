@@ -55,6 +55,7 @@ export declare class DatePickerMixinClass {
    * Date which should be visible when there is no value selected.
    *
    * The same date formats as for the `value` property are supported.
+   * @attr {string} initial-position
    */
   initialPosition: string | null | undefined;
 
@@ -65,6 +66,7 @@ export declare class DatePickerMixinClass {
 
   /**
    * Set true to prevent the overlay from opening automatically.
+   * @attr {boolean} auto-open-disabled
    */
   autoOpenDisabled: boolean | null | undefined;
 
@@ -72,6 +74,7 @@ export declare class DatePickerMixinClass {
    * Set true to display ISO-8601 week numbers in the calendar. Notice that
    * displaying week numbers is only supported when `i18n.firstDayOfWeek`
    * is 1 (Monday).
+   * @attr {boolean} show-week-numbers
    */
   showWeekNumbers: boolean | null | undefined;
 
