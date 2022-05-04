@@ -10,6 +10,6 @@ interface TestComboBoxItem {
 assertType<
   (
     renderer: ComboBoxLitRenderer<TestComboBoxItem>,
-    value?: unknown,
+    dependencies?: unknown,
   ) => DirectiveResult<typeof ComboBoxRendererDirective>
 >(comboBoxRenderer);
