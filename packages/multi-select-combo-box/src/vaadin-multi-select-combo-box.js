@@ -365,6 +365,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        */
       placeholder: {
         type: String,
+        value: '',
         observer: '_placeholderChanged',
       },
 
