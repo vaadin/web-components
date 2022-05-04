@@ -22,6 +22,8 @@
   "files": [
     "src",
     "theme",
+    "lit.js",
+    "lit.d.ts",
     "vaadin-*.d.ts",
     "vaadin-*.js"
   ],
@@ -40,6 +42,7 @@
     "@vaadin/input-container": "23.1.0-beta1",
     "@vaadin/item": "23.1.0-beta1",
     "@vaadin/list-box": "23.1.0-beta1",
+    "@vaadin/lit-renderer": "23.1.0-beta1",
     "@vaadin/vaadin-list-mixin": "23.1.0-beta1",
     "@vaadin/vaadin-lumo-styles": "23.1.0-beta1",
     "@vaadin/vaadin-material-styles": "23.1.0-beta1",
