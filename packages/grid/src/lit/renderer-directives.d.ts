@@ -31,11 +31,11 @@ export declare class GridRowDetailsRendererDirective<TItem> extends LitRendererD
 }
 
 /**
- * A Lit directive for populating the content of the row details cell.
+ * A Lit directive for rendering the content of the row details cell.
  *
  * The directive accepts a renderer callback returning a Lit template and assigns it to the grid
  * via the `rowDetailsRenderer` property. The renderer is called for each grid item that is in `detailsOpened`
- * to populate the content when assigned and whenever a single dependency or an array of dependencies changes.
+ * when assigned and whenever a single dependency or an array of dependencies changes.
  * It is not guaranteed that the renderer will be called immediately (synchronously) in both cases.
  *
  * Dependencies can be a single value or an array of values.
