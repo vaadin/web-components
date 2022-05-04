@@ -23,6 +23,8 @@
     "all-imports.js",
     "src",
     "theme",
+    "lit.js",
+    "lit.d.ts",
     "vaadin-*.d.ts",
     "vaadin-*.js"
   ],
@@ -43,6 +45,7 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/checkbox": "23.1.0-beta1",
     "@vaadin/component-base": "23.1.0-beta1",
+    "@vaadin/lit-renderer": "23.1.0-beta1",
     "@vaadin/text-field": "23.1.0-beta1",
     "@vaadin/vaadin-lumo-styles": "23.1.0-beta1",
     "@vaadin/vaadin-material-styles": "23.1.0-beta1",
