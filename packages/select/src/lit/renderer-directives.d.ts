@@ -28,7 +28,7 @@ export class SelectRendererDirective extends LitRendererDirective<Select, Select
 }
 
 /**
- * A Lit directive for populating the content of the `<vaadin-select-overlay>`.
+ * A Lit directive for populating the content of the `<vaadin-select-overlay>` element.
  *
  * The directive accepts a renderer callback returning a Lit template and assigns it to the select
  * via the `renderer` property. The renderer is called once to populate the content when assigned
