@@ -25,6 +25,10 @@ registerStyles(
 );
 
 const multiSelectComboBox = css`
+  :host([has-value]) ::slotted(input:placeholder-shown) {
+    caret-color: var(--material-body-text-color) !important;
+  }
+
   [part='input-field'] {
     height: auto;
     min-height: 32px;

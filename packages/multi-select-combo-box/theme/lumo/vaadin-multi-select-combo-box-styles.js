@@ -30,6 +30,10 @@ const multiSelectComboBox = css`
     padding-inline-start: 0;
   }
 
+  :host([has-value]) ::slotted(input:placeholder-shown) {
+    caret-color: var(--lumo-body-text-color) !important;
+  }
+
   [part~='chip']:not(:last-of-type) {
     margin-inline-end: var(--lumo-space-xs);
   }
