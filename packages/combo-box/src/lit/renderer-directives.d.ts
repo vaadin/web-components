@@ -32,7 +32,7 @@ export class ComboBoxRendererDirective<TItem> extends LitRendererDirective<Combo
 }
 
 /**
- * A Lit directive for populating the list of combo-box options.
+ * A Lit directive for rendering the content of the `<vaadin-combo-box-item>` elements.
  *
  * The directive accepts a renderer callback returning a Lit template and assigns it to the combo-box
  * via the `renderer` property. The renderer is called for each combo-box item to populate options
