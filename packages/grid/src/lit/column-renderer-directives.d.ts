@@ -62,7 +62,7 @@ export declare class GridColumnFooterRendererDirective extends AbstractGridColum
  * A Lit directive for rendering the content of the column's body cells.
  *
  * The directive accepts a renderer callback returning a Lit template and assigns it to the grid column
- * via the `renderer` property. The renderer is called for each grid item when assigned and whenever
+ * via the `renderer` property. The renderer is called for each column's body cell when assigned and whenever
  * a single dependency or an array of dependencies changes.
  * It is not guaranteed that the renderer will be called immediately (synchronously) in both cases.
  *
