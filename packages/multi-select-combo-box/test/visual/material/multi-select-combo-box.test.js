@@ -105,6 +105,12 @@ describe('multi-select-combo-box', () => {
       element.disabled = true;
       await visualDiff(div, 'selected-disabled');
     });
+
+    it('focused chip', async () => {
+      element.inputElement.focus();
+      await sendKeys({ press: 'ArrowLeft' });
+      await visualDiff(div, 'selected-focused-chip');
+    });
   });
 
   describe('opened', () => {

@@ -20,6 +20,10 @@ const chip = css`
     font-family: var(--material-font-family);
   }
 
+  :host([focused]) {
+    background-color: hsla(214, 47%, 21%, 0.38);
+  }
+
   :host(:not([part~='overflow']):not([readonly]):not([disabled])) {
     padding-inline-end: 0;
   }

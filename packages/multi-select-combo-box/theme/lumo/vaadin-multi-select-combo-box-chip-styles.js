@@ -22,6 +22,10 @@ const chip = css`
     cursor: var(--lumo-clickable-cursor);
   }
 
+  :host([focused]) {
+    background-color: var(--lumo-contrast-40pct);
+  }
+
   :host(:not([part~='overflow']):not([readonly]):not([disabled])) {
     padding-inline-end: 0;
   }

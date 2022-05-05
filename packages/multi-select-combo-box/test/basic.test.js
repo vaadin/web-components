@@ -129,35 +129,6 @@ describe('basic', () => {
       expect(comboBox.hasAttribute('has-value')).to.be.true;
     });
 
-    it('should clear last selected item on Backspace if input has no value', async () => {
-      comboBox.selectedItems = ['apple', 'banana'];
-      await nextRender();
-
-      await sendKeys({ down: 'Backspace' });
-      expect(comboBox.selectedItems).to.deep.equal(['apple']);
-
-      await sendKeys({ down: 'Backspace' });
-      expect(comboBox.selectedItems).to.deep.equal([]);
-    });
-
-    it('should not clear last selected item on Backspace if input has value', async () => {
-      comboBox.selectedItems = ['apple', 'banana'];
-      await nextRender();
-      await sendKeys({ type: 'lemon' });
-
-      await sendKeys({ down: 'Backspace' });
-      expect(comboBox.selectedItems).to.deep.equal(['apple', 'banana']);
-    });
-
-    it('should not clear last selected item on Backspace when readonly', async () => {
-      comboBox.selectedItems = ['apple', 'banana'];
-      await nextRender();
-      comboBox.readonly = true;
-
-      await sendKeys({ down: 'Backspace' });
-      expect(comboBox.selectedItems).to.deep.equal(['apple', 'banana']);
-    });
-
     it('should clear internal combo-box value when selecting an item', async () => {
       await sendKeys({ down: 'ArrowDown' });
       await sendKeys({ type: 'apple' });
@@ -510,6 +481,114 @@ describe('basic', () => {
         expect(chips[0].hasAttribute('readonly')).to.be.true;
         expect(chips[1].hasAttribute('readonly')).to.be.true;
         expect(chips[2].hasAttribute('readonly')).to.be.true;
+      });
+    });
+
+    describe('keyboard navigation', () => {
+      beforeEach(async () => {
+        comboBox.selectedItems = ['apple', 'banana'];
+        comboBox.style.width = '300px';
+        await nextResize(comboBox);
+        inputElement.focus();
+      });
+
+      describe('Backspace', () => {
+        it('should not remove last chip on Backspace but mark it as focused', async () => {
+          await sendKeys({ down: 'Backspace' });
+          const chips = getChips(comboBox);
+          expect(chips.length).to.equal(3);
+          expect(chips[1].hasAttribute('focused')).to.be.false;
+          expect(chips[2].hasAttribute('focused')).to.be.true;
+        });
+
+        it('should remove last chip on subsequent Backspace after focusing', async () => {
+          await sendKeys({ down: 'Backspace' });
+          await sendKeys({ down: 'Backspace' });
+          const chips = getChips(comboBox);
+          expect(chips.length).to.equal(2);
+          expect(comboBox.selectedItems).to.deep.equal(['apple']);
+        });
+
+        it('should not mark last chip on Backspace as focused when input has value', async () => {
+          await sendKeys({ type: 'lemon' });
+          await sendKeys({ down: 'Backspace' });
+          const chips = getChips(comboBox);
+          expect(chips[1].hasAttribute('focused')).to.be.false;
+          expect(chips[2].hasAttribute('focused')).to.be.false;
+        });
+
+        it('should not mark last chip on Backspace as focused when readonly', async () => {
+          comboBox.readonly = true;
+          await sendKeys({ down: 'Backspace' });
+          const chips = getChips(comboBox);
+          expect(chips[1].hasAttribute('focused')).to.be.false;
+          expect(chips[2].hasAttribute('focused')).to.be.false;
+        });
+      });
+
+      describe('Arrow keys', () => {
+        ['ltr', 'rtl'].forEach((dir) => {
+          const PREV_KEY = dir === 'ltr' ? 'ArrowLeft' : 'ArrowRight';
+          const NEXT_KEY = dir === 'ltr' ? 'ArrowRight' : 'ArrowLeft';
+
+          describe(dir, () => {
+            before(() => {
+              document.documentElement.setAttribute('dir', dir);
+            });
+
+            after(() => {
+              document.documentElement.removeAttribute('dir');
+            });
+
+            it(`should mark last chip on ${PREV_KEY} as focused when no chip is focused`, async () => {
+              await sendKeys({ down: PREV_KEY });
+              const chips = getChips(comboBox);
+              expect(chips[1].hasAttribute('focused')).to.be.false;
+              expect(chips[2].hasAttribute('focused')).to.be.true;
+            });
+
+            it(`should not mark last chip on ${PREV_KEY} as focused when input has value`, async () => {
+              await sendKeys({ type: 'lemon' });
+              await sendKeys({ down: PREV_KEY });
+              const chips = getChips(comboBox);
+              expect(chips[1].hasAttribute('focused')).to.be.false;
+              expect(chips[2].hasAttribute('focused')).to.be.false;
+            });
+
+            it(`should mark previous chip on ${PREV_KEY} as focused when a chip is focused`, async () => {
+              await sendKeys({ down: PREV_KEY });
+              await sendKeys({ down: PREV_KEY });
+              const chips = getChips(comboBox);
+              expect(chips[1].hasAttribute('focused')).to.be.true;
+              expect(chips[2].hasAttribute('focused')).to.be.false;
+            });
+
+            it(`should mark next chip on ${NEXT_KEY} as focused when a chip is focused`, async () => {
+              await sendKeys({ down: PREV_KEY });
+              await sendKeys({ down: PREV_KEY });
+              await sendKeys({ down: NEXT_KEY });
+              const chips = getChips(comboBox);
+              expect(chips[1].hasAttribute('focused')).to.be.false;
+              expect(chips[2].hasAttribute('focused')).to.be.true;
+            });
+
+            it(`should mark all chips as not focused on ${NEXT_KEY} when last chip is focused`, async () => {
+              await sendKeys({ down: PREV_KEY });
+              await sendKeys({ down: NEXT_KEY });
+              const chips = getChips(comboBox);
+              expect(chips[1].hasAttribute('focused')).to.be.false;
+              expect(chips[2].hasAttribute('focused')).to.be.false;
+            });
+
+            it(`should mark all chips as not focused after ${NEXT_KEY} followed by unrelated key`, async () => {
+              await sendKeys({ down: PREV_KEY });
+              await sendKeys({ down: 'ArrowDown' });
+              const chips = getChips(comboBox);
+              expect(chips[1].hasAttribute('focused')).to.be.false;
+              expect(chips[2].hasAttribute('focused')).to.be.false;
+            });
+          });
+        });
       });
     });
   });
