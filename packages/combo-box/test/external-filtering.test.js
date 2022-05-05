@@ -227,4 +227,31 @@ describe('external filtering', () => {
       expect(comboBox.value).to.equal('custom');
     });
   });
+
+  describe('selectedItem is set before', () => {
+    const items = [
+      { label: 'Item 0', value: '0' },
+      { label: 'Item 1', value: '1' },
+      { label: 'Item 2', value: '2' }
+    ];
+
+    beforeEach(() => {
+      comboBox = fixtureSync(`<vaadin-combo-box></vaadin-combo-box>`);
+      comboBox.selectedItem = items[0];
+      comboBox.filteredItems = items;
+    });
+
+    it('should set component value based on selected item', () => {
+      expect(comboBox.value).to.equal('0');
+    });
+
+    it('should set input value based on selected item', () => {
+      expect(comboBox.inputElement.value).to.equal('Item 0');
+    });
+
+    it('should have the correct item focused when opened', () => {
+      comboBox.open();
+      expect(getFocusedItemIndex(comboBox)).to.equal(0);
+    });
+  });
 });
