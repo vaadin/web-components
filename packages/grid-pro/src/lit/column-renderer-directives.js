@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { directive } from 'lit/directive.js';
-import { microTask } from '@vaadin/component-base/src/async';
-import { Debouncer } from '@vaadin/component-base/src/debounce';
+import { microTask } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { CONTENT_UPDATE_DEBOUNCER } from '@vaadin/grid/src/lit/renderer-directives.js';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 
