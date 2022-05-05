@@ -240,6 +240,13 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
   pageSize: number;
 
   /**
+   * A hint to the user of what can be entered in the control.
+   * The placeholder will be only displayed in the case when
+   * there is no item selected.
+   */
+  placeholder: string;
+
+  /**
    * Custom function for rendering the content of every item.
    * Receives three arguments:
    *

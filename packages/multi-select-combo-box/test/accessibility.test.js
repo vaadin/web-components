@@ -7,19 +7,15 @@ import '../vaadin-multi-select-combo-box.js';
 describe('accessibility', () => {
   let comboBox, inputElement;
 
-  beforeEach(() => {
-    comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
-    comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
-    inputElement = comboBox.inputElement;
-  });
-
   describe('ARIA', () => {
     let scroller, items;
 
     describe('input', () => {
       describe('required', () => {
         beforeEach(() => {
-          comboBox.required = true;
+          comboBox = fixtureSync(`<vaadin-multi-select-combo-box required></vaadin-multi-select-combo-box>`);
+          comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
+          inputElement = comboBox.inputElement;
         });
 
         it('should set aria-required attribute on the input when required', () => {
@@ -38,7 +34,13 @@ describe('accessibility', () => {
 
       describe('placeholder', () => {
         beforeEach(() => {
-          comboBox.placeholder = 'Fruits';
+          comboBox = fixtureSync(`
+            <vaadin-multi-select-combo-box
+              placeholder="Fruits"
+            ></vaadin-multi-select-combo-box>
+          `);
+          comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
+          inputElement = comboBox.inputElement;
         });
 
         it('should set input placeholder when selected items are changed', () => {
@@ -51,13 +53,36 @@ describe('accessibility', () => {
           comboBox.selectedItems = [];
           expect(inputElement.getAttribute('placeholder')).to.equal('Fruits');
         });
+
+        it('should keep input placeholder when placeholder property is updated', () => {
+          comboBox.selectedItems = ['Apple', 'Banana'];
+          comboBox.placeholder = 'Options';
+          expect(inputElement.getAttribute('placeholder')).to.equal('Apple, Banana');
+        });
+
+        it('should restore updated placeholder when placeholder property is updated', () => {
+          comboBox.selectedItems = ['Apple', 'Banana'];
+          comboBox.placeholder = 'Options';
+          comboBox.selectedItems = [];
+          expect(inputElement.getAttribute('placeholder')).to.equal('Options');
+        });
+
+        it('should restore empty placeholder when selected items are removed', () => {
+          comboBox.placeholder = '';
+          comboBox.selectedItems = ['Apple', 'Banana'];
+          comboBox.selectedItems = [];
+          expect(comboBox.placeholder).to.be.equal('');
+          expect(inputElement.hasAttribute('placeholder')).to.be.false;
+        });
       });
     });
 
     describe('items', () => {
       beforeEach(() => {
+        comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
+        comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
         comboBox.selectedItems = ['Apple', 'Lemon'];
-        inputElement.click();
+        comboBox.inputElement.click();
         scroller = comboBox.$.comboBox.$.dropdown._scroller;
         items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
       });
@@ -93,6 +118,9 @@ describe('accessibility', () => {
     });
 
     beforeEach(() => {
+      comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
+      comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
+      inputElement = comboBox.inputElement;
       clock = sinon.useFakeTimers();
     });
 

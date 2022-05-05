@@ -359,6 +359,17 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       },
 
       /**
+       * A hint to the user of what can be entered in the control.
+       * The placeholder will be only displayed in the case when
+       * there is no item selected.
+       */
+      placeholder: {
+        type: String,
+        value: '',
+        observer: '_placeholderChanged',
+      },
+
+      /**
        * Custom function for rendering the content of every item.
        * Receives three arguments:
        *
@@ -560,6 +571,19 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
+  _placeholderChanged(placeholder) {
+    const tmpPlaceholder = this.__tmpA11yPlaceholder;
+    // Do not store temporary placeholder
+    if (tmpPlaceholder !== placeholder) {
+      this.__savedPlaceholder = placeholder;
+
+      if (tmpPlaceholder) {
+        this.placeholder = tmpPlaceholder;
+      }
+    }
+  }
+
+  /** @private */
   _selectedItemsChanged(selectedItems) {
     this._hasValue = Boolean(selectedItems && selectedItems.length);
 
@@ -567,9 +591,11 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     // Use placeholder for announcing items
     if (this._hasValue) {
-      this.__savedPlaceholder = this.placeholder;
-      this.placeholder = selectedItems.map((item) => this._getItemLabel(item, this.itemLabelPath)).join(', ');
+      const tmpPlaceholder = selectedItems.map((item) => this._getItemLabel(item, this.itemLabelPath)).join(', ');
+      this.__tmpA11yPlaceholder = tmpPlaceholder;
+      this.placeholder = tmpPlaceholder;
     } else {
+      delete this.__tmpA11yPlaceholder;
       this.placeholder = this.__savedPlaceholder;
     }
 
