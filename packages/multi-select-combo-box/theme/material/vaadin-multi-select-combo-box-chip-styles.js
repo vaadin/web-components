@@ -33,19 +33,19 @@ const chip = css`
   :host([part~='overflow'])::after {
     position: absolute;
     content: '';
-    width: 3px;
-    height: 20px;
-    border-left: 2px solid;
+    width: 100%;
+    height: 100%;
+    border-left: 0.13rem solid;
     border-radius: 4px 0 0 4px;
     border-color: hsla(214, 53%, 23%, 0.1);
   }
 
   :host([part~='overflow'])::before {
-    left: -4px;
+    left: -0.25rem;
   }
 
   :host([part~='overflow'])::after {
-    left: -8px;
+    left: -0.5rem;
   }
 
   :host([part~='overflow-two']) {

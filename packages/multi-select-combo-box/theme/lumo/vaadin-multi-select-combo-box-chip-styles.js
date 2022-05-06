@@ -36,19 +36,19 @@ const chip = css`
   :host([part~='overflow'])::after {
     position: absolute;
     content: '';
-    width: 3px;
-    height: calc(1.875em - 1px);
-    border-left: 2px solid;
-    border-radius: 4px 0 0 4px;
+    width: 100%;
+    height: 100%;
+    border-left: calc(var(--lumo-space-s) / 4) solid;
+    border-radius: var(--lumo-border-radius-s);
     border-color: var(--lumo-contrast-30pct);
   }
 
   :host([part~='overflow'])::before {
-    left: -4px;
+    left: calc(-1 * var(--lumo-space-s) / 2);
   }
 
   :host([part~='overflow'])::after {
-    left: -8px;
+    left: calc(-1 * var(--lumo-space-s));
   }
 
   :host([part~='overflow-two']) {
