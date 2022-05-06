@@ -278,7 +278,6 @@ function _handleNative(ev) {
   if (!ev[HANDLED_OBJ]) {
     ev[HANDLED_OBJ] = {};
     if (type.slice(0, 5) === 'touch') {
-      // Ev = /** @type {TouchEvent} */ (ev); // eslint-disable-line no-self-assign
       const t = ev.changedTouches[0];
       if (type === 'touchstart') {
         // Only handle the first finger

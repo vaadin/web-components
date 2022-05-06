@@ -38,7 +38,7 @@ const TARGET_REPO = {
   owner: 'vaadin',
 };
 
-// Moslty useful for testing to limit the scope when running this script
+// Mostly useful for testing to limit the scope when running this script
 let shouldExcludeIssue = () => false;
 if (TEST_ON_SINGLE_ISSUE) {
   // Run a small-scale test with a signle issue only
@@ -48,7 +48,7 @@ if (TEST_ON_SINGLE_ISSUE) {
   };
 }
 
-// Moslty useful for testing to limit the scope when running this script
+// Mostly useful for testing to limit the scope when running this script
 let shouldExcludeRepo = () => false;
 if (TEST_ON_SINGLE_ISSUE) {
   // Run a small-scale test with a signle issue only

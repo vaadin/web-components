@@ -223,7 +223,6 @@ describe('overlay', () => {
           overlay.scrollToDate(initialDate);
           var closeSpy = sinon.spy();
           overlay.addEventListener('close', closeSpy);
-          // Const scrollSpy = sinon.spy(overlay, 'scrollToDate');
 
           overlay.$.todayButton.disabled = true;
 
@@ -232,8 +231,6 @@ describe('overlay', () => {
             tap(overlay.$.todayButton);
 
             expect(overlay.$.monthScroller.position).to.equal(lastScrollPos);
-            // FIXME: fails in FF + Polymer 1.x
-            // expect(scrollSpy.called).to.be.false;
             expect(closeSpy.called).to.be.false;
             done();
           });
