@@ -52,6 +52,7 @@ function createPlainElementDefinition(elementAnalysis) {
   }));
   const properties = elementAnalysis.properties
     .filter((prop) => prop.privacy === 'public')
+    .filter((prop) => !prop.metadata.polymer.readOnly)
     .map((prop) => ({
       name: prop.name,
       description: prop.description,
@@ -90,8 +91,10 @@ function createPlainWebTypes(packageJson, packageElements) {
 }
 
 function createLitElementDefinition(elementAnalysis) {
-  const booleanAttributes = elementAnalysis.attributes
-    .filter((attr) => attr.type.includes('boolean'))
+  const booleanAttributes = elementAnalysis.properties
+    .filter((prop) => prop.privacy === 'public')
+    .filter((prop) => !prop.metadata.polymer.readOnly)
+    .filter((prop) => prop.type.includes('boolean'))
     .map((prop) => ({
       name: `?${prop.name}`,
       description: prop.description,
@@ -103,6 +106,8 @@ function createLitElementDefinition(elementAnalysis) {
     }));
   const propertyAttributes = elementAnalysis.properties
     .filter((prop) => prop.privacy === 'public')
+    .filter((prop) => !prop.metadata.polymer.readOnly)
+    .filter((prop) => !prop.type.includes('boolean'))
     .map((prop) => ({
       name: `.${prop.name}`,
       description: prop.description,
@@ -115,6 +120,11 @@ function createLitElementDefinition(elementAnalysis) {
   const eventAttributes = elementAnalysis.events.map((event) => ({
     name: `@${event.name}`,
     description: event.description,
+    value: {
+      // Type checking does not work with template tagged literals
+      // Since this Lit binding should use an expression, just declare it as such
+      kind: 'expression',
+    },
   }));
 
   return {
