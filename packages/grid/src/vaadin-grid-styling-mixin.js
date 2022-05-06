@@ -49,7 +49,7 @@ export const StylingMixin = (superClass) =>
      */
     generateCellClassNames() {
       Array.from(this.$.items.children)
-        .filter((row) => !row.hidden)
+        .filter((row) => !row.hidden && !row.hasAttribute('loading'))
         .forEach((row) => this._generateCellClassNames(row, this.__getRowModel(row)));
     }
 
