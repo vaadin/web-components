@@ -59,8 +59,8 @@ export interface UploadI18n {
     size: string[];
     sizeBase?: number;
   };
-  formatSize?: (bytes: number) => string;
-  formatTime?: (seconds: number, units: number[]) => string;
+  formatSize?(bytes: number): string;
+  formatTime?(seconds: number, units: number[]): string;
 }
 
 export type UploadMethod = 'POST' | 'PUT';
