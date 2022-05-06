@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const { execSync } = require('child_process');
 
 const PLAIN_WEB_TYPES_FILE = 'web-types.json';
@@ -226,7 +227,8 @@ function modifyPackageJson() {
     // Add field for declaring web-types
     packageJson['web-types'] = [PLAIN_WEB_TYPES_FILE, LIT_WEB_TYPES_FILE];
 
-    fs.writeFileSync(`./packages/${packageName}/package.json`, JSON.stringify(packageJson, null, 2), 'utf8');
+    const fileContent = JSON.stringify(packageJson, null, 2) + os.EOL;
+    fs.writeFileSync(`./packages/${packageName}/package.json`, fileContent, 'utf8');
   });
 }
 
