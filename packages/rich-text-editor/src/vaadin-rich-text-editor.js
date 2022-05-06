@@ -595,7 +595,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     });
 
     editorContent.addEventListener('focus', () => {
-      // format changed, but no value changed happened
+      // Format changed, but no value changed happened
       if (this._toolbarState === STATE.CLICKED) {
         this._cleanToolbarState();
       }
@@ -662,7 +662,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       }
     });
 
-    // mousedown happens before editor focusout
+    // Mousedown happens before editor focusout
     toolbar.addEventListener('mousedown', (e) => {
       if (buttons.indexOf(e.composedPath()[0]) > -1) {
         this._markToolbarFocused();
@@ -704,7 +704,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   __patchFirefoxFocus() {
-    // in Firefox 63+ with native Shadow DOM, when moving focus out of
+    // In Firefox 63+ with native Shadow DOM, when moving focus out of
     // contenteditable and back again within same shadow root, cursor
     // disappears. See https://bugzilla.mozilla.org/show_bug.cgi?id=1496769
     const editorContent = this.shadowRoot.querySelector('.ql-editor');
@@ -714,7 +714,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       isFake = true;
       this.__fakeTarget = this.__createFakeFocusTarget();
       document.body.appendChild(this.__fakeTarget);
-      // let the focus step out of shadow root!
+      // Let the focus step out of shadow root!
       this.__fakeTarget.focus();
       return new Promise((resolve) => {
         setTimeout(resolve);
@@ -753,7 +753,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     const toolbar = this._editor.getModule('toolbar');
     const update = toolbar.update;
 
-    // add custom link button to toggle state attribute
+    // Add custom link button to toggle state attribute
     toolbar.controls.push(['link', this.shadowRoot.querySelector('[part~="toolbar-button-link"]')]);
 
     toolbar.update = function (range) {
@@ -780,7 +780,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     const keyboard = this._editor.getModule('keyboard');
     const bindings = keyboard.bindings[TAB_KEY];
 
-    // exclude Quill shift-tab bindings, except for code block,
+    // Exclude Quill shift-tab bindings, except for code block,
     // as some of those are breaking when on a newline in the list
     // https://github.com/vaadin/vaadin-rich-text-editor/issues/67
     const originalBindings = bindings.filter((b) => !b.shiftKey || (b.format && b.format['code-block']));
@@ -788,7 +788,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     keyboard.bindings[TAB_KEY] = [...originalBindings, moveFocusBinding];
 
-    // alt-f10 focuses a toolbar button
+    // Alt-f10 focuses a toolbar button
     keyboard.addBinding({ key: 121, altKey: true, handler: focusToolbar });
   }
 
@@ -814,7 +814,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       const LinkBlot = Quill.imports['formats/link'];
       const [link, offset] = this._editor.scroll.descendant(LinkBlot, range.index);
       if (link != null) {
-        // existing link
+        // Existing link
         this._linkRange = { index: range.index - offset, length: link.length() };
         this._linkUrl = LinkBlot.formats(link.domNode);
       } else if (range.length === 0) {
@@ -1081,7 +1081,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       return;
     }
     const delta = new Quill.imports.delta(parsedValue);
-    // suppress text-change event to prevent infinite loop
+    // Suppress text-change event to prevent infinite loop
     if (JSON.stringify(editor.getContents()) !== JSON.stringify(delta)) {
       editor.setContents(delta, SOURCE.SILENT);
     }
@@ -1091,7 +1091,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       this._cleanToolbarState();
       this.__emitChangeEvent();
     } else if (!this._editor.hasFocus()) {
-      // value changed from outside
+      // Value changed from outside
       this.__lastCommittedChange = this.value;
     }
   }

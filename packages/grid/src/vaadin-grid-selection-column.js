@@ -235,7 +235,7 @@ class GridSelectionColumn extends GridColumn {
   }
 
   /**
-   * iOS needs indeterminate + checked at the same time
+   * IOS needs indeterminate + checked at the same time
    * @private
    */
   __isChecked(selectAll, indeterminate) {

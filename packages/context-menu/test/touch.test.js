@@ -184,7 +184,7 @@ describe('mobile support', () => {
         const xy = middleOfNode(menu.listenOn);
         makeSoloTouchEvent('touchstart', xy, target);
         clock.tick(100);
-        xy.x += 16; // threshold is 15px from start
+        xy.x += 16; // Threshold is 15px from start
         makeSoloTouchEvent('touchmove', xy, target);
         clock.tick(600);
         expect(menu.opened).to.eql(false);

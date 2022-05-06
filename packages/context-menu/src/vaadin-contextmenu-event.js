@@ -53,11 +53,11 @@ register({
           this.fire(t, ct.clientX, ct.clientY);
         }
 
-        // needed to prevent any 'tap' gesture events from firing
+        // Needed to prevent any 'tap' gesture events from firing
         // which could potentially cancel/close the overlay.
         prevent('tap');
       }
-    }, 500); // default setting for Android and iOS.
+    }, 500); // Default setting for Android and iOS.
   },
 
   touchmove: function (e) {
@@ -93,7 +93,7 @@ register({
     const ev = new Event('vaadin-contextmenu', { bubbles: true, cancelable: true, composed: true });
     ev.detail = { x, y, sourceEvent };
     target.dispatchEvent(ev);
-    // forward `preventDefault` in a clean way
+    // Forward `preventDefault` in a clean way
     if (ev.defaultPrevented && sourceEvent && sourceEvent.preventDefault) {
       sourceEvent.preventDefault();
     }

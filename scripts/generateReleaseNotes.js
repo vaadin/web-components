@@ -147,17 +147,17 @@ function parseLog(log) {
   return commits;
 }
 
-// return absolute link to GH given a path
+// Return absolute link to GH given a path
 function createGHLink(path) {
   return `https://github.com/vaadin/${path}`;
 }
 
-// create link to low-components repo given a type or id
+// Create link to low-components repo given a type or id
 function createLink(type, id, char) {
   return id ? `[${char ? char : id}](${createGHLink(`web-components/${type}/${id})`)}` : '';
 }
 
-// convert GH internal links to absolute links
+// Convert GH internal links to absolute links
 function parseLinks(message) {
   message = message.trim();
   message = message.replace(/^([\da-f]+) /, `${createLink('commit', '$1', '⧉')} `);
@@ -165,14 +165,14 @@ function parseLinks(message) {
   return message;
 }
 
-// return web-components affected by this commit
+// Return web-components affected by this commit
 function getComponents(c) {
   if (c.components[0]) {
     return `- ${c.components.map((k) => `\`${k}\``).join(', ')}`;
   }
 }
 
-// return ticket links for this commit
+// Return ticket links for this commit
 function getTickets(c) {
   if (c.footers.fixes && c.footers.fixes[0]) {
     const ticket = `Ticket${c.footers.fixes.length > 1 ? 's' : ''}`;
@@ -192,7 +192,7 @@ function getTickets(c) {
   }
 }
 
-// log a commit for release notes
+// Log a commit for release notes
 function logCommit(c) {
   let log = '';
   let indent = '';
@@ -214,7 +214,7 @@ function logCommit(c) {
   console.log(log);
 }
 
-// log a set of commits, and group by types
+// Log a set of commits, and group by types
 function logCommitsByType(commits) {
   if (!commits[0]) {
     return;

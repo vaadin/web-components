@@ -260,7 +260,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should enable navigation mode when tabbed into header', () => {
-      // simulating tabbing into header
+      // Simulating tabbing into header
       tabToHeader();
 
       expect(grid.hasAttribute('navigating')).to.be.true;
@@ -275,7 +275,7 @@ describe('keyboard navigation', () => {
     });
 
     it('should enable navigation mode when tabbed into footer', () => {
-      // simulating tabbing into footer
+      // Simulating tabbing into footer
       focusable.focus();
       shiftTabToFooter();
 
@@ -402,16 +402,16 @@ describe('keyboard navigation', () => {
       let keydownEvent;
       const listener = (e) => (keydownEvent = e);
 
-      // assuming grid has been tabbed into.
+      // Assuming grid has been tabbed into.
       tabbableElements[1].focus();
 
       listenOnce(scroller, 'keydown', listener);
-      tab(); // to body cell
+      tab(); // To body cell
       expect(keydownEvent.defaultPrevented).to.be.true;
       expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
 
       listenOnce(scroller, 'keydown', listener);
-      tab(); // to footer cell
+      tab(); // To footer cell
       expect(keydownEvent.defaultPrevented).to.be.true;
       expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[3]);
     });
@@ -422,16 +422,16 @@ describe('keyboard navigation', () => {
       let keydownEvent;
       const listener = (e) => (keydownEvent = e);
 
-      // assuming grid has been shift-tabbed into.
+      // Assuming grid has been shift-tabbed into.
       tabbableElements[3].focus();
 
       listenOnce(grid.$.scroller, 'keydown', listener);
-      shiftTab(); // to body cell
+      shiftTab(); // To body cell
       expect(keydownEvent.defaultPrevented).to.be.true;
       expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
 
       listenOnce(grid.$.scroller, 'keydown', listener);
-      shiftTab(); // to header cell
+      shiftTab(); // To header cell
       expect(keydownEvent.defaultPrevented).to.be.true;
       expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[1]);
     });
@@ -445,16 +445,16 @@ describe('keyboard navigation', () => {
       let keydownEvent;
       const listener = (e) => (keydownEvent = e);
 
-      // assuming grid has been tabbed into.
+      // Assuming grid has been tabbed into.
       tabbableElements[1].focus();
 
       listenOnce(grid.$.scroller, 'keydown', listener);
-      tab(); // to body cell
+      tab(); // To body cell
       expect(keydownEvent.defaultPrevented).to.be.true;
       expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
 
       listenOnce(grid.$.scroller, 'keydown', listener);
-      tab(); // to footer cell
+      tab(); // To footer cell
       expect(keydownEvent.defaultPrevented).to.be.true;
       expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[3]);
     });
@@ -468,23 +468,23 @@ describe('keyboard navigation', () => {
       let keydownEvent;
       const listener = (e) => (keydownEvent = e);
 
-      // assuming grid has been shift-tabbed into.
+      // Assuming grid has been shift-tabbed into.
       tabbableElements[3].focus();
 
       listenOnce(grid.$.scroller, 'keydown', listener);
-      shiftTab(); // to body cell
+      shiftTab(); // To body cell
       expect(keydownEvent.defaultPrevented).to.be.true;
       expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
 
       listenOnce(grid.$.scroller, 'keydown', listener);
-      shiftTab(); // to header cell
+      shiftTab(); // To header cell
       expect(keydownEvent.defaultPrevented).to.be.true;
       expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[1]);
     });
 
     it('should be possible to exit grid with tab', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
-      tabbableElements[3].focus(); // focus footer cell
+      tabbableElements[3].focus(); // Focus footer cell
 
       let keydownEvent;
       listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => (keydownEvent = e));
@@ -498,7 +498,7 @@ describe('keyboard navigation', () => {
 
     it('should be possible to exit grid with shift+tab', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
-      tabbableElements[1].focus(); // focus header cell
+      tabbableElements[1].focus(); // Focus header cell
 
       let keydownEvent;
       listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => (keydownEvent = e));
@@ -513,7 +513,7 @@ describe('keyboard navigation', () => {
     it('should be possible to enter grid with tab', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
 
-      // focusin on table element — same as tab from above the grid
+      // Focusin on table element — same as tab from above the grid
       focusin(tabbableElements[0], focusable);
 
       // Expect programmatic focus on header cell
@@ -523,7 +523,7 @@ describe('keyboard navigation', () => {
     it('should be possible to enter grid with shift+tab', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
 
-      // focusin on focusexit element — same as shift+tab from below the grid
+      // Focusin on focusexit element — same as shift+tab from below the grid
       focusin(tabbableElements[4], focusable);
 
       // Expect programmatic focus on footer cell
@@ -815,8 +815,8 @@ describe('keyboard navigation', () => {
       }
 
       it('should not navigate to row details with right arrow', () => {
-        right(); // index 1
-        right(); // index 2
+        right(); // Index 1
+        right(); // Index 2
 
         right();
         expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(
@@ -991,7 +991,7 @@ describe('keyboard navigation', () => {
 
     describe('horizontal scrolling', () => {
       beforeEach(() => {
-        grid.style.width = '100px'; // column default min width is 100px
+        grid.style.width = '100px'; // Column default min width is 100px
       });
 
       it('should scroll cells visible with right arrow on header', () => {
@@ -1076,7 +1076,7 @@ describe('keyboard navigation', () => {
 
       it('should scroll cell visible under from frozen cells with left arrow', async () => {
         const scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
-        grid.style.width = `${200 + scrollbarWidth}px`; // column default min width is 100px
+        grid.style.width = `${200 + scrollbarWidth}px`; // Column default min width is 100px
         grid.style.border = 'none';
         grid._columnTree[0][0].frozen = true;
 
@@ -1090,7 +1090,7 @@ describe('keyboard navigation', () => {
 
       it('should scroll cell visible under from frozen to end cells with right arrow', async () => {
         const scrollbarWidth = grid.$.table.offsetWidth - grid.$.table.clientWidth;
-        grid.style.width = `${200 + scrollbarWidth}px`; // column default min width is 100px
+        grid.style.width = `${200 + scrollbarWidth}px`; // Column default min width is 100px
         grid.style.border = 'none';
         grid._columnTree[0][2].frozenToEnd = true;
         await aTimeout(0);
@@ -1173,7 +1173,7 @@ describe('keyboard navigation', () => {
 
         pageDown();
 
-        expect(getLastVisibleItem(grid).index).to.be.gt(1); // sanity check
+        expect(getLastVisibleItem(grid).index).to.be.gt(1); // Sanity check
         expect(getFocusedRowIndex()).to.equal(previousLastVisibleIndex - 1);
       });
 
@@ -1287,7 +1287,7 @@ describe('keyboard navigation', () => {
 
     it('should deactivate item on space keydown', () => {
       focusItem(0);
-      clickItem(0); // activates first item on click
+      clickItem(0); // Activates first item on click
 
       spaceDown();
 
@@ -1568,7 +1568,7 @@ describe('keyboard navigation', () => {
       const input = getCellContent(cell).children[0];
       const spy = sinon.spy(input, 'focus');
 
-      right(); // focus the cell with input.
+      right(); // Focus the cell with input.
 
       enter();
 
@@ -1581,7 +1581,7 @@ describe('keyboard navigation', () => {
       const input = getCellContent(cell).children[0];
       input.type = 'text';
 
-      right(); // focus the cell with input.
+      right(); // Focus the cell with input.
       enter();
 
       enter(input);
@@ -1594,7 +1594,7 @@ describe('keyboard navigation', () => {
       const input = getCellContent(cell).children[0];
       input.type = 'button';
 
-      right(); // focus the cell with input.
+      right(); // Focus the cell with input.
       enter();
 
       enter(input);
@@ -1607,7 +1607,7 @@ describe('keyboard navigation', () => {
       const input = getCellContent(cell).children[0];
       const spy = sinon.spy(input, 'focus');
 
-      right(); // focus the cell with input.
+      right(); // Focus the cell with input.
 
       f2();
       expect(spy.callCount).to.equal(1);
@@ -1662,7 +1662,7 @@ describe('keyboard navigation', () => {
       input.parentElement.insertBefore(div, input);
       input.setAttribute('focus-target', '');
 
-      right(); // focus the cell with input.
+      right(); // Focus the cell with input.
 
       enter();
 
@@ -1826,10 +1826,10 @@ describe('keyboard navigation', () => {
     it('should remove focus from cell with escape', () => {
       const input = focusFirstBodyInput(0);
 
-      escape(input); // revert to navigation first
+      escape(input); // Revert to navigation first
 
-      escape(); // unfortunately this does not trigger native blur
-      focusable.focus(); // simulate native blur on escape
+      escape(); // Unfortunately this does not trigger native blur
+      focusable.focus(); // Simulate native blur on escape
 
       expect(grid.hasAttribute('navigating')).to.be.false;
     });
@@ -1856,7 +1856,7 @@ describe('keyboard navigation', () => {
       grid.removeAttribute('interacting');
 
       escape();
-      focusable.focus(); // simulate native blur on escape
+      focusable.focus(); // Simulate native blur on escape
 
       expect(grid.hasAttribute('navigating')).to.be.false;
     });

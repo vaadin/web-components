@@ -582,12 +582,12 @@ describe('lazy loading', () => {
 
       it('should set selectedItem matching value when items are loading', () => {
         comboBox.value = 'item 0';
-        comboBox.opened = true; // loads first page of dataProvider items
+        comboBox.opened = true; // Loads first page of dataProvider items
         expect(comboBox.selectedItem).to.equal('item 0');
       });
 
       it('should set selectedItem matching value when items are loaded', () => {
-        comboBox.opened = true; // loads first page of dataProvider items
+        comboBox.opened = true; // Loads first page of dataProvider items
         comboBox.value = 'item 0';
         expect(comboBox.selectedItem).to.equal('item 0');
       });
@@ -631,7 +631,7 @@ describe('lazy loading', () => {
 
       it('should set matching selectedItem when items are loading', () => {
         comboBox.value = 'value 0';
-        comboBox.opened = true; // loads first page of dataProvider items
+        comboBox.opened = true; // Loads first page of dataProvider items
         expect(comboBox.selectedItem).to.eql({ id: 0, value: 'value 0', label: 'label 0' });
       });
 
@@ -652,7 +652,7 @@ describe('lazy loading', () => {
       });
 
       it('should set matching selectedItem when items are loaded', () => {
-        comboBox.opened = true; // loads first page of dataProvider items
+        comboBox.opened = true; // Loads first page of dataProvider items
         comboBox.value = 'value 0';
         expect(comboBox.selectedItem).to.eql({ id: 0, value: 'value 0', label: 'label 0' });
       });
@@ -686,7 +686,7 @@ describe('lazy loading', () => {
         expect(comboBox.value).to.equal('item 0');
         flushComboBox(comboBox);
         const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
-        // doesn't work when run on SauceLabs, work locally
+        // Doesn't work when run on SauceLabs, work locally
         // expect(selectedRenderedItemElements).to.have.lengthOf(1);
         expect(selectedRenderedItemElements[0].item).to.equal('item 0');
       });
@@ -725,7 +725,7 @@ describe('lazy loading', () => {
         // Wait for the timeout in __loadingChanged to finish
         await aTimeout(0);
         const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
-        // doesn't work when run on SauceLabs, work locally
+        // Doesn't work when run on SauceLabs, work locally
         // expect(selectedRenderedItemElements).to.have.lengthOf(1);
         expect(selectedRenderedItemElements[0].item).to.eql({ id: 0, value: 'value 0', label: 'label 0' });
       });
@@ -743,7 +743,7 @@ describe('lazy loading', () => {
         comboBox.opened = true;
         await nextFrame();
         const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
-        // doesn't work when run on SauceLabs, work locally
+        // Doesn't work when run on SauceLabs, work locally
         // expect(selectedRenderedItemElements).to.have.lengthOf(1);
         expect(selectedRenderedItemElements[0].item).to.eql({ id: 0, value: 'value 0', label: 'label 0' });
       });
@@ -765,7 +765,7 @@ describe('lazy loading', () => {
         comboBox.opened = true;
         await nextFrame();
         const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
-        // doesn't work when run on SauceLabs, work locally
+        // Doesn't work when run on SauceLabs, work locally
         // expect(selectedRenderedItemElements).to.have.lengthOf(1);
         expect(selectedRenderedItemElements[0].item).to.eql({
           id: 0,
@@ -1013,7 +1013,7 @@ describe('lazy loading', () => {
         comboBox.opened = true;
         comboBox.$.dropdown._scrollIntoView(targetItemIndex);
         comboBox.size = 300;
-        // verify whether the scroller not jumped to 0 pos and restored properly,
+        // Verify whether the scroller not jumped to 0 pos and restored properly,
         // having the item with 'targetItemIndex' in the bottom
         // (exact visible items may vary depending of window size),
         // and sometimes the 'ironList.scrollToIndex' does not point

@@ -84,7 +84,7 @@ class GridProEditSelect extends Select {
   _valueChanged(value, oldValue) {
     super._valueChanged(value, oldValue);
 
-    // select is first created without a value
+    // Select is first created without a value
     if (value === '' && oldValue === undefined) {
       return;
     }
@@ -125,7 +125,7 @@ class GridProEditSelect extends Select {
       // see https://github.com/vaadin/vaadin-list-mixin/issues/49
       setTimeout(() => {
         this.opened = true;
-        // any value change after first open will stop edit
+        // Any value change after first open will stop edit
         this._initialized = true;
       });
     }

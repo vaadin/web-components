@@ -365,7 +365,7 @@ describe('sorting', () => {
       });
 
       it('should remove order from sorters', () => {
-        // initial order before multiSort was set
+        // Initial order before multiSort was set
         expect(sorterLast._order).to.eql(0);
         expect(sorterFirst._order).to.eql(1);
 

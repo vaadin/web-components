@@ -539,7 +539,7 @@ class DateTimePicker extends FieldMixin(
       this.__syncI18n(this, newDatePicker, datePickerI18nProps);
     }
 
-    // min and max are always synchronized from date time picker (host) to inner fields because time picker
+    // Min and max are always synchronized from date time picker (host) to inner fields because time picker
     // min and max need to be dynamically set depending on currently selected date instead of simple propagation
     newDatePicker.min = this.__formatDateISO(this.__minDateTime, this.__defaultDateMinMaxValue);
     newDatePicker.max = this.__formatDateISO(this.__maxDateTime, this.__defaultDateMinMaxValue);
@@ -579,7 +579,7 @@ class DateTimePicker extends FieldMixin(
       this.__syncI18n(this, newTimePicker, timePickerI18nProps);
     }
 
-    // min and max are always synchronized from parent to slotted because time picker min and max
+    // Min and max are always synchronized from parent to slotted because time picker min and max
     // need to be dynamically set depending on currently selected date instead of simple propagation
     this.__updateTimePickerMinMax();
     newTimePicker.required = this.required;

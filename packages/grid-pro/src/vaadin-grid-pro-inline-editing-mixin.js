@@ -63,20 +63,20 @@ export const InlineEditingMixin = (superClass) =>
       this.__boundGlobalFocusIn = this._onGlobalFocusIn.bind(this);
 
       this._addEditColumnListener('mousedown', (e) => {
-        // prevent grid from resetting navigating state
+        // Prevent grid from resetting navigating state
         e.stopImmediatePropagation();
         this.toggleAttribute('navigating', true);
       });
 
       this._addEditColumnListener('focusout', (e) => {
-        // prevent grid from resetting navigating state
+        // Prevent grid from resetting navigating state
         e.stopImmediatePropagation();
       });
     }
 
     /** @protected */
     ready() {
-      // add listener before `vaadin-grid` interaction mode listener
+      // Add listener before `vaadin-grid` interaction mode listener
       this.addEventListener('keydown', (e) => {
         switch (e.keyCode) {
           case 27:
@@ -129,7 +129,7 @@ export const InlineEditingMixin = (superClass) =>
         }
       });
 
-      // dblclick does not work on iOS Safari
+      // Dblclick does not work on iOS Safari
       if (this._ios) {
         let firstClickTime;
         let waitingSecondClick = false;
@@ -245,7 +245,7 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @private */
     _cancelStopEdit() {
-      // stop edit on outside click will always trigger notify resize.
+      // Stop edit on outside click will always trigger notify resize.
       // when tabbing within same row it might not be needed, so cancel
       if (this._debouncerStopEdit) {
         this._debouncerStopEdit.cancel();
@@ -293,7 +293,7 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @private */
     _onEditorFocusOut() {
-      // schedule stop on editor component focusout
+      // Schedule stop on editor component focusout
       this._debouncerStopEdit = Debouncer.debounce(this._debouncerStopEdit, animationFrame, this._stopEdit.bind(this));
     }
 
@@ -306,7 +306,7 @@ export const InlineEditingMixin = (superClass) =>
     _onGlobalFocusIn(e) {
       const edited = this.__edited;
       if (edited) {
-        // detect focus moving to e.g. vaadin-select-overlay
+        // Detect focus moving to e.g. vaadin-select-overlay
         const overlay = Array.from(e.composedPath()).filter(
           (node) => node.nodeType === Node.ELEMENT_NODE && /^vaadin-(?!dialog).*-overlay$/i.test(node.localName),
         )[0];
@@ -324,7 +324,7 @@ export const InlineEditingMixin = (superClass) =>
       if (this.disabled || this._editingDisabled) {
         return;
       }
-      // cancel debouncer enqueued on focusout
+      // Cancel debouncer enqueued on focusout
       this._cancelStopEdit();
 
       this._scrollHorizontallyToCell(cell);
@@ -423,17 +423,17 @@ export const InlineEditingMixin = (superClass) =>
       let nextCol = null;
       let nextIdx = index;
 
-      // enter key
+      // Enter key
       if (e.keyCode === 13) {
         nextCol = column;
 
-        // move up / down
+        // Move up / down
         if (this.enterNextRow) {
           nextIdx = e.shiftKey ? index - 1 : index + 1;
         }
       }
 
-      // tab: move right / left
+      // Tab: move right / left
       if (e.keyCode === 9) {
         if (e.shiftKey) {
           if (cols[colIndex - 1]) {
@@ -458,7 +458,7 @@ export const InlineEditingMixin = (superClass) =>
         const nextCell = Array.from(nextRow.children).filter((cell) => cell._column === nextCol)[0];
         e.preventDefault();
 
-        // prevent vaadin-grid handler from being called
+        // Prevent vaadin-grid handler from being called
         e.stopImmediatePropagation();
 
         if (!this.singleCellEdit && nextCell !== cell) {

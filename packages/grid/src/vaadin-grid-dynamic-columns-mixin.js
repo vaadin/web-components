@@ -16,7 +16,7 @@ function arrayEquals(arr1, arr2) {
   for (let i = 0, l = arr1.length; i < l; i++) {
     // Check if we have nested arrays
     if (arr1[i] instanceof Array && arr2[i] instanceof Array) {
-      // recurse into the nested arrays
+      // Recurse into the nested arrays
       if (!arrayEquals(arr1[i], arr2[i])) {
         return false;
       }

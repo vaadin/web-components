@@ -5,10 +5,10 @@ const axios = require('axios');
 
 dotenv.config();
 
-// if DRY_RUN then no actual changes are made
+// If DRY_RUN then no actual changes are made
 const DRY_RUN = process.env.PRODUCTION_RUN !== 'true';
 
-// if TEST_ON_SINGLE_ISSUE then only the special test issue is affected
+// If TEST_ON_SINGLE_ISSUE then only the special test issue is affected
 // (see https://github.com/vaadin/magi-cli/issues/142)
 const TEST_ON_SINGLE_ISSUE = process.env.TEST_ON_SINGLE_ISSUE === 'true';
 
@@ -27,7 +27,7 @@ const zhApi = axios.create({
 // The packages listed here will be skipped by this script.
 // All issues opened in that repos will remain untouched.
 const EXCLUDED_PACKAGES = [
-  // do not exclude even though it's managed by the CE team
+  // Do not exclude even though it's managed by the CE team
   // https://vaadin.slack.com/archives/C01MHLE0FN3/p1621246586005600
   // 'vaadin-messages'
 ];
@@ -38,7 +38,7 @@ const TARGET_REPO = {
   owner: 'vaadin',
 };
 
-// moslty useful for testing to limit the scope when running this script
+// Moslty useful for testing to limit the scope when running this script
 let shouldExcludeIssue = () => false;
 if (TEST_ON_SINGLE_ISSUE) {
   // Run a small-scale test with a signle issue only
@@ -48,7 +48,7 @@ if (TEST_ON_SINGLE_ISSUE) {
   };
 }
 
-// moslty useful for testing to limit the scope when running this script
+// Moslty useful for testing to limit the scope when running this script
 let shouldExcludeRepo = () => false;
 if (TEST_ON_SINGLE_ISSUE) {
   // Run a small-scale test with a signle issue only
@@ -91,7 +91,7 @@ async function getSourceReposList() {
   );
 
   return repos
-    .filter((repo) => !!repo) // remove skipped packages from the list
+    .filter((repo) => !!repo) // Remove skipped packages from the list
     .filter((repo) => {
       const skip = shouldExcludeRepo(repo);
       if (skip) {
@@ -256,7 +256,7 @@ async function makeRepoLabelsMap(repo) {
     },
   };
 
-  // fetch the list of all existing labels on the target repo
+  // Fetch the list of all existing labels on the target repo
   const iterator = octokit.paginate.iterator(octokit.rest.issues.listLabelsForRepo, {
     owner: repo.owner.login,
     repo: repo.name,
@@ -309,11 +309,11 @@ async function main() {
         per_page: 100,
       });
 
-      // iterate through each page of issues
+      // Iterate through each page of issues
       for await (const { data: issues } of iterator) {
-        // iterate through each issue in a page
+        // Iterate through each issue in a page
         for (const issue of issues) {
-          // do not transfer open PRs
+          // Do not transfer open PRs
           if (issue.html_url.indexOf('/pull/') > -1) {
             continue;
           }
@@ -324,7 +324,7 @@ async function main() {
           }
 
           const [{ data: labels }, zhIssue] = await Promise.all([
-            // fetch all labels on the issue
+            // Fetch all labels on the issue
             // (no need for pagination as there is never too many)
             octokit.rest.issues.listLabelsOnIssue({
               owner: repo.owner.login,
@@ -360,7 +360,7 @@ async function main() {
 
           const transferredIssue = await transferIssue(issue, targetRepo);
 
-          // add the original repo name as an extra label on the transferred issue
+          // Add the original repo name as an extra label on the transferred issue
           // (but use the 'theme' label for styles issues)
           labels.push(
             ['vaadin-lumo-styles', 'vaadin-material-styles'].indexOf(repo.name) > -1

@@ -135,7 +135,7 @@ class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(PolymerElement
     super.ready();
     const uniqueId = (Details._uniqueId = 1 + Details._uniqueId || 0);
     this._contentId = `${this.constructor.is}-content-${uniqueId}`;
-    // prevent Shift + Tab on content from host blur
+    // Prevent Shift + Tab on content from host blur
     this._collapsible.addEventListener('keydown', (e) => {
       if (e.shiftKey && e.keyCode === 9) {
         e.stopPropagation();

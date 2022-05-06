@@ -593,12 +593,12 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       labelItem = selected.cloneNode(true);
     }
 
-    // store reference to the original item
+    // Store reference to the original item
     labelItem._sourceItem = selected;
 
     this.__appendValueItemElement(labelItem);
 
-    // ensure the item gets proper styles
+    // Ensure the item gets proper styles
     labelItem.selected = true;
   }
 

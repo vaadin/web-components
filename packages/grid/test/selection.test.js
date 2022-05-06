@@ -352,7 +352,7 @@ describe('multi selection column', () => {
     expect(selectAllCheckbox.indeterminate).to.be.true;
   });
 
-  // iOS needs both to show the indeterminate status
+  // IOS needs both to show the indeterminate status
   it('should have indeterminate and select-all when an item is selected', () => {
     expect(selectAllCheckbox.checked).to.be.false;
     expect(selectAllCheckbox.indeterminate).not.to.be.ok;

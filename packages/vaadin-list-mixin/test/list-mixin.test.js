@@ -114,7 +114,7 @@ describe('vaadin-list-mixin', () => {
     });
 
     it('`focus` should flush the `_observer` if it is called too soon', () => {
-      // focus flushes the observer in order to be run in 3rd party elements initialization
+      // Focus flushes the observer in order to be run in 3rd party elements initialization
       list.focus();
       expect(list.items.length).to.be.equal(3);
     });

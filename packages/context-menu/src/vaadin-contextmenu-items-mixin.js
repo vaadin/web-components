@@ -139,7 +139,7 @@ export const ItemsMixin = (superClass) =>
     __forwardFocus() {
       const overlay = this.$.overlay;
       const child = overlay.getFirstChild();
-      // if parent item is not focused, do not focus submenu
+      // If parent item is not focused, do not focus submenu
       if (overlay.parentOverlay) {
         const parent = overlay.parentOverlay.querySelector('[expanded]');
         if (parent && parent.hasAttribute('focused') && child) {

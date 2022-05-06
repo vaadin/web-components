@@ -776,7 +776,7 @@ export const ironList = {
       this._physicalTop -= deltaHeight;
       // This may be called outside of a scrollHandler, so use last cached position
       var scrollTop = this._scrollPosition;
-      // juking scroll position during interial scrolling on iOS is no bueno
+      // Juking scroll position during interial scrolling on iOS is no bueno
       if (!IOS_TOUCH_SCROLLING && scrollTop > 0) {
         this._resetScrollPosition(scrollTop - deltaHeight);
       }
@@ -847,7 +847,7 @@ export const ironList = {
     var currentVirtualItem = this._virtualStart;
     var targetOffsetTop = 0;
     var hiddenContentSize = this._hiddenContentSize;
-    // scroll to the item as much as we can.
+    // Scroll to the item as much as we can.
     while (currentVirtualItem < idx && targetOffsetTop <= hiddenContentSize) {
       targetOffsetTop += this._getPhysicalSizeIncrement(currentTopItem);
       currentTopItem = (currentTopItem + 1) % this._physicalCount;
@@ -857,7 +857,7 @@ export const ironList = {
     this._positionItems();
     this._resetScrollPosition(this._physicalTop + this._scrollOffset + targetOffsetTop);
     this._increasePoolIfNeeded(0);
-    // clear cached visible index.
+    // Clear cached visible index.
     this._firstVisibleIndexVal = null;
     this._lastVisibleIndexVal = null;
   },
@@ -878,7 +878,7 @@ export const ironList = {
     this._debounce(
       '_render',
       () => {
-        // clear cached visible index.
+        // Clear cached visible index.
         this._firstVisibleIndexVal = null;
         this._lastVisibleIndexVal = null;
         if (this._isVisible) {
@@ -926,7 +926,7 @@ export const ironList = {
    * Allows for better order and fill computation when grid == true.
    */
   _convertIndexToCompleteRow: function (idx) {
-    // when grid == false _itemPerRow can be unset.
+    // When grid == false _itemPerRow can be unset.
     this._itemsPerRow = this._itemsPerRow || 1;
     return this.grid ? Math.ceil(idx / this._itemsPerRow) * this._itemsPerRow : idx;
   },

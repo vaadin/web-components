@@ -469,14 +469,14 @@ export const ComboBoxMixin = (subclass) =>
         this._onArrowDown();
         this._closeOnBlurIsPrevented = false;
 
-        // prevent caret from moving
+        // Prevent caret from moving
         e.preventDefault();
       } else if (e.key === 'ArrowUp') {
         this._closeOnBlurIsPrevented = true;
         this._onArrowUp();
         this._closeOnBlurIsPrevented = false;
 
-        // prevent caret from moving
+        // Prevent caret from moving
         e.preventDefault();
       } else if (e.key === 'Enter') {
         this._onEnter(e);
@@ -576,7 +576,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _onEnter(e) {
-      // do not commit value when custom values are disallowed and input value is not a valid option
+      // Do not commit value when custom values are disallowed and input value is not a valid option
       // also stop propagation of the event, otherwise the user could submit a form while the input
       // still contains an invalid value
       if (!this.allowCustomValue && this._inputElementValue !== '' && this._focusedIndex < 0) {
@@ -587,7 +587,7 @@ export const ComboBoxMixin = (subclass) =>
         return;
       }
 
-      // stop propagation of the enter event only if the dropdown is opened, this
+      // Stop propagation of the enter event only if the dropdown is opened, this
       // "consumes" the enter event for the action of closing the dropdown
       if (this.opened) {
         // Do not submit the surrounding form.
@@ -704,7 +704,7 @@ export const ComboBoxMixin = (subclass) =>
         if (this.selectedItem !== focusedItem) {
           this.selectedItem = focusedItem;
         }
-        // make sure input field is updated in case value doesn't change (i.e. FOO -> foo)
+        // Make sure input field is updated in case value doesn't change (i.e. FOO -> foo)
         this._inputElementValue = this._getItemLabel(this.selectedItem);
       } else if (this._inputElementValue === '' || this._inputElementValue === undefined) {
         this.selectedItem = null;
@@ -723,7 +723,7 @@ export const ComboBoxMixin = (subclass) =>
 
         if (
           this.allowCustomValue &&
-          // to prevent a repetitive input value being saved after pressing ESC and Tab.
+          // To prevent a repetitive input value being saved after pressing ESC and Tab.
           !itemMatchingByLabel
         ) {
           const customValue = this._inputElementValue;
@@ -1057,7 +1057,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _overlaySelectedItemChanged(e) {
-      // stop this private event from leaking outside.
+      // Stop this private event from leaking outside.
       e.stopPropagation();
 
       if (e.detail.item instanceof ComboBoxPlaceholder) {

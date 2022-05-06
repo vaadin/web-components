@@ -1061,7 +1061,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     ) {
       this.$.confirmCancel.opened = true;
       const listenOnce = (event) => {
-        event.preventDefault(); // prevent editor to get closed
+        event.preventDefault(); // Prevent editor to get closed
         if (item || keepOpened) {
           this.__edit(item);
           this.__clearItemAndKeepEditorOpened(item, keepOpened);

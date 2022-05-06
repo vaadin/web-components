@@ -68,7 +68,7 @@ export const FocusMixin = dedupingMixin(
       disconnectedCallback() {
         super.disconnectedCallback();
 
-        // in non-Chrome browsers, blur does not fire on the element when it is disconnected.
+        // In non-Chrome browsers, blur does not fire on the element when it is disconnected.
         // reproducible in `<vaadin-date-picker>` when closing on `Cancel` or `Today` click.
         if (this.hasAttribute('focused')) {
           this._setFocused(false);
@@ -84,7 +84,7 @@ export const FocusMixin = dedupingMixin(
       _setFocused(focused) {
         this.toggleAttribute('focused', focused);
 
-        // focus-ring is true when the element was focused from the keyboard.
+        // Focus-ring is true when the element was focused from the keyboard.
         // Focus Ring [A11ycasts]: https://youtu.be/ilj2P5-5CjI
         this.toggleAttribute('focus-ring', focused && this._keyboardActive);
       }

@@ -160,7 +160,7 @@ export const InteractionsMixin = (superClass) =>
           idx = buttons.length - 1;
           break;
         default:
-        // do nothing.
+        // Do nothing.
       }
 
       idx = this._getAvailableIndex(idx, increment, buttons);
@@ -334,7 +334,7 @@ export const InteractionsMixin = (superClass) =>
       }
 
       this.__onceOpened(() => {
-        // do not focus item when open not from keyboard
+        // Do not focus item when open not from keyboard
         if (event.type !== 'keydown') {
           subMenu.$.overlay.$.overlay.focus();
         }

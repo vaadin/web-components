@@ -8,7 +8,7 @@ import { isSafari } from './browser-utils.js';
 import { Debouncer, flush } from './debounce.js';
 import { ironList } from './iron-list-core.js';
 
-// iron-list can by default handle sizes up to around 100000.
+// Iron-list can by default handle sizes up to around 100000.
 // When the size is larger than MAX_VIRTUAL_COUNT _vidxOffset is used
 const MAX_VIRTUAL_COUNT = 100000;
 const OFFSET_ADJUST_MIN_THRESHOLD = 1000;
@@ -172,8 +172,8 @@ export class IronListAdapter {
     this.__preventElementUpdates = true;
 
     // Record the scroll position before changing the size
-    let fvi; // first visible index
-    let fviOffsetBefore; // scroll offset of the first visible index
+    let fvi; // First visible index
+    let fviOffsetBefore; // Scroll offset of the first visible index
     if (size > 0) {
       fvi = this.adjustedFirstVisibleIndex;
       fviOffsetBefore = this.__getIndexScrollOffset(fvi);

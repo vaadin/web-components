@@ -597,7 +597,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     const xhr = (file.xhr = this._createXhr());
 
     let stalledId, last;
-    // onprogress is called always after onreadystatechange
+    // Onprogress is called always after onreadystatechange
     xhr.upload.onprogress = (e) => {
       clearTimeout(stalledId);
 

@@ -45,13 +45,13 @@ export class DatePickerObserver extends ComponentObserver {
 
   onFocusIn(event) {
     if (event.relatedTarget === this.overlay) {
-      // focus returns from the overlay, do nothing.
+      // Focus returns from the overlay, do nothing.
       return;
     }
 
     if (this.blurWhileOpened) {
       this.blurWhileOpened = false;
-      // focus returns from outside the browser tab, ignore.
+      // Focus returns from outside the browser tab, ignore.
       return;
     }
 
@@ -60,9 +60,9 @@ export class DatePickerObserver extends ComponentObserver {
 
   onFocusOut(event) {
     if (this.fullscreenFocus || event.relatedTarget === this.overlay) {
-      // do nothing, overlay is opening.
+      // Do nothing, overlay is opening.
     } else if (!this.datePicker.opened) {
-      // field blur when closed.
+      // Field blur when closed.
       this.hideOutline(this.datePicker);
     } else {
       // Focus moves away while still opened, e.g. outside the browser.
@@ -84,7 +84,7 @@ export class DatePickerObserver extends ComponentObserver {
       this.showOutline(this.datePicker);
     }
 
-    // closing after previously moving focus away.
+    // Closing after previously moving focus away.
     if (event.detail.value === false && this.blurWhileOpened) {
       this.blurWhileOpened = false;
       this.hideOutline(this.datePicker);

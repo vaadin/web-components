@@ -318,8 +318,8 @@ export const ColumnReorderingMixin = (superClass) =>
         const differentColumns = column1 !== column2;
         const sameParent = column1.parentElement === column2.parentElement;
         const sameFrozen =
-          (column1.frozen && column2.frozen) || // both columns are frozen
-          (column1.frozenToEnd && column2.frozenToEnd) || // both columns are frozen to end
+          (column1.frozen && column2.frozen) || // Both columns are frozen
+          (column1.frozenToEnd && column2.frozenToEnd) || // Both columns are frozen to end
           (!column1.frozen && !column1.frozenToEnd && !column2.frozen && !column2.frozenToEnd);
         return differentColumns && sameParent && sameFrozen;
       }

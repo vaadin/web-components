@@ -10,7 +10,7 @@ import { createItems, flushGrid, getCellEditor, getContainerCell, outsideClick }
 async function clickOverlay(element) {
   focusout(element);
 
-  // add a microTask in between
+  // Add a microTask in between
   await Promise.resolve();
 
   focusin(element.$.overlay);
@@ -55,7 +55,7 @@ const fixtures = {
       dialog = fixtureSync(fixtures[type]);
       grid = dialog.$.overlay.querySelector('vaadin-grid-pro');
       grid.items = createItems();
-      grid.style.width = '100px'; // column default min width is 100px
+      grid.style.width = '100px'; // Column default min width is 100px
       flushGrid(grid);
 
       dateCell = getContainerCell(grid.$.items, 0, 1);

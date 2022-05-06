@@ -32,7 +32,7 @@ function parseObserver(observerString) {
 
 function getOrCreateMap(obj, name) {
   if (!Object.prototype.hasOwnProperty.call(obj, name)) {
-    // clone any existing entries (superclasses)
+    // Clone any existing entries (superclasses)
     obj[name] = new Map(obj[name]);
   }
   return obj[name];
@@ -123,7 +123,7 @@ const PolylitMixinImplementation = (superclass) => {
       if (options.observer) {
         const method = options.observer;
 
-        // set this method
+        // Set this method
         this.getOrCreateMap('__observers').set(name, method);
 
         this.addCheckedInitializer((instance) => {
@@ -138,12 +138,12 @@ const PolylitMixinImplementation = (superclass) => {
           this.__notifyProps = new Set();
           // eslint-disable-next-line no-prototype-builtins
         } else if (!this.hasOwnProperty('__notifyProps')) {
-          // clone any existing observers (superclasses)
+          // Clone any existing observers (superclasses)
           const notifyProps = this.__notifyProps;
           this.__notifyProps = new Set(notifyProps);
         }
 
-        // set this method
+        // Set this method
         this.__notifyProps.add(name);
       }
 

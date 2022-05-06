@@ -26,19 +26,19 @@ import { microTask } from './async.js';
 const passiveTouchGestures = false;
 const wrap = (node) => node;
 
-// detect native touch action support
+// Detect native touch action support
 const HAS_NATIVE_TA = typeof document.head.style.touchAction === 'string';
 const GESTURE_KEY = '__polymerGestures';
 const HANDLED_OBJ = '__polymerGesturesHandled';
 const TOUCH_ACTION = '__polymerGesturesTouchAction';
-// radius for tap and track
+// Radius for tap and track
 const TAP_DISTANCE = 25;
 const TRACK_DISTANCE = 5;
-// number of last N track positions to keep
+// Number of last N track positions to keep
 const TRACK_LENGTH = 2;
 
 const MOUSE_EVENTS = ['mousedown', 'mousemove', 'mouseup', 'click'];
-// an array of bitmask values for mapping MouseEvent.which to MouseEvent.buttons
+// An array of bitmask values for mapping MouseEvent.which to MouseEvent.buttons
 const MOUSE_WHICH_TO_BUTTONS = [0, 1, 4, 2];
 const MOUSE_HAS_BUTTONS = (function () {
   try {
@@ -112,47 +112,47 @@ const canBeDisabled = {
  */
 function hasLeftMouseButton(ev) {
   const type = ev.type;
-  // exit early if the event is not a mouse event
+  // Exit early if the event is not a mouse event
   if (!isMouseEvent(type)) {
     return false;
   }
-  // ev.button is not reliable for mousemove (0 is overloaded as both left button and no buttons)
+  // Ev.button is not reliable for mousemove (0 is overloaded as both left button and no buttons)
   // instead we use ev.buttons (bitmask of buttons) or fall back to ev.which (deprecated, 0 for no buttons, 1 for left button)
   if (type === 'mousemove') {
-    // allow undefined for testing events
+    // Allow undefined for testing events
     let buttons = ev.buttons === undefined ? 1 : ev.buttons;
     if (ev instanceof window.MouseEvent && !MOUSE_HAS_BUTTONS) {
       buttons = MOUSE_WHICH_TO_BUTTONS[ev.which] || 0;
     }
-    // buttons is a bitmask, check that the left button bit is set (1)
+    // Buttons is a bitmask, check that the left button bit is set (1)
     return Boolean(buttons & 1);
   }
-  // allow undefined for testing events
+  // Allow undefined for testing events
   const button = ev.button === undefined ? 0 : ev.button;
-  // ev.button is 0 in mousedown/mouseup/click for left button activation
+  // Ev.button is 0 in mousedown/mouseup/click for left button activation
   return button === 0;
 }
 
 function isSyntheticClick(ev) {
   if (ev.type === 'click') {
-    // ev.detail is 0 for HTMLElement.click in most browsers
+    // Ev.detail is 0 for HTMLElement.click in most browsers
     if (ev.detail === 0) {
       return true;
     }
-    // in the worst case, check that the x/y position of the click is within
+    // In the worst case, check that the x/y position of the click is within
     // the bounding box of the target of the event
     // Thanks IE 10 >:(
     const t = _findOriginalTarget(ev);
-    // make sure the target of the event is an element so we can use getBoundingClientRect,
+    // Make sure the target of the event is an element so we can use getBoundingClientRect,
     // if not, just assume it is a synthetic click
     if (!t.nodeType || /** @type {Element} */ (t).nodeType !== Node.ELEMENT_NODE) {
       return true;
     }
     const bcr = /** @type {Element} */ (t).getBoundingClientRect();
-    // use page x/y to account for scrolling
+    // Use page x/y to account for scrolling
     const x = ev.pageX,
       y = ev.pageY;
-    // ev is a synthetic click if the position is outside the bounding box of the target
+    // Ev is a synthetic click if the position is outside the bounding box of the target
     return !(x >= bcr.left && x <= bcr.right && y >= bcr.top && y <= bcr.bottom);
   }
   return false;
@@ -228,14 +228,14 @@ export const recognizers = [];
 export function deepTargetFind(x, y) {
   let node = document.elementFromPoint(x, y);
   let next = node;
-  // this code path is only taken when native ShadowDOM is used
+  // This code path is only taken when native ShadowDOM is used
   // if there is a shadowroot, it may have a node at x/y
   // if there is not a shadowroot, exit the loop
   while (next && next.shadowRoot && !window.ShadyDOM) {
-    // if there is a node at x/y in the shadowroot, look deeper
+    // If there is a node at x/y in the shadowroot, look deeper
     const oldNext = next;
     next = next.shadowRoot.elementFromPoint(x, y);
-    // on Safari, elementFromPoint may return the shadowRoot host
+    // On Safari, elementFromPoint may return the shadowRoot host
     if (oldNext === next) {
       break;
     }
@@ -247,7 +247,7 @@ export function deepTargetFind(x, y) {
 }
 
 /**
- * a cheaper check than ev.composedPath()[0];
+ * A cheaper check than ev.composedPath()[0];
  *
  * @private
  * @param {Event|Touch} ev Event.
@@ -278,10 +278,10 @@ function _handleNative(ev) {
   if (!ev[HANDLED_OBJ]) {
     ev[HANDLED_OBJ] = {};
     if (type.slice(0, 5) === 'touch') {
-      // ev = /** @type {TouchEvent} */ (ev); // eslint-disable-line no-self-assign
+      // Ev = /** @type {TouchEvent} */ (ev); // eslint-disable-line no-self-assign
       const t = ev.changedTouches[0];
       if (type === 'touchstart') {
-        // only handle the first finger
+        // Only handle the first finger
         if (ev.touches.length === 1) {
           POINTERSTATE.touch.id = t.identifier;
         }
@@ -297,11 +297,11 @@ function _handleNative(ev) {
     }
   }
   const handled = ev[HANDLED_OBJ];
-  // used to ignore synthetic mouse events
+  // Used to ignore synthetic mouse events
   if (handled.skip) {
     return;
   }
-  // reset recognizer state
+  // Reset recognizer state
   for (let i = 0, r; i < recognizers.length; i++) {
     r = recognizers[i];
     if (gs[r.name] && !handled[r.name]) {
@@ -310,7 +310,7 @@ function _handleNative(ev) {
       }
     }
   }
-  // enforce gesture recognizer order
+  // Enforce gesture recognizer order
   for (let i = 0, r; i < recognizers.length; i++) {
     r = recognizers[i];
     if (gs[r.name] && !handled[r.name]) {
@@ -342,7 +342,7 @@ function _handleTouchAction(ev) {
     const dx = Math.abs(POINTERSTATE.touch.x - t.clientX);
     const dy = Math.abs(POINTERSTATE.touch.y - t.clientY);
     if (!ev.cancelable) {
-      // scrolling is happening
+      // Scrolling is happening
     } else if (ta === 'none') {
       shouldPrevent = true;
     } else if (ta === 'pan-x') {
@@ -392,7 +392,7 @@ export function removeListener(node, evType, handler) {
 }
 
 /**
- * automate the event listeners for the native events
+ * Automate the event listeners for the native events
  *
  * @private
  * @param {!EventTarget} node Node on which to add the event.
@@ -410,7 +410,7 @@ function _add(node, evType, handler) {
   }
   for (let i = 0, dep, gd; i < deps.length; i++) {
     dep = deps[i];
-    // don't add mouse handlers on iOS because they cause gray selection overlays
+    // Don't add mouse handlers on iOS because they cause gray selection overlays
     if (IS_TOUCH_ONLY && isMouseEvent(dep) && dep !== 'click') {
       continue;
     }
@@ -431,7 +431,7 @@ function _add(node, evType, handler) {
 }
 
 /**
- * automate event listener removal for native events
+ * Automate event listener removal for native events
  *
  * @private
  * @param {!EventTarget} node Node on which to remove the event.
@@ -528,7 +528,7 @@ function _fire(target, type, detail) {
   const ev = new Event(type, { bubbles: true, cancelable: true, composed: true });
   ev.detail = detail;
   wrap(/** @type {!Node} */ (target)).dispatchEvent(ev);
-  // forward `preventDefault` in a clean way
+  // Forward `preventDefault` in a clean way
   if (ev.defaultPrevented) {
     const preventer = detail.preventer || detail.sourceEvent;
     if (preventer && preventer.preventDefault) {
@@ -699,15 +699,15 @@ register({
       const x = e.clientX,
         y = e.clientY;
       if (trackHasMovedEnough(self.info, x, y)) {
-        // first move is 'start', subsequent moves are 'move', mouseup is 'end'
+        // First move is 'start', subsequent moves are 'move', mouseup is 'end'
         self.info.state = self.info.started ? (e.type === 'mouseup' ? 'end' : 'track') : 'start';
         if (self.info.state === 'start') {
-          // if and only if tracking, always prevent tap
+          // If and only if tracking, always prevent tap
           prevent('tap');
         }
         self.info.addMove({ x: x, y: y });
         if (!hasLeftMouseButton(e)) {
-          // always fire "end"
+          // Always fire "end"
           self.info.state = 'end';
           untrackDocument(self.info);
         }
@@ -722,10 +722,10 @@ register({
         movefn(e);
       }
 
-      // remove the temporary listeners
+      // Remove the temporary listeners
       untrackDocument(self.info);
     };
-    // add temporary document listeners as mouse retargets
+    // Add temporary document listeners as mouse retargets
     trackDocument(this.info, movefn, upfn);
     this.info.x = e.clientX;
     this.info.y = e.clientY;
@@ -754,7 +754,7 @@ register({
       y = ct.clientY;
     if (trackHasMovedEnough(this.info, x, y)) {
       if (this.info.state === 'start') {
-        // if and only if tracking, always prevent tap
+        // If and only if tracking, always prevent tap
         prevent('tap');
       }
       this.info.addMove({ x: x, y: y });
@@ -772,9 +772,9 @@ register({
   touchend: function (e) {
     const t = _findOriginalTarget(e);
     const ct = e.changedTouches[0];
-    // only trackend if track was started and not aborted
+    // Only trackend if track was started and not aborted
     if (this.info.started) {
-      // reset started state on up
+      // Reset started state on up
       this.info.state = 'end';
       this.info.addMove({ x: ct.clientX, y: ct.clientY });
       trackFire(this.info, t, ct);
@@ -912,14 +912,14 @@ register({
 function trackForward(info, e, preventer) {
   const dx = Math.abs(e.clientX - info.x);
   const dy = Math.abs(e.clientY - info.y);
-  // find original target from `preventer` for TouchEvents, or `e` for MouseEvents
+  // Find original target from `preventer` for TouchEvents, or `e` for MouseEvents
   const t = _findOriginalTarget(preventer || e);
   if (!t || (canBeDisabled[/** @type {!HTMLElement} */ (t).localName] && t.hasAttribute('disabled'))) {
     return;
   }
-  // dx,dy can be NaN if `click` has been simulated and there was no `down` for `start`
+  // Dx,dy can be NaN if `click` has been simulated and there was no `down` for `start`
   if (isNaN(dx) || isNaN(dy) || (dx <= TAP_DISTANCE && dy <= TAP_DISTANCE) || isSyntheticClick(e)) {
-    // prevent taps from being generated if an event has canceled them
+    // Prevent taps from being generated if an event has canceled them
     if (!info.prevent) {
       _fire(t, 'tap', {
         x: e.clientX,

@@ -58,7 +58,7 @@ describe('multiple notification', () => {
       el.close();
       el._removeNotificationCard();
     });
-    // delete singleton reference, so as it's created in next test
+    // Delete singleton reference, so as it's created in next test
     delete notifications[0].constructor._container;
   });
 

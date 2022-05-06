@@ -242,7 +242,7 @@ describe('rich text editor', () => {
             done();
           });
 
-          // trigger mock image upload
+          // Trigger mock image upload
           fileInput.dispatchEvent(new Event('change'));
         },
       );
@@ -264,7 +264,7 @@ describe('rich text editor', () => {
           done();
         });
 
-        // trigger mock image upload
+        // Trigger mock image upload
         fileInput.dispatchEvent(new Event('change'));
       });
     });

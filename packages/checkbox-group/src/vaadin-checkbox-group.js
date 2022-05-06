@@ -306,7 +306,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
    * @private
    */
   __valueChanged(value) {
-    // setting initial value to empty array, skip validation
+    // Setting initial value to empty array, skip validation
     if (value.length === 0 && this.__oldValue === undefined) {
       return;
     }

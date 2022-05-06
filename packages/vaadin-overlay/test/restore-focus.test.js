@@ -49,7 +49,7 @@ describe('restore focus', () => {
     overlay.restoreFocusOnClose = false;
     focusInput.focus();
     await open(overlay);
-    // emulate focus leaving the input
+    // Emulate focus leaving the input
     focusInput.blur();
     document.body.focus();
     await close(overlay);
@@ -60,7 +60,7 @@ describe('restore focus', () => {
     overlay.restoreFocusOnClose = true;
     focusInput.focus();
     await open(overlay);
-    // emulate focus leaving the input
+    // Emulate focus leaving the input
     focusInput.blur();
     document.body.focus();
     await close(overlay);
@@ -93,7 +93,7 @@ describe('restore focus', () => {
       overlay.restoreFocusOnClose = false;
       focusInput.focus();
       await open(overlay);
-      // emulate focus leaving the input
+      // Emulate focus leaving the input
       focusInput.blur();
       document.body.focus();
       await close(overlay);

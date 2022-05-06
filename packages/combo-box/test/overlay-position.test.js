@@ -55,7 +55,7 @@ describe('overlay position', () => {
     await aTimeout(0);
   });
 
-  // clean out <vaadin-overlay> elements from body.
+  // Clean out <vaadin-overlay> elements from body.
   afterEach(() => {
     comboBox.close();
   });

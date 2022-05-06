@@ -287,7 +287,7 @@ describe('time-picker', () => {
       arrowDown(inputElement);
       enter(inputElement);
       expect(spy.calledOnce).to.be.true;
-      // mimic native change happening on text-field blur
+      // Mimic native change happening on text-field blur
       document.body.click();
       timePicker.value = '02:00';
       expect(spy.calledOnce).to.be.true;

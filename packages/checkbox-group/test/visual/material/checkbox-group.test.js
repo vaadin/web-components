@@ -84,7 +84,7 @@ describe('checkbox-group', () => {
       element.style.width = '100%';
       element.querySelectorAll('vaadin-checkbox').forEach((checkbox) => {
         checkbox.style.width = '33%';
-        // compensate inline-block whitespace
+        // Compensate inline-block whitespace
         checkbox.style.marginRight = '-3px';
       });
       await visualDiff(div, 'full-width');

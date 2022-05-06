@@ -426,7 +426,7 @@ describe('edit column', () => {
         </vaadin-grid-pro>
       `);
       grid.items = createItems();
-      grid.style.width = '100px'; // column default min width is 100px
+      grid.style.width = '100px'; // Column default min width is 100px
       flushGrid(grid);
     });
 
@@ -620,7 +620,7 @@ describe('edit column', () => {
     it('should keep navigating state on the grid while focusing the editable cell', () => {
       cell = getContainerCell(grid.$.items, 0, 0);
 
-      // mimic the real events sequence to avoid using fake focus shim from grid
+      // Mimic the real events sequence to avoid using fake focus shim from grid
       cell.dispatchEvent(new CustomEvent('mousedown', { bubbles: true, composed: true }));
       expect(grid.hasAttribute('navigating')).to.be.true;
 

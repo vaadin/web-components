@@ -225,7 +225,7 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     if (index != null) {
       const prop = `--vaadin-user-color-${index}`;
 
-      // check if custom CSS property is defined
+      // Check if custom CSS property is defined
       const isValid = Boolean(getComputedStyle(document.documentElement).getPropertyValue(prop));
 
       if (isValid) {

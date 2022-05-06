@@ -82,14 +82,14 @@ describe('vaadin-chart properties', () => {
     it('should react to additionalOptions object change', async () => {
       chart.additionalOptions = { title: { text: 'Updated title' } };
       await oneEvent(chart, 'chart-redraw');
-      // await oneEvent(chart, 'chart-redraw');
+      // Await oneEvent(chart, 'chart-redraw');
       expect(chartContainer.querySelector('.highcharts-title').textContent).to.be.equal('Updated title');
     });
 
     it('should react to additionalOptions sub property change', async () => {
       chart.set('additionalOptions.title.text', 'Reindeer statistics');
       await oneEvent(chart, 'chart-redraw');
-      // await oneEvent(chart, 'chart-redraw');
+      // Await oneEvent(chart, 'chart-redraw');
       expect(chartContainer.querySelector('.highcharts-title').textContent).to.be.equal('Reindeer statistics');
     });
   });

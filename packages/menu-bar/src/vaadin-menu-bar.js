@@ -245,7 +245,7 @@ class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(
   /** @private */
   __updateButtonsDisabled(disabled) {
     this._buttons.forEach((btn) => {
-      // disable the button if the entire menu-bar is disabled or the item alone is disabled
+      // Disable the button if the entire menu-bar is disabled or the item alone is disabled
       btn.disabled = disabled || (btn.item && btn.item.disabled);
     });
   }

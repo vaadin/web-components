@@ -197,7 +197,7 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     const input = e.currentTarget;
     if (isTab && input && input.select) {
       input.select();
-      // iOS 9 workaround: https://stackoverflow.com/a/7436574
+      // IOS 9 workaround: https://stackoverflow.com/a/7436574
       setTimeout(() => input.setSelectionRange(0, 9999));
     }
   }

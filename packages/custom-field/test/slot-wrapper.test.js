@@ -82,7 +82,7 @@ Object.keys(fixtures).forEach((set) => {
         parent = root; // <x-field>
         customField = root.$.customField; // <custom-field>
       } else if (set === 'deep' || set === 'deep2') {
-        parent = root.firstElementChild.firstElementChild; // inner <div>
+        parent = root.firstElementChild.firstElementChild; // Inner <div>
         customField = root.$.customField; // <custom-field>
       } else {
         parent = root; // <custom-field>

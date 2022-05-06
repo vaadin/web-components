@@ -16,7 +16,7 @@ describe('static helpers', () => {
   it('show should show a Lit template notification', () => {
     const notification = Notification.show(html`Hello world`);
 
-    // const notificationDom = document.body.querySelector('vaadin-notification');
+    // Const notificationDom = document.body.querySelector('vaadin-notification');
     // FIXME This causes 'TypeError: Converting circular structure to JSON'
     // expect(notification).to.equal(notificationDom);
 

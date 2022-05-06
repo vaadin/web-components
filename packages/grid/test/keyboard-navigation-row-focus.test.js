@@ -174,7 +174,7 @@ describe('keyboard navigation - row focus', () => {
 
     it('should be possible to exit grid with tab', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
-      tabbableElements[3].focus(); // focus footer row
+      tabbableElements[3].focus(); // Focus footer row
 
       let keydownEvent;
       listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => (keydownEvent = e));
@@ -188,7 +188,7 @@ describe('keyboard navigation - row focus', () => {
 
     it('should be possible to exit grid with shift+tab', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
-      tabbableElements[1].focus(); // focus header row
+      tabbableElements[1].focus(); // Focus header row
 
       let keydownEvent;
       listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => (keydownEvent = e));

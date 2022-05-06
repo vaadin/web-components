@@ -12,7 +12,7 @@
 export function updateColumnOrders(columns, scope, baseOrder) {
   let c = 1;
   columns.forEach((column) => {
-    // avoid multiples of 10 because they introduce and extra zero and
+    // Avoid multiples of 10 because they introduce and extra zero and
     // causes the underlying calculations for child order goes wrong
     if (c % 10 === 0) {
       c += 1;

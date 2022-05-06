@@ -38,7 +38,7 @@ describe('vaadin-icon', () => {
     });
 
     it('should set aria-hidden attribute on the svg', () => {
-      // semantic-dom-diff does not support SVG so we can't test this with snapshots.
+      // Semantic-dom-diff does not support SVG so we can't test this with snapshots.
       expect(svgElement.getAttribute('aria-hidden')).to.equal('true');
     });
   });

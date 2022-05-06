@@ -416,7 +416,7 @@ describe('vaadin-select', () => {
         expect(select.opened).to.be.false;
       });
 
-      // iOS Safari has incorrect viewport height when navigation bar is
+      // IOS Safari has incorrect viewport height when navigation bar is
       // visible in landscape orientation. This is workarounded by exposing
       // --vaadin-overlay-viewport-bottom in <vaadin-overlay>.
       it('should support --vaadin-overlay-viewport-bottom CSS property', () => {

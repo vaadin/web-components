@@ -223,7 +223,7 @@ describe('overlay', () => {
           overlay.scrollToDate(initialDate);
           var closeSpy = sinon.spy();
           overlay.addEventListener('close', closeSpy);
-          // const scrollSpy = sinon.spy(overlay, 'scrollToDate');
+          // Const scrollSpy = sinon.spy(overlay, 'scrollToDate');
 
           overlay.$.todayButton.disabled = true;
 

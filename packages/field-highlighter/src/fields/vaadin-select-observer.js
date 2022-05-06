@@ -17,7 +17,7 @@ export class SelectObserver extends FieldObserver {
     super.addListeners(select);
 
     select.addEventListener('opened-changed', (event) => {
-      // when in phone mode, focus is lost when closing.
+      // When in phone mode, focus is lost when closing.
       if (select._phone && event.detail.value === false) {
         this.hideOutline(select);
       }
@@ -26,12 +26,12 @@ export class SelectObserver extends FieldObserver {
 
   onFocusIn(event) {
     if (this.overlay.contains(event.relatedTarget)) {
-      // focus returns on item select, do nothing.
+      // Focus returns on item select, do nothing.
       return;
     }
 
     if (!this.component._phone && this.overlay.hasAttribute('closing')) {
-      // focus returns on outside click, do nothing.
+      // Focus returns on outside click, do nothing.
       return;
     }
 
@@ -40,7 +40,7 @@ export class SelectObserver extends FieldObserver {
 
   onFocusOut(event) {
     if (this.overlay.contains(event.relatedTarget)) {
-      // do nothing, overlay is opening.
+      // Do nothing, overlay is opening.
       return;
     }
     super.onFocusOut(event);

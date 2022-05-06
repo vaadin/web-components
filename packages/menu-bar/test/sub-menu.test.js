@@ -352,7 +352,7 @@ describe('sub-menu', () => {
       document.body.style.overflow = 'hidden';
       menu.style.position = 'absolute';
       menu.style.left = '0px';
-      // set dir on document to also it apply to submenu
+      // Set dir on document to also it apply to submenu
       document.documentElement.setAttribute('dir', 'rtl');
       buttons[0].click();
       await nextRender(subMenu);
@@ -372,7 +372,7 @@ describe('sub-menu', () => {
       document.body.style.overflow = 'hidden';
       menu.style.position = 'absolute';
       menu.style.left = '0px';
-      // set dir on document to also it apply to submenu
+      // Set dir on document to also it apply to submenu
       document.documentElement.setAttribute('dir', 'rtl');
       buttons[2].click();
       await nextRender(subMenu);
@@ -610,7 +610,7 @@ describe('theme attribute', () => {
     subMenu = menu._subMenu;
     buttons = menu._buttons;
 
-    // open submenu
+    // Open submenu
     menu.openOnHover = true;
     buttons[0].dispatchEvent(new CustomEvent(menuOpenEvent, { bubbles: true, composed: true }));
     await nextRender(subMenu);

@@ -258,7 +258,7 @@ describe('input-field-mixin', () => {
         });
 
         it(`should not prevent ${eventName} with minus and plus signs`, () => {
-          // because the same can be done by typing
+          // Because the same can be done by typing
           const event = fireEvent('1-2+3');
           expect(event.defaultPrevented).to.be.false;
         });

@@ -417,7 +417,7 @@ describe('basic features', () => {
     });
 
     it('should reflect correct invalid value on value-changed eventListener', (done) => {
-      datepicker.value = '2016-01-01'; // valid
+      datepicker.value = '2016-01-01'; // Valid
 
       datepicker.addEventListener('value-changed', () => {
         expect(datepicker.invalid).to.be.equal(true);
@@ -425,7 +425,7 @@ describe('basic features', () => {
       });
 
       datepicker.open();
-      getOverlayContent(datepicker)._selectDate(new Date('2017-01-01')); // invalid
+      getOverlayContent(datepicker)._selectDate(new Date('2017-01-01')); // Invalid
     });
 
     it('should change invalid state only once', (done) => {

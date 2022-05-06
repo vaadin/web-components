@@ -558,7 +558,7 @@ class Grid extends ElementMixin(
 
     const columnWidth = Math.max(this.__getIntrinsicWidth(col), this.__getDistributedWidth(col.parentElement, col));
 
-    // we're processing a regular grid-column and not a grid-column-group
+    // We're processing a regular grid-column and not a grid-column-group
     if (!innerColumn) {
       return columnWidth;
     }
@@ -989,14 +989,14 @@ class Grid extends ElementMixin(
    */
   requestContentUpdate() {
     if (this._columnTree) {
-      // header and footer renderers
+      // Header and footer renderers
       this._columnTree.forEach((level) => {
         level.forEach((column) => {
           column._renderHeaderAndFooter();
         });
       });
 
-      // body and row details renderers
+      // Body and row details renderers
       this.__updateVisibleRows();
     }
   }

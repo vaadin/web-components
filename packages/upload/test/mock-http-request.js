@@ -158,7 +158,7 @@ MockHttpRequest.prototype = {
       return;
     }
 
-    // it's the first call on this header field
+    // It's the first call on this header field
     if (this.requestHeaders[header] === undefined) {
       this.requestHeaders[header] = value;
     } else {
@@ -179,7 +179,7 @@ MockHttpRequest.prototype = {
     this.sent = true;
     this.onreadystatechange();
 
-    // fake send
+    // Fake send
     this.requestText = data;
     this.onsend();
   },
@@ -260,7 +260,7 @@ MockHttpRequest.prototype = {
 
   makeXMLResponse: function (data) {
     var xmlDoc;
-    // according to specs from point 3.7.5:
+    // According to specs from point 3.7.5:
     // '1. If the response entity body is null terminate these steps
     //     and return null.
     //  2. If final MIME type is not null, text/xml, application/xml,
@@ -286,7 +286,7 @@ MockHttpRequest.prototype = {
           xmlDoc.loadXML(data);
         }
       } catch (e) {
-        // according to specs from point 3.7.5:
+        // According to specs from point 3.7.5:
         // '3. Let document be a cookie-free Document object that
         // represents the result of parsing the response entity body
         // into a document tree following the rules from the XML
@@ -295,7 +295,7 @@ MockHttpRequest.prototype = {
         // these steps return null.'
         xmlDoc = null;
       }
-      // parse errors also yield a null.
+      // Parse errors also yield a null.
       if (
         (xmlDoc && xmlDoc.parseError && xmlDoc.parseError.errorCode !== 0) ||
         (xmlDoc && xmlDoc.documentElement && xmlDoc.documentElement.nodeName === 'parsererror') ||
@@ -310,7 +310,7 @@ MockHttpRequest.prototype = {
         xmlDoc = null;
       }
     } else {
-      // mimetype is specified, but not xml-ish
+      // Mimetype is specified, but not xml-ish
       xmlDoc = null;
     }
     return xmlDoc;

@@ -33,7 +33,7 @@ describe('focus', () => {
 
   it('should remove focus-ring when a child node is focused', async () => {
     await sendKeys({ press: 'Tab' });
-    // moves focus to one of the buttons created by the OL controls
+    // Moves focus to one of the buttons created by the OL controls
     await sendKeys({ press: 'Tab' });
     expect(map.hasAttribute('focus-ring')).to.be.false;
   });
