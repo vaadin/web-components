@@ -36,6 +36,12 @@ function loadAnalysis() {
   }
 }
 
+/**
+ * Maps a type string such as `'boolean | null | undefined'` into an array of type
+ * strings, such as `['boolean', 'null', 'undefined']`
+ * @param typeString
+ * @returns {string[]}
+ */
 function mapType(typeString) {
   const sanitizedTypeString = (typeString || '').replace(/[!()]/g, '');
   const types = sanitizedTypeString.split('|');
@@ -159,6 +165,15 @@ function createLitWebTypes(packageJson, packageElements) {
   };
 }
 
+/**
+ * Creates web-types definitions for all relevant packages exposing
+ * web-components. Only public components are considered.
+ * The definitions are split into two files, one containing  "plain" types
+ * for the web-component, including attributes, properties and
+ * events. The other file contains lit-specific bindings, to bind regular
+ * properties, boolean properties, and events, through their respective lit
+ * attribute syntax.
+ */
 function buildWebTypes() {
   const packages = getRelevantPackages();
   const analysis = loadAnalysis();
