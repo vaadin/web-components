@@ -81,6 +81,7 @@
     "no-throw-literal": "error",
     "no-unused-expressions": "error",
     "no-useless-return": "error",
+    "no-var": "error",
     "operator-assignment": ["error", "always"],
     "prefer-arrow-callback": ["error", { "allowNamedFunctions": false, "allowUnboundThis": false }],
     "prefer-const": ["error", { "ignoreReadBeforeAssign": true }],
