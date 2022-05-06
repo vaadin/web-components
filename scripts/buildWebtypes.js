@@ -2,6 +2,9 @@ const path = require('path');
 const fs = require('fs');
 const { execSync } = require('child_process');
 
+const PLAIN_WEB_TYPES_FILE = 'web-types.json';
+const LIT_WEB_TYPES_FILE = 'web-types.lit.json';
+
 const blacklistedPackages = [
   /^vaadin-/,
   /^component-base/,
@@ -9,6 +12,7 @@ const blacklistedPackages = [
   /^field-highlighter/,
   /^icons/,
   /^input-container/,
+  /^lit-renderer/,
   /^polymer-legacy-adapter/,
 ];
 
@@ -24,7 +28,7 @@ function getRelevantPackages() {
 function loadAnalysis() {
   const analysisPath = path.resolve('./analysis.json');
   try {
-    return require(analysisPath);
+    return JSON.parse(fs.readFileSync(analysisPath, 'utf8'));
   } catch (e) {
     throw new Error(
       `Could not read output of the Polymer Analyzer from: ${analysisPath}. Make sure to run the Polymer Analyzer before generating web-types.`,
@@ -150,18 +154,44 @@ function buildWebTypes() {
   const analysis = loadAnalysis();
 
   packages.forEach((packageName) => {
-    const packageJson = require(`../packages/${packageName}/package.json`);
+    const packageJson = JSON.parse(fs.readFileSync(`./packages/${packageName}/package.json`, 'utf8'));
     const packageElements = analysis.elements
       .filter((el) => el.path.startsWith(`packages/${packageName}`))
       .filter((el) => el.privacy === 'public');
 
     const plainWebTypes = createPlainWebTypes(packageJson, packageElements);
     const plainWebTypesJson = JSON.stringify(plainWebTypes, null, 2);
-    fs.writeFileSync(path.join('.', 'packages', packageName, 'web-types.json'), plainWebTypesJson, 'utf8');
+    fs.writeFileSync(path.join('.', 'packages', packageName, PLAIN_WEB_TYPES_FILE), plainWebTypesJson, 'utf8');
 
     const litWebTypes = createLitWebTypes(packageJson, packageElements);
     const litWebTypesJson = JSON.stringify(litWebTypes, null, 2);
-    fs.writeFileSync(path.join('.', 'packages', packageName, 'web-types.lit.json'), litWebTypesJson, 'utf8');
+    fs.writeFileSync(path.join('.', 'packages', packageName, LIT_WEB_TYPES_FILE), litWebTypesJson, 'utf8');
+  });
+}
+
+/**
+ * Updates all relevant packages' package.json files to reference the
+ * generated web-types JSON files, and to include them for publishing.
+ * This is not run by default. Instead, it can be run on demand when adding
+ * new packages, and the resulting changes can be committed to the repo.
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function modifyPackageJson() {
+  const packages = getRelevantPackages();
+
+  packages.forEach((packageName) => {
+    const packageJson = JSON.parse(fs.readFileSync(`./packages/${packageName}/package.json`, 'utf8'));
+    // Add web types definitions to published files
+    if (!packageJson.files.includes(PLAIN_WEB_TYPES_FILE)) {
+      packageJson.files.push(PLAIN_WEB_TYPES_FILE);
+    }
+    if (!packageJson.files.includes(LIT_WEB_TYPES_FILE)) {
+      packageJson.files.push(LIT_WEB_TYPES_FILE);
+    }
+    // Add field for declaring web-types
+    packageJson['web-types'] = [PLAIN_WEB_TYPES_FILE, LIT_WEB_TYPES_FILE];
+
+    fs.writeFileSync(`./packages/${packageName}/package.json`, JSON.stringify(packageJson, null, 2), 'utf8');
   });
 }
 
