@@ -16,6 +16,16 @@ const blacklistedPackages = [
   /^polymer-legacy-adapter/,
 ];
 
+// Additional attributes that will be added to all components
+const additionalAttributes = [
+  // Theme attribute is not properly declared at the moment
+  {
+    name: 'theme',
+    description: 'The theme variants to apply to the component.',
+    type: 'string | null | undefined',
+  },
+];
+
 /**
  * Get packages using lerna, excluding blacklisted packages
  */
@@ -49,7 +59,7 @@ function mapType(typeString) {
 }
 
 function createPlainElementDefinition(elementAnalysis) {
-  const attributes = elementAnalysis.attributes.map((attribute) => ({
+  const attributes = [...elementAnalysis.attributes, ...additionalAttributes].map((attribute) => ({
     name: attribute.name,
     description: attribute.description,
     value: {
