@@ -235,7 +235,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     return {
       scrollDuration: {
         type: Number,
-        default: 300,
+        default: 300
       },
 
       /**
@@ -541,7 +541,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
           currentTime,
           initialPosition,
           this._targetPosition - initialPosition,
-          this.scrollDuration,
+          this.scrollDuration
         );
         this.$.monthScroller.position = currentPos;
         window.requestAnimationFrame(smoothScroll);
