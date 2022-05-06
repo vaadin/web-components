@@ -85,12 +85,9 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
 
   static get observers() {
     return [
-      '_updateVisibleChildColumns(_childColumns)',
-      '_childColumnsChanged(_childColumns)',
       '_groupFrozenChanged(frozen, _rootColumns)',
       '_groupFrozenToEndChanged(frozenToEnd, _rootColumns)',
-      '_groupHiddenChanged(hidden, _rootColumns)',
-      '_visibleChildColumnsChanged(_visibleChildColumns)',
+      '_groupHiddenChanged(hidden)',
       '_colSpanChanged(_colSpan, _headerCell, _footerCell)',
       '_groupOrderChanged(_order, _rootColumns)',
       '_groupReorderStatusChanged(_reorderStatus, _rootColumns)',
@@ -120,9 +117,13 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
    */
   _columnPropChanged(path, value) {
     if (path === 'hidden') {
-      this._preventHiddenCascade = true;
+      // Prevent synchronization of the hidden state to child columns.
+      // If the group is currently auto-hidden, and one column is made visible,
+      // we don't want the other columns to become visible as well.
+      this._preventHiddenSynchronization = true;
       this._updateVisibleChildColumns(this._childColumns);
-      this._preventHiddenCascade = false;
+      this._updateAutoHidden();
+      this._preventHiddenSynchronization = false;
     }
 
     if (/flexGrow|width|hidden|_childColumns/.test(path)) {
@@ -205,14 +206,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   /** @private */
   _updateVisibleChildColumns(childColumns) {
     this._visibleChildColumns = Array.prototype.filter.call(childColumns, (col) => !col.hidden);
-  }
-
-  /** @private */
-  _childColumnsChanged(childColumns) {
-    if (!this._autoHidden && this.hidden) {
-      Array.prototype.forEach.call(childColumns, (column) => (column.hidden = true));
-      this._updateVisibleChildColumns(childColumns);
-    }
+    this._colSpan = this._visibleChildColumns.length;
   }
 
   /** @protected */
@@ -258,26 +252,31 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   }
 
   /** @private */
-  _groupHiddenChanged(hidden, rootColumns) {
-    if (rootColumns && !this._preventHiddenCascade) {
-      this._ignoreVisibleChildColumns = true;
-      rootColumns.forEach((column) => (column.hidden = hidden));
-      this._ignoreVisibleChildColumns = false;
+  _groupHiddenChanged(hidden) {
+    // When initializing the hidden property, only sync hidden state to columns
+    // if group is actually hidden. Otherwise, we could override a hidden column
+    // to be visible.
+    // We always want to run this though if the property is actually changed.
+    if (hidden || this.__groupHiddenInitialized) {
+      this._synchronizeHidden();
     }
-
-    this._columnPropChanged('hidden');
+    this.__groupHiddenInitialized = true;
   }
 
   /** @private */
-  _visibleChildColumnsChanged(visibleChildColumns) {
-    this._colSpan = visibleChildColumns.length;
+  _updateAutoHidden() {
+    const wasAutoHidden = this._autoHidden;
+    this._autoHidden = (this._visibleChildColumns || []).length === 0;
+    // Only modify hidden state if group was auto-hidden, or becomes auto-hidden
+    if (wasAutoHidden || this._autoHidden) {
+      this.hidden = this._autoHidden;
+    }
+  }
 
-    if (!this._ignoreVisibleChildColumns) {
-      if (visibleChildColumns.length === 0) {
-        this._autoHidden = this.hidden = true;
-      } else if (this.hidden && this._autoHidden) {
-        this._autoHidden = this.hidden = false;
-      }
+  /** @private */
+  _synchronizeHidden() {
+    if (this._childColumns && !this._preventHiddenSynchronization) {
+      this._childColumns.forEach((column) => (column.hidden = this.hidden));
     }
   }
 
@@ -313,10 +312,15 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
         info.addedNodes.filter(this._isColumnElement).length > 0 ||
         info.removedNodes.filter(this._isColumnElement).length > 0
       ) {
-        this._preventHiddenCascade = true;
+        // Prevent synchronization of the hidden state to child columns.
+        // If the group is currently auto-hidden, and a visible column is added,
+        // we don't want the other columns to become visible as well.
+        this._preventHiddenSynchronization = true;
         this._rootColumns = this._getChildColumns(this);
         this._childColumns = this._rootColumns;
-        this._preventHiddenCascade = false;
+        this._updateVisibleChildColumns(this._childColumns);
+        this._updateAutoHidden();
+        this._preventHiddenSynchronization = false;
 
         // Update the column tree with microtask timing to avoid shady style scope issues
         microTask.run(() => {
