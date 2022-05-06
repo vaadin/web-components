@@ -133,6 +133,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       overlay.initialPosition = initialDate;
       await nextRender(overlay);
       await overlay.focusDate(initialDate);
+      await waitForScrollToFinish(overlay);
     });
 
     it('should focus one week forward with arrow down', async () => {
@@ -165,12 +166,14 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
 
         it(`should focus one day ${isRTL ? 'backward' : 'forward'} with arrow 'right'`, async () => {
           await sendKeys({ press: 'ArrowRight' });
+          await waitForScrollToFinish(overlay);
           const cell = getFocusedCell(overlay);
           expect(cell.date).to.eql(isRTL ? new Date(1999, 11, 31) : new Date(2000, 0, 2));
         });
 
         it(`should focus one day ${isRTL ? 'forward' : 'backward'} with arrow left`, async () => {
           await sendKeys({ press: 'ArrowLeft' });
+          await waitForScrollToFinish(overlay);
           const cell = getFocusedCell(overlay);
           expect(cell.date).to.eql(isRTL ? new Date(2000, 0, 2) : new Date(1999, 11, 31));
         });
@@ -197,6 +200,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
     it('should select a date with space', async () => {
       await sendKeys({ press: 'ArrowRight' });
       await sendKeys({ press: 'Space' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 0, 2));
     });
@@ -209,12 +213,14 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
     it('should focus first day of the month with home', async () => {
       await sendKeys({ press: 'ArrowLeft' });
       await sendKeys({ press: 'Home' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 1));
     });
 
     it('should focus last day of the month with end', async () => {
       await sendKeys({ press: 'End' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 0, 31));
     });
@@ -235,7 +241,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
 
     it('should not skip a month', async () => {
       await overlay.focusDate(new Date(2000, 0, 31));
-      await nextRender(overlay);
+      await waitForScrollToFinish(overlay);
       await sendKeys({ press: 'PageDown' });
       await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
@@ -244,7 +250,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
 
     it('should focus the previously focused date number if available', async () => {
       await overlay.focusDate(new Date(2000, 0, 31));
-      await nextRender(overlay);
+      await waitForScrollToFinish(overlay);
       await sendKeys({ press: 'PageDown' });
       await sendKeys({ press: 'PageDown' });
       await waitForScrollToFinish(overlay);
@@ -331,6 +337,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       overlay.minDate = new Date(1999, 11, 3);
       await sendKeys({ down: 'ArrowLeft' });
       await sendKeys({ down: 'Home' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 3));
     });
@@ -338,6 +345,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
     it('should focus max date with end', async () => {
       overlay.maxDate = new Date(2000, 0, 26);
       await sendKeys({ down: 'End' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 0, 26));
     });
@@ -345,6 +353,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
     it('should focus max date with pagedown', async () => {
       overlay.maxDate = new Date(2000, 0, 28);
       await sendKeys({ press: 'PageDown' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 0, 28));
     });
@@ -352,6 +361,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
     it('should focus min date with pageup', async () => {
       overlay.minDate = new Date(1999, 11, 3);
       await sendKeys({ press: 'PageUp' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 3));
     });
@@ -384,8 +394,8 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
       await nextRender(overlay);
-
       await sendKeys({ press: 'PageUp' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
@@ -394,8 +404,8 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
       await nextRender(overlay);
-
       await sendKeys({ press: 'PageDown' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
@@ -432,6 +442,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
       await sendKeys({ press: 'Home' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
@@ -440,6 +451,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
       await sendKeys({ press: 'End' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
@@ -449,6 +461,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       overlay.minDate = new Date(1999, 11, 25);
       await nextRender(overlay);
       await sendKeys({ press: 'ArrowUp' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
@@ -458,6 +471,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       overlay.minDate = new Date(1999, 11, 25);
       await nextRender(overlay);
       await sendKeys({ press: 'ArrowDown' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
@@ -467,6 +481,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       overlay.minDate = new Date(1999, 11, 25);
       await nextRender(overlay);
       await sendKeys({ press: 'ArrowLeft' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
@@ -476,6 +491,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       overlay.minDate = new Date(1999, 11, 25);
       await nextRender(overlay);
       await sendKeys({ press: 'ArrowRight' });
+      await waitForScrollToFinish(overlay);
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
