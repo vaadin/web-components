@@ -1,24 +1,21 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { InputMixin } from '../src/input-mixin.js';
+import { define } from './helpers.js';
 
-customElements.define(
-  'input-mixin-element',
-  class extends InputMixin(PolymerElement) {
-    static get template() {
-      return html`<slot name="input"></slot>`;
-    }
-  },
-);
+const runTests = (baseClass) => {
+  const tag = define[baseClass](
+    'input-mixin',
+    '<slot name="input"></slot>',
+    (Base) => class extends InputMixin(Base) {},
+  );
 
-describe('input-mixin', () => {
-  let element, input, inputSpy, changeSpy;
+  let element, input;
 
   describe('type', () => {
     beforeEach(() => {
-      element = fixtureSync('<input-mixin-element></input-mixin-element>');
+      element = fixtureSync(`<${tag}></${tag}>`);
     });
 
     it('should have a read-only type property', () => {
@@ -29,12 +26,14 @@ describe('input-mixin', () => {
   });
 
   describe('value', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-mixin-element></input-mixin-element>');
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await nextRender();
       input = document.createElement('input');
       input.setAttribute('slot', 'input');
       element.appendChild(input);
       element._setInputElement(input);
+      await nextFrame();
     });
 
     it('should set property to empty string by default', () => {
@@ -45,84 +44,101 @@ describe('input-mixin', () => {
       expect(element.hasAttribute('has-value')).to.be.false;
     });
 
-    it('should set has-value attribute when value attribute is set', () => {
+    it('should set has-value attribute when value attribute is set', async () => {
       element.setAttribute('value', 'test');
+      await nextFrame();
       expect(element.hasAttribute('has-value')).to.be.true;
     });
 
-    it('should set has-value attribute when value property is set', () => {
+    it('should set has-value attribute when value property is set', async () => {
       element.value = 'test';
+      await nextFrame();
       expect(element.hasAttribute('has-value')).to.be.true;
     });
 
-    it('should remove has-value attribute when value is removed', () => {
+    it('should remove has-value attribute when value is removed', async () => {
       element.value = 'foo';
+      await nextFrame();
       element.value = '';
+      await nextFrame();
       expect(element.hasAttribute('has-value')).to.be.false;
     });
 
-    it('should propagate value to the input element', () => {
+    it('should propagate value to the input element', async () => {
       element.value = 'foo';
+      await nextFrame();
       expect(input.value).to.equal('foo');
     });
 
-    it('should clear input value when value is set to null', () => {
+    it('should clear input value when value is set to null', async () => {
       element.value = 'foo';
+      await nextFrame();
       element.value = null;
+      await nextFrame();
       expect(input.value).to.equal('');
     });
 
-    it('should clear input value when value is set to undefined', () => {
+    it('should clear input value when value is set to undefined', async () => {
       element.value = 'foo';
+      await nextFrame();
       element.value = undefined;
+      await nextFrame();
       expect(input.value).to.equal('');
     });
 
-    it('should update field value on the input event', () => {
+    it('should update field value on the input event', async () => {
       input.value = 'foo';
       input.dispatchEvent(new Event('input'));
       expect(element.value).to.equal('foo');
     });
 
-    it('should clear the field value on clear method call', () => {
+    it('should clear the field value on clear method call', async () => {
+      element.value = 'foo';
+      await nextFrame();
       element.clear();
+      await nextFrame();
       expect(element.value).to.equal('');
     });
 
-    it('should clear the input value on clear method call', () => {
+    it('should clear the input value on clear method call', async () => {
+      element.value = 'foo';
+      await nextFrame();
       element.clear();
+      await nextFrame();
       expect(input.value).to.equal('');
     });
   });
 
   describe('events', () => {
+    let eventsTag, inputSpy, changeSpy;
+
     before(() => {
       inputSpy = sinon.spy();
       changeSpy = sinon.spy();
 
-      customElements.define(
-        'input-mixin-events-element',
-        class extends InputMixin(PolymerElement) {
-          static get template() {
-            return html`<slot name="input"></slot>`;
-          }
+      eventsTag = define[baseClass](
+        'input-mixin-events',
+        '<slot name="input"></slot>',
+        (Base) =>
+          class extends InputMixin(Base) {
+            _onInput() {
+              inputSpy();
+            }
 
-          _onInput() {
-            inputSpy();
-          }
-
-          _onChange() {
-            changeSpy();
-          }
-        },
+            _onChange() {
+              changeSpy();
+            }
+          },
       );
     });
 
-    beforeEach(() => {
-      element = fixtureSync('<input-mixin-events-element></input-mixin-events-element>');
+    beforeEach(async () => {
+      element = fixtureSync(`<${eventsTag}></${eventsTag}>`);
+      await nextRender();
       input = document.createElement('input');
       element.appendChild(input);
       element._setInputElement(input);
+      await nextFrame();
     });
 
     afterEach(() => {
@@ -140,18 +156,28 @@ describe('input-mixin', () => {
       expect(changeSpy.calledOnce).to.be.true;
     });
 
-    it('should not call an input event listener when input is unset', () => {
+    it('should not call an input event listener when input is unset', async () => {
       element.removeChild(input);
       element._setInputElement(undefined);
+      await nextFrame();
       input.dispatchEvent(new CustomEvent('input'));
       expect(inputSpy.called).to.be.false;
     });
 
-    it('should not call a change event listener when input is unset', () => {
+    it('should not call a change event listener when input is unset', async () => {
       element.removeChild(input);
       element._setInputElement(undefined);
+      await nextFrame();
       input.dispatchEvent(new CustomEvent('change'));
       expect(changeSpy.called).to.be.false;
     });
   });
+};
+
+describe('InputMixin + Polymer', () => {
+  runTests('polymer');
+});
+
+describe('InputMixin + Lit', () => {
+  runTests('lit');
 });
