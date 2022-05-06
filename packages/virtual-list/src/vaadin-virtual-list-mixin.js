@@ -78,7 +78,7 @@ export const VirtualListMixin = (superClass) =>
         renderer: Function,
 
         /** @private */
-        __virtualizer: Object
+        __virtualizer: Object,
       };
     }
 
@@ -95,7 +95,7 @@ export const VirtualListMixin = (superClass) =>
         updateElement: this.__updateElement.bind(this),
         elementsContainer: this,
         scrollTarget: this,
-        scrollContainer: this.shadowRoot.querySelector('#items')
+        scrollContainer: this.shadowRoot.querySelector('#items'),
       });
 
       processTemplates(this);
@@ -177,6 +177,8 @@ export const VirtualListMixin = (superClass) =>
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
      */
     requestContentUpdate() {
-      this.__virtualizer && this.__virtualizer.update();
+      if (this.__virtualizer) {
+        this.__virtualizer.update();
+      }
     }
   };
