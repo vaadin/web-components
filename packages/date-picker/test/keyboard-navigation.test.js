@@ -126,6 +126,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       overlay = fixtureSync(`
       <vaadin-date-picker-overlay-content
         style="position: absolute; top: 0"
+        scroll-duration="0"
       ></vaadin-date-picker-overlay-content>`);
       overlay.i18n = getDefaultI18n();
 

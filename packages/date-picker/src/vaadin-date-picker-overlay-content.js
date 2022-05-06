@@ -233,6 +233,11 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
   static get properties() {
     return {
+      scrollDuration: {
+        type: Number,
+        default: 300
+      },
+
       /**
        * The value for this element.
        */
@@ -524,7 +529,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       return (-c / 2) * (t * (t - 2) - 1) + b;
     };
 
-    var duration = animate ? 300 : 0;
     var start = 0;
     var initialPosition = this.$.monthScroller.position;
 
@@ -532,8 +536,13 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       start = start || timestamp;
       var currentTime = timestamp - start;
 
-      if (currentTime < duration) {
-        var currentPos = easingFunction(currentTime, initialPosition, this._targetPosition - initialPosition, duration);
+      if (currentTime < this.scrollDuration) {
+        var currentPos = easingFunction(
+          currentTime,
+          initialPosition,
+          this._targetPosition - initialPosition,
+          this.scrollDuration
+        );
         this.$.monthScroller.position = currentPos;
         window.requestAnimationFrame(smoothScroll);
       } else {
