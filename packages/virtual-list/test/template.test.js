@@ -1,10 +1,15 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '../vaadin-virtual-list.js';
+
+if (!customElements.get('vaadin-virtual-list')) {
+  import('../vaadin-virtual-list.js');
+}
 
 describe('template', () => {
   let list;
+
+  before(() => customElements.whenDefined('vaadin-virtual-list'));
 
   beforeEach(async () => {
     list = fixtureSync(`
