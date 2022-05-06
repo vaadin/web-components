@@ -79,7 +79,7 @@ class Iconset extends ElementMixin(PolymerElement) {
    * @param {string} name
    */
   applyIcon(name) {
-    // create the icon map on-demand, since the iconset itself has no discrete
+    // Create the icon map on-demand, since the iconset itself has no discrete
     // signal to know when it's children are fully parsed
     this._icons = this._icons || this.__createIconMap();
     return { svg: cloneSvgNode(this._icons[this.__getIconId(name)]), size: this.size };

@@ -16,7 +16,7 @@ describe('overlay', () => {
     `);
     overlay = menu.$.overlay;
     content = overlay.$.overlay.children[0];
-    // make content have a fixed size
+    // Make content have a fixed size
     content.style.height = content.style.width = '100px';
     content.style.boxSizing = 'border-box';
     // Compute viewport at the end of the test setup

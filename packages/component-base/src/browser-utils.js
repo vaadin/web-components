@@ -16,7 +16,7 @@ export const isChrome = testUserAgent(/Chrome/) && testVendor(/Google Inc/);
 
 export const isFirefox = testUserAgent(/Firefox/);
 
-// iPadOS 13 lies and says it's a Mac, but we can distinguish by detecting touch support.
+// IPadOS 13 lies and says it's a Mac, but we can distinguish by detecting touch support.
 export const isIPad = testPlatform(/^iPad/) || (testPlatform(/^Mac/) && navigator.maxTouchPoints > 1);
 
 export const isIPhone = testPlatform(/^iPhone/);

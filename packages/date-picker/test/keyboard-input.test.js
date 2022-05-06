@@ -123,7 +123,7 @@ describe('keyboard', () => {
       datepicker.clearButtonVisible = true;
       await sendKeys({ type: 'foo' });
       await close(datepicker);
-      // wait for overlay to finish closing. Without this, clear button click
+      // Wait for overlay to finish closing. Without this, clear button click
       // will trigger "close()" again, which will result in infinite loop.
       await nextRender(datepicker);
       const spy = sinon.spy(datepicker, 'validate');
@@ -693,7 +693,7 @@ describe('keyboard', () => {
 
       it('should change after validate on overlay close', (done) => {
         listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-          // wait for overlay to finish closing
+          // Wait for overlay to finish closing
           nextRender(datepicker).then(() => {
             expect(validateSpy.calledOnce).to.be.true;
             expect(changeSpy.calledOnce).to.be.true;
@@ -724,7 +724,7 @@ describe('keyboard', () => {
         await close(datepicker);
         validateSpy.resetHistory();
         changeSpy.resetHistory();
-        // wait for overlay to finish closing
+        // Wait for overlay to finish closing
         await nextRender(datepicker);
         datepicker._focus();
       });

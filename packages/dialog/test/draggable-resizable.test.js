@@ -761,7 +761,7 @@ describe('overflowing content', () => {
     div.style.overflow = 'auto';
     div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
     overlay.content.appendChild(div);
-    // emulate removing "pointer-events: none"
+    // Emulate removing "pointer-events: none"
     overlayPart.setAttribute('style', '');
     expect(overlayPart.offsetHeight).to.equal(container.offsetHeight);
   });

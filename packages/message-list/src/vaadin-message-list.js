@@ -148,7 +148,7 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
       return;
     }
 
-    // get index of the item that was focused when event happened
+    // Get index of the item that was focused when event happened
     const target = event.composedPath()[0];
     let currentIndex = this._messages.indexOf(target);
 
@@ -166,7 +166,7 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
         currentIndex = this._messages.length - 1;
         break;
       default:
-        return; // nothing to do
+        return; // Nothing to do
     }
     if (currentIndex < 0) {
       currentIndex = this._messages.length - 1;

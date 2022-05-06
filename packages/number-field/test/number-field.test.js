@@ -785,7 +785,7 @@ describe('number-field', () => {
     it('should not validate by step when only min and max are set', () => {
       numberField.min = 1;
       numberField.max = 5;
-      numberField.value = 1.5; // would be invalid by default step=1
+      numberField.value = 1.5; // Would be invalid by default step=1
       expect(numberField.validate()).to.be.true;
     });
 

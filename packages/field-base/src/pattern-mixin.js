@@ -50,7 +50,7 @@ export const PatternMixin = (superclass) =>
         const input = this.inputElement;
         if (input && input.value.length > 0 && !this.checkValidity()) {
           input.value = this.value || '';
-          // add input-prevented attribute for 200ms
+          // Add input-prevented attribute for 200ms
           this.setAttribute('input-prevented', '');
           this._inputDebouncer = Debouncer.debounce(this._inputDebouncer, timeOut.after(200), () => {
             this.removeAttribute('input-prevented');

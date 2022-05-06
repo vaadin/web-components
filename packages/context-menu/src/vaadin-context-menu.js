@@ -430,12 +430,12 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
 
   /** @private */
   _setListenOnUserSelect(value) {
-    // note: these styles don't seem to work in Firefox on iOS.
+    // Note: these styles don't seem to work in Firefox on iOS.
     this.listenOn.style.webkitTouchCallout = value;
     this.listenOn.style.webkitUserSelect = value; // Chrome, Safari, Firefox
     this.listenOn.style.userSelect = value;
 
-    // note: because user-selection is disabled on the overlay
+    // Note: because user-selection is disabled on the overlay
     // before opening the menu the text could be already selected
     // so we need to clear that selection
     document.getSelection().removeAllRanges();

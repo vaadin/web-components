@@ -51,11 +51,11 @@ describe('Basic features', () => {
   });
 
   it('should convert null and undefined values to empty string', () => {
-    dateTimePicker.value = '2019-09-19T08:26'; // init with valid value
+    dateTimePicker.value = '2019-09-19T08:26'; // Init with valid value
     dateTimePicker.value = null;
     expect(dateTimePicker.value).to.equal('');
 
-    dateTimePicker.value = '2019-09-19T08:26'; // init with valid value
+    dateTimePicker.value = '2019-09-19T08:26'; // Init with valid value
     dateTimePicker.value = undefined;
     expect(dateTimePicker.value).to.equal('');
   });
@@ -220,14 +220,14 @@ describe('Basic features', () => {
 
       dateTimePicker.step = 1;
       expect(dateTimePicker.value).to.equal('0000-02-03T08:30:00');
-      // test that format stays even after setting the value again
+      // Test that format stays even after setting the value again
       dateTimePicker.value = '';
       dateTimePicker.__selectedDateTime = date;
       expect(dateTimePicker.value).to.equal('0000-02-03T08:30:00');
 
       dateTimePicker.step = 0.001;
       expect(dateTimePicker.value).to.equal('0000-02-03T08:30:00.000');
-      // test that format stays even after setting the value again
+      // Test that format stays even after setting the value again
       dateTimePicker.value = '';
       dateTimePicker.__selectedDateTime = date;
       expect(dateTimePicker.value).to.equal('0000-02-03T08:30:00.000');

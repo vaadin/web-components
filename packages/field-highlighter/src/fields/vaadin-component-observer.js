@@ -32,7 +32,7 @@ export class ComponentObserver {
     this._tags = tags;
 
     component.addEventListener('mouseenter', (event) => {
-      // ignore mouseleave on overlay opening
+      // Ignore mouseleave on overlay opening
       if (event.relatedTarget === this._tags.$.overlay) {
         return;
       }
@@ -45,7 +45,7 @@ export class ComponentObserver {
     });
 
     component.addEventListener('mouseleave', (event) => {
-      // ignore mouseleave on overlay opening
+      // Ignore mouseleave on overlay opening
       if (event.relatedTarget === this._tags.$.overlay) {
         return;
       }
@@ -76,7 +76,7 @@ export class ComponentObserver {
     });
 
     this._tags.$.overlay.addEventListener('mouseleave', (event) => {
-      // ignore mouseleave when moving back to field
+      // Ignore mouseleave when moving back to field
       if (event.relatedTarget === component) {
         return;
       }

@@ -110,7 +110,7 @@ describe('crud grid', () => {
       });
 
       it('should not generate groups for excluded fields', async () => {
-        // password is in the exclude list so it shouldn't affect the group depth
+        // Password is in the exclude list so it shouldn't affect the group depth
         grid.items = [
           {
             name: 'foo',

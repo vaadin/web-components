@@ -1,7 +1,7 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { FieldHighlighter } from '../../src/vaadin-field-highlighter.js';
 
-/* hide caret */
+/* Hide caret */
 registerStyles(
   'vaadin-combo-box vaadin-date-picker vaadin-text-field',
   css`

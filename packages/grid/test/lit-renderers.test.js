@@ -106,7 +106,7 @@ describe('lit renderers', () => {
 
       grid.openItemDetails(grid.items[0]);
 
-      cell = getCell(grid.$.items, { row: 0, col: 1 /* column count + 1 = the row details cell */ });
+      cell = getCell(grid.$.items, { row: 0, col: 1 /* Column count + 1 = the row details cell */ });
     });
 
     it('should render the content', () => {

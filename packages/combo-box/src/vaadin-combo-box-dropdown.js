@@ -275,7 +275,7 @@ export class ComboBoxDropdown extends PolymerElement {
   }
 
   _positionTargetChanged(target) {
-    // we must update the overlay width when the positionTarget is set (or changes)
+    // We must update the overlay width when the positionTarget is set (or changes)
     if (target) {
       this._setOverlayWidth();
     }

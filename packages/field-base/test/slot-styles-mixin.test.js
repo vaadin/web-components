@@ -65,13 +65,13 @@ describe('slot-styles-mixin', () => {
     const inner = document.createElement('div');
     inner.attachShadow({ mode: 'open' });
     wrapper.shadowRoot.appendChild(inner);
-    // move to inner shadow root
+    // Move to inner shadow root
     inner.shadowRoot.appendChild(element);
     expect(getComputedStyle(button).color).to.equal(COLOR);
   });
 
   it('should append styles when moved to document body', () => {
-    // move out of shadow root
+    // Move out of shadow root
     wrapper.appendChild(element);
     expect(getComputedStyle(button).color).to.equal(COLOR);
   });

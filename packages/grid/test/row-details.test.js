@@ -237,10 +237,10 @@ describe('row details', () => {
     });
 
     it('should have the correct index on details template', () => {
-      // open details for item 0
+      // Open details for item 0
       grid.openItemDetails('foo');
 
-      // open details for item 1
+      // Open details for item 1
       grid.openItemDetails('bar');
 
       const firstRowCells = getRowCells(bodyRows[0]);
@@ -356,7 +356,7 @@ describe('row details', () => {
 
     it('should be removed when item is removed', () => {
       openRowDetails(0);
-      dataset.shift(); // remove opened item
+      dataset.shift(); // Remove opened item
       grid.clearCache();
 
       expect(bodyRows[0].hasAttribute('details-opened')).to.be.false;
@@ -365,7 +365,7 @@ describe('row details', () => {
 
     it('should be removed when items are replaced', () => {
       openRowDetails(0);
-      dataset = buildDataSet(10); // replace data
+      dataset = buildDataSet(10); // Replace data
       grid.clearCache();
 
       expect(bodyRows[0].hasAttribute('details-opened')).to.be.false;
@@ -379,7 +379,7 @@ describe('row details', () => {
       });
       expect(countRowsMarkedAsDetailsOpened(grid)).to.equal(dataset.length);
 
-      dataset = buildDataSet(10); // replace data
+      dataset = buildDataSet(10); // Replace data
       grid.clearCache();
 
       expect(countRowsMarkedAsDetailsOpened(grid)).to.equal(0);

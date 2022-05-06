@@ -88,7 +88,7 @@ describe('form layout', () => {
 
     it('should have max-width set to 100%', () => {
       expect(getComputedStyle(layout).getPropertyValue('max-width')).to.be.oneOf([
-        '900px', // some browsers (IE, Safari) return px computed style
+        '900px', // Some browsers (IE, Safari) return px computed style
         '100%',
       ]);
     });
@@ -157,11 +157,11 @@ describe('form layout', () => {
     });
 
     it('should apply default column-spacing', () => {
-      // override to not depend on the theme changes
+      // Override to not depend on the theme changes
       layout.updateStyles({ '--lumo-space-l': '2rem' });
 
       expect(getParsedWidth(layout.firstElementChild).spacing).to.equal('1rem');
-      expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-left')).to.equal('0px'); // zero because it's first
+      expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-left')).to.equal('0px'); // Zero because it's first
       expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-right')).to.equal('16px'); // 0.5 * 2rem in px
     });
 
@@ -198,18 +198,18 @@ describe('form layout', () => {
     }
 
     it('should span children correctly', () => {
-      // empty means 1
+      // Empty means 1
       expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(1, 0.1);
 
-      // correct values
+      // Correct values
       expect(estimateEffectiveColspan(layout.children[1])).to.be.closeTo(1, 0.1);
       expect(estimateEffectiveColspan(layout.children[2])).to.be.closeTo(2, 0.1);
       expect(estimateEffectiveColspan(layout.children[3])).to.be.closeTo(3, 0.1);
 
-      // if more then a number of columns, use number of columns
+      // If more then a number of columns, use number of columns
       expect(estimateEffectiveColspan(layout.children[4])).to.be.closeTo(3, 0.1);
 
-      // invalid means 1
+      // Invalid means 1
       expect(estimateEffectiveColspan(layout.children[5])).to.be.closeTo(1, 0.1);
     });
   });
@@ -422,15 +422,15 @@ describe('form layout', () => {
         'foo',
         0,
         1,
-        {}, // array value is required
-        [], // at least one step is required
-        [{ columns: undefined }], // columns key is required
-        [{ columns: -1 }], // columns requires natural number
-        [{ columns: 0 }], // columns requires natural number
-        [{ columns: 0.5 }], // columns requires natural number
-        [{ minWidth: '10', columns: 1 }], // minWidth requires valid CSS length string
-        [{ columns: 1, minWidth: '480px', labelsPosition: null }], // labelsPosition should be a string
-        [{ columns: 1, minWidth: '480px', labelsPosition: 'foo' }], // labelsPosition should be in supported list
+        {}, // Array value is required
+        [], // At least one step is required
+        [{ columns: undefined }], // Columns key is required
+        [{ columns: -1 }], // Columns requires natural number
+        [{ columns: 0 }], // Columns requires natural number
+        [{ columns: 0.5 }], // Columns requires natural number
+        [{ minWidth: '10', columns: 1 }], // MinWidth requires valid CSS length string
+        [{ columns: 1, minWidth: '480px', labelsPosition: null }], // LabelsPosition should be a string
+        [{ columns: 1, minWidth: '480px', labelsPosition: 'foo' }], // LabelsPosition should be in supported list
       ];
 
       const validValues = [

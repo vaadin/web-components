@@ -241,18 +241,18 @@ describe('vaadin-app-layout', () => {
       });
 
       it('should keep drawer state when it resizes to overlay mode and back', () => {
-        // force it to desktop layout
+        // Force it to desktop layout
         layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
         layout.drawerOpened = true;
         layout._updateOverlayMode();
 
-        // force it to mobile layout
+        // Force it to mobile layout
         layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'true');
         layout._updateOverlayMode();
 
         expect(layout.drawerOpened).to.be.false;
 
-        // force it to desktop layout
+        // Force it to desktop layout
         layout.style.setProperty('--vaadin-app-layout-drawer-overlay', 'false');
         layout._updateOverlayMode();
         expect(layout.drawerOpened).to.be.true;

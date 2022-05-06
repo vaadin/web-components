@@ -344,7 +344,7 @@ export const DataProviderMixin = (superClass) =>
      * @protected
      */
     _loadPage(page, cache) {
-      // make sure same page isn't requested multiple times.
+      // Make sure same page isn't requested multiple times.
       if (!cache.pendingRequests[page] && this.dataProvider) {
         this._setLoading(true);
         cache.pendingRequests[page] = true;
@@ -466,7 +466,7 @@ export const DataProviderMixin = (superClass) =>
     /** @protected */
     _ensureFirstPageLoaded() {
       if (!this._hasData) {
-        // load data before adding rows to make sure they have content when
+        // Load data before adding rows to make sure they have content when
         // rendered for the first time.
         this._loadPage(0, this._cache);
       }

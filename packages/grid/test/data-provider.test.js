@@ -80,7 +80,7 @@ class PageSizeGrid extends PolymerElement {
 customElements.define('page-size-grid', PageSizeGrid);
 
 function simulateScrollToStart(grid) {
-  // make sure not over scroll more than the delta threshold limit of 10k.
+  // Make sure not over scroll more than the delta threshold limit of 10k.
   const table = grid.$.table;
 
   return new Promise((resolve) => {
@@ -99,7 +99,7 @@ function simulateScrollToStart(grid) {
 }
 
 function simulateScrollToEnd(grid) {
-  // make sure not over scroll more than the delta threshold limit of 10k.
+  // Make sure not over scroll more than the delta threshold limit of 10k.
   const table = grid.$.table;
 
   return new Promise((resolve) => {
@@ -416,7 +416,7 @@ describe('data provider', () => {
       });
 
       it('should request pages from 0', () => {
-        expandIndex(grid, 7); // pageSize is 5, index 7 is on the second page
+        expandIndex(grid, 7); // PageSize is 5, index 7 is on the second page
         expect(grid.dataProvider.getCall(2).args[0].page).to.equal(0);
       });
 
@@ -627,7 +627,7 @@ describe('wrapped grid', () => {
       grid.pageSize = 5;
       flushGrid(grid);
       await aTimeout(loadDebounceTime);
-      // assuming grid has about 18 items
+      // Assuming grid has about 18 items
       expect(container.dataProvider.callCount).to.be.above(2);
       for (let i = 0; i < container.dataProvider.callCount; i++) {
         expect(container.dataProvider.getCall(i).args[0].page).to.eql(i);
@@ -647,7 +647,7 @@ describe('wrapped grid', () => {
 
     it('should cache fetched pages', async () => {
       grid.pageSize = 10;
-      // wait first to initially load first pages.
+      // Wait first to initially load first pages.
       await aTimeout(loadDebounceTime);
       await simulateScrollToEnd(grid);
       container.dataProvider.resetHistory();

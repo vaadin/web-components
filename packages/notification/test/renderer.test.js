@@ -29,7 +29,7 @@ describe('renderer', () => {
     afterEach(() => {
       // Close to stop all pending timers.
       notification.close();
-      // delete singleton reference, so as it's created in next test
+      // Delete singleton reference, so as it's created in next test
       delete notification.constructor._container;
     });
 

@@ -288,7 +288,7 @@ export const DatePickerMixin = (subclass) =>
          */
         _minDate: {
           type: Date,
-          // null does not work here because minimizer passes undefined to overlay (#351)
+          // Null does not work here because minimizer passes undefined to overlay (#351)
           value: '',
         },
 
@@ -535,7 +535,7 @@ export const DatePickerMixin = (subclass) =>
         if (this.inputElement.checkValidity) {
           inputValidity = this.inputElement.checkValidity();
         } else if (this.inputElement.validate) {
-          // iron-form-elements have the validate API
+          // Iron-form-elements have the validate API
           inputValidity = this.inputElement.validate();
         }
       }
@@ -932,7 +932,7 @@ export const DatePickerMixin = (subclass) =>
         // the required attribute. Both are not allowed on an input element.
         // Therefore we prevent default on most keydown events.
         var allowedKeys = [
-          9, // tab
+          9, // Tab
         ];
         if (allowedKeys.indexOf(e.keyCode) === -1) {
           e.preventDefault();
@@ -942,7 +942,7 @@ export const DatePickerMixin = (subclass) =>
       switch (e.key) {
         case 'ArrowDown':
         case 'ArrowUp':
-          // prevent scrolling the page with arrows
+          // Prevent scrolling the page with arrows
           e.preventDefault();
           if (this.opened) {
             // The overlay can be opened with ctrl + option + shift in VoiceOver

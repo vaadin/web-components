@@ -15,14 +15,14 @@ registerStyles(
   { moduleId: 'vaadin-menu-bar-test-styles' },
 );
 
-// utility function to assert a menu item is not visible
+// Utility function to assert a menu item is not visible
 const assertHidden = (elem) => {
   const style = getComputedStyle(elem);
   expect(style.visibility).to.equal('hidden');
   expect(style.position).to.equal('absolute');
 };
 
-// utility function to assert a menu item is visible
+// Utility function to assert a menu item is visible
 const assertVisible = (elem) => {
   const style = getComputedStyle(elem);
   expect(style.visibility).to.equal('visible');
@@ -427,7 +427,7 @@ describe('overflow button', () => {
   });
 
   it('should hide overflow button and reset its items when all buttons fit after changing items', async () => {
-    // see https://github.com/vaadin/vaadin-menu-bar/issues/133
+    // See https://github.com/vaadin/vaadin-menu-bar/issues/133
     menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }];
     await nextRender(menu);
     buttons = menu._buttons;
@@ -480,7 +480,7 @@ describe('responsive behaviour in container', () => {
   });
 
   it('should hide overflow button and reset its items when all buttons fit ', async () => {
-    // must work even if menu-bar won't automatically resize to a larger size
+    // Must work even if menu-bar won't automatically resize to a larger size
     // when more space becomes available
     // see https://github.com/vaadin/vaadin-menu-bar/issues/130
     menu.style.minWidth = '0';

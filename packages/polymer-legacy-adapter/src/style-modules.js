@@ -44,7 +44,7 @@ function registerStyles(themeFor, styles = [], options = {}) {
   // (with <style include="module-id">)
   const includeStylesToTemplate = !!(styles.length && options.moduleId);
 
-  // options.include may be undefined, string or an array of strings. Convert it to an array
+  // Options.include may be undefined, string or an array of strings. Convert it to an array
   const moduleIncludes = [].concat(options.include || []);
   if (moduleIncludes.length === 0) {
     // No includes are used so the styles array is considered complete and can be cached as is

@@ -16,8 +16,8 @@ describe('static helpers', () => {
   it('show should show a Lit template notification', () => {
     const notification = Notification.show(html`Hello world`);
 
+    // FIXME: This causes 'TypeError: Converting circular structure to JSON'
     // const notificationDom = document.body.querySelector('vaadin-notification');
-    // FIXME This causes 'TypeError: Converting circular structure to JSON'
     // expect(notification).to.equal(notificationDom);
 
     expect(notification._card.innerText.trim()).to.equal('Hello world');

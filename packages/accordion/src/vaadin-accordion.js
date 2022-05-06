@@ -176,7 +176,7 @@ class Accordion extends ThemableMixin(ElementMixin(PolymerElement)) {
    * @protected
    */
   _onKeydown(event) {
-    // only check keyboard events on details toggle buttons
+    // Only check keyboard events on details toggle buttons
     const item = event.composedPath()[0];
     if (!this.items.some((el) => el.focusElement === item)) {
       return;
@@ -204,7 +204,7 @@ class Accordion extends ThemableMixin(ElementMixin(PolymerElement)) {
         idx = this.items.length - 1;
         break;
       default:
-      // do nothing.
+      // Do nothing.
     }
 
     idx = this._getAvailableIndex(idx, increment);

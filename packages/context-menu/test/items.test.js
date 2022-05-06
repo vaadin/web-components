@@ -179,7 +179,7 @@ describe('items', () => {
       rootOverlay.setAttribute('end-aligned', '');
       padding = parseFloat(getComputedStyle(rootOverlay.$.content).paddingLeft) * 2;
 
-      /* first sub-menu end-aligned */
+      /* First sub-menu end-aligned */
       open(rootItem);
       await nextRender(subMenu);
       expect(subMenu.$.overlay.hasAttribute('end-aligned')).to.be.true;
@@ -187,7 +187,7 @@ describe('items', () => {
       const subMenuRect = subMenu.$.overlay.$.content.getBoundingClientRect();
       expect(subMenuRect.right).to.be.closeTo(rootMenuRect.left, 1);
 
-      /* second sub-menu left-aligned */
+      /* Second sub-menu left-aligned */
       const nestedItem = menuComponents(subMenu)[2];
       const nestedItemRect = nestedItem.getBoundingClientRect();
       padding = parseFloat(getComputedStyle(subMenu.$.overlay.$.content).paddingLeft) * 2;

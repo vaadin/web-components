@@ -168,8 +168,8 @@ describe('templates', () => {
       parent.appendChild(grid);
       flushGrid(grid);
 
-      expect(grid.$.header.children[0].children[0].children.length).to.eql(1); // with a header template
-      expect(grid.$.header.children[0].children[3].children.length).to.eql(1); // without a header template
+      expect(grid.$.header.children[0].children[0].children.length).to.eql(1); // With a header template
+      expect(grid.$.header.children[0].children[3].children.length).to.eql(1); // Without a header template
     });
 
     it('should not restamp footer templates on attach', () => {
@@ -179,8 +179,8 @@ describe('templates', () => {
       parent.appendChild(grid);
       flushGrid(grid);
 
-      expect(grid.$.footer.children[0].children[0].children.length).to.eql(1); // with a footer template
-      expect(grid.$.footer.children[0].children[3].children.length).to.eql(1); // without footer template
+      expect(grid.$.footer.children[0].children[0].children.length).to.eql(1); // With a footer template
+      expect(grid.$.footer.children[0].children[3].children.length).to.eql(1); // Without footer template
     });
 
     describe('using functions inside templates', () => {

@@ -41,7 +41,7 @@ describe('position target', () => {
   let target, overlay, overlayContent;
   let margin;
 
-  // top or left coordinates for position target
+  // Top or left coordinates for position target
   let targetPositionToFlipOverlay, targetPositionForCentering;
 
   function updatePosition() {

@@ -25,12 +25,12 @@ function checkPaths(arrayToCheck, action, items) {
   for (const i in arrayToCheck) {
     const path = arrayToCheck[i].path;
 
-    // skip simple paths
+    // Skip simple paths
     if (!path || path.indexOf('.') === -1) {
       continue;
     }
 
-    const parentProperty = path.replace(/\.[^.]*$/, ''); // a.b.c -> a.b
+    const parentProperty = path.replace(/\.[^.]*$/, ''); // A.b.c -> a.b
     if (get(parentProperty, items[0]) === undefined) {
       console.warn(`Path "${path}" used for ${action} does not exist in all of the items, ${action} is disabled.`);
       result = false;

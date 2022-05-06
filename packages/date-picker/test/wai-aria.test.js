@@ -156,7 +156,7 @@ describe('WAI-ARIA', () => {
     });
 
     it('should have disabled state on disabled date cells', () => {
-      // just [disabled] attribute is not enough for screen readers, should
+      // Just [disabled] attribute is not enough for screen readers, should
       // also contain aria-disabled="true".
       monthCalendar.maxDate = new Date(2016, 1, 10); // 10 February 2016
 

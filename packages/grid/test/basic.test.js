@@ -97,7 +97,7 @@ describe('basic features', () => {
 
     expect(getFirstVisibleItem(grid).index, Math.floor(grid.size - itemsPerViewport));
     grid.scrollToIndex(0);
-    // make the height of the viewport same as the height of the row
+    // Make the height of the viewport same as the height of the row
     // and scroll to the last item
     grid.style.height = `${getPhysicalItems(grid)[0].offsetHeight - 2}px`;
 

@@ -140,7 +140,7 @@ export class FieldAriaController {
     }
 
     if (!this.__isGroupField) {
-      // native <input> or <textarea>, required is enough
+      // Native <input> or <textarea>, required is enough
       return;
     }
 

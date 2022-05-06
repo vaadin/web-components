@@ -1,6 +1,6 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-/* hide caret */
+/* Hide caret */
 registerStyles(
   'vaadin-date-picker',
   css`
@@ -11,7 +11,7 @@ registerStyles(
   `,
 );
 
-/* stop focused day animation */
+/* Stop focused day animation */
 registerStyles(
   'vaadin-month-calendar',
   css`

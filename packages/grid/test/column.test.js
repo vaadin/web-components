@@ -65,7 +65,7 @@ describe('column', () => {
 
         const header = grid.$.header;
 
-        expect(getContainerCell(header, 0, 0).style.flexGrow).to.eql('3'); // colspan 2 + 1
+        expect(getContainerCell(header, 0, 0).style.flexGrow).to.eql('3'); // Colspan 2 + 1
         expect(getContainerCell(header, 1, 0).style.flexGrow).to.eql('2');
       });
 

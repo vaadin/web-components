@@ -158,12 +158,12 @@ describe('message-list', () => {
       const messages = messageList.shadowRoot.querySelectorAll('vaadin-message');
       const thirdMessage = messages[2];
 
-      // click on third item to give it tabindex=0
+      // Click on third item to give it tabindex=0
       thirdMessage.dispatchEvent(new CustomEvent('mousedown', { composed: true, bubbles: true }));
       thirdMessage.dispatchEvent(new CustomEvent('focus', { composed: true, bubbles: true }));
       thirdMessage.dispatchEvent(new CustomEvent('mouseup', { composed: true, bubbles: true }));
 
-      // set message list to shorter than three items, so that tabIndex=0 can't be maintained on third item
+      // Set message list to shorter than three items, so that tabIndex=0 can't be maintained on third item
       messageList.items = [
         {
           text: 'This is a new list',
@@ -218,7 +218,7 @@ describe('message-list', () => {
       mousedown(secondMessage);
       focusin(secondMessage);
 
-      // set message list to two items
+      // Set message list to two items
       messageList.items = [
         {
           text: 'This is a new list',

@@ -350,7 +350,7 @@ describe('accessibility', () => {
           setANumberOfItems(grid, 100);
           expect(
             Array.from(grid.$.items.children)
-              .slice(0, 5) // assuming at least five body rows are visible
+              .slice(0, 5) // Assuming at least five body rows are visible
               .map((row) => row.getAttribute('aria-rowindex')),
           ).to.eql(['3', '4', '5', '6', '7']);
           expect(grid.$.footer.children[0].getAttribute('aria-rowindex')).to.equal('103');
@@ -358,7 +358,7 @@ describe('accessibility', () => {
 
         it('should update aria-rowindex on scroll', () => {
           setANumberOfItems(grid, 1000);
-          // scroll to end
+          // Scroll to end
           grid.scrollToIndex(1000);
 
           const ariaRowindexValues = Array.from(grid.$.items.children).map((row) => row.getAttribute('aria-rowindex'));

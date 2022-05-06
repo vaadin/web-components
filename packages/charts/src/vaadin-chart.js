@@ -1711,7 +1711,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   /** @private */
   __callAxisFunction(functionName, axisCategory, axisIndex, ...args) {
     /*
-     * axisCategory:
+     * AxisCategory:
      * 0 - xAxis
      * 1 - yAxis
      * 2 - zAxis

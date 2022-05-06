@@ -399,14 +399,14 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
         result.push(item.name || item.abbr || 'anonymous');
       }
     }
-    // override generated title attribute
+    // Override generated title attribute
     this.$.overflow.setAttribute('title', result.join('\n'));
   }
 
   /** @private */
   __getLimit(items, itemsInView, maxItemsVisible) {
     let limit = null;
-    // handle max set to 0 or 1
+    // Handle max set to 0 or 1
     const adjustedMax = this.__getMax(maxItemsVisible);
     if (maxItemsVisible != null && adjustedMax < items) {
       limit = adjustedMax - 1;
@@ -428,13 +428,13 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
     this.$.items.render();
     this.__setItemsInView();
 
-    // mutation using group.splice('items')
+    // Mutation using group.splice('items')
     if (splices && Array.isArray(splices.indexSplices)) {
       splices.indexSplices.forEach((mutation) => {
         this.__announceItemsChange(items, mutation);
       });
     } else if (Array.isArray(items) && Array.isArray(this.__oldItems)) {
-      // mutation using group.set('items')
+      // Mutation using group.set('items')
       const diff = calculateSplices(items, this.__oldItems);
       diff.forEach((mutation) => {
         this.__announceItemsChange(items, mutation);
@@ -507,26 +507,26 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
     const avatars = this._avatars;
     const items = this.items;
 
-    // always show at least two avatars
+    // Always show at least two avatars
     if (!items || !avatars || avatars.length < 3) {
       return;
     }
 
     let result = this.__calculateAvatarsFitWidth();
 
-    // only show overlay if two or more avatars don't fit
+    // Only show overlay if two or more avatars don't fit
     if (result === items.length - 1) {
       result = items.length;
     }
 
-    // close overlay if all avatars become visible
+    // Close overlay if all avatars become visible
     if (result >= items.length && this._opened) {
       this.$.overlay.close();
       // FIXME: hack to avoid jump before closing
       this.$.overlay._flushAnimation('closing');
     }
 
-    // reserve space for overflow avatar
+    // Reserve space for overflow avatar
     this.__itemsInView = result;
   }
 
@@ -538,10 +538,10 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
 
     const avatars = this._avatars;
 
-    // assume all the avatars have the same width
+    // Assume all the avatars have the same width
     const avatarWidth = avatars[0].clientWidth;
 
-    // take negative margin into account
+    // Take negative margin into account
     const { marginLeft, marginRight } = getComputedStyle(avatars[1]);
 
     const offset =

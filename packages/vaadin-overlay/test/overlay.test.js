@@ -357,7 +357,7 @@ describe('vaadin-overlay', () => {
       // the overlay, then one contextmenu-related mouseup event also occurs.
 
       it('should close on outside click after mouseup inside', () => {
-        // assume the overlay was opened on contextmenu event
+        // Assume the overlay was opened on contextmenu event
         mouseup(overlayPart);
 
         mousedown(parent);
@@ -368,7 +368,7 @@ describe('vaadin-overlay', () => {
       });
 
       it('should close on outside click after mouseup outside', () => {
-        // assume the overlay was opened on contextmenu event,
+        // Assume the overlay was opened on contextmenu event,
         // but this time the cursor was moved outside before mouseup
         mouseup(parent);
 

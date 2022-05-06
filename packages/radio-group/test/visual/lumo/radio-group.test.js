@@ -94,7 +94,7 @@ describe('radio-group', () => {
       element.style.width = '100%';
       element.querySelectorAll('vaadin-radio-button').forEach((radio) => {
         radio.style.width = '33%';
-        // compensate inline-block whitespace
+        // Compensate inline-block whitespace
         radio.style.marginRight = '-3px';
       });
       await visualDiff(div, 'full-width');

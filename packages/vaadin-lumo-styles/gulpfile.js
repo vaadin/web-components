@@ -90,7 +90,7 @@ gulp.task('icons', async () => {
     )
     .pipe(gulp.dest(folder))
     .on('finish', () => {
-      // iron-iconset-svg
+      // Iron-iconset-svg
       fs.readdir(folder, (err, filenames) => {
         if (err) {
           console.error(err);
@@ -132,7 +132,7 @@ ${createIconset(folder, filenames, 'lumo:')}
         });
       });
 
-      // icon font
+      // Icon font
       gulp
         .src(`${folder}*.svg`)
         .pipe(

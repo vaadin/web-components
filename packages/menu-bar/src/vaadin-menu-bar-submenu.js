@@ -35,7 +35,7 @@ class MenuBarSubmenu extends ContextMenu {
   close() {
     super.close();
 
-    // only handle 1st level submenu
+    // Only handle 1st level submenu
     if (this.hasAttribute('is-root')) {
       this.getRootNode().host._close();
     }

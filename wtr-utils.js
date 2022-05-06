@@ -249,9 +249,9 @@ const createUnitTestsConfig = (config) => {
   return {
     ...config,
     nodeResolve: true,
-    browserStartTimeout: 60000, // default 30000
-    testsStartTimeout: 60000, // default 10000
-    testsFinishTimeout: 120000, // default 20000
+    browserStartTimeout: 60000, // Default 30000
+    testsStartTimeout: 60000, // Default 10000
+    testsFinishTimeout: 120000, // Default 20000
     testFramework: {
       config: {
         ui: 'bdd',
@@ -288,7 +288,7 @@ const createVisualTestsConfig = (theme) => {
     nodeResolve: true,
     testFramework: {
       config: {
-        timeout: '20000', // default 2000
+        timeout: '20000', // Default 2000
       },
     },
     browsers: [

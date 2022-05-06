@@ -133,7 +133,7 @@ describe('accessibility', () => {
       const e = new CustomEvent('keydown', { bubbles: true });
       e.keyCode = 27;
       const result = buttons[0].dispatchEvent(e);
-      expect(result).to.be.false; // dispatchEvent returns false when preventDefault is called
+      expect(result).to.be.false; // DispatchEvent returns false when preventDefault is called
     });
 
     it('should prevent keydown and focus the editor on tab', (done) => {
@@ -142,7 +142,7 @@ describe('accessibility', () => {
       e.keyCode = 9;
       e.shiftKey = false;
       const result = buttons[0].dispatchEvent(e);
-      expect(result).to.be.false; // dispatchEvent returns false when preventDefault is called
+      expect(result).to.be.false; // DispatchEvent returns false when preventDefault is called
     });
 
     it('should preserve the text selection on shift-tab', (done) => {

@@ -11,7 +11,7 @@ class DateObserver extends DatePickerObserver {
   constructor(datePicker, host) {
     super(datePicker);
 
-    // fire events on the host
+    // Fire events on the host
     this.component = host;
   }
 
@@ -24,7 +24,7 @@ class TimeObserver extends FieldObserver {
   constructor(timePicker, host) {
     super(timePicker);
 
-    // fire events on the host
+    // Fire events on the host
     this.component = host;
     this.timePicker = timePicker;
   }

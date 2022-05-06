@@ -1,6 +1,6 @@
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-/* hide caret */
+/* Hide caret */
 registerStyles(
   'vaadin-combo-box',
   css`

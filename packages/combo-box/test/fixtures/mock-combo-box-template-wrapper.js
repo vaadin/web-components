@@ -30,7 +30,7 @@ class MockComboBoxTemplateWrapper extends PolymerElement {
   }
 
   parentEventHandler() {
-    // do nothing
+    // Do nothing
   }
 }
 

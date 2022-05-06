@@ -198,8 +198,8 @@ export const InputFieldMixin = (superclass) =>
       return (
         event.metaKey ||
         event.ctrlKey ||
-        !event.key || // allow typing anything if event.key is not supported
-        event.key.length !== 1 || // allow "Backspace", "ArrowLeft" etc.
+        !event.key || // Allow typing anything if event.key is not supported
+        event.key.length !== 1 || // Allow "Backspace", "ArrowLeft" etc.
         this.__enabledCharRegExp.test(event.key)
       );
     }

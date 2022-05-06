@@ -21,7 +21,7 @@ export const onceOpened = (element) => {
     const listener = (e) => {
       if (e.detail.value) {
         element.removeEventListener('opened-changed', listener);
-        // wait for scroll position adjustment
+        // Wait for scroll position adjustment
         window.requestAnimationFrame(() => {
           resolve();
         });
@@ -109,7 +109,7 @@ export const flushComboBox = (comboBox) => {
  * Emulates selecting an item at the given index.
  */
 export const selectItem = (comboBox, index) => {
-  // simulates clicking on the overlay items, but it more reliable in tests.
+  // Simulates clicking on the overlay items, but it more reliable in tests.
   fire(comboBox.$.dropdown, 'selection-changed', {
     item: comboBox.items[index],
   });

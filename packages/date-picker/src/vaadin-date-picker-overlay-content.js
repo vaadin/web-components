@@ -861,10 +861,10 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     } else if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
       // Move to min or max date
       if (days > 0) {
-        // down or right
+        // Down or right
         this.focusDate(this.maxDate);
       } else {
-        // up or left
+        // Up or left
         this.focusDate(this.minDate);
       }
     } else {
@@ -891,10 +891,10 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     } else if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
       // Move to min or max date
       if (months > 0) {
-        // pagedown
+        // Pagedown
         this.focusDate(this.maxDate);
       } else {
-        // pageup
+        // Pageup
         this.focusDate(this.minDate);
       }
     } else {

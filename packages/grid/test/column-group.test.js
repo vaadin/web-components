@@ -59,7 +59,7 @@ describe('column group', () => {
     expect(group.frozen).to.be.true;
   });
 
-  // this test is aimed for Safari 9, see #552
+  // This test is aimed for Safari 9, see #552
   it('should propagate frozen from children when attached', () => {
     const parent = group.parentElement;
     parent.removeChild(group);

@@ -88,7 +88,7 @@ export const ButtonsMixin = (superClass) =>
         btn.style.visibility = '';
         btn.style.position = '';
 
-        // teleport item component back from "overflow" sub-menu
+        // Teleport item component back from "overflow" sub-menu
         const item = btn.item && btn.item.component;
         if (item instanceof HTMLElement && item.classList.contains('vaadin-menu-item')) {
           btn.appendChild(item);
@@ -113,7 +113,7 @@ export const ButtonsMixin = (superClass) =>
           const btn = buttons[i - 1];
           const btnStyle = getComputedStyle(btn);
 
-          // if this button isn't overflowing, then the rest aren't either
+          // If this button isn't overflowing, then the rest aren't either
           if (
             (!isRTL && btn.offsetLeft + btn.offsetWidth < container.offsetWidth - overflow.offsetWidth) ||
             (isRTL && btn.offsetLeft >= overflow.offsetWidth)
@@ -124,7 +124,7 @@ export const ButtonsMixin = (superClass) =>
           btn.disabled = true;
           btn.style.visibility = 'hidden';
           btn.style.position = 'absolute';
-          // save width for buttons with component
+          // Save width for buttons with component
           btn.style.width = btnStyle.width;
         }
         overflow.item = {
@@ -139,10 +139,10 @@ export const ButtonsMixin = (superClass) =>
       const buttons = this._buttons.filter((btn) => btn !== overflow);
       const oldOverflowCount = this.__getOverflowCount(overflow);
 
-      // reset all buttons in the menu bar and the overflow button
+      // Reset all buttons in the menu bar and the overflow button
       this.__restoreButtons(buttons);
 
-      // hide any overflowing buttons and put them in the 'overflow' button
+      // Hide any overflowing buttons and put them in the 'overflow' button
       this.__setOverflowItems(buttons, overflow);
 
       const newOverflowCount = this.__getOverflowCount(overflow);
@@ -171,7 +171,7 @@ export const ButtonsMixin = (superClass) =>
       if (item.component) {
         const component = this.__getComponent(itemCopy);
         itemCopy.component = component;
-        // save item for overflow menu
+        // Save item for overflow menu
         component.item = itemCopy;
         button.appendChild(component);
       } else if (item.text) {
@@ -201,7 +201,7 @@ export const ButtonsMixin = (superClass) =>
     _setButtonTheme(btn, hostTheme) {
       let theme = hostTheme;
 
-      // item theme takes precedence over host theme even if it's empty, as long as it's not undefined or null
+      // Item theme takes precedence over host theme even if it's empty, as long as it's not undefined or null
       const itemTheme = btn.item && btn.item.theme;
       if (itemTheme != null) {
         theme = Array.isArray(itemTheme) ? itemTheme.join(' ') : itemTheme;
@@ -225,7 +225,7 @@ export const ButtonsMixin = (superClass) =>
       let component;
 
       const isElement = itemComponent instanceof HTMLElement;
-      // use existing item component, if any
+      // Use existing item component, if any
       if (isElement && itemComponent.localName === 'vaadin-context-menu-item') {
         component = itemComponent;
       } else {

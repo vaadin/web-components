@@ -164,7 +164,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
     /** @private */
     _loadPage(page) {
-      // make sure same page isn't requested multiple times.
+      // Make sure same page isn't requested multiple times.
       if (!this._pendingRequests[page] && this.dataProvider) {
         this.loading = true;
 

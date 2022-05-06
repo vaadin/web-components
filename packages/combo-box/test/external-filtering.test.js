@@ -168,7 +168,7 @@ describe('external filtering', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
-    // see https://github.com/vaadin/web-components/issues/2615
+    // See https://github.com/vaadin/web-components/issues/2615
     it('should not reset value after blur when set as html attribute', () => {
       comboBox.value = '';
       comboBox.focus();

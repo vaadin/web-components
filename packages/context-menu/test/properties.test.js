@@ -159,7 +159,7 @@ describe('properties', () => {
     });
 
     it('should use context selector on external target', () => {
-      menu.selector = 'section'; // parent of #target
+      menu.selector = 'section'; // Parent of #target
       menu.listenOn = menu.parentElement;
       fire(target, 'contextmenu');
 

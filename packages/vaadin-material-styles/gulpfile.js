@@ -54,7 +54,7 @@ gulp.task('icons', async () => {
     )
     .pipe(gulp.dest(folder))
     .on('finish', () => {
-      // icon font
+      // Icon font
       gulp
         .src(`${folder}*.svg`)
         .pipe(

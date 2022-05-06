@@ -304,7 +304,7 @@ describe('light dom observing', () => {
     grid = fixtureSync(fixtures[fixtureName]);
 
     if (grid.$.grid) {
-      // unwrap the <grid-wrapper>
+      // Unwrap the <grid-wrapper>
       wrapper = grid;
       grid = grid.$.grid || grid;
     }
@@ -638,7 +638,7 @@ describe('light dom observing', () => {
         const row = getRows(grid.$.items)[0];
         const cell = getRowCells(row)[0];
         const toggle = getCellContent(cell).children[0];
-        // open row details
+        // Open row details
         toggle.value = true;
         expect(grid.detailsOpenedItems).to.contain(row._item);
       });

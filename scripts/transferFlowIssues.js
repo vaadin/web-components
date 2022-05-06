@@ -4,7 +4,7 @@ const axios = require('axios');
 
 dotenv.config();
 
-// if DRY_RUN then no actual changes are made
+// If DRY_RUN then no actual changes are made
 const DRY_RUN = process.env.PRODUCTION_RUN !== 'true';
 console.log(
   DRY_RUN
@@ -12,7 +12,7 @@ console.log(
     : `PRODUCTION_RUN is set to 'true', making changes for real`,
 );
 
-// stop after processing ISSUE_LIMIT issues
+// Stop after processing ISSUE_LIMIT issues
 const ISSUE_LIMIT = Number(process.env.ISSUE_LIMIT) || Number.MAX_SAFE_INTEGER;
 
 // GitHub API client (both REST and GraphQL)
@@ -196,7 +196,7 @@ async function makeRepoLabelsMap(repo) {
     },
   };
 
-  // fetch the list of all existing labels on the target repo
+  // Fetch the list of all existing labels on the target repo
   const iterator = octokit.paginate.iterator(octokit.rest.issues.listLabelsForRepo, {
     owner: repo.owner.login,
     repo: repo.name,
@@ -247,27 +247,27 @@ async function main() {
     per_page: 100,
   });
 
-  // iterate through each page of issues
+  // Iterate through each page of issues
   for await (const { data: issues } of iterator) {
-    // stop processing when reached the issue limit
+    // Stop processing when reached the issue limit
     if (issueCount >= ISSUE_LIMIT) {
       break;
     }
-    // iterate through each issue in a page
+    // Iterate through each issue in a page
     for (const issue of issues) {
-      // stop processing when reached the issue limit
+      // Stop processing when reached the issue limit
       if (issueCount >= ISSUE_LIMIT) {
         console.log(`stoppig because reached the ISSUE_LIMIT (${ISSUE_LIMIT})`);
         break;
       }
 
-      // do not transfer open PRs
+      // Do not transfer open PRs
       if (issue.html_url.indexOf('/pull/') > -1) {
         continue;
       }
 
       const [{ data: labels }, zhIssue] = await Promise.all([
-        // fetch all labels on the issue
+        // Fetch all labels on the issue
         // (no need for pagination as there is never too many)
         octokit.rest.issues.listLabelsOnIssue({
           owner: repo.owner.login,
@@ -303,7 +303,7 @@ async function main() {
 
       const transferredIssue = await transferIssue(issue, targetRepo);
 
-      // remove the `flow` label
+      // Remove the `flow` label
       const idx = labels.findIndex((label) => label.name === 'flow');
       if (idx > -1) {
         labels.splice(idx, 1);

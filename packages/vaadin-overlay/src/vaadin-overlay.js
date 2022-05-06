@@ -725,7 +725,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
   }
 
   /**
-   * returns true if this is the last one in the opened overlays stack
+   * Returns true if this is the last one in the opened overlays stack
    * @return {boolean}
    * @protected
    */
@@ -937,7 +937,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
    * @protected
    */
   _getActiveElement() {
-    // document.activeElement can be null
+    // Document.activeElement can be null
     // https://developer.mozilla.org/en-US/docs/Web/API/Document/activeElement
     let active = document.activeElement || document.body;
     while (active.shadowRoot && active.shadowRoot.activeElement) {
@@ -957,7 +957,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
     }
     let n = node;
     const doc = node.ownerDocument;
-    // walk from node to `this` or `document`
+    // Walk from node to `this` or `document`
     while (n && n !== doc && n !== this) {
       n = n.parentNode || n.host;
     }

@@ -37,7 +37,7 @@ describe('lit renderer directives', () => {
       beforeEach(async () => {
         grid = await renderGrid(container, { items: ['Item'], rowDetails: 'Row Details' });
         grid.openItemDetails(grid.items[0]);
-        cell = getContainerCell(grid.$.items, 0, 1 /* column count + 1 = the row details cell */);
+        cell = getContainerCell(grid.$.items, 0, 1 /* Column count + 1 = the row details cell */);
       });
 
       it('should set `rowDetailsRenderer` property when the directive is attached', () => {
@@ -79,7 +79,7 @@ describe('lit renderer directives', () => {
       });
 
       it('should pass the model to the renderer', () => {
-        const cell = getContainerCell(grid.$.items, 0, 1 /* column count + 1 = the row details cell */);
+        const cell = getContainerCell(grid.$.items, 0, 1 /* Column count + 1 = the row details cell */);
         const model = grid.__getRowModel(cell.parentElement);
         expect(rendererSpy.firstCall.args[1]).to.deep.equal(model);
       });

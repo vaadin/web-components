@@ -370,7 +370,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
   /** @private */
   __validDayDivisor(step) {
-    // valid if undefined, or exact divides a day, or has millisecond resolution
+    // Valid if undefined, or exact divides a day, or has millisecond resolution
     return !step || (24 * 3600) % step === 0 || (step < 1 && ((step % 1) * 1000) % 1 === 0);
   }
 

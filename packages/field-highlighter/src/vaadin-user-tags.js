@@ -220,7 +220,7 @@ export class UserTags extends PolymerElement {
       }
     });
 
-    // filter out users that are only moved
+    // Filter out users that are only moved
     const addedUsers = usersToAdd.filter((u) => !usersToRemove.some((u2) => u.id === u2.id));
     const removedUsers = usersToRemove.filter((u) => !usersToAdd.some((u2) => u.id === u2.id));
 
@@ -264,7 +264,7 @@ export class UserTags extends PolymerElement {
 
     const changedTags = this.getChangedTags(addedUsers, removedUsers);
 
-    // check if flash queue contains pending tags for removed users
+    // Check if flash queue contains pending tags for removed users
     if (this._flashQueue.length > 0) {
       for (let i = 0; i < removedUsers.length; i++) {
         if (changedTags.removed[i] === null) {
@@ -283,7 +283,7 @@ export class UserTags extends PolymerElement {
       // Avoid adding to queue if window is not visible.
       const tags = changedTags.added;
       if (this.flashing) {
-        // schedule next flash later
+        // Schedule next flash later
         this.push('_flashQueue', tags);
       } else {
         this.flashTags(tags);
@@ -296,7 +296,7 @@ export class UserTags extends PolymerElement {
 
   /** @private */
   _onOverlayOpen() {
-    // animate all tags except removing ones
+    // Animate all tags except removing ones
     Array.from(this.wrapper.children).forEach((tag) => {
       if (!tag.classList.contains('removing')) {
         tag.classList.add('show');
@@ -308,11 +308,11 @@ export class UserTags extends PolymerElement {
     this.flashing = true;
     const wrapper = this.wrapper;
 
-    // hide existing tags
+    // Hide existing tags
     const hidden = Array.from(wrapper.children);
     hidden.forEach((tag) => (tag.style.display = 'none'));
 
-    // render new tags
+    // Render new tags
     added.forEach((tag) => {
       wrapper.insertBefore(tag, wrapper.firstChild);
     });
@@ -320,12 +320,12 @@ export class UserTags extends PolymerElement {
     this.flashPromise = new Promise((resolve) => {
       listenOnce(this.$.overlay, 'vaadin-overlay-open').then(() => {
         this._debounceFlashStart = Debouncer.debounce(this._debounceFlashStart, timeOut.after(DURATION + DELAY), () => {
-          // animate disappearing
+          // Animate disappearing
           if (!this.hasFocus) {
             added.forEach((tag) => tag.classList.remove('show'));
           }
           this._debounceFlashEnd = Debouncer.debounce(this._debounceFlashEnd, timeOut.after(DURATION), () => {
-            // show all tags
+            // Show all tags
             const finishFlash = () => {
               hidden.forEach((tag) => (tag.style.display = 'block'));
               this.flashing = false;
@@ -335,7 +335,7 @@ export class UserTags extends PolymerElement {
             if (this.hasFocus) {
               finishFlash();
             } else {
-              // wait for overlay closing animation to complete
+              // Wait for overlay closing animation to complete
               listenOnce(this.$.overlay, 'animationend').then(() => {
                 finishFlash();
               });
