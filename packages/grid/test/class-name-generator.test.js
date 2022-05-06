@@ -125,4 +125,35 @@ describe('class name generator', () => {
     assertClassList(getContainerCell(grid.$.items, 1, 0), ['odd']);
     assertClassList(getContainerCell(grid.$.items, 1, 1), ['odd']);
   });
+
+  describe('async data provider', () => {
+    let clock;
+
+    beforeEach(() => {
+      clock = sinon.useFakeTimers({
+        shouldClearNativeTimers: true,
+      });
+
+      grid.dataProvider = (params, callback) => {
+        setTimeout(() => infiniteDataProvider(params, callback), 10);
+      };
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    it('should only run the generator for the rows that are loaded', async () => {
+      const spy = sinon.spy();
+      grid.cellClassNameGenerator = spy;
+      spy.resetHistory();
+
+      grid.generateCellClassNames();
+      expect(spy.called).to.be.false;
+
+      clock.tick(10);
+      grid.generateCellClassNames();
+      expect(spy.called).to.be.true;
+    });
+  });
 });
