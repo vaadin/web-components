@@ -181,7 +181,7 @@ function buildWebTypes() {
   packages.forEach((packageName) => {
     const packageJson = JSON.parse(fs.readFileSync(`./packages/${packageName}/package.json`, 'utf8'));
     const packageElements = analysis.elements
-      .filter((el) => el.path.startsWith(`packages/${packageName}`))
+      .filter((el) => el.path.startsWith(`packages/${packageName}/`))
       .filter((el) => el.privacy === 'public');
 
     const plainWebTypes = createPlainWebTypes(packageJson, packageElements);
