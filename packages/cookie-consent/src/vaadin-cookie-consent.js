@@ -206,7 +206,7 @@ class CookieConsent extends ElementMixin(PolymerElement) {
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    var popup = this._getPopup();
+    const popup = this._getPopup();
     if (popup) {
       popup.parentNode.removeChild(popup);
     }
@@ -225,7 +225,7 @@ class CookieConsent extends ElementMixin(PolymerElement) {
    * @protected
    */
   _show() {
-    var popup = this._getPopup();
+    const popup = this._getPopup();
     if (popup) {
       popup.classList.remove('cc-invisible');
       popup.style.display = '';

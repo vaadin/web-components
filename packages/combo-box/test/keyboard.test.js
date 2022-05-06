@@ -32,7 +32,7 @@ describe('keyboard', () => {
   }
 
   function inputText(text) {
-    for (var i = 0; i < text.length; i++) {
+    for (let i = 0; i < text.length; i++) {
       inputChar(text[i]);
     }
   }

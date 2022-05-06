@@ -217,13 +217,13 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
   /* Returns true if all the dates in the month are out of the allowed range */
   _isDisabled(month, minDate, maxDate) {
     // First day of the month
-    var firstDate = new Date(0, 0);
+    const firstDate = new Date(0, 0);
     firstDate.setFullYear(month.getFullYear());
     firstDate.setMonth(month.getMonth());
     firstDate.setDate(1);
 
     // Last day of the month
-    var lastDate = new Date(0, 0);
+    const lastDate = new Date(0, 0);
     lastDate.setFullYear(month.getFullYear());
     lastDate.setMonth(month.getMonth() + 1);
     lastDate.setDate(0);
@@ -320,7 +320,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
       return;
     }
     // First day of the month (at midnight).
-    var date = new Date(0, 0);
+    const date = new Date(0, 0);
     date.setFullYear(month.getFullYear());
     date.setMonth(month.getMonth());
     date.setDate(1);
@@ -330,9 +330,9 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
       this._dateAdd(date, -1);
     }
 
-    var days = [];
-    var startMonth = date.getMonth();
-    var targetMonth = month.getMonth();
+    const days = [];
+    const startMonth = date.getMonth();
+    const targetMonth = month.getMonth();
     while (date.getMonth() === targetMonth || date.getMonth() === startMonth) {
       days.push(date.getMonth() === targetMonth ? new Date(date.getTime()) : null);
 
@@ -406,7 +406,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
       return '';
     }
 
-    var ariaLabel = `${this._getDate(date)} ${this.i18n.monthNames[date.getMonth()]} ${date.getFullYear()}, ${
+    let ariaLabel = `${this._getDate(date)} ${this.i18n.monthNames[date.getMonth()]} ${date.getFullYear()}, ${
       this.i18n.weekdays[date.getDay()]
     }`;
 

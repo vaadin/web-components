@@ -307,7 +307,7 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       return;
     }
 
-    var size = this.orientation === 'vertical' ? 'height' : 'width';
+    const size = this.orientation === 'vertical' ? 'height' : 'width';
     if (event.detail.state === 'start') {
       this._startSize = {
         container: this.getBoundingClientRect()[size] - this.$.splitter.getBoundingClientRect()[size],
@@ -318,7 +318,7 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       return;
     }
 
-    var distance = this.orientation === 'vertical' ? event.detail.dy : event.detail.dx;
+    const distance = this.orientation === 'vertical' ? event.detail.dy : event.detail.dx;
     const isRtl = this.orientation !== 'vertical' && this.getAttribute('dir') === 'rtl';
     const dirDistance = isRtl ? -distance : distance;
 

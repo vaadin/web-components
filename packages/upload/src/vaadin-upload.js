@@ -469,7 +469,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     const unitSizes = [60, 60, 24, Infinity];
     const timeValues = [0];
 
-    for (var i = 0; i < unitSizes.length && time > 0; i++) {
+    for (let i = 0; i < unitSizes.length && time > 0; i++) {
       timeValues[i] = time % unitSizes[i];
       time = Math.floor(time / unitSizes[i]);
     }
@@ -552,7 +552,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
         this.headers = undefined;
       }
     }
-    for (var key in this.headers) {
+    for (const key in this.headers) {
       xhr.setRequestHeader(key, this.headers[key]);
     }
     if (this.timeout) {
@@ -747,7 +747,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   /** @private */
   _notifyFileChanges(file) {
-    var p = `files.${this.files.indexOf(file)}.`;
+    const p = `files.${this.files.indexOf(file)}.`;
     for (const i in file) {
       // eslint-disable-next-line no-prototype-builtins
       if (file.hasOwnProperty(i)) {

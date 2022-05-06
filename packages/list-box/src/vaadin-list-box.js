@@ -109,7 +109,7 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(Controller
 
   /** @private */
   _checkImport() {
-    var item = this.querySelector('vaadin-item');
+    const item = this.querySelector('vaadin-item');
     if (item && !(item instanceof PolymerElement)) {
       console.warn(`Make sure you have imported the vaadin-item element.`);
     }

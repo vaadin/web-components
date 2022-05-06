@@ -330,7 +330,7 @@ class InfiniteScroller extends PolymerElement {
       return;
     }
 
-    var tmpInstance = itemWrapper.instance;
+    const tmpInstance = itemWrapper.instance;
 
     itemWrapper.instance = new this._TemplateClass({});
     itemWrapper.appendChild(itemWrapper.instance.root);
@@ -343,10 +343,10 @@ class InfiniteScroller extends PolymerElement {
   _updateClones(viewPortOnly) {
     this._firstIndex = ~~((this._buffers[0].translateY - this._initialScroll) / this.itemHeight) + this._initialIndex;
 
-    var scrollerRect = viewPortOnly ? this.$.scroller.getBoundingClientRect() : undefined;
+    const scrollerRect = viewPortOnly ? this.$.scroller.getBoundingClientRect() : undefined;
     this._buffers.forEach((buffer, bufferIndex) => {
       if (!buffer.updated) {
-        var firstIndex = this._firstIndex + this.bufferSize * bufferIndex;
+        const firstIndex = this._firstIndex + this.bufferSize * bufferIndex;
 
         [].forEach.call(buffer.children, (insertionPoint, index) => {
           const itemWrapper = insertionPoint._itemWrapper;
@@ -360,7 +360,7 @@ class InfiniteScroller extends PolymerElement {
   }
 
   _isVisible(element, container) {
-    var rect = element.getBoundingClientRect();
+    const rect = element.getBoundingClientRect();
     return rect.bottom > container.top && rect.top < container.bottom;
   }
 }

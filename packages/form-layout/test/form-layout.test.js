@@ -289,7 +289,7 @@ describe('form layout', () => {
   });
 
   describe('responsiveSteps property', () => {
-    var layout;
+    let layout;
 
     beforeEach(async () => {
       layout = fixtureSync(`

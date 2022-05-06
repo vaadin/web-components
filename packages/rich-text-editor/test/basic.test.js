@@ -438,7 +438,7 @@ describe('rich text editor', () => {
   });
 
   describe('change event', () => {
-    var content;
+    let content;
 
     const setContent = (text) => {
       editor.setContents(new window.Quill.imports.delta([{ insert: text }]), 'user');

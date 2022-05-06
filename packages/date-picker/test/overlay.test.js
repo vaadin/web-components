@@ -9,7 +9,7 @@ function waitUntilScrolledTo(overlay, date, callback) {
   if (overlay.$.monthScroller.position) {
     overlay._onMonthScroll();
   }
-  var monthIndex = overlay._differenceInMonths(date, new Date());
+  const monthIndex = overlay._differenceInMonths(date, new Date());
   if (overlay.$.monthScroller.position === monthIndex) {
     afterNextRender(overlay, callback);
   } else {
@@ -219,9 +219,9 @@ describe('overlay', () => {
         });
 
         it('should do nothing if disabled', (done) => {
-          var initialDate = new Date(2000, 1, 1);
+          const initialDate = new Date(2000, 1, 1);
           overlay.scrollToDate(initialDate);
-          var closeSpy = sinon.spy();
+          const closeSpy = sinon.spy();
           overlay.addEventListener('close', closeSpy);
 
           overlay.$.todayButton.disabled = true;

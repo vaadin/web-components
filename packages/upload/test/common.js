@@ -12,14 +12,14 @@ export const touchDevice = (function () {
 /**
  * Creates a File suitable to add to FormData.
  */
-var fileCounter = 0;
+let fileCounter = 0;
 
 export function createFile(fileSize, contentType) {
-  var array = [];
-  for (var i = 0; i < (fileSize || 512); i++) {
+  const array = [];
+  for (let i = 0; i < (fileSize || 512); i++) {
     array.push('A');
   }
-  var file = new Blob([new Uint8Array(array)], { type: contentType || 'application/x-octet-stream' });
+  const file = new Blob([new Uint8Array(array)], { type: contentType || 'application/x-octet-stream' });
   file.name = `file-${fileCounter}`;
   fileCounter += 1;
   return file;
@@ -29,8 +29,8 @@ export function createFile(fileSize, contentType) {
  * Creates an array of Files suitable to add to FormData.
  */
 export function createFiles(arraySize, fileSize, contentType) {
-  var files = [];
-  for (var i = 0; i < arraySize; i++) {
+  const files = [];
+  for (let i = 0; i < arraySize; i++) {
     files.push(createFile(fileSize, contentType));
   }
   return files;
@@ -51,7 +51,7 @@ export function createFiles(arraySize, fileSize, contentType) {
  */
 export function xhrCreator(c) {
   c = c || {};
-  var cfg = {
+  const cfg = {
     size: c.size || 100,
     connectTime: c.connectTime || 10,
     uploadTime: c.uploadTime || 10,
@@ -62,21 +62,21 @@ export function xhrCreator(c) {
     serverValidation: c.serverValidation || function () {},
   };
   return function () {
-    var xhr = new MockHttpRequest();
+    const xhr = new MockHttpRequest();
     xhr.upload = { onprogress: function () {} };
     xhr.onsend = function () {
       if (xhr.upload.onloadstart) {
         xhr.upload.onloadstart();
       }
-      var total = cfg.size;
-      var done = 0;
-      var step = (total / cfg.uploadTime) * cfg.stepTime;
+      const total = cfg.size;
+      let done = 0;
+      const step = (total / cfg.uploadTime) * cfg.stepTime;
       function finish() {
-        var error = cfg.serverValidation(xhr);
+        const error = cfg.serverValidation(xhr);
         if (error) {
           xhr.setResponseHeader('Content-Type', cfg.serverType);
-          var status = error.status || 500;
-          var statusText = error.statusText || error;
+          const status = error.status || 500;
+          const statusText = error.statusText || error;
           xhr.receive(status, { error: statusText });
         } else if (xhr.readyState === 0) {
           xhr.onreadystatechange();

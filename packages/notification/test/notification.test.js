@@ -58,7 +58,7 @@ describe('vaadin-notification', () => {
     });
 
     it('should be visible after opening', () => {
-      var isVisible = (elem) => !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
+      const isVisible = (elem) => !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
       expect(isVisible(document.body.querySelector('vaadin-notification-container'))).to.be.true;
     });
 

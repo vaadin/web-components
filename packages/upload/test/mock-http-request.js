@@ -162,7 +162,7 @@ MockHttpRequest.prototype = {
     if (this.requestHeaders[header] === undefined) {
       this.requestHeaders[header] = value;
     } else {
-      var prev = this.requestHeaders[header];
+      const prev = this.requestHeaders[header];
       this.requestHeaders[header] = `${prev}, ${value}`;
     }
   },
@@ -187,7 +187,7 @@ MockHttpRequest.prototype = {
   abort: function () {
     this.responseText = null;
     this.error = true;
-    for (var header in this.requestHeaders) {
+    for (const header in this.requestHeaders) {
       delete this.requestHeaders[header];
     }
     delete this.requestText;
@@ -209,8 +209,8 @@ MockHttpRequest.prototype = {
   },
 
   getAllResponseHeaders: function () {
-    var r = '';
-    for (var header in this.responseHeaders) {
+    let r = '';
+    for (const header in this.responseHeaders) {
       if (header === 'set-cookie' || header === 'set-cookie2') {
         continue;
       }
@@ -259,13 +259,13 @@ MockHttpRequest.prototype = {
   },
 
   makeXMLResponse: function (data) {
-    var xmlDoc;
+    let xmlDoc;
     // According to specs from point 3.7.5:
     // '1. If the response entity body is null terminate these steps
     //     and return null.
     //  2. If final MIME type is not null, text/xml, application/xml,
     //     and does not end in +xml terminate these steps and return null.
-    var mimetype = this.getResponseHeader('Content-Type');
+    let mimetype = this.getResponseHeader('Content-Type');
     mimetype = mimetype && mimetype.split(';', 1)[0];
     if (
       mimetype == null ||
@@ -277,7 +277,7 @@ MockHttpRequest.prototype = {
       // and it will fail if not a good xml
       try {
         if (window.DOMParser) {
-          var parser = new DOMParser();
+          const parser = new DOMParser();
           xmlDoc = parser.parseFromString(data, 'text/xml');
         } else {
           // Internet Explorer
@@ -351,7 +351,7 @@ MockHttpRequest.prototype = {
 
     this.responseText = null;
     this.error = true;
-    for (var header in this.requestHeaders) {
+    for (const header in this.requestHeaders) {
       delete this.requestHeaders[header];
     }
     this.readyState = this.DONE;
@@ -373,7 +373,7 @@ MockHttpRequest.prototype = {
     }
 
     // Basic auth.  Requires existence of the 'atob' function.
-    var auth = this.getRequestHeader('Authorization');
+    let auth = this.getRequestHeader('Authorization');
     if (auth === undefined) {
       return false;
     }
@@ -384,9 +384,9 @@ MockHttpRequest.prototype = {
       return false;
     }
     auth = atob(auth.substr(6));
-    var pieces = auth.split(':');
-    var requser = pieces.shift();
-    var reqpass = pieces.join(':');
+    const pieces = auth.split(':');
+    const requser = pieces.shift();
+    const reqpass = pieces.join(':');
     return user === requser && password === reqpass;
   },
 
@@ -394,9 +394,9 @@ MockHttpRequest.prototype = {
   // Based on parseUri by Steven Levithan <stevenlevithan.com>
   // See http://blog.stevenlevithan.com/archives/parseuri
   parseUri: function (str) {
-    var pattern =
+    const pattern =
       /^(?:([^:/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:/?#]*)(?::(\d*))?))?((((?:[^?#/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/;
-    var key = [
+    const key = [
       'source',
       'protocol',
       'authority',
@@ -412,11 +412,11 @@ MockHttpRequest.prototype = {
       'query',
       'anchor',
     ];
-    var querypattern = /(?:^|&)([^&=]*)=?([^&]*)/g;
+    const querypattern = /(?:^|&)([^&=]*)=?([^&]*)/g;
 
-    var match = pattern.exec(str);
-    var uri = {};
-    var i = 14;
+    const match = pattern.exec(str);
+    const uri = {};
+    let i = 14;
     while (i) {
       i -= 1;
       uri[key[i]] = match[i] || '';

@@ -69,7 +69,7 @@ describe('WAI-ARIA', () => {
   });
 
   describe('overlay contents', () => {
-    var overlay;
+    let overlay;
 
     beforeEach(async () => {
       overlay = fixtureSync(`<vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>`);

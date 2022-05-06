@@ -17,7 +17,7 @@ registerStyles(
 );
 
 describe('login form with csrf', () => {
-  var loginForm, submitStub;
+  let loginForm, submitStub;
 
   before(() => {
     submitStub = sinon.stub(HTMLFormElement.prototype, 'submit');
@@ -49,7 +49,7 @@ describe('login form with csrf', () => {
 });
 
 describe('login form', () => {
-  var login, formWrapper, submitStub;
+  let login, formWrapper, submitStub;
 
   before(() => {
     submitStub = sinon.stub(HTMLFormElement.prototype, 'submit');
@@ -98,7 +98,7 @@ describe('login form', () => {
   });
 
   it('should emit forgot password event', () => {
-    var eventWasCaught = false;
+    let eventWasCaught = false;
     login.addEventListener('forgot-password', () => {
       eventWasCaught = true;
     });

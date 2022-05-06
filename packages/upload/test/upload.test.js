@@ -30,8 +30,8 @@ describe('upload', () => {
       });
 
       it('should apply the capture attribute to the input', () => {
-        var input = upload.$.fileInput;
-        var captureType = 'camera';
+        const input = upload.$.fileInput;
+        const captureType = 'camera';
         upload.capture = captureType;
         expect(input.getAttribute('capture')).to.equal(captureType);
       });

@@ -84,8 +84,8 @@ export function getClosestDate(date, dates) {
         return candidate;
       }
 
-      var candidateDiff = Math.abs(date.getTime() - candidate.getTime());
-      var closestDateDiff = Math.abs(closestDate.getTime() - date.getTime());
+      const candidateDiff = Math.abs(date.getTime() - candidate.getTime());
+      const closestDateDiff = Math.abs(closestDate.getTime() - date.getTime());
       return candidateDiff < closestDateDiff ? candidate : closestDate;
     });
 }
