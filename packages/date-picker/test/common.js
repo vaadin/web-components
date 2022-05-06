@@ -146,5 +146,5 @@ export async function waitForScrollToFinish(overlayContent) {
     await oneEvent(overlayContent, 'scroll-animation-finished');
   }
 
-  await nextRender(overlayContent);
+  await nextRender();
 }
