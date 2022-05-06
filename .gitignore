@@ -13,3 +13,7 @@ packages/*/test/visual/*/screenshots/*/failed
 
 # VSCode user configuration folders
 .vscode
+
+# Generated web-types JSON files
+web-types.json
+web-types.lit.json

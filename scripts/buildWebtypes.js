@@ -1,10 +1,36 @@
 const path = require('path');
 const fs = require('fs');
+const { execSync } = require('child_process');
 
-const analysis = require('../analysis.json');
+const blacklistedPackages = [
+  /^vaadin-/,
+  /^component-base/,
+  /^field-base/,
+  /^field-highlighter/,
+  /^icons/,
+  /^input-container/,
+  /^polymer-legacy-adapter/,
+];
 
-// TODO: Gather actual packages
-const packages = ['date-picker'];
+/**
+ * Get packages using lerna, excluding blacklisted packages
+ */
+function getRelevantPackages() {
+  const output = execSync('./node_modules/.bin/lerna ls --json --loglevel silent');
+  const allPackages = JSON.parse(output.toString()).map((project) => project.name.replace('@vaadin/', ''));
+  return allPackages.filter((pkg) => !blacklistedPackages.some((blacklistedPackage) => pkg.match(blacklistedPackage)));
+}
+
+function loadAnalysis() {
+  const analysisPath = path.resolve('./analysis.json');
+  try {
+    return require(analysisPath);
+  } catch (e) {
+    throw new Error(
+      `Could not read output of the Polymer Analyzer from: ${analysisPath}. Make sure to run the Polymer Analyzer before generating web-types.`,
+    );
+  }
+}
 
 function mapType(typeString) {
   const sanitizedTypeString = (typeString || '').replace(/[!()]/g, '');
@@ -17,8 +43,8 @@ function createPlainElementDefinition(elementAnalysis) {
     name: attribute.name,
     description: attribute.description,
     value: {
-      type: mapType(attribute.type)
-    }
+      type: mapType(attribute.type),
+    },
   }));
   const properties = elementAnalysis.properties
     .filter((prop) => prop.privacy === 'public')
@@ -26,12 +52,12 @@ function createPlainElementDefinition(elementAnalysis) {
       name: prop.name,
       description: prop.description,
       value: {
-        type: mapType(prop.type)
-      }
+        type: mapType(prop.type),
+      },
     }));
   const events = elementAnalysis.events.map((event) => ({
     name: event.name,
-    description: event.description
+    description: event.description,
   }));
 
   return {
@@ -40,8 +66,8 @@ function createPlainElementDefinition(elementAnalysis) {
     attributes,
     js: {
       properties,
-      events
-    }
+      events,
+    },
   };
 }
 
@@ -53,9 +79,9 @@ function createPlainWebTypes(packageJson, packageElements) {
     'description-markup': 'markdown',
     contributions: {
       html: {
-        elements: packageElements.map(createPlainElementDefinition)
-      }
-    }
+        elements: packageElements.map(createPlainElementDefinition),
+      },
+    },
   };
 }
 
@@ -68,8 +94,8 @@ function createLitElementDefinition(elementAnalysis) {
       value: {
         // Type checking does not work with template tagged literals
         // Since this Lit binding should use an expression, just declare it as such
-        kind: 'expression'
-      }
+        kind: 'expression',
+      },
     }));
   const propertyAttributes = elementAnalysis.properties
     .filter((prop) => prop.privacy === 'public')
@@ -79,12 +105,12 @@ function createLitElementDefinition(elementAnalysis) {
       value: {
         // Type checking does not work with template tagged literals
         // Since this Lit binding should use an expression, just declare it as such
-        kind: 'expression'
-      }
+        kind: 'expression',
+      },
     }));
   const eventAttributes = elementAnalysis.events.map((event) => ({
     name: `@${event.name}`,
-    description: event.description
+    description: event.description,
   }));
 
   return {
@@ -95,7 +121,7 @@ function createLitElementDefinition(elementAnalysis) {
     extension: true,
     // IntelliJ does not understand Lit template syntax, so
     // effectively everything has to be declared as attribute
-    attributes: [...booleanAttributes, ...propertyAttributes, ...eventAttributes]
+    attributes: [...booleanAttributes, ...propertyAttributes, ...eventAttributes],
   };
 }
 
@@ -108,28 +134,35 @@ function createLitWebTypes(packageJson, packageElements) {
     framework: 'lit',
     'framework-config': {
       'enable-when': {
-        'node-packages': ['lit']
-      }
+        'node-packages': ['lit'],
+      },
     },
     contributions: {
       html: {
-        elements: packageElements.map(createLitElementDefinition)
-      }
-    }
+        elements: packageElements.map(createLitElementDefinition),
+      },
+    },
   };
 }
 
-packages.forEach((packageName) => {
-  const packageJson = require(`../packages/${packageName}/package.json`);
-  const packageElements = analysis.elements
-    .filter((el) => el.path.startsWith(`packages/${packageName}`))
-    .filter((el) => el.privacy === 'public');
+function buildWebTypes() {
+  const packages = getRelevantPackages();
+  const analysis = loadAnalysis();
 
-  const plainWebTypes = createPlainWebTypes(packageJson, packageElements);
-  const plainWebTypesJson = JSON.stringify(plainWebTypes, null, 2);
-  fs.writeFileSync(path.join('..', 'packages', packageName, 'web-types.json'), plainWebTypesJson, 'utf8');
+  packages.forEach((packageName) => {
+    const packageJson = require(`../packages/${packageName}/package.json`);
+    const packageElements = analysis.elements
+      .filter((el) => el.path.startsWith(`packages/${packageName}`))
+      .filter((el) => el.privacy === 'public');
 
-  const litWebTypes = createLitWebTypes(packageJson, packageElements);
-  const litWebTypesJson = JSON.stringify(litWebTypes, null, 2);
-  fs.writeFileSync(path.join('..', 'packages', packageName, 'web-types.lit.json'), litWebTypesJson, 'utf8');
-});
+    const plainWebTypes = createPlainWebTypes(packageJson, packageElements);
+    const plainWebTypesJson = JSON.stringify(plainWebTypes, null, 2);
+    fs.writeFileSync(path.join('.', 'packages', packageName, 'web-types.json'), plainWebTypesJson, 'utf8');
+
+    const litWebTypes = createLitWebTypes(packageJson, packageElements);
+    const litWebTypesJson = JSON.stringify(litWebTypes, null, 2);
+    fs.writeFileSync(path.join('.', 'packages', packageName, 'web-types.lit.json'), litWebTypesJson, 'utf8');
+  });
+}
+
+buildWebTypes();
