@@ -35,8 +35,8 @@ const chip = css`
     content: '';
     width: 100%;
     height: 100%;
-    border-left: 0.13rem solid;
-    border-radius: 4px 0 0 4px;
+    border-left: 0.125rem solid;
+    border-radius: 0.25rem;
     border-color: hsla(214, 53%, 23%, 0.1);
   }
 
