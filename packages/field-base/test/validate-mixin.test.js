@@ -1,43 +1,40 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { ValidateMixin } from '../src/validate-mixin.js';
+import { define } from './helpers.js';
 
-customElements.define(
-  'validate-mixin-element',
-  class extends ValidateMixin(PolymerElement) {
-    static get template() {
-      return html`<input />`;
-    }
-  },
-);
+const runTests = (baseClass) => {
+  const tag = define[baseClass]('validate-mixin', '<input>', (Base) => class extends ValidateMixin(Base) {});
 
-describe('validate-mixin', () => {
   let element;
 
   describe('properties', () => {
-    beforeEach(() => {
-      element = fixtureSync(`<validate-mixin-element></validate-mixin-element>`);
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await nextRender();
     });
 
-    it('should reflect required property to attribute', () => {
+    it('should reflect required property to attribute', async () => {
       expect(element.hasAttribute('required')).to.be.false;
 
       element.required = true;
+      await nextFrame();
       expect(element.hasAttribute('required')).to.be.true;
     });
 
-    it('should reflect invalid property to attribute', () => {
+    it('should reflect invalid property to attribute', async () => {
       expect(element.hasAttribute('invalid')).to.be.false;
 
       element.invalid = true;
+      await nextFrame();
       expect(element.hasAttribute('invalid')).to.be.true;
     });
   });
 
   describe('checkValidity', () => {
-    beforeEach(() => {
-      element = fixtureSync(`<validate-mixin-element></validate-mixin-element>`);
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></$${tag}>`);
+      await nextRender();
     });
 
     it('should return true when element is not required', () => {
@@ -57,8 +54,9 @@ describe('validate-mixin', () => {
   });
 
   describe('validate', () => {
-    beforeEach(() => {
-      element = fixtureSync(`<validate-mixin-element></validate-mixin-element>`);
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await nextRender();
     });
 
     it('should return true when element is not required', () => {
@@ -103,4 +101,12 @@ describe('validate-mixin', () => {
       expect(element.invalid).to.be.false;
     });
   });
+};
+
+describe('ValidateMixin + Polymer', () => {
+  runTests('polymer');
+});
+
+describe('ValidateMixin + Lit', () => {
+  runTests('lit');
 });
