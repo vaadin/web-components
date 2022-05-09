@@ -734,9 +734,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         if (cell) {
           // Fire a public event for cell.
           const context = this.getEventContext(e);
-          cell.dispatchEvent(
-            new CustomEvent('cell-focus', { bubbles: true, composed: true, detail: { context: context } }),
-          );
+          cell.dispatchEvent(new CustomEvent('cell-focus', { bubbles: true, composed: true, detail: { context } }));
         }
       }
 

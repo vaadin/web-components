@@ -567,7 +567,7 @@ register({
    * @this {GestureRecognizer}
    * @return {void}
    */
-  reset: function () {
+  reset() {
     untrackDocument(this.info);
   },
 
@@ -576,7 +576,7 @@ register({
    * @param {MouseEvent} e
    * @return {void}
    */
-  mousedown: function (e) {
+  mousedown(e) {
     if (!hasLeftMouseButton(e)) {
       return;
     }
@@ -604,7 +604,7 @@ register({
    * @param {TouchEvent} e
    * @return {void}
    */
-  touchstart: function (e) {
+  touchstart(e) {
     downupFire('down', _findOriginalTarget(e), e.changedTouches[0], e);
   },
 
@@ -613,7 +613,7 @@ register({
    * @param {TouchEvent} e
    * @return {void}
    */
-  touchend: function (e) {
+  touchend(e) {
     downupFire('up', _findOriginalTarget(e), e.changedTouches[0], e);
   },
 });
@@ -633,8 +633,8 @@ function downupFire(type, target, event, preventer) {
     x: event.clientX,
     y: event.clientY,
     sourceEvent: event,
-    preventer: preventer,
-    prevent: function (e) {
+    preventer,
+    prevent(e) {
       return prevent(e);
     },
   });
@@ -657,7 +657,7 @@ register({
     started: false,
     moves: [],
     /** @this {GestureInfo} */
-    addMove: function (move) {
+    addMove(move) {
       if (this.moves.length > TRACK_LENGTH) {
         this.moves.shift();
       }
@@ -672,7 +672,7 @@ register({
    * @this {GestureRecognizer}
    * @return {void}
    */
-  reset: function () {
+  reset() {
     this.info.state = 'start';
     this.info.started = false;
     this.info.moves = [];
@@ -687,7 +687,7 @@ register({
    * @param {MouseEvent} e
    * @return {void}
    */
-  mousedown: function (e) {
+  mousedown(e) {
     if (!hasLeftMouseButton(e)) {
       return;
     }
@@ -704,7 +704,7 @@ register({
           // If and only if tracking, always prevent tap
           prevent('tap');
         }
-        self.info.addMove({ x: x, y: y });
+        self.info.addMove({ x, y });
         if (!hasLeftMouseButton(e)) {
           // Always fire "end"
           self.info.state = 'end';
@@ -735,7 +735,7 @@ register({
    * @param {TouchEvent} e
    * @return {void}
    */
-  touchstart: function (e) {
+  touchstart(e) {
     const ct = e.changedTouches[0];
     this.info.x = ct.clientX;
     this.info.y = ct.clientY;
@@ -746,7 +746,7 @@ register({
    * @param {TouchEvent} e
    * @return {void}
    */
-  touchmove: function (e) {
+  touchmove(e) {
     const t = _findOriginalTarget(e);
     const ct = e.changedTouches[0];
     const x = ct.clientX,
@@ -756,7 +756,7 @@ register({
         // If and only if tracking, always prevent tap
         prevent('tap');
       }
-      this.info.addMove({ x: x, y: y });
+      this.info.addMove({ x, y });
       trackFire(this.info, t, ct);
       this.info.state = 'track';
       this.info.started = true;
@@ -768,7 +768,7 @@ register({
    * @param {TouchEvent} e
    * @return {void}
    */
-  touchend: function (e) {
+  touchend(e) {
     const t = _findOriginalTarget(e);
     const ct = e.changedTouches[0];
     // Only trackend if track was started and not aborted
@@ -823,12 +823,12 @@ function trackFire(info, target, touch) {
     state: info.state,
     x: touch.clientX,
     y: touch.clientY,
-    dx: dx,
-    dy: dy,
-    ddx: ddx,
-    ddy: ddy,
+    dx,
+    dy,
+    ddx,
+    ddy,
     sourceEvent: touch,
-    hover: function () {
+    hover() {
       return deepTargetFind(touch.clientX, touch.clientY);
     },
   });
@@ -852,7 +852,7 @@ register({
    * @this {GestureRecognizer}
    * @return {void}
    */
-  reset: function () {
+  reset() {
     this.info.x = NaN;
     this.info.y = NaN;
     this.info.prevent = false;
@@ -863,7 +863,7 @@ register({
    * @param {MouseEvent} e
    * @return {void}
    */
-  mousedown: function (e) {
+  mousedown(e) {
     if (hasLeftMouseButton(e)) {
       this.info.x = e.clientX;
       this.info.y = e.clientY;
@@ -875,7 +875,7 @@ register({
    * @param {MouseEvent} e
    * @return {void}
    */
-  click: function (e) {
+  click(e) {
     if (hasLeftMouseButton(e)) {
       trackForward(this.info, e);
     }
@@ -886,7 +886,7 @@ register({
    * @param {TouchEvent} e
    * @return {void}
    */
-  touchstart: function (e) {
+  touchstart(e) {
     const touch = e.changedTouches[0];
     this.info.x = touch.clientX;
     this.info.y = touch.clientY;
@@ -897,7 +897,7 @@ register({
    * @param {TouchEvent} e
    * @return {void}
    */
-  touchend: function (e) {
+  touchend(e) {
     trackForward(this.info, e.changedTouches[0], e);
   },
 });
@@ -924,7 +924,7 @@ function trackForward(info, e, preventer) {
         x: e.clientX,
         y: e.clientY,
         sourceEvent: e,
-        preventer: preventer,
+        preventer,
       });
     }
   }

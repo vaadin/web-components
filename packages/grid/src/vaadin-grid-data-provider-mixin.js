@@ -172,7 +172,7 @@ export const DataProviderMixin = (superClass) =>
          */
         _cache: {
           type: Object,
-          value: function () {
+          value() {
             const cache = new ItemCache(this);
             return cache;
           },

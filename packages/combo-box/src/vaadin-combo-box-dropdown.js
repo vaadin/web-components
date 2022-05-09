@@ -174,7 +174,7 @@ export class ComboBoxDropdown extends PolymerElement {
   _fireTouchAction(sourceEvent) {
     this.dispatchEvent(
       new CustomEvent('vaadin-overlay-touch-action', {
-        detail: { sourceEvent: sourceEvent },
+        detail: { sourceEvent },
       }),
     );
   }

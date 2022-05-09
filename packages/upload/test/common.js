@@ -63,7 +63,7 @@ export function xhrCreator(c) {
   };
   return function () {
     const xhr = new MockHttpRequest();
-    xhr.upload = { onprogress: function () {} };
+    xhr.upload = { onprogress() {} };
     xhr.onsend = function () {
       if (xhr.upload.onloadstart) {
         xhr.upload.onloadstart();
@@ -86,7 +86,7 @@ export function xhrCreator(c) {
         }
       }
       function progress() {
-        xhr.upload.onprogress({ total: total, loaded: done });
+        xhr.upload.onprogress({ total, loaded: done });
         if (done < total) {
           setTimeout(progress, cfg.stepTime);
           done = Math.min(total, done + step);

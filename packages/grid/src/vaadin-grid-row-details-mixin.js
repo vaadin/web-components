@@ -17,7 +17,7 @@ export const RowDetailsMixin = (superClass) =>
          */
         detailsOpenedItems: {
           type: Array,
-          value: function () {
+          value() {
             return [];
           },
         },

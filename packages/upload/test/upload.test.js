@@ -160,7 +160,7 @@ describe('upload', () => {
           this.data = [];
         }
         MockFormData.prototype.append = function (name, value, filename) {
-          this.data.push({ name: name, value: value, filename: filename });
+          this.data.push({ name, value, filename });
         };
         const OriginalFormData = window.FormData;
         window.FormData = MockFormData;
@@ -290,7 +290,7 @@ describe('upload', () => {
         upload._createXhr = xhrCreator({
           serverValidation: () => {
             return {
-              status: status,
+              status,
               statusText: 'Error',
             };
           },

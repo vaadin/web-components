@@ -125,7 +125,7 @@ class InfiniteScroller extends PolymerElement {
 
     const tpl = this.querySelector('template');
     this._TemplateClass = templatize(tpl, this, {
-      forwardHostProp: function (prop, value) {
+      forwardHostProp(prop, value) {
         if (prop !== 'index') {
           this._buffers.forEach((buffer) => {
             [].forEach.call(buffer.children, (insertionPoint) => {

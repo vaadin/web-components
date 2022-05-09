@@ -213,7 +213,7 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
        */
       responsiveSteps: {
         type: Array,
-        value: function () {
+        value() {
           return [
             { minWidth: 0, columns: 1, labelsPosition: 'top' },
             { minWidth: '20em', columns: 1 },

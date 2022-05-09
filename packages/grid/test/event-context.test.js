@@ -49,7 +49,7 @@ describe('event context', () => {
       cell,
       {
         item: { foo: 'bar' },
-        column: column,
+        column,
         section: 'body',
         index: 0,
         selected: false,
@@ -66,7 +66,7 @@ describe('event context', () => {
     testEventContext(
       headerCell,
       {
-        column: column,
+        column,
         section: 'header',
       },
       done,
@@ -78,7 +78,7 @@ describe('event context', () => {
     testEventContext(
       footerCell,
       {
-        column: column,
+        column,
         section: 'footer',
       },
       done,

@@ -674,7 +674,7 @@ describe('PolylitMixin', () => {
 
             count: {
               type: Number,
-              value: function () {
+              value() {
                 return this.value;
               },
             },

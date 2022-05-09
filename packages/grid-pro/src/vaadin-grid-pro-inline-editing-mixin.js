@@ -375,7 +375,7 @@ export const InlineEditingMixin = (superClass) =>
                   index: model.index,
                   item: model.item,
                   path: column.path,
-                  value: value,
+                  value,
                 },
                 bubbles: true,
                 cancelable: true,

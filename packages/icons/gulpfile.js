@@ -38,7 +38,7 @@ gulp.task('iron-icons', () => {
     .pipe(concat('iconset.js'))
     .pipe(
       modify({
-        fileModifier: function (file, contents) {
+        fileModifier(file, contents) {
           // Enclose all icons in an iron-iconset-svg
           return `${createCopyright()}
 import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
@@ -67,7 +67,7 @@ gulp.task('vaadin-icons', () => {
     .pipe(concat('vaadin-iconset.js'))
     .pipe(
       modify({
-        fileModifier: function (file, contents) {
+        fileModifier(file, contents) {
           // Enclose all icons in a vaadin-iconset
           return `${createCopyright()}
 import '@vaadin/icon/vaadin-iconset.js';

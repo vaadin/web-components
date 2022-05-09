@@ -27,7 +27,7 @@ export const SortMixin = (superClass) =>
          */
         _sorters: {
           type: Array,
-          value: function () {
+          value() {
             return [];
           },
         },
@@ -35,7 +35,7 @@ export const SortMixin = (superClass) =>
         /** @private */
         _previousSorters: {
           type: Array,
-          value: function () {
+          value() {
             return [];
           },
         },
