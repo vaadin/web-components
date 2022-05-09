@@ -21,7 +21,7 @@ const chip = css`
   }
 
   :host([focused]) {
-    background-color: hsla(214, 47%, 21%, 0.38);
+    background-color: rgba(0, 0, 0, 0.16);
   }
 
   :host(:not([part~='overflow']):not([readonly]):not([disabled])) {
