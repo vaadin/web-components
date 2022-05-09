@@ -500,6 +500,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     super._setFocused(focused);
 
     if (!focused) {
+      this._focusedChipIndex = -1;
       this.validate();
     }
   }

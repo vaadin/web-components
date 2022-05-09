@@ -532,6 +532,15 @@ describe('basic', () => {
           expect(chips[1].hasAttribute('focused')).to.be.false;
           expect(chips[2].hasAttribute('focused')).to.be.false;
         });
+
+        it('should remove focused attribute from chips on input focusout ', async () => {
+          await sendKeys({ press: 'Backspace' });
+          await sendKeys({ press: 'Tab' });
+          const chips = getChips(comboBox);
+          expect(chips.length).to.equal(3);
+          expect(chips[1].hasAttribute('focused')).to.be.false;
+          expect(chips[2].hasAttribute('focused')).to.be.false;
+        });
       });
 
       describe('Arrow keys', () => {
