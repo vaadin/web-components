@@ -177,10 +177,10 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
         type: Object,
         value: () => {
           return {
-            parseValue: function (value) {
+            parseValue(value) {
               return value.split('\t');
             },
-            formatValue: function (inputValues) {
+            formatValue(inputValues) {
               return inputValues.join('\t');
             },
           };

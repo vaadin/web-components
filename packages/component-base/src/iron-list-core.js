@@ -323,7 +323,7 @@ export const ironList = {
   /**
    * Recycles the physical items when needed.
    */
-  _scrollHandler: function () {
+  _scrollHandler() {
     const scrollTop = Math.max(0, Math.min(this._maxScrollTop, this._scrollTop));
     let delta = scrollTop - this._scrollPosition;
     const isScrollingDown = delta >= 0;
@@ -370,7 +370,7 @@ export const ironList = {
    *
    * @param {boolean} fromTop If the potential reusable items are above the scrolling region.
    */
-  _getReusables: function (fromTop) {
+  _getReusables(fromTop) {
     let ith, lastIth, offsetContent, physicalItemHeight;
     const idxs = [];
     const protectedOffsetContent = this._hiddenContentSize * this._ratio;
@@ -434,7 +434,7 @@ export const ironList = {
    * @param {!Array<number>=} itemSet
    * @param {!Array<number>=} movingUp
    */
-  _update: function (itemSet, movingUp) {
+  _update(itemSet, movingUp) {
     if ((itemSet && itemSet.length === 0) || this._physicalCount === 0) {
       return;
     }
@@ -452,7 +452,7 @@ export const ironList = {
     this._updateScrollerSize();
   },
 
-  _isClientFull: function () {
+  _isClientFull() {
     return (
       this._scrollBottom !== 0 &&
       this._physicalBottom - 1 >= this._scrollBottom &&
@@ -463,7 +463,7 @@ export const ironList = {
   /**
    * Increases the pool size.
    */
-  _increasePoolIfNeeded: function (count) {
+  _increasePoolIfNeeded(count) {
     let nextPhysicalCount = this._clamp(
       this._physicalCount + count,
       DEFAULT_PHYSICAL_COUNT,
@@ -528,7 +528,7 @@ export const ironList = {
   /**
    * Renders the a new list.
    */
-  _render: function () {
+  _render() {
     if (!this.isAttached || !this._isVisible) {
       return;
     }
@@ -547,7 +547,7 @@ export const ironList = {
     }
   },
 
-  _gridChanged: function (newGrid, oldGrid) {
+  _gridChanged(newGrid, oldGrid) {
     if (typeof oldGrid === 'undefined') {
       return;
     }
@@ -562,7 +562,7 @@ export const ironList = {
    * Called when the items have changed. That is, reassignments
    * to `items`, splices or updates to a single item.
    */
-  _itemsChanged: function (change) {
+  _itemsChanged(change) {
     if (change.path === 'items') {
       this._virtualStart = 0;
       this._physicalTop = 0;
@@ -614,7 +614,7 @@ export const ironList = {
    * @param {!function(number, number)} fn
    * @param {!Array<number>=} itemSet
    */
-  _iterateItems: function (fn, itemSet) {
+  _iterateItems(fn, itemSet) {
     let pidx, vidx, rtn, i;
 
     if (arguments.length === 2 && itemSet) {
@@ -647,7 +647,7 @@ export const ironList = {
    * @param {number} pidx Physical index
    * @return {number}
    */
-  _computeVidx: function (pidx) {
+  _computeVidx(pidx) {
     if (pidx >= this._physicalStart) {
       return this._virtualStart + (pidx - this._physicalStart);
     }
@@ -659,7 +659,7 @@ export const ironList = {
    *
    * @param {!Array<number>=} itemSet
    */
-  _updateMetrics: function (itemSet) {
+  _updateMetrics(itemSet) {
     // Make sure we distributed all the physical items
     // so we can measure them.
     flush();
@@ -696,7 +696,7 @@ export const ironList = {
     }
   },
 
-  _updateGridMetrics: function () {
+  _updateGridMetrics() {
     this._itemWidth = this._physicalCount > 0 ? this._physicalItems[0].getBoundingClientRect().width : 200;
     this._rowHeight = this._physicalCount > 0 ? this._physicalItems[0].offsetHeight : 200;
     this._itemsPerRow = this._itemWidth ? Math.floor(this._viewportWidth / this._itemWidth) : this._itemsPerRow;
@@ -705,7 +705,7 @@ export const ironList = {
   /**
    * Updates the position of the physical items.
    */
-  _positionItems: function () {
+  _positionItems() {
     this._adjustScrollPosition();
 
     let y = this._physicalTop;
@@ -743,7 +743,7 @@ export const ironList = {
     }
   },
 
-  _getPhysicalSizeIncrement: function (pidx) {
+  _getPhysicalSizeIncrement(pidx) {
     if (!this.grid) {
       return this._physicalSizes[pidx];
     }
@@ -761,14 +761,14 @@ export const ironList = {
    * @param {number} vidx Virtual index
    * @return {boolean}
    */
-  _shouldRenderNextRow: function (vidx) {
+  _shouldRenderNextRow(vidx) {
     return vidx % this._itemsPerRow === this._itemsPerRow - 1;
   },
 
   /**
    * Adjusts the scroll position when it was overestimated.
    */
-  _adjustScrollPosition: function () {
+  _adjustScrollPosition() {
     const deltaHeight =
       this._virtualStart === 0 ? this._physicalTop : Math.min(this._scrollPosition + this._physicalTop, 0);
     // Note: the delta can be positive or negative.
@@ -786,7 +786,7 @@ export const ironList = {
   /**
    * Sets the position of the scroll.
    */
-  _resetScrollPosition: function (pos) {
+  _resetScrollPosition(pos) {
     if (this.scrollTarget && pos >= 0) {
       this._scrollTop = pos;
       this._scrollPosition = this._scrollTop;
@@ -798,7 +798,7 @@ export const ironList = {
    *
    * @param {boolean=} forceUpdate If true, updates the height no matter what.
    */
-  _updateScrollerSize: function (forceUpdate) {
+  _updateScrollerSize(forceUpdate) {
     if (this.grid) {
       this._estScrollHeight = this._virtualRowCount * this._rowHeight;
     } else {
@@ -823,7 +823,7 @@ export const ironList = {
    * @method scrollToIndex
    * @param {number} idx The index of the item
    */
-  scrollToIndex: function (idx) {
+  scrollToIndex(idx) {
     if (typeof idx !== 'number' || idx < 0 || idx > this.items.length - 1) {
       return;
     }
@@ -865,7 +865,7 @@ export const ironList = {
   /**
    * Reset the physical average and the average count.
    */
-  _resetAverage: function () {
+  _resetAverage() {
     this._physicalAverage = 0;
     this._physicalAverageCount = 0;
   },
@@ -874,7 +874,7 @@ export const ironList = {
    * A handler for the `iron-resize` event triggered by `IronResizableBehavior`
    * when the element is resized.
    */
-  _resizeHandler: function () {
+  _resizeHandler() {
     this._debounce(
       '_render',
       () => {
@@ -902,7 +902,7 @@ export const ironList = {
    * @method updateSizeForItem
    * @param {Object} item The item instance.
    */
-  updateSizeForItem: function (item) {
+  updateSizeForItem(item) {
     return this.updateSizeForIndex(this.items.indexOf(item));
   },
 
@@ -912,7 +912,7 @@ export const ironList = {
    * @method updateSizeForIndex
    * @param {number} index The index of the item in the items array.
    */
-  updateSizeForIndex: function (index) {
+  updateSizeForIndex(index) {
     if (!this._isIndexRendered(index)) {
       return null;
     }
@@ -925,29 +925,29 @@ export const ironList = {
    * Converts a random index to the index of the item that completes it's row.
    * Allows for better order and fill computation when grid == true.
    */
-  _convertIndexToCompleteRow: function (idx) {
+  _convertIndexToCompleteRow(idx) {
     // When grid == false _itemPerRow can be unset.
     this._itemsPerRow = this._itemsPerRow || 1;
     return this.grid ? Math.ceil(idx / this._itemsPerRow) * this._itemsPerRow : idx;
   },
 
-  _isIndexRendered: function (idx) {
+  _isIndexRendered(idx) {
     return idx >= this._virtualStart && idx <= this._virtualEnd;
   },
 
-  _isIndexVisible: function (idx) {
+  _isIndexVisible(idx) {
     return idx >= this.firstVisibleIndex && idx <= this.lastVisibleIndex;
   },
 
-  _getPhysicalIndex: function (vidx) {
+  _getPhysicalIndex(vidx) {
     return (this._physicalStart + (vidx - this._virtualStart)) % this._physicalCount;
   },
 
-  _clamp: function (v, min, max) {
+  _clamp(v, min, max) {
     return Math.min(max, Math.max(min, v));
   },
 
-  _debounce: function (name, cb, asyncModule) {
+  _debounce(name, cb, asyncModule) {
     this._debouncers = this._debouncers || {};
     this._debouncers[name] = Debouncer.debounce(this._debouncers[name], asyncModule, cb.bind(this));
     enqueueDebouncer(this._debouncers[name]);

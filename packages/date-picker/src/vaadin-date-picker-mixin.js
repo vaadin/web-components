@@ -780,8 +780,8 @@ export const DatePickerMixin = (subclass) =>
           const oldInlineValue = element.style.webkitOverflowScrolling;
           element.style.webkitOverflowScrolling = 'auto';
           result.push({
-            element: element,
-            oldInlineValue: oldInlineValue,
+            element,
+            oldInlineValue,
           });
         }
         element = element.parentElement;

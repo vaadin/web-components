@@ -39,7 +39,7 @@ export const infiniteDataProvider = (params, callback) => {
 
 export const buildItem = (index) => {
   return {
-    index: index,
+    index,
   };
 };
 
@@ -218,7 +218,7 @@ export const makeSoloTouchEvent = (type, xy, node) => {
     },
   ];
   const touchEventInit = {
-    touches: touches,
+    touches,
     targetTouches: touches,
     changedTouches: touches,
   };

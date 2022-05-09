@@ -274,7 +274,7 @@ class ContextMenu extends ControllerMixin(ElementMixin(ThemePropertyMixin(ItemsM
        */
       listenOn: {
         type: Object,
-        value: function () {
+        value() {
           return this;
         },
       },

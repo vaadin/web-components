@@ -27,17 +27,13 @@ export const SortMixin = (superClass) =>
          */
         _sorters: {
           type: Array,
-          value: function () {
-            return [];
-          },
+          value: () => [],
         },
 
         /** @private */
         _previousSorters: {
           type: Array,
-          value: function () {
-            return [];
-          },
+          value: () => [],
         },
       };
     }

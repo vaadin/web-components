@@ -89,7 +89,7 @@ MockHttpRequest.prototype = {
   /* Request */
 
   // eslint-disable-next-line max-params
-  open: function (method, url, async, user, password) {
+  open(method, url, async, user, password) {
     if (typeof method !== 'string') {
       throw new Error('INVALID_METHOD');
     }
@@ -128,7 +128,7 @@ MockHttpRequest.prototype = {
     this.onreadystatechange();
   },
 
-  setRequestHeader: function (header, value) {
+  setRequestHeader(header, value) {
     header = header.toLowerCase();
 
     switch (header) {
@@ -167,7 +167,7 @@ MockHttpRequest.prototype = {
     }
   },
 
-  send: function (data) {
+  send(data) {
     if (this.readyState !== this.OPENED || this.sent) {
       throw new Error('INVALID_STATE_ERR');
     }
@@ -184,7 +184,7 @@ MockHttpRequest.prototype = {
     this.onsend();
   },
 
-  abort: function () {
+  abort() {
     this.responseText = null;
     this.error = true;
     for (const header in this.requestHeaders) {
@@ -201,14 +201,14 @@ MockHttpRequest.prototype = {
   status: 0,
   statusText: '',
 
-  getResponseHeader: function (header) {
+  getResponseHeader(header) {
     if (this.readyState === this.UNSENT || this.readyState === this.OPENED || this.error) {
       return null;
     }
     return this.responseHeaders[header.toLowerCase()];
   },
 
-  getAllResponseHeaders: function () {
+  getAllResponseHeaders() {
     let r = '';
     for (const header in this.responseHeaders) {
       if (header === 'set-cookie' || header === 'set-cookie2') {
@@ -224,41 +224,41 @@ MockHttpRequest.prototype = {
 
   /* See http://www.w3.org/TR/progress-events/ */
 
-  onload: function () {
+  onload() {
     // Instances should override this.
   },
 
-  onprogress: function () {
+  onprogress() {
     // Instances should override this.
   },
 
-  onerror: function () {
+  onerror() {
     // Instances should override this.
   },
 
-  onabort: function () {
+  onabort() {
     // Instances should override this.
   },
 
-  onreadystatechange: function () {
+  onreadystatechange() {
     // Instances should override this.
   },
 
   /* Properties and methods for test interaction */
 
-  onsend: function () {
+  onsend() {
     // Instances should override this.
   },
 
-  getRequestHeader: function (header) {
+  getRequestHeader(header) {
     return this.requestHeaders[header.toLowerCase()];
   },
 
-  setResponseHeader: function (header, value) {
+  setResponseHeader(header, value) {
     this.responseHeaders[header.toLowerCase()] = value;
   },
 
-  makeXMLResponse: function (data) {
+  makeXMLResponse(data) {
     let xmlDoc;
     // According to specs from point 3.7.5:
     // '1. If the response entity body is null terminate these steps
@@ -317,7 +317,7 @@ MockHttpRequest.prototype = {
   },
 
   // Call this to simulate a server response
-  receive: function (status, data) {
+  receive(status, data) {
     if (this.readyState !== this.OPENED || !this.sent) {
       // Can't respond to unopened request.
       throw new Error('INVALID_STATE_ERR');
@@ -343,7 +343,7 @@ MockHttpRequest.prototype = {
   },
 
   // Call this to simulate a request error (e.g. NETWORK_ERR)
-  err: function (exception) {
+  err(exception) {
     if (this.readyState !== this.OPENED || !this.sent) {
       // Can't respond to unopened request.
       throw new Error('INVALID_STATE_ERR');
@@ -363,7 +363,7 @@ MockHttpRequest.prototype = {
   },
 
   // Convenience method to verify HTTP credentials
-  authenticate: function (user, password) {
+  authenticate(user, password) {
     if (this.user) {
       return user === this.user && password === this.password;
     }
@@ -393,7 +393,7 @@ MockHttpRequest.prototype = {
   // Parse RFC 3986 compliant URIs.
   // Based on parseUri by Steven Levithan <stevenlevithan.com>
   // See http://blog.stevenlevithan.com/archives/parseuri
-  parseUri: function (str) {
+  parseUri(str) {
     const pattern =
       /^(?:([^:/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:/?#]*)(?::(\d*))?))?((((?:[^?#/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/;
     const key = [

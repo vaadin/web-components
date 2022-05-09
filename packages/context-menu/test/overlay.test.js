@@ -34,7 +34,7 @@ describe('overlay', () => {
       cancelable: true,
       clientX: x,
       clientY: y,
-      shiftKey: shiftKey,
+      shiftKey,
     });
     (target || menu.listenOn).dispatchEvent(e);
     return e;

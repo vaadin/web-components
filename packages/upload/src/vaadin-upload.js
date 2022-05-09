@@ -221,9 +221,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
       files: {
         type: Array,
         notify: true,
-        value: function () {
-          return [];
-        },
+        value: () => [],
       },
 
       /**
@@ -388,7 +386,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       i18n: {
         type: Object,
-        value: function () {
+        value() {
           return {
             dropFiles: {
               one: 'Drop file here',

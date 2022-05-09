@@ -112,7 +112,7 @@ export const LoginMixin = (superClass) =>
        */
         i18n: {
           type: Object,
-          value: function () {
+          value() {
             return {
               form: {
                 title: 'Log in',

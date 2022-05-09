@@ -541,7 +541,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
        */
       i18n: {
         type: Object,
-        value: function () {
+        value() {
           return {
             newItem: 'New item',
             editItem: 'Edit item',
@@ -1198,7 +1198,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     this.__isDirty = false;
     this.__isNew = !item;
     const evt = this.dispatchEvent(
-      new CustomEvent(this.__isNew ? 'new' : 'edit', { detail: { item: item }, cancelable: true }),
+      new CustomEvent(this.__isNew ? 'new' : 'edit', { detail: { item }, cancelable: true }),
     );
     if (evt) {
       this.editedItem = item || {};
@@ -1220,7 +1220,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
         this.__set(path, e.value, item);
       }
     });
-    const evt = this.dispatchEvent(new CustomEvent('save', { detail: { item: item }, cancelable: true }));
+    const evt = this.dispatchEvent(new CustomEvent('save', { detail: { item }, cancelable: true }));
     if (evt) {
       if (this.__isNew && !this.dataProvider) {
         if (!this.items) {

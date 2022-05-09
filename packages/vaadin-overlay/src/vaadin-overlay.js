@@ -416,7 +416,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
     const evt = new CustomEvent('vaadin-overlay-close', {
       bubbles: true,
       cancelable: true,
-      detail: { sourceEvent: sourceEvent },
+      detail: { sourceEvent },
     });
     this.dispatchEvent(evt);
     if (!evt.defaultPrevented) {
@@ -842,7 +842,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
 
     if (!template._Templatizer) {
       template._Templatizer = templatize(template, this, {
-        forwardHostProp: function (prop, value) {
+        forwardHostProp(prop, value) {
           if (this._instance) {
             this._instance.forwardHostProp(prop, value);
           }

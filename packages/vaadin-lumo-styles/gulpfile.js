@@ -137,7 +137,7 @@ ${createIconset(folder, filenames, 'lumo:')}
         .src(`${folder}*.svg`)
         .pipe(
           sort({
-            comparator: function (file1, file2) {
+            comparator(file1, file2) {
               return sortIconFilesNormalized(file1.relative, file2.relative);
             },
           }),

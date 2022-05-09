@@ -613,7 +613,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     const toolbar = {
       container: this.shadowRoot.querySelector('[part="toolbar"]'),
       handlers: {
-        clean: function () {
+        clean() {
           self._markToolbarClicked();
           clean.call(this);
         },

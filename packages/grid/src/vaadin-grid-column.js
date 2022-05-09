@@ -22,7 +22,7 @@ export const ColumnBaseMixin = (superClass) =>
          */
         resizable: {
           type: Boolean,
-          value: function () {
+          value() {
             if (this.localName === 'vaadin-grid-column-group') {
               return;
             }

@@ -63,14 +63,14 @@ class GridWithSlots extends PolymerElement {
       parentProp: String,
       parentPath: {
         type: Object,
-        value: function () {
+        value() {
           return {
             foo: 'foo',
           };
         },
       },
       dataProvider: {
-        value: function () {
+        value() {
           return infiniteDataProvider;
         },
       },

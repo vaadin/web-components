@@ -33,9 +33,7 @@ export const MultiSelectListMixin = (superClass) =>
         selectedValues: {
           type: Array,
           notify: true,
-          value: function () {
-            return [];
-          },
+          value: () => [],
         },
       };
     }

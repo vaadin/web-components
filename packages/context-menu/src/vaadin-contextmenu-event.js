@@ -20,21 +20,21 @@ register({
     sourceEvent: null,
   },
 
-  reset: function () {
+  reset() {
     this.info.sourceEvent = null;
     this._cancelTimer();
     this.info.touchJob = null;
     this.info.touchStartCoords = null;
   },
 
-  _cancelTimer: function () {
+  _cancelTimer() {
     if (this._timerId) {
       clearTimeout(this._timerId);
       delete this._fired;
     }
   },
 
-  touchstart: function (e) {
+  touchstart(e) {
     this.info.sourceEvent = e;
     this.info.touchStartCoords = {
       x: e.changedTouches[0].clientX,
@@ -60,7 +60,7 @@ register({
     }, 500); // Default setting for Android and iOS.
   },
 
-  touchmove: function (e) {
+  touchmove(e) {
     const moveThreshold = 15;
     const touchStartCoords = this.info.touchStartCoords;
     if (
@@ -71,14 +71,14 @@ register({
     }
   },
 
-  touchend: function (e) {
+  touchend(e) {
     if (this._fired) {
       e.preventDefault();
     }
     this._cancelTimer();
   },
 
-  contextmenu: function (e) {
+  contextmenu(e) {
     if (!e.shiftKey) {
       this.info.sourceEvent = e;
       this.fire(e.target, e.clientX, e.clientY);
@@ -86,7 +86,7 @@ register({
     }
   },
 
-  fire: function (target, x, y) {
+  fire(target, x, y) {
     // NOTE(web-padawan): the code below is copied from `Polymer.Gestures._fire`,
     // which is not exported from `gestures.js` module for Polymer 3.
     const sourceEvent = this.info.sourceEvent;

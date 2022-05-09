@@ -50,7 +50,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
     return {
       /** @private */
       _childColumns: {
-        value: function () {
+        value() {
           return this._getChildColumns(this);
         },
       },
