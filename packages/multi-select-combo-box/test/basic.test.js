@@ -197,6 +197,14 @@ describe('basic', () => {
       const item = document.querySelectorAll('vaadin-multi-select-combo-box-item')[1];
       expect(item.hasAttribute('focused')).to.be.true;
     });
+
+    it('should not unselect previously committed item on focusout', async () => {
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ down: 'Enter' });
+      await sendKeys({ down: 'Tab' });
+      expect(comboBox.selectedItems).to.deep.equal(['apple']);
+    });
   });
 
   describe('pageSize', () => {

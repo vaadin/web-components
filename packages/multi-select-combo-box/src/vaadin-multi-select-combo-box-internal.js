@@ -179,11 +179,35 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
    * @override
    */
   _onFocusout(event) {
+    // Disable combo-box logic that updates selectedItem
+    // based on the overlay focused index on input blur
+    this._ignoreCommitValue = true;
+
     super._onFocusout(event);
 
     if (this.readonly && !this._closeOnBlurIsPrevented) {
       this.close();
     }
+  }
+
+  /**
+   * Override method inherited from the combo-box
+   * to not commit an already selected item again
+   * on blur, which would result in un-selecting.
+   * @protected
+   * @override
+   */
+  _detectAndDispatchChange() {
+    if (this._ignoreCommitValue) {
+      this._ignoreCommitValue = false;
+
+      // Reset internal combo-box state
+      this.selectedItem = null;
+      this._inputElementValue = '';
+      return;
+    }
+
+    super._detectAndDispatchChange();
   }
 
   /**
