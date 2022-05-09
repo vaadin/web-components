@@ -243,6 +243,21 @@ describe('basic', () => {
       clearButton.click();
       expect(internal.opened).to.be.false;
     });
+
+    it('should clear selected items on Esc when clear button is visible', async () => {
+      comboBox.selectedItems = ['apple', 'orange'];
+      inputElement.focus();
+      await sendKeys({ press: 'Escape' });
+      expect(comboBox.selectedItems).to.deep.equal([]);
+    });
+
+    it('should not clear selected items on Esc when clear button is not visible', async () => {
+      comboBox.selectedItems = ['apple', 'orange'];
+      comboBox.clearButtonVisible = false;
+      inputElement.focus();
+      await sendKeys({ press: 'Escape' });
+      expect(comboBox.selectedItems).to.deep.equal(['apple', 'orange']);
+    });
   });
 
   describe('chips', () => {

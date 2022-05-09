@@ -823,6 +823,12 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
    */
   _onKeyDown(event) {
     const items = this.selectedItems || [];
+
+    if (event.key === 'Escape' && this.clearButtonVisible && items.length) {
+      this.selectedItems = [];
+      return;
+    }
+
     if (!this.readonly && event.key === 'Backspace' && items.length && this.inputElement.value === '') {
       this.__removeItem(items[items.length - 1]);
     }
