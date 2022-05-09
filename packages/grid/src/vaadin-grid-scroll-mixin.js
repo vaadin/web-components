@@ -63,9 +63,6 @@ export const ScrollMixin = (superClass) =>
     ready() {
       super.ready();
 
-      // Preserve accessor to the legacy scrolling functionality
-      this.$.outerscroller = document.createElement('div');
-
       this.scrollTarget = this.$.table;
 
       this.$.items.addEventListener('focusin', (e) => {
