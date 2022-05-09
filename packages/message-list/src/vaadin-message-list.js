@@ -65,9 +65,7 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       items: {
         type: Array,
-        value() {
-          return [];
-        },
+        value: () => [],
         observer: '_itemsChanged',
       },
     };

@@ -14,9 +14,7 @@ export const FilterMixin = (superClass) =>
         /** @private */
         _filters: {
           type: Array,
-          value() {
-            return [];
-          },
+          value: () => [],
         },
       };
     }
