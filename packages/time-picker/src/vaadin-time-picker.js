@@ -455,11 +455,11 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       msec += stepMsec;
     }
 
-    var hh = Math.floor(msec / 1000 / 60 / 60);
+    const hh = Math.floor(msec / 1000 / 60 / 60);
     msec -= hh * 1000 * 60 * 60;
-    var mm = Math.floor(msec / 1000 / 60);
+    const mm = Math.floor(msec / 1000 / 60);
     msec -= mm * 1000 * 60;
-    var ss = Math.floor(msec / 1000);
+    const ss = Math.floor(msec / 1000);
     msec -= ss * 1000;
 
     return { hours: hh < 24 ? hh : 0, minutes: mm, seconds: ss, milliseconds: msec };

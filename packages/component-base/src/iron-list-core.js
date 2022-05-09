@@ -166,7 +166,7 @@ export const ironList = {
    * The height of the physical content that isn't on the screen.
    */
   get _hiddenContentSize() {
-    var size = this.grid ? this._physicalRows * this._rowHeight : this._physicalSize;
+    const size = this.grid ? this._physicalRows * this._rowHeight : this._physicalSize;
     return size - this._viewportHeight;
   },
 
@@ -182,7 +182,7 @@ export const ironList = {
    * `_physicalStart`.
    */
   get _maxVirtualStart() {
-    var virtualCount = this._convertIndexToCompleteRow(this._virtualCount);
+    const virtualCount = this._convertIndexToCompleteRow(this._virtualCount);
     return Math.max(0, virtualCount - this._physicalCount);
   },
 
@@ -255,9 +255,9 @@ export const ironList = {
    * @type {number}
    */
   get firstVisibleIndex() {
-    var idx = this._firstVisibleIndexVal;
+    let idx = this._firstVisibleIndexVal;
     if (idx == null) {
-      var physicalOffset = this._physicalTop + this._scrollOffset;
+      let physicalOffset = this._physicalTop + this._scrollOffset;
 
       idx =
         this._iterateItems((pidx, vidx) => {
@@ -282,12 +282,12 @@ export const ironList = {
    * @type {number}
    */
   get lastVisibleIndex() {
-    var idx = this._lastVisibleIndexVal;
+    let idx = this._lastVisibleIndexVal;
     if (idx == null) {
       if (this.grid) {
         idx = Math.min(this._virtualCount, this.firstVisibleIndex + this._estRowsInView * this._itemsPerRow - 1);
       } else {
-        var physicalOffset = this._physicalTop + this._scrollOffset;
+        let physicalOffset = this._physicalTop + this._scrollOffset;
         this._iterateItems((pidx, vidx) => {
           if (physicalOffset < this._scrollBottom) {
             idx = vidx;
@@ -324,9 +324,9 @@ export const ironList = {
    * Recycles the physical items when needed.
    */
   _scrollHandler: function () {
-    var scrollTop = Math.max(0, Math.min(this._maxScrollTop, this._scrollTop));
-    var delta = scrollTop - this._scrollPosition;
-    var isScrollingDown = delta >= 0;
+    const scrollTop = Math.max(0, Math.min(this._maxScrollTop, this._scrollTop));
+    let delta = scrollTop - this._scrollPosition;
+    const isScrollingDown = delta >= 0;
     // Track the current scroll position.
     this._scrollPosition = scrollTop;
     // Clear indexes for first and last visible indexes.
@@ -335,7 +335,7 @@ export const ironList = {
     // Random access.
     if (Math.abs(delta) > this._physicalSize && this._physicalSize > 0) {
       delta -= this._scrollOffset;
-      var idxAdjustment = Math.round(delta / this._physicalAverage) * this._itemsPerRow;
+      const idxAdjustment = Math.round(delta / this._physicalAverage) * this._itemsPerRow;
       this._virtualStart += idxAdjustment;
       this._physicalStart += idxAdjustment;
       // Estimate new physical offset based on the virtual start index.
@@ -350,7 +350,7 @@ export const ironList = {
       );
       this._update();
     } else if (this._physicalCount > 0) {
-      var reusables = this._getReusables(isScrollingDown);
+      const reusables = this._getReusables(isScrollingDown);
       if (isScrollingDown) {
         this._physicalTop = reusables.physicalTop;
         this._virtualStart += reusables.indexes.length;
@@ -371,17 +371,17 @@ export const ironList = {
    * @param {boolean} fromTop If the potential reusable items are above the scrolling region.
    */
   _getReusables: function (fromTop) {
-    var ith, lastIth, offsetContent, physicalItemHeight;
-    var idxs = [];
-    var protectedOffsetContent = this._hiddenContentSize * this._ratio;
-    var virtualStart = this._virtualStart;
-    var virtualEnd = this._virtualEnd;
-    var physicalCount = this._physicalCount;
-    var top = this._physicalTop + this._scrollOffset;
-    var bottom = this._physicalBottom + this._scrollOffset;
+    let ith, lastIth, offsetContent, physicalItemHeight;
+    const idxs = [];
+    const protectedOffsetContent = this._hiddenContentSize * this._ratio;
+    const virtualStart = this._virtualStart;
+    const virtualEnd = this._virtualEnd;
+    const physicalCount = this._physicalCount;
+    let top = this._physicalTop + this._scrollOffset;
+    const bottom = this._physicalBottom + this._scrollOffset;
     // This may be called outside of a scrollHandler, so use last cached position
-    var scrollTop = this._scrollPosition;
-    var scrollBottom = this._scrollBottom;
+    const scrollTop = this._scrollPosition;
+    const scrollBottom = this._scrollBottom;
 
     if (fromTop) {
       ith = this._physicalStart;
@@ -444,7 +444,7 @@ export const ironList = {
     // Adjust offset after measuring.
     if (movingUp) {
       while (movingUp.length) {
-        var idx = movingUp.pop();
+        const idx = movingUp.pop();
         this._physicalTop -= this._getPhysicalSizeIncrement(idx);
       }
     }
@@ -464,32 +464,32 @@ export const ironList = {
    * Increases the pool size.
    */
   _increasePoolIfNeeded: function (count) {
-    var nextPhysicalCount = this._clamp(
+    let nextPhysicalCount = this._clamp(
       this._physicalCount + count,
       DEFAULT_PHYSICAL_COUNT,
       this._virtualCount - this._virtualStart,
     );
     nextPhysicalCount = this._convertIndexToCompleteRow(nextPhysicalCount);
     if (this.grid) {
-      var correction = nextPhysicalCount % this._itemsPerRow;
+      const correction = nextPhysicalCount % this._itemsPerRow;
       if (correction && nextPhysicalCount - correction <= this._physicalCount) {
         nextPhysicalCount += this._itemsPerRow;
       }
       nextPhysicalCount -= correction;
     }
-    var delta = nextPhysicalCount - this._physicalCount;
-    var nextIncrease = Math.round(this._physicalCount * 0.5);
+    const delta = nextPhysicalCount - this._physicalCount;
+    let nextIncrease = Math.round(this._physicalCount * 0.5);
 
     if (delta < 0) {
       return;
     }
     if (delta > 0) {
-      var ts = window.performance.now();
+      const ts = window.performance.now();
       // Concat arrays in place.
       [].push.apply(this._physicalItems, this._createPool(delta));
       // Push 0s into physicalSizes. Can't use Array.fill because IE11 doesn't
       // support it.
-      for (var i = 0; i < delta; i++) {
+      for (let i = 0; i < delta; i++) {
         this._physicalSizes.push(0);
       }
       this._physicalCount += delta;
@@ -533,7 +533,7 @@ export const ironList = {
       return;
     }
     if (this._physicalCount !== 0) {
-      var reusables = this._getReusables(true);
+      const reusables = this._getReusables(true);
       this._physicalTop = reusables.physicalTop;
       this._virtualStart += reusables.indexes.length;
       this._physicalStart += reusables.indexes.length;
@@ -583,19 +583,19 @@ export const ironList = {
       this._adjustVirtualIndex(change.value.indexSplices);
       this._virtualCount = this.items ? this.items.length : 0;
       // Only blur if at least one item is added or removed.
-      var itemAddedOrRemoved = change.value.indexSplices.some((splice) => {
+      const itemAddedOrRemoved = change.value.indexSplices.some((splice) => {
         return splice.addedCount > 0 || splice.removed.length > 0;
       });
       if (itemAddedOrRemoved) {
         // Only blur activeElement if it is a descendant of the list (#505,
         // #507).
-        var activeElement = this._getActiveElement();
+        const activeElement = this._getActiveElement();
         if (this.contains(activeElement)) {
           activeElement.blur();
         }
       }
       // Render only if the affected index is rendered.
-      var affectedIndexRendered = change.value.indexSplices.some((splice) => {
+      const affectedIndexRendered = change.value.indexSplices.some((splice) => {
         return splice.index + splice.addedCount >= this._virtualStart && splice.index <= this._virtualEnd;
       });
       if (!this._isClientFull() || affectedIndexRendered) {
@@ -615,7 +615,7 @@ export const ironList = {
    * @param {!Array<number>=} itemSet
    */
   _iterateItems: function (fn, itemSet) {
-    var pidx, vidx, rtn, i;
+    let pidx, vidx, rtn, i;
 
     if (arguments.length === 2 && itemSet) {
       for (i = 0; i < itemSet.length; i++) {
@@ -664,10 +664,10 @@ export const ironList = {
     // so we can measure them.
     flush();
 
-    var newPhysicalSize = 0;
-    var oldPhysicalSize = 0;
-    var prevAvgCount = this._physicalAverageCount;
-    var prevPhysicalAvg = this._physicalAverage;
+    let newPhysicalSize = 0;
+    let oldPhysicalSize = 0;
+    const prevAvgCount = this._physicalAverageCount;
+    const prevPhysicalAvg = this._physicalAverage;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this._iterateItems((pidx, vidx) => {
@@ -708,15 +708,15 @@ export const ironList = {
   _positionItems: function () {
     this._adjustScrollPosition();
 
-    var y = this._physicalTop;
+    let y = this._physicalTop;
 
     if (this.grid) {
-      var totalItemWidth = this._itemsPerRow * this._itemWidth;
-      var rowOffset = (this._viewportWidth - totalItemWidth) / 2;
+      const totalItemWidth = this._itemsPerRow * this._itemWidth;
+      const rowOffset = (this._viewportWidth - totalItemWidth) / 2;
 
       this._iterateItems((pidx, vidx) => {
-        var modulus = vidx % this._itemsPerRow;
-        var x = Math.floor(modulus * this._itemWidth + rowOffset);
+        const modulus = vidx % this._itemsPerRow;
+        let x = Math.floor(modulus * this._itemWidth + rowOffset);
         if (this._isRTL) {
           x *= -1;
         }
@@ -769,13 +769,13 @@ export const ironList = {
    * Adjusts the scroll position when it was overestimated.
    */
   _adjustScrollPosition: function () {
-    var deltaHeight =
+    const deltaHeight =
       this._virtualStart === 0 ? this._physicalTop : Math.min(this._scrollPosition + this._physicalTop, 0);
     // Note: the delta can be positive or negative.
     if (deltaHeight !== 0) {
       this._physicalTop -= deltaHeight;
       // This may be called outside of a scrollHandler, so use last cached position
-      var scrollTop = this._scrollPosition;
+      const scrollTop = this._scrollPosition;
       // Juking scroll position during interial scrolling on iOS is no bueno
       if (!IOS_TOUCH_SCROLLING && scrollTop > 0) {
         this._resetScrollPosition(scrollTop - deltaHeight);
@@ -843,10 +843,10 @@ export const ironList = {
     // Estimate new physical offset.
     this._physicalTop = Math.floor(this._virtualStart / this._itemsPerRow) * this._physicalAverage;
 
-    var currentTopItem = this._physicalStart;
-    var currentVirtualItem = this._virtualStart;
-    var targetOffsetTop = 0;
-    var hiddenContentSize = this._hiddenContentSize;
+    let currentTopItem = this._physicalStart;
+    let currentVirtualItem = this._virtualStart;
+    let targetOffsetTop = 0;
+    const hiddenContentSize = this._hiddenContentSize;
     // Scroll to the item as much as we can.
     while (currentVirtualItem < idx && targetOffsetTop <= hiddenContentSize) {
       targetOffsetTop += this._getPhysicalSizeIncrement(currentTopItem);

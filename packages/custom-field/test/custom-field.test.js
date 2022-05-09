@@ -25,7 +25,7 @@ describe('custom field', () => {
 
     it('should properly define internal inputs', () => {
       expect(customField.inputs.length).to.equal(2);
-      for (var i = 0; i < 2; i++) {
+      for (let i = 0; i < 2; i++) {
         expect(customField.inputs[i].localName).to.be.equal('input');
       }
     });

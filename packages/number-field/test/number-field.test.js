@@ -4,7 +4,7 @@ import sinon from 'sinon';
 import '../src/vaadin-number-field.js';
 
 describe('number-field', () => {
-  var numberField, input, decreaseButton, increaseButton;
+  let numberField, input, decreaseButton, increaseButton;
 
   beforeEach(() => {
     numberField = fixtureSync('<vaadin-number-field></vaadin-number-field>');
@@ -296,7 +296,7 @@ describe('number-field', () => {
       numberField.step = 4;
 
       const correctSteps = [-4, -8, -12, -16, -20];
-      for (var i = 0; i < correctSteps.length; i++) {
+      for (let i = 0; i < correctSteps.length; i++) {
         decreaseButton.click();
         expect(numberField.value).to.be.equal(String(correctSteps[i]));
       }
@@ -328,7 +328,7 @@ describe('number-field', () => {
       numberField.step = 4;
 
       const correctSteps = [1, 5, 9, 13, 17];
-      for (var i = 0; i < correctSteps.length; i++) {
+      for (let i = 0; i < correctSteps.length; i++) {
         increaseButton.click();
         expect(numberField.value).to.be.equal(String(correctSteps[i]));
       }
@@ -341,7 +341,7 @@ describe('number-field', () => {
       numberField.step = 0.01;
 
       const correctSteps = [-0.02, -0.01, 0, 0.01, 0.02];
-      for (var i = 0; i < correctSteps.length; i++) {
+      for (let i = 0; i < correctSteps.length; i++) {
         increaseButton.click();
         expect(numberField.value).to.be.equal(String(correctSteps[i]));
       }

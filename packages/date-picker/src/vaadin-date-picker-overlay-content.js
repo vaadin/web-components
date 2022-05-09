@@ -470,7 +470,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   }
 
   _onTodayTap() {
-    var today = new Date();
+    const today = new Date();
 
     if (Math.abs(this.$.monthScroller.position - this._differenceInMonths(today, this._originDate)) < 0.001) {
       // Select today only if the month scroller is positioned approximately
@@ -496,9 +496,9 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
   _onYearTap(e) {
     if (!this._ignoreTaps && !this._notTapping) {
-      var scrollDelta =
+      const scrollDelta =
         e.detail.y - (this.$.yearScroller.getBoundingClientRect().top + this.$.yearScroller.clientHeight / 2);
-      var yearDelta = scrollDelta / this.$.yearScroller.itemHeight;
+      const yearDelta = scrollDelta / this.$.yearScroller.itemHeight;
       this._scrollToPosition(this.$.monthScroller.position + yearDelta * 12, true);
     }
   }
@@ -520,7 +520,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     this._targetPosition = targetPosition;
 
     // http://gizma.com/easing/
-    var easingFunction = (t, b, c, d) => {
+    const easingFunction = (t, b, c, d) => {
       t /= d / 2;
       if (t < 1) {
         return (c / 2) * t * t + b;
@@ -529,15 +529,15 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       return (-c / 2) * (t * (t - 2) - 1) + b;
     };
 
-    var start = 0;
-    var initialPosition = this.$.monthScroller.position;
+    let start = 0;
+    const initialPosition = this.$.monthScroller.position;
 
-    var smoothScroll = (timestamp) => {
+    const smoothScroll = (timestamp) => {
       start = start || timestamp;
-      var currentTime = timestamp - start;
+      const currentTime = timestamp - start;
 
       if (currentTime < this.scrollDuration) {
-        var currentPos = easingFunction(
+        const currentPos = easingFunction(
           currentTime,
           initialPosition,
           this._targetPosition - initialPosition,
@@ -585,7 +585,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       this._toggleAnimateClass(true);
     }
 
-    var newTranslateX = this._translateX + e.detail.ddx;
+    const newTranslateX = this._translateX + e.detail.ddx;
     this._translateX = this._limit(newTranslateX, {
       min: 0,
       max: this._yearScrollerWidth,
@@ -656,7 +656,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   }
 
   _yearAfterXYears(index) {
-    var result = new Date(this._originDate);
+    const result = new Date(this._originDate);
     result.setFullYear(parseInt(index) + this._originDate.getFullYear());
     return result.getFullYear();
   }
@@ -666,14 +666,14 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   }
 
   _dateAfterXMonths(months) {
-    var result = new Date(this._originDate);
+    const result = new Date(this._originDate);
     result.setDate(1);
     result.setMonth(parseInt(months) + this._originDate.getMonth());
     return result;
   }
 
   _differenceInMonths(date1, date2) {
-    var months = (date1.getFullYear() - date2.getFullYear()) * 12;
+    const months = (date1.getFullYear() - date2.getFullYear()) * 12;
     return months - date2.getMonth() + date1.getMonth();
   }
 
@@ -850,8 +850,8 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   }
 
   _moveFocusByDays(days) {
-    var focus = this.focusedDate;
-    var dateToFocus = new Date(0, 0);
+    const focus = this.focusedDate;
+    const dateToFocus = new Date(0, 0);
     dateToFocus.setFullYear(focus.getFullYear());
     dateToFocus.setMonth(focus.getMonth());
     dateToFocus.setDate(focus.getDate() + days);
@@ -874,12 +874,12 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   }
 
   _moveFocusByMonths(months) {
-    var focus = this.focusedDate;
-    var dateToFocus = new Date(0, 0);
+    const focus = this.focusedDate;
+    const dateToFocus = new Date(0, 0);
     dateToFocus.setFullYear(focus.getFullYear());
     dateToFocus.setMonth(focus.getMonth() + months);
 
-    var targetMonth = dateToFocus.getMonth();
+    const targetMonth = dateToFocus.getMonth();
 
     dateToFocus.setDate(this._focusedMonthDate || (this._focusedMonthDate = focus.getDate()));
     if (dateToFocus.getMonth() !== targetMonth) {
@@ -904,7 +904,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   }
 
   _moveFocusInsideMonth(focusedDate, property) {
-    var dateToFocus = new Date(0, 0);
+    const dateToFocus = new Date(0, 0);
     dateToFocus.setFullYear(focusedDate.getFullYear());
 
     if (property === 'minDate') {
@@ -931,8 +931,8 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   }
 
   _isTodayAllowed(min, max) {
-    var today = new Date();
-    var todayMidnight = new Date(0, 0);
+    const today = new Date();
+    const todayMidnight = new Date(0, 0);
     todayMidnight.setFullYear(today.getFullYear());
     todayMidnight.setMonth(today.getMonth());
     todayMidnight.setDate(today.getDate());

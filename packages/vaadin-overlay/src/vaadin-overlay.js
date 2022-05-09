@@ -413,7 +413,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
    * fired before the `vaadin-overlay` will be closed. If canceled the closing of the overlay is canceled as well.
    */
   close(sourceEvent) {
-    var evt = new CustomEvent('vaadin-overlay-close', {
+    const evt = new CustomEvent('vaadin-overlay-close', {
       bubbles: true,
       cancelable: true,
       detail: { sourceEvent: sourceEvent },

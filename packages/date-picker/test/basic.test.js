@@ -246,7 +246,7 @@ describe('basic features', () => {
     datepicker.style.display = 'inline-block';
 
     datepicker.value = '2000-01-01';
-    var width = datepicker.clientWidth;
+    const width = datepicker.clientWidth;
 
     datepicker.open();
     expect(datepicker.clientWidth).to.equal(width);

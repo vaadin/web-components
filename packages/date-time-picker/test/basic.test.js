@@ -180,7 +180,7 @@ describe('Basic features', () => {
 
   describe('value property formats', () => {
     it('should accept ISO format', () => {
-      var date = new Date(0, 1, 3, 8, 30, 0);
+      const date = new Date(0, 1, 3, 8, 30, 0);
 
       date.setFullYear(0);
       dateTimePicker.value = '0000-02-03T08:30:00';
@@ -212,7 +212,7 @@ describe('Basic features', () => {
     });
 
     it('should output ISO format', () => {
-      var date = new Date(0, 1, 3, 8, 30, 0);
+      const date = new Date(0, 1, 3, 8, 30, 0);
 
       date.setFullYear(0);
       dateTimePicker.__selectedDateTime = date;

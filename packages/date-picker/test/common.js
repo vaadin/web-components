@@ -78,7 +78,7 @@ export function monthsEqual(date1, date2) {
 }
 
 export function getFirstVisibleItem(scroller, bufferOffset) {
-  var children = [];
+  const children = [];
   bufferOffset = bufferOffset || 0;
 
   scroller._buffers.forEach((buffer) => {
@@ -86,7 +86,7 @@ export function getFirstVisibleItem(scroller, bufferOffset) {
       children.push(insertionPoint._itemWrapper);
     });
   });
-  var scrollerRect = scroller.getBoundingClientRect();
+  const scrollerRect = scroller.getBoundingClientRect();
   return children.reduce((prev, current) => {
     return Math.floor(current.getBoundingClientRect().top) - Math.floor(scrollerRect.top + bufferOffset) <= 0
       ? current

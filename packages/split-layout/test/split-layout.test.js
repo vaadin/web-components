@@ -201,10 +201,10 @@ function testDimensions(isVertical) {
     });
 
     describe('min and max css limits', () => {
-      var min = 20;
-      var max = 40;
-      var minSize = isVertical ? 'minHeight' : 'minWidth';
-      var maxSize = isVertical ? 'maxHeight' : 'maxWidth';
+      const min = 20;
+      const max = 40;
+      const minSize = isVertical ? 'minHeight' : 'minWidth';
+      const maxSize = isVertical ? 'maxHeight' : 'maxWidth';
 
       function testCssLimits(element, directionToMinimum) {
         dragHandle(directionToMinimum * initialSize * 2);
