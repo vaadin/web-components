@@ -95,8 +95,8 @@ export type GridExpandedItemsChangedEvent<TItem> = CustomEvent<{ value: TItem[] 
  */
 export type GridDragStartEvent<TItem> = CustomEvent<{
   draggedItems: TItem[];
-  setDraggedItemsCount: (count: number) => void;
-  setDragData: (type: string, data: string) => void;
+  setDraggedItemsCount(count: number): void;
+  setDragData(type: string, data: string): void;
 }>;
 
 /**

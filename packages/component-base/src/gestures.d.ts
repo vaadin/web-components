@@ -65,12 +65,12 @@ export { prevent };
 declare function prevent(evName: string): void;
 
 export interface GestureRecognizer {
-  reset: () => void;
-  mousedown?: (e: MouseEvent) => void;
-  mousemove?: (e: MouseEvent) => void;
-  mouseup?: (e: MouseEvent) => void;
-  touchstart?: (e: TouchEvent) => void;
-  touchmove?: (e: TouchEvent) => void;
-  touchend?: (e: TouchEvent) => void;
-  click?: (e: MouseEvent) => void;
+  reset(): void;
+  mousedown?(e: MouseEvent): void;
+  mousemove?(e: MouseEvent): void;
+  mouseup?(e: MouseEvent): void;
+  touchstart?(e: TouchEvent): void;
+  touchmove?(e: TouchEvent): void;
+  touchend?(e: TouchEvent): void;
+  click?(e: MouseEvent): void;
 }

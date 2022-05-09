@@ -26,9 +26,9 @@ export interface DatePickerI18n {
   clear: string;
   today: string;
   cancel: string;
-  parseDate: (date: string) => DatePickerDate | undefined;
-  formatDate: (date: DatePickerDate) => string;
-  formatTitle: (monthName: string, fullYear: number) => string;
+  parseDate(date: string): DatePickerDate | undefined;
+  formatDate(date: DatePickerDate): string;
+  formatTitle(monthName: string, fullYear: number): string;
 }
 
 export declare function DatePickerMixin<T extends Constructor<HTMLElement>>(

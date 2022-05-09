@@ -9,8 +9,8 @@
  */
 
 export interface AsyncInterface {
-  run: (fn: Function, delay?: number) => number;
-  cancel: (handle: number) => void;
+  run(fn: Function, delay?: number): number;
+  cancel(handle: number): void;
 }
 
 /**
