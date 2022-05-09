@@ -15,7 +15,7 @@ const chip = css`
     margin-inline-end: 0.25rem;
     padding: 0 0.5rem;
     border-radius: 4px;
-    background-color: hsla(214, 53%, 23%, 0.1);
+    background-color: rgba(0, 0, 0, 0.08);
     cursor: default;
     font-family: var(--material-font-family);
   }
@@ -37,7 +37,7 @@ const chip = css`
     height: 100%;
     border-left: 0.125rem solid;
     border-radius: 0.25rem;
-    border-color: hsla(214, 53%, 23%, 0.1);
+    border-color: rgba(0, 0, 0, 0.08);
   }
 
   :host([part~='overflow'])::before {
