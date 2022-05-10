@@ -20,8 +20,8 @@
   "module": "vaadin-virtual-list.js",
   "type": "module",
   "files": [
-    "lit.js",
     "lit.d.ts",
+    "lit.js",
     "src",
     "theme",
     "vaadin-*.d.ts",
