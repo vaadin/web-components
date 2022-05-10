@@ -122,7 +122,6 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       // we don't want the other columns to become visible as well.
       this._preventHiddenSynchronization = true;
       this._updateVisibleChildColumns(this._childColumns);
-      this._updateAutoHidden();
       this._preventHiddenSynchronization = false;
     }
 
@@ -207,6 +206,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   _updateVisibleChildColumns(childColumns) {
     this._visibleChildColumns = Array.prototype.filter.call(childColumns, (col) => !col.hidden);
     this._colSpan = this._visibleChildColumns.length;
+    this._updateAutoHidden();
   }
 
   /** @protected */
@@ -319,7 +319,6 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
         this._rootColumns = this._getChildColumns(this);
         this._childColumns = this._rootColumns;
         this._updateVisibleChildColumns(this._childColumns);
-        this._updateAutoHidden();
         this._preventHiddenSynchronization = false;
 
         // Update the column tree with microtask timing to avoid shady style scope issues
