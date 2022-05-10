@@ -79,21 +79,21 @@ describe('column group', () => {
     expect(columns[1].frozen).to.be.true;
   });
 
-  it('should hide group column', () => {
+  it('should hide when all columns are hidden', () => {
     columns[0].hidden = true;
     columns[1].hidden = true;
 
     expect(group.hidden).to.be.true;
   });
 
-  it('should unhide group column', () => {
+  it('should unhide when making child column visible', () => {
     group.hidden = true;
     columns[0].hidden = false;
 
     expect(group.hidden).to.be.false;
   });
 
-  it('should not unhide other columns', () => {
+  it('should not unhide other columns when making a column visible', () => {
     group.hidden = true;
     columns[0].hidden = false;
 
@@ -107,10 +107,7 @@ describe('column group', () => {
     expect(columns[0].hidden).to.be.true;
     expect(columns[1].hidden).to.be.true;
     expect(group.hidden).to.be.true;
-  });
 
-  it('should propagate hidden to child columns 2', () => {
-    group.hidden = true;
     group.hidden = false;
 
     expect(columns[0].hidden).to.be.false;
@@ -118,7 +115,7 @@ describe('column group', () => {
     expect(group.hidden).to.be.false;
   });
 
-  it('should hide the group', () => {
+  it('should hide when removing all child columns', () => {
     group.removeChild(columns[0]);
     group.removeChild(columns[1]);
     group._observer.flush();
@@ -126,7 +123,7 @@ describe('column group', () => {
     expect(group.hidden).to.be.true;
   });
 
-  it('should unhide the group', () => {
+  it('should unhide when adding a visible column', () => {
     group.removeChild(columns[0]);
     group.removeChild(columns[1]);
     group._observer.flush();
@@ -137,7 +134,7 @@ describe('column group', () => {
     expect(group.hidden).to.be.false;
   });
 
-  it('should not unhide the group', () => {
+  it('should not unhide when adding a hidden column', () => {
     group.removeChild(columns[0]);
     group.removeChild(columns[1]);
     group._observer.flush();
@@ -147,6 +144,21 @@ describe('column group', () => {
     group._observer.flush();
 
     expect(group.hidden).to.be.true;
+  });
+
+  // Regression test for https://github.com/vaadin/flow-components/issues/2959
+  it('should not unhide columns when attached to DOM', () => {
+    const group = document.createElement('vaadin-grid-column-group');
+    const visibleColumn = document.createElement('vaadin-grid-column');
+    const hiddenColumn = document.createElement('vaadin-grid-column');
+    hiddenColumn.hidden = true;
+
+    group.appendChild(visibleColumn);
+    group.appendChild(hiddenColumn);
+    document.body.appendChild(group);
+    group._observer.flush();
+
+    expect(hiddenColumn.hidden).to.be.true;
   });
 
   it('should calculate column group width after hiding a column', () => {
