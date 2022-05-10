@@ -12,23 +12,19 @@ export { GridProEditorType } from './vaadin-grid-pro-edit-column.js';
  * Fired when the user starts editing a grid cell.
  */
 export type GridProCellEditStartedEvent<TItem> = CustomEvent<{
-  value: {
-    index: number;
-    item: TItem;
-    path: string;
-  };
+  index: number;
+  item: TItem;
+  path: string;
 }>;
 
 /**
  * Fired before exiting the cell edit mode, if the value has been changed.
  */
 export type GridProItemPropertyChangedEvent<TItem> = CustomEvent<{
-  value: {
-    index: number;
-    item: TItem;
-    path: string;
-    value: string | boolean;
-  };
+  index: number;
+  item: TItem;
+  path: string;
+  value: string | boolean;
 }>;
 
 export interface GridProCustomEventMap<TItem> {
