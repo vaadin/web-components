@@ -268,6 +268,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        * {
        *   // Screen reader announcement on clear button click.
        *   cleared: 'Selection cleared',
+       *   // Screen reader announcement when a chip is focused.
+       *   focused: ' focused. Press Backspace to remove',
        *   // Screen reader announcement when item is selected.
        *   selected: 'added to selection',
        *   // Screen reader announcement when item is deselected.
@@ -285,6 +287,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         value: () => {
           return {
             cleared: 'Selection cleared',
+            focused: 'focused. Press Backspace to remove',
             selected: 'added to selection',
             deselected: 'removed from selection',
             total: '{count} items selected',
@@ -939,6 +942,13 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       chips.forEach((chip, index) => {
         chip.toggleAttribute('focused', index === focusedIndex);
       });
+
+      // Announce focused chip
+      if (focusedIndex > -1) {
+        const item = chips[focusedIndex].item;
+        const itemLabel = this._getItemLabel(item, this.itemLabelPath);
+        announce(`${itemLabel} ${this.i18n.focused}`);
+      }
     }
   }
 
