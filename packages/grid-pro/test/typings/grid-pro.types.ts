@@ -32,16 +32,16 @@ assertType<Grid<TestGridItem>>(narrowedGrid);
 assertType<InlineEditingMixinClass>(narrowedGrid);
 
 narrowedGrid.addEventListener('cell-edit-started', (event) => {
-  assertType<string>(event.detail.value.path);
-  assertType<number>(event.detail.value.index);
-  assertType<TestGridItem>(event.detail.value.item);
+  assertType<string>(event.detail.path);
+  assertType<number>(event.detail.index);
+  assertType<TestGridItem>(event.detail.item);
 });
 
 narrowedGrid.addEventListener('item-property-changed', (event) => {
-  assertType<string>(event.detail.value.path);
-  assertType<number>(event.detail.value.index);
-  assertType<TestGridItem>(event.detail.value.item);
-  assertType<string | boolean>(event.detail.value.value);
+  assertType<string>(event.detail.path);
+  assertType<number>(event.detail.index);
+  assertType<TestGridItem>(event.detail.item);
+  assertType<string | boolean>(event.detail.value);
 });
 
 narrowedGrid.addEventListener('active-item-changed', (event) => {
