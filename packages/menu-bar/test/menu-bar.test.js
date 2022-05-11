@@ -542,6 +542,20 @@ describe('parent resize', () => {
       assertVisible(buttons[2]);
       assertVisible(buttons[3]);
     });
+
+    it('should show buttons after attaching another container and increasing its width', async () => {
+      const other = document.createElement('div');
+      other.style.display = 'flex';
+      other.style.maxWidth = '300px';
+      container.parentNode.appendChild(other);
+
+      other.append(text, menu);
+      other.style.maxWidth = '400px';
+      await onceResized(menu);
+
+      assertVisible(buttons[2]);
+      assertVisible(buttons[3]);
+    });
   });
 
   describe('shadow host', () => {
