@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notification</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+
+  <body>
+    <vaadin-notification position="middle" duration="0" theme="success"></vaadin-notification>
+
+    <script type="module">
+      import '@vaadin/notification';
+
+      const notification = document.querySelector('vaadin-notification');
+      notification.renderer = root => root.textContent = 'Financial report generated';
+      notification.open();
+    </script>
+  </body>
+</html>
