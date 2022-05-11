@@ -95,8 +95,13 @@ export const ButtonsMixin = (superClass) =>
           item.classList.remove('vaadin-menu-item');
         }
       }
-      this._overflow.item = { children: [] };
-      this._hasOverflow = false;
+      this.__updateOverflow([]);
+    }
+
+    /** @private */
+    __updateOverflow(items) {
+      this._overflow.item = { children: items };
+      this._hasOverflow = items.length > 0;
     }
 
     /** @private */
@@ -127,9 +132,8 @@ export const ButtonsMixin = (superClass) =>
           // Save width for buttons with component
           btn.style.width = btnStyle.width;
         }
-        overflow.item = {
-          children: buttons.filter((b, idx) => idx >= i).map((b) => b.item),
-        };
+        const items = buttons.filter((_, idx) => idx >= i).map((b) => b.item);
+        this.__updateOverflow(items);
       }
     }
 
