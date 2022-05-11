@@ -22,6 +22,15 @@ const chip = css`
     cursor: var(--lumo-clickable-cursor);
   }
 
+  :host([focused]) {
+    background-color: var(--lumo-primary-color);
+    color: var(--lumo-primary-contrast-color);
+  }
+
+  :host([focused]) [part='remove-button'] {
+    color: inherit;
+  }
+
   :host(:not([part~='overflow']):not([readonly]):not([disabled])) {
     padding-inline-end: 0;
   }
@@ -83,6 +92,7 @@ const chip = css`
     width: 1.25em;
     height: 1.25em;
     font-size: 1.5em;
+    transition: none;
   }
 
   [part='remove-button']::before {

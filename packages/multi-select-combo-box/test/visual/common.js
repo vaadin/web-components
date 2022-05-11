@@ -4,9 +4,9 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-multi-select-combo-box',
   css`
-    :host([focus-ring]) ::slotted(input),
-    :host([opened]) ::slotted(input) {
-      caret-color: transparent;
+    :host([focused][focus-ring]) ::slotted(input),
+    :host([focused][opened]) ::slotted(input) {
+      caret-color: transparent !important;
     }
   `,
 );

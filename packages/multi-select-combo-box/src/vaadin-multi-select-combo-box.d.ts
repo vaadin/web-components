@@ -22,6 +22,7 @@ import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themabl
 
 export interface MultiSelectComboBoxI18n {
   cleared: string;
+  focused: string;
   selected: string;
   deselected: string;
   total: string;
@@ -216,6 +217,8 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    * {
    *   // Screen reader announcement on clear button click.
    *   cleared: 'Selection cleared',
+   *   // Screen reader announcement when a chip is focused.
+   *   focused: ' focused. Press Backspace to remove',
    *   // Screen reader announcement when item is selected.
    *   selected: 'added to selection',
    *   // Screen reader announcement when item is deselected.

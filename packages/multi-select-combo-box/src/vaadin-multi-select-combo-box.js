@@ -268,6 +268,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        * {
        *   // Screen reader announcement on clear button click.
        *   cleared: 'Selection cleared',
+       *   // Screen reader announcement when a chip is focused.
+       *   focused: ' focused. Press Backspace to remove',
        *   // Screen reader announcement when item is selected.
        *   selected: 'added to selection',
        *   // Screen reader announcement when item is deselected.
@@ -285,6 +287,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         value: () => {
           return {
             cleared: 'Selection cleared',
+            focused: 'focused. Press Backspace to remove',
             selected: 'added to selection',
             deselected: 'removed from selection',
             total: '{count} items selected',
@@ -409,6 +412,13 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         type: Array,
         value: () => [],
       },
+
+      /** @private */
+      _focusedChipIndex: {
+        type: Number,
+        value: -1,
+        observer: '_focusedChipIndexChanged',
+      },
     };
   }
 
@@ -493,6 +503,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     super._setFocused(focused);
 
     if (!focused) {
+      this._focusedChipIndex = -1;
       this.validate();
     }
   }
@@ -829,8 +840,115 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       return;
     }
 
-    if (!this.readonly && event.key === 'Backspace' && items.length && this.inputElement.value === '') {
-      this.__removeItem(items[items.length - 1]);
+    const chips = Array.from(this._chips).slice(1);
+
+    if (!this.readonly && chips.length > 0) {
+      switch (event.key) {
+        case 'Backspace':
+          this._onBackSpace(chips);
+          break;
+        case 'ArrowLeft':
+          this._onArrowLeft(chips);
+          break;
+        case 'ArrowRight':
+          this._onArrowRight(chips);
+          break;
+        default:
+          this._focusedChipIndex = -1;
+          break;
+      }
+    }
+  }
+
+  /** @private */
+  _onArrowLeft(chips) {
+    if (this.inputElement.value !== '' || this.opened) {
+      return;
+    }
+
+    const idx = this._focusedChipIndex;
+    let newIdx;
+
+    if (this.getAttribute('dir') !== 'rtl') {
+      if (idx === -1) {
+        // Focus last chip
+        newIdx = chips.length - 1;
+      } else if (idx > 0) {
+        // Focus prev chip
+        newIdx = idx - 1;
+      }
+    } else if (idx === chips.length - 1) {
+      // Blur last chip
+      newIdx = -1;
+    } else if (idx > -1) {
+      // Focus next chip
+      newIdx = idx + 1;
+    }
+
+    if (newIdx !== undefined) {
+      this._focusedChipIndex = newIdx;
+    }
+  }
+
+  /** @private */
+  _onArrowRight(chips) {
+    if (this.inputElement.value !== '' || this.opened) {
+      return;
+    }
+
+    const idx = this._focusedChipIndex;
+    let newIdx;
+
+    if (this.getAttribute('dir') === 'rtl') {
+      if (idx === -1) {
+        // Focus last chip
+        newIdx = chips.length - 1;
+      } else if (idx > 0) {
+        // Focus prev chip
+        newIdx = idx - 1;
+      }
+    } else if (idx === chips.length - 1) {
+      // Blur last chip
+      newIdx = -1;
+    } else if (idx > -1) {
+      // Focus next chip
+      newIdx = idx + 1;
+    }
+
+    if (newIdx !== undefined) {
+      this._focusedChipIndex = newIdx;
+    }
+  }
+
+  /** @private */
+  _onBackSpace(chips) {
+    if (this.inputElement.value !== '' || this.opened) {
+      return;
+    }
+
+    const idx = this._focusedChipIndex;
+    if (idx === -1) {
+      this._focusedChipIndex = chips.length - 1;
+    } else {
+      this.__removeItem(chips[idx].item);
+      this._focusedChipIndex = -1;
+    }
+  }
+
+  /** @private */
+  _focusedChipIndexChanged(focusedIndex, oldFocusedIndex) {
+    if (focusedIndex > -1 || oldFocusedIndex > -1) {
+      const chips = Array.from(this._chips).slice(1);
+      chips.forEach((chip, index) => {
+        chip.toggleAttribute('focused', index === focusedIndex);
+      });
+
+      // Announce focused chip
+      if (focusedIndex > -1) {
+        const item = chips[focusedIndex].item;
+        const itemLabel = this._getItemLabel(item, this.itemLabelPath);
+        announce(`${itemLabel} ${this.i18n.focused}`);
+      }
     }
   }
 

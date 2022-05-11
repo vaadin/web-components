@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
@@ -160,6 +161,17 @@ describe('accessibility', () => {
       clock.tick(150);
 
       expect(region.textContent).to.equal('Selection cleared');
+    });
+
+    it('should announce when focusing a chip with keyboard', async () => {
+      comboBox.selectedItems = ['Apple'];
+
+      inputElement.focus();
+      await sendKeys({ press: 'Backspace' });
+
+      clock.tick(150);
+
+      expect(region.textContent).to.equal('Apple focused. Press Backspace to remove');
     });
   });
 });
