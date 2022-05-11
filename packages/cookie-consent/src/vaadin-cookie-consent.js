@@ -52,6 +52,10 @@ class CookieConsent extends ElementMixin(PolymerElement) {
     return 'vaadin-cookie-consent';
   }
 
+  static get cvdlName() {
+    return 'vaadin-cookie-consent';
+  }
+
   static get properties() {
     return {
       /**

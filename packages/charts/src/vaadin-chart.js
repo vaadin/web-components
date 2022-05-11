@@ -266,6 +266,10 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     return 'vaadin-chart';
   }
 
+  static get cvdlName() {
+    return 'vaadin-chart';
+  }
+
   /** @private */
   static __callHighchartsFunction(functionName, redrawCharts, ...args) {
     const functionToCall = Highcharts[functionName];
