@@ -6,6 +6,7 @@
   },
   "description": "vaadin-confirm-dialog",
   "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/confirm-dialog/LICENSE",
+  "cvdlName": "vaadin-confirm-dialog",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",

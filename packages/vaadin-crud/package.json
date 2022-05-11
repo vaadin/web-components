@@ -6,6 +6,7 @@
   },
   "description": "vaadin-crud",
   "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/vaadin-crud/LICENSE",
+  "cvdlName": "vaadin-crud",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",

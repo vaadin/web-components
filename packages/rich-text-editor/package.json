@@ -6,6 +6,7 @@
   },
   "description": "vaadin-rich-text-editor",
   "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/rich-text-editor/LICENSE",
+  "cvdlName": "vaadin-rich-text-editor",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",

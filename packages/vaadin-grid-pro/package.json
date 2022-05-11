@@ -6,6 +6,7 @@
   },
   "description": "vaadin-grid-pro",
   "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/vaadin-grid-pro/LICENSE",
+  "cvdlName": "vaadin-grid-pro",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",

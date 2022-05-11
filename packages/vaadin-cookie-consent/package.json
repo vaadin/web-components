@@ -6,6 +6,7 @@
   },
   "description": "vaadin-cookie-consent",
   "license": "https://raw.githubusercontent.com/vaadin/vaadin-cookie-consent/master/LICENSE",
+  "cvdlName": "vaadin-cookie-consent",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
