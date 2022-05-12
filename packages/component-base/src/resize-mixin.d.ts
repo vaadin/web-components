@@ -16,4 +16,10 @@ export declare class ResizeMixinClass {
    * Override the method to implement your own behavior.
    */
   protected _onResize(contentRect: DOMRect): void;
+
+  /**
+   * When true, the parent element resize will be also observed.
+   * Override this getter and return `true` to enable this.
+   */
+  protected readonly _observeParent: boolean;
 }
