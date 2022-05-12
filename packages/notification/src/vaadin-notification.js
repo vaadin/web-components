@@ -328,6 +328,12 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     processTemplates(this);
   }
 
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.opened = false;
+  }
+
   /**
    * Requests an update for the content of the notification.
    * While performing the update, it invokes the renderer passed in the `renderer` property.
