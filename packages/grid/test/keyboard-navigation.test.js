@@ -2205,7 +2205,7 @@ describe('empty grid', () => {
     grid.focus();
 
     expect(() => {
-      shiftTab();
+      shiftTab(grid);
     }).to.not.throw(Error);
   });
 });
