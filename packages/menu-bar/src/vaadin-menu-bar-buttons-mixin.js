@@ -28,6 +28,16 @@ export const ButtonsMixin = (superClass) =>
       return ['_menuItemsChanged(items, items.splices)'];
     }
 
+    /**
+     * Override getter from `ResizeMixin` to observe parent.
+     *
+     * @protected
+     * @override
+     */
+    get _observeParent() {
+      return true;
+    }
+
     /** @protected */
     ready() {
       super.ready();
