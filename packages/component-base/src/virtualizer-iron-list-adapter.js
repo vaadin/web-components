@@ -304,10 +304,7 @@ export class IronListAdapter {
 
     super._scrollHandler();
 
-    if (this._scrollTop === 0) {
-      // When scrolled to start, make sure the index of the first element is 0
-      this._virtualStart = 0;
-    } else if (this._physicalSize > 0) {
+    if (this._physicalSize > 0) {
       // After running super._scrollHandler, fix _virtualStart to workaround an iron-list issue.
       // See https://github.com/vaadin/web-components/issues/1691
       const reusables = this._getReusables(true);

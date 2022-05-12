@@ -75,17 +75,5 @@ describe('virtualizer - workarounds', () => {
       const lastVisibleElement = element.getRootNode().elementFromPoint(listRect.left, listRect.bottom - 1);
       expect(lastVisibleElement.textContent).to.equal('item 99473');
     });
-
-    it('should have 0 for the first visible index when scrolled to start', async () => {
-      // Scroll to start, taking a couple of steps on the way
-      const scrollPositions = [115000, 3500, 0];
-      for (let i = 0; i < scrollPositions.length; i++) {
-        element.scrollTop = scrollPositions[i];
-        await nextFrame();
-      }
-
-      // The index of the first visible item should be 0
-      expect(element.virtualizer.firstVisibleIndex).to.equal(0);
-    });
   });
 });
