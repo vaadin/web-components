@@ -49,6 +49,10 @@ class GridPro extends InlineEditingMixin(Grid) {
     return 'vaadin-grid-pro';
   }
 
+  static get cvdlName() {
+    return 'vaadin-grid-pro';
+  }
+
   /**
    * @protected
    */

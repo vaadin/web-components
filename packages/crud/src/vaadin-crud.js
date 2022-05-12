@@ -310,6 +310,10 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     return 'vaadin-crud';
   }
 
+  static get cvdlName() {
+    return 'vaadin-crud';
+  }
+
   static get properties() {
     return {
       /**

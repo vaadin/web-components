@@ -97,6 +97,10 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
     return 'vaadin-confirm-dialog';
   }
 
+  static get cvdlName() {
+    return 'vaadin-confirm-dialog';
+  }
+
   static get properties() {
     return {
       /**

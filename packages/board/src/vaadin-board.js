@@ -47,6 +47,10 @@ class Board extends ElementMixin(PolymerElement) {
     return 'vaadin-board';
   }
 
+  static get cvdlName() {
+    return 'vaadin-board';
+  }
+
   /**
    * @protected
    */

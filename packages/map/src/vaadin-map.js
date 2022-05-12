@@ -376,6 +376,10 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
     return 'vaadin-map';
   }
 
+  static get cvdlName() {
+    return 'vaadin-map';
+  }
+
   /** @protected */
   static _finalizeClass() {
     super._finalizeClass();

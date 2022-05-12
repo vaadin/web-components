@@ -362,6 +362,10 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     return 'vaadin-rich-text-editor';
   }
 
+  static get cvdlName() {
+    return 'vaadin-rich-text-editor';
+  }
+
   static get properties() {
     return {
       /**
