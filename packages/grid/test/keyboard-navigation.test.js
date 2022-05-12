@@ -2198,6 +2198,16 @@ describe('empty grid', () => {
     // Expect programmatic focus on focus exit element
     expect(grid.shadowRoot.activeElement).to.equal(grid.$.focusexit);
   });
+
+  it('should not throw on Shift + Tab when grid has tabindex', () => {
+    grid.setAttribute('tabindex', '0');
+
+    grid.focus();
+
+    expect(() => {
+      shiftTab();
+    }).to.not.throw(Error);
+  });
 });
 
 describe('hierarchical data', () => {
