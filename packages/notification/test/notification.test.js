@@ -34,6 +34,12 @@ describe('vaadin-notification', () => {
     expect(notification._card.getAttribute('id')).to.be.null;
   });
 
+  it('should close on detach', () => {
+    expect(notification.opened).to.be.true;
+    notification.remove();
+    expect(notification.opened).to.be.false;
+  });
+
   describe('vaadin-notification-container', () => {
     it('should be in the body when notification opens', () => {
       expect(document.body.querySelectorAll('vaadin-notification-container').length).to.be.equal(1);
