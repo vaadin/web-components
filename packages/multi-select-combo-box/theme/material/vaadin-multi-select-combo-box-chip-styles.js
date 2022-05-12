@@ -12,7 +12,6 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 const chip = css`
   :host {
     height: 1.25rem;
-    margin-inline-end: 0.25rem;
     padding: 0 0.5rem;
     border-radius: 4px;
     background-color: rgba(0, 0, 0, 0.08);

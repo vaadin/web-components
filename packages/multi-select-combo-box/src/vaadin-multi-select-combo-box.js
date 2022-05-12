@@ -177,18 +177,18 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
             invalid="[[invalid]]"
             theme$="[[theme]]"
           >
-            <vaadin-multi-select-combo-box-chip
-              id="overflow"
-              slot="prefix"
-              part$="[[_getOverflowPart(_overflowItems.length)]]"
-              disabled="[[disabled]]"
-              readonly="[[readonly]]"
-              label="[[_getOverflowLabel(_overflowItems.length)]]"
-              title$="[[_getOverflowTitle(_overflowItems)]]"
-              hidden$="[[_isOverflowHidden(_overflowItems.length)]]"
-              on-mousedown="_preventBlur"
-            ></vaadin-multi-select-combo-box-chip>
-            <div id="chips" part="chips" slot="prefix"></div>
+            <div id="chips" part="chips" slot="prefix">
+              <vaadin-multi-select-combo-box-chip
+                id="overflow"
+                part$="[[_getOverflowPart(_overflowItems.length)]]"
+                disabled="[[disabled]]"
+                readonly="[[readonly]]"
+                label="[[_getOverflowLabel(_overflowItems.length)]]"
+                title$="[[_getOverflowTitle(_overflowItems)]]"
+                hidden$="[[_isOverflowHidden(_overflowItems.length)]]"
+                on-mousedown="_preventBlur"
+              ></vaadin-multi-select-combo-box-chip>
+            </div>
             <slot name="input"></slot>
             <div id="clearButton" part="clear-button" slot="suffix"></div>
             <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix"></div>

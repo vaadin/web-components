@@ -34,12 +34,8 @@ const multiSelectComboBox = css`
     caret-color: var(--lumo-body-text-color) !important;
   }
 
-  [part~='chip']:not(:last-of-type) {
-    margin-inline-end: var(--lumo-space-xs);
-  }
-
-  [part~='overflow']:not([hidden]) + :not(:empty) {
-    margin-inline-start: var(--lumo-space-xs);
+  [part~='chips'] {
+    gap: var(--lumo-space-xs);
   }
 
   [part='toggle-button']::before {

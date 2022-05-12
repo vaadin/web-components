@@ -38,6 +38,10 @@ const multiSelectComboBox = css`
     padding: 6px 0;
   }
 
+  [part='chips'] {
+    gap: 0.25rem;
+  }
+
   [part='toggle-button']::before {
     content: var(--material-icons-dropdown);
   }
