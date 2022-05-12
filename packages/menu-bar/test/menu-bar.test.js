@@ -513,6 +513,72 @@ describe('responsive behaviour in container', () => {
   });
 });
 
+describe('parent resize', () => {
+  let container, text, menu, buttons;
+
+  beforeEach(() => {
+    container = fixtureSync('<div style="display: flex; max-width: 300px"></div>');
+    text = document.createElement('div');
+    text.textContent = 'Sibling';
+    menu = document.createElement('vaadin-menu-bar');
+    menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }];
+    menu.style.minWidth = '100px';
+  });
+
+  describe('container', () => {
+    beforeEach(async () => {
+      container.append(text, menu);
+      await onceResized(menu);
+      buttons = menu._buttons;
+    });
+
+    it('should show buttons when container width increases and menu-bar width stays the same', async () => {
+      assertHidden(buttons[2]);
+      assertHidden(buttons[3]);
+
+      container.style.maxWidth = '400px';
+      await onceResized(menu);
+
+      assertVisible(buttons[2]);
+      assertVisible(buttons[3]);
+    });
+
+    it('should show buttons after attaching another container and increasing its width', async () => {
+      const other = document.createElement('div');
+      other.style.display = 'flex';
+      other.style.maxWidth = '300px';
+      container.parentNode.appendChild(other);
+
+      other.append(text, menu);
+      other.style.maxWidth = '400px';
+      await onceResized(menu);
+
+      assertVisible(buttons[2]);
+      assertVisible(buttons[3]);
+    });
+  });
+
+  describe('shadow host', () => {
+    beforeEach(async () => {
+      container.attachShadow({ mode: 'open' });
+      container.shadowRoot.append(text, menu);
+      await onceResized(menu);
+      buttons = menu._buttons;
+    });
+
+    it('should show buttons when shadow host width increases and menu-bar width stays the same', async () => {
+      assertHidden(buttons[2]);
+      assertHidden(buttons[3]);
+
+      container.style.maxWidth = '400px';
+      await onceResized(menu);
+
+      assertVisible(buttons[2]);
+      assertVisible(buttons[3]);
+    });
+  });
+});
+
 describe('item components', () => {
   let menu, buttons, overflow;
 
