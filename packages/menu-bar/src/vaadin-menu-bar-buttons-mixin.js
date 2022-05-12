@@ -28,14 +28,14 @@ export const ButtonsMixin = (superClass) =>
       return ['_menuItemsChanged(items, items.splices)'];
     }
 
-    constructor() {
-      super();
-
-      this.__parentResizeObserver = new ResizeObserver(() => {
-        setTimeout(() => {
-          this.__detectOverflow();
-        });
-      });
+    /**
+     * Override getter from `ResizeMixin` to observe parent.
+     *
+     * @protected
+     * @override
+     */
+    get _observeParent() {
+      return true;
     }
 
     /** @protected */
@@ -50,18 +50,6 @@ export const ButtonsMixin = (superClass) =>
       super.connectedCallback();
 
       this._initButtonAttrs(this._overflow);
-
-      // Observe parent node resize to detect overflow
-      this.__parent = this.parentNode instanceof ShadowRoot ? this.parentNode.host : this.parentNode;
-      this.__parentResizeObserver.observe(this.__parent);
-    }
-
-    /** @protected */
-    disconnectedCallback() {
-      super.disconnectedCallback();
-
-      this.__parentResizeObserver.unobserve(this.__parent);
-      delete this.__parent;
     }
 
     /**
