@@ -6,6 +6,7 @@
   },
   "description": "vaadin-charts",
   "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/charts/LICENSE",
+  "cvdlName": "vaadin-chart",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
