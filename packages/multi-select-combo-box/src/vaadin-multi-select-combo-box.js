@@ -126,7 +126,7 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
- * @fires {CustomEvent} custom-values-set - Fired when the user sets a custom value.
+ * @fires {CustomEvent} custom-value-set - Fired when the user sets a custom value.
  * @fires {CustomEvent} filter-changed - Fired when the `filter` property changes.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
@@ -159,7 +159,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           disabled="[[disabled]]"
           readonly="[[readonly]]"
           auto-open-disabled="[[autoOpenDisabled]]"
-          allow-custom-value="[[allowCustomValues]]"
+          allow-custom-value="[[allowCustomValue]]"
           data-provider="[[dataProvider]]"
           filter="{{filter}}"
           filtered-items="[[filteredItems]]"
@@ -354,9 +354,9 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
       /**
        * When true, the user can input a value that is not present in the items list.
-       * @attr {boolean} allow-custom-values
+       * @attr {boolean} allow-custom-value
        */
-      allowCustomValues: {
+      allowCustomValue: {
         type: Boolean,
         value: false,
       },
@@ -970,10 +970,13 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     // Do not set combo-box value
     event.preventDefault();
 
+    // Stop the original event
+    event.stopPropagation();
+
     this.__clearFilter();
 
     this.dispatchEvent(
-      new CustomEvent('custom-values-set', {
+      new CustomEvent('custom-value-set', {
         detail: event.detail,
         composed: true,
         bubbles: true,

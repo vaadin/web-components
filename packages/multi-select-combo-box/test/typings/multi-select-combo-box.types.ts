@@ -16,7 +16,7 @@ import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import {
   MultiSelectComboBox,
   MultiSelectComboBoxChangeEvent,
-  MultiSelectComboBoxCustomValuesSetEvent,
+  MultiSelectComboBoxCustomValueSetEvent,
   MultiSelectComboBoxFilterChangedEvent,
   MultiSelectComboBoxI18n,
   MultiSelectComboBoxInvalidChangedEvent,
@@ -40,8 +40,8 @@ narrowedComboBox.addEventListener('change', (event) => {
   assertType<MultiSelectComboBox<TestComboBoxItem>>(event.target);
 });
 
-narrowedComboBox.addEventListener('custom-values-set', (event) => {
-  assertType<MultiSelectComboBoxCustomValuesSetEvent>(event);
+narrowedComboBox.addEventListener('custom-value-set', (event) => {
+  assertType<MultiSelectComboBoxCustomValueSetEvent>(event);
   assertType<string>(event.detail);
 });
 
@@ -63,7 +63,7 @@ narrowedComboBox.addEventListener('selected-items-changed', (event) => {
 // Properties
 assertType<() => boolean>(narrowedComboBox.checkValidity);
 assertType<() => boolean>(narrowedComboBox.validate);
-assertType<boolean>(narrowedComboBox.allowCustomValues);
+assertType<boolean>(narrowedComboBox.allowCustomValue);
 assertType<boolean | null | undefined>(narrowedComboBox.autoOpenDisabled);
 assertType<string>(narrowedComboBox.filter);
 assertType<TestComboBoxItem[] | undefined>(narrowedComboBox.filteredItems);
