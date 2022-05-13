@@ -5,6 +5,10 @@
  */
 import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
 
+console.warn(
+  `WARNING: Since Vaadin 23.1, using <iron-icon> is deprecated. Please use <vaadin-icon> and '@vaadin/icons/vaadin-iconset.js' instead.`,
+);
+
 const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = `<iron-iconset-svg name="vaadin" size="16">

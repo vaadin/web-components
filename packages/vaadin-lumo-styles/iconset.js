@@ -6,6 +6,10 @@
 import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
 import './version.js';
 
+console.warn(
+  `WARNING: Since Vaadin 23.1, using <iron-icon> is deprecated. Please use <vaadin-icon> and '@vaadin/vaadin-lumo-styles/vaadin-iconset.js' instead.`,
+);
+
 const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = `<iron-iconset-svg size="1000" name="lumo">
