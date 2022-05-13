@@ -1,6 +1,6 @@
 {
-  "name": "@vaadin/vaadin-grid",
-  "version": "23.0.7",
+  "name": "@datadobi/vaadin-grid",
+  "version": "23.0.7-datadobi1",
   "publishConfig": {
     "access": "public"
   },
@@ -39,6 +39,6 @@
     "data-table"
   ],
   "dependencies": {
-    "@vaadin/grid": "^23.0.7"
+    "@datadobi/grid": "23.0.7-datadobi1"
   }
 }

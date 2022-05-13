@@ -1,6 +1,6 @@
 {
-  "name": "@vaadin/grid",
-  "version": "23.0.7",
+  "name": "@datadobi/grid",
+  "version": "23.0.7-datadobi1",
   "publishConfig": {
     "access": "public"
   },
