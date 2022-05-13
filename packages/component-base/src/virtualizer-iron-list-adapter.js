@@ -308,7 +308,9 @@ export class IronListAdapter {
       // After running super._scrollHandler, fix _virtualStart to workaround an iron-list issue.
       // See https://github.com/vaadin/web-components/issues/1691
       const reusables = this._getReusables(true);
+      this._physicalTop = reusables.physicalTop;
       this._virtualStart += reusables.indexes.length;
+      this._physicalStart += reusables.indexes.length;
     }
 
     if (this.reorderElements) {
