@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-material-styles",
-  "version": "22.0.13",
+  "version": "22.0.14",
   "publishConfig": {
     "access": "public"
   },
@@ -38,7 +38,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-themable-mixin": "^22.0.13"
+    "@vaadin/vaadin-themable-mixin": "^22.0.14"
   },
   "devDependencies": {
     "gulp": "^4.0.2",
