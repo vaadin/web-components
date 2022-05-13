@@ -69,7 +69,6 @@ export class UserTags extends PolymerElement {
       opened: {
         type: Boolean,
         value: false,
-        observer: '_openedChanged',
       },
 
       /**
