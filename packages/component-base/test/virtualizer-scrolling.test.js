@@ -212,7 +212,7 @@ describe('virtualizer - scrollbar scrolling', () => {
         el.classList.add(`item`);
       },
       scrollTarget,
-      scrollContainer,
+      scrollContainer
     });
   });
 
