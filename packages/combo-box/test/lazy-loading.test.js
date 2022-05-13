@@ -427,6 +427,28 @@ describe('lazy loading', () => {
           enterKeyDown(comboBox.inputElement);
           expect(comboBox.value).to.eql('custom value');
         });
+
+        it('should not jump back to focused item after scroll', async () => {
+          comboBox.size = SIZE;
+          comboBox.dataProvider = spyAsyncDataProvider;
+          comboBox.opened = true;
+          // Wait for the async data provider to respond
+          await aTimeout(0);
+
+          comboBox.value = 'item 8';
+          comboBox.close();
+
+          comboBox.opened = true;
+          comboBox.$.dropdown._scrollIntoView(50);
+          // Wait for the async data provider to respond
+          await aTimeout(0);
+
+          // Wait for the timeout in __loadingChanged
+          await aTimeout(0);
+
+          const items = getViewportItems(comboBox);
+          expect(items.some((item) => item.index === 50)).to.be.true;
+        });
       });
 
       describe('changing dataProvider', () => {
