@@ -214,11 +214,11 @@ describe('virtualizer - scrollbar scrolling', () => {
       scrollTarget,
       scrollContainer,
     });
-
-    virtualizer.size = 100000;
   });
 
   it('should have an item at the bottom of the viewport after scrolling up', async () => {
+    virtualizer.size = 100000;
+
     // Scroll to end
     virtualizer.scrollToIndex(100000);
     await nextFrame();
@@ -234,5 +234,9 @@ describe('virtualizer - scrollbar scrolling', () => {
     const listRect = scrollTarget.getBoundingClientRect();
     const lastVisibleElement = scrollTarget.getRootNode().elementFromPoint(listRect.left, listRect.bottom - 1);
     expect([...lastVisibleElement.classList]).to.contain('item');
+  });
+
+  it('should not throw on flush if size is not set', () => {
+    expect(() => virtualizer.flush()).not.to.throw(Error);
   });
 });
