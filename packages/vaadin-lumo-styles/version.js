@@ -5,7 +5,7 @@
  */
 class Lumo extends HTMLElement {
   static get version() {
-    return '23.0.8';
+    return '23.0.9';
   }
 }
 
