@@ -976,15 +976,19 @@ export const ComboBoxMixin = (subclass) =>
           this._selectItemForValue(this.value);
         }
 
-        const inputValue = this._inputElementValue;
-        if (inputValue === undefined || inputValue === this._getItemLabel(this.selectedItem)) {
-          // When the input element value is the same as the current value or not defined,
-          // set the focused index to the item that matches the value.
-          this._focusedIndex = this.$.dropdown.indexOfLabel(this._getItemLabel(this.selectedItem));
-        } else {
-          // When the user filled in something that is different from the current value = filtering is enabled,
-          // set the focused index to the item that matches the filter query.
-          this._focusedIndex = this.$.dropdown.indexOfLabel(this.filter);
+        // Do not update `_focusedIndex` to from `-1` to old value during scroll.
+        // Otherwise, the scroll would jump back to the previously focused item.
+        if (!this.loading) {
+          const inputValue = this._inputElementValue;
+          if (inputValue === undefined || inputValue === this._getItemLabel(this.selectedItem)) {
+            // When the input element value is the same as the current value or not defined,
+            // set the focused index to the item that matches the value.
+            this._focusedIndex = this.$.dropdown.indexOfLabel(this._getItemLabel(this.selectedItem));
+          } else {
+            // When the user filled in something that is different from the current value = filtering is enabled,
+            // set the focused index to the item that matches the filter query.
+            this._focusedIndex = this.$.dropdown.indexOfLabel(this.filter);
+          }
         }
       }
     }
