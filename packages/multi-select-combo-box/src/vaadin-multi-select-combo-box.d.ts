@@ -38,7 +38,7 @@ export type MultiSelectComboBoxChangeEvent<TItem> = Event & {
 /**
  * Fired when the user sets a custom value.
  */
-export type MultiSelectComboBoxCustomValuesSetEvent = CustomEvent<string>;
+export type MultiSelectComboBoxCustomValueSetEvent = CustomEvent<string>;
 
 /**
  * Fired when the `filter` property changes.
@@ -58,7 +58,7 @@ export type MultiSelectComboBoxSelectedItemsChangedEvent<TItem> = CustomEvent<{ 
 export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap {
   change: MultiSelectComboBoxChangeEvent<TItem>;
 
-  'custom-values-set': MultiSelectComboBoxCustomValuesSetEvent;
+  'custom-value-set': MultiSelectComboBoxCustomValueSetEvent;
 
   'filter-changed': MultiSelectComboBoxFilterChangedEvent;
 
@@ -138,7 +138,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
- * @fires {CustomEvent} custom-values-set - Fired when the user sets a custom value.
+ * @fires {CustomEvent} custom-value-set - Fired when the user sets a custom value.
  * @fires {CustomEvent} filter-changed - Fired when the `filter` property changes.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
@@ -146,9 +146,9 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
 declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
   /**
    * When true, the user can input a value that is not present in the items list.
-   * @attr {boolean} allow-custom-values
+   * @attr {boolean} allow-custom-value
    */
-  allowCustomValues: boolean;
+  allowCustomValue: boolean;
 
   /**
    * Set true to prevent the overlay from opening automatically.
