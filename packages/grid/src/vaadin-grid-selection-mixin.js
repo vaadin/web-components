@@ -35,7 +35,7 @@ export const SelectionMixin = (superClass) =>
     static get observers() {
       return [
         '_updateSelectionForItemIdPathChange(itemIdPath)',
-        '_updateSelectionForSelectedItemsChange(selectedItems.*)'
+        '_updateSelectionForSelectedItemsChange(selectedItems.*)',
       ];
     }
 
@@ -100,12 +100,11 @@ export const SelectionMixin = (superClass) =>
 
     /** @private */
     __cacheSelectedKeys() {
-      if (this.selectedItems) {
-        this.__selectedKeys = new Set();
-        this.selectedItems.forEach((item) => {
-          this.__selectedKeys.add(this.getItemId(item));
-        });
-      }
+      const selectedItems = this.selectedItems || [];
+      this.__selectedKeys = new Set();
+      selectedItems.forEach((item) => {
+        this.__selectedKeys.add(this.getItemId(item));
+      });
     }
 
     /**
