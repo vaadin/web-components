@@ -33,7 +33,10 @@ export const SelectionMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_itemIdPathChanged(itemIdPath)', '_selectedItemsChanged(selectedItems.*)'];
+      return [
+        '_updateSelectionForItemIdPathChange(itemIdPath)',
+        '_updateSelectionForSelectedItemsChange(selectedItems.*)'
+      ];
     }
 
     /**
@@ -85,12 +88,12 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    _itemIdPathChanged() {
+    _updateSelectionForItemIdPathChange() {
       this.__cacheSelectedKeys();
     }
 
     /** @private */
-    _selectedItemsChanged() {
+    _updateSelectionForSelectedItemsChange() {
       this.__cacheSelectedKeys();
       this.requestContentUpdate();
     }
