@@ -227,6 +227,11 @@ describe('virtualizer - scrollbar scrolling', () => {
     for (let i = 0; i < 10; i++) {
       await nextFrame();
       scrollTarget.scrollTop -= 1000;
+
+      // Sanity check for iron-list internal properties
+      const adapter = virtualizer.__adapter;
+      const firstItem = adapter._physicalItems[adapter._physicalStart];
+      expect(firstItem.__virtualIndex).to.equal(adapter._virtualStart);
     }
 
     // There should be an item at the bottom of the viewport
