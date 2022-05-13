@@ -18,7 +18,7 @@
       clear-button-visible
       required
       error-message="Select at least one"
-      allow-custom-values
+      allow-custom-value
       style="width: 300px"
     ></vaadin-multi-select-combo-box>
 
@@ -69,11 +69,11 @@
 
       comboBox.selectedItems = ['Hydrogen', 'Helium', 'Lithium'];
 
-      comboBox.addEventListener('custom-values-set', (event) => {
+      comboBox.addEventListener('custom-value-set', (event) => {
         const item = event.detail;
         comboBox.items.push(item);
         comboBox.selectedItems = [...comboBox.selectedItems, item];
-        console.log('custom-values-set', item);
+        console.log('custom-value-set', item);
       });
 
       comboBox.addEventListener('change', () => {
