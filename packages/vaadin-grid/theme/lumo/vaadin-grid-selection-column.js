@@ -1,1 +1,1 @@
-import '@vaadin/grid/theme/lumo/vaadin-grid-selection-column.js';
+import '@datadobi/grid/theme/lumo/vaadin-grid-selection-column.js';

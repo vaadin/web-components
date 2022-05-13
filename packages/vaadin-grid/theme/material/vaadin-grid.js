@@ -1,1 +1,1 @@
-import '@vaadin/grid/theme/material/vaadin-grid.js';
+import '@datadobi/grid/theme/material/vaadin-grid.js';

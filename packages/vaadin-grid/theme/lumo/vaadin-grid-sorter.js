@@ -1,1 +1,1 @@
-import '@vaadin/grid/theme/lumo/vaadin-grid-sorter.js';
+import '@datadobi/grid/theme/lumo/vaadin-grid-sorter.js';
