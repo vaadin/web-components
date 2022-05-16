@@ -63,7 +63,7 @@ import { RadioButton } from './vaadin-radio-button.js';
  * @mixes KeyboardMixin
  */
 class RadioGroup extends FieldMixin(
-  FocusMixin(DisabledMixin(KeyboardMixin(ElementMixin(ThemableMixin(PolymerElement)))))
+  FocusMixin(DisabledMixin(KeyboardMixin(ElementMixin(ThemableMixin(PolymerElement))))),
 ) {
   static get is() {
     return 'vaadin-radio-group';
@@ -127,7 +127,7 @@ class RadioGroup extends FieldMixin(
       value: {
         type: String,
         notify: true,
-        observer: '__valueChanged'
+        observer: '__valueChanged',
       },
 
       /**
@@ -142,7 +142,7 @@ class RadioGroup extends FieldMixin(
         type: Boolean,
         value: false,
         reflectToAttribute: true,
-        observer: '__readonlyChanged'
+        observer: '__readonlyChanged',
       },
 
       /**
@@ -150,8 +150,8 @@ class RadioGroup extends FieldMixin(
        * @private
        */
       _fieldName: {
-        type: String
-      }
+        type: String,
+      },
     };
   }
 

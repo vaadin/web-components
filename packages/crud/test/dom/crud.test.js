@@ -10,8 +10,8 @@ describe('vaadin-crud', () => {
     crud.items = [
       {
         name: 'John',
-        age: 30
-      }
+        age: 30,
+      },
     ];
     await nextFrame();
   });

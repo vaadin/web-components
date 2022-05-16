@@ -10,5 +10,5 @@ registerStyles(
       animation: none !important;
     }
   `,
-  { moduleId: 'not-animated-date-picker-overlay' }
+  { moduleId: 'not-animated-date-picker-overlay' },
 );

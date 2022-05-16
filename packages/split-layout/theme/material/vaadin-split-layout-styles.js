@@ -28,5 +28,5 @@ registerStyles(
       transform: rotate(90deg);
     }
   `,
-  { moduleId: 'material-split-layout' }
+  { moduleId: 'material-split-layout' },
 );

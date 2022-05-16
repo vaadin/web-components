@@ -154,7 +154,7 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * @mixes ComboBoxMixin
  */
 class ComboBox extends ComboBoxDataProviderMixin(
-  ComboBoxMixin(PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))))
+  ComboBoxMixin(PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement))))),
 ) {
   static get is() {
     return 'vaadin-combo-box';
@@ -218,8 +218,8 @@ class ComboBox extends ComboBoxDataProviderMixin(
        * @protected
        */
       _positionTarget: {
-        type: Object
-      }
+        type: Object,
+      },
     };
   }
 
@@ -242,7 +242,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
         this._setFocusElement(input);
         this.stateTarget = input;
         this.ariaTarget = input;
-      })
+      }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
     this._positionTarget = this.shadowRoot.querySelector('[part="input-field"]');

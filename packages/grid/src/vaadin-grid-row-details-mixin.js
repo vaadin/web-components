@@ -19,7 +19,7 @@ export const RowDetailsMixin = (superClass) =>
           type: Array,
           value: function () {
             return [];
-          }
+          },
         },
 
         /**
@@ -45,15 +45,15 @@ export const RowDetailsMixin = (superClass) =>
          * @protected
          */
         _detailsCells: {
-          type: Array
-        }
+          type: Array,
+        },
       };
     }
 
     static get observers() {
       return [
         '_detailsOpenedItemsChanged(detailsOpenedItems.*, rowDetailsRenderer)',
-        '_rowDetailsRendererChanged(rowDetailsRenderer)'
+        '_rowDetailsRendererChanged(rowDetailsRenderer)',
       ];
     }
 

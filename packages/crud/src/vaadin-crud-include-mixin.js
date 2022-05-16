@@ -22,7 +22,7 @@ export const IncludedMixin = (superClass) =>
          */
         exclude: {
           value: '^_',
-          observer: '__onExcludeChange'
+          observer: '__onExcludeChange',
         },
 
         /**
@@ -33,8 +33,8 @@ export const IncludedMixin = (superClass) =>
          * @type {string | !Array<string> | undefined}
          */
         include: {
-          observer: '__onIncludeChange'
-        }
+          observer: '__onIncludeChange',
+        },
       };
     }
 

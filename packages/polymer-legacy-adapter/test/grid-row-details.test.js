@@ -30,7 +30,7 @@ describe('row details template', () => {
     grid.rowDetailsRenderer = () => {};
 
     expect(() => window.Vaadin.templateRendererCallback(grid)).to.throw(
-      /^Cannot use both a template and a renderer for <vaadin-grid \/>\.$/
+      /^Cannot use both a template and a renderer for <vaadin-grid \/>\.$/,
     );
   });
 });
@@ -132,7 +132,7 @@ describe('row details template', () => {
       grid.dataProvider = (_params, cb) => {
         const items = [
           { title: 'item1', hasChildren: true },
-          { title: 'item2', hasChildren: true }
+          { title: 'item2', hasChildren: true },
         ];
 
         cb(items, 1);

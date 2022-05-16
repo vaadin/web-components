@@ -8,7 +8,7 @@ import {
   NumberField,
   NumberFieldChangeEvent,
   NumberFieldInvalidChangedEvent,
-  NumberFieldValueChangedEvent
+  NumberFieldValueChangedEvent,
 } from '../../vaadin-number-field.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

@@ -52,7 +52,7 @@ export function registerStyles(themeFor, styles, options = {}) {
       themeFor,
       styles,
       include: options.include,
-      moduleId: options.moduleId
+      moduleId: options.moduleId,
     });
   }
 }
@@ -161,7 +161,7 @@ function getThemes(tagName) {
       // Prepend styles from included themes
       styles: [...getIncludedStyles(theme), ...theme.styles],
       // Map moduleId to includePriority
-      includePriority: getIncludePriority(theme.moduleId)
+      includePriority: getIncludePriority(theme.moduleId),
     }))
     // Sort by includePriority
     .sort((themeA, themeB) => themeB.includePriority - themeA.includePriority);

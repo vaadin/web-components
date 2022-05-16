@@ -16,7 +16,7 @@ describe('context-menu', () => {
         bubbles: true,
         cancelable: true,
         clientX,
-        clientY: domRect.y
+        clientY: domRect.y,
       });
 
       target.listenOn.dispatchEvent(e);
@@ -109,12 +109,12 @@ describe('context-menu', () => {
                     { text: 'Menu Item 2-2-1', checked: true },
                     { text: 'Menu Item 2-2-2', disabled: true },
                     { component: 'hr' },
-                    { text: 'Menu Item 2-2-3' }
-                  ]
-                }
-              ]
+                    { text: 'Menu Item 2-2-3' },
+                  ],
+                },
+              ],
             },
-            { text: 'Menu Item 3', disabled: true }
+            { text: 'Menu Item 3', disabled: true },
           ];
           contextmenu(element);
           await openSubMenus(element);

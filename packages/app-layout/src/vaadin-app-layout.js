@@ -341,9 +341,9 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         observer: '__i18nChanged',
         value: () => {
           return {
-            drawer: 'Drawer'
+            drawer: 'Drawer',
           };
-        }
+        },
       },
 
       /**
@@ -358,7 +358,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         value: 'navbar',
         notify: true,
         reflectToAttribute: true,
-        observer: '__primarySectionChanged'
+        observer: '__primarySectionChanged',
       },
 
       /**
@@ -374,7 +374,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         notify: true,
         value: true,
         reflectToAttribute: true,
-        observer: '__drawerOpenedChanged'
+        observer: '__drawerOpenedChanged',
       },
 
       /**
@@ -387,7 +387,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         notify: true,
         readOnly: true,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -400,8 +400,8 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
       closeDrawerOn: {
         type: String,
         value: 'vaadin-router-location-changed',
-        observer: '_closeDrawerOnChanged'
-      }
+        observer: '_closeDrawerOnChanged',
+      },
     };
   }
 

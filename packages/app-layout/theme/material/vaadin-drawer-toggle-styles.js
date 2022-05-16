@@ -47,5 +47,5 @@ const drawerToggle = css`
 `;
 
 registerStyles('vaadin-drawer-toggle', [button, drawerToggle], {
-  moduleId: 'material-drawer-toggle'
+  moduleId: 'material-drawer-toggle',
 });

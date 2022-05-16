@@ -11,7 +11,7 @@ import {
   flushGrid,
   getCellEditor,
   getContainerCell,
-  getContainerCellContent
+  getContainerCellContent,
 } from './helpers.js';
 
 customElements.define(
@@ -27,11 +27,11 @@ customElements.define(
           type: Object,
           value: () => {
             return { name: null };
-          }
-        }
+          },
+        },
       };
     }
-  }
+  },
 );
 
 describe('edit column renderer', () => {

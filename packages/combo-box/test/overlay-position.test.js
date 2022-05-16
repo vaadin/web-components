@@ -96,7 +96,7 @@ describe('overlay position', () => {
 
       expect(Math.round(overlayPart.getBoundingClientRect().left)).to.be.closeTo(
         Math.round(inputField.getBoundingClientRect().left),
-        1
+        1,
       );
 
       expect(overlayPart.getBoundingClientRect().top).to.be.closeTo(inputField.getBoundingClientRect().bottom, 1);

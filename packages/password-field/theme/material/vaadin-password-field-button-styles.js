@@ -33,5 +33,5 @@ const passwordFieldButton = css`
 `;
 
 registerStyles('vaadin-password-field-button', [button, passwordFieldButton], {
-  moduleId: 'material-password-field-button'
+  moduleId: 'material-password-field-button',
 });

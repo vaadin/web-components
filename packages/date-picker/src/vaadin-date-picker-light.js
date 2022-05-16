@@ -114,7 +114,7 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
        */
       attrForValue: {
         type: String,
-        value: 'value'
+        value: 'value',
       },
 
       /**
@@ -123,8 +123,8 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
        */
       _overlayInitialized: {
         type: Boolean,
-        value: true
-      }
+        value: true,
+      },
     };
   }
 

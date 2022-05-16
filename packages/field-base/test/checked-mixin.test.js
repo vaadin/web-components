@@ -25,10 +25,10 @@ customElements.define(
           this._setInputElement(input);
           this._setFocusElement(input);
           this.stateTarget = input;
-        })
+        }),
       );
     }
-  }
+  },
 );
 
 describe('checked-mixin', () => {

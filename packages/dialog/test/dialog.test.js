@@ -21,10 +21,10 @@ customElements.define(
     static get properties() {
       return {
         message: String,
-        text: String
+        text: String,
       };
     }
-  }
+  },
 );
 
 describe('vaadin-dialog', () => {

@@ -49,7 +49,7 @@ const fixtures = {
       </vaadin-grid-column>
       <template class="row-details">details</template>
     </vaadin-grid>
-  `
+  `,
 };
 
 describe('accessibility', () => {
@@ -188,7 +188,7 @@ describe('accessibility', () => {
         return {
           name: `${parentItem ? parentItem.name + '-' : ''}${i}`,
           // Let's only have child items on every second item
-          children: i % 2 === 0
+          children: i % 2 === 0,
         };
       });
 
@@ -279,7 +279,7 @@ describe('accessibility', () => {
           expect(detailsCell.id).to.be.ok;
           expect(detailsCell.getAttribute('aria-controls')).to.equal(null);
           expect(uniqueAttrValues(row.querySelectorAll('td:not([part~="details-cell"])'), 'aria-controls')).to.eql([
-            detailsCell.id
+            detailsCell.id,
           ]);
         });
       });
@@ -351,7 +351,7 @@ describe('accessibility', () => {
           expect(
             Array.from(grid.$.items.children)
               .slice(0, 5) // assuming at least five body rows are visible
-              .map((row) => row.getAttribute('aria-rowindex'))
+              .map((row) => row.getAttribute('aria-rowindex')),
           ).to.eql(['3', '4', '5', '6', '7']);
           expect(grid.$.footer.children[0].getAttribute('aria-rowindex')).to.equal('103');
         });

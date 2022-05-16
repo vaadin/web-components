@@ -23,7 +23,7 @@ customElements.define(
       this.attachShadow({ mode: 'open' });
       this.shadowRoot.appendChild(document.importNode(shadowTemplate.content, true));
     }
-  }
+  },
 );
 
 customElements.define(
@@ -61,7 +61,7 @@ customElements.define(
         </vaadin-overlay>
       `;
     }
-  }
+  },
 );
 
 describe('focus-trap', function () {
@@ -171,7 +171,7 @@ describe('focus-trap', function () {
       it('should properly detect multiple focusables in web component shadowRoots', () => {
         expect(focusableElements.length).to.eql(4);
         expect(focusableElements[1]).to.eql(
-          overlay.content.querySelector('container-with-shadow').shadowRoot.getElementById('text')
+          overlay.content.querySelector('container-with-shadow').shadowRoot.getElementById('text'),
         );
       });
 
@@ -375,7 +375,7 @@ describe('focus-trap', function () {
       it('should properly detect multiple focusables in web component shadowRoots', () => {
         expect(focusableElements.length).to.eql(4);
         expect(focusableElements[1]).to.eql(
-          overlay.content.querySelector('container-with-shadow').shadowRoot.getElementById('text')
+          overlay.content.querySelector('container-with-shadow').shadowRoot.getElementById('text'),
         );
       });
 

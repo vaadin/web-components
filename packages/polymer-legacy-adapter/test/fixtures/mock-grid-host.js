@@ -48,15 +48,15 @@ export class MockGridHost extends PolymerElement {
         type: String,
         value() {
           return 'parentValue';
-        }
+        },
       },
 
       items: {
         type: Array,
         value() {
           return [{ title: 'item0' }, { title: 'item1' }];
-        }
-      }
+        },
+      },
     };
   }
 }

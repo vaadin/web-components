@@ -7,5 +7,5 @@ registerStyles(
     ::slotted(textarea) {
       caret-color: transparent;
     }
-  `
+  `,
 );

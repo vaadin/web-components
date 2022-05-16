@@ -150,7 +150,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       value: {
         type: String,
         notify: true,
-        value: ''
+        value: '',
       },
 
       /**
@@ -164,7 +164,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
        */
       min: {
         type: String,
-        value: '00:00:00.000'
+        value: '00:00:00.000',
       },
 
       /**
@@ -178,7 +178,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
        */
       max: {
         type: String,
-        value: '23:59:59.999'
+        value: '23:59:59.999',
       },
 
       /**
@@ -198,7 +198,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
        * not recommended to use it for better UX experience.
        */
       step: {
-        type: Number
+        type: Number,
       },
 
       /**
@@ -209,7 +209,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
       /** @private */
       __dropdownItems: {
-        type: Array
+        type: Array,
       },
 
       /**
@@ -267,7 +267,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
               const MATCH_SECONDS = MATCH_MINUTES;
               const MATCH_MILLISECONDS = '(\\d{1,3})';
               const re = new RegExp(
-                `^${MATCH_HOURS}(?::${MATCH_MINUTES}(?::${MATCH_SECONDS}(?:\\.${MATCH_MILLISECONDS})?)?)?$`
+                `^${MATCH_HOURS}(?::${MATCH_MINUTES}(?::${MATCH_SECONDS}(?:\\.${MATCH_MILLISECONDS})?)?)?$`,
               );
               const parts = re.exec(text);
               if (parts) {
@@ -279,19 +279,19 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
                 }
                 return { hours: parts[1], minutes: parts[2], seconds: parts[3], milliseconds: parts[4] };
               }
-            }
+            },
           };
-        }
+        },
       },
 
       /** @private */
       _comboBoxValue: {
         type: String,
-        observer: '__comboBoxValueChanged'
+        observer: '__comboBoxValueChanged',
       },
 
       /** @private */
-      _inputContainer: Object
+      _inputContainer: Object,
     };
   }
 
@@ -318,7 +318,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
         this._setFocusElement(input);
         this.stateTarget = input;
         this.ariaTarget = input;
-      })
+      }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
     this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');

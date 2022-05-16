@@ -17,14 +17,14 @@ import {
   DatePickerChangeEvent,
   DatePickerInvalidChangedEvent,
   DatePickerOpenedChangedEvent,
-  DatePickerValueChangedEvent
+  DatePickerValueChangedEvent,
 } from '../../vaadin-date-picker.js';
 import {
   DatePickerLight,
   DatePickerLightChangeEvent,
   DatePickerLightInvalidChangedEvent,
   DatePickerLightOpenedChangedEvent,
-  DatePickerLightValueChangedEvent
+  DatePickerLightValueChangedEvent,
 } from '../../vaadin-date-picker-light.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

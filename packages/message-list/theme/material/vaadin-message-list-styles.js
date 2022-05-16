@@ -10,5 +10,5 @@ registerStyles(
       padding: 8px 0;
     }
   `,
-  { moduleId: 'material-message-list' }
+  { moduleId: 'material-message-list' },
 );

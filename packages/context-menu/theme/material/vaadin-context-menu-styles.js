@@ -12,7 +12,7 @@ const contextMenuOverlay = css`
 `;
 
 registerStyles('vaadin-context-menu-overlay', [menuOverlay, contextMenuOverlay], {
-  moduleId: 'material-context-menu-overlay'
+  moduleId: 'material-context-menu-overlay',
 });
 
 registerStyles(
@@ -44,7 +44,7 @@ registerStyles(
       }
     }
   `,
-  { moduleId: 'material-context-menu-list-box' }
+  { moduleId: 'material-context-menu-list-box' },
 );
 
 registerStyles(
@@ -79,5 +79,5 @@ registerStyles(
       background-color: var(--material-secondary-background-color);
     }
   `,
-  { moduleId: 'material-context-menu-item' }
+  { moduleId: 'material-context-menu-item' },
 );

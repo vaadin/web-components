@@ -19,7 +19,7 @@ import { InputConstraintsMixin } from './input-constraints-mixin.js';
  */
 export const InputControlMixin = (superclass) =>
   class InputControlMixinClass extends DelegateFocusMixin(
-    InputConstraintsMixin(FieldMixin(KeyboardMixin(superclass)))
+    InputConstraintsMixin(FieldMixin(KeyboardMixin(superclass))),
   ) {
     static get properties() {
       return {
@@ -28,7 +28,7 @@ export const InputControlMixin = (superclass) =>
          */
         autoselect: {
           type: Boolean,
-          value: false
+          value: false,
         },
 
         /**
@@ -38,7 +38,7 @@ export const InputControlMixin = (superclass) =>
         clearButtonVisible: {
           type: Boolean,
           reflectToAttribute: true,
-          value: false
+          value: false,
         },
 
         /**
@@ -46,7 +46,7 @@ export const InputControlMixin = (superclass) =>
          */
         name: {
           type: String,
-          reflectToAttribute: true
+          reflectToAttribute: true,
         },
 
         /**
@@ -54,7 +54,7 @@ export const InputControlMixin = (superclass) =>
          */
         placeholder: {
           type: String,
-          reflectToAttribute: true
+          reflectToAttribute: true,
         },
 
         /**
@@ -63,7 +63,7 @@ export const InputControlMixin = (superclass) =>
         readonly: {
           type: Boolean,
           value: false,
-          reflectToAttribute: true
+          reflectToAttribute: true,
         },
 
         /**
@@ -71,8 +71,8 @@ export const InputControlMixin = (superclass) =>
          */
         title: {
           type: String,
-          reflectToAttribute: true
-        }
+          reflectToAttribute: true,
+        },
       };
     }
 
@@ -156,11 +156,11 @@ export const InputControlMixin = (superclass) =>
       this.dispatchEvent(
         new CustomEvent('change', {
           detail: {
-            sourceEvent: event
+            sourceEvent: event,
           },
           bubbles: event.bubbles,
-          cancelable: event.cancelable
-        })
+          cancelable: event.cancelable,
+        }),
       );
     }
 

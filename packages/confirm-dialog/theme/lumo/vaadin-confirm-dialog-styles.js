@@ -93,5 +93,5 @@ registerStyles(
       margin-right: var(--lumo-space-s);
     }
   `,
-  { moduleId: 'lumo-confirm-dialog-overlay' }
+  { moduleId: 'lumo-confirm-dialog-overlay' },
 );

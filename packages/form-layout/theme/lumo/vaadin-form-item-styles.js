@@ -42,5 +42,5 @@ registerStyles(
       color: var(--lumo-required-field-indicator-color, var(--lumo-error-text-color));
     }
   `,
-  { moduleId: 'lumo-form-item' }
+  { moduleId: 'lumo-form-item' },
 );

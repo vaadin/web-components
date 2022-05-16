@@ -10,18 +10,18 @@ customElements.define(
       return {
         title: {
           type: String,
-          reflectToAttribute: true
+          reflectToAttribute: true,
         },
 
         invalid: {
           type: Boolean,
-          reflectToAttribute: true
+          reflectToAttribute: true,
         },
 
         indeterminate: {
           type: Boolean,
-          value: true
-        }
+          value: true,
+        },
       };
     }
 
@@ -42,7 +42,7 @@ customElements.define(
 
       this.stateTarget = this.$.input;
     }
-  }
+  },
 );
 
 describe('delegate-state-mixin', () => {

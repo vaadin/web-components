@@ -3,7 +3,7 @@ import {
   IntegerField,
   IntegerFieldChangeEvent,
   IntegerFieldInvalidChangedEvent,
-  IntegerFieldValueChangedEvent
+  IntegerFieldValueChangedEvent,
 } from '../../vaadin-integer-field.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

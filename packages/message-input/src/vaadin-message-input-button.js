@@ -13,7 +13,7 @@ registerStyles(
       flex-shrink: 0;
     }
   `,
-  { moduleId: 'vaadin-message-input-button-styles' }
+  { moduleId: 'vaadin-message-input-button-styles' },
 );
 
 /**

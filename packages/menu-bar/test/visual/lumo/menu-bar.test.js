@@ -28,10 +28,10 @@ describe('menu-bar', () => {
             { text: 'Home' },
             {
               text: 'Reports',
-              children: [{ text: 'View Reports' }, { text: 'Generate Report' }]
+              children: [{ text: 'View Reports' }, { text: 'Generate Report' }],
             },
             { text: 'Dashboard', disabled: true },
-            { text: 'Help' }
+            { text: 'Help' },
           ];
         });
 
@@ -65,14 +65,14 @@ describe('menu-bar', () => {
             { component: 'u', text: 'Home' },
             {
               component: makeIcon('lumo:chevron-down'),
-              children: [{ text: 'Notifications' }, { text: 'Mark as read' }]
+              children: [{ text: 'Notifications' }, { text: 'Mark as read' }],
             },
             { text: 'Manage', disabled: true },
             {
               text: 'Reports',
-              children: [{ text: 'View Reports' }, { text: 'Generate Report' }]
+              children: [{ text: 'View Reports' }, { text: 'Generate Report' }],
             },
-            { text: 'Help' }
+            { text: 'Help' },
           ];
         });
 

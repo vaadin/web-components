@@ -35,10 +35,10 @@ customElements.define(
           this._setFocusElement(input);
           this.stateTarget = input;
           this.ariaTarget = input;
-        })
+        }),
       );
     }
-  }
+  },
 );
 
 describe('input-control-mixin', () => {

@@ -54,7 +54,7 @@ registerStyles(
         opacity: 1;
       }
     }
-  `
+  `,
 );
 
 /**

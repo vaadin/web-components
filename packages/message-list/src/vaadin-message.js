@@ -59,7 +59,7 @@ class Message extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        * so the formatting is up to you.
        */
       time: {
-        type: String
+        type: String,
       },
 
       /**
@@ -69,7 +69,7 @@ class Message extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        * Example: `message.userName = "Jessica Jacobs";`
        */
       userName: {
-        type: String
+        type: String,
       },
 
       /**
@@ -79,7 +79,7 @@ class Message extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        * Example: `message.userAbbr = "JJ";`
        */
       userAbbr: {
-        type: String
+        type: String,
       },
 
       /**
@@ -88,7 +88,7 @@ class Message extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        * Example: `message.userImg = "/static/img/avatar.jpg";`
        */
       userImg: {
-        type: String
+        type: String,
       },
 
       /**
@@ -111,8 +111,8 @@ class Message extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        * ```
        */
       userColorIndex: {
-        type: Number
-      }
+        type: Number,
+      },
     };
   }
 

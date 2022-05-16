@@ -130,7 +130,7 @@ describe('focus-utils', () => {
             </slot>
           `;
         }
-      }
+      },
     );
 
     it('should return focusable elements in the tab order', () => {
@@ -162,7 +162,7 @@ describe('focus-utils', () => {
         'element-5',
         'element-8',
         'element-9',
-        'custom-element-1'
+        'custom-element-1',
       ]);
     });
 

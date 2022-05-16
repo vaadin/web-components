@@ -22,14 +22,14 @@ customElements.define(
     static get properties() {
       return {
         minlength: {
-          type: Number
+          type: Number,
         },
         maxlength: {
-          type: Number
+          type: Number,
         },
         pattern: {
-          type: String
-        }
+          type: String,
+        },
       };
     }
 
@@ -48,10 +48,10 @@ customElements.define(
         new InputController(this, (input) => {
           this._setInputElement(input);
           this.stateTarget = input;
-        })
+        }),
       );
     }
-  }
+  },
 );
 
 describe('input-constraints-mixin', () => {

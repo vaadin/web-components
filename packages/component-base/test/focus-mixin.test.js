@@ -15,7 +15,7 @@ customElements.define(
       const input = document.createElement('input');
       this.appendChild(input);
     }
-  }
+  },
 );
 
 describe('focus-mixin', () => {

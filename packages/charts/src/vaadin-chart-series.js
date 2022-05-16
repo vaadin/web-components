@@ -123,7 +123,7 @@ class ChartSeries extends PolymerElement {
        */
       values: {
         type: Array,
-        value: () => []
+        value: () => [],
       },
 
       /**
@@ -135,7 +135,7 @@ class ChartSeries extends PolymerElement {
        */
       valueMin: {
         type: Number,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -145,7 +145,7 @@ class ChartSeries extends PolymerElement {
        */
       valueMax: {
         type: Number,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -155,7 +155,7 @@ class ChartSeries extends PolymerElement {
        */
       type: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -164,7 +164,7 @@ class ChartSeries extends PolymerElement {
        */
       title: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -177,7 +177,7 @@ class ChartSeries extends PolymerElement {
        */
       markers: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -187,7 +187,7 @@ class ChartSeries extends PolymerElement {
        */
       unit: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -198,7 +198,7 @@ class ChartSeries extends PolymerElement {
        */
       stack: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -210,7 +210,7 @@ class ChartSeries extends PolymerElement {
        */
       neckPosition: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -222,7 +222,7 @@ class ChartSeries extends PolymerElement {
        */
       neckWidth: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -231,7 +231,7 @@ class ChartSeries extends PolymerElement {
        * @readonly
        */
       options: {
-        type: Object
+        type: Object,
       },
 
       /**
@@ -240,7 +240,7 @@ class ChartSeries extends PolymerElement {
        */
       additionalOptions: {
         type: Object,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -248,8 +248,8 @@ class ChartSeries extends PolymerElement {
        * @protected
        */
       _series: {
-        type: Object
-      }
+        type: Object,
+      },
     };
   }
 
@@ -265,7 +265,7 @@ class ChartSeries extends PolymerElement {
       '__unitObserver(unit, valueMin, valueMax, _series)',
       '__valueMinObserver(valueMin, _series)',
       '__valueMaxObserver(valueMax, _series)',
-      '__valuesObserver(values.splices, _series)'
+      '__valuesObserver(values.splices, _series)',
     ];
   }
 
@@ -409,7 +409,7 @@ class ChartSeries extends PolymerElement {
     }
 
     series.update({
-      marker: this.__markersConfiguration
+      marker: this.__markersConfiguration,
     });
   }
 

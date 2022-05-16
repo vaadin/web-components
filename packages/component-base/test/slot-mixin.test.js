@@ -24,7 +24,7 @@ customElements.define(
           const div = document.createElement('div');
           div.textContent = 'bar';
           return div;
-        }
+        },
       };
     }
 
@@ -35,7 +35,7 @@ customElements.define(
     get barChild() {
       return this._getDirectSlotChild('');
     }
-  }
+  },
 );
 
 describe('slot-mixin', () => {

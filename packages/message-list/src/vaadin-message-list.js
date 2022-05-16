@@ -68,8 +68,8 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
         value: function () {
           return [];
         },
-        observer: '_itemsChanged'
-      }
+        observer: '_itemsChanged',
+      },
     };
   }
 

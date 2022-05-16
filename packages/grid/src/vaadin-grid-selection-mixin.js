@@ -18,7 +18,7 @@ export const SelectionMixin = (superClass) =>
         selectedItems: {
           type: Object,
           notify: true,
-          value: () => []
+          value: () => [],
         },
 
         /**
@@ -27,8 +27,8 @@ export const SelectionMixin = (superClass) =>
          */
         __selectedKeys: {
           type: Object,
-          value: () => new Set()
-        }
+          value: () => new Set(),
+        },
       };
     }
 

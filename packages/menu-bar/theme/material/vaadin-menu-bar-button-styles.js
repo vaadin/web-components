@@ -107,5 +107,5 @@ const menuBarButton = css`
 `;
 
 registerStyles('vaadin-menu-bar-button', [button, menuBarButton], {
-  moduleId: 'material-menu-bar-button'
+  moduleId: 'material-menu-bar-button',
 });

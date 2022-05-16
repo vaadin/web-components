@@ -36,14 +36,14 @@ customElements.define(
           this._setFocusElement(input);
           this.stateTarget = input;
           this.ariaTarget = input;
-        })
+        }),
       );
     }
 
     setEnabledCharPattern(pattern) {
       this._enabledCharPattern = pattern;
     }
-  }
+  },
 );
 
 describe('input-field-mixin', () => {
@@ -163,7 +163,7 @@ describe('input-field-mixin', () => {
         [69, ['shift'], 'E'],
         [106, [], '*'],
         [32, [], ' '],
-        [187, [], '?']
+        [187, [], '?'],
       ].forEach(([keyCode, modifiers, key]) => {
         const keyCombo = modifiers.concat(key).join('+');
 
@@ -186,7 +186,7 @@ describe('input-field-mixin', () => {
         [112, [], 'F1'],
         [8, [], 'Backspace'],
         [37, [], 'ArrowLeft'],
-        [37, ['ctrl'], 'ArrowLeft']
+        [37, ['ctrl'], 'ArrowLeft'],
       ].forEach(([keyCode, modifiers, key]) => {
         const keyCombo = modifiers.concat(key).join('+');
 
@@ -202,10 +202,10 @@ describe('input-field-mixin', () => {
       const event = new Event('drop', {
         bubbles: true,
         cancelable: true,
-        composed: true
+        composed: true,
       });
       event.dataTransfer = {
-        getData: () => draggedText
+        getData: () => draggedText,
       };
       input.dispatchEvent(event);
       return event;
@@ -215,10 +215,10 @@ describe('input-field-mixin', () => {
       const event = new Event('paste', {
         bubbles: true,
         cancelable: true,
-        composed: true
+        composed: true,
       });
       event.clipboardData = {
-        getData: () => pastedText
+        getData: () => pastedText,
       };
       input.dispatchEvent(event);
       return event;
@@ -228,7 +228,7 @@ describe('input-field-mixin', () => {
       const event = new Event('beforeinput', {
         bubbles: true,
         cancelable: true,
-        composed: true
+        composed: true,
       });
       event.data = textToInput;
       input.dispatchEvent(event);

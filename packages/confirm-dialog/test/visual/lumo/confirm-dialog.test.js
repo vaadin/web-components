@@ -17,7 +17,7 @@ describe('confirm-dialog', () => {
           Please press a button to confirm.
         </vaadin-confirm-dialog>
       `,
-      div
+      div,
     );
     await oneEvent(element.$.dialog.$.overlay, 'vaadin-overlay-open');
   });

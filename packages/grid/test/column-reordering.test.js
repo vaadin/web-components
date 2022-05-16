@@ -14,7 +14,7 @@ import {
   getRowCells,
   getRows,
   infiniteDataProvider,
-  makeSoloTouchEvent
+  makeSoloTouchEvent,
 } from './helpers.js';
 
 function getVisualCellContent(section, row, col) {
@@ -40,7 +40,7 @@ function getVisualColumnCellContents(grid, col) {
   const headerContent = getVisualCellContent(grid.$.header, getRows(grid.$.header).length - 1, col);
   const footerContent = getVisualCellContent(grid.$.footer, 0, col);
   const bodyContent = Array.from(grid.$.items.children).map((row, rowIndex) =>
-    getVisualCellContent(grid.$.items, rowIndex, col)
+    getVisualCellContent(grid.$.items, rowIndex, col),
   );
   return bodyContent.concat(headerContent).concat(footerContent);
 }
@@ -174,7 +174,7 @@ describe('reordering simple grid', () => {
     const e = makeSoloTouchEvent(
       'touchmove',
       { x: 0, y: 0 },
-      getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]')
+      getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]'),
     );
     expect(e.defaultPrevented).to.be.false;
   });

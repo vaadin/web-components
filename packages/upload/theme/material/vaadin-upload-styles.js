@@ -93,7 +93,7 @@ registerStyles(
       transition-delay: 0s, 0s;
     }
   `,
-  { moduleId: 'material-upload' }
+  { moduleId: 'material-upload' },
 );
 
 registerStyles(
@@ -247,5 +247,5 @@ registerStyles(
       display: none;
     }
   `,
-  { moduleId: 'material-upload-file' }
+  { moduleId: 'material-upload-file' },
 );

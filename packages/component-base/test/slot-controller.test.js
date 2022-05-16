@@ -14,7 +14,7 @@ customElements.define(
         <slot></slot>
       `;
     }
-  }
+  },
 );
 
 describe('slot-controller', () => {
@@ -33,7 +33,7 @@ describe('slot-controller', () => {
             div.textContent = 'foo';
             return div;
           },
-          initializeSpy
+          initializeSpy,
         );
         element.addController(controller);
         child = element.querySelector('[slot="foo"]');
@@ -77,7 +77,7 @@ describe('slot-controller', () => {
             div.textContent = 'foo';
             return div;
           },
-          initializeSpy
+          initializeSpy,
         );
         element.addController(controller);
       });
@@ -116,7 +116,7 @@ describe('slot-controller', () => {
             div.textContent = 'bar';
             return div;
           },
-          initializeSpy
+          initializeSpy,
         );
         element.addController(controller);
         child = element.querySelector(':not([slot])');
@@ -160,7 +160,7 @@ describe('slot-controller', () => {
             div.textContent = 'bar';
             return div;
           },
-          initializeSpy
+          initializeSpy,
         );
         element.addController(controller);
       });
@@ -197,7 +197,7 @@ describe('slot-controller', () => {
             div.textContent = 'bar';
             return div;
           },
-          initializeSpy
+          initializeSpy,
         );
         element.addController(controller);
         // Check last child to ensure no custom node is added.

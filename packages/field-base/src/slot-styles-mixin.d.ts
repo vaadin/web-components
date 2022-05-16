@@ -10,7 +10,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
  * This is useful e.g. to hide native `<input type="number">` controls.
  */
 export declare function SlotStylesMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<SlotStylesMixinClass>;
 
 export declare class SlotStylesMixinClass {

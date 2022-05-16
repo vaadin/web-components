@@ -26,7 +26,7 @@ export const TabindexMixin = (superclass) =>
         tabindex: {
           type: Number,
           reflectToAttribute: true,
-          observer: '_tabindexChanged'
+          observer: '_tabindexChanged',
         },
 
         /**
@@ -35,8 +35,8 @@ export const TabindexMixin = (superclass) =>
          * @protected
          */
         _lastTabIndex: {
-          type: Number
-        }
+          type: Number,
+        },
       };
     }
 

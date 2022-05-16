@@ -25,7 +25,7 @@ describe('grid-pro', () => {
             <vaadin-grid-column path="name.last"></vaadin-grid-column>
           </vaadin-grid-pro>
         `,
-        div
+        div,
       );
       element.items = users;
       await nextRender(element);
@@ -65,7 +65,7 @@ describe('grid-pro', () => {
             <vaadin-grid-pro-edit-column path="name.first"></vaadin-grid-pro-edit-column>
           </vaadin-grid-pro>
         `,
-        div
+        div,
       );
       element.items = users;
       await nextRender(element);
@@ -86,7 +86,7 @@ describe('grid-pro', () => {
             <vaadin-grid-pro-edit-column path="married" editor-type="checkbox"></vaadin-grid-pro-edit-column>
           </vaadin-grid-pro>
         `,
-        div
+        div,
       );
       element.items = users;
       await nextRender(element);
@@ -107,7 +107,7 @@ describe('grid-pro', () => {
             <vaadin-grid-pro-edit-column path="name.title" editor-type="select"></vaadin-grid-pro-edit-column>
           </vaadin-grid-pro>
         `,
-        div
+        div,
       );
       element.items = users;
       const column = element.querySelector('vaadin-grid-pro-edit-column');

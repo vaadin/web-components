@@ -10,7 +10,7 @@ import { ReactiveController, ReactiveControllerHost } from 'lit';
  * A mixin for connecting controllers to the element.
  */
 export declare function ControllerMixin<T extends Constructor<HTMLElement>>(
-  superclass: T
+  superclass: T,
 ): T & Constructor<ControllerMixinClass>;
 
 export declare class ControllerMixinClass

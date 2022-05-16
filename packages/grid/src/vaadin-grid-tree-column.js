@@ -38,8 +38,8 @@ class GridTreeColumn extends GridColumn {
        */
       itemHasChildrenPath: {
         type: String,
-        observer: '_itemHasChildrenPathChanged'
-      }
+        observer: '_itemHasChildrenPathChanged',
+      },
     };
   }
 
@@ -89,7 +89,7 @@ class GridTreeColumn extends GridColumn {
   _itemHasChildrenPathChanged(itemHasChildrenPath) {
     if (itemHasChildrenPath) {
       console.warn(
-        `WARNING: Since Vaadin 23, itemHasChildrenPath on <vaadin-grid-tree-column> is deprecated. Please set this property on the <vaadin-grid> instead.`
+        `WARNING: Since Vaadin 23, itemHasChildrenPath on <vaadin-grid-tree-column> is deprecated. Please set this property on the <vaadin-grid> instead.`,
       );
 
       if (this._grid) {

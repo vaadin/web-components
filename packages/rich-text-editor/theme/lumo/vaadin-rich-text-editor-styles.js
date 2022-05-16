@@ -217,5 +217,5 @@ const richTextEditor = css`
 `;
 
 registerStyles('vaadin-rich-text-editor', [color, typography, richTextEditor], {
-  moduleId: 'lumo-rich-text-editor'
+  moduleId: 'lumo-rich-text-editor',
 });

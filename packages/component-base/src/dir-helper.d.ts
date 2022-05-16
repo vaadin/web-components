@@ -35,7 +35,7 @@ declare class DirHelper {
     scrollType: string,
     direction: string,
     element: Element | null,
-    scrollLeft: number
+    scrollLeft: number,
   ): void;
 }
 

@@ -59,7 +59,7 @@ class GridProEditColumn extends GridColumn {
        */
       editorOptions: {
         type: Array,
-        value: () => []
+        value: () => [],
       },
 
       /**
@@ -75,7 +75,7 @@ class GridProEditColumn extends GridColumn {
       editorType: {
         type: String,
         notify: true, // FIXME(web-padawan): needed by Flow counterpart
-        value: 'text'
+        value: 'text',
       },
 
       /**
@@ -85,7 +85,7 @@ class GridProEditColumn extends GridColumn {
        */
       editorValuePath: {
         type: String,
-        value: 'value'
+        value: 'value',
       },
 
       /**
@@ -93,11 +93,11 @@ class GridProEditColumn extends GridColumn {
        */
       path: {
         type: String,
-        observer: '_pathChanged'
+        observer: '_pathChanged',
       },
 
       /** @private */
-      _oldRenderer: Function
+      _oldRenderer: Function,
     };
   }
 

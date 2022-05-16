@@ -194,7 +194,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
         type: Boolean,
         notify: true,
         observer: '_openedChanged',
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -220,7 +220,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
        */
       template: {
         type: Object,
-        notify: true
+        notify: true,
       },
 
       /**
@@ -229,7 +229,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
        */
       content: {
         type: Object,
-        notify: true
+        notify: true,
       },
 
       /**
@@ -239,7 +239,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
       withBackdrop: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -256,7 +256,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
         type: Boolean,
         value: false,
         reflectToAttribute: true,
-        observer: '_modelessChanged'
+        observer: '_modelessChanged',
       },
 
       /**
@@ -267,7 +267,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
       hidden: {
         type: Boolean,
         reflectToAttribute: true,
-        observer: '_hiddenChanged'
+        observer: '_hiddenChanged',
       },
 
       /**
@@ -277,7 +277,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
        */
       focusTrap: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -286,7 +286,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
        */
       restoreFocusOnClose: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -295,22 +295,22 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
        * @type {HTMLElement}
        */
       restoreFocusNode: {
-        type: HTMLElement
+        type: HTMLElement,
       },
 
       /** @private */
       _mouseDownInside: {
-        type: Boolean
+        type: Boolean,
       },
 
       /** @private */
       _mouseUpInside: {
-        type: Boolean
+        type: Boolean,
       },
 
       /** @private */
       _instance: {
-        type: Object
+        type: Object,
       },
 
       /** @private */
@@ -332,7 +332,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
       _oldRenderer: Object,
 
       /** @private */
-      _oldOpened: Boolean
+      _oldOpened: Boolean,
     };
   }
 
@@ -416,7 +416,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
     var evt = new CustomEvent('vaadin-overlay-close', {
       bubbles: true,
       cancelable: true,
-      detail: { sourceEvent: sourceEvent }
+      detail: { sourceEvent: sourceEvent },
     });
     this.dispatchEvent(evt);
     if (!evt.defaultPrevented) {
@@ -495,7 +495,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
     const evt = new CustomEvent('vaadin-overlay-outside-click', {
       bubbles: true,
       cancelable: true,
-      detail: { sourceEvent: event }
+      detail: { sourceEvent: event },
     });
     this.dispatchEvent(evt);
 
@@ -519,7 +519,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
       const evt = new CustomEvent('vaadin-overlay-escape-press', {
         bubbles: true,
         cancelable: true,
-        detail: { sourceEvent: event }
+        detail: { sourceEvent: event },
       });
       this.dispatchEvent(evt);
 
@@ -846,7 +846,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
           if (this._instance) {
             this._instance.forwardHostProp(prop, value);
           }
-        }
+        },
       });
     }
 
@@ -862,7 +862,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
 
       let scopeCssText = Array.from(templateRoot.querySelectorAll('style')).reduce(
         (result, style) => result + style.textContent,
-        ''
+        '',
       );
 
       // The overlay root’s :host styles should not apply inside the overlay

@@ -36,15 +36,15 @@ describe('array data provider', () => {
         {
           name: {
             first: 'foo',
-            last: 'bar'
-          }
+            last: 'bar',
+          },
         },
         {
           name: {
             first: 'baz',
-            last: 'qux'
-          }
-        }
+            last: 'qux',
+          },
+        },
       ];
       flushGrid(grid);
       body = grid.$.items;
@@ -65,8 +65,8 @@ describe('array data provider', () => {
       grid.unshift('items', {
         name: {
           first: 'a',
-          last: 'b'
-        }
+          last: 'b',
+        },
       });
       expect(grid.size).to.equal(3);
       expect(getContent(0, 0)).to.equal('a');
@@ -103,14 +103,14 @@ describe('array data provider', () => {
       grid.items = [
         {
           name: {
-            first: 'a'
-          }
+            first: 'a',
+          },
         },
         {
           name: {
-            first: 'b'
-          }
-        }
+            first: 'b',
+          },
+        },
       ];
       expect(getContent(0, 0)).to.equal('a');
     });
@@ -172,9 +172,9 @@ describe('invalid paths', () => {
       {
         name: {
           first: 'foo',
-          last: 'bar'
-        }
-      }
+          last: 'bar',
+        },
+      },
     ];
     flushGrid(grid);
   });
@@ -217,10 +217,10 @@ describe('invalid paths', () => {
         {
           name: {
             last: {
-              foo: 'foo'
-            }
-          }
-        }
+              foo: 'foo',
+            },
+          },
+        },
       ];
 
       sorter.path = 'name.last.foo';

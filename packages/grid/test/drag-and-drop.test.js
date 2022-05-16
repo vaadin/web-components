@@ -9,7 +9,7 @@ describe('drag and drop', () => {
 
   const getTestItems = () => [
     { first: 'foo', last: 'bar' },
-    { first: 'baz', last: 'qux' }
+    { first: 'baz', last: 'qux' },
   ];
 
   const getDraggable = (grid, rowIndex = 0) => {
@@ -22,11 +22,11 @@ describe('drag and drop', () => {
     const event = new Event('dragstart', {
       bubbles: true,
       cancelable: true,
-      composed: true
+      composed: true,
     });
     event.dataTransfer = {
       setDragImage: sinon.spy(),
-      setData: (type, data) => (dragData[type] = data)
+      setData: (type, data) => (dragData[type] = data),
     };
     const draggableRect = draggable.getBoundingClientRect();
     event.clientX = draggableRect.left + draggableRect.width / 2;
@@ -39,7 +39,7 @@ describe('drag and drop', () => {
     const event = new Event('dragend', {
       bubbles: true,
       cancelable: true,
-      composed: true
+      composed: true,
     });
     draggable.dispatchEvent(event);
     return event;
@@ -49,7 +49,7 @@ describe('drag and drop', () => {
     const event = new Event('dragleave', {
       bubbles: true,
       cancelable: true,
-      composed: true
+      composed: true,
     });
     draggable.dispatchEvent(event);
   };
@@ -58,7 +58,7 @@ describe('drag and drop', () => {
     const event = new Event('dragenter', {
       bubbles: true,
       cancelable: true,
-      composed: true
+      composed: true,
     });
     draggable.dispatchEvent(event);
     return event;
@@ -68,11 +68,11 @@ describe('drag and drop', () => {
     const event = new Event('drop', {
       bubbles: true,
       cancelable: true,
-      composed: true
+      composed: true,
     });
     event.dataTransfer = {
       getData: (type) => dragData[type],
-      types: Object.keys(dragData)
+      types: Object.keys(dragData),
     };
     draggable.dispatchEvent(event);
     return event;
@@ -82,7 +82,7 @@ describe('drag and drop', () => {
     const event = new Event('dragover', {
       bubbles: true,
       cancelable: true,
-      composed: true
+      composed: true,
     });
     if (row) {
       const rect = row.getBoundingClientRect();
@@ -176,7 +176,7 @@ describe('drag and drop', () => {
         const event = new Event('dragstart', {
           bubbles: true,
           cancelable: true,
-          composed: true
+          composed: true,
         });
         getBodyCellContent(grid, 0, 0).dispatchEvent(event);
         expect(spy.called).to.be.true;

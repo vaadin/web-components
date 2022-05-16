@@ -7,5 +7,5 @@ registerStyles(
       padding-top: var(--lumo-space-xs);
     }
   `,
-  { moduleId: 'lumo-menu-bar-overlay' }
+  { moduleId: 'lumo-menu-bar-overlay' },
 );

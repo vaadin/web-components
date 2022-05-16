@@ -26,7 +26,7 @@ registerStyles(
       animation: test-animation 100ms;
     }
   `,
-  { moduleId: 'vaadin-notification-card-animation-theme' }
+  { moduleId: 'vaadin-notification-card-animation-theme' },
 );
 
 describe('animated notifications', () => {

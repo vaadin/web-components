@@ -50,5 +50,5 @@ registerStyles(
       font-size: var(--lumo-font-size-s);
     }
   `,
-  { moduleId: 'lumo-message' }
+  { moduleId: 'lumo-message' },
 );

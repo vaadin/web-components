@@ -13,7 +13,7 @@ import { ValidateMixinClass } from './validate-mixin.js';
  * A mixin to provide common field logic: label, error message and helper text.
  */
 export declare function FieldMixin<T extends Constructor<HTMLElement>>(
-  superclass: T
+  superclass: T,
 ): T &
   Constructor<ControllerMixinClass> &
   Constructor<FieldMixinClass> &

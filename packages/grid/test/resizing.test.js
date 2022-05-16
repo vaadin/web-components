@@ -14,7 +14,7 @@ import {
   getRows,
   infiniteDataProvider,
   nextResize,
-  scrollToEnd
+  scrollToEnd,
 } from './helpers.js';
 
 class TestComponent extends PolymerElement {
@@ -89,7 +89,7 @@ describe('resizing', () => {
     const bodyRows = getRows(grid.$.items);
     expect(bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom).to.be.closeTo(
       grid.$.footer.getBoundingClientRect().top,
-      1
+      1,
     );
   });
 

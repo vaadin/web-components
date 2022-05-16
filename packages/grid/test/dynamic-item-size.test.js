@@ -20,7 +20,7 @@ registerStyles(
     :host(.high) [part~='cell'] {
       line-height: 100px;
     }
-  `
+  `,
 );
 
 describe('dynamic item size', () => {

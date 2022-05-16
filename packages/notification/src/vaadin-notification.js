@@ -105,8 +105,8 @@ class NotificationContainer extends ThemableMixin(ElementMixin(PolymerElement)) 
       opened: {
         type: Boolean,
         value: false,
-        observer: '_openedChanged'
-      }
+        observer: '_openedChanged',
+      },
     };
   }
 
@@ -277,7 +277,7 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
        */
       duration: {
         type: Number,
-        value: 5000
+        value: 5000,
       },
 
       /**
@@ -288,7 +288,7 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         type: Boolean,
         value: false,
         notify: true,
-        observer: '_openedChanged'
+        observer: '_openedChanged',
       },
 
       /**
@@ -299,7 +299,7 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       position: {
         type: String,
         value: 'bottom-start',
-        observer: '_positionChanged'
+        observer: '_positionChanged',
       },
 
       /**
@@ -311,7 +311,7 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
        * - `notification` The reference to the `<vaadin-notification>` element.
        * @type {!NotificationRenderer | undefined}
        */
-      renderer: Function
+      renderer: Function,
     };
   }
 

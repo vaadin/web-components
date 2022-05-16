@@ -19,8 +19,8 @@ export const ButtonsMixin = (superClass) =>
          */
         _hasOverflow: {
           type: Boolean,
-          value: false
-        }
+          value: false,
+        },
       };
     }
 

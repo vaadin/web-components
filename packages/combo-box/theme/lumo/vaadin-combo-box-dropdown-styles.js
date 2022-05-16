@@ -89,5 +89,5 @@ const comboBoxOverlay = css`
 `;
 
 registerStyles('vaadin-combo-box-overlay', [overlay, menuOverlayCore, comboBoxOverlay], {
-  moduleId: 'lumo-combo-box-overlay'
+  moduleId: 'lumo-combo-box-overlay',
 });

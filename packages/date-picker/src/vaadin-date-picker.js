@@ -207,7 +207,7 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
         this._setFocusElement(input);
         this.stateTarget = input;
         this.ariaTarget = input;
-      })
+      }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
 

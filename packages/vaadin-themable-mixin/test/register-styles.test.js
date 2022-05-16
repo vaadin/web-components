@@ -19,7 +19,7 @@ const define =
         static get template() {
           return html`foo`;
         }
-      }
+      },
     );
   });
 
@@ -76,7 +76,7 @@ describe('registerStyles', () => {
         :host {
           background-color: rgb(0, 255, 0);
         }
-      `
+      `,
     ]);
 
     const instance = defineAndInstantiate(unique());
@@ -101,7 +101,7 @@ describe('registerStyles', () => {
         :host {
           color: rgb(${255}, 0, 0);
         }
-      `
+      `,
     );
 
     const instance = defineAndInstantiate(unique());
@@ -127,7 +127,7 @@ describe('registerStyles', () => {
             color: rgb(255, 0, 0);
           }
         `,
-        { moduleId: unique('id') }
+        { moduleId: unique('id') },
       );
 
       registerStyles(unique('component'), undefined, { include: [unique('id')] });
@@ -144,7 +144,7 @@ describe('registerStyles', () => {
             color: rgb(255, 0, 0);
           }
         `,
-        { moduleId: unique('id') }
+        { moduleId: unique('id') },
       );
 
       registerStyles(
@@ -154,7 +154,7 @@ describe('registerStyles', () => {
             color: rgb(0, 0, 255);
           }
         `,
-        { include: [unique('id')] }
+        { include: [unique('id')] },
       );
 
       const instance = defineAndInstantiate(unique('component'));
@@ -168,7 +168,7 @@ describe('registerStyles', () => {
       // Need to use both moduleId and include to verify the fix in style-modules -adapter
       registerStyles(unique('component'), unsafeCSS(duplicateStyle), {
         include: [unique('id')],
-        moduleId: unique('id2')
+        moduleId: unique('id2'),
       });
 
       const instance = defineAndInstantiate(unique('component'));
@@ -177,7 +177,7 @@ describe('registerStyles', () => {
       // Gather from the <style> tags (PolymerElement) and from the adoptedStyleSheets (LitElement)
       const rules = [
         ...(instance.shadowRoot.adoptedStyleSheets || []),
-        ...[...instance.shadowRoot.querySelectorAll('style')].map((style) => style.sheet)
+        ...[...instance.shadowRoot.querySelectorAll('style')].map((style) => style.sheet),
       ]
         .map((sheet) => [...sheet.cssRules])
         .flat();

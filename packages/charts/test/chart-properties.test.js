@@ -394,11 +394,11 @@ describe('vaadin-chart properties', () => {
           xAxis: [
             {
               name: 'First',
-              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             },
             {
               name: 'Second',
-              categories: ['a', 'v', 's', 'h', 'd', 'g', 'g', 'e', 'kj', 'kl', 'gs', 'df']
+              categories: ['a', 'v', 's', 'h', 'd', 'g', 'g', 'e', 'kj', 'kl', 'gs', 'df'],
             },
             {
               name: 'Third',
@@ -414,23 +414,23 @@ describe('vaadin-chart properties', () => {
                 'Riga',
                 'Copenhagen',
                 'Oslo',
-                'St. Petersburg'
-              ]
-            }
+                'St. Petersburg',
+              ],
+            },
           ],
           series: [
             {
               name: 'Rainfall',
               type: 'column',
-              data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+              data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
             },
             {
               name: 'Sea-Level Pressure',
               type: 'column',
               xAxis: 1,
-              data: [1016, 1016, 1015.9, 1015.5, 1012.3, 1009.5, 1009.6, 1010.2, 1013.1, 1016.9, 1018.2, 1016.7]
-            }
-          ]
+              data: [1016, 1016, 1015.9, 1015.5, 1012.3, 1009.5, 1009.6, 1010.2, 1013.1, 1016.9, 1018.2, 1016.7],
+            },
+          ],
         });
         await oneEvent(chart, 'chart-redraw');
         expect(chart.configuration.xAxis.length).to.be.equal(3);

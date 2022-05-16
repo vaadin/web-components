@@ -57,13 +57,13 @@ declare class GridSelectionColumn<TItem = GridDefaultItem> extends GridColumn<TI
   addEventListener<K extends keyof GridSelectionColumnEventMap>(
     type: K,
     listener: (this: GridSelectionColumn<TItem>, ev: GridSelectionColumnEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof GridSelectionColumnEventMap>(
     type: K,
     listener: (this: GridSelectionColumn<TItem>, ev: GridSelectionColumnEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

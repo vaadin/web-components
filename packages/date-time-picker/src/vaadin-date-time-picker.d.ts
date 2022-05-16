@@ -97,7 +97,7 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
 declare class DateTimePicker extends FieldMixin(
-  SlotMixin(DisabledMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement)))))
+  SlotMixin(DisabledMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement))))),
 ) {
   /**
    * The name of the control, which is submitted with the form data.
@@ -210,13 +210,13 @@ declare class DateTimePicker extends FieldMixin(
   addEventListener<K extends keyof DateTimePickerEventMap>(
     type: K,
     listener: (this: DateTimePicker, ev: DateTimePickerEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof DateTimePickerEventMap>(
     type: K,
     listener: (this: DateTimePicker, ev: DateTimePickerEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

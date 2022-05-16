@@ -143,8 +143,8 @@ class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
       tabindex: {
         type: Number,
         value: 0,
-        reflectToAttribute: true
-      }
+        reflectToAttribute: true,
+      },
     };
   }
 
@@ -154,7 +154,7 @@ class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
       '_toggleHostAttribute(file.error, "error")',
       '_toggleHostAttribute(file.indeterminate, "indeterminate")',
       '_toggleHostAttribute(file.uploading, "uploading")',
-      '_toggleHostAttribute(file.complete, "complete")'
+      '_toggleHostAttribute(file.complete, "complete")',
     ];
   }
 
@@ -203,8 +203,8 @@ class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
       new CustomEvent('file-remove', {
         detail: { file: this.file },
         bubbles: true,
-        composed: true
-      })
+        composed: true,
+      }),
     );
   }
 
@@ -220,8 +220,8 @@ class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
       new CustomEvent(e.target.getAttribute('file-event'), {
         detail: { file: this.file },
         bubbles: true,
-        composed: true
-      })
+        composed: true,
+      }),
     );
   }
 

@@ -81,7 +81,7 @@ export class PasswordField extends SlotStylesMixin(TextField) {
       revealButtonHidden: {
         type: Boolean,
         observer: '_revealButtonHiddenChanged',
-        value: false
+        value: false,
       },
 
       /**
@@ -93,7 +93,7 @@ export class PasswordField extends SlotStylesMixin(TextField) {
         value: false,
         reflectToAttribute: true,
         observer: '_passwordVisibleChanged',
-        readOnly: true
+        readOnly: true,
       },
 
       /**
@@ -111,10 +111,10 @@ export class PasswordField extends SlotStylesMixin(TextField) {
         type: Object,
         value: () => {
           return {
-            reveal: 'Show password'
+            reveal: 'Show password',
           };
-        }
-      }
+        },
+      },
     };
   }
 
@@ -130,7 +130,7 @@ export class PasswordField extends SlotStylesMixin(TextField) {
         ${tag} [slot="input"]::-ms-reveal {
           display: none;
         }
-      `
+      `,
     ];
   }
 
@@ -161,7 +161,7 @@ export class PasswordField extends SlotStylesMixin(TextField) {
 
         btn.addEventListener('click', host.__boundRevealButtonClick);
         btn.addEventListener('touchend', host.__boundRevealButtonTouchend);
-      }
+      },
     );
     this.addController(this._revealButtonController);
 

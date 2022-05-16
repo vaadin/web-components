@@ -95,7 +95,7 @@ export const ItemsMixin = (superClass) =>
          * ----------------|----------------|----------------
          * `:host` | expanded | Expanded parent item
          */
-        items: Array
+        items: Array,
       };
     }
 
@@ -178,9 +178,9 @@ export const ItemsMixin = (superClass) =>
       itemElement.dispatchEvent(
         new CustomEvent('opensubmenu', {
           detail: {
-            children: itemElement._item.children
-          }
-        })
+            children: itemElement._item.children,
+          },
+        }),
       );
     }
 
@@ -334,7 +334,7 @@ export const ItemsMixin = (superClass) =>
         requestAnimationFrame(() => (this.__openListenerActive = true));
         const openSubMenu = (
           e,
-          itemElement = e.composedPath().filter((e) => e.localName === 'vaadin-context-menu-item')[0]
+          itemElement = e.composedPath().filter((e) => e.localName === 'vaadin-context-menu-item')[0],
         ) => {
           // Delay enabling the mouseover listener to avoid it from triggering on parent menu open
           if (!this.__openListenerActive) {

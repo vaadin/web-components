@@ -11,5 +11,5 @@ registerStyles(
       padding: var(--lumo-space-s) var(--lumo-space-m);
     }
   `,
-  { moduleId: 'lumo-message-input' }
+  { moduleId: 'lumo-message-input' },
 );

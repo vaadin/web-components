@@ -22,8 +22,8 @@ export class MockGridProHost extends PolymerElement {
         type: Array,
         value() {
           return [{ title: 'item0' }, { title: 'item1' }];
-        }
-      }
+        },
+      },
     };
   }
 

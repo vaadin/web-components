@@ -49,13 +49,13 @@ declare class GridSortColumn<TItem = GridDefaultItem> extends GridColumn<TItem> 
   addEventListener<K extends keyof GridSortColumnEventMap>(
     type: K,
     listener: (this: GridSortColumn<TItem>, ev: GridSortColumnEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof GridSortColumnEventMap>(
     type: K,
     listener: (this: GridSortColumn<TItem>, ev: GridSortColumnEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

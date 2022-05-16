@@ -32,8 +32,8 @@ gulp.task('iron-icons', function () {
     .src(['assets/svg/*.svg'], { base: '.' })
     .pipe(
       modify({
-        fileModifier: iconFileModifier('')
-      })
+        fileModifier: iconFileModifier(''),
+      }),
     )
     .pipe(concat('iconset.js'))
     .pipe(
@@ -50,8 +50,8 @@ $_documentContainer.innerHTML = \`<iron-iconset-svg name="vaadin" size="16">
 </iron-iconset-svg>\`;
 
 document.head.appendChild($_documentContainer.content);\n`;
-        }
-      })
+        },
+      }),
     )
     .pipe(gulp.dest('.'));
 });
@@ -61,8 +61,8 @@ gulp.task('vaadin-icons', function () {
     .src(['assets/svg/*.svg'], { base: '.' })
     .pipe(
       modify({
-        fileModifier: iconFileModifier('vaadin:')
-      })
+        fileModifier: iconFileModifier('vaadin:'),
+      }),
     )
     .pipe(concat('vaadin-iconset.js'))
     .pipe(
@@ -80,8 +80,8 @@ $_documentContainer.innerHTML = \`<vaadin-iconset name="vaadin" size="16">
 </vaadin-iconset>\`;
 
 document.head.appendChild($_documentContainer.content);\n`;
-        }
-      })
+        },
+      }),
     )
     .pipe(gulp.dest('.'));
 });

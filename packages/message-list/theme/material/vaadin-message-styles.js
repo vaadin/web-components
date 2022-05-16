@@ -59,5 +59,5 @@ registerStyles(
       line-height: 1.25rem;
     }
   `,
-  { moduleId: 'material-message' }
+  { moduleId: 'material-message' },
 );

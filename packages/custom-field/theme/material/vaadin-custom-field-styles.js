@@ -45,7 +45,7 @@ const customField = css`
 `;
 
 registerStyles('vaadin-custom-field', [requiredField, helper, customField], {
-  moduleId: 'material-custom-field'
+  moduleId: 'material-custom-field',
 });
 
 export { customField };

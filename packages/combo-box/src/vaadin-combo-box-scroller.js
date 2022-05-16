@@ -56,7 +56,7 @@ export class ComboBoxScroller extends PolymerElement {
        */
       items: {
         type: Array,
-        observer: '__itemsChanged'
+        observer: '__itemsChanged',
       },
 
       /**
@@ -65,7 +65,7 @@ export class ComboBoxScroller extends PolymerElement {
        */
       focusedIndex: {
         type: Number,
-        observer: '__focusedIndexChanged'
+        observer: '__focusedIndexChanged',
       },
 
       /**
@@ -73,7 +73,7 @@ export class ComboBoxScroller extends PolymerElement {
        */
       loading: {
         type: Boolean,
-        observer: '__loadingChanged'
+        observer: '__loadingChanged',
       },
 
       /**
@@ -82,35 +82,35 @@ export class ComboBoxScroller extends PolymerElement {
        */
       opened: {
         type: Boolean,
-        observer: '__openedChanged'
+        observer: '__openedChanged',
       },
 
       /**
        * The selected item from the `items` array.
        */
       selectedItem: {
-        type: Object
+        type: Object,
       },
 
       /**
        * Path for the id of the item, used to detect whether the item is selected.
        */
       itemIdPath: {
-        type: String
+        type: String,
       },
 
       /**
        * Reference to the combo-box, used by the item elements.
        */
       comboBox: {
-        type: Object
+        type: Object,
       },
 
       /**
        * Function used to set a label for every combo-box item.
        */
       getItemLabel: {
-        type: Object
+        type: Object,
       },
 
       /**
@@ -118,15 +118,15 @@ export class ComboBoxScroller extends PolymerElement {
        */
       renderer: {
         type: Object,
-        observer: '__rendererChanged'
+        observer: '__rendererChanged',
       },
 
       /**
        * Used to propagate the `theme` attribute from the host element.
        */
       theme: {
-        type: String
-      }
+        type: String,
+      },
     };
   }
 
@@ -159,7 +159,7 @@ export class ComboBoxScroller extends PolymerElement {
       updateElement: this.__updateElement.bind(this),
       elementsContainer: this,
       scrollTarget: this,
-      scrollContainer: this.$.selector
+      scrollContainer: this.$.selector,
     });
   }
 
@@ -193,7 +193,7 @@ export class ComboBoxScroller extends PolymerElement {
 
     // Sometimes the item is partly below the bottom edge, detect and adjust.
     const lastPhysicalItem = [...this.children].find(
-      (el) => !el.hidden && el.index === this.__virtualizer.lastVisibleIndex
+      (el) => !el.hidden && el.index === this.__virtualizer.lastVisibleIndex,
     );
     if (!lastPhysicalItem || index !== lastPhysicalItem.index) {
       return;
@@ -294,7 +294,7 @@ export class ComboBoxScroller extends PolymerElement {
       label: this.getItemLabel(item),
       selected: this.__isItemSelected(item, this.selectedItem, this.itemIdPath),
       renderer: this.renderer,
-      focused: this.__isItemFocused(focusedIndex, index)
+      focused: this.__isItemFocused(focusedIndex, index),
     });
 
     el.id = `${this.__hostTagName}-item-${index}`;
@@ -355,7 +355,7 @@ export class ComboBoxScroller extends PolymerElement {
   __requestItemByIndex(item, index) {
     if (item instanceof ComboBoxPlaceholder && index !== undefined) {
       this.dispatchEvent(
-        new CustomEvent('index-requested', { detail: { index, currentScrollerPos: this._oldScrollerPosition } })
+        new CustomEvent('index-requested', { detail: { index, currentScrollerPos: this._oldScrollerPosition } }),
       );
     }
 

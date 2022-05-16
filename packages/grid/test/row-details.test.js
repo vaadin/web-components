@@ -13,7 +13,7 @@ import {
   getRowCells,
   getRows,
   infiniteDataProvider,
-  scrollToEnd
+  scrollToEnd,
 } from './helpers.js';
 
 class GridDetailsWrapper extends PolymerElement {

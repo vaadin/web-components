@@ -87,5 +87,5 @@ registerStyles(
       content: var(--material-icons-chevron-right);
     }
   `,
-  { moduleId: 'material-tabs' }
+  { moduleId: 'material-tabs' },
 );

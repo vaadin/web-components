@@ -119,7 +119,7 @@ describe('keyboard navigation', () => {
           const parts = text.split('.');
           return {
             hours: parts[0],
-            minutes: parts[1]
+            minutes: parts[1],
           };
         };
         timePicker.i18n.formatTime = (time) => {

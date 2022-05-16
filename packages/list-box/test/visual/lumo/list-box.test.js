@@ -22,7 +22,7 @@ describe('list-box', () => {
           <vaadin-item>Item 4</vaadin-item>
         </vaadin-list-box>
       `,
-      div
+      div,
     );
   });
 

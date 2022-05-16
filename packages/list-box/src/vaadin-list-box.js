@@ -76,8 +76,8 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(Controller
       // but we don't want it to be modified, or be shown in the API docs.
       /** @private */
       orientation: {
-        readOnly: true
-      }
+        readOnly: true,
+      },
     };
   }
 

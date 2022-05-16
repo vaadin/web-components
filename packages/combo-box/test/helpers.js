@@ -4,7 +4,7 @@ export const createEventSpy = (type, preventDefault) => {
   // Fake a keydown event to mimic form submit.
   const event = new CustomEvent(type, {
     bubbles: true,
-    cancelable: true
+    cancelable: true,
   });
   event.preventDefault = preventDefault;
   return event;
@@ -111,7 +111,7 @@ export const flushComboBox = (comboBox) => {
 export const selectItem = (comboBox, index) => {
   // simulates clicking on the overlay items, but it more reliable in tests.
   fire(comboBox.$.dropdown, 'selection-changed', {
-    item: comboBox.items[index]
+    item: comboBox.items[index],
   });
 };
 

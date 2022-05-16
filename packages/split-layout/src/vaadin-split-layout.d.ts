@@ -165,13 +165,13 @@ declare class SplitLayout extends ElementMixin(ThemableMixin(HTMLElement)) {
   addEventListener<K extends keyof SplitLayoutEventMap>(
     type: K,
     listener: (this: SplitLayout, ev: SplitLayoutEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof SplitLayoutEventMap>(
     type: K,
     listener: (this: SplitLayout, ev: SplitLayoutEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

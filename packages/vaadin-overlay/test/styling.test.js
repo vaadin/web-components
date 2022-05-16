@@ -11,7 +11,7 @@ registerStyles(
     .themed-styles-content {
       font-family: '.themed-styles-content';
     }
-  `
+  `,
 );
 
 customElements.define(
@@ -49,10 +49,10 @@ customElements.define(
 
     static get properties() {
       return {
-        opened: Boolean
+        opened: Boolean,
       };
     }
-  }
+  },
 );
 
 function getComputedStyleSource(element) {

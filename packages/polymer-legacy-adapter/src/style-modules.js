@@ -102,7 +102,7 @@ function getAllThemes() {
     return {
       themeFor,
       moduleId,
-      styles: module.__allStyles
+      styles: module.__allStyles,
     };
   });
 }
@@ -110,7 +110,7 @@ function getAllThemes() {
 window.Vaadin = window.Vaadin || {};
 window.Vaadin.styleModules = {
   getAllThemes,
-  registerStyles
+  registerStyles,
 };
 
 // Convert any existing themes from the themable-mixin's themeRegistry to the style modules format
@@ -118,7 +118,7 @@ if (themeRegistry && themeRegistry.length > 0) {
   themeRegistry.forEach((theme) => {
     registerStyles(theme.themeFor, theme.styles, {
       moduleId: theme.moduleId,
-      include: theme.include
+      include: theme.include,
     });
   });
   // Clear the themeRegistry

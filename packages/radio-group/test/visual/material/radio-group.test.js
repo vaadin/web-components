@@ -19,7 +19,7 @@ describe('radio-group', () => {
           <vaadin-radio-button value="c" label="C"></vaadin-radio-button>
         </vaadin-radio-group>
       `,
-      div
+      div,
     );
   });
 

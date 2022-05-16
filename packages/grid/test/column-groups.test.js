@@ -11,7 +11,7 @@ import {
   getRows,
   infiniteDataProvider,
   nextResize,
-  scrollToEnd
+  scrollToEnd,
 } from './helpers.js';
 
 const createColumn = () => {
@@ -129,7 +129,7 @@ const fixtures = {
         </vaadin-grid-column>
       </vaadin-grid-column-group>
     </vaadin-grid>
-  `
+  `,
 };
 
 describe('column groups', () => {
@@ -397,7 +397,7 @@ describe('column groups', () => {
         [2, 2],
         [2, 3],
         [2, 4],
-        [2, 5]
+        [2, 5],
       ].forEach((a) => expect(getHeaderCell(a[0], a[1]).hasAttribute('frozen')).to.be.true);
     });
 
@@ -409,7 +409,7 @@ describe('column groups', () => {
         [0, 5],
         [1, 2],
         [1, 3],
-        [2, 1]
+        [2, 1],
       ].forEach((a) => expect(getFooterCell(a[0], a[1]).hasAttribute('frozen')).to.be.true);
     });
 
@@ -485,7 +485,7 @@ describe('column groups', () => {
               <vaadin-grid-column-group>
                 <vaadin-grid-column id="col${col}" header="Col ${col}"></vaadin-grid-column>
               </vaadin-grid-column-group>
-              `
+              `,
             )
             .join('')}
         </vaadin-grid>

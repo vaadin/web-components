@@ -209,7 +209,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
        */
       items: {
         type: Array,
-        observer: '__itemsChanged'
+        observer: '__itemsChanged',
       },
 
       /**
@@ -221,7 +221,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
         value: false,
         notify: true,
         reflectToAttribute: true,
-        observer: '_openedChanged'
+        observer: '_openedChanged',
       },
 
       /**
@@ -253,14 +253,14 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
         type: String,
         value: '',
         notify: true,
-        observer: '_valueChanged'
+        observer: '_valueChanged',
       },
 
       /**
        * The name of this element.
        */
       name: {
-        type: String
+        type: String,
       },
 
       /**
@@ -271,7 +271,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
        * DOM content is empty.
        */
       placeholder: {
-        type: String
+        type: String,
       },
 
       /**
@@ -281,7 +281,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       readonly: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /** @private */
@@ -289,7 +289,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
       /** @private */
       _phoneMediaQuery: {
-        value: '(max-width: 420px), (max-height: 420px)'
+        value: '(max-width: 420px), (max-height: 420px)',
       },
 
       /** @private */
@@ -299,7 +299,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       _inputContainer: Object,
 
       /** @private */
-      _items: Object
+      _items: Object,
     };
   }
 
@@ -308,7 +308,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
       '_updateAriaExpanded(opened)',
       '_updateAriaRequired(required)',
       '_updateSelectedItem(value, _items, placeholder)',
-      '_rendererChanged(renderer, _overlayElement)'
+      '_rendererChanged(renderer, _overlayElement)',
     ];
   }
 
@@ -320,7 +320,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
         const button = document.createElement('vaadin-select-value-button');
         button.setAttribute('aria-haspopup', 'listbox');
         return button;
-      }
+      },
     };
   }
 
@@ -376,7 +376,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
     this.addController(
       new MediaQueryController(this._phoneMediaQuery, (matches) => {
         this._phone = matches;
-      })
+      }),
     );
 
     processTemplates(this);
@@ -451,7 +451,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
           this.__userInteraction = true;
           this.opened = false;
         },
-        true
+        true,
       );
 
       menuElement.setAttribute('role', 'listbox');
@@ -536,7 +536,7 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
       this._overlayElement.style.setProperty(
         '--vaadin-select-text-field-width',
-        this._inputContainer.offsetWidth + 'px'
+        this._inputContainer.offsetWidth + 'px',
       );
 
       // Preserve focus-ring to restore it later

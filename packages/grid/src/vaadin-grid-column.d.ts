@@ -9,7 +9,7 @@ import { GridDefaultItem, GridItemModel } from './vaadin-grid.js';
 export type GridBodyRenderer<TItem> = (
   root: HTMLElement,
   column: GridColumn<TItem>,
-  model: GridItemModel<TItem>
+  model: GridItemModel<TItem>,
 ) => void;
 
 export type GridColumnTextAlign = 'start' | 'center' | 'end' | null;
@@ -17,7 +17,7 @@ export type GridColumnTextAlign = 'start' | 'center' | 'end' | null;
 export type GridHeaderFooterRenderer<TItem> = (root: HTMLElement, column: GridColumn<TItem>) => void;
 
 export declare function ColumnBaseMixin<TItem, T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<ColumnBaseMixinClass<TItem>>;
 
 export declare class ColumnBaseMixinClass<TItem> {

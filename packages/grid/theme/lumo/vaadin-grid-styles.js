@@ -376,7 +376,7 @@ registerStyles(
       border-left-color: var(--_lumo-grid-border-color);
     }
   `,
-  { moduleId: 'lumo-grid' }
+  { moduleId: 'lumo-grid' },
 );
 
 registerStyles(
@@ -386,5 +386,5 @@ registerStyles(
       font-size: var(--lumo-font-size-m);
     }
   `,
-  { moduleId: 'vaadin-grid-select-all-checkbox-lumo' }
+  { moduleId: 'vaadin-grid-select-all-checkbox-lumo' },
 );
