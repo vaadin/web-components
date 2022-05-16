@@ -4,17 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
+import { PositionMixin } from '@vaadin/vaadin-overlay/src/vaadin-overlay-position-mixin.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
   'vaadin-user-tags-overlay',
   css`
     :host {
-      align-items: stretch;
-      justify-content: flex-start;
       background: transparent;
       box-shadow: none;
-      bottom: auto;
     }
 
     [part='overlay'] {
@@ -42,14 +40,6 @@ registerStyles(
       padding: 0;
     }
 
-    :host([dir='rtl']) {
-      left: auto;
-    }
-
-    :host(:not([dir='rtl'])) {
-      right: auto;
-    }
-
     :host([opening]),
     :host([closing]) {
       animation: 0.14s user-tags-overlay-dummy-animation;
@@ -73,7 +63,7 @@ registerStyles(
  * @extends OverlayElement
  * @private
  */
-class UserTagsOverlay extends OverlayElement {
+class UserTagsOverlay extends PositionMixin(OverlayElement) {
   static get is() {
     return 'vaadin-user-tags-overlay';
   }

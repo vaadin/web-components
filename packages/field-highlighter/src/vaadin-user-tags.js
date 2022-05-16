@@ -45,6 +45,7 @@ export class UserTags extends PolymerElement {
         id="overlay"
         modeless
         opened="[[opened]]"
+        no-vertical-overlap
         on-vaadin-overlay-open="_onOverlayOpen"
       ></vaadin-user-tags-overlay>
     `;
@@ -68,7 +69,6 @@ export class UserTags extends PolymerElement {
       opened: {
         type: Boolean,
         value: false,
-        observer: '_openedChanged',
       },
 
       /**
@@ -85,6 +85,7 @@ export class UserTags extends PolymerElement {
        */
       target: {
         type: Object,
+        observer: '__targetChanged',
       },
 
       /**
@@ -103,23 +104,9 @@ export class UserTags extends PolymerElement {
     };
   }
 
-  constructor() {
-    super();
-    this._boundSetPosition = this._debounceSetPosition.bind(this);
-  }
-
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    window.addEventListener('resize', this._boundSetPosition);
-    window.addEventListener('scroll', this._boundSetPosition);
-  }
-
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener('resize', this._boundSetPosition);
-    window.removeEventListener('scroll', this._boundSetPosition);
     this.opened = false;
   }
 
@@ -138,15 +125,8 @@ export class UserTags extends PolymerElement {
   }
 
   /** @private */
-  _debounceSetPosition() {
-    this._debouncePosition = Debouncer.debounce(this._debouncePosition, timeOut.after(16), () => this._setPosition());
-  }
-
-  /** @private */
-  _openedChanged(opened) {
-    if (opened) {
-      this._setPosition();
-    }
+  __targetChanged(target) {
+    this.$.overlay.positionTarget = target;
   }
 
   /** @private */
@@ -154,34 +134,6 @@ export class UserTags extends PolymerElement {
     if (hasFocus && this.flashing) {
       this.stopFlash();
     }
-  }
-
-  /**
-   * Set position of the user tags overlay.
-   * TODO: use PositionMixin instead.
-   *
-   * @private
-   */
-  _setPosition() {
-    if (!this.opened) {
-      return;
-    }
-
-    const targetRect = this.target.getBoundingClientRect();
-
-    const overlayRect = this.$.overlay.getBoundingClientRect();
-
-    this._translateX =
-      this.getAttribute('dir') === 'rtl'
-        ? targetRect.right - overlayRect.right + (this._translateX || 0)
-        : targetRect.left - overlayRect.left + (this._translateX || 0);
-    this._translateY = targetRect.top - overlayRect.top + (this._translateY || 0) + targetRect.height;
-
-    const devicePixelRatio = window.devicePixelRatio || 1;
-    this._translateX = Math.round(this._translateX * devicePixelRatio) / devicePixelRatio;
-    this._translateY = Math.round(this._translateY * devicePixelRatio) / devicePixelRatio;
-
-    this.$.overlay.style.transform = `translate3d(${this._translateX}px, ${this._translateY}px, 0)`;
   }
 
   get wrapper() {
