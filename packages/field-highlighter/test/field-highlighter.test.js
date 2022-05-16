@@ -258,28 +258,6 @@ describe('field highlighter', () => {
         expect(overlay.opened).to.equal(true);
       });
 
-      it('should set position on tags overlay when opened', async () => {
-        const spy = sinon.spy(wrapper, '_setPosition');
-        addUser(user1);
-        await nextFrame();
-        field.dispatchEvent(new CustomEvent('mouseenter'));
-        highlighter.observer._mouseDebouncer.flush();
-        expect(spy.callCount).to.equal(1);
-      });
-
-      it('should not re-position overlay on mouseenter from overlay', async () => {
-        const spy = sinon.spy(wrapper, '_setPosition');
-        addUser(user1);
-        await nextFrame();
-        field.dispatchEvent(new CustomEvent('mouseenter'));
-        highlighter.observer._mouseDebouncer.flush();
-        // Emulate second mouseenter from overlay
-        const enter = new CustomEvent('mouseenter');
-        enter.relatedTarget = overlay;
-        field.dispatchEvent(enter);
-        expect(spy.callCount).to.equal(1);
-      });
-
       it('should close overlay when users set to empty while opened', async () => {
         field.dispatchEvent(new CustomEvent('focusin'));
         setUsers([user1, user2]);
