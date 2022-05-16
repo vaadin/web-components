@@ -124,6 +124,7 @@ export class UserTags extends PolymerElement {
     this.$.overlay.requestContentUpdate();
   }
 
+  /** @private */
   __targetChanged(target) {
     this.$.overlay.positionTarget = target;
   }
