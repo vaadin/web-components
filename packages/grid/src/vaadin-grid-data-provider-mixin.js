@@ -219,13 +219,13 @@ export const DataProviderMixin = (superClass) =>
          */
         __expandedKeys: {
           type: Object,
-          value: () => new Set()
+          computed: '__computeExpandedKeys(itemIdPath, expandedItems.*)'
         }
       };
     }
 
     static get observers() {
-      return ['_sizeChanged(size)', '_itemIdPathChanged(itemIdPath)', '_expandedItemsChanged(expandedItems.*)'];
+      return ['_sizeChanged(size)', '_expandedItemsChanged(expandedItems.*)'];
     }
 
     /** @private */
@@ -282,25 +282,20 @@ export const DataProviderMixin = (superClass) =>
 
     /** @private */
     _expandedItemsChanged() {
-      this.__cacheExpandedKeys();
       this._cache.updateSize();
       this._effectiveSize = this._cache.effectiveSize;
       this.__updateVisibleRows();
     }
 
     /** @private */
-    _itemIdPathChanged() {
-      this.__cacheExpandedKeys();
-    }
+    __computeExpandedKeys(itemIdPath, expandedItems) {
+      const expanded = expandedItems.base || [];
+      const expandedKeys = new Set();
+      expanded.forEach((item) => {
+        expandedKeys.add(this.getItemId(item));
+      });
 
-    /** @private */
-    __cacheExpandedKeys() {
-      if (this.expandedItems) {
-        this.__expandedKeys = new Set();
-        this.expandedItems.forEach((item) => {
-          this.__expandedKeys.add(this.getItemId(item));
-        });
-      }
+      return expandedKeys;
     }
 
     /**
