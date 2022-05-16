@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-date-time-picker",
-  "version": "22.0.14",
+  "version": "22.0.15",
   "publishConfig": {
     "access": "public"
   },
@@ -32,6 +32,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/date-time-picker": "^22.0.14"
+    "@vaadin/date-time-picker": "^22.0.15"
   }
 }
