@@ -8,20 +8,41 @@
     <script type="module" src="./common.js"></script>
     <script type="module">
       import '@vaadin/combo-box';
+      import '@vaadin/combo-box/vaadin-combo-box-light.js';
     </script>
   </head>
   <body>
-    <vaadin-combo-box label="User"></vaadin-combo-box>
+    <vaadin-combo-box label="Country"></vaadin-combo-box>
 
-    <script>
+    <script type="module">
       const comboBox = document.querySelector('vaadin-combo-box');
 
-      (async () => {
-        const res = await fetch('https://demo.vaadin.com/demo-data/1.0/people?count=200');
-        const arr = await res.json();
-        comboBox.items = arr.result.map((user) => `${user.firstName} ${user.lastName}`);
-        // comboBox.renderer = (root, owner, model) => (root.innerHTML = `<i>${model.item}</i>`);
-      })();
+      /*
+      const res = await fetch('https://demo.vaadin.com/demo-data/1.0/filtered-countries?count=200');
+      const arr = await res.json();
+      comboBox.items = arr.result;
+      */
+
+      comboBox.dataProvider = (params, callback) => {
+        console.log(JSON.stringify(params))
+        const xhr = new XMLHttpRequest();
+        xhr.onload = () => {
+          const response = JSON.parse(xhr.responseText);
+
+          // Emulate network latency for demo purpose
+          setTimeout(() => {
+            callback(response.result, response.size);
+          }, 100);
+        };
+
+        const index = params.page * params.pageSize;
+        xhr.open(
+          'GET',
+          `https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=${index}&count=${params.pageSize}&filter=${params.filter}`,
+          true,
+        );
+        xhr.send();
+      };
     </script>
   </body>
 </html>
