@@ -27,13 +27,13 @@ export const SelectionMixin = (superClass) =>
          */
         __selectedKeys: {
           type: Object,
-          value: () => new Set(),
+          computed: '__computeSelectedKeys(itemIdPath, selectedItems.*)',
         },
       };
     }
 
     static get observers() {
-      return ['_updateSelectedKeys(itemIdPath, selectedItems.*)'];
+      return ['requestContentUpdate(itemIdPath, selectedItems.*)'];
     }
 
     /**
@@ -85,14 +85,14 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    _updateSelectedKeys() {
-      const selectedItems = this.selectedItems || [];
-      this.__selectedKeys = new Set();
-      selectedItems.forEach((item) => {
-        this.__selectedKeys.add(this.getItemId(item));
+    __computeSelectedKeys(itemIdPath, selectedItems) {
+      const selected = selectedItems.base || [];
+      const selectedKeys = new Set();
+      selected.forEach((item) => {
+        selectedKeys.add(this.getItemId(item));
       });
 
-      this.requestContentUpdate();
+      return selectedKeys;
     }
 
     /**
