@@ -109,7 +109,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
       opened: {
         type: Boolean,
         value: false,
-        notify: true
+        notify: true,
       },
 
       /**
@@ -118,7 +118,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        */
       header: {
         type: String,
-        value: ''
+        value: '',
       },
 
       /**
@@ -126,7 +126,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        */
       message: {
         type: String,
-        value: ''
+        value: '',
       },
 
       /**
@@ -137,7 +137,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        */
       confirmText: {
         type: String,
-        value: 'Confirm'
+        value: 'Confirm',
       },
 
       /**
@@ -148,7 +148,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        */
       confirmTheme: {
         type: String,
-        value: 'primary'
+        value: 'primary',
       },
 
       /**
@@ -158,7 +158,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        */
       noCloseOnEsc: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -168,7 +168,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
       reject: {
         type: Boolean,
         reflectToAttribute: true,
-        value: false
+        value: false,
       },
 
       /**
@@ -179,7 +179,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        */
       rejectText: {
         type: String,
-        value: 'Reject'
+        value: 'Reject',
       },
 
       /**
@@ -190,7 +190,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        */
       rejectTheme: {
         type: String,
-        value: 'error tertiary'
+        value: 'error tertiary',
       },
 
       /**
@@ -200,7 +200,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
       cancel: {
         type: Boolean,
         reflectToAttribute: true,
-        value: false
+        value: false,
       },
 
       /**
@@ -211,7 +211,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        */
       cancelText: {
         type: String,
-        value: 'Cancel'
+        value: 'Cancel',
       },
 
       /**
@@ -222,7 +222,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        */
       cancelTheme: {
         type: String,
-        value: 'tertiary'
+        value: 'tertiary',
       },
 
       /**
@@ -231,7 +231,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        */
       _cancelButton: {
         type: HTMLElement,
-        observer: '_cancelButtonChanged'
+        observer: '_cancelButtonChanged',
       },
 
       /**
@@ -240,7 +240,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        */
       _confirmButton: {
         type: HTMLElement,
-        observer: '_confirmButtonChanged'
+        observer: '_confirmButtonChanged',
       },
 
       /**
@@ -248,7 +248,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        * @private
        */
       _headerNode: {
-        type: HTMLElement
+        type: HTMLElement,
       },
 
       /**
@@ -256,7 +256,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        * @private
        */
       _messageNode: {
-        type: HTMLElement
+        type: HTMLElement,
       },
 
       /**
@@ -265,8 +265,8 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
        */
       _rejectButton: {
         type: HTMLElement,
-        observer: '_rejectButtonChanged'
-      }
+        observer: '_rejectButtonChanged',
+      },
     };
   }
 
@@ -288,7 +288,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
       '__updateCancelButton(_cancelButton, cancelText, cancelTheme, cancel)',
       '__updateHeaderNode(_headerNode, header)',
       '__updateMessageNode(_messageNode, message)',
-      '__updateRejectButton(_rejectButton, rejectText, rejectTheme, reject)'
+      '__updateRejectButton(_rejectButton, rejectText, rejectTheme, reject)',
     ];
   }
 
@@ -325,7 +325,7 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
         const button = document.createElement('vaadin-button');
         button._isDefaultButton = true;
         return button;
-      }
+      },
     };
   }
 

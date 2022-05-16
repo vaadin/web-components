@@ -143,7 +143,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
       nodrop: {
         type: Boolean,
         reflectToAttribute: true,
-        value: isTouch
+        value: isTouch,
       },
 
       /**
@@ -153,7 +153,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       target: {
         type: String,
-        value: ''
+        value: '',
       },
 
       /**
@@ -162,7 +162,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       method: {
         type: String,
-        value: 'POST'
+        value: 'POST',
       },
 
       /**
@@ -175,7 +175,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       headers: {
         type: Object,
-        value: {}
+        value: {},
       },
 
       /**
@@ -185,14 +185,14 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       timeout: {
         type: Number,
-        value: 0
+        value: 0,
       },
 
       /** @private */
       _dragover: {
         type: Boolean,
         value: false,
-        observer: '_dragoverChanged'
+        observer: '_dragoverChanged',
       },
 
       /**
@@ -223,7 +223,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
         notify: true,
         value: function () {
           return [];
-        }
+        },
       },
 
       /**
@@ -234,7 +234,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       maxFiles: {
         type: Number,
-        value: Infinity
+        value: Infinity,
       },
 
       /**
@@ -248,7 +248,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
         notify: true,
         readOnly: true,
         reflectToAttribute: true,
-        computed: '_maxFilesAdded(maxFiles, files.length)'
+        computed: '_maxFilesAdded(maxFiles, files.length)',
       },
 
       /**
@@ -262,7 +262,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       accept: {
         type: String,
-        value: ''
+        value: '',
       },
 
       /**
@@ -275,7 +275,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       maxFileSize: {
         type: Number,
-        value: Infinity
+        value: Infinity,
       },
 
       /**
@@ -286,7 +286,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
       _dragoverValid: {
         type: Boolean,
         value: false,
-        observer: '_dragoverValidChanged'
+        observer: '_dragoverValidChanged',
       },
 
       /**
@@ -296,7 +296,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       formDataName: {
         type: String,
-        value: 'file'
+        value: 'file',
       },
 
       /**
@@ -307,7 +307,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       noAuto: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -317,7 +317,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       withCredentials: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -392,45 +392,45 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
           return {
             dropFiles: {
               one: 'Drop file here',
-              many: 'Drop files here'
+              many: 'Drop files here',
             },
             addFiles: {
               one: 'Upload File...',
-              many: 'Upload Files...'
+              many: 'Upload Files...',
             },
             error: {
               tooManyFiles: 'Too Many Files.',
               fileIsTooBig: 'File is Too Big.',
-              incorrectFileType: 'Incorrect File Type.'
+              incorrectFileType: 'Incorrect File Type.',
             },
             uploading: {
               status: {
                 connecting: 'Connecting...',
                 stalled: 'Stalled',
                 processing: 'Processing File...',
-                held: 'Queued'
+                held: 'Queued',
               },
               remainingTime: {
                 prefix: 'remaining time: ',
-                unknown: 'unknown remaining time'
+                unknown: 'unknown remaining time',
               },
               error: {
                 serverUnavailable: 'Upload failed, please try again later',
                 unexpectedServerError: 'Upload failed due to server error',
-                forbidden: 'Upload forbidden'
-              }
+                forbidden: 'Upload forbidden',
+              },
             },
             file: {
               retry: 'Retry',
               start: 'Start',
-              remove: 'Remove'
+              remove: 'Remove',
             },
             units: {
-              size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-            }
+              size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+            },
           };
-        }
-      }
+        },
+      },
     };
   }
 
@@ -648,8 +648,8 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
         const evt = this.dispatchEvent(
           new CustomEvent('upload-response', {
             detail: { file, xhr },
-            cancelable: true
-          })
+            cancelable: true,
+          }),
         );
 
         if (!evt) {
@@ -666,8 +666,8 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
         file.complete = !file.error;
         this.dispatchEvent(
           new CustomEvent(`upload-${file.error ? 'error' : 'success'}`, {
-            detail: { file, xhr }
-          })
+            detail: { file, xhr },
+          }),
         );
         this._notifyFileChanges(file);
       }
@@ -681,8 +681,8 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     const evt = this.dispatchEvent(
       new CustomEvent('upload-before', {
         detail: { file, xhr },
-        cancelable: true
-      })
+        cancelable: true,
+      }),
     );
     if (!evt) {
       return;
@@ -700,8 +700,8 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     xhr.upload.onloadstart = () => {
       this.dispatchEvent(
         new CustomEvent('upload-start', {
-          detail: { file, xhr }
-        })
+          detail: { file, xhr },
+        }),
       );
       this._notifyFileChanges(file);
     };
@@ -711,8 +711,8 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     const uploadEvt = this.dispatchEvent(
       new CustomEvent('upload-request', {
         detail: { file, xhr, formData },
-        cancelable: true
-      })
+        cancelable: true,
+      }),
     );
     if (uploadEvt) {
       xhr.send(formData);
@@ -724,8 +724,8 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     const evt = this.dispatchEvent(
       new CustomEvent('upload-retry', {
         detail: { file, xhr: file.xhr },
-        cancelable: true
-      })
+        cancelable: true,
+      }),
     );
     if (evt) {
       this._uploadFile(file);
@@ -737,8 +737,8 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     const evt = this.dispatchEvent(
       new CustomEvent('upload-abort', {
         detail: { file, xhr: file.xhr },
-        cancelable: true
-      })
+        cancelable: true,
+      }),
     );
     if (evt) {
       file.abort = true;
@@ -775,16 +775,16 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     if (this.maxFilesReached) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
-          detail: { file, error: this.i18n.error.tooManyFiles }
-        })
+          detail: { file, error: this.i18n.error.tooManyFiles },
+        }),
       );
       return;
     }
     if (this.maxFileSize >= 0 && file.size > this.maxFileSize) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
-          detail: { file, error: this.i18n.error.fileIsTooBig }
-        })
+          detail: { file, error: this.i18n.error.fileIsTooBig },
+        }),
       );
       return;
     }
@@ -793,8 +793,8 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     if (this.accept && !(re.test(file.type) || re.test(fileExt))) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
-          detail: { file, error: this.i18n.error.incorrectFileType }
-        })
+          detail: { file, error: this.i18n.error.incorrectFileType },
+        }),
       );
       return;
     }

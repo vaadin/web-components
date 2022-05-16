@@ -13,7 +13,7 @@ import {
   getContainerCellContent,
   getHeaderCellContent,
   getPhysicalItems,
-  infiniteDataProvider
+  infiniteDataProvider,
 } from './helpers.js';
 
 class GridContainer extends PolymerElement {
@@ -294,7 +294,7 @@ describe('column', () => {
           set: spy,
           get: () => {
             return spy.called ? spy.getCalls().pop().args[0] : '';
-          }
+          },
         });
         emptyColumn.path = 'value';
         await nextFrame();
@@ -308,7 +308,7 @@ describe('column', () => {
           set: spy,
           get: () => {
             return spy.called ? spy.getCalls().pop().args[0] : '';
-          }
+          },
         });
         emptyColumn.path = 'header';
         const callCount = spy.callCount;
@@ -395,7 +395,7 @@ describe('column', () => {
           set: spy,
           get: () => {
             return spy.called ? spy.getCalls().pop().args[0] : '';
-          }
+          },
         });
         emptyColumn.header = undefined;
         emptyColumn.path = 'foo';

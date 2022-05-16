@@ -37,7 +37,7 @@ registerStyles(
       left: 0;
     }
   `,
-  { moduleId: 'material-crud-grid-edit' }
+  { moduleId: 'material-crud-grid-edit' },
 );
 
 /**
@@ -101,9 +101,9 @@ registerStyles(
         margin: 0;
         padding: 0;
       }
-    `
+    `,
   ],
-  { moduleId: 'material-crud' }
+  { moduleId: 'material-crud' },
 );
 
 registerStyles(
@@ -125,7 +125,7 @@ registerStyles(
       :host([closing]) {
         animation: 0.25s material-overlay-dummy-animation;
       }
-    `
+    `,
   ],
-  { moduleId: 'material-crud-dialog-overlay' }
+  { moduleId: 'material-crud-dialog-overlay' },
 );

@@ -28,7 +28,7 @@ describe('update range', () => {
         el.state = state;
       },
       scrollTarget,
-      scrollContainer
+      scrollContainer,
     });
 
     state = 0;

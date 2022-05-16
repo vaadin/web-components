@@ -24,7 +24,7 @@ import { ComboBoxDefaultItem } from './vaadin-combo-box-mixin.js';
 export {
   ComboBoxDataProvider,
   ComboBoxDataProviderCallback,
-  ComboBoxDataProviderParams
+  ComboBoxDataProviderParams,
 } from './vaadin-combo-box-data-provider-mixin.js';
 export { ComboBoxDefaultItem, ComboBoxItemModel, ComboBoxRenderer } from './vaadin-combo-box-mixin.js';
 
@@ -212,13 +212,13 @@ declare class ComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
   addEventListener<K extends keyof ComboBoxEventMap<TItem>>(
     type: K,
     listener: (this: ComboBox<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof ComboBoxEventMap<TItem>>(
     type: K,
     listener: (this: ComboBox<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

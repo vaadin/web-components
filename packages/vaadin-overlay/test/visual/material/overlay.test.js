@@ -17,7 +17,7 @@ describe('overlay', () => {
           </template>
         </vaadin-overlay>
       `,
-      div
+      div,
     );
   });
 

@@ -19,7 +19,7 @@ describe('app-layout', () => {
           <main>Page content</main>
         </vaadin-app-layout>
       `,
-      div
+      div,
     );
   });
 

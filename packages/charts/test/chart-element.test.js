@@ -158,9 +158,9 @@ describe('vaadin-chart', () => {
         series: [
           {
             type: 'column',
-            data: DATA
-          }
-        ]
+            data: DATA,
+          },
+        ],
       });
       await oneEvent(chart, 'chart-redraw');
       const series = chart.$.chart.querySelectorAll('.highcharts-series');
@@ -172,14 +172,14 @@ describe('vaadin-chart', () => {
     it('should set chart categories using update', async () => {
       chart.updateConfiguration({
         xAxis: {
-          categories: MONTHS
+          categories: MONTHS,
         },
         series: [
           {
             type: 'column',
-            data: DATA
-          }
-        ]
+            data: DATA,
+          },
+        ],
       });
       await oneEvent(chart, 'chart-redraw');
       const categories = chart.$.chart.querySelectorAll('.highcharts-xaxis-labels > text');
@@ -229,9 +229,9 @@ describe('vaadin-chart', () => {
       chart.updateConfiguration({
         series: [
           {
-            name: 'series-name'
-          }
-        ]
+            name: 'series-name',
+          },
+        ],
       });
       const series = chart.configuration.series[0];
       await oneEvent(chart, 'chart-redraw');
@@ -242,17 +242,17 @@ describe('vaadin-chart', () => {
       chart.updateConfiguration({
         series: [
           {
-            innerSize: 40
-          }
-        ]
+            innerSize: 40,
+          },
+        ],
       });
       chart.updateConfiguration({
         series: [
           {
             name: 'name of the series',
-            type: 'area'
-          }
-        ]
+            type: 'area',
+          },
+        ],
       });
       await oneEvent(chart, 'chart-redraw');
       const series = chart.configuration.series;
@@ -263,10 +263,10 @@ describe('vaadin-chart', () => {
 
     it('should handle merging multiple series', async () => {
       chart.updateConfiguration({
-        series: [{ name: 'series 1' }, { name: 'series 2' }]
+        series: [{ name: 'series 1' }, { name: 'series 2' }],
       });
       chart.updateConfiguration({
-        series: [null, { innerSize: 100 }]
+        series: [null, { innerSize: 100 }],
       });
       await oneEvent(chart, 'chart-redraw');
       const series = chart.configuration.series;
@@ -446,25 +446,25 @@ describe('vaadin-chart', () => {
       chart.updateConfiguration({
         title: 'Title',
         xAxis: {
-          categories: ['2021', '2022', '2023', '2024']
+          categories: ['2021', '2022', '2023', '2024'],
         },
         yAxis: {
-          title: 'Values'
+          title: 'Values',
         },
         credits: {
           enabled: true,
-          title: 'Vaadin'
+          title: 'Vaadin',
         },
         series: [
           {
             name: 'Series 1',
-            data: [0, 100, 200, 300]
+            data: [0, 100, 200, 300],
           },
           {
             name: 'Series 2',
-            data: [0, 100, 200, 300]
-          }
-        ]
+            data: [0, 100, 200, 300],
+          },
+        ],
       });
 
       await nextRender();

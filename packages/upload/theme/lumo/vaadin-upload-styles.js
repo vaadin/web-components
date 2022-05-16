@@ -67,7 +67,7 @@ registerStyles(
       border-top: 1px solid var(--lumo-contrast-10pct);
     }
   `,
-  { moduleId: 'lumo-upload' }
+  { moduleId: 'lumo-upload' },
 );
 
 const uploadFile = css`

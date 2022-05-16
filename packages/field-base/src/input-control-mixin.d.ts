@@ -20,7 +20,7 @@ import { ValidateMixinClass } from './validate-mixin.js';
  * A mixin to provide shared logic for the editable form input controls.
  */
 export declare function InputControlMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T &
   Constructor<ControllerMixinClass> &
   Constructor<DelegateFocusMixinClass> &

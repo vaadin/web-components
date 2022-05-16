@@ -582,13 +582,13 @@ declare class Chart extends ResizeMixin(ThemableMixin(ElementMixin(HTMLElement))
   addEventListener<K extends keyof ChartEventMap>(
     type: K,
     listener: (this: Chart, ev: ChartEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof ChartEventMap>(
     type: K,
     listener: (this: Chart, ev: ChartEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

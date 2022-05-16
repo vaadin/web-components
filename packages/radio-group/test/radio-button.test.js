@@ -270,7 +270,7 @@ describe('radio-button', () => {
 
       expect(console.warn.calledOnce).to.be.true;
       expect(console.warn.args[0][0]).to.include(
-        'WARNING: Since Vaadin 22, placing the label as a direct child of a <vaadin-radio-button> is deprecated.'
+        'WARNING: Since Vaadin 22, placing the label as a direct child of a <vaadin-radio-button> is deprecated.',
       );
     });
   });

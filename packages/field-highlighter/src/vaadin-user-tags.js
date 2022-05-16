@@ -60,7 +60,7 @@ export class UserTags extends PolymerElement {
       hasFocus: {
         type: Boolean,
         value: false,
-        observer: '_hasFocusChanged'
+        observer: '_hasFocusChanged',
       },
 
       /**
@@ -68,7 +68,7 @@ export class UserTags extends PolymerElement {
        */
       opened: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -77,7 +77,7 @@ export class UserTags extends PolymerElement {
        */
       flashing: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -85,7 +85,7 @@ export class UserTags extends PolymerElement {
        */
       target: {
         type: Object,
-        observer: '__targetChanged'
+        observer: '__targetChanged',
       },
 
       /**
@@ -93,14 +93,14 @@ export class UserTags extends PolymerElement {
        */
       users: {
         type: Array,
-        value: () => []
+        value: () => [],
       },
 
       /** @private */
       _flashQueue: {
         type: Array,
-        value: () => []
-      }
+        value: () => [],
+      },
     };
   }
 

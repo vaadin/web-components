@@ -127,5 +127,5 @@ registerStyles(
       padding: var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-xs) var(--lumo-space-s);
     }
   `,
-  { moduleId: 'lumo-radio-button' }
+  { moduleId: 'lumo-radio-button' },
 );

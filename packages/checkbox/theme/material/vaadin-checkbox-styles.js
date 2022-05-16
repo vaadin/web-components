@@ -126,5 +126,5 @@ registerStyles(
       padding: 3px 6px 3px 12px;
     }
   `,
-  { moduleId: 'material-checkbox' }
+  { moduleId: 'material-checkbox' },
 );

@@ -27,7 +27,7 @@ registerStyles(
     :host(.animated) [part='overlay'] {
       animation: slidein 0.2s;
     }
-  `
+  `,
 );
 
 describe('position target', () => {
@@ -51,7 +51,7 @@ describe('position target', () => {
   function expectEdgesAligned(overlayEdge, targetEdge) {
     expect(overlayContent.getBoundingClientRect()[overlayEdge]).to.be.closeTo(
       target.getBoundingClientRect()[targetEdge],
-      1
+      1,
     );
   }
 

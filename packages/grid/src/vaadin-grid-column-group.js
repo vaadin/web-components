@@ -52,7 +52,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       _childColumns: {
         value: function () {
           return this._getChildColumns(this);
-        }
+        },
       },
 
       /**
@@ -61,7 +61,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
        */
       flexGrow: {
         type: Number,
-        readOnly: true
+        readOnly: true,
       },
 
       /**
@@ -69,7 +69,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
        */
       width: {
         type: String,
-        readOnly: true
+        readOnly: true,
       },
 
       /** @private */
@@ -79,7 +79,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       _colSpan: Number,
 
       /** @private */
-      _rootColumns: Array
+      _rootColumns: Array,
     };
   }
 
@@ -90,7 +90,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       '_colSpanChanged(_colSpan, _headerCell, _footerCell)',
       '_groupOrderChanged(_order, _rootColumns)',
       '_groupReorderStatusChanged(_reorderStatus, _rootColumns)',
-      '_groupResizableChanged(resizable, _rootColumns)'
+      '_groupResizableChanged(resizable, _rootColumns)',
     ];
   }
 
@@ -209,10 +209,10 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
             .call(
               this._visibleChildColumns,
               (prev, curr) => (prev += ' + ' + (curr.width || '0px').replace('calc', '')),
-              ''
+              '',
             )
             .substring(3) +
-          ')'
+          ')',
       );
     } else {
       this._setWidth('0px');

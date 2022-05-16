@@ -17,7 +17,7 @@ export const ArrayDataProviderMixin = (superClass) =>
          *
          * @type {Array<!GridItem> | undefined}
          */
-        items: Array
+        items: Array,
       };
     }
 
@@ -32,7 +32,7 @@ export const ArrayDataProviderMixin = (superClass) =>
       this.setProperties({
         _arrayDataProvider: arrayDataProvider,
         size: items.length,
-        dataProvider: arrayDataProvider
+        dataProvider: arrayDataProvider,
       });
     }
 
@@ -49,14 +49,14 @@ export const ArrayDataProviderMixin = (superClass) =>
           // A custom data provider was set externally
           this.setProperties({
             _arrayDataProvider: undefined,
-            items: undefined
+            items: undefined,
           });
         } else if (!items) {
           // The items array was unset
           this.setProperties({
             _arrayDataProvider: undefined,
             dataProvider: undefined,
-            size: 0
+            size: 0,
           });
           this.clearCache();
         } else if (this._arrayDataProvider.__items === items) {

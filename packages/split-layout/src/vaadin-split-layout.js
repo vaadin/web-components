@@ -222,14 +222,14 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       orientation: {
         type: String,
         reflectToAttribute: true,
-        value: 'horizontal'
+        value: 'horizontal',
       },
 
       /** @private */
       _previousPrimaryPointerEvents: String,
 
       /** @private */
-      _previousSecondaryPointerEvents: String
+      _previousSecondaryPointerEvents: String,
     };
   }
 
@@ -312,7 +312,7 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       this._startSize = {
         container: this.getBoundingClientRect()[size] - this.$.splitter.getBoundingClientRect()[size],
         primary: this._primaryChild.getBoundingClientRect()[size],
-        secondary: this._secondaryChild.getBoundingClientRect()[size]
+        secondary: this._secondaryChild.getBoundingClientRect()[size],
       };
 
       return;
@@ -338,7 +338,7 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
    */
   notifyResize() {
     console.warn(
-      `WARNING: Since Vaadin 23, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`
+      `WARNING: Since Vaadin 23, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`,
     );
   }
 

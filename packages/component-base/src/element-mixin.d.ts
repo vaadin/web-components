@@ -12,7 +12,7 @@ import { DirMixinClass } from './dir-mixin.js';
  * A mixin providing common logic for Vaadin components.
  */
 export declare function ElementMixin<T extends Constructor<HTMLElement>>(
-  superclass: T
+  superclass: T,
 ): T & Constructor<DirMixinClass> & Constructor<ElementMixinClass>;
 
 export declare class ElementMixinClass {

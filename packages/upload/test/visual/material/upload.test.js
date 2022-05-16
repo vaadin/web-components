@@ -39,7 +39,7 @@ describe('upload', () => {
       it('files', async () => {
         element.files = [
           { name: 'Don Quixote.pdf', progress: 100, complete: true },
-          { name: 'Hamlet.pdf', progress: 100, complete: true }
+          { name: 'Hamlet.pdf', progress: 100, complete: true },
         ];
         await visualDiff(div, `${dir}-files`);
       });
@@ -133,7 +133,7 @@ describe('upload', () => {
             <textarea></textarea>
           </vaadin-form-item>
         </vaadin-form-layout>`,
-        div
+        div,
       );
     });
 

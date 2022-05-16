@@ -70,7 +70,7 @@ const timeOut = {
       },
       cancel(handle) {
         window.clearTimeout(handle);
-      }
+      },
     };
   },
   /**
@@ -93,7 +93,7 @@ const timeOut = {
    */
   cancel(handle) {
     window.clearTimeout(handle);
-  }
+  },
 };
 export { timeOut };
 
@@ -123,7 +123,7 @@ const animationFrame = {
    */
   cancel(handle) {
     window.cancelAnimationFrame(handle);
-  }
+  },
 };
 export { animationFrame };
 
@@ -154,7 +154,7 @@ const idlePeriod = {
    */
   cancel(handle) {
     window.cancelIdleCallback ? window.cancelIdleCallback(handle) : window.clearTimeout(handle);
-  }
+  },
 };
 export { idlePeriod };
 
@@ -206,6 +206,6 @@ const microTask = {
       }
       microtaskCallbacks[idx] = null;
     }
-  }
+  },
 };
 export { microTask };

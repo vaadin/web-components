@@ -79,7 +79,7 @@ export class ComboBoxItem extends ThemableMixin(DirMixin(PolymerElement)) {
       selected: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -88,7 +88,7 @@ export class ComboBoxItem extends ThemableMixin(DirMixin(PolymerElement)) {
       focused: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -99,7 +99,7 @@ export class ComboBoxItem extends ThemableMixin(DirMixin(PolymerElement)) {
       /**
        * Saved instance of a custom renderer function.
        */
-      _oldRenderer: Function
+      _oldRenderer: Function,
     };
   }
 
@@ -133,7 +133,7 @@ export class ComboBoxItem extends ThemableMixin(DirMixin(PolymerElement)) {
       index: this.index,
       item: this.item,
       focused: this.focused,
-      selected: this.selected
+      selected: this.selected,
     };
 
     this.renderer(this, this._comboBox, model);

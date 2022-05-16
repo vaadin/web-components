@@ -54,8 +54,8 @@ export class FieldOutline extends ThemableMixin(DirMixin(PolymerElement)) {
       user: {
         type: Object,
         value: null,
-        observer: '_userChanged'
-      }
+        observer: '_userChanged',
+      },
     };
   }
 

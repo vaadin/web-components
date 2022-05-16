@@ -29,8 +29,8 @@ describe('map', () => {
     element.configuration.setView(
       new View({
         center: [0, 0],
-        zoom: 3
-      })
+        zoom: 3,
+      }),
     );
   });
 

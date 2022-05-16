@@ -101,8 +101,8 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
        */
       attrForValue: {
         type: String,
-        value: 'value'
-      }
+        value: 'value',
+      },
     };
   }
 

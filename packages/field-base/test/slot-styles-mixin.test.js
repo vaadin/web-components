@@ -22,7 +22,7 @@ describe('slot-styles-mixin', () => {
               const button = document.createElement('button');
               button.textContent = 'Button';
               return button;
-            }
+            },
           };
         }
 
@@ -32,10 +32,10 @@ describe('slot-styles-mixin', () => {
               button[slot='button'] {
                 color: ${COLOR};
               }
-            `
+            `,
           ];
         }
-      }
+      },
     );
   });
 

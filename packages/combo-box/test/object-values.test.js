@@ -23,7 +23,7 @@ describe('object values', () => {
         { label: 'duplicate value 1', value: 'duplicate' },
         { label: 'duplicate value 2', value: 'duplicate' },
         { label: 'missing value 1' },
-        { label: 'missing value 2' }
+        { label: 'missing value 2' },
       ];
 
       comboBox.open();

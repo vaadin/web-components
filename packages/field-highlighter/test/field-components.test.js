@@ -197,7 +197,7 @@ describe('field components', () => {
               <vaadin-item>Baz</vaadin-item>
             </vaadin-list-box>
           `,
-          root
+          root,
         );
       };
       FieldHighlighter.init(field);

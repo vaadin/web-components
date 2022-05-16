@@ -6,7 +6,7 @@ import {
   SelectItem,
   SelectOpenedChangedEvent,
   SelectRenderer,
-  SelectValueChangedEvent
+  SelectValueChangedEvent,
 } from '../../vaadin-select.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

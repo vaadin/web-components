@@ -243,8 +243,8 @@ describe('crud buttons', () => {
               new CustomEvent('click', {
                 bubbles: true,
                 cancelable: true,
-                composed: true
-              })
+                composed: true,
+              }),
             );
 
             await aTimeout(0);

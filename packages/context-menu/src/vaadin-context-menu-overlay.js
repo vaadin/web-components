@@ -28,7 +28,7 @@ registerStyles(
       background-color: #fff;
     }
   `,
-  { moduleId: 'vaadin-context-menu-overlay-styles' }
+  { moduleId: 'vaadin-context-menu-overlay-styles' },
 );
 
 /**
@@ -49,8 +49,8 @@ class ContextMenuOverlay extends PositionMixin(OverlayElement) {
        */
       parentOverlay: {
         type: Object,
-        readOnly: true
-      }
+        readOnly: true,
+      },
     };
   }
 
@@ -102,7 +102,7 @@ class ContextMenuOverlay extends PositionMixin(OverlayElement) {
     return {
       xMax: overlayRect.right - contentRect.width,
       xMin: overlayRect.left + contentRect.width,
-      yMax
+      yMax,
     };
   }
 

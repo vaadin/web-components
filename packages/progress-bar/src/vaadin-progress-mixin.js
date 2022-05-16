@@ -16,7 +16,7 @@ export const ProgressMixin = (superClass) =>
          */
         value: {
           type: Number,
-          observer: '_valueChanged'
+          observer: '_valueChanged',
         },
 
         /**
@@ -26,7 +26,7 @@ export const ProgressMixin = (superClass) =>
         min: {
           type: Number,
           value: 0,
-          observer: '_minChanged'
+          observer: '_minChanged',
         },
 
         /**
@@ -36,7 +36,7 @@ export const ProgressMixin = (superClass) =>
         max: {
           type: Number,
           value: 1,
-          observer: '_maxChanged'
+          observer: '_maxChanged',
         },
 
         /**
@@ -47,8 +47,8 @@ export const ProgressMixin = (superClass) =>
         indeterminate: {
           type: Boolean,
           value: false,
-          reflectToAttribute: true
-        }
+          reflectToAttribute: true,
+        },
       };
     }
 

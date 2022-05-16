@@ -20,7 +20,7 @@ customElements.define(
         </div>
       `;
     }
-  }
+  },
 );
 
 customElements.define(
@@ -48,7 +48,7 @@ customElements.define(
         </div>
       `;
     }
-  }
+  },
 );
 
 async function tab() {
@@ -172,7 +172,7 @@ describe('focus-trap-controller', () => {
           expect([activeElement1.id, activeElement2.id, activeElement3.id]).to.deep.equal([
             'trap-input-2',
             'trap-input-3',
-            'trap-input-1'
+            'trap-input-1',
           ]);
         });
 
@@ -183,7 +183,7 @@ describe('focus-trap-controller', () => {
           expect([activeElement1.id, activeElement2.id, activeElement3.id]).to.deep.equal([
             'trap-input-3',
             'trap-input-2',
-            'trap-input-1'
+            'trap-input-1',
           ]);
         });
       });
@@ -207,7 +207,7 @@ describe('focus-trap-controller', () => {
           expect([activeElement1.id, activeElement2.id, activeElement3.id]).to.deep.equal([
             'trap-input-1',
             'trap-input-2',
-            'trap-input-1'
+            'trap-input-1',
           ]);
         });
 
@@ -218,7 +218,7 @@ describe('focus-trap-controller', () => {
           expect([activeElement1.id, activeElement2.id, activeElement3.id]).to.deep.equal([
             'trap-input-1',
             'trap-input-2',
-            'trap-input-1'
+            'trap-input-1',
           ]);
         });
       });
@@ -237,7 +237,7 @@ describe('focus-trap-controller', () => {
           expect([activeElement1.id, activeElement2.id, activeElement3.id]).to.deep.equal([
             'trap-input-2',
             'trap-input-1',
-            'trap-input-2'
+            'trap-input-2',
           ]);
         });
 
@@ -250,7 +250,7 @@ describe('focus-trap-controller', () => {
           expect([activeElement1.id, activeElement2.id, activeElement3.id]).to.deep.equal([
             'trap-input-2',
             'trap-input-1',
-            'trap-input-2'
+            'trap-input-2',
           ]);
         });
 
@@ -263,7 +263,7 @@ describe('focus-trap-controller', () => {
           expect([activeElement1.id, activeElement2.id, activeElement3.id]).to.deep.equal([
             'trap-input-2',
             'trap-input-1',
-            'trap-input-2'
+            'trap-input-2',
           ]);
         });
       });

@@ -71,8 +71,8 @@ class DrawerToggle extends Button {
       ariaLabel: {
         type: String,
         value: 'Toggle navigation panel',
-        reflectToAttribute: true
-      }
+        reflectToAttribute: true,
+      },
     };
   }
 

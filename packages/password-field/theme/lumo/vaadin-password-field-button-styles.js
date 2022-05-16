@@ -22,5 +22,5 @@ const passwordFieldButton = css`
 `;
 
 registerStyles('vaadin-password-field-button', [button, passwordFieldButton], {
-  moduleId: 'lumo-password-field-button'
+  moduleId: 'lumo-password-field-button',
 });

@@ -10,7 +10,7 @@ describe('vaadin-upload-file', () => {
     uploadFile.file = {
       name: 'Workflow.pdf',
       progress: 60,
-      status: '19.7 MB: 60% (remaining time: 00:12:34)'
+      status: '19.7 MB: 60% (remaining time: 00:12:34)',
     };
   });
 

@@ -10,7 +10,7 @@ import { ListMixinClass } from './vaadin-list-mixin.js';
  * A mixin for `nav` elements, facilitating multiple selection of childNodes.
  */
 export declare function MultiSelectListMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<ListMixinClass> & Constructor<ListMixinClass>;
 
 export declare class MultiSelectListMixinClass {

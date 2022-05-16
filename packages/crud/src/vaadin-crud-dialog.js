@@ -52,7 +52,7 @@ registerStyles(
       flex: 1;
     }
   `,
-  { moduleId: 'vaadin-crud-dialog-overlay-styles' }
+  { moduleId: 'vaadin-crud-dialog-overlay-styles' },
 );
 
 let memoizedTemplate;

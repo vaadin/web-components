@@ -7,5 +7,5 @@ registerStyles(
     :host([focus-ring]) ::slotted(input) {
       caret-color: transparent;
     }
-  `
+  `,
 );

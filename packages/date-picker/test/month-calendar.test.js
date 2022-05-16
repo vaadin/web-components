@@ -118,7 +118,7 @@ describe('vaadin-month-calendar', () => {
     const preventDefaultSpy = sinon.spy();
     const touchendEvent = new CustomEvent('touchend', {
       bubbles: true,
-      cancelable: true
+      cancelable: true,
     });
     touchendEvent.changedTouches = [{}];
     touchendEvent.preventDefault = preventDefaultSpy;
@@ -156,14 +156,14 @@ describe('vaadin-month-calendar', () => {
       monthCalendar.i18n = {
         monthNames:
           'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split(
-            '_'
+            '_',
           ),
         weekdays: 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'),
         weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
         firstDayOfWeek: 1,
         week: 'viikko',
         today: 'Tänään',
-        formatTitle: (monthName, fullYear) => monthName + '-' + fullYear
+        formatTitle: (monthName, fullYear) => monthName + '-' + fullYear,
       };
       await aTimeout();
     });
@@ -205,7 +205,7 @@ describe('vaadin-month-calendar', () => {
 
     function getWeekNumbers(cal) {
       return Array.from(cal.shadowRoot.querySelectorAll('[part="week-number"]')).map((elem) =>
-        parseInt(elem.textContent, 10)
+        parseInt(elem.textContent, 10),
       );
     }
 

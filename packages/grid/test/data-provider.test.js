@@ -15,7 +15,7 @@ import {
   getPhysicalAverage,
   getRows,
   infiniteDataProvider,
-  scrollToEnd
+  scrollToEnd,
 } from './helpers.js';
 
 registerStyles(
@@ -24,7 +24,7 @@ registerStyles(
     [part~='cell'] {
       height: 20px;
     }
-  `
+  `,
 );
 
 class WrappedGrid extends PolymerElement {
@@ -65,7 +65,7 @@ class PageSizeGrid extends PolymerElement {
   static get properties() {
     return {
       dataProvider: Object,
-      size: Number
+      size: Number,
     };
   }
 
@@ -217,7 +217,7 @@ describe('data provider', () => {
             }
             return item;
           }),
-          10
+          10,
         );
       });
     }

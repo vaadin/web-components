@@ -59,8 +59,8 @@ class Button extends ActiveMixin(TabindexMixin(FocusMixin(ElementMixin(ThemableM
        * @protected
        */
       tabindex: {
-        value: 0
-      }
+        value: 0,
+      },
     };
   }
 

@@ -71,11 +71,11 @@ class GridFilter extends class extends PolymerElement {} {
        */
       value: {
         type: String,
-        notify: true
+        notify: true,
       },
 
       /** @private */
-      _connected: Boolean
+      _connected: Boolean,
     };
   }
 

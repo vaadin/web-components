@@ -14,7 +14,7 @@ describe('column auto-width', function () {
   const testItems = [
     { a: 'fubar', b: 'foo', c: 'foo', d: 'a' },
     { a: 'foo', b: 'foo bar baz', c: 'foo', d: 'bar' },
-    { a: 'foo', b: 'foo baz', c: 'foo bar', d: 'baz' }
+    { a: 'foo', b: 'foo baz', c: 'foo bar', d: 'baz' },
   ];
 
   function expectColumnWidthsToBeOk(columns, expectedWidths = [71, 114, 84, 107]) {
@@ -155,10 +155,10 @@ describe('async recalculateWidth columns', () => {
         name: 'foo',
         children: [
           {
-            name: 'bar'
-          }
-        ]
-      }
+            name: 'bar',
+          },
+        ],
+      },
     ];
     grid.dataProvider = (params, cb) => {
       grid._getData = () => cb(params.parentItem ? params.parentItem.children : data, 1);
@@ -231,7 +231,7 @@ describe('column group', () => {
           </vaadin-grid-column-group>
         </vaadin-grid>
       `,
-      items
+      items,
     );
 
     const gridWithFlexGrow = createGrid(
@@ -243,7 +243,7 @@ describe('column group', () => {
           </vaadin-grid-column-group>
         </vaadin-grid>
       `,
-      items
+      items,
     );
 
     const [columnA, columnB] = grid.querySelectorAll('vaadin-grid-column');

@@ -11,13 +11,13 @@ register({
   deps: ['touchstart', 'touchmove', 'touchend', 'contextmenu'],
   flow: {
     start: ['touchstart', 'contextmenu'],
-    end: ['contextmenu']
+    end: ['contextmenu'],
   },
 
   emits: ['vaadin-contextmenu'],
 
   info: {
-    sourceEvent: null
+    sourceEvent: null,
   },
 
   reset: function () {
@@ -38,7 +38,7 @@ register({
     this.info.sourceEvent = e;
     this.info.touchStartCoords = {
       x: e.changedTouches[0].clientX,
-      y: e.changedTouches[0].clientY
+      y: e.changedTouches[0].clientY,
     };
 
     // After timeout event is already retargeted to the parent element in case there is one.
@@ -97,5 +97,5 @@ register({
     if (ev.defaultPrevented && sourceEvent && sourceEvent.preventDefault) {
       sourceEvent.preventDefault();
     }
-  }
+  },
 });

@@ -181,13 +181,13 @@ declare class RichTextEditor extends ElementMixin(ThemableMixin(HTMLElement)) {
   addEventListener<K extends keyof RichTextEditorEventMap>(
     type: K,
     listener: (this: RichTextEditor, ev: RichTextEditorEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof RichTextEditorEventMap>(
     type: K,
     listener: (this: RichTextEditor, ev: RichTextEditorEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

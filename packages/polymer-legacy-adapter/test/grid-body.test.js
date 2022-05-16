@@ -33,7 +33,7 @@ describe('grid body template', () => {
     column.renderer = () => {};
 
     expect(() => window.Vaadin.templateRendererCallback(column)).to.throw(
-      /^Cannot use both a template and a renderer for <vaadin-grid-column \/>\.$/
+      /^Cannot use both a template and a renderer for <vaadin-grid-column \/>\.$/,
     );
   });
 });
@@ -157,7 +157,7 @@ describe('grid body template', () => {
       grid.dataProvider = (params, cb) => {
         const items = [
           { title: 'item1', hasChildren: true },
-          { title: 'item2', hasChildren: true }
+          { title: 'item2', hasChildren: true },
         ];
 
         cb(items, 1);

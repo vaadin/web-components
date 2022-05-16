@@ -366,7 +366,7 @@ describe('number-field', () => {
           { props: { step: 0.001, value: 8.008 }, expectedValue: '8.009' },
           { props: { step: 0.01, value: 16.08 }, expectedValue: '16.09' },
           { props: { step: 0.01, value: 73.1 }, expectedValue: '73.11' },
-          { props: { step: 0.001, value: 1.0131, min: 0.0001 }, expectedValue: '1.0141' }
+          { props: { step: 0.001, value: 1.0131, min: 0.0001 }, expectedValue: '1.0141' },
         ];
         const reset = { step: 1, min: undefined, max: undefined, value: '' };
 
@@ -384,7 +384,7 @@ describe('number-field', () => {
           { props: { step: 0.001, min: 0.0001, value: 1.0031 }, expectedValue: '1.0021' },
           { props: { step: 0.001, min: 0.0001, value: 1.0051 }, expectedValue: '1.0041' },
           { props: { step: 0.001, min: 0.0001, value: 1.0071 }, expectedValue: '1.0061' },
-          { props: { step: 0.001, min: 0.0001, value: 1.0091 }, expectedValue: '1.0081' }
+          { props: { step: 0.001, min: 0.0001, value: 1.0091 }, expectedValue: '1.0081' },
         ];
         const reset = { step: 1, min: undefined, max: undefined, value: '' };
 

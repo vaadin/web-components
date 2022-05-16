@@ -54,13 +54,13 @@ declare class GridFilter extends HTMLElement {
   addEventListener<K extends keyof GridFilterEventMap>(
     type: K,
     listener: (this: GridFilter, ev: GridFilterEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof GridFilterEventMap>(
     type: K,
     listener: (this: GridFilter, ev: GridFilterEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

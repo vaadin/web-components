@@ -30,7 +30,7 @@ registerStyles(
       left: calc((var(--lumo-size-m) - var(--lumo-size-s)) / -2);
     }
   `,
-  { moduleId: 'lumo-crud-grid-edit' }
+  { moduleId: 'lumo-crud-grid-edit' },
 );
 
 /**
@@ -121,11 +121,11 @@ registerStyles(
       vaadin-grid-cell-content {
         text-overflow: ellipsis;
       }
-    `
+    `,
   ],
-  { moduleId: 'lumo-crud' }
+  { moduleId: 'lumo-crud' },
 );
 
 registerStyles('vaadin-crud-dialog-overlay', editorStyles, {
-  moduleId: 'lumo-crud-dialog-overlay'
+  moduleId: 'lumo-crud-dialog-overlay',
 });

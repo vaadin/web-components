@@ -16,8 +16,8 @@ describe('a11y', () => {
         file: {
           start: 'Start',
           retry: 'Retry',
-          remove: 'Remove'
-        }
+          remove: 'Remove',
+        },
       };
       uploadFileElement.i18n = i18n;
       uploadFileElement.file = FAKE_FILE;
@@ -100,7 +100,7 @@ describe('a11y', () => {
 
     it('should announce file reject', async () => {
       upload.dispatchEvent(
-        new CustomEvent('file-reject', { detail: { file: { name: 'file.js', error: 'rejected' } } })
+        new CustomEvent('file-reject', { detail: { file: { name: 'file.js', error: 'rejected' } } }),
       );
       clock.tick(200);
       expect(announceRegion.textContent).to.equal('file.js: rejected');

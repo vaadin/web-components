@@ -11,5 +11,5 @@ registerStyles(
       margin: 0 0 0 0.5em;
     }
   `,
-  { moduleId: 'material-message-input-text-area' }
+  { moduleId: 'material-message-input-text-area' },
 );

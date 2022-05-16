@@ -34,7 +34,7 @@ class Iconset extends ElementMixin(PolymerElement) {
        */
       name: {
         type: String,
-        observer: '__nameChanged'
+        observer: '__nameChanged',
       },
 
       /**
@@ -45,8 +45,8 @@ class Iconset extends ElementMixin(PolymerElement) {
        */
       size: {
         type: Number,
-        value: 24
-      }
+        value: 24,
+      },
     };
   }
 

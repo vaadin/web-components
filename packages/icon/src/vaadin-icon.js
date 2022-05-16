@@ -108,14 +108,14 @@ class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
        */
       icon: {
         type: String,
-        observer: '__iconChanged'
+        observer: '__iconChanged',
       },
 
       /**
        * The SVG icon wrapped in a Lit template literal.
        */
       svg: {
-        type: Object
+        type: Object,
       },
 
       /**
@@ -123,11 +123,11 @@ class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
        */
       size: {
         type: Number,
-        value: 24
+        value: 24,
       },
 
       /** @private */
-      __svgElement: Object
+      __svgElement: Object,
     };
   }
 
@@ -196,7 +196,7 @@ class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
       'vaadin:funcion': 'vaadin:function',
       'vaadin:megafone': 'vaadin:megaphone',
       'vaadin:palete': 'vaadin:palette',
-      'vaadin:trendind-down': 'vaadin:trending-down'
+      'vaadin:trendind-down': 'vaadin:trending-down',
     };
     if (icon in deprecatedIcons) {
       console.warn(`WARNING: The icon "${icon}" is deprecated. Use "${deprecatedIcons[icon]}" instead`);

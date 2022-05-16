@@ -8,5 +8,5 @@ registerStyles(
       padding-bottom: 5px;
     }
   `,
-  { moduleId: 'material-menu-bar' }
+  { moduleId: 'material-menu-bar' },
 );

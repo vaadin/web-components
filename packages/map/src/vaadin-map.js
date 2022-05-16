@@ -409,11 +409,11 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
       // correctly display icons through pseudo-element
       controls: defaultControls({
         rotate: false,
-        zoomOptions: { zoomInLabel: '', zoomOutLabel: '' }
+        zoomOptions: { zoomInLabel: '', zoomOutLabel: '' },
       }),
       // Override default interactions to allow mouse-wheel zoom + drag-pan when not focused
       interactions: defaultInteractions({ onFocusOnly: false }),
-      target: this._mapTarget
+      target: this._mapTarget,
     };
     this._configuration = new OpenLayersMap(options);
   }
@@ -472,7 +472,7 @@ if (isEnabled()) {
   customElements.define(Map.is, Map);
 } else {
   console.warn(
-    'WARNING: The map component is currently an experimental feature and needs to be explicitly enabled. To enable the component, `import "@vaadin/map/enable.js"` *before* importing the map module itself.'
+    'WARNING: The map component is currently an experimental feature and needs to be explicitly enabled. To enable the component, `import "@vaadin/map/enable.js"` *before* importing the map module itself.',
   );
 }
 

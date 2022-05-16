@@ -67,7 +67,7 @@ describe('vaadin-notification', () => {
       listenOnce(document, 'click', (clickEvent) => {
         const overlayCloseEvent = new CustomEvent('vaadin-overlay-close', {
           cancelable: true,
-          detail: { sourceEvent: clickEvent }
+          detail: { sourceEvent: clickEvent },
         });
         document.dispatchEvent(overlayCloseEvent);
 
@@ -81,7 +81,7 @@ describe('vaadin-notification', () => {
       listenOnce(document, 'click', (clickEvent) => {
         const overlayCloseEvent = new CustomEvent('vaadin-overlay-close', {
           cancelable: true,
-          detail: { sourceEvent: clickEvent }
+          detail: { sourceEvent: clickEvent },
         });
         document.dispatchEvent(overlayCloseEvent);
 

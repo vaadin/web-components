@@ -96,7 +96,7 @@ describe('sorting', () => {
       grid.items = [
         { first: '1', second: '2', third: '3' },
         { first: '2', second: '3', third: '1' },
-        { first: '3', second: '1', third: '2' }
+        { first: '3', second: '1', third: '2' },
       ];
 
       flushGrid(grid);
@@ -188,7 +188,7 @@ describe('sorting', () => {
       grid.items = [
         { first: 'foo', last: 'bar' },
         { first: 'foo', last: 'baz' },
-        { first: 'bar', last: 'bar' }
+        { first: 'bar', last: 'bar' },
       ];
 
       flushGrid(grid);
@@ -251,7 +251,7 @@ describe('sorting', () => {
         grid.items = [
           { first: 'foo', last: 'bar' },
           { first: '', last: '' },
-          { first: 'bar', last: 'bar' }
+          { first: 'bar', last: 'bar' },
         ];
 
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
@@ -263,7 +263,7 @@ describe('sorting', () => {
         grid.items = [
           { first: 'foo', last: 'bar' },
           { first: null, last: null },
-          { first: 'bar', last: 'bar' }
+          { first: 'bar', last: 'bar' },
         ];
 
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
@@ -275,7 +275,7 @@ describe('sorting', () => {
         grid.items = [
           { first: 'foo', last: 'bar' },
           { first: undefined, last: undefined },
-          { first: 'bar', last: 'bar' }
+          { first: 'bar', last: 'bar' },
         ];
 
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
@@ -287,7 +287,7 @@ describe('sorting', () => {
         grid.items = [
           { first: 'foo', last: 'bar' },
           { first: NaN, last: NaN },
-          { first: 'bar', last: 'bar' }
+          { first: 'bar', last: 'bar' },
         ];
 
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('bar');
@@ -307,7 +307,7 @@ describe('sorting', () => {
         grid.items = [
           { first: 1, last: new Date(2000, 1, 2) },
           { first: 2, last: new Date(2000, 1, 3) },
-          { first: 3, last: new Date(2000, 1, 1) }
+          { first: 3, last: new Date(2000, 1, 1) },
         ];
 
         sorterFirst.direction = '';
@@ -330,7 +330,7 @@ describe('sorting', () => {
         const params = lastCall.args[0];
         expect(params.sortOrders).to.eql([
           { path: 'last', direction: 'desc' },
-          { path: 'first', direction: 'asc' }
+          { path: 'first', direction: 'asc' },
         ]);
       });
 
@@ -340,7 +340,7 @@ describe('sorting', () => {
         const params = lastCall.args[0];
         expect(params.sortOrders).to.eql([
           { path: 'first', direction: 'desc' },
-          { path: 'last', direction: 'desc' }
+          { path: 'last', direction: 'desc' },
         ]);
       });
 

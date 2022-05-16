@@ -22,8 +22,8 @@ export const DisabledMixin = dedupingMixin(
             type: Boolean,
             value: false,
             observer: '_disabledChanged',
-            reflectToAttribute: true
-          }
+            reflectToAttribute: true,
+          },
         };
       }
 
@@ -58,5 +58,5 @@ export const DisabledMixin = dedupingMixin(
           super.click();
         }
       }
-    }
+    },
 );

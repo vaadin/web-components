@@ -136,7 +136,7 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
         type: String,
         reflectToAttribute: true,
         notify: true,
-        value: null
+        value: null,
       },
 
       /**
@@ -145,14 +145,14 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       _order: {
         type: Number,
-        value: null
+        value: null,
       },
 
       /** @private */
       _isConnected: {
         type: Boolean,
-        observer: '__isConnectedChanged'
-      }
+        observer: '__isConnectedChanged',
+      },
     };
   }
 

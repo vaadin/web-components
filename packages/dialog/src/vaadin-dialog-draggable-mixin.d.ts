@@ -6,7 +6,7 @@
 import { Constructor } from '@open-wc/dedupe-mixin';
 
 export declare function DialogDraggableMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<DialogDraggableMixinClass>;
 
 export declare class DialogDraggableMixinClass {

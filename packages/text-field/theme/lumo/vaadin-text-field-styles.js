@@ -7,5 +7,5 @@ import { inputFieldShared } from '@vaadin/vaadin-lumo-styles/mixins/input-field-
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles('vaadin-text-field', inputFieldShared, {
-  moduleId: 'lumo-text-field-styles'
+  moduleId: 'lumo-text-field-styles',
 });

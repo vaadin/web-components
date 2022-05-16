@@ -38,7 +38,7 @@ describe('item renderer', () => {
         item: 'foo',
         index: 0,
         focused: false,
-        selected: false
+        selected: false,
       });
     });
 

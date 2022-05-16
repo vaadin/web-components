@@ -31,7 +31,7 @@ const contextMenuOverlay = css`
 `;
 
 registerStyles('vaadin-context-menu-overlay', [menuOverlay, contextMenuOverlay], {
-  moduleId: 'lumo-context-menu-overlay'
+  moduleId: 'lumo-context-menu-overlay',
 });
 
 registerStyles(
@@ -84,7 +84,7 @@ registerStyles(
       }
     }
   `,
-  { moduleId: 'lumo-context-menu-list-box' }
+  { moduleId: 'lumo-context-menu-list-box' },
 );
 
 registerStyles(
@@ -124,5 +124,5 @@ registerStyles(
       padding-right: var(--lumo-space-m);
     }
   `,
-  { moduleId: 'lumo-context-menu-item' }
+  { moduleId: 'lumo-context-menu-item' },
 );

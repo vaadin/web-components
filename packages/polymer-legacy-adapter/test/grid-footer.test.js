@@ -42,7 +42,7 @@ describe('grid footer template', () => {
     column.footerRenderer = () => {};
 
     expect(() => window.Vaadin.templateRendererCallback(column)).to.throw(
-      /^Cannot use both a template and a renderer for <vaadin-grid-column \/>\.$/
+      /^Cannot use both a template and a renderer for <vaadin-grid-column \/>\.$/,
     );
   });
 });

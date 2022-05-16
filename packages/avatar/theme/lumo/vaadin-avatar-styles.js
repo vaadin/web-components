@@ -73,5 +73,5 @@ registerStyles(
       --vaadin-avatar-size: var(--lumo-size-xs);
     }
   `,
-  { moduleId: 'lumo-avatar' }
+  { moduleId: 'lumo-avatar' },
 );

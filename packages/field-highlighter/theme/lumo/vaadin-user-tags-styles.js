@@ -37,8 +37,8 @@ registerStyles(
     }
   `,
   {
-    moduleId: 'lumo-user-tags-overlay'
-  }
+    moduleId: 'lumo-user-tags-overlay',
+  },
 );
 
 registerStyles(
@@ -60,5 +60,5 @@ registerStyles(
       min-width: calc(var(--lumo-line-height-xs) * 1em + 0.45em);
     }
   `,
-  { moduleId: 'lumo-user-tag' }
+  { moduleId: 'lumo-user-tag' },
 );

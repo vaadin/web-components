@@ -7,7 +7,7 @@ import {
   makeSoloTouchEvent,
   middleOfNode,
   touchend,
-  touchstart
+  touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';

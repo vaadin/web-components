@@ -12,7 +12,7 @@ import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 const CLASSES = {
   SMALL: 'small',
   MEDIUM: 'medium',
-  LARGE: 'large'
+  LARGE: 'large',
 };
 
 /**

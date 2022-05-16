@@ -51,7 +51,7 @@ describe('field-highlighter', () => {
             <vaadin-checkbox name="user" value="4" label="Option 4"></vaadin-checkbox>
           </vaadin-checkbox-group>
         `,
-        div
+        div,
       );
       setUsers(element);
       await nextFrame();
@@ -98,7 +98,7 @@ describe('field-highlighter', () => {
             <vaadin-item>Option four</vaadin-item>
           </vaadin-list-box>
         `,
-        div
+        div,
       );
       await nextFrame();
       setUsers(element);
@@ -146,7 +146,7 @@ describe('field-highlighter', () => {
             <vaadin-radio-button name="user" value="4" label="Option 4"></vaadin-radio-button>
           </vaadin-radio-group>
         `,
-        div
+        div,
       );
       setUsers(element);
       await nextFrame();
@@ -173,7 +173,7 @@ describe('field-highlighter', () => {
             helper-text="Helper"
           ></vaadin-text-area>
         `,
-        div
+        div,
       );
       setUsers(element);
       await nextFrame();

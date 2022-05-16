@@ -383,13 +383,13 @@ declare class Crud<Item> extends ControllerMixin(ElementMixin(ThemableMixin(HTML
   addEventListener<K extends keyof CrudEventMap<Item>>(
     type: K,
     listener: (this: Crud<Item>, ev: CrudEventMap<Item>[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof CrudEventMap<Item>>(
     type: K,
     listener: (this: Crud<Item>, ev: CrudEventMap<Item>[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

@@ -8,7 +8,7 @@ import {
   TextField,
   TextFieldChangeEvent,
   TextFieldInvalidChangedEvent,
-  TextFieldValueChangedEvent
+  TextFieldValueChangedEvent,
 } from '../../vaadin-text-field.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

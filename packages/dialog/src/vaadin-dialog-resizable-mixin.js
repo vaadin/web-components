@@ -99,7 +99,7 @@ registerStyles(
       cursor: nwse-resize;
     }
   `,
-  { moduleId: 'vaadin-dialog-resizable-overlay-styles' }
+  { moduleId: 'vaadin-dialog-resizable-overlay-styles' },
 );
 
 /**
@@ -116,8 +116,8 @@ export const DialogResizableMixin = (superClass) =>
         resizable: {
           type: Boolean,
           value: false,
-          reflectToAttribute: true
-        }
+          reflectToAttribute: true,
+        },
       };
     }
 
@@ -246,7 +246,7 @@ export const DialogResizableMixin = (superClass) =>
       const content = this.$.overlay.$.content;
       content.setAttribute(
         'style',
-        'position: absolute; top: 0; right: 0; bottom: 0; left: 0; box-sizing: content-box; height: auto;'
+        'position: absolute; top: 0; right: 0; bottom: 0; left: 0; box-sizing: content-box; height: auto;',
       );
       const { width: contentWidth, height: contentHeight } = getComputedStyle(content);
       content.removeAttribute('style');

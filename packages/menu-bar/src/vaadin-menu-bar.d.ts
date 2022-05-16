@@ -138,13 +138,13 @@ declare class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(Eleme
   addEventListener<K extends keyof MenuBarEventMap>(
     type: K,
     listener: (this: MenuBar, ev: MenuBarEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof MenuBarEventMap>(
     type: K,
     listener: (this: MenuBar, ev: MenuBarEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

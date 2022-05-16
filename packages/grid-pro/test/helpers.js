@@ -7,9 +7,9 @@ export const infiniteDataProvider = (params, callback) => {
       const count = params.page * params.pageSize + index;
       return {
         name: 'foo' + count,
-        age: count
+        age: count,
       };
-    })
+    }),
   );
 };
 
@@ -19,7 +19,7 @@ export const fire = (type, detail, options) => {
   const event = new Event(type, {
     bubbles: options.bubbles === undefined ? true : options.bubbles,
     cancelable: Boolean(options.cancelable),
-    composed: options.composed === undefined ? true : options.composed
+    composed: options.composed === undefined ? true : options.composed,
   });
   event.detail = detail;
   const node = options.node || window;
@@ -41,12 +41,12 @@ export const dragStart = (source) => {
     {
       x: Math.round(sourceRect.left + sourceRect.width / 2),
       y: Math.round(sourceRect.top + sourceRect.height / 2),
-      state: 'start'
+      state: 'start',
     },
     {
       node: source,
-      bubbles: true
-    }
+      bubbles: true,
+    },
   );
 };
 
@@ -58,12 +58,12 @@ export const dragOver = (source, target, clientX) => {
     {
       x: Math.round(clientX || targetRect.left + targetRect.width / 2),
       y: Math.round(targetRect.top + targetRect.height / 2),
-      state: 'track'
+      state: 'track',
     },
     {
       node: source,
-      bubbles: true
-    }
+      bubbles: true,
+    },
   );
 };
 
@@ -74,12 +74,12 @@ export const dragAndDropOver = (source, target) => {
     {
       x: 0,
       y: 0,
-      state: 'end'
+      state: 'end',
     },
     {
       node: source,
-      bubbles: true
-    }
+      bubbles: true,
+    },
   );
 };
 
@@ -159,7 +159,7 @@ export const createItems = () => {
   return [
     { name: 'foo', age: 20, married: true, title: 'mrs' },
     { name: 'bar', age: 30, married: false, title: 'ms' },
-    { name: 'baz', age: 40, married: false, title: 'mr' }
+    { name: 'baz', age: 40, married: false, title: 'mr' },
   ];
 };
 

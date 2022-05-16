@@ -1,6 +1,8 @@
 {
-  "singleQuote": true,
+  "bracketSpacing": true,
   "printWidth": 120,
-  "trailingComma": "none",
+  "trailingComma": "all",
+  "tabWidth": 2,
+  "singleQuote": true,
   "htmlWhitespaceSensitivity": "strict"
 }

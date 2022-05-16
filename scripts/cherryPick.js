@@ -36,8 +36,8 @@ async function getAllCommits() {
       headers: {
         'User-Agent': 'Vaadin Cherry Pick',
         Authorization: `token ${token}`,
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     };
 
     const res = await axios.get(url, options);
@@ -125,8 +125,8 @@ async function labelCommit(url, label) {
   const options = {
     headers: {
       'User-Agent': 'Vaadin Cherry Pick',
-      Authorization: `token ${token}`
-    }
+      Authorization: `token ${token}`,
+    },
   };
 
   await axios.post(issueURL, { labels: [label] }, options);
@@ -137,16 +137,16 @@ async function postComment(url, userName, branch, message) {
   const options = {
     headers: {
       'User-Agent': 'Vaadin Cherry Pick',
-      Authorization: `token ${token}`
-    }
+      Authorization: `token ${token}`,
+    },
   };
 
   await axios.post(
     issueURL,
     {
-      body: `Hi ${userName} , this commit cannot be picked to ${branch} by this bot, can you take a look and pick it manually?\n Error Message: ${message}`
+      body: `Hi ${userName} , this commit cannot be picked to ${branch} by this bot, can you take a look and pick it manually?\n Error Message: ${message}`,
     },
-    options
+    options,
   );
 }
 
@@ -162,9 +162,9 @@ async function createPR(title, head, base) {
           Authorization: `token ${token}`,
           'User-Agent': 'Vaadin Cherry Pick',
           'Content-Type': 'application/json',
-          'Content-Length': content.length
+          'Content-Length': content.length,
         },
-        body: content
+        body: content,
       },
       (res) => {
         let body = '';
@@ -174,7 +174,7 @@ async function createPR(title, head, base) {
         res.on('end', () => {
           resolve(body);
         });
-      }
+      },
     );
     req.write(content);
   }).then((body) => {

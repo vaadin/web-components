@@ -143,7 +143,7 @@ const inputField = css`
 const inputFieldShared = [requiredField, fieldButton, helper, inputField];
 
 registerStyles('', inputFieldShared, {
-  moduleId: 'lumo-input-field-shared-styles'
+  moduleId: 'lumo-input-field-shared-styles',
 });
 
 export { inputField, inputFieldShared };

@@ -62,7 +62,7 @@ describe('virtualizer - wheel scrolling', () => {
         el.querySelector('.content').textContent = index;
       },
       scrollTarget,
-      scrollContainer
+      scrollContainer,
     });
 
     virtualizer.size = 100;
@@ -83,7 +83,7 @@ describe('virtualizer - wheel scrolling', () => {
     deltaY = 0,
     deltaMode = WheelEvent.DOM_DELTA_PIXEL,
     skipFlush = false,
-    ctrlKey = false
+    ctrlKey = false,
   }) {
     const e = new CustomEvent('wheel', { bubbles: true, cancelable: true });
     e.deltaY = deltaY;
@@ -212,7 +212,7 @@ describe('virtualizer - scrollbar scrolling', () => {
         el.classList.add(`item`);
       },
       scrollTarget,
-      scrollContainer
+      scrollContainer,
     });
   });
 

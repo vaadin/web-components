@@ -55,9 +55,9 @@ describe('event context', () => {
         selected: false,
         detailsOpened: true,
         expanded: false,
-        level: 0
+        level: 0,
       },
-      done
+      done,
     );
   });
 
@@ -67,9 +67,9 @@ describe('event context', () => {
       headerCell,
       {
         column: column,
-        section: 'header'
+        section: 'header',
       },
-      done
+      done,
     );
   });
 
@@ -79,9 +79,9 @@ describe('event context', () => {
       footerCell,
       {
         column: column,
-        section: 'footer'
+        section: 'footer',
       },
-      done
+      done,
     );
   });
 
@@ -91,9 +91,9 @@ describe('event context', () => {
       columnGroupHeader,
       {
         column: columnGroup,
-        section: 'header'
+        section: 'header',
       },
-      done
+      done,
     );
   });
 
@@ -103,9 +103,9 @@ describe('event context', () => {
       columnGroupFooter,
       {
         column: columnGroup,
-        section: 'footer'
+        section: 'footer',
       },
-      done
+      done,
     );
   });
 
@@ -120,9 +120,9 @@ describe('event context', () => {
         selected: false,
         detailsOpened: true,
         expanded: false,
-        level: 0
+        level: 0,
       },
-      done
+      done,
     );
   });
 

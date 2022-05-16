@@ -131,7 +131,7 @@ describe('class name generator', () => {
 
     beforeEach(() => {
       clock = sinon.useFakeTimers({
-        shouldClearNativeTimers: true
+        shouldClearNativeTimers: true,
       });
 
       grid.dataProvider = (params, callback) => {

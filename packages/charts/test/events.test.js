@@ -28,8 +28,8 @@ describe('vaadin-chart events', () => {
       chart.addEventListener('chart-redraw', spy);
       chart.updateConfiguration({
         chart: {
-          type: 'column'
-        }
+          type: 'column',
+        },
       });
       await oneEvent(chart, 'chart-redraw');
       const event = spy.firstCall.args[0];

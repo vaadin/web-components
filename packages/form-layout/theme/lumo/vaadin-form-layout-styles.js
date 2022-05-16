@@ -8,5 +8,5 @@ registerStyles(
       --vaadin-form-layout-column-spacing: var(--lumo-space-l);
     }
   `,
-  { moduleId: 'lumo-form-layout' }
+  { moduleId: 'lumo-form-layout' },
 );

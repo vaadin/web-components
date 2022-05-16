@@ -12,9 +12,9 @@ describe('vaadin-upload', () => {
       {
         name: 'Workflow.pdf',
         progress: 60,
-        status: '19.7 MB: 60% (remaining time: 00:12:34)'
+        status: '19.7 MB: 60% (remaining time: 00:12:34)',
       },
-      { name: 'Financials.xlsx', error: 'An error occurred' }
+      { name: 'Financials.xlsx', error: 'An error occurred' },
     ];
     await nextFrame();
   });

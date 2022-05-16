@@ -14,7 +14,7 @@ registerStyles(
       flex-shrink: 0;
     }
   `,
-  { moduleId: 'vaadin-message-avatar-styles' }
+  { moduleId: 'vaadin-message-avatar-styles' },
 );
 
 /**

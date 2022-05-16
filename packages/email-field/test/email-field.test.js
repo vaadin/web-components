@@ -14,7 +14,7 @@ const validAddresses = [
   'email@example.name',
   'email@example.museum',
   'email@example.co.jp',
-  'firstname-lastname@example.com'
+  'firstname-lastname@example.com',
 ];
 
 const invalidAddresses = [
@@ -27,7 +27,7 @@ const invalidAddresses = [
   'あいうえお@example.com',
   'email@example.com (Joe Smith)',
   'email@example..com',
-  'email@example'
+  'email@example',
 ];
 
 describe('email-field', () => {

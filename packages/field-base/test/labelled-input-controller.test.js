@@ -13,7 +13,7 @@ customElements.define(
     static get template() {
       return html`<slot name="label"></slot><slot name="input"></slot>`;
     }
-  }
+  },
 );
 
 customElements.define(
@@ -22,7 +22,7 @@ customElements.define(
     static get template() {
       return html`<slot name="label"></slot><slot name="textarea"></slot>`;
     }
-  }
+  },
 );
 
 describe('labelled-input-controller', () => {

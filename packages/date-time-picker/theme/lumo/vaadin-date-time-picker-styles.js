@@ -6,7 +6,7 @@ import { requiredField } from '@vaadin/vaadin-lumo-styles/mixins/required-field.
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles('vaadin-date-time-picker', [requiredField, helper, customField], {
-  moduleId: 'lumo-date-time-picker'
+  moduleId: 'lumo-date-time-picker',
 });
 
 registerStyles(
@@ -34,7 +34,7 @@ registerStyles(
       border-bottom-left-radius: 0;
     }
   `,
-  { moduleId: 'lumo-date-time-picker-date-picker' }
+  { moduleId: 'lumo-date-time-picker-date-picker' },
 );
 
 registerStyles(
@@ -52,5 +52,5 @@ registerStyles(
       border-bottom-right-radius: 0;
     }
   `,
-  { moduleId: 'lumo-date-time-picker-time-picker' }
+  { moduleId: 'lumo-date-time-picker-time-picker' },
 );

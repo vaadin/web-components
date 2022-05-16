@@ -41,8 +41,8 @@ class GridSortColumn extends GridColumn {
        */
       direction: {
         type: String,
-        notify: true
-      }
+        notify: true,
+      },
     };
   }
 

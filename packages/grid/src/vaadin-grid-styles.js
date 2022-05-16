@@ -297,5 +297,5 @@ registerStyles(
       right: auto;
     }
   `,
-  { moduleId: 'vaadin-grid-styles' }
+  { moduleId: 'vaadin-grid-styles' },
 );

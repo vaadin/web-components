@@ -22,7 +22,7 @@ export const PatternMixin = (superclass) =>
          * The pattern must match the entire value, not just some subset.
          */
         pattern: {
-          type: String
+          type: String,
         },
 
         /**
@@ -31,8 +31,8 @@ export const PatternMixin = (superclass) =>
          * @attr {boolean} prevent-invalid-input
          */
         preventInvalidInput: {
-          type: Boolean
-        }
+          type: Boolean,
+        },
       };
     }
 

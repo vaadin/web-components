@@ -68,5 +68,5 @@ registerStyles(
       right: auto;
     }
   `,
-  { moduleId: 'material-grid-sorter' }
+  { moduleId: 'material-grid-sorter' },
 );

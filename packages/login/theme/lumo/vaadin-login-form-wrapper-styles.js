@@ -79,5 +79,5 @@ const loginFormWrapper = css`
 `;
 
 registerStyles('vaadin-login-form-wrapper', [color, typography, loginFormWrapper], {
-  moduleId: 'lumo-login-form-wrapper'
+  moduleId: 'lumo-login-form-wrapper',
 });

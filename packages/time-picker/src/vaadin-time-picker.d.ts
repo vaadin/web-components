@@ -198,13 +198,13 @@ declare class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(El
   addEventListener<K extends keyof TimePickerEventMap>(
     type: K,
     listener: (this: TimePicker, ev: TimePickerEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof TimePickerEventMap>(
     type: K,
     listener: (this: TimePicker, ev: TimePickerEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

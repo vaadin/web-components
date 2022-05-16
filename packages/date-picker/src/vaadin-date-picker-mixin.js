@@ -26,7 +26,7 @@ export const DatePickerMixin = (subclass) =>
          * @protected
          */
         _selectedDate: {
-          type: Date
+          type: Date,
         },
 
         /**
@@ -48,7 +48,7 @@ export const DatePickerMixin = (subclass) =>
           type: String,
           observer: '_valueChanged',
           notify: true,
-          value: ''
+          value: '',
         },
 
         /**
@@ -66,7 +66,7 @@ export const DatePickerMixin = (subclass) =>
           type: Boolean,
           reflectToAttribute: true,
           notify: true,
-          observer: '_openedChanged'
+          observer: '_openedChanged',
         },
 
         /**
@@ -82,7 +82,7 @@ export const DatePickerMixin = (subclass) =>
          * @attr {boolean} show-week-numbers
          */
         showWeekNumbers: {
-          type: Boolean
+          type: Boolean,
         },
 
         /**
@@ -91,7 +91,7 @@ export const DatePickerMixin = (subclass) =>
          */
         _fullscreen: {
           type: Boolean,
-          value: false
+          value: false,
         },
 
         /**
@@ -99,7 +99,7 @@ export const DatePickerMixin = (subclass) =>
          * @protected
          */
         _fullscreenMediaQuery: {
-          value: '(max-width: 420px), (max-height: 420px)'
+          value: '(max-width: 420px), (max-height: 420px)',
         },
 
         /**
@@ -208,7 +208,7 @@ export const DatePickerMixin = (subclass) =>
                 'September',
                 'October',
                 'November',
-                'December'
+                'December',
               ],
               weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
               weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -248,9 +248,9 @@ export const DatePickerMixin = (subclass) =>
               },
               formatTitle: (monthName, fullYear) => {
                 return monthName + ' ' + fullYear;
-              }
+              },
             };
-          }
+          },
         },
 
         /**
@@ -264,7 +264,7 @@ export const DatePickerMixin = (subclass) =>
          */
         min: {
           type: String,
-          observer: '_minChanged'
+          observer: '_minChanged',
         },
 
         /**
@@ -278,7 +278,7 @@ export const DatePickerMixin = (subclass) =>
          */
         max: {
           type: String,
-          observer: '_maxChanged'
+          observer: '_maxChanged',
         },
 
         /**
@@ -289,7 +289,7 @@ export const DatePickerMixin = (subclass) =>
         _minDate: {
           type: Date,
           // null does not work here because minimizer passes undefined to overlay (#351)
-          value: ''
+          value: '',
         },
 
         /**
@@ -299,39 +299,39 @@ export const DatePickerMixin = (subclass) =>
          */
         _maxDate: {
           type: Date,
-          value: ''
+          value: '',
         },
 
         /** @private */
         _noInput: {
           type: Boolean,
-          computed: '_isNoInput(inputElement, _fullscreen, _ios, i18n, opened, autoOpenDisabled)'
+          computed: '_isNoInput(inputElement, _fullscreen, _ios, i18n, opened, autoOpenDisabled)',
         },
 
         /** @private */
         _ios: {
           type: Boolean,
-          value: isIOS
+          value: isIOS,
         },
 
         /** @private */
         _webkitOverflowScroll: {
           type: Boolean,
-          value: document.createElement('div').style.webkitOverflowScrolling === ''
+          value: document.createElement('div').style.webkitOverflowScrolling === '',
         },
 
         /** @private */
         _focusOverlayOnOpen: Boolean,
 
         /** @protected */
-        _overlayInitialized: Boolean
+        _overlayInitialized: Boolean,
       };
     }
 
     static get observers() {
       return [
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
-        '_focusedDateChanged(_focusedDate, i18n.formatDate)'
+        '_focusedDateChanged(_focusedDate, i18n.formatDate)',
       ];
     }
 
@@ -421,7 +421,7 @@ export const DatePickerMixin = (subclass) =>
       this.addController(
         new MediaQueryController(this._fullscreenMediaQuery, (matches) => {
           this._fullscreen = matches;
-        })
+        }),
       );
 
       this.addController(new VirtualKeyboardController(this));
@@ -775,7 +775,7 @@ export const DatePickerMixin = (subclass) =>
           element.style.webkitOverflowScrolling = 'auto';
           result.push({
             element: element,
-            oldInlineValue: oldInlineValue
+            oldInlineValue: oldInlineValue,
           });
         }
         element = element.parentElement;
@@ -811,7 +811,7 @@ export const DatePickerMixin = (subclass) =>
 
       if (this._touchPrevented) {
         this._touchPrevented.forEach(
-          (prevented) => (prevented.element.style.webkitOverflowScrolling = prevented.oldInlineValue)
+          (prevented) => (prevented.element.style.webkitOverflowScrolling = prevented.oldInlineValue),
         );
         this._touchPrevented = [];
       }
@@ -924,7 +924,7 @@ export const DatePickerMixin = (subclass) =>
         // the required attribute. Both are not allowed on an input element.
         // Therefore we prevent default on most keydown events.
         var allowedKeys = [
-          9 // tab
+          9, // tab
         ];
         if (allowedKeys.indexOf(e.keyCode) === -1) {
           e.preventDefault();

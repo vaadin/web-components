@@ -47,8 +47,8 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
   static get properties() {
     return {
       positionTarget: {
-        type: Object
-      }
+        type: Object,
+      },
     };
   }
 

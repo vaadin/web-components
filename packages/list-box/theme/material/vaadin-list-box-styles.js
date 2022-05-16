@@ -23,5 +23,5 @@ registerStyles(
       background-color: var(--material-divider-color);
     }
   `,
-  { moduleId: 'material-list-box' }
+  { moduleId: 'material-list-box' },
 );

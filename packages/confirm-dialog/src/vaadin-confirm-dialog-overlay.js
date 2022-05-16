@@ -27,7 +27,7 @@ registerStyles(
       margin-bottom: auto;
     }
   `,
-  { moduleId: 'vaadin-confirm-dialog-overlay-styles' }
+  { moduleId: 'vaadin-confirm-dialog-overlay-styles' },
 );
 
 let memoizedTemplate;
