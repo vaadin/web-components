@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/map",
-  "version": "23.1.0-beta2",
+  "version": "23.1.0-beta3",
   "publishConfig": {
     "access": "public"
   },
@@ -36,9 +36,9 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "23.1.0-beta2",
+    "@vaadin/component-base": "23.1.0-beta3",
     "@vaadin/vaadin-license-checker": "^2.1.0",
-    "@vaadin/vaadin-themable-mixin": "23.1.0-beta2",
+    "@vaadin/vaadin-themable-mixin": "23.1.0-beta3",
     "ol": "6.13.0"
   },
   "devDependencies": {
