@@ -617,6 +617,11 @@ export const KeyboardNavigationMixin = (superClass) =>
     _onTabKeyDown(e) {
       const focusTarget = this._predictFocusStepTarget(e.composedPath()[0], e.shiftKey ? -1 : 1);
 
+      // Can be undefined if grid has tabindex
+      if (!focusTarget) {
+        return;
+      }
+
       // Prevent focus-trap logic from intercepting the event.
       e.stopPropagation();
 

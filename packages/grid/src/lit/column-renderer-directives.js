@@ -5,8 +5,8 @@
  */
 /* eslint-disable max-classes-per-file */
 import { directive } from 'lit/directive.js';
-import { microTask } from '@vaadin/component-base/src/async';
-import { Debouncer } from '@vaadin/component-base/src/debounce';
+import { microTask } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
 import { CONTENT_UPDATE_DEBOUNCER } from './renderer-directives.js';
 

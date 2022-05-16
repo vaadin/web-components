@@ -47,7 +47,7 @@ describe('multi-select-combo-box', () => {
   });
 
   it('custom value', async () => {
-    element.allowCustomValues = true;
+    element.allowCustomValue = true;
     element.selectedItems = ['Orange'];
     await visualDiff(div, 'custom-value');
   });

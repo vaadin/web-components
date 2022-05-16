@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import Sinon from 'sinon';
 import { Virtualizer } from '../src/virtualizer.js';
 
@@ -11,7 +11,7 @@ function canScroll(el, deltaY) {
   return isScrollableElement && (canScrollAndScrollingDownwards || canScrollAndScrollingUpwards);
 }
 
-describe('scrolling mode', () => {
+describe('virtualizer - wheel scrolling', () => {
   const IGNORE_WHEEL_TIMEOUT = 500;
   let wrapper;
   let virtualizer;
@@ -190,5 +190,58 @@ describe('scrolling mode', () => {
     expect(child.scrollTop).to.equal(0);
     expect(scrollTarget.scrollTop).to.equal(1);
     expect(wrapper.scrollTop).to.equal(0);
+  });
+});
+
+describe('virtualizer - scrollbar scrolling', () => {
+  let virtualizer;
+  let scrollTarget;
+
+  beforeEach(() => {
+    scrollTarget = fixtureSync(`
+      <div style="height: 100px;">
+        <div></div>
+      </div>
+    `);
+    const scrollContainer = scrollTarget.firstElementChild;
+
+    virtualizer = new Virtualizer({
+      createElements: (count) => [...Array(count)].map(() => document.createElement('div')),
+      updateElement: (el, index) => {
+        el.textContent = `item ${index}`;
+        el.classList.add(`item`);
+      },
+      scrollTarget,
+      scrollContainer,
+    });
+  });
+
+  it('should have an item at the bottom of the viewport after scrolling up', async () => {
+    virtualizer.size = 100000;
+
+    // Scroll to end
+    virtualizer.scrollToIndex(100000);
+    await nextFrame();
+
+    // Scroll upwards in 1000px steps
+    for (let i = 0; i < 10; i++) {
+      await nextFrame();
+      scrollTarget.scrollTop -= 1000;
+
+      // Sanity check for iron-list internal properties
+      const adapter = virtualizer.__adapter;
+      const firstItem = adapter._physicalItems[adapter._physicalStart];
+      expect(firstItem.__virtualIndex).to.equal(adapter._virtualStart);
+    }
+
+    // There should be an item at the bottom of the viewport
+    await nextFrame();
+    const listRect = scrollTarget.getBoundingClientRect();
+    const lastVisibleElement = scrollTarget.getRootNode().elementFromPoint(listRect.left, listRect.bottom - 1);
+    expect([...lastVisibleElement.classList]).to.contain('item');
+  });
+
+  it('should not throw on flush if size is not set', () => {
+    expect(() => virtualizer.flush()).not.to.throw(Error);
   });
 });

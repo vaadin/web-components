@@ -649,17 +649,17 @@ describe('basic', () => {
     });
   });
 
-  describe('allowCustomValues', () => {
+  describe('allowCustomValue', () => {
     beforeEach(async () => {
-      comboBox.allowCustomValues = true;
+      comboBox.allowCustomValue = true;
       comboBox.selectedItems = ['apple'];
       await nextRender();
       inputElement.focus();
     });
 
-    it('should fire custom-values-set event when entering custom value', async () => {
+    it('should fire custom-value-set event when entering custom value', async () => {
       const spy = sinon.spy();
-      comboBox.addEventListener('custom-values-set', spy);
+      comboBox.addEventListener('custom-value-set', spy);
       await sendKeys({ type: 'pear' });
       await sendKeys({ down: 'Enter' });
       expect(spy.calledOnce).to.be.true;
