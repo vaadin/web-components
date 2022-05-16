@@ -94,5 +94,5 @@ const richTextEditor = css`
 `;
 
 registerStyles('vaadin-rich-text-editor', [typography, richTextEditor], {
-  moduleId: 'material-rich-text-editor'
+  moduleId: 'material-rich-text-editor',
 });

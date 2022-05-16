@@ -55,13 +55,13 @@ declare class IntegerField extends NumberField {
   addEventListener<K extends keyof IntegerFieldEventMap>(
     type: K,
     listener: (this: IntegerField, ev: IntegerFieldEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof IntegerFieldEventMap>(
     type: K,
     listener: (this: IntegerField, ev: IntegerFieldEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

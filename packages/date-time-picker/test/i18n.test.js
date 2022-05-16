@@ -32,13 +32,13 @@ customElements.define(
 
               // formatTime and parseTime are needed so that time picker doesn't throw errors on init
               formatTime,
-              parseTime
+              parseTime,
             };
-          }
-        }
+          },
+        },
       };
     }
-  }
+  },
 );
 
 customElements.define(
@@ -59,22 +59,22 @@ customElements.define(
           type: Object,
           value: () => {
             return {
-              cancel: 'Peruuta'
+              cancel: 'Peruuta',
             };
-          }
+          },
         },
         tpI18n: {
           type: Object,
           value: () => {
             return {
               formatTime,
-              parseTime
+              parseTime,
             };
-          }
-        }
+          },
+        },
       };
     }
-  }
+  },
 );
 
 ['default', 'slotted'].forEach((set) => {

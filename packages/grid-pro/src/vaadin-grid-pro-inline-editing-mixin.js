@@ -22,7 +22,7 @@ export const InlineEditingMixin = (superClass) =>
          */
         enterNextRow: {
           type: Boolean,
-          notify: true // FIXME(yuriy-fix): needed by Flow counterpart
+          notify: true, // FIXME(yuriy-fix): needed by Flow counterpart
         },
 
         /**
@@ -35,7 +35,7 @@ export const InlineEditingMixin = (superClass) =>
          */
         singleCellEdit: {
           type: Boolean,
-          notify: true // FIXME(yuriy-fix): needed by Flow counterpart
+          notify: true, // FIXME(yuriy-fix): needed by Flow counterpart
         },
 
         /**
@@ -44,13 +44,13 @@ export const InlineEditingMixin = (superClass) =>
          * @attr {boolean} edit-on-click
          */
         editOnClick: {
-          type: Boolean
+          type: Boolean,
         },
 
         /** @private */
         _editingDisabled: {
-          type: Boolean
-        }
+          type: Boolean,
+        },
       };
     }
 
@@ -279,7 +279,7 @@ export const InlineEditingMixin = (superClass) =>
       if (edited) {
         // detect focus moving to e.g. vaadin-select-overlay
         const overlay = Array.from(e.composedPath()).filter(
-          (node) => node.nodeType === Node.ELEMENT_NODE && /^vaadin-(?!dialog).*-overlay$/i.test(node.localName)
+          (node) => node.nodeType === Node.ELEMENT_NODE && /^vaadin-(?!dialog).*-overlay$/i.test(node.localName),
         )[0];
 
         if (overlay) {
@@ -308,10 +308,10 @@ export const InlineEditingMixin = (superClass) =>
           detail: {
             index: model.index,
             item: model.item,
-            path: column.path
+            path: column.path,
           },
-          composed: true
-        })
+          composed: true,
+        }),
       );
       this.addEventListener('item-property-changed', this.__boundItemPropertyChanged);
     }
@@ -345,12 +345,12 @@ export const InlineEditingMixin = (superClass) =>
                   index: model.index,
                   item: model.item,
                   path: column.path,
-                  value: value
+                  value: value,
                 },
                 bubbles: true,
                 cancelable: true,
-                composed: true
-              })
+                composed: true,
+              }),
             );
           }
         }

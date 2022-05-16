@@ -37,5 +37,5 @@ registerStyles(
       font-weight: 500;
     }
   `,
-  { moduleId: 'material-avatar' }
+  { moduleId: 'material-avatar' },
 );

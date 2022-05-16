@@ -9,7 +9,7 @@ customElements.define(
     static get template() {
       return html`<input />`;
     }
-  }
+  },
 );
 
 describe('validate-mixin', () => {

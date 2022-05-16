@@ -32,7 +32,7 @@ createStyles(
     [part='text'] {
       color: rgb(255, 0, 0);
     }
-  `
+  `,
 );
 
 /* This default style module should get overridden by test-foo styles.
@@ -46,7 +46,7 @@ createStyles(
       color: rgb(0, 0, 0) !important;
       background-color: rgb(255, 0, 0);
     }
-  `
+  `,
 );
 
 createStyles(
@@ -60,7 +60,7 @@ createStyles(
     [part='text'] {
       color: rgb(255, 255, 255);
     }
-  `
+  `,
 );
 
 createStyles(
@@ -70,7 +70,7 @@ createStyles(
     [part='text'] {
       background-color: rgb(255, 0, 0);
     }
-  `
+  `,
 );
 
 createStyles(
@@ -80,7 +80,7 @@ createStyles(
     [part='text'] {
       position: relative;
     }
-  `
+  `,
 );
 
 createStyles(
@@ -90,7 +90,7 @@ createStyles(
     [part='text'] {
       width: 100px;
     }
-  `
+  `,
 );
 
 createStyles(
@@ -104,7 +104,7 @@ createStyles(
     [part='text'] {
       color: rgb(0, 0, 0);
     }
-  `
+  `,
 );
 
 createStyles(
@@ -114,7 +114,7 @@ createStyles(
     :host {
       position: relative;
     }
-  `
+  `,
 );
 
 createStyles(
@@ -124,7 +124,7 @@ createStyles(
     :host {
       display: flex;
     }
-  `
+  `,
 );
 
 createStyles(
@@ -135,7 +135,7 @@ createStyles(
       color: rgb(255, 0, 0);
       display: inline;
     }
-  `
+  `,
 );
 
 createStyles(
@@ -146,7 +146,7 @@ createStyles(
       color: rgb(0, 255, 0);
       opacity: 0.5;
     }
-  `
+  `,
 );
 
 createStyles(
@@ -162,7 +162,7 @@ createStyles(
       opacity: 1;
       display: block;
     }
-  `
+  `,
 );
 
 class TestFoo extends ThemableMixin(PolymerElement) {

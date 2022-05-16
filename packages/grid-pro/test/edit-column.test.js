@@ -15,7 +15,7 @@ import {
   getContainerCell,
   getRowCells,
   getRows,
-  infiniteDataProvider
+  infiniteDataProvider,
 } from './helpers.js';
 
 describe('edit column', () => {
@@ -290,7 +290,7 @@ describe('edit column', () => {
       grid.columnReorderingAllowed = true;
       const headerContent = [
         getContainerCell(grid.$.header, 0, 0)._content,
-        getContainerCell(grid.$.header, 0, 1)._content
+        getContainerCell(grid.$.header, 0, 1)._content,
       ];
       dragAndDropOver(headerContent[0], headerContent[1]);
 

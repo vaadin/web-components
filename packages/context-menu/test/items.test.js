@@ -12,7 +12,7 @@ import {
   isIOS,
   nextFrame,
   nextRender,
-  spaceKeyDown
+  spaceKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
@@ -74,10 +74,10 @@ describe('items', () => {
           children: [
             { text: 'foo-0-0', checked: true },
             { text: 'foo-0-1', disabled: true },
-            { text: 'foo-0-2', children: [{ text: 'foo-0-2-0' }] }
-          ]
+            { text: 'foo-0-2', children: [{ text: 'foo-0-2-0' }] },
+          ],
         },
-        { text: 'foo-1' }
+        { text: 'foo-1' },
       ];
       open();
       await nextRender(rootMenu);
@@ -516,12 +516,12 @@ describe('items', () => {
             { text: 'foo-0-0' },
             {
               text: 'foo-0-1',
-              children: [{ text: 'foo-0-1-0' }]
+              children: [{ text: 'foo-0-1-0' }],
             },
-            { component: itemWithTheme }
-          ]
+            { component: itemWithTheme },
+          ],
         },
-        { text: 'foo-1' }
+        { text: 'foo-1' },
       ];
       open();
       await nextRender();

@@ -349,7 +349,7 @@ describe('overlay', () => {
       beforeEach(async () => {
         await fixtureOverlayContent({
           monthScrollerItems: 0.5,
-          monthScrollerOffset: 0
+          monthScrollerOffset: 0,
         });
       });
 
@@ -376,7 +376,7 @@ describe('overlay', () => {
       beforeEach(async () => {
         await fixtureOverlayContent({
           monthScrollerItems: 2,
-          monthScrollerOffset: 0
+          monthScrollerOffset: 0,
         });
       });
 
@@ -403,7 +403,7 @@ describe('overlay', () => {
       beforeEach(async () => {
         await fixtureOverlayContent({
           monthScrollerItems: 3,
-          monthScrollerOffset: '10%'
+          monthScrollerOffset: '10%',
         });
       });
 

@@ -8,7 +8,7 @@ registerStyles(
     :host([opened]) ::slotted(input) {
       caret-color: transparent;
     }
-  `
+  `,
 );
 
 /* stop focused day animation */
@@ -18,5 +18,5 @@ registerStyles(
     [part='date'][focused]::before {
       animation: none !important;
     }
-  `
+  `,
 );

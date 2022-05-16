@@ -49,5 +49,5 @@ registerStyles(
       margin-left: 0;
     }
   `,
-  { moduleId: 'lumo-grid-sorter' }
+  { moduleId: 'lumo-grid-sorter' },
 );

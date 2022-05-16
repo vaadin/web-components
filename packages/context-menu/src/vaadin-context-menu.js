@@ -242,7 +242,7 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
        * of the context menu to listen for `openOn` events.
        */
       selector: {
-        type: String
+        type: String,
       },
 
       /**
@@ -253,7 +253,7 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
         type: Boolean,
         value: false,
         notify: true,
-        readOnly: true
+        readOnly: true,
       },
 
       /**
@@ -263,7 +263,7 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
        */
       openOn: {
         type: String,
-        value: 'vaadin-contextmenu'
+        value: 'vaadin-contextmenu',
       },
 
       /**
@@ -277,7 +277,7 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
         type: Object,
         value: function () {
           return this;
-        }
+        },
       },
 
       /**
@@ -288,7 +288,7 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
       closeOn: {
         type: String,
         value: 'click',
-        observer: '_closeOnChanged'
+        observer: '_closeOnChanged',
       },
 
       /**
@@ -303,7 +303,7 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
        * @type {ContextMenuRenderer | undefined}
        */
       renderer: {
-        type: Function
+        type: Function,
       },
 
       /** @private */
@@ -316,7 +316,7 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
       _boundOpen: Object,
 
       /** @private */
-      _touch: Boolean
+      _touch: Boolean,
     };
   }
 
@@ -502,7 +502,7 @@ class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(GestureEven
     if (e && !this.opened) {
       this._context = {
         detail: e.detail,
-        target: this._contextTarget(e)
+        target: this._contextTarget(e),
       };
 
       if (this._context.target) {

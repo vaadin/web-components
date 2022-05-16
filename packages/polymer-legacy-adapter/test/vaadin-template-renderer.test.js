@@ -81,7 +81,7 @@ describe('vaadin-template-renderer', () => {
     component.renderer = () => {};
 
     expect(() => window.Vaadin.templateRendererCallback(component)).to.throw(
-      /^Cannot use both a template and a renderer for <mock-component \/>\.$/
+      /^Cannot use both a template and a renderer for <mock-component \/>\.$/,
     );
   });
 

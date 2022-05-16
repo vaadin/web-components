@@ -15,7 +15,7 @@ describe('vertical-layout', () => {
           <div style="background: #f3f3f3; padding: 20px;">Item 2</div>
         </vaadin-vertical-layout>
       `,
-      div
+      div,
     );
   });
 

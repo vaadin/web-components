@@ -10,7 +10,7 @@ import {
   home,
   mousedown,
   nextRender,
-  tabKeyDown
+  tabKeyDown,
 } from '@vaadin/testing-helpers';
 import '../vaadin-message-list.js';
 
@@ -31,7 +31,7 @@ describe('message-list', () => {
         userAbbr: 'JD',
         userImg: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
         userColorIndex: 1,
-        theme: 'fancy'
+        theme: 'fancy',
       },
       {
         text: 'A message in the stream of messages',
@@ -40,8 +40,8 @@ describe('message-list', () => {
           name: 'Joan Doe',
           abbr: 'JD',
           img: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-          colorIndex: 1
-        }
+          colorIndex: 1,
+        },
       },
       {
         text: 'A message in the stream of messages',
@@ -50,16 +50,16 @@ describe('message-list', () => {
           name: 'Joan Doe',
           abbr: 'JD',
           img: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=',
-          colorIndex: 1
-        }
+          colorIndex: 1,
+        },
       },
       {
         text: 'Call upon the times of glory',
         time: '2:34 PM',
         userName: 'Steve Mops',
         userAbbr: 'SM',
-        userColorIndex: 2
-      }
+        userColorIndex: 2,
+      },
     ];
   });
 
@@ -128,9 +128,9 @@ describe('message-list', () => {
           user: {
             name: 'Steve Mops',
             abbr: 'SM',
-            colorIndex: 2
-          }
-        }
+            colorIndex: 2,
+          },
+        },
       ];
       await nextRender(messageList);
       expect(messageList.scrollTop).to.be.at.least(scrollTopBeforeMessage + 1);
@@ -146,9 +146,9 @@ describe('message-list', () => {
           user: {
             name: 'Steve Mops',
             abbr: 'SM',
-            colorIndex: 2
-          }
-        }
+            colorIndex: 2,
+          },
+        },
       ];
       await nextRender(messageList);
       expect(messageList.scrollTop).to.be.equal(0);
@@ -171,8 +171,8 @@ describe('message-list', () => {
           user: {
             name: 'Steve Mops',
             abbr: 'SM',
-            colorIndex: 2
-          }
+            colorIndex: 2,
+          },
         },
         {
           text: 'With two items',
@@ -180,9 +180,9 @@ describe('message-list', () => {
           user: {
             name: 'Steve Mops',
             abbr: 'SM',
-            colorIndex: 2
-          }
-        }
+            colorIndex: 2,
+          },
+        },
       ];
       await nextRender(messageList);
       const firstMessage = messages[0];
@@ -202,9 +202,9 @@ describe('message-list', () => {
           user: {
             name: 'Steve Mops',
             abbr: 'SM',
-            colorIndex: 2
-          }
-        }
+            colorIndex: 2,
+          },
+        },
       ];
       await nextRender(messageList);
       const messages = messageList.shadowRoot.querySelectorAll('vaadin-message');
@@ -226,8 +226,8 @@ describe('message-list', () => {
           user: {
             name: 'Steve Mops',
             abbr: 'SM',
-            colorIndex: 2
-          }
+            colorIndex: 2,
+          },
         },
         {
           text: 'With two items',
@@ -235,9 +235,9 @@ describe('message-list', () => {
           user: {
             name: 'Steve Mops',
             abbr: 'SM',
-            colorIndex: 2
-          }
-        }
+            colorIndex: 2,
+          },
+        },
       ];
 
       await nextRender(messageList);

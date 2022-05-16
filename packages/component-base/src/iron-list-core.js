@@ -346,7 +346,7 @@ export const ironList = {
       // _increasePoolIfNeeded to run away creating items to try to fill it.
       this._physicalTop = Math.min(
         Math.floor(this._virtualStart / this._itemsPerRow) * this._physicalAverage,
-        this._scrollPosition
+        this._scrollPosition,
       );
       this._update();
     } else if (this._physicalCount > 0) {
@@ -467,7 +467,7 @@ export const ironList = {
     var nextPhysicalCount = this._clamp(
       this._physicalCount + count,
       DEFAULT_PHYSICAL_COUNT,
-      this._virtualCount - this._virtualStart
+      this._virtualCount - this._virtualStart,
     );
     nextPhysicalCount = this._convertIndexToCompleteRow(nextPhysicalCount);
     if (this.grid) {
@@ -520,7 +520,7 @@ export const ironList = {
       this._debounce(
         '_increasePoolIfNeeded',
         this._increasePoolIfNeeded.bind(this, this._clamp(Math.round(50 / this._templateCost), 1, nextIncrease)),
-        idlePeriod
+        idlePeriod,
       );
     }
   },
@@ -687,7 +687,7 @@ export const ironList = {
     // Update the average if it measured something.
     if (this._physicalAverageCount !== prevAvgCount) {
       this._physicalAverage = Math.round(
-        (prevPhysicalAvg * prevAvgCount + newPhysicalSize) / this._physicalAverageCount
+        (prevPhysicalAvg * prevAvgCount + newPhysicalSize) / this._physicalAverageCount,
       );
     }
   },
@@ -888,7 +888,7 @@ export const ironList = {
           this.toggleScrollListener(false);
         }
       },
-      animationFrame
+      animationFrame,
     );
   },
 
@@ -947,5 +947,5 @@ export const ironList = {
     this._debouncers = this._debouncers || {};
     this._debouncers[name] = Debouncer.debounce(this._debouncers[name], asyncModule, cb.bind(this));
     enqueueDebouncer(this._debouncers[name]);
-  }
+  },
 };

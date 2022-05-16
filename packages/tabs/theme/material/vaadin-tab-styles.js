@@ -139,5 +139,5 @@ registerStyles(
       box-shadow: inset -2px 0 0 0 var(--material-primary-color);
     }
   `,
-  { moduleId: 'material-tab' }
+  { moduleId: 'material-tab' },
 );

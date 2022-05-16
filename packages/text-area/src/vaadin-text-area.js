@@ -169,15 +169,15 @@ export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(Polymer
        * Maximum number of characters (in Unicode code points) that the user can enter.
        */
       maxlength: {
-        type: Number
+        type: Number,
       },
 
       /**
        * Minimum number of characters (in Unicode code points) that the user can enter.
        */
       minlength: {
-        type: Number
-      }
+        type: Number,
+      },
     };
   }
 
@@ -230,7 +230,7 @@ export class TextArea extends InputFieldMixin(ThemableMixin(ElementMixin(Polymer
         this._setFocusElement(input);
         this.stateTarget = input;
         this.ariaTarget = input;
-      })
+      }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
     this.addEventListener('animationend', this._onAnimationEnd);

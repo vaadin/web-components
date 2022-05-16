@@ -14,7 +14,7 @@ import { DelegateFocusMixinClass } from './delegate-focus-mixin.js';
  * A mixin to forward focus to an element in the shadow DOM.
  */
 export declare function ShadowFocusMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DisabledMixinClass> &

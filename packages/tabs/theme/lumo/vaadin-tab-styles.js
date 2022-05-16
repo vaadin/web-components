@@ -231,5 +231,5 @@ registerStyles(
       transform-origin: 0% 50%;
     }
   `,
-  { moduleId: 'lumo-tab' }
+  { moduleId: 'lumo-tab' },
 );

@@ -167,5 +167,5 @@ registerStyles(
       opacity: 0.4;
     }
   `,
-  { moduleId: 'lumo-checkbox' }
+  { moduleId: 'lumo-checkbox' },
 );

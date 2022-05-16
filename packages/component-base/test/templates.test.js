@@ -63,7 +63,7 @@ describe('process templates', () => {
 
       expect(console.warn.calledOnce).to.be.true;
       expect(console.warn.args[0][0]).to.equal(
-        `WARNING: <template> inside <component-element> is no longer supported. Import @vaadin/polymer-legacy-adapter/template-renderer.js to enable compatibility.`
+        `WARNING: <template> inside <component-element> is no longer supported. Import @vaadin/polymer-legacy-adapter/template-renderer.js to enable compatibility.`,
       );
     });
   });

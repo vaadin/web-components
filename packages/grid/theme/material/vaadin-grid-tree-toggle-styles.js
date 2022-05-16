@@ -38,5 +38,5 @@ registerStyles(
       transform: rotate(90deg);
     }
   `,
-  { moduleId: 'material-grid-tree-toggle' }
+  { moduleId: 'material-grid-tree-toggle' },
 );

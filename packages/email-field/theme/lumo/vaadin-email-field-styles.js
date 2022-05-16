@@ -17,5 +17,5 @@ const emailField = css`
 `;
 
 registerStyles('vaadin-email-field', [inputFieldShared, emailField], {
-  moduleId: 'lumo-email-field'
+  moduleId: 'lumo-email-field',
 });

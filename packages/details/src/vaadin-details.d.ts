@@ -62,13 +62,13 @@ declare class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(HTMLEl
   addEventListener<K extends keyof DetailsEventMap>(
     type: K,
     listener: (this: Details, ev: DetailsEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof DetailsEventMap>(
     type: K,
     listener: (this: Details, ev: DetailsEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

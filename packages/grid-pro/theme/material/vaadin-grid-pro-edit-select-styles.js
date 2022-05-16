@@ -13,5 +13,5 @@ const gridProEditSelect = css`
 `;
 
 registerStyles('vaadin-grid-pro-edit-select', [gridProEditor, gridProEditSelect], {
-  moduleId: 'material-grid-pro-edit-select'
+  moduleId: 'material-grid-pro-edit-select',
 });

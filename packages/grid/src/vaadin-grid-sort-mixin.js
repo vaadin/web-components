@@ -18,7 +18,7 @@ export const SortMixin = (superClass) =>
          */
         multiSort: {
           type: Boolean,
-          value: false
+          value: false,
         },
 
         /**
@@ -29,7 +29,7 @@ export const SortMixin = (superClass) =>
           type: Array,
           value: function () {
             return [];
-          }
+          },
         },
 
         /** @private */
@@ -37,8 +37,8 @@ export const SortMixin = (superClass) =>
           type: Array,
           value: function () {
             return [];
-          }
-        }
+          },
+        },
       };
     }
 
@@ -124,7 +124,7 @@ export const SortMixin = (superClass) =>
       return this._sorters.map((sorter) => {
         return {
           path: sorter.path,
-          direction: sorter.direction
+          direction: sorter.direction,
         };
       });
     }

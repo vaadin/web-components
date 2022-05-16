@@ -25,7 +25,7 @@ describe('notification', () => {
     'bottom-start',
     'bottom-center',
     'bottom-end',
-    'bottom-stretch'
+    'bottom-stretch',
   ].forEach((position) => {
     it(position, async () => {
       element.position = position;

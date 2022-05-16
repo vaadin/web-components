@@ -8,7 +8,7 @@ import {
   mouseup,
   nextFrame,
   touchend,
-  touchstart
+  touchstart,
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
@@ -37,8 +37,8 @@ class MyInput extends PolymerElement {
     return {
       customValue: {
         type: String,
-        notify: true
-      }
+        notify: true,
+      },
     };
   }
 }

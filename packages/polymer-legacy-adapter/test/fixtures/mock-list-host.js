@@ -25,8 +25,8 @@ export class MockListHost extends PolymerElement {
         type: Array,
         value() {
           return [{ title: 'title0' }, { title: 'title1' }];
-        }
-      }
+        },
+      },
     };
   }
 

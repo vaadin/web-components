@@ -29,7 +29,7 @@ async function exe(cmd, quiet) {
       } else {
         reject(`${quiet ? out : ''}\n!!! ERROR !!! Process '${cmd}' exited with code ${code}`);
       }
-    })
+    }),
   );
 }
 
@@ -44,7 +44,7 @@ async function main() {
   const results = await replace({
     files: ['packages/**/version.{js,ts}', 'packages/component-base/src/*.{js,ts}'],
     from: fromRegex,
-    to: newVersion
+    to: newVersion,
   });
   const changes = results.filter((result) => result.hasChanged).map((result) => result.file);
 

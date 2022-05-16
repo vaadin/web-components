@@ -189,7 +189,7 @@ const inputField = css`
 const inputFieldShared = [requiredField, fieldButton, helper, inputField];
 
 registerStyles('', inputFieldShared, {
-  moduleId: 'material-input-field-shared-styles'
+  moduleId: 'material-input-field-shared-styles',
 });
 
 export { inputField, inputFieldShared };

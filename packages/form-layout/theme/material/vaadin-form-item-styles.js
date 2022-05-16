@@ -15,5 +15,5 @@ registerStyles(
       margin-bottom: 8px;
     }
   `,
-  { moduleId: 'material-form-item' }
+  { moduleId: 'material-form-item' },
 );

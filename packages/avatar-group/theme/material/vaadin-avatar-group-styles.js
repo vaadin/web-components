@@ -9,7 +9,7 @@ const avatarGroupOverlay = css`
 `;
 
 registerStyles('vaadin-avatar-group-overlay', [menuOverlay, avatarGroupOverlay], {
-  moduleId: 'material-avatar-group-overlay'
+  moduleId: 'material-avatar-group-overlay',
 });
 
 registerStyles(
@@ -25,7 +25,7 @@ registerStyles(
       padding-left: 24px;
     }
   `,
-  { moduleId: 'material-avatar-group-list-box' }
+  { moduleId: 'material-avatar-group-list-box' },
 );
 
 registerStyles(
@@ -48,5 +48,5 @@ registerStyles(
       margin-left: 8px;
     }
   `,
-  { moduleId: 'material-avatar-group-item' }
+  { moduleId: 'material-avatar-group-item' },
 );

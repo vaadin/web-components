@@ -22,7 +22,7 @@ export const ValidateMixin = dedupingMixin(
             type: Boolean,
             reflectToAttribute: true,
             notify: true,
-            value: false
+            value: false,
           },
 
           /**
@@ -30,8 +30,8 @@ export const ValidateMixin = dedupingMixin(
            */
           required: {
             type: Boolean,
-            reflectToAttribute: true
-          }
+            reflectToAttribute: true,
+          },
         };
       }
 
@@ -52,5 +52,5 @@ export const ValidateMixin = dedupingMixin(
       checkValidity() {
         return !this.required || !!this.value;
       }
-    }
+    },
 );

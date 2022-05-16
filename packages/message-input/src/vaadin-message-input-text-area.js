@@ -18,7 +18,7 @@ registerStyles(
       min-height: 0;
     }
   `,
-  { moduleId: 'vaadin-message-input-text-area-styles' }
+  { moduleId: 'vaadin-message-input-text-area-styles' },
 );
 
 /**
@@ -36,8 +36,8 @@ class MessageInputTextArea extends TextArea {
     return {
       ariaLabel: {
         type: String,
-        observer: '__ariaLabelChanged'
-      }
+        observer: '__ariaLabelChanged',
+      },
     };
   }
 

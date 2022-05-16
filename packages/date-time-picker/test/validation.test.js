@@ -18,7 +18,7 @@ const fixtures = {
       <vaadin-date-picker slot="date-picker"></vaadin-date-picker>
       <vaadin-time-picker slot="time-picker"></vaadin-time-picker>
     </vaadin-date-time-picker>
-  `
+  `,
 };
 
 ['default', 'slotted'].forEach((set) => {

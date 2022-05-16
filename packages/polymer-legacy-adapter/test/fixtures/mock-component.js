@@ -11,7 +11,7 @@ export class MockComponent extends HTMLElement {
 
   get $() {
     return {
-      content: this.shadowRoot.querySelector('#content')
+      content: this.shadowRoot.querySelector('#content'),
     };
   }
 

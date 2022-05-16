@@ -136,7 +136,7 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       img: {
         type: String,
         reflectToAttribute: true,
-        observer: '__imgChanged'
+        observer: '__imgChanged',
       },
 
       /**
@@ -145,7 +145,7 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        */
       abbr: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -154,7 +154,7 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        */
       name: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -162,7 +162,7 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        */
       colorIndex: {
         type: Number,
-        observer: '__colorIndexChanged'
+        observer: '__colorIndexChanged',
       },
 
       /**
@@ -182,9 +182,9 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
         type: Object,
         value: () => {
           return {
-            anonymous: 'anonymous'
+            anonymous: 'anonymous',
           };
-        }
+        },
       },
 
       /** @private */
@@ -194,7 +194,7 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       __iconVisible: Boolean,
 
       /** @private */
-      __abbrVisible: Boolean
+      __abbrVisible: Boolean,
     };
   }
 

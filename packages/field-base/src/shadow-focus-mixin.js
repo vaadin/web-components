@@ -25,8 +25,8 @@ export const ShadowFocusMixin = (superClass) =>
          */
         tabindex: {
           type: Number,
-          value: 0
-        }
+          value: 0,
+        },
       };
     }
 

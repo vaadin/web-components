@@ -46,13 +46,13 @@ declare class EmailField extends TextField {
   addEventListener<K extends keyof EmailFieldEventMap>(
     type: K,
     listener: (this: EmailField, ev: EmailFieldEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof EmailFieldEventMap>(
     type: K,
     listener: (this: EmailField, ev: EmailFieldEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

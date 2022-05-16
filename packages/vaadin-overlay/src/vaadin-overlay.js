@@ -198,7 +198,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
         type: Boolean,
         notify: true,
         observer: '_openedChanged',
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -224,14 +224,14 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       template: {
         type: Object,
-        notify: true
+        notify: true,
       },
 
       /**
        * Optional argument for `Polymer.Templatize.templatize`.
        */
       instanceProps: {
-        type: Object
+        type: Object,
       },
 
       /**
@@ -240,7 +240,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       content: {
         type: Object,
-        notify: true
+        notify: true,
       },
 
       /**
@@ -250,7 +250,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       withBackdrop: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -267,7 +267,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
-        observer: '_modelessChanged'
+        observer: '_modelessChanged',
       },
 
       /**
@@ -278,7 +278,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       hidden: {
         type: Boolean,
         reflectToAttribute: true,
-        observer: '_hiddenChanged'
+        observer: '_hiddenChanged',
       },
 
       /**
@@ -288,7 +288,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       focusTrap: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -297,22 +297,22 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       restoreFocusOnClose: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /** @private */
       _mouseDownInside: {
-        type: Boolean
+        type: Boolean,
       },
 
       /** @private */
       _mouseUpInside: {
-        type: Boolean
+        type: Boolean,
       },
 
       /** @private */
       _instance: {
-        type: Object
+        type: Object,
       },
 
       /** @private */
@@ -337,7 +337,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       _oldRenderer: Object,
 
       /** @private */
-      _oldOpened: Boolean
+      _oldOpened: Boolean,
     };
   }
 
@@ -417,7 +417,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     var evt = new CustomEvent('vaadin-overlay-close', {
       bubbles: true,
       cancelable: true,
-      detail: { sourceEvent: sourceEvent }
+      detail: { sourceEvent: sourceEvent },
     });
     this.dispatchEvent(evt);
     if (!evt.defaultPrevented) {
@@ -496,7 +496,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
     const evt = new CustomEvent('vaadin-overlay-outside-click', {
       bubbles: true,
       cancelable: true,
-      detail: { sourceEvent: event }
+      detail: { sourceEvent: event },
     });
     this.dispatchEvent(evt);
 
@@ -528,7 +528,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
       const evt = new CustomEvent('vaadin-overlay-escape-press', {
         bubbles: true,
         cancelable: true,
-        detail: { sourceEvent: event }
+        detail: { sourceEvent: event },
       });
       this.dispatchEvent(evt);
 
@@ -838,7 +838,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
           if (this._instance) {
             this._instance.forwardHostProp(prop, value);
           }
-        }
+        },
       });
     }
 
@@ -854,7 +854,7 @@ class OverlayElement extends ThemableMixin(DirMixin(PolymerElement)) {
 
       let scopeCssText = Array.from(templateRoot.querySelectorAll('style')).reduce(
         (result, style) => result + style.textContent,
-        ''
+        '',
       );
 
       // The overlay root’s :host styles should not apply inside the overlay

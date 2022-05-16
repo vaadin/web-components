@@ -24,7 +24,7 @@ describe('warning', () => {
 
     expect(stub.calledOnce).to.be.true;
     expect(stub.args[0][0]).to.equal(
-      'WARNING: <template> inside <mock-component> is deprecated. Use a renderer function instead (see https://vaad.in/template-renderer)'
+      'WARNING: <template> inside <mock-component> is deprecated. Use a renderer function instead (see https://vaad.in/template-renderer)',
     );
   });
 

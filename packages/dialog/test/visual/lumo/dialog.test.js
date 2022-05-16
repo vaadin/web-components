@@ -18,7 +18,7 @@ describe('dialog', () => {
           </template>
         </vaadin-dialog>
       `,
-      div
+      div,
     );
   });
 

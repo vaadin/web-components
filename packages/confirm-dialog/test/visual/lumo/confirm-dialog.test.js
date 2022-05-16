@@ -16,7 +16,7 @@ describe('confirm-dialog', () => {
           Please press a button to confirm.
         </vaadin-confirm-dialog>
       `,
-      div
+      div,
     );
   });
 

@@ -7,5 +7,5 @@ import { inputFieldShared } from '@vaadin/vaadin-material-styles/mixins/input-fi
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles('vaadin-email-field', inputFieldShared, {
-  moduleId: 'material-email-field'
+  moduleId: 'material-email-field',
 });

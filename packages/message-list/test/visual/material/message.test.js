@@ -21,7 +21,7 @@ describe('message', () => {
           div.style.padding = '10px';
           element = fixtureSync(
             `<vaadin-message>There is no real ending. It's just the place where you stop the story.</vaadin-message>`,
-            div
+            div,
           );
         });
 

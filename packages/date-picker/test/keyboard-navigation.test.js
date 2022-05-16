@@ -15,7 +15,7 @@ import {
   oneEvent,
   pageDown,
   pageUp,
-  space
+  space,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';

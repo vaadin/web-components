@@ -19,7 +19,7 @@ class XNotification extends PolymerElement {
   static get properties() {
     return {
       message: String,
-      text: String
+      text: String,
     };
   }
 }

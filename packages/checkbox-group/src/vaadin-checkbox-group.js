@@ -125,8 +125,8 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin(Themabl
       value: {
         type: Array,
         value: () => [],
-        notify: true
-      }
+        notify: true,
+      },
     };
   }
 

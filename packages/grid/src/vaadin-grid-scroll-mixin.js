@@ -7,7 +7,7 @@ import { animationFrame, microTask, timeOut } from '@vaadin/component-base/src/a
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
 const timeouts = {
-  SCROLLING: 500
+  SCROLLING: 500,
 };
 
 /**
@@ -23,11 +23,11 @@ export const ScrollMixin = (superClass) =>
          */
         _frozenCells: {
           type: Array,
-          value: () => []
+          value: () => [],
         },
 
         /** @private */
-        _rowWithFocusedElement: Element
+        _rowWithFocusedElement: Element,
       };
     }
 

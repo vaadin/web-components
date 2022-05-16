@@ -9,7 +9,7 @@ registerStyles(
     :host([closing]) [part='overlay'] {
       animation: none !important;
     }
-  `
+  `,
 );
 
 registerStyles(
@@ -20,5 +20,5 @@ registerStyles(
     :host::after {
       transition: none !important;
     }
-  `
+  `,
 );

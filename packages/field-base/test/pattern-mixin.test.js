@@ -20,10 +20,10 @@ customElements.define(
         new InputController(this, (input) => {
           this._setInputElement(input);
           this.stateTarget = input;
-        })
+        }),
       );
     }
-  }
+  },
 );
 
 describe('pattern-mixin', () => {

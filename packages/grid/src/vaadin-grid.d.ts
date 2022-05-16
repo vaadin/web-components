@@ -16,13 +16,13 @@ import {
   GridDataProviderParams,
   GridFilterDefinition,
   GridSorterDefinition,
-  GridSorterDirection
+  GridSorterDirection,
 } from './vaadin-grid-data-provider-mixin.js';
 import {
   DragAndDropMixinClass,
   GridDragAndDropFilter,
   GridDropLocation,
-  GridDropMode
+  GridDropMode,
 } from './vaadin-grid-drag-and-drop-mixin.js';
 import { EventContextMixinClass, GridEventContext } from './vaadin-grid-event-context-mixin.js';
 import { GridRowDetailsRenderer, RowDetailsMixinClass } from './vaadin-grid-row-details-mixin.js';
@@ -45,7 +45,7 @@ export {
   GridHeaderFooterRenderer,
   GridRowDetailsRenderer,
   GridSorterDefinition,
-  GridSorterDirection
+  GridSorterDirection,
 };
 
 export type GridDefaultItem = any;
@@ -378,13 +378,13 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
   addEventListener<K extends keyof GridEventMap<TItem>>(
     type: K,
     listener: (this: Grid<TItem>, ev: GridEventMap<TItem>[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof GridEventMap<TItem>>(
     type: K,
     listener: (this: Grid<TItem>, ev: GridEventMap<TItem>[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

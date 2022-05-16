@@ -20,7 +20,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         pageSize: {
           type: Number,
           value: 50,
-          observer: '_pageSizeChanged'
+          observer: '_pageSizeChanged',
         },
 
         /**
@@ -29,7 +29,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
          */
         size: {
           type: Number,
-          observer: '_sizeChanged'
+          observer: '_sizeChanged',
         },
 
         /**
@@ -48,20 +48,20 @@ export const ComboBoxDataProviderMixin = (superClass) =>
          */
         dataProvider: {
           type: Object,
-          observer: '_dataProviderChanged'
+          observer: '_dataProviderChanged',
         },
 
         /** @private */
         _pendingRequests: {
           value: () => {
             return {};
-          }
+          },
         },
 
         /** @private */
         __placeHolder: {
-          value: new ComboBoxPlaceholder()
-        }
+          value: new ComboBoxPlaceholder(),
+        },
       };
     }
 
@@ -70,7 +70,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         '_dataProviderFilterChanged(filter, dataProvider)',
         '_dataProviderClearFilter(dataProvider, opened, value)',
         '_warnDataProviderValue(dataProvider, value)',
-        '_ensureFirstPage(opened)'
+        '_ensureFirstPage(opened)',
       ];
     }
 
@@ -172,7 +172,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         const params = {
           page,
           pageSize: this.pageSize,
-          filter: this.filter
+          filter: this.filter,
         };
 
         const callback = (items, size) => {
@@ -283,7 +283,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
               'Nothing to display in the text field. This usually happens when ' +
               'setting an initial `value` before any items are returned from ' +
               'the `dataProvider` callback. Consider setting `selectedItem` ' +
-              'instead of `value`'
+              'instead of `value`',
           );
         }
       }

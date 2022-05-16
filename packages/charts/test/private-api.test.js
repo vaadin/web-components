@@ -119,7 +119,7 @@ describe('vaadin-chart private API', () => {
 
     function getLabels() {
       return Array.from(chartContainer.querySelectorAll('.highcharts-xaxis-labels > text')).map(
-        (node) => node.textContent
+        (node) => node.textContent,
       );
     }
 
@@ -139,8 +139,8 @@ describe('vaadin-chart private API', () => {
 
       chart.constructor.__callHighchartsFunction('setOptions', true, {
         lang: {
-          shortWeekdays: ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la']
-        }
+          shortWeekdays: ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'],
+        },
       });
       expect(getLabels()).to.be.deep.equal(['to', 'pe', 'la', 'su', 'ma', 'ti', 'ke']);
     });

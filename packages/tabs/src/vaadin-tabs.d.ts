@@ -75,13 +75,13 @@ declare class Tabs extends ElementMixin(ListMixin(ThemableMixin(HTMLElement))) {
   addEventListener<K extends keyof TabsEventMap>(
     type: K,
     listener: (this: Tabs, ev: TabsEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof TabsEventMap>(
     type: K,
     listener: (this: Tabs, ev: TabsEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

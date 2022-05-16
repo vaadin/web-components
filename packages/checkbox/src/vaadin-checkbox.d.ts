@@ -62,7 +62,7 @@ export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEve
  * @fires {CustomEvent} indeterminate-changed - Fired when the `indeterminate` property changes.
  */
 declare class Checkbox extends LabelMixin(
-  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement))))))
+  CheckedMixin(DelegateFocusMixin(ActiveMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))))),
 ) {
   /**
    * True if the checkbox is in the indeterminate state which means
@@ -81,13 +81,13 @@ declare class Checkbox extends LabelMixin(
   addEventListener<K extends keyof CheckboxEventMap>(
     type: K,
     listener: (this: Checkbox, ev: CheckboxEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof CheckboxEventMap>(
     type: K,
     listener: (this: Checkbox, ev: CheckboxEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

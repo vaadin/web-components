@@ -151,7 +151,7 @@ export class HelperController extends SlotController {
       attributeFilter: ['id'],
       childList: true,
       subtree: true,
-      characterData: true
+      characterData: true,
     });
   }
 
@@ -167,9 +167,9 @@ export class HelperController extends SlotController {
       new CustomEvent('helper-changed', {
         detail: {
           hasHelper,
-          node: this.node
-        }
-      })
+          node: this.node,
+        },
+      }),
     );
   }
 

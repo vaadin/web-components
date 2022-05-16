@@ -155,7 +155,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes GestureEventListeners
  */
 class SplitLayout extends ElementMixin(
-  ThemableMixin(GestureEventListeners(mixinBehaviors([IronResizableBehavior], PolymerElement)))
+  ThemableMixin(GestureEventListeners(mixinBehaviors([IronResizableBehavior], PolymerElement))),
 ) {
   static get template() {
     return html`
@@ -233,14 +233,14 @@ class SplitLayout extends ElementMixin(
       orientation: {
         type: String,
         reflectToAttribute: true,
-        value: 'horizontal'
+        value: 'horizontal',
       },
 
       /** @private */
       _previousPrimaryPointerEvents: String,
 
       /** @private */
-      _previousSecondaryPointerEvents: String
+      _previousSecondaryPointerEvents: String,
     };
   }
 
@@ -318,7 +318,7 @@ class SplitLayout extends ElementMixin(
       this._startSize = {
         container: this.getBoundingClientRect()[size] - this.$.splitter.getBoundingClientRect()[size],
         primary: this._primaryChild.getBoundingClientRect()[size],
-        secondary: this._secondaryChild.getBoundingClientRect()[size]
+        secondary: this._secondaryChild.getBoundingClientRect()[size],
       };
 
       return;

@@ -24,7 +24,7 @@ describe('unlimited size', () => {
         el.textContent = el.id;
       },
       scrollTarget,
-      scrollContainer
+      scrollContainer,
     });
 
     virtualizer.size = 1000000;

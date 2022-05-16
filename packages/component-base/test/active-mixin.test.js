@@ -10,7 +10,7 @@ customElements.define(
     static get template() {
       return html`<div></div>`;
     }
-  }
+  },
 );
 
 describe('active-mixin', () => {
@@ -88,7 +88,7 @@ describe('active-mixin', () => {
         Object.defineProperty(element, '_activeKeys', {
           get() {
             return ['Enter'];
-          }
+          },
         });
       });
 

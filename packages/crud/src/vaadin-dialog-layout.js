@@ -108,12 +108,12 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
         value: false,
         notify: true,
         reflectToAttribute: true,
-        observer: '_openedChanged'
+        observer: '_openedChanged',
       },
 
       editorPosition: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /** Theme to use */
@@ -140,10 +140,10 @@ class DialogLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
       mobile: {
         type: Boolean,
         observer: '__mobileChanged',
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
-      __ariaLabel: String
+      __ariaLabel: String,
     };
   }
 

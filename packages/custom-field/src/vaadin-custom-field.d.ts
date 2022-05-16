@@ -135,13 +135,13 @@ declare class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMix
   addEventListener<K extends keyof CustomFieldEventMap>(
     type: K,
     listener: (this: CustomField, ev: CustomFieldEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof CustomFieldEventMap>(
     type: K,
     listener: (this: CustomField, ev: CustomFieldEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

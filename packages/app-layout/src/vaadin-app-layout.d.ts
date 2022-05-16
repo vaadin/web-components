@@ -158,13 +158,13 @@ declare class AppLayout extends ElementMixin(ThemableMixin(HTMLElement)) {
   addEventListener<K extends keyof AppLayoutEventMap>(
     type: K,
     listener: (this: AppLayout, ev: AppLayoutEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof AppLayoutEventMap>(
     type: K,
     listener: (this: AppLayout, ev: AppLayoutEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

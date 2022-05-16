@@ -24,5 +24,5 @@ registerStyles(
       line-height: 1.333;
     }
   `,
-  { moduleId: 'lumo-form-item' }
+  { moduleId: 'lumo-form-item' },
 );

@@ -23,7 +23,7 @@ class MockComboBoxLightTemplateWrapper extends PolymerElement {
 
   static get properties() {
     return {
-      items: Array
+      items: Array,
     };
   }
 

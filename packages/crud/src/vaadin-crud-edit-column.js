@@ -36,7 +36,7 @@ class CrudEditColumn extends GridColumn {
        */
       width: {
         type: String,
-        value: '4em'
+        value: '4em',
       },
 
       /**
@@ -45,11 +45,11 @@ class CrudEditColumn extends GridColumn {
        */
       flexGrow: {
         type: Number,
-        value: 0
+        value: 0,
       },
 
       /** The arial-label for the edit button */
-      ariaLabel: String
+      ariaLabel: String,
     };
   }
 

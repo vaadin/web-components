@@ -12,7 +12,7 @@ import { InputMixinClass } from './input-mixin.js';
  * A mixin to manage the checked state.
  */
 export declare function CheckedMixin<T extends Constructor<object>>(
-  base: T
+  base: T,
 ): T &
   Constructor<CheckedMixinClass> &
   Constructor<DelegateStateMixinClass> &

@@ -6,7 +6,7 @@
 import { Constructor } from '@open-wc/dedupe-mixin';
 
 export declare function ColumnReorderingMixin<T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<ColumnReorderingMixinClass>;
 
 export declare class ColumnReorderingMixinClass {

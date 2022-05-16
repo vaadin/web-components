@@ -34,11 +34,11 @@ customElements.define(
       return {
         items: {
           type: Array,
-          value: () => []
-        }
+          value: () => [],
+        },
       };
     }
-  }
+  },
 );
 
 function getParsedWidth(el) {
@@ -68,7 +68,7 @@ describe('form layout', () => {
     it('should have max-width set to 100%', () => {
       expect(getComputedStyle(layout).getPropertyValue('max-width')).to.be.oneOf([
         '900px', // some browsers (IE, Safari) return px computed style
-        '100%'
+        '100%',
       ]);
     });
 
@@ -139,7 +139,7 @@ describe('form layout', () => {
       layout.updateStyles({
         '--vaadin-form-layout-column-spacing': '2rem',
         '--vaadin-form-layout-label-width': '4rem',
-        '--vaadin-form-layout-label-spacing': '1rem'
+        '--vaadin-form-layout-label-spacing': '1rem',
       });
       expect(getParsedWidth(layout.firstElementChild).spacing).to.equal('1rem');
       expect(getComputedStyle(layout).getPropertyValue('--vaadin-form-layout-label-width')).to.equal('4rem');
@@ -275,7 +275,7 @@ describe('form layout', () => {
       expect(layout.responsiveSteps).to.deep.equal([
         { minWidth: 0, columns: 1, labelsPosition: 'top' },
         { minWidth: '20em', columns: 1 },
-        { minWidth: '40em', columns: 2 }
+        { minWidth: '40em', columns: 2 },
       ]);
     });
 
@@ -355,7 +355,7 @@ describe('form layout', () => {
         layout.responsiveSteps = [
           { columns: 1 },
           { minWidth: '20em', columns: 2, labelsPosition: 'top' },
-          { minWidth: '40em', columns: 5 }
+          { minWidth: '40em', columns: 5 },
         ];
 
         document.body.style.width = '10em';
@@ -399,7 +399,7 @@ describe('form layout', () => {
         [{ columns: 0.5 }], // columns requires natural number
         [{ minWidth: '10', columns: 1 }], // minWidth requires valid CSS length string
         [{ columns: 1, minWidth: '480px', labelsPosition: null }], // labelsPosition should be a string
-        [{ columns: 1, minWidth: '480px', labelsPosition: 'foo' }] // labelsPosition should be in supported list
+        [{ columns: 1, minWidth: '480px', labelsPosition: 'foo' }], // labelsPosition should be in supported list
       ];
 
       const validValues = [
@@ -407,7 +407,7 @@ describe('form layout', () => {
         [{ columns: 1, minWidth: 0 }],
         [{ columns: 1, minWidth: '480px' }],
         [{ columns: 1, minWidth: '480px', labelsPosition: 'aside' }],
-        [{ columns: 1, minWidth: '480px', labelsPosition: 'top' }]
+        [{ columns: 1, minWidth: '480px', labelsPosition: 'top' }],
       ];
 
       it('should warn for invalid values', () => {
@@ -431,7 +431,7 @@ describe('form layout', () => {
           expect(layout.responsiveSteps).to.deep.equal([
             { minWidth: 0, columns: 1, labelsPosition: 'top' },
             { minWidth: '20em', columns: 1 },
-            { minWidth: '40em', columns: 2 }
+            { minWidth: '40em', columns: 2 },
           ]);
         });
       });

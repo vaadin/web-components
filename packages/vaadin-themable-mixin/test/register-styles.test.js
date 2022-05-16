@@ -17,7 +17,7 @@ function define(customElementName) {
       static get template() {
         return html`foo`;
       }
-    }
+    },
   );
 }
 
@@ -72,7 +72,7 @@ describe('registerStyles', () => {
         :host {
           background-color: rgb(0, 255, 0);
         }
-      `
+      `,
     ]);
 
     const instance = defineAndInstantiate(unique());
@@ -97,7 +97,7 @@ describe('registerStyles', () => {
         :host {
           color: rgb(${255}, 0, 0);
         }
-      `
+      `,
     );
 
     const instance = defineAndInstantiate(unique());
@@ -123,7 +123,7 @@ describe('registerStyles', () => {
             color: rgb(255, 0, 0);
           }
         `,
-        { moduleId: unique('id') }
+        { moduleId: unique('id') },
       );
 
       registerStyles(unique('component'), undefined, { include: [unique('id')] });
@@ -140,7 +140,7 @@ describe('registerStyles', () => {
             color: rgb(255, 0, 0);
           }
         `,
-        { moduleId: unique('id') }
+        { moduleId: unique('id') },
       );
 
       registerStyles(
@@ -150,7 +150,7 @@ describe('registerStyles', () => {
             color: rgb(0, 0, 255);
           }
         `,
-        { include: [unique('id')] }
+        { include: [unique('id')] },
       );
 
       const instance = defineAndInstantiate(unique('component'));

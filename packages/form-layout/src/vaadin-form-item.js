@@ -163,7 +163,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
   _onLabelClick() {
     const firstContentElementChild = Array.prototype.find.call(
       this.$.contentSlot.assignedNodes(),
-      (e) => e.nodeType === Node.ELEMENT_NODE
+      (e) => e.nodeType === Node.ELEMENT_NODE,
     );
     if (firstContentElementChild) {
       firstContentElementChild.focus();

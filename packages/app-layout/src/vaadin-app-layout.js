@@ -316,7 +316,7 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
         value: 'navbar',
         notify: true,
         reflectToAttribute: true,
-        observer: '_primarySectionObserver'
+        observer: '_primarySectionObserver',
       },
 
       /**
@@ -332,7 +332,7 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
         notify: true,
         value: true,
         reflectToAttribute: true,
-        observer: '_drawerOpenedObserver'
+        observer: '_drawerOpenedObserver',
       },
 
       /**
@@ -345,7 +345,7 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
         notify: true,
         readOnly: true,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -358,8 +358,8 @@ class AppLayout extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizable
       closeDrawerOn: {
         type: String,
         value: 'vaadin-router-location-changed',
-        observer: '_closeDrawerOnChanged'
-      }
+        observer: '_closeDrawerOnChanged',
+      },
     };
   }
 

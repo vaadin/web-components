@@ -16,7 +16,7 @@ describe('details', () => {
         <span>Content</span>
       </vaadin-details>
       `,
-      div
+      div,
     );
   });
 

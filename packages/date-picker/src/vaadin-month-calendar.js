@@ -109,7 +109,7 @@ class MonthCalendar extends ThemableMixin(GestureEventListeners(PolymerElement))
        */
       month: {
         type: Date,
-        value: new Date()
+        value: new Date(),
       },
 
       /**
@@ -117,7 +117,7 @@ class MonthCalendar extends ThemableMixin(GestureEventListeners(PolymerElement))
        */
       selectedDate: {
         type: Date,
-        notify: true
+        notify: true,
       },
 
       /**
@@ -127,11 +127,11 @@ class MonthCalendar extends ThemableMixin(GestureEventListeners(PolymerElement))
 
       showWeekNumbers: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       i18n: {
-        type: Object
+        type: Object,
       },
 
       /**
@@ -146,7 +146,7 @@ class MonthCalendar extends ThemableMixin(GestureEventListeners(PolymerElement))
        */
       minDate: {
         type: Date,
-        value: null
+        value: null,
       },
 
       /**
@@ -154,19 +154,19 @@ class MonthCalendar extends ThemableMixin(GestureEventListeners(PolymerElement))
        */
       maxDate: {
         type: Date,
-        value: null
+        value: null,
       },
 
       _days: {
         type: Array,
-        computed: '_getDays(month, i18n.firstDayOfWeek, minDate, maxDate)'
+        computed: '_getDays(month, i18n.firstDayOfWeek, minDate, maxDate)',
       },
 
       disabled: {
         type: Boolean,
         reflectToAttribute: true,
-        computed: '_isDisabled(month, minDate, maxDate)'
-      }
+        computed: '_isDisabled(month, minDate, maxDate)',
+      },
     };
   }
 
@@ -247,7 +247,7 @@ class MonthCalendar extends ThemableMixin(GestureEventListeners(PolymerElement))
     weekDayNames = weekDayNames.map((day, index) => {
       return {
         weekDay: day,
-        weekDayShort: weekDayNamesShort[index]
+        weekDayShort: weekDayNamesShort[index],
       };
     });
 

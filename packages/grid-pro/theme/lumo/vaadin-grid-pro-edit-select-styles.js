@@ -20,5 +20,5 @@ const gridProEditSelect = css`
 `;
 
 registerStyles('vaadin-grid-pro-edit-select', [gridProEditor, gridProEditSelect], {
-  moduleId: 'lumo-grid-pro-edit-select'
+  moduleId: 'lumo-grid-pro-edit-select',
 });

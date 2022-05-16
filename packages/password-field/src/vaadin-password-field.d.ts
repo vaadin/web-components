@@ -85,13 +85,13 @@ declare class PasswordField extends SlotStylesMixin(SlotMixin(TextField)) {
   addEventListener<K extends keyof PasswordFieldEventMap>(
     type: K,
     listener: (this: PasswordField, ev: PasswordFieldEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof PasswordFieldEventMap>(
     type: K,
     listener: (this: PasswordField, ev: PasswordFieldEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

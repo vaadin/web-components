@@ -44,7 +44,7 @@ registerStyles(
       --vaadin-avatar-size: var(--lumo-size-xs);
     }
   `,
-  { moduleId: 'lumo-avatar-group' }
+  { moduleId: 'lumo-avatar-group' },
 );
 
 const avatarGroupOverlay = css`
@@ -59,7 +59,7 @@ const avatarGroupOverlay = css`
 `;
 
 registerStyles('vaadin-avatar-group-overlay', [overlay, menuOverlayCore, avatarGroupOverlay], {
-  moduleId: 'lumo-avatar-group-overlay'
+  moduleId: 'lumo-avatar-group-overlay',
 });
 
 registerStyles(
@@ -75,7 +75,7 @@ registerStyles(
       padding-left: var(--lumo-space-m);
     }
   `,
-  { moduleId: 'lumo-avatar-group-list-box' }
+  { moduleId: 'lumo-avatar-group-list-box' },
 );
 
 registerStyles(
@@ -99,5 +99,5 @@ registerStyles(
       margin-left: var(--lumo-space-s);
     }
   `,
-  { moduleId: 'lumo-avatar-group-item' }
+  { moduleId: 'lumo-avatar-group-item' },
 );

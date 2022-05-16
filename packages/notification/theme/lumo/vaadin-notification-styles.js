@@ -184,5 +184,5 @@ registerStyles(
       --_lumo-button-primary-color: var(--lumo-error-text-color);
     }
   `,
-  { moduleId: 'lumo-notification-card' }
+  { moduleId: 'lumo-notification-card' },
 );

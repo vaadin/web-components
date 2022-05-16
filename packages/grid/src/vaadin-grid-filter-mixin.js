@@ -16,8 +16,8 @@ export const FilterMixin = (superClass) =>
           type: Array,
           value: function () {
             return [];
-          }
-        }
+          },
+        },
       };
     }
 
@@ -69,7 +69,7 @@ export const FilterMixin = (superClass) =>
       return this._filters.map((filter) => {
         return {
           path: filter.path,
-          value: filter.value
+          value: filter.value,
         };
       });
     }

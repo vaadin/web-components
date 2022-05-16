@@ -2,7 +2,7 @@ import '../../vaadin-app-layout.js';
 import {
   AppLayoutDrawerOpenedChangedEvent,
   AppLayoutOverlayChangedEvent,
-  AppLayoutPrimarySectionChangedEvent
+  AppLayoutPrimarySectionChangedEvent,
 } from '../../vaadin-app-layout.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

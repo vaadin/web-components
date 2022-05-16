@@ -64,13 +64,13 @@ declare class ListBox extends MultiSelectListMixin(ThemableMixin(ElementMixin(HT
   addEventListener<K extends keyof ListBoxEventMap>(
     type: K,
     listener: (this: ListBox, ev: ListBoxEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof ListBoxEventMap>(
     type: K,
     listener: (this: ListBox, ev: ListBoxEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

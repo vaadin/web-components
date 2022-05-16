@@ -23,7 +23,7 @@ export const DelegateFocusMixin = dedupingMixin(
            * Specify that this control should have input focus when the page loads.
            */
           autofocus: {
-            type: Boolean
+            type: Boolean,
           },
 
           /**
@@ -41,7 +41,7 @@ export const DelegateFocusMixin = dedupingMixin(
           focusElement: {
             type: Object,
             readOnly: true,
-            observer: '_focusElementChanged'
+            observer: '_focusElementChanged',
           },
 
           /**
@@ -53,8 +53,8 @@ export const DelegateFocusMixin = dedupingMixin(
            * @override
            */
           _lastTabIndex: {
-            value: 0
-          }
+            value: 0,
+          },
         };
       }
 
@@ -224,5 +224,5 @@ export const DelegateFocusMixin = dedupingMixin(
           this.tabindex = undefined;
         }
       }
-    }
+    },
 );

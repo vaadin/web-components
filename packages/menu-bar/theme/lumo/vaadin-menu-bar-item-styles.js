@@ -25,5 +25,5 @@ registerStyles(
       box-sizing: border-box !important;
     }
   `,
-  { moduleId: 'lumo-menu-bar-item' }
+  { moduleId: 'lumo-menu-bar-item' },
 );

@@ -18,7 +18,7 @@ registerStyles(
       justify-content: flex-end;
     }
   `,
-  { moduleId: 'vaadin-avatar-group-overlay-styles' }
+  { moduleId: 'vaadin-avatar-group-overlay-styles' },
 );
 
 /**

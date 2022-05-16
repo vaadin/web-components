@@ -7,7 +7,7 @@ import { OverlayElement } from '../src/vaadin-overlay.js';
 
 Polymer({
   is: 'iron-overlay',
-  behaviors: [IronOverlayBehavior]
+  behaviors: [IronOverlayBehavior],
 });
 
 describe('overlay legacy', () => {

@@ -19,7 +19,7 @@ registerStyles(
       text-align: left;
     }
   `,
-  { moduleId: 'vaadin-email-field-styles' }
+  { moduleId: 'vaadin-email-field-styles' },
 );
 
 /**

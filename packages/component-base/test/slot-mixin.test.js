@@ -16,14 +16,14 @@ customElements.define(
           const div = document.createElement('div');
           div.textContent = 'foo';
           return div;
-        }
+        },
       };
     }
 
     get fooChild() {
       return this._getDirectSlotChild('foo');
     }
-  }
+  },
 );
 
 describe('slot-mixin', () => {

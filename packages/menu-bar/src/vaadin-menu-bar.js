@@ -163,7 +163,7 @@ class MenuBar extends ButtonsMixin(InteractionsMixin(ElementMixin(ThemableMixin(
        */
       items: {
         type: Array,
-        value: () => []
+        value: () => [],
       },
 
       /**
@@ -193,10 +193,10 @@ class MenuBar extends ButtonsMixin(InteractionsMixin(ElementMixin(ThemableMixin(
         type: Object,
         value: () => {
           return {
-            moreOptions: 'More options'
+            moreOptions: 'More options',
           };
-        }
-      }
+        },
+      },
     };
   }
 

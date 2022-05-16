@@ -54,7 +54,7 @@ registerStyles(
       opacity: 0.12;
     }
   `,
-  { moduleId: 'lumo-crud-grid-edit' }
+  { moduleId: 'lumo-crud-grid-edit' },
 );
 
 registerStyles(
@@ -87,7 +87,7 @@ registerStyles(
       text-overflow: ellipsis;
     }
   `,
-  { moduleId: 'lumo-crud' }
+  { moduleId: 'lumo-crud' },
 );
 
 registerStyles(
@@ -137,5 +137,5 @@ registerStyles(
       border-right: 0;
     }
   `,
-  { moduleId: 'lumo-dialog-layout' }
+  { moduleId: 'lumo-dialog-layout' },
 );

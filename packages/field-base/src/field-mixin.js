@@ -30,7 +30,7 @@ export const FieldMixin = (superclass) =>
          */
         ariaTarget: {
           type: Object,
-          observer: '_ariaTargetChanged'
+          observer: '_ariaTargetChanged',
         },
 
         /**
@@ -40,7 +40,7 @@ export const FieldMixin = (superclass) =>
          */
         errorMessage: {
           type: String,
-          observer: '_errorMessageChanged'
+          observer: '_errorMessageChanged',
         },
 
         /**
@@ -49,11 +49,11 @@ export const FieldMixin = (superclass) =>
          */
         helperText: {
           type: String,
-          observer: '_helperTextChanged'
+          observer: '_helperTextChanged',
         },
 
         /** @protected */
-        _helperId: String
+        _helperId: String,
       };
     }
 
@@ -61,7 +61,7 @@ export const FieldMixin = (superclass) =>
       return [
         '__observeOffsetHeight(errorMessage, invalid, label, helperText)',
         '_invalidChanged(invalid)',
-        '_requiredChanged(required)'
+        '_requiredChanged(required)',
       ];
     }
 
@@ -143,7 +143,7 @@ export const FieldMixin = (superclass) =>
         animationFrame,
         () => {
           this._dispatchIronResizeEventIfNeeded('Height', this.offsetHeight);
-        }
+        },
       );
     }
 

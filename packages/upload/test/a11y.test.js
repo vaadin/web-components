@@ -15,8 +15,8 @@ describe('a11y', () => {
         file: {
           start: 'Start',
           retry: 'Retry',
-          remove: 'Remove'
-        }
+          remove: 'Remove',
+        },
       };
       uploadFileElement.i18n = i18n;
       uploadFileElement.file = FAKE_FILE;

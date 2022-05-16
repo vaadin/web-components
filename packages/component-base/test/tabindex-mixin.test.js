@@ -9,7 +9,7 @@ customElements.define(
     static get template() {
       return html`<div></div>`;
     }
-  }
+  },
 );
 
 describe('tabindex-mixin', () => {

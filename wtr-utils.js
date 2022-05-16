@@ -11,7 +11,7 @@ const HIDDEN_WARNINGS = [
   '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. Either specify `include` or ensure at least one item is available beforehand.',
   'The <vaadin-grid> needs the total number of items in order to display rows. Set the total number of items to the `size` property, or provide the total number of items in the second argument of the `dataProvider`’s `callback` call.',
   /^WARNING: Since Vaadin 22, .* is deprecated.*/,
-  /^WARNING: <template> inside <[^>]+> is deprecated. Use a renderer function instead/
+  /^WARNING: <template> inside <[^>]+> is deprecated. Use a renderer function instead/,
 ];
 
 const filterBrowserLogs = (log) => {
@@ -59,7 +59,7 @@ const getAllUnitPackages = () => {
   return fs
     .readdirSync('packages')
     .filter(
-      (dir) => fs.statSync(`packages/${dir}`).isDirectory() && glob.sync(`packages/${dir}/test/*.test.js`).length > 0
+      (dir) => fs.statSync(`packages/${dir}`).isDirectory() && glob.sync(`packages/${dir}/test/*.test.js`).length > 0,
     );
 };
 
@@ -125,7 +125,7 @@ const getSnapshotTestGroups = (packages) => {
   return packages.map((pkg) => {
     return {
       name: pkg,
-      files: `packages/${pkg}/test/dom/*.test.js`
+      files: `packages/${pkg}/test/dom/*.test.js`,
     };
   });
 };
@@ -137,7 +137,7 @@ const getUnitTestGroups = (packages) => {
   return packages.map((pkg) => {
     return {
       name: pkg,
-      files: `packages/${pkg}/test/*.test.js`
+      files: `packages/${pkg}/test/*.test.js`,
     };
   });
 };
@@ -148,21 +148,21 @@ const getUnitTestGroups = (packages) => {
 const getVisualTestGroups = (packages, theme) => {
   return packages
     .filter(
-      (pkg) => !pkg.includes('icons') && !pkg.includes(theme) && !pkg.includes(theme === 'lumo' ? 'material' : 'lumo')
+      (pkg) => !pkg.includes('icons') && !pkg.includes(theme) && !pkg.includes(theme === 'lumo' ? 'material' : 'lumo'),
     )
     .map((pkg) => {
       return {
         name: pkg,
-        files: `packages/${pkg}/test/visual/${theme}/*.test.js`
+        files: `packages/${pkg}/test/visual/${theme}/*.test.js`,
       };
     })
     .concat({
       name: `vaadin-${theme}-styles`,
-      files: `packages/vaadin-${theme}-styles/test/visual/*.test.js`
+      files: `packages/vaadin-${theme}-styles/test/visual/*.test.js`,
     })
     .concat({
       name: `vaadin-icons`,
-      files: `packages/icons/test/visual/*.test.js`
+      files: `packages/icons/test/visual/*.test.js`,
     });
 };
 
@@ -247,7 +247,7 @@ const createSnapshotTestsConfig = (config) => {
     nodeResolve: true,
     groups,
     testRunnerHtml: getTestRunnerHtml(),
-    filterBrowserLogs
+    filterBrowserLogs,
   };
 };
 
@@ -265,13 +265,13 @@ const createUnitTestsConfig = (config) => {
     testFramework: {
       config: {
         ui: 'bdd',
-        timeout: '10000'
-      }
+        timeout: '10000',
+      },
     },
     coverage: hasCoverageParam,
     groups,
     testRunnerHtml: getTestRunnerHtml(),
-    filterBrowserLogs
+    filterBrowserLogs,
   };
 };
 
@@ -283,14 +283,14 @@ const createVisualTestsConfig = (theme) => {
   const sauceLabsLauncher = createSauceLabsLauncher(
     {
       user: process.env.SAUCE_USERNAME,
-      key: process.env.SAUCE_ACCESS_KEY
+      key: process.env.SAUCE_ACCESS_KEY,
     },
     {
       name: `${theme[0].toUpperCase()}${theme.slice(1)} visual tests`,
       build: `${process.env.GITHUB_REF || 'local'} build ${process.env.GITHUB_RUN_NUMBER || ''}`,
       recordScreenshots: false,
-      recordVideo: false
-    }
+      recordVideo: false,
+    },
   );
 
   return {
@@ -298,15 +298,15 @@ const createVisualTestsConfig = (theme) => {
     nodeResolve: true,
     testFramework: {
       config: {
-        timeout: '20000' // default 2000
-      }
+        timeout: '20000', // default 2000
+      },
     },
     browsers: [
       sauceLabsLauncher({
         browserName: 'chrome',
         platformName: 'Windows 10',
-        browserVersion: '88'
-      })
+        browserVersion: '88',
+      }),
     ],
     plugins: [
       visualRegressionPlugin({
@@ -315,19 +315,19 @@ const createVisualTestsConfig = (theme) => {
         getDiffName: getDiffScreenshotName,
         getFailedName: getFailedScreenshotName,
         diffOptions: {
-          threshold: 0.2
+          threshold: 0.2,
         },
-        update: process.env.TEST_ENV === 'update'
-      })
+        update: process.env.TEST_ENV === 'update',
+      }),
     ],
     groups,
     testRunnerHtml: getTestRunnerHtml(theme),
-    filterBrowserLogs
+    filterBrowserLogs,
   };
 };
 
 module.exports = {
   createSnapshotTestsConfig,
   createUnitTestsConfig,
-  createVisualTestsConfig
+  createVisualTestsConfig,
 };

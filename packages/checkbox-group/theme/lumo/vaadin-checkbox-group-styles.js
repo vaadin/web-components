@@ -54,5 +54,5 @@ const checkboxGroup = css`
 `;
 
 registerStyles('vaadin-checkbox-group', [requiredField, helper, checkboxGroup], {
-  moduleId: 'lumo-checkbox-group'
+  moduleId: 'lumo-checkbox-group',
 });

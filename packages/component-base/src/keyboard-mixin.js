@@ -49,5 +49,5 @@ export const KeyboardMixin = dedupingMixin(
       _onKeyUp(_event) {
         // To be implemented.
       }
-    }
+    },
 );

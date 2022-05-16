@@ -72,7 +72,7 @@ describe('static helpers', () => {
           }}
           >this</button
         >
-        to close`
+        to close`,
     );
     notification._card.querySelector('button').click();
 

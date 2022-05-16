@@ -24,7 +24,7 @@ const keyName = {
   refactor: ':nail_care:　Polish',
   docs: ':memo:　Documentation',
   test: ':microscope:　Tests',
-  chore: ':house:　Internal'
+  chore: ':house:　Internal',
 };
 
 async function run(cmd) {
@@ -125,7 +125,7 @@ function parseLog(log) {
             isBreaking: false,
             components: [],
             footers: { fixes: [] },
-            commits: []
+            commits: [],
           };
           commits.push(commit);
           commit.commit = result[1];

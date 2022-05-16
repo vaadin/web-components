@@ -9,5 +9,5 @@ registerStyles(
       padding: 0.5em 1em;
     }
   `,
-  { moduleId: 'material-message-input' }
+  { moduleId: 'material-message-input' },
 );

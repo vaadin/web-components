@@ -41,7 +41,7 @@ export const EventContextMixin = (superClass) =>
       }
 
       context.section = ['body', 'header', 'footer', 'details'].filter(
-        (section) => cell.getAttribute('part').indexOf(section) > -1
+        (section) => cell.getAttribute('part').indexOf(section) > -1,
       )[0];
 
       if (cell._column) {

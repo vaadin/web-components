@@ -80,9 +80,9 @@ describe('crud form', () => {
       _id: 1,
       name: {
         first: 'Grant',
-        last: 'Andrews'
+        last: 'Andrews',
       },
-      role: 'operator'
+      role: 'operator',
     };
 
     beforeEach(async () => {

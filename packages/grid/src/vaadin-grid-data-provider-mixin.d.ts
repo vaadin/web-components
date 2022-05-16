@@ -30,7 +30,7 @@ export type GridDataProviderParams<TItem> = {
 
 export type GridDataProvider<TItem> = (
   params: GridDataProviderParams<TItem>,
-  callback: GridDataProviderCallback<TItem>
+  callback: GridDataProviderCallback<TItem>,
 ) => void;
 
 export declare class ItemCache<TItem> {
@@ -57,7 +57,7 @@ export declare class ItemCache<TItem> {
 }
 
 export declare function DataProviderMixin<TItem, T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<DataProviderMixinClass<TItem>>;
 
 export declare class DataProviderMixinClass<TItem> {

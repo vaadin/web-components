@@ -97,5 +97,5 @@ registerStyles(
       border-right: 1px solid var(--lumo-contrast-10pct);
     }
   `,
-  { moduleId: 'lumo-split-layout' }
+  { moduleId: 'lumo-split-layout' },
 );

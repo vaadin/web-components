@@ -14,7 +14,7 @@ import {
   listenOnce,
   nextRender,
   tab,
-  tap
+  tap,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
@@ -272,14 +272,14 @@ import { close, getOverlayContent, open } from './common.js';
     beforeEach(() => {
       datepicker.i18n = {
         ...datepicker.i18n,
-        parseDate: null
+        parseDate: null,
       };
     });
 
     it('should prevent key input', () => {
       const e = new CustomEvent('keydown', {
         bubbles: true,
-        composed: true
+        composed: true,
       });
 
       const spy = sinon.spy(e, 'preventDefault');

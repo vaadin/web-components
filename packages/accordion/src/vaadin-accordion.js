@@ -89,7 +89,7 @@ class Accordion extends ThemableMixin(ElementMixin(PolymerElement)) {
         type: Number,
         value: 0,
         notify: true,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -101,8 +101,8 @@ class Accordion extends ThemableMixin(ElementMixin(PolymerElement)) {
       items: {
         type: Array,
         readOnly: true,
-        notify: true
-      }
+        notify: true,
+      },
     };
   }
 

@@ -79,13 +79,13 @@ declare class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(DirMixin
   addEventListener<K extends keyof CheckboxGroupEventMap>(
     type: K,
     listener: (this: CheckboxGroup, ev: CheckboxGroupEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof CheckboxGroupEventMap>(
     type: K,
     listener: (this: CheckboxGroup, ev: CheckboxGroupEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

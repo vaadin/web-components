@@ -71,7 +71,7 @@ registerStyles(
       background-color: transparent;
     }
   `,
-  { moduleId: 'lumo-select-value-button' }
+  { moduleId: 'lumo-select-value-button' },
 );
 
 const selectOverlay = css`

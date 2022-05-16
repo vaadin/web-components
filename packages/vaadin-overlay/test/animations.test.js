@@ -18,7 +18,7 @@ registerStyles(
         opacity: 1 !important; /* stylelint-disable-line keyframe-declaration-no-important */
       }
     }
-  `
+  `,
 );
 
 customElements.define(
@@ -43,7 +43,7 @@ customElements.define(
     static get properties() {
       return {
         showOverlay1: Boolean,
-        showOverlay2: Boolean
+        showOverlay2: Boolean,
       };
     }
 
@@ -51,7 +51,7 @@ customElements.define(
       this.showOverlay1 = false;
       this.showOverlay2 = true;
     }
-  }
+  },
 );
 
 customElements.define(
@@ -73,7 +73,7 @@ customElements.define(
         <slot></slot>
       `;
     }
-  }
+  },
 );
 
 function afterOverlayOpeningFinished(overlay, callback) {

@@ -12,7 +12,7 @@ import {
   getCellContent,
   getRowCells,
   getRows,
-  infiniteDataProvider
+  infiniteDataProvider,
 } from './helpers.js';
 
 const fixtures = {
@@ -31,7 +31,7 @@ const fixtures = {
         <template>bar</template>
       </vaadin-grid-column>
     </vaadin-grid>
-  `
+  `,
 };
 
 describe('selection', () => {

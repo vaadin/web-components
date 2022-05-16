@@ -92,7 +92,7 @@ describe('crud', () => {
         crud.$.dialog,
         crud.$.dialog.$.dialog,
         crud.$.confirmCancel,
-        crud.$.confirmDelete
+        crud.$.confirmDelete,
       ].forEach((e) => expect(e.getAttribute('theme')).to.be.match(/foo/));
     });
   });
@@ -237,7 +237,7 @@ describe('crud', () => {
               <vaadin-button slot="save-button"></vaadin-button>
               <vaadin-button slot="cancel-button"></vaadin-button>
               <vaadin-button slot="delete-button"></vaadin-button>
-            </vaadin-crud>`
+            </vaadin-crud>`,
           );
         }
         crud.items = [{ foo: 'bar' }];
@@ -422,8 +422,8 @@ describe('crud', () => {
             new CustomEvent('click', {
               bubbles: true,
               cancelable: true,
-              composed: true
-            })
+              composed: true,
+            }),
           );
 
           await aTimeout(0);

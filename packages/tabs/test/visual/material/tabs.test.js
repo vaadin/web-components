@@ -30,7 +30,7 @@ describe('tabs', () => {
                 <vaadin-tab>Baz</vaadin-tab>
               </vaadin-tabs>
             `,
-            div
+            div,
           );
         });
 
@@ -59,7 +59,7 @@ describe('tabs', () => {
                 <vaadin-tab>Baz</vaadin-tab>
               </vaadin-tabs>
             `,
-            div
+            div,
           );
         });
 
@@ -90,7 +90,7 @@ describe('tabs', () => {
             <vaadin-tab><a href="#">Baz</a></vaadin-tab>
           </vaadin-tabs>
         `,
-        div
+        div,
       );
     });
 
@@ -136,7 +136,7 @@ describe('tabs', () => {
                 <vaadin-tab>Tab-15</vaadin-tab>
               </vaadin-tabs>
             `,
-            div
+            div,
           );
         });
 

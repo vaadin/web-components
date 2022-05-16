@@ -21,14 +21,14 @@ export const ColumnReorderingMixin = (superClass) =>
          */
         columnReorderingAllowed: {
           type: Boolean,
-          value: false
+          value: false,
         },
 
         /** @private */
         _orderBaseScope: {
           type: Number,
-          value: 10000000
-        }
+          value: 10000000,
+        },
       };
     }
 
@@ -61,8 +61,8 @@ export const ColumnReorderingMixin = (superClass) =>
         this._onTrackStart({
           detail: {
             x: e.touches[0].clientX,
-            y: e.touches[0].clientY
-          }
+            y: e.touches[0].clientY,
+          },
         });
       }, 100);
     }
@@ -185,9 +185,9 @@ export const ColumnReorderingMixin = (superClass) =>
       this.dispatchEvent(
         new CustomEvent('column-reorder', {
           detail: {
-            columns: this._getColumnsInOrder()
-          }
-        })
+            columns: this._getColumnsInOrder(),
+          },
+        }),
       );
     }
 
@@ -262,7 +262,7 @@ export const ColumnReorderingMixin = (superClass) =>
         'padding',
         'border',
         'flex-direction',
-        'overflow'
+        'overflow',
       ].forEach((propertyName) => (ghost.style[propertyName] = style[propertyName]));
       return ghost;
     }
@@ -331,7 +331,7 @@ export const ColumnReorderingMixin = (superClass) =>
      */
     _isSwappableByPosition(targetColumn, clientX) {
       const targetCell = Array.from(this.$.header.querySelectorAll('tr:not([hidden]) [part~="cell"]')).filter((cell) =>
-        targetColumn.contains(cell._column)
+        targetColumn.contains(cell._column),
       )[0];
       const sourceCellRect = this.$.header
         .querySelector('tr:not([hidden]) [reorder-status=dragging]')

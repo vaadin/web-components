@@ -251,7 +251,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
        */
       selectedDate: {
         type: Date,
-        notify: true
+        notify: true,
       },
 
       /**
@@ -260,7 +260,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
       focusedDate: {
         type: Date,
         notify: true,
-        observer: '_focusedDateChanged'
+        observer: '_focusedDateChanged',
       },
 
       _focusedMonthDate: Number,
@@ -270,11 +270,11 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
        */
       initialPosition: {
         type: Date,
-        observer: '_initialPositionChanged'
+        observer: '_initialPositionChanged',
       },
 
       _originDate: {
-        value: new Date()
+        value: new Date(),
       },
 
       _visibleMonthIndex: Number,
@@ -282,19 +282,19 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
       _desktopMode: Boolean,
 
       _translateX: {
-        observer: '_translateXChanged'
+        observer: '_translateXChanged',
       },
 
       _yearScrollerWidth: {
-        value: 50
+        value: 50,
       },
 
       i18n: {
-        type: Object
+        type: Object,
       },
 
       showWeekNumbers: {
-        type: Boolean
+        type: Boolean,
       },
 
       _ignoreTaps: Boolean,
@@ -316,7 +316,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
       /**
        * Input label
        */
-      label: String
+      label: String,
     };
   }
 
@@ -358,7 +358,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
       this.i18n.weekdays[focusedDate.getDay()],
       focusedDate.getDate(),
       this.i18n.monthNames[focusedDate.getMonth()],
-      focusedDate.getFullYear()
+      focusedDate.getFullYear(),
     ]);
     if (this.showWeekNumbers && this.i18n.firstDayOfWeek === 1) {
       announce.push(this.i18n.week);
@@ -369,9 +369,9 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
         bubbles: true,
         composed: true,
         detail: {
-          text: announce.join(' ')
-        }
-      })
+          text: announce.join(' '),
+        },
+      }),
     );
     return;
   }
@@ -414,7 +414,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
 
       const visibleArea = Math.max(
         this.$.monthScroller.itemHeight,
-        this.$.monthScroller.clientHeight - this.$.monthScroller.bufferOffset * 2
+        this.$.monthScroller.clientHeight - this.$.monthScroller.bufferOffset * 2,
       );
       const visibleItems = visibleArea / this.$.monthScroller.itemHeight;
       const scrolledBelowViewport = this.$.monthScroller.position + visibleItems - 1 < diff;
@@ -561,9 +561,9 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
             composed: true,
             detail: {
               position: this._targetPosition,
-              oldPosition: initialPosition
-            }
-          })
+              oldPosition: initialPosition,
+            },
+          }),
         );
 
         this.$.monthScroller.position = this._targetPosition;
@@ -596,7 +596,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
     var newTranslateX = this._translateX + e.detail.ddx;
     this._translateX = this._limit(newTranslateX, {
       min: 0,
-      max: this._yearScrollerWidth
+      max: this._yearScrollerWidth,
     });
   }
 
@@ -730,7 +730,7 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
       'Home',
       'PageUp',
       'PageDown',
-      'Tab'
+      'Tab',
     ];
 
     const eventKey = e.key;

@@ -125,7 +125,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
       value: {
         type: String,
         notify: true,
-        observer: '__valueChanged'
+        observer: '__valueChanged',
       },
 
       /**
@@ -140,7 +140,7 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
         type: Boolean,
         value: false,
         reflectToAttribute: true,
-        observer: '__readonlyChanged'
+        observer: '__readonlyChanged',
       },
 
       /**
@@ -148,8 +148,8 @@ class RadioGroup extends FieldMixin(FocusMixin(DisabledMixin(KeyboardMixin(DirMi
        * @private
        */
       _fieldName: {
-        type: String
-      }
+        type: String,
+      },
     };
   }
 

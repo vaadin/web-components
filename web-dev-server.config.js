@@ -17,7 +17,7 @@ module.exports = {
 
           return { body: context.body.replace(/<ul id="listing">.*<\/ul>/, listing) };
         }
-      }
-    }
-  ]
+      },
+    },
+  ],
 };

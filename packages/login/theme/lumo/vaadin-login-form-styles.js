@@ -9,5 +9,5 @@ registerStyles(
       margin-bottom: var(--lumo-space-s);
     }
   `,
-  { moduleId: 'lumo-login-form' }
+  { moduleId: 'lumo-login-form' },
 );
