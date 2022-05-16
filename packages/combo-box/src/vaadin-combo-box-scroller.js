@@ -260,7 +260,9 @@ export class ComboBoxScroller extends PolymerElement {
       this.requestContentUpdate();
     }
 
-    if (index >= 0) {
+    // Do not jump back to the previously focused item while loading
+    // when requesting next page from the data provider on scroll.
+    if (index >= 0 && !this.loading) {
       this.scrollIntoView(index);
     }
   }
