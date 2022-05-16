@@ -19,12 +19,21 @@ export const SelectionMixin = (superClass) =>
           type: Object,
           notify: true,
           value: () => []
+        },
+
+        /**
+         * Set of selected item ids
+         * @private
+         */
+        __selectedKeys: {
+          type: Object,
+          value: () => new Set()
         }
       };
     }
 
     static get observers() {
-      return ['_selectedItemsChanged(selectedItems.*)'];
+      return ['_updateSelectedKeys(itemIdPath, selectedItems.*)'];
     }
 
     /**
@@ -33,7 +42,7 @@ export const SelectionMixin = (superClass) =>
      * @protected
      */
     _isSelected(item) {
-      return this.selectedItems && this._getItemIndexInArray(item, this.selectedItems) > -1;
+      return this.__selectedKeys.has(this.getItemId(item));
     }
 
     /**
@@ -68,8 +77,7 @@ export const SelectionMixin = (superClass) =>
      * @protected
      */
     _toggleItem(item) {
-      const index = this._getItemIndexInArray(item, this.selectedItems);
-      if (index === -1) {
+      if (!this._isSelected(item)) {
         this.selectItem(item);
       } else {
         this.deselectItem(item);
@@ -77,7 +85,13 @@ export const SelectionMixin = (superClass) =>
     }
 
     /** @private */
-    _selectedItemsChanged() {
+    _updateSelectedKeys() {
+      const selectedItems = this.selectedItems || [];
+      this.__selectedKeys = new Set();
+      selectedItems.forEach((item) => {
+        this.__selectedKeys.add(this.getItemId(item));
+      });
+
       this.requestContentUpdate();
     }
 
