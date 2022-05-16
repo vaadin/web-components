@@ -132,13 +132,13 @@ declare class ConfirmDialog extends ElementMixin(ThemableMixin(HTMLElement)) {
   addEventListener<K extends keyof ConfirmDialogEventMap>(
     type: K,
     listener: (this: ConfirmDialog, ev: ConfirmDialogEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof ConfirmDialogEventMap>(
     type: K,
     listener: (this: ConfirmDialog, ev: ConfirmDialogEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

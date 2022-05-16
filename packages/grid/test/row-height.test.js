@@ -11,7 +11,7 @@ registerStyles(
     [part~='cell'] {
       border: none !important;
     }
-  `
+  `,
 );
 
 const fixtures = {
@@ -51,7 +51,7 @@ const fixtures = {
         <template class="header">foo</template>
       </vaadin-grid-column>
     </vaadin-grid>
-  `
+  `,
 };
 
 describe('rows', () => {

@@ -46,7 +46,7 @@ export class ComboBoxDropdown extends PolymerElement {
        */
       positionTarget: {
         type: Object,
-        observer: '_positionTargetChanged'
+        observer: '_positionTargetChanged',
       },
 
       /**
@@ -60,7 +60,7 @@ export class ComboBoxDropdown extends PolymerElement {
       loading: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -69,31 +69,31 @@ export class ComboBoxDropdown extends PolymerElement {
       theme: String,
 
       _selectedItem: {
-        type: Object
+        type: Object,
       },
 
       _items: {
-        type: Array
+        type: Array,
       },
 
       _focusedIndex: {
         type: Number,
-        value: -1
+        value: -1,
       },
 
       focusedItem: {
         type: String,
-        computed: '_getFocusedItem(_focusedIndex)'
+        computed: '_getFocusedItem(_focusedIndex)',
       },
 
       _itemLabelPath: {
         type: String,
-        value: 'label'
+        value: 'label',
       },
 
       _itemValuePath: {
         type: String,
-        value: 'value'
+        value: 'value',
       },
 
       _scroller: Object,
@@ -102,15 +102,15 @@ export class ComboBoxDropdown extends PolymerElement {
 
       _overlayOpened: {
         type: Boolean,
-        observer: '_openedChanged'
-      }
+        observer: '_openedChanged',
+      },
     };
   }
 
   static get observers() {
     return [
       '_openedOrItemsChanged(opened, _items, loading)',
-      '__updateScroller(_scroller, _items, opened, loading, _selectedItem, _itemIdPath, _focusedIndex, renderer, theme)'
+      '__updateScroller(_scroller, _items, opened, loading, _selectedItem, _itemIdPath, _focusedIndex, renderer, theme)',
     ];
   }
 
@@ -172,8 +172,8 @@ export class ComboBoxDropdown extends PolymerElement {
   _fireTouchAction(sourceEvent) {
     this.dispatchEvent(
       new CustomEvent('vaadin-overlay-touch-action', {
-        detail: { sourceEvent: sourceEvent }
-      })
+        detail: { sourceEvent: sourceEvent },
+      }),
     );
   }
 
@@ -262,7 +262,7 @@ export class ComboBoxDropdown extends PolymerElement {
         itemIdPath,
         focusedIndex,
         renderer,
-        theme
+        theme,
       });
     }
   }

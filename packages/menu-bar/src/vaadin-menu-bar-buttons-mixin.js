@@ -21,8 +21,8 @@ export const ButtonsMixin = (superClass) =>
          */
         _hasOverflow: {
           type: Boolean,
-          value: false
-        }
+          value: false,
+        },
       };
     }
 
@@ -307,7 +307,7 @@ export const ButtonsMixin = (superClass) =>
       this.__debounceOverflow = Debouncer.debounce(
         this.__debounceOverflow,
         animationFrame,
-        this.__detectOverflow.bind(this)
+        this.__detectOverflow.bind(this),
       );
     }
   };

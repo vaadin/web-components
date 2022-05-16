@@ -3,7 +3,7 @@ import {
   Select,
   SelectInvalidChangedEvent,
   SelectOpenedChangedEvent,
-  SelectValueChangedEvent
+  SelectValueChangedEvent,
 } from '../../vaadin-select.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

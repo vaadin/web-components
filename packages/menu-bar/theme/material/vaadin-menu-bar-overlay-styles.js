@@ -7,5 +7,5 @@ registerStyles(
       padding-top: 5px;
     }
   `,
-  { moduleId: 'material-menu-bar-overlay' }
+  { moduleId: 'material-menu-bar-overlay' },
 );

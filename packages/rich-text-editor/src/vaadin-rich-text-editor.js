@@ -32,19 +32,19 @@ const HANDLERS = [
   'list',
   'align',
   'blockquote',
-  'code-block'
+  'code-block',
 ];
 
 const SOURCE = {
   API: 'api',
   USER: 'user',
-  SILENT: 'silent'
+  SILENT: 'silent',
 };
 
 const STATE = {
   DEFAULT: 0,
   FOCUSED: 1,
-  CLICKED: 2
+  CLICKED: 2,
 };
 
 const TAB_KEY = 9;
@@ -383,7 +383,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       value: {
         type: String,
         notify: true,
-        value: ''
+        value: '',
       },
 
       /**
@@ -392,7 +392,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       htmlValue: {
         type: String,
         notify: true,
-        readOnly: true
+        readOnly: true,
       },
 
       /**
@@ -402,7 +402,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       disabled: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -412,7 +412,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       readonly: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -450,14 +450,14 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
             linkDialogTitle: 'Link address',
             ok: 'OK',
             cancel: 'Cancel',
-            remove: 'Remove'
+            remove: 'Remove',
           };
-        }
+        },
       },
 
       /** @private */
       _editor: {
-        type: Object
+        type: Object,
       },
 
       /**
@@ -469,31 +469,31 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       /** @private */
       __lastCommittedChange: {
         type: String,
-        value: ''
+        value: '',
       },
 
       /** @private */
       _linkEditing: {
-        type: Boolean
+        type: Boolean,
       },
 
       /** @private */
       _linkRange: {
         type: Object,
-        value: null
+        value: null,
       },
 
       /** @private */
       _linkIndex: {
         type: Number,
-        value: null
+        value: null,
       },
 
       /** @private */
       _linkUrl: {
         type: String,
-        value: ''
-      }
+        value: '',
+      },
     };
   }
 
@@ -559,8 +559,8 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     this._editor = new Quill(editor, {
       modules: {
-        toolbar: toolbarConfig
-      }
+        toolbar: toolbarConfig,
+      },
     });
 
     this.__patchToolbar();
@@ -617,8 +617,8 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
         clean: function () {
           self._markToolbarClicked();
           clean.call(this);
-        }
-      }
+        },
+      },
     };
 
     HANDLERS.forEach((handler) => {
@@ -908,7 +908,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     [this.__dir === 'rtl' ? 'left' : 'right', 'center', 'justify'].forEach((align) => {
       content = content.replace(
         new RegExp(` class=[\\\\]?"\\s?ql-align-${align}[\\\\]?"`, 'g'),
-        ` style="text-align: ${align}"`
+        ` style="text-align: ${align}"`,
       );
     });
 
@@ -947,7 +947,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
           .map((button) => button.getAttribute('title'))
           .join(', ');
         announcer.textContent = formatting;
-      }
+      },
     );
   }
 
@@ -1022,7 +1022,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
         const range = this._editor.getSelection(true);
         this._editor.updateContents(
           new Quill.imports.delta().retain(range.index).delete(range.length).insert({ image }),
-          SOURCE.USER
+          SOURCE.USER,
         );
         this._markToolbarClicked();
         this._editor.setSelection(range.index + 1, SOURCE.SILENT);

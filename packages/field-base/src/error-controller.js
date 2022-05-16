@@ -18,7 +18,7 @@ export class ErrorController extends SlotController {
         this.__updateErrorId(node);
 
         this.__updateHasError();
-      }
+      },
     );
   }
 

@@ -116,5 +116,5 @@ registerStyles(
       opacity: 1;
     }
   `,
-  { moduleId: 'material-date-picker-month-calendar' }
+  { moduleId: 'material-date-picker-month-calendar' },
 );

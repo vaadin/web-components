@@ -10,7 +10,7 @@ import { GridColumn } from './vaadin-grid-column.js';
 export type GridCellClassNameGenerator<TItem> = (column: GridColumn<TItem>, model: GridItemModel<TItem>) => string;
 
 export declare function StylingMixin<TItem, T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<StylingMixinClass<TItem>>;
 
 export declare class StylingMixinClass<TItem> {

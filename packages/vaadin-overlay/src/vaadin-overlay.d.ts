@@ -197,13 +197,13 @@ declare class OverlayElement extends ThemableMixin(DirMixin(HTMLElement)) {
   addEventListener<K extends keyof OverlayEventMap>(
     type: K,
     listener: (this: OverlayElement, ev: OverlayEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof OverlayEventMap>(
     type: K,
     listener: (this: OverlayElement, ev: OverlayEventMap[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

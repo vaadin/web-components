@@ -12,7 +12,7 @@ registerStyles(
       width: 100px;
     }
   `,
-  { moduleId: 'vaadin-menu-bar-test-styles' }
+  { moduleId: 'vaadin-menu-bar-test-styles' },
 );
 
 // utility function to assert a menu item is not visible
@@ -301,7 +301,7 @@ describe('overflow button', () => {
       { text: 'Item 2' },
       { text: 'Item 3' },
       { text: 'Item 4' },
-      { text: 'Item 5', disabled: true }
+      { text: 'Item 5', disabled: true },
     ];
     await nextRender(menu);
     buttons = menu._buttons;
@@ -432,7 +432,7 @@ describe('responsive behaviour in container', () => {
 
   beforeEach(async () => {
     container = fixtureSync(
-      '<div style="display: flex;"><vaadin-menu-bar style="min-width: 100%"></vaadin-menu-bar></div>'
+      '<div style="display: flex;"><vaadin-menu-bar style="min-width: 100%"></vaadin-menu-bar></div>',
     );
     menu = container.firstChild;
 
@@ -443,7 +443,7 @@ describe('responsive behaviour in container', () => {
       { text: 'Item 2' },
       { text: 'Item 3' },
       { text: 'Item 4' },
-      { text: 'Item 5', disabled: true }
+      { text: 'Item 5', disabled: true },
     ];
     await nextRender(menu);
     buttons = menu._buttons;
@@ -494,7 +494,7 @@ describe('item components', () => {
       { text: 'Item 2' },
       { component: makeComponent('3') },
       { text: 'Item 4 text', component: makeComponent('4') },
-      { text: 'Item 5', component: document.createElement('vaadin-context-menu-item') }
+      { text: 'Item 5', component: document.createElement('vaadin-context-menu-item') },
     ];
     await nextRender(menu);
     buttons = menu._buttons;

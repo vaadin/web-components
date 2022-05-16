@@ -20,7 +20,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 const HOST_PROPS = {
   save: [{ attr: 'disabled', prop: '__isDirty', parseProp: '__isSaveBtnDisabled' }, { prop: 'i18n.saveItem' }],
   cancel: [{ prop: 'i18n.cancel' }],
-  delete: [{ attr: 'hidden', prop: '__isNew', parseProp: (prop) => prop }, { prop: 'i18n.deleteItem' }]
+  delete: [{ attr: 'hidden', prop: '__isNew', parseProp: (prop) => prop }, { prop: 'i18n.deleteItem' }],
 };
 
 /**
@@ -302,7 +302,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       _grid: {
         type: HTMLElement,
-        observer: '__onGridChange'
+        observer: '__onGridChange',
       },
 
       /**
@@ -311,7 +311,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       _form: {
         type: HTMLElement,
-        observer: '__onFormChange'
+        observer: '__onFormChange',
       },
 
       /**
@@ -320,7 +320,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       _saveButton: {
         type: HTMLElement,
-        observer: '__onSaveButtonChange'
+        observer: '__onSaveButtonChange',
       },
 
       /**
@@ -329,7 +329,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       _deleteButton: {
         type: HTMLElement,
-        observer: '__onDeleteButtonChange'
+        observer: '__onDeleteButtonChange',
       },
 
       /**
@@ -338,7 +338,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       _cancelButton: {
         type: HTMLElement,
-        observer: '__onCancelButtonChange'
+        observer: '__onCancelButtonChange',
       },
 
       /**
@@ -348,7 +348,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
       items: {
         type: Array,
         notify: true,
-        observer: '__onItemsChange'
+        observer: '__onItemsChange',
       },
 
       /**
@@ -358,7 +358,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
       editedItem: {
         type: Object,
         observer: '__onItemChange',
-        notify: true
+        notify: true,
       },
 
       /**
@@ -375,7 +375,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
         type: String,
         value: '',
         reflectToAttribute: true,
-        observer: '__onEditorPositionChange'
+        observer: '__onEditorPositionChange',
       },
 
       /**
@@ -386,7 +386,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       editOnClick: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -404,7 +404,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       dataProvider: {
         type: Function,
-        observer: '__onDataProviderChange'
+        observer: '__onDataProviderChange',
       },
 
       /**
@@ -451,7 +451,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
       editorOpened: {
         type: Boolean,
         notify: true,
-        observer: '__onOpenedChanged'
+        observer: '__onOpenedChanged',
       },
 
       /**
@@ -461,7 +461,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
       size: {
         type: Number,
         readOnly: true,
-        notify: true
+        notify: true,
       },
 
       /**
@@ -472,7 +472,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
       noToolbar: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -530,20 +530,20 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
                 content: 'Are you sure you want to delete this item? This action cannot be undone.',
                 button: {
                   confirm: 'Delete',
-                  dismiss: 'Cancel'
-                }
+                  dismiss: 'Cancel',
+                },
               },
               cancel: {
                 title: 'Discard changes',
                 content: 'There are unsaved changes to this item.',
                 button: {
                   confirm: 'Discard',
-                  dismiss: 'Cancel'
-                }
-              }
-            }
+                  dismiss: 'Cancel',
+                },
+              },
+            },
           };
-        }
+        },
       },
 
       /** @private */
@@ -554,14 +554,14 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
 
       /** @private */
       __mobileMediaQuery: {
-        value: '(max-width: 600px), (max-height: 600px)'
+        value: '(max-width: 600px), (max-height: 600px)',
       },
 
       /** @private */
       __mobile: {
         type: Boolean,
-        observer: '__mobileChanged'
-      }
+        observer: '__mobileChanged',
+      },
     };
   }
 
@@ -575,7 +575,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
         HOST_PROPS.cancel.map(({ prop }) => prop).join(',') +
         ',' +
         HOST_PROPS.delete.map(({ prop }) => prop).join(',') +
-        ')'
+        ')',
     ];
   }
 
@@ -934,7 +934,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
         } else {
           console.warn(
             '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. ' +
-              'Either specify `include` or ensure at least one item is available beforehand.'
+              'Either specify `include` or ensure at least one item is available beforehand.',
           );
         }
       }
@@ -1005,7 +1005,7 @@ class Crud extends ElementMixin(ThemableMixin(PolymerElement)) {
     this.__isDirty = false;
     this.__isNew = !item;
     const evt = this.dispatchEvent(
-      new CustomEvent(this.__isNew ? 'new' : 'edit', { detail: { item: item }, cancelable: true })
+      new CustomEvent(this.__isNew ? 'new' : 'edit', { detail: { item: item }, cancelable: true }),
     );
     if (evt) {
       this.editedItem = item || {};

@@ -24,8 +24,8 @@ export const LabelMixin = dedupingMixin(
            */
           label: {
             type: String,
-            observer: '_labelChanged'
-          }
+            observer: '_labelChanged',
+          },
         };
       }
 
@@ -50,5 +50,5 @@ export const LabelMixin = dedupingMixin(
       _labelChanged(label) {
         this._labelController.setLabel(label);
       }
-    }
+    },
 );

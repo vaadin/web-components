@@ -8,7 +8,7 @@ module.exports = createUnitTestsConfig({
       statements: 95,
       branches: 90,
       functions: 92,
-      lines: 95
-    }
-  }
+      lines: 95,
+    },
+  },
 });

@@ -26,7 +26,7 @@ export const ComboBoxMixin = (subclass) =>
           notify: true,
           value: false,
           reflectToAttribute: true,
-          observer: '_openedChanged'
+          observer: '_openedChanged',
         },
 
         /**
@@ -34,7 +34,7 @@ export const ComboBoxMixin = (subclass) =>
          * @attr {boolean} auto-open-disabled
          */
         autoOpenDisabled: {
-          type: Boolean
+          type: Boolean,
         },
 
         /**
@@ -44,7 +44,7 @@ export const ComboBoxMixin = (subclass) =>
         readonly: {
           type: Boolean,
           value: false,
-          reflectToAttribute: true
+          reflectToAttribute: true,
         },
 
         /**
@@ -68,7 +68,7 @@ export const ComboBoxMixin = (subclass) =>
          */
         items: {
           type: Array,
-          observer: '_itemsChanged'
+          observer: '_itemsChanged',
         },
 
         /**
@@ -81,7 +81,7 @@ export const ComboBoxMixin = (subclass) =>
          */
         allowCustomValue: {
           type: Boolean,
-          value: false
+          value: false,
         },
 
         /**
@@ -91,7 +91,7 @@ export const ComboBoxMixin = (subclass) =>
          * @type {!Array<!ComboBoxItem | string> | undefined}
          */
         filteredItems: {
-          type: Array
+          type: Array,
         },
 
         /**
@@ -108,7 +108,7 @@ export const ComboBoxMixin = (subclass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-          observer: '_loadingChanged'
+          observer: '_loadingChanged',
         },
 
         /**
@@ -118,7 +118,7 @@ export const ComboBoxMixin = (subclass) =>
         _focusedIndex: {
           type: Number,
           observer: '_focusedIndexChanged',
-          value: -1
+          value: -1,
         },
 
         /**
@@ -128,7 +128,7 @@ export const ComboBoxMixin = (subclass) =>
         filter: {
           type: String,
           value: '',
-          notify: true
+          notify: true,
         },
 
         /**
@@ -137,7 +137,7 @@ export const ComboBoxMixin = (subclass) =>
          */
         selectedItem: {
           type: Object,
-          notify: true
+          notify: true,
         },
 
         /**
@@ -153,7 +153,7 @@ export const ComboBoxMixin = (subclass) =>
         itemLabelPath: {
           type: String,
           value: 'label',
-          observer: '_itemLabelPathChanged'
+          observer: '_itemLabelPathChanged',
         },
 
         /**
@@ -168,7 +168,7 @@ export const ComboBoxMixin = (subclass) =>
          */
         itemValuePath: {
           type: String,
-          value: 'value'
+          value: 'value',
         },
 
         /**
@@ -186,11 +186,11 @@ export const ComboBoxMixin = (subclass) =>
          */
         _toggleElement: {
           type: Object,
-          observer: '_toggleElementChanged'
+          observer: '_toggleElementChanged',
         },
 
         /** @private */
-        _closeOnBlurIsPrevented: Boolean
+        _closeOnBlurIsPrevented: Boolean,
       };
     }
 
@@ -199,7 +199,7 @@ export const ComboBoxMixin = (subclass) =>
         '_filterChanged(filter, itemValuePath, itemLabelPath)',
         '_itemsOrPathsChanged(items.*, itemValuePath, itemLabelPath)',
         '_filteredItemsChanged(filteredItems.*, itemValuePath, itemLabelPath)',
-        '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)'
+        '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
       ];
     }
 
@@ -732,7 +732,7 @@ export const ComboBoxMixin = (subclass) =>
             detail: customValue,
             composed: true,
             cancelable: true,
-            bubbles: true
+            bubbles: true,
           });
           this.dispatchEvent(e);
           if (!e.defaultPrevented) {

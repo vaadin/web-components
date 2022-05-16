@@ -29,7 +29,7 @@ registerStyles(
       max-width: none;
     }
   `,
-  { moduleId: 'vaadin-dialog-overlay-styles' }
+  { moduleId: 'vaadin-dialog-overlay-styles' },
 );
 
 let memoizedTemplate;
@@ -63,7 +63,7 @@ class DialogOverlay extends mixinBehaviors(IronResizableBehavior, OverlayElement
     return {
       modeless: Boolean,
 
-      withBackdrop: Boolean
+      withBackdrop: Boolean,
     };
   }
 
@@ -208,7 +208,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
       opened: {
         type: Boolean,
         value: false,
-        notify: true
+        notify: true,
       },
 
       /**
@@ -218,7 +218,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
        */
       noCloseOnOutsideClick: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -228,7 +228,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
        */
       noCloseOnEsc: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -238,7 +238,7 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
        */
       ariaLabel: {
         type: String,
-        value: ''
+        value: '',
       },
 
       /**
@@ -257,8 +257,8 @@ class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixin(Dialog
        */
       modeless: {
         type: Boolean,
-        value: false
-      }
+        value: false,
+      },
     };
   }
 

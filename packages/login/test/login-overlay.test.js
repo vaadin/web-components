@@ -164,7 +164,7 @@ describe('title and description', () => {
 
   it('should update title and description when i18n.header updated', () => {
     const i18n = Object.assign({}, overlay.i18n, {
-      header: { title: 'The newest title', description: 'The newest description' }
+      header: { title: 'The newest title', description: 'The newest description' },
     });
     overlay.i18n = i18n;
 

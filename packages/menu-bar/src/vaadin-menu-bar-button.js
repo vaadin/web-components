@@ -14,7 +14,7 @@ registerStyles(
       z-index: 1;
     }
   `,
-  { moduleId: 'vaadin-menu-bar-button-styles' }
+  { moduleId: 'vaadin-menu-bar-button-styles' },
 );
 
 /**

@@ -302,7 +302,7 @@ const loginOverlayWrapper = css`
 `;
 
 registerStyles('vaadin-login-overlay-wrapper', [overlay, typography, loginOverlayWrapper], {
-  moduleId: 'vaadin-login-overlay-wrapper-material-styles'
+  moduleId: 'vaadin-login-overlay-wrapper-material-styles',
 });
 
 const loginFormWrapper = css`

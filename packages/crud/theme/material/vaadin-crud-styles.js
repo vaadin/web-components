@@ -48,7 +48,7 @@ registerStyles(
       opacity: 0.12;
     }
   `,
-  { moduleId: 'material-crud-grid-edit' }
+  { moduleId: 'material-crud-grid-edit' },
 );
 
 registerStyles(
@@ -78,7 +78,7 @@ registerStyles(
       padding: 0;
     }
   `,
-  { moduleId: 'material-crud' }
+  { moduleId: 'material-crud' },
 );
 
 registerStyles(
@@ -103,7 +103,7 @@ registerStyles(
       margin-right: 4px;
     }
   `,
-  { moduleId: 'material-dialog-layout' }
+  { moduleId: 'material-dialog-layout' },
 );
 
 registerStyles(
@@ -124,5 +124,5 @@ registerStyles(
       animation: 0.25s material-overlay-dummy-animation;
     }
   `,
-  { moduleId: 'material-crud-dialog-overlay' }
+  { moduleId: 'material-crud-dialog-overlay' },
 );

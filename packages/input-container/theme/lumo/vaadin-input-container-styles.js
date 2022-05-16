@@ -161,5 +161,5 @@ registerStyles(
       }
     }
   `,
-  { moduleId: 'lumo-input-container' }
+  { moduleId: 'lumo-input-container' },
 );

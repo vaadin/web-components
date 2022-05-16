@@ -211,5 +211,5 @@ registerStyles(
       }
     }
   `,
-  { moduleId: 'lumo-date-picker-overlay-content' }
+  { moduleId: 'lumo-date-picker-overlay-content' },
 );

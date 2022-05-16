@@ -18,7 +18,7 @@ describe('renderer', () => {
         return;
       }
       root.appendChild(
-        document.createTextNode(`Renderer ${context.detail && context.detail.foo} ${context.target.id}`)
+        document.createTextNode(`Renderer ${context.detail && context.detail.foo} ${context.target.id}`),
       );
     });
     target = menu.querySelector('#target');

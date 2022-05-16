@@ -76,7 +76,7 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       disabled: {
         type: Boolean,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -84,7 +84,7 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       readonly: {
         type: Boolean,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -92,8 +92,8 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
        */
       invalid: {
         type: Boolean,
-        reflectToAttribute: true
-      }
+        reflectToAttribute: true,
+      },
     };
   }
 

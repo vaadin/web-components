@@ -53,7 +53,7 @@ describe('reorder elements', () => {
       },
       scrollTarget,
       scrollContainer,
-      ...config
+      ...config,
     });
 
     virtualizer.size = 100;

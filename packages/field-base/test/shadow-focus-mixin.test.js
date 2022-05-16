@@ -20,7 +20,7 @@ customElements.define(
     get focusElement() {
       return this.$.input;
     }
-  }
+  },
 );
 
 customElements.define(
@@ -33,7 +33,7 @@ customElements.define(
     get focusElement() {
       return this.shadowRoot ? this.$.testElement : null;
     }
-  }
+  },
 );
 
 async function click(element) {

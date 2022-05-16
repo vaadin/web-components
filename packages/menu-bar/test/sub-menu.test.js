@@ -11,7 +11,7 @@ import {
   isIOS,
   nextRender,
   touchend,
-  touchstart
+  touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -30,15 +30,15 @@ describe('sub-menu', () => {
           { text: 'Menu Item 1 1' },
           {
             text: 'Menu Item 1 2',
-            children: [{ text: 'Menu Item 1 2 1' }]
-          }
-        ]
+            children: [{ text: 'Menu Item 1 2 1' }],
+          },
+        ],
       },
       { text: 'Menu Item 2' },
       {
         text: 'Menu Item 3',
-        children: [{ text: 'Menu Item 3 1' }, { text: 'Menu Item 3 2' }]
-      }
+        children: [{ text: 'Menu Item 3 1' }, { text: 'Menu Item 3 2' }],
+      },
     ];
     await nextRender(menu);
     subMenu = menu._subMenu;
@@ -229,7 +229,7 @@ describe('sub-menu', () => {
     menu.items = [
       ...menu.items.slice(0, 1),
       { text: 'Menu Item 2', children: [{ text: 'Menu Item 2 1' }] },
-      ...menu.items.slice(2)
+      ...menu.items.slice(2),
     ];
     buttons = menu._buttons;
     await nextRender(menu);
@@ -441,13 +441,13 @@ describe('open on hover', () => {
     menu.items = [
       {
         text: 'Menu Item 1',
-        children: [{ text: 'Menu Item 1 1' }, { text: 'Menu Item 1 2' }]
+        children: [{ text: 'Menu Item 1 1' }, { text: 'Menu Item 1 2' }],
       },
       { text: 'Menu Item 2' },
       {
         text: 'Menu Item 3',
-        children: [{ text: 'Menu Item 3 1' }, { text: 'Menu Item 3 2' }]
-      }
+        children: [{ text: 'Menu Item 3 1' }, { text: 'Menu Item 3 2' }],
+      },
     ];
     menu.openOnHover = true;
     await nextRender(menu);
@@ -526,13 +526,13 @@ describe('accessibility', () => {
     menu.items = [
       {
         text: 'Menu Item 1',
-        children: [{ text: 'Menu Item 1 1' }, { text: 'Menu Item 1 2' }]
+        children: [{ text: 'Menu Item 1 1' }, { text: 'Menu Item 1 2' }],
       },
       { text: 'Menu Item 2' },
       {
         text: 'Menu Item 3',
-        children: [{ text: 'Menu Item 3 1' }, { text: 'Menu Item 3 2' }]
-      }
+        children: [{ text: 'Menu Item 3 1' }, { text: 'Menu Item 3 2' }],
+      },
     ];
     await nextRender(menu);
     subMenu = menu._subMenu;
@@ -591,12 +591,12 @@ describe('theme attribute', () => {
         children: [
           { text: 'Menu Item 1 1', theme: 'sub-item-theme' },
           {
-            text: 'Menu Item 1 2'
-          }
-        ]
+            text: 'Menu Item 1 2',
+          },
+        ],
       },
       { text: 'Menu Item 2' },
-      { text: 'Menu Item 3' }
+      { text: 'Menu Item 3' },
     ];
     await nextRender(menu);
     subMenu = menu._subMenu;
@@ -665,16 +665,16 @@ describe('touch', () => {
             text: 'Menu Item 1 2',
             children: [
               { text: 'Menu Item 1 2 1', children: [{ text: 'Menu Item 1 2 1 1' }] },
-              { text: 'Menu Item 1 2 2' }
-            ]
-          }
-        ]
+              { text: 'Menu Item 1 2 2' },
+            ],
+          },
+        ],
       },
       { text: 'Menu Item 2' },
       {
         text: 'Menu Item 3',
-        children: [{ text: 'Menu Item 3 1' }, { text: 'Menu Item 3 2' }]
-      }
+        children: [{ text: 'Menu Item 3 1' }, { text: 'Menu Item 3 2' }],
+      },
     ];
     await nextRender(menu);
     subMenu = menu._subMenu;

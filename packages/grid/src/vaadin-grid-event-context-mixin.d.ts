@@ -18,7 +18,7 @@ export interface GridEventContext<TItem> {
 }
 
 export declare function EventContextMixin<TItem, T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<EventContextMixinClass<TItem>>;
 
 export declare class EventContextMixinClass<TItem> {

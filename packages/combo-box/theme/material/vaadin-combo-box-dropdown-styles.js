@@ -117,5 +117,5 @@ const comboBoxOverlay = css`
 `;
 
 registerStyles('vaadin-combo-box-overlay', [menuOverlay, comboBoxOverlay], {
-  moduleId: 'material-combo-box-overlay'
+  moduleId: 'material-combo-box-overlay',
 });

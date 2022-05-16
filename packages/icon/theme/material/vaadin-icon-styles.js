@@ -8,5 +8,5 @@ registerStyles(
       height: 24px;
     }
   `,
-  { moduleId: 'material-icon' }
+  { moduleId: 'material-icon' },
 );

@@ -32,7 +32,7 @@ describe('virtualizer', () => {
           el.textContent = el.id;
         }),
       scrollTarget,
-      scrollContainer
+      scrollContainer,
     });
 
     virtualizer.size = size;
@@ -289,7 +289,7 @@ describe('virtualizer', () => {
           if (render) {
             el.textContent = `item-${index}`;
           }
-        }
+        },
       });
     });
 

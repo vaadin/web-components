@@ -13,7 +13,7 @@ registerStyles(
       width: var(--vaadin-time-picker-overlay-width, var(--_vaadin-time-picker-overlay-default-width, auto));
     }
   `,
-  { moduleId: 'vaadin-time-picker-overlay-styles' }
+  { moduleId: 'vaadin-time-picker-overlay-styles' },
 );
 
 /**

@@ -256,20 +256,20 @@ class Grid extends ElementMixin(
                       A11yMixin(
                         FilterMixin(
                           ColumnReorderingMixin(
-                            ColumnResizingMixin(EventContextMixin(DragAndDropMixin(StylingMixin(PolymerElement))))
-                          )
-                        )
-                      )
-                    )
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
-    )
-  )
+                            ColumnResizingMixin(EventContextMixin(DragAndDropMixin(StylingMixin(PolymerElement)))),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  ),
 ) {
   static get template() {
     return html`
@@ -301,7 +301,7 @@ class Grid extends ElementMixin(
   static get observers() {
     return [
       '_columnTreeChanged(_columnTree, _columnTree.*)',
-      '_effectiveSizeChanged(_effectiveSize, __virtualizer, _hasData, _columnTree)'
+      '_effectiveSizeChanged(_effectiveSize, __virtualizer, _hasData, _columnTree)',
     ];
   }
 
@@ -310,31 +310,31 @@ class Grid extends ElementMixin(
       /** @private */
       _safari: {
         type: Boolean,
-        value: isSafari
+        value: isSafari,
       },
 
       /** @private */
       _ios: {
         type: Boolean,
-        value: isIOS
+        value: isIOS,
       },
 
       /** @private */
       _firefox: {
         type: Boolean,
-        value: isFirefox
+        value: isFirefox,
       },
 
       /** @private */
       _android: {
         type: Boolean,
-        value: isAndroid
+        value: isAndroid,
       },
 
       /** @private */
       _touchDevice: {
         type: Boolean,
-        value: isTouch
+        value: isTouch,
       },
 
       /**
@@ -348,18 +348,18 @@ class Grid extends ElementMixin(
       allRowsVisible: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /** @private */
       _recalculateColumnWidthOnceLoadingFinished: {
         type: Boolean,
-        value: true
+        value: true,
       },
 
       /** @private */
       isAttached: {
-        value: false
+        value: false,
       },
 
       /**
@@ -370,8 +370,8 @@ class Grid extends ElementMixin(
        */
       __gridElement: {
         type: Boolean,
-        value: true
-      }
+        value: true,
+      },
     };
   }
 
@@ -444,7 +444,7 @@ class Grid extends ElementMixin(
       updateElement: this._updateScrollerItem.bind(this),
       scrollContainer: this.$.items,
       scrollTarget: this.$.table,
-      reorderElements: true
+      reorderElements: true,
     });
 
     new ResizeObserver(() => setTimeout(() => this.__updateFooterPositioning())).observe(this.$.footer);
@@ -470,7 +470,7 @@ class Grid extends ElementMixin(
     if (this.$.items.contains(cell) && cell.localName === 'td') {
       return {
         item: cell.parentElement._item,
-        column: cell._column
+        column: cell._column,
       };
     }
   }
@@ -621,7 +621,7 @@ class Grid extends ElementMixin(
 
     if (this._columnTree) {
       this._columnTree[this._columnTree.length - 1].forEach(
-        (c) => c.isConnected && c.notifyPath && c.notifyPath('_cells.*', c._cells)
+        (c) => c.isConnected && c.notifyPath && c.notifyPath('_cells.*', c._cells),
       );
     }
 
@@ -845,7 +845,7 @@ class Grid extends ElementMixin(
    */
   _renderColumnTree(columnTree) {
     Array.from(this.$.items.children).forEach((row) =>
-      this._updateRow(row, columnTree[columnTree.length - 1], null, false, true)
+      this._updateRow(row, columnTree[columnTree.length - 1], null, false, true),
     );
 
     while (this.$.header.children.length < columnTree.length) {
@@ -867,11 +867,11 @@ class Grid extends ElementMixin(
     }
 
     Array.from(this.$.header.children).forEach((headerRow, index) =>
-      this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1)
+      this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1),
     );
 
     Array.from(this.$.footer.children).forEach((footerRow, index) =>
-      this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0)
+      this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0),
     );
 
     // Sizer rows
@@ -965,7 +965,7 @@ class Grid extends ElementMixin(
       level: this._getIndexLevel(row.index),
       expanded: this._isExpanded(row._item),
       selected: this._isSelected(row._item),
-      detailsOpened: !!this.rowDetailsRenderer && this._isDetailsOpened(row._item)
+      detailsOpened: !!this.rowDetailsRenderer && this._isDetailsOpened(row._item),
     };
   }
 
@@ -1010,7 +1010,7 @@ class Grid extends ElementMixin(
    */
   notifyResize() {
     console.warn(
-      `WARNING: Since Vaadin 22, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`
+      `WARNING: Since Vaadin 22, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`,
     );
   }
 }

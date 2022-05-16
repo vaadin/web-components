@@ -60,7 +60,7 @@ export const ElementMixin = (superClass) =>
 
       if (document.doctype === null) {
         console.warn(
-          'Vaadin components require the "standards mode" declaration. Please add <!DOCTYPE html> to the HTML document.'
+          'Vaadin components require the "standards mode" declaration. Please add <!DOCTYPE html> to the HTML document.',
         );
       }
     }

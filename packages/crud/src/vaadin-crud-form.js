@@ -25,7 +25,7 @@ class CrudForm extends IncludedMixin(FormLayout) {
        * The item being edited.
        * @type {unknown}
        */
-      item: Object
+      item: Object,
     };
   }
 

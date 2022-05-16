@@ -37,7 +37,7 @@ registerStyles(
       line-height: inherit;
     }
   `,
-  { moduleId: 'vaadin-select-value-button-styles' }
+  { moduleId: 'vaadin-select-value-button-styles' },
 );
 
 /**

@@ -58,7 +58,7 @@ export function xhrCreator(c) {
     serverTime: c.serverTime || 10,
     serverMessage: c.message || '{"message": "ok"}',
     serverType: c.serverType || 'application/json',
-    serverValidation: c.serverValidation || function () {}
+    serverValidation: c.serverValidation || function () {},
   };
   return function () {
     var xhr = new MockHttpRequest();

@@ -15,7 +15,7 @@ import {
   getRowCells,
   getRows,
   infiniteDataProvider,
-  scrollToEnd
+  scrollToEnd,
 } from './helpers.js';
 
 class XBooleanToggle extends PolymerElement {
@@ -25,7 +25,7 @@ class XBooleanToggle extends PolymerElement {
 
   static get properties() {
     return {
-      value: { type: Boolean, notify: true }
+      value: { type: Boolean, notify: true },
     };
   }
 }
@@ -294,7 +294,7 @@ const fixtures = {
         </vaadin-grid-column>
       </vaadin-grid-column-group>
     </grid-wrapper>
-  `
+  `,
 };
 
 describe('light dom observing', () => {
@@ -317,7 +317,7 @@ describe('light dom observing', () => {
     // Assign the slot to the <grid-wrapper> children.
     if (wrapper) {
       Array.from(wrapper.children).forEach((wrapperChild) =>
-        wrapperChild.setAttribute('slot', options && options.inGroup ? 'group' : 'grid')
+        wrapperChild.setAttribute('slot', options && options.inGroup ? 'group' : 'grid'),
       );
     }
 

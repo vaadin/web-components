@@ -153,7 +153,7 @@ class Tabs extends ElementMixin(ListMixin(ThemableMixin(mixinBehaviors([IronResi
        */
       orientation: {
         value: 'horizontal',
-        type: String
+        type: String,
       },
 
       /**
@@ -161,8 +161,8 @@ class Tabs extends ElementMixin(ListMixin(ThemableMixin(mixinBehaviors([IronResi
        */
       selected: {
         value: 0,
-        type: Number
-      }
+        type: Number,
+      },
     };
   }
 

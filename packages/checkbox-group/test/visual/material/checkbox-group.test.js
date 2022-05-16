@@ -19,7 +19,7 @@ describe('checkbox-group', () => {
           <vaadin-checkbox value="c" label="C"></vaadin-checkbox>
         </vaadin-checkbox-group>
       `,
-      div
+      div,
     );
   });
 

@@ -8,7 +8,7 @@ import {
   fixtureSync,
   home,
   keyDownChar,
-  nextFrame
+  nextFrame,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -44,7 +44,7 @@ customElements.define(
     get _scrollerElement() {
       return this.$.scroll;
     }
-  }
+  },
 );
 
 customElements.define(
@@ -72,15 +72,15 @@ customElements.define(
     static get properties() {
       return {
         _hasVaadinItemMixin: {
-          value: true
+          value: true,
         },
         disabled: {
           type: Boolean,
-          observer: '_disabledChanged'
+          observer: '_disabledChanged',
         },
         selected: {
-          type: Boolean
-        }
+          type: Boolean,
+        },
       };
     }
 
@@ -90,7 +90,7 @@ customElements.define(
         this.selected = false;
       }
     }
-  }
+  },
 );
 
 describe('vaadin-list-mixin', () => {

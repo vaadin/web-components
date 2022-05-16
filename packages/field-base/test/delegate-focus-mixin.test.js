@@ -19,10 +19,10 @@ customElements.define(
       this.addController(
         new InputController(this, (input) => {
           this._setFocusElement(input);
-        })
+        }),
       );
     }
-  }
+  },
 );
 
 describe('delegate-focus-mixin', () => {

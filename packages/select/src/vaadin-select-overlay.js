@@ -15,7 +15,7 @@ registerStyles(
       justify-content: flex-start;
     }
   `,
-  { moduleId: 'vaadin-select-overlay-styles' }
+  { moduleId: 'vaadin-select-overlay-styles' },
 );
 
 /**

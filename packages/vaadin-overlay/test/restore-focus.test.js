@@ -18,7 +18,7 @@ customElements.define(
         <input id="focusable" />
       `;
     }
-  }
+  },
 );
 
 describe('restore focus', () => {

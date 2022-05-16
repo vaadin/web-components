@@ -68,7 +68,7 @@ const fixtures = {
         </div>
       </div>
     </x-field2>
-  `
+  `,
 };
 
 Object.keys(fixtures).forEach((set) => {

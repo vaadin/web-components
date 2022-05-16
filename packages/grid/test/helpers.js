@@ -35,15 +35,15 @@ export const infiniteDataProvider = (params, callback) => {
   callback(
     Array.apply(null, Array(params.pageSize)).map((item, index) => {
       return {
-        value: 'foo' + (params.page * params.pageSize + index)
+        value: 'foo' + (params.page * params.pageSize + index),
       };
-    })
+    }),
   );
 };
 
 export const buildItem = (index) => {
   return {
-    index: index
+    index: index,
   };
 };
 
@@ -170,12 +170,12 @@ export const dragStart = (source) => {
     {
       x: Math.round(sourceRect.left + sourceRect.width / 2),
       y: Math.round(sourceRect.top + sourceRect.height / 2),
-      state: 'start'
+      state: 'start',
     },
     {
       node: source,
-      bubbles: true
-    }
+      bubbles: true,
+    },
   );
 };
 
@@ -187,12 +187,12 @@ export const dragOver = (source, target, clientX) => {
     {
       x: Math.round(clientX || targetRect.left + targetRect.width / 2),
       y: Math.round(targetRect.top + targetRect.height / 2),
-      state: 'track'
+      state: 'track',
     },
     {
       node: source,
-      bubbles: true
-    }
+      bubbles: true,
+    },
   );
 };
 
@@ -203,12 +203,12 @@ export const dragAndDropOver = (source, target) => {
     {
       x: 0,
       y: 0,
-      state: 'end'
+      state: 'end',
     },
     {
       node: source,
-      bubbles: true
-    }
+      bubbles: true,
+    },
   );
 };
 
@@ -218,13 +218,13 @@ export const makeSoloTouchEvent = (type, xy, node) => {
       identifier: 0,
       target: node,
       clientX: xy.x,
-      clientY: xy.y
-    }
+      clientY: xy.y,
+    },
   ];
   const touchEventInit = {
     touches: touches,
     targetTouches: touches,
-    changedTouches: touches
+    changedTouches: touches,
   };
   const event = new CustomEvent(type, { bubbles: true, cancelable: true });
   for (let property in touchEventInit) {
@@ -240,7 +240,7 @@ export const fire = (type, detail, options) => {
   const event = new Event(type, {
     bubbles: options.bubbles === undefined ? true : options.bubbles,
     cancelable: Boolean(options.cancelable),
-    composed: options.composed === undefined ? true : options.composed
+    composed: options.composed === undefined ? true : options.composed,
   });
   event.detail = detail;
   const node = options.node || window;

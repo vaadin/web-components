@@ -41,5 +41,5 @@ registerStyles(
       }
     }
   `,
-  { moduleId: 'vaadin-dialog-layout-overlay' }
+  { moduleId: 'vaadin-dialog-layout-overlay' },
 );

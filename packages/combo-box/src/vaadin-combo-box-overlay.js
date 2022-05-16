@@ -20,7 +20,7 @@ registerStyles(
       height: 100%;
     }
   `,
-  { moduleId: 'vaadin-combo-box-overlay-styles' }
+  { moduleId: 'vaadin-combo-box-overlay-styles' },
 );
 
 let memoizedTemplate;

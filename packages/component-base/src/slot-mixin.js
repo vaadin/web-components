@@ -48,5 +48,5 @@ export const SlotMixin = dedupingMixin(
       _getDirectSlotChild(slotName) {
         return Array.from(this.children).find((el) => el.slot === slotName);
       }
-    }
+    },
 );

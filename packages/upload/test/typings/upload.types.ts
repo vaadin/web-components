@@ -12,7 +12,7 @@ import {
   UploadResponseEvent,
   UploadRetryEvent,
   UploadStartEvent,
-  UploadSuccessEvent
+  UploadSuccessEvent,
 } from '../../vaadin-upload.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;

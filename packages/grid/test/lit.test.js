@@ -17,7 +17,7 @@ describe('lit', () => {
             })}
           </vaadin-grid>
         `,
-        wrapper
+        wrapper,
       );
     }
 

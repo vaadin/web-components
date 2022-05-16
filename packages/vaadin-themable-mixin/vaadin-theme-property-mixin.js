@@ -29,8 +29,8 @@ export const ThemePropertyMixin = (superClass) =>
          */
         theme: {
           type: String,
-          readOnly: true
-        }
+          readOnly: true,
+        },
       };
     }
 

@@ -254,5 +254,5 @@ registerStyles(
       right: var(--_grid-drag-start-x);
     }
   `,
-  { moduleId: 'material-grid' }
+  { moduleId: 'material-grid' },
 );

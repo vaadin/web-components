@@ -15,5 +15,5 @@ registerStyles(
       margin-right: calc(var(--vaadin-avatar-outline-width) * -1);
     }
   `,
-  { moduleId: 'material-message-avatar' }
+  { moduleId: 'material-message-avatar' },
 );

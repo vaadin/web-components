@@ -138,7 +138,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
       hasControls: {
         type: Boolean,
         value: false,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -146,7 +146,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
        */
       min: {
         type: Number,
-        observer: '_minChanged'
+        observer: '_minChanged',
       },
 
       /**
@@ -154,7 +154,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
        */
       max: {
         type: Number,
-        observer: '_maxChanged'
+        observer: '_maxChanged',
       },
 
       /**
@@ -164,8 +164,8 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
       step: {
         type: Number,
         value: 1,
-        observer: '_stepChanged'
-      }
+        observer: '_stepChanged',
+      },
     };
   }
 
@@ -200,7 +200,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
         ${tag}[dir='rtl']:not([has-controls]) input[type="number"]::placeholder {
           text-align: left;
         }
-      `
+      `,
     ];
   }
 
@@ -233,7 +233,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
         this._setFocusElement(input);
         this.stateTarget = input;
         this.ariaTarget = input;
-      })
+      }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
   }

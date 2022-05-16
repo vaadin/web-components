@@ -44,7 +44,7 @@ class CrudGrid extends IncludedMixin(Grid) {
       noHead: Boolean,
 
       /** @private */
-      __hideEditColumn: Boolean
+      __hideEditColumn: Boolean,
     };
   }
 

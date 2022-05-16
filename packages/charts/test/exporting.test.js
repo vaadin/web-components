@@ -48,7 +48,7 @@ customElements.define(
         </vaadin-chart>
       `;
     }
-  }
+  },
 );
 
 describe('vaadin-chart exporting', () => {
@@ -84,7 +84,7 @@ describe('vaadin-chart exporting', () => {
           (mutation) =>
             Array.from(mutation.addedNodes)
               .map((node) => node.tagName.toLowerCase())
-              .indexOf('style') >= 0
+              .indexOf('style') >= 0,
         );
     });
 
@@ -113,7 +113,7 @@ describe('vaadin-chart exporting', () => {
           (mutation) =>
             Array.from(mutation.removedNodes)
               .map((node) => node.tagName.toLowerCase())
-              .indexOf('style') >= 0
+              .indexOf('style') >= 0,
         );
     });
 

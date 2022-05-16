@@ -16,7 +16,7 @@ describe('vaadin-message-list', () => {
   it('items', async () => {
     list.items = [
       { text: 'Hi folks!', userName: 'Jane Doe' },
-      { text: 'Good morning!', userName: 'Lina Roy' }
+      { text: 'Good morning!', userName: 'Lina Roy' },
     ];
     await nextFrame();
     await expect(list).shadowDom.to.equalSnapshot();

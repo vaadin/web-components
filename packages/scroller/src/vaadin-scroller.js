@@ -62,8 +62,8 @@ class Scroller extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       scrollDirection: {
         type: String,
-        reflectToAttribute: true
-      }
+        reflectToAttribute: true,
+      },
     };
   }
 }

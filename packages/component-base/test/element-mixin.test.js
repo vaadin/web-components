@@ -12,7 +12,7 @@ describe('ElementMixin', () => {
         static get is() {
           return tagName;
         }
-      }
+      },
     );
 
     flush();

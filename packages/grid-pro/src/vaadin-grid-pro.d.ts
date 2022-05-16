@@ -74,13 +74,13 @@ declare class GridPro<TItem = GridDefaultItem> extends Grid<TItem> {
   addEventListener<K extends keyof GridProEventMap<TItem>>(
     type: K,
     listener: (this: GridPro<TItem>, ev: GridProEventMap<TItem>[K]) => void,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
 
   removeEventListener<K extends keyof GridProEventMap<TItem>>(
     type: K,
     listener: (this: GridPro<TItem>, ev: GridProEventMap<TItem>[K]) => void,
-    options?: boolean | EventListenerOptions
+    options?: boolean | EventListenerOptions,
   ): void;
 }
 

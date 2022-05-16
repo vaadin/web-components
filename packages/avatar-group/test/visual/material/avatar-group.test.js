@@ -31,7 +31,7 @@ describe('avatar-group', () => {
       { abbr: '33', colorIndex: 3 },
       { abbr: '44', colorIndex: 4 },
       { abbr: '55', colorIndex: 5 },
-      { abbr: '66', colorIndex: 6 }
+      { abbr: '66', colorIndex: 6 },
     ];
     await visualDiff(div, 'color-index');
   });

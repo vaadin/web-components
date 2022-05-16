@@ -14,7 +14,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 const CLASSES = {
   SMALL: 'small',
   MEDIUM: 'medium',
-  LARGE: 'large'
+  LARGE: 'large',
 };
 
 /**
@@ -101,8 +101,8 @@ class BoardRow extends ElementMixin(mixinBehaviors([IronResizableBehavior], Poly
           bubbles: true,
           cancelable: true,
           composed: true,
-          detail: {}
-        })
+          detail: {},
+        }),
       );
     });
   }

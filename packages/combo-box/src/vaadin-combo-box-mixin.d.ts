@@ -19,11 +19,11 @@ export interface ComboBoxItemModel<TItem> {
 export type ComboBoxRenderer<TItem> = (
   root: HTMLElement,
   comboBox: ComboBox<TItem>,
-  model: ComboBoxItemModel<TItem>
+  model: ComboBoxItemModel<TItem>,
 ) => void;
 
 export declare function ComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T &
   Constructor<ComboBoxMixinClass<TItem>> &
   Constructor<DisabledMixinClass> &

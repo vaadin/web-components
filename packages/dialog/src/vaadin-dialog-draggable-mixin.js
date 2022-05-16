@@ -28,19 +28,19 @@ export const DialogDraggableMixin = (superClass) =>
         draggable: {
           type: Boolean,
           value: false,
-          reflectToAttribute: true
+          reflectToAttribute: true,
         },
 
         /** @private */
         _touchDevice: {
           type: Boolean,
-          value: isTouch
+          value: isTouch,
         },
 
         /* TODO: Expose as a public property (check naming) */
         __dragHandleClassName: {
-          type: String
-        }
+          type: String,
+        },
       };
     }
 

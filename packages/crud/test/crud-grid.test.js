@@ -11,11 +11,11 @@ describe('crud grid', () => {
       _id: 1,
       name: {
         first: 'Grant',
-        last: 'Andrews'
+        last: 'Andrews',
       },
       password: 'lorem',
-      role: 'operator'
-    }
+      role: 'operator',
+    },
   ];
 
   describe('custom element definition', () => {

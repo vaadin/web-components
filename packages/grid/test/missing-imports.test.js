@@ -21,7 +21,7 @@ describe('missing imports', () => {
     'vaadin-grid-tree-toggle',
     'vaadin-grid-selection-column',
     'vaadin-grid-sort-column',
-    'vaadin-grid-sorter'
+    'vaadin-grid-sorter',
   ].forEach((elementName) => {
     describe(`import warning for ${elementName}`, () => {
       beforeEach(() => {

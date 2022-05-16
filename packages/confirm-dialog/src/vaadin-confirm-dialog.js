@@ -140,7 +140,7 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
         type: Boolean,
         value: false,
         notify: true,
-        observer: '_openedChanged'
+        observer: '_openedChanged',
       },
 
       /**
@@ -149,14 +149,14 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       header: {
         type: String,
-        value: ''
+        value: '',
       },
 
       /**
        * Set the message or confirmation question.
        */
       message: {
-        type: String
+        type: String,
       },
 
       /**
@@ -166,7 +166,7 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       confirmText: {
         type: String,
-        value: 'Confirm'
+        value: 'Confirm',
       },
 
       /**
@@ -176,7 +176,7 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       confirmTheme: {
         type: String,
-        value: 'primary'
+        value: 'primary',
       },
 
       /**
@@ -186,7 +186,7 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       noCloseOnEsc: {
         type: Boolean,
-        value: false
+        value: false,
       },
 
       /**
@@ -196,7 +196,7 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
       reject: {
         type: Boolean,
         reflectToAttribute: true,
-        value: false
+        value: false,
       },
 
       /**
@@ -206,7 +206,7 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       rejectText: {
         type: String,
-        value: 'Reject'
+        value: 'Reject',
       },
 
       /**
@@ -216,7 +216,7 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       rejectTheme: {
         type: String,
-        value: 'error tertiary'
+        value: 'error tertiary',
       },
 
       /**
@@ -226,7 +226,7 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
       cancel: {
         type: Boolean,
         reflectToAttribute: true,
-        value: false
+        value: false,
       },
 
       /**
@@ -236,7 +236,7 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       cancelText: {
         type: String,
-        value: 'Cancel'
+        value: 'Cancel',
       },
 
       /**
@@ -246,13 +246,13 @@ class ConfirmDialog extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       cancelTheme: {
         type: String,
-        value: 'tertiary'
+        value: 'tertiary',
       },
 
       /** @private */
       _confirmButton: {
-        type: Element
-      }
+        type: Element,
+      },
     };
   }
 

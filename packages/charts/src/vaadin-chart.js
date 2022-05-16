@@ -302,7 +302,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       categories: {
         type: Object,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -311,7 +311,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       categoryMax: {
         type: Number,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -320,7 +320,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       categoryMin: {
         type: Number,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -336,7 +336,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       categoryPosition: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -346,7 +346,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       noLegend: {
         type: Boolean,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -359,7 +359,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       stacking: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -367,7 +367,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       timeline: {
         type: Boolean,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -376,7 +376,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       title: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -384,7 +384,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       tooltip: {
         type: Boolean,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -393,7 +393,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       type: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -402,7 +402,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       subtitle: {
         type: String,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -415,7 +415,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       chart3d: {
         type: Boolean,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -426,7 +426,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
       emptyText: {
         type: String,
         value: ' ',
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -435,7 +435,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       additionalOptions: {
         type: Object,
-        reflectToAttribute: true
+        reflectToAttribute: true,
       },
 
       /**
@@ -444,8 +444,8 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        */
       polar: {
         type: Boolean,
-        reflectToAttribute: true
-      }
+        reflectToAttribute: true,
+      },
     };
   }
 
@@ -464,7 +464,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
       '__updateSubtitle(subtitle, configuration)',
       '__updateTitle(title, configuration)',
       '__updateType(type, configuration)',
-      '__updateAdditionalOptions(additionalOptions.*)'
+      '__updateAdditionalOptions(additionalOptions.*)',
     ];
   }
 
@@ -487,29 +487,29 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     this._baseConfig = {
       chart: {
-        styledMode: true
+        styledMode: true,
       },
       credits: {
-        enabled: false
+        enabled: false,
       },
       exporting: {
-        enabled: false
+        enabled: false,
       },
       title: {
-        text: null
+        text: null,
       },
       series: [],
       xAxis: {},
       yAxis: {
-        axisGenerated: true
-      }
+        axisGenerated: true,
+      },
     };
 
     this._baseChart3d = {
       enabled: true,
       alpha: 15,
       beta: 15,
-      depth: 50
+      depth: 50,
     };
 
     this.__mutationCallback = this.__mutationCallback.bind(this);
@@ -556,7 +556,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     if (this.title) {
       options.title = {
-        text: this.title
+        text: this.title,
       };
     }
 
@@ -570,7 +570,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     if (this.subtitle) {
       options.subtitle = {
-        text: this.subtitle
+        text: this.subtitle,
       };
     }
 
@@ -606,7 +606,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     if (this.noLegend) {
       options.legend = {
-        enabled: false
+        enabled: false,
       };
     }
 
@@ -743,7 +743,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        * @param {Object} detail.originalEvent object with details about the event sent
        * @param {Object} chart Chart object where the event was sent from
        */
-      selection: 'chart-selection'
+      selection: 'chart-selection',
     };
   }
 
@@ -815,7 +815,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        * @param {Object} detail.originalEvent object with details about the event sent
        * @param {Object} series Series object where the event was sent from
        */
-      show: 'series-show'
+      show: 'series-show',
     };
   }
 
@@ -887,7 +887,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        * @param {Object} detail.originalEvent object with details about the event sent
        * @param {Object} point Point object where the event was sent from
        */
-      update: 'point-update'
+      update: 'point-update',
     };
   }
 
@@ -900,7 +900,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        * @param {Object} detail.originalEvent object with details about the event sent
        * @param {Object} axis Point object where the event was sent from
        */
-      afterSetExtremes: 'xaxes-extremes-set'
+      afterSetExtremes: 'xaxes-extremes-set',
     };
   }
 
@@ -913,7 +913,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
        * @param {Object} detail.originalEvent object with details about the event sent
        * @param {Object} axis Point object where the event was sent from
        */
-      afterSetExtremes: 'yaxes-extremes-set'
+      afterSetExtremes: 'yaxes-extremes-set',
     };
   }
 
@@ -1280,8 +1280,8 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
             composed: true,
             detail: {
               originalEvent: event,
-              [eventType]: event.target
-            }
+              [eventType]: event.target,
+            },
           };
 
           if (event.type === 'afterSetExtremes') {
@@ -1494,14 +1494,14 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     config.update({
       chart: {
-        inverted: this.__shouldInvert()
-      }
+        inverted: this.__shouldInvert(),
+      },
     });
 
     config.xAxis.forEach((e) =>
       e.update({
-        opposite: this.__shouldFlipOpposite()
-      })
+        opposite: this.__shouldFlipOpposite(),
+      }),
     );
   }
 
@@ -1546,7 +1546,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     if (type && type.length > 0) {
       config.update({
-        chart: { type }
+        chart: { type },
       });
     }
   }
@@ -1595,8 +1595,8 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     config.update({
       plotOptions: {
-        series: { stacking }
-      }
+        series: { stacking },
+      },
     });
   }
 
@@ -1613,17 +1613,17 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
             {},
             this._baseChart3d,
             this.additionalOptions && this.additionalOptions.chart && this.additionalOptions.chart.options3d,
-            { enabled: true }
-          )
-        }
+            { enabled: true },
+          ),
+        },
       });
     } else {
       config.update({
         chart: {
           options3d: {
-            enabled: false
-          }
-        }
+            enabled: false,
+          },
+        },
       });
     }
   }
@@ -1635,7 +1635,7 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
 
     config.update({
-      chart: { polar }
+      chart: { polar },
     });
   }
 
@@ -1647,8 +1647,8 @@ class Chart extends ElementMixin(ThemableMixin(PolymerElement)) {
 
     config.update({
       lang: {
-        noData: emptyText
-      }
+        noData: emptyText,
+      },
     });
     config.hideNoData();
     config.showNoData(emptyText);

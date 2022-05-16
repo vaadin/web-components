@@ -80,7 +80,7 @@ export class PasswordField extends SlotStylesMixin(SlotMixin(TextField)) {
       revealButtonHidden: {
         type: Boolean,
         observer: '_revealButtonHiddenChanged',
-        value: false
+        value: false,
       },
 
       /**
@@ -92,7 +92,7 @@ export class PasswordField extends SlotStylesMixin(SlotMixin(TextField)) {
         value: false,
         reflectToAttribute: true,
         observer: '_passwordVisibleChanged',
-        readOnly: true
+        readOnly: true,
       },
 
       /**
@@ -110,10 +110,10 @@ export class PasswordField extends SlotStylesMixin(SlotMixin(TextField)) {
         type: Object,
         value: () => {
           return {
-            reveal: 'Show password'
+            reveal: 'Show password',
           };
-        }
-      }
+        },
+      },
     };
   }
 
@@ -130,7 +130,7 @@ export class PasswordField extends SlotStylesMixin(SlotMixin(TextField)) {
         btn.setAttribute('type', 'button');
         btn.disabled = this.disabled;
         return btn;
-      }
+      },
     };
   }
 
@@ -142,7 +142,7 @@ export class PasswordField extends SlotStylesMixin(SlotMixin(TextField)) {
         ${tag} [slot="input"]::-ms-reveal {
           display: none;
         }
-      `
+      `,
     ];
   }
 

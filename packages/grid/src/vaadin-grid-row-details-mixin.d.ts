@@ -9,11 +9,11 @@ import { Grid, GridItemModel } from './vaadin-grid.js';
 export type GridRowDetailsRenderer<TItem> = (
   root: HTMLElement,
   grid?: Grid<TItem>,
-  model?: GridItemModel<TItem>
+  model?: GridItemModel<TItem>,
 ) => void;
 
 export declare function RowDetailsMixin<TItem, T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<RowDetailsMixinClass<TItem>>;
 
 export declare class RowDetailsMixinClass<TItem> {

@@ -13,7 +13,7 @@ export type GridDropLocation = 'above' | 'on-top' | 'below' | 'empty';
 export type GridDropMode = 'between' | 'on-top' | 'on-top-or-between' | 'on-grid';
 
 export declare function DragAndDropMixin<TItem, T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<DragAndDropMixinClass<TItem>>;
 
 export declare class DragAndDropMixinClass<TItem> {

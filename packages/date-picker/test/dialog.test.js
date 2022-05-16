@@ -40,7 +40,7 @@ describe('modeless dialog', () => {
     datepicker.dispatchEvent(new CustomEvent('mousedown', { bubbles: true, composed: true }));
     await nextFrame();
     expect(parseFloat(getComputedStyle(datepicker.$.overlay).zIndex)).to.equal(
-      parseFloat(getComputedStyle(dialog.$.overlay).zIndex) + 1
+      parseFloat(getComputedStyle(dialog.$.overlay).zIndex) + 1,
     );
   });
 
@@ -49,7 +49,7 @@ describe('modeless dialog', () => {
     touchstart(datepicker);
     await nextFrame();
     expect(parseFloat(getComputedStyle(datepicker.$.overlay).zIndex)).to.equal(
-      parseFloat(getComputedStyle(dialog.$.overlay).zIndex) + 1
+      parseFloat(getComputedStyle(dialog.$.overlay).zIndex) + 1,
     );
   });
 });

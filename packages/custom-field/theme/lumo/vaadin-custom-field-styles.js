@@ -86,7 +86,7 @@ const customField = css`
 `;
 
 registerStyles('vaadin-custom-field', [requiredField, helper, customField], {
-  moduleId: 'lumo-custom-field'
+  moduleId: 'lumo-custom-field',
 });
 
 export { customField };

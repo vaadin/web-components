@@ -21,8 +21,8 @@ export const DelegateStateMixin = dedupingMixin(
            */
           stateTarget: {
             type: Object,
-            observer: '_stateTargetChanged'
-          }
+            observer: '_stateTargetChanged',
+          },
         };
       }
 
@@ -121,5 +121,5 @@ export const DelegateStateMixin = dedupingMixin(
 
         this.stateTarget[name] = value;
       }
-    }
+    },
 );

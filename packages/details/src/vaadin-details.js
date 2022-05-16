@@ -109,8 +109,8 @@ class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(PolymerElement
         value: false,
         reflectToAttribute: true,
         notify: true,
-        observer: '_openedChanged'
-      }
+        observer: '_openedChanged',
+      },
     };
   }
 

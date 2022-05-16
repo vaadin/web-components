@@ -86,5 +86,5 @@ const loginFormWrapper = css`
 `;
 
 registerStyles('vaadin-login-form-wrapper', [typography, loginFormWrapper], {
-  moduleId: 'material-login-form-wrapper'
+  moduleId: 'material-login-form-wrapper',
 });

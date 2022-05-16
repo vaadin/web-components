@@ -118,7 +118,7 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
  * @mixes DatePickerMixin
  */
 class DatePicker extends DatePickerMixin(
-  InputControlMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement))))
+  InputControlMixin(GestureEventListeners(ThemableMixin(ElementMixin(PolymerElement)))),
 ) {
   static get is() {
     return 'vaadin-date-picker';
@@ -212,7 +212,7 @@ class DatePicker extends DatePickerMixin(
         this._setFocusElement(input);
         this.stateTarget = input;
         this.ariaTarget = input;
-      })
+      }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
 

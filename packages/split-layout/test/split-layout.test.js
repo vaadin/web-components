@@ -242,10 +242,10 @@ function testDimensions(isVertical) {
         dragHandle(distance);
 
         expect(
-          Math.abs((isVertical ? first : second).getBoundingClientRect()[size] - (initialSize + distance))
+          Math.abs((isVertical ? first : second).getBoundingClientRect()[size] - (initialSize + distance)),
         ).to.be.at.most(1);
         expect(
-          Math.abs((isVertical ? second : first).getBoundingClientRect()[size] - (initialSize - distance))
+          Math.abs((isVertical ? second : first).getBoundingClientRect()[size] - (initialSize - distance)),
         ).to.be.at.most(1);
       });
 

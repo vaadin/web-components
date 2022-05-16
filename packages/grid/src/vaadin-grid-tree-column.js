@@ -37,8 +37,8 @@ class GridTreeColumn extends GridColumn {
        */
       itemHasChildrenPath: {
         type: String,
-        value: 'children'
-      }
+        value: 'children',
+      },
     };
   }
 

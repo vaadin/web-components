@@ -6,7 +6,7 @@
 import { Constructor } from '@open-wc/dedupe-mixin';
 
 export declare function SelectionMixin<TItem, T extends Constructor<HTMLElement>>(
-  base: T
+  base: T,
 ): T & Constructor<SelectionMixinClass<TItem>>;
 
 export declare class SelectionMixinClass<TItem> {

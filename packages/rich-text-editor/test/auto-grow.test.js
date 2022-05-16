@@ -79,7 +79,7 @@ describe('rich text editor', () => {
             compareValue(rte.offsetHeight, 500, 0);
           }
           getAndCompareHeightConstrains(elementsArray, key);
-        }
+        },
       );
     });
   });

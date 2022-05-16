@@ -352,7 +352,7 @@ describe('text-field', () => {
     it('should not consider updating the value as user input if the value is not changed', () => {
       const event = new Event('input', {
         bubbles: true,
-        cancelable: true
+        cancelable: true,
       });
       input.dispatchEvent(event);
 

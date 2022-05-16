@@ -10,7 +10,7 @@ import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mi
 import { datePickerOverlayStyles } from './vaadin-date-picker-styles.js';
 
 registerStyles('vaadin-date-picker-overlay', datePickerOverlayStyles, {
-  moduleId: 'vaadin-date-picker-overlay-styles'
+  moduleId: 'vaadin-date-picker-overlay-styles',
 });
 
 /**

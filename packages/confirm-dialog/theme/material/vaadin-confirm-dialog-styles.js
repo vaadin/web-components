@@ -15,7 +15,7 @@ registerStyles(
       box-sizing: content-box;
     }
   `,
-  { moduleId: 'material-confirm-dialog-overlay' }
+  { moduleId: 'material-confirm-dialog-overlay' },
 );
 
 registerStyles(
@@ -85,5 +85,5 @@ registerStyles(
       margin-left: 8px;
     }
   `,
-  { moduleId: 'material-confirm-dialog' }
+  { moduleId: 'material-confirm-dialog' },
 );

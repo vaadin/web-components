@@ -8,7 +8,7 @@ import {
   focusout,
   keyDownChar,
   nextRender,
-  space
+  space,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';

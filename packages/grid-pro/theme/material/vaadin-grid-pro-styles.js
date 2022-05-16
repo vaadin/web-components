@@ -19,5 +19,5 @@ registerStyles(
       background: var(--material-background-color) linear-gradient(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.08));
     }
   `,
-  { moduleId: 'material-grid-pro' }
+  { moduleId: 'material-grid-pro' },
 );

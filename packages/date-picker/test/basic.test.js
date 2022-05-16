@@ -342,7 +342,7 @@ describe('basic features', () => {
         'torstai',
         'perjantai',
         'lauantai',
-        'sunnuntai'
+        'sunnuntai',
       ]);
       expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
     });

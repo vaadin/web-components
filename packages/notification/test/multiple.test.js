@@ -14,7 +14,7 @@ registerStyles(
       animation: none !important;
     }
   `,
-  { moduleId: 'vaadin-notification-card-multiple-theme' }
+  { moduleId: 'vaadin-notification-card-multiple-theme' },
 );
 
 describe('multiple notification', () => {
@@ -83,7 +83,7 @@ describe('multiple notification', () => {
         'bottom-start',
         'bottom-center',
         'bottom-end',
-        'bottom-stretch'
+        'bottom-stretch',
       ].forEach((regionName) => {
         const region = container.shadowRoot.querySelector(`[region="${regionName}"]`);
         expect(region).to.not.be.null;
@@ -176,7 +176,7 @@ describe('multiple notification', () => {
     it('all region groups should have flex-direction row', () => {
       [
         container.shadowRoot.querySelector('[region-group="top"]'),
-        container.shadowRoot.querySelector('[region-group="bottom"]')
+        container.shadowRoot.querySelector('[region-group="bottom"]'),
       ].forEach((el) => {
         expect(getComputedStyle(el).flexDirection).to.equal('row');
       });
@@ -185,7 +185,7 @@ describe('multiple notification', () => {
     it('all region groups should have equal flex stretching', () => {
       [
         container.shadowRoot.querySelector('[region-group="top"]'),
-        container.shadowRoot.querySelector('[region-group="bottom"]')
+        container.shadowRoot.querySelector('[region-group="bottom"]'),
       ].forEach((el) => {
         expect(getComputedStyle(el).flexGrow).to.equal('1');
         expect(parseFloat(getComputedStyle(el).flexBasis)).to.equal(0);

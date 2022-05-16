@@ -10,7 +10,7 @@ registerStyles(
       box-sizing: content-box;
     }
   `,
-  { moduleId: 'lumo-confirm-dialog-overlay' }
+  { moduleId: 'lumo-confirm-dialog-overlay' },
 );
 
 registerStyles(
@@ -113,5 +113,5 @@ registerStyles(
       margin-right: var(--lumo-space-s);
     }
   `,
-  { moduleId: 'lumo-confirm-dialog' }
+  { moduleId: 'lumo-confirm-dialog' },
 );

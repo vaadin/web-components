@@ -42,7 +42,7 @@ export const ItemCache = class ItemCache {
       Object.keys(this.pendingRequests).length ||
         Object.keys(this.itemCaches).filter((index) => {
           return this.itemCaches[index].isLoading();
-        })[0]
+        })[0],
     );
   }
 
@@ -113,7 +113,7 @@ export const DataProviderMixin = (superClass) =>
          */
         size: {
           type: Number,
-          notify: true
+          notify: true,
         },
 
         /**
@@ -124,7 +124,7 @@ export const DataProviderMixin = (superClass) =>
         pageSize: {
           type: Number,
           value: 50,
-          observer: '_pageSizeChanged'
+          observer: '_pageSizeChanged',
         },
 
         /**
@@ -153,7 +153,7 @@ export const DataProviderMixin = (superClass) =>
         dataProvider: {
           type: Object,
           notify: true,
-          observer: '_dataProviderChanged'
+          observer: '_dataProviderChanged',
         },
 
         /**
@@ -163,7 +163,7 @@ export const DataProviderMixin = (superClass) =>
           type: Boolean,
           notify: true,
           readOnly: true,
-          reflectToAttribute: true
+          reflectToAttribute: true,
         },
 
         /**
@@ -175,7 +175,7 @@ export const DataProviderMixin = (superClass) =>
           value: function () {
             const cache = new ItemCache(this);
             return cache;
-          }
+          },
         },
 
         /**
@@ -183,7 +183,7 @@ export const DataProviderMixin = (superClass) =>
          */
         _hasData: {
           type: Boolean,
-          value: false
+          value: false,
         },
 
         /**
@@ -192,7 +192,7 @@ export const DataProviderMixin = (superClass) =>
          */
         itemIdPath: {
           type: String,
-          value: null
+          value: null,
         },
 
         /**
@@ -202,7 +202,7 @@ export const DataProviderMixin = (superClass) =>
         expandedItems: {
           type: Object,
           notify: true,
-          value: () => []
+          value: () => [],
         },
 
         /**
@@ -210,8 +210,8 @@ export const DataProviderMixin = (superClass) =>
          */
         __expandedKeys: {
           type: Object,
-          value: () => new Set()
-        }
+          value: () => new Set(),
+        },
       };
     }
 
@@ -344,7 +344,7 @@ export const DataProviderMixin = (superClass) =>
           pageSize: this.pageSize,
           sortOrders: this._mapSorters(),
           filters: this._mapFilters(),
-          parentItem: cache.parentItem
+          parentItem: cache.parentItem,
         };
 
         this.dataProvider(params, (items, size) => {
@@ -436,7 +436,7 @@ export const DataProviderMixin = (superClass) =>
           'The <vaadin-grid> needs the total number of items' +
             ' in order to display rows. Set the total number of items' +
             ' to the `size` property, or provide the total number of items' +
-            ' in the second argument of the `dataProvider`’s `callback` call.'
+            ' in the second argument of the `dataProvider`’s `callback` call.',
         );
       }
     }
@@ -452,7 +452,7 @@ export const DataProviderMixin = (superClass) =>
       this._debouncerCheckSize = Debouncer.debounce(
         this._debouncerCheckSize,
         timeOut.after(2000),
-        this._checkSize.bind(this)
+        this._checkSize.bind(this),
       );
     }
 

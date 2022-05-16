@@ -14,5 +14,5 @@ registerStyles(
       margin-right: calc(var(--vaadin-avatar-outline-width) * -1);
     }
   `,
-  { moduleId: 'lumo-message-avatar' }
+  { moduleId: 'lumo-message-avatar' },
 );

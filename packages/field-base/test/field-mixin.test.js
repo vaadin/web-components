@@ -47,10 +47,10 @@ customElements.define(
           this._setInputElement(input);
           this.stateTarget = input;
           this.ariaTarget = input;
-        })
+        }),
       );
     }
-  }
+  },
 );
 
 customElements.define(
@@ -69,7 +69,7 @@ customElements.define(
 
       this.ariaTarget = this;
     }
-  }
+  },
 );
 
 describe('field-mixin', () => {
@@ -598,7 +598,7 @@ describe('field-mixin', () => {
     describe('field', () => {
       beforeEach(() => {
         element = fixtureSync(
-          `<field-mixin-element label="Label" helper-text="Helper" error-message="Error Message"></field-mixin-element>`
+          `<field-mixin-element label="Label" helper-text="Helper" error-message="Error Message"></field-mixin-element>`,
         );
         input = element.querySelector('[slot=input]');
         label = element.querySelector('[slot=label]');
@@ -639,7 +639,7 @@ describe('field-mixin', () => {
     describe('field group', () => {
       beforeEach(() => {
         element = fixtureSync(
-          `<field-mixin-group-element label="Label" helper-text="Helper" error-message="Error Message"></field-mixin-group-element>`
+          `<field-mixin-group-element label="Label" helper-text="Helper" error-message="Error Message"></field-mixin-group-element>`,
         );
         label = element.querySelector('[slot=label]');
         error = element.querySelector('[slot=error-message]');

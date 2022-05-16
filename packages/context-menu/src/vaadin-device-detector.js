@@ -29,7 +29,7 @@ class DeviceDetector extends PolymerElement {
       phone: {
         type: Boolean,
         computed: '_phone(wide, touch)',
-        notify: true
+        notify: true,
       },
 
       /**
@@ -39,7 +39,7 @@ class DeviceDetector extends PolymerElement {
       touch: {
         type: Boolean,
         notify: true,
-        value: isTouch
+        value: isTouch,
       },
 
       /**
@@ -47,8 +47,8 @@ class DeviceDetector extends PolymerElement {
        */
       wide: {
         type: Boolean,
-        notify: true
-      }
+        notify: true,
+      },
     };
   }
 
