@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/board",
-  "version": "23.1.0-beta3",
+  "version": "23.1.0-beta4",
   "publishConfig": {
     "access": "public"
   },
@@ -38,7 +38,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "23.1.0-beta3",
+    "@vaadin/component-base": "23.1.0-beta4",
     "@vaadin/vaadin-license-checker": "^2.1.0"
   },
   "devDependencies": {
