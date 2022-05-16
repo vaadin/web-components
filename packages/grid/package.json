@@ -1,6 +1,6 @@
 {
   "name": "@datadobi/grid",
-  "version": "23.0.7-datadobi1",
+  "version": "23.0.7-datadobi3",
   "publishConfig": {
     "access": "public"
   },
