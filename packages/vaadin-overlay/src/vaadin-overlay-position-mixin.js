@@ -4,6 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+import { getAncestorRootNodes } from '@vaadin/component-base/src/dom-utils.js';
+
 const PROP_NAMES_VERTICAL = {
   start: 'top',
   end: 'bottom',
@@ -86,19 +88,70 @@ export const PositionMixin = (superClass) =>
 
     constructor() {
       super();
+      this._onScroll = this._onScroll.bind(this);
+      this._onResize = this._onResize.bind(this);
+      this._updatePosition = this._updatePosition.bind(this);
+    }
 
-      this.__boundUpdatePosition = this._updatePosition.bind(this);
+    connectedCallback() {
+      super.connectedCallback();
+
+      if (this.opened) {
+        this.__subscribeToEvents();
+      }
+    }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      this.__unsubscribeFromEvents();
+      this.__ancestorRootNodes = null;
+    }
+
+    /** @private */
+    __subscribeToEvents() {
+      window.addEventListener('resize', this._onResize);
+
+      this.__ancestorRootNodes = this.__ancestorRootNodes || getAncestorRootNodes(this.positionTarget);
+      this.__ancestorRootNodes.forEach((node) => {
+        node.addEventListener('scroll', this._onScroll, true);
+      });
+    }
+
+    /** @private */
+    __unsubscribeFromEvents() {
+      window.removeEventListener('resize', this._onResize);
+
+      if (this.__ancestorRootNodes) {
+        this.__ancestorRootNodes.forEach((node) => {
+          node.removeEventListener('scroll', this._onScroll, true);
+        });
+      }
+    }
+
+    /**
+     * @param {Event} _event
+     * @protected
+     */
+    _onScroll(_event) {
+      this._updatePosition();
+    }
+
+    /**
+     * @param {UIEvent} _event
+     * @protected
+     */
+    _onResize(_event) {
+      this._updatePosition();
     }
 
     __overlayOpenedChanged(opened) {
       // Toggle the event listeners that cause the overlay to update its position
-      ['scroll', 'resize'].forEach((eventName) => {
-        if (opened) {
-          window.addEventListener(eventName, this.__boundUpdatePosition);
-        } else {
-          window.removeEventListener(eventName, this.__boundUpdatePosition);
-        }
-      });
+      if (opened) {
+        this.__subscribeToEvents();
+      } else {
+        this.__unsubscribeFromEvents();
+      }
 
       if (opened) {
         const computedStyle = getComputedStyle(this);
