@@ -559,6 +559,8 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
         this.dispatchEvent(evt);
       });
 
+      document.addEventListener('keydown', this._boundKeydownListener);
+
       if (!this.modeless) {
         this._addGlobalListeners();
       }
@@ -566,6 +568,8 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
       this.__focusTrapController.releaseFocus();
 
       this._animatedClosing();
+
+      document.removeEventListener('keydown', this._boundKeydownListener);
 
       if (!this.modeless) {
         this._removeGlobalListeners();
@@ -753,7 +757,6 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
     // Firefox leaks click to document on contextmenu even if prevented
     // https://bugzilla.mozilla.org/show_bug.cgi?id=990614
     document.documentElement.addEventListener('click', this._boundOutsideClickListener, true);
-    document.addEventListener('keydown', this._boundKeydownListener);
   }
 
   /** @protected */
@@ -778,7 +781,6 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
     document.removeEventListener('mousedown', this._boundMouseDownListener);
     document.removeEventListener('mouseup', this._boundMouseUpListener);
     document.documentElement.removeEventListener('click', this._boundOutsideClickListener, true);
-    document.removeEventListener('keydown', this._boundKeydownListener);
   }
 
   /** @protected */

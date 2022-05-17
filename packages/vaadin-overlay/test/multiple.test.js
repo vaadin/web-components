@@ -239,5 +239,28 @@ describe('multiple overlays', () => {
       modeless2.opened = true;
       expect(modeless2.style.zIndex).to.be.empty;
     });
+
+    it('should fire the vaadin-overlay-escape-press if the overlay is the frontmost one', () => {
+      const spy = sinon.spy();
+      modeless1.addEventListener('vaadin-overlay-escape-press', spy);
+
+      modeless1.opened = true;
+      modeless2.opened = true;
+      modeless1.bringToFront();
+
+      escKeyDown(document.body);
+      expect(spy.called).to.be.true;
+    });
+
+    it('should not fire the vaadin-overlay-escape-press if the overlay is not the frontmost', () => {
+      const spy = sinon.spy();
+      modeless1.addEventListener('vaadin-overlay-escape-press', spy);
+
+      modeless1.opened = true;
+      modeless2.opened = true;
+
+      escKeyDown(document.body);
+      expect(spy.called).to.be.false;
+    });
   });
 });
