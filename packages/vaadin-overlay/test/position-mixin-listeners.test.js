@@ -45,9 +45,10 @@ describe('position mixin listeners', () => {
     `);
     target = wrapper.querySelector('#target');
     overlay = wrapper.querySelector('#overlay');
+    updatePositionSpy = sinon.spy(overlay, '_updatePosition');
     overlay.positionTarget = target;
     overlay.opened = true;
-    updatePositionSpy = sinon.spy(overlay, '_updatePosition');
+    updatePositionSpy.resetHistory();
   });
 
   it('should update position on resize when opened', () => {
@@ -92,7 +93,7 @@ describe('position mixin listeners', () => {
         expect(updatePositionSpy.called).to.be.false;
       });
 
-      it(`should update position on ${name} scroll when re-connected to the DOM`, () => {
+      it(`should update position on ${name} scroll when reconnected to the DOM`, () => {
         const parentElement = overlay.parentElement;
         parentElement.removeChild(overlay);
         parentElement.appendChild(overlay);

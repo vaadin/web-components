@@ -88,8 +88,6 @@ export const PositionMixin = (superClass) =>
 
     constructor() {
       super();
-      this._onScroll = this._onScroll.bind(this);
-      this._onResize = this._onResize.bind(this);
       this._updatePosition = this._updatePosition.bind(this);
     }
 
@@ -110,39 +108,23 @@ export const PositionMixin = (superClass) =>
 
     /** @private */
     __subscribeToEvents() {
-      window.addEventListener('resize', this._onResize);
+      window.addEventListener('resize', this._updatePosition);
 
       this.__ancestorRootNodes = this.__ancestorRootNodes || getAncestorRootNodes(this.positionTarget);
       this.__ancestorRootNodes.forEach((node) => {
-        node.addEventListener('scroll', this._onScroll, true);
+        node.addEventListener('scroll', this._updatePosition, true);
       });
     }
 
     /** @private */
     __unsubscribeFromEvents() {
-      window.removeEventListener('resize', this._onResize);
+      window.removeEventListener('resize', this._updatePosition);
 
       if (this.__ancestorRootNodes) {
         this.__ancestorRootNodes.forEach((node) => {
-          node.removeEventListener('scroll', this._onScroll, true);
+          node.removeEventListener('scroll', this._updatePosition, true);
         });
       }
-    }
-
-    /**
-     * @param {Event} _event
-     * @protected
-     */
-    _onScroll(_event) {
-      this._updatePosition();
-    }
-
-    /**
-     * @param {UIEvent} _event
-     * @protected
-     */
-    _onResize(_event) {
-      this._updatePosition();
     }
 
     __overlayOpenedChanged(opened) {

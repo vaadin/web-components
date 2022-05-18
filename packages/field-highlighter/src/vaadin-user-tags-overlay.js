@@ -72,22 +72,6 @@ class UserTagsOverlay extends PositionMixin(OverlayElement) {
     super.ready();
     this.$.overlay.setAttribute('tabindex', '-1');
   }
-
-  /**
-   * @param {Event}
-   */
-  _onScroll(event) {
-    super._onScroll(event);
-
-    const scrollContainer = event.target.documentElement || event.target;
-    const scrollContainerRect = scrollContainer.getBoundingClientRect();
-
-    const targetRect = this.positionTarget.getBoundingClientRect();
-    const targetNotVisible = scrollContainerRect.top > targetRect.bottom || scrollContainerRect.bottom < targetRect.top;
-    if (targetNotVisible && this.opened) {
-      this.opened = false;
-    }
-  }
 }
 
 customElements.define(UserTagsOverlay.is, UserTagsOverlay);

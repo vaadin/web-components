@@ -101,13 +101,45 @@ export class UserTags extends PolymerElement {
         type: Array,
         value: () => [],
       },
+
+      __isTargetVisible: {
+        type: Boolean,
+        value: false,
+        observer: '__isTargetVisibleChanged',
+      },
+
+      __targetVisibilityObserver: {
+        type: Object,
+      },
     };
+  }
+
+  constructor() {
+    super();
+
+    this.__targetVisibilityObserver = new IntersectionObserver((entries) => {
+      entries.forEach(({ isIntersecting }) => {
+        this.__isTargetVisible = isIntersecting;
+      });
+    });
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+
+    if (this.target) {
+      this.__targetVisibilityObserver.observe(this.target);
+    }
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
     this.opened = false;
+
+    if (this.target) {
+      this.__targetVisibilityObserver.unobserve(this.target);
+    }
   }
 
   ready() {
@@ -125,8 +157,27 @@ export class UserTags extends PolymerElement {
   }
 
   /** @private */
-  __targetChanged(target) {
-    this.$.overlay.positionTarget = target;
+  __targetChanged(newTarget, oldTarget) {
+    this.$.overlay.positionTarget = newTarget;
+
+    if (oldTarget) {
+      this.__targetVisibilityObserver.unobserve(oldTarget);
+    }
+
+    if (newTarget) {
+      this.__targetVisibilityObserver.observe(newTarget);
+    }
+  }
+
+  /** @private */
+  __isTargetVisibleChanged(isVisible) {
+    if (isVisible && !this.flashing && this._flashQueue.length > 0) {
+      this.flashTags(this._flashQueue.shift());
+    }
+
+    if (!isVisible && this.opened) {
+      this.opened = false;
+    }
   }
 
   /** @private */
@@ -244,7 +295,7 @@ export class UserTags extends PolymerElement {
         removed: removedTags,
       });
 
-      if (this.flashing) {
+      if (this.flashing || !this.__isTargetVisible) {
         // Schedule next flash later
         this.push('_flashQueue', addedTags);
       } else {
