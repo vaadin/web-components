@@ -1,0 +1,72 @@
+
+<script type="module" src="./common.js"></script>
+
+<style>
+  html, body {
+    height: 100%;
+    max-height: 100%;
+  }
+
+  h1[slot='navbar'] {
+    font-size: var(--lumo-font-size-xl);
+    margin: 0;
+  }
+
+  .page-content {
+    height: 150vh;
+    line-height: 2.5;
+  }
+</style>
+
+<script type="module">
+  import '@vaadin/app-layout';
+  import '@vaadin/app-layout/vaadin-drawer-toggle';
+  import '@vaadin/tabs';
+  import '@vaadin/text-field';
+  import { FieldHighlighter } from '@vaadin/field-highlighter';
+
+  const textField = document.querySelector('vaadin-text-field');
+  FieldHighlighter.init(textField);
+  FieldHighlighter.setUsers(textField, [
+    { id: 'a', name: 'User', colorIndex: 0, fieldIndex: 0 },
+    { id: 'b', name: 'Moderator', colorIndex: 1, fieldIndex: 1 },
+    { id: 'c', name: 'Admin', colorIndex: 2, fieldIndex: 1 }
+  ]);
+</script>
+
+<vaadin-app-layout>
+  <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
+  <h1 slot="navbar">MyApp</h1>
+  <vaadin-tabs slot="drawer" orientation="vertical">
+    <vaadin-tab>
+      <a tabindex="-1">
+        <vaadin-icon icon="vaadin:dashboard"></vaadin-icon>
+        <span>Dashboard</span>
+      </a>
+    </vaadin-tab>
+    <vaadin-tab>
+      <a tabindex="-1">
+        <vaadin-icon icon="vaadin:cart"></vaadin-icon>
+        <span>Orders</span>
+      </a>
+    </vaadin-tab>
+  </vaadin-tabs>
+
+  <div class="page-content">
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vulputate leo lectus, et sollicitudin enim porta ullamcorper. Duis quis vulputate purus. Curabitur ut neque ac libero vestibulum finibus. Sed at mauris tempor, ornare mauris at, commodo urna. Proin sed tortor massa. Sed id nisi magna. Pellentesque in nisi leo. Nullam quis eros quis augue auctor venenatis. Etiam sit amet ante luctus, facilisis mauris at, aliquam est. Donec gravida sit amet enim id fermentum. In at iaculis sem, pharetra tempor dui. Phasellus auctor enim ante, a porttitor libero consectetur ac. Suspendisse potenti. Maecenas finibus lectus vitae quam congue pretium. Donec dictum eget eros sed pulvinar.</p>
+
+    <p>Integer eget neque tristique, euismod felis eu, finibus ligula. Mauris dapibus est non sapien rhoncus, at vehicula nunc pellentesque. In id leo finibus magna luctus tincidunt. Mauris at elementum ante. Vestibulum tristique eros quis augue lacinia molestie. Aenean dignissim consectetur blandit. Nullam posuere sem id leo volutpat lobortis. Proin metus tellus, dignissim non lectus vitae, hendrerit congue lacus. Nunc mi felis, consectetur in pellentesque elementum, rutrum sed velit.</p>
+
+    <p>Fusce porttitor, libero eget efficitur pharetra, eros elit dignissim urna, sed mollis ligula dolor feugiat nulla. Mauris accumsan libero metus. Aenean imperdiet quam ut viverra venenatis. Suspendisse pulvinar turpis vel ipsum sollicitudin, et sodales ligula porta. Aenean lobortis, lacus eget pulvinar fringilla, neque ligula vehicula mauris, et dapibus eros risus at felis. Suspendisse potenti. Proin nunc risus, sollicitudin eu erat nec, placerat tincidunt odio. Aliquam erat volutpat. Morbi eget rutrum sapien, nec aliquet velit. Proin pretium dignissim accumsan. Fusce feugiat pretium est non convallis. Praesent fermentum, nisi id condimentum finibus, mauris augue vestibulum leo, vitae gravida neque risus sit amet neque.</p>
+
+    <p>Aenean ante augue, bibendum eu diam non, venenatis tincidunt metus. Quisque dignissim laoreet gravida. Cras blandit, lectus vitae posuere sollicitudin, nulla erat tristique neque, ac tincidunt est orci ut diam. Nam pretium a nibh id vehicula. Vestibulum eu ipsum vitae nunc iaculis porttitor et vitae tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla dui ligula, facilisis id venenatis sed, elementum ac dui. Sed euismod egestas orci, et placerat elit porttitor ut. Donec ac laoreet libero, in lobortis eros. Proin malesuada pretium ornare. Fusce accumsan et ipsum eu bibendum.</p>
+
+    <vaadin-text-field label="Modeless Overlay"></vaadin-text-field>
+
+    <p>Nam nec augue maximus, rhoncus enim non, feugiat eros. Mauris libero ligula, pharetra a sapien quis, venenatis tempus enim. Duis tortor nibh, sollicitudin in posuere consectetur, finibus vulputate lacus. Nullam finibus, quam a tempor tristique, sem erat venenatis eros, non vestibulum odio orci a odio. Vivamus et felis tempor, cursus sem non, efficitur nulla. Sed vitae interdum ligula, vel auctor tellus. Sed blandit venenatis turpis et varius. Curabitur suscipit dapibus congue. Etiam tempus neque id justo tincidunt finibus. Vivamus dapibus mi molestie, facilisis tortor nec, tristique lorem. Fusce faucibus ipsum eget sapien finibus, malesuada sollicitudin sapien scelerisque. Nullam nulla nibh, condimentum nec odio nec, rhoncus rhoncus quam. Nam in nunc vel turpis vehicula pharetra.</p>
+
+    <p>Nulla maximus nulla quis arcu scelerisque cursus. Suspendisse vitae felis tortor. Praesent vestibulum quam aliquet augue vulputate vehicula. Phasellus interdum ac urna nec ullamcorper. Mauris efficitur hendrerit tellus eu rutrum. Morbi scelerisque mauris et consectetur vulputate. Nam bibendum nibh ut justo placerat, eget ultrices sem ullamcorper. Proin ipsum eros, sollicitudin convallis orci eget, mollis gravida quam. Vivamus tristique quam sed laoreet placerat. Morbi sed risus rhoncus, tincidunt massa luctus, varius nisi.</p>
+
+    <p>Proin interdum semper orci et imperdiet. Curabitur id turpis at nunc auctor volutpat. Nunc nec sodales arcu. Curabitur ut lectus in nisi tincidunt mollis. In hac habitasse platea dictumst. Mauris eu condimentum lectus. Ut gravida a orci ac interdum. Maecenas pharetra, sem sed feugiat vehicula, mauris massa luctus neque, a pretium justo ex et eros.</p>
+  </div>
+</vaadin-app-layout>
