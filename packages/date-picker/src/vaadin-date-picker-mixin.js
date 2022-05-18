@@ -480,6 +480,11 @@ export const DatePickerMixin = (subclass) =>
 
       this.$.overlay.addEventListener('opened-changed', (e) => (this.opened = e.detail.value));
 
+      this.$.overlay.addEventListener('vaadin-overlay-escape-press', () => {
+        this._focusedDate = this._selectedDate;
+        this._close();
+      });
+
       this._overlayContent.addEventListener('close', this._close.bind(this));
       this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
 
@@ -975,21 +980,7 @@ export const DatePickerMixin = (subclass) =>
           break;
         }
         case 'Escape':
-          if (this.opened) {
-            this._focusedDate = this._selectedDate;
-            this._close();
-          } else if (this.clearButtonVisible) {
-            this._onClearButtonClick();
-          } else if (this.autoOpenDisabled) {
-            // Do not restore selected date if Esc was pressed after clearing input field
-            if (this.inputElement.value === '') {
-              this._selectDate(null);
-            }
-            this._applyInputValue(this._selectedDate);
-          } else {
-            this._focusedDate = this._selectedDate;
-            this._selectParsedOrFocusedDate();
-          }
+          this._onEscape();
           break;
         case 'Tab':
           if (this.opened) {
@@ -1005,6 +996,27 @@ export const DatePickerMixin = (subclass) =>
           break;
         default:
           break;
+      }
+    }
+
+    /** @private */
+    _onEscape() {
+      // Closing overlay is handled in vaadin-overlay-escape-press event listener.
+      if (this.opened) {
+        return;
+      }
+
+      if (this.clearButtonVisible) {
+        this._onClearButtonClick();
+      } else if (this.autoOpenDisabled) {
+        // Do not restore selected date if Esc was pressed after clearing input field
+        if (this.inputElement.value === '') {
+          this._selectDate(null);
+        }
+        this._applyInputValue(this._selectedDate);
+      } else {
+        this._focusedDate = this._selectedDate;
+        this._selectParsedOrFocusedDate();
       }
     }
 

@@ -761,10 +761,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
         this._moveFocusByMonths(event.shiftKey ? -12 : -1);
         handled = true;
         break;
-      case 'Escape':
-        this._cancel();
-        handled = true;
-        break;
       default:
         break;
     }
@@ -788,12 +784,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       // We need to move the scroll to focused date.
       setTimeout(() => this.revealDate(this.focusedDate), 1);
     }
-
-    if (event.key === 'Escape') {
-      this._cancel();
-      event.preventDefault();
-      event.stopPropagation();
-    }
   }
 
   __onCancelButtonKeyDown(event) {
@@ -807,12 +797,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       event.preventDefault();
       event.stopPropagation();
       this.dispatchEvent(new CustomEvent('focus-input', { bubbles: true, composed: true }));
-    }
-
-    if (event.key === 'Escape') {
-      this._cancel();
-      event.preventDefault();
-      event.stopPropagation();
     }
   }
 
