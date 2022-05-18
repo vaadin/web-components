@@ -116,30 +116,9 @@ export const ironList = {
   _maxPages: 2,
 
   /**
-   * The maximum items per row
-   */
-  _itemsPerRow: 1,
-
-  /**
-   * The width of each grid item
-   */
-  _itemWidth: 0,
-
-  /**
-   * The height of the row in grid layout.
-   */
-  _rowHeight: 0,
-
-  /**
    * The cost of stamping a template in ms.
    */
   _templateCost: 0,
-
-  /**
-   * Needed to pass event.model property to declarative event handlers -
-   * see polymer/polymer#4339.
-   */
-  _parentModel: true,
 
   /**
    * The bottom of the physical content.
@@ -166,8 +145,7 @@ export const ironList = {
    * The height of the physical content that isn't on the screen.
    */
   get _hiddenContentSize() {
-    const size = this.grid ? this._physicalRows * this._rowHeight : this._physicalSize;
-    return size - this._viewportHeight;
+    return this._physicalSize - this._viewportHeight;
   },
 
   /**
@@ -182,7 +160,7 @@ export const ironList = {
    * `_physicalStart`.
    */
   get _maxVirtualStart() {
-    const virtualCount = this._convertIndexToCompleteRow(this._virtualCount);
+    const virtualCount = this._virtualCount;
     return Math.max(0, virtualCount - this._physicalCount);
   },
 
@@ -192,9 +170,6 @@ export const ironList = {
 
   set _virtualStart(val) {
     val = this._clamp(val, 0, this._maxVirtualStart);
-    if (this.grid) {
-      val -= val % this._itemsPerRow;
-    }
     this._virtualStartVal = val;
   },
 
@@ -209,9 +184,6 @@ export const ironList = {
     val %= this._physicalCount;
     if (val < 0) {
       val = this._physicalCount + val;
-    }
-    if (this.grid) {
-      val -= val % this._itemsPerRow;
     }
     this._physicalStartVal = val;
   },
@@ -264,11 +236,7 @@ export const ironList = {
           physicalOffset += this._getPhysicalSizeIncrement(pidx);
 
           if (physicalOffset > this._scrollPosition) {
-            return this.grid ? vidx - (vidx % this._itemsPerRow) : vidx;
-          }
-          // Handle a partially rendered final row in grid mode
-          if (this.grid && this._virtualCount - 1 === vidx) {
-            return vidx - (vidx % this._itemsPerRow);
+            return vidx;
           }
         }) || 0;
       this._firstVisibleIndexVal = idx;
@@ -284,36 +252,17 @@ export const ironList = {
   get lastVisibleIndex() {
     let idx = this._lastVisibleIndexVal;
     if (idx == null) {
-      if (this.grid) {
-        idx = Math.min(this._virtualCount, this.firstVisibleIndex + this._estRowsInView * this._itemsPerRow - 1);
-      } else {
-        let physicalOffset = this._physicalTop + this._scrollOffset;
-        this._iterateItems((pidx, vidx) => {
-          if (physicalOffset < this._scrollBottom) {
-            idx = vidx;
-          }
-          physicalOffset += this._getPhysicalSizeIncrement(pidx);
-        });
-      }
+      let physicalOffset = this._physicalTop + this._scrollOffset;
+      this._iterateItems((pidx, vidx) => {
+        if (physicalOffset < this._scrollBottom) {
+          idx = vidx;
+        }
+        physicalOffset += this._getPhysicalSizeIncrement(pidx);
+      });
+
       this._lastVisibleIndexVal = idx;
     }
     return idx;
-  },
-
-  get _defaultScrollTarget() {
-    return this;
-  },
-
-  get _virtualRowCount() {
-    return Math.ceil(this._virtualCount / this._itemsPerRow);
-  },
-
-  get _estRowsInView() {
-    return Math.ceil(this._viewportHeight / this._rowHeight);
-  },
-
-  get _physicalRows() {
-    return Math.ceil(this._physicalCount / this._itemsPerRow);
   },
 
   get _scrollOffset() {
@@ -335,7 +284,7 @@ export const ironList = {
     // Random access.
     if (Math.abs(delta) > this._physicalSize && this._physicalSize > 0) {
       delta -= this._scrollOffset;
-      const idxAdjustment = Math.round(delta / this._physicalAverage) * this._itemsPerRow;
+      const idxAdjustment = Math.round(delta / this._physicalAverage);
       this._virtualStart += idxAdjustment;
       this._physicalStart += idxAdjustment;
       // Estimate new physical offset based on the virtual start index.
@@ -344,10 +293,7 @@ export const ironList = {
       // more than the scroll position however, since that would result in
       // the physical items not covering the viewport, and leading to
       // _increasePoolIfNeeded to run away creating items to try to fill it.
-      this._physicalTop = Math.min(
-        Math.floor(this._virtualStart / this._itemsPerRow) * this._physicalAverage,
-        this._scrollPosition,
-      );
+      this._physicalTop = Math.min(Math.floor(this._virtualStart) * this._physicalAverage, this._scrollPosition);
       this._update();
     } else if (this._physicalCount > 0) {
       const reusables = this._getReusables(isScrollingDown);
@@ -371,7 +317,7 @@ export const ironList = {
    * @param {boolean} fromTop If the potential reusable items are above the scrolling region.
    */
   _getReusables(fromTop) {
-    let ith, lastIth, offsetContent, physicalItemHeight;
+    let ith, offsetContent, physicalItemHeight;
     const idxs = [];
     const protectedOffsetContent = this._hiddenContentSize * this._ratio;
     const virtualStart = this._virtualStart;
@@ -385,12 +331,9 @@ export const ironList = {
 
     if (fromTop) {
       ith = this._physicalStart;
-      lastIth = this._physicalEnd;
       offsetContent = scrollTop - top;
     } else {
       ith = this._physicalEnd;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      lastIth = this._physicalStart;
       offsetContent = bottom - scrollBottom;
     }
     // eslint-disable-next-line no-constant-condition
@@ -438,7 +381,6 @@ export const ironList = {
     if ((itemSet && itemSet.length === 0) || this._physicalCount === 0) {
       return;
     }
-    this._manageFocus();
     this._assignModels(itemSet);
     this._updateMetrics(itemSet);
     // Adjust offset after measuring.
@@ -464,19 +406,11 @@ export const ironList = {
    * Increases the pool size.
    */
   _increasePoolIfNeeded(count) {
-    let nextPhysicalCount = this._clamp(
+    const nextPhysicalCount = this._clamp(
       this._physicalCount + count,
       DEFAULT_PHYSICAL_COUNT,
       this._virtualCount - this._virtualStart,
     );
-    nextPhysicalCount = this._convertIndexToCompleteRow(nextPhysicalCount);
-    if (this.grid) {
-      const correction = nextPhysicalCount % this._itemsPerRow;
-      if (correction && nextPhysicalCount - correction <= this._physicalCount) {
-        nextPhysicalCount += this._itemsPerRow;
-      }
-      nextPhysicalCount -= correction;
-    }
     const delta = nextPhysicalCount - this._physicalCount;
     let nextIncrease = Math.round(this._physicalCount * 0.5);
 
@@ -508,8 +442,6 @@ export const ironList = {
       this._templateCost = (window.performance.now() - ts) / delta;
       nextIncrease = Math.round(this._physicalCount * 0.5);
     }
-    // The upper bounds is not fixed when dealing with a grid that doesn't
-    // fill it's last row with the exact number of items per row.
     if (this._virtualEnd >= this._virtualCount - 1 || nextIncrease === 0) {
       // Do nothing.
     } else if (!this._isClientFull()) {
@@ -547,17 +479,6 @@ export const ironList = {
     }
   },
 
-  _gridChanged(newGrid, oldGrid) {
-    if (typeof oldGrid === 'undefined') {
-      return;
-    }
-    this.notifyResize();
-    flush();
-    if (newGrid) {
-      this._updateGridMetrics();
-    }
-  },
-
   /**
    * Called when the items have changed. That is, reassignments
    * to `items`, splices or updates to a single item.
@@ -577,32 +498,7 @@ export const ironList = {
       if (this._scrollTop > this._scrollOffset) {
         this._resetScrollPosition(0);
       }
-      this._removeFocusedItem();
       this._debounce('_render', this._render, animationFrame);
-    } else if (change.path === 'items.splices') {
-      this._adjustVirtualIndex(change.value.indexSplices);
-      this._virtualCount = this.items ? this.items.length : 0;
-      // Only blur if at least one item is added or removed.
-      const itemAddedOrRemoved = change.value.indexSplices.some((splice) => {
-        return splice.addedCount > 0 || splice.removed.length > 0;
-      });
-      if (itemAddedOrRemoved) {
-        // Only blur activeElement if it is a descendant of the list (#505,
-        // #507).
-        const activeElement = this._getActiveElement();
-        if (this.contains(activeElement)) {
-          activeElement.blur();
-        }
-      }
-      // Render only if the affected index is rendered.
-      const affectedIndexRendered = change.value.indexSplices.some((splice) => {
-        return splice.index + splice.addedCount >= this._virtualStart && splice.index <= this._virtualEnd;
-      });
-      if (!this._isClientFull() || affectedIndexRendered) {
-        this._debounce('_render', this._render, animationFrame);
-      }
-    } else if (change.path !== 'items.length') {
-      this._forwardItemPath(change.path, change.value);
     }
   },
 
@@ -677,29 +573,14 @@ export const ironList = {
       this._physicalAverageCount += this._physicalSizes[pidx] ? 1 : 0;
     }, itemSet);
 
-    if (this.grid) {
-      this._updateGridMetrics();
-      this._physicalSize = Math.ceil(this._physicalCount / this._itemsPerRow) * this._rowHeight;
-    } else {
-      oldPhysicalSize =
-        this._itemsPerRow === 1
-          ? oldPhysicalSize
-          : Math.ceil(this._physicalCount / this._itemsPerRow) * this._rowHeight;
-      this._physicalSize = this._physicalSize + newPhysicalSize - oldPhysicalSize;
-      this._itemsPerRow = 1;
-    }
+    this._physicalSize = this._physicalSize + newPhysicalSize - oldPhysicalSize;
+
     // Update the average if it measured something.
     if (this._physicalAverageCount !== prevAvgCount) {
       this._physicalAverage = Math.round(
         (prevPhysicalAvg * prevAvgCount + newPhysicalSize) / this._physicalAverageCount,
       );
     }
-  },
-
-  _updateGridMetrics() {
-    this._itemWidth = this._physicalCount > 0 ? this._physicalItems[0].getBoundingClientRect().width : 200;
-    this._rowHeight = this._physicalCount > 0 ? this._physicalItems[0].offsetHeight : 200;
-    this._itemsPerRow = this._itemWidth ? Math.floor(this._viewportWidth / this._itemWidth) : this._itemsPerRow;
   },
 
   /**
@@ -710,59 +591,14 @@ export const ironList = {
 
     let y = this._physicalTop;
 
-    if (this.grid) {
-      const totalItemWidth = this._itemsPerRow * this._itemWidth;
-      const rowOffset = (this._viewportWidth - totalItemWidth) / 2;
-
-      this._iterateItems((pidx, vidx) => {
-        const modulus = vidx % this._itemsPerRow;
-        let x = Math.floor(modulus * this._itemWidth + rowOffset);
-        if (this._isRTL) {
-          x *= -1;
-        }
-        this.translate3d(`${x}px`, `${y}px`, 0, this._physicalItems[pidx]);
-        if (this._shouldRenderNextRow(vidx)) {
-          y += this._rowHeight;
-        }
-      });
-    } else {
-      const order = [];
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      this._iterateItems((pidx, vidx) => {
-        const item = this._physicalItems[pidx];
-        this.translate3d(0, `${y}px`, 0, item);
-        y += this._physicalSizes[pidx];
-        const itemId = item.id;
-        if (itemId) {
-          order.push(itemId);
-        }
-      });
-      if (order.length) {
-        this.setAttribute('aria-owns', order.join(' '));
-      }
-    }
+    this._iterateItems((pidx) => {
+      this.translate3d(0, `${y}px`, 0, this._physicalItems[pidx]);
+      y += this._physicalSizes[pidx];
+    });
   },
 
   _getPhysicalSizeIncrement(pidx) {
-    if (!this.grid) {
-      return this._physicalSizes[pidx];
-    }
-    if (this._computeVidx(pidx) % this._itemsPerRow !== this._itemsPerRow - 1) {
-      return 0;
-    }
-    return this._rowHeight;
-  },
-
-  /**
-   * Returns, based on the current index,
-   * whether or not the next index will need
-   * to be rendered on a new row.
-   *
-   * @param {number} vidx Virtual index
-   * @return {boolean}
-   */
-  _shouldRenderNextRow(vidx) {
-    return vidx % this._itemsPerRow === this._itemsPerRow - 1;
+    return this._physicalSizes[pidx];
   },
 
   /**
@@ -799,16 +635,12 @@ export const ironList = {
    * @param {boolean=} forceUpdate If true, updates the height no matter what.
    */
   _updateScrollerSize(forceUpdate) {
-    if (this.grid) {
-      this._estScrollHeight = this._virtualRowCount * this._rowHeight;
-    } else {
-      this._estScrollHeight =
-        this._physicalBottom +
-        Math.max(this._virtualCount - this._physicalCount - this._virtualStart, 0) * this._physicalAverage;
-    }
+    this._estScrollHeight =
+      this._physicalBottom +
+      Math.max(this._virtualCount - this._physicalCount - this._virtualStart, 0) * this._physicalAverage;
+
     forceUpdate = forceUpdate || this._scrollHeight === 0;
     forceUpdate = forceUpdate || this._scrollPosition >= this._estScrollHeight - this._physicalSize;
-    forceUpdate = forceUpdate || (this.grid && this.$.items.style.height < this._estScrollHeight);
     // Amortize height adjustment, so it won't trigger large repaints too often.
     if (forceUpdate || Math.abs(this._estScrollHeight - this._scrollHeight) >= this._viewportHeight) {
       this.$.items.style.height = `${this._estScrollHeight}px`;
@@ -835,13 +667,12 @@ export const ironList = {
     idx = this._clamp(idx, 0, this._virtualCount - 1);
     // Update the virtual start only when needed.
     if (!this._isIndexRendered(idx) || idx >= this._maxVirtualStart) {
-      this._virtualStart = this.grid ? idx - this._itemsPerRow * 2 : idx - 1;
+      this._virtualStart = idx - 1;
     }
-    this._manageFocus();
     this._assignModels();
     this._updateMetrics();
     // Estimate new physical offset.
-    this._physicalTop = Math.floor(this._virtualStart / this._itemsPerRow) * this._physicalAverage;
+    this._physicalTop = this._virtualStart * this._physicalAverage;
 
     let currentTopItem = this._physicalStart;
     let currentVirtualItem = this._virtualStart;
@@ -896,47 +727,8 @@ export const ironList = {
     );
   },
 
-  /**
-   * Updates the size of a given list item.
-   *
-   * @method updateSizeForItem
-   * @param {Object} item The item instance.
-   */
-  updateSizeForItem(item) {
-    return this.updateSizeForIndex(this.items.indexOf(item));
-  },
-
-  /**
-   * Updates the size of the item at the given index in the items array.
-   *
-   * @method updateSizeForIndex
-   * @param {number} index The index of the item in the items array.
-   */
-  updateSizeForIndex(index) {
-    if (!this._isIndexRendered(index)) {
-      return null;
-    }
-    this._updateMetrics([this._getPhysicalIndex(index)]);
-    this._positionItems();
-    return null;
-  },
-
-  /**
-   * Converts a random index to the index of the item that completes it's row.
-   * Allows for better order and fill computation when grid == true.
-   */
-  _convertIndexToCompleteRow(idx) {
-    // When grid == false _itemPerRow can be unset.
-    this._itemsPerRow = this._itemsPerRow || 1;
-    return this.grid ? Math.ceil(idx / this._itemsPerRow) * this._itemsPerRow : idx;
-  },
-
   _isIndexRendered(idx) {
     return idx >= this._virtualStart && idx <= this._virtualEnd;
-  },
-
-  _isIndexVisible(idx) {
-    return idx >= this.firstVisibleIndex && idx <= this.lastVisibleIndex;
   },
 
   _getPhysicalIndex(vidx) {
