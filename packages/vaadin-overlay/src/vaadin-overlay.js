@@ -515,6 +515,11 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
       return;
     }
 
+    // Only close modeless overlay on Esc press when it contains focus
+    if (this.modeless && !event.composedPath().includes(this.$.overlay)) {
+      return;
+    }
+
     if (event.key === 'Escape') {
       const evt = new CustomEvent('vaadin-overlay-escape-press', {
         bubbles: true,
