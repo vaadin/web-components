@@ -89,7 +89,6 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
             show-week-numbers="[[showWeekNumbers]]"
             min-date="[[_minDate]]"
             max-date="[[_maxDate]]"
-            on-date-tap="_close"
             role="dialog"
             part="overlay-content"
             theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
