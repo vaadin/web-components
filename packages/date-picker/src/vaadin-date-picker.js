@@ -177,7 +177,6 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
             show-week-numbers="[[showWeekNumbers]]"
             min-date="[[_minDate]]"
             max-date="[[_maxDate]]"
-            role="dialog"
             part="overlay-content"
             theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
           ></vaadin-date-picker-overlay-content>
