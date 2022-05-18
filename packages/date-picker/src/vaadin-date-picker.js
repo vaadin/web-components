@@ -173,7 +173,6 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
             fullscreen$="[[_fullscreen]]"
             label="[[label]]"
             selected-date="[[_selectedDate]]"
-            slot="dropdown-content"
             focused-date="{{_focusedDate}}"
             show-week-numbers="[[showWeekNumbers]]"
             min-date="[[_minDate]]"
