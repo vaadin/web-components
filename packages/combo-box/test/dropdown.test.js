@@ -47,7 +47,7 @@ describe('overlay', () => {
   describe('with data provider', () => {
     let comboBox, dropdown;
     let dataProviderSpy;
-    let openedChangedSpy;
+    let openedSpy;
 
     beforeEach(() => {
       dataProviderSpy = sinon.spy((params, callback) => {
@@ -60,38 +60,36 @@ describe('overlay', () => {
       dropdown = comboBox.$.dropdown;
       comboBox.dataProvider = dataProviderSpy;
       comboBox.opened = true;
+      dataProviderSpy.resetHistory();
 
-      openedChangedSpy = sinon.spy(dropdown, '_openedChanged');
+      openedSpy = sinon.spy();
+      dropdown.addEventListener('vaadin-combo-box-dropdown-opened', openedSpy);
     });
 
-    it.skip('should not toggle between opened and closed when filtering', () => {
-      dataProviderSpy.resetHistory();
+    it('should not toggle between opened and closed when filtering', () => {
       // Filter for something that should return results
       comboBox.filter = 'item';
       // Verify data provider has been called
       expect(dataProviderSpy.calledOnce).to.be.true;
-      // Overlay opened state should not change during fetching data
-      expect(openedChangedSpy.called).to.be.false;
+      // Overlay should not have been closed and re-opened
+      expect(openedSpy.called).to.be.false;
     });
 
-    it.skip('should not toggle between opened and closed when setting a value', () => {
-      dataProviderSpy.resetHistory();
+    it('should not toggle between opened and closed when setting a value', () => {
+      // Filter for something that should return results
+      comboBox.filter = 'item';
       // Set a value
       comboBox.value = 'item 1';
-      // Verify data provider has been called
-      expect(dataProviderSpy.calledOnce).to.be.true;
-      // Overlay opened state should not change during fetching data
-      expect(openedChangedSpy.called).to.be.false;
+      // Overlay should not have been closed and re-opened
+      expect(openedSpy.called).to.be.false;
     });
 
-    it('should eventually close when there are no items', async () => {
-      dataProviderSpy.resetHistory();
+    it('should close when there are no items', () => {
       // Filter for something that doesn't exist
       comboBox.filter = 'doesnotexist';
       // Verify data provider has been called
       expect(dataProviderSpy.calledOnce).to.be.true;
       // Overlay should close
-      expect(openedChangedSpy.called).to.be.true;
       expect(dropdown._overlayOpened).to.be.false;
     });
   });
