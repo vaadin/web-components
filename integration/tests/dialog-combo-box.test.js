@@ -1,10 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, mousedown, nextFrame, touchstart } from '@vaadin/testing-helpers';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '@vaadin/dialog/src/vaadin-dialog.js';
-import '../src/vaadin-combo-box.js';
+import './not-animated-styles.js';
+import '@vaadin/combo-box';
+import '@vaadin/dialog';
 
-describe('dialog', () => {
+describe('combo-box in dialog', () => {
   let dialog, comboBox;
 
   beforeEach(async () => {
