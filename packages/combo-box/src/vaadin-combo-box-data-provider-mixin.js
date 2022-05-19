@@ -79,6 +79,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       // Can't depend on filter in this observer as we don't want
       // to clear the filter whenever it's set
       if (dataProvider && !this.loading && this.filter && !(opened && this.autoOpenDisabled && value === this.filter)) {
+        this.loading = this._shouldFetchData();
         this.size = undefined;
         this._pendingRequests = {};
         this.filter = '';
@@ -118,6 +119,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         return;
       }
 
+      this.loading = true;
       this.size = undefined;
       this._pendingRequests = {};
       this.clearCache();
