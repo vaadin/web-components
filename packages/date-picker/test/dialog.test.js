@@ -39,6 +39,14 @@ describe('dialog', () => {
       expect(dialog.opened).to.be.true;
     });
 
+    it('should close the dialog on subsequent Escape after the date-picker is closed', async () => {
+      await sendKeys({ press: 'Escape' });
+
+      await sendKeys({ press: 'Escape' });
+
+      expect(dialog.opened).to.be.false;
+    });
+
     it('should not close the dialog when closing date-picker on month calendar Escape', async () => {
       // Focus the month calendar
       await sendKeys({ press: 'Tab' });
