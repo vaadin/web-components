@@ -45,7 +45,6 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/dialog": "23.1.0-beta4",
     "@vaadin/testing-helpers": "^0.3.2",
     "sinon": "^13.0.2"
   }
