@@ -64,6 +64,24 @@ customElements.define(
   },
 );
 
+customElements.define(
+  'nested-overlay-wrapper',
+  class extends PolymerElement {
+    static get template() {
+      return html`
+        <vaadin-overlay id="outer" focus-trap>
+          <template>
+            <button>Button</button>
+            <vaadin-overlay id="nested">
+              <template>Inner content</template>
+            </vaadin-overlay>
+          </template>
+        </vaadin-overlay>
+      `;
+    }
+  },
+);
+
 describe('focus-trap', () => {
   let overlay, parent, overlayPart, focusableElements;
 
@@ -456,6 +474,35 @@ describe('focus-trap', () => {
         expect(focusableElements[0]).to.be.eql(overlayPart);
         expect(getFocusedElementIndex()).to.eql(0);
       });
+    });
+  });
+
+  describe('nested overlay', () => {
+    let nested;
+
+    beforeEach(async () => {
+      parent = fixtureSync('<nested-overlay-wrapper></nested-overlay-wrapper>');
+      overlay = parent.$.outer;
+      overlay.opened = true;
+      focusableElements = getFocusableElements(overlay.$.overlay);
+      await nextRender();
+      nested = overlay.content.querySelector('#nested');
+    });
+
+    afterEach(() => {
+      overlay.opened = false;
+    });
+
+    it('should not release focus when closing nested overlay without focus-trap', async () => {
+      nested.opened = true;
+      await nextRender();
+      nested.opened = false;
+
+      const button = overlay.content.querySelector('button');
+      button.focus();
+      tabKeyDown(button);
+
+      expect(getFocusedElementIndex()).to.equal(0);
     });
   });
 });
