@@ -1,8 +1,9 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
+import './not-animated-styles.js';
+import '@vaadin/accordion';
 import '@vaadin/dialog';
-import '../vaadin-accordion.js';
 
 describe('accordion in dialog', () => {
   let dialog, overlay, accordion, panels;
