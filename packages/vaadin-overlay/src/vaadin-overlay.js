@@ -563,7 +563,9 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
         this._addGlobalListeners();
       }
     } else if (wasOpened) {
-      this.__focusTrapController.releaseFocus();
+      if (this.focusTrap) {
+        this.__focusTrapController.releaseFocus();
+      }
 
       this._animatedClosing();
 
