@@ -6,5 +6,6 @@
 import '@vaadin/input-container/theme/material/vaadin-input-container.js';
 import '@vaadin/item/theme/material/vaadin-item.js';
 import '@vaadin/list-box/theme/material/vaadin-list-box.js';
+import '@vaadin/vaadin-overlay/theme/material/vaadin-overlay.js';
 import './vaadin-select-styles.js';
 import '../../src/vaadin-select.js';

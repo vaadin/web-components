@@ -6,5 +6,6 @@
 import '@vaadin/input-container/theme/lumo/vaadin-input-container.js';
 import '@vaadin/item/theme/lumo/vaadin-item.js';
 import '@vaadin/list-box/theme/lumo/vaadin-list-box.js';
+import '@vaadin/vaadin-overlay/theme/lumo/vaadin-overlay.js';
 import './vaadin-select-styles.js';
 import '../../src/vaadin-select.js';
