@@ -1,3 +1,4 @@
+import '@vaadin/vaadin-overlay/theme/material/vaadin-overlay.js';
 import { overlay } from '@vaadin/vaadin-material-styles/mixins/overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
