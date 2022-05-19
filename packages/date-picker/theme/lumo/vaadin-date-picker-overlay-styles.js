@@ -1,5 +1,6 @@
 import '@vaadin/vaadin-lumo-styles/sizing.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
+import '@vaadin/vaadin-overlay/theme/lumo/vaadin-overlay.js';
 import { menuOverlay } from '@vaadin/vaadin-lumo-styles/mixins/menu-overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
