@@ -326,6 +326,9 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
   ready() {
     super.ready();
+
+    this.setAttribute('role', 'dialog');
+
     addListener(this, 'tap', this._stopPropagation);
     addListener(this.$.scrollers, 'track', this._track.bind(this));
     addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
