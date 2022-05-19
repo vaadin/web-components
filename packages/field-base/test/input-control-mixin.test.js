@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { escKeyDown, fixtureSync } from '@vaadin/testing-helpers';
+import { escKeyDown, fixtureSync, keyboardEventFor } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
@@ -134,6 +134,21 @@ describe('input-control-mixin', () => {
       const event = spy.firstCall.args[0];
       expect(event.bubbles).to.be.true;
       expect(event.composed).to.be.false;
+    });
+
+    it('should call stopPropagation() on Esc when clearButtonVisible is true', () => {
+      element.clearButtonVisible = true;
+      const event = keyboardEventFor('keydown', 27, [], 'Escape');
+      const spy = sinon.spy(event, 'stopPropagation');
+      button.dispatchEvent(event);
+      expect(spy.called).to.be.true;
+    });
+
+    it('should not call stopPropagation() on Esc when clearButtonVisible is false', () => {
+      const event = keyboardEventFor('keydown', 27, [], 'Escape');
+      const spy = sinon.spy(event, 'stopPropagation');
+      button.dispatchEvent(event);
+      expect(spy.called).to.be.false;
     });
   });
 
