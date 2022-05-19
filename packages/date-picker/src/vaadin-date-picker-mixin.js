@@ -488,6 +488,8 @@ export const DatePickerMixin = (subclass) =>
         this.__userConfirmedDate = true;
 
         this._selectDate(e.detail.date);
+
+        this._close(e);
       });
 
       // User confirmed selected date by pressing Enter or Today.

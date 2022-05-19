@@ -84,13 +84,10 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
             fullscreen$="[[_fullscreen]]"
             label="[[label]]"
             selected-date="[[_selectedDate]]"
-            slot="dropdown-content"
             focused-date="{{_focusedDate}}"
             show-week-numbers="[[showWeekNumbers]]"
             min-date="[[_minDate]]"
             max-date="[[_maxDate]]"
-            on-date-tap="_close"
-            role="dialog"
             part="overlay-content"
             theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
           >
