@@ -136,6 +136,7 @@ export const InputControlMixin = (superclass) =>
       super._onKeyDown(event);
 
       if (event.key === 'Escape' && this.clearButtonVisible && !!this.value) {
+        event.stopPropagation();
         this.__clear();
       }
     }
