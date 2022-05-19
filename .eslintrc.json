@@ -104,7 +104,7 @@
       }
     },
     {
-      "files": ["packages/**/test/**"],
+      "files": ["packages/**/test/**", "integration/tests/**"],
       "rules": {
         "no-await-in-loop": "off",
         // TODO: Use chai-friendly plugin

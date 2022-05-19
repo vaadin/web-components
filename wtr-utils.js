@@ -48,7 +48,7 @@ const isLockfileChanged = () => {
  * Get packages changed since master.
  */
 const getChangedPackages = () => {
-  const output = execSync('./node_modules/.bin/lerna ls --since origin/master --json --loglevel silent');
+  const output = execSync('./node_modules/.bin/lerna la --since origin/master --json --loglevel silent');
   return JSON.parse(output.toString()).map((project) => project.name.replace('@vaadin/', ''));
 };
 
@@ -316,8 +316,41 @@ const createVisualTestsConfig = (theme) => {
   };
 };
 
+const createIntegrationTestsConfig = (config) => {
+  const changedPackages = getChangedPackages();
+
+  // When running in GitHub Actions, do nothing.
+  if (!changedPackages.includes('integration-tests') && process.env.GITHUB_REF) {
+    console.log('No packages have changed, exiting.');
+    process.exit(0);
+  }
+
+  return {
+    ...config,
+    nodeResolve: true,
+    browserStartTimeout: 60000, // Default 30000
+    testsStartTimeout: 60000, // Default 10000
+    testsFinishTimeout: 120000, // Default 20000
+    testFramework: {
+      config: {
+        ui: 'bdd',
+        timeout: '10000',
+      },
+    },
+    groups: [
+      {
+        name: 'integration',
+        files: 'integration/tests/*.test.js',
+      },
+    ],
+    testRunnerHtml: getTestRunnerHtml(),
+    filterBrowserLogs,
+  };
+};
+
 module.exports = {
   createSnapshotTestsConfig,
   createUnitTestsConfig,
   createVisualTestsConfig,
+  createIntegrationTestsConfig,
 };

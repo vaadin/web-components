@@ -10,13 +10,14 @@
     "icons": "lerna run icons",
     "lint": "npm-run-all --parallel lint:*",
     "lint:css": "stylelint packages/**/src/*.js packages/**/theme/**/*-styles.js",
-    "lint:js": "eslint --ext .js,.ts *.js scripts packages",
+    "lint:js": "eslint --ext .js,.ts *.js scripts packages integration",
     "lint:types": "tsc",
     "prepare": "husky install",
     "serve:dist": "web-dev-server --app-index dist/index.html --open",
     "start": "web-dev-server --node-resolve --open /dev",
     "test": "web-test-runner",
     "test:firefox": "web-test-runner --config web-test-runner-firefox.config.js",
+    "test:it": "web-test-runner --config web-test-runner-it.config.js",
     "test:lumo": "web-test-runner --config web-test-runner-lumo.config.js",
     "test:material": "web-test-runner --config web-test-runner-material.config.js",
     "test:smoke": "web-test-runner --config web-test-runner-smoke.config.js",
@@ -71,6 +72,7 @@
     ]
   },
   "workspaces": [
+    "integration",
     "packages/*"
   ]
 }
