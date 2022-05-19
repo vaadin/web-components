@@ -269,6 +269,27 @@ describe('field highlighter', () => {
       });
     });
 
+    describe('user tags', () => {
+      let tags;
+
+      it('should create user tags for each added user', async () => {
+        addUser(user1);
+        addUser(user2);
+        await wrapper.flashPromise;
+        tags = getTags();
+        expect(tags.length).to.equal(2);
+      });
+
+      it('should replace user tags when replacing users', async () => {
+        setUsers([user1, user2]);
+        await wrapper.flashPromise;
+        setUsers([user3]);
+        await wrapper.flashPromise;
+        tags = getTags();
+        expect(tags.length).to.equal(1);
+      });
+    });
+
     describe('user tags opened', () => {
       let tags;
 
@@ -293,6 +314,13 @@ describe('field highlighter', () => {
         addUser(user1);
         addUser(user2);
         removeUser(user2);
+        tags = getTags();
+        expect(tags.length).to.equal(1);
+      });
+
+      it('should replace user tags when replacing users', async () => {
+        setUsers([user1, user2]);
+        setUsers([user3]);
         tags = getTags();
         expect(tags.length).to.equal(1);
       });
