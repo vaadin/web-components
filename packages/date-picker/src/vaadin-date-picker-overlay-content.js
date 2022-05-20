@@ -690,12 +690,6 @@ class DatePickerOverlayContent extends ThemableMixin(DirMixin(GestureEventListen
   }
 
   _close() {
-    const overlayContent = this.getRootNode().host;
-    const overlay = overlayContent ? overlayContent.getRootNode().host : null;
-    if (overlay) {
-      overlay.opened = false;
-    }
-
     this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
   }
 
