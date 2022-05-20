@@ -48,7 +48,6 @@ registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { mod
  * Part name             | Description
  * ----------------------|--------------------
  * `toggle-button`       | Toggle button
- * `overlay-content`     | The overlay element
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
@@ -161,32 +160,19 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
       <vaadin-date-picker-overlay
         id="overlay"
         fullscreen$="[[_fullscreen]]"
-        theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
+        theme$="[[_theme]]"
         on-vaadin-overlay-open="_onOverlayOpened"
         on-vaadin-overlay-closing="_onOverlayClosed"
         restore-focus-on-close
         restore-focus-node="[[inputElement]]"
-        disable-upgrade
-      >
-        <template>
-          <vaadin-date-picker-overlay-content
-            id="overlay-content"
-            i18n="[[i18n]]"
-            fullscreen$="[[_fullscreen]]"
-            label="[[label]]"
-            selected-date="[[_selectedDate]]"
-            focused-date="{{_focusedDate}}"
-            show-week-numbers="[[showWeekNumbers]]"
-            min-date="[[_minDate]]"
-            max-date="[[_maxDate]]"
-            part="overlay-content"
-            theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
-          ></vaadin-date-picker-overlay-content>
-        </template>
-      </vaadin-date-picker-overlay>
+      ></vaadin-date-picker-overlay>
 
       <slot name="tooltip"></slot>
     `;
+  }
+
+  static get observers() {
+    return ['__updateOverlayTheme(_overlayContent, _theme)'];
   }
 
   /**
@@ -219,13 +205,19 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
 
     const toggleButton = this.shadowRoot.querySelector('[part="toggle-button"]');
     toggleButton.addEventListener('mousedown', (e) => e.preventDefault());
-  }
-
-  /** @protected */
-  _initOverlay() {
-    super._initOverlay();
 
     this.$.overlay.addEventListener('vaadin-overlay-close', this._onVaadinOverlayClose.bind(this));
+  }
+
+  /** @private */
+  __updateOverlayTheme(overlayContent, theme) {
+    if (overlayContent) {
+      if (theme) {
+        overlayContent.setAttribute('theme', theme);
+      } else {
+        overlayContent.removeAttribute('theme');
+      }
+    }
   }
 
   /** @private */
@@ -238,7 +230,7 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
   /** @private */
   _toggle(e) {
     e.stopPropagation();
-    this[this._overlayInitialized && this.$.overlay.opened ? 'close' : 'open']();
+    this[this.$.overlay.opened ? 'close' : 'open']();
   }
 
   // Workaround https://github.com/vaadin/web-components/issues/2855

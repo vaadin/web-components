@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-date-time-picker.js';
@@ -72,6 +72,10 @@ const fixtures = {
       datePicker.focus();
       // Move focus to time-picker
       await sendKeys({ press: 'Tab' });
+
+      // Wait to reduce flakiness
+      await aTimeout(1);
+
       // Move focus to date-picker
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });

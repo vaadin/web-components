@@ -464,7 +464,7 @@ class DateTimePicker extends FieldMixin(
     if (
       this.__datePicker.contains(target) ||
       this.__timePicker.contains(target) ||
-      target === this.__datePicker.$.overlay
+      target === this.__datePicker._overlayContent
     ) {
       return false;
     }

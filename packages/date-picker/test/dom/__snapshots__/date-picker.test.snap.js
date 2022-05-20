@@ -329,12 +329,9 @@ snapshots["vaadin-date-picker shadow default"] =
   </div>
 </div>
 <vaadin-date-picker-overlay
-  disable-upgrade=""
   id="overlay"
   restore-focus-on-close=""
 >
-  <template>
-  </template>
 </vaadin-date-picker-overlay>
 <slot name="tooltip">
 </slot>
@@ -387,12 +384,9 @@ snapshots["vaadin-date-picker shadow disabled"] =
   </div>
 </div>
 <vaadin-date-picker-overlay
-  disable-upgrade=""
   id="overlay"
   restore-focus-on-close=""
 >
-  <template>
-  </template>
 </vaadin-date-picker-overlay>
 <slot name="tooltip">
 </slot>
@@ -445,12 +439,9 @@ snapshots["vaadin-date-picker shadow readonly"] =
   </div>
 </div>
 <vaadin-date-picker-overlay
-  disable-upgrade=""
   id="overlay"
   restore-focus-on-close=""
 >
-  <template>
-  </template>
 </vaadin-date-picker-overlay>
 <slot name="tooltip">
 </slot>
@@ -503,12 +494,9 @@ snapshots["vaadin-date-picker shadow invalid"] =
   </div>
 </div>
 <vaadin-date-picker-overlay
-  disable-upgrade=""
   id="overlay"
   restore-focus-on-close=""
 >
-  <template>
-  </template>
 </vaadin-date-picker-overlay>
 <slot name="tooltip">
 </slot>
@@ -561,12 +549,10 @@ snapshots["vaadin-date-picker shadow theme"] =
   </div>
 </div>
 <vaadin-date-picker-overlay
-  disable-upgrade=""
   id="overlay"
   restore-focus-on-close=""
+  theme="align-right"
 >
-  <template>
-  </template>
 </vaadin-date-picker-overlay>
 <slot name="tooltip">
 </slot>

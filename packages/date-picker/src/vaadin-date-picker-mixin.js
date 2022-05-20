@@ -308,8 +308,8 @@ export const DatePickerMixin = (subclass) =>
         /** @private */
         _focusOverlayOnOpen: Boolean,
 
-        /** @protected */
-        _overlayInitialized: Boolean,
+        /** @private */
+        _overlayContent: Object,
       };
     }
 
@@ -317,6 +317,8 @@ export const DatePickerMixin = (subclass) =>
       return [
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
         '_focusedDateChanged(_focusedDate, i18n.formatDate)',
+        '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers)',
+        '__updateFullScreen(_overlayContent, _fullscreen)',
       ];
     }
 
@@ -411,6 +413,29 @@ export const DatePickerMixin = (subclass) =>
       );
 
       this.addController(new VirtualKeyboardController(this));
+
+      this.$.overlay.addEventListener('opened-changed', (e) => {
+        this.opened = e.detail.value;
+      });
+
+      this.$.overlay.addEventListener('vaadin-overlay-escape-press', () => {
+        this._focusedDate = this._selectedDate;
+        this._close();
+      });
+
+      this.addEventListener('mousedown', () => this.__bringToFront());
+      this.addEventListener('touchstart', () => this.__bringToFront());
+
+      this.$.overlay.renderer = (root) => {
+        if (!root.firstChild) {
+          // Create and store document content element
+          const content = document.createElement('vaadin-date-picker-overlay-content');
+          root.appendChild(content);
+          this._overlayContent = content;
+
+          this._initOverlayContent(content);
+        }
+      };
     }
 
     /** @protected */
@@ -452,33 +477,19 @@ export const DatePickerMixin = (subclass) =>
      * Closes the dropdown.
      */
     close() {
-      if (this._overlayInitialized || this.autoOpenDisabled) {
-        this.$.overlay.close();
-      }
+      this.$.overlay.close();
     }
 
-    /** @protected */
-    _initOverlay() {
-      this.$.overlay.removeAttribute('disable-upgrade');
-      this._overlayInitialized = true;
-
-      this.$.overlay.addEventListener('opened-changed', (e) => {
-        this.opened = e.detail.value;
-      });
-
-      this.$.overlay.addEventListener('vaadin-overlay-escape-press', () => {
-        this._focusedDate = this._selectedDate;
+    /** @private */
+    _initOverlayContent(content) {
+      content.addEventListener('close', () => {
         this._close();
       });
 
-      this._overlayContent.addEventListener('close', () => {
-        this._close();
-      });
-
-      this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
+      content.addEventListener('focus-input', this._focusAndSelect.bind(this));
 
       // User confirmed selected date by clicking the calendar.
-      this._overlayContent.addEventListener('date-tap', (e) => {
+      content.addEventListener('date-tap', (e) => {
         this.__userConfirmedDate = true;
 
         this._selectDate(e.detail.date);
@@ -487,7 +498,7 @@ export const DatePickerMixin = (subclass) =>
       });
 
       // User confirmed selected date by pressing Enter or Today.
-      this._overlayContent.addEventListener('date-selected', (e) => {
+      content.addEventListener('date-selected', (e) => {
         this.__userConfirmedDate = true;
 
         this._selectDate(e.detail.date);
@@ -495,14 +506,16 @@ export const DatePickerMixin = (subclass) =>
 
       // Set focus-ring attribute when moving focus to the overlay
       // by pressing Tab or arrow key, after opening it on click.
-      this._overlayContent.addEventListener('focusin', () => {
+      content.addEventListener('focusin', () => {
         if (this._keyboardActive) {
           this._setFocused(true);
         }
       });
 
-      this.addEventListener('mousedown', () => this.__bringToFront());
-      this.addEventListener('touchstart', () => this.__bringToFront());
+      // Two-way data binding for `focusedDate` property
+      content.addEventListener('focused-date-changed', (e) => {
+        this._focusedDate = e.detail.value;
+      });
     }
 
     /**
@@ -676,12 +689,8 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _openedChanged(opened) {
-      if (opened && !this._overlayInitialized) {
-        this._initOverlay();
-      }
-      if (this._overlayInitialized) {
-        this.$.overlay.opened = opened;
-      }
+      this.$.overlay.opened = opened;
+
       if (this.inputElement) {
         this.inputElement.setAttribute('aria-expanded', opened);
       }
@@ -714,13 +723,6 @@ export const DatePickerMixin = (subclass) =>
       }
       if (!this._ignoreFocusedDateChange && !this._noInput) {
         this._applyInputValue(focusedDate);
-      }
-    }
-
-    /** @private */
-    __getOverlayTheme(theme, overlayInitialized) {
-      if (overlayInitialized) {
-        return theme;
       }
     }
 
@@ -760,6 +762,29 @@ export const DatePickerMixin = (subclass) =>
       }
 
       this._toggleHasValue(this._hasValue);
+    }
+
+    /** @private */
+    // eslint-disable-next-line max-params
+    __updateOverlayContent(overlayContent, i18n, label, minDate, maxDate, focusedDate, selectedDate, showWeekNumbers) {
+      if (overlayContent) {
+        overlayContent.setProperties({
+          i18n,
+          label,
+          minDate,
+          maxDate,
+          focusedDate,
+          selectedDate,
+          showWeekNumbers,
+        });
+      }
+    }
+
+    /** @private */
+    __updateFullScreen(overlayContent, fullscreen) {
+      if (overlayContent) {
+        overlayContent.toggleAttribute('fullscreen', fullscreen);
+      }
     }
 
     /** @protected */
@@ -996,7 +1021,7 @@ export const DatePickerMixin = (subclass) =>
       const parsedDate = this._getParsedDate();
       const isValidDate = this._isValidDate(parsedDate);
       if (this.opened) {
-        if (this._overlayInitialized && this._overlayContent.focusedDate && isValidDate) {
+        if (this._overlayContent && this._overlayContent.focusedDate && isValidDate) {
           this._selectDate(this._overlayContent.focusedDate);
         }
         this.close();
@@ -1082,11 +1107,6 @@ export const DatePickerMixin = (subclass) =>
           this._ignoreFocusedDateChange = false;
         }
       }
-    }
-
-    /** @private */
-    get _overlayContent() {
-      return this.$.overlay.content.querySelector('#overlay-content');
     }
 
     /** @private */

@@ -120,13 +120,12 @@ export function isFullscreen(datepicker) {
   return datepicker.$.overlay.getAttribute('fullscreen') !== null;
 }
 
-// As a side-effect has to toggle the overlay once to initialize it
 export function getOverlayContent(datepicker) {
-  if (datepicker.$.overlay.hasAttribute('disable-upgrade')) {
-    datepicker.open();
-    datepicker.close();
+  // Ensure overlay content is rendered
+  if (!datepicker._overlayContent) {
+    datepicker.$.overlay.requestContentUpdate();
   }
-  return datepicker.$.overlay.content.querySelector('#overlay-content');
+  return datepicker._overlayContent;
 }
 
 export function getFocusedMonth(overlayContent) {
