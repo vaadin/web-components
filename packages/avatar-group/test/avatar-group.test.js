@@ -73,7 +73,7 @@ describe('avatar-group', () => {
     });
 
     it('should render avatar based on maxItemsVisible, including overflow avatar', () => {
-      const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+      const items = group.$.container.querySelectorAll('vaadin-avatar');
       expect(items.length).to.equal(group.maxItemsVisible);
     });
 
@@ -98,7 +98,7 @@ describe('avatar-group', () => {
     it('should show at least two avatars if maxItemsVisible is below 2', async () => {
       group.maxItemsVisible = 1;
       await nextRender(group);
-      const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+      const items = group.$.container.querySelectorAll('vaadin-avatar');
       expect(items.length).to.equal(2);
     });
 
@@ -146,7 +146,7 @@ describe('avatar-group', () => {
       group.items = [];
       group.items = items;
       await nextRender(group);
-      const renderedElements = group.shadowRoot.querySelectorAll('vaadin-avatar');
+      const renderedElements = group.$.container.querySelectorAll('vaadin-avatar');
       expect(renderedElements.length).to.equal(maxItemsVisible);
     });
 
@@ -160,7 +160,7 @@ describe('avatar-group', () => {
         group.style.width = '100px';
         await onceResized(group);
 
-        const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+        const items = group.$.container.querySelectorAll('vaadin-avatar');
         expect(items.length).to.equal(3);
       });
 
@@ -191,7 +191,7 @@ describe('avatar-group', () => {
     it('should render avatars to fit width on resize', async () => {
       group.style.width = '110px';
       await onceResized(group);
-      const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+      const items = group.$.container.querySelectorAll('vaadin-avatar');
       expect(items.length).to.equal(3);
       expect(overflow.abbr).to.equal('+3');
     });
@@ -200,7 +200,7 @@ describe('avatar-group', () => {
       group.set('items', group.items.slice(0, 2));
       group.style.width = '50px';
       await onceResized(group);
-      const items = group.shadowRoot.querySelectorAll('vaadin-avatar:not([hidden])');
+      const items = group.$.container.querySelectorAll('vaadin-avatar:not([hidden])');
       expect(items.length).to.equal(2);
     });
 
@@ -219,7 +219,7 @@ describe('avatar-group', () => {
 
     it('should render avatars in the list-box items', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
+        const items = overlay.querySelectorAll('[theme="avatar-group-item"]');
         expect(items.length).to.equal(3);
         done();
       });
@@ -231,7 +231,7 @@ describe('avatar-group', () => {
       overlay.addEventListener('vaadin-overlay-open', () => {
         group.style.width = '75px';
         onceResized(group).then(() => {
-          const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
+          const items = overlay.querySelectorAll('[theme="avatar-group-item"]');
           expect(items.length).to.equal(4);
           done();
         });
@@ -295,9 +295,9 @@ describe('avatar-group', () => {
 
     it('should render list-box with items in the overlay', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
+        const list = overlay.querySelector('vaadin-avatar-group-list-box');
         expect(list).to.be.ok;
-        const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
+        const items = overlay.querySelectorAll('[theme="avatar-group-item"]');
         expect(items.length).to.equal(3);
         done();
       });
@@ -306,7 +306,7 @@ describe('avatar-group', () => {
 
     it('should render avatar names in the list-box items', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
+        const items = overlay.querySelectorAll('[theme="avatar-group-item"]');
         expect(items[0].textContent.trim()).to.equal(group.items[1].name);
         expect(items[1].textContent.trim()).to.equal(group.items[2].name);
         expect(items[2].textContent.trim()).to.equal(group.items[3].name);
@@ -317,7 +317,7 @@ describe('avatar-group', () => {
 
     it('should set tabindex="-1" on the avatars in the items', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const avatars = overlay.content.querySelectorAll('vaadin-avatar');
+        const avatars = overlay.querySelectorAll('vaadin-avatar');
         expect(avatars[0].getAttribute('tabindex')).to.equal('-1');
         expect(avatars[1].getAttribute('tabindex')).to.equal('-1');
         expect(avatars[2].getAttribute('tabindex')).to.equal('-1');
@@ -340,7 +340,7 @@ describe('avatar-group', () => {
 
     it('should close overlay on list-box Escape press', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
+        const list = overlay.querySelector('vaadin-avatar-group-list-box');
         escKeyDown(list);
 
         afterNextRender(overlay, () => {
@@ -353,7 +353,7 @@ describe('avatar-group', () => {
 
     it('should close overlay on list-box Tab press', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
+        const list = overlay.querySelector('vaadin-avatar-group-list-box');
         tabKeyDown(list);
 
         afterNextRender(overlay, () => {
@@ -393,7 +393,7 @@ describe('avatar-group', () => {
 
     it('should restore focus-ring attribute on close if closed with keyboard', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
+        const list = overlay.querySelector('vaadin-avatar-group-list-box');
         escKeyDown(list);
 
         afterNextRender(overlay, () => {
@@ -407,7 +407,7 @@ describe('avatar-group', () => {
 
     it('should not restore focus-ring attribute on close if not set', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
+        const items = overlay.querySelectorAll('[theme="avatar-group-item"]');
         items[0].click();
 
         afterNextRender(overlay, () => {
@@ -444,7 +444,7 @@ describe('avatar-group', () => {
     it('should pass color index to overlay avatars', (done) => {
       group.maxItemsVisible = 1;
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const avatars = overlay.content.querySelectorAll('vaadin-avatar');
+        const avatars = overlay.querySelectorAll('vaadin-avatar');
         expect(avatars[0].colorIndex).to.equal(group.items[1].colorIndex);
         expect(avatars[1].colorIndex).to.equal(group.items[2].colorIndex);
         done();
@@ -506,7 +506,7 @@ describe('avatar-group', () => {
       group.i18n = customI18n;
       group.maxItemsVisible = 1;
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const avatars = overlay.content.querySelectorAll('vaadin-avatar');
+        const avatars = overlay.querySelectorAll('vaadin-avatar');
         expect(avatars[0].i18n).to.deep.equal(customI18n);
         expect(avatars[1].i18n).to.deep.equal(customI18n);
         done();
@@ -549,7 +549,7 @@ describe('avatar-group', () => {
 
     it('should set role="listbox" on the overlay list-box', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const list = overlay.content.querySelector('vaadin-avatar-group-list-box');
+        const list = overlay.querySelector('vaadin-avatar-group-list-box');
         expect(list.getAttribute('role')).to.equal('listbox');
         done();
       });
@@ -558,7 +558,7 @@ describe('avatar-group', () => {
 
     it('should set role="option" on the overlay items', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const items = overlay.content.querySelectorAll('[theme="avatar-group-item"]');
+        const items = overlay.querySelectorAll('[theme="avatar-group-item"]');
         items.forEach((item) => {
           expect(item.getAttribute('role')).to.equal('option');
         });
@@ -569,7 +569,7 @@ describe('avatar-group', () => {
 
     it('should remove title from the overlay avatars', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const avatars = overlay.content.querySelectorAll('vaadin-avatar');
+        const avatars = overlay.querySelectorAll('vaadin-avatar');
         avatars.forEach((avatar) => {
           expect(avatar.hasAttribute('title')).to.equal(false);
         });
@@ -580,7 +580,7 @@ describe('avatar-group', () => {
 
     it('should set aria-hidden="true" on the overlay avatars', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const avatars = overlay.content.querySelectorAll('vaadin-avatar');
+        const avatars = overlay.querySelectorAll('vaadin-avatar');
         avatars.forEach((avatar) => {
           expect(avatar.getAttribute('aria-hidden')).to.equal('true');
         });
