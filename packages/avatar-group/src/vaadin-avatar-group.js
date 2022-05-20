@@ -140,28 +140,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
         opened="{{_opened}}"
         no-vertical-overlap
         on-vaadin-overlay-close="_onVaadinOverlayClose"
-      >
-        <template>
-          <vaadin-avatar-group-list-box on-keydown="_onListKeyDown">
-            <template is="dom-repeat" items="[[__computeExtraItems(items.*, __itemsInView, maxItemsVisible)]]">
-              <vaadin-item theme="avatar-group-item" role="option">
-                <vaadin-avatar
-                  name="[[item.name]]"
-                  abbr="[[item.abbr]]"
-                  img="[[item.img]]"
-                  i18n="[[i18n]]"
-                  part="avatar"
-                  theme$="[[_theme]]"
-                  color-index="[[item.colorIndex]]"
-                  tabindex="-1"
-                  aria-hidden="true"
-                ></vaadin-avatar>
-                [[item.name]]
-              </vaadin-item>
-            </template>
-          </vaadin-avatar-group-list-box>
-        </template>
-      </vaadin-avatar-group-overlay>
+      ></vaadin-avatar-group-overlay>
     `;
   }
 
@@ -267,6 +246,13 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
       },
 
       /** @private */
+      _overflowItems: {
+        type: Array,
+        observer: '__overflowItemsChanged',
+        computed: '__computeOverflowItems(items.*, __itemsInView, maxItemsVisible)',
+      },
+
+      /** @private */
       _opened: {
         type: Boolean,
         observer: '__openedChanged',
@@ -293,6 +279,8 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
     this._overlayElement = this.shadowRoot.querySelector('vaadin-avatar-group-overlay');
     this._overlayElement.positionTarget = this.$.overflow;
 
+    this.$.overlay.renderer = this.__overlayRenderer.bind(this);
+
     afterNextRender(this, () => {
       this.__setItemsInView();
     });
@@ -309,6 +297,61 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
   /** @private */
   __getMessage(user, action) {
     return action.replace('{user}', user.name || user.abbr || this.i18n.anonymous);
+  }
+
+  /**
+   * Renders items when they are provided by the `items` property and clears the content otherwise.
+   * @param {!HTMLElement} root
+   * @param {!Select} _select
+   * @private
+   */
+  __overlayRenderer(root) {
+    let listBox = root.firstElementChild;
+    if (!listBox) {
+      listBox = document.createElement('vaadin-avatar-group-list-box');
+      listBox.addEventListener('keydown', (event) => this._onListKeyDown(event));
+      root.appendChild(listBox);
+    }
+
+    listBox.textContent = '';
+
+    if (!this._overflowItems) {
+      return;
+    }
+
+    this._overflowItems.forEach((item) => {
+      listBox.appendChild(this.__createItemElement(item));
+    });
+  }
+
+  /** @private */
+  __createItemElement(item) {
+    const itemElement = document.createElement('vaadin-item');
+    itemElement.setAttribute('theme', 'avatar-group-item');
+    itemElement.setAttribute('role', 'option');
+
+    const avatar = document.createElement('vaadin-avatar');
+    itemElement.appendChild(avatar);
+
+    avatar.setAttribute('aria-hidden', 'true');
+    avatar.setAttribute('tabindex', '-1');
+    avatar.i18n = this.i18n;
+
+    if (this._theme) {
+      avatar.setAttribute('theme', this._theme);
+    }
+
+    avatar.name = item.name;
+    avatar.abbr = item.abbr;
+    avatar.img = item.img;
+    avatar.colorIndex = item.colorIndex;
+
+    if (item.name) {
+      const text = document.createTextNode(item.name);
+      itemElement.appendChild(text);
+    }
+
+    return itemElement;
   }
 
   /** @private */
@@ -361,10 +404,10 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
   }
 
   /** @private */
-  __computeExtraItems(arr, itemsInView, maxItemsVisible) {
+  __computeOverflowItems(arr, itemsInView, maxItemsVisible) {
     const items = arr.base || [];
     const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
-    return limit ? items.slice(limit) : items;
+    return limit ? items.slice(limit) : [];
   }
 
   /** @private */
@@ -490,6 +533,13 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
       }
     }
     this.$.overflow.setAttribute('aria-expanded', opened === true);
+  }
+
+  /** @private */
+  __overflowItemsChanged(items, oldItems) {
+    if (items || oldItems) {
+      this.$.overlay.requestContentUpdate();
+    }
   }
 
   /** @private */
