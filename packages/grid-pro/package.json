@@ -53,8 +53,6 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/date-picker": "23.1.0-beta4",
-    "@vaadin/dialog": "23.1.0-beta4",
     "@vaadin/polymer-legacy-adapter": "23.1.0-beta4",
     "@vaadin/testing-helpers": "^0.3.2",
     "lit": "^2.0.0",

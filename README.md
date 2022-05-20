@@ -267,6 +267,14 @@ Update screenshots for single package:
 yarn update:lumo --group vaadin-upload
 ```
 
+### Integration tests
+
+Run integration tests in the separate `integration` folder:
+
+```sh
+yarn test:it
+```
+
 ### Generating icons
 
 Re-generate SVG icon sets and icon fonts from individual SVG files for the packages that have them (e.g. `vaadin-icons`):

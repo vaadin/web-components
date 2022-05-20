@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender, touchstart } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
-import '@vaadin/dialog/vaadin-dialog.js';
 import './not-animated-styles.js';
-import '../vaadin-date-picker.js';
-import { getOverlayContent, open } from './common.js';
+import '@vaadin/date-picker';
+import '@vaadin/dialog';
+import { getOverlayContent, open } from '@vaadin/date-picker/test/common.js';
 
-describe('dialog', () => {
+describe('date-picker in dialog', () => {
   let dialog, datepicker;
 
   beforeEach(async () => {
