@@ -13,7 +13,7 @@ export type TabsOrientation = 'horizontal' | 'vertical';
 /**
  * Fired when the `items` property changes.
  */
-export type TabsItemsChangedEvent = CustomEvent<{ value: Array<Element> }>;
+export type TabsItemsChangedEvent = CustomEvent<{ value: Element[] }>;
 
 /**
  * Fired when the `selected` property changes.

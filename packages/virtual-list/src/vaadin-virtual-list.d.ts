@@ -57,7 +57,7 @@ declare class VirtualList<TItem = VirtualListDefaultItem> extends ElementMixin(T
   /**
    * An array containing items determining how many instances to render.
    */
-  items: Array<TItem> | undefined;
+  items: TItem[] | undefined;
 
   /**
    * Scroll to a specific index in the virtual list.

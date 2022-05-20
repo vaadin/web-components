@@ -8,7 +8,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export type ChartCategories = Array<string> | { [key: number]: string };
+export type ChartCategories = string[] | { [key: number]: string };
 
 export type ChartCategoryPosition = 'left' | 'right' | 'top' | 'bottom';
 

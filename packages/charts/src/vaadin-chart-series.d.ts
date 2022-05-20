@@ -22,7 +22,7 @@ export interface ChartSeriesConfig {
 
 export type ChartSeriesOptions = ChartSeriesConfig & SeriesOptionsType;
 
-export type ChartSeriesValues = Array<number | Array<number> | PointOptionsObject>;
+export type ChartSeriesValues = Array<number | number[] | PointOptionsObject>;
 
 /**
  * `<vaadin-chart-series>` is a custom element for creating series for Vaadin Charts.

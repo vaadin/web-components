@@ -8,13 +8,13 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { GridFilterDefinition, GridSorterDefinition } from '@vaadin/grid/src/vaadin-grid.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export type CrudDataProviderCallback<T> = (items: Array<T>, size?: number) => void;
+export type CrudDataProviderCallback<T> = (items: T[], size?: number) => void;
 
 export type CrudDataProviderParams = {
   page: number;
   pageSize: number;
-  filters: Array<GridFilterDefinition>;
-  sortOrders: Array<GridSorterDefinition>;
+  filters: GridFilterDefinition[];
+  sortOrders: GridSorterDefinition[];
 };
 
 export type CrudDataProvider<T> = (params: CrudDataProviderParams, callback: CrudDataProviderCallback<T>) => void;
@@ -61,7 +61,7 @@ export type CrudEditedItemChangedEvent<T> = CustomEvent<{ value: T }>;
 /**
  * Fired when the `items` property changes.
  */
-export type CrudItemsChangedEvent<T> = CustomEvent<{ value: Array<T> }>;
+export type CrudItemsChangedEvent<T> = CustomEvent<{ value: T[] }>;
 
 /**
  * Fired when the `size` property changes.
@@ -247,7 +247,7 @@ declare class Crud<Item> extends ControllerMixin(ElementMixin(ThemableMixin(HTML
   /**
    * An array containing the items which will be stamped to the column template instances.
    */
-  items: Array<Item> | null | undefined;
+  items: Item[] | null | undefined;
 
   /**
    * The item being edited in the dialog.
