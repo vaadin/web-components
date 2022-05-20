@@ -1135,6 +1135,48 @@ describe('lazy loading', () => {
         expect(comboBox.filteredItems).to.contain('item 293');
       });
     });
+
+    describe('dropdown behaviour', () => {
+      let dropdown;
+      let openedSpy;
+
+      beforeEach(() => {
+        dropdown = comboBox.$.dropdown;
+        comboBox.dataProvider = spyDataProvider;
+        comboBox.opened = true;
+        spyDataProvider.resetHistory();
+
+        openedSpy = sinon.spy();
+        dropdown.addEventListener('vaadin-combo-box-dropdown-opened', openedSpy);
+      });
+
+      it('should not toggle between opened and closed when filtering', () => {
+        // Filter for something that should return results
+        comboBox.filter = 'item';
+        // Verify data provider has been called
+        expect(spyDataProvider.calledOnce).to.be.true;
+        // Dropdown should not have been closed and re-opened
+        expect(openedSpy.called).to.be.false;
+      });
+
+      it('should not toggle between opened and closed when setting a value', () => {
+        // Filter for something that should return results
+        comboBox.filter = 'item';
+        // Set a value
+        comboBox.value = 'item 1';
+        // Dropdown should not have been closed and re-opened
+        expect(openedSpy.called).to.be.false;
+      });
+
+      it('should close when there are no items', () => {
+        // Filter for something that doesn't exist
+        comboBox.filter = 'doesnotexist';
+        // Verify data provider has been called
+        expect(spyDataProvider.calledOnce).to.be.true;
+        // Dropdown should close
+        expect(dropdown._overlayOpened).to.be.false;
+      });
+    });
   };
 
   describe('combo-box', () => {
