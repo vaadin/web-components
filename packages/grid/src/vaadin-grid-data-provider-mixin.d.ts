@@ -18,13 +18,13 @@ export interface GridSorterDefinition {
   direction: GridSorterDirection;
 }
 
-export type GridDataProviderCallback<TItem> = (items: Array<TItem>, size?: number) => void;
+export type GridDataProviderCallback<TItem> = (items: TItem[], size?: number) => void;
 
 export type GridDataProviderParams<TItem> = {
   page: number;
   pageSize: number;
-  filters: Array<GridFilterDefinition>;
-  sortOrders: Array<GridSorterDefinition>;
+  filters: GridFilterDefinition[];
+  sortOrders: GridSorterDefinition[];
   parentItem?: TItem;
 };
 

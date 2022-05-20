@@ -57,7 +57,7 @@ narrowedComboBox.addEventListener('invalid-changed', (event) => {
 
 narrowedComboBox.addEventListener('selected-items-changed', (event) => {
   assertType<MultiSelectComboBoxSelectedItemsChangedEvent<TestComboBoxItem>>(event);
-  assertType<Array<TestComboBoxItem>>(event.detail.value);
+  assertType<TestComboBoxItem[]>(event.detail.value);
 });
 
 // Properties

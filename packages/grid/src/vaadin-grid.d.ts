@@ -78,7 +78,7 @@ export type GridCellFocusEvent<TItem> = CustomEvent<{ context: GridEventContext<
 /**
  * Fired when the columns in the grid are reordered.
  */
-export type GridColumnReorderEvent<TItem> = CustomEvent<{ columns: GridColumn<TItem>[] }>;
+export type GridColumnReorderEvent<TItem> = CustomEvent<{ columns: Array<GridColumn<TItem>> }>;
 
 /**
  * Fired when the grid column resize is finished.

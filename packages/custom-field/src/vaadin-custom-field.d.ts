@@ -8,9 +8,9 @@ import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export type CustomFieldParseValueFn = (value: string) => Array<unknown>;
+export type CustomFieldParseValueFn = (value: string) => unknown[];
 
-export type CustomFieldFormatValueFn = (inputValues: Array<unknown>) => string;
+export type CustomFieldFormatValueFn = (inputValues: unknown[]) => string;
 
 export interface CustomFieldI18n {
   parseValue: CustomFieldParseValueFn;

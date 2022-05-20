@@ -39,6 +39,13 @@
       }
     ],
     "no-unused-vars": "off",
+    "@typescript-eslint/array-type": [
+      "error",
+      {
+        "default": "array-simple",
+        "readonly": "array-simple"
+      }
+    ],
     "@typescript-eslint/no-unused-vars": ["error", {
       "argsIgnorePattern": "^_"
     }],

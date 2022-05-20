@@ -53,7 +53,7 @@ export type MultiSelectComboBoxInvalidChangedEvent = CustomEvent<{ value: boolea
 /**
  * Fired when the `selectedItems` property changes.
  */
-export type MultiSelectComboBoxSelectedItemsChangedEvent<TItem> = CustomEvent<{ value: Array<TItem> }>;
+export type MultiSelectComboBoxSelectedItemsChangedEvent<TItem> = CustomEvent<{ value: TItem[] }>;
 
 export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap {
   change: MultiSelectComboBoxChangeEvent<TItem>;
@@ -175,7 +175,7 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    * can be assigned directly to omit the internal filtering functionality.
    * The items can be of either `String` or `Object` type.
    */
-  filteredItems: Array<TItem> | undefined;
+  filteredItems: TItem[] | undefined;
 
   /**
    * Filtering string the user has typed into the input field.
@@ -186,7 +186,7 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    * A full set of items to filter the visible options from.
    * The items can be of either `String` or `Object` type.
    */
-  items: Array<TItem> | undefined;
+  items: TItem[] | undefined;
 
   /**
    * The item property used for a visual representation of the item.
@@ -266,7 +266,7 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    * The list of selected items.
    * Note: modifying the selected items creates a new array each time.
    */
-  selectedItems: Array<TItem>;
+  selectedItems: TItem[];
 
   addEventListener<K extends keyof MultiSelectComboBoxEventMap<TItem>>(
     type: K,

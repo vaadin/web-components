@@ -11,7 +11,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 /**
  * Fired when the `items` property changes.
  */
-export type ListBoxItemsChangedEvent = CustomEvent<{ value: Array<Element> }>;
+export type ListBoxItemsChangedEvent = CustomEvent<{ value: Element[] }>;
 
 /**
  * Fired when the `selected` property changes.
@@ -21,7 +21,7 @@ export type ListBoxSelectedChangedEvent = CustomEvent<{ value: number }>;
 /**
  * Fired when the `selectedValues` property changes.
  */
-export type ListBoxSelectedValuesChangedEvent = CustomEvent<{ value: Array<number> }>;
+export type ListBoxSelectedValuesChangedEvent = CustomEvent<{ value: number[] }>;
 
 export interface ListBoxCustomEventMap {
   'items-changed': ListBoxItemsChangedEvent;

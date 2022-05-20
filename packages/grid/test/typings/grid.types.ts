@@ -92,7 +92,7 @@ narrowedGrid.addEventListener('cell-focus', (event) => {
 
 narrowedGrid.addEventListener('column-reorder', (event) => {
   assertType<GridColumnReorderEvent<TestGridItem>>(event);
-  assertType<GridColumn<TestGridItem>[]>(event.detail.columns);
+  assertType<Array<GridColumn<TestGridItem>>>(event.detail.columns);
 });
 
 narrowedGrid.addEventListener('column-resize', (event) => {

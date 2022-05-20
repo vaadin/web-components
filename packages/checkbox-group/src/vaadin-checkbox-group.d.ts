@@ -17,7 +17,7 @@ export type CheckboxGroupInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 /**
  * Fired when the `value` property changes.
  */
-export type CheckboxGroupValueChangedEvent = CustomEvent<{ value: Array<string> }>;
+export type CheckboxGroupValueChangedEvent = CustomEvent<{ value: string[] }>;
 
 export interface CheckboxGroupCustomEventMap {
   'invalid-changed': CheckboxGroupInvalidChangedEvent;

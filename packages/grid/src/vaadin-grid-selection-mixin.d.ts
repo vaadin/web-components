@@ -13,7 +13,7 @@ export declare class SelectionMixinClass<TItem> {
   /**
    * An array that contains the selected items.
    */
-  selectedItems: Array<TItem>;
+  selectedItems: TItem[];
 
   /**
    * Selects the given item.

@@ -72,7 +72,7 @@ export declare class ComboBoxMixinClass<TItem> {
    * A full set of items to filter the visible options from.
    * The items can be of either `String` or `Object` type.
    */
-  items: Array<TItem> | undefined;
+  items: TItem[] | undefined;
 
   /**
    * If `true`, the user can input a value that is not present in the items list.
@@ -88,7 +88,7 @@ export declare class ComboBoxMixinClass<TItem> {
    * can be assigned directly to omit the internal filtering functionality.
    * The items can be of either `String` or `Object` type.
    */
-  filteredItems: Array<TItem> | undefined;
+  filteredItems: TItem[] | undefined;
 
   /**
    * The `String` value for the selected item of the combo box.
