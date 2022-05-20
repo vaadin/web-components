@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '../src/vaadin-combo-box.js';
 import '../src/vaadin-combo-box-overlay.js';
 
 describe('overlay', () => {
