@@ -367,7 +367,7 @@ describe('basic features', () => {
 
     it('should not open overlay when disabled', () => {
       datepicker.open();
-      expect(datepicker.$.overlay.hasAttribute('disable-upgrade')).to.be.true;
+      expect(datepicker.$.overlay.opened).to.be.not.ok;
     });
   });
 
@@ -382,7 +382,7 @@ describe('basic features', () => {
 
     it('should not open overlay when readonly', () => {
       datepicker.open();
-      expect(datepicker.$.overlay.hasAttribute('disable-upgrade')).to.be.true;
+      expect(datepicker.$.overlay.opened).to.be.not.ok;
     });
 
     it('should make input focusable', () => {

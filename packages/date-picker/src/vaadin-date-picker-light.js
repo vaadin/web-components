@@ -75,25 +75,8 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
         on-vaadin-overlay-close="_onOverlayClosed"
         restore-focus-on-close
         restore-focus-node="[[inputElement]]"
-        theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
-      >
-        <template>
-          <vaadin-date-picker-overlay-content
-            id="overlay-content"
-            i18n="[[i18n]]"
-            fullscreen$="[[_fullscreen]]"
-            label="[[label]]"
-            selected-date="[[_selectedDate]]"
-            focused-date="{{_focusedDate}}"
-            show-week-numbers="[[showWeekNumbers]]"
-            min-date="[[_minDate]]"
-            max-date="[[_maxDate]]"
-            part="overlay-content"
-            theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
-          >
-          </vaadin-date-picker-overlay-content>
-        </template>
-      </vaadin-date-picker-overlay>
+        theme$="[[_theme]]"
+      ></vaadin-date-picker-overlay>
     `;
   }
 
@@ -113,16 +96,11 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
         type: String,
         value: 'value',
       },
-
-      /**
-       * @type {boolean}
-       * @protected
-       */
-      _overlayInitialized: {
-        type: Boolean,
-        value: true,
-      },
     };
+  }
+
+  static get observers() {
+    return ['__updateOverlayTheme(_overlayContent, _theme)'];
   }
 
   /** @protected */
@@ -151,6 +129,17 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
 
     this.$.overlay.positionTarget = this.inputElement;
     this.$.overlay.noVerticalOverlap = true;
+  }
+
+  /** @private */
+  __updateOverlayTheme(overlayContent, theme) {
+    if (overlayContent) {
+      if (theme) {
+        overlayContent.setAttribute('theme', theme);
+      } else {
+        overlayContent.removeAttribute('theme');
+      }
+    }
   }
 }
 

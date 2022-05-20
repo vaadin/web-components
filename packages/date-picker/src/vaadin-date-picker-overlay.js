@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DisableUpgradeMixin } from '@polymer/polymer/lib/mixins/disable-upgrade-mixin.js';
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
 import { PositionMixin } from '@vaadin/vaadin-overlay/src/vaadin-overlay-position-mixin.js';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -21,7 +20,7 @@ let memoizedTemplate;
  * @extends OverlayElement
  * @private
  */
-class DatePickerOverlay extends DisableUpgradeMixin(PositionMixin(OverlayElement)) {
+class DatePickerOverlay extends PositionMixin(OverlayElement) {
   static get is() {
     return 'vaadin-date-picker-overlay';
   }

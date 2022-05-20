@@ -155,6 +155,6 @@ describe('wrapped', () => {
   it('should not open on clear-button down if was not opened initially', () => {
     datepicker.value = '2001-01-01';
     click(clearButton);
-    expect(datepicker.$.overlay.hasAttribute('disable-upgrade')).to.be.true;
+    expect(datepicker.$.overlay.opened).to.be.not.ok;
   });
 });

@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-date-picker.js';
-import { open } from './common.js';
+import { getOverlayContent, open, waitForScrollToFinish } from './common.js';
 
 describe('theme attribute', () => {
   let datepicker;
@@ -16,29 +16,24 @@ describe('theme attribute', () => {
   });
 
   it('should propagate theme attribute to overlay', () => {
-    datepicker.open();
     expect(datepicker.$.overlay.getAttribute('theme')).to.equal('foo');
   });
 
   it('should propagate theme attribute to overlay content', () => {
     datepicker.open();
-    const overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
+    const overlayContent = getOverlayContent(datepicker);
     expect(overlayContent.getAttribute('theme')).to.equal('foo');
   });
 
   describe('in content', () => {
-    let overlayContent;
-
     beforeEach(async () => {
       await open(datepicker);
-      overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
-      overlayContent.$.yearScroller.bufferSize = 0;
-      overlayContent.$.monthScroller.bufferSize = 1;
-      overlayContent.$.yearScroller._finishInit();
-      overlayContent.$.monthScroller._finishInit();
+      await nextRender(datepicker);
     });
 
-    it('should propagate theme attribute to month calendar', () => {
+    it('should propagate theme attribute to month calendar', async () => {
+      const overlayContent = getOverlayContent(datepicker);
+      await waitForScrollToFinish(overlayContent);
       const monthCalendar = overlayContent.$.monthScroller.querySelector('vaadin-month-calendar');
       expect(monthCalendar.getAttribute('theme')).to.equal('foo');
     });

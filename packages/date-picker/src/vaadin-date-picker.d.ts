@@ -72,7 +72,6 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * Part name             | Description
  * ----------------------|--------------------
  * `toggle-button`       | Toggle button
- * `overlay-content`     | The overlay element
  *
  * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
  *
