@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { escKeyDown, fixtureSync } from '@vaadin/testing-helpers';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-overlay.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';

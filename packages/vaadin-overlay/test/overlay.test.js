@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { click, enterKeyDown, escKeyDown, fixtureSync, mousedown, mouseup, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
@@ -69,7 +70,6 @@ describe('vaadin-overlay', () => {
           </template>
         </vaadin-overlay>
       `);
-      overlay._observer.flush();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -109,7 +109,6 @@ describe('vaadin-overlay', () => {
           </template>
         </vaadin-overlay>
       `);
-      overlay._observer.flush();
       backdrop = overlay.$.backdrop;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -151,7 +150,6 @@ describe('vaadin-overlay', () => {
           </template>
         </vaadin-overlay>
       `);
-      overlay._observer.flush();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -209,7 +207,6 @@ describe('vaadin-overlay', () => {
       overlay = parent.children[0];
       overlayPart = overlay.$.overlay;
       backdrop = overlay.$.backdrop;
-      overlay._observer.flush();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -408,12 +405,11 @@ describe('vaadin-overlay', () => {
       overlay = fixtureSync(`
         <vaadin-overlay>
           <template>
-            overlay-content
+            <div>overlay-content</div>
           </template>
         </vaadin-overlay>
       `);
       overlayPart = overlay.$.overlay;
-      overlay._observer.flush();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -431,7 +427,7 @@ describe('vaadin-overlay', () => {
     });
 
     it('should fit in viewport when huge content is used', () => {
-      const lastChild = overlay.content.lastElementChild;
+      const lastChild = overlay.lastElementChild;
       lastChild.setAttribute('style', 'display: block; width: 2000px; height: 2000px;');
 
       const rect = overlay.getBoundingClientRect();
@@ -490,7 +486,6 @@ describe('vaadin-overlay', () => {
         </div>
       `);
       overlay = parent.children[0];
-      overlay._observer.flush();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -520,7 +515,6 @@ describe('vaadin-overlay', () => {
           </template>
         </vaadin-overlay>
       `);
-      overlay._observer.flush();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });

@@ -44,6 +44,7 @@
     "@esm-bundle/chai": "^4.3.4",
     "@polymer/iron-overlay-behavior": "^3.0.0",
     "@vaadin/button": "23.1.0-beta4",
+    "@vaadin/polymer-legacy-adapter": "23.1.0-beta4",
     "@vaadin/radio-group": "23.1.0-beta4",
     "@vaadin/testing-helpers": "^0.3.2",
     "@vaadin/text-field": "23.1.0-beta4",
