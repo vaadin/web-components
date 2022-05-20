@@ -132,8 +132,8 @@ export class IronListAdapter {
 
   __updateElement(el, index, forceSameIndexUpdates) {
     // Clean up temporary placeholder sizing
-    if (el.style.paddingBottom) {
-      el.style.paddingBottom = '';
+    if (el.style.paddingTop) {
+      el.style.paddingTop = '';
     }
 
     if (!this.__preventElementUpdates && (el.__lastUpdatedIndex !== index || forceSameIndexUpdates)) {
@@ -146,7 +146,7 @@ export class IronListAdapter {
       // it results in iron-list requesting to create an unlimited count of elements.
       // Assign a temporary placeholder sizing to elements that would otherwise end up having
       // no height.
-      el.style.paddingBottom = '200px';
+      el.style.paddingTop = '200px';
     }
   }
 
