@@ -422,6 +422,10 @@ describe('lazy loading', () => {
           comboBox.close();
 
           comboBox.opened = true;
+          // Wait for the async data provider to respond
+          await aTimeout(0);
+          // Wait for items to render
+          await nextFrame();
           comboBox.$.dropdown._scrollIntoView(50);
           // Wait for the async data provider to respond
           await aTimeout(0);
