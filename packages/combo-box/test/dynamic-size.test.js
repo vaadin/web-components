@@ -35,6 +35,7 @@ describe('dynamic size change', () => {
       comboBox.opened = true;
       scrollToIndex(comboBox, comboBox.size - 1);
       flushComboBox(comboBox);
+      flushComboBox(comboBox);
       const items = getViewportItems(comboBox);
       expect(items.length).to.be.above(5);
       items.forEach((item) => {
