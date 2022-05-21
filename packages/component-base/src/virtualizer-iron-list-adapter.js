@@ -26,6 +26,11 @@ export class IronListAdapter {
     // Iron-list uses this value to determine how many pages of elements to render
     this._maxPages = 1.3;
 
+    // Placeholder height (used for sizing elements that have intrinsic 0 height after update)
+    this.__placeholderHeight = 200;
+    // A queue of 10 previous element heights
+    this.__elementHeightQueue = Array(10);
+
     this.timeouts = {
       SCROLL_REORDER: 500,
       IGNORE_WHEEL: 500,
@@ -141,12 +146,22 @@ export class IronListAdapter {
       el.__lastUpdatedIndex = index;
     }
 
-    if (el.offsetHeight === 0) {
+    const elementHeight = el.offsetHeight;
+    if (elementHeight === 0) {
       // If the elements have 0 height after update (for example due to lazy rendering),
       // it results in iron-list requesting to create an unlimited count of elements.
       // Assign a temporary placeholder sizing to elements that would otherwise end up having
       // no height.
-      el.style.paddingTop = '200px';
+      el.style.paddingTop = `${this.__placeholderHeight}px`;
+    } else {
+      // Add element height to the queue
+      this.__elementHeightQueue.push(elementHeight);
+      this.__elementHeightQueue.shift();
+
+      // Calcualte new placeholder height based on the average of the defined values in the
+      // element height queue
+      const filteredHeights = this.__elementHeightQueue.filter((h) => h !== undefined);
+      this.__placeholderHeight = Math.round(filteredHeights.reduce((a, b) => a + b, 0) / filteredHeights.length);
     }
   }
 
