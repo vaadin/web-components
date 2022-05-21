@@ -131,9 +131,9 @@ export class IronListAdapter {
   }
 
   __updateElement(el, index, forceSameIndexUpdates) {
-    // Clean up temporary min height
-    if (el.style.minHeight) {
-      el.style.minHeight = '';
+    // Clean up temporary placeholder sizing
+    if (el.style.paddingTop) {
+      el.style.paddingTop = '';
     }
 
     if (!this.__preventElementUpdates && (el.__lastUpdatedIndex !== index || forceSameIndexUpdates)) {
@@ -144,9 +144,9 @@ export class IronListAdapter {
     if (el.offsetHeight === 0) {
       // If the elements have 0 height after update (for example due to lazy rendering),
       // it results in iron-list requesting to create an unlimited count of elements.
-      // Assign a temporary min height to elements that would otherwise end up having
+      // Assign a temporary placeholder sizing to elements that would otherwise end up having
       // no height.
-      el.style.minHeight = '200px';
+      el.style.paddingTop = '200px';
     }
   }
 
