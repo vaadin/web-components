@@ -117,11 +117,16 @@ export class UserTags extends PolymerElement {
   constructor() {
     super();
 
-    this.__targetVisibilityObserver = new IntersectionObserver((entries) => {
-      entries.forEach(({ isIntersecting }) => {
-        this.__isTargetVisible = isIntersecting;
-      });
-    });
+    this.__targetVisibilityObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(({ isIntersecting }) => {
+          this.__isTargetVisible = isIntersecting;
+        });
+      },
+      {
+        threshold: 1,
+      },
+    );
   }
 
   connectedCallback() {
