@@ -40,8 +40,6 @@ declare class ContextMenuListBox extends ListBox {}
 export declare function ItemsMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ItemsMixinClass>;
 
 export declare class ItemsMixinClass {
-  protected readonly __isRTL: boolean;
-
   /**
    * Defines a (hierarchical) menu structure for the component.
    * If a menu item has a non-empty `children` set, a sub-menu with the child items is opened
@@ -71,4 +69,6 @@ export declare class ItemsMixinClass {
    * ```
    */
   items: ContextMenuItem[] | undefined;
+
+  protected readonly __isRTL: boolean;
 }

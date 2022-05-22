@@ -42,6 +42,16 @@ export type VirtualListRenderer<TItem> = (
  */
 declare class VirtualList<TItem = VirtualListDefaultItem> extends ElementMixin(ThemableMixin(HTMLElement)) {
   /**
+   * Gets the index of the first visible item in the viewport.
+   */
+  readonly firstVisibleIndex: number;
+
+  /**
+   * Gets the index of the last visible item in the viewport.
+   */
+  readonly lastVisibleIndex: number;
+
+  /**
    * Custom function for rendering the content of every item.
    * Receives three arguments:
    *
@@ -63,16 +73,6 @@ declare class VirtualList<TItem = VirtualListDefaultItem> extends ElementMixin(T
    * Scroll to a specific index in the virtual list.
    */
   scrollToIndex(index: number): void;
-
-  /**
-   * Gets the index of the first visible item in the viewport.
-   */
-  readonly firstVisibleIndex: number;
-
-  /**
-   * Gets the index of the last visible item in the viewport.
-   */
-  readonly lastVisibleIndex: number;
 
   /**
    * Requests an update for the content of the rows.

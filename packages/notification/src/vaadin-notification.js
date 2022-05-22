@@ -110,6 +110,15 @@ class NotificationContainer extends ThemableMixin(ElementMixin(PolymerElement)) 
     };
   }
 
+  constructor() {
+    super();
+
+    this._boundVaadinOverlayClose = this._onVaadinOverlayClose.bind(this);
+    if (isIOS) {
+      this._boundIosResizeListener = () => this._detectIosNavbar();
+    }
+  }
+
   /** @private */
   _openedChanged(opened) {
     if (opened) {
@@ -125,15 +134,6 @@ class NotificationContainer extends ThemableMixin(ElementMixin(PolymerElement)) 
       if (this._boundIosResizeListener) {
         window.removeEventListener('resize', this._boundIosResizeListener);
       }
-    }
-  }
-
-  constructor() {
-    super();
-
-    this._boundVaadinOverlayClose = this._onVaadinOverlayClose.bind(this);
-    if (isIOS) {
-      this._boundIosResizeListener = () => this._detectIosNavbar();
     }
   }
 
@@ -319,6 +319,63 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     return ['_durationChanged(duration, opened)', '_rendererChanged(renderer, opened, _card)'];
   }
 
+  /**
+   * Shows a notification with the given content.
+   * By default, positions the notification at `bottom-start` and uses a 5 second duration.
+   * An options object can be passed to configure the notification.
+   * The options object has the following structure:
+   *
+   * ```
+   * {
+   *   position?: string
+   *   duration?: number
+   *   theme?: string
+   * }
+   * ```
+   *
+   * See the individual documentation for:
+   * - [`position`](#/elements/vaadin-notification#property-position)
+   * - [`duration`](#/elements/vaadin-notification#property-duration)
+   *
+   * @param contents the contents to show, either as a string or a Lit template.
+   * @param options optional options for customizing the notification.
+   */
+  static show(contents, options) {
+    if (isTemplateResult(contents)) {
+      return Notification._createAndShowNotification((root) => {
+        render(contents, root);
+      }, options);
+    }
+    return Notification._createAndShowNotification((root) => {
+      root.innerText = contents;
+    }, options);
+  }
+
+  /** @private */
+  static _createAndShowNotification(renderer, options) {
+    const notification = document.createElement(Notification.is);
+    if (options && Number.isFinite(options.duration)) {
+      notification.duration = options.duration;
+    }
+    if (options && options.position) {
+      notification.position = options.position;
+    }
+    if (options && options.theme) {
+      notification.setAttribute('theme', options.theme);
+    }
+    notification.renderer = renderer;
+    document.body.appendChild(notification);
+    notification.opened = true;
+
+    notification.addEventListener('opened-changed', (e) => {
+      if (!e.detail.value) {
+        notification.remove();
+      }
+    });
+
+    return notification;
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -488,63 +545,6 @@ class Notification extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         this._durationTimeoutId = setTimeout(() => this.close(), duration);
       }
     }
-  }
-
-  /**
-   * Shows a notification with the given content.
-   * By default, positions the notification at `bottom-start` and uses a 5 second duration.
-   * An options object can be passed to configure the notification.
-   * The options object has the following structure:
-   *
-   * ```
-   * {
-   *   position?: string
-   *   duration?: number
-   *   theme?: string
-   * }
-   * ```
-   *
-   * See the individual documentation for:
-   * - [`position`](#/elements/vaadin-notification#property-position)
-   * - [`duration`](#/elements/vaadin-notification#property-duration)
-   *
-   * @param contents the contents to show, either as a string or a Lit template.
-   * @param options optional options for customizing the notification.
-   */
-  static show(contents, options) {
-    if (isTemplateResult(contents)) {
-      return Notification._createAndShowNotification((root) => {
-        render(contents, root);
-      }, options);
-    }
-    return Notification._createAndShowNotification((root) => {
-      root.innerText = contents;
-    }, options);
-  }
-
-  /** @private */
-  static _createAndShowNotification(renderer, options) {
-    const notification = document.createElement(Notification.is);
-    if (options && Number.isFinite(options.duration)) {
-      notification.duration = options.duration;
-    }
-    if (options && options.position) {
-      notification.position = options.position;
-    }
-    if (options && options.theme) {
-      notification.setAttribute('theme', options.theme);
-    }
-    notification.renderer = renderer;
-    document.body.appendChild(notification);
-    notification.opened = true;
-
-    notification.addEventListener('opened-changed', (e) => {
-      if (!e.detail.value) {
-        notification.remove();
-      }
-    });
-
-    return notification;
   }
 }
 

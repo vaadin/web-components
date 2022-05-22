@@ -15,11 +15,11 @@ export abstract class LitRendererDirective<E extends Element, R extends LitRende
 
   protected renderer: R;
 
-  protected renderRenderer(container: Element, ...args: Parameters<R>): void;
-
   render(_renderer: R, _value?: unknown): typeof nothing;
 
   update(_part: ElementPart, props: [R, unknown]): typeof nothing;
+
+  protected renderRenderer(container: Element, ...args: Parameters<R>): void;
 
   /**
    * Adds the renderer callback to the element.

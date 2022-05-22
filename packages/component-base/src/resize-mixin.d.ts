@@ -12,14 +12,14 @@ export declare function ResizeMixin<T extends Constructor<HTMLElement>>(base: T)
 
 export declare class ResizeMixinClass {
   /**
-   * A handler invoked on host resize. By default, it does nothing.
-   * Override the method to implement your own behavior.
-   */
-  protected _onResize(contentRect: DOMRect): void;
-
-  /**
    * When true, the parent element resize will be also observed.
    * Override this getter and return `true` to enable this.
    */
   protected readonly _observeParent: boolean;
+
+  /**
+   * A handler invoked on host resize. By default, it does nothing.
+   * Override the method to implement your own behavior.
+   */
+  protected _onResize(contentRect: DOMRect): void;
 }

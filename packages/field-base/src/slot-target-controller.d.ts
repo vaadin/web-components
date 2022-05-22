@@ -6,14 +6,6 @@
 import { ReactiveController } from 'lit';
 
 export class SlotTargetController implements ReactiveController {
-  constructor(
-    sourceSlot: HTMLSlotElement,
-    targetFactory: () => HTMLElement,
-    copyCallback?: (nodes: HTMLElement[]) => void,
-  );
-
-  hostConnected(): void;
-
   /**
    * The source `<slot>` element to copy nodes from.
    */
@@ -28,4 +20,12 @@ export class SlotTargetController implements ReactiveController {
    * Function called after copying nodes to target.
    */
   protected copyCallback?: (nodes: HTMLElement[]) => void;
+
+  constructor(
+    sourceSlot: HTMLSlotElement,
+    targetFactory: () => HTMLElement,
+    copyCallback?: (nodes: HTMLElement[]) => void,
+  );
+
+  hostConnected(): void;
 }

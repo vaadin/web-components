@@ -10,15 +10,6 @@ import { ReactiveController } from 'lit';
  */
 export class MediaQueryController implements ReactiveController {
   /**
-   * @param {HTMLElement} host
-   */
-  constructor(query: string, callback: (matches: boolean) => void);
-
-  hostConnected(): void;
-
-  hostDisconnected(): void;
-
-  /**
    * The CSS media query to evaluate.
    */
   protected query: string;
@@ -27,4 +18,13 @@ export class MediaQueryController implements ReactiveController {
    * Function to call when media query changes.
    */
   protected callback: (matches: boolean) => void;
+
+  /**
+   * @param {HTMLElement} host
+   */
+  constructor(query: string, callback: (matches: boolean) => void);
+
+  hostConnected(): void;
+
+  hostDisconnected(): void;
 }

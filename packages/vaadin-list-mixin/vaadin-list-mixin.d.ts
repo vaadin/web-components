@@ -11,10 +11,6 @@ import { Constructor } from '@open-wc/dedupe-mixin';
 export declare function ListMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ListMixinClass>;
 
 export declare class ListMixinClass {
-  protected readonly focused: Element | null;
-
-  protected readonly _scrollerElement: HTMLElement;
-
   /**
    * Used for mixin detection because `instanceof` does not work with mixins.
    */
@@ -45,4 +41,8 @@ export declare class ListMixinClass {
    * you have to use `dom-repeat` and place it to the light DOM.
    */
   readonly items: Element[] | undefined;
+
+  protected readonly focused: Element | null;
+
+  protected readonly _scrollerElement: HTMLElement;
 }

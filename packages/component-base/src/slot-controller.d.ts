@@ -6,15 +6,6 @@
 import { ReactiveController } from 'lit';
 
 export class SlotController extends EventTarget implements ReactiveController {
-  constructor(
-    host: HTMLElement,
-    slotName: string,
-    slotFactory?: () => HTMLElement,
-    slotInitializer?: (host: HTMLElement, node: HTMLElement) => void,
-  );
-
-  hostConnected(): void;
-
   /**
    * The controller host element.
    */
@@ -25,16 +16,25 @@ export class SlotController extends EventTarget implements ReactiveController {
    */
   node: HTMLElement;
 
-  /**
-   * Return a reference to the node managed by the controller.
-   */
-  getSlotChild(): Node;
-
   protected initialized: boolean;
 
   protected defaultNode: Node;
 
   protected defaultId: string;
+
+  constructor(
+    host: HTMLElement,
+    slotName: string,
+    slotFactory?: () => HTMLElement,
+    slotInitializer?: (host: HTMLElement, node: HTMLElement) => void,
+  );
+
+  hostConnected(): void;
+
+  /**
+   * Return a reference to the node managed by the controller.
+   */
+  getSlotChild(): Node;
 
   protected attachDefaultNode(): Node | undefined;
 

@@ -10,6 +10,11 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  */
 export class LabelController extends SlotController {
   /**
+   * ID attribute value set on the label element.
+   */
+  labelId: string;
+
+  /**
    * String used for the label.
    */
   protected label: string | null | undefined;
@@ -18,9 +23,4 @@ export class LabelController extends SlotController {
    * Set label based on corresponding host property.
    */
   setLabel(label: string | null | undefined): void;
-
-  /**
-   * ID attribute value set on the label element.
-   */
-  labelId: string;
 }

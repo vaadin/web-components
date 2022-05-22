@@ -405,6 +405,13 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     };
   }
 
+  /**
+   * Helper static method that dispatches a `close-overlay-drawer` event
+   */
+  static dispatchCloseOverlayDrawerEvent() {
+    window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
+  }
+
   constructor() {
     super();
     // TODO(jouni): might want to debounce
@@ -471,13 +478,6 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     window.removeEventListener('resize', this.__boundResizeListener);
     this.removeEventListener('drawer-toggle-click', this.__drawerToggleClickListener);
     window.removeEventListener('close-overlay-drawer', this.__drawerToggleClickListener);
-  }
-
-  /**
-   * Helper static method that dispatches a `close-overlay-drawer` event
-   */
-  static dispatchCloseOverlayDrawerEvent() {
-    window.dispatchEvent(new CustomEvent('close-overlay-drawer'));
   }
 
   /**

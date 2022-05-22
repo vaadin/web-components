@@ -101,6 +101,29 @@ declare class NotificationCard extends ThemableMixin(HTMLElement) {}
  */
 declare class Notification extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   /**
+   * Shows a notification with the given content.
+   * By default, positions the notification at `bottom-start` and uses a 5 second duration.
+   * An options object can be passed to configure the notification.
+   * The options object has the following structure:
+   *
+   * ```
+   * {
+   *   position?: string
+   *   duration?: number
+   *   theme?: string
+   * }
+   * ```
+   *
+   * See the individual documentation for:
+   * - [`position`](#/elements/vaadin-notification#property-position)
+   * - [`duration`](#/elements/vaadin-notification#property-duration)
+   *
+   * @param contents the contents to show, either as a string or a Lit template.
+   * @param options optional options for customizing the notification.
+   */
+  static show(contents: string | TemplateResult, options?: ShowOptions): Notification;
+
+  /**
    * The duration in milliseconds to show the notification.
    * Set to `0` or a negative number to disable the notification auto-closing.
    */
@@ -156,29 +179,6 @@ declare class Notification extends ThemePropertyMixin(ElementMixin(HTMLElement))
     listener: (this: Notification, ev: NotificationEventMap[K]) => void,
     options?: boolean | EventListenerOptions,
   ): void;
-
-  /**
-   * Shows a notification with the given content.
-   * By default, positions the notification at `bottom-start` and uses a 5 second duration.
-   * An options object can be passed to configure the notification.
-   * The options object has the following structure:
-   *
-   * ```
-   * {
-   *   position?: string
-   *   duration?: number
-   *   theme?: string
-   * }
-   * ```
-   *
-   * See the individual documentation for:
-   * - [`position`](#/elements/vaadin-notification#property-position)
-   * - [`duration`](#/elements/vaadin-notification#property-duration)
-   *
-   * @param contents the contents to show, either as a string or a Lit template.
-   * @param options optional options for customizing the notification.
-   */
-  static show(contents: string | TemplateResult, options?: ShowOptions): Notification;
 }
 
 declare global {

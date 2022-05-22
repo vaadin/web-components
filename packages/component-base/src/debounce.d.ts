@@ -10,8 +10,6 @@
 import { AsyncInterface } from './async.js';
 
 export declare class Debouncer {
-  constructor();
-
   /**
    * Creates a debouncer if no debouncer is passed as a parameter
    * or it cancels an active debouncer otherwise. The following
@@ -47,6 +45,8 @@ export declare class Debouncer {
    * @returns Returns a debouncer object.
    */
   static debounce(debouncer: Debouncer | null, asyncModule: AsyncInterface, callback: () => any): Debouncer;
+
+  constructor();
 
   /**
    * Sets the scheduler; that is, a module with the Async interface,
