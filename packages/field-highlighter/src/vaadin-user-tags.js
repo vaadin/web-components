@@ -175,6 +175,10 @@ export class UserTags extends PolymerElement {
       this.flashTags(this._flashQueue.shift());
     }
 
+    if (isVisible && this.hasFocus) {
+      this.opened = true;
+    }
+
     if (!isVisible && this.opened) {
       this.opened = false;
     }
