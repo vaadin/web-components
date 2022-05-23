@@ -231,16 +231,25 @@ export class UserTags extends PolymerElement {
 
     if (this.opened && this.hasFocus) {
       this.updateTags(users, changedTags);
-    } else if (addedUsers.length && document.visibilityState !== 'hidden') {
+    } else if (addedUsers.length > 0 && document.visibilityState !== 'hidden') {
       // Avoid adding to queue if window is not visible.
-      const tags = changedTags.added;
+
+      const addedTags = changedTags.added;
+      const removedTags = changedTags.removed;
+
+      // Only sync the removed user tags.
+      // The added tags are handled by the `flashTags` method.
+      this.updateTagsSync(users, {
+        added: [],
+        removed: removedTags,
+      });
+
       if (this.flashing) {
-        // schedule next flash later
-        this.push('_flashQueue', tags);
+        // Schedule next flash later
+        this.push('_flashQueue', addedTags);
       } else {
-        this.flashTags(tags);
+        this.flashTags(addedTags);
       }
-      this.set('users', users);
     } else {
       this.updateTagsSync(users, changedTags);
     }
