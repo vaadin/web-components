@@ -165,11 +165,13 @@ describe('multiple overlays', () => {
           <vaadin-overlay modeless>
             <template>
               overlay 1
+              <input />
             </template>
           </vaadin-overlay>
           <vaadin-overlay modeless>
             <template>
               overlay 2
+              <input />
             </template>
           </vaadin-overlay>
         </div>
@@ -238,6 +240,58 @@ describe('multiple overlays', () => {
       modeless1.opened = modeless2.opened = false;
       modeless2.opened = true;
       expect(modeless2.style.zIndex).to.be.empty;
+    });
+
+    it('should not fire the vaadin-overlay-escape-press if the overlay does not contain focus', () => {
+      const spy = sinon.spy();
+      modeless1.addEventListener('vaadin-overlay-escape-press', spy);
+
+      modeless1.opened = true;
+
+      escKeyDown(document.body);
+      expect(spy.called).to.be.false;
+    });
+
+    it('should not fire the vaadin-overlay-escape-press if the overlay contains focus', () => {
+      const spy = sinon.spy();
+      modeless1.addEventListener('vaadin-overlay-escape-press', spy);
+
+      modeless1.opened = true;
+
+      const input = modeless1.content.querySelector('input');
+      input.focus();
+
+      escKeyDown(input);
+      expect(spy.called).to.be.true;
+    });
+
+    it('should fire the vaadin-overlay-escape-press if the overlay is the frontmost one', () => {
+      const spy = sinon.spy();
+      modeless1.addEventListener('vaadin-overlay-escape-press', spy);
+
+      modeless1.opened = true;
+      modeless2.opened = true;
+      modeless1.bringToFront();
+
+      const input = modeless1.content.querySelector('input');
+      input.focus();
+
+      escKeyDown(input);
+      expect(spy.called).to.be.true;
+    });
+
+    it('should not fire the vaadin-overlay-escape-press if the overlay is not the frontmost', () => {
+      const spy = sinon.spy();
+      modeless1.addEventListener('vaadin-overlay-escape-press', spy);
+
+      modeless1.opened = true;
+      modeless2.opened = true;
+
+      const input = modeless2.content.querySelector('input');
+      input.focus();
+
+      escKeyDown(input);
+      expect(spy.called).to.be.false;
     });
   });
 });
