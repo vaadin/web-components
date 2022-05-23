@@ -114,7 +114,7 @@ describe('keyboard', () => {
       input.select();
       await sendKeys({ press: 'Backspace' });
       const spy = sinon.spy(datepicker, 'validate');
-      await sendKeys({ press: 'Tab' });
+      input.blur();
       expect(spy.callCount).to.equal(1);
       expect(datepicker.invalid).to.be.false;
     });

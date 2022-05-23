@@ -982,6 +982,7 @@ export const DatePickerMixin = (subclass) =>
         case 'Tab':
           if (this.opened) {
             e.preventDefault();
+            e.stopPropagation();
             // Clear the selection range (remains visible on IE)
             this._setSelectionRange(0, 0);
             if (e.shiftKey) {
