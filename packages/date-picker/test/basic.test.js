@@ -87,6 +87,7 @@ describe('basic features', () => {
 
   it('should set focused attribute when focused on fullscreen', async () => {
     datepicker._fullscreen = true;
+    datepicker.focus();
     await open(datepicker);
     await nextRender();
     expect(datepicker.hasAttribute('focused')).to.be.true;
