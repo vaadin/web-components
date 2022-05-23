@@ -269,7 +269,7 @@ yarn update:lumo --group vaadin-upload
 
 ### Integration tests
 
-Run integration tests in the separate `integration` folder:
+Run integration tests that are in the separate `integration` folder:
 
 ```sh
 yarn test:it
