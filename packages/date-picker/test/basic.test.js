@@ -93,6 +93,13 @@ describe('basic features', () => {
     expect(datepicker.hasAttribute('focused')).to.be.true;
   });
 
+  it('should close the dropdown on Esc when on fullscreen', async () => {
+    datepicker._fullscreen = true;
+    datepicker.click();
+    await sendKeys({ press: 'Escape' });
+    expect(datepicker.opened).to.be.false;
+  });
+
   it('should remove focused attribute when closed and not focused', async () => {
     datepicker._fullscreen = true;
     datepicker.click();

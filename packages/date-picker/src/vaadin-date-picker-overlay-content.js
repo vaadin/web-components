@@ -767,7 +767,10 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
   __onTodayButtonKeyDown(event) {
     if (this.hasAttribute('fullscreen')) {
-      event.stopPropagation();
+      // Do not prevent closing on Esc
+      if (event.key !== 'Escape') {
+        event.stopPropagation();
+      }
       return;
     }
 
@@ -782,7 +785,10 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
   __onCancelButtonKeyDown(event) {
     if (this.hasAttribute('fullscreen')) {
-      event.stopPropagation();
+      // Do not prevent closing on Esc
+      if (event.key !== 'Escape') {
+        event.stopPropagation();
+      }
       return;
     }
 
