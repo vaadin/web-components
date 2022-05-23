@@ -503,7 +503,7 @@ export const DatePickerMixin = (subclass) =>
       });
 
       // Keep focus attribute in focusElement for styling
-      this._overlayContent.addEventListener('focus', () => {
+      this._overlayContent.addEventListener('focusin', () => {
         this._setFocused(true);
       });
 
@@ -768,6 +768,7 @@ export const DatePickerMixin = (subclass) =>
 
       if (this._noInput && this.focusElement) {
         this.focusElement.blur();
+        this._overlayContent.focusDateElement();
       }
     }
 
@@ -854,9 +855,7 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _focus() {
-      if (this._noInput) {
-        this._overlayInitialized && this._overlayContent.focus();
-      } else {
+      if (!this._noInput) {
         this.inputElement.focus();
       }
     }
