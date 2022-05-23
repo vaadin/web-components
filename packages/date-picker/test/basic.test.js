@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, fixtureSync, makeSoloTouchEvent, oneEvent, tap } from '@vaadin/testing-helpers';
+import { aTimeout, click, fixtureSync, makeSoloTouchEvent, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import * as settings from '@polymer/polymer/lib/utils/settings.js';
-import { close, getOverlayContent, monthsEqual, open } from './common.js';
+import { close, getFocusedCell, getOverlayContent, monthsEqual, open } from './common.js';
 
 settings.setCancelSyntheticClickEvents(false);
 
@@ -82,6 +82,22 @@ describe('basic features', () => {
     datepicker.focus();
     await sendKeys({ press: 'ArrowDown' });
     await sendKeys({ press: 'Escape' });
+    expect(datepicker.hasAttribute('focused')).to.be.true;
+  });
+
+  it('should focus date element when focused on fullscreen', async () => {
+    datepicker._fullscreen = true;
+    await open(datepicker);
+    await nextRender();
+    const content = getOverlayContent(datepicker);
+    const cell = getFocusedCell(content);
+    expect(isFocused(cell)).to.be.true;
+  });
+
+  it('should set focused attribute when focused on fullscreen', async () => {
+    datepicker._fullscreen = true;
+    await open(datepicker);
+    await nextRender();
     expect(datepicker.hasAttribute('focused')).to.be.true;
   });
 
