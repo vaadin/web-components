@@ -25,14 +25,14 @@ export declare class ItemMixinClass {
   value: string;
 
   /**
+   * If true, the item is in selected state.
+   */
+  selected: boolean;
+
+  /**
    * Used for mixin detection because `instanceof` does not work with mixins.
    * e.g. in VaadinListMixin it filters items by using the
    * `element._hasVaadinItemMixin` condition.
    */
   protected _hasVaadinItemMixin: boolean;
-
-  /**
-   * If true, the item is in selected state.
-   */
-  selected: boolean;
 }

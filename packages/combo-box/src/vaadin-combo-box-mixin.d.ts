@@ -31,14 +31,6 @@ export declare function ComboBoxMixin<TItem, T extends Constructor<HTMLElement>>
   Constructor<KeyboardMixinClass>;
 
 export declare class ComboBoxMixinClass<TItem> {
-  protected readonly _propertyForValue: string;
-
-  protected _inputElementValue: string | undefined;
-
-  protected _revertInputValue(): void;
-
-  protected _getItemElements(): HTMLElement[];
-
   /**
    * True if the dropdown is open, false otherwise.
    */
@@ -151,6 +143,10 @@ export declare class ComboBoxMixinClass<TItem> {
    */
   invalid: boolean;
 
+  protected readonly _propertyForValue: string;
+
+  protected _inputElementValue: string | undefined;
+
   /**
    * Requests an update for the content of items.
    * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
@@ -179,4 +175,8 @@ export declare class ComboBoxMixinClass<TItem> {
    * You can override this method for custom validations.
    */
   checkValidity(): boolean;
+
+  protected _revertInputValue(): void;
+
+  protected _getItemElements(): HTMLElement[];
 }

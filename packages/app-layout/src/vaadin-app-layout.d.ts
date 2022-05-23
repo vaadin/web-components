@@ -125,6 +125,11 @@ export type AppLayoutEventMap = HTMLElementEventMap & AppLayoutCustomEventMap;
  */
 declare class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(HTMLElement))) {
   /**
+   * Helper static method that dispatches a `close-overlay-drawer` event
+   */
+  static dispatchCloseOverlayDrawerEvent(): void;
+
+  /**
    * The object used to localize this component.
    * To change the default localization, replace the entire
    * `i18n` object with a custom one.
@@ -176,11 +181,6 @@ declare class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(HTMLE
    * @attr {string} close-drawer-on
    */
   closeDrawerOn: string;
-
-  /**
-   * Helper static method that dispatches a `close-overlay-drawer` event
-   */
-  static dispatchCloseOverlayDrawerEvent(): void;
 
   addEventListener<K extends keyof AppLayoutEventMap>(
     type: K,

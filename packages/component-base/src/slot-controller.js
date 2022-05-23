@@ -10,16 +10,6 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
  * A controller for providing content to slot element and observing changes.
  */
 export class SlotController extends EventTarget {
-  constructor(host, slotName, slotFactory, slotInitializer) {
-    super();
-
-    this.host = host;
-    this.slotName = slotName;
-    this.slotFactory = slotFactory;
-    this.slotInitializer = slotInitializer;
-    this.defaultId = SlotController.generateId(slotName, host);
-  }
-
   /**
    * Ensure that every instance has unique ID.
    *
@@ -38,6 +28,16 @@ export class SlotController extends EventTarget {
     this[field] = 1 + this[field] || 0;
 
     return `${prefix}-${host.localName}-${this[field]}`;
+  }
+
+  constructor(host, slotName, slotFactory, slotInitializer) {
+    super();
+
+    this.host = host;
+    this.slotName = slotName;
+    this.slotFactory = slotFactory;
+    this.slotInitializer = slotInitializer;
+    this.defaultId = SlotController.generateId(slotName, host);
   }
 
   hostConnected() {

@@ -9,16 +9,16 @@ import { ReactiveController } from 'lit';
  * A controller for trapping focus within a DOM node.
  */
 export class FocusTrapController implements ReactiveController {
+  /**
+   * The controller host element.
+   */
+  host: HTMLElement;
+
   constructor(node: HTMLElement);
 
   hostConnected(): void;
 
   hostDisconnected(): void;
-
-  /**
-   * The controller host element.
-   */
-  host: HTMLElement;
 
   /**
    * Activates a focus trap for a DOM node that will prevent focus from escaping the node.
