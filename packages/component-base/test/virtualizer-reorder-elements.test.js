@@ -27,7 +27,7 @@ describe('reorder elements', () => {
         resolve(mutations.flatMap((record) => [...record.removedNodes]));
       }).observe(elementsContainer, { childList: true });
 
-      virtualizer.scrollToIndex(Math.ceil(elementsContainer.childElementCount / 3));
+      virtualizer.scrollToIndex(Math.ceil(elementsContainer.childElementCount / 2));
 
       if (!skipFlush) {
         virtualizer.flush();
