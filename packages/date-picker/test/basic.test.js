@@ -4,7 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import * as settings from '@polymer/polymer/lib/utils/settings.js';
-import { close, getFocusedCell, getOverlayContent, monthsEqual, open } from './common.js';
+import { close, getFocusedCell, getOverlayContent, monthsEqual, open, waitForScrollToFinish } from './common.js';
 
 settings.setCancelSyntheticClickEvents(false);
 
@@ -88,8 +88,8 @@ describe('basic features', () => {
   it('should focus date element when focused on fullscreen', async () => {
     datepicker._fullscreen = true;
     await open(datepicker);
-    await nextRender();
     const content = getOverlayContent(datepicker);
+    await waitForScrollToFinish(content);
     const cell = getFocusedCell(content);
     expect(isFocused(cell)).to.be.true;
   });
