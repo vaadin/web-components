@@ -104,10 +104,7 @@ export function getOverlayContent(datepicker) {
     datepicker.open();
     datepicker.close();
   }
-  const overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
-  overlayContent.$.monthScroller.bufferSize = 0;
-  overlayContent.$.yearScroller.bufferSize = 0;
-  return overlayContent;
+  return datepicker.$.overlay.content.querySelector('#overlay-content');
 }
 
 export function getFocusedMonth(overlayContent) {
