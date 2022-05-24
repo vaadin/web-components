@@ -227,31 +227,31 @@ describe('basic features', () => {
       datepicker._fullscreen = true;
     });
 
-    it('should blur when focused on fullscreen', () => {
+    it('should blur when focused', () => {
       const spy = sinon.spy(input, 'blur');
       input.dispatchEvent(new CustomEvent('focus'));
 
       expect(spy.called).to.be.true;
     });
 
-    it('should blur the input on fullscreen', () => {
+    it('should blur the input', () => {
       datepicker.focus();
       expect(isFocused(input)).to.be.false;
     });
 
-    it('should not focus the input on touch tap on fullscreen', () => {
+    it('should not focus the input on touch tap', () => {
       touchTap(input);
       expect(isFocused(input)).to.be.false;
     });
 
-    it('should set focused attribute when focused on fullscreen', async () => {
+    it('should set focused attribute when focused', async () => {
       datepicker.focus();
       await open(datepicker);
       await nextRender();
       expect(datepicker.hasAttribute('focused')).to.be.true;
     });
 
-    it('should close the dropdown on Today button Esc on fullscreen', async () => {
+    it('should close the dropdown on Today button Esc', async () => {
       await open(datepicker);
       await nextRender();
 
@@ -261,7 +261,7 @@ describe('basic features', () => {
       expect(datepicker.opened).to.be.false;
     });
 
-    it('should close the dropdown on Cancel button Esc on fullscreen', async () => {
+    it('should close the dropdown on Cancel button Esc', async () => {
       await open(datepicker);
       await nextRender();
 
@@ -281,7 +281,7 @@ describe('basic features', () => {
       expect(datepicker.hasAttribute('focused')).to.be.false;
     });
 
-    it('should blur when datepicker is opened on fullscreen', async () => {
+    it('should blur when datepicker is opened', async () => {
       const spy = sinon.spy(input, 'blur');
       await open(datepicker);
       expect(spy.called).to.be.true;
