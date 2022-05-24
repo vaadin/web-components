@@ -27,23 +27,22 @@ describe('date-picker in dialog', () => {
   });
 
   describe('modal', () => {
-    let overlayContent;
-
     beforeEach(async () => {
       datepicker.inputElement.focus();
       await open(datepicker);
       await nextRender();
-      overlayContent = getOverlayContent(datepicker);
     });
 
     it('should focus the Today button on second Tab when inside a dialog', async () => {
       // Focus the month calendar
       await sendKeys({ press: 'Tab' });
 
+      await nextRender();
+
       // Focus the Today button
       await sendKeys({ press: 'Tab' });
 
-      expect(overlayContent.$.todayButton.hasAttribute('focused')).to.be.true;
+      expect(getOverlayContent(datepicker).$.todayButton.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus the Cancel button on Shift + Tab when inside a dialog', async () => {
@@ -52,12 +51,14 @@ describe('date-picker in dialog', () => {
       await sendKeys({ press: 'Tab' });
       await sendKeys({ up: 'Shift' });
 
-      expect(overlayContent.$.cancelButton.hasAttribute('focused')).to.be.true;
+      expect(getOverlayContent(datepicker).$.cancelButton.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus the input on calendar date Shift Tab when inside a dialog', async () => {
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
+
+      await nextRender();
 
       const spy = sinon.spy(datepicker.inputElement, 'focus');
 
