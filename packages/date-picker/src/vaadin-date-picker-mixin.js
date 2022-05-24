@@ -471,7 +471,7 @@ export const DatePickerMixin = (subclass) =>
       }
     }
 
-    /** @private */
+    /** @protected */
     _initOverlay() {
       this.$.overlay.removeAttribute('disable-upgrade');
       this._overlayInitialized = true;
@@ -506,8 +506,6 @@ export const DatePickerMixin = (subclass) =>
       this._overlayContent.addEventListener('focusin', () => {
         this._setFocused(true);
       });
-
-      this.$.overlay.addEventListener('vaadin-overlay-close', this._onVaadinOverlayClose.bind(this));
 
       this.addEventListener('mousedown', () => this.__bringToFront());
       this.addEventListener('touchstart', () => this.__bringToFront());

@@ -126,6 +126,13 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
   }
 
   /** @protected */
+  ready() {
+    super.ready();
+
+    this._initOverlay();
+  }
+
+  /** @protected */
   connectedCallback() {
     super.connectedCallback();
     const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
