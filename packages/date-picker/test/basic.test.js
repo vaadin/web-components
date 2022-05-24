@@ -56,15 +56,6 @@ describe('basic features', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
-  it('should blur when focused on fullscreen', () => {
-    datepicker._fullscreen = true;
-
-    const spy = sinon.spy(input, 'blur');
-    input.dispatchEvent(new CustomEvent('focus'));
-
-    expect(spy.called).to.be.true;
-  });
-
   it('should keep focused attribute when focus moves to overlay', async () => {
     datepicker.focus();
     await sendKeys({ press: 'ArrowDown' });
@@ -83,28 +74,6 @@ describe('basic features', () => {
     await sendKeys({ press: 'ArrowDown' });
     await sendKeys({ press: 'Escape' });
     expect(datepicker.hasAttribute('focused')).to.be.true;
-  });
-
-  it('should set focused attribute when focused on fullscreen', async () => {
-    datepicker._fullscreen = true;
-    datepicker.focus();
-    await open(datepicker);
-    await nextRender();
-    expect(datepicker.hasAttribute('focused')).to.be.true;
-  });
-
-  it('should remove focused attribute when closed and not focused', async () => {
-    datepicker._fullscreen = true;
-    datepicker.click();
-    await sendKeys({ press: 'Escape' });
-    expect(datepicker.hasAttribute('focused')).to.be.false;
-  });
-
-  it('should blur when datepicker is opened on fullscreen', async () => {
-    datepicker._fullscreen = true;
-    const spy = sinon.spy(input, 'blur');
-    await open(datepicker);
-    expect(spy.called).to.be.true;
   });
 
   it('should notify opened changed on open and close', async () => {
@@ -130,18 +99,6 @@ describe('basic features', () => {
   it('should focus the input on touch tap', () => {
     touchTap(input);
     expect(isFocused(input)).to.be.true;
-  });
-
-  it('should not focus the input on touch tap on fullscreen', () => {
-    datepicker._fullscreen = true;
-    touchTap(input);
-    expect(isFocused(input)).to.be.false;
-  });
-
-  it('should blur the input on fullscreen', () => {
-    datepicker._fullscreen = true;
-    datepicker.focus();
-    expect(isFocused(input)).to.be.false;
   });
 
   it('should pass the placeholder attribute to the input tag', () => {
@@ -263,6 +220,72 @@ describe('basic features', () => {
   it('should set has-value attribute when value is set', () => {
     datepicker.value = '2000-02-01';
     expect(datepicker.hasAttribute('has-value')).to.be.true;
+  });
+
+  describe('fullscreen', () => {
+    beforeEach(() => {
+      datepicker._fullscreen = true;
+    });
+
+    it('should blur when focused', () => {
+      const spy = sinon.spy(input, 'blur');
+      input.dispatchEvent(new CustomEvent('focus'));
+
+      expect(spy.called).to.be.true;
+    });
+
+    it('should blur the input', () => {
+      datepicker.focus();
+      expect(isFocused(input)).to.be.false;
+    });
+
+    it('should not focus the input on touch tap', () => {
+      touchTap(input);
+      expect(isFocused(input)).to.be.false;
+    });
+
+    it('should set focused attribute when focused', async () => {
+      datepicker.focus();
+      await open(datepicker);
+      await nextRender();
+      expect(datepicker.hasAttribute('focused')).to.be.true;
+    });
+
+    it('should close the dropdown on Today button Esc', async () => {
+      await open(datepicker);
+      await nextRender();
+
+      getOverlayContent(datepicker).$.todayButton.focus();
+      await sendKeys({ press: 'Escape' });
+
+      expect(datepicker.opened).to.be.false;
+    });
+
+    it('should close the dropdown on Cancel button Esc', async () => {
+      await open(datepicker);
+      await nextRender();
+
+      getOverlayContent(datepicker).$.cancelButton.focus();
+      await sendKeys({ press: 'Escape' });
+
+      expect(datepicker.opened).to.be.false;
+    });
+
+    it('should remove focused attribute when closed and not focused', async () => {
+      await open(datepicker);
+      await nextRender();
+
+      getOverlayContent(datepicker).$.todayButton.focus();
+      await sendKeys({ press: 'Escape' });
+
+      expect(datepicker.hasAttribute('focused')).to.be.false;
+    });
+
+    it('should blur when datepicker is opened', async () => {
+      const spy = sinon.spy(input, 'blur');
+      await open(datepicker);
+      expect(spy.called).to.be.true;
+    });
   });
 
   describe('value property formats', () => {
