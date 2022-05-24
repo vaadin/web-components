@@ -11,6 +11,7 @@ import {
   nextFrame,
   nextRender,
   spaceKeyDown,
+  tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
@@ -284,6 +285,11 @@ describe('items', () => {
 
     it('should close all menus on esc', () => {
       escKeyDown(menuComponents(subMenu)[0]);
+      expect(rootMenu.opened).to.be.false;
+    });
+
+    it('should close all menus on Tab', () => {
+      tabKeyDown(menuComponents(subMenu)[0]);
       expect(rootMenu.opened).to.be.false;
     });
 
