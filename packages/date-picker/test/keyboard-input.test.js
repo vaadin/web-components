@@ -270,6 +270,21 @@ describe('keyboard', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
+    it('should move focus back to the input on calendar date Shift Tab', async () => {
+      // Move focus to the calendar
+      await sendKeys({ press: 'Tab' });
+
+      await nextRender();
+
+      const spy = sinon.spy(input, 'focus');
+
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
+      expect(spy.calledOnce).to.be.true;
+    });
+
     it('should move focus to the input on Cancel button Tab', async () => {
       overlayContent.$.cancelButton.focus();
       const spy = sinon.spy(input, 'focus');
