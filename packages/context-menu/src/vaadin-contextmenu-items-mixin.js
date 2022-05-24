@@ -328,7 +328,7 @@ export const ItemsMixin = (superClass) =>
           if ((!isRTL && e.keyCode === 37) || (isRTL && e.keyCode === 39)) {
             menu.close();
             menu.listenOn.focus();
-          } else if (e.keyCode === 27) {
+          } else if (e.key === 'Escape' || e.key === 'Tab') {
             menu.dispatchEvent(new CustomEvent('close-all-menus'));
           }
         });
