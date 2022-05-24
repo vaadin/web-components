@@ -755,6 +755,9 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
         this._moveFocusByMonths(event.shiftKey ? -12 : -1);
         handled = true;
         break;
+      case 'Tab':
+        this._onTabKeyDown(event, 'calendar');
+        break;
       default:
         break;
     }
@@ -762,6 +765,38 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     if (handled) {
       event.preventDefault();
       event.stopPropagation();
+    }
+  }
+
+  _onTabKeyDown(event, section) {
+    // Stop propagation to avoid focus-trap
+    // listener when used in a modal dialog.
+    event.stopPropagation();
+
+    switch (section) {
+      case 'calendar':
+        if (event.shiftKey) {
+          // Return focus back to the input field.
+          event.preventDefault();
+          this.__focusInput();
+        }
+        break;
+      case 'today':
+        if (event.shiftKey) {
+          // Browser returns focus back to the calendar.
+          // We need to move the scroll to focused date.
+          setTimeout(() => this.revealDate(this.focusedDate), 1);
+        }
+        break;
+      case 'cancel':
+        if (!event.shiftKey) {
+          // Return focus back to the input field.
+          event.preventDefault();
+          this.__focusInput();
+        }
+        break;
+      default:
+        break;
     }
   }
 
@@ -774,12 +809,8 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       return;
     }
 
-    if (event.key === 'Tab' && event.shiftKey) {
-      event.stopPropagation();
-
-      // Browser returns focus back to the calendar.
-      // We need to move the scroll to focused date.
-      setTimeout(() => this.revealDate(this.focusedDate), 1);
+    if (event.key === 'Tab') {
+      this._onTabKeyDown(event, 'today');
     }
   }
 
@@ -792,12 +823,13 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       return;
     }
 
-    if (event.key === 'Tab' && !event.shiftKey) {
-      // Return focus back to the input field
-      event.preventDefault();
-      event.stopPropagation();
-      this.dispatchEvent(new CustomEvent('focus-input', { bubbles: true, composed: true }));
+    if (event.key === 'Tab') {
+      this._onTabKeyDown(event, 'cancel');
     }
+  }
+
+  __focusInput() {
+    this.dispatchEvent(new CustomEvent('focus-input', { bubbles: true, composed: true }));
   }
 
   __tryFocusDate() {
