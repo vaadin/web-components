@@ -205,7 +205,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
   }
 
   /**
-   * Used by `ClearButtonMixin` as a reference to the clear button element.
+   * Used by `InputControlMixin` as a reference to the clear button element.
    * @protected
    */
   get clearElement() {
@@ -440,7 +440,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
   }
 
   /**
-   * Override an event listener from `ClearButtonMixin`
+   * Override an event listener from `InputControlMixin`
    * to avoid adding a separate listener.
    * @param {!KeyboardEvent} event
    * @protected

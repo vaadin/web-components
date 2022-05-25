@@ -186,7 +186,7 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
   }
 
   /**
-   * Used by `ClearButtonMixin` as a reference to the clear button element.
+   * Used by `InputControlMixin` as a reference to the clear button element.
    * @protected
    * @return {!HTMLElement}
    */

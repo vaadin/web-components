@@ -179,7 +179,7 @@ export const InputFieldMixin = (superclass) =>
     }
 
     /**
-     * Override an event listener from `ClearButtonMixin`
+     * Override an event listener from `InputControlMixin`
      * to avoid adding a separate listener.
      * @param {!KeyboardEvent} event
      * @protected

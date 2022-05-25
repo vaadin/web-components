@@ -304,7 +304,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   }
 
   /**
-   * Used by `ClearButtonMixin` as a reference to the clear button element.
+   * Used by `InputControlMixin` as a reference to the clear button element.
    * @protected
    * @return {!HTMLElement}
    */
@@ -658,7 +658,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   }
 
   /**
-   * Override method inherited from `ClearButtonMixin`.
+   * Override method inherited from `InputControlMixin`.
    * @protected
    */
   _onClearButtonClick() {}

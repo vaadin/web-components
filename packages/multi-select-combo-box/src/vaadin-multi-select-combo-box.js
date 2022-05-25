@@ -429,7 +429,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /**
-   * Used by `ClearButtonMixin` as a reference to the clear button element.
+   * Used by `InputControlMixin` as a reference to the clear button element.
    * @protected
    * @return {!HTMLElement}
    */
@@ -821,7 +821,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /**
-   * Override method inherited from `ClearButtonMixin` and clear items.
+   * Override method inherited from `InputControlMixin` and clear items.
    * @protected
    * @override
    */
