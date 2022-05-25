@@ -750,7 +750,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     chip.disabled = this.disabled;
     chip.readonly = this.readonly;
 
-    const label = this._getItemLabel(item, this.itemLabelPath);
+    const label = this._getItemLabel(item);
     chip.label = label;
     chip.setAttribute('title', label);
 
@@ -953,7 +953,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       // Announce focused chip
       if (focusedIndex > -1) {
         const item = chips[focusedIndex].item;
-        const itemLabel = this._getItemLabel(item, this.itemLabelPath);
+        const itemLabel = this._getItemLabel(item);
         announce(`${itemLabel} ${this.i18n.focused}`);
       }
     }
