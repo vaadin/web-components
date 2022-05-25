@@ -29,14 +29,24 @@ export const KeyboardMixin = dedupingMixin(
       }
 
       /**
-       * A handler for the `keydown` event. By default, it does nothing.
+       * A handler for the `keydown` event. By default, it calls
+       * separate methods for handling "Enter" and "Escape" keys.
        * Override the method to implement your own behavior.
        *
-       * @param {KeyboardEvent} _event
+       * @param {KeyboardEvent} event
        * @protected
        */
-      _onKeyDown(_event) {
-        // To be implemented.
+      _onKeyDown(event) {
+        switch (event.key) {
+          case 'Enter':
+            this._onEnter(event);
+            break;
+          case 'Escape':
+            this._onEscape(event);
+            break;
+          default:
+            break;
+        }
       }
 
       /**
@@ -47,6 +57,28 @@ export const KeyboardMixin = dedupingMixin(
        * @protected
        */
       _onKeyUp(_event) {
+        // To be implemented.
+      }
+
+      /**
+       * A handler for the "Enter" key. By default, it does nothing.
+       * Override the method to implement your own behavior.
+       *
+       * @param {KeyboardEvent} _event
+       * @protected
+       */
+      _onEnter(_event) {
+        // To be implemented.
+      }
+
+      /**
+       * A handler for the "Escape" key. By default, it does nothing.
+       * Override the method to implement your own behavior.
+       *
+       * @param {KeyboardEvent} _event
+       * @protected
+       */
+      _onEscape(_event) {
         // To be implemented.
       }
     },

@@ -127,15 +127,15 @@ export const InputControlMixin = (superclass) =>
     /**
      * Override an event listener inherited from `KeydownMixin` to clear on Esc.
      * Components that extend this mixin can prevent this behavior by overriding
-     * this method without calling `super._onKeyDown` to provide custom logic.
+     * this method without calling `super._onEscape` to provide custom logic.
      * @param {KeyboardEvent} event
      * @protected
      * @override
      */
-    _onKeyDown(event) {
-      super._onKeyDown(event);
+    _onEscape(event) {
+      super._onEscape(event);
 
-      if (event.key === 'Escape' && this.clearButtonVisible && !!this.value) {
+      if (this.clearButtonVisible && !!this.value) {
         event.stopPropagation();
         this.__clear();
       }

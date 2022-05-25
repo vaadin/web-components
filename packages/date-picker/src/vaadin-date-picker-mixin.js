@@ -924,11 +924,13 @@ export const DatePickerMixin = (subclass) =>
 
     /**
      * Override an event listener from `KeyboardMixin`.
-     * Do not call `super` to also override `ClearButtonMixin`.
+     * @param {KeyboardEvent} e
      * @protected
      * @override
      */
     _onKeyDown(e) {
+      super._onKeyDown(e);
+
       if (this._noInput) {
         // The input element cannot be readonly as it would conflict with
         // the required attribute. Both are not allowed on an input element.
@@ -955,28 +957,6 @@ export const DatePickerMixin = (subclass) =>
             this.open();
           }
           break;
-        case 'Enter': {
-          const parsedDate = this._getParsedDate();
-          const isValidDate = this._isValidDate(parsedDate);
-          if (this.opened) {
-            if (this._overlayInitialized && this._overlayContent.focusedDate && isValidDate) {
-              this._selectDate(this._overlayContent.focusedDate);
-            }
-            this.close();
-          } else if (!isValidDate && this.inputElement.value !== '') {
-            this.validate();
-          } else {
-            const oldValue = this.value;
-            this._selectParsedOrFocusedDate();
-            if (oldValue === this.value) {
-              this.validate();
-            }
-          }
-          break;
-        }
-        case 'Escape':
-          this._onEscape();
-          break;
         case 'Tab':
           if (this.opened) {
             e.preventDefault();
@@ -995,8 +975,42 @@ export const DatePickerMixin = (subclass) =>
       }
     }
 
-    /** @private */
-    _onEscape() {
+    /**
+     * Override an event listener from `KeyboardMixin`.
+     *
+     * @param {!KeyboardEvent} _event
+     * @protected
+     * @override
+     */
+    _onEnter(_event) {
+      const parsedDate = this._getParsedDate();
+      const isValidDate = this._isValidDate(parsedDate);
+      if (this.opened) {
+        if (this._overlayInitialized && this._overlayContent.focusedDate && isValidDate) {
+          this._selectDate(this._overlayContent.focusedDate);
+        }
+        this.close();
+      } else if (!isValidDate && this.inputElement.value !== '') {
+        this.validate();
+      } else {
+        const oldValue = this.value;
+        this._selectParsedOrFocusedDate();
+        if (oldValue === this.value) {
+          this.validate();
+        }
+      }
+    }
+
+    /**
+     * Override an event listener from `KeyboardMixin`.
+     * Do not call `super` in order to override clear
+     * button logic defined in `InputControlMixin`.
+     *
+     * @param {!KeyboardEvent} _event
+     * @protected
+     * @override
+     */
+    _onEscape(_event) {
       // Closing overlay is handled in vaadin-overlay-escape-press event listener.
       if (this.opened) {
         return;

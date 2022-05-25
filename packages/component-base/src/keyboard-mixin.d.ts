@@ -14,7 +14,20 @@ export declare function KeyboardMixin<T extends Constructor<HTMLElement>>(base: 
 
 export declare class KeyboardMixinClass {
   /**
-   * A handler for the `keydown` event. By default, it does nothing.
+   * A handler for the "Enter" key. By default, it does nothing.
+   * Override the method to implement your own behavior.
+   */
+  protected _onEnter(event: KeyboardEvent): void;
+
+  /**
+   * A handler for the "Escape" key. By default, it does nothing.
+   * Override the method to implement your own behavior.
+   */
+  protected _onEscape(event: KeyboardEvent): void;
+
+  /**
+   * A handler for the `keydown` event. By default, it only
+   * calls `_onEscape` method for handling the "Escape" key.
    * Override the method to implement your own behavior.
    */
   protected _onKeyDown(event: KeyboardEvent): void;
