@@ -376,7 +376,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
   /**
    * Override an event listener from `KeyboardMixin`.
-   * @param {!KeyboardEvent} event
+   * @param {!KeyboardEvent} e
    * @protected
    */
   _onKeyDown(e) {
@@ -396,8 +396,9 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   }
 
   /**
-   * Override an event listener from `InputControlMixin`
-   * to prevent clearing the input value on Esc key.
+   * Override an event listener from `KeyboardMixin`.
+   * Do not call `super` in order to override clear
+   * button logic defined in `InputControlMixin`.
    * @param {Event} event
    * @protected
    */

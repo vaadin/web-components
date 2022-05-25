@@ -26,8 +26,8 @@ export declare class KeyboardMixinClass {
   protected _onEscape(event: KeyboardEvent): void;
 
   /**
-   * A handler for the `keydown` event. By default, it only
-   * calls `_onEscape` method for handling the "Escape" key.
+   * A handler for the `keydown` event. By default, it calls
+   * separate methods for handling "Enter" and "Escape" keys.
    * Override the method to implement your own behavior.
    */
   protected _onKeyDown(event: KeyboardEvent): void;
