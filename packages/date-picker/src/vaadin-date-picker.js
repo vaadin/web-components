@@ -212,6 +212,13 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
     toggleButton.addEventListener('mousedown', (e) => e.preventDefault());
   }
 
+  /** @protected */
+  _initOverlay() {
+    super._initOverlay();
+
+    this.$.overlay.addEventListener('vaadin-overlay-close', this._onVaadinOverlayClose.bind(this));
+  }
+
   /** @private */
   _onVaadinOverlayClose(e) {
     if (this._openedWithFocusRing && this.hasAttribute('focused')) {
