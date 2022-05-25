@@ -239,6 +239,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        */
       itemLabelPath: {
         type: String,
+        value: 'label',
       },
 
       /**
@@ -248,6 +249,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        */
       itemValuePath: {
         type: String,
+        value: 'value',
       },
 
       /**
@@ -602,7 +604,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     // Use placeholder for announcing items
     if (this._hasValue) {
-      const tmpPlaceholder = selectedItems.map((item) => this._getItemLabel(item, this.itemLabelPath)).join(', ');
+      const tmpPlaceholder = this._mergeItemLabels(selectedItems);
       this.__tmpA11yPlaceholder = tmpPlaceholder;
       this.placeholder = tmpPlaceholder;
     } else {
@@ -627,8 +629,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  _getItemLabel(item, itemLabelPath) {
-    return item && Object.prototype.hasOwnProperty.call(item, itemLabelPath) ? item[itemLabelPath] : item;
+  _getItemLabel(item) {
+    return item && Object.prototype.hasOwnProperty.call(item, this.itemLabelPath) ? item[this.itemLabelPath] : item;
   }
 
   /** @private */
@@ -651,12 +653,17 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @private */
   _getOverflowTitle(items) {
-    return items.map((item) => this._getItemLabel(item, this.itemLabelPath)).join(', ');
+    return this._mergeItemLabels(items);
   }
 
   /** @private */
   _isOverflowHidden(length) {
     return length === 0;
+  }
+
+  /** @private */
+  _mergeItemLabels(items) {
+    return items.map((item) => this._getItemLabel(item)).join(', ');
   }
 
   /** @private */
@@ -699,7 +706,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     const itemsCopy = [...this.selectedItems];
 
     const index = this._findIndex(item, itemsCopy, this.itemIdPath);
-    const itemLabel = this._getItemLabel(item, this.itemLabelPath);
+    const itemLabel = this._getItemLabel(item);
 
     let isSelected = false;
 
