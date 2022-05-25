@@ -16,7 +16,9 @@ class AbstractGridColumnRendererDirective extends LitRendererDirective {
    *
    * @abstract
    */
-  rendererProperty;
+  get rendererProperty() {
+    throw new Error('The `rendererProperty` getter must be implemented.');
+  }
 
   /**
    * Adds the renderer callback to the grid column.
@@ -47,7 +49,9 @@ class AbstractGridColumnRendererDirective extends LitRendererDirective {
 }
 
 export class GridColumnBodyRendererDirective extends AbstractGridColumnRendererDirective {
-  rendererProperty = 'renderer';
+  get rendererProperty() {
+    return 'renderer';
+  }
 
   addRenderer() {
     this.element[this.rendererProperty] = (root, column, model) => {
@@ -57,11 +61,15 @@ export class GridColumnBodyRendererDirective extends AbstractGridColumnRendererD
 }
 
 export class GridColumnHeaderRendererDirective extends AbstractGridColumnRendererDirective {
-  rendererProperty = 'headerRenderer';
+  get rendererProperty() {
+    return 'headerRenderer';
+  }
 }
 
 export class GridColumnFooterRendererDirective extends AbstractGridColumnRendererDirective {
-  rendererProperty = 'footerRenderer';
+  get rendererProperty() {
+    return 'footerRenderer';
+  }
 }
 
 /**

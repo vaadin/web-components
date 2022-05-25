@@ -11,14 +11,14 @@ import { PartType } from 'lit/directive.js';
 const VALUE_NOT_INITIALIZED = Symbol('valueNotInitialized');
 
 export class LitRendererDirective extends AsyncDirective {
-  /** @protected */
-  previousValue = VALUE_NOT_INITIALIZED;
-
   constructor(part) {
     super(part);
+
     if (part.type !== PartType.ELEMENT) {
       throw new Error(`\`${this.constructor.name}\` must be bound to an element.`);
     }
+
+    this.previousValue = VALUE_NOT_INITIALIZED;
   }
 
   /** @override */

@@ -17,7 +17,9 @@ class AbstractDialogRendererDirective extends LitRendererDirective {
    *
    * @abstract
    */
-  rendererProperty;
+  get rendererProperty() {
+    throw new Error('The `rendererProperty` getter must be implemented.');
+  }
 
   /**
    * Adds the renderer callback to the dialog.
@@ -51,15 +53,21 @@ class AbstractDialogRendererDirective extends LitRendererDirective {
 }
 
 export class DialogRendererDirective extends AbstractDialogRendererDirective {
-  rendererProperty = 'renderer';
+  get rendererProperty() {
+    return 'renderer';
+  }
 }
 
 export class DialogHeaderRendererDirective extends AbstractDialogRendererDirective {
-  rendererProperty = 'headerRenderer';
+  get rendererProperty() {
+    return 'headerRenderer';
+  }
 }
 
 export class DialogFooterRendererDirective extends AbstractDialogRendererDirective {
-  rendererProperty = 'footerRenderer';
+  get rendererProperty() {
+    return 'footerRenderer';
+  }
 }
 
 /**
