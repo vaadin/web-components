@@ -835,17 +835,28 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /**
    * Override an event listener from `KeyboardMixin`.
+   * Do not call `super` in order to override clear
+   * button logic defined in `InputControlMixin`.
+   *
+   * @param {!KeyboardEvent} event
+   * @protected
+   * @override
+   */
+  _onEscape(event) {
+    if (this.clearButtonVisible && this.selectedItems && this.selectedItems.length) {
+      event.stopPropagation();
+      this.selectedItems = [];
+    }
+  }
+
+  /**
+   * Override an event listener from `KeyboardMixin`.
    * @param {KeyboardEvent} event
    * @protected
    * @override
    */
   _onKeyDown(event) {
-    const items = this.selectedItems || [];
-
-    if (event.key === 'Escape' && this.clearButtonVisible && items.length) {
-      this.selectedItems = [];
-      return;
-    }
+    super._onKeyDown(event);
 
     const chips = Array.from(this._chips).slice(1);
 

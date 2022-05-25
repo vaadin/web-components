@@ -375,12 +375,13 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   }
 
   /**
-   * Override an event listener from `ClearButtonMixin`
-   * to prevent clearing the input value on Esc key.
-   * @param {Event} event
+   * Override an event listener from `KeyboardMixin`.
+   * @param {!KeyboardEvent} e
    * @protected
    */
   _onKeyDown(e) {
+    super._onKeyDown(e);
+
     if (this.readonly || this.disabled || this.__dropdownItems.length) {
       return;
     }
@@ -392,6 +393,17 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     } else if (e.keyCode === 38) {
       this.__onArrowPressWithStep(stepResolution);
     }
+  }
+
+  /**
+   * Override an event listener from `KeyboardMixin`.
+   * Do not call `super` in order to override clear
+   * button logic defined in `InputControlMixin`.
+   * @param {Event} event
+   * @protected
+   */
+  _onEscape() {
+    // Do nothing, the internal combo-box handles Escape.
   }
 
   /** @private */

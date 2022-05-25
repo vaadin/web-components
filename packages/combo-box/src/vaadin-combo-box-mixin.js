@@ -456,12 +456,14 @@ export const ComboBoxMixin = (subclass) =>
 
     /**
      * Override an event listener from `KeyboardMixin`.
-     * Do not call `super` to also override a listener
-     * for Esc key defined in `ClearButtonMixin`.
+     *
+     * @param {KeyboardEvent} e
      * @protected
      * @override
      */
     _onKeyDown(e) {
+      super._onKeyDown(e);
+
       if (e.key === 'Tab') {
         this.__restoreFocusOnClose = false;
       } else if (e.key === 'ArrowDown') {
@@ -478,10 +480,6 @@ export const ComboBoxMixin = (subclass) =>
 
         // Prevent caret from moving
         e.preventDefault();
-      } else if (e.key === 'Enter') {
-        this._onEnter(e);
-      } else if (e.key === 'Escape') {
-        this._onEscape(e);
       }
     }
 
@@ -574,7 +572,13 @@ export const ComboBoxMixin = (subclass) =>
       }
     }
 
-    /** @private */
+    /**
+     * Override an event listener from `KeyboardMixin`.
+     *
+     * @param {KeyboardEvent} e
+     * @protected
+     * @override
+     */
     _onEnter(e) {
       // Do not commit value when custom values are disallowed and input value is not a valid option
       // also stop propagation of the event, otherwise the user could submit a form while the input
@@ -600,8 +604,13 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
+     * Override an event listener from `KeyboardMixin`.
+     * Do not call `super` in order to override clear
+     * button logic defined in `InputControlMixin`.
+     *
      * @param {!KeyboardEvent} e
      * @protected
+     * @override
      */
     _onEscape(e) {
       if (this.autoOpenDisabled) {
