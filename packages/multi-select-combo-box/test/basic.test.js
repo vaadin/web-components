@@ -86,6 +86,24 @@ describe('basic', () => {
       comboBox.renderer = renderer;
       expect(internal.renderer).to.equal(renderer);
     });
+
+    it('should set itemLabelPath property by default', () => {
+      expect(comboBox.itemLabelPath).to.equal('label');
+    });
+
+    it('should propagate itemLabelPath property to combo-box', () => {
+      comboBox.itemLabelPath = 'title';
+      expect(internal.itemLabelPath).to.equal('title');
+    });
+
+    it('should set itemValuePath property by default', () => {
+      expect(comboBox.itemValuePath).to.equal('value');
+    });
+
+    it('should propagate itemValuePath property to combo-box', () => {
+      comboBox.itemValuePath = 'key';
+      expect(internal.itemValuePath).to.equal('key');
+    });
   });
 
   describe('selecting items', () => {
