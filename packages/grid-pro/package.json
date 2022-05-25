@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/grid-pro",
-  "version": "23.1.0-rc1",
+  "version": "23.1.0-rc2",
   "publishConfig": {
     "access": "public"
   },
@@ -38,22 +38,22 @@
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/checkbox": "23.1.0-rc1",
-    "@vaadin/component-base": "23.1.0-rc1",
-    "@vaadin/grid": "23.1.0-rc1",
-    "@vaadin/item": "23.1.0-rc1",
-    "@vaadin/list-box": "23.1.0-rc1",
-    "@vaadin/lit-renderer": "23.1.0-rc1",
-    "@vaadin/select": "23.1.0-rc1",
-    "@vaadin/text-field": "23.1.0-rc1",
+    "@vaadin/checkbox": "23.1.0-rc2",
+    "@vaadin/component-base": "23.1.0-rc2",
+    "@vaadin/grid": "23.1.0-rc2",
+    "@vaadin/item": "23.1.0-rc2",
+    "@vaadin/list-box": "23.1.0-rc2",
+    "@vaadin/lit-renderer": "23.1.0-rc2",
+    "@vaadin/select": "23.1.0-rc2",
+    "@vaadin/text-field": "23.1.0-rc2",
     "@vaadin/vaadin-license-checker": "^2.1.0",
-    "@vaadin/vaadin-lumo-styles": "23.1.0-rc1",
-    "@vaadin/vaadin-material-styles": "23.1.0-rc1",
-    "@vaadin/vaadin-themable-mixin": "23.1.0-rc1"
+    "@vaadin/vaadin-lumo-styles": "23.1.0-rc2",
+    "@vaadin/vaadin-material-styles": "23.1.0-rc2",
+    "@vaadin/vaadin-themable-mixin": "23.1.0-rc2"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/polymer-legacy-adapter": "23.1.0-rc1",
+    "@vaadin/polymer-legacy-adapter": "23.1.0-rc2",
     "@vaadin/testing-helpers": "^0.3.2",
     "lit": "^2.0.0",
     "sinon": "^13.0.2"

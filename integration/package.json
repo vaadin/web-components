@@ -1,19 +1,19 @@
 {
   "name": "@vaadin/integration-tests",
-  "version": "23.1.0-rc1",
+  "version": "23.1.0-rc2",
   "private": true,
   "description": "Vaadin web components integration tests",
   "license": "Apache-2.0",
   "author": "Vaadin Ltd",
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/accordion": "23.1.0-rc1",
-    "@vaadin/combo-box": "23.1.0-rc1",
-    "@vaadin/dialog": "23.1.0-rc1",
-    "@vaadin/grid-pro": "23.1.0-rc1",
-    "@vaadin/polymer-legacy-adapter": "23.1.0-rc1",
+    "@vaadin/accordion": "23.1.0-rc2",
+    "@vaadin/combo-box": "23.1.0-rc2",
+    "@vaadin/dialog": "23.1.0-rc2",
+    "@vaadin/grid-pro": "23.1.0-rc2",
+    "@vaadin/polymer-legacy-adapter": "23.1.0-rc2",
     "@vaadin/testing-helpers": "^0.3.2",
-    "@vaadin/vaadin-themable-mixin": "23.1.0-rc1",
+    "@vaadin/vaadin-themable-mixin": "23.1.0-rc2",
     "sinon": "^13.0.2"
   }
 }
