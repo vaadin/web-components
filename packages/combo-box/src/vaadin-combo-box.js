@@ -224,7 +224,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
   }
 
   /**
-   * Used by `ClearButtonMixin` as a reference to the clear button element.
+   * Used by `InputControlMixin` as a reference to the clear button element.
    * @protected
    * @return {!HTMLElement}
    */
@@ -282,7 +282,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
   }
 
   /**
-   * Override method inherited from `ClearButtonMixin` to handle clear
+   * Override method inherited from `InputControlMixin` to handle clear
    * button click and stop event from propagating to the host element.
    * @param {Event} event
    * @protected

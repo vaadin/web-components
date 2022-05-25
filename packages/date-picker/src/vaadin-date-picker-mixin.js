@@ -336,7 +336,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
-     * Override a getter from `ClearButtonMixin` to make it optional
+     * Override a getter from `InputControlMixin` to make it optional
      * and to prevent warning when a clear button is missing,
      * for example when using <vaadin-date-picker-light>.
      * @protected
@@ -911,7 +911,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /**
-     * Override an event listener from `ClearButtonMixin`
+     * Override an event listener from `InputControlMixin`
      * to validate and dispatch change on clear.
      * @protected
      */

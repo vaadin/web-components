@@ -194,7 +194,7 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
   }
 
   /**
-   * Used by `ClearButtonMixin` as a reference to the clear button element.
+   * Used by `InputControlMixin` as a reference to the clear button element.
    * @protected
    */
   get clearElement() {

@@ -61,7 +61,7 @@ class MessageInputTextArea extends TextArea {
   }
 
   /**
-   * Override an event listener from `ClearButtonMixin`
+   * Override an event listener from `InputControlMixin`
    * to dispatch a custom event on Enter key.
    * @param {!KeyboardEvent} event
    * @protected

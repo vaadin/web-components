@@ -107,7 +107,7 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
   }
 
   /**
-   * Used by `ClearButtonMixin` as a reference to the clear button element.
+   * Used by `InputControlMixin` as a reference to the clear button element.
    * @protected
    * @return {!HTMLElement}
    */
