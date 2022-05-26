@@ -18,10 +18,6 @@ describe('time-picker in dialog', () => {
     timePicker = dialog.$.overlay.querySelector('vaadin-time-picker');
   });
 
-  afterEach(() => {
-    dialog.opened = false;
-  });
-
   beforeEach(() => {
     timePicker.inputElement.focus();
   });
