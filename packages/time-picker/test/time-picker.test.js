@@ -209,6 +209,20 @@ describe('time-picker', () => {
 
       expect(event.defaultPrevented).to.be.true;
     });
+
+    it('should propagate clear button to the internal combo-box', () => {
+      expect(comboBox.clearButtonVisible).to.be.true;
+
+      timePicker.clearButtonVisible = false;
+      expect(comboBox.clearButtonVisible).to.be.false;
+    });
+
+    it('should clear value on Escape if clear button is visible', async () => {
+      timePicker.value = '00:00';
+      timePicker.inputElement.focus();
+      await sendKeys({ press: 'Escape' });
+      expect(timePicker.value).to.equal('');
+    });
   });
 
   describe('autoselect', () => {
