@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
 import '../vaadin-overlay.js';
 import { css } from 'lit';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles';
@@ -95,23 +94,6 @@ describe('position mixin', () => {
     overlay.opened = true;
     expectEdgesAligned(TOP, TOP);
     expectEdgesAligned(LEFT, LEFT);
-  });
-
-  ['scroll', 'resize'].forEach((event) => {
-    it(`should update position on ${event}`, () => {
-      target.style.top = '5px';
-      target.style.left = '10px';
-      window.dispatchEvent(new Event(event));
-      expectEdgesAligned(TOP, TOP);
-      expectEdgesAligned(LEFT, LEFT);
-    });
-  });
-
-  it('should remove listeners on close', () => {
-    const spy = sinon.spy(window, 'removeEventListener');
-    overlay.opened = false;
-    expect(spy.calledWith('scroll')).to.be.true;
-    expect(spy.calledWith('resize')).to.be.true;
   });
 
   describe('vertical align top', () => {
