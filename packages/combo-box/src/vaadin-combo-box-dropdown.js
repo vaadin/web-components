@@ -48,7 +48,6 @@ export class ComboBoxDropdown extends PolymerElement {
        */
       positionTarget: {
         type: Object,
-        observer: '_positionTargetChanged',
       },
 
       /**
@@ -185,8 +184,6 @@ export class ComboBoxDropdown extends PolymerElement {
 
   _openedChanged(opened, wasOpened) {
     if (opened) {
-      this._setOverlayWidth();
-
       this._scroller.style.maxHeight =
         getComputedStyle(this).getPropertyValue(`--${this.__hostTagName}-overlay-max-height`) || '65vh';
 
@@ -272,32 +269,6 @@ export class ComboBoxDropdown extends PolymerElement {
 
   _isOverlayHidden() {
     return !this.loading && !(this._items && this._items.length);
-  }
-
-  _positionTargetChanged(target) {
-    // We must update the overlay width when the positionTarget is set (or changes)
-    if (target) {
-      this._setOverlayWidth();
-    }
-  }
-
-  _setOverlayWidth() {
-    if (!this.positionTarget) {
-      return;
-    }
-    const inputWidth = `${this.positionTarget.clientWidth}px`;
-    const propPrefix = `${this.__hostTagName}-overlay`;
-    const customWidth = getComputedStyle(this).getPropertyValue(`--${propPrefix}-width`);
-
-    this.$.overlay.style.setProperty(`--_${propPrefix}-default-width`, inputWidth);
-
-    if (customWidth === '') {
-      this.$.overlay.style.removeProperty(`--${propPrefix}-width`);
-    } else {
-      this.$.overlay.style.setProperty(`--${propPrefix}-width`, customWidth);
-    }
-
-    this.$.overlay._updatePosition();
   }
 
   /**
