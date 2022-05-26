@@ -13,6 +13,7 @@
     "@vaadin/grid-pro": "23.1.0-rc2",
     "@vaadin/polymer-legacy-adapter": "23.1.0-rc2",
     "@vaadin/testing-helpers": "^0.3.2",
+    "@vaadin/time-picker": "23.1.0-rc2",
     "@vaadin/vaadin-themable-mixin": "23.1.0-rc2",
     "sinon": "^13.0.2"
   }
