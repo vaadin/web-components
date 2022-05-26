@@ -101,17 +101,15 @@ export const PositionMixin = (superClass) =>
 
     disconnectedCallback() {
       super.disconnectedCallback();
-
       this.__removeUpdatePositionEventListeners();
-      this.__ancestorRootNodes = null;
     }
 
     /** @private */
     __addUpdatePositionEventListeners() {
       window.addEventListener('resize', this._updatePosition);
 
-      this.__ancestorRootNodes = this.__ancestorRootNodes || getAncestorRootNodes(this.positionTarget);
-      this.__ancestorRootNodes.forEach((node) => {
+      this.__positionTargetAncestorRootNodes = getAncestorRootNodes(this.positionTarget);
+      this.__positionTargetAncestorRootNodes.forEach((node) => {
         node.addEventListener('scroll', this._updatePosition, true);
       });
     }
@@ -120,10 +118,11 @@ export const PositionMixin = (superClass) =>
     __removeUpdatePositionEventListeners() {
       window.removeEventListener('resize', this._updatePosition);
 
-      if (this.__ancestorRootNodes) {
-        this.__ancestorRootNodes.forEach((node) => {
+      if (this.__positionTargetAncestorRootNodes) {
+        this.__positionTargetAncestorRootNodes.forEach((node) => {
           node.removeEventListener('scroll', this._updatePosition, true);
         });
+        this.__positionTargetAncestorRootNodes = null;
       }
     }
 
