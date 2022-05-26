@@ -30,7 +30,7 @@ registerStyles(
   `,
 );
 
-describe('position target', () => {
+describe('position mixin', () => {
   const TOP = 'top';
   const BOTTOM = 'bottom';
   const START = 'start';
