@@ -106,6 +106,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
           value="{{_comboBoxValue}}"
           disabled="[[disabled]]"
           readonly="[[readonly]]"
+          clear-button-visible="[[clearButtonVisible]]"
           auto-open-disabled="[[autoOpenDisabled]]"
           position-target="[[_inputContainer]]"
           theme$="[[theme]]"
