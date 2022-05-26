@@ -660,7 +660,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @private */
   _getItemLabel(item) {
-    return item && Object.prototype.hasOwnProperty.call(item, this.itemLabelPath) ? item[this.itemLabelPath] : item;
+    return this.$.comboBox._getItemLabel(item);
   }
 
   /** @private */

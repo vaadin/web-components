@@ -12,7 +12,7 @@ describe('external filtering', () => {
     beforeEach(() => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       comboBox.filteredItems = ['foo', 'bar', 'baz'];
-      overlay = comboBox.$.dropdown.$.overlay;
+      overlay = comboBox.$.overlay;
     });
 
     it('should set items to filteredItems', () => {
@@ -24,7 +24,7 @@ describe('external filtering', () => {
     it('should not filter items', () => {
       setInputValue(comboBox, 'foo');
 
-      expect(comboBox._getOverlayItems()).to.eql(['foo', 'bar', 'baz']);
+      expect(comboBox._scroller.items).to.eql(['foo', 'bar', 'baz']);
     });
 
     it('should remove focus while loading', () => {
@@ -63,7 +63,7 @@ describe('external filtering', () => {
       comboBox.loading = true;
 
       expect(comboBox.opened).to.be.true;
-      expect(comboBox.$.dropdown.hidden).to.be.false;
+      expect(comboBox.$.overlay.hasAttribute('hidden')).to.be.false;
     });
 
     // FIXME(@platosha): Hiding does not play nice with lazy loading.
@@ -74,13 +74,14 @@ describe('external filtering', () => {
       comboBox.loading = true;
 
       expect(comboBox.opened).to.be.true;
-      expect(comboBox.$.dropdown._scroller.hidden).to.be.true;
+      expect(comboBox._scroller.hidden).to.be.true;
     });
 
     it('should refresh items after reassignment', () => {
+      comboBox.opened = true;
       comboBox.filteredItems = ['foo'];
 
-      expect(comboBox._getOverlayItems()).to.eql(['foo']);
+      expect(comboBox._scroller.items).to.eql(['foo']);
     });
 
     it('should toggle loading attributes to host and overlay', () => {

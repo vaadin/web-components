@@ -17,7 +17,7 @@ describe('toggling dropdown', () => {
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box label="Label" items="[1, 2]"></vaadin-combo-box>');
     input = comboBox.inputElement;
-    overlay = comboBox.$.dropdown.$.overlay;
+    overlay = comboBox.$.overlay;
   });
 
   describe('opening', () => {
@@ -132,8 +132,8 @@ describe('toggling dropdown', () => {
 
       comboBox.open();
 
-      expect(comboBox.opened);
-      expect(overlay.hidden).to.be.true;
+      expect(comboBox.opened).to.be.true;
+      expect(overlay.hasAttribute('hidden')).to.be.true;
     });
 
     it('should be hidden with no items', () => {
@@ -141,8 +141,8 @@ describe('toggling dropdown', () => {
 
       comboBox.open();
 
-      expect(comboBox.opened);
-      expect(overlay.hidden).to.be.true;
+      expect(comboBox.opened).to.be.true;
+      expect(overlay.hasAttribute('hidden')).to.be.true;
     });
 
     (isIOS ? describe : describe.skip)('after opening', () => {
@@ -208,7 +208,7 @@ describe('toggling dropdown', () => {
     it('should not close popup when clicking on any overlay children', () => {
       comboBox.open();
 
-      comboBox.$.dropdown._scroller.click();
+      comboBox._scroller.click();
 
       expect(comboBox.opened).to.be.true;
     });

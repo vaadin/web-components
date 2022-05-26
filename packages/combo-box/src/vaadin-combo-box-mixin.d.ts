@@ -145,7 +145,14 @@ export declare class ComboBoxMixinClass<TItem> {
 
   protected readonly _propertyForValue: string;
 
+  protected _dropdownItems: TItem[];
+
   protected _inputElementValue: string | undefined;
+
+  /**
+   * Tag name prefix used by scroller and items.
+   */
+  protected readonly _tagNamePrefix: string;
 
   /**
    * Requests an update for the content of items.
@@ -177,6 +184,4 @@ export declare class ComboBoxMixinClass<TItem> {
   checkValidity(): boolean;
 
   protected _revertInputValue(): void;
-
-  protected _getItemElements(): HTMLElement[];
 }

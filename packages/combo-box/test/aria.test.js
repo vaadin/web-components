@@ -61,7 +61,7 @@ describe('ARIA', () => {
 
     beforeEach(async () => {
       arrowDownKeyDown(input);
-      scroller = comboBox.$.dropdown._scroller;
+      scroller = comboBox._scroller;
       items = getAllItems(comboBox);
       await nextFrame();
     });

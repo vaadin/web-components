@@ -4,7 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/input-container/src/vaadin-input-container.js';
-import './vaadin-combo-box-dropdown.js';
+import './vaadin-combo-box-item.js';
+import './vaadin-combo-box-overlay.js';
+import './vaadin-combo-box-scroller.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
@@ -196,19 +198,16 @@ class ComboBox extends ComboBoxDataProviderMixin(
         </div>
       </div>
 
-      <vaadin-combo-box-dropdown
-        id="dropdown"
-        opened="[[opened]]"
-        renderer="[[renderer]]"
+      <vaadin-combo-box-overlay
+        id="overlay"
+        hidden$="[[_isOverlayHidden(_dropdownItems, loading)]]"
+        opened="[[_overlayOpened]]"
+        loading$="[[loading]]"
+        theme$="[[_theme]]"
         position-target="[[_positionTarget]]"
-        restore-focus-on-close="[[__restoreFocusOnClose]]"
+        no-vertical-overlap
         restore-focus-node="[[inputElement]]"
-        _focused-index="[[_focusedIndex]]"
-        _item-id-path="[[itemIdPath]]"
-        _item-label-path="[[itemLabelPath]]"
-        loading="[[loading]]"
-        theme="[[_theme]]"
-      ></vaadin-combo-box-dropdown>
+      ></vaadin-combo-box-overlay>
     `;
   }
 
@@ -273,7 +272,7 @@ class ComboBox extends ComboBoxDataProviderMixin(
    */
   _shouldRemoveFocus(event) {
     // Do not blur when focus moves to the overlay
-    if (event.relatedTarget === this.$.dropdown.$.overlay) {
+    if (event.relatedTarget === this.$.overlay) {
       event.composedPath()[0].focus();
       return false;
     }

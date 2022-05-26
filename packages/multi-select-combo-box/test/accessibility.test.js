@@ -84,7 +84,7 @@ describe('accessibility', () => {
         comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
         comboBox.selectedItems = ['Apple', 'Lemon'];
         comboBox.inputElement.click();
-        scroller = comboBox.$.comboBox.$.dropdown._scroller;
+        scroller = comboBox.$.comboBox._scroller;
         items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
       });
 

@@ -225,7 +225,18 @@ export const ComboBoxMixin = (subclass) =>
         _closeOnBlurIsPrevented: Boolean,
 
         /** @private */
-        __restoreFocusOnClose: Boolean,
+        _scroller: Object,
+
+        /** @private */
+        _dropdownItems: {
+          type: Array,
+        },
+
+        /** @private */
+        _overlayOpened: {
+          type: Boolean,
+          observer: '_overlayOpenedChanged',
+        },
       };
     }
 
@@ -233,6 +244,8 @@ export const ComboBoxMixin = (subclass) =>
       return [
         '_filterChanged(filter, itemValuePath, itemLabelPath)',
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
+        '_openedOrItemsChanged(opened, _dropdownItems, loading)',
+        '_updateScroller(_scroller, _dropdownItems, opened, loading, selectedItem, itemIdPath, _focusedIndex, renderer, theme)',
       ];
     }
 
@@ -241,11 +254,18 @@ export const ComboBoxMixin = (subclass) =>
       this._boundOnFocusout = this._onFocusout.bind(this);
       this._boundOverlaySelectedItemChanged = this._overlaySelectedItemChanged.bind(this);
       this._boundOnClearButtonMouseDown = this.__onClearButtonMouseDown.bind(this);
-      this._boundClose = this.close.bind(this);
-      this._boundOnOpened = this._onOpened.bind(this);
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnOverlayTouchAction = this._onOverlayTouchAction.bind(this);
       this._boundOnTouchend = this._onTouchend.bind(this);
+    }
+
+    /**
+     * Tag name prefix used by scroller and items.
+     * @protected
+     * @return {string}
+     */
+    get _tagNamePrefix() {
+      return 'vaadin-combo-box';
     }
 
     /**
@@ -301,23 +321,19 @@ export const ComboBoxMixin = (subclass) =>
     ready() {
       super.ready();
 
+      this._initOverlay();
+      this._initScroller();
+
       this.addEventListener('focusout', this._boundOnFocusout);
 
       this._lastCommittedValue = this.value;
 
-      this.$.dropdown.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
-
-      this.addEventListener('vaadin-combo-box-dropdown-closed', this._boundClose);
-      this.addEventListener('vaadin-combo-box-dropdown-opened', this._boundOnOpened);
       this.addEventListener('click', this._boundOnClick);
-
-      this.$.dropdown.addEventListener('vaadin-overlay-touch-action', this._boundOnOverlayTouchAction);
-
       this.addEventListener('touchend', this._boundOnTouchend);
 
       const bringToFrontListener = () => {
         requestAnimationFrame(() => {
-          this.$.dropdown.$.overlay.bringToFront();
+          this.$.overlay.bringToFront();
         });
       };
 
@@ -329,6 +345,14 @@ export const ComboBoxMixin = (subclass) =>
       this.addController(new VirtualKeyboardController(this));
     }
 
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      // Close the overlay on detach
+      this.close();
+    }
+
     /**
      * Requests an update for the content of items.
      * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
@@ -336,11 +360,11 @@ export const ComboBoxMixin = (subclass) =>
      * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
      */
     requestContentUpdate() {
-      if (!this.$.dropdown._scroller) {
+      if (!this._scroller) {
         return;
       }
 
-      this.$.dropdown._scroller.requestContentUpdate();
+      this._scroller.requestContentUpdate();
 
       this._getItemElements().forEach((item) => {
         item.requestContentUpdate();
@@ -362,6 +386,99 @@ export const ComboBoxMixin = (subclass) =>
      */
     close() {
       this.opened = false;
+    }
+
+    /** @private */
+    _initOverlay() {
+      const overlay = this.$.overlay;
+
+      // Store instance for detecting "dir" attribute on opening
+      overlay._comboBox = this;
+
+      overlay.addEventListener('touchend', this._boundOnOverlayTouchAction);
+      overlay.addEventListener('touchmove', this._boundOnOverlayTouchAction);
+
+      // Prevent blurring the input when clicking inside the overlay
+      overlay.addEventListener('mousedown', (e) => e.preventDefault());
+
+      // Preventing the default modal behavior of the overlay on input click
+      overlay.addEventListener('vaadin-overlay-outside-click', (e) => {
+        e.preventDefault();
+      });
+
+      // Manual two-way binding for the overlay "opened" property
+      overlay.addEventListener('opened-changed', (e) => {
+        this._overlayOpened = e.detail.value;
+      });
+    }
+
+    /** @private */
+    _initScroller() {
+      const scrollerTag = `${this._tagNamePrefix}-scroller`;
+
+      const overlay = this.$.overlay;
+
+      overlay.renderer = (root) => {
+        if (!root.firstChild) {
+          root.appendChild(document.createElement(scrollerTag));
+        }
+      };
+
+      // Ensure the scroller is rendered
+      if (!this.opened) {
+        overlay.requestContentUpdate();
+      }
+
+      const scroller = overlay.querySelector(scrollerTag);
+
+      scroller.comboBox = this;
+      scroller.getItemLabel = this._getItemLabel.bind(this);
+      scroller.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
+
+      // Trigger the observer to set properties
+      this._scroller = scroller;
+    }
+
+    /** @private */
+    // eslint-disable-next-line max-params
+    _updateScroller(scroller, items, opened, loading, selectedItem, itemIdPath, focusedIndex, renderer, theme) {
+      if (scroller) {
+        scroller.setProperties({
+          items: opened ? items : [],
+          opened,
+          loading,
+          selectedItem,
+          itemIdPath,
+          focusedIndex,
+          renderer,
+          theme,
+        });
+      }
+    }
+
+    /** @protected */
+    _isOverlayHidden(items, loading) {
+      return !loading && !(items && items.length);
+    }
+
+    /** @private */
+    _openedOrItemsChanged(opened, items, loading) {
+      // Close the overlay if there are no items to display.
+      // See https://github.com/vaadin/vaadin-combo-box/pull/964
+      this._overlayOpened = !!(opened && (loading || (items && items.length)));
+    }
+
+    /** @private */
+    _overlayOpenedChanged(opened, wasOpened) {
+      if (opened) {
+        this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', { bubbles: true, composed: true }));
+
+        this._onOpened();
+      } else if (wasOpened && this._dropdownItems && this._dropdownItems.length) {
+        this.close();
+
+        this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-closed', { bubbles: true, composed: true }));
+      }
     }
 
     /** @private */
@@ -402,7 +519,7 @@ export const ComboBoxMixin = (subclass) =>
           this.focus();
         }
 
-        this.__restoreFocusOnClose = true;
+        this.$.overlay.restoreFocusOnClose = true;
       } else {
         this._onClosed();
         if (this._openedWithFocusRing && this.hasAttribute('focused')) {
@@ -415,7 +532,7 @@ export const ComboBoxMixin = (subclass) =>
         input.setAttribute('aria-expanded', !!opened);
 
         if (opened) {
-          input.setAttribute('aria-controls', this.$.dropdown.scrollerId);
+          input.setAttribute('aria-controls', this._scroller.id);
         } else {
           input.removeAttribute('aria-controls');
         }
@@ -505,7 +622,7 @@ export const ComboBoxMixin = (subclass) =>
       super._onKeyDown(e);
 
       if (e.key === 'Tab') {
-        this.__restoreFocusOnClose = false;
+        this.$.overlay.restoreFocusOnClose = false;
       } else if (e.key === 'ArrowDown') {
         this._closeOnBlurIsPrevented = true;
         this._onArrowDown();
@@ -525,7 +642,11 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _getItemLabel(item) {
-      return this.$.dropdown.getItemLabel(item);
+      let label = item && this.itemLabelPath ? this.get(this.itemLabelPath, item) : undefined;
+      if (label === undefined || label === null) {
+        label = item ? item.toString() : '';
+      }
+      return label;
     }
 
     /** @private */
@@ -540,7 +661,7 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _onArrowDown() {
       if (this.opened) {
-        const items = this._getOverlayItems();
+        const items = this._dropdownItems;
         if (items) {
           this._focusedIndex = Math.min(items.length - 1, this._focusedIndex + 1);
           this._prefillFocusedItemLabel();
@@ -556,7 +677,7 @@ export const ComboBoxMixin = (subclass) =>
         if (this._focusedIndex > -1) {
           this._focusedIndex = Math.max(0, this._focusedIndex - 1);
         } else {
-          const items = this._getOverlayItems();
+          const items = this._dropdownItems;
           if (items) {
             this._focusedIndex = items.length - 1;
           }
@@ -571,7 +692,8 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _prefillFocusedItemLabel() {
       if (this._focusedIndex > -1) {
-        this._inputElementValue = this._getItemLabel(this.$.dropdown.focusedItem);
+        const focusedItem = this._dropdownItems[this._focusedIndex];
+        this._inputElementValue = this._getItemLabel(focusedItem);
         this._markAllSelectionRange();
       }
     }
@@ -728,7 +850,11 @@ export const ComboBoxMixin = (subclass) =>
     _onOpened() {
       // Defer scroll position adjustment to improve performance.
       requestAnimationFrame(() => {
-        this.$.dropdown.adjustScrollPosition();
+        // When opened is set as attribute, this logic needs to be delayed until scroller is created.
+        this._scroller.style.maxHeight =
+          getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
+
+        this._scrollIntoView(this._focusedIndex);
 
         // Set attribute after the items are rendered when overlay is opened for the first time.
         this._updateActiveDescendant(this._focusedIndex);
@@ -747,9 +873,8 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _commitValue() {
-      if (this._focusedIndex > -1) {
-        const items = this._getOverlayItems();
-        const focusedItem = items[this._focusedIndex];
+      if (this._focusedIndex > -1 && this._dropdownItems) {
+        const focusedItem = this._dropdownItems[this._focusedIndex];
         if (this.selectedItem !== focusedItem) {
           this.selectedItem = focusedItem;
         }
@@ -863,7 +988,7 @@ export const ComboBoxMixin = (subclass) =>
       }
 
       // Scroll to the top of the list whenever the filter changes.
-      this.$.dropdown._scrollIntoView(0);
+      this._scrollIntoView(0);
 
       if (this.items) {
         this.filteredItems = this._filterItems(this.items, filter);
@@ -927,9 +1052,7 @@ export const ComboBoxMixin = (subclass) =>
         this._inputElementValue = this._getItemLabel(selectedItem);
       }
 
-      this.$.dropdown._selectedItem = selectedItem;
-      const items = this._getOverlayItems();
-      if (this.filteredItems && items) {
+      if (this.filteredItems) {
         this._focusedIndex = this.filteredItems.indexOf(selectedItem);
       }
     }
@@ -1055,19 +1178,39 @@ export const ComboBoxMixin = (subclass) =>
       }
     }
 
-    /** @protected */
+    /** @private */
     _getItemElements() {
-      return Array.from(this.$.dropdown._scroller.querySelectorAll('vaadin-combo-box-item'));
+      return Array.from(this._scroller.querySelectorAll(`${this._tagNamePrefix}-item`));
     }
 
-    /** @private */
-    _getOverlayItems() {
-      return this.$.dropdown._items;
-    }
-
-    /** @private */
+    /** @protected */
     _setOverlayItems(items) {
-      this.$.dropdown.set('_items', items);
+      this._dropdownItems = items;
+    }
+
+    /** @private */
+    _scrollIntoView(index) {
+      if (!this._scroller) {
+        return;
+      }
+      this._scroller.scrollIntoView(index);
+    }
+
+    /**
+     * Gets the index of the item with the provided label.
+     * @return {number}
+     * @protected
+     */
+    _indexOfLabel(label) {
+      if (this._dropdownItems && label) {
+        for (let i = 0; i < this._dropdownItems.length; i++) {
+          if (this._getItemLabel(this._dropdownItems[i]).toString().toLowerCase() === label.toString().toLowerCase()) {
+            return i;
+          }
+        }
+      }
+
+      return -1;
     }
 
     /**
@@ -1129,7 +1272,7 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _onFocusout(event) {
       // Fixes the problem with `focusout` happening when clicking on the scroll bar on Edge
-      if (event.relatedTarget === this.$.dropdown.$.overlay) {
+      if (event.relatedTarget === this.$.overlay) {
         event.composedPath()[0].focus();
         return;
       }
@@ -1204,5 +1347,17 @@ export const ComboBoxMixin = (subclass) =>
      * Fired when value changes.
      * To comply with https://developer.mozilla.org/en-US/docs/Web/Events/change
      * @event change
+     */
+
+    /**
+     * Fired after the `vaadin-combo-box-overlay` opens.
+     *
+     * @event vaadin-combo-box-dropdown-opened
+     */
+
+    /**
+     * Fired after the `vaadin-combo-box-overlay` closes.
+     *
+     * @event vaadin-combo-box-dropdown-closed
      */
   };

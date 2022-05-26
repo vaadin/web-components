@@ -20,7 +20,7 @@ describe('selecting items', () => {
     comboBox.addEventListener('selected-item-changed', selectedItemChangedSpy);
 
     selectionChangedSpy = sinon.spy();
-    comboBox.$.dropdown.addEventListener('selection-changed', selectionChangedSpy);
+    comboBox._scroller.addEventListener('selection-changed', selectionChangedSpy);
 
     changeSpy = sinon.spy();
     comboBox.addEventListener('change', changeSpy);
@@ -29,7 +29,7 @@ describe('selecting items', () => {
   it('should stop click events from bubbling outside the overlay', () => {
     const clickSpy = sinon.spy();
     document.addEventListener('click', clickSpy);
-    comboBox.$.dropdown._scroller.click();
+    comboBox._scroller.click();
     document.removeEventListener('click', clickSpy);
     expect(clickSpy.calledOnce).not.to.be.true;
   });
@@ -63,7 +63,7 @@ describe('selecting items', () => {
     comboBox.open();
 
     expect(comboBox.selectedItem).to.equal('foo');
-    expect(comboBox.$.dropdown._selectedItem).to.equal('foo');
+    expect(comboBox._scroller.selectedItem).to.equal('foo');
     expect(comboBox.inputElement.value).to.equal('foo');
   });
 
@@ -267,7 +267,7 @@ describe('clearing a selection', () => {
     clearIcon.click();
 
     expect(comboBox.value).to.eql('');
-    expect(comboBox.$.dropdown._selectedItem).to.be.null;
+    expect(comboBox._scroller.selectedItem).to.be.null;
     expect(comboBox.selectedItem).to.be.null;
   });
 

@@ -10,7 +10,7 @@ describe('Properties', () => {
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
-    overlay = comboBox.$.dropdown.$.overlay;
+    overlay = comboBox.$.overlay;
     input = comboBox.inputElement;
   });
 
@@ -494,7 +494,7 @@ describe('theme attribute', () => {
   });
 
   it('should propagate theme attribute to overlay', () => {
-    expect(comboBox.$.dropdown.$.overlay.getAttribute('theme')).to.equal('foo');
+    expect(comboBox.$.overlay.getAttribute('theme')).to.equal('foo');
   });
 
   it('should propagate theme attribute to item', () => {
@@ -566,7 +566,7 @@ describe('pre-opened', () => {
   it('should have overlay with correct width', () => {
     const comboBox = fixtureSync(`<vaadin-combo-box opened items="[0]"></vaadin-combo-box>`);
     const expectedOverlayWidth = comboBox.clientWidth;
-    const actualOverlayWidth = comboBox.$.dropdown.$.overlay.$.content.clientWidth;
+    const actualOverlayWidth = comboBox.$.overlay.$.content.clientWidth;
     expect(actualOverlayWidth).to.eq(expectedOverlayWidth);
   });
 });

@@ -3,7 +3,9 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './vaadin-multi-select-combo-box-dropdown.js';
+import './vaadin-multi-select-combo-box-item.js';
+import './vaadin-multi-select-combo-box-overlay.js';
+import './vaadin-multi-select-combo-box-scroller.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ComboBoxDataProviderMixin } from '@vaadin/combo-box/src/vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixin } from '@vaadin/combo-box/src/vaadin-combo-box-mixin.js';
@@ -34,17 +36,16 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
 
       <slot></slot>
 
-      <vaadin-multi-select-combo-box-dropdown
-        id="dropdown"
-        opened="[[opened]]"
+      <vaadin-multi-select-combo-box-overlay
+        id="overlay"
+        hidden$="[[_isOverlayHidden(_dropdownItems, loading)]]"
+        opened="[[_overlayOpened]]"
+        loading$="[[loading]]"
+        theme$="[[_theme]]"
         position-target="[[_target]]"
-        renderer="[[renderer]]"
-        _focused-index="[[_focusedIndex]]"
-        _item-id-path="[[itemIdPath]]"
-        _item-label-path="[[itemLabelPath]]"
-        loading="[[loading]]"
-        theme="[[theme]]"
-      ></vaadin-multi-select-combo-box-dropdown>
+        no-vertical-overlap
+        restore-focus-node="[[inputElement]]"
+      ></vaadin-multi-select-combo-box-overlay>
     `;
   }
 
@@ -98,6 +99,15 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /**
+   * Tag name prefix used by scroller and items.
+   * @protected
+   * @return {string}
+   */
+  get _tagNamePrefix() {
+    return 'vaadin-multi-select-combo-box';
+  }
+
+  /**
    * Override method inherited from the combo-box
    * to allow opening dropdown when readonly.
    * @override
@@ -108,20 +118,15 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     }
   }
 
-  /**
-   * @protected
-   * @override
-   */
-  _getItemElements() {
-    return Array.from(this.$.dropdown._scroller.querySelectorAll('vaadin-multi-select-combo-box-item'));
-  }
-
   /** @protected */
   ready() {
     super.ready();
 
     this._target = this;
     this._toggleElement = this.querySelector('.toggle-button');
+
+    // Set correct owner for using by item renderers
+    this._scroller.comboBox = this.getRootNode().host;
   }
 
   /**
@@ -303,13 +308,13 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   /** @private */
   _readonlyItemsChanged(readonly, selectedItems) {
     if (readonly && selectedItems) {
-      this.__savedItems = this._getOverlayItems();
-      this._setOverlayItems(selectedItems);
+      this.__savedItems = this._dropdownItems;
+      this._dropdownItems = selectedItems;
     }
 
     // Restore the original dropdown items
     if (readonly === false && this.__savedItems) {
-      this._setOverlayItems(this.__savedItems);
+      this._dropdownItems = this.__savedItems;
       this.__savedItems = null;
     }
   }

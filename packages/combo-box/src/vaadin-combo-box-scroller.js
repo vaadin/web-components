@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
@@ -144,6 +145,9 @@ export class ComboBoxScroller extends PolymerElement {
   /** @protected */
   ready() {
     super.ready();
+
+    // Ensure every instance has unique ID
+    this.id = `${this.localName}-${generateUniqueId()}`;
 
     // Allow extensions to customize tag name for the items
     this.__hostTagName = this.constructor.is.replace('-scroller', '');

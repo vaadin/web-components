@@ -3,7 +3,9 @@
  * Copyright (c) 2015 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './vaadin-combo-box-dropdown.js';
+import './vaadin-combo-box-item.js';
+import './vaadin-combo-box-overlay.js';
+import './vaadin-combo-box-scroller.js';
 import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -75,19 +77,16 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
 
       <slot></slot>
 
-      <vaadin-combo-box-dropdown
-        id="dropdown"
-        opened="[[opened]]"
+      <vaadin-combo-box-overlay
+        id="overlay"
+        hidden$="[[_isOverlayHidden(_dropdownItems, loading)]]"
+        opened="[[_overlayOpened]]"
+        loading$="[[loading]]"
+        theme$="[[_theme]]"
         position-target="[[inputElement]]"
-        restore-focus-on-close="[[__restoreFocusOnClose]]"
+        no-vertical-overlap
         restore-focus-node="[[inputElement]]"
-        renderer="[[renderer]]"
-        _focused-index="[[_focusedIndex]]"
-        _item-id-path="[[itemIdPath]]"
-        _item-label-path="[[itemLabelPath]]"
-        loading="[[loading]]"
-        theme="[[_theme]]"
-      ></vaadin-combo-box-dropdown>
+      ></vaadin-combo-box-overlay>
     `;
   }
 

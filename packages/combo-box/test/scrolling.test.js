@@ -9,9 +9,9 @@ describe('scrolling', () => {
 
   beforeEach(() => {
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
-    overlay = comboBox.$.dropdown.$.overlay;
+    overlay = comboBox.$.overlay;
     input = comboBox.inputElement;
-    scroller = comboBox.$.dropdown._scroller;
+    scroller = comboBox._scroller;
   });
 
   afterEach(() => {

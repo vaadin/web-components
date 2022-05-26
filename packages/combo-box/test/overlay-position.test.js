@@ -17,7 +17,7 @@ class XFixed extends PolymerElement {
 customElements.define('x-fixed', XFixed);
 
 describe('overlay position', () => {
-  let comboBox, dropdown, overlayPart, inputField;
+  let comboBox, overlayPart, inputField;
 
   let wh, ww, xCenter, xStart, xEnd, yCenter, yTop, yBottom;
 
@@ -37,8 +37,7 @@ describe('overlay position', () => {
     const comboBoxRect = comboBox.getBoundingClientRect();
     comboBox.items = makeItems(20);
     inputField = comboBox.shadowRoot.querySelector('[part="input-field"]');
-    dropdown = comboBox.$.dropdown;
-    overlayPart = dropdown.$.overlay.$.overlay;
+    overlayPart = comboBox.$.overlay.$.overlay;
 
     // Subtract the combo-box size from the coordinates range in order not to
     // move it outside the viewport boundaries when changing top and left.
@@ -132,7 +131,7 @@ describe('overlay position', () => {
       const inputWidth = 150;
 
       beforeEach(() => {
-        dropdown.style.setProperty('--vaadin-combo-box-overlay-width', `${inputWidth * 2}px`);
+        comboBox.style.setProperty('--vaadin-combo-box-overlay-width', `${inputWidth * 2}px`);
       });
 
       it('should be on the left side of the input', async () => {
@@ -214,7 +213,7 @@ describe('fixed position target', () => {
       `);
 
       comboBox = parent.querySelector('vaadin-combo-box');
-      overlay = comboBox.$.dropdown.$.overlay;
+      overlay = comboBox.$.overlay;
     });
 
     it('should have same position when parent has fixed', async () => {
@@ -235,7 +234,7 @@ describe('fixed position target', () => {
       `);
 
       comboBox = parent.querySelector('vaadin-combo-box');
-      overlay = comboBox.$.dropdown.$.overlay;
+      overlay = comboBox.$.overlay;
     });
 
     it('should have same position when parent component has fixed', async () => {
