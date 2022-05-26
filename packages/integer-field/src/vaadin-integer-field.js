@@ -40,23 +40,10 @@ export class IntegerField extends NumberField {
     return 'vaadin-integer-field';
   }
 
-  static get properties() {
-    return {
-      /**
-       * A pattern matched against individual characters the user inputs.
-       * When set, the field will prevent:
-       * - `keyDown` events if the entered key doesn't match `/^_enabledCharPattern$/`
-       * - `paste` events if the pasted text doesn't match `/^_enabledCharPattern*$/`
-       * - `drop` events if the dropped text doesn't match `/^_enabledCharPattern*$/`
-       *
-       * For example, to enable entering only numbers and minus signs,
-       * `_enabledCharPattern = "[\\d-]"`
-       * @protected
-       */
-      _enabledCharPattern: {
-        value: '[-+\\d]',
-      },
-    };
+  constructor() {
+    super();
+
+    this.allowedCharPattern = '[-+\\d]';
   }
 
   /**

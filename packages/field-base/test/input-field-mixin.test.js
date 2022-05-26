@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
+import { fixtureSync } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -38,10 +38,6 @@ customElements.define(
           this.ariaTarget = input;
         }),
       );
-    }
-
-    setEnabledCharPattern(pattern) {
-      this._enabledCharPattern = pattern;
     }
   },
 );
@@ -139,134 +135,5 @@ describe('input-field-mixin', () => {
       document.body.appendChild(element);
       expect(console.warn.called).to.be.false;
     });
-  });
-
-  describe('enabled char pattern', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-field-mixin-element></input-field-mixin-element>');
-      element.setEnabledCharPattern('[-+\\d]');
-      input = element.querySelector('[slot=input]');
-    });
-
-    describe('keyboard input', () => {
-      let keydownSpy;
-
-      beforeEach(() => {
-        keydownSpy = sinon.spy();
-        input.addEventListener('keydown', keydownSpy);
-      });
-
-      [
-        [188, [], ','],
-        [190, [], '.'],
-        [69, [], 'e'],
-        [69, ['shift'], 'E'],
-        [106, [], '*'],
-        [32, [], ' '],
-        [187, [], '?'],
-      ].forEach(([keyCode, modifiers, key]) => {
-        const keyCombo = modifiers.concat(key).join('+');
-
-        it(`should prevent "${keyCombo}"`, () => {
-          keyDownOn(input, keyCode, modifiers, key);
-          const event = keydownSpy.lastCall.args[0];
-          expect(event.defaultPrevented).to.be.true;
-        });
-      });
-
-      [
-        [49, [], '1'],
-        [187, [], '+'],
-        [189, [], '-'],
-        [49, ['ctrl'], '1'],
-        [49, ['meta'], '1'],
-        [65, ['ctrl'], 'e'],
-        [65, ['meta'], 'e'],
-        [65, ['ctrl', 'shift'], 'E'],
-        [112, [], 'F1'],
-        [8, [], 'Backspace'],
-        [37, [], 'ArrowLeft'],
-        [37, ['ctrl'], 'ArrowLeft'],
-      ].forEach(([keyCode, modifiers, key]) => {
-        const keyCombo = modifiers.concat(key).join('+');
-
-        it(`should not prevent "${keyCombo}"`, () => {
-          keyDownOn(input, keyCode, modifiers, key);
-          const event = keydownSpy.lastCall.args[0];
-          expect(event.defaultPrevented).to.be.false;
-        });
-      });
-    });
-
-    const fireDropEvent = (draggedText) => {
-      const event = new Event('drop', {
-        bubbles: true,
-        cancelable: true,
-        composed: true,
-      });
-      event.dataTransfer = {
-        getData: () => draggedText,
-      };
-      input.dispatchEvent(event);
-      return event;
-    };
-
-    const firePasteEvent = (pastedText) => {
-      const event = new Event('paste', {
-        bubbles: true,
-        cancelable: true,
-        composed: true,
-      });
-      event.clipboardData = {
-        getData: () => pastedText,
-      };
-      input.dispatchEvent(event);
-      return event;
-    };
-
-    const fireBeforeInputEvent = (textToInput) => {
-      const event = new Event('beforeinput', {
-        bubbles: true,
-        cancelable: true,
-        composed: true,
-      });
-      event.data = textToInput;
-      input.dispatchEvent(event);
-      return event;
-    };
-
-    const testEvent = (eventName, fireEvent) => {
-      describe(`${eventName} event`, () => {
-        it(`should prevent ${eventName} with text`, () => {
-          const event = fireEvent('foo');
-          expect(event.defaultPrevented).to.be.true;
-        });
-
-        it(`should prevent ${eventName} with decimals`, () => {
-          const event = fireEvent('1.2');
-          expect(event.defaultPrevented).to.be.true;
-        });
-
-        it(`should not prevent ${eventName} with integer`, () => {
-          const event = fireEvent('123');
-          expect(event.defaultPrevented).to.be.false;
-        });
-
-        it(`should not prevent ${eventName} with negative integer`, () => {
-          const event = fireEvent('-123');
-          expect(event.defaultPrevented).to.be.false;
-        });
-
-        it(`should not prevent ${eventName} with minus and plus signs`, () => {
-          // Because the same can be done by typing
-          const event = fireEvent('1-2+3');
-          expect(event.defaultPrevented).to.be.false;
-        });
-      });
-    };
-
-    testEvent('drop', fireDropEvent);
-    testEvent('paste', firePasteEvent);
-    testEvent('beforeinput', fireBeforeInputEvent);
   });
 });

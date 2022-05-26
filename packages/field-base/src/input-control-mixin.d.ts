@@ -37,6 +37,19 @@ export declare function InputControlMixin<T extends Constructor<HTMLElement>>(
 
 export declare class InputControlMixinClass {
   /**
+   * A pattern matched against individual characters the user inputs.
+   *
+   * When set, the field will prevent:
+   * - `keydown` events if the entered key doesn't match `/^allowedCharPattern$/`
+   * - `paste` events if the pasted text doesn't match `/^allowedCharPattern*$/`
+   * - `drop` events if the dropped text doesn't match `/^allowedCharPattern*$/`
+   *
+   * For example, to allow entering only numbers and minus signs, use:
+   * `allowedCharPattern = "[\\d-]"`
+   */
+  allowedCharPattern: string;
+
+  /**
    * If true, the input text gets fully selected when the field is focused using click or touch / tap.
    */
   autoselect: boolean;

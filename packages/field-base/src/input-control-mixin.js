@@ -24,6 +24,22 @@ export const InputControlMixin = (superclass) =>
     static get properties() {
       return {
         /**
+         * A pattern matched against individual characters the user inputs.
+         *
+         * When set, the field will prevent:
+         * - `keydown` events if the entered key doesn't match `/^allowedCharPattern$/`
+         * - `paste` events if the pasted text doesn't match `/^allowedCharPattern*$/`
+         * - `drop` events if the dropped text doesn't match `/^allowedCharPattern*$/`
+         *
+         * For example, to allow entering only numbers and minus signs, use:
+         * `allowedCharPattern = "[\\d-]"`
+         */
+        allowedCharPattern: {
+          type: String,
+          observer: '_allowedCharPatternChanged',
+        },
+
+        /**
          * If true, the input text gets fully selected when the field is focused using click or touch / tap.
          */
         autoselect: {
@@ -78,6 +94,14 @@ export const InputControlMixin = (superclass) =>
 
     static get delegateAttrs() {
       return [...super.delegateAttrs, 'name', 'type', 'placeholder', 'readonly', 'invalid', 'title'];
+    }
+
+    constructor() {
+      super();
+
+      this._boundOnPaste = this._onPaste.bind(this);
+      this._boundOnDrop = this._onDrop.bind(this);
+      this._boundOnBeforeInput = this._onBeforeInput.bind(this);
     }
 
     /**
@@ -170,6 +194,98 @@ export const InputControlMixin = (superclass) =>
       this.clear();
       this.inputElement.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
       this.inputElement.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    /**
+     * Override a method from `InputMixin`.
+     * @param {!HTMLElement} input
+     * @protected
+     * @override
+     */
+    _addInputListeners(input) {
+      super._addInputListeners(input);
+
+      input.addEventListener('paste', this._boundOnPaste);
+      input.addEventListener('drop', this._boundOnDrop);
+      input.addEventListener('beforeinput', this._boundOnBeforeInput);
+    }
+
+    /**
+     * Override a method from `InputMixin`.
+     * @param {!HTMLElement} input
+     * @protected
+     * @override
+     */
+    _removeInputListeners(input) {
+      super._removeInputListeners(input);
+
+      input.removeEventListener('paste', this._boundOnPaste);
+      input.removeEventListener('drop', this._boundOnDrop);
+      input.removeEventListener('beforeinput', this._boundOnBeforeInput);
+    }
+
+    /**
+     * Override an event listener from `KeyboardMixin`.
+     * @param {!KeyboardEvent} event
+     * @protected
+     * @override
+     */
+    _onKeyDown(event) {
+      super._onKeyDown(event);
+
+      if (this.allowedCharPattern && !this.__shouldAcceptKey(event)) {
+        event.preventDefault();
+      }
+    }
+
+    /** @private */
+    __shouldAcceptKey(event) {
+      return (
+        event.metaKey ||
+        event.ctrlKey ||
+        !event.key || // Allow typing anything if event.key is not supported
+        event.key.length !== 1 || // Allow "Backspace", "ArrowLeft" etc.
+        this.__allowedCharRegExp.test(event.key)
+      );
+    }
+
+    /** @private */
+    _onPaste(e) {
+      if (this.allowedCharPattern) {
+        const pastedText = e.clipboardData.getData('text');
+        if (!this.__allowedTextRegExp.test(pastedText)) {
+          e.preventDefault();
+        }
+      }
+    }
+
+    /** @private */
+    _onDrop(e) {
+      if (this.allowedCharPattern) {
+        const draggedText = e.dataTransfer.getData('text');
+        if (!this.__allowedTextRegExp.test(draggedText)) {
+          e.preventDefault();
+        }
+      }
+    }
+
+    /** @private */
+    _onBeforeInput(e) {
+      // The `beforeinput` event covers all the cases for `allowedCharPattern`: keyboard, pasting and dropping,
+      // but it is still experimental technology so we can't rely on it. It's used here just as an additional check,
+      // because it seems to be the only way to detect and prevent specific keys on mobile devices.
+      // See https://github.com/vaadin/vaadin-text-field/issues/429
+      if (this.allowedCharPattern && e.data && !this.__allowedTextRegExp.test(e.data)) {
+        e.preventDefault();
+      }
+    }
+
+    /** @private */
+    _allowedCharPatternChanged(charPattern) {
+      if (charPattern) {
+        this.__allowedCharRegExp = new RegExp(`^${charPattern}$`);
+        this.__allowedTextRegExp = new RegExp(`^${charPattern}*$`);
+      }
     }
 
     /**
