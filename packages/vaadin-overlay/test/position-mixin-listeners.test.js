@@ -30,6 +30,14 @@ customElements.define('scrollable-wrapper', ScrollableWrapper);
 describe('position mixin listeners', () => {
   let wrapper, target, overlay, updatePositionSpy;
 
+  function resize(node) {
+    fire(node, 'resize', undefined, { bubbles: false, composed: false });
+  }
+
+  function scroll(node) {
+    fire(node, 'scroll', undefined, { bubbles: true, composed: false });
+  }
+
   beforeEach(() => {
     wrapper = fixtureSync(`
       <scrollable-wrapper>
@@ -52,13 +60,13 @@ describe('position mixin listeners', () => {
   });
 
   it('should update position on resize when opened', () => {
-    fire(window, 'resize');
+    resize(window);
     expect(updatePositionSpy.called).to.be.true;
   });
 
   it('should not update position on resize when closed', () => {
     overlay.opened = false;
-    fire(window, 'resize');
+    resize(window);
     expect(updatePositionSpy.called).to.be.false;
   });
 
@@ -76,20 +84,20 @@ describe('position mixin listeners', () => {
       });
 
       it(`should update position on ${name} scroll when opened`, () => {
-        fire(scrollableNode, 'scroll');
+        scroll(scrollableNode);
         expect(updatePositionSpy.called).to.be.true;
       });
 
       it(`should not update position on ${name} scroll when closed`, () => {
         overlay.opened = false;
-        fire(scrollableNode, 'scroll');
+        scroll(scrollableNode);
         expect(updatePositionSpy.called).to.be.false;
       });
 
       it(`should not update position on ${name} scroll when disconnected from the DOM`, () => {
         const parentElement = overlay.parentElement;
         parentElement.removeChild(overlay);
-        fire(scrollableNode, 'scroll');
+        scroll(scrollableNode);
         expect(updatePositionSpy.called).to.be.false;
       });
 
@@ -97,9 +105,38 @@ describe('position mixin listeners', () => {
         const parentElement = overlay.parentElement;
         parentElement.removeChild(overlay);
         parentElement.appendChild(overlay);
-        fire(scrollableNode, 'scroll');
+        scroll(scrollableNode);
         expect(updatePositionSpy.called).to.be.true;
       });
+    });
+  });
+
+  describe('the position target is moved within the DOM', () => {
+    let newWrapper;
+
+    beforeEach(() => {
+      overlay.opened = false;
+      newWrapper = fixtureSync(`<scrollable-wrapper></scrollable-wrapper>`);
+      newWrapper.appendChild(target);
+      overlay.opened = true;
+      updatePositionSpy.resetHistory();
+    });
+
+    it('should update position on document scroll when opened', () => {
+      scroll(document);
+      expect(updatePositionSpy.called).to.be.true;
+    });
+
+    it('should update position on new ancestor scroll when opened', () => {
+      const scrollableNode = newWrapper.shadowRoot.querySelector('#scrollable');
+      scroll(scrollableNode);
+      expect(updatePositionSpy.called).to.be.true;
+    });
+
+    it('should not update position on old ancestor scroll when opened', () => {
+      const scrollableNode = wrapper.shadowRoot.querySelector('#scrollable');
+      scroll(scrollableNode);
+      expect(updatePositionSpy.called).to.be.false;
     });
   });
 });
