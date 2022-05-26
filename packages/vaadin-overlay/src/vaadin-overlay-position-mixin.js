@@ -4,6 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+import { getAncestorRootNodes } from '@vaadin/component-base/src/dom-utils.js';
+
 const PROP_NAMES_VERTICAL = {
   start: 'top',
   end: 'bottom',
@@ -87,18 +89,52 @@ export const PositionMixin = (superClass) =>
     constructor() {
       super();
 
-      this.__boundUpdatePosition = this._updatePosition.bind(this);
+      this._updatePosition = this._updatePosition.bind(this);
+    }
+
+    connectedCallback() {
+      super.connectedCallback();
+
+      if (this.opened) {
+        this.__addUpdatePositionEventListeners();
+      }
+    }
+
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      this.__removeUpdatePositionEventListeners();
+      this.__ancestorRootNodes = null;
+    }
+
+    /** @private */
+    __addUpdatePositionEventListeners() {
+      window.addEventListener('resize', this._updatePosition);
+
+      this.__ancestorRootNodes = this.__ancestorRootNodes || getAncestorRootNodes(this.positionTarget);
+      this.__ancestorRootNodes.forEach((node) => {
+        node.addEventListener('scroll', this._updatePosition, true);
+      });
+    }
+
+    /** @private */
+    __removeUpdatePositionEventListeners() {
+      window.removeEventListener('resize', this._updatePosition);
+
+      if (this.__ancestorRootNodes) {
+        this.__ancestorRootNodes.forEach((node) => {
+          node.removeEventListener('scroll', this._updatePosition, true);
+        });
+      }
     }
 
     __overlayOpenedChanged(opened) {
       // Toggle the event listeners that cause the overlay to update its position
-      ['scroll', 'resize'].forEach((eventName) => {
-        if (opened) {
-          window.addEventListener(eventName, this.__boundUpdatePosition);
-        } else {
-          window.removeEventListener(eventName, this.__boundUpdatePosition);
-        }
-      });
+      if (opened) {
+        this.__addUpdatePositionEventListeners();
+      } else {
+        this.__removeUpdatePositionEventListeners();
+      }
 
       if (opened) {
         const computedStyle = getComputedStyle(this);
