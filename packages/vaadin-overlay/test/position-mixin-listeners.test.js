@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../vaadin-overlay.js';
 import { OverlayElement } from '../src/vaadin-overlay.js';
 import { PositionMixin } from '../src/vaadin-overlay-position-mixin.js';
 

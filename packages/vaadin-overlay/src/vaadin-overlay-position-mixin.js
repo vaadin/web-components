@@ -80,7 +80,7 @@ export const PositionMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__positionSettingsChanged(positionTarget, horizontalAlign, verticalAlign, noHorizontalOverlap, noVerticalOverlap)',
+        '__positionSettingsChanged(horizontalAlign, verticalAlign, noHorizontalOverlap, noVerticalOverlap)',
         '__overlayOpenedChanged(opened, positionTarget)',
       ];
     }
@@ -91,6 +91,7 @@ export const PositionMixin = (superClass) =>
       this._updatePosition = this._updatePosition.bind(this);
     }
 
+    /** @protected */
     connectedCallback() {
       super.connectedCallback();
 
@@ -99,6 +100,7 @@ export const PositionMixin = (superClass) =>
       }
     }
 
+    /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
       this.__removeUpdatePositionEventListeners();

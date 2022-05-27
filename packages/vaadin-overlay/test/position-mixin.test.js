@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import '../vaadin-overlay.js';
 import { css } from 'lit';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles';
 import { OverlayElement } from '../src/vaadin-overlay.js';
