@@ -49,9 +49,6 @@ export const FieldMixin = (superclass) =>
           type: String,
           observer: '_helperTextChanged',
         },
-
-        /** @protected */
-        _helperId: String,
       };
     }
 
@@ -169,7 +166,7 @@ export const FieldMixin = (superclass) =>
       this._errorController.setInvalid(invalid);
 
       // This timeout is needed to prevent NVDA from announcing the error message twice:
-      // 1. Once adding the `[role=alert]` attribute by the `_updateErrorMessage` method (OK).
+      // 1. Once adding the `[role=alert]` attribute when updating `has-error-message` (OK).
       // 2. Once linking the error ID with the ARIA target here (unwanted).
       // Related issue: https://github.com/vaadin/web-components/issues/3061.
       setTimeout(() => {
