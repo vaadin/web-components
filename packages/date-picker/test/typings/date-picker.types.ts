@@ -75,6 +75,7 @@ assertType<string | null | undefined>(datePicker.label);
 assertType<string>(datePicker.value);
 assertType<boolean>(datePicker.required);
 assertType<string>(datePicker.name);
+assertType<string>(datePicker.allowedCharPattern);
 assertType<string | null | undefined>(datePicker.initialPosition);
 
 // DatePicker mixins

@@ -118,6 +118,7 @@ assertType<string | null | undefined>(narrowedComboBox.label);
 assertType<string>(narrowedComboBox.value);
 assertType<boolean>(narrowedComboBox.required);
 assertType<string>(narrowedComboBox.name);
+assertType<string>(narrowedComboBox.allowedCharPattern);
 
 // ComboBox mixins
 assertType<ComboBoxDataProviderMixinClass<TestComboBoxItem>>(narrowedComboBox);
