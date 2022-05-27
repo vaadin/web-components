@@ -81,7 +81,7 @@ export const PositionMixin = (superClass) =>
     static get observers() {
       return [
         '__positionSettingsChanged(positionTarget, horizontalAlign, verticalAlign, noHorizontalOverlap, noVerticalOverlap)',
-        '__overlayOpenedChanged(opened)',
+        '__overlayOpenedChanged(opened, positionTarget)',
       ];
     }
 
@@ -126,9 +126,9 @@ export const PositionMixin = (superClass) =>
       }
     }
 
-    __overlayOpenedChanged(opened) {
+    __overlayOpenedChanged(opened, positionTarget) {
       // Toggle the event listeners that cause the overlay to update its position
-      if (opened) {
+      if (opened && positionTarget) {
         this.__addUpdatePositionEventListeners();
       } else {
         this.__removeUpdatePositionEventListeners();

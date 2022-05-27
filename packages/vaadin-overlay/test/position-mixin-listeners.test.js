@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-overlay.js';
 import { OverlayElement } from '../src/vaadin-overlay.js';
@@ -54,89 +54,164 @@ describe('position mixin listeners', () => {
     target = wrapper.querySelector('#target');
     overlay = wrapper.querySelector('#overlay');
     updatePositionSpy = sinon.spy(overlay, '_updatePosition');
-    overlay.positionTarget = target;
-    overlay.opened = true;
-    updatePositionSpy.resetHistory();
   });
 
-  it('should update position on resize when opened', () => {
-    resize(window);
-    expect(updatePositionSpy.called).to.be.true;
-  });
-
-  it('should not update position on resize when closed', () => {
-    overlay.opened = false;
-    resize(window);
-    expect(updatePositionSpy.called).to.be.false;
-  });
-
-  ['document', 'ancestor'].forEach((name) => {
-    describe(name, () => {
-      let scrollableNode;
-
-      beforeEach(() => {
-        if (name === 'document') {
-          scrollableNode = document;
-        }
-        if (name === 'ancestor') {
-          scrollableNode = wrapper.shadowRoot.querySelector('#scrollable');
-        }
-      });
-
-      it(`should update position on ${name} scroll when opened`, () => {
-        scroll(scrollableNode);
-        expect(updatePositionSpy.called).to.be.true;
-      });
-
-      it(`should not update position on ${name} scroll when closed`, () => {
-        overlay.opened = false;
-        scroll(scrollableNode);
-        expect(updatePositionSpy.called).to.be.false;
-      });
-
-      it(`should not update position on ${name} scroll when disconnected from the DOM`, () => {
-        const parentElement = overlay.parentElement;
-        parentElement.removeChild(overlay);
-        scroll(scrollableNode);
-        expect(updatePositionSpy.called).to.be.false;
-      });
-
-      it(`should update position on ${name} scroll when reconnected to the DOM`, () => {
-        const parentElement = overlay.parentElement;
-        parentElement.removeChild(overlay);
-        parentElement.appendChild(overlay);
-        scroll(scrollableNode);
-        expect(updatePositionSpy.called).to.be.true;
-      });
-    });
-  });
-
-  describe('the position target is moved within the DOM', () => {
-    let newWrapper;
-
-    beforeEach(() => {
-      overlay.opened = false;
-      newWrapper = fixtureSync(`<scrollable-wrapper></scrollable-wrapper>`);
-      newWrapper.appendChild(target);
+  describe('opened without position target', () => {
+    beforeEach(async () => {
       overlay.opened = true;
+      await nextFrame();
       updatePositionSpy.resetHistory();
     });
 
-    it('should update position on document scroll when opened', () => {
+    it('should not update position on resize', () => {
+      resize(window);
+      expect(updatePositionSpy.called).to.be.false;
+    });
+
+    it('should not update position on document scroll', () => {
+      scroll(document);
+      expect(updatePositionSpy.called).to.be.false;
+    });
+
+    it('should not update position on ancestor scroll', () => {
+      const scrollableAncestor = wrapper.shadowRoot.querySelector('#scrollable');
+      scroll(scrollableAncestor);
+      expect(updatePositionSpy.called).to.be.false;
+    });
+
+    it('should update position on resize after assigning a position target', () => {
+      overlay.positionTarget = target;
+      updatePositionSpy.resetHistory();
+      resize(window);
+      expect(updatePositionSpy.called).to.be.true;
+    });
+
+    it('should update position on document scroll after assigning a position target', () => {
+      overlay.positionTarget = target;
+      updatePositionSpy.resetHistory();
       scroll(document);
       expect(updatePositionSpy.called).to.be.true;
     });
 
-    it('should update position on new ancestor scroll when opened', () => {
-      const scrollableNode = newWrapper.shadowRoot.querySelector('#scrollable');
-      scroll(scrollableNode);
+    it('should update position on ancestor scroll after assigning a position target', () => {
+      overlay.positionTarget = target;
+      updatePositionSpy.resetHistory();
+      const scrollableAncestor = wrapper.shadowRoot.querySelector('#scrollable');
+      scroll(scrollableAncestor);
+      expect(updatePositionSpy.called).to.be.true;
+    });
+  });
+
+  describe('opened', () => {
+    beforeEach(async () => {
+      overlay.positionTarget = target;
+      overlay.opened = true;
+      await nextFrame();
+      updatePositionSpy.resetHistory();
+    });
+
+    it('should update position on resize', () => {
+      resize(window);
       expect(updatePositionSpy.called).to.be.true;
     });
 
-    it('should not update position on old ancestor scroll when opened', () => {
-      const scrollableNode = wrapper.shadowRoot.querySelector('#scrollable');
-      scroll(scrollableNode);
+    it('should not update position on resize when closed', () => {
+      overlay.opened = false;
+      resize(window);
       expect(updatePositionSpy.called).to.be.false;
+    });
+
+    ['document', 'ancestor'].forEach((name) => {
+      describe(name, () => {
+        let scrollableNode;
+
+        beforeEach(() => {
+          if (name === 'document') {
+            scrollableNode = document;
+          }
+          if (name === 'ancestor') {
+            scrollableNode = wrapper.shadowRoot.querySelector('#scrollable');
+          }
+        });
+
+        it(`should update position on ${name} scroll`, () => {
+          scroll(scrollableNode);
+          expect(updatePositionSpy.called).to.be.true;
+        });
+
+        it(`should not update position on ${name} scroll when closed`, () => {
+          overlay.opened = false;
+          scroll(scrollableNode);
+          expect(updatePositionSpy.called).to.be.false;
+        });
+
+        it(`should not update position on ${name} scroll when disconnected from the DOM`, () => {
+          const parentElement = overlay.parentElement;
+          parentElement.removeChild(overlay);
+          scroll(scrollableNode);
+          expect(updatePositionSpy.called).to.be.false;
+        });
+
+        it(`should update position on ${name} scroll when reconnected to the DOM`, () => {
+          const parentElement = overlay.parentElement;
+          parentElement.removeChild(overlay);
+          parentElement.appendChild(overlay);
+          scroll(scrollableNode);
+          expect(updatePositionSpy.called).to.be.true;
+        });
+      });
+    });
+
+    describe('the position target is moved within the DOM', () => {
+      let newWrapper;
+
+      beforeEach(() => {
+        newWrapper = fixtureSync(`<scrollable-wrapper></scrollable-wrapper>`);
+        newWrapper.appendChild(target);
+      });
+
+      it('should update position on document scroll after re-opened', async () => {
+        scroll(document);
+        expect(updatePositionSpy.called).to.be.true;
+
+        overlay.opened = false;
+        overlay.opened = true;
+        await nextFrame();
+        updatePositionSpy.resetHistory();
+
+        scroll(document);
+        expect(updatePositionSpy.called).to.be.true;
+      });
+
+      it('should update position on new ancestor scroll after re-opened', async () => {
+        const newScrollableAncestor = newWrapper.shadowRoot.querySelector('#scrollable');
+
+        scroll(newScrollableAncestor);
+        expect(updatePositionSpy.called).to.be.false;
+
+        overlay.opened = false;
+        overlay.opened = true;
+        await nextFrame();
+        updatePositionSpy.resetHistory();
+
+        scroll(newScrollableAncestor);
+        expect(updatePositionSpy.called).to.be.true;
+      });
+
+      it('should not update position on old ancestor scroll after re-opened', async () => {
+        const oldScrollableAncestor = wrapper.shadowRoot.querySelector('#scrollable');
+
+        scroll(oldScrollableAncestor);
+        expect(updatePositionSpy.called).to.be.true;
+
+        overlay.opened = false;
+        overlay.opened = true;
+        await nextFrame();
+        updatePositionSpy.resetHistory();
+
+        scroll(oldScrollableAncestor);
+        expect(updatePositionSpy.called).to.be.false;
+      });
     });
   });
 });
