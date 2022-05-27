@@ -126,6 +126,7 @@ export const PositionMixin = (superClass) =>
       }
     }
 
+    /** @private */
     __overlayOpenedChanged(opened, positionTarget) {
       this.__removeUpdatePositionEventListeners();
 
