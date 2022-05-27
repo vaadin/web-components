@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { Item } from '@vaadin/item/src/vaadin-item.js';
 import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
@@ -273,20 +272,18 @@ export const ItemsMixin = (superClass) =>
     /** @private */
     __initMenu(root, menu) {
       if (!root.firstElementChild) {
-        const is = this.constructor.is;
-        root.innerHTML = `
-        <vaadin-context-menu-list-box></vaadin-context-menu-list-box>
-        <${is} hidden></${is}>
-      `;
-        flush();
-        const listBox = root.querySelector('vaadin-context-menu-list-box');
+        const listBox = document.createElement('vaadin-context-menu-list-box');
+        root.appendChild(listBox);
+
         if (this._theme) {
           listBox.setAttribute('theme', this._theme);
         }
         listBox.classList.add('vaadin-menu-list-box');
         requestAnimationFrame(() => listBox.setAttribute('role', 'menu'));
 
-        const subMenu = root.querySelector(is);
+        const subMenu = document.createElement(this.constructor.is);
+        subMenu.setAttribute('hidden', '');
+        root.appendChild(subMenu);
         subMenu.$.overlay.modeless = true;
         subMenu.openOn = 'opensubmenu';
 
