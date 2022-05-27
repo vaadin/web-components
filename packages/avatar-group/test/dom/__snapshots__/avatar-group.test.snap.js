@@ -26,7 +26,10 @@ snapshots["vaadin-avatar-group default"] =
   >
   </vaadin-avatar>
 </div>
-<vaadin-avatar-group-overlay id="overlay">
+<vaadin-avatar-group-overlay
+  id="overlay"
+  no-vertical-overlap=""
+>
   <template>
   </template>
 </vaadin-avatar-group-overlay>
@@ -76,7 +79,10 @@ Tomi Virkki"
   >
   </vaadin-avatar>
 </div>
-<vaadin-avatar-group-overlay id="overlay">
+<vaadin-avatar-group-overlay
+  id="overlay"
+  no-vertical-overlap=""
+>
   <template>
   </template>
 </vaadin-avatar-group-overlay>
@@ -129,7 +135,10 @@ Tomi Virkki"
   >
   </vaadin-avatar>
 </div>
-<vaadin-avatar-group-overlay id="overlay">
+<vaadin-avatar-group-overlay
+  id="overlay"
+  no-vertical-overlap=""
+>
   <template>
   </template>
 </vaadin-avatar-group-overlay>

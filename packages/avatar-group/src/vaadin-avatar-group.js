@@ -133,7 +133,12 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
           aria-haspopup="listbox"
         ></vaadin-avatar>
       </div>
-      <vaadin-avatar-group-overlay id="overlay" opened="{{_opened}}" on-vaadin-overlay-close="_onVaadinOverlayClose">
+      <vaadin-avatar-group-overlay
+        id="overlay"
+        opened="{{_opened}}"
+        no-vertical-overlap
+        on-vaadin-overlay-close="_onVaadinOverlayClose"
+      >
         <template>
           <vaadin-avatar-group-list-box on-keydown="_onListKeyDown">
             <template is="dom-repeat" items="[[__computeExtraItems(items.*, __itemsInView, maxItemsVisible)]]">
@@ -279,26 +284,12 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
   ready() {
     super.ready();
 
-    this.__boundSetPosition = this.__setPosition.bind(this);
-
     this._overlayElement = this.shadowRoot.querySelector('vaadin-avatar-group-overlay');
+    this._overlayElement.positionTarget = this.$.overflow;
 
     afterNextRender(this, () => {
       this.__setItemsInView();
     });
-  }
-
-  /**
-   * @param {string} name
-   * @param {?string} oldValue
-   * @param {?string} newValue
-   * @protected
-   */
-  attributeChangedCallback(name, oldValue, newValue) {
-    super.attributeChangedCallback(name, oldValue, newValue);
-    if (name === 'dir') {
-      this.__setPosition();
-    }
   }
 
   /**
@@ -347,7 +338,6 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
    */
   _onResize() {
     this.__setItemsInView();
-    this.__setPosition();
   }
 
   /** @private */
@@ -490,14 +480,11 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
       avatars.forEach((avatar) => avatar.removeAttribute('title'));
 
       this._menuElement.focus();
-      this.__setPosition();
-      window.addEventListener('scroll', this.__boundSetPosition, true);
     } else if (wasOpened) {
       this.$.overflow.focus();
       if (this._openedWithFocusRing) {
         this.$.overflow.setAttribute('focus-ring', '');
       }
-      window.removeEventListener('scroll', this.__boundSetPosition, true);
     }
     this.$.overflow.setAttribute('aria-expanded', opened === true);
   }
@@ -550,34 +537,6 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
         : parseInt(marginLeft, 0) - parseInt(marginRight, 0);
 
     return Math.floor((this.$.container.offsetWidth - avatarWidth) / (avatarWidth + offset));
-  }
-
-  /** @private */
-  __setPosition() {
-    if (!this._opened) {
-      return;
-    }
-    const btnRect = this.$.overflow.getBoundingClientRect();
-    const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
-    const bottomAlign = btnRect.top > (viewportHeight - btnRect.height) / 2;
-
-    const isRtl = this.getAttribute('dir') === 'rtl';
-
-    if (isRtl) {
-      this._overlayElement.style.right = `${document.documentElement.clientWidth - btnRect.right}px`;
-    } else {
-      this._overlayElement.style.left = `${btnRect.left}px`;
-    }
-
-    if (bottomAlign) {
-      this._overlayElement.setAttribute('bottom-aligned', '');
-      this._overlayElement.style.removeProperty('top');
-      this._overlayElement.style.bottom = `${viewportHeight - btnRect.top}px`;
-    } else {
-      this._overlayElement.removeAttribute('bottom-aligned');
-      this._overlayElement.style.removeProperty('bottom');
-      this._overlayElement.style.top = `${btnRect.bottom}px`;
-    }
   }
 }
 
