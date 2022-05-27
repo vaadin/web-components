@@ -3,6 +3,7 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { getAncestorRootNodes } from '@vaadin/component-base/src/dom-utils.js';
 
 const PROP_NAMES_VERTICAL = {
   start: 'top',
@@ -79,26 +80,61 @@ export const PositionMixin = (superClass) =>
 
     static get observers() {
       return [
-        '__positionSettingsChanged(positionTarget, horizontalAlign, verticalAlign, noHorizontalOverlap, noVerticalOverlap)',
-        '__overlayOpenedChanged(opened)',
+        '__positionSettingsChanged(horizontalAlign, verticalAlign, noHorizontalOverlap, noVerticalOverlap)',
+        '__overlayOpenedChanged(opened, positionTarget)',
       ];
     }
 
     constructor() {
       super();
 
-      this.__boundUpdatePosition = this._updatePosition.bind(this);
+      this._updatePosition = this._updatePosition.bind(this);
     }
 
-    __overlayOpenedChanged(opened) {
-      // Toggle the event listeners that cause the overlay to update its position
-      ['scroll', 'resize'].forEach((eventName) => {
-        if (opened) {
-          window.addEventListener(eventName, this.__boundUpdatePosition);
-        } else {
-          window.removeEventListener(eventName, this.__boundUpdatePosition);
-        }
+    /** @protected */
+    connectedCallback() {
+      super.connectedCallback();
+
+      if (this.opened) {
+        this.__addUpdatePositionEventListeners();
+      }
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this.__removeUpdatePositionEventListeners();
+    }
+
+    /** @private */
+    __addUpdatePositionEventListeners() {
+      window.addEventListener('resize', this._updatePosition);
+
+      this.__positionTargetAncestorRootNodes = getAncestorRootNodes(this.positionTarget);
+      this.__positionTargetAncestorRootNodes.forEach((node) => {
+        node.addEventListener('scroll', this._updatePosition, true);
       });
+    }
+
+    /** @private */
+    __removeUpdatePositionEventListeners() {
+      window.removeEventListener('resize', this._updatePosition);
+
+      if (this.__positionTargetAncestorRootNodes) {
+        this.__positionTargetAncestorRootNodes.forEach((node) => {
+          node.removeEventListener('scroll', this._updatePosition, true);
+        });
+        this.__positionTargetAncestorRootNodes = null;
+      }
+    }
+
+    /** @private */
+    __overlayOpenedChanged(opened, positionTarget) {
+      this.__removeUpdatePositionEventListeners();
+
+      if (opened && positionTarget) {
+        this.__addUpdatePositionEventListeners();
+      }
 
       if (opened) {
         const computedStyle = getComputedStyle(this);
