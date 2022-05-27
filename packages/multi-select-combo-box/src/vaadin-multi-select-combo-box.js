@@ -165,7 +165,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           filtered-items="[[filteredItems]]"
           opened="{{opened}}"
           renderer="[[renderer]]"
-          theme$="[[theme]]"
+          theme$="[[_theme]]"
           on-combo-box-item-selected="_onComboBoxItemSelected"
           on-change="_onComboBoxChange"
           on-custom-value-set="_onCustomValueSet"
@@ -175,7 +175,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
             readonly="[[readonly]]"
             disabled="[[disabled]]"
             invalid="[[invalid]]"
-            theme$="[[theme]]"
+            theme$="[[_theme]]"
           >
             <vaadin-multi-select-combo-box-chip
               id="overflow"
