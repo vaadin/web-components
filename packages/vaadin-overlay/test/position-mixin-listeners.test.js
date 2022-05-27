@@ -162,6 +162,41 @@ describe('position mixin listeners', () => {
       });
     });
 
+    describe('the position target is changed', () => {
+      let newWrapper, newTarget;
+
+      beforeEach(() => {
+        newWrapper = fixtureSync(`
+          <scrollable-wrapper>
+            <div id="target" style="position: fixed; top: 100px; left: 100px; width: 20px; height: 20px; border: 1px solid">
+              New Target
+            </div>
+          </scrollable-wrapper>
+        `);
+        newWrapper.appendChild(target);
+        newTarget = newWrapper.querySelector('#target');
+        overlay.positionTarget = newTarget;
+        updatePositionSpy.resetHistory();
+      });
+
+      it('should update position on document scroll', () => {
+        scroll(document);
+        expect(updatePositionSpy.called).to.be.true;
+      });
+
+      it('should not update position on old ancestor scroll', () => {
+        const oldScrollableAncestor = wrapper.shadowRoot.querySelector('#scrollable');
+        scroll(oldScrollableAncestor);
+        expect(updatePositionSpy.called).to.be.false;
+      });
+
+      it('should update position on new ancestor scroll', () => {
+        const newScrollableAncestor = newWrapper.shadowRoot.querySelector('#scrollable');
+        scroll(newScrollableAncestor);
+        expect(updatePositionSpy.called).to.be.true;
+      });
+    });
+
     describe('the position target is moved within the DOM', () => {
       let newWrapper;
 

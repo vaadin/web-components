@@ -127,11 +127,10 @@ export const PositionMixin = (superClass) =>
     }
 
     __overlayOpenedChanged(opened, positionTarget) {
-      // Toggle the event listeners that cause the overlay to update its position
+      this.__removeUpdatePositionEventListeners();
+
       if (opened && positionTarget) {
         this.__addUpdatePositionEventListeners();
-      } else {
-        this.__removeUpdatePositionEventListeners();
       }
 
       if (opened) {
