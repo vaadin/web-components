@@ -45,11 +45,17 @@ export class ComboBoxOverlay extends PositionMixin(OverlayElement) {
     return memoizedTemplate;
   }
 
+  static get observers() {
+    return ['_setOverlayWidth(positionTarget, opened)'];
+  }
+
   connectedCallback() {
     super.connectedCallback();
 
     const dropdown = this.__dataHost;
     const comboBox = dropdown && dropdown.getRootNode().host;
+    this._comboBox = comboBox;
+
     const hostDir = comboBox && comboBox.getAttribute('dir');
     if (hostDir) {
       this.setAttribute('dir', hostDir);
@@ -68,6 +74,23 @@ export class ComboBoxOverlay extends PositionMixin(OverlayElement) {
     const eventPath = event.composedPath();
     if (!eventPath.includes(this.positionTarget) && !eventPath.includes(this)) {
       this.close();
+    }
+  }
+
+  _setOverlayWidth(positionTarget, opened) {
+    if (positionTarget && opened) {
+      const propPrefix = this.localName;
+      this.style.setProperty(`--_${propPrefix}-default-width`, `${positionTarget.clientWidth}px`);
+
+      const customWidth = getComputedStyle(this._comboBox).getPropertyValue(`--${propPrefix}-width`);
+
+      if (customWidth === '') {
+        this.style.removeProperty(`--${propPrefix}-width`);
+      } else {
+        this.style.setProperty(`--${propPrefix}-width`, customWidth);
+      }
+
+      this._updatePosition();
     }
   }
 }
