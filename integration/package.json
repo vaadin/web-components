@@ -11,6 +11,7 @@
     "@vaadin/combo-box": "23.1.0-rc2",
     "@vaadin/dialog": "23.1.0-rc2",
     "@vaadin/grid-pro": "23.1.0-rc2",
+    "@vaadin/multi-select-combo-box": "23.1.0-rc2",
     "@vaadin/polymer-legacy-adapter": "23.1.0-rc2",
     "@vaadin/testing-helpers": "^0.3.2",
     "@vaadin/time-picker": "23.1.0-rc2",
