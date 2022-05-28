@@ -41,6 +41,7 @@ export const DatePickerMixin = (subclass) =>
          * Supported date formats:
          * - ISO 8601 `"YYYY-MM-DD"` (default)
          * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+         * - 24 or 27 extended ISO 8601 `YYYY-MM-DDTHH:mm:ss.sssZ` or `±YYYYYY-MM-DDTHH:mm:ss.sssZ`
          *
          * @type {string}
          */
@@ -259,6 +260,7 @@ export const DatePickerMixin = (subclass) =>
          * Supported date formats:
          * - ISO 8601 `"YYYY-MM-DD"` (default)
          * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+         * - 24 or 27 extended ISO 8601 `YYYY-MM-DDTHH:mm:ss.sssZ` or `±YYYYYY-MM-DDTHH:mm:ss.sssZ`
          *
          * @type {string | undefined}
          */
@@ -273,6 +275,7 @@ export const DatePickerMixin = (subclass) =>
          * Supported date formats:
          * - ISO 8601 `"YYYY-MM-DD"` (default)
          * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+         * - 24 or 27 extended ISO 8601 `YYYY-MM-DDTHH:mm:ss.sssZ` or `±YYYYYY-MM-DDTHH:mm:ss.sssZ`
          *
          * @type {string | undefined}
          */
@@ -585,7 +588,7 @@ export const DatePickerMixin = (subclass) =>
     /** @private */
     _parseDate(str) {
       // Parsing with RegExp to ensure correct format
-      const parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/.exec(str);
+      const parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})(T[\d:.]+Z)?$/.exec(str);
       if (!parts) {
         return;
       }

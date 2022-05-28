@@ -48,6 +48,7 @@ export declare class DatePickerMixinClass {
    * Supported date formats:
    * - ISO 8601 `"YYYY-MM-DD"` (default)
    * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+   * - 24 or 27 extended ISO 8601 `YYYY-MM-DDTHH:mm:ss.sssZ` or `±YYYYYY-MM-DDTHH:mm:ss.sssZ`
    */
   value: string;
 
@@ -166,6 +167,8 @@ export declare class DatePickerMixinClass {
    * Supported date formats:
    * - ISO 8601 `"YYYY-MM-DD"` (default)
    * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+   * - 24 or 27 extended ISO 8601 `YYYY-MM-DDTHH:mm:ss.sssZ` or `±YYYYYY-MM-DDTHH:mm:ss.sssZ`
+   *
    */
   min: string | undefined;
 
@@ -175,6 +178,8 @@ export declare class DatePickerMixinClass {
    * Supported date formats:
    * - ISO 8601 `"YYYY-MM-DD"` (default)
    * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+   * - 24 or 27 extended ISO 8601 `YYYY-MM-DDTHH:mm:ss.sssZ` or `±YYYYYY-MM-DDTHH:mm:ss.sssZ`
+   *
    */
   max: string | undefined;
 
