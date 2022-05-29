@@ -111,6 +111,7 @@ declare class DateTimePicker extends FieldMixin(
    * - Minute precision `"YYYY-MM-DDThh:mm"` (default)
    * - Second precision `"YYYY-MM-DDThh:mm:ss"`
    * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
+   * - Millisecond precision with the Zulu suffix `"YYYY-MM-DDThh:mm:ss.fffZ"`
    */
   value: string;
 
@@ -121,6 +122,7 @@ declare class DateTimePicker extends FieldMixin(
    * - Minute precision `"YYYY-MM-DDThh:mm"`
    * - Second precision `"YYYY-MM-DDThh:mm:ss"`
    * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
+   * - Millisecond precision with the Zulu suffix `"YYYY-MM-DDThh:mm:ss.fffZ"`
    */
   min: string | undefined;
 
@@ -131,6 +133,7 @@ declare class DateTimePicker extends FieldMixin(
    * - Minute precision `"YYYY-MM-DDThh:mm"`
    * - Second precision `"YYYY-MM-DDThh:mm:ss"`
    * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
+   * - Millisecond precision with the Zulu suffix `"YYYY-MM-DDThh:mm:ss.fffZ"`
    */
   max: string | undefined;
 

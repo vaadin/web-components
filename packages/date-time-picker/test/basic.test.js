@@ -193,6 +193,21 @@ describe('Basic features', () => {
       date.setFullYear(-10000);
       dateTimePicker.value = '-010000-02-03T08:30:00';
       expect(dateTimePicker.__selectedDateTime).to.eql(date);
+
+      date.setFullYear(0);
+      dateTimePicker.value = '0000-02-03T08:30:00.573Z';
+      expect(dateTimePicker.__selectedDateTime).to.eql(date);
+
+      date.setFullYear(10000);
+      dateTimePicker.value = '+010000-02-03T08:30:00.573Z';
+      expect(dateTimePicker.__selectedDateTime).to.eql(date);
+
+      date.setFullYear(-10000);
+      dateTimePicker.value = '-010000-02-03T08:30:00.573Z';
+      expect(dateTimePicker.__selectedDateTime).to.eql(date);
+
+      dateTimePicker.value = date.toISOString();
+      expect(dateTimePicker.__selectedDateTime).to.eql(date);
     });
 
     it('should not accept non-ISO formats', () => {

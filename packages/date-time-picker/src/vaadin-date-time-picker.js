@@ -178,6 +178,7 @@ class DateTimePicker extends FieldMixin(
        * - Minute precision `"YYYY-MM-DDThh:mm"` (default)
        * - Second precision `"YYYY-MM-DDThh:mm:ss"`
        * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
+       * - Millisecond precision with the Zulu suffix `"YYYY-MM-DDThh:mm:ss.fffZ"`
        * @type {string}
        */
       value: {
@@ -194,7 +195,7 @@ class DateTimePicker extends FieldMixin(
        * - Minute precision `"YYYY-MM-DDThh:mm"`
        * - Second precision `"YYYY-MM-DDThh:mm:ss"`
        * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
-       *
+       * - Millisecond precision with the Zulu suffix `"YYYY-MM-DDThh:mm:ss.fffZ"`
        * @type {string | undefined}
        */
       min: {
@@ -209,7 +210,7 @@ class DateTimePicker extends FieldMixin(
        * - Minute precision `"YYYY-MM-DDThh:mm"`
        * - Second precision `"YYYY-MM-DDThh:mm:ss"`
        * - Millisecond precision `"YYYY-MM-DDThh:mm:ss.fff"`
-       *
+       * - Millisecond precision with the Zulu suffix `"YYYY-MM-DDThh:mm:ss.fffZ"`
        * @type {string | undefined}
        */
       max: {
@@ -750,12 +751,12 @@ class DateTimePicker extends FieldMixin(
 
   /**
    * String (ISO date time) to Date object
-   * @param {string} str e.g. 'yyyy-mm-ddThh:mm', 'yyyy-mm-ddThh:mm:ss', 'yyyy-mm-ddThh:mm:ss.fff'
+   * @param {string} str e.g. 'yyyy-mm-ddThh:mm', 'yyyy-mm-ddThh:mm:ss', 'yyyy-mm-ddThh:mm:ss.fff', 'yyyy-mm-ddThh:mm:ss.fffZ'
    * @return {Date | undefined}
    * @private
    */
   __parseDateTime(str) {
-    const [dateValue, timeValue] = str.split('T');
+    const [dateValue, timeValue] = str.replace(/Z$/, '').split('T');
     /* istanbul ignore if */
     if (!(dateValue && timeValue)) {
       return;

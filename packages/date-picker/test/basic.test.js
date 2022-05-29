@@ -318,6 +318,9 @@ describe('basic features', () => {
 
       datepicker.value = date.toISOString();
       expect(datepicker._selectedDate).to.eql(date);
+
+      datepicker.value = date.toISOString();
+      expect(datepicker._selectedDate).to.eql(date);
     });
 
     it('should not accept non-ISO formats', () => {
