@@ -8,7 +8,7 @@ const user1 = { id: 'a', name: 'foo', colorIndex: 0 };
 const user2 = { id: 'b', name: 'var', colorIndex: 1 };
 const user3 = { id: 'c', name: 'baz', colorIndex: 2 };
 
-async function nextIntersection() {
+async function waitForIntersectionObserver() {
   await nextFrame();
   await nextFrame();
 }
@@ -44,7 +44,7 @@ describe('user-tags', () => {
       wrapper = field.shadowRoot.querySelector('vaadin-user-tags');
       wrapper.duration = 0;
       wrapper.delay = 0;
-      await nextIntersection();
+      await waitForIntersectionObserver();
     });
 
     it('should create user tags for each added user', async () => {
@@ -73,7 +73,7 @@ describe('user-tags', () => {
       wrapper.duration = 0;
       wrapper.delay = 0;
       wrapper.show();
-      await nextIntersection();
+      await waitForIntersectionObserver();
     });
 
     it('should create user tags for each added user', () => {
@@ -152,7 +152,7 @@ describe('user-tags', () => {
       setUsers([user2, user3]);
       wrapper.hide();
       wrapper.$.overlay._flushAnimation('closing');
-      await nextIntersection();
+      await waitForIntersectionObserver();
     });
 
     it('should render and hide all tags except new ones', async () => {
@@ -199,7 +199,7 @@ describe('user-tags', () => {
       field = container.querySelector('vaadin-text-field');
       FieldHighlighter.init(field);
       wrapper = field.shadowRoot.querySelector('vaadin-user-tags');
-      await nextIntersection();
+      await waitForIntersectionObserver();
     });
 
     describe('adding users when the field is not visible', () => {
@@ -212,7 +212,7 @@ describe('user-tags', () => {
         expect(wrapper.opened).to.be.false;
 
         field.scrollIntoView({ block: 'center' });
-        await nextIntersection();
+        await waitForIntersectionObserver();
         expect(wrapper.opened).to.be.true;
       });
 
@@ -220,7 +220,7 @@ describe('user-tags', () => {
         expect(wrapper.flashing).to.be.false;
 
         field.scrollIntoView({ block: 'center' });
-        await nextIntersection();
+        await waitForIntersectionObserver();
         expect(wrapper.flashing).to.be.true;
       });
     });
@@ -228,7 +228,7 @@ describe('user-tags', () => {
     describe('adding users when the field is visible', () => {
       beforeEach(async () => {
         field.scrollIntoView({ block: 'center' });
-        await nextIntersection();
+        await waitForIntersectionObserver();
         addUser(user1);
         addUser(user2);
       });
@@ -243,7 +243,7 @@ describe('user-tags', () => {
 
       it('should hide the overlay when the field is not visible', async () => {
         container.scrollTop = 0;
-        await nextIntersection();
+        await waitForIntersectionObserver();
         expect(wrapper.opened).to.be.false;
       });
 
@@ -252,11 +252,11 @@ describe('user-tags', () => {
         expect(wrapper.opened).to.be.true;
 
         container.scrollTop = 0;
-        await nextIntersection();
+        await waitForIntersectionObserver();
         expect(wrapper.opened).to.be.false;
 
         field.scrollIntoView({ block: 'center' });
-        await nextIntersection();
+        await waitForIntersectionObserver();
         expect(wrapper.opened).to.be.true;
       });
     });
