@@ -108,15 +108,45 @@ export class UserTags extends PolymerElement {
         type: Array,
         value: () => [],
       },
+
+      /** @private */
+      __isTargetVisible: {
+        type: Boolean,
+        value: false,
+      },
     };
+  }
+
+  constructor() {
+    super();
+
+    this.__targetVisibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        this.__onTargetVisibilityChange(entry.isIntersecting);
+      },
+      { threshold: 1 },
+    );
+  }
+
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+
+    if (this.target) {
+      this.__targetVisibilityObserver.observe(this.target);
+    }
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
     this.opened = false;
+    if (this.target) {
+      this.__targetVisibilityObserver.unobserve(this.target);
+    }
   }
 
+  /** @protected */
   ready() {
     super.ready();
 
@@ -132,8 +162,35 @@ export class UserTags extends PolymerElement {
   }
 
   /** @private */
-  __targetChanged(target) {
-    this.$.overlay.positionTarget = target;
+  __onTargetVisibilityChange(isVisible) {
+    this.__isTargetVisible = isVisible;
+
+    if (isVisible && this._flashQueue.length > 0 && !this.flashing) {
+      this.flashTags(this._flashQueue.shift());
+      return;
+    }
+
+    if (isVisible && this.users.length > 0 && this.hasFocus) {
+      this.opened = true;
+      return;
+    }
+
+    if (!isVisible && this.opened) {
+      this.opened = false;
+    }
+  }
+
+  /** @private */
+  __targetChanged(newTarget, oldTarget) {
+    this.$.overlay.positionTarget = newTarget;
+
+    if (oldTarget) {
+      this.__targetVisibilityObserver.unobserve(oldTarget);
+    }
+
+    if (newTarget) {
+      this.__targetVisibilityObserver.observe(newTarget);
+    }
   }
 
   /** @private */
@@ -251,7 +308,7 @@ export class UserTags extends PolymerElement {
         removed: removedTags,
       });
 
-      if (this.flashing) {
+      if (this.flashing || !this.__isTargetVisible) {
         // Schedule next flash later
         this.push('__flashQueue', addedTags);
       } else {
