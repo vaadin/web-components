@@ -82,6 +82,22 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.false;
     });
 
+    it('should prevent default for the handled toggle-button click', () => {
+      const event = click(comboBox._toggleElement);
+      expect(event.defaultPrevented).to.be.true;
+    });
+
+    it('should prevent default for the handled label element click', () => {
+      const event = click(comboBox.querySelector('[slot="label"]'));
+      expect(event.defaultPrevented).to.be.true;
+    });
+
+    it('should not prevent default for click when autoOpenDisabled', () => {
+      comboBox.autoOpenDisabled = true;
+      const event = click(comboBox.querySelector('[slot="label"]'));
+      expect(event.defaultPrevented).to.be.false;
+    });
+
     it('should open on function call', () => {
       comboBox.open();
 
