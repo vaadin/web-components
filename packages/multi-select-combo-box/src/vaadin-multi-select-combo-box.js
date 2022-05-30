@@ -162,6 +162,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           allow-custom-value="[[allowCustomValue]]"
           data-provider="[[dataProvider]]"
           filter="{{filter}}"
+          size="{{size}}"
           filtered-items="[[filteredItems]]"
           opened="{{opened}}"
           renderer="[[renderer]]"
@@ -328,6 +329,13 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       },
 
       /**
+       * Total number of items.
+       */
+      size: {
+        type: Number,
+      },
+
+      /**
        * Number of items fetched at a time from the data provider.
        * @attr {number} page-size
        */
@@ -468,6 +476,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
    */
   checkValidity() {
     return this.required && !this.readonly ? this._hasValue : true;
+  }
+
+  /**
+   * Clears the cached pages and reloads data from data provider when needed.
+   */
+  clearCache() {
+    if (this.$ && this.$.comboBox) {
+      this.$.comboBox.clearCache();
+    }
   }
 
   /**

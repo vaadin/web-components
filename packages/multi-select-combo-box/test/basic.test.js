@@ -104,6 +104,29 @@ describe('basic', () => {
       comboBox.itemValuePath = 'key';
       expect(internal.itemValuePath).to.equal('key');
     });
+
+    it('should propagate size property to combo-box', () => {
+      comboBox.size = 20;
+      expect(internal.size).to.equal(20);
+    });
+
+    it('should update size when combo-box size changes', () => {
+      internal.size = 20;
+      expect(comboBox.size).to.equal(20);
+    });
+
+    it('should call clearCache() method on the combo-box', () => {
+      const spy = sinon.spy(internal, 'clearCache');
+      comboBox.clearCache();
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should not throw on clearCache() if not attached', () => {
+      const combo = document.createElement('vaadin-multi-select-combo-box');
+      expect(() => {
+        combo.clearCache();
+      }).to.not.throw(Error);
+    });
   });
 
   describe('selecting items', () => {

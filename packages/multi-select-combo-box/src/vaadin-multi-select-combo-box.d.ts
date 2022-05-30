@@ -268,6 +268,16 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    */
   selectedItems: TItem[];
 
+  /**
+   * Total number of items.
+   */
+  size: number | undefined;
+
+  /**
+   * Clears the cached pages and reloads data from data provider when needed.
+   */
+  clearCache(): void;
+
   addEventListener<K extends keyof MultiSelectComboBoxEventMap<TItem>>(
     type: K,
     listener: (this: MultiSelectComboBox<TItem>, ev: MultiSelectComboBoxEventMap<TItem>[K]) => void,
