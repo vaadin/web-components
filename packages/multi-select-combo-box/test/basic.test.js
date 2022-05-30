@@ -127,6 +127,14 @@ describe('basic', () => {
         combo.clearCache();
       }).to.not.throw(Error);
     });
+
+    it('should propagate focused attribute to combo-box', () => {
+      expect(internal.hasAttribute('focused')).to.be.false;
+      comboBox.focus();
+      expect(internal.hasAttribute('focused')).to.be.true;
+      comboBox.blur();
+      expect(internal.hasAttribute('focused')).to.be.false;
+    });
   });
 
   describe('selecting items', () => {
