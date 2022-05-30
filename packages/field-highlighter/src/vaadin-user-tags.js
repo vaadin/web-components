@@ -10,9 +10,6 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 
-const DURATION = 200;
-const DELAY = 2000;
-
 const listenOnce = (elem, type) => {
   return new Promise((resolve) => {
     const listener = () => {
@@ -96,8 +93,18 @@ export class UserTags extends PolymerElement {
         value: () => [],
       },
 
+      duration: {
+        type: Number,
+        value: 200,
+      },
+
+      delay: {
+        type: Number,
+        value: 2000,
+      },
+
       /** @private */
-      _flashQueue: {
+      __flashQueue: {
         type: Array,
         value: () => [],
       },
@@ -216,13 +223,13 @@ export class UserTags extends PolymerElement {
 
     const changedTags = this.getChangedTags(addedUsers, removedUsers);
 
-    // check if flash queue contains pending tags for removed users
-    if (this._flashQueue.length > 0) {
+    // Check if flash queue contains pending tags for removed users
+    if (this.__flashQueue.length > 0) {
       for (let i = 0; i < removedUsers.length; i++) {
         if (changedTags.removed[i] === null) {
-          for (let j = 0; j < this._flashQueue.length; j++) {
-            if (this._flashQueue[j].some((tag) => tag.uid === removedUsers[i].id)) {
-              this.splice('_flashQueue', i, 1);
+          for (let j = 0; j < this.__flashQueue.length; j++) {
+            if (this.__flashQueue[j].some((tag) => tag.uid === removedUsers[i].id)) {
+              this.splice('__flashQueue', i, 1);
             }
           }
         }
@@ -246,7 +253,7 @@ export class UserTags extends PolymerElement {
 
       if (this.flashing) {
         // Schedule next flash later
-        this.push('_flashQueue', addedTags);
+        this.push('__flashQueue', addedTags);
       } else {
         this.flashTags(addedTags);
       }
@@ -280,36 +287,40 @@ export class UserTags extends PolymerElement {
 
     this.flashPromise = new Promise((resolve) => {
       listenOnce(this.$.overlay, 'vaadin-overlay-open').then(() => {
-        this._debounceFlashStart = Debouncer.debounce(this._debounceFlashStart, timeOut.after(DURATION + DELAY), () => {
-          // animate disappearing
-          if (!this.hasFocus) {
-            added.forEach((tag) => tag.classList.remove('show'));
-          }
-          this._debounceFlashEnd = Debouncer.debounce(this._debounceFlashEnd, timeOut.after(DURATION), () => {
-            // show all tags
-            const finishFlash = () => {
-              hidden.forEach((tag) => (tag.style.display = 'block'));
-              this.flashing = false;
-              resolve();
-            };
-
-            if (this.hasFocus) {
-              finishFlash();
-            } else {
-              // wait for overlay closing animation to complete
-              listenOnce(this.$.overlay, 'animationend').then(() => {
-                finishFlash();
-              });
-
-              this.opened = false;
+        this._debounceFlashStart = Debouncer.debounce(
+          this._debounceFlashStart,
+          timeOut.after(this.duration + this.delay),
+          () => {
+            // Animate disappearing
+            if (!this.hasFocus) {
+              added.forEach((tag) => tag.classList.remove('show'));
             }
-          });
-        });
+            this._debounceFlashEnd = Debouncer.debounce(this._debounceFlashEnd, timeOut.after(this.duration), () => {
+              // Show all tags
+              const finishFlash = () => {
+                hidden.forEach((tag) => (tag.style.display = 'block'));
+                this.flashing = false;
+                resolve();
+              };
+
+              if (this.hasFocus) {
+                finishFlash();
+              } else {
+                // Wait for overlay closing animation to complete
+                listenOnce(this.$.overlay, 'animationend').then(() => {
+                  finishFlash();
+                });
+
+                this.opened = false;
+              }
+            });
+          },
+        );
       });
     }).then(() => {
-      if (this._flashQueue.length > 0) {
-        const tags = this._flashQueue[0];
-        this.splice('_flashQueue', 0, 1);
+      if (this.__flashQueue.length > 0) {
+        const tags = this.__flashQueue[0];
+        this.splice('__flashQueue', 0, 1);
         this.flashTags(tags);
       }
     });
@@ -326,7 +337,7 @@ export class UserTags extends PolymerElement {
   updateTags(users, changed) {
     this.applyTagsStart(changed);
 
-    this._debounceRender = Debouncer.debounce(this._debounceRender, timeOut.after(DURATION), () => {
+    this._debounceRender = Debouncer.debounce(this._debounceRender, timeOut.after(this.duration), () => {
       this.set('users', users);
 
       this.applyTagsEnd(changed);
