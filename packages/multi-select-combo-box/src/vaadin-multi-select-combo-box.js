@@ -525,6 +525,11 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       this._focusedChipIndex = -1;
       this.validate();
     }
+
+    // Propagate focused attribute to internal combo box
+    if (this.$ && this.$.comboBox) {
+      this.$.comboBox.toggleAttribute('focused', focused);
+    }
   }
 
   /**
