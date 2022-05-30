@@ -4,22 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
-import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-
-registerStyles(
-  'vaadin-avatar-group-overlay',
-  css`
-    :host {
-      align-items: flex-start;
-      justify-content: flex-start;
-    }
-
-    :host([bottom-aligned]) {
-      justify-content: flex-end;
-    }
-  `,
-  { moduleId: 'vaadin-avatar-group-overlay-styles' },
-);
+import { PositionMixin } from '@vaadin/vaadin-overlay/src/vaadin-overlay-position-mixin.js';
 
 /**
  * An element used internally by `<vaadin-avatar-group>`. Not intended to be used separately.
@@ -27,7 +12,7 @@ registerStyles(
  * @extends OverlayElement
  * @private
  */
-class AvatarGroupOverlay extends OverlayElement {
+class AvatarGroupOverlay extends PositionMixin(OverlayElement) {
   static get is() {
     return 'vaadin-avatar-group-overlay';
   }
