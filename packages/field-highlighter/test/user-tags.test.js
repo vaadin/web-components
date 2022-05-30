@@ -37,6 +37,8 @@ describe('user-tags', () => {
       field = fixtureSync(`<vaadin-text-field></vaadin-text-field>`);
       FieldHighlighter.init(field);
       wrapper = field.shadowRoot.querySelector('vaadin-user-tags');
+      wrapper.duration = 0;
+      wrapper.delay = 0;
     });
 
     it('should create user tags for each added user', async () => {
@@ -62,6 +64,8 @@ describe('user-tags', () => {
       field = fixtureSync(`<vaadin-text-field></vaadin-text-field>`);
       FieldHighlighter.init(field);
       wrapper = field.shadowRoot.querySelector('vaadin-user-tags');
+      wrapper.duration = 0;
+      wrapper.delay = 0;
       wrapper.show();
     });
 
@@ -135,6 +139,8 @@ describe('user-tags', () => {
       field = fixtureSync(`<vaadin-text-field></vaadin-text-field>`);
       FieldHighlighter.init(field);
       wrapper = field.shadowRoot.querySelector('vaadin-user-tags');
+      wrapper.duration = 0;
+      wrapper.delay = 0;
       wrapper.show();
       setUsers([user2, user3]);
       wrapper.hide();
