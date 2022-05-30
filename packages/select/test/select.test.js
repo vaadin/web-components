@@ -6,6 +6,7 @@ import {
   enterKeyDown,
   enterKeyUp,
   escKeyDown,
+  fire,
   fixtureSync,
   keyboardEventFor,
   keyDownChar,
@@ -287,6 +288,11 @@ describe('vaadin-select', () => {
       it('should open the overlay on required indicator click', () => {
         select.shadowRoot.querySelector('[part=required-indicator]').click();
         expect(select.opened).to.be.true;
+      });
+
+      it('should prevent default for the handled click event', () => {
+        const event = fire(select._inputContainer, 'click');
+        expect(event.defaultPrevented).to.be.true;
       });
 
       it('should open the overlay on ArrowUp', () => {
