@@ -1,0 +1,69 @@
+name: Visual tests
+
+on: pull_request
+
+jobs:
+  lumo:
+    name: Lumo
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'vaadin'
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      - name: Visual tests
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+        run: yarn test:lumo
+
+      - uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: screenshots
+          path: |
+            packages/*/test/visual/lumo/screenshots/*/failed/*.png
+            packages/vaadin-lumo-styles/test/visual/screenshots/failed/*.png
+  material:
+    name: Material
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'vaadin'
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: "0"
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      - name: Visual tests
+        env:
+          SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+          SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+        run: yarn test:material
+
+      - uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
+        with:
+          name: screenshots
+          path: |
+            packages/*/test/visual/material/screenshots/*/failed/*.png
+            packages/vaadin-material-styles/test/visual/screenshots/failed/*.png
