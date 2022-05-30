@@ -415,10 +415,27 @@ export const ComboBoxMixin = (subclass) =>
 
     /**
      * @param {Event} event
+     * @private
+     */
+    _onToggleButtonClick(event) {
+      // Prevent parent components such as `vaadin-grid`
+      // from handling the click event after it bubbles.
+      event.preventDefault();
+
+      if (this.opened) {
+        this.close();
+      } else {
+        this.open();
+      }
+    }
+
+    /**
+     * @param {Event} event
      * @protected
      */
-    _onHostClick(_event) {
+    _onHostClick(event) {
       if (!this.autoOpenDisabled) {
+        event.preventDefault();
         this.open();
       }
     }
@@ -432,11 +449,7 @@ export const ComboBoxMixin = (subclass) =>
       if (this._isClearButton(e)) {
         this._handleClearButtonClick(e);
       } else if (path.indexOf(this._toggleElement) > -1) {
-        if (this.opened) {
-          this.close();
-        } else {
-          this.open();
-        }
+        this._onToggleButtonClick(e);
       } else {
         this._onHostClick(e);
       }
