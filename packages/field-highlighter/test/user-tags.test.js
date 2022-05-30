@@ -11,7 +11,6 @@ const user3 = { id: 'c', name: 'baz', colorIndex: 2 };
 describe('user-tags', () => {
   let field;
   let wrapper;
-  let overlay;
 
   const getTags = () => {
     const { overlay } = wrapper.$;
@@ -144,7 +143,7 @@ describe('user-tags', () => {
 
     it('should render and hide all tags except new ones', async () => {
       FieldHighlighter.setUsers(field, [user1, user2, user3]);
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      await oneEvent(wrapper.$.overlay, 'vaadin-overlay-open');
       const tags = getTags();
       expect(tags).to.have.lengthOf(3);
       expect(getComputedStyle(tags[0]).display).to.equal('block');
@@ -154,7 +153,7 @@ describe('user-tags', () => {
 
     it('should close overlay and restore tags after a timeout', async () => {
       FieldHighlighter.addUser(field, user1);
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      await oneEvent(wrapper.$.overlay, 'vaadin-overlay-open');
       await wrapper.flashPromise;
       expect(wrapper.opened).to.be.false;
     });
