@@ -165,8 +165,8 @@ export class UserTags extends PolymerElement {
   __onTargetVisibilityChange(isVisible) {
     this.__isTargetVisible = isVisible;
 
-    if (isVisible && this._flashQueue.length > 0 && !this.flashing) {
-      this.flashTags(this._flashQueue.shift());
+    if (isVisible && this.__flashQueue.length > 0 && !this.flashing) {
+      this.flashTags(this.__flashQueue.shift());
       return;
     }
 
