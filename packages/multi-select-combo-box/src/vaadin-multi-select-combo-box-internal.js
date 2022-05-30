@@ -50,6 +50,15 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
 
   static get properties() {
     return {
+      /**
+       * Total number of items.
+       * @type {number | undefined}
+       */
+      size: {
+        type: Number,
+        notify: true,
+      },
+
       _target: {
         type: Object,
       },
