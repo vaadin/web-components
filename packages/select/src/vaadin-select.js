@@ -421,7 +421,11 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
    *
    * @private
    */
-  _onClick() {
+  _onClick(event) {
+    // Prevent parent components such as `vaadin-grid`
+    // from handling the click event after it bubbles.
+    event.preventDefault();
+
     this.opened = !this.readonly;
   }
 
