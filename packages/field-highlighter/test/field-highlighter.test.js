@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 import { FieldHighlighter } from '../src/vaadin-field-highlighter.js';
@@ -10,10 +10,6 @@ describe('field highlighter', () => {
   let outline;
   let wrapper;
   let overlay;
-
-  const getTags = () => {
-    return overlay.content.querySelectorAll('vaadin-user-tag');
-  };
 
   beforeEach(() => {
     field = fixtureSync(`<vaadin-text-field></vaadin-text-field>`);
@@ -61,7 +57,6 @@ describe('field highlighter', () => {
   describe('users', () => {
     const user1 = { id: 'a', name: 'foo', colorIndex: 0 };
     const user2 = { id: 'b', name: 'var', colorIndex: 1 };
-    const user3 = { id: 'c', name: 'baz', colorIndex: 2 };
 
     const addUser = (user) => {
       FieldHighlighter.addUser(field, user);
@@ -157,28 +152,22 @@ describe('field highlighter', () => {
         addUser(user2);
         removeUser(user2);
         removeUser(user1);
-        expect(highlighter.user).to.equal(null);
+        expect(highlighter.user).to.be.null;
       });
 
       it('should reset user when multiple users are removed', () => {
         setUsers([user1, user2]);
         setUsers([]);
-        expect(highlighter.user).to.equal(null);
+        expect(highlighter.user).to.be.null;
       });
     });
 
     describe('overlay', () => {
-      afterEach(() => {
-        if (overlay.opened) {
-          overlay.opened = false;
-        }
-      });
-
       it('should open overlay on field focusin', async () => {
         addUser(user1);
         await nextFrame();
         field.dispatchEvent(new CustomEvent('focusin'));
-        expect(overlay.opened).to.equal(true);
+        expect(overlay.opened).to.be.true;
       });
 
       it('should close overlay on field focusout', async () => {
@@ -187,7 +176,7 @@ describe('field highlighter', () => {
         field.dispatchEvent(new CustomEvent('focusin'));
         field.dispatchEvent(new CustomEvent('focusout'));
         await aTimeout(1);
-        expect(overlay.opened).to.equal(false);
+        expect(overlay.opened).to.be.false;
       });
 
       it('should open overlay on field mouseenter', async () => {
@@ -195,7 +184,7 @@ describe('field highlighter', () => {
         await nextFrame();
         field.dispatchEvent(new CustomEvent('mouseenter'));
         highlighter.observer._mouseDebouncer.flush();
-        expect(overlay.opened).to.equal(true);
+        expect(overlay.opened).to.be.true;
       });
 
       it('should close overlay on field mouseleave', async () => {
@@ -204,7 +193,7 @@ describe('field highlighter', () => {
         field.dispatchEvent(new CustomEvent('mouseenter'));
         highlighter.observer._mouseDebouncer.flush();
         field.dispatchEvent(new CustomEvent('mouseleave'));
-        expect(overlay.opened).to.equal(false);
+        expect(overlay.opened).to.be.false;
       });
 
       it('should not close overlay on field mouseleave after focusin', async () => {
@@ -214,7 +203,7 @@ describe('field highlighter', () => {
         highlighter.observer._mouseDebouncer.flush();
         field.dispatchEvent(new CustomEvent('focusin'));
         field.dispatchEvent(new CustomEvent('mouseleave'));
-        expect(overlay.opened).to.equal(true);
+        expect(overlay.opened).to.be.true;
       });
 
       it('should not close overlay on field focusout after mouseenter', async () => {
@@ -224,7 +213,7 @@ describe('field highlighter', () => {
         field.dispatchEvent(new CustomEvent('mouseenter'));
         highlighter.observer._mouseDebouncer.flush();
         field.dispatchEvent(new CustomEvent('focusout'));
-        expect(overlay.opened).to.equal(true);
+        expect(overlay.opened).to.be.true;
       });
 
       it('should not close overlay on field mouseleave to overlay', async () => {
@@ -235,7 +224,7 @@ describe('field highlighter', () => {
         const leave = new CustomEvent('mouseleave');
         leave.relatedTarget = overlay;
         field.dispatchEvent(leave);
-        expect(overlay.opened).to.equal(true);
+        expect(overlay.opened).to.be.true;
       });
 
       it('should close overlay on overlay mouseleave', async () => {
@@ -244,7 +233,7 @@ describe('field highlighter', () => {
         field.dispatchEvent(new CustomEvent('mouseenter'));
         highlighter.observer._mouseDebouncer.flush();
         overlay.dispatchEvent(new CustomEvent('mouseleave'));
-        expect(overlay.opened).to.equal(false);
+        expect(overlay.opened).to.be.false;
       });
 
       it('should not close overlay on overlay mouseleave to field', async () => {
@@ -255,160 +244,17 @@ describe('field highlighter', () => {
         const leave = new CustomEvent('mouseleave');
         leave.relatedTarget = field;
         overlay.dispatchEvent(leave);
-        expect(overlay.opened).to.equal(true);
+        expect(overlay.opened).to.be.true;
       });
 
       it('should close overlay when users set to empty while opened', async () => {
         field.dispatchEvent(new CustomEvent('focusin'));
         setUsers([user1, user2]);
         await nextFrame();
-        expect(overlay.opened).to.equal(true);
+        expect(overlay.opened).to.be.true;
         setUsers([]);
         await nextFrame();
-        expect(overlay.opened).to.equal(false);
-      });
-    });
-
-    describe('user tags', () => {
-      let tags;
-
-      it('should create user tags for each added user', async () => {
-        addUser(user1);
-        addUser(user2);
-        await wrapper.flashPromise;
-        tags = getTags();
-        expect(tags.length).to.equal(2);
-      });
-
-      it('should replace user tags when replacing users', async () => {
-        setUsers([user1, user2]);
-        await wrapper.flashPromise;
-        setUsers([user3]);
-        await wrapper.flashPromise;
-        tags = getTags();
-        expect(tags.length).to.equal(1);
-      });
-    });
-
-    describe('user tags opened', () => {
-      let tags;
-
-      beforeEach(() => {
-        wrapper.show();
-      });
-
-      afterEach(() => {
-        if (overlay.opened) {
-          overlay.opened = false;
-        }
-      });
-
-      it('should create user tags for each added user', () => {
-        addUser(user1);
-        addUser(user2);
-        tags = getTags();
-        expect(tags.length).to.equal(2);
-      });
-
-      it('should remove user tag when user is removed', () => {
-        addUser(user1);
-        addUser(user2);
-        removeUser(user2);
-        tags = getTags();
-        expect(tags.length).to.equal(1);
-      });
-
-      it('should replace user tags when replacing users', async () => {
-        setUsers([user1, user2]);
-        setUsers([user3]);
-        tags = getTags();
-        expect(tags.length).to.equal(1);
-      });
-
-      it('should set tag background color based on user index', () => {
-        setUsers([user1, user2]);
-        tags = getTags();
-        document.documentElement.style.setProperty('--vaadin-user-color-0', 'red');
-        document.documentElement.style.setProperty('--vaadin-user-color-1', 'blue');
-        expect(getComputedStyle(tags[0]).backgroundColor).to.equal('rgb(0, 0, 255)');
-        expect(getComputedStyle(tags[1]).backgroundColor).to.equal('rgb(255, 0, 0)');
-      });
-
-      it('should not set custom property if index is null', () => {
-        addUser({ name: 'xyz', colorIndex: null });
-        tags = getTags();
-        expect(getComputedStyle(tags[0]).getPropertyValue('--vaadin-user-tag-color')).to.equal('');
-      });
-
-      it('should dispatch event on tag mousedown', () => {
-        addUser(user1);
-        const tag = getTags()[0];
-        const spy = sinon.spy();
-        tag.addEventListener('user-tag-click', spy);
-        tag.dispatchEvent(new Event('mousedown'));
-        expect(spy.callCount).to.equal(1);
-      });
-
-      it('should reuse existing user tag when user is moved', () => {
-        setUsers([user3, user2]);
-        const oldTags = getTags();
-        setUsers([user1, user2, user3]);
-        const newTags = getTags();
-        // ['b', 'c'] -> ['a', 'b', 'c']
-        expect(newTags[1].id).to.deep.equal(oldTags[0].id);
-        expect(newTags[2].id).to.deep.equal(oldTags[1].id);
-      });
-
-      it('should handle pending changes properly', () => {
-        FieldHighlighter.setUsers(field, [user3, user2]);
-        field.dispatchEvent(new CustomEvent('focusin'));
-        FieldHighlighter.setUsers(field, []);
-        wrapper.requestContentUpdate();
-        expect(getTags().length).to.equal(0);
-      });
-    });
-
-    describe('user tags closed', () => {
-      let tags;
-
-      beforeEach(async () => {
-        wrapper.show();
-        setUsers([user2, user3]);
-        wrapper.hide();
-        overlay._flushAnimation('closing');
-        await nextFrame();
-        tags = overlay.content.querySelector('[part="tags"]');
-      });
-
-      it('should render and hide all tags except new ones', async () => {
-        FieldHighlighter.setUsers(field, [user1, user2, user3]);
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        const allTags = tags.querySelectorAll('vaadin-user-tag');
-        expect(tags.querySelectorAll('vaadin-user-tag').length).to.equal(3);
-        expect(getComputedStyle(allTags[0]).display).to.equal('block');
-        expect(getComputedStyle(allTags[1]).display).to.equal('none');
-        expect(getComputedStyle(allTags[2]).display).to.equal('none');
-      });
-
-      it('should close overlay and restore tags after a timeout', async () => {
-        FieldHighlighter.addUser(field, user1);
-        await oneEvent(overlay, 'vaadin-overlay-open');
-        await wrapper.flashPromise;
-        expect(wrapper.opened).to.equal(false);
-      });
-
-      it('should not flash tags when reordering same users', async () => {
-        const spy = sinon.spy(wrapper, 'flashTags');
-        FieldHighlighter.setUsers(field, [user3, user2]);
-        await nextFrame();
-        expect(spy.called).to.be.false;
-      });
-
-      it('should not update tags when reordering same users', async () => {
-        const spy = sinon.spy(wrapper, 'updateTagsSync');
-        FieldHighlighter.setUsers(field, [user3, user2]);
-        await nextFrame();
-        expect(spy.called).to.be.false;
+        expect(overlay.opened).to.be.false;
       });
     });
 
