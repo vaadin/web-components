@@ -20,103 +20,124 @@ describe('date-picker in dialog', () => {
     datepicker = dialog.$.overlay.querySelector('vaadin-date-picker');
   });
 
-  afterEach(async () => {
-    datepicker.opened = false;
-    dialog.opened = false;
-    await nextFrame();
-  });
-
   describe('modal', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       datepicker.inputElement.focus();
-      await open(datepicker);
-      await nextRender();
     });
 
-    it('should focus the Today button on second Tab when inside a dialog', async () => {
-      // Focus the month calendar
-      await sendKeys({ press: 'Tab' });
+    describe('opened', () => {
+      beforeEach(async () => {
+        await open(datepicker);
+        await nextRender();
+      });
 
-      await nextRender();
+      it('should focus the Today button on second Tab when inside a dialog', async () => {
+        // Focus the month calendar
+        await sendKeys({ press: 'Tab' });
 
-      // Focus the Today button
-      await sendKeys({ press: 'Tab' });
+        await nextRender();
 
-      expect(getOverlayContent(datepicker).$.todayButton.hasAttribute('focused')).to.be.true;
+        // Focus the Today button
+        await sendKeys({ press: 'Tab' });
+
+        expect(getOverlayContent(datepicker).$.todayButton.hasAttribute('focused')).to.be.true;
+      });
+
+      it('should focus the Cancel button on Shift + Tab when inside a dialog', async () => {
+        // Focus the Cancel button
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ up: 'Shift' });
+
+        expect(getOverlayContent(datepicker).$.cancelButton.hasAttribute('focused')).to.be.true;
+      });
+
+      it('should focus the input on calendar date Shift Tab when inside a dialog', async () => {
+        // Move focus to the calendar
+        await sendKeys({ press: 'Tab' });
+
+        await nextRender();
+
+        const spy = sinon.spy(datepicker.inputElement, 'focus');
+
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ up: 'Shift' });
+
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not close the dialog when closing date-picker on input element Escape', async () => {
+        await sendKeys({ press: 'Escape' });
+
+        expect(datepicker.opened).to.be.false;
+        expect(dialog.opened).to.be.true;
+      });
+
+      it('should close the dialog on subsequent Escape after the date-picker is closed', async () => {
+        await sendKeys({ press: 'Escape' });
+
+        await sendKeys({ press: 'Escape' });
+
+        expect(dialog.opened).to.be.false;
+      });
+
+      it('should not close the dialog when closing date-picker on month calendar Escape', async () => {
+        // Focus the month calendar
+        await sendKeys({ press: 'Tab' });
+
+        await sendKeys({ press: 'Escape' });
+
+        expect(datepicker.opened).to.be.false;
+        expect(dialog.opened).to.be.true;
+      });
+
+      it('should not close the dialog when closing date-picker on Today button Escape', async () => {
+        // Focus the month calendar
+        await sendKeys({ press: 'Tab' });
+
+        // Focus the Today button
+        await sendKeys({ press: 'Tab' });
+
+        await sendKeys({ press: 'Escape' });
+
+        expect(datepicker.opened).to.be.false;
+        expect(dialog.opened).to.be.true;
+      });
+
+      it('should not close the dialog when closing date-picker on Cancel button Escape', async () => {
+        // Focus the Cancel button
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ up: 'Shift' });
+
+        await sendKeys({ press: 'Escape' });
+
+        expect(datepicker.opened).to.be.false;
+        expect(dialog.opened).to.be.true;
+      });
     });
 
-    it('should focus the Cancel button on Shift + Tab when inside a dialog', async () => {
-      // Focus the Cancel button
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
+    describe('clear button visible', () => {
+      beforeEach(() => {
+        datepicker.clearButtonVisible = true;
+        datepicker.value = '2000-02-01';
+        datepicker.inputElement.focus();
+      });
 
-      expect(getOverlayContent(datepicker).$.cancelButton.hasAttribute('focused')).to.be.true;
-    });
+      it('should not close the dialog when clearing on Escape with clear button visible', async () => {
+        await sendKeys({ press: 'Escape' });
 
-    it('should focus the input on calendar date Shift Tab when inside a dialog', async () => {
-      // Move focus to the calendar
-      await sendKeys({ press: 'Tab' });
+        expect(dialog.opened).to.be.true;
+      });
 
-      await nextRender();
+      it('should close the dialog on subsequent Escape after the value is cleared', async () => {
+        await sendKeys({ press: 'Escape' });
 
-      const spy = sinon.spy(datepicker.inputElement, 'focus');
+        await sendKeys({ press: 'Escape' });
 
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
-
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should not close the dialog when closing date-picker on input element Escape', async () => {
-      await sendKeys({ press: 'Escape' });
-
-      expect(datepicker.opened).to.be.false;
-      expect(dialog.opened).to.be.true;
-    });
-
-    it('should close the dialog on subsequent Escape after the date-picker is closed', async () => {
-      await sendKeys({ press: 'Escape' });
-
-      await sendKeys({ press: 'Escape' });
-
-      expect(dialog.opened).to.be.false;
-    });
-
-    it('should not close the dialog when closing date-picker on month calendar Escape', async () => {
-      // Focus the month calendar
-      await sendKeys({ press: 'Tab' });
-
-      await sendKeys({ press: 'Escape' });
-
-      expect(datepicker.opened).to.be.false;
-      expect(dialog.opened).to.be.true;
-    });
-
-    it('should not close the dialog when closing date-picker on Today button Escape', async () => {
-      // Focus the month calendar
-      await sendKeys({ press: 'Tab' });
-
-      // Focus the Today button
-      await sendKeys({ press: 'Tab' });
-
-      await sendKeys({ press: 'Escape' });
-
-      expect(datepicker.opened).to.be.false;
-      expect(dialog.opened).to.be.true;
-    });
-
-    it('should not close the dialog when closing date-picker on Cancel button Escape', async () => {
-      // Focus the Cancel button
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
-
-      await sendKeys({ press: 'Escape' });
-
-      expect(datepicker.opened).to.be.false;
-      expect(dialog.opened).to.be.true;
+        expect(dialog.opened).to.be.false;
+      });
     });
   });
 
