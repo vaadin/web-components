@@ -771,18 +771,8 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
     if (document.body.style.pointerEvents !== 'none') {
       // Set body pointer-events to 'none' to disable mouse interactions with
       // other document nodes.
-      this._previousBodyPointerEvents = document.body.style.pointerEvents;
+      this._previousDocumentPointerEvents = document.body.style.pointerEvents;
       document.body.style.pointerEvents = 'none';
-    }
-
-    if (document.documentElement.style.overflow !== 'hidden') {
-      this._previousDocumentOverflow = document.documentElement.style.overflow;
-      document.documentElement.style.overflow = 'hidden';
-    }
-
-    if (document.documentElement.style.scrollbarGutter !== 'stable') {
-      this._previousDocumentScrollbarGutter = document.documentElement.style.scrollbarGutter;
-      document.documentElement.style.scrollbarGutter = 'stable';
     }
 
     // Disable pointer events in other attached overlays
@@ -802,20 +792,10 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
 
   /** @protected */
   _exitModalState() {
-    if (this._previousBodyPointerEvents !== undefined) {
+    if (this._previousDocumentPointerEvents !== undefined) {
       // Restore body pointer-events
-      document.body.style.pointerEvents = this._previousBodyPointerEvents;
-      delete this._previousBodyPointerEvents;
-    }
-
-    if (this._previousDocumentOverflow !== undefined) {
-      document.documentElement.style.overflow = this._previousDocumentOverflow;
-      delete this._previousDocumentOverflow;
-    }
-
-    if (this._previousDocumentScrollbarGutter !== undefined) {
-      document.documentElement.style.scrollbarGutter = this._previousDocumentScrollbarGutter;
-      delete this._previousDocumentScrollbarGutter;
+      document.body.style.pointerEvents = this._previousDocumentPointerEvents;
+      delete this._previousDocumentPointerEvents;
     }
 
     // Restore pointer events in the previous overlay(s)
