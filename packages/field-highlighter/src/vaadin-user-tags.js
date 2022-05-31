@@ -170,7 +170,7 @@ export class UserTags extends PolymerElement {
       return;
     }
 
-    if (isVisible && this.users.length > 0 && this.hasFocus) {
+    if (isVisible && this.hasFocus) {
       this.opened = true;
       return;
     }
