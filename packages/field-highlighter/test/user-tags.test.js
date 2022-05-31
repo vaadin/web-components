@@ -208,17 +208,29 @@ describe('user-tags', () => {
         addUser(user2);
       });
 
-      it('should postpone opening the overlay until the field is visible', async () => {
+      it('should postpone opening the overlay until the field is fully visible', async () => {
         expect(wrapper.opened).to.be.false;
 
+        // The field is partially visible.
+        container.scrollTop = 220;
+        await waitForIntersectionObserver();
+        expect(wrapper.opened).to.be.false;
+
+        // The field is fully visible.
         field.scrollIntoView({ block: 'center' });
         await waitForIntersectionObserver();
         expect(wrapper.opened).to.be.true;
       });
 
-      it('should postpone flashing until the field is visible', async () => {
+      it('should postpone flashing until the field is fully visible', async () => {
         expect(wrapper.flashing).to.be.false;
 
+        // The field is partially visible.
+        container.scrollTop = 220;
+        await waitForIntersectionObserver();
+        expect(wrapper.flashing).to.be.false;
+
+        // The field is fully visible.
         field.scrollIntoView({ block: 'center' });
         await waitForIntersectionObserver();
         expect(wrapper.flashing).to.be.true;
