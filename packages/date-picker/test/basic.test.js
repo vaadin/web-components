@@ -113,6 +113,13 @@ describe('basic features', () => {
     expect(event.defaultPrevented).to.be.true;
   });
 
+  it('should not prevent default for click when autoOpenDisabled', () => {
+    datepicker.autoOpenDisabled = true;
+    const inputField = datepicker.shadowRoot.querySelector('[part="input-field"]');
+    const event = click(inputField);
+    expect(event.defaultPrevented).to.be.false;
+  });
+
   it('should pass the placeholder attribute to the input tag', () => {
     const placeholder = 'Pick a date';
     datepicker.set('placeholder', placeholder);
