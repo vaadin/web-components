@@ -101,6 +101,25 @@ describe('basic features', () => {
     expect(isFocused(input)).to.be.true;
   });
 
+  it('should open on input container element click', () => {
+    const inputField = datepicker.shadowRoot.querySelector('[part="input-field"]');
+    click(inputField);
+    expect(datepicker.opened).to.be.true;
+  });
+
+  it('should prevent default for the handled click event', () => {
+    const inputField = datepicker.shadowRoot.querySelector('[part="input-field"]');
+    const event = click(inputField);
+    expect(event.defaultPrevented).to.be.true;
+  });
+
+  it('should not prevent default for click when autoOpenDisabled', () => {
+    datepicker.autoOpenDisabled = true;
+    const inputField = datepicker.shadowRoot.querySelector('[part="input-field"]');
+    const event = click(inputField);
+    expect(event.defaultPrevented).to.be.false;
+  });
+
   it('should pass the placeholder attribute to the input tag', () => {
     const placeholder = 'Pick a date';
     datepicker.set('placeholder', placeholder);
