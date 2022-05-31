@@ -200,6 +200,7 @@ describe('user-tags', () => {
       field = container.querySelector('vaadin-text-field');
       FieldHighlighter.init(field);
       wrapper = field.shadowRoot.querySelector('vaadin-user-tags');
+      wrapper.duration = 1000;
       await waitForIntersectionObserver();
     });
 
@@ -247,15 +248,7 @@ describe('user-tags', () => {
         addUser(user2);
       });
 
-      it('should postpone opening the overlay until the field is fully visible', async () => {
-        expect(wrapper.opened).to.be.false;
-
-        field.scrollIntoView({ block: 'center' });
-        await waitForIntersectionObserver();
-        expect(wrapper.opened).to.be.true;
-      });
-
-      it('should keep the overlay open as long as the field is fully visible', async () => {
+      it('should open the overlay when the field is fully visible and hide otherwise', async () => {
         expect(wrapper.opened).to.be.false;
 
         field.scrollIntoView({ block: 'center' });
@@ -288,6 +281,20 @@ describe('user-tags', () => {
         container.scrollTop = 0;
         await waitForIntersectionObserver();
         expect(wrapper.opened).to.be.false;
+      });
+
+      it('should not run extra flashing when the field changes visibility', async () => {
+        const spy = sinon.spy(wrapper, 'flashTags');
+
+        // Make the field not visible.
+        container.scrollTop = 0;
+        await waitForIntersectionObserver();
+
+        // Make the field visible again.
+        field.scrollIntoView({ block: 'center' });
+        await waitForIntersectionObserver();
+
+        expect(spy.called).to.be.false;
       });
     });
   });
