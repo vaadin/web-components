@@ -165,16 +165,24 @@ export class UserTags extends PolymerElement {
   __onTargetVisibilityChange(isVisible) {
     this.__isTargetVisible = isVisible;
 
+    // Open the overlay and run the flashing animation for the user tags
+    // that have been enqueued (if any) during a `.setUsers()` call
+    // because the field was not visible at that point.
     if (isVisible && this.__flashQueue.length > 0 && !this.flashing) {
       this.flashTags(this.__flashQueue.shift());
       return;
     }
 
+    // Open the overlay when the field is visible and focused.
+    // - opens the overlay in the case it was not opened during a `.show()` call because the field was not visible at that point.
+    // - re-opens the overlay in the case it was closed because the focused field became not visible for a while (see the below check).
     if (isVisible && this.hasFocus) {
       this.opened = true;
       return;
     }
 
+    // Close the overlay when the field is not visible.
+    // The focused field will be re-opened once it becomes visible again (see the above check).
     if (!isVisible && this.opened) {
       this.opened = false;
     }
