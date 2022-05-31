@@ -370,6 +370,7 @@ export const DatePickerMixin = (subclass) =>
     constructor() {
       super();
 
+      this._boundOnClick = this._onClick.bind(this);
       this._boundOnScroll = this._onScroll.bind(this);
     }
 
@@ -414,11 +415,7 @@ export const DatePickerMixin = (subclass) =>
     ready() {
       super.ready();
 
-      this.addEventListener('click', (e) => {
-        if (!this._isClearButton(e) && (!this.autoOpenDisabled || this._noInput)) {
-          this.open();
-        }
-      });
+      this.addEventListener('click', this._boundOnClick);
 
       this.addController(
         new MediaQueryController(this._fullscreenMediaQuery, (matches) => {
@@ -908,6 +905,29 @@ export const DatePickerMixin = (subclass) =>
       }
 
       event.stopPropagation();
+    }
+
+    /**
+     * @param {Event} event
+     * @private
+     */
+    _onClick(event) {
+      // Clear button click is handled in separate listener
+      // but bubbles to the host, so we need to ignore it.
+      if (!this._isClearButton(event)) {
+        this._onHostClick(event);
+      }
+    }
+
+    /**
+     * @param {Event} event
+     * @private
+     */
+    _onHostClick(event) {
+      if (!this.autoOpenDisabled || this._noInput) {
+        event.preventDefault();
+        this.open();
+      }
     }
 
     /**
