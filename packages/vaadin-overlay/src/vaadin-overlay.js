@@ -775,15 +775,15 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
       document.body.style.pointerEvents = 'none';
     }
 
-    if (document.documentElement.style.overflow !== 'hidden') {
-      this._previousDocumentOverflow = document.documentElement.style.overflow;
-      document.documentElement.style.overflow = 'hidden';
-    }
+    // If (document.documentElement.style.overflow !== 'hidden') {
+    //   this._previousDocumentOverflow = document.documentElement.style.overflow;
+    //   document.documentElement.style.overflow = 'hidden';
+    // }
 
-    if (document.documentElement.style.scrollbarGutter !== 'stable') {
-      this._previousDocumentScrollbarGutter = document.documentElement.style.scrollbarGutter;
-      document.documentElement.style.scrollbarGutter = 'stable';
-    }
+    // if (document.documentElement.style.scrollbarGutter !== 'stable') {
+    //   this._previousDocumentScrollbarGutter = document.documentElement.style.scrollbarGutter;
+    //   document.documentElement.style.scrollbarGutter = 'stable';
+    // }
 
     // Disable pointer events in other attached overlays
     OverlayElement.__attachedInstances.forEach((el) => {
