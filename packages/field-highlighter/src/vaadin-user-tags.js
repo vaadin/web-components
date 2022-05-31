@@ -417,7 +417,9 @@ export class UserTags extends PolymerElement {
 
   show() {
     this.hasFocus = true;
-    this.opened = true;
+    if (this.__isTargetVisible) {
+      this.opened = true;
+    }
   }
 
   hide() {

@@ -148,6 +148,7 @@ describe('user-tags', () => {
       wrapper = field.shadowRoot.querySelector('vaadin-user-tags');
       wrapper.duration = 0;
       wrapper.delay = 0;
+      await waitForIntersectionObserver();
       wrapper.show();
       setUsers([user2, user3]);
       wrapper.hide();
@@ -237,6 +238,36 @@ describe('user-tags', () => {
       });
     });
 
+    describe('adding users when the field is partially visible and focused', () => {
+      beforeEach(async () => {
+        container.scrollTop = 220;
+        field.inputElement.focus();
+        await waitForIntersectionObserver();
+        addUser(user1);
+        addUser(user2);
+      });
+
+      it('should postpone opening the overlay until the field is fully visible', async () => {
+        expect(wrapper.opened).to.be.false;
+
+        field.scrollIntoView({ block: 'center' });
+        await waitForIntersectionObserver();
+        expect(wrapper.opened).to.be.true;
+      });
+
+      it('should keep the overlay open as long as the field is fully visible', async () => {
+        expect(wrapper.opened).to.be.false;
+
+        field.scrollIntoView({ block: 'center' });
+        await waitForIntersectionObserver();
+        expect(wrapper.opened).to.be.true;
+
+        container.scrollTop = 0;
+        await waitForIntersectionObserver();
+        expect(wrapper.opened).to.be.false;
+      });
+    });
+
     describe('adding users when the field is visible', () => {
       beforeEach(async () => {
         field.scrollIntoView({ block: 'center' });
@@ -253,23 +284,10 @@ describe('user-tags', () => {
         expect(wrapper.flashing).to.be.true;
       });
 
-      it('should hide the overlay when the field is not visible', async () => {
+      it('should hide the overlay once the field is not visible', async () => {
         container.scrollTop = 0;
         await waitForIntersectionObserver();
         expect(wrapper.opened).to.be.false;
-      });
-
-      it('should only hide the overlay as long as the field is not visible when it is focused', async () => {
-        field.inputElement.focus();
-        expect(wrapper.opened).to.be.true;
-
-        container.scrollTop = 0;
-        await waitForIntersectionObserver();
-        expect(wrapper.opened).to.be.false;
-
-        field.scrollIntoView({ block: 'center' });
-        await waitForIntersectionObserver();
-        expect(wrapper.opened).to.be.true;
       });
     });
   });
