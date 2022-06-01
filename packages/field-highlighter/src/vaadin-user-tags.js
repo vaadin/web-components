@@ -108,15 +108,45 @@ export class UserTags extends PolymerElement {
         type: Array,
         value: () => [],
       },
+
+      /** @private */
+      __isTargetVisible: {
+        type: Boolean,
+        value: false,
+      },
     };
+  }
+
+  constructor() {
+    super();
+
+    this.__targetVisibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        this.__onTargetVisibilityChange(entry.isIntersecting);
+      },
+      { threshold: 1 },
+    );
+  }
+
+  /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+
+    if (this.target) {
+      this.__targetVisibilityObserver.observe(this.target);
+    }
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
     this.opened = false;
+    if (this.target) {
+      this.__targetVisibilityObserver.unobserve(this.target);
+    }
   }
 
+  /** @protected */
   ready() {
     super.ready();
 
@@ -132,8 +162,43 @@ export class UserTags extends PolymerElement {
   }
 
   /** @private */
-  __targetChanged(target) {
-    this.$.overlay.positionTarget = target;
+  __onTargetVisibilityChange(isVisible) {
+    this.__isTargetVisible = isVisible;
+
+    // Open the overlay and run the flashing animation for the user tags
+    // that have been enqueued (if any) during a `.setUsers()` call
+    // because the field was not visible at that point.
+    if (isVisible && this.__flashQueue.length > 0 && !this.flashing) {
+      this.flashTags(this.__flashQueue.shift());
+      return;
+    }
+
+    // Open the overlay when the field is visible and focused.
+    // - opens the overlay in the case it was not opened during a `.show()` call because the field was not visible at that point.
+    // - re-opens the overlay in the case it was closed because the focused field became not visible for a while (see the below check).
+    if (isVisible && this.hasFocus) {
+      this.opened = true;
+      return;
+    }
+
+    // Close the overlay when the field is not visible.
+    // The focused field will be re-opened once it becomes visible again (see the above check).
+    if (!isVisible && this.opened) {
+      this.opened = false;
+    }
+  }
+
+  /** @private */
+  __targetChanged(newTarget, oldTarget) {
+    this.$.overlay.positionTarget = newTarget;
+
+    if (oldTarget) {
+      this.__targetVisibilityObserver.unobserve(oldTarget);
+    }
+
+    if (newTarget) {
+      this.__targetVisibilityObserver.observe(newTarget);
+    }
   }
 
   /** @private */
@@ -251,7 +316,7 @@ export class UserTags extends PolymerElement {
         removed: removedTags,
       });
 
-      if (this.flashing) {
+      if (this.flashing || !this.__isTargetVisible) {
         // Schedule next flash later
         this.push('__flashQueue', addedTags);
       } else {
@@ -356,7 +421,9 @@ export class UserTags extends PolymerElement {
 
   show() {
     this.hasFocus = true;
-    this.opened = true;
+    if (this.__isTargetVisible) {
+      this.opened = true;
+    }
   }
 
   hide() {
