@@ -54,6 +54,11 @@ const footerTemplate = html`
   <slot name="delete-button"></slot>
 `;
 
+/**
+ * An extension of `<vaadin-dialog-overlay>` used internally by `<vaadin-crud>`.
+ * Not intended to be used separately.
+ * @private
+ */
 class CrudDialogOverlay extends DialogOverlay {
   static get is() {
     return 'vaadin-crud-dialog-overlay';
@@ -100,6 +105,11 @@ class CrudDialogOverlay extends DialogOverlay {
 
 customElements.define('vaadin-crud-dialog-overlay', CrudDialogOverlay);
 
+/**
+ * An extension of `<vaadin-dialog>` used internally by `<vaadin-crud>`.
+ * Not intended to be used separately.
+ * @private
+ */
 class CrudDialog extends Dialog {
   /**
    * Override template to provide custom overlay tag name.
