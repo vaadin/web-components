@@ -4,6 +4,11 @@ import sinon from 'sinon';
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 import { FieldHighlighter } from '../src/vaadin-field-highlighter.js';
 
+async function waitForIntersectionObserver() {
+  await nextFrame();
+  await nextFrame();
+}
+
 describe('field highlighter', () => {
   let field;
   let highlighter;
@@ -11,12 +16,13 @@ describe('field highlighter', () => {
   let wrapper;
   let overlay;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     field = fixtureSync(`<vaadin-text-field></vaadin-text-field>`);
     highlighter = FieldHighlighter.init(field);
     outline = field.shadowRoot.querySelector('[part="outline"]');
     wrapper = field.shadowRoot.querySelector('vaadin-user-tags');
     overlay = wrapper.$.overlay;
+    await waitForIntersectionObserver();
   });
 
   describe('initialization', () => {

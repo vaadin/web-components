@@ -14,6 +14,11 @@ import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, render } from 'lit';
 import { FieldHighlighter } from '../src/vaadin-field-highlighter.js';
 
+async function waitForIntersectionObserver() {
+  await nextFrame();
+  await nextFrame();
+}
+
 describe('field components', () => {
   let field;
   let overlay;
@@ -31,13 +36,14 @@ describe('field components', () => {
   }
 
   describe('text field', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       field = fixtureSync(`<vaadin-text-field></vaadin-text-field>`);
       FieldHighlighter.init(field);
       showSpy = sinon.spy();
       hideSpy = sinon.spy();
       field.addEventListener('vaadin-highlight-show', showSpy);
       field.addEventListener('vaadin-highlight-hide', hideSpy);
+      await waitForIntersectionObserver();
     });
 
     it('should dispatch vaadin-highlight-show event on focus', () => {
@@ -53,7 +59,7 @@ describe('field components', () => {
   });
 
   describe('date picker', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       field = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
       FieldHighlighter.init(field);
       overlay = field.$.overlay;
@@ -61,6 +67,7 @@ describe('field components', () => {
       hideSpy = sinon.spy();
       field.addEventListener('vaadin-highlight-show', showSpy);
       field.addEventListener('vaadin-highlight-hide', hideSpy);
+      await waitForIntersectionObserver();
     });
 
     afterEach(() => {
@@ -182,7 +189,7 @@ describe('field components', () => {
   });
 
   describe('select', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       field = fixtureSync(`<vaadin-select></vaadin-select>`);
       field.renderer = (root) => {
         if (root.firstChild) {
@@ -206,6 +213,7 @@ describe('field components', () => {
       hideSpy = sinon.spy();
       field.addEventListener('vaadin-highlight-show', showSpy);
       field.addEventListener('vaadin-highlight-hide', hideSpy);
+      await waitForIntersectionObserver();
     });
 
     describe('default', () => {
@@ -296,7 +304,7 @@ describe('field components', () => {
   describe('checkbox group', () => {
     let checkboxes;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       field = fixtureSync(`
         <vaadin-checkbox-group>
           <vaadin-checkbox value="1" label="Checkbox 1"></vaadin-checkbox>
@@ -310,6 +318,7 @@ describe('field components', () => {
       field.addEventListener('vaadin-highlight-show', showSpy);
       field.addEventListener('vaadin-highlight-hide', hideSpy);
       checkboxes = Array.from(field.children);
+      await waitForIntersectionObserver();
     });
 
     it('should dispatch vaadin-highlight-show event on checkbox focus', () => {
@@ -352,7 +361,7 @@ describe('field components', () => {
   describe('radio group', () => {
     let radios;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       field = fixtureSync(`
         <vaadin-radio-group>
           <vaadin-radio-button value="1" label="Radio 1"></vaadin-radio-button>
@@ -366,6 +375,7 @@ describe('field components', () => {
       field.addEventListener('vaadin-highlight-show', showSpy);
       field.addEventListener('vaadin-highlight-hide', hideSpy);
       radios = Array.from(field.children);
+      await waitForIntersectionObserver();
     });
 
     it('should dispatch vaadin-highlight-show event on checkbox focus', () => {
@@ -409,7 +419,7 @@ describe('field components', () => {
     let date;
     let time;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       field = fixtureSync(`<vaadin-date-time-picker></vaadin-date-time-picker>`);
       FieldHighlighter.init(field);
       date = field.__inputs[0];
@@ -419,6 +429,7 @@ describe('field components', () => {
       hideSpy = sinon.spy();
       field.addEventListener('vaadin-highlight-show', showSpy);
       field.addEventListener('vaadin-highlight-hide', hideSpy);
+      await waitForIntersectionObserver();
     });
 
     afterEach(() => {
@@ -520,6 +531,7 @@ describe('field components', () => {
       hideSpy = sinon.spy();
       field.addEventListener('vaadin-highlight-show', showSpy);
       field.addEventListener('vaadin-highlight-hide', hideSpy);
+      await waitForIntersectionObserver();
     });
 
     it('should dispatch vaadin-highlight-show event on item focus', () => {

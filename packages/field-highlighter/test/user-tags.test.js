@@ -1,12 +1,17 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/vaadin-text-field/vaadin-text-field.js';
+import '@vaadin/text-field';
 import { FieldHighlighter } from '../src/vaadin-field-highlighter.js';
 
 const user1 = { id: 'a', name: 'foo', colorIndex: 0 };
 const user2 = { id: 'b', name: 'var', colorIndex: 1 };
 const user3 = { id: 'c', name: 'baz', colorIndex: 2 };
+
+async function waitForIntersectionObserver() {
+  await nextFrame();
+  await nextFrame();
+}
 
 describe('user-tags', () => {
   let field;
@@ -39,6 +44,7 @@ describe('user-tags', () => {
       wrapper = field.shadowRoot.querySelector('vaadin-user-tags');
       wrapper.duration = 0;
       wrapper.delay = 0;
+      await waitForIntersectionObserver();
     });
 
     it('should create user tags for each added user', async () => {
@@ -67,6 +73,7 @@ describe('user-tags', () => {
       wrapper.duration = 0;
       wrapper.delay = 0;
       wrapper.show();
+      await waitForIntersectionObserver();
     });
 
     it('should create user tags for each added user', () => {
@@ -141,10 +148,12 @@ describe('user-tags', () => {
       wrapper = field.shadowRoot.querySelector('vaadin-user-tags');
       wrapper.duration = 0;
       wrapper.delay = 0;
+      await waitForIntersectionObserver();
       wrapper.show();
       setUsers([user2, user3]);
       wrapper.hide();
       wrapper.$.overlay._flushAnimation('closing');
+      await waitForIntersectionObserver();
     });
 
     it('should render and hide all tags except new ones', async () => {
@@ -176,6 +185,117 @@ describe('user-tags', () => {
       FieldHighlighter.setUsers(field, [user3, user2]);
       await nextFrame();
       expect(spy.called).to.be.false;
+    });
+  });
+
+  describe('inside a scrollable container', () => {
+    let container;
+
+    beforeEach(async () => {
+      container = fixtureSync(`
+        <div style="width: 400px; height: 400px; overflow: scroll; border: 1px solid black;">
+          <vaadin-text-field style="margin: 600px 0;"></vaadin-text-field>
+        </div>
+      `);
+      field = container.querySelector('vaadin-text-field');
+      FieldHighlighter.init(field);
+      wrapper = field.shadowRoot.querySelector('vaadin-user-tags');
+      wrapper.duration = 1000;
+      await waitForIntersectionObserver();
+    });
+
+    describe('adding users when the field is not visible', () => {
+      beforeEach(() => {
+        addUser(user1);
+        addUser(user2);
+      });
+
+      it('should postpone opening the overlay until the field is fully visible', async () => {
+        expect(wrapper.opened).to.be.false;
+
+        // The field is partially visible.
+        container.scrollTop = 220;
+        await waitForIntersectionObserver();
+        expect(wrapper.opened).to.be.false;
+
+        // The field is fully visible.
+        field.scrollIntoView({ block: 'center' });
+        await waitForIntersectionObserver();
+        expect(wrapper.opened).to.be.true;
+      });
+
+      it('should postpone flashing until the field is fully visible', async () => {
+        expect(wrapper.flashing).to.be.false;
+
+        // The field is partially visible.
+        container.scrollTop = 220;
+        await waitForIntersectionObserver();
+        expect(wrapper.flashing).to.be.false;
+
+        // The field is fully visible.
+        field.scrollIntoView({ block: 'center' });
+        await waitForIntersectionObserver();
+        expect(wrapper.flashing).to.be.true;
+      });
+    });
+
+    describe('adding users when the field is partially visible and focused', () => {
+      beforeEach(async () => {
+        container.scrollTop = 220;
+        field.inputElement.focus();
+        await waitForIntersectionObserver();
+        addUser(user1);
+        addUser(user2);
+      });
+
+      it('should open the overlay when the field is fully visible and hide otherwise', async () => {
+        expect(wrapper.opened).to.be.false;
+
+        field.scrollIntoView({ block: 'center' });
+        await waitForIntersectionObserver();
+        expect(wrapper.opened).to.be.true;
+
+        container.scrollTop = 0;
+        await waitForIntersectionObserver();
+        expect(wrapper.opened).to.be.false;
+      });
+    });
+
+    describe('adding users when the field is visible', () => {
+      beforeEach(async () => {
+        field.scrollIntoView({ block: 'center' });
+        await waitForIntersectionObserver();
+        addUser(user1);
+        addUser(user2);
+      });
+
+      it('should open the overlay immediately', () => {
+        expect(wrapper.opened).to.be.true;
+      });
+
+      it('should start flashing immediately', () => {
+        expect(wrapper.flashing).to.be.true;
+      });
+
+      it('should hide the overlay once the field is not visible', async () => {
+        container.scrollTop = 0;
+        await waitForIntersectionObserver();
+        expect(wrapper.opened).to.be.false;
+      });
+
+      it('should not run extra flashing when the field changes visibility', async () => {
+        const spy = sinon.spy(wrapper, 'flashTags');
+
+        // Make the field not visible.
+        container.scrollTop = 0;
+        await waitForIntersectionObserver();
+
+        // Make the field visible again.
+        field.scrollIntoView({ block: 'center' });
+        await waitForIntersectionObserver();
+
+        expect(spy.called).to.be.false;
+      });
     });
   });
 });
