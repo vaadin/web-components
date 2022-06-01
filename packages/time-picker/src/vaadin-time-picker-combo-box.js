@@ -14,6 +14,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @extends HTMLElement
  * @mixes ComboBoxMixin
  * @mixes ThemableMixin
+ * @private
  */
 class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
   static get is() {
