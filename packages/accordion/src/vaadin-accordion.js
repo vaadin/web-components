@@ -138,6 +138,7 @@ class Accordion extends ThemableMixin(ElementMixin(PolymerElement)) {
     }
   }
 
+  /** @protected */
   ready() {
     super.ready();
 

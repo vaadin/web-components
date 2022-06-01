@@ -142,6 +142,7 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
     this.__onCheckboxCheckedChanged = this.__onCheckboxCheckedChanged.bind(this);
   }
 
+  /** @protected */
   ready() {
     super.ready();
 

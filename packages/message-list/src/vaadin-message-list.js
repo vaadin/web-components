@@ -101,6 +101,7 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
     `;
   }
 
+  /** @protected */
   ready() {
     super.ready();
 

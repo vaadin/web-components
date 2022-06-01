@@ -10,6 +10,7 @@ import { addListener } from '@vaadin/component-base/src/gestures.js';
  */
 export const ColumnResizingMixin = (superClass) =>
   class ColumnResizingMixin extends superClass {
+    /** @protected */
     ready() {
       super.ready();
       const scroller = this.$.scroller;

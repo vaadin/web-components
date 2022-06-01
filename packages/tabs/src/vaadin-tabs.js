@@ -178,6 +178,7 @@ class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(PolymerEleme
     });
   }
 
+  /** @protected */
   ready() {
     super.ready();
     this._scrollerElement.addEventListener('scroll', () => this._updateOverflow());

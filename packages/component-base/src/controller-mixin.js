@@ -6,6 +6,11 @@
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 
 /**
+ * @typedef ReactiveController
+ * @type {import('lit').ReactiveController}
+ */
+
+/**
  * A mixin for connecting controllers to the element.
  *
  * @polymerMixin
@@ -17,7 +22,7 @@ export const ControllerMixin = dedupingMixin(
         super();
 
         /**
-         * @type {Set<import('lit').ReactiveController>}
+         * @type {Set<ReactiveController>}
          */
         this.__controllers = new Set();
       }
@@ -47,7 +52,7 @@ export const ControllerMixin = dedupingMixin(
       /**
        * Registers a controller to participate in the element update cycle.
        *
-       * @param {import('lit').ReactiveController} controller
+       * @param {ReactiveController} controller
        * @protected
        */
       addController(controller) {
@@ -61,7 +66,7 @@ export const ControllerMixin = dedupingMixin(
       /**
        * Removes a controller from the element.
        *
-       * @param {import('lit').ReactiveController} controller
+       * @param {ReactiveController} controller
        * @protected
        */
       removeController(controller) {

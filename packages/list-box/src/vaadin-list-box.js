@@ -92,6 +92,7 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(Controller
     this.focused;
   }
 
+  /** @protected */
   ready() {
     super.ready();
     this.setAttribute('role', 'list');
