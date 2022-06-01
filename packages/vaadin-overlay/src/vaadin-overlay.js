@@ -768,22 +768,21 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
 
   /** @protected */
   _enterModalState() {
-    if (document.body.style.pointerEvents !== 'none') {
+    const { documentElement, body } = document;
+
+    if (body.style.pointerEvents !== 'none') {
       // Set body pointer-events to 'none' to disable mouse interactions with
       // other document nodes.
-      this._previousBodyPointerEvents = document.body.style.pointerEvents;
-      document.body.style.pointerEvents = 'none';
+      this._previousBodyPointerEvents = body.style.pointerEvents;
+      body.style.pointerEvents = 'none';
     }
-
-    const { documentElement } = document;
 
     if (documentElement.style.overflow !== 'hidden') {
       this._previousDocumentOverflow = documentElement.style.overflow;
       documentElement.style.overflow = 'hidden';
     }
 
-    const isDocumentElementScrollable = documentElement.scrollHeight > document.clientHeight;
-    if (documentElement.style.scrollbarGutter !== 'stable' && isDocumentElementScrollable) {
+    if (documentElement.style.scrollbarGutter !== 'stable') {
       this._previousDocumentScrollbarGutter = documentElement.style.scrollbarGutter;
       documentElement.style.scrollbarGutter = 'stable';
     }
