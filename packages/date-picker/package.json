@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/date-picker",
-  "version": "23.1.0-rc2",
+  "version": "23.1.0-rc3",
   "publishConfig": {
     "access": "public"
   },
@@ -34,14 +34,14 @@
   "dependencies": {
     "@open-wc/dedupe-mixin": "^1.3.0",
     "@polymer/polymer": "^3.2.0",
-    "@vaadin/button": "23.1.0-rc2",
-    "@vaadin/component-base": "23.1.0-rc2",
-    "@vaadin/field-base": "23.1.0-rc2",
-    "@vaadin/input-container": "23.1.0-rc2",
-    "@vaadin/vaadin-lumo-styles": "23.1.0-rc2",
-    "@vaadin/vaadin-material-styles": "23.1.0-rc2",
-    "@vaadin/vaadin-overlay": "23.1.0-rc2",
-    "@vaadin/vaadin-themable-mixin": "23.1.0-rc2"
+    "@vaadin/button": "23.1.0-rc3",
+    "@vaadin/component-base": "23.1.0-rc3",
+    "@vaadin/field-base": "23.1.0-rc3",
+    "@vaadin/input-container": "23.1.0-rc3",
+    "@vaadin/vaadin-lumo-styles": "23.1.0-rc3",
+    "@vaadin/vaadin-material-styles": "23.1.0-rc3",
+    "@vaadin/vaadin-overlay": "23.1.0-rc3",
+    "@vaadin/vaadin-themable-mixin": "23.1.0-rc3"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
