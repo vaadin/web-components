@@ -24,6 +24,7 @@ export const ActiveItemMixin = (superClass) =>
       };
     }
 
+    /** @protected */
     ready() {
       super.ready();
 

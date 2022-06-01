@@ -163,11 +163,13 @@ class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
     }
   }
 
+  /** @protected */
   connectedCallback() {
     super.connectedCallback();
     document.addEventListener('vaadin-iconset-registered', this.__onIconsetRegistered);
   }
 
+  /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
     document.removeEventListener('vaadin-iconset-registered', this.__onIconsetRegistered);

@@ -131,6 +131,7 @@ class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(PolymerElement
     return this.shadowRoot.querySelector('[part="summary"]');
   }
 
+  /** @protected */
   ready() {
     super.ready();
     const uniqueId = (Details._uniqueId = 1 + Details._uniqueId || 0);

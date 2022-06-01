@@ -35,6 +35,7 @@ export const ColumnReorderingMixin = (superClass) =>
       return ['_updateOrders(_columnTree, _columnTree.*)'];
     }
 
+    /** @protected */
     ready() {
       super.ready();
       addListener(this, 'track', this._onTrackEvent);
