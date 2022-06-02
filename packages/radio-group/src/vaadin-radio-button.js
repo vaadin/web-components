@@ -149,26 +149,25 @@ class RadioButton extends LabelMixin(
   }
 
   /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
+  ready() {
+    super.ready();
 
-    if (!this._inputController) {
-      this._inputController = new InputController(this, (input) => {
+    this.addController(
+      new InputController(this, (input) => {
         this._setInputElement(input);
         this._setFocusElement(input);
         this.stateTarget = input;
         this.ariaTarget = input;
-      });
-      this.addController(this._inputController);
-      this.addController(new LabelledInputController(this.inputElement, this._labelController));
-      this.addController(
-        new SlotTargetController(
-          this.$.noop,
-          () => this._labelController.node,
-          () => this.__warnDeprecated(),
-        ),
-      );
-    }
+      }),
+    );
+    this.addController(new LabelledInputController(this.inputElement, this._labelController));
+    this.addController(
+      new SlotTargetController(
+        this.$.noop,
+        () => this._labelController.node,
+        () => this.__warnDeprecated(),
+      ),
+    );
   }
 
   /** @private */
