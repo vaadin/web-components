@@ -43,6 +43,12 @@ export const LabelMixin = dedupingMixin(
         super();
 
         this._labelController = new LabelController(this);
+      }
+
+      /** @protected */
+      ready() {
+        super.ready();
+
         this.addController(this._labelController);
       }
 

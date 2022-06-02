@@ -54,8 +54,8 @@ export class EmailField extends TextField {
   }
 
   /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
+  ready() {
+    super.ready();
 
     if (this.inputElement) {
       this.inputElement.autocapitalize = 'off';

@@ -201,29 +201,6 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
     return this.$.clearButton;
   }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-
-    this._inputField = this.shadowRoot.querySelector('[part=input-field]');
-
-    // Wheel scrolling results in async scroll events. Preventing the wheel
-    // event, scrolling manually and then synchronously updating the scroll position CSS variable
-    // allows us to avoid some jumpy behavior that would occur on wheel otherwise.
-    this._inputField.addEventListener('wheel', (e) => {
-      const scrollTopBefore = this._inputField.scrollTop;
-      this._inputField.scrollTop += e.deltaY;
-
-      if (scrollTopBefore !== this._inputField.scrollTop) {
-        e.preventDefault();
-        this.__scrollPositionUpdated();
-      }
-    });
-
-    this._updateHeight();
-    this.__scrollPositionUpdated();
-  }
-
   /**
    * @protected
    * @override
@@ -246,6 +223,24 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
     this.addEventListener('animationend', this._onAnimationEnd);
+
+    this._inputField = this.shadowRoot.querySelector('[part=input-field]');
+
+    // Wheel scrolling results in async scroll events. Preventing the wheel
+    // event, scrolling manually and then synchronously updating the scroll position CSS variable
+    // allows us to avoid some jumpy behavior that would occur on wheel otherwise.
+    this._inputField.addEventListener('wheel', (e) => {
+      const scrollTopBefore = this._inputField.scrollTop;
+      this._inputField.scrollTop += e.deltaY;
+
+      if (scrollTopBefore !== this._inputField.scrollTop) {
+        e.preventDefault();
+        this.__scrollPositionUpdated();
+      }
+    });
+
+    this._updateHeight();
+    this.__scrollPositionUpdated();
   }
 
   /** @private */
