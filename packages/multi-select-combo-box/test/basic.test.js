@@ -910,7 +910,9 @@ describe('basic', () => {
 
   describe('renderer', () => {
     it('should propagate renderer property to combo-box', () => {
-      const renderer = (root, _, model) => (root.textContent = model.item);
+      const renderer = (root, _, model) => {
+        root.textContent = model.item;
+      };
       comboBox.renderer = renderer;
       expect(internal.renderer).to.equal(renderer);
     });
