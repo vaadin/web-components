@@ -1,5 +1,14 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, fixtureSync, makeSoloTouchEvent, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
+import {
+  aTimeout,
+  click,
+  fixtureSync,
+  keyboardEventFor,
+  makeSoloTouchEvent,
+  nextRender,
+  oneEvent,
+  tap,
+} from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
@@ -607,6 +616,42 @@ describe('clear button', () => {
     datepicker.value = '2000-02-01';
     click(clearButton);
     expect(datepicker.hasAttribute('has-value')).to.be.false;
+  });
+
+  it('should prevent default on clear button click event', () => {
+    datepicker.value = '2000-02-01';
+    const event = click(clearButton);
+    expect(event.defaultPrevented).to.be.true;
+  });
+
+  it('should prevent default on Esc when clearing value', () => {
+    datepicker.value = '2000-02-01';
+    const event = keyboardEventFor('keydown', 27, [], 'Escape');
+    datepicker.inputElement.dispatchEvent(event);
+    expect(event.defaultPrevented).to.be.true;
+  });
+
+  it('should stop propagation on Esc when clearing value', () => {
+    datepicker.value = '2000-02-01';
+    const event = keyboardEventFor('keydown', 27, [], 'Escape');
+    const spy = sinon.spy(event, 'stopPropagation');
+    datepicker.inputElement.dispatchEvent(event);
+    expect(spy.calledOnce).to.be.true;
+  });
+
+  it('should not stop propagation on Esc when no value is set', () => {
+    const event = keyboardEventFor('keydown', 27, [], 'Escape');
+    const spy = sinon.spy(event, 'stopPropagation');
+    datepicker.inputElement.dispatchEvent(event);
+    expect(spy.called).to.be.false;
+  });
+
+  it('should not stop propagation on Esc when clearButtonVisible is false', () => {
+    datepicker.clearButtonVisible = false;
+    const event = keyboardEventFor('keydown', 27, [], 'Escape');
+    const spy = sinon.spy(event, 'stopPropagation');
+    datepicker.inputElement.dispatchEvent(event);
+    expect(spy.called).to.be.false;
   });
 });
 

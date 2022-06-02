@@ -935,7 +935,8 @@ export const DatePickerMixin = (subclass) =>
      * to validate and dispatch change on clear.
      * @protected
      */
-    _onClearButtonClick() {
+    _onClearButtonClick(event) {
+      event.preventDefault();
       this.value = '';
       this._inputValue = '';
       this.validate();
@@ -1026,19 +1027,25 @@ export const DatePickerMixin = (subclass) =>
      * Do not call `super` in order to override clear
      * button logic defined in `InputControlMixin`.
      *
-     * @param {!KeyboardEvent} _event
+     * @param {!KeyboardEvent} event
      * @protected
      * @override
      */
-    _onEscape(_event) {
+    _onEscape(event) {
       // Closing overlay is handled in vaadin-overlay-escape-press event listener.
       if (this.opened) {
         return;
       }
 
-      if (this.clearButtonVisible) {
-        this._onClearButtonClick();
-      } else if (this.autoOpenDisabled) {
+      if (this.clearButtonVisible && !!this.value) {
+        // Stop event from propagating to the host element
+        // to avoid closing dialog when clearing on Esc
+        event.stopPropagation();
+        this._onClearButtonClick(event);
+        return;
+      }
+
+      if (this.autoOpenDisabled) {
         // Do not restore selected date if Esc was pressed after clearing input field
         if (this.inputElement.value === '') {
           this._selectDate(null);
