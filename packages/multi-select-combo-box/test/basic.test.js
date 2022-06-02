@@ -81,12 +81,6 @@ describe('basic', () => {
       expect(comboBox.hasAttribute('readonly')).to.be.true;
     });
 
-    it('should propagate renderer property to combo-box', () => {
-      const renderer = (root, _, model) => (root.textContent = model);
-      comboBox.renderer = renderer;
-      expect(internal.renderer).to.equal(renderer);
-    });
-
     it('should set itemLabelPath property by default', () => {
       expect(comboBox.itemLabelPath).to.equal('label');
     });
@@ -911,6 +905,68 @@ describe('basic', () => {
       comboBox.readonly = true;
       expect(comboBox.validate()).to.be.true;
       expect(comboBox.invalid).to.be.false;
+    });
+  });
+
+  describe('renderer', () => {
+    it('should propagate renderer property to combo-box', () => {
+      const renderer = (root, _, model) => (root.textContent = model.item);
+      comboBox.renderer = renderer;
+      expect(internal.renderer).to.equal(renderer);
+    });
+
+    it('should use renderer when it is defined', () => {
+      comboBox.renderer = (root, _, model) => {
+        const textNode = document.createTextNode(`${model.item} ${model.index}`);
+        root.appendChild(textNode);
+      };
+      comboBox.opened = true;
+
+      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      expect(item.textContent.trim()).to.equal('apple 0');
+    });
+
+    it('should run renderers when requesting content update', () => {
+      comboBox.renderer = sinon.spy();
+      comboBox.opened = true;
+
+      expect(comboBox.renderer.callCount).to.be.equal(comboBox.items.length);
+
+      comboBox.requestContentUpdate();
+
+      expect(comboBox.renderer.callCount).to.be.equal(comboBox.items.length * 2);
+    });
+
+    it('should not throw if requestContentUpdate() called before opening', () => {
+      expect(() => comboBox.requestContentUpdate()).not.to.throw(Error);
+    });
+
+    it('should not throw if requestContentUpdate() called before attached', () => {
+      const combo = document.createElement('vaadin-multi-select-combo-box');
+      expect(() => {
+        combo.requestContentUpdate();
+      }).to.not.throw(Error);
+    });
+
+    it('should render the item label when removing the renderer', () => {
+      comboBox.renderer = (root, _, model) => {
+        root.textContent = model.item.toUpperCase();
+      };
+      comboBox.opened = true;
+
+      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      expect(item.textContent).to.equal('APPLE');
+
+      comboBox.renderer = null;
+
+      expect(item.textContent).to.equal('apple');
+    });
+
+    it('should clear the old content after assigning a new renderer', () => {
+      comboBox.opened = true;
+      comboBox.renderer = () => {};
+      const item = document.querySelector('vaadin-multi-select-combo-box-item');
+      expect(item.textContent).to.equal('');
     });
   });
 });

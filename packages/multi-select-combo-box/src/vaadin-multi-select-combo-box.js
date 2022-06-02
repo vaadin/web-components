@@ -488,6 +488,18 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /**
+   * Requests an update for the content of items.
+   * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   */
+  requestContentUpdate() {
+    if (this.$ && this.$.comboBox) {
+      this.$.comboBox.requestContentUpdate();
+    }
+  }
+
+  /**
    * Override method inherited from `DisabledMixin` to forward disabled to chips.
    * @protected
    * @override
@@ -642,7 +654,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     }
 
     // Update selected for dropdown items
-    this.$.comboBox.requestContentUpdate();
+    this.requestContentUpdate();
   }
 
   /** @private */
