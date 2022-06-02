@@ -933,7 +933,7 @@ describe('basic', () => {
       comboBox.opened = true;
 
       expect(comboBox.renderer.callCount).to.be.equal(comboBox.items.length);
-      
+
       comboBox.renderer.resetHistory();
       comboBox.requestContentUpdate();
 
