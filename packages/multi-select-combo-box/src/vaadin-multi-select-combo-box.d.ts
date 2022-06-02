@@ -3,7 +3,11 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ComboBoxDataProvider, ComboBoxDefaultItem, ComboBoxRenderer } from '@vaadin/combo-box/src/vaadin-combo-box.js';
+import {
+  ComboBoxDataProvider,
+  ComboBoxDefaultItem,
+  ComboBoxItemModel,
+} from '@vaadin/combo-box/src/vaadin-combo-box.js';
 import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
@@ -19,6 +23,12 @@ import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+export type MultiSelectComboBoxRenderer<TItem> = (
+  root: HTMLElement,
+  comboBox: MultiSelectComboBox<TItem>,
+  model: ComboBoxItemModel<TItem>,
+) => void;
 
 export interface MultiSelectComboBoxI18n {
   cleared: string;
@@ -254,13 +264,13 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    * Receives three arguments:
    *
    * - `root` The `<vaadin-multi-select-combo-box-item>` internal container DOM element.
-   * - `comboBox` The reference to the `<vaadin-combo-box>` element.
+   * - `comboBox` The reference to the `<vaadin-multi-select-combo-box>` element.
    * - `model` The object with the properties related with the rendered
    *   item, contains:
    *   - `model.index` The index of the rendered item.
    *   - `model.item` The item.
    */
-  renderer: ComboBoxRenderer<TItem> | null | undefined;
+  renderer: MultiSelectComboBoxRenderer<TItem> | null | undefined;
 
   /**
    * The list of selected items.

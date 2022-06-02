@@ -1,4 +1,3 @@
-import { ComboBoxRenderer } from '@vaadin/combo-box/src/vaadin-combo-box.js';
 import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
 import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
@@ -20,6 +19,7 @@ import {
   MultiSelectComboBoxFilterChangedEvent,
   MultiSelectComboBoxI18n,
   MultiSelectComboBoxInvalidChangedEvent,
+  MultiSelectComboBoxRenderer,
   MultiSelectComboBoxSelectedItemsChangedEvent,
 } from '../../vaadin-multi-select-combo-box.js';
 
@@ -72,7 +72,7 @@ assertType<string | null | undefined>(narrowedComboBox.itemIdPath);
 assertType<string>(narrowedComboBox.itemLabelPath);
 assertType<string>(narrowedComboBox.itemValuePath);
 assertType<MultiSelectComboBoxI18n>(narrowedComboBox.i18n);
-assertType<ComboBoxRenderer<TestComboBoxItem> | null | undefined>(narrowedComboBox.renderer);
+assertType<MultiSelectComboBoxRenderer<TestComboBoxItem> | null | undefined>(narrowedComboBox.renderer);
 assertType<boolean>(narrowedComboBox.invalid);
 assertType<HTMLElement | null | undefined>(narrowedComboBox.focusElement);
 assertType<boolean>(narrowedComboBox.disabled);

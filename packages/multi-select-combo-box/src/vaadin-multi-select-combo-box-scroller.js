@@ -40,8 +40,7 @@ class MultiSelectComboBoxScroller extends ComboBoxScroller {
       return false;
     }
 
-    const host = this.comboBox.getRootNode().host;
-    return host._findIndex(item, host.selectedItems, itemIdPath) > -1;
+    return this.comboBox._findIndex(item, this.comboBox.selectedItems, itemIdPath) > -1;
   }
 
   /** @private */

@@ -387,7 +387,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        * Receives three arguments:
        *
        * - `root` The `<vaadin-multi-select-combo-box-item>` internal container DOM element.
-       * - `comboBox` The reference to the `<vaadin-combo-box>` element.
+       * - `comboBox` The reference to the `<vaadin-multi-select-combo-box>` element.
        * - `model` The object with the properties related with the rendered
        *   item, contains:
        *   - `model.index` The index of the rendered item.

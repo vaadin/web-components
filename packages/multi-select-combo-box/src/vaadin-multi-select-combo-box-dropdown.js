@@ -33,6 +33,15 @@ class MultiSelectComboBoxDropdown extends ComboBoxDropdown {
       ></vaadin-multi-select-combo-box-overlay>
     `;
   }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    // Set owner for using by item renderers
+    const comboBox = this.getRootNode().host;
+    this._scroller.comboBox = comboBox.getRootNode().host;
+  }
 }
 
 customElements.define(MultiSelectComboBoxDropdown.is, MultiSelectComboBoxDropdown);

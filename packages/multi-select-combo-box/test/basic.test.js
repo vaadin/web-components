@@ -917,6 +917,23 @@ describe('basic', () => {
       expect(internal.renderer).to.equal(renderer);
     });
 
+    it('should pass the "root", "owner", "model" arguments to the renderer', () => {
+      const spy = sinon.spy();
+      comboBox.renderer = spy;
+      comboBox.opened = true;
+
+      const [root, owner, model] = spy.firstCall.args;
+
+      expect(root.localName).to.equal('vaadin-multi-select-combo-box-item');
+      expect(owner).to.eql(comboBox);
+      expect(model).to.deep.equal({
+        item: 'apple',
+        index: 0,
+        focused: false,
+        selected: false,
+      });
+    });
+
     it('should use renderer when it is defined', () => {
       comboBox.renderer = (root, _, model) => {
         const textNode = document.createTextNode(`${model.item} ${model.index}`);
