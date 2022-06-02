@@ -933,10 +933,11 @@ describe('basic', () => {
       comboBox.opened = true;
 
       expect(comboBox.renderer.callCount).to.be.equal(comboBox.items.length);
-
+      
+      comboBox.renderer.resetHistory();
       comboBox.requestContentUpdate();
 
-      expect(comboBox.renderer.callCount).to.be.equal(comboBox.items.length * 2);
+      expect(comboBox.renderer.callCount).to.be.equal(comboBox.items.length);
     });
 
     it('should not throw if requestContentUpdate() called before opening', () => {
