@@ -278,6 +278,14 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    */
   clearCache(): void;
 
+  /**
+   * Requests an update for the content of items.
+   * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
+   *
+   * It is not guaranteed that the update happens immediately (synchronously) after it is requested.
+   */
+  requestContentUpdate(): void;
+
   addEventListener<K extends keyof MultiSelectComboBoxEventMap<TItem>>(
     type: K,
     listener: (this: MultiSelectComboBox<TItem>, ev: MultiSelectComboBoxEventMap<TItem>[K]) => void,
