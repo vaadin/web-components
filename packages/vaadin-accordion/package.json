@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-accordion",
-  "version": "22.0.15",
+  "version": "22.0.16",
   "publishConfig": {
     "access": "public"
   },
@@ -32,6 +32,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/accordion": "^22.0.15"
+    "@vaadin/accordion": "^22.0.16"
   }
 }
