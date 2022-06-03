@@ -40,7 +40,7 @@ class Tab extends ElementMixin(ThemableMixin(ItemMixin(PolymerElement))) {
     return html`
       <style>
         :host {
-          display: inline-flex;
+          display: block;
         }
 
         :host([hidden]) {
