@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/checkbox-group",
-  "version": "23.0.10",
+  "version": "23.0.11",
   "publishConfig": {
     "access": "public"
   },
@@ -34,11 +34,11 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/checkbox": "^23.0.10",
-    "@vaadin/component-base": "^23.0.10",
-    "@vaadin/vaadin-lumo-styles": "^23.0.10",
-    "@vaadin/vaadin-material-styles": "^23.0.10",
-    "@vaadin/vaadin-themable-mixin": "^23.0.10"
+    "@vaadin/checkbox": "^23.0.11",
+    "@vaadin/component-base": "^23.0.11",
+    "@vaadin/vaadin-lumo-styles": "^23.0.11",
+    "@vaadin/vaadin-material-styles": "^23.0.11",
+    "@vaadin/vaadin-themable-mixin": "^23.0.11"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
