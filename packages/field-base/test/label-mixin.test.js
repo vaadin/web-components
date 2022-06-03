@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { LabelMixin } from '../src/label-mixin.js';
 
 customElements.define(
@@ -30,12 +29,6 @@ describe('label-mixin', () => {
 
     it('should set slot on the label', () => {
       expect(label.getAttribute('slot')).to.equal('label');
-    });
-
-    it('should set id on the label element', () => {
-      const id = label.getAttribute('id');
-      expect(id).to.match(ID_REGEX);
-      expect(id.endsWith(SlotController.labelId)).to.be.true;
     });
 
     describe('label property', () => {
@@ -82,6 +75,23 @@ describe('label-mixin', () => {
     });
   });
 
+  describe('unique id', () => {
+    let label1, label2;
+
+    beforeEach(() => {
+      const element1 = fixtureSync(`<label-mixin-element error-message="Error 1"></label-mixin-element>`);
+      const element2 = fixtureSync(`<label-mixin-element error-message="Error 2"></label-mixin-element>`);
+      label1 = element1.querySelector('label');
+      label2 = element2.querySelector('label');
+    });
+
+    it('should set a unique id on the label element', () => {
+      expect(label1.id).to.not.equal(label2.id);
+      expect(label1.id).to.match(ID_REGEX);
+      expect(label2.id).to.match(ID_REGEX);
+    });
+  });
+
   describe('slotted', () => {
     describe('basic', () => {
       beforeEach(async () => {
@@ -95,9 +105,7 @@ describe('label-mixin', () => {
       });
 
       it('should set id on the slotted label element', () => {
-        const id = label.getAttribute('id');
-        expect(id).to.match(ID_REGEX);
-        expect(id.endsWith(SlotController.labelId)).to.be.true;
+        expect(label.id).to.match(ID_REGEX);
       });
 
       it('should not update slotted label content on property change', () => {

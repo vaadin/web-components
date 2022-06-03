@@ -3,8 +3,8 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
+import { generateUniqueId } from './unique-id-utils.js';
 
 /**
  * A controller for providing content to slot element and observing changes.
@@ -20,14 +20,7 @@ export class SlotController extends EventTarget {
    */
   static generateId(slotName, host) {
     const prefix = slotName || 'default';
-
-    // Support dash-case slot names e.g. "error-message"
-    const field = `${dashToCamelCase(prefix)}Id`;
-
-    // Maintain the unique ID counter for a given prefix.
-    this[field] = 1 + this[field] || 0;
-
-    return `${prefix}-${host.localName}-${this[field]}`;
+    return `${prefix}-${host.localName}-${generateUniqueId()}`;
   }
 
   constructor(host, slotName, slotFactory, slotInitializer) {

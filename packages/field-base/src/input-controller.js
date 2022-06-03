@@ -23,9 +23,7 @@ export class InputController extends SlotController {
         }
 
         // Ensure every instance has unique ID
-        const uniqueId = (InputController._uniqueInputId = 1 + InputController._uniqueInputId || 0);
-        host._inputId = `${host.localName}-${uniqueId}`;
-        node.id = host._inputId;
+        node.id = this.defaultId;
 
         if (typeof callback === 'function') {
           callback(node);
