@@ -37,7 +37,18 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 class Tab extends ElementMixin(ThemableMixin(ItemMixin(PolymerElement))) {
   static get template() {
-    return html`<slot></slot>`;
+    return html`
+      <style>
+        :host {
+          display: block;
+        }
+
+        :host([hidden]) {
+          display: none !important;
+        }
+      </style>
+      <slot></slot>
+    `;
   }
 
   static get is() {
