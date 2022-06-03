@@ -17,6 +17,11 @@ describe('tab', () => {
     expect(tab.getAttribute('role')).to.be.equal('tab');
   });
 
+  it('should have display: none when hidden', () => {
+    tab.setAttribute('hidden', '');
+    expect(getComputedStyle(tab).display).to.equal('none');
+  });
+
   it('should have an unnamed slot for content', () => {
     const slot = tab.shadowRoot.querySelector('slot:not([name])');
     const content = slot.assignedNodes()[0];
