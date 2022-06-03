@@ -1,29 +1,25 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-combo-box.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-combo-box', () => {
   let comboBox;
 
-  // Ignore generated attributes to prevent failures
-  // when running snapshot tests in a different order
-  const SNAPSHOT_CONFIG = {
-    ignoreAttributes: ['id', 'aria-describedby', 'aria-labelledby', 'for'],
-  };
-
   beforeEach(() => {
+    resetUniqueId();
     comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
   });
 
   describe('host', () => {
     it('placeholder', async () => {
       comboBox.placeholder = 'Placeholder';
-      await expect(comboBox).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      await expect(comboBox).dom.to.equalSnapshot();
     });
 
     it('pattern', async () => {
       comboBox.pattern = '[0-9]*';
-      await expect(comboBox).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      await expect(comboBox).dom.to.equalSnapshot();
     });
   });
 
@@ -55,23 +51,23 @@ describe('vaadin-combo-box', () => {
 
   describe('slots', () => {
     it('default', async () => {
-      await expect(comboBox).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      await expect(comboBox).lightDom.to.equalSnapshot();
     });
 
     it('label', async () => {
       comboBox.label = 'Label';
-      await expect(comboBox).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      await expect(comboBox).lightDom.to.equalSnapshot();
     });
 
     it('helper', async () => {
       comboBox.helperText = 'Helper';
-      await expect(comboBox).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      await expect(comboBox).lightDom.to.equalSnapshot();
     });
 
     it('error', async () => {
       comboBox.errorMessage = 'Error';
       comboBox.invalid = true;
-      await expect(comboBox).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      await expect(comboBox).lightDom.to.equalSnapshot();
     });
   });
 });

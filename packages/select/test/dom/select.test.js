@@ -1,17 +1,13 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-select.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-select', () => {
   let select;
 
-  // Ignore generated attributes to prevent failures
-  // when running snapshot tests in a different order
-  const SNAPSHOT_CONFIG = {
-    ignoreAttributes: ['id', 'aria-describedby', 'aria-labelledby', 'for'],
-  };
-
   beforeEach(() => {
+    resetUniqueId();
     select = fixtureSync('<vaadin-select></vaadin-select>');
   });
 
@@ -43,12 +39,12 @@ describe('vaadin-select', () => {
 
   describe('slots', () => {
     it('default', async () => {
-      await expect(select).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      await expect(select).lightDom.to.equalSnapshot();
     });
 
     it('helper', async () => {
       select.helperText = 'Helper';
-      await expect(select).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      await expect(select).lightDom.to.equalSnapshot();
     });
   });
 });

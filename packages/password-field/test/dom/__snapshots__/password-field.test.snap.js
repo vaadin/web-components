@@ -271,6 +271,7 @@ snapshots["vaadin-password-field shadow theme"] =
 snapshots["vaadin-password-field slots default"] = 
 `<input
   autocapitalize="off"
+  id="input-vaadin-password-field-3"
   slot="input"
   type="password"
 >
@@ -282,10 +283,15 @@ snapshots["vaadin-password-field slots default"] =
   tabindex="0"
 >
 </vaadin-password-field-button>
-<label slot="label">
+<label
+  for="input-vaadin-password-field-3"
+  id="label-vaadin-password-field-0"
+  slot="label"
+>
 </label>
 <div
   hidden=""
+  id="error-message-vaadin-password-field-2"
   slot="error-message"
 >
 </div>
@@ -294,7 +300,9 @@ snapshots["vaadin-password-field slots default"] =
 
 snapshots["vaadin-password-field slots helper"] = 
 `<input
+  aria-describedby="helper-vaadin-password-field-1"
   autocapitalize="off"
+  id="input-vaadin-password-field-3"
   slot="input"
   type="password"
 >
@@ -306,14 +314,22 @@ snapshots["vaadin-password-field slots helper"] =
   tabindex="0"
 >
 </vaadin-password-field-button>
-<label slot="label">
+<label
+  for="input-vaadin-password-field-3"
+  id="label-vaadin-password-field-0"
+  slot="label"
+>
 </label>
 <div
   hidden=""
+  id="error-message-vaadin-password-field-2"
   slot="error-message"
 >
 </div>
-<div slot="helper">
+<div
+  id="helper-vaadin-password-field-1"
+  slot="helper"
+>
   Helper
 </div>
 `;

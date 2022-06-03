@@ -1,17 +1,18 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-message-input.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-message-input', () => {
   let input;
 
-  // Ignore generated attributes to prevent failures
-  // when running snapshot tests in a different order
+  // Ignore pattern because of escape characters
   const SNAPSHOT_CONFIG = {
-    ignoreAttributes: ['id', 'aria-describedby', 'aria-labelledby', 'for', 'pattern'],
+    ignoreAttributes: ['pattern'],
   };
 
   beforeEach(() => {
+    resetUniqueId();
     input = fixtureSync('<vaadin-message-input></vaadin-message-input>');
   });
 

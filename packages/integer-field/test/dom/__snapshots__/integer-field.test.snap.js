@@ -361,16 +361,22 @@ snapshots["vaadin-integer-field shadow theme"] =
 
 snapshots["vaadin-integer-field slots default"] = 
 `<input
+  id="input-vaadin-integer-field-3"
   max="undefined"
   min="undefined"
   slot="input"
   step="any"
   type="number"
 >
-<label slot="label">
+<label
+  for="input-vaadin-integer-field-3"
+  id="label-vaadin-integer-field-0"
+  slot="label"
+>
 </label>
 <div
   hidden=""
+  id="error-message-vaadin-integer-field-2"
   slot="error-message"
 >
 </div>
@@ -379,20 +385,30 @@ snapshots["vaadin-integer-field slots default"] =
 
 snapshots["vaadin-integer-field slots helper"] = 
 `<input
+  aria-describedby="helper-vaadin-integer-field-1"
+  id="input-vaadin-integer-field-3"
   max="undefined"
   min="undefined"
   slot="input"
   step="any"
   type="number"
 >
-<label slot="label">
+<label
+  for="input-vaadin-integer-field-3"
+  id="label-vaadin-integer-field-0"
+  slot="label"
+>
 </label>
 <div
   hidden=""
+  id="error-message-vaadin-integer-field-2"
   slot="error-message"
 >
 </div>
-<div slot="helper">
+<div
+  id="helper-vaadin-integer-field-1"
+  slot="helper"
+>
   Helper
 </div>
 `;

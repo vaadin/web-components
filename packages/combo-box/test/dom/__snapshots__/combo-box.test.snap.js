@@ -9,15 +9,21 @@ snapshots["vaadin-combo-box host placeholder"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
+    id="input-vaadin-combo-box-4"
     placeholder="Placeholder"
     role="combobox"
     slot="input"
     spellcheck="false"
   >
-  <label slot="label">
+  <label
+    for="input-vaadin-combo-box-4"
+    id="label-vaadin-combo-box-0"
+    slot="label"
+  >
   </label>
   <div
     hidden=""
+    id="error-message-vaadin-combo-box-2"
     slot="error-message"
   >
   </div>
@@ -33,15 +39,21 @@ snapshots["vaadin-combo-box host pattern"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
+    id="input-vaadin-combo-box-4"
     pattern="[0-9]*"
     role="combobox"
     slot="input"
     spellcheck="false"
   >
-  <label slot="label">
+  <label
+    for="input-vaadin-combo-box-4"
+    id="label-vaadin-combo-box-0"
+    slot="label"
+  >
   </label>
   <div
     hidden=""
+    id="error-message-vaadin-combo-box-2"
     slot="error-message"
   >
   </div>
@@ -308,14 +320,20 @@ snapshots["vaadin-combo-box slots default"] =
   autocapitalize="off"
   autocomplete="off"
   autocorrect="off"
+  id="input-vaadin-combo-box-4"
   role="combobox"
   slot="input"
   spellcheck="false"
 >
-<label slot="label">
+<label
+  for="input-vaadin-combo-box-4"
+  id="label-vaadin-combo-box-0"
+  slot="label"
+>
 </label>
 <div
   hidden=""
+  id="error-message-vaadin-combo-box-2"
   slot="error-message"
 >
 </div>
@@ -326,18 +344,25 @@ snapshots["vaadin-combo-box slots label"] =
 `<input
   aria-autocomplete="list"
   aria-expanded="false"
+  aria-labelledby="label-vaadin-combo-box-0"
   autocapitalize="off"
   autocomplete="off"
   autocorrect="off"
+  id="input-vaadin-combo-box-4"
   role="combobox"
   slot="input"
   spellcheck="false"
 >
-<label slot="label">
+<label
+  for="input-vaadin-combo-box-4"
+  id="label-vaadin-combo-box-0"
+  slot="label"
+>
   Label
 </label>
 <div
   hidden=""
+  id="error-message-vaadin-combo-box-2"
   slot="error-message"
 >
 </div>
@@ -347,22 +372,32 @@ snapshots["vaadin-combo-box slots label"] =
 snapshots["vaadin-combo-box slots helper"] = 
 `<input
   aria-autocomplete="list"
+  aria-describedby="helper-vaadin-combo-box-1"
   aria-expanded="false"
   autocapitalize="off"
   autocomplete="off"
   autocorrect="off"
+  id="input-vaadin-combo-box-4"
   role="combobox"
   slot="input"
   spellcheck="false"
 >
-<label slot="label">
+<label
+  for="input-vaadin-combo-box-4"
+  id="label-vaadin-combo-box-0"
+  slot="label"
+>
 </label>
 <div
   hidden=""
+  id="error-message-vaadin-combo-box-2"
   slot="error-message"
 >
 </div>
-<div slot="helper">
+<div
+  id="helper-vaadin-combo-box-1"
+  slot="helper"
+>
   Helper
 </div>
 `;
@@ -376,14 +411,20 @@ snapshots["vaadin-combo-box slots error"] =
   autocapitalize="off"
   autocomplete="off"
   autocorrect="off"
+  id="input-vaadin-combo-box-4"
   invalid=""
   role="combobox"
   slot="input"
   spellcheck="false"
 >
-<label slot="label">
+<label
+  for="input-vaadin-combo-box-4"
+  id="label-vaadin-combo-box-0"
+  slot="label"
+>
 </label>
 <div
+  id="error-message-vaadin-combo-box-2"
   role="alert"
   slot="error-message"
 >

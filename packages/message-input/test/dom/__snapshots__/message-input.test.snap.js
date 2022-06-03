@@ -5,16 +5,22 @@ snapshots["vaadin-message-input default"] =
 `<vaadin-message-input-text-area placeholder="Message">
   <textarea
     aria-label="Message"
+    id="textarea-vaadin-message-input-text-area-3"
     placeholder="Message"
     rows="1"
     slot="textarea"
     style="min-height: 0px;"
   >
   </textarea>
-  <label slot="label">
+  <label
+    for="textarea-vaadin-message-input-text-area-3"
+    id="label-vaadin-message-input-text-area-0"
+    slot="label"
+  >
   </label>
   <div
     hidden=""
+    id="error-message-vaadin-message-input-text-area-2"
     slot="error-message"
   >
   </div>
@@ -38,6 +44,7 @@ snapshots["vaadin-message-input disabled"] =
   <textarea
     aria-label="Message"
     disabled=""
+    id="textarea-vaadin-message-input-text-area-3"
     placeholder="Message"
     rows="1"
     slot="textarea"
@@ -45,10 +52,15 @@ snapshots["vaadin-message-input disabled"] =
     tabindex="-1"
   >
   </textarea>
-  <label slot="label">
+  <label
+    for="textarea-vaadin-message-input-text-area-3"
+    id="label-vaadin-message-input-text-area-0"
+    slot="label"
+  >
   </label>
   <div
     hidden=""
+    id="error-message-vaadin-message-input-text-area-2"
     slot="error-message"
   >
   </div>
