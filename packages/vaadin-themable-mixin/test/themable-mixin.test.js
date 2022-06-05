@@ -20,7 +20,8 @@ const defineCustomElement =
       Object.defineProperty(CustomElement, 'template', {
         get() {
           if (styles) {
-            content = `<style>${styles}</style>${content}`;
+            const cssText = Array.isArray(styles) ? styles.join('\n') : styles;
+            content = `<style>${cssText}</style>${content}`;
           }
 
           const template = document.createElement('template');
@@ -221,6 +222,19 @@ defineCustomElement(
   `,
 );
 
+defineCustomElement('test-own-styles-multiple', '', '<div part="text" id="text">text</div>', [
+  `
+    [part='text'] {
+      color: rgb(255, 0, 0);
+    }
+  `,
+  `
+    [part='text'] {
+      font-weight: 700;
+    }
+  `,
+]);
+
 function getText(element) {
   return element.shadowRoot.querySelector('#text');
 }
@@ -241,6 +255,7 @@ describe('ThemableMixin', () => {
         <test-inherited-no-content-no-is></test-inherited-no-content-no-is>
         <test-style-override></test-style-override>
         <test-own-styles></test-own-styles>
+        <test-own-styles-multiple></test-own-styles-multiple>
       </div>
     `);
 
@@ -362,5 +377,11 @@ describe('ThemableMixin', () => {
 
   it('should have own styles', async () => {
     expect(getComputedStyle(getText(components['test-own-styles'])).color).to.equal('rgb(255, 0, 0)');
+  });
+
+  it('should apply multiple own styles', () => {
+    const text = getText(components['test-own-styles-multiple']);
+    expect(getComputedStyle(text).color).to.equal('rgb(255, 0, 0)');
+    expect(getComputedStyle(text).fontWeight).to.equal('700');
   });
 });

@@ -11,6 +11,10 @@ window.defineCustomElementFunction = (name, parentName, content, styles, noIs) =
   const parentElement = parentName ? customElements.get(parentName) : LitElement;
   class CustomElement extends ThemableMixin(parentElement) {
     static get styles() {
+      if (Array.isArray(styles)) {
+        return styles.map((style) => unsafeCSS(style));
+      }
+
       return styles ? unsafeCSS(styles) : undefined;
     }
   }
