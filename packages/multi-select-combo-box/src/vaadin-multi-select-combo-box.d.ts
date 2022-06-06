@@ -122,6 +122,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * `invalid`              | Set when the element is invalid
  * `focused`              | Set when the element is focused
  * `focus-ring`           | Set when the element is keyboard focused
+ * `loading`              | Set when loading items from the data provider
  * `opened`               | Set when the dropdown is open
  * `readonly`             | Set to a readonly element
  *
@@ -240,6 +241,11 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
    * ```
    */
   i18n: MultiSelectComboBoxI18n;
+
+  /**
+   * True when loading items from the data provider, false otherwise.
+   */
+  loading: boolean;
 
   /**
    * True if the dropdown is open, false otherwise.

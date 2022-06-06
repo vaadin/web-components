@@ -109,6 +109,24 @@ describe('basic', () => {
       expect(comboBox.size).to.equal(20);
     });
 
+    it('should propagate loading property to combo-box', () => {
+      comboBox.loading = true;
+      expect(internal.loading).to.be.true;
+    });
+
+    it('should update size when combo-box size changes', () => {
+      internal.loading = true;
+      expect(comboBox.loading).to.be.true;
+    });
+
+    it('should reflect loading property to attribute', () => {
+      comboBox.loading = true;
+      expect(comboBox.hasAttribute('loading')).to.be.true;
+
+      comboBox.loading = false;
+      expect(comboBox.hasAttribute('loading')).to.be.false;
+    });
+
     it('should call clearCache() method on the combo-box', () => {
       const spy = sinon.spy(internal, 'clearCache');
       comboBox.clearCache();

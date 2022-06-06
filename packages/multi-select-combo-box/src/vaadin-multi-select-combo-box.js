@@ -100,6 +100,7 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * `invalid`              | Set when the element is invalid
  * `focused`              | Set when the element is focused
  * `focus-ring`           | Set when the element is keyboard focused
+ * `loading`              | Set when loading items from the data provider
  * `opened`               | Set when the dropdown is open
  * `readonly`             | Set to a readonly element
  *
@@ -162,6 +163,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           allow-custom-value="[[allowCustomValue]]"
           data-provider="[[dataProvider]]"
           filter="{{filter}}"
+          loading="{{loading}}"
           size="{{size}}"
           filtered-items="[[filteredItems]]"
           selected-items="[[selectedItems]]"
@@ -297,6 +299,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
             total: '{count} items selected',
           };
         },
+      },
+
+      /**
+       * True when loading items from the data provider, false otherwise.
+       */
+      loading: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
       },
 
       /**
