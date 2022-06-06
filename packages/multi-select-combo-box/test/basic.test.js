@@ -811,6 +811,15 @@ describe('basic', () => {
       expect(items[1].textContent).to.equal('orange');
     });
 
+    it('should render selected items updated while readonly', () => {
+      comboBox.selectedItems = [];
+      comboBox.selectedItems = ['lemon'];
+      inputElement.click();
+      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      expect(items.length).to.equal(1);
+      expect(items[0].textContent).to.equal('lemon');
+    });
+
     it('should not set selected attribute on the dropdown items', () => {
       inputElement.click();
       const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');

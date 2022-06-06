@@ -84,6 +84,10 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     };
   }
 
+  static get observers() {
+    return ['_readonlyItemsChanged(readonly, selectedItems)'];
+  }
+
   /**
    * Reference to the clear button element.
    * @protected
@@ -304,6 +308,13 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     } else if (oldReadonly) {
       this._setOverlayItems(this.__savedItems);
       this.__savedItems = null;
+    }
+  }
+
+  /** @private */
+  _readonlyItemsChanged(readonly, selectedItems) {
+    if (readonly && selectedItems) {
+      this._setOverlayItems(selectedItems);
     }
   }
 }
