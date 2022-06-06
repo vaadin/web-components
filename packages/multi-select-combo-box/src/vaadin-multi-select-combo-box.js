@@ -164,6 +164,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           filter="{{filter}}"
           size="{{size}}"
           filtered-items="[[filteredItems]]"
+          selected-items="[[selectedItems]]"
           opened="{{opened}}"
           renderer="[[renderer]]"
           theme$="[[_theme]]"
@@ -595,13 +596,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @private */
   _readonlyChanged(readonly, oldReadonly) {
-    if (readonly) {
-      this.__savedItems = this.$.comboBox._getOverlayItems();
-      this.$.comboBox._setOverlayItems(Array.from(this.selectedItems));
-      this.__updateChips();
-    } else if (oldReadonly) {
-      this.$.comboBox._setOverlayItems(this.__savedItems);
-      this.__savedItems = null;
+    if (readonly || oldReadonly) {
       this.__updateChips();
     }
   }
@@ -647,10 +642,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     // Re-render chips
     this.__updateChips();
-
-    if (this.readonly) {
-      this.$.comboBox._setOverlayItems(selectedItems);
-    }
 
     // Update selected for dropdown items
     this.requestContentUpdate();

@@ -59,10 +59,23 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
         notify: true,
       },
 
+      /**
+       * Selected items to render in the dropdown
+       * when the component is read-only.
+       */
+      selectedItems: {
+        type: Array,
+        value: () => [],
+      },
+
       _target: {
         type: Object,
       },
     };
+  }
+
+  static get observers() {
+    return ['_readonlyItemsChanged(readonly, selectedItems)'];
   }
 
   /**
@@ -80,7 +93,7 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
    * @override
    */
   open() {
-    if (!this.disabled && !(this.readonly && this._getOverlayItems().length === 0)) {
+    if (!this.disabled && !(this.readonly && this.selectedItems.length === 0)) {
       this.opened = true;
     }
   }
@@ -244,6 +257,50 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
           },
         }),
       );
+    }
+  }
+
+  /**
+   * Override method inherited from the combo-box
+   * to render only selected items when read-only,
+   * even if a different set of items is provided.
+   *
+   * @protected
+   * @override
+   */
+  _setOverlayItems(items) {
+    const effectiveItems = this.readonly ? this.selectedItems : items;
+    super._setOverlayItems(effectiveItems);
+  }
+
+  /**
+   * Override method inherited from the combo-box
+   * to not request data provider when read-only.
+   *
+   * @param {number}
+   * @return {boolean}
+   * @protected
+   * @override
+   */
+  _shouldLoadPage(page) {
+    if (this.readonly) {
+      return false;
+    }
+
+    return super._shouldLoadPage(page);
+  }
+
+  /** @private */
+  _readonlyItemsChanged(readonly, selectedItems) {
+    if (readonly && selectedItems) {
+      this.__savedItems = this._getOverlayItems();
+      this._setOverlayItems(selectedItems);
+    }
+
+    // Restore the original dropdown items
+    if (readonly === false && this.__savedItems) {
+      this._setOverlayItems(this.__savedItems);
+      this.__savedItems = null;
     }
   }
 }
