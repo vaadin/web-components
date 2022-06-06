@@ -60,16 +60,6 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
       },
 
       /**
-       * When present, it specifies that the field is read-only.
-       */
-      readonly: {
-        type: Boolean,
-        value: false,
-        observer: '_readonlyChanged',
-        reflectToAttribute: true,
-      },
-
-      /**
        * Selected items to render in the dropdown
        * when the component is read-only.
        */
@@ -301,21 +291,19 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   }
 
   /** @private */
-  _readonlyChanged(readonly, oldReadonly) {
-    if (readonly) {
+  _readonlyItemsChanged(readonly, selectedItems) {
+    if (readonly && selectedItems) {
       this.__savedItems = this._getOverlayItems();
-      this._setOverlayItems(this.selectedItems);
-    } else if (oldReadonly) {
+      this._setOverlayItems(selectedItems);
+    }
+
+    // Restore the original dropdown items
+    if (this._oldReadOnly && this.__savedItems) {
       this._setOverlayItems(this.__savedItems);
       this.__savedItems = null;
     }
-  }
 
-  /** @private */
-  _readonlyItemsChanged(readonly, selectedItems) {
-    if (readonly && selectedItems) {
-      this._setOverlayItems(selectedItems);
-    }
+    this._oldReadOnly = readonly;
   }
 }
 
