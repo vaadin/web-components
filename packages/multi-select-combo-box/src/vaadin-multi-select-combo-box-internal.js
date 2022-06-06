@@ -51,6 +51,16 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   static get properties() {
     return {
       /**
+       * When set to `true`, "loading" attribute is set
+       * on the host and the overlay element.
+       * @type {boolean}
+       */
+      loading: {
+        type: Boolean,
+        notify: true,
+      },
+
+      /**
        * Total number of items.
        * @type {number | undefined}
        */
