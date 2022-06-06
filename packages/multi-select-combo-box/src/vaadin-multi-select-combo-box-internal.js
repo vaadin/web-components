@@ -298,12 +298,10 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     }
 
     // Restore the original dropdown items
-    if (this._oldReadOnly && this.__savedItems) {
+    if (readonly === false && this.__savedItems) {
       this._setOverlayItems(this.__savedItems);
       this.__savedItems = null;
     }
-
-    this._oldReadOnly = readonly;
   }
 }
 
