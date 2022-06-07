@@ -82,7 +82,12 @@ class Iconset extends ElementMixin(PolymerElement) {
     // Create the icon map on-demand, since the iconset itself has no discrete
     // signal to know when it's children are fully parsed
     this._icons = this._icons || this.__createIconMap();
-    return { svg: cloneSvgNode(this._icons[this.__getIconId(name)]), size: this.size };
+    const icon = this._icons[this.__getIconId(name)];
+    return {
+      svg: cloneSvgNode(icon),
+      size: this.size,
+      viewBox: icon ? icon.getAttribute('viewBox') : null,
+    };
   }
 
   /**
