@@ -130,10 +130,7 @@ class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
       __svgElement: Object,
 
       /** @private */
-      __viewBox: {
-        type: String,
-        value: '',
-      },
+      __viewBox: String,
     };
   }
 
