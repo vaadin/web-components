@@ -6,6 +6,7 @@ import { unsafeSvgLiteral } from '../src/vaadin-icon-svg.js';
 
 const ANGLE_DOWN = '<path d="M13 4v2l-5 5-5-5v-2l5 5z"></path>';
 const ANGLE_UP = '<path d="M3 12v-2l5-5 5 5v2l-5-5z"></path>';
+const PLUS = '<path d="M3.5,7V0M0,3.5h7"></path>';
 
 describe('vaadin-icon', () => {
   let icon, svgElement;
@@ -124,6 +125,7 @@ describe('vaadin-icon', () => {
             <defs>
               <g id="vaadin:angle-down">${ANGLE_DOWN}</g>
               <g id="vaadin:angle-up">${ANGLE_UP}</g>
+              <g id="vaadin:plus" viewBox="0 0 7 7">${PLUS}</g>
             </defs>
           </svg>
         </vaadin-iconset>
@@ -167,6 +169,11 @@ describe('vaadin-icon', () => {
         icon.style.color = 'rgb(0, 0, 255)';
         icon.style.fill = 'rgb(0, 255, 0)';
         expect(getComputedStyle(icon).fill).to.equal('rgb(0, 255, 0)');
+      });
+
+      it('should preserve the viewBox attribute set on the icon', () => {
+        icon.icon = 'vaadin:plus';
+        expect(svgElement.getAttribute('viewBox')).to.equal('0 0 7 7');
       });
 
       it('should apply the icon once the set is registered', () => {
