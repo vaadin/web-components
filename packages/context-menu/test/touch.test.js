@@ -71,6 +71,18 @@ describe('mobile support', () => {
     target.dispatchEvent(ev);
   });
 
+  it('should preserve `composedPath()` for the source event', (done) => {
+    const ev = new CustomEvent('contextmenu', { bubbles: true });
+    menu.listenOn.addEventListener('vaadin-contextmenu', (e) => {
+      setTimeout(() => {
+        const { sourceEvent } = e.detail;
+        expect(sourceEvent.composedPath()[0]).to.eql(target);
+        done();
+      });
+    });
+    target.dispatchEvent(ev);
+  });
+
   (isIOS ? describe : describe.skip)('iOS touch', () => {
     describe('timings', () => {
       let clock;
