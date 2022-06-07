@@ -35,7 +35,7 @@ declare class Iconset extends ElementMixin(HTMLElement) {
    * Produce SVGTemplateResult for the element matching `name` in this
    * iconset, or `undefined` if there is no matching element.
    */
-  applyIcon(name: string): { svg: IconSvgLiteral; size: number };
+  applyIcon(name: string): { svg: IconSvgLiteral; size: number; viewBox: string | null };
 }
 
 declare global {

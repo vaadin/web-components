@@ -83,7 +83,7 @@ class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
-        viewBox="[[__computeViewBox(size)]]"
+        viewBox="[[__computeViewBox(size, __viewBox)]]"
         preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
       ></svg>
@@ -128,6 +128,12 @@ class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
 
       /** @private */
       __svgElement: Object,
+
+      /** @private */
+      __viewBox: {
+        type: String,
+        value: '',
+      },
     };
   }
 
@@ -181,7 +187,10 @@ class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
       this.__checkDeprecatedIcon(icon);
       const iconsetName = this.__getIconsetName(icon);
       const iconset = Iconset.getIconset(iconsetName);
-      const { svg, size } = iconset.applyIcon(icon);
+      const { svg, size, viewBox } = iconset.applyIcon(icon);
+      if (viewBox) {
+        this.__viewBox = viewBox;
+      }
       if (size !== this.size) {
         this.size = size;
       }
@@ -215,8 +224,8 @@ class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  __computeViewBox(size) {
-    return `0 0 ${size} ${size}`;
+  __computeViewBox(size, viewBox) {
+    return viewBox || `0 0 ${size} ${size}`;
   }
 }
 
