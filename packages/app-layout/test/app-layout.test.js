@@ -304,7 +304,7 @@ describe('vaadin-app-layout', () => {
           expect(layout.drawerOpened).to.be.false;
         });
 
-        it('should prevent touchend event on backdrop touchend', () => {
+        it('should close the drawer on backdrop touchend', () => {
           makeSoloTouchEvent('touchend', null, backdrop);
           expect(layout.drawerOpened).to.be.false;
         });
