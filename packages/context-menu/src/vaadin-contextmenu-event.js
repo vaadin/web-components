@@ -41,12 +41,8 @@ register({
 
     // Calling `sourceEvent.composedPath()` after a timeout would return an empty array.
     // This is especially problematic on iOS where we configure the timer on touchstart.
-    // So we need this hack to make `grid.getEventContext(sourceEvent)` work properly.
-    Object.defineProperty(this.info.sourceEvent, 'composedPath', {
-      get: () => {
-        return () => path;
-      },
-    });
+    // Store the composed path to be used by `grid.getEventContext(event)` so it works.
+    this.info.sourceEvent.__composedPath = path;
   },
 
   touchstart(e) {
