@@ -203,8 +203,8 @@ export const ComboBoxMixin = (subclass) =>
     static get observers() {
       return [
         '_filterChanged(filter, itemValuePath, itemLabelPath)',
-        '_itemsOrPathsChanged(items, itemValuePath, itemLabelPath)',
-        '_filteredItemsChanged(filteredItems, itemValuePath, itemLabelPath)',
+        '_itemsChanged(items)',
+        '_filteredItemsChanged(filteredItems)',
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
       ];
     }
@@ -834,7 +834,7 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _filterChanged(filter, itemValuePath, itemLabelPath) {
+    _filterChanged(filter, _itemValuePath, _itemLabelPath) {
       if (filter === undefined) {
         return;
       }
@@ -848,7 +848,7 @@ export const ComboBoxMixin = (subclass) =>
         // With certain use cases (e. g., external filtering), `items` are
         // undefined. Filtering is unnecessary per se, but the filteredItems
         // observer should still be invoked to update focused item.
-        this._filteredItemsChanged(this.filteredItems, itemValuePath, itemLabelPath);
+        this._filteredItemsChanged(this.filteredItems);
       }
     }
 
@@ -956,10 +956,7 @@ export const ComboBoxMixin = (subclass) =>
       this._ensureItemsOrDataProvider(() => {
         this.items = oldItems;
       });
-    }
 
-    /** @private */
-    _itemsOrPathsChanged(items, _itemValuePath, _itemLabelPath) {
       if (items) {
         this.filteredItems = items.slice(0);
       } else if (this.__previousItems) {
@@ -984,7 +981,7 @@ export const ComboBoxMixin = (subclass) =>
       // When the external filtering is used and `value` was provided before `filteredItems`,
       // initialize the selected item with the current value here. This will also cause
       // the input element value to sync. In other cases, the selected item is already initialized
-      // in other observers such as `valueChanged`, `_itemsOrPathsChanged`.
+      // in other observers such as `valueChanged`, `_itemsChanged`.
       const valueIndex = this._indexOfValue(this.value, filteredItems);
       if (this.selectedItem === null && valueIndex >= 0) {
         this._selectItemForValue(this.value);
