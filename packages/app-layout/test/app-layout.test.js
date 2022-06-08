@@ -1,5 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, esc, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import {
+  aTimeout,
+  esc,
+  fixtureSync,
+  makeSoloTouchEvent,
+  nextFrame,
+  nextRender,
+  oneEvent,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-app-layout.js';
 import '../vaadin-drawer-toggle.js';
@@ -294,6 +302,16 @@ describe('vaadin-app-layout', () => {
         it('should close the drawer on backdrop click', () => {
           backdrop.click();
           expect(layout.drawerOpened).to.be.false;
+        });
+
+        it('should prevent touchend event on backdrop touchend', () => {
+          makeSoloTouchEvent('touchend', null, backdrop);
+          expect(layout.drawerOpened).to.be.false;
+        });
+
+        it('should prevent touchend event on backdrop', () => {
+          const event = makeSoloTouchEvent('touchend', null, backdrop);
+          expect(event.defaultPrevented).to.be.true;
         });
 
         it('should close the drawer when calling helper method', () => {
