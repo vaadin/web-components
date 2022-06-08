@@ -708,6 +708,11 @@ describe('basic', () => {
       chip.shadowRoot.querySelector('[part="remove-button"]').click();
       expect(spy.calledOnce).to.be.true;
     });
+
+    it('should stop change event on the native input', () => {
+      inputElement.dispatchEvent(new CustomEvent('change', { bubbles: true }));
+      expect(spy.called).to.be.false;
+    });
   });
 
   describe('allowCustomValue', () => {
