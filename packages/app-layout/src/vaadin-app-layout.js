@@ -293,7 +293,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
       <div part="navbar" id="navbarTop">
         <slot name="navbar"></slot>
       </div>
-      <div part="backdrop" on-click="_close" on-touchstart="_close"></div>
+      <div part="backdrop" on-click="_onBackdropClick" on-touchend="_onBackdropTouchend"></div>
       <div part="drawer" id="drawer" on-keydown="__onDrawerKeyDown">
         <slot name="drawer" id="drawerSlot"></slot>
       </div>
@@ -725,6 +725,20 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     if (closeDrawerOn) {
       window.addEventListener(closeDrawerOn, this.__closeOverlayDrawerListener);
     }
+  }
+
+  /** @private */
+  _onBackdropClick() {
+    this._close();
+  }
+
+  /** @private */
+  _onBackdropTouchend(event) {
+    // Prevent the click event from being fired
+    // on clickable element behind the backdrop
+    event.preventDefault();
+
+    this._close();
   }
 
   /** @protected */
