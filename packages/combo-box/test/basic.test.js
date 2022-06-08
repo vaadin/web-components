@@ -34,15 +34,6 @@ describe('Properties', () => {
       expect(comboBox._focusedIndex).to.eql(1);
     });
 
-    it('should set focused index on mutation', () => {
-      comboBox.value = 'baz';
-      comboBox.items = ['foo', 'bar'];
-
-      comboBox.push('items', 'baz');
-
-      expect(comboBox._focusedIndex).to.eql(2);
-    });
-
     it('should support resetting items', () => {
       comboBox.items = ['foo', 'bar'];
       comboBox.items = undefined;
