@@ -73,15 +73,15 @@ snapshots["vaadin-checkbox-group host disabled"] =
     value="1"
   >
     <label
-      for="input-vaadin-checkbox-12"
-      id="label-vaadin-checkbox-10"
+      for="input-vaadin-checkbox-5"
+      id="label-vaadin-checkbox-3"
       slot="label"
     >
       Checkbox 1
     </label>
     <input
       disabled=""
-      id="input-vaadin-checkbox-12"
+      id="input-vaadin-checkbox-5"
       slot="input"
       tabindex="-1"
       type="checkbox"
@@ -97,15 +97,15 @@ snapshots["vaadin-checkbox-group host disabled"] =
     value="2"
   >
     <label
-      for="input-vaadin-checkbox-13"
-      id="label-vaadin-checkbox-11"
+      for="input-vaadin-checkbox-6"
+      id="label-vaadin-checkbox-4"
       slot="label"
     >
       Checkbox 2
     </label>
     <input
       disabled=""
-      id="input-vaadin-checkbox-13"
+      id="input-vaadin-checkbox-6"
       slot="input"
       tabindex="-1"
       type="checkbox"
@@ -113,13 +113,13 @@ snapshots["vaadin-checkbox-group host disabled"] =
     >
   </vaadin-checkbox>
   <label
-    id="label-vaadin-checkbox-group-7"
+    id="label-vaadin-checkbox-group-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-checkbox-group-9"
+    id="error-message-vaadin-checkbox-group-2"
     slot="error-message"
   >
   </div>

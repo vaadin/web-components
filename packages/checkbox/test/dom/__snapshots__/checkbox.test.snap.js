@@ -33,15 +33,15 @@ snapshots["vaadin-checkbox host disabled"] =
   label="I accept terms and conditions"
 >
   <label
-    for="input-vaadin-checkbox-3"
-    id="label-vaadin-checkbox-2"
+    for="input-vaadin-checkbox-1"
+    id="label-vaadin-checkbox-0"
     slot="label"
   >
     I accept terms and conditions
   </label>
   <input
     disabled=""
-    id="input-vaadin-checkbox-3"
+    id="input-vaadin-checkbox-1"
     slot="input"
     tabindex="-1"
     type="checkbox"

@@ -33,15 +33,15 @@ snapshots["vaadin-radio-button host disabled"] =
   label="Radio button"
 >
   <label
-    for="input-vaadin-radio-button-3"
-    id="label-vaadin-radio-button-2"
+    for="input-vaadin-radio-button-1"
+    id="label-vaadin-radio-button-0"
     slot="label"
   >
     Radio button
   </label>
   <input
     disabled=""
-    id="input-vaadin-radio-button-3"
+    id="input-vaadin-radio-button-1"
     slot="input"
     tabindex="-1"
     type="radio"
