@@ -864,6 +864,18 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /**
+   * Override an event listener from `InputControlMixin` to
+   * stop the change event re-targeted from the input.
+   *
+   * @param {!Event} event
+   * @protected
+   * @override
+   */
+  _onChange(event) {
+    event.stopPropagation();
+  }
+
+  /**
    * Override an event listener from `KeyboardMixin`.
    * Do not call `super` in order to override clear
    * button logic defined in `InputControlMixin`.
