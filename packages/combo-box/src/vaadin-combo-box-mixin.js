@@ -203,8 +203,8 @@ export const ComboBoxMixin = (subclass) =>
     static get observers() {
       return [
         '_filterChanged(filter, itemValuePath, itemLabelPath)',
-        '_itemsOrPathsChanged(items.*, itemValuePath, itemLabelPath)',
-        '_filteredItemsChanged(filteredItems.*, itemValuePath, itemLabelPath)',
+        '_itemsOrPathsChanged(items, itemValuePath, itemLabelPath)',
+        '_filteredItemsChanged(filteredItems, itemValuePath, itemLabelPath)',
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
       ];
     }
@@ -848,7 +848,7 @@ export const ComboBoxMixin = (subclass) =>
         // With certain use cases (e. g., external filtering), `items` are
         // undefined. Filtering is unnecessary per se, but the filteredItems
         // observer should still be invoked to update focused item.
-        this._filteredItemsChanged({ path: 'filteredItems', value: this.filteredItems }, itemValuePath, itemLabelPath);
+        this._filteredItemsChanged(this.filteredItems, itemValuePath, itemLabelPath);
       }
     }
 
@@ -959,50 +959,46 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _itemsOrPathsChanged(e) {
-      if (e.path === 'items' || e.path === 'items.splices') {
-        if (this.items) {
-          this.filteredItems = this.items.slice(0);
-        } else if (this.__previousItems) {
-          // Only clear filteredItems if the component had items previously but got cleared
-          this.filteredItems = null;
-        }
-
-        const valueIndex = this._indexOfValue(this.value, this.items);
-        this._focusedIndex = valueIndex;
-
-        const item = valueIndex > -1 && this.items[valueIndex];
-        if (item) {
-          this.selectedItem = item;
-        }
+    _itemsOrPathsChanged(items, _itemValuePath, _itemLabelPath) {
+      if (items) {
+        this.filteredItems = items.slice(0);
+      } else if (this.__previousItems) {
+        // Only clear filteredItems if the component had items previously but got cleared
+        this.filteredItems = null;
       }
-      this.__previousItems = e.value;
+
+      const valueIndex = this._indexOfValue(this.value, items);
+      this._focusedIndex = valueIndex;
+
+      const item = valueIndex > -1 && items[valueIndex];
+      if (item) {
+        this.selectedItem = item;
+      }
+      this.__previousItems = items;
     }
 
     /** @private */
-    _filteredItemsChanged(e) {
-      if (e.path === 'filteredItems' || e.path === 'filteredItems.splices') {
-        this._setOverlayItems(this.filteredItems);
+    _filteredItemsChanged(filteredItems, _itemValuePath, _itemLabelPath) {
+      this._setOverlayItems(filteredItems);
 
-        // When the external filtering is used and `value` was provided before `filteredItems`,
-        // initialize the selected item with the current value here. This will also cause
-        // the input element value to sync. In other cases, the selected item is already initialized
-        // in other observers such as `valueChanged`, `_itemsOrPathsChanged`.
-        const valueIndex = this._indexOfValue(this.value, this.filteredItems);
-        if (this.selectedItem === null && valueIndex >= 0) {
-          this._selectItemForValue(this.value);
-        }
+      // When the external filtering is used and `value` was provided before `filteredItems`,
+      // initialize the selected item with the current value here. This will also cause
+      // the input element value to sync. In other cases, the selected item is already initialized
+      // in other observers such as `valueChanged`, `_itemsOrPathsChanged`.
+      const valueIndex = this._indexOfValue(this.value, filteredItems);
+      if (this.selectedItem === null && valueIndex >= 0) {
+        this._selectItemForValue(this.value);
+      }
 
-        const inputValue = this._inputElementValue;
-        if (inputValue === undefined || inputValue === this._getItemLabel(this.selectedItem)) {
-          // When the input element value is the same as the current value or not defined,
-          // set the focused index to the item that matches the value.
-          this._focusedIndex = this.$.dropdown.indexOfLabel(this._getItemLabel(this.selectedItem));
-        } else {
-          // When the user filled in something that is different from the current value = filtering is enabled,
-          // set the focused index to the item that matches the filter query.
-          this._focusedIndex = this.$.dropdown.indexOfLabel(this.filter);
-        }
+      const inputValue = this._inputElementValue;
+      if (inputValue === undefined || inputValue === this._getItemLabel(this.selectedItem)) {
+        // When the input element value is the same as the current value or not defined,
+        // set the focused index to the item that matches the value.
+        this._focusedIndex = this.$.dropdown.indexOfLabel(this._getItemLabel(this.selectedItem));
+      } else {
+        // When the user filled in something that is different from the current value = filtering is enabled,
+        // set the focused index to the item that matches the filter query.
+        this._focusedIndex = this.$.dropdown.indexOfLabel(this.filter);
       }
     }
 
