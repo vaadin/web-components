@@ -977,13 +977,13 @@ export const ComboBoxMixin = (subclass) =>
     _filteredItemsChanged(filteredItems, _itemValuePath, _itemLabelPath) {
       this._setOverlayItems(filteredItems);
 
-      // When the external filtering is used and `value` was provided before `filteredItems`,
-      // initialize the selected item with the current value here. This will also cause
-      // the input element value to sync. In other cases, the selected item is already initialized
-      // in other observers such as `valueChanged`, `_itemsChanged`.
+      // Try to sync `selectedItem` based on `value` once a new set of `filteredItems` is available
+      // (as a result of external filtering or when they have been loaded by the data provider).
+      // When `value` is specified but `selectedItem` is not, it means that there was no item
+      // matching `value` at the moment `value` was set, so `selectedItem` has remained unsynced.
       const valueIndex = this._indexOfValue(this.value, filteredItems);
-      if (this.selectedItem === null && valueIndex >= 0) {
-        this._selectItemForValue(this.value);
+      if ((this.selectedItem === null || this.selectedItem === undefined) && valueIndex >= 0) {
+        this.selectedItem = filteredItems[valueIndex];
       }
 
       const inputValue = this._inputElementValue;
