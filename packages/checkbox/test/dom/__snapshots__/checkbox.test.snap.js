@@ -8,14 +8,14 @@ snapshots["vaadin-checkbox host default"] =
   label="I accept terms and conditions"
 >
   <label
-    for="vaadin-checkbox-0"
+    for="input-vaadin-checkbox-1"
     id="label-vaadin-checkbox-0"
     slot="label"
   >
     I accept terms and conditions
   </label>
   <input
-    id="vaadin-checkbox-0"
+    id="input-vaadin-checkbox-1"
     slot="input"
     type="checkbox"
     value="on"
@@ -33,15 +33,15 @@ snapshots["vaadin-checkbox host disabled"] =
   label="I accept terms and conditions"
 >
   <label
-    for="vaadin-checkbox-1"
-    id="label-vaadin-checkbox-1"
+    for="input-vaadin-checkbox-1"
+    id="label-vaadin-checkbox-0"
     slot="label"
   >
     I accept terms and conditions
   </label>
   <input
     disabled=""
-    id="vaadin-checkbox-1"
+    id="input-vaadin-checkbox-1"
     slot="input"
     tabindex="-1"
     type="checkbox"

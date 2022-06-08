@@ -236,13 +236,19 @@ snapshots["vaadin-email-field shadow theme"] =
 snapshots["vaadin-email-field slots default"] = 
 `<input
   autocapitalize="off"
+  id="input-vaadin-email-field-3"
   slot="input"
   type="email"
 >
-<label slot="label">
+<label
+  for="input-vaadin-email-field-3"
+  id="label-vaadin-email-field-0"
+  slot="label"
+>
 </label>
 <div
   hidden=""
+  id="error-message-vaadin-email-field-2"
   slot="error-message"
 >
 </div>
@@ -251,18 +257,28 @@ snapshots["vaadin-email-field slots default"] =
 
 snapshots["vaadin-email-field slots helper"] = 
 `<input
+  aria-describedby="helper-vaadin-email-field-1"
   autocapitalize="off"
+  id="input-vaadin-email-field-3"
   slot="input"
   type="email"
 >
-<label slot="label">
+<label
+  for="input-vaadin-email-field-3"
+  id="label-vaadin-email-field-0"
+  slot="label"
+>
 </label>
 <div
   hidden=""
+  id="error-message-vaadin-email-field-2"
   slot="error-message"
 >
 </div>
-<div slot="helper">
+<div
+  id="helper-vaadin-email-field-1"
+  slot="helper"
+>
   Helper
 </div>
 `;

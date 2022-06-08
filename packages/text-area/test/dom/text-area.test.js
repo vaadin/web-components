@@ -1,17 +1,13 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-text-area.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-text-area', () => {
   let textArea;
 
-  // Ignore generated attributes to prevent failures
-  // when running snapshot tests in a different order
-  const SNAPSHOT_CONFIG = {
-    ignoreAttributes: ['id', 'aria-describedby', 'aria-labelledby', 'for'],
-  };
-
   beforeEach(() => {
+    resetUniqueId();
     textArea = fixtureSync('<vaadin-text-area></vaadin-text-area>');
   });
 
@@ -43,12 +39,12 @@ describe('vaadin-text-area', () => {
 
   describe('slots', () => {
     it('default', async () => {
-      await expect(textArea).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      await expect(textArea).lightDom.to.equalSnapshot();
     });
 
     it('helper', async () => {
       textArea.helperText = 'Helper';
-      await expect(textArea).lightDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      await expect(textArea).lightDom.to.equalSnapshot();
     });
   });
 });

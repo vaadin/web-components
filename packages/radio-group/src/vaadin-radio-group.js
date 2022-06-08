@@ -9,6 +9,7 @@ import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { RadioButton } from './vaadin-radio-button.js';
@@ -172,9 +173,7 @@ class RadioGroup extends FieldMixin(
     // See https://github.com/vaadin/vaadin-web-components/issues/94
     this.setAttribute('role', 'radiogroup');
 
-    // Ensure every instance has unique id
-    const uniqueId = (RadioGroup._uniqueRadioGroupId = 1 + RadioGroup._uniqueRadioGroupId || 0);
-    this._fieldName = `${this.localName}-${uniqueId}`;
+    this._fieldName = `${this.localName}-${generateUniqueId()}`;
 
     this._observer = new FlattenedNodesObserver(this, ({ addedNodes, removedNodes }) => {
       // Registers the added radio buttons in the reverse order

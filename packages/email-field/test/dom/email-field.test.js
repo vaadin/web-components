@@ -1,18 +1,18 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-email-field.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-email-field', () => {
   let field;
 
-  // Ignore generated attributes to prevent failures
-  // when running snapshot tests in a different order
-  // Also ignore pattern because of escape characters
+  // Ignore pattern because of escape characters
   const SNAPSHOT_CONFIG = {
-    ignoreAttributes: ['id', 'aria-describedby', 'aria-labelledby', 'for', 'pattern'],
+    ignoreAttributes: ['pattern'],
   };
 
   beforeEach(() => {
+    resetUniqueId();
     field = fixtureSync('<vaadin-email-field></vaadin-email-field>');
   });
 

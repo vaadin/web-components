@@ -9,14 +9,20 @@ snapshots["vaadin-time-picker host default"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
+    id="input-vaadin-time-picker-4"
     role="combobox"
     slot="input"
     spellcheck="false"
   >
-  <label slot="label">
+  <label
+    for="input-vaadin-time-picker-4"
+    id="label-vaadin-time-picker-0"
+    slot="label"
+  >
   </label>
   <div
     hidden=""
+    id="error-message-vaadin-time-picker-2"
     slot="error-message"
   >
   </div>
@@ -29,18 +35,25 @@ snapshots["vaadin-time-picker host label"] =
   <input
     aria-autocomplete="list"
     aria-expanded="false"
+    aria-labelledby="label-vaadin-time-picker-0"
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
+    id="input-vaadin-time-picker-4"
     role="combobox"
     slot="input"
     spellcheck="false"
   >
-  <label slot="label">
+  <label
+    for="input-vaadin-time-picker-4"
+    id="label-vaadin-time-picker-0"
+    slot="label"
+  >
     Label
   </label>
   <div
     hidden=""
+    id="error-message-vaadin-time-picker-2"
     slot="error-message"
   >
   </div>
@@ -52,22 +65,32 @@ snapshots["vaadin-time-picker host helper"] =
 `<vaadin-time-picker has-helper="">
   <input
     aria-autocomplete="list"
+    aria-describedby="helper-vaadin-time-picker-1"
     aria-expanded="false"
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
+    id="input-vaadin-time-picker-4"
     role="combobox"
     slot="input"
     spellcheck="false"
   >
-  <label slot="label">
+  <label
+    for="input-vaadin-time-picker-4"
+    id="label-vaadin-time-picker-0"
+    slot="label"
+  >
   </label>
   <div
     hidden=""
+    id="error-message-vaadin-time-picker-2"
     slot="error-message"
   >
   </div>
-  <div slot="helper">
+  <div
+    id="helper-vaadin-time-picker-1"
+    slot="helper"
+  >
     Helper
   </div>
 </vaadin-time-picker>
@@ -86,14 +109,20 @@ snapshots["vaadin-time-picker host error"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
+    id="input-vaadin-time-picker-4"
     invalid=""
     role="combobox"
     slot="input"
     spellcheck="false"
   >
-  <label slot="label">
+  <label
+    for="input-vaadin-time-picker-4"
+    id="label-vaadin-time-picker-0"
+    slot="label"
+  >
   </label>
   <div
+    id="error-message-vaadin-time-picker-2"
     role="alert"
     slot="error-message"
   >
@@ -115,15 +144,21 @@ snapshots["vaadin-time-picker host disabled"] =
     autocomplete="off"
     autocorrect="off"
     disabled=""
+    id="input-vaadin-time-picker-4"
     role="combobox"
     slot="input"
     spellcheck="false"
     tabindex="-1"
   >
-  <label slot="label">
+  <label
+    for="input-vaadin-time-picker-4"
+    id="label-vaadin-time-picker-0"
+    slot="label"
+  >
   </label>
   <div
     hidden=""
+    id="error-message-vaadin-time-picker-2"
     slot="error-message"
   >
   </div>
@@ -139,15 +174,21 @@ snapshots["vaadin-time-picker host readonly"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
+    id="input-vaadin-time-picker-4"
     readonly=""
     role="combobox"
     slot="input"
     spellcheck="false"
   >
-  <label slot="label">
+  <label
+    for="input-vaadin-time-picker-4"
+    id="label-vaadin-time-picker-0"
+    slot="label"
+  >
   </label>
   <div
     hidden=""
+    id="error-message-vaadin-time-picker-2"
     slot="error-message"
   >
   </div>
@@ -163,15 +204,21 @@ snapshots["vaadin-time-picker host placeholder"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
+    id="input-vaadin-time-picker-4"
     placeholder="Placeholder"
     role="combobox"
     slot="input"
     spellcheck="false"
   >
-  <label slot="label">
+  <label
+    for="input-vaadin-time-picker-4"
+    id="label-vaadin-time-picker-0"
+    slot="label"
+  >
   </label>
   <div
     hidden=""
+    id="error-message-vaadin-time-picker-2"
     slot="error-message"
   >
   </div>
@@ -187,15 +234,21 @@ snapshots["vaadin-time-picker host pattern"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
+    id="input-vaadin-time-picker-4"
     pattern="[0-9]*"
     role="combobox"
     slot="input"
     spellcheck="false"
   >
-  <label slot="label">
+  <label
+    for="input-vaadin-time-picker-4"
+    id="label-vaadin-time-picker-0"
+    slot="label"
+  >
   </label>
   <div
     hidden=""
+    id="error-message-vaadin-time-picker-2"
     slot="error-message"
   >
   </div>

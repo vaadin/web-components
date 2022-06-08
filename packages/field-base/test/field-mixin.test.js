@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { FieldMixin } from '../src/field-mixin.js';
 import { InputController } from '../src/input-controller.js';
 import { InputMixin } from '../src/input-mixin.js';
@@ -88,12 +87,6 @@ describe('field-mixin', () => {
         expect(error).to.be.an.instanceof(HTMLDivElement);
       });
 
-      it('should set id on the error message element', () => {
-        const id = error.getAttribute('id');
-        expect(id).to.match(ID_REGEX);
-        expect(id.endsWith(SlotController.errorMessageId)).to.be.true;
-      });
-
       it('should update error message content on attribute change', () => {
         element.setAttribute('error-message', 'This field is required');
         expect(error.textContent).to.equal('This field is required');
@@ -151,6 +144,23 @@ describe('field-mixin', () => {
       });
     });
 
+    describe('unique id', () => {
+      let error1, error2;
+
+      beforeEach(() => {
+        const element1 = fixtureSync(`<field-mixin-element error-message="Error 1"></field-mixin-element>`);
+        const element2 = fixtureSync(`<field-mixin-element error-message="Error 2"></field-mixin-element>`);
+        error1 = element1.querySelector('[slot=error-message]');
+        error2 = element2.querySelector('[slot=error-message]');
+      });
+
+      it('should set a unique id on the error message element', () => {
+        expect(error1.id).to.not.equal(error2.id);
+        expect(error1.id).to.match(ID_REGEX);
+        expect(error2.id).to.match(ID_REGEX);
+      });
+    });
+
     describe('attribute', () => {
       beforeEach(() => {
         element = fixtureSync(`
@@ -187,9 +197,7 @@ describe('field-mixin', () => {
       });
 
       it('should set id on the slotted error message element', () => {
-        const id = error.getAttribute('id');
-        expect(id).to.match(ID_REGEX);
-        expect(id.endsWith(SlotController.errorMessageId)).to.be.true;
+        expect(error.id).to.match(ID_REGEX);
       });
 
       it('should set has-error-message attribute with slotted error message', () => {
@@ -271,6 +279,23 @@ describe('field-mixin', () => {
       });
     });
 
+    describe('unique id', () => {
+      let helper1, helper2;
+
+      beforeEach(() => {
+        const element1 = fixtureSync(`<field-mixin-element helper-text="Helper 1"></field-mixin-element>`);
+        const element2 = fixtureSync(`<field-mixin-element helper-text="Helper 2"></field-mixin-element>`);
+        helper1 = element1.querySelector('[slot=helper]');
+        helper2 = element2.querySelector('[slot=helper]');
+      });
+
+      it('should set a unique id on the helper element', () => {
+        expect(helper1.id).to.not.equal(helper2.id);
+        expect(helper1.id).to.match(ID_REGEX);
+        expect(helper2.id).to.match(ID_REGEX);
+      });
+    });
+
     describe('property', () => {
       beforeEach(() => {
         element = fixtureSync(`<field-mixin-element></field-mixin-element>`);
@@ -280,12 +305,6 @@ describe('field-mixin', () => {
 
       it('should set slot on the generated helper element', () => {
         expect(helper.getAttribute('slot')).to.equal('helper');
-      });
-
-      it('should set id on the generated helper element', () => {
-        const id = helper.getAttribute('id');
-        expect(id).to.match(ID_REGEX);
-        expect(id.endsWith(SlotController.helperId)).to.be.true;
       });
 
       it('should set content to the generated helper element', () => {
@@ -343,9 +362,7 @@ describe('field-mixin', () => {
       });
 
       it('should set id on the slotted helper element', () => {
-        const id = helper.getAttribute('id');
-        expect(id).to.match(ID_REGEX);
-        expect(id.endsWith(SlotController.helperId)).to.be.true;
+        expect(helper.id).to.match(ID_REGEX);
       });
 
       it('should set has-helper attribute with slotted helper', () => {

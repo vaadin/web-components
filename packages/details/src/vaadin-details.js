@@ -5,6 +5,7 @@
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ShadowFocusMixin } from '@vaadin/field-base/src/shadow-focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -134,8 +135,7 @@ class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(PolymerElement
   /** @protected */
   ready() {
     super.ready();
-    const uniqueId = (Details._uniqueId = 1 + Details._uniqueId || 0);
-    this._contentId = `${this.constructor.is}-content-${uniqueId}`;
+    this._contentId = `${this.constructor.is}-content-${generateUniqueId()}`;
     // Prevent Shift + Tab on content from host blur
     this._collapsible.addEventListener('keydown', (e) => {
       if (e.shiftKey && e.keyCode === 9) {

@@ -1,11 +1,13 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../vaadin-checkbox.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-checkbox', () => {
   let checkbox;
 
   beforeEach(() => {
+    resetUniqueId();
     checkbox = fixtureSync('<vaadin-checkbox label="I accept terms and conditions"></vaadin-checkbox>');
   });
 

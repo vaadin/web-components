@@ -80,6 +80,25 @@ describe('form-item', () => {
     });
   });
 
+  describe('unique label id', () => {
+    let label1, label2;
+
+    beforeEach(async () => {
+      const item1 = fixtureSync(`<vaadin-form-item><label slot="label">Label</label></vaadin-form-item>`);
+      const item2 = fixtureSync(`<vaadin-form-item><label slot="label">Label</label></vaadin-form-item>`);
+      label1 = item1.querySelector('label');
+      label2 = item2.querySelector('label');
+      await nextFrame();
+    });
+
+    it('should set a unique id on the label element', () => {
+      const ID_REGEX = /^label-vaadin-form-item-\d+$/;
+      expect(label1.id).to.not.equal(label2.id);
+      expect(label1.id).to.match(ID_REGEX);
+      expect(label2.id).to.match(ID_REGEX);
+    });
+  });
+
   describe('label', () => {
     let labelId;
 
@@ -106,13 +125,6 @@ describe('form-item', () => {
       const spy = sinon.spy(input, 'click');
       label.click();
       expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should set id to the label element', () => {
-      const ID_REGEX = /^label-vaadin-form-item-\d+$/;
-      const id = label.getAttribute('id');
-      expect(id).to.match(ID_REGEX);
-      expect(id.endsWith(item.constructor._uniqueLabelId)).to.be.true;
     });
 
     it('should set id to the new label element when using replaceChild', async () => {

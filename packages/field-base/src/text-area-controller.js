@@ -25,10 +25,7 @@ export class TextAreaController extends SlotController {
           node.setAttribute('name', name);
         }
 
-        // Ensure every instance has unique ID
-        const uniqueId = (TextAreaController._uniqueTextAreaId = 1 + TextAreaController._uniqueTextAreaId || 0);
-        host._textareaId = `${host.localName}-${uniqueId}`;
-        node.id = host._textareaId;
+        node.id = this.defaultId;
 
         if (typeof callback === 'function') {
           callback(node);

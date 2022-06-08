@@ -7,6 +7,7 @@ import './vaadin-combo-box-item.js';
 import './vaadin-combo-box-overlay.js';
 import './vaadin-combo-box-scroller.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 /**
  * Element for internal use only.
@@ -119,8 +120,7 @@ export class ComboBoxDropdown extends PolymerElement {
     super();
 
     // Ensure every instance has unique ID
-    const uniqueId = (ComboBoxDropdown._uniqueId = 1 + ComboBoxDropdown._uniqueId || 0);
-    this.scrollerId = `${this.localName}-scroller-${uniqueId}`;
+    this.scrollerId = `${this.localName}-scroller-${generateUniqueId()}`;
   }
 
   ready() {
