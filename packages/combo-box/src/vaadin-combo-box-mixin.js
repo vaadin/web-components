@@ -203,7 +203,6 @@ export const ComboBoxMixin = (subclass) =>
     static get observers() {
       return [
         '_filterChanged(filter, itemValuePath, itemLabelPath)',
-        '_itemsChanged(items)',
         '_filteredItemsChanged(filteredItems)',
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
       ];
