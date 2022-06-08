@@ -1,11 +1,13 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../vaadin-checkbox-group.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-checkbox-group', () => {
   let group;
 
   beforeEach(() => {
+    resetUniqueId();
     group = fixtureSync(`
       <vaadin-checkbox-group>
         <vaadin-checkbox value="1" label="Checkbox 1"></vaadin-checkbox>

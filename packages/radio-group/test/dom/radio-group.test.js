@@ -1,11 +1,13 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../vaadin-radio-group.js';
+import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-radio-group', () => {
   let group;
 
   beforeEach(() => {
+    resetUniqueId();
     group = fixtureSync(`
       <vaadin-radio-group>
         <vaadin-radio-button value="1" label="Radio 1"></vaadin-radio-button>
