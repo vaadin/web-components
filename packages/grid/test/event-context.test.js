@@ -133,4 +133,20 @@ describe('event context', () => {
   it('should return empty object when targeting grid element', (done) => {
     testEventContext(grid, {}, done);
   });
+
+  it('should use composedPath() stored on the event', (done) => {
+    grid.addEventListener('click', (e) => {
+      // Emulate the context-menu gesture
+      e.__composedPath = e.composedPath();
+
+      setTimeout(() => {
+        const context = grid.getEventContext(e);
+        expect(context.column).to.deep.equal(column);
+        done();
+      });
+    });
+
+    const cell = getContainerCell(grid.$.items, 0, 0);
+    click(cell);
+  });
 });

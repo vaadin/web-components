@@ -34,8 +34,20 @@ register({
     }
   },
 
-  touchstart(e) {
+  _setSourceEvent(e) {
     this.info.sourceEvent = e;
+
+    const path = e.composedPath();
+
+    // Calling `sourceEvent.composedPath()` after a timeout would return an empty array.
+    // This is especially problematic on iOS where we configure the timer on touchstart.
+    // Store the composed path to be used by `grid.getEventContext(event)` so it works.
+    this.info.sourceEvent.__composedPath = path;
+  },
+
+  touchstart(e) {
+    this._setSourceEvent(e);
+
     this.info.touchStartCoords = {
       x: e.changedTouches[0].clientX,
       y: e.changedTouches[0].clientY,
@@ -80,7 +92,7 @@ register({
 
   contextmenu(e) {
     if (!e.shiftKey) {
-      this.info.sourceEvent = e;
+      this._setSourceEvent(e);
       this.fire(e.target, e.clientX, e.clientY);
       prevent('tap');
     }

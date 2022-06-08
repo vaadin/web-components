@@ -33,7 +33,9 @@ export const EventContextMixin = (superClass) =>
     getEventContext(event) {
       const context = {};
 
-      const path = event.composedPath();
+      // Use `composedPath()` stored by vaadin-context-menu gesture
+      // to avoid problem when accessing it after a timeout on iOS
+      const path = event.__composedPath || event.composedPath();
       const cell = path[path.indexOf(this.$.table) - 3];
 
       if (!cell) {
