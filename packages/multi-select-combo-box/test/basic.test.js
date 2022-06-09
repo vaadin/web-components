@@ -878,48 +878,51 @@ describe('basic', () => {
       inputElement.click();
       expect(internal.opened).to.be.false;
     });
+  });
 
-    describe('dataProvider', () => {
-      let spyAsyncDataProvider;
+  describe('readonly + dataProvider', () => {
+    let spyAsyncDataProvider;
 
-      const ITEMS = ['apple', 'banana', 'lemon', 'orange', 'pear'];
+    const ITEMS = ['apple', 'banana', 'lemon', 'orange', 'pear'];
 
-      const getDataProvider = (allItems) => (params, callback) => {
-        const filteredItems = allItems.filter((item) => item.indexOf(params.filter) > -1);
-        const size = filteredItems.length;
-        const offset = params.page * params.pageSize;
-        const dataProviderItems = filteredItems.slice(offset, offset + params.pageSize);
-        callback(dataProviderItems, size);
-      };
+    const getDataProvider = (allItems) => (params, callback) => {
+      const filteredItems = allItems.filter((item) => item.indexOf(params.filter) > -1);
+      const size = filteredItems.length;
+      const offset = params.page * params.pageSize;
+      const dataProviderItems = filteredItems.slice(offset, offset + params.pageSize);
+      callback(dataProviderItems, size);
+    };
 
-      const dataProvider = getDataProvider(ITEMS);
+    const dataProvider = getDataProvider(ITEMS);
 
-      const asyncDataProvider = (params, callback) => {
-        setTimeout(() => dataProvider(params, callback));
-      };
+    const asyncDataProvider = (params, callback) => {
+      setTimeout(() => dataProvider(params, callback));
+    };
 
-      beforeEach(() => {
-        comboBox.items = undefined;
-        spyAsyncDataProvider = sinon.spy(asyncDataProvider);
-        comboBox.dataProvider = spyAsyncDataProvider;
-      });
+    beforeEach(() => {
+      comboBox.items = undefined;
+      spyAsyncDataProvider = sinon.spy(asyncDataProvider);
+      comboBox.dataProvider = spyAsyncDataProvider;
+      comboBox.selectedItems = ['apple', 'orange'];
+      comboBox.readonly = true;
+      inputElement.focus();
+    });
 
-      it('should not fetch items from the data-provider when readonly', async () => {
-        comboBox.opened = true;
-        // Wait for the async data provider timeout
-        await aTimeout(0);
-        expect(spyAsyncDataProvider.called).to.be.false;
-      });
+    it('should not fetch items from the data-provider when readonly', async () => {
+      comboBox.opened = true;
+      // Wait for the async data provider timeout
+      await aTimeout(0);
+      expect(spyAsyncDataProvider.called).to.be.false;
+    });
 
-      it('should not update the dropdown items from the data-provider', async () => {
-        comboBox.opened = true;
-        // Wait for the async data provider timeout
-        await aTimeout(0);
-        const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
-        expect(items.length).to.equal(2);
-        expect(items[0].textContent).to.equal('apple');
-        expect(items[1].textContent).to.equal('orange');
-      });
+    it('should not update the dropdown items from the data-provider', async () => {
+      comboBox.opened = true;
+      // Wait for the async data provider timeout
+      await aTimeout(0);
+      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      expect(items.length).to.equal(2);
+      expect(items[0].textContent).to.equal('apple');
+      expect(items[1].textContent).to.equal('orange');
     });
   });
 

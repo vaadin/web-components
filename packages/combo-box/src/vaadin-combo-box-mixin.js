@@ -221,14 +221,6 @@ export const ComboBoxMixin = (subclass) =>
           observer: '_toggleElementChanged',
         },
 
-        /**
-         * Set of items to be rendered in the dropdown.
-         * @protected
-         */
-        _dropdownItems: {
-          type: Array,
-        },
-
         /** @private */
         _closeOnBlurIsPrevented: Boolean,
 
@@ -247,8 +239,8 @@ export const ComboBoxMixin = (subclass) =>
       return [
         '_filterChanged(filter, itemValuePath, itemLabelPath)',
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
-        '_openedOrItemsChanged(opened, _dropdownItems, loading)',
-        '_updateScroller(_scroller, _dropdownItems, opened, loading, selectedItem, itemIdPath, _focusedIndex, renderer, theme)',
+        '_openedOrItemsChanged(opened, filteredItems, loading)',
+        '_updateScroller(_scroller, filteredItems, opened, loading, selectedItem, itemIdPath, _focusedIndex, renderer, theme)',
       ];
     }
 
@@ -477,7 +469,7 @@ export const ComboBoxMixin = (subclass) =>
         this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', { bubbles: true, composed: true }));
 
         this._onOpened();
-      } else if (wasOpened && this._dropdownItems && this._dropdownItems.length) {
+      } else if (wasOpened && this.filteredItems && this.filteredItems.length) {
         this.close();
 
         this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-closed', { bubbles: true, composed: true }));
@@ -664,7 +656,7 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _onArrowDown() {
       if (this.opened) {
-        const items = this._dropdownItems;
+        const items = this.filteredItems;
         if (items) {
           this._focusedIndex = Math.min(items.length - 1, this._focusedIndex + 1);
           this._prefillFocusedItemLabel();
@@ -680,7 +672,7 @@ export const ComboBoxMixin = (subclass) =>
         if (this._focusedIndex > -1) {
           this._focusedIndex = Math.max(0, this._focusedIndex - 1);
         } else {
-          const items = this._dropdownItems;
+          const items = this.filteredItems;
           if (items) {
             this._focusedIndex = items.length - 1;
           }
@@ -695,7 +687,7 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _prefillFocusedItemLabel() {
       if (this._focusedIndex > -1) {
-        const focusedItem = this._dropdownItems[this._focusedIndex];
+        const focusedItem = this.filteredItems[this._focusedIndex];
         this._inputElementValue = this._getItemLabel(focusedItem);
         this._markAllSelectionRange();
       }
@@ -877,7 +869,7 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _commitValue() {
       if (this._focusedIndex > -1) {
-        const focusedItem = this._dropdownItems[this._focusedIndex];
+        const focusedItem = this.filteredItems[this._focusedIndex];
         if (this.selectedItem !== focusedItem) {
           this.selectedItem = focusedItem;
         }
@@ -1125,8 +1117,6 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _filteredItemsChanged(filteredItems) {
-      this._setDropdownItems(filteredItems);
-
       // Try to sync `selectedItem` based on `value` once a new set of `filteredItems` is available
       // (as a result of external filtering or when they have been loaded by the data provider).
       // When `value` is specified but `selectedItem` is not, it means that there was no item
@@ -1184,16 +1174,6 @@ export const ComboBoxMixin = (subclass) =>
     /** @private */
     _getItemElements() {
       return Array.from(this._scroller.querySelectorAll(`${this._tagNamePrefix}-item`));
-    }
-
-    /**
-     * Provide items to be rendered in the dropdown.
-     * Override this method to show custom items.
-     *
-     * @protected
-     */
-    _setDropdownItems(items) {
-      this._dropdownItems = items;
     }
 
     /** @private */

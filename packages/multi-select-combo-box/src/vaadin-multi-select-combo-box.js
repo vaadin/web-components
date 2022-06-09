@@ -153,7 +153,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
         <vaadin-multi-select-combo-box-internal
           id="comboBox"
-          items="[[items]]"
+          items="[[__effectiveItems]]"
           item-id-path="[[itemIdPath]]"
           item-label-path="[[itemLabelPath]]"
           item-value-path="[[itemValuePath]]"
@@ -165,7 +165,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           filter="{{filter}}"
           loading="{{loading}}"
           size="{{size}}"
-          filtered-items="[[filteredItems]]"
+          filtered-items="[[__effectiveFilteredItems]]"
           selected-items="[[selectedItems]]"
           opened="{{opened}}"
           renderer="[[renderer]]"
@@ -421,6 +421,17 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        * The items can be of either `String` or `Object` type.
        */
       filteredItems: Array,
+
+      __effectiveItems: {
+        type: Array,
+        computed: '__computeEffectiveItems(items, selectedItems, readonly, dataProvider)',
+      },
+
+      /** @private */
+      __effectiveFilteredItems: {
+        type: Array,
+        computed: '__computeEffectiveFilteredItems(filteredItems, selectedItems, readonly, dataProvider)',
+      },
 
       /** @protected */
       _hasValue: {
@@ -1054,6 +1065,24 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     // Prevent mousedown event to keep the input focused
     // and keep the overlay opened when clicking a chip.
     event.preventDefault();
+  }
+
+  /** @private */
+  __computeEffectiveItems(items, selectedItems, readonly, dataProvider) {
+    if (dataProvider) {
+      return;
+    }
+
+    return readonly ? selectedItems : items;
+  }
+
+  /** @private */
+  __computeEffectiveFilteredItems(filteredItems, selectedItems, readonly, dataProvider) {
+    if (!dataProvider) {
+      return;
+    }
+
+    return readonly ? selectedItems : filteredItems;
   }
 }
 

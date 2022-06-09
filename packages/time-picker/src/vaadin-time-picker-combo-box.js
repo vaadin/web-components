@@ -35,7 +35,7 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
 
       <vaadin-time-picker-overlay
         id="overlay"
-        hidden$="[[_isOverlayHidden(_dropdownItems, loading)]]"
+        hidden$="[[_isOverlayHidden(filteredItems, loading)]]"
         opened="[[_overlayOpened]]"
         loading$="[[loading]]"
         theme$="[[_theme]]"

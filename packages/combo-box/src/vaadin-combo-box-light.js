@@ -79,7 +79,7 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
 
       <vaadin-combo-box-overlay
         id="overlay"
-        hidden$="[[_isOverlayHidden(_dropdownItems, loading)]]"
+        hidden$="[[_isOverlayHidden(filteredItems, loading)]]"
         opened="[[_overlayOpened]]"
         loading$="[[loading]]"
         theme$="[[_theme]]"
