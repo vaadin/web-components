@@ -221,16 +221,19 @@ export const ComboBoxMixin = (subclass) =>
           observer: '_toggleElementChanged',
         },
 
+        /**
+         * Set of items to be rendered in the dropdown.
+         * @protected
+         */
+        _dropdownItems: {
+          type: Array,
+        },
+
         /** @private */
         _closeOnBlurIsPrevented: Boolean,
 
         /** @private */
         _scroller: Object,
-
-        /** @private */
-        _dropdownItems: {
-          type: Array,
-        },
 
         /** @private */
         _overlayOpened: {
