@@ -330,6 +330,14 @@ describe('input-control-mixin', () => {
           expect(event.defaultPrevented).to.be.false;
         });
       });
+
+      it('should temporarily set input-prevented attribute when keydown is prevented', () => {
+        keyDownOn(input, 32, [], ' ');
+        expect(element.hasAttribute('input-prevented')).to.be.true;
+
+        element._preventInputDebouncer.flush();
+        expect(element.hasAttribute('input-prevented')).to.be.false;
+      });
     });
 
     const fireDropEvent = (draggedText) => {
@@ -395,6 +403,14 @@ describe('input-control-mixin', () => {
           // Because the same can be done by typing
           const event = fireEvent('1-2+3');
           expect(event.defaultPrevented).to.be.false;
+        });
+
+        it(`should temporarily set input-prevented attribute when ${eventName} is prevented`, () => {
+          fireEvent('foo');
+          expect(element.hasAttribute('input-prevented')).to.be.true;
+
+          element._preventInputDebouncer.flush();
+          expect(element.hasAttribute('input-prevented')).to.be.false;
         });
       });
     };

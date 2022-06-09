@@ -3,6 +3,8 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { timeOut } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldMixin } from './field-mixin.js';
@@ -235,7 +237,17 @@ export const InputControlMixin = (superclass) =>
 
       if (this.allowedCharPattern && !this.__shouldAcceptKey(event)) {
         event.preventDefault();
+        this._markInputPrevented();
       }
+    }
+
+    /** @protected */
+    _markInputPrevented() {
+      // Add input-prevented attribute for 200ms
+      this.setAttribute('input-prevented', '');
+      this._preventInputDebouncer = Debouncer.debounce(this._preventInputDebouncer, timeOut.after(200), () => {
+        this.removeAttribute('input-prevented');
+      });
     }
 
     /** @private */
@@ -255,6 +267,7 @@ export const InputControlMixin = (superclass) =>
         const pastedText = e.clipboardData.getData('text');
         if (!this.__allowedTextRegExp.test(pastedText)) {
           e.preventDefault();
+          this._markInputPrevented();
         }
       }
     }
@@ -265,6 +278,7 @@ export const InputControlMixin = (superclass) =>
         const draggedText = e.dataTransfer.getData('text');
         if (!this.__allowedTextRegExp.test(draggedText)) {
           e.preventDefault();
+          this._markInputPrevented();
         }
       }
     }
@@ -277,6 +291,7 @@ export const InputControlMixin = (superclass) =>
       // See https://github.com/vaadin/vaadin-text-field/issues/429
       if (this.allowedCharPattern && e.data && !this.__allowedTextRegExp.test(e.data)) {
         e.preventDefault();
+        this._markInputPrevented();
       }
     }
 
