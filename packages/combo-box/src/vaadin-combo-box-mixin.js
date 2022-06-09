@@ -1122,7 +1122,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _filteredItemsChanged(filteredItems) {
-      this._setOverlayItems(filteredItems);
+      this._setDropdownItems(filteredItems);
 
       // Try to sync `selectedItem` based on `value` once a new set of `filteredItems` is available
       // (as a result of external filtering or when they have been loaded by the data provider).
@@ -1183,8 +1183,13 @@ export const ComboBoxMixin = (subclass) =>
       return Array.from(this._scroller.querySelectorAll(`${this._tagNamePrefix}-item`));
     }
 
-    /** @protected */
-    _setOverlayItems(items) {
+    /**
+     * Provide items to be rendered in the dropdown.
+     * Override this method to show custom items.
+     *
+     * @protected
+     */
+    _setDropdownItems(items) {
       this._dropdownItems = items;
     }
 

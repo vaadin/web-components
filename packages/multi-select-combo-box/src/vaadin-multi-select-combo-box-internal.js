@@ -283,9 +283,9 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
    * @protected
    * @override
    */
-  _setOverlayItems(items) {
+  _setDropdownItems(items) {
     const effectiveItems = this.readonly ? this.selectedItems : items;
-    super._setOverlayItems(effectiveItems);
+    super._setDropdownItems(effectiveItems);
   }
 
   /**
