@@ -280,7 +280,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     /** @private */
     _warnDataProviderValue(dataProvider, value) {
       if (dataProvider && value !== '' && (this.selectedItem === undefined || this.selectedItem === null)) {
-        const valueIndex = this._indexOfValue(value, this.filteredItems);
+        const valueIndex = this.__getItemIndexByValue(this.filteredItems, value);
         if (valueIndex < 0 || !this._getItemLabel(this.filteredItems[valueIndex])) {
           console.warn(
             'Warning: unable to determine the label for the provided `value`. ' +
