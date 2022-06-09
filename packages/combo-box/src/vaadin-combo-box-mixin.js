@@ -873,7 +873,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _commitValue() {
-      if (this._focusedIndex > -1 && this._dropdownItems) {
+      if (this._focusedIndex > -1) {
         const focusedItem = this._dropdownItems[this._focusedIndex];
         if (this.selectedItem !== focusedItem) {
           this.selectedItem = focusedItem;
