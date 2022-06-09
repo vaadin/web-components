@@ -19,6 +19,8 @@
   "main": "vaadin-multi-select-combo-box.js",
   "module": "vaadin-multi-select-combo-box.js",
   "files": [
+    "lit.js",
+    "lit.d.ts",
     "src",
     "theme",
     "vaadin-*.d.ts",
@@ -37,6 +39,7 @@
     "@vaadin/component-base": "^23.2.0-alpha0",
     "@vaadin/field-base": "^23.2.0-alpha0",
     "@vaadin/input-container": "^23.2.0-alpha0",
+    "@vaadin/lit-renderer": "^23.2.0-alpha0",
     "@vaadin/vaadin-lumo-styles": "^23.2.0-alpha0",
     "@vaadin/vaadin-material-styles": "^23.2.0-alpha0",
     "@vaadin/vaadin-themable-mixin": "^23.2.0-alpha0"
