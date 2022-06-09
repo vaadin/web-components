@@ -747,8 +747,8 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _commitValue() {
-      const items = this._getOverlayItems();
-      if (items && this._focusedIndex > -1) {
+      if (this._focusedIndex > -1) {
+        const items = this._getOverlayItems();
         const focusedItem = items[this._focusedIndex];
         if (this.selectedItem !== focusedItem) {
           this.selectedItem = focusedItem;
@@ -762,18 +762,14 @@ export const ComboBoxMixin = (subclass) =>
           this.value = '';
         }
       } else {
-        const toLowerCase = (item) => item && item.toLowerCase && item.toLowerCase();
-
-        // Try to find an item whose label matches the input value. A matching item is searched from
-        // the filteredItems array (if available) and the selectedItem (if available).
-        const itemMatchingByLabel = [...(this.filteredItems || []), this.selectedItem].find((item) => {
-          return toLowerCase(this._getItemLabel(item)) === toLowerCase(this._inputElementValue);
-        });
+        // Try to find an item which label matches the input value.
+        const items = [...(this.filteredItems || []), this.selectedItem];
+        const itemMatchingInputValue = items[this.__getItemIndexByLabel(items, this._inputElementValue)];
 
         if (
           this.allowCustomValue &&
           // To prevent a repetitive input value being saved after pressing ESC and Tab.
-          !itemMatchingByLabel
+          !itemMatchingInputValue
         ) {
           const customValue = this._inputElementValue;
 
@@ -793,9 +789,9 @@ export const ComboBoxMixin = (subclass) =>
             this._selectItemForValue(customValue);
             this.value = customValue;
           }
-        } else if (!this.allowCustomValue && !this.opened && itemMatchingByLabel) {
+        } else if (!this.allowCustomValue && !this.opened && itemMatchingInputValue) {
           // An item matching by label was found, select it.
-          this.value = this._getItemValue(itemMatchingByLabel);
+          this.value = this._getItemValue(itemMatchingInputValue);
         } else {
           // Revert the input value
           this._inputElementValue = this.selectedItem ? this._getItemLabel(this.selectedItem) : this.value || '';
