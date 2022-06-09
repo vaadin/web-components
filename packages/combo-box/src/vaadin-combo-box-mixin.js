@@ -1202,23 +1202,6 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
-     * Gets the index of the item with the provided label.
-     * @return {number}
-     * @protected
-     */
-    _indexOfLabel(label) {
-      if (this._dropdownItems && label) {
-        for (let i = 0; i < this._dropdownItems.length; i++) {
-          if (this._getItemLabel(this._dropdownItems[i]).toString().toLowerCase() === label.toString().toLowerCase()) {
-            return i;
-          }
-        }
-      }
-
-      return -1;
-    }
-
-    /**
      * Returns the first item that matches the provided value.
      *
      * @private
