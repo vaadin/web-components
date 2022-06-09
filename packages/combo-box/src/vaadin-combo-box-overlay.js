@@ -52,9 +52,7 @@ export class ComboBoxOverlay extends PositionMixin(OverlayElement) {
   connectedCallback() {
     super.connectedCallback();
 
-    const dropdown = this.__dataHost;
-    const comboBox = dropdown && dropdown.getRootNode().host;
-    this._comboBox = comboBox;
+    const comboBox = this._comboBox;
 
     const hostDir = comboBox && comboBox.getAttribute('dir');
     if (hostDir) {

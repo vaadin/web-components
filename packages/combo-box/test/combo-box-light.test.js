@@ -54,7 +54,7 @@ describe('vaadin-combo-box-light', () => {
       </vaadin-combo-box-light>
     `);
     comboBox.items = ['foo', 'bar', 'baz'];
-    overlay = comboBox.$.dropdown.$.overlay;
+    overlay = comboBox.$.overlay;
     inputElement = comboBox.querySelector('vaadin-text-field');
   });
 
@@ -325,7 +325,7 @@ describe('custom buttons', () => {
       click(clearButton);
 
       expect(comboBox.value).to.eql('');
-      expect(comboBox.$.dropdown._selectedItem).to.be.null;
+      expect(comboBox._scroller.selectedItem).to.be.null;
       expect(comboBox.selectedItem).to.be.null;
     });
 
@@ -366,7 +366,7 @@ describe('theme attribute', () => {
   });
 
   it('should propagate theme attribute to overlay', () => {
-    expect(comboBox.$.dropdown.$.overlay.getAttribute('theme')).to.equal('foo');
+    expect(comboBox.$.overlay.getAttribute('theme')).to.equal('foo');
   });
 
   it('should propagate theme attribute to item', () => {

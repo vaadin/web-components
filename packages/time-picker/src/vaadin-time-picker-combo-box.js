@@ -3,7 +3,9 @@
  * Copyright (c) 2018 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './vaadin-time-picker-dropdown.js';
+import './vaadin-time-picker-item.js';
+import './vaadin-time-picker-scroller.js';
+import './vaadin-time-picker-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ComboBoxMixin } from '@vaadin/combo-box/src/vaadin-combo-box-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -31,17 +33,16 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
 
       <slot></slot>
 
-      <vaadin-time-picker-dropdown
-        id="dropdown"
-        opened="[[opened]]"
+      <vaadin-time-picker-overlay
+        id="overlay"
+        hidden$="[[_isOverlayHidden(_dropdownItems, loading)]]"
+        opened="[[_overlayOpened]]"
+        loading$="[[loading]]"
+        theme$="[[_theme]]"
         position-target="[[positionTarget]]"
-        renderer="[[renderer]]"
-        _focused-index="[[_focusedIndex]]"
-        _item-id-path="[[itemIdPath]]"
-        _item-label-path="[[itemLabelPath]]"
-        loading="[[loading]]"
-        theme="[[_theme]]"
-      ></vaadin-time-picker-dropdown>
+        no-vertical-overlap
+        restore-focus-node="[[inputElement]]"
+      ></vaadin-time-picker-overlay>
     `;
   }
 
@@ -54,20 +55,21 @@ class TimePickerComboBox extends ComboBoxMixin(ThemableMixin(PolymerElement)) {
   }
 
   /**
+   * Tag name prefix used by scroller and items.
+   * @protected
+   * @return {string}
+   */
+  get _tagNamePrefix() {
+    return 'vaadin-time-picker';
+  }
+
+  /**
    * Reference to the clear button element.
    * @protected
    * @return {!HTMLElement}
    */
   get clearElement() {
     return this.querySelector('[part="clear-button"]');
-  }
-
-  /**
-   * @protected
-   * @override
-   */
-  _getItemElements() {
-    return Array.from(this.$.dropdown._scroller.querySelectorAll('vaadin-time-picker-item'));
   }
 
   /** @protected */

@@ -104,8 +104,18 @@ snapshots["vaadin-combo-box shadow default"] =
     </slot>
   </div>
 </div>
-<vaadin-combo-box-dropdown id="dropdown">
-</vaadin-combo-box-dropdown>
+<vaadin-combo-box-overlay
+  hidden=""
+  id="overlay"
+  no-vertical-overlap=""
+>
+  <vaadin-combo-box-scroller
+    aria-setsize="0"
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+  >
+  </vaadin-combo-box-scroller>
+</vaadin-combo-box-overlay>
 `;
 /* end snapshot vaadin-combo-box shadow default */
 
@@ -155,8 +165,18 @@ snapshots["vaadin-combo-box shadow disabled"] =
     </slot>
   </div>
 </div>
-<vaadin-combo-box-dropdown id="dropdown">
-</vaadin-combo-box-dropdown>
+<vaadin-combo-box-overlay
+  hidden=""
+  id="overlay"
+  no-vertical-overlap=""
+>
+  <vaadin-combo-box-scroller
+    aria-setsize="0"
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+  >
+  </vaadin-combo-box-scroller>
+</vaadin-combo-box-overlay>
 `;
 /* end snapshot vaadin-combo-box shadow disabled */
 
@@ -206,8 +226,18 @@ snapshots["vaadin-combo-box shadow readonly"] =
     </slot>
   </div>
 </div>
-<vaadin-combo-box-dropdown id="dropdown">
-</vaadin-combo-box-dropdown>
+<vaadin-combo-box-overlay
+  hidden=""
+  id="overlay"
+  no-vertical-overlap=""
+>
+  <vaadin-combo-box-scroller
+    aria-setsize="0"
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+  >
+  </vaadin-combo-box-scroller>
+</vaadin-combo-box-overlay>
 `;
 /* end snapshot vaadin-combo-box shadow readonly */
 
@@ -257,8 +287,18 @@ snapshots["vaadin-combo-box shadow invalid"] =
     </slot>
   </div>
 </div>
-<vaadin-combo-box-dropdown id="dropdown">
-</vaadin-combo-box-dropdown>
+<vaadin-combo-box-overlay
+  hidden=""
+  id="overlay"
+  no-vertical-overlap=""
+>
+  <vaadin-combo-box-scroller
+    aria-setsize="0"
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+  >
+  </vaadin-combo-box-scroller>
+</vaadin-combo-box-overlay>
 `;
 /* end snapshot vaadin-combo-box shadow invalid */
 
@@ -308,8 +348,19 @@ snapshots["vaadin-combo-box shadow theme"] =
     </slot>
   </div>
 </div>
-<vaadin-combo-box-dropdown id="dropdown">
-</vaadin-combo-box-dropdown>
+<vaadin-combo-box-overlay
+  hidden=""
+  id="overlay"
+  no-vertical-overlap=""
+  theme="align-right"
+>
+  <vaadin-combo-box-scroller
+    aria-setsize="0"
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+  >
+  </vaadin-combo-box-scroller>
+</vaadin-combo-box-overlay>
 `;
 /* end snapshot vaadin-combo-box shadow theme */
 

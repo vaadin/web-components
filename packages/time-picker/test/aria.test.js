@@ -59,8 +59,8 @@ describe('ARIA', () => {
 
     beforeEach(async () => {
       arrowDownKeyDown(input);
-      scroller = comboBox.$.dropdown._scroller;
-      items = comboBox.$.dropdown._scroller.querySelectorAll('vaadin-time-picker-item');
+      scroller = comboBox._scroller;
+      items = scroller.querySelectorAll('vaadin-time-picker-item');
       await nextFrame();
     });
 

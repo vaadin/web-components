@@ -74,7 +74,7 @@ describe('combo-box in dialog', () => {
     it('should not end up behind the dialog overlay on mousedown', async () => {
       mousedown(comboBox);
       await nextFrame();
-      expect(comboBox.$.dropdown.$.overlay._last).to.be.true;
+      expect(comboBox.$.overlay._last).to.be.true;
     });
 
     it('should not end up behind the dialog overlay on touchstart', async () => {
@@ -82,7 +82,7 @@ describe('combo-box in dialog', () => {
       touchstart(comboBox, { x, y });
 
       await nextFrame();
-      expect(comboBox.$.dropdown.$.overlay._last).to.be.true;
+      expect(comboBox.$.overlay._last).to.be.true;
     });
   });
 });
