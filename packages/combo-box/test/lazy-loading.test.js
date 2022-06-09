@@ -993,23 +993,6 @@ describe('lazy loading', () => {
           expect(comboBox.hasAttribute('focused')).to.be.false;
           expect(comboBox.value).to.equal('other value');
         });
-
-        it('should keep previous value if allow-custom-value is set', () => {
-          comboBox.allowCustomValue = true;
-          comboBox.open();
-          setInputValue(comboBox, 'other value');
-          comboBox.close();
-          expect(comboBox.value).to.eql('other value');
-
-          comboBox.focus();
-          // FIXME: fails when using `setInputValue()`
-          const filterValue = 'item 12';
-          comboBox.inputElement.value = filterValue;
-          comboBox.filter = filterValue;
-
-          expect(comboBox.value).to.eql('other value');
-          expect(comboBox.inputElement.value).to.eql('other value');
-        });
       });
 
       describe('after empty data set loaded', () => {

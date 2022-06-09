@@ -192,10 +192,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
             filteredItems.splice(params.page * params.pageSize, items.length, ...items);
             this.filteredItems = filteredItems;
 
-            // Update selectedItem from filteredItems if value is set
-            if (this._isValidValue(this.value) && this._getItemValue(this.selectedItem) !== this.value) {
-              this._selectItemForValue(this.value);
-            }
             if (!this.opened && !this.hasAttribute('focused')) {
               this._commitValue();
             }
