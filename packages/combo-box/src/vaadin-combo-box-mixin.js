@@ -13,6 +13,34 @@ import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboa
 import { ComboBoxPlaceholder } from './vaadin-combo-box-placeholder.js';
 
 /**
+ * Checks if the value is supported as an item value in this control.
+ *
+ * @param {unknown} value
+ * @return {boolean}
+ */
+function isValidValue(value) {
+  return value !== undefined && value !== null;
+}
+
+/**
+ * Returns the index of the first item that satisfies the provided testing function
+ * ignoring placeholder items.
+ *
+ * @param {Array<ComboBoxItem | string>} items
+ * @param {Function} callback
+ * @return {number}
+ */
+function findItemIndex(items, callback) {
+  return items.findIndex((item) => {
+    if (item instanceof ComboBoxPlaceholder) {
+      return false;
+    }
+
+    return callback(item);
+  });
+}
+
+/**
  * @polymerMixin
  * @param {function(new:HTMLElement)} subclass
  */
@@ -95,6 +123,7 @@ export const ComboBoxMixin = (subclass) =>
          */
         filteredItems: {
           type: Array,
+          observer: '_filteredItemsChanged',
         },
 
         /**
@@ -203,7 +232,6 @@ export const ComboBoxMixin = (subclass) =>
     static get observers() {
       return [
         '_filterChanged(filter, itemValuePath, itemLabelPath)',
-        '_filteredItemsChanged(filteredItems)',
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
       ];
     }
@@ -719,8 +747,8 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _commitValue() {
-      const items = this._getOverlayItems();
-      if (items && this._focusedIndex > -1) {
+      if (this._focusedIndex > -1) {
+        const items = this._getOverlayItems();
         const focusedItem = items[this._focusedIndex];
         if (this.selectedItem !== focusedItem) {
           this.selectedItem = focusedItem;
@@ -734,18 +762,14 @@ export const ComboBoxMixin = (subclass) =>
           this.value = '';
         }
       } else {
-        const toLowerCase = (item) => item && item.toLowerCase && item.toLowerCase();
-
-        // Try to find an item whose label matches the input value. A matching item is searched from
-        // the filteredItems array (if available) and the selectedItem (if available).
-        const itemMatchingByLabel = [...(this.filteredItems || []), this.selectedItem].find((item) => {
-          return toLowerCase(this._getItemLabel(item)) === toLowerCase(this._inputElementValue);
-        });
+        // Try to find an item which label matches the input value.
+        const items = [...(this.filteredItems || []), this.selectedItem];
+        const itemMatchingInputValue = items[this.__getItemIndexByLabel(items, this._inputElementValue)];
 
         if (
           this.allowCustomValue &&
           // To prevent a repetitive input value being saved after pressing ESC and Tab.
-          !itemMatchingByLabel
+          !itemMatchingInputValue
         ) {
           const customValue = this._inputElementValue;
 
@@ -765,9 +789,9 @@ export const ComboBoxMixin = (subclass) =>
             this._selectItemForValue(customValue);
             this.value = customValue;
           }
-        } else if (!this.allowCustomValue && !this.opened && itemMatchingByLabel) {
+        } else if (!this.allowCustomValue && !this.opened && itemMatchingInputValue) {
           // An item matching by label was found, select it.
-          this.value = this._getItemValue(itemMatchingByLabel);
+          this.value = this._getItemValue(itemMatchingInputValue);
         } else {
           // Revert the input value
           this._inputElementValue = this.selectedItem ? this._getItemLabel(this.selectedItem) : this.value || '';
@@ -922,7 +946,7 @@ export const ComboBoxMixin = (subclass) =>
         return;
       }
 
-      if (this._isValidValue(value)) {
+      if (isValidValue(value)) {
         let item;
         if (this._getItemValue(this.selectedItem) !== value) {
           this._selectItemForValue(value);
@@ -963,7 +987,7 @@ export const ComboBoxMixin = (subclass) =>
         this.filteredItems = null;
       }
 
-      const valueIndex = this._indexOfValue(this.value, items);
+      const valueIndex = this.__getItemIndexByValue(items, this.value);
       this._focusedIndex = valueIndex;
 
       const item = valueIndex > -1 && items[valueIndex];
@@ -974,14 +998,14 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _filteredItemsChanged(filteredItems, _itemValuePath, _itemLabelPath) {
+    _filteredItemsChanged(filteredItems) {
       this._setOverlayItems(filteredItems);
 
       // Try to sync `selectedItem` based on `value` once a new set of `filteredItems` is available
       // (as a result of external filtering or when they have been loaded by the data provider).
       // When `value` is specified but `selectedItem` is not, it means that there was no item
       // matching `value` at the moment `value` was set, so `selectedItem` has remained unsynced.
-      const valueIndex = this._indexOfValue(this.value, filteredItems);
+      const valueIndex = this.__getItemIndexByValue(filteredItems, this.value);
       if ((this.selectedItem === null || this.selectedItem === undefined) && valueIndex >= 0) {
         this.selectedItem = filteredItems[valueIndex];
       }
@@ -990,11 +1014,11 @@ export const ComboBoxMixin = (subclass) =>
       if (inputValue === undefined || inputValue === this._getItemLabel(this.selectedItem)) {
         // When the input element value is the same as the current value or not defined,
         // set the focused index to the item that matches the value.
-        this._focusedIndex = this.$.dropdown.indexOfLabel(this._getItemLabel(this.selectedItem));
+        this._focusedIndex = this.__getItemIndexByLabel(filteredItems, this._getItemLabel(this.selectedItem));
       } else {
         // When the user filled in something that is different from the current value = filtering is enabled,
         // set the focused index to the item that matches the filter query.
-        this._focusedIndex = this.$.dropdown.indexOfLabel(this.filter);
+        this._focusedIndex = this.__getItemIndexByLabel(filteredItems, this.filter);
       }
     }
 
@@ -1015,7 +1039,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _selectItemForValue(value) {
-      const valueIndex = this._indexOfValue(value, this.filteredItems);
+      const valueIndex = this.__getItemIndexByValue(this.filteredItems, value);
       const previouslySelectedItem = this.selectedItem;
 
       if (valueIndex >= 0) {
@@ -1046,27 +1070,35 @@ export const ComboBoxMixin = (subclass) =>
       this.$.dropdown.set('_items', items);
     }
 
-    /** @private */
-    _indexOfValue(value, items) {
-      if (!items || !this._isValidValue(value)) {
+    /**
+     * Returns the first item that matches the provided value.
+     *
+     * @private
+     */
+    __getItemIndexByValue(items, value) {
+      if (!items || !isValidValue(value)) {
         return -1;
       }
 
-      return items.findIndex((item) => {
-        if (item instanceof ComboBoxPlaceholder) {
-          return false;
-        }
-
+      return findItemIndex(items, (item) => {
         return this._getItemValue(item) === value;
       });
     }
 
     /**
-     * Checks if the value is supported as an item value in this control.
+     * Returns the first item that matches the provided label.
+     * Labels are matched against each other case insensitively.
+     *
      * @private
      */
-    _isValidValue(value) {
-      return value !== undefined && value !== null;
+    __getItemIndexByLabel(items, label) {
+      if (!items || !label) {
+        return -1;
+      }
+
+      return findItemIndex(items, (item) => {
+        return this._getItemLabel(item).toString().toLowerCase() === label.toString().toLowerCase();
+      });
     }
 
     /** @private */

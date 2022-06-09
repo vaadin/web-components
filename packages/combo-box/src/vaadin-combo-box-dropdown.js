@@ -210,22 +210,6 @@ export class ComboBoxDropdown extends PolymerElement {
   }
 
   /**
-   * Gets the index of the item with the provided label.
-   * @return {number}
-   */
-  indexOfLabel(label) {
-    if (this._items && label) {
-      for (let i = 0; i < this._items.length; i++) {
-        if (this.getItemLabel(this._items[i]).toString().toLowerCase() === label.toString().toLowerCase()) {
-          return i;
-        }
-      }
-    }
-
-    return -1;
-  }
-
-  /**
    * Gets the label string for the item based on the `_itemLabelPath`.
    * @return {string}
    */
