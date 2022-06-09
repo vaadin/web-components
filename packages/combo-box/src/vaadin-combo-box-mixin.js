@@ -140,7 +140,6 @@ export const ComboBoxMixin = (subclass) =>
           type: Boolean,
           value: false,
           reflectToAttribute: true,
-          observer: '_loadingChanged',
         },
 
         /**
@@ -990,6 +989,8 @@ export const ComboBoxMixin = (subclass) =>
       // Scroll to the top of the list whenever the filter changes.
       this._scrollIntoView(0);
 
+      this._focusedIndex = -1;
+
       if (this.items) {
         this.filteredItems = this._filterItems(this.items, filter);
       } else {
@@ -997,13 +998,6 @@ export const ComboBoxMixin = (subclass) =>
         // undefined. Filtering is unnecessary per se, but the filteredItems
         // observer should still be invoked to update focused item.
         this._filteredItemsChanged(this.filteredItems);
-      }
-    }
-
-    /** @private */
-    _loadingChanged(loading) {
-      if (loading) {
-        this._focusedIndex = -1;
       }
     }
 
@@ -1112,7 +1106,9 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _filteredItemsChanged(filteredItems) {
+    _filteredItemsChanged(filteredItems, oldFilteredItems) {
+      const focusedItem = oldFilteredItems ? oldFilteredItems[this._focusedIndex] : null;
+
       // Try to sync `selectedItem` based on `value` once a new set of `filteredItems` is available
       // (as a result of external filtering or when they have been loaded by the data provider).
       // When `value` is specified but `selectedItem` is not, it means that there was no item
@@ -1122,15 +1118,25 @@ export const ComboBoxMixin = (subclass) =>
         this.selectedItem = filteredItems[valueIndex];
       }
 
+      const focusedItemIndex = this.__getItemIndexByValue(filteredItems, this._getItemValue(focusedItem));
+      if (focusedItemIndex > -1) {
+        this._focusedIndex = focusedItemIndex;
+      } else {
+        this.__setInitialFocusedIndex();
+      }
+    }
+
+    /** @private */
+    __setInitialFocusedIndex() {
       const inputValue = this._inputElementValue;
       if (inputValue === undefined || inputValue === this._getItemLabel(this.selectedItem)) {
         // When the input element value is the same as the current value or not defined,
         // set the focused index to the item that matches the value.
-        this._focusedIndex = this.__getItemIndexByLabel(filteredItems, this._getItemLabel(this.selectedItem));
+        this._focusedIndex = this.__getItemIndexByLabel(this.filteredItems, this._getItemLabel(this.selectedItem));
       } else {
         // When the user filled in something that is different from the current value = filtering is enabled,
         // set the focused index to the item that matches the filter query.
-        this._focusedIndex = this.__getItemIndexByLabel(filteredItems, this.filter);
+        this._focusedIndex = this.__getItemIndexByLabel(this.filteredItems, this.filter);
       }
     }
 

@@ -223,7 +223,7 @@ export class ComboBoxScroller extends PolymerElement {
 
   /** @private */
   __isItemFocused(focusedIndex, itemIndex) {
-    return focusedIndex === itemIndex;
+    return !this.loading && focusedIndex === itemIndex;
   }
 
   /** @private */
@@ -248,8 +248,8 @@ export class ComboBoxScroller extends PolymerElement {
   }
 
   /** @private */
-  __loadingChanged(loading) {
-    if (this.__virtualizer && !loading) {
+  __loadingChanged() {
+    if (this.__virtualizer) {
       this.requestContentUpdate();
     }
   }
