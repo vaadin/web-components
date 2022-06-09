@@ -237,40 +237,6 @@ describe('basic', () => {
       await sendKeys({ down: 'Tab' });
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
     });
-
-    it('should clear selectedItems when items property is reset', () => {
-      comboBox.selectedItems = ['apple', 'banana'];
-      comboBox.items = [];
-      expect(comboBox.selectedItems).to.deep.equal([]);
-    });
-
-    it('should update selectedItems when items property is updated', () => {
-      comboBox.selectedItems = ['apple', 'banana'];
-      comboBox.items = ['apple', 'lemon'];
-      expect(comboBox.selectedItems).to.deep.equal(['apple']);
-    });
-
-    it('should update selectedItems when updating object items', () => {
-      comboBox.itemIdPath = 'key';
-
-      comboBox.items = [
-        { id: 'a', key: 'apple' },
-        { id: 'b', key: 'banana' },
-        { id: 'l', key: 'lemon' },
-      ];
-
-      comboBox.selectedItems = [
-        { id: 'a', key: 'apple' },
-        { id: 'b', key: 'banana' },
-      ];
-
-      comboBox.items = [
-        { id: 'a', key: 'apple' },
-        { id: 'l', key: 'lemon' },
-      ];
-
-      expect(comboBox.selectedItems).to.deep.equal([{ id: 'a', key: 'apple' }]);
-    });
   });
 
   describe('pageSize', () => {
