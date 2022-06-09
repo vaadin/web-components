@@ -235,6 +235,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
        */
       items: {
         type: Array,
+        observer: '_itemsChanged',
       },
 
       /**
@@ -602,6 +603,13 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   _clearButtonVisibleChanged(visible, oldVisible) {
     if (visible || oldVisible) {
       this.__updateChips();
+    }
+  }
+
+  /** @private */
+  _itemsChanged(items) {
+    if (Array.isArray(items) && Array.isArray(this.selectedItems)) {
+      this.selectedItems = this.selectedItems.filter((item) => this._findIndex(item, items, this.itemIdPath) > -1);
     }
   }
 
