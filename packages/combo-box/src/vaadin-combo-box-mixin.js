@@ -415,8 +415,13 @@ export const ComboBoxMixin = (subclass) =>
       });
     }
 
-    /** @private */
-    _initScroller() {
+    /**
+     * Create and initialize the scroller element.
+     * Override to provide custom host reference.
+     *
+     * @protected
+     */
+    _initScroller(host) {
       const scrollerTag = `${this._tagNamePrefix}-scroller`;
 
       const overlay = this.$.overlay;
@@ -434,7 +439,7 @@ export const ComboBoxMixin = (subclass) =>
 
       const scroller = overlay.querySelector(scrollerTag);
 
-      scroller.comboBox = this;
+      scroller.comboBox = host || this;
       scroller.getItemLabel = this._getItemLabel.bind(this);
       scroller.addEventListener('selection-changed', this._boundOverlaySelectedItemChanged);
 

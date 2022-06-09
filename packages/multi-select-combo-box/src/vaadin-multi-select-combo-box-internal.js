@@ -124,9 +124,20 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
 
     this._target = this;
     this._toggleElement = this.querySelector('.toggle-button');
+  }
 
-    // Set correct owner for using by item renderers
-    this._scroller.comboBox = this.getRootNode().host;
+  /**
+   * Override combo-box method to set correct owner for using by item renderers.
+   * This needs to be done before the scroller gets added to the DOM to ensure
+   * Lit directive works in case when combo-box is opened using attribute.
+   *
+   * @protected
+   * @override
+   */
+  _initScroller() {
+    const comboBox = this.getRootNode().host;
+
+    super._initScroller(comboBox);
   }
 
   /**
