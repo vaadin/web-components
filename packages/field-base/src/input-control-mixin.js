@@ -283,8 +283,12 @@ export const InputControlMixin = (superclass) =>
     /** @private */
     _allowedCharPatternChanged(charPattern) {
       if (charPattern) {
-        this.__allowedCharRegExp = new RegExp(`^${charPattern}$`);
-        this.__allowedTextRegExp = new RegExp(`^${charPattern}*$`);
+        try {
+          this.__allowedCharRegExp = new RegExp(`^${charPattern}$`);
+          this.__allowedTextRegExp = new RegExp(`^${charPattern}*$`);
+        } catch (e) {
+          console.error(e);
+        }
       }
     }
 

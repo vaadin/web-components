@@ -402,5 +402,20 @@ describe('input-control-mixin', () => {
     testEvent('drop', fireDropEvent);
     testEvent('paste', firePasteEvent);
     testEvent('beforeinput', fireBeforeInputEvent);
+
+    describe('incorrect pattern', () => {
+      beforeEach(() => {
+        sinon.stub(console, 'error');
+      });
+
+      afterEach(() => {
+        console.error.restore();
+      });
+
+      it('should not throw an error when incorrect pattern provided', () => {
+        fixtureSync('<input-control-mixin-element allowed-char-pattern="[a]*"></input-control-mixin-element>');
+        expect(console.error.calledOnce).to.be.true;
+      });
+    });
   });
 });
