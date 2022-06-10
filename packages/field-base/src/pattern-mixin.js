@@ -29,9 +29,11 @@ export const PatternMixin = (superclass) =>
          * When set to true, user is prevented from typing a value that
          * conflicts with the given `pattern`.
          * @attr {boolean} prevent-invalid-input
+         * @deprecated Please use `allowedCharPattern` instead.
          */
         preventInvalidInput: {
           type: Boolean,
+          observer: '_preventInvalidInputChanged',
         },
       };
     }
@@ -67,5 +69,14 @@ export const PatternMixin = (superclass) =>
       this._checkInputValue();
 
       super._onInput(event);
+    }
+
+    /** @private */
+    _preventInvalidInputChanged(preventInvalidInput) {
+      if (preventInvalidInput) {
+        console.warn(
+          `WARNING: Since Vaadin 23.2, "preventInvalidInput" is deprecated. Please use "allowedCharPattern" instead.`,
+        );
+      }
     }
   };

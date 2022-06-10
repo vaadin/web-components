@@ -70,15 +70,24 @@ const runTests = (baseClass) => {
 
   describe('prevent invalid input', () => {
     beforeEach(async () => {
+      sinon.stub(console, 'warn');
       element.preventInvalidInput = true;
       element.value = '1';
       await nextFrame();
+    });
+
+    afterEach(() => {
+      console.warn.restore();
     });
 
     function inputText(value) {
       input.value = value;
       input.dispatchEvent(new CustomEvent('input'));
     }
+
+    it('should warn about using preventInvalidInput', () => {
+      expect(console.warn.calledOnce).to.be.true;
+    });
 
     it('should prevent invalid pattern', async () => {
       element.pattern = '[0-9]*';
