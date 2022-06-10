@@ -47,35 +47,11 @@ export const InputFieldMixin = (superclass) =>
         autocapitalize: {
           type: String,
         },
-
-        /**
-         * A pattern matched against individual characters the user inputs.
-         * When set, the field will prevent:
-         * - `keyDown` events if the entered key doesn't match `/^_enabledCharPattern$/`
-         * - `paste` events if the pasted text doesn't match `/^_enabledCharPattern*$/`
-         * - `drop` events if the dropped text doesn't match `/^_enabledCharPattern*$/`
-         *
-         * For example, to enable entering only numbers and minus signs,
-         * `_enabledCharPattern = "[\\d-]"`
-         * @protected
-         */
-        _enabledCharPattern: {
-          type: String,
-          observer: '_enabledCharPatternChanged',
-        },
       };
     }
 
     static get delegateAttrs() {
       return [...super.delegateAttrs, 'autocapitalize', 'autocomplete', 'autocorrect'];
-    }
-
-    constructor() {
-      super();
-
-      this._boundOnPaste = this._onPaste.bind(this);
-      this._boundOnDrop = this._onDrop.bind(this);
-      this._boundOnBeforeInput = this._onBeforeInput.bind(this);
     }
 
     /**
@@ -147,99 +123,6 @@ export const InputFieldMixin = (superclass) =>
 
       if (this.invalid) {
         this.validate();
-      }
-    }
-
-    /**
-     * Override a method from `InputMixin`.
-     * @param {!HTMLElement} input
-     * @protected
-     * @override
-     */
-    _addInputListeners(input) {
-      super._addInputListeners(input);
-
-      input.addEventListener('paste', this._boundOnPaste);
-      input.addEventListener('drop', this._boundOnDrop);
-      input.addEventListener('beforeinput', this._boundOnBeforeInput);
-    }
-
-    /**
-     * Override a method from `InputMixin`.
-     * @param {!HTMLElement} input
-     * @protected
-     * @override
-     */
-    _removeInputListeners(input) {
-      super._removeInputListeners(input);
-
-      input.removeEventListener('paste', this._boundOnPaste);
-      input.removeEventListener('drop', this._boundOnDrop);
-      input.removeEventListener('beforeinput', this._boundOnBeforeInput);
-    }
-
-    /**
-     * Override an event listener from `InputControlMixin`
-     * to avoid adding a separate listener.
-     * @param {!KeyboardEvent} event
-     * @protected
-     * @override
-     */
-    _onKeyDown(event) {
-      if (this._enabledCharPattern && !this.__shouldAcceptKey(event)) {
-        event.preventDefault();
-      }
-
-      super._onKeyDown(event);
-    }
-
-    /** @private */
-    __shouldAcceptKey(event) {
-      return (
-        event.metaKey ||
-        event.ctrlKey ||
-        !event.key || // Allow typing anything if event.key is not supported
-        event.key.length !== 1 || // Allow "Backspace", "ArrowLeft" etc.
-        this.__enabledCharRegExp.test(event.key)
-      );
-    }
-
-    /** @private */
-    _onPaste(e) {
-      if (this._enabledCharPattern) {
-        const pastedText = (e.clipboardData || window.clipboardData).getData('text');
-        if (!this.__enabledTextRegExp.test(pastedText)) {
-          e.preventDefault();
-        }
-      }
-    }
-
-    /** @private */
-    _onDrop(e) {
-      if (this._enabledCharPattern) {
-        const draggedText = e.dataTransfer.getData('text');
-        if (!this.__enabledTextRegExp.test(draggedText)) {
-          e.preventDefault();
-        }
-      }
-    }
-
-    /** @private */
-    _onBeforeInput(e) {
-      // The `beforeinput` event covers all the cases for `_enabledCharPattern`: keyboard, pasting and dropping,
-      // but it is still experimental technology so we can't rely on it. It's used here just as an additional check,
-      // because it seems to be the only way to detect and prevent specific keys on mobile devices.
-      // See https://github.com/vaadin/vaadin-text-field/issues/429
-      if (this._enabledCharPattern && e.data && !this.__enabledTextRegExp.test(e.data)) {
-        e.preventDefault();
-      }
-    }
-
-    /** @private */
-    _enabledCharPatternChanged(charPattern) {
-      if (charPattern) {
-        this.__enabledCharRegExp = new RegExp(`^${charPattern}$`);
-        this.__enabledTextRegExp = new RegExp(`^${charPattern}*$`);
       }
     }
   };
