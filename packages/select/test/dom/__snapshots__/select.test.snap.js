@@ -214,17 +214,7 @@ snapshots["vaadin-select shadow theme"] =
 /* end snapshot vaadin-select shadow theme */
 
 snapshots["vaadin-select slots default"] = 
-`<vaadin-select-value-button
-  aria-expanded="false"
-  aria-haspopup="listbox"
-  aria-labelledby="label-vaadin-select-0 vaadin-select-3"
-  aria-required="false"
-  role="button"
-  slot="value"
-  tabindex="0"
->
-</vaadin-select-value-button>
-<label
+`<label
   id="label-vaadin-select-0"
   slot="label"
 >
@@ -235,11 +225,32 @@ snapshots["vaadin-select slots default"] =
   slot="error-message"
 >
 </div>
+<vaadin-select-value-button
+  aria-expanded="false"
+  aria-haspopup="listbox"
+  aria-labelledby="label-vaadin-select-0 vaadin-select-3"
+  aria-required="false"
+  role="button"
+  slot="value"
+  tabindex="0"
+>
+</vaadin-select-value-button>
 `;
 /* end snapshot vaadin-select slots default */
 
 snapshots["vaadin-select slots helper"] = 
-`<vaadin-select-value-button
+`<label
+  id="label-vaadin-select-0"
+  slot="label"
+>
+</label>
+<div
+  hidden=""
+  id="error-message-vaadin-select-2"
+  slot="error-message"
+>
+</div>
+<vaadin-select-value-button
   aria-describedby="helper-vaadin-select-1"
   aria-expanded="false"
   aria-haspopup="listbox"
@@ -250,17 +261,6 @@ snapshots["vaadin-select slots helper"] =
   tabindex="0"
 >
 </vaadin-select-value-button>
-<label
-  id="label-vaadin-select-0"
-  slot="label"
->
-</label>
-<div
-  hidden=""
-  id="error-message-vaadin-select-2"
-  slot="error-message"
->
-</div>
 <div
   id="helper-vaadin-select-1"
   slot="helper"
