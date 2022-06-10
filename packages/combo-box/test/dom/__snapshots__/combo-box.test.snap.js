@@ -3,6 +3,18 @@ export const snapshots = {};
 
 snapshots["vaadin-combo-box host placeholder"] = 
 `<vaadin-combo-box placeholder="Placeholder">
+  <label
+    for="input-vaadin-combo-box-4"
+    id="label-vaadin-combo-box-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-combo-box-2"
+    slot="error-message"
+  >
+  </div>
   <input
     aria-autocomplete="list"
     aria-expanded="false"
@@ -15,6 +27,12 @@ snapshots["vaadin-combo-box host placeholder"] =
     slot="input"
     spellcheck="false"
   >
+</vaadin-combo-box>
+`;
+/* end snapshot vaadin-combo-box host placeholder */
+
+snapshots["vaadin-combo-box host pattern"] = 
+`<vaadin-combo-box>
   <label
     for="input-vaadin-combo-box-4"
     id="label-vaadin-combo-box-0"
@@ -27,12 +45,6 @@ snapshots["vaadin-combo-box host placeholder"] =
     slot="error-message"
   >
   </div>
-</vaadin-combo-box>
-`;
-/* end snapshot vaadin-combo-box host placeholder */
-
-snapshots["vaadin-combo-box host pattern"] = 
-`<vaadin-combo-box>
   <input
     aria-autocomplete="list"
     aria-expanded="false"
@@ -45,18 +57,6 @@ snapshots["vaadin-combo-box host pattern"] =
     slot="input"
     spellcheck="false"
   >
-  <label
-    for="input-vaadin-combo-box-4"
-    id="label-vaadin-combo-box-0"
-    slot="label"
-  >
-  </label>
-  <div
-    hidden=""
-    id="error-message-vaadin-combo-box-2"
-    slot="error-message"
-  >
-  </div>
 </vaadin-combo-box>
 `;
 /* end snapshot vaadin-combo-box host pattern */
@@ -365,18 +365,7 @@ snapshots["vaadin-combo-box shadow theme"] =
 /* end snapshot vaadin-combo-box shadow theme */
 
 snapshots["vaadin-combo-box slots default"] = 
-`<input
-  aria-autocomplete="list"
-  aria-expanded="false"
-  autocapitalize="off"
-  autocomplete="off"
-  autocorrect="off"
-  id="input-vaadin-combo-box-4"
-  role="combobox"
-  slot="input"
-  spellcheck="false"
->
-<label
+`<label
   for="input-vaadin-combo-box-4"
   id="label-vaadin-combo-box-0"
   slot="label"
@@ -388,14 +377,9 @@ snapshots["vaadin-combo-box slots default"] =
   slot="error-message"
 >
 </div>
-`;
-/* end snapshot vaadin-combo-box slots default */
-
-snapshots["vaadin-combo-box slots label"] = 
-`<input
+<input
   aria-autocomplete="list"
   aria-expanded="false"
-  aria-labelledby="label-vaadin-combo-box-0"
   autocapitalize="off"
   autocomplete="off"
   autocorrect="off"
@@ -404,7 +388,11 @@ snapshots["vaadin-combo-box slots label"] =
   slot="input"
   spellcheck="false"
 >
-<label
+`;
+/* end snapshot vaadin-combo-box slots default */
+
+snapshots["vaadin-combo-box slots label"] = 
+`<label
   for="input-vaadin-combo-box-4"
   id="label-vaadin-combo-box-0"
   slot="label"
@@ -417,14 +405,10 @@ snapshots["vaadin-combo-box slots label"] =
   slot="error-message"
 >
 </div>
-`;
-/* end snapshot vaadin-combo-box slots label */
-
-snapshots["vaadin-combo-box slots helper"] = 
-`<input
+<input
   aria-autocomplete="list"
-  aria-describedby="helper-vaadin-combo-box-1"
   aria-expanded="false"
+  aria-labelledby="label-vaadin-combo-box-0"
   autocapitalize="off"
   autocomplete="off"
   autocorrect="off"
@@ -433,7 +417,11 @@ snapshots["vaadin-combo-box slots helper"] =
   slot="input"
   spellcheck="false"
 >
-<label
+`;
+/* end snapshot vaadin-combo-box slots label */
+
+snapshots["vaadin-combo-box slots helper"] = 
+`<label
   for="input-vaadin-combo-box-4"
   id="label-vaadin-combo-box-0"
   slot="label"
@@ -445,6 +433,18 @@ snapshots["vaadin-combo-box slots helper"] =
   slot="error-message"
 >
 </div>
+<input
+  aria-autocomplete="list"
+  aria-describedby="helper-vaadin-combo-box-1"
+  aria-expanded="false"
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  id="input-vaadin-combo-box-4"
+  role="combobox"
+  slot="input"
+  spellcheck="false"
+>
 <div
   id="helper-vaadin-combo-box-1"
   slot="helper"
@@ -455,20 +455,7 @@ snapshots["vaadin-combo-box slots helper"] =
 /* end snapshot vaadin-combo-box slots helper */
 
 snapshots["vaadin-combo-box slots error"] = 
-`<input
-  aria-autocomplete="list"
-  aria-expanded="false"
-  aria-invalid="true"
-  autocapitalize="off"
-  autocomplete="off"
-  autocorrect="off"
-  id="input-vaadin-combo-box-4"
-  invalid=""
-  role="combobox"
-  slot="input"
-  spellcheck="false"
->
-<label
+`<label
   for="input-vaadin-combo-box-4"
   id="label-vaadin-combo-box-0"
   slot="label"
@@ -481,6 +468,19 @@ snapshots["vaadin-combo-box slots error"] =
 >
   Error
 </div>
+<input
+  aria-autocomplete="list"
+  aria-expanded="false"
+  aria-invalid="true"
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  id="input-vaadin-combo-box-4"
+  invalid=""
+  role="combobox"
+  slot="input"
+  spellcheck="false"
+>
 `;
 /* end snapshot vaadin-combo-box slots error */
 

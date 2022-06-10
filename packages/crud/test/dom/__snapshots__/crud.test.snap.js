@@ -80,11 +80,6 @@ snapshots["vaadin-crud shadow default"] =
               style="width: 100%;"
               theme="small"
             >
-              <input
-                id="input-vaadin-text-field-10"
-                slot="input"
-                type="text"
-              >
               <label
                 for="input-vaadin-text-field-10"
                 id="label-vaadin-text-field-0"
@@ -97,6 +92,11 @@ snapshots["vaadin-crud shadow default"] =
                 slot="error-message"
               >
               </div>
+              <input
+                id="input-vaadin-text-field-10"
+                slot="input"
+                type="text"
+              >
             </vaadin-text-field>
           </vaadin-grid-filter>
         </vaadin-grid-cell-content>
@@ -112,11 +112,6 @@ snapshots["vaadin-crud shadow default"] =
               style="width: 100%;"
               theme="small"
             >
-              <input
-                id="input-vaadin-text-field-15"
-                slot="input"
-                type="text"
-              >
               <label
                 for="input-vaadin-text-field-15"
                 id="label-vaadin-text-field-3"
@@ -129,6 +124,11 @@ snapshots["vaadin-crud shadow default"] =
                 slot="error-message"
               >
               </div>
+              <input
+                id="input-vaadin-text-field-15"
+                slot="input"
+                type="text"
+              >
             </vaadin-text-field>
           </vaadin-grid-filter>
         </vaadin-grid-cell-content>

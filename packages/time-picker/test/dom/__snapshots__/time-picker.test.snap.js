@@ -3,17 +3,6 @@ export const snapshots = {};
 
 snapshots["vaadin-time-picker host default"] = 
 `<vaadin-time-picker>
-  <input
-    aria-autocomplete="list"
-    aria-expanded="false"
-    autocapitalize="off"
-    autocomplete="off"
-    autocorrect="off"
-    id="input-vaadin-time-picker-4"
-    role="combobox"
-    slot="input"
-    spellcheck="false"
-  >
   <label
     for="input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
@@ -26,16 +15,9 @@ snapshots["vaadin-time-picker host default"] =
     slot="error-message"
   >
   </div>
-</vaadin-time-picker>
-`;
-/* end snapshot vaadin-time-picker host default */
-
-snapshots["vaadin-time-picker host label"] = 
-`<vaadin-time-picker has-label="">
   <input
     aria-autocomplete="list"
     aria-expanded="false"
-    aria-labelledby="label-vaadin-time-picker-0"
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
@@ -44,6 +26,12 @@ snapshots["vaadin-time-picker host label"] =
     slot="input"
     spellcheck="false"
   >
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host default */
+
+snapshots["vaadin-time-picker host label"] = 
+`<vaadin-time-picker has-label="">
   <label
     for="input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
@@ -57,16 +45,10 @@ snapshots["vaadin-time-picker host label"] =
     slot="error-message"
   >
   </div>
-</vaadin-time-picker>
-`;
-/* end snapshot vaadin-time-picker host label */
-
-snapshots["vaadin-time-picker host helper"] = 
-`<vaadin-time-picker has-helper="">
   <input
     aria-autocomplete="list"
-    aria-describedby="helper-vaadin-time-picker-1"
     aria-expanded="false"
+    aria-labelledby="label-vaadin-time-picker-0"
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
@@ -75,6 +57,12 @@ snapshots["vaadin-time-picker host helper"] =
     slot="input"
     spellcheck="false"
   >
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host label */
+
+snapshots["vaadin-time-picker host helper"] = 
+`<vaadin-time-picker has-helper="">
   <label
     for="input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
@@ -87,6 +75,18 @@ snapshots["vaadin-time-picker host helper"] =
     slot="error-message"
   >
   </div>
+  <input
+    aria-autocomplete="list"
+    aria-describedby="helper-vaadin-time-picker-1"
+    aria-expanded="false"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    id="input-vaadin-time-picker-4"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
   <div
     id="helper-vaadin-time-picker-1"
     slot="helper"
@@ -102,19 +102,6 @@ snapshots["vaadin-time-picker host error"] =
   has-error-message=""
   invalid=""
 >
-  <input
-    aria-autocomplete="list"
-    aria-expanded="false"
-    aria-invalid="true"
-    autocapitalize="off"
-    autocomplete="off"
-    autocorrect="off"
-    id="input-vaadin-time-picker-4"
-    invalid=""
-    role="combobox"
-    slot="input"
-    spellcheck="false"
-  >
   <label
     for="input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
@@ -128,6 +115,19 @@ snapshots["vaadin-time-picker host error"] =
   >
     Error
   </div>
+  <input
+    aria-autocomplete="list"
+    aria-expanded="false"
+    aria-invalid="true"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    id="input-vaadin-time-picker-4"
+    invalid=""
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
 </vaadin-time-picker>
 `;
 /* end snapshot vaadin-time-picker host error */
@@ -137,6 +137,18 @@ snapshots["vaadin-time-picker host disabled"] =
   aria-disabled="true"
   disabled=""
 >
+  <label
+    for="input-vaadin-time-picker-4"
+    id="label-vaadin-time-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-time-picker-2"
+    slot="error-message"
+  >
+  </div>
   <input
     aria-autocomplete="list"
     aria-expanded="false"
@@ -150,6 +162,12 @@ snapshots["vaadin-time-picker host disabled"] =
     spellcheck="false"
     tabindex="-1"
   >
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host disabled */
+
+snapshots["vaadin-time-picker host readonly"] = 
+`<vaadin-time-picker readonly="">
   <label
     for="input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
@@ -162,12 +180,6 @@ snapshots["vaadin-time-picker host disabled"] =
     slot="error-message"
   >
   </div>
-</vaadin-time-picker>
-`;
-/* end snapshot vaadin-time-picker host disabled */
-
-snapshots["vaadin-time-picker host readonly"] = 
-`<vaadin-time-picker readonly="">
   <input
     aria-autocomplete="list"
     aria-expanded="false"
@@ -180,6 +192,12 @@ snapshots["vaadin-time-picker host readonly"] =
     slot="input"
     spellcheck="false"
   >
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host readonly */
+
+snapshots["vaadin-time-picker host placeholder"] = 
+`<vaadin-time-picker placeholder="Placeholder">
   <label
     for="input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
@@ -192,12 +210,6 @@ snapshots["vaadin-time-picker host readonly"] =
     slot="error-message"
   >
   </div>
-</vaadin-time-picker>
-`;
-/* end snapshot vaadin-time-picker host readonly */
-
-snapshots["vaadin-time-picker host placeholder"] = 
-`<vaadin-time-picker placeholder="Placeholder">
   <input
     aria-autocomplete="list"
     aria-expanded="false"
@@ -210,6 +222,12 @@ snapshots["vaadin-time-picker host placeholder"] =
     slot="input"
     spellcheck="false"
   >
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host placeholder */
+
+snapshots["vaadin-time-picker host pattern"] = 
+`<vaadin-time-picker>
   <label
     for="input-vaadin-time-picker-4"
     id="label-vaadin-time-picker-0"
@@ -222,12 +240,6 @@ snapshots["vaadin-time-picker host placeholder"] =
     slot="error-message"
   >
   </div>
-</vaadin-time-picker>
-`;
-/* end snapshot vaadin-time-picker host placeholder */
-
-snapshots["vaadin-time-picker host pattern"] = 
-`<vaadin-time-picker>
   <input
     aria-autocomplete="list"
     aria-expanded="false"
@@ -240,18 +252,6 @@ snapshots["vaadin-time-picker host pattern"] =
     slot="input"
     spellcheck="false"
   >
-  <label
-    for="input-vaadin-time-picker-4"
-    id="label-vaadin-time-picker-0"
-    slot="label"
-  >
-  </label>
-  <div
-    hidden=""
-    id="error-message-vaadin-time-picker-2"
-    slot="error-message"
-  >
-  </div>
 </vaadin-time-picker>
 `;
 /* end snapshot vaadin-time-picker host pattern */

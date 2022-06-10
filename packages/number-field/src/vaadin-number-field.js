@@ -213,17 +213,6 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
   }
 
   /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-
-    if (this.inputElement) {
-      this.inputElement.min = this.min;
-      this.inputElement.max = this.max;
-      this.__applyStep(this.step);
-    }
-  }
-
-  /** @protected */
   ready() {
     super.ready();
 
@@ -235,6 +224,11 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
         this.ariaTarget = input;
       }),
     );
+
+    this.inputElement.min = this.min;
+    this.inputElement.max = this.max;
+    this.__applyStep(this.step);
+
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
   }
 
