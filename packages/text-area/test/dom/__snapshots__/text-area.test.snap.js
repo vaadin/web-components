@@ -241,12 +241,7 @@ snapshots["vaadin-text-area shadow theme"] =
 /* end snapshot vaadin-text-area shadow theme */
 
 snapshots["vaadin-text-area slots default"] = 
-`<textarea
-  id="textarea-vaadin-text-area-3"
-  slot="textarea"
->
-</textarea>
-<label
+`<label
   for="textarea-vaadin-text-area-3"
   id="label-vaadin-text-area-0"
   slot="label"
@@ -258,28 +253,33 @@ snapshots["vaadin-text-area slots default"] =
   slot="error-message"
 >
 </div>
+<textarea
+  id="textarea-vaadin-text-area-3"
+  slot="textarea"
+>
+</textarea>
 `;
 /* end snapshot vaadin-text-area slots default */
 
 snapshots["vaadin-text-area slots helper"] = 
-`<textarea
+`<label
+  for="textarea-vaadin-text-area-3"
+  id="label-vaadin-text-area-0"
+  slot="label"
+>
+</label>
+<div
+  hidden=""
+  id="error-message-vaadin-text-area-2"
+  slot="error-message"
+>
+</div>
+<textarea
   aria-describedby="helper-vaadin-text-area-1"
   id="textarea-vaadin-text-area-3"
   slot="textarea"
 >
 </textarea>
-<label
-  for="textarea-vaadin-text-area-3"
-  id="label-vaadin-text-area-0"
-  slot="label"
->
-</label>
-<div
-  hidden=""
-  id="error-message-vaadin-text-area-2"
-  slot="error-message"
->
-</div>
 <div
   id="helper-vaadin-text-area-1"
   slot="helper"
