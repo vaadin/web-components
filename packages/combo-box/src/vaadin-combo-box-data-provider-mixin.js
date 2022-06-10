@@ -177,40 +177,44 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     /** @private */
     _loadPage(page) {
       // Make sure same page isn't requested multiple times.
-      if (!this._pendingRequests[page] && this.dataProvider) {
-        this.loading = true;
-
-        const params = {
-          page,
-          pageSize: this.pageSize,
-          filter: this.filter,
-        };
-
-        const callback = (items, size) => {
-          if (this._pendingRequests[page] === callback) {
-            const filteredItems = this.filteredItems ? [...this.filteredItems] : [];
-            filteredItems.splice(params.page * params.pageSize, items.length, ...items);
-            this.filteredItems = filteredItems;
-
-            if (!this.opened && !this.hasAttribute('focused')) {
-              this._commitValue();
-            }
-            this.size = size;
-
-            delete this._pendingRequests[page];
-
-            if (Object.keys(this._pendingRequests).length === 0) {
-              this.loading = false;
-            }
-          }
-        };
-
-        if (!this._pendingRequests[page]) {
-          // Don't request page if it's already being requested
-          this._pendingRequests[page] = callback;
-          this.dataProvider(params, callback);
-        }
+      if (this._pendingRequests[page] || !this.dataProvider) {
+        return;
       }
+
+      const params = {
+        page,
+        pageSize: this.pageSize,
+        filter: this.filter,
+      };
+
+      const callback = (items, size) => {
+        if (this._pendingRequests[page] !== callback) {
+          return;
+        }
+
+        const filteredItems = this.filteredItems ? [...this.filteredItems] : [];
+        filteredItems.splice(params.page * params.pageSize, items.length, ...items);
+        this.filteredItems = filteredItems;
+
+        if (!this.opened && !this.hasAttribute('focused')) {
+          this._commitValue();
+        }
+        this.size = size;
+
+        delete this._pendingRequests[page];
+
+        if (Object.keys(this._pendingRequests).length === 0) {
+          this.loading = false;
+        }
+      };
+
+      this._pendingRequests[page] = callback;
+      // Set the `loading` flag only after marking the request as pending
+      // to prevent the same page from getting requested multiple times
+      // as a result of `__loadingChanged` in the scroller which requests
+      // a virtualizer update which in turn may trigger a data provider page request.
+      this.loading = true;
+      this.dataProvider(params, callback);
     }
 
     /** @private */
