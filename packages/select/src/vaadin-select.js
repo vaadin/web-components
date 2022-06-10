@@ -11,7 +11,7 @@ import './vaadin-select-value-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
-import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
@@ -129,11 +129,10 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
- * @mixes SlotMixin
  * @mixes FieldMixin
  * @mixes DelegateFocusMixin
  */
-class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
+class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-select';
   }
@@ -313,20 +312,8 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   }
 
   /** @protected */
-  get slots() {
-    return {
-      ...super.slots,
-      value: () => {
-        const button = document.createElement('vaadin-select-value-button');
-        button.setAttribute('aria-haspopup', 'listbox');
-        return button;
-      },
-    };
-  }
-
-  /** @protected */
   get _valueButton() {
-    return this._getDirectSlotChild('value');
+    return this._valueButtonController && this._valueButtonController.node;
   }
 
   constructor() {
@@ -338,28 +325,9 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   }
 
   /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-
-    if (this._valueButton) {
-      this._valueButton.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
-
-      this._updateAriaRequired(this.required);
-      this._updateAriaExpanded(this.opened);
-
-      this._setFocusElement(this._valueButton);
-      this.ariaTarget = this._valueButton;
-
-      this._valueButton.addEventListener('keydown', this._boundOnKeyDown);
-    }
-  }
-
-  /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
-    if (this._valueButton) {
-      this._valueButton.removeEventListener('keydown', this._boundOnKeyDown);
-    }
+
     // Making sure the select is closed and removed from DOM after detaching the select.
     this.opened = false;
   }
@@ -370,6 +338,25 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
 
     this._overlayElement = this.shadowRoot.querySelector('vaadin-select-overlay');
     this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
+
+    this._valueButtonController = new SlotController(
+      this,
+      'value',
+      () => document.createElement('vaadin-select-value-button'),
+      (host, btn) => {
+        this._setFocusElement(btn);
+        this.ariaTarget = btn;
+
+        btn.setAttribute('aria-haspopup', 'listbox');
+        btn.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
+
+        this._updateAriaRequired(host.required);
+        this._updateAriaExpanded(host.opened);
+
+        btn.addEventListener('keydown', this._boundOnKeyDown);
+      },
+    );
+    this.addController(this._valueButtonController);
 
     this.addController(
       new MediaQueryController(this._phoneMediaQuery, (matches) => {
