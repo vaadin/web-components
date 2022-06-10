@@ -21,6 +21,8 @@ export type CrudDataProvider<T> = (params: CrudDataProviderParams, callback: Cru
 
 export type CrudEditorPosition = '' | 'bottom' | 'aside';
 
+type Binder = {};
+
 export interface CrudI18n {
   newItem: string;
   editItem: string;
@@ -383,7 +385,7 @@ declare class Crud<Item> extends ControllerMixin(ElementMixin(ThemableMixin(HTML
   /**
    * An optional Hilla Binder in order to use validators and type safe models in Crud Forms.
    */
-  binder: Binder<any, any>;
+  binder: Binder;
 
   addEventListener<K extends keyof CrudEventMap<Item>>(
     type: K,
