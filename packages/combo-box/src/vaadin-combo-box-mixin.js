@@ -1113,13 +1113,6 @@ export const ComboBoxMixin = (subclass) =>
         this.filteredItems = null;
       }
 
-      const valueIndex = this.__getItemIndexByValue(items, this.value);
-      this._focusedIndex = valueIndex;
-
-      const item = valueIndex > -1 && items[valueIndex];
-      if (item) {
-        this.selectedItem = item;
-      }
       this.__previousItems = items;
     }
 
