@@ -1108,12 +1108,10 @@ export const ComboBoxMixin = (subclass) =>
 
       if (items) {
         this.filteredItems = items.slice(0);
-      } else if (this.__previousItems) {
+      } else if (oldItems) {
         // Only clear filteredItems if the component had items previously but got cleared
         this.filteredItems = null;
       }
-
-      this.__previousItems = items;
     }
 
     /** @private */
