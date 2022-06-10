@@ -145,11 +145,6 @@ export declare class ComboBoxMixinClass<TItem> {
 
   protected readonly _propertyForValue: string;
 
-  /**
-   * Set of items to be rendered in the dropdown.
-   */
-  protected _dropdownItems: TItem[];
-
   protected _inputElementValue: string | undefined;
 
   /**
