@@ -34,6 +34,7 @@ export declare class PatternMixinClass {
    * When set to true, user is prevented from typing a value that
    * conflicts with the given `pattern`.
    * @attr {boolean} prevent-invalid-input
+   * @deprecated Please use `allowedCharPattern` instead.
    */
   preventInvalidInput: boolean | null | undefined;
 }
