@@ -34,7 +34,7 @@ registerStyles('vaadin-number-field', inputFieldShared, { moduleId: 'vaadin-numb
  * `increase-button` | Increase ("plus") button
  * `decrease-button` | Decrease ("minus") button
  *
- * Note, the `input-prevented` state attribute is not supported by `<vaadin-number-field>`.
+ * Note, the `input-prevented` state attribute is only supported when `allowedCharPattern` is set.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
