@@ -235,7 +235,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     return {
       scrollDuration: {
         type: Number,
-        default: 300,
+        value: 300,
       },
 
       /**
