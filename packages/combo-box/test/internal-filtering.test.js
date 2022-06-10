@@ -9,6 +9,21 @@ import { getAllItems, getFocusedItemIndex, makeItems, onceOpened, setInputValue 
 describe('internal filtering', () => {
   let comboBox;
 
+  describe('value is set before', () => {
+    beforeEach(() => {
+      comboBox = fixtureSync(`<vaadin-combo-box value="foo"></vaadin-combo-box>`);
+      comboBox.items = ['foo', 'bar'];
+    });
+
+    it('should have the selected item', () => {
+      expect(comboBox.selectedItem).to.equal('foo');
+    });
+
+    it('should have the input value', () => {
+      expect(comboBox.inputElement.value).to.equal('foo');
+    });
+  });
+
   describe('setting the input field value', () => {
     beforeEach(() => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
