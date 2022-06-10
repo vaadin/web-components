@@ -631,4 +631,30 @@ describe('crud buttons', () => {
       expect(newButton.textContent).to.equal(crud.i18n.cancel);
     });
   });
+
+  describe('dataProvider', () => {
+    let items;
+
+    beforeEach(async () => {
+      crud = fixtureSync('<vaadin-crud style="width: 300px;"></vaadin-crud>');
+      items = [{ foo: 'bar' }];
+      crud.dataProvider = (_, callback) => callback(items, items.length);
+      await nextRender(crud._grid);
+      saveButton = crud.querySelector('[slot=save-button]');
+      deleteButton = crud.querySelector('[slot=delete-button]');
+    });
+
+    it('should hide delete button on new', async () => {
+      crud.$.new.click();
+      await nextRender(crud.$.dialog.$.overlay);
+      expect(deleteButton.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('should show delete button and disable save button on edit', async () => {
+      edit(items[0]);
+      await nextRender(crud.$.dialog.$.overlay);
+      expect(saveButton.hasAttribute('disabled')).to.be.true;
+      expect(deleteButton.hasAttribute('hidden')).not.to.be.true;
+    });
+  });
 });

@@ -1141,7 +1141,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
         }
       });
 
-      this.__isNew = this.__isNew || (this.items && this.items.indexOf(item) < 0);
+      this.__isNew = !!(this.__isNew || (this.items && this.items.indexOf(item) < 0));
       this.editorOpened = true;
     }
   }
