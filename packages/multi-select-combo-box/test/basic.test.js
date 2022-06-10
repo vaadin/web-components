@@ -127,6 +127,11 @@ describe('basic', () => {
       expect(comboBox.hasAttribute('loading')).to.be.false;
     });
 
+    it('should update filteredItems when combo-box filteredItems changes', () => {
+      internal.filteredItems = ['apple'];
+      expect(comboBox.filteredItems).to.deep.equal(['apple']);
+    });
+
     it('should call clearCache() method on the combo-box', () => {
       const spy = sinon.spy(internal, 'clearCache');
       comboBox.clearCache();

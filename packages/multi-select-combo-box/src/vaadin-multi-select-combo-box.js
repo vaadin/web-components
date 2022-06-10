@@ -173,6 +173,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           on-combo-box-item-selected="_onComboBoxItemSelected"
           on-change="_onComboBoxChange"
           on-custom-value-set="_onCustomValueSet"
+          on-filtered-items-changed="_onFilteredItemsChanged"
         >
           <vaadin-multi-select-combo-box-container
             part="input-field"
@@ -603,6 +604,17 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     if (visible || oldVisible) {
       this.__updateChips();
     }
+  }
+
+  /**
+   * Implement two-way binding for the `filteredItems` property
+   * that can be set on the internal combo-box element.
+   *
+   * @param {CustomEvent} event
+   * @private
+   */
+  _onFilteredItemsChanged(event) {
+    this.filteredItems = event.detail.value;
   }
 
   /** @private */
