@@ -54,7 +54,7 @@ export interface NumberFieldEventMap extends HTMLElementEventMap, NumberFieldCus
  * `increase-button` | Increase ("plus") button
  * `decrease-button` | Decrease ("minus") button
  *
- * Note, the `input-prevented` state attribute is not supported by `<vaadin-number-field>`.
+ * Note, the `input-prevented` state attribute is only supported when `allowedCharPattern` is set.
  *
  * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
  * @fires {Event} change - Fired when the user commits a value change.
