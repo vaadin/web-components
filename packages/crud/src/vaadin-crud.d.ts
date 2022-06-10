@@ -380,6 +380,11 @@ declare class Crud<Item> extends ControllerMixin(ElementMixin(ThemableMixin(HTML
    */
   i18n: CrudI18n;
 
+  /**
+   * An optional Hilla Binder in order to use validators and type safe models in Crud Forms.
+   */
+  binder: Binder<any, any>;
+
   addEventListener<K extends keyof CrudEventMap<Item>>(
     type: K,
     listener: (this: Crud<Item>, ev: CrudEventMap<Item>[K]) => void,

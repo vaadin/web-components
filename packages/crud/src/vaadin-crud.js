@@ -600,6 +600,14 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       _fullscreenMediaQuery: {
         value: '(max-width: 600px), (max-height: 600px)',
       },
+
+      /**
+       * An optional Hilla Binder in order to use validators and type safe models in Crud Forms.
+       * @type {Object}
+       */
+      binder: {
+        type: Object,
+      },
     };
   }
 
@@ -1123,26 +1131,31 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       return;
     }
     if (item) {
-      if (!this._fields.length && this._form._configure) {
-        if (this.__model) {
-          this._form._configure(this.__model);
-        } else {
-          console.warn(
-            '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. ' +
-              'Either specify `include` or ensure at least one item is available beforehand.',
-          );
+      if (this.binder) {
+        this.binder.read(item);
+      } else {
+        if (!this._fields.length && this._form._configure) {
+          if (this.__model) {
+            this._form._configure(this.__model);
+          } else {
+            console.warn(
+              '<vaadin-crud> Unable to autoconfigure form because the data structure is unknown. ' +
+                'Either specify `include` or ensure at least one item is available beforehand.',
+            );
+          }
         }
+        this._form.item = item;
+        this._fields.forEach((e) => {
+          const path = e.path || e.getAttribute('path');
+          if (path) {
+            e.value = this.get(path, item);
+          }
+        });
       }
-      this._form.item = item;
-      this._fields.forEach((e) => {
-        const path = e.path || e.getAttribute('path');
-        if (path) {
-          e.value = this.get(path, item);
-        }
-      });
-
       this.__isNew = !!(this.__isNew || (this.items && this.items.indexOf(item) < 0));
       this.editorOpened = true;
+    } else if (this.binder) {
+      this.binder.clear();
     }
   }
 
@@ -1212,18 +1225,23 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   }
 
   /** @private */
-  __save() {
-    if (!this.__validate()) {
+  async __save() {
+    if (this.binder && !(await this.binder.validate())) {
+      return;
+    }
+    if (!this.binder && !this.__validate()) {
       return;
     }
 
-    const item = { ...this.editedItem };
-    this._fields.forEach((e) => {
-      const path = e.path || e.getAttribute('path');
-      if (path) {
-        this.__set(path, e.value, item);
-      }
-    });
+    const item = this.binder ? this.binder.value : { ...this.editedItem };
+    if (!this.binder) {
+      this._fields.forEach((e) => {
+        const path = e.path || e.getAttribute('path');
+        if (path) {
+          this.__set(path, e.value, item);
+        }
+      });
+    }
     const evt = this.dispatchEvent(new CustomEvent('save', { detail: { item }, cancelable: true }));
     if (evt) {
       if (this.__isNew && !this.dataProvider) {
@@ -1235,6 +1253,12 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       } else {
         this.editedItem = this.editedItem || {};
         Object.assign(this.editedItem, item);
+      }
+      if (this.binder) {
+        const retItem = await this.binder.submit();
+        if (retItem) {
+          this.editedItem = retItem;
+        }
       }
       this._grid.clearCache();
       this.__closeEditor();
