@@ -51,6 +51,14 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
   static get properties() {
     return {
       /**
+       * A subset of items, filtered based on the user input.
+       */
+      filteredItems: {
+        type: Array,
+        notify: true,
+      },
+
+      /**
        * When set to `true`, "loading" attribute is set
        * on the host and the overlay element.
        * @type {boolean}
