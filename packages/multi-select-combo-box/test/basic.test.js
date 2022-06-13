@@ -132,6 +132,11 @@ describe('basic', () => {
       expect(comboBox.filteredItems).to.deep.equal(['apple']);
     });
 
+    it('should update filteredItems on combo-box filteredItems splice', () => {
+      internal.splice('filteredItems', 0, 2);
+      expect(comboBox.filteredItems).to.deep.equal(['lemon', 'orange']);
+    });
+
     it('should call clearCache() method on the combo-box', () => {
       const spy = sinon.spy(internal, 'clearCache');
       comboBox.clearCache();

@@ -614,7 +614,10 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
    * @private
    */
   _onFilteredItemsChanged(event) {
-    this.filteredItems = event.detail.value;
+    const { value } = event.detail;
+    if (Array.isArray(value) || value == null) {
+      this.filteredItems = value;
+    }
   }
 
   /** @private */
