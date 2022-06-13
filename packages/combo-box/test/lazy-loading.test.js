@@ -15,6 +15,7 @@ import {
   getViewportItems,
   getVisibleItemsCount,
   makeItems,
+  scrollToIndex,
   setInputValue,
 } from './helpers.js';
 
@@ -56,6 +57,10 @@ describe('lazy loading', () => {
       return { id: i, value: `value ${i}`, label: `label ${i}` };
     });
     callback(dataProviderItems, SIZE);
+  };
+
+  const asyncObjectDataProvider = (params, callback) => {
+    setTimeout(() => objectDataProvider(params, callback));
   };
 
   before(() => {
@@ -447,9 +452,6 @@ describe('lazy loading', () => {
           // Wait for the async data provider to respond
           await aTimeout(0);
 
-          // Wait for the timeout in __loadingChanged
-          await aTimeout(0);
-
           expect(comboBox._focusedIndex).to.equal(8);
           const items = getViewportItems(comboBox);
           expect(items.some((item) => item.index === 50)).to.be.true;
@@ -703,7 +705,9 @@ describe('lazy loading', () => {
     });
 
     describe('selectedItem (string items)', () => {
-      beforeEach(() => (comboBox.dataProvider = dataProvider));
+      beforeEach(() => {
+        comboBox.dataProvider = asyncDataProvider;
+      });
 
       it('should allow setting initial selectedItem', () => {
         comboBox.selectedItem = 'item 0';
@@ -715,31 +719,41 @@ describe('lazy loading', () => {
         expect(comboBox.value).to.equal('item 0');
       });
 
-      it('should select value matching selectedItem when items are loading', () => {
-        comboBox.selectedItem = 'item 0';
-        comboBox.opened = true;
-        expect(comboBox.value).to.equal('item 0');
-        const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
-        expect(selectedRenderedItemElements).to.have.lengthOf(1);
-        expect(selectedRenderedItemElements[0].item).to.equal('item 0');
-      });
+      describe('some items are loaded', () => {
+        beforeEach(async () => {
+          comboBox.opened = true;
+          await aTimeout(0);
+        });
 
-      it('should select value matching selectedItem when items are loaded', () => {
-        comboBox.opened = true;
-        comboBox.selectedItem = 'item 0';
-        expect(comboBox.value).to.equal('item 0');
-        flushComboBox(comboBox);
-        const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
-        // Doesn't work when run on SauceLabs, work locally
-        // expect(selectedRenderedItemElements).to.have.lengthOf(1);
-        expect(selectedRenderedItemElements[0].item).to.equal('item 0');
+        it('should render selectedItem as selected when setting it', async () => {
+          const loadedItem = 'item 0';
+          comboBox.selectedItem = loadedItem;
+          flushComboBox(comboBox);
+          const items = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
+          expect(items).to.have.lengthOf(1);
+          expect(items[0].item).to.deep.equal(loadedItem);
+        });
+
+        it('should render selectedItem as selected when setting it while loading more items', async () => {
+          const alreadyLoadedItem = `item ${comboBox.pageSize - 1}`;
+
+          scrollToIndex(comboBox, comboBox.pageSize + 1);
+          expect(comboBox.loading).to.be.true;
+
+          comboBox.selectedItem = alreadyLoadedItem;
+          flushComboBox(comboBox);
+
+          const items = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
+          expect(items).to.have.lengthOf(1);
+          expect(items[0].item).to.deep.equal(alreadyLoadedItem);
+        });
       });
     });
 
     describe('selectedItem (object items)', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         comboBox.itemIdPath = 'id';
-        comboBox.dataProvider = objectDataProvider;
+        comboBox.dataProvider = asyncObjectDataProvider;
       });
 
       it('should allow setting initial selectedItem', () => {
@@ -752,26 +766,38 @@ describe('lazy loading', () => {
         expect(comboBox.value).to.equal('value 0');
       });
 
-      it('should select value matching selectedItem when items are loading', () => {
-        comboBox.selectedItem = { id: 0, value: 'value 0', label: 'label 0' };
-        comboBox.opened = true;
-        expect(comboBox.value).to.equal('value 0');
-        const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
-        expect(selectedRenderedItemElements).to.have.lengthOf(1);
-        expect(selectedRenderedItemElements[0].item).to.eql({ id: 0, value: 'value 0', label: 'label 0' });
-      });
+      describe('some items are loaded', () => {
+        beforeEach(async () => {
+          comboBox.opened = true;
+          await aTimeout(0);
+        });
 
-      it('should select value matching selectedItem when items are loaded', async () => {
-        comboBox.opened = true;
-        comboBox.selectedItem = { id: 0, value: 'value 0', label: 'label 0' };
-        expect(comboBox.value).to.equal('value 0');
-        flushComboBox(comboBox);
-        // Wait for the timeout in __loadingChanged to finish
-        await aTimeout(0);
-        const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
-        // Doesn't work when run on SauceLabs, work locally
-        // expect(selectedRenderedItemElements).to.have.lengthOf(1);
-        expect(selectedRenderedItemElements[0].item).to.eql({ id: 0, value: 'value 0', label: 'label 0' });
+        it('should render selectedItem as selected when setting it', async () => {
+          const loadedItem = { id: 0, value: 'value 0', label: 'label 0' };
+          comboBox.selectedItem = loadedItem;
+          flushComboBox(comboBox);
+          const items = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
+          expect(items).to.have.lengthOf(1);
+          expect(items[0].item).to.deep.equal(loadedItem);
+        });
+
+        it('should render selectedItem as selected when setting it while loading more items', async () => {
+          const alreadyLoadedItem = {
+            id: comboBox.pageSize - 1,
+            value: `value ${comboBox.pageSize - 1}`,
+            label: `label ${comboBox.pageSize - 1}`,
+          };
+
+          scrollToIndex(comboBox, comboBox.pageSize + 1);
+          expect(comboBox.loading).to.be.true;
+
+          comboBox.selectedItem = alreadyLoadedItem;
+          flushComboBox(comboBox);
+
+          const items = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
+          expect(items).to.have.lengthOf(1);
+          expect(items[0].item).to.deep.equal(alreadyLoadedItem);
+        });
       });
     });
 
