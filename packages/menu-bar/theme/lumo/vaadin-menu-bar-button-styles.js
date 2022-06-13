@@ -95,6 +95,14 @@ const menuBarButton = css`
   :host([dir='rtl'][part='overflow-button']) {
     border-radius: var(--lumo-border-radius-m) 0 0 var(--lumo-border-radius-m);
   }
+
+  :host([theme~='end-aligned']:not([dir='rtl'])):first-child {
+    margin-left: auto;
+  }
+
+  :host([theme~='end-aligned'][dir='rtl']):first-child {
+    margin-right: auto;
+  }
 `;
 
 registerStyles('vaadin-menu-bar-button', [button, menuBarButton], {
