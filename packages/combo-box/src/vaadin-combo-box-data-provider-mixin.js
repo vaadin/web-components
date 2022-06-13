@@ -188,13 +188,10 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
         const callback = (items, size) => {
           if (this._pendingRequests[page] === callback) {
-            if (!this.filteredItems) {
-              const filteredItems = [];
-              filteredItems.splice(params.page * params.pageSize, items.length, ...items);
-              this.filteredItems = filteredItems;
-            } else {
-              this.splice('filteredItems', params.page * params.pageSize, items.length, ...items);
-            }
+            const filteredItems = this.filteredItems ? [...this.filteredItems] : [];
+            filteredItems.splice(params.page * params.pageSize, items.length, ...items);
+            this.filteredItems = filteredItems;
+
             // Update selectedItem from filteredItems if value is set
             if (this._isValidValue(this.value) && this._getItemValue(this.selectedItem) !== this.value) {
               this._selectItemForValue(this.value);
