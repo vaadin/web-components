@@ -17,7 +17,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-          cache: 'yarn'
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
@@ -49,7 +48,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-          cache: 'yarn'
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
