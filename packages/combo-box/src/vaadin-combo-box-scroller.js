@@ -91,6 +91,7 @@ export class ComboBoxScroller extends PolymerElement {
        */
       selectedItem: {
         type: Object,
+        observer: '__selectedItemChanged',
       },
 
       /**
@@ -249,7 +250,14 @@ export class ComboBoxScroller extends PolymerElement {
   /** @private */
   __loadingChanged(loading) {
     if (this.__virtualizer && !loading) {
-      setTimeout(() => this.requestContentUpdate());
+      this.requestContentUpdate();
+    }
+  }
+
+  /** @private */
+  __selectedItemChanged() {
+    if (this.__virtualizer) {
+      this.requestContentUpdate();
     }
   }
 
