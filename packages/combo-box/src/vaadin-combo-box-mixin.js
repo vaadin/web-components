@@ -911,7 +911,6 @@ export const ComboBoxMixin = (subclass) =>
           });
           this.dispatchEvent(e);
           if (!e.defaultPrevented) {
-            this._selectItemForValue(customValue);
             this.value = customValue;
           }
         } else if (!this.allowCustomValue && !this.opened && itemMatchingInputValue) {
