@@ -426,13 +426,13 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       /** @private */
       __effectiveItems: {
         type: Array,
-        computed: '__computeEffectiveItems(items, selectedItems, readonly, dataProvider)',
+        computed: '__computeEffectiveItems(items, selectedItems, readonly)',
       },
 
       /** @private */
       __effectiveFilteredItems: {
         type: Array,
-        computed: '__computeEffectiveFilteredItems(filteredItems, selectedItems, readonly, dataProvider)',
+        computed: '__computeEffectiveFilteredItems(items, filteredItems, selectedItems, readonly)',
       },
 
       /** @protected */
@@ -1084,21 +1084,13 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  __computeEffectiveItems(items, selectedItems, readonly, dataProvider) {
-    if (dataProvider) {
-      return;
-    }
-
-    return readonly ? selectedItems : items;
+  __computeEffectiveItems(items, selectedItems, readonly) {
+    return items && readonly ? selectedItems : items;
   }
 
   /** @private */
-  __computeEffectiveFilteredItems(filteredItems, selectedItems, readonly, dataProvider) {
-    if (!dataProvider) {
-      return;
-    }
-
-    return readonly ? selectedItems : filteredItems;
+  __computeEffectiveFilteredItems(items, filteredItems, selectedItems, readonly) {
+    return !items && readonly ? selectedItems : filteredItems;
   }
 }
 
