@@ -1107,6 +1107,9 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _filteredItemsChanged(filteredItems, oldFilteredItems) {
+      // Store the currently focused item if any. The focused index preserves
+      // in the case when more filtered items are loading but it is reset
+      // when the user types in a filter query.
       const focusedItem = oldFilteredItems ? oldFilteredItems[this._focusedIndex] : null;
 
       // Try to sync `selectedItem` based on `value` once a new set of `filteredItems` is available
@@ -1118,6 +1121,9 @@ export const ComboBoxMixin = (subclass) =>
         this.selectedItem = filteredItems[valueIndex];
       }
 
+      // Try to first set focus on the item that had been focused before `filteredItems` were updated
+      // if it is still present in the `filteredItems` array. Otherwise, set the focused index
+      // depending on the selected item or the filter query.
       const focusedItemIndex = this.__getItemIndexByValue(filteredItems, this._getItemValue(focusedItem));
       if (focusedItemIndex > -1) {
         this._focusedIndex = focusedItemIndex;
