@@ -426,7 +426,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       /** @private */
       __effectiveItems: {
         type: Array,
-        computed: '__computeEffectiveItems(items, selectedItems, readonly, dataProvider)',
+        computed: '__computeEffectiveItems(items, selectedItems, readonly)',
       },
 
       /** @private */
