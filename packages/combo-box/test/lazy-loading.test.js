@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, enterKeyDown, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, aTimeout, enterKeyDown, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import './not-animated-styles.js';
@@ -11,6 +11,7 @@ import {
   flushComboBox,
   getAllItems,
   getFirstItem,
+  getFocusedItemIndex,
   getSelectedItem,
   getViewportItems,
   getVisibleItemsCount,
@@ -414,6 +415,45 @@ describe('lazy loading', () => {
 
           enterKeyDown(comboBox.inputElement);
           expect(comboBox.value).to.eql('custom value');
+        });
+
+        it('should keep the focused item focused when loading more items', async () => {
+          comboBox.size = SIZE;
+          comboBox.dataProvider = spyAsyncDataProvider;
+          comboBox.opened = true;
+          // Wait for the async data provider to respond
+          await aTimeout(0);
+
+          arrowDownKeyDown(comboBox.inputElement);
+          expect(getFocusedItemIndex(comboBox)).to.equal(0);
+
+          comboBox._scrollIntoView(50);
+          // Wait for the async data provider to respond
+          await aTimeout(0);
+
+          comboBox._scrollIntoView(0);
+          expect(getFocusedItemIndex(comboBox)).to.equal(0);
+        });
+
+        it('should keep the focused item focused when loading more items including a selected item', async () => {
+          comboBox.size = SIZE;
+          comboBox.dataProvider = spyAsyncDataProvider;
+          comboBox.value = 'item 50';
+          comboBox.opened = true;
+          // Wait for the async data provider to respond
+          await aTimeout(0);
+          expect(comboBox.selectedItem).to.not.exist;
+
+          arrowDownKeyDown(comboBox.inputElement);
+          expect(getFocusedItemIndex(comboBox)).to.equal(0);
+
+          comboBox._scrollIntoView(50);
+          // Wait for the async data provider to respond
+          await aTimeout(0);
+          expect(comboBox.selectedItem).to.exist;
+
+          comboBox._scrollIntoView(0);
+          expect(getFocusedItemIndex(comboBox)).to.equal(0);
         });
 
         it('should not jump back to focused item after scroll', async () => {
