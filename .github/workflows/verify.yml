@@ -1,10 +1,33 @@
-name: Unit tests
+name: Verify
 
 on: pull_request
 
 jobs:
-  chrome:
-    name: Chrome
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile --no-progress --non-interactive
+
+      - name: Lint JavaScript
+        run: yarn lint:js
+
+      - name: Lint CSS
+        run: yarn lint:css
+
+      - name: Lint TypeScript
+        run: yarn lint:types
+  smoke:
+    name: Smoke tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -21,9 +44,9 @@ jobs:
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
       - name: Test
-        run: yarn test
-  firefox:
-    name: Firefox
+        run: yarn test:smoke
+  snapshots:
+    name: Snapshot tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -39,13 +62,10 @@ jobs:
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      - name: Install Playwright
-        run: npx playwright install-deps firefox
-
       - name: Test
-        run: yarn test:firefox
-  webkit:
-    name: WebKit
+        run: yarn test:snapshots
+  integration:
+    name: Integration tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -61,8 +81,5 @@ jobs:
       - name: Install Dependencies
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      - name: Install Playwright
-        run: npx playwright install-deps webkit
-
       - name: Test
-        run: yarn test:webkit
+        run: yarn test:it
