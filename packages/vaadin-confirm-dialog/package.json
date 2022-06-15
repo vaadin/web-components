@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-confirm-dialog",
-  "version": "23.2.0-alpha0",
+  "version": "23.2.0-alpha1",
   "publishConfig": {
     "access": "public"
   },
@@ -34,6 +34,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/confirm-dialog": "^23.2.0-alpha0"
+    "@vaadin/confirm-dialog": "23.2.0-alpha1"
   }
 }
