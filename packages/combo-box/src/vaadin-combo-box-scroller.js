@@ -250,7 +250,7 @@ export class ComboBoxScroller extends PolymerElement {
   /** @private */
   __loadingChanged() {
     if (this.__virtualizer) {
-      this.requestContentUpdate();
+      setTimeout(() => this.requestContentUpdate());
     }
   }
 

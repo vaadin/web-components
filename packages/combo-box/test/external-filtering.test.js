@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, enter, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
@@ -27,12 +27,13 @@ describe('external filtering', () => {
       expect(comboBox._scroller.items).to.eql(['foo', 'bar', 'baz']);
     });
 
-    it('should remove focus while loading', () => {
+    it('should remove focus while loading', async () => {
       setInputValue(comboBox, 'foo');
       comboBox.filteredItems = ['foo'];
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
 
       comboBox.loading = true;
+      await aTimeout(0);
 
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
