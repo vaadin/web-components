@@ -147,6 +147,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     /** @private */
     _ensureFirstPage(opened) {
       if (opened && this._shouldLoadPage(0)) {
+        console.warn('will ensure first page');
         this._loadPage(0);
       }
     }
@@ -192,8 +193,10 @@ export const ComboBoxDataProviderMixin = (superClass) =>
               const filteredItems = [];
               filteredItems.splice(params.page * params.pageSize, items.length, ...items);
               this.filteredItems = filteredItems;
+              console.warn('set filtered items', filteredItems.length);
             } else {
               this.splice('filteredItems', params.page * params.pageSize, items.length, ...items);
+              console.warn('splice filtered items', items.length);
             }
             // Update selectedItem from filteredItems if value is set
             if (this._isValidValue(this.value) && this._getItemValue(this.selectedItem) !== this.value) {
@@ -213,6 +216,8 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         };
 
         if (!this._pendingRequests[page]) {
+          console.warn('will load page', page);
+
           // Don't request page if it's already being requested
           this._pendingRequests[page] = callback;
           this.dataProvider(params, callback);
@@ -239,6 +244,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       }
       this.filteredItems = filteredItems;
       if (this._shouldFetchData()) {
+        console.warn('cache cleared, will fetch page 0');
         this._loadPage(0);
       } else {
         this._forceNextRequest = true;
@@ -251,6 +257,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       for (let i = 0; i < size; i++) {
         filteredItems[i] = filteredItems[i] !== undefined ? filteredItems[i] : this.__placeHolder;
       }
+      console.warn('size changed', size);
       this.filteredItems = filteredItems;
 
       // Cleans up the redundant pending requests for pages > size

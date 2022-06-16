@@ -254,6 +254,7 @@ export class ComboBoxDropdown extends PolymerElement {
   // eslint-disable-next-line max-params
   __updateScroller(scroller, items, opened, loading, selectedItem, itemIdPath, focusedIndex, renderer, theme) {
     if (scroller) {
+      console.warn(items, opened, loading, selectedItem, itemIdPath, focusedIndex);
       scroller.setProperties({
         items: opened ? items : [],
         opened,
