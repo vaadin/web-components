@@ -569,4 +569,15 @@ describe('pre-opened', () => {
     const actualOverlayWidth = comboBox.$.overlay.$.content.clientWidth;
     expect(actualOverlayWidth).to.eq(expectedOverlayWidth);
   });
+
+  it('should have overlay with correct width', () => {
+    const comboBox = fixtureSync(`
+      <vaadin-combo-box
+        opened
+        items="[0]"
+        style="--vaadin-combo-box-overlay-max-height: 200px"
+      ></vaadin-combo-box>`);
+    const scroller = comboBox.$.overlay.querySelector('vaadin-combo-box-scroller');
+    expect(scroller.style.maxHeight).to.equal('200px');
+  });
 });
