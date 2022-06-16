@@ -442,6 +442,11 @@ export const ComboBoxMixin = (subclass) =>
     // eslint-disable-next-line max-params
     _updateScroller(scroller, items, opened, loading, selectedItem, itemIdPath, focusedIndex, renderer, theme) {
       if (scroller) {
+        if (opened) {
+          scroller.style.maxHeight =
+            getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
+        }
+
         scroller.setProperties({
           items: opened ? items : [],
           opened,
@@ -849,10 +854,6 @@ export const ComboBoxMixin = (subclass) =>
     _onOpened() {
       // Defer scroll position adjustment to improve performance.
       requestAnimationFrame(() => {
-        // When opened is set as attribute, this logic needs to be delayed until scroller is created.
-        this._scroller.style.maxHeight =
-          getComputedStyle(this).getPropertyValue(`--${this._tagNamePrefix}-overlay-max-height`) || '65vh';
-
         this._scrollIntoView(this._focusedIndex);
 
         // Set attribute after the items are rendered when overlay is opened for the first time.
