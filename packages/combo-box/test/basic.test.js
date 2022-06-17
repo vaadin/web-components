@@ -463,47 +463,6 @@ describe('inside flexbox', () => {
   });
 });
 
-describe('slots', () => {
-  let comboBox;
-
-  beforeEach(() => {
-    comboBox = fixtureSync(`
-      <vaadin-combo-box>
-        <div slot="prefix">foo</div>
-        <div slot="helper">bar</div>
-      </vaadin-combo-box>
-    `);
-  });
-
-  it('should expose the prefix slot', () => {
-    const slot = comboBox.shadowRoot.querySelector('slot[name="prefix"]');
-    expect(slot.assignedNodes()[0].textContent).to.eql('foo');
-  });
-
-  it('should expose the helper slot', () => {
-    const slot = comboBox.shadowRoot.querySelector('slot[name="helper"]');
-    expect(slot.assignedNodes()[0].textContent).to.eql('bar');
-  });
-});
-
-describe('theme attribute', () => {
-  let comboBox;
-
-  beforeEach(() => {
-    comboBox = fixtureSync('<vaadin-combo-box theme="foo"></vaadin-combo-box>');
-  });
-
-  it('should propagate theme attribute to overlay', () => {
-    expect(comboBox.$.overlay.getAttribute('theme')).to.equal('foo');
-  });
-
-  it('should propagate theme attribute to item', () => {
-    comboBox.items = ['bar', 'baz'];
-    comboBox.open();
-    expect(getFirstItem(comboBox).getAttribute('theme')).to.equal('foo');
-  });
-});
-
 describe('clear button', () => {
   let comboBox, clearButton;
 

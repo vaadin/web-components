@@ -193,6 +193,114 @@ snapshots["vaadin-combo-box host error"] =
 `;
 /* end snapshot vaadin-combo-box host error */
 
+snapshots["vaadin-combo-box host opened default"] = 
+`<vaadin-combo-box
+  focused=""
+  opened=""
+>
+  <label
+    for="input-vaadin-combo-box-4"
+    id="label-vaadin-combo-box-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-combo-box-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-autocomplete="list"
+    aria-controls="vaadin-combo-box-scroller-3"
+    aria-expanded="true"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    id="input-vaadin-combo-box-4"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+</vaadin-combo-box>
+`;
+/* end snapshot vaadin-combo-box host opened default */
+
+snapshots["vaadin-combo-box host opened overlay"] = 
+`<vaadin-combo-box-overlay
+  dir="ltr"
+  id="overlay"
+  no-vertical-overlap=""
+  opened=""
+  start-aligned=""
+  top-aligned=""
+>
+  <vaadin-combo-box-scroller
+    aria-setsize="2"
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+  >
+    <vaadin-combo-box-item
+      aria-posinset="1"
+      aria-selected="false"
+      id="vaadin-combo-box-item-0"
+      role="option"
+      tabindex="-1"
+    >
+      Item 1
+    </vaadin-combo-box-item>
+    <vaadin-combo-box-item
+      aria-posinset="2"
+      aria-selected="false"
+      id="vaadin-combo-box-item-1"
+      role="option"
+      tabindex="-1"
+    >
+      Item 2
+    </vaadin-combo-box-item>
+  </vaadin-combo-box-scroller>
+</vaadin-combo-box-overlay>
+`;
+/* end snapshot vaadin-combo-box host opened overlay */
+
+snapshots["vaadin-combo-box host opened theme overlay"] = 
+`<vaadin-combo-box-overlay
+  dir="ltr"
+  id="overlay"
+  no-vertical-overlap=""
+  opened=""
+  start-aligned=""
+  theme="align-right"
+  top-aligned=""
+>
+  <vaadin-combo-box-scroller
+    aria-setsize="2"
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+  >
+    <vaadin-combo-box-item
+      aria-posinset="1"
+      aria-selected="false"
+      id="vaadin-combo-box-item-0"
+      role="option"
+      tabindex="-1"
+    >
+      Item 1
+    </vaadin-combo-box-item>
+    <vaadin-combo-box-item
+      aria-posinset="2"
+      aria-selected="false"
+      id="vaadin-combo-box-item-1"
+      role="option"
+      tabindex="-1"
+    >
+      Item 2
+    </vaadin-combo-box-item>
+  </vaadin-combo-box-scroller>
+</vaadin-combo-box-overlay>
+`;
+/* end snapshot vaadin-combo-box host opened theme overlay */
+
 snapshots["vaadin-combo-box shadow default"] = 
 `<div class="vaadin-combo-box-container">
   <div part="label">
