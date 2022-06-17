@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-number-field.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -9,6 +9,24 @@ describe('vaadin-number-field', () => {
   beforeEach(() => {
     resetUniqueId();
     field = fixtureSync('<vaadin-number-field></vaadin-number-field>');
+  });
+
+  describe('host', () => {
+    it('default', async () => {
+      await expect(field).dom.to.equalSnapshot();
+    });
+
+    it('helper', async () => {
+      field.helperText = 'Helper';
+      await expect(field).dom.to.equalSnapshot();
+    });
+
+    it('error', async () => {
+      field.errorMessage = 'Error';
+      field.invalid = true;
+      await aTimeout(0);
+      await expect(field).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
@@ -39,17 +57,6 @@ describe('vaadin-number-field', () => {
     it('theme', async () => {
       field.setAttribute('theme', 'align-right');
       await expect(field).shadowDom.to.equalSnapshot();
-    });
-  });
-
-  describe('slots', () => {
-    it('default', async () => {
-      await expect(field).lightDom.to.equalSnapshot();
-    });
-
-    it('helper', async () => {
-      field.helperText = 'Helper';
-      await expect(field).lightDom.to.equalSnapshot();
     });
   });
 });

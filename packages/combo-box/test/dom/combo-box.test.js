@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-combo-box.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -12,6 +12,10 @@ describe('vaadin-combo-box', () => {
   });
 
   describe('host', () => {
+    it('default', async () => {
+      await expect(comboBox).dom.to.equalSnapshot();
+    });
+
     it('placeholder', async () => {
       comboBox.placeholder = 'Placeholder';
       await expect(comboBox).dom.to.equalSnapshot();
@@ -19,6 +23,23 @@ describe('vaadin-combo-box', () => {
 
     it('pattern', async () => {
       comboBox.pattern = '[0-9]*';
+      await expect(comboBox).dom.to.equalSnapshot();
+    });
+
+    it('label', async () => {
+      comboBox.label = 'Label';
+      await expect(comboBox).dom.to.equalSnapshot();
+    });
+
+    it('helper', async () => {
+      comboBox.helperText = 'Helper';
+      await expect(comboBox).dom.to.equalSnapshot();
+    });
+
+    it('error', async () => {
+      comboBox.errorMessage = 'Error';
+      comboBox.invalid = true;
+      await aTimeout(0);
       await expect(comboBox).dom.to.equalSnapshot();
     });
   });
@@ -46,28 +67,6 @@ describe('vaadin-combo-box', () => {
     it('theme', async () => {
       comboBox.setAttribute('theme', 'align-right');
       await expect(comboBox).shadowDom.to.equalSnapshot();
-    });
-  });
-
-  describe('slots', () => {
-    it('default', async () => {
-      await expect(comboBox).lightDom.to.equalSnapshot();
-    });
-
-    it('label', async () => {
-      comboBox.label = 'Label';
-      await expect(comboBox).lightDom.to.equalSnapshot();
-    });
-
-    it('helper', async () => {
-      comboBox.helperText = 'Helper';
-      await expect(comboBox).lightDom.to.equalSnapshot();
-    });
-
-    it('error', async () => {
-      comboBox.errorMessage = 'Error';
-      comboBox.invalid = true;
-      await expect(comboBox).lightDom.to.equalSnapshot();
     });
   });
 });

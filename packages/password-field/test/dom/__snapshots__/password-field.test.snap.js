@@ -1,6 +1,115 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
+snapshots["vaadin-password-field host default"] = 
+`<vaadin-password-field>
+  <label
+    for="input-vaadin-password-field-3"
+    id="label-vaadin-password-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-password-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    autocapitalize="off"
+    id="input-vaadin-password-field-3"
+    slot="input"
+    type="password"
+  >
+  <vaadin-password-field-button
+    aria-label="Show password"
+    aria-pressed="false"
+    role="button"
+    slot="reveal"
+    tabindex="0"
+  >
+  </vaadin-password-field-button>
+</vaadin-password-field>
+`;
+/* end snapshot vaadin-password-field host default */
+
+snapshots["vaadin-password-field host helper"] = 
+`<vaadin-password-field has-helper="">
+  <label
+    for="input-vaadin-password-field-3"
+    id="label-vaadin-password-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-password-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-describedby="helper-vaadin-password-field-1"
+    autocapitalize="off"
+    id="input-vaadin-password-field-3"
+    slot="input"
+    type="password"
+  >
+  <vaadin-password-field-button
+    aria-label="Show password"
+    aria-pressed="false"
+    role="button"
+    slot="reveal"
+    tabindex="0"
+  >
+  </vaadin-password-field-button>
+  <div
+    id="helper-vaadin-password-field-1"
+    slot="helper"
+  >
+    Helper
+  </div>
+</vaadin-password-field>
+`;
+/* end snapshot vaadin-password-field host helper */
+
+snapshots["vaadin-password-field host error"] = 
+`<vaadin-password-field
+  has-error-message=""
+  invalid=""
+>
+  <label
+    for="input-vaadin-password-field-3"
+    id="label-vaadin-password-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    id="error-message-vaadin-password-field-2"
+    role="alert"
+    slot="error-message"
+  >
+    Error
+  </div>
+  <input
+    aria-describedby="error-message-vaadin-password-field-2"
+    aria-invalid="true"
+    id="input-vaadin-password-field-3"
+    invalid=""
+    slot="input"
+    type="password"
+  >
+  <vaadin-password-field-button
+    aria-label="Show password"
+    aria-pressed="false"
+    role="button"
+    slot="reveal"
+    tabindex="0"
+  >
+  </vaadin-password-field-button>
+</vaadin-password-field>
+`;
+/* end snapshot vaadin-password-field host error */
+
 snapshots["vaadin-password-field shadow default"] = 
 `<div class="vaadin-field-container">
   <div part="label">
@@ -267,71 +376,4 @@ snapshots["vaadin-password-field shadow theme"] =
 </div>
 `;
 /* end snapshot vaadin-password-field shadow theme */
-
-snapshots["vaadin-password-field slots default"] = 
-`<label
-  for="input-vaadin-password-field-3"
-  id="label-vaadin-password-field-0"
-  slot="label"
->
-</label>
-<div
-  hidden=""
-  id="error-message-vaadin-password-field-2"
-  slot="error-message"
->
-</div>
-<input
-  autocapitalize="off"
-  id="input-vaadin-password-field-3"
-  slot="input"
-  type="password"
->
-<vaadin-password-field-button
-  aria-label="Show password"
-  aria-pressed="false"
-  role="button"
-  slot="reveal"
-  tabindex="0"
->
-</vaadin-password-field-button>
-`;
-/* end snapshot vaadin-password-field slots default */
-
-snapshots["vaadin-password-field slots helper"] = 
-`<label
-  for="input-vaadin-password-field-3"
-  id="label-vaadin-password-field-0"
-  slot="label"
->
-</label>
-<div
-  hidden=""
-  id="error-message-vaadin-password-field-2"
-  slot="error-message"
->
-</div>
-<input
-  aria-describedby="helper-vaadin-password-field-1"
-  autocapitalize="off"
-  id="input-vaadin-password-field-3"
-  slot="input"
-  type="password"
->
-<vaadin-password-field-button
-  aria-label="Show password"
-  aria-pressed="false"
-  role="button"
-  slot="reveal"
-  tabindex="0"
->
-</vaadin-password-field-button>
-<div
-  id="helper-vaadin-password-field-1"
-  slot="helper"
->
-  Helper
-</div>
-`;
-/* end snapshot vaadin-password-field slots helper */
 
