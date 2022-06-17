@@ -50,3 +50,13 @@ registerStyles(
   `,
   { moduleId: 'material-avatar-group-item' },
 );
+
+registerStyles(
+  'vaadin-avatar',
+  css`
+    :host {
+      --vaadin-avatar-size: inherit;
+    }
+  `,
+  { moduleId: 'material-avatar' },
+);

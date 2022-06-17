@@ -101,3 +101,13 @@ registerStyles(
   `,
   { moduleId: 'lumo-avatar-group-item' },
 );
+
+registerStyles(
+  'vaadin-avatar',
+  css`
+    :host {
+      --vaadin-avatar-size: inherit;
+    }
+  `,
+  { moduleId: 'lumo-avatar' },
+);
