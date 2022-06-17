@@ -1,6 +1,102 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
+snapshots["vaadin-integer-field host default"] = 
+`<vaadin-integer-field step="1">
+  <label
+    for="input-vaadin-integer-field-3"
+    id="label-vaadin-integer-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-integer-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    id="input-vaadin-integer-field-3"
+    max="undefined"
+    min="undefined"
+    slot="input"
+    step="any"
+    type="number"
+  >
+</vaadin-integer-field>
+`;
+/* end snapshot vaadin-integer-field host default */
+
+snapshots["vaadin-integer-field host helper"] = 
+`<vaadin-integer-field
+  has-helper=""
+  step="1"
+>
+  <label
+    for="input-vaadin-integer-field-3"
+    id="label-vaadin-integer-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-integer-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-describedby="helper-vaadin-integer-field-1"
+    id="input-vaadin-integer-field-3"
+    max="undefined"
+    min="undefined"
+    slot="input"
+    step="any"
+    type="number"
+  >
+  <div
+    id="helper-vaadin-integer-field-1"
+    slot="helper"
+  >
+    Helper
+  </div>
+</vaadin-integer-field>
+`;
+/* end snapshot vaadin-integer-field host helper */
+
+snapshots["vaadin-integer-field host error"] = 
+`<vaadin-integer-field
+  has-error-message=""
+  invalid=""
+  step="1"
+>
+  <label
+    for="input-vaadin-integer-field-3"
+    id="label-vaadin-integer-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    id="error-message-vaadin-integer-field-2"
+    role="alert"
+    slot="error-message"
+  >
+    Error
+  </div>
+  <input
+    aria-describedby="error-message-vaadin-integer-field-2"
+    aria-invalid="true"
+    id="input-vaadin-integer-field-3"
+    invalid=""
+    max="undefined"
+    min="undefined"
+    slot="input"
+    step="any"
+    type="number"
+  >
+</vaadin-integer-field>
+`;
+/* end snapshot vaadin-integer-field host error */
+
 snapshots["vaadin-integer-field shadow default"] = 
 `<div class="vaadin-field-container">
   <div part="label">
@@ -358,59 +454,4 @@ snapshots["vaadin-integer-field shadow theme"] =
 </div>
 `;
 /* end snapshot vaadin-integer-field shadow theme */
-
-snapshots["vaadin-integer-field slots default"] = 
-`<label
-  for="input-vaadin-integer-field-3"
-  id="label-vaadin-integer-field-0"
-  slot="label"
->
-</label>
-<div
-  hidden=""
-  id="error-message-vaadin-integer-field-2"
-  slot="error-message"
->
-</div>
-<input
-  id="input-vaadin-integer-field-3"
-  max="undefined"
-  min="undefined"
-  slot="input"
-  step="any"
-  type="number"
->
-`;
-/* end snapshot vaadin-integer-field slots default */
-
-snapshots["vaadin-integer-field slots helper"] = 
-`<label
-  for="input-vaadin-integer-field-3"
-  id="label-vaadin-integer-field-0"
-  slot="label"
->
-</label>
-<div
-  hidden=""
-  id="error-message-vaadin-integer-field-2"
-  slot="error-message"
->
-</div>
-<input
-  aria-describedby="helper-vaadin-integer-field-1"
-  id="input-vaadin-integer-field-3"
-  max="undefined"
-  min="undefined"
-  slot="input"
-  step="any"
-  type="number"
->
-<div
-  id="helper-vaadin-integer-field-1"
-  slot="helper"
->
-  Helper
-</div>
-`;
-/* end snapshot vaadin-integer-field slots helper */
 
