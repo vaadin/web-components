@@ -307,6 +307,7 @@ snapshots["vaadin-email-field host error"] =
     Error
   </div>
   <input
+    aria-describedby="error-message-vaadin-email-field-2"
     aria-invalid="true"
     id="input-vaadin-email-field-3"
     invalid=""
