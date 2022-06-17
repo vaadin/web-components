@@ -536,21 +536,18 @@ snapshots["vaadin-combo-box host opened overlay"] =
   no-vertical-overlap=""
   opened=""
   start-aligned=""
-  style="justify-content: flex-start; align-items: flex-start; top: 18.5px; left: 0px; --_vaadin-combo-box-overlay-default-width:192px;"
   top-aligned=""
 >
   <vaadin-combo-box-scroller
     aria-setsize="2"
     id="vaadin-combo-box-scroller-3"
     role="listbox"
-    style="max-height: 65vh;"
   >
     <vaadin-combo-box-item
       aria-posinset="1"
       aria-selected="false"
       id="vaadin-combo-box-item-0"
       role="option"
-      style="width: 100%; position: absolute; transform: translateY(0px);"
       tabindex="-1"
     >
       Item 1
@@ -560,7 +557,6 @@ snapshots["vaadin-combo-box host opened overlay"] =
       aria-selected="false"
       id="vaadin-combo-box-item-1"
       role="option"
-      style="width: 100%; position: absolute; transform: translateY(19px);"
       tabindex="-1"
     >
       Item 2
@@ -611,4 +607,42 @@ snapshots["vaadin-combo-box host opened overlay theme"] =
 </vaadin-combo-box-overlay>
 `;
 /* end snapshot vaadin-combo-box host opened overlay theme */
+
+snapshots["vaadin-combo-box host opened theme overlay"] = 
+`<vaadin-combo-box-overlay
+  dir="ltr"
+  id="overlay"
+  no-vertical-overlap=""
+  opened=""
+  start-aligned=""
+  theme="align-right"
+  top-aligned=""
+>
+  <vaadin-combo-box-scroller
+    aria-setsize="2"
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+  >
+    <vaadin-combo-box-item
+      aria-posinset="1"
+      aria-selected="false"
+      id="vaadin-combo-box-item-0"
+      role="option"
+      tabindex="-1"
+    >
+      Item 1
+    </vaadin-combo-box-item>
+    <vaadin-combo-box-item
+      aria-posinset="2"
+      aria-selected="false"
+      id="vaadin-combo-box-item-1"
+      role="option"
+      tabindex="-1"
+    >
+      Item 2
+    </vaadin-combo-box-item>
+  </vaadin-combo-box-scroller>
+</vaadin-combo-box-overlay>
+`;
+/* end snapshot vaadin-combo-box host opened theme overlay */
 
