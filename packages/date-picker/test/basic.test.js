@@ -415,40 +415,6 @@ describe('basic features', () => {
     });
   });
 
-  describe('Disabled', () => {
-    beforeEach(() => {
-      datepicker.disabled = true;
-    });
-
-    it('should propagate disabled property to the input', () => {
-      expect(input.disabled).to.be.true;
-    });
-
-    it('should not open overlay when disabled', () => {
-      datepicker.open();
-      expect(datepicker.$.overlay.hasAttribute('disable-upgrade')).to.be.true;
-    });
-  });
-
-  describe('Readonly', () => {
-    beforeEach(() => {
-      datepicker.readonly = true;
-    });
-
-    it('should propagate readonly property to the input', () => {
-      expect(input.readOnly).to.be.true;
-    });
-
-    it('should not open overlay when readonly', () => {
-      datepicker.open();
-      expect(datepicker.$.overlay.hasAttribute('disable-upgrade')).to.be.true;
-    });
-
-    it('should make input focusable', () => {
-      expect(input.tabIndex).to.equal(0);
-    });
-  });
-
   describe('Date limits', () => {
     beforeEach(() => {
       datepicker.min = '2016-01-01';

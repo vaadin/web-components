@@ -21,6 +21,11 @@ describe('vaadin-date-picker', () => {
       await expect(datePicker).dom.to.equalSnapshot();
     });
 
+    it('readonly', async () => {
+      datePicker.readonly = true;
+      await expect(datePicker).dom.to.equalSnapshot();
+    });
+
     it('label', async () => {
       datePicker.label = 'Label';
       await expect(datePicker).dom.to.equalSnapshot();
