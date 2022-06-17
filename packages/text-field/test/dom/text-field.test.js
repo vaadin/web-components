@@ -16,6 +16,11 @@ describe('vaadin-text-field', () => {
       await expect(field).dom.to.equalSnapshot();
     });
 
+    it('label', async () => {
+      field.label = 'Label';
+      await expect(field).dom.to.equalSnapshot();
+    });
+
     it('helper', async () => {
       field.helperText = 'Helper';
       await expect(field).dom.to.equalSnapshot();

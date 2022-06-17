@@ -316,3 +316,28 @@ snapshots["vaadin-text-field shadow theme"] =
 `;
 /* end snapshot vaadin-text-field shadow theme */
 
+snapshots["vaadin-text-field host label"] = 
+`<vaadin-text-field has-label="">
+  <label
+    for="input-vaadin-text-field-3"
+    id="label-vaadin-text-field-0"
+    slot="label"
+  >
+    Label
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-text-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-labelledby="label-vaadin-text-field-0"
+    id="input-vaadin-text-field-3"
+    slot="input"
+    type="text"
+  >
+</vaadin-text-field>
+`;
+/* end snapshot vaadin-text-field host label */
+
