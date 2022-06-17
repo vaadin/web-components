@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-select.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -9,6 +9,24 @@ describe('vaadin-select', () => {
   beforeEach(() => {
     resetUniqueId();
     select = fixtureSync('<vaadin-select></vaadin-select>');
+  });
+
+  describe('host', () => {
+    it('default', async () => {
+      await expect(select).dom.to.equalSnapshot();
+    });
+
+    it('helper', async () => {
+      select.helperText = 'Helper';
+      await expect(select).dom.to.equalSnapshot();
+    });
+
+    it('error', async () => {
+      select.errorMessage = 'Error';
+      select.invalid = true;
+      await aTimeout(0);
+      await expect(select).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
@@ -34,17 +52,6 @@ describe('vaadin-select', () => {
     it('theme', async () => {
       select.setAttribute('theme', 'align-right');
       await expect(select).shadowDom.to.equalSnapshot();
-    });
-  });
-
-  describe('slots', () => {
-    it('default', async () => {
-      await expect(select).lightDom.to.equalSnapshot();
-    });
-
-    it('helper', async () => {
-      select.helperText = 'Helper';
-      await expect(select).lightDom.to.equalSnapshot();
     });
   });
 });
