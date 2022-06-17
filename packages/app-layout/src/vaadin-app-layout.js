@@ -122,14 +122,8 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           --vaadin-app-layout-touch-optimized: false;
           --vaadin-app-layout-navbar-offset-top: var(--_vaadin-app-layout-navbar-offset-size);
           --vaadin-app-layout-navbar-offset-bottom: var(--_vaadin-app-layout-navbar-offset-size-bottom);
-          padding-top: var(--vaadin-app-layout-navbar-offset-top);
-          padding-bottom: var(--vaadin-app-layout-navbar-offset-bottom);
-          padding-left: var(--vaadin-app-layout-navbar-offset-left);
-        }
-
-        :host([dir='rtl']) {
-          padding-left: 0;
-          padding-right: var(--vaadin-app-layout-navbar-offset-left);
+          padding-block: var(--vaadin-app-layout-navbar-offset-top) var(--vaadin-app-layout-navbar-offset-bottom);
+          padding-inline-start: var(--vaadin-app-layout-navbar-offset-left);
         }
 
         :host([hidden]),
@@ -169,21 +163,16 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           display: flex;
           align-items: center;
           top: 0;
-          right: 0;
-          left: 0;
-          transition: left var(--vaadin-app-layout-transition);
+          inset-inline: 0;
+          transition: inset-inline-start var(--vaadin-app-layout-transition);
           padding-top: var(--safe-area-inset-top);
           padding-left: var(--safe-area-inset-left);
           padding-right: var(--safe-area-inset-right);
           z-index: 1;
         }
 
-        :host(:not([dir='rtl'])[primary-section='drawer'][drawer-opened]:not([overlay])) [part='navbar'] {
-          left: var(--vaadin-app-layout-drawer-offset-left, 0);
-        }
-
-        :host([dir='rtl'][primary-section='drawer'][drawer-opened]:not([overlay])) [part='navbar'] {
-          right: var(--vaadin-app-layout-drawer-offset-left, 0);
+        :host([primary-section='drawer'][drawer-opened]:not([overlay])) [part='navbar'] {
+          inset-inline-start: var(--vaadin-app-layout-drawer-offset-left, 0);
         }
 
         :host([primary-section='drawer']) [part='drawer'] {
@@ -200,9 +189,8 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
           overflow: auto;
           position: fixed;
           top: var(--vaadin-app-layout-navbar-offset-top, 0);
-          right: auto;
           bottom: var(--vaadin-app-layout-navbar-offset-bottom, var(--vaadin-viewport-offset-bottom, 0));
-          left: var(--vaadin-app-layout-navbar-offset-left, 0);
+          inset-inline: var(--vaadin-app-layout-navbar-offset-left, 0) auto;
           transition: transform var(--vaadin-app-layout-transition), visibility var(--vaadin-app-layout-transition);
           transform: translateX(-100%);
           max-width: 90%;
@@ -234,10 +222,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
 
         :host([overlay]) [part='backdrop'] {
           position: fixed;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
+          inset: 0;
           pointer-events: none;
           transition: opacity var(--vaadin-app-layout-transition);
           -webkit-tap-highlight-color: transparent;
@@ -259,25 +244,15 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
         }
 
         :host([dir='rtl']) [part='drawer'] {
-          left: auto;
-          right: var(--vaadin-app-layout-navbar-offset-start, 0);
           transform: translateX(100%);
-        }
-
-        :host([dir='rtl']) [part='navbar'] {
-          transition: right var(--vaadin-app-layout-transition);
         }
 
         :host([dir='rtl'][drawer-opened]) [part='drawer'] {
           transform: translateX(0%);
         }
 
-        :host(:not([dir='rtl'])[drawer-opened]:not([overlay])) {
-          padding-left: var(--vaadin-app-layout-drawer-offset-left);
-        }
-
-        :host([dir='rtl'][drawer-opened]:not([overlay])) {
-          padding-right: var(--vaadin-app-layout-drawer-offset-left);
+        :host([drawer-opened]:not([overlay])) {
+          padding-inline-start: var(--vaadin-app-layout-drawer-offset-left);
         }
 
         @media (max-width: 800px), (max-height: 600px) {
