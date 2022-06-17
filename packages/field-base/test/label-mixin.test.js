@@ -1,25 +1,23 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { LabelMixin } from '../src/label-mixin.js';
+import { define } from './helpers.js';
 
-customElements.define(
-  'label-mixin-element',
-  class extends LabelMixin(PolymerElement) {
-    static get template() {
-      return html`<slot name="label"></slot>`;
-    }
-  },
-);
+const runTests = (baseClass) => {
+  const tag = define[baseClass](
+    'label-mixin',
+    '<slot name="label"></slot>',
+    (Base) => class extends LabelMixin(Base) {},
+  );
 
-describe('label-mixin', () => {
   let element, label;
 
-  const ID_REGEX = /^label-label-mixin-element-\d+$/;
+  const ID_REGEX = new RegExp(`^label-${tag}-\\d+$`);
 
   describe('default', () => {
-    beforeEach(() => {
-      element = fixtureSync(`<label-mixin-element></label-mixin-element>`);
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await nextRender();
       label = element.querySelector('[slot=label]');
     });
 
@@ -36,16 +34,19 @@ describe('label-mixin', () => {
         expect(element.label).to.be.undefined;
       });
 
-      it('should reflect label attribute to the property', () => {
+      it('should reflect label attribute to the property', async () => {
         element.setAttribute('label', 'Email');
+        await nextFrame();
         expect(element.label).to.equal('Email');
 
         element.removeAttribute('label');
+        await nextFrame();
         expect(element.label).to.equal(null);
       });
 
-      it('should update label content on property change', () => {
+      it('should update label content on property change', async () => {
         element.label = 'Email';
+        await nextFrame();
         expect(label.textContent).to.equal('Email');
       });
     });
@@ -55,21 +56,25 @@ describe('label-mixin', () => {
         expect(element.hasAttribute('has-label')).to.be.false;
       });
 
-      it('should toggle the attribute on label property change', () => {
+      it('should toggle the attribute on label property change', async () => {
         element.label = 'Email';
+        await nextFrame();
         expect(element.hasAttribute('has-label')).to.be.true;
 
         element.label = null;
+        await nextFrame();
         expect(element.hasAttribute('has-label')).to.be.false;
       });
 
-      it('should not set the attribute when label is only whitespaces', () => {
+      it('should not set the attribute when label is only whitespaces', async () => {
         element.label = ' ';
+        await nextFrame();
         expect(element.hasAttribute('has-label')).to.be.false;
       });
 
-      it('should not set the attribute when label is empty', () => {
+      it('should not set the attribute when label is empty', async () => {
         element.label = '';
+        await nextFrame();
         expect(element.hasAttribute('has-label')).to.be.false;
       });
     });
@@ -78,9 +83,10 @@ describe('label-mixin', () => {
   describe('unique id', () => {
     let label1, label2;
 
-    beforeEach(() => {
-      const element1 = fixtureSync(`<label-mixin-element error-message="Error 1"></label-mixin-element>`);
-      const element2 = fixtureSync(`<label-mixin-element error-message="Error 2"></label-mixin-element>`);
+    beforeEach(async () => {
+      const element1 = fixtureSync(`<${tag} error-message="Error 1"></${tag}>`);
+      const element2 = fixtureSync(`<${tag} error-message="Error 2"></${tag}>`);
+      await nextRender();
       label1 = element1.querySelector('label');
       label2 = element2.querySelector('label');
     });
@@ -96,20 +102,21 @@ describe('label-mixin', () => {
     describe('basic', () => {
       beforeEach(async () => {
         element = fixtureSync(`
-          <label-mixin-element>
+          <${tag}>
             <label slot="label">Custom</label>
-          </label-mixin-element>
+          </${tag}>
         `);
+        await nextRender();
         label = element.querySelector('label');
-        await nextFrame();
       });
 
       it('should set id on the slotted label element', () => {
         expect(label.id).to.match(ID_REGEX);
       });
 
-      it('should not update slotted label content on property change', () => {
+      it('should not update slotted label content on property change', async () => {
         element.label = 'Email';
+        await nextFrame();
         expect(label.textContent).to.equal('Custom');
       });
 
@@ -138,12 +145,13 @@ describe('label-mixin', () => {
     });
 
     describe('empty text node', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         element = fixtureSync(`
-          <label-mixin-element>
+          <${tag}>
             <label slot="label"> </label>
-          </label-mixin-element>
+          </${tag}>
         `);
+        await nextRender();
         label = element.querySelector('label');
       });
 
@@ -159,12 +167,13 @@ describe('label-mixin', () => {
     });
 
     describe('element node', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         element = fixtureSync(`
-          <label-mixin-element>
+          <${tag}>
             <label slot="label"><div>Label</div></label>
-          </label-mixin-element>
+          </${tag}>
         `);
+        await nextRender();
         label = element.querySelector('label');
       });
 
@@ -180,12 +189,13 @@ describe('label-mixin', () => {
     });
 
     describe('empty element node', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         element = fixtureSync(`
-          <label-mixin-element>
+          <${tag}>
             <label slot="label"><div></div></label>
-          </label-mixin-element>
+          </${tag}>
         `);
+        await nextRender();
         label = element.querySelector('label');
       });
 
@@ -200,7 +210,8 @@ describe('label-mixin', () => {
       let lazyLabel;
 
       beforeEach(async () => {
-        element = fixtureSync('<label-mixin-element></label-mixin-element>');
+        element = fixtureSync(`<${tag}></${tag}>`);
+        await nextRender();
         element.label = 'Default label';
         await nextFrame();
         label = element._labelNode;
@@ -319,4 +330,12 @@ describe('label-mixin', () => {
       });
     });
   });
+};
+
+describe('LabelMixin + Polymer', () => {
+  runTests('polymer');
+});
+
+describe('LabelMixin + Lit', () => {
+  runTests('lit');
 });
