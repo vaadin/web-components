@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-text-area.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -9,6 +9,24 @@ describe('vaadin-text-area', () => {
   beforeEach(() => {
     resetUniqueId();
     textArea = fixtureSync('<vaadin-text-area></vaadin-text-area>');
+  });
+
+  describe('host', () => {
+    it('default', async () => {
+      await expect(textArea).dom.to.equalSnapshot();
+    });
+
+    it('helper', async () => {
+      textArea.helperText = 'Helper';
+      await expect(textArea).dom.to.equalSnapshot();
+    });
+
+    it('error', async () => {
+      textArea.errorMessage = 'Error';
+      textArea.invalid = true;
+      await aTimeout(0);
+      await expect(textArea).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
@@ -34,17 +52,6 @@ describe('vaadin-text-area', () => {
     it('theme', async () => {
       textArea.setAttribute('theme', 'align-right');
       await expect(textArea).shadowDom.to.equalSnapshot();
-    });
-  });
-
-  describe('slots', () => {
-    it('default', async () => {
-      await expect(textArea).lightDom.to.equalSnapshot();
-    });
-
-    it('helper', async () => {
-      textArea.helperText = 'Helper';
-      await expect(textArea).lightDom.to.equalSnapshot();
     });
   });
 });

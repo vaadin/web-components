@@ -1,6 +1,89 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
+snapshots["vaadin-text-area host default"] = 
+`<vaadin-text-area>
+  <label
+    for="textarea-vaadin-text-area-3"
+    id="label-vaadin-text-area-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-text-area-2"
+    slot="error-message"
+  >
+  </div>
+  <textarea
+    id="textarea-vaadin-text-area-3"
+    slot="textarea"
+  >
+  </textarea>
+</vaadin-text-area>
+`;
+/* end snapshot vaadin-text-area host default */
+
+snapshots["vaadin-text-area host helper"] = 
+`<vaadin-text-area has-helper="">
+  <label
+    for="textarea-vaadin-text-area-3"
+    id="label-vaadin-text-area-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-text-area-2"
+    slot="error-message"
+  >
+  </div>
+  <textarea
+    aria-describedby="helper-vaadin-text-area-1"
+    id="textarea-vaadin-text-area-3"
+    slot="textarea"
+  >
+  </textarea>
+  <div
+    id="helper-vaadin-text-area-1"
+    slot="helper"
+  >
+    Helper
+  </div>
+</vaadin-text-area>
+`;
+/* end snapshot vaadin-text-area host helper */
+
+snapshots["vaadin-text-area host error"] = 
+`<vaadin-text-area
+  has-error-message=""
+  invalid=""
+>
+  <label
+    for="textarea-vaadin-text-area-3"
+    id="label-vaadin-text-area-0"
+    slot="label"
+  >
+  </label>
+  <div
+    id="error-message-vaadin-text-area-2"
+    role="alert"
+    slot="error-message"
+  >
+    Error
+  </div>
+  <textarea
+    aria-describedby="error-message-vaadin-text-area-2"
+    aria-invalid="true"
+    id="textarea-vaadin-text-area-3"
+    invalid=""
+    slot="textarea"
+  >
+  </textarea>
+</vaadin-text-area>
+`;
+/* end snapshot vaadin-text-area host error */
+
 snapshots["vaadin-text-area shadow default"] = 
 `<div class="vaadin-text-area-container">
   <div part="label">
@@ -239,53 +322,4 @@ snapshots["vaadin-text-area shadow theme"] =
 </div>
 `;
 /* end snapshot vaadin-text-area shadow theme */
-
-snapshots["vaadin-text-area slots default"] = 
-`<label
-  for="textarea-vaadin-text-area-3"
-  id="label-vaadin-text-area-0"
-  slot="label"
->
-</label>
-<div
-  hidden=""
-  id="error-message-vaadin-text-area-2"
-  slot="error-message"
->
-</div>
-<textarea
-  id="textarea-vaadin-text-area-3"
-  slot="textarea"
->
-</textarea>
-`;
-/* end snapshot vaadin-text-area slots default */
-
-snapshots["vaadin-text-area slots helper"] = 
-`<label
-  for="textarea-vaadin-text-area-3"
-  id="label-vaadin-text-area-0"
-  slot="label"
->
-</label>
-<div
-  hidden=""
-  id="error-message-vaadin-text-area-2"
-  slot="error-message"
->
-</div>
-<textarea
-  aria-describedby="helper-vaadin-text-area-1"
-  id="textarea-vaadin-text-area-3"
-  slot="textarea"
->
-</textarea>
-<div
-  id="helper-vaadin-text-area-1"
-  slot="helper"
->
-  Helper
-</div>
-`;
-/* end snapshot vaadin-text-area slots helper */
 
