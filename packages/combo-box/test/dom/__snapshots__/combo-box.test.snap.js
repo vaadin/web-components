@@ -496,3 +496,119 @@ snapshots["vaadin-combo-box shadow theme"] =
 `;
 /* end snapshot vaadin-combo-box shadow theme */
 
+snapshots["vaadin-combo-box host opened default"] = 
+`<vaadin-combo-box
+  focused=""
+  opened=""
+>
+  <label
+    for="input-vaadin-combo-box-4"
+    id="label-vaadin-combo-box-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-combo-box-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-autocomplete="list"
+    aria-controls="vaadin-combo-box-scroller-3"
+    aria-expanded="true"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    id="input-vaadin-combo-box-4"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+</vaadin-combo-box>
+`;
+/* end snapshot vaadin-combo-box host opened default */
+
+snapshots["vaadin-combo-box host opened overlay"] = 
+`<vaadin-combo-box-overlay
+  dir="ltr"
+  id="overlay"
+  no-vertical-overlap=""
+  opened=""
+  start-aligned=""
+  style="justify-content: flex-start; align-items: flex-start; top: 18.5px; left: 0px; --_vaadin-combo-box-overlay-default-width:192px;"
+  top-aligned=""
+>
+  <vaadin-combo-box-scroller
+    aria-setsize="2"
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    style="max-height: 65vh;"
+  >
+    <vaadin-combo-box-item
+      aria-posinset="1"
+      aria-selected="false"
+      id="vaadin-combo-box-item-0"
+      role="option"
+      style="width: 100%; position: absolute; transform: translateY(0px);"
+      tabindex="-1"
+    >
+      Item 1
+    </vaadin-combo-box-item>
+    <vaadin-combo-box-item
+      aria-posinset="2"
+      aria-selected="false"
+      id="vaadin-combo-box-item-1"
+      role="option"
+      style="width: 100%; position: absolute; transform: translateY(19px);"
+      tabindex="-1"
+    >
+      Item 2
+    </vaadin-combo-box-item>
+  </vaadin-combo-box-scroller>
+</vaadin-combo-box-overlay>
+`;
+/* end snapshot vaadin-combo-box host opened overlay */
+
+snapshots["vaadin-combo-box host opened overlay theme"] = 
+`<vaadin-combo-box-overlay
+  dir="ltr"
+  id="overlay"
+  no-vertical-overlap=""
+  opened=""
+  start-aligned=""
+  style="justify-content: flex-start; align-items: flex-start; top: 18.5px; left: 0px; --_vaadin-combo-box-overlay-default-width:192px;"
+  theme="align-right"
+  top-aligned=""
+>
+  <vaadin-combo-box-scroller
+    aria-setsize="2"
+    id="vaadin-combo-box-scroller-3"
+    role="listbox"
+    style="max-height: 65vh;"
+  >
+    <vaadin-combo-box-item
+      aria-posinset="1"
+      aria-selected="false"
+      id="vaadin-combo-box-item-0"
+      role="option"
+      style="width: 100%; position: absolute; transform: translateY(0px);"
+      tabindex="-1"
+    >
+      Item 1
+    </vaadin-combo-box-item>
+    <vaadin-combo-box-item
+      aria-posinset="2"
+      aria-selected="false"
+      id="vaadin-combo-box-item-1"
+      role="option"
+      style="width: 100%; position: absolute; transform: translateY(19px);"
+      tabindex="-1"
+    >
+      Item 2
+    </vaadin-combo-box-item>
+  </vaadin-combo-box-scroller>
+</vaadin-combo-box-overlay>
+`;
+/* end snapshot vaadin-combo-box host opened overlay theme */
+
