@@ -107,6 +107,16 @@ describe('field-mixin', () => {
         expect(element.hasAttribute('has-error-message')).to.be.false;
       });
 
+      it('should not set has-error-message attribute when the property is an empty string', () => {
+        element.errorMessage = '';
+        expect(element.hasAttribute('has-error-message')).to.be.false;
+      });
+
+      it('should not set has-error-message attribute when the property is null', () => {
+        element.errorMessage = null;
+        expect(element.hasAttribute('has-error-message')).to.be.false;
+      });
+
       it('should set has-error-message attribute when attribute is set', () => {
         element.setAttribute('error-message', 'This field is required');
         expect(element.hasAttribute('has-error-message')).to.be.true;
@@ -323,6 +333,11 @@ describe('field-mixin', () => {
 
       it('should remove has-helper attribute when property is unset', () => {
         element.helperText = '';
+        expect(element.hasAttribute('has-helper')).to.be.false;
+      });
+
+      it('should remove has-helper attribute when property is null', () => {
+        element.helperText = null;
         expect(element.hasAttribute('has-helper')).to.be.false;
       });
     });

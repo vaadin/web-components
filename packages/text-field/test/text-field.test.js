@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-text-field.js';
 
@@ -128,93 +128,10 @@ describe('text-field', () => {
         expect(textField.value).to.be.equal('foo');
       });
 
-      it('setting input value updates has-value attribute', () => {
-        textField.value = 'foo';
-        expect(textField.hasAttribute('has-value')).to.be.true;
-      });
-
-      it('setting value to undefined should not update has-value attribute', () => {
-        textField.value = undefined;
-        expect(textField.hasAttribute('has-value')).to.be.false;
-      });
-
       it('setting value to undefined should clear the native input value', () => {
         textField.value = 'foo';
         textField.value = undefined;
         expect(input.value).to.equal('');
-      });
-
-      it('setting empty value does not update has-value attribute', () => {
-        textField.value = '';
-        expect(textField.hasAttribute('has-value')).to.be.false;
-      });
-
-      // User could accidentally set a 0 or false value
-      it('setting number value updates has-value attribute', () => {
-        textField.value = 0;
-        expect(textField.hasAttribute('has-value')).to.be.true;
-      });
-
-      it('setting boolean value updates has-value attribute', () => {
-        textField.value = false;
-        expect(textField.hasAttribute('has-value')).to.be.true;
-      });
-
-      it('setting label updates has-label attribute', () => {
-        textField.label = 'foo';
-        expect(textField.hasAttribute('has-label')).to.be.true;
-      });
-
-      it('setting label to empty string does not update has-label attribute', () => {
-        textField.label = '';
-        expect(textField.hasAttribute('has-label')).to.be.false;
-      });
-
-      it('setting label to null does not update has-label attribute', () => {
-        textField.label = null;
-        expect(textField.hasAttribute('has-label')).to.be.false;
-      });
-
-      it('setting helper updates has-helper attribute', () => {
-        textField.helperText = 'foo';
-        expect(textField.hasAttribute('has-helper')).to.be.true;
-      });
-
-      it('setting helper to empty string does not update has-helper attribute', () => {
-        textField.helperText = '';
-        expect(textField.hasAttribute('has-helper')).to.be.false;
-      });
-
-      it('setting helper to null does not update has-helper attribute', () => {
-        textField.helperText = null;
-        expect(textField.hasAttribute('has-helper')).to.be.false;
-      });
-
-      it('setting helper with slot updates has-helper attribute', async () => {
-        const helper = document.createElement('div');
-        helper.setAttribute('slot', 'helper');
-        helper.textContent = 'foo';
-        textField.appendChild(helper);
-        await nextFrame();
-        expect(textField.hasAttribute('has-helper')).to.be.true;
-      });
-
-      it('setting errorMessage updates has-error-message attribute', () => {
-        textField.invalid = true;
-        textField.errorMessage = 'foo';
-        expect(textField.hasAttribute('has-error-message')).to.be.true;
-      });
-
-      it('setting errorMessage to empty string does not update has-error-message attribute', () => {
-        textField.invalid = true;
-        textField.errorMessage = '';
-        expect(textField.hasAttribute('has-error-message')).to.be.false;
-      });
-
-      it('setting errorMessage to null does not update has-error-message attribute', () => {
-        textField.invalid = true;
-        textField.errorMessage = null;
-        expect(textField.hasAttribute('has-error-message')).to.be.false;
       });
     });
 
@@ -348,6 +265,31 @@ describe('text-field', () => {
     });
   });
 
+  describe('has-value attribute', () => {
+    it('should toggle the attribute on value change', () => {
+      textField.value = 'foo';
+      expect(textField.hasAttribute('has-value')).to.be.true;
+      textField.value = undefined;
+      expect(textField.hasAttribute('has-value')).to.be.false;
+    });
+
+    it('should not add the attribute when the value is an empty string', () => {
+      textField.value = '';
+      expect(textField.hasAttribute('has-value')).to.be.false;
+    });
+
+    // User could accidentally set a 0 or false value
+    it('should add the attribute when the value is a number', () => {
+      textField.value = 0;
+      expect(textField.hasAttribute('has-value')).to.be.true;
+    });
+
+    it('should add the attribute when the value is a boolean', () => {
+      textField.value = false;
+      expect(textField.hasAttribute('has-value')).to.be.true;
+    });
+  });
+
   describe('value property', () => {
     it('should not consider updating the value as user input if the value is not changed', () => {
       const event = new Event('input', {
@@ -385,14 +327,6 @@ describe('text-field', () => {
       textField.value = 'Foo';
       textField.clear();
       expect(input.value).to.equal('');
-    });
-  });
-
-  describe('theme attribute', () => {
-    it('should propagate theme attribute to input container', () => {
-      const container = textField.shadowRoot.querySelector('[part="input-field"]');
-      textField.setAttribute('theme', 'align-center');
-      expect(container.getAttribute('theme')).to.equal('align-center');
     });
   });
 });
