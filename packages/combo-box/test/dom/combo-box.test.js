@@ -44,6 +44,12 @@ describe('vaadin-combo-box', () => {
     });
 
     describe('opened', () => {
+      const SNAPSHOT_CONFIG = {
+        // Some inline CSS styles related to the overlay's position
+        // may slightly change depending on the environment, so ignore them.
+        ignoreAttributes: ['style'],
+      };
+
       beforeEach(async () => {
         comboBox.items = ['Item 1', 'Item 2'];
         comboBox.open();
@@ -51,16 +57,16 @@ describe('vaadin-combo-box', () => {
       });
 
       it('default', async () => {
-        await expect(comboBox).dom.to.equalSnapshot();
+        await expect(comboBox).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
 
       it('overlay', async () => {
-        await expect(comboBox.$.overlay).dom.to.equalSnapshot();
+        await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
 
       it('theme overlay', async () => {
         comboBox.setAttribute('theme', 'align-right');
-        await expect(comboBox.$.overlay).dom.to.equalSnapshot();
+        await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
       });
     });
   });
