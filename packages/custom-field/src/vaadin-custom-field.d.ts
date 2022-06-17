@@ -35,10 +35,19 @@ export type CustomFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type CustomFieldValueChangedEvent = CustomEvent<{ value: string }>;
 
+/**
+ * Fired on Tab keydown triggered from the internal inputs, meaning focus will not leave the inputs.
+ */
+export type CustomFieldInternalTabEvent = Event & {
+  target: CustomField;
+};
+
 export interface CustomFieldCustomEventMap {
   'invalid-changed': CustomFieldInvalidChangedEvent;
 
   'value-changed': CustomFieldValueChangedEvent;
+
+  'internal-tab': CustomFieldInternalTabEvent;
 }
 
 export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldCustomEventMap {
