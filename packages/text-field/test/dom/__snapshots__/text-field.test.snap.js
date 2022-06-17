@@ -1,6 +1,89 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
+snapshots["vaadin-text-field host default"] = 
+`<vaadin-text-field>
+  <label
+    for="input-vaadin-text-field-3"
+    id="label-vaadin-text-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-text-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    id="input-vaadin-text-field-3"
+    slot="input"
+    type="text"
+  >
+</vaadin-text-field>
+`;
+/* end snapshot vaadin-text-field host default */
+
+snapshots["vaadin-text-field host helper"] = 
+`<vaadin-text-field has-helper="">
+  <label
+    for="input-vaadin-text-field-3"
+    id="label-vaadin-text-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-text-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-describedby="helper-vaadin-text-field-1"
+    id="input-vaadin-text-field-3"
+    slot="input"
+    type="text"
+  >
+  <div
+    id="helper-vaadin-text-field-1"
+    slot="helper"
+  >
+    Helper
+  </div>
+</vaadin-text-field>
+`;
+/* end snapshot vaadin-text-field host helper */
+
+snapshots["vaadin-text-field host error"] = 
+`<vaadin-text-field
+  has-error-message=""
+  invalid=""
+>
+  <label
+    for="input-vaadin-text-field-3"
+    id="label-vaadin-text-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    id="error-message-vaadin-text-field-2"
+    role="alert"
+    slot="error-message"
+  >
+    Error
+  </div>
+  <input
+    aria-describedby="error-message-vaadin-text-field-2"
+    aria-invalid="true"
+    id="input-vaadin-text-field-3"
+    invalid=""
+    slot="input"
+    type="text"
+  >
+</vaadin-text-field>
+`;
+/* end snapshot vaadin-text-field host error */
+
 snapshots["vaadin-text-field shadow default"] = 
 `<div class="vaadin-field-container">
   <div part="label">
@@ -232,53 +315,4 @@ snapshots["vaadin-text-field shadow theme"] =
 </div>
 `;
 /* end snapshot vaadin-text-field shadow theme */
-
-snapshots["vaadin-text-field slots default"] = 
-`<label
-  for="input-vaadin-text-field-3"
-  id="label-vaadin-text-field-0"
-  slot="label"
->
-</label>
-<div
-  hidden=""
-  id="error-message-vaadin-text-field-2"
-  slot="error-message"
->
-</div>
-<input
-  id="input-vaadin-text-field-3"
-  slot="input"
-  type="text"
->
-`;
-/* end snapshot vaadin-text-field slots default */
-
-snapshots["vaadin-text-field slots helper"] = 
-`<label
-  for="input-vaadin-text-field-3"
-  id="label-vaadin-text-field-0"
-  slot="label"
->
-</label>
-<div
-  hidden=""
-  id="error-message-vaadin-text-field-2"
-  slot="error-message"
->
-</div>
-<input
-  aria-describedby="helper-vaadin-text-field-1"
-  id="input-vaadin-text-field-3"
-  slot="input"
-  type="text"
->
-<div
-  id="helper-vaadin-text-field-1"
-  slot="helper"
->
-  Helper
-</div>
-`;
-/* end snapshot vaadin-text-field slots helper */
 
