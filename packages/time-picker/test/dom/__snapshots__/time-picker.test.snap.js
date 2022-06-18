@@ -117,6 +117,7 @@ snapshots["vaadin-time-picker host error"] =
   </div>
   <input
     aria-autocomplete="list"
+    aria-describedby="error-message-vaadin-time-picker-2"
     aria-expanded="false"
     aria-invalid="true"
     autocapitalize="off"

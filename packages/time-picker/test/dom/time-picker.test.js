@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
 import '../../src/vaadin-time-picker.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
@@ -29,6 +29,7 @@ describe('vaadin-time-picker', () => {
     it('error', async () => {
       timePicker.errorMessage = 'Error';
       timePicker.invalid = true;
+      await aTimeout(0);
       await expect(timePicker).dom.to.equalSnapshot();
     });
 
