@@ -659,8 +659,9 @@ class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(Po
   /** @private */
   _updateSelectedItem(value, items) {
     if (items) {
+      const valueAsString = value === undefined || value === null ? value : value.toString();
       this._menuElement.selected = items.reduce((prev, item, idx) => {
-        return prev === undefined && item.value === value ? idx : prev;
+        return prev === undefined && item.value === valueAsString ? idx : prev;
       }, undefined);
       if (!this._selectedChanging) {
         this._valueChanging = true;
