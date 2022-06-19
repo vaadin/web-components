@@ -196,12 +196,12 @@ describe('vaadin-select', () => {
         expect(menu.selected).to.be.undefined;
       });
 
-      it('should select a value even if provided as a number', () => {
+      it('should select a numeric value if a matching item is found', () => {
         select.value = 5;
         expect(menu.selected).to.be.equal(6);
       });
 
-      it('should select a value even if provided as a boolean', () => {
+      it('should select a boolean value if a matching item is found', () => {
         select.value = false;
         expect(menu.selected).to.be.equal(7);
       });
