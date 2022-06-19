@@ -89,6 +89,8 @@ describe('vaadin-select', () => {
               <vaadin-item></vaadin-item>
               <vaadin-item label="">Empty</vaadin-item>
               <vaadin-item value="v4" disabled>Disabled</vaadin-item>
+              <vaadin-item value="5">A number</vaadin-item>
+              <vaadin-item value="false">A boolean</vaadin-item>
             </vaadin-list-box>
           `,
           root,
@@ -192,6 +194,16 @@ describe('vaadin-select', () => {
         select.value = 'v2';
         select.value = 'foo';
         expect(menu.selected).to.be.undefined;
+      });
+
+      it('should select a numeric value if a matching item is found', () => {
+        select.value = 5;
+        expect(menu.selected).to.be.equal(6);
+      });
+
+      it('should select a boolean value if a matching item is found', () => {
+        select.value = false;
+        expect(menu.selected).to.be.equal(7);
       });
     });
 
