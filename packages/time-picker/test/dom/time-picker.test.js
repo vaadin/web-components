@@ -1,14 +1,15 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import '../../src/vaadin-time-picker.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
 describe('vaadin-time-picker', () => {
-  let timePicker;
+  let timePicker, comboBox;
 
   beforeEach(() => {
     resetUniqueId();
     timePicker = fixtureSync('<vaadin-time-picker></vaadin-time-picker>');
+    comboBox = timePicker.$.comboBox;
   });
 
   describe('host', () => {
@@ -29,6 +30,7 @@ describe('vaadin-time-picker', () => {
     it('error', async () => {
       timePicker.errorMessage = 'Error';
       timePicker.invalid = true;
+      await aTimeout(0);
       await expect(timePicker).dom.to.equalSnapshot();
     });
 
@@ -50,6 +52,27 @@ describe('vaadin-time-picker', () => {
     it('pattern', async () => {
       timePicker.pattern = '[0-9]*';
       await expect(timePicker).dom.to.equalSnapshot();
+    });
+
+    describe('opened', () => {
+      const SNAPSHOT_CONFIG = {
+        // Some inline CSS styles related to the overlay's position
+        // may slightly change depending on the environment, so ignore them.
+        ignoreAttributes: ['style'],
+      };
+
+      beforeEach(async () => {
+        comboBox.opened = true;
+        await oneEvent(comboBox.$.overlay, 'vaadin-overlay-open');
+      });
+
+      it('default', async () => {
+        await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
+
+      it('overlay', async () => {
+        await expect(comboBox.$.overlay).dom.to.equalSnapshot(SNAPSHOT_CONFIG);
+      });
     });
   });
 
