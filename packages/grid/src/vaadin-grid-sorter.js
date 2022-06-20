@@ -176,6 +176,10 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
   disconnectedCallback() {
     super.disconnectedCallback();
     this._isConnected = false;
+
+    if (!this.parentNode && this._grid) {
+      this._grid.__removeSorters([this]);
+    }
   }
 
   /** @private */

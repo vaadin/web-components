@@ -48,6 +48,7 @@ export const SortMixin = (superClass) =>
     _onSorterChanged(e) {
       const sorter = e.target;
       e.stopPropagation();
+      sorter._grid = this;
       this.__updateSorter(sorter);
       this.__applySorters();
     }
