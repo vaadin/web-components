@@ -289,6 +289,12 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
             width: 20em;
           }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+          :host {
+            --vaadin-app-layout-transition: none !important;
+          }
+        }
       </style>
       <div part="navbar" id="navbarTop">
         <slot name="navbar"></slot>
