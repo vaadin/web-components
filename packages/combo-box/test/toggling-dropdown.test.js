@@ -1,11 +1,11 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, fixtureSync, focusout, isIOS, tap, touchstart } from '@vaadin/testing-helpers';
+import { aTimeout, click, fire, fixtureSync, focusout, isIOS, tap, touchstart } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { createEventSpy, outsideClick, setInputValue } from './helpers.js';
+import { outsideClick, setInputValue } from './helpers.js';
 
 describe('toggling dropdown', () => {
   let comboBox, overlay, input;
@@ -171,11 +171,8 @@ describe('toggling dropdown', () => {
       });
 
       it('should prevent default on overlay mousedown', () => {
-        const preventDefaultSpy = sinon.spy();
-        const event = createEventSpy('mousedown', preventDefaultSpy);
-        overlay.dispatchEvent(event);
-
-        expect(preventDefaultSpy.calledOnce).to.be.true;
+        const event = fire(overlay, 'mousedown');
+        expect(event.defaultPrevented).to.be.true;
       });
     });
   });
