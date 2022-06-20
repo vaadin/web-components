@@ -170,12 +170,28 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
   connectedCallback() {
     super.connectedCallback();
     this._isConnected = true;
+    this._grid = this._findHostGrid();
   }
 
   /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
     this._isConnected = false;
+
+    if (!this.parentNode && this._grid && this.direction) {
+      this._grid.__removeSorters([this]);
+    }
+  }
+
+  /** @private */
+  _findHostGrid() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias, consistent-this
+    let el = this;
+    // Custom elements extending grid must have a specific localName
+    while (el && !/^vaadin.*grid(-pro)?$/.test(el.localName)) {
+      el = el.parentNode;
+    }
+    return el || undefined;
   }
 
   /** @private */

@@ -486,4 +486,50 @@ describe('sorting', () => {
       expect(sorterFirst.direction).to.eql('asc');
     });
   });
+
+  describe('detached sorter', () => {
+    let grid, firstName;
+
+    beforeEach(async () => {
+      grid = fixtureSync(`
+        <vaadin-grid style="width: 200px; height: 200px;" multi-sort>
+          <vaadin-grid-column path="first"></vaadin-grid-column>
+          <vaadin-grid-column path="last"></vaadin-grid-column>
+        </vaadin-grid>
+      `);
+      firstName = grid.querySelector('vaadin-grid-column');
+      firstName.headerRenderer = (root) => {
+        if (!root.firstChild) {
+          root.innerHTML = '<vaadin-grid-sorter path="first">First name</vaadin-grid-sorter>';
+        }
+      };
+      grid.items = [{ first: 'John', last: 'Doe' }];
+      flushGrid(grid);
+      await nextFrame();
+    });
+
+    it('should remove detached sorter with no parent', () => {
+      const sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
+      sorterFirst.click();
+
+      firstName.headerRenderer = (root) => {
+        root.innerHTML = '<vaadin-grid-sorter path="first">1st</vaadin-grid-sorter>';
+      };
+      grid.requestContentUpdate();
+
+      expect(grid._sorters).to.not.contain(sorterFirst);
+    });
+
+    it('should not remove sorter for hidden column', async () => {
+      const sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
+      sorterFirst.click();
+      firstName.setAttribute('hidden', '');
+      await nextFrame();
+
+      firstName.removeAttribute('hidden');
+      await nextFrame();
+
+      expect(grid._sorters).to.contain(sorterFirst);
+    });
+  });
 });
