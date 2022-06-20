@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import {
   click,
+  fire,
   fixtureSync,
   isDesktopSafari,
   isIOS,
@@ -18,7 +19,7 @@ import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { createEventSpy, getFirstItem } from './helpers.js';
+import { getFirstItem } from './helpers.js';
 
 class MyInput extends PolymerElement {
   static get template() {
@@ -125,11 +126,9 @@ describe('vaadin-combo-box-light', () => {
     });
 
     it('should prevent default on overlay mousedown (vaadin-combo-box-light)', () => {
-      const preventDefaultSpy = sinon.spy();
       comboBox.open();
-      const event = createEventSpy('mousedown', preventDefaultSpy);
-      overlay.dispatchEvent(event);
-      expect(preventDefaultSpy.called).to.be.true;
+      const event = fire(overlay, 'mousedown');
+      expect(event.defaultPrevented).to.be.true;
     });
   });
 

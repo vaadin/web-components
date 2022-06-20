@@ -1,9 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
+import { fixtureSync, keyboardEventFor } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { createEventSpy } from './helpers.js';
 
 describe('form field', () => {
   let comboBox, input;
@@ -50,26 +48,22 @@ describe('form field', () => {
   });
 
   describe('enter key behavior', () => {
-    let keydownEvent, preventDefault;
+    let keydownEvent;
 
     beforeEach(() => {
-      preventDefault = sinon.spy();
-
       // Fake a keydown event to mimic form submit.
-      keydownEvent = createEventSpy('keydown', preventDefault);
-      keydownEvent.keyCode = 13;
-      keydownEvent.key = 'Enter';
+      keydownEvent = keyboardEventFor('keydown', 13, [], 'Enter');
     });
 
     it('should prevent default on open combobox', () => {
       comboBox.open();
       comboBox.dispatchEvent(keydownEvent);
-      expect(preventDefault.called).to.be.true;
+      expect(keydownEvent.defaultPrevented).to.be.true;
     });
 
     it('should not prevent default on closed combobox', () => {
       comboBox.dispatchEvent(keydownEvent);
-      expect(preventDefault.called).to.be.false;
+      expect(keydownEvent.defaultPrevented).to.be.false;
     });
   });
 });

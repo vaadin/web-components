@@ -1,48 +1,14 @@
-import { click, fire, mousedown, mouseup } from '@vaadin/testing-helpers';
+import { aTimeout, fire, nextFrame, oneEvent } from '@vaadin/testing-helpers';
 
-export const createEventSpy = (type, preventDefault) => {
-  // Fake a keydown event to mimic form submit.
-  const event = new CustomEvent(type, {
-    bubbles: true,
-    cancelable: true,
-  });
-  event.preventDefault = preventDefault;
-  return event;
-};
+export async function onceOpened(element) {
+  await oneEvent(element, 'opened-changed');
+  await nextFrame();
+}
 
-export const fireDownUpClick = (node) => {
-  mousedown(node);
-  mouseup(node);
-  click(node);
-};
-
-export const onceOpened = (element) => {
-  return new Promise((resolve) => {
-    const listener = (e) => {
-      if (e.detail.value) {
-        element.removeEventListener('opened-changed', listener);
-        // Wait for scroll position adjustment
-        window.requestAnimationFrame(() => {
-          resolve();
-        });
-      }
-    };
-    element.addEventListener('opened-changed', listener);
-  });
-};
-
-export const onceScrolled = (comboBox) => {
-  const scroller = comboBox._scroller;
-  return new Promise((resolve) => {
-    const listener = () => {
-      scroller.removeEventListener('scroll', listener);
-      setTimeout(() => {
-        resolve();
-      });
-    };
-    scroller.addEventListener('scroll', listener);
-  });
-};
+export async function onceScrolled(comboBox) {
+  await oneEvent(comboBox._scroller, 'scroll');
+  await aTimeout(0);
+}
 
 export const makeItems = (length) => {
   return Array.from({ length }, (_, i) => `item ${i}`);
