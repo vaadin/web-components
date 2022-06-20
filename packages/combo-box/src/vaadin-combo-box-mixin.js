@@ -944,9 +944,7 @@ export const ComboBoxMixin = (subclass) =>
 
       this._clearSelectionRange();
 
-      if (!this.dataProvider) {
-        this.filter = '';
-      }
+      this.filter = '';
     }
 
     /**
@@ -1101,6 +1099,9 @@ export const ComboBoxMixin = (subclass) =>
       } else {
         this.selectedItem = null;
       }
+
+      this.filter = '';
+
       // In the next _detectAndDispatchChange() call, the change detection should pass
       this._lastCommittedValue = undefined;
     }

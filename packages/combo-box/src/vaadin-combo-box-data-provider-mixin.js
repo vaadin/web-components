@@ -67,8 +67,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
     static get observers() {
       return [
-        '_dataProviderFilterChanged(filter, dataProvider)',
-        '_dataProviderClearFilter(dataProvider, opened, value)',
+        '_dataProviderFilterChanged(filter)',
         '_warnDataProviderValue(dataProvider, value)',
         '_ensureFirstPage(opened)',
       ];
@@ -77,7 +76,6 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
-      this.clearCache();
       this._scroller.addEventListener('index-requested', (e) => {
         const index = e.detail.index;
         const currentScrollerPos = e.detail.currentScrollerPos;
@@ -101,38 +99,25 @@ export const ComboBoxDataProviderMixin = (superClass) =>
     }
 
     /** @private */
-    _dataProviderFilterChanged() {
-      if (!this._shouldFetchData()) {
+    _dataProviderFilterChanged(filter) {
+      if (this.__oldDataProviderFilter === undefined && filter === '') {
+        this.__oldDataProviderFilter = filter;
         return;
       }
 
-      this._refreshData();
-    }
+      if (this.__oldDataProviderFilter !== filter) {
+        this.__oldDataProviderFilter = filter;
 
-    /** @private */
-    _dataProviderClearFilter(dataProvider, opened, value) {
-      // Can't depend on filter in this observer as we don't want
-      // to clear the filter whenever it's set
-      if (dataProvider && !this.loading && this.filter && !(opened && this.autoOpenDisabled && value === this.filter)) {
-        this._refreshData(true);
-      }
-    }
+        this._pendingRequests = {};
+        // Immediately mark as loading if this refresh leads to re-fetching pages
+        // This prevents some issues with the properties below triggering
+        // observers that also rely on the loading state
+        this.loading = this._shouldFetchData();
+        // Reset size and internal loading state
+        this.size = undefined;
 
-    /** @private */
-    _refreshData(clearFilter) {
-      // Immediately mark as loading if this refresh leads to re-fetching pages
-      // This prevents some issues with the properties below triggering
-      // observers that also rely on the loading state
-      this.loading = this._shouldFetchData();
-      // Reset size and internal loading state
-      this.size = undefined;
-      this._pendingRequests = {};
-      // Clear filter if requested
-      if (clearFilter) {
-        this.filter = '';
+        this.clearCache();
       }
-      // Clear cached pages, and reload current page if we need the data
-      this.clearCache();
     }
 
     /** @private */
@@ -229,6 +214,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       if (!this.dataProvider) {
         return;
       }
+
       this._pendingRequests = {};
       const filteredItems = [];
       for (let i = 0; i < (this.size || 0); i++) {
@@ -269,6 +255,8 @@ export const ComboBoxDataProviderMixin = (superClass) =>
       this._ensureItemsOrDataProvider(() => {
         this.dataProvider = oldDataProvider;
       });
+
+      this.clearCache();
     }
 
     /** @private */

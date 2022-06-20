@@ -139,6 +139,7 @@ describe('lazy loading', () => {
           expect(comboBox.autoOpenDisabled).to.be.true;
           expect(comboBox.opened).to.be.false;
           comboBox.dataProvider = spyDataProvider;
+          comboBox.inputElement.focus();
           setInputValue(comboBox, 'item 1');
           comboBox.opened = true;
           expect(comboBox.filter).to.equal('item 1');
@@ -151,7 +152,10 @@ describe('lazy loading', () => {
       describe('when open', function () {
         // eslint-disable-next-line no-invalid-this
         this.timeout(15000);
-        beforeEach(() => (comboBox.opened = true));
+        beforeEach(() => {
+          comboBox.inputElement.focus();
+          comboBox.opened = true;
+        });
 
         it('should be invoked when set', () => {
           comboBox.dataProvider = spyDataProvider;
@@ -209,7 +213,7 @@ describe('lazy loading', () => {
         it('should request on filter change with user’s filter', () => {
           comboBox.dataProvider = spyDataProvider;
           spyDataProvider.resetHistory();
-          comboBox.filter = 'item 1';
+          setInputValue(comboBox, 'item 1');
           expect(spyDataProvider.called).to.be.true;
           const params = spyDataProvider.lastCall.args[0];
           expect(params.filter).to.equal('item 1');
@@ -217,7 +221,7 @@ describe('lazy loading', () => {
 
         it('should clear filter on value change', () => {
           comboBox.dataProvider = spyDataProvider;
-          comboBox.filter = 'item 1';
+          setInputValue(comboBox, 'item 1');
           spyDataProvider.resetHistory();
           comboBox.value = 'foo';
           const params = spyDataProvider.lastCall.args[0];
@@ -226,7 +230,7 @@ describe('lazy loading', () => {
 
         it('should clear filter on value clear', () => {
           comboBox.dataProvider = dataProvider;
-          comboBox.filter = 'item 1';
+          setInputValue(comboBox, 'item 1');
           comboBox.value = 'item 1';
           comboBox.value = '';
           expect(comboBox.filter).to.equal('');
@@ -234,7 +238,7 @@ describe('lazy loading', () => {
 
         it('should clear filter on opened change', () => {
           comboBox.dataProvider = dataProvider;
-          comboBox.filter = 'item 1';
+          setInputValue(comboBox, 'item 1');
           comboBox.opened = false;
           expect(comboBox.filter).to.equal('');
         });
@@ -267,7 +271,7 @@ describe('lazy loading', () => {
 
         it('should request page after partial filter & cancel & reopen', () => {
           comboBox.dataProvider = spyDataProvider;
-          comboBox.filter = 'it';
+          setInputValue(comboBox, 'it');
           spyDataProvider.resetHistory();
           comboBox.cancel();
           comboBox.opened = true;
