@@ -236,7 +236,6 @@ export const ComboBoxMixin = (subclass) =>
 
     static get observers() {
       return [
-        '_filterChanged(filter, itemValuePath, itemLabelPath)',
         '_selectedItemChanged(selectedItem, itemValuePath, itemLabelPath)',
         '_openedOrItemsChanged(opened, filteredItems, loading)',
         '_updateScroller(_scroller, filteredItems, opened, loading, selectedItem, itemIdPath, _focusedIndex, renderer, theme)',
@@ -380,6 +379,25 @@ export const ComboBoxMixin = (subclass) =>
      */
     close() {
       this.opened = false;
+    }
+
+    /**
+     * Override Polymer lifecycle callback to handle `filter` property change after
+     * the observer for `opened` property is triggered. This is needed when opening
+     * combo-box on user input to ensure the focused index is set correctly.
+     *
+     * @param {!Object} currentProps Current accessor values
+     * @param {?Object} changedProps Properties changed since the last call
+     * @param {?Object} oldProps Previous values for each changed property
+     * @protected
+     * @override
+     */
+    _propertiesChanged(currentProps, changedProps, oldProps) {
+      super._propertiesChanged(currentProps, changedProps, oldProps);
+
+      if (changedProps.filter !== undefined) {
+        this._filterChanged(changedProps.filter);
+      }
     }
 
     /** @private */
@@ -946,19 +964,27 @@ export const ComboBoxMixin = (subclass) =>
      * @override
      */
     _onInput(event) {
-      if (!this.opened && !this._isClearButton(event) && !this.autoOpenDisabled) {
-        this.open();
-      }
+      const filter = this._inputElementValue;
 
-      const value = this._inputElementValue;
-      if (this.filter === value) {
+      // When opening dropdown on user input, both `opened` and `filter` properties are set.
+      // Perform a batched property update instead of relying on sync property observers.
+      // This is necessary to avoid an extra data-provider request for loading first page.
+      const props = {};
+
+      if (this.filter === filter) {
         // Filter and input value might get out of sync, while keyboard navigating for example.
         // Afterwards, input value might be changed to the same value as used in filtering.
         // In situation like these, we need to make sure all the filter changes handlers are run.
-        this._filterChanged(this.filter, this.itemValuePath, this.itemLabelPath);
+        this._filterChanged(this.filter);
       } else {
-        this.filter = value;
+        props.filter = filter;
       }
+
+      if (!this.opened && !this._isClearButton(event) && !this.autoOpenDisabled) {
+        props.opened = true;
+      }
+
+      this.setProperties(props);
     }
 
     /**
