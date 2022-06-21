@@ -221,7 +221,9 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         filteredItems.push(this.__placeHolder);
       }
       this.filteredItems = filteredItems;
+
       if (this._shouldFetchData()) {
+        this._forceNextRequest = false;
         this._loadPage(0);
       } else {
         this._forceNextRequest = true;
