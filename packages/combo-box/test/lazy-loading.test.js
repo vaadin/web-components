@@ -137,6 +137,12 @@ describe('lazy loading', () => {
           comboBox.autoOpenDisabled = true;
           comboBox.inputElement.focus();
           comboBox.dataProvider = spyDataProvider;
+          spyDataProvider.resetHistory();
+        });
+
+        it('should be invoked on open', () => {
+          comboBox.opened = true;
+          expect(spyDataProvider.calledOnce).to.be.true;
         });
 
         it('should be invoked with the correct filter when filtering', () => {
@@ -147,7 +153,7 @@ describe('lazy loading', () => {
           expect(filter).to.equal('item 1');
         });
 
-        it('should not make an extra request on open after filtering', () => {
+        it('should not be invoked on open after filtering', () => {
           setInputValue(comboBox, 'item 1');
           spyDataProvider.resetHistory();
           comboBox.opened = true;
