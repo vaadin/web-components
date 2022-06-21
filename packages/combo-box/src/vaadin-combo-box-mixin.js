@@ -1007,11 +1007,7 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /** @private */
-    _filterChanged(filter, _itemValuePath, _itemLabelPath) {
-      if (filter === undefined) {
-        return;
-      }
-
+    _filterChanged(filter) {
       // Scroll to the top of the list whenever the filter changes.
       this._scrollIntoView(0);
 
