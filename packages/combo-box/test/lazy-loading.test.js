@@ -366,6 +366,15 @@ describe('lazy loading', () => {
           expect(spyAsyncDataProvider.calledOnce).to.be.true;
         });
 
+        it('should be invoked with correct filter parameter', async () => {
+          comboBox.dataProvider = spyAsyncDataProvider;
+          setInputValue(comboBox, '1');
+          // Wait for the async data provider to respond
+          await aTimeout(0);
+          expect(spyAsyncDataProvider.calledOnce).to.be.true;
+          expect(spyAsyncDataProvider.firstCall.args[0].filter).to.equal('1');
+        });
+
         it('should be invoked on open with pre-defined size', () => {
           comboBox.size = SIZE;
           comboBox.dataProvider = spyAsyncDataProvider;
