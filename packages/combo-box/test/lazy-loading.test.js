@@ -439,6 +439,8 @@ describe('lazy loading', () => {
           comboBox._scrollIntoView(50);
           // Wait for the async data provider to respond
           await aTimeout(0);
+          // Wait for the __loadingChanged observer
+          await aTimeout(0);
 
           comboBox._scrollIntoView(0);
           expect(getFocusedItemIndex(comboBox)).to.equal(0);
@@ -458,6 +460,8 @@ describe('lazy loading', () => {
 
           comboBox._scrollIntoView(50);
           // Wait for the async data provider to respond
+          await aTimeout(0);
+          // Wait for the __loadingChanged observer
           await aTimeout(0);
           expect(comboBox.selectedItem).to.exist;
 
@@ -482,6 +486,8 @@ describe('lazy loading', () => {
           await nextFrame();
           comboBox._scrollIntoView(50);
           // Wait for the async data provider to respond
+          await aTimeout(0);
+          // Wait for the __loadingChanged observer
           await aTimeout(0);
 
           expect(comboBox._focusedIndex).to.equal(8);
