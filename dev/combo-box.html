@@ -25,23 +25,15 @@
 
       comboBox.dataProvider = (params, callback) => {
         console.log(JSON.stringify(params))
-        const xhr = new XMLHttpRequest();
-        xhr.onload = () => {
-          const response = JSON.parse(xhr.responseText);
-
+        const index = params.page * params.pageSize;
+        const response = await fetch(`https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=${index}&count=${params.pageSize}&filter=${params.filter}`)
+        if (response.ok) {
+          const { result, size } = await response.json();
           // Emulate network latency for demo purpose
           setTimeout(() => {
-            callback(response.result, response.size);
+            callback(result, size);
           }, 100);
-        };
-
-        const index = params.page * params.pageSize;
-        xhr.open(
-          'GET',
-          `https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=${index}&count=${params.pageSize}&filter=${params.filter}`,
-          true,
-        );
-        xhr.send();
+        }
       };
     </script>
   </body>
