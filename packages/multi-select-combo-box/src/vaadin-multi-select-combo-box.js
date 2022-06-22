@@ -163,6 +163,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           allow-custom-value="[[allowCustomValue]]"
           data-provider="[[dataProvider]]"
           filter="{{filter}}"
+          last-filter="{{_lastFilter}}"
           loading="{{loading}}"
           size="{{size}}"
           filtered-items="[[__effectiveFilteredItems]]"
@@ -452,6 +453,11 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         type: Number,
         value: -1,
         observer: '_focusedChipIndexChanged',
+      },
+
+      /** @private */
+      _lastFilter: {
+        type: String,
       },
     };
   }
@@ -768,8 +774,9 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     let isSelected = false;
 
     if (index !== -1) {
+      const lastFilter = this._lastFilter;
       // Do not unselect when manually typing and committing an already selected item.
-      if (this.filter.toLowerCase() === itemLabel.toLowerCase()) {
+      if (lastFilter && lastFilter.toLowerCase() === itemLabel.toLowerCase()) {
         this.__clearFilter();
         return;
       }

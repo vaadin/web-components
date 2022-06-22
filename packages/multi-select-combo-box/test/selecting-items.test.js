@@ -4,6 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-multi-select-combo-box.js';
+import { getDataProvider } from './helpers.js';
 
 describe('selecting items', () => {
   let comboBox, internal, inputElement;
@@ -102,6 +103,20 @@ describe('selecting items', () => {
       await sendKeys({ down: 'Enter' });
       await sendKeys({ down: 'Tab' });
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
+    });
+  });
+
+  describe('dataProvider', () => {
+    beforeEach(() => {
+      comboBox.dataProvider = getDataProvider(['apple', 'banana', 'lemon', 'orange']);
+    });
+
+    it('should not un-select item when typing its value manually', async () => {
+      comboBox.selectedItems = ['orange'];
+      await sendKeys({ down: 'ArrowDown' });
+      await sendKeys({ type: 'orange' });
+      await sendKeys({ down: 'Enter' });
+      expect(comboBox.selectedItems).to.deep.equal(['orange']);
     });
   });
 });
