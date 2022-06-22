@@ -87,6 +87,15 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
         value: () => [],
       },
 
+      /**
+       * Last input value entered by the user before value is updated.
+       * Used to store `filter` property value before clearing it.
+       */
+      lastFilter: {
+        type: String,
+        notify: true,
+      },
+
       _target: {
         type: Object,
       },
@@ -193,6 +202,18 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
     }
 
     super._closeOrCommit();
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _commitValue() {
+    // Store filter value for checking if user input is matching
+    // an item which is already selected, to not un-select it.
+    this.lastFilter = this.filter;
+
+    super._commitValue();
   }
 
   /**
