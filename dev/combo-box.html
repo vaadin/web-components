@@ -23,7 +23,7 @@
       comboBox.items = arr.result;
       */
 
-      comboBox.dataProvider = (params, callback) => {
+      comboBox.dataProvider = async (params, callback) => {
         console.log(JSON.stringify(params))
         const index = params.page * params.pageSize;
         const response = await fetch(`https://demo.vaadin.com/demo-data/1.0/filtered-countries?index=${index}&count=${params.pageSize}&filter=${params.filter}`)
