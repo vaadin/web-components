@@ -100,6 +100,7 @@ describe('keyboard', () => {
       await sendKeys({ type: 'foo' });
       await sendKeys({ press: 'Enter' });
       expect(datepicker.invalid).to.be.true;
+      expect(datepicker.checkValidity()).to.be.false;
       expect(datepicker.value).to.equal('');
       expect(input.value).to.equal('foo');
     });
@@ -110,6 +111,7 @@ describe('keyboard', () => {
       // Wait for overlay to finish closing
       await nextRender(datepicker);
       expect(datepicker.invalid).to.be.true;
+      expect(datepicker.checkValidity()).to.be.false;
 
       // Clear the invalid input
       input.select();
@@ -131,6 +133,7 @@ describe('keyboard', () => {
       datepicker.$.clearButton.click();
       expect(spy.callCount).to.equal(1);
       expect(datepicker.invalid).to.be.false;
+      expect(datepicker.checkValidity()).to.be.true;
     });
 
     it('should empty value with invalid input', async () => {
@@ -147,6 +150,7 @@ describe('keyboard', () => {
       await sendKeys({ type: 'foo' });
       await close(datepicker);
       expect(datepicker.invalid).to.be.true;
+      expect(datepicker.checkValidity()).to.be.false;
     });
   });
 
