@@ -62,6 +62,11 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         __placeHolder: {
           value: new ComboBoxPlaceholder(),
         },
+
+        /** @private */
+        __oldDataProviderFilter: {
+          type: String,
+        },
       };
     }
 
