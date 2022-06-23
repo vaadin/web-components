@@ -263,6 +263,20 @@ describe('internal filtering', () => {
 
       expect(comboBox.opened && overlay.hasAttribute('hidden')).to.be.true;
     });
+
+    it('should reset the filter on value change', () => {
+      setInputValue(comboBox, 'bar');
+      expect(comboBox.filter).to.equal('bar');
+      comboBox.value = 'foo';
+      expect(comboBox.filter).to.be.empty;
+    });
+
+    it('should reset the filter on selected item change', () => {
+      setInputValue(comboBox, 'bar');
+      expect(comboBox.filter).to.equal('bar');
+      comboBox.selectedItem = 'foo';
+      expect(comboBox.filter).to.be.empty;
+    });
   });
 
   describe('setting items when opened', () => {
