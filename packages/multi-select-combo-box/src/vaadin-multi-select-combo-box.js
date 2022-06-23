@@ -109,6 +109,7 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * Custom property                                      | Description                | Default
  * -----------------------------------------------------|----------------------------|--------
  * `--vaadin-field-default-width`                       | Default width of the field | `12em`
+ * `--vaadin-multi-select-combo-box-overlay-width`      | Width of the overlay       | `auto`
  * `--vaadin-multi-select-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
  * `--vaadin-multi-select-combo-box-input-min-width`    | Min width of the input     | `4em`
  *
