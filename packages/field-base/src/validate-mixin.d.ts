@@ -30,4 +30,12 @@ export declare class ValidateMixinClass {
    * Returns true if the field value satisfies all constraints (if any).
    */
   checkValidity(): boolean;
+
+  /**
+   * Fired whenever the field is validated.
+   *
+   * @event validated
+   * @param {Object} detail
+   * @param {boolean} detail.valid the result of the validation.
+   */
 }

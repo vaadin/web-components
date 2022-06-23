@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { ValidateMixin } from '../src/validate-mixin.js';
 import { define } from './helpers.js';
 
@@ -99,6 +100,27 @@ const runTests = (baseClass) => {
       element.value = 'value';
       element.validate();
       expect(element.invalid).to.be.false;
+    });
+
+    it('should fire a validated event on validation success', () => {
+      const validatedSpy = sinon.spy();
+      element.addEventListener('validated', validatedSpy);
+      element.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.true;
+    });
+
+    it('should fire a validated event on validation failure', () => {
+      const validatedSpy = sinon.spy();
+      element.addEventListener('validated', validatedSpy);
+      element.required = true;
+      element.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.false;
     });
   });
 };

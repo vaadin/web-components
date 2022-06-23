@@ -36,12 +36,17 @@ export const ValidateMixin = dedupingMixin(
       }
 
       /**
-       * Returns true if field is valid, and sets `invalid` based on the field validity.
+       * Validates the field and sets the `invalid` property based on the result.
+       *
+       * The method fires a `validated` event with the result of the validation.
        *
        * @return {boolean} True if the value is valid.
        */
       validate() {
-        return !(this.invalid = !this.checkValidity());
+        const isValid = this.checkValidity();
+        this.invalid = !isValid;
+        this.dispatchEvent(new CustomEvent('validated', { detail: { valid: isValid } }));
+        return isValid;
       }
 
       /**
@@ -52,5 +57,13 @@ export const ValidateMixin = dedupingMixin(
       checkValidity() {
         return !this.required || !!this.value;
       }
+
+      /**
+       * Fired whenever the field is validated.
+       *
+       * @event validated
+       * @param {Object} detail
+       * @param {boolean} detail.valid the result of the validation.
+       */
     },
 );
