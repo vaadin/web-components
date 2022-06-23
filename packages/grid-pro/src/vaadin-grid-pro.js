@@ -51,7 +51,6 @@ class GridPro extends InlineEditingMixin(Grid) {
   static get cvdlName() {
     return 'vaadin-grid-pro';
   }
-
 }
 
 customElements.define(GridPro.is, GridPro);
