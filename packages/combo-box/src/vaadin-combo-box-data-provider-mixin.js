@@ -64,7 +64,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         },
 
         /** @private */
-        __oldDataProviderFilter: {
+        __previousDataProviderFilter: {
           type: String,
         },
       };
@@ -105,13 +105,13 @@ export const ComboBoxDataProviderMixin = (superClass) =>
 
     /** @private */
     _dataProviderFilterChanged(filter) {
-      if (this.__oldDataProviderFilter === undefined && filter === '') {
-        this.__oldDataProviderFilter = filter;
+      if (this.__previousDataProviderFilter === undefined && filter === '') {
+        this.__previousDataProviderFilter = filter;
         return;
       }
 
-      if (this.__oldDataProviderFilter !== filter) {
-        this.__oldDataProviderFilter = filter;
+      if (this.__previousDataProviderFilter !== filter) {
+        this.__previousDataProviderFilter = filter;
 
         this._pendingRequests = {};
         // Immediately mark as loading if this refresh leads to re-fetching pages
