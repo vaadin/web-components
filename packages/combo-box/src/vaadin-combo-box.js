@@ -104,6 +104,7 @@ registerStyles('vaadin-combo-box', inputFieldShared, { moduleId: 'vaadin-combo-b
  * Custom property                         | Description                | Default
  * ----------------------------------------|----------------------------|---------
  * `--vaadin-field-default-width`          | Default width of the field | `12em`
+ * `--vaadin-combo-box-overlay-width`      | Width of the overlay       | `auto`
  * `--vaadin-combo-box-overlay-max-height` | Max height of the overlay  | `65vh`
  *
  * `<vaadin-combo-box>` provides the same set of shadow DOM parts and state attributes as `<vaadin-text-field>`.
