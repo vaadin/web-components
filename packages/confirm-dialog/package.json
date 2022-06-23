@@ -38,7 +38,6 @@
     "@vaadin/button": "23.2.0-alpha2",
     "@vaadin/component-base": "23.2.0-alpha2",
     "@vaadin/dialog": "23.2.0-alpha2",
-    "@vaadin/vaadin-license-checker": "^2.1.0",
     "@vaadin/vaadin-lumo-styles": "23.2.0-alpha2",
     "@vaadin/vaadin-material-styles": "23.2.0-alpha2",
     "@vaadin/vaadin-overlay": "23.2.0-alpha2",

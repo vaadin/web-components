@@ -1956,13 +1956,6 @@
   resolved "https://registry.yarnpkg.com/@vaadin/vaadin-development-mode-detector/-/vaadin-development-mode-detector-2.0.5.tgz#5098216dae30d8eeabe46c7cbe494a352fe09691"
   integrity sha512-miirBQw10UHjKwRv29iZniXCo41cLg3wFotoyTeUZ2PTGIDk/fZVFr4Q4WVKZrp3D15878vz94nNQROSmPLjdg==
 
-"@vaadin/vaadin-license-checker@^2.1.0":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@vaadin/vaadin-license-checker/-/vaadin-license-checker-2.1.2.tgz#a255bed26291a4937106846690455b9e6e59ee39"
-  integrity sha512-oD6/MoavXyIZp6NWhkbJD5RKrpiWohhaQpgqjM0bFIthRr+1NoiG5R1w0uY3NIdMDuaXlsUFSQJ/Viz1v7F/jQ==
-  dependencies:
-    "@vaadin/vaadin-development-mode-detector" "^2.0.0"
-
 "@vaadin/vaadin-usage-statistics@^2.1.0":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@vaadin/vaadin-usage-statistics/-/vaadin-usage-statistics-2.1.2.tgz#a0a211b298e647742b60c6d4d1d8834381e3c77f"

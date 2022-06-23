@@ -6,7 +6,6 @@
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/dialog/src/vaadin-dialog.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
-import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import './vaadin-crud-dialog.js';
 import './vaadin-crud-grid.js';
 import './vaadin-crud-form.js';
@@ -613,17 +612,6 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       '__cancelButtonPropsChanged(_cancelButton, i18n.cancel)',
       '__deleteButtonPropsChanged(_deleteButton, i18n.deleteItem, __isNew)',
     ];
-  }
-
-  /** @protected */
-  static _finalizeClass() {
-    super._finalizeClass();
-
-    const devModeCallback = window.Vaadin.developmentModeCallback;
-    const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
-    if (typeof licenseChecker === 'function') {
-      licenseChecker(Crud);
-    }
   }
 
   /** @private */
