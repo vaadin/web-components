@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, keyboardEventFor } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 
@@ -49,6 +50,27 @@ describe('form field', () => {
     expect(comboBox.checkValidity()).to.be.true;
     expect(comboBox.validate()).to.be.true;
     expect(comboBox.invalid).to.be.false;
+  });
+
+  it('should fire a validated event on validation success', () => {
+    const validatedSpy = sinon.spy();
+    comboBox.addEventListener('validated', validatedSpy);
+    comboBox.validate();
+
+    expect(validatedSpy.calledOnce).to.be.true;
+    const event = validatedSpy.firstCall.args[0];
+    expect(event.detail.valid).to.be.true;
+  });
+
+  it('should fire a validated event on validation failure', () => {
+    const validatedSpy = sinon.spy();
+    comboBox.addEventListener('validated', validatedSpy);
+    comboBox.required = true;
+    comboBox.validate();
+
+    expect(validatedSpy.calledOnce).to.be.true;
+    const event = validatedSpy.firstCall.args[0];
+    expect(event.detail.valid).to.be.false;
   });
 
   describe('enter key behavior', () => {
