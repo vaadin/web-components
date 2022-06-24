@@ -538,21 +538,29 @@ describe('vaadin-select', () => {
     });
 
     describe('validation', () => {
-      it('should set invalid to true when is required but there is no value', () => {
+      it('should pass the validation when the field is valid', () => {
+        select.validate();
+        expect(select.checkValidity()).to.be.true;
+        expect(select.invalid).to.be.false;
+      });
+
+      it('should not pass the validation when the field is required and has no value', () => {
         expect(select.invalid).to.be.false;
         select.setAttribute('required', '');
 
         enterKeyDown(valueButton);
         escKeyDown(valueButton);
+        expect(select.checkValidity()).to.be.false;
         expect(select.invalid).to.be.true;
       });
 
-      it('should not set invalid to true when is required, there is no value, but is disabled', () => {
+      it('should pass the validation when the field is required and has no value but disabled', () => {
         expect(select.invalid).to.be.false;
         select.setAttribute('required', '');
         select.setAttribute('disabled', '');
 
         select.validate();
+        expect(select.checkValidity()).to.be.true;
         expect(select.invalid).to.be.false;
       });
 
