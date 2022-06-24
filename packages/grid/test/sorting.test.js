@@ -351,7 +351,7 @@ describe('sorting', () => {
       });
     });
 
-    describe('multi-sort priority', () => {
+    describe('multi-sort-priority="append"', () => {
       beforeEach(() => {
         grid.multiSortPriority = 'append';
       });

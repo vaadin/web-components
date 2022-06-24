@@ -15,8 +15,8 @@ export declare class SortMixinClass {
   multiSort: boolean;
 
   /**
-    * Controls how columns are added to the sort order when using multi-sort.
-    * The sort order is visually indicated by numbers in grid sorters placed in column headers.
+   * Controls how columns are added to the sort order when using multi-sort.
+   * The sort order is visually indicated by numbers in grid sorters placed in column headers.
    *
    * By default, whenever an unsorted column is sorted, or the sort-direction of a column is
    * changed, that column gets sort priority 1, thus affecting the priority for all the other
