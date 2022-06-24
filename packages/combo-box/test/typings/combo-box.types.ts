@@ -199,3 +199,4 @@ assertType<DisabledMixinClass>(narrowedComboBoxLight);
 assertType<InputMixinClass>(narrowedComboBoxLight);
 assertType<KeyboardMixinClass>(narrowedComboBoxLight);
 assertType<ThemableMixinClass>(narrowedComboBoxLight);
+assertType<ValidateMixinClass>(narrowedComboBoxLight);

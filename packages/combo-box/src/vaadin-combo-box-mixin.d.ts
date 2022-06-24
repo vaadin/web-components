@@ -138,11 +138,6 @@ export declare class ComboBoxMixinClass<TItem> {
    */
   itemIdPath: string | null | undefined;
 
-  /**
-   * Set to true if the value is invalid.
-   */
-  invalid: boolean;
-
   protected readonly _propertyForValue: string;
 
   protected _inputElementValue: string | undefined;
