@@ -697,7 +697,7 @@ class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(Po
   }
 
   /**
-   * Returns true if the current input value satisfies all constraints (if any)
+   * Returns true if the current value satisfies all constraints (if any)
    *
    * @return {boolean}
    */
