@@ -1,4 +1,5 @@
 import '../../vaadin-select.js';
+import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import {
   Select,
   SelectChangeEvent,
@@ -20,8 +21,13 @@ assertType<SelectRenderer | undefined>(select.renderer);
 assertType<string>(select.value);
 assertType<string | null | undefined>(select.placeholder);
 assertType<boolean>(select.readonly);
+assertType<boolean>(select.invalid);
+assertType<boolean>(select.required);
 assertType<() => void>(select.requestContentUpdate);
 assertType<() => boolean>(select.validate);
+
+// Mixins
+assertType<ValidateMixinClass>(select);
 
 // Item properties
 const item: SelectItem = select.items ? select.items[0] : {};
