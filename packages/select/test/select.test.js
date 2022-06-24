@@ -589,6 +589,27 @@ describe('vaadin-select', () => {
         select.value = '';
         expect(spy.callCount).to.be.equal(2);
       });
+
+      it('should fire a validated event on validation success', () => {
+        const validatedSpy = sinon.spy();
+        select.addEventListener('validated', validatedSpy);
+        select.validate();
+
+        expect(validatedSpy.calledOnce).to.be.true;
+        const event = validatedSpy.firstCall.args[0];
+        expect(event.detail.valid).to.be.true;
+      });
+
+      it('should fire a validated event on validation failure', () => {
+        const validatedSpy = sinon.spy();
+        select.addEventListener('validated', validatedSpy);
+        select.required = true;
+        select.validate();
+
+        expect(validatedSpy.calledOnce).to.be.true;
+        const event = validatedSpy.firstCall.args[0];
+        expect(event.detail.valid).to.be.false;
+      });
     });
 
     describe('initial validation', () => {
