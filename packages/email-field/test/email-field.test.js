@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '../src/vaadin-email-field.js';
 
 const validAddresses = [
@@ -92,6 +93,35 @@ describe('email-field', () => {
 
     it('should not remove "invalid" state when ready', () => {
       expect(field.invalid).to.be.true;
+    });
+  });
+
+  describe('validation', () => {
+    let field;
+
+    beforeEach(() => {
+      field = fixtureSync('<vaadin-email-field></vaadin-email-field>');
+    });
+
+    it('should fire a validated event on validation success', () => {
+      const validatedSpy = sinon.spy();
+      field.addEventListener('validated', validatedSpy);
+      field.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.true;
+    });
+
+    it('should fire a validated event on validation failure', () => {
+      const validatedSpy = sinon.spy();
+      field.addEventListener('validated', validatedSpy);
+      field.required = true;
+      field.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.false;
     });
   });
 });
