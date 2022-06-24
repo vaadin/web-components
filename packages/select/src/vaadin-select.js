@@ -711,12 +711,12 @@ class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixin(Themab
   }
 
   /**
-   * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
+   * Returns true if the current value satisfies all constraints (if any)
    *
-   * @return {boolean} True if the value is valid and sets the `invalid` flag appropriately
+   * @return {boolean}
    */
-  validate() {
-    return !(this.invalid = !(this.disabled || !this.required || this.value));
+  checkValidity() {
+    return this.disabled || !this.required || !!this.value;
   }
 
   /**

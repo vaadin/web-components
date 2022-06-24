@@ -245,13 +245,6 @@ declare class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixi
    */
   requestContentUpdate(): void;
 
-  /**
-   * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-   *
-   * @returns True if the value is valid and sets the `invalid` flag appropriately
-   */
-  validate(): boolean;
-
   addEventListener<K extends keyof SelectEventMap>(
     type: K,
     listener: (this: Select, ev: SelectEventMap[K]) => void,
