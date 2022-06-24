@@ -544,6 +544,7 @@ describe('vaadin-select', () => {
 
         enterKeyDown(valueButton);
         escKeyDown(valueButton);
+        expect(select.checkValidity()).to.be.false;
         expect(select.invalid).to.be.true;
       });
 
@@ -553,6 +554,7 @@ describe('vaadin-select', () => {
         select.setAttribute('disabled', '');
 
         select.validate();
+        expect(select.checkValidity()).to.be.true;
         expect(select.invalid).to.be.false;
       });
 
