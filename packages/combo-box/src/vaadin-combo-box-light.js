@@ -8,6 +8,7 @@ import './vaadin-combo-box-overlay.js';
 import './vaadin-combo-box-scroller.js';
 import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
@@ -61,8 +62,9 @@ import { ComboBoxMixin } from './vaadin-combo-box-mixin.js';
  * @mixes ComboBoxDataProviderMixin
  * @mixes ComboBoxMixin
  * @mixes ThemableMixin
+ * @mixes ValidateMixin
  */
-class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixin(PolymerElement))) {
+class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixin(ThemableMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-combo-box-light';
   }

@@ -30,21 +30,25 @@ describe('form field', () => {
     expect(input.readOnly).to.be.true;
   });
 
-  it('should validate correctly when input value is invalid', () => {
-    comboBox.name = 'foo';
-    comboBox.required = true;
-
-    expect(comboBox.validate()).to.equal(false);
-    expect(comboBox.invalid).to.be.equal(true);
+  it('should pass the validation when the field is valid', () => {
+    expect(comboBox.checkValidity()).to.be.true;
+    expect(comboBox.validate()).to.be.true;
+    expect(comboBox.invalid).to.be.false;
   });
 
-  it('should validate correctly when input value is valid', () => {
-    comboBox.name = 'foo';
+  it('should not pass the validation when the field is required and has no value', () => {
+    comboBox.required = true;
+    expect(comboBox.checkValidity()).to.be.false;
+    expect(comboBox.validate()).to.be.false;
+    expect(comboBox.invalid).to.be.true;
+  });
+
+  it('should pass the validation when the field is required and has a value', () => {
     comboBox.required = true;
     comboBox.value = 'foo';
-
-    expect(comboBox.validate()).to.equal(true);
-    expect(comboBox.invalid).to.be.equal(false);
+    expect(comboBox.checkValidity()).to.be.true;
+    expect(comboBox.validate()).to.be.true;
+    expect(comboBox.invalid).to.be.false;
   });
 
   describe('enter key behavior', () => {

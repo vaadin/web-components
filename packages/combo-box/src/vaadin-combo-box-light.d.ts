@@ -6,6 +6,7 @@
 import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
+import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
 import { ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
@@ -142,7 +143,8 @@ interface ComboBoxLight<TItem = ComboBoxDefaultItem>
     KeyboardMixinClass,
     InputMixinClass,
     DisabledMixinClass,
-    ThemableMixinClass {}
+    ThemableMixinClass,
+    ValidateMixinClass {}
 
 declare global {
   interface HTMLElementTagNameMap {
