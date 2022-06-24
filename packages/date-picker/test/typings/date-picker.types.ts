@@ -97,6 +97,7 @@ assertType<DatePickerMixinClass>(datePicker);
 const datePickerLight = document.createElement('vaadin-date-picker-light');
 
 assertType<DatePickerLight>(datePickerLight);
+assertType<ValidateMixinClass>(datePickerLight);
 
 datePickerLight.addEventListener('opened-changed', (event) => {
   assertType<DatePickerLightOpenedChangedEvent>(event);
@@ -131,6 +132,8 @@ assertType<boolean | null | undefined>(datePickerLight.opened);
 assertType<HTMLElement | null | undefined>(datePickerLight.focusElement);
 assertType<boolean>(datePickerLight.disabled);
 assertType<string>(datePickerLight.value);
+assertType<boolean>(datePickerLight.invalid);
+assertType<boolean>(datePickerLight.required);
 assertType<string | null | undefined>(datePickerLight.initialPosition);
 
 // DatePickerLight mixins

@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 export { DatePickerDate, DatePickerI18n } from './vaadin-date-picker-mixin.js';
@@ -80,7 +81,7 @@ export interface DatePickerLightEventMap extends HTMLElementEventMap, DatePicker
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  */
-declare class DatePickerLight extends ThemableMixin(DatePickerMixin(HTMLElement)) {
+declare class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixin(HTMLElement))) {
   /**
    * Name of the two-way data-bindable property representing the
    * value of the custom input field.
