@@ -6,7 +6,6 @@
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
-import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import '../vendor/vaadin-quill.js';
 import './vaadin-rich-text-editor-toolbar-styles.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -502,17 +501,6 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
 
   static get observers() {
     return ['_valueChanged(value, _editor)', '_disabledChanged(disabled, readonly, _editor)'];
-  }
-
-  /** @protected */
-  static _finalizeClass() {
-    super._finalizeClass();
-
-    const devModeCallback = window.Vaadin.developmentModeCallback;
-    const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
-    if (typeof licenseChecker === 'function') {
-      licenseChecker(RichTextEditor);
-    }
   }
 
   /**

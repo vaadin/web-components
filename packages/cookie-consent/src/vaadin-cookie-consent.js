@@ -3,7 +3,6 @@
  * Copyright (c) 2018 - 2022 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import 'cookieconsent/build/cookieconsent.min.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -132,18 +131,6 @@ class CookieConsent extends ElementMixin(PolymerElement) {
         type: Object,
       },
     };
-  }
-
-  /** @protected */
-  static _finalizeClass() {
-    super._finalizeClass();
-
-    const devModeCallback = window.Vaadin.developmentModeCallback;
-    const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
-    /* c8 ignore next 3 */
-    if (typeof licenseChecker === 'function') {
-      licenseChecker(CookieConsent);
-    }
   }
 
   /** @private */

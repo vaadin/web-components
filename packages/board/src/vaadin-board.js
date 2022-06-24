@@ -3,7 +3,6 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import './vaadin-board-row.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -49,20 +48,6 @@ class Board extends ElementMixin(PolymerElement) {
 
   static get cvdlName() {
     return 'vaadin-board';
-  }
-
-  /**
-   * @protected
-   */
-  static _finalizeClass() {
-    super._finalizeClass();
-
-    const devModeCallback = window.Vaadin.developmentModeCallback;
-    const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
-    /* c8 ignore next 3 */
-    if (typeof licenseChecker === 'function') {
-      licenseChecker(Board);
-    }
   }
 
   /**

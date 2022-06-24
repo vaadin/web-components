@@ -3,7 +3,6 @@
  * Copyright (c) 2018 - 2022 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import './vaadin-confirm-dialog-overlay.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -269,18 +268,6 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
         observer: '_rejectButtonChanged',
       },
     };
-  }
-
-  /** @protected */
-  static _finalizeClass() {
-    super._finalizeClass();
-
-    const devModeCallback = window.Vaadin.developmentModeCallback;
-    const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
-    /* c8 ignore next 3 */
-    if (typeof licenseChecker === 'function') {
-      licenseChecker(ConfirmDialog);
-    }
   }
 
   static get observers() {

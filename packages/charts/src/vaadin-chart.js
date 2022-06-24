@@ -3,7 +3,6 @@
  * Copyright (c) 2015 - 2022 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import 'highcharts/es-modules/masters/highstock.src.js';
 import 'highcharts/es-modules/masters/modules/accessibility.src.js';
 import 'highcharts/es-modules/masters/highcharts-more.src.js';
@@ -476,20 +475,6 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       '__updateType(type, configuration)',
       '__updateAdditionalOptions(additionalOptions.*)',
     ];
-  }
-
-  /**
-   * @protected
-   */
-  static _finalizeClass() {
-    super._finalizeClass();
-
-    const devModeCallback = window.Vaadin.developmentModeCallback;
-    const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
-    /* c8 ignore next 3 */
-    if (typeof licenseChecker === 'function') {
-      licenseChecker(Chart);
-    }
   }
 
   constructor() {

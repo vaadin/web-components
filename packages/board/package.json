@@ -38,8 +38,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "23.2.0-alpha2",
-    "@vaadin/vaadin-license-checker": "^2.1.0"
+    "@vaadin/component-base": "23.2.0-alpha2"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",

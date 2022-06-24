@@ -4,7 +4,6 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
-import '@vaadin/vaadin-license-checker/vaadin-license-checker.js';
 import { Grid } from '@vaadin/grid/src/vaadin-grid.js';
 import { InlineEditingMixin } from './vaadin-grid-pro-inline-editing-mixin.js';
 
@@ -51,19 +50,6 @@ class GridPro extends InlineEditingMixin(Grid) {
 
   static get cvdlName() {
     return 'vaadin-grid-pro';
-  }
-
-  /**
-   * @protected
-   */
-  static _finalizeClass() {
-    super._finalizeClass();
-
-    const devModeCallback = window.Vaadin.developmentModeCallback;
-    const licenseChecker = devModeCallback && devModeCallback['vaadin-license-checker'];
-    if (typeof licenseChecker === 'function') {
-      licenseChecker(GridPro);
-    }
   }
 }
 
