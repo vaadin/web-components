@@ -149,6 +149,27 @@ describe('form input', () => {
       expect(datepicker.validate()).to.equal(false);
       expect(datepicker.invalid).to.be.equal(true);
     });
+
+    it('should fire a validated event on validation success', () => {
+      const validatedSpy = sinon.spy();
+      datepicker.addEventListener('validated', validatedSpy);
+      datepicker.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.true;
+    });
+
+    it('should fire a validated event on validation failure', () => {
+      const validatedSpy = sinon.spy();
+      datepicker.addEventListener('validated', validatedSpy);
+      datepicker.required = true;
+      datepicker.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.false;
+    });
   });
 
   describe('required', () => {
