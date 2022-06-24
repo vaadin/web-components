@@ -114,6 +114,27 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
       expect(changeSpy.calledAfter(validateSpy)).to.be.true;
     });
+
+    it('should fire a validated event on validation success', () => {
+      const validatedSpy = sinon.spy();
+      field.addEventListener('validated', validatedSpy);
+      field.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.true;
+    });
+
+    it('should fire a validated event on validation failure', () => {
+      const validatedSpy = sinon.spy();
+      field.addEventListener('validated', validatedSpy);
+      field.required = true;
+      field.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.false;
+    });
   });
 
   describe('step', () => {
