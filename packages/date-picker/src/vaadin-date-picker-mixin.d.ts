@@ -189,13 +189,6 @@ export declare class DatePickerMixinClass {
   close(): void;
 
   /**
-   * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-   *
-   * @returns True if the value is valid and sets the `invalid` flag appropriately
-   */
-  validate(): boolean;
-
-  /**
    * Returns true if the current input value satisfies all constraints (if any)
    *
    * Override the `checkValidity` method for custom validations.

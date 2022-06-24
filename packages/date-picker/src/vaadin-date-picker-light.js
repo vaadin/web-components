@@ -7,6 +7,7 @@ import './vaadin-date-picker-overlay.js';
 import './vaadin-date-picker-overlay-content.js';
 import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
 
@@ -53,7 +54,7 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * @mixes ThemableMixin
  * @mixes DatePickerMixin
  */
-class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
+class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
