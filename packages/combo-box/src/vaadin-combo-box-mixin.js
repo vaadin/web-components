@@ -921,14 +921,11 @@ export const ComboBoxMixin = (subclass) =>
       }
 
       if (this._isValidValue(value)) {
-        let item;
         if (this._getItemValue(this.selectedItem) !== value) {
           this._selectItemForValue(value);
-        } else {
-          item = this.selectedItem;
         }
 
-        if (!item && this.allowCustomValue) {
+        if (!this.selectedItem && this.allowCustomValue) {
           this._inputElementValue = value;
         }
 
