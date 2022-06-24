@@ -548,6 +548,27 @@ describe('radio-group', () => {
       group.invalid = false;
       expect(group.hasAttribute('invalid')).to.be.false;
     });
+
+    it('should fire a validated event on validation success', () => {
+      const validatedSpy = sinon.spy();
+      group.addEventListener('validated', validatedSpy);
+      group.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.true;
+    });
+
+    it('should fire a validated event on validation failure', () => {
+      const validatedSpy = sinon.spy();
+      group.addEventListener('validated', validatedSpy);
+      group.required = true;
+      group.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.false;
+    });
   });
 
   describe('aria-labelledby', () => {
