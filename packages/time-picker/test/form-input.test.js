@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, focusout } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import { TimePicker } from '../src/vaadin-time-picker.js';
 
 class TimePicker20Element extends TimePicker {
@@ -165,6 +166,27 @@ describe('form input', () => {
       expect(timePicker.invalid).to.be.equal(false);
       focusout(comboBox);
       expect(timePicker.invalid).to.be.equal(true);
+    });
+
+    it('should fire a validated event on validation success', () => {
+      const validatedSpy = sinon.spy();
+      timePicker.addEventListener('validated', validatedSpy);
+      timePicker.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.true;
+    });
+
+    it('should fire a validated event on validation failure', () => {
+      const validatedSpy = sinon.spy();
+      timePicker.addEventListener('validated', validatedSpy);
+      timePicker.required = true;
+      timePicker.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.false;
     });
   });
 
