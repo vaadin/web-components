@@ -1301,29 +1301,6 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
-     * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-     *
-     * @return {boolean} True if the value is valid and sets the `invalid` flag appropriately
-     */
-    validate() {
-      return !(this.invalid = !this.checkValidity());
-    }
-
-    /**
-     * Returns true if the current input value satisfies all constraints (if any).
-     * You can override this method for custom validations.
-     *
-     * @return {boolean}
-     */
-    checkValidity() {
-      if (super.checkValidity) {
-        return super.checkValidity();
-      }
-
-      return !this.required || !!this.value;
-    }
-
-    /**
      * Fired when the value changes.
      *
      * @event value-changed
