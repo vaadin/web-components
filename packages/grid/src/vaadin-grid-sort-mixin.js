@@ -22,6 +22,25 @@ export const SortMixin = (superClass) =>
         },
 
         /**
+         * Use this property to determine the order in which the grid rows are sorted.
+         * It's visually indicated by numbers in grid sorters placed in column headers.
+         *
+         * By default, whenever an unsorted column is sorted, or the sort-direction of a column is
+         * changed, that column gets sort priority 1, thus affecting the priority for all the other
+         * sorted columns. This is identical to using `multi-sort-priority="prepend"`.
+         *
+         * Using this property allows to change this behavior so that sorting an unsorted column
+         * would add it to the "end" of the sort, and changing column's sort direction would retain
+         * it's previous priority. To set this, use `multi-sort-priority="append"`.
+         *
+         * @attr {string} multi-sort-priority
+         */
+        multiSortPriority: {
+          type: String,
+          value: 'prepend',
+        },
+
+        /**
          * @type {!Array<!GridSorterDefinition>}
          * @protected
          */
@@ -72,6 +91,26 @@ export const SortMixin = (superClass) =>
     }
 
     /** @private */
+    __appendSorter(sorter) {
+      if (!sorter.direction) {
+        this._removeArrayItem(this._sorters, sorter);
+      } else if (!this._sorters.includes(sorter)) {
+        this._sorters.push(sorter);
+      }
+
+      this.__updateSortOrders();
+    }
+
+    /** @private */
+    __prependSorter(sorter) {
+      this._removeArrayItem(this._sorters, sorter);
+      if (sorter.direction) {
+        this._sorters.unshift(sorter);
+      }
+      this.__updateSortOrders();
+    }
+
+    /** @private */
     __updateSorter(sorter) {
       if (!sorter.direction && this._sorters.indexOf(sorter) === -1) {
         return;
@@ -80,11 +119,11 @@ export const SortMixin = (superClass) =>
       sorter._order = null;
 
       if (this.multiSort) {
-        this._removeArrayItem(this._sorters, sorter);
-        if (sorter.direction) {
-          this._sorters.unshift(sorter);
+        if (this.multiSortPriority === 'append') {
+          this.__appendSorter(sorter);
+        } else {
+          this.__prependSorter(sorter);
         }
-        this.__updateSortOrders();
       } else if (sorter.direction) {
         const otherSorters = this._sorters.filter((s) => s !== sorter);
         this._sorters = [sorter];
