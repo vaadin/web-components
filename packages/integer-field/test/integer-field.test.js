@@ -216,6 +216,29 @@ describe('integer-field', () => {
       });
     });
   });
+
+  describe('validation', () => {
+    it('should fire a validated event on validation success', () => {
+      const validatedSpy = sinon.spy();
+      integerField.addEventListener('validated', validatedSpy);
+      integerField.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.true;
+    });
+
+    it('should fire a validated event on validation failure', () => {
+      const validatedSpy = sinon.spy();
+      integerField.addEventListener('validated', validatedSpy);
+      integerField.required = true;
+      integerField.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.false;
+    });
+  });
 });
 
 describe('mixed', () => {
