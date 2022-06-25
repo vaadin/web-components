@@ -12,6 +12,27 @@ describe('validation', () => {
       input = field.inputElement;
     });
 
+    it('should pass validation when the field by default', () => {
+      expect(field.checkValidity()).to.be.true;
+      expect(field.validate()).to.be.true;
+      expect(field.invalid).to.be.false;
+    });
+
+    it('should not pass validation when the field is required and has no value', () => {
+      field.required = true;
+      expect(field.checkValidity()).to.be.false;
+      expect(field.validate()).to.be.false;
+      expect(field.invalid).to.be.true;
+    });
+
+    it('should pass validation when the field is required and has a valid value', () => {
+      field.required = true;
+      field.value = '1';
+      expect(field.checkValidity()).to.be.true;
+      expect(field.validate()).to.be.true;
+      expect(field.invalid).to.be.false;
+    });
+
     it('should be valid with numeric values', () => {
       expect(field.validate()).to.be.true;
 
@@ -186,6 +207,15 @@ describe('validation', () => {
       field = fixtureSync('<vaadin-number-field></vaadin-number-field>');
     });
 
+    it('should update "invalid" state when "required" is removed', () => {
+      field.required = true;
+      field.validate();
+      expect(field.invalid).to.be.true;
+
+      field.required = false;
+      expect(field.invalid).to.be.false;
+    });
+
     it('should update "invalid" state when "min" is removed', () => {
       field.value = '42';
       field.min = 50;
@@ -215,6 +245,16 @@ describe('validation', () => {
 
       field.step = '';
       expect(field.invalid).to.be.false;
+    });
+
+    it('should not update "invalid" when "step" is removed but the field is still required', () => {
+      field.required = true;
+      field.step = 2;
+      field.validate();
+      expect(field.invalid).to.be.true;
+
+      field.step = '';
+      expect(field.invalid).to.be.true;
     });
 
     it('should not set "invalid" to false when "min" is set to 0', () => {
