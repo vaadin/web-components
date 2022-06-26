@@ -27,6 +27,21 @@ describe('vaadin-number-field', () => {
       await aTimeout(0);
       await expect(field).dom.to.equalSnapshot();
     });
+
+    it('min', async () => {
+      field.min = 2;
+      await expect(field).dom.to.equalSnapshot();
+    });
+
+    it('max', async () => {
+      field.max = 2;
+      await expect(field).dom.to.equalSnapshot();
+    });
+
+    it('step', async () => {
+      field.step = 2;
+      await expect(field).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {

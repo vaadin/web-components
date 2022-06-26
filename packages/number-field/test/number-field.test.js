@@ -14,18 +14,6 @@ describe('number-field', () => {
   });
 
   describe('native', () => {
-    it('should have [type=number]', () => {
-      expect(input.type).to.equal('number');
-    });
-
-    ['min', 'max'].forEach((attr) => {
-      it(`should set numeric attribute ${attr}`, () => {
-        const value = 5;
-        numberField[attr] = value;
-        expect(input.getAttribute(attr)).to.be.equal(String(value));
-      });
-    });
-
     it('should set value with correct decimal places regardless of step', () => {
       numberField.step = 2;
       numberField.value = 9.99;
