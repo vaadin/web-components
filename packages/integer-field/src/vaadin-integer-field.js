@@ -65,20 +65,19 @@ export class IntegerField extends NumberField {
    * Override an observer from `NumberField` to reset the step
    * property when an invalid step is set.
    * @param {number} newVal
-   * @param {number | undefined} oldVal
    * @protected
    * @override
    */
-  _stepChanged(newVal, oldVal) {
-    if (!this.__hasOnlyDigits(newVal)) {
+  _stepChanged(step, inputElement) {
+    if (step && !this.__hasOnlyDigits(step)) {
       console.warn(
-        `Trying to set invalid step size "${newVal}", which is not a positive integer, to <vaadin-integer-field>. Resetting the default value 1.`,
+        `Trying to set invalid step size "${step}", which is not a positive integer, to <vaadin-integer-field>. Resetting the default value 1.`,
       );
-      this.step = 1;
+      this.step = null;
       return;
     }
 
-    super._stepChanged(newVal, oldVal);
+    super._stepChanged(step, inputElement);
   }
 
   /** @private */

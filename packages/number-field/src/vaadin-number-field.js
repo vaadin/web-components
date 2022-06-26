@@ -146,7 +146,6 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
        */
       min: {
         type: Number,
-        observer: '_minChanged',
       },
 
       /**
@@ -154,7 +153,6 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
        */
       max: {
         type: Number,
-        observer: '_maxChanged',
       },
 
       /**
@@ -163,10 +161,12 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
        */
       step: {
         type: Number,
-        value: 1,
-        observer: '_stepChanged',
       },
     };
+  }
+
+  static get observers() {
+    return ['_minChanged(min, inputElement)', '_maxChanged(max, inputElement)', '_stepChanged(step, inputElement)'];
   }
 
   static get constraints() {
@@ -225,10 +225,6 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
       }),
     );
 
-    this.inputElement.min = this.min;
-    this.inputElement.max = this.max;
-    this.__applyStep(this.step);
-
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
   }
 
@@ -279,6 +275,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
       return;
     }
 
+    const step = this.step || 1;
     let value = parseFloat(this.value);
 
     if (!this.value) {
@@ -297,11 +294,11 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
         value = this.max;
         if (incr < 0) {
           incr = 0;
-        } else if (this._getIncrement(1, value - this.step) > this.max) {
-          value -= 2 * this.step;
+        } else if (this._getIncrement(1, value - step) > this.max) {
+          value -= 2 * step;
           // FIXME(yuriy): find a proper solution to make correct step back
         } else {
-          value -= this.step;
+          value -= step;
         }
       }
     } else if (value < this.min) {
@@ -377,42 +374,32 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
     return !this.value || (!this.disabled && this._incrementIsInsideTheLimits(incr, value));
   }
 
-  /** @private */
-  __applyStep(step) {
-    if (this.inputElement) {
-      this.inputElement.step = this.__validateByStep ? step : 'any';
-    }
-  }
-
   /**
-   * @param {number} newVal
-   * @param {number | undefined} oldVal
+   * @param {number} step
    * @protected
    */
-  _stepChanged(newVal) {
-    // TODO: refactor to not have initial value
-    // https://github.com/vaadin/vaadin-text-field/issues/435
+  _stepChanged(step, inputElement) {
+    if (typeof step === 'string' && step) {
+      this.step = parseFloat(step);
+      return;
+    }
 
-    // Avoid using initial value in validation
-    this.__validateByStep = this.__stepChangedCalled || this.getAttribute('step') !== null;
-
-    this.__applyStep(newVal);
-
-    this.__stepChangedCalled = true;
-    this.setAttribute('step', newVal);
-  }
-
-  /** @private */
-  _minChanged(min) {
-    if (this.inputElement) {
-      this.inputElement.min = min;
+    if (inputElement) {
+      inputElement.step = step || 'any';
     }
   }
 
   /** @private */
-  _maxChanged(max) {
-    if (this.inputElement) {
-      this.inputElement.max = max;
+  _minChanged(min, inputElement) {
+    if (inputElement) {
+      inputElement.min = min;
+    }
+  }
+
+  /** @private */
+  _maxChanged(max, inputElement) {
+    if (inputElement) {
+      inputElement.max = max;
     }
   }
 
@@ -450,20 +437,6 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
     }
 
     super._onKeyDown(event);
-  }
-
-  /**
-   * Returns true if the current input value satisfies all constraints (if any).
-   * @return {boolean}
-   */
-  checkValidity() {
-    if (
-      this.inputElement &&
-      (this.required || this.min !== undefined || this.max !== undefined || this.__validateByStep)
-    ) {
-      return this.inputElement.checkValidity();
-    }
-    return !this.invalid;
   }
 }
 
