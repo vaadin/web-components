@@ -2,7 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-number-field host default"] = 
-`<vaadin-number-field step="1">
+`<vaadin-number-field>
   <label
     for="input-vaadin-number-field-3"
     id="label-vaadin-number-field-0"
@@ -28,10 +28,7 @@ snapshots["vaadin-number-field host default"] =
 /* end snapshot vaadin-number-field host default */
 
 snapshots["vaadin-number-field host helper"] = 
-`<vaadin-number-field
-  has-helper=""
-  step="1"
->
+`<vaadin-number-field has-helper="">
   <label
     for="input-vaadin-number-field-3"
     id="label-vaadin-number-field-0"
@@ -67,7 +64,6 @@ snapshots["vaadin-number-field host error"] =
 `<vaadin-number-field
   has-error-message=""
   invalid=""
-  step="1"
 >
   <label
     for="input-vaadin-number-field-3"
