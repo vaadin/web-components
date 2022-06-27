@@ -65,6 +65,11 @@ export type ComboBoxFilterChangedEvent = CustomEvent<{ value: string }>;
  */
 export type ComboBoxSelectedItemChangedEvent<TItem> = CustomEvent<{ value: TItem | null | undefined }>;
 
+/**
+ * Fired whenever the field is validated.
+ */
+export type ComboBoxValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
   change: ComboBoxChangeEvent<TItem>;
 
@@ -79,6 +84,8 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
   'value-changed': ComboBoxValueChangedEvent;
 
   'selected-item-changed': ComboBoxSelectedItemChangedEvent<TItem>;
+
+  validated: ComboBoxValidatedEvent;
 }
 
 /**
@@ -208,6 +215,7 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} selected-item-changed - Fired when the `selectedItem` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class ComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
   addEventListener<K extends keyof ComboBoxEventMap<TItem>>(

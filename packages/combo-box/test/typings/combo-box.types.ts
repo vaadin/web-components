@@ -24,6 +24,7 @@ import type {
   ComboBoxOpenedChangedEvent,
   ComboBoxRenderer,
   ComboBoxSelectedItemChangedEvent,
+  ComboBoxValidatedEvent,
   ComboBoxValueChangedEvent,
 } from '../../vaadin-combo-box';
 import type {
@@ -34,6 +35,7 @@ import type {
   ComboBoxLightInvalidChangedEvent,
   ComboBoxLightOpenedChangedEvent,
   ComboBoxLightSelectedItemChangedEvent,
+  ComboBoxLightValidatedEvent,
   ComboBoxLightValueChangedEvent,
 } from '../../vaadin-combo-box-light';
 
@@ -82,6 +84,11 @@ narrowedComboBox.addEventListener('filter-changed', (event) => {
 narrowedComboBox.addEventListener('selected-item-changed', (event) => {
   assertType<ComboBoxSelectedItemChangedEvent<TestComboBoxItem>>(event);
   assertType<TestComboBoxItem | null | undefined>(event.detail.value);
+});
+
+narrowedComboBox.addEventListener('validated', (event) => {
+  assertType<ComboBoxValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });
 
 // ComboBox properties
@@ -178,6 +185,11 @@ narrowedComboBoxLight.addEventListener('filter-changed', (event) => {
 narrowedComboBoxLight.addEventListener('selected-item-changed', (event) => {
   assertType<ComboBoxLightSelectedItemChangedEvent<TestComboBoxItem>>(event);
   assertType<TestComboBoxItem | null | undefined>(event.detail.value);
+});
+
+narrowedComboBoxLight.addEventListener('validated', (event) => {
+  assertType<ComboBoxLightValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });
 
 // ComboBoxLight properties
