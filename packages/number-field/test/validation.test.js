@@ -12,7 +12,7 @@ describe('validation', () => {
       input = field.inputElement;
     });
 
-    it('should pass validation when the field by default', () => {
+    it('should pass validation by default', () => {
       expect(field.checkValidity()).to.be.true;
       expect(field.validate()).to.be.true;
       expect(field.invalid).to.be.false;
