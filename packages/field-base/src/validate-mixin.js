@@ -66,11 +66,9 @@ export const ValidateMixin = dedupingMixin(
        * @protected
        */
       _commitValidationResult(isValid) {
-        if (!this._shouldCommitValidationResult(isValid)) {
-          return;
+        if (this._shouldCommitValidationResult(isValid)) {
+          this.invalid = !isValid;
         }
-
-        this.invalid = !isValid;
       }
 
       /**
