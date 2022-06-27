@@ -44,7 +44,7 @@ export const ValidateMixin = dedupingMixin(
        */
       validate() {
         const isValid = this.checkValidity();
-        this._commitValidationResult(isValid);
+        this._setInvalid(!isValid);
         this.dispatchEvent(new CustomEvent('validated', { detail: { valid: isValid } }));
         return isValid;
       }
@@ -59,26 +59,23 @@ export const ValidateMixin = dedupingMixin(
       }
 
       /**
-       * Sets the `invalid` property according to the given validation result
-       * if the result passes `_shouldCommitValidationResult`.
-       *
-       * @param {boolean} isValid
+       * @param {boolean} invalid
        * @protected
        */
-      _commitValidationResult(isValid) {
-        if (this._shouldCommitValidationResult(isValid)) {
-          this.invalid = !isValid;
+      _setInvalid(invalid) {
+        if (this._shouldSetInvalid(invalid)) {
+          this.invalid = invalid;
         }
       }
 
       /**
-       * Override this method to control which validation results should be committed.
+       * Override this method to define whether the given `invalid` state should be set.
        *
-       * @param {boolean} isValid
+       * @param {boolean} _invalid
        * @return {boolean}
        * @protected
        */
-      _shouldCommitValidationResult(_isValid) {
+      _shouldSetInvalid(_invalid) {
         return true;
       }
 

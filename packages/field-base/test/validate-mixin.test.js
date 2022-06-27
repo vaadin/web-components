@@ -124,28 +124,27 @@ const runTests = (baseClass) => {
     });
   });
 
-  describe('only validation failure is committed', () => {
-    const tagWithOnlyFailureCommitted = define[baseClass](
-      'validate-mixin-with-only-failure-committed',
+  describe('invalid cannot be set to false', () => {
+    const tagWithShouldSetInvalid = define[baseClass](
+      'validate-mixin-with-should-set-invalid',
       '<input>',
       (Base) =>
         class extends ValidateMixin(Base) {
-          _shouldCommitValidationResult(isValid) {
-            return !isValid;
+          _shouldSetInvalid(invalid) {
+            return invalid;
           }
         },
     );
 
     beforeEach(async () => {
-      element = fixtureSync(`<${tagWithOnlyFailureCommitted}></${tagWithOnlyFailureCommitted}>`);
+      element = fixtureSync(`<${tagWithShouldSetInvalid}></${tagWithShouldSetInvalid}>`);
       await nextRender();
     });
 
-    it('should not commit validation success', () => {
+    it('should set invalid only when it is true', () => {
       element.required = true;
       element.validate();
       expect(element.invalid).to.be.true;
-
       element.value = 'value';
       element.validate();
       expect(element.invalid).to.be.true;
