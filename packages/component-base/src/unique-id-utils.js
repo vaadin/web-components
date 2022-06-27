@@ -6,6 +6,8 @@
 
 let uniqueId = 0;
 
+let keyIdMap = {};
+
 /**
  * Resets the unique id counter.
  *
@@ -13,6 +15,7 @@ let uniqueId = 0;
  */
 export function resetUniqueId() {
   uniqueId = 0;
+  keyIdMap = {};
 }
 
 /**
@@ -23,4 +26,16 @@ export function resetUniqueId() {
 export function generateUniqueId() {
   // eslint-disable-next-line no-plusplus
   return uniqueId++;
+}
+
+/**
+ * Returns a unique integer id.
+ *
+ * @param {string} key
+ * @return {number}
+ */
+export function generateIdForKey(key) {
+  const nextId = keyIdMap[key] === undefined ? 0 : keyIdMap[key] + 1;
+  keyIdMap[key] = nextId;
+  return nextId;
 }

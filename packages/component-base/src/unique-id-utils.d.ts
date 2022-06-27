@@ -13,3 +13,11 @@ export function resetUniqueId(): void;
  * Returns a unique integer id.
  */
 export function generateUniqueId(): number;
+
+/**
+ * Returns a unique integer id.
+ *
+ * @param {string} key
+ * @return {number}
+ */
+export function generateIdForKey(key): string;

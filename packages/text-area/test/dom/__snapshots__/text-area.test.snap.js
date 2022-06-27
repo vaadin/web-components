@@ -4,19 +4,19 @@ export const snapshots = {};
 snapshots["vaadin-text-area host default"] = 
 `<vaadin-text-area>
   <label
-    for="textarea-vaadin-text-area-3"
+    for="textarea-vaadin-text-area-0"
     id="label-vaadin-text-area-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-text-area-2"
+    id="error-message-vaadin-text-area-0"
     slot="error-message"
   >
   </div>
   <textarea
-    id="textarea-vaadin-text-area-3"
+    id="textarea-vaadin-text-area-0"
     slot="textarea"
   >
   </textarea>
@@ -27,25 +27,25 @@ snapshots["vaadin-text-area host default"] =
 snapshots["vaadin-text-area host helper"] = 
 `<vaadin-text-area has-helper="">
   <label
-    for="textarea-vaadin-text-area-3"
+    for="textarea-vaadin-text-area-0"
     id="label-vaadin-text-area-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-text-area-2"
+    id="error-message-vaadin-text-area-0"
     slot="error-message"
   >
   </div>
   <textarea
-    aria-describedby="helper-vaadin-text-area-1"
-    id="textarea-vaadin-text-area-3"
+    aria-describedby="helper-vaadin-text-area-0"
+    id="textarea-vaadin-text-area-0"
     slot="textarea"
   >
   </textarea>
   <div
-    id="helper-vaadin-text-area-1"
+    id="helper-vaadin-text-area-0"
     slot="helper"
   >
     Helper
@@ -60,22 +60,22 @@ snapshots["vaadin-text-area host error"] =
   invalid=""
 >
   <label
-    for="textarea-vaadin-text-area-3"
+    for="textarea-vaadin-text-area-0"
     id="label-vaadin-text-area-0"
     slot="label"
   >
   </label>
   <div
-    id="error-message-vaadin-text-area-2"
+    id="error-message-vaadin-text-area-0"
     role="alert"
     slot="error-message"
   >
     Error
   </div>
   <textarea
-    aria-describedby="error-message-vaadin-text-area-2"
+    aria-describedby="error-message-vaadin-text-area-0"
     aria-invalid="true"
-    id="textarea-vaadin-text-area-3"
+    id="textarea-vaadin-text-area-0"
     invalid=""
     slot="textarea"
   >

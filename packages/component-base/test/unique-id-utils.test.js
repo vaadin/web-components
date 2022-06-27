@@ -9,6 +9,16 @@ describe('unique-id-utils', () => {
     });
   });
 
+  describe('generateIdForKey', () => {
+    it('should use separate counter for each provided key', () => {
+      expect(generateUniqueId('foo')).to.equal(0);
+      expect(generateUniqueId('bar')).to.equal(0);
+
+      expect(generateUniqueId('foo')).to.equal(1);
+      expect(generateUniqueId('bar')).to.equal(1);
+    });
+  });
+
   describe('resetUniqueId', () => {
     beforeEach(() => {
       resetUniqueId();
@@ -20,6 +30,20 @@ describe('unique-id-utils', () => {
       resetUniqueId();
       expect(generateUniqueId()).to.equal(0);
       expect(generateUniqueId()).to.equal(1);
+    });
+
+    it('should reset counters for all keys', () => {
+      expect(generateUniqueId('foo')).to.equal(0);
+      expect(generateUniqueId('foo')).to.equal(1);
+      expect(generateUniqueId('bar')).to.equal(0);
+      expect(generateUniqueId('bar')).to.equal(1);
+
+      resetUniqueId();
+
+      expect(generateUniqueId('foo')).to.equal(0);
+      expect(generateUniqueId('foo')).to.equal(1);
+      expect(generateUniqueId('bar')).to.equal(1);
+      expect(generateUniqueId('bar')).to.equal(1);
     });
   });
 });

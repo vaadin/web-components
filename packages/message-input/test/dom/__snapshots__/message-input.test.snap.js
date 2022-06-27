@@ -4,20 +4,20 @@ export const snapshots = {};
 snapshots["vaadin-message-input default"] = 
 `<vaadin-message-input-text-area placeholder="Message">
   <label
-    for="textarea-vaadin-message-input-text-area-3"
+    for="textarea-vaadin-message-input-text-area-0"
     id="label-vaadin-message-input-text-area-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-message-input-text-area-2"
+    id="error-message-vaadin-message-input-text-area-0"
     slot="error-message"
   >
   </div>
   <textarea
     aria-label="Message"
-    id="textarea-vaadin-message-input-text-area-3"
+    id="textarea-vaadin-message-input-text-area-0"
     placeholder="Message"
     rows="1"
     slot="textarea"
@@ -42,21 +42,21 @@ snapshots["vaadin-message-input disabled"] =
   placeholder="Message"
 >
   <label
-    for="textarea-vaadin-message-input-text-area-3"
+    for="textarea-vaadin-message-input-text-area-0"
     id="label-vaadin-message-input-text-area-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-message-input-text-area-2"
+    id="error-message-vaadin-message-input-text-area-0"
     slot="error-message"
   >
   </div>
   <textarea
     aria-label="Message"
     disabled=""
-    id="textarea-vaadin-message-input-text-area-3"
+    id="textarea-vaadin-message-input-text-area-0"
     placeholder="Message"
     rows="1"
     slot="textarea"

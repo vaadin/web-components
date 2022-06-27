@@ -4,14 +4,14 @@ export const snapshots = {};
 snapshots["vaadin-combo-box host default"] = 
 `<vaadin-combo-box>
   <label
-    for="input-vaadin-combo-box-4"
+    for="input-vaadin-combo-box-0"
     id="label-vaadin-combo-box-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-combo-box-2"
+    id="error-message-vaadin-combo-box-0"
     slot="error-message"
   >
   </div>
@@ -21,7 +21,7 @@ snapshots["vaadin-combo-box host default"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-combo-box-4"
+    id="input-vaadin-combo-box-0"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -33,14 +33,14 @@ snapshots["vaadin-combo-box host default"] =
 snapshots["vaadin-combo-box host placeholder"] = 
 `<vaadin-combo-box placeholder="Placeholder">
   <label
-    for="input-vaadin-combo-box-4"
+    for="input-vaadin-combo-box-0"
     id="label-vaadin-combo-box-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-combo-box-2"
+    id="error-message-vaadin-combo-box-0"
     slot="error-message"
   >
   </div>
@@ -50,7 +50,7 @@ snapshots["vaadin-combo-box host placeholder"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-combo-box-4"
+    id="input-vaadin-combo-box-0"
     placeholder="Placeholder"
     role="combobox"
     slot="input"
@@ -63,14 +63,14 @@ snapshots["vaadin-combo-box host placeholder"] =
 snapshots["vaadin-combo-box host pattern"] = 
 `<vaadin-combo-box>
   <label
-    for="input-vaadin-combo-box-4"
+    for="input-vaadin-combo-box-0"
     id="label-vaadin-combo-box-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-combo-box-2"
+    id="error-message-vaadin-combo-box-0"
     slot="error-message"
   >
   </div>
@@ -80,7 +80,7 @@ snapshots["vaadin-combo-box host pattern"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-combo-box-4"
+    id="input-vaadin-combo-box-0"
     pattern="[0-9]*"
     role="combobox"
     slot="input"
@@ -93,7 +93,7 @@ snapshots["vaadin-combo-box host pattern"] =
 snapshots["vaadin-combo-box host label"] = 
 `<vaadin-combo-box has-label="">
   <label
-    for="input-vaadin-combo-box-4"
+    for="input-vaadin-combo-box-0"
     id="label-vaadin-combo-box-0"
     slot="label"
   >
@@ -101,7 +101,7 @@ snapshots["vaadin-combo-box host label"] =
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-combo-box-2"
+    id="error-message-vaadin-combo-box-0"
     slot="error-message"
   >
   </div>
@@ -112,7 +112,7 @@ snapshots["vaadin-combo-box host label"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-combo-box-4"
+    id="input-vaadin-combo-box-0"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -124,31 +124,31 @@ snapshots["vaadin-combo-box host label"] =
 snapshots["vaadin-combo-box host helper"] = 
 `<vaadin-combo-box has-helper="">
   <label
-    for="input-vaadin-combo-box-4"
+    for="input-vaadin-combo-box-0"
     id="label-vaadin-combo-box-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-combo-box-2"
+    id="error-message-vaadin-combo-box-0"
     slot="error-message"
   >
   </div>
   <input
     aria-autocomplete="list"
-    aria-describedby="helper-vaadin-combo-box-1"
+    aria-describedby="helper-vaadin-combo-box-0"
     aria-expanded="false"
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-combo-box-4"
+    id="input-vaadin-combo-box-0"
     role="combobox"
     slot="input"
     spellcheck="false"
   >
   <div
-    id="helper-vaadin-combo-box-1"
+    id="helper-vaadin-combo-box-0"
     slot="helper"
   >
     Helper
@@ -163,13 +163,13 @@ snapshots["vaadin-combo-box host error"] =
   invalid=""
 >
   <label
-    for="input-vaadin-combo-box-4"
+    for="input-vaadin-combo-box-0"
     id="label-vaadin-combo-box-0"
     slot="label"
   >
   </label>
   <div
-    id="error-message-vaadin-combo-box-2"
+    id="error-message-vaadin-combo-box-0"
     role="alert"
     slot="error-message"
   >
@@ -177,13 +177,13 @@ snapshots["vaadin-combo-box host error"] =
   </div>
   <input
     aria-autocomplete="list"
-    aria-describedby="error-message-vaadin-combo-box-2"
+    aria-describedby="error-message-vaadin-combo-box-0"
     aria-expanded="false"
     aria-invalid="true"
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-combo-box-4"
+    id="input-vaadin-combo-box-0"
     invalid=""
     role="combobox"
     slot="input"
@@ -199,25 +199,25 @@ snapshots["vaadin-combo-box host opened default"] =
   opened=""
 >
   <label
-    for="input-vaadin-combo-box-4"
+    for="input-vaadin-combo-box-0"
     id="label-vaadin-combo-box-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-combo-box-2"
+    id="error-message-vaadin-combo-box-0"
     slot="error-message"
   >
   </div>
   <input
     aria-autocomplete="list"
-    aria-controls="vaadin-combo-box-scroller-3"
+    aria-controls="vaadin-combo-box-scroller-0"
     aria-expanded="true"
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-combo-box-4"
+    id="input-vaadin-combo-box-0"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -237,7 +237,7 @@ snapshots["vaadin-combo-box host opened overlay"] =
 >
   <vaadin-combo-box-scroller
     aria-setsize="2"
-    id="vaadin-combo-box-scroller-3"
+    id="vaadin-combo-box-scroller-0"
     role="listbox"
   >
     <vaadin-combo-box-item
@@ -275,7 +275,7 @@ snapshots["vaadin-combo-box host opened theme overlay"] =
 >
   <vaadin-combo-box-scroller
     aria-setsize="2"
-    id="vaadin-combo-box-scroller-3"
+    id="vaadin-combo-box-scroller-0"
     role="listbox"
   >
     <vaadin-combo-box-item
@@ -351,7 +351,7 @@ snapshots["vaadin-combo-box shadow default"] =
 >
   <vaadin-combo-box-scroller
     aria-setsize="0"
-    id="vaadin-combo-box-scroller-3"
+    id="vaadin-combo-box-scroller-0"
     role="listbox"
   >
   </vaadin-combo-box-scroller>
@@ -412,7 +412,7 @@ snapshots["vaadin-combo-box shadow disabled"] =
 >
   <vaadin-combo-box-scroller
     aria-setsize="0"
-    id="vaadin-combo-box-scroller-3"
+    id="vaadin-combo-box-scroller-0"
     role="listbox"
   >
   </vaadin-combo-box-scroller>
@@ -473,7 +473,7 @@ snapshots["vaadin-combo-box shadow readonly"] =
 >
   <vaadin-combo-box-scroller
     aria-setsize="0"
-    id="vaadin-combo-box-scroller-3"
+    id="vaadin-combo-box-scroller-0"
     role="listbox"
   >
   </vaadin-combo-box-scroller>
@@ -534,7 +534,7 @@ snapshots["vaadin-combo-box shadow invalid"] =
 >
   <vaadin-combo-box-scroller
     aria-setsize="0"
-    id="vaadin-combo-box-scroller-3"
+    id="vaadin-combo-box-scroller-0"
     role="listbox"
   >
   </vaadin-combo-box-scroller>
@@ -596,7 +596,7 @@ snapshots["vaadin-combo-box shadow theme"] =
 >
   <vaadin-combo-box-scroller
     aria-setsize="0"
-    id="vaadin-combo-box-scroller-3"
+    id="vaadin-combo-box-scroller-0"
     role="listbox"
   >
   </vaadin-combo-box-scroller>

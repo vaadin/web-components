@@ -10,14 +10,14 @@ snapshots["vaadin-select host default"] =
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-select-2"
+    id="error-message-vaadin-select-0"
     slot="error-message"
   >
   </div>
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0 vaadin-select-3"
+    aria-labelledby="label-vaadin-select-0 vaadin-select-0"
     aria-required="false"
     role="button"
     slot="value"
@@ -38,14 +38,14 @@ snapshots["vaadin-select host label"] =
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-select-2"
+    id="error-message-vaadin-select-0"
     slot="error-message"
   >
   </div>
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0 vaadin-select-3"
+    aria-labelledby="label-vaadin-select-0 vaadin-select-0"
     aria-required="false"
     role="button"
     slot="value"
@@ -68,7 +68,7 @@ snapshots["vaadin-select host disabled"] =
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-select-2"
+    id="error-message-vaadin-select-0"
     slot="error-message"
   >
   </div>
@@ -76,7 +76,7 @@ snapshots["vaadin-select host disabled"] =
     aria-disabled="true"
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0 vaadin-select-3"
+    aria-labelledby="label-vaadin-select-0 vaadin-select-0"
     aria-required="false"
     disabled=""
     role="button"
@@ -97,14 +97,14 @@ snapshots["vaadin-select host required"] =
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-select-2"
+    id="error-message-vaadin-select-0"
     slot="error-message"
   >
   </div>
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0 vaadin-select-3"
+    aria-labelledby="label-vaadin-select-0 vaadin-select-0"
     aria-required="true"
     role="button"
     slot="value"
@@ -124,14 +124,14 @@ snapshots["vaadin-select host value"] =
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-select-2"
+    id="error-message-vaadin-select-0"
     slot="error-message"
   >
   </div>
   <vaadin-select-value-button
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0 vaadin-select-3"
+    aria-labelledby="label-vaadin-select-0 vaadin-select-0"
     aria-required="false"
     role="button"
     slot="value"
@@ -139,7 +139,7 @@ snapshots["vaadin-select host value"] =
   >
     <vaadin-select-item
       aria-selected="true"
-      id="vaadin-select-3"
+      id="vaadin-select-0"
       selected=""
     >
       Option 1
@@ -158,15 +158,15 @@ snapshots["vaadin-select host helper"] =
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-select-2"
+    id="error-message-vaadin-select-0"
     slot="error-message"
   >
   </div>
   <vaadin-select-value-button
-    aria-describedby="helper-vaadin-select-1"
+    aria-describedby="helper-vaadin-select-0"
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0 vaadin-select-3"
+    aria-labelledby="label-vaadin-select-0 vaadin-select-0"
     aria-required="false"
     role="button"
     slot="value"
@@ -174,7 +174,7 @@ snapshots["vaadin-select host helper"] =
   >
   </vaadin-select-value-button>
   <div
-    id="helper-vaadin-select-1"
+    id="helper-vaadin-select-0"
     slot="helper"
   >
     Helper
@@ -194,17 +194,17 @@ snapshots["vaadin-select host error"] =
   >
   </label>
   <div
-    id="error-message-vaadin-select-2"
+    id="error-message-vaadin-select-0"
     role="alert"
     slot="error-message"
   >
     Error
   </div>
   <vaadin-select-value-button
-    aria-describedby="error-message-vaadin-select-2"
+    aria-describedby="error-message-vaadin-select-0"
     aria-expanded="false"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0 vaadin-select-3"
+    aria-labelledby="label-vaadin-select-0 vaadin-select-0"
     aria-required="false"
     role="button"
     slot="value"
@@ -224,14 +224,14 @@ snapshots["vaadin-select host opened default"] =
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-select-2"
+    id="error-message-vaadin-select-0"
     slot="error-message"
   >
   </div>
   <vaadin-select-value-button
     aria-expanded="true"
     aria-haspopup="listbox"
-    aria-labelledby="label-vaadin-select-0 vaadin-select-3"
+    aria-labelledby="label-vaadin-select-0 vaadin-select-0"
     aria-required="false"
     role="button"
     slot="value"

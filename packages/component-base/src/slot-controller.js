@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
-import { generateUniqueId } from './unique-id-utils.js';
+import { generateIdForKey } from './unique-id-utils.js';
 
 /**
  * A controller for providing content to slot element and observing changes.
@@ -20,7 +20,7 @@ export class SlotController extends EventTarget {
    */
   static generateId(slotName, host) {
     const prefix = slotName || 'default';
-    return `${prefix}-${host.localName}-${generateUniqueId()}`;
+    return `${prefix}-${host.localName}-${generateIdForKey(slotName)}`;
   }
 
   constructor(host, slotName, slotFactory, slotInitializer) {

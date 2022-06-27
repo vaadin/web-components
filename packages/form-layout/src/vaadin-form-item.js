@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { generateIdForKey } from '@vaadin/component-base/src/unique-id-utils.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/field-base/src/utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -257,7 +257,7 @@ class FormItem extends ThemableMixin(PolymerElement) {
         this.__labelId = this.__labelNode.id;
       } else {
         // The new label node doesn't have an id yet. Generate a unique one.
-        this.__labelId = `label-${this.localName}-${generateUniqueId()}`;
+        this.__labelId = `label-${this.localName}-${generateIdForKey('form-item')}`;
         this.__labelNode.id = this.__labelId;
       }
 

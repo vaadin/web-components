@@ -81,19 +81,19 @@ snapshots["vaadin-crud shadow default"] =
               theme="small"
             >
               <label
-                for="input-vaadin-text-field-10"
+                for="input-vaadin-text-field-1"
                 id="label-vaadin-text-field-0"
                 slot="label"
               >
               </label>
               <div
                 hidden=""
-                id="error-message-vaadin-text-field-2"
+                id="error-message-vaadin-text-field-0"
                 slot="error-message"
               >
               </div>
               <input
-                id="input-vaadin-text-field-10"
+                id="input-vaadin-text-field-1"
                 slot="input"
                 type="text"
               >
@@ -113,19 +113,19 @@ snapshots["vaadin-crud shadow default"] =
               theme="small"
             >
               <label
-                for="input-vaadin-text-field-15"
-                id="label-vaadin-text-field-3"
+                for="input-vaadin-text-field-3"
+                id="label-vaadin-text-field-1"
                 slot="label"
               >
               </label>
               <div
                 hidden=""
-                id="error-message-vaadin-text-field-5"
+                id="error-message-vaadin-text-field-1"
                 slot="error-message"
               >
               </div>
               <input
-                id="input-vaadin-text-field-15"
+                id="input-vaadin-text-field-3"
                 slot="input"
                 type="text"
               >

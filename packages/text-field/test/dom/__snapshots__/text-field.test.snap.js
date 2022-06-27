@@ -4,19 +4,19 @@ export const snapshots = {};
 snapshots["vaadin-text-field host default"] = 
 `<vaadin-text-field>
   <label
-    for="input-vaadin-text-field-3"
+    for="input-vaadin-text-field-0"
     id="label-vaadin-text-field-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-text-field-2"
+    id="error-message-vaadin-text-field-0"
     slot="error-message"
   >
   </div>
   <input
-    id="input-vaadin-text-field-3"
+    id="input-vaadin-text-field-0"
     slot="input"
     type="text"
   >
@@ -27,25 +27,25 @@ snapshots["vaadin-text-field host default"] =
 snapshots["vaadin-text-field host helper"] = 
 `<vaadin-text-field has-helper="">
   <label
-    for="input-vaadin-text-field-3"
+    for="input-vaadin-text-field-0"
     id="label-vaadin-text-field-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-text-field-2"
+    id="error-message-vaadin-text-field-0"
     slot="error-message"
   >
   </div>
   <input
-    aria-describedby="helper-vaadin-text-field-1"
-    id="input-vaadin-text-field-3"
+    aria-describedby="helper-vaadin-text-field-0"
+    id="input-vaadin-text-field-0"
     slot="input"
     type="text"
   >
   <div
-    id="helper-vaadin-text-field-1"
+    id="helper-vaadin-text-field-0"
     slot="helper"
   >
     Helper
@@ -60,22 +60,22 @@ snapshots["vaadin-text-field host error"] =
   invalid=""
 >
   <label
-    for="input-vaadin-text-field-3"
+    for="input-vaadin-text-field-0"
     id="label-vaadin-text-field-0"
     slot="label"
   >
   </label>
   <div
-    id="error-message-vaadin-text-field-2"
+    id="error-message-vaadin-text-field-0"
     role="alert"
     slot="error-message"
   >
     Error
   </div>
   <input
-    aria-describedby="error-message-vaadin-text-field-2"
+    aria-describedby="error-message-vaadin-text-field-0"
     aria-invalid="true"
-    id="input-vaadin-text-field-3"
+    id="input-vaadin-text-field-0"
     invalid=""
     slot="input"
     type="text"
@@ -319,7 +319,7 @@ snapshots["vaadin-text-field shadow theme"] =
 snapshots["vaadin-text-field host label"] = 
 `<vaadin-text-field has-label="">
   <label
-    for="input-vaadin-text-field-3"
+    for="input-vaadin-text-field-0"
     id="label-vaadin-text-field-0"
     slot="label"
   >
@@ -327,13 +327,13 @@ snapshots["vaadin-text-field host label"] =
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-text-field-2"
+    id="error-message-vaadin-text-field-0"
     slot="error-message"
   >
   </div>
   <input
     aria-labelledby="label-vaadin-text-field-0"
-    id="input-vaadin-text-field-3"
+    id="input-vaadin-text-field-0"
     slot="input"
     type="text"
   >

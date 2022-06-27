@@ -13,7 +13,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
-import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { generateIdForKey } from '@vaadin/component-base/src/unique-id-utils.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
@@ -319,7 +319,7 @@ class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(Po
   constructor() {
     super();
 
-    this._fieldId = `${this.localName}-${generateUniqueId()}`;
+    this._fieldId = `${this.localName}-${generateIdForKey('select')}`;
 
     this._boundOnKeyDown = this._onKeyDown.bind(this);
   }

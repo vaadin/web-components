@@ -4,14 +4,14 @@ export const snapshots = {};
 snapshots["vaadin-time-picker host default"] = 
 `<vaadin-time-picker>
   <label
-    for="input-vaadin-time-picker-4"
+    for="input-vaadin-time-picker-0"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-time-picker-2"
+    id="error-message-vaadin-time-picker-0"
     slot="error-message"
   >
   </div>
@@ -21,7 +21,7 @@ snapshots["vaadin-time-picker host default"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="input-vaadin-time-picker-0"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -33,7 +33,7 @@ snapshots["vaadin-time-picker host default"] =
 snapshots["vaadin-time-picker host label"] = 
 `<vaadin-time-picker has-label="">
   <label
-    for="input-vaadin-time-picker-4"
+    for="input-vaadin-time-picker-0"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
@@ -41,7 +41,7 @@ snapshots["vaadin-time-picker host label"] =
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-time-picker-2"
+    id="error-message-vaadin-time-picker-0"
     slot="error-message"
   >
   </div>
@@ -52,7 +52,7 @@ snapshots["vaadin-time-picker host label"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="input-vaadin-time-picker-0"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -64,31 +64,31 @@ snapshots["vaadin-time-picker host label"] =
 snapshots["vaadin-time-picker host helper"] = 
 `<vaadin-time-picker has-helper="">
   <label
-    for="input-vaadin-time-picker-4"
+    for="input-vaadin-time-picker-0"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-time-picker-2"
+    id="error-message-vaadin-time-picker-0"
     slot="error-message"
   >
   </div>
   <input
     aria-autocomplete="list"
-    aria-describedby="helper-vaadin-time-picker-1"
+    aria-describedby="helper-vaadin-time-picker-0"
     aria-expanded="false"
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="input-vaadin-time-picker-0"
     role="combobox"
     slot="input"
     spellcheck="false"
   >
   <div
-    id="helper-vaadin-time-picker-1"
+    id="helper-vaadin-time-picker-0"
     slot="helper"
   >
     Helper
@@ -103,13 +103,13 @@ snapshots["vaadin-time-picker host error"] =
   invalid=""
 >
   <label
-    for="input-vaadin-time-picker-4"
+    for="input-vaadin-time-picker-0"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
   </label>
   <div
-    id="error-message-vaadin-time-picker-2"
+    id="error-message-vaadin-time-picker-0"
     role="alert"
     slot="error-message"
   >
@@ -117,13 +117,13 @@ snapshots["vaadin-time-picker host error"] =
   </div>
   <input
     aria-autocomplete="list"
-    aria-describedby="error-message-vaadin-time-picker-2"
+    aria-describedby="error-message-vaadin-time-picker-0"
     aria-expanded="false"
     aria-invalid="true"
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="input-vaadin-time-picker-0"
     invalid=""
     role="combobox"
     slot="input"
@@ -139,14 +139,14 @@ snapshots["vaadin-time-picker host disabled"] =
   disabled=""
 >
   <label
-    for="input-vaadin-time-picker-4"
+    for="input-vaadin-time-picker-0"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-time-picker-2"
+    id="error-message-vaadin-time-picker-0"
     slot="error-message"
   >
   </div>
@@ -157,7 +157,7 @@ snapshots["vaadin-time-picker host disabled"] =
     autocomplete="off"
     autocorrect="off"
     disabled=""
-    id="input-vaadin-time-picker-4"
+    id="input-vaadin-time-picker-0"
     role="combobox"
     slot="input"
     spellcheck="false"
@@ -170,14 +170,14 @@ snapshots["vaadin-time-picker host disabled"] =
 snapshots["vaadin-time-picker host readonly"] = 
 `<vaadin-time-picker readonly="">
   <label
-    for="input-vaadin-time-picker-4"
+    for="input-vaadin-time-picker-0"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-time-picker-2"
+    id="error-message-vaadin-time-picker-0"
     slot="error-message"
   >
   </div>
@@ -187,7 +187,7 @@ snapshots["vaadin-time-picker host readonly"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="input-vaadin-time-picker-0"
     readonly=""
     role="combobox"
     slot="input"
@@ -200,14 +200,14 @@ snapshots["vaadin-time-picker host readonly"] =
 snapshots["vaadin-time-picker host placeholder"] = 
 `<vaadin-time-picker placeholder="Placeholder">
   <label
-    for="input-vaadin-time-picker-4"
+    for="input-vaadin-time-picker-0"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-time-picker-2"
+    id="error-message-vaadin-time-picker-0"
     slot="error-message"
   >
   </div>
@@ -217,7 +217,7 @@ snapshots["vaadin-time-picker host placeholder"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="input-vaadin-time-picker-0"
     placeholder="Placeholder"
     role="combobox"
     slot="input"
@@ -230,14 +230,14 @@ snapshots["vaadin-time-picker host placeholder"] =
 snapshots["vaadin-time-picker host pattern"] = 
 `<vaadin-time-picker>
   <label
-    for="input-vaadin-time-picker-4"
+    for="input-vaadin-time-picker-0"
     id="label-vaadin-time-picker-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-time-picker-2"
+    id="error-message-vaadin-time-picker-0"
     slot="error-message"
   >
   </div>
@@ -247,7 +247,7 @@ snapshots["vaadin-time-picker host pattern"] =
     autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    id="input-vaadin-time-picker-4"
+    id="input-vaadin-time-picker-0"
     pattern="[0-9]*"
     role="combobox"
     slot="input"
@@ -544,7 +544,7 @@ snapshots["vaadin-time-picker host opened overlay"] =
 >
   <vaadin-time-picker-scroller
     aria-setsize="24"
-    id="vaadin-time-picker-scroller-3"
+    id="vaadin-time-picker-scroller-0"
     role="listbox"
   >
     <vaadin-time-picker-item
@@ -803,7 +803,7 @@ snapshots["vaadin-time-picker host opened default"] =
 >
   <vaadin-time-picker-scroller
     aria-setsize="24"
-    id="vaadin-time-picker-scroller-3"
+    id="vaadin-time-picker-scroller-0"
     role="listbox"
   >
     <vaadin-time-picker-item

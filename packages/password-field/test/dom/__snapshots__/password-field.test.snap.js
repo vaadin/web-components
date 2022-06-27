@@ -4,20 +4,20 @@ export const snapshots = {};
 snapshots["vaadin-password-field host default"] = 
 `<vaadin-password-field>
   <label
-    for="input-vaadin-password-field-3"
+    for="input-vaadin-password-field-0"
     id="label-vaadin-password-field-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-password-field-2"
+    id="error-message-vaadin-password-field-0"
     slot="error-message"
   >
   </div>
   <input
     autocapitalize="off"
-    id="input-vaadin-password-field-3"
+    id="input-vaadin-password-field-0"
     slot="input"
     type="password"
   >
@@ -36,21 +36,21 @@ snapshots["vaadin-password-field host default"] =
 snapshots["vaadin-password-field host helper"] = 
 `<vaadin-password-field has-helper="">
   <label
-    for="input-vaadin-password-field-3"
+    for="input-vaadin-password-field-0"
     id="label-vaadin-password-field-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-password-field-2"
+    id="error-message-vaadin-password-field-0"
     slot="error-message"
   >
   </div>
   <input
-    aria-describedby="helper-vaadin-password-field-1"
+    aria-describedby="helper-vaadin-password-field-0"
     autocapitalize="off"
-    id="input-vaadin-password-field-3"
+    id="input-vaadin-password-field-0"
     slot="input"
     type="password"
   >
@@ -63,7 +63,7 @@ snapshots["vaadin-password-field host helper"] =
   >
   </vaadin-password-field-button>
   <div
-    id="helper-vaadin-password-field-1"
+    id="helper-vaadin-password-field-0"
     slot="helper"
   >
     Helper
@@ -78,22 +78,22 @@ snapshots["vaadin-password-field host error"] =
   invalid=""
 >
   <label
-    for="input-vaadin-password-field-3"
+    for="input-vaadin-password-field-0"
     id="label-vaadin-password-field-0"
     slot="label"
   >
   </label>
   <div
-    id="error-message-vaadin-password-field-2"
+    id="error-message-vaadin-password-field-0"
     role="alert"
     slot="error-message"
   >
     Error
   </div>
   <input
-    aria-describedby="error-message-vaadin-password-field-2"
+    aria-describedby="error-message-vaadin-password-field-0"
     aria-invalid="true"
-    id="input-vaadin-password-field-3"
+    id="input-vaadin-password-field-0"
     invalid=""
     slot="input"
     type="password"

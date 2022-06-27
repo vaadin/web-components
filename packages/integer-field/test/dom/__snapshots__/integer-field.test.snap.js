@@ -4,19 +4,19 @@ export const snapshots = {};
 snapshots["vaadin-integer-field host default"] = 
 `<vaadin-integer-field step="1">
   <label
-    for="input-vaadin-integer-field-3"
+    for="input-vaadin-integer-field-0"
     id="label-vaadin-integer-field-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-integer-field-2"
+    id="error-message-vaadin-integer-field-0"
     slot="error-message"
   >
   </div>
   <input
-    id="input-vaadin-integer-field-3"
+    id="input-vaadin-integer-field-0"
     max="undefined"
     min="undefined"
     slot="input"
@@ -33,20 +33,20 @@ snapshots["vaadin-integer-field host helper"] =
   step="1"
 >
   <label
-    for="input-vaadin-integer-field-3"
+    for="input-vaadin-integer-field-0"
     id="label-vaadin-integer-field-0"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-integer-field-2"
+    id="error-message-vaadin-integer-field-0"
     slot="error-message"
   >
   </div>
   <input
-    aria-describedby="helper-vaadin-integer-field-1"
-    id="input-vaadin-integer-field-3"
+    aria-describedby="helper-vaadin-integer-field-0"
+    id="input-vaadin-integer-field-0"
     max="undefined"
     min="undefined"
     slot="input"
@@ -54,7 +54,7 @@ snapshots["vaadin-integer-field host helper"] =
     type="number"
   >
   <div
-    id="helper-vaadin-integer-field-1"
+    id="helper-vaadin-integer-field-0"
     slot="helper"
   >
     Helper
@@ -70,22 +70,22 @@ snapshots["vaadin-integer-field host error"] =
   step="1"
 >
   <label
-    for="input-vaadin-integer-field-3"
+    for="input-vaadin-integer-field-0"
     id="label-vaadin-integer-field-0"
     slot="label"
   >
   </label>
   <div
-    id="error-message-vaadin-integer-field-2"
+    id="error-message-vaadin-integer-field-0"
     role="alert"
     slot="error-message"
   >
     Error
   </div>
   <input
-    aria-describedby="error-message-vaadin-integer-field-2"
+    aria-describedby="error-message-vaadin-integer-field-0"
     aria-invalid="true"
-    id="input-vaadin-integer-field-3"
+    id="input-vaadin-integer-field-0"
     invalid=""
     max="undefined"
     min="undefined"
