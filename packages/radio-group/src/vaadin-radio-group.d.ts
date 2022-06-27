@@ -20,10 +20,17 @@ export type RadioGroupInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type RadioGroupValueChangedEvent = CustomEvent<{ value: string }>;
 
+/**
+ * Fired whenever the field is validated.
+ */
+export type RadioGroupValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface RadioGroupCustomEventMap {
   'invalid-changed': RadioGroupInvalidChangedEvent;
 
   'value-changed': RadioGroupValueChangedEvent;
+
+  validated: RadioGroupValidatedEvent;
 }
 
 export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupCustomEventMap {}
@@ -68,6 +75,7 @@ export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupCusto
  *
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class RadioGroup extends FieldMixin(
   FocusMixin(DisabledMixin(KeyboardMixin(ElementMixin(ThemableMixin(HTMLElement))))),

@@ -11,7 +11,7 @@ import type { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-fo
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { RadioButtonCheckedChangedEvent } from '../../vaadin-radio-button.js';
-import type { RadioGroupInvalidChangedEvent, RadioGroupValueChangedEvent } from '../../vaadin-radio-group.js';
+import type { RadioGroupInvalidChangedEvent, RadioGroupValueChangedEvent, RadioGroupValidatedEvent } from '../../vaadin-radio-group.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -53,4 +53,9 @@ group.addEventListener('invalid-changed', (event) => {
 group.addEventListener('value-changed', (event) => {
   assertType<RadioGroupValueChangedEvent>(event);
   assertType<string>(event.detail.value);
+});
+
+group.addEventListener('validated', (event) => {
+  assertType<RadioGroupValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });
