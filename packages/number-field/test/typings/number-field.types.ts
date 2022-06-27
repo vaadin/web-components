@@ -8,6 +8,7 @@ import type {
   NumberField,
   NumberFieldChangeEvent,
   NumberFieldInvalidChangedEvent,
+  NumberFieldValidatedEvent,
   NumberFieldValueChangedEvent,
 } from '../../vaadin-number-field.js';
 
@@ -36,4 +37,9 @@ field.addEventListener('invalid-changed', (event) => {
 field.addEventListener('value-changed', (event) => {
   assertType<NumberFieldValueChangedEvent>(event);
   assertType<string>(event.detail.value);
+});
+
+field.addEventListener('validated', (event) => {
+  assertType<NumberFieldValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });
