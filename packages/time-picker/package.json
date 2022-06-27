@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/time-picker",
-  "version": "23.1.1",
+  "version": "23.1.2",
   "publishConfig": {
     "access": "public"
   },
@@ -34,13 +34,13 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/combo-box": "^23.1.1",
-    "@vaadin/component-base": "^23.1.1",
-    "@vaadin/field-base": "^23.1.1",
-    "@vaadin/input-container": "^23.1.1",
-    "@vaadin/vaadin-lumo-styles": "^23.1.1",
-    "@vaadin/vaadin-material-styles": "^23.1.1",
-    "@vaadin/vaadin-themable-mixin": "^23.1.1"
+    "@vaadin/combo-box": "^23.1.2",
+    "@vaadin/component-base": "^23.1.2",
+    "@vaadin/field-base": "^23.1.2",
+    "@vaadin/input-container": "^23.1.2",
+    "@vaadin/vaadin-lumo-styles": "^23.1.2",
+    "@vaadin/vaadin-material-styles": "^23.1.2",
+    "@vaadin/vaadin-themable-mixin": "^23.1.2"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
