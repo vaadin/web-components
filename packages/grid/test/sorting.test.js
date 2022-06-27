@@ -351,6 +351,41 @@ describe('sorting', () => {
       });
     });
 
+    describe('multi-sort-priority="append"', () => {
+      beforeEach(() => {
+        grid.multiSortPriority = 'append';
+      });
+
+      it('should append sort order when setting sort direction', () => {
+        sorterLast.direction = null;
+
+        sorterLast.direction = 'asc';
+        expect(sorterFirst._order).to.equal(0);
+        expect(sorterLast._order).to.equal(1);
+      });
+
+      it('should retain sort order when changing sort direction', () => {
+        sorterFirst.direction = 'desc';
+        expect(sorterFirst._order).to.equal(1);
+        expect(sorterLast._order).to.equal(0);
+      });
+
+      it('should remove sorter when clearing sort direction', () => {
+        sorterLast.direction = null;
+
+        const sortOrders = grid._mapSorters();
+        expect(sortOrders).to.have.length(1);
+        expect(sortOrders[0].path).to.equal('first');
+        expect(sortOrders[0].direction).to.equal('asc');
+      });
+
+      it('should update order when clearing sort direction', () => {
+        sorterLast.direction = null;
+
+        expect(sorterFirst._order).to.be.null;
+      });
+    });
+
     describe('single column sorting', () => {
       beforeEach(() => {
         grid.multiSort = false;

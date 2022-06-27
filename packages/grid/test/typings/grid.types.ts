@@ -173,6 +173,7 @@ assertType<(arg0: TestGridItem) => void>(narrowedGrid.selectItem);
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.deselectItem);
 
 assertType<boolean>(narrowedGrid.multiSort);
+assertType<'prepend' | 'append'>(narrowedGrid.multiSortPriority);
 
 assertType<GridCellClassNameGenerator<TestGridItem> | null | undefined>(narrowedGrid.cellClassNameGenerator);
 assertType<() => void>(narrowedGrid.generateCellClassNames);
