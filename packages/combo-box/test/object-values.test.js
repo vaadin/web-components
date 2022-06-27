@@ -224,6 +224,14 @@ describe('object values', () => {
 
         expect(input.value).to.eql('not found');
       });
+
+      it('should set input value using provided itemLabelPath', () => {
+        comboBox.itemLabelPath = 'custom';
+
+        comboBox.value = 'bar';
+
+        expect(input.value).to.equal('bazs');
+      });
     });
   });
 
