@@ -49,6 +49,7 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
  * @extends HTMLElement
  * @mixes ThemableMixin
