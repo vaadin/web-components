@@ -3,6 +3,7 @@ import type {
   DateTimePicker,
   DateTimePickerChangeEvent,
   DateTimePickerInvalidChangedEvent,
+  DateTimePickerValidatedEvent,
   DateTimePickerValueChangedEvent,
 } from '../../vaadin-date-time-picker.js';
 
@@ -23,6 +24,11 @@ picker.addEventListener('invalid-changed', (event) => {
 picker.addEventListener('value-changed', (event) => {
   assertType<DateTimePickerValueChangedEvent>(event);
   assertType<string>(event.detail.value);
+});
+
+picker.addEventListener('validated', (event) => {
+  assertType<DateTimePickerValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });
 
 assertType<boolean>(picker.required);
