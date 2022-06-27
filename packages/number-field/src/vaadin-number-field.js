@@ -259,7 +259,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
     if (!isNumUnset(min) || !isNumUnset(max)) {
       this.validate();
     } else if (!required) {
-      this.invalid = false;
+      this._commitValidationResult(true);
     }
   }
 
