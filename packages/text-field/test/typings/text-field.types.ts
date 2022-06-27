@@ -8,6 +8,7 @@ import type {
   TextField,
   TextFieldChangeEvent,
   TextFieldInvalidChangedEvent,
+  TextFieldValidatedEvent,
   TextFieldValueChangedEvent,
 } from '../../vaadin-text-field.js';
 
@@ -36,4 +37,9 @@ field.addEventListener('invalid-changed', (event) => {
 field.addEventListener('value-changed', (event) => {
   assertType<TextFieldValueChangedEvent>(event);
   assertType<string>(event.detail.value);
+});
+
+field.addEventListener('validated', (event) => {
+  assertType<TextFieldValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });
