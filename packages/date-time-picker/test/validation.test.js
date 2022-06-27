@@ -80,6 +80,27 @@ const fixtures = {
       expect(dateTimePicker.invalid).to.equal(false);
     });
 
+    it('should fire a validated event on validation success', () => {
+      const validatedSpy = sinon.spy();
+      dateTimePicker.addEventListener('validated', validatedSpy);
+      dateTimePicker.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.true;
+    });
+
+    it('should fire a validated event on validation failure', () => {
+      const validatedSpy = sinon.spy();
+      dateTimePicker.addEventListener('validated', validatedSpy);
+      dateTimePicker.required = true;
+      dateTimePicker.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.false;
+    });
+
     describe('required', () => {
       beforeEach(() => {
         dateTimePicker.required = true;

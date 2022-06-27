@@ -215,7 +215,7 @@ describe('custom field', () => {
     });
   });
 
-  describe('checkValidity', () => {
+  describe('validation', () => {
     it('should check validity on validate', () => {
       const spy = sinon.spy(customField, 'checkValidity');
       customField.validate();
@@ -227,6 +227,27 @@ describe('custom field', () => {
       customField.inputs[0].value = 'foo';
       dispatchChange(customField.inputs[0]);
       expect(spy.called).to.be.true;
+    });
+
+    it('should fire a validated event on validation success', () => {
+      const validatedSpy = sinon.spy();
+      customField.addEventListener('validated', validatedSpy);
+      customField.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.true;
+    });
+
+    it('should fire a validated event on validation failure', () => {
+      const validatedSpy = sinon.spy();
+      customField.addEventListener('validated', validatedSpy);
+      customField.required = true;
+      customField.validate();
+
+      expect(validatedSpy.calledOnce).to.be.true;
+      const event = validatedSpy.firstCall.args[0];
+      expect(event.detail.valid).to.be.false;
     });
   });
 
