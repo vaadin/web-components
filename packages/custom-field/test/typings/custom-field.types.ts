@@ -4,6 +4,7 @@ import type {
   CustomFieldChangeEvent,
   CustomFieldInternalTabEvent,
   CustomFieldInvalidChangedEvent,
+  CustomFieldValidatedEvent,
   CustomFieldValueChangedEvent,
 } from '../../vaadin-custom-field.js';
 
@@ -29,4 +30,9 @@ customField.addEventListener('value-changed', (event) => {
 customField.addEventListener('internal-tab', (event) => {
   assertType<CustomFieldInternalTabEvent>(event);
   assertType<CustomField>(event.target);
+});
+
+customField.addEventListener('validated', (event) => {
+  assertType<CustomFieldValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });

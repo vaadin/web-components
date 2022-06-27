@@ -36,6 +36,11 @@ export type CustomFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 export type CustomFieldValueChangedEvent = CustomEvent<{ value: string }>;
 
 /**
+ * Fired whenever the field is validated.
+ */
+export type CustomFieldValidatedEvent = CustomEvent<{ valid: boolean }>;
+
+/**
  * Fired on Tab keydown triggered from the internal inputs, meaning focus will not leave the inputs.
  */
 export type CustomFieldInternalTabEvent = Event & {
@@ -48,6 +53,8 @@ export interface CustomFieldCustomEventMap {
   'value-changed': CustomFieldValueChangedEvent;
 
   'internal-tab': CustomFieldInternalTabEvent;
+
+  validated: CustomFieldValidatedEvent;
 }
 
 export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldCustomEventMap {
@@ -93,6 +100,7 @@ export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldCus
  * @fires {Event} internal-tab - Fired on Tab keydown triggered from the internal inputs, meaning focus will not leave the inputs.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   /**
