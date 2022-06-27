@@ -34,8 +34,6 @@ describe('validation', () => {
     });
 
     it('should be valid with numeric values', () => {
-      expect(field.validate()).to.be.true;
-
       field.value = '1';
       expect(input.value).to.be.equal('1');
       expect(field.validate()).to.be.true;
