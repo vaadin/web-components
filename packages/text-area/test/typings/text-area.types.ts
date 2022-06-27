@@ -8,6 +8,7 @@ import type {
   TextArea,
   TextAreaChangeEvent,
   TextAreaInvalidChangedEvent,
+  TextAreaValidatedEvent,
   TextAreaValueChangedEvent,
 } from '../../vaadin-text-area.js';
 
@@ -36,4 +37,9 @@ area.addEventListener('invalid-changed', (event) => {
 area.addEventListener('value-changed', (event) => {
   assertType<TextAreaValueChangedEvent>(event);
   assertType<string>(event.detail.value);
+});
+
+area.addEventListener('validated', (event) => {
+  assertType<TextAreaValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });

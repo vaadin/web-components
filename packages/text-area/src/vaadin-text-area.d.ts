@@ -26,10 +26,17 @@ export type TextAreaInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type TextAreaValueChangedEvent = CustomEvent<{ value: string }>;
 
+/**
+ * Fired whenever the field is validated.
+ */
+export type TextAreaValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface TextAreaCustomEventMap {
   'invalid-changed': TextAreaInvalidChangedEvent;
 
   'value-changed': TextAreaValueChangedEvent;
+
+  validated: TextAreaValidatedEvent;
 }
 
 export interface TextAreaEventMap extends HTMLElementEventMap, TextAreaCustomEventMap {
@@ -76,6 +83,7 @@ export interface TextAreaEventMap extends HTMLElementEventMap, TextAreaCustomEve
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement))))) {
   /**
