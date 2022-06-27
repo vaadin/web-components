@@ -455,3 +455,81 @@ snapshots["vaadin-number-field shadow theme"] =
 `;
 /* end snapshot vaadin-number-field shadow theme */
 
+snapshots["vaadin-number-field host min"] = 
+`<vaadin-number-field step="1">
+  <label
+    for="input-vaadin-number-field-3"
+    id="label-vaadin-number-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-number-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    id="input-vaadin-number-field-3"
+    max="undefined"
+    min="2"
+    slot="input"
+    step="any"
+    type="number"
+  >
+</vaadin-number-field>
+`;
+/* end snapshot vaadin-number-field host min */
+
+snapshots["vaadin-number-field host max"] = 
+`<vaadin-number-field step="1">
+  <label
+    for="input-vaadin-number-field-3"
+    id="label-vaadin-number-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-number-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    id="input-vaadin-number-field-3"
+    max="2"
+    min="undefined"
+    slot="input"
+    step="any"
+    type="number"
+  >
+</vaadin-number-field>
+`;
+/* end snapshot vaadin-number-field host max */
+
+snapshots["vaadin-number-field host step"] = 
+`<vaadin-number-field step="2">
+  <label
+    for="input-vaadin-number-field-3"
+    id="label-vaadin-number-field-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-number-field-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    id="input-vaadin-number-field-3"
+    max="undefined"
+    min="undefined"
+    slot="input"
+    step="2"
+    type="number"
+  >
+</vaadin-number-field>
+`;
+/* end snapshot vaadin-number-field host step */
+
