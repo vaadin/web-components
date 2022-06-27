@@ -123,6 +123,34 @@ const runTests = (baseClass) => {
       expect(event.detail.valid).to.be.false;
     });
   });
+
+  describe('only validation failure is committed', () => {
+    const tagWithOnlyFailureCommitted = define[baseClass](
+      'validate-mixin-with-only-failure-committed',
+      '<input>',
+      (Base) =>
+        class extends ValidateMixin(Base) {
+          _shouldCommitValidationResult(isValid) {
+            return !isValid;
+          }
+        },
+    );
+
+    beforeEach(async () => {
+      element = fixtureSync(`<${tagWithOnlyFailureCommitted}></${tagWithOnlyFailureCommitted}>`);
+      await nextRender();
+    });
+
+    it('should not commit validation success', () => {
+      element.required = true;
+      element.validate();
+      expect(element.invalid).to.be.true;
+
+      element.value = 'value';
+      element.validate();
+      expect(element.invalid).to.be.true;
+    });
+  });
 };
 
 describe('ValidateMixin + Polymer', () => {
