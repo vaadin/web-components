@@ -123,6 +123,33 @@ const runTests = (baseClass) => {
       expect(event.detail.valid).to.be.false;
     });
   });
+
+  describe('invalid cannot be set to false', () => {
+    const tagWithShouldSetInvalid = define[baseClass](
+      'validate-mixin-with-should-set-invalid',
+      '<input>',
+      (Base) =>
+        class extends ValidateMixin(Base) {
+          _shouldSetInvalid(invalid) {
+            return invalid;
+          }
+        },
+    );
+
+    beforeEach(async () => {
+      element = fixtureSync(`<${tagWithShouldSetInvalid}></${tagWithShouldSetInvalid}>`);
+      await nextRender();
+    });
+
+    it('should set invalid only when it is true', () => {
+      element.required = true;
+      element.validate();
+      expect(element.invalid).to.be.true;
+      element.value = 'value';
+      element.validate();
+      expect(element.invalid).to.be.true;
+    });
+  });
 };
 
 describe('ValidateMixin + Polymer', () => {

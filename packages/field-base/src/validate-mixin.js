@@ -44,7 +44,7 @@ export const ValidateMixin = dedupingMixin(
        */
       validate() {
         const isValid = this.checkValidity();
-        this.invalid = !isValid;
+        this._setInvalid(!isValid);
         this.dispatchEvent(new CustomEvent('validated', { detail: { valid: isValid } }));
         return isValid;
       }
@@ -56,6 +56,27 @@ export const ValidateMixin = dedupingMixin(
        */
       checkValidity() {
         return !this.required || !!this.value;
+      }
+
+      /**
+       * @param {boolean} invalid
+       * @protected
+       */
+      _setInvalid(invalid) {
+        if (this._shouldSetInvalid(invalid)) {
+          this.invalid = invalid;
+        }
+      }
+
+      /**
+       * Override this method to define whether the given `invalid` state should be set.
+       *
+       * @param {boolean} _invalid
+       * @return {boolean}
+       * @protected
+       */
+      _shouldSetInvalid(_invalid) {
+        return true;
       }
 
       /**
