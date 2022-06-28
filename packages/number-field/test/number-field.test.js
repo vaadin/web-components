@@ -55,6 +55,18 @@ describe('number-field', () => {
     });
   });
 
+  describe('step property', () => {
+    it('should reset the step property when setting not a number', () => {
+      numberField.step = 'not a number';
+      expect(numberField.step).to.be.null;
+    });
+
+    it('should cast the step property to a number when setting a number as a string', () => {
+      numberField.step = '100';
+      expect(numberField.step).to.equal(100);
+    });
+  });
+
   describe('value control buttons', () => {
     it('should increase value by 1 on plus button click', () => {
       numberField.value = 0;

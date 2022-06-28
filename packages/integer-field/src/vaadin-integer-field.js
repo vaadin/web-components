@@ -71,7 +71,7 @@ export class IntegerField extends NumberField {
   _stepChanged(step, inputElement) {
     if (step && !this.__hasOnlyDigits(step)) {
       console.warn(
-        `Trying to set invalid step size "${step}", which is not a positive integer, to <vaadin-integer-field>. Resetting the default value 1.`,
+        `Trying to set invalid step size "${step}", which is not a positive integer, to <vaadin-integer-field>. Resetting the default value to "null".`,
       );
       this.step = null;
       return;
