@@ -6,11 +6,14 @@ import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/vaadin-lumo-styles/user-colors.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+const globalStyle = document.createElement('style');
+globalStyle.textContent = 'html { --vaadin-avatar-size: var(--lumo-size-m); }';
+document.head.appendChild(globalStyle);
+
 registerStyles(
   'vaadin-avatar',
   css`
     :host {
-      --vaadin-avatar-size: var(--lumo-size-m);
       color: var(--lumo-secondary-text-color);
       background-color: var(--lumo-contrast-10pct);
       border-radius: 50%;

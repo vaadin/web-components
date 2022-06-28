@@ -49,13 +49,12 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
           flex: none;
           border-radius: 50%;
           overflow: hidden;
-          height: var(--vaadin-avatar-size);
-          width: var(--vaadin-avatar-size);
+          height: var(--vaadin-avatar-size, 64px);
+          width: var(--vaadin-avatar-size, 64px);
           border: var(--vaadin-avatar-outline-width) solid transparent;
           margin: calc(var(--vaadin-avatar-outline-width) * -1);
           background-clip: content-box;
           --vaadin-avatar-outline-width: 2px;
-          --vaadin-avatar-size: 64px;
         }
 
         img {

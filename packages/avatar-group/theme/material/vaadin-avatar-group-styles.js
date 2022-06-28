@@ -2,6 +2,48 @@ import '@vaadin/vaadin-material-styles/color.js';
 import { menuOverlay } from '@vaadin/vaadin-material-styles/mixins/menu-overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+registerStyles(
+  'vaadin-avatar-group',
+  css`
+    :host {
+      --vaadin-avatar-size: 36px;
+    }
+
+    :host([theme~='small']) {
+      --vaadin-avatar-size: 30px;
+    }
+
+    :host([theme~='xsmall']) {
+      --vaadin-avatar-size: 26px;
+    }
+
+    :host([theme~='xlarge']) {
+      --vaadin-avatar-group-overlap: 12px;
+      --vaadin-avatar-group-overlap-border: 3px;
+      --vaadin-avatar-size: 56px;
+    }
+
+    :host([theme~='large']) {
+      --vaadin-avatar-group-overlap: 10px;
+      --vaadin-avatar-group-overlap-border: 3px;
+      --vaadin-avatar-size: 44px;
+    }
+
+    :host([theme~='small']) {
+      --vaadin-avatar-group-overlap: 6px;
+      --vaadin-avatar-group-overlap-border: 2px;
+      --vaadin-avatar-size: 30px;
+    }
+
+    :host([theme~='xsmall']) {
+      --vaadin-avatar-group-overlap: 4px;
+      --vaadin-avatar-group-overlap-border: 2px;
+      --vaadin-avatar-size: 26px;
+    }
+  `,
+  { moduleId: 'material-avatar-group' },
+);
+
 const avatarGroupOverlay = css`
   [part='overlay'] {
     outline: none;
@@ -49,14 +91,4 @@ registerStyles(
     }
   `,
   { moduleId: 'material-avatar-group-item' },
-);
-
-registerStyles(
-  'vaadin-avatar',
-  css`
-    :host {
-      --vaadin-avatar-size: inherit;
-    }
-  `,
-  { moduleId: 'material-avatar' },
 );
