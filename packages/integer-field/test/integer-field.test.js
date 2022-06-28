@@ -208,7 +208,7 @@ describe('integer-field', () => {
       });
 
       ['foo', '-1', -1, '1.2', 1.2, '+1', '1e1', {}].forEach((invalidStep) => {
-        it(`should reset default step when setting ${typeof invalidStep} value: ${invalidStep}`, () => {
+        it(`should reset default step when setting ${typeof invalidStep} value: "${invalidStep}"`, () => {
           integerField.step = invalidStep;
           expect(integerField.step).to.be.null;
           expect(console.warn.called).to.be.true;
@@ -229,7 +229,7 @@ describe('integer-field', () => {
 
       it('should not show the warning when setting step to an empty string', () => {
         integerField.step = '';
-        expect(integerField.step).to.equal('');
+        expect(integerField.step).to.be.null;
         expect(console.warn.called).to.be.false;
       });
     });

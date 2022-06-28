@@ -262,7 +262,7 @@ describe('validation', () => {
       field.validate();
       expect(field.invalid).to.be.true;
 
-      field.step = '';
+      field.step = null;
       expect(field.invalid).to.be.false;
     });
 
@@ -272,7 +272,7 @@ describe('validation', () => {
       field.validate();
       expect(field.invalid).to.be.true;
 
-      field.step = '';
+      field.step = null;
       expect(field.invalid).to.be.true;
     });
 
