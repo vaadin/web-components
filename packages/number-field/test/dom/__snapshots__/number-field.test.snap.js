@@ -452,7 +452,7 @@ snapshots["vaadin-number-field shadow theme"] =
 /* end snapshot vaadin-number-field shadow theme */
 
 snapshots["vaadin-number-field host min"] = 
-`<vaadin-number-field step="1">
+`<vaadin-number-field>
   <label
     for="input-vaadin-number-field-3"
     id="label-vaadin-number-field-0"
@@ -478,7 +478,7 @@ snapshots["vaadin-number-field host min"] =
 /* end snapshot vaadin-number-field host min */
 
 snapshots["vaadin-number-field host max"] = 
-`<vaadin-number-field step="1">
+`<vaadin-number-field>
   <label
     for="input-vaadin-number-field-3"
     id="label-vaadin-number-field-0"
@@ -504,7 +504,7 @@ snapshots["vaadin-number-field host max"] =
 /* end snapshot vaadin-number-field host max */
 
 snapshots["vaadin-number-field host step"] = 
-`<vaadin-number-field step="2">
+`<vaadin-number-field>
   <label
     for="input-vaadin-number-field-3"
     id="label-vaadin-number-field-0"
