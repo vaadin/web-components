@@ -21,6 +21,7 @@ import type {
   MultiSelectComboBoxInvalidChangedEvent,
   MultiSelectComboBoxRenderer,
   MultiSelectComboBoxSelectedItemsChangedEvent,
+  MultiSelectComboBoxValidatedEvent,
 } from '../../vaadin-multi-select-combo-box.js';
 
 interface TestComboBoxItem {
@@ -58,6 +59,11 @@ narrowedComboBox.addEventListener('invalid-changed', (event) => {
 narrowedComboBox.addEventListener('selected-items-changed', (event) => {
   assertType<MultiSelectComboBoxSelectedItemsChangedEvent<TestComboBoxItem>>(event);
   assertType<TestComboBoxItem[]>(event.detail.value);
+});
+
+narrowedComboBox.addEventListener('validated', (event) => {
+  assertType<MultiSelectComboBoxValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });
 
 // Properties
