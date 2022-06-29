@@ -400,7 +400,9 @@ describe('keyboard navigation', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
 
       let keydownEvent;
-      const listener = (e) => (keydownEvent = e);
+      const listener = (e) => {
+        keydownEvent = e;
+      };
 
       // Assuming grid has been tabbed into.
       tabbableElements[1].focus();
@@ -420,7 +422,9 @@ describe('keyboard navigation', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
 
       let keydownEvent;
-      const listener = (e) => (keydownEvent = e);
+      const listener = (e) => {
+        keydownEvent = e;
+      };
 
       // Assuming grid has been shift-tabbed into.
       tabbableElements[3].focus();
@@ -443,7 +447,9 @@ describe('keyboard navigation', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
 
       let keydownEvent;
-      const listener = (e) => (keydownEvent = e);
+      const listener = (e) => {
+        keydownEvent = e;
+      };
 
       // Assuming grid has been tabbed into.
       tabbableElements[1].focus();
@@ -466,7 +472,9 @@ describe('keyboard navigation', () => {
       const tabbableElements = getTabbableElements(grid.shadowRoot);
 
       let keydownEvent;
-      const listener = (e) => (keydownEvent = e);
+      const listener = (e) => {
+        keydownEvent = e;
+      };
 
       // Assuming grid has been shift-tabbed into.
       tabbableElements[3].focus();
@@ -487,7 +495,9 @@ describe('keyboard navigation', () => {
       tabbableElements[3].focus(); // Focus footer cell
 
       let keydownEvent;
-      listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => (keydownEvent = e));
+      listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => {
+        keydownEvent = e;
+      });
       tab();
 
       // Expect programmatic focus on focus exit element
@@ -501,7 +511,9 @@ describe('keyboard navigation', () => {
       tabbableElements[1].focus(); // Focus header cell
 
       let keydownEvent;
-      listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => (keydownEvent = e));
+      listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => {
+        keydownEvent = e;
+      });
       shiftTab();
 
       // Expect programmatic focus on focus exit element

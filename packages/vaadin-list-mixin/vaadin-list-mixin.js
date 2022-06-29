@@ -107,7 +107,9 @@ export const ListMixin = (superClass) =>
           this._setFocusable(selected || 0);
 
           const itemToSelect = items[selected];
-          items.forEach((item) => (item.selected = item === itemToSelect));
+          items.forEach((item) => {
+            item.selected = item === itemToSelect;
+          });
           if (itemToSelect && !itemToSelect.disabled) {
             this._scrollToItem(selected);
           }
@@ -154,7 +156,9 @@ export const ListMixin = (superClass) =>
      * @protected
      */
     _searchKey(currentIdx, key) {
-      this._searchReset = Debouncer.debounce(this._searchReset, timeOut.after(500), () => (this._searchBuf = ''));
+      this._searchReset = Debouncer.debounce(this._searchReset, timeOut.after(500), () => {
+        this._searchBuf = '';
+      });
       this._searchBuf += key.toLowerCase();
       const increment = 1;
       const condition = (item) =>
@@ -276,7 +280,9 @@ export const ListMixin = (superClass) =>
     _setFocusable(idx) {
       idx = this._getAvailableIndex(idx, 1, (item) => !item.disabled);
       const item = this.items[idx];
-      this.items.forEach((e) => (e.tabIndex = e === item ? 0 : -1));
+      this.items.forEach((e) => {
+        e.tabIndex = e === item ? 0 : -1;
+      });
     }
 
     /**
@@ -285,7 +291,9 @@ export const ListMixin = (superClass) =>
      */
     _focus(idx) {
       const item = this.items[idx];
-      this.items.forEach((e) => (e.focused = e === item));
+      this.items.forEach((e) => {
+        e.focused = e === item;
+      });
       this._setFocusable(idx);
       this._scrollToItem(idx);
       this._focusItem(item);

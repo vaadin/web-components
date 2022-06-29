@@ -137,6 +137,7 @@
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "no-promise-executor-return": "error",
     "no-proto": "error",
+    "no-return-assign": ["error", "always"],
     "no-return-await": "error",
     "no-sequences": "error",
     "no-sync": "off",

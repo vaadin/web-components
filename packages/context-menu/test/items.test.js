@@ -409,7 +409,9 @@ describe('items', () => {
     });
 
     it('should throw with renderer', () => {
-      expect(() => (rootMenu.renderer = () => {})).to.throw(Error);
+      expect(() => {
+        rootMenu.renderer = () => {};
+      }).to.throw(Error);
     });
 
     it('should not remove the component attributes', () => {

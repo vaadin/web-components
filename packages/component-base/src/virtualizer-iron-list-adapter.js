@@ -55,7 +55,9 @@ export class IronListAdapter {
     if (this.reorderElements) {
       // Reordering the physical elements cancels the user's grab of the scroll bar handle on Safari.
       // Need to defer reordering until the user lets go of the scroll bar handle.
-      this.scrollTarget.addEventListener('mousedown', () => (this.__mouseDown = true));
+      this.scrollTarget.addEventListener('mousedown', () => {
+        this.__mouseDown = true;
+      });
       this.scrollTarget.addEventListener('mouseup', () => {
         this.__mouseDown = false;
         if (this.__pendingReorder) {
@@ -298,7 +300,9 @@ export class IronListAdapter {
   /** @private */
   _isClientFull() {
     // Workaround an issue in iron-list that can cause it to freeze on fast scroll
-    setTimeout(() => (this.__clientFull = true));
+    setTimeout(() => {
+      this.__clientFull = true;
+    });
     return this.__clientFull || super._isClientFull();
   }
 
@@ -378,7 +382,9 @@ export class IronListAdapter {
     this.__debouncerWheelAnimationFrame = Debouncer.debounce(
       this.__debouncerWheelAnimationFrame,
       animationFrame,
-      () => (this._wheelAnimationFrame = false),
+      () => {
+        this._wheelAnimationFrame = false;
+      },
     );
 
     const momentum = Math.abs(e.deltaX) + Math.abs(deltaY);
@@ -394,7 +400,9 @@ export class IronListAdapter {
       this._debouncerIgnoreNewWheel = Debouncer.debounce(
         this._debouncerIgnoreNewWheel,
         timeOut.after(this.timeouts.IGNORE_WHEEL),
-        () => (this._ignoreNewWheel = false),
+        () => {
+          this._ignoreNewWheel = false;
+        },
       );
     } else if ((this._hasResidualMomentum && momentum <= this._previousMomentum) || this._ignoreNewWheel) {
       e.preventDefault();
@@ -494,7 +502,9 @@ export class IronListAdapter {
     if (isSafari) {
       const { transform } = this.scrollTarget.style;
       this.scrollTarget.style.transform = 'translateZ(0)';
-      setTimeout(() => (this.scrollTarget.style.transform = transform));
+      setTimeout(() => {
+        this.scrollTarget.style.transform = transform;
+      });
     }
   }
 

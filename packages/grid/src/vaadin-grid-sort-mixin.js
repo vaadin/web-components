@@ -87,7 +87,9 @@ export const SortMixin = (superClass) =>
 
     /** @private */
     __updateSortOrders() {
-      this._sorters.forEach((sorter, index) => (sorter._order = this._sorters.length > 1 ? index : null), this);
+      this._sorters.forEach((sorter, index) => {
+        sorter._order = this._sorters.length > 1 ? index : null;
+      });
     }
 
     /** @private */

@@ -10,7 +10,8 @@ const caseMap = {};
 const CAMEL_TO_DASH = /([A-Z])/g;
 
 function camelToDash(camel) {
-  return caseMap[camel] || (caseMap[camel] = camel.replace(CAMEL_TO_DASH, '-$1').toLowerCase());
+  caseMap[camel] = caseMap[camel] || camel.replace(CAMEL_TO_DASH, '-$1').toLowerCase();
+  return caseMap[camel];
 }
 
 function upper(name) {

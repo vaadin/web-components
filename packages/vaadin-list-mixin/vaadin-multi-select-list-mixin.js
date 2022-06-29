@@ -58,7 +58,9 @@ export const MultiSelectListMixin = (superClass) =>
 
       if (selectedValues) {
         const selectedItems = selectedValues.map((selectedId) => items[selectedId]);
-        items.forEach((item) => (item.selected = selectedItems.includes(item)));
+        items.forEach((item) => {
+          item.selected = selectedItems.includes(item);
+        });
       }
 
       this._scrollToLastSelectedItem();
@@ -96,7 +98,9 @@ export const MultiSelectListMixin = (superClass) =>
       // Changing from multiple to single selection, clear selection.
       if (!value && oldValue) {
         this.selectedValues = [];
-        this.items.forEach((item) => (item.selected = false));
+        this.items.forEach((item) => {
+          item.selected = false;
+        });
       }
 
       // Changing from single to multiple selection, add selected to selectedValues.

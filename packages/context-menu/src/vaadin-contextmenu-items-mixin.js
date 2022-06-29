@@ -330,7 +330,9 @@ export const ItemsMixin = (superClass) =>
           }
         });
 
-        requestAnimationFrame(() => (this.__openListenerActive = true));
+        requestAnimationFrame(() => {
+          this.__openListenerActive = true;
+        });
         const openSubMenu = (
           e,
           itemElement = e.composedPath().filter((e) => e.localName === 'vaadin-context-menu-item')[0],

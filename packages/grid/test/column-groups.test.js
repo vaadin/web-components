@@ -207,7 +207,9 @@ describe('column groups', () => {
       });
 
       it('should not override header renderer content', () => {
-        emptyGroup.headerRenderer = (root) => (root.textContent = 'foo');
+        emptyGroup.headerRenderer = (root) => {
+          root.textContent = 'foo';
+        };
         emptyGroup.header = 'Bar';
         expect(getHeaderCellContent(0, 1).trim()).to.equal('foo');
       });
@@ -228,8 +230,12 @@ describe('column groups', () => {
 
       beforeEach(() => {
         emptyGroup = grid.querySelector('vaadin-grid-column-group');
-        emptyGroup.headerRenderer = (root) => (root.textContent = 'header');
-        emptyGroup.footerRenderer = (root) => (root.textContent = 'footer');
+        emptyGroup.headerRenderer = (root) => {
+          root.textContent = 'header';
+        };
+        emptyGroup.footerRenderer = (root) => {
+          root.textContent = 'footer';
+        };
       });
 
       it('should align visually to right', () => {

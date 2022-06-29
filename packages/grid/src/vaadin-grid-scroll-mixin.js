@@ -69,7 +69,9 @@ export const ScrollMixin = (superClass) =>
         const itemsIndex = e.composedPath().indexOf(this.$.items);
         this._rowWithFocusedElement = e.composedPath()[itemsIndex - 1];
       });
-      this.$.items.addEventListener('focusout', () => (this._rowWithFocusedElement = undefined));
+      this.$.items.addEventListener('focusout', () => {
+        this._rowWithFocusedElement = undefined;
+      });
 
       this.$.table.addEventListener('scroll', () => this._afterScroll());
     }

@@ -201,7 +201,9 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   _setTabIndexesByMessage(message) {
-    this._messages.forEach((e) => (e.tabIndex = e === message ? 0 : -1));
+    this._messages.forEach((e) => {
+      e.tabIndex = e === message ? 0 : -1;
+    });
   }
 
   _getIndexOfFocusableElement() {

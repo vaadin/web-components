@@ -173,7 +173,9 @@ describe('vaadin-dialog', () => {
     });
 
     it('should not throw an exception if template is not present', () => {
-      const openDialog = () => (dialog.opened = true);
+      const openDialog = () => {
+        dialog.opened = true;
+      };
       expect(openDialog).to.not.throw();
     });
 

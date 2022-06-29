@@ -45,7 +45,9 @@ describe('virtual-list', () => {
         return { value: `value-${i}` };
       });
 
-      list.renderer = (el, list, model) => (el.textContent = model.item.value);
+      list.renderer = (el, list, model) => {
+        el.textContent = model.item.value;
+      };
     });
 
     it('should include div elements', () => {
@@ -113,7 +115,9 @@ describe('virtual-list', () => {
 
     it('should update content on request', () => {
       let name = 'foo';
-      list.renderer = (root) => (root.textContent = name);
+      list.renderer = (root) => {
+        root.textContent = name;
+      };
       expect(list.children[0].textContent.trim()).to.equal('foo');
 
       name = 'bar';

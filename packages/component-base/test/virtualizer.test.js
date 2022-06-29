@@ -185,7 +185,9 @@ describe('virtualizer', () => {
   });
 
   it('should not request item updates on size increase', () => {
-    const updateElement = sinon.spy((el, index) => (el.textContent = `item-${index}`));
+    const updateElement = sinon.spy((el, index) => {
+      el.textContent = `item-${index}`;
+    });
     init({ size: 100, updateElement });
 
     // Scroll halfway down the list
@@ -200,7 +202,9 @@ describe('virtualizer', () => {
   });
 
   it('should request a different set of items on size decrease', () => {
-    const updateElement = sinon.spy((el, index) => (el.textContent = `item-${index}`));
+    const updateElement = sinon.spy((el, index) => {
+      el.textContent = `item-${index}`;
+    });
     init({ size: 100, updateElement });
 
     // Scroll halfway down the list
@@ -218,7 +222,9 @@ describe('virtualizer', () => {
   });
 
   it('should request an index only once', async () => {
-    const updateElement = sinon.spy((el, index) => (el.textContent = `item-${index}`));
+    const updateElement = sinon.spy((el, index) => {
+      el.textContent = `item-${index}`;
+    });
     init({ size: 100, updateElement });
 
     // Wait for a possible resize observer flush
@@ -231,7 +237,9 @@ describe('virtualizer', () => {
   it('should re-render an unhidden item', async () => {
     // Create a virtualizer with just one item (rendered content "foo-0")
     let prefix = 'foo-';
-    const updateElement = (el, index) => (el.textContent = `${prefix}${index}`);
+    const updateElement = (el, index) => {
+      el.textContent = `${prefix}${index}`;
+    };
     init({ size: 1, updateElement });
 
     // Wait for a possible resize observer flush

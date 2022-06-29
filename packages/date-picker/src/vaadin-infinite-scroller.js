@@ -155,7 +155,7 @@ class InfiniteScroller extends PolymerElement {
       // Once the first set of items start fading in, stamp the rest
       this._buffers.forEach((buffer) => {
         [].forEach.call(buffer.children, (insertionPoint) => this._ensureStampedInstance(insertionPoint._itemWrapper));
-      }, this);
+      });
 
       if (!this._buffers[0].translateY) {
         this._reset();
@@ -318,7 +318,7 @@ class InfiniteScroller extends PolymerElement {
           }
         }, 1); // Wait for first reset
       }
-    }, this);
+    });
 
     setTimeout(() => {
       afterNextRender(this, this._finishInit.bind(this));
@@ -356,7 +356,7 @@ class InfiniteScroller extends PolymerElement {
         });
         buffer.updated = true;
       }
-    }, this);
+    });
   }
 
   _isVisible(element, container) {

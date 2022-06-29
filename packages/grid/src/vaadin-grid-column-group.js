@@ -156,7 +156,9 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       const _rootColumns = rootColumns.slice(0);
 
       if (!order) {
-        _rootColumns.forEach((column) => (column._order = 0));
+        _rootColumns.forEach((column) => {
+          column._order = 0;
+        });
         return;
       }
       // The parent column order number cascades downwards to it's children
@@ -190,7 +192,9 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       return;
     }
 
-    rootColumns.forEach((column) => (column._reorderStatus = reorderStatus));
+    rootColumns.forEach((column) => {
+      column._reorderStatus = reorderStatus;
+    });
   }
 
   /** @private */
@@ -199,7 +203,9 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
       return;
     }
 
-    rootColumns.forEach((column) => (column.resizable = resizable));
+    rootColumns.forEach((column) => {
+      column.resizable = resizable;
+    });
   }
 
   /** @private */
@@ -217,7 +223,10 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
 
     if (this._visibleChildColumns.length > 0) {
       const width = this._visibleChildColumns
-        .reduce((prev, curr) => (prev += ` + ${(curr.width || '0px').replace('calc', '')}`), '')
+        .reduce((prev, curr) => {
+          prev += ` + ${(curr.width || '0px').replace('calc', '')}`;
+          return prev;
+        }, '')
         .substring(3);
       this._setWidth(`calc(${width})`);
     } else {
@@ -235,7 +244,9 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
 
     // Don’t propagate the default `false` value.
     if (frozen !== false) {
-      Array.from(rootColumns).forEach((col) => (col.frozen = frozen));
+      Array.from(rootColumns).forEach((col) => {
+        col.frozen = frozen;
+      });
     }
   }
 
@@ -247,7 +258,9 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
 
     // Don’t propagate the default `false` value.
     if (frozenToEnd !== false) {
-      Array.from(rootColumns).forEach((col) => (col.frozenToEnd = frozenToEnd));
+      Array.from(rootColumns).forEach((col) => {
+        col.frozenToEnd = frozenToEnd;
+      });
     }
   }
 
@@ -276,7 +289,9 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
   /** @private */
   _synchronizeHidden() {
     if (this._childColumns && !this._preventHiddenSynchronization) {
-      this._childColumns.forEach((column) => (column.hidden = this.hidden));
+      this._childColumns.forEach((column) => {
+        column.hidden = this.hidden;
+      });
     }
   }
 

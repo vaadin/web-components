@@ -280,7 +280,9 @@ export const DragAndDropMixin = (superClass) =>
         if (scrollTopChanged) {
           this.__dndAutoScrolling = true;
           // Disallow more auto-scrolls within 20ms
-          setTimeout(() => (this.__dndAutoScrolling = false), 20);
+          setTimeout(() => {
+            this.__dndAutoScrolling = false;
+          }, 20);
           return true;
         }
       }

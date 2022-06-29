@@ -203,9 +203,13 @@ describe('renderers', () => {
     });
 
     it('should have a visible header with headerRenderer', () => {
-      column.headerRenderer = (root) => (root.textContent = 'foo');
+      column.headerRenderer = (root) => {
+        root.textContent = 'foo';
+      };
       const newColumn = document.createElement('vaadin-grid-column');
-      newColumn.headerRenderer = (root) => (root.textContent = 'bar');
+      newColumn.headerRenderer = (root) => {
+        root.textContent = 'bar';
+      };
       grid.appendChild(newColumn);
       flushGrid(grid);
       grid.removeChild(newColumn);

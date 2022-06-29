@@ -75,7 +75,9 @@ describe('class name generator', () => {
   });
 
   it('should not throw with falsy return value', () => {
-    expect(() => (grid.cellClassNameGenerator = () => {})).not.to.throw(Error);
+    expect(() => {
+      grid.cellClassNameGenerator = () => {};
+    }).not.to.throw(Error);
   });
 
   it('should clear generated classes with falsy return value', () => {
@@ -111,7 +113,9 @@ describe('class name generator', () => {
   });
 
   it('should not throw with extra whitespace in the result', () => {
-    expect(() => (grid.cellClassNameGenerator = () => ' foo  bar ')).not.to.throw(Error);
+    expect(() => {
+      grid.cellClassNameGenerator = () => ' foo  bar ';
+    }).not.to.throw(Error);
     assertClassList(firstCell, ['foo', 'bar']);
   });
 

@@ -97,7 +97,9 @@ describe('renderer', () => {
     it('should remove template when added after renderer', () => {
       overlay.renderer = () => {};
       const template = document.createElement('template');
-      expect(() => (overlay.template = template)).to.throw(Error);
+      expect(() => {
+        overlay.template = template;
+      }).to.throw(Error);
       expect(overlay.template).to.be.not.ok;
     });
 
@@ -150,7 +152,9 @@ describe('renderer', () => {
     });
 
     it('should throw an error when setting a renderer if there is already a template', () => {
-      expect(() => (overlay.renderer = () => {})).to.throw(Error);
+      expect(() => {
+        overlay.renderer = () => {};
+      }).to.throw(Error);
     });
 
     it('should not restamp the template on model change', () => {
@@ -167,7 +171,9 @@ describe('renderer', () => {
     });
 
     it('should remove renderer when added after template', () => {
-      expect(() => (overlay.renderer = () => {})).to.throw(Error);
+      expect(() => {
+        overlay.renderer = () => {};
+      }).to.throw(Error);
       expect(overlay.renderer).to.be.not.ok;
     });
   });

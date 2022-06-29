@@ -61,8 +61,12 @@ describe('accessibility', () => {
     const col2 = document.createElement('vaadin-grid-column');
     if (grouped) {
       const grp = document.createElement('vaadin-grid-column-group');
-      grp.headerRenderer = (root) => (root.textContent = 'Group header');
-      grp.footerRenderer = (root) => (root.textContent = 'Group footer');
+      grp.headerRenderer = (root) => {
+        root.textContent = 'Group header';
+      };
+      grp.footerRenderer = (root) => {
+        root.textContent = 'Group footer';
+      };
       grp.appendChild(col1);
       grp.appendChild(col2);
       grid.appendChild(grp);
@@ -71,10 +75,18 @@ describe('accessibility', () => {
       grid.appendChild(col2);
     }
 
-    col1.headerRenderer = col2.headerRenderer = (root) => (root.textContent = 'header');
-    col1.footerRenderer = col2.footerRenderer = (root) => (root.textContent = 'footer');
-    col1.renderer = (root, col, model) => (root.textContent = model.index);
-    col2.renderer = (root, col, model) => (root.textContent = model.item);
+    col1.headerRenderer = col2.headerRenderer = (root) => {
+      root.textContent = 'header';
+    };
+    col1.footerRenderer = col2.footerRenderer = (root) => {
+      root.textContent = 'footer';
+    };
+    col1.renderer = (root, col, model) => {
+      root.textContent = model.index;
+    };
+    col2.renderer = (root, col, model) => {
+      root.textContent = model.item;
+    };
     grid.items = ['foo', 'bar'];
     flushGrid(grid);
   }
@@ -82,7 +94,9 @@ describe('accessibility', () => {
   function initRendererFixture(fixtureName) {
     initGridRenderer(fixtureName === 'group');
     if (fixtureName === 'details') {
-      grid.rowDetailsRenderer = (root) => (root.textContent = 'details');
+      grid.rowDetailsRenderer = (root) => {
+        root.textContent = 'details';
+      };
     }
   }
 

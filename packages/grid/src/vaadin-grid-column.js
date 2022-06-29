@@ -312,12 +312,16 @@ export const ColumnBaseMixin = (superClass) =>
         this.parentElement._columnPropChanged('flexGrow');
       }
 
-      this._allCells.forEach((cell) => (cell.style.flexGrow = flexGrow));
+      this._allCells.forEach((cell) => {
+        cell.style.flexGrow = flexGrow;
+      });
     }
 
     /** @private */
     _orderChanged(order) {
-      this._allCells.forEach((cell) => (cell.style.order = order));
+      this._allCells.forEach((cell) => {
+        cell.style.order = order;
+      });
     }
 
     /** @private */
@@ -326,7 +330,9 @@ export const ColumnBaseMixin = (superClass) =>
         this.parentElement._columnPropChanged('width');
       }
 
-      this._allCells.forEach((cell) => (cell.style.width = width));
+      this._allCells.forEach((cell) => {
+        cell.style.width = width;
+      });
     }
 
     /** @private */

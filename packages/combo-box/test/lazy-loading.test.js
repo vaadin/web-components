@@ -100,7 +100,9 @@ describe('lazy loading', () => {
       });
 
       it('should not throw with large size', () => {
-        expect(() => (comboBox.size = 500000)).not.to.throw(Error);
+        expect(() => {
+          comboBox.size = 500000;
+        }).not.to.throw(Error);
       });
 
       it('should throw if set after items', () => {
@@ -555,24 +557,20 @@ describe('lazy loading', () => {
 
       it('should throw when set to zero', () => {
         comboBox.pageSize = 123;
-        expect(() => (comboBox.pageSize = 0)).to.throw('pageSize');
+        expect(() => {
+          comboBox.pageSize = 0;
+        }).to.throw('pageSize');
         expect(comboBox.pageSize).to.equal(123);
       });
 
-      it('should throw when set to non-integer', () => {
+      it('should throw when set an invalid value', () => {
         comboBox.pageSize = 123;
-        expect(() => (comboBox.pageSize = undefined)).to.throw('pageSize');
-        expect(() => (comboBox.pageSize = null)).to.throw('pageSize');
-        expect(() => (comboBox.pageSize = NaN)).to.throw('pageSize');
-        expect(() => (comboBox.pageSize = 10.5)).to.throw('pageSize');
-        expect(() => (comboBox.pageSize = '10')).to.throw('pageSize');
+        [undefined, null, NaN, 10.5, '10', -1].forEach((size) => {
+          expect(() => {
+            comboBox.pageSize = size;
+          }).to.throw('pageSize');
+        });
         expect(comboBox.pageSize).to.equal(123);
-      });
-
-      it('should throw when set to negative value', () => {
-        comboBox.pageSize = 10;
-        expect(() => (comboBox.pageSize = -1)).to.throw('pageSize');
-        expect(comboBox.pageSize).to.equal(10);
       });
     });
 

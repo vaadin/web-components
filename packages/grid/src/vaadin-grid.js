@@ -708,7 +708,9 @@ class Grid extends ElementMixin(
 
     const contentsFragment = document.createDocumentFragment();
 
-    Array.from(row.children).forEach((cell) => (cell._vacant = true));
+    Array.from(row.children).forEach((cell) => {
+      cell._vacant = true;
+    });
     row.innerHTML = '';
 
     columns

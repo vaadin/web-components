@@ -374,7 +374,9 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
       return;
     }
 
-    this.inputs.forEach((input, id) => (input.value = valuesArray[id]));
+    this.inputs.forEach((input, id) => {
+      input.value = valuesArray[id];
+    });
     if (oldValue !== undefined) {
       this.validate();
     }
