@@ -370,7 +370,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * Focuses the target row after navigating by the given dy offset.
      * If the row is not in the viewport, it is first scrolled to.
      * @private
-     **/
+     */
     _onRowNavigation(activeRow, dy) {
       const { dstRow } = this.__navigateRows(dy, activeRow);
 
@@ -394,7 +394,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * Also returns information whether the details cell should be the target on the target row.
      * If the row is not in the viewport, it is first scrolled to.
      * @private
-     **/
+     */
     __navigateRows(dy, activeRow, activeCell) {
       const currentRowIndex = this.__getIndexInGroup(activeRow, this._focusedItemIndex);
       const activeRowGroup = activeRow.parentNode;
@@ -469,7 +469,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * Focuses the target cell after navigating by the given dx and dy offset.
      * If the cell is not in the viewport, it is first scrolled to.
      * @private
-     **/
+     */
     _onCellNavigation(activeCell, dx, dy) {
       const activeRow = activeCell.parentNode;
       const { dstRow, dstIsRowDetails } = this.__navigateRows(dy, activeRow, activeCell);
@@ -746,10 +746,11 @@ export const KeyboardNavigationMixin = (superClass) =>
       this._detectFocusedItemIndex(e);
     }
 
-    /** @private
+    /**
      * Enables interaction mode if a cells descendant receives focus or keyboard
      * input. Disables it if the event is not related to cell content.
      * @param {!KeyboardEvent|!FocusEvent} e
+     * @private
      */
     _detectInteracting(e) {
       const isInteracting = e.composedPath().some((el) => el.localName === 'vaadin-grid-cell-content');
@@ -765,11 +766,12 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
     }
 
-    /** @private
+    /**
      * Enables or disables the focus target of the containing section of the
      * grid from receiving focus, based on whether the user is interacting with
      * that section of the grid.
      * @param {HTMLElement} focusTarget
+     * @private
      */
     _updateGridSectionFocusTarget(focusTarget) {
       if (!focusTarget) {

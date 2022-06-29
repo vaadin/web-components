@@ -1302,7 +1302,7 @@ export const ComboBoxMixin = (subclass) =>
      *
      * @event value-changed
      * @param {Object} detail
-     *  @param {String} detail.value the combobox value
+     * @param {String} detail.value the combobox value
      */
 
     /**
@@ -1310,7 +1310,7 @@ export const ComboBoxMixin = (subclass) =>
      *
      * @event selected-item-changed
      * @param {Object} detail
-     *  @param {Object|String} detail.value the selected item. Type is the same as the type of `items`.
+     * @param {Object|String} detail.value the selected item. Type is the same as the type of `items`.
      */
 
     /**

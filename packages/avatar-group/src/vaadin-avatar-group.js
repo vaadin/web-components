@@ -517,7 +517,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
     this.__itemsInView = result;
   }
 
-  /** @private **/
+  /** @private */
   __calculateAvatarsFitWidth() {
     if (!this.shadowRoot || this._avatars.length < MINIMUM_DISPLAYED_AVATARS) {
       return MINIMUM_DISPLAYED_AVATARS;
