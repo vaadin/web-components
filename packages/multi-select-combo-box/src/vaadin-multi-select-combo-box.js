@@ -749,7 +749,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     const itemsCopy = [...this.selectedItems];
     itemsCopy.splice(itemsCopy.indexOf(item), 1);
     this.__updateSelection(itemsCopy);
-    this.__announceItem(item, false, itemsCopy.length);
+    const itemLabel = this._getItemLabel(item);
+    this.__announceItem(itemLabel, false, itemsCopy.length);
   }
 
   /** @private */
