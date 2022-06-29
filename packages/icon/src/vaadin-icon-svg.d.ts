@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { nothing, SVGTemplateResult } from 'lit';
+import type { nothing, SVGTemplateResult } from 'lit';
 
 export type IconSvgLiteral = SVGTemplateResult | typeof nothing;
 

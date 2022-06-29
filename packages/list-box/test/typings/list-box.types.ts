@@ -1,5 +1,5 @@
 import '../../vaadin-list-box.js';
-import {
+import type {
   ListBoxItemsChangedEvent,
   ListBoxSelectedChangedEvent,
   ListBoxSelectedValuesChangedEvent,

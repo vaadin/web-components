@@ -1,5 +1,5 @@
 import '../../vaadin-custom-field.js';
-import {
+import type {
   CustomField,
   CustomFieldChangeEvent,
   CustomFieldInternalTabEvent,

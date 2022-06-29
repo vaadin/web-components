@@ -3,19 +3,19 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Constructor } from '@open-wc/dedupe-mixin';
-import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
-import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
-import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
-import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { DelegateFocusMixinClass } from './delegate-focus-mixin.js';
-import { DelegateStateMixinClass } from './delegate-state-mixin.js';
-import { FieldMixinClass } from './field-mixin.js';
-import { InputConstraintsMixinClass } from './input-constraints-mixin.js';
-import { InputControlMixinClass } from './input-control-mixin.js';
-import { InputMixinClass } from './input-mixin.js';
-import { LabelMixinClass } from './label-mixin.js';
-import { ValidateMixinClass } from './validate-mixin.js';
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
+import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import type { DelegateFocusMixinClass } from './delegate-focus-mixin.js';
+import type { DelegateStateMixinClass } from './delegate-state-mixin.js';
+import type { FieldMixinClass } from './field-mixin.js';
+import type { InputConstraintsMixinClass } from './input-constraints-mixin.js';
+import type { InputControlMixinClass } from './input-control-mixin.js';
+import type { InputMixinClass } from './input-mixin.js';
+import type { LabelMixinClass } from './label-mixin.js';
+import type { ValidateMixinClass } from './validate-mixin.js';
 
 /**
  * A mixin to provide logic for vaadin-text-field and related components.

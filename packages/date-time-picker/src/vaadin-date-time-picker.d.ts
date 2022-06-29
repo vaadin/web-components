@@ -7,9 +7,9 @@ import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
-import { DatePickerI18n } from '@vaadin/date-picker/src/vaadin-date-picker.js';
+import type { DatePickerI18n } from '@vaadin/date-picker/src/vaadin-date-picker.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
-import { TimePickerI18n } from '@vaadin/time-picker/src/vaadin-time-picker.js';
+import type { TimePickerI18n } from '@vaadin/time-picker/src/vaadin-time-picker.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export interface DateTimePickerI18n extends DatePickerI18n, TimePickerI18n {}

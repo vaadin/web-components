@@ -57,6 +57,7 @@
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/prefer-function-type": "error",
+    "@typescript-eslint/consistent-type-imports": ["error", { "prefer": "type-imports" }],
     "@typescript-eslint/member-ordering": [
       "error",
       {

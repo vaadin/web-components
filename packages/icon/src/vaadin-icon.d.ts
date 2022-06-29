@@ -5,7 +5,7 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { IconSvgLiteral } from './vaadin-icon-svg.js';
+import type { IconSvgLiteral } from './vaadin-icon-svg.js';
 
 /**
  * `<vaadin-icon>` is a Web Component for displaying SVG icons.

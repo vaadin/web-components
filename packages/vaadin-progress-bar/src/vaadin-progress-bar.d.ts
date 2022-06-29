@@ -3,7 +3,7 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ProgressBar } from '@vaadin/progress-bar/src/vaadin-progress-bar.js';
+import type { ProgressBar } from '@vaadin/progress-bar/src/vaadin-progress-bar.js';
 
 /**
  * @deprecated Import `ProgressBar` from `@vaadin/progress-bar` instead.

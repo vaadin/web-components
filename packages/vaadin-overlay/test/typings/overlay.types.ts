@@ -1,8 +1,8 @@
 import '../../vaadin-overlay.js';
-import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
-import { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
-import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import {
+import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import type { DirMixinClass } from '@vaadin/component-base/src/dir-mixin.js';
+import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type {
   OverlayCloseEvent,
   OverlayClosingEvent,
   OverlayEscapePressEvent,

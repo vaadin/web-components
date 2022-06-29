@@ -3,8 +3,7 @@ import { aTimeout, click, down, fixtureSync, isIOS, touchstart } from '@vaadin/t
 import { sendKeys } from '@web/test-runner-commands';
 import '../src/vaadin-date-picker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { open, outsideClick } from './common.js';
-import { isFullscreen } from './common.js';
+import { isFullscreen, open, outsideClick } from './common.js';
 
 describe('dropdown', () => {
   let datepicker, input;

@@ -1,6 +1,6 @@
 import '../../vaadin-accordion.js';
-import { AccordionItemsChangedEvent, AccordionOpenedChangedEvent } from '../../vaadin-accordion.js';
-import { AccordionPanel } from '../../vaadin-accordion-panel';
+import type { AccordionItemsChangedEvent, AccordionOpenedChangedEvent } from '../../vaadin-accordion.js';
+import type { AccordionPanel } from '../../vaadin-accordion-panel';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

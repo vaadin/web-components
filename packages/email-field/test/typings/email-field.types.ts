@@ -1,5 +1,5 @@
 import '../../vaadin-email-field.js';
-import {
+import type {
   EmailField,
   EmailFieldChangeEvent,
   EmailFieldInvalidChangedEvent,

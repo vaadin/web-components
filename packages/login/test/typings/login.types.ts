@@ -1,6 +1,6 @@
 import '../../vaadin-login-form.js';
-import { LoginFormLoginEvent } from '../../vaadin-login-form.js';
-import { LoginOverlayLoginEvent } from '../../vaadin-login-overlay.js';
+import type { LoginFormLoginEvent } from '../../vaadin-login-form.js';
+import type { LoginOverlayLoginEvent } from '../../vaadin-login-overlay.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

@@ -1,4 +1,4 @@
-import {
+import type {
   Grid,
   GridActiveItemChangedEvent,
   GridCellActivateEvent,
@@ -12,10 +12,10 @@ import {
   GridLoadingChangedEvent,
   GridSelectedItemsChangedEvent,
 } from '@vaadin/grid';
-import { GridColumn } from '@vaadin/grid/vaadin-grid-column';
-import { InlineEditingMixinClass } from '../../src/vaadin-grid-pro-inline-editing-mixin';
-import { GridPro } from '../../vaadin-grid-pro';
-import { GridProEditColumn } from '../../vaadin-grid-pro-edit-column';
+import type { GridColumn } from '@vaadin/grid/vaadin-grid-column';
+import type { InlineEditingMixinClass } from '../../src/vaadin-grid-pro-inline-editing-mixin';
+import type { GridPro } from '../../vaadin-grid-pro';
+import type { GridProEditColumn } from '../../vaadin-grid-pro-edit-column';
 
 interface TestGridItem {
   testProperty: string;

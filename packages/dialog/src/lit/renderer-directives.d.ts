@@ -4,10 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 /* eslint-disable max-classes-per-file */
-import { TemplateResult } from 'lit';
-import { DirectiveResult } from 'lit/directive.js';
+import type { TemplateResult } from 'lit';
+import type { DirectiveResult } from 'lit/directive.js';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
-import { Dialog } from '../vaadin-dialog.js';
+import type { Dialog } from '../vaadin-dialog.js';
 
 export type DialogLitRenderer = (dialog: Dialog) => TemplateResult;
 

@@ -3,8 +3,8 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Constructor } from '@open-wc/dedupe-mixin';
-import { GridColumn } from './vaadin-grid-column.js';
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { GridColumn } from './vaadin-grid-column.js';
 
 export interface GridEventContext<TItem> {
   section?: 'body' | 'header' | 'footer' | 'details';

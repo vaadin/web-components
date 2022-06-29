@@ -3,10 +3,10 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Constructor } from '@open-wc/dedupe-mixin';
-import { ActiveMixinClass } from '@vaadin/component-base/src/active-mixin.js';
-import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
-import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { ActiveMixinClass } from '@vaadin/component-base/src/active-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 
 /**
  * A mixin providing `focused`, `focus-ring`, `active`, `disabled` and `selected`.

@@ -1,4 +1,4 @@
-import { Iconset, IconSvgLiteral } from '../../vaadin-iconset';
+import type { Iconset, IconSvgLiteral } from '../../vaadin-iconset';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

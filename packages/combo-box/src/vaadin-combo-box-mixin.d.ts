@@ -3,11 +3,11 @@
  * Copyright (c) 2015 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Constructor } from '@open-wc/dedupe-mixin';
-import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
-import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
-import { ComboBox } from './vaadin-combo-box.js';
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
+import type { ComboBox } from './vaadin-combo-box.js';
 
 export type ComboBoxDefaultItem = any;
 

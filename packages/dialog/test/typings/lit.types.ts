@@ -1,13 +1,11 @@
-import { DirectiveResult } from 'lit/directive.js';
-import {
-  dialogFooterRenderer,
+import type { DirectiveResult } from 'lit/directive.js';
+import type {
   DialogFooterRendererDirective,
-  dialogHeaderRenderer,
   DialogHeaderRendererDirective,
   DialogLitRenderer,
-  dialogRenderer,
   DialogRendererDirective,
 } from '../../lit.js';
+import { dialogFooterRenderer, dialogHeaderRenderer, dialogRenderer } from '../../lit.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

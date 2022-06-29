@@ -5,8 +5,8 @@
  */
 import '../custom_typings/vaadin-usage-statistics.js';
 import '../custom_typings/vaadin.js';
-import { Constructor } from '@open-wc/dedupe-mixin';
-import { DirMixinClass } from './dir-mixin.js';
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { DirMixinClass } from './dir-mixin.js';
 
 /**
  * A mixin providing common logic for Vaadin components.

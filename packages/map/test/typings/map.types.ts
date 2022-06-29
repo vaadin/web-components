@@ -1,5 +1,5 @@
 import '../../vaadin-map.js';
-import Map from 'ol/Map';
+import type Map from 'ol/Map';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

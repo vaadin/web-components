@@ -1,3 +1,3 @@
-import { CSSResult } from 'lit';
+import type { CSSResult } from 'lit';
 
 export const sizing: CSSResult;

@@ -1,5 +1,5 @@
 import '../../vaadin-upload.js';
-import {
+import type {
   UploadAbortEvent,
   UploadBeforeEvent,
   UploadErrorEvent,

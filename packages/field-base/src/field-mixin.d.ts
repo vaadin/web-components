@@ -3,10 +3,10 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Constructor } from '@open-wc/dedupe-mixin';
-import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
-import { LabelMixinClass } from './label-mixin.js';
-import { ValidateMixinClass } from './validate-mixin.js';
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import type { LabelMixinClass } from './label-mixin.js';
+import type { ValidateMixinClass } from './validate-mixin.js';
 
 /**
  * A mixin to provide common field logic: label, error message and helper text.

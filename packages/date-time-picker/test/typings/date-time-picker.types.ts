@@ -1,5 +1,5 @@
 import '../../vaadin-date-time-picker.js';
-import {
+import type {
   DateTimePicker,
   DateTimePickerChangeEvent,
   DateTimePickerInvalidChangedEvent,

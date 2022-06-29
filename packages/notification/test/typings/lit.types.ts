@@ -1,5 +1,6 @@
-import { DirectiveResult } from 'lit/directive.js';
-import { NotificationLitRenderer, notificationRenderer, NotificationRendererDirective } from '../../lit.js';
+import type { DirectiveResult } from 'lit/directive.js';
+import type { NotificationLitRenderer, NotificationRendererDirective } from '../../lit.js';
+import { notificationRenderer } from '../../lit.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

@@ -1,5 +1,5 @@
 import '../../vaadin-crud.js';
-import {
+import type {
   Crud,
   CrudCancelEvent,
   CrudDeleteEvent,
