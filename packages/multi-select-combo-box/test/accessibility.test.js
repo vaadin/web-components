@@ -112,6 +112,11 @@ describe('accessibility', () => {
   });
 
   describe('announcements', () => {
+    const apple = { id: 1, name: 'Apple' };
+    const banana = { id: 2, name: 'Banana' };
+    const lemon = { id: 3, name: 'Lemon' };
+    const orange = { id: 4, name: 'Orange' };
+    const fruits = [apple, banana, lemon, orange];
     let clock, region;
 
     before(() => {
@@ -120,7 +125,9 @@ describe('accessibility', () => {
 
     beforeEach(() => {
       comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
-      comboBox.items = ['Apple', 'Banana', 'Lemon', 'Orange'];
+      comboBox.itemIdPath = 'id';
+      comboBox.itemLabelPath = 'name';
+      comboBox.items = fruits;
       inputElement = comboBox.inputElement;
       clock = sinon.useFakeTimers();
     });
@@ -141,7 +148,7 @@ describe('accessibility', () => {
     });
 
     it('should announce when deselecting an item', () => {
-      comboBox.selectedItems = ['Apple', 'Banana', 'Lemon'];
+      comboBox.selectedItems = [apple, banana, lemon];
       inputElement.click();
 
       const item = document.querySelector('vaadin-multi-select-combo-box-item');
@@ -153,7 +160,7 @@ describe('accessibility', () => {
     });
 
     it('should announce when clicking clear button', () => {
-      comboBox.selectedItems = ['Apple', 'Banana', 'Lemon'];
+      comboBox.selectedItems = [apple, banana, lemon];
       comboBox.clearButtonVisible = true;
 
       comboBox.$.clearButton.click();
@@ -164,7 +171,7 @@ describe('accessibility', () => {
     });
 
     it('should announce when focusing a chip with keyboard', async () => {
-      comboBox.selectedItems = ['Apple'];
+      comboBox.selectedItems = [apple];
 
       inputElement.focus();
       await sendKeys({ press: 'Backspace' });
@@ -172,6 +179,18 @@ describe('accessibility', () => {
       clock.tick(150);
 
       expect(region.textContent).to.equal('Apple focused. Press Backspace to remove');
+    });
+
+    it('should announce when removing a chip with keyboard', async () => {
+      comboBox.selectedItems = [apple];
+
+      inputElement.focus();
+      await sendKeys({ press: 'Backspace' });
+      await sendKeys({ press: 'Backspace' });
+
+      clock.tick(150);
+
+      expect(region.textContent).to.equal('Apple removed from selection 0 items selected');
     });
   });
 });
