@@ -222,7 +222,7 @@ class CrudGrid extends IncludedMixin(Grid) {
    * @param {string} path The property path from the root item to the object.
    * @param {number} depth The depth of the object in the object hierarchy.
    * @private
-   **/
+   */
   __createColumns(parent, object, path, depth) {
     if (object && typeof object === 'object') {
       // Iterate over the object properties
