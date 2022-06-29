@@ -146,7 +146,9 @@ describe('vaadin-accordion', () => {
     });
 
     it('should not focus any panel if all the panels are disabled', () => {
-      accordion.items.forEach((item) => (item.disabled = true));
+      accordion.items.forEach((item) => {
+        item.disabled = true;
+      });
       const spies = accordion.items.map((item) => sinon.spy(item, 'focus'));
       accordion.focus();
       spies.forEach((spy) => {

@@ -26,7 +26,9 @@ describe('drag and drop', () => {
     });
     event.dataTransfer = {
       setDragImage: sinon.spy(),
-      setData: (type, data) => (dragData[type] = data),
+      setData: (type, data) => {
+        dragData[type] = data;
+      },
     };
     const draggableRect = draggable.getBoundingClientRect();
     event.clientX = draggableRect.left + draggableRect.width / 2;

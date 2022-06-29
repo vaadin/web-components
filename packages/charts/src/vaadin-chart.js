@@ -619,7 +619,9 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       options.chart.inverted = this.__shouldInvert();
 
       if (Array.isArray(options.xAxis)) {
-        options.xAxis.forEach((e) => (e.opposite = this.__shouldFlipOpposite()));
+        options.xAxis.forEach((e) => {
+          e.opposite = this.__shouldFlipOpposite();
+        });
       } else if (options.xAxis) {
         options.xAxis.opposite = this.__shouldFlipOpposite();
       }

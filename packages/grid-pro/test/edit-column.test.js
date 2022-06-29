@@ -669,12 +669,16 @@ describe('edit column', () => {
 
     it('should throw an error when no path is set for the edit column', () => {
       const column = grid.querySelector('vaadin-grid-pro-edit-column');
-      expect(() => (column.path = undefined)).to.throw(Error);
+      expect(() => {
+        column.path = undefined;
+      }).to.throw(Error);
     });
 
     it('should throw an error when path is set to empty string for the edit column', () => {
       const column = grid.querySelector('vaadin-grid-pro-edit-column');
-      expect(() => (column.path = '')).to.throw(Error);
+      expect(() => {
+        column.path = '';
+      }).to.throw(Error);
     });
 
     describe('active-item-changed event', () => {
@@ -755,7 +759,9 @@ describe('edit column', () => {
         </vaadin-grid-pro>
       `);
       grid.items = createItems();
-      grid.rowDetailsRenderer = (root) => (root.textContent = 'foo');
+      grid.rowDetailsRenderer = (root) => {
+        root.textContent = 'foo';
+      };
       flushGrid(grid);
       rows = Array.from(getRows(grid.$.items));
     });

@@ -451,7 +451,9 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
   _onYearScrollTouchStart() {
     this._notTapping = false;
-    setTimeout(() => (this._notTapping = true), 300);
+    setTimeout(() => {
+      this._notTapping = true;
+    }, 300);
 
     this._repositionMonthScroller();
   }
@@ -462,7 +464,9 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
   _doIgnoreTaps() {
     this._ignoreTaps = true;
-    this._debouncer = Debouncer.debounce(this._debouncer, timeOut.after(300), () => (this._ignoreTaps = false));
+    this._debouncer = Debouncer.debounce(this._debouncer, timeOut.after(300), () => {
+      this._ignoreTaps = false;
+    });
   }
 
   _formatDisplayed(date, formatDate, label) {

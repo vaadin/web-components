@@ -263,7 +263,9 @@ export const ColumnReorderingMixin = (superClass) =>
         'border',
         'flex-direction',
         'overflow',
-      ].forEach((propertyName) => (ghost.style[propertyName] = style[propertyName]));
+      ].forEach((propertyName) => {
+        ghost.style[propertyName] = style[propertyName];
+      });
       return ghost;
     }
 
@@ -274,7 +276,9 @@ export const ColumnReorderingMixin = (superClass) =>
       }
 
       // Reset all column orders
-      columnTree[0].forEach((column) => (column._order = 0));
+      columnTree[0].forEach((column) => {
+        column._order = 0;
+      });
       // Set order numbers to top-level columns
       updateColumnOrders(columnTree[0], this._orderBaseScope, 0);
     }
@@ -287,7 +291,9 @@ export const ColumnReorderingMixin = (superClass) =>
     _setSiblingsReorderStatus(column, status) {
       Array.from(column.parentNode.children)
         .filter((child) => /column/.test(child.localName) && this._isSwapAllowed(child, column))
-        .forEach((sibling) => (sibling._reorderStatus = status));
+        .forEach((sibling) => {
+          sibling._reorderStatus = status;
+        });
     }
 
     /** @protected */

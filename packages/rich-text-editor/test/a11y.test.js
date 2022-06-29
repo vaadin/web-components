@@ -34,7 +34,9 @@ describe('accessibility', () => {
       const defaultI18n = rte.i18n;
 
       const localized = {};
-      Object.keys(defaultI18n).forEach((key) => (localized[key] = `${defaultI18n[key]} localized`));
+      Object.keys(defaultI18n).forEach((key) => {
+        localized[key] = `${defaultI18n[key]} localized`;
+      });
       rte.i18n = localized;
 
       buttons.forEach((button, index) => {

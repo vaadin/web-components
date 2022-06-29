@@ -191,7 +191,9 @@ describe('column', () => {
       });
 
       it('should not remove details row when a column is hidden', () => {
-        grid.rowDetailsRenderer = (root) => (root.textContent = 'row-details');
+        grid.rowDetailsRenderer = (root) => {
+          root.textContent = 'row-details';
+        };
         grid.detailsOpenedItems = [grid._cache.items[0]];
         column.hidden = true;
         flushGrid(grid);
@@ -202,7 +204,9 @@ describe('column', () => {
       it('should not throw error when adding a new row with a hidden column', () => {
         column.hidden = true;
         flushGrid(grid);
-        expect(() => (grid.size = 11)).to.not.throw(Error);
+        expect(() => {
+          grid.size = 11;
+        }).to.not.throw(Error);
       });
     });
 
@@ -226,7 +230,9 @@ describe('column', () => {
       });
 
       it('should not override header renderer content', () => {
-        emptyColumn.headerRenderer = (root) => (root.textContent = 'foo');
+        emptyColumn.headerRenderer = (root) => {
+          root.textContent = 'foo';
+        };
         emptyColumn.path = 'foo';
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
       });
@@ -242,7 +248,9 @@ describe('column', () => {
       });
 
       it('should use path generated header if header renderer is removed', () => {
-        emptyColumn.headerRenderer = (root) => (root.textContent = 'foo');
+        emptyColumn.headerRenderer = (root) => {
+          root.textContent = 'foo';
+        };
         emptyColumn.headerRenderer = null;
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Value');
       });
@@ -256,7 +264,9 @@ describe('column', () => {
       });
 
       it('should not override renderer content', () => {
-        emptyColumn.renderer = (root) => (root.textContent = 'foo');
+        emptyColumn.renderer = (root) => {
+          root.textContent = 'foo';
+        };
         emptyColumn.path = 'foo';
         expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo');
       });
@@ -271,7 +281,9 @@ describe('column', () => {
       });
 
       it('should use path if renderer is removed', () => {
-        emptyColumn.renderer = (root) => (root.textContent = 'foo');
+        emptyColumn.renderer = (root) => {
+          root.textContent = 'foo';
+        };
         emptyColumn.renderer = null;
         expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo0');
       });
@@ -328,7 +340,9 @@ describe('column', () => {
       });
 
       it('should not override header renderer text content', () => {
-        emptyColumn.headerRenderer = (root) => (root.textContent = 'foo');
+        emptyColumn.headerRenderer = (root) => {
+          root.textContent = 'foo';
+        };
         emptyColumn.header = 'Bar';
         expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
       });
@@ -538,7 +552,9 @@ describe('column', () => {
     expect(column.isConnected).to.be.true;
     column.remove();
     expect(column.isConnected).to.be.false;
-    expect(() => (grid.size = 11)).not.to.throw();
+    expect(() => {
+      grid.size = 11;
+    }).not.to.throw();
     expect(grid.size).to.equal(11);
   });
 });

@@ -185,7 +185,9 @@ class GridSelectionColumn extends GridColumn {
     }
 
     if (selectAll && Array.isArray(this._grid.items)) {
-      this.__withFilteredItemsArray((items) => (this._grid.selectedItems = items));
+      this.__withFilteredItemsArray((items) => {
+        this._grid.selectedItems = items;
+      });
     } else {
       this._grid.selectedItems = [];
     }

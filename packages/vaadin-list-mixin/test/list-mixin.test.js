@@ -610,7 +610,9 @@ describe('vaadin-list-mixin', () => {
       expect(list.items[3].selected).to.be.true;
 
       list.disabled = true;
-      list.items.forEach((item) => (item.disabled = true));
+      list.items.forEach((item) => {
+        item.disabled = true;
+      });
       expect(list.items[3].selected).to.be.false;
 
       list.disabled = false;

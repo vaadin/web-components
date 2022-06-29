@@ -400,7 +400,9 @@ export const InlineEditingMixin = (superClass) =>
     /** @private */
     _setCancelCellSwitch() {
       this.__cancelCellSwitch = true;
-      window.requestAnimationFrame(() => (this.__cancelCellSwitch = false));
+      window.requestAnimationFrame(() => {
+        this.__cancelCellSwitch = false;
+      });
     }
 
     /**

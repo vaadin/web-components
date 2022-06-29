@@ -250,7 +250,9 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
 
   _onMonthGridTouchStart() {
     this._notTapping = false;
-    setTimeout(() => (this._notTapping = true), 300);
+    setTimeout(() => {
+      this._notTapping = true;
+    }, 300);
   }
 
   _dateAdd(date, delta) {

@@ -307,7 +307,9 @@ describe('resizable', () => {
     const content = dialog.$.overlay.$.content;
     let detail = {};
     dialog.addEventListener('resize', onResize);
-    dialog.addEventListener('resize', (e) => (detail = e.detail));
+    dialog.addEventListener('resize', (e) => {
+      detail = e.detail;
+    });
     resize(overlayPart.querySelector('.w'), -dx, 0);
 
     const resizedBounds = overlayPart.getBoundingClientRect();

@@ -162,7 +162,9 @@ describe('keyboard', () => {
       });
 
       it('should tab to the next focusable when items have focusable content', async () => {
-        comboBox.renderer = (root) => (root.innerHTML = '<input>');
+        comboBox.renderer = (root) => {
+          root.innerHTML = '<input>';
+        };
         document.body.appendChild(button);
 
         // Workaround Firefox sendKeys bug

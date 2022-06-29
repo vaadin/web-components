@@ -95,7 +95,9 @@ describe('message-list', () => {
     });
 
     it('should not throw when items is undefined', () => {
-      expect(() => (messageList.items = undefined)).to.not.throw();
+      expect(() => {
+        messageList.items = undefined;
+      }).to.not.throw();
     });
 
     it('message properties should be correctly set', () => {

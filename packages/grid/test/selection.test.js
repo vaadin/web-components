@@ -51,8 +51,12 @@ describe('selection', () => {
     beforeEach(() => {
       grid = fixtureSync(fixtures.renderer);
       const cols = grid.children;
-      cols[0].renderer = (root) => (root.textContent = 'foo');
-      cols[1].renderer = (root) => (root.textContent = 'bar');
+      cols[0].renderer = (root) => {
+        root.textContent = 'foo';
+      };
+      cols[1].renderer = (root) => {
+        root.textContent = 'bar';
+      };
       configureGrid();
     });
 
@@ -116,8 +120,12 @@ describe('selection', () => {
         grid = fixtureSync(fixtures[type]);
         if (type === 'renderer') {
           const cols = grid.children;
-          cols[0].renderer = (root) => (root.textContent = 'foo');
-          cols[1].renderer = (root) => (root.textContent = 'bar');
+          cols[0].renderer = (root) => {
+            root.textContent = 'foo';
+          };
+          cols[1].renderer = (root) => {
+            root.textContent = 'bar';
+          };
         }
         configureGrid();
       });

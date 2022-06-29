@@ -98,7 +98,10 @@ class CrudForm extends IncludedMixin(FormLayout) {
       path
         .split('.')
         .slice(0, -1)
-        .reduce((o, p) => (o[p] = o[p] || {}), obj);
+        .reduce((o, p) => {
+          o[p] = o[p] || {};
+          return o[p];
+        }, obj);
       this.set(path, val, obj);
     }
   }

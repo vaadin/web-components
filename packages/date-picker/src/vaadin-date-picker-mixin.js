@@ -475,7 +475,9 @@ export const DatePickerMixin = (subclass) =>
       this.$.overlay.removeAttribute('disable-upgrade');
       this._overlayInitialized = true;
 
-      this.$.overlay.addEventListener('opened-changed', (e) => (this.opened = e.detail.value));
+      this.$.overlay.addEventListener('opened-changed', (e) => {
+        this.opened = e.detail.value;
+      });
 
       this.$.overlay.addEventListener('vaadin-overlay-escape-press', () => {
         this._focusedDate = this._selectedDate;
@@ -810,9 +812,9 @@ export const DatePickerMixin = (subclass) =>
       window.removeEventListener('scroll', this._boundOnScroll, true);
 
       if (this._touchPrevented) {
-        this._touchPrevented.forEach(
-          (prevented) => (prevented.element.style.webkitOverflowScrolling = prevented.oldInlineValue),
-        );
+        this._touchPrevented.forEach((prevented) => {
+          prevented.element.style.webkitOverflowScrolling = prevented.oldInlineValue;
+        });
         this._touchPrevented = [];
       }
 

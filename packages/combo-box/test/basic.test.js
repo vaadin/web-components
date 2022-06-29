@@ -162,7 +162,9 @@ describe('Properties', () => {
     });
 
     describe('custom-value-set event', () => {
-      beforeEach(() => (comboBox.items = ['a', 'b']));
+      beforeEach(() => {
+        comboBox.items = ['a', 'b'];
+      });
 
       it('should be fired when custom value is set', () => {
         const spy = sinon.spy();

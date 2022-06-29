@@ -343,7 +343,9 @@ export class UserTags extends PolymerElement {
 
     // Hide existing tags
     const hidden = Array.from(wrapper.children);
-    hidden.forEach((tag) => (tag.style.display = 'none'));
+    hidden.forEach((tag) => {
+      tag.style.display = 'none';
+    });
 
     // Render new tags
     added.forEach((tag) => {
@@ -363,7 +365,9 @@ export class UserTags extends PolymerElement {
             this._debounceFlashEnd = Debouncer.debounce(this._debounceFlashEnd, timeOut.after(this.duration), () => {
               // Show all tags
               const finishFlash = () => {
-                hidden.forEach((tag) => (tag.style.display = 'block'));
+                hidden.forEach((tag) => {
+                  tag.style.display = 'block';
+                });
                 this.flashing = false;
                 resolve();
               };

@@ -139,8 +139,12 @@ describe('keyboard navigation - row focus', () => {
     `);
 
     grid.dataProvider = hierarchicalDataProvider;
-    grid.firstElementChild.footerRenderer = (root) => (root.textContent = 'footer');
-    grid.rowDetailsRenderer = (root) => (root.textContent = 'details');
+    grid.firstElementChild.footerRenderer = (root) => {
+      root.textContent = 'footer';
+    };
+    grid.rowDetailsRenderer = (root) => {
+      root.textContent = 'details';
+    };
 
     header = grid.$.header;
     body = grid.$.items;
@@ -177,7 +181,9 @@ describe('keyboard navigation - row focus', () => {
       tabbableElements[3].focus(); // Focus footer row
 
       let keydownEvent;
-      listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => (keydownEvent = e));
+      listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => {
+        keydownEvent = e;
+      });
       tab();
 
       // Expect programmatic focus on focus exit element
@@ -191,7 +197,9 @@ describe('keyboard navigation - row focus', () => {
       tabbableElements[1].focus(); // Focus header row
 
       let keydownEvent;
-      listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => (keydownEvent = e));
+      listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => {
+        keydownEvent = e;
+      });
       shiftTab();
 
       // Expect programmatic focus on focus exit element
@@ -400,7 +408,9 @@ describe('keyboard navigation on column groups - row focus', () => {
       </vaadin-grid>
     `);
     grid.items = ['foo', 'bar'];
-    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => (root.textContent = model.item);
+    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
+      root.textContent = model.item;
+    };
     flushGrid(grid);
 
     await nextRender(grid);
@@ -521,7 +531,9 @@ describe('keyboard navigation on column groups - row focus', () => {
       if (section === 'header') {
         column.header = 'header';
       } else if (section === 'footer') {
-        column.footerRenderer = (root) => (root.textContent = 'footer');
+        column.footerRenderer = (root) => {
+          root.textContent = 'footer';
+        };
       } else if (section === 'body') {
         grid.items = ['foo'];
       }
