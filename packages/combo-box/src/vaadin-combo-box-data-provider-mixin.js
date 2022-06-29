@@ -189,7 +189,10 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         if (!this.opened && !this.hasAttribute('focused')) {
           this._commitValue();
         }
-        this.size = size;
+
+        if (size !== undefined) {
+          this.size = size;
+        }
 
         delete this._pendingRequests[page];
 

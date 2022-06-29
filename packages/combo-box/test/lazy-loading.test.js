@@ -595,6 +595,15 @@ describe('lazy loading', () => {
         expect(comboBox.filteredItems).to.eql(['foo']);
       });
 
+      it('should not reset when dataProvider callback has undefined size', () => {
+        comboBox.size = SIZE;
+        comboBox.dataProvider = (params, callback) => {
+          callback(allItems);
+        };
+        comboBox.opened = true;
+        expect(comboBox.size).to.equal(SIZE);
+      });
+
       it('should not show the loading on size change while pending the data provider', () => {
         const allItems = makeItems(200);
 
