@@ -37,6 +37,26 @@ describe('avatar', () => {
     await visualDiff(div, 'color-index');
   });
 
+  it('theme-xlarge', async () => {
+    element.setAttribute('theme', 'xlarge');
+    await visualDiff(div, 'theme-xlarge');
+  });
+
+  it('theme-large', async () => {
+    element.setAttribute('theme', 'large');
+    await visualDiff(div, 'theme-large');
+  });
+
+  it('theme-small', async () => {
+    element.setAttribute('theme', 'small');
+    await visualDiff(div, 'theme-small');
+  });
+
+  it('theme-xsmall', async () => {
+    element.setAttribute('theme', 'xsmall');
+    await visualDiff(div, 'theme-xsmall');
+  });
+
   /**
    * Tests that images rendered in <vaadin-avatar> preserve their aspect ratio using object-fit: cover, instead of being
    * stretched. Uses the Vaadin `}` as test image, which is higher than it is wide.
