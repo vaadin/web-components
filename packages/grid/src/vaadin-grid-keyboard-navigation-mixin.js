@@ -535,7 +535,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         const dstCell = dstRow.children[dstColumnIndex];
 
         this._scrollHorizontallyToCell(dstCell);
-        dstCell.focus();
+        this._focusCell(dstCell);
       }
     }
 
@@ -579,7 +579,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         } else {
           e.preventDefault();
           this._focusedColumnOrder = undefined;
-          cell.focus();
+          this._focusCell(cell);
           this._setInteracting(false);
           this.toggleAttribute('navigating', true);
         }
@@ -749,13 +749,27 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /**
+     * Detect if the grid should switch from navigation mode to interaction mode.
+     * Normally, this happens when a cells content receives focus or keyboard input.
+     * This method can be overridden for handling special case when `tabindex` is set on
+     * the cell content, rather than the cell itself, for better screen reader support.
+     *
+     * @param {!KeyboardEvent|!FocusEvent} event
+     * @returns {boolean}
+     * @protected
+     */
+    _isInteracting(event) {
+      return event.composedPath().some((el) => el.localName === 'vaadin-grid-cell-content');
+    }
+
+    /**
      * Enables interaction mode if a cells descendant receives focus or keyboard
      * input. Disables it if the event is not related to cell content.
      * @param {!KeyboardEvent|!FocusEvent} e
      * @private
      */
     _detectInteracting(e) {
-      const isInteracting = e.composedPath().some((el) => el.localName === 'vaadin-grid-cell-content');
+      const isInteracting = this._isInteracting(e);
       this._setInteracting(isInteracting);
       this.__updateHorizontalScrollPosition();
     }
@@ -900,6 +914,14 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (dstCellRect.right > rightBoundary) {
         this.$.table.scrollLeft += Math.round(dstCellRect.right - rightBoundary);
       }
+    }
+
+    /**
+     * Focus the given cell.
+     * @protected
+     */
+    _focusCell(dstCell) {
+      dstCell.focus();
     }
 
     /**

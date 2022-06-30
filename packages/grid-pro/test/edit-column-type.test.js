@@ -203,7 +203,7 @@ describe('edit column editor type', () => {
         grid.singleCellEdit = true;
         const item = editor._overlayElement.querySelector('vaadin-item');
         const value = item.textContent;
-        const spy = sinon.spy(cell, 'focus');
+        const spy = sinon.spy(cell._content, 'focus');
         item.click();
         expect(column._getEditorComponent(cell)).to.not.be.ok;
         expect(cell._content.textContent).to.equal(value);

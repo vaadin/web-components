@@ -322,7 +322,7 @@ describe('edit column', () => {
       cell.dispatchEvent(new CustomEvent('mousedown', { bubbles: true, composed: true }));
       expect(grid.hasAttribute('navigating')).to.be.true;
 
-      cell.focus();
+      cell._content.focus();
       focusout(cell);
       expect(grid.hasAttribute('navigating')).to.be.true;
 

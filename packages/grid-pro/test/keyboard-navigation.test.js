@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, esc, fixtureSync, tab } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, keyDownOn, tab } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-pro.js';
@@ -12,7 +12,7 @@ describe('keyboard navigation', () => {
   beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid-pro>
-        <vaadin-grid-pro-edit-column path="name" suppress-template-warning>
+        <vaadin-grid-pro-edit-column path="name" suppress-template-warning
           <template class="header">Name</template>
           <template>[[index]] [[item.name]]</template>
           <template class="footer"></template>
@@ -30,58 +30,58 @@ describe('keyboard navigation', () => {
       grid.singleCellEdit = true;
     });
 
-    it('should focus cell next available for editing within a same row in non-edit mode on Tab', () => {
+    it('should focus next cell content available for editing within a same row in non-edit mode on Tab', () => {
       const firstCell = getContainerCell(grid.$.items, 1, 0);
       dblclick(firstCell._content);
       input = getCellEditor(firstCell);
 
       const secondCell = getContainerCell(grid.$.items, 1, 1);
-      const spy = sinon.spy(secondCell, 'focus');
+      const spy = sinon.spy(secondCell._content, 'focus');
       tab(input);
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should focus previous cell available for editing within a same row in non-edit mode on Shift Tab', () => {
+    it('should focus previous cell content available for editing within a same row in non-edit mode on Shift Tab', () => {
       const firstCell = getContainerCell(grid.$.items, 1, 1);
       dblclick(firstCell._content);
       input = getCellEditor(firstCell);
 
       const secondCell = getContainerCell(grid.$.items, 1, 0);
-      const spy = sinon.spy(secondCell, 'focus');
+      const spy = sinon.spy(secondCell._content, 'focus');
       tab(input, ['shift']);
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should focus cell next available for editing on the next row in non-edit mode on Tab', () => {
+    it('should focus next cell content available for editing on the next row in non-edit mode on Tab', () => {
       const firstCell = getContainerCell(grid.$.items, 1, 1);
       dblclick(firstCell._content);
       input = getCellEditor(firstCell);
 
       const secondCell = getContainerCell(grid.$.items, 2, 0);
-      const spy = sinon.spy(secondCell, 'focus');
+      const spy = sinon.spy(secondCell._content, 'focus');
       tab(input);
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should focus previous cell available for editing on the previous in non-edit mode on Shift Tab', () => {
+    it('should focus previous cell content available for editing on the previous in non-edit mode on Shift Tab', () => {
       const firstCell = getContainerCell(grid.$.items, 2, 0);
       dblclick(firstCell._content);
       input = getCellEditor(firstCell);
 
       const secondCell = getContainerCell(grid.$.items, 1, 1);
-      const spy = sinon.spy(secondCell, 'focus');
+      const spy = sinon.spy(secondCell._content, 'focus');
       tab(input, ['shift']);
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should focus editable cell on the next row in non-edit mode on Enter, if `enterNextRow` is true', () => {
+    it('should focus editable cell content on the next row in non-edit mode on Enter, if `enterNextRow` is true', () => {
       grid.enterNextRow = true;
       const firstCell = getContainerCell(grid.$.items, 1, 0);
       enter(firstCell._content);
       input = getCellEditor(firstCell);
 
       const secondCell = getContainerCell(grid.$.items, 2, 0);
-      const spy = sinon.spy(secondCell, 'focus');
+      const spy = sinon.spy(secondCell._content, 'focus');
       enter(input);
       expect(spy.calledOnce).to.be.true;
     });
@@ -95,14 +95,14 @@ describe('keyboard navigation', () => {
       expect(getCellEditor(firstCell)).to.be.not.ok;
     });
 
-    it('should focus editable cell on the previous row in non-edit mode on Shift Enter, if `enterNextRow` is true', () => {
+    it('should focus editable cell content on the previous row in non-edit mode on Shift Enter, if `enterNextRow` is true', () => {
       grid.enterNextRow = true;
       const firstCell = getContainerCell(grid.$.items, 1, 0);
       enter(firstCell._content);
       input = getCellEditor(firstCell);
 
       const secondCell = getContainerCell(grid.$.items, 0, 0);
-      const spy = sinon.spy(secondCell, 'focus');
+      const spy = sinon.spy(secondCell._content, 'focus');
       enter(input, ['shift']);
       expect(spy.calledOnce).to.be.true;
     });
@@ -116,7 +116,7 @@ describe('keyboard navigation', () => {
       expect(getCellEditor(firstCell)).to.be.not.ok;
     });
 
-    it('should focus correct editable cell after column reordering', () => {
+    it('should focus correct editable cell content after column reordering', () => {
       grid.columnReorderingAllowed = true;
       const headerContent = [
         getContainerCell(grid.$.header, 0, 0)._content,
@@ -129,12 +129,12 @@ describe('keyboard navigation', () => {
       input = getCellEditor(firstCell);
 
       const secondCell = getContainerCell(grid.$.items, 1, 0);
-      const spy = sinon.spy(secondCell, 'focus');
+      const spy = sinon.spy(secondCell._content, 'focus');
       tab(input);
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should focus correct editable cell when column is hidden', () => {
+    it('should focus correct editable cell content when column is hidden', () => {
       const column = grid.querySelector('vaadin-grid-pro-edit-column');
       column.hidden = true;
 
@@ -143,7 +143,7 @@ describe('keyboard navigation', () => {
       input = getCellEditor(firstCell);
 
       const secondCell = getContainerCell(grid.$.items, 2, 1);
-      const spy = sinon.spy(secondCell, 'focus');
+      const spy = sinon.spy(secondCell._content, 'focus');
       tab(input);
       expect(spy.calledOnce).to.be.true;
     });
@@ -261,13 +261,13 @@ describe('keyboard navigation', () => {
       expect(input).to.be.ok;
     });
 
-    it('should not re-focus previous cell in edit mode on Enter, if `enterNextRow` is true', () => {
+    it('should not re-focus previous cell content in edit mode on Enter, if `enterNextRow` is true', () => {
       grid.enterNextRow = true;
       const firstCell = getContainerCell(grid.$.items, 1, 0);
       enter(firstCell._content);
       input = getCellEditor(firstCell).inputElement;
 
-      const spy = sinon.spy(firstCell, 'focus');
+      const spy = sinon.spy(firstCell._content, 'focus');
       enter(input);
       expect(spy.called).to.be.false;
     });
@@ -282,27 +282,120 @@ describe('keyboard navigation', () => {
     });
   });
 
-  describe('Esc key', () => {
-    it('should exit the edit mode for the cell when pressing ESC', () => {
-      const firstCell = getContainerCell(grid.$.items, 1, 0);
-      dblclick(firstCell._content);
-      input = getCellEditor(firstCell);
+  describe('navigation mode', () => {
+    let cell, content;
 
-      esc(input);
-      expect(getCellEditor(firstCell)).to.be.not.ok;
+    beforeEach(() => {
+      cell = getContainerCell(grid.$.items, 1, 1);
+      content = cell._content;
+      content.focus();
     });
 
-    it('should re-focus cell after exit edit mode on ESC', () => {
-      const firstCell = getContainerCell(grid.$.items, 1, 0);
-      firstCell.focus();
-      enter(firstCell._content);
-      input = getCellEditor(firstCell);
+    it('should enable navigation mode on focusing cell content', () => {
+      expect(grid.hasAttribute('navigating')).to.be.true;
+      expect(grid.hasAttribute('interacting')).to.be.false;
+    });
 
-      const focusSpy = sinon.spy(firstCell, 'focus');
+    it('should disable navigation mode on cell content Enter', () => {
+      enter(content);
+
+      expect(grid.hasAttribute('navigating')).to.be.false;
+      expect(grid.hasAttribute('interacting')).to.be.true;
+    });
+
+    it('should keep navigation mode on cell content ArrowUp', () => {
+      keyDownOn(content, 38, [], 'ArrowUp');
+
+      expect(grid.hasAttribute('navigating')).to.be.true;
+      expect(grid.hasAttribute('interacting')).to.be.false;
+    });
+
+    it('should keep navigation mode on cell content ArrowDown', () => {
+      keyDownOn(content, 40, [], 'ArrowDown');
+
+      expect(grid.hasAttribute('navigating')).to.be.true;
+      expect(grid.hasAttribute('interacting')).to.be.false;
+    });
+
+    it('should keep navigation mode on cell content ArrowLeft', () => {
+      keyDownOn(content, 37, [], 'ArrowLeft');
+
+      expect(grid.hasAttribute('navigating')).to.be.true;
+      expect(grid.hasAttribute('interacting')).to.be.false;
+    });
+
+    it('should keep navigation mode on cell content ArrowRight', () => {
+      keyDownOn(content, 39, [], 'ArrowRight');
+
+      expect(grid.hasAttribute('navigating')).to.be.true;
+      expect(grid.hasAttribute('interacting')).to.be.false;
+    });
+
+    it('should keep navigation mode on cell content PageDown', () => {
+      keyDownOn(content, 34, [], 'PageDown');
+
+      expect(grid.hasAttribute('navigating')).to.be.true;
+      expect(grid.hasAttribute('interacting')).to.be.false;
+    });
+
+    it('should keep navigation mode on cell content PageDown', () => {
+      keyDownOn(content, 33, [], 'PageUp');
+
+      expect(grid.hasAttribute('navigating')).to.be.true;
+      expect(grid.hasAttribute('interacting')).to.be.false;
+    });
+
+    it('should keep navigation mode on cell content Home', () => {
+      keyDownOn(content, 36, [], 'Home');
+
+      expect(grid.hasAttribute('navigating')).to.be.true;
+      expect(grid.hasAttribute('interacting')).to.be.false;
+    });
+
+    it('should keep navigation mode on cell content End', () => {
+      keyDownOn(content, 35, [], 'End');
+
+      expect(grid.hasAttribute('navigating')).to.be.true;
+      expect(grid.hasAttribute('interacting')).to.be.false;
+    });
+  });
+
+  describe('Esc key', () => {
+    let cell, content;
+
+    beforeEach(() => {
+      cell = getContainerCell(grid.$.items, 1, 0);
+      content = cell._content;
+      content.focus();
+    });
+
+    it('should exit the edit mode for the cell', () => {
+      dblclick(content);
+      input = getCellEditor(cell);
+
+      esc(input);
+      expect(getCellEditor(cell)).to.be.not.ok;
+    });
+
+    it('should focus cell content after exiting edit mode', () => {
+      enter(content);
+      input = getCellEditor(cell);
+
+      const focusSpy = sinon.spy(content, 'focus');
       const stopSpy = sinon.spy(grid, '_stopEdit');
       esc(input);
 
       expect(focusSpy.calledAfter(stopSpy)).to.be.true;
+    });
+
+    it('should restore navigation mode on the grid', () => {
+      dblclick(content);
+      input = getCellEditor(cell);
+
+      esc(input);
+
+      expect(grid.hasAttribute('navigating')).to.be.true;
+      expect(grid.hasAttribute('interacting')).to.be.false;
     });
   });
 });
