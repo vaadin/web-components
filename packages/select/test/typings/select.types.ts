@@ -1,6 +1,6 @@
 import '../../vaadin-select.js';
-import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
-import {
+import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
+import type {
   Select,
   SelectChangeEvent,
   SelectInvalidChangedEvent,

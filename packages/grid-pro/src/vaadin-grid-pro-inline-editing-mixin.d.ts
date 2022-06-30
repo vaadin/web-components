@@ -4,7 +4,7 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
-import { Constructor } from '@open-wc/dedupe-mixin';
+import type { Constructor } from '@open-wc/dedupe-mixin';
 
 export declare function InlineEditingMixin<T extends Constructor<HTMLElement>>(
   base: T,

@@ -1,5 +1,5 @@
 import '../../vaadin-integer-field.js';
-import {
+import type {
   IntegerField,
   IntegerFieldChangeEvent,
   IntegerFieldInvalidChangedEvent,

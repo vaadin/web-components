@@ -1,6 +1,6 @@
 import '../../vaadin-chart.js';
-import { Axis, Chart as HighchartsChart, Point, Series } from 'highcharts';
-import {
+import type { Axis, Chart as HighchartsChart, Point, Series } from 'highcharts';
+import type {
   ChartAddSeriesEvent,
   ChartAfterExportEvent,
   ChartAfterPrintEvent,

@@ -3,7 +3,7 @@
  * Copyright (c) 2022 - 2022 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import OpenLayersMap from 'ol/Map.js';
+import type OpenLayersMap from 'ol/Map.js';
 import { ElementMixin, FocusMixin, ResizeMixin } from '@vaadin/component-base';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin';
 

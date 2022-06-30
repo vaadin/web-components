@@ -1,5 +1,5 @@
 import '../../vaadin-rich-text-editor.js';
-import {
+import type {
   RichTextEditor,
   RichTextEditorChangeEvent,
   RichTextEditorHtmlValueChangedEvent,

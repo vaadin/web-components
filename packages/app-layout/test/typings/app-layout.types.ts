@@ -1,8 +1,8 @@
 import '../../vaadin-app-layout.js';
-import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
-import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import {
+import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type {
   AppLayoutDrawerOpenedChangedEvent,
   AppLayoutI18n,
   AppLayoutOverlayChangedEvent,

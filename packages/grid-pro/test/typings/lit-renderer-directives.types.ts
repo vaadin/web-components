@@ -1,9 +1,6 @@
-import { DirectiveResult } from 'lit/directive';
-import {
-  columnEditModeRenderer,
-  GridProColumnEditModeLitRenderer,
-  GridProColumnEditModeRendererDirective,
-} from '../../lit.js';
+import type { DirectiveResult } from 'lit/directive';
+import type { GridProColumnEditModeLitRenderer, GridProColumnEditModeRendererDirective } from '../../lit.js';
+import { columnEditModeRenderer } from '../../lit.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

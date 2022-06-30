@@ -3,7 +3,7 @@
  * Copyright (c) 2015 - 2022 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
-import { Axis, Chart as HighchartsChart, ExtremesObject, Options, Point, Series } from 'highcharts';
+import type { Axis, Chart as HighchartsChart, ExtremesObject, Options, Point, Series } from 'highcharts';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';

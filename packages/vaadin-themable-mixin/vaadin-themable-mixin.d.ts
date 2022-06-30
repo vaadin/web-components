@@ -3,9 +3,9 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Constructor } from '@open-wc/dedupe-mixin';
-import { CSSResult, CSSResultGroup } from 'lit';
-import { ThemePropertyMixinClass } from './vaadin-theme-property-mixin.js';
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { CSSResult, CSSResultGroup } from 'lit';
+import type { ThemePropertyMixinClass } from './vaadin-theme-property-mixin.js';
 
 /**
  * A mixin for `nav` elements, facilitating navigation and selection of childNodes.

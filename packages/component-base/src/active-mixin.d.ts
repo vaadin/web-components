@@ -3,9 +3,9 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Constructor } from '@open-wc/dedupe-mixin';
-import { DisabledMixinClass } from './disabled-mixin.js';
-import { KeyboardMixinClass } from './keyboard-mixin.js';
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { DisabledMixinClass } from './disabled-mixin.js';
+import type { KeyboardMixinClass } from './keyboard-mixin.js';
 
 /**
  * A mixin to toggle the `active` attribute.

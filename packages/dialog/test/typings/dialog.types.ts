@@ -1,5 +1,5 @@
 import '../../vaadin-dialog.js';
-import {
+import type {
   DialogOpenedChangedEvent,
   DialogRenderer,
   DialogResizeDimensions,

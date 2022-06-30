@@ -3,11 +3,11 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { TemplateResult } from 'lit';
-import { DirectiveResult } from 'lit/directive.js';
-import { ComboBoxItemModel } from '@vaadin/combo-box/src/vaadin-combo-box.js';
+import type { TemplateResult } from 'lit';
+import type { DirectiveResult } from 'lit/directive.js';
+import type { ComboBoxItemModel } from '@vaadin/combo-box/src/vaadin-combo-box.js';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
-import { MultiSelectComboBox } from '../vaadin-multi-select-combo-box.js';
+import type { MultiSelectComboBox } from '../vaadin-multi-select-combo-box.js';
 
 export type MultiSelectComboBoxLitRenderer<TItem> = (
   item: TItem,

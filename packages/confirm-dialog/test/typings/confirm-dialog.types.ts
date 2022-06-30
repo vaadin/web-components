@@ -1,5 +1,5 @@
 import '../../vaadin-confirm-dialog.js';
-import { ConfirmDialogOpenedChangedEvent } from '../../vaadin-confirm-dialog.js';
+import type { ConfirmDialogOpenedChangedEvent } from '../../vaadin-confirm-dialog.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

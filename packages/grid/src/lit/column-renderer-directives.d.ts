@@ -4,11 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 /* eslint-disable max-classes-per-file */
-import { TemplateResult } from 'lit';
-import { DirectiveResult } from 'lit/directive';
-import { LitRenderer, LitRendererDirective } from '@vaadin/lit-renderer';
-import { GridItemModel } from '../vaadin-grid.js';
-import { GridColumn } from '../vaadin-grid-column.js';
+import type { TemplateResult } from 'lit';
+import type { DirectiveResult } from 'lit/directive';
+import type { LitRenderer } from '@vaadin/lit-renderer';
+import { LitRendererDirective } from '@vaadin/lit-renderer';
+import type { GridItemModel } from '../vaadin-grid.js';
+import type { GridColumn } from '../vaadin-grid-column.js';
 
 export type GridColumnBodyLitRenderer<TItem> = (
   item: TItem,

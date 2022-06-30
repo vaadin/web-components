@@ -1,5 +1,5 @@
 import '../../vaadin-details.js';
-import { DetailsOpenedChangedEvent } from '../../vaadin-details.js';
+import type { DetailsOpenedChangedEvent } from '../../vaadin-details.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

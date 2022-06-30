@@ -3,8 +3,8 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Constructor } from '@open-wc/dedupe-mixin';
-import { LabelController } from './label-controller.js';
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { LabelController } from './label-controller.js';
 
 /**
  * A mixin to provide label via corresponding property or named slot.

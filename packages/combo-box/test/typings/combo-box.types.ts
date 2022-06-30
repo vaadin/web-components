@@ -1,21 +1,21 @@
-import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
-import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
-import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
-import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { DelegateStateMixinClass } from '@vaadin/field-base/src/delegate-state-mixin.js';
-import { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
-import { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
-import { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
-import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
-import { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
-import { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
-import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
-import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
-import { ComboBoxDataProviderMixinClass } from '../../src/vaadin-combo-box-data-provider-mixin';
-import { ComboBoxMixinClass } from '../../src/vaadin-combo-box-mixin';
-import {
+import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
+import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import type { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import type { DelegateStateMixinClass } from '@vaadin/field-base/src/delegate-state-mixin.js';
+import type { FieldMixinClass } from '@vaadin/field-base/src/field-mixin.js';
+import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
+import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
+import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
+import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
+import type { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
+import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
+import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
+import type { ComboBoxDataProviderMixinClass } from '../../src/vaadin-combo-box-data-provider-mixin';
+import type { ComboBoxMixinClass } from '../../src/vaadin-combo-box-mixin';
+import type {
   ComboBox,
   ComboBoxChangeEvent,
   ComboBoxCustomValueSetEvent,
@@ -26,7 +26,7 @@ import {
   ComboBoxSelectedItemChangedEvent,
   ComboBoxValueChangedEvent,
 } from '../../vaadin-combo-box';
-import {
+import type {
   ComboBoxLight,
   ComboBoxLightChangeEvent,
   ComboBoxLightCustomValueSetEvent,

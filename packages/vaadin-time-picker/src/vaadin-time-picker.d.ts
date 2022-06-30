@@ -3,7 +3,7 @@
  * Copyright (c) 2018 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { TimePicker } from '@vaadin/time-picker';
+import type { TimePicker } from '@vaadin/time-picker';
 
 export * from '@vaadin/time-picker/src/vaadin-time-picker.js';
 /**

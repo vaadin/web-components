@@ -3,8 +3,8 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Constructor } from '@open-wc/dedupe-mixin';
-import { GridDefaultItem, GridItemModel } from './vaadin-grid.js';
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { GridDefaultItem, GridItemModel } from './vaadin-grid.js';
 
 export type GridBodyRenderer<TItem> = (
   root: HTMLElement,

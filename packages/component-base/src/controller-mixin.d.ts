@@ -3,8 +3,8 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { Constructor } from '@open-wc/dedupe-mixin';
-import { ReactiveController, ReactiveControllerHost } from 'lit';
+import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { ReactiveController, ReactiveControllerHost } from 'lit';
 
 /**
  * A mixin for connecting controllers to the element.

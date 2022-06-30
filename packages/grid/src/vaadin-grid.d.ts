@@ -3,15 +3,16 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
-import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ActiveItemMixinClass } from './vaadin-grid-active-item-mixin.js';
-import { ArrayDataProviderMixinClass } from './vaadin-grid-array-data-provider-mixin.js';
-import { GridBodyRenderer, GridColumn, GridHeaderFooterRenderer } from './vaadin-grid-column.js';
-import { ColumnReorderingMixinClass } from './vaadin-grid-column-reordering-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { ActiveItemMixinClass } from './vaadin-grid-active-item-mixin.js';
+import type { ArrayDataProviderMixinClass } from './vaadin-grid-array-data-provider-mixin.js';
+import type { GridColumn } from './vaadin-grid-column.js';
+import { GridBodyRenderer, GridHeaderFooterRenderer } from './vaadin-grid-column.js';
+import type { ColumnReorderingMixinClass } from './vaadin-grid-column-reordering-mixin.js';
+import type { DataProviderMixinClass } from './vaadin-grid-data-provider-mixin.js';
 import {
-  DataProviderMixinClass,
   GridDataProvider,
   GridDataProviderCallback,
   GridDataProviderParams,
@@ -19,18 +20,17 @@ import {
   GridSorterDefinition,
   GridSorterDirection,
 } from './vaadin-grid-data-provider-mixin.js';
-import {
-  DragAndDropMixinClass,
-  GridDragAndDropFilter,
-  GridDropLocation,
-  GridDropMode,
-} from './vaadin-grid-drag-and-drop-mixin.js';
-import { EventContextMixinClass, GridEventContext } from './vaadin-grid-event-context-mixin.js';
-import { GridRowDetailsRenderer, RowDetailsMixinClass } from './vaadin-grid-row-details-mixin.js';
-import { ScrollMixinClass } from './vaadin-grid-scroll-mixin.js';
-import { SelectionMixinClass } from './vaadin-grid-selection-mixin.js';
-import { SortMixinClass } from './vaadin-grid-sort-mixin.js';
-import { GridCellClassNameGenerator, StylingMixinClass } from './vaadin-grid-styling-mixin.js';
+import type { DragAndDropMixinClass } from './vaadin-grid-drag-and-drop-mixin.js';
+import { GridDragAndDropFilter, GridDropLocation, GridDropMode } from './vaadin-grid-drag-and-drop-mixin.js';
+import type { EventContextMixinClass } from './vaadin-grid-event-context-mixin.js';
+import { GridEventContext } from './vaadin-grid-event-context-mixin.js';
+import type { RowDetailsMixinClass } from './vaadin-grid-row-details-mixin.js';
+import { GridRowDetailsRenderer } from './vaadin-grid-row-details-mixin.js';
+import type { ScrollMixinClass } from './vaadin-grid-scroll-mixin.js';
+import type { SelectionMixinClass } from './vaadin-grid-selection-mixin.js';
+import type { SortMixinClass } from './vaadin-grid-sort-mixin.js';
+import type { StylingMixinClass } from './vaadin-grid-styling-mixin.js';
+import { GridCellClassNameGenerator } from './vaadin-grid-styling-mixin.js';
 
 export {
   GridBodyRenderer,

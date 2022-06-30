@@ -4,11 +4,11 @@
  * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
  * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
  */
-import { TemplateResult } from 'lit';
-import { DirectiveResult } from 'lit/directive';
-import { GridItemModel } from '@vaadin/grid';
+import type { TemplateResult } from 'lit';
+import type { DirectiveResult } from 'lit/directive';
+import type { GridItemModel } from '@vaadin/grid';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
-import { GridProEditColumn } from '../vaadin-grid-pro-edit-column.js';
+import type { GridProEditColumn } from '../vaadin-grid-pro-edit-column.js';
 
 export type GridProColumnEditModeLitRenderer<TItem> = (
   item: TItem,

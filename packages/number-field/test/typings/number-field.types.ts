@@ -1,10 +1,10 @@
 import '../../vaadin-number-field.js';
-import { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
-import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import { InputFieldMixinClass } from '@vaadin/field-base/src/input-field-mixin.js';
-import { SlotStylesMixinClass } from '@vaadin/field-base/src/slot-styles-mixin.js';
-import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import {
+import type { ControllerMixinClass } from '@vaadin/component-base/src/controller-mixin.js';
+import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { InputFieldMixinClass } from '@vaadin/field-base/src/input-field-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/field-base/src/slot-styles-mixin.js';
+import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type {
   NumberField,
   NumberFieldChangeEvent,
   NumberFieldInvalidChangedEvent,

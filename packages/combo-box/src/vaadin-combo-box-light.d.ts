@@ -3,14 +3,13 @@
  * Copyright (c) 2015 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
-import { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
-import { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
-import { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
-import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
-import { ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
-import { ComboBoxDefaultItem } from './vaadin-combo-box-mixin.js';
+import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
+import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
+import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
+import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
+import type { ComboBoxDefaultItem, ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
 export {
   ComboBoxDataProvider,
   ComboBoxDataProviderCallback,

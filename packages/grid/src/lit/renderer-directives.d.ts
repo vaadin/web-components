@@ -3,10 +3,10 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { TemplateResult } from 'lit';
-import { DirectiveResult } from 'lit/directive';
+import type { TemplateResult } from 'lit';
+import type { DirectiveResult } from 'lit/directive';
 import { LitRendererDirective } from '@vaadin/lit-renderer';
-import { Grid, GridItemModel } from '../vaadin-grid.js';
+import type { Grid, GridItemModel } from '../vaadin-grid.js';
 
 export type GridRowDetailsLitRenderer<TItem> = (item: TItem, model: GridItemModel<TItem>, grid: Grid) => TemplateResult;
 

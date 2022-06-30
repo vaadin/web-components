@@ -1,5 +1,6 @@
-import { DirectiveResult } from 'lit/directive.js';
-import { ComboBoxLitRenderer, comboBoxRenderer, ComboBoxRendererDirective } from '../../lit.js';
+import type { DirectiveResult } from 'lit/directive.js';
+import type { ComboBoxLitRenderer, ComboBoxRendererDirective } from '../../lit.js';
+import { comboBoxRenderer } from '../../lit.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

@@ -5,7 +5,7 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { AccordionPanel } from './vaadin-accordion-panel.js';
+import type { AccordionPanel } from './vaadin-accordion-panel.js';
 
 /**
  * Fired when the `items` property changes.

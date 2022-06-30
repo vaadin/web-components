@@ -1,6 +1,6 @@
 import '../../vaadin-tabs.js';
-import { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
-import { TabsItemsChangedEvent, TabsSelectedChangedEvent } from '../../vaadin-tabs.js';
+import type { ResizeMixinClass } from '@vaadin/component-base/src/resize-mixin.js';
+import type { TabsItemsChangedEvent, TabsSelectedChangedEvent } from '../../vaadin-tabs.js';
 
 const tabs = document.createElement('vaadin-tabs');
 

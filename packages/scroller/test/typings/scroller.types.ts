@@ -1,5 +1,5 @@
 import '../../vaadin-scroller.js';
-import { Scroller } from '../../vaadin-scroller.js';
+import type { Scroller } from '../../vaadin-scroller.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

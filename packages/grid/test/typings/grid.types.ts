@@ -1,18 +1,18 @@
-import { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
-import { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
-import { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
-import { ActiveItemMixinClass } from '../../src/vaadin-grid-active-item-mixin';
-import { ArrayDataProviderMixinClass } from '../../src/vaadin-grid-array-data-provider-mixin';
-import { ColumnReorderingMixinClass } from '../../src/vaadin-grid-column-reordering-mixin';
-import { DataProviderMixinClass } from '../../src/vaadin-grid-data-provider-mixin';
-import { DragAndDropMixinClass } from '../../src/vaadin-grid-drag-and-drop-mixin';
-import { EventContextMixinClass } from '../../src/vaadin-grid-event-context-mixin';
-import { RowDetailsMixinClass } from '../../src/vaadin-grid-row-details-mixin';
-import { ScrollMixinClass } from '../../src/vaadin-grid-scroll-mixin';
-import { SelectionMixinClass } from '../../src/vaadin-grid-selection-mixin';
-import { SortMixinClass } from '../../src/vaadin-grid-sort-mixin';
-import { StylingMixinClass } from '../../src/vaadin-grid-styling-mixin';
-import {
+import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
+import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
+import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
+import type { ActiveItemMixinClass } from '../../src/vaadin-grid-active-item-mixin';
+import type { ArrayDataProviderMixinClass } from '../../src/vaadin-grid-array-data-provider-mixin';
+import type { ColumnReorderingMixinClass } from '../../src/vaadin-grid-column-reordering-mixin';
+import type { DataProviderMixinClass } from '../../src/vaadin-grid-data-provider-mixin';
+import type { DragAndDropMixinClass } from '../../src/vaadin-grid-drag-and-drop-mixin';
+import type { EventContextMixinClass } from '../../src/vaadin-grid-event-context-mixin';
+import type { RowDetailsMixinClass } from '../../src/vaadin-grid-row-details-mixin';
+import type { ScrollMixinClass } from '../../src/vaadin-grid-scroll-mixin';
+import type { SelectionMixinClass } from '../../src/vaadin-grid-selection-mixin';
+import type { SortMixinClass } from '../../src/vaadin-grid-sort-mixin';
+import type { StylingMixinClass } from '../../src/vaadin-grid-styling-mixin';
+import type {
   ColumnBaseMixinClass,
   Grid,
   GridActiveItemChangedEvent,
@@ -40,14 +40,17 @@ import {
   GridSorterDefinition,
   GridSorterDirection,
 } from '../../vaadin-grid.js';
-import { GridColumnGroup } from '../../vaadin-grid-column-group';
-import { GridFilter, GridFilterValueChangedEvent } from '../../vaadin-grid-filter.js';
-import { GridFilterColumn } from '../../vaadin-grid-filter-column';
-import { GridSelectionColumn, GridSelectionColumnSelectAllChangedEvent } from '../../vaadin-grid-selection-column.js';
-import { GridSortColumn, GridSortColumnDirectionChangedEvent } from '../../vaadin-grid-sort-column.js';
-import { GridSorter, GridSorterDirectionChangedEvent } from '../../vaadin-grid-sorter.js';
-import { GridTreeColumn } from '../../vaadin-grid-tree-column';
-import { GridTreeToggle, GridTreeToggleExpandedChangedEvent } from '../../vaadin-grid-tree-toggle.js';
+import type { GridColumnGroup } from '../../vaadin-grid-column-group';
+import type { GridFilter, GridFilterValueChangedEvent } from '../../vaadin-grid-filter.js';
+import type { GridFilterColumn } from '../../vaadin-grid-filter-column';
+import type {
+  GridSelectionColumn,
+  GridSelectionColumnSelectAllChangedEvent,
+} from '../../vaadin-grid-selection-column.js';
+import type { GridSortColumn, GridSortColumnDirectionChangedEvent } from '../../vaadin-grid-sort-column.js';
+import type { GridSorter, GridSorterDirectionChangedEvent } from '../../vaadin-grid-sorter.js';
+import type { GridTreeColumn } from '../../vaadin-grid-tree-column';
+import type { GridTreeToggle, GridTreeToggleExpandedChangedEvent } from '../../vaadin-grid-tree-toggle.js';
 
 interface TestGridItem {
   testProperty: string;

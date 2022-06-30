@@ -1,5 +1,5 @@
 import '../../vaadin-password-field.js';
-import {
+import type {
   PasswordField,
   PasswordFieldChangeEvent,
   PasswordFieldInvalidChangedEvent,

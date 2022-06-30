@@ -1,5 +1,5 @@
 import '../../vaadin-context-menu.js';
-import {
+import type {
   ContextMenuItem,
   ContextMenuItemSelectedEvent,
   ContextMenuOpenedChangedEvent,

@@ -1,8 +1,5 @@
-import { DirectiveResult } from 'lit/directive';
-import {
-  columnBodyRenderer,
-  columnFooterRenderer,
-  columnHeaderRenderer,
+import type { DirectiveResult } from 'lit/directive';
+import type {
   GridColumnBodyLitRenderer,
   GridColumnBodyRendererDirective,
   GridColumnFooterLitRenderer,
@@ -10,9 +7,9 @@ import {
   GridColumnHeaderLitRenderer,
   GridColumnHeaderRendererDirective,
   GridRowDetailsLitRenderer,
-  gridRowDetailsRenderer,
   GridRowDetailsRendererDirective,
 } from '../../lit.js';
+import { columnBodyRenderer, columnFooterRenderer, columnHeaderRenderer, gridRowDetailsRenderer } from '../../lit.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

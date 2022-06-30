@@ -3,8 +3,8 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { GridDefaultItem } from '@vaadin/grid/src/vaadin-grid.js';
-import { GridColumnGroup } from '@vaadin/grid/src/vaadin-grid-column-group.js';
+import type { GridDefaultItem } from '@vaadin/grid/src/vaadin-grid.js';
+import type { GridColumnGroup } from '@vaadin/grid/src/vaadin-grid-column-group.js';
 
 /**
  * @deprecated Import `GridColumnGroup` from `@vaadin/grid/vaadin-grid-column-group` instead.
