@@ -70,13 +70,13 @@ registerStyles(
 
     [part~='row']:focus,
     [part~='cell']:focus,
-    [part~='cell'] ::slotted(vaadin-grid-cell-content:focus) {
+    [part~='cell']:not([tabindex]) ::slotted(vaadin-grid-cell-content:focus) {
       outline: none;
     }
 
     :host([navigating]) [part~='row']:focus::before,
     :host([navigating]) [part~='cell']:focus::before,
-    :host([navigating]) [part~='cell']:focus-within::before {
+    :host([navigating]) [part~='cell']:not([tabindex]):focus-within::before {
       content: '';
       position: absolute;
       top: 0;
