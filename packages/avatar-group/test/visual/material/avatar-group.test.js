@@ -48,7 +48,7 @@ describe('avatar-group', () => {
 
   it('avatar-size', async () => {
     element.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
-    element.style.cssText += '--vaadin-avatar-size: 45px';
+    element.style.setProperty('--vaadin-avatar-size', '45px');
     element.$.overflow.click();
     await visualDiff(div, 'avatar-size');
   });

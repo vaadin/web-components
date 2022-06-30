@@ -48,7 +48,7 @@ describe('avatar', () => {
   });
 
   it('avatar-size', async () => {
-    element.style.cssText += '--vaadin-avatar-size: 45px';
+    element.style.setProperty('--vaadin-avatar-size', '45px');
     await visualDiff(div, 'avatar-size');
   });
 });
