@@ -69,7 +69,6 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
           width: 100%; /* prevent collapsing inside non-stretching column flex */
           --vaadin-avatar-group-overlap: 8px;
           --vaadin-avatar-group-overlap-border: 2px;
-          --vaadin-avatar-size: 64px;
         }
 
         :host([hidden]) {
