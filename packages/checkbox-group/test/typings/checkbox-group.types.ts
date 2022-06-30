@@ -1,8 +1,8 @@
 import '../../vaadin-checkbox-group.js';
 import type {
   CheckboxGroupInvalidChangedEvent,
-  CheckboxGroupValueChangedEvent,
   CheckboxGroupValidatedEvent,
+  CheckboxGroupValueChangedEvent,
 } from '../../vaadin-checkbox-group.js';
 
 const assertType = <TExpected>(value: TExpected) => value;
