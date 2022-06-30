@@ -31,10 +31,17 @@ export type DateTimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type DateTimePickerValueChangedEvent = CustomEvent<{ value: string }>;
 
+/**
+ * Fired whenever the field is validated.
+ */
+export type DateTimePickerValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface DateTimePickerCustomEventMap {
   'invalid-changed': DateTimePickerInvalidChangedEvent;
 
   'value-changed': DateTimePickerValueChangedEvent;
+
+  validated: DateTimePickerValidatedEvent;
 }
 
 export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HTMLElementEventMap {
@@ -95,6 +102,7 @@ export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HT
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class DateTimePicker extends FieldMixin(
   SlotMixin(DisabledMixin(FocusMixin(ThemableMixin(ElementMixin(HTMLElement))))),

@@ -65,6 +65,11 @@ export type MultiSelectComboBoxInvalidChangedEvent = CustomEvent<{ value: boolea
  */
 export type MultiSelectComboBoxSelectedItemsChangedEvent<TItem> = CustomEvent<{ value: TItem[] }>;
 
+/**
+ * Fired whenever the field is validated.
+ */
+export type MultiSelectComboBoxValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap {
   change: MultiSelectComboBoxChangeEvent<TItem>;
 
@@ -75,6 +80,8 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
   'invalid-changed': MultiSelectComboBoxInvalidChangedEvent;
 
   'selected-items-changed': MultiSelectComboBoxSelectedItemsChangedEvent<TItem>;
+
+  validated: MultiSelectComboBoxValidatedEvent;
 }
 
 /**
@@ -154,6 +161,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * @fires {CustomEvent} filter-changed - Fired when the `filter` property changes.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} selected-items-changed - Fired when the `selectedItems` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
   /**

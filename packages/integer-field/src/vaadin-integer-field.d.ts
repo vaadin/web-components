@@ -22,10 +22,17 @@ export type IntegerFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type IntegerFieldValueChangedEvent = CustomEvent<{ value: string }>;
 
+/**
+ * Fired whenever the field is validated.
+ */
+export type IntegerFieldValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface IntegerFieldCustomEventMap {
   'invalid-changed': IntegerFieldInvalidChangedEvent;
 
   'value-changed': IntegerFieldValueChangedEvent;
+
+  validated: IntegerFieldValidatedEvent;
 }
 
 export interface IntegerFieldEventMap extends HTMLElementEventMap, IntegerFieldCustomEventMap {
@@ -57,6 +64,7 @@ export interface IntegerFieldEventMap extends HTMLElementEventMap, IntegerFieldC
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class IntegerField extends NumberField {
   addEventListener<K extends keyof IntegerFieldEventMap>(

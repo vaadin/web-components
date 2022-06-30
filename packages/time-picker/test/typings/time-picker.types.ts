@@ -8,6 +8,7 @@ import type {
   TimePicker,
   TimePickerChangeEvent,
   TimePickerInvalidChangedEvent,
+  TimePickerValidatedEvent,
   TimePickerValueChangedEvent,
 } from '../../vaadin-time-picker.js';
 
@@ -36,4 +37,9 @@ timePicker.addEventListener('invalid-changed', (event) => {
 timePicker.addEventListener('value-changed', (event) => {
   assertType<TimePickerValueChangedEvent>(event);
   assertType<string>(event.detail.value);
+});
+
+timePicker.addEventListener('validated', (event) => {
+  assertType<TimePickerValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });

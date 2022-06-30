@@ -23,10 +23,17 @@ export type PasswordFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type PasswordFieldValueChangedEvent = CustomEvent<{ value: string }>;
 
+/**
+ * Fired whenever the field is validated.
+ */
+export type PasswordFieldValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface PasswordFieldCustomEventMap {
   'invalid-changed': PasswordFieldInvalidChangedEvent;
 
   'value-changed': PasswordFieldValueChangedEvent;
+
+  validated: PasswordFieldValidatedEvent;
 }
 
 export interface PasswordFieldEventMap extends HTMLElementEventMap, PasswordFieldCustomEventMap {
@@ -63,6 +70,7 @@ export interface PasswordFieldEventMap extends HTMLElementEventMap, PasswordFiel
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class PasswordField extends SlotStylesMixin(TextField) {
   /**

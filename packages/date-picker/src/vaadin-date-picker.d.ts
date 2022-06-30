@@ -31,12 +31,19 @@ export type DatePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type DatePickerValueChangedEvent = CustomEvent<{ value: string }>;
 
+/**
+ * Fired whenever the field is validated.
+ */
+export type DatePickerValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface DatePickerCustomEventMap {
   'opened-changed': DatePickerOpenedChangedEvent;
 
   'invalid-changed': DatePickerInvalidChangedEvent;
 
   'value-changed': DatePickerValueChangedEvent;
+
+  validated: DatePickerValidatedEvent;
 }
 
 export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCustomEventMap {
@@ -133,6 +140,7 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   addEventListener<K extends keyof DatePickerEventMap>(

@@ -97,6 +97,7 @@ const timePickerI18nProps = Object.keys(timePickerI18nDefaults);
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
  * @extends HTMLElement
  * @mixes ElementMixin

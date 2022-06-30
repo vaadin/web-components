@@ -39,10 +39,17 @@ export type TimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type TimePickerValueChangedEvent = CustomEvent<{ value: string }>;
 
+/**
+ * Fired whenever the field is validated.
+ */
+export type TimePickerValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface TimePickerCustomEventMap {
   'invalid-changed': TimePickerInvalidChangedEvent;
 
   'value-changed': TimePickerValueChangedEvent;
+
+  validated: TimePickerValidatedEvent;
 }
 
 export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerCustomEventMap {
@@ -97,6 +104,7 @@ export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerCusto
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   /**

@@ -30,12 +30,19 @@ export type DatePickerLightInvalidChangedEvent = CustomEvent<{ value: boolean }>
  */
 export type DatePickerLightValueChangedEvent = CustomEvent<{ value: string }>;
 
+/**
+ * Fired whenever the field is validated.
+ */
+export type DatePickerLightValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface DatePickerLightCustomEventMap {
   'opened-changed': DatePickerLightOpenedChangedEvent;
 
   'invalid-changed': DatePickerLightInvalidChangedEvent;
 
   'value-changed': DatePickerLightValueChangedEvent;
+
+  validated: DatePickerLightValidatedEvent;
 }
 
 export interface DatePickerLightEventMap extends HTMLElementEventMap, DatePickerLightCustomEventMap {
@@ -80,6 +87,7 @@ export interface DatePickerLightEventMap extends HTMLElementEventMap, DatePicker
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixin(HTMLElement))) {
   /**

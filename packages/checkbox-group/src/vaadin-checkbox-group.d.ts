@@ -19,10 +19,17 @@ export type CheckboxGroupInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type CheckboxGroupValueChangedEvent = CustomEvent<{ value: string[] }>;
 
+/**
+ * Fired whenever the field is validated.
+ */
+export type CheckboxGroupValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface CheckboxGroupCustomEventMap {
   'invalid-changed': CheckboxGroupInvalidChangedEvent;
 
   'value-changed': CheckboxGroupValueChangedEvent;
+
+  validated: CheckboxGroupValidatedEvent;
 }
 
 export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGroupCustomEventMap {}
@@ -66,6 +73,7 @@ export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGrou
  *
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(ThemableMixin(HTMLElement))))) {
   /**

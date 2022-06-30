@@ -25,10 +25,17 @@ export type TextFieldInvalidChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type TextFieldValueChangedEvent = CustomEvent<{ value: string }>;
 
+/**
+ * Fired whenever the field is validated.
+ */
+export type TextFieldValidatedEvent = CustomEvent<{ valid: boolean }>;
+
 export interface TextFieldCustomEventMap {
   'invalid-changed': TextFieldInvalidChangedEvent;
 
   'value-changed': TextFieldValueChangedEvent;
+
+  validated: TextFieldValidatedEvent;
 }
 
 export interface TextFieldEventMap extends HTMLElementEventMap, TextFieldCustomEventMap {
@@ -96,6 +103,7 @@ export interface TextFieldEventMap extends HTMLElementEventMap, TextFieldCustomE
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
+ * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
 declare class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
   /**

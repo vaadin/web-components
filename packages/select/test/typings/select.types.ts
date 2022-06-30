@@ -7,6 +7,7 @@ import type {
   SelectItem,
   SelectOpenedChangedEvent,
   SelectRenderer,
+  SelectValidatedEvent,
   SelectValueChangedEvent,
 } from '../../vaadin-select.js';
 
@@ -55,4 +56,9 @@ select.addEventListener('invalid-changed', (event) => {
 select.addEventListener('value-changed', (event) => {
   assertType<SelectValueChangedEvent>(event);
   assertType<string>(event.detail.value);
+});
+
+select.addEventListener('validated', (event) => {
+  assertType<SelectValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });

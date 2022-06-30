@@ -17,6 +17,7 @@ import type {
   DatePickerChangeEvent,
   DatePickerInvalidChangedEvent,
   DatePickerOpenedChangedEvent,
+  DatePickerValidatedEvent,
   DatePickerValueChangedEvent,
 } from '../../vaadin-date-picker.js';
 import type {
@@ -24,6 +25,7 @@ import type {
   DatePickerLightChangeEvent,
   DatePickerLightInvalidChangedEvent,
   DatePickerLightOpenedChangedEvent,
+  DatePickerLightValidatedEvent,
   DatePickerLightValueChangedEvent,
 } from '../../vaadin-date-picker-light.js';
 
@@ -51,6 +53,11 @@ datePicker.addEventListener('value-changed', (event) => {
 datePicker.addEventListener('change', (event) => {
   assertType<DatePickerChangeEvent>(event);
   assertType<DatePicker>(event.target);
+});
+
+datePicker.addEventListener('validated', (event) => {
+  assertType<DatePickerValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });
 
 // DatePicker properties
@@ -117,6 +124,11 @@ datePickerLight.addEventListener('value-changed', (event) => {
 datePickerLight.addEventListener('change', (event) => {
   assertType<DatePickerLightChangeEvent>(event);
   assertType<DatePickerLight>(event.target);
+});
+
+datePickerLight.addEventListener('validated', (event) => {
+  assertType<DatePickerLightValidatedEvent>(event);
+  assertType<boolean>(event.detail.valid);
 });
 
 // DatePickerLight properties
