@@ -5,7 +5,7 @@
     "access": "public"
   },
   "description": "vaadin-rich-text-editor",
-  "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/rich-text-editor/LICENSE",
+  "license": "SEE LICENSE IN LICENSE",
   "cvdlName": "vaadin-rich-text-editor",
   "repository": {
     "type": "git",

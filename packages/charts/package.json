@@ -5,7 +5,7 @@
     "access": "public"
   },
   "description": "vaadin-charts",
-  "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/charts/LICENSE",
+  "license": "SEE LICENSE IN LICENSE",
   "cvdlName": "vaadin-chart",
   "repository": {
     "type": "git",
