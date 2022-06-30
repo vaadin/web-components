@@ -161,6 +161,71 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /**
+     * Override grid method to set tabindex and role
+     * on the cell content element for edit columns.
+     *
+     * @param {HTMLElement} cell
+     * @param {GridColumn} column
+     * @protected
+     * @override
+     */
+    _configureBodyCell(cell, column) {
+      if (this._isEditColumn(column)) {
+        cell.removeAttribute('tabindex');
+        cell._content.setAttribute('tabindex', '-1');
+        cell._content.setAttribute('role', 'button');
+      }
+    }
+
+    /**
+     * Override grid logic to focus the cell content.
+     *
+     * @param {HTMLElement} cell
+     * @param {GridColumn} column
+     * @protected
+     * @override
+     */
+    _focusCell(cell) {
+      if (cell._content.hasAttribute('tabindex')) {
+        cell._content.focus();
+      } else {
+        cell.focus();
+      }
+    }
+
+    /**
+     * @param {Event} event
+     * @returns {boolean}
+     * @private
+     */
+    _isFocusableContent(event) {
+      const target = event.composedPath()[0];
+      return target && target.localName === 'vaadin-grid-cell-content' && target.hasAttribute('tabindex');
+    }
+
+    /**
+     * Detect if the grid should enter interaction mode.
+     *
+     * @param {!KeyboardEvent|!FocusEvent} event
+     * @returns {boolean}
+     * @protected
+     */
+    _isInteracting(event) {
+      const KEYS = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End'];
+      const isNavigationKey = event.type === 'keydown' && KEYS.includes(event.key);
+
+      // In plain grid, keyboard navigation only moves focus between `<td>` elements, and
+      // focusing `vaadin-grid-cell-content` is considered as entering "interaction" mode.
+      // This is not the case for editable cells, where `tabindex` is set on the content
+      // element with `role="button"` to ensure `focus` events are fired with VoiceOver.
+      if (this._isFocusableContent(event) && (event.type === 'focusin' || isNavigationKey)) {
+        return false;
+      }
+
+      return super._isInteracting(event);
+    }
+
+    /**
      * Override an observer from `DisabledMixin` to stop
      * editing when grid element becomes disabled.
      *
@@ -333,6 +398,8 @@ export const InlineEditingMixin = (superClass) =>
       this.__edited = { cell, column, model };
       column._startCellEdit(cell, model);
 
+      this.toggleAttribute('navigating', false);
+
       this.dispatchEvent(
         new CustomEvent('cell-edit-started', {
           detail: {
@@ -393,7 +460,7 @@ export const InlineEditingMixin = (superClass) =>
       this.removeEventListener('item-property-changed', this.__boundItemPropertyChanged);
 
       if (shouldRestoreFocus) {
-        cell.focus();
+        this._focusCell(cell);
       }
     }
 
@@ -467,7 +534,7 @@ export const InlineEditingMixin = (superClass) =>
           this._startEdit(nextCell, nextCol);
         } else {
           this._ensureScrolledToIndex(nextIdx);
-          nextCell.focus();
+          this._focusCell(nextCell);
         }
       }
     }

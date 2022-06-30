@@ -695,6 +695,15 @@ class Grid extends ElementMixin(
   }
 
   /**
+   * @param {HTMLElement} cell
+   * @param {GridColumn} column
+   * @protected
+   */
+  _configureBodyCell(_cell, _column) {
+    // To be implemented
+  }
+
+  /**
    * @param {!HTMLTableRowElement} row
    * @param {!Array<!GridColumn>} columns
    * @param {?string} section
@@ -724,6 +733,7 @@ class Grid extends ElementMixin(
           cell = column._cells.filter((cell) => cell._vacant)[0];
           if (!cell) {
             cell = this._createCell('td');
+            this._configureBodyCell(cell, column);
             column._cells.push(cell);
           }
           cell.setAttribute('part', 'cell body-cell');
