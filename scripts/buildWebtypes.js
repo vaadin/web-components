@@ -74,6 +74,10 @@ function transformDescription(packageJson, description) {
     /\(#\/elements\/(.*)\)/g, // Matches "(#/elements/$1)"
     `(${API_DOCS_BASE_PATH}/${packageJson.version}/#/elements/$1)`,
   );
+  // Remove multiple newlines between subsequent code examples,
+  // The IntelliJ markdown renderer will otherwise collapse
+  // both examples into one
+  description = description.replace(/```(\n)+```/g, '```\n```');
 
   return description;
 }
