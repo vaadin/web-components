@@ -82,14 +82,37 @@ function transformDescription(packageJson, description) {
   return description;
 }
 
+function camelize(text) {
+  return text.replace(/-./g, (x) => x[1].toUpperCase());
+}
+
+function isWritablePrimitiveAttribute(elementAnalysis, attribute) {
+  // Attributes do not have metadata, so we need to look at the corresponding
+  // property
+  const propertyName = camelize(attribute.name);
+  const matchingProperty = elementAnalysis.properties.find((property) => property.name === propertyName);
+  // If we can not find the property, just include the attribute rather than exclude
+  if (!matchingProperty) {
+    return true;
+  }
+  const isWritable = !matchingProperty.metadata.polymer.readOnly;
+  const hasPrimitiveType =
+    !matchingProperty.metadata.polymer.attributeType ||
+    ['String', 'Number', 'Boolean'].includes(matchingProperty.metadata.polymer.attributeType);
+
+  return isWritable && hasPrimitiveType;
+}
+
 function createPlainElementDefinition(packageJson, elementAnalysis) {
-  const attributes = [...elementAnalysis.attributes, ...additionalAttributes].map((attribute) => ({
-    name: attribute.name,
-    description: transformDescription(packageJson, attribute.description),
-    value: {
-      type: mapType(attribute.type),
-    },
-  }));
+  const attributes = [...elementAnalysis.attributes, ...additionalAttributes]
+    .filter((attribute) => isWritablePrimitiveAttribute(elementAnalysis, attribute))
+    .map((attribute) => ({
+      name: attribute.name,
+      description: transformDescription(packageJson, attribute.description),
+      value: {
+        type: mapType(attribute.type),
+      },
+    }));
   const properties = elementAnalysis.properties
     .filter((prop) => prop.privacy === 'public')
     .filter((prop) => !prop.metadata.polymer.readOnly)
