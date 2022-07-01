@@ -221,13 +221,13 @@ declare class ComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
   addEventListener<K extends keyof ComboBoxEventMap<TItem>>(
     type: K,
     listener: (this: ComboBox<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof ComboBoxEventMap<TItem>>(
     type: K,
     listener: (this: ComboBox<TItem>, ev: ComboBoxEventMap<TItem>[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

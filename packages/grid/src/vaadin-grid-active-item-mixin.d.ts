@@ -7,7 +7,7 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 
 export declare function ActiveItemMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<ActiveItemMixinClass<TItem>>;
+): Constructor<ActiveItemMixinClass<TItem>> & T;
 
 export declare class ActiveItemMixinClass<TItem> {
   /**

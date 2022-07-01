@@ -19,7 +19,7 @@ assertType<ThemableMixinClass>(layout);
 assertType<ControllerMixinClass>(layout);
 
 // Properties
-assertType<'navbar' | 'drawer'>(layout.primarySection);
+assertType<'drawer' | 'navbar'>(layout.primarySection);
 assertType<boolean>(layout.drawerOpened);
 assertType<boolean>(layout.overlay);
 assertType<string>(layout.closeDrawerOn);
@@ -38,5 +38,5 @@ layout.addEventListener('overlay-changed', (event) => {
 
 layout.addEventListener('primary-section-changed', (event) => {
   assertType<AppLayoutPrimarySectionChangedEvent>(event);
-  assertType<'navbar' | 'drawer'>(event.detail.value);
+  assertType<'drawer' | 'navbar'>(event.detail.value);
 });

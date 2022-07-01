@@ -379,13 +379,13 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
   addEventListener<K extends keyof GridEventMap<TItem>>(
     type: K,
     listener: (this: Grid<TItem>, ev: GridEventMap<TItem>[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof GridEventMap<TItem>>(
     type: K,
     listener: (this: Grid<TItem>, ev: GridEventMap<TItem>[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

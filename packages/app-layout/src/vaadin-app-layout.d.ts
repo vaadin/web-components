@@ -24,7 +24,7 @@ export type AppLayoutOverlayChangedEvent = CustomEvent<{ value: boolean }>;
 /**
  * Fired when the `primarySection` property changes.
  */
-export type AppLayoutPrimarySectionChangedEvent = CustomEvent<{ value: 'navbar' | 'drawer' }>;
+export type AppLayoutPrimarySectionChangedEvent = CustomEvent<{ value: 'drawer' | 'navbar' }>;
 
 export interface AppLayoutCustomEventMap {
   'drawer-opened-changed': AppLayoutDrawerOpenedChangedEvent;
@@ -34,7 +34,7 @@ export interface AppLayoutCustomEventMap {
   'primary-section-changed': AppLayoutPrimarySectionChangedEvent;
 }
 
-export type AppLayoutEventMap = HTMLElementEventMap & AppLayoutCustomEventMap;
+export type AppLayoutEventMap = AppLayoutCustomEventMap & HTMLElementEventMap;
 
 /**
  * `<vaadin-app-layout>` is a Web Component providing a quick and easy way to get a common application layout structure done.
@@ -157,7 +157,7 @@ declare class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(HTMLE
    * - If `primary-section="drawer"` is set, then the drawer will move the navbar, taking the full available height.
    * @attr {navbar|drawer} primary-section
    */
-  primarySection: 'navbar' | 'drawer';
+  primarySection: 'drawer' | 'navbar';
 
   /**
    * Controls whether the drawer is opened (visible) or not.
@@ -185,13 +185,13 @@ declare class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(HTMLE
   addEventListener<K extends keyof AppLayoutEventMap>(
     type: K,
     listener: (this: AppLayout, ev: AppLayoutEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof AppLayoutEventMap>(
     type: K,
     listener: (this: AppLayout, ev: AppLayoutEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

@@ -33,13 +33,13 @@ export interface DatePickerI18n {
 
 export declare function DatePickerMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): T &
-  Constructor<DatePickerMixinClass> &
+): Constructor<DatePickerMixinClass> &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DisabledMixinClass> &
   Constructor<FocusMixinClass> &
   Constructor<InputMixinClass> &
-  Constructor<KeyboardMixinClass>;
+  Constructor<KeyboardMixinClass> &
+  T;
 
 export declare class DatePickerMixinClass {
   /**

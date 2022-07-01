@@ -13,7 +13,7 @@ import type { DirMixinClass } from './dir-mixin.js';
  */
 export declare function ElementMixin<T extends Constructor<HTMLElement>>(
   superclass: T,
-): T & Constructor<DirMixinClass> & Constructor<ElementMixinClass>;
+): Constructor<DirMixinClass> & Constructor<ElementMixinClass> & T;
 
 export declare class ElementMixinClass {
   static version: string;

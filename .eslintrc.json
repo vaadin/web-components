@@ -111,6 +111,7 @@
         "typeLiterals": ["field", "constructor", "method"]
       }
     ],
+    "@typescript-eslint/sort-type-union-intersection-members": "error",
     "accessor-pairs": "error",
     "array-callback-return": "error",
     "capitalized-comments": ["error", "always", {

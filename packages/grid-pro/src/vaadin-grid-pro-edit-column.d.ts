@@ -7,7 +7,7 @@
 import type { GridBodyRenderer, GridDefaultItem, GridItemModel } from '@vaadin/grid/src/vaadin-grid.js';
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 
-export type GridProEditorType = 'text' | 'checkbox' | 'select' | 'custom';
+export type GridProEditorType = 'checkbox' | 'custom' | 'select' | 'text';
 
 /**
  * `<vaadin-grid-pro-edit-column>` is a helper element for the `<vaadin-grid-pro>`

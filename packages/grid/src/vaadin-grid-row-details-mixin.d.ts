@@ -14,7 +14,7 @@ export type GridRowDetailsRenderer<TItem> = (
 
 export declare function RowDetailsMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<RowDetailsMixinClass<TItem>>;
+): Constructor<RowDetailsMixinClass<TItem>> & T;
 
 export declare class RowDetailsMixinClass<TItem> {
   /**

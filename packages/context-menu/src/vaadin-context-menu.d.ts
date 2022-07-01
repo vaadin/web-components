@@ -289,13 +289,13 @@ declare class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(HTM
   addEventListener<K extends keyof ContextMenuEventMap>(
     type: K,
     listener: (this: ContextMenu, ev: ContextMenuEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof ContextMenuEventMap>(
     type: K,
     listener: (this: ContextMenu, ev: ContextMenuEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

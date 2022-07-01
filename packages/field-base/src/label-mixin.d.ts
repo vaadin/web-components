@@ -9,7 +9,7 @@ import type { LabelController } from './label-controller.js';
 /**
  * A mixin to provide label via corresponding property or named slot.
  */
-export declare function LabelMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<LabelMixinClass>;
+export declare function LabelMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<LabelMixinClass> & T;
 
 export declare class LabelMixinClass {
   /**

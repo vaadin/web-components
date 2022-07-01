@@ -94,13 +94,13 @@ declare class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(
   addEventListener<K extends keyof NumberFieldEventMap>(
     type: K,
     listener: (this: NumberField, ev: NumberFieldEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof NumberFieldEventMap>(
     type: K,
     listener: (this: NumberField, ev: NumberFieldEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

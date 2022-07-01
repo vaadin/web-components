@@ -24,7 +24,7 @@ export interface LoginI18n {
   additionalInformation?: string;
 }
 
-export declare function LoginMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<LoginMixinClass>;
+export declare function LoginMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<LoginMixinClass> & T;
 
 export declare class LoginMixinClass {
   /**

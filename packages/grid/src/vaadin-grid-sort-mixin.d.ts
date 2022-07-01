@@ -5,7 +5,7 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
-export declare function SortMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<SortMixinClass>;
+export declare function SortMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<SortMixinClass> & T;
 
 export declare class SortMixinClass {
   /**
@@ -28,5 +28,5 @@ export declare class SortMixinClass {
    *
    * @attr {string} multi-sort-priority
    */
-  multiSortPriority: 'prepend' | 'append';
+  multiSortPriority: 'append' | 'prepend';
 }

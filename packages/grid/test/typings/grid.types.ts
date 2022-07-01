@@ -146,7 +146,7 @@ assertType<boolean | null | undefined>(narrowedGrid.loading);
 assertType<string | null | undefined>(narrowedGrid.itemIdPath);
 assertType<string>(narrowedGrid.itemHasChildrenPath);
 
-assertType<TestGridItem[] | undefined | null>(narrowedGrid.items);
+assertType<TestGridItem[] | null | undefined>(narrowedGrid.items);
 assertType<TestGridItem | null>(narrowedGrid.activeItem);
 assertType<boolean>(narrowedGrid.columnReorderingAllowed);
 
@@ -176,7 +176,7 @@ assertType<(arg0: TestGridItem) => void>(narrowedGrid.selectItem);
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.deselectItem);
 
 assertType<boolean>(narrowedGrid.multiSort);
-assertType<'prepend' | 'append'>(narrowedGrid.multiSortPriority);
+assertType<'append' | 'prepend'>(narrowedGrid.multiSortPriority);
 
 assertType<GridCellClassNameGenerator<TestGridItem> | null | undefined>(narrowedGrid.cellClassNameGenerator);
 assertType<() => void>(narrowedGrid.generateCellClassNames);

@@ -10,7 +10,7 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
  */
 export declare function DelegateStateMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<DelegateStateMixinClass>;
+): Constructor<DelegateStateMixinClass> & T;
 
 export declare class DelegateStateMixinClass {
   /**

@@ -11,7 +11,7 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
  */
 export declare function SlotStylesMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<SlotStylesMixinClass>;
+): Constructor<SlotStylesMixinClass> & T;
 
 export declare class SlotStylesMixinClass {
   /**

@@ -15,11 +15,11 @@ import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js'
  */
 export declare function ItemMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): T &
-  Constructor<ItemMixinClass> &
-  Constructor<ActiveMixinClass> &
+): Constructor<ActiveMixinClass> &
   Constructor<DisabledMixinClass> &
-  Constructor<FocusMixinClass>;
+  Constructor<FocusMixinClass> &
+  Constructor<ItemMixinClass> &
+  T;
 
 export declare class ItemMixinClass {
   value: string;

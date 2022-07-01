@@ -8,13 +8,13 @@ import type { GridItemModel } from './vaadin-grid.js';
 
 export type GridDragAndDropFilter<TItem> = (model: GridItemModel<TItem>) => boolean;
 
-export type GridDropLocation = 'above' | 'on-top' | 'below' | 'empty';
+export type GridDropLocation = 'above' | 'below' | 'empty' | 'on-top';
 
-export type GridDropMode = 'between' | 'on-top' | 'on-top-or-between' | 'on-grid';
+export type GridDropMode = 'between' | 'on-grid' | 'on-top-or-between' | 'on-top';
 
 export declare function DragAndDropMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<DragAndDropMixinClass<TItem>>;
+): Constructor<DragAndDropMixinClass<TItem>> & T;
 
 export declare class DragAndDropMixinClass<TItem> {
   /**
