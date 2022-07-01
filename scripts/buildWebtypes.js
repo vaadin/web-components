@@ -103,6 +103,12 @@ function isWritablePrimitiveAttribute(elementAnalysis, attribute) {
   return isWritable && hasPrimitiveType;
 }
 
+function getPublicWritableProperties(elementAnalysis) {
+  return elementAnalysis.properties
+    .filter((prop) => prop.privacy === 'public')
+    .filter((prop) => !prop.metadata.polymer.readOnly);
+}
+
 function createPlainElementDefinition(packageJson, elementAnalysis) {
   const attributes = [...elementAnalysis.attributes, ...additionalAttributes]
     .filter((attribute) => isWritablePrimitiveAttribute(elementAnalysis, attribute))
@@ -113,16 +119,13 @@ function createPlainElementDefinition(packageJson, elementAnalysis) {
         type: mapType(attribute.type),
       },
     }));
-  const properties = elementAnalysis.properties
-    .filter((prop) => prop.privacy === 'public')
-    .filter((prop) => !prop.metadata.polymer.readOnly)
-    .map((prop) => ({
-      name: prop.name,
-      description: transformDescription(packageJson, prop.description),
-      value: {
-        type: mapType(prop.type),
-      },
-    }));
+  const properties = getPublicWritableProperties(elementAnalysis).map((prop) => ({
+    name: prop.name,
+    description: transformDescription(packageJson, prop.description),
+    value: {
+      type: mapType(prop.type),
+    },
+  }));
   const events = elementAnalysis.events.map((event) => ({
     name: event.name,
     description: transformDescription(packageJson, event.description),
@@ -154,9 +157,8 @@ function createPlainWebTypes(packageJson, packageElements) {
 }
 
 function createLitElementDefinition(packageJson, elementAnalysis) {
-  const booleanAttributes = elementAnalysis.properties
-    .filter((prop) => prop.privacy === 'public')
-    .filter((prop) => !prop.metadata.polymer.readOnly)
+  const publicProperties = getPublicWritableProperties(elementAnalysis);
+  const booleanAttributes = publicProperties
     .filter((prop) => prop.type.includes('boolean'))
     .map((prop) => ({
       name: `?${prop.name}`,
@@ -167,9 +169,7 @@ function createLitElementDefinition(packageJson, elementAnalysis) {
         kind: 'expression',
       },
     }));
-  const propertyAttributes = elementAnalysis.properties
-    .filter((prop) => prop.privacy === 'public')
-    .filter((prop) => !prop.metadata.polymer.readOnly)
+  const propertyAttributes = publicProperties
     .filter((prop) => !prop.type.includes('boolean'))
     .map((prop) => ({
       name: `.${prop.name}`,
