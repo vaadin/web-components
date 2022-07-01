@@ -27,7 +27,7 @@ declare class Scroller extends FocusMixin(ThemableMixin(ElementMixin(HTMLElement
    * This property indicates the scroll direction. Supported values are `vertical`, `horizontal`, `none`.
    * When `scrollDirection` is undefined scrollbars will be shown in both directions.
    */
-  scrollDirection: 'horizontal' | 'vertical' | 'none' | undefined;
+  scrollDirection: 'horizontal' | 'none' | 'vertical' | undefined;
 
   /**
    * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.

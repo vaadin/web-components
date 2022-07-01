@@ -13,11 +13,11 @@ import { TabindexMixinClass } from '@vaadin/component-base/src/tabindex-mixin.js
  */
 export declare function DelegateFocusMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): T &
-  Constructor<DelegateFocusMixinClass> &
+): Constructor<DelegateFocusMixinClass> &
   Constructor<DisabledMixinClass> &
   Constructor<FocusMixinClass> &
-  Constructor<TabindexMixinClass>;
+  Constructor<TabindexMixinClass> &
+  T;
 
 export declare class DelegateFocusMixinClass {
   /**

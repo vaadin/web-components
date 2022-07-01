@@ -8,7 +8,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
 /**
  * A mixin that uses a ResizeObserver to listen to host size changes.
  */
-export declare function ResizeMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ResizeMixinClass>;
+export declare function ResizeMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<ResizeMixinClass> & T;
 
 export declare class ResizeMixinClass {
   /**

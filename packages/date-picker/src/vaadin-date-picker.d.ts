@@ -138,13 +138,13 @@ declare class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin
   addEventListener<K extends keyof DatePickerEventMap>(
     type: K,
     listener: (this: DatePicker, ev: DatePickerEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof DatePickerEventMap>(
     type: K,
     listener: (this: DatePicker, ev: DatePickerEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

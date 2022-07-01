@@ -14,23 +14,23 @@ import { DisabledMixinClass } from './disabled-mixin.js';
  */
 export declare function TabindexMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<DisabledMixinClass> & Constructor<TabindexMixinClass>;
+): Constructor<DisabledMixinClass> & Constructor<TabindexMixinClass> & T;
 
 export declare class TabindexMixinClass {
   /**
    * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
    */
-  tabindex: number | undefined | null;
+  tabindex: number | null | undefined;
 
   /**
    * Stores the last known tabindex since the element has been disabled.
    */
-  protected _lastTabIndex: number | undefined | null;
+  protected _lastTabIndex: number | null | undefined;
 
   /**
    * When the user has changed tabindex while the element is disabled,
    * the observer reverts tabindex to -1 and rather saves the new tabindex value to apply it later.
    * The new value will be applied as soon as the element becomes enabled.
    */
-  protected _tabindexChanged(tabindex: number | undefined | null): void;
+  protected _tabindexChanged(tabindex: number | null | undefined): void;
 }

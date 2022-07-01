@@ -23,7 +23,7 @@ export interface AccordionCustomEventMap {
   'opened-changed': AccordionOpenedChangedEvent;
 }
 
-export type AccordionEventMap = HTMLElementEventMap & AccordionCustomEventMap;
+export type AccordionEventMap = AccordionCustomEventMap & HTMLElementEventMap;
 
 /**
  * `<vaadin-accordion>` is a Web Component implementing accordion widget —
@@ -87,13 +87,13 @@ declare class Accordion extends ElementMixin(ThemableMixin(HTMLElement)) {
   addEventListener<K extends keyof AccordionEventMap>(
     type: K,
     listener: (this: Accordion, ev: AccordionEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof AccordionEventMap>(
     type: K,
     listener: (this: Accordion, ev: AccordionEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

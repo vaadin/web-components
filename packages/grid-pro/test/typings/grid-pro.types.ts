@@ -41,7 +41,7 @@ narrowedGrid.addEventListener('item-property-changed', (event) => {
   assertType<string>(event.detail.path);
   assertType<number>(event.detail.index);
   assertType<TestGridItem>(event.detail.item);
-  assertType<string | boolean>(event.detail.value);
+  assertType<boolean | string>(event.detail.value);
 });
 
 narrowedGrid.addEventListener('active-item-changed', (event) => {

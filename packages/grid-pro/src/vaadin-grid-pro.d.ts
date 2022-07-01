@@ -24,7 +24,7 @@ export type GridProItemPropertyChangedEvent<TItem> = CustomEvent<{
   index: number;
   item: TItem;
   path: string;
-  value: string | boolean;
+  value: boolean | string;
 }>;
 
 export interface GridProCustomEventMap<TItem> {
@@ -74,13 +74,13 @@ declare class GridPro<TItem = GridDefaultItem> extends Grid<TItem> {
   addEventListener<K extends keyof GridProEventMap<TItem>>(
     type: K,
     listener: (this: GridPro<TItem>, ev: GridProEventMap<TItem>[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof GridProEventMap<TItem>>(
     type: K,
     listener: (this: GridPro<TItem>, ev: GridProEventMap<TItem>[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

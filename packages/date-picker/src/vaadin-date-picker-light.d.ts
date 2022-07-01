@@ -90,13 +90,13 @@ declare class DatePickerLight extends ThemableMixin(DatePickerMixin(HTMLElement)
   addEventListener<K extends keyof DatePickerLightEventMap>(
     type: K,
     listener: (this: DatePickerLight, ev: DatePickerLightEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof DatePickerLightEventMap>(
     type: K,
     listener: (this: DatePickerLight, ev: DatePickerLightEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

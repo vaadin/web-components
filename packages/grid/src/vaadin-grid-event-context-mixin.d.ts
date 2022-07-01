@@ -7,7 +7,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
 import { GridColumn } from './vaadin-grid-column.js';
 
 export interface GridEventContext<TItem> {
-  section?: 'body' | 'header' | 'footer' | 'details';
+  section?: 'body' | 'details' | 'footer' | 'header';
   item?: TItem;
   column?: GridColumn<TItem>;
   index?: number;
@@ -19,7 +19,7 @@ export interface GridEventContext<TItem> {
 
 export declare function EventContextMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<EventContextMixinClass<TItem>>;
+): Constructor<EventContextMixinClass<TItem>> & T;
 
 export declare class EventContextMixinClass<TItem> {
   /**

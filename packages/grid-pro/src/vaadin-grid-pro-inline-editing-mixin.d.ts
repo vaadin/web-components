@@ -8,7 +8,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
 
 export declare function InlineEditingMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<InlineEditingMixinClass>;
+): Constructor<InlineEditingMixinClass> & T;
 
 export declare class InlineEditingMixinClass {
   /**

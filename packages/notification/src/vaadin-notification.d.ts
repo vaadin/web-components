@@ -9,15 +9,15 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 export type NotificationPosition =
-  | 'top-stretch'
-  | 'top-start'
-  | 'top-center'
-  | 'top-end'
-  | 'middle'
-  | 'bottom-start'
   | 'bottom-center'
   | 'bottom-end'
-  | 'bottom-stretch';
+  | 'bottom-start'
+  | 'bottom-stretch'
+  | 'middle'
+  | 'top-center'
+  | 'top-end'
+  | 'top-start'
+  | 'top-stretch';
 
 export type NotificationRenderer = (root: HTMLElement, notification?: Notification) => void;
 
@@ -121,7 +121,7 @@ declare class Notification extends ThemePropertyMixin(ElementMixin(HTMLElement))
    * @param contents the contents to show, either as a string or a Lit template.
    * @param options optional options for customizing the notification.
    */
-  static show(contents: string | TemplateResult, options?: ShowOptions): Notification;
+  static show(contents: TemplateResult | string, options?: ShowOptions): Notification;
 
   /**
    * The duration in milliseconds to show the notification.
@@ -171,13 +171,13 @@ declare class Notification extends ThemePropertyMixin(ElementMixin(HTMLElement))
   addEventListener<K extends keyof NotificationEventMap>(
     type: K,
     listener: (this: Notification, ev: NotificationEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof NotificationEventMap>(
     type: K,
     listener: (this: Notification, ev: NotificationEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

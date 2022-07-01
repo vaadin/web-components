@@ -248,13 +248,13 @@ declare class Select extends DelegateFocusMixin(FieldMixin(SlotMixin(ElementMixi
   addEventListener<K extends keyof SelectEventMap>(
     type: K,
     listener: (this: Select, ev: SelectEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof SelectEventMap>(
     type: K,
     listener: (this: Select, ev: SelectEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

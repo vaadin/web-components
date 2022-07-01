@@ -210,13 +210,13 @@ declare class DateTimePicker extends FieldMixin(
   addEventListener<K extends keyof DateTimePickerEventMap>(
     type: K,
     listener: (this: DateTimePicker, ev: DateTimePickerEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof DateTimePickerEventMap>(
     type: K,
     listener: (this: DateTimePicker, ev: DateTimePickerEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

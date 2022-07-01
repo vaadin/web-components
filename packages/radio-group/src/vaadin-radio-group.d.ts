@@ -88,13 +88,13 @@ declare class RadioGroup extends FieldMixin(
   addEventListener<K extends keyof RadioGroupEventMap>(
     type: K,
     listener: (this: RadioGroup, ev: RadioGroupEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof RadioGroupEventMap>(
     type: K,
     listener: (this: RadioGroup, ev: RadioGroupEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

@@ -8,7 +8,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
 /**
  * A mixin to provide required state and validation logic.
  */
-export declare function ValidateMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ValidateMixinClass>;
+export declare function ValidateMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<ValidateMixinClass> & T;
 
 export declare class ValidateMixinClass {
   /**

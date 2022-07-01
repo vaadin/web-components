@@ -5,7 +5,7 @@
  */
 import { PointOptionsObject, Series, SeriesOptionsType } from 'highcharts';
 
-export type ChartSeriesMarkers = 'shown' | 'hidden' | 'auto';
+export type ChartSeriesMarkers = 'auto' | 'hidden' | 'shown';
 
 export interface ChartSeriesConfig {
   data?: ChartSeriesValues;
@@ -22,7 +22,7 @@ export interface ChartSeriesConfig {
 
 export type ChartSeriesOptions = ChartSeriesConfig & SeriesOptionsType;
 
-export type ChartSeriesValues = Array<number | number[] | PointOptionsObject>;
+export type ChartSeriesValues = Array<number[] | PointOptionsObject | number>;
 
 /**
  * `<vaadin-chart-series>` is a custom element for creating series for Vaadin Charts.

@@ -10,7 +10,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 export type ChartCategories = string[] | { [key: number]: string };
 
-export type ChartCategoryPosition = 'left' | 'right' | 'top' | 'bottom';
+export type ChartCategoryPosition = 'bottom' | 'left' | 'right' | 'top';
 
 export type ChartStacking = 'normal' | 'percent' | null;
 
@@ -245,7 +245,7 @@ export interface ChartCustomEventMap {
   'yaxes-extremes-set': ChartYaxesExtremesSetEvent;
 }
 
-export type ChartEventMap = HTMLElementEventMap & ChartCustomEventMap;
+export type ChartEventMap = ChartCustomEventMap & HTMLElementEventMap;
 
 /**
  * `<vaadin-chart>` is a Web Component for creating high quality charts.
@@ -582,13 +582,13 @@ declare class Chart extends ResizeMixin(ThemableMixin(ElementMixin(HTMLElement))
   addEventListener<K extends keyof ChartEventMap>(
     type: K,
     listener: (this: Chart, ev: ChartEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof ChartEventMap>(
     type: K,
     listener: (this: Chart, ev: ChartEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

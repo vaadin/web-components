@@ -15,9 +15,9 @@ import { DelegateFocusMixinClass } from './delegate-focus-mixin.js';
  */
 export declare function ShadowFocusMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): T &
-  Constructor<DelegateFocusMixinClass> &
+): Constructor<DelegateFocusMixinClass> &
   Constructor<DisabledMixinClass> &
   Constructor<FocusMixinClass> &
   Constructor<KeyboardMixinClass> &
-  Constructor<TabindexMixinClass>;
+  Constructor<TabindexMixinClass> &
+  T;

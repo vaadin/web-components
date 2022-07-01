@@ -9,7 +9,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
  * A mixin to store the reference to an input element
  * and add input and change event listeners to it.
  */
-export declare function InputMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<InputMixinClass>;
+export declare function InputMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<InputMixinClass> & T;
 
 export declare class InputMixinClass {
   /**

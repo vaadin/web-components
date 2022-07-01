@@ -16,7 +16,7 @@ export class DialogOverlay extends OverlayElement {}
 
 export type DialogRenderer = (root: HTMLElement, dialog?: Dialog) => void;
 
-export type DialogResizableDirection = 'n' | 'e' | 's' | 'w' | 'nw' | 'ne' | 'se' | 'sw';
+export type DialogResizableDirection = 'e' | 'n' | 'ne' | 'nw' | 's' | 'se' | 'sw' | 'w';
 
 export type DialogResizeDimensions = {
   width: string;
@@ -35,10 +35,10 @@ export type DialogOverlayBounds = {
 export type DialogOverlayBoundsParam =
   | DialogOverlayBounds
   | {
-      top?: string | number;
-      left?: string | number;
-      width?: string | number;
-      height?: string | number;
+      top?: number | string;
+      left?: number | string;
+      width?: number | string;
+      height?: number | string;
     };
 
 /**
@@ -57,7 +57,7 @@ export interface DialogCustomEventMap {
   resize: DialogResizeEvent;
 }
 
-export type DialogEventMap = HTMLElementEventMap & DialogCustomEventMap;
+export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
 
 /**
  * `<vaadin-dialog>` is a Web Component for creating customized modal dialogs.
@@ -208,13 +208,13 @@ declare class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixi
   addEventListener<K extends keyof DialogEventMap>(
     type: K,
     listener: (this: Dialog, ev: DialogEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof DialogEventMap>(
     type: K,
     listener: (this: Dialog, ev: DialogEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 
