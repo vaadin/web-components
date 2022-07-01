@@ -3,7 +3,7 @@
  * Copyright (c) 2019 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { ContextMenu } from '@vaadin/vaadin-context-menu/src/vaadin-context-menu.js';
+import { ContextMenu } from '@vaadin/context-menu/src/vaadin-context-menu.js';
 
 /**
  * An element used internally by `<vaadin-menu-bar>`. Not intended to be used separately.
