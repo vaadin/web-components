@@ -164,8 +164,7 @@ Highcharts.setOptions({ lang: { noData: '' } });
  * A comprehensive list of the supported style classes can be found at
  * https://www.highcharts.com/docs/chart-design-and-style/style-by-css
  *
- * See also the documentation for styling Vaadin components at
- * https://vaadin.com/docs/v14/themes/themes-and-styling-overview.html
+ * See also [Chart Styling](https://vaadin.com/docs/latest/components/charts/css-styling) documentation.
  *
  * ### RTL support
  *
