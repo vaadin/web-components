@@ -89,9 +89,9 @@ function matchesThemeFor(themeFor, tagName) {
  */
 function getIncludePriority(moduleName = '') {
   let includePriority = 0;
-  if (moduleName.indexOf('lumo-') === 0 || moduleName.indexOf('material-') === 0) {
+  if (moduleName.startsWith('lumo-') || moduleName.startsWith('material-')) {
     includePriority = 1;
-  } else if (moduleName.indexOf('vaadin-') === 0) {
+  } else if (moduleName.startsWith('vaadin-')) {
     includePriority = 2;
   }
   return includePriority;

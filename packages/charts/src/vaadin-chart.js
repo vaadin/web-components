@@ -1221,7 +1221,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       // eslint-disable-next-line no-prototype-builtins
       if (jsonConfiguration.hasOwnProperty(attr)) {
         const targetProperty = jsonConfiguration[attr];
-        if (attr.indexOf('_fn_') === 0 && (typeof targetProperty === 'string' || targetProperty instanceof String)) {
+        if (attr.startsWith('_fn_') && (typeof targetProperty === 'string' || targetProperty instanceof String)) {
           try {
             // eslint-disable-next-line no-eval
             jsonConfiguration[attr.substr(4)] = eval(`(${targetProperty})`);
@@ -1766,7 +1766,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       let style = '';
       if (this.hasAttribute('style')) {
         style = this.getAttribute('style');
-        if (style.charAt(style.length - 1) !== ';') {
+        if (!style.endsWith(';')) {
           style += ';';
         }
       }
