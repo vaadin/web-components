@@ -6,6 +6,8 @@ const { execSync } = require('child_process');
 const PLAIN_WEB_TYPES_FILE = 'web-types.json';
 const LIT_WEB_TYPES_FILE = 'web-types.lit.json';
 
+const API_DOCS_BASE_PATH = 'https://cdn.vaadin.com/vaadin-web-components';
+
 const blacklistedPackages = [
   /^vaadin-/,
   /^component-base/,
@@ -59,10 +61,27 @@ function mapType(typeString) {
   return types.map((type) => type.trim());
 }
 
-function createPlainElementDefinition(elementAnalysis) {
+/**
+ * Transforms a description text of an element, attribute, property, event to:
+ * - make relative docs links point to the absolute documentation URL
+ * @param packageJson
+ * @param description
+ * @returns {*}
+ */
+function transformDescription(packageJson, description) {
+  // Transform relative documentation links to absolute ones
+  description = description.replace(
+    /\(#\/elements\/(.*)\)/g, // Matches "(#/elements/$1)"
+    `(${API_DOCS_BASE_PATH}/${packageJson.version}/#/elements/$1)`,
+  );
+
+  return description;
+}
+
+function createPlainElementDefinition(packageJson, elementAnalysis) {
   const attributes = [...elementAnalysis.attributes, ...additionalAttributes].map((attribute) => ({
     name: attribute.name,
-    description: attribute.description,
+    description: transformDescription(packageJson, attribute.description),
     value: {
       type: mapType(attribute.type),
     },
@@ -72,19 +91,19 @@ function createPlainElementDefinition(elementAnalysis) {
     .filter((prop) => !prop.metadata.polymer.readOnly)
     .map((prop) => ({
       name: prop.name,
-      description: prop.description,
+      description: transformDescription(packageJson, prop.description),
       value: {
         type: mapType(prop.type),
       },
     }));
   const events = elementAnalysis.events.map((event) => ({
     name: event.name,
-    description: event.description,
+    description: transformDescription(packageJson, event.description),
   }));
 
   return {
     name: elementAnalysis.tagname,
-    description: elementAnalysis.description,
+    description: transformDescription(packageJson, elementAnalysis.description),
     attributes,
     js: {
       properties,
@@ -101,20 +120,20 @@ function createPlainWebTypes(packageJson, packageElements) {
     'description-markup': 'markdown',
     contributions: {
       html: {
-        elements: packageElements.map(createPlainElementDefinition),
+        elements: packageElements.map((elementAnalysis) => createPlainElementDefinition(packageJson, elementAnalysis)),
       },
     },
   };
 }
 
-function createLitElementDefinition(elementAnalysis) {
+function createLitElementDefinition(packageJson, elementAnalysis) {
   const booleanAttributes = elementAnalysis.properties
     .filter((prop) => prop.privacy === 'public')
     .filter((prop) => !prop.metadata.polymer.readOnly)
     .filter((prop) => prop.type.includes('boolean'))
     .map((prop) => ({
       name: `?${prop.name}`,
-      description: prop.description,
+      description: transformDescription(packageJson, prop.description),
       value: {
         // Type checking does not work with template tagged literals
         // Since this Lit binding should use an expression, just declare it as such
@@ -127,7 +146,7 @@ function createLitElementDefinition(elementAnalysis) {
     .filter((prop) => !prop.type.includes('boolean'))
     .map((prop) => ({
       name: `.${prop.name}`,
-      description: prop.description,
+      description: transformDescription(packageJson, prop.description),
       value: {
         // Type checking does not work with template tagged literals
         // Since this Lit binding should use an expression, just declare it as such
@@ -136,7 +155,7 @@ function createLitElementDefinition(elementAnalysis) {
     }));
   const eventAttributes = elementAnalysis.events.map((event) => ({
     name: `@${event.name}`,
-    description: event.description,
+    description: transformDescription(packageJson, event.description),
     value: {
       // Type checking does not work with template tagged literals
       // Since this Lit binding should use an expression, just declare it as such
@@ -146,7 +165,7 @@ function createLitElementDefinition(elementAnalysis) {
 
   return {
     name: elementAnalysis.tagname,
-    description: elementAnalysis.description,
+    description: transformDescription(packageJson, elementAnalysis.description),
     // Declare as extension to plain web type, this also means we don't have to
     // repeat the same stuff from the plain web-types.json again
     extension: true,
@@ -170,7 +189,7 @@ function createLitWebTypes(packageJson, packageElements) {
     },
     contributions: {
       html: {
-        elements: packageElements.map(createLitElementDefinition),
+        elements: packageElements.map((elementAnalysis) => createLitElementDefinition(packageJson, elementAnalysis)),
       },
     },
   };
