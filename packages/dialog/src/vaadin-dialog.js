@@ -318,11 +318,11 @@ export class DialogOverlay extends OverlayElement {
       this.__forceSafariReflow();
     }
 
-    for (const arg in parsedBounds) {
+    Object.keys(parsedBounds).forEach((arg) => {
       if (typeof parsedBounds[arg] === 'number') {
         parsedBounds[arg] = `${parsedBounds[arg]}px`;
       }
-    }
+    });
 
     Object.assign(overlay.style, parsedBounds);
   }
