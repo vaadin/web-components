@@ -86,7 +86,7 @@ const runTests = (baseClass) => {
       expect(input.value).to.equal('');
     });
 
-    it('should update field value on the input event', async () => {
+    it('should update field value on the input event', () => {
       input.value = 'foo';
       input.dispatchEvent(new Event('input'));
       expect(element.value).to.equal('foo');

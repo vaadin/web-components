@@ -2128,7 +2128,7 @@ describe('keyboard navigation on column groups', () => {
         expect(tabbableBodyCell.offsetHeight).not.to.equal(0);
       });
 
-      it('should have no tabbable body cell when there are no rows', async () => {
+      it('should have no tabbable body cell when there are no rows', () => {
         // Remove all body rows
         grid.items = [];
 
@@ -2192,7 +2192,7 @@ describe('keyboard navigation on column groups', () => {
 });
 
 describe('empty grid', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid>
         <vaadin-grid-column header="header"></vaadin-grid-column>

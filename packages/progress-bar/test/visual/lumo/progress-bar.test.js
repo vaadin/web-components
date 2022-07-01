@@ -5,7 +5,7 @@ import '../../../theme/lumo/vaadin-progress-bar.js';
 describe('progress-bar', () => {
   let div, element;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     div = document.createElement('div');
     div.style.display = 'inline-block';
     div.style.width = '200px';

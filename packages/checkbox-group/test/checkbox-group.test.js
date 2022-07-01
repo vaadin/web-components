@@ -359,7 +359,7 @@ describe('vaadin-checkbox-group', () => {
   });
 
   describe('error message', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       group = fixtureSync(`<vaadin-checkbox-group></vaadin-checkbox-group>`);
     });
 
@@ -383,7 +383,7 @@ describe('vaadin-checkbox-group', () => {
   });
 
   describe('helper text', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       group = fixtureSync(`<vaadin-checkbox-group></vaadin-checkbox-group>`);
     });
 

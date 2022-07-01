@@ -111,7 +111,7 @@ describe('virtualizer - wheel scrolling', () => {
     expect(scrollTarget.scrollTop).to.equal(184);
   });
 
-  it('should not scroll the wrapper right after virtualizer scrolled to end', async () => {
+  it('should not scroll the wrapper right after virtualizer scrolled to end', () => {
     // Wheel scroll to end
     wheel({ deltaY: scrollTarget.scrollHeight });
     // Wheel momentum settled down
@@ -122,7 +122,7 @@ describe('virtualizer - wheel scrolling', () => {
     expect(wrapper.scrollTop).to.equal(0);
   });
 
-  it('should scroll the wrapper a while after virtualizer scrolled to end', async () => {
+  it('should scroll the wrapper a while after virtualizer scrolled to end', () => {
     wheel({ deltaY: scrollTarget.scrollHeight });
     wheel({ deltaY: 0 });
     clock.tick(IGNORE_WHEEL_TIMEOUT);
@@ -130,7 +130,7 @@ describe('virtualizer - wheel scrolling', () => {
     expect(wrapper.scrollTop).to.equal(1);
   });
 
-  it('should skip the custom wheel scrolling logic on ctrl-wheel', async () => {
+  it('should skip the custom wheel scrolling logic on ctrl-wheel', () => {
     wheel({ deltaY: scrollTarget.scrollHeight });
     wheel({ deltaY: 1, ctrlKey: true });
     expect(wrapper.scrollTop).to.equal(1);
@@ -147,7 +147,7 @@ describe('virtualizer - wheel scrolling', () => {
     expect(wrapper.scrollTop).to.equal(0);
   });
 
-  it('should scroll the wrapper normally if already scrolled to end', async () => {
+  it('should scroll the wrapper normally if already scrolled to end', () => {
     wheel({ deltaY: scrollTarget.scrollHeight });
     wheel({ deltaY: 0 });
     clock.tick(IGNORE_WHEEL_TIMEOUT);
@@ -170,21 +170,21 @@ describe('virtualizer - wheel scrolling', () => {
     expect(scrollTarget.scrollTop).to.equal(4);
   });
 
-  it('should scroll a scrollable child', async () => {
+  it('should scroll a scrollable child', () => {
     wheel({ deltaY: 1, element: child });
     expect(child.scrollTop).to.equal(1);
     expect(scrollTarget.scrollTop).to.equal(0);
     expect(wrapper.scrollTop).to.equal(0);
   });
 
-  it('should scroll a scrollable child from wheel over grandchild', async () => {
+  it('should scroll a scrollable child from wheel over grandchild', () => {
     wheel({ deltaY: 1, element: grandchild });
     expect(child.scrollTop).to.equal(1);
     expect(scrollTarget.scrollTop).to.equal(0);
     expect(wrapper.scrollTop).to.equal(0);
   });
 
-  it('should scroll the scrollTarget from wheel over grandchild', async () => {
+  it('should scroll the scrollTarget from wheel over grandchild', () => {
     child.style.overflow = 'hidden';
     wheel({ deltaY: 1, element: grandchild });
     expect(child.scrollTop).to.equal(0);

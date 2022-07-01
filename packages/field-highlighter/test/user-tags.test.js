@@ -91,7 +91,7 @@ describe('user-tags', () => {
       expect(tags).to.have.lengthOf(1);
     });
 
-    it('should replace user tags when replacing users', async () => {
+    it('should replace user tags when replacing users', () => {
       setUsers([user1, user2]);
       setUsers([user3]);
       const tags = getTags();

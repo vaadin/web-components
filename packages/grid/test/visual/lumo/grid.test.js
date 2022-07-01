@@ -251,7 +251,7 @@ describe('grid', () => {
       });
 
       describe('frozen', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           element = fixtureSync(`
             <vaadin-grid style="max-width: 600px">
               <vaadin-grid-column path="name.first" width="200px" flex-shrink="0" frozen></vaadin-grid-column>

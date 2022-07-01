@@ -106,7 +106,7 @@ describe('field components', () => {
       });
 
       it('should not dispatch vaadin-highlight-hide event on close with focus moved to the field', (done) => {
-        open(field, async () => {
+        open(field, () => {
           listenOnce(field, 'opened-changed', () => {
             expect(hideSpy.callCount).to.equal(0);
             done();

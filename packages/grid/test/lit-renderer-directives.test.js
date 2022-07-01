@@ -6,7 +6,7 @@ import { html, render } from 'lit';
 import { columnBodyRenderer, columnFooterRenderer, columnHeaderRenderer, gridRowDetailsRenderer } from '../lit.js';
 import { getCellContent, getContainerCell } from './helpers.js';
 
-async function renderGrid(container, { items, header, footer, rowDetails }) {
+function renderGrid(container, { items, header, footer, rowDetails }) {
   render(
     html`<vaadin-grid
       .items="${items}"
@@ -62,7 +62,7 @@ describe('lit renderer directives', () => {
     describe('arguments', () => {
       let rendererSpy;
 
-      beforeEach(async () => {
+      beforeEach(() => {
         rendererSpy = sinon.spy();
         render(
           html`<vaadin-grid .items="${['Item']}" ${gridRowDetailsRenderer(rendererSpy)}>
@@ -122,7 +122,7 @@ describe('lit renderer directives', () => {
     describe('arguments', () => {
       let rendererSpy;
 
-      beforeEach(async () => {
+      beforeEach(() => {
         rendererSpy = sinon.spy();
         render(
           html`<vaadin-grid .items="${['Item']}">
@@ -182,7 +182,7 @@ describe('lit renderer directives', () => {
     describe('arguments', () => {
       let rendererSpy;
 
-      beforeEach(async () => {
+      beforeEach(() => {
         rendererSpy = sinon.spy();
         render(
           html`<vaadin-grid>
@@ -232,7 +232,7 @@ describe('lit renderer directives', () => {
     describe('arguments', () => {
       let rendererSpy;
 
-      beforeEach(async () => {
+      beforeEach(() => {
         rendererSpy = sinon.spy();
         render(
           html`<vaadin-grid>

@@ -510,7 +510,7 @@ describe('open on hover', () => {
     expect(subMenu.listenOn).to.equal(buttons[2]);
   });
 
-  it('should not select value of button without nested items', async () => {
+  it('should not select value of button without nested items', () => {
     const spy = sinon.spy();
     menu.addEventListener('item-selected', spy);
     buttons[1].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));

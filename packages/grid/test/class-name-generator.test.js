@@ -147,7 +147,7 @@ describe('class name generator', () => {
       clock.restore();
     });
 
-    it('should only run the generator for the rows that are loaded', async () => {
+    it('should only run the generator for the rows that are loaded', () => {
       const spy = sinon.spy();
       grid.cellClassNameGenerator = spy;
       spy.resetHistory();

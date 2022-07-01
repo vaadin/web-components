@@ -84,21 +84,21 @@ describe('a11y', () => {
       clock.restore();
     });
 
-    it('should announce upload start', async () => {
+    it('should announce upload start', () => {
       upload.dispatchEvent(new CustomEvent('upload-start', { detail: { file: { name: 'file.js' } } }));
       clock.tick(200);
       expect(announceRegion.textContent).to.equal('file.js: 0%');
       expect(announceRegion.getAttribute('role')).to.equal('alert');
     });
 
-    it('should announce upload success', async () => {
+    it('should announce upload success', () => {
       upload.dispatchEvent(new CustomEvent('upload-success', { detail: { file: { name: 'file.js' } } }));
       clock.tick(200);
       expect(announceRegion.textContent).to.equal('file.js: 100%');
       expect(announceRegion.getAttribute('role')).to.equal('alert');
     });
 
-    it('should announce file reject', async () => {
+    it('should announce file reject', () => {
       upload.dispatchEvent(
         new CustomEvent('file-reject', { detail: { file: { name: 'file.js', error: 'rejected' } } }),
       );
@@ -107,7 +107,7 @@ describe('a11y', () => {
       expect(announceRegion.getAttribute('role')).to.equal('alert');
     });
 
-    it('should announce upload error', async () => {
+    it('should announce upload error', () => {
       upload.dispatchEvent(new CustomEvent('upload-error', { detail: { file: { name: 'file.js', error: 'error' } } }));
       clock.tick(200);
       expect(announceRegion.textContent).to.equal('file.js: error');

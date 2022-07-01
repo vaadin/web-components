@@ -33,7 +33,7 @@ describe('crud buttons', () => {
       });
 
       describe('i18n', () => {
-        it('should set the label for the delete button', async () => {
+        it('should set the label for the delete button', () => {
           expect(deleteButton.textContent).to.equal(crud.i18n.deleteItem);
         });
 
@@ -42,7 +42,7 @@ describe('crud buttons', () => {
           expect(deleteButton.textContent).to.equal('Custom');
         });
 
-        it('should set the label for the save button', async () => {
+        it('should set the label for the save button', () => {
           expect(saveButton.textContent).to.equal(crud.i18n.saveItem);
         });
 
@@ -51,7 +51,7 @@ describe('crud buttons', () => {
           expect(saveButton.textContent).to.equal('Custom');
         });
 
-        it('should set the label for the cancel button', async () => {
+        it('should set the label for the cancel button', () => {
           expect(cancelButton.textContent).to.equal(crud.i18n.cancel);
         });
 

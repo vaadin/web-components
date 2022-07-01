@@ -59,7 +59,7 @@ function createIconset(folder, filenames, idPrefix = '') {
   return output;
 }
 
-gulp.task('icons', async () => {
+gulp.task('icons', () => {
   const folder = 'icons/svg/';
   let glyphs;
 

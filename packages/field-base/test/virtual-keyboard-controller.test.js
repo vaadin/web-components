@@ -41,13 +41,13 @@ describe('virtual-keyboard-controller', () => {
     input = element.inputElement;
   });
 
-  it('should disable virtual keyboard on close', async () => {
+  it('should disable virtual keyboard on close', () => {
     element.open();
     element.close();
     expect(input.inputMode).to.equal('none');
   });
 
-  it('should re-enable virtual keyboard on touchstart', async () => {
+  it('should re-enable virtual keyboard on touchstart', () => {
     element.open();
     element.close();
     touchstart(element);

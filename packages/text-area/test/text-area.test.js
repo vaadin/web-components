@@ -392,12 +392,12 @@ describe('text-area', () => {
         expect(getVerticalScrollPosition()).to.equal('10px');
       });
 
-      it('should update value on wheel', async () => {
+      it('should update value on wheel', () => {
         wheel({ deltaY: 10 });
         expect(getVerticalScrollPosition()).to.equal('10px');
       });
 
-      it('should scroll on wheel', async () => {
+      it('should scroll on wheel', () => {
         wheel({ deltaY: 10 });
         expect(inputField.scrollTop).to.equal(10);
       });

@@ -247,7 +247,7 @@ describe('shadow-focus-mixin', () => {
       expect(customElement.hasAttribute('focused')).to.be.true;
     });
 
-    it('should remove focused attribute when moving to focusable slotted element', async () => {
+    it('should remove focused attribute when moving to focusable slotted element', () => {
       const input = document.createElement('input');
       customElement.appendChild(input);
 

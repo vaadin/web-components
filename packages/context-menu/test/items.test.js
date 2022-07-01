@@ -119,7 +119,7 @@ describe('items', () => {
       expect(spy.called).to.be.false;
     });
 
-    (isTouch ? it.skip : it)('should open the subMenu on the right side', async () => {
+    (isTouch ? it.skip : it)('should open the subMenu on the right side', () => {
       const rootItemRect = menuComponents()[0].getBoundingClientRect();
       const subItemRect = menuComponents(subMenu)[0].getBoundingClientRect();
       expect(subItemRect.left).to.be.above(rootItemRect.right);

@@ -23,7 +23,7 @@ function sortIconFilesNormalized(file1, file2) {
   return file1.replace(/-/g, '~').localeCompare(file2.replace(/-/g, '~'), 'en-US');
 }
 
-gulp.task('icons', async () => {
+gulp.task('icons', () => {
   const folder = 'icons/svg/';
   let glyphs;
 

@@ -8,7 +8,7 @@ describe('virtualizer - item height', () => {
   const EVEN_ITEM_HEIGHT = 20;
   const ODD_ITEM_HEIGHT = 40;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     const scrollTarget = fixtureSync(`
       <div style="height: 300px;">
         <div class="container"></div>
@@ -43,7 +43,7 @@ describe('virtualizer - item height', () => {
     virtualizer.size = 10000;
   });
 
-  it('should have the initial placeholder height', async () => {
+  it('should have the initial placeholder height', () => {
     const firstItem = elementsContainer.querySelector(`#item-0`);
     expect(firstItem.offsetHeight).to.equal(200);
   });
