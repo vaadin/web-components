@@ -191,7 +191,7 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  * `overflow` | Set when rows are overflowing the grid viewport. Possible values: `top`, `bottom`, `start`, `end` | :host
  * `reordering` | Set when the grid's columns are being reordered | :host
  * `dragover` | Set when the grid (not a specific row) is dragged over | :host
- * `dragging-rows` : Set when grid rows are dragged  | :host
+ * `dragging-rows` | Set when grid rows are dragged  | :host
  * `reorder-status` | Reflects the status of a cell while columns are being reordered | cell
  * `frozen` | Frozen cell | cell
  * `last-frozen` | Last frozen cell | cell
