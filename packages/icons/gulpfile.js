@@ -43,13 +43,13 @@ gulp.task('iron-icons', () => {
           return `${createCopyright()}
 import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
 
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = \`<iron-iconset-svg name="vaadin" size="16">
+template.innerHTML = \`<iron-iconset-svg name="vaadin" size="16">
 <svg><defs>\n${contents}\n</defs></svg>
 </iron-iconset-svg>\`;
 
-document.head.appendChild($_documentContainer.content);\n`;
+document.head.appendChild(template.content);\n`;
         },
       }),
     )
@@ -73,13 +73,13 @@ gulp.task('vaadin-icons', () => {
 import '@vaadin/icon/vaadin-iconset.js';
 import '@vaadin/icon/vaadin-icon.js';
 
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = \`<vaadin-iconset name="vaadin" size="16">
+template.innerHTML = \`<vaadin-iconset name="vaadin" size="16">
 <svg><defs>\n${contents}\n</defs></svg>
 </vaadin-iconset>\`;
 
-document.head.appendChild($_documentContainer.content);\n`;
+document.head.appendChild(template.content);\n`;
         },
       }),
     )

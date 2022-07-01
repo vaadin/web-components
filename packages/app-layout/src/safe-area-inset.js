@@ -1,6 +1,6 @@
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = `
+template.innerHTML = `
   <style>
     /* Use units so that the values can be used in calc() */
     html {
@@ -12,4 +12,4 @@ $_documentContainer.innerHTML = `
   </style>
 `;
 
-document.head.appendChild($_documentContainer.content);
+document.head.appendChild(template.content);

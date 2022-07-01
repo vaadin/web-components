@@ -5,6 +5,7 @@ const analysis = require('../analysis.json');
 const elements = analysis.elements.filter((el) => el.privacy === 'public');
 
 const result = {
+  // eslint-disable-next-line camelcase
   schema_version: '1.0.0',
 };
 

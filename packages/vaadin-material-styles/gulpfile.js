@@ -90,9 +90,9 @@ gulp.task('icons', async () => {
  */
 import './version.js';
 
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = \`
+template.innerHTML = \`
   <style>
     @font-face {
       font-family: 'material-icons';
@@ -112,7 +112,7 @@ $_documentContainer.innerHTML = \`
   </style>
 \`;
 
-document.head.appendChild($_documentContainer.content);
+document.head.appendChild(template.content);
 `;
           fs.writeFile('font-icons.js', output, (err) => {
             if (err) {

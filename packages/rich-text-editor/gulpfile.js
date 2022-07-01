@@ -40,9 +40,9 @@ gulp.task('icons', (done) => {
  */
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = \`
+template.innerHTML = \`
   <style>
     @font-face {
       font-family: '${fontName}';
@@ -62,7 +62,7 @@ $_documentContainer.innerHTML = \`
   </style>
 \`;
 
-document.head.appendChild($_documentContainer.content);
+document.head.appendChild(template.content);
 
 export const iconsStyles = css\`\n`;
       glyphs.forEach((g, index) => {

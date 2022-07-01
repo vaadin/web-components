@@ -5,9 +5,9 @@
  */
 import '../sizing.js';
 import '../spacing.js';
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = `
+template.innerHTML = `
   <style>
     /* Use a stronger selector so that imports added later do not override the property values */
     html:not(div) {
@@ -37,4 +37,4 @@ $_documentContainer.innerHTML = `
   </style>
 `;
 
-document.head.appendChild($_documentContainer.content);
+document.head.appendChild(template.content);

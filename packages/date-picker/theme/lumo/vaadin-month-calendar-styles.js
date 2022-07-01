@@ -151,9 +151,9 @@ registerStyles(
   { moduleId: 'lumo-month-calendar' },
 );
 
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = `
+template.innerHTML = `
   <style>
     @keyframes vaadin-date-picker-month-calendar-focus-date {
       50% {
@@ -163,4 +163,4 @@ $_documentContainer.innerHTML = `
   </style>
 `;
 
-document.head.appendChild($_documentContainer.content);
+document.head.appendChild(template.content);

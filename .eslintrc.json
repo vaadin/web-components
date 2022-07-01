@@ -114,6 +114,7 @@
     "@typescript-eslint/sort-type-union-intersection-members": "error",
     "accessor-pairs": "error",
     "array-callback-return": "error",
+    "camelcase": "error",
     "capitalized-comments": ["error", "always", {
       "ignoreConsecutiveComments": true,
       "ignorePattern": "prettier|c8"
