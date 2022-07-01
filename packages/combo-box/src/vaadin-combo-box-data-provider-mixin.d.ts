@@ -20,7 +20,7 @@ export type ComboBoxDataProvider<TItem> = (
 
 export declare function ComboBoxDataProviderMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<ComboBoxDataProviderMixinClass<TItem>>;
+): Constructor<ComboBoxDataProviderMixinClass<TItem>> & T;
 
 export declare class ComboBoxDataProviderMixinClass<TItem> {
   /**

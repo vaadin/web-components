@@ -11,7 +11,7 @@ export type GridCellClassNameGenerator<TItem> = (column: GridColumn<TItem>, mode
 
 export declare function StylingMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<StylingMixinClass<TItem>>;
+): Constructor<StylingMixinClass<TItem>> & T;
 
 export declare class StylingMixinClass<TItem> {
   /**

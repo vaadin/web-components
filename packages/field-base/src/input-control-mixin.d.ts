@@ -21,8 +21,7 @@ import type { ValidateMixinClass } from './validate-mixin.js';
  */
 export declare function InputControlMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): T &
-  Constructor<ControllerMixinClass> &
+): Constructor<ControllerMixinClass> &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &
@@ -33,7 +32,8 @@ export declare function InputControlMixin<T extends Constructor<HTMLElement>>(
   Constructor<InputMixinClass> &
   Constructor<KeyboardMixinClass> &
   Constructor<LabelMixinClass> &
-  Constructor<ValidateMixinClass>;
+  Constructor<ValidateMixinClass> &
+  T;
 
 export declare class InputControlMixinClass {
   /**

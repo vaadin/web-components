@@ -61,7 +61,7 @@ declare class CookieConsent extends ElementMixin(HTMLElement) {
    * For `top` and `bottom`, the banner is shown with full width. For the corner positions,
    * it is shown as a smaller popup.
    */
-  position: 'top' | 'bottom' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  position: 'bottom-left' | 'bottom-right' | 'bottom' | 'top-left' | 'top-right' | 'top';
 
   /**
    * The name of the cookie to set to remember that the user has consented.

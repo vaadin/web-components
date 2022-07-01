@@ -19,7 +19,7 @@ export type CrudDataProviderParams = {
 
 export type CrudDataProvider<T> = (params: CrudDataProviderParams, callback: CrudDataProviderCallback<T>) => void;
 
-export type CrudEditorPosition = '' | 'bottom' | 'aside';
+export type CrudEditorPosition = '' | 'aside' | 'bottom';
 
 export interface CrudI18n {
   newItem: string;
@@ -113,7 +113,7 @@ export type CrudCustomEventMap<T> = {
   save: CrudSaveEvent<T>;
 };
 
-export type CrudEventMap<T> = HTMLElementEventMap & CrudCustomEventMap<T>;
+export type CrudEventMap<T> = CrudCustomEventMap<T> & HTMLElementEventMap;
 
 /**
  * `<vaadin-crud>` is a Web Component for [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
@@ -383,13 +383,13 @@ declare class Crud<Item> extends ControllerMixin(ElementMixin(ThemableMixin(HTML
   addEventListener<K extends keyof CrudEventMap<Item>>(
     type: K,
     listener: (this: Crud<Item>, ev: CrudEventMap<Item>[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof CrudEventMap<Item>>(
     type: K,
     listener: (this: Crud<Item>, ev: CrudEventMap<Item>[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

@@ -22,7 +22,7 @@ export interface ConfirmDialogCustomEventMap {
   reject: Event;
 }
 
-export type ConfirmDialogEventMap = HTMLElementEventMap & ConfirmDialogCustomEventMap;
+export type ConfirmDialogEventMap = ConfirmDialogCustomEventMap & HTMLElementEventMap;
 
 /**
  * `<vaadin-confirm-dialog>` is a Web Component for showing alerts and asking for user confirmation.
@@ -149,13 +149,13 @@ declare class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(HT
   addEventListener<K extends keyof ConfirmDialogEventMap>(
     type: K,
     listener: (this: ConfirmDialog, ev: ConfirmDialogEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof ConfirmDialogEventMap>(
     type: K,
     listener: (this: ConfirmDialog, ev: ConfirmDialogEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

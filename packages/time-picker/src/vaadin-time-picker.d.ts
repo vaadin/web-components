@@ -9,10 +9,10 @@ import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export interface TimePickerTime {
-  hours: string | number;
-  minutes: string | number;
-  seconds?: string | number;
-  milliseconds?: string | number;
+  hours: number | string;
+  minutes: number | string;
+  seconds?: number | string;
+  milliseconds?: number | string;
 }
 
 export interface TimePickerI18n {
@@ -206,13 +206,13 @@ declare class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(El
   addEventListener<K extends keyof TimePickerEventMap>(
     type: K,
     listener: (this: TimePicker, ev: TimePickerEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof TimePickerEventMap>(
     type: K,
     listener: (this: TimePicker, ev: TimePickerEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

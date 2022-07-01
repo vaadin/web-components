@@ -15,9 +15,9 @@ import type { TabindexMixinClass } from '@vaadin/component-base/src/tabindex-mix
  */
 export declare function ButtonMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): T &
-  Constructor<ActiveMixinClass> &
+): Constructor<ActiveMixinClass> &
   Constructor<DisabledMixinClass> &
   Constructor<FocusMixinClass> &
   Constructor<KeyboardMixinClass> &
-  Constructor<TabindexMixinClass>;
+  Constructor<TabindexMixinClass> &
+  T;

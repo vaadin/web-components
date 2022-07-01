@@ -11,7 +11,7 @@ import type { ReactiveController, ReactiveControllerHost } from 'lit';
  */
 export declare function ControllerMixin<T extends Constructor<HTMLElement>>(
   superclass: T,
-): T & Constructor<ControllerMixinClass>;
+): Constructor<ControllerMixinClass> & T;
 
 export declare class ControllerMixinClass
   implements Pick<ReactiveControllerHost, 'addController' | 'removeController'>

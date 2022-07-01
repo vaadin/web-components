@@ -70,13 +70,13 @@ declare class LoginOverlay extends ElementMixin(ThemableMixin(LoginMixin(HTMLEle
   addEventListener<K extends keyof LoginOverlayEventMap>(
     type: K,
     listener: (this: LoginOverlay, ev: LoginOverlayEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof LoginOverlayEventMap>(
     type: K,
     listener: (this: LoginOverlay, ev: LoginOverlayEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

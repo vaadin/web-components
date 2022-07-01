@@ -76,13 +76,13 @@ declare class GridSorter extends ThemableMixin(DirMixin(HTMLElement)) {
   addEventListener<K extends keyof GridSorterEventMap>(
     type: K,
     listener: (this: GridSorter, ev: GridSorterEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof GridSorterEventMap>(
     type: K,
     listener: (this: GridSorter, ev: GridSorterEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

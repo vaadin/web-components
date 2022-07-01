@@ -68,13 +68,13 @@ declare class RadioButton extends LabelMixin(
   addEventListener<K extends keyof RadioButtonEventMap>(
     type: K,
     listener: (this: RadioButton, ev: RadioButtonEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof RadioButtonEventMap>(
     type: K,
     listener: (this: RadioButton, ev: RadioButtonEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

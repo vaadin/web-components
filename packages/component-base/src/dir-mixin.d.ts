@@ -8,7 +8,7 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 /**
  * A mixin to handle `dir` attribute based on the one set on the `<html>` element.
  */
-export declare function DirMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<DirMixinClass>;
+export declare function DirMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<DirMixinClass> & T;
 
 export declare class DirMixinClass {
   protected __getNormalizedScrollLeft(element: Element | null): number;

@@ -8,7 +8,7 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 /**
  * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
  */
-export declare function ListMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ListMixinClass>;
+export declare function ListMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<ListMixinClass> & T;
 
 export declare class ListMixinClass {
   /**
