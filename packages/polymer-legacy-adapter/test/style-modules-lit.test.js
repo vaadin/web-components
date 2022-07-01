@@ -11,11 +11,11 @@ import '@vaadin/vaadin-themable-mixin/test/themable-mixin.test.js';
 import { LitElement } from 'lit';
 
 describe('style-modules-lit', () => {
-  it('should have created styles as dom-modules', async () => {
+  it('should have created styles as dom-modules', () => {
     expect(window.createStylesFunction.called).to.be.true;
   });
 
-  it('should have registered styles using the adapter', async () => {
+  it('should have registered styles using the adapter', () => {
     expect(window.Vaadin.styleModules.getAllThemes()).not.to.be.empty;
   });
 

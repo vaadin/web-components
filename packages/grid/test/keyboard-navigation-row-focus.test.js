@@ -496,7 +496,7 @@ describe('keyboard navigation on column groups - row focus', () => {
         expect(tabbableBodyRow.offsetHeight).not.to.equal(0);
       });
 
-      it('should have no tabbable body row when there are no rows', async () => {
+      it('should have no tabbable body row when there are no rows', () => {
         // Remove all body rows
         grid.items = [];
 
@@ -522,7 +522,7 @@ describe('keyboard navigation on column groups - row focus', () => {
 
 ['header', 'footer', 'body'].forEach((section) => {
   describe(`empty grid - row focus - ${section}`, () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       grid = fixtureSync(`<vaadin-grid>
         <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>`);

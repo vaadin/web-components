@@ -42,7 +42,7 @@ async function getSourceRepo() {
 }
 
 const zhWorkspaceNameById = new Map();
-async function getZenHubWorkspaceName(workspace_id, repo_id) {
+function getZenHubWorkspaceName(workspace_id, repo_id) {
   if (!zhWorkspaceNameById.has(workspace_id)) {
     zhWorkspaceNameById.set(
       workspace_id,
@@ -160,8 +160,8 @@ async function transferZhPipelines(pipelines, issue) {
     return Promise.resolve();
   }
   await Promise.all(
-    pipelines.map(async (pipeline) => {
-      zhApi.post(
+    pipelines.map((pipeline) => {
+      return zhApi.post(
         `/p2/workspaces/${pipeline.workspace_id}/repositories/${issue.repository.databaseId}/issues/${issue.number}/moves`,
         {
           pipeline_id: pipeline.pipeline_id,

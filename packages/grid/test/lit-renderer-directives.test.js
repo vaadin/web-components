@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import { html, render } from 'lit';
@@ -20,6 +20,7 @@ async function renderGrid(container, { items, header, footer, rowDetails }) {
     </vaadin-grid>`,
     container,
   );
+  await nextFrame();
   return container.querySelector('vaadin-grid');
 }
 
@@ -70,6 +71,7 @@ describe('lit renderer directives', () => {
           </vaadin-grid>`,
           container,
         );
+        await nextFrame();
         grid = container.querySelector('vaadin-grid');
         grid.openItemDetails(grid.items[0]);
       });
@@ -130,6 +132,7 @@ describe('lit renderer directives', () => {
           </vaadin-grid>`,
           container,
         );
+        await nextFrame();
         grid = container.querySelector('vaadin-grid');
       });
 
@@ -190,6 +193,7 @@ describe('lit renderer directives', () => {
           </vaadin-grid>`,
           container,
         );
+        await nextFrame();
         grid = container.querySelector('vaadin-grid');
       });
 
@@ -240,6 +244,7 @@ describe('lit renderer directives', () => {
           </vaadin-grid>`,
           container,
         );
+        await nextFrame();
         grid = container.querySelector('vaadin-grid');
       });
 

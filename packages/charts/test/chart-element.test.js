@@ -45,7 +45,7 @@ describe('vaadin-chart', () => {
   describe('creating element', () => {
     let chart;
 
-    beforeEach(async () => {
+    beforeEach(() => {
       chart = document.createElement('vaadin-chart');
     });
 

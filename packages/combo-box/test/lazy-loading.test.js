@@ -787,7 +787,7 @@ describe('lazy loading', () => {
           await aTimeout(0);
         });
 
-        it('should render selectedItem as selected when setting it', async () => {
+        it('should render selectedItem as selected when setting it', () => {
           const loadedItem = 'item 0';
           comboBox.selectedItem = loadedItem;
           flushComboBox(comboBox);
@@ -796,7 +796,7 @@ describe('lazy loading', () => {
           expect(items[0].item).to.deep.equal(loadedItem);
         });
 
-        it('should render selectedItem as selected when setting it while loading more items', async () => {
+        it('should render selectedItem as selected when setting it while loading more items', () => {
           const alreadyLoadedItem = `item ${comboBox.pageSize - 1}`;
 
           scrollToIndex(comboBox, comboBox.pageSize + 1);
@@ -813,7 +813,7 @@ describe('lazy loading', () => {
     });
 
     describe('selectedItem (object items)', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         comboBox.itemIdPath = 'id';
         comboBox.dataProvider = asyncObjectDataProvider;
       });
@@ -834,7 +834,7 @@ describe('lazy loading', () => {
           await aTimeout(0);
         });
 
-        it('should render selectedItem as selected when setting it', async () => {
+        it('should render selectedItem as selected when setting it', () => {
           const loadedItem = { id: 0, value: 'value 0', label: 'label 0' };
           comboBox.selectedItem = loadedItem;
           flushComboBox(comboBox);
@@ -843,7 +843,7 @@ describe('lazy loading', () => {
           expect(items[0].item).to.deep.equal(loadedItem);
         });
 
-        it('should render selectedItem as selected when setting it while loading more items', async () => {
+        it('should render selectedItem as selected when setting it while loading more items', () => {
           const alreadyLoadedItem = {
             id: comboBox.pageSize - 1,
             value: `value ${comboBox.pageSize - 1}`,

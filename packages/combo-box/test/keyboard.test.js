@@ -422,7 +422,7 @@ describe('keyboard', () => {
         expect(keydownSpy.called).to.be.false;
       });
 
-      it('should not stop propagation of the keyboard enter event when input has a predefined option', async () => {
+      it('should not stop propagation of the keyboard enter event when input has a predefined option', () => {
         setInputValue(comboBox, 'foo');
         expect(comboBox.opened).to.be.false;
         const keydownSpy = sinon.spy();

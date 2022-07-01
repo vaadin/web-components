@@ -246,7 +246,7 @@ describe('disabled', () => {
       await sendKeys({ up: 'Shift' });
     }
 
-    beforeEach(async () => {
+    beforeEach(() => {
       focusInput = fixtureSync('<input>');
       // Move focus to the input after the field so we can shift-tab to the reveal button in tests
       focusInput.focus();

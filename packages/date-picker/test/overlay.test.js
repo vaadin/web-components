@@ -350,19 +350,19 @@ describe('overlay', () => {
         });
       });
 
-      it('should scroll when the month is above the visible area', async () => {
+      it('should scroll when the month is above the visible area', () => {
         const position = monthScroller.position;
         overlay.revealDate(new Date(2021, 0, 1), false);
         expect(monthScroller.position).to.equal(position - 1);
       });
 
-      it('should not scroll when the month is the same', async () => {
+      it('should not scroll when the month is the same', () => {
         const position = monthScroller.position;
         overlay.revealDate(new Date(2021, 1, 10), false);
         expect(monthScroller.position).to.equal(position);
       });
 
-      it('should scroll when the month is below the visible area', async () => {
+      it('should scroll when the month is below the visible area', () => {
         const position = monthScroller.position;
         overlay.revealDate(new Date(2021, 2, 1), false);
         expect(monthScroller.position).to.equal(position + 1);
@@ -377,19 +377,19 @@ describe('overlay', () => {
         });
       });
 
-      it('should scroll when the month is above the visible area', async () => {
+      it('should scroll when the month is above the visible area', () => {
         const position = monthScroller.position;
         overlay.revealDate(new Date(2021, 0, 1), false);
         expect(monthScroller.position).to.equal(position - 1);
       });
 
-      it('should not scroll when the month is within the visible area', async () => {
+      it('should not scroll when the month is within the visible area', () => {
         const position = monthScroller.position;
         overlay.revealDate(new Date(2021, 2, 1), false);
         expect(monthScroller.position).to.equal(position);
       });
 
-      it('should scroll when the month is below the visible area', async () => {
+      it('should scroll when the month is below the visible area', () => {
         const position = monthScroller.position;
         overlay.revealDate(new Date(2021, 3, 1), false);
         expect(monthScroller.position).to.equal(position + 1);
@@ -404,19 +404,19 @@ describe('overlay', () => {
         });
       });
 
-      it('should scroll when the month is above the visible area', async () => {
+      it('should scroll when the month is above the visible area', () => {
         const position = monthScroller.position;
         overlay.revealDate(new Date(2021, 0, 1), false);
         expect(monthScroller.position).to.equal(position - 1 /* The top 10% offset is ensured by CSS */);
       });
 
-      it('should not scroll when the month is within the visible area', async () => {
+      it('should not scroll when the month is within the visible area', () => {
         const position = monthScroller.position;
         overlay.revealDate(new Date(2021, 2, 1), false);
         expect(monthScroller.position).to.equal(position);
       });
 
-      it('should scroll when the month is below the visible area', async () => {
+      it('should scroll when the month is below the visible area', () => {
         const position = monthScroller.position;
         overlay.revealDate(new Date(2021, 3, 1), false);
         expect(monthScroller.position).to.equal(position + 0.6 /* The bottom 10% offset is ensured by JS */);

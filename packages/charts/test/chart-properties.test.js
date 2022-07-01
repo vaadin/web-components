@@ -543,7 +543,7 @@ describe('vaadin-chart properties', () => {
         await oneEvent(chart, 'chart-load');
       });
 
-      it('should not show a message when lazily setting the property and the chart has data', async () => {
+      it('should not show a message when lazily setting the property and the chart has data', () => {
         chart.emptyText = 'Empty Vaadin Chart';
         expect(chart.$.chart.querySelector('.highcharts-no-data > text')).not.to.exist;
       });

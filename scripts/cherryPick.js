@@ -150,7 +150,7 @@ async function postComment(url, userName, branch, message) {
   );
 }
 
-async function createPR(title, head, base) {
+function createPR(title, head, base) {
   return new Promise((resolve) => {
     const content = JSON.stringify({ title, head, base }, null, 1);
     const req = https.request(
