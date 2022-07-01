@@ -277,7 +277,7 @@ function _handleNative(ev) {
   }
   if (!ev[HANDLED_OBJ]) {
     ev[HANDLED_OBJ] = {};
-    if (type.slice(0, 5) === 'touch') {
+    if (type.startsWith('touch')) {
       const t = ev.changedTouches[0];
       if (type === 'touchstart') {
         // Only handle the first finger
