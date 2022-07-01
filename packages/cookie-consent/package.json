@@ -24,7 +24,9 @@
     "src",
     "theme",
     "vaadin-*.d.ts",
-    "vaadin-*.js"
+    "vaadin-*.js",
+    "web-types.json",
+    "web-types.lit.json"
   ],
   "keywords": [
     "Vaadin",
@@ -43,5 +45,9 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.3.2"
-  }
+  },
+  "web-types": [
+    "web-types.json",
+    "web-types.lit.json"
+  ]
 }
