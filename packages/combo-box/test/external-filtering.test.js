@@ -144,7 +144,7 @@ describe('external filtering', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
-    it('should commit the empty value', async () => {
+    it('should commit the empty value', () => {
       setInputValue(comboBox, '');
       enter(comboBox.inputElement);
       expect(comboBox.value).to.equal('');
@@ -204,7 +204,7 @@ describe('external filtering', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(0);
     });
 
-    it('should commit the filtered value', async () => {
+    it('should commit the filtered value', () => {
       setInputValue(comboBox, 'foo');
       enter(comboBox.inputElement);
       expect(comboBox.value).to.equal('foo');
@@ -216,7 +216,7 @@ describe('external filtering', () => {
       expect(getFocusedItemIndex(comboBox)).to.equal(-1);
     });
 
-    it('should commit an empty value', async () => {
+    it('should commit an empty value', () => {
       setInputValue(comboBox, '');
       enter(comboBox.inputElement);
       expect(comboBox.value).to.equal('');

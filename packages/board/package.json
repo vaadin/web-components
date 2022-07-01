@@ -5,7 +5,7 @@
     "access": "public"
   },
   "description": "Polymer element to create flexible responsive layouts and build nice looking dashboard.",
-  "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/board/LICENSE.txt",
+  "license": "SEE LICENSE IN LICENSE",
   "cvdlName": "vaadin-board",
   "repository": {
     "type": "git",
@@ -24,7 +24,9 @@
     "src",
     "theme",
     "vaadin-*.d.ts",
-    "vaadin-*.js"
+    "vaadin-*.js",
+    "web-types.json",
+    "web-types.lit.json"
   ],
   "keywords": [
     "Vaadin",
@@ -44,5 +46,9 @@
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.3.2",
     "sinon": "^13.0.2"
-  }
+  },
+  "web-types": [
+    "web-types.json",
+    "web-types.lit.json"
+  ]
 }

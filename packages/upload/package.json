@@ -23,7 +23,9 @@
     "src",
     "theme",
     "vaadin-*.d.ts",
-    "vaadin-*.js"
+    "vaadin-*.js",
+    "web-types.json",
+    "web-types.lit.json"
   ],
   "keywords": [
     "Vaadin",
@@ -46,5 +48,9 @@
     "@vaadin/form-layout": "23.2.0-alpha3",
     "@vaadin/testing-helpers": "^0.3.2",
     "sinon": "^13.0.2"
-  }
+  },
+  "web-types": [
+    "web-types.json",
+    "web-types.lit.json"
+  ]
 }

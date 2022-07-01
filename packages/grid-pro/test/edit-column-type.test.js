@@ -210,7 +210,7 @@ describe('edit column editor type', () => {
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should work with `enterNextRow`', async () => {
+      it('should work with `enterNextRow`', () => {
         grid.enterNextRow = true;
         const item = editor._overlayElement.querySelector('vaadin-item');
         enter(item);
@@ -262,22 +262,22 @@ describe('edit column editor type', () => {
         expect(column._getEditorComponent(cell)).to.not.be.ok;
       });
 
-      it('should warn about missing options on enter key', async () => {
+      it('should warn about missing options on enter key', () => {
         enter(editor.focusElement);
         expect(console.warn.called).to.be.true;
       });
 
-      it('should warn about missing options on space key', async () => {
+      it('should warn about missing options on space key', () => {
         space(editor.focusElement);
         expect(console.warn.called).to.be.true;
       });
 
-      it('should warn about missing options on arrow down key', async () => {
+      it('should warn about missing options on arrow down key', () => {
         arrowDown(editor.focusElement);
         expect(console.warn.called).to.be.true;
       });
 
-      it('should warn about missing options on arrow up key', async () => {
+      it('should warn about missing options on arrow up key', () => {
         arrowUp(editor.focusElement);
         expect(console.warn.called).to.be.true;
       });

@@ -55,19 +55,19 @@ describe('PolylitMixin', () => {
       await element.updateComplete;
     });
 
-    it('should reference elements with id', async () => {
+    it('should reference elements with id', () => {
       expect(element.$.foo).to.be.instanceOf(HTMLDivElement);
     });
 
-    it('should get the nested value', async () => {
+    it('should get the nested value', () => {
       expect(element.get('foo.bar', { foo: { bar: 'baz' } })).to.equal('baz');
     });
 
-    it('should return undefined for a non-existent value', async () => {
+    it('should return undefined for a non-existent value', () => {
       expect(element.get('foo.bar', {})).to.be.undefined;
     });
 
-    it('should set the nested value', async () => {
+    it('should set the nested value', () => {
       const object = { foo: {} };
       element.set('foo.bar', 'baz', object);
       expect(object.foo.bar).to.equal('baz');
@@ -501,11 +501,11 @@ describe('PolylitMixin', () => {
       expect(valueOrLoadingChangedSpy.getCall(0).args).to.eql(['foo', true]);
     });
 
-    it('should not run complex observer whose dependencies have not intialized', async () => {
+    it('should not run complex observer whose dependencies have not intialized', () => {
       expect(valueOrLoadingChangedSpy.called).to.be.false;
     });
 
-    it('should run a complex observer whose dependency has a default value', async () => {
+    it('should run a complex observer whose dependency has a default value', () => {
       expect(countOrLoadingChangedSpy.calledOnce).to.be.true;
     });
 

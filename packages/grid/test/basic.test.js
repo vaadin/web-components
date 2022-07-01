@@ -80,7 +80,7 @@ describe('basic features', () => {
     expect(window.getComputedStyle(cellContent).opacity).to.eql('1');
   });
 
-  it('scroll to index', async () => {
+  it('scroll to index', () => {
     grid.size = 100;
 
     grid.scrollToIndex(30);

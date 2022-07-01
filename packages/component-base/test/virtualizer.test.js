@@ -75,13 +75,13 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
-  it('should ignore scroll to invalid index', async () => {
+  it('should ignore scroll to invalid index', () => {
     virtualizer.scrollToIndex();
     const item = elementsContainer.querySelector('#item-0');
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
-  it('should ignore scroll to index while invisible', async () => {
+  it('should ignore scroll to index while invisible', () => {
     scrollTarget.hidden = true;
 
     virtualizer.scrollToIndex(100);
@@ -156,7 +156,7 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
-  it('should scroll to an arbitrary index', async () => {
+  it('should scroll to an arbitrary index', () => {
     // This is a special case that seems to be due to an iron-list bug (reproduces with plain iron-list)...
     // The bug is worked around in the virtualizer.
     scrollTarget.style.height = '200px';
@@ -174,7 +174,7 @@ describe('virtualizer', () => {
     expect(item.getBoundingClientRect().top).to.equal(scrollTarget.getBoundingClientRect().top);
   });
 
-  it('should restore scroll position on size change', async () => {
+  it('should restore scroll position on size change', () => {
     // Scroll to item 50 and an additional 10 pixels
     virtualizer.scrollToIndex(50);
     scrollTarget.scrollTop += 10;

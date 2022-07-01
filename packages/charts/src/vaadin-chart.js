@@ -164,8 +164,7 @@ Highcharts.setOptions({ lang: { noData: '' } });
  * A comprehensive list of the supported style classes can be found at
  * https://www.highcharts.com/docs/chart-design-and-style/style-by-css
  *
- * See also the documentation for styling Vaadin components at
- * https://vaadin.com/docs/v14/themes/themes-and-styling-overview.html
+ * See also the [Chart Styling](https://vaadin.com/docs/latest/components/charts/css-styling) documentation.
  *
  * ### RTL support
  *
@@ -1218,7 +1217,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   /** @private */
   __inflateFunctions(jsonConfiguration) {
     Object.entries(jsonConfiguration).forEach(([attr, targetProperty]) => {
-      if (attr.indexOf('_fn_') === 0 && (typeof targetProperty === 'string' || targetProperty instanceof String)) {
+      if (attr.startsWith('_fn_') && (typeof targetProperty === 'string' || targetProperty instanceof String)) {
         try {
           // eslint-disable-next-line no-eval
           jsonConfiguration[attr.substr(4)] = eval(`(${targetProperty})`);
@@ -1762,7 +1761,7 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       let style = '';
       if (this.hasAttribute('style')) {
         style = this.getAttribute('style');
-        if (style.charAt(style.length - 1) !== ';') {
+        if (!style.endsWith(';')) {
           style += ';';
         }
       }

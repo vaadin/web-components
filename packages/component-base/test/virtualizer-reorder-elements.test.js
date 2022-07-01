@@ -21,7 +21,7 @@ describe('reorder elements', () => {
   // This helper scrolls the virtualizer enough to cause some elements to get
   // recycled but not too much to cause a full recycle.
   // Returns a list of the elements that were detached while being reordered.
-  async function scrollRecycle(skipFlush = false) {
+  function scrollRecycle(skipFlush = false) {
     return new Promise((resolve) => {
       new MutationObserver((mutations) => {
         resolve(mutations.flatMap((record) => [...record.removedNodes]));
@@ -71,12 +71,12 @@ describe('reorder elements', () => {
     clock.restore();
   });
 
-  it('should have the elements in order', async () => {
+  it('should have the elements in order', () => {
     scrollRecycle();
     expect(elementsInOrder()).to.be.true;
   });
 
-  it('should not have the elements in order', async () => {
+  it('should not have the elements in order', () => {
     init({ reorderElements: false });
 
     scrollRecycle();
@@ -96,9 +96,9 @@ describe('reorder elements', () => {
     expect(detachedElements).not.to.include(recycledElement);
   });
 
-  it('should not try to reorder an empty virtualizer', async () => {
+  it('should not try to reorder an empty virtualizer', () => {
     virtualizer.size = 0;
-    expect(async () => scrollRecycle()).not.to.throw(Error);
+    expect(() => scrollRecycle()).not.to.throw(Error);
   });
 
   it('should not reorder before debouncer flushes', () => {
@@ -113,13 +113,13 @@ describe('reorder elements', () => {
     expect(elementsInOrder()).to.be.true;
   });
 
-  it('should not reorder while mouse down', async () => {
+  it('should not reorder while mouse down', () => {
     mousedown(elementsContainer);
     scrollRecycle();
     expect(elementsInOrder()).to.be.false;
   });
 
-  it('should reorder once mousedown is released', async () => {
+  it('should reorder once mousedown is released', () => {
     mousedown(elementsContainer);
     scrollRecycle();
     mouseup(elementsContainer);

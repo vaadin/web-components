@@ -36,7 +36,7 @@ describe('custom input', () => {
     expect(overlay.opened).not.to.be.true;
   });
 
-  it('should close on overlay date tap', async () => {
+  it('should close on overlay date tap', () => {
     datepicker.open();
     const spy = sinon.spy(datepicker, 'close');
     const evt = new CustomEvent('date-tap', { detail: { date: new Date() }, bubbles: true, composed: true });

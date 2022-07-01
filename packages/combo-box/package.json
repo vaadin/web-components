@@ -24,7 +24,9 @@
     "src",
     "theme",
     "vaadin-*.d.ts",
-    "vaadin-*.js"
+    "vaadin-*.js",
+    "web-types.json",
+    "web-types.lit.json"
   ],
   "keywords": [
     "Vaadin",
@@ -53,5 +55,9 @@
     "@vaadin/text-field": "23.2.0-alpha3",
     "lit": "^2.0.0",
     "sinon": "^13.0.2"
-  }
+  },
+  "web-types": [
+    "web-types.json",
+    "web-types.lit.json"
+  ]
 }

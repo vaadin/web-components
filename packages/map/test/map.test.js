@@ -8,7 +8,7 @@ import Map from 'ol/Map';
 import OSM from 'ol/source/OSM';
 import View from 'ol/View';
 
-async function nextMapRender(map) {
+function nextMapRender(map) {
   return new Promise((resolve) => {
     map.configuration.on('rendercomplete', resolve);
   });

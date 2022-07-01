@@ -17,7 +17,7 @@ import { close, getOverlayContent, monthsEqual, open } from './common.js';
 
 settings.setCancelSyntheticClickEvents(false);
 
-async function touchTap(target) {
+function touchTap(target) {
   const start = makeSoloTouchEvent('touchstart', null, target);
   const end = makeSoloTouchEvent('touchend', null, target);
   if (!start.defaultPrevented && !end.defaultPrevented) {
@@ -71,7 +71,7 @@ describe('basic features', () => {
     expect(datepicker.hasAttribute('focused')).to.be.true;
   });
 
-  it('should not blur when toggle button is clicked', async () => {
+  it('should not blur when toggle button is clicked', () => {
     const e = new CustomEvent('mousedown', { bubbles: true });
     const spy = sinon.spy(e, 'preventDefault');
     toggleButton.dispatchEvent(e);

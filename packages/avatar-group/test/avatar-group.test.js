@@ -77,18 +77,18 @@ describe('avatar-group', () => {
       expect(items.length).to.equal(group.maxItemsVisible);
     });
 
-    it('should set abbr property on the overflow avatar', async () => {
+    it('should set abbr property on the overflow avatar', () => {
       const overflow = group.$.overflow;
       expect(overflow.abbr).to.equal('+3');
     });
 
-    it('should set title attribute on the overflow avatar', async () => {
+    it('should set title attribute on the overflow avatar', () => {
       const overflow = group.$.overflow;
       const items = group.items;
       expect(overflow.getAttribute('title')).to.equal([items[2].name, items[3].abbr, 'anonymous'].join('\n'));
     });
 
-    it('should show overlay on overflow avatar click', async () => {
+    it('should show overlay on overflow avatar click', () => {
       const overflow = group.$.overflow;
       overflow.click();
       expect(overflow.hasAttribute('hidden')).to.be.false;

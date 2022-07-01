@@ -6,7 +6,7 @@ import '../vaadin-chart.js';
 describe('turbo-mode', () => {
   let chart;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sinon.stub(console, 'warn');
   });
 

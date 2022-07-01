@@ -307,11 +307,11 @@ describe('ThemableMixin', () => {
     expect(getComputedStyle(getText(components['test-own-template'])).backgroundColor).to.equal('rgb(255, 0, 0)');
   });
 
-  it('should inherit parent themes to own custom template with no is defined', async () => {
+  it('should inherit parent themes to own custom template with no is defined', () => {
     expect(getComputedStyle(getText(components['test-own-template-no-is'])).backgroundColor).to.equal('rgb(255, 0, 0)');
   });
 
-  it('should inherit parent themes with no is nor content defined', async () => {
+  it('should inherit parent themes with no is nor content defined', () => {
     expect(getComputedStyle(getText(components['test-inherited-no-content-no-is'])).backgroundColor).to.equal(
       'rgb(255, 0, 0)',
     );
@@ -375,7 +375,7 @@ describe('ThemableMixin', () => {
     expect(occurrences).to.equal(1);
   });
 
-  it('should have own styles', async () => {
+  it('should have own styles', () => {
     expect(getComputedStyle(getText(components['test-own-styles'])).color).to.equal('rgb(255, 0, 0)');
   });
 

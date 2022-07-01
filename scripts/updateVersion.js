@@ -8,7 +8,7 @@ const oldVersion = require('../lerna.json').version;
  * It prints stdout and stderr at the same time that captures it in
  * order to be passed in the resolved promise.
  */
-async function exe(cmd, quiet) {
+function exe(cmd, quiet) {
   const args = cmd.split(/ +/);
   const child = spawn(args[0], args.slice(1));
 
@@ -25,7 +25,7 @@ async function exe(cmd, quiet) {
   child.stderr.on('data', capture);
 
   return new Promise((resolve, reject) => {
-    child.on('exit', async (code) => {
+    child.on('exit', (code) => {
       if (code === 0) {
         resolve(out);
       } else {

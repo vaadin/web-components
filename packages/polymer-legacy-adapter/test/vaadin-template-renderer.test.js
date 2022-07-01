@@ -130,7 +130,7 @@ describe('vaadin-template-renderer', () => {
     expect(spy.getCall(0).args[0].model).to.equal(component.$.content.__templateInstance);
   });
 
-  it('should re-render the template instance when changing a parent property', async () => {
+  it('should re-render the template instance when changing a parent property', () => {
     const host = fixtureSync(`<mock-component-host></mock-component-host>`);
     const component = host.$.component;
 
@@ -139,7 +139,7 @@ describe('vaadin-template-renderer', () => {
     expect(component.$.content.textContent.trim()).to.equal('foobar');
   });
 
-  it('should re-render multiple template instances independently', async () => {
+  it('should re-render multiple template instances independently', () => {
     const host1 = fixtureSync(`<mock-component-host></mock-component-host>`);
     const host2 = fixtureSync(`<mock-component-host></mock-component-host>`);
     const component1 = host1.$.component;

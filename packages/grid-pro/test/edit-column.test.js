@@ -387,7 +387,7 @@ describe('edit column', () => {
         grid.addEventListener('active-item-changed', activeItemChangedSpy);
       });
 
-      it('should not fire the event on cell click in the editable column', async () => {
+      it('should not fire the event on cell click in the editable column', () => {
         cell = getContainerCell(grid.$.items, 0, 1);
         cell._content.click();
         expect(activeItemChangedSpy.called).to.be.false;

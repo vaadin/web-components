@@ -106,7 +106,7 @@ describe('vaadin-app-layout', () => {
         expect(toggle.offsetHeight).to.be.greaterThan(0);
       });
 
-      it('should remove hidden attribute on navbar-bottom on resize', async () => {
+      it('should remove hidden attribute on navbar-bottom on resize', () => {
         expect(layout.$.navbarBottom.hasAttribute('hidden')).to.be.true;
         window.dispatchEvent(new Event('resize'));
         expect(layout.$.navbarBottom.hasAttribute('hidden')).to.be.false;

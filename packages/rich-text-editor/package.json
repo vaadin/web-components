@@ -5,7 +5,7 @@
     "access": "public"
   },
   "description": "vaadin-rich-text-editor",
-  "license": "https://raw.githubusercontent.com/vaadin/web-components/master/packages/rich-text-editor/LICENSE",
+  "license": "SEE LICENSE IN LICENSE",
   "cvdlName": "vaadin-rich-text-editor",
   "repository": {
     "type": "git",
@@ -28,7 +28,9 @@
     "theme",
     "vaadin-*.d.ts",
     "vaadin-*.js",
-    "vendor"
+    "vendor",
+    "web-types.json",
+    "web-types.lit.json"
   ],
   "keywords": [
     "Vaadin",
@@ -54,5 +56,9 @@
     "gulp-cli": "^2.3.0",
     "gulp-iconfont": "^11.0.0",
     "sinon": "^13.0.2"
-  }
+  },
+  "web-types": [
+    "web-types.json",
+    "web-types.lit.json"
+  ]
 }
