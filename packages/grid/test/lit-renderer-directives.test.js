@@ -1,12 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-grid.js';
 import { html, render } from 'lit';
 import { columnBodyRenderer, columnFooterRenderer, columnHeaderRenderer, gridRowDetailsRenderer } from '../lit.js';
 import { getCellContent, getContainerCell } from './helpers.js';
 
-function renderGrid(container, { items, header, footer, rowDetails }) {
+async function renderGrid(container, { items, header, footer, rowDetails }) {
   render(
     html`<vaadin-grid
       .items="${items}"
@@ -20,6 +20,7 @@ function renderGrid(container, { items, header, footer, rowDetails }) {
     </vaadin-grid>`,
     container,
   );
+  await nextFrame();
   return container.querySelector('vaadin-grid');
 }
 
@@ -62,7 +63,7 @@ describe('lit renderer directives', () => {
     describe('arguments', () => {
       let rendererSpy;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         rendererSpy = sinon.spy();
         render(
           html`<vaadin-grid .items="${['Item']}" ${gridRowDetailsRenderer(rendererSpy)}>
@@ -70,6 +71,7 @@ describe('lit renderer directives', () => {
           </vaadin-grid>`,
           container,
         );
+        await nextFrame();
         grid = container.querySelector('vaadin-grid');
         grid.openItemDetails(grid.items[0]);
       });
@@ -122,7 +124,7 @@ describe('lit renderer directives', () => {
     describe('arguments', () => {
       let rendererSpy;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         rendererSpy = sinon.spy();
         render(
           html`<vaadin-grid .items="${['Item']}">
@@ -130,6 +132,7 @@ describe('lit renderer directives', () => {
           </vaadin-grid>`,
           container,
         );
+        await nextFrame();
         grid = container.querySelector('vaadin-grid');
       });
 
@@ -182,7 +185,7 @@ describe('lit renderer directives', () => {
     describe('arguments', () => {
       let rendererSpy;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         rendererSpy = sinon.spy();
         render(
           html`<vaadin-grid>
@@ -190,6 +193,7 @@ describe('lit renderer directives', () => {
           </vaadin-grid>`,
           container,
         );
+        await nextFrame();
         grid = container.querySelector('vaadin-grid');
       });
 
@@ -232,7 +236,7 @@ describe('lit renderer directives', () => {
     describe('arguments', () => {
       let rendererSpy;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         rendererSpy = sinon.spy();
         render(
           html`<vaadin-grid>
@@ -240,6 +244,7 @@ describe('lit renderer directives', () => {
           </vaadin-grid>`,
           container,
         );
+        await nextFrame();
         grid = container.querySelector('vaadin-grid');
       });
 
