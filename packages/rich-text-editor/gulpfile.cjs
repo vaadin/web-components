@@ -35,7 +35,7 @@ gulp.task('icons', (done) => {
 
       let output = `/**
  * @license
- * Copyright (c) 2021 Vaadin Ltd
+ * Copyright (c) 2018 - 2022 Vaadin Ltd.
  * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
