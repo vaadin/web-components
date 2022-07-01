@@ -76,13 +76,13 @@ declare class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(HTML
   addEventListener<K extends keyof TabsEventMap>(
     type: K,
     listener: (this: Tabs, ev: TabsEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof TabsEventMap>(
     type: K,
     listener: (this: Tabs, ev: TabsEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

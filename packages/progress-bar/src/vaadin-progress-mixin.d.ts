@@ -5,7 +5,7 @@
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
 
-export declare function ProgressMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ProgressMixinClass>;
+export declare function ProgressMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<ProgressMixinClass> & T;
 
 export declare class ProgressMixinClass {
   /**

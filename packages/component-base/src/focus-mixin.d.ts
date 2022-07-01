@@ -8,7 +8,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
 /**
  * A mixin to handle `focused` and `focus-ring` attributes based on focus.
  */
-export declare function FocusMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<FocusMixinClass>;
+export declare function FocusMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<FocusMixinClass> & T;
 
 export declare class FocusMixinClass {
   protected readonly _keyboardActive: boolean;

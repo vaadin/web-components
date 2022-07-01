@@ -13,11 +13,11 @@ import { InputMixinClass } from './input-mixin.js';
  */
 export declare function CheckedMixin<T extends Constructor<object>>(
   base: T,
-): T &
-  Constructor<CheckedMixinClass> &
+): Constructor<CheckedMixinClass> &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &
-  Constructor<InputMixinClass>;
+  Constructor<InputMixinClass> &
+  T;
 
 export declare class CheckedMixinClass {
   /**

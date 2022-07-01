@@ -6,7 +6,7 @@
 import { Constructor } from '@open-wc/dedupe-mixin';
 import { LitElement } from 'lit';
 
-export declare function PolylitMixin<T extends Constructor<LitElement>>(base: T): T & Constructor<PolylitMixinClass>;
+export declare function PolylitMixin<T extends Constructor<LitElement>>(base: T): Constructor<PolylitMixinClass> & T;
 
 export declare class PolylitMixinClass {
   ready(): void;

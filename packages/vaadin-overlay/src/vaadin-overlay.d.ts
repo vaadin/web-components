@@ -232,13 +232,13 @@ declare class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(HTML
   addEventListener<K extends keyof OverlayEventMap>(
     type: K,
     listener: (this: OverlayElement, ev: OverlayEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof OverlayEventMap>(
     type: K,
     listener: (this: OverlayElement, ev: OverlayEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

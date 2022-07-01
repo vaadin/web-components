@@ -7,7 +7,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
 
 export declare function ArrayDataProviderMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<ArrayDataProviderMixinClass<TItem>>;
+): Constructor<ArrayDataProviderMixinClass<TItem>> & T;
 
 export declare class ArrayDataProviderMixinClass<TItem> {
   /**

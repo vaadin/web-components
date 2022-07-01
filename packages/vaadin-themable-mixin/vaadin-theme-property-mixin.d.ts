@@ -7,7 +7,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
 
 export declare function ThemePropertyMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<ThemePropertyMixinClass>;
+): Constructor<ThemePropertyMixinClass> & T;
 
 export declare class ThemePropertyMixinClass {
   /**

@@ -26,7 +26,7 @@ declare abstract class AbstractGridColumnRendererDirective<R extends LitRenderer
   /**
    * A property to that the renderer callback will be assigned.
    */
-  abstract rendererProperty: 'renderer' | 'headerRenderer' | 'footerRenderer';
+  abstract rendererProperty: 'footerRenderer' | 'headerRenderer' | 'renderer';
 
   /**
    * Adds the renderer callback to the grid column.

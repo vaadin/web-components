@@ -8,7 +8,7 @@ import { Constructor } from '@open-wc/dedupe-mixin';
 /**
  * A mixin to provide content for named slots defined by component.
  */
-export declare function SlotMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<SlotMixinClass>;
+export declare function SlotMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<SlotMixinClass> & T;
 
 export declare class SlotMixinClass {
   /**

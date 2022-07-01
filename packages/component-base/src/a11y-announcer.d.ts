@@ -7,4 +7,4 @@
 /**
  * Cause a text string to be announced by screen readers.
  */
-export function announce(text: string, options?: { mode?: 'polite' | 'assertive' | 'alert'; timeout?: number }): void;
+export function announce(text: string, options?: { mode?: 'alert' | 'assertive' | 'polite'; timeout?: number }): void;

@@ -11,17 +11,17 @@ import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
 
 export interface MenuBarItem {
   text?: string;
-  component?: string | HTMLElement;
+  component?: HTMLElement | string;
   disabled?: boolean;
-  theme?: string | string[];
+  theme?: string[] | string;
   children?: SubMenuItem[];
 }
 
 export interface SubMenuItem {
   text?: string;
-  component?: string | HTMLElement;
+  component?: HTMLElement | string;
   disabled?: boolean;
-  theme?: string | string[];
+  theme?: string[] | string;
   checked?: boolean;
   children?: SubMenuItem[];
 }
@@ -138,13 +138,13 @@ declare class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(Eleme
   addEventListener<K extends keyof MenuBarEventMap>(
     type: K,
     listener: (this: MenuBar, ev: MenuBarEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof MenuBarEventMap>(
     type: K,
     listener: (this: MenuBar, ev: MenuBarEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 
   /**

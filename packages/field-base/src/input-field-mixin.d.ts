@@ -22,8 +22,7 @@ import { ValidateMixinClass } from './validate-mixin.js';
  */
 export declare function InputFieldMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): T &
-  Constructor<ControllerMixinClass> &
+): Constructor<ControllerMixinClass> &
   Constructor<DelegateFocusMixinClass> &
   Constructor<DelegateStateMixinClass> &
   Constructor<DisabledMixinClass> &
@@ -35,7 +34,8 @@ export declare function InputFieldMixin<T extends Constructor<HTMLElement>>(
   Constructor<InputMixinClass> &
   Constructor<KeyboardMixinClass> &
   Constructor<LabelMixinClass> &
-  Constructor<ValidateMixinClass>;
+  Constructor<ValidateMixinClass> &
+  T;
 
 export declare class InputFieldMixinClass {
   /**
@@ -52,7 +52,7 @@ export declare class InputFieldMixinClass {
    * on: Enable autocorrection.
    * off: Disable autocorrection.
    */
-  autocorrect: 'on' | 'off' | undefined;
+  autocorrect: 'off' | 'on' | undefined;
 
   /**
    * This is a property supported by Safari and Chrome that is used to control whether
@@ -63,5 +63,5 @@ export declare class InputFieldMixinClass {
    * sentences: Sentences capitalization.
    * none: No capitalization.
    */
-  autocapitalize: 'on' | 'off' | 'none' | 'characters' | 'words' | 'sentences' | undefined;
+  autocapitalize: 'characters' | 'none' | 'off' | 'on' | 'sentences' | 'words' | undefined;
 }

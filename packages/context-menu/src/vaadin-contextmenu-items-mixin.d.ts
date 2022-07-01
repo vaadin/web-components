@@ -9,10 +9,10 @@ import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
 
 export interface ContextMenuItem {
   text?: string;
-  component?: string | HTMLElement;
+  component?: HTMLElement | string;
   disabled?: boolean;
   checked?: boolean;
-  theme?: string | string[];
+  theme?: string[] | string;
   children?: ContextMenuItem[];
 }
 
@@ -37,7 +37,7 @@ declare global {
  */
 declare class ContextMenuListBox extends ListBox {}
 
-export declare function ItemsMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ItemsMixinClass>;
+export declare function ItemsMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<ItemsMixinClass> & T;
 
 export declare class ItemsMixinClass {
   /**

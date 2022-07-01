@@ -58,7 +58,7 @@ export declare class ItemCache<TItem> {
 
 export declare function DataProviderMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<DataProviderMixinClass<TItem>>;
+): Constructor<DataProviderMixinClass<TItem>> & T;
 
 export declare class DataProviderMixinClass<TItem> {
   /**

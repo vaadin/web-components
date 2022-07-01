@@ -111,13 +111,13 @@ declare class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(Eleme
   addEventListener<K extends keyof TextFieldEventMap>(
     type: K,
     listener: (this: TextField, ev: TextFieldEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof TextFieldEventMap>(
     type: K,
     listener: (this: TextField, ev: TextFieldEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

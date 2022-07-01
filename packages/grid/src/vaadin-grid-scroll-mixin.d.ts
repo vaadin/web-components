@@ -5,7 +5,7 @@
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
 
-export declare function ScrollMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<ScrollMixinClass>;
+export declare function ScrollMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<ScrollMixinClass> & T;
 
 export declare class ScrollMixinClass {
   /**

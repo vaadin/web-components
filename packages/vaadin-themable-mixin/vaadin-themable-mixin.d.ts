@@ -12,7 +12,7 @@ import { ThemePropertyMixinClass } from './vaadin-theme-property-mixin.js';
  */
 export declare function ThemableMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<ThemableMixinClass> & Constructor<ThemePropertyMixinClass>;
+): Constructor<ThemableMixinClass> & Constructor<ThemePropertyMixinClass> & T;
 
 export declare class ThemableMixinClass {
   protected static finalize(): void;
@@ -30,7 +30,7 @@ type Theme = {
   themeFor: string;
   styles: CSSResult[];
   moduleId?: string;
-  include?: string | string[];
+  include?: string[] | string;
 };
 
 /**

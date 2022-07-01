@@ -5,7 +5,7 @@
  */
 import { Constructor } from '@open-wc/dedupe-mixin';
 
-export declare function SortMixin<T extends Constructor<HTMLElement>>(base: T): T & Constructor<SortMixinClass>;
+export declare function SortMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<SortMixinClass> & T;
 
 export declare class SortMixinClass {
   /**

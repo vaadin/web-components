@@ -12,13 +12,13 @@ export type GridBodyRenderer<TItem> = (
   model: GridItemModel<TItem>,
 ) => void;
 
-export type GridColumnTextAlign = 'start' | 'center' | 'end' | null;
+export type GridColumnTextAlign = 'center' | 'end' | 'start' | null;
 
 export type GridHeaderFooterRenderer<TItem> = (root: HTMLElement, column: GridColumn<TItem>) => void;
 
 export declare function ColumnBaseMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): T & Constructor<ColumnBaseMixinClass<TItem>>;
+): Constructor<ColumnBaseMixinClass<TItem>> & T;
 
 export declare class ColumnBaseMixinClass<TItem> {
   /**

@@ -401,13 +401,13 @@ declare class Upload extends ThemableMixin(ElementMixin(HTMLElement)) {
   addEventListener<K extends keyof UploadEventMap>(
     type: K,
     listener: (this: Upload, ev: UploadEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof UploadEventMap>(
     type: K,
     listener: (this: Upload, ev: UploadEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

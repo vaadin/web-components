@@ -81,13 +81,13 @@ declare class Checkbox extends LabelMixin(
   addEventListener<K extends keyof CheckboxEventMap>(
     type: K,
     listener: (this: Checkbox, ev: CheckboxEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof CheckboxEventMap>(
     type: K,
     listener: (this: Checkbox, ev: CheckboxEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

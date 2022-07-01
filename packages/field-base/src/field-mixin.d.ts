@@ -13,11 +13,11 @@ import { ValidateMixinClass } from './validate-mixin.js';
  */
 export declare function FieldMixin<T extends Constructor<HTMLElement>>(
   superclass: T,
-): T &
-  Constructor<ControllerMixinClass> &
+): Constructor<ControllerMixinClass> &
   Constructor<FieldMixinClass> &
   Constructor<LabelMixinClass> &
-  Constructor<ValidateMixinClass>;
+  Constructor<ValidateMixinClass> &
+  T;
 
 export declare class FieldMixinClass {
   /**

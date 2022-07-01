@@ -16,7 +16,7 @@ export interface DetailsCustomEventMap {
   'opened-changed': DetailsOpenedChangedEvent;
 }
 
-export type DetailsEventMap = HTMLElementEventMap & DetailsCustomEventMap;
+export type DetailsEventMap = DetailsCustomEventMap & HTMLElementEventMap;
 
 /**
  * `<vaadin-details>` is a Web Component which the creates an
@@ -62,13 +62,13 @@ declare class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(HTMLEl
   addEventListener<K extends keyof DetailsEventMap>(
     type: K,
     listener: (this: Details, ev: DetailsEventMap[K]) => void,
-    options?: boolean | AddEventListenerOptions,
+    options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof DetailsEventMap>(
     type: K,
     listener: (this: Details, ev: DetailsEventMap[K]) => void,
-    options?: boolean | EventListenerOptions,
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

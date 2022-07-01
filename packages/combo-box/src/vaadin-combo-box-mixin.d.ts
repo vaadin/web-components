@@ -24,11 +24,11 @@ export type ComboBoxRenderer<TItem> = (
 
 export declare function ComboBoxMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,
-): T &
-  Constructor<ComboBoxMixinClass<TItem>> &
+): Constructor<ComboBoxMixinClass<TItem>> &
   Constructor<DisabledMixinClass> &
   Constructor<InputMixinClass> &
-  Constructor<KeyboardMixinClass>;
+  Constructor<KeyboardMixinClass> &
+  T;
 
 export declare class ComboBoxMixinClass<TItem> {
   /**
