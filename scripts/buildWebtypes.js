@@ -256,8 +256,9 @@ function buildWebTypes() {
  * generated web-types JSON files, and to include them for publishing.
  * This is not run by default. Instead, it can be run on demand when adding
  * new packages, and the resulting changes can be committed to the repo.
+ * To run this command specify the --modify-packages parameter on the
+ * command line.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function modifyPackageJson() {
   const packages = getRelevantPackages();
 
@@ -278,4 +279,10 @@ function modifyPackageJson() {
   });
 }
 
-buildWebTypes();
+if (process.argv.includes('--modify-packages')) {
+  // Modify packages command
+  modifyPackageJson();
+} else {
+  // Run web types generation as default command
+  buildWebTypes();
+}
