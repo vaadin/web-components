@@ -14,6 +14,12 @@ function createCopyright() {
  */`;
 }
 
+function addWarning() {
+  return `console.warn(
+  \`WARNING: Since Vaadin 23.1, using <iron-icon> is deprecated. Please use <vaadin-icon> and '@vaadin/icons/vaadin-iconset.js' instead.\`,
+);`;
+}
+
 function iconFileModifier(prefix) {
   return function (file, contents) {
     const id = file.path.replace(/.*\/(.*).svg/, '$1');
@@ -42,6 +48,8 @@ gulp.task('iron-icons', () => {
           // Enclose all icons in an iron-iconset-svg
           return `${createCopyright()}
 import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
+
+${addWarning()}
 
 const template = document.createElement('template');
 

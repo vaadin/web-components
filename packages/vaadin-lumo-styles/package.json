@@ -20,7 +20,7 @@
   "module": "all-imports.js",
   "type": "module",
   "scripts": {
-    "icons": "gulp icons"
+    "icons": "gulp icons --gulpfile gulpfile.cjs"
   },
   "files": [
     "*.d.ts",
