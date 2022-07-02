@@ -34,7 +34,7 @@ export function deepMerge(target, source) {
   const isObject = (item) => item && typeof item === 'object' && !Array.isArray(item);
 
   if (isObject(source) && isObject(target)) {
-    for (const key in source) {
+    Object.keys(source).forEach((key) => {
       if (isObject(source[key])) {
         if (!target[key]) {
           Object.assign(target, { [key]: {} });
@@ -44,7 +44,7 @@ export function deepMerge(target, source) {
       } else {
         Object.assign(target, { [key]: source[key] });
       }
-    }
+    });
   }
 
   return target;
@@ -1216,24 +1216,20 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
   /** @private */
   __inflateFunctions(jsonConfiguration) {
-    for (const attr in jsonConfiguration) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (jsonConfiguration.hasOwnProperty(attr)) {
-        const targetProperty = jsonConfiguration[attr];
-        if (attr.startsWith('_fn_') && (typeof targetProperty === 'string' || targetProperty instanceof String)) {
-          try {
-            // eslint-disable-next-line no-eval
-            jsonConfiguration[attr.substr(4)] = eval(`(${targetProperty})`);
-          } catch (e) {
-            // eslint-disable-next-line no-eval
-            jsonConfiguration[attr.substr(4)] = eval(`(function(){${targetProperty}})`);
-          }
-          delete jsonConfiguration[attr];
-        } else if (targetProperty instanceof Object) {
-          this.__inflateFunctions(targetProperty);
+    Object.entries(jsonConfiguration).forEach(([attr, targetProperty]) => {
+      if (attr.startsWith('_fn_') && (typeof targetProperty === 'string' || targetProperty instanceof String)) {
+        try {
+          // eslint-disable-next-line no-eval
+          jsonConfiguration[attr.substr(4)] = eval(`(${targetProperty})`);
+        } catch (e) {
+          // eslint-disable-next-line no-eval
+          jsonConfiguration[attr.substr(4)] = eval(`(function(){${targetProperty}})`);
         }
+        delete jsonConfiguration[attr];
+      } else if (targetProperty instanceof Object) {
+        this.__inflateFunctions(targetProperty);
       }
-    }
+    });
   }
 
   /** @private */

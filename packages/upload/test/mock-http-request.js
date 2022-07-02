@@ -187,9 +187,9 @@ MockHttpRequest.prototype = {
   abort() {
     this.responseText = null;
     this.error = true;
-    for (const header in this.requestHeaders) {
-      delete this.requestHeaders[header];
-    }
+    Object.keys(this.requestHeaders).forEach((key) => {
+      delete this.requestHeaders[key];
+    });
     delete this.requestText;
     this.onreadystatechange();
     this.onabort();
@@ -209,14 +209,13 @@ MockHttpRequest.prototype = {
   },
 
   getAllResponseHeaders() {
-    let r = '';
-    for (const header in this.responseHeaders) {
-      if (header === 'set-cookie' || header === 'set-cookie2') {
-        continue;
+    return Object.entries(this.responseHeaders).reduce((r, [key, value]) => {
+      if (key === 'set-cookie' || key === 'set-cookie2') {
+        return r;
       }
-      r += `${header}: ${this.responseHeaders[header]}\r\n`;
-    }
-    return r;
+      r += `${key}: ${value}\r\n`;
+      return r;
+    }, '');
   },
 
   responseText: '',
@@ -351,9 +350,9 @@ MockHttpRequest.prototype = {
 
     this.responseText = null;
     this.error = true;
-    for (const header in this.requestHeaders) {
-      delete this.requestHeaders[header];
-    }
+    Object.keys(this.requestHeaders).forEach((key) => {
+      delete this.requestHeaders[key];
+    });
     this.readyState = this.DONE;
     if (!this.async) {
       throw exception;

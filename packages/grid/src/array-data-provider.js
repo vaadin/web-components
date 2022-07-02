@@ -22,12 +22,10 @@ function checkPaths(arrayToCheck, action, items) {
 
   let result = true;
 
-  for (const i in arrayToCheck) {
-    const path = arrayToCheck[i].path;
-
+  arrayToCheck.forEach(({ path }) => {
     // Skip simple paths
     if (!path || path.indexOf('.') === -1) {
-      continue;
+      return;
     }
 
     const parentProperty = path.replace(/\.[^.]*$/, ''); // A.b.c -> a.b
@@ -35,7 +33,7 @@ function checkPaths(arrayToCheck, action, items) {
       console.warn(`Path "${path}" used for ${action} does not exist in all of the items, ${action} is disabled.`);
       result = false;
     }
-  }
+  });
 
   return result;
 }

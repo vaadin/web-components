@@ -550,9 +550,9 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
         this.headers = undefined;
       }
     }
-    for (const key in this.headers) {
-      xhr.setRequestHeader(key, this.headers[key]);
-    }
+    Object.entries(this.headers).forEach(([key, value]) => {
+      xhr.setRequestHeader(key, value);
+    });
     if (this.timeout) {
       xhr.timeout = this.timeout;
     }
@@ -746,12 +746,9 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @private */
   _notifyFileChanges(file) {
     const p = `files.${this.files.indexOf(file)}.`;
-    for (const i in file) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (file.hasOwnProperty(i)) {
-        this.notifyPath(p + i, file[i]);
-      }
-    }
+    Object.keys(file).forEach((i) => {
+      this.notifyPath(p + i, file[i]);
+    });
   }
 
   /** @private */
