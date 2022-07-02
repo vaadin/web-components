@@ -275,10 +275,10 @@ registerStyles(
   { moduleId: 'lumo-progress-bar' },
 );
 
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
 /* Safari fails to declare animations for pseudo elements inside a shadow DOM */
-$_documentContainer.innerHTML = `
+template.innerHTML = `
   <style>
     @keyframes vaadin-progress-pulse3 {
       0% { opacity: 1; }
@@ -293,4 +293,4 @@ $_documentContainer.innerHTML = `
   </style>
 `;
 
-document.head.appendChild($_documentContainer.content);
+document.head.appendChild(template.content);

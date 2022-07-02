@@ -10,9 +10,9 @@ console.warn(
   `WARNING: Since Vaadin 23.1, using <iron-icon> is deprecated. Please use <vaadin-icon> and '@vaadin/vaadin-lumo-styles/vaadin-iconset.js' instead.`,
 );
 
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = `<iron-iconset-svg size="1000" name="lumo">
+template.innerHTML = `<iron-iconset-svg size="1000" name="lumo">
 <svg xmlns="http://www.w3.org/2000/svg">
 <defs>
 <g id="align-center"><path d="M167 217c0-18 17-33 38-34H795c21 0 38 15 38 34 0 18-17 33-38 33H205C184 250 167 235 167 217z m83 191c0-18 13-33 29-33H721c16 0 29 15 29 33 0 18-13 33-29 34H279C263 442 250 427 250 408zM250 792c0-18 13-33 29-34H721c16 0 29 15 29 34s-13 33-29 33H279C263 825 250 810 250 792z m-83-192c0-18 17-33 38-33H795c21 0 38 15 38 33s-17 33-38 33H205C184 633 167 618 167 600z" fill-rule="evenodd" clip-rule="evenodd"></path></g>
@@ -61,4 +61,4 @@ $_documentContainer.innerHTML = `<iron-iconset-svg size="1000" name="lumo">
 </svg>
 </iron-iconset-svg>`;
 
-document.head.appendChild($_documentContainer.content);
+document.head.appendChild(template.content);

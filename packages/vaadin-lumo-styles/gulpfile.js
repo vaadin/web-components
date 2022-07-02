@@ -103,11 +103,11 @@ gulp.task('icons', () => {
 import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
 import './version.js';
 
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = \`<iron-iconset-svg size="1000" name="lumo">
+template.innerHTML = \`<iron-iconset-svg size="1000" name="lumo">
 ${createIconset(folder, filenames)}
-</iron-iconset-svg>\`;\n\ndocument.head.appendChild($_documentContainer.content);\n`;
+</iron-iconset-svg>\`;\n\ndocument.head.appendChild(template.content);\n`;
 
         fs.writeFile('iconset.js', ironIcons, (err) => {
           if (err) {
@@ -119,11 +119,11 @@ ${createIconset(folder, filenames)}
 import '@vaadin/icon/vaadin-iconset.js';
 import './version.js';
 
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = \`<vaadin-iconset name="lumo" size="1000">
+template.innerHTML = \`<vaadin-iconset name="lumo" size="1000">
 ${createIconset(folder, filenames, 'lumo:')}
-</vaadin-iconset>\`;\n\ndocument.head.appendChild($_documentContainer.content);\n`;
+</vaadin-iconset>\`;\n\ndocument.head.appendChild(template.content);\n`;
 
         fs.writeFile('vaadin-iconset.js', vaadinIcons, (err) => {
           if (err) {
@@ -168,9 +168,9 @@ ${createIconset(folder, filenames, 'lumo:')}
           output += `
 import './version.js';
 
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = \`
+template.innerHTML = \`
   <style>
     @font-face {
       font-family: 'lumo-icons';
@@ -190,7 +190,7 @@ $_documentContainer.innerHTML = \`
   </style>
 \`;
 
-document.head.appendChild($_documentContainer.content);
+document.head.appendChild(template.content);
 `;
           fs.writeFile('font-icons.js', output, (err) => {
             if (err) {

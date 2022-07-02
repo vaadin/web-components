@@ -8,9 +8,9 @@ import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { isFocusable } from './vaadin-grid-active-item-mixin.js';
 
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = `
+template.innerHTML = `
   <style>
     @font-face {
       font-family: "vaadin-grid-tree-icons";
@@ -21,7 +21,7 @@ $_documentContainer.innerHTML = `
   </style>
 `;
 
-document.head.appendChild($_documentContainer.content);
+document.head.appendChild(template.content);
 
 /**
  * `<vaadin-grid-tree-toggle>` is a helper element for the `<vaadin-grid>`

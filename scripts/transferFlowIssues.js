@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const dotenv = require('dotenv');
 const { Octokit } = require('octokit');
 const axios = require('axios');

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const fs = require('fs').promises;
 const dotenv = require('dotenv');
 const { Octokit } = require('octokit');

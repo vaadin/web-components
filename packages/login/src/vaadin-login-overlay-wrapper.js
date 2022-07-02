@@ -6,9 +6,9 @@
 import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
 
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = `<dom-module id="vaadin-login-overlay-wrapper-template">
+template.innerHTML = `<dom-module id="vaadin-login-overlay-wrapper-template">
   <template>
     <style>
       [part="overlay"] {
@@ -52,7 +52,7 @@ $_documentContainer.innerHTML = `<dom-module id="vaadin-login-overlay-wrapper-te
   </template>
 </dom-module>`;
 
-document.head.appendChild($_documentContainer.content);
+document.head.appendChild(template.content);
 
 let memoizedTemplate;
 

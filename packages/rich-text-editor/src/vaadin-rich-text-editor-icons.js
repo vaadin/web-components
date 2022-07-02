@@ -5,9 +5,9 @@
  */
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-const $_documentContainer = document.createElement('template');
+const template = document.createElement('template');
 
-$_documentContainer.innerHTML = `
+template.innerHTML = `
   <style>
     @font-face {
       font-family: 'vaadin-rte-icons';
@@ -31,7 +31,7 @@ $_documentContainer.innerHTML = `
   </style>
 `;
 
-document.head.appendChild($_documentContainer.content);
+document.head.appendChild(template.content);
 
 export const iconsStyles = css`
   [part~='toolbar-button-align-center']::before {
