@@ -246,23 +246,6 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
     this._increaseValue();
   }
 
-  /**
-   * @protected
-   * @override
-   */
-  _constraintsChanged(required, min, max, _step) {
-    if (!this.invalid) {
-      return;
-    }
-
-    const isNumUnset = (n) => !n && n !== 0;
-    if (!isNumUnset(min) || !isNumUnset(max)) {
-      this.validate();
-    } else if (!required) {
-      this._setInvalid(false);
-    }
-  }
-
   /** @private */
   _decreaseValue() {
     this._incrementValue(-1);
