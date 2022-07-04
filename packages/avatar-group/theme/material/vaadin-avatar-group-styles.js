@@ -6,39 +6,31 @@ registerStyles(
   'vaadin-avatar-group',
   css`
     :host {
-      --vaadin-avatar-size: 36px;
-    }
-
-    :host([theme~='small']) {
-      --vaadin-avatar-size: 30px;
-    }
-
-    :host([theme~='xsmall']) {
-      --vaadin-avatar-size: 26px;
+      --vaadin-avatar-size: 2.25rem;
     }
 
     :host([theme~='xlarge']) {
       --vaadin-avatar-group-overlap: 12px;
       --vaadin-avatar-group-overlap-border: 3px;
-      --vaadin-avatar-size: 56px;
+      --vaadin-avatar-size: 3.5rem;
     }
 
     :host([theme~='large']) {
       --vaadin-avatar-group-overlap: 10px;
       --vaadin-avatar-group-overlap-border: 3px;
-      --vaadin-avatar-size: 44px;
+      --vaadin-avatar-size: 2.75rem;
     }
 
     :host([theme~='small']) {
       --vaadin-avatar-group-overlap: 6px;
       --vaadin-avatar-group-overlap-border: 2px;
-      --vaadin-avatar-size: 30px;
+      --vaadin-avatar-size: 1.875rem;
     }
 
     :host([theme~='xsmall']) {
       --vaadin-avatar-group-overlap: 4px;
       --vaadin-avatar-group-overlap-border: 2px;
-      --vaadin-avatar-size: 26px;
+      --vaadin-avatar-size: 1.625rem;
     }
   `,
   { moduleId: 'material-avatar-group' },
