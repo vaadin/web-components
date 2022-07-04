@@ -178,7 +178,19 @@ export const InlineEditingMixin = (superClass) =>
     }
 
     /**
-     * Override grid logic to focus the cell content.
+     * Override grid method to focus the cell content.
+     *
+     * @param {HTMLElement} row
+     * @param {HTMLElement} cell
+     * @return {HTMLElement}
+     * @protected
+     */
+    _detectFocusable(row, cell) {
+      return super._detectFocusable(row, this._getFocusable(cell));
+    }
+
+    /**
+     * Override grid method to focus the cell content.
      *
      * @param {HTMLElement} cell
      * @param {GridColumn} column
@@ -186,11 +198,16 @@ export const InlineEditingMixin = (superClass) =>
      * @override
      */
     _focusCell(cell) {
-      if (cell._content.hasAttribute('tabindex')) {
-        cell._content.focus();
-      } else {
-        cell.focus();
-      }
+      this._getFocusable(cell).focus();
+    }
+
+    /**
+     * @param {HTMLElement} cell
+     * @returns {HTMLElement}
+     * @private
+     */
+    _getFocusable(cell) {
+      return cell && cell._content && cell._content.hasAttribute('tabindex') ? cell._content : cell;
     }
 
     /**
