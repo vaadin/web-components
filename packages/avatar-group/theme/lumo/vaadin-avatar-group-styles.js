@@ -12,14 +12,6 @@ registerStyles(
       --vaadin-avatar-size: var(--lumo-size-m);
     }
 
-    :host([theme~='small']) {
-      --vaadin-avatar-size: var(--lumo-size-s);
-    }
-
-    :host([theme~='xsmall']) {
-      --vaadin-avatar-size: var(--lumo-size-xs);
-    }
-
     :host([theme~='xlarge']) {
       --vaadin-avatar-group-overlap: 12px;
       --vaadin-avatar-group-overlap-border: 3px;
