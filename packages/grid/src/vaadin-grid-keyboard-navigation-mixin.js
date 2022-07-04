@@ -731,11 +731,11 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (section && (cell || row)) {
         this._activeRowGroup = section;
         if (this.$.header === section) {
-          this._headerFocusable = this.__rowFocusMode ? row : cell;
+          this._headerFocusable = this._detectFocusable(row, cell);
         } else if (this.$.items === section) {
-          this._itemsFocusable = this.__rowFocusMode ? row : cell;
+          this._itemsFocusable = this._detectFocusable(row, cell);
         } else if (this.$.footer === section) {
-          this._footerFocusable = this.__rowFocusMode ? row : cell;
+          this._footerFocusable = this._detectFocusable(row, cell);
         }
 
         if (cell) {
@@ -746,6 +746,20 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       this._detectFocusedItemIndex(e);
+    }
+
+    /**
+     * Set the focusable element to either row or cell, depending on the focus mode.
+     * This method can be overridden for handling special case when `tabindex` is set on
+     * the cell content, rather than the cell itself, for better screen reader support.
+     *
+     * @param {HTMLElement} row
+     * @param {HTMLElement} cell
+     * @return {HTMLElement}
+     * @protected
+     */
+    _detectFocusable(row, cell) {
+      return this.__rowFocusMode ? row : cell;
     }
 
     /**
@@ -851,7 +865,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           const firstVisibleRow = [...this.$[section].children].find((row) => row.offsetHeight);
           const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
           if (firstVisibleRow && firstVisibleCell) {
-            this[`_${section}Focusable`] = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
+            this[`_${section}Focusable`] = this._detectFocusable(firstVisibleRow, firstVisibleCell);
           }
         }
       });
@@ -864,7 +878,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         if (firstVisibleCell && firstVisibleRow) {
           // Reset memoized column
           delete this._focusedColumnOrder;
-          this._itemsFocusable = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
+          this._itemsFocusable = this._detectFocusable(firstVisibleRow, firstVisibleCell);
         }
       } else {
         this.__updateItemsFocusable();

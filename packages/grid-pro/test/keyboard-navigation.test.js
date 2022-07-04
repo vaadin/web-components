@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { enter, esc, fixtureSync, keyDownOn, tab } from '@vaadin/testing-helpers';
+import { enter, esc, fixtureSync, focusin, keyDownOn, tab } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-pro.js';
@@ -279,6 +279,40 @@ describe('keyboard navigation', () => {
 
       enter(input, ['shift']);
       expect(getCellEditor(firstCell)).to.be.not.ok;
+    });
+  });
+
+  describe('tabindex', () => {
+    let firstCell;
+
+    beforeEach(() => {
+      firstCell = getContainerCell(grid.$.items, 0, 0);
+    });
+
+    it('should not set tabindex attribute on editable cell', () => {
+      expect(firstCell.hasAttribute('tabindex')).to.be.false;
+    });
+
+    it('should set tabindex to 0 on first visible editable cell content', () => {
+      expect(firstCell._content.getAttribute('tabindex')).to.equal('0');
+    });
+
+    it('should update tabindex when moving focus between editable cells', () => {
+      const cell = getContainerCell(grid.$.items, 1, 0);
+
+      focusin(cell._content, firstCell._content);
+
+      expect(cell._content.getAttribute('tabindex')).to.equal('0');
+      expect(firstCell._content.getAttribute('tabindex')).to.equal('-1');
+    });
+
+    it('should update tabindex when moving from editable to readonly cell', () => {
+      const cell = getContainerCell(grid.$.items, 0, 2);
+
+      focusin(cell, firstCell._content);
+
+      expect(cell.getAttribute('tabindex')).to.equal('0');
+      expect(firstCell._content.getAttribute('tabindex')).to.equal('-1');
     });
   });
 
