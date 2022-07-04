@@ -363,6 +363,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
 
   /**
    * @param {number} step
+   * @param {HTMLElement | undefined} inputElement
    * @protected
    */
   _stepChanged(step, inputElement) {
