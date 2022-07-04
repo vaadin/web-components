@@ -166,7 +166,11 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
   }
 
   static get observers() {
-    return ['_minChanged(min, inputElement)', '_maxChanged(max, inputElement)', '_stepChanged(step, inputElement)'];
+    return ['_stepChanged(step, inputElement)'];
+  }
+
+  static get delegateProps() {
+    return [...super.delegateProps, 'min', 'max'];
   }
 
   static get constraints() {
@@ -381,20 +385,6 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
   _stepChanged(step, inputElement) {
     if (inputElement) {
       inputElement.step = step || 'any';
-    }
-  }
-
-  /** @private */
-  _minChanged(min, inputElement) {
-    if (inputElement) {
-      inputElement.min = min;
-    }
-  }
-
-  /** @private */
-  _maxChanged(max, inputElement) {
-    if (inputElement) {
-      inputElement.max = max;
     }
   }
 
