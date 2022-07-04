@@ -379,12 +379,6 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
    * @protected
    */
   _stepChanged(step, inputElement) {
-    if (typeof step === 'string') {
-      const stepNumber = parseFloat(step);
-      this.step = isNaN(stepNumber) ? null : stepNumber;
-      return;
-    }
-
     if (inputElement) {
       inputElement.step = step || 'any';
     }

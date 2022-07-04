@@ -193,11 +193,6 @@ describe('integer-field', () => {
       expect(integerField.step).to.eql(initialStep);
     });
 
-    it('should allow setting positive integer as string', () => {
-      integerField.step = '5';
-      expect(integerField.step).to.eql(5);
-    });
-
     describe('invalid step', () => {
       beforeEach(() => {
         sinon.stub(console, 'warn');
@@ -207,7 +202,7 @@ describe('integer-field', () => {
         console.warn.restore();
       });
 
-      ['foo', '-1', -1, '1.2', 1.2, '+1', '1e1', {}].forEach((invalidStep) => {
+      ['foo', '-1', -1, '1.2', 1.2, '+1', '1e1', {}, ''].forEach((invalidStep) => {
         it(`should reset default step when setting ${typeof invalidStep} value: "${invalidStep}"`, () => {
           integerField.step = invalidStep;
           expect(integerField.step).to.be.null;
@@ -223,12 +218,6 @@ describe('integer-field', () => {
 
       it('should not show the warning when setting step to null', () => {
         integerField.step = null;
-        expect(integerField.step).to.be.null;
-        expect(console.warn.called).to.be.false;
-      });
-
-      it('should not show the warning when setting step to an empty string', () => {
-        integerField.step = '';
         expect(integerField.step).to.be.null;
         expect(console.warn.called).to.be.false;
       });

@@ -70,7 +70,7 @@ export class IntegerField extends NumberField {
    * @override
    */
   _stepChanged(step, inputElement) {
-    if (step && !this.__hasOnlyDigits(step)) {
+    if (step != null && !this.__hasOnlyDigits(step)) {
       console.warn(
         `<vaadin-integer-field> The \`step\` property must be a positive integer but \`${step}\` was provided, so the property was reset to \`null\`.`,
       );
@@ -88,7 +88,7 @@ export class IntegerField extends NumberField {
 
   /** @private */
   __hasOnlyDigits(value) {
-    return /^\d*$/.test(String(value));
+    return /^\d+$/.test(String(value));
   }
 }
 
