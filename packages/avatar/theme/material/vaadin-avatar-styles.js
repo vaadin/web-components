@@ -40,6 +40,22 @@ registerStyles(
       font-size: 3em;
       font-weight: 500;
     }
+
+    :host([theme~='xlarge']) {
+      --vaadin-avatar-size: 3.5rem;
+    }
+
+    :host([theme~='large']) {
+      --vaadin-avatar-size: 2.75rem;
+    }
+
+    :host([theme~='small']) {
+      --vaadin-avatar-size: 1.875rem;
+    }
+
+    :host([theme~='xsmall']) {
+      --vaadin-avatar-size: 1.625rem;
+    }
   `,
   { moduleId: 'material-avatar' },
 );

@@ -36,6 +36,30 @@ describe('avatar-group', () => {
     await visualDiff(div, 'color-index');
   });
 
+  it('theme-xlarge', async () => {
+    element.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
+    element.setAttribute('theme', 'xlarge');
+    await visualDiff(div, 'theme-xlarge');
+  });
+
+  it('theme-large', async () => {
+    element.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
+    element.setAttribute('theme', 'large');
+    await visualDiff(div, 'theme-large');
+  });
+
+  it('theme-small', async () => {
+    element.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
+    element.setAttribute('theme', 'small');
+    await visualDiff(div, 'theme-small');
+  });
+
+  it('theme-xsmall', async () => {
+    element.items = [{ name: 'Abc Def' }, { name: 'Ghi Jkl' }, { name: 'Mno Pqr' }, { name: 'Stu Vwx' }];
+    element.setAttribute('theme', 'xsmall');
+    await visualDiff(div, 'theme-xsmall');
+  });
+
   it('opened', async () => {
     document.body.style.height = '200px';
     document.body.style.width = '220px';
