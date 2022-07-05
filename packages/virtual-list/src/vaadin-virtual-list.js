@@ -105,6 +105,17 @@ class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
     });
 
     processTemplates(this);
+
+    // Update overflow attribute on resize
+    this.__resizeObserver = new ResizeObserver(() => {
+      this.__updateOverflow();
+    });
+    this.__resizeObserver.observe(this);
+
+    // Update overflow attribute on scroll
+    this.addEventListener('scroll', () => {
+      this.__updateOverflow();
+    });
   }
 
   /**
@@ -156,6 +167,8 @@ class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
       virtualizer.size = (items || []).length;
       virtualizer.update();
     }
+
+    this.__updateOverflow();
   }
 
   /**
@@ -185,6 +198,26 @@ class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
   requestContentUpdate() {
     if (this.__virtualizer) {
       this.__virtualizer.update();
+    }
+  }
+
+  /** @private */
+  __updateOverflow() {
+    let overflow = '';
+
+    if (this.scrollTop > 0) {
+      overflow += ' top';
+    }
+
+    if (this.scrollTop < this.scrollHeight - this.clientHeight) {
+      overflow += ' bottom';
+    }
+
+    const value = overflow.trim();
+    if (value.length > 0 && this.getAttribute('overflow') !== value) {
+      this.setAttribute('overflow', value);
+    } else if (value.length === 0 && this.hasAttribute('overflow')) {
+      this.removeAttribute('overflow');
     }
   }
 }

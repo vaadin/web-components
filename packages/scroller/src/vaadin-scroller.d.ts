@@ -21,6 +21,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * -------------| -----------
  * `focus-ring` | Set when the element is focused using the keyboard.
  * `focused`    | Set when the element is focused.
+ * `overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.
  */
 declare class Scroller extends FocusMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**

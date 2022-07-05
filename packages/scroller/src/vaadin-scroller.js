@@ -85,6 +85,30 @@ class Scroller extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     };
   }
 
+  /** @protected */
+  ready() {
+    super.ready();
+
+    // Update overflow attribute on resize
+    this.__resizeObserver = new ResizeObserver(() => {
+      this.__updateOverflow();
+    });
+    this.__resizeObserver.observe(this);
+
+    // Update overflow attribute on DOM mutations
+    this.__mutationObserver = new MutationObserver(() => {
+      this.__updateOverflow();
+    });
+    this.__mutationObserver.observe(this, { childList: true, subtree: true });
+
+    // Update overflow attribute on scroll
+    this.addEventListener('scroll', () => {
+      this.__updateOverflow();
+    });
+
+    this.__updateOverflow();
+  }
+
   /**
    * Override method inherited from `FocusMixin` to mark the scroller as focused
    * only when the host is focused.
@@ -94,6 +118,35 @@ class Scroller extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
    */
   _shouldSetFocus(event) {
     return event.target === this;
+  }
+
+  /** @private */
+  __updateOverflow() {
+    let overflow = '';
+
+    if (this.scrollTop > 0) {
+      overflow += ' top';
+    }
+
+    if (this.scrollTop < this.scrollHeight - this.clientHeight) {
+      overflow += ' bottom';
+    }
+
+    // Use Math.abs to account for RTL
+    if (Math.abs(this.scrollLeft) > 0) {
+      overflow += ' start';
+    }
+
+    if (Math.abs(this.scrollLeft) < this.scrollWidth - this.clientWidth) {
+      overflow += ' end';
+    }
+
+    const value = overflow.trim();
+    if (value.length > 0 && this.getAttribute('overflow') !== value) {
+      this.setAttribute('overflow', value);
+    } else if (value.length === 0 && this.hasAttribute('overflow')) {
+      this.removeAttribute('overflow');
+    }
   }
 }
 

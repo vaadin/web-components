@@ -34,6 +34,12 @@ export type VirtualListRenderer<TItem> = (
  * }
  * ```
  *
+ *  * The following state attributes are available for styling:
+ *
+ * Attribute        | Description
+ * -----------------|--------------------------------------------
+ * `overflow`       | Set to `top`, `bottom`, both, or none.
+ *
  * See [Virtual List](https://vaadin.com/docs/latest/ds/components/virtual-list) documentation.
  *
  * @extends HTMLElement
