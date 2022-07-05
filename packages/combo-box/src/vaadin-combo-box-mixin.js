@@ -249,7 +249,6 @@ export const ComboBoxMixin = (subclass) =>
       this._boundOnClearButtonMouseDown = this.__onClearButtonMouseDown.bind(this);
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnOverlayTouchAction = this._onOverlayTouchAction.bind(this);
-      this._boundOnTouchend = this._onTouchend.bind(this);
     }
 
     /**
@@ -322,7 +321,6 @@ export const ComboBoxMixin = (subclass) =>
       this._lastCommittedValue = this.value;
 
       this.addEventListener('click', this._boundOnClick);
-      this.addEventListener('touchend', this._boundOnTouchend);
 
       const bringToFrontListener = () => {
         requestAnimationFrame(() => {
@@ -1285,16 +1283,6 @@ export const ComboBoxMixin = (subclass) =>
 
         this._closeOrCommit();
       }
-    }
-
-    /** @private */
-    _onTouchend(event) {
-      if (!this.clearElement || event.composedPath()[0] !== this.clearElement) {
-        return;
-      }
-
-      event.preventDefault();
-      this._clear();
     }
 
     /**

@@ -303,6 +303,15 @@ describe('clearing a selection', () => {
 
     expect(event.defaultPrevented).to.be.true;
   });
+
+  it('should not prevent touchend event to avoid cancelling click', () => {
+    comboBox.open();
+
+    const event = new CustomEvent('touchend', { cancelable: true });
+    clearIcon.dispatchEvent(event);
+
+    expect(event.defaultPrevented).to.be.false;
+  });
 });
 
 describe('selecting a custom value', () => {
