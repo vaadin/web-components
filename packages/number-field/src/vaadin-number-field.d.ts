@@ -89,7 +89,7 @@ declare class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(
   /**
    * Specifies the allowed number intervals of the field.
    */
-  step: number;
+  step: number | null | undefined;
 
   addEventListener<K extends keyof NumberFieldEventMap>(
     type: K,
