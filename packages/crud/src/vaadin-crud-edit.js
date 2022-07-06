@@ -38,6 +38,10 @@ class CrudEdit extends Button {
     super.ready();
     this.addEventListener('click', this.__onClick);
     this.setAttribute('aria-label', 'Edit');
+
+    this.addEventListener('focus', (e) => {
+      console.log('focus', e);
+    });
   }
 
   /** @private */

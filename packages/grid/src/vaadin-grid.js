@@ -666,6 +666,7 @@ class Grid extends ElementMixin(
     // With native Shadow DOM, mousedown on slotted element does not focus
     // focusable slot wrapper, that is why cells are not focused with
     // mousedown. Workaround: listen for mousedown and focus manually.
+    /*
     cellContent.addEventListener('mousedown', () => {
       if (isChrome) {
         // Chrome bug: focusing before mouseup prevents text selection, see http://crbug.com/771903
@@ -690,6 +691,7 @@ class Grid extends ElementMixin(
         });
       }
     });
+    */
 
     return cell;
   }

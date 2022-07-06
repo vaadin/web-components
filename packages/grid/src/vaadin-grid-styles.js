@@ -154,7 +154,7 @@ registerStyles(
       display: block;
       width: 100%;
       box-sizing: border-box;
-      overflow: hidden;
+      /* overflow: hidden; */
       text-overflow: ellipsis;
     }
 
