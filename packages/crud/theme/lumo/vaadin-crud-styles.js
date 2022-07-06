@@ -117,10 +117,6 @@ registerStyles(
       :host([dir='rtl']:not([theme~='no-border'])[editor-position='aside']) [part='editor']:not([hidden]) {
         border-right: 0;
       }
-
-      vaadin-grid-cell-content {
-        text-overflow: ellipsis;
-      }
     `,
   ],
   { moduleId: 'lumo-crud' },
