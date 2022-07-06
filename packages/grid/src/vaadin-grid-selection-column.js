@@ -259,7 +259,7 @@ class GridSelectionColumn extends GridColumn {
   /** @private */
   __onSelectedItemsChanged() {
     this._selectAllChangeLock = true;
-    if (Array.isArray(this._grid.items)) {
+    if (Array.isArray(this._grid.items) && this._grid.dataProvider) {
       this.__withFilteredItemsArray((items) => {
         if (!this._grid.selectedItems.length) {
           this.selectAll = false;
