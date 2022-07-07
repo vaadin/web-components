@@ -328,7 +328,7 @@ interface MultiSelectComboBox
   extends ValidateMixinClass,
     LabelMixinClass,
     KeyboardMixinClass,
-    InputMixinClass,
+    Omit<InputMixinClass, 'value'>,
     InputControlMixinClass,
     InputConstraintsMixinClass,
     FocusMixinClass,
