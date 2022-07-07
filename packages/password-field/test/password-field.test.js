@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, makeSoloTouchEvent, mousedown } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout, makeSoloTouchEvent, mousedown, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-password-field.js';
@@ -177,6 +177,40 @@ describe('password-field', () => {
     it('should remove aria-hidden attribute when revealButtonHidden set to false', () => {
       passwordField.revealButtonHidden = false;
       expect(revealButton.hasAttribute('aria-hidden')).to.be.false;
+    });
+  });
+
+  describe('initial validation', () => {
+    let validateSpy;
+
+    beforeEach(() => {
+      passwordField = document.createElement('vaadin-password-field');
+      validateSpy = sinon.spy(passwordField, 'validate');
+    });
+
+    afterEach(() => {
+      passwordField.remove();
+    });
+
+    it('should not validate by default', async () => {
+      document.body.appendChild(passwordField);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value', async () => {
+      passwordField.value = 'Initial Value';
+      document.body.appendChild(passwordField);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value and invalid', async () => {
+      passwordField.value = 'Initial Value';
+      passwordField.invalid = true;
+      document.body.appendChild(passwordField);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
     });
   });
 
