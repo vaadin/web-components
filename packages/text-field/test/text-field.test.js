@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-text-field.js';
 
@@ -164,6 +164,40 @@ describe('text-field', () => {
         input.dispatchEvent(new CustomEvent('focus', { bubbles: false }));
         await aTimeout(1);
         expect(input.selectionEnd - input.selectionStart).to.equal(3);
+      });
+    });
+
+    describe('initial validation', () => {
+      let validateSpy;
+
+      beforeEach(() => {
+        textField = document.createElement('vaadin-text-field');
+        validateSpy = sinon.spy(textField, 'validate');
+      });
+
+      afterEach(() => {
+        textField.remove();
+      });
+
+      it('should not validate by default', async () => {
+        document.body.appendChild(textField);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate when the field has an initial value', async () => {
+        textField.value = 'Initial Value';
+        document.body.appendChild(textField);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate when the field has an initial value and invalid', async () => {
+        textField.value = 'Initial Value';
+        textField.invalid = true;
+        document.body.appendChild(textField);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
       });
     });
 
