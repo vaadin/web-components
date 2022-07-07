@@ -184,7 +184,7 @@ class GridSelectionColumn extends GridColumn {
       return;
     }
 
-    if (selectAll && Array.isArray(this._grid.items)) {
+    if (selectAll && this.__hasItemsDataProvider()) {
       this.__withFilteredItemsArray((items) => {
         this._grid.selectedItems = items;
       });
@@ -257,9 +257,14 @@ class GridSelectionColumn extends GridColumn {
   }
 
   /** @private */
+  __hasItemsDataProvider() {
+    return Array.isArray(this._grid.items) && !!this._grid.dataProvider;
+  }
+
+  /** @private */
   __onSelectedItemsChanged() {
     this._selectAllChangeLock = true;
-    if (Array.isArray(this._grid.items) && this._grid.dataProvider) {
+    if (this.__hasItemsDataProvider()) {
       this.__withFilteredItemsArray((items) => {
         if (!this._grid.selectedItems.length) {
           this.selectAll = false;
