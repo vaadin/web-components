@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, keyDownOn } from '@vaadin/testing-helpers';
+import { fixtureSync, keyDownOn, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-integer-field.js';
 
@@ -221,6 +221,40 @@ describe('integer-field', () => {
         expect(integerField.step).to.be.null;
         expect(console.warn.called).to.be.false;
       });
+    });
+  });
+
+  describe('initial validation', () => {
+    let validateSpy;
+
+    beforeEach(() => {
+      integerField = document.createElement('vaadin-integer-field');
+      validateSpy = sinon.spy(integerField, 'validate');
+    });
+
+    afterEach(() => {
+      integerField.remove();
+    });
+
+    it('should not validate by default', async () => {
+      document.body.appendChild(integerField);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value', async () => {
+      integerField.value = 2;
+      document.body.appendChild(integerField);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value and invalid', async () => {
+      integerField.value = 2;
+      integerField.invalid = true;
+      document.body.appendChild(integerField);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
     });
   });
 
