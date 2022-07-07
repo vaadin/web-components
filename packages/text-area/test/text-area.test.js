@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-text-area.js';
 
@@ -113,6 +113,40 @@ describe('text-area', () => {
       it('should update has-value attribute when boolean value is set', () => {
         textArea.value = false;
         expect(textArea.hasAttribute('has-value')).to.be.true;
+      });
+    });
+
+    describe('initial validation', () => {
+      let validateSpy;
+
+      beforeEach(() => {
+        textArea = document.createElement('vaadin-text-area');
+        validateSpy = sinon.spy(textArea, 'validate');
+      });
+
+      afterEach(() => {
+        textArea.remove();
+      });
+
+      it('should not validate by default', async () => {
+        document.body.appendChild(textArea);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate when the field has an initial value', async () => {
+        textArea.value = 'Initial Value';
+        document.body.appendChild(textArea);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate when the field has an initial value and invalid', async () => {
+        textArea.value = 'Initial Value';
+        textArea.invalid = true;
+        document.body.appendChild(textArea);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
       });
     });
 
