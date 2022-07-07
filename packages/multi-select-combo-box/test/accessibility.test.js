@@ -170,6 +170,17 @@ describe('accessibility', () => {
       expect(region.textContent).to.equal('Selection cleared');
     });
 
+    it('should announce when using clear() method', () => {
+      comboBox.selectedItems = [apple, banana, lemon];
+      comboBox.clearButtonVisible = true;
+
+      comboBox.clear();
+
+      clock.tick(150);
+
+      expect(region.textContent).to.equal('Selection cleared');
+    });
+
     it('should announce when focusing a chip with keyboard', async () => {
       comboBox.selectedItems = [apple];
 

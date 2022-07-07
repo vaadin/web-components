@@ -511,6 +511,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /**
+   * Clear the selected items.
+   */
+  clear() {
+    this.__updateSelection([]);
+
+    announce(this.i18n.cleared);
+  }
+
+  /**
    * Clears the cached pages and reloads data from data provider when needed.
    */
   clearCache() {
@@ -895,9 +904,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   _onClearButtonClick(event) {
     event.stopPropagation();
 
-    this.__updateSelection([]);
-
-    announce(this.i18n.cleared);
+    this.clear();
   }
 
   /**
