@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -64,6 +64,34 @@ describe('input-field-mixin', () => {
     it('should propagate autocapitalize property to the input', () => {
       element.autocapitalize = 'none';
       expect(input.getAttribute('autocapitalize')).to.equal('none');
+    });
+  });
+
+  describe('initial validation', () => {
+    let validateSpy;
+
+    beforeEach(() => {
+      element = document.createElement('input-field-mixin-element');
+      validateSpy = sinon.spy(element, 'validate');
+    });
+
+    afterEach(() => {
+      element.remove();
+    });
+
+    it('should not validate when the field has an initial value', async () => {
+      element.value = 'Initial Value';
+      document.body.appendChild(element);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value and invalid', async () => {
+      element.value = 'Initial Value';
+      element.invalid = true;
+      document.body.appendChild(element);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
     });
   });
 

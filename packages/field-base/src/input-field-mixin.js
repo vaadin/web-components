@@ -112,14 +112,20 @@ export const InputFieldMixin = (superclass) =>
     }
 
     /**
-     * Override a method from `InputMixin` to validate the field
+     * Override an observer from `InputMixin` to validate the field
      * when a new value is set programmatically.
-     * @param {string} value
+     *
+     * @param {string | undefined} newValue
+     * @param {string | undefined} oldValue
      * @protected
      * @override
      */
-    _forwardInputValue(value) {
-      super._forwardInputValue(value);
+    _valueChanged(newValue, oldValue) {
+      super._valueChanged(newValue, oldValue);
+
+      if (oldValue === undefined) {
+        return;
+      }
 
       if (this.invalid) {
         this.validate();
