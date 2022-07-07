@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-number-field.js';
 
@@ -134,6 +134,40 @@ describe('validation', () => {
       expect(validatedSpy.calledOnce).to.be.true;
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
+    });
+  });
+
+  describe('initial', () => {
+    let validateSpy;
+
+    beforeEach(() => {
+      field = document.createElement('vaadin-number-field');
+      validateSpy = sinon.spy(field, 'validate');
+    });
+
+    afterEach(() => {
+      field.remove();
+    });
+
+    it('should not validate by default', async () => {
+      document.body.appendChild(field);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value', async () => {
+      field.value = 2;
+      document.body.appendChild(field);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value and invalid', async () => {
+      field.value = 2;
+      field.invalid = true;
+      document.body.appendChild(field);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
     });
   });
 
