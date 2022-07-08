@@ -413,11 +413,6 @@ export const ComboBoxMixin = (subclass) =>
       // Prevent blurring the input when clicking inside the overlay
       overlay.addEventListener('mousedown', (e) => e.preventDefault());
 
-      // Preventing the default modal behavior of the overlay on input click
-      overlay.addEventListener('vaadin-overlay-outside-click', (e) => {
-        e.preventDefault();
-      });
-
       // Manual two-way binding for the overlay "opened" property
       overlay.addEventListener('opened-changed', (e) => {
         this._overlayOpened = e.detail.value;
