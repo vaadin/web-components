@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-checkbox-group.js';
@@ -459,6 +459,40 @@ describe('vaadin-checkbox-group', () => {
       expect(aria).to.include(helper.id);
       expect(aria).to.include(error.id);
       expect(aria).to.include(label.id);
+    });
+  });
+
+  describe('initial validation', () => {
+    let validateSpy;
+
+    beforeEach(() => {
+      group = document.createElement('vaadin-checkbox-group');
+      validateSpy = sinon.spy(group, 'validate');
+    });
+
+    afterEach(() => {
+      group.remove();
+    });
+
+    it('should not validate by default', async () => {
+      document.body.appendChild(group);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value', async () => {
+      group.value = ['en'];
+      document.body.appendChild(group);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value and invalid', async () => {
+      group.value = ['en'];
+      group.invalid = true;
+      document.body.appendChild(group);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
     });
   });
 

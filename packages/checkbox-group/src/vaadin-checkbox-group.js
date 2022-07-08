@@ -303,15 +303,14 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
 
   /**
    * @param {string | null | undefined} value
+   * @param {string | null | undefined} oldValue
    * @private
    */
-  __valueChanged(value) {
+  __valueChanged(value, oldValue) {
     // Setting initial value to empty array, skip validation
-    if (value.length === 0 && this.__oldValue === undefined) {
+    if (value.length === 0 && oldValue === undefined) {
       return;
     }
-
-    this.__oldValue = value;
 
     this.toggleAttribute('has-value', value.length > 0);
 
@@ -319,7 +318,9 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
       checkbox.checked = value.includes(checkbox.value);
     });
 
-    this.validate();
+    if (oldValue !== undefined) {
+      this.validate();
+    }
   }
 
   /**
