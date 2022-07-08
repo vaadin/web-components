@@ -156,14 +156,14 @@ describe('validation', () => {
     });
 
     it('should not validate when the field has an initial value', async () => {
-      field.value = 2;
+      field.value = '2';
       document.body.appendChild(field);
       await nextRender();
       expect(validateSpy.called).to.be.false;
     });
 
     it('should not validate when the field has an initial value and invalid', async () => {
-      field.value = 2;
+      field.value = '2';
       field.invalid = true;
       document.body.appendChild(field);
       await nextRender();
