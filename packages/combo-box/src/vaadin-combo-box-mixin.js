@@ -732,7 +732,7 @@ export const ComboBoxMixin = (subclass) =>
       // and there's no need to modify the selection range if the input isn't focused anyway.
       // This affects Safari. When the overlay is open, and then hitting tab, browser should focus
       // the next focusable element instead of the combo-box itself.
-      if (this._isInputFocused()) {
+      if (this._isInputFocused() && this.inputElement.setSelectionRange) {
         this.inputElement.setSelectionRange(start, end);
       }
     }
