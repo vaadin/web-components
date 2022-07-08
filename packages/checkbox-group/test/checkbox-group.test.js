@@ -2,7 +2,6 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '@polymer/polymer/lib/elements/dom-bind.js';
 import '../vaadin-checkbox-group.js';
 
 describe('vaadin-checkbox-group', () => {
