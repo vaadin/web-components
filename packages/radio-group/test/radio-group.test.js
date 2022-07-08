@@ -471,12 +471,12 @@ describe('radio-group', () => {
   });
 
   describe('initial validation', () => {
-    let validateSpy, radio;
+    let validateSpy;
 
     beforeEach(() => {
       group = document.createElement('vaadin-radio-group');
 
-      radio = document.createElement('vaadin-radio-button');
+      const radio = document.createElement('vaadin-radio-button');
       radio.value = '1';
       group.appendChild(radio);
 
@@ -488,13 +488,6 @@ describe('radio-group', () => {
     });
 
     it('should not validate by default', async () => {
-      document.body.appendChild(group);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
-
-    it('should not validate when the field has an initially checked radio button', async () => {
-      radio.checked = true;
       document.body.appendChild(group);
       await nextRender();
       expect(validateSpy.called).to.be.false;
