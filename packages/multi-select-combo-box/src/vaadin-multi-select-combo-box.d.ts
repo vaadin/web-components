@@ -304,6 +304,11 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
   clearCache(): void;
 
   /**
+   * Clears the selected items.
+   */
+  clear(): void;
+
+  /**
    * Requests an update for the content of items.
    * While performing the update, it invokes the renderer (passed in the `renderer` property) once an item.
    *
