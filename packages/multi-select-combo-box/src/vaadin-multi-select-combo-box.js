@@ -511,7 +511,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /**
-   * Clear the selected items.
+   * Clears the selected items.
    */
   clear() {
     this.__updateSelection([]);
