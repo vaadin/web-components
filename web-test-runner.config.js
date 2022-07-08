@@ -4,11 +4,11 @@ const devServerConfig = require('./web-dev-server.config.js');
 
 const unitTestsConfig = createUnitTestsConfig({
   coverageConfig: {
-    include: ['packages/**/src/*', 'packages/**/*.js'],
+    include: ['packages/**/src/**/*', 'packages/*/*.js'],
     threshold: {
       statements: 95,
-      branches: 90,
-      functions: 92,
+      branches: 95,
+      functions: 95,
       lines: 95,
     },
   },
