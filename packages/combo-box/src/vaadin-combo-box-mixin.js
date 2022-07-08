@@ -6,6 +6,7 @@
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
@@ -506,6 +507,11 @@ export const ComboBoxMixin = (subclass) =>
       this._updateActiveDescendant(index);
     }
 
+    /** @protected */
+    _isInputFocused() {
+      return this.inputElement && isElementFocused(this.inputElement);
+    }
+
     /** @private */
     _updateActiveDescendant(index) {
       const input = this.inputElement;
@@ -532,14 +538,14 @@ export const ComboBoxMixin = (subclass) =>
         this._openedWithFocusRing = this.hasAttribute('focus-ring');
         // For touch devices, we don't want to popup virtual keyboard
         // unless input element is explicitly focused by the user.
-        if (!this.hasAttribute('focused') && !isTouch) {
+        if (!this._isInputFocused() && !isTouch) {
           this.focus();
         }
 
         this.$.overlay.restoreFocusOnClose = true;
       } else {
         this._onClosed();
-        if (this._openedWithFocusRing && this.hasAttribute('focused')) {
+        if (this._openedWithFocusRing && this._isInputFocused()) {
           this.setAttribute('focus-ring', '');
         }
       }
@@ -721,8 +727,7 @@ export const ComboBoxMixin = (subclass) =>
       // and there's no need to modify the selection range if the input isn't focused anyway.
       // This affects Safari. When the overlay is open, and then hitting tab, browser should focus
       // the next focusable element instead of the combo-box itself.
-      // Checking the focused property here is enough instead of checking the activeElement.
-      if (this.hasAttribute('focused')) {
+      if (this._isInputFocused() && this.inputElement.setSelectionRange) {
         this.inputElement.setSelectionRange(start, end);
       }
     }
@@ -832,7 +837,7 @@ export const ComboBoxMixin = (subclass) =>
         toggleElement.addEventListener('mousedown', (e) => e.preventDefault());
         // Unfocus previously focused element if focus is not inside combo box (on touch devices)
         toggleElement.addEventListener('click', () => {
-          if (isTouch && !this.hasAttribute('focused')) {
+          if (isTouch && !this._isInputFocused()) {
             document.activeElement.blur();
           }
         });
