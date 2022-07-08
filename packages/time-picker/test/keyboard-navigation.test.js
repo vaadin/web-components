@@ -162,6 +162,7 @@ describe('keyboard navigation', () => {
     beforeEach(() => {
       timePicker.step = 1800;
       timePicker.value = '02:00';
+      inputElement.focus();
       comboBox.opened = true;
     });
 
@@ -173,6 +174,18 @@ describe('keyboard navigation', () => {
     it('should not change the value on arrow down', () => {
       arrowDown(inputElement);
       expect(timePicker.value).to.be.equal('02:00');
+    });
+
+    it('should select the input field on arrow up', () => {
+      arrowUp(inputElement);
+      expect(inputElement.selectionStart).to.eql(0);
+      expect(inputElement.selectionEnd).to.eql(5);
+    });
+
+    it('should select the input field on arrow down', () => {
+      arrowDown(inputElement);
+      expect(inputElement.selectionStart).to.eql(0);
+      expect(inputElement.selectionEnd).to.eql(5);
     });
 
     it('should not call __onArrowPressWithStep on arrow down/up', () => {
