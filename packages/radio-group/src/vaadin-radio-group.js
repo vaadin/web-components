@@ -129,6 +129,7 @@ class RadioGroup extends FieldMixin(
       value: {
         type: String,
         notify: true,
+        value: '',
         observer: '__valueChanged',
       },
 
@@ -340,25 +341,28 @@ class RadioGroup extends FieldMixin(
    * @private
    */
   __valueChanged(newValue, oldValue) {
-    if (!oldValue && !newValue) {
+    if (oldValue === undefined && newValue === '') {
       return;
     }
 
-    if (oldValue && !newValue) {
+    if (newValue) {
+      const newSelectedRadioButton = this.__radioButtons.find((radioButton) => {
+        return radioButton.value === newValue;
+      });
+
+      if (newSelectedRadioButton) {
+        this.__selectRadioButton(newSelectedRadioButton);
+        this.toggleAttribute('has-value', true);
+      } else {
+        console.warn(`The radio button with the value "${newValue}" was not found.`);
+      }
+    } else {
       this.__selectRadioButton(null);
       this.removeAttribute('has-value');
-      return;
     }
 
-    const newSelectedRadioButton = this.__radioButtons.find((radioButton) => {
-      return radioButton.value === newValue;
-    });
-
-    if (newSelectedRadioButton) {
-      this.__selectRadioButton(newSelectedRadioButton);
-      this.toggleAttribute('has-value', true);
-    } else {
-      console.warn(`The radio button with the value "${newValue}" was not found.`);
+    if (oldValue !== undefined) {
+      this.validate();
     }
   }
 
@@ -451,8 +455,6 @@ class RadioGroup extends FieldMixin(
     this.__radioButtons.forEach((button) => {
       button.checked = button === radioButton;
     });
-
-    this.validate();
 
     if (this.readonly) {
       this.__updateRadioButtonsDisabledProperty();
