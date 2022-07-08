@@ -196,7 +196,13 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
             ></vaadin-multi-select-combo-box-chip>
             <div id="chips" part="chips" slot="prefix"></div>
             <slot name="input"></slot>
-            <div id="clearButton" part="clear-button" slot="suffix" aria-hidden="true"></div>
+            <div
+              id="clearButton"
+              part="clear-button"
+              slot="suffix"
+              on-touchend="_onClearButtonTouchend"
+              aria-hidden="true"
+            ></div>
             <div id="toggleButton" class="toggle-button" part="toggle-button" slot="suffix" aria-hidden="true"></div>
           </vaadin-multi-select-combo-box-container>
         </vaadin-multi-select-combo-box-internal>
@@ -880,6 +886,14 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     }
 
     this._overflowItems = items;
+  }
+
+  /** @private */
+  _onClearButtonTouchend(event) {
+    // Cancel the following click and focus events
+    event.preventDefault();
+
+    this.clear();
   }
 
   /**

@@ -218,6 +218,19 @@ describe('basic', () => {
       await sendKeys({ press: 'Escape' });
       expect(comboBox.selectedItems).to.deep.equal(['apple', 'orange']);
     });
+
+    it('should prevent default for touchend event on clear button', () => {
+      comboBox.selectedItems = ['apple', 'orange'];
+      const event = new CustomEvent('touchend', { cancelable: true });
+      clearButton.dispatchEvent(event);
+      expect(event.defaultPrevented).to.be.true;
+    });
+
+    it('should clear selected items on clear button touchend', () => {
+      comboBox.selectedItems = ['apple', 'orange'];
+      clearButton.dispatchEvent(new CustomEvent('touchend', { cancelable: true }));
+      expect(comboBox.selectedItems).to.deep.equal([]);
+    });
   });
 
   describe('chips', () => {
