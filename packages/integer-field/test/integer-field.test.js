@@ -243,14 +243,14 @@ describe('integer-field', () => {
     });
 
     it('should not validate when the field has an initial value', async () => {
-      integerField.value = 2;
+      integerField.value = '2';
       document.body.appendChild(integerField);
       await nextRender();
       expect(validateSpy.called).to.be.false;
     });
 
     it('should not validate when the field has an initial value and invalid', async () => {
-      integerField.value = 2;
+      integerField.value = '2';
       integerField.invalid = true;
       document.body.appendChild(integerField);
       await nextRender();
