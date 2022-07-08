@@ -186,7 +186,7 @@ export const ComboBoxDataProviderMixin = (superClass) =>
         filteredItems.splice(params.page * params.pageSize, items.length, ...items);
         this.filteredItems = filteredItems;
 
-        if (!this.opened && !this.hasAttribute('focused')) {
+        if (!this.opened && !this._isInputFocused()) {
           this._commitValue();
         }
 
