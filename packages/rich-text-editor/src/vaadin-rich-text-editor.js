@@ -557,7 +557,7 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
     this.__patchToolbar();
     this.__patchKeyboard();
 
-    /* istanbul ignore if */
+    /* c8 ignore next 3 */
     if (isFirefox) {
       this.__patchFirefoxFocus();
     }
