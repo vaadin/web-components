@@ -752,7 +752,7 @@ class DateTimePicker extends FieldMixin(
    */
   __parseDateTime(str) {
     const [dateValue, timeValue] = str.split('T');
-    /* istanbul ignore if */
+    /* c8 ignore next 3 */
     if (!(dateValue && timeValue)) {
       return;
     }
