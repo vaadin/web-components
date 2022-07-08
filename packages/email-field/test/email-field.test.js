@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-email-field.js';
 
@@ -93,6 +93,40 @@ describe('email-field', () => {
 
     it('should not remove "invalid" state when ready', () => {
       expect(field.invalid).to.be.true;
+    });
+  });
+
+  describe('initial validation', () => {
+    let field, validateSpy;
+
+    beforeEach(() => {
+      field = document.createElement('vaadin-email-field');
+      validateSpy = sinon.spy(field, 'validate');
+    });
+
+    afterEach(() => {
+      field.remove();
+    });
+
+    it('should not validate by default', async () => {
+      document.body.appendChild(field);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value', async () => {
+      field.value = 'foo@example.com';
+      document.body.appendChild(field);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value and invalid', async () => {
+      field.value = 'foo@example.com';
+      field.invalid = true;
+      document.body.appendChild(field);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
     });
   });
 
