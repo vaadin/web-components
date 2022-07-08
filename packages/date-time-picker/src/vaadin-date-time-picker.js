@@ -432,11 +432,6 @@ class DateTimePicker extends FieldMixin(
     this.ariaTarget = this;
   }
 
-  /** @private */
-  __filterElements(node) {
-    return node.nodeType === Node.ELEMENT_NODE;
-  }
-
   focus() {
     this.__datePicker.focus();
   }
