@@ -100,7 +100,7 @@ assertType<FieldMixinClass>(narrowedComboBox);
 assertType<FocusMixinClass>(narrowedComboBox);
 assertType<InputConstraintsMixinClass>(narrowedComboBox);
 assertType<InputControlMixinClass>(narrowedComboBox);
-assertType<InputMixinClass>(narrowedComboBox);
+assertType<Omit<InputMixinClass, 'value'>>(narrowedComboBox);
 assertType<KeyboardMixinClass>(narrowedComboBox);
 assertType<LabelMixinClass>(narrowedComboBox);
 assertType<ValidateMixinClass>(narrowedComboBox);
