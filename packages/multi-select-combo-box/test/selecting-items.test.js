@@ -104,6 +104,12 @@ describe('selecting items', () => {
       await sendKeys({ down: 'Tab' });
       expect(comboBox.selectedItems).to.deep.equal(['apple']);
     });
+
+    it('should un-select item when using clear() method', () => {
+      comboBox.selectedItems = ['orange'];
+      comboBox.clear();
+      expect(comboBox.selectedItems).to.deep.equal([]);
+    });
   });
 
   describe('dataProvider', () => {
