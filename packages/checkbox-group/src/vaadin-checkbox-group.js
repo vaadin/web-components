@@ -117,22 +117,20 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
   static get properties() {
     return {
       /**
-       * The value of the checkbox group.
-       * Note: toggling the checkboxes modifies the value by creating new
-       * array each time, to override Polymer dirty-checking for arrays.
-       * You can still use Polymer array mutation methods to update the value.
+       * An array containing values of the currently checked checkboxes.
+       *
+       * The array is immutable so toggling checkboxes always results in
+       * creating a new array.
+       *
        * @type {!Array<!string>}
        */
       value: {
         type: Array,
         value: () => [],
         notify: true,
+        observer: '__valueChanged',
       },
     };
-  }
-
-  static get observers() {
-    return ['__valueChanged(value, value.splices)'];
   }
 
   constructor() {
