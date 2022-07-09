@@ -613,8 +613,6 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _onClick(e) {
-      this._closeOnBlurIsPrevented = true;
-
       const path = e.composedPath();
 
       if (this._isClearButton(e)) {
@@ -624,8 +622,6 @@ export const ComboBoxMixin = (subclass) =>
       } else {
         this._onHostClick(e);
       }
-
-      this._closeOnBlurIsPrevented = false;
     }
 
     /**
