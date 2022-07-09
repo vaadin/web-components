@@ -619,8 +619,6 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _onClick(e) {
-      this._closeOnBlurIsPrevented = true;
-
       const path = e.composedPath();
 
       if (this._isClearButton(e)) {
@@ -630,8 +628,6 @@ export const ComboBoxMixin = (subclass) =>
       } else {
         this._onHostClick(e);
       }
-
-      this._closeOnBlurIsPrevented = false;
     }
 
     /**
@@ -647,16 +643,12 @@ export const ComboBoxMixin = (subclass) =>
       if (e.key === 'Tab') {
         this.$.overlay.restoreFocusOnClose = false;
       } else if (e.key === 'ArrowDown') {
-        this._closeOnBlurIsPrevented = true;
         this._onArrowDown();
-        this._closeOnBlurIsPrevented = false;
 
         // Prevent caret from moving
         e.preventDefault();
       } else if (e.key === 'ArrowUp') {
-        this._closeOnBlurIsPrevented = true;
         this._onArrowUp();
-        this._closeOnBlurIsPrevented = false;
 
         // Prevent caret from moving
         e.preventDefault();

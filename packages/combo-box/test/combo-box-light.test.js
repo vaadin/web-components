@@ -241,6 +241,34 @@ describe('custom buttons', () => {
       toggleButton.dispatchEvent(e);
       expect(spy.calledOnce).to.be.true;
     });
+
+    it('should open overlay on toggle button Arrow Down', async () => {
+      comboBox.inputElement.focus();
+
+      // Focus the custom clear button
+      await sendKeys({ press: 'Tab' });
+
+      // Focus the custom toggle button
+      await sendKeys({ press: 'Tab' });
+
+      await sendKeys({ press: 'ArrowDown' });
+
+      expect(comboBox.opened).to.be.true;
+    });
+
+    it('should open overlay on toggle button Arrow Up', async () => {
+      comboBox.inputElement.focus();
+
+      // Focus the custom clear button
+      await sendKeys({ press: 'Tab' });
+
+      // Focus the custom toggle button
+      await sendKeys({ press: 'Tab' });
+
+      await sendKeys({ press: 'ArrowUp' });
+
+      expect(comboBox.opened).to.be.true;
+    });
   });
 
   describe('clear-button', () => {
