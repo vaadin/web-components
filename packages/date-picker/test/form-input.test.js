@@ -27,24 +27,6 @@ describe('form input', () => {
       datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
     });
 
-    it('should have the given name', () => {
-      datepicker.name = 'foo';
-      expect(datepicker.inputElement.name).to.equal('foo');
-    });
-
-    it('should have no name', () => {
-      expect(datepicker.inputElement.name).not.to.be.ok;
-    });
-
-    it('should be required', () => {
-      datepicker.required = true;
-      expect(datepicker.inputElement.required).to.be.true;
-    });
-
-    it('should not be required', () => {
-      expect(datepicker.inputElement.required).to.be.false;
-    });
-
     it('should validate correctly with required flag', async () => {
       datepicker.name = 'foo';
       datepicker.required = true;
@@ -103,18 +85,6 @@ describe('form input', () => {
       datepicker.open();
       inputValue('01/01/2000');
       datepicker.close();
-    });
-
-    it('should display the error-message when invalid', () => {
-      datepicker.invalid = true;
-      datepicker.errorMessage = 'Not cool';
-      expect(datepicker.querySelector('[slot="error-message"]').textContent).to.equal(datepicker.errorMessage);
-    });
-
-    it('should have disabled vaadin-text-field', () => {
-      datepicker.disabled = true;
-      expect(datepicker.inputElement.hasAttribute('disabled')).to.be.true;
-      expect(datepicker.inputElement.disabled).to.equal(true);
     });
 
     it('should validate keyboard input (invalid)', async () => {
