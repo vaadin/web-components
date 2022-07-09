@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout } from '@vaadin/testing-helpers';
+import { fixtureSync, focusout, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { TimePicker } from '../src/vaadin-time-picker.js';
 
@@ -18,6 +18,40 @@ describe('form input', () => {
     inputElement.value = value;
     inputElement.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
   }
+
+  describe('initial validation', () => {
+    let validateSpy;
+
+    beforeEach(() => {
+      timePicker = document.createElement('vaadin-time-picker');
+      validateSpy = sinon.spy(timePicker, 'validate');
+    });
+
+    afterEach(() => {
+      timePicker.remove();
+    });
+
+    it('should not validate by default', async () => {
+      document.body.appendChild(timePicker);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value', async () => {
+      timePicker.value = '12:00';
+      document.body.appendChild(timePicker);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value and invalid', async () => {
+      timePicker.value = '12:00';
+      timePicker.invalid = true;
+      document.body.appendChild(timePicker);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+  });
 
   describe('default validator', () => {
     beforeEach(() => {
