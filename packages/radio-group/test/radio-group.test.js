@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-radio-group.js';
@@ -270,6 +270,10 @@ describe('radio-group', () => {
       buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });
 
+    it('should be an empty string by default', () => {
+      expect(group.value).to.equal('');
+    });
+
     it('should set value when radio button is checked', () => {
       buttons[0].checked = true;
       expect(group.value).to.eq('on');
@@ -466,6 +470,45 @@ describe('radio-group', () => {
     });
   });
 
+  describe('initial validation', () => {
+    let validateSpy;
+
+    beforeEach(() => {
+      group = document.createElement('vaadin-radio-group');
+
+      const radio = document.createElement('vaadin-radio-button');
+      radio.value = '1';
+      group.appendChild(radio);
+
+      validateSpy = sinon.spy(group, 'validate');
+    });
+
+    afterEach(() => {
+      group.remove();
+    });
+
+    it('should not validate by default', async () => {
+      document.body.appendChild(group);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value', async () => {
+      group.value = '1';
+      document.body.appendChild(group);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value and invalid', async () => {
+      group.value = '1';
+      group.invalid = true;
+      document.body.appendChild(group);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+  });
+
   describe('validation', () => {
     beforeEach(async () => {
       group = fixtureSync(`
@@ -499,10 +542,17 @@ describe('radio-group', () => {
       expect(group.invalid).to.be.true;
     });
 
-    it('should validate and reset invalid state after changing selected radio', () => {
+    it('should validate on radio button click', () => {
       group.required = true;
       group.validate();
       buttons[1].click();
+      expect(group.invalid).to.be.false;
+    });
+
+    it('should validate on value change', () => {
+      group.required = true;
+      group.validate();
+      group.value = '1';
       expect(group.invalid).to.be.false;
     });
 
