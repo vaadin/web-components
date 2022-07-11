@@ -16,6 +16,11 @@ describe('vaadin-date-picker', () => {
       await expect(datePicker).dom.to.equalSnapshot();
     });
 
+    it('disabled', async () => {
+      datePicker.disabled = true;
+      await expect(datePicker).dom.to.equalSnapshot();
+    });
+
     it('placeholder', async () => {
       datePicker.placeholder = 'Placeholder';
       await expect(datePicker).dom.to.equalSnapshot();
@@ -23,6 +28,11 @@ describe('vaadin-date-picker', () => {
 
     it('readonly', async () => {
       datePicker.readonly = true;
+      await expect(datePicker).dom.to.equalSnapshot();
+    });
+
+    it('required', async () => {
+      datePicker.required = true;
       await expect(datePicker).dom.to.equalSnapshot();
     });
 
@@ -40,6 +50,11 @@ describe('vaadin-date-picker', () => {
       datePicker.errorMessage = 'Error';
       datePicker.invalid = true;
       await aTimeout(0);
+      await expect(datePicker).dom.to.equalSnapshot();
+    });
+
+    it('name', async () => {
+      datePicker.name = 'Field Name';
       await expect(datePicker).dom.to.equalSnapshot();
     });
   });
