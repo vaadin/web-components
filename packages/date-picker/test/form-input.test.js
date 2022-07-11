@@ -69,23 +69,23 @@ describe('form input', () => {
     it('should re-validate old input after selecting date', async () => {
       // Set invalid value.
       setInputValue(datePicker, 'foo');
-      expect(datePicker.validate()).to.equal(false);
+      expect(datePicker.validate()).to.be.false;
       await open(datePicker);
       datePicker.value = '2000-02-01';
       await close(datePicker);
-      expect(datePicker.invalid).to.equal(false);
+      expect(datePicker.invalid).to.be.false;
     });
 
     it('should set proper validity by the time the value-changed event is fired', (done) => {
       // Set invalid value.
       setInputValue(datePicker, 'foo');
-      expect(datePicker.validate()).to.equal(false);
+      expect(datePicker.validate()).to.be.false;
 
       validateSpy.resetHistory();
 
       datePicker.addEventListener('value-changed', () => {
         expect(validateSpy.callCount).to.equal(1);
-        expect(datePicker.invalid).to.equal(false);
+        expect(datePicker.invalid).to.be.false;
         done();
       });
 
@@ -294,13 +294,13 @@ describe('form input', () => {
     it('should validate correctly with custom validator', () => {
       // Try invalid value.
       datePicker.value = '2014-01-01';
-      expect(datePicker.validate()).to.equal(false);
-      expect(datePicker.invalid).to.equal(true);
+      expect(datePicker.validate()).to.be.false;
+      expect(datePicker.invalid).to.be.true;
 
       // Try valid value.
       datePicker.value = '2016-01-01';
-      expect(datePicker.validate()).to.equal(true);
-      expect(datePicker.invalid).to.equal(false);
+      expect(datePicker.validate()).to.be.true;
+      expect(datePicker.invalid).to.be.false;
     });
   });
 });

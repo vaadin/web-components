@@ -149,10 +149,10 @@ export async function waitForScrollToFinish(overlayContent) {
 /**
  * Emulates the user filling in something in the date-picker input.
  *
- * @param {Element} comboBox
+ * @param {Element} datePicker
  * @param {string} value
  */
-export function setInputValue(comboBox, value) {
-  comboBox.inputElement.value = value;
-  fire(comboBox.inputElement, 'input');
+export function setInputValue(datePicker, value) {
+  datePicker.inputElement.value = value;
+  fire(datePicker.inputElement, 'input');
 }
