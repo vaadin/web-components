@@ -88,13 +88,6 @@ describe('keyboard', () => {
   });
 
   describe('invalid date', () => {
-    it('should validate on close', async () => {
-      await open(datepicker);
-      const spy = sinon.spy(datepicker, 'validate');
-      await close(datepicker);
-      expect(spy.called).to.be.true;
-    });
-
     it('should not select date on Enter if input invalid', async () => {
       await open(datepicker);
       await sendKeys({ type: 'foo' });
@@ -134,23 +127,6 @@ describe('keyboard', () => {
       expect(spy.callCount).to.equal(1);
       expect(datepicker.invalid).to.be.false;
       expect(datepicker.checkValidity()).to.be.true;
-    });
-
-    it('should empty value with invalid input', async () => {
-      datepicker.value = '2000-01-01';
-      input.select();
-      await sendKeys({ type: 'foo' });
-      await close(datepicker);
-      expect(datepicker.value).to.equal('');
-    });
-
-    it('should be invalid with false input', async () => {
-      datepicker.value = '2000-01-01';
-      input.select();
-      await sendKeys({ type: 'foo' });
-      await close(datepicker);
-      expect(datepicker.invalid).to.be.true;
-      expect(datepicker.checkValidity()).to.be.false;
     });
   });
 

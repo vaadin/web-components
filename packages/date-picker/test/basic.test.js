@@ -421,38 +421,6 @@ describe('basic features', () => {
       datepicker.max = '2016-12-31';
     });
 
-    it('should be invalid when value is out of limits', () => {
-      datepicker.value = '2017-01-01';
-      expect(datepicker.invalid).to.be.equal(true);
-    });
-
-    it('should be valid when value is inside the limits', () => {
-      datepicker.value = '2016-07-14';
-      expect(datepicker.invalid).to.be.equal(false);
-    });
-
-    it('should be valid when value is the same as min date', () => {
-      datepicker.value = '2016-01-01';
-      expect(datepicker.invalid).to.be.equal(false);
-    });
-
-    it('should be valid when value is the same as max date', () => {
-      datepicker.value = '2016-12-31';
-      expect(datepicker.invalid).to.be.equal(false);
-    });
-
-    it('should reflect correct invalid value on value-changed eventListener', (done) => {
-      datepicker.value = '2016-01-01'; // Valid
-
-      datepicker.addEventListener('value-changed', () => {
-        expect(datepicker.invalid).to.be.equal(true);
-        done();
-      });
-
-      datepicker.open();
-      getOverlayContent(datepicker)._selectDate(new Date('2017-01-01')); // Invalid
-    });
-
     it('should change invalid state only once', (done) => {
       datepicker.addEventListener('value-changed', () => {
         expect(invalidChangedSpy.calledOnce).to.be.true;
@@ -761,5 +729,18 @@ describe('ios', () => {
       tap(toggleButton);
       await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
     });
+  });
+});
+
+describe('required', () => {
+  let datePicker;
+
+  beforeEach(() => {
+    datePicker = fixtureSync(`<vaadin-date-picker required></vaadin-date-picker>`);
+  });
+
+  it('should focus on required indicator click', () => {
+    datePicker.shadowRoot.querySelector('[part="required-indicator"]').click();
+    expect(datePicker.hasAttribute('focused')).to.be.true;
   });
 });

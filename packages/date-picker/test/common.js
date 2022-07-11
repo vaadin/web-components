@@ -1,4 +1,4 @@
-import { listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fire, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
 export function activateScroller(scroller) {
@@ -144,4 +144,15 @@ export async function waitForScrollToFinish(overlayContent) {
   }
 
   await nextRender(overlayContent);
+}
+
+/**
+ * Emulates the user filling in something in the date-picker input.
+ *
+ * @param {Element} datePicker
+ * @param {string} value
+ */
+export function setInputValue(datePicker, value) {
+  datePicker.inputElement.value = value;
+  fire(datePicker.inputElement, 'input');
 }
