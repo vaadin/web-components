@@ -46,7 +46,6 @@ export const DatePickerMixin = (subclass) =>
          */
         value: {
           type: String,
-          observer: '_valueChanged',
           notify: true,
           value: '',
         },
@@ -264,6 +263,11 @@ export const DatePickerMixin = (subclass) =>
          */
         min: {
           type: String,
+<<<<<<< HEAD
+=======
+          value: '',
+          observer: '_minChanged',
+>>>>>>> 9594a5f9f (fix!: prevent initial validation for date-picker)
         },
 
         /**
@@ -277,6 +281,11 @@ export const DatePickerMixin = (subclass) =>
          */
         max: {
           type: String,
+<<<<<<< HEAD
+=======
+          value: '',
+          observer: '_maxChanged',
+>>>>>>> 9594a5f9f (fix!: prevent initial validation for date-picker)
         },
 
         /**
@@ -688,27 +697,40 @@ export const DatePickerMixin = (subclass) =>
       }
     }
 
-    /** @private */
+    /**
+     * Override the value observer from `InputMixin` to implement custom
+     * handling of the `value` property. The date-picker doesn't forward
+     * the value directly to the input like the default implementation of `InputMixin`.
+     * Instead, it parses the value into a date, puts it in `_selectedDate` which
+     * is then displayed in the input with respect to the specified date format.
+     *
+     * @param {string | undefined} value
+     * @param {string | undefined} oldValue
+     * @protected
+     * @override
+     */
     _valueChanged(value, oldValue) {
-      const newDate = this._parseDate(value);
+      if (!value) {
+        this._selectedDate = null;
+        return;
+      }
 
-      // The new value cannot be parsed, revert the old value.
-      if (value && !newDate) {
+      const newDate = this._parseDate(value);
+      if (!newDate) {
+        // The new value cannot be parsed, revert the old value.
         this.value = oldValue;
         return;
       }
 
-      if (value) {
-        // Only update the date instance if the date has actually changed.
-        if (!dateEquals(this._selectedDate, newDate)) {
-          this._selectedDate = newDate;
+      if (!dateEquals(this._selectedDate, newDate)) {
+        // Update the date instance only if the date has actually changed.
+        this._selectedDate = newDate;
+
+        if (oldValue !== undefined) {
+          // Validate only if `value` changes after initialization.
           this.validate();
         }
-      } else {
-        this._selectedDate = null;
       }
-
-      this._toggleHasValue(!!value);
     }
 
     /** @private */

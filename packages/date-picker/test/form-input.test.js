@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import { DatePicker } from '../vaadin-date-picker.js';
@@ -15,6 +15,48 @@ customElements.define('vaadin-date-picker-2016', DatePicker2016);
 
 describe('form input', () => {
   let datePicker;
+
+  describe('initial', () => {
+    let validateSpy;
+
+    beforeEach(() => {
+      datePicker = document.createElement('vaadin-date-picker');
+      validateSpy = sinon.spy(datePicker, 'validate');
+    });
+
+    afterEach(() => {
+      datePicker.remove();
+    });
+
+    it('should not validate by default', async () => {
+      document.body.appendChild(datePicker);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value', async () => {
+      datePicker.value = '2020-01-01';
+      document.body.appendChild(datePicker);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value and min', async () => {
+      datePicker.min = '2020-01-01';
+      datePicker.value = '2020-01-01';
+      document.body.appendChild(datePicker);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value and max', async () => {
+      datePicker.max = '2020-01-01';
+      datePicker.value = '2020-01-01';
+      document.body.appendChild(datePicker);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+  });
 
   describe('basic', () => {
     let validateSpy;
@@ -47,11 +89,21 @@ describe('form input', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
+    it('should not validate on min change when no value is provided', () => {
+      datePicker.min = '2020-01-01';
+      expect(validateSpy.called).to.be.false;
+    });
+
     it('should validate on min change when a value is provided', () => {
       datePicker.value = '2020-01-01';
       validateSpy.resetHistory();
       datePicker.min = '2020-01-01';
       expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should not validate on max change when no value is provided', () => {
+      datePicker.max = '2020-01-01';
+      expect(validateSpy.called).to.be.false;
     });
 
     it('should validate on max change when a value is provided', () => {
