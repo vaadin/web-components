@@ -5,6 +5,7 @@
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
+import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import { DelegateStateMixin } from './delegate-state-mixin.js';
 import { InputMixin } from './input-mixin.js';
 
@@ -44,7 +45,15 @@ export const CheckedMixin = dedupingMixin(
        * @override
        */
       _onChange(event) {
-        this._toggleChecked(event.target.checked);
+        const input = event.target;
+
+        this._toggleChecked(input.checked);
+
+        // Clicking the checkbox or radio-button in Safari
+        // does not make it focused, so we do it manually.
+        if (!isElementFocused(input)) {
+          input.focus();
+        }
       }
 
       /** @protected */

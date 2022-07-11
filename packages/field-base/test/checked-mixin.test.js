@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync } from '@vaadin/testing-helpers';
+import { sendMouse } from '@web/test-runner-commands';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { CheckedMixin } from '../src/checked-mixin.js';
@@ -105,6 +106,21 @@ describe('checked-mixin', () => {
         element.checked = false;
         expect(input.checked).to.be.false;
       });
+    });
+  });
+
+  describe('focus', () => {
+    beforeEach(() => {
+      element = fixtureSync(`<checked-mixin-element checked></checked-mixin-element>`);
+      input = element.querySelector('[slot=input]');
+    });
+
+    it('should focus on input click if not focused', async () => {
+      const rect = input.getBoundingClientRect();
+      const middleX = Math.floor(rect.x + rect.width / 2);
+      const middleY = Math.floor(rect.y + rect.height / 2);
+      await sendMouse({ type: 'click', position: [middleX, middleY] });
+      expect(document.activeElement).to.eql(input);
     });
   });
 });
