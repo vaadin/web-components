@@ -7,6 +7,7 @@ import { unsafeSvgLiteral } from '../src/vaadin-icon-svg.js';
 const ANGLE_DOWN = '<path d="M13 4v2l-5 5-5-5v-2l5 5z"></path>';
 const ANGLE_UP = '<path d="M3 12v-2l5-5 5 5v2l-5-5z"></path>';
 const PLUS = '<path d="M3.5,7V0M0,3.5h7"></path>';
+const MINUS = '<path d="M2 7h12v2h-12v-2z"></path>';
 
 describe('vaadin-icon', () => {
   let icon, svgElement;
@@ -126,6 +127,7 @@ describe('vaadin-icon', () => {
               <g id="vaadin:angle-down">${ANGLE_DOWN}</g>
               <g id="vaadin:angle-up">${ANGLE_UP}</g>
               <g id="vaadin:plus" viewBox="0 0 7 7">${PLUS}</g>
+              <svg id="vaadin:minus" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="red">${MINUS}</svg>
             </defs>
           </svg>
         </vaadin-iconset>
@@ -142,20 +144,20 @@ describe('vaadin-icon', () => {
       it('should render icon from the iconset', () => {
         icons.forEach((svgIcon) => {
           icon.icon = svgIcon.getAttribute('id');
-          expectIcon(svgIcon.innerHTML);
+          expectIcon(svgIcon.outerHTML.replace(/ id="[^\s]+"/, ''));
         });
       });
 
       it('should clear icon when the value is set to null', () => {
         icon.icon = 'vaadin:angle-up';
-        expectIcon(ANGLE_UP);
+        expectIcon(`<g>${ANGLE_UP}</g>`);
         icon.icon = null;
         expectIcon('');
       });
 
       it('should clear icon when the value is set to undefined', () => {
         icon.icon = 'vaadin:angle-up';
-        expectIcon(ANGLE_UP);
+        expectIcon(`<g>${ANGLE_UP}</g>`);
         icon.icon = undefined;
         expectIcon('');
       });
@@ -169,6 +171,12 @@ describe('vaadin-icon', () => {
         icon.style.color = 'rgb(0, 0, 255)';
         icon.style.fill = 'rgb(0, 255, 0)';
         expect(getComputedStyle(icon).fill).to.equal('rgb(0, 255, 0)');
+      });
+
+      it('should support rendering custom svg element inside the icon', () => {
+        icon.icon = 'vaadin:minus';
+        const child = svgElement.firstElementChild;
+        expect(child.getAttribute('fill')).to.equal('red');
       });
 
       it('should preserve the viewBox attribute set on the icon', () => {
@@ -188,7 +196,7 @@ describe('vaadin-icon', () => {
             </svg>
           </vaadin-iconset>
         `);
-        expectIcon(ANGLE_UP);
+        expectIcon(`<g>${ANGLE_UP}</g>`);
       });
     });
 
@@ -205,7 +213,7 @@ describe('vaadin-icon', () => {
         icon.icon = 'vaadin:angle-up';
         document.body.appendChild(icon);
         svgElement = icon.shadowRoot.querySelector('svg');
-        expectIcon(ANGLE_UP);
+        expectIcon(`<g>${ANGLE_UP}</g>`);
       });
     });
 
