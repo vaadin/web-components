@@ -17,7 +17,7 @@ export function cloneSvgNode(source) {
   if (source) {
     const content = source.cloneNode(true);
     content.removeAttribute('id');
-    result = svg`${unsafeSVG(content.innerHTML)}`;
+    result = svg`${unsafeSVG(content.outerHTML)}`;
   }
 
   return result;
