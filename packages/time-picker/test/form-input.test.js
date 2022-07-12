@@ -185,4 +185,10 @@ describe('form input', () => {
       expect(timePicker.invalid).to.equal(false);
     });
   });
+
+  describe('incorrect value', () => {
+    it('should not throw error when setting incorrect value using attribute', () => {
+      expect(() => fixtureSync(`<vaadin-time-picker value="1500"></vaadin-time-picker>`)).to.not.throw(Error);
+    });
+  });
 });
