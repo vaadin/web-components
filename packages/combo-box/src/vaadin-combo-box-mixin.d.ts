@@ -165,16 +165,5 @@ export declare class ComboBoxMixinClass<TItem> {
    */
   close(): void;
 
-  /**
-   * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-   */
-  validate(): boolean;
-
-  /**
-   * Returns true if the current input value satisfies all constraints (if any).
-   * You can override this method for custom validations.
-   */
-  checkValidity(): boolean;
-
   protected _revertInputValue(): void;
 }
