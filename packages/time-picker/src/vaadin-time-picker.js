@@ -550,7 +550,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     const newValue = this.__formatISO(parsedObj) || '';
 
     if (this.value !== '' && this.value !== null && !parsedObj) {
-      this.value = oldValue;
+      this.value = oldValue === undefined ? '' : oldValue;
     } else if (this.value !== newValue) {
       this.value = newValue;
     } else {
