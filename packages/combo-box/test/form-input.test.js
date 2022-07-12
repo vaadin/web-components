@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, keyboardEventFor } from '@vaadin/testing-helpers';
+import { fixtureSync, keyboardEventFor, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
@@ -71,6 +71,41 @@ describe('form field', () => {
     expect(validatedSpy.calledOnce).to.be.true;
     const event = validatedSpy.firstCall.args[0];
     expect(event.detail.valid).to.be.false;
+  });
+
+  describe('initial validation', () => {
+    let validateSpy;
+
+    beforeEach(() => {
+      comboBox = document.createElement('vaadin-combo-box');
+      comboBox.allowCustomValue = true;
+      validateSpy = sinon.spy(comboBox, 'validate');
+    });
+
+    afterEach(() => {
+      comboBox.remove();
+    });
+
+    it('should not validate by default', async () => {
+      document.body.appendChild(comboBox);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value', async () => {
+      comboBox.value = 'foo';
+      document.body.appendChild(comboBox);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value and invalid', async () => {
+      comboBox.value = 'foo';
+      comboBox.invalid = true;
+      document.body.appendChild(comboBox);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
   });
 
   describe('enter key behavior', () => {
