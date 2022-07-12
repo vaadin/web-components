@@ -40,22 +40,6 @@ describe('form input', () => {
       await nextRender();
       expect(validateSpy.called).to.be.false;
     });
-
-    it('should not validate when the field has an initial value and min', async () => {
-      datePicker.min = '2020-01-01';
-      datePicker.value = '2020-01-01';
-      document.body.appendChild(datePicker);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
-
-    it('should not validate when the field has an initial value and max', async () => {
-      datePicker.max = '2020-01-01';
-      datePicker.value = '2020-01-01';
-      document.body.appendChild(datePicker);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
   });
 
   describe('basic', () => {
