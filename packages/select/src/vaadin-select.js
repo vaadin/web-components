@@ -459,11 +459,10 @@ class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(Po
   _valueChanged(value, oldValue) {
     this.toggleAttribute('has-value', Boolean(value));
 
-    // Skip validation for the initial empty string value
-    if (value === '' && oldValue === undefined) {
-      return;
+    // Validate only if `value` changes after initialization.
+    if (oldValue !== undefined) {
+      this.validate();
     }
-    this.validate();
   }
 
   /**

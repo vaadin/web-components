@@ -11,6 +11,7 @@ import {
   keyboardEventFor,
   keyDownChar,
   nextFrame,
+  nextRender,
   spaceKeyDown,
   tab,
 } from '@vaadin/testing-helpers';
@@ -678,6 +679,40 @@ describe('vaadin-select', () => {
         enterKeyUp(secondOption);
         expect(changeSpy.callCount).to.equal(1);
       });
+    });
+  });
+
+  describe('initial validation', () => {
+    let validateSpy;
+
+    beforeEach(() => {
+      select = document.createElement('vaadin-select');
+      validateSpy = sinon.spy(select, 'validate');
+    });
+
+    afterEach(() => {
+      select.remove();
+    });
+
+    it('should not validate by default', async () => {
+      document.body.appendChild(select);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value', async () => {
+      select.value = 'value';
+      document.body.appendChild(select);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when the field has an initial value and invalid', async () => {
+      select.value = 'value';
+      select.invalid = true;
+      document.body.appendChild(select);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
     });
   });
 
