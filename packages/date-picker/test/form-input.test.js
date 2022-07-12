@@ -40,6 +40,14 @@ describe('form input', () => {
       await nextRender();
       expect(validateSpy.called).to.be.false;
     });
+
+    it('should not validate when the field has an initial value and invalid', async () => {
+      datePicker.value = '2020-01-01';
+      datePicker.invalid = true;
+      document.body.appendChild(datePicker);
+      await nextRender();
+      expect(validateSpy.called).to.be.false;
+    });
   });
 
   describe('basic', () => {
