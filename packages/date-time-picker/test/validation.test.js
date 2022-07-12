@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-date-time-picker.js';
 
@@ -115,6 +115,40 @@ const fixtures = {
         expect(dateTimePicker.invalid).to.be.true;
       });
     });
+  });
+});
+
+describe('initial validation', () => {
+  let validateSpy, dateTimePicker;
+
+  beforeEach(() => {
+    dateTimePicker = document.createElement('vaadin-date-time-picker');
+    validateSpy = sinon.spy(dateTimePicker, 'validate');
+  });
+
+  afterEach(() => {
+    dateTimePicker.remove();
+  });
+
+  it('should not validate by default', async () => {
+    document.body.appendChild(dateTimePicker);
+    await nextRender();
+    expect(validateSpy.called).to.be.false;
+  });
+
+  it('should not validate when the field has an initial value', async () => {
+    dateTimePicker.value = '2020-02-01T02:00';
+    document.body.appendChild(dateTimePicker);
+    await nextRender();
+    expect(validateSpy.called).to.be.false;
+  });
+
+  it('should not validate when the field has an initial value and invalid', async () => {
+    dateTimePicker.value = '2020-02-01T02:00';
+    dateTimePicker.invalid = true;
+    document.body.appendChild(dateTimePicker);
+    await nextRender();
+    expect(validateSpy.called).to.be.false;
   });
 });
 
