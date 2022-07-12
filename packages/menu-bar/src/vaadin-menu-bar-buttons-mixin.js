@@ -163,6 +163,9 @@ export const ButtonsMixin = (superClass) =>
       if (oldOverflowCount !== newOverflowCount && this._subMenu.opened) {
         this._subMenu.close();
       }
+
+      const isSingleButton = newOverflowCount === buttons.length || (newOverflowCount === 0 && buttons.length === 1);
+      this.toggleAttribute('has-single-button', isSingleButton);
     }
 
     /** @protected */
