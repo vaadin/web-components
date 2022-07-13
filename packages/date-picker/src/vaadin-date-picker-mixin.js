@@ -263,14 +263,6 @@ export const DatePickerMixin = (subclass) =>
          */
         min: {
           type: String,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-          value: '',
-=======
->>>>>>> bb4fdd640 (revert min / max changes)
-          observer: '_minChanged',
->>>>>>> 9594a5f9f (fix!: prevent initial validation for date-picker)
         },
 
         /**
@@ -284,14 +276,6 @@ export const DatePickerMixin = (subclass) =>
          */
         max: {
           type: String,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-          value: '',
-=======
->>>>>>> bb4fdd640 (revert min / max changes)
-          observer: '_maxChanged',
->>>>>>> 9594a5f9f (fix!: prevent initial validation for date-picker)
         },
 
         /**
