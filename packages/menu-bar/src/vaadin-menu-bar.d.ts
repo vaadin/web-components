@@ -68,6 +68,12 @@ export interface MenuBarEventMap extends HTMLElementEventMap, MenuBarCustomEvent
  * `menu-bar-button` | The menu bar button.
  * `overflow-button` | The "overflow" button appearing when menu bar width is not enough to fit all the buttons.
  *
+ * The following state attributes are available for styling:
+ *
+ * Attribute           | Description
+ * --------------------|----------------------------------
+ * `disabled`          | Set when the menu bar is disabled
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
  * ### Internal components
