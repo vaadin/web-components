@@ -264,7 +264,6 @@ export const DatePickerMixin = (subclass) =>
          */
         min: {
           type: String,
-          observer: '_minChanged',
         },
 
         /**
@@ -278,28 +277,28 @@ export const DatePickerMixin = (subclass) =>
          */
         max: {
           type: String,
-          observer: '_maxChanged',
         },
 
         /**
          * The earliest date that can be selected. All earlier dates will be disabled.
-         * @type {Date | string}
+         * @type {Date | undefined}
          * @protected
          */
         _minDate: {
           type: Date,
-          // Null does not work here because minimizer passes undefined to overlay (#351)
-          value: '',
+          observer: '__minDateChanged',
+          computed: '__computeMinDate(min)',
         },
 
         /**
          * The latest date that can be selected. All later dates will be disabled.
-         * @type {Date | string}
+         * @type {Date | undefined}
          * @protected
          */
         _maxDate: {
           type: Date,
-          value: '',
+          observer: '__maxDateChanged',
+          computed: '__computeMaxDate(max)',
         },
 
         /** @private */
@@ -690,40 +689,40 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _handleDateChange(property, value, oldValue) {
-      if (!value) {
-        this[property] = '';
-        return;
-      }
+    _valueChanged(value, oldValue) {
+      const newDate = this._parseDate(value);
 
-      const date = this._parseDate(value);
-      if (!date) {
+      // The new value cannot be parsed, revert the old value.
+      if (value && !newDate) {
         this.value = oldValue;
         return;
       }
-      if (!dateEquals(this[property], date)) {
-        this[property] = date;
-        if (this.value) {
+
+      if (value) {
+        // Only update the date instance if the date has actually changed.
+        if (!dateEquals(this._selectedDate, newDate)) {
+          this._selectedDate = newDate;
           this.validate();
         }
+      } else {
+        this._selectedDate = null;
       }
-    }
-
-    /** @private */
-    _valueChanged(value, oldValue) {
-      this._handleDateChange('_selectedDate', value, oldValue);
 
       this._toggleHasValue(!!value);
     }
 
     /** @private */
-    _minChanged(value, oldValue) {
-      this._handleDateChange('_minDate', value, oldValue);
+    __minDateChanged() {
+      if (this.value) {
+        this.validate();
+      }
     }
 
     /** @private */
-    _maxChanged(value, oldValue) {
-      this._handleDateChange('_maxDate', value, oldValue);
+    __maxDateChanged() {
+      if (this.value) {
+        this.validate();
+      }
     }
 
     /** @protected */
@@ -1091,6 +1090,16 @@ export const DatePickerMixin = (subclass) =>
     /** @private */
     get _overlayContent() {
       return this.$.overlay.content.querySelector('#overlay-content');
+    }
+
+    /** @private */
+    __computeMinDate(min) {
+      return this._parseDate(min);
+    }
+
+    /** @private */
+    __computeMaxDate(max) {
+      return this._parseDate(max);
     }
 
     /**
