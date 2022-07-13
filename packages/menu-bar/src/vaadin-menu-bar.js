@@ -62,6 +62,7 @@ import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
  * @extends HTMLElement
  * @mixes ButtonsMixin
  * @mixes InteractionsMixin
+ * @mixes DisabledMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
