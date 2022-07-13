@@ -697,6 +697,15 @@ class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(Po
   }
 
   /**
+   * Returns true if the current value satisfies all constraints (if any)
+   *
+   * @return {boolean}
+   */
+  checkValidity() {
+    return !this.required || !!this.value;
+  }
+
+  /**
    * Renders items when they are provided by the `items` property and clears the content otherwise.
    * @param {!HTMLElement} root
    * @param {!Select} _select
