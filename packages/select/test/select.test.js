@@ -555,16 +555,6 @@ describe('vaadin-select', () => {
         expect(select.invalid).to.be.true;
       });
 
-      it('should pass the validation when the field is required and has no value but disabled', () => {
-        expect(select.invalid).to.be.false;
-        select.setAttribute('required', '');
-        select.setAttribute('disabled', '');
-
-        select.validate();
-        expect(select.checkValidity()).to.be.true;
-        expect(select.invalid).to.be.false;
-      });
-
       it('should validate when closing the overlay', () => {
         const spy = sinon.spy();
         select.validate = spy;
