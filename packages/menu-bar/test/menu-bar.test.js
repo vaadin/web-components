@@ -456,6 +456,73 @@ describe('overflow button', () => {
   });
 });
 
+describe('has-single-button attribute', () => {
+  let menu, buttons, overflow;
+
+  beforeEach(async () => {
+    menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
+    menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }];
+    await nextRender(menu);
+    buttons = menu._buttons;
+    overflow = buttons[buttons.length - 1];
+  });
+
+  it('should not set when one button and overflow are only visible', async () => {
+    menu.style.width = '150px';
+    await onceResized(menu);
+    assertVisible(buttons[0]);
+    assertHidden(buttons[1]);
+    expect(overflow.hasAttribute('hidden')).to.be.false;
+    expect(menu.hasAttribute('has-single-button')).to.be.false;
+  });
+
+  it('should set when only overflow button is visible', async () => {
+    menu.style.width = '100px';
+    await onceResized(menu);
+    assertHidden(buttons[0]);
+    assertHidden(buttons[1]);
+    expect(menu.hasAttribute('has-single-button')).to.be.true;
+  });
+
+  it('should remove when buttons become visible after size increases', async () => {
+    menu.style.width = '100px';
+    await onceResized(menu);
+
+    menu.style.width = '150px';
+    await onceResized(menu);
+    expect(menu.hasAttribute('has-single-button')).to.be.false;
+  });
+
+  it('should set when theme attribute makes other buttons not fit', async () => {
+    menu.style.width = '150px';
+    await onceResized(menu);
+
+    menu.setAttribute('theme', 'big');
+    expect(menu.hasAttribute('has-single-button')).to.be.true;
+  });
+
+  it('should set when changing items to only have one button', () => {
+    menu.items = [{ text: 'Actions' }];
+    expect(menu.hasAttribute('has-single-button')).to.be.true;
+  });
+
+  it('should not remove after changing items to not overflow', async () => {
+    menu.style.width = '100px';
+    await onceResized(menu);
+
+    menu.items = [{ text: 'Actions' }];
+    expect(menu.hasAttribute('has-single-button')).to.be.true;
+  });
+
+  it('should remove when changing items to have more than one button', async () => {
+    menu.items = [{ text: 'Actions' }];
+    await nextFrame();
+
+    menu.items = [{ text: 'Edit' }, { text: 'Delete' }];
+    expect(menu.hasAttribute('has-single-button')).to.be.false;
+  });
+});
+
 describe('responsive behaviour in container', () => {
   let container, menu, buttons, overflow;
 
