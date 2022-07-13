@@ -702,7 +702,7 @@ class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(Po
    * @return {boolean}
    */
   checkValidity() {
-    return this.disabled || !this.required || !!this.value;
+    return !this.required || !!this.value;
   }
 
   /**
