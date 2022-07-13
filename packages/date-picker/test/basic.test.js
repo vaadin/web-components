@@ -336,23 +336,23 @@ describe('basic features', () => {
     it('should not accept non-ISO formats', () => {
       datepicker.value = '03/02/01';
       expect(datepicker.value).to.equal('');
-      expect(datepicker._selectedDate).to.equal('');
+      expect(datepicker._selectedDate).to.be.null;
 
       datepicker.value = '2010/02/03';
       expect(datepicker.value).to.equal('');
-      expect(datepicker._selectedDate).to.equal('');
+      expect(datepicker._selectedDate).to.be.null;
 
       datepicker.value = '03/02/2010';
       expect(datepicker.value).to.equal('');
-      expect(datepicker._selectedDate).to.equal('');
+      expect(datepicker._selectedDate).to.be.null;
 
       datepicker.value = '3 Feb 2010';
       expect(datepicker.value).to.equal('');
-      expect(datepicker._selectedDate).to.equal('');
+      expect(datepicker._selectedDate).to.be.null;
 
       datepicker.value = 'Feb 3, 2010';
       expect(datepicker.value).to.equal('');
-      expect(datepicker._selectedDate).to.equal('');
+      expect(datepicker._selectedDate).to.be.null;
     });
 
     it('should output ISO format', () => {
