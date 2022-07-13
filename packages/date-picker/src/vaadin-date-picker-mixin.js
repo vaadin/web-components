@@ -287,7 +287,7 @@ export const DatePickerMixin = (subclass) =>
         _minDate: {
           type: Date,
           observer: '__minDateChanged',
-          computed: '__computeMinDate(min)',
+          computed: '__computeMinOrMaxDate(min)',
         },
 
         /**
@@ -298,7 +298,7 @@ export const DatePickerMixin = (subclass) =>
         _maxDate: {
           type: Date,
           observer: '__maxDateChanged',
-          computed: '__computeMaxDate(max)',
+          computed: '__computeMinOrMaxDate(max)',
         },
 
         /** @private */
@@ -1093,13 +1093,8 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    __computeMinDate(min) {
-      return this._parseDate(min);
-    }
-
-    /** @private */
-    __computeMaxDate(max) {
-      return this._parseDate(max);
+    __computeMinOrMaxDate(dateString) {
+      return this._parseDate(dateString);
     }
 
     /**
