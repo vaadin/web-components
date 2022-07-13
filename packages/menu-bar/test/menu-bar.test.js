@@ -457,24 +457,26 @@ describe('overflow button', () => {
 });
 
 describe('has-single-button attribute', () => {
-  let menu, buttons;
+  let menu, buttons, overflow;
 
   beforeEach(async () => {
     menu = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>');
     menu.items = [{ text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' }, { text: 'Item 4' }];
     await nextRender(menu);
     buttons = menu._buttons;
+    overflow = buttons[buttons.length - 1];
   });
 
-  it('should not set when at least one button is visible', async () => {
+  it('should not set when one button and overflow are only visible', async () => {
     menu.style.width = '150px';
     await onceResized(menu);
     assertVisible(buttons[0]);
     assertHidden(buttons[1]);
+    expect(overflow.hasAttribute('hidden')).to.be.false;
     expect(menu.hasAttribute('has-single-button')).to.be.false;
   });
 
-  it('should set when all the buttons except overflow are hidden', async () => {
+  it('should set when only overflow button is visible', async () => {
     menu.style.width = '100px';
     await onceResized(menu);
     assertHidden(buttons[0]);
