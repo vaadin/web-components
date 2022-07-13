@@ -700,27 +700,29 @@ export const DatePickerMixin = (subclass) =>
      * @override
      */
     _valueChanged(value, oldValue) {
-      if (!value) {
-        this._selectedDate = null;
-        return;
-      }
-
       const newDate = this._parseDate(value);
-      if (!newDate) {
+
+      if (value && !newDate) {
         // The new value cannot be parsed, revert the old value.
         this.value = oldValue;
         return;
       }
 
-      if (!dateEquals(this._selectedDate, newDate)) {
-        // Update the date instance only if the date has actually changed.
-        this._selectedDate = newDate;
+      if (value) {
+        if (!dateEquals(this._selectedDate, newDate)) {
+          // Update the date instance only if the date has actually changed.
+          this._selectedDate = newDate;
 
-        if (oldValue !== undefined) {
-          // Validate only if `value` changes after initialization.
-          this.validate();
+          if (oldValue !== undefined) {
+            // Validate only if `value` changes after initialization.
+            this.validate();
+          }
         }
+      } else {
+        this._selectedDate = null;
       }
+
+      this._toggleHasValue(!!value);
     }
 
     /** @private */
