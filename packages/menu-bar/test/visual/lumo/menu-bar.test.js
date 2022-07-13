@@ -46,6 +46,26 @@ describe('menu-bar', () => {
         });
       });
 
+      describe('single button', () => {
+        beforeEach(() => {
+          div = document.createElement('div');
+          div.style.padding = '10px';
+
+          element = fixtureSync('<vaadin-menu-bar></vaadin-menu-bar>', div);
+          element.items = [{ text: 'Actions' }];
+        });
+
+        it('single button', async () => {
+          await visualDiff(document.body, `${dir}-single-button`);
+        });
+
+        it('single overflow button', async () => {
+          element.items = [{ text: 'View' }, { text: 'Edit' }];
+          element.style.maxWidth = '100px';
+          await visualDiff(document.body, `${dir}-single-button-overflow`);
+        });
+      });
+
       describe('theme', () => {
         function makeIcon(img) {
           const item = document.createElement('vaadin-context-menu-item');
