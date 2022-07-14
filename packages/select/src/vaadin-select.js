@@ -702,7 +702,12 @@ class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(Po
    * @return {boolean}
    */
   checkValidity() {
-    return !this.required || !!this.value;
+    // Readonly select should not be marked as invalid when required
+    if (this.required && !this.readonly) {
+      return !!this.value;
+    }
+
+    return !this.invalid;
   }
 
   /**

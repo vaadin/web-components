@@ -44,6 +44,25 @@ describe('validation', () => {
       expect(select.invalid).to.be.true;
     });
 
+    it('should pass the validation when the field is required and readonly', () => {
+      select.required = true;
+      select.readonly = true;
+
+      select.validate();
+
+      expect(select.checkValidity()).to.be.true;
+      expect(select.invalid).to.be.false;
+    });
+
+    it('should not pass the validation when invalid is set and required is not set', () => {
+      select.invalid = true;
+
+      select.validate();
+
+      expect(select.checkValidity()).to.be.false;
+      expect(select.invalid).to.be.true;
+    });
+
     it('should validate when closing the overlay', () => {
       const spy = sinon.spy(select, 'validate');
       select.opened = true;
