@@ -55,7 +55,6 @@ describe('validation', () => {
 
     it('should validate when required property is removed', () => {
       select.required = true;
-      select.validate();
 
       const spy = sinon.spy(select, 'validate');
       select.required = false;
