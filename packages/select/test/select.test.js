@@ -538,6 +538,59 @@ describe('vaadin-select', () => {
       });
     });
 
+    describe('change event', () => {
+      let menu, changeSpy;
+
+      beforeEach(async () => {
+        menu = select._menuElement;
+        await nextFrame();
+        changeSpy = sinon.spy();
+        select.addEventListener('change', changeSpy);
+      });
+
+      it('should not fire `change` event when programmatically opened and selected changed', () => {
+        select.opened = true;
+        menu.selected = 1;
+        select.opened = false;
+        expect(changeSpy.called).to.be.false;
+      });
+
+      it('should not fire `change` event when programmatically opened and value changed', () => {
+        select.opened = true;
+        select.value = 'Option 1';
+        expect(changeSpy.called).to.be.false;
+      });
+
+      it('should not fire `change` event when committing a value programmatically', () => {
+        menu.selected = 1;
+        select.value = 'Option 1';
+        expect(changeSpy.called).to.be.false;
+      });
+
+      it('should fire `change` event when value changes when alphanumeric keys are pressed', () => {
+        keyDownChar(valueButton, 'o');
+        keyDownChar(valueButton, 'p');
+        keyDownChar(valueButton, 't');
+        expect(changeSpy.callCount).to.equal(1);
+      });
+
+      it('should fire `change` event when value changes by user clicking the item', () => {
+        select.opened = true;
+        menu.firstElementChild.click();
+        expect(changeSpy.callCount).to.equal(1);
+      });
+
+      it('should fire `change` event when value changes by user selecting item with keyboard', () => {
+        select.opened = true;
+        arrowUp(menu);
+
+        const secondOption = menu.querySelector('[value="v2"]');
+        enterKeyDown(secondOption);
+        enterKeyUp(secondOption);
+        expect(changeSpy.callCount).to.equal(1);
+      });
+    });
+
     describe('validation', () => {
       it('should pass the validation when the field is valid', () => {
         select.validate();
@@ -600,74 +653,6 @@ describe('vaadin-select', () => {
         expect(validatedSpy.calledOnce).to.be.true;
         const event = validatedSpy.firstCall.args[0];
         expect(event.detail.valid).to.be.false;
-      });
-    });
-
-    describe('initial validation', () => {
-      let spy;
-
-      beforeEach(async () => {
-        select.required = true;
-        spy = sinon.spy();
-        select.validate = spy;
-        await nextFrame();
-      });
-
-      it('should not validate the initial empty value', () => {
-        expect(spy.called).to.be.false;
-      });
-    });
-
-    describe('change event', () => {
-      let menu, changeSpy;
-
-      beforeEach(async () => {
-        menu = select._menuElement;
-        await nextFrame();
-        changeSpy = sinon.spy();
-        select.addEventListener('change', changeSpy);
-      });
-
-      it('should not fire `change` event when programmatically opened and selected changed', () => {
-        select.opened = true;
-        menu.selected = 1;
-        select.opened = false;
-        expect(changeSpy.called).to.be.false;
-      });
-
-      it('should not fire `change` event when programmatically opened and value changed', () => {
-        select.opened = true;
-        select.value = 'Option 1';
-        expect(changeSpy.called).to.be.false;
-      });
-
-      it('should not fire `change` event when committing a value programmatically', () => {
-        menu.selected = 1;
-        select.value = 'Option 1';
-        expect(changeSpy.called).to.be.false;
-      });
-
-      it('should fire `change` event when value changes when alphanumeric keys are pressed', () => {
-        keyDownChar(valueButton, 'o');
-        keyDownChar(valueButton, 'p');
-        keyDownChar(valueButton, 't');
-        expect(changeSpy.callCount).to.equal(1);
-      });
-
-      it('should fire `change` event when value changes by user clicking the item', () => {
-        select.opened = true;
-        menu.firstElementChild.click();
-        expect(changeSpy.callCount).to.equal(1);
-      });
-
-      it('should fire `change` event when value changes by user selecting item with keyboard', () => {
-        select.opened = true;
-        arrowUp(menu);
-
-        const secondOption = menu.querySelector('[value="v2"]');
-        enterKeyDown(secondOption);
-        enterKeyUp(secondOption);
-        expect(changeSpy.callCount).to.equal(1);
       });
     });
   });
