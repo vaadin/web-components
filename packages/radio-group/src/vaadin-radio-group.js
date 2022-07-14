@@ -249,6 +249,23 @@ class RadioGroup extends FieldMixin(
   }
 
   /**
+   * Override an observer from `FieldMixin`.
+   *
+   * @param {boolean} invalid
+   * @protected
+   * @override
+   */
+  _invalidChanged(invalid) {
+    super._invalidChanged(invalid);
+
+    if (invalid) {
+      this.setAttribute('aria-invalid', 'true');
+    } else {
+      this.removeAttribute('aria-invalid');
+    }
+  }
+
+  /**
    * @param {number} index
    * @private
    */
