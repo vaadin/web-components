@@ -51,6 +51,23 @@ describe('validation', () => {
       select.validate();
 
       expect(select.checkValidity()).to.be.true;
+    });
+
+    it('should validate when required property is removed', () => {
+      select.required = true;
+      select.validate();
+
+      const spy = sinon.spy(select, 'validate');
+      select.required = false;
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should update invalid state when required property is removed', () => {
+      select.required = true;
+      select.validate();
+      expect(select.invalid).to.be.true;
+
+      select.required = false;
       expect(select.invalid).to.be.false;
     });
 
