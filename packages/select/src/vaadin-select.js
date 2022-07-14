@@ -700,7 +700,7 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
    * @return {boolean}
    */
   checkValidity() {
-    return !this.required || !!this.value;
+    return !this.required || this.readonly || !!this.value;
   }
 
   /**
