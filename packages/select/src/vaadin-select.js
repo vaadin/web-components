@@ -15,6 +15,7 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { fieldShared } from '@vaadin/field-base/src/styles/field-shared-styles.js';
 import { inputFieldContainer } from '@vaadin/field-base/src/styles/input-field-container-styles.js';
@@ -132,8 +133,9 @@ registerStyles('vaadin-select', [fieldShared, inputFieldContainer], { moduleId: 
  * @mixes ThemableMixin
  * @mixes FieldMixin
  * @mixes DelegateFocusMixin
+ * @mixes DelegateStateMixin
  */
-class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
+class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
   static get is() {
     return 'vaadin-select';
   }
@@ -303,10 +305,13 @@ class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(Po
     };
   }
 
+  static get delegateAttrs() {
+    return [...super.delegateAttrs, 'invalid'];
+  }
+
   static get observers() {
     return [
       '_updateAriaExpanded(opened)',
-      '_updateAriaRequired(required)',
       '_updateSelectedItem(value, _items, placeholder)',
       '_rendererChanged(renderer, _overlayElement)',
     ];
@@ -347,11 +352,11 @@ class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(Po
       (host, btn) => {
         this._setFocusElement(btn);
         this.ariaTarget = btn;
+        this.stateTarget = btn;
 
         btn.setAttribute('aria-haspopup', 'listbox');
         btn.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
 
-        this._updateAriaRequired(host.required);
         this._updateAriaExpanded(host.opened);
 
         btn.addEventListener('keydown', this._boundOnKeyDown);
@@ -551,13 +556,6 @@ class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(Po
   _updateAriaExpanded(opened) {
     if (this._valueButton) {
       this._valueButton.setAttribute('aria-expanded', opened ? 'true' : 'false');
-    }
-  }
-
-  /** @private */
-  _updateAriaRequired(required) {
-    if (this._valueButton) {
-      this._valueButton.setAttribute('aria-required', required ? 'true' : 'false');
     }
   }
 
