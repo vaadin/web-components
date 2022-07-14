@@ -5,6 +5,7 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
+import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -171,7 +172,9 @@ export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMa
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
-declare class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(HTMLElement)))) {
+declare class Select extends DelegateFocusMixin(
+  DelegateStateMixin(FieldMixin(ElementMixin(ThemableMixin(HTMLElement)))),
+) {
   /**
    * An array containing items that will be rendered as the options of the select.
    *
