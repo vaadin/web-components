@@ -63,6 +63,15 @@ describe('validation', () => {
       expect(select.invalid).to.be.true;
     });
 
+    it('should update invalid state when required property is removed', () => {
+      select.required = true;
+      select.validate();
+      expect(select.invalid).to.be.true;
+
+      select.required = false;
+      expect(select.invalid).to.be.false;
+    });
+
     it('should validate when closing the overlay', () => {
       const spy = sinon.spy(select, 'validate');
       select.opened = true;

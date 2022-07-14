@@ -387,6 +387,20 @@ class Select extends DelegateFocusMixin(FieldMixin(ElementMixin(ThemableMixin(Po
   }
 
   /**
+   * Override an observer from `FieldMixin`.
+   *
+   * @protected
+   * @override
+   */
+  _requiredChanged(required) {
+    super._requiredChanged(required);
+
+    if (required === false) {
+      this._setInvalid(false);
+    }
+  }
+
+  /**
    * @param {SelectRenderer | undefined | null} renderer
    * @param {SelectOverlay | undefined} overlay
    * @private
