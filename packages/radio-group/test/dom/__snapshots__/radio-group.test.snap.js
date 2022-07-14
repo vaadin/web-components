@@ -60,7 +60,7 @@ snapshots["vaadin-radio-group host default"] =
 
 snapshots["vaadin-radio-group host label"] = 
 `<vaadin-radio-group
-  aria-labelledby="label-vaadin-radio-group-0"
+  aria-labelledby="label-vaadin-radio-group-3"
   has-label=""
   role="radiogroup"
 >
@@ -71,14 +71,14 @@ snapshots["vaadin-radio-group host label"] =
     value="1"
   >
     <label
-      for="input-vaadin-radio-button-6"
-      id="label-vaadin-radio-button-3"
+      for="vaadin-radio-button-2"
+      id="label-vaadin-radio-button-4"
       slot="label"
     >
       Radio 1
     </label>
     <input
-      id="input-vaadin-radio-button-6"
+      id="vaadin-radio-button-2"
       slot="input"
       type="radio"
       value="1"
@@ -91,28 +91,28 @@ snapshots["vaadin-radio-group host label"] =
     value="2"
   >
     <label
-      for="input-vaadin-radio-button-7"
-      id="label-vaadin-radio-button-4"
+      for="vaadin-radio-button-3"
+      id="label-vaadin-radio-button-5"
       slot="label"
     >
       Radio 2
     </label>
     <input
-      id="input-vaadin-radio-button-7"
+      id="vaadin-radio-button-3"
       slot="input"
       type="radio"
       value="2"
     >
   </vaadin-radio-button>
   <label
-    id="label-vaadin-radio-group-0"
+    id="label-vaadin-radio-group-3"
     slot="label"
   >
     Label
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-radio-group-2"
+    id="error-message-vaadin-radio-group-1"
     slot="error-message"
   >
   </div>
@@ -135,15 +135,15 @@ snapshots["vaadin-radio-group host disabled"] =
     value="1"
   >
     <label
-      for="vaadin-radio-button-2"
-      id="label-vaadin-radio-button-4"
+      for="vaadin-radio-button-4"
+      id="label-vaadin-radio-button-7"
       slot="label"
     >
       Radio 1
     </label>
     <input
       disabled=""
-      id="vaadin-radio-button-2"
+      id="vaadin-radio-button-4"
       slot="input"
       tabindex="-1"
       type="radio"
@@ -159,15 +159,15 @@ snapshots["vaadin-radio-group host disabled"] =
     value="2"
   >
     <label
-      for="vaadin-radio-button-3"
-      id="label-vaadin-radio-button-5"
+      for="vaadin-radio-button-5"
+      id="label-vaadin-radio-button-8"
       slot="label"
     >
       Radio 2
     </label>
     <input
       disabled=""
-      id="vaadin-radio-button-3"
+      id="vaadin-radio-button-5"
       slot="input"
       tabindex="-1"
       type="radio"
@@ -175,13 +175,13 @@ snapshots["vaadin-radio-group host disabled"] =
     >
   </vaadin-radio-button>
   <label
-    id="label-vaadin-radio-group-3"
+    id="label-vaadin-radio-group-6"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-radio-group-1"
+    id="error-message-vaadin-radio-group-2"
     slot="error-message"
   >
   </div>
@@ -202,14 +202,14 @@ snapshots["vaadin-radio-group host required"] =
     value="1"
   >
     <label
-      for="input-vaadin-radio-button-6"
-      id="label-vaadin-radio-button-3"
+      for="vaadin-radio-button-6"
+      id="label-vaadin-radio-button-10"
       slot="label"
     >
       Radio 1
     </label>
     <input
-      id="input-vaadin-radio-button-6"
+      id="vaadin-radio-button-6"
       slot="input"
       type="radio"
       value="1"
@@ -222,27 +222,27 @@ snapshots["vaadin-radio-group host required"] =
     value="2"
   >
     <label
-      for="input-vaadin-radio-button-7"
-      id="label-vaadin-radio-button-4"
+      for="vaadin-radio-button-7"
+      id="label-vaadin-radio-button-11"
       slot="label"
     >
       Radio 2
     </label>
     <input
-      id="input-vaadin-radio-button-7"
+      id="vaadin-radio-button-7"
       slot="input"
       type="radio"
       value="2"
     >
   </vaadin-radio-button>
   <label
-    id="label-vaadin-radio-group-0"
+    id="label-vaadin-radio-group-9"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-radio-group-2"
+    id="error-message-vaadin-radio-group-3"
     slot="error-message"
   >
   </div>
@@ -252,7 +252,7 @@ snapshots["vaadin-radio-group host required"] =
 
 snapshots["vaadin-radio-group host helper"] = 
 `<vaadin-radio-group
-  aria-labelledby="helper-vaadin-radio-group-1"
+  aria-labelledby="helper-vaadin-radio-group-4"
   has-helper=""
   role="radiogroup"
 >
@@ -263,14 +263,14 @@ snapshots["vaadin-radio-group host helper"] =
     value="1"
   >
     <label
-      for="input-vaadin-radio-button-6"
-      id="label-vaadin-radio-button-3"
+      for="vaadin-radio-button-8"
+      id="label-vaadin-radio-button-13"
       slot="label"
     >
       Radio 1
     </label>
     <input
-      id="input-vaadin-radio-button-6"
+      id="vaadin-radio-button-8"
       slot="input"
       type="radio"
       value="1"
@@ -283,32 +283,32 @@ snapshots["vaadin-radio-group host helper"] =
     value="2"
   >
     <label
-      for="input-vaadin-radio-button-7"
-      id="label-vaadin-radio-button-4"
+      for="vaadin-radio-button-9"
+      id="label-vaadin-radio-button-14"
       slot="label"
     >
       Radio 2
     </label>
     <input
-      id="input-vaadin-radio-button-7"
+      id="vaadin-radio-button-9"
       slot="input"
       type="radio"
       value="2"
     >
   </vaadin-radio-button>
   <label
-    id="label-vaadin-radio-group-0"
+    id="label-vaadin-radio-group-12"
     slot="label"
   >
   </label>
   <div
     hidden=""
-    id="error-message-vaadin-radio-group-2"
+    id="error-message-vaadin-radio-group-4"
     slot="error-message"
   >
   </div>
   <div
-    id="helper-vaadin-radio-group-1"
+    id="helper-vaadin-radio-group-4"
     slot="helper"
   >
     Helper
@@ -319,7 +319,7 @@ snapshots["vaadin-radio-group host helper"] =
 
 snapshots["vaadin-radio-group host error"] = 
 `<vaadin-radio-group
-  aria-labelledby="error-message-vaadin-radio-group-2"
+  aria-labelledby="error-message-vaadin-radio-group-5"
   has-error-message=""
   invalid=""
   role="radiogroup"
@@ -331,14 +331,14 @@ snapshots["vaadin-radio-group host error"] =
     value="1"
   >
     <label
-      for="input-vaadin-radio-button-6"
-      id="label-vaadin-radio-button-3"
+      for="vaadin-radio-button-10"
+      id="label-vaadin-radio-button-16"
       slot="label"
     >
       Radio 1
     </label>
     <input
-      id="input-vaadin-radio-button-6"
+      id="vaadin-radio-button-10"
       name="vaadin-radio-group-5"
       slot="input"
       type="radio"
@@ -352,14 +352,14 @@ snapshots["vaadin-radio-group host error"] =
     value="2"
   >
     <label
-      for="input-vaadin-radio-button-7"
-      id="label-vaadin-radio-button-4"
+      for="vaadin-radio-button-11"
+      id="label-vaadin-radio-button-17"
       slot="label"
     >
       Radio 2
     </label>
     <input
-      id="input-vaadin-radio-button-7"
+      id="vaadin-radio-button-11"
       name="vaadin-radio-group-5"
       slot="input"
       type="radio"
@@ -367,12 +367,12 @@ snapshots["vaadin-radio-group host error"] =
     >
   </vaadin-radio-button>
   <label
-    id="label-vaadin-radio-group-0"
+    id="label-vaadin-radio-group-15"
     slot="label"
   >
   </label>
   <div
-    id="error-message-vaadin-radio-group-2"
+    id="error-message-vaadin-radio-group-5"
     role="alert"
     slot="error-message"
   >
