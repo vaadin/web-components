@@ -57,6 +57,13 @@ describe('accessibility', () => {
     expect(valueButton.getAttribute('aria-describedby')).to.not.be.empty;
   });
 
+  it('should set aria-invalid on the value button when invalid', async () => {
+    select.errorMessage = 'invalid';
+    select.invalid = true;
+    await aTimeout(0);
+    expect(valueButton.getAttribute('aria-invalid')).to.be.equal('true');
+  });
+
   it('should have role listbox on menu element', () => {
     expect(select._menuElement.getAttribute('role')).to.equal('listbox');
   });
