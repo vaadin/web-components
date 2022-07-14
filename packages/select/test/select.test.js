@@ -11,7 +11,6 @@ import {
   keyboardEventFor,
   keyDownChar,
   nextFrame,
-  nextRender,
   spaceKeyDown,
   tab,
 } from '@vaadin/testing-helpers';
@@ -538,86 +537,6 @@ describe('vaadin-select', () => {
       });
     });
 
-    describe('validation', () => {
-      it('should pass the validation when the field is valid', () => {
-        select.validate();
-        expect(select.checkValidity()).to.be.true;
-        expect(select.invalid).to.be.false;
-      });
-
-      it('should not pass the validation when the field is required and has no value', () => {
-        expect(select.invalid).to.be.false;
-        select.setAttribute('required', '');
-
-        enterKeyDown(valueButton);
-        escKeyDown(valueButton);
-        expect(select.checkValidity()).to.be.false;
-        expect(select.invalid).to.be.true;
-      });
-
-      it('should validate when closing the overlay', () => {
-        const spy = sinon.spy();
-        select.validate = spy;
-        select.opened = true;
-
-        select.opened = false;
-        expect(spy.called).to.be.true;
-      });
-
-      it('should validate when blurring', () => {
-        const spy = sinon.spy();
-        select.validate = spy;
-        select.blur();
-
-        expect(spy.called).to.be.true;
-      });
-
-      it('should validate when setting value', () => {
-        const spy = sinon.spy();
-        select.validate = spy;
-        select.value = 'v2';
-        expect(spy.callCount).to.be.equal(1);
-        select.value = '';
-        expect(spy.callCount).to.be.equal(2);
-      });
-
-      it('should fire a validated event on validation success', () => {
-        const validatedSpy = sinon.spy();
-        select.addEventListener('validated', validatedSpy);
-        select.validate();
-
-        expect(validatedSpy.calledOnce).to.be.true;
-        const event = validatedSpy.firstCall.args[0];
-        expect(event.detail.valid).to.be.true;
-      });
-
-      it('should fire a validated event on validation failure', () => {
-        const validatedSpy = sinon.spy();
-        select.addEventListener('validated', validatedSpy);
-        select.required = true;
-        select.validate();
-
-        expect(validatedSpy.calledOnce).to.be.true;
-        const event = validatedSpy.firstCall.args[0];
-        expect(event.detail.valid).to.be.false;
-      });
-    });
-
-    describe('initial validation', () => {
-      let spy;
-
-      beforeEach(async () => {
-        select.required = true;
-        spy = sinon.spy();
-        select.validate = spy;
-        await nextFrame();
-      });
-
-      it('should not validate the initial empty value', () => {
-        expect(spy.called).to.be.false;
-      });
-    });
-
     describe('change event', () => {
       let menu, changeSpy;
 
@@ -669,40 +588,6 @@ describe('vaadin-select', () => {
         enterKeyUp(secondOption);
         expect(changeSpy.callCount).to.equal(1);
       });
-    });
-  });
-
-  describe('initial validation', () => {
-    let validateSpy;
-
-    beforeEach(() => {
-      select = document.createElement('vaadin-select');
-      validateSpy = sinon.spy(select, 'validate');
-    });
-
-    afterEach(() => {
-      select.remove();
-    });
-
-    it('should not validate by default', async () => {
-      document.body.appendChild(select);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
-
-    it('should not validate when the field has an initial value', async () => {
-      select.value = 'value';
-      document.body.appendChild(select);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
-
-    it('should not validate when the field has an initial value and invalid', async () => {
-      select.value = 'value';
-      select.invalid = true;
-      document.body.appendChild(select);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
     });
   });
 
