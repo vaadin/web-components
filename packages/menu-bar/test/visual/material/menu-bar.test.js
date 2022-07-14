@@ -120,6 +120,27 @@ describe('menu-bar', () => {
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-text`);
         });
+
+        it('end-aligned', async () => {
+          element.setAttribute('theme', 'end-aligned');
+          await visualDiff(document.body, `${dir}-end-aligned`);
+        });
+
+        it('end-aligned overflow button', async () => {
+          element.style.width = '100px';
+          element.setAttribute('theme', 'end-aligned');
+          await visualDiff(document.body, `${dir}-end-aligned-overflow-button`);
+        });
+
+        it('end-aligned outlined', async () => {
+          element.setAttribute('theme', 'outlined end-aligned');
+          await visualDiff(document.body, `${dir}-end-aligned-outlined`);
+        });
+
+        it('end-aligned contained', async () => {
+          element.setAttribute('theme', 'contained end-aligned');
+          await visualDiff(document.body, `${dir}-end-aligned-contained`);
+        });
       });
     });
   });
