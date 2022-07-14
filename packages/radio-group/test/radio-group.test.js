@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-radio-group.js';
@@ -62,10 +62,6 @@ describe('radio-group', () => {
       buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });
 
-    it('should set aria-disabled to true when disabled', () => {
-      expect(group.getAttribute('aria-disabled')).to.equal('true');
-    });
-
     it('should propagate disabled property to radio buttons', () => {
       buttons.forEach((button) => {
         expect(button.disabled).to.be.true;
@@ -98,15 +94,6 @@ describe('radio-group', () => {
       await nextFrame();
       buttons = [...group.querySelectorAll('vaadin-radio-button')];
       groupName = group._fieldName;
-    });
-
-    it('should generate a group name', () => {
-      expect(groupName).to.match(/^vaadin-radio-group-\d+$/);
-    });
-
-    it('should set the group name to the radio buttons', () => {
-      expect(buttons[0].name).to.equal(groupName);
-      expect(buttons[1].name).to.equal(groupName);
     });
 
     it('should set the group name to the dynamically added radio buttons', async () => {
@@ -179,40 +166,6 @@ describe('radio-group', () => {
       await nextFrame();
 
       expect(newRadioButton.disabled).to.be.false;
-    });
-  });
-
-  describe('label property', () => {
-    beforeEach(() => {
-      group = fixtureSync(`<vaadin-radio-group></vaadin-radio-group>`);
-    });
-
-    it('should not have has-label attribute by default', () => {
-      expect(group.hasAttribute('has-label')).to.be.false;
-    });
-
-    it('should toggle has-label attribute on label change', () => {
-      group.label = 'foo';
-      expect(group.hasAttribute('has-label')).to.be.true;
-      group.label = null;
-      expect(group.hasAttribute('has-label')).to.be.false;
-    });
-  });
-
-  describe('aria-required attribute', () => {
-    beforeEach(() => {
-      group = fixtureSync(`<vaadin-radio-group></vaadin-radio-group>`);
-    });
-
-    it('should not have aria-required attribute by default', () => {
-      expect(group.hasAttribute('aria-required')).to.be.false;
-    });
-
-    it('should toggle aria-required attribute on required property change', () => {
-      group.required = true;
-      expect(group.getAttribute('aria-required')).to.equal('true');
-      group.required = false;
-      expect(group.hasAttribute('aria-required')).to.be.false;
     });
   });
 
@@ -345,18 +298,14 @@ describe('radio-group', () => {
       buttons = [...group.querySelectorAll('vaadin-radio-button')];
     });
 
-    it('should not have has-value attribute by default', () => {
-      expect(group.hasAttribute('has-value')).to.be.false;
-    });
-
-    it('should set has-value on radio button click', () => {
+    it('should add and keep the attribute on radio button click', () => {
       buttons[0].click();
       expect(group.hasAttribute('has-value')).to.be.true;
       buttons[1].click();
       expect(group.hasAttribute('has-value')).to.be.true;
     });
 
-    it('should toggle has-value attribute on value change', () => {
+    it('should toggle the attribute on value change', () => {
       group.value = '2';
       expect(group.hasAttribute('has-value')).to.be.true;
       group.value = '';
@@ -585,20 +534,6 @@ describe('radio-group', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should reflect required property to attribute', () => {
-      group.required = true;
-      expect(group.hasAttribute('required')).to.be.true;
-      group.required = false;
-      expect(group.hasAttribute('required')).to.be.false;
-    });
-
-    it('should reflect invalid property to attribute', () => {
-      group.invalid = true;
-      expect(group.hasAttribute('invalid')).to.be.true;
-      group.invalid = false;
-      expect(group.hasAttribute('invalid')).to.be.false;
-    });
-
     it('should fire a validated event on validation success', () => {
       const validatedSpy = sinon.spy();
       group.addEventListener('validated', validatedSpy);
@@ -618,57 +553,6 @@ describe('radio-group', () => {
       expect(validatedSpy.calledOnce).to.be.true;
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
-    });
-  });
-
-  describe('aria-labelledby', () => {
-    let error, helper, label;
-
-    beforeEach(() => {
-      group = fixtureSync('<vaadin-radio-group helper-text="Choose one" label="Label"></vaadin-radio-group>');
-      error = group.querySelector('[slot=error-message]');
-      helper = group.querySelector('[slot=helper]');
-      label = group.querySelector('[slot=label]');
-    });
-
-    it('should add label and helper text to aria-labelledby when field is valid', () => {
-      const aria = group.getAttribute('aria-labelledby');
-      expect(aria).to.include(helper.id);
-      expect(aria).to.not.include(error.id);
-      expect(aria).to.include(label.id);
-    });
-
-    it('should add error message to aria-labelledby when field is invalid', async () => {
-      group.invalid = true;
-      await aTimeout(0);
-      const aria = group.getAttribute('aria-labelledby');
-      expect(aria).to.include(helper.id);
-      expect(aria).to.include(error.id);
-      expect(aria).to.include(label.id);
-    });
-  });
-
-  describe('custom helper', () => {
-    let group, helper;
-
-    beforeEach(async () => {
-      group = fixtureSync(`
-        <vaadin-radio-group>
-          <div slot="helper">Custom helper</div>
-        </vaadin-radio-group>
-      `);
-      await nextFrame();
-      helper = group.querySelector('[slot=helper]');
-    });
-
-    it('should set has-helper attribute', () => {
-      expect(group.hasAttribute('has-helper')).to.be.true;
-    });
-
-    it('should remove has-helper attribute when the custom helper is removed', async () => {
-      group.removeChild(helper);
-      await nextFrame();
-      expect(group.hasAttribute('has-helper')).to.be.false;
     });
   });
 
