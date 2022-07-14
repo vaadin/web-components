@@ -135,6 +135,17 @@ describe('menu-bar', () => {
           await oneEvent(element._subMenu.$.overlay, 'vaadin-overlay-open');
           await visualDiff(document.body, `${dir}-small`);
         });
+
+        it('end-aligned', async () => {
+          element.setAttribute('theme', 'end-aligned');
+          await visualDiff(document.body, `${dir}-end-aligned`);
+        });
+
+        it('end-aligned overflow button', async () => {
+          element.style.width = '100px';
+          element.setAttribute('theme', 'end-aligned');
+          await visualDiff(document.body, `${dir}-end-aligned-overflow-button`);
+        });
       });
     });
   });

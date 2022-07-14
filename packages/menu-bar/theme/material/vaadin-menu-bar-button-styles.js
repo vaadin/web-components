@@ -14,8 +14,8 @@ const menuBarButton = css`
     justify-content: center;
   }
 
-  :host([theme='outlined']),
-  :host([theme='contained']) {
+  :host([theme~='outlined']),
+  :host([theme~='contained']) {
     border-radius: 0;
   }
 
@@ -36,7 +36,7 @@ const menuBarButton = css`
     transition: 0s;
   }
 
-  :host([theme='contained'][expanded]) {
+  :host([theme~='contained'][expanded]) {
     box-shadow: var(--material-shadow-elevation-8dp);
   }
 
@@ -45,7 +45,7 @@ const menuBarButton = css`
     opacity: 0;
   }
 
-  :host([theme='contained']:not([dir='rtl'])) {
+  :host([theme~='contained']:not([dir='rtl'])) {
     margin-right: 1px;
   }
 
@@ -68,16 +68,16 @@ const menuBarButton = css`
     font-size: 24px;
   }
 
-  :host([theme='outlined']:not([dir='rtl'])) {
+  :host([theme~='outlined']:not([dir='rtl'])) {
     margin-right: -1px;
   }
 
-  :host([theme='outlined']:not([dir='rtl']):nth-last-of-type(2)),
-  :host([theme='outlined']:not([dir='rtl'])[part~='overflow-button']) {
+  :host([theme~='outlined']:not([dir='rtl']):nth-last-of-type(2)),
+  :host([theme~='outlined']:not([dir='rtl'])[part~='overflow-button']) {
     margin-right: 0;
   }
 
-  :host([theme='text']),
+  :host([theme~='text']),
   :host(:not([theme])) {
     border-radius: 4px;
   }
@@ -92,16 +92,16 @@ const menuBarButton = css`
     border-radius: 4px 0 0 4px;
   }
 
-  :host([dir='rtl'][theme='contained']) {
+  :host([dir='rtl'][theme~='contained']) {
     margin-left: 1px;
   }
 
-  :host([dir='rtl'][theme='outlined']) {
+  :host([dir='rtl'][theme~='outlined']) {
     margin-left: -1px;
   }
 
-  :host([theme='outlined'][dir='rtl']:nth-last-of-type(2)),
-  :host([theme='outlined'][dir='rtl'][part~='overflow-button']) {
+  :host([theme~='outlined'][dir='rtl']:nth-last-of-type(2)),
+  :host([theme~='outlined'][dir='rtl'][part~='overflow-button']) {
     margin-left: 0;
   }
 `;

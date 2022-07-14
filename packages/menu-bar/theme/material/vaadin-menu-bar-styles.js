@@ -11,6 +11,11 @@ registerStyles(
     :host([has-single-button]) [part$='button'] {
       border-radius: 4px;
     }
+
+    :host([theme~='end-aligned']) [part$='button']:first-child,
+    :host([theme~='end-aligned'][has-single-button]) [part$='button'] {
+      margin-inline-start: auto;
+    }
   `,
   { moduleId: 'material-menu-bar' },
 );
