@@ -47,9 +47,8 @@ describe('vaadin-select', () => {
     });
 
     it('error', async () => {
-      select.required = true;
       select.errorMessage = 'Error';
-      select.validate();
+      select.invalid = true;
       await aTimeout(0);
       await expect(select).dom.to.equalSnapshot();
     });

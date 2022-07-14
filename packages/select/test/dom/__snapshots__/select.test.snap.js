@@ -182,7 +182,6 @@ snapshots["vaadin-select host error"] =
 `<vaadin-select
   has-error-message=""
   invalid=""
-  required=""
 >
   <label
     id="label-vaadin-select-0"
@@ -202,7 +201,6 @@ snapshots["vaadin-select host error"] =
     aria-haspopup="listbox"
     aria-invalid="true"
     aria-labelledby="label-vaadin-select-0 vaadin-select-3"
-    aria-required="true"
     invalid=""
     role="button"
     slot="value"
