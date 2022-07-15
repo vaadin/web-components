@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, mousedown, mouseup, nextFrame } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-checkbox.js';
 
@@ -135,6 +135,20 @@ describe('checkbox', () => {
       await nextFrame();
 
       expect(checkbox.hasAttribute('has-label')).to.be.false;
+    });
+
+    describe('focus', () => {
+      afterEach(async () => {
+        await resetMouse();
+      });
+
+      it('should focus on input click if not focused', async () => {
+        const rect = input.getBoundingClientRect();
+        const middleX = Math.floor(rect.x + rect.width / 2);
+        const middleY = Math.floor(rect.y + rect.height / 2);
+        await sendMouse({ type: 'click', position: [middleX, middleY] });
+        expect(checkbox.hasAttribute('focused')).to.be.true;
+      });
     });
 
     describe('active attribute', () => {
