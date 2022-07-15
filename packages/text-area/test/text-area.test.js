@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, inputText, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-text-area.js';
 
@@ -223,11 +223,6 @@ describe('text-area', () => {
       textArea.preventInvalidInput = true;
       textArea.value = '1';
     });
-
-    function inputText(value) {
-      textArea.inputElement.value = value;
-      textArea.inputElement.dispatchEvent(new CustomEvent('input'));
-    }
 
     it('should prevent non matching input', () => {
       textArea.pattern = '[0-9]*';

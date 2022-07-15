@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, inputText, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { InputController } from '../src/input-controller.js';
 import { PatternMixin } from '../src/pattern-mixin.js';
@@ -79,11 +79,6 @@ const runTests = (baseClass) => {
     afterEach(() => {
       console.warn.restore();
     });
-
-    function inputText(value) {
-      input.value = value;
-      input.dispatchEvent(new CustomEvent('input'));
-    }
 
     it('should warn about using preventInvalidInput', () => {
       expect(console.warn.calledOnce).to.be.true;

@@ -5,11 +5,10 @@ import {
   aTimeout,
   enterKeyDown,
   escKeyDown,
-  fire,
   fixtureSync,
   focusout,
+  inputText,
   keyboardEventFor,
-  keyDownOn,
   nextFrame,
 } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
@@ -22,19 +21,6 @@ describe('keyboard', () => {
 
   function getFocusedIndex() {
     return comboBox._focusedIndex;
-  }
-
-  function inputChar(char) {
-    const target = input;
-    target.value += char;
-    keyDownOn(target, char.charCodeAt(0));
-    fire(target, 'input');
-  }
-
-  function inputText(text) {
-    for (let i = 0; i < text.length; i++) {
-      inputChar(text[i]);
-    }
   }
 
   beforeEach(() => {
@@ -563,42 +549,42 @@ describe('keyboard', () => {
     });
 
     it('should apply input value on focusout if input valid', () => {
-      inputText('FOO');
+      inputText(input, 'FOO');
       focusout(comboBox);
       expect(input.value).to.equal('foo');
       expect(comboBox.value).to.equal('foo');
     });
 
     it('should apply input value on enter if input valid', () => {
-      inputText('FOO');
+      inputText(input, 'FOO');
       enterKeyDown(input);
       expect(input.value).to.equal('foo');
       expect(comboBox.value).to.equal('foo');
     });
 
     it('should not apply input value on enter if input invalid', () => {
-      inputText('quux');
+      inputText(input, 'quux');
       enterKeyDown(input);
       expect(input.value).to.equal('quux');
       expect(comboBox.value).to.equal('');
     });
 
     it('should revert input value on focusout if input invalid', () => {
-      inputText('quux');
+      inputText(input, 'quux');
       focusout(comboBox);
       expect(input.value).to.equal('');
       expect(comboBox.value).to.equal('');
     });
 
     it('should revert input value on esc if input valid', () => {
-      inputText('foo');
+      inputText(input, 'foo');
       escKeyDown(input);
       expect(input.value).to.equal('');
       expect(comboBox.value).to.equal('');
     });
 
     it('should revert input value on esc if input invalid', () => {
-      inputText('quux');
+      inputText(input, 'quux');
       escKeyDown(input);
       expect(input.value).to.equal('');
       expect(comboBox.value).to.equal('');
@@ -607,7 +593,7 @@ describe('keyboard', () => {
     it('should revert changed input value on esc if clear button is visible', () => {
       comboBox.value = 'bar';
       comboBox.clearButtonVisible = true;
-      inputText('foo');
+      inputText(input, 'foo');
       escKeyDown(input);
       expect(input.value).to.equal('bar');
       expect(comboBox.value).to.equal('bar');
@@ -629,7 +615,7 @@ describe('keyboard', () => {
     });
 
     it('should not propagate when input value is not empty', () => {
-      inputText('foo');
+      inputText(input, 'foo');
 
       const event = keyboardEventFor('keydown', 27, [], 'Escape');
       const keyDownSpy = sinon.spy(event, 'stopPropagation');
