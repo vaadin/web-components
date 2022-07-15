@@ -3,7 +3,7 @@ import { fixtureSync, focusout } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { getFirstItem, getViewportItems } from './helpers.js';
+import { clickItem, getViewportItems } from './helpers.js';
 
 describe('Properties', () => {
   let comboBox, overlay, input;
@@ -220,7 +220,7 @@ describe('Properties', () => {
 
         comboBox.open();
         input.value = 'a';
-        getFirstItem(comboBox).click();
+        clickItem(comboBox, 0);
         expect(spy.called).to.be.false;
       });
 

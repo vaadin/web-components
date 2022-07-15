@@ -3,7 +3,7 @@ import { aTimeout, fire, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { getAllItems, getFirstItem, onceScrolled, scrollToIndex, setInputValue } from './helpers.js';
+import { clickItem, getAllItems, getFirstItem, onceScrolled, scrollToIndex, setInputValue } from './helpers.js';
 
 describe('selecting items', () => {
   let comboBox;
@@ -36,7 +36,7 @@ describe('selecting items', () => {
 
   it('should fire `selection-changed` when clicked on an item', () => {
     comboBox.opened = true;
-    getFirstItem(comboBox).click();
+    clickItem(comboBox, 0);
     expect(selectionChangedSpy.calledOnce).to.be.true;
     expect(selectionChangedSpy.args[0][0].detail.item).to.eql(comboBox.items[0]);
   });
@@ -53,7 +53,7 @@ describe('selecting items', () => {
 
     await onceScrolled(comboBox);
 
-    getFirstItem(comboBox).click();
+    clickItem(comboBox, 0);
     expect(selectionChangedSpy.calledOnce).to.be.true;
   });
 
@@ -70,7 +70,7 @@ describe('selecting items', () => {
   it('should close the dropdown on selection', () => {
     comboBox.open();
 
-    getFirstItem(comboBox).click();
+    clickItem(comboBox, 0);
 
     expect(comboBox.opened).to.equal(false);
   });
@@ -83,7 +83,7 @@ describe('selecting items', () => {
   it('should close the dropdown when reselecting the current value', () => {
     comboBox.value = 'foo';
     comboBox.open();
-    getFirstItem(comboBox).click();
+    clickItem(comboBox, 0);
     expect(comboBox.opened).to.be.false;
   });
 
@@ -91,7 +91,7 @@ describe('selecting items', () => {
     comboBox.value = 'foo';
     comboBox.open();
     valueChangedSpy.resetHistory();
-    getFirstItem(comboBox).click();
+    clickItem(comboBox, 0);
     expect(valueChangedSpy.callCount).to.equal(0);
   });
 
@@ -239,7 +239,7 @@ describe('selecting items', () => {
 
     it('should fire when selecting an item via click', () => {
       comboBox.open();
-      getFirstItem(comboBox).click();
+      clickItem(comboBox, 0);
       expect(changeSpy.callCount).to.equal(1);
     });
   });
