@@ -73,6 +73,7 @@ export const InputMixin = dedupingMixin(
        * Add event listeners to the input element instance.
        * Override this method to add custom listeners.
        * @param {!HTMLElement} input
+       * @protected
        */
       _addInputListeners(input) {
         input.addEventListener('input', this._boundOnInput);
@@ -82,6 +83,7 @@ export const InputMixin = dedupingMixin(
       /**
        * Remove event listeners from the input element instance.
        * @param {!HTMLElement} input
+       * @protected
        */
       _removeInputListeners(input) {
         input.removeEventListener('input', this._boundOnInput);
@@ -95,7 +97,6 @@ export const InputMixin = dedupingMixin(
        * for example to skip this in certain conditions.
        * @param {string} value
        * @protected
-       * @override
        */
       _forwardInputValue(value) {
         // Value might be set before an input element is initialized.
@@ -112,7 +113,11 @@ export const InputMixin = dedupingMixin(
         }
       }
 
-      /** @protected */
+      /**
+       * @param {HTMLElement | undefined} input
+       * @param {HTMLElement | undefined} oldInput
+       * @protected
+       */
       _inputElementChanged(input, oldInput) {
         if (input) {
           this._addInputListeners(input);
@@ -123,10 +128,9 @@ export const InputMixin = dedupingMixin(
 
       /**
        * An input event listener used to update the field value.
-       * Override this method with an actual implementation.
-       * @param {Event} _event
+       *
+       * @param {Event} event
        * @protected
-       * @override
        */
       _onInput(event) {
         // Ignore fake input events e.g. used by clear button.
@@ -140,7 +144,6 @@ export const InputMixin = dedupingMixin(
        * Override this method with an actual implementation.
        * @param {Event} _event
        * @protected
-       * @override
        */
       _onChange(_event) {}
 
@@ -158,7 +161,6 @@ export const InputMixin = dedupingMixin(
        * @param {string | undefined} newVal
        * @param {string | undefined} oldVal
        * @protected
-       * @override
        */
       _valueChanged(newVal, oldVal) {
         this._toggleHasValue(newVal !== '' && newVal != null);

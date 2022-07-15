@@ -39,6 +39,7 @@ export const CheckedMixin = dedupingMixin(
       }
 
       /**
+       * @param {Event} event
        * @protected
        * @override
        */
