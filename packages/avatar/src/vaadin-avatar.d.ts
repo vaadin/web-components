@@ -66,10 +66,13 @@ declare class Avatar extends FocusMixin(ElementMixin(ThemableMixin(HTMLElement))
    * _i18n_ object or just the property you want to modify.
    *
    * The object has the following JSON structure and default values:
-   *           {
-   *             // Translation of the anonymous user avatar title.
-   *             anonymous: 'anonymous'
-   *           }
+   *
+   * ```
+   * {
+   *   // Translation of the anonymous user avatar title.
+   *   anonymous: 'anonymous'
+   * }
+   * ```
    */
   i18n: AvatarI18n;
 }

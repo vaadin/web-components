@@ -81,35 +81,38 @@ export const LoginMixin = (superClass) =>
         },
 
         /**
-       * The object used to localize this component.
-       * For changing the default localization, change the entire
-       * _i18n_ object or just the property you want to modify.
-       *
-       * The object has the following JSON structure (by default it doesn't include `additionalInformation`
-       * and `header` sections, `header` can be added to override `title` and `description` properties
-       * in `vaadin-login-overlay`):
-
-        {
-          header: {
-            title: 'App name',
-            description: 'Inspiring application description'
-          },
-          form: {
-            title: 'Log in',
-            username: 'Username',
-            password: 'Password',
-            submit: 'Log in',
-            forgotPassword: 'Forgot password'
-          },
-          errorMessage: {
-            title: 'Incorrect username or password',
-            message: 'Check that you have entered the correct username and password and try again.'
-          },
-          additionalInformation: 'In case you need to provide some additional info for the user.'
-        }
-       * @type {!LoginI18n}
-       * @default {English/US}
-       */
+         * The object used to localize this component.
+         * For changing the default localization, change the entire
+         * _i18n_ object or just the property you want to modify.
+         *
+         * The object has the following JSON structure (by default it doesn't include `additionalInformation`
+         * and `header` sections, `header` can be added to override `title` and `description` properties
+         * in `vaadin-login-overlay`):
+         *
+         * ```
+         * {
+         *   header: {
+         *     title: 'App name',
+         *     description: 'Inspiring application description'
+         *   },
+         *   form: {
+         *     title: 'Log in',
+         *     username: 'Username',
+         *     password: 'Password',
+         *     submit: 'Log in',
+         *     forgotPassword: 'Forgot password'
+         *   },
+         *   errorMessage: {
+         *     title: 'Incorrect username or password',
+         *     message: 'Check that you have entered the correct username and password and try again.'
+         *   },
+         *   additionalInformation: 'In case you need to provide some additional info for the user.'
+         * }
+         * ```
+         *
+         * @type {!LoginI18n}
+         * @default {English/US}
+         */
         i18n: {
           type: Object,
           value() {
