@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-board",
-  "version": "22.0.16",
+  "version": "22.0.17",
   "publishConfig": {
     "access": "public"
   },
@@ -35,6 +35,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/board": "^22.0.16"
+    "@vaadin/board": "^22.0.17"
   }
 }

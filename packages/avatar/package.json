@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/avatar",
-  "version": "22.0.16",
+  "version": "22.0.17",
   "publishConfig": {
     "access": "public"
   },
@@ -36,13 +36,13 @@
     "@polymer/iron-a11y-announcer": "^3.0.0",
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^22.0.16",
-    "@vaadin/item": "^22.0.16",
-    "@vaadin/list-box": "^22.0.16",
-    "@vaadin/vaadin-lumo-styles": "^22.0.16",
-    "@vaadin/vaadin-material-styles": "^22.0.16",
-    "@vaadin/vaadin-overlay": "^22.0.16",
-    "@vaadin/vaadin-themable-mixin": "^22.0.16"
+    "@vaadin/component-base": "^22.0.17",
+    "@vaadin/item": "^22.0.17",
+    "@vaadin/list-box": "^22.0.17",
+    "@vaadin/vaadin-lumo-styles": "^22.0.17",
+    "@vaadin/vaadin-material-styles": "^22.0.17",
+    "@vaadin/vaadin-overlay": "^22.0.17",
+    "@vaadin/vaadin-themable-mixin": "^22.0.17"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
