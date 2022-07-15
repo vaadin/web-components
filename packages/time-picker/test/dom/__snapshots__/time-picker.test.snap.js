@@ -1051,3 +1051,63 @@ snapshots["vaadin-time-picker host opened default"] =
 `;
 /* end snapshot vaadin-time-picker host opened default */
 
+snapshots["vaadin-time-picker host required"] = 
+`<vaadin-time-picker required="">
+  <label
+    for="input-vaadin-time-picker-4"
+    id="label-vaadin-time-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-time-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-autocomplete="list"
+    aria-expanded="false"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    id="input-vaadin-time-picker-4"
+    required=""
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host required */
+
+snapshots["vaadin-time-picker host name"] = 
+`<vaadin-time-picker name="Field Name">
+  <label
+    for="input-vaadin-time-picker-4"
+    id="label-vaadin-time-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-time-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-autocomplete="list"
+    aria-expanded="false"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    id="input-vaadin-time-picker-4"
+    name="Field Name"
+    role="combobox"
+    slot="input"
+    spellcheck="false"
+  >
+</vaadin-time-picker>
+`;
+/* end snapshot vaadin-time-picker host name */
+
