@@ -3,7 +3,7 @@ import { aTimeout, fire, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { getAllItems, getFirstItem, onceScrolled, scrollToIndex, selectItem, setInputValue } from './helpers.js';
+import { getAllItems, getFirstItem, onceScrolled, scrollToIndex, setInputValue } from './helpers.js';
 
 describe('selecting items', () => {
   let comboBox;
@@ -83,14 +83,15 @@ describe('selecting items', () => {
   it('should close the dropdown when reselecting the current value', () => {
     comboBox.value = 'foo';
     comboBox.open();
-    selectItem(comboBox, 0);
+    getFirstItem(comboBox).click();
     expect(comboBox.opened).to.be.false;
   });
 
   it('should not fire an event when reselecting the current value', () => {
     comboBox.value = 'foo';
+    comboBox.open();
     valueChangedSpy.resetHistory();
-    selectItem(comboBox, 0);
+    getFirstItem(comboBox).click();
     expect(valueChangedSpy.callCount).to.equal(0);
   });
 

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
@@ -9,7 +9,7 @@ describe('object values', () => {
   let comboBox, input;
 
   describe('label and value paths', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
       input = comboBox.inputElement;
 
@@ -27,6 +27,7 @@ describe('object values', () => {
       ];
 
       comboBox.open();
+      await nextRender();
     });
 
     it('it should change combo-box value when value path changes', () => {
@@ -41,8 +42,7 @@ describe('object values', () => {
       expect(input.value).to.eql('foo');
     });
 
-    it('should use the default label property in overlay items', async () => {
-      await aTimeout(1);
+    it('should use the default label property in overlay items', () => {
       expect(getFirstItem(comboBox).textContent).to.contain('foo');
     });
 
@@ -158,6 +158,8 @@ describe('object values', () => {
       selectItem(comboBox, 2);
       expect(input.value).to.eql('zero');
       expect(comboBox.value).to.eql(0);
+
+      comboBox.open();
 
       selectItem(comboBox, 5);
       expect(input.value).to.eql('zero as a string');
