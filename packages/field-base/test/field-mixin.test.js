@@ -423,6 +423,12 @@ const runTests = (baseClass) => {
         await nextFrame();
         expect(helper.textContent).to.not.equal('3 digits');
       });
+
+      it('should remove has-helper attribute when slotted helper is removed', async () => {
+        element.removeChild(helper);
+        await nextFrame();
+        expect(element.hasAttribute('has-helper')).to.be.false;
+      });
     });
 
     describe('slotted with property', () => {
@@ -751,11 +757,11 @@ const runTests = (baseClass) => {
   describe('slotted label', () => {
     beforeEach(async () => {
       element = fixtureSync(`
-          <${tag}>
-            <label slot="label">Label</label>
-            <input slot="input">
-          </${tag}>
-        `);
+        <${tag}>
+          <label slot="label">Label</label>
+          <input slot="input">
+        </${tag}>
+      `);
       await nextRender();
       input = element.querySelector('[slot=input]');
       label = element.querySelector('[slot=label]');
