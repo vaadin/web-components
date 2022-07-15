@@ -30,9 +30,11 @@ describe('accessibility', () => {
     valueButton = select._valueButton;
   });
 
-  it('should have aria-required attribute set to true when required', () => {
+  it('should toggle aria-required attribute when required property changes', () => {
     select.required = true;
     expect(valueButton.getAttribute('aria-required')).to.be.equal('true');
+    select.required = false;
+    expect(valueButton.hasAttribute('aria-required')).to.be.false;
   });
 
   it('should have aria-disabled attribute set to true when disabled', () => {
@@ -55,6 +57,13 @@ describe('accessibility', () => {
     select.invalid = true;
     await aTimeout(0);
     expect(valueButton.getAttribute('aria-describedby')).to.not.be.empty;
+  });
+
+  it('should set aria-invalid on the value button when invalid', async () => {
+    select.errorMessage = 'invalid';
+    select.invalid = true;
+    await aTimeout(0);
+    expect(valueButton.getAttribute('aria-invalid')).to.be.equal('true');
   });
 
   it('should have role listbox on menu element', () => {

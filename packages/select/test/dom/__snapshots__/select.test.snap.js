@@ -217,7 +217,6 @@ snapshots["vaadin-select slots default"] =
 `<vaadin-select-value-button
   aria-expanded="false"
   aria-haspopup="listbox"
-  aria-required="false"
   role="button"
   slot="value"
   tabindex="0"
@@ -237,7 +236,6 @@ snapshots["vaadin-select slots helper"] =
 `<vaadin-select-value-button
   aria-expanded="false"
   aria-haspopup="listbox"
-  aria-required="false"
   role="button"
   slot="value"
   tabindex="0"
