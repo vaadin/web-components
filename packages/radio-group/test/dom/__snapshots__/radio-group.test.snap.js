@@ -319,6 +319,7 @@ snapshots["vaadin-radio-group host helper"] =
 
 snapshots["vaadin-radio-group host error"] = 
 `<vaadin-radio-group
+  aria-invalid="true"
   aria-labelledby="error-message-vaadin-radio-group-5"
   has-error-message=""
   invalid=""

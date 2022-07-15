@@ -216,6 +216,19 @@ describe('radio-group', () => {
     });
   });
 
+  describe('aria-invalid attribute', () => {
+    beforeEach(() => {
+      group = fixtureSync(`<vaadin-radio-group></vaadin-radio-group>`);
+    });
+
+    it('should toggle aria-invalid attribute on invalid property change', () => {
+      group.invalid = true;
+      expect(group.getAttribute('aria-invalid')).to.equal('true');
+      group.invalid = false;
+      expect(group.hasAttribute('aria-invalid')).to.be.false;
+    });
+  });
+
   describe('focused state', () => {
     beforeEach(async () => {
       group = fixtureSync(`
