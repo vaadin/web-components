@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, mousedown, mouseup, nextFrame } from '@vaadin/testing-helpers';
-import { sendKeys, sendMouse } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-checkbox.js';
 
@@ -138,6 +138,10 @@ describe('checkbox', () => {
     });
 
     describe('focus', () => {
+      afterEach(() => {
+        resetMouse();
+      });
+
       it('should focus on input click if not focused', async () => {
         const rect = input.getBoundingClientRect();
         const middleX = Math.floor(rect.x + rect.width / 2);
