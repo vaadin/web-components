@@ -8,6 +8,7 @@ import '../vaadin-combo-box-light.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxPlaceholder } from '../src/vaadin-combo-box-placeholder.js';
 import {
+  clickItem,
   flushComboBox,
   getAllItems,
   getFirstItem,
@@ -361,7 +362,7 @@ describe('lazy loading', () => {
 
         it('should not be invoked', () => {
           spyDataProvider.resetHistory();
-          getFirstItem(comboBox).click();
+          clickItem(comboBox, 0);
           expect(comboBox.selectedItem).to.eql('item 0');
           expect(spyDataProvider.callCount).to.eql(0);
         });
@@ -372,7 +373,7 @@ describe('lazy loading', () => {
 
           spyDataProvider.resetHistory();
 
-          getFirstItem(comboBox).click();
+          clickItem(comboBox, 0);
           expect(comboBox.selectedItem).to.eql('item 1');
           expect(spyDataProvider.callCount).to.eql(0);
         });

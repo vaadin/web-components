@@ -72,13 +72,10 @@ export const flushComboBox = (comboBox) => {
 };
 
 /**
- * Emulates selecting an item at the given index.
+ * Click an item at the given index.
  */
-export const selectItem = (comboBox, index) => {
-  // Simulates clicking on the overlay items, but it more reliable in tests.
-  fire(comboBox._scroller, 'selection-changed', {
-    item: comboBox.items[index],
-  });
+export const clickItem = (comboBox, index) => {
+  getAllItems(comboBox)[index].click();
 };
 
 /**
