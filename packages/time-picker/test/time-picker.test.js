@@ -3,14 +3,10 @@ import { arrowDown, arrowUp, enter, esc, fixtureSync, nextFrame } from '@vaadin/
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-time-picker.js';
+import { setInputValue } from './helpers.js';
 
 describe('time-picker', () => {
   let timePicker, comboBox, inputElement;
-
-  function changeInputValue(el, value) {
-    el.value = value;
-    el.dispatchEvent(new CustomEvent('change'));
-  }
 
   beforeEach(() => {
     timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
@@ -40,7 +36,8 @@ describe('time-picker', () => {
     });
 
     it('should not set value if the format is invalid', () => {
-      changeInputValue(comboBox, 'invalid');
+      setInputValue(comboBox, 'invalid');
+      enter(timePicker.inputElement);
       expect(timePicker.value).to.be.equal('');
       expect(comboBox.value).to.be.equal('invalid');
     });
@@ -52,8 +49,10 @@ describe('time-picker', () => {
     });
 
     it('should change value to empty string when setting invalid value', () => {
-      changeInputValue(comboBox, '09:00');
-      changeInputValue(comboBox, 'invalid');
+      setInputValue(comboBox, '09:00');
+      enter(timePicker.inputElement);
+      setInputValue(comboBox, 'invalid');
+      enter(timePicker.inputElement);
       expect(timePicker.value).to.be.equal('');
     });
 
@@ -84,7 +83,8 @@ describe('time-picker', () => {
       timePicker.value = '12:00';
       timePicker.value = 'invalid';
       expect(timePicker.value).to.be.equal('12:00');
-      changeInputValue(comboBox, 'invalid');
+      setInputValue(comboBox, 'invalid');
+      enter(timePicker.inputElement);
       expect(timePicker.value).to.be.equal('');
       expect(comboBox.value).to.be.equal('');
     });
@@ -93,7 +93,8 @@ describe('time-picker', () => {
       comboBox.value = '12:00';
       comboBox.value = '';
       expect(timePicker.value).to.be.equal('');
-      changeInputValue(comboBox, '');
+      setInputValue(comboBox, '');
+      enter(timePicker.inputElement);
       expect(timePicker.value).to.be.equal('');
       expect(comboBox.value).to.be.equal('');
     });

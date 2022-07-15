@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, focusout, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { TimePicker } from '../src/vaadin-time-picker.js';
+import { setInputValue } from './helpers.js';
 
 class TimePicker20Element extends TimePicker {
   checkValidity() {
@@ -13,11 +14,6 @@ customElements.define('vaadin-time-picker-20', TimePicker20Element);
 
 describe('form input', () => {
   let timePicker, comboBox, inputElement;
-
-  function inputValue(value) {
-    inputElement.value = value;
-    inputElement.dispatchEvent(new CustomEvent('input', { bubbles: true, composed: true }));
-  }
 
   describe('initial validation', () => {
     let validateSpy;
@@ -140,10 +136,10 @@ describe('form input', () => {
     it('should not mark empty input as invalid', () => {
       expect(timePicker.validate()).to.equal(true);
 
-      inputValue('22:00');
+      setInputValue(timePicker, '22:00');
       expect(timePicker.validate()).to.equal(true);
 
-      inputValue('');
+      setInputValue(timePicker, '');
       expect(timePicker.validate()).to.equal(true);
     });
 
@@ -164,10 +160,10 @@ describe('form input', () => {
       timePicker.pattern = '^1\\d:.*';
       timePicker.preventInvalidInput = true;
 
-      inputValue('22:00');
+      setInputValue(timePicker, '22:00');
       expect(inputElement.value).to.be.not.ok;
 
-      inputValue('12:34');
+      setInputValue(timePicker, '12:34');
       expect(inputElement.value).to.equal('12:34');
     });
 
@@ -183,20 +179,20 @@ describe('form input', () => {
     });
 
     it('should validate keyboard input (invalid)', () => {
-      inputValue('foo');
+      setInputValue(timePicker, 'foo');
       expect(timePicker.invalid).to.be.equal(false);
       focusout(comboBox);
       expect(timePicker.invalid).to.be.equal(true);
     });
 
     it('should validate keyboard input (valid)', () => {
-      inputValue('12:00');
+      setInputValue(timePicker, '12:00');
       focusout(comboBox);
       expect(timePicker.invalid).to.be.equal(false);
     });
 
     it('should validate keyboard input (disallowed value)', () => {
-      inputValue('99:00');
+      setInputValue(timePicker, '99:00');
       expect(timePicker.invalid).to.be.equal(false);
       focusout(comboBox);
       expect(timePicker.invalid).to.be.equal(true);
