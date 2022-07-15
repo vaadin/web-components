@@ -67,24 +67,26 @@ export declare class LoginMixinClass {
    * and `header` sections, `header` can be added to override `title` and `description` properties
    * in `vaadin-login-overlay`):
    *
-   *         {
-   *           header: {
-   *             title: 'App name',
-   *             description: 'Inspiring application description'
-   *           },
-   *           form: {
-   *             title: 'Log in',
-   *             username: 'Username',
-   *             password: 'Password',
-   *             submit: 'Log in',
-   *             forgotPassword: 'Forgot password'
-   *           },
-   *           errorMessage: {
-   *             title: 'Incorrect username or password',
-   *             message: 'Check that you have entered the correct username and password and try again.'
-   *           },
-   *           additionalInformation: 'In case you need to provide some additional info for the user.'
-   *         }
+   * ```
+   * {
+   *   header: {
+   *     title: 'App name',
+   *     description: 'Inspiring application description'
+   *   },
+   *   form: {
+   *     title: 'Log in',
+   *     username: 'Username',
+   *     password: 'Password',
+   *     submit: 'Log in',
+   *     forgotPassword: 'Forgot password'
+   *   },
+   *   errorMessage: {
+   *     title: 'Incorrect username or password',
+   *     message: 'Check that you have entered the correct username and password and try again.'
+   *   },
+   *   additionalInformation: 'In case you need to provide some additional info for the user.'
+   * }
+   * ```
    */
   i18n: LoginI18n;
 

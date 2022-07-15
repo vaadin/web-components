@@ -170,13 +170,17 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        * _i18n_ object or just the property you want to modify.
        *
        * The object has the following JSON structure and default values:
-          {
-            // Translation of the anonymous user avatar title.
-            anonymous: 'anonymous'
-          }
-      * @type {!AvatarI18n}
-      * @default {English/US}
-      */
+       *
+       * ```
+       * {
+       *   // Translation of the anonymous user avatar title.
+       *   anonymous: 'anonymous'
+       * }
+       * ```
+       *
+       * @type {!AvatarI18n}
+       * @default {English/US}
+       */
       i18n: {
         type: Object,
         value: () => {
