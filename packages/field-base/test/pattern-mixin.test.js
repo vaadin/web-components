@@ -87,7 +87,7 @@ const runTests = (baseClass) => {
     it('should prevent invalid pattern', async () => {
       element.pattern = '[0-9]*';
       await nextFrame();
-      inputText('f');
+      inputText(input, 'f');
       await nextFrame();
       expect(element.value).to.equal('1');
     });
@@ -95,7 +95,7 @@ const runTests = (baseClass) => {
     it('should temporarily set input-prevented attribute on invalid input', async () => {
       element.pattern = '[0-9]*';
       await nextFrame();
-      inputText('f');
+      inputText(input, 'f');
       await nextFrame();
       expect(element.hasAttribute('input-prevented')).to.be.true;
     });
@@ -103,7 +103,7 @@ const runTests = (baseClass) => {
     it('should not set input-prevented attribute on valid input', async () => {
       element.pattern = '[0-9]*';
       await nextFrame();
-      inputText('1');
+      inputText(input, '1');
       await nextFrame();
       expect(element.hasAttribute('input-prevented')).to.be.false;
     });
@@ -112,7 +112,7 @@ const runTests = (baseClass) => {
       element.pattern = '[0-9]*';
       await nextFrame();
       const clock = sinon.useFakeTimers();
-      inputText('f');
+      inputText(input, 'f');
       clock.tick(200);
       expect(element.hasAttribute('input-prevented')).to.be.false;
       clock.restore();
@@ -122,7 +122,7 @@ const runTests = (baseClass) => {
       element.value = '';
       element.pattern = '[0-9]*';
       await nextFrame();
-      inputText('f');
+      inputText(input, 'f');
       await nextFrame();
       expect(input.value).to.equal('');
     });
@@ -132,7 +132,7 @@ const runTests = (baseClass) => {
       element.addEventListener('value-changed', spy);
       element.pattern = '[0-9]*';
       await nextFrame();
-      inputText('f');
+      inputText(input, 'f');
       await nextFrame();
       expect(spy.called).to.be.false;
     });
@@ -140,7 +140,7 @@ const runTests = (baseClass) => {
     it('should not prevent valid pattern', async () => {
       element.pattern = '[0-9]*';
       await nextFrame();
-      inputText('2');
+      inputText(input, '2');
       await nextFrame();
       expect(input.value).to.equal('2');
     });
@@ -148,7 +148,7 @@ const runTests = (baseClass) => {
     it('should not prevent too short value', async () => {
       input.minlength = 1;
       await nextFrame();
-      inputText('');
+      inputText(input, '');
       await nextFrame();
       expect(input.value).to.equal('');
     });
@@ -156,7 +156,7 @@ const runTests = (baseClass) => {
     it('should not prevent empty value for required field', async () => {
       element.required = true;
       await nextFrame();
-      inputText('');
+      inputText(input, '');
       await nextFrame();
       expect(input.value).to.equal('');
     });

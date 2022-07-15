@@ -226,13 +226,13 @@ describe('text-area', () => {
 
     it('should prevent non matching input', () => {
       textArea.pattern = '[0-9]*';
-      inputText('f');
+      inputText(textArea, 'f');
       expect(textArea.inputElement.value).to.equal('1');
     });
 
     it('should not prevent input when pattern is invalid', () => {
       textArea.pattern = '[0-9])))]*';
-      inputText('f');
+      inputText(textArea, 'f');
       expect(textArea.inputElement.value).to.equal('f');
     });
   });
