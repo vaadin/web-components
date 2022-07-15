@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync, mousedown, mouseup, nextFrame } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
+import { resetMouse, sendKeys, sendMouse } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-radio-button.js';
 
@@ -50,6 +50,10 @@ describe('radio-button', () => {
       label = radio.querySelector('[slot=label]');
     });
 
+    afterEach(async () => {
+      await resetMouse();
+    });
+
     it('should set input checked to false by default', () => {
       expect(input.checked).to.be.false;
     });
@@ -94,6 +98,14 @@ describe('radio-button', () => {
       radio.disabled = true;
       radio.click();
       expect(spy.called).to.be.false;
+    });
+
+    it('should focus on input click if not focused', async () => {
+      const rect = input.getBoundingClientRect();
+      const middleX = Math.floor(rect.x + rect.width / 2);
+      const middleY = Math.floor(rect.y + rect.height / 2);
+      await sendMouse({ type: 'click', position: [middleX, middleY] });
+      expect(radio.hasAttribute('focused')).to.be.true;
     });
   });
 
