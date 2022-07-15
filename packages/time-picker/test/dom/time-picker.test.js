@@ -34,6 +34,11 @@ describe('vaadin-time-picker', () => {
       await expect(timePicker).dom.to.equalSnapshot();
     });
 
+    it('required', async () => {
+      timePicker.required = true;
+      await expect(timePicker).dom.to.equalSnapshot();
+    });
+
     it('disabled', async () => {
       timePicker.disabled = true;
       await expect(timePicker).dom.to.equalSnapshot();
@@ -51,6 +56,11 @@ describe('vaadin-time-picker', () => {
 
     it('pattern', async () => {
       timePicker.pattern = '[0-9]*';
+      await expect(timePicker).dom.to.equalSnapshot();
+    });
+
+    it('name', async () => {
+      timePicker.name = 'Field Name';
       await expect(timePicker).dom.to.equalSnapshot();
     });
 

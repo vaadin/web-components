@@ -56,24 +56,6 @@ describe('form input', () => {
       inputElement = timePicker.inputElement;
     });
 
-    it('should pass the name to input element', () => {
-      timePicker.name = 'foo';
-      expect(inputElement.name).to.equal('foo');
-    });
-
-    it('should set name to empty string by default', () => {
-      expect(inputElement.name).to.equal('');
-    });
-
-    it('should pass required tp input element', () => {
-      timePicker.required = true;
-      expect(inputElement.required).to.be.true;
-    });
-
-    it('should not be required by default', () => {
-      expect(inputElement.required).to.be.false;
-    });
-
     it('should have synced invalid property with input on validation with required flag', () => {
       timePicker.name = 'foo';
       timePicker.required = true;
