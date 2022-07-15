@@ -138,8 +138,8 @@ describe('checkbox', () => {
     });
 
     describe('focus', () => {
-      afterEach(() => {
-        resetMouse();
+      afterEach(async () => {
+        await resetMouse();
       });
 
       it('should focus on input click if not focused', async () => {

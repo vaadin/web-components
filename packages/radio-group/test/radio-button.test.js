@@ -50,8 +50,8 @@ describe('radio-button', () => {
       label = radio.querySelector('[slot=label]');
     });
 
-    afterEach(() => {
-      resetMouse();
+    afterEach(async () => {
+      await resetMouse();
     });
 
     it('should set input checked to false by default', () => {
