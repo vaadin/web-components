@@ -64,6 +64,7 @@ export const PatternMixin = (superclass) =>
     /**
      * @param {Event} event
      * @protected
+     * @override
      */
     _onInput(event) {
       this._checkInputValue();

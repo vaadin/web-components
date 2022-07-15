@@ -164,7 +164,7 @@ export const FieldMixin = (superclass) =>
     }
 
     /**
-     * @param {boolean} required
+     * @param {boolean} invalid
      * @protected
      */
     _invalidChanged(invalid) {
