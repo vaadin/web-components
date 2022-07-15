@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, inputText, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-text-area.js';
 
@@ -222,18 +223,19 @@ describe('text-area', () => {
     beforeEach(() => {
       textArea.preventInvalidInput = true;
       textArea.value = '1';
+      textArea.inputElement.focus();
     });
 
-    it('should prevent non matching input', () => {
+    it('should prevent non matching input', async () => {
       textArea.pattern = '[0-9]*';
-      inputText(textArea, 'f');
+      await sendKeys({ type: 'f' });
       expect(textArea.inputElement.value).to.equal('1');
     });
 
-    it('should not prevent input when pattern is invalid', () => {
+    it('should not prevent input when pattern is invalid', async () => {
       textArea.pattern = '[0-9])))]*';
-      inputText(textArea, 'f');
-      expect(textArea.inputElement.value).to.equal('f');
+      await sendKeys({ type: 'f' });
+      expect(textArea.inputElement.value).to.equal('1f');
     });
   });
 

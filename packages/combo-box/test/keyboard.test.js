@@ -6,8 +6,6 @@ import {
   enterKeyDown,
   escKeyDown,
   fixtureSync,
-  focusout,
-  inputText,
   keyboardEventFor,
   nextFrame,
 } from '@vaadin/testing-helpers';
@@ -536,6 +534,7 @@ describe('keyboard', () => {
   describe('auto open disabled', () => {
     beforeEach(() => {
       comboBox.autoOpenDisabled = true;
+      input.focus();
     });
 
     it('should open the overlay with arrow down', () => {
@@ -548,53 +547,53 @@ describe('keyboard', () => {
       expect(comboBox.opened).to.equal(true);
     });
 
-    it('should apply input value on focusout if input valid', () => {
-      inputText(input, 'FOO');
-      focusout(comboBox);
+    it('should apply input value on focusout if input valid', async () => {
+      await sendKeys({ type: 'FOO' });
+      input.blur();
       expect(input.value).to.equal('foo');
       expect(comboBox.value).to.equal('foo');
     });
 
-    it('should apply input value on enter if input valid', () => {
-      inputText(input, 'FOO');
-      enterKeyDown(input);
+    it('should apply input value on enter if input valid', async () => {
+      await sendKeys({ type: 'FOO' });
+      await sendKeys({ press: 'Enter' });
       expect(input.value).to.equal('foo');
       expect(comboBox.value).to.equal('foo');
     });
 
-    it('should not apply input value on enter if input invalid', () => {
-      inputText(input, 'quux');
-      enterKeyDown(input);
+    it('should not apply input value on enter if input invalid', async () => {
+      await sendKeys({ type: 'quux' });
+      await sendKeys({ press: 'Enter' });
       expect(input.value).to.equal('quux');
       expect(comboBox.value).to.equal('');
     });
 
-    it('should revert input value on focusout if input invalid', () => {
-      inputText(input, 'quux');
-      focusout(comboBox);
+    it('should revert input value on focusout if input invalid', async () => {
+      await sendKeys({ type: 'quux' });
+      input.blur();
       expect(input.value).to.equal('');
       expect(comboBox.value).to.equal('');
     });
 
-    it('should revert input value on esc if input valid', () => {
-      inputText(input, 'foo');
-      escKeyDown(input);
+    it('should revert input value on esc if input valid', async () => {
+      await sendKeys({ type: 'foo' });
+      await sendKeys({ press: 'Escape' });
       expect(input.value).to.equal('');
       expect(comboBox.value).to.equal('');
     });
 
-    it('should revert input value on esc if input invalid', () => {
-      inputText(input, 'quux');
-      escKeyDown(input);
+    it('should revert input value on esc if input invalid', async () => {
+      await sendKeys({ type: 'quux' });
+      await sendKeys({ press: 'Escape' });
       expect(input.value).to.equal('');
       expect(comboBox.value).to.equal('');
     });
 
-    it('should revert changed input value on esc if clear button is visible', () => {
+    it('should revert changed input value on esc if clear button is visible', async () => {
       comboBox.value = 'bar';
       comboBox.clearButtonVisible = true;
-      inputText(input, 'foo');
-      escKeyDown(input);
+      await sendKeys({ type: 'foo' });
+      await sendKeys({ press: 'Escape' });
       expect(input.value).to.equal('bar');
       expect(comboBox.value).to.equal('bar');
     });
@@ -614,8 +613,8 @@ describe('keyboard', () => {
       expect(comboBox.value).to.equal('bar');
     });
 
-    it('should not propagate when input value is not empty', () => {
-      inputText(input, 'foo');
+    it('should not propagate when input value is not empty', async () => {
+      await sendKeys({ type: 'foo' });
 
       const event = keyboardEventFor('keydown', 27, [], 'Escape');
       const keyDownSpy = sinon.spy(event, 'stopPropagation');
