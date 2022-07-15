@@ -521,6 +521,10 @@ describe('value set before attach', () => {
 
 describe('pre-opened', () => {
   it('should not throw error when adding a pre-opened combo-box', () => {
+    expect(() => fixtureSync(`<vaadin-combo-box opened></vaadin-combo-box>`)).to.not.throw(Error);
+  });
+
+  it('should not throw error when adding a pre-opened combo-box with items', () => {
     expect(() => fixtureSync(`<vaadin-combo-box opened items="[0]"></vaadin-combo-box>`)).to.not.throw(Error);
   });
 

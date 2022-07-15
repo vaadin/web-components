@@ -438,9 +438,7 @@ export const ComboBoxMixin = (subclass) =>
       };
 
       // Ensure the scroller is rendered
-      if (!this.opened) {
-        overlay.requestContentUpdate();
-      }
+      overlay.requestContentUpdate();
 
       const scroller = overlay.querySelector(scrollerTag);
 
