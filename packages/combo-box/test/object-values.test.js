@@ -3,7 +3,7 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { getFirstItem, getViewportItems, selectItem } from './helpers.js';
+import { clickItem, getFirstItem, getViewportItems } from './helpers.js';
 
 describe('object values', () => {
   let comboBox, input;
@@ -31,13 +31,13 @@ describe('object values', () => {
     });
 
     it('it should change combo-box value when value path changes', () => {
-      selectItem(comboBox, 0);
+      clickItem(comboBox, 0);
       comboBox.itemValuePath = 'custom';
       expect(comboBox.value).to.be.equal('bazs');
     });
 
     it('should use the default label property on input field', () => {
-      selectItem(comboBox, 0);
+      clickItem(comboBox, 0);
 
       expect(input.value).to.eql('foo');
     });
@@ -55,7 +55,7 @@ describe('object values', () => {
     });
 
     it('should use the default value property', () => {
-      selectItem(comboBox, 0);
+      clickItem(comboBox, 0);
 
       expect(comboBox.value).to.eql('bar');
     });
@@ -63,7 +63,7 @@ describe('object values', () => {
     it('should use the provided value property', () => {
       comboBox.itemValuePath = 'custom';
 
-      selectItem(comboBox, 1);
+      clickItem(comboBox, 1);
 
       expect(comboBox.value).to.eql('bashcsdfsa');
     });
@@ -73,14 +73,14 @@ describe('object values', () => {
       comboBox.itemValuePath = 'not.found';
       comboBox.itemLabelPath = 'not.found';
 
-      selectItem(comboBox, 0);
+      clickItem(comboBox, 0);
 
       expect(input.value).to.eql('default');
       expect(comboBox.value).to.eql('default');
     });
 
     it('should refresh labels if the label path is changed', () => {
-      selectItem(comboBox, 0);
+      clickItem(comboBox, 0);
 
       comboBox.itemLabelPath = 'custom';
       comboBox.opened = true;
@@ -93,7 +93,7 @@ describe('object values', () => {
       comboBox.items = [{}, {}];
       comboBox.items[0].toString = () => 'default';
 
-      selectItem(comboBox, 0);
+      clickItem(comboBox, 0);
 
       expect(input.value).to.eql('default');
       expect(comboBox.value).to.eql('default');
@@ -104,7 +104,7 @@ describe('object values', () => {
       comboBox.items[0].toString = () => 'default';
       comboBox.itemLabelPath = 'custom';
 
-      selectItem(comboBox, 0);
+      clickItem(comboBox, 0);
 
       expect(input.value).to.eql('default');
     });
@@ -126,28 +126,28 @@ describe('object values', () => {
     });
 
     it('should set the value', () => {
-      selectItem(comboBox, 0);
+      clickItem(comboBox, 0);
 
       expect(input.value).to.eql('foo');
       expect(comboBox.value).to.eql('bar');
     });
 
     it('should set the value even if the value is zero (number)', () => {
-      selectItem(comboBox, 2);
+      clickItem(comboBox, 2);
 
       expect(input.value).to.eql('zero');
       expect(comboBox.value).to.eql(0);
     });
 
     it('should set the value even if the value is false (boolean)', () => {
-      selectItem(comboBox, 3);
+      clickItem(comboBox, 3);
 
       expect(input.value).to.eql('false');
       expect(comboBox.value).to.eql(false);
     });
 
     it('should set the value even if the value is an empty string', () => {
-      selectItem(comboBox, 4);
+      clickItem(comboBox, 4);
 
       expect(input.value).to.eql('empty string');
       expect(comboBox.value).to.eql('');
@@ -155,13 +155,13 @@ describe('object values', () => {
     });
 
     it('should distinguish between 0 (number) and "0" (string) values', () => {
-      selectItem(comboBox, 2);
+      clickItem(comboBox, 2);
       expect(input.value).to.eql('zero');
       expect(comboBox.value).to.eql(0);
 
       comboBox.open();
 
-      selectItem(comboBox, 5);
+      clickItem(comboBox, 5);
       expect(input.value).to.eql('zero as a string');
       expect(comboBox.value).to.eql('0');
     });
@@ -182,7 +182,7 @@ describe('object values', () => {
       const spy = sinon.spy();
       comboBox.addEventListener('selected-item-changed', spy);
 
-      selectItem(comboBox, 7);
+      clickItem(comboBox, 7);
 
       expect(comboBox.selectedItem).to.eql(comboBox.items[7]);
       expect(comboBox.value).to.eql('duplicate');
@@ -194,7 +194,7 @@ describe('object values', () => {
       const spy = sinon.spy();
       comboBox.addEventListener('selected-item-changed', spy);
 
-      selectItem(comboBox, 9);
+      clickItem(comboBox, 9);
 
       expect(comboBox.selectedItem).to.eql(comboBox.items[9]);
       expect(comboBox.value).to.eql(comboBox.items[9].toString());
@@ -258,7 +258,7 @@ describe('object values', () => {
     it('should use toString if provided label and value paths are undefined and then log error', () => {
       comboBox.items[0].toString = () => 'default';
 
-      selectItem(comboBox, 0);
+      clickItem(comboBox, 0);
 
       expect(input.value).to.eql('default');
       expect(comboBox.value).to.eql('default');

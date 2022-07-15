@@ -72,9 +72,9 @@ export const flushComboBox = (comboBox) => {
 };
 
 /**
- * Emulates selecting an item at the given index.
+ * Click an item at the given index.
  */
-export const selectItem = (comboBox, index) => {
+export const clickItem = (comboBox, index) => {
   getAllItems(comboBox)[index].click();
 };
 
