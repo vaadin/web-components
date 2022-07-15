@@ -1248,9 +1248,6 @@ export const ComboBoxMixin = (subclass) =>
       if (this.opened) {
         this._focusedIndex = this.filteredItems.indexOf(e.detail.item);
         this.close();
-      } else if (this.selectedItem !== e.detail.item) {
-        this.selectedItem = e.detail.item;
-        this._detectAndDispatchChange();
       }
     }
 
