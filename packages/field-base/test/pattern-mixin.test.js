@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { InputController } from '../src/input-controller.js';
 import { PatternMixin } from '../src/pattern-mixin.js';
@@ -73,17 +74,13 @@ const runTests = (baseClass) => {
       sinon.stub(console, 'warn');
       element.preventInvalidInput = true;
       element.value = '1';
+      element.inputElement.focus();
       await nextFrame();
     });
 
     afterEach(() => {
       console.warn.restore();
     });
-
-    function inputText(value) {
-      input.value = value;
-      input.dispatchEvent(new CustomEvent('input'));
-    }
 
     it('should warn about using preventInvalidInput', () => {
       expect(console.warn.calledOnce).to.be.true;
@@ -92,7 +89,7 @@ const runTests = (baseClass) => {
     it('should prevent invalid pattern', async () => {
       element.pattern = '[0-9]*';
       await nextFrame();
-      inputText('f');
+      await sendKeys({ type: 'f' });
       await nextFrame();
       expect(element.value).to.equal('1');
     });
@@ -100,7 +97,7 @@ const runTests = (baseClass) => {
     it('should temporarily set input-prevented attribute on invalid input', async () => {
       element.pattern = '[0-9]*';
       await nextFrame();
-      inputText('f');
+      await sendKeys({ type: 'f' });
       await nextFrame();
       expect(element.hasAttribute('input-prevented')).to.be.true;
     });
@@ -108,7 +105,7 @@ const runTests = (baseClass) => {
     it('should not set input-prevented attribute on valid input', async () => {
       element.pattern = '[0-9]*';
       await nextFrame();
-      inputText('1');
+      await sendKeys({ type: '1' });
       await nextFrame();
       expect(element.hasAttribute('input-prevented')).to.be.false;
     });
@@ -117,7 +114,7 @@ const runTests = (baseClass) => {
       element.pattern = '[0-9]*';
       await nextFrame();
       const clock = sinon.useFakeTimers();
-      inputText('f');
+      await sendKeys({ type: 'f' });
       clock.tick(200);
       expect(element.hasAttribute('input-prevented')).to.be.false;
       clock.restore();
@@ -127,7 +124,7 @@ const runTests = (baseClass) => {
       element.value = '';
       element.pattern = '[0-9]*';
       await nextFrame();
-      inputText('f');
+      await sendKeys({ type: 'f' });
       await nextFrame();
       expect(input.value).to.equal('');
     });
@@ -137,7 +134,7 @@ const runTests = (baseClass) => {
       element.addEventListener('value-changed', spy);
       element.pattern = '[0-9]*';
       await nextFrame();
-      inputText('f');
+      await sendKeys({ type: 'f' });
       await nextFrame();
       expect(spy.called).to.be.false;
     });
@@ -145,15 +142,15 @@ const runTests = (baseClass) => {
     it('should not prevent valid pattern', async () => {
       element.pattern = '[0-9]*';
       await nextFrame();
-      inputText('2');
+      await sendKeys({ type: '2' });
       await nextFrame();
-      expect(input.value).to.equal('2');
+      expect(input.value).to.equal('12');
     });
 
     it('should not prevent too short value', async () => {
       input.minlength = 1;
       await nextFrame();
-      inputText('');
+      await sendKeys({ press: 'Backspace' });
       await nextFrame();
       expect(input.value).to.equal('');
     });
@@ -161,7 +158,7 @@ const runTests = (baseClass) => {
     it('should not prevent empty value for required field', async () => {
       element.required = true;
       await nextFrame();
-      inputText('');
+      await sendKeys({ press: 'Backspace' });
       await nextFrame();
       expect(input.value).to.equal('');
     });
