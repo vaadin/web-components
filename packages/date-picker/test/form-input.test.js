@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import { DatePicker } from '../vaadin-date-picker.js';
@@ -190,24 +190,22 @@ describe('form input', () => {
       datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
     });
 
-    it('should pass validation when the entered value is a valid date', async () => {
+    it('should be valid when committing a valid date', () => {
       setInputValue(datePicker, '1/1/2022');
-      await close(datePicker);
-      expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.validate()).to.be.true;
+      enter(datePicker.inputElement);
+      expect(datePicker.invalid).to.be.false;
     });
 
-    it('should fail validation when the entered value is an invalid date', async () => {
+    it('should be invalid when trying to commit an invalid date', () => {
       setInputValue(datePicker, 'foo');
-      await close(datePicker);
-      expect(datePicker.checkValidity()).to.be.false;
-      expect(datePicker.validate()).to.be.false;
+      enter(datePicker.inputElement);
+      expect(datePicker.invalid).to.be.true;
     });
 
-    it('should set an empty value when trying to commit an invalid value', async () => {
+    it('should set an empty value when trying to commit an invalid date', () => {
       datePicker.value = '2020-01-01';
       setInputValue(datePicker, 'foo');
-      await close(datePicker);
+      enter(datePicker.inputElement);
       expect(datePicker.value).to.equal('');
       expect(datePicker.inputElement.value).to.equal('foo');
     });
@@ -220,13 +218,25 @@ describe('form input', () => {
 
     it('should fail validation without value', () => {
       expect(datePicker.checkValidity()).to.be.false;
-      expect(datePicker.validate()).to.be.false;
     });
 
     it('should pass validation with a valid value', () => {
       datePicker.value = '2000-01-01';
       expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.validate()).to.be.true;
+    });
+
+    it('should be valid when committing a non-empty value', () => {
+      setInputValue(datePicker, '1/1/2000');
+      enter(datePicker.inputElement);
+      expect(datePicker.invalid).to.be.false;
+    });
+
+    it('should be invalid when committing an empty value', () => {
+      setInputValue(datePicker, '1/1/2000');
+      enter(datePicker.inputElement);
+      setInputValue(datePicker, '');
+      enter(datePicker.inputElement);
+      expect(datePicker.invalid).to.be.true;
     });
   });
 
@@ -237,46 +247,39 @@ describe('form input', () => {
 
     it('should pass validation without value', () => {
       expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.validate()).to.be.true;
     });
 
     it('should fail validation with a value < min', () => {
       datePicker.value = '2000-01-01';
       expect(datePicker.checkValidity()).to.be.false;
-      expect(datePicker.validate()).to.be.false;
     });
 
     it('should pass validation with a value > min', () => {
       datePicker.value = '2020-01-01';
       expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.validate()).to.be.true;
     });
 
     it('should pass validation with a value = min', () => {
       datePicker.value = '2010-01-01';
       expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.validate()).to.be.true;
     });
 
-    it('should fail validation when the entered value < min', async () => {
+    it('should be invalid when committing a value < min', () => {
       setInputValue(datePicker, '1/1/2000');
-      await close(datePicker);
-      expect(datePicker.checkValidity()).to.be.false;
-      expect(datePicker.validate()).to.be.false;
+      enter(datePicker.inputElement);
+      expect(datePicker.invalid).to.be.true;
     });
 
-    it('should pass validation when the entered value > min', async () => {
+    it('should be valid when committing a value > min', () => {
       setInputValue(datePicker, '1/1/2022');
-      await close(datePicker);
-      expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.validate()).to.be.true;
+      enter(datePicker.inputElement);
+      expect(datePicker.invalid).to.be.false;
     });
 
-    it('should pass validation when the entered value = min', async () => {
+    it('should be valid when committing a value = min', () => {
       setInputValue(datePicker, '1/1/2022');
-      await close(datePicker);
-      expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.validate()).to.be.true;
+      enter(datePicker.inputElement);
+      expect(datePicker.invalid).to.be.false;
     });
   });
 
@@ -287,46 +290,39 @@ describe('form input', () => {
 
     it('should pass validation without value', () => {
       expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.validate()).to.be.true;
     });
 
     it('should fail validation with a value > max', () => {
       datePicker.value = '2020-01-01';
       expect(datePicker.checkValidity()).to.be.false;
-      expect(datePicker.validate()).to.be.false;
     });
 
     it('should pass validation with a value < max', () => {
       datePicker.value = '2000-01-01';
       expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.validate()).to.be.true;
     });
 
     it('should pass validation with a value = max', () => {
       datePicker.value = '2010-01-01';
       expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.validate()).to.be.true;
     });
 
-    it('should fail validation when the entered value > max', async () => {
+    it('should be invalid when committing a value > max', () => {
       setInputValue(datePicker, '1/1/2022');
-      await close(datePicker);
-      expect(datePicker.checkValidity()).to.be.false;
-      expect(datePicker.validate()).to.be.false;
+      enter(datePicker.inputElement);
+      expect(datePicker.invalid).to.be.true;
     });
 
-    it('should pass validation when the entered value < max', async () => {
+    it('should be valid when committing a value < max', () => {
       setInputValue(datePicker, '1/1/2000');
-      await close(datePicker);
-      expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.validate()).to.be.true;
+      enter(datePicker.inputElement);
+      expect(datePicker.invalid).to.be.false;
     });
 
-    it('should pass validation when the entered value = max', async () => {
+    it('should be valid when committing a value = max', () => {
       setInputValue(datePicker, '1/1/2010');
-      await close(datePicker);
-      expect(datePicker.checkValidity()).to.be.true;
-      expect(datePicker.validate()).to.be.true;
+      enter(datePicker.inputElement);
+      expect(datePicker.invalid).to.be.false;
     });
   });
 
