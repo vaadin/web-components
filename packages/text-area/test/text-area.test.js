@@ -222,20 +222,19 @@ describe('text-area', () => {
   describe('prevent invalid input', () => {
     beforeEach(() => {
       textArea.preventInvalidInput = true;
-      textArea.value = '1';
       textArea.inputElement.focus();
     });
 
     it('should prevent non matching input', async () => {
       textArea.pattern = '[0-9]*';
       await sendKeys({ type: 'f' });
-      expect(textArea.inputElement.value).to.equal('1');
+      expect(textArea.inputElement.value).to.equal('');
     });
 
     it('should not prevent input when pattern is invalid', async () => {
       textArea.pattern = '[0-9])))]*';
       await sendKeys({ type: 'f' });
-      expect(textArea.inputElement.value).to.equal('1f');
+      expect(textArea.inputElement.value).to.equal('f');
     });
   });
 
