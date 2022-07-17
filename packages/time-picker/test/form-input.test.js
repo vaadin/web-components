@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusout, nextRender } from '@vaadin/testing-helpers';
+import { enter, fixtureSync, focusout, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { TimePicker } from '../src/vaadin-time-picker.js';
 import { setInputValue } from './helpers.js';
@@ -13,9 +13,9 @@ class TimePicker20Element extends TimePicker {
 customElements.define('vaadin-time-picker-20', TimePicker20Element);
 
 describe('form input', () => {
-  let timePicker, comboBox, inputElement;
+  let timePicker;
 
-  describe('initial validation', () => {
+  describe('initial', () => {
     let validateSpy;
 
     beforeEach(() => {
@@ -49,135 +49,38 @@ describe('form input', () => {
     });
   });
 
-  describe('default validator', () => {
+  describe('basic', () => {
+    let validateSpy;
+
     beforeEach(() => {
       timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
-      comboBox = timePicker.$.comboBox;
-      inputElement = timePicker.inputElement;
+      validateSpy = sinon.spy(timePicker, 'validate');
     });
 
-    it('should have synced invalid property with input on validation with required flag', () => {
-      timePicker.name = 'foo';
-      timePicker.required = true;
-      timePicker.min = '14:00';
-      timePicker.value = '13:00';
-      comboBox.dispatchEvent(new CustomEvent('change', { bubbles: true }));
-
-      expect(inputElement.hasAttribute('invalid')).to.be.true;
-
-      timePicker.value = '12:00';
-      expect(inputElement.hasAttribute('invalid')).to.be.true;
+    it('should pass validation by default', () => {
+      expect(timePicker.checkValidity()).to.be.true;
+      expect(timePicker.validate()).to.be.true;
     });
 
-    it('should validate correctly with required flag', () => {
-      timePicker.name = 'foo';
-      timePicker.required = true;
-
-      expect(timePicker.validate()).to.equal(false);
-      expect(timePicker.invalid).to.be.equal(true);
-
-      timePicker.value = '13:00';
-      expect(timePicker.validate()).to.equal(true);
-      expect(timePicker.invalid).to.be.equal(false);
+    it('should not validate on value input', () => {
+      setInputValue(timePicker, '12:00');
+      expect(validateSpy.calledOnce).to.be.false;
     });
 
-    it('should validate correctly with required flag on focusout', () => {
-      timePicker.name = 'foo';
-      timePicker.required = true;
-
-      focusout(inputElement);
-      expect(timePicker.invalid).to.be.equal(true);
+    it('should validate on value commit', () => {
+      setInputValue(timePicker, '12:00');
+      enter(timePicker.inputElement);
+      expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should respect min value during validation', () => {
-      timePicker.step = '0.5';
-      timePicker.min = '01:00';
-      timePicker.value = '00:59:59.500';
-
-      expect(timePicker.validate()).to.equal(false);
-      expect(timePicker.invalid).to.be.equal(true);
-
-      timePicker.value = '01:00:00.000';
-      expect(timePicker.validate()).to.equal(true);
-      expect(timePicker.invalid).to.be.equal(false);
-    });
-
-    it('should respect max value during validation', () => {
-      timePicker.step = '0.5';
-      timePicker.max = '01:00';
-      timePicker.value = '01:00:00.500';
-
-      expect(timePicker.validate()).to.equal(false);
-      expect(timePicker.invalid).to.be.equal(true);
-
-      timePicker.value = '01:00:00.000';
-      expect(timePicker.validate()).to.equal(true);
-      expect(timePicker.invalid).to.be.equal(false);
-    });
-
-    it('should not mark empty input as invalid', () => {
-      expect(timePicker.validate()).to.equal(true);
-
-      setInputValue(timePicker, '22:00');
-      expect(timePicker.validate()).to.equal(true);
-
-      setInputValue(timePicker, '');
-      expect(timePicker.validate()).to.equal(true);
-    });
-
-    it('should validate correctly with pattern regexp', () => {
-      timePicker.pattern = '^1\\d:.*';
-
-      timePicker.value = '20:01';
-      expect(timePicker.validate()).to.equal(false);
-      expect(timePicker.invalid).to.equal(true);
-
-      timePicker.value = '11:00';
-      expect(inputElement.value).to.equal('11:00');
-      expect(timePicker.validate()).to.equal(true);
-      expect(timePicker.invalid).to.equal(false);
-    });
-
-    it('should prevent invalid input', () => {
-      timePicker.pattern = '^1\\d:.*';
-      timePicker.preventInvalidInput = true;
-
-      setInputValue(timePicker, '22:00');
-      expect(inputElement.value).to.be.not.ok;
-
-      setInputValue(timePicker, '12:34');
-      expect(inputElement.value).to.equal('12:34');
+    it('should validate on input focusout', () => {
+      focusout(timePicker.inputElement);
+      expect(validateSpy.calledOnce).to.be.true;
     });
 
     it('should be possible to force invalid status', () => {
       timePicker.invalid = true;
-      expect(inputElement.hasAttribute('invalid')).to.be.true;
-    });
-
-    it('should display the error-message when invalid', () => {
-      timePicker.invalid = true;
-      timePicker.errorMessage = 'Not cool';
-      expect(timePicker.hasAttribute('has-error-message')).to.be.true;
-    });
-
-    it('should validate keyboard input (invalid)', () => {
-      setInputValue(timePicker, 'foo');
-      expect(timePicker.invalid).to.be.equal(false);
-      focusout(comboBox);
-      expect(timePicker.invalid).to.be.equal(true);
-    });
-
-    it('should validate keyboard input (valid)', () => {
-      setInputValue(timePicker, '12:00');
-      focusout(comboBox);
-      expect(timePicker.invalid).to.be.equal(false);
-    });
-
-    it('should validate keyboard input (disallowed value)', () => {
-      setInputValue(timePicker, '99:00');
-      expect(timePicker.invalid).to.be.equal(false);
-      focusout(comboBox);
-      expect(timePicker.invalid).to.be.equal(true);
+      expect(timePicker.inputElement.hasAttribute('invalid')).to.be.true;
     });
 
     it('should fire a validated event on validation success', () => {
@@ -199,6 +102,189 @@ describe('form input', () => {
       expect(validatedSpy.calledOnce).to.be.true;
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
+    });
+  });
+
+  describe('input value', () => {
+    beforeEach(() => {
+      timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
+    });
+
+    it('should be valid when committing a valid time', () => {
+      setInputValue(timePicker, '12:00');
+      enter(timePicker.inputElement);
+      expect(timePicker.invalid).to.be.false;
+    });
+
+    it('should be invalid when trying to commit an invalid time', () => {
+      setInputValue(timePicker, 'foo');
+      enter(timePicker.inputElement);
+      expect(timePicker.invalid).to.be.true;
+    });
+
+    it('should set an empty value when trying to commit an invalid time', () => {
+      timePicker.value = '12:00';
+      setInputValue(timePicker, 'foo');
+      enter(timePicker.inputElement);
+      expect(timePicker.value).to.equal('');
+      expect(timePicker.inputElement.value).to.equal('foo');
+    });
+  });
+
+  describe('required', () => {
+    beforeEach(() => {
+      timePicker = fixtureSync(`<vaadin-time-picker required></vaadin-time-picker>`);
+    });
+
+    it('should fail validation without value', () => {
+      expect(timePicker.checkValidity()).to.be.false;
+    });
+
+    it('should pass validation with a valid value', () => {
+      timePicker.value = '12:00';
+      expect(timePicker.checkValidity()).to.be.true;
+    });
+
+    it('should be valid when committing a non-empty value', () => {
+      setInputValue(timePicker, '12:00');
+      enter(timePicker.inputElement);
+      expect(timePicker.invalid).to.be.false;
+    });
+
+    it('should be invalid when committing an empty value', () => {
+      setInputValue(timePicker, '12:00');
+      enter(timePicker.inputElement);
+      setInputValue(timePicker, '');
+      enter(timePicker.inputElement);
+      expect(timePicker.invalid).to.be.true;
+    });
+  });
+
+  describe('min', () => {
+    beforeEach(() => {
+      timePicker = fixtureSync(`<vaadin-time-picker min="10:00"></vaadin-time-picker>`);
+    });
+
+    it('should pass validation without value', () => {
+      expect(timePicker.checkValidity()).to.be.true;
+    });
+
+    it('should fail validation with a value < min', () => {
+      timePicker.value = '08:00';
+      expect(timePicker.checkValidity()).to.be.false;
+    });
+
+    it('should pass validation with a value > min', () => {
+      timePicker.value = '12:00';
+      expect(timePicker.checkValidity()).to.be.true;
+    });
+
+    it('should pass validation with a value = min', () => {
+      timePicker.value = '10:00';
+      expect(timePicker.checkValidity()).to.be.true;
+    });
+
+    it('should be invalid when committing a value < min', () => {
+      setInputValue(timePicker, '08:00');
+      enter(timePicker.inputElement);
+      expect(timePicker.invalid).to.be.true;
+    });
+
+    it('should be valid when committing a value > min', () => {
+      setInputValue(timePicker, '12:00');
+      enter(timePicker.inputElement);
+      expect(timePicker.invalid).to.be.false;
+    });
+
+    it('should be valid when committing a value = min', () => {
+      setInputValue(timePicker, '10:00');
+      enter(timePicker.inputElement);
+      expect(timePicker.invalid).to.be.false;
+    });
+  });
+
+  describe('max', () => {
+    beforeEach(() => {
+      timePicker = fixtureSync(`<vaadin-time-picker max="10:00"></vaadin-time-picker>`);
+    });
+
+    it('should pass validation without value', () => {
+      expect(timePicker.checkValidity()).to.be.true;
+    });
+
+    it('should fail validation with a value > max', () => {
+      timePicker.value = '12:00';
+      expect(timePicker.checkValidity()).to.be.false;
+    });
+
+    it('should pass validation with a value < max', () => {
+      timePicker.value = '08:00';
+      expect(timePicker.checkValidity()).to.be.true;
+    });
+
+    it('should pass validation with a value = max', () => {
+      timePicker.value = '10:00';
+      expect(timePicker.checkValidity()).to.be.true;
+    });
+
+    it('should be invalid when committing a value > max', () => {
+      setInputValue(timePicker, '12:00');
+      enter(timePicker.inputElement);
+      expect(timePicker.invalid).to.be.true;
+    });
+
+    it('should be valid when committing a value < max', () => {
+      setInputValue(timePicker, '08:00');
+      enter(timePicker.inputElement);
+      expect(timePicker.invalid).to.be.false;
+    });
+
+    it('should be valid when committing a value = max', () => {
+      setInputValue(timePicker, '10:00');
+      enter(timePicker.inputElement);
+      expect(timePicker.invalid).to.be.false;
+    });
+  });
+
+  describe('pattern', () => {
+    beforeEach(() => {
+      timePicker = fixtureSync(`<vaadin-time-picker pattern="^1\\d:.*"></vaadin-time-picker>`);
+    });
+
+    it('should pass validation without value', () => {
+      expect(timePicker.checkValidity()).to.be.true;
+    });
+
+    it('should fail validation with a value not matching the pattern', () => {
+      timePicker.value = '20:00';
+      expect(timePicker.checkValidity()).to.be.false;
+    });
+
+    it('should pass validation with a value matching the pattern', () => {
+      timePicker.value = '10:00';
+      expect(timePicker.checkValidity()).to.be.true;
+    });
+
+    it('should be invalid when committing a value not matching the pattern', () => {
+      setInputValue(timePicker, '20:00');
+      enter(timePicker.inputElement);
+      expect(timePicker.invalid).to.be.true;
+    });
+
+    it('should be valid when committing a value matching the pattern', () => {
+      setInputValue(timePicker, '10:00');
+      enter(timePicker.inputElement);
+      expect(timePicker.invalid).to.be.false;
+    });
+
+    it('should prevent invalid input', () => {
+      timePicker.preventInvalidInput = true;
+
+      setInputValue(timePicker, '22:00');
+      expect(timePicker.inputElement.value).to.be.not.ok;
+
+      setInputValue(timePicker, '12:34');
+      expect(timePicker.inputElement.value).to.equal('12:34');
     });
   });
 
