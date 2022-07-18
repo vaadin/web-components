@@ -531,8 +531,12 @@ class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))
 
         if (child.localName === 'vaadin-form-item') {
           if (this._labelsOnTop) {
-            child.setAttribute('label-position', 'top');
-          } else {
+            if (child.getAttribute('label-position') !== 'top') {
+              child.__useLayoutLabelPosition = true;
+              child.setAttribute('label-position', 'top');
+            }
+          } else if (child.__useLayoutLabelPosition) {
+            delete child.__useLayoutLabelPosition;
             child.removeAttribute('label-position');
           }
         }
