@@ -16,8 +16,23 @@ describe('vaadin-combo-box', () => {
       await expect(comboBox).dom.to.equalSnapshot();
     });
 
+    it('disabled', async () => {
+      comboBox.disabled = true;
+      await expect(comboBox).dom.to.equalSnapshot();
+    });
+
     it('placeholder', async () => {
       comboBox.placeholder = 'Placeholder';
+      await expect(comboBox).dom.to.equalSnapshot();
+    });
+
+    it('readonly', async () => {
+      comboBox.readonly = true;
+      await expect(comboBox).dom.to.equalSnapshot();
+    });
+
+    it('required', async () => {
+      comboBox.required = true;
       await expect(comboBox).dom.to.equalSnapshot();
     });
 
