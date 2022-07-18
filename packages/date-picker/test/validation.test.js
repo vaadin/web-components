@@ -13,7 +13,7 @@ class DatePicker2016 extends DatePicker {
 
 customElements.define('vaadin-date-picker-2016', DatePicker2016);
 
-describe('form input', () => {
+describe('validation', () => {
   let datePicker;
 
   describe('initial', () => {
