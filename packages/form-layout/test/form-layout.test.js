@@ -301,6 +301,31 @@ describe('form layout', () => {
       expect(layout.children[2].getAttribute('label-position')).to.equal('top');
     });
 
+    describe('custom label-position', () => {
+      beforeEach(async () => {
+        const item = document.createElement('vaadin-form-item');
+        item.setAttribute('label-position', 'top');
+        layout.insertBefore(item, layout.lastElementChild);
+        await nextRender();
+      });
+
+      it('should not remove custom label-position attribute on added form-item elements', () => {
+        expect(layout.children[3].getAttribute('label-position')).to.equal('top');
+      });
+
+      it('should not remove custom label-position attribute after updating responsive steps', () => {
+        layout.responsiveSteps = [{ columns: 1, labelsPosition: 'top' }];
+
+        expect(layout.children[2].getAttribute('label-position')).to.equal('top');
+        expect(layout.children[3].getAttribute('label-position')).to.equal('top');
+
+        layout.responsiveSteps = [{ columns: 1 }];
+
+        expect(layout.children[2].getAttribute('label-position')).to.be.null;
+        expect(layout.children[3].getAttribute('label-position')).to.equal('top');
+      });
+    });
+
     describe('responsive', () => {
       beforeEach(() => {
         document.body.style.minWidth = '0';
