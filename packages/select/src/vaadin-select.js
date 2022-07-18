@@ -164,7 +164,7 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
         >
           <slot name="prefix" slot="prefix"></slot>
           <slot name="value"></slot>
-          <div part="toggle-button" slot="suffix" aria-hidden="true"></div>
+          <div part="toggle-button" slot="suffix" aria-hidden="true" on-mousedown="_onToggleMouseDown"></div>
         </vaadin-input-container>
 
         <div part="helper-text">
@@ -496,6 +496,13 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
     event.preventDefault();
 
     this.opened = !this.readonly;
+  }
+
+  /** @private */
+  _onToggleMouseDown(event) {
+    // Prevent mousedown event to avoid blur and preserve focused state
+    // while opening, and to restore focus-ring attribute on closing.
+    event.preventDefault();
   }
 
   /**
