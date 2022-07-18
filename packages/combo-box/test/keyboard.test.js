@@ -150,7 +150,7 @@ describe('keyboard', () => {
         };
         document.body.appendChild(focusable);
 
-        // Workaround Firefox sendKeys bug
+        // Workaround Playwright sendKeys bug
         focusable.focus();
         input.focus();
         arrowDownKeyDown(input);
