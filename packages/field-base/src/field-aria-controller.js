@@ -139,7 +139,7 @@ export class FieldAriaController {
       return;
     }
 
-    if (!this.__isGroupField) {
+    if (['input', 'textarea'].includes(this.__target.localName)) {
       // native <input> or <textarea>, required is enough
       return;
     }
