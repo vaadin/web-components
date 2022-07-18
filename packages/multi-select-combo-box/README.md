@@ -1,7 +1,5 @@
 # @vaadin/multi-select-combo-box
 
-> ⚠️ Work in progress, please do not use this component yet.
-
 A web component that wraps `<vaadin-combo-box>` and allows selecting multiple items.
 
 ```html
