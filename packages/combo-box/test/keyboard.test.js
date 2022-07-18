@@ -622,4 +622,24 @@ describe('keyboard', () => {
       expect(keyDownSpy.called).to.be.true;
     });
   });
+
+  describe('enter key behavior', () => {
+    let keydownEvent;
+
+    beforeEach(() => {
+      // Fake a keydown event to mimic form submit.
+      keydownEvent = keyboardEventFor('keydown', 13, [], 'Enter');
+    });
+
+    it('should prevent default on open combobox', () => {
+      comboBox.open();
+      comboBox.dispatchEvent(keydownEvent);
+      expect(keydownEvent.defaultPrevented).to.be.true;
+    });
+
+    it('should not prevent default on closed combobox', () => {
+      comboBox.dispatchEvent(keydownEvent);
+      expect(keydownEvent.defaultPrevented).to.be.false;
+    });
+  });
 });
