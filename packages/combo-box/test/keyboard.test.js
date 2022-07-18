@@ -134,32 +134,31 @@ describe('keyboard', () => {
     });
 
     describe('focusable items content', () => {
-      let button;
+      let focusable;
 
       beforeEach(() => {
-        button = document.createElement('button');
-        button.textContent = 'Button';
+        focusable = document.createElement('input');
       });
 
       afterEach(() => {
-        button.remove();
+        focusable.remove();
       });
 
       it('should tab to the next focusable when items have focusable content', async () => {
         comboBox.renderer = (root) => {
           root.innerHTML = '<input>';
         };
-        document.body.appendChild(button);
+        document.body.appendChild(focusable);
 
-        // Workaround Firefox sendKeys bug
-        button.focus();
+        // Workaround Playwright sendKeys bug
+        focusable.focus();
         input.focus();
         arrowDownKeyDown(input);
 
         await aTimeout(0);
 
         await sendKeys({ press: 'Tab' });
-        expect(document.activeElement).to.equal(button);
+        expect(document.activeElement).to.equal(focusable);
       });
     });
   });
