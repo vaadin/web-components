@@ -539,13 +539,6 @@ describe('clear button', () => {
     expect(datepicker.value).to.equal('');
   });
 
-  it('should validate on clear', () => {
-    datepicker.required = true;
-    datepicker.value = '1991-20-12';
-    click(clearButton);
-    expect(datepicker.invalid).to.equal(true);
-  });
-
   it('should remove has-value attribute on clear', () => {
     datepicker.value = '2000-02-01';
     click(clearButton);

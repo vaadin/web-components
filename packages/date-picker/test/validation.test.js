@@ -76,6 +76,17 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
+    it('should validate on clear button click', () => {
+      datePicker.clearButtonVisible = true;
+      // Set invalid value.
+      setInputValue(datePicker, 'foo');
+      enter(datePicker.inputElement);
+      validateSpy.resetHistory();
+      datePicker.$.clearButton.click();
+      expect(validateSpy.calledOnce).to.be.true;
+      expect(datePicker.invalid).to.be.false;
+    });
+
     it('should validate on value change', () => {
       datePicker.value = '2020-01-01';
       expect(validateSpy.calledOnce).to.be.true;
