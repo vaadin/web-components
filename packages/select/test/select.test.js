@@ -307,6 +307,13 @@ describe('vaadin-select', () => {
         expect(event.defaultPrevented).to.be.true;
       });
 
+      it('should prevent default for the toggle button mousedown', () => {
+        const e = new CustomEvent('mousedown', { bubbles: true });
+        const spy = sinon.spy(e, 'preventDefault');
+        select.shadowRoot.querySelector('[part=toggle-button]').dispatchEvent(e);
+        expect(spy.calledOnce).to.be.true;
+      });
+
       it('should open the overlay on ArrowUp', () => {
         arrowUp(valueButton);
         expect(select.opened).to.be.true;
