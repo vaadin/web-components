@@ -87,49 +87,6 @@ describe('keyboard', () => {
     });
   });
 
-  describe('invalid date', () => {
-    it('should not select date on Enter if input invalid', async () => {
-      await open(datepicker);
-      await sendKeys({ type: 'foo' });
-      await sendKeys({ press: 'Enter' });
-      expect(datepicker.invalid).to.be.true;
-      expect(datepicker.checkValidity()).to.be.false;
-      expect(datepicker.value).to.equal('');
-      expect(input.value).to.equal('foo');
-    });
-
-    it('should validate on blur when not opened', async () => {
-      await sendKeys({ type: 'foo' });
-      await close(datepicker);
-      // Wait for overlay to finish closing
-      await nextRender(datepicker);
-      expect(datepicker.invalid).to.be.true;
-      expect(datepicker.checkValidity()).to.be.false;
-
-      // Clear the invalid input
-      input.select();
-      await sendKeys({ press: 'Backspace' });
-      const spy = sinon.spy(datepicker, 'validate');
-      input.blur();
-      expect(spy.callCount).to.equal(1);
-      expect(datepicker.invalid).to.be.false;
-    });
-
-    it('should validate on clear button', async () => {
-      datepicker.clearButtonVisible = true;
-      await sendKeys({ type: 'foo' });
-      await close(datepicker);
-      // Wait for overlay to finish closing. Without this, clear button click
-      // will trigger "close()" again, which will result in infinite loop.
-      await nextRender(datepicker);
-      const spy = sinon.spy(datepicker, 'validate');
-      datepicker.$.clearButton.click();
-      expect(spy.callCount).to.equal(1);
-      expect(datepicker.invalid).to.be.false;
-      expect(datepicker.checkValidity()).to.be.true;
-    });
-  });
-
   describe('no parseDate', () => {
     beforeEach(() => {
       datepicker.i18n = {
