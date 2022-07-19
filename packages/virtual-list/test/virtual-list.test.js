@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../vaadin-virtual-list.js';
 
 describe('virtual-list', () => {
@@ -123,6 +123,24 @@ describe('virtual-list', () => {
       name = 'bar';
       list.requestContentUpdate();
       expect(list.children[0].textContent.trim()).to.equal('bar');
+    });
+
+    describe('overflow attribute', () => {
+      it('should set overflow attribute to "bottom" when scroll is at the beginning', () => {
+        expect(list.getAttribute('overflow')).to.equal('bottom');
+      });
+
+      it('should set overflow attribute to "top bottom" when scroll is at the middle', async () => {
+        list.scrollToIndex(50);
+        await nextFrame();
+        expect(list.getAttribute('overflow')).to.equal('top bottom');
+      });
+
+      it('should set overflow attribute to "start" when scroll is at the end', async () => {
+        list.scrollToIndex(100);
+        await nextFrame();
+        expect(list.getAttribute('overflow')).to.equal('top');
+      });
     });
   });
 });

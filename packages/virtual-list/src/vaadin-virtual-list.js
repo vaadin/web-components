@@ -4,7 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -24,13 +26,20 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * }
  * ```
  *
+ * The following state attributes are available for styling:
+ *
+ * Attribute        | Description
+ * -----------------|--------------------------------------------
+ * `overflow`       | Set to `top`, `bottom`, both, or none.
+ *
  * See [Virtual List](https://vaadin.com/docs/latest/ds/components/virtual-list) documentation.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
+class VirtualList extends ElementMixin(ControllerMixin(ThemableMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -104,18 +113,10 @@ class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
       scrollContainer: this.shadowRoot.querySelector('#items'),
     });
 
+    this.__overflowController = new OverflowController(this);
+    this.addController(this.__overflowController);
+
     processTemplates(this);
-
-    // Update overflow attribute on resize
-    this.__resizeObserver = new ResizeObserver(() => {
-      this.__updateOverflow();
-    });
-    this.__resizeObserver.observe(this);
-
-    // Update overflow attribute on scroll
-    this.addEventListener('scroll', () => {
-      this.__updateOverflow();
-    });
   }
 
   /**
@@ -167,8 +168,6 @@ class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
       virtualizer.size = (items || []).length;
       virtualizer.update();
     }
-
-    this.__updateOverflow();
   }
 
   /**
@@ -198,26 +197,6 @@ class VirtualList extends ElementMixin(ThemableMixin(PolymerElement)) {
   requestContentUpdate() {
     if (this.__virtualizer) {
       this.__virtualizer.update();
-    }
-  }
-
-  /** @private */
-  __updateOverflow() {
-    let overflow = '';
-
-    if (this.scrollTop > 0) {
-      overflow += ' top';
-    }
-
-    if (this.scrollTop < this.scrollHeight - this.clientHeight) {
-      overflow += ' bottom';
-    }
-
-    const value = overflow.trim();
-    if (value.length > 0 && this.getAttribute('overflow') !== value) {
-      this.setAttribute('overflow', value);
-    } else if (value.length === 0 && this.hasAttribute('overflow')) {
-      this.removeAttribute('overflow');
     }
   }
 }
