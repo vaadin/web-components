@@ -4,8 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -22,13 +24,15 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * -------------| -----------
  * `focus-ring` | Set when the element is focused using the keyboard.
  * `focused`    | Set when the element is focused.
+ * `overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.
  *
  * @extends HTMLElement
  * @mixes ThemableMixin
+ * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes FocusMixin
  */
-class Scroller extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class Scroller extends FocusMixin(ElementMixin(ControllerMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -89,24 +93,8 @@ class Scroller extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   ready() {
     super.ready();
 
-    // Update overflow attribute on resize
-    this.__resizeObserver = new ResizeObserver(() => {
-      this.__updateOverflow();
-    });
-    this.__resizeObserver.observe(this);
-
-    // Update overflow attribute on DOM mutations
-    this.__mutationObserver = new MutationObserver(() => {
-      this.__updateOverflow();
-    });
-    this.__mutationObserver.observe(this, { childList: true, subtree: true });
-
-    // Update overflow attribute on scroll
-    this.addEventListener('scroll', () => {
-      this.__updateOverflow();
-    });
-
-    this.__updateOverflow();
+    this.__overflowController = new OverflowController(this);
+    this.addController(this.__overflowController);
   }
 
   /**
@@ -118,35 +106,6 @@ class Scroller extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
    */
   _shouldSetFocus(event) {
     return event.target === this;
-  }
-
-  /** @private */
-  __updateOverflow() {
-    let overflow = '';
-
-    if (this.scrollTop > 0) {
-      overflow += ' top';
-    }
-
-    if (this.scrollTop < this.scrollHeight - this.clientHeight) {
-      overflow += ' bottom';
-    }
-
-    // Use Math.abs to account for RTL
-    if (Math.abs(this.scrollLeft) > 0) {
-      overflow += ' start';
-    }
-
-    if (Math.abs(this.scrollLeft) < this.scrollWidth - this.clientWidth) {
-      overflow += ' end';
-    }
-
-    const value = overflow.trim();
-    if (value.length > 0 && this.getAttribute('overflow') !== value) {
-      this.setAttribute('overflow', value);
-    } else if (value.length === 0 && this.hasAttribute('overflow')) {
-      this.removeAttribute('overflow');
-    }
   }
 }
 

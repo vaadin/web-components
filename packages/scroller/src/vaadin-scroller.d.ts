@@ -3,6 +3,7 @@
  * Copyright (c) 2020 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -23,7 +24,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `focused`    | Set when the element is focused.
  * `overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.
  */
-declare class Scroller extends FocusMixin(ThemableMixin(ElementMixin(HTMLElement))) {
+declare class Scroller extends FocusMixin(ThemableMixin(ElementMixin(ControllerMixin(HTMLElement)))) {
   /**
    * This property indicates the scroll direction. Supported values are `vertical`, `horizontal`, `none`.
    * When `scrollDirection` is undefined scrollbars will be shown in both directions.
