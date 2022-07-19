@@ -127,22 +127,31 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.true;
     });
 
-    it('should be hidden with null items', () => {
+    it('should not open overlay when setting items to null', () => {
       comboBox.items = null;
 
       comboBox.open();
 
       expect(comboBox.opened).to.be.true;
-      expect(overlay.hasAttribute('hidden')).to.be.true;
+      expect(overlay.opened).to.be.false;
     });
 
-    it('should be hidden with no items', () => {
+    it('should not open overlay when setting empty items array', () => {
       comboBox.items = [];
 
       comboBox.open();
 
       expect(comboBox.opened).to.be.true;
-      expect(overlay.hasAttribute('hidden')).to.be.true;
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not open overlay when setting empty filteredItems array', () => {
+      comboBox.filteredItems = [];
+
+      comboBox.open();
+
+      expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.false;
     });
 
     (isIOS ? describe : describe.skip)('after opening', () => {
@@ -319,24 +328,6 @@ describe('toggling dropdown', () => {
 
     it('dropdown should not be shown when read-only', () => {
       click(input);
-      expect(comboBox.opened).to.be.false;
-    });
-  });
-
-  describe('empty list', () => {
-    it('vaadin-combo-box-overlay should not be attached when filteredItems is empty', () => {
-      comboBox.open();
-      expect(comboBox.opened).to.be.true;
-      expect(document.querySelector('vaadin-combo-box-overlay')).to.be.ok;
-      comboBox.close();
-      expect(comboBox.opened).to.be.false;
-      expect(document.querySelector('vaadin-combo-box-overlay')).not.to.be.ok;
-
-      comboBox.filteredItems = [];
-      comboBox.open();
-      expect(comboBox.opened).to.be.true;
-      expect(document.querySelector('vaadin-combo-box-overlay')).not.to.be.ok;
-      comboBox.close();
       expect(comboBox.opened).to.be.false;
     });
   });

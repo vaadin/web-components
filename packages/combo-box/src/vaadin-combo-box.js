@@ -202,7 +202,6 @@ class ComboBox extends ComboBoxDataProviderMixin(
 
       <vaadin-combo-box-overlay
         id="overlay"
-        hidden$="[[_isOverlayHidden(filteredItems, loading)]]"
         opened="[[_overlayOpened]]"
         loading$="[[loading]]"
         theme$="[[_theme]]"
