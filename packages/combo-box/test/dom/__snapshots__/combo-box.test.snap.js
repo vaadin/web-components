@@ -439,7 +439,6 @@ snapshots["vaadin-combo-box shadow default"] =
   </div>
 </div>
 <vaadin-combo-box-overlay
-  hidden=""
   id="overlay"
   no-vertical-overlap=""
 >
@@ -500,7 +499,6 @@ snapshots["vaadin-combo-box shadow disabled"] =
   </div>
 </div>
 <vaadin-combo-box-overlay
-  hidden=""
   id="overlay"
   no-vertical-overlap=""
 >
@@ -561,7 +559,6 @@ snapshots["vaadin-combo-box shadow readonly"] =
   </div>
 </div>
 <vaadin-combo-box-overlay
-  hidden=""
   id="overlay"
   no-vertical-overlap=""
 >
@@ -622,7 +619,6 @@ snapshots["vaadin-combo-box shadow invalid"] =
   </div>
 </div>
 <vaadin-combo-box-overlay
-  hidden=""
   id="overlay"
   no-vertical-overlap=""
 >
@@ -683,7 +679,6 @@ snapshots["vaadin-combo-box shadow theme"] =
   </div>
 </div>
 <vaadin-combo-box-overlay
-  hidden=""
   id="overlay"
   no-vertical-overlap=""
   theme="align-right"
