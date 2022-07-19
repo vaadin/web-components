@@ -8,6 +8,7 @@ import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mix
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { ComboBoxDataProviderMixinClass } from './vaadin-combo-box-data-provider-mixin.js';
 import type { ComboBoxDefaultItem, ComboBoxMixinClass } from './vaadin-combo-box-mixin.js';
 export {
@@ -151,6 +152,7 @@ interface ComboBoxLight<TItem = ComboBoxDefaultItem>
     InputMixinClass,
     DisabledMixinClass,
     ThemableMixinClass,
+    ThemePropertyMixinClass,
     ValidateMixinClass {}
 
 declare global {

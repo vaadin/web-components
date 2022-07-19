@@ -23,6 +23,7 @@ import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 export type MultiSelectComboBoxRenderer<TItem> = (
   root: HTMLElement,
@@ -343,6 +344,7 @@ interface MultiSelectComboBox
     DelegateFocusMixinClass,
     ResizeMixinClass,
     ThemableMixinClass,
+    ThemePropertyMixinClass,
     ElementMixinClass,
     ControllerMixinClass {}
 
