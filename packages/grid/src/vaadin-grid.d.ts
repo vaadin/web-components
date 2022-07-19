@@ -6,6 +6,7 @@
 import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import type { ActiveItemMixinClass } from './vaadin-grid-active-item-mixin.js';
 import type { ArrayDataProviderMixinClass } from './vaadin-grid-array-data-provider-mixin.js';
 import type { GridColumn } from './vaadin-grid-column.js';
@@ -393,6 +394,7 @@ interface Grid<TItem = GridDefaultItem>
   extends DisabledMixinClass,
     ElementMixinClass,
     ThemableMixinClass,
+    ThemePropertyMixinClass,
     ActiveItemMixinClass<TItem>,
     ArrayDataProviderMixinClass<TItem>,
     DataProviderMixinClass<TItem>,

@@ -185,6 +185,8 @@ assertType<boolean>(narrowedGrid.allRowsVisible);
 assertType<() => void>(narrowedGrid.recalculateColumnWidths);
 assertType<() => void>(narrowedGrid.requestContentUpdate);
 
+assertType<string | null | undefined>(narrowedGrid.theme);
+
 /* GridColumn */
 const genericColumn = document.createElement('vaadin-grid-column');
 assertType<GridColumn>(genericColumn);
