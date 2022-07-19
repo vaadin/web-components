@@ -31,8 +31,6 @@ export class OverflowController {
 
     /** @private */
     this.__boundOnScroll = this.__onScroll.bind(this);
-
-    this.observe();
   }
 
   hostConnected() {
