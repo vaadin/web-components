@@ -38,7 +38,7 @@ describe('virtual-list', () => {
   });
 
   describe('with items', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const size = 100;
 
       list.items = new Array(size).fill().map((e, i) => {
@@ -48,6 +48,8 @@ describe('virtual-list', () => {
       list.renderer = (el, list, model) => {
         el.textContent = model.item.value;
       };
+
+      await nextFrame();
     });
 
     it('should include div elements', () => {
