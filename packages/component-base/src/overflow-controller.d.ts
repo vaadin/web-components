@@ -24,6 +24,8 @@ export class OverflowController implements ReactiveController {
 
   constructor(host: HTMLElement, scrollTarget?: HTMLElement);
 
+  hostConnected(): void;
+
   /**
    * Setup a scroll listener and observers to update overflow.
    * Also performs one-time update synchronously when called.

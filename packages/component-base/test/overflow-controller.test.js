@@ -53,7 +53,7 @@ customElements.define(
 
 customElements.define(
   'overflow-wrapper-element',
-  class OverfloWrapperElement extends ControllerMixin(PolymerElement) {
+  class OverflowWrapperElement extends ControllerMixin(PolymerElement) {
     static get template() {
       return html`
         <style>

@@ -35,6 +35,12 @@ export class OverflowController {
     this.observe();
   }
 
+  hostConnected() {
+    if (!this.initialized) {
+      this.observe();
+    }
+  }
+
   /**
    * Setup scroll listener and observers to update overflow.
    * Also performs one-time update synchronously when called.
@@ -99,10 +105,10 @@ export class OverflowController {
       overflow += ' end';
     }
 
-    const value = overflow.trim();
-    if (value.length > 0 && this.host.getAttribute('overflow') !== value) {
-      this.host.setAttribute('overflow', value);
-    } else if (value.length === 0 && this.host.hasAttribute('overflow')) {
+    overflow = overflow.trim();
+    if (overflow.length > 0 && this.host.getAttribute('overflow') !== overflow) {
+      this.host.setAttribute('overflow', overflow);
+    } else if (overflow.length === 0 && this.host.hasAttribute('overflow')) {
       this.host.removeAttribute('overflow');
     }
   }
