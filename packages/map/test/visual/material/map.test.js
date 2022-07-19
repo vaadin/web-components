@@ -1,7 +1,6 @@
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '../../../enable';
 import '../../../theme/material/vaadin-map.js';
 import FullScreen from 'ol/control/FullScreen';
 import OverviewMap from 'ol/control/OverviewMap';

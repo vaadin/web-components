@@ -29,14 +29,6 @@ Once installed, import the component in your application:
 import '@vaadin/map';
 ```
 
-Map is currently an experimental feature and must be explicitly enabled through a feature flag.
-To do so, import the enabler module before the map component module itself:
-
-```js
-import '@vaadin/map/enable';
-import '@vaadin/map';
-```
-
 ## Contributing
 
 Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.

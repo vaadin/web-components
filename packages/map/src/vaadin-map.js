@@ -12,10 +12,6 @@ import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-function isEnabled() {
-  return window.Vaadin && window.Vaadin.featureFlags && !!window.Vaadin.featureFlags.mapComponent;
-}
-
 /**
  * `vaadin-map` is a web component for displaying web maps.
  *
@@ -460,12 +456,6 @@ class Map extends ResizeMixin(FocusMixin(ElementMixin(ThemableMixin(PolymerEleme
   }
 }
 
-if (isEnabled()) {
-  customElements.define(Map.is, Map);
-} else {
-  console.warn(
-    'WARNING: The map component is currently an experimental feature and needs to be explicitly enabled. To enable the component, `import "@vaadin/map/enable.js"` *before* importing the map module itself.',
-  );
-}
+customElements.define(Map.is, Map);
 
 export { Map };
