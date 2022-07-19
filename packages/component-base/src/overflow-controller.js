@@ -37,6 +37,8 @@ export class OverflowController {
 
   hostConnected() {
     if (!this.initialized) {
+      this.initialized = true;
+
       this.observe();
     }
   }
