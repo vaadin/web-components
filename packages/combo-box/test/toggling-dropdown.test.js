@@ -25,6 +25,7 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.false;
       tap(comboBox.querySelector('[slot="label"]'));
       expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
     });
 
     it('should not open synchronously by clicking label when autoOpenDisabled is true', () => {
@@ -32,6 +33,7 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.false;
       tap(comboBox.querySelector('[slot="label"]'));
       expect(comboBox.opened).to.be.false;
+      expect(overlay.opened).to.be.false;
     });
 
     it('should restore attribute focus-ring if it was initially set before opening and combo-box is focused', () => {
@@ -45,6 +47,7 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.false;
       tap(input);
       expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
     });
 
     it('should not open synchronously by clicking input when autoOpenDisabled is true', () => {
@@ -52,12 +55,14 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.false;
       tap(input);
       expect(comboBox.opened).to.be.false;
+      expect(overlay.opened).to.be.false;
     });
 
     it('should open by clicking icon', () => {
       clickToggleIcon();
 
       expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
     });
 
     it('should open by clicking icon when autoOpenDisabled is true and input is invalid', () => {
@@ -103,6 +108,7 @@ describe('toggling dropdown', () => {
       comboBox.open();
 
       expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
     });
 
     it('should set body `pointer-events: none` on open and restore initial value on close', () => {
@@ -232,7 +238,7 @@ describe('toggling dropdown', () => {
 
       focusout(input);
 
-      expect(comboBox.opened).to.equal(false);
+      expect(comboBox.opened).to.be.false;
     });
 
     it('should restore focus to the field on outside click', async () => {
