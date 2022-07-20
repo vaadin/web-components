@@ -395,13 +395,3 @@ registerStyles(
   `,
   { moduleId: 'lumo-grid' },
 );
-
-registerStyles(
-  'vaadin-checkbox',
-  css`
-    :host(.vaadin-grid-select-all-checkbox) {
-      font-size: var(--lumo-font-size-m);
-    }
-  `,
-  { moduleId: 'vaadin-grid-select-all-checkbox-lumo' },
-);
