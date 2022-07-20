@@ -8,15 +8,11 @@
     <script type="module" src="./common.js"></script>
   </head>
   <body>
-    <vaadin-grid-pro single-cell-edit>
-      <vaadin-grid-pro-edit-column path="name.first"></vaadin-grid-pro-edit-column>
-      <vaadin-grid-pro-edit-column path="name.last"></vaadin-grid-pro-edit-column>
-      <vaadin-grid-pro-edit-column
-        path="name.title"
-        editor-type="select"
-        editor-options='["mr", "mrs", "ms"]'
-      ></vaadin-grid-pro-edit-column>
-      <vaadin-grid-pro-edit-column path="married" editor-type="checkbox"></vaadin-grid-pro-edit-column>
+    <vaadin-grid-pro single-cell-edit theme="highlight-read-only-cells">
+      <vaadin-grid-pro-edit-column path="name.first" header="First (editable)"></vaadin-grid-pro-edit-column>
+      <vaadin-grid-pro-edit-column path="name.last" header="Last (editable)"></vaadin-grid-pro-edit-column>
+      <vaadin-grid-column path="name.first"></vaadin-grid-column>
+      <vaadin-grid-column path="name.last"></vaadin-grid-column>
     </vaadin-grid-pro>
 
     <script type="module">

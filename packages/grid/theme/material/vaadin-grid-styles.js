@@ -140,7 +140,8 @@ registerStyles(
       box-shadow: inset 0 0 0 2px var(--material-primary-color);
     }
 
-    :host([navigating]) [part~='row']:focus::before {
+    :host([navigating]) [part~='row']:focus::before,
+    :host([navigating]) [part~='cell'] > [tabindex]:focus::before {
       content: '';
       position: absolute;
       top: 0;

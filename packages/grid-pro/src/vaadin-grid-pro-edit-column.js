@@ -108,6 +108,8 @@ class GridProEditColumn extends GridColumn {
   constructor() {
     super();
 
+    this._contentFocusable = true;
+
     this.__editModeRenderer = function (root, column) {
       const cell = root.assignedSlot.parentNode;
 
@@ -213,6 +215,9 @@ class GridProEditColumn extends GridColumn {
     cell.__savedRenderer = this._renderer || cell._renderer;
     cell._renderer = this.editModeRenderer || this.__editModeRenderer;
 
+    // Remove role to avoid announcing button while editing
+    cell._focusable.removeAttribute('role');
+
     this._clearCellContent(cell);
     this._runRenderer(cell._renderer, cell, model);
   }
@@ -227,6 +232,9 @@ class GridProEditColumn extends GridColumn {
     cell.__savedRenderer = undefined;
 
     this._clearCellContent(cell);
+
+    // Restore previously removed role attribute
+    cell._focusable.setAttribute('role', 'button');
 
     const row = cell.parentElement;
     this._grid._updateItem(row, row._item);

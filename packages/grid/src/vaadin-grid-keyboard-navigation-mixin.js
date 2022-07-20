@@ -108,11 +108,20 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     set __rowFocusMode(value) {
-      ['_itemsFocusable', '_footerFocusable', '_headerFocusable'].forEach((focusable) => {
-        if (value && this.__isCell(this[focusable])) {
-          this[focusable] = this[focusable].parentElement;
-        } else if (!value && this.__isRow(this[focusable])) {
-          this[focusable] = this[focusable].firstElementChild;
+      ['_itemsFocusable', '_footerFocusable', '_headerFocusable'].forEach((prop) => {
+        const focusable = this[prop];
+        if (value) {
+          const parent = focusable && focusable.parentElement;
+          if (this.__isCell(focusable)) {
+            // Cell itself focusable (default)
+            this[prop] = parent;
+          } else if (this.__isCell(parent)) {
+            // Div inside a cell is focusable
+            this[prop] = parent.parentElement;
+          }
+        } else if (!value && this.__isRow(focusable)) {
+          const cell = focusable.firstElementChild;
+          this[prop] = cell._focusable || cell;
         }
       });
     }
@@ -153,10 +162,21 @@ export const KeyboardNavigationMixin = (superClass) =>
           if (this.__rowFocusMode) {
             // Row focus mode
             this._itemsFocusable = row;
-          } else if (this._itemsFocusable.parentElement) {
+          } else {
             // Cell focus mode
-            const cellIndex = [...this._itemsFocusable.parentElement.children].indexOf(this._itemsFocusable);
-            this._itemsFocusable = row.children[cellIndex];
+            let parent = this._itemsFocusable.parentElement;
+            let cell = this._itemsFocusable;
+
+            if (parent) {
+              // Div inside a cell is focusable
+              if (this.__isCell(parent)) {
+                cell = parent;
+                parent = parent.parentElement;
+              }
+
+              const cellIndex = [...parent.children].indexOf(cell);
+              this._itemsFocusable = this.__getFocusable(row, row.children[cellIndex]);
+            }
           }
         }
       });
@@ -731,11 +751,11 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (section && (cell || row)) {
         this._activeRowGroup = section;
         if (this.$.header === section) {
-          this._headerFocusable = this.__rowFocusMode ? row : cell;
+          this._headerFocusable = this.__getFocusable(row, cell);
         } else if (this.$.items === section) {
-          this._itemsFocusable = this.__rowFocusMode ? row : cell;
+          this._itemsFocusable = this.__getFocusable(row, cell);
         } else if (this.$.footer === section) {
-          this._footerFocusable = this.__rowFocusMode ? row : cell;
+          this._footerFocusable = this.__getFocusable(row, cell);
         }
 
         if (cell) {
@@ -746,6 +766,19 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       this._detectFocusedItemIndex(e);
+    }
+
+    /**
+     * Get the focusable element depending on the current focus mode.
+     * It can be a row, a cell, or a focusable div inside a cell.
+     *
+     * @param {HTMLElement} row
+     * @param {HTMLElement} cell
+     * @return {HTMLElement}
+     * @private
+     */
+    __getFocusable(row, cell) {
+      return this.__rowFocusMode ? row : cell._focusable || cell;
     }
 
     /**
@@ -837,7 +870,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           const firstVisibleRow = [...this.$[section].children].find((row) => row.offsetHeight);
           const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
           if (firstVisibleRow && firstVisibleCell) {
-            this[`_${section}Focusable`] = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
+            this[`_${section}Focusable`] = this.__getFocusable(firstVisibleRow, firstVisibleCell);
           }
         }
       });
@@ -850,7 +883,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         if (firstVisibleCell && firstVisibleRow) {
           // Reset memoized column
           delete this._focusedColumnOrder;
-          this._itemsFocusable = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
+          this._itemsFocusable = this.__getFocusable(firstVisibleRow, firstVisibleCell);
         }
       } else {
         this.__updateItemsFocusable();

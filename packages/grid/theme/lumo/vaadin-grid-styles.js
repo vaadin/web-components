@@ -74,7 +74,8 @@ registerStyles(
     }
 
     :host([navigating]) [part~='row']:focus::before,
-    :host([navigating]) [part~='cell']:focus::before {
+    :host([navigating]) [part~='cell']:focus::before,
+    :host([navigating]) [part~='cell'] > [tabindex]:focus::before {
       content: '';
       position: absolute;
       top: 0;
