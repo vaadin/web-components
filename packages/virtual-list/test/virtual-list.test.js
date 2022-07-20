@@ -138,7 +138,7 @@ describe('virtual-list', () => {
         expect(list.getAttribute('overflow')).to.equal('top bottom');
       });
 
-      it('should set overflow attribute to "start" when scroll is at the end', async () => {
+      it('should set overflow attribute to "top" when scroll is at the end', async () => {
         list.scrollToIndex(100);
         await nextFrame();
         expect(list.getAttribute('overflow')).to.equal('top');
