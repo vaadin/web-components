@@ -823,6 +823,17 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
       },
 
       /**
+       * When true, `tabindex` attribute is set on the cell content elements in the light DOM,
+       * rather than cell elements in Shadow DOM. This is needed to ensure cell content gets focus
+       * when navigating with VoiceOver cursor, which does not move focus to `<td>` elements
+       */
+      contentFocusable: {
+        type: Boolean,
+        value: false,
+        readOnly: true,
+      },
+
+      /**
        * @type {Array<!HTMLElement>}
        * @protected
        */

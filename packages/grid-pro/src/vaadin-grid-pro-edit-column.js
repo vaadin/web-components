@@ -108,6 +108,8 @@ class GridProEditColumn extends GridColumn {
   constructor() {
     super();
 
+    this._setContentFocusable(true);
+
     this.__editModeRenderer = function (root, column) {
       const cell = root.assignedSlot.parentNode;
 

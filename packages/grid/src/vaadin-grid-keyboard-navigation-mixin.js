@@ -749,31 +749,41 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /**
-     * Set the focusable element to either row or cell, depending on the focus mode.
-     * This method can be overridden for handling special case when `tabindex` is set on
-     * the cell content, rather than the cell itself, for better screen reader support.
+     * Get the focusable element depending on the focus mode.
+     * It can be a row, a cell, or a cell content element.
      *
      * @param {HTMLElement} row
      * @param {HTMLElement} cell
      * @return {HTMLElement}
-     * @protected
+     * @private
      */
     _detectFocusable(row, cell) {
-      return this.__rowFocusMode ? row : cell;
+      if (this.__rowFocusMode) {
+        return row;
+      }
+
+      if (cell && cell._content.hasAttribute('tabindex')) {
+        return cell._content;
+      }
+
+      return cell;
     }
 
     /**
      * Detect if the grid should switch from navigation mode to interaction mode.
      * Normally, this happens when a cells content receives focus or keyboard input.
-     * This method can be overridden for handling special case when `tabindex` is set on
-     * the cell content, rather than the cell itself, for better screen reader support.
+     * However, when a column has `contentFocusable` set to `true`, the cell content
+     * is expected to get focus instead of the cell when navigating with keyboard.
+     * In this case, interaction mode should not be set.
      *
      * @param {!KeyboardEvent|!FocusEvent} event
      * @returns {boolean}
-     * @protected
+     * @private
      */
     _isInteracting(event) {
-      return event.composedPath().some((el) => el.localName === 'vaadin-grid-cell-content');
+      const target = event.composedPath()[0];
+      const isCellContent = (el) => el.localName === 'vaadin-grid-cell-content';
+      return event.composedPath().some(isCellContent) && !(isCellContent(target) && target.hasAttribute('tabindex'));
     }
 
     /**
@@ -931,11 +941,15 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     /**
-     * Focus the given cell.
+     * Focus the given cell or its content element, if it has tabindex.
      * @protected
      */
     _focusCell(dstCell) {
-      dstCell.focus();
+      if (dstCell._content.hasAttribute('tabindex')) {
+        dstCell._content.focus();
+      } else {
+        dstCell.focus();
+      }
     }
 
     /**
