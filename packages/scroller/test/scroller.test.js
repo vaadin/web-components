@@ -131,7 +131,7 @@ describe('vaadin-scroller', () => {
       expect(scroller.getAttribute('overflow')).to.equal('top bottom');
     });
 
-    it('should set overflow attribute to "start" when scroll is at the end', async () => {
+    it('should set overflow attribute to "top" when scroll is at the end', async () => {
       scroller.scrollTop = scroller.scrollHeight - scroller.clientHeight;
       await nextFrame();
       expect(scroller.getAttribute('overflow')).to.equal('top');
