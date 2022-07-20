@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import '../vaadin-scroller.js';
 
@@ -73,6 +73,68 @@ describe('vaadin-scroller', () => {
       scroller.setAttribute('scroll-direction', 'none');
       expect(getComputedStyle(scroller).overflowX).to.equal('hidden');
       expect(getComputedStyle(scroller).overflowY).to.equal('hidden');
+    });
+  });
+
+  describe('overflow attribute', () => {
+    describe('horizontal', () => {
+      beforeEach(async () => {
+        scroller.scrollDirection = 'horizontal';
+        scroller.style.maxWidth = '100px';
+
+        const div = document.createElement('div');
+        div.textContent = 'Long text that does not fit';
+        div.style.width = '200px';
+        div.style.whiteSpace = 'nowrap';
+        scroller.appendChild(div);
+
+        await nextRender();
+      });
+
+      it('should set overflow attribute to "end" when scroll is at the beginning', () => {
+        expect(scroller.getAttribute('overflow')).to.equal('end');
+      });
+
+      it('should set overflow attribute to "start end" when scroll is at the middle', async () => {
+        scroller.scrollLeft = 50;
+        await nextFrame();
+        expect(scroller.getAttribute('overflow')).to.equal('start end');
+      });
+
+      it('should set overflow attribute to "start" when scroll is at the end', async () => {
+        scroller.scrollLeft = scroller.scrollWidth - scroller.clientWidth;
+        await nextFrame();
+        expect(scroller.getAttribute('overflow')).to.equal('start');
+      });
+    });
+  });
+
+  describe('vertical', () => {
+    beforeEach(async () => {
+      scroller.scrollDirection = 'vertical';
+      scroller.style.maxHeight = '50px';
+
+      const div = document.createElement('div');
+      div.innerHTML = 'Long<br>text<br>that<br>has<br>many<br>lines';
+      scroller.appendChild(div);
+
+      await nextRender();
+    });
+
+    it('should set overflow attribute to "bottom" when scroll is at the beginning', () => {
+      expect(scroller.getAttribute('overflow')).to.equal('bottom');
+    });
+
+    it('should set overflow attribute to "top bottom" when scroll is at the middle', async () => {
+      scroller.scrollTop = 25;
+      await nextFrame();
+      expect(scroller.getAttribute('overflow')).to.equal('top bottom');
+    });
+
+    it('should set overflow attribute to "top" when scroll is at the end', async () => {
+      scroller.scrollTop = scroller.scrollHeight - scroller.clientHeight;
+      await nextFrame();
+      expect(scroller.getAttribute('overflow')).to.equal('top');
     });
   });
 });

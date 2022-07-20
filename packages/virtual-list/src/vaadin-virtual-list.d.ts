@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -34,13 +35,21 @@ export type VirtualListRenderer<TItem> = (
  * }
  * ```
  *
+ * The following state attributes are available for styling:
+ *
+ * Attribute        | Description
+ * -----------------|--------------------------------------------
+ * `overflow`       | Set to `top`, `bottom`, both, or none.
+ *
  * See [Virtual List](https://vaadin.com/docs/latest/ds/components/virtual-list) documentation.
  *
  * @extends HTMLElement
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-declare class VirtualList<TItem = VirtualListDefaultItem> extends ElementMixin(ThemableMixin(HTMLElement)) {
+declare class VirtualList<TItem = VirtualListDefaultItem> extends ElementMixin(
+  ControllerMixin(ThemableMixin(HTMLElement)),
+) {
   /**
    * Gets the index of the first visible item in the viewport.
    */

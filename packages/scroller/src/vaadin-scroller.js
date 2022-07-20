@@ -4,8 +4,10 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -22,13 +24,15 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * -------------| -----------
  * `focus-ring` | Set when the element is focused using the keyboard.
  * `focused`    | Set when the element is focused.
+ * `overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.
  *
  * @extends HTMLElement
  * @mixes ThemableMixin
+ * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes FocusMixin
  */
-class Scroller extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class Scroller extends FocusMixin(ElementMixin(ControllerMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -83,6 +87,14 @@ class Scroller extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
         reflectToAttribute: true,
       },
     };
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.__overflowController = new OverflowController(this);
+    this.addController(this.__overflowController);
   }
 
   /**
