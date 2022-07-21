@@ -660,7 +660,7 @@ class Grid extends ElementMixin(
   }
 
   /** @private */
-  _createCell(tagName) {
+  _createCell(tagName, isCellButton) {
     const contentId = (this._contentIndex = this._contentIndex + 1 || 0);
     const slotName = `vaadin-grid-cell-content-${contentId}`;
 
@@ -669,7 +669,6 @@ class Grid extends ElementMixin(
 
     const cell = document.createElement(tagName);
     cell.id = slotName.replace('-content-', '-');
-    cell.setAttribute('tabindex', '-1');
     cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
 
     // For now we only support tooltip on desktop
@@ -690,7 +689,23 @@ class Grid extends ElementMixin(
     const slot = document.createElement('slot');
     slot.setAttribute('name', slotName);
 
-    cell.appendChild(slot);
+    if (isCellButton) {
+      const div = document.createElement('div');
+      div.setAttribute('role', 'button');
+      div.setAttribute('tabindex', '-1');
+      cell.appendChild(div);
+
+      // Patch `focus()` to use the button
+      cell._button = div;
+      cell.focus = function () {
+        cell._button.focus();
+      };
+
+      div.appendChild(slot);
+    } else {
+      cell.setAttribute('tabindex', '-1');
+      cell.appendChild(slot);
+    }
 
     cell._content = cellContent;
 
@@ -754,7 +769,7 @@ class Grid extends ElementMixin(
           column._cells = column._cells || [];
           cell = column._cells.find((cell) => cell._vacant);
           if (!cell) {
-            cell = this._createCell('td');
+            cell = this._createCell('td', column._cellButton);
             column._cells.push(cell);
           }
           cell.setAttribute('part', 'cell body-cell');
