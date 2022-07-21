@@ -472,11 +472,6 @@ export const ComboBoxMixin = (subclass) =>
       }
     }
 
-    /** @protected */
-    _isOverlayHidden(items, loading) {
-      return !loading && !(items && items.length);
-    }
-
     /** @private */
     _openedOrItemsChanged(opened, items, loading) {
       // Close the overlay if there are no items to display.
