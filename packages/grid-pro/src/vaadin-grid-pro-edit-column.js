@@ -107,6 +107,11 @@ class GridProEditColumn extends GridColumn {
   constructor() {
     super();
 
+    // Enable focus button mode for Mac OS to ensure focused
+    // editable cell stays in sync with the VoiceOver cursor
+    // https://github.com/vaadin/web-components/issues/3820
+    this._focusButtonMode = navigator.platform.includes('Mac');
+
     this.__editModeRenderer = function (root, column) {
       const cell = root.assignedSlot.parentNode;
 
@@ -212,6 +217,11 @@ class GridProEditColumn extends GridColumn {
     cell.__savedRenderer = this._renderer || cell._renderer;
     cell._renderer = this.editModeRenderer || this.__editModeRenderer;
 
+    // Remove role to avoid announcing button while editing
+    if (cell._focusButton) {
+      cell._focusButton.removeAttribute('role');
+    }
+
     this._clearCellContent(cell);
     this._runRenderer(cell._renderer, cell, model);
   }
@@ -226,6 +236,11 @@ class GridProEditColumn extends GridColumn {
     cell.__savedRenderer = undefined;
 
     this._clearCellContent(cell);
+
+    // Restore previously removed role attribute
+    if (cell._focusButton) {
+      cell._focusButton.setAttribute('role', 'button');
+    }
 
     const row = cell.parentElement;
     this._grid._updateItem(row, row._item);

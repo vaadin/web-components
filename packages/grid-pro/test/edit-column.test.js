@@ -17,6 +17,8 @@ import {
   infiniteDataProvider,
 } from './helpers.js';
 
+const isMac = navigator.platform.includes('Mac');
+
 describe('edit column', () => {
   (isIOS ? describe.skip : describe)('select column', () => {
     let grid, textCell, selectCell, checkboxCell;
@@ -342,6 +344,47 @@ describe('edit column', () => {
 
       focusin(cell);
       expect(grid.hasAttribute('navigating')).to.be.false;
+    });
+
+    (isMac ? it : it.skip)('should call focus on the div element inside of the editable cell', () => {
+      cell = getContainerCell(grid.$.items, 0, 0);
+      const spy = sinon.spy(cell.firstChild, 'focus');
+      cell.focus();
+      expect(spy.calledOnce).to.be.true;
+    });
+  });
+
+  (isMac ? describe : describe.skip)('role attribute', () => {
+    let grid, firstCell, input;
+
+    beforeEach(() => {
+      grid = fixtureSync(`
+        <vaadin-grid-pro>
+          <vaadin-grid-pro-edit-column path="name"></vaadin-grid-pro-edit-column>
+          <vaadin-grid-column path="name"></vaadin-grid-column>
+        </vaadin-grid-pro>
+      `);
+      grid.items = createItems();
+
+      flushGrid(grid);
+      firstCell = getContainerCell(grid.$.items, 0, 0);
+    });
+
+    it('should set role="button" on the focusable div inside the editable cell', () => {
+      expect(firstCell.firstChild.getAttribute('role')).to.equal('button');
+    });
+
+    it('should remove role from the focusable div when entering edit mode', () => {
+      enter(firstCell);
+      expect(firstCell.firstChild.hasAttribute('role')).to.be.false;
+    });
+
+    it('should restore role on the focusable div after exiting edit mode', () => {
+      enter(firstCell);
+      expect(firstCell.firstChild.hasAttribute('role')).to.be.false;
+      input = getCellEditor(firstCell);
+      enter(input);
+      expect(firstCell.firstChild.getAttribute('role')).to.equal('button');
     });
   });
 
