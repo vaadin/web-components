@@ -121,14 +121,6 @@ describe('form input', () => {
       enter(timePicker.inputElement);
       expect(timePicker.invalid).to.be.true;
     });
-
-    it('should set an empty value when trying to commit an invalid time', () => {
-      timePicker.value = '12:00';
-      setInputValue(timePicker, 'foo');
-      enter(timePicker.inputElement);
-      expect(timePicker.value).to.equal('');
-      expect(timePicker.inputElement.value).to.equal('foo');
-    });
   });
 
   describe('required', () => {
