@@ -12,7 +12,7 @@ class TimePicker20Element extends TimePicker {
 
 customElements.define('vaadin-time-picker-20', TimePicker20Element);
 
-describe('form input', () => {
+describe('validation', () => {
   let timePicker;
 
   describe('initial', () => {
