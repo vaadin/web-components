@@ -25,6 +25,7 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.false;
       tap(comboBox.querySelector('[slot="label"]'));
       expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
     });
 
     it('should not open synchronously by clicking label when autoOpenDisabled is true', () => {
@@ -32,6 +33,7 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.false;
       tap(comboBox.querySelector('[slot="label"]'));
       expect(comboBox.opened).to.be.false;
+      expect(overlay.opened).to.be.false;
     });
 
     it('should restore attribute focus-ring if it was initially set before opening and combo-box is focused', () => {
@@ -45,6 +47,7 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.false;
       tap(input);
       expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
     });
 
     it('should not open synchronously by clicking input when autoOpenDisabled is true', () => {
@@ -52,12 +55,14 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.false;
       tap(input);
       expect(comboBox.opened).to.be.false;
+      expect(overlay.opened).to.be.false;
     });
 
     it('should open by clicking icon', () => {
       clickToggleIcon();
 
       expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
     });
 
     it('should open by clicking icon when autoOpenDisabled is true and input is invalid', () => {
@@ -103,6 +108,7 @@ describe('toggling dropdown', () => {
       comboBox.open();
 
       expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
     });
 
     it('should set body `pointer-events: none` on open and restore initial value on close', () => {
@@ -127,22 +133,31 @@ describe('toggling dropdown', () => {
       expect(comboBox.opened).to.be.true;
     });
 
-    it('should be hidden with null items', () => {
+    it('should not open overlay when setting items to null', () => {
       comboBox.items = null;
 
       comboBox.open();
 
       expect(comboBox.opened).to.be.true;
-      expect(overlay.hasAttribute('hidden')).to.be.true;
+      expect(overlay.opened).to.be.false;
     });
 
-    it('should be hidden with no items', () => {
+    it('should not open overlay when setting empty items array', () => {
       comboBox.items = [];
 
       comboBox.open();
 
       expect(comboBox.opened).to.be.true;
-      expect(overlay.hasAttribute('hidden')).to.be.true;
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not open overlay when setting empty filteredItems array', () => {
+      comboBox.filteredItems = [];
+
+      comboBox.open();
+
+      expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.false;
     });
 
     (isIOS ? describe : describe.skip)('after opening', () => {
@@ -223,7 +238,7 @@ describe('toggling dropdown', () => {
 
       focusout(input);
 
-      expect(comboBox.opened).to.equal(false);
+      expect(comboBox.opened).to.be.false;
     });
 
     it('should restore focus to the field on outside click', async () => {
@@ -319,24 +334,6 @@ describe('toggling dropdown', () => {
 
     it('dropdown should not be shown when read-only', () => {
       click(input);
-      expect(comboBox.opened).to.be.false;
-    });
-  });
-
-  describe('empty list', () => {
-    it('vaadin-combo-box-overlay should not be attached when filteredItems is empty', () => {
-      comboBox.open();
-      expect(comboBox.opened).to.be.true;
-      expect(document.querySelector('vaadin-combo-box-overlay')).to.be.ok;
-      comboBox.close();
-      expect(comboBox.opened).to.be.false;
-      expect(document.querySelector('vaadin-combo-box-overlay')).not.to.be.ok;
-
-      comboBox.filteredItems = [];
-      comboBox.open();
-      expect(comboBox.opened).to.be.true;
-      expect(document.querySelector('vaadin-combo-box-overlay')).not.to.be.ok;
-      comboBox.close();
       expect(comboBox.opened).to.be.false;
     });
   });

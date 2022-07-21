@@ -258,10 +258,11 @@ describe('internal filtering', () => {
       expect(comboBox.filteredItems).to.be.null;
     });
 
-    it('should hide overlay when filtered items length is 0', () => {
+    it('should close overlay when filtered items length is 0', () => {
       setInputValue(comboBox, 'THIS IS NOT FOUND');
 
-      expect(comboBox.opened && overlay.hasAttribute('hidden')).to.be.true;
+      expect(comboBox.opened).to.be.true;
+      expect(overlay.opened).to.be.false;
     });
 
     it('should reset the filter on value change', () => {
