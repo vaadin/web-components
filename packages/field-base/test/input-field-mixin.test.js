@@ -103,7 +103,14 @@ describe('input-field-mixin', () => {
 
     it('should validate on input blur', () => {
       const spy = sinon.spy(element, 'validate');
-      input.dispatchEvent(new Event('blur'));
+      input.focus();
+      input.blur();
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should validate on programmatic blur', () => {
+      const spy = sinon.spy(element, 'validate');
+      element.blur();
       expect(spy.calledOnce).to.be.true;
     });
 
