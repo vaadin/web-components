@@ -233,6 +233,20 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
   }
 
+  /**
+   * Override a method from `InputConstraintsMixin`
+   * to additionally check for bad user input.
+   *
+   * @override
+   */
+  checkValidity() {
+    if (this.inputElement && this.inputElement.validity.badInput) {
+      return false;
+    }
+
+    return super.checkValidity();
+  }
+
   /** @private */
   _decreaseButtonTouchend(e) {
     // Cancel the following click and focus events
