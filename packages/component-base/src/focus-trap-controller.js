@@ -125,7 +125,11 @@ export class FocusTrapController {
     const step = backward ? -1 : 1;
     const currentIndex = this.__focusedElementIndex;
     const nextIndex = (focusableElements.length + currentIndex + step) % focusableElements.length;
-    focusableElements[nextIndex].focus();
+    const element = focusableElements[nextIndex];
+    element.focus();
+    if (element.localName === 'input') {
+      element.select();
+    }
   }
 
   /**
