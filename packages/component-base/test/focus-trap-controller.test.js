@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
+import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '../src/controller-mixin.js';
 import { FocusTrapController } from '../src/focus-trap-controller.js';
@@ -40,7 +41,7 @@ customElements.define(
             <input id="trap-input-1" />
             <input id="trap-input-2" />
             <div id="parent">
-              <input id="trap-input-3" />
+              <textarea id="trap-input-3"></textarea>
             </div>
           </div>
 
@@ -103,7 +104,7 @@ describe('focus-trap-controller', () => {
 
     describe('no focusable elements', () => {
       beforeEach(() => {
-        trap.querySelectorAll('input').forEach((input) => {
+        trap.querySelectorAll('input, textarea').forEach((input) => {
           input.tabIndex = -1;
         });
       });
@@ -185,6 +186,19 @@ describe('focus-trap-controller', () => {
             'trap-input-2',
             'trap-input-1',
           ]);
+        });
+
+        it('should select the input element when focusing it with Tab', async () => {
+          const spy = sinon.spy(trapInput2, 'select');
+          await tab();
+          expect(spy.called).to.be.true;
+        });
+
+        it('should not select non-input element when focusing it with Tab', async () => {
+          const spy = sinon.spy(trapInput3, 'select');
+          await tab();
+          await tab();
+          expect(spy.called).to.be.false;
         });
       });
 
