@@ -85,15 +85,17 @@ export const InputFieldMixin = (superclass) =>
     }
 
     /**
-     * Override an event listener from `DelegateFocusMixin`.
-     * @param {FocusEvent} event
+     * Override an event listener from `FocusMixin`.
+     * @param {boolean} focused
      * @protected
      * @override
      */
-    _onBlur(event) {
-      super._onBlur(event);
+    _setFocused(focused) {
+      super._setFocused(focused);
 
-      this.validate();
+      if (!focused) {
+        this.validate();
+      }
     }
 
     /**
