@@ -191,14 +191,14 @@ describe('focus-trap-controller', () => {
         it('should select the input element when focusing it with Tab', async () => {
           const spy = sinon.spy(trapInput2, 'select');
           await tab();
-          expect(spy.called).to.be.true;
+          expect(spy.calledOnce).to.be.true;
         });
 
         it('should not select non-input element when focusing it with Tab', async () => {
           const spy = sinon.spy(trapInput3, 'select');
           await tab();
           await tab();
-          expect(spy.called).to.be.false;
+          expect(spy.calledOnce).to.be.false;
         });
       });
 
