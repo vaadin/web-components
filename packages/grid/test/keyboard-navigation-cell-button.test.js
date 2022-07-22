@@ -20,10 +20,14 @@ describe('keyboard navigation - cell button', () => {
   beforeEach(async () => {
     grid = fixtureSync(`
       <vaadin-grid>
-        <vaadin-grid-column path="name" _cell-button></vaadin-grid-column>
         <vaadin-grid-column path="name"></vaadin-grid-column>
       </vaadin-grid>
     `);
+
+    const column = document.createElement('vaadin-grid-column');
+    column.path = 'name';
+    column._focusButtonMode = true;
+    grid.insertBefore(column, grid.firstElementChild);
 
     grid.items = [{ name: 'foo' }, { name: 'bar' }];
 

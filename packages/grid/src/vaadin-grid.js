@@ -660,7 +660,7 @@ class Grid extends ElementMixin(
   }
 
   /** @private */
-  _createCell(tagName, isCellButton) {
+  _createCell(tagName, column) {
     const contentId = (this._contentIndex = this._contentIndex + 1 || 0);
     const slotName = `vaadin-grid-cell-content-${contentId}`;
 
@@ -689,7 +689,7 @@ class Grid extends ElementMixin(
     const slot = document.createElement('slot');
     slot.setAttribute('name', slotName);
 
-    if (isCellButton) {
+    if (column && column._focusButtonMode) {
       const div = document.createElement('div');
       div.setAttribute('role', 'button');
       div.setAttribute('tabindex', '-1');
@@ -769,7 +769,7 @@ class Grid extends ElementMixin(
           column._cells = column._cells || [];
           cell = column._cells.find((cell) => cell._vacant);
           if (!cell) {
-            cell = this._createCell('td', column._cellButton);
+            cell = this._createCell('td', column);
             column._cells.push(cell);
           }
           cell.setAttribute('part', 'cell body-cell');
