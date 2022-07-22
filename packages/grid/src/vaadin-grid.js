@@ -696,9 +696,9 @@ class Grid extends ElementMixin(
       cell.appendChild(div);
 
       // Patch `focus()` to use the button
-      cell._button = div;
+      cell._focusButton = div;
       cell.focus = function () {
-        cell._button.focus();
+        cell._focusButton.focus();
       };
 
       div.appendChild(slot);

@@ -117,12 +117,13 @@ export const KeyboardNavigationMixin = (superClass) =>
             // Cell itself focusable (default)
             this[prop] = parent;
           } else if (this.__isCell(parent)) {
-            // Div inside a cell is focusable
+            // Focus button mode is enabled for the column,
+            // button element inside the cell is focusable.
             this[prop] = parent.parentElement;
           }
         } else if (!value && this.__isRow(focusable)) {
           const cell = focusable.firstElementChild;
-          this[prop] = cell._button || cell;
+          this[prop] = cell._focusButton || cell;
         }
       });
     }
@@ -169,7 +170,8 @@ export const KeyboardNavigationMixin = (superClass) =>
             let cell = this._itemsFocusable;
 
             if (parent) {
-              // Div inside a cell is focusable
+              // Focus button mode is enabled for the column,
+              // button element inside the cell is focusable.
               if (this.__isCell(parent)) {
                 cell = parent;
                 parent = parent.parentElement;
@@ -788,7 +790,7 @@ export const KeyboardNavigationMixin = (superClass) =>
      * @private
      */
     __getFocusable(row, cell) {
-      return this.__rowFocusMode ? row : cell._button || cell;
+      return this.__rowFocusMode ? row : cell._focusButton || cell;
     }
 
     /**
