@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-integer-field.js';
 
@@ -64,6 +65,35 @@ describe('validation', () => {
       expect(validatedSpy.calledOnce).to.be.true;
       const event = validatedSpy.firstCall.args[0];
       expect(event.detail.valid).to.be.false;
+    });
+  });
+
+  describe('bad input', () => {
+    let input;
+
+    beforeEach(() => {
+      integerField = fixtureSync('<vaadin-integer-field></vaadin-integer-field>');
+      input = integerField.inputElement;
+      input.focus();
+    });
+
+    it('should be valid when committing a valid number', async () => {
+      await sendKeys({ type: '1' });
+      input.blur();
+      expect(integerField.invalid).to.be.false;
+    });
+
+    it('should be invalid when trying to commit a not valid number', async () => {
+      await sendKeys({ type: '1--' });
+      input.blur();
+      expect(integerField.invalid).to.be.true;
+    });
+
+    it('should set an empty value when trying to commit a not valid number', async () => {
+      integerField.value = '1';
+      await sendKeys({ type: '1--' });
+      await sendKeys({ type: 'Enter' });
+      expect(integerField.value).to.equal('');
     });
   });
 });
