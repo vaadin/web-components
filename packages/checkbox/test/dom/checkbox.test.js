@@ -8,11 +8,21 @@ describe('vaadin-checkbox', () => {
 
   beforeEach(() => {
     resetUniqueId();
-    checkbox = fixtureSync('<vaadin-checkbox label="I accept terms and conditions"></vaadin-checkbox>');
+    checkbox = fixtureSync('<vaadin-checkbox></vaadin-checkbox>');
   });
 
   describe('host', () => {
     it('default', async () => {
+      await expect(checkbox).dom.to.equalSnapshot();
+    });
+
+    it('name', async () => {
+      checkbox.name = 'Name';
+      await expect(checkbox).dom.to.equalSnapshot();
+    });
+
+    it('label', async () => {
+      checkbox.label = 'Label';
       await expect(checkbox).dom.to.equalSnapshot();
     });
 

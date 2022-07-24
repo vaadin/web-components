@@ -38,14 +38,6 @@ describe('checkbox', () => {
       link = label.children[0];
     });
 
-    it('should set value property to "on"', () => {
-      expect(checkbox.value).to.equal('on');
-    });
-
-    it('should set the name to the empty string', () => {
-      expect(checkbox.name).to.equal('');
-    });
-
     it('should have display: none when hidden', () => {
       checkbox.setAttribute('hidden', '');
       expect(getComputedStyle(checkbox).display).to.equal('none');
@@ -128,13 +120,6 @@ describe('checkbox', () => {
 
       expect(checkbox.checked).to.be.false;
       expect(checkbox.indeterminate).to.be.false;
-    });
-
-    it('should remove has-label attribute when the label was cleared', async () => {
-      label.innerHTML = '';
-      await nextFrame();
-
-      expect(checkbox.hasAttribute('has-label')).to.be.false;
     });
 
     describe('focus', () => {
@@ -229,58 +214,18 @@ describe('checkbox', () => {
     });
   });
 
-  describe('has-label attribute', () => {
+  describe('indeterminate property', () => {
     beforeEach(() => {
-      checkbox = fixtureSync('<vaadin-checkbox></vaadin-checkbox>');
+      checkbox = fixtureSync(`<vaadin-checkbox></vaadin-checkbox>`);
+      input = checkbox.inputElement;
     });
 
-    it('should not set has-label attribute when label content is empty', () => {
-      expect(checkbox.hasAttribute('has-label')).to.be.false;
-    });
+    it('should delegate the property to the input', () => {
+      checkbox.indeterminate = true;
+      expect(input.indeterminate).to.be.true;
 
-    it('should not set has-label attribute when only one empty text node added', async () => {
-      const textNode = document.createTextNode(' ');
-      checkbox.appendChild(textNode);
-      await nextFrame();
-      expect(checkbox.hasAttribute('has-label')).to.be.false;
-    });
-
-    it('should set has-label attribute when the label is added', async () => {
-      const paragraph = document.createElement('p');
-      paragraph.textContent = 'Added label';
-      checkbox.appendChild(paragraph);
-      await nextFrame();
-      expect(checkbox.hasAttribute('has-label')).to.be.true;
-    });
-  });
-
-  describe('delegation', () => {
-    describe('name attribute', () => {
-      beforeEach(() => {
-        checkbox = fixtureSync(`<vaadin-checkbox name="Name"></vaadin-checkbox>`);
-        input = checkbox.inputElement;
-      });
-
-      it('should delegate name attribute to the input', () => {
-        expect(input.getAttribute('name')).to.equal('Name');
-
-        checkbox.removeAttribute('name');
-        expect(input.hasAttribute('name')).to.be.false;
-      });
-    });
-
-    describe('indeterminate property', () => {
-      beforeEach(() => {
-        checkbox = fixtureSync(`<vaadin-checkbox indeterminate></vaadin-checkbox>`);
-        input = checkbox.inputElement;
-      });
-
-      it('should delegate indeterminate property to the input', () => {
-        expect(input.indeterminate).to.be.true;
-
-        checkbox.indeterminate = false;
-        expect(input.indeterminate).to.be.false;
-      });
+      checkbox.indeterminate = false;
+      expect(input.indeterminate).to.be.false;
     });
   });
 
