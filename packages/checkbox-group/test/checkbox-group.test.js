@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-checkbox-group.js';
@@ -256,66 +256,11 @@ describe('vaadin-checkbox-group', () => {
       checkboxes = [...group.querySelectorAll('vaadin-checkbox')];
     });
 
-    it('should not set has-value attribute by default', () => {
-      expect(group.hasAttribute('has-value')).to.be.false;
-    });
-
-    it('should toggle has-value attribute on value property change', () => {
+    it('should toggle the attribute on value change', () => {
       group.value = ['2'];
       expect(group.hasAttribute('has-value')).to.be.true;
       group.value = [];
       expect(group.hasAttribute('has-value')).to.be.false;
-    });
-  });
-
-  describe('label property', () => {
-    let label;
-
-    beforeEach(() => {
-      group = fixtureSync(`<vaadin-checkbox-group></vaadin-checkbox-group>`);
-      label = group.querySelector('[slot=label]');
-    });
-
-    it('should not set has-label attribute by default', () => {
-      expect(group.hasAttribute('has-label')).to.be.false;
-    });
-
-    it('should reflect the attribute to the property', () => {
-      group.setAttribute('label', 'Label');
-      expect(group.label).to.equal('Label');
-
-      group.removeAttribute('label');
-      expect(group.label).to.null;
-    });
-
-    it('should add label to checkbox group when a label is dynamically set', () => {
-      group.label = 'Label';
-      expect(label.textContent).to.equal('Label');
-    });
-
-    it('should toggle has-label attribute on label property change', () => {
-      group.label = 'Label';
-      expect(group.hasAttribute('has-label')).to.be.true;
-
-      group.label = '';
-      expect(group.hasAttribute('has-label')).to.be.false;
-    });
-  });
-
-  describe('aria-required attribute', () => {
-    beforeEach(() => {
-      group = fixtureSync(`<vaadin-checkbox-group></vaadin-checkbox-group>`);
-    });
-
-    it('should not have aria-required attribute by default', () => {
-      expect(group.hasAttribute('aria-required')).to.be.false;
-    });
-
-    it('should toggle aria-required attribute on required property change', () => {
-      group.required = true;
-      expect(group.getAttribute('aria-required')).to.equal('true');
-      group.required = false;
-      expect(group.hasAttribute('aria-required')).to.be.false;
     });
   });
 
@@ -354,111 +299,6 @@ describe('vaadin-checkbox-group', () => {
       group.appendChild(checkbox);
       await nextFrame();
       expect(console.warn.called).to.be.false;
-    });
-  });
-
-  describe('error message', () => {
-    beforeEach(() => {
-      group = fixtureSync(`<vaadin-checkbox-group></vaadin-checkbox-group>`);
-    });
-
-    it('setting errorMessage updates has-error-message attribute', () => {
-      group.invalid = true;
-      group.errorMessage = 'foo';
-      expect(group.hasAttribute('has-error-message')).to.be.true;
-    });
-
-    it('setting errorMessage to empty string does not update has-error-message attribute', () => {
-      group.invalid = true;
-      group.errorMessage = '';
-      expect(group.hasAttribute('has-error-message')).to.be.false;
-    });
-
-    it('setting errorMessage to null does not update has-error-message attribute', () => {
-      group.invalid = true;
-      group.errorMessage = null;
-      expect(group.hasAttribute('has-error-message')).to.be.false;
-    });
-  });
-
-  describe('helper text', () => {
-    beforeEach(() => {
-      group = fixtureSync(`<vaadin-checkbox-group></vaadin-checkbox-group>`);
-    });
-
-    it('setting helper updates has-helper attribute', () => {
-      group.helperText = 'foo';
-      expect(group.hasAttribute('has-helper')).to.be.true;
-    });
-
-    it('setting helper to empty string does not update has-helper attribute', () => {
-      group.helperText = '';
-      expect(group.hasAttribute('has-helper')).to.be.false;
-    });
-
-    it('setting helper to null does not update has-helper attribute', () => {
-      group.helperText = null;
-      expect(group.hasAttribute('has-helper')).to.be.false;
-    });
-
-    it('setting helper with slot updates has-helper attribute', async () => {
-      const helper = document.createElement('div');
-      helper.setAttribute('slot', 'helper');
-      helper.textContent = 'foo';
-      group.appendChild(helper);
-      await nextFrame();
-      expect(group.hasAttribute('has-helper')).to.be.true;
-    });
-  });
-
-  describe('custom helper', () => {
-    let helper;
-
-    beforeEach(async () => {
-      group = fixtureSync(`
-        <vaadin-checkbox-group>
-          <div slot="helper">Custom helper</div>
-        </vaadin-checkbox-group>
-      `);
-      await nextFrame();
-      helper = group.querySelector('[slot=helper]');
-    });
-
-    it('should set has-helper attribute', () => {
-      expect(group.hasAttribute('has-helper')).to.be.true;
-    });
-
-    it('should remove has-helper attribute when slotted helper is removed', async () => {
-      group.removeChild(helper);
-      await nextFrame();
-      expect(group.hasAttribute('has-helper')).to.be.false;
-    });
-  });
-
-  describe('aria-labelledby', () => {
-    let error, helper, label;
-
-    beforeEach(() => {
-      group = fixtureSync('<vaadin-checkbox-group helper-text="Choose one" label="Label"></vaadin-checkbox-group>');
-      error = group.querySelector('[slot=error-message]');
-      helper = group.querySelector('[slot=helper]');
-      label = group.querySelector('[slot=label]');
-    });
-
-    it('should add label and helper text to aria-labelledby when field is valid', () => {
-      const aria = group.getAttribute('aria-labelledby');
-      expect(aria).to.include(helper.id);
-      expect(aria).to.not.include(error.id);
-      expect(aria).to.include(label.id);
-    });
-
-    it('should add error message to aria-labelledby when field is invalid', async () => {
-      group.invalid = true;
-      await aTimeout(0);
-      const aria = group.getAttribute('aria-labelledby');
-      expect(aria).to.include(helper.id);
-      expect(aria).to.include(error.id);
-      expect(aria).to.include(label.id);
     });
   });
 
