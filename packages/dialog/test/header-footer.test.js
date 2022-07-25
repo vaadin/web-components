@@ -34,6 +34,14 @@ describe('header/footer feature', () => {
       expect(overlay.textContent).to.include(HEADER_TITLE);
     });
 
+    it('should use `h2` element for rendering header title', () => {
+      dialog.headerTitle = HEADER_TITLE;
+      dialog.opened = true;
+
+      const title = overlay.querySelector('[slot=title]');
+      expect(title.localName).to.equal('h2');
+    });
+
     it('should remove title element if header-title is unset', () => {
       dialog.headerTitle = HEADER_TITLE;
       dialog.opened = true;
