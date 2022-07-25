@@ -33,6 +33,10 @@ registerStyles(
       pointer-events: auto;
     }
 
+    ::slotted([slot='title']) {
+      font: inherit !important;
+    }
+
     [part='header-content'] {
       flex: 1;
     }
@@ -260,7 +264,7 @@ export class DialogOverlay extends OverlayElement {
   _headerTitleRenderer() {
     if (this.headerTitle) {
       if (!this.headerTitleElement) {
-        this.headerTitleElement = document.createElement('span');
+        this.headerTitleElement = document.createElement('h2');
         this.headerTitleElement.setAttribute('slot', 'title');
         this.headerTitleElement.classList.add('draggable');
       }
