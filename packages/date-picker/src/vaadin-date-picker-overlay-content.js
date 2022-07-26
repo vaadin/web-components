@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/button/src/vaadin-button.js';
+import './vaadin-date-picker-year-scroller.js';
 import './vaadin-month-calendar.js';
 import './vaadin-infinite-scroller.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -188,26 +189,15 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
             </vaadin-month-calendar>
           </template>
         </vaadin-infinite-scroller>
-        <vaadin-infinite-scroller
+        <vaadin-date-picker-year-scroller
           id="yearScroller"
           on-custom-scroll="_onYearScroll"
           on-touchstart="_onYearScrollTouchStart"
-          buffer-size="12"
+          selected-date="[[selectedDate]]"
           active="[[initialPosition]]"
           part="years"
           aria-hidden="true"
-        >
-          <template>
-            <div
-              part="year-number"
-              current$="[[_isCurrentYear(index)]]"
-              selected$="[[_isSelectedYear(index, selectedDate)]]"
-            >
-              [[_yearAfterXYears(index)]]
-            </div>
-            <div part="year-separator" aria-hidden="true"></div>
-          </template>
-        </vaadin-infinite-scroller>
+        ></vaadin-date-picker-year-scroller>
       </div>
 
       <div on-touchend="_preventDefault" role="toolbar" part="toolbar">
