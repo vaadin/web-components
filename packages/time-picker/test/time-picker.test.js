@@ -79,14 +79,22 @@ describe('time-picker', () => {
       expect(inputElement.value).to.be.equal('12:00');
     });
 
+    it('should preserve invalid input value while resetting value to empty string', () => {
+      timePicker.value = '12:00';
+      setInputValue(timePicker, 'foo');
+      enter(inputElement);
+      expect(timePicker.value).to.equal('');
+      expect(inputElement.value).to.equal('foo');
+    });
+
     it('should not restore the previous value in input field if input value is invalid', () => {
       timePicker.value = '12:00';
-      timePicker.value = 'invalid';
+      timePicker.value = 'foo';
       expect(timePicker.value).to.be.equal('12:00');
-      setInputValue(comboBox, 'invalid');
-      enter(timePicker.inputElement);
+      setInputValue(timePicker, 'bar');
+      enter(inputElement);
       expect(timePicker.value).to.be.equal('');
-      expect(comboBox.value).to.be.equal('');
+      expect(inputElement.value).to.be.equal('bar');
     });
 
     it('should restore the previous value in input field if input value is empty', () => {

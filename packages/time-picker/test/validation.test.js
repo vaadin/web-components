@@ -121,6 +121,13 @@ describe('validation', () => {
       enter(timePicker.inputElement);
       expect(timePicker.invalid).to.be.true;
     });
+
+    it('should be invalid when trying to change value to an invalid time', () => {
+      timePicker.value = '12:00';
+      setInputValue(timePicker, 'foo');
+      enter(timePicker.inputElement);
+      expect(timePicker.invalid).to.be.true;
+    });
   });
 
   describe('required', () => {
