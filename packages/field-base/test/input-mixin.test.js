@@ -156,7 +156,7 @@ const runTests = (baseClass) => {
       expect(changeSpy.calledOnce).to.be.true;
     });
 
-    it("should notify about populated state of the input's value", async () => {
+    it('should fire input-value-populated-changed event on user value change', async () => {
       const spy = sinon.spy();
       element.addEventListener('input-value-populated-changed', spy);
 

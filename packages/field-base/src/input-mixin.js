@@ -58,7 +58,7 @@ export const InputMixin = dedupingMixin(
            * @private
            */
           __inputValuePopulated: {
-            type: String,
+            type: Boolean,
             value: false,
             observer: '__inputValuePopulatedChanged',
           },
@@ -170,12 +170,12 @@ export const InputMixin = dedupingMixin(
        * A change event listener used to update __inputValuePopulated property.
        * Do not override this method.
        *
-       * @param {Event} _event
+       * @param {Event} event
        * @private
        */
-      __onChange(_event) {
-        this.__inputValuePopulated = _event.target.value.length > 0;
-        this._onChange(_event);
+      __onChange(event) {
+        this.__inputValuePopulated = event.target.value.length > 0;
+        this._onChange(event);
       }
 
       /**
