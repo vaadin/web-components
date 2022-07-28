@@ -52,6 +52,16 @@ export const InputMixin = dedupingMixin(
             observer: '_valueChanged',
             notify: true,
           },
+
+          /**
+           * Populated state of the input's value.
+           * @private
+           */
+          __inputValuePopulated: {
+            type: String,
+            value: false,
+            observer: '__inputValuePopulatedChanged',
+          },
         };
       }
 
@@ -59,7 +69,7 @@ export const InputMixin = dedupingMixin(
         super();
 
         this._boundOnInput = this._onInput.bind(this);
-        this._boundOnChange = this._onChange.bind(this);
+        this._boundOnChange = this.__onChange.bind(this);
       }
 
       /**
@@ -127,6 +137,15 @@ export const InputMixin = dedupingMixin(
       }
 
       /**
+       * Observer to notify about the change of private property.
+       *
+       * @private
+       */
+      __inputValuePopulatedChanged() {
+        this.dispatchEvent(new CustomEvent('input-value-populated-changed'));
+      }
+
+      /**
        * An input event listener used to update the field value.
        *
        * @param {Event} event
@@ -146,6 +165,18 @@ export const InputMixin = dedupingMixin(
        * @protected
        */
       _onChange(_event) {}
+
+      /**
+       * A change event listener used to update __inputValuePopulated property.
+       * Do not override this method.
+       *
+       * @param {Event} _event
+       * @private
+       */
+      __onChange(_event) {
+        this.__inputValuePopulated = _event.target.value.length > 0;
+        this._onChange(_event);
+      }
 
       /**
        * Toggle the has-value attribute based on the value property.

@@ -50,4 +50,8 @@ export declare class InputMixinClass {
   protected _toggleHasValue(value: boolean): void;
 
   protected _valueChanged(value?: string, oldValue?: string): void;
+
+  private __inputValuePopulatedChanged(): void;
+
+  private __onChange(event: void): void;
 }

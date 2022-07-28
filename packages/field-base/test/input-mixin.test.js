@@ -156,6 +156,21 @@ const runTests = (baseClass) => {
       expect(changeSpy.calledOnce).to.be.true;
     });
 
+    it("should notify about populated state of the input's value", async () => {
+      const spy = sinon.spy();
+      element.addEventListener('input-value-populated-changed', spy);
+
+      input.value = 'foo';
+      input.dispatchEvent(new CustomEvent('change'));
+      await nextFrame();
+
+      input.value = '';
+      input.dispatchEvent(new CustomEvent('change'));
+      await nextFrame();
+
+      expect(spy.calledTwice).to.be.true;
+    });
+
     it('should not call an input event listener when input is unset', async () => {
       element.removeChild(input);
       element._setInputElement(undefined);
