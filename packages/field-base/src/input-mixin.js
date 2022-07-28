@@ -55,12 +55,12 @@ export const InputMixin = dedupingMixin(
 
           /**
            * Populated state of the input's value.
-           * @private
+           * @protected
            */
-          __inputValuePopulated: {
+          _hasInputValue: {
             type: Boolean,
             value: false,
-            observer: '__inputValuePopulatedChanged',
+            observer: '_hasInputValueChanged',
           },
         };
       }
@@ -141,7 +141,7 @@ export const InputMixin = dedupingMixin(
        *
        * @private
        */
-      __inputValuePopulatedChanged() {
+      _hasInputValueChanged() {
         this.dispatchEvent(new CustomEvent('input-value-populated-changed'));
       }
 
@@ -174,7 +174,7 @@ export const InputMixin = dedupingMixin(
        * @private
        */
       __onChange(event) {
-        this.__inputValuePopulated = event.target.value.length > 0;
+        this._hasInputValue = event.target.value.length > 0;
         this._onChange(event);
       }
 
