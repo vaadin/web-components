@@ -142,7 +142,7 @@ export const InputMixin = dedupingMixin(
        * @private
        */
       _hasInputValueChanged() {
-        this.dispatchEvent(new CustomEvent('input-value-populated-changed'));
+        this.dispatchEvent(new CustomEvent('has-input-value-changed'));
       }
 
       /**

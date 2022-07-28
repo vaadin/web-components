@@ -156,9 +156,9 @@ const runTests = (baseClass) => {
       expect(changeSpy.calledOnce).to.be.true;
     });
 
-    it('should fire input-value-populated-changed event on user value change', async () => {
+    it('should fire has-input-value-changed event on user value change', async () => {
       const spy = sinon.spy();
-      element.addEventListener('input-value-populated-changed', spy);
+      element.addEventListener('has-input-value-changed', spy);
 
       input.value = 'foo';
       input.dispatchEvent(new CustomEvent('change'));
