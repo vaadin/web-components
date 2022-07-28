@@ -54,7 +54,7 @@ export const InputMixin = dedupingMixin(
           },
 
           /**
-           * Populated state of the input's value.
+           * When true, the input element has a non-empty value entered by the user.
            * @protected
            */
           _hasInputValue: {
@@ -169,7 +169,7 @@ export const InputMixin = dedupingMixin(
       _onChange(_event) {}
 
       /**
-       * A change event listener used to update __inputValuePopulated property.
+       * A change event listener used to update `_hasInputValue` property.
        * Do not override this method.
        *
        * @param {Event} event
