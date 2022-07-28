@@ -111,7 +111,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
           auto-open-disabled="[[autoOpenDisabled]]"
           position-target="[[_inputContainer]]"
           theme$="[[_theme]]"
-          on-change="__onChange"
+          on-change="__onComboBoxChange"
         >
           <vaadin-input-container
             part="input-field"
@@ -592,7 +592,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
   }
 
   /** @private */
-  __onChange(event) {
+  __onComboBoxChange(event) {
     event.stopPropagation();
 
     this.validate();

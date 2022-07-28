@@ -110,11 +110,12 @@ const runTests = (baseClass) => {
   });
 
   describe('events', () => {
-    let eventsTag, inputSpy, changeSpy;
+    let eventsTag, inputSpy, changeSpy, hasInputValueSpy;
 
     before(() => {
       inputSpy = sinon.spy();
       changeSpy = sinon.spy();
+      hasInputValueSpy = sinon.spy();
 
       eventsTag = define[baseClass](
         'input-mixin-events',
@@ -134,6 +135,7 @@ const runTests = (baseClass) => {
 
     beforeEach(async () => {
       element = fixtureSync(`<${eventsTag}></${eventsTag}>`);
+      element.addEventListener('has-input-value-changed', hasInputValueSpy);
       await nextRender();
       input = document.createElement('input');
       element.appendChild(input);
@@ -144,6 +146,7 @@ const runTests = (baseClass) => {
     afterEach(() => {
       inputSpy.resetHistory();
       changeSpy.resetHistory();
+      hasInputValueSpy.resetHistory();
     });
 
     it('should call an input event listener', () => {
@@ -154,6 +157,18 @@ const runTests = (baseClass) => {
     it('should call a change event listener', () => {
       input.dispatchEvent(new CustomEvent('change'));
       expect(changeSpy.calledOnce).to.be.true;
+    });
+
+    it('should fire has-input-value-changed event on user value change', async () => {
+      input.value = 'foo';
+      input.dispatchEvent(new CustomEvent('change'));
+      await nextFrame();
+
+      input.value = '';
+      input.dispatchEvent(new CustomEvent('change'));
+      await nextFrame();
+
+      expect(hasInputValueSpy.calledTwice).to.be.true;
     });
 
     it('should not call an input event listener when input is unset', async () => {

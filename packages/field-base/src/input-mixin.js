@@ -52,6 +52,16 @@ export const InputMixin = dedupingMixin(
             observer: '_valueChanged',
             notify: true,
           },
+
+          /**
+           * When true, the input element has a non-empty value entered by the user.
+           * @protected
+           */
+          _hasInputValue: {
+            type: Boolean,
+            value: false,
+            observer: '_hasInputValueChanged',
+          },
         };
       }
 
@@ -59,7 +69,7 @@ export const InputMixin = dedupingMixin(
         super();
 
         this._boundOnInput = this._onInput.bind(this);
-        this._boundOnChange = this._onChange.bind(this);
+        this._boundOnChange = this.__onChange.bind(this);
       }
 
       /**
@@ -127,6 +137,17 @@ export const InputMixin = dedupingMixin(
       }
 
       /**
+       * Observer to notify about the change of private property.
+       *
+       * @private
+       */
+      _hasInputValueChanged(hasValue, oldHasValue) {
+        if (hasValue || oldHasValue) {
+          this.dispatchEvent(new CustomEvent('has-input-value-changed'));
+        }
+      }
+
+      /**
        * An input event listener used to update the field value.
        *
        * @param {Event} event
@@ -146,6 +167,18 @@ export const InputMixin = dedupingMixin(
        * @protected
        */
       _onChange(_event) {}
+
+      /**
+       * A change event listener used to update `_hasInputValue` property.
+       * Do not override this method.
+       *
+       * @param {Event} event
+       * @private
+       */
+      __onChange(event) {
+        this._hasInputValue = event.target.value.length > 0;
+        this._onChange(event);
+      }
 
       /**
        * Toggle the has-value attribute based on the value property.
