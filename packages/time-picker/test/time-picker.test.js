@@ -3,7 +3,7 @@ import { arrowDown, arrowUp, enter, esc, fixtureSync, nextFrame } from '@vaadin/
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-time-picker.js';
-import { setInputValue } from './helpers.js';
+import { outsideClick, setInputValue } from './helpers.js';
 
 describe('time-picker', () => {
   let timePicker, comboBox, inputElement;
@@ -36,23 +36,23 @@ describe('time-picker', () => {
     });
 
     it('should not set value if the format is invalid', () => {
-      setInputValue(comboBox, 'invalid');
-      enter(timePicker.inputElement);
+      setInputValue(timePicker, 'invalid');
+      enter(inputElement);
       expect(timePicker.value).to.be.equal('');
-      expect(comboBox.value).to.be.equal('invalid');
+      expect(inputElement.value).to.be.equal('invalid');
     });
 
     it('should not allow setting invalid value programmatically', () => {
       timePicker.value = 'invalid';
       expect(timePicker.value).to.be.equal('');
-      expect(comboBox.value).to.be.equal('');
+      expect(inputElement.value).to.be.equal('');
     });
 
     it('should change value to empty string when setting invalid value', () => {
-      setInputValue(comboBox, '09:00');
-      enter(timePicker.inputElement);
-      setInputValue(comboBox, 'invalid');
-      enter(timePicker.inputElement);
+      setInputValue(timePicker, '09:00');
+      enter(inputElement);
+      setInputValue(timePicker, 'invalid');
+      enter(inputElement);
       expect(timePicker.value).to.be.equal('');
     });
 
@@ -72,10 +72,13 @@ describe('time-picker', () => {
       expect(inputElement.value).to.be.equal('12:00');
     });
 
-    it('input value should be constantly formatted on same input', () => {
-      comboBox.value = '12';
+    it('should format input value consistently when committing same input value', () => {
+      setInputValue(timePicker, '12');
+      enter(inputElement);
       expect(inputElement.value).to.be.equal('12:00');
-      comboBox.value = '12';
+
+      setInputValue(timePicker, '12');
+      enter(inputElement);
       expect(inputElement.value).to.be.equal('12:00');
     });
 
@@ -97,14 +100,12 @@ describe('time-picker', () => {
       expect(inputElement.value).to.be.equal('bar');
     });
 
-    it('should restore the previous value in input field if input value is empty', () => {
-      comboBox.value = '12:00';
-      comboBox.value = '';
+    it('should set empty value on outside click after clearing input value', () => {
+      timePicker.value = '12:00';
+      setInputValue(timePicker, '');
+      outsideClick();
       expect(timePicker.value).to.be.equal('');
-      setInputValue(comboBox, '');
-      enter(timePicker.inputElement);
-      expect(timePicker.value).to.be.equal('');
-      expect(comboBox.value).to.be.equal('');
+      expect(inputElement.value).to.be.equal('');
     });
 
     it('should dispatch value-changed when value changes', () => {
@@ -211,7 +212,7 @@ describe('time-picker', () => {
     });
 
     it('should prevent mousedown event to avoid input blur', () => {
-      timePicker.$.comboBox.open();
+      comboBox.open();
 
       const event = new CustomEvent('mousedown', { cancelable: true });
       clearButton.dispatchEvent(event);
@@ -228,7 +229,7 @@ describe('time-picker', () => {
 
     it('should clear value on Escape if clear button is visible', async () => {
       timePicker.value = '00:00';
-      timePicker.inputElement.focus();
+      inputElement.focus();
       await sendKeys({ press: 'Escape' });
       expect(timePicker.value).to.equal('');
     });
