@@ -11,3 +11,7 @@ import { FormLayout } from '@vaadin/form-layout/src/vaadin-form-layout.js';
 export const FormLayoutElement = FormLayout;
 
 export * from '@vaadin/form-layout/src/vaadin-form-layout.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-form-layout" is deprecated. Use "@vaadin/form-layout" instead.',
+);

@@ -11,3 +11,7 @@ import { RadioGroup } from '@vaadin/radio-group/src/vaadin-radio-group.js';
 export const RadioGroupElement = RadioGroup;
 
 export * from '@vaadin/radio-group/src/vaadin-radio-group.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-radio-button" is deprecated. Use "@vaadin/radio-group" instead.',
+);

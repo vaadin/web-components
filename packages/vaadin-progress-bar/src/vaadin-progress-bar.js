@@ -11,3 +11,7 @@ import { ProgressBar } from '@vaadin/progress-bar/src/vaadin-progress-bar.js';
 export const ProgressBarElement = ProgressBar;
 
 export * from '@vaadin/progress-bar/src/vaadin-progress-bar.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-progress-bar" is deprecated. Use "@vaadin/progress-bar" instead.',
+);

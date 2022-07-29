@@ -11,3 +11,5 @@ import { TextArea } from '@vaadin/text-area/src/vaadin-text-area.js';
 export const TextAreaElement = TextArea;
 
 export * from '@vaadin/text-area/src/vaadin-text-area.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-text-field" is deprecated. Use "@vaadin/text-area" instead.');

@@ -11,3 +11,7 @@ import { Scroller } from '@vaadin/scroller/src/vaadin-scroller.js';
 export const ScrollerElement = Scroller;
 
 export * from '@vaadin/scroller/src/vaadin-scroller.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-ordered-layout" is deprecated. Use "@vaadin/scroller" instead.',
+);

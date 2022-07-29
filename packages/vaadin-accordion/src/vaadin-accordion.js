@@ -11,3 +11,5 @@ import { Accordion } from '@vaadin/accordion/src/vaadin-accordion.js';
 export const AccordionElement = Accordion;
 
 export * from '@vaadin/accordion/src/vaadin-accordion.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-accordion" is deprecated. Use "@vaadin/accordion" instead.');

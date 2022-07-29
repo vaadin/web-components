@@ -11,3 +11,5 @@ import { Crud } from '@vaadin/crud/src/vaadin-crud.js';
 export const CrudElement = Crud;
 
 export * from '@vaadin/crud/src/vaadin-crud.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-crud" is deprecated. Use "@vaadin/crud" instead.');

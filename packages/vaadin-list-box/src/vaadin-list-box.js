@@ -11,3 +11,5 @@ import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
 export const ListBoxElement = ListBox;
 
 export * from '@vaadin/list-box/src/vaadin-list-box.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-list-box" is deprecated. Use "@vaadin/list-box" instead.');

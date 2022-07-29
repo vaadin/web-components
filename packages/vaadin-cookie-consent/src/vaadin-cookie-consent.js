@@ -11,3 +11,7 @@ import { CookieConsent } from '@vaadin/cookie-consent/src/vaadin-cookie-consent.
 export const CookieConsentElement = CookieConsent;
 
 export * from '@vaadin/cookie-consent/src/vaadin-cookie-consent.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-cookie-consent" is deprecated. Use "@vaadin/cookie-consent" instead.',
+);

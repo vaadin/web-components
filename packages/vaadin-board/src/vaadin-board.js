@@ -11,3 +11,5 @@ import { Board } from '@vaadin/board/src/vaadin-board.js';
 export const BoardElement = Board;
 
 export * from '@vaadin/board/src/vaadin-board.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-board" is deprecated. Use "@vaadin/board" instead.');

@@ -11,3 +11,7 @@ import { ContextMenu } from '@vaadin/context-menu/src/vaadin-context-menu.js';
 export const ContextMenuElement = ContextMenu;
 
 export * from '@vaadin/context-menu/src/vaadin-context-menu.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-context-menu" is deprecated. Use "@vaadin/context-menu" instead.',
+);

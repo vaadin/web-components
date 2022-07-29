@@ -11,3 +11,7 @@ import { MessageList } from '@vaadin/message-list/src/vaadin-message-list.js';
 export const MessageListElement = MessageList;
 
 export * from '@vaadin/message-list/src/vaadin-message-list.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-messages" is deprecated. Use "@vaadin/message-list" instead.',
+);

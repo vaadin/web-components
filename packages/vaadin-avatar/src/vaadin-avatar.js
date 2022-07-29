@@ -11,3 +11,5 @@ import { Avatar } from '@vaadin/avatar/src/vaadin-avatar.js';
 export const AvatarElement = Avatar;
 
 export * from '@vaadin/avatar/src/vaadin-avatar.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-avatar" is deprecated. Use "@vaadin/avatar" instead.');

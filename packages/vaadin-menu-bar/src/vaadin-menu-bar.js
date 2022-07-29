@@ -11,3 +11,5 @@ import { MenuBar } from '@vaadin/menu-bar/src/vaadin-menu-bar.js';
 export const MenuBarElement = MenuBar;
 
 export * from '@vaadin/menu-bar/src/vaadin-menu-bar.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-menu-bar" is deprecated. Use "@vaadin/menu-bar" instead.');

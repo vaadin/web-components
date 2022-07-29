@@ -11,3 +11,7 @@ import { MessageInput } from '@vaadin/message-input/src/vaadin-message-input.js'
 export const MessageInputElement = MessageInput;
 
 export * from '@vaadin/message-input/src/vaadin-message-input.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-messages" is deprecated. Use "@vaadin/message-input" instead.',
+);

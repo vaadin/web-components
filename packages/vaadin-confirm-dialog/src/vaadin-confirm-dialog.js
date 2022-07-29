@@ -11,3 +11,7 @@ import { ConfirmDialog } from '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.
 export const ConfirmDialogElement = ConfirmDialog;
 
 export * from '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-confirm-dialog" is deprecated. Use "@vaadin/confirm-dialog" instead.',
+);

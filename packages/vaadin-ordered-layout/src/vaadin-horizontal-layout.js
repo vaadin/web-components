@@ -11,3 +11,7 @@ import { HorizontalLayout } from '@vaadin/horizontal-layout/src/vaadin-horizonta
 export const HorizontalLayoutElement = HorizontalLayout;
 
 export * from '@vaadin/horizontal-layout/src/vaadin-horizontal-layout.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-ordered-layout" is deprecated. Use "@vaadin/horizontal-layout" instead.',
+);

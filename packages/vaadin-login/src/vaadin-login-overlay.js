@@ -11,3 +11,5 @@ import { LoginOverlay } from '@vaadin/login/src/vaadin-login-overlay.js';
 export const LoginOverlayElement = LoginOverlay;
 
 export * from '@vaadin/login/src/vaadin-login-overlay.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-login" is deprecated. Use "@vaadin/login" instead.');

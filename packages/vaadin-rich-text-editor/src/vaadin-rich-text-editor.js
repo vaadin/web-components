@@ -11,3 +11,7 @@ import { RichTextEditor } from '@vaadin/rich-text-editor/src/vaadin-rich-text-ed
 export const RichTextEditorElement = RichTextEditor;
 
 export * from '@vaadin/rich-text-editor/src/vaadin-rich-text-editor.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-rich-text-editor" is deprecated. Use "@vaadin/rich-text-editor" instead.',
+);

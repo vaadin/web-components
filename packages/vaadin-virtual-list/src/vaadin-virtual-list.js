@@ -11,3 +11,7 @@ import { VirtualList } from '@vaadin/virtual-list/src/vaadin-virtual-list.js';
 export const VirtualListElement = VirtualList;
 
 export * from '@vaadin/virtual-list/src/vaadin-virtual-list.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-virtual-list" is deprecated. Use "@vaadin/virtual-list" instead.',
+);

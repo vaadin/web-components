@@ -11,3 +11,7 @@ import { CustomField } from '@vaadin/custom-field/src/vaadin-custom-field.js';
 export const CustomFieldElement = CustomField;
 
 export * from '@vaadin/custom-field/src/vaadin-custom-field.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-custom-field" is deprecated. Use "@vaadin/custom-field" instead.',
+);

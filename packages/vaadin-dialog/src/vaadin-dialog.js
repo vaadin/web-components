@@ -11,3 +11,5 @@ import { Dialog } from '@vaadin/dialog/src/vaadin-dialog.js';
 export const DialogElement = Dialog;
 
 export * from '@vaadin/dialog/src/vaadin-dialog.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-dialog" is deprecated. Use "@vaadin/dialog" instead.');

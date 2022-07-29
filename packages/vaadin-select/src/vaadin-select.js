@@ -11,3 +11,5 @@ import { Select } from '@vaadin/select/src/vaadin-select.js';
 export const SelectElement = Select;
 
 export * from '@vaadin/select/src/vaadin-select.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-select" is deprecated. Use "@vaadin/select" instead.');
