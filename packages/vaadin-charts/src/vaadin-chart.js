@@ -11,3 +11,5 @@ import { Chart } from '@vaadin/charts/src/vaadin-chart.js';
 export const ChartElement = Chart;
 
 export * from '@vaadin/charts/src/vaadin-chart.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-charts" is deprecated. Use "@vaadin/charts" instead.');

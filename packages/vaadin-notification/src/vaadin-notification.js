@@ -11,3 +11,7 @@ import { Notification } from '@vaadin/notification/src/vaadin-notification.js';
 export const NotificationElement = Notification;
 
 export * from '@vaadin/notification/src/vaadin-notification.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-notification" is deprecated. Use "@vaadin/notification" instead.',
+);

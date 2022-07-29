@@ -11,3 +11,5 @@ import { AvatarGroup } from '@vaadin/avatar-group/src/vaadin-avatar-group.js';
 export const AvatarGroupElement = AvatarGroup;
 
 export * from '@vaadin/avatar-group/src/vaadin-avatar-group.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-avatar" is deprecated. Use "@vaadin/avatar-group" instead.');

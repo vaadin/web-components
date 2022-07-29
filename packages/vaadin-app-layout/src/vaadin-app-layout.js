@@ -11,3 +11,7 @@ import { AppLayout } from '@vaadin/app-layout/src/vaadin-app-layout.js';
 export const AppLayoutElement = AppLayout;
 
 export * from '@vaadin/app-layout/src/vaadin-app-layout.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-app-layout" is deprecated. Use "@vaadin/app-layout" instead.',
+);

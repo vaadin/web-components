@@ -11,3 +11,7 @@ import { SplitLayout } from '@vaadin/split-layout/src/vaadin-split-layout.js';
 export const SplitLayoutElement = SplitLayout;
 
 export * from '@vaadin/split-layout/src/vaadin-split-layout.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-split-layout" is deprecated. Use "@vaadin/split-layout" instead.',
+);

@@ -11,3 +11,5 @@ import { Item } from '@vaadin/item/src/vaadin-item.js';
 export const ItemElement = Item;
 
 export * from '@vaadin/item/src/vaadin-item.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-item" is deprecated. Use "@vaadin/item" instead.');

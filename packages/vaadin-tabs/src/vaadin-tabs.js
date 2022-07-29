@@ -11,3 +11,5 @@ import { Tabs } from '@vaadin/tabs/src/vaadin-tabs.js';
 export const TabsElement = Tabs;
 
 export * from '@vaadin/tabs/src/vaadin-tabs.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-tabs" is deprecated. Use "@vaadin/tabs" instead.');

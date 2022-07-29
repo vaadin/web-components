@@ -11,3 +11,7 @@ import { VerticalLayout } from '@vaadin/vertical-layout/src/vaadin-vertical-layo
 export const VerticalLayoutElement = VerticalLayout;
 
 export * from '@vaadin/vertical-layout/src/vaadin-vertical-layout.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-ordered-layout" is deprecated. Use "@vaadin/vertical-layout" instead.',
+);

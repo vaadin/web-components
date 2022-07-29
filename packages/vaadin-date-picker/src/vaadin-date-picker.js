@@ -11,3 +11,7 @@ import { DatePicker } from '@vaadin/date-picker/src/vaadin-date-picker.js';
 export const DatePickerElement = DatePicker;
 
 export * from '@vaadin/date-picker/src/vaadin-date-picker.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-date-picker" is deprecated. Use "@vaadin/date-picker" instead.',
+);

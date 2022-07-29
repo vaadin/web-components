@@ -12,3 +12,5 @@ import { GridPro } from '@vaadin/grid-pro/src/vaadin-grid-pro.js';
 export const GridProElement = GridPro;
 
 export * from '@vaadin/grid-pro/src/vaadin-grid-pro.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-grid-pro" is deprecated. Use "@vaadin/grid-pro" instead.');

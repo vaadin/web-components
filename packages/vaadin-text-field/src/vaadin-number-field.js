@@ -11,3 +11,7 @@ import { NumberField } from '@vaadin/number-field/src/vaadin-number-field.js';
 export const NumberFieldElement = NumberField;
 
 export * from '@vaadin/number-field/src/vaadin-number-field.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-text-field" is deprecated. Use "@vaadin/number-field" instead.',
+);

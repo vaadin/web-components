@@ -11,3 +11,5 @@ import { Upload } from '@vaadin/upload/src/vaadin-upload.js';
 export const UploadElement = Upload;
 
 export * from '@vaadin/upload/src/vaadin-upload.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-upload" is deprecated. Use "@vaadin/upload" instead.');

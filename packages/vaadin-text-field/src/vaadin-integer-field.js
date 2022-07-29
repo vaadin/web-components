@@ -11,3 +11,7 @@ import { IntegerField } from '@vaadin/integer-field/src/vaadin-integer-field.js'
 export const IntegerFieldElement = IntegerField;
 
 export * from '@vaadin/integer-field/src/vaadin-integer-field.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-text-field" is deprecated. Use "@vaadin/integer-field" instead.',
+);

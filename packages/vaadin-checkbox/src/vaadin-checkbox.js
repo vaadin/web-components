@@ -11,3 +11,5 @@ import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 export const CheckboxElement = Checkbox;
 
 export * from '@vaadin/checkbox/src/vaadin-checkbox.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-checkbox" is deprecated. Use "@vaadin/checkbox" instead.');

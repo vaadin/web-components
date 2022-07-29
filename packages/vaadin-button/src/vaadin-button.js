@@ -11,3 +11,5 @@ import { Button } from '@vaadin/button/src/vaadin-button.js';
 export const ButtonElement = Button;
 
 export * from '@vaadin/button/src/vaadin-button.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-button" is deprecated. Use "@vaadin/button" instead.');

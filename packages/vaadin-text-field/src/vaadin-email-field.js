@@ -11,3 +11,7 @@ import { EmailField } from '@vaadin/email-field/src/vaadin-email-field.js';
 export const EmailFieldElement = EmailField;
 
 export * from '@vaadin/email-field/src/vaadin-email-field.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-text-field" is deprecated. Use "@vaadin/email-field" instead.',
+);

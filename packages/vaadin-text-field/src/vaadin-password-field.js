@@ -11,3 +11,7 @@ import { PasswordField } from '@vaadin/password-field/src/vaadin-password-field.
 export const PasswordFieldElement = PasswordField;
 
 export * from '@vaadin/password-field/src/vaadin-password-field.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-text-field" is deprecated. Use "@vaadin/password-field" instead.',
+);

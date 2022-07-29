@@ -11,3 +11,5 @@ import { ComboBox } from '@vaadin/combo-box/src/vaadin-combo-box.js';
 export const ComboBoxElement = ComboBox;
 
 export * from '@vaadin/combo-box/src/vaadin-combo-box.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-combo-box" is deprecated. Use "@vaadin/combo-box" instead.');

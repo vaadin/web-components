@@ -11,3 +11,7 @@ import { CheckboxGroup } from '@vaadin/checkbox-group/src/vaadin-checkbox-group.
 export const CheckboxGroupElement = CheckboxGroup;
 
 export * from '@vaadin/checkbox-group/src/vaadin-checkbox-group.js';
+
+console.warn(
+  'WARNING: Since Vaadin 23.2, "@vaadin/vaadin-checkbox" is deprecated. Use "@vaadin/checkbox-group" instead.',
+);

@@ -11,3 +11,5 @@ import { Icon } from '@vaadin/icon/src/vaadin-icon.js';
 export const IconElement = Icon;
 
 export * from '@vaadin/icon/src/vaadin-icon.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-icon" is deprecated. Use "@vaadin/icon" instead.');

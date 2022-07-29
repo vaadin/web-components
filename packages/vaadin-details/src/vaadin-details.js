@@ -11,3 +11,5 @@ import { Details } from '@vaadin/details/src/vaadin-details.js';
 export const DetailsElement = Details;
 
 export * from '@vaadin/details/src/vaadin-details.js';
+
+console.warn('WARNING: Since Vaadin 23.2, "@vaadin/vaadin-details" is deprecated. Use "@vaadin/details" instead.');
