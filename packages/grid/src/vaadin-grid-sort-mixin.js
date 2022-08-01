@@ -4,6 +4,12 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+function getDefaultMultiSortPriority() {
+  return window.Vaadin && window.Vaadin.featureFlags && window.Vaadin.featureFlags.multiSortPriorityAppend
+    ? 'append'
+    : 'prepend';
+}
+
 /**
  * @polymerMixin
  */
@@ -37,7 +43,7 @@ export const SortMixin = (superClass) =>
          */
         multiSortPriority: {
           type: String,
-          value: 'prepend',
+          value: getDefaultMultiSortPriority(),
         },
 
         /**
