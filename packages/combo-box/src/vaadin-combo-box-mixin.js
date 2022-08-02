@@ -1102,7 +1102,7 @@ export const ComboBoxMixin = (subclass) =>
     _onFocusout(event) {
       // VoiceOver on iOS fires `focusout` event when moving focus to the item in the dropdown.
       // Do not focus the input in this case, because it would break announcement for the item.
-      if (event.relatedTarget && event.relatedTarget.localName === `${this._tagNamePrefix}-item`) {
+      if (event.relatedTarget && this._getItemElements().includes(event.relatedTarget)) {
         return;
       }
 
