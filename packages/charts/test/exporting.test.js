@@ -131,6 +131,37 @@ describe('vaadin-chart exporting', () => {
     expect(styleRemovedFromBody).to.be.true;
   });
 
+  it('should add styled-mode attribute to body before export and delete it afterwards', async () => {
+    const attributeName = 'styled-mode';
+    expect(document.body.getAttribute(attributeName)).to.be.null;
+
+    let styledModeAddedToBody = false;
+
+    const targetNode = document.body;
+    const config = { attributes: true, attributeOldValue: true };
+
+    // Track styled-mode attribute addition and removal from the document body
+    const observer = new MutationObserver((mutations) => {
+      styledModeAddedToBody =
+        styledModeAddedToBody ||
+        mutations.some((mutation) => mutation.attributeName === attributeName && mutation.oldValue);
+    });
+
+    observer.observe(targetNode, config);
+
+    // Reveal exporting menu items
+    chartContainer.querySelector('button.highcharts-a11y-proxy-button.highcharts-no-tooltip').click();
+
+    // Simulate a PNG export
+    const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[2];
+    pngExportButton.onclick();
+
+    expect(fireEventSpy.lastCall.args[1]).to.be.equal('afterExport');
+    await nextRender(chart);
+    expect(styledModeAddedToBody).to.be.true;
+    expect(document.body.getAttribute(attributeName)).to.be.null;
+  });
+
   // TODO add test for print button.
   // The original issue https://github.com/highcharts/highcharts/issues/13489 is fixed now.
 });
