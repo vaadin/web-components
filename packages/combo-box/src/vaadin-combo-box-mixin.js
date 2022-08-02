@@ -1090,6 +1090,12 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _onFocusout(event) {
+      // VoiceOver on iOS fires `focusout` event when moving focus to the item in the dropdown.
+      // Do not focus the input in this case, because it would break announcement for the item.
+      if (event.relatedTarget && this._getItemElements().includes(event.relatedTarget)) {
+        return;
+      }
+
       // Fixes the problem with `focusout` happening when clicking on the scroll bar on Edge
       if (event.relatedTarget === this.$.dropdown.$.overlay) {
         event.composedPath()[0].focus();
