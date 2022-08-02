@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { createEventSpy, outsideClick, setInputValue } from './helpers.js';
+import { createEventSpy, getFirstItem, outsideClick, setInputValue } from './helpers.js';
 
 describe('toggling dropdown', () => {
   let comboBox, overlay, input;
@@ -227,6 +227,15 @@ describe('toggling dropdown', () => {
       focusout(input);
 
       expect(comboBox.opened).to.equal(false);
+    });
+
+    it('should not close the overlay when focus is moved to item', () => {
+      comboBox.open();
+
+      const item = getFirstItem(comboBox);
+      focusout(input, item);
+
+      expect(comboBox.opened).to.be.true;
     });
 
     it('should restore focus to the field on outside click', async () => {
