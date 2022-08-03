@@ -7,6 +7,7 @@ import './vaadin-combo-box-item.js';
 import './vaadin-combo-box-overlay.js';
 import './vaadin-combo-box-scroller.js';
 import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ValidateMixin } from '@vaadin/field-base/src/validate-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -120,9 +121,10 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
   ready() {
     super.ready();
 
-    // Wait until the slotted elements are rendered
-    requestAnimationFrame(() => {
-      this._toggleElement = this.querySelector('.toggle-button');
+    this._toggleElement = this.querySelector('.toggle-button');
+
+    // Wait until the slotted input DOM is ready
+    afterNextRender(this, () => {
       this._setInputElement(this.querySelector('vaadin-text-field,.input'));
       this._revertInputValue();
     });
