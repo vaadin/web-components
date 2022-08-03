@@ -318,10 +318,12 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     return this.getAttribute('dir') === 'rtl';
   }
 
+  get calendars() {
+    return [...this.shadowRoot.querySelectorAll('vaadin-month-calendar')];
+  }
+
   get focusableDateElement() {
-    return [...this.shadowRoot.querySelectorAll('vaadin-month-calendar')]
-      .map((calendar) => calendar.focusableDateElement)
-      .find(Boolean);
+    return this.calendars.map((calendar) => calendar.focusableDateElement).find(Boolean);
   }
 
   ready() {
@@ -526,6 +528,11 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
     this._targetPosition = targetPosition;
 
+    let revealResolve;
+    this._revealPromise = new Promise((resolve) => {
+      revealResolve = resolve;
+    });
+
     // http://gizma.com/easing/
     const easingFunction = (t, b, c, d) => {
       t /= d / 2;
@@ -566,7 +573,9 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
         this.$.monthScroller.position = this._targetPosition;
         this._targetPosition = undefined;
-        this.__tryFocusDate();
+
+        revealResolve();
+        this._revealPromise = undefined;
       }
 
       setTimeout(this._repositionYearScroller.bind(this), 1);
@@ -787,9 +796,8 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
         break;
       case 'today':
         if (event.shiftKey) {
-          // Browser returns focus back to the calendar.
-          // We need to move the scroll to focused date.
-          setTimeout(() => this.revealDate(this.focusedDate), 1);
+          event.preventDefault();
+          this.focusDateElement();
         }
         break;
       case 'cancel':
@@ -855,15 +863,29 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     if (!keepMonth) {
       this._focusedMonthDate = dateToFocus.getDate();
     }
-    await this.focusDateElement();
+    await this.focusDateElement(false);
   }
 
-  async focusDateElement() {
+  async focusDateElement(reveal = true) {
     this.__pendingDateFocus = this.focusedDate;
 
-    await new Promise((resolve) => {
-      requestAnimationFrame(resolve);
-    });
+    // Wait for `vaadin-month-calendar` elements to be rendered
+    if (!this.calendars.length) {
+      await new Promise((resolve) => {
+        setTimeout(resolve);
+      });
+    }
+
+    // Reveal focused date unless it has been just set,
+    // which triggers `revealDate()` in the observer.
+    if (reveal) {
+      this.revealDate(this.focusedDate);
+    }
+
+    if (this._revealPromise) {
+      // Wait for focused date to be scrolled into view.
+      await this._revealPromise;
+    }
 
     this.__tryFocusDate();
   }

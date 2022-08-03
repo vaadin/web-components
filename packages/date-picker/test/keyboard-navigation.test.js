@@ -134,7 +134,6 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       overlay.initialPosition = initialDate;
       await nextRender(overlay);
       await overlay.focusDate(initialDate);
-      await waitForScrollToFinish(overlay);
     });
 
     it('should focus one week forward with arrow down', async () => {
