@@ -119,14 +119,13 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
   /** @protected */
   ready() {
     super.ready();
-    this._toggleElement = this.querySelector('.toggle-button');
-  }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    this._setInputElement(this.querySelector('vaadin-text-field,.input'));
-    this._revertInputValue();
+    // Wait until the slotted elements are rendered
+    requestAnimationFrame(() => {
+      this._toggleElement = this.querySelector('.toggle-button');
+      this._setInputElement(this.querySelector('vaadin-text-field,.input'));
+      this._revertInputValue();
+    });
   }
 
   /**
@@ -146,6 +145,38 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ValidateMixi
    */
   get _propertyForValue() {
     return dashToCamelCase(this.attrForValue);
+  }
+
+  /**
+   * @protected
+   * @override
+   * @return {HTMLInputElement | undefined}
+   */
+  get _nativeInput() {
+    const input = this.inputElement;
+
+    if (input) {
+      // Support `<input class="input">`
+      if (input instanceof HTMLInputElement) {
+        return input;
+      }
+
+      // Support `<input>` in light DOM (e.g. `vaadin-text-field`)
+      const slottedInput = input.querySelector('input');
+      if (slottedInput) {
+        return slottedInput;
+      }
+
+      if (input.shadowRoot) {
+        // Support `<input>` in Shadow DOM (e.g. `mwc-textfield`)
+        const shadowInput = input.shadowRoot.querySelector('input');
+        if (shadowInput) {
+          return shadowInput;
+        }
+      }
+    }
+
+    return undefined;
   }
 
   /** @protected */
