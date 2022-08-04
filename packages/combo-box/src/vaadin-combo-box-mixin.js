@@ -239,13 +239,25 @@ export const ComboBoxMixin = (subclass) =>
     }
 
     /**
+     * Get a reference to the native `<input>` element.
+     * Override to provide a custom input.
+     * @protected
+     * @return {HTMLInputElement | undefined}
+     */
+    get _nativeInput() {
+      return this.inputElement;
+    }
+
+    /**
      * Override method inherited from `InputMixin`
      * to customize the input element.
      * @protected
      * @override
      */
-    _inputElementChanged(input) {
-      super._inputElementChanged(input);
+    _inputElementChanged(inputElement) {
+      super._inputElementChanged(inputElement);
+
+      const input = this._nativeInput;
 
       if (input) {
         input.autocomplete = 'off';
@@ -346,7 +358,7 @@ export const ComboBoxMixin = (subclass) =>
 
     /** @private */
     _updateActiveDescendant(index) {
-      const input = this.inputElement;
+      const input = this._nativeInput;
       if (!input) {
         return;
       }
@@ -382,7 +394,7 @@ export const ComboBoxMixin = (subclass) =>
         }
       }
 
-      const input = this.inputElement;
+      const input = this._nativeInput;
       if (input) {
         input.setAttribute('aria-expanded', !!opened);
 
