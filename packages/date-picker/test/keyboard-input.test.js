@@ -269,7 +269,9 @@ describe('keyboard', () => {
         await nextRender(datepicker);
 
         // Scroll to date outside viewport
-        overlayContent.revealDate(new Date(2000, 0, 1));
+        const date = new Date();
+        date.setFullYear(date.getFullYear() - 1);
+        overlayContent.revealDate(date);
         await waitForScrollToFinish(overlayContent);
 
         // Move focus to the input
@@ -297,7 +299,9 @@ describe('keyboard', () => {
         await nextRender(datepicker);
 
         // Scroll to date outside viewport
-        overlayContent.revealDate(new Date(2000, 0, 1));
+        const date = new Date();
+        date.setFullYear(date.getFullYear() - 1);
+        overlayContent.revealDate(date);
         await waitForScrollToFinish(overlayContent);
 
         // Move focus to the Today button
