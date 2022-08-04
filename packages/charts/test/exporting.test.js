@@ -134,7 +134,7 @@ describe('vaadin-chart exporting', () => {
   it('should add styled-mode attribute to body before export and delete it afterwards', async () => {
     chart.options.chart.styledMode = true;
     const attributeName = 'styled-mode';
-    expect(document.body.getAttribute(attributeName)).to.be.null;
+    expect(document.body.hasAttribute(attributeName)).to.be.false;
 
     let styledModeAddedToBody = false;
 
@@ -160,13 +160,13 @@ describe('vaadin-chart exporting', () => {
     expect(fireEventSpy.lastCall.args[1]).to.be.equal('afterExport');
     await nextRender(chart);
     expect(styledModeAddedToBody).to.be.true;
-    expect(document.body.getAttribute(attributeName)).to.be.null;
+    expect(document.body.hasAttribute(attributeName)).to.be.false;
   });
 
-  it('styled-mode attribute should not be added to body if styledMode option is set to false', async () => {
+  it('should not add styled-mode attribute to body if styledMode option is set to false', async () => {
     chart.options.chart.styledMode = false;
     const attributeName = 'styled-mode';
-    expect(document.body.getAttribute(attributeName)).to.be.null;
+    expect(document.body.hasAttribute(attributeName)).to.be.false;
 
     let styledModeAddedToBody = false;
 
@@ -192,7 +192,7 @@ describe('vaadin-chart exporting', () => {
     expect(fireEventSpy.lastCall.args[1]).to.be.equal('afterExport');
     await nextRender(chart);
     expect(styledModeAddedToBody).to.be.false;
-    expect(document.body.getAttribute(attributeName)).to.be.null;
+    expect(document.body.hasAttribute(attributeName)).to.be.false;
   });
 
   // TODO add test for print button.
