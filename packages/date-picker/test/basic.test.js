@@ -314,6 +314,27 @@ describe('basic features', () => {
       await open(datepicker);
       expect(spy.called).to.be.true;
     });
+
+    describe('focus date', () => {
+      let spy;
+
+      beforeEach(() => {
+        // Do not spy on the DOM element because it can be reused
+        // by infinite scroller. Instead, spy on the native focus.
+        spy = sinon.spy(HTMLElement.prototype, 'focus');
+      });
+
+      afterEach(() => {
+        spy.restore();
+      });
+
+      it('should focus date element when opened', async () => {
+        await open(datepicker);
+        await nextRender();
+        const cell = spy.lastCall.thisValue;
+        expect(cell.hasAttribute('today')).to.be.true;
+      });
+    });
   });
 
   describe('value property formats', () => {
@@ -599,7 +620,7 @@ describe('wrapped', () => {
   it('should match the parent width', () => {
     container.querySelector('div').style.width = '120px';
     datepicker.style.width = '100%';
-    expect(datepicker.inputElement.clientWidth).to.equal(120);
+    expect(datepicker.clientWidth).to.equal(120);
   });
 });
 
