@@ -132,6 +132,7 @@ describe('vaadin-chart exporting', () => {
   });
 
   it('should add styled-mode attribute to body before export and delete it afterwards', async () => {
+    chart.options.chart.styledMode = true;
     const attributeName = 'styled-mode';
     expect(document.body.getAttribute(attributeName)).to.be.null;
 
@@ -159,6 +160,38 @@ describe('vaadin-chart exporting', () => {
     expect(fireEventSpy.lastCall.args[1]).to.be.equal('afterExport');
     await nextRender(chart);
     expect(styledModeAddedToBody).to.be.true;
+    expect(document.body.getAttribute(attributeName)).to.be.null;
+  });
+
+  it('styled-mode attribute should not be added to body if styledMode option is set to false', async () => {
+    chart.options.chart.styledMode = false;
+    const attributeName = 'styled-mode';
+    expect(document.body.getAttribute(attributeName)).to.be.null;
+
+    let styledModeAddedToBody = false;
+
+    const targetNode = document.body;
+    const config = { attributes: true, attributeOldValue: true };
+
+    // Track styled-mode attribute addition and removal from the document body
+    const observer = new MutationObserver((mutations) => {
+      styledModeAddedToBody =
+        styledModeAddedToBody ||
+        mutations.some((mutation) => mutation.attributeName === attributeName && mutation.oldValue === '');
+    });
+
+    observer.observe(targetNode, config);
+
+    // Reveal exporting menu items
+    chartContainer.querySelector('button.highcharts-a11y-proxy-button.highcharts-no-tooltip').click();
+
+    // Simulate a PNG export
+    const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[2];
+    pngExportButton.onclick();
+
+    expect(fireEventSpy.lastCall.args[1]).to.be.equal('afterExport');
+    await nextRender(chart);
+    expect(styledModeAddedToBody).to.be.false;
     expect(document.body.getAttribute(attributeName)).to.be.null;
   });
 
