@@ -993,7 +993,7 @@ export const DatePickerMixin = (subclass) =>
             if (e.shiftKey) {
               this._overlayContent.focusCancel();
             } else {
-              this._overlayContent.focusDate(this._focusedDate);
+              this._overlayContent.focusDateElement();
             }
           }
           break;
