@@ -525,5 +525,17 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       date.setDate(31);
       expect(overlay.focusedDate).to.eql(date);
     });
+
+    it('should only reveal date once when navigating days', async () => {
+      const spy = sinon.spy(overlay, 'revealDate');
+      await sendKeys({ press: 'ArrowDown' });
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should reveal date when focusing date element', async () => {
+      const spy = sinon.spy(overlay, 'revealDate');
+      await overlay.focusDateElement();
+      expect(spy.calledOnce).to.be.true;
+    });
   });
 });
