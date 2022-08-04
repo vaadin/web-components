@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDownKeyDown, fixtureSync } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
@@ -12,9 +12,10 @@ describe('item template', () => {
 
   ['combo-box', 'combo-box-light'].forEach((name) => {
     describe(name, () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         wrapper = fixtureSync(`<mock-${name}-template-wrapper></mock-${name}-template-wrapper>`);
         comboBox = wrapper.$.comboBox;
+        await nextRender();
         comboBox.items = ['foo', 'bar'];
         comboBox.open();
         firstItem = getFirstItem(comboBox);

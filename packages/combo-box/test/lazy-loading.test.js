@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDownKeyDown, aTimeout, enterKeyDown, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, aTimeout, enterKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
 import './not-animated-styles.js';
@@ -1279,12 +1279,13 @@ describe('lazy loading', () => {
   });
 
   describe('combo-box-light', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       comboBox = fixtureSync(`
         <vaadin-combo-box-light>
           <vaadin-text-field></vaadin-text-field>
         </vaadin-combo-box-light>
       `);
+      await nextRender();
     });
 
     isComboBoxLight = true;
