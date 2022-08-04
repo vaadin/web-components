@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, down, fixtureSync, isIOS, touchstart } from '@vaadin/testing-helpers';
+import { aTimeout, click, down, fixtureSync, touchstart } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import '../src/vaadin-date-picker.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -22,22 +22,6 @@ describe('dropdown', () => {
     datepicker.open();
     datepicker.parentElement.removeChild(datepicker);
     expect(datepicker.$.overlay.parentElement).to.not.be.ok;
-  });
-
-  (isIOS ? it : it.skip)('should handle webkit-overflow-scrolling', (done) => {
-    document.body.style.webkitOverflowScrolling = 'touch';
-
-    datepicker.open();
-
-    datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
-      expect(window.getComputedStyle(document.body).webkitOverflowScrolling).to.equal('auto');
-      datepicker.close();
-    });
-
-    datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
-      expect(window.getComputedStyle(document.body).webkitOverflowScrolling).to.equal('touch');
-      done();
-    });
   });
 
   it('should restore focus to the field on outside click', async () => {
