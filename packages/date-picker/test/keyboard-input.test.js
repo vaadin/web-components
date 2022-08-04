@@ -249,6 +249,57 @@ describe('keyboard', () => {
       expect(spy.called).to.be.true;
     });
 
+    it('should focus date scrolled out of the view on input Tab', async () => {
+      // Move focus to the calendar
+      await sendKeys({ press: 'Tab' });
+      await nextRender(datepicker);
+
+      const cell = getFocusedCell(overlayContent);
+
+      // Scroll to date outside viewport
+      overlayContent.revealDate(new Date(2000, 0, 1));
+      await waitForScrollToFinish(overlayContent);
+
+      // Move focus to the input
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
+      const spy = sinon.spy(cell, 'focus');
+
+      // Move focus back to the date
+      await sendKeys({ press: 'Tab' });
+      await waitForScrollToFinish(overlayContent);
+
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should focus date scrolled out of the view on Today button Shift Tab', async () => {
+      // Move focus to the calendar
+      await sendKeys({ press: 'Tab' });
+      await nextRender(datepicker);
+
+      const cell = getFocusedCell(overlayContent);
+
+      // Scroll to date outside viewport
+      overlayContent.revealDate(new Date(2000, 0, 1));
+      await waitForScrollToFinish(overlayContent);
+
+      // Move focus to the Today button
+      await sendKeys({ press: 'Tab' });
+
+      const spy = sinon.spy(cell, 'focus');
+
+      // Move focus back to the date
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
+      await waitForScrollToFinish(overlayContent);
+
+      expect(spy.calledOnce).to.be.true;
+    });
+
     it('should clear selection on close', async () => {
       input.select();
 
