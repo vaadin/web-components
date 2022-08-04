@@ -13,7 +13,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import * as settings from '@polymer/polymer/lib/utils/settings.js';
-import { close, getFocusedCell, getOverlayContent, monthsEqual, open, waitForScrollToFinish } from './common.js';
+import { close, getOverlayContent, monthsEqual, open } from './common.js';
 
 settings.setCancelSyntheticClickEvents(false);
 
@@ -319,6 +319,8 @@ describe('basic features', () => {
       let spy;
 
       beforeEach(() => {
+        // Do not spy on the DOM element because it can be reused
+        // by infinite scroller. Instead, spy on the native focus.
         spy = sinon.spy(HTMLElement.prototype, 'focus');
       });
 
@@ -328,10 +330,9 @@ describe('basic features', () => {
 
       it('should focus date element when opened', async () => {
         await open(datepicker);
-        const content = getOverlayContent(datepicker);
-        await waitForScrollToFinish(content);
-        const cell = getFocusedCell(content);
-        expect(spy.calledOn(cell)).to.be.true;
+        await nextRender();
+        const cell = spy.lastCall.thisValue;
+        expect(cell.hasAttribute('today')).to.be.true;
       });
     });
   });
