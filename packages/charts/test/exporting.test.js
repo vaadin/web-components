@@ -145,7 +145,7 @@ describe('vaadin-chart exporting', () => {
     const observer = new MutationObserver((mutations) => {
       styledModeAddedToBody =
         styledModeAddedToBody ||
-        mutations.some((mutation) => mutation.attributeName === attributeName && mutation.oldValue);
+        mutations.some((mutation) => mutation.attributeName === attributeName && mutation.oldValue === '');
     });
 
     observer.observe(targetNode, config);

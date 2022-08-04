@@ -1348,7 +1348,9 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
               this.tempBodyStyle = document.createElement('style');
               this.tempBodyStyle.textContent = effectiveCss;
               document.body.appendChild(this.tempBodyStyle);
-              document.body.setAttribute('styled-mode', this.options.chart.styledMode.toString());
+              if (this.options.chart.styledMode) {
+                document.body.setAttribute('styled-mode', '');
+              }
             }
           }
 
@@ -1357,7 +1359,9 @@ class Chart extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
             if (this.tempBodyStyle) {
               document.body.removeChild(this.tempBodyStyle);
               delete this.tempBodyStyle;
-              document.body.removeAttribute('styled-mode');
+              if (this.options.chart.styledMode) {
+                document.body.removeAttribute('styled-mode');
+              }
             }
           }
 
