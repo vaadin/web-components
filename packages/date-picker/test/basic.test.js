@@ -13,7 +13,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import * as settings from '@polymer/polymer/lib/utils/settings.js';
-import { close, getOverlayContent, monthsEqual, open } from './common.js';
+import { close, getFocusedCell, getOverlayContent, monthsEqual, open, waitForScrollToFinish } from './common.js';
 
 settings.setCancelSyntheticClickEvents(false);
 
@@ -314,6 +314,26 @@ describe('basic features', () => {
       await open(datepicker);
       expect(spy.called).to.be.true;
     });
+
+    describe('focus date', () => {
+      let spy;
+
+      beforeEach(() => {
+        spy = sinon.spy(HTMLElement.prototype, 'focus');
+      });
+
+      afterEach(() => {
+        spy.restore();
+      });
+
+      it('should focus date element when opened', async () => {
+        await open(datepicker);
+        const content = getOverlayContent(datepicker);
+        await waitForScrollToFinish(content);
+        const cell = getFocusedCell(content);
+        expect(spy.calledOn(cell)).to.be.true;
+      });
+    });
   });
 
   describe('value property formats', () => {
@@ -599,7 +619,7 @@ describe('wrapped', () => {
   it('should match the parent width', () => {
     container.querySelector('div').style.width = '120px';
     datepicker.style.width = '100%';
-    expect(datepicker.inputElement.clientWidth).to.equal(120);
+    expect(datepicker.clientWidth).to.equal(120);
   });
 });
 
