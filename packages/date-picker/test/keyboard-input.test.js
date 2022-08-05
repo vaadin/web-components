@@ -324,6 +324,39 @@ describe('keyboard', () => {
         expect(cell.hasAttribute('today')).to.be.true;
       });
     });
+
+    describe('fullscreen', () => {
+      beforeEach(async () => {
+        // Move focus to the calendar
+        await sendKeys({ press: 'Tab' });
+        await nextRender(datepicker);
+
+        datepicker._fullscreen = true;
+      });
+
+      it('should move focus to Cancel button on date cell Shift Tab', async () => {
+        const spy = sinon.spy(overlayContent.$.cancelButton, 'focus');
+
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ up: 'Shift' });
+
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should move focus to date cell button on Cancel button Tab', async () => {
+        const cell = getFocusedCell(overlayContent);
+        const spy = sinon.spy(cell, 'focus');
+
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ up: 'Shift' });
+
+        await sendKeys({ press: 'Tab' });
+
+        expect(spy.calledOnce).to.be.true;
+      });
+    });
   });
 
   describe('Escape key', () => {

@@ -789,9 +789,14 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     switch (section) {
       case 'calendar':
         if (event.shiftKey) {
-          // Return focus back to the input field.
           event.preventDefault();
-          this.__focusInput();
+
+          if (this.hasAttribute('fullscreen')) {
+            // Trap focus in the overlay
+            this.$.cancelButton.focus();
+          } else {
+            this.__focusInput();
+          }
         }
         break;
       case 'today':
@@ -802,9 +807,14 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
         break;
       case 'cancel':
         if (!event.shiftKey) {
-          // Return focus back to the input field.
           event.preventDefault();
-          this.__focusInput();
+
+          if (this.hasAttribute('fullscreen')) {
+            // Trap focus in the overlay
+            this.focusDateElement();
+          } else {
+            this.__focusInput();
+          }
         }
         break;
       default:
@@ -813,28 +823,12 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   }
 
   __onTodayButtonKeyDown(event) {
-    if (this.hasAttribute('fullscreen')) {
-      // Do not prevent closing on Esc
-      if (event.key !== 'Escape') {
-        event.stopPropagation();
-      }
-      return;
-    }
-
     if (event.key === 'Tab') {
       this._onTabKeyDown(event, 'today');
     }
   }
 
   __onCancelButtonKeyDown(event) {
-    if (this.hasAttribute('fullscreen')) {
-      // Do not prevent closing on Esc
-      if (event.key !== 'Escape') {
-        event.stopPropagation();
-      }
-      return;
-    }
-
     if (event.key === 'Tab') {
       this._onTabKeyDown(event, 'cancel');
     }
