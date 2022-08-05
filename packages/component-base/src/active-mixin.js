@@ -79,21 +79,18 @@ export const ActiveMixin = (superclass) =>
 
       if (this._shouldSetActive(event) && this._activeKeys.includes(event.key)) {
         this._setActive(true);
-      }
-    }
 
-    /**
-     * Removes the `active` attribute from the element if the activation key is released.
-     *
-     * @param {KeyboardEvent} event
-     * @protected
-     * @override
-     */
-    _onKeyUp(event) {
-      super._onKeyUp(event);
-
-      if (this._activeKeys.includes(event.key)) {
-        this._setActive(false);
+        // Element can become hidden before the `keyup` event, e.g. on button click.
+        // Use document listener to ensure `active` attribute is removed correctly.
+        document.addEventListener(
+          'keyup',
+          (e) => {
+            if (this._activeKeys.includes(e.key)) {
+              this._setActive(false);
+            }
+          },
+          { once: true },
+        );
       }
     }
 
