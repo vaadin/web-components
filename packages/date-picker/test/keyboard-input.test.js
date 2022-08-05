@@ -288,6 +288,7 @@ describe('keyboard', () => {
         await sendKeys({ press: 'Tab' });
 
         const cell = await onceFocused();
+        expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.hasAttribute('today')).to.be.true;
       });
 
@@ -311,6 +312,7 @@ describe('keyboard', () => {
         await sendKeys({ up: 'Shift' });
 
         const cell = await onceFocused();
+        expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.hasAttribute('today')).to.be.true;
       });
     });

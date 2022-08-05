@@ -330,6 +330,7 @@ describe('basic features', () => {
       it('should focus date element when opened', async () => {
         await open(datepicker);
         const cell = await onceFocused();
+        expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.hasAttribute('today')).to.be.true;
       });
     });
