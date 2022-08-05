@@ -5,7 +5,7 @@
  */
 class Material extends HTMLElement {
   static get version() {
-    return '22.0.17';
+    return '22.0.18';
   }
 }
 
