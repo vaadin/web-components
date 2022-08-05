@@ -102,13 +102,6 @@ export const DatePickerMixin = (subclass) =>
         },
 
         /**
-         * An array of ancestor elements whose -webkit-overflow-scrolling is forced from value
-         * 'touch' to value 'auto' in order to prevent them from clipping the dropdown. iOS only.
-         * @private
-         */
-        _touchPrevented: Array,
-
-        /**
          * The object used to localize this component.
          * To change the default localization, replace the entire
          * `i18n` object with a custom one.
@@ -310,12 +303,6 @@ export const DatePickerMixin = (subclass) =>
         _ios: {
           type: Boolean,
           value: isIOS,
-        },
-
-        /** @private */
-        _webkitOverflowScroll: {
-          type: Boolean,
-          value: document.createElement('div').style.webkitOverflowScrolling === '',
         },
 
         /** @private */
@@ -762,10 +749,6 @@ export const DatePickerMixin = (subclass) =>
 
       window.addEventListener('scroll', this._boundOnScroll, true);
 
-      if (this._webkitOverflowScroll) {
-        this._touchPrevented = this._preventWebkitOverflowScrollingTouch(this.parentElement);
-      }
-
       if (this._focusOverlayOnOpen) {
         this._overlayContent.focusDateElement();
         this._focusOverlayOnOpen = false;
@@ -777,25 +760,6 @@ export const DatePickerMixin = (subclass) =>
         this.focusElement.blur();
         this._overlayContent.focusDateElement();
       }
-    }
-
-    // A hack needed for iOS to prevent dropdown from being clipped in an
-    // ancestor container with -webkit-overflow-scrolling: touch;
-    /** @private */
-    _preventWebkitOverflowScrollingTouch(element) {
-      const result = [];
-      while (element) {
-        if (window.getComputedStyle(element).webkitOverflowScrolling === 'touch') {
-          const oldInlineValue = element.style.webkitOverflowScrolling;
-          element.style.webkitOverflowScrolling = 'auto';
-          result.push({
-            element,
-            oldInlineValue,
-          });
-        }
-        element = element.parentElement;
-      }
-      return result;
     }
 
     /** @private */
@@ -823,13 +787,6 @@ export const DatePickerMixin = (subclass) =>
     /** @protected */
     _onOverlayClosed() {
       window.removeEventListener('scroll', this._boundOnScroll, true);
-
-      if (this._touchPrevented) {
-        this._touchPrevented.forEach((prevented) => {
-          prevented.element.style.webkitOverflowScrolling = prevented.oldInlineValue;
-        });
-        this._touchPrevented = [];
-      }
 
       // No need to select date on close if it was confirmed by the user.
       if (this.__userConfirmedDate) {
