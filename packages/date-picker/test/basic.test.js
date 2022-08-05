@@ -320,7 +320,7 @@ describe('basic features', () => {
         return new Promise((resolve) => {
           // Do not spy on the DOM element because it can be reused
           // by infinite scroller. Instead, spy on the native focus.
-          const stub = sinon.stub(HTMLElement.prototype, 'focus').callsFake(() => {
+          const stub = sinon.stub(HTMLTableCellElement.prototype, 'focus').callsFake(() => {
             stub.restore();
             resolve(stub.firstCall.thisValue);
           });
