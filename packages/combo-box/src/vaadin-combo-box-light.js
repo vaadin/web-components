@@ -5,6 +5,7 @@
  */
 import './vaadin-combo-box-dropdown.js';
 import { dashToCamelCase } from '@polymer/polymer/lib/utils/case-map.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ComboBoxDataProviderMixin } from './vaadin-combo-box-data-provider-mixin.js';
@@ -118,14 +119,14 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
   /** @protected */
   ready() {
     super.ready();
-    this._toggleElement = this.querySelector('.toggle-button');
-  }
 
-  /** @protected */
-  connectedCallback() {
-    super.connectedCallback();
-    this._setInputElement(this.querySelector('vaadin-text-field,.input'));
-    this._revertInputValue();
+    this._toggleElement = this.querySelector('.toggle-button');
+
+    // Wait until the slotted input DOM is ready
+    afterNextRender(this, () => {
+      this._setInputElement(this.querySelector('vaadin-text-field,.input'));
+      this._revertInputValue();
+    });
   }
 
   /**
@@ -145,6 +146,38 @@ class ComboBoxLight extends ComboBoxDataProviderMixin(ComboBoxMixin(ThemableMixi
    */
   get _propertyForValue() {
     return dashToCamelCase(this.attrForValue);
+  }
+
+  /**
+   * @protected
+   * @override
+   * @return {HTMLInputElement | undefined}
+   */
+  get _nativeInput() {
+    const input = this.inputElement;
+
+    if (input) {
+      // Support `<input class="input">`
+      if (input instanceof HTMLInputElement) {
+        return input;
+      }
+
+      // Support `<input>` in light DOM (e.g. `vaadin-text-field`)
+      const slottedInput = input.querySelector('input');
+      if (slottedInput) {
+        return slottedInput;
+      }
+
+      if (input.shadowRoot) {
+        // Support `<input>` in Shadow DOM (e.g. `mwc-textfield`)
+        const shadowInput = input.shadowRoot.querySelector('input');
+        if (shadowInput) {
+          return shadowInput;
+        }
+      }
+    }
+
+    return undefined;
   }
 
   /** @protected */

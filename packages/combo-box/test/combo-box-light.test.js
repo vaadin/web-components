@@ -1,12 +1,15 @@
 import { expect } from '@esm-bundle/chai';
 import {
+  arrowDownKeyDown,
   click,
+  escKeyDown,
   fixtureSync,
   isDesktopSafari,
   isIOS,
   mousedown,
   mouseup,
   nextFrame,
+  nextRender,
   touchend,
   touchstart,
 } from '@vaadin/testing-helpers';
@@ -47,12 +50,13 @@ customElements.define('my-input', MyInput);
 describe('vaadin-combo-box-light', () => {
   let comboBox, overlay, inputElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync(`
       <vaadin-combo-box-light>
         <vaadin-text-field></vaadin-text-field>
       </vaadin-combo-box-light>
     `);
+    await nextRender();
     comboBox.items = ['foo', 'bar', 'baz'];
     overlay = comboBox.$.dropdown.$.overlay;
     inputElement = comboBox.querySelector('vaadin-text-field');
@@ -166,12 +170,13 @@ describe('vaadin-combo-box-light', () => {
 describe('attr-for-value', () => {
   let comboBox, customInput, inputElement;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync(`
       <vaadin-combo-box-light attr-for-value="custom-value">
         <my-input class="input"></my-input>
       </vaadin-combo-box-light>
     `);
+    await nextRender();
     comboBox.items = ['foo', 'bar', 'baz'];
     customInput = comboBox.querySelector('.input');
     inputElement = customInput.$.input;
@@ -206,10 +211,64 @@ describe('attr-for-value', () => {
   });
 });
 
+describe('ARIA', () => {
+  let comboBox, input;
+
+  describe('input in light DOM', () => {
+    beforeEach(async () => {
+      comboBox = fixtureSync(`
+        <vaadin-combo-box-light>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-combo-box-light>
+      `);
+      await nextRender();
+      comboBox.items = ['foo', 'bar', 'baz'];
+      input = comboBox.querySelector('input');
+    });
+
+    it('should set correct attributes on the input in light DOM', () => {
+      expect(input.getAttribute('role')).to.equal('combobox');
+      expect(input.getAttribute('aria-autocomplete')).to.equal('list');
+    });
+
+    it('should toggle aria-expanded attribute on the input in light DOM', () => {
+      arrowDownKeyDown(input);
+      expect(input.getAttribute('aria-expanded')).to.equal('true');
+      escKeyDown(input);
+      expect(input.getAttribute('aria-expanded')).to.equal('false');
+    });
+  });
+
+  describe('input in Shadow DOM', () => {
+    beforeEach(async () => {
+      comboBox = fixtureSync(`
+        <vaadin-combo-box-light attr-for-value="custom-value">
+          <my-input class="input"></my-input>
+        </vaadin-combo-box-light>
+      `);
+      await nextRender();
+      comboBox.items = ['foo', 'bar', 'baz'];
+      input = comboBox.inputElement.shadowRoot.querySelector('input');
+    });
+
+    it('should set correct attributes on the input in shadow DOM', () => {
+      expect(input.getAttribute('role')).to.equal('combobox');
+      expect(input.getAttribute('aria-autocomplete')).to.equal('list');
+    });
+
+    it('should toggle aria-expanded attribute on the input in shadow DOM', () => {
+      arrowDownKeyDown(input);
+      expect(input.getAttribute('aria-expanded')).to.equal('true');
+      escKeyDown(input);
+      expect(input.getAttribute('aria-expanded')).to.equal('false');
+    });
+  });
+});
+
 describe('custom buttons', () => {
   let comboBox;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync(`
       <vaadin-combo-box-light>
         <vaadin-text-field>
@@ -218,6 +277,7 @@ describe('custom buttons', () => {
         </vaadin-text-field>
       </vaadin-combo-box-light>
     `);
+    await nextRender();
     comboBox.items = ['foo', 'bar', 'baz'];
   });
 
@@ -379,7 +439,7 @@ describe('theme attribute', () => {
 describe('nested template', () => {
   let comboBox;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     comboBox = fixtureSync(`
       <vaadin-combo-box-light>
         <vaadin-text-field>
@@ -393,6 +453,7 @@ describe('nested template', () => {
         </vaadin-text-field>
       </vaadin-combo-box-light>
     `);
+    await nextRender();
     comboBox.items = ['bar', 'baz', 'qux'];
   });
 
