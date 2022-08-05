@@ -5,6 +5,7 @@ import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-sorter.js';
 import '../vaadin-grid-sort-column.js';
+import { setDefaultMultiSortPriorityAppend } from '../src/vaadin-grid-sort-mixin.js';
 import { buildDataSet, flushGrid, getBodyCellContent, getHeaderCellContent, getRowCells, getRows } from './helpers.js';
 
 describe('sorting', () => {
@@ -383,6 +384,25 @@ describe('sorting', () => {
         sorterLast.direction = null;
 
         expect(sorterFirst._order).to.be.null;
+      });
+    });
+
+    describe('set multi-sort-priority', () => {
+      it('should change default multi-sort-priority for newly created grid', () => {
+        const grid1 = fixtureSync('<vaadin-grid></vaadin-grid>');
+        expect(grid1.multiSortPriority).to.be.equal('prepend');
+
+        setDefaultMultiSortPriorityAppend(true);
+
+        const grid2 = fixtureSync('<vaadin-grid></vaadin-grid>');
+        expect(grid1.multiSortPriority).to.be.equal('prepend');
+        expect(grid2.multiSortPriority).to.be.equal('append');
+
+        setDefaultMultiSortPriorityAppend(false);
+
+        const grid3 = fixtureSync('<vaadin-grid></vaadin-grid>');
+        expect(grid2.multiSortPriority).to.be.equal('append');
+        expect(grid3.multiSortPriority).to.be.equal('prepend');
       });
     });
 
