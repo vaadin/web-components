@@ -257,7 +257,7 @@ describe('keyboard', () => {
     });
 
     describe('focus date not in the viewport', () => {
-      function onceFocused() {
+      function onceFocused(callback) {
         return new Promise((resolve) => {
           // Do not spy on the DOM element because it can be reused
           // by infinite scroller. Instead, spy on the native focus.
@@ -265,6 +265,8 @@ describe('keyboard', () => {
             stub.restore();
             resolve(stub.firstCall.thisValue);
           });
+
+          callback();
         });
       }
 
@@ -285,9 +287,10 @@ describe('keyboard', () => {
         await sendKeys({ up: 'Shift' });
 
         // Move focus back to the date
-        await sendKeys({ press: 'Tab' });
+        const cell = await onceFocused(() => {
+          sendKeys({ press: 'Tab' });
+        });
 
-        const cell = await onceFocused();
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.hasAttribute('today')).to.be.true;
       });
@@ -307,11 +310,12 @@ describe('keyboard', () => {
         await sendKeys({ press: 'Tab' });
 
         // Move focus back to the date
-        await sendKeys({ down: 'Shift' });
-        await sendKeys({ press: 'Tab' });
-        await sendKeys({ up: 'Shift' });
+        const cell = await onceFocused(async () => {
+          await sendKeys({ down: 'Shift' });
+          await sendKeys({ press: 'Tab' });
+          await sendKeys({ up: 'Shift' });
+        });
 
-        const cell = await onceFocused();
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.hasAttribute('today')).to.be.true;
       });

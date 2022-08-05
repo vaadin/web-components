@@ -316,7 +316,7 @@ describe('basic features', () => {
     });
 
     describe('focus date', () => {
-      function onceFocused() {
+      function onceFocused(callback) {
         return new Promise((resolve) => {
           // Do not spy on the DOM element because it can be reused
           // by infinite scroller. Instead, spy on the native focus.
@@ -324,12 +324,15 @@ describe('basic features', () => {
             stub.restore();
             resolve(stub.firstCall.thisValue);
           });
+
+          callback();
         });
       }
 
       it('should focus date element when opened', async () => {
-        await open(datepicker);
-        const cell = await onceFocused();
+        const cell = await onceFocused(() => {
+          datepicker.open();
+        });
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.hasAttribute('today')).to.be.true;
       });
