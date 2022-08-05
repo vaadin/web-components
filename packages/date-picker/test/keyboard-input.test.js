@@ -257,11 +257,16 @@ describe('keyboard', () => {
     });
 
     describe('focus date not in the viewport', () => {
-      let spy;
-
-      afterEach(() => {
-        spy.restore();
-      });
+      function onceFocused() {
+        return new Promise((resolve) => {
+          // Do not spy on the DOM element because it can be reused
+          // by infinite scroller. Instead, spy on the native focus.
+          const stub = sinon.stub(HTMLElement.prototype, 'focus').callsFake(() => {
+            stub.restore();
+            resolve(stub.firstCall.thisValue);
+          });
+        });
+      }
 
       it('should focus date scrolled out of the view on input Tab', async () => {
         // Move focus to the calendar
@@ -279,17 +284,10 @@ describe('keyboard', () => {
         await sendKeys({ press: 'Tab' });
         await sendKeys({ up: 'Shift' });
 
-        // Do not spy on the DOM element because it can be reused
-        // by infinite scroller. Instead, spy on the native focus.
-        spy = sinon.spy(HTMLElement.prototype, 'focus');
-
         // Move focus back to the date
         await sendKeys({ press: 'Tab' });
-        await waitForScrollToFinish(overlayContent);
 
-        expect(spy.calledOnce).to.be.true;
-
-        const cell = spy.firstCall.thisValue;
+        const cell = await onceFocused();
         expect(cell.hasAttribute('today')).to.be.true;
       });
 
@@ -307,20 +305,12 @@ describe('keyboard', () => {
         // Move focus to the Today button
         await sendKeys({ press: 'Tab' });
 
-        // Do not spy on the DOM element because it can be reused
-        // by infinite scroller. Instead, spy on the native focus.
-        spy = sinon.spy(HTMLElement.prototype, 'focus');
-
         // Move focus back to the date
         await sendKeys({ down: 'Shift' });
         await sendKeys({ press: 'Tab' });
         await sendKeys({ up: 'Shift' });
 
-        await waitForScrollToFinish(overlayContent);
-
-        expect(spy.calledOnce).to.be.true;
-
-        const cell = spy.firstCall.thisValue;
+        const cell = await onceFocused();
         expect(cell.hasAttribute('today')).to.be.true;
       });
     });
