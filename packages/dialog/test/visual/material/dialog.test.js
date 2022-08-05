@@ -51,4 +51,11 @@ describe('dialog', () => {
     element.footerRenderer = createRenderer('Footer');
     await visualDiff(div, 'header-footer-renderer');
   });
+
+  it('long title and header renderer', async () => {
+    element.$.overlay.style.maxWidth = '20rem';
+    element.headerTitle = 'Long title that wraps in multiple lines';
+    element.headerRenderer = createRenderer('Header');
+    await visualDiff(div, 'header-title-multiple-lines');
+  });
 });
