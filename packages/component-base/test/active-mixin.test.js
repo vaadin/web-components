@@ -83,6 +83,15 @@ describe('active-mixin', () => {
       expect(element.hasAttribute('active')).to.be.false;
     });
 
+    it('should remove active attribute when element gets hidden on keydown', async () => {
+      element.addEventListener('keydown', () => {
+        element.setAttribute('hidden', '');
+      });
+      await sendKeys({ down: 'Space' });
+      await sendKeys({ up: 'Space' });
+      expect(element.hasAttribute('active')).to.be.false;
+    });
+
     describe('custom activation keys', () => {
       beforeEach(() => {
         Object.defineProperty(element, '_activeKeys', {
