@@ -271,8 +271,8 @@ describe('keyboard', () => {
         // Scroll to date outside viewport
         const date = new Date();
         date.setFullYear(date.getFullYear() - 1);
-        overlayContent.revealDate(date);
-        await waitForScrollToFinish(overlayContent);
+        overlayContent.revealDate(date, false);
+        await nextRender();
 
         // Move focus to the input
         await sendKeys({ down: 'Shift' });
@@ -301,8 +301,8 @@ describe('keyboard', () => {
         // Scroll to date outside viewport
         const date = new Date();
         date.setFullYear(date.getFullYear() - 1);
-        overlayContent.revealDate(date);
-        await waitForScrollToFinish(overlayContent);
+        overlayContent.revealDate(date, false);
+        await nextRender();
 
         // Move focus to the Today button
         await sendKeys({ press: 'Tab' });
