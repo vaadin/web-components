@@ -82,15 +82,15 @@ export const ActiveMixin = (superclass) =>
 
         // Element can become hidden before the `keyup` event, e.g. on button click.
         // Use document listener to ensure `active` attribute is removed correctly.
-        const keyUpListener = (e) => {
-          if (this._activeKeys.includes(e.key)) {
-            this._setActive(false);
-          }
-
-          document.removeEventListener('keyup', keyUpListener);
-        };
-
-        document.addEventListener('keyup', keyUpListener);
+        document.addEventListener(
+          'keyup',
+          (e) => {
+            if (this._activeKeys.includes(e.key)) {
+              this._setActive(false);
+            }
+          },
+          { once: true },
+        );
       }
     }
 
