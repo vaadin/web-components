@@ -39,6 +39,7 @@ registerStyles(
 
     ::slotted([slot='title']) {
       font: inherit !important;
+      word-break: break-word;
     }
 
     [part='header-content'] {

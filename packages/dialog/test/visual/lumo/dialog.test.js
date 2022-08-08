@@ -58,4 +58,11 @@ describe('dialog', () => {
     element.headerRenderer = createRenderer('Header');
     await visualDiff(div, 'header-title-multiple-lines');
   });
+
+  it('long single word title and header renderer', async () => {
+    element.$.overlay.style.maxWidth = '20rem';
+    element.headerTitle = 'InternationalizationConfigurationHelper';
+    element.headerRenderer = createRenderer('Header');
+    await visualDiff(div, 'header-title-long-single-word');
+  });
 });
