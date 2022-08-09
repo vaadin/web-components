@@ -131,13 +131,13 @@ import {
     let overlay;
 
     beforeEach(async () => {
-      overlay = document.createElement('vaadin-date-picker-overlay-content');
-      overlay.scrollDuration = 0;
-      overlay.style.position = 'absolute';
-      overlay.style.top = '0';
-      overlay.style.width = '400px';
+      overlay = fixtureSync(`
+        <vaadin-date-picker-overlay-content
+          style="position: absolute; top: 0; width: 400px"
+          scroll-duration="0"
+        ></vaadin-date-picker-overlay-content>
+      `);
       overlay.i18n = getDefaultI18n();
-      document.body.appendChild(overlay);
 
       // Set initialPosition to activate scrollers
       const initialDate = new Date(2000, 0, 1);
@@ -153,10 +153,6 @@ import {
       await overlay.focusDate(initialDate);
 
       await idleCallback();
-    });
-
-    afterEach(() => {
-      document.body.removeChild(overlay);
     });
 
     it('should focus one week forward with arrow down', async () => {
