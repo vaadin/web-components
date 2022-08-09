@@ -132,6 +132,7 @@ import {
 
     beforeEach(async () => {
       overlay = document.createElement('vaadin-date-picker-overlay-content');
+      overlay.scrollDuration = 0;
       overlay.style.position = 'absolute';
       overlay.style.top = '0';
       overlay.style.width = '400px';
