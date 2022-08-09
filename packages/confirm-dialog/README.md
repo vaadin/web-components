@@ -63,4 +63,4 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.
 
 Vaadin collects usage statistics at development time to improve this product.
-For confirm-dialog and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
+For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
