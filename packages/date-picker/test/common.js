@@ -1,4 +1,4 @@
-import { fire, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { fire, listenOnce, nextRender } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
 export function activateScroller(scroller) {
@@ -58,6 +58,12 @@ export function close(datepicker) {
   return new Promise((resolve) => {
     listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', resolve);
     datepicker.close();
+  });
+}
+
+export function idleCallback() {
+  return new Promise((resolve) => {
+    window.requestIdleCallback ? window.requestIdleCallback(resolve) : setTimeout(resolve, 16);
   });
 }
 
@@ -138,9 +144,9 @@ export function getFocusedCell(overlayContent) {
  * @param {HTMLElement} overlayContent
  */
 export async function waitForScrollToFinish(overlayContent) {
-  if (overlayContent._targetPosition) {
+  if (overlayContent._revealPromise) {
     // The overlay content is scrolling.
-    await oneEvent(overlayContent, 'scroll-animation-finished');
+    await overlayContent._revealPromise;
   }
 
   await nextRender(overlayContent);

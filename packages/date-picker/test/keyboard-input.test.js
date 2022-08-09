@@ -4,7 +4,8 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { close, getFocusedCell, getOverlayContent, open, waitForScrollToFinish } from './common.js';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { close, getFocusedCell, getOverlayContent, idleCallback, open, waitForScrollToFinish } from './common.js';
 
 describe('keyboard', () => {
   let datepicker;
@@ -170,8 +171,14 @@ describe('keyboard', () => {
     beforeEach(async () => {
       // Open the overlay
       await open(datepicker);
-      await nextRender(datepicker);
       overlayContent = getOverlayContent(datepicker);
+
+      // Wait until infinite scrollers are rendered
+      await aTimeout(1);
+      await nextRender();
+
+      // Force dom-repeat to render table elements
+      flush();
     });
 
     it('should keep focused attribute when the focus moves to the overlay', async () => {
@@ -257,65 +264,38 @@ describe('keyboard', () => {
     });
 
     describe('focus date not in the viewport', () => {
-      function onceFocused(callback) {
-        return new Promise((resolve) => {
-          // Do not spy on the DOM element because it can be reused
-          // by infinite scroller. Instead, spy on the native focus.
-          const stub = sinon.stub(HTMLTableCellElement.prototype, 'focus').callsFake(() => {
-            stub.restore();
-            resolve(stub.firstCall.thisValue);
-          });
-
-          callback();
-        });
-      }
-
-      it('should focus date scrolled out of the view on input Tab', async () => {
-        // Move focus to the calendar
-        await sendKeys({ press: 'Tab' });
-        await nextRender(datepicker);
-
+      beforeEach(async () => {
         // Scroll to date outside viewport
         const date = new Date();
         date.setFullYear(date.getFullYear() - 1);
         overlayContent.revealDate(date, false);
-        await nextRender();
+        await idleCallback();
+      });
 
-        // Move focus to the input
-        await sendKeys({ down: 'Shift' });
+      it('should focus date scrolled out of the view on input Tab', async () => {
+        // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
-        await sendKeys({ up: 'Shift' });
 
-        // Move focus back to the date
-        const cell = await onceFocused(() => {
-          sendKeys({ press: 'Tab' });
-        });
+        await waitForScrollToFinish(overlayContent);
 
+        const cell = getFocusedCell(overlayContent);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.hasAttribute('today')).to.be.true;
       });
 
       it('should focus date scrolled out of the view on Today button Shift Tab', async () => {
-        // Move focus to the calendar
-        await sendKeys({ press: 'Tab' });
-        await nextRender(datepicker);
+        // Move focus to the Today button
+        overlayContent.$.todayButton.focus();
 
-        // Scroll to date outside viewport
-        const date = new Date();
-        date.setFullYear(date.getFullYear() - 1);
-        overlayContent.revealDate(date, false);
+        // Move focus to the calendar
+        await sendKeys({ down: 'Shift' });
+        await sendKeys({ press: 'Tab' });
+        await sendKeys({ up: 'Shift' });
+
+        await waitForScrollToFinish(overlayContent);
         await nextRender();
 
-        // Move focus to the Today button
-        await sendKeys({ press: 'Tab' });
-
-        // Move focus back to the date
-        const cell = await onceFocused(async () => {
-          await sendKeys({ down: 'Shift' });
-          await sendKeys({ press: 'Tab' });
-          await sendKeys({ up: 'Shift' });
-        });
-
+        const cell = getFocusedCell(overlayContent);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.hasAttribute('today')).to.be.true;
       });
@@ -360,7 +340,12 @@ describe('keyboard', () => {
       beforeEach(async () => {
         // Open the overlay
         await open(datepicker);
-        await nextRender(datepicker);
+        // Wait until infinite scrollers are rendered
+        await aTimeout(1);
+        await nextRender();
+
+        // Force dom-repeat to render table elements
+        flush();
       });
 
       it('should close the overlay when input is focused', async () => {

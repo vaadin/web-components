@@ -5,7 +5,14 @@ import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
-import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollToFinish } from './common.js';
+import {
+  getDefaultI18n,
+  getFocusedCell,
+  getOverlayContent,
+  idleCallback,
+  open,
+  waitForScrollToFinish,
+} from './common.js';
 
 (isIOS ? describe.skip : describe)('keyboard navigation', () => {
   describe('date-picker', () => {
@@ -143,6 +150,8 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       flush();
 
       await overlay.focusDate(initialDate);
+
+      await idleCallback();
     });
 
     afterEach(() => {

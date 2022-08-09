@@ -13,7 +13,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import * as settings from '@polymer/polymer/lib/utils/settings.js';
-import { close, getFocusedCell, getOverlayContent, monthsEqual, open } from './common.js';
+import { close, getFocusedCell, getOverlayContent, idleCallback, monthsEqual, open } from './common.js';
 
 settings.setCancelSyntheticClickEvents(false);
 
@@ -318,6 +318,7 @@ describe('basic features', () => {
     it('should focus date element when opened', async () => {
       await open(datepicker);
       await nextRender();
+      await idleCallback();
       const content = getOverlayContent(datepicker);
       const cell = getFocusedCell(content);
       expect(cell).to.be.instanceOf(HTMLTableCellElement);
