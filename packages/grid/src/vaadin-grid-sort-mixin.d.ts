@@ -9,6 +9,13 @@ export declare function SortMixin<T extends Constructor<HTMLElement>>(base: T): 
 
 export declare class SortMixinClass {
   /**
+   * Sets the default multi-sort priority to use for all grid instances.
+   * This method should be called before creating any grid instances.
+   * Changing this setting does not affect the default for existing grids.
+   */
+  static setDefaultMultiSortPriority(priority: 'append' | 'prepend'): void;
+
+  /**
    * When `true`, all `<vaadin-grid-sorter>` are applied for sorting.
    * @attr {boolean} multi-sort
    */

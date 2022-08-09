@@ -2,10 +2,9 @@ import { expect } from '@esm-bundle/chai';
 import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
-import '../vaadin-grid.js';
 import '../vaadin-grid-sorter.js';
 import '../vaadin-grid-sort-column.js';
-import { setDefaultMultiSortPriorityAppend } from '../src/vaadin-grid-sort-mixin.js';
+import { Grid } from '../vaadin-grid.js';
 import { buildDataSet, flushGrid, getBodyCellContent, getHeaderCellContent, getRowCells, getRows } from './helpers.js';
 
 describe('sorting', () => {
@@ -392,17 +391,27 @@ describe('sorting', () => {
         const grid1 = fixtureSync('<vaadin-grid></vaadin-grid>');
         expect(grid1.multiSortPriority).to.be.equal('prepend');
 
-        setDefaultMultiSortPriorityAppend(true);
+        Grid.setDefaultMultiSortPriority('append');
 
         const grid2 = fixtureSync('<vaadin-grid></vaadin-grid>');
         expect(grid1.multiSortPriority).to.be.equal('prepend');
         expect(grid2.multiSortPriority).to.be.equal('append');
 
-        setDefaultMultiSortPriorityAppend(false);
+        Grid.setDefaultMultiSortPriority('prepend');
 
         const grid3 = fixtureSync('<vaadin-grid></vaadin-grid>');
         expect(grid2.multiSortPriority).to.be.equal('append');
         expect(grid3.multiSortPriority).to.be.equal('prepend');
+      });
+
+      it('should not change default multi-sort-priority with incorrect value', () => {
+        const grid1 = fixtureSync('<vaadin-grid></vaadin-grid>');
+        expect(grid1.multiSortPriority).to.be.equal('prepend');
+
+        Grid.setDefaultMultiSortPriority(null);
+
+        const grid2 = fixtureSync('<vaadin-grid></vaadin-grid>');
+        expect(grid2.multiSortPriority).to.be.equal('prepend');
       });
     });
 

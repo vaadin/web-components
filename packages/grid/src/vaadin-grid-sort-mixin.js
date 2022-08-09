@@ -4,11 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
-let multiSortAppend = false;
-
-export const setDefaultMultiSortPriorityAppend = (priority) => {
-  multiSortAppend = priority;
-};
+let defaultMultiSortPriority = 'prepend';
 
 /**
  * @polymerMixin
@@ -43,7 +39,7 @@ export const SortMixin = (superClass) =>
          */
         multiSortPriority: {
           type: String,
-          value: () => (multiSortAppend ? 'append' : 'prepend'),
+          value: () => defaultMultiSortPriority,
         },
 
         /**
@@ -61,6 +57,17 @@ export const SortMixin = (superClass) =>
           value: () => [],
         },
       };
+    }
+
+    /**
+     * Sets the default multi-sort priority to use for all grid instances.
+     * This method should be called before creating any grid instances.
+     * Changing this setting does not affect the default for existing grids.
+     *
+     * @param {string} priority
+     */
+    static setDefaultMultiSortPriority(priority) {
+      defaultMultiSortPriority = ['append', 'prepend'].includes(priority) ? priority : 'prepend';
     }
 
     /** @protected */
