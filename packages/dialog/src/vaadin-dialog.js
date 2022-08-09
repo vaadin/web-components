@@ -39,7 +39,7 @@ registerStyles(
 
     ::slotted([slot='title']) {
       font: inherit !important;
-      word-break: break-word;
+      overflow-wrap: anywhere;
     }
 
     [part='header-content'] {
