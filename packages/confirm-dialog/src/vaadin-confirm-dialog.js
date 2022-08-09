@@ -1,7 +1,7 @@
 /**
  * @license
  * Copyright (c) 2018 - 2022 Vaadin Ltd.
- * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
+ * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import './vaadin-confirm-dialog-overlay.js';
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
@@ -93,10 +93,6 @@ class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(PolymerEle
   }
 
   static get is() {
-    return 'vaadin-confirm-dialog';
-  }
-
-  static get cvdlName() {
     return 'vaadin-confirm-dialog';
   }
 

@@ -2,8 +2,6 @@
 
 A modal dialog web component for confirming user actions.
 
-> ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Confirm Dialog in your project.
-
 [Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/confirm-dialog)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/confirm-dialog)](https://www.npmjs.com/package/@vaadin/confirm-dialog)
@@ -60,7 +58,7 @@ Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/
 
 ## License
 
-Commercial Vaadin Developer License 4.0 (CVDLv4). For license terms, see LICENSE.
+Apache License 2.0
 
 Vaadin collects usage statistics at development time to improve this product.
 For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
