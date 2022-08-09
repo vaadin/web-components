@@ -4,6 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollToFinish } from './common.js';
 
 (isIOS ? describe.skip : describe)('keyboard navigation', () => {
@@ -123,17 +124,29 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
     let overlay;
 
     beforeEach(async () => {
-      overlay = fixtureSync(`
-      <vaadin-date-picker-overlay-content
-        style="position: absolute; top: 0"
-        scroll-duration="0"
-      ></vaadin-date-picker-overlay-content>`);
+      overlay = document.createElement('vaadin-date-picker-overlay-content');
+      overlay.style.position = 'absolute';
+      overlay.style.top = '0';
+      overlay.style.width = '400px';
       overlay.i18n = getDefaultI18n();
+      document.body.appendChild(overlay);
 
+      // Set initialPosition to activate scrollers
       const initialDate = new Date(2000, 0, 1);
       overlay.initialPosition = initialDate;
-      await nextRender(overlay);
+
+      // Wait until infinite scrollers are rendered
+      await aTimeout(1);
+      await nextRender();
+
+      // Force dom-repeat to render table elements
+      flush();
+
       await overlay.focusDate(initialDate);
+    });
+
+    afterEach(() => {
+      document.body.removeChild(overlay);
     });
 
     it('should focus one week forward with arrow down', async () => {
@@ -324,12 +337,14 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
     it('should move to max date when targeted date is disabled', async () => {
       overlay.maxDate = new Date(2000, 0, 7);
       await sendKeys({ down: 'ArrowDown' });
+      await waitForScrollToFinish(overlay);
       expect(overlay.focusedDate).to.eql(new Date(2000, 0, 7));
     });
 
     it('should move to min date when targeted date is disabled', async () => {
       overlay.minDate = new Date(1999, 11, 26);
       await sendKeys({ down: 'ArrowUp' });
+      await waitForScrollToFinish(overlay);
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 26));
     });
 

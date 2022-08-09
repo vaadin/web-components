@@ -1,4 +1,4 @@
-import { fire, listenOnce, nextRender } from '@vaadin/testing-helpers';
+import { fire, listenOnce, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
 export function activateScroller(scroller) {
@@ -138,9 +138,9 @@ export function getFocusedCell(overlayContent) {
  * @param {HTMLElement} overlayContent
  */
 export async function waitForScrollToFinish(overlayContent) {
-  if (overlayContent._revealPromise) {
+  if (overlayContent._targetPosition) {
     // The overlay content is scrolling.
-    await overlayContent._revealPromise;
+    await oneEvent(overlayContent, 'scroll-animation-finished');
   }
 
   await nextRender(overlayContent);

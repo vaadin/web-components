@@ -13,7 +13,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import * as settings from '@polymer/polymer/lib/utils/settings.js';
-import { close, getOverlayContent, monthsEqual, open } from './common.js';
+import { close, getFocusedCell, getOverlayContent, monthsEqual, open } from './common.js';
 
 settings.setCancelSyntheticClickEvents(false);
 
@@ -315,27 +315,13 @@ describe('basic features', () => {
       expect(spy.called).to.be.true;
     });
 
-    describe('focus date', () => {
-      function onceFocused(callback) {
-        return new Promise((resolve) => {
-          // Do not spy on the DOM element because it can be reused
-          // by infinite scroller. Instead, spy on the native focus.
-          const stub = sinon.stub(HTMLTableCellElement.prototype, 'focus').callsFake(() => {
-            stub.restore();
-            resolve(stub.firstCall.thisValue);
-          });
-
-          callback();
-        });
-      }
-
-      it('should focus date element when opened', async () => {
-        const cell = await onceFocused(() => {
-          datepicker.open();
-        });
-        expect(cell).to.be.instanceOf(HTMLTableCellElement);
-        expect(cell.hasAttribute('today')).to.be.true;
-      });
+    it('should focus date element when opened', async () => {
+      await open(datepicker);
+      await nextRender();
+      const content = getOverlayContent(datepicker);
+      const cell = getFocusedCell(content);
+      expect(cell).to.be.instanceOf(HTMLTableCellElement);
+      expect(cell.hasAttribute('today')).to.be.true;
     });
   });
 
