@@ -4,7 +4,6 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { close, getFocusedCell, getOverlayContent, idleCallback, open, waitForScrollToFinish } from './common.js';
 
 describe('keyboard', () => {
@@ -76,7 +75,6 @@ describe('keyboard', () => {
     it('should reflect focused date to input', async () => {
       datepicker.value = '2000-01-01';
       await open(datepicker);
-      await nextRender(datepicker);
 
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
@@ -172,13 +170,7 @@ describe('keyboard', () => {
       // Open the overlay
       await open(datepicker);
       overlayContent = getOverlayContent(datepicker);
-
-      // Wait until infinite scrollers are rendered
-      await aTimeout(1);
-      await nextRender();
-
-      // Force dom-repeat to render table elements
-      flush();
+      await idleCallback();
     });
 
     it('should keep focused attribute when the focus moves to the overlay', async () => {
@@ -340,12 +332,6 @@ describe('keyboard', () => {
       beforeEach(async () => {
         // Open the overlay
         await open(datepicker);
-        // Wait until infinite scrollers are rendered
-        await aTimeout(1);
-        await nextRender();
-
-        // Force dom-repeat to render table elements
-        flush();
       });
 
       it('should close the overlay when input is focused', async () => {
@@ -417,7 +403,6 @@ describe('keyboard', () => {
       beforeEach(async () => {
         datepicker.value = '2000-01-01';
         await open(datepicker);
-        await nextRender(datepicker);
         input.select();
       });
 

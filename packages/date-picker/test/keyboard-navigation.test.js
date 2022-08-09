@@ -4,13 +4,13 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import {
   getDefaultI18n,
   getFocusedCell,
   getOverlayContent,
   idleCallback,
   open,
+  waitForOverlayRender,
   waitForScrollToFinish,
 } from './common.js';
 
@@ -29,7 +29,6 @@ import {
       it('should be focused on today if no value / initial position is set', async () => {
         const today = new Date();
         await open(datepicker);
-        await nextRender(datepicker);
 
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
@@ -43,7 +42,7 @@ import {
 
         input.click();
         await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
-        await nextRender(datepicker);
+        await waitForOverlayRender();
 
         // Reset overlay focused date
         input.click();
@@ -65,7 +64,6 @@ import {
 
       it('should be focused on selected value when overlay is opened', async () => {
         await open(datepicker);
-        await nextRender(datepicker);
 
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
@@ -76,7 +74,6 @@ import {
 
       it('should not lose focused date after deselecting', async () => {
         await open(datepicker);
-        await nextRender(datepicker);
 
         const content = getOverlayContent(datepicker);
         const focused = content.focusedDate;
@@ -101,7 +98,6 @@ import {
 
       it('should be focused on initial position when opened', async () => {
         await open(datepicker);
-        await nextRender(datepicker);
 
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
@@ -113,7 +109,7 @@ import {
       it('should be focused on initial position when focused date is empty', async () => {
         input.click();
         await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
-        await nextRender(datepicker);
+        await waitForOverlayRender();
 
         // Reset overlay focused date
         input.click();
@@ -143,15 +139,8 @@ import {
       const initialDate = new Date(2000, 0, 1);
       overlay.initialPosition = initialDate;
 
-      // Wait until infinite scrollers are rendered
-      await aTimeout(1);
-      await nextRender();
-
-      // Force dom-repeat to render table elements
-      flush();
-
+      await waitForOverlayRender();
       await overlay.focusDate(initialDate);
-
       await idleCallback();
     });
 

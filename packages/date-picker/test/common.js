@@ -1,4 +1,5 @@
-import { fire, listenOnce, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fire, listenOnce, nextRender } from '@vaadin/testing-helpers';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
 export function activateScroller(scroller) {
@@ -49,9 +50,23 @@ export function getDefaultI18n() {
 
 export function open(datepicker) {
   return new Promise((resolve) => {
-    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', resolve);
+    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', async () => {
+      // Wait until infinite scrollers are rendered
+      await waitForOverlayRender();
+
+      resolve();
+    });
     datepicker.open();
   });
+}
+
+export async function waitForOverlayRender() {
+  // Wait until infinite scrollers are rendered
+  await aTimeout(1);
+  await nextRender();
+
+  // Force dom-repeat to render table elements
+  flush();
 }
 
 export function close(datepicker) {
