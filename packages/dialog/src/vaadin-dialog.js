@@ -26,6 +26,10 @@ registerStyles(
       z-index: 1;
     }
 
+    [part='header'] {
+      flex-wrap: nowrap;
+    }
+
     ::slotted([slot='header-content']),
     ::slotted([slot='title']),
     ::slotted([slot='footer']) {
@@ -35,6 +39,7 @@ registerStyles(
 
     ::slotted([slot='title']) {
       font: inherit !important;
+      overflow-wrap: anywhere;
     }
 
     [part='header-content'] {
