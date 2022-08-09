@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/components",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-select/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-select.js",
   "module": "vaadin-select.js",

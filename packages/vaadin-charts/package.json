@@ -15,7 +15,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/charts",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-charts/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-chart.js",
   "module": "vaadin-chart.js",

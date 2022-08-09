@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/components",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-login/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-login-overlay.js",
   "module": "vaadin-login-overlay.js",

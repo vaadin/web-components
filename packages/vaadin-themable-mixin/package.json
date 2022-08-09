@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/elements",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-themable-mixin/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-themable-mixin.js",
   "module": "vaadin-themable-mixin.js",

@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/components",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-details/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-details.js",
   "module": "vaadin-details.js",
