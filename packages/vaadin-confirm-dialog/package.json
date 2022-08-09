@@ -5,8 +5,7 @@
     "access": "public"
   },
   "description": "vaadin-confirm-dialog",
-  "license": "SEE LICENSE IN LICENSE",
-  "cvdlName": "vaadin-confirm-dialog",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
