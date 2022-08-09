@@ -1,8 +1,7 @@
 /**
  * @license
  * Copyright (c) 2018 - 2022 Vaadin Ltd.
- * This program is available under Commercial Vaadin Developer License 4.0 (CVDLv4).
- * See <a href="https://vaadin.com/license/cvdl-4.0">the website</a> for the complete license.
+ * This program is available under Commercial Vaadin Developer License 4.0, available at https://vaadin.com/license/cvdl-4.0.
  */
 import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 
