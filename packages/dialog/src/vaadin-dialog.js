@@ -26,11 +26,19 @@ registerStyles(
       z-index: 1;
     }
 
+    [part='header'] {
+      flex-wrap: nowrap;
+    }
+
     ::slotted([slot='header-content']),
     ::slotted([slot='title']),
     ::slotted([slot='footer']) {
       display: contents;
       pointer-events: auto;
+    }
+
+    ::slotted([slot='title']) {
+      overflow-wrap: anywhere;
     }
 
     [part='header-content'] {
