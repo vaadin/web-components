@@ -139,7 +139,7 @@ describe('vaadin-list-mixin', () => {
     });
   });
 
-  describe.only('wrapped list with slotted items', () => {
+  describe('wrapped list with slotted items', () => {
     beforeEach(() => {
       list = fixtureSync(`
         <test-list-wrapper-element>
