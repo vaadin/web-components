@@ -7,6 +7,7 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirHelper } from '@vaadin/component-base/src/dir-helper.js';
+import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 
 /**
  * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
@@ -121,7 +122,7 @@ export const ListMixin = (superClass) =>
      * @return {Element}
      */
     get focused() {
-      return this.getRootNode().activeElement;
+      return (this.items || []).find(isElementFocused);
     }
 
     /**
