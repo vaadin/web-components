@@ -11,6 +11,7 @@ const user3 = { id: 'c', name: 'baz', colorIndex: 2 };
 async function waitForIntersectionObserver() {
   await nextFrame();
   await nextFrame();
+  await nextFrame();
 }
 
 describe('user-tags', () => {
