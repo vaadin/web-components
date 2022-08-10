@@ -68,8 +68,8 @@ export const InputMixin = dedupingMixin(
       constructor() {
         super();
 
-        this._boundOnInput = this._onInput.bind(this);
-        this._boundOnChange = this.__onChange.bind(this);
+        this._boundOnInput = this.__onInput.bind(this);
+        this._boundOnChange = this._onChange.bind(this);
       }
 
       /**
@@ -148,6 +148,18 @@ export const InputMixin = dedupingMixin(
       }
 
       /**
+       * An input event listener used to update `_hasInputValue` property.
+       * Do not override this method.
+       *
+       * @param {Event} event
+       * @private
+       */
+      __onInput(event) {
+        this._hasInputValue = event.target.value.length > 0;
+        this._onInput(event);
+      }
+
+      /**
        * An input event listener used to update the field value.
        *
        * @param {Event} event
@@ -167,18 +179,6 @@ export const InputMixin = dedupingMixin(
        * @protected
        */
       _onChange(_event) {}
-
-      /**
-       * A change event listener used to update `_hasInputValue` property.
-       * Do not override this method.
-       *
-       * @param {Event} event
-       * @private
-       */
-      __onChange(event) {
-        this._hasInputValue = event.target.value.length > 0;
-        this._onChange(event);
-      }
 
       /**
        * Toggle the has-value attribute based on the value property.
