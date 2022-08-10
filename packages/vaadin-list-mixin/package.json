@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/elements",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-list-mixin/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-list-mixin.js",
   "module": "vaadin-list-mixin.js",

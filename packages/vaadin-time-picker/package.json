@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/components",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-time-picker/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-time-picker.js",
   "module": "vaadin-time-picker.js",

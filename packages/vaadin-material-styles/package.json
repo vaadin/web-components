@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/themes",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-material-styles/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "all-imports.js",
   "module": "all-imports.js",

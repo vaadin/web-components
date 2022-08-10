@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/components",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-tabs/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-tabs.js",
   "module": "vaadin-tabs.js",

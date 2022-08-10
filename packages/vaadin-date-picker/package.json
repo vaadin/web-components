@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/components",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-date-picker/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-date-picker.js",
   "module": "vaadin-date-picker.js",

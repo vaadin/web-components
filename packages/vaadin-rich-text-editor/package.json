@@ -15,7 +15,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/components",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-rich-text-editor/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-rich-text-editor.js",
   "module": "vaadin-rich-text-editor.js",

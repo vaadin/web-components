@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/components",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-ordered-layout/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "imports.js",
   "module": "imports.js",

@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/components",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-list-box/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-list-box.js",
   "module": "vaadin-list-box.js",

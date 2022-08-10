@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/icons",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-icons/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-icons.js",
   "module": "vaadin-icons.js",

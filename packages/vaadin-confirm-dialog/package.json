@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/components",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-confirm-dialog/issues"
+    "url": "https://github.com/vaadin/web-components/issues"
   },
   "main": "vaadin-confirm-dialog.js",
   "module": "vaadin-confirm-dialog.js",
