@@ -155,7 +155,11 @@ export const InputMixin = dedupingMixin(
        * @private
        */
       __onInput(event) {
-        this._hasInputValue = event.target.value.length > 0;
+        // In the case a custom web component is passed as `inputElement`,
+        // the actual native input element, on which the event occurred,
+        // can be inside shadow trees.
+        const target = event.composedPath()[0];
+        this._hasInputValue = target.value.length > 0;
         this._onInput(event);
       }
 
@@ -166,9 +170,13 @@ export const InputMixin = dedupingMixin(
        * @protected
        */
       _onInput(event) {
+        // In the case a custom web component is passed as `inputElement`,
+        // the actual native input element, on which the event occurred,
+        // can be inside shadow trees.
+        const target = event.composedPath()[0];
         // Ignore fake input events e.g. used by clear button.
         this.__userInput = event.isTrusted;
-        this.value = event.target.value;
+        this.value = target.value;
         this.__userInput = false;
       }
 
