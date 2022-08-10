@@ -257,10 +257,15 @@ describe('keyboard', () => {
 
     describe('focus date not in the viewport', () => {
       beforeEach(async () => {
+        // Disable scrolling animation
+        const stub = sinon.stub(overlayContent, 'revealDate').callsFake((date) => {
+          stub.wrappedMethod.call(overlayContent, date, false);
+        });
+
         // Scroll to date outside viewport
         const date = new Date();
         date.setFullYear(date.getFullYear() - 1);
-        overlayContent.revealDate(date, false);
+        overlayContent.revealDate(date);
         await idleCallback();
       });
 
@@ -285,7 +290,6 @@ describe('keyboard', () => {
         await sendKeys({ up: 'Shift' });
 
         await waitForScrollToFinish(overlayContent);
-        await nextRender();
 
         const cell = getFocusedCell(overlayContent);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
