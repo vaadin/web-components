@@ -68,8 +68,8 @@ export const InputMixin = dedupingMixin(
       constructor() {
         super();
 
-        this._boundOnInput = this._onInput.bind(this);
-        this._boundOnChange = this.__onChange.bind(this);
+        this._boundOnInput = this.__onInput.bind(this);
+        this._boundOnChange = this._onChange.bind(this);
       }
 
       /**
@@ -148,15 +148,35 @@ export const InputMixin = dedupingMixin(
       }
 
       /**
+       * An input event listener used to update `_hasInputValue` property.
+       * Do not override this method.
+       *
+       * @param {Event} event
+       * @private
+       */
+      __onInput(event) {
+        // In the case a custom web component is passed as `inputElement`,
+        // the actual native input element, on which the event occurred,
+        // can be inside shadow trees.
+        const target = event.composedPath()[0];
+        this._hasInputValue = target.value.length > 0;
+        this._onInput(event);
+      }
+
+      /**
        * An input event listener used to update the field value.
        *
        * @param {Event} event
        * @protected
        */
       _onInput(event) {
+        // In the case a custom web component is passed as `inputElement`,
+        // the actual native input element, on which the event occurred,
+        // can be inside shadow trees.
+        const target = event.composedPath()[0];
         // Ignore fake input events e.g. used by clear button.
         this.__userInput = event.isTrusted;
-        this.value = event.target.value;
+        this.value = target.value;
         this.__userInput = false;
       }
 
@@ -167,18 +187,6 @@ export const InputMixin = dedupingMixin(
        * @protected
        */
       _onChange(_event) {}
-
-      /**
-       * A change event listener used to update `_hasInputValue` property.
-       * Do not override this method.
-       *
-       * @param {Event} event
-       * @private
-       */
-      __onChange(event) {
-        this._hasInputValue = event.target.value.length > 0;
-        this._onChange(event);
-      }
 
       /**
        * Toggle the has-value attribute based on the value property.

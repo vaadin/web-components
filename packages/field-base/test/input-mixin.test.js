@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { InputMixin } from '../src/input-mixin.js';
 import { define } from './helpers.js';
@@ -110,12 +110,11 @@ const runTests = (baseClass) => {
   });
 
   describe('events', () => {
-    let eventsTag, inputSpy, changeSpy, hasInputValueSpy;
+    let eventsTag, inputSpy, changeSpy;
 
     before(() => {
       inputSpy = sinon.spy();
       changeSpy = sinon.spy();
-      hasInputValueSpy = sinon.spy();
 
       eventsTag = define[baseClass](
         'input-mixin-events',
@@ -135,7 +134,6 @@ const runTests = (baseClass) => {
 
     beforeEach(async () => {
       element = fixtureSync(`<${eventsTag}></${eventsTag}>`);
-      element.addEventListener('has-input-value-changed', hasInputValueSpy);
       await nextRender();
       input = document.createElement('input');
       element.appendChild(input);
@@ -146,7 +144,6 @@ const runTests = (baseClass) => {
     afterEach(() => {
       inputSpy.resetHistory();
       changeSpy.resetHistory();
-      hasInputValueSpy.resetHistory();
     });
 
     it('should call an input event listener', () => {
@@ -157,18 +154,6 @@ const runTests = (baseClass) => {
     it('should call a change event listener', () => {
       input.dispatchEvent(new CustomEvent('change'));
       expect(changeSpy.calledOnce).to.be.true;
-    });
-
-    it('should fire has-input-value-changed event on user value change', async () => {
-      input.value = 'foo';
-      input.dispatchEvent(new CustomEvent('change'));
-      await nextFrame();
-
-      input.value = '';
-      input.dispatchEvent(new CustomEvent('change'));
-      await nextFrame();
-
-      expect(hasInputValueSpy.calledTwice).to.be.true;
     });
 
     it('should not call an input event listener when input is unset', async () => {
@@ -185,6 +170,54 @@ const runTests = (baseClass) => {
       await nextFrame();
       input.dispatchEvent(new CustomEvent('change'));
       expect(changeSpy.called).to.be.false;
+    });
+  });
+
+  describe('has-input-value-changed event', () => {
+    let tag, hasInputValueChangedSpy;
+
+    before(() => {
+      tag = define[baseClass](
+        'input-mixin-has-input-value-changed-event',
+        '<slot name="input"></slot>',
+        (Base) => class extends InputMixin(Base) {},
+      );
+    });
+
+    beforeEach(async () => {
+      hasInputValueChangedSpy = sinon.spy();
+      element = fixtureSync(`<${tag}></${tag}>`);
+      element.addEventListener('has-input-value-changed', hasInputValueChangedSpy);
+      await nextRender();
+      input = document.createElement('input');
+      element.appendChild(input);
+      element._setInputElement(input);
+      await nextFrame();
+    });
+
+    it('should fire the event on input value presence change', async () => {
+      input.value = 'foo';
+      fire(input, 'input');
+      await nextFrame();
+      expect(hasInputValueChangedSpy.calledOnce).to.be.true;
+
+      hasInputValueChangedSpy.resetHistory();
+      input.value = '';
+      fire(input, 'input');
+      await nextFrame();
+      expect(hasInputValueChangedSpy.calledOnce).to.be.true;
+    });
+
+    it('should not fire the event on input if input value presence has not changed', async () => {
+      input.value = 'foo';
+      fire(input, 'input');
+      await nextFrame();
+      hasInputValueChangedSpy.resetHistory();
+
+      input.value = 'foobar';
+      fire(input, 'input');
+      await nextFrame();
+      expect(hasInputValueChangedSpy.called).to.be.false;
     });
   });
 };
