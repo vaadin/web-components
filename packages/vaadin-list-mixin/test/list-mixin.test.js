@@ -149,12 +149,19 @@ describe('vaadin-list-mixin', () => {
         </test-list-wrapper-element>
       `);
       list = wrapper.shadowRoot.querySelector('test-list-element');
-    });
-
-    it('should have a list of valid items after the DOM `_observer` has been run', () => {
       // DOM _observer runs asynchronously, we need to flush to access items
       list._observer.flush();
+    });
+
+    it('should have a list of valid items', () => {
       expect(list.items.length).to.be.equal(3);
+    });
+
+    it('should move focus to next element on "arrow-right" keydown', () => {
+      list.orientation = 'horizontal';
+      list._focus(0);
+      arrowRight(list);
+      expect(list.items[1].focused).to.be.true;
     });
   });
 

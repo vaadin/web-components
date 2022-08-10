@@ -121,7 +121,7 @@ export const ListMixin = (superClass) =>
      * @return {Element}
      */
     get focused() {
-      return this.getRootNode().activeElement;
+      return (this.items || []).find((item) => item.focused);
     }
 
     /**
