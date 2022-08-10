@@ -4,7 +4,15 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollToFinish } from './common.js';
+import {
+  getDefaultI18n,
+  getFocusedCell,
+  getOverlayContent,
+  idleCallback,
+  open,
+  waitForOverlayRender,
+  waitForScrollToFinish,
+} from './common.js';
 
 (isIOS ? describe.skip : describe)('keyboard navigation', () => {
   describe('date-picker', () => {
@@ -21,7 +29,6 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       it('should be focused on today if no value / initial position is set', async () => {
         const today = new Date();
         await open(datepicker);
-        await nextRender(datepicker);
 
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
@@ -35,7 +42,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
 
         input.click();
         await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
-        await nextRender(datepicker);
+        await waitForOverlayRender();
 
         // Reset overlay focused date
         input.click();
@@ -57,7 +64,6 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
 
       it('should be focused on selected value when overlay is opened', async () => {
         await open(datepicker);
-        await nextRender(datepicker);
 
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
@@ -68,7 +74,6 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
 
       it('should not lose focused date after deselecting', async () => {
         await open(datepicker);
-        await nextRender(datepicker);
 
         const content = getOverlayContent(datepicker);
         const focused = content.focusedDate;
@@ -93,7 +98,6 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
 
       it('should be focused on initial position when opened', async () => {
         await open(datepicker);
-        await nextRender(datepicker);
 
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
@@ -105,7 +109,7 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
       it('should be focused on initial position when focused date is empty', async () => {
         input.click();
         await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
-        await nextRender(datepicker);
+        await waitForOverlayRender();
 
         // Reset overlay focused date
         input.click();
@@ -124,16 +128,20 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
 
     beforeEach(async () => {
       overlay = fixtureSync(`
-      <vaadin-date-picker-overlay-content
-        style="position: absolute; top: 0"
-        scroll-duration="0"
-      ></vaadin-date-picker-overlay-content>`);
+        <vaadin-date-picker-overlay-content
+          style="position: absolute; top: 0; width: 400px"
+          scroll-duration="0"
+        ></vaadin-date-picker-overlay-content>
+      `);
       overlay.i18n = getDefaultI18n();
 
+      // Set initialPosition to activate scrollers
       const initialDate = new Date(2000, 0, 1);
       overlay.initialPosition = initialDate;
-      await nextRender(overlay);
+
+      await waitForOverlayRender();
       await overlay.focusDate(initialDate);
+      await idleCallback();
     });
 
     it('should focus one week forward with arrow down', async () => {
@@ -324,12 +332,14 @@ import { getDefaultI18n, getFocusedCell, getOverlayContent, open, waitForScrollT
     it('should move to max date when targeted date is disabled', async () => {
       overlay.maxDate = new Date(2000, 0, 7);
       await sendKeys({ down: 'ArrowDown' });
+      await waitForScrollToFinish(overlay);
       expect(overlay.focusedDate).to.eql(new Date(2000, 0, 7));
     });
 
     it('should move to min date when targeted date is disabled', async () => {
       overlay.minDate = new Date(1999, 11, 26);
       await sendKeys({ down: 'ArrowUp' });
+      await waitForScrollToFinish(overlay);
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 26));
     });
 

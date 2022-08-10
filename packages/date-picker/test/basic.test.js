@@ -5,7 +5,6 @@ import {
   fixtureSync,
   keyboardEventFor,
   makeSoloTouchEvent,
-  nextRender,
   oneEvent,
   tap,
 } from '@vaadin/testing-helpers';
@@ -13,7 +12,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import * as settings from '@polymer/polymer/lib/utils/settings.js';
-import { close, getOverlayContent, monthsEqual, open } from './common.js';
+import { close, getFocusedCell, getOverlayContent, idleCallback, monthsEqual, open } from './common.js';
 
 settings.setCancelSyntheticClickEvents(false);
 
@@ -275,13 +274,11 @@ describe('basic features', () => {
     it('should set focused attribute when focused', async () => {
       datepicker.focus();
       await open(datepicker);
-      await nextRender();
       expect(datepicker.hasAttribute('focused')).to.be.true;
     });
 
     it('should close the dropdown on Today button Esc', async () => {
       await open(datepicker);
-      await nextRender();
 
       getOverlayContent(datepicker).$.todayButton.focus();
       await sendKeys({ press: 'Escape' });
@@ -291,7 +288,6 @@ describe('basic features', () => {
 
     it('should close the dropdown on Cancel button Esc', async () => {
       await open(datepicker);
-      await nextRender();
 
       getOverlayContent(datepicker).$.cancelButton.focus();
       await sendKeys({ press: 'Escape' });
@@ -301,7 +297,6 @@ describe('basic features', () => {
 
     it('should remove focused attribute when closed and not focused', async () => {
       await open(datepicker);
-      await nextRender();
 
       getOverlayContent(datepicker).$.todayButton.focus();
       await sendKeys({ press: 'Escape' });
@@ -315,25 +310,13 @@ describe('basic features', () => {
       expect(spy.called).to.be.true;
     });
 
-    describe('focus date', () => {
-      let spy;
-
-      beforeEach(() => {
-        // Do not spy on the DOM element because it can be reused
-        // by infinite scroller. Instead, spy on the native focus.
-        spy = sinon.spy(HTMLElement.prototype, 'focus');
-      });
-
-      afterEach(() => {
-        spy.restore();
-      });
-
-      it('should focus date element when opened', async () => {
-        await open(datepicker);
-        await nextRender();
-        const cell = spy.lastCall.thisValue;
-        expect(cell.hasAttribute('today')).to.be.true;
-      });
+    it('should focus date element when opened', async () => {
+      await open(datepicker);
+      await idleCallback();
+      const content = getOverlayContent(datepicker);
+      const cell = getFocusedCell(content);
+      expect(cell).to.be.instanceOf(HTMLTableCellElement);
+      expect(cell.hasAttribute('today')).to.be.true;
     });
   });
 
