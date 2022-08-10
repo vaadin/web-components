@@ -57,6 +57,11 @@ describe('vaadin-date-picker', () => {
       datePicker.name = 'Field Name';
       await expect(datePicker).dom.to.equalSnapshot();
     });
+
+    it('value', async () => {
+      datePicker.value = '2000-02-01';
+      await expect(datePicker).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
