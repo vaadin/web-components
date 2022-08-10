@@ -93,6 +93,25 @@ customElements.define(
   },
 );
 
+customElements.define(
+  'test-list-wrapper-element',
+  class extends PolymerElement {
+    static get template() {
+      return html`
+        <style>
+          :host {
+            display: block;
+          }
+        </style>
+
+        <test-list-element>
+          <slot></slot>
+        </test-list-element>
+      `;
+    }
+  },
+);
+
 describe('vaadin-list-mixin', () => {
   let list;
 
@@ -116,6 +135,24 @@ describe('vaadin-list-mixin', () => {
     it('`focus` should flush the `_observer` if it is called too soon', () => {
       // Focus flushes the observer in order to be run in 3rd party elements initialization
       list.focus();
+      expect(list.items.length).to.be.equal(3);
+    });
+  });
+
+  describe.only('wrapped list with slotted items', () => {
+    beforeEach(() => {
+      list = fixtureSync(`
+        <test-list-wrapper-element>
+          <test-item-element>Item 0</test-item-element>
+          <test-item-element>Item 1</test-item-element>
+          <test-item-element>Item 2</test-item-element>
+        </test-list-wrapper-element>
+      `).shadowRoot.querySelector('test-list-element');
+    });
+
+    it('should have a list of valid items after the DOM `_observer` has been run', () => {
+      // DOM _observer runs asynchronously, we need to flush to access items
+      list._observer.flush();
       expect(list.items.length).to.be.equal(3);
     });
   });

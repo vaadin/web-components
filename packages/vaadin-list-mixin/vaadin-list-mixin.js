@@ -87,7 +87,7 @@ export const ListMixin = (superClass) =>
       this.addEventListener('click', (e) => this._onClick(e));
 
       this._observer = new FlattenedNodesObserver(this, () => {
-        this._setItems(this._filterItems(Array.from(this.children)));
+        this._setItems(this._filterItems(FlattenedNodesObserver.getFlattenedNodes(this)));
       });
     }
 
