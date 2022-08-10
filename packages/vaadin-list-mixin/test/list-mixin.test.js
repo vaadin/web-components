@@ -141,13 +141,14 @@ describe('vaadin-list-mixin', () => {
 
   describe('wrapped list with slotted items', () => {
     beforeEach(() => {
-      list = fixtureSync(`
+      const wrapper = fixtureSync(`
         <test-list-wrapper-element>
           <test-item-element>Item 0</test-item-element>
           <test-item-element>Item 1</test-item-element>
           <test-item-element>Item 2</test-item-element>
         </test-list-wrapper-element>
-      `).shadowRoot.querySelector('test-list-element');
+      `);
+      list = wrapper.shadowRoot.querySelector('test-list-element');
     });
 
     it('should have a list of valid items after the DOM `_observer` has been run', () => {
