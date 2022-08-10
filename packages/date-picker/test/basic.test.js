@@ -5,7 +5,6 @@ import {
   fixtureSync,
   keyboardEventFor,
   makeSoloTouchEvent,
-  nextRender,
   oneEvent,
   tap,
 } from '@vaadin/testing-helpers';
@@ -275,13 +274,11 @@ describe('basic features', () => {
     it('should set focused attribute when focused', async () => {
       datepicker.focus();
       await open(datepicker);
-      await nextRender();
       expect(datepicker.hasAttribute('focused')).to.be.true;
     });
 
     it('should close the dropdown on Today button Esc', async () => {
       await open(datepicker);
-      await nextRender();
 
       getOverlayContent(datepicker).$.todayButton.focus();
       await sendKeys({ press: 'Escape' });
@@ -291,7 +288,6 @@ describe('basic features', () => {
 
     it('should close the dropdown on Cancel button Esc', async () => {
       await open(datepicker);
-      await nextRender();
 
       getOverlayContent(datepicker).$.cancelButton.focus();
       await sendKeys({ press: 'Escape' });
@@ -301,7 +297,6 @@ describe('basic features', () => {
 
     it('should remove focused attribute when closed and not focused', async () => {
       await open(datepicker);
-      await nextRender();
 
       getOverlayContent(datepicker).$.todayButton.focus();
       await sendKeys({ press: 'Escape' });
@@ -317,7 +312,6 @@ describe('basic features', () => {
 
     it('should focus date element when opened', async () => {
       await open(datepicker);
-      await nextRender();
       await idleCallback();
       const content = getOverlayContent(datepicker);
       const cell = getFocusedCell(content);

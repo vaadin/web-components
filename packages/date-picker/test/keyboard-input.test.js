@@ -546,7 +546,6 @@ describe('keyboard', () => {
     it('should fire change on selecting date with Enter', async () => {
       // Open the overlay
       await open(datepicker);
-      await nextRender(datepicker);
 
       // Move focus to the calendar
       await sendKeys({ press: 'ArrowDown' });
@@ -559,7 +558,6 @@ describe('keyboard', () => {
     it('should fire change on selecting date with Space', async () => {
       // Open the overlay
       await open(datepicker);
-      await nextRender(datepicker);
 
       // Move focus to the calendar
       await sendKeys({ press: 'ArrowDown' });
