@@ -128,12 +128,6 @@ describe('basic features', () => {
     expect(event.defaultPrevented).to.be.false;
   });
 
-  it('should pass the placeholder attribute to the input tag', () => {
-    const placeholder = 'Pick a date';
-    datepicker.set('placeholder', placeholder);
-    expect(input.placeholder).to.be.equal(placeholder);
-  });
-
   it('should scroll to today by default', async () => {
     const overlayContent = getOverlayContent(datepicker);
     const spy = sinon.spy(overlayContent, 'scrollToDate');
@@ -242,11 +236,6 @@ describe('basic features', () => {
 
     datepicker.open();
     expect(datepicker.clientWidth).to.equal(width);
-  });
-
-  it('should set has-value attribute when value is set', () => {
-    datepicker.value = '2000-02-01';
-    expect(datepicker.hasAttribute('has-value')).to.be.true;
   });
 
   describe('fullscreen', () => {

@@ -27,6 +27,37 @@ snapshots["vaadin-date-picker host default"] =
 `;
 /* end snapshot vaadin-date-picker host default */
 
+snapshots["vaadin-date-picker host disabled"] = 
+`<vaadin-date-picker
+  aria-disabled="true"
+  disabled=""
+>
+  <label
+    for="input-vaadin-date-picker-3"
+    id="label-vaadin-date-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-date-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-expanded="false"
+    aria-haspopup="dialog"
+    autocomplete="off"
+    disabled=""
+    id="input-vaadin-date-picker-3"
+    role="combobox"
+    slot="input"
+    tabindex="-1"
+  >
+</vaadin-date-picker>
+`;
+/* end snapshot vaadin-date-picker host disabled */
+
 snapshots["vaadin-date-picker host placeholder"] = 
 `<vaadin-date-picker placeholder="Placeholder">
   <label
@@ -53,6 +84,60 @@ snapshots["vaadin-date-picker host placeholder"] =
 </vaadin-date-picker>
 `;
 /* end snapshot vaadin-date-picker host placeholder */
+
+snapshots["vaadin-date-picker host readonly"] = 
+`<vaadin-date-picker readonly="">
+  <label
+    for="input-vaadin-date-picker-3"
+    id="label-vaadin-date-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-date-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-expanded="false"
+    aria-haspopup="dialog"
+    autocomplete="off"
+    id="input-vaadin-date-picker-3"
+    readonly=""
+    role="combobox"
+    slot="input"
+  >
+</vaadin-date-picker>
+`;
+/* end snapshot vaadin-date-picker host readonly */
+
+snapshots["vaadin-date-picker host required"] = 
+`<vaadin-date-picker required="">
+  <label
+    for="input-vaadin-date-picker-3"
+    id="label-vaadin-date-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-date-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-expanded="false"
+    aria-haspopup="dialog"
+    autocomplete="off"
+    id="input-vaadin-date-picker-3"
+    required=""
+    role="combobox"
+    slot="input"
+  >
+</vaadin-date-picker>
+`;
+/* end snapshot vaadin-date-picker host required */
 
 snapshots["vaadin-date-picker host label"] = 
 `<vaadin-date-picker has-label="">
@@ -147,6 +232,59 @@ snapshots["vaadin-date-picker host error"] =
 </vaadin-date-picker>
 `;
 /* end snapshot vaadin-date-picker host error */
+
+snapshots["vaadin-date-picker host name"] = 
+`<vaadin-date-picker name="Field Name">
+  <label
+    for="input-vaadin-date-picker-3"
+    id="label-vaadin-date-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-date-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-expanded="false"
+    aria-haspopup="dialog"
+    autocomplete="off"
+    id="input-vaadin-date-picker-3"
+    name="Field Name"
+    role="combobox"
+    slot="input"
+  >
+</vaadin-date-picker>
+`;
+/* end snapshot vaadin-date-picker host name */
+
+snapshots["vaadin-date-picker host value"] = 
+`<vaadin-date-picker has-value="">
+  <label
+    for="input-vaadin-date-picker-3"
+    id="label-vaadin-date-picker-0"
+    slot="label"
+  >
+  </label>
+  <div
+    hidden=""
+    id="error-message-vaadin-date-picker-2"
+    slot="error-message"
+  >
+  </div>
+  <input
+    aria-expanded="false"
+    aria-haspopup="dialog"
+    autocomplete="off"
+    id="input-vaadin-date-picker-3"
+    role="combobox"
+    slot="input"
+  >
+</vaadin-date-picker>
+`;
+/* end snapshot vaadin-date-picker host value */
 
 snapshots["vaadin-date-picker shadow default"] = 
 `<div class="vaadin-date-picker-container">
@@ -424,116 +562,4 @@ snapshots["vaadin-date-picker shadow theme"] =
 </vaadin-date-picker-overlay>
 `;
 /* end snapshot vaadin-date-picker shadow theme */
-
-snapshots["vaadin-date-picker host readonly"] = 
-`<vaadin-date-picker readonly="">
-  <label
-    for="input-vaadin-date-picker-3"
-    id="label-vaadin-date-picker-0"
-    slot="label"
-  >
-  </label>
-  <div
-    hidden=""
-    id="error-message-vaadin-date-picker-2"
-    slot="error-message"
-  >
-  </div>
-  <input
-    aria-expanded="false"
-    aria-haspopup="dialog"
-    autocomplete="off"
-    id="input-vaadin-date-picker-3"
-    readonly=""
-    role="combobox"
-    slot="input"
-  >
-</vaadin-date-picker>
-`;
-/* end snapshot vaadin-date-picker host readonly */
-
-snapshots["vaadin-date-picker host required"] = 
-`<vaadin-date-picker required="">
-  <label
-    for="input-vaadin-date-picker-3"
-    id="label-vaadin-date-picker-0"
-    slot="label"
-  >
-  </label>
-  <div
-    hidden=""
-    id="error-message-vaadin-date-picker-2"
-    slot="error-message"
-  >
-  </div>
-  <input
-    aria-expanded="false"
-    aria-haspopup="dialog"
-    autocomplete="off"
-    id="input-vaadin-date-picker-3"
-    required=""
-    role="combobox"
-    slot="input"
-  >
-</vaadin-date-picker>
-`;
-/* end snapshot vaadin-date-picker host required */
-
-snapshots["vaadin-date-picker host name"] = 
-`<vaadin-date-picker name="Field Name">
-  <label
-    for="input-vaadin-date-picker-3"
-    id="label-vaadin-date-picker-0"
-    slot="label"
-  >
-  </label>
-  <div
-    hidden=""
-    id="error-message-vaadin-date-picker-2"
-    slot="error-message"
-  >
-  </div>
-  <input
-    aria-expanded="false"
-    aria-haspopup="dialog"
-    autocomplete="off"
-    id="input-vaadin-date-picker-3"
-    name="Field Name"
-    role="combobox"
-    slot="input"
-  >
-</vaadin-date-picker>
-`;
-/* end snapshot vaadin-date-picker host name */
-
-snapshots["vaadin-date-picker host disabled"] = 
-`<vaadin-date-picker
-  aria-disabled="true"
-  disabled=""
->
-  <label
-    for="input-vaadin-date-picker-3"
-    id="label-vaadin-date-picker-0"
-    slot="label"
-  >
-  </label>
-  <div
-    hidden=""
-    id="error-message-vaadin-date-picker-2"
-    slot="error-message"
-  >
-  </div>
-  <input
-    aria-expanded="false"
-    aria-haspopup="dialog"
-    autocomplete="off"
-    disabled=""
-    id="input-vaadin-date-picker-3"
-    role="combobox"
-    slot="input"
-    tabindex="-1"
-  >
-</vaadin-date-picker>
-`;
-/* end snapshot vaadin-date-picker host disabled */
 
