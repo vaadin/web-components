@@ -5,6 +5,7 @@
  */
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
+import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
@@ -488,9 +489,12 @@ export const DatePickerMixin = (subclass) =>
         this._selectDate(e.detail.date);
       });
 
-      // Keep focus attribute in focusElement for styling
+      // Set focus-ring attribute when moving focus to the overlay
+      // by pressing Tab or arrow key, after opening it on click.
       this._overlayContent.addEventListener('focusin', () => {
-        this._setFocused(true);
+        if (this._keyboardActive) {
+          this._setFocused(true);
+        }
       });
 
       this.addEventListener('mousedown', () => this.__bringToFront());
@@ -521,6 +525,51 @@ export const DatePickerMixin = (subclass) =>
       }
 
       return inputValid && minMaxValid && inputValidity;
+    }
+
+    /**
+     * Override method inherited from `FocusMixin`
+     * to not call `_setFocused(true)` when focus
+     * is restored after closing overlay on click,
+     * and to avoid removing `focus-ring` attribute.
+     *
+     * @param {!FocusEvent} _event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldSetFocus(_event) {
+      return !this._shouldKeepFocusRing;
+    }
+
+    /**
+     * Override method inherited from `FocusMixin`
+     * to prevent removing the `focused` attribute:
+     * - when moving focus to the overlay content,
+     * - when closing on date click / outside click.
+     *
+     * @param {!FocusEvent} _event
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    _shouldRemoveFocus(_event) {
+      return !this.opened;
+    }
+
+    /**
+     * Override method inherited from `FocusMixin`
+     * to store the `focus-ring` state to restore
+     * it later when closing on outside click.
+     *
+     * @param {boolean} focused
+     * @protected
+     * @override
+     */
+    _setFocused(focused) {
+      super._setFocused(focused);
+
+      this._shouldKeepFocusRing = focused && this._keyboardActive;
     }
 
     /**
@@ -728,8 +777,6 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayOpened() {
-      this._openedWithFocusRing = this.hasAttribute('focus-ring');
-
       const parsedInitialPosition = this._parseDate(this.initialPosition);
 
       const initialPosition =
@@ -804,10 +851,13 @@ export const DatePickerMixin = (subclass) =>
         this.validate();
       }
 
-      // If the input isn't focused when overlay closes (fullscreen mode), clear focused state
-      if (this.getRootNode().activeElement !== this.inputElement) {
-        this._setFocused(false);
-      }
+      // Wait for focus to be restored on close by the `vaadin-overlay`.
+      setTimeout(() => {
+        // If the input isn't focused (fullscreen mode), clear focused state.
+        if (!isElementFocused(this._nativeInput)) {
+          this._setFocused(false);
+        }
+      });
     }
 
     /** @private */

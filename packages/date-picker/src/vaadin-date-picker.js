@@ -222,11 +222,6 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
 
   /** @private */
   _onVaadinOverlayClose(e) {
-    if (this._openedWithFocusRing && this.hasAttribute('focused')) {
-      this.setAttribute('focus-ring', '');
-    } else if (!this.hasAttribute('focused')) {
-      this.blur();
-    }
     if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().includes(this)) {
       e.preventDefault();
     }
