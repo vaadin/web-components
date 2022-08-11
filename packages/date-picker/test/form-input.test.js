@@ -77,6 +77,13 @@ describe('form input', () => {
       expect(datepicker.inputElement.hasAttribute('invalid')).to.be.true;
     });
 
+    it('should not validate on input click while opened', async () => {
+      await open(datepicker);
+      const spy = sinon.spy(datepicker, 'validate');
+      datepicker.inputElement.click();
+      expect(spy.called).to.be.false;
+    });
+
     it('should re-validate old input after selecting date', async () => {
       // Set invalid value.
       inputValue('foo');
