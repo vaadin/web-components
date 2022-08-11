@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '../enable.js';
 import '../vaadin-map.js';
 
 describe('vaadin-map styles', () => {

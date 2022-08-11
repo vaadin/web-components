@@ -21,7 +21,6 @@
   "module": "vaadin-map.js",
   "type": "module",
   "files": [
-    "enable.js",
     "src",
     "theme",
     "vaadin-*.d.ts",
