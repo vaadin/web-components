@@ -3,7 +3,7 @@ import { fixtureSync, focusout } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
-import { clickItem, getViewportItems } from './helpers.js';
+import { clickItem, getViewportItems, outsideClick, setInputValue } from './helpers.js';
 
 describe('Properties', () => {
   let comboBox, overlay, input;
@@ -109,8 +109,7 @@ describe('Properties', () => {
     it('should support preventInvalidInput property', () => {
       comboBox.pattern = '[0-9]*';
       comboBox.preventInvalidInput = true;
-      input.value = 'foo';
-      input.dispatchEvent(new CustomEvent('input'));
+      setInputValue(comboBox, 'foo');
       expect(comboBox.value).to.equal('');
     });
   });
@@ -136,10 +135,8 @@ describe('Properties', () => {
 
     it('should set value after setting a custom input value', () => {
       comboBox.open();
-      input.value = 'foo';
-      input.dispatchEvent(new CustomEvent('input'));
-      comboBox.close();
-
+      setInputValue(comboBox, 'foo');
+      outsideClick();
       expect(comboBox.value).to.eql('foo');
     });
 
@@ -147,15 +144,13 @@ describe('Properties', () => {
       comboBox.items = ['a', 'b'];
 
       comboBox.open();
-      input.value = 'foo';
-      input.dispatchEvent(new CustomEvent('input'));
-      comboBox.close();
+      setInputValue(comboBox, 'foo');
+      outsideClick();
 
       comboBox.open();
-      input.value = 'a';
-      input.dispatchEvent(new CustomEvent('input'));
+      setInputValue(comboBox, 'a');
       comboBox._focusedIndex = -1;
-      comboBox.close();
+      outsideClick();
 
       expect(comboBox.value).to.eql('foo');
       expect(input.value).to.eql('foo');
@@ -171,9 +166,8 @@ describe('Properties', () => {
         comboBox.addEventListener('custom-value-set', spy);
 
         comboBox.open();
-        input.value = 'foo';
-        input.dispatchEvent(new CustomEvent('input'));
-        comboBox.close();
+        setInputValue(comboBox, 'foo');
+        outsideClick();
 
         expect(spy.callCount).to.eql(1);
       });
@@ -185,19 +179,18 @@ describe('Properties', () => {
         comboBox.addEventListener('custom-value-set', spy);
 
         comboBox.open();
-        input.value = 'foo';
-        input.dispatchEvent(new CustomEvent('input'));
-        comboBox.close();
+        setInputValue(comboBox, 'foo');
+        outsideClick();
 
         expect(spy.callCount).to.eql(0);
       });
 
-      it('should be fired when combo-box is read-only', () => {
+      it('should not be fired when combo-box is read-only', () => {
         const spy = sinon.spy();
         comboBox.addEventListener('custom-value-set', spy);
 
         comboBox.readonly = true;
-        input.value = 'foo';
+        setInputValue(comboBox, 'foo');
         comboBox.focus();
         focusout(comboBox);
 
@@ -208,9 +201,8 @@ describe('Properties', () => {
         comboBox.addEventListener('custom-value-set', (e) => e.preventDefault());
 
         comboBox.open();
-        input.value = 'foo';
-        input.dispatchEvent(new CustomEvent('input'));
-        comboBox.close();
+        setInputValue(comboBox, 'foo');
+        outsideClick();
         expect(comboBox.value).to.be.empty;
       });
 
@@ -219,7 +211,7 @@ describe('Properties', () => {
         comboBox.addEventListener('custom-value-set', spy);
 
         comboBox.open();
-        input.value = 'a';
+        setInputValue(comboBox, 'a');
         clickItem(comboBox, 0);
         expect(spy.called).to.be.false;
       });
@@ -229,9 +221,8 @@ describe('Properties', () => {
         comboBox.addEventListener('custom-value-set', spy);
 
         comboBox.open();
-        input.value = 'a';
-        comboBox.close();
-        input.blur();
+        setInputValue(comboBox, 'a');
+        outsideClick();
         expect(spy.called).to.be.false;
       });
 
@@ -244,8 +235,8 @@ describe('Properties', () => {
         };
 
         comboBox.open();
-        input.value = 'foo';
-        comboBox.close();
+        setInputValue(comboBox, 'foo');
+        outsideClick();
 
         expect(spy.called).to.be.false;
       });
@@ -259,8 +250,8 @@ describe('Properties', () => {
         };
 
         comboBox.open();
-        input.value = 'bar';
-        comboBox.close();
+        setInputValue(comboBox, 'bar');
+        outsideClick();
 
         expect(spy.calledOnce).to.be.true;
       });
@@ -275,9 +266,8 @@ describe('Properties', () => {
         });
 
         comboBox.open();
-        input.value = 'foo';
-        input.dispatchEvent(new CustomEvent('input'));
-        comboBox.close();
+        setInputValue(comboBox, 'foo');
+        outsideClick();
 
         expect(spy.calledOnce).to.be.true;
       });
@@ -287,12 +277,12 @@ describe('Properties', () => {
         comboBox.addEventListener('custom-value-set', spy);
 
         comboBox.open();
-        input.value = 'foo';
-        input.dispatchEvent(new CustomEvent('input'));
-        comboBox.close();
+        setInputValue(comboBox, 'foo');
+        outsideClick();
 
-        input.value = 'bar';
-        input.dispatchEvent(new CustomEvent('input'));
+        input.focus();
+        setInputValue(comboBox, 'bar');
+        outsideClick();
         focusout(input);
 
         expect(spy.calledTwice).to.be.true;
