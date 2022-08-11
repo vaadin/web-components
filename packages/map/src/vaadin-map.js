@@ -28,7 +28,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Then use the exposed OpenLayers API to configure it:
  * ```html
  * <script type="module">
- *   import "@vaadin/map/enable";
  *   import "@vaadin/map";
  *   import TileLayer from "ol/layer/Tile";
  *   import OSM from "ol/source/OSM";
