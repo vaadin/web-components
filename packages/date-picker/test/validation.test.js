@@ -76,6 +76,13 @@ describe('validation', () => {
       expect(validateSpy.calledOnce).to.be.true;
     });
 
+    it('should not validate on input click while opened', async () => {
+      await open(datePicker);
+      validateSpy.resetHistory();
+      datePicker.inputElement.click();
+      expect(validateSpy.called).to.be.false;
+    });
+
     it('should validate on clear button click', () => {
       datePicker.clearButtonVisible = true;
       // Set invalid value.

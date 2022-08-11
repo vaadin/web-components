@@ -162,7 +162,7 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
         fullscreen$="[[_fullscreen]]"
         theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
         on-vaadin-overlay-open="_onOverlayOpened"
-        on-vaadin-overlay-close="_onOverlayClosed"
+        on-vaadin-overlay-closing="_onOverlayClosed"
         restore-focus-on-close
         restore-focus-node="[[inputElement]]"
         disable-upgrade
