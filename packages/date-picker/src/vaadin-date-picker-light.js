@@ -72,7 +72,7 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(PolymerElement)) {
         fullscreen$="[[_fullscreen]]"
         opened="{{opened}}"
         on-vaadin-overlay-open="_onOverlayOpened"
-        on-vaadin-overlay-close="_onOverlayClosed"
+        on-vaadin-overlay-closing="_onOverlayClosed"
         restore-focus-on-close
         restore-focus-node="[[inputElement]]"
         theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
