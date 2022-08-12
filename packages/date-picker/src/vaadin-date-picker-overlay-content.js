@@ -331,7 +331,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
     this.setAttribute('role', 'dialog');
 
-    addListener(this, 'tap', this._stopPropagation);
     addListener(this.$.scrollers, 'track', this._track.bind(this));
     addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
     addListener(this.shadowRoot.querySelector('[part="today-button"]'), 'tap', this._onTodayTap.bind(this));
@@ -976,10 +975,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     todayMidnight.setMonth(today.getMonth());
     todayMidnight.setDate(today.getDate());
     return this._dateAllowed(todayMidnight, min, max);
-  }
-
-  _stopPropagation(e) {
-    e.stopPropagation();
   }
 }
 
