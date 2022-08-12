@@ -469,7 +469,10 @@ export const DatePickerMixin = (subclass) =>
         this._close();
       });
 
-      this._overlayContent.addEventListener('close', this._close.bind(this));
+      this._overlayContent.addEventListener('close', () => {
+        this._close();
+      });
+
       this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
 
       // User confirmed selected date by clicking the calendar.
@@ -478,7 +481,7 @@ export const DatePickerMixin = (subclass) =>
 
         this._selectDate(e.detail.date);
 
-        this._close(e);
+        this._close();
       });
 
       // User confirmed selected date by pressing Enter or Today.
@@ -590,10 +593,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _close(e) {
-      if (e) {
-        e.stopPropagation();
-      }
+    _close() {
       this._focus();
       this.close();
     }
