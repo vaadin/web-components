@@ -48,16 +48,12 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
           flex-grow: 1;
         }
 
-        [part='clear-button']:not([showclear]) {
-          display: none;
+        [hidden] {
+          display: none !important;
         }
 
         [part='years-toggle-button'] {
           display: flex;
-        }
-
-        [part='years-toggle-button'][desktop] {
-          display: none;
         }
 
         :host(:not([years-visible])) [part='years-toggle-button']::before {
@@ -154,10 +150,10 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
       <div part="overlay-header" on-touchend="_preventDefault" desktop$="[[_desktopMode]]" aria-hidden="true">
         <div part="label">[[_formatDisplayed(selectedDate, i18n.formatDate, label)]]</div>
-        <div part="clear-button" showclear$="[[_showClear(selectedDate)]]"></div>
+        <div part="clear-button" hidden$="[[!_showClear(selectedDate)]]"></div>
         <div part="toggle-button"></div>
 
-        <div part="years-toggle-button" desktop$="[[_desktopMode]]" aria-hidden="true">
+        <div part="years-toggle-button" hidden$="[[_desktopMode]]" aria-hidden="true">
           [[_yearAfterXMonths(_visibleMonthIndex)]]
         </div>
       </div>
