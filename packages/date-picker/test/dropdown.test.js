@@ -1,27 +1,58 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, down, fixtureSync, mousedown, touchstart } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, mousedown, oneEvent, touchstart } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
+import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { getFocusedCell, getOverlayContent, isFullscreen, open, outsideClick } from './common.js';
 
 describe('dropdown', () => {
-  let datepicker, input;
+  let datepicker, input, overlay;
 
   beforeEach(() => {
     datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
     input = datepicker.inputElement;
+    overlay = datepicker.$.overlay;
   });
 
   it('should update position of the overlay after changing opened property', () => {
     datepicker.opened = true;
-    expect(input.getBoundingClientRect().bottom).to.be.closeTo(datepicker.$.overlay.getBoundingClientRect().top, 0.01);
+    expect(input.getBoundingClientRect().bottom).to.be.closeTo(overlay.getBoundingClientRect().top, 0.01);
   });
 
   it('should detach overlay on datepicker detach', () => {
     datepicker.open();
     datepicker.parentElement.removeChild(datepicker);
-    expect(datepicker.$.overlay.parentElement).to.not.be.ok;
+    expect(overlay.parentElement).to.not.be.ok;
+  });
+
+  describe('toggle button', () => {
+    let toggleButton;
+
+    beforeEach(() => {
+      toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
+    });
+
+    it('should open by tapping the calendar icon', () => {
+      toggleButton.click();
+      expect(datepicker.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close on subsequent toggle button click', async () => {
+      toggleButton.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      toggleButton.click();
+      expect(datepicker.opened).to.be.false;
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should prevent default for the toggle button mousedown', () => {
+      const e = new CustomEvent('mousedown', { bubbles: true });
+      const spy = sinon.spy(e, 'preventDefault');
+      toggleButton.dispatchEvent(e);
+      expect(spy.calledOnce).to.be.true;
+    });
   });
 
   describe('outside click', () => {
@@ -163,45 +194,5 @@ describe('dropdown', () => {
         });
       });
     });
-  });
-});
-
-class DatePickerWrapper extends PolymerElement {
-  static get template() {
-    return html`<vaadin-date-picker id="datepicker" label="foo" clear-button-visible></vaadin-date-picker>`;
-  }
-}
-
-customElements.define('vaadin-date-picker-wrapper', DatePickerWrapper);
-
-describe('wrapped', () => {
-  let datepicker, clearButton, toggleButton;
-
-  beforeEach(() => {
-    datepicker = fixtureSync(`<vaadin-date-picker-wrapper></vaadin-date-picker-wrapper>`).$.datepicker;
-    toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
-    clearButton = datepicker.shadowRoot.querySelector('[part="clear-button"]');
-  });
-
-  it('should not close on calendar icon down', (done) => {
-    datepicker.open();
-    datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
-      down(toggleButton);
-      expect(datepicker.$.overlay.opened).to.be.true;
-      done();
-    });
-  });
-
-  it('should not close on clear-button down', () => {
-    datepicker.open();
-    datepicker.value = '2001-01-01';
-    click(clearButton);
-    expect(datepicker.$.overlay.opened).to.be.true;
-  });
-
-  it('should not open on clear-button down if was not opened initially', () => {
-    datepicker.value = '2001-01-01';
-    click(clearButton);
-    expect(datepicker.$.overlay.hasAttribute('disable-upgrade')).to.be.true;
   });
 });
