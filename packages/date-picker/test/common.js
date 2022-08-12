@@ -1,4 +1,4 @@
-import { aTimeout, fire, listenOnce, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fire, listenOnce, mousedown, nextRender } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
@@ -88,6 +88,8 @@ export function idleCallback() {
 export function outsideClick() {
   // Move focus to body
   document.body.tabIndex = 0;
+  // Clear keyboardActive flag
+  mousedown(document.body);
   document.body.focus();
   document.body.tabIndex = -1;
   // Outside click

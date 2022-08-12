@@ -173,14 +173,6 @@ describe('basic features', () => {
     expect(monthsEqual(spy.firstCall.args[0], new Date(2000, 1, 1))).to.be.true;
   });
 
-  it('should close on overlay date tap', async () => {
-    await open(datepicker);
-    const spy = sinon.spy(datepicker, 'close');
-    const evt = new CustomEvent('date-tap', { detail: { date: new Date() }, bubbles: true, composed: true });
-    getOverlayContent(datepicker).dispatchEvent(evt);
-    expect(spy.called).to.be.true;
-  });
-
   it('should lead zeros correctly', () => {
     datepicker.value = '+000300-02-01';
     expect(input.value).to.equal('2/1/0300');
