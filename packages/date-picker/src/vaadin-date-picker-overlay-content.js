@@ -150,7 +150,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
       <div part="overlay-header" on-touchend="_preventDefault" desktop$="[[_desktopMode]]" aria-hidden="true">
         <div part="label">[[_formatDisplayed(selectedDate, i18n.formatDate, label)]]</div>
-        <div part="clear-button" hidden$="[[!_showClear(selectedDate)]]"></div>
+        <div part="clear-button" hidden$="[[!selectedDate]]"></div>
         <div part="toggle-button"></div>
 
         <div part="years-toggle-button" hidden$="[[_desktopMode]]" aria-hidden="true">
@@ -239,6 +239,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
        */
       selectedDate: {
         type: Date,
+        value: null,
       },
 
       /**
@@ -493,10 +494,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     }
 
     this.scrollToDate(new Date(), true);
-  }
-
-  _showClear(selectedDate) {
-    return !!selectedDate;
   }
 
   _onYearTap(e) {
