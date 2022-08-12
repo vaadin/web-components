@@ -386,12 +386,10 @@ export const DatePickerMixin = (subclass) =>
           }
         }
 
-        if (this.inputElement.value === '' && this.__dispatchChange) {
-          this.validate();
+        this.validate();
+
+        if (this._inputValue === '' && this.value !== '') {
           this.value = '';
-          this.__dispatchChange = false;
-        } else {
-          this.validate();
         }
       }
     }
@@ -901,10 +899,7 @@ export const DatePickerMixin = (subclass) =>
     _onChange(event) {
       // For change event on the native <input> blur, after the input is cleared,
       // we schedule change event to be dispatched on date-picker blur.
-      if (
-        this.inputElement.value === '' &&
-        !(event.detail && event.detail.sourceEvent && event.detail.sourceEvent.__fromClearButton)
-      ) {
+      if (this._inputValue === '') {
         this.__dispatchChange = true;
       }
 
