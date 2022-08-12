@@ -33,14 +33,6 @@ describe('overlay', () => {
       afterNextRender(overlay.$.monthScroller, () => waitUntilScrolledTo(overlay, overlay.initialPosition, done));
     });
 
-    it('should stop tap events from bubbling outside the overlay', () => {
-      const tapSpy = sinon.spy();
-      document.addEventListener('tap', tapSpy);
-      overlay.$.monthScroller.dispatchEvent(new CustomEvent('tap', { bubbles: true }));
-      document.removeEventListener('tap', tapSpy);
-      expect(tapSpy.called).to.be.false;
-    });
-
     it('should return correct month', () => {
       overlay._originDate = new Date(2016, 2, 31);
       expect(overlay._dateAfterXMonths(11).getMonth()).to.equal(1);
