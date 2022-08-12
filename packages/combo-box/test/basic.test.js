@@ -125,6 +125,7 @@ describe('Properties', () => {
     beforeEach(() => {
       comboBox.items = [];
       comboBox.allowCustomValue = true;
+      input.focus();
     });
 
     it('should set bind value after setting value property', () => {
