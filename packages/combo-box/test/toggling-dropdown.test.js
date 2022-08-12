@@ -162,7 +162,7 @@ describe('toggling dropdown', () => {
     });
 
     it('should not open overlay when readonly', () => {
-      comboBox.disabled = true;
+      comboBox.readonly = true;
       comboBox.open();
       expect(comboBox.opened).to.be.false;
       expect(overlay.opened).to.be.false;
