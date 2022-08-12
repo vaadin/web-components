@@ -565,6 +565,19 @@ describe('clear button', () => {
     datepicker.inputElement.dispatchEvent(event);
     expect(spy.called).to.be.false;
   });
+
+  it('should not close on clear button click when opened', async () => {
+    await open(datepicker);
+    datepicker.value = '2001-01-01';
+    click(clearButton);
+    expect(datepicker.opened).to.be.true;
+  });
+
+  it('should not open on clear button click when not opened', () => {
+    datepicker.value = '2001-01-01';
+    click(clearButton);
+    expect(datepicker.opened).to.be.false;
+  });
 });
 
 describe('wrapped', () => {

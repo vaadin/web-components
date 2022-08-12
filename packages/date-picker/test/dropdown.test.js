@@ -1,8 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, down, fixtureSync, mousedown, touchstart } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, mousedown, touchstart } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import '../src/vaadin-date-picker.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { getFocusedCell, getOverlayContent, isFullscreen, open, outsideClick } from './common.js';
 
 describe('dropdown', () => {
@@ -163,45 +162,5 @@ describe('dropdown', () => {
         });
       });
     });
-  });
-});
-
-class DatePickerWrapper extends PolymerElement {
-  static get template() {
-    return html`<vaadin-date-picker id="datepicker" label="foo" clear-button-visible></vaadin-date-picker>`;
-  }
-}
-
-customElements.define('vaadin-date-picker-wrapper', DatePickerWrapper);
-
-describe('wrapped', () => {
-  let datepicker, clearButton, toggleButton;
-
-  beforeEach(() => {
-    datepicker = fixtureSync(`<vaadin-date-picker-wrapper></vaadin-date-picker-wrapper>`).$.datepicker;
-    toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
-    clearButton = datepicker.shadowRoot.querySelector('[part="clear-button"]');
-  });
-
-  it('should not close on calendar icon down', (done) => {
-    datepicker.open();
-    datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
-      down(toggleButton);
-      expect(datepicker.$.overlay.opened).to.be.true;
-      done();
-    });
-  });
-
-  it('should not close on clear-button down', () => {
-    datepicker.open();
-    datepicker.value = '2001-01-01';
-    click(clearButton);
-    expect(datepicker.$.overlay.opened).to.be.true;
-  });
-
-  it('should not open on clear-button down if was not opened initially', () => {
-    datepicker.value = '2001-01-01';
-    click(clearButton);
-    expect(datepicker.$.overlay.hasAttribute('disable-upgrade')).to.be.true;
   });
 });
