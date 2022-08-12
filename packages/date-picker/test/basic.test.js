@@ -30,11 +30,10 @@ function isFocused(target) {
 }
 
 describe('basic features', () => {
-  let datepicker, input, toggleButton;
+  let datepicker, input;
 
   beforeEach(() => {
     datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
-    toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
     input = datepicker.inputElement;
   });
 
@@ -68,13 +67,6 @@ describe('basic features', () => {
     datepicker.focus();
     await sendKeys({ press: 'ArrowDown' });
     expect(datepicker.hasAttribute('focused')).to.be.true;
-  });
-
-  it('should not blur when toggle button is clicked', () => {
-    const e = new CustomEvent('mousedown', { bubbles: true });
-    const spy = sinon.spy(e, 'preventDefault');
-    toggleButton.dispatchEvent(e);
-    expect(spy.calledOnce).to.be.true;
   });
 
   it('should have focused attribute when closed and focused', async () => {
@@ -190,19 +182,6 @@ describe('basic features', () => {
     expect(input.value).to.equal('2/1/0001');
     datepicker.value = '+000099-02-01';
     expect(input.value).to.equal('2/1/0099');
-  });
-
-  it('should open by tapping the calendar icon', async () => {
-    tap(toggleButton);
-    await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
-  });
-
-  it('should close on subsequent toggle button click', () => {
-    toggleButton.click();
-    expect(datepicker.opened).to.be.true;
-
-    toggleButton.click();
-    expect(datepicker.opened).to.be.false;
   });
 
   it('should scroll to a date on open', async () => {
@@ -576,7 +555,7 @@ describe('clear button', () => {
   it('should not open on clear button click when not opened', () => {
     datepicker.value = '2001-01-01';
     click(clearButton);
-    expect(datepicker.opened).to.be.false;
+    expect(datepicker.opened).to.be.not.ok;
   });
 });
 
