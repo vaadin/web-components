@@ -167,6 +167,21 @@ describe('validation', () => {
       datePicker.close();
     });
 
+    it('should change invalid state only once', (done) => {
+      datePicker.min = '2016-01-01';
+      datePicker.max = '2016-12-31';
+
+      datePicker.addEventListener('value-changed', () => {
+        expect(invalidChangedSpy.calledOnce).to.be.true;
+        done();
+      });
+
+      const invalidChangedSpy = sinon.spy();
+      datePicker.addEventListener('invalid-changed', invalidChangedSpy);
+      datePicker.open();
+      getOverlayContent(datePicker)._selectDate(new Date('2017-01-01')); // Invalid
+    });
+
     it('should reflect correct invalid value on value-changed eventListener', (done) => {
       datePicker.min = '2016-01-01';
       datePicker.max = '2016-12-31';

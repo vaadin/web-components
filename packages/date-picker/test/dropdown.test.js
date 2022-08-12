@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, mousedown, oneEvent, touchstart } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, mousedown, nextRender, oneEvent, touchstart } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getFocusedCell, getOverlayContent, isFullscreen, open, outsideClick } from './common.js';
+import { getFocusedCell, getOverlayContent, isFullscreen, monthsEqual, open, outsideClick } from './common.js';
 
 describe('dropdown', () => {
   let datepicker, input, overlay;
@@ -52,6 +52,113 @@ describe('dropdown', () => {
       const spy = sinon.spy(e, 'preventDefault');
       toggleButton.dispatchEvent(e);
       expect(spy.calledOnce).to.be.true;
+    });
+  });
+
+  describe('scroll to date', () => {
+    it('should scroll to today by default', async () => {
+      datepicker.open();
+      const overlayContent = getOverlayContent(datepicker);
+      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const scrolledDate = spy.firstCall.args[0];
+      expect(monthsEqual(scrolledDate, new Date())).to.be.true;
+    });
+
+    it('should scroll to initial position', async () => {
+      datepicker.initialPosition = '2016-01-01';
+
+      datepicker.open();
+      const overlayContent = getOverlayContent(datepicker);
+      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const scrolledDate = spy.firstCall.args[0];
+      expect(scrolledDate).to.be.eql(new Date(2016, 0, 1));
+    });
+
+    it('should scroll to selected value', async () => {
+      datepicker.value = '2000-02-01';
+
+      datepicker.open();
+      const overlayContent = getOverlayContent(datepicker);
+      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const scrolledDate = spy.firstCall.args[0];
+      expect(monthsEqual(scrolledDate, new Date(2000, 1, 1))).to.be.true;
+    });
+
+    it('should remember the initial position on reopen', async () => {
+      datepicker.open();
+      const overlayContent = getOverlayContent(datepicker);
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      const initialPosition = overlayContent.initialPosition;
+
+      datepicker.close();
+      await nextRender();
+
+      datepicker.open();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      expect(overlayContent.initialPosition).to.be.eql(initialPosition);
+    });
+
+    it('should scroll to date on reopen', async () => {
+      datepicker.open();
+      const overlayContent = getOverlayContent(datepicker);
+
+      // We must scroll to initial position on reopen because
+      // scrollTop can be reset while the dropdown is closed.
+      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      expect(spy.called).to.be.true;
+
+      datepicker.close();
+      await nextRender();
+      spy.resetHistory();
+
+      await open(datepicker);
+      expect(spy.called).to.be.true;
+    });
+
+    it('should scroll to min date when today is not allowed', async () => {
+      datepicker.min = '2100-01-01';
+
+      datepicker.open();
+      const overlayContent = getOverlayContent(datepicker);
+      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const scrolledDate = spy.firstCall.args[0];
+      expect(scrolledDate).to.be.eql(new Date(2100, 0, 1));
+    });
+
+    it('should scroll to max date when today is not allowed', async () => {
+      datepicker.max = '2000-01-01';
+
+      datepicker.open();
+      const overlayContent = getOverlayContent(datepicker);
+      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const scrolledDate = spy.firstCall.args[0];
+      expect(scrolledDate).to.be.eql(new Date(2000, 0, 1));
+    });
+
+    it('should scroll to initial position even when not allowed', async () => {
+      datepicker.min = '2016-01-01';
+      datepicker.max = '2016-12-31';
+
+      datepicker.initialPosition = '2015-01-01';
+
+      datepicker.open();
+      const overlayContent = getOverlayContent(datepicker);
+      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      await oneEvent(overlay, 'vaadin-overlay-open');
+
+      const scrolledDate = spy.firstCall.args[0];
+      expect(scrolledDate).to.be.eql(new Date(2015, 0, 1));
     });
   });
 
