@@ -204,7 +204,7 @@ describe('overlay', () => {
             overlay.$.monthScroller.$.scroller.scrollTop -= 1;
             tap(overlay.$.todayButton);
 
-            expect(overlay.selectedDate).to.be.undefined;
+            expect(overlay.selectedDate).to.be.not.ok;
             expect(spy.called).to.be.false;
             done();
           });
