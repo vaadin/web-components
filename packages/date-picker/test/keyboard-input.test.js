@@ -627,20 +627,6 @@ describe('keyboard', () => {
       expect(datepicker.value).to.equal('2000-01-01');
     });
 
-    it('should not be invalid on blur if valid date is entered', async () => {
-      await sendKeys({ type: '1/1/2000' });
-      await sendKeys({ press: 'Tab' });
-      expect(datepicker.invalid).not.to.be.true;
-    });
-
-    it('should validate on blur only once', async () => {
-      await sendKeys({ type: 'foo' });
-      const spy = sinon.spy(datepicker, 'validate');
-      await sendKeys({ press: 'Tab' });
-      expect(spy.callCount).to.equal(1);
-      expect(datepicker.invalid).to.be.true;
-    });
-
     it('should revert input value on Esc when overlay not initialized', async () => {
       await sendKeys({ type: '1/1/2000' });
       await sendKeys({ press: 'Escape' });
@@ -677,13 +663,6 @@ describe('keyboard', () => {
       await sendKeys({ type: '1/1/2000' });
       await sendKeys({ press: 'Enter' });
       expect(datepicker.value).to.equal('2000-01-01');
-    });
-
-    it('should be invalid on enter with false input', async () => {
-      await sendKeys({ type: 'foo' });
-      await sendKeys({ press: 'Enter' });
-      expect(datepicker.value).to.equal('');
-      expect(datepicker.invalid).to.be.true;
     });
   });
 

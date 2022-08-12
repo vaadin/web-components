@@ -206,6 +206,7 @@ describe('validation', () => {
   describe('input value', () => {
     beforeEach(() => {
       datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+      datePicker.inputElement.focus();
     });
 
     it('should be valid when committing a valid date', () => {
@@ -226,6 +227,20 @@ describe('validation', () => {
       enter(datePicker.inputElement);
       expect(datePicker.value).to.equal('');
       expect(datePicker.inputElement.value).to.equal('foo');
+    });
+
+    it('should be valid on blur after entering a valid date', () => {
+      datePicker.autoOpenDisabled = true;
+      setInputValue(datePicker, '1/1/2022');
+      datePicker.inputElement.blur();
+      expect(datePicker.invalid).to.be.false;
+    });
+
+    it('should be invalid on blur after entering an invalid date', () => {
+      datePicker.autoOpenDisabled = true;
+      setInputValue(datePicker, 'foo');
+      datePicker.inputElement.blur();
+      expect(datePicker.invalid).to.be.true;
     });
   });
 
