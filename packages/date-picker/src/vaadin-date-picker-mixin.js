@@ -5,7 +5,6 @@
  */
 import { isIOS } from '@vaadin/component-base/src/browser-utils.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
@@ -850,14 +849,6 @@ export const DatePickerMixin = (subclass) =>
       if (!this.value) {
         this.validate();
       }
-
-      // Wait for focus to be restored on close by the `vaadin-overlay`.
-      setTimeout(() => {
-        // If the input isn't focused (fullscreen mode), clear focused state.
-        if (!isElementFocused(this._nativeInput)) {
-          this._setFocused(false);
-        }
-      });
     }
 
     /** @private */
