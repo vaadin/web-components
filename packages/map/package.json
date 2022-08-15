@@ -38,6 +38,8 @@
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
     "@vaadin/component-base": "23.2.0-beta1",
+    "@vaadin/vaadin-lumo-styles": "23.2.0-beta1",
+    "@vaadin/vaadin-material-styles": "23.2.0-beta1",
     "@vaadin/vaadin-themable-mixin": "23.2.0-beta1",
     "ol": "6.13.0"
   },
