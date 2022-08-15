@@ -6,14 +6,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tooltip</title>
     <script type="module" src="./common.js"></script>
-
-    <script type="module">
-      import '@vaadin/tooltip';
-    </script>
   </head>
 
   <body>
-    <button id="user">User</button>
-    <vaadin-tooltip target-id="user" text="View user profile"></vaadin-tooltip>
+    <div style="display: flex; align-items: center; gap: 1rem">
+      <button id="user">User</button>
+      <vaadin-tooltip target-id="user" text="View user profile"></vaadin-tooltip>
+
+      <tooltip-host id="property" tooltip-text="I'm a property tooltip">Property tooltip</tooltip-host>
+
+      <tooltip-host id="slotted">
+        <div>Slotted tooltip</div>
+        <vaadin-tooltip slot="tooltip" text="I'm a slotted tooltip"></vaadin-tooltip>
+      </tooltip-host>
+
+      <tooltip-host id="lazy">Lazy (init on hover)</tooltip-host>
+    </div>
+
+    <script type="module">
+      import '@vaadin/tooltip';
+      import { TooltipHostMixin } from '@vaadin/tooltip/src/vaadin-tooltip-host-mixin.js';
+      import { html, PolymerElement } from '@polymer/polymer';
+
+      customElements.define(
+        'tooltip-host',
+        class extends TooltipHostMixin(PolymerElement) {
+          static get template() {
+            return html`
+              <style>
+                :host {
+                  display: block;
+                  padding: 5px 10px;
+                  border: solid 1px #e2e2e2;
+                }
+              </style>
+              <slot></slot>
+              <slot name="tooltip"></slot>
+            `;
+          }
+        },
+      );
+
+      const lazy = document.getElementById('lazy');
+      let count = 0;
+      lazy.addEventListener('mouseenter', (e) => {
+        count += 1;
+        lazy.tooltipText = `Tooltip shown ${count} times`;
+
+        // Hack to open on first mouseenter
+        const tooltip = lazy.querySelector('vaadin-tooltip');
+        if (!tooltip._opened) {
+          tooltip._opened = true;
+        }
+      });
+    </script>
   </body>
 </html>
