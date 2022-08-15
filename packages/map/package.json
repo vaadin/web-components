@@ -38,6 +38,8 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/component-base": "^23.1.5",
     "@vaadin/vaadin-license-checker": "^2.1.0",
+    "@vaadin/vaadin-lumo-styles": "^23.1.5",
+    "@vaadin/vaadin-material-styles": "^23.1.5",
     "@vaadin/vaadin-themable-mixin": "^23.1.5",
     "ol": "6.13.0"
   },
