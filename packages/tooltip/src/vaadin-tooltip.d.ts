@@ -9,7 +9,25 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
 /**
  * `<vaadin-tooltip>` is a Web Component for creating tooltips.
  */
-declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {}
+declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
+  /**
+   * An HTML element to attach the tooltip to.
+   * The target must be placed in the same shadow scope.
+   * Defaults to an element referenced with `targetId`.
+   */
+  target: HTMLElement | undefined;
+
+  /**
+   * An id of the target element.
+   * @attr {string} target-id
+   */
+  targetId: string | undefined;
+
+  /**
+   * String used for a tooltip content.
+   */
+  text: string;
+}
 
 declare global {
   interface HTMLElementTagNameMap {
