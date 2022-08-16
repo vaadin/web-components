@@ -31,7 +31,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         id="overlay"
         role="tooltip"
         theme$="[[_theme]]"
-        opened="[[_opened]]"
+        opened="[[__computeOpened(manual, opened, _autoOpened)]]"
         position-target="[[target]]"
         renderer="[[_renderer]]"
         modeless
@@ -42,6 +42,23 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   static get properties() {
     return {
+      /**
+       * When true, the tooltip is controlled manually
+       * instead of reacting to focus and mouse events.
+       */
+      manual: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
+       * When true, the tooltip is opened programmatically.
+       * Only works if `manual` is set to `true`.
+       */
+      opened: {
+        type: Boolean,
+      },
+
       /**
        * An HTML element to attach the tooltip to.
        * The target must be placed in the same shadow scope.
@@ -69,9 +86,10 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       },
 
       /**
-       * When true, the tooltip is visible.
+       * When true, the tooltip is opened
+       * by using its auto-added listeners.
        */
-      _opened: {
+      _autoOpened: {
         type: Boolean,
       },
 
@@ -94,6 +112,20 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__boundOnMouseLeave = this.__onMouseLeave.bind(this);
     this.__boundOnFocusin = this.__onFocusin.bind(this);
     this.__boundOnFocusout = this.__onFocusout.bind(this);
+  }
+
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    if (this._autoOpened) {
+      this._autoOpened = false;
+    }
+  }
+
+  /** @private */
+  __computeOpened(manual, opened, autoOpened) {
+    return manual ? opened : autoOpened;
   }
 
   /** @private */
@@ -136,7 +168,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__focusInside = true;
 
     if (!this.__mouseInside) {
-      this._opened = true;
+      this._autoOpened = true;
     }
   }
 
@@ -145,7 +177,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__focusInside = false;
 
     if (!this.__mouseInside) {
-      this._opened = false;
+      this._autoOpened = false;
     }
   }
 
@@ -154,7 +186,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__mouseInside = true;
 
     if (!this.__focusInside) {
-      this._opened = true;
+      this._autoOpened = true;
     }
   }
 
@@ -163,7 +195,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__mouseInside = false;
 
     if (!this.__focusInside) {
-      this._opened = false;
+      this._autoOpened = false;
     }
   }
 }

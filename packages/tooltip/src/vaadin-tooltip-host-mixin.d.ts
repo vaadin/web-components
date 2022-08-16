@@ -17,6 +17,20 @@ export declare function TooltipHostMixin<T extends Constructor<HTMLElement>>(
 
 export declare class TooltipHostMixinClass {
   /**
+   * When true, the tooltip is controlled manually
+   * instead of reacting to focus and mouse events.
+   * @attr {boolean} tooltip-manual
+   */
+  tooltipManual: boolean;
+
+  /**
+   * When true, the tooltip is opened programmatically.
+   * Only works if `tooltipManual` is set to `true`.
+   * @attr {boolean} tooltip-opened
+   */
+  tooltipOpened: boolean;
+
+  /**
    * String used as a content for the tooltip
    * shown on the element when it gets focus
    * or is hovered using the pointer device.

@@ -11,6 +11,18 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  */
 declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   /**
+   * When true, the tooltip is controlled manually
+   * instead of reacting to focus and mouse events.
+   */
+  manual: boolean;
+
+  /**
+   * When true, the tooltip is opened programmatically.
+   * Only works if `manual` is set to `true`.
+   */
+  opened: boolean;
+
+  /**
    * An HTML element to attach the tooltip to.
    * The target must be placed in the same shadow scope.
    * Defaults to an element referenced with `targetId`.

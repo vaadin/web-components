@@ -20,7 +20,14 @@
         <vaadin-tooltip slot="tooltip" text="I'm a slotted tooltip"></vaadin-tooltip>
       </tooltip-host>
 
-      <tooltip-host id="lazy">Lazy (init on hover)</tooltip-host>
+      <tooltip-host id="lazy">
+        <div>Lazy tooltip (click to add)</div>
+      </tooltip-host>
+
+      <tooltip-host id="manual" tooltip-text="Only shown when checked" tooltip-manual>
+        <input type="checkbox" id="check">
+        <label for="check">Manual (check to show)</label>
+      </tooltip-host>
     </div>
 
     <script type="module">
@@ -47,17 +54,18 @@
         },
       );
 
-      const lazy = document.getElementById('lazy');
-      let count = 0;
-      lazy.addEventListener('mouseenter', (e) => {
-        count += 1;
-        lazy.tooltipText = `Tooltip shown ${count} times`;
 
-        // Hack to open on first mouseenter
-        const tooltip = lazy.querySelector('vaadin-tooltip');
-        if (!tooltip._opened) {
-          tooltip._opened = true;
-        }
+      const lazy = document.getElementById('lazy');
+      lazy.addEventListener('click', (e) => {
+        lazy.tooltipText = 'Only shown after first click';
+        const div = lazy.firstElementChild;
+        div.textContent = 'Lazy (added)';
+      });
+
+      const checkbox = document.getElementById('check');
+      checkbox.addEventListener('change', (e) => {
+        const manual = checkbox.parentElement;
+        manual.tooltipOpened = checkbox.checked;
       });
     </script>
   </body>
