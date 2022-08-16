@@ -8,6 +8,30 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
+let defaultCooldown = 0;
+let defaultDelay = 0;
+
+const tooltips = new Set();
+
+let warmedUp = false;
+let warmUpTimeout = null;
+let cooldownTimeout = null;
+
+function addTooltip(tooltip) {
+  tooltips.add(tooltip);
+}
+
+function deleteTooltip(tooltip) {
+  tooltips.delete(tooltip);
+}
+
+function closeOpenTooltips() {
+  tooltips.forEach((tooltip) => {
+    tooltip._close(true);
+    tooltips.delete(tooltip);
+  });
+}
+
 /**
  * `<vaadin-tooltip>` is a Web Component for creating tooltips.
  *
@@ -42,6 +66,28 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   static get properties() {
     return {
+      /**
+       * The delay in milliseconds before the tooltip
+       * is closed, when not using manual mode.
+       * This only applies to `mouseleave` listener.
+       * On blur, the tooltip is closed immediately.
+       */
+      cooldown: {
+        type: Number,
+        value: () => defaultCooldown,
+      },
+
+      /**
+       * The delay in milliseconds before the tooltip
+       * is opened, when not using manual mode.
+       * This only applies to `mouseenter` listener.
+       * On focus, the tooltip is opened immediately.
+       */
+      delay: {
+        type: Number,
+        value: () => defaultDelay,
+      },
+
       /**
        * When true, the tooltip is controlled manually
        * instead of reacting to focus and mouse events.
@@ -101,6 +147,28 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         type: Object,
       },
     };
+  }
+
+  /**
+   * Sets the default cooldown to use for all tooltip instances.
+   * This method should be called before creating any tooltips.
+   * It does not affect the default for existing tooltips.
+   *
+   * @param {number} cooldown
+   */
+  static setDefaultTooltipCooldown(cooldown) {
+    defaultCooldown = cooldown;
+  }
+
+  /**
+   * Sets the default delay to use for all tooltip instances.
+   * This method should be called before creating any tooltips.
+   * It does not affect the default for existing tooltips.
+   *
+   * @param {number} delay
+   */
+  static setDefaultTooltipDelay(delay) {
+    defaultDelay = delay;
   }
 
   constructor() {
@@ -167,35 +235,128 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   __onFocusin() {
     this.__focusInside = true;
 
-    if (!this.__mouseInside) {
-      this._autoOpened = true;
+    if (!this.__hoverInside) {
+      // Open immediately on focus.
+      this._open(true);
     }
   }
 
   /** @private */
   __onFocusout() {
+    // Close the tooltip even if it still has hover,
+    // to avoid two tooltips shown simultaneously.
     this.__focusInside = false;
+    this.__hoverInside = false;
 
-    if (!this.__mouseInside) {
-      this._autoOpened = false;
-    }
+    // Close immediately on blur.
+    this._close(true);
   }
 
   /** @private */
   __onMouseEnter() {
-    this.__mouseInside = true;
+    this.__hoverInside = true;
 
     if (!this.__focusInside) {
-      this._autoOpened = true;
+      // Open after a delay on hover.
+      this._open();
     }
   }
 
   /** @private */
   __onMouseLeave() {
-    this.__mouseInside = false;
+    // Close the tooltip even if it still has focus,
+    // to avoid two tooltips shown simultaneously.
+    this.__focusInside = false;
+    this.__hoverInside = false;
 
-    if (!this.__focusInside) {
-      this._autoOpened = false;
+    // Close after a cooldown.
+    this._close();
+  }
+
+  /** @protected */
+  _open(immediate) {
+    if (!immediate && this.delay > 0 && !this.__closeTimeout) {
+      this.__warmupTooltip();
+    } else {
+      this.__showTooltip();
+    }
+  }
+
+  /** @protected */
+  _close(immediate) {
+    if (immediate) {
+      clearTimeout(this.__closeTimeout);
+      this.__finishClose();
+    } else if (!this.__closeTimeout) {
+      this.__closeTimeout = setTimeout(() => {
+        this.__finishClose();
+      }, this.cooldown);
+    }
+
+    if (warmUpTimeout) {
+      clearTimeout(warmUpTimeout);
+      warmUpTimeout = null;
+    }
+
+    if (warmedUp) {
+      if (cooldownTimeout) {
+        clearTimeout(cooldownTimeout);
+      }
+
+      cooldownTimeout = setTimeout(() => {
+        deleteTooltip(this);
+        cooldownTimeout = null;
+        warmedUp = false;
+      }, this.cooldown);
+    }
+  }
+
+  /** @private */
+  __finishClose() {
+    this.__closeTimeout = null;
+    this._autoOpened = false;
+  }
+
+  /** @private */
+  __showTooltip() {
+    clearTimeout(this.__closeTimeout);
+    this.__closeTimeout = null;
+
+    closeOpenTooltips();
+    addTooltip(this);
+
+    warmedUp = true;
+
+    this._autoOpened = true;
+
+    if (warmUpTimeout) {
+      clearTimeout(warmUpTimeout);
+      warmUpTimeout = null;
+    }
+
+    if (cooldownTimeout) {
+      clearTimeout(cooldownTimeout);
+      cooldownTimeout = null;
+    }
+  }
+
+  /** @private */
+  __warmupTooltip() {
+    closeOpenTooltips();
+    addTooltip(this);
+
+    if (!this._autoOpened) {
+      // First tooltip is opened, warm up.
+      if (!warmUpTimeout && !warmedUp) {
+        warmUpTimeout = setTimeout(() => {
+          warmUpTimeout = null;
+          warmedUp = true;
+          this.__showTooltip();
+        }, this.delay);
+      } else {
+        // Warmed up, show another tooltip.
+        this.__showTooltip();
+      }
     }
   }
 }

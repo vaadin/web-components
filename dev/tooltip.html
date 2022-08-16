@@ -6,34 +6,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tooltip</title>
     <script type="module" src="./common.js"></script>
+    <script type="module">
+      import { Tooltip } from '@vaadin/tooltip';
+
+      // Show after 1 second
+      Tooltip.setDefaultTooltipDelay(1000);
+
+      // Hide after 0.5 seconds
+      Tooltip.setDefaultTooltipCooldown(500);
+    </script>
   </head>
 
   <body>
-    <div style="display: flex; align-items: center; gap: 1rem">
-      <button id="user">User</button>
-      <vaadin-tooltip target-id="user" text="View user profile"></vaadin-tooltip>
-
-      <tooltip-host id="property" tooltip-text="I'm a property tooltip">Property tooltip</tooltip-host>
-
-      <tooltip-host id="slotted">
-        <div>Slotted tooltip</div>
-        <vaadin-tooltip slot="tooltip" text="I'm a slotted tooltip"></vaadin-tooltip>
-      </tooltip-host>
-
-      <tooltip-host id="lazy">
-        <div>Lazy tooltip (click to add)</div>
-      </tooltip-host>
-
-      <tooltip-host id="manual" tooltip-text="Only shown when checked" tooltip-manual>
-        <input type="checkbox" id="check">
-        <label for="check">Manual (check to show)</label>
-      </tooltip-host>
-    </div>
+    <!--
+      Wrap demo into the component so that global cooldown / delay work
+      for all the `<vaadin-tooltip>` instances, including those that are
+      created in HTML (placing them in `<body>` would break this logic).
+    -->
+    <tooltip-demo></tooltip-demo>
 
     <script type="module">
-      import '@vaadin/tooltip';
       import { TooltipHostMixin } from '@vaadin/tooltip/src/vaadin-tooltip-host-mixin.js';
       import { html, PolymerElement } from '@polymer/polymer';
+
+      customElements.define(
+        'tooltip-demo',
+        class extends PolymerElement {
+          static get template() {
+            return html`
+              <style>
+                :host {
+                  display: flex;
+                  align-items: center;
+                  gap: 1rem;
+                }
+              </style>
+
+              <button id="user">User</button>
+              <vaadin-tooltip target-id="user" text="View user profile"></vaadin-tooltip>
+
+              <tooltip-host id="property" tooltip-text="I'm a property tooltip">Property tooltip</tooltip-host>
+
+              <tooltip-host id="slotted">
+                <div>Slotted tooltip</div>
+                <vaadin-tooltip slot="tooltip" text="I'm a slotted tooltip"></vaadin-tooltip>
+              </tooltip-host>
+
+              <tooltip-host id="lazy">
+                <div>Lazy tooltip (click to add)</div>
+              </tooltip-host>
+
+              <tooltip-host id="manual" tooltip-text="Only shown when checked" tooltip-manual>
+                <input type="checkbox" id="checkbox" />
+                <label for="check">Manual (check to show)</label>
+              </tooltip-host>
+
+              <tooltip-host
+                id="immediate"
+                tooltip-delay="0"
+                tooltip-cooldown="0"
+                tooltip-text="Zero delay or cooldown!"
+              >
+                <div>Immediate tooltip</div>
+              </tooltip-host>
+            `;
+          }
+
+          ready() {
+            super.ready();
+
+            const lazy = this.$.lazy;
+            lazy.addEventListener('click', (e) => {
+              lazy.tooltipText = 'Only shown after first click';
+              const div = lazy.firstElementChild;
+              div.textContent = 'Lazy (added)';
+            });
+
+            const checkbox = this.$.checkbox;
+            checkbox.addEventListener('change', (e) => {
+              this.$.manual.tooltipOpened = checkbox.checked;
+            });
+          }
+        },
+      );
 
       customElements.define(
         'tooltip-host',
@@ -53,20 +108,6 @@
           }
         },
       );
-
-
-      const lazy = document.getElementById('lazy');
-      lazy.addEventListener('click', (e) => {
-        lazy.tooltipText = 'Only shown after first click';
-        const div = lazy.firstElementChild;
-        div.textContent = 'Lazy (added)';
-      });
-
-      const checkbox = document.getElementById('check');
-      checkbox.addEventListener('change', (e) => {
-        const manual = checkbox.parentElement;
-        manual.tooltipOpened = checkbox.checked;
-      });
     </script>
   </body>
 </html>

@@ -18,6 +18,30 @@ export const TooltipHostMixin = (superClass) =>
     static get properties() {
       return {
         /**
+         * The delay in milliseconds before the tooltip
+         * is closed, when not using manual mode.
+         * This only applies to `mouseleave` listener.
+         * On blur, the tooltip is closed immediately.
+         * @attr {number} tooltip-cooldown
+         */
+        tooltipCooldown: {
+          type: Number,
+          observer: '__tooltipCooldownChanged',
+        },
+
+        /**
+         * The delay in milliseconds before the tooltip
+         * is opened, when not using manual mode.
+         * This only applies to `mouseenter` listener.
+         * On focus, the tooltip is opened immediately.
+         * @attr {number} tooltip-delay
+         */
+        tooltipDelay: {
+          type: Number,
+          observer: '__tooltipDelayChanged',
+        },
+
+        /**
          * When true, the tooltip is controlled manually
          * instead of reacting to focus and mouse events.
          * @attr {boolean} tooltip-manual
@@ -75,6 +99,16 @@ export const TooltipHostMixin = (superClass) =>
       super.ready();
 
       this.addController(this._tooltipController);
+    }
+
+    /** @private */
+    __tooltipCooldownChanged(cooldown) {
+      this._tooltipController.setCooldown(cooldown);
+    }
+
+    /** @private */
+    __tooltipDelayChanged(delay) {
+      this._tooltipController.setDelay(delay);
     }
 
     /** @private */

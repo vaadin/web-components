@@ -10,6 +10,18 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  */
 export class HelperController extends SlotController {
   /**
+   * The delay in milliseconds before the tooltip
+   * is closed, when not using manual mode.
+   */
+  cooldown: number | null | undefined;
+
+  /**
+   * The delay in milliseconds before the tooltip
+   * is opened, when not using manual mode.
+   */
+  delay: number | null | undefined;
+
+  /**
    * When true, the tooltip is controlled manually
    * instead of reacting to focus and mouse events.
    */
@@ -30,6 +42,18 @@ export class HelperController extends SlotController {
    * String used for the helper text.
    */
   tooltipText: string | undefined;
+
+  /**
+   * Set the delay in milliseconds before the tooltip
+   * is closed, when not using manual mode.
+   */
+  setCooldown(cooldown: number | null | undefined): void;
+
+  /**
+   * Set the delay in milliseconds before the tooltip
+   * is opened, when not using manual mode.
+   */
+  setDelay(delay: number | null | undefined): void;
 
   /**
    * Toggle opened state for the tooltip.

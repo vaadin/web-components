@@ -17,6 +17,24 @@ export declare function TooltipHostMixin<T extends Constructor<HTMLElement>>(
 
 export declare class TooltipHostMixinClass {
   /**
+   * The delay in milliseconds before the tooltip
+   * is closed, when not using manual mode.
+   * This only applies to `mouseleave` listener.
+   * On blur, the tooltip is closed immediately.
+   * @attr {number} tooltip-cooldown
+   */
+  tooltipCooldown: number;
+
+  /**
+   * The delay in milliseconds before the tooltip
+   * is opened, when not using manual mode.
+   * This only applies to `mouseenter` listener.
+   * On focus, the tooltip is opened immediately.
+   * @attr {number} tooltip-delay
+   */
+  tooltipDelay: number;
+
+  /**
    * When true, the tooltip is controlled manually
    * instead of reacting to focus and mouse events.
    * @attr {boolean} tooltip-manual
