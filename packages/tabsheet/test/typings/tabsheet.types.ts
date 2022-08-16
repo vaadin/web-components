@@ -1,0 +1,1 @@
+import '../../vaadin-tabsheet.js';

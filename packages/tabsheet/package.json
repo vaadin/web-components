@@ -1,0 +1,53 @@
+{
+  "name": "@vaadin/tabsheet",
+  "version": "23.3.0-alpha1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "vaadin-tabsheet",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-tabsheet"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-tabsheet.js",
+  "module": "vaadin-tabsheet.js",
+  "type": "module",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js",
+    "web-types.json",
+    "web-types.lit.json"
+  ],
+  "keywords": [
+    "Vaadin",
+    "vaadin-tabsheet",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/component-base": "23.2.0-beta1",
+    "@vaadin/vaadin-lumo-styles": "23.2.0-beta1",
+    "@vaadin/vaadin-material-styles": "23.2.0-beta1",
+    "@vaadin/vaadin-themable-mixin": "23.2.0-beta1"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/testing-helpers": "^0.3.2",
+    "sinon": "^13.0.2"
+  },
+  "web-types": [
+    "web-types.json",
+    "web-types.lit.json"
+  ]
+}
