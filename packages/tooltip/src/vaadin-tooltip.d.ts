@@ -11,6 +11,36 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  */
 declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   /**
+   * Sets the default cooldown to use for all tooltip instances.
+   * This method should be called before creating any tooltips.
+   * It does not affect the default for existing tooltips.
+   */
+  static setDefaultTooltipCooldown(cooldown: number): void;
+
+  /**
+   * Sets the default delay to use for all tooltip instances.
+   * This method should be called before creating any tooltips.
+   * It does not affect the default for existing tooltips.
+   */
+  static setDefaultTooltipDelay(delay: number): void;
+
+  /**
+   * The delay in milliseconds before the tooltip
+   * is closed, when not using manual mode.
+   * This only applies to `mouseleave` listener.
+   * On blur, the tooltip is closed immediately.
+   */
+  cooldown: number;
+
+  /**
+   * The delay in milliseconds before the tooltip
+   * is opened, when not using manual mode.
+   * This only applies to `mouseenter` listener.
+   * On focus, the tooltip is opened immediately.
+   */
+  delay: number;
+
+  /**
    * When true, the tooltip is controlled manually
    * instead of reacting to focus and mouse events.
    */

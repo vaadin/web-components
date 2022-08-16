@@ -5,6 +5,22 @@
  */
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
+// Find a property definition from the prototype chain of a Polymer element class
+function getPropertyFromPrototype(proto, prop) {
+  while (proto) {
+    if (proto.properties && proto.properties[prop]) {
+      return proto.properties[prop];
+    }
+    proto = Object.getPrototypeOf(proto);
+  }
+}
+
+function getDefaultProperty(prop) {
+  // Restore default value for cooldown
+  const Tooltip = customElements.get('vaadin-tooltip');
+  return getPropertyFromPrototype(Tooltip, prop).value();
+}
+
 /**
  * A controller that manages the slotted tooltip element.
  */
@@ -25,6 +41,14 @@ export class TooltipController extends SlotController {
     tooltipNode.target = this.target;
     tooltipNode.manual = this.manual;
     tooltipNode.opened = this.opened;
+
+    if (this.cooldown !== undefined) {
+      tooltipNode.cooldown = this.cooldown;
+    }
+
+    if (this.delay !== undefined) {
+      tooltipNode.delay = this.cooldown;
+    }
   }
 
   /**
@@ -40,6 +64,36 @@ export class TooltipController extends SlotController {
     if (this.__isDefaultTooltip(tooltipNode)) {
       // Restore default tooltip if a custom one was removed.
       this.__applyDefaultTooltip(this.tooltipText, tooltipNode);
+    }
+  }
+
+  /**
+   * Set the delay in milliseconds before the tooltip
+   * is closed, when not using manual mode.
+   * @param {number} cooldown
+   */
+  setCooldown(cooldown) {
+    // When an invalid value is provided, fall back to the default one configured on the class.
+    this.cooldown = cooldown != null && cooldown >= 0 ? cooldown : getDefaultProperty('cooldown');
+
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode.cooldown = this.cooldown;
+    }
+  }
+
+  /**
+   * Set the delay in milliseconds before the tooltip
+   * is opened, when not using manual mode.
+   * @param {number} delay
+   */
+  setDelay(delay) {
+    // When an invalid value is provided, fall back to the default one configured on the class.
+    this.delay = delay != null && delay >= 0 ? delay : getDefaultProperty('delay');
+
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode.delay = this.delay;
     }
   }
 
@@ -134,6 +188,14 @@ export class TooltipController extends SlotController {
       tooltipNode.manual = this.manual;
       tooltipNode.opened = this.opened;
       tooltipNode.target = this.target;
+
+      if (this.cooldown !== undefined) {
+        tooltipNode.cooldown = this.cooldown;
+      }
+
+      if (this.delay !== undefined) {
+        tooltipNode.delay = this.cooldown;
+      }
     }
   }
 }
