@@ -16,9 +16,6 @@ const runTests = (baseClass) => {
             minlength: {
               type: Number,
             },
-            maxlength: {
-              type: Number,
-            },
             pattern: {
               type: String,
             },
@@ -26,11 +23,11 @@ const runTests = (baseClass) => {
         }
 
         static get delegateAttrs() {
-          return [...super.delegateAttrs, 'minlength', 'maxlength', 'pattern'];
+          return [...super.delegateAttrs, 'minlength', 'pattern'];
         }
 
         static get constraints() {
-          return [...super.constraints, 'minlength', 'maxlength', 'pattern'];
+          return [...super.constraints, 'minlength', 'pattern'];
         }
 
         ready() {
@@ -61,12 +58,6 @@ const runTests = (baseClass) => {
       expect(element.invalid).to.be.false;
     });
 
-    it('should not validate the field when maxlength is set', async () => {
-      element.maxlength = 6;
-      await nextFrame();
-      expect(element.invalid).to.be.false;
-    });
-
     it('should not validate the field when pattern is set', async () => {
       element.pattern = '[-+\\d]';
       await nextFrame();
@@ -82,29 +73,11 @@ const runTests = (baseClass) => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should validate the field when invalid after maxlength is changed', async () => {
-      element.invalid = true;
-      await nextFrame();
-      const spy = sinon.spy(element, 'validate');
-      element.maxlength = 6;
-      await nextFrame();
-      expect(spy.calledOnce).to.be.true;
-    });
-
     it('should validate the field when invalid after minlength is set to 0', async () => {
       element.invalid = true;
       await nextFrame();
       const spy = sinon.spy(element, 'validate');
       element.minlength = 0;
-      await nextFrame();
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should validate the field when invalid after maxlength is set to 0', async () => {
-      element.invalid = true;
-      await nextFrame();
-      const spy = sinon.spy(element, 'validate');
-      element.maxlength = 0;
       await nextFrame();
       expect(spy.calledOnce).to.be.true;
     });
@@ -123,15 +96,6 @@ const runTests = (baseClass) => {
       await nextFrame();
       const spy = sinon.spy(input, 'checkValidity');
       element.minlength = 2;
-      await nextFrame();
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should call checkValidity on the input when invalid after maxlength is changed', async () => {
-      element.invalid = true;
-      await nextFrame();
-      const spy = sinon.spy(input, 'checkValidity');
-      element.maxlength = 6;
       await nextFrame();
       expect(spy.calledOnce).to.be.true;
     });
