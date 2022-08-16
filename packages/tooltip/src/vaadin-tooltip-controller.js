@@ -23,6 +23,8 @@ export class TooltipController extends SlotController {
    */
   initCustomNode(tooltipNode) {
     tooltipNode.target = this.target;
+    tooltipNode.manual = this.manual;
+    tooltipNode.opened = this.opened;
   }
 
   /**
@@ -38,6 +40,32 @@ export class TooltipController extends SlotController {
     if (this.__isDefaultTooltip(tooltipNode)) {
       // Restore default tooltip if a custom one was removed.
       this.__applyDefaultTooltip(this.tooltipText, tooltipNode);
+    }
+  }
+
+  /**
+   * Toggle manual mode for the tooltip.
+   * @param {boolean} manual
+   */
+  setManual(manual) {
+    this.manual = manual;
+
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode.manual = manual;
+    }
+  }
+
+  /**
+   * Toggle opened state for the tooltip.
+   * @param {boolean} opened
+   */
+  setOpened(opened) {
+    this.opened = opened;
+
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode.opened = opened;
     }
   }
 
@@ -77,7 +105,7 @@ export class TooltipController extends SlotController {
    * @private
    */
   __isNotEmpty(helperText) {
-    return helperText && helperText.trim() !== '';
+    return Boolean(helperText && helperText.trim() !== '');
   }
 
   /**
@@ -88,15 +116,23 @@ export class TooltipController extends SlotController {
   __applyDefaultTooltip(tooltipText, tooltipNode) {
     const hasTooltipText = this.__isNotEmpty(tooltipText);
 
-    if (hasTooltipText && !tooltipNode) {
-      // Set slot factory lazily to only create tooltip node when needed.
-      this.slotFactory = () => document.createElement('vaadin-tooltip');
+    if (hasTooltipText) {
+      if (!tooltipNode) {
+        // Set slot factory lazily to only create tooltip node when needed.
+        this.slotFactory = () => document.createElement('vaadin-tooltip');
 
-      tooltipNode = this.attachDefaultNode();
+        tooltipNode = this.attachDefaultNode();
+      }
+    } else if (tooltipNode) {
+      // Tooltip text is cleared, detach listeners.
+      this.setTarget(null);
+      this.host.removeChild(tooltipNode);
     }
 
     if (tooltipNode) {
       tooltipNode.text = tooltipText;
+      tooltipNode.manual = this.manual;
+      tooltipNode.opened = this.opened;
       tooltipNode.target = this.target;
     }
   }
