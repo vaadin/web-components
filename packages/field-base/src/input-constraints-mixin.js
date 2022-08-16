@@ -80,8 +80,8 @@ export const InputConstraintsMixin = dedupingMixin(
        */
       _constraintsChanged(...constraints) {
         // Prevent marking field as invalid when setting required state
-        // or any other constraint before a user has entered the value.
-        if (!this.invalid) {
+        // or any other constraints before the user has entered the value.
+        if (!this.invalid && this.value === '') {
           return;
         }
 
