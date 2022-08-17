@@ -29,15 +29,15 @@ export declare class InputMixinClass {
   value: string;
 
   /**
-   * Clear the value of the field.
-   */
-  clear(): void;
-
-  /**
    * Indicates whether the value is different from the default one.
    * Override if the `value` property has a type other than `string`.
    */
   protected readonly _hasValue: boolean;
+
+  /**
+   * Clear the value of the field.
+   */
+  clear(): void;
 
   protected _addInputListeners(input: HTMLElement): void;
 
