@@ -39,6 +39,19 @@ class TooltipOverlay extends PositionMixin(OverlayElement) {
 
     return memoizedTemplate;
   }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this.__resizeObserver = new ResizeObserver(() => {
+      if (this.opened) {
+        this._updatePosition();
+      }
+    });
+
+    this.__resizeObserver.observe(this.$.overlay);
+  }
 }
 
 customElements.define(TooltipOverlay.is, TooltipOverlay);
