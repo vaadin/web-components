@@ -82,7 +82,7 @@ export const InputConstraintsMixin = dedupingMixin(
         // Validate the field on constraint change only if it has a value.
         // The exception is the case when the field is invalid. In that case,
         // let the method reset `invalid` when the last constraint is removed.
-        if (!this.invalid && !this._hasValue) {
+        if (!this.invalid && this.value === '') {
           return;
         }
 
