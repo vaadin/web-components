@@ -29,6 +29,12 @@ export declare class InputMixinClass {
   value: string;
 
   /**
+   * Indicates whether the value is different from the default one.
+   * Override if the `value` property has a type other than `string`.
+   */
+  protected readonly _hasValue: boolean;
+
+  /**
    * Clear the value of the field.
    */
   clear(): void;
@@ -47,7 +53,7 @@ export declare class InputMixinClass {
 
   protected _setInputElement(input: HTMLElement): void;
 
-  protected _toggleHasValue(value: boolean): void;
+  protected _toggleHasValue(hasValue: boolean): void;
 
   protected _valueChanged(value?: string, oldValue?: string): void;
 }

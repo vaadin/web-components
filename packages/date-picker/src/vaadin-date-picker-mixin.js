@@ -755,7 +755,7 @@ export const DatePickerMixin = (subclass) =>
         this._selectedDate = null;
       }
 
-      this._toggleHasValue(!!value);
+      this._toggleHasValue(this._hasValue);
     }
 
     /** @private */

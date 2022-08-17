@@ -563,7 +563,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
       this.__updateInputValue(parsedObj);
     }
 
-    this._toggleHasValue(!!this.value);
+    this._toggleHasValue(this._hasValue);
   }
 
   /** @private */

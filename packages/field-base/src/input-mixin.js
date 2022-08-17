@@ -190,6 +190,7 @@ export const InputMixin = dedupingMixin(
 
       /**
        * Toggle the has-value attribute based on the value property.
+       *
        * @param {boolean} hasValue
        * @protected
        */
@@ -204,7 +205,7 @@ export const InputMixin = dedupingMixin(
        * @protected
        */
       _valueChanged(newVal, oldVal) {
-        this._toggleHasValue(newVal !== '' && newVal != null);
+        this._toggleHasValue(this._hasValue);
 
         // Setting initial value to empty string, do nothing.
         if (newVal === '' && oldVal === undefined) {
@@ -218,6 +219,16 @@ export const InputMixin = dedupingMixin(
 
         // Setting a value programmatically, sync it to input element.
         this._forwardInputValue(newVal);
+      }
+
+      /**
+       * Indicates whether the value is different from the default one.
+       * Override if the `value` property has a type other than `string`.
+       *
+       * @protected
+       */
+      get _hasValue() {
+        return this.value != null && this.value !== '';
       }
     },
 );
