@@ -449,12 +449,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
         computed: '__computeEffectiveFilteredItems(items, filteredItems, selectedItems, readonly)',
       },
 
-      /** @protected */
-      _hasValue: {
-        type: Boolean,
-        value: false,
-      },
-
       /** @private */
       _overflowItems: {
         type: Array,
@@ -592,16 +586,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /**
-   * Override method inherited from `InputMixin`
-   * to keep attribute after clearing the input.
-   * @protected
-   * @override
-   */
-  _toggleHasValue() {
-    super._toggleHasValue(this._hasValue);
-  }
-
-  /**
    * Implement callback from `ResizeMixin` to update chips.
    * @protected
    * @override
@@ -687,9 +671,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @private */
   _selectedItemsChanged(selectedItems) {
-    this._hasValue = Boolean(selectedItems && selectedItems.length);
-
-    this._toggleHasValue();
+    this._toggleHasValue(this._hasValue);
 
     // Use placeholder for announcing items
     if (this._hasValue) {
@@ -1122,6 +1104,17 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   /** @private */
   __computeEffectiveFilteredItems(items, filteredItems, selectedItems, readonly) {
     return !items && readonly ? selectedItems : filteredItems;
+  }
+
+  /**
+   * Override a method from `InputMixin` to
+   * compute the presence of value based on `selectedItems`.
+   *
+   * @protected
+   * @override
+   */
+  get _hasValue() {
+    return this.selectedItems && this.selectedItems.length > 0;
   }
 }
 

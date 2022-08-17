@@ -1045,7 +1045,7 @@ export const ComboBoxMixin = (subclass) =>
             this.value = '';
           }
 
-          this._toggleHasValue(this.value !== '');
+          this._toggleHasValue(this._hasValue);
           this._inputElementValue = this.value;
         }
       } else {
@@ -1089,7 +1089,7 @@ export const ComboBoxMixin = (subclass) =>
           this._inputElementValue = value;
         }
 
-        this._toggleHasValue(this.value !== '');
+        this._toggleHasValue(this._hasValue);
       } else {
         this.selectedItem = null;
       }
