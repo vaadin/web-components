@@ -10,6 +10,7 @@
   <body>
     <script type="module">
       import '@vaadin/grid/all-imports';
+      import '@vaadin/tooltip';
 
       const grid = document.querySelector('vaadin-grid');
 
@@ -28,6 +29,25 @@
 
         cb(pageItems, levelSize);
       };
+
+      const tooltip = document.querySelector('vaadin-tooltip');
+
+      grid.addEventListener('mousemove', (e) => {
+        const targetCell = e.path.find(
+          (node) => node.nodeType === Node.ELEMENT_NODE && node.getAttribute('part')?.includes('cell'),
+        );
+
+        if (targetCell) {
+          const { item, column } = grid.getEventContext(e);
+          tooltip.target = targetCell;
+          tooltip.text = `Item: ${item.name}`;
+          tooltip.opened = true;
+        }
+      });
+
+      grid.addEventListener('mouseleave', (e) => {
+        tooltip.opened = false;
+      });
     </script>
 
     <vaadin-grid item-id-path="name">
@@ -37,5 +57,7 @@
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
     </vaadin-grid>
+
+    <vaadin-tooltip manual></vaadin-tooltip>
   </body>
 </html>
