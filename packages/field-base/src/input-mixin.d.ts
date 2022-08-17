@@ -27,7 +27,7 @@ export declare class InputMixinClass {
    * Indicates whether the value is different from the default one.
    * Override if the `value` property has a type other than `string`.
    */
-  readonly _hasValue: boolean;
+  protected readonly _hasValue: boolean;
 
   /**
    * The value of the field.
