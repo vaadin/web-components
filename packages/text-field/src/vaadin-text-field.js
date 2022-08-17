@@ -11,6 +11,7 @@ import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
+import { TooltipHostMixin } from '@vaadin/tooltip/src/vaadin-tooltip-host-mixin.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles('vaadin-text-field', inputFieldShared, { moduleId: 'vaadin-text-field-styles' });
@@ -83,8 +84,11 @@ registerStyles('vaadin-text-field', inputFieldShared, { moduleId: 'vaadin-text-f
  * @mixes ThemableMixin
  * @mixes PatternMixin
  * @mixes InputFieldMixin
+ * @mixes TooltipHostMixin
  */
-export class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+export class TextField extends TooltipHostMixin(
+  PatternMixin(InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement)))),
+) {
   static get is() {
     return 'vaadin-text-field';
   }
@@ -124,6 +128,8 @@ export class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(Elemen
           <slot name="error-message"></slot>
         </div>
       </div>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
