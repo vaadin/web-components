@@ -53,6 +53,12 @@ declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   opened: boolean;
 
   /**
+   * Position of the tooltip with respect to its target.
+   * Supported values: `top`, `bottom`, `start`, `end`.
+   */
+  position: 'bottom' | 'end' | 'start' | 'top';
+
+  /**
    * An HTML element to attach the tooltip to.
    * The target must be placed in the same shadow scope.
    * Defaults to an element referenced with `targetId`.

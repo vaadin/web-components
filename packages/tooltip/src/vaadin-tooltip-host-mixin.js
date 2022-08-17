@@ -64,6 +64,16 @@ export const TooltipHostMixin = (superClass) =>
         },
 
         /**
+         * Position of the tooltip with respect to the element.
+         * Supported values: `top`, `bottom`, `start`, `end`.
+         * @attr {string} tooltip-position
+         */
+        tooltipPosition: {
+          type: String,
+          observer: '__tooltipPositionChanged',
+        },
+
+        /**
          * String used as a content for the tooltip
          * shown on the element when it gets focus
          * or is hovered using the pointer device.
@@ -122,6 +132,13 @@ export const TooltipHostMixin = (superClass) =>
     __tooltipOpenedChanged(opened, oldOpened) {
       if (opened || oldOpened) {
         this._tooltipController.setOpened(opened);
+      }
+    }
+
+    /** @private */
+    __tooltipPositionChanged(position, oldPosition) {
+      if (position || oldPosition) {
+        this._tooltipController.setPosition(position);
       }
     }
 

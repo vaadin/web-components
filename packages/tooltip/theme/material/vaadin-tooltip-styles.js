@@ -9,7 +9,6 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const tooltipOverlay = css`
   [part='overlay'] {
-    margin: 2px 0;
     background-color: rgba(97, 97, 97, 0.92);
     color: #fff;
     font-size: 0.6875rem;
