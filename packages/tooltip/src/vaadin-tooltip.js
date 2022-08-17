@@ -129,6 +129,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
        */
       text: {
         type: String,
+        observer: '__textChanged',
       },
 
       /**
@@ -223,6 +224,13 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       } else {
         console.warn(`No element with id="${targetId}" found to show tooltip.`);
       }
+    }
+  }
+
+  /** @private */
+  __textChanged(text, oldText) {
+    if (text || oldText) {
+      this.$.overlay.requestContentUpdate();
     }
   }
 
