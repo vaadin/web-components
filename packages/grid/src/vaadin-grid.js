@@ -29,6 +29,7 @@ import { ScrollMixin } from './vaadin-grid-scroll-mixin.js';
 import { SelectionMixin } from './vaadin-grid-selection-mixin.js';
 import { SortMixin } from './vaadin-grid-sort-mixin.js';
 import { StylingMixin } from './vaadin-grid-styling-mixin.js';
+import { TooltipMixin } from './vaadin-grid-tooltip-mixin.js';
 
 /**
  * `<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the
@@ -258,7 +259,9 @@ class Grid extends ElementMixin(
                         FilterMixin(
                           ColumnReorderingMixin(
                             ColumnResizingMixin(
-                              EventContextMixin(DragAndDropMixin(StylingMixin(TabindexMixin(PolymerElement)))),
+                              EventContextMixin(
+                                DragAndDropMixin(StylingMixin(TooltipMixin(TabindexMixin(PolymerElement)))),
+                              ),
                             ),
                           ),
                         ),
@@ -294,6 +297,8 @@ class Grid extends ElementMixin(
       </div>
 
       <div id="focusexit" tabindex="0"></div>
+
+      <slot name="tooltip"></slot>
     `;
   }
 

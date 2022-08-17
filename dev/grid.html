@@ -10,6 +10,7 @@
   <body>
     <script type="module">
       import '@vaadin/grid/all-imports';
+      import '@vaadin/tooltip';
 
       const grid = document.querySelector('vaadin-grid');
 
@@ -27,6 +28,10 @@
         });
 
         cb(pageItems, levelSize);
+      };
+
+      grid.cellTooltipGenerator = (column, model) => {
+        return column.path && model.item ? `${column.path} ${model.item.name}` : '';
       };
     </script>
 
