@@ -34,6 +34,12 @@ export class HelperController extends SlotController {
   opened: boolean;
 
   /**
+   * Position of the tooltip with respect to the element.
+   * Supported values: `top`, `bottom`, `start`, `end`.
+   */
+  position: 'bottom' | 'end' | 'start' | 'top';
+
+  /**
    * An HTML element to attach the tooltip to.
    */
   target: HTMLElement;
@@ -59,6 +65,11 @@ export class HelperController extends SlotController {
    * Toggle opened state for the tooltip.
    */
   setOpened(opened: boolean): void;
+
+  /**
+   * Set position for the tooltip.
+   */
+  setPosition(position: 'bottom' | 'end' | 'start' | 'top'): void;
 
   /**
    * Toggle manual mode for the tooltip.

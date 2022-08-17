@@ -10,7 +10,6 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const tooltipOverlay = css`
   [part='overlay'] {
-    margin: 2px 0;
     background-color: var(--lumo-contrast);
     color: var(--lumo-primary-contrast-color);
     font-size: var(--lumo-font-size-xs);

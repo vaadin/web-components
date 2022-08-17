@@ -10,9 +10,14 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-tooltip-overlay',
   css`
-    :host {
-      align-items: flex-start;
-      justify-content: flex-start;
+    :host([position='top']) [part='overlay'],
+    :host([position='bottom']) [part='overlay'] {
+      margin: 2px 0;
+    }
+
+    :host([position='start']) [part='overlay'],
+    :host([position='end']) [part='overlay'] {
+      margin: 0 2px;
     }
   `,
   { moduleId: 'vaadin-tooltip-overlay-styles' },
@@ -40,6 +45,15 @@ class TooltipOverlay extends PositionMixin(OverlayElement) {
     return memoizedTemplate;
   }
 
+  static get properties() {
+    return {
+      position: {
+        type: String,
+        reflectToAttribute: true,
+      },
+    };
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -51,6 +65,38 @@ class TooltipOverlay extends PositionMixin(OverlayElement) {
     });
 
     this.__resizeObserver.observe(this.$.overlay);
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _updatePosition() {
+    super._updatePosition();
+
+    if (!this.positionTarget) {
+      return;
+    }
+
+    const targetRect = this.positionTarget.getBoundingClientRect();
+    const overlayRect = this.$.overlay.getBoundingClientRect();
+
+    if (this.noVerticalOverlap) {
+      if (this.style.left) {
+        const left = targetRect.left + targetRect.width / 2 - overlayRect.width / 2;
+        this.style.left = `${left < targetRect.left ? targetRect.left : left}px`;
+      }
+
+      if (this.style.right) {
+        this.style.right = `${targetRect.left + targetRect.width / 2 - overlayRect.width / 2}px`;
+      }
+    }
+
+    if (this.noHorizontalOverlap) {
+      if (this.style.bottom) {
+        this.style.bottom = `${parseFloat(this.style.bottom) + targetRect.height / 2 - overlayRect.height / 2}px`;
+      }
+    }
   }
 }
 

@@ -59,7 +59,11 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         position-target="[[target]]"
         renderer="[[_renderer]]"
         modeless
-        no-vertical-overlap
+        position="[[position]]"
+        horizontal-align="[[__computeHorizontalAlign(position)]]"
+        vertical-align="[[__computeVerticalAlign(position)]]"
+        no-horizontal-overlap="[[__computeNoHorizontalOverlap(position)]]"
+        no-vertical-overlap="[[__computeNoVerticalOverlap(position)]]"
       ></vaadin-tooltip-overlay>
     `;
   }
@@ -103,6 +107,15 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
        */
       opened: {
         type: Boolean,
+      },
+
+      /**
+       * Position of the tooltip with respect to its target.
+       * Supported values: `top`, `bottom`, `start`, `end`.
+       */
+      position: {
+        type: String,
+        value: 'bottom',
       },
 
       /**
@@ -193,8 +206,28 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
+  __computeHorizontalAlign(position) {
+    return position === 'start' ? 'end' : 'start';
+  }
+
+  /** @private */
+  __computeNoHorizontalOverlap(position) {
+    return position === 'start' || position === 'end';
+  }
+
+  /** @private */
+  __computeNoVerticalOverlap(position) {
+    return position === 'bottom' || position === 'top';
+  }
+
+  /** @private */
   __computeOpened(manual, opened, autoOpened) {
     return manual ? opened : autoOpened;
+  }
+
+  /** @private */
+  __computeVerticalAlign(position) {
+    return position === 'bottom' ? 'top' : 'bottom';
   }
 
   /** @private */

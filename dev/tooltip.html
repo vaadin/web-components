@@ -38,7 +38,17 @@
                 :host {
                   display: flex;
                   align-items: center;
+                  flex-wrap: wrap;
                   gap: 1rem;
+                }
+
+                .position {
+                  width: 200px;
+                  height: 200px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  flex-basis: 9999px;
                 }
               </style>
 
@@ -69,7 +79,33 @@
               >
                 <div>Immediate tooltip</div>
               </tooltip-host>
+
+              <div class="position">
+                <tooltip-host>
+                  <div>Positioned tooltip</div>
+                  <select id="position">
+                    <option value="top">top</option>
+                    <option value="bottom" selected>bottom</option>
+                    <option value="start">start</option>
+                    <option value="end">end</option>
+                  </select>
+                  <vaadin-tooltip
+                    slot="tooltip"
+                    position="[[position]]"
+                    text="Position: [[position]]"
+                  ></vaadin-tooltip>
+                </tooltip-host>
+              </div
             `;
+          }
+
+          static get properties() {
+            return {
+              position: {
+                type: String,
+                value: 'bottom',
+              },
+            };
           }
 
           ready() {
@@ -82,10 +118,13 @@
               div.textContent = 'Lazy (added)';
             });
 
-            const checkbox = this.$.checkbox;
-            checkbox.addEventListener('change', (e) => {
-              this.$.manual.tooltipOpened = checkbox.checked;
+            this.$.checkbox.addEventListener('change', (e) => {
+              this.$.manual.tooltipOpened = e.target.checked;
             });
+
+            this.$.position.addEventListener('change', (e) => {
+              this.position = e.target.value;
+            })
           }
         },
       );
@@ -100,6 +139,7 @@
                   display: block;
                   padding: 5px 10px;
                   border: solid 1px #e2e2e2;
+                  text-align: center;
                 }
               </style>
               <slot></slot>

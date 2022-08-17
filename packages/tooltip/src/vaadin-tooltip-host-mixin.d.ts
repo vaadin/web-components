@@ -49,6 +49,13 @@ export declare class TooltipHostMixinClass {
   tooltipOpened: boolean;
 
   /**
+   * Position of the tooltip with respect to the element.
+   * Supported values: `top`, `bottom`, `start`, `end`.
+   * @attr {string} tooltip-position
+   */
+  tooltipPosition: 'bottom' | 'end' | 'start' | 'top';
+
+  /**
    * String used as a content for the tooltip
    * shown on the element when it gets focus
    * or is hovered using the pointer device.

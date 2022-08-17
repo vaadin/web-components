@@ -49,6 +49,10 @@ export class TooltipController extends SlotController {
     if (this.delay !== undefined) {
       tooltipNode.delay = this.cooldown;
     }
+
+    if (this.position !== undefined) {
+      tooltipNode.position = this.position;
+    }
   }
 
   /**
@@ -124,6 +128,19 @@ export class TooltipController extends SlotController {
   }
 
   /**
+   * Set position for the tooltip.
+   * @param {string} position
+   */
+  setPosition(position) {
+    this.position = position;
+
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode.position = position;
+    }
+  }
+
+  /**
    * Set an HTML element to attach the tooltip to.
    * @param {HTMLElement} target
    */
@@ -195,6 +212,10 @@ export class TooltipController extends SlotController {
 
       if (this.delay !== undefined) {
         tooltipNode.delay = this.cooldown;
+      }
+
+      if (this.position !== undefined) {
+        tooltipNode.position = this.position;
       }
     }
   }
