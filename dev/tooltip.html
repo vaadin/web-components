@@ -16,12 +16,30 @@
       Tooltip.setDefaultTooltipCooldown(500);
     </script>
   </head>
+  <style>
+    tooltip-demo {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .position {
+      width: 200px;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-basis: 9999px;
+    }
+  </style>
 
   <body>
     <!--
       Wrap demo into the component so that global cooldown / delay work
       for all the `<vaadin-tooltip>` instances, including those that are
       created in HTML (placing them in `<body>` would break this logic).
+      Do not use Shadow DOM in the demo so that `aria-describedby` works.
     -->
     <tooltip-demo></tooltip-demo>
 
@@ -34,26 +52,11 @@
         class extends PolymerElement {
           static get template() {
             return html`
-              <style>
-                :host {
-                  display: flex;
-                  align-items: center;
-                  flex-wrap: wrap;
-                  gap: 1rem;
-                }
-
-                .position {
-                  width: 200px;
-                  height: 200px;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  flex-basis: 9999px;
-                }
-              </style>
-
               <button id="user">User</button>
               <vaadin-tooltip target-id="user" text="View user profile"></vaadin-tooltip>
+
+              <input id="name" autocomplete="off" />
+              <vaadin-tooltip target-id="name" text="Enter your name"></vaadin-tooltip>
 
               <tooltip-host id="property" tooltip-text="I'm a property tooltip">Property tooltip</tooltip-host>
 
@@ -66,7 +69,12 @@
                 <div>Lazy tooltip (click to add)</div>
               </tooltip-host>
 
-              <tooltip-host id="manual" tooltip-text="Only shown when checked" tooltip-manual>
+              <tooltip-host
+                id="manual"
+                tooltip-text="Only shown when checked"
+                tooltip-manual
+                tooltip-opened="[[manualOpened]]"
+              >
                 <input type="checkbox" id="checkbox" />
                 <label for="check">Manual (check to show)</label>
               </tooltip-host>
@@ -89,14 +97,14 @@
                     <option value="start">start</option>
                     <option value="end">end</option>
                   </select>
-                  <vaadin-tooltip
-                    slot="tooltip"
-                    position="[[position]]"
-                    text="Position: [[position]]"
-                  ></vaadin-tooltip>
+                  <vaadin-tooltip slot="tooltip" position="[[position]]" text="Position: [[position]]"></vaadin-tooltip>
                 </tooltip-host>
-              </div
+              </div>
             `;
+          }
+
+          _attachDom(dom) {
+            this.appendChild(dom);
           }
 
           static get properties() {
@@ -105,26 +113,29 @@
                 type: String,
                 value: 'bottom',
               },
+              manualOpened: {
+                type: Boolean,
+              },
             };
           }
 
           ready() {
             super.ready();
 
-            const lazy = this.$.lazy;
+            const lazy = this.querySelector('#lazy');
             lazy.addEventListener('click', (e) => {
               lazy.tooltipText = 'Only shown after first click';
               const div = lazy.firstElementChild;
               div.textContent = 'Lazy (added)';
             });
 
-            this.$.checkbox.addEventListener('change', (e) => {
-              this.$.manual.tooltipOpened = e.target.checked;
+            this.querySelector('#checkbox').addEventListener('change', (e) => {
+              this.manualOpened = e.target.checked;
             });
 
-            this.$.position.addEventListener('change', (e) => {
+            this.querySelector('#position').addEventListener('change', (e) => {
               this.position = e.target.value;
-            })
+            });
           }
         },
       );

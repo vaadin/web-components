@@ -5,7 +5,9 @@
  */
 import './vaadin-tooltip-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
 let defaultCooldown = 0;
@@ -52,7 +54,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         }
       </style>
       <vaadin-tooltip-overlay
-        id="overlay"
+        id="[[_uniqueId]]"
         role="tooltip"
         theme$="[[_theme]]"
         opened="[[__computeOpened(manual, opened, _autoOpened)]]"
@@ -189,11 +191,19 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     super();
 
     this._renderer = this.__defaultRenderer.bind(this);
+    this._uniqueId = `vaadin-tooltip-${generateUniqueId()}`;
 
     this.__boundOnMouseEnter = this.__onMouseEnter.bind(this);
     this.__boundOnMouseLeave = this.__onMouseLeave.bind(this);
     this.__boundOnFocusin = this.__onFocusin.bind(this);
     this.__boundOnFocusout = this.__onFocusout.bind(this);
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._overlayElement = this.shadowRoot.querySelector('vaadin-tooltip-overlay');
   }
 
   /** @protected */
@@ -237,6 +247,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       oldTarget.removeEventListener('mouseleave', this.__boundOnMouseLeave);
       oldTarget.removeEventListener('focusin', this.__boundOnFocusin);
       oldTarget.removeEventListener('focusout', this.__boundOnFocusout);
+
+      removeValueFromAttribute(oldTarget, 'aria-describedby', this._uniqueId);
     }
 
     if (target) {
@@ -244,6 +256,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       target.addEventListener('mouseleave', this.__boundOnMouseLeave);
       target.addEventListener('focusin', this.__boundOnFocusin);
       target.addEventListener('focusout', this.__boundOnFocusout);
+
+      addValueToAttribute(target, 'aria-describedby', this._uniqueId);
     }
   }
 
@@ -262,8 +276,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   __textChanged(text, oldText) {
-    if (text || oldText) {
-      this.$.overlay.requestContentUpdate();
+    if (this._overlayElement && (text || oldText)) {
+      this._overlayElement.requestContentUpdate();
     }
   }
 
