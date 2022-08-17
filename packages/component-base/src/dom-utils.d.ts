@@ -12,3 +12,14 @@
  * and involves both the light DOM and ancestor shadow DOM trees.
  */
 export function getAncestorRootNodes(node: Node): Node[];
+
+/**
+ * Adds a value to an attribute containing space-delimited values.
+ */
+export function addValueToAttribute(element: HTMLElement, attr: string, value: string): void;
+
+/**
+ * Removes a value from an attribute containing space-delimited values.
+ * If the value is the last one, the whole attribute is removed.
+ */
+export function removeValueFromAttribute(element: HTMLElement, attr: string, value: string): void;
