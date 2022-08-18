@@ -10,8 +10,8 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
-let defaultCooldown = 0;
 let defaultDelay = 0;
+let defaultHideDelay = 0;
 
 const tooltips = new Set();
 
@@ -74,17 +74,6 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     return {
       /**
        * The delay in milliseconds before the tooltip
-       * is closed, when not using manual mode.
-       * This only applies to `mouseleave` listener.
-       * On blur, the tooltip is closed immediately.
-       */
-      cooldown: {
-        type: Number,
-        value: () => defaultCooldown,
-      },
-
-      /**
-       * The delay in milliseconds before the tooltip
        * is opened, when not using manual mode.
        * This only applies to `mouseenter` listener.
        * On focus, the tooltip is opened immediately.
@@ -92,6 +81,18 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       delay: {
         type: Number,
         value: () => defaultDelay,
+      },
+
+      /**
+       * The delay in milliseconds before the tooltip
+       * is closed, when not using manual mode.
+       * This only applies to `mouseleave` listener.
+       * On blur, the tooltip is closed immediately.
+       * @attr {number} hide-delay
+       */
+      hideDelay: {
+        type: Number,
+        value: () => defaultHideDelay,
       },
 
       /**
@@ -166,25 +167,25 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /**
-   * Sets the default cooldown to use for all tooltip instances.
-   * This method should be called before creating any tooltips.
-   * It does not affect the default for existing tooltips.
-   *
-   * @param {number} cooldown
-   */
-  static setDefaultTooltipCooldown(cooldown) {
-    defaultCooldown = cooldown;
-  }
-
-  /**
    * Sets the default delay to use for all tooltip instances.
    * This method should be called before creating any tooltips.
    * It does not affect the default for existing tooltips.
    *
    * @param {number} delay
    */
-  static setDefaultTooltipDelay(delay) {
+  static setDefaultDelay(delay) {
     defaultDelay = delay;
+  }
+
+  /**
+   * Sets the default hide delay to use for all tooltip instances.
+   * This method should be called before creating any tooltips.
+   * It does not affect the default for existing tooltips.
+   *
+   * @param {number} hideDelay
+   */
+  static setDefaultHideDelay(hideDelay) {
+    defaultHideDelay = hideDelay;
   }
 
   constructor() {
@@ -334,7 +335,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__focusInside = false;
     this.__hoverInside = false;
 
-    // Close after a cooldown.
+    // Close after a hide delay.
     this._close();
   }
 
@@ -355,7 +356,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     } else if (!this.__closeTimeout) {
       this.__closeTimeout = setTimeout(() => {
         this.__finishClose();
-      }, this.cooldown);
+      }, this.hideDelay);
     }
 
     if (warmUpTimeout) {
@@ -372,7 +373,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         deleteTooltip(this);
         cooldownTimeout = null;
         warmedUp = false;
-      }, this.cooldown);
+      }, this.hideDelay);
     }
   }
 

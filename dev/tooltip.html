@@ -10,10 +10,10 @@
       import { Tooltip } from '@vaadin/tooltip';
 
       // Show after 1 second
-      Tooltip.setDefaultTooltipDelay(1000);
+      Tooltip.setDefaultDelay(1000);
 
       // Hide after 0.5 seconds
-      Tooltip.setDefaultTooltipCooldown(500);
+      Tooltip.setDefaultHideDelay(500);
     </script>
   </head>
   <style>
@@ -77,7 +77,12 @@
 
               <tooltip-host>
                 <div>Immediate tooltip</div>
-                <vaadin-tooltip slot="tooltip" text="Zero delay or cooldown" delay="0" cooldown="0"></vaadin-tooltip>
+                <vaadin-tooltip
+                  slot="tooltip"
+                  text="Zero show and hide delay"
+                  delay="0"
+                  hide-delay="0"
+                ></vaadin-tooltip>
               </tooltip-host>
 
               <div class="position">
