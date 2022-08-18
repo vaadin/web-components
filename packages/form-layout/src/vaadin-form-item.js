@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/field-base/src/utils.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
