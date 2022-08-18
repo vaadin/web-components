@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { addValueToAttribute, removeValueFromAttribute } from './utils.js';
+import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
  * A controller for managing ARIA attributes for a field element:
