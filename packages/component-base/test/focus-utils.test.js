@@ -1,6 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
-import { getFocusableElements, isElementFocusable, isElementFocused, isElementHidden } from '../src/focus-utils.js';
+import { fixtureSync, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
+import {
+  getFocusableElements,
+  isElementFocusable,
+  isElementFocused,
+  isElementHidden,
+  isKeyboardActive,
+} from '../src/focus-utils.js';
 
 describe('focus-utils', () => {
   describe('isElementHidden', () => {
@@ -194,6 +200,20 @@ describe('focus-utils', () => {
     it('should return false for a not focused element', () => {
       input.focus();
       expect(isElementFocused(document.body)).to.be.false;
+    });
+  });
+
+  describe('isKeyboardActive', () => {
+    it('should return true when a keydown is fired after mousedown', () => {
+      mousedown(document.body);
+      tabKeyDown(document.body);
+      expect(isKeyboardActive()).to.be.true;
+    });
+
+    it('should return false when a mousedown is fired after keydown', () => {
+      tabKeyDown(document.body);
+      mousedown(document.body);
+      expect(isKeyboardActive()).to.be.false;
     });
   });
 });

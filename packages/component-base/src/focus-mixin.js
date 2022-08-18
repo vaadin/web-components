@@ -4,28 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
-
-// We consider the keyboard to be active if the window has received a keydown
-// event since the last mousedown event.
-let keyboardActive = false;
-
-// Listen for top-level keydown and mousedown events.
-// Use capture phase so we detect events even if they're handled.
-window.addEventListener(
-  'keydown',
-  () => {
-    keyboardActive = true;
-  },
-  { capture: true },
-);
-
-window.addEventListener(
-  'mousedown',
-  () => {
-    keyboardActive = false;
-  },
-  { capture: true },
-);
+import { isKeyboardActive } from './focus-utils.js';
 
 /**
  * A mixin to handle `focused` and `focus-ring` attributes based on focus.
@@ -40,7 +19,7 @@ export const FocusMixin = dedupingMixin(
        * @return {boolean}
        */
       get _keyboardActive() {
-        return keyboardActive;
+        return isKeyboardActive();
       }
 
       /** @protected */
