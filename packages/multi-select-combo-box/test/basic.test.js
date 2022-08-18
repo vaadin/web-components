@@ -722,26 +722,9 @@ describe('basic', () => {
       comboBox.required = true;
     });
 
-    it('should be invalid when selectedItems is empty', () => {
-      expect(comboBox.validate()).to.be.false;
-      expect(comboBox.invalid).to.be.true;
-    });
-
-    it('should be valid when selectedItems is not empty', () => {
-      comboBox.selectedItems = ['apple'];
-      expect(comboBox.validate()).to.be.true;
-      expect(comboBox.invalid).to.be.false;
-    });
-
     it('should focus on required indicator click', () => {
       comboBox.shadowRoot.querySelector('[part="required-indicator"]').click();
       expect(comboBox.hasAttribute('focused')).to.be.true;
-    });
-
-    it('should not be invalid when empty and readonly', () => {
-      comboBox.readonly = true;
-      expect(comboBox.validate()).to.be.true;
-      expect(comboBox.invalid).to.be.false;
     });
   });
 
