@@ -7,6 +7,7 @@ import './vaadin-tooltip-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
@@ -193,6 +194,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this._renderer = this.__defaultRenderer.bind(this);
     this._uniqueId = `vaadin-tooltip-${generateUniqueId()}`;
 
+    this.__boundOnMouseDown = this.__onMouseDown.bind(this);
     this.__boundOnMouseEnter = this.__onMouseEnter.bind(this);
     this.__boundOnMouseLeave = this.__onMouseLeave.bind(this);
     this.__boundOnFocusin = this.__onFocusin.bind(this);
@@ -262,6 +264,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       oldTarget.removeEventListener('focusin', this.__boundOnFocusin);
       oldTarget.removeEventListener('focusout', this.__boundOnFocusout);
       oldTarget.removeEventListener('keydown', this.__boundOnKeydown);
+      oldTarget.removeEventListener('mousedown', this.__boundOnMouseDown);
 
       removeValueFromAttribute(oldTarget, 'aria-describedby', this._uniqueId);
     }
@@ -272,6 +275,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       target.addEventListener('focusin', this.__boundOnFocusin);
       target.addEventListener('focusout', this.__boundOnFocusout);
       target.addEventListener('keydown', this.__boundOnKeydown);
+      target.addEventListener('mousedown', this.__boundOnMouseDown);
 
       addValueToAttribute(target, 'aria-describedby', this._uniqueId);
     }
@@ -291,6 +295,11 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   __onFocusin() {
+    // Only open on keyboard focus.
+    if (!isKeyboardActive()) {
+      return;
+    }
+
     this.__focusInside = true;
 
     if (!this.__hoverInside || !this._autoOpened) {
@@ -314,6 +323,12 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     if (event.key === 'Escape') {
       this._close(true);
     }
+  }
+
+  /** @private */
+  __onMouseDown() {
+    // Close the tooltip on mousedown.
+    this._close(true);
   }
 
   /** @private */
