@@ -117,7 +117,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
        */
       position: {
         type: String,
-        value: 'bottom',
+        value: 'top',
       },
 
       /**
