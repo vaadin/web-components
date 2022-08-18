@@ -294,7 +294,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   __onFocusin() {
     this.__focusInside = true;
 
-    if (!this.__hoverInside) {
+    if (!this.__hoverInside || !this._autoOpened) {
       // Open immediately on focus.
       this._open(true);
     }
@@ -302,13 +302,12 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   __onFocusout() {
-    // Close the tooltip even if it still has hover,
-    // to avoid two tooltips shown simultaneously.
     this.__focusInside = false;
-    this.__hoverInside = false;
 
-    // Close immediately on blur.
-    this._close(true);
+    if (!this.__hoverInside) {
+      // Close immediately on blur.
+      this._close(true);
+    }
   }
 
   /** @private */
@@ -322,7 +321,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   __onMouseEnter() {
     this.__hoverInside = true;
 
-    if (!this.__focusInside) {
+    if (!this.__focusInside || !this._autoOpened) {
       // Open after a delay on hover.
       this._open();
     }
@@ -330,13 +329,12 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   __onMouseLeave() {
-    // Close the tooltip even if it still has focus,
-    // to avoid two tooltips shown simultaneously.
-    this.__focusInside = false;
     this.__hoverInside = false;
 
-    // Close after a hide delay.
-    this._close();
+    if (!this.__focusInside) {
+      // Close after a hide delay.
+      this._close();
+    }
   }
 
   /** @protected */
