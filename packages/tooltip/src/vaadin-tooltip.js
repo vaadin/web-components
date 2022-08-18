@@ -197,6 +197,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__boundOnMouseLeave = this.__onMouseLeave.bind(this);
     this.__boundOnFocusin = this.__onFocusin.bind(this);
     this.__boundOnFocusout = this.__onFocusout.bind(this);
+    this.__boundOnKeydown = this.__onKeydown.bind(this);
   }
 
   /** @protected */
@@ -247,6 +248,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       oldTarget.removeEventListener('mouseleave', this.__boundOnMouseLeave);
       oldTarget.removeEventListener('focusin', this.__boundOnFocusin);
       oldTarget.removeEventListener('focusout', this.__boundOnFocusout);
+      oldTarget.removeEventListener('keydown', this.__boundOnKeydown);
 
       removeValueFromAttribute(oldTarget, 'aria-describedby', this._uniqueId);
     }
@@ -256,6 +258,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       target.addEventListener('mouseleave', this.__boundOnMouseLeave);
       target.addEventListener('focusin', this.__boundOnFocusin);
       target.addEventListener('focusout', this.__boundOnFocusout);
+      target.addEventListener('keydown', this.__boundOnKeydown);
 
       addValueToAttribute(target, 'aria-describedby', this._uniqueId);
     }
@@ -305,6 +308,13 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
     // Close immediately on blur.
     this._close(true);
+  }
+
+  /** @private */
+  __onKeydown(event) {
+    if (event.key === 'Escape') {
+      this._close(true);
+    }
   }
 
   /** @private */
