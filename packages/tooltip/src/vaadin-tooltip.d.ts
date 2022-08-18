@@ -33,6 +33,11 @@ declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   delay: number;
 
   /**
+   * An id of the target element.
+   */
+  for: string | undefined;
+
+  /**
    * The delay in milliseconds before the tooltip
    * is closed, when not using manual mode.
    * This only applies to `mouseleave` listener.
@@ -65,12 +70,6 @@ declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
    * Defaults to an element referenced with `targetId`.
    */
   target: HTMLElement | undefined;
-
-  /**
-   * An id of the target element.
-   * @attr {string} target-id
-   */
-  targetId: string | undefined;
 
   /**
    * String used for a tooltip content.

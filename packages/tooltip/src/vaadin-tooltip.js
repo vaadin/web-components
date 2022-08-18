@@ -84,6 +84,14 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       },
 
       /**
+       * An id of the target element.
+       */
+      for: {
+        type: String,
+        observer: '__forChanged',
+      },
+
+      /**
        * The delay in milliseconds before the tooltip
        * is closed, when not using manual mode.
        * This only applies to `mouseleave` listener.
@@ -129,15 +137,6 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       target: {
         type: Object,
         observer: '__targetChanged',
-      },
-
-      /**
-       * An id of the target element.
-       * @attr {string} target-id
-       */
-      targetId: {
-        type: String,
-        observer: '__targetIdChanged',
       },
 
       /**
@@ -243,6 +242,19 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
+  __forChanged(forId) {
+    if (forId) {
+      const target = this.getRootNode().getElementById(forId);
+
+      if (target) {
+        this.target = target;
+      } else {
+        console.warn(`No element with id="${forId}" found to show tooltip.`);
+      }
+    }
+  }
+
+  /** @private */
   __targetChanged(target, oldTarget) {
     if (oldTarget) {
       oldTarget.removeEventListener('mouseenter', this.__boundOnMouseEnter);
@@ -262,19 +274,6 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       target.addEventListener('keydown', this.__boundOnKeydown);
 
       addValueToAttribute(target, 'aria-describedby', this._uniqueId);
-    }
-  }
-
-  /** @private */
-  __targetIdChanged(targetId) {
-    if (targetId) {
-      const target = this.getRootNode().getElementById(targetId);
-
-      if (target) {
-        this.target = target;
-      } else {
-        console.warn(`No element with id="${targetId}" found to show tooltip.`);
-      }
     }
   }
 

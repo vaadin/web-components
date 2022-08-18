@@ -54,10 +54,10 @@
           static get template() {
             return html`
               <button id="user">User</button>
-              <vaadin-tooltip target-id="user" text="View user profile"></vaadin-tooltip>
+              <vaadin-tooltip for="user" text="View user profile"></vaadin-tooltip>
 
               <input id="name" autocomplete="off" />
-              <vaadin-tooltip target-id="name" text="Enter your name"></vaadin-tooltip>
+              <vaadin-tooltip for="name" text="Enter your name"></vaadin-tooltip>
 
               <tooltip-host id="slotted">
                 <div>Slotted tooltip</div>
