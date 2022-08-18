@@ -82,13 +82,20 @@ class TooltipOverlay extends PositionMixin(OverlayElement) {
     const overlayRect = this.$.overlay.getBoundingClientRect();
 
     if (this.noVerticalOverlap) {
+      const offset = targetRect.width / 2 - overlayRect.width / 2;
+
       if (this.style.left) {
-        const left = targetRect.left + targetRect.width / 2 - overlayRect.width / 2;
-        this.style.left = `${left < targetRect.left ? targetRect.left : left}px`;
+        const left = parseFloat(this.style.left) + offset;
+        if (left > 0) {
+          this.style.left = `${left}px`;
+        }
       }
 
       if (this.style.right) {
-        this.style.right = `${targetRect.left + targetRect.width / 2 - overlayRect.width / 2}px`;
+        const right = parseFloat(this.style.right) + offset;
+        if (right > 0) {
+          this.style.right = `${right}px`;
+        }
       }
     }
 
