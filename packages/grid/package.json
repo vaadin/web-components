@@ -49,6 +49,7 @@
     "@vaadin/component-base": "23.3.0-alpha0",
     "@vaadin/lit-renderer": "23.3.0-alpha0",
     "@vaadin/text-field": "23.3.0-alpha0",
+    "@vaadin/tooltip": "23.3.0-alpha0",
     "@vaadin/vaadin-lumo-styles": "23.3.0-alpha0",
     "@vaadin/vaadin-material-styles": "23.3.0-alpha0",
     "@vaadin/vaadin-themable-mixin": "23.3.0-alpha0"
