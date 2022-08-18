@@ -5,6 +5,12 @@
  */
 
 /**
+ * Returns true if the window has received a keydown
+ * event since the last mousedown event.
+ */
+export declare function isKeyboardActive(): boolean;
+
+/**
  * Returns true if the element is hidden, false otherwise.
  *
  * An element is treated as hidden when any of the following conditions are met:

@@ -4,6 +4,38 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+// We consider the keyboard to be active if the window has received a keydown
+// event since the last mousedown event.
+let keyboardActive = false;
+
+// Listen for top-level keydown and mousedown events.
+// Use capture phase so we detect events even if they're handled.
+window.addEventListener(
+  'keydown',
+  () => {
+    keyboardActive = true;
+  },
+  { capture: true },
+);
+
+window.addEventListener(
+  'mousedown',
+  () => {
+    keyboardActive = false;
+  },
+  { capture: true },
+);
+
+/**
+ * Returns true if the window has received a keydown
+ * event since the last mousedown event.
+ *
+ * @return {boolean}
+ */
+export function isKeyboardActive() {
+  return keyboardActive;
+}
+
 /**
  * Returns true if the element is hidden directly with `display: none` or `visibility: hidden`,
  * false otherwise.
