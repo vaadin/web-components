@@ -59,34 +59,25 @@
               <input id="name" autocomplete="off" />
               <vaadin-tooltip target-id="name" text="Enter your name"></vaadin-tooltip>
 
-              <tooltip-host id="property" tooltip-text="I'm a property tooltip">Property tooltip</tooltip-host>
-
               <tooltip-host id="slotted">
                 <div>Slotted tooltip</div>
                 <vaadin-tooltip slot="tooltip" text="I'm a slotted tooltip"></vaadin-tooltip>
               </tooltip-host>
 
-              <tooltip-host id="lazy">
-                <div>Lazy tooltip (click to add)</div>
-              </tooltip-host>
-
-              <tooltip-host
-                id="manual"
-                tooltip-text="Only shown when checked"
-                tooltip-manual
-                tooltip-opened="[[manualOpened]]"
-              >
+              <tooltip-host>
                 <input type="checkbox" id="checkbox" />
                 <label for="check">Manual (check to show)</label>
+                <vaadin-tooltip
+                  slot="tooltip"
+                  text="Only shown when checked"
+                  manual
+                  opened="[[manualOpened]]"
+                ></vaadin-tooltip>
               </tooltip-host>
 
-              <tooltip-host
-                id="immediate"
-                tooltip-delay="0"
-                tooltip-cooldown="0"
-                tooltip-text="Zero delay or cooldown!"
-              >
+              <tooltip-host>
                 <div>Immediate tooltip</div>
+                <vaadin-tooltip slot="tooltip" text="Zero delay or cooldown" delay="0" cooldown="0"></vaadin-tooltip>
               </tooltip-host>
 
               <div class="position">
@@ -122,13 +113,6 @@
 
           ready() {
             super.ready();
-
-            const lazy = this.querySelector('#lazy');
-            lazy.addEventListener('click', (e) => {
-              lazy.tooltipText = 'Only shown after first click';
-              const div = lazy.firstElementChild;
-              div.textContent = 'Lazy (added)';
-            });
 
             this.querySelector('#checkbox').addEventListener('change', (e) => {
               this.manualOpened = e.target.checked;
