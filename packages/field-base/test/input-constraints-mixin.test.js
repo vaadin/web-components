@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fire, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { InputConstraintsMixin } from '../src/input-constraints-mixin.js';
 import { InputController } from '../src/input-controller.js';
@@ -43,143 +43,165 @@ const runTests = (baseClass) => {
       },
   );
 
-  let element, input;
-
-  beforeEach(async () => {
-    element = fixtureSync(`<${tag}></${tag}>`);
-    await nextRender();
-    input = element.querySelector('[slot=input]');
-  });
-
   describe('validation', () => {
-    it('should not validate the field when minlength is set', async () => {
-      element.minlength = 2;
-      await nextFrame();
-      expect(element.invalid).to.be.false;
+    let element, input, validateSpy, changeSpy;
+
+    beforeEach(() => {
+      element = document.createElement(tag);
+      validateSpy = sinon.spy(element, 'validate');
     });
 
-    it('should not validate the field when pattern is set', async () => {
-      element.pattern = '[-+\\d]';
-      await nextFrame();
-      expect(element.invalid).to.be.false;
+    afterEach(() => {
+      element.remove();
     });
 
-    it('should validate the field when invalid after minlength is changed', async () => {
-      element.invalid = true;
-      await nextFrame();
-      const spy = sinon.spy(element, 'validate');
-      element.minlength = 2;
-      await nextFrame();
-      expect(spy.calledOnce).to.be.true;
+    describe('without value', () => {
+      beforeEach(async () => {
+        document.body.appendChild(element);
+        await nextRender();
+      });
+
+      it('should not validate initially', () => {
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate when setting a constraint', async () => {
+        element.required = true;
+        await nextFrame();
+        expect(validateSpy.called).to.be.false;
+      });
     });
 
-    it('should validate the field when invalid after minlength is set to 0', async () => {
-      element.invalid = true;
-      await nextFrame();
-      const spy = sinon.spy(element, 'validate');
-      element.minlength = 0;
-      await nextFrame();
-      expect(spy.calledOnce).to.be.true;
+    describe('with an initial value', () => {
+      beforeEach(async () => {
+        element.value = 'Value';
+        document.body.appendChild(element);
+        await nextRender();
+        input = element.querySelector('[slot=input]');
+      });
+
+      it('should override explicitly set invalid when setting a constraint', async () => {
+        element.invalid = true;
+        await nextFrame();
+
+        element.required = true;
+        await nextFrame();
+        expect(element.invalid).to.be.false;
+      });
+
+      it('should call checkValidity on the input when setting a constraint', async () => {
+        const spy = sinon.spy(input, 'checkValidity');
+        element.minlength = 2;
+        await nextFrame();
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should validate when setting a boolean constraint', async () => {
+        element.required = true;
+        await nextFrame();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
+
+      it('should reset invalid when removing a boolean constraint', async () => {
+        element.required = true;
+        element.invalid = true;
+        await nextFrame();
+
+        element.required = false;
+        await nextFrame();
+        expect(element.invalid).to.be.false;
+      });
+
+      it('should validate when setting a number constraint', async () => {
+        element.minlength = 2;
+        await nextFrame();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
+
+      it('should validate when setting a number constraint to 0', async () => {
+        element.minlength = 0;
+        await nextFrame();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
+
+      it('should reset invalid when removing a number constraint', async () => {
+        element.minlength = 50;
+        element.invalid = true;
+        await nextFrame();
+
+        element.minlength = null;
+        await nextFrame();
+        expect(element.invalid).to.be.false;
+      });
+
+      it('should validate when setting a string constraint', async () => {
+        element.pattern = '[-+\\d]';
+        await nextFrame();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
+
+      it('should reset invalid when removing a string constraint', async () => {
+        element.pattern = '[-+\\d]';
+        element.invalid = true;
+        await nextFrame();
+
+        element.pattern = '';
+        await nextFrame();
+        expect(element.invalid).to.be.false;
+      });
+
+      it('should validate when removing a constraint that is not the last one', async () => {
+        element.required = true;
+        element.minlength = 2;
+        await nextFrame();
+        validateSpy.resetHistory();
+
+        element.minlength = null;
+        await nextFrame();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
     });
 
-    it('should validate the field when invalid after pattern is changed', async () => {
-      element.invalid = true;
-      await nextFrame();
-      const spy = sinon.spy(element, 'validate');
-      element.pattern = '[-+\\d]';
-      await nextFrame();
-      expect(spy.calledOnce).to.be.true;
+    describe('with an initial value + constraint', () => {
+      beforeEach(async () => {
+        element.value = 'Value';
+        element.minlength = 2;
+        document.body.appendChild(element);
+        await nextRender();
+      });
+
+      it('should validate initially', () => {
+        expect(validateSpy.calledOnce).to.be.true;
+      });
     });
 
-    it('should call checkValidity on the input when invalid after minlength is changed', async () => {
-      element.invalid = true;
-      await nextFrame();
-      const spy = sinon.spy(input, 'checkValidity');
-      element.minlength = 2;
-      await nextFrame();
-      expect(spy.calledOnce).to.be.true;
-    });
+    describe('change event', () => {
+      beforeEach(async () => {
+        changeSpy = sinon.spy();
+        element.addEventListener('change', changeSpy);
+        document.body.appendChild(element);
+        await nextRender();
+        input = element.querySelector('[slot=input]');
+      });
 
-    it('should call checkValidity on the input when invalid after pattern is changed', async () => {
-      element.invalid = true;
-      await nextFrame();
-      const spy = sinon.spy(input, 'checkValidity');
-      element.pattern = '[-+\\d]';
-      await nextFrame();
-      expect(spy.calledOnce).to.be.true;
-    });
+      it('should validate on input change event', () => {
+        input.value = '123foo';
+        fire(input, 'change');
+        expect(validateSpy.calledOnce).to.be.true;
+      });
 
-    it('should update invalid state when required is removed', async () => {
-      element.required = true;
-      await nextFrame();
-      element.validate();
-      expect(element.invalid).to.be.true;
+      it('should dispatch change event after validation', () => {
+        input.value = '123foo';
+        fire(input, 'change');
+        expect(validateSpy.calledOnce).to.be.true;
+        expect(changeSpy.calledAfter(validateSpy)).to.be.true;
+      });
 
-      element.required = false;
-      await nextFrame();
-      expect(element.invalid).to.be.false;
-    });
-
-    it('should update invalid state when pattern is removed', async () => {
-      input.value = '123foo';
-      element.pattern = '\\d+';
-      await nextFrame();
-
-      element.validate();
-      expect(element.invalid).to.be.true;
-
-      element.pattern = '';
-      await nextFrame();
-      expect(element.invalid).to.be.false;
-    });
-
-    it('should update invalid state when a constraint is removed even if other constraints are active', async () => {
-      element.required = true;
-      element.pattern = '\\d*';
-      await nextFrame();
-
-      element.validate();
-      expect(element.invalid).to.be.true;
-
-      element.required = false;
-      await nextFrame();
-      expect(element.invalid).to.be.false;
-    });
-
-    it('should override explicitly set invalid when required is set', async () => {
-      element.invalid = true;
-      element.value = 'foo';
-      await nextFrame();
-
-      element.required = true;
-      await nextFrame();
-      expect(element.invalid).to.be.false;
-    });
-
-    it('should call validate on change event from the input', () => {
-      const spy = sinon.spy(element, 'validate');
-      input.value = '123foo';
-      input.dispatchEvent(new CustomEvent('change'));
-      expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should dispatch change event after validation', () => {
-      const validateSpy = sinon.spy(element, 'validate');
-      const changeSpy = sinon.spy();
-      element.addEventListener('change', changeSpy);
-      input.value = '123foo';
-      input.dispatchEvent(new CustomEvent('change'));
-      expect(validateSpy.calledOnce).to.be.true;
-      expect(changeSpy.calledAfter(validateSpy)).to.be.true;
-    });
-
-    it('should store reference on the original change event', () => {
-      const changeSpy = sinon.spy();
-      element.addEventListener('change', changeSpy);
-      input.value = '123foo';
-      const event = new CustomEvent('change');
-      input.dispatchEvent(event);
-      expect(changeSpy.firstCall.args[0].detail.sourceEvent).to.equal(event);
+      it('should store a reference to the original change event', () => {
+        input.value = '123foo';
+        const event = fire(input, 'change');
+        expect(changeSpy.firstCall.args[0].detail.sourceEvent).to.equal(event);
+      });
     });
   });
 

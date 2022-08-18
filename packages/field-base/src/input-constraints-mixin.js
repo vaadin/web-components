@@ -79,9 +79,10 @@ export const InputConstraintsMixin = dedupingMixin(
        * @protected
        */
       _constraintsChanged(...constraints) {
-        // Prevent marking field as invalid when setting required state
-        // or any other constraint before a user has entered the value.
-        if (!this.invalid) {
+        // Validate the field on constraint change only if it has a value.
+        // The exception is the case when the field is invalid. In that case,
+        // let the method reset `invalid` when the last constraint is removed.
+        if (!this.invalid && !this._hasValue) {
           return;
         }
 
