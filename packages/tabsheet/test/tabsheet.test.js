@@ -8,21 +8,21 @@ describe('tabsheet', () => {
 
   beforeEach(async () => {
     tabsheet = fixtureSync(`
-        <vaadin-tabsheet>
-            <div slot="prefix">Prefix</div>
-            <div slot="suffix">Suffix</div>
-    
-            <vaadin-tabs slot="tabs">
-                <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
-                <vaadin-tab id="tab-2">Tab 2</vaadin-tab>
-                <vaadin-tab id="tab-3">Tab 3</vaadin-tab>
-            </vaadin-tabs>
-    
-            <div tab="tab-1"></div>
-            <div tab="tab-2"></div>
-            <div tab="tab-3"></div>
-        </vaadin-tabsheet>
-        `);
+      <vaadin-tabsheet>
+        <div slot="prefix">Prefix</div>
+        <div slot="suffix">Suffix</div>
+
+        <vaadin-tabs slot="tabs">
+          <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
+          <vaadin-tab id="tab-2">Tab 2</vaadin-tab>
+          <vaadin-tab id="tab-3">Tab 3</vaadin-tab>
+        </vaadin-tabs>
+
+        <div tab="tab-1"></div>
+        <div tab="tab-2"></div>
+        <div tab="tab-3"></div>
+      </vaadin-tabsheet>
+    `);
     tabs = tabsheet.querySelector('vaadin-tabs');
 
     await nextFrame();
