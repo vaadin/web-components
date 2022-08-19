@@ -81,11 +81,26 @@ class TabSheet extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement
       },
 
       /**
+       * The list of `<vaadin-tab>`s from which a selection can be made.
+       * It is populated from the elements passed inside the slotted
+       * `<vaadin-tabs>`, and updated dynamically when adding or removing items.
+       *
+       * Note: unlike `<vaadin-combo-box>`, this property is read-only.
+       * @type {!Array<!Tab> | undefined}
+       */
+      items: {
+        type: Array,
+        readOnly: true,
+        notify: true,
+      },
+
+      /**
        * The index of the selected tab.
        */
       selected: {
         value: 0,
         type: Number,
+        reflectToAttribute: true,
         notify: true,
       },
 
@@ -94,13 +109,6 @@ class TabSheet extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement
        */
       __tabs: {
         type: Object,
-      },
-
-      /**
-       * The <vaadin-tab> elements.
-       */
-      __tabItems: {
-        type: Array,
       },
 
       /**
@@ -117,15 +125,13 @@ class TabSheet extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement
 
     this.role = 'tablist';
 
-    const tabsItemsChangedListener = () => {
-      this.__tabItems = this.__tabs.items;
-    };
+    const tabsItemsChangedListener = () => this._setItems(this.__tabs.items);
 
     const tabsSelectedChangedListener = () => {
       this.selected = this.__tabs.selected;
     };
 
-    // Observe the tabs slot for a
+    // Observe the tabs slot for a <vaadin-tabs> element.
     this.addController(
       new (class extends SlotController {
         constructor(host) {
@@ -136,16 +142,15 @@ class TabSheet extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement
           if (!(tabs instanceof Tabs)) {
             throw Error('The "tabs" slot of a <vaadin-tabsheet> must only contain a <vaadin-tabs> element!');
           }
-          this.host.__tabs = tabs;
-          tabs.orientation = this.host.orientation;
-          tabs.selected = this.host.selected;
           tabs.addEventListener('items-changed', tabsItemsChangedListener);
           tabs.addEventListener('selected-changed', tabsSelectedChangedListener);
+          this.host.__tabs = tabs;
         }
 
         teardownNode(tabs) {
           tabs.removeEventListener('items-changed', tabsItemsChangedListener);
           tabs.removeEventListener('selected-changed', tabsSelectedChangedListener);
+          this.host._setItems([]);
         }
       })(this),
     );
@@ -161,8 +166,8 @@ class TabSheet extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement
 
   static get observers() {
     return [
-      '__tabItemsOrPanelsChanged(__tabItems, __panels)',
-      '__selectedTabItemChanged(selected, __tabItems, __panels)',
+      '__itemsOrPanelsChanged(items, __panels)',
+      '__selectedTabItemChanged(selected, items, __panels)',
       '__propagateTabsProperties(__tabs, orientation, selected)',
     ];
   }
@@ -172,12 +177,12 @@ class TabSheet extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement
    * to associate the tab elements with the panels.
    * @private
    */
-  __tabItemsOrPanelsChanged(tabItems, panels) {
-    if (!tabItems || !panels) {
+  __itemsOrPanelsChanged(items, panels) {
+    if (!items || !panels) {
       return;
     }
 
-    tabItems.forEach((tabItem) => {
+    items.forEach((tabItem) => {
       const panel = panels.find((panel) => panel.getAttribute('tab') === tabItem.id);
       if (panel) {
         panel.role = 'tabpanel';
@@ -193,12 +198,12 @@ class TabSheet extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement
    * An observer which toggles the visibility of the panels based on the selected tab.
    * @private
    */
-  __selectedTabItemChanged(selected, tabItems, panels) {
-    if (!tabItems || !panels || selected === undefined) {
+  __selectedTabItemChanged(selected, items, panels) {
+    if (!items || !panels || selected === undefined) {
       return;
     }
 
-    const selectedTab = tabItems[selected];
+    const selectedTab = items[selected];
     const selectedTabId = selectedTab ? selectedTab.id : '';
 
     panels.forEach((panel) => {
