@@ -10,7 +10,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
-import { Tabs } from '@vaadin/tabs/vaadin-tabs.js';
+import { Tabs } from '@vaadin/tabs/src/vaadin-tabs.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
