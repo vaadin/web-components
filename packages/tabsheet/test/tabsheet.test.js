@@ -133,6 +133,13 @@ describe('tabsheet', () => {
       tabsheet.selected = 1;
       expect(tabs.selected).to.equal(tabsheet.selected);
     });
+
+    it('should not propagate valued to a detached tabs', async () => {
+      tabs.remove();
+      await nextFrame();
+      tabsheet.selected = 1;
+      expect(tabs.selected).not.to.equal(tabsheet.selected);
+    });
   });
 
   describe('panels', () => {

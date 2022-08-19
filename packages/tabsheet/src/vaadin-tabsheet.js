@@ -10,6 +10,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
+import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import { Tabs } from '@vaadin/tabs/src/vaadin-tabs.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -47,8 +48,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes ControllerMixin
+ * @mises DelegateStateMixin
  */
-class TabSheet extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -150,6 +152,11 @@ class TabSheet extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement
     };
   }
 
+  /** @override */
+  static get delegateProps() {
+    return ['orientation', 'selected'];
+  }
+
   /** @protected */
   ready() {
     super.ready();
@@ -176,12 +183,14 @@ class TabSheet extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement
           tabs.addEventListener('items-changed', tabsItemsChangedListener);
           tabs.addEventListener('selected-changed', tabsSelectedChangedListener);
           this.host.__tabs = tabs;
+          this.host.stateTarget = tabs;
         }
 
         teardownNode(tabs) {
           tabs.removeEventListener('items-changed', tabsItemsChangedListener);
           tabs.removeEventListener('selected-changed', tabsSelectedChangedListener);
           this.host._setItems([]);
+          this.host.stateTarget = undefined;
         }
       })(this),
     );
@@ -196,11 +205,7 @@ class TabSheet extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement
   }
 
   static get observers() {
-    return [
-      '__itemsOrPanelsChanged(items, __panels)',
-      '__selectedTabItemChanged(selected, items, __panels)',
-      '__propagateTabsProperties(__tabs, orientation, selected)',
-    ];
+    return ['__itemsOrPanelsChanged(items, __panels)', '__selectedTabItemChanged(selected, items, __panels)'];
   }
 
   /**
@@ -240,17 +245,6 @@ class TabSheet extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement
     panels.forEach((panel) => {
       panel.hidden = panel.getAttribute('tab') !== selectedTabId;
     });
-  }
-
-  /**
-   * An observer which propagates property value changes to the slotted <vaadin-tabs>.
-   * @private
-   */
-  __propagateTabsProperties(tabs, orientation, selected) {
-    if (tabs) {
-      tabs.orientation = orientation;
-      tabs.selected = selected;
-    }
   }
 
   /**

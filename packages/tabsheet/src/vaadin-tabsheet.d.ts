@@ -6,6 +6,7 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
 import type { Tab } from '@vaadin/tabs/src/vaadin-tab.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -59,7 +60,7 @@ export interface TabSheetEventMap extends HTMLElementEventMap, TabSheetCustomEve
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} selected-changed - Fired when the `selected` property changes.
  */
-declare class TabSheet extends ControllerMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+declare class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableMixin(PolymerElement)))) {
   /**
    * The index of the selected tab.
    */
