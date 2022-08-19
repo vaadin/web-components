@@ -12,6 +12,8 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
 declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   /**
    * The id of the element used as a tooltip trigger.
+   * The element should be in the DOM by the time when
+   * the attribute is set, otherwise a warning is shown.
    */
   for: string | undefined;
 

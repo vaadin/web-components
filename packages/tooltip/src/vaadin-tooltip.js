@@ -43,6 +43,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     return {
       /**
        * The id of the element used as a tooltip trigger.
+       * The element should be in the DOM by the time when
+       * the attribute is set, otherwise a warning is shown.
        */
       for: {
         type: String,
