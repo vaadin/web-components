@@ -99,7 +99,7 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
           box-shadow: inset 0 0 0 2px var(--vaadin-avatar-user-color);
         }
       </style>
-      <img hidden$="[[!__imgVisible]]" src$="[[img]]" aria-hidden="true" on-error="__onImageLoadError" />
+      <img hidden$="[[!__imgVisible]]" src$="[[img]]" aria-hidden="true" on-error="__onImageLoadError" referrerpolicy="no-referrer" />
       <svg
         part="icon"
         hidden$="[[!__iconVisible]]"
