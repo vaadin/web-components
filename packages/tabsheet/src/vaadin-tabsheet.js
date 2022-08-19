@@ -109,7 +109,6 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
         reflectToAttribute: true,
         value: 'horizontal',
         type: String,
-        observer: '__orientationChanged',
       },
 
       /**
@@ -160,8 +159,6 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
   /** @protected */
   ready() {
     super.ready();
-
-    this.role = 'tablist';
 
     const tabsItemsChangedListener = () => this._setItems(this.__tabs.items);
 
@@ -245,18 +242,6 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
     panels.forEach((panel) => {
       panel.hidden = panel.getAttribute('tab') !== selectedTabId;
     });
-  }
-
-  /**
-   * An observer which reflects the orientation property to the host as aria-orientation.
-   * @private
-   */
-  __orientationChanged(orientation) {
-    if (orientation) {
-      this.setAttribute('aria-orientation', orientation);
-    } else {
-      this.removeAttribute('aria-orientation');
-    }
   }
 }
 

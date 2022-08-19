@@ -3,9 +3,7 @@ export const snapshots = {};
 
 snapshots["vaadin-tabsheet host default"] = 
 `<vaadin-tabsheet
-  aria-orientation="horizontal"
   orientation="horizontal"
-  role="tablist"
   selected="0"
 >
   <div slot="prefix">
