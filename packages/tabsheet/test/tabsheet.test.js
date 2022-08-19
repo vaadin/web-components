@@ -174,5 +174,20 @@ describe('tabsheet', () => {
       const panelId = panel.id;
       expect(tab.getAttribute('aria-controls')).to.equal(panelId);
     });
+
+    it('should not overwrite the id of a dynamically added panel', async () => {
+      // Create a new tab and panel
+      const tab = document.createElement('vaadin-tab');
+      const panel = document.createElement('div');
+      tab.id = 'tab-4';
+      panel.setAttribute('tab', 'tab-4');
+      panel.id = 'custom-id';
+      tabs.appendChild(tab);
+      tabsheet.appendChild(panel);
+
+      await nextFrame();
+
+      expect(panel.id).to.equal('custom-id');
+    });
   });
 });
