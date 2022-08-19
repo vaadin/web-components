@@ -167,30 +167,29 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
     };
 
     // Observe the tabs slot for a <vaadin-tabs> element.
-    this.addController(
-      new (class extends SlotController {
-        constructor(host) {
-          super(host, 'tabs');
-        }
+    this._tabsSlotController = new (class extends SlotController {
+      constructor(host) {
+        super(host, 'tabs');
+      }
 
-        initCustomNode(tabs) {
-          if (!(tabs instanceof Tabs)) {
-            throw Error('The "tabs" slot of a <vaadin-tabsheet> must only contain a <vaadin-tabs> element!');
-          }
-          tabs.addEventListener('items-changed', tabsItemsChangedListener);
-          tabs.addEventListener('selected-changed', tabsSelectedChangedListener);
-          this.host.__tabs = tabs;
-          this.host.stateTarget = tabs;
+      initCustomNode(tabs) {
+        if (!(tabs instanceof Tabs)) {
+          throw Error('The "tabs" slot of a <vaadin-tabsheet> must only contain a <vaadin-tabs> element!');
         }
+        tabs.addEventListener('items-changed', tabsItemsChangedListener);
+        tabs.addEventListener('selected-changed', tabsSelectedChangedListener);
+        this.host.__tabs = tabs;
+        this.host.stateTarget = tabs;
+      }
 
-        teardownNode(tabs) {
-          tabs.removeEventListener('items-changed', tabsItemsChangedListener);
-          tabs.removeEventListener('selected-changed', tabsSelectedChangedListener);
-          this.host._setItems([]);
-          this.host.stateTarget = undefined;
-        }
-      })(this),
-    );
+      teardownNode(tabs) {
+        tabs.removeEventListener('items-changed', tabsItemsChangedListener);
+        tabs.removeEventListener('selected-changed', tabsSelectedChangedListener);
+        this.host._setItems([]);
+        this.host.stateTarget = undefined;
+      }
+    })(this);
+    this.addController(this._tabsSlotController);
 
     // Observe the panels slot for nodes. Set the assigned element nodes as the __panels array.
     const panelSlot = this.shadowRoot.querySelector('#panel-slot');
