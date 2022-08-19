@@ -6,7 +6,7 @@
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import type { Tab } from '@vaadin/tabs/src/vaadin-tab';
+import type { Tab } from '@vaadin/tabs/src/vaadin-tab.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export type TabSheetOrientation = 'horizontal' | 'vertical';
