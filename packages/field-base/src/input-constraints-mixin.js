@@ -70,7 +70,7 @@ export const InputConstraintsMixin = dedupingMixin(
       _createConstraintsObserver() {
         // This complex observer needs to be added dynamically instead of using `static get observers()`
         // to make it possible to tweak this behavior in classes that apply this mixin.
-        this._createMethodObserver(`_constraintsChanged(${this.constructor.constraints.join(', ')})`);
+        this._createMethodObserver(`_constraintsChanged(${this.constructor.constraints.join(', ')})`, true);
       }
 
       /**
@@ -79,18 +79,16 @@ export const InputConstraintsMixin = dedupingMixin(
        * @protected
        */
       _constraintsChanged(...constraints) {
-        // Validate the field on constraint change only if it has a value.
-        // The exception is the case when the field is invalid. In that case,
-        // let the method reset `invalid` when the last constraint is removed.
-        if (!this.invalid && !this._hasValue) {
-          return;
-        }
+        const hasConstraints = this._hasValidConstraints(constraints);
+        const isLastConstraintRemoved = this.__previousHasConstraints && !hasConstraints;
 
-        if (this._hasValidConstraints(constraints)) {
+        if ((this._hasValue || this.invalid) && hasConstraints) {
           this.validate();
-        } else {
+        } else if (isLastConstraintRemoved) {
           this._setInvalid(false);
         }
+
+        this.__previousHasConstraints = hasConstraints;
       }
 
       /**
