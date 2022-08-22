@@ -13,6 +13,13 @@ registerStyles(
       -webkit-tap-highlight-color: transparent;
     }
 
+    /* Needed to align the tabs nicely on the baseline */
+    :host(:not([orientation='vertical']))::before {
+      content: '\\2003';
+      width: 0;
+      display: inline-block;
+    }
+
     :host(:not([orientation='vertical'])) {
       box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
       position: relative;

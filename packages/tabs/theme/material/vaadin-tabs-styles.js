@@ -14,6 +14,13 @@ registerStyles(
       flex-shrink: 0;
     }
 
+    /* Needed to align the tabs nicely on the baseline */
+    :host(:not([orientation='vertical']))::before {
+      content: '\\2003';
+      width: 0;
+      display: inline-block;
+    }
+
     /* Hide scroll buttons when no needed, and on touch devices */
 
     :host(:not([overflow])) [part='forward-button'],
