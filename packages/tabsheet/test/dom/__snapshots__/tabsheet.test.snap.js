@@ -87,7 +87,7 @@ snapshots["vaadin-tabsheet shadow default"] =
   <slot name="suffix">
   </slot>
 </div>
-<div part="panels">
+<div part="content">
   <slot id="panel-slot">
   </slot>
 </div>

@@ -15,3 +15,5 @@ tabsheet.addEventListener('selected-changed', (event) => {
   assertType<TabSheetSelectedChangedEvent>(event);
   assertType<number>(event.detail.value);
 });
+
+assertType<string | null | undefined>(tabsheet.theme);
