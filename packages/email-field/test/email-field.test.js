@@ -72,30 +72,6 @@ describe('email-field', () => {
     });
   });
 
-  describe('invalid', () => {
-    let field;
-
-    beforeEach(() => {
-      field = fixtureSync('<vaadin-email-field invalid></vaadin-email-field>');
-    });
-
-    it('should not remove "invalid" state when ready', () => {
-      expect(field.invalid).to.be.true;
-    });
-  });
-
-  describe('invalid with value', () => {
-    let field;
-
-    beforeEach(() => {
-      field = fixtureSync('<vaadin-email-field invalid value="foo@example.com"></vaadin-email-field>');
-    });
-
-    it('should not remove "invalid" state when ready', () => {
-      expect(field.invalid).to.be.true;
-    });
-  });
-
   describe('initial validation', () => {
     let field, validateSpy;
 
