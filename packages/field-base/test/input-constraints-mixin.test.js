@@ -71,7 +71,7 @@ const runTests = (baseClass) => {
         expect(validateSpy.called).to.be.false;
       });
 
-      it('should not validate on removing a not last constraint when the field is valid', async () => {
+      it('should not validate on removing a non-final constraint when the field is valid', async () => {
         element.pattern = '\\d*';
         element.minlength = 2;
         await nextFrame();
@@ -82,7 +82,7 @@ const runTests = (baseClass) => {
         expect(validateSpy.called).to.be.false;
       });
 
-      it('should validate on removing a not last constraint when the field is invalid', async () => {
+      it('should validate on removing a non-final constraint when the field is invalid', async () => {
         element.required = true;
         element.pattern = '\\d*';
         await nextFrame();
@@ -173,7 +173,7 @@ const runTests = (baseClass) => {
         expect(element.invalid).to.be.false;
       });
 
-      it('should validate on removing a not last constraint', async () => {
+      it('should validate on removing a non-final constraint', async () => {
         element.required = true;
         element.minlength = 2;
         await nextFrame();
