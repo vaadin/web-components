@@ -65,10 +65,33 @@ const runTests = (baseClass) => {
         expect(validateSpy.called).to.be.false;
       });
 
-      it('should not validate when setting a constraint', async () => {
+      it('should not validate on setting a constraint', async () => {
         element.required = true;
         await nextFrame();
         expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate on removing a non-final constraint when the field is valid', async () => {
+        element.pattern = '\\d*';
+        element.minlength = 2;
+        await nextFrame();
+        expect(element.invalid).to.be.false;
+        validateSpy.resetHistory();
+        element.minlength = 2;
+        await nextFrame();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should validate on removing a non-final constraint when the field is invalid', async () => {
+        element.required = true;
+        element.pattern = '\\d*';
+        await nextFrame();
+        element.validate();
+        expect(element.invalid).to.be.true;
+        validateSpy.resetHistory();
+        element.required = false;
+        await nextFrame();
+        expect(validateSpy.calledOnce).to.be.true;
       });
     });
 
@@ -80,7 +103,7 @@ const runTests = (baseClass) => {
         input = element.querySelector('[slot=input]');
       });
 
-      it('should override explicitly set invalid when setting a constraint', async () => {
+      it('should override explicitly set invalid on setting a constraint', async () => {
         element.invalid = true;
         await nextFrame();
 
@@ -89,20 +112,20 @@ const runTests = (baseClass) => {
         expect(element.invalid).to.be.false;
       });
 
-      it('should call checkValidity on the input when setting a constraint', async () => {
+      it('should call checkValidity on the input on setting a constraint', async () => {
         const spy = sinon.spy(input, 'checkValidity');
         element.minlength = 2;
         await nextFrame();
         expect(spy.calledOnce).to.be.true;
       });
 
-      it('should validate when setting a boolean constraint', async () => {
+      it('should validate on setting a boolean constraint', async () => {
         element.required = true;
         await nextFrame();
         expect(validateSpy.calledOnce).to.be.true;
       });
 
-      it('should reset invalid when removing a boolean constraint', async () => {
+      it('should reset invalid on removing a boolean constraint', async () => {
         element.required = true;
         element.invalid = true;
         await nextFrame();
@@ -112,19 +135,19 @@ const runTests = (baseClass) => {
         expect(element.invalid).to.be.false;
       });
 
-      it('should validate when setting a number constraint', async () => {
+      it('should validate on setting a number constraint', async () => {
         element.minlength = 2;
         await nextFrame();
         expect(validateSpy.calledOnce).to.be.true;
       });
 
-      it('should validate when setting a number constraint to 0', async () => {
+      it('should validate on setting a number constraint to 0', async () => {
         element.minlength = 0;
         await nextFrame();
         expect(validateSpy.calledOnce).to.be.true;
       });
 
-      it('should reset invalid when removing a number constraint', async () => {
+      it('should reset invalid on removing a number constraint', async () => {
         element.minlength = 50;
         element.invalid = true;
         await nextFrame();
@@ -134,13 +157,13 @@ const runTests = (baseClass) => {
         expect(element.invalid).to.be.false;
       });
 
-      it('should validate when setting a string constraint', async () => {
+      it('should validate on setting a string constraint', async () => {
         element.pattern = '[-+\\d]';
         await nextFrame();
         expect(validateSpy.calledOnce).to.be.true;
       });
 
-      it('should reset invalid when removing a string constraint', async () => {
+      it('should reset invalid on removing a string constraint', async () => {
         element.pattern = '[-+\\d]';
         element.invalid = true;
         await nextFrame();
@@ -150,7 +173,7 @@ const runTests = (baseClass) => {
         expect(element.invalid).to.be.false;
       });
 
-      it('should validate when removing a constraint that is not the last one', async () => {
+      it('should validate on removing a non-final constraint', async () => {
         element.required = true;
         element.minlength = 2;
         await nextFrame();

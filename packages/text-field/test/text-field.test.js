@@ -309,16 +309,6 @@ describe('text-field', () => {
         textField.pattern = '';
         expect(textField.invalid).to.be.false;
       });
-
-      it('should update "invalid" state when a constraint is removed even while other constraints are still active', () => {
-        textField.required = true;
-        textField.pattern = '\\d*';
-        textField.validate();
-        expect(textField.invalid).to.be.true;
-
-        textField.required = false;
-        expect(textField.invalid).to.be.false;
-      });
     });
   });
 
