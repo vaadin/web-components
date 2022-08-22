@@ -129,6 +129,13 @@ describe('validation', () => {
       expect(field.invalid).to.be.false;
     });
 
+    it('should validate the field when invalid after maxlength is changed', () => {
+      field.invalid = true;
+      const spy = sinon.spy(field, 'validate');
+      field.maxlength = 2;
+      expect(spy.calledOnce).to.be.true;
+    });
+
     it.skip('should update "invalid" state when "maxlength" is removed', () => {
       field.maxlength = 3;
       field.value = 'foobar';
