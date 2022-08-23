@@ -27,25 +27,43 @@ describe('validation', () => {
       timePicker.remove();
     });
 
-    it('should not validate by default', async () => {
+    it('should not validate without value', async () => {
       document.body.appendChild(timePicker);
       await nextRender();
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should not validate when the field has an initial value', async () => {
-      timePicker.value = '12:00';
-      document.body.appendChild(timePicker);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
+    describe('with value', () => {
+      beforeEach(() => {
+        timePicker.value = '12:00';
+      });
 
-    it('should not validate when the field has an initial value and invalid', async () => {
-      timePicker.value = '12:00';
-      timePicker.invalid = true;
-      document.body.appendChild(timePicker);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
+      it('should not validate without constraints', async () => {
+        document.body.appendChild(timePicker);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate without constraints when the field has invalid', async () => {
+        timePicker.invalid = true;
+        document.body.appendChild(timePicker);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should validate when the field has min', async () => {
+        timePicker.min = '12:00';
+        document.body.appendChild(timePicker);
+        await nextRender();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
+
+      it('should validate when the field has max', async () => {
+        timePicker.max = '12:00';
+        document.body.appendChild(timePicker);
+        await nextRender();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
     });
   });
 

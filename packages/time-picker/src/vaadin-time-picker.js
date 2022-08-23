@@ -16,6 +16,9 @@ import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaa
 
 registerStyles('vaadin-time-picker', inputFieldShared, { moduleId: 'vaadin-time-picker-styles' });
 
+const MIN_ALLOWED_TIME = '00:00:00.000';
+const MAX_ALLOWED_TIME = '23:59:59.999';
+
 /**
  * `<vaadin-time-picker>` is a Web Component providing a time-selection field.
  *
@@ -166,7 +169,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
        */
       min: {
         type: String,
-        value: '00:00:00.000',
+        value: '',
       },
 
       /**
@@ -180,7 +183,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
        */
       max: {
         type: String,
-        value: '23:59:59.999',
+        value: '',
       },
 
       /**
@@ -298,6 +301,18 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
       /** @private */
       _inputContainer: Object,
+
+      /** @private */
+      __minTime: {
+        type: Object,
+        computed: '__computeMinTime(i18n, min)',
+      },
+
+      /** @private */
+      __maxTime: {
+        type: Object,
+        computed: '__computeMaxTime(i18n, max)',
+      },
     };
   }
 
@@ -485,10 +500,10 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
   /** @private */
   __updateDropdownItems(i8n, min, max, step) {
-    const minTimeObj = this.__validateTime(this.__parseISO(min));
+    const minTimeObj = this.__validateTime(this.__minTime);
     const minSec = this.__getSec(minTimeObj);
 
-    const maxTimeObj = this.__validateTime(this.__parseISO(max));
+    const maxTimeObj = this.__validateTime(this.__maxTime);
     const maxSec = this.__getSec(maxTimeObj);
 
     this.__adjustValue(minSec, maxSec, minTimeObj, maxTimeObj);
@@ -665,12 +680,9 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
    * @protected
    */
   _timeAllowed(time) {
-    const parsedMin = this.i18n.parseTime(this.min);
-    const parsedMax = this.i18n.parseTime(this.max);
-
     return (
-      (!this.__getMsec(parsedMin) || this.__getMsec(time) >= this.__getMsec(parsedMin)) &&
-      (!this.__getMsec(parsedMax) || this.__getMsec(time) <= this.__getMsec(parsedMax))
+      (!this.__getMsec(this.__minTime) || this.__getMsec(time) >= this.__getMsec(this.__minTime)) &&
+      (!this.__getMsec(this.__maxTime) || this.__getMsec(time) <= this.__getMsec(this.__maxTime))
     );
   }
 
@@ -685,6 +697,16 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
    * @protected
    */
   _onChange() {}
+
+  /** @private */
+  __computeMinTime(i18n, min) {
+    return i18n.parseTime(min || MIN_ALLOWED_TIME);
+  }
+
+  /** @private */
+  __computeMaxTime(i18n, max) {
+    return i18n.parseTime(max || MAX_ALLOWED_TIME);
+  }
 
   /**
    * Override method inherited from `InputMixin`.
