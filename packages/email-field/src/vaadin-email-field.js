@@ -49,6 +49,15 @@ export class EmailField extends TextField {
     return 'vaadin-email-field';
   }
 
+  static get properties() {
+    return {
+      pattern: {
+        type: String,
+        value: '^([a-zA-Z0-9_\\.\\-+])+@[a-zA-Z0-9-.]+\\.[a-zA-Z0-9-]{2,}$',
+      },
+    };
+  }
+
   constructor() {
     super();
     this._setType('email');
@@ -61,14 +70,6 @@ export class EmailField extends TextField {
     if (this.inputElement) {
       this.inputElement.autocapitalize = 'off';
     }
-  }
-
-  /** @protected */
-  _createConstraintsObserver() {
-    // NOTE: pattern needs to be set before constraints observer is initialized
-    this.pattern = this.pattern || '^([a-zA-Z0-9_\\.\\-+])+@[a-zA-Z0-9-.]+\\.[a-zA-Z0-9-]{2,}$';
-
-    super._createConstraintsObserver();
   }
 }
 
