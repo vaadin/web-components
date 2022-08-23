@@ -8,7 +8,7 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
-import { InputMixin } from '@vaadin/field-base/src/input-mixin.js';
+import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import { dateAllowed, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
 
@@ -17,7 +17,9 @@ import { dateAllowed, dateEquals, extractDateParts, getClosestDate } from './vaa
  * @param {function(new:HTMLElement)} subclass
  */
 export const DatePickerMixin = (subclass) =>
-  class VaadinDatePickerMixin extends ControllerMixin(DelegateFocusMixin(InputMixin(KeyboardMixin(subclass)))) {
+  class VaadinDatePickerMixin extends ControllerMixin(
+    DelegateFocusMixin(InputConstraintsMixin(KeyboardMixin(subclass))),
+  ) {
     static get properties() {
       return {
         /**
@@ -278,7 +280,6 @@ export const DatePickerMixin = (subclass) =>
          */
         _minDate: {
           type: Date,
-          observer: '__minDateChanged',
           computed: '__computeMinOrMaxDate(min)',
         },
 
@@ -289,7 +290,6 @@ export const DatePickerMixin = (subclass) =>
          */
         _maxDate: {
           type: Date,
-          observer: '__maxDateChanged',
           computed: '__computeMinOrMaxDate(max)',
         },
 
@@ -318,6 +318,10 @@ export const DatePickerMixin = (subclass) =>
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
         '_focusedDateChanged(_focusedDate, i18n.formatDate)',
       ];
+    }
+
+    static get constraints() {
+      return [...super.constraints, 'min', 'max'];
     }
 
     /**
@@ -756,20 +760,6 @@ export const DatePickerMixin = (subclass) =>
       }
 
       this._toggleHasValue(this._hasValue);
-    }
-
-    /** @private */
-    __minDateChanged() {
-      if (this.value) {
-        this.validate();
-      }
-    }
-
-    /** @private */
-    __maxDateChanged() {
-      if (this.value) {
-        this.validate();
-      }
     }
 
     /** @protected */

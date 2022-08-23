@@ -154,5 +154,6 @@ assertType<DisabledMixinClass>(datePickerLight);
 assertType<KeyboardMixinClass>(datePickerLight);
 assertType<DelegateFocusMixinClass>(datePickerLight);
 assertType<InputMixinClass>(datePickerLight);
+assertType<InputConstraintsMixinClass>(datePickerLight);
 assertType<ThemableMixinClass>(datePickerLight);
 assertType<DatePickerMixinClass>(datePickerLight);
