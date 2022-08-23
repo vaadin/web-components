@@ -21,16 +21,16 @@ const tabsheet = css`
     padding: var(--lumo-space-xs) var(--lumo-space-m) 0;
   }
 
-  ::slotted([slot='tabs']) {
-    align-self: stretch;
-  }
-
   :host(:not([orientation='vertical'])) [part='tabs-container'] {
     box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
   }
 
-  :host([orientation='vertical']) [part='tabs-container'] {
+  :host([orientation='vertical']:not([dir='rtl'])) [part='tabs-container'] {
     box-shadow: inset -1px 0 0 0 var(--lumo-contrast-10pct);
+  }
+
+  :host([orientation='vertical'][dir='rtl']) [part='tabs-container'] {
+    box-shadow: inset 1px 0 0 0 var(--lumo-contrast-10pct);
   }
 
   [part='content'] {
