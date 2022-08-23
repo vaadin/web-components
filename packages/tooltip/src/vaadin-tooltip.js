@@ -80,12 +80,12 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
     this._uniqueId = `vaadin-tooltip-${generateUniqueId()}`;
 
-    this.__boundOnFocusin = this.__onFocusin.bind(this);
-    this.__boundOnFocusout = this.__onFocusout.bind(this);
-    this.__boundOnMouseDown = this.__onMouseDown.bind(this);
-    this.__boundOnMouseEnter = this.__onMouseEnter.bind(this);
-    this.__boundOnMouseLeave = this.__onMouseLeave.bind(this);
-    this.__boundOnKeydown = this.__onKeyDown.bind(this);
+    this.__onFocusin = this.__onFocusin.bind(this);
+    this.__onFocusout = this.__onFocusout.bind(this);
+    this.__onMouseDown = this.__onMouseDown.bind(this);
+    this.__onMouseEnter = this.__onMouseEnter.bind(this);
+    this.__onMouseLeave = this.__onMouseLeave.bind(this);
+    this.__onKeyDown = this.__onKeyDown.bind(this);
   }
 
   /** @protected */
@@ -100,9 +100,9 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   /** @private */
   __autoOpenedChanged(opened, oldOpened) {
     if (opened) {
-      document.addEventListener('keydown', this.__boundOnKeydown, true);
+      document.addEventListener('keydown', this.__onKeyDown, true);
     } else if (oldOpened) {
-      document.removeEventListener('keydown', this.__boundOnKeydown, true);
+      document.removeEventListener('keydown', this.__onKeyDown, true);
     }
   }
 
@@ -122,21 +122,21 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   /** @private */
   __targetChanged(target, oldTarget) {
     if (oldTarget) {
-      oldTarget.removeEventListener('mouseenter', this.__boundOnMouseEnter);
-      oldTarget.removeEventListener('mouseleave', this.__boundOnMouseLeave);
-      oldTarget.removeEventListener('focusin', this.__boundOnFocusin);
-      oldTarget.removeEventListener('focusout', this.__boundOnFocusout);
-      oldTarget.removeEventListener('mousedown', this.__boundOnMouseDown);
+      oldTarget.removeEventListener('mouseenter', this.__onMouseEnter);
+      oldTarget.removeEventListener('mouseleave', this.__onMouseLeave);
+      oldTarget.removeEventListener('focusin', this.__onFocusin);
+      oldTarget.removeEventListener('focusout', this.__onFocusout);
+      oldTarget.removeEventListener('mousedown', this.__onMouseDown);
 
       removeValueFromAttribute(oldTarget, 'aria-describedby', this._uniqueId);
     }
 
     if (target) {
-      target.addEventListener('mouseenter', this.__boundOnMouseEnter);
-      target.addEventListener('mouseleave', this.__boundOnMouseLeave);
-      target.addEventListener('focusin', this.__boundOnFocusin);
-      target.addEventListener('focusout', this.__boundOnFocusout);
-      target.addEventListener('mousedown', this.__boundOnMouseDown);
+      target.addEventListener('mouseenter', this.__onMouseEnter);
+      target.addEventListener('mouseleave', this.__onMouseLeave);
+      target.addEventListener('focusin', this.__onFocusin);
+      target.addEventListener('focusout', this.__onFocusout);
+      target.addEventListener('mousedown', this.__onMouseDown);
 
       addValueToAttribute(target, 'aria-describedby', this._uniqueId);
     }
