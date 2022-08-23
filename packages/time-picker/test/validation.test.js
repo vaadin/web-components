@@ -83,6 +83,30 @@ describe('validation', () => {
       expect(timePicker.inputElement.hasAttribute('invalid')).to.be.true;
     });
 
+    it('should not validate on min change without value', () => {
+      timePicker.min = '12:00';
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on min change with value', () => {
+      timePicker.value = '12:00';
+      validateSpy.resetHistory();
+      timePicker.min = '12:00';
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should not validate on max change without value', () => {
+      timePicker.max = '12:00';
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on max change with value', () => {
+      timePicker.value = '12:00';
+      validateSpy.resetHistory();
+      timePicker.max = '12:00';
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
     it('should fire a validated event on validation success', () => {
       const validatedSpy = sinon.spy();
       timePicker.addEventListener('validated', validatedSpy);

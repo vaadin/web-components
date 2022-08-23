@@ -305,6 +305,10 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     return ['__updateDropdownItems(i18n.*, min, max, step)'];
   }
 
+  static get constraints() {
+    return [...super.constraints, 'min', 'max'];
+  }
+
   /**
    * Used by `InputControlMixin` as a reference to the clear button element.
    * @protected
