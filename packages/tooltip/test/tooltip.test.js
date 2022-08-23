@@ -11,6 +11,14 @@ import {
 import sinon from 'sinon';
 import '../vaadin-tooltip.js';
 
+function mouseenter(target) {
+  fire(target, 'mouseenter');
+}
+
+function mouseleave(target) {
+  fire(target, 'mouseleave');
+}
+
 describe('vaadin-tooltip', () => {
   let tooltip, overlay;
 
@@ -172,14 +180,6 @@ describe('vaadin-tooltip', () => {
   describe('auto open', () => {
     let target;
 
-    function mouseenter(target) {
-      fire(target, 'mouseenter');
-    }
-
-    function mouseleave(target) {
-      fire(target, 'mouseleave');
-    }
-
     beforeEach(() => {
       target = document.createElement('input');
       document.body.appendChild(target);
@@ -318,6 +318,59 @@ describe('vaadin-tooltip', () => {
       tooltip.target = null;
       focusout(target);
       expect(overlay.opened).to.be.true;
+    });
+  });
+
+  describe('manual', () => {
+    let target;
+
+    beforeEach(() => {
+      target = document.createElement('input');
+      document.body.appendChild(target);
+      tooltip.target = target;
+
+      tooltip.manual = true;
+    });
+
+    afterEach(() => {
+      document.body.removeChild(target);
+    });
+
+    it('should not open overlay on target keyboard focus', () => {
+      tabKeyDown(target);
+      target.focus();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not open overlay on target mouseenter', () => {
+      mouseenter(target);
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should open overlay when opened is set to true', () => {
+      tooltip.opened = true;
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close overlay on target focusout', () => {
+      tooltip.opened = true;
+      target.focus();
+      focusout(target);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close overlay on target mouseleave', () => {
+      tooltip.opened = true;
+      mouseenter(target);
+      mouseleave(target);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close overlay when opened is set to false', () => {
+      tooltip.opened = true;
+
+      tooltip.opened = false;
+      expect(overlay.opened).to.be.false;
     });
   });
 });

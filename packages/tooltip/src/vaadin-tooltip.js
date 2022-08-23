@@ -35,7 +35,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         role="tooltip"
         renderer="[[_renderer]]"
         theme$="[[_theme]]"
-        opened="[[_autoOpened]]"
+        opened="[[__computeOpened(manual, opened, _autoOpened)]]"
         position-target="[[target]]"
         modeless
       ></vaadin-tooltip-overlay>
@@ -63,6 +63,24 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       for: {
         type: String,
         observer: '__forChanged',
+      },
+
+      /**
+       * When true, the tooltip is controlled programmatically
+       * instead of reacting to focus and mouse events.
+       */
+      manual: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
+       * When true, the tooltip is opened programmatically.
+       * Only works if `manual` is set to `true`.
+       */
+      opened: {
+        type: Boolean,
+        value: false,
       },
 
       /**
@@ -140,6 +158,11 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     if (this._autoOpened) {
       this._autoOpened = false;
     }
+  }
+
+  /** @private */
+  __computeOpened(manual, opened, autoOpened) {
+    return manual ? opened : autoOpened;
   }
 
   /** @private */

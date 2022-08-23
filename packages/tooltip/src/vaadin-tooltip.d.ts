@@ -24,6 +24,18 @@ declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   for: string | undefined;
 
   /**
+   * When true, the tooltip is controlled programmatically
+   * instead of reacting to focus and mouse events.
+   */
+  manual: boolean;
+
+  /**
+   * When true, the tooltip is opened programmatically.
+   * Only works if `manual` is set to `true`.
+   */
+  opened: boolean;
+
+  /**
    * Reference to the element used as a tooltip trigger.
    * The target must be placed in the same shadow scope.
    * Defaults to an element referenced with `for`.

@@ -16,3 +16,5 @@ assertType<HTMLElement | undefined>(tooltip.target);
 assertType<string | null | undefined>(tooltip.text);
 assertType<Record<string, unknown>>(tooltip.context);
 assertType<(context: Record<string, unknown>) => string>(tooltip.textGenerator);
+assertType<boolean>(tooltip.manual);
+assertType<boolean>(tooltip.opened);
