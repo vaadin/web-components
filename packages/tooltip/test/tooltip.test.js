@@ -181,7 +181,7 @@ describe('vaadin-tooltip', () => {
     });
 
     it('should close overlay on target mousedown', () => {
-      fire(target, 'mouseenter');
+      mouseenter(target);
       mousedown(target);
       expect(overlay.opened).to.be.false;
     });
@@ -234,6 +234,50 @@ describe('vaadin-tooltip', () => {
       const spy = sinon.spy(event, 'stopImmediatePropagation');
       target.dispatchEvent(event);
       expect(spy.called).to.be.false;
+    });
+
+    it('should not open overlay on mouseenter when target is reset', () => {
+      mouseenter(target);
+      mouseleave(target);
+
+      tooltip.target = null;
+      mouseenter(target);
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not close overlay on mouseleave when target is reset', () => {
+      mouseenter(target);
+
+      tooltip.target = null;
+      mouseleave(target);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not open overlay on keyboard focus when target is reset', () => {
+      mouseenter(target);
+      mouseleave(target);
+
+      tooltip.target = null;
+      tabKeyDown(target);
+      target.focus();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not close overlay on mousedown when target is reset', () => {
+      mouseenter(target);
+
+      tooltip.target = null;
+      mousedown(target);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close overlay on focusout when target is reset', () => {
+      tabKeyDown(target);
+      target.focus();
+
+      tooltip.target = null;
+      focusout(target);
+      expect(overlay.opened).to.be.true;
     });
   });
 });
