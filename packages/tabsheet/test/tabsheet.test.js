@@ -18,9 +18,9 @@ describe('tabsheet', () => {
           <vaadin-tab id="tab-3">Tab 3</vaadin-tab>
         </vaadin-tabs>
 
-        <div tab="tab-1"></div>
-        <div tab="tab-2"></div>
-        <div tab="tab-3"></div>
+        <div tab="tab-1">Panel 1</div>
+        <div tab="tab-2">Panel 2</div>
+        <div tab="tab-3">Panel 3</div>
       </vaadin-tabsheet>
     `);
     tabs = tabsheet.querySelector('vaadin-tabs');
@@ -189,6 +189,35 @@ describe('tabsheet', () => {
       await nextFrame();
 
       expect(panel.id).to.equal('custom-id');
+    });
+  });
+
+  describe('loading', () => {
+    let newTab, newPanel;
+
+    beforeEach(async () => {
+      newTab = fixtureSync(`<vaadin-tab id="new-tab">New Tab</vaadin-tab>`);
+      tabs.appendChild(newTab);
+
+      newPanel = fixtureSync(`<div tab="new-tab">New Panel</div>`);
+      await nextFrame();
+    });
+
+    it('should not be in loading state initially', () => {
+      expect(tabsheet.hasAttribute('loading')).to.be.false;
+    });
+
+    it('should be in loading state after opening a tab with no panel', () => {
+      newTab.click();
+      expect(tabsheet.hasAttribute('loading')).to.be.true;
+      expect(tabsheet.getAttribute('loading')).to.equal('');
+    });
+
+    it('should exit loading state after the missing panel is added', async () => {
+      newTab.click();
+      tabsheet.appendChild(newPanel);
+      await nextFrame();
+      expect(tabsheet.hasAttribute('loading')).to.be.false;
     });
   });
 });

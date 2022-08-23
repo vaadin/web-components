@@ -31,6 +31,45 @@ const tabsheet = css`
     border: 1px solid var(--lumo-contrast-10pct);
     border-top: none;
   }
+
+  :host([loading]) [part='content']::before {
+    content: '';
+    box-sizing: border-box;
+    width: var(--lumo-icon-size-s);
+    height: var(--lumo-icon-size-s);
+    margin-left: calc(var(--lumo-icon-size-s) / -2);
+    margin-top: calc(var(--lumo-icon-size-s) / -2);
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    border: 2px solid transparent;
+    border-color: var(--lumo-primary-color-50pct) var(--lumo-primary-color-50pct) var(--lumo-primary-color)
+      var(--lumo-primary-color);
+    border-radius: calc(0.5 * var(--lumo-icon-size-s));
+    opacity: 0;
+    animation: 1s linear infinite lumo-combo-box-loader-rotate, 0.3s 0.1s lumo-combo-box-loader-fade-in both;
+    pointer-events: none;
+  }
+
+  @keyframes lumo-combo-box-loader-fade-in {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes lumo-combo-box-loader-rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 `;
 
 registerStyles('vaadin-tabsheet', tabsheet, { moduleId: 'lumo-tabsheet' });
