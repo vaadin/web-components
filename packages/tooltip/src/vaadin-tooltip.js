@@ -33,6 +33,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       <vaadin-tooltip-overlay
         id="[[_uniqueId]]"
         role="tooltip"
+        renderer="[[_renderer]]"
         theme$="[[_theme]]"
         opened="[[_autoOpened]]"
         position-target="[[target]]"
@@ -43,6 +44,17 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   static get properties() {
     return {
+      /**
+       * Object with properties passed to `textGenerator`
+       * function to be used for generating tooltip text.
+       */
+      context: {
+        type: Object,
+        value: () => {
+          return {};
+        },
+      },
+
       /**
        * The id of the element used as a tooltip trigger.
        * The element should be in the DOM by the time when
@@ -64,6 +76,24 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       },
 
       /**
+       * String used as a tooltip content.
+       */
+      text: {
+        type: String,
+        observer: '__textChanged',
+      },
+
+      /**
+       * Function used to generate the tooltip content.
+       * When provided, it overrides the `text` property.
+       * Use the `context` property to provide argument
+       * that can be passed to the generator function.
+       */
+      textGenerator: {
+        type: Object,
+      },
+
+      /**
        * Set to true when the overlay is opened using auto-added
        * event listeners: mouseenter and focusin (keyboard only).
        * @protected
@@ -72,13 +102,21 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         type: Boolean,
         observer: '__autoOpenedChanged',
       },
+
+      /** @protected */
+      _overlayElement: Object,
     };
+  }
+
+  static get observers() {
+    return ['__textGeneratorChanged(_overlayElement, textGenerator, context)'];
   }
 
   constructor() {
     super();
 
     this._uniqueId = `vaadin-tooltip-${generateUniqueId()}`;
+    this._renderer = this.__tooltipRenderer.bind(this);
 
     this.__onFocusin = this.__onFocusin.bind(this);
     this.__onFocusout = this.__onFocusout.bind(this);
@@ -89,12 +127,24 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @protected */
+  ready() {
+    super.ready();
+
+    this._overlayElement = this.shadowRoot.querySelector('vaadin-tooltip-overlay');
+  }
+
+  /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
 
     if (this._autoOpened) {
       this._autoOpened = false;
     }
+  }
+
+  /** @private */
+  __tooltipRenderer(root) {
+    root.textContent = typeof this.textGenerator === 'function' ? this.textGenerator(this.context) : this.text;
   }
 
   /** @private */
@@ -204,6 +254,25 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   /** @protected */
   _close() {
     this._autoOpened = false;
+  }
+
+  /** @private */
+  __textChanged(text, oldText) {
+    if (this._overlayElement && (text || oldText)) {
+      this._overlayElement.requestContentUpdate();
+    }
+  }
+
+  /** @private */
+  __textGeneratorChanged(overlayElement, textGenerator, context) {
+    if (overlayElement) {
+      if (textGenerator !== this.__oldTextGenerator || context !== this.__oldContext) {
+        overlayElement.requestContentUpdate();
+      }
+
+      this.__oldTextGenerator = textGenerator;
+      this.__oldContext = context;
+    }
   }
 }
 

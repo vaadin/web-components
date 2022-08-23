@@ -46,6 +46,46 @@ describe('vaadin-tooltip', () => {
     });
   });
 
+  describe('text', () => {
+    it('should use text property as overlay text content', () => {
+      tooltip.text = 'Foo';
+      expect(overlay.textContent.trim()).to.equal('Foo');
+    });
+
+    it('should clear overlay content when text is set to null', () => {
+      tooltip.text = 'Foo';
+      tooltip.text = null;
+      expect(overlay.textContent.trim()).to.equal('');
+    });
+  });
+
+  describe('textGenerator', () => {
+    it('should use textGenerator property to generate text content', () => {
+      tooltip.textGenerator = () => 'Foo';
+      expect(overlay.textContent.trim()).to.equal('Foo');
+    });
+
+    it('should override text property when textGenerator is set', () => {
+      tooltip.text = 'Foo';
+      tooltip.textGenerator = () => 'Bar';
+      expect(overlay.textContent.trim()).to.equal('Bar');
+    });
+
+    it('should use context property in generator when provided', () => {
+      tooltip.context = { text: 'Foo' };
+      tooltip.textGenerator = (context) => context.text;
+      expect(overlay.textContent.trim()).to.equal('Foo');
+    });
+
+    it('should update text content when context property changes', () => {
+      tooltip.context = { text: 'Foo' };
+      tooltip.textGenerator = (context) => context.text;
+
+      tooltip.context = { text: 'Bar' };
+      expect(overlay.textContent.trim()).to.equal('Bar');
+    });
+  });
+
   describe('target', () => {
     let target;
 
