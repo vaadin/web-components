@@ -36,6 +36,22 @@ describe('validation', () => {
       await nextRender();
       expect(validateSpy.called).to.be.false;
     });
+
+    it('should validate when the field has an initial value and minlength', async () => {
+      field.value = 'AA';
+      field.minlength = 2;
+      document.body.appendChild(field);
+      await nextRender();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate when the field has an initial value and maxlength', async () => {
+      field.value = 'AA';
+      field.maxlength = 2;
+      document.body.appendChild(field);
+      await nextRender();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
   });
 
   describe('basic', () => {
