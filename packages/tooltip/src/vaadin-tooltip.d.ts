@@ -11,6 +11,12 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  */
 declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   /**
+   * Object with properties passed to `textGenerator`
+   * function to be used for generating tooltip text.
+   */
+  context: Record<string, unknown>;
+
+  /**
    * The id of the element used as a tooltip trigger.
    * The element should be in the DOM by the time when
    * the attribute is set, otherwise a warning is shown.
@@ -23,6 +29,19 @@ declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
    * Defaults to an element referenced with `for`.
    */
   target: HTMLElement | undefined;
+
+  /**
+   * String used as a tooltip content.
+   */
+  text: string | null | undefined;
+
+  /**
+   * Function used to generate the tooltip content.
+   * When provided, it overrides the `text` property.
+   * Use the `context` property to provide argument
+   * that can be passed to the generator function.
+   */
+  textGenerator: (context: Record<string, unknown>) => string;
 }
 
 declare global {
