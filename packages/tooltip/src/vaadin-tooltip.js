@@ -36,6 +36,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         theme$="[[_theme]]"
         opened="[[_autoOpened]]"
         position-target="[[target]]"
+        no-vertical-overlap
         modeless
       ></vaadin-tooltip-overlay>
     `;
