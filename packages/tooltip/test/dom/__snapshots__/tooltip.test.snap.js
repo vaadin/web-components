@@ -5,6 +5,7 @@ snapshots["vaadin-tooltip default"] =
 `<vaadin-tooltip-overlay
   id="vaadin-tooltip-0"
   modeless=""
+  no-vertical-overlap=""
   role="tooltip"
 >
 </vaadin-tooltip-overlay>
