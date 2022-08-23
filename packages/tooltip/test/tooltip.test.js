@@ -181,13 +181,8 @@ describe('vaadin-tooltip', () => {
     let target;
 
     beforeEach(() => {
-      target = document.createElement('input');
-      document.body.appendChild(target);
+      target = fixtureSync('<input>');
       tooltip.target = target;
-    });
-
-    afterEach(() => {
-      document.body.removeChild(target);
     });
 
     it('should open overlay on target keyboard focus', () => {
@@ -325,15 +320,9 @@ describe('vaadin-tooltip', () => {
     let target;
 
     beforeEach(() => {
-      target = document.createElement('input');
-      document.body.appendChild(target);
+      target = fixtureSync('<input>');
       tooltip.target = target;
-
       tooltip.manual = true;
-    });
-
-    afterEach(() => {
-      document.body.removeChild(target);
     });
 
     it('should not open overlay on target keyboard focus', () => {
