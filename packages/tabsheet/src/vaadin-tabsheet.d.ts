@@ -53,7 +53,18 @@ export interface TabSheetEventMap extends HTMLElementEventMap, TabSheetCustomEve
  *
  * ### Styling
  *
- * TODO: Styling and theme variants to be implemented separately
+ * The following shadow DOM parts are exposed for styling:
+ *
+ * Part name | Description
+ * --------- | ---------------
+ * `tabs-container`    | The container for the slotted prefix, tabs and suffix
+ * `content`    | The container for the slotted panels
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute         | Description
+ * ------------------|-------------
+ * `orientation` | Tabs disposition, valid values are `horizontal` and `vertical`. | :host
  *
  * See [Styling Components](hhttps://vaadin.com/docs/latest/components/ds-resources/customization/styling-components) documentation.
  *
