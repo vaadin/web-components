@@ -86,7 +86,12 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
 
         ::slotted([slot='tabs']) {
           overflow: hidden;
-          flex-shrink: 1;
+          flex: 1;
+        }
+
+        ::slotted([slot='prefix']),
+        ::slotted([slot='suffix']) {
+          flex: none;
         }
 
         :host([orientation='horizontal']) [part='tabs-container'] {
