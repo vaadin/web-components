@@ -48,7 +48,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * Attribute         | Description
  * ------------------|-------------
- * `orientation` | Tabs disposition, valid values are `horizontal` and `vertical`. | :host
  *
  * See [Styling Components](hhttps://vaadin.com/docs/latest/components/ds-resources/customization/styling-components) documentation.
  *
@@ -72,15 +71,11 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
         :host {
           display: flex;
           height: 400px;
-        }
-
-        :host([orientation='horizontal']) {
           flex-direction: column;
         }
 
         [part='tabs-container'] {
           display: flex;
-          flex-direction: column;
           align-items: baseline;
         }
 
@@ -92,10 +87,6 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
         ::slotted([slot='prefix']),
         ::slotted([slot='suffix']) {
           flex: none;
-        }
-
-        :host([orientation='horizontal']) [part='tabs-container'] {
-          flex-direction: row;
         }
 
         [part='content'] {
@@ -122,16 +113,6 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
 
   static get properties() {
     return {
-      /**
-       * The tabsheet's orientation. Possible values are `horizontal|vertical`
-       * @type {!TabSheetOrientation}
-       */
-      orientation: {
-        reflectToAttribute: true,
-        value: 'horizontal',
-        type: String,
-      },
-
       /**
        * The list of `<vaadin-tab>`s from which a selection can be made.
        * It is populated from the elements passed inside the slotted
@@ -174,7 +155,7 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
 
   /** @override */
   static get delegateProps() {
-    return ['orientation', 'selected'];
+    return ['selected'];
   }
 
   /** @protected */

@@ -4,7 +4,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 
 const tabsheet = css`
   /* Needed to align the tabs nicely on the baseline */
-  :host(:not([orientation='vertical'])) ::slotted([slot='tabs'])::before {
+  ::slotted([slot='tabs'])::before {
     content: '\\2003';
     width: 0;
     display: inline-block;

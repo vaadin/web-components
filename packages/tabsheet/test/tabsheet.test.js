@@ -122,19 +122,13 @@ describe('tabsheet', () => {
   });
 
   describe('syncing properties', () => {
-    it('should propagate orientation value to tabs', () => {
-      expect(tabs.orientation).to.equal(tabsheet.orientation);
-      tabsheet.orientation = 'vertical';
-      expect(tabs.orientation).to.equal(tabsheet.orientation);
-    });
-
     it('should propagate selected value to tabs', () => {
       expect(tabs.selected).to.equal(tabsheet.selected);
       tabsheet.selected = 1;
       expect(tabs.selected).to.equal(tabsheet.selected);
     });
 
-    it('should not propagate valued to a detached tabs', async () => {
+    it('should not propagate value to a detached tabs', async () => {
       tabs.remove();
       await nextFrame();
       tabsheet.selected = 1;

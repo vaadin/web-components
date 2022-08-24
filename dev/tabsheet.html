@@ -61,11 +61,6 @@
         <vaadin-checkbox label="content-borders" value="content-borders"></vaadin-checkbox>
       </vaadin-checkbox-group>
 
-      <vaadin-radio-group label="Orientation" id="orientation-group" value="horizontal" theme="vertical">
-        <vaadin-radio-button label="horizontal" value="horizontal"></vaadin-radio-button>
-        <vaadin-radio-button label="vertical" value="vertical"></vaadin-radio-button>
-      </vaadin-radio-group>
-
       <vaadin-radio-group label="Direction" id="direction-group" value="ltr" theme="vertical">
         <vaadin-radio-button label="ltr" value="ltr"></vaadin-radio-button>
         <vaadin-radio-button label="rtl" value="rtl"></vaadin-radio-button>
@@ -76,10 +71,6 @@
 
         document.querySelector('#variant-group').addEventListener('value-changed', (e) => {
           tabsheet.setAttribute('theme', e.detail.value.join(' '));
-        });
-
-        document.querySelector('#orientation-group').addEventListener('value-changed', (e) => {
-          tabsheet.orientation = e.detail.value;
         });
 
         document.querySelector('#direction-group').addEventListener('value-changed', (e) => {

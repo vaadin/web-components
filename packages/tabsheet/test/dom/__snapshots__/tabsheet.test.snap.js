@@ -2,10 +2,7 @@
 export const snapshots = {};
 
 snapshots["vaadin-tabsheet host default"] = 
-`<vaadin-tabsheet
-  orientation="horizontal"
-  selected="0"
->
+`<vaadin-tabsheet selected="0">
   <div slot="prefix">
     Prefix
   </div>

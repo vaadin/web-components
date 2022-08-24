@@ -11,7 +11,7 @@ const tabsheet = css`
   }
 
   /* Needed to align the tabs nicely on the baseline */
-  :host(:not([orientation='vertical'])) ::slotted([slot='tabs'])::before {
+  ::slotted([slot='tabs'])::before {
     content: '\\2003';
     width: 0;
     display: inline-block;
@@ -19,18 +19,7 @@ const tabsheet = css`
 
   [part='tabs-container'] {
     padding: var(--lumo-space-xs) var(--lumo-space-m) 0;
-  }
-
-  :host(:not([orientation='vertical'])) [part='tabs-container'] {
     box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
-  }
-
-  :host([orientation='vertical']:not([dir='rtl'])) [part='tabs-container'] {
-    box-shadow: inset -1px 0 0 0 var(--lumo-contrast-10pct);
-  }
-
-  :host([orientation='vertical'][dir='rtl']) [part='tabs-container'] {
-    box-shadow: inset 1px 0 0 0 var(--lumo-contrast-10pct);
   }
 
   [part='content'] {
@@ -41,10 +30,6 @@ const tabsheet = css`
 
   :host([theme~='content-borders']) {
     border: 1px solid var(--lumo-contrast-20pct);
-  }
-
-  :host([orientation='vertical']) ::slotted([slot='tabs']) {
-    width: 100%;
   }
 `;
 

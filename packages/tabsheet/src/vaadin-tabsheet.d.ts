@@ -10,8 +10,6 @@ import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.
 import type { Tab } from '@vaadin/tabs/src/vaadin-tab.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export type TabSheetOrientation = 'horizontal' | 'vertical';
-
 /**
  * Fired when the `items` property changes.
  */
@@ -64,7 +62,6 @@ export interface TabSheetEventMap extends HTMLElementEventMap, TabSheetCustomEve
  *
  * Attribute         | Description
  * ------------------|-------------
- * `orientation` | Tabs disposition, valid values are `horizontal` and `vertical`. | :host
  *
  * See [Styling Components](hhttps://vaadin.com/docs/latest/components/ds-resources/customization/styling-components) documentation.
  *
@@ -76,11 +73,6 @@ declare class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(T
    * The index of the selected tab.
    */
   selected: number | null | undefined;
-
-  /**
-   * The tabsheet's orientation. Possible values are `horizontal|vertical`
-   */
-  orientation: TabSheetOrientation;
 
   /**
    * The list of `<vaadin-tab>`s from which a selection can be made.
