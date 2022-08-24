@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-overlay",
-  "version": "23.2.0-beta2",
+  "version": "23.2.0-beta3",
   "publishConfig": {
     "access": "public"
   },
@@ -35,18 +35,18 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "23.2.0-beta2",
-    "@vaadin/vaadin-lumo-styles": "23.2.0-beta2",
-    "@vaadin/vaadin-material-styles": "23.2.0-beta2",
-    "@vaadin/vaadin-themable-mixin": "23.2.0-beta2"
+    "@vaadin/component-base": "23.2.0-beta3",
+    "@vaadin/vaadin-lumo-styles": "23.2.0-beta3",
+    "@vaadin/vaadin-material-styles": "23.2.0-beta3",
+    "@vaadin/vaadin-themable-mixin": "23.2.0-beta3"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@polymer/iron-overlay-behavior": "^3.0.0",
-    "@vaadin/button": "23.2.0-beta2",
-    "@vaadin/radio-group": "23.2.0-beta2",
+    "@vaadin/button": "23.2.0-beta3",
+    "@vaadin/radio-group": "23.2.0-beta3",
     "@vaadin/testing-helpers": "^0.3.2",
-    "@vaadin/text-field": "23.2.0-beta2",
+    "@vaadin/text-field": "23.2.0-beta3",
     "lit": "^2.0.0",
     "sinon": "^13.0.2"
   }
