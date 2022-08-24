@@ -76,7 +76,7 @@ class TooltipOverlay extends PositionMixin(OverlayElement) {
       const overlayRect = this.$.overlay.getBoundingClientRect();
 
       const offset = targetRect.height / 2 - overlayRect.height / 2;
-      this.style.top = `${parseFloat(this.style.top) + offset}px`;
+      this.style.top = `${overlayRect.top + offset}px`;
     }
   }
 }
