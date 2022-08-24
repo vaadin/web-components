@@ -1,6 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
-import '../vaadin-tooltip.js';
+import '../src/vaadin-tooltip.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -18,9 +18,7 @@ describe('position', () => {
 
   beforeEach(() => {
     tooltip = fixtureSync('<vaadin-tooltip text="tooltip"></vaadin-tooltip>');
-    target = fixtureSync(`
-      <div style="display: flex; width: 100px; height: 100px; margin: 100px; outline: 1px solid red;"></div>
-    `);
+    target = fixtureSync('<div style="width: 100px; height: 100px; margin: 100px; outline: 1px solid red;"></div>');
     tooltip.target = target;
     overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
   });

@@ -15,63 +15,23 @@ describe('vaadin-tooltip', () => {
     await expect(tooltip).shadowDom.to.equalSnapshot();
   });
 
-  it('top-start', async () => {
-    tooltip.position = 'top-start';
-    await expect(tooltip).shadowDom.to.equalSnapshot();
-  });
-
-  it('top', async () => {
-    tooltip.position = 'top';
-    await expect(tooltip).shadowDom.to.equalSnapshot();
-  });
-
-  it('top-end', async () => {
-    tooltip.position = 'top-end';
-    await expect(tooltip).shadowDom.to.equalSnapshot();
-  });
-
-  it('bottom-start', async () => {
-    tooltip.position = 'bottom-start';
-    await expect(tooltip).shadowDom.to.equalSnapshot();
-  });
-
-  it('bottom', async () => {
-    tooltip.position = 'bottom';
-    await expect(tooltip).shadowDom.to.equalSnapshot();
-  });
-
-  it('bottom-end', async () => {
-    tooltip.position = 'bottom-end';
-    await expect(tooltip).shadowDom.to.equalSnapshot();
-  });
-
-  it('start-top', async () => {
-    tooltip.position = 'start-top';
-    await expect(tooltip).shadowDom.to.equalSnapshot();
-  });
-
-  it('start', async () => {
-    tooltip.position = 'start';
-    await expect(tooltip).shadowDom.to.equalSnapshot();
-  });
-
-  it('start-bottom', async () => {
-    tooltip.position = 'start-bottom';
-    await expect(tooltip).shadowDom.to.equalSnapshot();
-  });
-
-  it('end-top', async () => {
-    tooltip.position = 'end-top';
-    await expect(tooltip).shadowDom.to.equalSnapshot();
-  });
-
-  it('end', async () => {
-    tooltip.position = 'end';
-    await expect(tooltip).shadowDom.to.equalSnapshot();
-  });
-
-  it('end-bottom', async () => {
-    tooltip.position = 'end-bottom';
-    await expect(tooltip).shadowDom.to.equalSnapshot();
+  [
+    'top-start',
+    'top',
+    'top-end',
+    'bottom-start',
+    'bottom',
+    'bottom-end',
+    'start-top',
+    'start',
+    'start-bottom',
+    'end-top',
+    'end',
+    'end-bottom',
+  ].forEach((position) => {
+    it(position, async () => {
+      tooltip.position = position;
+      await expect(tooltip).shadowDom.to.equalSnapshot();
+    });
   });
 });
