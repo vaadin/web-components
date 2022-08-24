@@ -6,6 +6,20 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
+export type TooltipPosition =
+  | 'bottom-end'
+  | 'bottom-start'
+  | 'bottom'
+  | 'end-bottom'
+  | 'end-top'
+  | 'end'
+  | 'start-bottom'
+  | 'start-top'
+  | 'start'
+  | 'top-end'
+  | 'top-start'
+  | 'top';
+
 /**
  * `<vaadin-tooltip>` is a Web Component for creating tooltips.
  */
@@ -34,6 +48,14 @@ declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
    * Only works if `manual` is set to `true`.
    */
   opened: boolean;
+
+  /**
+   * Position of the tooltip with respect to its target.
+   * Supported values: `top-start`, `top`, `top-end`,
+   * `bottom-start`, `bottom`, `bottom-end`, `start-top`,
+   * `start`, `start-bottom`, `end-top`, `end`, `end-bottom`.
+   */
+  position: TooltipPosition;
 
   /**
    * Reference to the element used as a tooltip trigger.
