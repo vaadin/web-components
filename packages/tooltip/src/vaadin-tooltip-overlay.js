@@ -27,6 +27,58 @@ class TooltipOverlay extends PositionMixin(OverlayElement) {
 
     return memoizedTemplate;
   }
+
+  static get properties() {
+    return {
+      position: {
+        type: String,
+        reflectToAttribute: true,
+      },
+    };
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _updatePosition() {
+    super._updatePosition();
+
+    if (!this.positionTarget) {
+      return;
+    }
+
+    // Center the tooltip overlay horizontally
+    if (this.position === 'bottom' || this.position === 'top') {
+      const targetRect = this.positionTarget.getBoundingClientRect();
+      const overlayRect = this.$.overlay.getBoundingClientRect();
+
+      const offset = targetRect.width / 2 - overlayRect.width / 2;
+
+      if (this.style.left) {
+        const left = parseFloat(this.style.left) + offset;
+        if (left > 0) {
+          this.style.left = `${left}px`;
+        }
+      }
+
+      if (this.style.right) {
+        const right = parseFloat(this.style.right) + offset;
+        if (right > 0) {
+          this.style.right = `${right}px`;
+        }
+      }
+    }
+
+    // Center the tooltip overlay vertically
+    if (this.position === 'start' || this.position === 'end') {
+      const targetRect = this.positionTarget.getBoundingClientRect();
+      const overlayRect = this.$.overlay.getBoundingClientRect();
+
+      const offset = targetRect.height / 2 - overlayRect.height / 2;
+      this.style.top = `${parseFloat(this.style.top) + offset}px`;
+    }
+  }
 }
 
 customElements.define(TooltipOverlay.is, TooltipOverlay);

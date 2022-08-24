@@ -37,7 +37,11 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         theme$="[[_theme]]"
         opened="[[__computeOpened(manual, opened, _autoOpened)]]"
         position-target="[[target]]"
-        no-vertical-overlap
+        position="[[position]]"
+        no-horizontal-overlap$="[[__computeNoHorizontalOverlap(position)]]"
+        no-vertical-overlap$="[[__computeNoVerticalOverlap(position)]]"
+        horizontal-align="[[__computeHorizontalAlign(position)]]"
+        vertical-align="[[__computeVerticalAlign(position)]]"
         modeless
       ></vaadin-tooltip-overlay>
     `;
@@ -82,6 +86,17 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       opened: {
         type: Boolean,
         value: false,
+      },
+
+      /**
+       * Position of the tooltip with respect to its target.
+       * Supported values: `top-start`, `top`, `top-end`,
+       * `bottom-start`, `bottom`, `bottom-end`, `start-top`,
+       * `start`, `start-bottom`, `end-top`, `end`, `end-bottom`.
+       */
+      position: {
+        type: String,
+        value: 'bottom',
       },
 
       /**
@@ -159,6 +174,26 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     if (this._autoOpened) {
       this._autoOpened = false;
     }
+  }
+
+  /** @private */
+  __computeHorizontalAlign(position) {
+    return ['top-end', 'bottom-end', 'start-top', 'start', 'start-bottom'].includes(position) ? 'end' : 'start';
+  }
+
+  /** @private */
+  __computeNoHorizontalOverlap(position) {
+    return ['start-top', 'start', 'start-bottom', 'end-top', 'end', 'end-bottom'].includes(position);
+  }
+
+  /** @private */
+  __computeNoVerticalOverlap(position) {
+    return ['top-start', 'top-end', 'top', 'bottom-start', 'bottom', 'bottom-end'].includes(position);
+  }
+
+  /** @private */
+  __computeVerticalAlign(position) {
+    return ['top-start', 'top-end', 'top', 'start-bottom', 'end-bottom'].includes(position) ? 'bottom' : 'top';
   }
 
   /** @private */
