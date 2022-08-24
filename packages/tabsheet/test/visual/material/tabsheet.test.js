@@ -34,7 +34,14 @@ describe('tabsheet', () => {
                 <vaadin-tab id="tab-3">Tab 3</vaadin-tab>
               </vaadin-tabs>
       
-              <div tab="tab-1">Panel 1</div>
+              <div tab="tab-1">
+                Odio quis mi. Aliquam massa pede, pharetra quis, tincidunt quis, fringilla at, mauris. Vestibulum a massa.
+                Vestibulum luctus odio ut quam. Maecenas congue convallis diam. Cras urna arcu, vestibulum vitae, blandit ut,
+                laoreet id, risus. Ut condimentum, arcu sit amet placerat blandit, augue nibh pretium nunc, in tempus sem dolor
+                non leo. Etiam fringilla mauris a odio. Nunc lorem diam, interdum eget, lacinia in, scelerisque sit amet, purus.
+                Nam ornare. Donec placerat dui ut orci. Phasellus quis lacus at nisl elementum cursus. Cras bibendum egestas
+                nulla. Phasellus pulvinar ullamcorper odio. Etiam ipsum. Proin tincidunt. Aliquam aliquet.
+              </div>
               <div tab="tab-2">Panel 2</div>
               <div tab="tab-3">Panel 3</div>
             </vaadin-tabsheet>
