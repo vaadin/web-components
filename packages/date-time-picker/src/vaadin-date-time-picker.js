@@ -924,6 +924,10 @@ class DateTimePicker extends FieldMixin(
       this.__datePicker.min = this.__formatDateISO(this.__minDateTime, this.__defaultDateMinMaxValue);
     }
     this.__updateTimePickerMinMax();
+
+    if (this.__datePicker && this.__timePicker && this.value) {
+      this.validate();
+    }
   }
 
   /** @private */
@@ -933,6 +937,10 @@ class DateTimePicker extends FieldMixin(
       this.__datePicker.max = this.__formatDateISO(this.__maxDateTime, this.__defaultDateMinMaxValue);
     }
     this.__updateTimePickerMinMax();
+
+    if (this.__datePicker && this.__timePicker && this.value) {
+      this.validate();
+    }
   }
 
   /** @private */

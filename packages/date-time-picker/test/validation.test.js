@@ -23,10 +23,11 @@ const fixtures = {
 
 ['default', 'slotted'].forEach((set) => {
   describe(`Validation (${set})`, () => {
-    let dateTimePicker;
+    let dateTimePicker, validateSpy;
 
     beforeEach(() => {
       dateTimePicker = fixtureSync(fixtures[set]);
+      validateSpy = sinon.spy(dateTimePicker, 'validate');
     });
 
     it('should not be required', () => {
@@ -50,6 +51,30 @@ const fixtures = {
       dateTimePicker.value = '2020-02-02T02:02:00';
       expect(dateTimePicker.validate()).to.equal(true);
       expect(dateTimePicker.invalid).to.equal(false);
+    });
+
+    it('should not validate on min change without value', () => {
+      dateTimePicker.min = '2020-02-02T02:00';
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on min change with value', () => {
+      dateTimePicker.value = '2020-02-02T02:00';
+      validateSpy.resetHistory();
+      dateTimePicker.min = '2020-02-02T02:00';
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should not validate on max change without value', () => {
+      dateTimePicker.max = '2020-02-02T02:00';
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should validate on max change with value', () => {
+      dateTimePicker.value = '2020-02-02T02:00';
+      validateSpy.resetHistory();
+      dateTimePicker.max = '2020-02-02T02:00';
+      expect(validateSpy.calledOnce).to.be.true;
     });
 
     it('should validate min/max times', () => {
