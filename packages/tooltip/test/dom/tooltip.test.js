@@ -14,4 +14,24 @@ describe('vaadin-tooltip', () => {
   it('default', async () => {
     await expect(tooltip).shadowDom.to.equalSnapshot();
   });
+
+  [
+    'top-start',
+    'top',
+    'top-end',
+    'bottom-start',
+    'bottom',
+    'bottom-end',
+    'start-top',
+    'start',
+    'start-bottom',
+    'end-top',
+    'end',
+    'end-bottom',
+  ].forEach((position) => {
+    it(position, async () => {
+      tooltip.position = position;
+      await expect(tooltip).shadowDom.to.equalSnapshot();
+    });
+  });
 });
