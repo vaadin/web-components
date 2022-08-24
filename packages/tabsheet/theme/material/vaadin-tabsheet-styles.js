@@ -12,10 +12,12 @@ const tabsheet = css`
 
   [part='tabs-container'] {
     border-bottom: 1px solid var(--material-divider-color);
+    font-family: var(--material-font-family);
   }
 
   [part='content'] {
     font-family: var(--material-font-family);
+    padding: 8px 24px 24px;
   }
 `;
 
