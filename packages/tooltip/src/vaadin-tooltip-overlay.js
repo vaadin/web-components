@@ -56,7 +56,7 @@ class TooltipOverlay extends PositionMixin(OverlayElement) {
       const offset = targetRect.width / 2 - overlayRect.width / 2;
 
       if (this.style.left) {
-        const left = parseFloat(this.style.left) + offset;
+        const left = overlayRect.left + offset;
         if (left > 0) {
           this.style.left = `${left}px`;
         }
