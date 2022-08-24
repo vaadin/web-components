@@ -18,18 +18,20 @@ const tabsheet = css`
   }
 
   [part='tabs-container'] {
-    padding: var(--lumo-space-xs) var(--lumo-space-m) 0;
     box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
+    font-family: var(--lumo-font-family);
   }
 
   [part='content'] {
     padding: var(--lumo-space-xs) var(--lumo-space-m) var(--lumo-space-s);
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
+    font-family: var(--lumo-font-family);
   }
 
-  :host([theme~='content-borders']) {
-    border: 1px solid var(--lumo-contrast-20pct);
+  :host([theme~='content-borders']) [part='content'] {
+    border: 1px solid var(--lumo-contrast-10pct);
+    border-top: none;
   }
 `;
 
