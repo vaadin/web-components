@@ -11,6 +11,17 @@ import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 
+const DEFAULT_DELAY = 0;
+
+let defaultDelay = DEFAULT_DELAY;
+let defaultHideDelay = DEFAULT_DELAY;
+
+const instances = new Set();
+
+let warmedUp = false;
+let warmUpTimeout = null;
+let cooldownTimeout = null;
+
 /**
  * `<vaadin-tooltip>` is a Web Component for creating tooltips.
  *
@@ -61,6 +72,16 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       },
 
       /**
+       * The delay in milliseconds before the tooltip
+       * is opened on hover, when not in manual mode.
+       * On focus, the tooltip is opened immediately.
+       */
+      delay: {
+        type: Number,
+        value: () => defaultDelay,
+      },
+
+      /**
        * The id of the element used as a tooltip trigger.
        * The element should be in the DOM by the time when
        * the attribute is set, otherwise a warning is shown.
@@ -68,6 +89,17 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       for: {
         type: String,
         observer: '__forChanged',
+      },
+
+      /**
+       * The delay in milliseconds before the tooltip
+       * is closed on losing hover, when not in manual mode.
+       * On blur, the tooltip is closed immediately.
+       * @attr {number} hide-delay
+       */
+      hideDelay: {
+        type: Number,
+        value: () => defaultHideDelay,
       },
 
       /**
@@ -146,6 +178,28 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     return ['__textGeneratorChanged(_overlayElement, textGenerator, context)'];
   }
 
+  /**
+   * Sets the default delay to be used by all tooltip instances.
+   * This method should be called before creating any tooltips.
+   * It does not change the default for existing tooltips.
+   *
+   * @param {number} delay
+   */
+  static setDefaultDelay(delay) {
+    defaultDelay = delay != null && delay >= 0 ? delay : DEFAULT_DELAY;
+  }
+
+  /**
+   * Sets the default hide delay to be used by all tooltip instances.
+   * This method should be called before creating any tooltips.
+   * It does not change the default for existing tooltips.
+   *
+   * @param {number} hideDelay
+   */
+  static setDefaultHideDelay(hideDelay) {
+    defaultHideDelay = hideDelay != null && hideDelay >= 0 ? hideDelay : DEFAULT_DELAY;
+  }
+
   constructor() {
     super();
 
@@ -172,7 +226,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     super.disconnectedCallback();
 
     if (this._autoOpened) {
-      this._autoOpened = false;
+      this._close(true);
     }
   }
 
@@ -261,7 +315,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__focusInside = true;
 
     if (!this.__hoverInside || !this._autoOpened) {
-      this._open();
+      this._open(true);
     }
   }
 
@@ -270,7 +324,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__focusInside = false;
 
     if (!this.__hoverInside) {
-      this._close();
+      this._close(true);
     }
   }
 
@@ -278,13 +332,13 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   __onKeyDown(event) {
     if (event.key === 'Escape') {
       event.stopImmediatePropagation();
-      this._close();
+      this._close(true);
     }
   }
 
   /** @private */
   __onMouseDown() {
-    this._close();
+    this._close(true);
   }
 
   /** @private */
@@ -305,14 +359,131 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     }
   }
 
-  /** @protected */
-  _open() {
-    this._autoOpened = true;
+  /**
+   * Schedule opening the tooltip.
+   * @param {boolean} immediate
+   * @protected
+   */
+  _open(immediate) {
+    if (!immediate && this.delay > 0 && !this.__closeTimeout) {
+      this.__warmupTooltip();
+    } else {
+      this.__showTooltip();
+    }
   }
 
-  /** @protected */
-  _close() {
-    this._autoOpened = false;
+  /**
+   * Schedule closing the tooltip.
+   * @param {boolean} immediate
+   * @protected
+   */
+  _close(immediate) {
+    if (!immediate && this.hideDelay > 0) {
+      this.__scheduleClose();
+    } else {
+      this.__abortClose();
+      this._autoOpened = false;
+    }
+
+    this.__abortWarmUp();
+
+    if (warmedUp) {
+      // Re-start cooldown timer on each tooltip closing.
+      this.__abortCooldown();
+      this.__scheduleCooldown();
+    }
+  }
+
+  /** @private */
+  __closeOtherTooltips() {
+    instances.forEach((tooltip) => {
+      if (tooltip !== this) {
+        tooltip._close(true);
+        instances.delete(tooltip);
+      }
+    });
+
+    instances.add(this);
+  }
+
+  /** @private */
+  __showTooltip() {
+    this.__abortClose();
+    this.__closeOtherTooltips();
+
+    this._autoOpened = true;
+    warmedUp = true;
+
+    // Abort previously scheduled timers.
+    this.__abortWarmUp();
+    this.__abortCooldown();
+  }
+
+  /** @private */
+  __warmupTooltip() {
+    this.__closeOtherTooltips();
+
+    if (!this._autoOpened) {
+      // First tooltip is opened, warm up.
+      if (!warmUpTimeout && !warmedUp) {
+        this.__scheduleWarmUp();
+      } else {
+        // Warmed up, show another tooltip.
+        this.__showTooltip();
+      }
+    }
+  }
+
+  /** @private */
+  __abortClose() {
+    if (this.__closeTimeout) {
+      clearTimeout(this.__closeTimeout);
+      this.__closeTimeout = null;
+    }
+  }
+
+  /** @private */
+  __abortCooldown() {
+    if (cooldownTimeout) {
+      clearTimeout(cooldownTimeout);
+      cooldownTimeout = null;
+    }
+  }
+
+  /** @private */
+  __abortWarmUp() {
+    if (warmUpTimeout) {
+      clearTimeout(warmUpTimeout);
+      warmUpTimeout = null;
+    }
+  }
+
+  /** @private */
+  __scheduleClose() {
+    if (this._autoOpened) {
+      this.__closeTimeout = setTimeout(() => {
+        this.__closeTimeout = null;
+        this._autoOpened = false;
+      }, this.hideDelay);
+    }
+  }
+
+  /** @private */
+  __scheduleCooldown() {
+    cooldownTimeout = setTimeout(() => {
+      instances.delete(this);
+      cooldownTimeout = null;
+      warmedUp = false;
+    }, this.hideDelay);
+  }
+
+  /** @private */
+  __scheduleWarmUp() {
+    warmUpTimeout = setTimeout(() => {
+      warmUpTimeout = null;
+      warmedUp = true;
+      this.__showTooltip();
+    }, this.delay);
   }
 
   /** @private */

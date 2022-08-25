@@ -1,23 +1,8 @@
 import { expect } from '@esm-bundle/chai';
-import {
-  escKeyDown,
-  fire,
-  fixtureSync,
-  focusout,
-  keyboardEventFor,
-  mousedown,
-  tabKeyDown,
-} from '@vaadin/testing-helpers';
+import { escKeyDown, fixtureSync, focusout, keyboardEventFor, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-tooltip.js';
-
-function mouseenter(target) {
-  fire(target, 'mouseenter');
-}
-
-function mouseleave(target) {
-  fire(target, 'mouseleave');
-}
+import { mouseenter, mouseleave } from './helpers.js';
 
 describe('vaadin-tooltip', () => {
   let tooltip, overlay;
