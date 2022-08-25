@@ -104,8 +104,7 @@ const tabsheet = css`
   }
 
   :host([loading][dir='rtl']) [part='content']::before {
-    animation: 3s linear infinite material-tabsheet-loader-progress-rtl,
-      0.3s 0.1s both material-tabsheet-loader-fade-in;
+    animation: 3s linear infinite material-tabsheet-loader-progress-rtl, 0.3s 0.1s both material-tabsheet-loader-fade-in;
   }
 `;
 
