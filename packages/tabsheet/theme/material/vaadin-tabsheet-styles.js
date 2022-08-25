@@ -44,10 +44,10 @@ const tabsheet = css`
         transparent 100%
       )
       0 0 / 400% 100% repeat-x;
-    animation: 3s linear infinite material-combo-box-loader-progress, 0.3s 0.1s both material-combo-box-loader-fade-in;
+    animation: 3s linear infinite material-tabsheet-loader-progress, 0.3s 0.1s both material-tabsheet-loader-fade-in;
   }
 
-  @keyframes material-combo-box-loader-fade-in {
+  @keyframes material-tabsheet-loader-fade-in {
     0% {
       opacity: 0;
     }
@@ -57,7 +57,7 @@ const tabsheet = css`
     }
   }
 
-  @keyframes material-combo-box-loader-progress {
+  @keyframes material-tabsheet-loader-progress {
     0% {
       background-position: 0 0;
       background-size: 300% 100%;
@@ -81,7 +81,7 @@ const tabsheet = css`
 
   /* RTL specific styles */
 
-  @keyframes material-combo-box-loader-progress-rtl {
+  @keyframes material-tabsheet-loader-progress-rtl {
     0% {
       background-position: 100% 0;
       background-size: 300% 100%;
@@ -104,8 +104,8 @@ const tabsheet = css`
   }
 
   :host([loading][dir='rtl']) [part='content']::before {
-    animation: 3s linear infinite material-combo-box-loader-progress-rtl,
-      0.3s 0.1s both material-combo-box-loader-fade-in;
+    animation: 3s linear infinite material-tabsheet-loader-progress-rtl,
+      0.3s 0.1s both material-tabsheet-loader-fade-in;
   }
 `;
 

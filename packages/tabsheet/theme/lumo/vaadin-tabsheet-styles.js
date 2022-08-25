@@ -47,11 +47,11 @@ const tabsheet = css`
       var(--lumo-primary-color);
     border-radius: calc(0.5 * var(--lumo-icon-size-s));
     opacity: 0;
-    animation: 1s linear infinite lumo-combo-box-loader-rotate, 0.3s 0.1s lumo-combo-box-loader-fade-in both;
+    animation: 1s linear infinite lumo-tabsheet-loader-rotate, 0.3s 0.1s lumo-tabsheet-loader-fade-in both;
     pointer-events: none;
   }
 
-  @keyframes lumo-combo-box-loader-fade-in {
+  @keyframes lumo-tabsheet-loader-fade-in {
     0% {
       opacity: 0;
     }
@@ -61,7 +61,7 @@ const tabsheet = css`
     }
   }
 
-  @keyframes lumo-combo-box-loader-rotate {
+  @keyframes lumo-tabsheet-loader-rotate {
     0% {
       transform: rotate(0deg);
     }
