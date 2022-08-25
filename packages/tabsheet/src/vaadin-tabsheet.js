@@ -44,11 +44,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `tabs-container`    | The container for the slotted prefix, tabs and suffix
  * `content`    | The container for the slotted panels
  *
- * The following state attributes are available for styling:
- *
- * Attribute         | Description
- * ------------------|-------------
- *
  * See [Styling Components](hhttps://vaadin.com/docs/latest/components/ds-resources/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
