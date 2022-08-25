@@ -9,6 +9,14 @@
 
     <script type="module">
       import '@vaadin/tabsheet';
+      import '@vaadin/button';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/radio-group';
+
+      // import '@vaadin/tabsheet/theme/material/vaadin-tabsheet.js';
+      // import '@vaadin/button/theme/material/vaadin-button.js';
+      // import '@vaadin/checkbox-group/theme/material/vaadin-checkbox-group.js';
+      // import '@vaadin/radio-group/theme/material/vaadin-radio-group.js';
 
       // Generate content for the panels
       const lorem = `Odio quis mi. Aliquam massa pede, pharetra quis, tincidunt quis, fringilla at, mauris. Vestibulum a massa.
@@ -19,7 +27,7 @@
         nulla. Phasellus pulvinar ullamcorper odio. Etiam ipsum. Proin tincidunt. Aliquam aliquet.`;
 
       document.querySelectorAll('[tab]').forEach((panelContent, i, array) => {
-        const dotIndex = lorem.indexOf('.', i * lorem.length / array.length);
+        const dotIndex = lorem.indexOf('.', (i * lorem.length) / array.length);
         const content = lorem.substring(dotIndex + 1) + lorem.substring(0, dotIndex + 1);
         panelContent.textContent = content.repeat(5);
       });
@@ -28,18 +36,47 @@
 
   <body>
     <vaadin-tabsheet>
-      <div slot="prefix">Prefix</div>
-      <div slot="suffix">Suffix</div>
+      <vaadin-checkbox slot="prefix" label="All tabs"></vaadin-checkbox>
+      <vaadin-button slot="suffix" label="Suffix" theme="tertiary">+ Add tab</vaadin-button>
 
       <vaadin-tabs slot="tabs">
         <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
         <vaadin-tab id="tab-2">Tab 2</vaadin-tab>
         <vaadin-tab id="tab-3">Tab 3</vaadin-tab>
+        <vaadin-tab id="tab-4">Tab 4</vaadin-tab>
+        <vaadin-tab id="tab-5">Tab 5</vaadin-tab>
+        <vaadin-tab id="tab-6">Tab 6</vaadin-tab>
       </vaadin-tabs>
 
       <div tab="tab-1"></div>
       <div tab="tab-2"></div>
       <div tab="tab-3"></div>
+      <div tab="tab-4"></div>
+      <div tab="tab-5"></div>
+      <div tab="tab-6"></div>
     </vaadin-tabsheet>
+
+    <section style="margin-top: 40px">
+      <vaadin-checkbox-group label="Tabsheet theme variants" id="variant-group" theme="vertical">
+        <vaadin-checkbox label="content-borders" value="content-borders"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+
+      <vaadin-radio-group label="Direction" id="direction-group" value="ltr" theme="vertical">
+        <vaadin-radio-button label="ltr" value="ltr"></vaadin-radio-button>
+        <vaadin-radio-button label="rtl" value="rtl"></vaadin-radio-button>
+      </vaadin-radio-group>
+
+      <script>
+        const tabsheet = document.querySelector('vaadin-tabsheet');
+
+        document.querySelector('#variant-group').addEventListener('value-changed', (e) => {
+          tabsheet.setAttribute('theme', e.detail.value.join(' '));
+        });
+
+        document.querySelector('#direction-group').addEventListener('value-changed', (e) => {
+          document.dir = e.detail.value;
+        });
+      </script>
+    </section>
   </body>
 </html>
