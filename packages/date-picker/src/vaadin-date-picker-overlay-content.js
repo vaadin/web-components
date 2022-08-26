@@ -56,10 +56,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
           display: flex;
         }
 
-        :host(:not([years-visible])) [part='years-toggle-button']::before {
-          transform: rotate(180deg);
-        }
-
         #scrollers {
           display: flex;
           height: 100%;

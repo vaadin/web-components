@@ -87,11 +87,6 @@ registerStyles(
       color: var(--material-secondary-text-color);
     }
 
-    [part='years-toggle-button']::before {
-      content: '';
-      display: none;
-    }
-
     [part='years-toggle-button']::after {
       content: var(--material-icons-play);
       display: inline-block;
