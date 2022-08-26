@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 
@@ -17,7 +16,6 @@ describe('properties', () => {
     beforeEach(() => {
       menu = fixtureSync(`
         <vaadin-context-menu>
-          <template></template>
           <section>
             <div id="target"></div>
           </section>
@@ -43,11 +41,7 @@ describe('properties', () => {
 
   describe('openOn', () => {
     beforeEach(() => {
-      menu = fixtureSync(`
-        <vaadin-context-menu>
-          <template></template>
-        </vaadin-context-menu>
-      `);
+      menu = fixtureSync('<vaadin-context-menu></vaadin-context-menu>');
     });
 
     it('should open on custom event', () => {
@@ -77,11 +71,7 @@ describe('properties', () => {
 
   describe('opened', () => {
     beforeEach(() => {
-      menu = fixtureSync(`
-        <vaadin-context-menu>
-          <template></template>
-        </vaadin-context-menu>
-      `);
+      menu = fixtureSync('<vaadin-context-menu></vaadin-context-menu>');
     });
 
     it('should be read-only', () => {
@@ -101,11 +91,7 @@ describe('properties', () => {
 
   describe('closeOn', () => {
     beforeEach(() => {
-      menu = fixtureSync(`
-        <vaadin-context-menu>
-          <template></template>
-        </vaadin-context-menu>
-      `);
+      menu = fixtureSync('<vaadin-context-menu></vaadin-context-menu>');
       menu._setOpened(true);
     });
 
@@ -132,9 +118,7 @@ describe('properties', () => {
     beforeEach(() => {
       wrapper = fixtureSync(`
         <div>
-          <vaadin-context-menu>
-            <template></template>
-          </vaadin-context-menu>
+          <vaadin-context-menu></vaadin-context-menu>
           <section>
             <div id="target"></div>
           </section>
@@ -177,11 +161,7 @@ describe('properties', () => {
 
   describe('theme attribute', () => {
     beforeEach(() => {
-      menu = fixtureSync(`
-        <vaadin-context-menu theme="foo">
-          <template></template>
-        </vaadin-context-menu>
-      `);
+      menu = fixtureSync('<vaadin-context-menu theme="foo"></vaadin-context-menu>');
     });
 
     it('should propagate theme attribute to overlay', () => {

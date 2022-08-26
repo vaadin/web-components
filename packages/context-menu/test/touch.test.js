@@ -10,7 +10,6 @@ import {
   touchstart,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -19,13 +18,18 @@ import { gestures } from '@vaadin/component-base/src/gestures.js';
 class MenuTouchWrapper extends PolymerElement {
   static get template() {
     return html`
-      <vaadin-context-menu selector="#target" id="menu">
+      <vaadin-context-menu selector="#target" id="menu" renderer="[[_renderer]]">
         <div id="target">Target</div>
-        <template>
-          <div>Menu Content</div>
-        </template>
       </vaadin-context-menu>
     `;
+  }
+
+  constructor() {
+    super();
+
+    this._renderer = (root) => {
+      root.innerHTML = '<div>Menu Content</div>';
+    };
   }
 }
 

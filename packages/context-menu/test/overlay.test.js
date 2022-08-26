@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync, isIOS, nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 
@@ -10,10 +9,12 @@ describe('overlay', () => {
   beforeEach(() => {
     menu = fixtureSync(`
       <vaadin-context-menu>
-        <template>OVERLAY CONTENT</template>
         <div id="target">FOOOO</div>
       </vaadin-context-menu>
     `);
+    menu.renderer = (root) => {
+      root.textContent = 'OVERLAY CONTENT';
+    };
     overlay = menu.$.overlay;
     content = overlay.$.overlay.children[0];
     // Make content have a fixed size

@@ -1,6 +1,5 @@
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../../../theme/lumo/vaadin-context-menu.js';
 import '../../not-animated-styles.js';
 import { openSubMenus } from '../common.js';
@@ -35,16 +34,17 @@ describe('context-menu', () => {
         beforeEach(() => {
           element = fixtureSync(`
             <vaadin-context-menu>
-              <template>
-                <vaadin-list-box>
-                  <vaadin-item>Item 1</vaadin-item>
-                  <vaadin-item>Item 2</vaadin-item>
-                </vaadin-list-box>
-              </template>
-
               <div style="padding: 10px">Target</div>
             </vaadin-context-menu>
           `);
+          element.renderer = (root) => {
+            root.innerHTML = `
+              <vaadin-list-box>
+                <vaadin-item>Item 1</vaadin-item>
+                <vaadin-item>Item 2</vaadin-item>
+              </vaadin-list-box>
+            `;
+          };
         });
 
         it('basic', async () => {
