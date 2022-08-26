@@ -5,9 +5,9 @@
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { isChrome } from '@vaadin/component-base/src/browser-utils.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -56,9 +56,10 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes FieldMixin
  * @mixes FocusMixin
  * @mixes ElementMixin
+ * @mixes KeyboardMixin
  * @mixes ThemableMixin
  */
-class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMixin(ElementMixin(PolymerElement))))) {
   static get is() {
     return 'vaadin-custom-field';
   }
@@ -221,8 +222,6 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
     this.__observer = new FlattenedNodesObserver(this.$.slot, () => {
       this.__setInputsFromSlot();
     });
-
-    this.__fixChromeFocus();
   }
 
   /** @protected */
@@ -273,28 +272,23 @@ class CustomField extends FieldMixin(FocusMixin(ThemableMixin(ElementMixin(Polym
     return true;
   }
 
-  /** @private */
-  __fixChromeFocus() {
-    this.addEventListener('keydown', (e) => {
-      if (e.keyCode === 9) {
-        // FIXME(yuriy): remove this workaround once this issue is fixed:
-        // https://bugs.chromium.org/p/chromium/issues/detail?id=1014868&can=2&num=100&q=slot%20shift%20tab
-        if (e.target.parentElement.localName === 'slot' && !e.defaultPrevented && isChrome) {
-          const slot = e.target.parentElement;
-          slot.setAttribute('tabindex', -1);
-          setTimeout(() => slot.removeAttribute('tabindex'));
-        }
-        if (
-          (this.inputs.indexOf(e.target) < this.inputs.length - 1 && !e.shiftKey) ||
-          (this.inputs.indexOf(e.target) > 0 && e.shiftKey)
-        ) {
-          this.dispatchEvent(new CustomEvent('internal-tab'));
-        } else {
-          // FIXME(yuriy): remove this workaround when value should not be updated before focusout
-          this.__setValue();
-        }
+  /**
+   * @param {KeyboardEvent} e
+   * @protected
+   * @override
+   */
+  _onKeyDown(e) {
+    if (e.key === 'Tab') {
+      if (
+        (this.inputs.indexOf(e.target) < this.inputs.length - 1 && !e.shiftKey) ||
+        (this.inputs.indexOf(e.target) > 0 && e.shiftKey)
+      ) {
+        this.dispatchEvent(new CustomEvent('internal-tab'));
+      } else {
+        // FIXME(yuriy): remove this workaround when value should not be updated before focusout
+        this.__setValue();
       }
-    });
+    }
   }
 
   /** @private */
