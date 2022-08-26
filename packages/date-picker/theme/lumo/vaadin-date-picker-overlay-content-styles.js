@@ -119,15 +119,8 @@ registerStyles(
 
     [part='toolbar'] {
       padding: var(--lumo-space-s);
-      box-shadow: 0 -1px 0 0 var(--lumo-contrast-10pct);
       border-bottom-left-radius: var(--lumo-border-radius-l);
       margin-right: 57px;
-    }
-
-    @supports (mask-image: linear-gradient(#000, #000)) or (-webkit-mask-image: linear-gradient(#000, #000)) {
-      [part='toolbar'] {
-        box-shadow: none;
-      }
     }
 
     /* Today and Cancel buttons */
