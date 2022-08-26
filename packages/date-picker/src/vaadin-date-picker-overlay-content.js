@@ -129,19 +129,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
           z-index: 2;
           flex-shrink: 0;
         }
-
-        [part~='overlay-header']:not([desktop]) {
-          padding-bottom: 40px;
-        }
-
-        [part~='years-toggle-button'] {
-          position: absolute;
-          top: auto;
-          right: 8px;
-          bottom: 0;
-          z-index: 1;
-          padding: 8px;
-        }
       </style>
 
       <div part="overlay-header" on-touchend="_preventDefault" desktop$="[[_desktopMode]]" aria-hidden="true">

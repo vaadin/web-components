@@ -36,11 +36,6 @@ registerStyles(
       box-shadow: var(--material-shadow-elevation-4dp);
     }
 
-    /* FIXME(platosha): fix the core styles and remove this override. */
-    [part='overlay-header']:not([desktop]) {
-      padding-bottom: 8px;
-    }
-
     [part='label'] {
       padding: 0 8px;
       flex: auto;
@@ -54,11 +49,6 @@ registerStyles(
       width: 24px;
       height: 24px;
       text-align: center;
-    }
-
-    [part='clear-button'],
-    [part='toggle-button'],
-    [part='years-toggle-button'] {
       padding: 8px;
       color: var(--material-secondary-text-color);
     }
@@ -78,7 +68,6 @@ registerStyles(
     }
 
     [part='years-toggle-button'] {
-      position: static;
       padding: 4px 8px;
       font-size: var(--material-body-font-size);
       font-weight: 500;
