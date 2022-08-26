@@ -181,10 +181,6 @@ registerStyles(
       color: var(--lumo-primary-contrast-color);
     }
 
-    [part='years-toggle-button']::before {
-      content: none;
-    }
-
     /* TODO magic number (same as used for iron-media-query in vaadin-date-picker-overlay-content) */
     @media screen and (max-width: 374px) {
       :host {
