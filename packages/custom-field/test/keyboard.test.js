@@ -1,28 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, isChrome, tabKeyDown } from '@vaadin/testing-helpers';
+import { fixtureSync, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-custom-field.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-
-class XWrapper extends PolymerElement {
-  static get template() {
-    return html`
-      <vaadin-custom-field id="field">
-        <slot name="input-1">
-          <input type="text" />
-        </slot>
-        <slot name="input-2">
-          <input type="text" />
-        </slot>
-        <slot name="input-3">
-          <input type="text" />
-        </slot>
-      </vaadin-custom-field>
-    `;
-  }
-}
-
-customElements.define('x-wrapper', XWrapper);
 
 describe('keyboard navigation', () => {
   let customField;
@@ -83,28 +62,6 @@ describe('keyboard navigation', () => {
         customField.inputs[0].value = 1;
         tabKeyDown(customField.inputs[0], ['shift']);
         expect(customField.value).to.equal('1\t\t\t');
-      });
-    });
-
-    describe('wrapping slots', () => {
-      let wrapper;
-
-      beforeEach(() => {
-        wrapper = fixtureSync(`<x-wrapper></x-wrapper>`);
-        customField = wrapper.$.field;
-      });
-
-      // Skip this test on any platform apart from Chrome
-      (isChrome ? it : it.skip)('should properly set tabindex on Shift Tab for wrapping slots', async () => {
-        for (let i = 2; i > -1; i--) {
-          const input = customField.inputs[i];
-          expect(input.parentElement.hasAttribute('tabindex')).to.be.false;
-          tabKeyDown(input, ['shift']);
-          expect(input.parentElement.getAttribute('tabindex')).to.equal('-1');
-        }
-
-        await aTimeout();
-        expect(customField.inputs.filter((input) => input.hasAttribute('tabindex')).length).to.equal(0);
       });
     });
   });
