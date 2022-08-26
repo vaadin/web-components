@@ -30,7 +30,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
           height: 100%;
           width: 100%;
           outline: none;
-          background: #fff;
         }
 
         [part='overlay-header'] {

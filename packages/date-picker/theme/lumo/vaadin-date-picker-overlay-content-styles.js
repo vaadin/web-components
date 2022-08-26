@@ -11,7 +11,6 @@ registerStyles(
   css`
     :host {
       position: relative;
-      background-color: transparent;
       /* Background for the year scroller, placed here as we are using a mask image on the actual years part */
       background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
       background-size: 57px 100%;
