@@ -532,21 +532,6 @@ describe('radio-group', () => {
       expect(group.invalid).to.be.true;
     });
 
-    it('should dispatch invalid-changed event when invalid changes', async () => {
-      const spy = sinon.spy();
-      group.addEventListener('invalid-changed', spy);
-      group.required = true;
-
-      // Focus on the first radio button.
-      await sendKeys({ press: 'Tab' });
-      // Move focus out of the group.
-      await sendKeys({ down: 'Shift' });
-      await sendKeys({ press: 'Tab' });
-      await sendKeys({ up: 'Shift' });
-
-      expect(spy.calledOnce).to.be.true;
-    });
-
     it('should fire a validated event on validation success', () => {
       const validatedSpy = sinon.spy();
       group.addEventListener('validated', validatedSpy);

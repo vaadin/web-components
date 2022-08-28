@@ -30,6 +30,19 @@ const runTests = (baseClass) => {
       await nextFrame();
       expect(element.hasAttribute('invalid')).to.be.true;
     });
+
+    it('should fire invalid-changed event on invalid property change', async () => {
+      const spy = sinon.spy();
+      element.addEventListener('invalid-changed', spy);
+      element.invalid = true;
+      await nextFrame();
+      expect(spy.calledOnce).to.be.true;
+
+      spy.resetHistory();
+      element.invalid = false;
+      await nextFrame();
+      expect(spy.calledOnce).to.be.true;
+    });
   });
 
   describe('checkValidity', () => {
