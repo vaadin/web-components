@@ -71,7 +71,6 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
 
         :host {
           display: flex;
-          height: auto;
           flex-direction: column;
         }
 
