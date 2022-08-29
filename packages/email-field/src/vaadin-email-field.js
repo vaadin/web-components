@@ -49,18 +49,10 @@ export class EmailField extends TextField {
     return 'vaadin-email-field';
   }
 
-  static get properties() {
-    return {
-      pattern: {
-        type: String,
-        value: '^([a-zA-Z0-9_\\.\\-+])+@[a-zA-Z0-9-.]+\\.[a-zA-Z0-9-]{2,}$',
-      },
-    };
-  }
-
   constructor() {
     super();
     this._setType('email');
+    this.pattern = '^([a-zA-Z0-9_\\.\\-+])+@[a-zA-Z0-9-.]+\\.[a-zA-Z0-9-]{2,}$';
   }
 
   /** @protected */
