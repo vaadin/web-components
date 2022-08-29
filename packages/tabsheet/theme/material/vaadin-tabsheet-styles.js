@@ -20,13 +20,13 @@ const tabsheet = css`
     padding: 8px 24px 24px;
   }
 
-  :host([loading]) [part='content']::before {
+  :host([loading]) [part='tabs-container']::before {
     content: '';
     display: block;
     height: 2px;
     position: absolute;
     z-index: 1;
-    top: 0;
+    bottom: 0;
     left: 0;
     right: 0;
     background: var(--material-background-color)
@@ -103,7 +103,7 @@ const tabsheet = css`
     }
   }
 
-  :host([loading][dir='rtl']) [part='content']::before {
+  :host([loading][dir='rtl']) [part='tabs-container']::before {
     animation: 3s linear infinite material-tabsheet-loader-progress-rtl, 0.3s 0.1s both material-tabsheet-loader-fade-in;
   }
 `;

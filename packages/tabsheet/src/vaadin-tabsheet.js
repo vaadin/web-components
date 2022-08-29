@@ -71,11 +71,12 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
 
         :host {
           display: flex;
-          height: 400px;
+          height: auto;
           flex-direction: column;
         }
 
         [part='tabs-container'] {
+          position: relative;
           display: flex;
           align-items: baseline;
         }
@@ -94,6 +95,7 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
           position: relative;
           overflow: auto;
           flex: 1;
+          box-sizing: border-box;
         }
       </style>
 
@@ -239,17 +241,29 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
       return;
     }
 
+    const content = this.shadowRoot.querySelector('[part="content"]');
+
     const selectedTab = items[selected];
     const selectedTabId = selectedTab ? selectedTab.id : '';
+    const selectedPanel = panels.find((panel) => panel.getAttribute('tab') === selectedTabId);
 
+    // Mark loading state if a selected panel is not found.
+    this.toggleAttribute('loading', !selectedPanel);
+
+    const hasOneVisiblePanel = panels.filter((panel) => !panel.hidden).length === 1;
+
+    if (selectedPanel) {
+      // A selected panel is found, remove the loading state fallback height.
+      content.style.minHeight = '';
+    } else if (hasOneVisiblePanel) {
+      // Make sure the empty content has a fallback height in loading state..
+      content.style.minHeight = `${content.offsetHeight}px`;
+    }
+
+    // Hide all panels and show only the selected panel.
     panels.forEach((panel) => {
-      panel.hidden = panel.getAttribute('tab') !== selectedTabId;
+      panel.hidden = panel !== selectedPanel;
     });
-
-    this.toggleAttribute(
-      'loading',
-      panels.every((panel) => panel.hidden),
-    );
   }
 }
 

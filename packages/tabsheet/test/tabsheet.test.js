@@ -219,5 +219,44 @@ describe('tabsheet', () => {
       await nextFrame();
       expect(tabsheet.hasAttribute('loading')).to.be.false;
     });
+
+    it('should not change height when entering loading state', () => {
+      const height = tabsheet.offsetHeight;
+      newTab.click();
+      expect(tabsheet.offsetHeight).to.equal(height);
+    });
+
+    it('should allow changing height when leaving loading state', async () => {
+      newTab.click();
+      const height = tabsheet.offsetHeight;
+      newPanel.textContent = '';
+      tabsheet.appendChild(newPanel);
+      await nextFrame();
+      expect(tabsheet.offsetHeight).to.be.below(height);
+    });
+
+    it('should not have height on loading state when there are no panels', async () => {
+      const height = tabsheet.offsetHeight;
+      // Remove all the panels
+      [...tabsheet.querySelectorAll('[tab]')].forEach((panel) => panel.remove());
+      await nextFrame();
+      expect(tabsheet.offsetHeight).to.be.below(height);
+    });
+
+    it('should not have height on loading state when there are too many non-hidden panels', async () => {
+      const height = tabsheet.offsetHeight;
+
+      // Remove all the panels
+      [...tabsheet.querySelectorAll('[tab]')].forEach((panel) => panel.remove());
+
+      await nextFrame();
+
+      // Add two panels
+      tabsheet.appendChild(fixtureSync(`<div tab="new-tab-1">New Panel 1</div>`));
+      tabsheet.appendChild(fixtureSync(`<div tab="new-tab-2">New Panel 2</div>`));
+
+      await nextFrame();
+      expect(tabsheet.offsetHeight).to.be.below(height);
+    });
   });
 });
