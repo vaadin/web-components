@@ -52,6 +52,7 @@ export class EmailField extends TextField {
   constructor() {
     super();
     this._setType('email');
+    this.pattern = '^([a-zA-Z0-9_\\.\\-+])+@[a-zA-Z0-9-.]+\\.[a-zA-Z0-9-]{2,}$';
   }
 
   /** @protected */
@@ -61,14 +62,6 @@ export class EmailField extends TextField {
     if (this.inputElement) {
       this.inputElement.autocapitalize = 'off';
     }
-  }
-
-  /** @protected */
-  _createConstraintsObserver() {
-    // NOTE: pattern needs to be set before constraints observer is initialized
-    this.pattern = this.pattern || '^([a-zA-Z0-9_\\.\\-+])+@[a-zA-Z0-9-.]+\\.[a-zA-Z0-9-]{2,}$';
-
-    super._createConstraintsObserver();
   }
 }
 
