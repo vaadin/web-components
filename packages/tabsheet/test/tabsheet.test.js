@@ -259,4 +259,31 @@ describe('tabsheet', () => {
       expect(tabsheet.offsetHeight).to.be.below(height);
     });
   });
+
+  describe('overflow attribute', () => {
+    let scrollTarget;
+
+    beforeEach(async () => {
+      tabsheet.style.maxHeight = `${tabsheet.offsetHeight - 10}px`;
+      scrollTarget = tabsheet.shadowRoot.querySelector('[part~="content"]');
+
+      await nextFrame();
+    });
+
+    it('should set overflow attribute to "bottom" when scroll is at the beginning', () => {
+      expect(tabsheet.getAttribute('overflow')).to.equal('bottom');
+    });
+
+    it('should set overflow attribute to "top bottom" when scroll is at the middle', async () => {
+      scrollTarget.scrollTop = 1;
+      await nextFrame();
+      expect(tabsheet.getAttribute('overflow')).to.equal('top bottom');
+    });
+
+    it('should set overflow attribute to "top" when scroll is at the end', async () => {
+      scrollTarget.scrollTop = scrollTarget.scrollHeight - scrollTarget.clientHeight;
+      await nextFrame();
+      expect(tabsheet.getAttribute('overflow')).to.equal('top');
+    });
+  });
 });

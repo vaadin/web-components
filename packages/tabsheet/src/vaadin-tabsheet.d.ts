@@ -63,6 +63,7 @@ export interface TabSheetEventMap extends HTMLElementEventMap, TabSheetCustomEve
  * Attribute         | Description
  * ------------------|-------------
  * `loading` | Set when a tab without associated content is selected | :host
+ * `overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.
  *
  * See [Styling Components](hhttps://vaadin.com/docs/latest/components/ds-resources/customization/styling-components) documentation.
  *
