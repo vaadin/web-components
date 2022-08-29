@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { InputConstraintsMixin } from '../src/input-constraints-mixin.js';
 import { InputController } from '../src/input-controller.js';
@@ -44,25 +44,63 @@ const runTests = (baseClass) => {
   );
 
   describe('validation', () => {
-    let element, input, validateSpy, changeSpy;
+    let element, input, validateSpy;
 
-    beforeEach(() => {
-      element = document.createElement(tag);
-      validateSpy = sinon.spy(element, 'validate');
-    });
+    describe('initial', () => {
+      beforeEach(() => {
+        element = document.createElement(tag);
+        validateSpy = sinon.spy(element, 'validate');
+      });
 
-    afterEach(() => {
-      element.remove();
+      afterEach(() => {
+        element.remove();
+      });
+
+      it('should not validate without value', async () => {
+        document.body.appendChild(element);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate without value when the field has invalid', async () => {
+        element.invalid = true;
+        document.body.appendChild(element);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      describe('with value', () => {
+        beforeEach(() => {
+          element.value = 'Value';
+        });
+
+        it('should not validate without constraints', async () => {
+          document.body.appendChild(element);
+          await nextRender();
+          expect(validateSpy.called).to.be.false;
+        });
+
+        it('should not validate without constraints when the field has invalid', async () => {
+          element.invalid = true;
+          document.body.appendChild(element);
+          await nextRender();
+          expect(validateSpy.called).to.be.false;
+        });
+
+        it('should validate when the field has a constraint', async () => {
+          element.minlength = 2;
+          document.body.appendChild(element);
+          await nextRender();
+          expect(validateSpy.calledOnce).to.be.true;
+        });
+      });
     });
 
     describe('without value', () => {
       beforeEach(async () => {
-        document.body.appendChild(element);
+        element = fixtureSync(`<${tag}></${tag}>`);
         await nextRender();
-      });
-
-      it('should not validate initially', () => {
-        expect(validateSpy.called).to.be.false;
+        validateSpy = sinon.spy(element, 'validate');
       });
 
       it('should not validate on setting a constraint', async () => {
@@ -95,21 +133,12 @@ const runTests = (baseClass) => {
       });
     });
 
-    describe('with an initial value', () => {
+    describe('with value', () => {
       beforeEach(async () => {
-        element.value = 'Value';
-        document.body.appendChild(element);
+        element = fixtureSync(`<${tag} value="Value"></${tag}>`);
         await nextRender();
+        validateSpy = sinon.spy(element, 'validate');
         input = element.querySelector('[slot=input]');
-      });
-
-      it('should override explicitly set invalid on setting a constraint', async () => {
-        element.invalid = true;
-        await nextFrame();
-
-        element.required = true;
-        await nextFrame();
-        expect(element.invalid).to.be.false;
       });
 
       it('should call checkValidity on the input on setting a constraint', async () => {
@@ -185,28 +214,25 @@ const runTests = (baseClass) => {
       });
     });
 
-    describe('with an initial value + constraint', () => {
+    describe('with invalid value + constraint', () => {
       beforeEach(async () => {
-        element.value = 'Value';
-        element.minlength = 2;
-        document.body.appendChild(element);
+        element = fixtureSync(`<${tag} value="Value" pattern="\\d+"></${tag}>`);
         await nextRender();
       });
 
-      // FIXME: This test is currently failing under Lit because the constraints observer
-      // doesn't have `stateTarget` as a dependency.
-      // This will be fixed by https://github.com/vaadin/web-components/pull/4413.
-      it.skip('should validate initially', () => {
-        expect(validateSpy.calledOnce).to.be.true;
+      it('should be invalid', () => {
+        expect(element.invalid).to.be.true;
       });
     });
 
     describe('change event', () => {
+      let changeSpy;
+
       beforeEach(async () => {
+        element = fixtureSync(`<${tag}></${tag}>`);
+        await nextRender();
         changeSpy = sinon.spy();
         element.addEventListener('change', changeSpy);
-        document.body.appendChild(element);
-        await nextRender();
         input = element.querySelector('[slot=input]');
       });
 

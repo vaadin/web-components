@@ -177,25 +177,50 @@ describe('validation', () => {
       field.remove();
     });
 
-    it('should not validate by default', async () => {
+    it('should not validate without value', async () => {
       document.body.appendChild(field);
       await nextRender();
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should not validate when the field has an initial value', async () => {
-      field.value = '2';
-      document.body.appendChild(field);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
+    describe('with value', () => {
+      beforeEach(() => {
+        field.value = '2';
+      });
 
-    it('should not validate when the field has an initial value and invalid', async () => {
-      field.value = '2';
-      field.invalid = true;
-      document.body.appendChild(field);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
+      it('should not validate without constraints', async () => {
+        document.body.appendChild(field);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate without constraints when the field has invalid', async () => {
+        field.invalid = true;
+        document.body.appendChild(field);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should validate when the field has min', async () => {
+        field.min = 2;
+        document.body.appendChild(field);
+        await nextRender();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
+
+      it('should validate when the field has max', async () => {
+        field.max = 2;
+        document.body.appendChild(field);
+        await nextRender();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
+
+      it('should validate when the field has step', async () => {
+        field.step = 2;
+        document.body.appendChild(field);
+        await nextRender();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
     });
   });
 
