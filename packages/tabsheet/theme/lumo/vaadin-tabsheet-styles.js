@@ -5,40 +5,38 @@ import { loader } from '@vaadin/vaadin-lumo-styles/mixins/loader.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const tabsheet = css`
-  :host(:not([theme~='no-border'])) {
-    border: 1px solid var(--lumo-contrast-20pct);
-  }
-
-  ::slotted([slot='tabs']) {
-    box-shadow: initial;
-  }
-
-  /* Needed to align the tabs nicely on the baseline */
-  ::slotted([slot='tabs'])::before {
-    content: '\\2003';
-    width: 0;
-    display: inline-block;
-  }
-
-  [part='tabs-container'] {
-    padding: 0 var(--lumo-space-m);
-    box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
-    font-family: var(--lumo-font-family);
-  }
-
-  [part='content'] {
-    padding: var(--lumo-space-xs) var(--lumo-space-m) var(--lumo-space-s);
+  :host {
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
     font-family: var(--lumo-font-family);
   }
 
-  :host([loading]) [part='loader'] {
-    margin-left: calc(var(--lumo-icon-size-s) / -2);
-    margin-top: calc(var(--lumo-icon-size-s) / -2);
-    left: 50%;
-    top: 50%;
-    position: absolute;
+  :host(:not([theme~='no-border'])) {
+    border: 1px solid var(--lumo-contrast-20pct);
+    border-radius: var(--lumo-border-radius-l);
+  }
+
+  [part='tabs-container'] {
+    box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
+    padding: var(--lumo-space-xs) var(--lumo-space-s);
+    gap: var(--lumo-space-s);
+  }
+
+  ::slotted([slot='tabs']) {
+    box-shadow: initial;
+    margin: calc(var(--lumo-space-xs) * -1) calc(var(--lumo-space-s) * -1);
+  }
+
+  [part='content'] {
+    padding: var(--lumo-space-s) var(--lumo-space-m);
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
+
+  :host([loading]) [part='content'] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 

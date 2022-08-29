@@ -4,33 +4,42 @@ import { loader } from '@vaadin/vaadin-material-styles/mixins/loader.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const tabsheet = css`
-  /* Needed to align the tabs nicely on the baseline */
-  ::slotted([slot='tabs'])::before {
-    content: '\\2003';
-    width: 0;
-    display: inline-block;
+  :host {
+    font-family: var(--material-font-family);
+  }
+
+  :host(:not([theme~='no-border'])) {
+    border-radius: 4px;
+    border: 1px solid var(--material-divider-color);
   }
 
   [part='tabs-container'] {
-    border-bottom: 1px solid var(--material-divider-color);
-    font-family: var(--material-font-family);
+    box-shadow: inset 0 -1px 0 0 var(--material-divider-color);
+    gap: 8px;
+    padding: 4px 8px;
+  }
+
+  ::slotted([slot='tabs']) {
+    margin: -4px -8px;
   }
 
   [part='content'] {
-    font-family: var(--material-font-family);
-    padding: 8px 24px 24px;
+    padding: 24px;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
   }
 
   :host([loading]) [part='content'] {
     overflow: visible;
   }
 
-  [part~='loader'] {
+  [part='loader'] {
     position: absolute;
     z-index: 1;
-    top: -3px;
+    top: 0;
     left: 0;
     right: 0;
+    transform: translate(0, -100%);
   }
 `;
 
