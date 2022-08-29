@@ -13,7 +13,7 @@ const loader = css`
     width: var(--lumo-icon-size-s);
     height: var(--lumo-icon-size-s);
     border: 2px solid transparent;
-    border-color: var(--lumo-primary-color-50pct) var(--lumo-primary-color-50pct) var(--lumo-primary-color)
+    border-color: var(--lumo-primary-color-10pct) var(--lumo-primary-color-10pct) var(--lumo-primary-color)
       var(--lumo-primary-color);
     border-radius: calc(0.5 * var(--lumo-icon-size-s));
     opacity: 0;
