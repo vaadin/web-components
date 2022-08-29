@@ -18,6 +18,9 @@
       // import '@vaadin/checkbox-group/theme/material/vaadin-checkbox-group.js';
       // import '@vaadin/radio-group/theme/material/vaadin-radio-group.js';
 
+      import '@vaadin/icon';
+      import '@vaadin/icons/vaadin-iconset.js';
+
       // Generate content for the panels
       const lorem = `Odio quis mi. Aliquam massa pede, pharetra quis, tincidunt quis, fringilla at, mauris. Vestibulum a massa.
         Vestibulum luctus odio ut quam. Maecenas congue convallis diam. Cras urna arcu, vestibulum vitae, blandit ut,
@@ -37,7 +40,10 @@
   <body>
     <vaadin-tabsheet>
       <vaadin-checkbox slot="prefix" label="All tabs"></vaadin-checkbox>
-      <vaadin-button slot="suffix" label="Suffix" theme="tertiary">+ Add tab</vaadin-button>
+      <vaadin-button slot="suffix" label="Suffix">
+        <vaadin-icon icon="vaadin:plus" slot="prefix"></vaadin-icon>
+        Add tab
+      </vaadin-button>
 
       <vaadin-tabs slot="tabs">
         <vaadin-tab id="tab-1">Tab 1</vaadin-tab>

@@ -79,17 +79,13 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
         [part='tabs-container'] {
           position: relative;
           display: flex;
-          align-items: baseline;
+          align-items: center;
         }
 
         ::slotted([slot='tabs']) {
-          overflow: hidden;
           flex: 1;
-        }
-
-        ::slotted([slot='prefix']),
-        ::slotted([slot='suffix']) {
-          flex: none;
+          align-self: stretch;
+          min-width: 8em;
         }
 
         [part='content'] {
