@@ -84,25 +84,44 @@ describe('email-field', () => {
       field.remove();
     });
 
-    it('should not validate by default', async () => {
+    it('should not validate without value', async () => {
       document.body.appendChild(field);
       await nextRender();
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should not validate when the field has an initial value', async () => {
-      field.value = 'foo@example.com';
-      document.body.appendChild(field);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
+    describe('with value', () => {
+      beforeEach(() => {
+        field.value = 'foo@example.com';
+      });
 
-    it('should not validate when the field has an initial value and invalid', async () => {
-      field.value = 'foo@example.com';
-      field.invalid = true;
-      document.body.appendChild(field);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
+      it('should validate by default', async () => {
+        document.body.appendChild(field);
+        await nextRender();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
+
+      it('should validate when using a custom pattern', async () => {
+        field.pattern = '.+@example.com';
+        document.body.appendChild(field);
+        await nextRender();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
+
+      it('should not validate when pattern is unset', async () => {
+        field.pattern = '';
+        document.body.appendChild(field);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate when pattern is unset and the field has invalid', async () => {
+        field.pattern = '';
+        field.invalid = true;
+        document.body.appendChild(field);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
     });
   });
 
