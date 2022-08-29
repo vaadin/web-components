@@ -16,25 +16,43 @@ describe('validation', () => {
       textArea.remove();
     });
 
-    it('should not validate by default', async () => {
+    it('should not validate without value', async () => {
       document.body.appendChild(textArea);
       await nextRender();
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should not validate when the field has an initial value', async () => {
-      textArea.value = 'Initial Value';
-      document.body.appendChild(textArea);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
+    describe('with value', () => {
+      beforeEach(() => {
+        textArea.value = 'Value';
+      });
 
-    it('should not validate when the field has an initial value and invalid', async () => {
-      textArea.value = 'Initial Value';
-      textArea.invalid = true;
-      document.body.appendChild(textArea);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
+      it('should not validate by default', async () => {
+        document.body.appendChild(textArea);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate when the field has invalid', async () => {
+        textArea.invalid = true;
+        document.body.appendChild(textArea);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should validate when the field has minlength', async () => {
+        textArea.minlength = 2;
+        document.body.appendChild(textArea);
+        await nextRender();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
+
+      it('should validate when the field has maxlength', async () => {
+        textArea.maxlength = 2;
+        document.body.appendChild(textArea);
+        await nextRender();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
     });
   });
 
