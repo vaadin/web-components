@@ -36,11 +36,11 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "23.2.0-beta1",
-    "@vaadin/tabs": "23.2.0-beta1",
-    "@vaadin/vaadin-lumo-styles": "23.2.0-beta1",
-    "@vaadin/vaadin-material-styles": "23.2.0-beta1",
-    "@vaadin/vaadin-themable-mixin": "23.2.0-beta1"
+    "@vaadin/component-base": "23.2.0-beta3",
+    "@vaadin/tabs": "23.2.0-beta3",
+    "@vaadin/vaadin-lumo-styles": "23.2.0-beta3",
+    "@vaadin/vaadin-material-styles": "23.2.0-beta3",
+    "@vaadin/vaadin-themable-mixin": "23.2.0-beta3"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
