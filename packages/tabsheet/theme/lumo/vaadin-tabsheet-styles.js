@@ -5,6 +5,10 @@ import { loader } from '@vaadin/vaadin-lumo-styles/mixins/loader.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const tabsheet = css`
+  :host(:not([theme~='no-border'])) {
+    border: 1px solid var(--lumo-contrast-20pct);
+  }
+
   ::slotted([slot='tabs']) {
     box-shadow: initial;
   }
@@ -17,6 +21,7 @@ const tabsheet = css`
   }
 
   [part='tabs-container'] {
+    padding: 0 var(--lumo-space-m);
     box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
     font-family: var(--lumo-font-family);
   }
@@ -26,11 +31,6 @@ const tabsheet = css`
     font-size: var(--lumo-font-size-m);
     line-height: var(--lumo-line-height-m);
     font-family: var(--lumo-font-family);
-  }
-
-  :host([theme~='content-borders']) [part='content'] {
-    border: 1px solid var(--lumo-contrast-10pct);
-    border-top: none;
   }
 
   :host([loading]) [part='loader'] {
