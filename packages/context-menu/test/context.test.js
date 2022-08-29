@@ -3,7 +3,6 @@ import { fire, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/item/vaadin-item.js';
 import '@vaadin/list-box/vaadin-list-box.js';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-context-menu.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -26,11 +25,6 @@ describe('context', () => {
   beforeEach(() => {
     menu = fixtureSync(`
       <vaadin-context-menu>
-        <template>
-          <vaadin-list-box id="menu">
-            <vaadin-item>The menu target: [[target.textContent]]</vaadin-item>
-          </vaadin-list-box>
-        </template>
         <div id="target">
           Foo
           <x-foo></x-foo>
@@ -38,26 +32,29 @@ describe('context', () => {
         <div id="another">Bar</div>
       </vaadin-context-menu>
     `);
+    menu.renderer = (root, _, context) => {
+      root.innerHTML = `
+        <vaadin-list-box id="menu">
+          <vaadin-item>The menu target: ${context.target.textContent}</vaadin-item>
+        </vaadin-list-box>
+      `;
+    };
     foo = document.querySelector('x-foo');
     target = document.querySelector('#target');
     another = document.querySelector('#another');
-  });
-
-  afterEach(() => {
-    menu.close();
   });
 
   it('should use target as default context', () => {
     fire(target, 'vaadin-contextmenu');
 
     expect(menu._context.target).to.eql(target);
-    expect(menu.$.overlay.content.textContent).to.contain(target.textContent);
+    expect(menu.$.overlay.textContent).to.contain(target.textContent);
 
     menu.close();
     fire(another, 'vaadin-contextmenu');
 
     expect(menu._context.target).to.eql(another);
-    expect(menu.$.overlay.content.textContent).to.contain(another.textContent);
+    expect(menu.$.overlay.textContent).to.contain(another.textContent);
   });
 
   it('should use details as context details', () => {
