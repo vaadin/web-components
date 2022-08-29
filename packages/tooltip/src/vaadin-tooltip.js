@@ -425,7 +425,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   __warmupTooltip() {
     if (!this._autoOpened) {
       // First tooltip is opened, warm up.
-      if (!warmUpTimeout && !warmedUp) {
+      if (!warmedUp) {
         this.__scheduleWarmUp();
       } else {
         // Warmed up, show another tooltip.
