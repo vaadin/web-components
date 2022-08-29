@@ -18,6 +18,14 @@ export class TooltipController extends SlotController {
     host.addEventListener('tooltip-target-changed', (e) => {
       this.setTarget(e.detail.target);
     });
+
+    host.addEventListener('tooltip-context-changed', (e) => {
+      this.setContext(e.detail.context);
+    });
+
+    host.addEventListener('tooltip-opened-changed', (e) => {
+      this.setOpened(e.detail.opened);
+    });
   }
 
   /**
@@ -29,6 +37,45 @@ export class TooltipController extends SlotController {
    */
   initCustomNode(tooltipNode) {
     tooltipNode.target = this.target;
+  }
+
+  /**
+   * Set a context object to be used by text generator.
+   * @param {object} context
+   */
+  setContext(context) {
+    this.context = context;
+
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode.context = context;
+    }
+  }
+
+  /**
+   * Toggle manual state on the slotted tooltip.
+   * @param {boolean} manual
+   */
+  setManual(manual) {
+    this.manual = manual;
+
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode.manual = manual;
+    }
+  }
+
+  /**
+   * Toggle opened state on the slotted tooltip.
+   * @param {boolean} opened
+   */
+  setOpened(opened) {
+    this.opened = opened;
+
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode.opened = opened;
+    }
   }
 
   /**
