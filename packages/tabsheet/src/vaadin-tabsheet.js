@@ -8,6 +8,7 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { OverflowController } from '@vaadin/component-base/src/overflow-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
@@ -49,6 +50,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Attribute         | Description
  * ------------------|-------------
  * `loading` | Set when a tab without associated content is selected | :host
+ * `overflow`   | Set to `top`, `bottom`, `start`, `end`, all of them, or none.
  *
  * See [Styling Components](hhttps://vaadin.com/docs/latest/components/ds-resources/customization/styling-components) documentation.
  *
@@ -171,6 +173,9 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
     const tabsSelectedChangedListener = () => {
       this.selected = this.__tabs.selected;
     };
+
+    this.__overflowController = new OverflowController(this, this.shadowRoot.querySelector('[part="content"]'));
+    this.addController(this.__overflowController);
 
     // Observe the tabs slot for a <vaadin-tabs> element.
     this._tabsSlotController = new (class extends SlotController {
