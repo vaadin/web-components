@@ -106,6 +106,7 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
       </div>
 
       <div part="content">
+        <div part="loader"></div>
         <slot id="panel-slot"></slot>
       </div>
     `;
