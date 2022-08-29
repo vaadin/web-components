@@ -16,25 +16,43 @@ describe('validation', () => {
       field.remove();
     });
 
-    it('should not validate by default', async () => {
+    it('should not validate without value', async () => {
       document.body.appendChild(field);
       await nextRender();
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should not validate when the field has an initial value', async () => {
-      field.value = 'Initial Value';
-      document.body.appendChild(field);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
+    describe('with value', () => {
+      beforeEach(() => {
+        field.value = 'Value';
+      });
 
-    it('should not validate when the field has an initial value and invalid', async () => {
-      field.value = 'Initial Value';
-      field.invalid = true;
-      document.body.appendChild(field);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
+      it('should not validate by default', async () => {
+        document.body.appendChild(field);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate when the field has invalid', async () => {
+        field.invalid = true;
+        document.body.appendChild(field);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should validate when the field has minlength', async () => {
+        field.minlength = 2;
+        document.body.appendChild(field);
+        await nextRender();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
+
+      it('should validate when the field has maxlength', async () => {
+        field.maxlength = 2;
+        document.body.appendChild(field);
+        await nextRender();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
     });
   });
 
