@@ -82,80 +82,163 @@ describe('timers', () => {
   });
 
   describe('setDefaultDelay', () => {
+    let tooltip, target;
+
+    beforeEach(() => {
+      target = fixtureSync('<div>Target</div>');
+    });
+
     afterEach(() => {
       Tooltip.setDefaultDelay(0);
     });
 
-    it('should set default delay for newly created tooltip', () => {
-      Tooltip.setDefaultDelay(10);
-      const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
-      expect(tooltip.delay).to.equal(10);
+    it('should change default delay for newly created tooltip', async () => {
+      Tooltip.setDefaultDelay(2);
+
+      tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      mouseenter(target);
+      await aTimeout(2);
+
+      expect(overlay.opened).to.be.true;
     });
 
-    it('should not change default delay for existing tooltip', () => {
-      const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
-      Tooltip.setDefaultDelay(10);
-      expect(tooltip.delay).to.equal(0);
+    it('should change default delay for existing tooltip', async () => {
+      tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      Tooltip.setDefaultDelay(2);
+
+      mouseenter(target);
+      await aTimeout(2);
+
+      expect(overlay.opened).to.be.true;
     });
 
     it('should reset delay when providing a negative number', () => {
       Tooltip.setDefaultDelay(10);
       Tooltip.setDefaultDelay(-1);
-      const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
-      expect(tooltip.delay).to.equal(0);
+
+      tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      mouseenter(target);
+
+      expect(overlay.opened).to.be.true;
     });
 
     it('should reset delay when providing null instead of number', () => {
       Tooltip.setDefaultDelay(10);
       Tooltip.setDefaultDelay(null);
+
       const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
-      expect(tooltip.delay).to.equal(0);
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      mouseenter(target);
+
+      expect(overlay.opened).to.be.true;
     });
 
     it('should reset delay when providing undefined instead of number', () => {
       Tooltip.setDefaultDelay(10);
       Tooltip.setDefaultDelay(undefined);
+
       const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
-      expect(tooltip.delay).to.equal(0);
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      mouseenter(target);
+
+      expect(overlay.opened).to.be.true;
     });
   });
 
   describe('setDefaultHideDelay', () => {
+    let tooltip, target;
+
+    beforeEach(() => {
+      target = fixtureSync('<div>Target</div>');
+    });
+
     afterEach(() => {
       Tooltip.setDefaultHideDelay(0);
     });
 
-    it('should set default hide delay for newly created tooltip', () => {
-      Tooltip.setDefaultHideDelay(10);
-      const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
-      expect(tooltip.hideDelay).to.equal(10);
+    it('should change default hide delay for newly created tooltip', async () => {
+      Tooltip.setDefaultHideDelay(2);
+
+      tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      mouseenter(target);
+
+      mouseleave(target);
+      await aTimeout(2);
+
+      expect(overlay.opened).to.be.false;
     });
 
-    it('should not change default hide delay for existing tooltip', () => {
-      const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
-      Tooltip.setDefaultHideDelay(10);
-      expect(tooltip.hideDelay).to.equal(0);
+    it('should change default hide delay for existing tooltip', async () => {
+      tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      Tooltip.setDefaultHideDelay(2);
+
+      mouseenter(target);
+
+      mouseleave(target);
+      await aTimeout(2);
+
+      expect(overlay.opened).to.be.false;
     });
 
     it('should reset hide delay when providing a negative number', () => {
       Tooltip.setDefaultHideDelay(10);
       Tooltip.setDefaultHideDelay(-1);
-      const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
-      expect(tooltip.hideDelay).to.equal(0);
+
+      tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      mouseenter(target);
+
+      mouseleave(target);
+      expect(overlay.opened).to.be.false;
     });
 
     it('should reset hide delay when providing null instead of number', () => {
       Tooltip.setDefaultHideDelay(10);
       Tooltip.setDefaultHideDelay(null);
-      const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
-      expect(tooltip.hideDelay).to.equal(0);
+
+      tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      mouseenter(target);
+
+      mouseleave(target);
+      expect(overlay.opened).to.be.false;
     });
 
     it('should reset hide delay when providing undefined instead of number', () => {
       Tooltip.setDefaultHideDelay(10);
       Tooltip.setDefaultHideDelay(undefined);
-      const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
-      expect(tooltip.hideDelay).to.equal(0);
+
+      tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      mouseenter(target);
+
+      mouseleave(target);
+      expect(overlay.opened).to.be.false;
     });
   });
 

@@ -25,16 +25,14 @@ export type TooltipPosition =
  */
 declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   /**
-   * Sets the default delay to be used by all tooltip instances.
-   * This method should be called before creating any tooltips.
-   * It does not change the default for existing tooltips.
+   * Sets the default delay to be used by all tooltip instances,
+   * except for those that have delay configured using property.
    */
   static setDefaultDelay(delay: number): void;
 
   /**
-   * Sets the default hide delay to be used by all tooltip instances.
-   * This method should be called before creating any tooltips.
-   * It does not change the default for existing tooltips.
+   * Sets the default hide delay to be used by all tooltip instances,
+   * except for those that have hide delay configured using property.
    */
   static setDefaultHideDelay(hideDelay: number): void;
 

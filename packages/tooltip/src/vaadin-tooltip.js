@@ -78,7 +78,6 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
        */
       delay: {
         type: Number,
-        value: () => defaultDelay,
       },
 
       /**
@@ -99,7 +98,6 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
        */
       hideDelay: {
         type: Number,
-        value: () => defaultHideDelay,
       },
 
       /**
@@ -179,9 +177,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /**
-   * Sets the default delay to be used by all tooltip instances.
-   * This method should be called before creating any tooltips.
-   * It does not change the default for existing tooltips.
+   * Sets the default delay to be used by all tooltip instances,
+   * except for those that have delay configured using property.
    *
    * @param {number} delay
    */
@@ -190,9 +187,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /**
-   * Sets the default hide delay to be used by all tooltip instances.
-   * This method should be called before creating any tooltips.
-   * It does not change the default for existing tooltips.
+   * Sets the default hide delay to be used by all tooltip instances,
+   * except for those that have hide delay configured using property.
    *
    * @param {number} hideDelay
    */
@@ -365,7 +361,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
    * @protected
    */
   _open(immediate) {
-    if (!immediate && this.delay > 0 && !this.__closeTimeout) {
+    if (!immediate && this.__getDelay() > 0 && !this.__closeTimeout) {
       this.__warmupTooltip();
     } else {
       this.__showTooltip();
@@ -378,7 +374,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
    * @protected
    */
   _close(immediate) {
-    if (!immediate && this.hideDelay > 0) {
+    if (!immediate && this.__getHideDelay() > 0) {
       this.__scheduleClose();
     } else {
       this.__abortClose();
@@ -392,6 +388,16 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       this.__abortCooldown();
       this.__scheduleCooldown();
     }
+  }
+
+  /** @private */
+  __getDelay() {
+    return this.delay != null && this.delay > 0 ? this.delay : defaultDelay;
+  }
+
+  /** @private */
+  __getHideDelay() {
+    return this.hideDelay != null && this.hideDelay > 0 ? this.hideDelay : defaultHideDelay;
   }
 
   /** @private */
@@ -464,7 +470,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       this.__closeTimeout = setTimeout(() => {
         this.__closeTimeout = null;
         this._autoOpened = false;
-      }, this.hideDelay);
+      }, this.__getHideDelay());
     }
   }
 
@@ -474,7 +480,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       instances.delete(this);
       cooldownTimeout = null;
       warmedUp = false;
-    }, this.hideDelay);
+    }, this.__getHideDelay());
   }
 
   /** @private */
@@ -483,7 +489,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       warmUpTimeout = null;
       warmedUp = true;
       this.__showTooltip();
-    }, this.delay);
+    }, this.__getDelay());
   }
 
   /** @private */
