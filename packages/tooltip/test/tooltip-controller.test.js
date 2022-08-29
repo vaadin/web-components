@@ -18,7 +18,7 @@ customElements.define(
 );
 
 describe('TooltipController', () => {
-  let host, tooltip;
+  let host, tooltip, controller;
 
   beforeEach(() => {
     host = fixtureSync(`
@@ -28,7 +28,8 @@ describe('TooltipController', () => {
       </tooltip-host>
     `);
     tooltip = host.querySelector('vaadin-tooltip');
-    host.addController(new TooltipController(host));
+    controller = new TooltipController(host);
+    host.addController(controller);
   });
 
   it('should set tooltip target to the host itself by default', () => {
@@ -39,5 +40,47 @@ describe('TooltipController', () => {
     const target = host.querySelector('div');
     host.dispatchEvent(new CustomEvent('tooltip-target-changed', { detail: { target } }));
     expect(tooltip.target).to.eql(target);
+  });
+
+  it('should update tooltip target using controller setTarget method', () => {
+    const target = host.querySelector('div');
+    controller.setTarget(target);
+    expect(tooltip.target).to.eql(target);
+  });
+
+  it('should update tooltip context on tooltip-context-changed event', () => {
+    const context = { foo: 'bar' };
+    host.dispatchEvent(new CustomEvent('tooltip-context-changed', { detail: { context } }));
+    expect(tooltip.context).to.eql(context);
+  });
+
+  it('should update tooltip context using controller setContext method', () => {
+    const context = { foo: 'bar' };
+    controller.setContext(context);
+    expect(tooltip.context).to.eql(context);
+  });
+
+  it('should update tooltip manual using controller setManual method', () => {
+    controller.setManual(true);
+    expect(tooltip.manual).to.be.true;
+
+    controller.setManual(false);
+    expect(tooltip.manual).to.be.false;
+  });
+
+  it('should update tooltip opened on tooltip-opened-changed event', () => {
+    host.dispatchEvent(new CustomEvent('tooltip-opened-changed', { detail: { opened: true } }));
+    expect(tooltip.opened).to.be.true;
+
+    host.dispatchEvent(new CustomEvent('tooltip-opened-changed', { detail: { opened: false } }));
+    expect(tooltip.opened).to.be.false;
+  });
+
+  it('should update tooltip opened using controller setOpened method', () => {
+    controller.setOpened(true);
+    expect(tooltip.opened).to.be.true;
+
+    controller.setOpened(false);
+    expect(tooltip.opened).to.be.false;
   });
 });
