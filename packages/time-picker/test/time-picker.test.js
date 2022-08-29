@@ -351,12 +351,12 @@ describe('time-picker', () => {
   });
 
   describe('min and max properties', () => {
-    it('min property should be 00:00:00.000 by default', () => {
-      expect(timePicker.min).to.be.equal('00:00:00.000');
+    it('min property should be empty by default', () => {
+      expect(timePicker.min).to.be.equal('');
     });
 
-    it('max property should be 23:59:59.999 by default', () => {
-      expect(timePicker.max).to.be.equal('23:59:59.999');
+    it('max property should be empty by default', () => {
+      expect(timePicker.max).to.be.equal('');
     });
 
     it('should have dropdown items if min nor max is defined', () => {

@@ -14,6 +14,9 @@ import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+const MIN_ALLOWED_TIME = '00:00:00.000';
+const MAX_ALLOWED_TIME = '23:59:59.999';
+
 registerStyles('vaadin-time-picker', inputFieldShared, { moduleId: 'vaadin-time-picker-styles' });
 
 /**
@@ -166,7 +169,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
        */
       min: {
         type: String,
-        value: '00:00:00.000',
+        value: '',
       },
 
       /**
@@ -180,7 +183,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
        */
       max: {
         type: String,
-        value: '23:59:59.999',
+        value: '',
       },
 
       /**
@@ -485,10 +488,10 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
   /** @private */
   __updateDropdownItems(i8n, min, max, step) {
-    const minTimeObj = this.__validateTime(this.__parseISO(min));
+    const minTimeObj = this.__validateTime(this.__parseISO(min || MIN_ALLOWED_TIME));
     const minSec = this.__getSec(minTimeObj);
 
-    const maxTimeObj = this.__validateTime(this.__parseISO(max));
+    const maxTimeObj = this.__validateTime(this.__parseISO(max || MAX_ALLOWED_TIME));
     const maxSec = this.__getSec(maxTimeObj);
 
     this.__adjustValue(minSec, maxSec, minTimeObj, maxTimeObj);
@@ -665,8 +668,8 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
    * @protected
    */
   _timeAllowed(time) {
-    const parsedMin = this.i18n.parseTime(this.min);
-    const parsedMax = this.i18n.parseTime(this.max);
+    const parsedMin = this.i18n.parseTime(this.min || MIN_ALLOWED_TIME);
+    const parsedMax = this.i18n.parseTime(this.max || MAX_ALLOWED_TIME);
 
     return (
       (!this.__getMsec(parsedMin) || this.__getMsec(time) >= this.__getMsec(parsedMin)) &&
