@@ -58,6 +58,12 @@ export interface TabSheetEventMap extends HTMLElementEventMap, TabSheetCustomEve
  * `tabs-container`    | The container for the slotted prefix, tabs and suffix
  * `content`    | The container for the slotted panels
  *
+ * The following state attributes are available for styling:
+ *
+ * Attribute         | Description
+ * ------------------|-------------
+ * `loading` | Set when a tab without associated content is selected | :host
+ *
  * See [Styling Components](hhttps://vaadin.com/docs/latest/components/ds-resources/customization/styling-components) documentation.
  *
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
