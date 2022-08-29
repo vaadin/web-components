@@ -16,7 +16,7 @@ const DEFAULT_DELAY = 0;
 let defaultDelay = DEFAULT_DELAY;
 let defaultHideDelay = DEFAULT_DELAY;
 
-const instances = new Set();
+const closing = new Set();
 
 let warmedUp = false;
 let warmUpTimeout = null;
@@ -401,21 +401,17 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  __closeOtherTooltips() {
-    instances.forEach((tooltip) => {
-      if (tooltip !== this) {
-        tooltip._close(true);
-        instances.delete(tooltip);
-      }
+  __flushClosingTooltips() {
+    closing.forEach((tooltip) => {
+      tooltip._close(true);
+      closing.delete(tooltip);
     });
-
-    instances.add(this);
   }
 
   /** @private */
   __showTooltip() {
     this.__abortClose();
-    this.__closeOtherTooltips();
+    this.__flushClosingTooltips();
 
     this._autoOpened = true;
     warmedUp = true;
@@ -427,8 +423,6 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   __warmupTooltip() {
-    this.__closeOtherTooltips();
-
     if (!this._autoOpened) {
       // First tooltip is opened, warm up.
       if (!warmUpTimeout && !warmedUp) {
@@ -467,7 +461,10 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   /** @private */
   __scheduleClose() {
     if (this._autoOpened) {
+      closing.add(this);
+
       this.__closeTimeout = setTimeout(() => {
+        closing.delete(this);
         this.__closeTimeout = null;
         this._autoOpened = false;
       }, this.__getHideDelay());
@@ -477,7 +474,6 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   /** @private */
   __scheduleCooldown() {
     cooldownTimeout = setTimeout(() => {
-      instances.delete(this);
       cooldownTimeout = null;
       warmedUp = false;
     }, this.__getHideDelay());
