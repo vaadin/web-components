@@ -28,7 +28,7 @@
 
       document.querySelectorAll('[tab]').forEach((panelContent, i, array) => {
         const dotIndex = lorem.indexOf('.', (i * lorem.length) / array.length);
-        const content = lorem.substring(dotIndex + 1) + lorem.substring(0, dotIndex + 1);
+        const content = lorem.substring(dotIndex + 1);
         panelContent.textContent = content.repeat(5);
       });
     </script>
@@ -45,7 +45,7 @@
         <vaadin-tab id="tab-3">Tab 3</vaadin-tab>
         <vaadin-tab id="tab-4">Tab 4</vaadin-tab>
         <vaadin-tab id="tab-5">Tab 5</vaadin-tab>
-        <vaadin-tab id="tab-6">Tab 6</vaadin-tab>
+        <vaadin-tab id="tab-6">Loading tab</vaadin-tab>
       </vaadin-tabs>
 
       <div tab="tab-1"></div>
@@ -53,7 +53,6 @@
       <div tab="tab-3"></div>
       <div tab="tab-4"></div>
       <div tab="tab-5"></div>
-      <div tab="tab-6"></div>
     </vaadin-tabsheet>
 
     <section style="margin-top: 40px">

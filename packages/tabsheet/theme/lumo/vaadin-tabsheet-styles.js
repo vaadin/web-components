@@ -1,6 +1,7 @@
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
+import { loader } from '@vaadin/vaadin-lumo-styles/mixins/loader.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const tabsheet = css`
@@ -31,8 +32,16 @@ const tabsheet = css`
     border: 1px solid var(--lumo-contrast-10pct);
     border-top: none;
   }
+
+  :host([loading]) [part='loader'] {
+    margin-left: calc(var(--lumo-icon-size-s) / -2);
+    margin-top: calc(var(--lumo-icon-size-s) / -2);
+    left: 50%;
+    top: 50%;
+    position: absolute;
+  }
 `;
 
-registerStyles('vaadin-tabsheet', tabsheet, { moduleId: 'lumo-tabsheet' });
+registerStyles('vaadin-tabsheet', [tabsheet, loader], { moduleId: 'lumo-tabsheet' });
 
 export { tabsheet };
