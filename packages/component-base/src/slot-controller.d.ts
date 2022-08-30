@@ -27,6 +27,7 @@ export class SlotController extends EventTarget implements ReactiveController {
     slotName: string,
     slotFactory?: () => HTMLElement,
     slotInitializer?: (host: HTMLElement, node: HTMLElement) => void,
+    useUniqueId?: boolean,
   );
 
   hostConnected(): void;

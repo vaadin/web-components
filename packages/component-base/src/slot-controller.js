@@ -23,14 +23,18 @@ export class SlotController extends EventTarget {
     return `${prefix}-${host.localName}-${generateUniqueId()}`;
   }
 
-  constructor(host, slotName, slotFactory, slotInitializer) {
+  constructor(host, slotName, slotFactory, slotInitializer, useUniqueId) {
     super();
 
     this.host = host;
     this.slotName = slotName;
     this.slotFactory = slotFactory;
     this.slotInitializer = slotInitializer;
-    this.defaultId = SlotController.generateId(slotName, host);
+
+    // Only generate the default ID if requested by the controller.
+    if (useUniqueId) {
+      this.defaultId = SlotController.generateId(slotName, host);
+    }
   }
 
   hostConnected() {

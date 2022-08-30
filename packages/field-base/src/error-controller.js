@@ -19,6 +19,7 @@ export class ErrorController extends SlotController {
 
         this.__updateHasError();
       },
+      true,
     );
   }
 

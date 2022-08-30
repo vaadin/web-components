@@ -29,6 +29,7 @@ export class InputController extends SlotController {
           callback(node);
         }
       },
+      true,
     );
   }
 }
