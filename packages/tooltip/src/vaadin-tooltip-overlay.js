@@ -37,6 +37,12 @@ class TooltipOverlay extends PositionMixin(OverlayElement) {
     };
   }
 
+  requestContentUpdate() {
+    super.requestContentUpdate();
+
+    this.toggleAttribute('hidden', this.textContent.trim() === '');
+  }
+
   /**
    * @protected
    * @override
