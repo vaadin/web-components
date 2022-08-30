@@ -191,6 +191,9 @@ describe('PolylitMixin', () => {
     let element;
 
     describe('default', () => {
+      const readySpy = sinon.spy();
+      const helperChangedSpy = sinon.spy();
+
       const tag = defineCE(
         class extends PolylitMixin(LitElement) {
           static get properties() {
@@ -215,6 +218,12 @@ describe('PolylitMixin', () => {
                 observer: '_textChanged',
               },
 
+              helper: {
+                type: String,
+                value: 'Default Helper',
+                observer: '_helperChanged',
+              },
+
               count: {
                 type: Number,
               },
@@ -232,7 +241,16 @@ describe('PolylitMixin', () => {
           }
 
           render() {
-            return html`${this.value}`;
+            return html`
+              <div>
+                ${this.value}
+                <div id="helper"></div>
+              </div>
+            `;
+          }
+
+          ready() {
+            readySpy();
           }
 
           willUpdate(props) {
@@ -254,12 +272,28 @@ describe('PolylitMixin', () => {
               this.count = value.length;
             }
           }
+
+          _helperChanged(value) {
+            helperChangedSpy(value);
+
+            this.$.helper.textContent = value;
+          }
         },
       );
 
       beforeEach(async () => {
         element = fixtureSync(`<${tag}></${tag}>`);
         await element.updateComplete;
+      });
+
+      it('should call ready after observers during initialization', () => {
+        expect(helperChangedSpy.calledOnce).to.be.true;
+        expect(readySpy.calledOnce).to.be.true;
+        expect(readySpy.calledAfter(helperChangedSpy)).to.be.true;
+      });
+
+      it('should be possible to access the elements id map from observers during initialization', () => {
+        expect(element.$.helper.textContent).to.equal('Default Helper');
       });
 
       it('should run single property observer on property change', async () => {
@@ -437,6 +471,9 @@ describe('PolylitMixin', () => {
     let element;
     let valueOrLoadingChangedSpy, countOrLoadingChangedSpy;
 
+    const readySpy = sinon.spy();
+    const helperChangedSpy = sinon.spy();
+
     const tag = defineCE(
       class extends PolylitMixin(LitElement) {
         static get properties() {
@@ -457,20 +494,45 @@ describe('PolylitMixin', () => {
             id: {
               type: Number,
             },
+
+            helper: {
+              type: String,
+              value: 'Default Helper',
+            },
           };
         }
 
         static get observers() {
-          return ['_valueOrLoadingChanged(value, loading)', '_countOrLoadingChanged(count, loading)', '_idChanged(id)'];
+          return [
+            '_valueOrLoadingChanged(value, loading)',
+            '_countOrLoadingChanged(count, loading)',
+            '_idChanged(id)',
+            '_helperChanged(helper)',
+          ];
+        }
+
+        ready() {
+          readySpy();
         }
 
         render() {
-          return html`${this.value}`;
+          return html`
+            <div>
+              ${this.value}
+              <div id="helper"></div>
+            </div>
+          `;
         }
 
         _valueOrLoadingChanged(_value, _loading) {}
 
         _countOrLoadingChanged(_count, _loading) {}
+
+        _helperChanged(value) {
+          helperChangedSpy(value);
+
+          this.$.helper.textContent = value;
+        }
       },
     );
 
@@ -479,6 +541,16 @@ describe('PolylitMixin', () => {
       valueOrLoadingChangedSpy = sinon.spy(element, '_valueOrLoadingChanged');
       countOrLoadingChangedSpy = sinon.spy(element, '_countOrLoadingChanged');
       await element.updateComplete;
+    });
+
+    it('should call ready after observers during initialization', () => {
+      expect(helperChangedSpy.calledOnce).to.be.true;
+      expect(readySpy.calledOnce).to.be.true;
+      expect(readySpy.calledAfter(helperChangedSpy)).to.be.true;
+    });
+
+    it('should be possible to access the elements id map from observers during initialization', () => {
+      expect(element.$.helper.textContent).to.equal('Default Helper');
     });
 
     it('should run complex observer once a property value changes', async () => {
@@ -597,6 +669,9 @@ describe('PolylitMixin', () => {
   describe('notify', () => {
     let element;
 
+    const readySpy = sinon.spy();
+    const helperChangedSpy = sinon.spy();
+
     const tag = defineCE(
       class extends PolylitMixin(LitElement) {
         static get properties() {
@@ -617,7 +692,17 @@ describe('PolylitMixin', () => {
               readOnly: true,
               notify: true,
             },
+
+            helper: {
+              type: String,
+              value: 'Default Helper',
+              notify: true,
+            },
           };
+        }
+
+        ready() {
+          readySpy();
         }
 
         render() {
@@ -632,7 +717,14 @@ describe('PolylitMixin', () => {
 
     beforeEach(async () => {
       element = fixtureSync(`<${tag}></${tag}>`);
+      element.addEventListener('helper-changed', helperChangedSpy);
       await element.updateComplete;
+    });
+
+    it('should call ready after notification event during initialization', () => {
+      expect(helperChangedSpy.calledOnce).to.be.true;
+      expect(readySpy.calledOnce).to.be.true;
+      expect(readySpy.calledAfter(helperChangedSpy)).to.be.true;
     });
 
     it('should fire notification event on property change', async () => {

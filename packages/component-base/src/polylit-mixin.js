@@ -166,10 +166,9 @@ const PolylitMixinImplementation = (superclass) => {
     }
 
     /** @protected */
-    ready() {
-      if (super.ready) {
-        super.ready();
-      }
+    firstUpdated() {
+      super.firstUpdated();
+
       this.$ = this.$ || {};
       this.shadowRoot.querySelectorAll('[id]').forEach((node) => {
         this.$[node.id] = node;
@@ -177,11 +176,7 @@ const PolylitMixinImplementation = (superclass) => {
     }
 
     /** @protected */
-    firstUpdated() {
-      super.firstUpdated();
-
-      this.ready();
-    }
+    ready() {}
 
     /** @protected */
     updated(props) {
@@ -199,6 +194,11 @@ const PolylitMixinImplementation = (superclass) => {
 
       if (this.constructor.__notifyProps) {
         this.__runNotifyProps(props, this.constructor.__notifyProps);
+      }
+
+      if (!this.__isReadyInvoked) {
+        this.ready();
+        this.__isReadyInvoked = true;
       }
     }
 
