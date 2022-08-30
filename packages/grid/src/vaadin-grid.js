@@ -1004,10 +1004,13 @@ class Grid extends ElementMixin(
    * @protected
    */
   _showTooltip(event) {
-    const context = this.getEventContext(event);
-    this.dispatchEvent(new CustomEvent('tooltip-target-changed', { detail: { target: event.target } }));
-    this.dispatchEvent(new CustomEvent('tooltip-context-changed', { detail: { context } }));
-    this.dispatchEvent(new CustomEvent('tooltip-opened-changed', { detail: { opened: true } }));
+    // Only fire events if there is a slotted vaadin-tooltip element.
+    if (this._tooltipController.node && this._tooltipController.node.isConnected) {
+      const context = this.getEventContext(event);
+      this.dispatchEvent(new CustomEvent('tooltip-target-changed', { detail: { target: event.target } }));
+      this.dispatchEvent(new CustomEvent('tooltip-context-changed', { detail: { context } }));
+      this.dispatchEvent(new CustomEvent('tooltip-opened-changed', { detail: { opened: true } }));
+    }
   }
 
   /** @protected */

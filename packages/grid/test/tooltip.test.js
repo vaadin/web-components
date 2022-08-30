@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { escKeyDown, fixtureSync, focusin, focusout, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
+import { escKeyDown, fixtureSync, focusin, focusout, mousedown, nextFrame, tabKeyDown } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@vaadin/tooltip/vaadin-tooltip.js';
 import '../vaadin-grid.js';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
@@ -117,5 +118,53 @@ describe('tooltip', () => {
     focusin(cell._content);
     escKeyDown(cell._content);
     expect(tooltip.opened).to.be.false;
+  });
+
+  it('should set tooltip opened to false when the grid is removed', () => {
+    const cell = getCell(grid, 0);
+    mouseenter(cell);
+
+    grid.remove();
+
+    expect(tooltip.opened).to.be.false;
+  });
+
+  it('should not fire tooltip-target-changed if there is no tooltip', async () => {
+    const spy = sinon.spy();
+    grid.addEventListener('tooltip-target-changed', spy);
+
+    tooltip.remove();
+    await nextFrame();
+
+    const cell = getCell(grid, 0);
+    mouseenter(cell);
+
+    expect(spy.calledOnce).to.be.false;
+  });
+
+  it('should not fire tooltip-context-changed if there is no tooltip', async () => {
+    const spy = sinon.spy();
+    grid.addEventListener('tooltip-context-changed', spy);
+
+    tooltip.remove();
+    await nextFrame();
+
+    const cell = getCell(grid, 0);
+    mouseenter(cell);
+
+    expect(spy.calledOnce).to.be.false;
+  });
+
+  it('should not fire tooltip-opened-changed if there is no tooltip', async () => {
+    const spy = sinon.spy();
+    grid.addEventListener('tooltip-opened-changed', spy);
+
+    tooltip.remove();
+    await nextFrame();
+
+    const cell = getCell(grid, 0);
+    mouseenter(cell);
+
+    expect(spy.calledOnce).to.be.false;
   });
 });
