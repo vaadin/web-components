@@ -11,7 +11,7 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 export class HelperController extends SlotController {
   constructor(host) {
     // Do not provide slot factory, as only create helper lazily.
-    super(host, 'helper');
+    super(host, 'helper', null, null, true);
   }
 
   get helperId() {

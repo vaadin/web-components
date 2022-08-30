@@ -31,6 +31,7 @@ export class TextAreaController extends SlotController {
           callback(node);
         }
       },
+      true,
     );
   }
 }

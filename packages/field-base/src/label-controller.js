@@ -23,6 +23,7 @@ export class LabelController extends SlotController {
 
         this.__observeLabel(node);
       },
+      true,
     );
   }
 
