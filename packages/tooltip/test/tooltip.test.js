@@ -50,6 +50,14 @@ describe('vaadin-tooltip', () => {
       tooltip.text = null;
       expect(overlay.textContent.trim()).to.equal('');
     });
+
+    it('should set hidden on the overlay when text is cleared', () => {
+      tooltip.text = 'Foo';
+      expect(overlay.hasAttribute('hidden')).to.be.false;
+
+      tooltip.text = null;
+      expect(overlay.hasAttribute('hidden')).to.be.true;
+    });
   });
 
   describe('textGenerator', () => {
@@ -76,6 +84,14 @@ describe('vaadin-tooltip', () => {
 
       tooltip.context = { text: 'Bar' };
       expect(overlay.textContent.trim()).to.equal('Bar');
+    });
+
+    it('should set hidden on the overlay when generator clears text', () => {
+      tooltip.textGenerator = () => 'Bar';
+      expect(overlay.hasAttribute('hidden')).to.be.false;
+
+      tooltip.textGenerator = () => '';
+      expect(overlay.hasAttribute('hidden')).to.be.true;
     });
   });
 
