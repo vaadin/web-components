@@ -400,6 +400,7 @@ class Grid extends ElementMixin(
   disconnectedCallback() {
     super.disconnectedCallback();
     this.isAttached = false;
+    this._hideTooltip();
   }
 
   /** @private */
@@ -665,13 +666,14 @@ class Grid extends ElementMixin(
     cell.id = slotName.replace('-content-', '-');
     cell.setAttribute('tabindex', '-1');
     cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
-    cell.addEventListener('mouseenter', (e) => {
-      this.dispatchEvent(new CustomEvent('tooltip-target-changed', { detail: { target: e.target } }));
-      this.dispatchEvent(new CustomEvent('tooltip-context-changed', { detail: { context: this.getEventContext(e) } }));
-      this.dispatchEvent(new CustomEvent('tooltip-opened-changed', { detail: { opened: true } }));
+    cell.addEventListener('mouseenter', (event) => {
+      this._showTooltip(event);
     });
     cell.addEventListener('mouseleave', () => {
-      this.dispatchEvent(new CustomEvent('tooltip-opened-changed', { detail: { opened: false } }));
+      this._hideTooltip();
+    });
+    cell.addEventListener('mousedown', () => {
+      this._hideTooltip();
     });
 
     const slot = document.createElement('slot');
@@ -995,6 +997,22 @@ class Grid extends ElementMixin(
       selected: this._isSelected(row._item),
       detailsOpened: !!this.rowDetailsRenderer && this._isDetailsOpened(row._item),
     };
+  }
+
+  /**
+   * @param {Event} event
+   * @protected
+   */
+  _showTooltip(event) {
+    const context = this.getEventContext(event);
+    this.dispatchEvent(new CustomEvent('tooltip-target-changed', { detail: { target: event.target } }));
+    this.dispatchEvent(new CustomEvent('tooltip-context-changed', { detail: { context } }));
+    this.dispatchEvent(new CustomEvent('tooltip-opened-changed', { detail: { opened: true } }));
+  }
+
+  /** @protected */
+  _hideTooltip() {
+    this.dispatchEvent(new CustomEvent('tooltip-opened-changed', { detail: { opened: false } }));
   }
 
   /**

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { escKeyDown, fixtureSync, focusin, focusout, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
 import '@vaadin/tooltip/vaadin-tooltip.js';
 import '../vaadin-grid.js';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
@@ -71,5 +71,51 @@ describe('tooltip', () => {
     mouseenter(getHeaderCell(grid, 0));
 
     expect(tooltip.context.item).to.be.not.ok;
+  });
+
+  it('should hide tooltip on cell mousedown', () => {
+    const cell = getCell(grid, 0);
+    mouseenter(cell);
+    mousedown(cell);
+    expect(tooltip.opened).to.be.false;
+  });
+
+  it('should show tooltip on cell keyboard focus', () => {
+    const cell = getCell(grid, 0);
+    tabKeyDown(document.body);
+    focusin(cell);
+    expect(tooltip.opened).to.be.true;
+  });
+
+  it('should set tooltip target on cell keyboard focus', () => {
+    const cell = getCell(grid, 0);
+    tabKeyDown(document.body);
+    focusin(cell);
+    expect(tooltip.target).to.be.equal(cell);
+  });
+
+  it('should set tooltip context on cell keyboard focus', () => {
+    const cell = getCell(grid, 0);
+    tabKeyDown(document.body);
+    focusin(cell);
+    expect(tooltip.context).to.be.instanceOf(Object);
+    expect(tooltip.context.item.firstName).to.equal('John');
+    expect(tooltip.context.item.lastName).to.equal('Doe');
+  });
+
+  it('should hide tooltip on grid focusout', () => {
+    const cell = getCell(grid, 0);
+    tabKeyDown(document.body);
+    focusin(cell);
+    focusout(grid);
+    expect(tooltip.opened).to.be.false;
+  });
+
+  it('should hide tooltip on grid cell content Esc', () => {
+    const cell = getCell(grid, 0);
+    tabKeyDown(document.body);
+    focusin(cell._content);
+    escKeyDown(cell._content);
+    expect(tooltip.opened).to.be.false;
   });
 });
