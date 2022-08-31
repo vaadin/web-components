@@ -505,6 +505,10 @@ class DateTimePicker extends FieldMixin(
           this.__timePicker = node;
         }
       });
+
+    if (this.value && (this.min || this.max)) {
+      this.validate();
+    }
   }
 
   /** @private */
