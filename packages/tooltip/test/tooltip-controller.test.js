@@ -36,22 +36,10 @@ describe('TooltipController', () => {
     expect(tooltip.target).to.eql(host);
   });
 
-  it('should update tooltip target on tooltip-target-changed event', () => {
-    const target = host.querySelector('div');
-    host.dispatchEvent(new CustomEvent('tooltip-target-changed', { detail: { target } }));
-    expect(tooltip.target).to.eql(target);
-  });
-
   it('should update tooltip target using controller setTarget method', () => {
     const target = host.querySelector('div');
     controller.setTarget(target);
     expect(tooltip.target).to.eql(target);
-  });
-
-  it('should update tooltip context on tooltip-context-changed event', () => {
-    const context = { foo: 'bar' };
-    host.dispatchEvent(new CustomEvent('tooltip-context-changed', { detail: { context } }));
-    expect(tooltip.context).to.eql(context);
   });
 
   it('should update tooltip context using controller setContext method', () => {
@@ -66,14 +54,6 @@ describe('TooltipController', () => {
 
     controller.setManual(false);
     expect(tooltip.manual).to.be.false;
-  });
-
-  it('should update tooltip opened on tooltip-opened-changed event', () => {
-    host.dispatchEvent(new CustomEvent('tooltip-opened-changed', { detail: { opened: true } }));
-    expect(tooltip.opened).to.be.true;
-
-    host.dispatchEvent(new CustomEvent('tooltip-opened-changed', { detail: { opened: false } }));
-    expect(tooltip.opened).to.be.false;
   });
 
   it('should update tooltip opened using controller setOpened method', () => {
