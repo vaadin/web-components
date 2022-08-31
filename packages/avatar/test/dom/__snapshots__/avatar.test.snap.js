@@ -6,6 +6,8 @@ snapshots["vaadin-avatar default"] =
   aria-hidden="true"
   hidden=""
 >
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-avatar default */
 
@@ -14,6 +16,8 @@ snapshots["vaadin-avatar img"] =
   aria-hidden="true"
   src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
 >
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-avatar img */
 

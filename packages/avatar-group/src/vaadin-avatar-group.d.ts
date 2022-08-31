@@ -106,7 +106,7 @@ declare class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(HTMLEle
    * The object has the following JSON structure and default values:
    * ```
    * {
-   *   // Translation of the anonymous user avatar title.
+   *   // Translation of the anonymous user avatar tooltip.
    *   anonymous: 'anonymous',
    *   // Translation of the avatar group accessible label.
    *   // {count} is replaced with the actual count of users.

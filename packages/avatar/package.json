@@ -40,6 +40,7 @@
     "@vaadin/component-base": "23.3.0-alpha0",
     "@vaadin/item": "23.3.0-alpha0",
     "@vaadin/list-box": "23.3.0-alpha0",
+    "@vaadin/tooltip": "23.3.0-alpha0",
     "@vaadin/vaadin-lumo-styles": "23.3.0-alpha0",
     "@vaadin/vaadin-material-styles": "23.3.0-alpha0",
     "@vaadin/vaadin-overlay": "23.3.0-alpha0",

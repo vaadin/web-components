@@ -22,8 +22,9 @@ snapshots["vaadin-avatar-group default"] =
     part="avatar"
     role="button"
     tabindex="0"
-    title=""
   >
+    <vaadin-tooltip slot="tooltip">
+    </vaadin-tooltip>
   </vaadin-avatar>
 </div>
 <vaadin-avatar-group-overlay
@@ -46,8 +47,9 @@ snapshots["vaadin-avatar-group items"] =
     part="avatar"
     role="button"
     tabindex="0"
-    title="YY"
   >
+    <vaadin-tooltip slot="tooltip">
+    </vaadin-tooltip>
   </vaadin-avatar>
   <vaadin-avatar
     abbr="TV"
@@ -55,8 +57,9 @@ snapshots["vaadin-avatar-group items"] =
     part="avatar"
     role="button"
     tabindex="0"
-    title="Tomi Virkki"
   >
+    <vaadin-tooltip slot="tooltip">
+    </vaadin-tooltip>
   </vaadin-avatar>
   <dom-repeat
     id="items"
@@ -74,9 +77,9 @@ snapshots["vaadin-avatar-group items"] =
     part="avatar"
     role="button"
     tabindex="0"
-    title="YY
-Tomi Virkki"
   >
+    <vaadin-tooltip slot="tooltip">
+    </vaadin-tooltip>
   </vaadin-avatar>
 </div>
 <vaadin-avatar-group-overlay
@@ -100,8 +103,9 @@ snapshots["vaadin-avatar-group theme"] =
     role="button"
     tabindex="0"
     theme="small"
-    title="YY"
   >
+    <vaadin-tooltip slot="tooltip">
+    </vaadin-tooltip>
   </vaadin-avatar>
   <vaadin-avatar
     abbr="TV"
@@ -110,8 +114,9 @@ snapshots["vaadin-avatar-group theme"] =
     role="button"
     tabindex="0"
     theme="small"
-    title="Tomi Virkki"
   >
+    <vaadin-tooltip slot="tooltip">
+    </vaadin-tooltip>
   </vaadin-avatar>
   <dom-repeat
     id="items"
@@ -130,9 +135,9 @@ snapshots["vaadin-avatar-group theme"] =
     role="button"
     tabindex="0"
     theme="small"
-    title="YY
-Tomi Virkki"
   >
+    <vaadin-tooltip slot="tooltip">
+    </vaadin-tooltip>
   </vaadin-avatar>
 </div>
 <vaadin-avatar-group-overlay
