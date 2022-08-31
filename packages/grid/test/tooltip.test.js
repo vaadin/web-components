@@ -129,9 +129,8 @@ describe('tooltip', () => {
     expect(tooltip.opened).to.be.false;
   });
 
-  it('should not fire tooltip-target-changed if there is no tooltip', async () => {
-    const spy = sinon.spy();
-    grid.addEventListener('tooltip-target-changed', spy);
+  it('should not set tooltip target if there is no tooltip', async () => {
+    const spy = sinon.spy(grid._tooltipController, 'setTarget');
 
     tooltip.remove();
     await nextFrame();
@@ -142,9 +141,8 @@ describe('tooltip', () => {
     expect(spy.calledOnce).to.be.false;
   });
 
-  it('should not fire tooltip-context-changed if there is no tooltip', async () => {
-    const spy = sinon.spy();
-    grid.addEventListener('tooltip-context-changed', spy);
+  it('should not set tooltip context if there is no tooltip', async () => {
+    const spy = sinon.spy(grid._tooltipController, 'setContext');
 
     tooltip.remove();
     await nextFrame();
@@ -155,9 +153,8 @@ describe('tooltip', () => {
     expect(spy.calledOnce).to.be.false;
   });
 
-  it('should not fire tooltip-opened-changed if there is no tooltip', async () => {
-    const spy = sinon.spy();
-    grid.addEventListener('tooltip-opened-changed', spy);
+  it('should not set tooltip opened if there is no tooltip', async () => {
+    const spy = sinon.spy(grid._tooltipController, 'setOpened');
 
     tooltip.remove();
     await nextFrame();
