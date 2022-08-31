@@ -2,7 +2,7 @@
 
 An input field web component that only accepts numeric input.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/number-field)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/number-field)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/number-field)](https://www.npmjs.com/package/@vaadin/number-field)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -27,7 +27,7 @@ import '@vaadin/number-field';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/number-field/vaadin-number-field.js) of the package uses Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -50,7 +50,7 @@ import '@vaadin/number-field/src/vaadin-number-field.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

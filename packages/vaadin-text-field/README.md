@@ -12,11 +12,11 @@
 
 A set of web components that allow to input and edit text.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/text-field)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/text-field)
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

@@ -2,7 +2,7 @@
 
 A web component for wrapping multiple components as a single field.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/custom-field)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/custom-field)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/custom-field)](https://www.npmjs.com/package/@vaadin/custom-field)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -15,7 +15,7 @@ A web component for wrapping multiple components as a single field.
 </vaadin-custom-field>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/custom-field/screenshot.png" width="401" alt="Screenshot of vaadin-custom-field">](https://vaadin.com/docs/latest/ds/components/custom-field)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/custom-field/screenshot.png" width="401" alt="Screenshot of vaadin-custom-field">](https://vaadin.com/docs/latest/components/custom-field)
 
 ## Installation
 
@@ -33,7 +33,7 @@ import '@vaadin/custom-field';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/custom-field/vaadin-custom-field.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -56,7 +56,7 @@ import '@vaadin/custom-field/src/vaadin-custom-field.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

@@ -2,7 +2,7 @@
 
 A web component with two content areas and a draggable split handle between them.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/split-layout)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/split-layout)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/split-layout)](https://www.npmjs.com/package/@vaadin/split-layout)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -20,7 +20,7 @@ A web component with two content areas and a draggable split handle between them
 </vaadin-split-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/split-layout/screenshot.png" width="616" alt="Screenshot of vaadin-split-layout">](https://vaadin.com/docs/latest/ds/components/split-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/split-layout/screenshot.png" width="616" alt="Screenshot of vaadin-split-layout">](https://vaadin.com/docs/latest/components/split-layout)
 
 ## Installation
 
@@ -38,7 +38,7 @@ import '@vaadin/split-layout';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/split-layout/vaadin-split-layout.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -61,7 +61,7 @@ import '@vaadin/split-layout/src/vaadin-split-layout.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

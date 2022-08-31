@@ -2,7 +2,7 @@
 
 A web component that can be attached to any component to display a context menu.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/context-menu)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/context-menu)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/context-menu)](https://www.npmjs.com/package/@vaadin/context-menu)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -33,7 +33,7 @@ A web component that can be attached to any component to display a context menu.
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/context-menu/screenshot.png" width="493" alt="Screenshot of vaadin-context-menu">](https://vaadin.com/docs/latest/ds/components/context-menu)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/context-menu/screenshot.png" width="493" alt="Screenshot of vaadin-context-menu">](https://vaadin.com/docs/latest/components/context-menu)
 
 **Note:** [`<vaadin-list-box>`](https://github.com/vaadin/vaadin-list-box) component used in the above example should be installed and imported separately.
 
@@ -53,7 +53,7 @@ import '@vaadin/context-menu';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/context-menu/vaadin-context-menu.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:

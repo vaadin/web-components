@@ -5,11 +5,11 @@
 
 A web component for presenting information and user interface elements in an overlay.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/dialog)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/dialog)
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

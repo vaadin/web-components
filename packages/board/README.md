@@ -4,7 +4,7 @@ A powerful and easy to use layout web component for building responsive views.
 
 > ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Board in your project.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/board)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/board)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/board)](https://www.npmjs.com/package/@vaadin/board)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -31,7 +31,7 @@ A powerful and easy to use layout web component for building responsive views.
 </vaadin-board>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/board/screenshot.png" alt="Screenshot of vaadin-board">](https://vaadin.com/docs/latest/ds/components/board)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/board/screenshot.png" alt="Screenshot of vaadin-board">](https://vaadin.com/docs/latest/components/board)
 
 ## Installation
 
@@ -49,7 +49,7 @@ import '@vaadin/board';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

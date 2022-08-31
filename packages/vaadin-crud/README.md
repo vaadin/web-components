@@ -7,11 +7,11 @@ A web component for displaying, editing, creating, and deleting items from a dat
 
 > ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use CRUD in your project.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/crud)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/crud)
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

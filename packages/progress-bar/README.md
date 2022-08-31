@@ -2,7 +2,7 @@
 
 A web component for showing the completion status of a task or process.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/progress-bar)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/progress-bar)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/progress-bar)](https://www.npmjs.com/package/@vaadin/progress-bar)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -13,7 +13,7 @@ A web component for showing the completion status of a task or process.
 <vaadin-progress-bar indeterminate></vaadin-progress-bar>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.gif" width="418" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/docs/latest/ds/components/progress-bar)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.gif" width="418" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/docs/latest/components/progress-bar)
 
 ## Installation
 
@@ -31,7 +31,7 @@ import '@vaadin/progress-bar';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/progress-bar/vaadin-progress-bar.js) of the package uses Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -54,7 +54,7 @@ import '@vaadin/progress-bar/src/vaadin-progress-bar.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

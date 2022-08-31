@@ -4,7 +4,7 @@ A web component to display a banner for users to give consent to the usage of co
 
 > ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Cookie Consent in your project.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/cookie-consent)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/cookie-consent)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/cookie-consent)](https://www.npmjs.com/package/@vaadin/cookie-consent)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -13,7 +13,7 @@ A web component to display a banner for users to give consent to the usage of co
 <vaadin-cookie-consent></vaadin-cookie-consent>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/cookie-consent/screenshot.png" width="847" alt="Screenshot of vaadin-details">](https://vaadin.com/docs/latest/ds/components/cookie-consent)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/cookie-consent/screenshot.png" width="847" alt="Screenshot of vaadin-details">](https://vaadin.com/docs/latest/components/cookie-consent)
 
 ## Installation
 
@@ -31,7 +31,7 @@ import '@vaadin/cookie-consent';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

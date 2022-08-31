@@ -7,11 +7,11 @@ An extension of the `vaadin-grid` component that provides inline editing with fu
 
 > ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Grid Pro in your project.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/grid-pro)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/grid-pro)
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

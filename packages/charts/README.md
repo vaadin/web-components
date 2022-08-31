@@ -24,7 +24,7 @@ A feature-rich interactive charting library providing multiple different chart t
 </vaadin-chart>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/charts/screenshot.png" width="530" alt="Screenshot of vaadin-chart">](https://vaadin.com/docs/latest/ds/components/charts)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/charts/screenshot.png" width="530" alt="Screenshot of vaadin-chart">](https://vaadin.com/docs/latest/components/charts)
 
 ## Installation
 
@@ -42,7 +42,7 @@ import '@vaadin/charts';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 
