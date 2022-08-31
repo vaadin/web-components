@@ -5,7 +5,7 @@
 
 A web component for displaying SVG icons.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/icons)
 
 ## Contributing
 

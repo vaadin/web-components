@@ -151,7 +151,7 @@ The components below are licensed under [CVDL 4.0 license](https://vaadin.com/li
 
 ## Documentation
 
-Check out our [design system documentation](https://vaadin.com/docs/latest/ds/overview).
+Check out our [design system documentation](https://vaadin.com/docs/latest/components).
 
 ## Examples
 

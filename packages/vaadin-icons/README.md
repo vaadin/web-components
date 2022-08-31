@@ -5,7 +5,7 @@
 
 A set of 600+ icons designed for web applications.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/foundation/icons/vaadin)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/icons)
 
 ## Contributing
 

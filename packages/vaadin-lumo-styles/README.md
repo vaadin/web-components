@@ -9,7 +9,7 @@
 
 Lumo contains foundational styles – typography, colors, visual style, sizing & spacing and icons – that components and applications can use to achieve a consistent visual design.
 
-[Documentation ↗](https://vaadin.com/docs/latest/ds/foundation)
+[Documentation ↗](https://vaadin.com/docs/latest/styling/lumo)
 
 ## License
 
