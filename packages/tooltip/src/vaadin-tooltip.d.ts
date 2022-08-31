@@ -22,6 +22,30 @@ export type TooltipPosition =
 
 /**
  * `<vaadin-tooltip>` is a Web Component for creating tooltips.
+ *
+ * ```html
+ * <button id="confirm">Confirm</button>
+ * <vaadin-tooltip text="Click to save changes" for="confirm"></vaadin-tooltip>
+ * ```
+ *
+ * ### Styling
+ *
+ * `<vaadin-tooltip>` uses `<vaadin-tooltip-overlay>` internal
+ * themable component as the actual visible overlay.
+ *
+ * See [`<vaadin-overlay>`](#/elements/vaadin-overlay) documentation
+ * for `<vaadin-tooltip-overlay>` parts.
+ *
+ * The following state attributes are available for styling:
+ *
+ * Attribute        | Description
+ * -----------------|----------------------------------------
+ * `position`       | Reflects the `position` property value.
+ *
+ * Note: the `theme` attribute value set on `<vaadin-tooltip>` is
+ * propagated to the internal `<vaadin-tooltip-overlay>` component.
+ *
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  */
 declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   /**
