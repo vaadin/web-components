@@ -28,25 +28,43 @@ describe('validation', () => {
       datePicker.remove();
     });
 
-    it('should not validate by default', async () => {
+    it('should not validate without value', async () => {
       document.body.appendChild(datePicker);
       await nextRender();
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should not validate when the field has an initial value', async () => {
-      datePicker.value = '2020-01-01';
-      document.body.appendChild(datePicker);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
-    });
+    describe('with value', () => {
+      beforeEach(() => {
+        datePicker.value = '2020-01-01';
+      });
 
-    it('should not validate when the field has an initial value and invalid', async () => {
-      datePicker.value = '2020-01-01';
-      datePicker.invalid = true;
-      document.body.appendChild(datePicker);
-      await nextRender();
-      expect(validateSpy.called).to.be.false;
+      it('should not validate without constraints', async () => {
+        document.body.appendChild(datePicker);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should not validate without constraints when the field has invalid', async () => {
+        datePicker.invalid = true;
+        document.body.appendChild(datePicker);
+        await nextRender();
+        expect(validateSpy.called).to.be.false;
+      });
+
+      it('should validate when the field has min', async () => {
+        datePicker.min = '2020-01-01';
+        document.body.appendChild(datePicker);
+        await nextRender();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
+
+      it('should validate when the field has max', async () => {
+        datePicker.max = '2020-01-01';
+        document.body.appendChild(datePicker);
+        await nextRender();
+        expect(validateSpy.calledOnce).to.be.true;
+      });
     });
   });
 
