@@ -2,7 +2,7 @@
 
 A web component that allows you to show a list of messages, for example, a chat log.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/message-list)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/message-list)
 
 ```html
 <vaadin-message-list></vaadin-message-list>
@@ -11,12 +11,12 @@ A web component that allows you to show a list of messages, for example, a chat 
     { userName: 'Alice', time: '8 Minutes ago', text: 'Lunch at the usual place?' },
     { userName: 'Bob', time: '6 Minutes ago', text: `Yeah, let's go together.` },
     { userName: 'Alice', time: '2 Minutes ago', text: 'Great! What about you, Charlie?' },
-    { userName: 'Charlie', time: 'A few seconds ago', text: 'I will meet you there.' }
+    { userName: 'Charlie', time: 'A few seconds ago', text: 'I will meet you there.' },
   ];
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/message-list/screenshot.png" width="504" alt="Screenshot of vaadin-message-list">](https://vaadin.com/docs/latest/ds/components/message-list)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/message-list/screenshot.png" width="504" alt="Screenshot of vaadin-message-list">](https://vaadin.com/docs/latest/components/message-list)
 
 ## Installation
 
@@ -34,7 +34,7 @@ import '@vaadin/message-list';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/message-list/vaadin-message-list.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -57,7 +57,7 @@ import '@vaadin/message-list/src/vaadin-message-list.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

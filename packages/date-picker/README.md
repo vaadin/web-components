@@ -2,7 +2,7 @@
 
 A web component that allows to enter a date by typing or by selecting from a calendar overlay.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/date-picker)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/date-picker)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/date-picker)](https://www.npmjs.com/package/@vaadin/date-picker)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -11,7 +11,7 @@ A web component that allows to enter a date by typing or by selecting from a cal
 <vaadin-date-picker label="Label" value="2018-12-03" clear-button-visible></vaadin-date-picker>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/date-picker/screenshot.png" width="343" alt="Screenshot of vaadin-date-picker">](https://vaadin.com/docs/latest/ds/components/date-picker)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/date-picker/screenshot.png" width="343" alt="Screenshot of vaadin-date-picker">](https://vaadin.com/docs/latest/components/date-picker)
 
 ## Installation
 
@@ -29,7 +29,7 @@ import '@vaadin/date-picker';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/date-picker/vaadin-date-picker.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -52,7 +52,7 @@ import '@vaadin/date-picker/src/vaadin-date-picker.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

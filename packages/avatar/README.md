@@ -2,7 +2,7 @@
 
 A web component for graphical representation of an object or entity, for example a person or an organization.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/avatar)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/avatar)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/avatar)](https://www.npmjs.com/package/@vaadin/avatar)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -13,7 +13,7 @@ A web component for graphical representation of an object or entity, for example
 <vaadin-avatar abbr="SK"></vaadin-avatar>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/avatar/screenshot.png" width="132" alt="Screenshot of vaadin-avatar">](https://vaadin.com/docs/latest/ds/components/avatar)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/avatar/screenshot.png" width="132" alt="Screenshot of vaadin-avatar">](https://vaadin.com/docs/latest/components/avatar)
 
 ## Installation
 
@@ -31,7 +31,7 @@ import '@vaadin/avatar';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/avatar/vaadin-avatar.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -54,7 +54,7 @@ import '@vaadin/avatar/src/vaadin-avatar.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

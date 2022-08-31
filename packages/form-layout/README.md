@@ -2,7 +2,7 @@
 
 A web component for building responsive forms with multiple columns.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/form-layout)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/form-layout)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/form-layout)](https://www.npmjs.com/package/@vaadin/form-layout)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -15,7 +15,7 @@ A web component for building responsive forms with multiple columns.
 </vaadin-form-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/form-layout/screenshot.png" width="880" alt="Screenshot of vaadin-form-layout">](https://vaadin.com/docs/latest/ds/components/form-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/form-layout/screenshot.png" width="880" alt="Screenshot of vaadin-form-layout">](https://vaadin.com/docs/latest/components/form-layout)
 
 ## Installation
 
@@ -33,7 +33,7 @@ import '@vaadin/form-layout';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/form-layout/vaadin-form-layout.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -56,7 +56,7 @@ import '@vaadin/form-layout/src/vaadin-form-layout.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

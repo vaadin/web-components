@@ -4,7 +4,7 @@ An extension of the `vaadin-grid` component that provides inline editing with fu
 
 > ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Grid Pro in your project.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/grid-pro)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/grid-pro)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/grid-pro)](https://www.npmjs.com/package/@vaadin/grid-pro)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -24,7 +24,7 @@ An extension of the `vaadin-grid` component that provides inline editing with fu
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/grid-pro/screenshot.png" width="900" alt="Screenshot of vaadin-grid-pro">](https://vaadin.com/docs/latest/ds/components/grid-pro)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/grid-pro/screenshot.png" width="900" alt="Screenshot of vaadin-grid-pro">](https://vaadin.com/docs/latest/components/grid-pro)
 
 ## Installation
 
@@ -43,7 +43,7 @@ import '@vaadin/grid-pro/vaadin-grid-pro-edit-column.js';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/grid-pro/vaadin-grid-pro.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the components from the `theme/material` folder:
@@ -69,7 +69,7 @@ import '@vaadin/grid-pro/src/vaadin-grid-pro-edit-column.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

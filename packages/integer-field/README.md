@@ -2,7 +2,7 @@
 
 An extension of [`<vaadin-number-field>`](https://www.npmjs.com/package/@vaadin/number-field) component that only allows entering integer numbers.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/number-field/#integer-field)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/number-field/#integer-field)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/integer-field)](https://www.npmjs.com/package/@vaadin/integer-field)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -27,7 +27,7 @@ import '@vaadin/integer-field';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/integer-field/vaadin-integer-field.js) of the package uses Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -50,7 +50,7 @@ import '@vaadin/integer-field/src/vaadin-integer-field.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

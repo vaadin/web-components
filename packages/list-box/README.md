@@ -2,7 +2,7 @@
 
 A web component for selecting one or more values from a scrollable list of items.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/list-box)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/list-box)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/list-box)](https://www.npmjs.com/package/@vaadin/list-box)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -18,7 +18,7 @@ A web component for selecting one or more values from a scrollable list of items
 </vaadin-list-box>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/list-box/screenshot.png" width="150" alt="Screenshot of vaadin-list-box">](https://vaadin.com/docs/latest/ds/components/list-box)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/list-box/screenshot.png" width="150" alt="Screenshot of vaadin-list-box">](https://vaadin.com/docs/latest/components/list-box)
 
 ## Installation
 
@@ -36,7 +36,7 @@ import '@vaadin/list-box';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/list-box/vaadin-list-box.js) of the package uses Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -59,7 +59,7 @@ import '@vaadin/list-box/src/vaadin-list-box.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

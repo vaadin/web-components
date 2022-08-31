@@ -2,7 +2,7 @@
 
 An extension of [`<vaadin-text-field>`](https://www.npmjs.com/package/@vaadin/text-field) component for entering passwords.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/password-field)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/password-field)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/password-field)](https://www.npmjs.com/package/@vaadin/password-field)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -27,7 +27,7 @@ import '@vaadin/password-field';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/password-field/vaadin-password-field.js) of the package uses Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -50,7 +50,7 @@ import '@vaadin/password-field/src/vaadin-password-field.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

@@ -2,7 +2,7 @@
 
 A web component for rendering a long list of items without sacrificing performance.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/virtual-list)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/virtual-list)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/virtual-list)](https://www.npmjs.com/package/@vaadin/virtual-list)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -35,7 +35,7 @@ import '@vaadin/virtual-list';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/virtual-list/vaadin-virtual-list.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -58,7 +58,7 @@ import '@vaadin/virtual-list/src/vaadin-virtual-list.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

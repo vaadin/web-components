@@ -2,7 +2,7 @@
 
 A web component for creating a horizontal button bar with hierarchical drop-down menus.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/menu-bar)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/menu-bar)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/menu-bar)](https://www.npmjs.com/package/@vaadin/menu-bar)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -23,7 +23,7 @@ A web component for creating a horizontal button bar with hierarchical drop-down
 </script>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/menu-bar/screenshot.png" width="345" alt="Screenshot of vaadin-menu-bar">](https://vaadin.com/docs/latest/ds/components/menu-bar)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/menu-bar/screenshot.png" width="345" alt="Screenshot of vaadin-menu-bar">](https://vaadin.com/docs/latest/components/menu-bar)
 
 ## Installation
 
@@ -41,7 +41,7 @@ import '@vaadin/menu-bar';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/menu-bar/vaadin-menu-bar.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -64,7 +64,7 @@ import '@vaadin/menu-bar/src/vaadin-menu-bar.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

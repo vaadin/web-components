@@ -5,11 +5,11 @@
 
 A web component for graphical representation of an object or entity, for example a person or an organization.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/avatar)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/avatar)
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

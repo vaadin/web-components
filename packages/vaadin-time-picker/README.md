@@ -5,11 +5,11 @@
 
 A web component that allows to enter a time, either by typing, or by selecting from a set of pre-defined options.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/time-picker)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/time-picker)
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

@@ -7,11 +7,11 @@ A web component to display a banner for users to give consent to the usage of co
 
 > ℹ️&nbsp; A commercial Vaadin [subscription](https://vaadin.com/pricing) is required to use Cookie Consent in your project.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/cookie-consent)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/cookie-consent)
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

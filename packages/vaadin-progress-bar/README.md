@@ -5,11 +5,11 @@
 
 A web component for showing the completion status of a task or process.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/progress-bar)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/progress-bar)
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 

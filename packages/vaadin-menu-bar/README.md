@@ -5,11 +5,11 @@
 
 A web component for creating a horizontal button bar with hierarchical drop-down menus.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/ds/components/menu-bar)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/menu-bar)
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 
