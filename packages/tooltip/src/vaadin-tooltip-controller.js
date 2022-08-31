@@ -14,18 +14,6 @@ export class TooltipController extends SlotController {
     super(host, 'tooltip');
 
     this.setTarget(host);
-
-    host.addEventListener('tooltip-target-changed', (e) => {
-      this.setTarget(e.detail.target);
-    });
-
-    host.addEventListener('tooltip-context-changed', (e) => {
-      this.setContext(e.detail.context);
-    });
-
-    host.addEventListener('tooltip-opened-changed', (e) => {
-      this.setOpened(e.detail.opened);
-    });
   }
 
   /**
