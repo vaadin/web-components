@@ -32,7 +32,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * -----------------|--------------------------------------------
  * `overflow`       | Set to `top`, `bottom`, both, or none.
  *
- * See [Virtual List](https://vaadin.com/docs/latest/ds/components/virtual-list) documentation.
+ * See [Virtual List](https://vaadin.com/docs/latest/components/virtual-list) documentation.
  *
  * @extends HTMLElement
  * @mixes ControllerMixin

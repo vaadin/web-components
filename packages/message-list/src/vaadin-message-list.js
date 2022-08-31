@@ -35,7 +35,7 @@ import { Message } from './vaadin-message.js';
  * ----------|----------------
  * `list`    | The container wrapping messages.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @extends HTMLElement
  * @mixes ThemableMixin

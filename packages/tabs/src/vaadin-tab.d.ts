@@ -27,7 +27,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `active` | Set when mousedown or enter/spacebar pressed | :host
  * `orientation` | Set to `horizontal` or `vertical` depending on the direction of items  | :host
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  */
 declare class Tab extends ElementMixin(ThemableMixin(ItemMixin(HTMLElement))) {}
 

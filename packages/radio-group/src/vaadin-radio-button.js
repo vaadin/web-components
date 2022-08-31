@@ -46,7 +46,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `checked`    | Set when the radio button is checked. | `:host`
  * `has-label`  | Set when the radio button has a label. | `:host`
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {CustomEvent} checked-changed - Fired when the `checked` property changes.
  *

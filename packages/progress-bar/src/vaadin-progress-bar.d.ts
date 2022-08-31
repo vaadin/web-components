@@ -24,7 +24,7 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  * `bar` | Progress-bar's background
  * `value` | Progress-bar's foreground
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * The following custom properties are available:
  *

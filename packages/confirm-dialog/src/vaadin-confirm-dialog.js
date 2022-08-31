@@ -40,7 +40,7 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  * Also, the `theme` attribute value set on `<vaadin-confirm-dialog>` is propagated to the
  * `<vaadin-confirm-dialog-overlay>` component.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * ### Custom content
  *

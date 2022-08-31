@@ -39,7 +39,7 @@ import { LoginMixin } from './vaadin-login-mixin.js';
  * `error-message-description` | Container for error message description
  * `footer`  | Container additional information text from `i18n` object
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.

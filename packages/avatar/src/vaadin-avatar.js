@@ -33,7 +33,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `focused`         | Set when the avatar is focused.
  * `has-color-index` | Set when the avatar has `colorIndex` and the corresponding custom CSS property exists.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @extends HTMLElement
  * @mixes FocusMixin

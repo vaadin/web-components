@@ -197,7 +197,7 @@ export interface UploadEventMap extends HTMLElementEventMap, UploadCustomEventMa
  * `dragover-valid` | A dragged file is valid with `maxFiles` and `accept` criteria | `:host`
  * `max-files-reached` | The maximum number of files that the user is allowed to add to the upload has been reached | `:host`
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {CustomEvent} file-reject - Fired when a file cannot be added to the queue due to a constrain.
  * @fires {CustomEvent} files-changed - Fired when the `files` property changes.

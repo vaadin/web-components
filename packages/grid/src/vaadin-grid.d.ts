@@ -324,7 +324,7 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * `drag-disabled` | Set to a row that isn't available for dragging | row
  * `drop-disabled` | Set to a row that can't be dropped on top of | row
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {CustomEvent} active-item-changed - Fired when the `activeItem` property changes.
  * @fires {CustomEvent} cell-activate - Fired when the cell is activated with click or keyboard.

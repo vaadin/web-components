@@ -226,7 +226,7 @@ export type CrudEventMap<T> = CrudCustomEventMap<T> & HTMLElementEventMap;
  * --vaadin-crud-editor-max-height | max height of editor when opened on the bottom | 40%
  * --vaadin-crud-editor-max-width | max width of editor when opened on the side | 40%
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {CustomEvent} editor-opened-changed - Fired when the `editorOpened` property changes.
  * @fires {CustomEvent} edited-item-changed - Fired when `editedItem` property changes.

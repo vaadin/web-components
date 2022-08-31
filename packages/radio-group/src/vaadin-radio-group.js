@@ -50,7 +50,7 @@ import { RadioButton } from './vaadin-radio-button.js';
  * `has-helper`        | Set when the element has helper text      | :host
  * `has-error-message` | Set when the element has an error message | :host
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.

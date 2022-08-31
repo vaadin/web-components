@@ -23,7 +23,7 @@ import { ComboBoxItem } from '@vaadin/combo-box/src/vaadin-combo-box-item.js';
  * `selected` | Set when the item is selected | :host
  * `focused`  | Set when the item is focused  | :host
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @extends ComboBoxItem
  * @private
