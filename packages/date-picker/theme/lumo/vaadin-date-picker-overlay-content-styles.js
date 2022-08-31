@@ -154,8 +154,6 @@ registerStyles(
     /* Very narrow screen (year scroller initially hidden) */
 
     [part='years-toggle-button'] {
-      position: relative;
-      right: auto;
       display: flex;
       align-items: center;
       height: var(--lumo-size-s);
