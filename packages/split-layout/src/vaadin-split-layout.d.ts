@@ -146,7 +146,7 @@ export interface SplitLayoutEventMap extends HTMLElementEventMap, SplitLayoutCus
  * `splitter` | Split element | vaadin-split-layout
  * `handle` | The handle of the splitter | vaadin-split-layout
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {Event} splitter-dragend - Fired after dragging the splitter have ended.
  */

@@ -49,7 +49,7 @@ export type DetailsEventMap = DetailsCustomEventMap & HTMLElementEventMap;
  * `focus-ring` | Set when the element is focused using the keyboard.
  * `focused`    | Set when the element is focused.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */

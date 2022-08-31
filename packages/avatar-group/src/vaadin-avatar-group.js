@@ -45,7 +45,7 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * `container` | The container element
  * `avatar`    | Individual avatars
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * ### Internal components
  *

@@ -64,7 +64,7 @@ export interface PasswordFieldEventMap extends HTMLElementEventMap, PasswordFiel
  * -------------------|---------------------------------
  * `password-visible` | Set when the password is visible
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {Event} input - Fired when the value is changed by the user: on every typing keystroke, and the value is cleared using the clear button.
  * @fires {Event} change - Fired when the user commits a value change.

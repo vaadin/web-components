@@ -32,7 +32,7 @@ import { LoginMixin } from './vaadin-login-mixin.js';
  * `brand`         | Container for application title and description
  * `form`          | Container for the `<vaadin-login-form>` component
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * See [`<vaadin-login-form>`](#/elements/vaadin-login-form)
  * documentation for  `<vaadin-login-form-wrapper>` stylable parts.

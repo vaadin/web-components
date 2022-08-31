@@ -44,7 +44,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `has-helper`        | Set when the element has helper text      | :host
  * `has-error-message` | Set when the element has an error message | :host
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change for any of the internal inputs.
  * @fires {Event} internal-tab - Fired on Tab keydown triggered from the internal inputs, meaning focus will not leave the inputs.

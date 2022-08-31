@@ -41,7 +41,7 @@ export type VirtualListRenderer<TItem> = (
  * -----------------|--------------------------------------------
  * `overflow`       | Set to `top`, `bottom`, both, or none.
  *
- * See [Virtual List](https://vaadin.com/docs/latest/ds/components/virtual-list) documentation.
+ * See [Virtual List](https://vaadin.com/docs/latest/components/virtual-list) documentation.
  *
  * @extends HTMLElement
  * @mixes ElementMixin

@@ -207,7 +207,7 @@ export interface ContextMenuEventMap extends HTMLElementEventMap, ContextMenuCus
  * See [`<vaadin-overlay>`](#/elements/vaadin-overlay)
  * documentation for `<vaadin-context-menu-overlay>` stylable parts.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * ### Internal components
  *

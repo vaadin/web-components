@@ -34,7 +34,7 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  * ----------------|----------------|----------------
  * `overlay-content` | The overlay element | vaadin-date-picker-light
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * In addition to `<vaadin-date-picker-light>` itself, the following
  * internal components are themable:

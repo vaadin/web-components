@@ -155,7 +155,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
  * Note: the `theme` attribute value set on `<vaadin-multi-select-combo-box>` is
  * propagated to these components.
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} custom-value-set - Fired when the user sets a custom value.

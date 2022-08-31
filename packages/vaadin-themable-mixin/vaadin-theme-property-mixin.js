@@ -22,7 +22,7 @@ export const ThemePropertyMixin = (superClass) =>
          * **NOTE:** Extending the mixin only provides the property for binding,
          * and does not make the propagation alone.
          *
-         * See [Styling Components: Sub-components](https://vaadin.com/docs/latest/ds/customization/styling-components/#sub-components).
+         * See [Styling Components: Sub-components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components/#sub-components).
          * page for more information.
          *
          * @deprecated The `theme` property is not supposed for public use and will be dropped in Vaadin 24.
@@ -47,7 +47,7 @@ export const ThemePropertyMixin = (superClass) =>
          * **NOTE:** Extending the mixin only provides the property for binding,
          * and does not make the propagation alone.
          *
-         * See [Styling Components: Sub-components](https://vaadin.com/docs/latest/ds/customization/styling-components/#sub-components).
+         * See [Styling Components: Sub-components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components/#sub-components).
          * page for more information.
          *
          * @protected

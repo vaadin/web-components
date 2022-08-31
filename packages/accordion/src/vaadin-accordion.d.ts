@@ -64,7 +64,7 @@ export type AccordionEventMap = AccordionCustomEventMap & HTMLElementEventMap;
  * }
  * ```
  *
- * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
+ * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
