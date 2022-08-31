@@ -23,14 +23,15 @@ describe('accessibility', () => {
   });
 
   describe('screen readers', () => {
-    it('should have default titles for the buttons', () => {
+    it('should have default tooltips for the buttons', () => {
       buttons.forEach((button, index) => {
         const expectedLabel = rte.i18n[Object.keys(rte.i18n)[index]];
-        expect(button.getAttribute('title')).to.equal(expectedLabel);
+        const tooltip = rte.shadowRoot.querySelector(`[for="${button.id}"]`);
+        expect(tooltip.text).to.equal(expectedLabel);
       });
     });
 
-    it('should localize titles for the buttons', () => {
+    it('should localize tooltips for the buttons', () => {
       const defaultI18n = rte.i18n;
 
       const localized = {};
@@ -41,7 +42,8 @@ describe('accessibility', () => {
 
       buttons.forEach((button, index) => {
         const expectedLabel = `${defaultI18n[Object.keys(defaultI18n)[index]]} localized`;
-        expect(button.getAttribute('title')).to.equal(expectedLabel);
+        const tooltip = rte.shadowRoot.querySelector(`[for="${button.id}"]`);
+        expect(tooltip.text).to.equal(expectedLabel);
       });
     });
 
