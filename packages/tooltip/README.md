@@ -10,7 +10,7 @@ A web component for creating tooltips.
 <vaadin-tooltip text="Click to save changes" for="confirm"></vaadin-tooltip>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/tooltip/screenshot.png" width="200" alt="Screenshot of vaadin-tooltip">](https://vaadin.com/docs/latest/ds/components/tooltip)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/tooltip/screenshot.png" width="200" alt="Screenshot of vaadin-tooltip">](https://vaadin.com/docs/latest/components/tooltip)
 
 ## Installation
 
@@ -28,7 +28,7 @@ import '@vaadin/tooltip';
 
 ## Themes
 
-Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/ds/customization/using-themes), Lumo and Material.
+Vaadin components come with two built-in [themes](https://vaadin.com/docs/latest/styling), Lumo and Material.
 The [main entrypoint](https://github.com/vaadin/web-components/blob/master/packages/tooltip/vaadin-tooltip.js) of the package uses the Lumo theme.
 
 To use the Material theme, import the component from the `theme/material` folder:
@@ -51,7 +51,7 @@ import '@vaadin/tooltip/src/vaadin-tooltip.js';
 
 ## Contributing
 
-Read the [contributing guide](https://vaadin.com/docs/latest/guide/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
+Read the [contributing guide](https://vaadin.com/docs/latest/contributing/overview) to learn about our development process, how to propose bugfixes and improvements, and how to test your changes to Vaadin components.
 
 ## License
 
