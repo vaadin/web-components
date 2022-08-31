@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-icons",
-  "version": "23.2.0-beta3",
+  "version": "23.2.0-rc1",
   "publishConfig": {
     "access": "public"
   },
@@ -32,6 +32,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/icons": "23.2.0-beta3"
+    "@vaadin/icons": "23.2.0-rc1"
   }
 }
