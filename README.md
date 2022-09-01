@@ -296,13 +296,13 @@ git checkout master && git pull
 Create a new branch from master:
 
 ```sh
-git checkout -b 23.0
+git checkout -b 23.3
 ```
 
 Push a newly created branch:
 
 ```sh
-git push origin 23.0
+git push origin 23.3
 ```
 
 The newly created branch for the current major is protected by default.
@@ -311,20 +311,28 @@ The rest of the changes to that branch should happen the usual way, through a PR
 Create another branch:
 
 ```sh
-git checkout -b update-v23
+git checkout -b update-v23.3
 ```
 
 Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/master/wtr-utils.js) as follows:
 
 ```diff
+const isLockfileChanged = () => {
+-  const log = execSync('git diff --name-only origin/master HEAD').toString();
++  const log = execSync('git diff --name-only origin/23.3 HEAD').toString();
+  return log.split('\n').some((line) => line.includes('yarn.lock'));
+};
+```
+
+```diff
 const getChangedPackages = () => {
 -  const output = execSync('./node_modules/.bin/lerna ls --since origin/master --json --loglevel silent');
-+  const output = execSync('./node_modules/.bin/lerna ls --since origin/23.0 --json --loglevel silent');
++  const output = execSync('./node_modules/.bin/lerna ls --since origin/23.3 --json --loglevel silent');
   return JSON.parse(output.toString());
 };
 ```
 
-Create a PR to the version branch ([example](https://github.com/vaadin/web-components/pull/260)).
+Create a PR to the version branch ([example](https://github.com/vaadin/web-components/pull/4432)).
 
 #### Update the version in `master`
 
@@ -349,16 +357,16 @@ node scripts/updateVersion.js
 Mark the new version with Lerna:
 
 ```sh
-lerna version 24.0.0-alpha0 --no-push --no-git-tag-version --yes
+lerna version 24.0.0-alpha0 --no-push --no-git-tag-version --force-publish --exact --yes
 ```
 
 Commit all the changes:
 
 ```sh
-git commit -a -m "chore: update master to Vaadin 24 [skip ci]"
+git commit -a -m "chore: update master branch to Vaadin 24"
 ```
 
-Create a PR to the `master` branch ([example](https://github.com/vaadin/web-components/pull/3018)).
+Create a PR to the `master` branch ([example](https://github.com/vaadin/web-components/pull/4433)).
 
 #### CI build updates
 
