@@ -157,7 +157,7 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
 
   /** @override */
   static get delegateProps() {
-    return ['selected'];
+    return ['selected', 'theme'];
   }
 
   /** @protected */

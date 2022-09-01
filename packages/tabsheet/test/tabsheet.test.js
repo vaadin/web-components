@@ -286,4 +286,28 @@ describe('tabsheet', () => {
       expect(tabsheet.getAttribute('overflow')).to.equal('top');
     });
   });
+
+  describe('theme propagation', () => {
+    it('should set the theme attribute to the slotted tabs', () => {
+      tabsheet.setAttribute('theme', 'foo');
+      expect(tabs.getAttribute('theme')).to.equal('foo');
+    });
+
+    it('should remove the theme attribute to the slotted tabs', () => {
+      tabsheet.setAttribute('theme', 'foo');
+      tabsheet.removeAttribute('theme');
+      expect(tabs.hasAttribute('theme')).to.be.false;
+    });
+
+    it('set the theme attribute to newly added tabs', async () => {
+      tabsheet.setAttribute('theme', 'foo');
+      tabs.remove();
+
+      const newTabs = document.createElement('vaadin-tabs');
+      newTabs.setAttribute('slot', 'tabs');
+      tabsheet.appendChild(newTabs);
+      await nextFrame();
+      expect(newTabs.getAttribute('theme')).to.equal('foo');
+    });
+  });
 });
