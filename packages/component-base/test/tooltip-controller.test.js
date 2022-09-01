@@ -63,7 +63,7 @@ describe('TooltipController', () => {
     expect(tooltip.opened).to.be.false;
   });
 
-  it('should update position target using controller setPosition method', () => {
+  it('should update tooltip position using controller setPosition method', () => {
     controller.setPosition('top-start');
     expect(tooltip.position).to.eql('top-start');
   });
