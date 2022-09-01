@@ -23,6 +23,6 @@ describe('details with tooltip', () => {
   });
 
   it('should set tooltip position property to bottom-start', () => {
-    expect(tooltip.target).to.equal('bottom-start');
+    expect(tooltip.position).to.equal('bottom-start');
   });
 });
