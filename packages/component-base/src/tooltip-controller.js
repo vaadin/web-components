@@ -25,6 +25,22 @@ export class TooltipController extends SlotController {
    */
   initCustomNode(tooltipNode) {
     tooltipNode.target = this.target;
+
+    if (this.context !== undefined) {
+      tooltipNode.context = this.context;
+    }
+
+    if (this.manual !== undefined) {
+      tooltipNode.manual = this.manual;
+    }
+
+    if (this.opened !== undefined) {
+      tooltipNode.opened = this.opened;
+    }
+
+    if (this.position !== undefined) {
+      tooltipNode.position = this.position;
+    }
   }
 
   /**
