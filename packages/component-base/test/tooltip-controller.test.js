@@ -1,9 +1,8 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '../vaadin-tooltip.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
-import { TooltipController } from '../src/vaadin-tooltip-controller.js';
+import { ControllerMixin } from '../src/controller-mixin.js';
+import { TooltipController } from '../src/tooltip-controller.js';
 
 customElements.define(
   'tooltip-host',
