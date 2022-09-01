@@ -67,6 +67,19 @@ export class TooltipController extends SlotController {
   }
 
   /**
+   * Set position on the slotted tooltip.
+   * @param {string} position
+   */
+  setPosition(position) {
+    this.position = position;
+
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode.position = position;
+    }
+  }
+
+  /**
    * Set an HTML element to attach the tooltip to.
    * @param {HTMLElement} target
    */
