@@ -30,6 +30,8 @@ snapshots["vaadin-crud shadow default"] =
       </slot>
     </span>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <section
   aria-hidden="true"
@@ -62,6 +64,8 @@ snapshots["vaadin-crud shadow opened"] =
       </slot>
     </span>
   </div>
+  <slot name="tooltip">
+  </slot>
 </div>
 <section
   aria-hidden="false"
