@@ -299,13 +299,15 @@ describe('tabsheet', () => {
       expect(tabs.hasAttribute('theme')).to.be.false;
     });
 
-    it('set the theme attribute to newly added tabs', async () => {
+    it('should set the theme attribute to newly added tabs', async () => {
       tabsheet.setAttribute('theme', 'foo');
       tabs.remove();
 
-      const newTabs = document.createElement('vaadin-tabs');
-      newTabs.setAttribute('slot', 'tabs');
-      tabsheet.appendChild(newTabs);
+      const newTabs = tabsheet.appendChild(
+        Object.assign(document.createElement('vaadin-tabs'), {
+          slot: 'tabs',
+        }),
+      );
       await nextFrame();
       expect(newTabs.getAttribute('theme')).to.equal('foo');
     });
