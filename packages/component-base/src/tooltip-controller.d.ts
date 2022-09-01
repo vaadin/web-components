@@ -5,6 +5,20 @@
  */
 import { SlotController } from './slot-controller.js';
 
+type TooltipPosition =
+  | 'bottom-end'
+  | 'bottom-start'
+  | 'bottom'
+  | 'end-bottom'
+  | 'end-top'
+  | 'end'
+  | 'start-bottom'
+  | 'start-top'
+  | 'start'
+  | 'top-end'
+  | 'top-start'
+  | 'top';
+
 /**
  * A controller that manages the slotted tooltip element.
  */
@@ -28,6 +42,11 @@ export class TooltipController extends SlotController {
   opened: boolean;
 
   /**
+   * Position of the tooltip with respect to its target.
+   */
+  position: TooltipPosition;
+
+  /**
    * An HTML element to attach the tooltip to.
    */
   target: HTMLElement;
@@ -46,6 +65,11 @@ export class TooltipController extends SlotController {
    * Toggle opened state on the slotted tooltip.
    */
   setOpened(opened: boolean): void;
+
+  /**
+   * Set position on the slotted tooltip.
+   */
+  setPosition(position: TooltipPosition): void;
 
   /**
    * Set an HTML element to attach the tooltip to.

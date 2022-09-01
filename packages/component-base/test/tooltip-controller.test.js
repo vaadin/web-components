@@ -62,4 +62,9 @@ describe('TooltipController', () => {
     controller.setOpened(false);
     expect(tooltip.opened).to.be.false;
   });
+
+  it('should update tooltip position using controller setPosition method', () => {
+    controller.setPosition('top-start');
+    expect(tooltip.position).to.eql('top-start');
+  });
 });
