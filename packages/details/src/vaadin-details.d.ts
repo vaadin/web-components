@@ -3,6 +3,7 @@
  * Copyright (c) 2019 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ShadowFocusMixin } from '@vaadin/field-base/src/shadow-focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -53,7 +54,7 @@ export type DetailsEventMap = DetailsCustomEventMap & HTMLElementEventMap;
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(HTMLElement))) {
+declare class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {
   /**
    * If true, the details content is visible.
    */

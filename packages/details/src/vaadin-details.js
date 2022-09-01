@@ -4,7 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { ShadowFocusMixin } from '@vaadin/field-base/src/shadow-focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -45,11 +47,12 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ShadowFocusMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -88,6 +91,7 @@ class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(PolymerElement
           <span part="toggle" aria-hidden="true"></span>
           <span part="summary-content"><slot name="summary"></slot></span>
         </div>
+        <slot name="tooltip"></slot>
       </div>
       <section id$="[[_contentId]]" part="content" aria-hidden$="[[_getAriaHidden(opened)]]">
         <slot></slot>
@@ -142,6 +146,12 @@ class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(PolymerElement
         e.stopPropagation();
       }
     });
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
+
+    this._tooltipController.setTarget(this.focusElement);
+    this._tooltipController.setPosition('bottom-start');
   }
 
   /** @private */
