@@ -303,11 +303,8 @@ describe('tabsheet', () => {
       tabsheet.setAttribute('theme', 'foo');
       tabs.remove();
 
-      const newTabs = tabsheet.appendChild(
-        Object.assign(document.createElement('vaadin-tabs'), {
-          slot: 'tabs',
-        }),
-      );
+      const newTabs = fixtureSync(`<vaadin-tabs slot="tabs"></vaadin-tabs>`);
+      tabsheet.appendChild(newTabs);
       await nextFrame();
       expect(newTabs.getAttribute('theme')).to.equal('foo');
     });
