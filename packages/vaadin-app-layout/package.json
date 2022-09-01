@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-app-layout",
-  "version": "23.2.0-rc1",
+  "version": "23.2.0",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/app-layout": "23.2.0-rc1"
+    "@vaadin/app-layout": "^23.2.0"
   }
 }
