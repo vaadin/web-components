@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tooltip</title>
+    <script type="module" src="./common.js"></script>
+    <script type="module">
+      import '@vaadin/tooltip';
+    </script>
+  </head>
+  <body>
+    <style>
+      #wrapper {
+        width: 350px;
+        height: 350px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1rem;
+      }
+
+      #target {
+        width: 150px;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: solid 1px #e2e2e2;
+      }
+    </style>
+
+    <div id="wrapper">
+      <div id="target">Save</div>
+    </div>
+
+    <vaadin-tooltip text="BS" position="bottom-start" for="target"></vaadin-tooltip>
+    <vaadin-tooltip text="B" position="bottom" for="target"></vaadin-tooltip>
+    <vaadin-tooltip text="BE" position="bottom-end" for="target"></vaadin-tooltip>
+    <vaadin-tooltip text="ST" position="start-top" for="target"></vaadin-tooltip>
+    <vaadin-tooltip text="S" position="start" for="target"></vaadin-tooltip>
+    <vaadin-tooltip text="SB" position="start-bottom" for="target"></vaadin-tooltip>
+    <vaadin-tooltip text="TS" position="top-start" for="target"></vaadin-tooltip>
+    <vaadin-tooltip text="T" position="top" for="target"></vaadin-tooltip>
+    <vaadin-tooltip text="TE" position="top-end" for="target"></vaadin-tooltip>
+    <vaadin-tooltip text="ET" position="end-top" for="target"></vaadin-tooltip>
+    <vaadin-tooltip text="E" position="end" for="target"></vaadin-tooltip>
+    <vaadin-tooltip text="EB" position="end-bottom" for="target"></vaadin-tooltip>
+
+    <button id="button">Confirm</button>
+    <vaadin-tooltip text="Click to save changes" for="button"></vaadin-tooltip>
+  </body>
+</html>
