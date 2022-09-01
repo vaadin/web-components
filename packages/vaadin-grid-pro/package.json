@@ -1,12 +1,11 @@
 {
   "name": "@vaadin/vaadin-grid-pro",
-  "version": "23.2.0",
+  "version": "23.3.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
   "description": "vaadin-grid-pro",
   "license": "SEE LICENSE IN LICENSE",
-  "cvdlName": "vaadin-grid-pro",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
@@ -34,6 +33,7 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/grid-pro": "^23.2.0"
-  }
+    "@vaadin/grid-pro": "23.3.0-alpha0"
+  },
+  "cvdlName": "vaadin-grid-pro"
 }
