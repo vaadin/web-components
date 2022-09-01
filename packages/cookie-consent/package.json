@@ -1,12 +1,11 @@
 {
   "name": "@vaadin/cookie-consent",
-  "version": "23.2.0",
+  "version": "23.3.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
   "description": "vaadin-cookie-consent",
   "license": "SEE LICENSE IN LICENSE",
-  "cvdlName": "vaadin-cookie-consent",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
@@ -37,15 +36,16 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^23.2.0",
-    "@vaadin/vaadin-lumo-styles": "^23.2.0",
-    "@vaadin/vaadin-material-styles": "^23.2.0",
+    "@vaadin/component-base": "23.3.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "23.3.0-alpha0",
+    "@vaadin/vaadin-material-styles": "23.3.0-alpha0",
     "cookieconsent": "^3.0.6"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/testing-helpers": "^0.3.2"
   },
+  "cvdlName": "vaadin-cookie-consent",
   "web-types": [
     "web-types.json",
     "web-types.lit.json"

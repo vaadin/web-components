@@ -1,12 +1,11 @@
 {
   "name": "@vaadin/charts",
-  "version": "23.2.0",
+  "version": "23.3.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
   "description": "vaadin-charts",
   "license": "SEE LICENSE IN LICENSE",
-  "cvdlName": "vaadin-chart",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
@@ -37,8 +36,8 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^23.2.0",
-    "@vaadin/vaadin-themable-mixin": "^23.2.0",
+    "@vaadin/component-base": "23.3.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "23.3.0-alpha0",
     "highcharts": "9.2.2"
   },
   "devDependencies": {
@@ -46,6 +45,7 @@
     "@vaadin/testing-helpers": "^0.3.2",
     "sinon": "^13.0.2"
   },
+  "cvdlName": "vaadin-chart",
   "web-types": [
     "web-types.json",
     "web-types.lit.json"

@@ -1,12 +1,11 @@
 {
   "name": "@vaadin/vaadin-board",
-  "version": "23.2.0",
+  "version": "23.3.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
   "description": "Polymer element to create flexible responsive layouts and build nice looking dashboard.",
   "license": "SEE LICENSE IN LICENSE",
-  "cvdlName": "vaadin-board",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
@@ -37,6 +36,7 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/board": "^23.2.0"
-  }
+    "@vaadin/board": "23.3.0-alpha0"
+  },
+  "cvdlName": "vaadin-board"
 }

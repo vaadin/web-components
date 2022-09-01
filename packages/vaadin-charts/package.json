@@ -1,12 +1,11 @@
 {
   "name": "@vaadin/vaadin-charts",
-  "version": "23.2.0",
+  "version": "23.3.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
   "description": "vaadin-charts",
   "license": "SEE LICENSE IN LICENSE",
-  "cvdlName": "vaadin-chart",
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
@@ -34,6 +33,7 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/charts": "^23.2.0"
-  }
+    "@vaadin/charts": "23.3.0-alpha0"
+  },
+  "cvdlName": "vaadin-chart"
 }

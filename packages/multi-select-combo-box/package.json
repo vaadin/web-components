@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/multi-select-combo-box",
-  "version": "23.2.0",
+  "version": "23.3.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
@@ -19,8 +19,8 @@
   "main": "vaadin-multi-select-combo-box.js",
   "module": "vaadin-multi-select-combo-box.js",
   "files": [
-    "lit.js",
     "lit.d.ts",
+    "lit.js",
     "src",
     "theme",
     "vaadin-*.d.ts",
@@ -37,14 +37,14 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/combo-box": "^23.2.0",
-    "@vaadin/component-base": "^23.2.0",
-    "@vaadin/field-base": "^23.2.0",
-    "@vaadin/input-container": "^23.2.0",
-    "@vaadin/lit-renderer": "^23.2.0",
-    "@vaadin/vaadin-lumo-styles": "^23.2.0",
-    "@vaadin/vaadin-material-styles": "^23.2.0",
-    "@vaadin/vaadin-themable-mixin": "^23.2.0"
+    "@vaadin/combo-box": "23.3.0-alpha0",
+    "@vaadin/component-base": "23.3.0-alpha0",
+    "@vaadin/field-base": "23.3.0-alpha0",
+    "@vaadin/input-container": "23.3.0-alpha0",
+    "@vaadin/lit-renderer": "23.3.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "23.3.0-alpha0",
+    "@vaadin/vaadin-material-styles": "23.3.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "23.3.0-alpha0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
