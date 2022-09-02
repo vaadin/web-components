@@ -92,6 +92,8 @@ snapshots["vaadin-button shadow default"] =
     </slot>
   </span>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-button shadow default */
 

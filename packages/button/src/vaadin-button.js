@@ -4,7 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ButtonMixin } from './vaadin-button-mixin.js';
 
@@ -38,10 +40,11 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  *
  * @extends HTMLElement
  * @mixes ButtonMixin
+ * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-button';
   }
@@ -105,7 +108,16 @@ class Button extends ButtonMixin(ElementMixin(ThemableMixin(PolymerElement))) {
           <slot name="suffix"></slot>
         </span>
       </div>
+      <slot name="tooltip"></slot>
     `;
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 }
 
