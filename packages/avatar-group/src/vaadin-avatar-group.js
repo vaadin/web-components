@@ -119,6 +119,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
             theme$="[[_theme]]"
             i18n="[[i18n]]"
             color-index="[[item.colorIndex]]"
+            with-tooltip
           ></vaadin-avatar>
         </template>
         <vaadin-avatar
@@ -479,16 +480,6 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
       }
 
       this._openedWithFocusRing = this.$.overflow.hasAttribute('focus-ring');
-
-      const avatars = this._menuElement.querySelectorAll('vaadin-avatar');
-
-      // Disable tooltips for overflow avatars
-      avatars.forEach((avatar) => {
-        const tooltip = avatar.querySelector('vaadin-tooltip');
-        if (tooltip) {
-          tooltip.target = null;
-        }
-      });
 
       this._menuElement.focus();
     } else if (wasOpened) {

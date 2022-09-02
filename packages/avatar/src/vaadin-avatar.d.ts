@@ -76,6 +76,14 @@ declare class Avatar extends FocusMixin(ElementMixin(ThemableMixin(ControllerMix
    * ```
    */
   i18n: AvatarI18n;
+
+  /**
+   * When true, the avatar has tooltip shown on hover and focus.
+   * The tooltip text is based on the `name` and `abbr` properties.
+   * When neither is provided, `i18n.anonymous` is used instead.
+   * @attr {boolean} with-tooltip
+   */
+  withTooltip: boolean;
 }
 
 declare global {

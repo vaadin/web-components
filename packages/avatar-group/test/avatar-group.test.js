@@ -569,11 +569,12 @@ describe('avatar-group', () => {
       overflow.click();
     });
 
-    it('should remove tooltips from the overlay avatars', (done) => {
+    it('should not create tooltips for the overlay avatars', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
         const avatars = overlay.content.querySelectorAll('vaadin-avatar');
         avatars.forEach((avatar) => {
-          expect(avatar.querySelector('vaadin-tooltip').target).to.be.null;
+          expect(avatar.withTooltip).to.be.false;
+          expect(avatar.querySelector('vaadin-tooltip')).to.be.not.ok;
         });
         done();
       });

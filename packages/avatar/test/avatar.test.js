@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusin, focusout, mousedown, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
+import { fixtureSync, focusin, focusout, mousedown, nextFrame, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/tooltip/vaadin-tooltip.js';
 import '../vaadin-avatar.js';
@@ -189,10 +189,12 @@ describe('vaadin-avatar', () => {
       });
     });
 
-    describe('tooltip', () => {
+    describe.only('tooltip', () => {
       let tooltip;
 
-      beforeEach(() => {
+      beforeEach(async () => {
+        avatar.withTooltip = true;
+        await nextFrame();
         tooltip = avatar.querySelector('[slot="tooltip"]');
       });
 
@@ -234,6 +236,16 @@ describe('vaadin-avatar', () => {
       it('should not update tooltip text when empty value is set', () => {
         avatar.i18n = null;
         expect(tooltip.text).to.equal('anonymous');
+      });
+
+      it('should cleanup tooltip target when withTooltip is set to false', () => {
+        avatar.withTooltip = false;
+        expect(tooltip.target).to.be.null;
+      });
+
+      it('should remove tooltip element when withTooltip is set to false', () => {
+        avatar.withTooltip = false;
+        expect(tooltip.parentNode).to.be.null;
       });
     });
   });

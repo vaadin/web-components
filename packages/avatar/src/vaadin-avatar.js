@@ -11,15 +11,6 @@ import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-class AvatarTooltipController extends TooltipController {
-  constructor(host, slotInitializer) {
-    super(host);
-
-    this.slotFactory = () => document.createElement('vaadin-tooltip');
-    this.slotInitializer = slotInitializer;
-  }
-}
-
 /**
  * `<vaadin-avatar>` is a Web Component providing avatar displaying functionality.
  *
@@ -204,6 +195,18 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(ControllerMixin(Polym
         },
       },
 
+      /**
+       * When true, the avatar has tooltip shown on hover and focus.
+       * The tooltip text is based on the `name` and `abbr` properties.
+       * When neither is provided, `i18n.anonymous` is used instead.
+       * @attr {boolean} with-tooltip
+       */
+      withTooltip: {
+        type: Boolean,
+        value: false,
+        observer: '__withTooltipChanged',
+      },
+
       /** @private */
       __imgVisible: Boolean,
 
@@ -219,7 +222,11 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(ControllerMixin(Polym
   }
 
   static get observers() {
-    return ['__imgOrAbbrOrNameChanged(__tooltipNode, img, abbr, name)', '__i18nChanged(i18n.*)'];
+    return [
+      '__imgOrAbbrOrNameChanged(img, abbr, name)',
+      '__i18nChanged(i18n.*)',
+      '__tooltipChanged(__tooltipNode, name, abbr)',
+    ];
   }
 
   /** @protected */
@@ -234,11 +241,7 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(ControllerMixin(Polym
       this.setAttribute('tabindex', '0');
     }
 
-    this._tooltipController = new AvatarTooltipController(this, (host, node) => {
-      node.target = host;
-      this.__tooltipNode = node;
-    });
-
+    this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
 
     // Should set `anonymous` if name / abbr is not provided
@@ -273,15 +276,10 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(ControllerMixin(Polym
   }
 
   /** @private */
-  __imgOrAbbrOrNameChanged(tooltip, img, abbr, name) {
-    if (!tooltip) {
-      return;
-    }
-
+  __imgOrAbbrOrNameChanged(img, abbr, name) {
     this.__updateVisibility();
 
     if (abbr && abbr !== this.__generatedAbbr) {
-      this.__setTooltip(name ? `${name} (${abbr})` : abbr);
       return;
     }
 
@@ -293,14 +291,39 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(ControllerMixin(Polym
     } else {
       this.abbr = undefined;
     }
+  }
 
-    this.__setTooltip(name);
+  /** @private */
+  __tooltipChanged(tooltipNode, name, abbr) {
+    if (tooltipNode) {
+      if (abbr && abbr !== this.__generatedAbbr) {
+        this.__setTooltip(name ? `${name} (${abbr})` : abbr);
+      } else {
+        this.__setTooltip(name);
+      }
+    }
+  }
+
+  /** @private */
+  __withTooltipChanged(withTooltip, oldWithTooltip) {
+    if (withTooltip) {
+      // Create and attach tooltip
+      const tooltipNode = document.createElement('vaadin-tooltip');
+      tooltipNode.setAttribute('slot', 'tooltip');
+      this.appendChild(tooltipNode);
+      this.__tooltipNode = tooltipNode;
+    } else if (oldWithTooltip) {
+      // Cleanup and detach tooltip
+      this.__tooltipNode.target = null;
+      this.__tooltipNode.remove();
+      this.__tooltipNode = null;
+    }
   }
 
   /** @private */
   __i18nChanged(i18n) {
     if (i18n.base && i18n.base.anonymous) {
-      if (this.__oldAnonymous && this.__tooltipNode.text === this.__oldAnonymous) {
+      if (this.__oldAnonymous && this.__tooltipNode && this.__tooltipNode.text === this.__oldAnonymous) {
         this.__setTooltip();
       }
 
