@@ -120,8 +120,6 @@ describe('column auto-width', () => {
 
     await nextFrame();
 
-    spy.resetHistory();
-    expect(grid._recalculateColumnWidths.called).to.be.false;
 
     columns[1].hidden = false;
     grid.recalculateColumnWidths();
