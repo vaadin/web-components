@@ -9,9 +9,6 @@ A web component for organizing and grouping content into sections.
 
 ```html
 <vaadin-tabsheet>
-  <div slot="prefix">Prefix</div>
-  <div slot="suffix">Suffix</div>
-
   <vaadin-tabs slot="tabs">
     <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
     <vaadin-tab id="tab-2">Tab 2</vaadin-tab>
