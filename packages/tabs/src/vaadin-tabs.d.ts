@@ -29,7 +29,7 @@ export interface TabsCustomEventMap {
 export interface TabsEventMap extends HTMLElementEventMap, TabsCustomEventMap {}
 
 /**
- * `<vaadin-tabs>` is a Web Component for easy switching between different views.
+ * `<vaadin-tabs>` is a Web Component for organizing and grouping content into sections.
  *
  * ```
  *   <vaadin-tabs selected="4">
