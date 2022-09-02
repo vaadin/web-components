@@ -58,6 +58,8 @@ snapshots["vaadin-checkbox shadow default"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-checkbox shadow default */
 
