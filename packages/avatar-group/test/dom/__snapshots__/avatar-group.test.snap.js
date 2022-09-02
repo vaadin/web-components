@@ -47,6 +47,7 @@ snapshots["vaadin-avatar-group items"] =
     part="avatar"
     role="button"
     tabindex="0"
+    with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
     </vaadin-tooltip>
@@ -57,6 +58,7 @@ snapshots["vaadin-avatar-group items"] =
     part="avatar"
     role="button"
     tabindex="0"
+    with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
     </vaadin-tooltip>
@@ -103,6 +105,7 @@ snapshots["vaadin-avatar-group theme"] =
     role="button"
     tabindex="0"
     theme="small"
+    with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
     </vaadin-tooltip>
@@ -114,6 +117,7 @@ snapshots["vaadin-avatar-group theme"] =
     role="button"
     tabindex="0"
     theme="small"
+    with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
     </vaadin-tooltip>
