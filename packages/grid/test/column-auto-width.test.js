@@ -119,8 +119,6 @@ describe('column auto-width', () => {
     columns[1].hidden = true;
 
     await nextFrame();
-
-
     columns[1].hidden = false;
     grid.recalculateColumnWidths();
 
