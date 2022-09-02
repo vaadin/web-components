@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TabSheet</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/tabsheet';
+      import '@vaadin/button';
+      import '@vaadin/checkbox-group';
+      import '@vaadin/radio-group';
+
+      // import '@vaadin/tabsheet/theme/material/vaadin-tabsheet.js';
+      // import '@vaadin/button/theme/material/vaadin-button.js';
+      // import '@vaadin/checkbox-group/theme/material/vaadin-checkbox-group.js';
+      // import '@vaadin/radio-group/theme/material/vaadin-radio-group.js';
+
+      import '@vaadin/icon';
+      import '@vaadin/icons/vaadin-iconset.js';
+
+      // Generate content for the panels
+      const lorem = `Odio quis mi. Aliquam massa pede, pharetra quis, tincidunt quis, fringilla at, mauris. Vestibulum a massa.
+        Vestibulum luctus odio ut quam. Maecenas congue convallis diam. Cras urna arcu, vestibulum vitae, blandit ut,
+        laoreet id, risus. Ut condimentum, arcu sit amet placerat blandit, augue nibh pretium nunc, in tempus sem dolor
+        non leo. Etiam fringilla mauris a odio. Nunc lorem diam, interdum eget, lacinia in, scelerisque sit amet, purus.
+        Nam ornare. Donec placerat dui ut orci. Phasellus quis lacus at nisl elementum cursus. Cras bibendum egestas
+        nulla. Phasellus pulvinar ullamcorper odio. Etiam ipsum. Proin tincidunt. Aliquam aliquet.`;
+
+      document.querySelectorAll('[tab]').forEach((panelContent, i, array) => {
+        const dotIndex = lorem.indexOf('.', (i * lorem.length) / array.length);
+        const content = lorem.substring(dotIndex + 1);
+        panelContent.textContent = content.repeat(5);
+      });
+    </script>
+  </head>
+
+  <body>
+    <vaadin-tabsheet>
+      <vaadin-checkbox slot="prefix" label="All tabs"></vaadin-checkbox>
+      <vaadin-button slot="suffix" label="Suffix">
+        <vaadin-icon icon="vaadin:plus" slot="prefix"></vaadin-icon>
+        Add tab
+      </vaadin-button>
+
+      <vaadin-tabs slot="tabs">
+        <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
+        <vaadin-tab id="tab-2">Tab 2</vaadin-tab>
+        <vaadin-tab id="tab-3">Tab 3</vaadin-tab>
+        <vaadin-tab id="tab-4">Tab 4</vaadin-tab>
+        <vaadin-tab id="tab-5">Tab 5</vaadin-tab>
+        <vaadin-tab id="tab-6">Loading tab</vaadin-tab>
+      </vaadin-tabs>
+
+      <div tab="tab-1"></div>
+      <div tab="tab-2"></div>
+      <div tab="tab-3"></div>
+      <div tab="tab-4"></div>
+      <div tab="tab-5"></div>
+    </vaadin-tabsheet>
+
+    <section style="margin-top: 40px">
+      <vaadin-checkbox-group label="Tabsheet theme variants" id="variant-group" theme="vertical">
+        <vaadin-checkbox label="no-border" value="no-border"></vaadin-checkbox>
+      </vaadin-checkbox-group>
+
+      <vaadin-radio-group label="Direction" id="direction-group" value="ltr" theme="vertical">
+        <vaadin-radio-button label="ltr" value="ltr"></vaadin-radio-button>
+        <vaadin-radio-button label="rtl" value="rtl"></vaadin-radio-button>
+      </vaadin-radio-group>
+
+      <script>
+        const tabsheet = document.querySelector('vaadin-tabsheet');
+
+        document.querySelector('#variant-group').addEventListener('value-changed', (e) => {
+          tabsheet.setAttribute('theme', e.detail.value.join(' '));
+        });
+
+        document.querySelector('#direction-group').addEventListener('value-changed', (e) => {
+          document.dir = e.detail.value;
+        });
+      </script>
+    </section>
+  </body>
+</html>
