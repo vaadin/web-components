@@ -12,7 +12,7 @@ import { ListMixin } from '@vaadin/vaadin-list-mixin/vaadin-list-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * `<vaadin-tabs>` is a Web Component for easy switching between different views.
+ * `<vaadin-tabs>` is a Web Component for organizing and grouping content into sections.
  *
  * ```
  *   <vaadin-tabs selected="4">
