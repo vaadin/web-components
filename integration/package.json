@@ -7,6 +7,7 @@
   "author": "Vaadin Ltd",
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/button": "23.3.0-alpha0",
     "@vaadin/accordion": "23.3.0-alpha0",
     "@vaadin/combo-box": "23.3.0-alpha0",
     "@vaadin/details": "23.3.0-alpha0",
@@ -18,6 +19,7 @@
     "@vaadin/tooltip": "23.3.0-alpha0",
     "@vaadin/testing-helpers": "^0.3.2",
     "@vaadin/time-picker": "23.3.0-alpha0",
+    "@vaadin/vaadin-overlay": "23.3.0-alpha0",
     "@vaadin/vaadin-themable-mixin": "23.3.0-alpha0",
     "sinon": "^13.0.2"
   }

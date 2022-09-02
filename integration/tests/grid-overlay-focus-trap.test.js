@@ -2,9 +2,9 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import '@vaadin/button';
+import '@vaadin/grid';
 import '@vaadin/vaadin-overlay';
-import '../vaadin-grid.js';
-import { flushGrid } from './helpers.js';
+import { flushGrid } from '@vaadin/grid/test/helpers.js';
 
 describe('overlay focus-trap', () => {
   let overlay, grid, button;
