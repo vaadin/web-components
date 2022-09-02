@@ -16,6 +16,48 @@ import { Tabs } from '@vaadin/tabs/src/vaadin-tabs.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
+ * @private
+ * A controller which observes the <vaadin-tabs> slotted to the tabs slot.
+ */
+class TabsSlotController extends SlotController {
+  constructor(host) {
+    super(host, 'tabs');
+    this.__tabsItemsChangedListener = this.__tabsItemsChangedListener.bind(this);
+    this.__tabsSelectedChangedListener = this.__tabsSelectedChangedListener.bind(this);
+  }
+
+  /** @private */
+  __tabsItemsChangedListener() {
+    this.host._setItems(this.tabs.items);
+  }
+
+  /** @private */
+  __tabsSelectedChangedListener() {
+    this.host.selected = this.tabs.selected;
+  }
+
+  initCustomNode(tabs) {
+    if (!(tabs instanceof Tabs)) {
+      throw Error('The "tabs" slot of a <vaadin-tabsheet> must only contain a <vaadin-tabs> element!');
+    }
+    this.tabs = tabs;
+    tabs.addEventListener('items-changed', this.__tabsItemsChangedListener);
+    tabs.addEventListener('selected-changed', this.__tabsSelectedChangedListener);
+    this.host.__tabs = tabs;
+    this.host.stateTarget = tabs;
+  }
+
+  teardownNode(tabs) {
+    this.tabs = null;
+    tabs.removeEventListener('items-changed', this.__tabsItemsChangedListener);
+    tabs.removeEventListener('selected-changed', this.__tabsSelectedChangedListener);
+    this.host.__tabs = null;
+    this.host._setItems([]);
+    this.host.stateTarget = undefined;
+  }
+}
+
+/**
  * `<vaadin-tabsheet>` is a Web Component for organizing and grouping content
  * into scrollable panels. The panels can be switched between by using tabs.
  *
@@ -168,38 +210,10 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
   ready() {
     super.ready();
 
-    const tabsItemsChangedListener = () => this._setItems(this.__tabs.items);
-
-    const tabsSelectedChangedListener = () => {
-      this.selected = this.__tabs.selected;
-    };
-
     this.__overflowController = new OverflowController(this, this.shadowRoot.querySelector('[part="content"]'));
     this.addController(this.__overflowController);
 
-    // Observe the tabs slot for a <vaadin-tabs> element.
-    this._tabsSlotController = new (class extends SlotController {
-      constructor(host) {
-        super(host, 'tabs');
-      }
-
-      initCustomNode(tabs) {
-        if (!(tabs instanceof Tabs)) {
-          throw Error('The "tabs" slot of a <vaadin-tabsheet> must only contain a <vaadin-tabs> element!');
-        }
-        tabs.addEventListener('items-changed', tabsItemsChangedListener);
-        tabs.addEventListener('selected-changed', tabsSelectedChangedListener);
-        this.host.__tabs = tabs;
-        this.host.stateTarget = tabs;
-      }
-
-      teardownNode(tabs) {
-        tabs.removeEventListener('items-changed', tabsItemsChangedListener);
-        tabs.removeEventListener('selected-changed', tabsSelectedChangedListener);
-        this.host._setItems([]);
-        this.host.stateTarget = undefined;
-      }
-    })(this);
+    this._tabsSlotController = new TabsSlotController(this);
     this.addController(this._tabsSlotController);
 
     // Observe the panels slot for nodes. Set the assigned element nodes as the __panels array.
