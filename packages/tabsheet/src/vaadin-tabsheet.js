@@ -176,7 +176,6 @@ class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(ThemableM
       selected: {
         value: 0,
         type: Number,
-        reflectToAttribute: true,
         notify: true,
       },
 

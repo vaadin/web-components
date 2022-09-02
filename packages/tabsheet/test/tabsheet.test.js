@@ -81,10 +81,6 @@ describe('tabsheet', () => {
       expect(tabsheet.items[0].selected).to.be.true;
     });
 
-    it('should reflect selected property to attribute', () => {
-      expect(tabsheet.hasAttribute('selected')).to.be.true;
-    });
-
     it('should update selected to new index when other tab is selected', () => {
       tabs.items[1].click();
       expect(tabsheet.items[1].selected).to.be.true;
