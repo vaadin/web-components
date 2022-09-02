@@ -189,7 +189,7 @@ describe('vaadin-avatar', () => {
       });
     });
 
-    describe.only('tooltip', () => {
+    describe('tooltip', () => {
       let tooltip;
 
       beforeEach(async () => {
