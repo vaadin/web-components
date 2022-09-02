@@ -158,6 +158,7 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
       /**
        * Color index used for avatar background.
+       * @attr {number} color-index
        */
       colorIndex: {
         type: Number,
