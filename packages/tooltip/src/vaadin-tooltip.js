@@ -351,7 +351,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   /** @private */
   __onKeyDown(event) {
     if (event.key === 'Escape') {
-      event.stopImmediatePropagation();
+      event.stopPropagation();
       this._close(true);
     }
   }

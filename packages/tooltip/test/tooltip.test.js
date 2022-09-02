@@ -255,21 +255,35 @@ describe('vaadin-tooltip', () => {
       expect(overlay.opened).to.be.false;
     });
 
-    it('should call stopImmediatePropagation for Esc keydown', () => {
+    it('should call stopPropagation for Esc keydown', () => {
       mouseenter(target);
       const event = keyboardEventFor('keydown', 27, [], 'Escape');
-      const spy = sinon.spy(event, 'stopImmediatePropagation');
+      const spy = sinon.spy(event, 'stopPropagation');
       target.dispatchEvent(event);
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should not call stopImmediatePropagation when not opened', () => {
+    it('should not call stopPropagation when not opened', () => {
       mouseenter(target);
       mouseleave(target);
       const event = keyboardEventFor('keydown', 27, [], 'Escape');
-      const spy = sinon.spy(event, 'stopImmediatePropagation');
+      const spy = sinon.spy(event, 'stopPropagation');
       target.dispatchEvent(event);
       expect(spy.called).to.be.false;
+    });
+
+    it('should close both opened tooltips on Esc keydown', () => {
+      tabKeyDown(target);
+      target.focus();
+
+      const tooltip2 = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      const overlay2 = tooltip2.shadowRoot.querySelector('vaadin-tooltip-overlay');
+      tooltip2.target = target;
+      mouseenter(target);
+
+      escKeyDown(document.body);
+      expect(overlay.opened).to.be.false;
+      expect(overlay2.opened).to.be.false;
     });
 
     it('should not open overlay on mouseenter when target is reset', () => {
