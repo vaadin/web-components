@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { escKeyDown, fixtureSync, focusin, focusout, mousedown, nextFrame, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import '@vaadin/grid/vaadin-grid.js';
 import '@vaadin/tooltip/vaadin-tooltip.js';
-import '../vaadin-grid.js';
+import { flushGrid, getCell } from '@vaadin/grid/test/helpers.js';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
-import { flushGrid, getCell } from './helpers.js';
 
 function getHeaderCell(grid, index = 0) {
   return grid.$.header.querySelectorAll('[part~="cell"]')[index];
