@@ -6,6 +6,7 @@
 import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/confirm-dialog/src/vaadin-confirm-dialog.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
+import '@vaadin/tooltip/src/vaadin-tooltip.js';
 import '../vendor/vaadin-quill.js';
 import './vaadin-rich-text-editor-toolbar-styles.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -156,166 +157,168 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
         <div part="toolbar">
           <span part="toolbar-group toolbar-group-history">
             <!-- Undo and Redo -->
-            <button
-              type="button"
-              part="toolbar-button toolbar-button-undo"
-              on-click="_undo"
-              title$="[[i18n.undo]]"
-            ></button>
-            <button
-              type="button"
-              part="toolbar-button toolbar-button-redo"
-              on-click="_redo"
-              title$="[[i18n.redo]]"
-            ></button>
+            <button id="btn-undo" type="button" part="toolbar-button toolbar-button-undo" on-click="_undo"></button>
+            <vaadin-tooltip for="btn-undo" text="[[i18n.undo]]"></vaadin-tooltip>
+
+            <button id="btn-redo" type="button" part="toolbar-button toolbar-button-redo" on-click="_redo"></button>
+            <vaadin-tooltip for="btn-redo" text="[[i18n.redo]]"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-emphasis">
             <!-- Bold -->
-            <button class="ql-bold" part="toolbar-button toolbar-button-bold" title$="[[i18n.bold]]"></button>
+            <button id="btn-bold" class="ql-bold" part="toolbar-button toolbar-button-bold"></button>
+            <vaadin-tooltip for="btn-bold" text="[[i18n.bold]]"></vaadin-tooltip>
 
             <!-- Italic -->
-            <button class="ql-italic" part="toolbar-button toolbar-button-italic" title$="[[i18n.italic]]"></button>
+            <button id="btn-italic" class="ql-italic" part="toolbar-button toolbar-button-italic"></button>
+            <vaadin-tooltip for="btn-italic" text="[[i18n.italic]]"></vaadin-tooltip>
 
             <!-- Underline -->
-            <button
-              class="ql-underline"
-              part="toolbar-button toolbar-button-underline"
-              title$="[[i18n.underline]]"
-            ></button>
+            <button id="btn-underline" class="ql-underline" part="toolbar-button toolbar-button-underline"></button>
+            <vaadin-tooltip for="btn-underline" text="[[i18n.underline]]"></vaadin-tooltip>
 
             <!-- Strike -->
-            <button class="ql-strike" part="toolbar-button toolbar-button-strike" title$="[[i18n.strike]]"></button>
+            <button id="btn-strike" class="ql-strike" part="toolbar-button toolbar-button-strike"></button>
+            <vaadin-tooltip for="btn-strike" text="[[i18n.strike]]"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-heading">
             <!-- Header buttons -->
             <button
+              id="btn-h1"
               type="button"
               class="ql-header"
               value="1"
               part="toolbar-button toolbar-button-h1"
-              title$="[[i18n.h1]]"
             ></button>
+            <vaadin-tooltip for="btn-h1" text="[[i18n.h1]]"></vaadin-tooltip>
             <button
+              id="btn-h2"
               type="button"
               class="ql-header"
               value="2"
               part="toolbar-button toolbar-button-h2"
-              title$="[[i18n.h2]]"
             ></button>
+            <vaadin-tooltip for="btn-h2" text="[[i18n.h2]]"></vaadin-tooltip>
             <button
+              id="btn-h3"
               type="button"
               class="ql-header"
               value="3"
               part="toolbar-button toolbar-button-h3"
-              title$="[[i18n.h3]]"
             ></button>
+            <vaadin-tooltip for="btn-h3" text="[[i18n.h3]]"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-glyph-transformation">
             <!-- Subscript and superscript -->
             <button
+              id="btn-subscript"
               class="ql-script"
               value="sub"
               part="toolbar-button toolbar-button-subscript"
-              title$="[[i18n.subscript]]"
             ></button>
+            <vaadin-tooltip for="btn-subscript" text="[[i18n.subscript]]"></vaadin-tooltip>
             <button
+              id="btn-superscript"
               class="ql-script"
               value="super"
               part="toolbar-button toolbar-button-superscript"
-              title$="[[i18n.superscript]]"
             ></button>
+            <vaadin-tooltip for="btn-superscript" text="[[i18n.superscript]]"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-list">
             <!-- List buttons -->
             <button
+              id="btn-ol"
               type="button"
               class="ql-list"
               value="ordered"
               part="toolbar-button toolbar-button-list-ordered"
-              title$="[[i18n.listOrdered]]"
             ></button>
+            <vaadin-tooltip for="btn-ol" text="[[i18n.listOrdered]]"></vaadin-tooltip>
             <button
+              id="btn-ul"
               type="button"
               class="ql-list"
               value="bullet"
               part="toolbar-button toolbar-button-list-bullet"
-              title$="[[i18n.listBullet]]"
             ></button>
+            <vaadin-tooltip for="btn-ul" text="[[i18n.listBullet]]"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-alignment">
             <!-- Align buttons -->
             <button
+              id="btn-left"
               type="button"
               class="ql-align"
               value=""
               part="toolbar-button toolbar-button-align-left"
-              title$="[[i18n.alignLeft]]"
             ></button>
+            <vaadin-tooltip for="btn-left" text="[[i18n.alignLeft]]"></vaadin-tooltip>
             <button
+              id="btn-center"
               type="button"
               class="ql-align"
               value="center"
               part="toolbar-button toolbar-button-align-center"
-              title$="[[i18n.alignCenter]]"
             ></button>
+            <vaadin-tooltip for="btn-center" text="[[i18n.alignCenter]]"></vaadin-tooltip>
             <button
+              id="btn-right"
               type="button"
               class="ql-align"
               value="right"
               part="toolbar-button toolbar-button-align-right"
-              title$="[[i18n.alignRight]]"
             ></button>
+            <vaadin-tooltip for="btn-right" text="[[i18n.alignRight]]"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-rich-text">
             <!-- Image -->
             <button
+              id="btn-image"
               type="button"
               part="toolbar-button toolbar-button-image"
-              title$="[[i18n.image]]"
               on-touchend="_onImageTouchEnd"
               on-click="_onImageClick"
             ></button>
+            <vaadin-tooltip for="btn-image" text="[[i18n.image]]"></vaadin-tooltip>
             <!-- Link -->
             <button
+              id="btn-link"
               type="button"
               part="toolbar-button toolbar-button-link"
-              title$="[[i18n.link]]"
               on-click="_onLinkClick"
             ></button>
+            <vaadin-tooltip for="btn-link" text="[[i18n.link]]"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-block">
             <!-- Blockquote -->
             <button
+              id="btn-blockquote"
               type="button"
               class="ql-blockquote"
               part="toolbar-button toolbar-button-blockquote"
-              title$="[[i18n.blockquote]]"
             ></button>
-
+            <vaadin-tooltip for="btn-blockquote" text="[[i18n.blockquote]]"></vaadin-tooltip>
             <!-- Code block -->
             <button
+              id="btn-code"
               type="button"
               class="ql-code-block"
               part="toolbar-button toolbar-button-code-block"
-              title$="[[i18n.codeBlock]]"
             ></button>
+            <vaadin-tooltip for="btn-code" text="[[i18n.codeBlock]]"></vaadin-tooltip>
           </span>
 
           <span part="toolbar-group toolbar-group-format">
             <!-- Clean -->
-            <button
-              type="button"
-              class="ql-clean"
-              part="toolbar-button toolbar-button-clean"
-              title$="[[i18n.clean]]"
-            ></button>
+            <button id="btn-clean" type="button" class="ql-clean" part="toolbar-button toolbar-button-clean"></button>
+            <vaadin-tooltip for="btn-clean" text="[[i18n.clean]]"></vaadin-tooltip>
           </span>
 
           <input
@@ -940,7 +943,10 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
       timeOut.after(timeout),
       () => {
         const formatting = Array.from(this.shadowRoot.querySelectorAll('[part="toolbar"] .ql-active'))
-          .map((button) => button.getAttribute('title'))
+          .map((button) => {
+            const tooltip = this.shadowRoot.querySelector(`[for="${button.id}"]`);
+            return tooltip.text;
+          })
           .join(', ');
         announcer.textContent = formatting;
       },
