@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
 
 /**
  * @polymerMixin
@@ -584,6 +585,10 @@ export const KeyboardNavigationMixin = (superClass) =>
           this.toggleAttribute('navigating', true);
         }
       }
+
+      if (key === 'Escape') {
+        this._hideTooltip();
+      }
     }
 
     /** @private */
@@ -721,6 +726,7 @@ export const KeyboardNavigationMixin = (superClass) =>
     _onFocusOut(e) {
       this.toggleAttribute('navigating', false);
       this._detectInteracting(e);
+      this._hideTooltip();
     }
 
     /** @private */
@@ -742,6 +748,10 @@ export const KeyboardNavigationMixin = (superClass) =>
           // Fire a public event for cell.
           const context = this.getEventContext(e);
           cell.dispatchEvent(new CustomEvent('cell-focus', { bubbles: true, composed: true, detail: { context } }));
+
+          if (isKeyboardActive()) {
+            this._showTooltip(e);
+          }
         }
       }
 

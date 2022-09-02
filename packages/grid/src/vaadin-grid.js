@@ -8,9 +8,11 @@ import './vaadin-grid-styles.js';
 import { beforeNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { isAndroid, isChrome, isFirefox, isIOS, isSafari, isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TabindexMixin } from '@vaadin/component-base/src/tabindex-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { Virtualizer } from '@vaadin/component-base/src/virtualizer.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { A11yMixin } from './vaadin-grid-a11y-mixin.js';
@@ -258,7 +260,9 @@ class Grid extends ElementMixin(
                         FilterMixin(
                           ColumnReorderingMixin(
                             ColumnResizingMixin(
-                              EventContextMixin(DragAndDropMixin(StylingMixin(TabindexMixin(PolymerElement)))),
+                              ControllerMixin(
+                                EventContextMixin(DragAndDropMixin(StylingMixin(TabindexMixin(PolymerElement)))),
+                              ),
                             ),
                           ),
                         ),
@@ -292,6 +296,8 @@ class Grid extends ElementMixin(
 
         <div part="reorder-ghost"></div>
       </div>
+
+      <slot name="tooltip"></slot>
 
       <div id="focusexit" tabindex="0"></div>
     `;
@@ -394,6 +400,7 @@ class Grid extends ElementMixin(
   disconnectedCallback() {
     super.disconnectedCallback();
     this.isAttached = false;
+    this._hideTooltip();
   }
 
   /** @private */
@@ -453,6 +460,10 @@ class Grid extends ElementMixin(
     new ResizeObserver(() => setTimeout(() => this.__updateFooterPositioning())).observe(this.$.footer);
 
     processTemplates(this);
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
+    this._tooltipController.setManual(true);
   }
 
   /**
@@ -655,6 +666,15 @@ class Grid extends ElementMixin(
     cell.id = slotName.replace('-content-', '-');
     cell.setAttribute('tabindex', '-1');
     cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
+    cell.addEventListener('mouseenter', (event) => {
+      this._showTooltip(event);
+    });
+    cell.addEventListener('mouseleave', () => {
+      this._hideTooltip();
+    });
+    cell.addEventListener('mousedown', () => {
+      this._hideTooltip();
+    });
 
     const slot = document.createElement('slot');
     slot.setAttribute('name', slotName);
@@ -977,6 +997,24 @@ class Grid extends ElementMixin(
       selected: this._isSelected(row._item),
       detailsOpened: !!this.rowDetailsRenderer && this._isDetailsOpened(row._item),
     };
+  }
+
+  /**
+   * @param {Event} event
+   * @protected
+   */
+  _showTooltip(event) {
+    // Check if there is a slotted vaadin-tooltip element.
+    if (this._tooltipController.node && this._tooltipController.node.isConnected) {
+      this._tooltipController.setTarget(event.target);
+      this._tooltipController.setContext(this.getEventContext(event));
+      this._tooltipController.setOpened(true);
+    }
+  }
+
+  /** @protected */
+  _hideTooltip() {
+    this._tooltipController.setOpened(false);
   }
 
   /**

@@ -10,6 +10,7 @@
   <body>
     <script type="module">
       import '@vaadin/grid/all-imports';
+      import '@vaadin/tooltip';
 
       const grid = document.querySelector('vaadin-grid');
 
@@ -28,6 +29,11 @@
 
         cb(pageItems, levelSize);
       };
+
+      const tooltip = document.querySelector('[slot="tooltip"]');
+      tooltip.textGenerator = ({column, item}) => {
+        return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
+      };
     </script>
 
     <vaadin-grid item-id-path="name">
@@ -36,6 +42,8 @@
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
       <vaadin-grid-column path="name" width="200px" flex-shrink="0"></vaadin-grid-column>
+
+      <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
     </vaadin-grid>
   </body>
 </html>
