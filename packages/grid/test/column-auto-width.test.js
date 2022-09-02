@@ -114,6 +114,18 @@ describe('column auto-width', () => {
     expectColumnWidthsToBeOk(columns);
   });
 
+  it('should have correct column widths once an invisible column is made visible', async () => {
+    grid.items = testItems;
+    columns[1].hidden = true;
+
+    await nextFrame();
+    columns[1].hidden = false;
+    grid.recalculateColumnWidths();
+
+    await recalculateWidths();
+    expectColumnWidthsToBeOk(columns);
+  });
+
   it('should have correct column widths when using renderers', async () => {
     columns[0].renderer = function (root, column, model) {
       root.textContent = model.index;

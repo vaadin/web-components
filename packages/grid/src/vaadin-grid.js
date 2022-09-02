@@ -605,6 +605,11 @@ class Grid extends ElementMixin(
     // Flush to make sure DOM is up-to-date when measuring the column widths
     this.__virtualizer.flush();
 
+    // Flush to account for any changes to the visibility of the columns
+    if (this._debouncerHiddenChanged) {
+      this._debouncerHiddenChanged.flush();
+    }
+
     cols.forEach((col) => {
       col.width = `${this.__getDistributedWidth(col)}px`;
     });
