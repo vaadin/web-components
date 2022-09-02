@@ -21,7 +21,7 @@ A web component for organizing and grouping content into sections.
 </vaadin-tabsheet>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/tabsheet/screenshot.png" width="355" alt="Screenshot of vaadin-tabsheet">](https://vaadin.com/docs/latest/components/tabsheet)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/tabsheet/screenshot.png" width="735" alt="Screenshot of vaadin-tabsheet">](https://vaadin.com/docs/latest/components/tabsheet)
 
 ## Installation
 
