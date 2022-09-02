@@ -7,7 +7,6 @@ snapshots["vaadin-message default"] =
   part="avatar"
   role="button"
   tabindex="-1"
-  title="anonymous"
 >
 </vaadin-message-avatar>
 <div part="content">
@@ -33,7 +32,6 @@ snapshots["vaadin-message userName"] =
   part="avatar"
   role="button"
   tabindex="-1"
-  title="Joan Doe"
 >
 </vaadin-message-avatar>
 <div part="content">
@@ -59,7 +57,6 @@ snapshots["vaadin-message userAbbr"] =
   part="avatar"
   role="button"
   tabindex="-1"
-  title="JD"
 >
 </vaadin-message-avatar>
 <div part="content">
@@ -84,7 +81,6 @@ snapshots["vaadin-message userImg"] =
   part="avatar"
   role="button"
   tabindex="-1"
-  title="anonymous"
 >
 </vaadin-message-avatar>
 <div part="content">
@@ -110,7 +106,6 @@ snapshots["vaadin-message userColorIndex"] =
   role="button"
   style="--vaadin-avatar-user-color:var(--vaadin-user-color-2);"
   tabindex="-1"
-  title="anonymous"
 >
 </vaadin-message-avatar>
 <div part="content">
@@ -134,7 +129,6 @@ snapshots["vaadin-message time"] =
   part="avatar"
   role="button"
   tabindex="-1"
-  title="anonymous"
 >
 </vaadin-message-avatar>
 <div part="content">

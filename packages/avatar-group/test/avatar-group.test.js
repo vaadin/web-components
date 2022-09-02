@@ -82,10 +82,12 @@ describe('avatar-group', () => {
       expect(overflow.abbr).to.equal('+3');
     });
 
-    it('should set title attribute on the overflow avatar', () => {
+    it('should set text generator on the overflow avatar tooltip', () => {
       const overflow = group.$.overflow;
       const items = group.items;
-      expect(overflow.getAttribute('title')).to.equal([items[2].name, items[3].abbr, 'anonymous'].join('\n'));
+      const tooltip = overflow.querySelector('vaadin-tooltip');
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+      expect(overlay.textContent).to.equal([items[2].name, items[3].abbr, 'anonymous'].join('\n'));
     });
 
     it('should show overlay on overflow avatar click', () => {
@@ -567,11 +569,12 @@ describe('avatar-group', () => {
       overflow.click();
     });
 
-    it('should remove title from the overlay avatars', (done) => {
+    it('should not create tooltips for the overlay avatars', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
         const avatars = overlay.content.querySelectorAll('vaadin-avatar');
         avatars.forEach((avatar) => {
-          expect(avatar.hasAttribute('title')).to.equal(false);
+          expect(avatar.withTooltip).to.be.false;
+          expect(avatar.querySelector('vaadin-tooltip')).to.be.not.ok;
         });
         done();
       });

@@ -1,4 +1,5 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
+import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../../theme/material/vaadin-avatar.js';
 
@@ -70,5 +71,14 @@ describe('avatar', () => {
   it('avatar-size', async () => {
     element.style.setProperty('--vaadin-avatar-size', '45px');
     await visualDiff(div, 'avatar-size');
+  });
+
+  it('tooltip', async () => {
+    div.style.width = '90px';
+    div.style.height = '90px';
+    div.style.textAlign = 'center';
+    element.withTooltip = true;
+    await sendKeys({ press: 'Tab' });
+    await visualDiff(div, 'tooltip');
   });
 });

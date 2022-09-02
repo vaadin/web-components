@@ -119,6 +119,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
             theme$="[[_theme]]"
             i18n="[[i18n]]"
             color-index="[[item.colorIndex]]"
+            with-tooltip
           ></vaadin-avatar>
         </template>
         <vaadin-avatar
@@ -130,7 +131,9 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
           on-click="_onOverflowClick"
           on-keydown="_onOverflowKeyDown"
           aria-haspopup="listbox"
-        ></vaadin-avatar>
+        >
+          <vaadin-tooltip slot="tooltip" text-generator="[[__overflowTextGenerator]]"></vaadin-tooltip>
+        </vaadin-avatar>
       </div>
       <vaadin-avatar-group-overlay
         id="overlay"
@@ -214,7 +217,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
        * The object has the following JSON structure and default values:
        * ```
        * {
-       *   // Translation of the anonymous user avatar title.
+       *   // Translation of the anonymous user avatar tooltip.
        *   anonymous: 'anonymous',
        *   // Translation of the avatar group accessible label.
        *   // {count} is replaced with the actual count of users.
@@ -268,12 +271,15 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
         observer: '__openedChanged',
         value: false,
       },
+
+      /** @private */
+      __overflowTextGenerator: Object,
     };
   }
 
   static get observers() {
     return [
-      '__computeMoreTitle(items.length, __itemsInView, maxItemsVisible)',
+      '__computeMoreTooltip(items.length, __itemsInView, maxItemsVisible)',
       '__itemsChanged(items.splices, items.*)',
       '__i18nItemsChanged(i18n.*, items.length)',
     ];
@@ -376,7 +382,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
   }
 
   /** @private */
-  __computeMoreTitle(items, itemsInView, maxItemsVisible) {
+  __computeMoreTooltip(items, itemsInView, maxItemsVisible) {
     const limit = this.__getLimit(items, itemsInView, maxItemsVisible);
     if (limit == null) {
       return;
@@ -388,8 +394,8 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
         result.push(item.name || item.abbr || 'anonymous');
       }
     }
-    // Override generated title attribute
-    this.$.overflow.setAttribute('title', result.join('\n'));
+    // Override generated tooltip text
+    this.__overflowTextGenerator = () => result.join('\n');
   }
 
   /** @private */
@@ -474,9 +480,6 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
       }
 
       this._openedWithFocusRing = this.$.overflow.hasAttribute('focus-ring');
-
-      const avatars = this._menuElement.querySelectorAll('vaadin-avatar');
-      avatars.forEach((avatar) => avatar.removeAttribute('title'));
 
       this._menuElement.focus();
     } else if (wasOpened) {

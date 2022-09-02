@@ -5,8 +5,10 @@
  */
 import './vaadin-avatar-icons.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -36,11 +38,12 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes FocusMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class Avatar extends FocusMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -120,6 +123,8 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       >
         <text dy=".35em" text-anchor="middle">[[abbr]]</text>
       </svg>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -149,7 +154,7 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
       /**
        * Full name of the user
-       * used for the title of the avatar.
+       * used for the tooltip of the avatar.
        */
       name: {
         type: String,
@@ -174,7 +179,7 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
        *
        * ```
        * {
-       *   // Translation of the anonymous user avatar title.
+       *   // Translation of the anonymous user avatar tooltip.
        *   anonymous: 'anonymous'
        * }
        * ```
@@ -191,6 +196,18 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
         },
       },
 
+      /**
+       * When true, the avatar has tooltip shown on hover and focus.
+       * The tooltip text is based on the `name` and `abbr` properties.
+       * When neither is provided, `i18n.anonymous` is used instead.
+       * @attr {boolean} with-tooltip
+       */
+      withTooltip: {
+        type: Boolean,
+        value: false,
+        observer: '__withTooltipChanged',
+      },
+
       /** @private */
       __imgVisible: Boolean,
 
@@ -199,11 +216,18 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
       /** @private */
       __abbrVisible: Boolean,
+
+      /** @private */
+      __tooltipNode: Object,
     };
   }
 
   static get observers() {
-    return ['__imgOrAbbrOrNameChanged(img, abbr, name)', '__i18nChanged(i18n.*)'];
+    return [
+      '__imgOrAbbrOrNameChanged(img, abbr, name)',
+      '__i18nChanged(i18n.*)',
+      '__tooltipChanged(__tooltipNode, name, abbr)',
+    ];
   }
 
   /** @protected */
@@ -212,15 +236,18 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
 
     this.__updateVisibility();
 
-    // Should set `anonymous` if name / abbr is not provided
-    if (!this.name && !this.abbr) {
-      this.__setTitle(this.name);
-    }
-
     this.setAttribute('role', 'button');
 
     if (!this.hasAttribute('tabindex')) {
       this.setAttribute('tabindex', '0');
+    }
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
+
+    // Should set `anonymous` if name / abbr is not provided
+    if (!this.name && !this.abbr) {
+      this.__setTooltip();
     }
   }
 
@@ -254,7 +281,6 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     this.__updateVisibility();
 
     if (abbr && abbr !== this.__generatedAbbr) {
-      this.__setTitle(name ? `${name} (${abbr})` : abbr);
       return;
     }
 
@@ -266,15 +292,40 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
     } else {
       this.abbr = undefined;
     }
+  }
 
-    this.__setTitle(name);
+  /** @private */
+  __tooltipChanged(tooltipNode, name, abbr) {
+    if (tooltipNode) {
+      if (abbr && abbr !== this.__generatedAbbr) {
+        this.__setTooltip(name ? `${name} (${abbr})` : abbr);
+      } else {
+        this.__setTooltip(name);
+      }
+    }
+  }
+
+  /** @private */
+  __withTooltipChanged(withTooltip, oldWithTooltip) {
+    if (withTooltip) {
+      // Create and attach tooltip
+      const tooltipNode = document.createElement('vaadin-tooltip');
+      tooltipNode.setAttribute('slot', 'tooltip');
+      this.appendChild(tooltipNode);
+      this.__tooltipNode = tooltipNode;
+    } else if (oldWithTooltip) {
+      // Cleanup and detach tooltip
+      this.__tooltipNode.target = null;
+      this.__tooltipNode.remove();
+      this.__tooltipNode = null;
+    }
   }
 
   /** @private */
   __i18nChanged(i18n) {
     if (i18n.base && i18n.base.anonymous) {
-      if (this.__oldAnonymous && this.getAttribute('title') === this.__oldAnonymous) {
-        this.__setTitle();
+      if (this.__oldAnonymous && this.__tooltipNode && this.__tooltipNode.text === this.__oldAnonymous) {
+        this.__setTooltip();
       }
 
       this.__oldAnonymous = i18n.base.anonymous;
@@ -289,11 +340,10 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   }
 
   /** @private */
-  __setTitle(title) {
-    if (title) {
-      this.setAttribute('title', title);
-    } else {
-      this.setAttribute('title', this.i18n.anonymous);
+  __setTooltip(tooltip) {
+    const tooltipNode = this.__tooltipNode;
+    if (tooltipNode) {
+      tooltipNode.text = tooltip || this.i18n.anonymous;
     }
   }
 

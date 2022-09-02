@@ -3,6 +3,7 @@
  * Copyright (c) 2020 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -37,7 +38,7 @@ export interface AvatarI18n {
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  */
-declare class Avatar extends FocusMixin(ElementMixin(ThemableMixin(HTMLElement))) {
+declare class Avatar extends FocusMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {
   /**
    * The path to the image
    */
@@ -51,7 +52,7 @@ declare class Avatar extends FocusMixin(ElementMixin(ThemableMixin(HTMLElement))
 
   /**
    * Full name of the user
-   * used for the title of the avatar.
+   * used for the tooltip of the avatar.
    */
   name: string | null | undefined;
 
@@ -70,12 +71,20 @@ declare class Avatar extends FocusMixin(ElementMixin(ThemableMixin(HTMLElement))
    *
    * ```
    * {
-   *   // Translation of the anonymous user avatar title.
+   *   // Translation of the anonymous user avatar tooltip.
    *   anonymous: 'anonymous'
    * }
    * ```
    */
   i18n: AvatarI18n;
+
+  /**
+   * When true, the avatar has tooltip shown on hover and focus.
+   * The tooltip text is based on the `name` and `abbr` properties.
+   * When neither is provided, `i18n.anonymous` is used instead.
+   * @attr {boolean} with-tooltip
+   */
+  withTooltip: boolean;
 }
 
 declare global {

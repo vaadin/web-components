@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, focusin, focusout, mousedown, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
+import { fixtureSync, focusin, focusout, mousedown, nextFrame, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import '@vaadin/tooltip/vaadin-tooltip.js';
 import '../vaadin-avatar.js';
 
 describe('vaadin-avatar', () => {
@@ -60,12 +61,6 @@ describe('vaadin-avatar', () => {
 
         avatar.img = validImageSrc;
         expect(abbrElement.hasAttribute('hidden')).to.be.true;
-      });
-
-      it('should set title when both "img" and "name" are set', () => {
-        avatar.img = validImageSrc;
-        avatar.name = 'Foo Bar';
-        expect(avatar.getAttribute('title')).to.equal('Foo Bar');
       });
     });
 
@@ -130,57 +125,17 @@ describe('vaadin-avatar', () => {
         avatar.name = 'Bar Baz';
         expect(avatar.abbr).to.equal('BB');
       });
-
-      it('should use "abbr" prop for setting title', () => {
-        avatar.abbr = 'FB';
-        expect(avatar.getAttribute('title')).to.equal('FB');
-      });
-
-      it('should set title when both "abbr" and "name" are set', () => {
-        avatar.abbr = 'GG';
-        avatar.name = 'Well played';
-        expect(avatar.getAttribute('title')).to.equal('Well played (GG)');
-      });
     });
 
     describe('"name" property', () => {
       it('should have undefined "name" prop by default', () => {
         expect(avatar.name).to.be.undefined;
       });
-
-      it('should use "name" prop for setting title', () => {
-        avatar.name = 'Foo Bar';
-        expect(avatar.getAttribute('title')).to.equal('Foo Bar');
-      });
-
-      it('if "name" is not provided title should be "anonymous"', () => {
-        expect(avatar.getAttribute('title')).to.equal('anonymous');
-      });
     });
 
     describe('i18n property', () => {
       it('should set default value for i18n property', () => {
         expect(avatar.i18n).to.deep.equal({ anonymous: 'anonymous' });
-      });
-
-      it('should update title when i18n object is set', () => {
-        avatar.i18n = { anonymous: 'someone' };
-        expect(avatar.getAttribute('title')).to.equal('someone');
-      });
-
-      it('should update title when sub-property is set', () => {
-        avatar.set('i18n.anonymous', 'someone');
-        expect(avatar.getAttribute('title')).to.equal('someone');
-      });
-
-      it('should not update title when empty object is set', () => {
-        avatar.i18n = {};
-        expect(avatar.getAttribute('title')).to.equal('anonymous');
-      });
-
-      it('should not update title when empty value is set', () => {
-        avatar.i18n = null;
-        expect(avatar.getAttribute('title')).to.equal('anonymous');
       });
     });
 
@@ -231,6 +186,66 @@ describe('vaadin-avatar', () => {
         await oneEvent(imgElement, 'load');
         expect(imgElement.hasAttribute('hidden')).to.be.false;
         expect(abbrElement.hasAttribute('hidden')).to.be.true;
+      });
+    });
+
+    describe('tooltip', () => {
+      let tooltip;
+
+      beforeEach(async () => {
+        avatar.withTooltip = true;
+        await nextFrame();
+        tooltip = avatar.querySelector('[slot="tooltip"]');
+      });
+
+      it('should set tooltip text to "anonymous" by default', () => {
+        expect(tooltip.text).to.equal('anonymous');
+      });
+
+      it('should use "name" property for setting tooltip text', () => {
+        avatar.name = 'Foo Bar';
+        expect(tooltip.text).to.equal('Foo Bar');
+      });
+
+      it('should use "abbr" property for setting tooltip text', () => {
+        avatar.abbr = 'FB';
+        expect(tooltip.text).to.equal('FB');
+      });
+
+      it('should set tooltip text when both "abbr" and "name" are set', () => {
+        avatar.abbr = 'GG';
+        avatar.name = 'Well played';
+        expect(tooltip.text).to.equal('Well played (GG)');
+      });
+
+      it('should update tooltip text when i18n object is set', () => {
+        avatar.i18n = { anonymous: 'someone' };
+        expect(tooltip.text).to.equal('someone');
+      });
+
+      it('should update tooltip text when i18n sub-property is set', () => {
+        avatar.set('i18n.anonymous', 'someone');
+        expect(tooltip.text).to.equal('someone');
+      });
+
+      it('should not update tooltip text when empty object is set', () => {
+        avatar.i18n = {};
+        expect(tooltip.text).to.equal('anonymous');
+      });
+
+      it('should not update tooltip text when empty value is set', () => {
+        avatar.i18n = null;
+        expect(tooltip.text).to.equal('anonymous');
+      });
+
+      it('should cleanup tooltip target when withTooltip is set to false', () => {
+        avatar.withTooltip = false;
+        expect(tooltip.target).to.be.null;
+      });
+
+      it('should remove tooltip element when withTooltip is set to false', () => {
+        avatar.withTooltip = false;
+        expect(tooltip.parentNode).to.be.null;
       });
     });
   });
