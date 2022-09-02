@@ -9,9 +9,6 @@ A web component for organizing and grouping content into sections.
 
 ```html
 <vaadin-tabsheet>
-  <div slot="prefix">Prefix</div>
-  <div slot="suffix">Suffix</div>
-
   <vaadin-tabs slot="tabs">
     <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
     <vaadin-tab id="tab-2">Tab 2</vaadin-tab>
@@ -24,7 +21,7 @@ A web component for organizing and grouping content into sections.
 </vaadin-tabsheet>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/tabsheet/screenshot.png" width="355" alt="Screenshot of vaadin-tabsheet">](https://vaadin.com/docs/latest/components/tabsheet)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/tabsheet/screenshot.png" width="735" alt="Screenshot of vaadin-tabsheet">](https://vaadin.com/docs/latest/components/tabsheet)
 
 ## Installation
 
