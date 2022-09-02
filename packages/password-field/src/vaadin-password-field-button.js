@@ -28,6 +28,7 @@ class PasswordFieldButton extends Button {
           display: none !important;
         }
       </style>
+      <slot name="tooltip"></slot>
     `;
   }
 }

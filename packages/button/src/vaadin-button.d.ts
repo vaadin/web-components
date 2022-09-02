@@ -3,6 +3,7 @@
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ButtonMixin } from './vaadin-button-mixin.js';
@@ -35,7 +36,7 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  */
-declare class Button extends ButtonMixin(ElementMixin(ThemableMixin(HTMLElement))) {}
+declare class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {}
 
 declare global {
   interface HTMLElementTagNameMap {

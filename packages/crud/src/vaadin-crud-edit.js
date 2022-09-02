@@ -26,6 +26,7 @@ class CrudEdit extends Button {
         }
       </style>
       <div part="icon"></div>
+      <slot name="tooltip"></slot>
     `;
   }
 
