@@ -95,6 +95,7 @@ declare class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(HTMLEle
    * The maximum number of avatars to display. By default, all the avatars are displayed.
    * When _maxItemsVisible_ is set, the overflowing avatars are grouped into one avatar with
    * a dropdown. Setting 0 or 1 has no effect so there are always at least two avatars visible.
+   * @attr {number} max-items-visible
    */
   maxItemsVisible: number | null | undefined;
 
