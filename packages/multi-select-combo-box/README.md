@@ -2,14 +2,18 @@
 
 A web component that wraps `<vaadin-combo-box>` and allows selecting multiple items.
 
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/multi-select-combo-box)
+
 ```html
-<vaadin-multi-select-combo-box id="fruit"></vaadin-multi-select-combo-box>
+<vaadin-multi-select-combo-box style="width: 300px"></vaadin-multi-select-combo-box>
 <script>
-  const comboBox = document.querySelector('#fruit');
+  const comboBox = document.querySelector('vaadin-multi-select-combo-box');
   comboBox.items = ['apple', 'banana', 'lemon', 'orange'];
-  comboBox.selectedItems = ['lemon', 'orange'];
+  comboBox.selectedItems = ['apple', 'banana'];
 </script>
 ```
+
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/multi-select-combo-box/screenshot.png" width="300" alt="Screenshot of vaadin-multi-select-combo-box">](https://vaadin.com/docs/latest/components/multi-select-combo-box)
 
 ## Installation
 
