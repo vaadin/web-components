@@ -8,8 +8,19 @@ A web component for organizing and grouping content into sections.
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
 
 ```html
-<vaadin-tabsheet selected="3">
-  ...
+<vaadin-tabsheet>
+  <div slot="prefix">Prefix</div>
+  <div slot="suffix">Suffix</div>
+
+  <vaadin-tabs slot="tabs">
+    <vaadin-tab id="tab-1">Tab 1</vaadin-tab>
+    <vaadin-tab id="tab-2">Tab 2</vaadin-tab>
+    <vaadin-tab id="tab-3">Tab 3</vaadin-tab>
+  </vaadin-tabs>
+
+  <div tab="tab-1">Panel 1</div>
+  <div tab="tab-2">Panel 2</div>
+  <div tab="tab-3">Panel 3</div>
 </vaadin-tabsheet>
 ```
 
