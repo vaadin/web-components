@@ -17,7 +17,7 @@ snapshots["vaadin-tabsheet host default"] =
     slot="tabs"
   >
     <vaadin-tab
-      aria-controls="tabsheet-panel-1"
+      aria-controls="tabsheet-panel-0"
       aria-selected="true"
       id="tab-1"
       orientation="horizontal"
@@ -28,7 +28,7 @@ snapshots["vaadin-tabsheet host default"] =
       Tab 1
     </vaadin-tab>
     <vaadin-tab
-      aria-controls="tabsheet-panel-2"
+      aria-controls="tabsheet-panel-1"
       aria-selected="false"
       id="tab-2"
       orientation="horizontal"
@@ -38,7 +38,7 @@ snapshots["vaadin-tabsheet host default"] =
       Tab 2
     </vaadin-tab>
     <vaadin-tab
-      aria-controls="tabsheet-panel-3"
+      aria-controls="tabsheet-panel-2"
       aria-selected="false"
       id="tab-3"
       orientation="horizontal"
@@ -50,7 +50,7 @@ snapshots["vaadin-tabsheet host default"] =
   </vaadin-tabs>
   <div
     aria-labelledby="tab-1"
-    id="tabsheet-panel-1"
+    id="tabsheet-panel-0"
     role="tabpanel"
     tab="tab-1"
   >
@@ -58,7 +58,7 @@ snapshots["vaadin-tabsheet host default"] =
   <div
     aria-labelledby="tab-2"
     hidden=""
-    id="tabsheet-panel-2"
+    id="tabsheet-panel-1"
     role="tabpanel"
     tab="tab-2"
   >
@@ -66,7 +66,7 @@ snapshots["vaadin-tabsheet host default"] =
   <div
     aria-labelledby="tab-3"
     hidden=""
-    id="tabsheet-panel-3"
+    id="tabsheet-panel-2"
     role="tabpanel"
     tab="tab-3"
   >
