@@ -57,6 +57,7 @@ declare class Avatar extends FocusMixin(ElementMixin(ThemableMixin(HTMLElement))
 
   /**
    * Color index used for avatar background.
+   * @attr {number} color-index
    */
   colorIndex: number | null | undefined;
 
