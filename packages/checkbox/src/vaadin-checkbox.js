@@ -7,6 +7,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ActiveMixin } from '@vaadin/component-base/src/active-mixin.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { CheckedMixin } from '@vaadin/field-base/src/checked-mixin.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
@@ -114,6 +115,7 @@ class Checkbox extends LabelMixin(
           <slot id="noop"></slot>
         </div>
       </div>
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -187,6 +189,8 @@ class Checkbox extends LabelMixin(
         () => this.__warnDeprecated(),
       ),
     );
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 
   /** @private */
