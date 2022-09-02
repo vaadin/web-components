@@ -224,7 +224,6 @@ class RichTextEditor extends ElementMixin(ThemableMixin(PolymerElement)) {
               class="ql-script"
               value="super"
               part="toolbar-button toolbar-button-superscript"
-              title$="[[i18n.superscript]]"
             ></button>
             <vaadin-tooltip for="btn-superscript" text="[[i18n.superscript]]"></vaadin-tooltip>
           </span>
