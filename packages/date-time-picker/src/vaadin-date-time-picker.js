@@ -414,12 +414,6 @@ class DateTimePicker extends FieldMixin(
   ready() {
     super.ready();
 
-    this.addEventListener('focusout', (e) => {
-      if (e.relatedTarget !== this.__datePicker.$.overlay) {
-        this.validate();
-      }
-    });
-
     this.__datePicker = this._getDirectSlotChild('date-picker');
     this.__timePicker = this._getDirectSlotChild('time-picker');
 
@@ -434,6 +428,20 @@ class DateTimePicker extends FieldMixin(
 
   focus() {
     this.__datePicker.focus();
+  }
+
+  /**
+   * Override method inherited from `FocusMixin` to validate on blur.
+   * @param {boolean} focused
+   * @protected
+   * @override
+   */
+  _setFocused(focused) {
+    super._setFocused(focused);
+
+    if (!focused) {
+      this.validate();
+    }
   }
 
   /**
