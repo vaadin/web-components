@@ -331,6 +331,70 @@ describe('vaadin-tooltip', () => {
     });
   });
 
+  describe('shouldShow', () => {
+    let target;
+
+    beforeEach(() => {
+      target = fixtureSync('<input>');
+      tooltip.target = target;
+    });
+
+    it('should not open overlay on mouseenter when shouldShow returns false', () => {
+      tooltip.shouldShow = (target) => !target.readOnly;
+      target.readOnly = true;
+
+      mouseenter(target);
+
+      expect(overlay.opened).to.be.not.ok;
+    });
+
+    it('should not open overlay on keyboard focus when shouldShow returns false', () => {
+      tooltip.shouldShow = (target) => !target.readOnly;
+      target.readOnly = true;
+
+      tabKeyDown(target);
+      target.focus();
+
+      expect(overlay.opened).to.be.not.ok;
+    });
+
+    it('should open overlay on mouseenter when shouldShow returns true', () => {
+      tooltip.shouldShow = (target) => target.readOnly;
+      target.readOnly = true;
+
+      mouseenter(target);
+
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should open overlay on keyboard focus when shouldShow returns true', () => {
+      tooltip.shouldShow = (target) => target.readOnly;
+      target.readOnly = true;
+
+      tabKeyDown(target);
+      target.focus();
+
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should open overlay on mouseenter when shouldShow is set to null', () => {
+      tooltip.shouldShow = null;
+
+      mouseenter(target);
+
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not open overlay on keyboard focus when shouldShow is set to null', () => {
+      tooltip.shouldShow = null;
+
+      tabKeyDown(target);
+      target.focus();
+
+      expect(overlay.opened).to.be.true;
+    });
+  });
+
   describe('manual', () => {
     let target;
 
