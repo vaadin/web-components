@@ -11,6 +11,7 @@
     "@vaadin/accordion": "23.3.0-alpha0",
     "@vaadin/checkbox": "23.3.0-alpha0",
     "@vaadin/combo-box": "23.3.0-alpha0",
+    "@vaadin/date-time-picker": "23.3.0-alpha0",
     "@vaadin/details": "23.3.0-alpha0",
     "@vaadin/dialog": "23.3.0-alpha0",
     "@vaadin/grid": "23.3.0-alpha0",

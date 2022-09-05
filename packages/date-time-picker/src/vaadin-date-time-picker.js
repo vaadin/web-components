@@ -11,6 +11,7 @@ import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { dateEquals } from '@vaadin/date-picker/src/vaadin-date-picker-helper.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
@@ -156,6 +157,8 @@ class DateTimePicker extends FieldMixin(
           <slot name="error-message"></slot>
         </div>
       </div>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -422,6 +425,12 @@ class DateTimePicker extends FieldMixin(
     }
 
     this.setAttribute('role', 'group');
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
+    this._tooltipController.setShouldShow((target) => {
+      return target.__datePicker && !target.__datePicker.opened && target.__timePicker && !target.__timePicker.opened;
+    });
 
     this.ariaTarget = this;
   }

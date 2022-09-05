@@ -8,6 +8,7 @@
     <script type="module" src="./common.js"></script>
     <script type="module">
       import '@vaadin/date-time-picker';
+      import '@vaadin/tooltip';
     </script>
   </head>
   <body>
@@ -16,6 +17,8 @@
       error-message="error-message"
       min="2019-09-01T08:00"
       max="2019-09-30T22:00"
-    ></vaadin-date-time-picker>
+    >
+      <vaadin-tooltip slot="tooltip" text="You will have a personal discount"></vaadin-tooltip>
+    </vaadin-date-time-picker>
   </body>
 </html>
