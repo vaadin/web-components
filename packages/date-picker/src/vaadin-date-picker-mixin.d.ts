@@ -189,13 +189,4 @@ export declare class DatePickerMixinClass {
    * Closes the dropdown.
    */
   close(): void;
-
-  /**
-   * Returns true if the current input value satisfies all constraints (if any)
-   *
-   * Override the `checkValidity` method for custom validations.
-   *
-   * @returns True if the value is valid
-   */
-  checkValidity(): boolean;
 }
