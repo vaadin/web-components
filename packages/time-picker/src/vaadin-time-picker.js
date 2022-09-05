@@ -50,6 +50,12 @@ registerStyles('vaadin-time-picker', inputFieldShared, { moduleId: 'vaadin-time-
  * ----------------|----------------
  * `toggle-button` | The toggle button
  *
+ * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
+ *
+ * Attribute | Description
+ * ----------|------------------------------------------
+ * `opened`  | Set when the time-picker dropdown is open
+ *
  * ### Internal components
  *
  * In addition to `<vaadin-time-picker>` itself, the following internal
