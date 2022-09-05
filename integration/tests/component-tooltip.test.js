@@ -9,6 +9,7 @@ import { EmailField } from '@vaadin/email-field';
 import { IntegerField } from '@vaadin/integer-field';
 import { NumberField } from '@vaadin/number-field';
 import { PasswordField } from '@vaadin/password-field';
+import { RadioGroup } from '@vaadin/radio-group';
 import { Select } from '@vaadin/select';
 import { Tab } from '@vaadin/tabs/vaadin-tab.js';
 import { TextField } from '@vaadin/text-field';
@@ -24,6 +25,7 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
   { tagName: IntegerField.is },
   { tagName: NumberField.is },
   { tagName: PasswordField.is },
+  { tagName: RadioGroup.is },
   { tagName: Select.is },
   { tagName: Tab.is },
   { tagName: TextField.is },

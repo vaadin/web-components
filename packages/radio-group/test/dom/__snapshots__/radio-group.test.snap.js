@@ -407,6 +407,8 @@ snapshots["vaadin-radio-group shadow default"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-radio-group shadow default */
 
