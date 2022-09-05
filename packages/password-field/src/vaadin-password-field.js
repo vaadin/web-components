@@ -6,6 +6,7 @@
 import './vaadin-password-field-button.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 
@@ -174,6 +175,9 @@ export class PasswordField extends SlotStylesMixin(TextField) {
     if (this.inputElement) {
       this.inputElement.autocapitalize = 'off';
     }
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 
   /**

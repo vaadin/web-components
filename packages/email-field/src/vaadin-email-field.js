@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -62,6 +63,9 @@ export class EmailField extends TextField {
     if (this.inputElement) {
       this.inputElement.autocapitalize = 'off';
     }
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 }
 

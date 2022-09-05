@@ -6,6 +6,7 @@
 import '@vaadin/input-container/src/vaadin-input-container.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -124,6 +125,7 @@ export class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(Elemen
           <slot name="error-message"></slot>
         </div>
       </div>
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -176,6 +178,9 @@ export class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(Elemen
       }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 }
 
