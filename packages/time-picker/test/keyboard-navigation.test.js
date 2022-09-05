@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, arrowUp, aTimeout, esc, fixtureSync } from '@vaadin/testing-helpers';
+import { arrowDown, arrowUp, esc, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import './not-animated-styles.js';
 import '../vaadin-time-picker.js';
 
 describe('keyboard navigation', () => {
@@ -10,13 +11,6 @@ describe('keyboard navigation', () => {
     timePicker = fixtureSync(`<vaadin-time-picker></vaadin-time-picker>`);
     comboBox = timePicker.$.comboBox;
     inputElement = timePicker.inputElement;
-  });
-
-  afterEach(async () => {
-    if (comboBox.opened) {
-      comboBox.opened = false;
-      await aTimeout(50);
-    }
   });
 
   describe('with invalid step', () => {
@@ -163,7 +157,7 @@ describe('keyboard navigation', () => {
       timePicker.step = 1800;
       timePicker.value = '02:00';
       inputElement.focus();
-      comboBox.opened = true;
+      timePicker.open();
     });
 
     it('should not change the value on arrow up', () => {

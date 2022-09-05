@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { enter, fixtureSync } from '@vaadin/testing-helpers';
+import './not-animated-styles.js';
 import '../vaadin-time-picker.js';
 import { setInputValue } from './helpers.js';
 
@@ -91,19 +92,32 @@ describe('combo-box', () => {
     timePicker.autoOpenDisabled = true;
     expect(comboBox.autoOpenDisabled).to.be.true;
   });
+
+  it('should propagate opened property to combo-box', () => {
+    timePicker.opened = true;
+    expect(comboBox.opened).to.be.true;
+    timePicker.opened = false;
+    expect(comboBox.opened).to.be.false;
+  });
+
+  it('should sync opened property from combo-box', () => {
+    comboBox.opened = true;
+    expect(timePicker.opened).to.be.true;
+    comboBox.opened = false;
+    expect(timePicker.opened).to.be.false;
+  });
 });
 
 describe('autoOpenDisabled', () => {
-  let timePicker, comboBox, inputElement;
+  let timePicker, inputElement;
 
   beforeEach(() => {
     timePicker = fixtureSync(`<vaadin-time-picker auto-open-disabled value="05:00"></vaadin-time-picker>`);
-    comboBox = timePicker.$.comboBox;
     inputElement = timePicker.inputElement;
   });
 
   it('should focus the correct item when opened', () => {
-    comboBox.open();
+    timePicker.open();
 
     const items = document.querySelectorAll('vaadin-time-picker-item');
     expect(items[5].hasAttribute('focused')).to.be.true;

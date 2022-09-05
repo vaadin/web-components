@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { arrowDown, arrowUp, enter, esc, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
+import './not-animated-styles.js';
 import '../vaadin-time-picker.js';
 import { outsideClick, setInputValue } from './helpers.js';
 
@@ -172,6 +173,41 @@ describe('time-picker', () => {
     });
   });
 
+  describe('toggle overlay', () => {
+    let overlay;
+
+    beforeEach(() => {
+      overlay = comboBox.shadowRoot.querySelector('vaadin-time-picker-overlay');
+    });
+
+    it('should open overlay using open() call', () => {
+      timePicker.open();
+      expect(timePicker.opened).to.be.true;
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close overlay using close() call', () => {
+      timePicker.open();
+      timePicker.close();
+      expect(timePicker.opened).to.be.false;
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not open overlay when disabled', () => {
+      timePicker.disabled = true;
+      timePicker.open();
+      expect(timePicker.opened).to.be.false;
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not open overlay when readonly', () => {
+      comboBox.readonly = true;
+      comboBox.open();
+      expect(comboBox.opened).to.be.false;
+      expect(overlay.opened).to.be.false;
+    });
+  });
+
   describe('properties and attributes', () => {
     it('should propagate required property to input', () => {
       timePicker.required = true;
@@ -306,7 +342,7 @@ describe('time-picker', () => {
 
     it('should not fire change on programmatic value change after manual one', () => {
       timePicker.value = '00:00';
-      comboBox.opened = true;
+      timePicker.open();
       inputElement.value = '';
       arrowDown(inputElement);
       enter(inputElement);
@@ -319,13 +355,13 @@ describe('time-picker', () => {
 
     it('should not fire change if the value was not changed', () => {
       timePicker.value = '01:00';
-      comboBox.opened = true;
+      timePicker.open();
       enter(inputElement);
       expect(spy.called).to.be.false;
     });
 
     it('should not fire change on revert', () => {
-      comboBox.opened = true;
+      timePicker.open();
       timePicker.value = '01:00';
       esc(inputElement);
       esc(inputElement);
@@ -334,7 +370,7 @@ describe('time-picker', () => {
 
     it('should fire just one change event', async () => {
       timePicker.focus();
-      comboBox.opened = true;
+      timePicker.open();
       await sendKeys({ type: '0' });
       enter(inputElement);
       inputElement.blur();
