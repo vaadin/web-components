@@ -8,9 +8,12 @@
     <script type="module" src="./common.js"></script>
     <script type="module">
       import '@vaadin/time-picker';
+      import '@vaadin/tooltip';
     </script>
   </head>
   <body>
-    <vaadin-time-picker value="15:00" clear-button-visible></vaadin-time-picker>
+    <vaadin-time-picker value="15:00" clear-button-visible>
+      <vaadin-tooltip slot="tooltip" text="Evening times are preferred"></vaadin-tooltip>
+    </vaadin-time-picker>
   </body>
 </html>

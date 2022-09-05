@@ -9,6 +9,8 @@ import { PasswordField } from '@vaadin/password-field';
 import { Select } from '@vaadin/select';
 import { Tab } from '@vaadin/tabs/vaadin-tab.js';
 import { TextField } from '@vaadin/text-field';
+import { TimePicker } from '@vaadin/time-picker';
+import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
 [
   { tagName: Button.is },
@@ -19,9 +21,10 @@ import { TextField } from '@vaadin/text-field';
   { tagName: Select.is },
   { tagName: Tab.is },
   { tagName: TextField.is },
-].forEach(({ tagName, targetSelector, position }) => {
+  { tagName: TimePicker.is, applyShouldNotShowCondition: (timePicker) => timePicker.click() },
+].forEach(({ tagName, targetSelector, position, applyShouldNotShowCondition }) => {
   describe(`${tagName} with a slotted tooltip`, () => {
-    let element, tooltip;
+    let element, tooltip, tooltipOverlay;
 
     beforeEach(() => {
       element = fixtureSync(`
@@ -30,6 +33,7 @@ import { TextField } from '@vaadin/text-field';
         </${tagName}>
       `);
       tooltip = element.querySelector('vaadin-tooltip');
+      tooltipOverlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
     });
 
     it('should set tooltip target', () => {
@@ -39,6 +43,19 @@ import { TextField } from '@vaadin/text-field';
 
     it('should set tooltip position', () => {
       expect(tooltip.position).to.equal(position || 'bottom');
+    });
+
+    it('should or should not show tooltip', () => {
+      mouseenter(tooltip.target);
+      expect(tooltipOverlay.opened).to.be.true;
+      mouseleave(tooltip.target);
+
+      if (applyShouldNotShowCondition) {
+        applyShouldNotShowCondition(element);
+
+        mouseenter(tooltip.target);
+        expect(tooltipOverlay.opened).to.be.false;
+      }
     });
   });
 });
