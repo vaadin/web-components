@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { enter, fixtureSync } from '@vaadin/testing-helpers';
+import './not-animated-styles.js';
 import '../vaadin-time-picker.js';
 import { setInputValue } from './helpers.js';
 
