@@ -154,6 +154,19 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       },
 
       /**
+       * Function used to detect whether to show the tooltip based on a condition,
+       * called every time the tooltip is about to be shown on hover and focus.
+       * The function accepts a reference to the target element as a parameter.
+       * The tooltip is only shown when the function invocation returns `true`.
+       */
+      shouldShow: {
+        type: Object,
+        value: () => {
+          return (_target) => true;
+        },
+      },
+
+      /**
        * Reference to the element used as a tooltip trigger.
        * The target must be placed in the same shadow scope.
        * Defaults to an element referenced with `for`.
@@ -332,6 +345,10 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       return;
     }
 
+    if (typeof this.shouldShow === 'function' && this.shouldShow(this.target) !== true) {
+      return;
+    }
+
     this.__focusInside = true;
 
     if (!this.__hoverInside || !this._autoOpened) {
@@ -363,6 +380,10 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   __onMouseEnter() {
+    if (typeof this.shouldShow === 'function' && this.shouldShow(this.target) !== true) {
+      return;
+    }
+
     this.__hoverInside = true;
 
     if (!this.__focusInside || !this._autoOpened) {
