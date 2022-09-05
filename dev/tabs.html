@@ -9,16 +9,32 @@
 
     <script type="module">
       import '@vaadin/tabs';
+      import '@vaadin/tooltip';
     </script>
   </head>
 
   <body>
-    <vaadin-tabs style="max-width: 100%; width: 400px;">
-      <vaadin-tab>Analytics</vaadin-tab>
-      <vaadin-tab>Customers</vaadin-tab>
-      <vaadin-tab>Dashboards</vaadin-tab>
-      <vaadin-tab>Documents</vaadin-tab>
-      <vaadin-tab>Orders</vaadin-tab>
+    <vaadin-tabs style="max-width: 100%; width: 400px">
+      <vaadin-tab>
+        Analytics
+        <vaadin-tooltip slot="tooltip" text="Analytics tooltip"></vaadin-tooltip>
+      </vaadin-tab>
+      <vaadin-tab>
+        Customers
+        <vaadin-tooltip slot="tooltip" text="Customers tooltip"></vaadin-tooltip>
+      </vaadin-tab>
+      <vaadin-tab>
+        Dashboards
+        <vaadin-tooltip slot="tooltip" text="Dashboards tooltip"></vaadin-tooltip>
+      </vaadin-tab>
+      <vaadin-tab>
+        Documents
+        <vaadin-tooltip slot="tooltip" text="Documents tooltip"></vaadin-tooltip>
+      </vaadin-tab>
+      <vaadin-tab>
+        Orders
+        <vaadin-tooltip slot="tooltip" text="Orders tooltip"></vaadin-tooltip>
+      </vaadin-tab>
     </vaadin-tabs>
   </body>
 </html>
