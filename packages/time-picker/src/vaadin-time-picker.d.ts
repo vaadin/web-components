@@ -192,17 +192,6 @@ declare class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(El
    */
   i18n: TimePickerI18n;
 
-  /**
-   * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
-   */
-  validate(): boolean;
-
-  /**
-   * Returns true if the current input value satisfies all constraints (if any).
-   * You can override this method for custom validations.
-   */
-  checkValidity(): boolean;
-
   addEventListener<K extends keyof TimePickerEventMap>(
     type: K,
     listener: (this: TimePicker, ev: TimePickerEventMap[K]) => void,
