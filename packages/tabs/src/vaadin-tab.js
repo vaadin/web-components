@@ -4,7 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ItemMixin } from '@vaadin/item/src/vaadin-item-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -31,11 +33,12 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes ItemMixin
  */
-class Tab extends ElementMixin(ThemableMixin(ItemMixin(PolymerElement))) {
+class Tab extends ElementMixin(ThemableMixin(ItemMixin(ControllerMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -48,6 +51,7 @@ class Tab extends ElementMixin(ThemableMixin(ItemMixin(PolymerElement))) {
         }
       </style>
       <slot></slot>
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -59,6 +63,9 @@ class Tab extends ElementMixin(ThemableMixin(ItemMixin(PolymerElement))) {
   ready() {
     super.ready();
     this.setAttribute('role', 'tab');
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 
   /**
