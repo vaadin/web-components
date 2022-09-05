@@ -35,6 +35,11 @@ export type TimePickerChangeEvent = Event & {
 export type TimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
+ * Fired when the `opened` property changes.
+ */
+export type TimePickerOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `value` property changes.
  */
 export type TimePickerValueChangedEvent = CustomEvent<{ value: string }>;
@@ -46,6 +51,8 @@ export type TimePickerValidatedEvent = CustomEvent<{ valid: boolean }>;
 
 export interface TimePickerCustomEventMap {
   'invalid-changed': TimePickerInvalidChangedEvent;
+
+  'opened-changed': TimePickerOpenedChangedEvent;
 
   'value-changed': TimePickerValueChangedEvent;
 
@@ -116,6 +123,11 @@ declare class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(El
    * - `hh:mm:ss.fff`
    */
   value: string;
+
+  /**
+   * True if the dropdown is open, false otherwise.
+   */
+  opened: boolean;
 
   /**
    * Minimum time allowed.
@@ -191,6 +203,16 @@ declare class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(El
    * to ensure the component works properly.
    */
   i18n: TimePickerI18n;
+
+  /**
+   * Opens the dropdown list.
+   */
+  open(): void;
+
+  /**
+   * Closes the dropdown list.
+   */
+  close(): void;
 
   /**
    * Returns true if `value` is valid, and sets the `invalid` flag appropriately.

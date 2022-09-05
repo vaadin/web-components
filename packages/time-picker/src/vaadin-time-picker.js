@@ -67,6 +67,7 @@ registerStyles('vaadin-time-picker', inputFieldShared, { moduleId: 'vaadin-time-
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  *
@@ -109,6 +110,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
           id="comboBox"
           filtered-items="[[__dropdownItems]]"
           value="{{_comboBoxValue}}"
+          opened="{{opened}}"
           disabled="[[disabled]]"
           readonly="[[readonly]]"
           clear-button-visible="[[clearButtonVisible]]"
@@ -158,6 +160,16 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
         type: String,
         notify: true,
         value: '',
+      },
+
+      /**
+       * True if the dropdown is open, false otherwise.
+       */
+      opened: {
+        type: Boolean,
+        notify: true,
+        value: false,
+        reflectToAttribute: true,
       },
 
       /**
@@ -339,7 +351,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
 
     this._tooltipController = new TooltipController(this);
-    this._tooltipController.setShouldShow((timePicker) => !timePicker.$.comboBox.opened);
+    this._tooltipController.setShouldShow((timePicker) => !timePicker.opened);
     this.addController(this._tooltipController);
   }
 
@@ -354,6 +366,22 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     if (input) {
       this.$.comboBox._setInputElement(input);
     }
+  }
+
+  /**
+   * Opens the dropdown list.
+   */
+  open() {
+    if (!this.disabled && !this.readonly) {
+      this.opened = true;
+    }
+  }
+
+  /**
+   * Closes the dropdown list.
+   */
+  close() {
+    this.opened = false;
   }
 
   /**
