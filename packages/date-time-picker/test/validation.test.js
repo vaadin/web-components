@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-date-time-picker.js';
 
@@ -23,11 +24,13 @@ const fixtures = {
 
 ['default', 'slotted'].forEach((set) => {
   describe(`Validation (${set})`, () => {
-    let dateTimePicker, validateSpy;
+    let dateTimePicker, validateSpy, datePicker, timePicker;
 
     beforeEach(() => {
       dateTimePicker = fixtureSync(fixtures[set]);
       validateSpy = sinon.spy(dateTimePicker, 'validate');
+      datePicker = dateTimePicker.querySelector('[slot=date-picker]');
+      timePicker = dateTimePicker.querySelector('[slot=time-picker]');
     });
 
     it('should not be required', () => {
@@ -51,6 +54,36 @@ const fixtures = {
       dateTimePicker.value = '2020-02-02T02:02:00';
       expect(dateTimePicker.validate()).to.equal(true);
       expect(dateTimePicker.invalid).to.equal(false);
+    });
+
+    it('should validate on date-picker blur', () => {
+      datePicker.focus();
+      datePicker.blur();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should validate on time-picker blur', () => {
+      timePicker.focus();
+      timePicker.blur();
+      expect(validateSpy.calledOnce).to.be.true;
+    });
+
+    it('should not validate when moving focus between pickers', async () => {
+      datePicker.focus();
+      // Move focus to time-picker
+      await sendKeys({ press: 'Tab' });
+      // Move focus to date-picker
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+      expect(validateSpy.called).to.be.false;
+    });
+
+    it('should not validate when moving focus to the date-picker dropdown', async () => {
+      datePicker.focus();
+      await sendKeys({ press: 'ArrowDown' });
+      await sendKeys({ press: 'Tab' });
+      expect(validateSpy.called).to.be.false;
     });
 
     it('should not validate on min change without value', () => {
