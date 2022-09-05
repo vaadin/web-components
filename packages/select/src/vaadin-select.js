@@ -13,6 +13,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { generateUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.js';
@@ -183,6 +184,8 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
         phone$="[[_phone]]"
         theme$="[[_theme]]"
       ></vaadin-select-overlay>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -371,6 +374,9 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
     );
 
     processTemplates(this);
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 
   /**

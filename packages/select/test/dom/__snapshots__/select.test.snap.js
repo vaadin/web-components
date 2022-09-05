@@ -325,6 +325,8 @@ snapshots["vaadin-select shadow default"] =
     </vaadin-select-item>
   </vaadin-select-list-box>
 </vaadin-select-overlay>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-select shadow default */
 
@@ -387,6 +389,8 @@ snapshots["vaadin-select shadow disabled"] =
     </vaadin-select-item>
   </vaadin-select-list-box>
 </vaadin-select-overlay>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-select shadow disabled */
 
@@ -449,6 +453,8 @@ snapshots["vaadin-select shadow readonly"] =
     </vaadin-select-item>
   </vaadin-select-list-box>
 </vaadin-select-overlay>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-select shadow readonly */
 
@@ -511,6 +517,8 @@ snapshots["vaadin-select shadow invalid"] =
     </vaadin-select-item>
   </vaadin-select-list-box>
 </vaadin-select-overlay>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-select shadow invalid */
 
@@ -573,6 +581,8 @@ snapshots["vaadin-select shadow theme"] =
     </vaadin-select-item>
   </vaadin-select-list-box>
 </vaadin-select-overlay>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-select shadow theme */
 

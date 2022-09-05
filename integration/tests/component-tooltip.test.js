@@ -4,12 +4,14 @@ import '@vaadin/tooltip';
 import { Button } from '@vaadin/button';
 import { Checkbox } from '@vaadin/checkbox';
 import { Details } from '@vaadin/details';
+import { Select } from '@vaadin/select';
 import { Tab } from '@vaadin/tabs/vaadin-tab.js';
 
 [
   { tagName: Checkbox.is },
   { tagName: Button.is },
   { tagName: Details.is, targetSelector: '[part="summary"]', position: 'bottom-start' },
+  { tagName: Select.is },
   { tagName: Tab.is },
 ].forEach(({ tagName, targetSelector, position }) => {
   describe(`${tagName} with a slotted tooltip`, () => {
