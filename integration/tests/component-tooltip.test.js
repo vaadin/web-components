@@ -4,13 +4,19 @@ import '@vaadin/tooltip';
 import { Button } from '@vaadin/button';
 import { Checkbox } from '@vaadin/checkbox';
 import { Details } from '@vaadin/details';
+import { EmailField } from '@vaadin/email-field';
+import { PasswordField } from '@vaadin/password-field';
 import { Tab } from '@vaadin/tabs/vaadin-tab.js';
+import { TextField } from '@vaadin/text-field';
 
 [
-  { tagName: Checkbox.is },
   { tagName: Button.is },
+  { tagName: Checkbox.is },
   { tagName: Details.is, targetSelector: '[part="summary"]', position: 'bottom-start' },
+  { tagName: EmailField.is },
+  { tagName: PasswordField.is },
   { tagName: Tab.is },
+  { tagName: TextField.is },
 ].forEach(({ tagName, targetSelector, position }) => {
   describe(`${tagName} with a slotted tooltip`, () => {
     let element, tooltip;
