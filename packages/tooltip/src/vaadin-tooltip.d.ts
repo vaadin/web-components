@@ -109,6 +109,14 @@ declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   position: TooltipPosition;
 
   /**
+   * Function used to detect whether to show the tooltip based on a condition,
+   * called every time the tooltip is about to be shown on hover and focus.
+   * The function accepts a reference to the target element as a parameter.
+   * The tooltip is only shown when the function invocation returns `true`.
+   */
+  shouldShow: (target: HTMLElement) => boolean;
+
+  /**
    * Reference to the element used as a tooltip trigger.
    * The target must be placed in the same shadow scope.
    * Defaults to an element referenced with `for`.
