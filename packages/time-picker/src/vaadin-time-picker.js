@@ -339,6 +339,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
 
     this._tooltipController = new TooltipController(this);
+    this._tooltipController.setShouldShow((timePicker) => !timePicker.$.comboBox.opened);
     this.addController(this._tooltipController);
   }
 
