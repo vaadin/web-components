@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ProgressMixin } from './vaadin-progress-mixin.js';
@@ -40,11 +41,12 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
  * `indeterminate` | Set to an indeterminate progress bar | :host
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ProgressMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class ProgressBar extends ElementMixin(ThemableMixin(ProgressMixin(PolymerElement))) {
+class ProgressBar extends ElementMixin(ThemableMixin(ControllerMixin(ProgressMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -78,6 +80,8 @@ class ProgressBar extends ElementMixin(ThemableMixin(ProgressMixin(PolymerElemen
       <div part="bar">
         <div part="value"></div>
       </div>
+
+      <slot name="tooltip"></slot>
     `;
   }
 

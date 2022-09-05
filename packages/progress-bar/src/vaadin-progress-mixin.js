@@ -1,3 +1,5 @@
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
+
 /**
  * @license
  * Copyright (c) 2017 - 2022 Vaadin Ltd.
@@ -61,6 +63,9 @@ export const ProgressMixin = (superClass) =>
       super.ready();
 
       this.setAttribute('role', 'progressbar');
+
+      this._tooltipController = new TooltipController(this);
+      this.addController(this._tooltipController);
     }
 
     /** @private */

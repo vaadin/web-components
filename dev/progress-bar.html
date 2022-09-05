@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Progress bar</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/progress-bar';
+      import '@vaadin/tooltip';
+    </script>
+  </head>
+
+  <body>
+    <div style="width: 300px; font-family: var(--lumo-font-family); color: var(--lumo-secondary-text-color);">
+      <div style="display: flex; justify-content: space-between;">
+        <div>Processing Financials.xlsx</div>
+        <div>50%</div>
+      </div>
+
+      <vaadin-progress-bar value="0.5">
+        <vaadin-tooltip slot="tooltip" text="Remaining files: 5"></vaadin-tooltip>
+      </vaadin-progress-bar>
+    </div>
+  </body>
+</html>
