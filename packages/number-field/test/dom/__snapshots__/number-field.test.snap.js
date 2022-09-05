@@ -148,6 +148,8 @@ snapshots["vaadin-number-field shadow default"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-number-field shadow default */
 
@@ -204,6 +206,8 @@ snapshots["vaadin-number-field shadow controls"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-number-field shadow controls */
 
@@ -265,6 +269,8 @@ snapshots["vaadin-number-field shadow disabled"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-number-field shadow disabled */
 
@@ -326,6 +332,8 @@ snapshots["vaadin-number-field shadow readonly"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-number-field shadow readonly */
 
@@ -387,6 +395,8 @@ snapshots["vaadin-number-field shadow invalid"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-number-field shadow invalid */
 
@@ -448,6 +458,8 @@ snapshots["vaadin-number-field shadow theme"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-number-field shadow theme */
 

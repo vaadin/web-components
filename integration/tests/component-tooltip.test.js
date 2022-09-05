@@ -6,6 +6,8 @@ import { Checkbox } from '@vaadin/checkbox';
 import { ComboBox } from '@vaadin/combo-box';
 import { Details } from '@vaadin/details';
 import { EmailField } from '@vaadin/email-field';
+import { IntegerField } from '@vaadin/integer-field';
+import { NumberField } from '@vaadin/number-field';
 import { PasswordField } from '@vaadin/password-field';
 import { Select } from '@vaadin/select';
 import { Tab } from '@vaadin/tabs/vaadin-tab.js';
@@ -19,6 +21,8 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
   { tagName: ComboBox.is, applyShouldNotShowCondition: (comboBox) => comboBox.click() },
   { tagName: Details.is, targetSelector: '[part="summary"]', position: 'bottom-start' },
   { tagName: EmailField.is },
+  { tagName: IntegerField.is },
+  { tagName: NumberField.is },
   { tagName: PasswordField.is },
   { tagName: Select.is },
   { tagName: Tab.is },
