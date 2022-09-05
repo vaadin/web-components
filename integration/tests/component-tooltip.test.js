@@ -20,8 +20,8 @@ import { TimePicker } from '@vaadin/time-picker';
   { tagName: Select.is },
   { tagName: Tab.is },
   { tagName: TextField.is },
-  { tagName: TimePicker.is },
-].forEach(({ tagName, targetSelector, position }) => {
+  { tagName: TimePicker.is, applyShouldNotShowCondition: (timePicker) => timePicker.click() },
+].forEach(({ tagName, targetSelector, position, applyShouldNotShowCondition }) => {
   describe(`${tagName} with a slotted tooltip`, () => {
     let element, tooltip;
 
@@ -41,6 +41,15 @@ import { TimePicker } from '@vaadin/time-picker';
 
     it('should set tooltip position', () => {
       expect(tooltip.position).to.equal(position || 'bottom');
+    });
+
+    it('should or should not show tooltip', () => {
+      expect(tooltip.shouldShow(element)).to.be.true;
+
+      if (applyShouldNotShowCondition) {
+        applyShouldNotShowCondition(element);
+        expect(tooltip.shouldShow(element)).to.be.false;
+      }
     });
   });
 });
