@@ -9,10 +9,13 @@
 
     <script type="module">
       import '@vaadin/number-field';
+      import '@vaadin/tooltip';
     </script>
   </head>
 
   <body>
-    <vaadin-number-field label="Required" required></vaadin-number-field>
+    <vaadin-number-field value="2.1" step="0.1" label="Size (kg)" has-controls>
+      <vaadin-tooltip slot="tooltip" text="Number field tooltip text"></vaadin-tooltip>
+    </vaadin-number-field>
   </body>
 </html>

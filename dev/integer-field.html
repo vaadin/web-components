@@ -9,10 +9,13 @@
 
     <script type="module">
       import '@vaadin/integer-field';
+      import '@vaadin/tooltip';
     </script>
   </head>
 
   <body>
-    <vaadin-integer-field label="Quantity"></vaadin-integer-field>
+    <vaadin-integer-field label="Quantity" value="5" has-controls>
+      <vaadin-tooltip slot="tooltip" text="Integer field tooltip text"></vaadin-tooltip>
+    </vaadin-integer-field>
   </body>
 </html>
