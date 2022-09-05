@@ -154,11 +154,6 @@ declare class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMi
    */
   value: string | null | undefined;
 
-  /**
-   * Returns true if the current inputs values satisfy all constraints (if any).
-   */
-  checkValidity(): boolean;
-
   addEventListener<K extends keyof CustomFieldEventMap>(
     type: K,
     listener: (this: CustomField, ev: CustomFieldEventMap[K]) => void,
