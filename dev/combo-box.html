@@ -9,10 +9,13 @@
     <script type="module">
       import '@vaadin/combo-box';
       import '@vaadin/combo-box/vaadin-combo-box-light.js';
+      import '@vaadin/tooltip';
     </script>
   </head>
   <body>
-    <vaadin-combo-box label="Country"></vaadin-combo-box>
+    <vaadin-combo-box label="Country">
+      <vaadin-tooltip slot="tooltip" text="Loading might take time"></vaadin-tooltip>
+    </vaadin-combo-box>
 
     <script type="module">
       const comboBox = document.querySelector('vaadin-combo-box');
