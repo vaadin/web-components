@@ -11,6 +11,7 @@ import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -217,6 +218,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           <slot name="error-message"></slot>
         </div>
       </div>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -500,6 +503,10 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
       }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
+    this._tooltipController.setShouldShow((target) => !target.opened);
 
     this._inputField = this.shadowRoot.querySelector('[part="input-field"]');
     this.__updateChips();
