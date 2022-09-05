@@ -9,6 +9,7 @@ import { PasswordField } from '@vaadin/password-field';
 import { Select } from '@vaadin/select';
 import { Tab } from '@vaadin/tabs/vaadin-tab.js';
 import { TextField } from '@vaadin/text-field';
+import { TimePicker } from '@vaadin/time-picker';
 
 [
   { tagName: Button.is },
@@ -19,6 +20,7 @@ import { TextField } from '@vaadin/text-field';
   { tagName: Select.is },
   { tagName: Tab.is },
   { tagName: TextField.is },
+  { tagName: TimePicker.is },
 ].forEach(({ tagName, targetSelector, position }) => {
   describe(`${tagName} with a slotted tooltip`, () => {
     let element, tooltip;
