@@ -8,10 +8,13 @@
     <script type="module" src="./common.js"></script>
     <script type="module">
       import '@vaadin/select';
+      import '@vaadin/tooltip';
     </script>
   </head>
   <body>
-    <vaadin-select label="Size"></vaadin-select>
+    <vaadin-select label="Size">
+      <vaadin-tooltip slot="tooltip" text="Stock availability may vary"></vaadin-tooltip>
+    </vaadin-select>
 
     <script>
       const select = document.querySelector('vaadin-select');

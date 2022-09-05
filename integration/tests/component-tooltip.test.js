@@ -6,6 +6,7 @@ import { Checkbox } from '@vaadin/checkbox';
 import { Details } from '@vaadin/details';
 import { EmailField } from '@vaadin/email-field';
 import { PasswordField } from '@vaadin/password-field';
+import { Select } from '@vaadin/select';
 import { Tab } from '@vaadin/tabs/vaadin-tab.js';
 import { TextField } from '@vaadin/text-field';
 
@@ -15,6 +16,7 @@ import { TextField } from '@vaadin/text-field';
   { tagName: Details.is, targetSelector: '[part="summary"]', position: 'bottom-start' },
   { tagName: EmailField.is },
   { tagName: PasswordField.is },
+  { tagName: Select.is },
   { tagName: Tab.is },
   { tagName: TextField.is },
 ].forEach(({ tagName, targetSelector, position }) => {
