@@ -9,6 +9,7 @@ import './vaadin-combo-box-overlay.js';
 import './vaadin-combo-box-scroller.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -209,6 +210,8 @@ class ComboBox extends ComboBoxDataProviderMixin(
         no-vertical-overlap
         restore-focus-node="[[inputElement]]"
       ></vaadin-combo-box-overlay>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -245,6 +248,11 @@ class ComboBox extends ComboBoxDataProviderMixin(
       }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
+    this._tooltipController.setShouldShow((target) => !target.opened);
+
     this._positionTarget = this.shadowRoot.querySelector('[part="input-field"]');
     this._toggleElement = this.$.toggleButton;
   }
