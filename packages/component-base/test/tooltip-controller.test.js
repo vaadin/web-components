@@ -64,6 +64,12 @@ describe('TooltipController', () => {
       expect(tooltip.opened).to.be.false;
     });
 
+    it('should update tooltip shouldShow using controller shouldShow method', () => {
+      const shouldShow = () => true;
+      controller.setShouldShow(shouldShow);
+      expect(tooltip.shouldShow).to.be.eql(shouldShow);
+    });
+
     it('should update tooltip position using controller setPosition method', () => {
       controller.setPosition('top-start');
       expect(tooltip.position).to.eql('top-start');
@@ -132,6 +138,16 @@ describe('TooltipController', () => {
 
       controller.setOpened(false);
       expect(tooltip.opened).to.be.false;
+    });
+
+    it('should update lazy tooltip shouldShow using controller shouldShow method', async () => {
+      const shouldShow = () => true;
+      controller.setShouldShow(shouldShow);
+
+      host.appendChild(tooltip);
+      await nextFrame();
+
+      expect(tooltip.shouldShow).to.be.eql(shouldShow);
     });
 
     it('should update lazy tooltip position using controller setPosition method', async () => {

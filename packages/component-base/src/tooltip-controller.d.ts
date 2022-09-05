@@ -72,6 +72,12 @@ export class TooltipController extends SlotController {
   setPosition(position: TooltipPosition): void;
 
   /**
+   * Set function used to detect whether to show
+   * the tooltip based on a condition.
+   */
+  setShouldShow(shouldShow: (target: HTMLElement) => boolean): void;
+
+  /**
    * Set an HTML element to attach the tooltip to.
    */
   setTarget(target: HTMLElement): void;

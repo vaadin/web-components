@@ -41,6 +41,10 @@ export class TooltipController extends SlotController {
     if (this.position !== undefined) {
       tooltipNode.position = this.position;
     }
+
+    if (this.shouldShow !== undefined) {
+      tooltipNode.shouldShow = this.shouldShow;
+    }
   }
 
   /**
@@ -92,6 +96,20 @@ export class TooltipController extends SlotController {
     const tooltipNode = this.node;
     if (tooltipNode) {
       tooltipNode.position = position;
+    }
+  }
+
+  /**
+   * Set function used to detect whether to show
+   * the tooltip based on a condition.
+   * @param {Function} shouldShow
+   */
+  setShouldShow(shouldShow) {
+    this.shouldShow = shouldShow;
+
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode.shouldShow = shouldShow;
     }
   }
 
