@@ -7,6 +7,7 @@ import '@vaadin/input-container/src/vaadin-input-container.js';
 import './vaadin-time-picker-combo-box.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -138,6 +139,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
           <slot name="error-message"></slot>
         </div>
       </div>
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -335,6 +337,9 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
     this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 
   /**

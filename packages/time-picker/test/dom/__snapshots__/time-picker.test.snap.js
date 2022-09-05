@@ -306,6 +306,8 @@ snapshots["vaadin-time-picker shadow default"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-time-picker shadow default */
 
@@ -363,6 +365,8 @@ snapshots["vaadin-time-picker shadow disabled"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-time-picker shadow disabled */
 
@@ -419,6 +423,8 @@ snapshots["vaadin-time-picker shadow readonly"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-time-picker shadow readonly */
 
@@ -474,6 +480,8 @@ snapshots["vaadin-time-picker shadow invalid"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-time-picker shadow invalid */
 
@@ -530,6 +538,8 @@ snapshots["vaadin-time-picker shadow theme"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-time-picker shadow theme */
 
