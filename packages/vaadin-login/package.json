@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-login",
-  "version": "23.1.6",
+  "version": "23.1.7",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/login": "^23.1.6"
+    "@vaadin/login": "~23.1.7"
   }
 }
