@@ -10,5 +10,4 @@ registerStyles(
       animation: none !important;
     }
   `,
-  { moduleId: 'not-animated-tooltip-overlay' },
 );
