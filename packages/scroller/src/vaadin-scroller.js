@@ -71,6 +71,7 @@ class Scroller extends FocusMixin(ElementMixin(ControllerMixin(ThemableMixin(Pol
       /**
        * This property indicates the scroll direction. Supported values are `vertical`, `horizontal`, `none`.
        * When `scrollDirection` is undefined scrollbars will be shown in both directions.
+       * @attr {string} scroll-direction
        */
       scrollDirection: {
         type: String,
