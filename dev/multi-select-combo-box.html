@@ -9,6 +9,7 @@
 
     <script type="module">
       import '@vaadin/multi-select-combo-box';
+      import '@vaadin/tooltip';
       // import '@vaadin/multi-select-combo-box/theme/material/vaadin-multi-select-combo-box.js';
     </script>
   </head>
@@ -20,7 +21,9 @@
       error-message="Select at least one"
       allow-custom-value
       style="width: 300px"
-    ></vaadin-multi-select-combo-box>
+    >
+      <vaadin-tooltip slot="tooltip" text="Vaadin multi-select-combo-box tooltip text"></vaadin-tooltip>
+    </vaadin-multi-select-combo-box>
 
     <!--
     <vaadin-multi-select-combo-box
@@ -64,7 +67,7 @@
         'Cobalt',
         'Nickel',
         'Copper',
-        'Zinc'
+        'Zinc',
       ];
 
       comboBox.selectedItems = ['Hydrogen', 'Helium', 'Lithium'];
