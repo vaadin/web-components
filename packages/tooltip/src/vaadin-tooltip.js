@@ -384,6 +384,11 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       return;
     }
 
+    if (this.__hoverInside) {
+      // Already hovering inside the element, do nothing.
+      return;
+    }
+
     this.__hoverInside = true;
 
     if (!this.__focusInside || !this._autoOpened) {
