@@ -15,6 +15,16 @@ const PROP_NAMES_HORIZONTAL = {
   end: 'right',
 };
 
+const targetResizeObserver = new ResizeObserver((entries) => {
+  setTimeout(() => {
+    entries.forEach((entry) => {
+      if (entry.target.__overlay) {
+        entry.target.__overlay._updatePosition();
+      }
+    });
+  });
+});
+
 /**
  * @polymerMixin
  */
@@ -89,12 +99,6 @@ export const PositionMixin = (superClass) =>
       super();
 
       this._updatePosition = this._updatePosition.bind(this);
-
-      this.__targetResizeObserver = new ResizeObserver(() => {
-        setTimeout(() => {
-          this._updatePosition();
-        });
-      });
     }
 
     /** @protected */
@@ -139,11 +143,13 @@ export const PositionMixin = (superClass) =>
       this.__removeUpdatePositionEventListeners();
 
       if (positionTarget) {
-        this.__targetResizeObserver.unobserve(positionTarget);
+        positionTarget.__overlay = null;
+        targetResizeObserver.unobserve(positionTarget);
 
         if (opened) {
           this.__addUpdatePositionEventListeners();
-          this.__targetResizeObserver.observe(positionTarget);
+          positionTarget.__overlay = this;
+          targetResizeObserver.observe(positionTarget);
         }
       }
 
