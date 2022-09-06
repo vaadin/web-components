@@ -8,6 +8,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -112,6 +113,8 @@ class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMixin(Elem
           <slot name="error-message"></slot>
         </div>
       </div>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -222,6 +225,9 @@ class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMixin(Elem
     this.__observer = new FlattenedNodesObserver(this.$.slot, () => {
       this.__setInputsFromSlot();
     });
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 
   /** @protected */

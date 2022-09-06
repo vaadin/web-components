@@ -135,6 +135,8 @@ snapshots["vaadin-custom-field shadow default"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-custom-field shadow default */
 
