@@ -27,6 +27,7 @@
     "@vaadin/radio-group": "23.3.0-alpha0",
     "@vaadin/select": "23.3.0-alpha0",
     "@vaadin/tabs": "23.3.0-alpha0",
+    "@vaadin/text-area": "23.3.0-alpha0",
     "@vaadin/text-field": "23.3.0-alpha0",
     "@vaadin/tooltip": "23.3.0-alpha0",
     "@vaadin/testing-helpers": "^0.3.2",
