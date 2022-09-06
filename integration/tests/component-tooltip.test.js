@@ -5,6 +5,7 @@ import { Button } from '@vaadin/button';
 import { Checkbox } from '@vaadin/checkbox';
 import { ComboBox } from '@vaadin/combo-box';
 import { DatePicker } from '@vaadin/date-picker';
+import { DateTimePicker } from '@vaadin/date-time-picker';
 import { Details } from '@vaadin/details';
 import { EmailField } from '@vaadin/email-field';
 import { IntegerField } from '@vaadin/integer-field';
@@ -23,6 +24,7 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
   { tagName: Checkbox.is },
   { tagName: ComboBox.is, applyShouldNotShowCondition: (comboBox) => comboBox.click() },
   { tagName: DatePicker.is, applyShouldNotShowCondition: (datePicker) => datePicker.click() },
+  { tagName: DateTimePicker.is, applyShouldNotShowCondition: (element) => element.querySelector('input').click() },
   { tagName: Details.is, targetSelector: '[part="summary"]', position: 'bottom-start' },
   { tagName: EmailField.is },
   { tagName: IntegerField.is },
