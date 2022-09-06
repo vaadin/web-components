@@ -1,5 +1,6 @@
 import { fire, fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '../../not-animated-styles.js';
 import '../../../theme/material/vaadin-tooltip.js';
 
 describe('tooltip', () => {

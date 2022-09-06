@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { sendKeys } from '@web/test-runner-commands';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/tooltip/test/not-animated-styles.js';
 import '../../../theme/material/vaadin-avatar.js';
 
 describe('avatar', () => {
