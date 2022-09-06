@@ -30,7 +30,6 @@ registerStyles(
       animation: none !important;
     }
   `,
-  { moduleId: 'not-animated-user-tags-overlay' },
 );
 
 const users = [
