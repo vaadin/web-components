@@ -6,8 +6,10 @@
 import './vaadin-menu-bar-submenu.js';
 import './vaadin-menu-bar-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
 import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
@@ -61,13 +63,16 @@ import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
  * @fires {CustomEvent<boolean>} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ButtonsMixin
  * @mixes InteractionsMixin
  * @mixes DisabledMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
+class MenuBar extends ButtonsMixin(
+  DisabledMixin(InteractionsMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))))),
+) {
   static get template() {
     return html`
       <style>
@@ -109,6 +114,8 @@ class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(
         </vaadin-menu-bar-button>
       </div>
       <vaadin-menu-bar-submenu is-root=""></vaadin-menu-bar-submenu>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -211,6 +218,15 @@ class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(
 
   static get observers() {
     return ['_themeChanged(_theme)'];
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._tooltipController = new TooltipController(this);
+    this._tooltipController.setManual(true);
+    this.addController(this._tooltipController);
   }
 
   /**
