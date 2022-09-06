@@ -15,6 +15,16 @@ const PROP_NAMES_HORIZONTAL = {
   end: 'right',
 };
 
+const targetResizeObserver = new ResizeObserver((entries) => {
+  setTimeout(() => {
+    entries.forEach((entry) => {
+      if (entry.target.__overlay) {
+        entry.target.__overlay._updatePosition();
+      }
+    });
+  });
+});
+
 /**
  * @polymerMixin
  */
@@ -132,8 +142,15 @@ export const PositionMixin = (superClass) =>
     __overlayOpenedChanged(opened, positionTarget) {
       this.__removeUpdatePositionEventListeners();
 
-      if (opened && positionTarget) {
-        this.__addUpdatePositionEventListeners();
+      if (positionTarget) {
+        positionTarget.__overlay = null;
+        targetResizeObserver.unobserve(positionTarget);
+
+        if (opened) {
+          this.__addUpdatePositionEventListeners();
+          positionTarget.__overlay = this;
+          targetResizeObserver.observe(positionTarget);
+        }
       }
 
       if (opened) {

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { aTimeout, fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { OverlayElement } from '../src/vaadin-overlay.js';
 import { PositionMixin } from '../src/vaadin-overlay-position-mixin.js';
@@ -117,6 +117,19 @@ describe('position mixin listeners', () => {
     it('should not update position on resize when closed', () => {
       overlay.opened = false;
       resize(window);
+      expect(updatePositionSpy.called).to.be.false;
+    });
+
+    it('should update position on target resize', async () => {
+      target.style.width = '100px';
+      await aTimeout(50);
+      expect(updatePositionSpy.called).to.be.true;
+    });
+
+    it('should not update position on target resize when closed', async () => {
+      overlay.opened = false;
+      target.style.width = '100px';
+      await aTimeout(50);
       expect(updatePositionSpy.called).to.be.false;
     });
 
