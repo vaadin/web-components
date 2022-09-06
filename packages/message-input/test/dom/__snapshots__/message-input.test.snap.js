@@ -32,6 +32,8 @@ snapshots["vaadin-message-input default"] =
 >
   Send
 </vaadin-message-input-button>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-message-input default */
 
@@ -74,6 +76,8 @@ snapshots["vaadin-message-input disabled"] =
 >
   Send
 </vaadin-message-input-button>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-message-input disabled */
 
