@@ -24,6 +24,7 @@
         required
       ></vaadin-text-field>
       <vaadin-number-field required></vaadin-number-field>
+      <vaadin-tooltip slot="tooltip" text="Other users will not see this"></vaadin-tooltip>
     </vaadin-custom-field>
 
     <script type="module">
@@ -33,6 +34,7 @@
       import '@vaadin/number-field';
       import '@vaadin/text-field';
       import '@vaadin/select';
+      import '@vaadin/tooltip';
 
       const select = document.querySelector('vaadin-select');
       select.focusElement.setAttribute('aria-label', 'Country code');
