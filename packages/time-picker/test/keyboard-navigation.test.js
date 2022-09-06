@@ -157,7 +157,7 @@ describe('keyboard navigation', () => {
       timePicker.step = 1800;
       timePicker.value = '02:00';
       inputElement.focus();
-      comboBox.opened = true;
+      timePicker.open();
     });
 
     it('should not change the value on arrow up', () => {

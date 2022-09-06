@@ -8,6 +8,7 @@ import './vaadin-date-picker-overlay.js';
 import './vaadin-date-picker-overlay-content.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
@@ -183,6 +184,8 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
           ></vaadin-date-picker-overlay-content>
         </template>
       </vaadin-date-picker-overlay>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -208,6 +211,10 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
       }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
+    this._tooltipController.setShouldShow((target) => !target.opened);
 
     const toggleButton = this.shadowRoot.querySelector('[part="toggle-button"]');
     toggleButton.addEventListener('mousedown', (e) => e.preventDefault());

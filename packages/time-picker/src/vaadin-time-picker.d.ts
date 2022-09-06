@@ -35,6 +35,11 @@ export type TimePickerChangeEvent = Event & {
 export type TimePickerInvalidChangedEvent = CustomEvent<{ value: boolean }>;
 
 /**
+ * Fired when the `opened` property changes.
+ */
+export type TimePickerOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when the `value` property changes.
  */
 export type TimePickerValueChangedEvent = CustomEvent<{ value: string }>;
@@ -46,6 +51,8 @@ export type TimePickerValidatedEvent = CustomEvent<{ valid: boolean }>;
 
 export interface TimePickerCustomEventMap {
   'invalid-changed': TimePickerInvalidChangedEvent;
+
+  'opened-changed': TimePickerOpenedChangedEvent;
 
   'value-changed': TimePickerValueChangedEvent;
 
@@ -86,6 +93,12 @@ export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerCusto
  * ----------------|----------------
  * `toggle-button` | The toggle button
  *
+ * In addition to `<vaadin-text-field>` state attributes, the following state attributes are available for theming:
+ *
+ * Attribute | Description
+ * ----------|------------------------------------------
+ * `opened`  | Set when the time-picker dropdown is open
+ *
  * ### Internal components
  *
  * In addition to `<vaadin-time-picker>` itself, the following internal
@@ -103,6 +116,7 @@ export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerCusto
  *
  * @fires {Event} change - Fired when the user commits a value change.
  * @fires {CustomEvent} invalid-changed - Fired when the `invalid` property changes.
+ * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
@@ -116,6 +130,11 @@ declare class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(El
    * - `hh:mm:ss.fff`
    */
   value: string;
+
+  /**
+   * True if the dropdown is open, false otherwise.
+   */
+  opened: boolean;
 
   /**
    * Minimum time allowed.
@@ -193,15 +212,14 @@ declare class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(El
   i18n: TimePickerI18n;
 
   /**
-   * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
+   * Opens the dropdown list.
    */
-  validate(): boolean;
+  open(): void;
 
   /**
-   * Returns true if the current input value satisfies all constraints (if any).
-   * You can override this method for custom validations.
+   * Closes the dropdown list.
    */
-  checkValidity(): boolean;
+  close(): void;
 
   addEventListener<K extends keyof TimePickerEventMap>(
     type: K,
