@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -35,7 +36,7 @@ export type MessageInputEventMap = HTMLElementEventMap & MessageInputCustomEvent
  * <vaadin-message-input></vaadin-message-input>
  * ```
  */
-declare class MessageInput extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class MessageInput extends ThemableMixin(ElementMixin(ControllerMixin(HTMLElement))) {
   /**
    * Current content of the text input field
    */

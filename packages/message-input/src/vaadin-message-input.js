@@ -6,7 +6,9 @@
 import './vaadin-message-input-text-area.js';
 import './vaadin-message-input-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -30,10 +32,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * - `<vaadin-message-input-text-area>` - has the same API as [`<vaadin-text-area>`](#/elements/vaadin-text-area).
  *
  * @extends HTMLElement
+ * @mizes ControllerMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class MessageInput extends ElementMixin(ThemableMixin(PolymerElement)) {
+class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))) {
   static get properties() {
     return {
       /**
@@ -106,11 +109,21 @@ class MessageInput extends ElementMixin(ThemableMixin(PolymerElement)) {
       <vaadin-message-input-button disabled="[[disabled]]" theme="primary contained" on-click="__submit"
         >[[i18n.send]]</vaadin-message-input-button
       >
+
+      <slot name="tooltip"></slot>
     `;
   }
 
   static get is() {
     return 'vaadin-message-input';
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 
   /**
