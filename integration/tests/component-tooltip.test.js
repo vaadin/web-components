@@ -3,6 +3,7 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import '@vaadin/tooltip';
 import { Button } from '@vaadin/button';
 import { Checkbox } from '@vaadin/checkbox';
+import { CheckboxGroup } from '@vaadin/checkbox-group';
 import { ComboBox } from '@vaadin/combo-box';
 import { CustomField } from '@vaadin/custom-field';
 import { DatePicker } from '@vaadin/date-picker';
@@ -25,6 +26,7 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 [
   { tagName: Button.is },
   { tagName: Checkbox.is },
+  { tagName: CheckboxGroup.is },
   { tagName: ComboBox.is, applyShouldNotShowCondition: (comboBox) => comboBox.click() },
   {
     tagName: CustomField.is,

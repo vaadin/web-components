@@ -9,6 +9,7 @@ import { Checkbox } from '@vaadin/checkbox/src/vaadin-checkbox.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -111,6 +112,8 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
           <slot name="error-message"></slot>
         </div>
       </div>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -159,6 +162,9 @@ class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementMixin(The
 
       this.__warnOfCheckboxesWithoutValue(addedCheckboxes);
     });
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 
   /**
