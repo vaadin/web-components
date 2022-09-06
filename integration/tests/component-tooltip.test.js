@@ -25,7 +25,11 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
   { tagName: Button.is },
   { tagName: Checkbox.is },
   { tagName: ComboBox.is, applyShouldNotShowCondition: (comboBox) => comboBox.click() },
-  { tagName: CustomField.is },
+  {
+    tagName: CustomField.is,
+    children: '<vaadin-combo-box></vaadin-combo-box>',
+    applyShouldNotShowCondition: (field) => field.inputs[0].click(),
+  },
   { tagName: DatePicker.is, applyShouldNotShowCondition: (datePicker) => datePicker.click() },
   { tagName: DateTimePicker.is, applyShouldNotShowCondition: (element) => element.querySelector('input').click() },
   { tagName: Details.is, targetSelector: '[part="summary"]', position: 'bottom-start' },
@@ -40,13 +44,14 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
   { tagName: Tab.is },
   { tagName: TextField.is },
   { tagName: TimePicker.is, applyShouldNotShowCondition: (timePicker) => timePicker.click() },
-].forEach(({ tagName, targetSelector, position, applyShouldNotShowCondition }) => {
+].forEach(({ tagName, targetSelector, position, applyShouldNotShowCondition, children = '' }) => {
   describe(`${tagName} with a slotted tooltip`, () => {
     let element, tooltip, tooltipOverlay;
 
     beforeEach(() => {
       element = fixtureSync(`
         <${tagName}>
+          ${children}
           <vaadin-tooltip slot="tooltip" text="Tooltip text"></vaadin-tooltip>
         </${tagName}>
       `);

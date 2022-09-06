@@ -228,6 +228,10 @@ class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMixin(Elem
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
+    this._tooltipController.setShouldShow((target) => {
+      const inputs = target.inputs || [];
+      return !inputs.some((el) => el.opened);
+    });
   }
 
   /** @protected */
