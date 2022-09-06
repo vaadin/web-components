@@ -336,6 +336,8 @@ snapshots["vaadin-date-picker shadow default"] =
   <template>
   </template>
 </vaadin-date-picker-overlay>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-date-picker shadow default */
 
@@ -392,6 +394,8 @@ snapshots["vaadin-date-picker shadow disabled"] =
   <template>
   </template>
 </vaadin-date-picker-overlay>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-date-picker shadow disabled */
 
@@ -448,6 +452,8 @@ snapshots["vaadin-date-picker shadow readonly"] =
   <template>
   </template>
 </vaadin-date-picker-overlay>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-date-picker shadow readonly */
 
@@ -504,6 +510,8 @@ snapshots["vaadin-date-picker shadow invalid"] =
   <template>
   </template>
 </vaadin-date-picker-overlay>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-date-picker shadow invalid */
 
@@ -560,6 +568,8 @@ snapshots["vaadin-date-picker shadow theme"] =
   <template>
   </template>
 </vaadin-date-picker-overlay>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-date-picker shadow theme */
 

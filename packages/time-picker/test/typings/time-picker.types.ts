@@ -3,6 +3,7 @@ import type { ControllerMixinClass } from '@vaadin/component-base/src/controller
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { PatternMixinClass } from '@vaadin/field-base/src/pattern-mixin.js';
+import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type {
   TimePicker,
@@ -22,6 +23,7 @@ assertType<ControllerMixinClass>(timePicker);
 assertType<ElementMixinClass>(timePicker);
 assertType<InputControlMixinClass>(timePicker);
 assertType<PatternMixinClass>(timePicker);
+assertType<ValidateMixinClass>(timePicker);
 assertType<ThemableMixinClass>(timePicker);
 
 // Events

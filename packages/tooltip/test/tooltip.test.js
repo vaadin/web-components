@@ -329,6 +329,13 @@ describe('vaadin-tooltip', () => {
       focusout(target);
       expect(overlay.opened).to.be.true;
     });
+
+    it('should not open a closed overlay on mouseenter if already hovering on target', () => {
+      mouseenter(target);
+      mousedown(target);
+      mouseenter(target);
+      expect(overlay.opened).to.be.false;
+    });
   });
 
   describe('shouldShow', () => {
