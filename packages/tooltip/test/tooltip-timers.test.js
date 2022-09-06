@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, escKeyDown, fixtureSync, focusout, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
+import './not-animated-styles.js';
 import { Tooltip } from '../vaadin-tooltip.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
