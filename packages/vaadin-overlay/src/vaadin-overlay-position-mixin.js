@@ -89,6 +89,12 @@ export const PositionMixin = (superClass) =>
       super();
 
       this._updatePosition = this._updatePosition.bind(this);
+
+      this.__targetResizeObserver = new ResizeObserver(() => {
+        setTimeout(() => {
+          this._updatePosition();
+        });
+      });
     }
 
     /** @protected */
@@ -132,8 +138,13 @@ export const PositionMixin = (superClass) =>
     __overlayOpenedChanged(opened, positionTarget) {
       this.__removeUpdatePositionEventListeners();
 
-      if (opened && positionTarget) {
-        this.__addUpdatePositionEventListeners();
+      if (positionTarget) {
+        this.__targetResizeObserver.unobserve(positionTarget);
+
+        if (opened) {
+          this.__addUpdatePositionEventListeners();
+          this.__targetResizeObserver.observe(positionTarget);
+        }
       }
 
       if (opened) {
