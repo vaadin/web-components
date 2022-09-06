@@ -16,6 +16,7 @@ import { PasswordField } from '@vaadin/password-field';
 import { RadioGroup } from '@vaadin/radio-group';
 import { Select } from '@vaadin/select';
 import { Tab } from '@vaadin/tabs/vaadin-tab.js';
+import { TextArea } from '@vaadin/text-area';
 import { TextField } from '@vaadin/text-field';
 import { TimePicker } from '@vaadin/time-picker';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
@@ -36,6 +37,7 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
   { tagName: RadioGroup.is },
   { tagName: Select.is },
   { tagName: Tab.is },
+  { tagName: TextArea.is },
   { tagName: TextField.is },
   { tagName: TimePicker.is, applyShouldNotShowCondition: (timePicker) => timePicker.click() },
 ].forEach(({ tagName, targetSelector, position, applyShouldNotShowCondition }) => {

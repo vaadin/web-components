@@ -9,10 +9,13 @@
 
     <script type="module">
       import '@vaadin/text-area';
+      import '@vaadin/tooltip';
     </script>
   </head>
 
   <body>
-    <vaadin-text-area label="Required" required></vaadin-text-area>
+    <vaadin-text-area label="Feedback" required>
+      <vaadin-tooltip slot="tooltip" text="Help us improve"></vaadin-tooltip>
+    </vaadin-text-area>
   </body>
 </html>

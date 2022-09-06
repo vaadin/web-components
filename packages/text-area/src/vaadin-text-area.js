@@ -7,6 +7,7 @@ import '@vaadin/input-container/src/vaadin-input-container.js';
 import { html, PolymerElement } from '@polymer/polymer';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
@@ -165,6 +166,8 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
           <slot name="error-message"></slot>
         </div>
       </div>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -223,6 +226,10 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
       }),
     );
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
+
     this.addEventListener('animationend', this._onAnimationEnd);
 
     this._inputField = this.shadowRoot.querySelector('[part=input-field]');

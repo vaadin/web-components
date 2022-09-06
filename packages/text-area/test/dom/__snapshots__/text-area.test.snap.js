@@ -128,6 +128,8 @@ snapshots["vaadin-text-area shadow default"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-text-area shadow default */
 
@@ -176,6 +178,8 @@ snapshots["vaadin-text-area shadow disabled"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-text-area shadow disabled */
 
@@ -224,6 +228,8 @@ snapshots["vaadin-text-area shadow readonly"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-text-area shadow readonly */
 
@@ -272,6 +278,8 @@ snapshots["vaadin-text-area shadow invalid"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-text-area shadow invalid */
 
@@ -320,6 +328,8 @@ snapshots["vaadin-text-area shadow theme"] =
     </slot>
   </div>
 </div>
+<slot name="tooltip">
+</slot>
 `;
 /* end snapshot vaadin-text-area shadow theme */
 
