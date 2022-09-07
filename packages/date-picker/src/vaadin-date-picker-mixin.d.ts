@@ -24,7 +24,6 @@ export interface DatePickerI18n {
   firstDayOfWeek: number;
   week: string;
   calendar: string;
-  clear: string;
   today: string;
   cancel: string;
   parseDate(date: string): DatePickerDate | undefined;

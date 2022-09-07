@@ -36,7 +36,6 @@ export function getDefaultI18n() {
     firstDayOfWeek: 0,
     week: 'Week',
     calendar: 'Calendar',
-    clear: 'Clear',
     today: 'Today',
     cancel: 'Cancel',
     formatDate(d) {
