@@ -1,5 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { escKeyDown, fixtureSync, focusout, keyboardEventFor, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
+import {
+  escKeyDown,
+  fixtureSync,
+  focusin,
+  focusout,
+  keyboardEventFor,
+  mousedown,
+  tabKeyDown,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-tooltip.js';
@@ -183,7 +191,7 @@ describe('vaadin-tooltip', () => {
     let target;
 
     beforeEach(() => {
-      target = fixtureSync('<input>');
+      target = fixtureSync('<div tabindex="0"></div>');
       tooltip.target = target;
     });
 
@@ -335,6 +343,50 @@ describe('vaadin-tooltip', () => {
       mouseenter(target);
       mousedown(target);
       mouseenter(target);
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not close overlay on moving focus within the target element', () => {
+      const input = document.createElement('input');
+      target.appendChild(input);
+
+      tabKeyDown(target);
+      target.focus();
+
+      focusout(target, input);
+
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not re-open overlay on moving focus within the target after mousedown', () => {
+      const input = document.createElement('input');
+      target.appendChild(input);
+
+      tabKeyDown(target);
+      target.focus();
+
+      mousedown(target);
+
+      tabKeyDown(target);
+      focusout(target, input);
+      focusin(input, target);
+
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should not re-open overlay on moving focus within the target after Esc', () => {
+      const input = document.createElement('input');
+      target.appendChild(input);
+
+      tabKeyDown(target);
+      target.focus();
+
+      escKeyDown(target);
+
+      tabKeyDown(target);
+      focusout(target, input);
+      focusin(input, target);
+
       expect(overlay.opened).to.be.false;
     });
   });
