@@ -95,6 +95,12 @@ describe('tooltip', () => {
     expect(tooltip.opened).to.be.false;
   });
 
+  it('should not show tooltip on focus without keyboard interaction', async () => {
+    buttons[0].focus();
+    await nextRender();
+    expect(tooltip.opened).to.be.false;
+  });
+
   it('should show tooltip on menu button keyboard focus', () => {
     tabKeyDown(document.body);
     focusin(buttons[0]);
@@ -198,6 +204,24 @@ describe('tooltip', () => {
       arrowRight(buttons[1]);
       tabKeyDown(document.body);
       focusin(buttons[buttons.length - 1]);
+      expect(tooltip.opened).to.be.false;
+    });
+  });
+
+  describe('open on hover', () => {
+    beforeEach(() => {
+      menuBar.openOnHover = true;
+    });
+
+    it('should show tooltip on mouseover for button without children', () => {
+      menuBar.openOnHover = true;
+      mouseover(buttons[0]);
+      expect(tooltip.opened).to.be.true;
+    });
+
+    it('should not show tooltip on mouseover for button with children', () => {
+      menuBar.openOnHover = true;
+      mouseover(buttons[1]);
       expect(tooltip.opened).to.be.false;
     });
   });

@@ -4,11 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils';
+
 /**
  * @polymerMixin
+ * @mixes FocusMixin
  */
 export const InteractionsMixin = (superClass) =>
-  class InteractionsMixin extends superClass {
+  class InteractionsMixin extends FocusMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -35,8 +39,6 @@ export const InteractionsMixin = (superClass) =>
       super.ready();
 
       this.addEventListener('keydown', (e) => this._onKeydown(e));
-      this.addEventListener('focusin', (e) => this._onFocusin(e));
-      this.addEventListener('focusout', (e) => this._onFocusout(e));
       this.addEventListener('mousedown', () => this._hideTooltip());
       this.addEventListener('mouseleave', () => this._hideTooltip());
 
@@ -119,27 +121,26 @@ export const InteractionsMixin = (superClass) =>
     }
 
     /**
-     * @param {!FocusEvent} event
+     * Override method inherited from `FocusMixin`
+     *
+     * @param {boolean} focused
+     * @override
      * @protected
      */
-    _onFocusin() {
-      const target = this.shadowRoot.querySelector('[part$="button"][tabindex="0"]');
-      if (target) {
-        this._buttons.forEach((btn) => {
-          this._setTabindex(btn, btn === target);
-          if (btn === target && btn !== this._overflow) {
-            this._showTooltip(btn);
-          }
-        });
+    _setFocused(focused) {
+      if (focused) {
+        const target = this.shadowRoot.querySelector('[part$="button"][tabindex="0"]');
+        if (target) {
+          this._buttons.forEach((btn) => {
+            this._setTabindex(btn, btn === target);
+            if (btn === target && btn !== this._overflow && isKeyboardActive()) {
+              this._showTooltip(btn);
+            }
+          });
+        }
+      } else {
+        this._hideTooltip();
       }
-    }
-
-    /**
-     * @param {!FocusEvent} event
-     * @protected
-     */
-    _onFocusout() {
-      this._hideTooltip();
     }
 
     /**
@@ -296,7 +297,7 @@ export const InteractionsMixin = (superClass) =>
           this._close();
         }
 
-        if (button === this._overflow) {
+        if (button === this._overflow || (this.openOnHover && button.item.children)) {
           this._hideTooltip();
         } else {
           this._showTooltip(button);
