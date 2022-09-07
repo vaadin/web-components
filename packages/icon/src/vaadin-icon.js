@@ -4,7 +4,9 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ensureSvgLiteral, renderSvg } from './vaadin-icon-svg.js';
 import { Iconset } from './vaadin-iconset.js';
@@ -51,10 +53,11 @@ const DEFAULT_ICONSET = 'vaadin';
  * ```
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
+class Icon extends ThemableMixin(ElementMixin(ControllerMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -87,6 +90,8 @@ class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
         preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
       ></svg>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -147,6 +152,9 @@ class Icon extends ThemableMixin(ElementMixin(PolymerElement)) {
   ready() {
     super.ready();
     this.__svgElement = this.shadowRoot.querySelector('svg');
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 
   /** @private */
