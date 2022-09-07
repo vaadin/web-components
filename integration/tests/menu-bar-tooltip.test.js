@@ -12,15 +12,15 @@ import {
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/menu-bar/vaadin-menu-bar.js';
-import '@vaadin/tooltip/vaadin-tooltip.js';
+import '@vaadin/menu-bar';
+import '@vaadin/tooltip';
 import { mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
 export function mouseover(target) {
   fire(target, 'mouseover');
 }
 
-describe('tooltip', () => {
+describe('menu-bar with tooltip', () => {
   let menuBar, tooltip, buttons;
 
   beforeEach(async () => {
