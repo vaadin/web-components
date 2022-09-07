@@ -10,10 +10,13 @@
     <script type="module">
       import '@vaadin/icon';
       import '@vaadin/icons/vaadin-iconset.js';
+      import '@vaadin/tooltip';
     </script>
   </head>
 
   <body>
-    <vaadin-icon icon="vaadin:phone"></vaadin-icon>
+    <vaadin-icon icon="vaadin:phone">
+      <vaadin-tooltip slot="tooltip" text="Icon tooltip text"></vaadin-tooltip>
+    </vaadin-icon>
   </body>
 </html>

@@ -10,6 +10,7 @@ import { DatePicker } from '@vaadin/date-picker';
 import { DateTimePicker } from '@vaadin/date-time-picker';
 import { Details } from '@vaadin/details';
 import { EmailField } from '@vaadin/email-field';
+import { Icon } from '@vaadin/icon';
 import { IntegerField } from '@vaadin/integer-field';
 import { MessageInput } from '@vaadin/message-input';
 import { MultiSelectComboBox } from '@vaadin/multi-select-combo-box';
@@ -37,6 +38,7 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
   { tagName: DateTimePicker.is, applyShouldNotShowCondition: (element) => element.querySelector('input').click() },
   { tagName: Details.is, targetSelector: '[part="summary"]', position: 'bottom-start' },
   { tagName: EmailField.is },
+  { tagName: Icon.is },
   { tagName: IntegerField.is },
   { tagName: MessageInput.is },
   { tagName: MultiSelectComboBox.is, applyShouldNotShowCondition: (comboBox) => comboBox.click() },

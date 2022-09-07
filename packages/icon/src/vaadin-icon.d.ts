@@ -3,6 +3,7 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { IconSvgLiteral } from './vaadin-icon-svg.js';
@@ -46,7 +47,7 @@ import type { IconSvgLiteral } from './vaadin-icon-svg.js';
  * }
  * ```
  */
-declare class Icon extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class Icon extends ThemableMixin(ElementMixin(ControllerMixin(HTMLElement))) {
   /**
    * The name of the icon to use. The name should be of the form:
    * `iconset_name:icon_name`. When using `vaadin-icons` it is possible
