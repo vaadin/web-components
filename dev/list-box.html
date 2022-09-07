@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List box</title>
+    <script type="module" src="./common.js"></script>
+  </head>
+  <body>
+    <script type="module">
+      import '@vaadin/list-box';
+      import '@vaadin/item';
+      import '@vaadin/tooltip';
+    </script>
+
+    <vaadin-list-box multiple selected-values="[0]" style="width: 200px">
+      <vaadin-item>Show assignee</vaadin-item>
+      <vaadin-item>Show due date</vaadin-item>
+      <vaadin-item>Show status</vaadin-item>
+
+      <vaadin-tooltip slot="tooltip" text="List box tooltip text"></vaadin-tooltip>
+    </vaadin-list-box>
+  </body>
+</html>

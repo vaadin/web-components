@@ -6,6 +6,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { MultiSelectListMixin } from '@vaadin/vaadin-list-mixin/vaadin-multi-select-list-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -63,6 +64,8 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(Controller
       <div part="items">
         <slot></slot>
       </div>
+
+      <slot name="tooltip"></slot>
     `;
   }
 
@@ -98,6 +101,9 @@ class ListBox extends ElementMixin(MultiSelectListMixin(ThemableMixin(Controller
     this.setAttribute('role', 'list');
 
     setTimeout(this._checkImport.bind(this), 2000);
+
+    this._tooltipController = new TooltipController(this);
+    this.addController(this._tooltipController);
   }
 
   /**
