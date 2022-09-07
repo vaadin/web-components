@@ -3,7 +3,6 @@
  * Copyright (c) 2019 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils';
 
