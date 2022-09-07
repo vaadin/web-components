@@ -3,7 +3,7 @@ import { escKeyDown, fixtureSync, focusout, keyboardEventFor, mousedown, tabKeyD
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-tooltip.js';
-import { mouseenter, mouseleave } from './helpers.js';
+import { mouseenter, mouseleave, waitForIntersectionObserver } from './helpers.js';
 
 describe('vaadin-tooltip', () => {
   let tooltip, overlay;
@@ -336,6 +336,70 @@ describe('vaadin-tooltip', () => {
       mousedown(target);
       mouseenter(target);
       expect(overlay.opened).to.be.false;
+    });
+  });
+
+  describe('inside a scrollable container', () => {
+    let container, target;
+
+    beforeEach(() => {
+      container = fixtureSync(`
+        <div style="width: 400px; height: 400px; overflow: scroll; border: 1px solid black;">
+          <div style="margin: 600px 0; height: 50px; border: solid 1px red;" tabindex="0"></div>
+        </div>
+      `);
+      target = container.querySelector('div');
+      tooltip.target = target;
+    });
+
+    describe('target is partially visible', () => {
+      beforeEach(async () => {
+        container.scrollTop = 220;
+        await waitForIntersectionObserver();
+      });
+
+      it('should open overlay when focused target is fully visible and hide otherwise', async () => {
+        tabKeyDown(target);
+        target.focus();
+        expect(overlay.opened).to.be.not.ok;
+
+        target.scrollIntoView({ block: 'center' });
+        await waitForIntersectionObserver();
+        expect(overlay.opened).to.be.true;
+
+        container.scrollTop = 0;
+        await waitForIntersectionObserver();
+        expect(overlay.opened).to.be.false;
+      });
+
+      it('should open overlay when hovered target is fully visible and hide otherwise', async () => {
+        mouseenter(target);
+        expect(overlay.opened).to.be.not.ok;
+
+        target.scrollIntoView({ block: 'center' });
+        await waitForIntersectionObserver();
+        expect(overlay.opened).to.be.true;
+
+        container.scrollTop = 0;
+        await waitForIntersectionObserver();
+        expect(overlay.opened).to.be.false;
+      });
+    });
+
+    describe('target is fully visible', () => {
+      beforeEach(async () => {
+        target.scrollIntoView({ block: 'center' });
+        await waitForIntersectionObserver();
+      });
+
+      it('should hide overlay once the target is no longer visible', async () => {
+        mouseenter(target);
+        expect(overlay.opened).to.be.true;
+
+        container.scrollTop = 0;
+        await waitForIntersectionObserver();
+        expect(overlay.opened).to.be.false;
+      });
     });
   });
 

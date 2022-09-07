@@ -206,6 +206,12 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
       /** @protected */
       _overlayElement: Object,
+
+      /** @private */
+      __isTargetHidden: {
+        type: Boolean,
+        value: false,
+      },
     };
   }
 
@@ -245,6 +251,13 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__onMouseEnter = this.__onMouseEnter.bind(this);
     this.__onMouseLeave = this.__onMouseLeave.bind(this);
     this.__onKeyDown = this.__onKeyDown.bind(this);
+
+    this.__targetVisibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        this.__onTargetVisibilityChange(entry.isIntersecting);
+      },
+      { threshold: 1 },
+    );
   }
 
   /** @protected */
@@ -324,6 +337,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       oldTarget.removeEventListener('focusout', this.__onFocusout);
       oldTarget.removeEventListener('mousedown', this.__onMouseDown);
 
+      this.__targetVisibilityObserver.unobserve(oldTarget);
+
       removeValueFromAttribute(oldTarget, 'aria-describedby', this._uniqueId);
     }
 
@@ -333,6 +348,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       target.addEventListener('focusin', this.__onFocusin);
       target.addEventListener('focusout', this.__onFocusout);
       target.addEventListener('mousedown', this.__onMouseDown);
+
+      this.__targetVisibilityObserver.observe(target);
 
       addValueToAttribute(target, 'aria-describedby', this._uniqueId);
     }
@@ -351,7 +368,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
     this.__focusInside = true;
 
-    if (!this.__hoverInside || !this._autoOpened) {
+    if (!this.__isTargetHidden && (!this.__hoverInside || !this._autoOpened)) {
       this._open(true);
     }
   }
@@ -391,7 +408,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
     this.__hoverInside = true;
 
-    if (!this.__focusInside || !this._autoOpened) {
+    if (!this.__isTargetHidden && (!this.__focusInside || !this._autoOpened)) {
       this._open();
     }
   }
@@ -402,6 +419,22 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
     if (!this.__focusInside) {
       this._close();
+    }
+  }
+
+  /** @private */
+  __onTargetVisibilityChange(isVisible) {
+    this.__isTargetHidden = !isVisible;
+
+    // Open the overlay when the target is visible and has focus or hover.
+    if (isVisible && (this.__focusInside || this.__hoverInside)) {
+      this._open(true);
+      return;
+    }
+
+    // Close the overlay when the target is no longer fully visible.
+    if (!isVisible && this._autoOpened) {
+      this._close(true);
     }
   }
 
