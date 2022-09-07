@@ -1,9 +1,19 @@
 import { expect } from '@esm-bundle/chai';
-import { escKeyDown, fixtureSync, focusin, focusout, mousedown, nextFrame, tabKeyDown } from '@vaadin/testing-helpers';
+import {
+  arrowDown,
+  enter,
+  escKeyDown,
+  fixtureSync,
+  focusin,
+  focusout,
+  mousedown,
+  nextFrame,
+  tabKeyDown,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/grid/vaadin-grid.js';
 import '@vaadin/tooltip/vaadin-tooltip.js';
-import { flushGrid, getCell } from '@vaadin/grid/test/helpers.js';
+import { flushGrid, getCell, getContainerCell } from '@vaadin/grid/test/helpers.js';
 import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
 
 function getHeaderCell(grid, index = 0) {
@@ -102,6 +112,27 @@ describe('tooltip', () => {
     expect(tooltip.context).to.be.instanceOf(Object);
     expect(tooltip.context.item.firstName).to.equal('John');
     expect(tooltip.context.item.lastName).to.equal('Doe');
+  });
+
+  it('should hide tooltip on cell content keyboard focus', () => {
+    // Make the first column render inputs
+    grid.firstElementChild.renderer = (root) => {
+      root.innerHTML = '<input>';
+    };
+
+    // Navigate to the first cell of second row
+    const cell = getCell(grid, 0);
+    tabKeyDown(document.body);
+    focusin(cell);
+    arrowDown(cell);
+
+    expect(tooltip.opened).to.be.true;
+
+    // Enter interaction mode (the input gets focus)
+    const focusedCell = getContainerCell(grid.$.items, 1, 0);
+    enter(focusedCell);
+
+    expect(tooltip.opened).to.be.false;
   });
 
   it('should hide tooltip on grid focusout', () => {

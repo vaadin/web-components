@@ -749,7 +749,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           const context = this.getEventContext(e);
           cell.dispatchEvent(new CustomEvent('cell-focus', { bubbles: true, composed: true, detail: { context } }));
 
-          if (isKeyboardActive()) {
+          if (isKeyboardActive() && e.target === cell) {
             this._showTooltip(e);
           }
         }
