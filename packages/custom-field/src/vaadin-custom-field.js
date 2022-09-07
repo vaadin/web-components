@@ -36,13 +36,15 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * Attribute           | Description                               | Part name
  * --------------------|-------------------------------------------|------------
- * `disabled`          | Set when the element is disabled          | :host
  * `invalid`           | Set when the element is invalid           | :host
  * `focused`           | Set when the element is focused           | :host
  * `has-label`         | Set when the element has a label          | :host
  * `has-value`         | Set when the element has a value          | :host
  * `has-helper`        | Set when the element has helper text      | :host
  * `has-error-message` | Set when the element has an error message | :host
+ *
+ * You may also manually set `disabled` or `readonly` attribute on this component to make the label
+ * part look visually the same as on a `<vaadin-text-field>` when it is disabled or readonly.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
