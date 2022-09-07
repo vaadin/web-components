@@ -16,8 +16,6 @@ export interface TimePickerTime {
 }
 
 export interface TimePickerI18n {
-  clear: string;
-  selector: string;
   parseTime(time: string): TimePickerTime | undefined;
   formatTime(time: TimePickerTime | undefined): string;
 }
