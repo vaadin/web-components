@@ -12,6 +12,7 @@ import { Details } from '@vaadin/details';
 import { EmailField } from '@vaadin/email-field';
 import { Icon } from '@vaadin/icon';
 import { IntegerField } from '@vaadin/integer-field';
+import { ListBox } from '@vaadin/list-box';
 import { MessageInput } from '@vaadin/message-input';
 import { MultiSelectComboBox } from '@vaadin/multi-select-combo-box';
 import { NumberField } from '@vaadin/number-field';
@@ -40,6 +41,7 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
   { tagName: EmailField.is },
   { tagName: Icon.is },
   { tagName: IntegerField.is },
+  { tagName: ListBox.is },
   { tagName: MessageInput.is },
   { tagName: MultiSelectComboBox.is, applyShouldNotShowCondition: (comboBox) => comboBox.click() },
   { tagName: NumberField.is },

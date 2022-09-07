@@ -21,6 +21,7 @@
     "@vaadin/grid-pro": "23.3.0-alpha0",
     "@vaadin/icon": "23.3.0-alpha0",
     "@vaadin/integer-field": "23.3.0-alpha0",
+    "@vaadin/list-box": "23.3.0-alpha0",
     "@vaadin/number-field": "23.3.0-alpha0",
     "@vaadin/message-input": "23.3.0-alpha0",
     "@vaadin/multi-select-combo-box": "23.3.0-alpha0",
