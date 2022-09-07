@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
-import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin';
+import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
 
 export declare function InteractionsMixin<T extends Constructor<HTMLElement>>(
   base: T,
