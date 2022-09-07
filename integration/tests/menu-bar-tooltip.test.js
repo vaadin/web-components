@@ -145,37 +145,19 @@ describe('tooltip', () => {
     expect(tooltip.opened).to.be.false;
   });
 
-  it('should not set tooltip target if there is no tooltip', async () => {
-    const spy = sinon.spy(menuBar._tooltipController, 'setTarget');
+  it('should not set tooltip properties if there is no tooltip', async () => {
+    const spyTarget = sinon.spy(menuBar._tooltipController, 'setTarget');
+    const spyContent = sinon.spy(menuBar._tooltipController, 'setContext');
+    const spyOpened = sinon.spy(menuBar._tooltipController, 'setOpened');
 
     tooltip.remove();
     await nextRender();
 
     mouseover(buttons[0]);
 
-    expect(spy.calledOnce).to.be.false;
-  });
-
-  it('should not set tooltip context if there is no tooltip', async () => {
-    const spy = sinon.spy(menuBar._tooltipController, 'setContext');
-
-    tooltip.remove();
-    await nextRender();
-
-    mouseover(buttons[0]);
-
-    expect(spy.calledOnce).to.be.false;
-  });
-
-  it('should not set tooltip opened if there is no tooltip', async () => {
-    const spy = sinon.spy(menuBar._tooltipController, 'setOpened');
-
-    tooltip.remove();
-    await nextRender();
-
-    mouseover(buttons[0]);
-
-    expect(spy.calledOnce).to.be.false;
+    expect(spyTarget.called).to.be.false;
+    expect(spyContent.called).to.be.false;
+    expect(spyOpened.called).to.be.false;
   });
 
   describe('overflow button', () => {
