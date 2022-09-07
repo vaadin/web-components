@@ -1,13 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import {
-  escKeyDown,
-  fixtureSync,
-  focusin,
-  focusout,
-  keyboardEventFor,
-  mousedown,
-  tabKeyDown,
-} from '@vaadin/testing-helpers';
+import { escKeyDown, fixtureSync, focusout, keyboardEventFor, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-tooltip.js';
@@ -371,18 +363,6 @@ describe('vaadin-tooltip', () => {
       input.focus();
 
       expect(overlay.opened).to.be.false;
-    });
-
-    it('should re-open overlay on moving focus out of the target after Esc', () => {
-      tabKeyDown(target);
-      target.focus();
-
-      escKeyDown(target);
-
-      focusout(target);
-      focusin(target);
-
-      expect(overlay.opened).to.be.true;
     });
   });
 
