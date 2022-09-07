@@ -9,6 +9,7 @@
 
     <script type="module">
       import '@vaadin/menu-bar';
+      import '@vaadin/tooltip';
 
       const menuBar = document.querySelector('vaadin-menu-bar');
       menuBar.items = [
@@ -31,10 +32,15 @@
         },
         { text: 'Duplicate' }
       ];
+
+      const tooltip = document.querySelector('[slot="tooltip"]');
+      tooltip.textGenerator = ({item}) => item ? `Tooltip for ${item.text}` : '';
     </script>
   </head>
 
   <body>
-    <vaadin-menu-bar></vaadin-menu-bar>
+    <vaadin-menu-bar>
+      <vaadin-tooltip slot="tooltip"></vaadin-tooltip>
+    </vaadin-menu-bar>
   </body>
 </html>

@@ -24,6 +24,7 @@
     "@vaadin/list-box": "23.3.0-alpha0",
     "@vaadin/number-field": "23.3.0-alpha0",
     "@vaadin/message-input": "23.3.0-alpha0",
+    "@vaadin/menu-bar": "23.3.0-alpha0",
     "@vaadin/multi-select-combo-box": "23.3.0-alpha0",
     "@vaadin/polymer-legacy-adapter": "23.3.0-alpha0",
     "@vaadin/password-field": "23.3.0-alpha0",

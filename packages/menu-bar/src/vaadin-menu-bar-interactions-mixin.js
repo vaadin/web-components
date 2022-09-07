@@ -3,12 +3,15 @@
  * Copyright (c) 2019 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
 
 /**
  * @polymerMixin
+ * @mixes FocusMixin
  */
 export const InteractionsMixin = (superClass) =>
-  class InteractionsMixin extends superClass {
+  class InteractionsMixin extends FocusMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -35,7 +38,8 @@ export const InteractionsMixin = (superClass) =>
       super.ready();
 
       this.addEventListener('keydown', (e) => this._onKeydown(e));
-      this.addEventListener('focusin', (e) => this._onFocusin(e));
+      this.addEventListener('mousedown', () => this._hideTooltip());
+      this.addEventListener('mouseleave', () => this._hideTooltip());
 
       this._subMenu.addEventListener('item-selected', this.__onItemSelected.bind(this));
       this._subMenu.addEventListener('close-all-menus', this.__onEscapeClose.bind(this));
@@ -52,6 +56,30 @@ export const InteractionsMixin = (superClass) =>
     /** @private */
     get __isRTL() {
       return this.getAttribute('dir') === 'rtl';
+    }
+
+    /** @protected */
+    disconnectedCallback() {
+      super.disconnectedCallback();
+      this._hideTooltip();
+    }
+
+    /**
+     * @param {HTMLElement} button
+     * @protected
+     */
+    _showTooltip(button) {
+      // Check if there is a slotted vaadin-tooltip element.
+      if (this._tooltipController.node && this._tooltipController.node.isConnected && !this._subMenu.opened) {
+        this._tooltipController.setTarget(button);
+        this._tooltipController.setContext({ item: button.item });
+        this._tooltipController.setOpened(true);
+      }
+    }
+
+    /** @protected */
+    _hideTooltip() {
+      this._tooltipController.setOpened(false);
     }
 
     /** @protected */
@@ -73,6 +101,12 @@ export const InteractionsMixin = (superClass) =>
       this._buttons.forEach((btn) => {
         this._setTabindex(btn, btn === button);
       });
+
+      if (button === this._overflow) {
+        this._hideTooltip();
+      } else {
+        this._showTooltip(button);
+      }
     }
 
     /** @private */
@@ -86,15 +120,25 @@ export const InteractionsMixin = (superClass) =>
     }
 
     /**
-     * @param {!FocusEvent} event
+     * Override method inherited from `FocusMixin`
+     *
+     * @param {boolean} focused
+     * @override
      * @protected
      */
-    _onFocusin() {
-      const target = this.shadowRoot.querySelector('[part$="button"][tabindex="0"]');
-      if (target) {
-        this._buttons.forEach((btn) => {
-          this._setTabindex(btn, btn === target);
-        });
+    _setFocused(focused) {
+      if (focused) {
+        const target = this.shadowRoot.querySelector('[part$="button"][tabindex="0"]');
+        if (target) {
+          this._buttons.forEach((btn) => {
+            this._setTabindex(btn, btn === target);
+            if (btn === target && btn !== this._overflow && isKeyboardActive()) {
+              this._showTooltip(btn);
+            }
+          });
+        }
+      } else {
+        this._hideTooltip();
       }
     }
 
@@ -105,6 +149,10 @@ export const InteractionsMixin = (superClass) =>
     _onKeydown(event) {
       const button = this._getButtonFromEvent(event);
       if (button) {
+        if (event.key === 'Escape') {
+          this._hideTooltip();
+        }
+
         if (event.keyCode === 40) {
           // ArrowDown, prevent page scroll
           event.preventDefault();
@@ -247,6 +295,12 @@ export const InteractionsMixin = (superClass) =>
         } else if (isOpened) {
           this._close();
         }
+
+        if (button === this._overflow || (this.openOnHover && button.item.children)) {
+          this._hideTooltip();
+        } else {
+          this._showTooltip(button);
+        }
       }
     }
 
@@ -319,6 +373,7 @@ export const InteractionsMixin = (superClass) =>
             },
           }),
         );
+        this._hideTooltip();
 
         this._setExpanded(button, true);
       });
