@@ -345,6 +345,11 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       return;
     }
 
+    // Do not re-open while focused if closed on Esc.
+    if (this.__focusInside && this.__escPressed) {
+      return;
+    }
+
     if (typeof this.shouldShow === 'function' && this.shouldShow(this.target) !== true) {
       return;
     }
@@ -357,8 +362,14 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  __onFocusout() {
+  __onFocusout(event) {
+    // Do not close when moving focus within a component.
+    if (this.target.contains(event.relatedTarget)) {
+      return;
+    }
+
     this.__focusInside = false;
+    this.__escPressed = false;
 
     if (!this.__hoverInside) {
       this._close(true);
@@ -369,6 +380,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   __onKeyDown(event) {
     if (event.key === 'Escape') {
       event.stopPropagation();
+      this.__escPressed = true;
       this._close(true);
     }
   }
