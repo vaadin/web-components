@@ -345,8 +345,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       return;
     }
 
-    // Do not re-open while focused if closed on Esc.
-    if (this.__focusInside && this.target.contains(event.relatedTarget)) {
+    // Do not re-open while focused if closed on Esc or mousedown.
+    if (this.target.contains(event.target) && this.target.contains(event.relatedTarget)) {
       return;
     }
 

@@ -1,5 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { escKeyDown, fixtureSync, focusout, keyboardEventFor, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
+import {
+  escKeyDown,
+  fixtureSync,
+  focusin,
+  focusout,
+  keyboardEventFor,
+  mousedown,
+  tabKeyDown,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-tooltip.js';
@@ -350,6 +358,22 @@ describe('vaadin-tooltip', () => {
       expect(overlay.opened).to.be.true;
     });
 
+    it('should not re-open overlay on moving focus within the target after mousedown', () => {
+      const input = document.createElement('input');
+      target.appendChild(input);
+
+      tabKeyDown(target);
+      target.focus();
+
+      mousedown(target);
+
+      tabKeyDown(target);
+      focusout(target, input);
+      focusin(input, target);
+
+      expect(overlay.opened).to.be.false;
+    });
+
     it('should not re-open overlay on moving focus within the target after Esc', () => {
       const input = document.createElement('input');
       target.appendChild(input);
@@ -359,8 +383,9 @@ describe('vaadin-tooltip', () => {
 
       escKeyDown(target);
 
+      tabKeyDown(target);
       focusout(target, input);
-      input.focus();
+      focusin(input, target);
 
       expect(overlay.opened).to.be.false;
     });
