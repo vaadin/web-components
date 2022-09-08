@@ -176,7 +176,7 @@ export const ColumnReorderingMixin = (superClass) =>
 
         // Iteratively swap all the columns from the dragged column to the target column
         for (let i = startIndex; i !== endIndex; i += direction) {
-          this._swapColumnOrders(levelColumnsInOrder[startIndex], levelColumnsInOrder[i + direction]);
+          this._swapColumnOrders(this._draggedColumn, levelColumnsInOrder[i + direction]);
         }
       }
 
