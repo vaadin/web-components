@@ -135,6 +135,16 @@ describe('lazy loading', () => {
         expect(comboBox.selectedItem).to.be.null;
       });
 
+      it('should not update filtered items when an empty page is returned', () => {
+        comboBox.dataProvider = (_params, callback) => callback([]);
+
+        const oldFilteredItems = comboBox.filteredItems;
+        comboBox.open();
+        const newFilteredItems = comboBox.filteredItems;
+
+        expect(oldFilteredItems).to.equal(newFilteredItems);
+      });
+
       (isComboBoxLight ? describe.skip : describe)('when autoOpenDisabled', () => {
         beforeEach(() => {
           comboBox.autoOpenDisabled = true;

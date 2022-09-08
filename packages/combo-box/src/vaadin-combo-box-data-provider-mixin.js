@@ -182,9 +182,11 @@ export const ComboBoxDataProviderMixin = (superClass) =>
           return;
         }
 
-        const filteredItems = this.filteredItems ? [...this.filteredItems] : [];
-        filteredItems.splice(params.page * params.pageSize, items.length, ...items);
-        this.filteredItems = filteredItems;
+        if (items.length > 0) {
+          const filteredItems = this.filteredItems ? [...this.filteredItems] : [];
+          filteredItems.splice(params.page * params.pageSize, items.length, ...items);
+          this.filteredItems = filteredItems;
+        }
 
         if (!this.opened && !this._isInputFocused()) {
           this._commitValue();
