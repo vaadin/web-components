@@ -161,7 +161,23 @@ export const ColumnReorderingMixin = (superClass) =>
         this._isSwapAllowed(this._draggedColumn, targetColumn) &&
         this._isSwappableByPosition(targetColumn, e.detail.x)
       ) {
-        this._swapColumnOrders(this._draggedColumn, targetColumn);
+        // Get the column header level of the target column (and the dragged column)
+        const columnTreeLevel = this._columnTree.findIndex((level) => level.includes(targetColumn));
+        // Get the columns on that level in visual order
+        const levelColumnsInOrder = this._getColumnsInOrder(columnTreeLevel);
+
+        // Index of the column being dragged
+        const startIndex = levelColumnsInOrder.indexOf(this._draggedColumn);
+        // Index of the column being dragged over
+        const endIndex = levelColumnsInOrder.indexOf(targetColumn);
+
+        // Direction of iteration
+        const direction = startIndex < endIndex ? 1 : -1;
+
+        // Iteratively swap all the columns from the dragged column to the target column
+        for (let i = startIndex; i !== endIndex; i += direction) {
+          this._swapColumnOrders(levelColumnsInOrder[startIndex], levelColumnsInOrder[i + direction]);
+        }
       }
 
       this._updateGhostPosition(e.detail.x, this._touchDevice ? e.detail.y - 50 : e.detail.y);
@@ -192,15 +208,14 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /**
+     * Returns the columns (or column groups) on the specified header level in visual order.
+     * By default, the bottom level is used.
+     *
      * @return {!Array<!GridColumn>}
      * @protected
      */
-    _getColumnsInOrder() {
-      return this._columnTree
-        .slice(0)
-        .pop()
-        .filter((c) => !c.hidden)
-        .sort((b, a) => b._order - a._order);
+    _getColumnsInOrder(headerLevel = this._columnTree.length - 1) {
+      return this._columnTree[headerLevel].filter((c) => !c.hidden).sort((b, a) => b._order - a._order);
     }
 
     /**
