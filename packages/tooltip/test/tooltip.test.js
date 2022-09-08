@@ -38,6 +38,10 @@ describe('vaadin-tooltip', () => {
   });
 
   describe('overlay', () => {
+    it('should set owner property on the overlay', () => {
+      expect(overlay.owner).to.be.equal(tooltip);
+    });
+
     it('should not have tabindex on the overlay part', () => {
       expect(overlay.$.overlay.hasAttribute('tabindex')).to.be.false;
     });

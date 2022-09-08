@@ -45,6 +45,17 @@ export type TooltipPosition =
  * Note: the `theme` attribute value set on `<vaadin-tooltip>` is
  * propagated to the internal `<vaadin-tooltip-overlay>` component.
  *
+ * ### Custom CSS Properties
+ *
+ * The following custom CSS properties are available on the `<vaadin-tooltip>` element:
+ *
+ * Custom CSS property              | Description
+ * ---------------------------------|-------------
+ * `--vaadin-tooltip-offset-top`    | Used as an offset when the tooltip is aligned vertically below the target
+ * `--vaadin-tooltip-offset-bottom` | Used as an offset when the tooltip is aligned vertically above the target
+ * `--vaadin-tooltip-offset-start`  | Used as an offset when the tooltip is aligned horizontally after the target
+ * `--vaadin-tooltip-offset-end`    | Used as an offset when the tooltip is aligned horizontally before the target
+ *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  */
 declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {

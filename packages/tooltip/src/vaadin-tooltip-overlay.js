@@ -5,6 +5,33 @@
  */
 import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
 import { PositionMixin } from '@vaadin/vaadin-overlay/src/vaadin-overlay-position-mixin.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+
+registerStyles(
+  'vaadin-tooltip-overlay',
+  css`
+    :host([position^='top'][top-aligned]) [part='overlay'],
+    :host([position^='bottom'][top-aligned]) [part='overlay'] {
+      margin-top: var(--vaadin-tooltip-offset-top, 0);
+    }
+
+    :host([position^='top'][bottom-aligned]) [part='overlay'],
+    :host([position^='bottom'][bottom-aligned]) [part='overlay'] {
+      margin-bottom: var(--vaadin-tooltip-offset-bottom, 0);
+    }
+
+    :host([position^='start'][start-aligned]) [part='overlay'],
+    :host([position^='end'][start-aligned]) [part='overlay'] {
+      margin-inline-start: var(--vaadin-tooltip-offset-start, 0);
+    }
+
+    :host([position^='start'][end-aligned]) [part='overlay'],
+    :host([position^='end'][end-aligned]) [part='overlay'] {
+      margin-inline-end: var(--vaadin-tooltip-offset-end, 0);
+    }
+  `,
+  { moduleId: 'vaadin-tooltip-overlay-styles' },
+);
 
 let memoizedTemplate;
 
@@ -83,6 +110,17 @@ class TooltipOverlay extends PositionMixin(OverlayElement) {
 
       const offset = targetRect.height / 2 - overlayRect.height / 2;
       this.style.top = `${overlayRect.top + offset}px`;
+    }
+
+    // Copy custom properties from the tooltip
+    if (this.owner) {
+      const style = getComputedStyle(this.owner);
+      ['top', 'bottom', 'start', 'end'].forEach((prop) => {
+        this.style.setProperty(
+          `--vaadin-tooltip-offset-${prop}`,
+          style.getPropertyValue(`--vaadin-tooltip-offset-${prop}`),
+        );
+      });
     }
   }
 }
