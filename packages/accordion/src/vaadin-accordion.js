@@ -6,7 +6,7 @@
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AccordionPanel } from './vaadin-accordion-panel.js';
 
@@ -56,10 +56,10 @@ import { AccordionPanel } from './vaadin-accordion-panel.js';
  *
  * @extends HTMLElement
  * @mixes ElementMixin
- * @mixes KeyboardMixin
+ * @mixes KeyboardDirectionMixin
  * @mixes ThemableMixin
  */
-class Accordion extends KeyboardMixin(ThemableMixin(ElementMixin(PolymerElement))) {
+class Accordion extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -118,26 +118,14 @@ class Accordion extends KeyboardMixin(ThemableMixin(ElementMixin(PolymerElement)
   }
 
   /**
-   * @return {Element | null}
    * @protected
-   */
-  get focused() {
-    return this.getRootNode().activeElement;
-  }
-
-  /**
-   * @protected
+   * @override
    */
   focus() {
     if (this._observer) {
       this._observer.flush();
     }
-    if (Array.isArray(this.items)) {
-      const idx = this._getAvailableIndex(0);
-      if (idx >= 0) {
-        this.items[idx].focus();
-      }
-    }
+    super.focus();
   }
 
   /** @protected */
@@ -151,6 +139,18 @@ class Accordion extends KeyboardMixin(ThemableMixin(ElementMixin(PolymerElement)
         el.addEventListener('opened-changed', this._boundUpdateOpened);
       });
     });
+  }
+
+  /**
+   * Override method inherited from `KeyboardDirectionMixin`
+   * to use the stored list of accordion panels as items.
+   *
+   * @return {Element[]}
+   * @protected
+   * @override
+   */
+  _getItems() {
+    return this.items;
   }
 
   /**
@@ -173,7 +173,8 @@ class Accordion extends KeyboardMixin(ThemableMixin(ElementMixin(PolymerElement)
   }
 
   /**
-   * Override an event listener from `KeyboardMixin`.
+   * Override an event listener from `KeyboardMixin`
+   * to only handle details toggle buttons events.
    *
    * @param {!KeyboardEvent} event
    * @protected
@@ -186,61 +187,7 @@ class Accordion extends KeyboardMixin(ThemableMixin(ElementMixin(PolymerElement)
       return;
     }
 
-    const currentIdx = this.items.indexOf(this.focused);
-    let idx;
-    let increment;
-
-    switch (event.key) {
-      case 'ArrowUp':
-        increment = -1;
-        idx = currentIdx - 1;
-        break;
-      case 'ArrowDown':
-        increment = 1;
-        idx = currentIdx + 1;
-        break;
-      case 'Home':
-        increment = 1;
-        idx = 0;
-        break;
-      case 'End':
-        increment = -1;
-        idx = this.items.length - 1;
-        break;
-      default:
-      // Do nothing.
-    }
-
-    idx = this._getAvailableIndex(idx, increment);
-    if (idx >= 0) {
-      this.items[idx].focus();
-      this.items[idx].setAttribute('focus-ring', '');
-      event.preventDefault();
-    }
-  }
-
-  /**
-   * @param {number} index
-   * @param {number} increment
-   * @return {number}
-   * @protected
-   */
-  _getAvailableIndex(index, increment) {
-    const totalItems = this.items.length;
-    let idx = index;
-    for (let i = 0; typeof idx === 'number' && i < totalItems; i++, idx += increment || 1) {
-      if (idx < 0) {
-        idx = totalItems - 1;
-      } else if (idx >= totalItems) {
-        idx = 0;
-      }
-
-      const item = this.items[idx];
-      if (!item.disabled) {
-        return idx;
-      }
-    }
-    return -1;
+    super._onKeyDown(event);
   }
 
   /** @private */
