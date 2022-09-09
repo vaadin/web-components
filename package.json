@@ -3,7 +3,7 @@
   "private": true,
   "author": "Vaadin Ltd",
   "scripts": {
-    "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/prepareDocs.js && node scripts/buildWebtypes.js",
+    "analyze": "polymer analyze packages/**/vaadin-*.js > analysis.json && node scripts/fixAnalyzerOutput.js && node scripts/prepareDocs.js && node scripts/buildWebtypes.js",
     "debug": "web-test-runner --watch",
     "dist": "rimraf dist && yarn analyze && rollup -c rollup.config.js && cp analysis.json dist",
     "docs": "yarn analyze && web-dev-server --node-resolve --open",
