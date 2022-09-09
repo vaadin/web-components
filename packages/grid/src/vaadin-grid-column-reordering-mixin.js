@@ -32,7 +32,7 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     static get observers() {
-      return ['_updateOrders(_columnTree, _columnTree.*)'];
+      return ['_updateOrders(_columnTree)'];
     }
 
     /** @protected */
@@ -120,12 +120,12 @@ export const ColumnReorderingMixin = (superClass) =>
 
       // Cancel reordering if there are draggable nodes on the event path
       const path = e.composedPath && e.composedPath();
-      if (path && path.filter((node) => node.hasAttribute && node.hasAttribute('draggable'))[0]) {
+      if (path && path.some((node) => node.hasAttribute && node.hasAttribute('draggable'))) {
         return;
       }
 
       const headerCell = this._cellFromPoint(e.detail.x, e.detail.y);
-      if (!headerCell || headerCell.getAttribute('part').indexOf('header-cell') === -1) {
+      if (!headerCell || !headerCell.getAttribute('part').includes('header-cell')) {
         return;
       }
 
@@ -161,7 +161,7 @@ export const ColumnReorderingMixin = (superClass) =>
         this._isSwapAllowed(this._draggedColumn, targetColumn) &&
         this._isSwappableByPosition(targetColumn, e.detail.x)
       ) {
-        // Get the column header level of the target column (and the dragged column)
+        // Get the header level of the target column (and the dragged column)
         const columnTreeLevel = this._columnTree.findIndex((level) => level.includes(targetColumn));
         // Get the columns on that level in visual order
         const levelColumnsInOrder = this._getColumnsInOrder(columnTreeLevel);
@@ -285,8 +285,8 @@ export const ColumnReorderingMixin = (superClass) =>
     }
 
     /** @private */
-    _updateOrders(columnTree, splices) {
-      if (columnTree === undefined || splices === undefined) {
+    _updateOrders(columnTree) {
+      if (columnTree === undefined) {
         return;
       }
 
@@ -354,9 +354,9 @@ export const ColumnReorderingMixin = (superClass) =>
      * @protected
      */
     _isSwappableByPosition(targetColumn, clientX) {
-      const targetCell = Array.from(this.$.header.querySelectorAll('tr:not([hidden]) [part~="cell"]')).filter((cell) =>
+      const targetCell = Array.from(this.$.header.querySelectorAll('tr:not([hidden]) [part~="cell"]')).find((cell) =>
         targetColumn.contains(cell._column),
-      )[0];
+      );
       const sourceCellRect = this.$.header
         .querySelector('tr:not([hidden]) [reorder-status=dragging]')
         .getBoundingClientRect();
@@ -373,9 +373,7 @@ export const ColumnReorderingMixin = (superClass) =>
      * @protected
      */
     _swapColumnOrders(column1, column2) {
-      const _order = column1._order;
-      column1._order = column2._order;
-      column2._order = _order;
+      [column1._order, column2._order] = [column2._order, column1._order];
       this._updateFrozenColumn();
       this._updateFirstAndLastColumn();
     }
