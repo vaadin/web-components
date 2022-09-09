@@ -6,10 +6,11 @@ import {
   arrowUp,
   click,
   esc,
+  fire,
   fixtureSync,
   isDesktopSafari as isSafari,
-  isIOS,
   nextRender,
+  oneEvent,
   touchend,
   touchstart,
 } from '@vaadin/testing-helpers';
@@ -18,7 +19,6 @@ import './not-animated-styles.js';
 import '../vaadin-menu-bar.js';
 import { setCancelSyntheticClickEvents } from '@polymer/polymer/lib/utils/settings.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
-import { onceOpened } from './helpers.js';
 
 setCancelSyntheticClickEvents(false);
 
@@ -49,12 +49,6 @@ describe('sub-menu', () => {
     await nextRender(menu);
     subMenu = menu._subMenu;
     buttons = menu._buttons;
-  });
-
-  afterEach(() => {
-    if (subMenu && subMenu.opened) {
-      subMenu.close();
-    }
   });
 
   it('should open sub-menu when button with nested items clicked', async () => {
@@ -111,7 +105,7 @@ describe('sub-menu', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
-  (isIOS ? it.skip : it)('should open sub-menu on arrow down', async () => {
+  it('should open sub-menu on arrow down', async () => {
     const spy = sinon.spy();
     menu._container.addEventListener('keydown', spy);
     arrowDown(buttons[0]);
@@ -120,9 +114,9 @@ describe('sub-menu', () => {
     expect(spy.firstCall.args[0].defaultPrevented).to.be.true;
   });
 
-  (isIOS ? it.skip : it)('should focus first sub-menu item when opened on arrow down', async () => {
+  it('should focus first sub-menu item when opened on arrow down', async () => {
     arrowDown(buttons[0]);
-    await onceOpened(subMenu);
+    await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
     const spy = sinon.spy(item, 'focus');
@@ -130,9 +124,9 @@ describe('sub-menu', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
-  (isIOS ? it.skip : it)('should open sub-menu and focus last item on arrow up', async () => {
+  it('should open sub-menu and focus last item on arrow up', async () => {
     arrowUp(buttons[0]);
-    await onceOpened(subMenu);
+    await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     const items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
     const last = items[items.length - 1];
@@ -141,9 +135,9 @@ describe('sub-menu', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
-  (isIOS ? it.skip : it)('should close sub-menu on first item arrow up', async () => {
+  it('should close sub-menu on first item arrow up', async () => {
     arrowDown(buttons[0]);
-    await onceOpened(subMenu);
+    await oneEvent(subMenu, 'opened-changed');
     item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
     expect(item).to.be.ok;
     await nextRender(subMenu);
@@ -152,9 +146,9 @@ describe('sub-menu', () => {
     expect(subMenu.opened).to.be.false;
   });
 
-  (isIOS ? it.skip : it)('should switch menubar button with items and open submenu on arrow left', async () => {
+  it('should switch menubar button with items and open submenu on arrow left', async () => {
     arrowDown(buttons[0]);
-    await onceOpened(subMenu);
+    await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
     const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
@@ -164,9 +158,9 @@ describe('sub-menu', () => {
     expect(subMenu.listenOn).to.equal(buttons[2]);
   });
 
-  (isIOS ? it.skip : it)('should switch menubar button without items and focus it on arrow left', async () => {
+  it('should switch menubar button without items and focus it on arrow left', async () => {
     arrowDown(buttons[2]);
-    await onceOpened(subMenu);
+    await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
     const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
@@ -177,9 +171,9 @@ describe('sub-menu', () => {
     expect(buttons[1].hasAttribute('focus-ring')).to.be.true;
   });
 
-  (isIOS ? it.skip : it)('should switch menubar button with items and open submenu on arrow right', async () => {
+  it('should switch menubar button with items and open submenu on arrow right', async () => {
     arrowDown(buttons[2]);
-    await onceOpened(subMenu);
+    await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
     const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
@@ -189,9 +183,9 @@ describe('sub-menu', () => {
     expect(subMenu.listenOn).to.equal(buttons[0]);
   });
 
-  (isIOS ? it.skip : it)('should switch menubar button without items and focus it on arrow right', async () => {
+  it('should switch menubar button without items and focus it on arrow right', async () => {
     arrowDown(buttons[0]);
-    await onceOpened(subMenu);
+    await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
     const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
@@ -202,9 +196,9 @@ describe('sub-menu', () => {
     expect(buttons[1].hasAttribute('focus-ring')).to.be.true;
   });
 
-  (isIOS ? it.skip : it)('should focus first item on arrow down after opened on arrow left', async () => {
+  it('should focus first item on arrow down after opened on arrow left', async () => {
     arrowDown(buttons[0]);
-    await onceOpened(subMenu);
+    await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     let item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
     await nextRender(subMenu);
@@ -216,9 +210,9 @@ describe('sub-menu', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
-  (isIOS ? it.skip : it)('should focus last item on arrow up after opened on arrow left', async () => {
+  it('should focus last item on arrow up after opened on arrow left', async () => {
     arrowDown(buttons[0]);
-    await onceOpened(subMenu);
+    await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
     await nextRender(subMenu);
@@ -231,7 +225,7 @@ describe('sub-menu', () => {
     expect(spy.calledOnce).to.be.true;
   });
 
-  (isIOS ? it.skip : it)('should switch submenu again on subsequent arrow left', async () => {
+  it('should switch submenu again on subsequent arrow left', async () => {
     menu.items = [
       ...menu.items.slice(0, 1),
       { text: 'Menu Item 2', children: [{ text: 'Menu Item 2 1' }] },
@@ -251,9 +245,9 @@ describe('sub-menu', () => {
     expect(buttons[1].hasAttribute('focused')).to.be.true;
   });
 
-  (isIOS ? it.skip : it)('should close submenu on Esc after switch on arrow left', async () => {
+  it('should close submenu on Esc after switch on arrow left', async () => {
     arrowDown(buttons[0]);
-    await onceOpened(subMenu);
+    await oneEvent(subMenu, 'opened-changed');
     expect(subMenu.opened).to.be.true;
     await nextRender(subMenu);
     const item = subMenu.$.overlay.querySelector('vaadin-context-menu-item');
@@ -297,9 +291,9 @@ describe('sub-menu', () => {
     expect(subMenu.opened).to.be.true;
   });
 
-  (isIOS ? it.skip : it)('should not close on parent item click', async () => {
+  it('should not close on parent item click', async () => {
     arrowUp(buttons[0]);
-    await onceOpened(subMenu);
+    await oneEvent(subMenu, 'opened-changed');
     const items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
     const last = items[items.length - 1];
     await nextRender(subMenu);
@@ -316,7 +310,7 @@ describe('sub-menu', () => {
     expect(spy.firstCall.args[0].detail.value).to.deep.equal({ text: 'Menu Item 2' });
   });
 
-  (isIOS ? it.skip : it)('should position bottom-aligned sub-menu to button top', async () => {
+  it('should position bottom-aligned sub-menu to button top', async () => {
     menu.style.position = 'absolute';
     menu.style.bottom = '50px';
     buttons[0].click();
@@ -326,63 +320,48 @@ describe('sub-menu', () => {
     expect(overlayRect.top + overlayRect.height).to.be.closeTo(buttonRect.top, 1);
   });
 
-  // TODO: Previously these tests were relying on iframe which had fixed size of WCT.
-  // Consider changing them so that they no longer depend on the browser window size.
-  describe.skip('sub-menu position', () => {
-    (isIOS ? it.skip : it)('should position end-aligned sub-menu to button right in LTR', async () => {
-      document.body.style.position = 'relative';
-      document.body.style.width = '450px';
-      document.body.style.minWidth = '450px';
-      menu.style.position = 'absolute';
-      menu.style.right = '0px';
-      buttons[2].click();
-      await nextRender(subMenu);
-      const overlayRect = subMenu.$.overlay.getBoundingClientRect();
-      const buttonRect = buttons[2].getBoundingClientRect();
-      expect(overlayRect.right).to.be.closeTo(buttonRect.right, 1);
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.minWidth = '';
+  describe('sub-menu position', () => {
+    describe('LTR', () => {
+      beforeEach(() => {
+        menu.style.position = 'absolute';
+        menu.style.right = '0px';
+      });
+
+      it('should position end-aligned sub-menu to button right in LTR', async () => {
+        buttons[2].click();
+        await nextRender(subMenu);
+        const overlayRect = subMenu.$.overlay.getBoundingClientRect();
+        const buttonRect = buttons[2].getBoundingClientRect();
+        expect(overlayRect.right).to.be.closeTo(buttonRect.right, 1);
+      });
     });
 
-    (isIOS ? it.skip : it)('should position sub-menu in RTL to button right', async () => {
-      document.body.style.position = 'relative';
-      document.body.style.width = '450px';
-      document.body.style.minWidth = '450px';
-      document.body.style.overflow = 'hidden';
-      menu.style.position = 'absolute';
-      menu.style.left = '0px';
-      // Set dir on document to also it apply to submenu
-      document.documentElement.setAttribute('dir', 'rtl');
-      buttons[0].click();
-      await nextRender(subMenu);
-      const overlayRect = subMenu.$.overlay.getBoundingClientRect();
-      const buttonRect = buttons[0].getBoundingClientRect();
-      expect(overlayRect.right).to.be.closeTo(buttonRect.right, 1);
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.minWidth = '';
-      document.body.style.overflow = '';
-    });
+    describe('RTL', () => {
+      beforeEach(() => {
+        document.documentElement.setAttribute('dir', 'rtl');
+        menu.style.position = 'absolute';
+        menu.style.left = '0px';
+      });
 
-    (isIOS ? it.skip : it)('should position end-aligned sub-menu in RTL to button left', async () => {
-      document.body.style.position = 'relative';
-      document.body.style.width = '470px';
-      document.body.style.minWidth = '470px';
-      document.body.style.overflow = 'hidden';
-      menu.style.position = 'absolute';
-      menu.style.left = '0px';
-      // Set dir on document to also it apply to submenu
-      document.documentElement.setAttribute('dir', 'rtl');
-      buttons[2].click();
-      await nextRender(subMenu);
-      const overlayRect = subMenu.$.overlay.getBoundingClientRect();
-      const buttonRect = buttons[2].getBoundingClientRect();
-      expect(overlayRect.left).to.be.closeTo(buttonRect.left, 1);
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.minWidth = '';
-      document.body.style.overflow = '';
+      afterEach(() => {
+        document.documentElement.removeAttribute('dir');
+      });
+
+      it('should position sub-menu in RTL to button right', async () => {
+        buttons[0].click();
+        await nextRender(subMenu);
+        const overlayRect = subMenu.$.overlay.getBoundingClientRect();
+        const buttonRect = buttons[0].getBoundingClientRect();
+        expect(overlayRect.right).to.be.closeTo(buttonRect.right, 1);
+      });
+
+      it('should position end-aligned sub-menu in RTL to button left', async () => {
+        buttons[2].click();
+        await nextRender(subMenu);
+        const overlayRect = subMenu.$.overlay.getBoundingClientRect();
+        const buttonRect = buttons[2].getBoundingClientRect();
+        expect(overlayRect.left).to.be.closeTo(buttonRect.left, 1);
+      });
     });
   });
 
@@ -463,20 +442,14 @@ describe('open on hover', () => {
     buttons = menu._buttons;
   });
 
-  afterEach(() => {
-    if (subMenu && subMenu.opened) {
-      subMenu.close();
-    }
-  });
-
   it('should set pointer events to `auto` when opened and remove when closed', async () => {
     expect(menu.style.pointerEvents).to.be.empty;
 
-    buttons[0].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
+    fire(buttons[0], openOnHoverEvent);
     await nextRender(subMenu);
     expect(menu.style.pointerEvents).to.equal('auto');
 
-    buttons[2].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
+    fire(buttons[2], openOnHoverEvent);
     await nextRender(subMenu);
     expect(menu.style.pointerEvents).to.equal('auto');
 
@@ -486,16 +459,16 @@ describe('open on hover', () => {
   });
 
   it('should open sub-menu on mouseover on button with nested items', async () => {
-    buttons[0].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
+    fire(buttons[0], openOnHoverEvent);
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.true;
     expect(subMenu.listenOn).to.equal(buttons[0]);
   });
 
   it('should close open sub-menu on mouseover on button without nested items', async () => {
-    buttons[0].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
+    fire(buttons[0], openOnHoverEvent);
     await nextRender(subMenu);
-    buttons[1].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
+    fire(buttons[1], openOnHoverEvent);
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.false;
   });
@@ -504,7 +477,7 @@ describe('open on hover', () => {
     menu.openOnHover = false;
     buttons[0].click();
     await nextRender(subMenu);
-    buttons[2].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
+    fire(buttons[2], openOnHoverEvent);
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.true;
     expect(subMenu.listenOn).to.equal(buttons[2]);
@@ -513,14 +486,14 @@ describe('open on hover', () => {
   it('should not select value of button without nested items', () => {
     const spy = sinon.spy();
     menu.addEventListener('item-selected', spy);
-    buttons[1].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
+    fire(buttons[1], openOnHoverEvent);
     expect(spy.called).to.be.false;
   });
 
   it('should not close sub-menu on expanded button mouseover', async () => {
-    buttons[0].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
+    fire(buttons[0], openOnHoverEvent);
     await nextRender(subMenu);
-    buttons[0].dispatchEvent(new CustomEvent(openOnHoverEvent, { bubbles: true, composed: true }));
+    fire(buttons[0], openOnHoverEvent);
     await nextRender(subMenu);
     expect(subMenu.opened).to.be.true;
   });
@@ -546,12 +519,6 @@ describe('accessibility', () => {
     subMenu = menu._subMenu;
     buttons = menu._buttons;
     overflow = menu._overflow;
-  });
-
-  afterEach(() => {
-    if (subMenu && subMenu.opened) {
-      subMenu.close();
-    }
   });
 
   it('should set role attribute on host element', () => {
@@ -616,12 +583,6 @@ describe('theme attribute', () => {
     await nextRender(subMenu);
   });
 
-  afterEach(() => {
-    if (subMenu && subMenu.opened) {
-      subMenu.close();
-    }
-  });
-
   it('should propagate theme attribute to the submenu', () => {
     expect(subMenu.getAttribute('theme')).to.be.equal('foo');
   });
@@ -659,7 +620,7 @@ describe('touch', () => {
       const overlay = menu.$.overlay;
       overlay.__openingHandler && overlay.__openingHandler();
     }
-    openTarget.dispatchEvent(new CustomEvent(menuOpenEvent, { bubbles: true, composed: true }));
+    fire(openTarget, menuOpenEvent);
   };
 
   beforeEach(async () => {
@@ -689,15 +650,9 @@ describe('touch', () => {
     buttons = menu._buttons;
   });
 
-  afterEach(() => {
-    if (subMenu && subMenu.opened) {
-      subMenu.close();
-    }
-  });
-
   (isSafari ? it.skip : it)('should close submenu on mobile when selecting an item in the nested one', async () => {
     arrowDown(buttons[0]);
-    await onceOpened(subMenu);
+    await oneEvent(subMenu, 'opened-changed');
     await nextRender(subMenu);
     const subMenu2 = subMenu.$.overlay.querySelector('vaadin-menu-bar-submenu');
     items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
@@ -715,7 +670,7 @@ describe('touch', () => {
 
   it('should not close submenu on mobile when opening the nested submenu', async () => {
     arrowDown(buttons[0]);
-    await onceOpened(subMenu);
+    await oneEvent(subMenu, 'opened-changed');
     await nextRender(subMenu);
     const subMenu2 = subMenu.$.overlay.querySelector('vaadin-menu-bar-submenu');
     items = subMenu.$.overlay.querySelectorAll('vaadin-context-menu-item');
