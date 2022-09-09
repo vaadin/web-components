@@ -7,15 +7,16 @@ import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nod
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirHelper } from '@vaadin/component-base/src/dir-helper.js';
-import { isElementFocused } from '@vaadin/component-base/src/focus-utils.js';
+import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 
 /**
  * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
  *
  * @polymerMixin
+ * @mixes KeyboardDirectionMixin
  */
 export const ListMixin = (superClass) =>
-  class VaadinListMixin extends superClass {
+  class ListMixinClass extends KeyboardDirectionMixin(superClass) {
     static get properties() {
       return {
         /**
@@ -84,12 +85,24 @@ export const ListMixin = (superClass) =>
     /** @protected */
     ready() {
       super.ready();
-      this.addEventListener('keydown', (e) => this._onKeydown(e));
+
       this.addEventListener('click', (e) => this._onClick(e));
 
       this._observer = new FlattenedNodesObserver(this, () => {
         this._setItems(this._filterItems(FlattenedNodesObserver.getFlattenedNodes(this)));
       });
+    }
+
+    /**
+     * Override method inherited from `KeyboardDirectionMixin`
+     * to use the stored list of item elements.
+     *
+     * @return {Element[]}
+     * @protected
+     * @override
+     */
+    _getItems() {
+      return this.items;
     }
 
     /** @private */
@@ -116,13 +129,6 @@ export const ListMixin = (superClass) =>
           }
         }
       }
-    }
-
-    /**
-     * @return {Element}
-     */
-    get focused() {
-      return (this.items || []).find(isElementFocused);
     }
 
     /**
@@ -161,28 +167,26 @@ export const ListMixin = (superClass) =>
         this._searchBuf = '';
       });
       this._searchBuf += key.toLowerCase();
-      const increment = 1;
-      const condition = (item) =>
-        !(item.disabled || this._isItemHidden(item)) &&
-        item.textContent
-          .replace(/[^\p{L}\p{Nd}]/gu, '')
-          .toLowerCase()
-          .indexOf(this._searchBuf) === 0;
 
-      if (
-        !this.items.some(
-          (item) =>
-            item.textContent
-              .replace(/[^\p{L}\p{Nd}]/gu, '')
-              .toLowerCase()
-              .indexOf(this._searchBuf) === 0,
-        )
-      ) {
+      if (!this.items.some((item) => this.__isMatchingKey(item))) {
         this._searchBuf = key.toLowerCase();
       }
 
       const idx = this._searchBuf.length === 1 ? currentIdx + 1 : currentIdx;
-      return this._getAvailableIndex(idx, increment, condition);
+      return this._getAvailableIndex(
+        this.items,
+        idx,
+        1,
+        (item) => this.__isMatchingKey(item) && getComputedStyle(item).display !== 'none',
+      );
+    }
+
+    /** @private */
+    __isMatchingKey(item) {
+      return item.textContent
+        .replace(/[^\p{L}\p{Nd}]/gu, '')
+        .toLowerCase()
+        .startsWith(this._searchBuf);
     }
 
     /**
@@ -194,10 +198,14 @@ export const ListMixin = (superClass) =>
     }
 
     /**
+     * Override an event listener from `KeyboardMixin`
+     * to search items by key.
+     *
      * @param {!KeyboardEvent} event
      * @protected
+     * @override
      */
-    _onKeydown(event) {
+    _onKeyDown(event) {
       if (event.metaKey || event.ctrlKey) {
         return;
       }
@@ -205,7 +213,6 @@ export const ListMixin = (superClass) =>
       const key = event.key;
 
       const currentIdx = this.items.indexOf(this.focused);
-
       if (/[a-zA-Z0-9]/.test(key) && key.length === 1) {
         const idx = this._searchKey(currentIdx, key);
         if (idx >= 0) {
@@ -214,55 +221,7 @@ export const ListMixin = (superClass) =>
         return;
       }
 
-      const condition = (item) => !(item.disabled || this._isItemHidden(item));
-      let idx, increment;
-
-      const dirIncrement = this._isRTL ? -1 : 1;
-
-      if ((this._vertical && key === 'ArrowUp') || (!this._vertical && key === 'ArrowLeft')) {
-        increment = -dirIncrement;
-        idx = currentIdx - dirIncrement;
-      } else if ((this._vertical && key === 'ArrowDown') || (!this._vertical && key === 'ArrowRight')) {
-        increment = dirIncrement;
-        idx = currentIdx + dirIncrement;
-      } else if (key === 'Home') {
-        increment = 1;
-        idx = 0;
-      } else if (key === 'End') {
-        increment = -1;
-        idx = this.items.length - 1;
-      }
-
-      idx = this._getAvailableIndex(idx, increment, condition);
-      if (idx >= 0) {
-        this._focus(idx);
-        event.preventDefault();
-      }
-    }
-
-    /**
-     * @param {number} idx
-     * @param {number} increment
-     * @param {function(!Element):boolean} condition
-     * @return {number}
-     * @protected
-     */
-    _getAvailableIndex(idx, increment, condition) {
-      const totalItems = this.items.length;
-      for (let i = 0; typeof idx === 'number' && i < totalItems; i++, idx += increment || 1) {
-        if (idx < 0) {
-          idx = totalItems - 1;
-        } else if (idx >= totalItems) {
-          idx = 0;
-        }
-
-        const item = this.items[idx];
-
-        if (condition(item)) {
-          return idx;
-        }
-      }
-      return -1;
+      super._onKeyDown(event);
     }
 
     /**
@@ -279,7 +238,7 @@ export const ListMixin = (superClass) =>
      * @protected
      */
     _setFocusable(idx) {
-      idx = this._getAvailableIndex(idx, 1, (item) => !item.disabled);
+      idx = this._getAvailableIndex(this.items, idx, 1);
       const item = this.items[idx];
       this.items.forEach((e) => {
         e.tabIndex = e === item ? 0 : -1;
@@ -291,26 +250,12 @@ export const ListMixin = (superClass) =>
      * @protected
      */
     _focus(idx) {
-      const item = this.items[idx];
-      this.items.forEach((e) => {
-        e.focused = e === item;
+      this.items.forEach((e, index) => {
+        e.focused = index === idx;
       });
       this._setFocusable(idx);
       this._scrollToItem(idx);
-      this._focusItem(item);
-    }
-
-    /**
-     * Always set focus-ring on the item managed by the list-box
-     * for backwards compatibility with the old implementation.
-     * @param {HTMLElement} item
-     * @protected
-     */
-    _focusItem(item) {
-      if (item) {
-        item.focus();
-        item.setAttribute('focus-ring', '');
-      }
+      super._focus(idx);
     }
 
     focus() {

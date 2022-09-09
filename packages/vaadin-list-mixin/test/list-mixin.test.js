@@ -76,6 +76,7 @@ customElements.define(
         },
         disabled: {
           type: Boolean,
+          reflectToAttribute: true,
           observer: '_disabledChanged',
         },
         selected: {
