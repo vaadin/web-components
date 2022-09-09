@@ -5,15 +5,15 @@
  */
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 
 /**
  * @polymerMixin
  * @mixes FocusMixin
- * @mixes KeyboardMixin
+ * @mixes KeyboardDirectionMixinClass
  */
 export const InteractionsMixin = (superClass) =>
-  class InteractionsMixin extends KeyboardMixin(FocusMixin(superClass)) {
+  class InteractionsMixin extends KeyboardDirectionMixin(FocusMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -52,6 +52,42 @@ export const InteractionsMixin = (superClass) =>
       const container = this._container;
       container.addEventListener('click', this.__onButtonClick.bind(this));
       container.addEventListener('mouseover', (e) => this._onMouseOver(e));
+    }
+
+    /**
+     * Override getter from `KeyboardDirectionMixin`
+     * to look for activeElement in shadow root, or
+     * use the expanded button as a fallback.
+     *
+     * @return {Element | null}
+     * @protected
+     * @override
+     */
+    get focused() {
+      return this.shadowRoot.activeElement || this._expandedButton;
+    }
+
+    /**
+     * Override getter from `KeyboardDirectionMixin`.
+     *
+     * @return {boolean}
+     * @protected
+     * @override
+     */
+    get _vertical() {
+      return false;
+    }
+
+    /**
+     * Override method inherited from `KeyboardDirectionMixin`
+     * to use the list of menu-bar buttons as items.
+     *
+     * @return {Element[]}
+     * @protected
+     * @override
+     */
+    _getItems() {
+      return this._buttons;
     }
 
     /** @private */
@@ -95,29 +131,40 @@ export const InteractionsMixin = (superClass) =>
       button.setAttribute('tabindex', focused ? '0' : '-1');
     }
 
-    /** @private */
-    _focusButton(button) {
-      button.focus();
-      button.setAttribute('focus-ring', '');
+    /**
+     * Override method inherited from `KeyboardDirectionMixin`
+     * to close the submenu for the previously focused button
+     * and open another one for the newly focused button.
+     *
+     * @param {Element} item
+     * @param {boolean} navigating
+     * @protected
+     * @override
+     */
+    _focusItem(item, navigating) {
+      const wasExpanded = navigating && this.focused === this._expandedButton;
+      if (wasExpanded) {
+        this._close();
+      }
+
+      super._focusItem(item, navigating);
+
       this._buttons.forEach((btn) => {
-        this._setTabindex(btn, btn === button);
+        this._setTabindex(btn, btn === item);
       });
 
-      if (button === this._overflow) {
+      if (wasExpanded && item.item && item.item.children) {
+        this.__openSubMenu(item, true, { keepFocus: true });
+      } else if (item === this._overflow) {
         this._hideTooltip();
       } else {
-        this._showTooltip(button);
+        this._showTooltip(item);
       }
     }
 
     /** @private */
     _getButtonFromEvent(e) {
       return Array.from(e.composedPath()).find((el) => el.localName === 'vaadin-menu-bar-button');
-    }
-
-    /** @private */
-    _getCurrentButton() {
-      return this.shadowRoot.activeElement || this._expandedButton;
     }
 
     /**
@@ -156,7 +203,7 @@ export const InteractionsMixin = (superClass) =>
         // Menu opened previously, focus first item
         this._focusFirstItem();
       } else {
-        this.__openSubMenu(button, event);
+        this.__openSubMenu(button, true);
       }
     }
 
@@ -173,7 +220,7 @@ export const InteractionsMixin = (superClass) =>
         // Menu opened previously, focus last item
         this._focusLastItem();
       } else {
-        this.__openSubMenu(button, event, { focusLast: true });
+        this.__openSubMenu(button, true, { focusLast: true });
       }
     }
 
@@ -211,76 +258,8 @@ export const InteractionsMixin = (superClass) =>
           break;
         default:
           super._onKeyDown(event);
-
-          this._navigateByKey(event);
           break;
       }
-    }
-
-    /** @private */
-    _navigateByKey(event) {
-      // IE names for arrows do not include the Arrow prefix
-      const key = event.key.replace(/^Arrow/, '');
-      const buttons = this._buttons;
-      const currentBtn = this._getCurrentButton();
-      const currentIdx = buttons.indexOf(currentBtn);
-      let idx;
-      let increment;
-      const dirIncrement = this.__isRTL ? -1 : 1;
-
-      switch (key) {
-        case 'Left':
-          increment = -dirIncrement;
-          idx = currentIdx - dirIncrement;
-          break;
-        case 'Right':
-          increment = dirIncrement;
-          idx = currentIdx + dirIncrement;
-          break;
-        case 'Home':
-          increment = 1;
-          idx = 0;
-          break;
-        case 'End':
-          increment = -1;
-          idx = buttons.length - 1;
-          break;
-        default:
-        // Do nothing.
-      }
-
-      idx = this._getAvailableIndex(idx, increment, buttons);
-      if (idx >= 0) {
-        event.preventDefault();
-        const btn = buttons[idx];
-        const wasExpanded = currentBtn === this._expandedButton;
-        if (wasExpanded) {
-          this._close();
-        }
-        this._focusButton(btn);
-        if (wasExpanded && btn.item && btn.item.children) {
-          this.__openSubMenu(btn, event, { keepFocus: true });
-        }
-      }
-    }
-
-    /** @private */
-    _getAvailableIndex(index, increment, buttons) {
-      const totalItems = buttons.length;
-      let idx = index;
-      for (let i = 0; typeof idx === 'number' && i < totalItems; i++, idx += increment || 1) {
-        if (idx < 0) {
-          idx = totalItems - 1;
-        } else if (idx >= totalItems) {
-          idx = 0;
-        }
-
-        const btn = buttons[idx];
-        if (!btn.disabled && !btn.hasAttribute('hidden')) {
-          return idx;
-        }
-      }
-      return -1;
     }
 
     /** @private */
@@ -329,7 +308,7 @@ export const InteractionsMixin = (superClass) =>
       if (button && button !== this._expandedButton) {
         const isOpened = this._subMenu.opened;
         if (button.item.children && (this.openOnHover || isOpened)) {
-          this.__openSubMenu(button, e);
+          this.__openSubMenu(button, false);
         } else if (isOpened) {
           this._close();
         }
@@ -354,11 +333,7 @@ export const InteractionsMixin = (superClass) =>
         if (e.keyCode === 37 || (e.keyCode === 39 && !item._item.children)) {
           // Prevent ArrowLeft from being handled in context-menu
           e.stopImmediatePropagation();
-          this._navigateByKey(e);
-          const button = this.shadowRoot.activeElement;
-          if (button && button.item && button.item.children) {
-            this.__openSubMenu(button, e, { keepFocus: true });
-          }
+          this._onKeyDown(e);
         }
       }
     }
@@ -373,12 +348,12 @@ export const InteractionsMixin = (superClass) =>
       e.stopPropagation();
       const button = this._getButtonFromEvent(e);
       if (button) {
-        this.__openSubMenu(button, e);
+        this.__openSubMenu(button, false);
       }
     }
 
     /** @private */
-    __openSubMenu(button, event, options = {}) {
+    __openSubMenu(button, keydown, options = {}) {
       const subMenu = this._subMenu;
       const item = button.item;
 
@@ -426,11 +401,11 @@ export const InteractionsMixin = (superClass) =>
           }
 
           if (options.keepFocus) {
-            this._focusButton(this._expandedButton);
+            this._focusItem(this._expandedButton, false);
           }
 
           // Do not focus item when open not from keyboard
-          if (event.type !== 'keydown') {
+          if (!keydown) {
             overlay.$.overlay.focus();
           }
 
@@ -473,7 +448,7 @@ export const InteractionsMixin = (superClass) =>
       if (button && button.hasAttribute('expanded')) {
         this._setExpanded(button, false);
         if (restoreFocus) {
-          this._focusButton(button);
+          this._focusItem(button, false);
         }
         this._expandedButton = null;
       }
