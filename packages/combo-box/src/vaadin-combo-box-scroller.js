@@ -294,7 +294,7 @@ export class ComboBoxScroller extends PolymerElement {
 
     el.setProperties({
       item,
-      index: this.__requestItemByIndex(item, index),
+      index,
       label: this.getItemLabel(item),
       selected: this.__isItemSelected(item, this.selectedItem, this.itemIdPath),
       renderer: this.renderer,
@@ -310,6 +310,10 @@ export class ComboBoxScroller extends PolymerElement {
       el.setAttribute('theme', this.theme);
     } else {
       el.removeAttribute('theme');
+    }
+
+    if (item instanceof ComboBoxPlaceholder) {
+      this.__requestItemByIndex(index);
     }
   }
 
@@ -351,19 +355,18 @@ export class ComboBoxScroller extends PolymerElement {
   }
 
   /**
-   * If dataProvider is used, dispatch a request for the item’s index if
-   * the item is a placeholder object.
-   *
-   * @return {number}
+   * Dispatches an `index-requested` event for the given index to notify
+   * the data provider that it should start loading the page containing the requested index.
    */
-  __requestItemByIndex(item, index) {
-    if (item instanceof ComboBoxPlaceholder && index !== undefined) {
-      this.dispatchEvent(
-        new CustomEvent('index-requested', { detail: { index, currentScrollerPos: this._oldScrollerPosition } }),
-      );
-    }
-
-    return index;
+  __requestItemByIndex(index) {
+    this.dispatchEvent(
+      new CustomEvent('index-requested', {
+        detail: {
+          index,
+          currentScrollerPos: this._oldScrollerPosition,
+        },
+      }),
+    );
   }
 
   /** @private */
