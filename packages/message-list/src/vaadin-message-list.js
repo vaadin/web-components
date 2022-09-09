@@ -118,6 +118,7 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
     return Array.from(this.shadowRoot.querySelectorAll('vaadin-message'));
   }
 
+  /** @private */
   _itemsChanged(newVal, oldVal) {
     const focusedIndex = this._getIndexOfFocusableElement();
     if (newVal && newVal.length) {
@@ -132,6 +133,7 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
+  /** @private */
   _scrollToLastMessage() {
     if (this.items.length > 0) {
       this.scrollTop = this.scrollHeight - this.clientHeight;
@@ -186,6 +188,7 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
     target.focus();
   }
 
+  /** @private */
   _handleFocusEvent(e) {
     const target = e.composedPath().find((node) => node instanceof Message);
     this._setTabIndexesByMessage(target);
@@ -200,10 +203,12 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
     this._setTabIndexesByMessage(message);
   }
 
+  /** @private */
   _setTabIndexesByMessage(message) {
     this._messages.forEach((e) => (e.tabIndex = e === message ? 0 : -1));
   }
 
+  /** @private */
   _getIndexOfFocusableElement() {
     const index = this._messages.findIndex((e) => e.tabIndex === 0);
     return index !== -1 ? index : 0;
