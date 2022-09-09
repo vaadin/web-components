@@ -5,11 +5,16 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 import type { FocusMixinClass } from '@vaadin/component-base/src/focus-mixin.js';
+import type { KeyboardDirectionMixinClass } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
 
 export declare function InteractionsMixin<T extends Constructor<HTMLElement>>(
   base: T,
-): Constructor<FocusMixinClass> & Constructor<InteractionsMixinClass> & Constructor<KeyboardMixinClass> & T;
+): Constructor<FocusMixinClass> &
+  Constructor<InteractionsMixinClass> &
+  Constructor<KeyboardDirectionMixinClass> &
+  Constructor<KeyboardMixinClass> &
+  T;
 
 export declare class InteractionsMixinClass {
   /**
