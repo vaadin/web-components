@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export interface MessageListItem {
@@ -43,7 +44,7 @@ export interface MessageListItem {
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  */
-declare class MessageList extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class MessageList extends KeyboardDirectionMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**
    * An array of objects which will be rendered as messages.
    * The message objects can have the following properties:

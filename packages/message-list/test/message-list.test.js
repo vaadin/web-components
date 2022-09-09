@@ -308,6 +308,7 @@ describe('message-list', () => {
     });
 
     it('should set tabindex on the next message on "arrow-down" keydown', () => {
+      messageElements[0].focus();
       arrowDown(messageElements[0]);
       messageElements.forEach((msg, idx) => {
         expect(msg.tabIndex).to.equal(idx === 1 ? 0 : -1);
@@ -315,36 +316,42 @@ describe('message-list', () => {
     });
 
     it('should move focus to the next message on "arrow-down" keydown', () => {
+      messageElements[0].focus();
       arrowDown(messageElements[0]);
       expect(messageElements[0].hasAttribute('focused')).to.be.false;
       expect(messageElements[1].hasAttribute('focused')).to.be.true;
     });
 
     it('should focus first message on last message "arrow-down" keydown', () => {
+      messageElements[3].focus();
       arrowDown(messageElements[3]);
       expect(messageElements[3].hasAttribute('focused')).to.be.false;
       expect(messageElements[0].hasAttribute('focused')).to.be.true;
     });
 
     it('should move focus to the previous message on "arrow-up" keydown', () => {
+      messageElements[1].focus();
       arrowUp(messageElements[1]);
       expect(messageElements[1].hasAttribute('focused')).to.be.false;
       expect(messageElements[0].hasAttribute('focused')).to.be.true;
     });
 
     it('should focus last message on first message "arrow-down" keydown', () => {
+      messageElements[0].focus();
       arrowUp(messageElements[0]);
       expect(messageElements[0].hasAttribute('focused')).to.be.false;
       expect(messageElements[3].hasAttribute('focused')).to.be.true;
     });
 
     it('should move focus to the first message on "home" keydown', () => {
+      messageElements[2].focus();
       home(messageElements[2]);
       expect(messageElements[2].hasAttribute('focused')).to.be.false;
       expect(messageElements[0].hasAttribute('focused')).to.be.true;
     });
 
-    it('should move focus to the last panel on "end" keydown', () => {
+    it('should move focus to the last message on "end" keydown', () => {
+      messageElements[1].focus();
       end(messageElements[1]);
       expect(messageElements[1].hasAttribute('focused')).to.be.false;
       expect(messageElements[3].hasAttribute('focused')).to.be.true;
@@ -352,11 +359,13 @@ describe('message-list', () => {
 
     it('should set focus-ring attribute when moving focus using keyboard', () => {
       expect(messageElements[1].hasAttribute('focus-ring')).to.be.false;
+      messageElements[0].focus();
       arrowDown(messageElements[0]);
       expect(messageElements[1].hasAttribute('focus-ring')).to.be.true;
     });
 
     it('should ignore keydown events when Ctrl modifier key is pressed', () => {
+      messageElements[1].focus();
       arrowDown(messageElements[1]);
       arrowDown(messageElements[2], ['ctrl']);
       expect(messageElements[3].hasAttribute('focused')).to.be.false;
@@ -364,6 +373,7 @@ describe('message-list', () => {
     });
 
     it('should not change focus when unrelated key is pressed', () => {
+      messageElements[0].focus();
       arrowDown(messageElements[0]);
       arrowRight(messageElements[1]);
       expect(messageElements[1].hasAttribute('focused')).to.be.true;
