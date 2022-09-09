@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
+import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { AccordionPanel } from './vaadin-accordion-panel.js';
 
@@ -70,7 +70,7 @@ export type AccordionEventMap = AccordionCustomEventMap & HTMLElementEventMap;
  * @fires {CustomEvent} items-changed - Fired when the `items` property changes.
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class Accordion extends KeyboardMixin(ElementMixin(ThemableMixin(HTMLElement))) {
+declare class Accordion extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(HTMLElement))) {
   /**
    * The index of currently opened panel. First panel is opened by
    * default. Only one panel can be opened at the same time.
