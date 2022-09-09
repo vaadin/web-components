@@ -89,11 +89,11 @@ describe('scroll to index', () => {
         grid.scrollToIndex(index);
         flushGrid(grid);
         grid.scrollTop += 1; // Scroll a little to validate the test
-        let row = Array.from(grid.$.items.children).filter((r) => r.index === index)[0];
+        let row = Array.from(grid.$.items.children).find((r) => r.index === index);
         const rowTop = row.getBoundingClientRect().top;
 
         grid.size -= ~~(grid.size / 4);
-        row = Array.from(grid.$.items.children).filter((r) => r.index === index)[0];
+        row = Array.from(grid.$.items.children).find((r) => r.index === index);
         expect(row.getBoundingClientRect().top).to.be.closeTo(rowTop, 0.5);
       });
     });

@@ -792,7 +792,7 @@ describe('vaadin-list-mixin', () => {
       expect(getComputedStyle(list.items[0]).getPropertyValue('display')).to.equal('block');
       arrowDown(list);
       expect(getComputedStyle(list.items[1]).getPropertyValue('display')).to.equal('none');
-      expect(list.items.filter((item) => item.textContent === 'Bax')[0].focused).to.be.true;
+      expect(list.items.find((item) => item.textContent === 'Bax').focused).to.be.true;
     });
 
     it('should move focus to next not hidden element on "arrow-up"', () => {
@@ -800,7 +800,7 @@ describe('vaadin-list-mixin', () => {
       expect(getComputedStyle(list.items[0]).getPropertyValue('display')).to.equal('block');
       arrowUp(list);
       expect(getComputedStyle(list.items[list.items.length - 1]).getPropertyValue('display')).to.equal('none');
-      expect(list.items.filter((item) => item.textContent === 'Bin')[0].focused).to.be.true;
+      expect(list.items.find((item) => item.textContent === 'Bin').focused).to.be.true;
     });
 
     it('should not set tabIndex=0 to hidden items, but the next one in the loop', () => {
@@ -811,13 +811,13 @@ describe('vaadin-list-mixin', () => {
     it('should skip hidden items to key search', () => {
       keyDownChar(list, 'b');
       keyDownChar(list, 'b');
-      expect(list.items.filter((item) => item.textContent === 'Bin')[0].focused).to.be.true;
+      expect(list.items.find((item) => item.textContent === 'Bin').focused).to.be.true;
     });
 
     it('should skip hidden items to focus loop', () => {
       arrowDown(list);
       arrowDown(list);
-      expect(list.items.filter((item) => item.textContent === 'Fox')[0].focused).to.be.true;
+      expect(list.items.find((item) => item.textContent === 'Fox').focused).to.be.true;
     });
   });
 

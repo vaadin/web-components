@@ -1171,7 +1171,7 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
   /** @private */
   __new(event) {
     // This allows listening to parent element and fire only when clicking on default or custom new-button.
-    if (event.composedPath().filter((e) => e.nodeType === 1 && e.hasAttribute('new-button'))[0]) {
+    if (event.composedPath().some((e) => e.nodeType === 1 && e.hasAttribute('new-button'))) {
       this.__confirmBeforeChangingEditedItem(null, true);
     }
   }

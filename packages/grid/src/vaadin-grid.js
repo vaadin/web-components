@@ -746,7 +746,7 @@ class Grid extends ElementMixin(
         if (section === 'body') {
           // Body
           column._cells = column._cells || [];
-          cell = column._cells.filter((cell) => cell._vacant)[0];
+          cell = column._cells.find((cell) => cell._vacant);
           if (!cell) {
             cell = this._createCell('td');
             column._cells.push(cell);
@@ -757,7 +757,7 @@ class Grid extends ElementMixin(
           if (index === cols.length - 1 && this.rowDetailsRenderer) {
             // Add details cell as last cell to body rows
             this._detailsCells = this._detailsCells || [];
-            const detailsCell = this._detailsCells.filter((cell) => cell._vacant)[0] || this._createCell('td');
+            const detailsCell = this._detailsCells.find((cell) => cell._vacant) || this._createCell('td');
             if (this._detailsCells.indexOf(detailsCell) === -1) {
               this._detailsCells.push(detailsCell);
             }
@@ -783,7 +783,7 @@ class Grid extends ElementMixin(
             column[`_${section}Cell`] = cell;
           } else {
             column._emptyCells = column._emptyCells || [];
-            cell = column._emptyCells.filter((cell) => cell._vacant)[0] || this._createCell(tagName);
+            cell = column._emptyCells.find((cell) => cell._vacant) || this._createCell(tagName);
             cell._column = column;
             row.appendChild(cell);
             if (column._emptyCells.indexOf(cell) === -1) {

@@ -42,9 +42,9 @@ export const EventContextMixin = (superClass) =>
         return context;
       }
 
-      context.section = ['body', 'header', 'footer', 'details'].filter(
+      context.section = ['body', 'header', 'footer', 'details'].find(
         (section) => cell.getAttribute('part').indexOf(section) > -1,
-      )[0];
+      );
 
       if (cell._column) {
         context.column = cell._column;

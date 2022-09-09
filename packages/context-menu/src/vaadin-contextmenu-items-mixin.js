@@ -105,7 +105,7 @@ export const ItemsMixin = (superClass) =>
       // Overlay's outside click listener doesn't work with modeless
       // overlays (submenus) so we need additional logic for it
       this.__itemsOutsideClickListener = (e) => {
-        if (!e.composedPath().filter((el) => el.localName === 'vaadin-context-menu-overlay')[0]) {
+        if (!e.composedPath().some((el) => el.localName === 'vaadin-context-menu-overlay')) {
           this.dispatchEvent(new CustomEvent('items-outside-click'));
         }
       };
@@ -335,7 +335,7 @@ export const ItemsMixin = (superClass) =>
         });
         const openSubMenu = (
           e,
-          itemElement = e.composedPath().filter((e) => e.localName === 'vaadin-context-menu-item')[0],
+          itemElement = e.composedPath().find((e) => e.localName === 'vaadin-context-menu-item'),
         ) => {
           // Delay enabling the mouseover listener to avoid it from triggering on parent menu open
           if (!this.__openListenerActive) {
