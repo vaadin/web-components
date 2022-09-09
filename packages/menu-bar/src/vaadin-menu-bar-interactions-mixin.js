@@ -378,23 +378,28 @@ export const InteractionsMixin = (superClass) =>
         this._setExpanded(button, true);
       });
 
-      if (options.focusLast) {
-        this.__onceOpened(() => this._focusLastItem());
-      }
+      this.style.pointerEvents = 'auto';
 
-      if (options.keepFocus) {
-        this.__onceOpened(() => {
-          this._focusButton(this._expandedButton);
-        });
-      }
+      overlay.addEventListener(
+        'vaadin-overlay-open',
+        () => {
+          if (options.focusLast) {
+            this._focusLastItem();
+          }
 
-      this.__onceOpened(() => {
-        // Do not focus item when open not from keyboard
-        if (event.type !== 'keydown') {
-          subMenu.$.overlay.$.overlay.focus();
-        }
-        overlay._updatePosition();
-      });
+          if (options.keepFocus) {
+            this._focusButton(this._expandedButton);
+          }
+
+          // Do not focus item when open not from keyboard
+          if (event.type !== 'keydown') {
+            overlay.$.overlay.focus();
+          }
+
+          overlay._updatePosition();
+        },
+        { once: true },
+      );
     }
 
     /** @private */
@@ -410,17 +415,6 @@ export const InteractionsMixin = (superClass) =>
       if (item) {
         item.focus();
       }
-    }
-
-    /** @private */
-    __onceOpened(cb) {
-      this.style.pointerEvents = 'auto';
-      const overlay = this._subMenu.$.overlay;
-      const listener = () => {
-        cb();
-        overlay.removeEventListener('vaadin-overlay-open', listener);
-      };
-      overlay.addEventListener('vaadin-overlay-open', listener);
     }
 
     /** @private */
