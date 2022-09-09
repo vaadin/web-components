@@ -5,13 +5,15 @@
  */
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 
 /**
  * @polymerMixin
  * @mixes FocusMixin
+ * @mixes KeyboardMixin
  */
 export const InteractionsMixin = (superClass) =>
-  class InteractionsMixin extends FocusMixin(superClass) {
+  class InteractionsMixin extends KeyboardMixin(FocusMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -37,7 +39,6 @@ export const InteractionsMixin = (superClass) =>
     ready() {
       super.ready();
 
-      this.addEventListener('keydown', (e) => this._onKeydown(e));
       this.addEventListener('mousedown', () => this._hideTooltip());
       this.addEventListener('mouseleave', () => this._hideTooltip());
 
@@ -144,38 +145,75 @@ export const InteractionsMixin = (superClass) =>
 
     /**
      * @param {!KeyboardEvent} event
-     * @protected
+     * @private
      */
-    _onKeydown(event) {
-      const button = this._getButtonFromEvent(event);
-      if (button) {
-        if (event.key === 'Escape') {
-          this._hideTooltip();
-        }
+    _onArrowDown(event) {
+      // Prevent page scroll.
+      event.preventDefault();
 
-        if (event.keyCode === 40) {
-          // ArrowDown, prevent page scroll
-          event.preventDefault();
-          if (button === this._expandedButton) {
-            // Menu opened previously, focus first item
-            this._focusFirstItem();
-          } else {
-            this.__openSubMenu(button, event);
-          }
-        } else if (event.keyCode === 38) {
-          // ArrowUp, prevent page scroll
-          event.preventDefault();
-          if (button === this._expandedButton) {
-            // Menu opened previously, focus last item
-            this._focusLastItem();
-          } else {
-            this.__openSubMenu(button, event, { focusLast: true });
-          }
-        } else if (event.keyCode === 27 && button === this._expandedButton) {
-          this._close(true);
-        } else {
+      const button = this._getButtonFromEvent(event);
+      if (button === this._expandedButton) {
+        // Menu opened previously, focus first item
+        this._focusFirstItem();
+      } else {
+        this.__openSubMenu(button, event);
+      }
+    }
+
+    /**
+     * @param {!KeyboardEvent} event
+     * @private
+     */
+    _onArrowUp(event) {
+      // Prevent page scroll.
+      event.preventDefault();
+
+      const button = this._getButtonFromEvent(event);
+      if (button === this._expandedButton) {
+        // Menu opened previously, focus last item
+        this._focusLastItem();
+      } else {
+        this.__openSubMenu(button, event, { focusLast: true });
+      }
+    }
+
+    /**
+     * Override an event listener from `KeyboardMixin`:
+     * - to close the sub-menu for expanded button,
+     * - to close a tooltip for collapsed button.
+     *
+     * @param {!KeyboardEvent} event
+     * @protected
+     * @override
+     */
+    _onEscape(event) {
+      if (event.composedPath().includes(this._expandedButton)) {
+        this._close(true);
+      }
+
+      this._hideTooltip();
+    }
+
+    /**
+     * Override an event listener from `KeyboardMixin`.
+     *
+     * @param {!KeyboardEvent} event
+     * @protected
+     * @override
+     */
+    _onKeyDown(event) {
+      switch (event.key) {
+        case 'ArrowDown':
+          this._onArrowDown(event);
+          break;
+        case 'ArrowUp':
+          this._onArrowUp(event);
+          break;
+        default:
+          super._onKeyDown(event);
+
           this._navigateByKey(event);
-        }
+          break;
       }
     }
 
