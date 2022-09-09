@@ -233,10 +233,32 @@ describe('reordering simple grid', () => {
     });
 
     it('should reorder multiple columns while dragging', () => {
+      // Start column order [1, 2, 3, 4]
+
+      // Drag column 1 on top of column 2. Expected order [2, 1, 3, 4]
       dragOver(headerContent[0], headerContent[1]);
+      // Keep dragging the column all the way over to the last column. Expected order [2, 3, 4, 1]
       dragOver(headerContent[0], headerContent[3]);
       flushGrid(grid);
-      expectVisualOrder(grid, [2, 4, 3, 1]);
+      expectVisualOrder(grid, [2, 3, 4, 1]);
+    });
+
+    it('should shift columns in between when dragged as last', () => {
+      // Start column order [1, 2, 3, 4]
+
+      // Drag column 2 all the way over to the last column. Expected order [1, 3, 4, 2]
+      dragOver(headerContent[1], headerContent[3]);
+      flushGrid(grid);
+      expectVisualOrder(grid, [1, 3, 4, 2]);
+    });
+
+    it('should shift columns in between when dragged as first', () => {
+      // Start column order [1, 2, 3, 4]
+
+      // Drag column 3 over the very first column. Expected order [3, 1, 2, 4]
+      dragOver(headerContent[2], headerContent[0]);
+      flushGrid(grid);
+      expectVisualOrder(grid, [3, 1, 2, 4]);
     });
 
     it('should update first-column attribute', () => {
@@ -378,8 +400,8 @@ describe('reordering grid with columns groups', () => {
 
   beforeEach(async () => {
     grid = fixtureSync(`
-      <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
-        ${[1, 2].map((colgroup) => {
+      <vaadin-grid style="width: 800px; height: 200px;" size="1" column-reordering-allowed>
+        ${[1, 2, 3].map((colgroup) => {
           return `
             <vaadin-grid-column-group>
               <template class="header">${colgroup}</template>
@@ -423,6 +445,20 @@ describe('reordering grid with columns groups', () => {
     const firstGroupCell = getVisualHeaderCellContent(grid, 0, 0);
     expect(firstGroupCell.innerText).to.equal('2');
     expectVisualOrder(grid, [21, 22, 11, 12]);
+  });
+
+  it('should reorder all the groups', () => {
+    // Start order
+    // [1,      2,      3     ] <- groups
+    // [11, 12, 21, 22, 31, 32] <- columns
+
+    // Drag the first group over the last group
+    dragAndDropOver(getVisualHeaderCellContent(grid, 0, 0), getVisualHeaderCellContent(grid, 0, 5));
+
+    // Expected order
+    // [2,      3,      1     ] <- groups
+    // [21, 22, 31, 32, 11, 12] <- columns
+    expectVisualOrder(grid, [21, 22, 31, 32, 11, 12]);
   });
 
   it('should allow dropping group over other groups column header', () => {
