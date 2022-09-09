@@ -7,6 +7,7 @@ import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { microTask } from '@vaadin/component-base/src/async.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { Message } from './vaadin-message.js';
 
@@ -40,8 +41,9 @@ import { Message } from './vaadin-message.js';
  * @extends HTMLElement
  * @mixes ThemableMixin
  * @mixes ElementMixin
+ * @mixes KeyboardDirectionMixin
  */
-class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
+class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-message-list';
   }
@@ -108,9 +110,18 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
     // Make screen readers announce new messages
     this.setAttribute('aria-relevant', 'additions');
     this.setAttribute('role', 'log');
+  }
 
-    // Keyboard navi
-    this.addEventListener('keydown', (e) => this._onKeydown(e));
+  /**
+   * Override method inherited from `KeyboardDirectionMixin`
+   * to use the list of message elements as items.
+   *
+   * @return {Element[]}
+   * @protected
+   * @override
+   */
+  _getItems() {
+    return this._messages;
   }
 
   /** @protected */
@@ -138,54 +149,6 @@ class MessageList extends ElementMixin(ThemableMixin(PolymerElement)) {
     if (this.items.length > 0) {
       this.scrollTop = this.scrollHeight - this.clientHeight;
     }
-  }
-
-  /**
-   * @param {!KeyboardEvent} event
-   * @protected
-   */
-  _onKeydown(event) {
-    if (event.metaKey || event.ctrlKey) {
-      return;
-    }
-
-    // Get index of the item that was focused when event happened
-    const target = event.composedPath()[0];
-    let currentIndex = this._messages.indexOf(target);
-
-    switch (event.key) {
-      case 'ArrowUp':
-        currentIndex -= 1;
-        break;
-      case 'ArrowDown':
-        currentIndex += 1;
-        break;
-      case 'Home':
-        currentIndex = 0;
-        break;
-      case 'End':
-        currentIndex = this._messages.length - 1;
-        break;
-      default:
-        return; // Nothing to do
-    }
-    if (currentIndex < 0) {
-      currentIndex = this._messages.length - 1;
-    }
-    if (currentIndex > this._messages.length - 1) {
-      currentIndex = 0;
-    }
-    this._focus(currentIndex);
-    event.preventDefault();
-  }
-
-  /**
-   * @param {number} idx
-   * @protected
-   */
-  _focus(idx) {
-    const target = this._messages[idx];
-    target.focus();
   }
 
   /** @private */
