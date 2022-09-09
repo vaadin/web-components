@@ -112,7 +112,7 @@ export const InteractionsMixin = (superClass) =>
 
     /** @private */
     _getButtonFromEvent(e) {
-      return Array.from(e.composedPath()).filter((el) => el.localName === 'vaadin-menu-bar-button')[0];
+      return Array.from(e.composedPath()).find((el) => el.localName === 'vaadin-menu-bar-button');
     }
 
     /** @private */
@@ -344,7 +344,7 @@ export const InteractionsMixin = (superClass) =>
 
     /** @private */
     __onContextMenuKeydown(e) {
-      const item = Array.from(e.composedPath()).filter((el) => el._item)[0];
+      const item = Array.from(e.composedPath()).find((el) => el._item);
       if (item) {
         const list = item.parentNode;
         if (e.keyCode === 38 && item === list.items[0]) {

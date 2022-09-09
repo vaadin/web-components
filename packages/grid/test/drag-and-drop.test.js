@@ -13,9 +13,9 @@ describe('drag and drop', () => {
   ];
 
   const getDraggable = (grid, rowIndex = 0) => {
-    const row = Array.from(grid.$.items.children).filter((row) => row.index === rowIndex)[0];
+    const row = Array.from(grid.$.items.children).find((row) => row.index === rowIndex);
     const cellContent = row.querySelector('slot').assignedNodes()[0];
-    return [row, cellContent].filter((node) => node.getAttribute('draggable') === 'true')[0];
+    return [row, cellContent].find((node) => node.getAttribute('draggable') === 'true');
   };
 
   const fireDragStart = (draggable = getDraggable(grid)) => {
@@ -296,7 +296,7 @@ describe('drag and drop', () => {
         fireDragStart();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
-        const textData = event.detail.dragData.filter((d) => d.type === 'text')[0].data;
+        const textData = event.detail.dragData.find((d) => d.type === 'text').data;
         expect(textData).to.eql('foo\tbar\nbaz\tqux');
       });
 
@@ -309,7 +309,7 @@ describe('drag and drop', () => {
         fireDragStart();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
-        const textData = event.detail.dragData.filter((d) => d.type === 'text')[0].data;
+        const textData = event.detail.dragData.find((d) => d.type === 'text').data;
         expect(textData).to.eql('foo\tbar');
       });
 
@@ -320,7 +320,7 @@ describe('drag and drop', () => {
         fireDragStart();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
-        const textData = event.detail.dragData.filter((d) => d.type === 'text')[0].data;
+        const textData = event.detail.dragData.find((d) => d.type === 'text').data;
         expect(textData).to.eql('bar\tfoo\nqux\tbaz');
         grid._swapColumnOrders(columns[0], columns[1]);
       });
@@ -333,7 +333,7 @@ describe('drag and drop', () => {
         fireDragStart();
         fireDrop();
         const event = dropSpy.getCall(0).args[0];
-        const dragData = event.detail.dragData.filter((d) => d.type === 'text/plain')[0];
+        const dragData = event.detail.dragData.find((d) => d.type === 'text/plain');
         expect(dragData.data).to.eql('bar,qux');
         expect(dragData.type).to.eql('text/plain');
       });

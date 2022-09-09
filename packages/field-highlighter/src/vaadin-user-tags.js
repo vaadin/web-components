@@ -221,7 +221,7 @@ export class UserTags extends PolymerElement {
   }
 
   getTagForUser(user) {
-    return Array.from(this.wrapper.children).filter((tag) => tag.uid === user.id)[0];
+    return Array.from(this.wrapper.children).find((tag) => tag.uid === user.id);
   }
 
   getChangedTags(addedUsers, removedUsers) {

@@ -226,7 +226,7 @@ export const InlineEditingMixin = (superClass) =>
 
     /** @private */
     _getRowByIndex(index) {
-      return Array.from(this.$.items.children).filter((el) => el.index === index)[0];
+      return Array.from(this.$.items.children).find((el) => el.index === index);
     }
 
     /** @private */
@@ -456,7 +456,7 @@ export const InlineEditingMixin = (superClass) =>
       this._stopEdit();
 
       if (nextRow && nextCol) {
-        const nextCell = Array.from(nextRow.children).filter((cell) => cell._column === nextCol)[0];
+        const nextCell = Array.from(nextRow.children).find((cell) => cell._column === nextCol);
         e.preventDefault();
 
         // Prevent vaadin-grid handler from being called

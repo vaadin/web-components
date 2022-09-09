@@ -96,7 +96,7 @@ describe('overlay legacy', () => {
 
       const backdropCall = HTMLElement.prototype.addEventListener
         .getCalls()
-        .filter((call) => call.calledOn(overlay.$.backdrop))[0];
+        .find((call) => call.calledOn(overlay.$.backdrop));
       expect(backdropCall).to.not.be.undefined;
       expect(backdropCall.calledWith('click')).to.be.true;
 

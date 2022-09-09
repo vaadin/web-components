@@ -404,7 +404,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
    * @protected
    */
   _setTemplateFromNodes(nodes) {
-    this.template = nodes.filter((node) => node.localName && node.localName === 'template')[0] || this.template;
+    this.template = nodes.find((node) => node.localName && node.localName === 'template') || this.template;
   }
 
   /**

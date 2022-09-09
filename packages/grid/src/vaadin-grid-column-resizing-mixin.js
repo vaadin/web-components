@@ -52,7 +52,7 @@ export const ColumnResizingMixin = (superClass) =>
 
         const eventX = e.detail.x;
         const columnRowCells = Array.from(this.$.header.querySelectorAll('[part~="row"]:last-child [part~="cell"]'));
-        const targetCell = columnRowCells.filter((cell) => cell._column === column)[0];
+        const targetCell = columnRowCells.find((cell) => cell._column === column);
         // Resize the target column
         if (targetCell.offsetWidth) {
           const style = getComputedStyle(targetCell._content);
