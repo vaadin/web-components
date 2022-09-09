@@ -169,9 +169,7 @@ export class ComboBoxScroller extends PolymerElement {
   }
 
   requestContentUpdate() {
-    if (this.__virtualizer) {
-      this.__virtualizer.update();
-    }
+    this.__virtualizer.update();
   }
 
   scrollIntoView(index) {
@@ -249,24 +247,16 @@ export class ComboBoxScroller extends PolymerElement {
 
   /** @private */
   __loadingChanged() {
-    if (this.__virtualizer) {
-      setTimeout(() => this.requestContentUpdate());
-    }
+    setTimeout(() => this.requestContentUpdate());
   }
 
   /** @private */
   __selectedItemChanged() {
-    if (this.__virtualizer) {
-      this.requestContentUpdate();
-    }
+    this.requestContentUpdate();
   }
 
   /** @private */
   __focusedIndexChanged(index, oldIndex) {
-    if (!this.__virtualizer) {
-      return;
-    }
-
     if (index !== oldIndex) {
       this.requestContentUpdate();
     }
