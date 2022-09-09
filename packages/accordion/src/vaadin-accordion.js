@@ -6,6 +6,7 @@
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { AccordionPanel } from './vaadin-accordion-panel.js';
 
@@ -55,9 +56,10 @@ import { AccordionPanel } from './vaadin-accordion-panel.js';
  *
  * @extends HTMLElement
  * @mixes ElementMixin
+ * @mixes KeyboardMixin
  * @mixes ThemableMixin
  */
-class Accordion extends ThemableMixin(ElementMixin(PolymerElement)) {
+class Accordion extends KeyboardMixin(ThemableMixin(ElementMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -142,8 +144,6 @@ class Accordion extends ThemableMixin(ElementMixin(PolymerElement)) {
   ready() {
     super.ready();
 
-    this.addEventListener('keydown', (e) => this._onKeydown(e));
-
     this._observer = new FlattenedNodesObserver(this, (info) => {
       this._setItems(this._filterItems(Array.from(this.children)));
 
@@ -173,10 +173,13 @@ class Accordion extends ThemableMixin(ElementMixin(PolymerElement)) {
   }
 
   /**
+   * Override an event listener from `KeyboardMixin`.
+   *
    * @param {!KeyboardEvent} event
    * @protected
+   * @override
    */
-  _onKeydown(event) {
+  _onKeyDown(event) {
     // Only check keyboard events on details toggle buttons
     const item = event.composedPath()[0];
     if (!this.items.some((el) => el.focusElement === item)) {
