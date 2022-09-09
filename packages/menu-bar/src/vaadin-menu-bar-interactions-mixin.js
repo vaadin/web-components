@@ -189,9 +189,9 @@ export const InteractionsMixin = (superClass) =>
     _onEscape(event) {
       if (event.composedPath().includes(this._expandedButton)) {
         this._close(true);
-      } else {
-        this._hideTooltip();
       }
+
+      this._hideTooltip();
     }
 
     /**
