@@ -169,13 +169,11 @@ export class ComboBoxScroller extends PolymerElement {
   }
 
   requestContentUpdate() {
-    if (this.__virtualizer) {
-      this.__virtualizer.update();
-    }
+    this.__virtualizer.update();
   }
 
   scrollIntoView(index) {
-    if (!this.__virtualizer || !this.opened || index === -1) {
+    if (!(this.opened && index >= 0)) {
       return;
     }
 
