@@ -4,11 +4,15 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
+import type { KeyboardDirectionMixinClass } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
+import type { KeyboardMixinClass } from '@vaadin/component-base/src/keyboard-mixin.js';
 
 /**
  * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
  */
-export declare function ListMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<ListMixinClass> & T;
+export declare function ListMixin<T extends Constructor<HTMLElement>>(
+  base: T,
+): Constructor<KeyboardDirectionMixinClass> & Constructor<KeyboardMixinClass> & Constructor<ListMixinClass> & T;
 
 export declare class ListMixinClass {
   /**
@@ -41,8 +45,6 @@ export declare class ListMixinClass {
    * you have to use `dom-repeat` and place it to the light DOM.
    */
   readonly items: Element[] | undefined;
-
-  protected readonly focused: Element | null;
 
   protected readonly _scrollerElement: HTMLElement;
 }
