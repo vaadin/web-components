@@ -419,9 +419,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
     this.__focusInside = false;
 
-    // When both tooltip and its focused target are detached,
-    // avoid closing twice: both on detach and target blur.
-    if (!this.__hoverInside && this._autoOpened) {
+    if (!this.__hoverInside) {
       this._close(true);
     }
   }

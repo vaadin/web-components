@@ -491,7 +491,7 @@ describe('timers', () => {
       focusout(targets[0]);
       await aTimeout(1);
 
-      expect(overlays[0].opened).to.be.false;
+      expect(overlays[0].opened).to.be.not.ok;
     });
 
     it('should stop closing on subsequent mouseenter during the hide delay', async () => {
