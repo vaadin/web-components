@@ -446,10 +446,13 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   __onTargetVisibilityChange(isVisible) {
+    const oldHidden = this.__isTargetHidden;
     this.__isTargetHidden = !isVisible;
 
-    // Open the overlay when the target is visible and has focus or hover.
-    if (isVisible && (this.__focusInside || this.__hoverInside)) {
+    console.log('is visible', isVisible);
+
+    // Open the overlay when the target becomes visible and has focus or hover.
+    if (oldHidden && isVisible && (this.__focusInside || this.__hoverInside)) {
       this._open(true);
       return;
     }
