@@ -361,9 +361,10 @@ export class ComboBoxScroller extends PolymerElement {
    * The event is dispatched asynchronously to prevent an immediate page request and therefore
    * a possible infinite recursion in case the data provider implements page request cancelation logic
    * by invoking data provider page callbacks with an empty array.
-   * Invoking the data provider page callback with an empty array triggers a synchronous scroller update
-   * and, if the callback corresponds to the currently visible page, then the scroller may synchronously
-   * request that page again which may result in a recurring in the end. That was the case for the Flow counterpart:
+   * The infinite recursion may occur otherwise since invoking a data provider page callback with an empty array
+   * triggers a synchronous scroller update and, if the callback corresponds to the currently visible page,
+   * the scroller will synchronously request the page again which may lead to a recurring in the end.
+   * That was the case for the Flow counterpart:
    * https://github.com/vaadin/flow-components/issues/3553#issuecomment-1239344828
    */
   __requestItemByIndex(index) {
