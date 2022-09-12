@@ -19,5 +19,8 @@ assertType<Record<string, unknown>>(tooltip.context);
 assertType<(context: Record<string, unknown>) => string>(tooltip.textGenerator);
 assertType<boolean>(tooltip.manual);
 assertType<boolean>(tooltip.opened);
+assertType<number>(tooltip.focusDelay);
+assertType<number>(tooltip.hideDelay);
+assertType<number>(tooltip.hoverDelay);
 assertType<TooltipPosition>(tooltip.position);
 assertType<(target: HTMLElement) => boolean>(tooltip.shouldShow);
