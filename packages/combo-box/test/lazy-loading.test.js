@@ -312,6 +312,15 @@ describe('lazy loading', () => {
           expect(dp.calledOnce).to.be.true;
         });
 
+        it('should request pages asynchronously when scrolling', async () => {
+          comboBox.dataProvider = spyDataProvider;
+          spyDataProvider.resetHistory();
+          comboBox._scrollIntoView(50);
+          expect(spyDataProvider.called).to.be.false;
+          await nextFrame();
+          expect(spyDataProvider.calledOnce).to.be.true;
+        });
+
         it('should render all visible items after delayed response', (done) => {
           const items = [...Array(10)].map((_, i) => `item ${i}`);
           comboBox.dataProvider = (params, callback) => {
