@@ -60,7 +60,7 @@ export type TooltipPosition =
  */
 declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   /**
-   * Sets the default hover delay to be used by all tooltip instances,
+   * Sets the default focus delay to be used by all tooltip instances,
    * except for those that have focus delay configured using property.
    */
   static setDefaultFocusDelay(focusDelay: number): void;

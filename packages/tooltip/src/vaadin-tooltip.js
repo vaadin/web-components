@@ -241,8 +241,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /**
-   * Sets the default hover delay to be used by all tooltip instances,
-   * except for those that have delay configured using property.
+   * Sets the default focus delay to be used by all tooltip instances,
+   * except for those that have focus delay configured using property.
    *
    * @param {number} delay
    */
@@ -262,7 +262,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /**
    * Sets the default hover delay to be used by all tooltip instances,
-   * except for those that have delay configured using property.
+   * except for those that have hover delay configured using property.
    *
    * @param {number} delay
    */
