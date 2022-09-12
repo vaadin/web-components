@@ -68,6 +68,17 @@ class TooltipOverlay extends PositionMixin(OverlayElement) {
     super.requestContentUpdate();
 
     this.toggleAttribute('hidden', this.textContent.trim() === '');
+
+    // Copy custom properties from the tooltip
+    if (this.positionTarget && this.owner) {
+      const style = getComputedStyle(this.owner);
+      ['top', 'bottom', 'start', 'end'].forEach((prop) => {
+        this.style.setProperty(
+          `--vaadin-tooltip-offset-${prop}`,
+          style.getPropertyValue(`--vaadin-tooltip-offset-${prop}`),
+        );
+      });
+    }
   }
 
   /**
@@ -110,17 +121,6 @@ class TooltipOverlay extends PositionMixin(OverlayElement) {
 
       const offset = targetRect.height / 2 - overlayRect.height / 2;
       this.style.top = `${overlayRect.top + offset}px`;
-    }
-
-    // Copy custom properties from the tooltip
-    if (this.owner) {
-      const style = getComputedStyle(this.owner);
-      ['top', 'bottom', 'start', 'end'].forEach((prop) => {
-        this.style.setProperty(
-          `--vaadin-tooltip-offset-${prop}`,
-          style.getPropertyValue(`--vaadin-tooltip-offset-${prop}`),
-        );
-      });
     }
   }
 }
