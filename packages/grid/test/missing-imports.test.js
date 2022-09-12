@@ -14,6 +14,14 @@ describe('missing imports', () => {
     `);
   });
 
+  it('should not throw on requestContentUpdate', () => {
+    // Add a column type that is not imported by default
+    grid.appendChild(document.createElement('vaadin-grid-sort-column'));
+    flushGrid(grid);
+
+    expect(() => grid.requestContentUpdate()).to.not.throw();
+  });
+
   [
     'vaadin-grid-column-group',
     'vaadin-grid-filter',
