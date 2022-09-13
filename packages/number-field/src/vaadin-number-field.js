@@ -10,7 +10,6 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -51,7 +50,7 @@ registerStyles('vaadin-number-field', inputFieldShared, { moduleId: 'vaadin-numb
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-number-field';
   }
@@ -190,6 +189,7 @@ export class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(E
   get slotStyles() {
     const tag = this.localName;
     return [
+      ...super.slotStyles,
       `
         ${tag} input[type="number"]::-webkit-outer-spin-button,
         ${tag} input[type="number"]::-webkit-inner-spin-button {

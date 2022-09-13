@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 
 /**
@@ -72,7 +71,7 @@ export interface PasswordFieldEventMap extends HTMLElementEventMap, PasswordFiel
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
-declare class PasswordField extends SlotStylesMixin(TextField) {
+declare class PasswordField extends TextField {
   /**
    * Set to true to hide the eye icon which toggles the password visibility.
    * @attr {boolean} reveal-button-hidden

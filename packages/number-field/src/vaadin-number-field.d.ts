@@ -5,7 +5,6 @@
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { InputFieldMixin } from '@vaadin/field-base/src/input-field-mixin.js';
-import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -69,7 +68,7 @@ export interface NumberFieldEventMap extends HTMLElementEventMap, NumberFieldCus
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  * @fires {CustomEvent} validated - Fired whenever the field is validated.
  */
-declare class NumberField extends InputFieldMixin(SlotStylesMixin(ThemableMixin(ElementMixin(HTMLElement)))) {
+declare class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**
    * Set to true to display value increase/decrease controls.
    * @attr {boolean} has-controls
