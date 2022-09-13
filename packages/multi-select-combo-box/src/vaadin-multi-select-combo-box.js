@@ -480,10 +480,10 @@ class MultiSelectComboBox extends SlotStylesMixin(
     const tag = this.localName;
     return [
       `
-         ${tag}[has-value] input::placeholder {
-           color: transparent !important;
-         }
-       `,
+        ${tag}[has-value] input::placeholder {
+          color: transparent !important;
+        }
+      `,
     ];
   }
 
