@@ -671,15 +671,21 @@ class Grid extends ElementMixin(
     cell.id = slotName.replace('-content-', '-');
     cell.setAttribute('tabindex', '-1');
     cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
-    cell.addEventListener('mouseenter', (event) => {
-      this._showTooltip(event);
-    });
-    cell.addEventListener('mouseleave', () => {
-      this._hideTooltip();
-    });
-    cell.addEventListener('mousedown', () => {
-      this._hideTooltip();
-    });
+
+    // For now we only support tooltip on desktop
+    if (!isAndroid && !isIOS) {
+      cell.addEventListener('mouseenter', (event) => {
+        this._showTooltip(event);
+      });
+
+      cell.addEventListener('mouseleave', () => {
+        this._hideTooltip();
+      });
+
+      cell.addEventListener('mousedown', () => {
+        this._hideTooltip();
+      });
+    }
 
     const slot = document.createElement('slot');
     slot.setAttribute('name', slotName);
