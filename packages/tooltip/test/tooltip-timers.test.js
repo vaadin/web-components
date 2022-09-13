@@ -1,5 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, escKeyDown, fixtureSync, focusout, mousedown, tabKeyDown } from '@vaadin/testing-helpers';
+import {
+  aTimeout,
+  escKeyDown,
+  fixtureSync,
+  focusout,
+  mousedown,
+  nextRender,
+  tabKeyDown,
+} from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import { Tooltip } from '../vaadin-tooltip.js';
 import { mouseenter, mouseleave } from './helpers.js';
@@ -8,14 +16,16 @@ describe('timers', () => {
   describe('delay', () => {
     let tooltip, target, overlay;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip = fixtureSync('<vaadin-tooltip text="tooltip" delay="1"></vaadin-tooltip>');
       target = fixtureSync('<input>');
       tooltip.target = target;
       overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+      await nextRender();
     });
 
     afterEach(async () => {
+      // Wait for cooldown timeout.
       await aTimeout(0);
     });
 
@@ -37,14 +47,16 @@ describe('timers', () => {
   describe('hideDelay', () => {
     let tooltip, target, overlay;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       tooltip = fixtureSync('<vaadin-tooltip text="tooltip" hide-delay="1"></vaadin-tooltip>');
       target = fixtureSync('<input>');
       tooltip.target = target;
       overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+      await nextRender();
     });
 
     afterEach(async () => {
+      // Wait for cooldown timeout.
       await aTimeout(1);
     });
 
@@ -246,7 +258,7 @@ describe('timers', () => {
   describe('warmup and cooldown', () => {
     let wrapper, targets, tooltips, overlays;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       wrapper = fixtureSync(`
         <div>
           <vaadin-tooltip text="tooltip 1" delay="2" hide-delay="2" for="input-1"></vaadin-tooltip>
@@ -258,9 +270,11 @@ describe('timers', () => {
       tooltips = Array.from(wrapper.querySelectorAll('vaadin-tooltip'));
       targets = wrapper.querySelectorAll('input');
       overlays = tooltips.map((el) => el.shadowRoot.querySelector('vaadin-tooltip-overlay'));
+      await nextRender();
     });
 
     afterEach(async () => {
+      // Wait for cooldown timeout.
       await aTimeout(2);
     });
 
@@ -310,7 +324,7 @@ describe('timers', () => {
       mouseleave(targets[0]);
       await aTimeout(1);
 
-      expect(overlays[0].opened).to.be.false;
+      expect(overlays[0].opened).to.be.not.ok;
     });
 
     it('should stop closing on subsequent mouseenter during the hide delay', async () => {
