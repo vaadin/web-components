@@ -137,6 +137,7 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * @mixes ThemableMixin
  * @mixes InputControlMixin
  * @mixes ResizeMixin
+ * @mixes SlotStylesMixin
  */
 class MultiSelectComboBox extends SlotStylesMixin(
   ResizeMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))),
