@@ -35,6 +35,7 @@ export const InputControlMixin = (superclass) =>
          *
          * For example, to allow entering only numbers and minus signs, use:
          * `allowedCharPattern = "[\\d-]"`
+         * @attr {string} allowed-char-pattern
          */
         allowedCharPattern: {
           type: String,
