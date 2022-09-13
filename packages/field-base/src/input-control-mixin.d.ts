@@ -14,6 +14,7 @@ import type { FieldMixinClass } from './field-mixin.js';
 import type { InputConstraintsMixinClass } from './input-constraints-mixin.js';
 import type { InputMixinClass } from './input-mixin.js';
 import type { LabelMixinClass } from './label-mixin.js';
+import type { SlotStylesMixinClass } from './slot-styles-mixin.js';
 import type { ValidateMixinClass } from './validate-mixin.js';
 
 /**
@@ -32,6 +33,7 @@ export declare function InputControlMixin<T extends Constructor<HTMLElement>>(
   Constructor<InputMixinClass> &
   Constructor<KeyboardMixinClass> &
   Constructor<LabelMixinClass> &
+  Constructor<SlotStylesMixinClass> &
   Constructor<ValidateMixinClass> &
   T;
 

@@ -9,6 +9,7 @@ import { KeyboardMixin } from '@vaadin/component-base/src/keyboard-mixin.js';
 import { DelegateFocusMixin } from './delegate-focus-mixin.js';
 import { FieldMixin } from './field-mixin.js';
 import { InputConstraintsMixin } from './input-constraints-mixin.js';
+import { SlotStylesMixin } from './slot-styles-mixin.js';
 
 /**
  * A mixin to provide shared logic for the editable form input controls.
@@ -18,10 +19,11 @@ import { InputConstraintsMixin } from './input-constraints-mixin.js';
  * @mixes FieldMixin
  * @mixes InputConstraintsMixin
  * @mixes KeyboardMixin
+ * @mixes SlotStylesMixin
  */
 export const InputControlMixin = (superclass) =>
-  class InputControlMixinClass extends DelegateFocusMixin(
-    InputConstraintsMixin(FieldMixin(KeyboardMixin(superclass))),
+  class InputControlMixinClass extends SlotStylesMixin(
+    DelegateFocusMixin(InputConstraintsMixin(FieldMixin(KeyboardMixin(superclass)))),
   ) {
     static get properties() {
       return {
@@ -116,6 +118,19 @@ export const InputControlMixin = (superclass) =>
     get clearElement() {
       console.warn(`Please implement the 'clearElement' property in <${this.localName}>`);
       return null;
+    }
+
+    /** @protected */
+    get slotStyles() {
+      // Needed for Safari, where ::slotted(...)::placeholder does not work
+      return [
+        `
+          :is(input[slot='input'], textarea[slot='textarea'])::placeholder {
+            font: inherit;
+            color: inherit;
+          }
+        `,
+      ];
     }
 
     /** @protected */
