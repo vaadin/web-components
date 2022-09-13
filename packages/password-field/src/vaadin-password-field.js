@@ -5,7 +5,6 @@
  */
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
-import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { TextField } from '@vaadin/text-field/src/vaadin-text-field.js';
 
 const ownTemplate = html`
@@ -48,9 +47,8 @@ let memoizedTemplate;
  * @fires {CustomEvent} value-changed - Fired when the `value` property changes.
  *
  * @extends TextField
- * @mixes SlotStylesMixin
  */
-export class PasswordField extends SlotStylesMixin(SlotMixin(TextField)) {
+export class PasswordField extends SlotMixin(TextField) {
   static get is() {
     return 'vaadin-password-field';
   }
@@ -138,6 +136,7 @@ export class PasswordField extends SlotStylesMixin(SlotMixin(TextField)) {
   get slotStyles() {
     const tag = this.localName;
     return [
+      ...super.slotStyles,
       `
         ${tag} [slot="input"]::-ms-reveal {
           display: none;
