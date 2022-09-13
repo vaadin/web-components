@@ -13,7 +13,8 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
 
 const DEFAULT_DELAY = 0;
 
-let defaultDelay = DEFAULT_DELAY;
+let defaultFocusDelay = DEFAULT_DELAY;
+let defaultHoverDelay = DEFAULT_DELAY;
 let defaultHideDelay = DEFAULT_DELAY;
 
 const closing = new Set();
@@ -108,10 +109,10 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
       /**
        * The delay in milliseconds before the tooltip
-       * is opened on hover, when not in manual mode.
-       * On focus, the tooltip is opened immediately.
+       * is opened on focus, when not in manual mode.
+       * @attr {number} focus-delay
        */
-      delay: {
+      focusDelay: {
         type: Number,
       },
 
@@ -132,6 +133,15 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
        * @attr {number} hide-delay
        */
       hideDelay: {
+        type: Number,
+      },
+
+      /**
+       * The delay in milliseconds before the tooltip
+       * is opened on hover, when not in manual mode.
+       * @attr {number} hover-delay
+       */
+      hoverDelay: {
         type: Number,
       },
 
@@ -231,13 +241,13 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /**
-   * Sets the default delay to be used by all tooltip instances,
-   * except for those that have delay configured using property.
+   * Sets the default focus delay to be used by all tooltip instances,
+   * except for those that have focus delay configured using property.
    *
    * @param {number} delay
    */
-  static setDefaultDelay(delay) {
-    defaultDelay = delay != null && delay >= 0 ? delay : DEFAULT_DELAY;
+  static setDefaultFocusDelay(focusDelay) {
+    defaultFocusDelay = focusDelay != null && focusDelay >= 0 ? focusDelay : DEFAULT_DELAY;
   }
 
   /**
@@ -248,6 +258,16 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
    */
   static setDefaultHideDelay(hideDelay) {
     defaultHideDelay = hideDelay != null && hideDelay >= 0 ? hideDelay : DEFAULT_DELAY;
+  }
+
+  /**
+   * Sets the default hover delay to be used by all tooltip instances,
+   * except for those that have hover delay configured using property.
+   *
+   * @param {number} delay
+   */
+  static setDefaultHoverDelay(hoverDelay) {
+    defaultHoverDelay = hoverDelay != null && hoverDelay >= 0 ? hoverDelay : DEFAULT_DELAY;
   }
 
   constructor() {
@@ -386,7 +406,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__focusInside = true;
 
     if (!this.__isTargetHidden && (!this.__hoverInside || !this._autoOpened)) {
-      this._open(true);
+      this._open({ focus: true });
     }
   }
 
@@ -431,7 +451,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__hoverInside = true;
 
     if (!this.__isTargetHidden && (!this.__focusInside || !this._autoOpened)) {
-      this._open();
+      this._open({ hover: true });
     }
   }
 
@@ -466,9 +486,13 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
    * @param {boolean} immediate
    * @protected
    */
-  _open(immediate) {
-    if (!immediate && this.__getDelay() > 0 && !this.__closeTimeout) {
-      this.__warmupTooltip();
+  _open(options = { immediate: false }) {
+    const { immediate, hover, focus } = options;
+    const isHover = hover && this.__getHoverDelay() > 0;
+    const isFocus = focus && this.__getFocusDelay() > 0;
+
+    if (!immediate && (isHover || isFocus) && !this.__closeTimeout) {
+      this.__warmupTooltip(isFocus);
     } else {
       this.__showTooltip();
     }
@@ -497,8 +521,13 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  __getDelay() {
-    return this.delay != null && this.delay > 0 ? this.delay : defaultDelay;
+  __getFocusDelay() {
+    return this.focusDelay != null && this.focusDelay > 0 ? this.focusDelay : defaultFocusDelay;
+  }
+
+  /** @private */
+  __getHoverDelay() {
+    return this.hoverDelay != null && this.hoverDelay > 0 ? this.hoverDelay : defaultHoverDelay;
   }
 
   /** @private */
@@ -528,11 +557,11 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  __warmupTooltip() {
+  __warmupTooltip(isFocus) {
     if (!this._autoOpened) {
       // First tooltip is opened, warm up.
       if (!warmedUp) {
-        this.__scheduleWarmUp();
+        this.__scheduleWarmUp(isFocus);
       } else {
         // Warmed up, show another tooltip.
         this.__showTooltip();
@@ -586,12 +615,13 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  __scheduleWarmUp() {
+  __scheduleWarmUp(isFocus) {
+    const delay = isFocus ? this.__getFocusDelay() : this.__getHoverDelay();
     warmUpTimeout = setTimeout(() => {
       warmUpTimeout = null;
       warmedUp = true;
       this.__showTooltip();
-    }, this.__getDelay());
+    }, delay);
   }
 
   /** @private */

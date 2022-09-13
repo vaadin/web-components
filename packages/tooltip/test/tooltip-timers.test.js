@@ -3,6 +3,7 @@ import {
   aTimeout,
   escKeyDown,
   fixtureSync,
+  focusin,
   focusout,
   mousedown,
   nextRender,
@@ -13,11 +14,11 @@ import { Tooltip } from '../vaadin-tooltip.js';
 import { mouseenter, mouseleave } from './helpers.js';
 
 describe('timers', () => {
-  describe('delay', () => {
+  describe('hoverDelay', () => {
     let tooltip, target, overlay;
 
     beforeEach(async () => {
-      tooltip = fixtureSync('<vaadin-tooltip text="tooltip" delay="1"></vaadin-tooltip>');
+      tooltip = fixtureSync('<vaadin-tooltip text="tooltip" hover-delay="1"></vaadin-tooltip>');
       target = fixtureSync('<input>');
       tooltip.target = target;
       overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
@@ -40,6 +41,37 @@ describe('timers', () => {
     it('should open the overlay immediately on keyboard focus', () => {
       tabKeyDown(document.body);
       target.focus();
+      expect(overlay.opened).to.be.true;
+    });
+  });
+
+  describe('focusDelay', () => {
+    let tooltip, target, overlay;
+
+    beforeEach(async () => {
+      tooltip = fixtureSync('<vaadin-tooltip text="tooltip" focus-delay="1"></vaadin-tooltip>');
+      target = fixtureSync('<input>');
+      tooltip.target = target;
+      overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+      await nextRender();
+    });
+
+    afterEach(async () => {
+      // Wait for cooldown timeout.
+      await aTimeout(0);
+    });
+
+    it('should open the overlay after a delay on keyboard focus', async () => {
+      tabKeyDown(document.body);
+      target.focus();
+      expect(overlay.opened).to.be.not.ok;
+
+      await aTimeout(1);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should open the overlay immediately on mouseenter', () => {
+      mouseenter(target);
       expect(overlay.opened).to.be.true;
     });
   });
@@ -94,7 +126,7 @@ describe('timers', () => {
     });
   });
 
-  describe('setDefaultDelay', () => {
+  describe('setDefaultHoverDelay', () => {
     let tooltip, target;
 
     beforeEach(() => {
@@ -102,11 +134,11 @@ describe('timers', () => {
     });
 
     afterEach(() => {
-      Tooltip.setDefaultDelay(0);
+      Tooltip.setDefaultHoverDelay(0);
     });
 
     it('should change default delay for newly created tooltip', async () => {
-      Tooltip.setDefaultDelay(2);
+      Tooltip.setDefaultHoverDelay(2);
 
       tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
       tooltip.target = target;
@@ -118,12 +150,12 @@ describe('timers', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    it('should change default delay for existing tooltip', async () => {
+    it('should change default hover delay for existing tooltip', async () => {
       tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
       tooltip.target = target;
       const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
 
-      Tooltip.setDefaultDelay(2);
+      Tooltip.setDefaultHoverDelay(2);
 
       mouseenter(target);
       await aTimeout(2);
@@ -131,9 +163,9 @@ describe('timers', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    it('should reset delay when providing a negative number', () => {
-      Tooltip.setDefaultDelay(10);
-      Tooltip.setDefaultDelay(-1);
+    it('should reset hover delay when providing a negative number', () => {
+      Tooltip.setDefaultHoverDelay(10);
+      Tooltip.setDefaultHoverDelay(-1);
 
       tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
       tooltip.target = target;
@@ -144,9 +176,9 @@ describe('timers', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    it('should reset delay when providing null instead of number', () => {
-      Tooltip.setDefaultDelay(10);
-      Tooltip.setDefaultDelay(null);
+    it('should reset hover delay when providing null instead of number', () => {
+      Tooltip.setDefaultHoverDelay(10);
+      Tooltip.setDefaultHoverDelay(null);
 
       const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
       tooltip.target = target;
@@ -157,15 +189,97 @@ describe('timers', () => {
       expect(overlay.opened).to.be.true;
     });
 
-    it('should reset delay when providing undefined instead of number', () => {
-      Tooltip.setDefaultDelay(10);
-      Tooltip.setDefaultDelay(undefined);
+    it('should reset hover delay when providing undefined instead of number', () => {
+      Tooltip.setDefaultHoverDelay(10);
+      Tooltip.setDefaultHoverDelay(undefined);
 
       const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
       tooltip.target = target;
       const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
 
       mouseenter(target);
+
+      expect(overlay.opened).to.be.true;
+    });
+  });
+
+  describe('setDefaultFocusDelay', () => {
+    let tooltip, target;
+
+    beforeEach(() => {
+      target = fixtureSync('<div>Target</div>');
+    });
+
+    afterEach(() => {
+      Tooltip.setDefaultFocusDelay(0);
+    });
+
+    it('should change default delay for newly created tooltip', async () => {
+      Tooltip.setDefaultFocusDelay(2);
+
+      tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      tabKeyDown(document.body);
+      focusin(target);
+      await aTimeout(2);
+
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should change default focus delay for existing tooltip', async () => {
+      tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      Tooltip.setDefaultFocusDelay(2);
+
+      tabKeyDown(document.body);
+      focusin(target);
+      await aTimeout(2);
+
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should reset focus delay when providing a negative number', () => {
+      Tooltip.setDefaultFocusDelay(10);
+      Tooltip.setDefaultFocusDelay(-1);
+
+      tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      tabKeyDown(document.body);
+      focusin(target);
+
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should reset focus delay when providing null instead of number', () => {
+      Tooltip.setDefaultFocusDelay(10);
+      Tooltip.setDefaultFocusDelay(null);
+
+      const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      tabKeyDown(document.body);
+      focusin(target);
+
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should reset focus delay when providing undefined instead of number', () => {
+      Tooltip.setDefaultFocusDelay(10);
+      Tooltip.setDefaultFocusDelay(undefined);
+
+      const tooltip = fixtureSync('<vaadin-tooltip></vaadin-tooltip>');
+      tooltip.target = target;
+      const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+
+      tabKeyDown(document.body);
+      focusin(target);
 
       expect(overlay.opened).to.be.true;
     });
@@ -261,8 +375,8 @@ describe('timers', () => {
     beforeEach(async () => {
       wrapper = fixtureSync(`
         <div>
-          <vaadin-tooltip text="tooltip 1" delay="2" hide-delay="2" for="input-1"></vaadin-tooltip>
-          <vaadin-tooltip text="tooltip 2" delay="2" hide-delay="2" for="input-2"></vaadin-tooltip>
+          <vaadin-tooltip text="tooltip 1" hover-delay="2" focus-delay="2" hide-delay="2" for="input-1"></vaadin-tooltip>
+          <vaadin-tooltip text="tooltip 2" hover-delay="2" focus-delay="2" hide-delay="2" for="input-2"></vaadin-tooltip>
           <input id="input-1">
           <input id="input-2">
         </div>
@@ -278,7 +392,7 @@ describe('timers', () => {
       await aTimeout(2);
     });
 
-    it('should close first tooltip and open the second one without waiting for delay', async () => {
+    it('should close first tooltip and open the second one without waiting for hover delay', async () => {
       mouseenter(targets[0]);
       await aTimeout(2);
 
@@ -289,7 +403,19 @@ describe('timers', () => {
       expect(overlays[1].opened).to.be.true;
     });
 
-    it('should re-open first tooltip and close the second one without waiting for delay', async () => {
+    it('should close first tooltip and open the second one without waiting for focus delay', async () => {
+      tabKeyDown(document.body);
+      focusin(targets[0]);
+      await aTimeout(2);
+
+      focusout(targets[0], targets[1]);
+      focusin(targets[1], targets[0]);
+
+      expect(overlays[0].opened).to.be.false;
+      expect(overlays[1].opened).to.be.true;
+    });
+
+    it('should re-open first tooltip and close the second one without waiting for hover delay', async () => {
       mouseenter(targets[0]);
       await aTimeout(2);
 
@@ -303,7 +429,22 @@ describe('timers', () => {
       expect(overlays[1].opened).to.be.false;
     });
 
-    it('should warm up again when closing the tooltip and re-opening it after the delay', async () => {
+    it('should re-open first tooltip and close the second one without waiting for focus delay', async () => {
+      tabKeyDown(document.body);
+      focusin(targets[0]);
+      await aTimeout(2);
+
+      focusout(targets[0], targets[1]);
+      focusin(targets[1], targets[0]);
+
+      focusout(targets[1], targets[0]);
+      focusin(targets[0], targets[1]);
+
+      expect(overlays[0].opened).to.be.true;
+      expect(overlays[1].opened).to.be.false;
+    });
+
+    it('should warm up again when closing the tooltip and re-opening it after the hover delay', async () => {
       mouseenter(targets[0]);
       await aTimeout(2);
 
@@ -317,11 +458,37 @@ describe('timers', () => {
       expect(overlays[0].opened).to.be.true;
     });
 
-    it('should not open on mouseleave during the initial warm up delay', async () => {
+    it('should warm up again when closing the tooltip and re-opening it after the focus delay', async () => {
+      tabKeyDown(document.body);
+      focusin(targets[0]);
+      await aTimeout(2);
+
+      focusout(targets[0]);
+      await aTimeout(2);
+
+      focusin(targets[0]);
+      expect(overlays[0].opened).to.be.false;
+
+      await aTimeout(2);
+      expect(overlays[0].opened).to.be.true;
+    });
+
+    it('should not open on mouseleave during the initial warm up hover delay', async () => {
       mouseenter(targets[0]);
       await aTimeout(1);
 
       mouseleave(targets[0]);
+      await aTimeout(1);
+
+      expect(overlays[0].opened).to.be.not.ok;
+    });
+
+    it('should not open on focusout during the initial warm up focus delay', async () => {
+      tabKeyDown(document.body);
+      focusin(targets[0]);
+      await aTimeout(1);
+
+      focusout(targets[0]);
       await aTimeout(1);
 
       expect(overlays[0].opened).to.be.not.ok;

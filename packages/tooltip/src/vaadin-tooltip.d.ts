@@ -60,16 +60,22 @@ export type TooltipPosition =
  */
 declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   /**
-   * Sets the default delay to be used by all tooltip instances,
-   * except for those that have delay configured using property.
+   * Sets the default focus delay to be used by all tooltip instances,
+   * except for those that have focus delay configured using property.
    */
-  static setDefaultDelay(delay: number): void;
+  static setDefaultFocusDelay(focusDelay: number): void;
 
   /**
    * Sets the default hide delay to be used by all tooltip instances,
    * except for those that have hide delay configured using property.
    */
   static setDefaultHideDelay(hideDelay: number): void;
+
+  /**
+   * Sets the default hover delay to be used by all tooltip instances,
+   * except for those that have hover delay configured using property.
+   */
+  static setDefaultHoverDelay(delay: number): void;
 
   /**
    * Object with properties passed to `textGenerator`
@@ -79,10 +85,10 @@ declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
 
   /**
    * The delay in milliseconds before the tooltip
-   * is opened on hover, when not in manual mode.
-   * On focus, the tooltip is opened immediately.
+   * is opened on focus, when not in manual mode.
+   * @attr {number} focus-delay
    */
-  delay: number;
+  focusDelay: number;
 
   /**
    * The id of the element used as a tooltip trigger.
@@ -98,6 +104,13 @@ declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
    * @attr {number} hide-delay
    */
   hideDelay: number;
+
+  /**
+   * The delay in milliseconds before the tooltip
+   * is opened on hover, when not in manual mode.
+   * @attr {number} hover-delay
+   */
+  hoverDelay: number;
 
   /**
    * When true, the tooltip is controlled programmatically
