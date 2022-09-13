@@ -15,7 +15,6 @@ import { TooltipController } from '@vaadin/component-base/src/tooltip-controller
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
-import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -137,11 +136,8 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * @mixes ThemableMixin
  * @mixes InputControlMixin
  * @mixes ResizeMixin
- * @mixes SlotStylesMixin
  */
-class MultiSelectComboBox extends SlotStylesMixin(
-  ResizeMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))),
-) {
+class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
   static get is() {
     return 'vaadin-multi-select-combo-box';
   }
@@ -480,6 +476,7 @@ class MultiSelectComboBox extends SlotStylesMixin(
   get slotStyles() {
     const tag = this.localName;
     return [
+      ...super.slotStyles,
       `
         ${tag}[has-value] input::placeholder {
           color: transparent !important;
