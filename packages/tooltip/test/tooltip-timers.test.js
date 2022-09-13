@@ -541,5 +541,82 @@ describe('timers', () => {
 
       expect(overlays[0].opened).to.be.false;
     });
+
+    it('should not keep warmed up state on mouseenter to the manual tooltip target', async () => {
+      tooltips[1].manual = true;
+
+      mouseenter(targets[0]);
+      await aTimeout(2);
+
+      mouseleave(targets[0]);
+      mouseenter(targets[1]);
+      await aTimeout(2);
+
+      expect(overlays[0].opened).to.be.false;
+
+      mouseleave(targets[1]);
+      mouseenter(targets[0]);
+      expect(overlays[0].opened).to.be.false;
+
+      await aTimeout(2);
+      expect(overlays[0].opened).to.be.true;
+    });
+
+    it('should not keep warmed up state on focusout to the manual tooltip target', async () => {
+      tooltips[1].manual = true;
+
+      tabKeyDown(document.body);
+      focusin(targets[0]);
+      await aTimeout(2);
+
+      focusout(targets[0], targets[1]);
+      focusin(targets[1], targets[0]);
+      await aTimeout(2);
+
+      expect(overlays[0].opened).to.be.false;
+
+      focusout(targets[1], targets[0]);
+      focusin(targets[0], targets[1]);
+
+      expect(overlays[0].opened).to.be.false;
+
+      await aTimeout(2);
+      expect(overlays[0].opened).to.be.true;
+    });
+
+    it('should not restart cooldown on mouseleave from the manual tooltip target', async () => {
+      tooltips[1].manual = true;
+
+      mouseenter(targets[0]);
+      await aTimeout(2);
+
+      mouseleave(targets[0]);
+      mouseenter(targets[1]);
+      await aTimeout(1);
+
+      mouseleave(targets[1]);
+      await aTimeout(1);
+
+      mouseenter(targets[0]);
+      expect(overlays[0].opened).to.be.false;
+    });
+
+    it('should not restart cooldown on focusout from the manual tooltip target', async () => {
+      tooltips[1].manual = true;
+
+      tabKeyDown(document.body);
+      focusin(targets[0]);
+      await aTimeout(2);
+
+      focusout(targets[0], targets[1]);
+      focusin(targets[1], targets[0]);
+      await aTimeout(1);
+
+      focusout(targets[1]);
+      await aTimeout(1);
+
+      focusin(targets[0]);
+      expect(overlays[0].opened).to.be.false;
+    });
   });
 });
