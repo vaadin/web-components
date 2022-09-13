@@ -10,6 +10,7 @@ import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-co
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
 import type {
@@ -104,5 +105,6 @@ assertType<InputControlMixinClass>(narrowedComboBox);
 assertType<Omit<InputMixinClass, 'value'>>(narrowedComboBox);
 assertType<KeyboardMixinClass>(narrowedComboBox);
 assertType<LabelMixinClass>(narrowedComboBox);
+assertType<SlotStylesMixinClass>(narrowedComboBox);
 assertType<ValidateMixinClass>(narrowedComboBox);
 assertType<ThemableMixinClass>(narrowedComboBox);

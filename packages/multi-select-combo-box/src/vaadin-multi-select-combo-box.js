@@ -14,6 +14,7 @@ import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
 import { InputController } from '@vaadin/field-base/src/input-controller.js';
 import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-controller.js';
+import { SlotStylesMixin } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -29,10 +30,6 @@ const multiSelectComboBox = css`
   #chips {
     display: flex;
     align-items: center;
-  }
-
-  :host([has-value]) ::slotted(input:placeholder-shown) {
-    color: transparent !important;
   }
 
   ::slotted(input) {
@@ -139,8 +136,11 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  * @mixes ThemableMixin
  * @mixes InputControlMixin
  * @mixes ResizeMixin
+ * @mixes SlotStylesMixin
  */
-class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))) {
+class MultiSelectComboBox extends SlotStylesMixin(
+  ResizeMixin(InputControlMixin(ThemableMixin(ElementMixin(PolymerElement)))),
+) {
   static get is() {
     return 'vaadin-multi-select-combo-box';
   }
@@ -471,6 +471,18 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   static get observers() {
     return ['_selectedItemsChanged(selectedItems, selectedItems.*)'];
+  }
+
+  /** @protected */
+  get slotStyles() {
+    const tag = this.localName;
+    return [
+      `
+        ${tag}[has-value] input::placeholder {
+          color: transparent !important;
+        }
+      `,
+    ];
   }
 
   /**
