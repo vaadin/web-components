@@ -21,6 +21,7 @@ import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-co
 import type { InputControlMixinClass } from '@vaadin/field-base/src/input-control-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 import type { LabelMixinClass } from '@vaadin/field-base/src/label-mixin.js';
+import type { SlotStylesMixinClass } from '@vaadin/field-base/src/slot-styles-mixin.js';
 import type { ValidateMixinClass } from '@vaadin/field-base/src/validate-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import type { ThemePropertyMixinClass } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
@@ -332,6 +333,7 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
 
 interface MultiSelectComboBox
   extends ValidateMixinClass,
+    SlotStylesMixinClass,
     LabelMixinClass,
     KeyboardMixinClass,
     Omit<InputMixinClass, 'value'>,
