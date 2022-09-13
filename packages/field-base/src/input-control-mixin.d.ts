@@ -46,6 +46,7 @@ export declare class InputControlMixinClass {
    *
    * For example, to allow entering only numbers and minus signs, use:
    * `allowedCharPattern = "[\\d-]"`
+   * @attr {string} allowed-char-pattern
    */
   allowedCharPattern: string;
 
