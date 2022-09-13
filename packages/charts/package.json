@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/charts",
-  "version": "23.2.0",
+  "version": "23.2.1",
   "publishConfig": {
     "access": "public"
   },
@@ -37,8 +37,8 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^23.2.0",
-    "@vaadin/vaadin-themable-mixin": "^23.2.0",
+    "@vaadin/component-base": "~23.2.1",
+    "@vaadin/vaadin-themable-mixin": "~23.2.1",
     "highcharts": "9.2.2"
   },
   "devDependencies": {
