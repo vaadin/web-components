@@ -5,7 +5,6 @@
  */
 import { html, PolymerElement } from '@polymer/polymer';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
-import { css } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
@@ -56,7 +55,6 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
         ::slotted(:is(input, textarea))::placeholder {
           /* Use ::slotted(input:placeholder-shown) in themes to style the placeholder. */
           /* because ::slotted(...)::placeholder does not work in Safari. */
-          /* See the workaround at the end of this file. */
           font: inherit;
           color: inherit;
           /* Override default opacity in Firefox */
@@ -122,15 +120,3 @@ export class InputContainer extends ThemableMixin(DirMixin(PolymerElement)) {
 }
 
 customElements.define(InputContainer.is, InputContainer);
-
-const placeholderStyleWorkaround = css`
-  /* Needed for Safari, where ::slotted(...)::placeholder does not work */
-  :is(input[slot='input'], textarea[slot='textarea'])::placeholder {
-    font: inherit;
-    color: inherit;
-  }
-`;
-
-const $tpl = document.createElement('template');
-$tpl.innerHTML = `<style>${placeholderStyleWorkaround.toString()}</style>`;
-document.head.appendChild($tpl.content);
