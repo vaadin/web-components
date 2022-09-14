@@ -37,6 +37,10 @@ const inputField = css`
     padding-top: 24px;
   }
 
+  :host([has-label]) ::slotted([slot='tooltip']) {
+    --vaadin-tooltip-offset-bottom: -8px;
+  }
+
   [part='input-field'] {
     position: relative;
     top: -0.2px; /* NOTE(platosha): Adjusts for wrong flex baseline in Chrome & Safari */
