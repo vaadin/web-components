@@ -1052,17 +1052,19 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
       this.editedItem !== item // Item is different
     ) {
       this.$.confirmCancel.opened = true;
-      const listenOnce = (event) => {
-        event.preventDefault(); // Prevent editor to get closed
-        if (item || keepOpened) {
-          this.__edit(item);
-          this.__clearItemAndKeepEditorOpened(item, keepOpened);
-        } else {
-          this.__closeEditor();
-        }
-        this.removeEventListener('cancel', listenOnce);
-      };
-      this.addEventListener('cancel', listenOnce);
+      this.addEventListener(
+        'cancel',
+        (event) => {
+          event.preventDefault(); // Prevent closing the editor
+          if (item || keepOpened) {
+            this.__edit(item);
+            this.__clearItemAndKeepEditorOpened(item, keepOpened);
+          } else {
+            this.__closeEditor();
+          }
+        },
+        { once: true },
+      );
     } else {
       this.__edit(item);
       this.__clearItemAndKeepEditorOpened(item, keepOpened);
