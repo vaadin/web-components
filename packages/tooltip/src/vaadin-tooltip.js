@@ -389,6 +389,10 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   __onFocusin(event) {
+    if (this.manual) {
+      return;
+    }
+
     // Only open on keyboard focus.
     if (!isKeyboardActive()) {
       return;
@@ -412,6 +416,10 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   __onFocusout(event) {
+    if (this.manual) {
+      return;
+    }
+
     // Do not close when moving focus within a component.
     if (this.target.contains(event.relatedTarget)) {
       return;
@@ -439,6 +447,10 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   __onMouseEnter() {
+    if (this.manual) {
+      return;
+    }
+
     if (typeof this.shouldShow === 'function' && this.shouldShow(this.target) !== true) {
       return;
     }
@@ -457,6 +469,10 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   __onMouseLeave() {
+    if (this.manual) {
+      return;
+    }
+
     this.__hoverInside = false;
 
     if (!this.__focusInside) {
