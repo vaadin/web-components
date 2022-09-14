@@ -89,6 +89,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         no-vertical-overlap$="[[__computeNoVerticalOverlap(position)]]"
         horizontal-align="[[__computeHorizontalAlign(position)]]"
         vertical-align="[[__computeVerticalAlign(position)]]"
+        on-mouseleave="__onOverlayMouseLeave"
         modeless
       ></vaadin-tooltip-overlay>
     `;
@@ -468,7 +469,21 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  __onMouseLeave() {
+  __onMouseLeave(event) {
+    if (event.relatedTarget !== this._overlayElement) {
+      this.__handleMouseLeave();
+    }
+  }
+
+  /** @private */
+  __onOverlayMouseLeave(event) {
+    if (event.relatedTarget !== this.target) {
+      this.__handleMouseLeave();
+    }
+  }
+
+  /** @private */
+  __handleMouseLeave() {
     if (this.manual) {
       return;
     }

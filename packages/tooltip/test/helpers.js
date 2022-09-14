@@ -4,8 +4,9 @@ export function mouseenter(target) {
   fire(target, 'mouseenter');
 }
 
-export function mouseleave(target) {
-  fire(target, 'mouseleave');
+export function mouseleave(target, relatedTarget) {
+  const eventProps = relatedTarget ? { relatedTarget } : {};
+  fire(target, 'mouseleave', undefined, eventProps);
 }
 
 export async function waitForIntersectionObserver() {
