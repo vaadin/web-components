@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 const fs = require('fs');
 
+const CAMEL_TO_DASH = /([A-Z])/g;
+
 function generateChangeEventName(property) {
-  return `${property.name}-changed`;
+  return `${property.name.replace(CAMEL_TO_DASH, '-$1').toLowerCase()}-changed`;
 }
 
 function findEvent(element, eventName) {
