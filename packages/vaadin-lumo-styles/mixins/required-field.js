@@ -40,6 +40,10 @@ const requiredField = css`
     padding-top: var(--lumo-space-m);
   }
 
+  :host([has-label]) ::slotted([slot='tooltip']) {
+    --vaadin-tooltip-offset-bottom: calc((var(--lumo-space-m) - var(--lumo-space-xs)) * -1);
+  }
+
   :host([required]) [part='required-indicator']::after {
     content: var(--lumo-required-field-indicator, '•');
     transition: opacity 0.2s;
