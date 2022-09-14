@@ -188,6 +188,25 @@ describe('readonly', () => {
     });
   });
 
+  describe('dataProvider is set after selectedItems', () => {
+    beforeEach(() => {
+      comboBox = fixtureSync(`<vaadin-multi-select-combo-box readonly></vaadin-multi-select-combo-box>`);
+      comboBox.selectedItems = ['apple', 'orange'];
+      comboBox.dataProvider = getAsyncDataProvider(['apple', 'banana', 'lemon', 'orange']);
+      inputElement = comboBox.inputElement;
+    });
+
+    it('should only render selected items in the dropdown when readonly', async () => {
+      inputElement.click();
+      // Wait for the async data provider timeout
+      await aTimeout(0);
+      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      expect(items.length).to.equal(2);
+      expect(items[0].textContent).to.equal('apple');
+      expect(items[1].textContent).to.equal('orange');
+    });
+  });
+
   describe('external filtering', () => {
     beforeEach(() => {
       comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
