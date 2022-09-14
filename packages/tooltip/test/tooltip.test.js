@@ -229,6 +229,30 @@ describe('vaadin-tooltip', () => {
       expect(overlay.opened).to.be.false;
     });
 
+    it('should not close overlay on mouseleave from target to overlay', () => {
+      mouseenter(target);
+      mouseleave(target, overlay);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close overlay on mouseleave from overlay to target', () => {
+      mouseenter(target);
+      mouseleave(target, overlay);
+
+      mouseenter(overlay);
+      mouseleave(overlay, target);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should close overlay on mouseleave from overlay to outside', () => {
+      mouseenter(target);
+      mouseleave(target, overlay);
+
+      mouseenter(overlay);
+      mouseleave(overlay);
+      expect(overlay.opened).to.be.false;
+    });
+
     it('should close overlay on target mousedown', () => {
       mouseenter(target);
       mousedown(target);
