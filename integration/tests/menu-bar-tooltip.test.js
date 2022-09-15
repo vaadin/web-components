@@ -72,6 +72,19 @@ describe('menu-bar with tooltip', () => {
     expect(tooltip.opened).to.be.false;
   });
 
+  it('should hide tooltip on menu bar container mouseover', () => {
+    mouseover(buttons[0]);
+    mouseover(menuBar._container);
+    expect(tooltip.opened).to.be.false;
+  });
+
+  it('should show tooltip again on menu bar button mouseover', () => {
+    mouseover(buttons[0]);
+    mouseover(menuBar._container);
+    mouseover(buttons[1]);
+    expect(tooltip.opened).to.be.true;
+  });
+
   it('should set tooltip target on menu button mouseover', () => {
     mouseover(buttons[0]);
     expect(tooltip.target).to.be.equal(buttons[0]);

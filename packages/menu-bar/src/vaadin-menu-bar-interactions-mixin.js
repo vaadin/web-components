@@ -305,7 +305,10 @@ export const InteractionsMixin = (superClass) =>
      */
     _onMouseOver(e) {
       const button = this._getButtonFromEvent(e);
-      if (button && button !== this._expandedButton) {
+      if (!button) {
+        // Hide tooltip on mouseover to disabled button
+        this._hideTooltip();
+      } else if (button !== this._expandedButton) {
         const isOpened = this._subMenu.opened;
         if (button.item.children && (this.openOnHover || isOpened)) {
           this.__openSubMenu(button, false);
