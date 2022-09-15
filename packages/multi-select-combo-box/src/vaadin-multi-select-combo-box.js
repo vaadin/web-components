@@ -653,6 +653,10 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     if (readonly || oldReadonly) {
       this.__updateChips();
     }
+
+    if (this.dataProvider) {
+      this.clearCache();
+    }
   }
 
   /** @private */
