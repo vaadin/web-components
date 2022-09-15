@@ -247,7 +247,7 @@ export class ComboBoxScroller extends PolymerElement {
 
   /** @private */
   __loadingChanged() {
-    setTimeout(() => this.requestContentUpdate());
+    this.requestContentUpdate();
   }
 
   /** @private */
@@ -357,16 +357,27 @@ export class ComboBoxScroller extends PolymerElement {
   /**
    * Dispatches an `index-requested` event for the given index to notify
    * the data provider that it should start loading the page containing the requested index.
+   *
+   * The event is dispatched asynchronously to prevent an immediate page request and therefore
+   * a possible infinite recursion in case the data provider implements page request cancelation logic
+   * by invoking data provider page callbacks with an empty array.
+   * The infinite recursion may occur otherwise since invoking a data provider page callback with an empty array
+   * triggers a synchronous scroller update and, if the callback corresponds to the currently visible page,
+   * the scroller will synchronously request the page again which may lead to looping in the end.
+   * That was the case for the Flow counterpart:
+   * https://github.com/vaadin/flow-components/issues/3553#issuecomment-1239344828
    */
   __requestItemByIndex(index) {
-    this.dispatchEvent(
-      new CustomEvent('index-requested', {
-        detail: {
-          index,
-          currentScrollerPos: this._oldScrollerPosition,
-        },
-      }),
-    );
+    requestAnimationFrame(() => {
+      this.dispatchEvent(
+        new CustomEvent('index-requested', {
+          detail: {
+            index,
+            currentScrollerPos: this._oldScrollerPosition,
+          },
+        }),
+      );
+    });
   }
 
   /** @private */
