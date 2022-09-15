@@ -326,6 +326,21 @@ class MultiSelectComboBoxInternal extends ComboBoxDataProviderMixin(ComboBoxMixi
 
     return super._shouldLoadPage(page);
   }
+
+  /**
+   * Override method inherited from the combo-box
+   * to not clear the data provider cache when read-only.
+   *
+   * @protected
+   * @override
+   */
+  clearCache() {
+    if (this.readonly) {
+      return;
+    }
+
+    super.clearCache();
+  }
 }
 
 customElements.define(MultiSelectComboBoxInternal.is, MultiSelectComboBoxInternal);

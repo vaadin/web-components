@@ -188,6 +188,50 @@ describe('readonly', () => {
     });
   });
 
+  describe('dataProvider is set after selectedItems', () => {
+    beforeEach(() => {
+      comboBox = fixtureSync(`<vaadin-multi-select-combo-box readonly></vaadin-multi-select-combo-box>`);
+      comboBox.selectedItems = ['apple', 'orange'];
+      comboBox.dataProvider = getAsyncDataProvider(['apple', 'banana', 'lemon', 'orange']);
+      inputElement = comboBox.inputElement;
+    });
+
+    it('should only render selected items in the dropdown when readonly', async () => {
+      inputElement.click();
+      // Wait for the async data provider timeout
+      await aTimeout(0);
+      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      expect(items.length).to.equal(2);
+      expect(items[0].textContent).to.equal('apple');
+      expect(items[1].textContent).to.equal('orange');
+    });
+  });
+
+  describe('dataProvider is changed while readonly', () => {
+    const asyncDataProvider1 = getAsyncDataProvider(['item 1', 'item 2']);
+    const asyncDataProvider2 = getAsyncDataProvider(['new item 1', 'new item 2']);
+
+    beforeEach(() => {
+      comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
+      comboBox.dataProvider = asyncDataProvider1;
+      // Load the first page.
+      comboBox.inputElement.click();
+      comboBox.readonly = true;
+      comboBox.dataProvider = asyncDataProvider2;
+    });
+
+    it('should render the new items when readonly is off', async () => {
+      comboBox.readonly = false;
+      comboBox.inputElement.click();
+      // Wait for the async data provider timeout
+      await aTimeout(0);
+      const items = document.querySelectorAll('vaadin-multi-select-combo-box-item');
+      expect(items.length).to.equal(2);
+      expect(items[0].textContent).to.equal('new item 1');
+      expect(items[1].textContent).to.equal('new item 2');
+    });
+  });
+
   describe('external filtering', () => {
     beforeEach(() => {
       comboBox = fixtureSync(`<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>`);
