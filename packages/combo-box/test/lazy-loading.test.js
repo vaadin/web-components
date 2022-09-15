@@ -202,19 +202,21 @@ describe('lazy loading', () => {
           expect(params.page).to.equal(0);
         });
 
-        (window.innerHeight > 900 ? it.skip : it)('should request page 1 on scroll', () => {
+        (window.innerHeight > 900 ? it.skip : it)('should request page 1 on scroll', async () => {
           comboBox.dataProvider = spyDataProvider;
           spyDataProvider.resetHistory();
           comboBox._scrollIntoView(75);
+          await nextFrame();
           expect(spyDataProvider.called).to.be.true;
           const pages = spyDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(1);
         });
 
-        (window.innerHeight > 900 ? it.skip : it)('should request page 2 on scroll', () => {
+        (window.innerHeight > 900 ? it.skip : it)('should request page 2 on scroll', async () => {
           comboBox.dataProvider = spyDataProvider;
           spyDataProvider.resetHistory();
           comboBox._scrollIntoView(125);
+          await nextFrame();
           expect(spyDataProvider.called).to.be.true;
           const pages = spyDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(2);
@@ -312,6 +314,15 @@ describe('lazy loading', () => {
           expect(dp.calledOnce).to.be.true;
         });
 
+        it('should request pages asynchronously when scrolling', async () => {
+          comboBox.dataProvider = spyDataProvider;
+          spyDataProvider.resetHistory();
+          comboBox._scrollIntoView(50);
+          expect(spyDataProvider.called).to.be.false;
+          await nextFrame();
+          expect(spyDataProvider.calledOnce).to.be.true;
+        });
+
         it('should render all visible items after delayed response', (done) => {
           const items = [...Array(10)].map((_, i) => `item ${i}`);
           comboBox.dataProvider = (params, callback) => {
@@ -402,23 +413,25 @@ describe('lazy loading', () => {
           expect(spyAsyncDataProvider.calledOnce).to.be.true;
         });
 
-        (window.innerHeight > 900 ? it.skip : it)('should request page 1 on scroll', () => {
+        (window.innerHeight > 900 ? it.skip : it)('should request page 1 on scroll', async () => {
           comboBox.size = SIZE;
           comboBox.dataProvider = spyAsyncDataProvider;
           comboBox.opened = true;
           spyAsyncDataProvider.resetHistory();
           comboBox._scrollIntoView(75);
+          await nextFrame();
           expect(spyAsyncDataProvider.called).to.be.true;
           const pages = spyAsyncDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(1);
         });
 
-        (window.innerHeight > 900 ? it.skip : it)('should request page 2 on scroll', () => {
+        (window.innerHeight > 900 ? it.skip : it)('should request page 2 on scroll', async () => {
           comboBox.size = SIZE;
           comboBox.dataProvider = spyAsyncDataProvider;
           comboBox.opened = true;
           spyAsyncDataProvider.resetHistory();
           comboBox._scrollIntoView(125);
+          await nextFrame();
           expect(spyAsyncDataProvider.called).to.be.true;
           const pages = spyAsyncDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(2);
@@ -479,13 +492,13 @@ describe('lazy loading', () => {
           expect(getFocusedItemIndex(comboBox)).to.equal(0);
 
           comboBox._scrollIntoView(50);
+          await nextFrame();
           // Wait for the async data provider to respond
-          await aTimeout(0);
-          // Wait for the __loadingChanged observer
           await aTimeout(0);
           expect(comboBox.selectedItem).to.exist;
 
           comboBox._scrollIntoView(0);
+          await nextFrame();
           expect(getFocusedItemIndex(comboBox)).to.equal(0);
         });
 
@@ -603,7 +616,7 @@ describe('lazy loading', () => {
         expect(comboBox.size).to.equal(SIZE);
       });
 
-      it('should not show the loading on size change while pending the data provider', () => {
+      it('should not show the loading on size change while pending the data provider', async () => {
         const allItems = makeItems(200);
 
         comboBox.size = 200;
@@ -619,8 +632,10 @@ describe('lazy loading', () => {
         comboBox.open();
         expect(comboBox.loading).to.be.false;
         comboBox._scrollIntoView(45);
+        await nextFrame();
         expect(comboBox.loading).to.be.false;
         comboBox._scrollIntoView(150);
+        await nextFrame();
         // Fetching the page = 2 and stucking
         expect(comboBox.loading).to.be.true;
         // Updating the size means we don't need pending requests anymore,
@@ -629,7 +644,7 @@ describe('lazy loading', () => {
         expect(comboBox.loading).to.be.false;
       });
 
-      it('should not show the loading on fast scrolling and size update', () => {
+      it('should not show the loading on fast scrolling and size update', async () => {
         const ITEMS_SIZE = 1000;
         const allItems = makeItems(ITEMS_SIZE);
 
@@ -647,6 +662,7 @@ describe('lazy loading', () => {
         comboBox.open();
         // Scroll fast to a large page
         comboBox._scrollIntoView(400);
+        await nextFrame();
         expect(comboBox.loading).to.be.true;
         // Reduce the size and trigger pending queue cleanup
         comboBox.size = 50;
@@ -797,10 +813,11 @@ describe('lazy loading', () => {
           expect(items[0].item).to.deep.equal(loadedItem);
         });
 
-        it('should render selectedItem as selected when setting it while loading more items', () => {
+        it('should render selectedItem as selected when setting it while loading more items', async () => {
           const alreadyLoadedItem = `item ${comboBox.pageSize - 1}`;
 
           scrollToIndex(comboBox, comboBox.pageSize + 1);
+          await nextFrame();
           expect(comboBox.loading).to.be.true;
 
           comboBox.selectedItem = alreadyLoadedItem;
@@ -844,7 +861,7 @@ describe('lazy loading', () => {
           expect(items[0].item).to.deep.equal(loadedItem);
         });
 
-        it('should render selectedItem as selected when setting it while loading more items', () => {
+        it('should render selectedItem as selected when setting it while loading more items', async () => {
           const alreadyLoadedItem = {
             id: comboBox.pageSize - 1,
             value: `value ${comboBox.pageSize - 1}`,
@@ -852,6 +869,7 @@ describe('lazy loading', () => {
           };
 
           scrollToIndex(comboBox, comboBox.pageSize + 1);
+          await nextFrame();
           expect(comboBox.loading).to.be.true;
 
           comboBox.selectedItem = alreadyLoadedItem;
@@ -999,10 +1017,11 @@ describe('lazy loading', () => {
           expect(spyDataProvider.called).to.be.false;
         });
 
-        it('should request page 1 on scroll after reopen', () => {
+        it('should request page 1 on scroll after reopen', async () => {
           comboBox.clearCache();
           comboBox.opened = true;
           comboBox._scrollIntoView(75);
+          await nextFrame();
           expect(spyDataProvider.called).to.be.true;
           const pages = spyDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(1);
@@ -1191,7 +1210,7 @@ describe('lazy loading', () => {
         }
       });
 
-      it('should not show the loading when exact size is suddenly reached in the middle of requested range', () => {
+      it('should not show the loading when exact size is suddenly reached in the middle of requested range', async () => {
         const REAL_SIZE = 294;
         const ESTIMATED_SIZE = 400;
 
@@ -1224,6 +1243,7 @@ describe('lazy loading', () => {
         // Scroll to last page and verify there is no loading indicator and
         // the last page has been fetched and rendered
         comboBox._scrollIntoView(274);
+        await nextFrame();
         expect(comboBox.loading).to.be.false;
         expect(comboBox.filteredItems).to.contain('item 293');
       });
