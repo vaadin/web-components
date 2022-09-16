@@ -1,22 +1,22 @@
 {
   "name": "@vaadin/integration-tests",
-  "version": "23.1.7",
+  "version": "23.1.8",
   "private": true,
   "description": "Vaadin web components integration tests",
   "license": "Apache-2.0",
   "author": "Vaadin Ltd",
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@vaadin/accordion": "~23.1.7",
-    "@vaadin/combo-box": "~23.1.7",
-    "@vaadin/dialog": "~23.1.7",
-    "@vaadin/grid": "~23.1.7",
-    "@vaadin/grid-pro": "~23.1.7",
-    "@vaadin/multi-select-combo-box": "~23.1.7",
-    "@vaadin/polymer-legacy-adapter": "~23.1.7",
+    "@vaadin/accordion": "~23.1.8",
+    "@vaadin/combo-box": "~23.1.8",
+    "@vaadin/dialog": "~23.1.8",
+    "@vaadin/grid": "~23.1.8",
+    "@vaadin/grid-pro": "~23.1.8",
+    "@vaadin/multi-select-combo-box": "~23.1.8",
+    "@vaadin/polymer-legacy-adapter": "~23.1.8",
     "@vaadin/testing-helpers": "^0.3.2",
-    "@vaadin/time-picker": "~23.1.7",
-    "@vaadin/vaadin-themable-mixin": "~23.1.7",
+    "@vaadin/time-picker": "~23.1.8",
+    "@vaadin/vaadin-themable-mixin": "~23.1.8",
     "sinon": "^13.0.2"
   }
 }
