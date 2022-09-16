@@ -15,6 +15,7 @@ import {
   getViewportItems,
   getVisibleItemsCount,
   makeItems,
+  scrollToIndex,
   setInputValue,
 } from './helpers.js';
 
@@ -56,6 +57,10 @@ describe('lazy loading', () => {
       return { id: i, value: `value ${i}`, label: `label ${i}` };
     });
     callback(dataProviderItems, SIZE);
+  };
+
+  const asyncObjectDataProvider = (params, callback) => {
+    setTimeout(() => objectDataProvider(params, callback));
   };
 
   before(() => {
@@ -193,19 +198,21 @@ describe('lazy loading', () => {
           expect(params.page).to.equal(0);
         });
 
-        (window.innerHeight > 900 ? it.skip : it)('should request page 1 on scroll', () => {
+        (window.innerHeight > 900 ? it.skip : it)('should request page 1 on scroll', async () => {
           comboBox.dataProvider = spyDataProvider;
           spyDataProvider.resetHistory();
           comboBox.$.dropdown._scrollIntoView(75);
+          await nextFrame();
           expect(spyDataProvider.called).to.be.true;
           const pages = spyDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(1);
         });
 
-        (window.innerHeight > 900 ? it.skip : it)('should request page 2 on scroll', () => {
+        (window.innerHeight > 900 ? it.skip : it)('should request page 2 on scroll', async () => {
           comboBox.dataProvider = spyDataProvider;
           spyDataProvider.resetHistory();
           comboBox.$.dropdown._scrollIntoView(125);
+          await nextFrame();
           expect(spyDataProvider.called).to.be.true;
           const pages = spyDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(2);
@@ -303,6 +310,15 @@ describe('lazy loading', () => {
           expect(dp.calledOnce).to.be.true;
         });
 
+        it('should request pages asynchronously when scrolling', async () => {
+          comboBox.dataProvider = spyDataProvider;
+          spyDataProvider.resetHistory();
+          comboBox.$.dropdown._scrollIntoView(50);
+          expect(spyDataProvider.called).to.be.false;
+          await nextFrame();
+          expect(spyDataProvider.calledOnce).to.be.true;
+        });
+
         it('should render all visible items after delayed response', (done) => {
           const items = [...Array(10)].map((_, i) => `item ${i}`);
           comboBox.dataProvider = (params, callback) => {
@@ -384,23 +400,25 @@ describe('lazy loading', () => {
           expect(spyAsyncDataProvider.calledOnce).to.be.true;
         });
 
-        (window.innerHeight > 900 ? it.skip : it)('should request page 1 on scroll', () => {
+        (window.innerHeight > 900 ? it.skip : it)('should request page 1 on scroll', async () => {
           comboBox.size = SIZE;
           comboBox.dataProvider = spyAsyncDataProvider;
           comboBox.opened = true;
           spyAsyncDataProvider.resetHistory();
           comboBox.$.dropdown._scrollIntoView(75);
+          await nextFrame();
           expect(spyAsyncDataProvider.called).to.be.true;
           const pages = spyAsyncDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(1);
         });
 
-        (window.innerHeight > 900 ? it.skip : it)('should request page 2 on scroll', () => {
+        (window.innerHeight > 900 ? it.skip : it)('should request page 2 on scroll', async () => {
           comboBox.size = SIZE;
           comboBox.dataProvider = spyAsyncDataProvider;
           comboBox.opened = true;
           spyAsyncDataProvider.resetHistory();
           comboBox.$.dropdown._scrollIntoView(125);
+          await nextFrame();
           expect(spyAsyncDataProvider.called).to.be.true;
           const pages = spyAsyncDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(2);
@@ -444,10 +462,8 @@ describe('lazy loading', () => {
           // Wait for items to render
           await nextFrame();
           comboBox.$.dropdown._scrollIntoView(50);
+          await nextFrame();
           // Wait for the async data provider to respond
-          await aTimeout(0);
-
-          // Wait for the timeout in __loadingChanged
           await aTimeout(0);
 
           expect(comboBox._focusedIndex).to.equal(8);
@@ -538,7 +554,7 @@ describe('lazy loading', () => {
         expect(comboBox.filteredItems).to.eql(['foo']);
       });
 
-      it('should not show the loading on size change while pending the data provider', () => {
+      it('should not show the loading on size change while pending the data provider', async () => {
         const allItems = makeItems(200);
 
         comboBox.size = 200;
@@ -554,8 +570,10 @@ describe('lazy loading', () => {
         comboBox.open();
         expect(comboBox.loading).to.be.false;
         comboBox.$.dropdown._scrollIntoView(45);
+        await nextFrame();
         expect(comboBox.loading).to.be.false;
         comboBox.$.dropdown._scrollIntoView(150);
+        await nextFrame();
         // Fetching the page = 2 and stucking
         expect(comboBox.loading).to.be.true;
         // Updating the size means we don't need pending requests anymore,
@@ -564,7 +582,7 @@ describe('lazy loading', () => {
         expect(comboBox.loading).to.be.false;
       });
 
-      it('should not show the loading on fast scrolling and size update', () => {
+      it('should not show the loading on fast scrolling and size update', async () => {
         const ITEMS_SIZE = 1000;
         const allItems = makeItems(ITEMS_SIZE);
 
@@ -582,6 +600,7 @@ describe('lazy loading', () => {
         comboBox.open();
         // Scroll fast to a large page
         comboBox.$.dropdown._scrollIntoView(400);
+        await nextFrame();
         expect(comboBox.loading).to.be.true;
         // Reduce the size and trigger pending queue cleanup
         comboBox.size = 50;
@@ -703,7 +722,9 @@ describe('lazy loading', () => {
     });
 
     describe('selectedItem (string items)', () => {
-      beforeEach(() => (comboBox.dataProvider = dataProvider));
+      beforeEach(() => {
+        comboBox.dataProvider = asyncDataProvider;
+      });
 
       it('should allow setting initial selectedItem', () => {
         comboBox.selectedItem = 'item 0';
@@ -715,31 +736,42 @@ describe('lazy loading', () => {
         expect(comboBox.value).to.equal('item 0');
       });
 
-      it('should select value matching selectedItem when items are loading', () => {
-        comboBox.selectedItem = 'item 0';
-        comboBox.opened = true;
-        expect(comboBox.value).to.equal('item 0');
-        const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
-        expect(selectedRenderedItemElements).to.have.lengthOf(1);
-        expect(selectedRenderedItemElements[0].item).to.equal('item 0');
-      });
+      describe('some items are loaded', () => {
+        beforeEach(async () => {
+          comboBox.opened = true;
+          await aTimeout(0);
+        });
 
-      it('should select value matching selectedItem when items are loaded', () => {
-        comboBox.opened = true;
-        comboBox.selectedItem = 'item 0';
-        expect(comboBox.value).to.equal('item 0');
-        flushComboBox(comboBox);
-        const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
-        // Doesn't work when run on SauceLabs, work locally
-        // expect(selectedRenderedItemElements).to.have.lengthOf(1);
-        expect(selectedRenderedItemElements[0].item).to.equal('item 0');
+        it('should render selectedItem as selected when setting it', async () => {
+          const loadedItem = 'item 0';
+          comboBox.selectedItem = loadedItem;
+          flushComboBox(comboBox);
+          const items = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
+          expect(items).to.have.lengthOf(1);
+          expect(items[0].item).to.deep.equal(loadedItem);
+        });
+
+        it('should render selectedItem as selected when setting it while loading more items', async () => {
+          const alreadyLoadedItem = `item ${comboBox.pageSize - 1}`;
+
+          scrollToIndex(comboBox, comboBox.pageSize + 1);
+          await nextFrame();
+          expect(comboBox.loading).to.be.true;
+
+          comboBox.selectedItem = alreadyLoadedItem;
+          flushComboBox(comboBox);
+
+          const items = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
+          expect(items).to.have.lengthOf(1);
+          expect(items[0].item).to.deep.equal(alreadyLoadedItem);
+        });
       });
     });
 
     describe('selectedItem (object items)', () => {
-      beforeEach(() => {
+      beforeEach(async () => {
         comboBox.itemIdPath = 'id';
-        comboBox.dataProvider = objectDataProvider;
+        comboBox.dataProvider = asyncObjectDataProvider;
       });
 
       it('should allow setting initial selectedItem', () => {
@@ -752,26 +784,39 @@ describe('lazy loading', () => {
         expect(comboBox.value).to.equal('value 0');
       });
 
-      it('should select value matching selectedItem when items are loading', () => {
-        comboBox.selectedItem = { id: 0, value: 'value 0', label: 'label 0' };
-        comboBox.opened = true;
-        expect(comboBox.value).to.equal('value 0');
-        const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
-        expect(selectedRenderedItemElements).to.have.lengthOf(1);
-        expect(selectedRenderedItemElements[0].item).to.eql({ id: 0, value: 'value 0', label: 'label 0' });
-      });
+      describe('some items are loaded', () => {
+        beforeEach(async () => {
+          comboBox.opened = true;
+          await aTimeout(0);
+        });
 
-      it('should select value matching selectedItem when items are loaded', async () => {
-        comboBox.opened = true;
-        comboBox.selectedItem = { id: 0, value: 'value 0', label: 'label 0' };
-        expect(comboBox.value).to.equal('value 0');
-        flushComboBox(comboBox);
-        // Wait for the timeout in __loadingChanged to finish
-        await aTimeout(0);
-        const selectedRenderedItemElements = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
-        // Doesn't work when run on SauceLabs, work locally
-        // expect(selectedRenderedItemElements).to.have.lengthOf(1);
-        expect(selectedRenderedItemElements[0].item).to.eql({ id: 0, value: 'value 0', label: 'label 0' });
+        it('should render selectedItem as selected when setting it', async () => {
+          const loadedItem = { id: 0, value: 'value 0', label: 'label 0' };
+          comboBox.selectedItem = loadedItem;
+          flushComboBox(comboBox);
+          const items = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
+          expect(items).to.have.lengthOf(1);
+          expect(items[0].item).to.deep.equal(loadedItem);
+        });
+
+        it('should render selectedItem as selected when setting it while loading more items', async () => {
+          const alreadyLoadedItem = {
+            id: comboBox.pageSize - 1,
+            value: `value ${comboBox.pageSize - 1}`,
+            label: `label ${comboBox.pageSize - 1}`,
+          };
+
+          scrollToIndex(comboBox, comboBox.pageSize + 1);
+          await nextFrame();
+          expect(comboBox.loading).to.be.true;
+
+          comboBox.selectedItem = alreadyLoadedItem;
+          flushComboBox(comboBox);
+
+          const items = getAllItems(comboBox).filter((itemEl) => itemEl.selected);
+          expect(items).to.have.lengthOf(1);
+          expect(items[0].item).to.deep.equal(alreadyLoadedItem);
+        });
       });
     });
 
@@ -910,10 +955,11 @@ describe('lazy loading', () => {
           expect(spyDataProvider.called).to.be.false;
         });
 
-        it('should request page 1 on scroll after reopen', () => {
+        it('should request page 1 on scroll after reopen', async () => {
           comboBox.clearCache();
           comboBox.opened = true;
           comboBox.$.dropdown._scrollIntoView(75);
+          await nextFrame();
           expect(spyDataProvider.called).to.be.true;
           const pages = spyDataProvider.getCalls().map((call) => call.args[0].page);
           expect(pages).to.contain(1);
@@ -1119,7 +1165,7 @@ describe('lazy loading', () => {
         }
       });
 
-      it('should not show the loading when exact size is suddenly reached in the middle of requested range', () => {
+      it('should not show the loading when exact size is suddenly reached in the middle of requested range', async () => {
         const REAL_SIZE = 294;
         const ESTIMATED_SIZE = 400;
 
@@ -1152,6 +1198,7 @@ describe('lazy loading', () => {
         // Scroll to last page and verify there is no loading indicator and
         // the last page has been fetched and rendered
         comboBox.$.dropdown._scrollIntoView(274);
+        await nextFrame();
         expect(comboBox.loading).to.be.false;
         expect(comboBox.filteredItems).to.contain('item 293');
       });
