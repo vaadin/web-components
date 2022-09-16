@@ -282,6 +282,44 @@ export const PositionMixin = (superClass) =>
     }
 
     /**
+     * Returns an adjusted value after resizing the browser window,
+     * to avoid wrong calculations when e.g. previously set `bottom`
+     * CSS property value is larger than the updated viewport height.
+     * See https://github.com/vaadin/web-components/issues/4604
+     */
+    __adjustBottomProperty(cssPropNameToSet, propNames, currentValue) {
+      let adjustedProp;
+
+      if (cssPropNameToSet === propNames.end) {
+        // Adjust horizontally
+        if (propNames.end === PROP_NAMES_VERTICAL.end) {
+          const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
+
+          if (currentValue > viewportHeight && this.__oldViewportHeight) {
+            const heightDiff = this.__oldViewportHeight - viewportHeight;
+            adjustedProp = currentValue - heightDiff;
+          }
+
+          this.__oldViewportHeight = viewportHeight;
+        }
+
+        // Adjust vertically
+        if (propNames.end === PROP_NAMES_HORIZONTAL.end) {
+          const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
+
+          if (currentValue > viewportWidth && this.__oldViewportWidth) {
+            const widthDiff = this.__oldViewportWidth - viewportWidth;
+            adjustedProp = currentValue - widthDiff;
+          }
+
+          this.__oldViewportWidth = viewportWidth;
+        }
+      }
+
+      return adjustedProp;
+    }
+
+    /**
      * Returns an object with CSS position properties to set,
      * e.g. { top: "100px", bottom: "" }
      */
@@ -291,13 +329,18 @@ export const PositionMixin = (superClass) =>
       const cssPropNameToClear = shouldAlignStart ? propNames.end : propNames.start;
 
       const currentValue = parseFloat(overlay.style[cssPropNameToSet] || getComputedStyle(overlay)[cssPropNameToSet]);
+      const adjustedValue = this.__adjustBottomProperty(cssPropNameToSet, propNames, currentValue);
 
       const diff =
         overlayRect[shouldAlignStart ? propNames.start : propNames.end] -
         targetRect[noOverlap === shouldAlignStart ? propNames.end : propNames.start];
 
+      const valueToSet = adjustedValue
+        ? `${adjustedValue}px`
+        : `${currentValue + diff * (shouldAlignStart ? -1 : 1)}px`;
+
       return {
-        [cssPropNameToSet]: `${currentValue + diff * (shouldAlignStart ? -1 : 1)}px`,
+        [cssPropNameToSet]: valueToSet,
         [cssPropNameToClear]: '',
       };
     }

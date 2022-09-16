@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
+import { setViewport } from '@web/test-runner-commands';
 import { css } from 'lit';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles';
 import { OverlayElement } from '../src/vaadin-overlay.js';
@@ -288,6 +289,28 @@ describe('position mixin', () => {
         expectEdgesAligned(TOP, BOTTOM);
       });
     });
+
+    describe('window resize', () => {
+      let width, height;
+
+      beforeEach(() => {
+        overlay.noVerticalOverlap = true;
+        width = window.innerWidth;
+        height = window.innerHeight;
+      });
+
+      afterEach(async () => {
+        await setViewport({ width, height });
+      });
+
+      it('should adjust vertically on decreasing viewport height', async () => {
+        await setViewport({ width, height: height / 2 });
+
+        updatePosition();
+
+        expectEdgesAligned(BOTTOM, TOP);
+      });
+    });
   });
 
   describe('horizontal align start', () => {
@@ -495,6 +518,28 @@ describe('position mixin', () => {
         target.style.left = `${targetPositionForCentering - 3}px`;
         updatePosition();
         expectEdgesAligned(LEFT, RIGHT);
+      });
+    });
+
+    describe('window resize', () => {
+      let width, height;
+
+      beforeEach(() => {
+        overlay.noHorizontalOverlap = true;
+        width = window.innerWidth;
+        height = window.innerHeight;
+      });
+
+      afterEach(async () => {
+        await setViewport({ width, height });
+      });
+
+      it('should adjust horizontally on decreasing viewport width', async () => {
+        await setViewport({ width: width / 2, height });
+
+        updatePosition();
+
+        expectEdgesAligned(RIGHT, LEFT);
       });
     });
   });
