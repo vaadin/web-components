@@ -13,28 +13,29 @@
 
       const menuBar = document.querySelector('vaadin-menu-bar');
       menuBar.items = [
-        { text: 'View' },
+        { text: 'View', tooltip: 'Options for how to view the content' },
         { text: 'Edit' },
         {
           text: 'Share',
           children: [
             {
               text: 'On social media',
-              children: [{ text: 'Facebook' }, { text: 'Twitter' }, { text: 'Instagram' }]
+              children: [{ text: 'Facebook' }, { text: 'Twitter' }, { text: 'Instagram' }],
             },
             { text: 'By email' },
-            { text: 'Get link' }
-          ]
+            { text: 'Get link' },
+          ],
         },
         {
           text: 'Move',
-          children: [{ text: 'To folder' }, { text: 'To trash' }]
+          tooltip: 'Move to a different folder or trash.',
+          children: [{ text: 'To folder' }, { text: 'To trash' }],
         },
-        { text: 'Duplicate' }
+        { text: 'Duplicate', tooltip: 'Create a duplicate' },
       ];
 
       const tooltip = document.querySelector('[slot="tooltip"]');
-      tooltip.textGenerator = ({item}) => item ? `Tooltip for ${item.text}` : '';
+      tooltip.textGenerator = ({ item }) => item.tooltip;
     </script>
   </head>
 
