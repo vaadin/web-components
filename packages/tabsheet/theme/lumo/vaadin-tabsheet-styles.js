@@ -11,7 +11,7 @@ const tabsheet = css`
     font-family: var(--lumo-font-family);
   }
 
-  :host(:not([theme~='no-border'])) {
+  :host([theme~='bordered']) {
     border: 1px solid var(--lumo-contrast-20pct);
     border-radius: var(--lumo-border-radius-l);
   }

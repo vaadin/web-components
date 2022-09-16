@@ -54,9 +54,9 @@ describe('tabsheet', () => {
           await visualDiff(div, `${dir}-default`);
         });
 
-        it('no-border', async () => {
-          element.setAttribute('theme', 'no-border');
-          await visualDiff(div, `${dir}-no-border`);
+        it('bordered', async () => {
+          element.setAttribute('theme', 'bordered');
+          await visualDiff(div, `${dir}-bordered`);
         });
       });
     });
