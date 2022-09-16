@@ -64,6 +64,17 @@ class TooltipOverlay extends PositionMixin(OverlayElement) {
     };
   }
 
+  /** @protected */
+  ready() {
+    super.ready();
+
+    // When setting `manual` and `opened` attributes, the overlay is already moved to body
+    // by the time when `ready()` callback of the `vaadin-tooltip` is executed by Polymer,
+    // so querySelector() would return null. So we use this workaround to set properties.
+    this.owner = this.__dataHost;
+    this.owner._overlayElement = this;
+  }
+
   requestContentUpdate() {
     super.requestContentUpdate();
 

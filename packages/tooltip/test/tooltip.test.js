@@ -594,3 +594,20 @@ describe('vaadin-tooltip', () => {
     });
   });
 });
+
+describe('manual opened', () => {
+  let tooltip, overlay;
+
+  beforeEach(() => {
+    tooltip = fixtureSync('<vaadin-tooltip text="Test" manual opened></vaadin-tooltip>');
+    overlay = tooltip._overlayElement;
+  });
+
+  afterEach(() => {
+    tooltip.opened = false;
+  });
+
+  it('should set owner on the overlay element', () => {
+    expect(overlay.owner).to.equal(tooltip);
+  });
+});

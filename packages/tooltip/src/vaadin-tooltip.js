@@ -293,14 +293,6 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @protected */
-  ready() {
-    super.ready();
-
-    this._overlayElement = this.shadowRoot.querySelector('vaadin-tooltip-overlay');
-    this._overlayElement.owner = this;
-  }
-
-  /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
 
