@@ -45,7 +45,7 @@ describe('menu-bar with tooltip', () => {
     buttons = menuBar._buttons;
 
     tooltip = menuBar.querySelector('vaadin-tooltip');
-    tooltip.textGenerator = ({ item }) => item && `${item.text} tooltip`;
+    tooltip.generator = ({ item }) => item && `${item.text} tooltip`;
   });
 
   it('should set manual on the tooltip to true', () => {

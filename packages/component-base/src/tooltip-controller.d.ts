@@ -24,7 +24,7 @@ type TooltipPosition =
  */
 export class TooltipController extends SlotController {
   /**
-   * Object with properties passed to `textGenerator`
+   * Object with properties passed to `generator`
    * function to be used for generating tooltip text.
    */
   context: Record<string, unknown>;
@@ -52,7 +52,7 @@ export class TooltipController extends SlotController {
   target: HTMLElement;
 
   /**
-   * Set a context object to be used by text generator.
+   * Set a context object to be used by generator.
    */
   setContext(context: Record<string, unknown>): void;
 

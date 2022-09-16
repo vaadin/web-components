@@ -98,7 +98,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   static get properties() {
     return {
       /**
-       * Object with properties passed to `textGenerator`
+       * Object with properties passed to `generator`
        * function to be used for generating tooltip text.
        */
       context: {
@@ -212,7 +212,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
        * Use the `context` property to provide argument
        * that can be passed to the generator function.
        */
-      textGenerator: {
+      generator: {
         type: Object,
       },
 
@@ -238,7 +238,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   static get observers() {
-    return ['__textGeneratorChanged(_overlayElement, textGenerator, context)'];
+    return ['__generatorChanged(_overlayElement, generator, context)'];
   }
 
   /**
@@ -328,7 +328,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
   /** @private */
   __tooltipRenderer(root) {
-    root.textContent = typeof this.textGenerator === 'function' ? this.textGenerator(this.context) : this.text;
+    root.textContent = typeof this.generator === 'function' ? this.generator(this.context) : this.text;
   }
 
   /** @private */
@@ -655,13 +655,13 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  __textGeneratorChanged(overlayElement, textGenerator, context) {
+  __generatorChanged(overlayElement, generator, context) {
     if (overlayElement) {
-      if (textGenerator !== this.__oldTextGenerator || context !== this.__oldContext) {
+      if (generator !== this.__oldTextGenerator || context !== this.__oldContext) {
         overlayElement.requestContentUpdate();
       }
 
-      this.__oldTextGenerator = textGenerator;
+      this.__oldTextGenerator = generator;
       this.__oldContext = context;
     }
   }
