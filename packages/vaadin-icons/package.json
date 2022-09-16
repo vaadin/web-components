@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-icons",
-  "version": "22.0.18",
+  "version": "22.0.19",
   "publishConfig": {
     "access": "public"
   },
@@ -31,6 +31,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/icons": "^22.0.18"
+    "@vaadin/icons": "^22.0.19"
   }
 }

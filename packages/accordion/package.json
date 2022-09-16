@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/accordion",
-  "version": "22.0.18",
+  "version": "22.0.19",
   "publishConfig": {
     "access": "public"
   },
@@ -33,11 +33,11 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "^22.0.18",
-    "@vaadin/details": "^22.0.18",
-    "@vaadin/vaadin-lumo-styles": "^22.0.18",
-    "@vaadin/vaadin-material-styles": "^22.0.18",
-    "@vaadin/vaadin-themable-mixin": "^22.0.18"
+    "@vaadin/component-base": "^22.0.19",
+    "@vaadin/details": "^22.0.19",
+    "@vaadin/vaadin-lumo-styles": "^22.0.19",
+    "@vaadin/vaadin-material-styles": "^22.0.19",
+    "@vaadin/vaadin-themable-mixin": "^22.0.19"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
