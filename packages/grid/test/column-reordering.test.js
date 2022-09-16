@@ -60,7 +60,7 @@ describe('reordering simple grid', () => {
 
   beforeEach(async () => {
     grid = fixtureSync(`
-      <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
+      <vaadin-grid style="width: 450px; height: 200px;" size="1" column-reordering-allowed>
         ${[1, 2, 3, 4].map((col) => {
           return `
             <vaadin-grid-column resizable index="${col}">
