@@ -8,7 +8,7 @@ const tabsheet = css`
     font-family: var(--material-font-family);
   }
 
-  :host(:not([theme~='no-border'])) {
+  :host([theme~='bordered']) {
     border-radius: 4px;
     border: 1px solid var(--material-divider-color);
   }
