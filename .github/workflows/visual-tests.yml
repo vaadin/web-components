@@ -2,7 +2,6 @@ name: Visual tests
 
 on: pull_request
 
-
 permissions:
   contents: read
 
