@@ -107,10 +107,19 @@ export const InteractionsMixin = (superClass) =>
      */
     _showTooltip(button) {
       // Check if there is a slotted vaadin-tooltip element.
-      if (this._tooltipController.node && this._tooltipController.node.isConnected && !this._subMenu.opened) {
-        this._tooltipController.setTarget(button);
-        this._tooltipController.setContext({ item: button.item });
-        this._tooltipController.setOpened(true);
+      const tooltip = this._tooltipController.node;
+      if (tooltip && tooltip.isConnected) {
+        // If the tooltip element doesn't have a generator assigned, use a default one
+        // that reads the `tooltip` property of an item.
+        if (tooltip.generator === undefined) {
+          tooltip.generator = ({ item }) => item && item.tooltip;
+        }
+
+        if (!this._subMenu.opened) {
+          this._tooltipController.setTarget(button);
+          this._tooltipController.setContext({ item: button.item });
+          this._tooltipController.setOpened(true);
+        }
       }
     }
 
