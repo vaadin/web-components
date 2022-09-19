@@ -16,3 +16,12 @@ menu.addEventListener('item-selected', (event) => {
   assertType<MenuBarItemSelectedEvent>(event);
   assertType<MenuBarItem>(event.detail.value);
 });
+
+const menuItem = menu.items[0];
+
+assertType<string | undefined>(menuItem.tooltip);
+assertType<string | undefined>(menuItem.text);
+assertType<boolean | undefined>(menuItem.disabled);
+assertType<string[] | string | undefined>(menuItem.theme);
+assertType<MenuBarItem[] | undefined>(menuItem.children);
+assertType<HTMLElement | string | undefined>(menuItem.component);

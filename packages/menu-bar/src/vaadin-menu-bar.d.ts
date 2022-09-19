@@ -11,10 +11,31 @@ import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
 import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
 
 export interface MenuBarItem {
+  /**
+   * Text to be set as the menu button component's textContent.
+   */
   text?: string;
+  /**
+   * Text to be set as the menu button's tooltip.
+   * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-menu-bar>`.
+   */
+  tooltip?: string;
+  /**
+   * The component to represent the button content.
+   * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
+   */
   component?: HTMLElement | string;
+  /**
+   * If true, the button is disabled and cannot be activated.
+   */
   disabled?: boolean;
+  /**
+   * Theme(s) to be set as the theme attribute of the button, overriding any theme set on the menu bar.
+   */
   theme?: string[] | string;
+  /**
+   * Array of submenu items.
+   */
   children?: SubMenuItem[];
 }
 

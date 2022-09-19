@@ -20,6 +20,11 @@ export function mouseover(target) {
   fire(target, 'mouseover');
 }
 
+function getTooltipText() {
+  const overlay = document.querySelector('vaadin-tooltip-overlay');
+  return overlay && overlay.textContent;
+}
+
 describe('menu-bar with tooltip', () => {
   let menuBar, tooltip, buttons;
 
@@ -30,13 +35,14 @@ describe('menu-bar with tooltip', () => {
       </vaadin-menu-bar>
     `);
     menuBar.items = [
-      { text: 'Edit' },
+      { text: 'Edit', tooltip: 'Edit tooltip' },
       {
         text: 'Share',
         children: [{ text: 'By email' }],
       },
       {
         text: 'Move',
+        tooltip: 'Move tooltip',
         children: [{ text: 'To folder' }],
       },
     ];
@@ -45,7 +51,6 @@ describe('menu-bar with tooltip', () => {
     buttons = menuBar._buttons;
 
     tooltip = menuBar.querySelector('vaadin-tooltip');
-    tooltip.generator = ({ item }) => item && `${item.text} tooltip`;
   });
 
   it('should set manual on the tooltip to true', () => {
@@ -55,6 +60,16 @@ describe('menu-bar with tooltip', () => {
   it('should show tooltip on menu button mouseover', () => {
     mouseover(buttons[0]);
     expect(tooltip.opened).to.be.true;
+  });
+
+  it('should use the tooltip property of an item as tooltip', () => {
+    mouseover(buttons[0]);
+    expect(getTooltipText()).to.equal('Edit tooltip');
+  });
+
+  it('should not show tooltip for an item which has no tooltip', () => {
+    mouseover(buttons[1]);
+    expect(getTooltipText()).not.to.be.ok;
   });
 
   it('should not show tooltip on another parent menu button mouseover when open', async () => {
@@ -177,6 +192,12 @@ describe('menu-bar with tooltip', () => {
     expect(spyTarget.called).to.be.false;
     expect(spyContent.called).to.be.false;
     expect(spyOpened.called).to.be.false;
+  });
+
+  it('should not override a custom generator', () => {
+    tooltip.generator = () => 'Custom tooltip';
+    mouseover(buttons[0]);
+    expect(getTooltipText()).to.equal('Custom tooltip');
   });
 
   describe('overflow button', () => {

@@ -129,6 +129,8 @@ class MenuBar extends ButtonsMixin(
        * @typedef MenuBarItem
        * @type {object}
        * @property {string} text - Text to be set as the menu button component's textContent.
+       * @property {string} tooltip - Text to be set as the menu button's tooltip.
+       * Requires a `<vaadin-tooltip slot="tooltip">` element to be added inside the `<vaadin-menu-bar>`.
        * @property {union: string | object} component - The component to represent the button content.
        * Either a tagName or an element instance. Defaults to "vaadin-context-menu-item".
        * @property {boolean} disabled - If true, the button is disabled and cannot be activated.
