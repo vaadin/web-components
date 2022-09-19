@@ -21,7 +21,7 @@ export function mouseover(target) {
 }
 
 function getTooltipText() {
-  const overlay = document.querySelector('vaadin-tooltip-overlay');
+  const overlay = document.querySelector('vaadin-tooltip-overlay:not([hidden])');
   return overlay && overlay.textContent;
 }
 
