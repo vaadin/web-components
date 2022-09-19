@@ -48,7 +48,7 @@ export class TooltipController extends SlotController {
   }
 
   /**
-   * Set a context object to be used by text generator.
+   * Set a context object to be used by generator.
    * @param {object} context
    */
   setContext(context) {

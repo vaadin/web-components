@@ -132,7 +132,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
           on-keydown="_onOverflowKeyDown"
           aria-haspopup="listbox"
         >
-          <vaadin-tooltip slot="tooltip" text-generator="[[__overflowTextGenerator]]"></vaadin-tooltip>
+          <vaadin-tooltip slot="tooltip" generator="[[__overflowTextGenerator]]"></vaadin-tooltip>
         </vaadin-avatar>
       </div>
       <vaadin-avatar-group-overlay

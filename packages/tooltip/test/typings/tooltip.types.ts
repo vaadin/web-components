@@ -16,7 +16,7 @@ assertType<string | undefined>(tooltip.for);
 assertType<HTMLElement | undefined>(tooltip.target);
 assertType<string | null | undefined>(tooltip.text);
 assertType<Record<string, unknown>>(tooltip.context);
-assertType<(context: Record<string, unknown>) => string>(tooltip.textGenerator);
+assertType<(context: Record<string, unknown>) => string>(tooltip.generator);
 assertType<boolean>(tooltip.manual);
 assertType<boolean>(tooltip.opened);
 assertType<number>(tooltip.focusDelay);

@@ -73,37 +73,37 @@ describe('vaadin-tooltip', () => {
     });
   });
 
-  describe('textGenerator', () => {
-    it('should use textGenerator property to generate text content', () => {
-      tooltip.textGenerator = () => 'Foo';
+  describe('generator', () => {
+    it('should use generator property to generate text content', () => {
+      tooltip.generator = () => 'Foo';
       expect(overlay.textContent.trim()).to.equal('Foo');
     });
 
-    it('should override text property when textGenerator is set', () => {
+    it('should override text property when generator is set', () => {
       tooltip.text = 'Foo';
-      tooltip.textGenerator = () => 'Bar';
+      tooltip.generator = () => 'Bar';
       expect(overlay.textContent.trim()).to.equal('Bar');
     });
 
     it('should use context property in generator when provided', () => {
       tooltip.context = { text: 'Foo' };
-      tooltip.textGenerator = (context) => context.text;
+      tooltip.generator = (context) => context.text;
       expect(overlay.textContent.trim()).to.equal('Foo');
     });
 
     it('should update text content when context property changes', () => {
       tooltip.context = { text: 'Foo' };
-      tooltip.textGenerator = (context) => context.text;
+      tooltip.generator = (context) => context.text;
 
       tooltip.context = { text: 'Bar' };
       expect(overlay.textContent.trim()).to.equal('Bar');
     });
 
     it('should set hidden on the overlay when generator clears text', () => {
-      tooltip.textGenerator = () => 'Bar';
+      tooltip.generator = () => 'Bar';
       expect(overlay.hasAttribute('hidden')).to.be.false;
 
-      tooltip.textGenerator = () => '';
+      tooltip.generator = () => '';
       expect(overlay.hasAttribute('hidden')).to.be.true;
     });
   });

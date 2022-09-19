@@ -78,7 +78,7 @@ declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   static setDefaultHoverDelay(delay: number): void;
 
   /**
-   * Object with properties passed to `textGenerator`
+   * Object with properties passed to `generator`
    * function to be used for generating tooltip text.
    */
   context: Record<string, unknown>;
@@ -158,7 +158,7 @@ declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
    * Use the `context` property to provide argument
    * that can be passed to the generator function.
    */
-  textGenerator: (context: Record<string, unknown>) => string;
+  generator: (context: Record<string, unknown>) => string;
 }
 
 declare global {

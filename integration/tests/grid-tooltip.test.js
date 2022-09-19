@@ -38,7 +38,7 @@ describe('tooltip', () => {
     flushGrid(grid);
 
     tooltip = grid.querySelector('vaadin-tooltip');
-    tooltip.textGenerator = ({ column, item }) => {
+    tooltip.generator = ({ column, item }) => {
       return column && column.path && item ? `${column.path}: ${item[column.path]}` : '';
     };
   });

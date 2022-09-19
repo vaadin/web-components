@@ -82,7 +82,7 @@ describe('avatar-group', () => {
       expect(overflow.abbr).to.equal('+3');
     });
 
-    it('should set text generator on the overflow avatar tooltip', () => {
+    it('should set generator on the overflow avatar tooltip', () => {
       const overflow = group.$.overflow;
       const items = group.items;
       const tooltip = overflow.querySelector('vaadin-tooltip');
