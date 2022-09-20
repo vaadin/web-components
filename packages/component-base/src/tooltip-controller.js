@@ -39,7 +39,7 @@ export class TooltipController extends SlotController {
     }
 
     if (this.position !== undefined) {
-      tooltipNode.position = this.position;
+      this.__updatePosition(tooltipNode, this.position);
     }
 
     if (this.shouldShow !== undefined) {
@@ -93,10 +93,7 @@ export class TooltipController extends SlotController {
   setPosition(position) {
     this.position = position;
 
-    const tooltipNode = this.node;
-    if (tooltipNode) {
-      tooltipNode.position = position;
-    }
+    this.__updatePosition(this.node, position);
   }
 
   /**
@@ -123,6 +120,13 @@ export class TooltipController extends SlotController {
     const tooltipNode = this.node;
     if (tooltipNode) {
       tooltipNode.target = target;
+    }
+  }
+
+  /** @private */
+  __updatePosition(node, position) {
+    if (node && !node.hasAttribute('position')) {
+      node.position = position;
     }
   }
 }

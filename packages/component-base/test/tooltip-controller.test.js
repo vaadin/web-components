@@ -74,6 +74,12 @@ describe('TooltipController', () => {
       controller.setPosition('top-start');
       expect(tooltip.position).to.eql('top-start');
     });
+
+    it('should not override position attribute using controller setPosition method', () => {
+      tooltip.setAttribute('position', 'end');
+      controller.setPosition('top-start');
+      expect(tooltip.position).to.not.eql('top-start');
+    });
   });
 
   describe('slotted tooltip', () => {
