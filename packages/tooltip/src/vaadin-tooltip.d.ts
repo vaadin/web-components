@@ -78,8 +78,9 @@ declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   static setDefaultHoverDelay(delay: number): void;
 
   /**
-   * Object with properties passed to `generator`
-   * function to be used for generating tooltip text.
+   * Object with properties passed to `generator` and
+   * `shouldShow` functions for generating tooltip text
+   * or detecting whether to show the tooltip or not.
    */
   context: Record<string, unknown>;
 
@@ -135,10 +136,11 @@ declare class Tooltip extends ThemePropertyMixin(ElementMixin(HTMLElement)) {
   /**
    * Function used to detect whether to show the tooltip based on a condition,
    * called every time the tooltip is about to be shown on hover and focus.
-   * The function accepts a reference to the target element as a parameter.
+   * The function takes two parameters: `target` and `context`, which contain
+   * values of the corresponding tooltip properties at the time of calling.
    * The tooltip is only shown when the function invocation returns `true`.
    */
-  shouldShow: (target: HTMLElement) => boolean;
+  shouldShow: (target: HTMLElement, context?: Record<string, unknown>) => boolean;
 
   /**
    * Reference to the element used as a tooltip trigger.

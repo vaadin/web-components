@@ -491,6 +491,46 @@ describe('vaadin-tooltip', () => {
       tooltip.target = target;
     });
 
+    it('should pass tooltip target as a first parameter to shouldShow on mouseenter', () => {
+      const spy = sinon.spy();
+      tooltip.shouldShow = spy;
+
+      mouseenter(target);
+      expect(spy.firstCall.args[0]).to.equal(target);
+    });
+
+    it('should pass tooltip context as a second parameter to shouldShow on mouseenter', () => {
+      const context = { foo: 'bar ' };
+      tooltip.context = context;
+
+      const spy = sinon.spy();
+      tooltip.shouldShow = spy;
+      mouseenter(target);
+
+      expect(spy.firstCall.args[1]).to.equal(context);
+    });
+
+    it('should pass tooltip target as a first parameter to shouldShow on keyboard focus', () => {
+      const spy = sinon.spy();
+      tooltip.shouldShow = spy;
+
+      tabKeyDown(target);
+      target.focus();
+      expect(spy.firstCall.args[0]).to.equal(target);
+    });
+
+    it('should pass tooltip context as a second parameter to shouldShow on keyboard focus', () => {
+      const context = { foo: 'bar ' };
+      tooltip.context = context;
+
+      const spy = sinon.spy();
+      tooltip.shouldShow = spy;
+      tabKeyDown(target);
+      target.focus();
+
+      expect(spy.firstCall.args[1]).to.equal(context);
+    });
+
     it('should not open overlay on mouseenter when shouldShow returns false', () => {
       tooltip.shouldShow = (target) => !target.readOnly;
       target.readOnly = true;

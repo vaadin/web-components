@@ -98,8 +98,9 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   static get properties() {
     return {
       /**
-       * Object with properties passed to `generator`
-       * function to be used for generating tooltip text.
+       * Object with properties passed to `generator` and
+       * `shouldShow` functions for generating tooltip text
+       * or detecting whether to show the tooltip or not.
        */
       context: {
         type: Object,
@@ -178,13 +179,14 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       /**
        * Function used to detect whether to show the tooltip based on a condition,
        * called every time the tooltip is about to be shown on hover and focus.
-       * The function accepts a reference to the target element as a parameter.
+       * The function takes two parameters: `target` and `context`, which contain
+       * values of the corresponding tooltip properties at the time of calling.
        * The tooltip is only shown when the function invocation returns `true`.
        */
       shouldShow: {
         type: Object,
         value: () => {
-          return (_target) => true;
+          return (_target, _context) => true;
         },
       },
 
@@ -396,7 +398,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       return;
     }
 
-    if (typeof this.shouldShow === 'function' && this.shouldShow(this.target) !== true) {
+    if (!this.__isShouldShow()) {
       return;
     }
 
@@ -444,7 +446,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       return;
     }
 
-    if (typeof this.shouldShow === 'function' && this.shouldShow(this.target) !== true) {
+    if (!this.__isShouldShow()) {
       return;
     }
 
@@ -502,6 +504,15 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     if (!isVisible && this._autoOpened) {
       this._close(true);
     }
+  }
+
+  /** @private */
+  __isShouldShow() {
+    if (typeof this.shouldShow === 'function' && this.shouldShow(this.target, this.context) !== true) {
+      return false;
+    }
+
+    return true;
   }
 
   /**
