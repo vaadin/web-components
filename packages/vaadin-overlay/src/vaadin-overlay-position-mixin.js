@@ -182,6 +182,17 @@ export const PositionMixin = (superClass) =>
         return;
       }
 
+      // Cleanup styles to avoid wrong values after window resize
+      // See https://github.com/vaadin/web-components/issues/4604
+      Object.assign(this.style, {
+        top: '',
+        right: '',
+        bottom: '',
+        left: '',
+        justifyContent: '',
+        alignItems: '',
+      });
+
       const targetRect = this.positionTarget.getBoundingClientRect();
 
       // Detect the desired alignment and update the layout accordingly
@@ -283,12 +294,11 @@ export const PositionMixin = (superClass) =>
 
     /**
      * Returns an object with CSS position properties to set,
-     * e.g. { top: "100px", bottom: "" }
+     * e.g. { top: "100px" }
      */
     // eslint-disable-next-line max-params
     __calculatePositionInOneDimension(targetRect, overlayRect, noOverlap, propNames, overlay, shouldAlignStart) {
       const cssPropNameToSet = shouldAlignStart ? propNames.start : propNames.end;
-      const cssPropNameToClear = shouldAlignStart ? propNames.end : propNames.start;
 
       const currentValue = parseFloat(overlay.style[cssPropNameToSet] || getComputedStyle(overlay)[cssPropNameToSet]);
 
@@ -298,7 +308,6 @@ export const PositionMixin = (superClass) =>
 
       return {
         [cssPropNameToSet]: `${currentValue + diff * (shouldAlignStart ? -1 : 1)}px`,
-        [cssPropNameToClear]: '',
       };
     }
   };
