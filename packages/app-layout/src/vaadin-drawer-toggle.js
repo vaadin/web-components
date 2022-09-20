@@ -56,10 +56,11 @@ class DrawerToggle extends Button {
           top: 12px;
         }
       </style>
-      <slot>
+      <slot name="icon">
         <div part="icon"></div>
       </slot>
       <slot name="tooltip"></slot>
+      <slot></slot>
     `;
   }
 
