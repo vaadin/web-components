@@ -23,4 +23,4 @@ assertType<number>(tooltip.focusDelay);
 assertType<number>(tooltip.hideDelay);
 assertType<number>(tooltip.hoverDelay);
 assertType<TooltipPosition>(tooltip.position);
-assertType<(target: HTMLElement) => boolean>(tooltip.shouldShow);
+assertType<(target: HTMLElement, context?: Record<string, unknown>) => boolean>(tooltip.shouldShow);
