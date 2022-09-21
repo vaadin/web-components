@@ -214,6 +214,7 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
+    this._tooltipController.setPosition('top');
     this._tooltipController.setShouldShow((target) => !target.opened);
 
     const toggleButton = this.shadowRoot.querySelector('[part="toggle-button"]');

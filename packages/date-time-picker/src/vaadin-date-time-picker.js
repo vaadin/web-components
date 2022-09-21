@@ -428,6 +428,7 @@ class DateTimePicker extends FieldMixin(
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
+    this._tooltipController.setPosition('top');
     this._tooltipController.setShouldShow((target) => {
       return target.__datePicker && !target.__datePicker.opened && target.__timePicker && !target.__timePicker.opened;
     });

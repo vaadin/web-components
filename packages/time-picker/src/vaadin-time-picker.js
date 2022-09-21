@@ -358,6 +358,7 @@ class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(ElementMix
 
     this._tooltipController = new TooltipController(this);
     this._tooltipController.setShouldShow((timePicker) => !timePicker.opened);
+    this._tooltipController.setPosition('top');
     this.addController(this._tooltipController);
   }
 

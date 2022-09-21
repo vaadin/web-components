@@ -237,6 +237,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
 
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
+    this._tooltipController.setPosition('top');
   }
 
   /**
