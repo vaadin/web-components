@@ -23,3 +23,8 @@ export function addValueToAttribute(element: HTMLElement, attr: string, value: s
  * If the value is the last one, the whole attribute is removed.
  */
 export function removeValueFromAttribute(element: HTMLElement, attr: string, value: string): void;
+
+/**
+ * Returns true if the given node is an empty text node, false otherwise.
+ */
+export function isEmptyTextNode(node: Node): boolean;
