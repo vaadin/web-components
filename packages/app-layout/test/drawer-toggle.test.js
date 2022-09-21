@@ -87,4 +87,57 @@ describe('drawer-toggle', () => {
       expect(toggle.getAttribute('aria-label')).to.equal('Label');
     });
   });
+
+  describe('fallback icon', () => {
+    let icon;
+
+    beforeEach(() => {
+      icon = toggle.shadowRoot.querySelectorAll('[part="icon"]')[1];
+    });
+
+    it('should not show fallback icon by default', () => {
+      expect(icon.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('should show fallback icon when adding non-empty element', () => {
+      const div = document.createElement('div');
+      toggle.appendChild(div);
+      toggle._observer.flush();
+      expect(icon.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('should show fallback icon when adding whitespace text node', () => {
+      const text = document.createTextNode(' ');
+      toggle.appendChild(text);
+      toggle._observer.flush();
+      expect(icon.hasAttribute('hidden')).to.be.false;
+    });
+
+    it('should show fallback icon when adding element to non-default slot', () => {
+      // Emulate adding element in HTML wrapped with whitespace text nodes
+      toggle.innerHTML = ' <vaadin-tooltip slot="tooltip"></vaadin-tooltip> ';
+      toggle._observer.flush();
+      expect(icon.hasAttribute('hidden')).to.be.false;
+    });
+
+    it('should hide fallback icon when removing whitespace text node', () => {
+      const text = document.createTextNode(' ');
+      toggle.appendChild(text);
+      toggle._observer.flush();
+
+      toggle.removeChild(text);
+      toggle._observer.flush();
+      expect(icon.hasAttribute('hidden')).to.be.true;
+    });
+
+    it('should hide fallback icon when clearing all slotted content', () => {
+      // Emulate adding element in HTML wrapped with whitespace text nodes
+      toggle.innerHTML = ' <vaadin-tooltip slot="tooltip"></vaadin-tooltip> ';
+      toggle._observer.flush();
+
+      toggle.innerHTML = '';
+      toggle._observer.flush();
+      expect(icon.hasAttribute('hidden')).to.be.true;
+    });
+  });
 });

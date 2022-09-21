@@ -3,8 +3,10 @@
  * Copyright (c) 2018 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { Button } from '@vaadin/button/src/vaadin-button.js';
+import { isEmptyTextNode } from '@vaadin/component-base/src/dom-utils.js';
 
 /**
  * The Drawer Toggle component controls the drawer in App Layout component.
@@ -56,9 +58,10 @@ class DrawerToggle extends Button {
           top: 12px;
         }
       </style>
-      <slot>
+      <slot id="slot">
         <div part="icon"></div>
       </slot>
+      <div part="icon" hidden$="[[!_showFallbackIcon]]"></div>
       <slot name="tooltip"></slot>
     `;
   }
@@ -74,6 +77,12 @@ class DrawerToggle extends Button {
         value: 'Toggle navigation panel',
         reflectToAttribute: true,
       },
+
+      /** @private */
+      _showFallbackIcon: {
+        type: Boolean,
+        value: false,
+      },
     };
   }
 
@@ -83,6 +92,23 @@ class DrawerToggle extends Button {
     this.addEventListener('click', () => {
       this.dispatchEvent(new CustomEvent('drawer-toggle-click', { bubbles: true, composed: true }));
     });
+  }
+
+  /** @protected */
+  ready() {
+    super.ready();
+
+    this._observer = new FlattenedNodesObserver(this, () => {
+      this._toggleFallbackIcon();
+    });
+  }
+
+  /** @private */
+  _toggleFallbackIcon() {
+    const nodes = this.$.slot.assignedNodes();
+
+    // Show fallback icon if there are 1-2 empty text nodes assigned to the default slot.
+    this._showFallbackIcon = nodes.length > 0 && nodes.every((node) => isEmptyTextNode(node));
   }
 }
 
