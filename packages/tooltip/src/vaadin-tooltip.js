@@ -376,7 +376,10 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       target.addEventListener('focusout', this.__onFocusout);
       target.addEventListener('mousedown', this.__onMouseDown);
 
-      this.__targetVisibilityObserver.observe(target);
+      // Wait before observing to avoid Chrome issue.
+      requestAnimationFrame(() => {
+        this.__targetVisibilityObserver.observe(target);
+      });
 
       addValueToAttribute(target, 'aria-describedby', this._uniqueId);
     }
