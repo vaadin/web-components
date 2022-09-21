@@ -6,6 +6,7 @@ import {
   focusout,
   keyboardEventFor,
   mousedown,
+  nextFrame,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
@@ -422,7 +423,7 @@ describe('vaadin-tooltip', () => {
   describe('inside a scrollable container', () => {
     let container, target;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       container = fixtureSync(`
         <div style="width: 400px; height: 400px; overflow: scroll; border: 1px solid black;">
           <div style="margin: 600px 0; height: 50px; border: solid 1px red;" tabindex="0"></div>
@@ -430,6 +431,7 @@ describe('vaadin-tooltip', () => {
       `);
       target = container.querySelector('div');
       tooltip.target = target;
+      await nextFrame();
     });
 
     describe('target is partially visible', () => {
