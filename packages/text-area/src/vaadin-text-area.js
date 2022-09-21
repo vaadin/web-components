@@ -228,6 +228,7 @@ export class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(ThemableM
     this.addController(new LabelledInputController(this.inputElement, this._labelController));
 
     this._tooltipController = new TooltipController(this);
+    this._tooltipController.setPosition('top');
     this.addController(this._tooltipController);
 
     this.addEventListener('animationend', this._onAnimationEnd);
