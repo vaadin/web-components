@@ -2,13 +2,16 @@
 export const snapshots = {};
 
 snapshots["vaadin-app-layout default"] = 
-`<slot name="icon">
+`<slot id="slot">
   <div part="icon">
   </div>
 </slot>
+<div
+  hidden=""
+  part="icon"
+>
+</div>
 <slot name="tooltip">
-</slot>
-<slot>
 </slot>
 `;
 /* end snapshot vaadin-app-layout default */
