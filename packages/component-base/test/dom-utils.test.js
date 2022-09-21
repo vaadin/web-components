@@ -1,6 +1,11 @@
 import { expect } from '@esm-bundle/chai';
 import { defineCE, fixtureSync } from '@vaadin/testing-helpers';
-import { addValueToAttribute, getAncestorRootNodes, removeValueFromAttribute } from '../src/dom-utils.js';
+import {
+  addValueToAttribute,
+  getAncestorRootNodes,
+  isEmptyTextNode,
+  removeValueFromAttribute,
+} from '../src/dom-utils.js';
 
 describe('dom-utils', () => {
   describe('getAncestorRootNodes', () => {
@@ -73,6 +78,28 @@ describe('dom-utils', () => {
 
       removeValueFromAttribute(element, 'aria-labelledby', 'label-id');
       expect(element.hasAttribute('aria-labelledby')).to.be.false;
+    });
+  });
+
+  describe('isEmptyTextNode', () => {
+    let node;
+
+    beforeEach(() => {
+      node = document.createTextNode('');
+    });
+
+    it('should return true when node has empty text content', () => {
+      expect(isEmptyTextNode(node)).to.be.true;
+    });
+
+    it('should return true when node has whitespace text content', () => {
+      node.textContent = '  ';
+      expect(isEmptyTextNode(node)).to.be.true;
+    });
+
+    it('should return false when node has non-empty text content', () => {
+      node.textContent = '0';
+      expect(isEmptyTextNode(node)).to.be.false;
     });
   });
 });

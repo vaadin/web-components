@@ -90,3 +90,13 @@ export function removeValueFromAttribute(element, attr, value) {
   }
   element.setAttribute(attr, serializeAttributeValue(values));
 }
+
+/**
+ * Returns true if the given node is an empty text node, false otherwise.
+ *
+ * @param {Node} node
+ * @return {boolean}
+ */
+export function isEmptyTextNode(node) {
+  return node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '';
+}
