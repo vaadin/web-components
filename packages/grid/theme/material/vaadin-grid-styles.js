@@ -221,10 +221,6 @@ registerStyles(
       box-shadow: none !important;
     }
 
-    [ios] [part~='row'][dragstart] [part~='cell'] {
-      background: var(--material-primary-color);
-    }
-
     #scroller [part~='row'][dragstart]:not([dragstart=''])::after {
       display: block;
       position: absolute;
