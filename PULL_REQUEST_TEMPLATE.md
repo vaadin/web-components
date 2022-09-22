@@ -14,7 +14,7 @@ Fixes # (issue)
 
 ## Checklist
 
-- [ ] I have read the contribution guide: https://vaadin.com/docs-beta/latest/guide/contributing/overview/
+- [ ] I have read the contribution guide: https://vaadin.com/docs/latest/contributing/overview
 - [ ] I have added a description following the guideline.
 - [ ] The issue is created in the corresponding repository and I have referenced it.
 - [ ] I have added tests to ensure my change is effective and works as intended.
