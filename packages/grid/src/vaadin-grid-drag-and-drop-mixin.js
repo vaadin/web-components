@@ -17,6 +17,9 @@ const DropLocation = {
   EMPTY: 'empty',
 };
 
+// Detects if the browser doesn't support HTML5 Drag & Drop API (and falls back to the @vaadin/vaadin-mobile-drag-drop polyfill)
+const usesDnDPolyfill = !('draggable' in document.createElement('div'));
+
 /**
  * @polymerMixin
  */
@@ -133,7 +136,7 @@ export const DragAndDropMixin = (superClass) =>
 
         const rowRect = row.getBoundingClientRect();
 
-        if (this._ios) {
+        if (usesDnDPolyfill) {
           e.dataTransfer.setDragImage(row);
         } else {
           e.dataTransfer.setDragImage(row, e.clientX - rowRect.left, e.clientY - rowRect.top);
