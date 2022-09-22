@@ -137,8 +137,10 @@ export const DragAndDropMixin = (superClass) =>
         const rowRect = row.getBoundingClientRect();
 
         if (usesDnDPolyfill) {
+          // The polyfill drag image is automatically centered so there is no need to adjust the position
           e.dataTransfer.setDragImage(row);
         } else {
+          // The native drag image needs to be shifted manually to compensate for the touch position offset
           e.dataTransfer.setDragImage(row, e.clientX - rowRect.left, e.clientY - rowRect.top);
         }
 
