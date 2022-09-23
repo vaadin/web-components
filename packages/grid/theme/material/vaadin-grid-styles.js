@@ -221,11 +221,7 @@ registerStyles(
       box-shadow: none !important;
     }
 
-    [ios] [part~='row'][dragstart] [part~='cell'] {
-      background: var(--material-primary-color);
-    }
-
-    #scroller:not([ios]) [part~='row'][dragstart]:not([dragstart=''])::after {
+    #scroller [part~='row'][dragstart]:not([dragstart=''])::after {
       display: block;
       position: absolute;
       left: var(--_grid-drag-start-x);
@@ -262,7 +258,7 @@ registerStyles(
       border-left: 1px solid var(--material-divider-color);
     }
 
-    :host([dir='rtl']) #scroller:not([ios]) [part~='row'][dragstart]:not([dragstart=''])::after {
+    :host([dir='rtl']) #scroller [part~='row'][dragstart]:not([dragstart=''])::after {
       left: auto;
       right: var(--_grid-drag-start-x);
     }
