@@ -170,11 +170,7 @@ registerStyles(
       border-radius: var(--lumo-border-radius-s) 0 0 var(--lumo-border-radius-s);
     }
 
-    [ios] [part~='row'][dragstart] [part~='cell'] {
-      background: var(--lumo-primary-color-50pct);
-    }
-
-    #scroller:not([ios]) [part~='row'][dragstart]:not([dragstart=''])::after {
+    #scroller [part~='row'][dragstart]:not([dragstart=''])::after {
       display: block;
       position: absolute;
       left: var(--_grid-drag-start-x);

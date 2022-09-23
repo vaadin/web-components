@@ -337,15 +337,8 @@ describe('drag and drop', () => {
       });
 
       it('should generate drag image with offset', () => {
-        grid._ios = false;
         const event = fireDragStart();
         expect(event.dataTransfer.setDragImage.getCall(0).args.length).to.equal(3);
-      });
-
-      it('should generate drag image without offset', () => {
-        grid._ios = true;
-        const event = fireDragStart();
-        expect(event.dataTransfer.setDragImage.getCall(0).args.length).to.equal(1);
       });
     });
 
