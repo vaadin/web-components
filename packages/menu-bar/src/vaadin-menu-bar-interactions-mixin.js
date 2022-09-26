@@ -42,7 +42,6 @@ export const InteractionsMixin = (superClass) =>
 
       const overlay = this._subMenu.$.overlay;
       overlay.addEventListener('keydown', this.__boundOnContextMenuKeydown);
-      overlay.addEventListener('vaadin-overlay-open', this.__alignOverlayPosition.bind(this));
 
       const container = this._container;
       container.addEventListener('click', this.__onButtonClick.bind(this));
@@ -200,30 +199,6 @@ export const InteractionsMixin = (superClass) =>
     /** @private */
     get _subMenu() {
       return this.shadowRoot.querySelector('vaadin-menu-bar-submenu');
-    }
-
-    /** @private */
-    __alignOverlayPosition(e) {
-      /* c8 ignore next */
-      if (!this._expandedButton) {
-        // When `openOnHover` is true, quickly moving cursor can close submenu,
-        // so by the time when event listener gets executed button is null.
-        // See https://github.com/vaadin/vaadin-menu-bar/issues/85
-        return;
-      }
-      const overlay = e.target;
-      const { width, height, left } = this._expandedButton.getBoundingClientRect();
-      if (overlay.hasAttribute('bottom-aligned')) {
-        overlay.style.bottom = `${parseInt(getComputedStyle(overlay).bottom) + height}px`;
-      }
-      const endAligned = overlay.hasAttribute('end-aligned');
-      if (endAligned) {
-        if (this.__isRTL) {
-          overlay.style.left = `${left}px`;
-        } else {
-          overlay.style.right = `${parseInt(getComputedStyle(overlay).right) - width}px`;
-        }
-      }
     }
 
     /** @private */
