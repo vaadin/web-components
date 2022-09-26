@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-themable-mixin",
-  "version": "23.2.1",
+  "version": "23.2.2",
   "publishConfig": {
     "access": "public"
   },
