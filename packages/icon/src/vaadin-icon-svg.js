@@ -3,7 +3,7 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { nothing, render, svg } from 'lit-html/lit-html.js';
+import { nothing, render, svg } from 'lit-html';
 import { isTemplateResult, TemplateResultType } from 'lit/directive-helpers.js';
 import { unsafeSVG } from 'lit/directives/unsafe-svg.js';
 
