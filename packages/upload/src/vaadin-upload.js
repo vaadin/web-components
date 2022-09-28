@@ -99,7 +99,7 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
           <slot name="drop-label-icon">
             <div part="drop-label-icon"></div>
           </slot>
-          <slot name="drop-label" id="dropLabel"> [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]] </slot>
+          <slot name="drop-label" id="dropLabel"> [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]]</slot>
         </div>
       </div>
       <slot name="file-list">
@@ -780,7 +780,10 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
       return;
     }
     const fileExt = file.name.match(/\.[^.]*$|$/)[0];
-    const re = new RegExp(`^(${this.accept.replace(/[, ]+/g, '|').replace(/\/\*/g, '/.*')})$`, 'i');
+    // Escape regex operators common to mime types
+    const escapedAccept = this.accept.replace(/[+.]/g, '\\$&');
+    // Create accept regex that can match comma separated patterns, star (*) wildcards
+    const re = new RegExp(`^(${escapedAccept.replace(/[, ]+/g, '|').replace(/\/\*/g, '/.*')})$`, 'i');
     if (this.accept && !(re.test(file.type) || re.test(fileExt))) {
       this.dispatchEvent(
         new CustomEvent('file-reject', {
