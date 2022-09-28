@@ -35,6 +35,7 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/checkbox": "^22.0.19",
     "@vaadin/component-base": "^22.0.19",
+    "@vaadin/field-base": "^22.0.19",
     "@vaadin/vaadin-lumo-styles": "^22.0.19",
     "@vaadin/vaadin-material-styles": "^22.0.19",
     "@vaadin/vaadin-themable-mixin": "^22.0.19"
