@@ -268,5 +268,19 @@ describe('file list', () => {
       upload._addFiles([file]);
       expect(upload.files.length).to.equal(1);
     });
+
+    it('should allow files when using regex operators in accept string', () => {
+      file = createFile(testFileSize, 'image/svg+xml');
+      upload.accept = 'image/svg+xml';
+      upload._addFiles([file]);
+      expect(upload.files.length).to.equal(1);
+    });
+
+    it('should reject files when accept contains regex single character wildcard and file type is not an exact match', () => {
+      file = createFile(testFileSize, 'application/vndxms-excel');
+      upload.accept = 'application/vnd.ms-excel';
+      upload._addFiles([file]);
+      expect(upload.files.length).to.equal(0);
+    });
   });
 });
