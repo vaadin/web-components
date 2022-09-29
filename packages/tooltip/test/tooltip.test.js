@@ -649,6 +649,13 @@ describe('vaadin-tooltip', () => {
       document.body.append(tooltip);
       expect(overlay.opened).to.be.true;
     });
+
+    it('should remain open when moved to another container', () => {
+      tooltip.opened = true;
+
+      document.body.append(tooltip);
+      expect(overlay.opened).to.be.true;
+    });
   });
 });
 
