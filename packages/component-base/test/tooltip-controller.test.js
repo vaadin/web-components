@@ -70,13 +70,12 @@ describe('TooltipController', () => {
       expect(tooltip.shouldShow).to.be.eql(shouldShow);
     });
 
-    it('should update tooltip position using controller setPosition method', () => {
+    it('should update tooltip _position using controller setPosition method', () => {
       controller.setPosition('top-start');
-      expect(tooltip.position).to.eql('top-start');
+      expect(tooltip._position).to.eql('top-start');
     });
 
-    it('should not override position attribute using controller setPosition method', () => {
-      tooltip.setAttribute('position', 'end');
+    it('should not set position property using controller setPosition method', () => {
       controller.setPosition('top-start');
       expect(tooltip.position).to.not.eql('top-start');
     });
@@ -156,13 +155,13 @@ describe('TooltipController', () => {
       expect(tooltip.shouldShow).to.be.eql(shouldShow);
     });
 
-    it('should update lazy tooltip position using controller setPosition method', async () => {
+    it('should update lazy tooltip _position using controller setPosition method', async () => {
       controller.setPosition('top-start');
 
       host.appendChild(tooltip);
       await nextFrame();
 
-      expect(tooltip.position).to.eql('top-start');
+      expect(tooltip._position).to.eql('top-start');
     });
   });
 });

@@ -39,7 +39,7 @@ export class TooltipController extends SlotController {
     }
 
     if (this.position !== undefined) {
-      this.__updatePosition(tooltipNode, this.position);
+      tooltipNode._position = this.position;
     }
 
     if (this.shouldShow !== undefined) {
@@ -87,13 +87,18 @@ export class TooltipController extends SlotController {
   }
 
   /**
-   * Set position on the slotted tooltip.
+   * Set default position for the slotted tooltip.
+   * This can be overridden by setting the position
+   * using corresponding property or attribute.
    * @param {string} position
    */
   setPosition(position) {
     this.position = position;
 
-    this.__updatePosition(this.node, position);
+    const tooltipNode = this.node;
+    if (tooltipNode) {
+      tooltipNode._position = position;
+    }
   }
 
   /**
@@ -120,13 +125,6 @@ export class TooltipController extends SlotController {
     const tooltipNode = this.node;
     if (tooltipNode) {
       tooltipNode.target = target;
-    }
-  }
-
-  /** @private */
-  __updatePosition(node, position) {
-    if (node && !node.hasAttribute('position')) {
-      node.position = position;
     }
   }
 }

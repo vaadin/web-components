@@ -92,8 +92,8 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
       expect(tooltip.target).to.equal(target);
     });
 
-    it('should set tooltip position', () => {
-      expect(tooltip.position).to.equal(position || 'bottom');
+    it('should set tooltip overlay position', () => {
+      expect(tooltipOverlay.position).to.equal(position || 'bottom');
     });
 
     it('should or should not show tooltip', () => {
