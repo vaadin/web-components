@@ -634,6 +634,21 @@ describe('vaadin-tooltip', () => {
       tooltip.opened = false;
       expect(overlay.opened).to.be.false;
     });
+
+    it('should close overlay when disconnected', () => {
+      tooltip.opened = true;
+
+      tooltip.remove();
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should re-open overlay when reconnected', () => {
+      tooltip.opened = true;
+
+      tooltip.remove();
+      document.body.append(tooltip);
+      expect(overlay.opened).to.be.true;
+    });
   });
 });
 
