@@ -1,5 +1,6 @@
 import { fire, fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
+import '@vaadin/vaadin-lumo-styles/test/autoload.js';
 import '../../not-animated-styles.js';
 import '../../../theme/lumo/vaadin-tooltip.js';
 
@@ -35,6 +36,17 @@ describe('tooltip', () => {
       element.position = position;
       fire(target, 'mouseenter');
       await visualDiff(div, position);
+    });
+  });
+
+  describe('dark', () => {
+    before(() => {
+      document.documentElement.setAttribute('theme', 'dark');
+    });
+
+    it('theme-dark', async () => {
+      fire(target, 'mouseenter');
+      await visualDiff(div, 'theme-dark');
     });
   });
 });

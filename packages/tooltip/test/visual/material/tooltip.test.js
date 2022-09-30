@@ -2,6 +2,7 @@ import { fire, fixtureSync } from '@vaadin/testing-helpers';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '../../not-animated-styles.js';
 import '../../../theme/material/vaadin-tooltip.js';
+import { colorDark } from '@vaadin/vaadin-material-styles/color.js';
 
 describe('tooltip', () => {
   let div, target, element;
@@ -35,6 +36,20 @@ describe('tooltip', () => {
       element.position = position;
       fire(target, 'mouseenter');
       await visualDiff(div, position);
+    });
+  });
+
+  describe('dark', () => {
+    before(() => {
+      const style = document.createElement('style');
+      style.innerHTML = `${colorDark.toString().replace(':host', 'html')}`;
+      document.head.appendChild(style);
+      document.documentElement.setAttribute('theme', 'dark');
+    });
+
+    it('theme-dark', async () => {
+      fire(target, 'mouseenter');
+      await visualDiff(div, 'theme-dark');
     });
   });
 });

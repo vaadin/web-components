@@ -12,8 +12,8 @@ const tooltipOverlay = css`
   }
 
   [part='overlay'] {
-    background-color: var(--lumo-contrast);
-    color: var(--lumo-primary-contrast-color);
+    background: var(--lumo-base-color), linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+    color: var(--lumo-body-text-color);
     font-size: var(--lumo-font-size-xs);
   }
 
