@@ -84,11 +84,11 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         theme$="[[_theme]]"
         opened="[[__computeOpened(manual, opened, _autoOpened, _isConnected)]]"
         position-target="[[target]]"
-        position="[[position]]"
-        no-horizontal-overlap$="[[__computeNoHorizontalOverlap(position)]]"
-        no-vertical-overlap$="[[__computeNoVerticalOverlap(position)]]"
-        horizontal-align="[[__computeHorizontalAlign(position)]]"
-        vertical-align="[[__computeVerticalAlign(position)]]"
+        position="[[__effectivePosition]]"
+        no-horizontal-overlap$="[[__computeNoHorizontalOverlap(__effectivePosition)]]"
+        no-vertical-overlap$="[[__computeNoVerticalOverlap(__effectivePosition)]]"
+        horizontal-align="[[__computeHorizontalAlign(__effectivePosition)]]"
+        vertical-align="[[__computeVerticalAlign(__effectivePosition)]]"
         on-mouseleave="__onOverlayMouseLeave"
         modeless
       ></vaadin-tooltip-overlay>
@@ -173,7 +173,6 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
        */
       position: {
         type: String,
-        value: 'bottom',
       },
 
       /**
@@ -226,6 +225,21 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       _autoOpened: {
         type: Boolean,
         observer: '__autoOpenedChanged',
+      },
+
+      /**
+       * Default value used when `position` property is not set.
+       * @protected
+       */
+      _position: {
+        type: String,
+        value: 'bottom',
+      },
+
+      /** @private */
+      __effectivePosition: {
+        type: String,
+        computed: '__computePosition(position, _position)',
       },
 
       /** @protected */
@@ -339,6 +353,11 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   /** @private */
   __computeOpened(manual, opened, autoOpened, connected) {
     return connected && (manual ? opened : autoOpened);
+  }
+
+  /** @private */
+  __computePosition(position, defaultPosition) {
+    return position || defaultPosition;
   }
 
   /** @private */

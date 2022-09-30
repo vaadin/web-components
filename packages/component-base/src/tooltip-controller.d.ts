@@ -67,7 +67,9 @@ export class TooltipController extends SlotController {
   setOpened(opened: boolean): void;
 
   /**
-   * Set position on the slotted tooltip.
+   * Set default position for the slotted tooltip.
+   * This can be overridden by setting the position
+   * using corresponding property or attribute.
    */
   setPosition(position: TooltipPosition): void;
 

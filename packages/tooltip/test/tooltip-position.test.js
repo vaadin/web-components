@@ -84,6 +84,16 @@ describe('position', () => {
     expect(overlayRect.top).to.be.equal(targetRect.top + offset);
   }
 
+  describe('default', () => {
+    it('should not set position property value by default', () => {
+      expect(tooltip.position).to.be.undefined;
+    });
+
+    it('should set overlay position to bottom by default', () => {
+      expect(overlay.position).to.be.equal('bottom');
+    });
+  });
+
   describe('top-start', () => {
     beforeEach(() => {
       tooltip.position = 'top-start';
