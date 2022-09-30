@@ -148,38 +148,35 @@ describe('column auto-width', () => {
     await recalculateWidths();
     expectColumnWidthsToBeOk(columns);
   });
+});
 
-  it('should recalculate tree column width correctly', async () => {
-    // Add a tree column to the grid
-    const treeColumn = fixtureSync(
-      `<vaadin-grid-tree-column path="id" auto-width flex-grow="0" resizable></vaadin-grid-tree-column>`,
-    );
-    grid.insertBefore(treeColumn, columns[0]);
+describe('tree column', () => {
+  let grid;
 
-    // Expand two levels of the tree
-    grid.itemIdPath = 'id';
-    grid.expandedItems = [{ id: 'item-0' }, { id: 'item-0-0' }];
+  beforeEach(() => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-tree-column auto-width path="name" flex-grow="0"></vaadin-grid-tree-column>
+      </vaadin-grid>
+    `);
 
-    // Assign a hierarchical data provider to the grid
-    grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
-      cb(
-        [...Array(Math.min(5, pageSize))].map((_, i) => {
-          const indexInLevel = page * pageSize + i;
-
-          return {
-            id: `${parentItem ? `${parentItem.id}-` : 'item-'}${`${indexInLevel}`}`,
-            children: true,
-          };
-        }),
-        1,
-      );
-    };
-
+    const data = [
+      {
+        name: 'a',
+        children: [
+          {
+            name: 'b',
+          },
+        ],
+      },
+    ];
+    grid.dataProvider = (params, cb) => cb(params.parentItem ? params.parentItem.children : data, 1);
+    grid.expandItem(data[0]);
     flushGrid(grid);
-    await nextFrame();
-    await recalculateWidths();
+  });
 
-    expect(parseInt(treeColumn.width)).to.be.closeTo(211, 5);
+  it('should recalculate tree column width correctly', () => {
+    expect(parseInt(grid.firstElementChild.width)).to.be.closeTo(107, 5);
   });
 });
 
