@@ -82,7 +82,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         role="tooltip"
         renderer="[[_renderer]]"
         theme$="[[_theme]]"
-        opened="[[__computeOpened(manual, opened, _autoOpened)]]"
+        opened="[[__computeOpened(manual, opened, _autoOpened, _isConnected)]]"
         position-target="[[target]]"
         position="[[position]]"
         no-horizontal-overlap$="[[__computeNoHorizontalOverlap(position)]]"
@@ -236,6 +236,11 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
         type: Boolean,
         value: false,
       },
+
+      /** @private */
+      _isConnected: {
+        type: Boolean,
+      },
     };
   }
 
@@ -295,12 +300,20 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @protected */
+  connectedCallback() {
+    super.connectedCallback();
+
+    this._isConnected = true;
+  }
+
+  /** @protected */
   disconnectedCallback() {
     super.disconnectedCallback();
 
     if (this._autoOpened) {
       this._close(true);
     }
+    this._isConnected = false;
   }
 
   /** @private */
@@ -324,8 +337,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   }
 
   /** @private */
-  __computeOpened(manual, opened, autoOpened) {
-    return manual ? opened : autoOpened;
+  __computeOpened(manual, opened, autoOpened, connected) {
+    return connected && (manual ? opened : autoOpened);
   }
 
   /** @private */
