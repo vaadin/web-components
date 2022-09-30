@@ -148,6 +148,36 @@ describe('column auto-width', () => {
     await recalculateWidths();
     expectColumnWidthsToBeOk(columns);
   });
+
+  it('should recalculate tree column width correctly', async () => {
+    // Add a tree column to the grid
+    const treeColumn = fixtureSync(
+      `<vaadin-grid-tree-column path="id" auto-width flex-grow="0" resizable></vaadin-grid-tree-column>`,
+    );
+    grid.insertBefore(treeColumn, columns[0]);
+
+    // Expand two levels of the tree
+    grid.itemIdPath = 'id';
+    grid.expandedItems = [{ id: 'item-0' }, { id: 'item-0-0' }];
+
+    // Assign a hierarchical data provider to the grid
+    grid.dataProvider = ({ parentItem, page, pageSize }, cb) => {
+      cb(
+        [...Array(Math.min(5, pageSize))].map((_, i) => {
+          const indexInLevel = page * pageSize + i;
+
+          return {
+            id: `${parentItem ? `${parentItem.id}-` : 'item-'}${`${indexInLevel}`}`,
+            children: true,
+          };
+        }),
+        1,
+      );
+    };
+    await nextFrame();
+
+    expect(parseInt(treeColumn.width)).to.be.closeTo(211, 5);
+  });
 });
 
 describe('async recalculateWidth columns', () => {
