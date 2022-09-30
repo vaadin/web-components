@@ -174,6 +174,8 @@ describe('column auto-width', () => {
         1,
       );
     };
+
+    await recalculateWidths();
     await nextFrame();
 
     expect(parseInt(treeColumn.width)).to.be.closeTo(211, 5);
