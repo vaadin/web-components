@@ -175,8 +175,9 @@ describe('column auto-width', () => {
       );
     };
 
-    await recalculateWidths();
+    flushGrid(grid);
     await nextFrame();
+    await recalculateWidths();
 
     expect(parseInt(treeColumn.width)).to.be.closeTo(211, 5);
   });
