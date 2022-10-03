@@ -10,7 +10,7 @@ registerStyles(
       --vaadin-grid-tree-toggle-level-offset: 2em;
       align-items: center;
       vertical-align: middle;
-      margin-left: calc(var(--lumo-space-s) * -1);
+      transform: translateX(calc(var(--lumo-space-s) * -1));
       -webkit-tap-highlight-color: transparent;
     }
 
