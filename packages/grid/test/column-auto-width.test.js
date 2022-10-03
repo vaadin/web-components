@@ -150,6 +150,36 @@ describe('column auto-width', () => {
   });
 });
 
+describe('tree column', () => {
+  let grid;
+
+  beforeEach(() => {
+    grid = fixtureSync(`
+      <vaadin-grid>
+        <vaadin-grid-tree-column auto-width path="name" flex-grow="0"></vaadin-grid-tree-column>
+      </vaadin-grid>
+    `);
+
+    const data = [
+      {
+        name: 'a',
+        children: [
+          {
+            name: 'b',
+          },
+        ],
+      },
+    ];
+    grid.dataProvider = (params, cb) => cb(params.parentItem ? params.parentItem.children : data, 1);
+    grid.expandItem(data[0]);
+    flushGrid(grid);
+  });
+
+  it('should recalculate tree column width correctly', () => {
+    expect(parseInt(grid.firstElementChild.width)).to.be.closeTo(107, 5);
+  });
+});
+
 describe('async recalculateWidth columns', () => {
   let grid;
 
