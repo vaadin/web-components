@@ -400,7 +400,7 @@ describe('basic features', () => {
     it('should notify i18n mutation to children', () => {
       const monthCalendar = overlayContent.$.monthScroller.querySelector('vaadin-month-calendar');
       const weekdays = monthCalendar.$.monthGrid.querySelectorAll('[part="weekday"]:not(:empty)');
-      const weekdayTitles = Array.prototype.map.call(weekdays, (weekday) => weekday.textContent);
+      const weekdayTitles = Array.prototype.map.call(weekdays, (weekday) => weekday.textContent.trim());
       expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
     });
 
