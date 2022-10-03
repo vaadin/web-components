@@ -111,7 +111,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
       /**
        * The delay in milliseconds before the tooltip
-       * is opened on focus, when not in manual mode.
+       * is opened on keyboard focus, when not in manual mode.
        * @attr {number} focus-delay
        */
       focusDelay: {
