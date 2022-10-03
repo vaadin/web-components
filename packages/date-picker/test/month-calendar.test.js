@@ -40,7 +40,7 @@ describe('vaadin-month-calendar', () => {
 
   it('should render days in correct order by default', () => {
     const weekdays = monthCalendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)');
-    const weekdayTitles = Array.from(weekdays).map((weekday) => weekday.textContent);
+    const weekdayTitles = Array.from(weekdays).map((weekday) => weekday.textContent.trim());
     expect(weekdayTitles).to.eql(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
   });
 
@@ -48,7 +48,7 @@ describe('vaadin-month-calendar', () => {
     monthCalendar.set('i18n.firstDayOfWeek', 1); // Start from Monday.
     await aTimeout();
     const weekdays = monthCalendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)');
-    const weekdayTitles = Array.from(weekdays).map((weekday) => weekday.textContent);
+    const weekdayTitles = Array.from(weekdays).map((weekday) => weekday.textContent.trim());
     expect(weekdayTitles).to.eql(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);
   });
 
@@ -170,7 +170,7 @@ describe('vaadin-month-calendar', () => {
 
     it('should render weekdays in correct locale', () => {
       const weekdays = monthCalendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)');
-      const weekdayTitles = Array.from(weekdays).map((weekday) => weekday.textContent);
+      const weekdayTitles = Array.from(weekdays).map((weekday) => weekday.textContent.trim());
       expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
     });
 
