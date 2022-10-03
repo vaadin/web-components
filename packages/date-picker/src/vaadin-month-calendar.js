@@ -80,7 +80,9 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
               is="dom-repeat"
               items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]"
             >
-              <th role="columnheader" part="weekday" scope="col" abbr$="[[item.weekDay]]">[[item.weekDayShort]]</th>
+              <th role="columnheader" part="weekday" scope="col" abbr$="[[item.weekDay]]" aria-hidden="true">
+                [[item.weekDayShort]]
+              </th>
             </template>
           </tr>
         </thead>

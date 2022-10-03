@@ -64,6 +64,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </th>
       <th
         abbr="Sunday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -72,6 +73,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </th>
       <th
         abbr="Monday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -80,6 +82,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </th>
       <th
         abbr="Tuesday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -88,6 +91,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </th>
       <th
         abbr="Wednesday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -96,6 +100,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </th>
       <th
         abbr="Thursday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -104,6 +109,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </th>
       <th
         abbr="Friday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -112,6 +118,7 @@ snapshots["vaadin-month-calendar shadow default"] =
       </th>
       <th
         abbr="Saturday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -467,6 +474,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </th>
       <th
         abbr="Sunday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -475,6 +483,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </th>
       <th
         abbr="Monday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -483,6 +492,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </th>
       <th
         abbr="Tuesday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -491,6 +501,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </th>
       <th
         abbr="Wednesday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -499,6 +510,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </th>
       <th
         abbr="Thursday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -507,6 +519,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </th>
       <th
         abbr="Friday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -515,6 +528,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
       </th>
       <th
         abbr="Saturday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -907,6 +921,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </th>
       <th
         abbr="Monday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -915,6 +930,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </th>
       <th
         abbr="Tuesday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -923,6 +939,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </th>
       <th
         abbr="Wednesday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -931,6 +948,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </th>
       <th
         abbr="Thursday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -939,6 +957,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </th>
       <th
         abbr="Friday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -947,6 +966,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </th>
       <th
         abbr="Saturday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
@@ -955,6 +975,7 @@ snapshots["vaadin-month-calendar shadow week numbers"] =
       </th>
       <th
         abbr="Sunday"
+        aria-hidden="true"
         part="weekday"
         role="columnheader"
         scope="col"
