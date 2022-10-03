@@ -124,13 +124,11 @@ class DateTimePicker extends FieldMixin(
         }
 
         .slots ::slotted([slot='date-picker']) {
-          pointer-events: all;
           min-width: 0;
           flex: 1 1 auto;
         }
 
         .slots ::slotted([slot='time-picker']) {
-          pointer-events: all;
           min-width: 0;
           flex: 1 1.65 auto;
         }
