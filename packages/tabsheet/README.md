@@ -2,7 +2,7 @@
 
 A web component for organizing and grouping content into sections.
 
-[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/tabsheet)
+[Documentation + Live Demo ↗](https://vaadin.com/docs/latest/components/tabs/#tab-sheet)
 
 [![npm version](https://badgen.net/npm/v/@vaadin/tabsheet)](https://www.npmjs.com/package/@vaadin/tabsheet)
 [![Discord](https://img.shields.io/discord/732335336448852018?label=discord)](https://discord.gg/PHmkCKC)
@@ -21,7 +21,7 @@ A web component for organizing and grouping content into sections.
 </vaadin-tabsheet>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/tabsheet/screenshot.png" width="735" alt="Screenshot of vaadin-tabsheet">](https://vaadin.com/docs/latest/components/tabsheet)
+[<img src="https://raw.githubusercontent.com/vaadin/web-components/master/packages/tabsheet/screenshot.png" width="735" alt="Screenshot of vaadin-tabsheet">](https://vaadin.com/docs/latest/components/tabs/#tab-sheet)
 
 ## Installation
 
