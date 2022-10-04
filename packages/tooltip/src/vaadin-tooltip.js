@@ -24,6 +24,174 @@ let warmUpTimeout = null;
 let cooldownTimeout = null;
 
 /**
+ * Controller for handling tooltip opened state.
+ */
+class TooltipStateController {
+  constructor(host) {
+    this.host = host;
+  }
+
+  /**
+   * Schedule opening the tooltip.
+   * @param {Object} options
+   */
+  open(options = { immediate: false }) {
+    const { immediate, hover, focus } = options;
+    const isHover = hover && this.hoverDelay > 0;
+    const isFocus = focus && this.focusDelay > 0;
+
+    if (!immediate && (isHover || isFocus) && !this.__closeTimeout) {
+      this.__warmupTooltip(isFocus);
+    } else {
+      this.__showTooltip();
+    }
+  }
+
+  /**
+   * Schedule closing the tooltip.
+   * @param {boolean} immediate
+   */
+  close(immediate) {
+    if (!immediate && this.hideDelay > 0) {
+      this.__scheduleClose();
+    } else {
+      this.__abortClose();
+      this._setOpened(false);
+    }
+
+    this.__abortWarmUp();
+
+    if (warmedUp) {
+      // Re-start cooldown timer on each tooltip closing.
+      this.__abortCooldown();
+      this.__scheduleCooldown();
+    }
+  }
+
+  /** @private */
+  get openedProp() {
+    return this.host.manual ? 'opened' : '_autoOpened';
+  }
+
+  /** @private */
+  get focusDelay() {
+    const tooltip = this.host;
+    return tooltip.focusDelay != null && tooltip.focusDelay > 0 ? tooltip.focusDelay : defaultFocusDelay;
+  }
+
+  /** @private */
+  get hoverDelay() {
+    const tooltip = this.host;
+    return tooltip.hoverDelay != null && tooltip.hoverDelay > 0 ? tooltip.hoverDelay : defaultHoverDelay;
+  }
+
+  /** @private */
+  get hideDelay() {
+    const tooltip = this.host;
+    return tooltip.hideDelay != null && tooltip.hideDelay > 0 ? tooltip.hideDelay : defaultHideDelay;
+  }
+
+  /** @private */
+  _isOpened() {
+    return this.host[this.openedProp];
+  }
+
+  /** @private */
+  _setOpened(opened) {
+    this.host[this.openedProp] = opened;
+  }
+
+  /** @private */
+  __flushClosingTooltips() {
+    closing.forEach((tooltip) => {
+      tooltip._stateController.close(true);
+      closing.delete(tooltip);
+    });
+  }
+
+  /** @private */
+  __showTooltip() {
+    this.__abortClose();
+    this.__flushClosingTooltips();
+
+    this._setOpened(true);
+    warmedUp = true;
+
+    // Abort previously scheduled timers.
+    this.__abortWarmUp();
+    this.__abortCooldown();
+  }
+
+  /** @private */
+  __warmupTooltip(isFocus) {
+    if (!this._isOpened()) {
+      // First tooltip is opened, warm up.
+      if (!warmedUp) {
+        this.__scheduleWarmUp(isFocus);
+      } else {
+        // Warmed up, show another tooltip.
+        this.__showTooltip();
+      }
+    }
+  }
+
+  /** @private */
+  __abortClose() {
+    if (this.__closeTimeout) {
+      clearTimeout(this.__closeTimeout);
+      this.__closeTimeout = null;
+    }
+  }
+
+  /** @private */
+  __abortCooldown() {
+    if (cooldownTimeout) {
+      clearTimeout(cooldownTimeout);
+      cooldownTimeout = null;
+    }
+  }
+
+  /** @private */
+  __abortWarmUp() {
+    if (warmUpTimeout) {
+      clearTimeout(warmUpTimeout);
+      warmUpTimeout = null;
+    }
+  }
+
+  /** @private */
+  __scheduleClose() {
+    if (this._isOpened()) {
+      closing.add(this.host);
+
+      this.__closeTimeout = setTimeout(() => {
+        closing.delete(this.host);
+        this.__closeTimeout = null;
+        this._setOpened(false);
+      }, this.hideDelay);
+    }
+  }
+
+  /** @private */
+  __scheduleCooldown() {
+    cooldownTimeout = setTimeout(() => {
+      cooldownTimeout = null;
+      warmedUp = false;
+    }, this.hideDelay);
+  }
+
+  /** @private */
+  __scheduleWarmUp(isFocus) {
+    const delay = isFocus ? this.focusDelay : this.hoverDelay;
+    warmUpTimeout = setTimeout(() => {
+      warmUpTimeout = null;
+      warmedUp = true;
+      this.__showTooltip();
+    }, delay);
+  }
+}
+
+/**
  * `<vaadin-tooltip>` is a Web Component for creating tooltips.
  *
  * ```html
@@ -311,6 +479,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       },
       { threshold: 1 },
     );
+
+    this._stateController = new TooltipStateController(this);
   }
 
   /** @protected */
@@ -325,7 +495,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     super.disconnectedCallback();
 
     if (this._autoOpened) {
-      this._close(true);
+      this._stateController.close(true);
     }
     this._isConnected = false;
   }
@@ -440,7 +610,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__focusInside = true;
 
     if (!this.__isTargetHidden && (!this.__hoverInside || !this._autoOpened)) {
-      this._open({ focus: true });
+      this._stateController.open({ focus: true });
     }
   }
 
@@ -458,7 +628,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__focusInside = false;
 
     if (!this.__hoverInside) {
-      this._close(true);
+      this._stateController.close(true);
     }
   }
 
@@ -466,13 +636,13 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
   __onKeyDown(event) {
     if (event.key === 'Escape') {
       event.stopPropagation();
-      this._close(true);
+      this._stateController.close(true);
     }
   }
 
   /** @private */
   __onMouseDown() {
-    this._close(true);
+    this._stateController.close(true);
   }
 
   /** @private */
@@ -493,7 +663,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__hoverInside = true;
 
     if (!this.__isTargetHidden && (!this.__focusInside || !this._autoOpened)) {
-      this._open({ hover: true });
+      this._stateController.open({ hover: true });
     }
   }
 
@@ -520,7 +690,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__hoverInside = false;
 
     if (!this.__focusInside) {
-      this._close();
+      this._stateController.close();
     }
   }
 
@@ -531,13 +701,13 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
     // Open the overlay when the target becomes visible and has focus or hover.
     if (oldHidden && isVisible && (this.__focusInside || this.__hoverInside)) {
-      this._open(true);
+      this._stateController.open({ immediate: true });
       return;
     }
 
     // Close the overlay when the target is no longer fully visible.
     if (!isVisible && this._autoOpened) {
-      this._close(true);
+      this._stateController.close(true);
     }
   }
 
@@ -548,149 +718,6 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     }
 
     return true;
-  }
-
-  /**
-   * Schedule opening the tooltip.
-   * @param {boolean} immediate
-   * @protected
-   */
-  _open(options = { immediate: false }) {
-    const { immediate, hover, focus } = options;
-    const isHover = hover && this.__getHoverDelay() > 0;
-    const isFocus = focus && this.__getFocusDelay() > 0;
-
-    if (!immediate && (isHover || isFocus) && !this.__closeTimeout) {
-      this.__warmupTooltip(isFocus);
-    } else {
-      this.__showTooltip();
-    }
-  }
-
-  /**
-   * Schedule closing the tooltip.
-   * @param {boolean} immediate
-   * @protected
-   */
-  _close(immediate) {
-    if (!immediate && this.__getHideDelay() > 0) {
-      this.__scheduleClose();
-    } else {
-      this.__abortClose();
-      this._autoOpened = false;
-    }
-
-    this.__abortWarmUp();
-
-    if (warmedUp) {
-      // Re-start cooldown timer on each tooltip closing.
-      this.__abortCooldown();
-      this.__scheduleCooldown();
-    }
-  }
-
-  /** @private */
-  __getFocusDelay() {
-    return this.focusDelay != null && this.focusDelay > 0 ? this.focusDelay : defaultFocusDelay;
-  }
-
-  /** @private */
-  __getHoverDelay() {
-    return this.hoverDelay != null && this.hoverDelay > 0 ? this.hoverDelay : defaultHoverDelay;
-  }
-
-  /** @private */
-  __getHideDelay() {
-    return this.hideDelay != null && this.hideDelay > 0 ? this.hideDelay : defaultHideDelay;
-  }
-
-  /** @private */
-  __flushClosingTooltips() {
-    closing.forEach((tooltip) => {
-      tooltip._close(true);
-      closing.delete(tooltip);
-    });
-  }
-
-  /** @private */
-  __showTooltip() {
-    this.__abortClose();
-    this.__flushClosingTooltips();
-
-    this._autoOpened = true;
-    warmedUp = true;
-
-    // Abort previously scheduled timers.
-    this.__abortWarmUp();
-    this.__abortCooldown();
-  }
-
-  /** @private */
-  __warmupTooltip(isFocus) {
-    if (!this._autoOpened) {
-      // First tooltip is opened, warm up.
-      if (!warmedUp) {
-        this.__scheduleWarmUp(isFocus);
-      } else {
-        // Warmed up, show another tooltip.
-        this.__showTooltip();
-      }
-    }
-  }
-
-  /** @private */
-  __abortClose() {
-    if (this.__closeTimeout) {
-      clearTimeout(this.__closeTimeout);
-      this.__closeTimeout = null;
-    }
-  }
-
-  /** @private */
-  __abortCooldown() {
-    if (cooldownTimeout) {
-      clearTimeout(cooldownTimeout);
-      cooldownTimeout = null;
-    }
-  }
-
-  /** @private */
-  __abortWarmUp() {
-    if (warmUpTimeout) {
-      clearTimeout(warmUpTimeout);
-      warmUpTimeout = null;
-    }
-  }
-
-  /** @private */
-  __scheduleClose() {
-    if (this._autoOpened) {
-      closing.add(this);
-
-      this.__closeTimeout = setTimeout(() => {
-        closing.delete(this);
-        this.__closeTimeout = null;
-        this._autoOpened = false;
-      }, this.__getHideDelay());
-    }
-  }
-
-  /** @private */
-  __scheduleCooldown() {
-    cooldownTimeout = setTimeout(() => {
-      cooldownTimeout = null;
-      warmedUp = false;
-    }, this.__getHideDelay());
-  }
-
-  /** @private */
-  __scheduleWarmUp(isFocus) {
-    const delay = isFocus ? this.__getFocusDelay() : this.__getHoverDelay();
-    warmUpTimeout = setTimeout(() => {
-      warmUpTimeout = null;
-      warmedUp = true;
-      this.__showTooltip();
-    }, delay);
   }
 
   /** @private */
