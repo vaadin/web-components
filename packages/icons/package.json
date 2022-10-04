@@ -25,7 +25,8 @@
   "files": [
     "iconset.js",
     "vaadin-icons.js",
-    "vaadin-iconset.js"
+    "vaadin-iconset.js",
+    "assets/**/*"
   ],
   "keywords": [
     "Vaadin",
