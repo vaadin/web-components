@@ -23,6 +23,7 @@
     "icons": "gulp icons --gulpfile gulpfile.cjs"
   },
   "files": [
+    "assets/**/*",
     "iconset.js",
     "vaadin-icons.js",
     "vaadin-iconset.js"
