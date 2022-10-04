@@ -587,7 +587,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
 
       if (key === 'Escape') {
-        this._hideTooltip();
+        this._hideTooltip(true);
       }
     }
 

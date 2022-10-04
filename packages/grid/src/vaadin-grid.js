@@ -400,7 +400,7 @@ class Grid extends ElementMixin(
   disconnectedCallback() {
     super.disconnectedCallback();
     this.isAttached = false;
-    this._hideTooltip();
+    this._hideTooltip(true);
   }
 
   /** @private */
@@ -683,7 +683,7 @@ class Grid extends ElementMixin(
       });
 
       cell.addEventListener('mousedown', () => {
-        this._hideTooltip();
+        this._hideTooltip(true);
       });
     }
 
@@ -1016,16 +1016,25 @@ class Grid extends ElementMixin(
    */
   _showTooltip(event) {
     // Check if there is a slotted vaadin-tooltip element.
-    if (this._tooltipController.node && this._tooltipController.node.isConnected) {
+    const tooltip = this._tooltipController.node;
+    if (tooltip && tooltip.isConnected) {
       this._tooltipController.setTarget(event.target);
       this._tooltipController.setContext(this.getEventContext(event));
-      this._tooltipController.setOpened(true);
+
+      // Trigger opening using the corresponding delay.
+      tooltip._stateController.open({
+        focus: event.type === 'focusin',
+        hover: event.type === 'mouseenter',
+      });
     }
   }
 
   /** @protected */
-  _hideTooltip() {
-    this._tooltipController.setOpened(false);
+  _hideTooltip(immediate) {
+    const tooltip = this._tooltipController.node;
+    if (tooltip) {
+      tooltip._stateController.close(immediate);
+    }
   }
 
   /**
