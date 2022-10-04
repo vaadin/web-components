@@ -97,14 +97,14 @@ export const InteractionsMixin = (superClass) =>
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      this._hideTooltip();
+      this._hideTooltip(true);
     }
 
     /**
      * @param {HTMLElement} button
      * @protected
      */
-    _showTooltip(button) {
+    _showTooltip(button, isHover) {
       // Check if there is a slotted vaadin-tooltip element.
       const tooltip = this._tooltipController.node;
       if (tooltip && tooltip.isConnected) {
@@ -117,14 +117,22 @@ export const InteractionsMixin = (superClass) =>
         if (!this._subMenu.opened) {
           this._tooltipController.setTarget(button);
           this._tooltipController.setContext({ item: button.item });
-          this._tooltipController.setOpened(true);
+
+          // Trigger opening using the corresponding delay.
+          tooltip._stateController.open({
+            hover: isHover,
+            focus: !isHover,
+          });
         }
       }
     }
 
     /** @protected */
-    _hideTooltip() {
-      this._tooltipController.setOpened(false);
+    _hideTooltip(immediate) {
+      const tooltip = this._tooltipController.node;
+      if (tooltip) {
+        tooltip._stateController.close(immediate);
+      }
     }
 
     /** @protected */
@@ -246,7 +254,7 @@ export const InteractionsMixin = (superClass) =>
         this._close(true);
       }
 
-      this._hideTooltip();
+      this._hideTooltip(true);
     }
 
     /**
@@ -303,7 +311,7 @@ export const InteractionsMixin = (superClass) =>
         if (button === this._overflow || (this.openOnHover && button.item.children)) {
           this._hideTooltip();
         } else {
-          this._showTooltip(button);
+          this._showTooltip(button, true);
         }
       }
     }
@@ -373,7 +381,7 @@ export const InteractionsMixin = (superClass) =>
             },
           }),
         );
-        this._hideTooltip();
+        this._hideTooltip(true);
 
         this._setExpanded(button, true);
       });
