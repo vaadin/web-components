@@ -243,7 +243,7 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
    * will get automatically frozen as well. As this may sometimes be unintended, this method
    * shows a warning in the console in such cases.
    * @private
-   **/
+   */
   __scheduleAutoFreezeWarning(columns, frozenProp) {
     if (this._grid) {
       // Derive the attribute name from the property name
