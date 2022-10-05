@@ -262,10 +262,10 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
           animationFrame,
           () => {
             console.warn(
-              'WARNING: Joining frozen and non-frozen Grid columns inside the same column group! ' +
-                'This will automatically freeze all the joined columns to avoid rendering issues. ' +
-                'If this was intentional, consider marking each joined column explicitly as frozen / frozenToEnd. ' +
-                'Otherwise, exclude frozen columns from the joined group.',
+              `WARNING: Joining ${frozenProp} and non-${frozenProp} Grid columns inside the same column group! ` +
+                `This will automatically freeze all the joined columns to avoid rendering issues. ` +
+                `If this was intentional, consider marking each joined column explicitly as ${frozenProp}. ` +
+                `Otherwise, exclude the ${frozenProp} columns from the joined group.`,
             );
           },
         );
