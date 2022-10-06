@@ -99,6 +99,17 @@ describe('position mixin listeners', () => {
       scroll(scrollableAncestor);
       expect(updatePositionSpy.called).to.be.true;
     });
+
+    it('should not update position on scroll that occurs inside the overlay', async () => {
+      overlay.positionTarget = target;
+      // Wait for the overlay open to finish (invokes _updatePosition once)
+      await nextFrame();
+      updatePositionSpy.resetHistory();
+
+      // Scroll inside the overlay
+      scroll(overlay);
+      expect(updatePositionSpy.called).to.be.false;
+    });
   });
 
   describe('opened', () => {
