@@ -5,7 +5,8 @@
  */
 import { FlattenedNodesObserver } from '@polymer/polymer/lib/utils/flattened-nodes-observer.js';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { microTask } from '@vaadin/component-base/src/async.js';
+import { animationFrame, microTask } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ColumnBaseMixin } from './vaadin-grid-column.js';
 import { updateColumnOrders } from './vaadin-grid-helpers.js';
 
@@ -236,6 +237,42 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
     this._setFlexGrow(Array.prototype.reduce.call(this._visibleChildColumns, (prev, curr) => prev + curr.flexGrow, 0));
   }
 
+  /**
+   * This method is called before the group's frozen value is being propagated to the child columns.
+   * In case some of the child columns are frozen, while others are not, the non-frozen ones
+   * will get automatically frozen as well. As this may sometimes be unintended, this method
+   * shows a warning in the console in such cases.
+   * @private
+   */
+  __scheduleAutoFreezeWarning(columns, frozenProp) {
+    if (this._grid) {
+      // Derive the attribute name from the property name
+      const frozenAttr = frozenProp.replace(/([A-Z])/g, '-$1').toLowerCase();
+
+      // Check if all the columns have the same frozen value
+      const firstColumnFrozen = columns[0][frozenProp] || columns[0].hasAttribute(frozenAttr);
+      const allSameFrozen = columns.every((column) => {
+        return (column[frozenProp] || column.hasAttribute(frozenAttr)) === firstColumnFrozen;
+      });
+
+      if (!allSameFrozen) {
+        // Some of the child columns are frozen, some are not. Show a warning.
+        this._grid.__autoFreezeWarningDebouncer = Debouncer.debounce(
+          this._grid.__autoFreezeWarningDebouncer,
+          animationFrame,
+          () => {
+            console.warn(
+              `WARNING: Joining ${frozenProp} and non-${frozenProp} Grid columns inside the same column group! ` +
+                `This will automatically freeze all the joined columns to avoid rendering issues. ` +
+                `If this was intentional, consider marking each joined column explicitly as ${frozenProp}. ` +
+                `Otherwise, exclude the ${frozenProp} columns from the joined group.`,
+            );
+          },
+        );
+      }
+    }
+  }
+
   /** @private */
   _groupFrozenChanged(frozen, rootColumns) {
     if (rootColumns === undefined || frozen === undefined) {
@@ -244,6 +281,8 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
 
     // Don’t propagate the default `false` value.
     if (frozen !== false) {
+      this.__scheduleAutoFreezeWarning(rootColumns, 'frozen');
+
       Array.from(rootColumns).forEach((col) => {
         col.frozen = frozen;
       });
@@ -258,6 +297,8 @@ class GridColumnGroup extends ColumnBaseMixin(PolymerElement) {
 
     // Don’t propagate the default `false` value.
     if (frozenToEnd !== false) {
+      this.__scheduleAutoFreezeWarning(rootColumns, 'frozenToEnd');
+
       Array.from(rootColumns).forEach((col) => {
         col.frozenToEnd = frozenToEnd;
       });
