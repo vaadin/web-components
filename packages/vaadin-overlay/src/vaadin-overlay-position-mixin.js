@@ -98,6 +98,7 @@ export const PositionMixin = (superClass) =>
     constructor() {
       super();
 
+      this.__onScroll = this.__onScroll.bind(this);
       this._updatePosition = this._updatePosition.bind(this);
     }
 
@@ -122,7 +123,7 @@ export const PositionMixin = (superClass) =>
 
       this.__positionTargetAncestorRootNodes = getAncestorRootNodes(this.positionTarget);
       this.__positionTargetAncestorRootNodes.forEach((node) => {
-        node.addEventListener('scroll', this._updatePosition, true);
+        node.addEventListener('scroll', this.__onScroll, true);
       });
     }
 
@@ -132,7 +133,7 @@ export const PositionMixin = (superClass) =>
 
       if (this.__positionTargetAncestorRootNodes) {
         this.__positionTargetAncestorRootNodes.forEach((node) => {
-          node.removeEventListener('scroll', this._updatePosition, true);
+          node.removeEventListener('scroll', this.__onScroll, true);
         });
         this.__positionTargetAncestorRootNodes = null;
       }
@@ -175,6 +176,14 @@ export const PositionMixin = (superClass) =>
 
     __positionSettingsChanged() {
       this._updatePosition();
+    }
+
+    /** @private */
+    __onScroll(e) {
+      // If the scroll event occurred inside the overlay, ignore it.
+      if (!this.contains(e.target)) {
+        this._updatePosition();
+      }
     }
 
     _updatePosition() {
