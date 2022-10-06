@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
@@ -131,6 +132,14 @@ const fixtures = {
     </vaadin-grid>
   `,
 };
+
+beforeEach(() => {
+  sinon.stub(console, 'warn');
+});
+
+afterEach(() => {
+  console.warn.restore();
+});
 
 describe('column groups', () => {
   let grid, header, body, footer, headerRows, footerRows, bodyRows;
@@ -555,6 +564,170 @@ describe('column groups', () => {
       const col100 = grid.querySelector('#col100');
       await nextFrame();
       expect(col99._order).to.be.lessThan(col100._order);
+    });
+  });
+
+  describe('warnings', () => {
+    ['frozen', 'frozen-to-end'].forEach((frozenAttr) => {
+      describe(frozenAttr, () => {
+        it('should not warn when grouping frozen only columns', async () => {
+          fixtureSync(`
+            <vaadin-grid>
+              <vaadin-grid-column-group>
+                <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
+                <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
+              </vaadin-grid-column-group>
+    
+              <vaadin-grid-column></vaadin-grid-column>
+            </vaadin-grid>
+          `);
+
+          await nextFrame();
+          expect(console.warn.called).to.be.false;
+        });
+
+        it('should not warn when freezing a root level group', async () => {
+          fixtureSync(`
+            <vaadin-grid>
+              <vaadin-grid-column-group ${frozenAttr}>
+                <vaadin-grid-column></vaadin-grid-column>
+                <vaadin-grid-column></vaadin-grid-column>
+              </vaadin-grid-column-group>
+    
+              <vaadin-grid-column></vaadin-grid-column>
+            </vaadin-grid>
+          `);
+
+          await nextFrame();
+          expect(console.warn.called).to.be.false;
+        });
+
+        it('should not warn when freezing a root level column', async () => {
+          fixtureSync(`
+            <vaadin-grid>
+              <vaadin-grid-column-group>
+                <vaadin-grid-column></vaadin-grid-column>
+                <vaadin-grid-column></vaadin-grid-column>
+              </vaadin-grid-column-group>
+    
+              <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
+            </vaadin-grid>
+          `);
+
+          await nextFrame();
+          expect(console.warn.called).to.be.false;
+        });
+
+        it('should not warn when grouping a frozen column with unimported frozen column', async () => {
+          expect(customElements.get('vaadin-grid-selection-column')).to.be.undefined;
+
+          fixtureSync(`
+            <vaadin-grid>
+              <vaadin-grid-column-group>
+                <vaadin-grid-selection-column ${frozenAttr}></vaadin-grid-selection-column>
+                <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
+              </vaadin-grid-column-group>
+    
+              <vaadin-grid-column></vaadin-grid-column>
+            </vaadin-grid>
+          `);
+
+          await nextFrame();
+          expect(console.warn.called).to.be.false;
+        });
+
+        it('should warn when grouping frozen and non-frozen columns', async () => {
+          fixtureSync(`
+            <vaadin-grid>
+              <vaadin-grid-column-group>
+                <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
+                <vaadin-grid-column></vaadin-grid-column>
+              </vaadin-grid-column-group>
+
+              <vaadin-grid-column></vaadin-grid-column>
+            </vaadin-grid>
+          `);
+
+          await nextFrame();
+          expect(console.warn.calledOnce).to.be.true;
+        });
+
+        it('should warn when grouping a frozen column with an unimported column', async () => {
+          expect(customElements.get('vaadin-grid-selection-column')).to.be.undefined;
+
+          // Testing the other way around (frozen unimported column with non-frozen column)
+          // is not feasible because an unimported column never notifies its parent group
+          // of its frozen state. A warning about the missing import is logged instead.
+          fixtureSync(`
+            <vaadin-grid>
+              <vaadin-grid-column-group>
+                <vaadin-grid-selection-column></vaadin-grid-selection-column>
+                <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
+              </vaadin-grid-column-group>
+    
+              <vaadin-grid-column></vaadin-grid-column>
+            </vaadin-grid>
+          `);
+
+          await nextFrame();
+          expect(console.warn.calledOnce).to.be.true;
+        });
+
+        it('should warn when grouping frozen group and non-frozen column', async () => {
+          fixtureSync(`
+            <vaadin-grid>
+              <vaadin-grid-column-group>
+                <vaadin-grid-column-group ${frozenAttr}>
+                  <vaadin-grid-column></vaadin-grid-column>
+                  <vaadin-grid-column></vaadin-grid-column>
+                </vaadin-grid-column-group>
+
+                <vaadin-grid-column></vaadin-grid-column>
+              </vaadin-grid-column-group>
+            </vaadin-grid>
+          `);
+
+          await nextFrame();
+          expect(console.warn.calledOnce).to.be.true;
+        });
+
+        it('should not warn when grouping frozen group and frozen column', async () => {
+          fixtureSync(`
+            <vaadin-grid>
+              <vaadin-grid-column-group>
+                <vaadin-grid-column-group ${frozenAttr}>
+                  <vaadin-grid-column></vaadin-grid-column>
+                  <vaadin-grid-column></vaadin-grid-column>
+                </vaadin-grid-column-group>
+
+                <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
+              </vaadin-grid-column-group>
+            </vaadin-grid>
+          `);
+
+          await nextFrame();
+          expect(console.warn.called).to.be.false;
+        });
+
+        it('should only warn once', async () => {
+          fixtureSync(`
+            <vaadin-grid>
+              <vaadin-grid-column-group>
+                <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
+                <vaadin-grid-column></vaadin-grid-column>
+              </vaadin-grid-column-group>
+
+              <vaadin-grid-column-group>
+                <vaadin-grid-column ${frozenAttr}></vaadin-grid-column>
+                <vaadin-grid-column></vaadin-grid-column>
+              </vaadin-grid-column-group>
+            </vaadin-grid>
+          `);
+
+          await nextFrame();
+          expect(console.warn.calledOnce).to.be.true;
+        });
+      });
     });
   });
 });
