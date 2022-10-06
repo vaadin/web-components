@@ -9,6 +9,14 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-menu-bar-button',
   css`
+    :host {
+      flex-shrink: 0;
+    }
+
+    :host([slot='overflow']) {
+      margin-inline-end: 0;
+    }
+
     [part='label'] ::slotted(vaadin-context-menu-item) {
       position: relative;
       z-index: 1;

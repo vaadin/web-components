@@ -3,14 +3,17 @@
  * Copyright (c) 2019 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 
 /**
  * @polymerMixin
  * @mixes ResizeMixin
+ * @mixes ControllerMixin
  */
 export const ButtonsMixin = (superClass) =>
-  class extends ResizeMixin(superClass) {
+  class extends ResizeMixin(ControllerMixin(superClass)) {
     static get properties() {
       return {
         /**
@@ -21,11 +24,20 @@ export const ButtonsMixin = (superClass) =>
           type: Boolean,
           value: false,
         },
+
+        /** @protected */
+        _overflow: {
+          type: Object,
+        },
       };
     }
 
     static get observers() {
-      return ['_menuItemsChanged(items, items.splices)'];
+      return [
+        '__hasOverflowChanged(_hasOverflow, _overflow)',
+        '__i18nChanged(i18n, _overflow)',
+        '_menuItemsChanged(items, _overflow, items.splices)',
+      ];
     }
 
     /**
@@ -43,13 +55,24 @@ export const ButtonsMixin = (superClass) =>
       super.ready();
 
       this.setAttribute('role', 'menubar');
-    }
 
-    /** @protected */
-    connectedCallback() {
-      super.connectedCallback();
+      this._overflowController = new SlotController(
+        this,
+        'overflow',
+        () => document.createElement('vaadin-menu-bar-button'),
+        (_, btn) => {
+          btn.setAttribute('hidden', '');
 
-      this._initButtonAttrs(this._overflow);
+          const dots = document.createElement('div');
+          dots.setAttribute('aria-hidden', 'true');
+          dots.textContent = '···';
+          btn.appendChild(dots);
+
+          this._overflow = btn;
+          this._initButtonAttrs(btn);
+        },
+      );
+      this.addController(this._overflowController);
     }
 
     /**
@@ -57,7 +80,7 @@ export const ButtonsMixin = (superClass) =>
      * @protected
      */
     get _buttons() {
-      return Array.from(this.shadowRoot.querySelectorAll('[part$="button"]'));
+      return Array.from(this.querySelectorAll('vaadin-menu-bar-button'));
     }
 
     /**
@@ -68,19 +91,29 @@ export const ButtonsMixin = (superClass) =>
       return this.shadowRoot.querySelector('[part="container"]');
     }
 
-    /**
-     * @return {!HTMLElement}
-     * @protected
-     */
-    get _overflow() {
-      return this.shadowRoot.querySelector('[part="overflow-button"]');
+    /** @private */
+    __hasOverflowChanged(hasOverflow, overflow) {
+      if (overflow) {
+        overflow.toggleAttribute('hidden', !hasOverflow);
+      }
     }
 
     /** @private */
-    _menuItemsChanged(items) {
+    _menuItemsChanged(items, overflow) {
+      if (!overflow) {
+        return;
+      }
+
       if (items !== this._oldItems) {
         this._oldItems = items;
         this.__renderButtons(items);
+      }
+    }
+
+    /** @private */
+    __i18nChanged(i18n, overflow) {
+      if (overflow && i18n && i18n.moreOptions) {
+        overflow.setAttribute('aria-label', i18n.moreOptions);
       }
     }
 
@@ -170,17 +203,16 @@ export const ButtonsMixin = (superClass) =>
 
     /** @protected */
     _removeButtons() {
-      const container = this._container;
-
-      while (container.children.length > 1) {
-        container.removeChild(container.firstElementChild);
-      }
+      this._buttons.forEach((button) => {
+        if (button !== this._overflow) {
+          this.removeChild(button);
+        }
+      });
     }
 
     /** @protected */
     _initButton(item) {
       const button = document.createElement('vaadin-menu-bar-button');
-      button.setAttribute('part', 'menu-bar-button');
 
       const itemCopy = { ...item };
       button.item = itemCopy;
@@ -231,11 +263,6 @@ export const ButtonsMixin = (superClass) =>
       }
     }
 
-    /** @protected */
-    _appendButton(button) {
-      this._container.insertBefore(button, this._overflow);
-    }
-
     /** @private */
     __getComponent(item) {
       const itemComponent = item.component;
@@ -268,7 +295,7 @@ export const ButtonsMixin = (superClass) =>
 
       items.forEach((item) => {
         const button = this._initButton(item);
-        this._appendButton(button);
+        this.insertBefore(button, this._overflow);
         this._setButtonDisabled(button, item.disabled);
         this._initButtonAttrs(button);
         this._setButtonTheme(button, this._theme);
