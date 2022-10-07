@@ -23,7 +23,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * Part name | Description
  * ----------|----------------
- * `avatar`  | The author's avatar
  * `name`    | Author's name
  * `time`    | When the message was posted
  * `content` | The message itself as a slotted content
@@ -36,13 +35,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `focused`    | Set when the message is focused.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
- *
- * ### Internal components
- *
- * In addition to `<vaadin-message>` itself, the following internal
- * components are themable:
- *
- * - `<vaadin-message-avatar>` - has the same API as [`<vaadin-avatar>`](#/elements/vaadin-avatar).
  */
 declare class Message extends FocusMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**
