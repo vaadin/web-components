@@ -60,7 +60,7 @@ export type ComboBoxLightSelectedItemChangedEvent<TItem> = CustomEvent<{ value: 
  */
 export type ComboBoxLightValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface ComboBoxLightEventMap<TItem> extends HTMLElementEventMap {
+export type ComboBoxLightEventMap<TItem> = HTMLElementEventMap & {
   change: ComboBoxLightChangeEvent<TItem>;
 
   'custom-value-set': ComboBoxLightCustomValueSetEvent;
@@ -76,7 +76,7 @@ export interface ComboBoxLightEventMap<TItem> extends HTMLElementEventMap {
   'selected-item-changed': ComboBoxLightSelectedItemChangedEvent<TItem>;
 
   validated: ComboBoxLightValidatedEvent;
-}
+};
 
 /**
  * `<vaadin-combo-box-light>` is a customizable version of the `<vaadin-combo-box>` providing
@@ -145,17 +145,17 @@ declare class ComboBoxLight<TItem = ComboBoxDefaultItem> extends HTMLElement {
   ): void;
 }
 
-interface ComboBoxLight<TItem = ComboBoxDefaultItem>
-  extends ComboBoxDataProviderMixinClass<TItem>,
-    ComboBoxMixinClass<TItem>,
-    KeyboardMixinClass,
-    InputMixinClass,
-    DisabledMixinClass,
-    ThemableMixinClass,
-    ThemePropertyMixinClass,
-    ValidateMixinClass {}
+type ComboBoxLight<TItem = ComboBoxDefaultItem> = ComboBoxDataProviderMixinClass<TItem> &
+  ComboBoxMixinClass<TItem> &
+  DisabledMixinClass &
+  InputMixinClass &
+  KeyboardMixinClass &
+  ThemableMixinClass &
+  ThemePropertyMixinClass &
+  ValidateMixinClass & {};
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-combo-box-light': ComboBoxLight;
   }

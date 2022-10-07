@@ -4,9 +4,9 @@ import { columnEditModeRenderer } from '../../lit.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
-interface TestGridItem {
+type TestGridItem = {
   testProperty: string;
-}
+};
 
 assertType<
   (

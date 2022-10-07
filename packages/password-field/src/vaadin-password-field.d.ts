@@ -27,17 +27,18 @@ export type PasswordFieldValueChangedEvent = CustomEvent<{ value: string }>;
  */
 export type PasswordFieldValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface PasswordFieldCustomEventMap {
+export type PasswordFieldCustomEventMap = {
   'invalid-changed': PasswordFieldInvalidChangedEvent;
 
   'value-changed': PasswordFieldValueChangedEvent;
 
   validated: PasswordFieldValidatedEvent;
-}
+};
 
-export interface PasswordFieldEventMap extends HTMLElementEventMap, PasswordFieldCustomEventMap {
-  change: PasswordFieldChangeEvent;
-}
+export type PasswordFieldEventMap = HTMLElementEventMap &
+  PasswordFieldCustomEventMap & {
+    change: PasswordFieldChangeEvent;
+  };
 
 /**
  * `<vaadin-password-field>` is an extension of `<vaadin-text-field>` component for entering passwords.
@@ -111,6 +112,7 @@ declare class PasswordField extends TextField {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-password-field': PasswordField;
   }

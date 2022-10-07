@@ -10,21 +10,21 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 export { AvatarI18n };
 
-export interface AvatarGroupI18n extends AvatarI18n {
+export type AvatarGroupI18n = AvatarI18n & {
   activeUsers: {
     one: string;
     many: string;
   };
   joined: string;
   left: string;
-}
+};
 
-export interface AvatarGroupItem {
+export type AvatarGroupItem = {
   name?: string;
   abbr?: string;
   img?: string;
   colorIndex?: number;
-}
+};
 
 /**
  * `<vaadin-avatar-group>` is a Web Component providing avatar group displaying functionality.
@@ -130,6 +130,7 @@ declare class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(HTMLEle
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-avatar-group': AvatarGroup;
   }

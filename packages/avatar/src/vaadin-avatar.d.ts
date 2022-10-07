@@ -8,9 +8,9 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export interface AvatarI18n {
+export type AvatarI18n = {
   anonymous: string;
-}
+};
 
 /**
  * `<vaadin-avatar>` is a Web Component providing avatar displaying functionality.
@@ -88,6 +88,7 @@ declare class Avatar extends FocusMixin(ElementMixin(ThemableMixin(ControllerMix
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-avatar': Avatar;
   }

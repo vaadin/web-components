@@ -39,6 +39,7 @@ declare class Iconset extends ElementMixin(HTMLElement) {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-iconset': Iconset;
   }

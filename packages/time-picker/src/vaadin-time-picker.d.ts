@@ -8,17 +8,17 @@ import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js
 import { PatternMixin } from '@vaadin/field-base/src/pattern-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export interface TimePickerTime {
+export type TimePickerTime = {
   hours: number | string;
   minutes: number | string;
   seconds?: number | string;
   milliseconds?: number | string;
-}
+};
 
-export interface TimePickerI18n {
+export type TimePickerI18n = {
   parseTime(time: string): TimePickerTime | undefined;
   formatTime(time: TimePickerTime | undefined): string;
-}
+};
 
 /**
  * Fired when the user commits a value change.
@@ -47,7 +47,7 @@ export type TimePickerValueChangedEvent = CustomEvent<{ value: string }>;
  */
 export type TimePickerValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface TimePickerCustomEventMap {
+export type TimePickerCustomEventMap = {
   'invalid-changed': TimePickerInvalidChangedEvent;
 
   'opened-changed': TimePickerOpenedChangedEvent;
@@ -55,11 +55,12 @@ export interface TimePickerCustomEventMap {
   'value-changed': TimePickerValueChangedEvent;
 
   validated: TimePickerValidatedEvent;
-}
+};
 
-export interface TimePickerEventMap extends HTMLElementEventMap, TimePickerCustomEventMap {
-  change: TimePickerChangeEvent;
-}
+export type TimePickerEventMap = HTMLElementEventMap &
+  TimePickerCustomEventMap & {
+    change: TimePickerChangeEvent;
+  };
 
 /**
  * `<vaadin-time-picker>` is a Web Component providing a time-selection field.
@@ -233,6 +234,7 @@ declare class TimePicker extends PatternMixin(InputControlMixin(ThemableMixin(El
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-time-picker': TimePicker;
   }

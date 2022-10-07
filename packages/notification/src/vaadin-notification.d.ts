@@ -26,17 +26,17 @@ export type NotificationRenderer = (root: HTMLElement, notification?: Notificati
  */
 export type NotificationOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
-export interface NotificationCustomEventMap {
+export type NotificationCustomEventMap = {
   'opened-changed': NotificationOpenedChangedEvent;
-}
+};
 
-export interface NotificationEventMap extends HTMLElementEventMap, NotificationCustomEventMap {}
+export type NotificationEventMap = HTMLElementEventMap & NotificationCustomEventMap & {};
 
-export interface ShowOptions {
+export type ShowOptions = {
   duration?: number;
   position?: NotificationPosition;
   theme?: string;
-}
+};
 
 /**
  * An element used internally by `<vaadin-notification>`. Not intended to be used separately.
@@ -182,6 +182,7 @@ declare class Notification extends ThemePropertyMixin(ElementMixin(HTMLElement))
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-notification-container': NotificationContainer;
     'vaadin-notification-card': NotificationCard;

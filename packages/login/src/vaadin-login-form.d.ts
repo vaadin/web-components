@@ -13,13 +13,13 @@ export { LoginI18n } from './vaadin-login-mixin.js';
  */
 export type LoginFormLoginEvent = CustomEvent<{ username: string; password: string }>;
 
-export interface LoginFormCustomEventMap {
+export type LoginFormCustomEventMap = {
   'forgot-password': Event;
 
   login: LoginFormLoginEvent;
-}
+};
 
-export interface LoginFormEventMap extends HTMLElementEventMap, LoginFormCustomEventMap {}
+export type LoginFormEventMap = HTMLElementEventMap & LoginFormCustomEventMap & {};
 
 /**
  * `<vaadin-login-form>` is a Web Component providing an easy way to require users
@@ -71,6 +71,7 @@ declare class LoginForm extends ElementMixin(ThemableMixin(LoginMixin(HTMLElemen
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-login-form': LoginForm;
   }

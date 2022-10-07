@@ -34,6 +34,7 @@ declare class GridTreeColumn<TItem = GridDefaultItem> extends GridColumn<TItem> 
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-grid-tree-column': GridTreeColumn<GridDefaultItem>;
   }

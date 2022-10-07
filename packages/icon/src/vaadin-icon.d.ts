@@ -72,6 +72,7 @@ declare class Icon extends ThemableMixin(ElementMixin(ControllerMixin(HTMLElemen
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-icon': Icon;
   }

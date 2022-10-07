@@ -4,9 +4,9 @@ import { virtualListRenderer } from '../../lit.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
-interface TestVirtualListItem {
+type TestVirtualListItem = {
   testProperty: string;
-}
+};
 
 assertType<
   (

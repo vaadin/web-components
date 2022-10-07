@@ -52,14 +52,14 @@ export {
 
 export type GridDefaultItem = any;
 
-export interface GridItemModel<TItem> {
+export type GridItemModel<TItem> = {
   index: number;
   item: TItem;
   selected?: boolean;
   expanded?: boolean;
   level?: number;
   detailsOpened?: boolean;
-}
+};
 
 /**
  * Fired when the `activeItem` property changes.
@@ -119,7 +119,7 @@ export type GridLoadingChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type GridSelectedItemsChangedEvent<TItem> = CustomEvent<{ value: TItem[] }>;
 
-export interface GridCustomEventMap<TItem> {
+export type GridCustomEventMap<TItem> = {
   'active-item-changed': GridActiveItemChangedEvent<TItem>;
 
   'cell-activate': GridCellActivateEvent<TItem>;
@@ -141,9 +141,9 @@ export interface GridCustomEventMap<TItem> {
   'loading-changed': GridLoadingChangedEvent;
 
   'selected-items-changed': GridSelectedItemsChangedEvent<TItem>;
-}
+};
 
-export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEventMap<TItem> {}
+export type GridEventMap<TItem> = GridCustomEventMap<TItem> & HTMLElementEventMap & {};
 
 /**
  * `<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the
@@ -390,24 +390,24 @@ declare class Grid<TItem = GridDefaultItem> extends HTMLElement {
   ): void;
 }
 
-interface Grid<TItem = GridDefaultItem>
-  extends DisabledMixinClass,
-    ElementMixinClass,
-    ThemableMixinClass,
-    ThemePropertyMixinClass,
-    ActiveItemMixinClass<TItem>,
-    ArrayDataProviderMixinClass<TItem>,
-    DataProviderMixinClass<TItem>,
-    RowDetailsMixinClass<TItem>,
-    ScrollMixinClass,
-    SelectionMixinClass<TItem>,
-    SortMixinClass,
-    ColumnReorderingMixinClass,
-    EventContextMixinClass<TItem>,
-    StylingMixinClass<TItem>,
-    DragAndDropMixinClass<TItem> {}
+type Grid<TItem = GridDefaultItem> = ActiveItemMixinClass<TItem> &
+  ArrayDataProviderMixinClass<TItem> &
+  ColumnReorderingMixinClass &
+  DataProviderMixinClass<TItem> &
+  DisabledMixinClass &
+  DragAndDropMixinClass<TItem> &
+  ElementMixinClass &
+  EventContextMixinClass<TItem> &
+  RowDetailsMixinClass<TItem> &
+  ScrollMixinClass &
+  SelectionMixinClass<TItem> &
+  SortMixinClass &
+  StylingMixinClass<TItem> &
+  ThemableMixinClass &
+  ThemePropertyMixinClass & {};
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-grid': Grid<GridDefaultItem>;
   }

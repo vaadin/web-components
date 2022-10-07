@@ -51,11 +51,11 @@ export type DialogOpenedChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type DialogResizeEvent = CustomEvent<DialogResizeDimensions>;
 
-export interface DialogCustomEventMap {
+export type DialogCustomEventMap = {
   'opened-changed': DialogOpenedChangedEvent;
 
   resize: DialogResizeEvent;
-}
+};
 
 export type DialogEventMap = DialogCustomEventMap & HTMLElementEventMap;
 
@@ -219,6 +219,7 @@ declare class Dialog extends ThemePropertyMixin(ElementMixin(DialogDraggableMixi
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-dialog': Dialog;
     'vaadin-dialog-overlay': DialogOverlay;

@@ -5,12 +5,12 @@
  */
 import type { ReactiveController } from 'lit';
 
-export interface FieldHighlighterUser {
+export type FieldHighlighterUser = {
   id: number;
   name: string;
   colorIndex: number;
   fieldIndex?: number;
-}
+};
 
 /**
  * A field controller for implementing real-time collaboration features: displaying
@@ -69,6 +69,7 @@ declare class FieldHighlighter extends HTMLElement {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-field-highlighter': FieldHighlighter;
   }

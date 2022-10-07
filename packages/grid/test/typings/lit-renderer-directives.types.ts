@@ -13,9 +13,9 @@ import { columnBodyRenderer, columnFooterRenderer, columnHeaderRenderer, gridRow
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
-interface TestGridItem {
+type TestGridItem = {
   testProperty: string;
-}
+};
 
 assertType<
   (

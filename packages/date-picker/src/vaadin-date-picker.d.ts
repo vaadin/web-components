@@ -36,7 +36,7 @@ export type DatePickerValueChangedEvent = CustomEvent<{ value: string }>;
  */
 export type DatePickerValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface DatePickerCustomEventMap {
+export type DatePickerCustomEventMap = {
   'opened-changed': DatePickerOpenedChangedEvent;
 
   'invalid-changed': DatePickerInvalidChangedEvent;
@@ -44,11 +44,12 @@ export interface DatePickerCustomEventMap {
   'value-changed': DatePickerValueChangedEvent;
 
   validated: DatePickerValidatedEvent;
-}
+};
 
-export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCustomEventMap {
-  change: DatePickerChangeEvent;
-}
+export type DatePickerEventMap = DatePickerCustomEventMap &
+  HTMLElementEventMap & {
+    change: DatePickerChangeEvent;
+  };
 
 /**
  * `<vaadin-date-picker>` is an input field that allows to enter a date by typing or by selecting from a calendar overlay.
@@ -157,6 +158,7 @@ declare class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-date-picker': DatePicker;
   }

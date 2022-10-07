@@ -17,9 +17,9 @@ import type { InlineEditingMixinClass } from '../../src/vaadin-grid-pro-inline-e
 import type { GridPro } from '../../vaadin-grid-pro';
 import type { GridProEditColumn } from '../../vaadin-grid-pro-edit-column';
 
-interface TestGridItem {
+type TestGridItem = {
   testProperty: string;
-}
+};
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

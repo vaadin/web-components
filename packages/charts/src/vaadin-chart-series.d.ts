@@ -7,7 +7,7 @@ import type { PointOptionsObject, Series, SeriesOptionsType } from 'highcharts';
 
 export type ChartSeriesMarkers = 'auto' | 'hidden' | 'shown';
 
-export interface ChartSeriesConfig {
+export type ChartSeriesConfig = {
   data?: ChartSeriesValues;
   marker?: { enabled: boolean | null };
   name?: string;
@@ -18,7 +18,7 @@ export interface ChartSeriesConfig {
   yAxis?: string;
   yAxisValueMin?: number;
   yAxisValueMax?: number;
-}
+};
 
 export type ChartSeriesOptions = ChartSeriesConfig & SeriesOptionsType;
 
@@ -169,6 +169,7 @@ declare class ChartSeries extends HTMLElement {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-chart-series': ChartSeries;
   }

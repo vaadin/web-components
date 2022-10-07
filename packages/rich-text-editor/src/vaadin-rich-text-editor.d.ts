@@ -6,7 +6,7 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export interface RichTextEditorI18n {
+export type RichTextEditorI18n = {
   undo: string;
   redo: string;
   bold: string;
@@ -32,7 +32,7 @@ export interface RichTextEditorI18n {
   ok: string;
   cancel: string;
   remove: string;
-}
+};
 
 /**
  * Fired when the user commits a value change.
@@ -51,15 +51,16 @@ export type RichTextEditorHtmlValueChangedEvent = CustomEvent<{ value: string }>
  */
 export type RichTextEditorValueChangedEvent = CustomEvent<{ value: string }>;
 
-export interface RichTextEditorCustomEventMap {
+export type RichTextEditorCustomEventMap = {
   'html-value-changed': RichTextEditorHtmlValueChangedEvent;
 
   'value-changed': RichTextEditorValueChangedEvent;
-}
+};
 
-export interface RichTextEditorEventMap extends HTMLElementEventMap, RichTextEditorCustomEventMap {
-  change: RichTextEditorChangeEvent;
-}
+export type RichTextEditorEventMap = HTMLElementEventMap &
+  RichTextEditorCustomEventMap & {
+    change: RichTextEditorChangeEvent;
+  };
 
 /**
  * `<vaadin-rich-text-editor>` is a Web Component for rich text editing.
@@ -192,6 +193,7 @@ declare class RichTextEditor extends ElementMixin(ThemableMixin(HTMLElement)) {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-rich-text-editor': RichTextEditor;
   }

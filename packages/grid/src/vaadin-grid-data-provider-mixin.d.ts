@@ -8,15 +8,15 @@ import { GridSorterDirection } from './vaadin-grid-sorter.js';
 
 export { GridSorterDirection };
 
-export interface GridFilterDefinition {
+export type GridFilterDefinition = {
   path: string;
   value: string;
-}
+};
 
-export interface GridSorterDefinition {
+export type GridSorterDefinition = {
   path: string;
   direction: GridSorterDirection;
-}
+};
 
 export type GridDataProviderCallback<TItem> = (items: TItem[], size?: number) => void;
 

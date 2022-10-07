@@ -7,14 +7,14 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 import { Item } from '@vaadin/item/src/vaadin-item.js';
 import { ListBox } from '@vaadin/list-box/src/vaadin-list-box.js';
 
-export interface ContextMenuItem {
+export type ContextMenuItem = {
   text?: string;
   component?: HTMLElement | string;
   disabled?: boolean;
   checked?: boolean;
   theme?: string[] | string;
   children?: ContextMenuItem[];
-}
+};
 
 /**
  * An element used internally by `<vaadin-context-menu>`. Not intended to be used separately.
@@ -24,6 +24,7 @@ export interface ContextMenuItem {
 declare class ContextMenuItemElement extends Item {}
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-context-menu-item': ContextMenuItemElement;
     'vaadin-context-menu-list-box': ContextMenuListBox;

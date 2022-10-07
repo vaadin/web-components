@@ -13,13 +13,13 @@ export { LoginI18n } from './vaadin-login-mixin.js';
  */
 export type LoginOverlayLoginEvent = CustomEvent<{ username: string; password: string }>;
 
-export interface LoginOverlayCustomEventMap {
+export type LoginOverlayCustomEventMap = {
   'forgot-password': Event;
 
   login: LoginOverlayLoginEvent;
-}
+};
 
-export interface LoginOverlayEventMap extends HTMLElementEventMap, LoginOverlayCustomEventMap {}
+export type LoginOverlayEventMap = HTMLElementEventMap & LoginOverlayCustomEventMap & {};
 
 /**
  * `<vaadin-login-overlay>` is a wrapper of the `<vaadin-login-form>` which opens a login form in an overlay and
@@ -81,6 +81,7 @@ declare class LoginOverlay extends ElementMixin(ThemableMixin(LoginMixin(HTMLEle
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-login-overlay': LoginOverlay;
   }

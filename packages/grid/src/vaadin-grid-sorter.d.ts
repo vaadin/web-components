@@ -13,13 +13,13 @@ export type GridSorterDirection = 'asc' | 'desc' | null;
  */
 export type GridSorterDirectionChangedEvent = CustomEvent<{ value: GridSorterDirection }>;
 
-export interface GridSorterCustomEventMap {
+export type GridSorterCustomEventMap = {
   'sorter-changed': Event;
 
   'direction-changed': GridSorterDirectionChangedEvent;
-}
+};
 
-export interface GridSorterEventMap extends HTMLElementEventMap, GridSorterCustomEventMap {}
+export type GridSorterEventMap = GridSorterCustomEventMap & HTMLElementEventMap & {};
 
 /**
  * `<vaadin-grid-sorter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,
@@ -87,6 +87,7 @@ declare class GridSorter extends ThemableMixin(DirMixin(HTMLElement)) {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-grid-sorter': GridSorter;
   }

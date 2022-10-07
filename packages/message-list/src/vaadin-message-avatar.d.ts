@@ -11,6 +11,7 @@ import { Avatar } from '@vaadin/avatar/src/vaadin-avatar.js';
 declare class MessageAvatar extends Avatar {}
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-message-avatar': MessageAvatar;
   }

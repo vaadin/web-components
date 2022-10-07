@@ -140,9 +140,10 @@ declare class GridColumn<TItem = GridDefaultItem> extends HTMLElement {
   autoWidth: boolean;
 }
 
-interface GridColumn<TItem = GridDefaultItem> extends ColumnBaseMixinClass<TItem> {}
+type GridColumn<TItem = GridDefaultItem> = ColumnBaseMixinClass<TItem> & {};
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-grid-column': GridColumn<GridDefaultItem>;
   }

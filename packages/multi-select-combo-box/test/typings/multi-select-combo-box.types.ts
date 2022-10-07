@@ -25,9 +25,9 @@ import type {
   MultiSelectComboBoxValidatedEvent,
 } from '../../vaadin-multi-select-combo-box.js';
 
-interface TestComboBoxItem {
+type TestComboBoxItem = {
   testProperty: string;
-}
+};
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

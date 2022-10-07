@@ -1,4 +1,4 @@
-interface Vaadin {
+type Vaadin = {
   developmentModeCallback?: {
     'usage-statistics'?(): void;
   };
@@ -6,8 +6,8 @@ interface Vaadin {
   usageStatsChecker?: {
     maybeGatherAndSend(): void;
   };
-}
+};
 
-interface Window {
+type Window = {
   Vaadin: Vaadin;
-}
+};

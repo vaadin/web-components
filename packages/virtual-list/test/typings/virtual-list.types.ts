@@ -9,9 +9,9 @@ assertType<VirtualList>(genericVirtualList);
 
 genericVirtualList.items = [1, 2, 3];
 
-interface TestVirtualListItem {
+type TestVirtualListItem = {
   testProperty: string;
-}
+};
 
 const virtualList = genericVirtualList as VirtualList<TestVirtualListItem>;
 

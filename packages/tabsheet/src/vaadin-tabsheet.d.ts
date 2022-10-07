@@ -20,13 +20,13 @@ export type TabSheetItemsChangedEvent = CustomEvent<{ value: Tab[] }>;
  */
 export type TabSheetSelectedChangedEvent = CustomEvent<{ value: number }>;
 
-export interface TabSheetCustomEventMap {
+export type TabSheetCustomEventMap = {
   'items-changed': TabSheetItemsChangedEvent;
 
   'selected-changed': TabSheetSelectedChangedEvent;
-}
+};
 
-export interface TabSheetEventMap extends HTMLElementEventMap, TabSheetCustomEventMap {}
+export type TabSheetEventMap = HTMLElementEventMap & TabSheetCustomEventMap & {};
 
 /**
  * `<vaadin-tabsheet>` is a Web Component for organizing and grouping content
@@ -99,6 +99,7 @@ declare class TabSheet extends ControllerMixin(DelegateStateMixin(ElementMixin(T
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-tabsheet': TabSheet;
   }

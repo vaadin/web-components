@@ -16,11 +16,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 export type RadioButtonCheckedChangedEvent = CustomEvent<{ value: boolean }>;
 
-export interface RadioButtonCustomEventMap {
+export type RadioButtonCustomEventMap = {
   'checked-changed': RadioButtonCheckedChangedEvent;
-}
+};
 
-export interface RadioButtonEventMap extends HTMLElementEventMap, RadioButtonCustomEventMap {}
+export type RadioButtonEventMap = HTMLElementEventMap & RadioButtonCustomEventMap & {};
 
 /**
  * `<vaadin-radio-button>` is a web component representing a choice in a radio group.
@@ -79,6 +79,7 @@ declare class RadioButton extends LabelMixin(
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-radio-button': RadioButton;
   }

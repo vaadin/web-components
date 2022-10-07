@@ -16,6 +16,7 @@ import { Button } from '@vaadin/button/src/vaadin-button.js';
 declare class CrudEdit extends Button {}
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-crud-edit': CrudEdit;
   }

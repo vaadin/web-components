@@ -53,6 +53,7 @@ declare class Item extends ItemMixin(ThemableMixin(DirMixin(HTMLElement))) {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-item': Item;
   }

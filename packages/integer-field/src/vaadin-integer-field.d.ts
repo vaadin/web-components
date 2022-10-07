@@ -27,17 +27,18 @@ export type IntegerFieldValueChangedEvent = CustomEvent<{ value: string }>;
  */
 export type IntegerFieldValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface IntegerFieldCustomEventMap {
+export type IntegerFieldCustomEventMap = {
   'invalid-changed': IntegerFieldInvalidChangedEvent;
 
   'value-changed': IntegerFieldValueChangedEvent;
 
   validated: IntegerFieldValidatedEvent;
-}
+};
 
-export interface IntegerFieldEventMap extends HTMLElementEventMap, IntegerFieldCustomEventMap {
-  change: IntegerFieldChangeEvent;
-}
+export type IntegerFieldEventMap = HTMLElementEventMap &
+  IntegerFieldCustomEventMap & {
+    change: IntegerFieldChangeEvent;
+  };
 
 /**
  * `<vaadin-integer-field>` is an input field web component that only accepts entering integer numbers.
@@ -81,6 +82,7 @@ declare class IntegerField extends NumberField {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-integer-field': IntegerField;
   }

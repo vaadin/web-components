@@ -48,9 +48,10 @@ declare class GridColumnGroup extends HTMLElement {
   readonly width: string | null | undefined;
 }
 
-interface GridColumnGroup<TItem = GridDefaultItem> extends ColumnBaseMixinClass<TItem> {}
+type GridColumnGroup<TItem = GridDefaultItem> = ColumnBaseMixinClass<TItem> & {};
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-grid-column-group': GridColumnGroup<GridDefaultItem>;
   }

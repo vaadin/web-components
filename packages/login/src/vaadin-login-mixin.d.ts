@@ -5,7 +5,7 @@
  */
 import type { Constructor } from '@open-wc/dedupe-mixin';
 
-export interface LoginI18n {
+export type LoginI18n = {
   form: {
     title: string;
     username: string;
@@ -22,7 +22,7 @@ export interface LoginI18n {
     description?: string;
   };
   additionalInformation?: string;
-}
+};
 
 export declare function LoginMixin<T extends Constructor<HTMLElement>>(base: T): Constructor<LoginMixinClass> & T;
 

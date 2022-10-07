@@ -41,6 +41,7 @@ import { ProgressMixin } from './vaadin-progress-mixin.js';
 declare class ProgressBar extends ProgressMixin(ThemableMixin(ElementMixin(HTMLElement))) {}
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-progress-bar': ProgressBar;
   }

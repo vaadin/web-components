@@ -6,7 +6,7 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export interface UploadFile extends File {
+export type UploadFile = File & {
   uploadTarget: string;
   elapsed: number;
   elapsedStr: string;
@@ -22,9 +22,9 @@ export interface UploadFile extends File {
   abort?: boolean;
   complete?: boolean;
   uploading?: boolean;
-}
+};
 
-export interface UploadI18n {
+export type UploadI18n = {
   dropFiles: {
     one: string;
     many: string;
@@ -61,7 +61,7 @@ export interface UploadI18n {
   };
   formatSize?(bytes: number): string;
   formatTime?(seconds: number, units: number[]): string;
-}
+};
 
 export type UploadMethod = 'POST' | 'PUT';
 
@@ -139,7 +139,7 @@ export type UploadAbortEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFi
  */
 export type UploadRequestEvent = CustomEvent<{ xhr: XMLHttpRequest; file: UploadFile; formData: FormData }>;
 
-export interface UploadCustomEventMap {
+export type UploadCustomEventMap = {
   'file-reject': UploadFileRejectEvent;
 
   'files-changed': UploadFilesChangedEvent;
@@ -163,9 +163,9 @@ export interface UploadCustomEventMap {
   'upload-abort': UploadAbortEvent;
 
   'upload-request': UploadRequestEvent;
-}
+};
 
-export interface UploadEventMap extends HTMLElementEventMap, UploadCustomEventMap {}
+export type UploadEventMap = HTMLElementEventMap & UploadCustomEventMap & {};
 
 /**
  * `<vaadin-upload>` is a Web Component for uploading multiple files with drag and drop support.
@@ -412,6 +412,7 @@ declare class Upload extends ThemableMixin(ElementMixin(HTMLElement)) {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-upload': Upload;
   }

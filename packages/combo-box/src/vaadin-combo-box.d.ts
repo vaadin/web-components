@@ -71,7 +71,7 @@ export type ComboBoxSelectedItemChangedEvent<TItem> = CustomEvent<{ value: TItem
  */
 export type ComboBoxValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
+export type ComboBoxEventMap<TItem> = HTMLElementEventMap & {
   change: ComboBoxChangeEvent<TItem>;
 
   'custom-value-set': ComboBoxCustomValueSetEvent;
@@ -87,7 +87,7 @@ export interface ComboBoxEventMap<TItem> extends HTMLElementEventMap {
   'selected-item-changed': ComboBoxSelectedItemChangedEvent<TItem>;
 
   validated: ComboBoxValidatedEvent;
-}
+};
 
 /**
  * `<vaadin-combo-box>` is a web component for choosing a value from a filterable list of options
@@ -232,27 +232,27 @@ declare class ComboBox<TItem = ComboBoxDefaultItem> extends HTMLElement {
   ): void;
 }
 
-interface ComboBox<TItem = ComboBoxDefaultItem>
-  extends ComboBoxDataProviderMixinClass<TItem>,
-    ComboBoxMixinClass<TItem>,
-    ValidateMixinClass,
-    PatternMixinClass,
-    LabelMixinClass,
-    KeyboardMixinClass,
-    InputMixinClass,
-    InputControlMixinClass,
-    InputConstraintsMixinClass,
-    FocusMixinClass,
-    FieldMixinClass,
-    DisabledMixinClass,
-    DelegateStateMixinClass,
-    DelegateFocusMixinClass,
-    ThemableMixinClass,
-    ThemePropertyMixinClass,
-    ElementMixinClass,
-    ControllerMixinClass {}
+type ComboBox<TItem = ComboBoxDefaultItem> = ComboBoxDataProviderMixinClass<TItem> &
+  ComboBoxMixinClass<TItem> &
+  ControllerMixinClass &
+  DelegateFocusMixinClass &
+  DelegateStateMixinClass &
+  DisabledMixinClass &
+  ElementMixinClass &
+  FieldMixinClass &
+  FocusMixinClass &
+  InputConstraintsMixinClass &
+  InputControlMixinClass &
+  InputMixinClass &
+  KeyboardMixinClass &
+  LabelMixinClass &
+  PatternMixinClass &
+  ThemableMixinClass &
+  ThemePropertyMixinClass &
+  ValidateMixinClass & {};
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-combo-box': ComboBox;
   }

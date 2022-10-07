@@ -21,7 +21,7 @@ export type CrudDataProvider<T> = (params: CrudDataProviderParams, callback: Cru
 
 export type CrudEditorPosition = '' | 'aside' | 'bottom';
 
-export interface CrudI18n {
+export type CrudI18n = {
   newItem: string;
   editItem: string;
   saveItem: string;
@@ -46,7 +46,7 @@ export interface CrudI18n {
       };
     };
   };
-}
+};
 
 /**
  * Fired when the `editorOpened` property changes.
@@ -394,6 +394,7 @@ declare class Crud<Item> extends ControllerMixin(ElementMixin(ThemableMixin(HTML
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-crud': Crud<any>;
   }

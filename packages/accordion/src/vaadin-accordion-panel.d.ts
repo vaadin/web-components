@@ -35,6 +35,7 @@ import { Details } from '@vaadin/details/src/vaadin-details.js';
 declare class AccordionPanel extends Details {}
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-accordion-panel': AccordionPanel;
   }

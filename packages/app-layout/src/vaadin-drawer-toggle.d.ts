@@ -19,6 +19,7 @@ declare class DrawerToggle extends Button {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-drawer-toggle': DrawerToggle;
   }

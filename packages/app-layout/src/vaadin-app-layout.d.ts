@@ -7,9 +7,9 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export interface AppLayoutI18n {
+export type AppLayoutI18n = {
   drawer: string;
-}
+};
 
 /**
  * Fired when the `drawerOpened` property changes.
@@ -26,13 +26,13 @@ export type AppLayoutOverlayChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type AppLayoutPrimarySectionChangedEvent = CustomEvent<{ value: 'drawer' | 'navbar' }>;
 
-export interface AppLayoutCustomEventMap {
+export type AppLayoutCustomEventMap = {
   'drawer-opened-changed': AppLayoutDrawerOpenedChangedEvent;
 
   'overlay-changed': AppLayoutOverlayChangedEvent;
 
   'primary-section-changed': AppLayoutPrimarySectionChangedEvent;
-}
+};
 
 export type AppLayoutEventMap = AppLayoutCustomEventMap & HTMLElementEventMap;
 
@@ -196,6 +196,7 @@ declare class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(HTMLE
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-app-layout': AppLayout;
   }

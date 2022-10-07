@@ -12,7 +12,7 @@ import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import type { TimePickerI18n } from '@vaadin/time-picker/src/vaadin-time-picker.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export interface DateTimePickerI18n extends DatePickerI18n, TimePickerI18n {}
+export type DateTimePickerI18n = DatePickerI18n & TimePickerI18n & {};
 
 /**
  * Fired when the user commits a value change.
@@ -36,17 +36,18 @@ export type DateTimePickerValueChangedEvent = CustomEvent<{ value: string }>;
  */
 export type DateTimePickerValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface DateTimePickerCustomEventMap {
+export type DateTimePickerCustomEventMap = {
   'invalid-changed': DateTimePickerInvalidChangedEvent;
 
   'value-changed': DateTimePickerValueChangedEvent;
 
   validated: DateTimePickerValidatedEvent;
-}
+};
 
-export interface DateTimePickerEventMap extends DateTimePickerCustomEventMap, HTMLElementEventMap {
-  change: DateTimePickerChangeEvent;
-}
+export type DateTimePickerEventMap = DateTimePickerCustomEventMap &
+  HTMLElementEventMap & {
+    change: DateTimePickerChangeEvent;
+  };
 
 /**
  * `<vaadin-date-time-picker>` is a Web Component providing a date time selection field.
@@ -229,6 +230,7 @@ declare class DateTimePicker extends FieldMixin(
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-date-time-picker': DateTimePicker;
   }

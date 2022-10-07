@@ -6,11 +6,11 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export interface SplitLayoutCustomEventMap {
+export type SplitLayoutCustomEventMap = {
   'splitter-dragend': Event;
-}
+};
 
-export interface SplitLayoutEventMap extends HTMLElementEventMap, SplitLayoutCustomEventMap {}
+export type SplitLayoutEventMap = HTMLElementEventMap & SplitLayoutCustomEventMap & {};
 
 /**
  * `<vaadin-split-layout>` is a Web Component implementing a split layout for two
@@ -176,6 +176,7 @@ declare class SplitLayout extends ElementMixin(ThemableMixin(HTMLElement)) {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-split-layout': SplitLayout;
   }

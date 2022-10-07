@@ -27,17 +27,18 @@ export type EmailFieldValueChangedEvent = CustomEvent<{ value: string }>;
  */
 export type EmailFieldValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface EmailFieldCustomEventMap {
+export type EmailFieldCustomEventMap = {
   'invalid-changed': EmailFieldInvalidChangedEvent;
 
   'value-changed': EmailFieldValueChangedEvent;
 
   validated: EmailFieldValidatedEvent;
-}
+};
 
-export interface EmailFieldEventMap extends HTMLElementEventMap, EmailFieldCustomEventMap {
-  change: EmailFieldChangeEvent;
-}
+export type EmailFieldEventMap = EmailFieldCustomEventMap &
+  HTMLElementEventMap & {
+    change: EmailFieldChangeEvent;
+  };
 
 /**
  * `<vaadin-email-field>` is a Web Component for email field control in forms.
@@ -74,6 +75,7 @@ declare class EmailField extends TextField {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-email-field': EmailField;
   }

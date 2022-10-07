@@ -27,16 +27,15 @@ export type GridProItemPropertyChangedEvent<TItem> = CustomEvent<{
   value: boolean | string;
 }>;
 
-export interface GridProCustomEventMap<TItem> {
+export type GridProCustomEventMap<TItem> = {
   'cell-edit-started': GridProCellEditStartedEvent<TItem>;
 
   'item-property-changed': GridProItemPropertyChangedEvent<TItem>;
-}
+};
 
-export interface GridProEventMap<TItem>
-  extends HTMLElementEventMap,
-    GridProCustomEventMap<TItem>,
-    GridCustomEventMap<TItem> {}
+export type GridProEventMap<TItem> = GridCustomEventMap<TItem> &
+  GridProCustomEventMap<TItem> &
+  HTMLElementEventMap & {};
 
 /**
  * `<vaadin-grid-pro>` is a high quality data grid / data table Web Component with extended functionality.
@@ -84,9 +83,10 @@ declare class GridPro<TItem = GridDefaultItem> extends Grid<TItem> {
   ): void;
 }
 
-interface GridPro extends InlineEditingMixinClass {}
+type GridPro = InlineEditingMixinClass & {};
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-grid-pro': GridPro<GridDefaultItem>;
   }

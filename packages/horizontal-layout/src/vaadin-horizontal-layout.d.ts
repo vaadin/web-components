@@ -29,6 +29,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 declare class HorizontalLayout extends ThemableMixin(ElementMixin(HTMLElement)) {}
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-horizontal-layout': HorizontalLayout;
   }

@@ -9,11 +9,11 @@
  */
 export type GridFilterValueChangedEvent = CustomEvent<{ value: string }>;
 
-export interface GridFilterCustomEventMap {
+export type GridFilterCustomEventMap = {
   'value-changed': GridFilterValueChangedEvent;
-}
+};
 
-export interface GridFilterEventMap extends HTMLElementEventMap, GridFilterCustomEventMap {}
+export type GridFilterEventMap = GridFilterCustomEventMap & HTMLElementEventMap & {};
 
 /**
  * `<vaadin-grid-filter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,
@@ -65,6 +65,7 @@ declare class GridFilter extends HTMLElement {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-grid-filter': GridFilter;
   }

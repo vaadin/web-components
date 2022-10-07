@@ -7,11 +7,11 @@ import type { Constructor } from '@open-wc/dedupe-mixin';
 
 export type ComboBoxDataProviderCallback<TItem> = (items: TItem[], size?: number) => void;
 
-export interface ComboBoxDataProviderParams {
+export type ComboBoxDataProviderParams = {
   page: number;
   pageSize: number;
   filter: string;
-}
+};
 
 export type ComboBoxDataProvider<TItem> = (
   params: ComboBoxDataProviderParams,

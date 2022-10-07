@@ -7,10 +7,10 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export interface MessageInputI18n {
+export type MessageInputI18n = {
   send: string;
   message: string;
-}
+};
 
 /**
  * Fired when a new message is submitted with `<vaadin-message-input>`, either
@@ -18,9 +18,9 @@ export interface MessageInputI18n {
  */
 export type MessageInputSubmitEvent = CustomEvent<{ value: string }>;
 
-export interface MessageInputCustomEventMap {
+export type MessageInputCustomEventMap = {
   submit: MessageInputSubmitEvent;
-}
+};
 
 export type MessageInputEventMap = HTMLElementEventMap & MessageInputCustomEventMap;
 
@@ -80,6 +80,7 @@ declare class MessageInput extends ThemableMixin(ElementMixin(ControllerMixin(HT
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-message-input': MessageInput;
   }

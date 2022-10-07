@@ -20,13 +20,13 @@ export type TabsItemsChangedEvent = CustomEvent<{ value: Element[] }>;
  */
 export type TabsSelectedChangedEvent = CustomEvent<{ value: number }>;
 
-export interface TabsCustomEventMap {
+export type TabsCustomEventMap = {
   'items-changed': TabsItemsChangedEvent;
 
   'selected-changed': TabsSelectedChangedEvent;
-}
+};
 
-export interface TabsEventMap extends HTMLElementEventMap, TabsCustomEventMap {}
+export type TabsEventMap = HTMLElementEventMap & TabsCustomEventMap & {};
 
 /**
  * `<vaadin-tabs>` is a Web Component for organizing and grouping content into sections.
@@ -87,6 +87,7 @@ declare class Tabs extends ResizeMixin(ElementMixin(ListMixin(ThemableMixin(HTML
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-tabs': Tabs;
   }

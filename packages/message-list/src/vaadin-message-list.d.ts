@@ -7,7 +7,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export interface MessageListItem {
+export type MessageListItem = {
   text?: string;
   time?: string;
   userName?: string;
@@ -15,7 +15,7 @@ export interface MessageListItem {
   userImg?: string;
   userColorIndex?: number;
   theme?: string;
-}
+};
 
 /**
  * `<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>
@@ -66,6 +66,7 @@ declare class MessageList extends KeyboardDirectionMixin(ThemableMixin(ElementMi
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-message-list': MessageList;
   }

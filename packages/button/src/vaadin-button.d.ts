@@ -39,6 +39,7 @@ import { ButtonMixin } from './vaadin-button-mixin.js';
 declare class Button extends ButtonMixin(ElementMixin(ThemableMixin(ControllerMixin(HTMLElement)))) {}
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-button': Button;
   }

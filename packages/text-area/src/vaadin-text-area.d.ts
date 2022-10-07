@@ -31,17 +31,18 @@ export type TextAreaValueChangedEvent = CustomEvent<{ value: string }>;
  */
 export type TextAreaValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface TextAreaCustomEventMap {
+export type TextAreaCustomEventMap = {
   'invalid-changed': TextAreaInvalidChangedEvent;
 
   'value-changed': TextAreaValueChangedEvent;
 
   validated: TextAreaValidatedEvent;
-}
+};
 
-export interface TextAreaEventMap extends HTMLElementEventMap, TextAreaCustomEventMap {
-  change: TextAreaChangeEvent;
-}
+export type TextAreaEventMap = HTMLElementEventMap &
+  TextAreaCustomEventMap & {
+    change: TextAreaChangeEvent;
+  };
 
 /**
  * `<vaadin-text-area>` is a web component for multi-line text input.
@@ -110,6 +111,7 @@ declare class TextArea extends ResizeMixin(PatternMixin(InputFieldMixin(Themable
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-text-area': TextArea;
   }

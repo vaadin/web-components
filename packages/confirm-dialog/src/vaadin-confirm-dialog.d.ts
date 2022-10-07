@@ -12,7 +12,7 @@ import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-p
  */
 export type ConfirmDialogOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
-export interface ConfirmDialogCustomEventMap {
+export type ConfirmDialogCustomEventMap = {
   'opened-changed': ConfirmDialogOpenedChangedEvent;
 
   confirm: Event;
@@ -20,7 +20,7 @@ export interface ConfirmDialogCustomEventMap {
   cancel: Event;
 
   reject: Event;
-}
+};
 
 export type ConfirmDialogEventMap = ConfirmDialogCustomEventMap & HTMLElementEventMap;
 
@@ -160,6 +160,7 @@ declare class ConfirmDialog extends SlotMixin(ElementMixin(ThemePropertyMixin(HT
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-confirm-dialog': ConfirmDialog;
   }

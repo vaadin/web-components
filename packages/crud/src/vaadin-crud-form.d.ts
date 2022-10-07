@@ -17,6 +17,7 @@ declare class CrudForm<Item> extends IncludedMixin(FormLayout) {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-crud-form': CrudForm<any>;
   }

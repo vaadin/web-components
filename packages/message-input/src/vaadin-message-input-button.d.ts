@@ -14,6 +14,7 @@ import { Button } from '@vaadin/button/src/vaadin-button.js';
 declare class MessageInputButton extends Button {}
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-message-input-button': MessageInputButton;
   }

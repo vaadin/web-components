@@ -11,11 +11,11 @@ import { GridColumn } from './vaadin-grid-column.js';
  */
 export type GridSelectionColumnSelectAllChangedEvent = CustomEvent<{ value: boolean }>;
 
-export interface GridSelectionColumnCustomEventMap {
+export type GridSelectionColumnCustomEventMap = {
   'select-all-changed': GridSelectionColumnSelectAllChangedEvent;
-}
+};
 
-export interface GridSelectionColumnEventMap extends HTMLElementEventMap, GridSelectionColumnCustomEventMap {}
+export type GridSelectionColumnEventMap = GridSelectionColumnCustomEventMap & HTMLElementEventMap & {};
 
 /**
  * `<vaadin-grid-selection-column>` is a helper element for the `<vaadin-grid>`
@@ -68,6 +68,7 @@ declare class GridSelectionColumn<TItem = GridDefaultItem> extends GridColumn<TI
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-grid-selection-column': GridSelectionColumn<GridDefaultItem>;
   }

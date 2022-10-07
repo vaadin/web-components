@@ -13,9 +13,9 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 export type DetailsOpenedChangedEvent = CustomEvent<{ value: boolean }>;
 
-export interface DetailsCustomEventMap {
+export type DetailsCustomEventMap = {
   'opened-changed': DetailsOpenedChangedEvent;
-}
+};
 
 export type DetailsEventMap = DetailsCustomEventMap & HTMLElementEventMap;
 
@@ -74,6 +74,7 @@ declare class Details extends ShadowFocusMixin(ElementMixin(ThemableMixin(Contro
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-details': Details;
   }

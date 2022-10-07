@@ -10,7 +10,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 import { ButtonsMixin } from './vaadin-menu-bar-buttons-mixin.js';
 import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
 
-export interface MenuBarItem {
+export type MenuBarItem = {
   /**
    * Text to be set as the menu button component's textContent.
    */
@@ -37,31 +37,31 @@ export interface MenuBarItem {
    * Array of submenu items.
    */
   children?: SubMenuItem[];
-}
+};
 
-export interface SubMenuItem {
+export type SubMenuItem = {
   text?: string;
   component?: HTMLElement | string;
   disabled?: boolean;
   theme?: string[] | string;
   checked?: boolean;
   children?: SubMenuItem[];
-}
+};
 
-export interface MenuBarI18n {
+export type MenuBarI18n = {
   moreOptions: string;
-}
+};
 
 /**
  * Fired when a submenu item or menu bar button without children is clicked.
  */
 export type MenuBarItemSelectedEvent = CustomEvent<{ value: MenuBarItem }>;
 
-export interface MenuBarCustomEventMap {
+export type MenuBarCustomEventMap = {
   'item-selected': MenuBarItemSelectedEvent;
-}
+};
 
-export interface MenuBarEventMap extends HTMLElementEventMap, MenuBarCustomEventMap {}
+export type MenuBarEventMap = HTMLElementEventMap & MenuBarCustomEventMap & {};
 
 /**
  * `<vaadin-menu-bar>` is a Web Component providing a set of horizontally stacked buttons offering
@@ -186,6 +186,7 @@ declare class MenuBar extends ButtonsMixin(
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-menu-bar': MenuBar;
   }

@@ -52,9 +52,9 @@ import type { GridSorter, GridSorterDirectionChangedEvent } from '../../vaadin-g
 import type { GridTreeColumn } from '../../vaadin-grid-tree-column';
 import type { GridTreeToggle, GridTreeToggleExpandedChangedEvent } from '../../vaadin-grid-tree-toggle.js';
 
-interface TestGridItem {
+type TestGridItem = {
   testProperty: string;
-}
+};
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

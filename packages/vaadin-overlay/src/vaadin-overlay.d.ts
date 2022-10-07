@@ -42,14 +42,14 @@ export type OverlayOutsideClickEvent = CustomEvent<{ sourceEvent: MouseEvent }>;
  */
 export type OverlayEscapePressEvent = CustomEvent<{ sourceEvent: KeyboardEvent }>;
 
-export interface OverlayElementEventMap {
+export type OverlayElementEventMap = {
   'opened-changed': OverlayOpenedChangedEvent;
   'vaadin-overlay-open': OverlayOpenEvent;
   'vaadin-overlay-close': OverlayCloseEvent;
   'vaadin-overlay-closing': OverlayClosingEvent;
   'vaadin-overlay-outside-click': OverlayOutsideClickEvent;
   'vaadin-overlay-escape-press': OverlayEscapePressEvent;
-}
+};
 
 export type OverlayEventMap = HTMLElementEventMap & OverlayElementEventMap;
 
@@ -243,6 +243,7 @@ declare class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(HTML
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-overlay': OverlayElement;
   }

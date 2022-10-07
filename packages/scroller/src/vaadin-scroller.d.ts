@@ -39,6 +39,7 @@ declare class Scroller extends FocusMixin(ThemableMixin(ElementMixin(ControllerM
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-scroller': Scroller;
   }

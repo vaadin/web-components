@@ -28,6 +28,7 @@ declare class CrudEditColumn extends GridColumn {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-crud-edit-column': CrudEditColumn;
   }

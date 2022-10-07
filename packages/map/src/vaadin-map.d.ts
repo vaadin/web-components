@@ -57,6 +57,7 @@ declare class Map extends ResizeMixin(FocusMixin(ThemableMixin(ElementMixin(HTML
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-map': Map;
   }

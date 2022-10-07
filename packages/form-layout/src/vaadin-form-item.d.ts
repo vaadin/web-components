@@ -96,6 +96,7 @@ declare class FormItem extends ThemableMixin(HTMLElement) {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-form-item': FormItem;
   }

@@ -13,11 +13,11 @@ export type CustomFieldParseValueFn = (value: string) => unknown[];
 
 export type CustomFieldFormatValueFn = (inputValues: unknown[]) => string;
 
-export interface CustomFieldI18n {
+export type CustomFieldI18n = {
   parseValue: CustomFieldParseValueFn;
 
   formatValue: CustomFieldFormatValueFn;
-}
+};
 
 /**
  * Fired when the user commits a value change.
@@ -48,7 +48,7 @@ export type CustomFieldInternalTabEvent = Event & {
   target: CustomField;
 };
 
-export interface CustomFieldCustomEventMap {
+export type CustomFieldCustomEventMap = {
   'invalid-changed': CustomFieldInvalidChangedEvent;
 
   'value-changed': CustomFieldValueChangedEvent;
@@ -56,11 +56,12 @@ export interface CustomFieldCustomEventMap {
   'internal-tab': CustomFieldInternalTabEvent;
 
   validated: CustomFieldValidatedEvent;
-}
+};
 
-export interface CustomFieldEventMap extends HTMLElementEventMap, CustomFieldCustomEventMap {
-  change: CustomFieldChangeEvent;
-}
+export type CustomFieldEventMap = CustomFieldCustomEventMap &
+  HTMLElementEventMap & {
+    change: CustomFieldChangeEvent;
+  };
 
 /**
  * `<vaadin-custom-field>` is a web component for wrapping multiple components as a single field.
@@ -170,6 +171,7 @@ declare class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMi
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-custom-field': CustomField;
   }

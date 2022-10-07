@@ -33,6 +33,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 declare class Tab extends ElementMixin(ThemableMixin(ItemMixin(ControllerMixin(HTMLElement)))) {}
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-tab': Tab;
   }

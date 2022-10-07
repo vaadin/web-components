@@ -39,9 +39,9 @@ import type {
   ComboBoxLightValueChangedEvent,
 } from '../../vaadin-combo-box-light';
 
-interface TestComboBoxItem {
+type TestComboBoxItem = {
   testProperty: string;
-}
+};
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 

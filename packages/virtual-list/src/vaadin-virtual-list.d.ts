@@ -9,10 +9,10 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 
 export type VirtualListDefaultItem = any;
 
-export interface VirtualListItemModel<TItem> {
+export type VirtualListItemModel<TItem> = {
   index: number;
   item: TItem;
-}
+};
 
 export type VirtualListRenderer<TItem> = (
   root: HTMLElement,
@@ -93,6 +93,7 @@ declare class VirtualList<TItem = VirtualListDefaultItem> extends ElementMixin(
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-virtual-list': VirtualList;
   }

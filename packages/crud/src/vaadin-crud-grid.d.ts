@@ -30,6 +30,7 @@ declare class CrudGrid extends IncludedMixin(Grid) {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-crud-grid': CrudGrid;
   }

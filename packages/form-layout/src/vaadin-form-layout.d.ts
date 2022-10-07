@@ -160,6 +160,7 @@ declare class FormLayout extends ResizeMixin(ElementMixin(ThemableMixin(HTMLElem
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-form-layout': FormLayout;
   }

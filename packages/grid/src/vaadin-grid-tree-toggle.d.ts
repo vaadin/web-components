@@ -11,11 +11,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  */
 export type GridTreeToggleExpandedChangedEvent = CustomEvent<{ value: boolean }>;
 
-export interface GridTreeToggleCustomEventMap {
+export type GridTreeToggleCustomEventMap = {
   'expanded-changed': GridTreeToggleExpandedChangedEvent;
-}
+};
 
-export interface GridTreeToggleEventMap extends HTMLElementEventMap, GridTreeToggleCustomEventMap {}
+export type GridTreeToggleEventMap = GridTreeToggleCustomEventMap & HTMLElementEventMap & {};
 
 /**
  * `<vaadin-grid-tree-toggle>` is a helper element for the `<vaadin-grid>`
@@ -96,6 +96,7 @@ declare class GridTreeToggle extends ThemableMixin(DirMixin(HTMLElement)) {
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-grid-tree-toggle': GridTreeToggle;
   }

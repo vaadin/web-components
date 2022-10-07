@@ -11,13 +11,13 @@ import type { DelegateFocusMixinClass } from '@vaadin/field-base/src/delegate-fo
 import type { InputConstraintsMixinClass } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import type { InputMixinClass } from '@vaadin/field-base/src/input-mixin.js';
 
-export interface DatePickerDate {
+export type DatePickerDate = {
   day: number;
   month: number;
   year: number;
-}
+};
 
-export interface DatePickerI18n {
+export type DatePickerI18n = {
   monthNames: string[];
   weekdays: string[];
   weekdaysShort: string[];
@@ -29,7 +29,7 @@ export interface DatePickerI18n {
   parseDate(date: string): DatePickerDate | undefined;
   formatDate(date: DatePickerDate): string;
   formatTitle(monthName: string, fullYear: number): string;
-}
+};
 
 export declare function DatePickerMixin<T extends Constructor<HTMLElement>>(
   base: T,

@@ -12,11 +12,11 @@ import type { GridSorterDirection } from './vaadin-grid-sorter.js';
  */
 export type GridSortColumnDirectionChangedEvent = CustomEvent<{ value: GridSorterDirection }>;
 
-export interface GridSortColumnCustomEventMap {
+export type GridSortColumnCustomEventMap = {
   'direction-changed': GridSortColumnDirectionChangedEvent;
-}
+};
 
-export interface GridSortColumnEventMap extends HTMLElementEventMap, GridSortColumnCustomEventMap {}
+export type GridSortColumnEventMap = GridSortColumnCustomEventMap & HTMLElementEventMap & {};
 
 /**
  * `<vaadin-grid-sort-column>` is a helper element for the `<vaadin-grid>`
@@ -60,6 +60,7 @@ declare class GridSortColumn<TItem = GridDefaultItem> extends GridColumn<TItem> 
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-grid-sort-column': GridSortColumn<GridDefaultItem>;
   }

@@ -9,12 +9,12 @@ import { DelegateStateMixin } from '@vaadin/field-base/src/delegate-state-mixin.
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-export interface SelectItem {
+export type SelectItem = {
   label?: string;
   value?: string;
   component?: string;
   disabled?: boolean;
-}
+};
 
 /**
  * Fired when the user commits a value change.
@@ -53,7 +53,7 @@ export type SelectValueChangedEvent = CustomEvent<{ value: string }>;
  */
 export type SelectValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface SelectCustomEventMap {
+export type SelectCustomEventMap = {
   'opened-changed': SelectOpenedChangedEvent;
 
   'invalid-changed': SelectInvalidChangedEvent;
@@ -61,11 +61,12 @@ export interface SelectCustomEventMap {
   'value-changed': SelectValueChangedEvent;
 
   validated: SelectValidatedEvent;
-}
+};
 
-export interface SelectEventMap extends HTMLElementEventMap, SelectCustomEventMap {
-  change: SelectChangeEvent;
-}
+export type SelectEventMap = HTMLElementEventMap &
+  SelectCustomEventMap & {
+    change: SelectChangeEvent;
+  };
 
 /**
  * `<vaadin-select>` is a Web Component for selecting values from a list of items.
@@ -269,6 +270,7 @@ declare class Select extends DelegateFocusMixin(
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-select': Select;
   }

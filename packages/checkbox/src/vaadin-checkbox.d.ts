@@ -21,13 +21,13 @@ export type CheckboxCheckedChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type CheckboxIndeterminateChangedEvent = CustomEvent<{ value: boolean }>;
 
-export interface CheckboxCustomEventMap {
+export type CheckboxCustomEventMap = {
   'checked-changed': CheckboxCheckedChangedEvent;
 
   'indeterminate-changed': CheckboxIndeterminateChangedEvent;
-}
+};
 
-export interface CheckboxEventMap extends HTMLElementEventMap, CheckboxCustomEventMap {}
+export type CheckboxEventMap = CheckboxCustomEventMap & HTMLElementEventMap & {};
 
 /**
  * `<vaadin-checkbox>` is an input field representing a binary choice.
@@ -92,6 +92,7 @@ declare class Checkbox extends LabelMixin(
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-checkbox': Checkbox;
   }

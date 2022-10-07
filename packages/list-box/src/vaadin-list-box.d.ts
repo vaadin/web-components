@@ -23,15 +23,15 @@ export type ListBoxSelectedChangedEvent = CustomEvent<{ value: number }>;
  */
 export type ListBoxSelectedValuesChangedEvent = CustomEvent<{ value: number[] }>;
 
-export interface ListBoxCustomEventMap {
+export type ListBoxCustomEventMap = {
   'items-changed': ListBoxItemsChangedEvent;
 
   'selected-changed': ListBoxSelectedChangedEvent;
 
   'selected-values-changed': ListBoxSelectedValuesChangedEvent;
-}
+};
 
-export interface ListBoxEventMap extends HTMLElementEventMap, ListBoxCustomEventMap {}
+export type ListBoxEventMap = HTMLElementEventMap & ListBoxCustomEventMap & {};
 
 /**
  * `<vaadin-list-box>` is a Web Component for creating menus.
@@ -76,6 +76,7 @@ declare class ListBox extends MultiSelectListMixin(ThemableMixin(ElementMixin(Co
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-list-box': ListBox;
   }

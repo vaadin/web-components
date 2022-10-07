@@ -9,10 +9,10 @@ import { ContextMenuItem, ItemsMixin } from './vaadin-contextmenu-items-mixin.js
 
 export { ContextMenuItem };
 
-export interface ContextMenuRendererContext {
+export type ContextMenuRendererContext = {
   target: HTMLElement;
   detail?: { sourceEvent: Event };
-}
+};
 
 export type ContextMenuRenderer = (
   root: HTMLElement,
@@ -30,7 +30,7 @@ export type ContextMenuOpenedChangedEvent = CustomEvent<{ value: boolean }>;
  */
 export type ContextMenuItemSelectedEvent = CustomEvent<{ value: ContextMenuItem }>;
 
-export interface ContextMenuCustomEventMap {
+export type ContextMenuCustomEventMap = {
   'opened-changed': ContextMenuOpenedChangedEvent;
 
   'item-selected': ContextMenuItemSelectedEvent;
@@ -38,9 +38,9 @@ export interface ContextMenuCustomEventMap {
   'close-all-menus': Event;
 
   'items-outside-click': Event;
-}
+};
 
-export interface ContextMenuEventMap extends HTMLElementEventMap, ContextMenuCustomEventMap {}
+export type ContextMenuEventMap = ContextMenuCustomEventMap & HTMLElementEventMap & {};
 
 /**
  * `<vaadin-context-menu>` is a Web Component for creating context menus.
@@ -300,6 +300,7 @@ declare class ContextMenu extends ElementMixin(ThemePropertyMixin(ItemsMixin(HTM
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-context-menu': ContextMenu;
   }

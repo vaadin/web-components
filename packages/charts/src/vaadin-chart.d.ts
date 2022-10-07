@@ -183,7 +183,7 @@ export type ChartYaxesExtremesSetEvent = CustomEvent<{
   };
 }>;
 
-export interface ChartCustomEventMap {
+export type ChartCustomEventMap = {
   'chart-add-series': ChartAddSeriesEvent;
 
   'chart-after-export': ChartAfterExportEvent;
@@ -243,7 +243,7 @@ export interface ChartCustomEventMap {
   'xaxes-extremes-set': ChartXaxesExtremesSetEvent;
 
   'yaxes-extremes-set': ChartYaxesExtremesSetEvent;
-}
+};
 
 export type ChartEventMap = ChartCustomEventMap & HTMLElementEventMap;
 
@@ -592,6 +592,7 @@ declare class Chart extends ResizeMixin(ThemableMixin(ElementMixin(HTMLElement))
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-chart': Chart;
   }

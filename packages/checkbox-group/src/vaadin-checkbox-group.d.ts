@@ -24,15 +24,15 @@ export type CheckboxGroupValueChangedEvent = CustomEvent<{ value: string[] }>;
  */
 export type CheckboxGroupValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface CheckboxGroupCustomEventMap {
+export type CheckboxGroupCustomEventMap = {
   'invalid-changed': CheckboxGroupInvalidChangedEvent;
 
   'value-changed': CheckboxGroupValueChangedEvent;
 
   validated: CheckboxGroupValidatedEvent;
-}
+};
 
-export interface CheckboxGroupEventMap extends HTMLElementEventMap, CheckboxGroupCustomEventMap {}
+export type CheckboxGroupEventMap = CheckboxGroupCustomEventMap & HTMLElementEventMap & {};
 
 /**
  * `<vaadin-checkbox-group>` is a web component that allows the user to choose several items from a group of binary choices.
@@ -98,6 +98,7 @@ declare class CheckboxGroup extends FieldMixin(FocusMixin(DisabledMixin(ElementM
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-checkbox-group': CheckboxGroup;
   }

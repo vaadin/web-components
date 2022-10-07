@@ -30,17 +30,18 @@ export type TextFieldValueChangedEvent = CustomEvent<{ value: string }>;
  */
 export type TextFieldValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface TextFieldCustomEventMap {
+export type TextFieldCustomEventMap = {
   'invalid-changed': TextFieldInvalidChangedEvent;
 
   'value-changed': TextFieldValueChangedEvent;
 
   validated: TextFieldValidatedEvent;
-}
+};
 
-export interface TextFieldEventMap extends HTMLElementEventMap, TextFieldCustomEventMap {
-  change: TextFieldChangeEvent;
-}
+export type TextFieldEventMap = HTMLElementEventMap &
+  TextFieldCustomEventMap & {
+    change: TextFieldChangeEvent;
+  };
 
 /**
  * `<vaadin-text-field>` is a web component that allows the user to input and edit text.
@@ -130,6 +131,7 @@ declare class TextField extends PatternMixin(InputFieldMixin(ThemableMixin(Eleme
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-text-field': TextField;
   }

@@ -35,7 +35,7 @@ export type DatePickerLightValueChangedEvent = CustomEvent<{ value: string }>;
  */
 export type DatePickerLightValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface DatePickerLightCustomEventMap {
+export type DatePickerLightCustomEventMap = {
   'opened-changed': DatePickerLightOpenedChangedEvent;
 
   'invalid-changed': DatePickerLightInvalidChangedEvent;
@@ -43,11 +43,12 @@ export interface DatePickerLightCustomEventMap {
   'value-changed': DatePickerLightValueChangedEvent;
 
   validated: DatePickerLightValidatedEvent;
-}
+};
 
-export interface DatePickerLightEventMap extends HTMLElementEventMap, DatePickerLightCustomEventMap {
-  change: DatePickerLightChangeEvent;
-}
+export type DatePickerLightEventMap = DatePickerLightCustomEventMap &
+  HTMLElementEventMap & {
+    change: DatePickerLightChangeEvent;
+  };
 
 /**
  * `<vaadin-date-picker-light>` is a customizable version of the `<vaadin-date-picker>` providing
@@ -110,6 +111,7 @@ declare class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixi
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-date-picker-light': DatePickerLight;
   }

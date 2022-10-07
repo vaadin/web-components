@@ -101,6 +101,7 @@ declare class Message extends FocusMixin(ThemableMixin(ElementMixin(HTMLElement)
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-message': Message;
   }

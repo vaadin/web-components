@@ -25,15 +25,15 @@ export type RadioGroupValueChangedEvent = CustomEvent<{ value: string }>;
  */
 export type RadioGroupValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface RadioGroupCustomEventMap {
+export type RadioGroupCustomEventMap = {
   'invalid-changed': RadioGroupInvalidChangedEvent;
 
   'value-changed': RadioGroupValueChangedEvent;
 
   validated: RadioGroupValidatedEvent;
-}
+};
 
-export interface RadioGroupEventMap extends HTMLElementEventMap, RadioGroupCustomEventMap {}
+export type RadioGroupEventMap = HTMLElementEventMap & RadioGroupCustomEventMap & {};
 
 /**
  * `<vaadin-radio-group>` is a web component that allows the user to choose one item from a group of choices.
@@ -107,6 +107,7 @@ declare class RadioGroup extends FieldMixin(
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-radio-group': RadioGroup;
   }

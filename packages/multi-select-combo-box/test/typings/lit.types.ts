@@ -4,9 +4,9 @@ import { multiSelectComboBoxRenderer } from '../../lit.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
-interface TestComboBoxItem {
+type TestComboBoxItem = {
   testProperty: string;
-}
+};
 
 assertType<
   (

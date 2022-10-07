@@ -11,10 +11,10 @@ import type { ComboBox } from './vaadin-combo-box.js';
 
 export type ComboBoxDefaultItem = any;
 
-export interface ComboBoxItemModel<TItem> {
+export type ComboBoxItemModel<TItem> = {
   index: number;
   item: TItem;
-}
+};
 
 export type ComboBoxRenderer<TItem> = (
   root: HTMLElement,

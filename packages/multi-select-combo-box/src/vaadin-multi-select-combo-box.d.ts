@@ -32,13 +32,13 @@ export type MultiSelectComboBoxRenderer<TItem> = (
   model: ComboBoxItemModel<TItem>,
 ) => void;
 
-export interface MultiSelectComboBoxI18n {
+export type MultiSelectComboBoxI18n = {
   cleared: string;
   focused: string;
   selected: string;
   deselected: string;
   total: string;
-}
+};
 
 /**
  * Fired when the user commits a value change.
@@ -72,7 +72,7 @@ export type MultiSelectComboBoxSelectedItemsChangedEvent<TItem> = CustomEvent<{ 
  */
 export type MultiSelectComboBoxValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap {
+export type MultiSelectComboBoxEventMap<TItem> = HTMLElementEventMap & {
   change: MultiSelectComboBoxChangeEvent<TItem>;
 
   'custom-value-set': MultiSelectComboBoxCustomValueSetEvent;
@@ -84,7 +84,7 @@ export interface MultiSelectComboBoxEventMap<TItem> extends HTMLElementEventMap 
   'selected-items-changed': MultiSelectComboBoxSelectedItemsChangedEvent<TItem>;
 
   validated: MultiSelectComboBoxValidatedEvent;
-}
+};
 
 /**
  * `<vaadin-multi-select-combo-box>` is a web component that wraps `<vaadin-combo-box>` and extends
@@ -331,26 +331,26 @@ declare class MultiSelectComboBox<TItem = ComboBoxDefaultItem> extends HTMLEleme
   ): void;
 }
 
-interface MultiSelectComboBox
-  extends ValidateMixinClass,
-    SlotStylesMixinClass,
-    LabelMixinClass,
-    KeyboardMixinClass,
-    Omit<InputMixinClass, 'value'>,
-    InputControlMixinClass,
-    InputConstraintsMixinClass,
-    FocusMixinClass,
-    FieldMixinClass,
-    DisabledMixinClass,
-    DelegateStateMixinClass,
-    DelegateFocusMixinClass,
-    ResizeMixinClass,
-    ThemableMixinClass,
-    ThemePropertyMixinClass,
-    ElementMixinClass,
-    ControllerMixinClass {}
+type MultiSelectComboBox = ControllerMixinClass &
+  DelegateFocusMixinClass &
+  DelegateStateMixinClass &
+  DisabledMixinClass &
+  ElementMixinClass &
+  FieldMixinClass &
+  FocusMixinClass &
+  InputConstraintsMixinClass &
+  InputControlMixinClass &
+  KeyboardMixinClass &
+  LabelMixinClass &
+  Omit<InputMixinClass, 'value'> &
+  ResizeMixinClass &
+  SlotStylesMixinClass &
+  ThemableMixinClass &
+  ThemePropertyMixinClass &
+  ValidateMixinClass & {};
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-multi-select-combo-box': MultiSelectComboBox;
   }

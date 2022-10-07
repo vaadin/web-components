@@ -18,11 +18,11 @@ export type AccordionItemsChangedEvent = CustomEvent<{ value: AccordionPanel[] }
  */
 export type AccordionOpenedChangedEvent = CustomEvent<{ value: number | null }>;
 
-export interface AccordionCustomEventMap {
+export type AccordionCustomEventMap = {
   'items-changed': AccordionItemsChangedEvent;
 
   'opened-changed': AccordionOpenedChangedEvent;
-}
+};
 
 export type AccordionEventMap = AccordionCustomEventMap & HTMLElementEventMap;
 
@@ -99,6 +99,7 @@ declare class Accordion extends KeyboardDirectionMixin(ElementMixin(ThemableMixi
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-accordion': Accordion;
   }

@@ -29,17 +29,18 @@ export type NumberFieldValueChangedEvent = CustomEvent<{ value: string }>;
  */
 export type NumberFieldValidatedEvent = CustomEvent<{ valid: boolean }>;
 
-export interface NumberFieldCustomEventMap {
+export type NumberFieldCustomEventMap = {
   'invalid-changed': NumberFieldInvalidChangedEvent;
 
   'value-changed': NumberFieldValueChangedEvent;
 
   validated: NumberFieldValidatedEvent;
-}
+};
 
-export interface NumberFieldEventMap extends HTMLElementEventMap, NumberFieldCustomEventMap {
-  change: NumberFieldChangeEvent;
-}
+export type NumberFieldEventMap = HTMLElementEventMap &
+  NumberFieldCustomEventMap & {
+    change: NumberFieldChangeEvent;
+  };
 
 /**
  * `<vaadin-number-field>` is an input field web component that only accepts numeric input.
@@ -104,6 +105,7 @@ declare class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(HTM
 }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
   interface HTMLElementTagNameMap {
     'vaadin-number-field': NumberField;
   }
