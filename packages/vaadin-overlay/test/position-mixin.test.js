@@ -96,6 +96,21 @@ describe('position mixin', () => {
     expectEdgesAligned(LEFT, LEFT);
   });
 
+  it('should not lose scroll position on overlay position update', () => {
+    // Move the target to the center of the viewport
+    target.style.top = '50vh';
+    // Increase the height of the child to make the overlay scrollable
+    overlay.querySelector('#overlay-child').style.height = '100vh';
+
+    // Scroll the overlay
+    overlay.$.overlay.scrollTop = 100;
+
+    updatePosition();
+
+    // Expect the overlay to be scrolled to the same position
+    expect(overlay.$.overlay.scrollTop).to.equal(100);
+  });
+
   describe('vertical align top', () => {
     beforeEach(() => {
       overlay.verticalAlign = TOP;
