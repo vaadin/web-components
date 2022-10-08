@@ -3,11 +3,12 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import './vaadin-message-input-text-area.js';
-import './vaadin-message-input-button.js';
+import '@vaadin/button/src/vaadin-button.js';
+import '@vaadin/text-area/src/vaadin-text-area.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -23,16 +24,8 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * <vaadin-message-input></vaadin-message-input>
  * ```
  *
- * ### Internal components
- *
- * In addition to `<vaadin-message-input>` itself, the following internal
- * components are themable:
- *
- * - `<vaadin-message-input-button>` - has the same API as [`<vaadin-button>`](#/elements/vaadin-button).
- * - `<vaadin-message-input-text-area>` - has the same API as [`<vaadin-text-area>`](#/elements/vaadin-text-area).
- *
  * @extends HTMLElement
- * @mizes ControllerMixin
+ * @mixes ControllerMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
@@ -44,10 +37,10 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
        */
       value: {
         type: String,
+        value: '',
       },
 
       /**
-       *
        * The object used to localize this component.
        * For changing the default localization, change the entire
        * `i18n` object.
@@ -84,6 +77,16 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
         value: false,
         reflectToAttribute: true,
       },
+
+      /** @private */
+      _button: {
+        type: Object,
+      },
+
+      /** @private */
+      _textArea: {
+        type: Object,
+      },
     };
   }
 
@@ -102,17 +105,19 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
         :host([hidden]) {
           display: none !important;
         }
+
+        ::slotted([slot='button']) {
+          flex-shrink: 0;
+        }
+
+        ::slotted([slot='textarea']) {
+          align-self: stretch;
+          flex-grow: 1;
+        }
       </style>
-      <vaadin-message-input-text-area
-        disabled="[[disabled]]"
-        value="{{value}}"
-        placeholder="[[i18n.message]]"
-        aria-label="[[i18n.message]]"
-        on-enter="__submit"
-      ></vaadin-message-input-text-area>
-      <vaadin-message-input-button disabled="[[disabled]]" theme="primary contained" on-click="__submit"
-        >[[i18n.send]]</vaadin-message-input-button
-      >
+      <slot name="textarea"></slot>
+
+      <slot name="button"></slot>
 
       <slot name="tooltip"></slot>
     `;
@@ -122,12 +127,89 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
     return 'vaadin-message-input';
   }
 
+  static get observers() {
+    return [
+      '__buttonPropsChanged(_button, disabled, i18n)',
+      '__textAreaPropsChanged(_textArea, disabled, i18n, value)',
+    ];
+  }
+
   /** @protected */
   ready() {
     super.ready();
 
+    this._buttonController = new SlotController(
+      this,
+      'button',
+      () => document.createElement('vaadin-button'),
+      (_, btn) => {
+        btn.setAttribute('theme', 'primary contained');
+
+        btn.addEventListener('click', () => {
+          this.__submit();
+        });
+
+        this._button = btn;
+      },
+    );
+    this.addController(this._buttonController);
+
+    this._textAreaController = new SlotController(
+      this,
+      'textarea',
+      () => document.createElement('vaadin-text-area'),
+      (_, textarea) => {
+        textarea.addEventListener('value-changed', (event) => {
+          this.value = event.detail.value;
+        });
+
+        textarea.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            this.__submit();
+          }
+        });
+
+        const input = textarea.inputElement;
+        input.removeAttribute('aria-labelledby');
+
+        // Set initial height to one row
+        input.setAttribute('rows', 1);
+        input.style.minHeight = '0';
+
+        this._textArea = textarea;
+      },
+    );
+    this.addController(this._textAreaController);
+
     this._tooltipController = new TooltipController(this);
     this.addController(this._tooltipController);
+  }
+
+  /** @private */
+  __buttonPropsChanged(button, disabled, i18n) {
+    if (button) {
+      button.disabled = disabled;
+      button.textContent = i18n.send;
+    }
+  }
+
+  /** @private */
+  __textAreaPropsChanged(textArea, disabled, i18n, value) {
+    if (textArea) {
+      textArea.disabled = disabled;
+      textArea.value = value;
+
+      const message = i18n.message;
+      textArea.placeholder = message;
+
+      if (message) {
+        textArea.inputElement.setAttribute('aria-label', message);
+      } else {
+        textArea.inputElement.removeAttribute('aria-label');
+      }
+    }
   }
 
   /**
@@ -141,7 +223,7 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
       this.dispatchEvent(new CustomEvent('submit', { detail: { value: this.value } }));
       this.value = '';
     }
-    this.shadowRoot.querySelector('vaadin-message-input-text-area').focus();
+    this._textArea.focus();
   }
 }
 

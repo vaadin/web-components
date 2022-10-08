@@ -8,8 +8,8 @@ describe('message-input', () => {
 
   beforeEach(() => {
     messageInput = fixtureSync('<vaadin-message-input></vaadin-message-input>');
-    textArea = messageInput.shadowRoot.querySelector('vaadin-message-input-text-area');
-    button = messageInput.shadowRoot.querySelector('vaadin-message-input-button');
+    textArea = messageInput.querySelector('vaadin-text-area');
+    button = messageInput.querySelector('vaadin-button');
   });
 
   describe('custom element definition', () => {
