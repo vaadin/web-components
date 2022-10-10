@@ -454,6 +454,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     this._updateOverlayMode();
 
     this._navbarSizeObserver = new ResizeObserver(() => {
+      this._blockAnimationUntilAfterNextRender();
       this._updateOffsetSize();
     });
     this._navbarSizeObserver.observe(this.$.navbarTop);
