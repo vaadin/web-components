@@ -14,7 +14,7 @@ import { FocusTrapController } from '@vaadin/component-base/src/focus-trap-contr
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * @typedef {import("./vaadin-app-layout.js").AppLayoutI18n} AppLayoutI18n
+ * @typedef {import('./vaadin-app-layout.js').AppLayoutI18n} AppLayoutI18n
  */
 
 /**
