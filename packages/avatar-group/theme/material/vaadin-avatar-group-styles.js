@@ -47,24 +47,13 @@ registerStyles('vaadin-avatar-group-overlay', [menuOverlay, avatarGroupOverlay],
 });
 
 registerStyles(
-  'vaadin-avatar-group-list-box',
-  css`
-    [part='items'] ::slotted(vaadin-item[theme='avatar-group-item']) {
-      padding: 8px;
-      padding-right: 24px;
-    }
-
-    :host([dir='rtl']) [part='items'] ::slotted(vaadin-item[theme='avatar-group-item']) {
-      padding: 8px;
-      padding-left: 24px;
-    }
-  `,
-  { moduleId: 'material-avatar-group-list-box' },
-);
-
-registerStyles(
   'vaadin-item',
   css`
+    :host([theme='avatar-group-item']) {
+      padding: 8px;
+      padding-inline-end: 24px;
+    }
+
     :host([theme='avatar-group-item']) [part='content'] {
       display: flex;
       align-items: center;
