@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/board",
-  "version": "23.2.3",
+  "version": "23.2.4",
   "publishConfig": {
     "access": "public"
   },
@@ -40,7 +40,7 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "~23.2.3"
+    "@vaadin/component-base": "~23.2.4"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
