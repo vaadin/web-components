@@ -83,6 +83,22 @@ describe('vaadin-app-layout', () => {
         await aTimeout(0);
         expect(toggle.offsetHeight).to.be.greaterThan(0);
       });
+
+      it('should update content offset when navbar height changes', async () => {
+        // Add content to navbar and measure original offset
+        const navbarContent = document.createElement('div');
+        navbarContent.style.height = '50px';
+        navbarContent.setAttribute('slot', 'navbar');
+        layout.appendChild(navbarContent);
+        await nextFrame();
+        const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-top'));
+        expect(initialOffset).to.be.greaterThan(0);
+        // Increase navbar content size and measure increase
+        navbarContent.style.height = '100px';
+        await nextFrame();
+        const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-top'));
+        expect(updatedOffset).to.equal(initialOffset + 50);
+      });
     });
 
     describe('touch-optimized', () => {
@@ -110,6 +126,22 @@ describe('vaadin-app-layout', () => {
         expect(layout.$.navbarBottom.hasAttribute('hidden')).to.be.true;
         window.dispatchEvent(new Event('resize'));
         expect(layout.$.navbarBottom.hasAttribute('hidden')).to.be.false;
+      });
+
+      it('should update content offset when navbar height changes', async () => {
+        // Add content to navbar and measure original offset
+        const navbarContent = document.createElement('div');
+        navbarContent.style.height = '50px';
+        navbarContent.setAttribute('slot', 'navbar touch-optimized');
+        layout.appendChild(navbarContent);
+        await nextFrame();
+        const initialOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
+        expect(initialOffset).to.be.greaterThan(0);
+        // Increase navbar content size and measure increase
+        navbarContent.style.height = '100px';
+        await nextFrame();
+        const updatedOffset = parseInt(getComputedStyle(layout).getPropertyValue('padding-bottom'));
+        expect(updatedOffset).to.equal(initialOffset + 50);
       });
     });
   });
