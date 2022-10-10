@@ -28,6 +28,13 @@ describe('message-input', () => {
     });
   });
 
+  describe('hidden', () => {
+    it('should have display: none when hidden', () => {
+      messageInput.setAttribute('hidden', '');
+      expect(getComputedStyle(messageInput).display).to.equal('none');
+    });
+  });
+
   describe('submit functionality', () => {
     it('should fire a submit event on button click', () => {
       const spy = sinon.spy();
