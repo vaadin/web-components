@@ -345,6 +345,12 @@ export class IronListAdapter {
     }
 
     this.__previousScrollTop = this._scrollTop;
+
+    // If the first visible index is not 0 when scrolled to the top,
+    // add some scroll offset to enable the user to continue scrolling.
+    if (this._scrollTop === 0 && this.firstVisibleIndex !== 0) {
+      this._scrollTop = 1;
+    }
   }
 
   /** @private */
