@@ -55,24 +55,13 @@ registerStyles('vaadin-avatar-group-overlay', [overlay, menuOverlayCore, avatarG
 });
 
 registerStyles(
-  'vaadin-avatar-group-list-box',
-  css`
-    [part='items'] ::slotted(vaadin-item[theme='avatar-group-item']) {
-      padding: var(--lumo-space-xs);
-      padding-right: var(--lumo-space-m);
-    }
-
-    :host([dir='rtl']) [part='items'] ::slotted(vaadin-item[theme='avatar-group-item']) {
-      padding: var(--lumo-space-xs);
-      padding-left: var(--lumo-space-m);
-    }
-  `,
-  { moduleId: 'lumo-avatar-group-list-box' },
-);
-
-registerStyles(
   'vaadin-item',
   css`
+    :host([theme='avatar-group-item']) {
+      padding: var(--lumo-space-xs);
+      padding-inline-end: var(--lumo-space-m);
+    }
+
     :host([theme='avatar-group-item']) [part='content'] {
       display: flex;
       align-items: center;
