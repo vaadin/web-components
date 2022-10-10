@@ -86,8 +86,8 @@ snapshots["vaadin-avatar-group items"] =
   id="overlay"
   no-vertical-overlap=""
 >
-  <vaadin-avatar-group-list-box role="list">
-  </vaadin-avatar-group-list-box>
+  <vaadin-list-box role="list">
+  </vaadin-list-box>
 </vaadin-avatar-group-overlay>
 `;
 /* end snapshot vaadin-avatar-group items */
@@ -146,8 +146,8 @@ snapshots["vaadin-avatar-group theme"] =
   id="overlay"
   no-vertical-overlap=""
 >
-  <vaadin-avatar-group-list-box role="list">
-  </vaadin-avatar-group-list-box>
+  <vaadin-list-box role="list">
+  </vaadin-list-box>
 </vaadin-avatar-group-overlay>
 `;
 /* end snapshot vaadin-avatar-group theme */

@@ -6,7 +6,7 @@
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@vaadin/avatar/src/vaadin-avatar.js';
 import '@vaadin/item/src/vaadin-item.js';
-import './vaadin-avatar-group-list-box.js';
+import '@vaadin/list-box/src/vaadin-list-box.js';
 import './vaadin-avatar-group-overlay.js';
 import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
@@ -52,7 +52,6 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * In addition to `<vaadin-avatar-group>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-avatar-group-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  * - `<vaadin-avatar-group-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  *
  * @extends HTMLElement
@@ -308,7 +307,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
   __overlayRenderer(root) {
     let listBox = root.firstElementChild;
     if (!listBox) {
-      listBox = document.createElement('vaadin-avatar-group-list-box');
+      listBox = document.createElement('vaadin-list-box');
       listBox.addEventListener('keydown', (event) => this._onListKeyDown(event));
       root.appendChild(listBox);
     }
@@ -519,7 +518,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
   __openedChanged(opened, wasOpened) {
     if (opened) {
       if (!this._menuElement) {
-        this._menuElement = this._overlayElement.content.querySelector('vaadin-avatar-group-list-box');
+        this._menuElement = this._overlayElement.content.querySelector('vaadin-list-box');
         this._menuElement.setAttribute('role', 'listbox');
       }
 

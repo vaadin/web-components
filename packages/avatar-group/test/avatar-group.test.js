@@ -297,7 +297,7 @@ describe('avatar-group', () => {
 
     it('should render list-box with items in the overlay', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const list = overlay.querySelector('vaadin-avatar-group-list-box');
+        const list = overlay.querySelector('vaadin-list-box');
         expect(list).to.be.ok;
         const items = overlay.querySelectorAll('[theme="avatar-group-item"]');
         expect(items.length).to.equal(3);
@@ -342,7 +342,7 @@ describe('avatar-group', () => {
 
     it('should close overlay on list-box Escape press', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const list = overlay.querySelector('vaadin-avatar-group-list-box');
+        const list = overlay.querySelector('vaadin-list-box');
         escKeyDown(list);
 
         afterNextRender(overlay, () => {
@@ -355,7 +355,7 @@ describe('avatar-group', () => {
 
     it('should close overlay on list-box Tab press', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const list = overlay.querySelector('vaadin-avatar-group-list-box');
+        const list = overlay.querySelector('vaadin-list-box');
         tabKeyDown(list);
 
         afterNextRender(overlay, () => {
@@ -395,7 +395,7 @@ describe('avatar-group', () => {
 
     it('should restore focus-ring attribute on close if closed with keyboard', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const list = overlay.querySelector('vaadin-avatar-group-list-box');
+        const list = overlay.querySelector('vaadin-list-box');
         escKeyDown(list);
 
         afterNextRender(overlay, () => {
@@ -551,7 +551,7 @@ describe('avatar-group', () => {
 
     it('should set role="listbox" on the overlay list-box', (done) => {
       overlay.addEventListener('vaadin-overlay-open', () => {
-        const list = overlay.querySelector('vaadin-avatar-group-list-box');
+        const list = overlay.querySelector('vaadin-list-box');
         expect(list.getAttribute('role')).to.equal('listbox');
         done();
       });
