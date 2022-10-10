@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-template-renderer",
-  "version": "23.3.0-alpha2",
+  "version": "23.3.0-alpha3",
   "publishConfig": {
     "access": "public"
   },
@@ -28,6 +28,6 @@
     "template"
   ],
   "dependencies": {
-    "@vaadin/polymer-legacy-adapter": "23.3.0-alpha2"
+    "@vaadin/polymer-legacy-adapter": "23.3.0-alpha3"
   }
 }
