@@ -6,7 +6,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-message-list',
   css`
-    [part='list'] {
+    ::slotted([role='list']) {
       padding: 8px 0;
     }
   `,
