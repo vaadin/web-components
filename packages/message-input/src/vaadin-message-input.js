@@ -95,6 +95,10 @@ class MessageInput extends ElementMixin(ThemableMixin(PolymerElement)) {
           overflow: hidden;
           flex-shrink: 0;
         }
+
+        :host([hidden]) {
+          display: none !important;
+        }
       </style>
       <vaadin-message-input-text-area
         disabled="[[disabled]]"
