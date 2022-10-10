@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/split-layout",
-  "version": "23.3.0-alpha3",
+  "version": "24.0.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
@@ -36,10 +36,10 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "23.3.0-alpha3",
-    "@vaadin/vaadin-lumo-styles": "23.3.0-alpha3",
-    "@vaadin/vaadin-material-styles": "23.3.0-alpha3",
-    "@vaadin/vaadin-themable-mixin": "23.3.0-alpha3"
+    "@vaadin/component-base": "24.0.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha0",
+    "@vaadin/vaadin-material-styles": "24.0.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
