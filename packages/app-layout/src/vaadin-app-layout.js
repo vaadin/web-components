@@ -303,9 +303,7 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
       <div part="navbar" id="navbarBottom" bottom hidden>
         <slot name="navbar-bottom"></slot>
       </div>
-      <div hidden>
-        <slot id="touchSlot" name="navbar touch-optimized"></slot>
-      </div>
+      <div hidden><slot id="touchSlot" name="navbar touch-optimized"></slot></div>
     `;
   }
 
