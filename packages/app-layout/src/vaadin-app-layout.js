@@ -14,7 +14,7 @@ import { FocusTrapController } from '@vaadin/component-base/src/focus-trap-contr
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
- * @typedef {import('./vaadin-app-layout.js').AppLayoutI18n} AppLayoutI18n
+ * @typedef {import("./vaadin-app-layout.js").AppLayoutI18n} AppLayoutI18n
  */
 
 /**
@@ -303,7 +303,9 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
       <div part="navbar" id="navbarBottom" bottom hidden>
         <slot name="navbar-bottom"></slot>
       </div>
-      <div hidden><slot id="touchSlot" name="navbar touch-optimized"></slot></div>
+      <div hidden>
+        <slot id="touchSlot" name="navbar touch-optimized"></slot>
+      </div>
     `;
   }
 
@@ -450,6 +452,12 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     });
     this._updateDrawerSize();
     this._updateOverlayMode();
+
+    this._navbarSizeObserver = new ResizeObserver(() => {
+      this._updateOffsetSize();
+    });
+    this._navbarSizeObserver.observe(this.$.navbarTop);
+    this._navbarSizeObserver.observe(this.$.navbarBottom);
 
     window.addEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
   }
