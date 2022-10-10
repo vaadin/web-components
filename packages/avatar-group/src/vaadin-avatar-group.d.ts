@@ -60,7 +60,6 @@ export interface AvatarGroupItem {
  * In addition to `<vaadin-avatar-group>` itself, the following internal
  * components are themable:
  *
- * - `<vaadin-avatar-group-list-box>` - has the same API as [`<vaadin-list-box>`](#/elements/vaadin-list-box).
  * - `<vaadin-avatar-group-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  */
 declare class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(HTMLElement))) {
