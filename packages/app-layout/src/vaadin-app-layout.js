@@ -451,6 +451,13 @@ class AppLayout extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElemen
     this._updateDrawerSize();
     this._updateOverlayMode();
 
+    this._navbarSizeObserver = new ResizeObserver(() => {
+      this._blockAnimationUntilAfterNextRender();
+      this._updateOffsetSize();
+    });
+    this._navbarSizeObserver.observe(this.$.navbarTop);
+    this._navbarSizeObserver.observe(this.$.navbarBottom);
+
     window.addEventListener('close-overlay-drawer', this.__closeOverlayDrawerListener);
   }
 
