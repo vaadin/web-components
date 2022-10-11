@@ -221,6 +221,15 @@ const runTests = (baseClass) => {
       await Promise.resolve();
       expect(element.getAttribute('dir')).to.eql('ltr');
     });
+
+    it('should keep custom direction when disconnecting and reconnecting', async () => {
+      element.setAttribute('dir', 'ltr');
+      setDir('rtl');
+      await Promise.resolve();
+      // Disconnect + reconnect
+      document.body.appendChild(element);
+      expect(element.getAttribute('dir')).to.eql('ltr');
+    });
   });
 };
 
