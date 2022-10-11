@@ -61,8 +61,8 @@ registerStyles(
 
     ::slotted([slot='avatar']) {
       --vaadin-avatar-size: 2.5rem;
-      margin-inline-end: calc(1rem - var(--vaadin-avatar-outline-width));
-      margin-top: calc(0.25rem - var(--vaadin-avatar-outline-width));
+      margin-top: 0.25rem;
+      margin-inline-end: 1rem;
     }
   `,
   { moduleId: 'material-message' },

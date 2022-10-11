@@ -52,8 +52,8 @@ registerStyles(
 
     ::slotted([slot='avatar']) {
       --vaadin-avatar-size: var(--lumo-size-m);
-      margin-inline-end: calc(var(--lumo-space-m) - var(--vaadin-avatar-outline-width));
-      margin-top: calc(var(--lumo-space-s) - var(--vaadin-avatar-outline-width));
+      margin-top: calc(var(--lumo-space-s));
+      margin-inline-end: calc(var(--lumo-space-m));
     }
   `,
   { moduleId: 'lumo-message' },
