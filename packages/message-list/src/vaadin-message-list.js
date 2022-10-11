@@ -5,10 +5,8 @@
  */
 import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
-import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { Message } from './vaadin-message.js';
 
@@ -34,18 +32,23 @@ import { Message } from './vaadin-message.js';
  *
  * ### Styling
  *
+ * The following shadow DOM parts are available for styling:
+ *
+ * Part name | Description
+ * ----------|----------------
+ * `list`    | The container wrapping messages.
+ *
  * See the [`<vaadin-message>`](#/elements/vaadin-message) documentation for the available
  * state attributes and stylable shadow parts of message elements.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @extends HTMLElement
- * @mixes ControllerMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
  * @mixes KeyboardDirectionMixin
  */
-class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
+class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(PolymerElement))) {
   static get is() {
     return 'vaadin-message-list';
   }
@@ -70,11 +73,7 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Cont
       items: {
         type: Array,
         value: () => [],
-      },
-
-      /** @protected */
-      _listElement: {
-        type: Object,
+        observer: '_itemsChanged',
       },
     };
   }
@@ -91,28 +90,15 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Cont
           display: none !important;
         }
       </style>
-      <slot></slot>
+      <div part="list" role="list">
+        <slot></slot>
+      </div>
     `;
-  }
-
-  static get observers() {
-    return ['__updateItems(items, _listElement)'];
   }
 
   /** @protected */
   ready() {
     super.ready();
-
-    this._listController = new SlotController(
-      this,
-      '',
-      () => document.createElement('div'),
-      (_, list) => {
-        list.setAttribute('role', 'list');
-        this._listElement = list;
-      },
-    );
-    this.addController(this._listController);
 
     // Make screen readers announce new messages
     this.setAttribute('aria-relevant', 'additions');
@@ -137,38 +123,34 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Cont
   }
 
   /** @private */
-  __updateItems(items, list) {
-    if (list) {
-      const newItems = items || [];
-      const oldItems = this.__oldItems || [];
+  _itemsChanged(newVal, oldVal) {
+    const items = newVal || [];
+    const oldItems = oldVal || [];
+
+    if (items.length || oldItems.length) {
       const focusedIndex = this._getIndexOfFocusableElement();
       const closeToBottom = this.scrollHeight < this.clientHeight + this.scrollTop + 50;
+      const removed = this.__getRemovedItems(items, oldItems);
+      const added = [...items];
 
-      if (newItems.length || oldItems.length) {
-        const removed = this.__getRemovedItems(newItems, oldItems);
-        const added = [...newItems];
+      this._messages.forEach((message) => {
+        const item = message._item;
+        if (removed.includes(item)) {
+          message.remove();
+        } else if (added.includes(item)) {
+          added.splice(added.indexOf(item), 1);
+        }
+      });
 
-        this._messages.forEach((message) => {
-          const item = message._item;
-          if (removed.includes(item)) {
-            message.remove();
-          } else if (added.includes(item)) {
-            added.splice(added.indexOf(item), 1);
-          }
-        });
+      this.__addMessages(added, items);
 
-        this.__addMessages(added, newItems);
+      this._setTabIndexesByIndex(focusedIndex);
 
-        this._setTabIndexesByIndex(focusedIndex);
-
-        requestAnimationFrame(() => {
-          if (newItems.length > oldItems.length && closeToBottom) {
-            this._scrollToLastMessage();
-          }
-        });
-      }
-
-      this.__oldItems = items;
+      requestAnimationFrame(() => {
+        if (items.length > oldItems.length && closeToBottom) {
+          this._scrollToLastMessage();
+        }
+      });
     }
   }
 
@@ -179,9 +161,9 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Cont
       const nextItem = allItems[allItems.indexOf(item) + 1];
       const nextMessage = this._messages.find((msg) => msg._item === nextItem);
       if (nextMessage) {
-        this._listElement.insertBefore(message, nextMessage);
+        this.insertBefore(message, nextMessage);
       } else {
-        this._listElement.appendChild(message);
+        this.appendChild(message);
       }
     });
   }
