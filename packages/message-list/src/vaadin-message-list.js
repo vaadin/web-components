@@ -3,7 +3,6 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
@@ -130,7 +129,8 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
     if (items.length || oldItems.length) {
       const focusedIndex = this._getIndexOfFocusableElement();
       const closeToBottom = this.scrollHeight < this.clientHeight + this.scrollTop + 50;
-      const removed = this.__getRemovedItems(items, oldItems);
+
+      const removed = oldItems.filter((item) => !items.includes(item));
       const added = [...items];
 
       this._messages.forEach((message) => {
@@ -191,20 +191,6 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
     });
 
     return message;
-  }
-
-  /** @private */
-  __getRemovedItems(items, oldItems) {
-    const result = [];
-
-    const splices = calculateSplices(items, oldItems);
-    splices.forEach((splice) => {
-      splice.removed.forEach((item) => {
-        result.push(item);
-      });
-    });
-
-    return result;
   }
 
   /** @private */
