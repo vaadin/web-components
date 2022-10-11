@@ -118,7 +118,7 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
 
   /** @protected */
   get _messages() {
-    return Array.from(this.querySelectorAll('vaadin-message'));
+    return [...this.querySelectorAll('vaadin-message')];
   }
 
   /** @private */
