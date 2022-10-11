@@ -9,6 +9,7 @@ import { DirHelper } from './dir-helper.js';
  * Array of Vaadin custom element classes that have been subscribed to the dir changes.
  */
 const directionSubscribers = [];
+
 function directionUpdater() {
   const documentDir = getDocumentDir();
   directionSubscribers.forEach((element) => {
@@ -74,7 +75,7 @@ export const DirMixin = (superClass) =>
     connectedCallback() {
       super.connectedCallback();
 
-      if (!this.hasAttribute('dir')) {
+      if (!this.hasAttribute('dir') || this.__restoreSubscription) {
         this.__subscribe();
         alignDirs(this, getDocumentDir(), null);
       }
@@ -100,15 +101,15 @@ export const DirMixin = (superClass) =>
         this.__subscribe();
         alignDirs(this, documentDir, newValue);
       } else if (newDiffValue) {
-        this.__subscribe(false);
+        this.__unsubscribe();
       }
     }
 
     /** @protected */
     disconnectedCallback() {
       super.disconnectedCallback();
-      this.__subscribe(false);
-      this.removeAttribute('dir');
+      this.__restoreSubscription = directionSubscribers.includes(this);
+      this.__unsubscribe();
     }
 
     /** @protected */
@@ -133,12 +134,15 @@ export const DirMixin = (superClass) =>
     }
 
     /** @private */
-    __subscribe(push = true) {
-      if (push) {
-        if (!directionSubscribers.includes(this)) {
-          directionSubscribers.push(this);
-        }
-      } else if (directionSubscribers.includes(this)) {
+    __subscribe() {
+      if (!directionSubscribers.includes(this)) {
+        directionSubscribers.push(this);
+      }
+    }
+
+    /** @private */
+    __unsubscribe() {
+      if (directionSubscribers.includes(this)) {
         directionSubscribers.splice(directionSubscribers.indexOf(this), 1);
       }
     }
