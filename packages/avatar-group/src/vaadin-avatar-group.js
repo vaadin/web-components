@@ -293,6 +293,13 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
     });
   }
 
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    this._opened = false;
+  }
+
   /**
    * @return {!Array<!HTMLElement>}
    * @protected
