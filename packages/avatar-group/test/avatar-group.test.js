@@ -1,5 +1,13 @@
 import { expect } from '@esm-bundle/chai';
-import { enterKeyDown, escKeyDown, fixtureSync, nextRender, spaceKeyDown, tabKeyDown } from '@vaadin/testing-helpers';
+import {
+  enterKeyDown,
+  escKeyDown,
+  fixtureSync,
+  nextRender,
+  oneEvent,
+  spaceKeyDown,
+  tabKeyDown,
+} from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-avatar-group.js';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
@@ -69,11 +77,9 @@ describe('avatar-group', () => {
       expect(overflow.getAttribute('title')).to.equal([items[2].name, items[3].abbr, 'anonymous'].join('\n'));
     });
 
-    it('should show overlay on overflow avatar click', async () => {
+    it('should show overflow avatar when maxItemsVisible is less than items count', () => {
       const overflow = group.$.overflow;
-      overflow.click();
       expect(overflow.hasAttribute('hidden')).to.be.false;
-      group.$.overlay.close();
     });
 
     it('should show at least two avatars if maxItemsVisible is below 2', async () => {
@@ -165,10 +171,6 @@ describe('avatar-group', () => {
       await nextRender(group);
       overlay = group.$.overlay;
       overflow = group.$.overflow;
-    });
-
-    afterEach(() => {
-      overlay.close();
     });
 
     it('should render avatars to fit width on resize', async () => {
@@ -284,16 +286,9 @@ describe('avatar-group', () => {
       overflow = group.$.overflow;
     });
 
-    afterEach(() => {
-      overlay.close();
-    });
-
-    it('should open overlay on overflow avatar click', (done) => {
-      overlay.addEventListener('vaadin-overlay-open', () => {
-        expect(overlay.opened).to.be.true;
-        done();
-      });
+    it('should open overlay on overflow avatar click', () => {
       overflow.click();
+      expect(overlay.opened).to.be.true;
     });
 
     it('should open overlay on overflow avatar Enter', () => {
@@ -304,6 +299,13 @@ describe('avatar-group', () => {
     it('should open overlay on overflow avatar Space', () => {
       spaceKeyDown(overflow);
       expect(overlay.opened).to.be.true;
+    });
+
+    it('should close overlay on avatar group detach', async () => {
+      overflow.click();
+      await oneEvent(overlay, 'vaadin-overlay-open');
+      group.remove();
+      expect(overlay.opened).to.be.false;
     });
 
     it('should render list-box with items in the overlay', (done) => {
@@ -542,10 +544,6 @@ describe('avatar-group', () => {
       await nextRender(group);
       overlay = group.$.overlay;
       overflow = group.$.overflow;
-    });
-
-    afterEach(() => {
-      overlay.close();
     });
 
     it('should set aria-expanded="false" on the overflow avatar', () => {

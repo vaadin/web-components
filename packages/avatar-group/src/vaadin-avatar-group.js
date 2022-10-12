@@ -293,6 +293,13 @@ class AvatarGroup extends ElementMixin(ThemableMixin(mixinBehaviors([IronResizab
     });
   }
 
+  /** @protected */
+  disconnectedCallback() {
+    super.disconnectedCallback();
+
+    this._opened = false;
+  }
+
   /**
    * @param {string} name
    * @param {?string} oldValue
