@@ -10,19 +10,19 @@ describe('vaadin-avatar-group', () => {
   });
 
   it('default', async () => {
-    await expect(group).shadowDom.to.equalSnapshot();
+    await expect(group).dom.to.equalSnapshot();
   });
 
   it('items', async () => {
     group.items = [{ abbr: 'YY' }, { name: 'Tomi Virkki' }];
     await nextFrame();
-    await expect(group).shadowDom.to.equalSnapshot();
+    await expect(group).dom.to.equalSnapshot();
   });
 
   it('theme', async () => {
     group.items = [{ abbr: 'YY' }, { name: 'Tomi Virkki' }];
     await nextFrame();
     group.setAttribute('theme', 'small');
-    await expect(group).shadowDom.to.equalSnapshot();
+    await expect(group).dom.to.equalSnapshot();
   });
 });

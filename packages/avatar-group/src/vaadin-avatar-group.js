@@ -3,7 +3,6 @@
  * Copyright (c) 2020 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@vaadin/avatar/src/vaadin-avatar.js';
 import '@vaadin/item/src/vaadin-item.js';
 import '@vaadin/list-box/src/vaadin-list-box.js';
@@ -12,8 +11,10 @@ import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 const MINIMUM_DISPLAYED_AVATARS = 2;
@@ -43,7 +44,9 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * Part name   | Description
  * ----------- | ---------------
  * `container` | The container element
- * `avatar`    | Individual avatars
+ *
+ * See the [`<vaadin-avatar>`](#/elements/vaadin-avatar) documentation for the available
+ * state attributes and stylable shadow parts of avatar elements.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
@@ -55,11 +58,12 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  * - `<vaadin-avatar-group-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  * @mixes ResizeMixin
  */
-class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement))) {
+class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
   static get template() {
     return html`
       <style>
@@ -81,7 +85,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
           flex-wrap: nowrap;
         }
 
-        [part='avatar']:not(:first-child) {
+        ::slotted(vaadin-avatar:not(:first-child)) {
           -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 300 300%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22><path fill-rule=%22evenodd%22 clip-rule=%22evenodd%22 d=%22M300 0H0V300H300V0ZM150 200C177.614 200 200 177.614 200 150C200 122.386 177.614 100 150 100C122.386 100 100 122.386 100 150C100 177.614 122.386 200 150 200Z%22 fill=%22black%22/></svg>');
           mask-image: url('data:image/svg+xml;utf8,<svg viewBox=%220 0 300 300%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22><path fill-rule=%22evenodd%22 clip-rule=%22evenodd%22 d=%22M300 0H0V300H300V0ZM150 200C177.614 200 200 177.614 200 150C200 122.386 177.614 100 150 100C122.386 100 100 122.386 100 150C100 177.614 122.386 200 150 200Z%22 fill=%22black%22/></svg>');
           -webkit-mask-size: calc(
@@ -92,13 +96,13 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
           );
         }
 
-        [part='avatar']:not([dir='rtl']):not(:first-child) {
+        ::slotted(vaadin-avatar:not([dir='rtl']):not(:first-child)) {
           margin-left: calc(var(--vaadin-avatar-group-overlap) * -1 - var(--vaadin-avatar-outline-width));
           -webkit-mask-position: calc(50% - var(--vaadin-avatar-size) + var(--vaadin-avatar-group-overlap));
           mask-position: calc(50% - var(--vaadin-avatar-size) + var(--vaadin-avatar-group-overlap));
         }
 
-        [part='avatar'][dir='rtl']:not(:first-child) {
+        ::slotted(vaadin-avatar[dir='rtl']:not(:first-child)) {
           margin-right: calc(var(--vaadin-avatar-group-overlap) * -1);
           -webkit-mask-position: calc(
             50% + var(--vaadin-avatar-size) - var(--vaadin-avatar-group-overlap) + var(--vaadin-avatar-outline-width)
@@ -109,34 +113,13 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
         }
       </style>
       <div id="container" part="container">
-        <template id="items" is="dom-repeat" items="[[__computeItems(items.*, __itemsInView, maxItemsVisible)]]">
-          <vaadin-avatar
-            name="[[item.name]]"
-            abbr="[[item.abbr]]"
-            img="[[item.img]]"
-            part="avatar"
-            theme$="[[_theme]]"
-            i18n="[[i18n]]"
-            color-index="[[item.colorIndex]]"
-            with-tooltip
-          ></vaadin-avatar>
-        </template>
-        <vaadin-avatar
-          id="overflow"
-          part="avatar"
-          hidden$="[[__computeMoreHidden(items.length, __itemsInView, __maxReached)]]"
-          abbr="[[__computeMore(items.length, __itemsInView, maxItemsVisible)]]"
-          theme$="[[_theme]]"
-          on-click="_onOverflowClick"
-          on-keydown="_onOverflowKeyDown"
-          aria-haspopup="listbox"
-        >
-          <vaadin-tooltip slot="tooltip" generator="[[__overflowTextGenerator]]"></vaadin-tooltip>
-        </vaadin-avatar>
+        <slot></slot>
+        <slot name="overflow"></slot>
       </div>
       <vaadin-avatar-group-overlay
         id="overlay"
         opened="{{_opened}}"
+        position-target="[[_overflow]]"
         no-vertical-overlap
         on-vaadin-overlay-close="_onVaadinOverlayClose"
       ></vaadin-avatar-group-overlay>
@@ -233,15 +216,31 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
       },
 
       /** @private */
+      _avatars: {
+        type: Array,
+        value: () => [],
+      },
+
+      /** @private */
       __maxReached: {
         type: Boolean,
         computed: '__computeMaxReached(items.length, maxItemsVisible)',
       },
 
       /** @private */
+      __items: {
+        type: Array,
+      },
+
+      /** @private */
       __itemsInView: {
         type: Number,
         value: null,
+      },
+
+      /** @private */
+      _overflow: {
+        type: Object,
       },
 
       /** @private */
@@ -252,22 +251,27 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
       },
 
       /** @private */
-      _opened: {
-        type: Boolean,
-        observer: '__openedChanged',
-        value: false,
+      _overflowTooltip: {
+        type: Object,
       },
 
       /** @private */
-      __overflowTextGenerator: Object,
+      _opened: {
+        type: Boolean,
+        observer: '__openedChanged',
+      },
     };
   }
 
   static get observers() {
     return [
-      '__computeMoreTooltip(items.length, __itemsInView, maxItemsVisible)',
       '__itemsChanged(items.splices, items.*)',
       '__i18nItemsChanged(i18n.*, items.length)',
+      '__updateAvatarsTheme(_overflow, _avatars, _theme)',
+      '__updateAvatars(items.*, __itemsInView, maxItemsVisible)',
+      '__updateOverflowAbbr(_overflow, items.length, __itemsInView, maxItemsVisible)',
+      '__updateOverflowHidden(_overflow, items.length, __itemsInView, __maxReached)',
+      '__updateOverflowTooltip(_overflowTooltip, items.length, __itemsInView, maxItemsVisible)',
     ];
   }
 
@@ -275,8 +279,25 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
   ready() {
     super.ready();
 
-    this._overlayElement = this.shadowRoot.querySelector('vaadin-avatar-group-overlay');
-    this._overlayElement.positionTarget = this.$.overflow;
+    this._overflowController = new SlotController(
+      this,
+      'overflow',
+      () => document.createElement('vaadin-avatar'),
+      (_, overflow) => {
+        overflow.setAttribute('aria-haspopup', 'listbox');
+        overflow.setAttribute('aria-expanded', 'false');
+        overflow.addEventListener('click', (e) => this._onOverflowClick(e));
+        overflow.addEventListener('keydown', (e) => this._onOverflowKeyDown(e));
+
+        const tooltip = document.createElement('vaadin-tooltip');
+        tooltip.setAttribute('slot', 'tooltip');
+        overflow.appendChild(tooltip);
+
+        this._overflow = overflow;
+        this._overflowTooltip = tooltip;
+      },
+    );
+    this.addController(this._overflowController);
 
     this.$.overlay.renderer = this.__overlayRenderer.bind(this);
 
@@ -290,14 +311,6 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
     super.disconnectedCallback();
 
     this._opened = false;
-  }
-
-  /**
-   * @return {!Array<!HTMLElement>}
-   * @protected
-   */
-  get _avatars() {
-    return this.shadowRoot.querySelectorAll('vaadin-avatar');
   }
 
   /** @private */
@@ -328,6 +341,21 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
     this._overflowItems.forEach((item) => {
       listBox.appendChild(this.__createItemElement(item));
     });
+  }
+
+  /** @private */
+  __createAvatar(item) {
+    const avatar = document.createElement('vaadin-avatar');
+    avatar.name = item.name;
+    avatar.abbr = item.abbr;
+    avatar.img = item.img;
+    avatar.colorIndex = item.colorIndex;
+
+    avatar.withTooltip = true;
+    avatar.i18n = this.i18n;
+    avatar._item = item;
+
+    return avatar;
   }
 
   /** @private */
@@ -403,10 +431,41 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
   }
 
   /** @private */
-  __computeItems(arr, itemsInView, maxItemsVisible) {
+  __updateAvatars(arr, itemsInView, maxItemsVisible) {
     const items = arr.base || [];
     const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
-    return limit ? items.slice(0, limit) : items;
+
+    const newItems = limit ? items.slice(0, limit) : items;
+    const oldItems = this.__oldAvatars || [];
+
+    if (newItems.length || oldItems.length) {
+      const removed = oldItems.filter((item) => !newItems.includes(item));
+      const added = [...newItems];
+
+      this._avatars.forEach((avatar) => {
+        const item = avatar._item;
+        if (removed.includes(item)) {
+          avatar.remove();
+        } else if (added.includes(item)) {
+          added.splice(added.indexOf(item), 1);
+        }
+      });
+
+      this.__addAvatars(added, newItems);
+    }
+
+    this._avatars = [...this.querySelectorAll('vaadin-avatar')];
+    this.__oldAvatars = newItems;
+  }
+
+  /** @private */
+  __addAvatars(itemsToAdd, allItems) {
+    itemsToAdd.forEach((item) => {
+      const avatar = this.__createAvatar(item);
+      const nextItem = allItems[allItems.indexOf(item) + 1];
+      const nextAvatar = this._avatars.find((el) => el._item === nextItem);
+      this.insertBefore(avatar, nextAvatar || this._overflow);
+    });
   }
 
   /** @private */
@@ -422,17 +481,38 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
   }
 
   /** @private */
-  __computeMore(items, itemsInView, maxItemsVisible) {
-    return `+${items - this.__getLimit(items, itemsInView, maxItemsVisible)}`;
+  __updateOverflowAbbr(overflow, items, itemsInView, maxItemsVisible) {
+    if (overflow) {
+      overflow.abbr = `+${items - this.__getLimit(items, itemsInView, maxItemsVisible)}`;
+    }
   }
 
   /** @private */
-  __computeMoreHidden(items, itemsInView, maxReached) {
-    return !maxReached && !(itemsInView && itemsInView < items);
+  __updateOverflowHidden(overflow, items, itemsInView, maxReached) {
+    if (overflow) {
+      overflow.toggleAttribute('hidden', !maxReached && !(itemsInView && itemsInView < items));
+    }
   }
 
   /** @private */
-  __computeMoreTooltip(items, itemsInView, maxItemsVisible) {
+  __updateAvatarsTheme(overflow, avatars, theme) {
+    if (overflow) {
+      [overflow, ...avatars].forEach((avatar) => {
+        if (theme) {
+          avatar.setAttribute('theme', theme);
+        } else {
+          avatar.removeAttribute('theme');
+        }
+      });
+    }
+  }
+
+  /** @private */
+  __updateOverflowTooltip(tooltip, items, itemsInView, maxItemsVisible) {
+    if (!tooltip) {
+      return;
+    }
+
     const limit = this.__getLimit(items, itemsInView, maxItemsVisible);
     if (limit == null) {
       return;
@@ -445,7 +525,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
       }
     }
     // Override generated tooltip text
-    this.__overflowTextGenerator = () => result.join('\n');
+    tooltip.generator = () => result.join('\n');
   }
 
   /** @private */
@@ -470,7 +550,6 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
   /** @private */
   __itemsChanged(splices, itemsChange) {
     const items = itemsChange.base;
-    this.$.items.render();
     this.__setItemsInView();
 
     // Mutation using group.splice('items')
@@ -518,6 +597,10 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
       if (base.activeUsers[field]) {
         this.setAttribute('aria-label', base.activeUsers[field].replace('{count}', items || 0));
       }
+
+      this._avatars.forEach((avatar) => {
+        avatar.i18n = base;
+      });
     }
   }
 
@@ -525,20 +608,20 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
   __openedChanged(opened, wasOpened) {
     if (opened) {
       if (!this._menuElement) {
-        this._menuElement = this._overlayElement.content.querySelector('vaadin-list-box');
+        this._menuElement = this.$.overlay.querySelector('vaadin-list-box');
         this._menuElement.setAttribute('role', 'listbox');
       }
 
-      this._openedWithFocusRing = this.$.overflow.hasAttribute('focus-ring');
+      this._openedWithFocusRing = this._overflow.hasAttribute('focus-ring');
 
       this._menuElement.focus();
     } else if (wasOpened) {
-      this.$.overflow.focus();
+      this._overflow.focus();
       if (this._openedWithFocusRing) {
-        this.$.overflow.setAttribute('focus-ring', '');
+        this._overflow.setAttribute('focus-ring', '');
       }
     }
-    this.$.overflow.setAttribute('aria-expanded', opened === true);
+    this._overflow.setAttribute('aria-expanded', opened === true);
   }
 
   /** @private */

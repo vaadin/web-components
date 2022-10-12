@@ -62,14 +62,28 @@ describe('avatar-group', () => {
     });
 
     it('should render avatar for each item, plus overflow avatar', () => {
-      const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+      const items = group.querySelectorAll('vaadin-avatar');
       expect(items.length).to.equal(group.items.length + 1);
     });
 
     it('should propagate theme attribute to all avatars', () => {
       group.setAttribute('theme', 'small');
-      const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+      const items = group.querySelectorAll('vaadin-avatar');
       items.forEach((avatar) => expect(avatar.getAttribute('theme')).to.equal('small'));
+    });
+
+    it('should append vaadin-avatar elements for items added at the end', async () => {
+      group.items = [group.items[1], group.items[2], { abbr: 'GG' }];
+      await nextRender();
+      const items = group.querySelectorAll('vaadin-avatar');
+      expect(items[2].abbr).to.equal('GG');
+    });
+
+    it('should insert vaadin-avatar elements for items added in the middle', async () => {
+      group.items = [group.items[1], { abbr: 'GG' }, group.items[2]];
+      await nextRender();
+      const items = group.querySelectorAll('vaadin-avatar');
+      expect(items[1].abbr).to.equal('GG');
     });
   });
 
@@ -81,17 +95,17 @@ describe('avatar-group', () => {
     });
 
     it('should render avatar based on maxItemsVisible, including overflow avatar', () => {
-      const items = group.$.container.querySelectorAll('vaadin-avatar');
+      const items = group.querySelectorAll('vaadin-avatar');
       expect(items.length).to.equal(group.maxItemsVisible);
     });
 
     it('should set abbr property on the overflow avatar', () => {
-      const overflow = group.$.overflow;
+      const overflow = group._overflow;
       expect(overflow.abbr).to.equal('+3');
     });
 
     it('should set generator on the overflow avatar tooltip', () => {
-      const overflow = group.$.overflow;
+      const overflow = group._overflow;
       const items = group.items;
       const tooltip = overflow.querySelector('vaadin-tooltip');
       const overlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
@@ -99,21 +113,21 @@ describe('avatar-group', () => {
     });
 
     it('should show overflow avatar when maxItemsVisible is less than items count', () => {
-      const overflow = group.$.overflow;
+      const overflow = group._overflow;
       expect(overflow.hasAttribute('hidden')).to.be.false;
     });
 
     it('should show at least two avatars if maxItemsVisible is below 2', async () => {
       group.maxItemsVisible = 1;
       await nextRender(group);
-      const items = group.$.container.querySelectorAll('vaadin-avatar');
+      const items = group.querySelectorAll('vaadin-avatar');
       expect(items.length).to.equal(2);
     });
 
     it('should set abbr property correctly if maxItemsVisible is below 2', async () => {
       group.maxItemsVisible = 1;
       await nextRender(group);
-      const overflow = group.$.overflow;
+      const overflow = group._overflow;
       expect(overflow.abbr).to.equal('+4');
     });
 
@@ -121,20 +135,20 @@ describe('avatar-group', () => {
       group.items = group.items.slice(0, 2);
       group.maxItemsVisible = 1;
       await nextRender(group);
-      const items = group.shadowRoot.querySelectorAll('vaadin-avatar:not([hidden])');
+      const items = group.querySelectorAll('vaadin-avatar:not([hidden])');
       expect(items.length).to.equal(2);
     });
 
     it('should hide overflow avatar when maxItemsVisible property is set to null', async () => {
       group.maxItemsVisible = null;
       await nextRender(group);
-      expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
+      expect(group._overflow.hasAttribute('hidden')).to.be.true;
     });
 
     it('should hide overflow avatar when maxItemsVisible property is set to undefined', async () => {
       group.maxItemsVisible = undefined;
       await nextRender(group);
-      expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
+      expect(group._overflow.hasAttribute('hidden')).to.be.true;
     });
 
     it('should hide overflow avatar when items property is changed', async () => {
@@ -142,7 +156,7 @@ describe('avatar-group', () => {
       await nextRender(group);
       group.splice('items', 1, 3);
       await nextRender(group);
-      expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
+      expect(group._overflow.hasAttribute('hidden')).to.be.true;
     });
 
     // https://github.com/vaadin/vaadin-avatar/issues/83
@@ -154,7 +168,7 @@ describe('avatar-group', () => {
       group.items = [];
       group.items = items;
       await nextRender(group);
-      const renderedElements = group.$.container.querySelectorAll('vaadin-avatar');
+      const renderedElements = group.querySelectorAll('vaadin-avatar');
       expect(renderedElements.length).to.equal(maxItemsVisible);
     });
 
@@ -168,7 +182,7 @@ describe('avatar-group', () => {
         group.style.width = '100px';
         await onceResized(group);
 
-        const items = group.$.container.querySelectorAll('vaadin-avatar');
+        const items = group.querySelectorAll('vaadin-avatar');
         expect(items.length).to.equal(3);
       });
 
@@ -176,7 +190,7 @@ describe('avatar-group', () => {
         group.style.width = '100px';
         await onceResized(group);
 
-        const overflow = group.$.overflow;
+        const overflow = group._overflow;
         expect(overflow.abbr).to.equal('+3');
       });
     });
@@ -189,13 +203,13 @@ describe('avatar-group', () => {
       group.items = [{ abbr: '01' }, { abbr: '02' }, { abbr: '03' }, { abbr: '04' }, { abbr: '05' }];
       await nextRender(group);
       overlay = group.$.overlay;
-      overflow = group.$.overflow;
+      overflow = group._overflow;
     });
 
     it('should render avatars to fit width on resize', async () => {
       group.style.width = '110px';
       await onceResized(group);
-      const items = group.$.container.querySelectorAll('vaadin-avatar');
+      const items = group.querySelectorAll('vaadin-avatar');
       expect(items.length).to.equal(3);
       expect(overflow.abbr).to.equal('+3');
     });
@@ -204,7 +218,7 @@ describe('avatar-group', () => {
       group.set('items', group.items.slice(0, 2));
       group.style.width = '50px';
       await onceResized(group);
-      const items = group.$.container.querySelectorAll('vaadin-avatar:not([hidden])');
+      const items = group.querySelectorAll('vaadin-avatar:not([hidden])');
       expect(items.length).to.equal(2);
     });
 
@@ -272,7 +286,7 @@ describe('avatar-group', () => {
       group.maxItemsVisible = 2;
       await nextRender(group);
       overlay = group.$.overlay;
-      overflow = group.$.overflow;
+      overflow = group._overflow;
     });
 
     it('should open overlay on overflow avatar click', () => {
@@ -435,11 +449,11 @@ describe('avatar-group', () => {
       ];
       await nextRender(group);
       overlay = group.$.overlay;
-      overflow = group.$.overflow;
+      overflow = group._overflow;
     });
 
     it('should pass color index to avatars', () => {
-      const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+      const items = group.querySelectorAll('vaadin-avatar');
       expect(items[0].colorIndex).to.equal(0);
       expect(items[1].colorIndex).to.equal(1);
       expect(items[2].colorIndex).to.equal(2);
@@ -472,7 +486,7 @@ describe('avatar-group', () => {
       group.items = [{ abbr: 'PM' }, { name: 'Yuriy Yevstihnyeyev' }, { name: 'Serhii Kulykov' }];
       await nextRender(group);
       overlay = group.$.overlay;
-      overflow = group.$.overflow;
+      overflow = group._overflow;
     });
 
     it('should set aria-label based on i18n.activeUsers.many', () => {
@@ -500,7 +514,7 @@ describe('avatar-group', () => {
 
     it('should pass i18n property to avatars', () => {
       group.i18n = customI18n;
-      const items = group.shadowRoot.querySelectorAll('vaadin-avatar');
+      const items = group.querySelectorAll('vaadin-avatar');
       expect(items[0].i18n).to.deep.equal(customI18n);
       expect(items[1].i18n).to.deep.equal(customI18n);
       expect(items[2].i18n).to.deep.equal(customI18n);
@@ -532,7 +546,7 @@ describe('avatar-group', () => {
       group.maxItemsVisible = 2;
       await nextRender(group);
       overlay = group.$.overlay;
-      overflow = group.$.overflow;
+      overflow = group._overflow;
     });
 
     it('should set aria-expanded="false" on the overflow avatar', () => {
@@ -693,6 +707,6 @@ describe('avatar group in column flex', () => {
   });
 
   it('should not show overflow avatar', () => {
-    expect(group.$.overflow.hasAttribute('hidden')).to.be.true;
+    expect(group._overflow.hasAttribute('hidden')).to.be.true;
   });
 });
