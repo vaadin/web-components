@@ -690,19 +690,23 @@ class Grid extends ElementMixin(
     slot.setAttribute('name', slotName);
 
     if (column && column._focusButtonMode) {
-      slot.setAttribute('role', 'button');
-      slot.setAttribute('tabindex', '-1');
+      const div = document.createElement('div');
+      div.setAttribute('role', 'button');
+      div.setAttribute('tabindex', '-1');
+      cell.appendChild(div);
 
-      // Patch `focus()` to use the slot
-      cell._focusButton = slot;
+      // Patch `focus()` to use the button
+      cell._focusButton = div;
       cell.focus = function () {
         cell._focusButton.focus();
       };
+
+      div.appendChild(slot);
     } else {
       cell.setAttribute('tabindex', '-1');
+      cell.appendChild(slot);
     }
 
-    cell.appendChild(slot);
     cell._content = cellContent;
 
     // With native Shadow DOM, mousedown on slotted element does not focus

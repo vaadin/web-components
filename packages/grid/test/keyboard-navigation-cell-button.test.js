@@ -39,22 +39,23 @@ describe('keyboard navigation - cell button', () => {
     cell = getRowFirstCell(0);
   });
 
-  it('should set role="button" on the slot element inside the cell', () => {
+  it('should create a focusable div with role="button" inside the cell', () => {
+    expect(cell.firstChild.localName).to.equal('div');
     expect(cell.firstChild.getAttribute('role')).to.equal('button');
   });
 
-  it('should set tabindex on the slot element inside the cell', () => {
+  it('should set tabindex on the focusable div inside the cell', () => {
     expect(cell.hasAttribute('tabindex')).to.be.false;
     expect(cell.firstChild.getAttribute('tabindex')).to.equal('0');
   });
 
-  it('should focus the focusable slot when calling `focus()` on the cell', () => {
+  it('should focus the focusable div when calling `focus()` on the cell', () => {
     const spy = sinon.spy(cell.firstChild, 'focus');
     cell.focus();
     expect(spy.calledOnce).to.be.true;
   });
 
-  it('should update tabindex on the slot when focusing another cell', () => {
+  it('should update tabindex on the div when focusing another cell', () => {
     const cell2 = getRowFirstCell(1);
 
     cell2.focus();
@@ -63,13 +64,13 @@ describe('keyboard navigation - cell button', () => {
     expect(cell2.firstChild.getAttribute('tabindex')).to.equal('0');
   });
 
-  it('should update tabindex on the slot when enabling row focus mode', () => {
+  it('should update tabindex on the div when enabling row focus mode', () => {
     cell.focus();
     arrowLeft(cell.firstChild);
     expect(cell.firstChild.getAttribute('tabindex')).to.equal('-1');
   });
 
-  it('should restore tabindex on the slot when disabling row focus mode', () => {
+  it('should restore tabindex on the div when disabling row focus mode', () => {
     cell.focus();
     arrowLeft(cell.firstChild);
     arrowRight(cell.firstChild);
