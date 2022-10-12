@@ -6,22 +6,17 @@ import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 describe('vaadin-message-input', () => {
   let input;
 
-  // Ignore pattern because of escape characters
-  const SNAPSHOT_CONFIG = {
-    ignoreAttributes: ['pattern'],
-  };
-
   beforeEach(() => {
     resetUniqueId();
     input = fixtureSync('<vaadin-message-input></vaadin-message-input>');
   });
 
   it('default', async () => {
-    await expect(input).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    await expect(input).dom.to.equalSnapshot();
   });
 
   it('disabled', async () => {
     input.disabled = true;
-    await expect(input).shadowDom.to.equalSnapshot(SNAPSHOT_CONFIG);
+    await expect(input).dom.to.equalSnapshot();
   });
 });

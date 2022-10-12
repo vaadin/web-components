@@ -10,6 +10,10 @@ registerStyles(
     :host {
       padding: var(--lumo-space-s) var(--lumo-space-m);
     }
+
+    ::slotted([slot='textarea']) {
+      margin-inline-end: var(--lumo-space-s);
+    }
   `,
   { moduleId: 'lumo-message-input' },
 );

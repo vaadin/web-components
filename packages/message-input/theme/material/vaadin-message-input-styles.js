@@ -8,6 +8,11 @@ registerStyles(
     :host {
       padding: 0.5em 1em;
     }
+
+    ::slotted([slot='textarea']) {
+      margin: 0;
+      margin-inline-end: 0.5em;
+    }
   `,
   { moduleId: 'material-message-input' },
 );
