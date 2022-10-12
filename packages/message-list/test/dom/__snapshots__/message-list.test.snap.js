@@ -2,22 +2,18 @@
 export const snapshots = {};
 
 snapshots["vaadin-message-list default"] = 
-`<div
-  part="list"
-  role="list"
+`<vaadin-message-list
+  aria-relevant="additions"
+  role="log"
 >
-  <dom-repeat style="display: none;">
-    <template is="dom-repeat">
-    </template>
-  </dom-repeat>
-</div>
+</vaadin-message-list>
 `;
 /* end snapshot vaadin-message-list default */
 
 snapshots["vaadin-message-list items"] = 
-`<div
-  part="list"
-  role="list"
+`<vaadin-message-list
+  aria-relevant="additions"
+  role="log"
 >
   <vaadin-message
     role="listitem"
@@ -49,18 +45,14 @@ snapshots["vaadin-message-list items"] =
     >
     </vaadin-avatar>
   </vaadin-message>
-  <dom-repeat style="display: none;">
-    <template is="dom-repeat">
-    </template>
-  </dom-repeat>
-</div>
+</vaadin-message-list>
 `;
 /* end snapshot vaadin-message-list items */
 
 snapshots["vaadin-message-list theme"] = 
-`<div
-  part="list"
-  role="list"
+`<vaadin-message-list
+  aria-relevant="additions"
+  role="log"
 >
   <vaadin-message
     role="listitem"
@@ -78,11 +70,7 @@ snapshots["vaadin-message-list theme"] =
     >
     </vaadin-avatar>
   </vaadin-message>
-  <dom-repeat style="display: none;">
-    <template is="dom-repeat">
-    </template>
-  </dom-repeat>
-</div>
+</vaadin-message-list>
 `;
 /* end snapshot vaadin-message-list theme */
 

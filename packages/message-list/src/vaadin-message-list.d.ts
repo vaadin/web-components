@@ -21,12 +21,15 @@ export interface MessageListItem {
  * `<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>
  *
  * ### Example
+ *
  * To create a new message list, add the component to the page:
+ *
  * ```html
  * <vaadin-message-list></vaadin-message-list>
  * ```
  *
- * Provide the messages to the message list with the `items` property.
+ * Provide the messages to the message list with the [`items`](#/elements/vaadin-message-list#property-items) property.
+ *
  * ```js
  * document.querySelector('vaadin-message-list').items = [
  *   { text: 'Hello list', time: 'yesterday', userName: 'Matt Mambo', userAbbr: 'MM', userColorIndex: 1 },
@@ -41,6 +44,9 @@ export interface MessageListItem {
  * Part name | Description
  * ----------|----------------
  * `list`    | The container wrapping messages.
+ *
+ * See the [`<vaadin-message>`](#/elements/vaadin-message) documentation for the available
+ * state attributes and stylable shadow parts of message elements.
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  */
