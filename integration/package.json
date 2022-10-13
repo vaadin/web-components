@@ -10,6 +10,7 @@
     "@vaadin/accordion": "23.3.0-alpha3",
     "@vaadin/button": "23.3.0-alpha3",
     "@vaadin/checkbox": "23.3.0-alpha3",
+    "@vaadin/checkbox-group": "23.3.0-alpha3",
     "@vaadin/combo-box": "23.3.0-alpha3",
     "@vaadin/custom-field": "23.3.0-alpha3",
     "@vaadin/date-picker": "23.3.0-alpha3",
