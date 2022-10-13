@@ -44,6 +44,7 @@
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/checkbox": "23.3.0-alpha3",
+    "@vaadin/checkbox-group": "23.3.0-alpha3",
     "@vaadin/combo-box": "23.3.0-alpha3",
     "@vaadin/date-picker": "23.3.0-alpha3",
     "@vaadin/date-time-picker": "23.3.0-alpha3",
