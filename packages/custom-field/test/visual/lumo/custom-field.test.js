@@ -5,14 +5,11 @@ import '@vaadin/date-picker/theme/lumo/vaadin-date-picker.js';
 import '@vaadin/email-field/theme/lumo/vaadin-email-field.js';
 import '@vaadin/form-layout/theme/lumo/vaadin-form-item.js';
 import '@vaadin/form-layout/theme/lumo/vaadin-form-layout.js';
-import '@vaadin/item/theme/lumo/vaadin-item.js';
-import '@vaadin/list-box/theme/lumo/vaadin-list-box.js';
 import '@vaadin/number-field/theme/lumo/vaadin-number-field.js';
 import '@vaadin/password-field/theme/lumo/vaadin-password-field.js';
 import '@vaadin/select/theme/lumo/vaadin-select.js';
 import '@vaadin/text-area/theme/lumo/vaadin-text-area.js';
 import '@vaadin/text-field/theme/lumo/vaadin-text-field.js';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/time-picker/theme/lumo/vaadin-time-picker.js';
 import '../../../theme/lumo/vaadin-custom-field.js';
 
@@ -134,26 +131,18 @@ describe('custom-field', () => {
         wrapper = fixtureSync(`
           <div>
             <vaadin-custom-field label="Custom field">
-              <vaadin-select value="+358">
-                <template>
-                  <vaadin-list-box>
-                    <vaadin-item>+358</vaadin-item>
-                    <vaadin-item>+46</vaadin-item>
-                    <vaadin-item>+34</vaadin-item>
-                  </vaadin-list-box>
-                </template>
-              </vaadin-select>
+              <vaadin-select
+                value="+358"
+                items='[{ "label": "+358" }, { "label": "+46" }, { "label": "+34" }]'
+              ></vaadin-select>
               <vaadin-text-field></vaadin-text-field>
             </vaadin-custom-field>
             <vaadin-text-field label="Text field" value="Text"></vaadin-text-field>
-            <vaadin-select label="Plain select" value="Option one">
-              <template>
-                <vaadin-list-box>
-                  <vaadin-item>Option one</vaadin-item>
-                  <vaadin-item>Option two</vaadin-item>
-                </vaadin-list-box>
-              </template>
-            </vaadin-select>
+            <vaadin-select
+              label="Plain select"
+              value="Option one"
+              items='[{ "label": "Option one" }, { "label": "Option two" }]'
+            ></vaadin-select>
           </div>
         `);
       });
