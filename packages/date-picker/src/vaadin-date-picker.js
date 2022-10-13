@@ -171,10 +171,6 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
     `;
   }
 
-  static get observers() {
-    return ['__updateOverlayTheme(_overlayContent, _theme)'];
-  }
-
   /**
    * Used by `InputControlMixin` as a reference to the clear button element.
    * @protected
