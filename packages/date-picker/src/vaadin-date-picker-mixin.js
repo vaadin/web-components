@@ -318,6 +318,7 @@ export const DatePickerMixin = (subclass) =>
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
         '_focusedDateChanged(_focusedDate, i18n.formatDate)',
         '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers)',
+        '__updateOverlayTheme(_overlayContent, _theme)',
         '__updateFullScreen(_overlayContent, _fullscreen)',
       ];
     }
@@ -777,6 +778,17 @@ export const DatePickerMixin = (subclass) =>
           selectedDate,
           showWeekNumbers,
         });
+      }
+    }
+
+    /** @private */
+    __updateOverlayTheme(overlayContent, theme) {
+      if (overlayContent) {
+        if (theme) {
+          overlayContent.setAttribute('theme', theme);
+        } else {
+          overlayContent.removeAttribute('theme');
+        }
       }
     }
 

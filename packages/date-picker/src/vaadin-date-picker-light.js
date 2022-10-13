@@ -28,12 +28,6 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  *
  * ### Styling
  *
- * The following shadow DOM parts are available for styling:
- *
- * Part name | Description | Theme for Element
- * ----------------|----------------|----------------
- * `overlay-content` | The overlay element | vaadin-date-picker-light
- *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * In addition to `<vaadin-date-picker-light>` itself, the following
@@ -101,10 +95,6 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixin(Polyme
     };
   }
 
-  static get observers() {
-    return ['__updateOverlayTheme(_overlayContent, _theme)'];
-  }
-
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
@@ -131,17 +121,6 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixin(Polyme
 
     this.$.overlay.positionTarget = this.inputElement;
     this.$.overlay.noVerticalOverlap = true;
-  }
-
-  /** @private */
-  __updateOverlayTheme(overlayContent, theme) {
-    if (overlayContent) {
-      if (theme) {
-        overlayContent.setAttribute('theme', theme);
-      } else {
-        overlayContent.removeAttribute('theme');
-      }
-    }
   }
 }
 

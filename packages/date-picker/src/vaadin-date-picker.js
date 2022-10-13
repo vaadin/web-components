@@ -210,17 +210,6 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
   }
 
   /** @private */
-  __updateOverlayTheme(overlayContent, theme) {
-    if (overlayContent) {
-      if (theme) {
-        overlayContent.setAttribute('theme', theme);
-      } else {
-        overlayContent.removeAttribute('theme');
-      }
-    }
-  }
-
-  /** @private */
   _onVaadinOverlayClose(e) {
     if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().includes(this)) {
       e.preventDefault();
@@ -230,7 +219,11 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
   /** @private */
   _toggle(e) {
     e.stopPropagation();
-    this[this.$.overlay.opened ? 'close' : 'open']();
+    if (this.$.overlay.opened) {
+      this.close();
+    } else {
+      this.open();
+    }
   }
 
   // Workaround https://github.com/vaadin/web-components/issues/2855
