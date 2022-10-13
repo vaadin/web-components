@@ -3,8 +3,8 @@ import { nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { LitElement } from 'lit';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DirMixin } from '../src/dir-mixin.js';
+import { PolylitMixin } from '../src/polylit-mixin.js';
 
 class DirMixinPolymerElement extends DirMixin(PolymerElement) {
   static get is() {

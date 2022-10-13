@@ -3,9 +3,8 @@
  * Copyright (c) 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-
-import { animationFrame } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
+import { animationFrame } from './async.js';
+import { Debouncer } from './debounce.js';
 
 const region = document.createElement('div');
 
