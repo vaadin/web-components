@@ -52,6 +52,7 @@
     "@esm-bundle/chai": "^4.3.4",
     "@vaadin/polymer-legacy-adapter": "23.3.0-alpha3",
     "@vaadin/testing-helpers": "^0.3.2",
+    "lit": "^2.0.0",
     "sinon": "^13.0.2"
   },
   "web-types": [
