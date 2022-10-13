@@ -53,6 +53,7 @@
     "@vaadin/radio-group": "23.3.0-alpha3",
     "@vaadin/select": "23.3.0-alpha3",
     "@vaadin/testing-helpers": "^0.3.2",
+    "@vaadin/text-area": "23.3.0-alpha3",
     "@vaadin/text-field": "23.3.0-alpha3",
     "@vaadin/time-picker": "23.3.0-alpha3",
     "sinon": "^13.0.2"
