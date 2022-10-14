@@ -1,5 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '../src/vaadin-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -37,7 +38,6 @@ describe('restore focus', () => {
     wrapper = fixtureSync('<overlay-field-wrapper></overlay-field-wrapper>');
     overlay = wrapper.$.overlay;
     focusable = wrapper.$.focusable;
-    overlay._observer.flush();
     window.focus();
   });
 

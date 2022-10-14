@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { escKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import { IronOverlayBehavior } from '@polymer/iron-overlay-behavior/iron-overlay-behavior.js';
 import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
 import { Overlay } from '../src/vaadin-overlay.js';
@@ -25,7 +26,6 @@ describe('overlay legacy', () => {
         </iron-overlay>
       `);
       overlay = parent.querySelector('vaadin-overlay');
-      overlay._observer.flush();
       parent.open();
       await nextRender(parent);
       overlay.opened = true;

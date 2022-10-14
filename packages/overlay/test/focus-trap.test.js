@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import '@vaadin/button/vaadin-button.js';
 import '@vaadin/text-field/vaadin-text-field.js';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/radio-group/vaadin-radio-group.js';
 import '@vaadin/radio-group/vaadin-radio-button.js';
 import '../vaadin-overlay.js';
@@ -94,6 +95,7 @@ describe('focus-trap', () => {
       parent = fixtureSync('<overlay-components-wrapper></overlay-components-wrapper>');
       await nextRender();
       overlay = parent.$.defaultOverlay;
+      overlay.requestContentUpdate();
       overlayPart = overlay.$.overlay;
       focusableElements = getFocusableElements(overlay.$.overlay);
       window.focus();
@@ -183,6 +185,7 @@ describe('focus-trap', () => {
     describe('shadow content', () => {
       beforeEach(() => {
         overlay = parent.$.shadowOverlay;
+        overlay.requestContentUpdate();
         focusableElements = getFocusableElements(overlay.$.overlay);
       });
 
@@ -253,7 +256,6 @@ describe('focus-trap', () => {
       beforeEach(() => {
         overlay = parent.$.emptyOverlay;
         overlayPart = overlay.$.overlay;
-        overlay._observer.flush();
         focusableElements = getFocusableElements(overlay.$.overlay);
       });
 
@@ -292,6 +294,7 @@ describe('focus-trap', () => {
       await nextRender();
       overlay = parent.firstElementChild;
       overlayPart = overlay.$.overlay;
+      overlay.requestContentUpdate();
       focusableElements = getFocusableElements(overlay.$.overlay);
       window.focus();
     });
@@ -387,6 +390,7 @@ describe('focus-trap', () => {
             </template>
           </vaadin-overlay>
         `);
+        overlay.requestContentUpdate();
         focusableElements = getFocusableElements(overlay.$.overlay);
       });
 
@@ -464,7 +468,6 @@ describe('focus-trap', () => {
         `);
         overlay = parent.firstElementChild;
         overlayPart = overlay.$.overlay;
-        overlay._observer.flush();
         focusableElements = getFocusableElements(overlay.$.overlay);
       });
 

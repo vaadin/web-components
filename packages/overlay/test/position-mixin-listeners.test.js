@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import { Overlay } from '../src/vaadin-overlay.js';
 import { PositionMixin } from '../src/vaadin-overlay-position-mixin.js';
 

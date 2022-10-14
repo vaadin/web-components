@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { click, enterKeyDown, escKeyDown, fixtureSync, mousedown, mouseup, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/text-field/vaadin-text-field.js';
 import '../vaadin-overlay.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
@@ -69,7 +70,6 @@ describe('vaadin-overlay', () => {
           </template>
         </vaadin-overlay>
       `);
-      overlay._observer.flush();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -109,7 +109,6 @@ describe('vaadin-overlay', () => {
           </template>
         </vaadin-overlay>
       `);
-      overlay._observer.flush();
       backdrop = overlay.$.backdrop;
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
@@ -151,7 +150,6 @@ describe('vaadin-overlay', () => {
           </template>
         </vaadin-overlay>
       `);
-      overlay._observer.flush();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -201,7 +199,7 @@ describe('vaadin-overlay', () => {
         <div id="parent">
           <vaadin-overlay>
             <template>
-              overlay-content
+              <div>overlay-content</div>
             </template>
           </vaadin-overlay>
         </div>
@@ -209,7 +207,6 @@ describe('vaadin-overlay', () => {
       overlay = parent.children[0];
       overlayPart = overlay.$.overlay;
       backdrop = overlay.$.backdrop;
-      overlay._observer.flush();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -408,12 +405,11 @@ describe('vaadin-overlay', () => {
       overlay = fixtureSync(`
         <vaadin-overlay>
           <template>
-            overlay-content
+            <div>overlay-content</div>
           </template>
         </vaadin-overlay>
       `);
       overlayPart = overlay.$.overlay;
-      overlay._observer.flush();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -431,7 +427,7 @@ describe('vaadin-overlay', () => {
     });
 
     it('should fit in viewport when huge content is used', () => {
-      const lastChild = overlay.content.lastElementChild;
+      const lastChild = overlay.lastElementChild;
       lastChild.setAttribute('style', 'display: block; width: 2000px; height: 2000px;');
 
       const rect = overlay.getBoundingClientRect();
@@ -453,7 +449,7 @@ describe('vaadin-overlay', () => {
 
     it('should center overlayPart in overlay with flex by default', () => {
       // The “default” fixture content is too large to test this
-      overlay.content.textContent = 'foo';
+      overlay.textContent = 'foo';
 
       const overlayRect = overlay.getBoundingClientRect();
       const overlayPartRect = overlayPart.getBoundingClientRect();
@@ -477,20 +473,14 @@ describe('vaadin-overlay', () => {
   });
 
   describe('wrapped overlay', () => {
-    let overlay, parent;
+    let overlay;
 
     beforeEach(async () => {
-      parent = fixtureSync(`
-        <div id="parent">
-          <vaadin-overlay>
-            <template>
-              <overlay-wrapper></-wrapper>
-            </template>
-          </vaadin-overlay>
-        </div>
-      `);
-      overlay = parent.children[0];
-      overlay._observer.flush();
+      overlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
+      overlay.renderer = (root) => {
+        const el = document.createElement('overlay-wrapper');
+        root.appendChild(el);
+      };
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
@@ -500,7 +490,7 @@ describe('vaadin-overlay', () => {
     });
 
     it('should not exit modal state when opened changes from undefined to false', () => {
-      const wrapper = overlay.content.querySelector('overlay-wrapper');
+      const wrapper = overlay.querySelector('overlay-wrapper');
       const inner = wrapper.shadowRoot.querySelector('vaadin-overlay');
       const spy = sinon.spy(inner, '_exitModalState');
       wrapper.opened = false;
@@ -520,7 +510,6 @@ describe('vaadin-overlay', () => {
           </template>
         </vaadin-overlay>
       `);
-      overlay._observer.flush();
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
     });
