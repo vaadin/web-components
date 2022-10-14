@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-progress-bar",
-  "version": "23.1.9",
+  "version": "23.1.10",
   "publishConfig": {
     "access": "public"
   },
@@ -34,6 +34,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/progress-bar": "~23.1.9"
+    "@vaadin/progress-bar": "~23.1.10"
   }
 }
