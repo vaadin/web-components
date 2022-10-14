@@ -318,8 +318,8 @@ export const DatePickerMixin = (subclass) =>
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
         '_focusedDateChanged(_focusedDate, i18n.formatDate)',
         '__updateOverlayContent(_overlayContent, i18n, label, _minDate, _maxDate, _focusedDate, _selectedDate, showWeekNumbers)',
-        '__updateOverlayTheme(_overlayContent, _theme)',
-        '__updateFullScreen(_overlayContent, _fullscreen)',
+        '__updateOverlayContentTheme(_overlayContent, _theme)',
+        '__updateOverlayContentFullScreen(_overlayContent, _fullscreen)',
       ];
     }
 
@@ -784,7 +784,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    __updateOverlayTheme(overlayContent, theme) {
+    __updateOverlayContentTheme(overlayContent, theme) {
       if (overlayContent) {
         if (theme) {
           overlayContent.setAttribute('theme', theme);
@@ -795,7 +795,7 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    __updateFullScreen(overlayContent, fullscreen) {
+    __updateOverlayContentFullScreen(overlayContent, fullscreen) {
       if (overlayContent) {
         overlayContent.toggleAttribute('fullscreen', fullscreen);
       }
