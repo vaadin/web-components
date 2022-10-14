@@ -683,8 +683,6 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _openedChanged(opened) {
-      this.$.overlay.opened = opened;
-
       if (this.inputElement) {
         this.inputElement.setAttribute('aria-expanded', opened);
       }
