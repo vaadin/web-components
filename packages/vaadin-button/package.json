@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-button",
-  "version": "23.2.4",
+  "version": "23.2.5",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/button": "~23.2.4"
+    "@vaadin/button": "~23.2.5"
   }
 }
