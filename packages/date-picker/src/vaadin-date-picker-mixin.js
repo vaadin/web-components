@@ -416,15 +416,6 @@ export const DatePickerMixin = (subclass) =>
 
       this.addController(new VirtualKeyboardController(this));
 
-      this.$.overlay.addEventListener('opened-changed', (e) => {
-        this.opened = e.detail.value;
-      });
-
-      this.$.overlay.addEventListener('vaadin-overlay-escape-press', () => {
-        this._focusedDate = this._selectedDate;
-        this._close();
-      });
-
       this.$.overlay.renderer = this._boundOverlayRenderer;
 
       this.addEventListener('mousedown', () => this.__bringToFront());
@@ -799,6 +790,12 @@ export const DatePickerMixin = (subclass) =>
       if (overlayContent) {
         overlayContent.toggleAttribute('fullscreen', fullscreen);
       }
+    }
+
+    /** @protected */
+    _onOverlayEscapePress() {
+      this._focusedDate = this._selectedDate;
+      this._close();
     }
 
     /** @protected */
