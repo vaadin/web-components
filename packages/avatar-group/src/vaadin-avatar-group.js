@@ -436,7 +436,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
     const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
 
     const newItems = limit ? items.slice(0, limit) : items;
-    const oldItems = this.__oldAvatars || [];
+    const oldItems = this.__oldAvatarItems || [];
 
     if (newItems.length || oldItems.length) {
       const removed = oldItems.filter((item) => !newItems.includes(item));
@@ -455,7 +455,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
     }
 
     this._avatars = [...this.querySelectorAll('vaadin-avatar')];
-    this.__oldAvatars = newItems;
+    this.__oldAvatarItems = newItems;
   }
 
   /** @private */
@@ -517,6 +517,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
     if (limit == null) {
       return;
     }
+
     const result = [];
     for (let i = limit; i < items; i++) {
       const item = this.items[i];
@@ -524,8 +525,8 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
         result.push(item.name || item.abbr || 'anonymous');
       }
     }
-    // Override generated tooltip text
-    tooltip.generator = () => result.join('\n');
+
+    tooltip.text = result.join('\n');
   }
 
   /** @private */
