@@ -1,7 +1,7 @@
 import '@vaadin/vaadin-lumo-styles/color.js';
 import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
-import '@vaadin/vaadin-overlay/theme/lumo/vaadin-overlay.js';
+import '@vaadin/overlay/theme/lumo/vaadin-overlay.js';
 import { loader } from '@vaadin/vaadin-lumo-styles/mixins/loader.js';
 import { menuOverlayCore } from '@vaadin/vaadin-lumo-styles/mixins/menu-overlay.js';
 import { overlay } from '@vaadin/vaadin-lumo-styles/mixins/overlay.js';

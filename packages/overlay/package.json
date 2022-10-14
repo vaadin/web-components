@@ -1,5 +1,5 @@
 {
-  "name": "@vaadin/vaadin-overlay",
+  "name": "@vaadin/overlay",
   "version": "23.3.0-alpha3",
   "publishConfig": {
     "access": "public"
@@ -9,7 +9,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/vaadin/web-components.git",
-    "directory": "packages/vaadin-overlay"
+    "directory": "packages/overlay"
   },
   "author": "Vaadin Ltd",
   "homepage": "https://vaadin.com/components",
