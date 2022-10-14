@@ -1,5 +1,5 @@
 {
-  "name": "@vaadin/vaadin-overlay",
+  "name": "@vaadin/overlay",
   "version": "24.0.0-alpha0",
   "publishConfig": {
     "access": "public"
