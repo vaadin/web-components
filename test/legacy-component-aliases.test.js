@@ -9,7 +9,6 @@
  * TODO: Remove after V23
  */
 import { expect } from '@esm-bundle/chai';
-import { OverlayElement } from '@vaadin/overlay';
 import { AccordionElement } from '@vaadin/vaadin-accordion';
 import { AccordionPanelElement } from '@vaadin/vaadin-accordion/vaadin-accordion-panel';
 import { AppLayoutElement } from '@vaadin/vaadin-app-layout';
@@ -133,7 +132,6 @@ describe('legacy-exports', () => {
     expect(new HorizontalLayoutElement()).to.be.instanceof(HTMLElement);
     expect(new VerticalLayoutElement()).to.be.instanceof(HTMLElement);
     expect(new ScrollerElement()).to.be.instanceof(HTMLElement);
-    expect(new OverlayElement()).to.be.instanceof(HTMLElement);
     expect(new ProgressBarElement()).to.be.instanceof(HTMLElement);
     expect(new RadioButtonElement()).to.be.instanceof(HTMLElement);
     expect(new RadioGroupElement()).to.be.instanceof(HTMLElement);

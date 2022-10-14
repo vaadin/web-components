@@ -1,10 +1,10 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fire, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { OverlayElement } from '../src/vaadin-overlay.js';
+import { Overlay } from '../src/vaadin-overlay.js';
 import { PositionMixin } from '../src/vaadin-overlay-position-mixin.js';
 
-class PositionedOverlay extends PositionMixin(OverlayElement) {
+class PositionedOverlay extends PositionMixin(Overlay) {
   static get is() {
     return 'vaadin-positioned-overlay';
   }
