@@ -104,7 +104,7 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @mixes DirMixin
  * @mixes ControllerMixin
  */
-class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
+class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -731,7 +731,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
    */
   static get __attachedInstances() {
     return Array.from(document.body.children)
-      .filter((el) => el instanceof OverlayElement && !el.hasAttribute('closing'))
+      .filter((el) => el instanceof Overlay && !el.hasAttribute('closing'))
       .sort((a, b) => a.__zIndex - b.__zIndex || 0);
   }
 
@@ -741,7 +741,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
    * @protected
    */
   get _last() {
-    return this === OverlayElement.__attachedInstances.pop();
+    return this === Overlay.__attachedInstances.pop();
   }
 
   /** @private */
@@ -776,7 +776,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
     }
 
     // Disable pointer events in other attached overlays
-    OverlayElement.__attachedInstances.forEach((el) => {
+    Overlay.__attachedInstances.forEach((el) => {
       if (el !== this) {
         el.shadowRoot.querySelector('[part="overlay"]').style.pointerEvents = 'none';
       }
@@ -799,7 +799,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
     }
 
     // Restore pointer events in the previous overlay(s)
-    const instances = OverlayElement.__attachedInstances;
+    const instances = Overlay.__attachedInstances;
     let el;
     // Use instances.pop() to ensure the reverse order
     while ((el = instances.pop())) {
@@ -978,7 +978,7 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
    */
   bringToFront() {
     let zIndex = '';
-    const frontmost = OverlayElement.__attachedInstances.filter((o) => o !== this).pop();
+    const frontmost = Overlay.__attachedInstances.filter((o) => o !== this).pop();
     if (frontmost) {
       const frontmostZIndex = frontmost.__zIndex;
       zIndex = frontmostZIndex + 1;
@@ -988,5 +988,6 @@ class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(PolymerEleme
   }
 }
 
-customElements.define(OverlayElement.is, OverlayElement);
-export { OverlayElement };
+customElements.define(Overlay.is, Overlay);
+
+export { Overlay };

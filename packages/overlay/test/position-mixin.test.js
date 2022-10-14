@@ -3,10 +3,10 @@ import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
 import { css } from 'lit';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles';
-import { OverlayElement } from '../src/vaadin-overlay.js';
+import { Overlay } from '../src/vaadin-overlay.js';
 import { PositionMixin } from '../src/vaadin-overlay-position-mixin.js';
 
-class PositionedOverlay extends PositionMixin(OverlayElement) {
+class PositionedOverlay extends PositionMixin(Overlay) {
   static get is() {
     return 'vaadin-positioned-overlay';
   }
