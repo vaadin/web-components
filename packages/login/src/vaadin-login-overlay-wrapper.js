@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
-import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
+import { OverlayElement } from '@vaadin/overlay/src/vaadin-overlay.js';
 
 const template = document.createElement('template');
 

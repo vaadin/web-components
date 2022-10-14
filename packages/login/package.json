@@ -39,11 +39,11 @@
     "@polymer/polymer": "^3.0.0",
     "@vaadin/button": "23.3.0-alpha3",
     "@vaadin/component-base": "23.3.0-alpha3",
+    "@vaadin/overlay": "23.3.0-alpha3",
     "@vaadin/password-field": "23.3.0-alpha3",
     "@vaadin/text-field": "23.3.0-alpha3",
     "@vaadin/vaadin-lumo-styles": "23.3.0-alpha3",
     "@vaadin/vaadin-material-styles": "23.3.0-alpha3",
-    "@vaadin/vaadin-overlay": "23.3.0-alpha3",
     "@vaadin/vaadin-themable-mixin": "23.3.0-alpha3"
   },
   "devDependencies": {
