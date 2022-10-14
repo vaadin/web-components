@@ -27,6 +27,7 @@
     "@vaadin/message-input": "24.0.0-alpha0",
     "@vaadin/multi-select-combo-box": "24.0.0-alpha0",
     "@vaadin/number-field": "24.0.0-alpha0",
+    "@vaadin/overlay": "24.0.0-alpha0",
     "@vaadin/password-field": "24.0.0-alpha0",
     "@vaadin/polymer-legacy-adapter": "24.0.0-alpha0",
     "@vaadin/radio-group": "24.0.0-alpha0",
@@ -37,7 +38,6 @@
     "@vaadin/text-field": "24.0.0-alpha0",
     "@vaadin/time-picker": "24.0.0-alpha0",
     "@vaadin/tooltip": "24.0.0-alpha0",
-    "@vaadin/vaadin-overlay": "24.0.0-alpha0",
     "@vaadin/vaadin-themable-mixin": "24.0.0-alpha0",
     "sinon": "^13.0.2"
   }

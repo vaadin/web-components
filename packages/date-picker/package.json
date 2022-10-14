@@ -40,9 +40,9 @@
     "@vaadin/component-base": "24.0.0-alpha0",
     "@vaadin/field-base": "24.0.0-alpha0",
     "@vaadin/input-container": "24.0.0-alpha0",
+    "@vaadin/overlay": "24.0.0-alpha0",
     "@vaadin/vaadin-lumo-styles": "24.0.0-alpha0",
     "@vaadin/vaadin-material-styles": "24.0.0-alpha0",
-    "@vaadin/vaadin-overlay": "24.0.0-alpha0",
     "@vaadin/vaadin-themable-mixin": "24.0.0-alpha0"
   },
   "devDependencies": {

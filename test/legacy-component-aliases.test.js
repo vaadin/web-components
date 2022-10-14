@@ -9,7 +9,7 @@
  * TODO: Remove after V23
  */
 import { expect } from '@esm-bundle/chai';
-
+import { OverlayElement } from '@vaadin/overlay';
 import { AccordionElement } from '@vaadin/vaadin-accordion';
 import { AccordionPanelElement } from '@vaadin/vaadin-accordion/vaadin-accordion-panel';
 import { AppLayoutElement } from '@vaadin/vaadin-app-layout';
@@ -62,7 +62,6 @@ import { NotificationElement } from '@vaadin/vaadin-notification';
 import { HorizontalLayoutElement } from '@vaadin/vaadin-ordered-layout';
 import { VerticalLayoutElement } from '@vaadin/vaadin-ordered-layout';
 import { ScrollerElement } from '@vaadin/vaadin-ordered-layout';
-import { OverlayElement } from '@vaadin/vaadin-overlay';
 import { ProgressBarElement } from '@vaadin/vaadin-progress-bar';
 import { RadioButtonElement } from '@vaadin/vaadin-radio-button';
 import { RadioGroupElement } from '@vaadin/vaadin-radio-button/vaadin-radio-group';

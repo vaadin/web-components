@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
-import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
+import { OverlayElement } from '@vaadin/overlay/src/vaadin-overlay.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
 import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
