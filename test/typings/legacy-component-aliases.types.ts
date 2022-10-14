@@ -60,6 +60,7 @@ import { NotificationElement } from '@vaadin/vaadin-notification';
 import { HorizontalLayoutElement } from '@vaadin/vaadin-ordered-layout';
 import { VerticalLayoutElement } from '@vaadin/vaadin-ordered-layout';
 import { ScrollerElement } from '@vaadin/vaadin-ordered-layout';
+import { OverlayElement } from '@vaadin/vaadin-overlay';
 import { ProgressBarElement } from '@vaadin/vaadin-progress-bar';
 import { RadioButtonElement } from '@vaadin/vaadin-radio-button';
 import { RadioGroupElement } from '@vaadin/vaadin-radio-button/vaadin-radio-group';
