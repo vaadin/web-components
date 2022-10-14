@@ -106,8 +106,8 @@ describe('Basic features', () => {
     });
 
     it('should remove focused attribute on focusout', () => {
-      focusin(datePicker);
-      focusout(datePicker);
+      datePicker.focus();
+      datePicker.blur();
       expect(dateTimePicker.hasAttribute('focused')).to.be.false;
     });
 
@@ -126,7 +126,7 @@ describe('Basic features', () => {
     it('should not remove focused attribute when moving focus to overlay', () => {
       focusin(datePicker);
       datePicker.open();
-      focusout(datePicker, datePicker.$.overlay);
+      focusout(datePicker, datePicker._overlayContent);
       expect(dateTimePicker.hasAttribute('focused')).to.be.true;
     });
   });
