@@ -42,7 +42,7 @@ export type OverlayOutsideClickEvent = CustomEvent<{ sourceEvent: MouseEvent }>;
  */
 export type OverlayEscapePressEvent = CustomEvent<{ sourceEvent: KeyboardEvent }>;
 
-export interface OverlayElementEventMap {
+export interface OverlayCustomEventMap {
   'opened-changed': OverlayOpenedChangedEvent;
   'vaadin-overlay-open': OverlayOpenEvent;
   'vaadin-overlay-close': OverlayCloseEvent;
@@ -51,7 +51,7 @@ export interface OverlayElementEventMap {
   'vaadin-overlay-escape-press': OverlayEscapePressEvent;
 }
 
-export type OverlayEventMap = HTMLElementEventMap & OverlayElementEventMap;
+export type OverlayEventMap = HTMLElementEventMap & OverlayCustomEventMap;
 
 /**
  * `<vaadin-overlay>` is a Web Component for creating overlays. The content of the overlay
@@ -144,7 +144,7 @@ export type OverlayEventMap = HTMLElementEventMap & OverlayElementEventMap;
  * @fires {CustomEvent} vaadin-overlay-outside-click - Fired before the overlay will be closed on outside click. If canceled the closing of the overlay is canceled as well.
  * @fires {CustomEvent} vaadin-overlay-escape-press - Fired before the overlay will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
  */
-declare class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(HTMLElement))) {
+declare class Overlay extends ThemableMixin(DirMixin(ControllerMixin(HTMLElement))) {
   /**
    * When true, the overlay is visible and attached to body.
    */
@@ -231,21 +231,21 @@ declare class OverlayElement extends ThemableMixin(DirMixin(ControllerMixin(HTML
 
   addEventListener<K extends keyof OverlayEventMap>(
     type: K,
-    listener: (this: OverlayElement, ev: OverlayEventMap[K]) => void,
+    listener: (this: Overlay, ev: OverlayEventMap[K]) => void,
     options?: AddEventListenerOptions | boolean,
   ): void;
 
   removeEventListener<K extends keyof OverlayEventMap>(
     type: K,
-    listener: (this: OverlayElement, ev: OverlayEventMap[K]) => void,
+    listener: (this: Overlay, ev: OverlayEventMap[K]) => void,
     options?: EventListenerOptions | boolean,
   ): void;
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'vaadin-overlay': OverlayElement;
+    'vaadin-overlay': Overlay;
   }
 }
 
-export { OverlayElement };
+export { Overlay };
