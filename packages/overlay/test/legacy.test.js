@@ -3,7 +3,7 @@ import { escKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { IronOverlayBehavior } from '@polymer/iron-overlay-behavior/iron-overlay-behavior.js';
 import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
-import { OverlayElement } from '../src/vaadin-overlay.js';
+import { Overlay } from '../src/vaadin-overlay.js';
 
 Polymer({
   is: 'iron-overlay',
@@ -75,15 +75,15 @@ describe('overlay legacy', () => {
     it('should have a click listener', () => {
       // Having at least one mouse event listener is needed for iOS
       // to enable mouse events dispatching.
-      sinon.spy(OverlayElement.prototype, 'addEventListener');
+      sinon.spy(Overlay.prototype, 'addEventListener');
 
       const overlay = document.createElement('vaadin-overlay');
       document.body.appendChild(overlay);
 
-      expect(OverlayElement.prototype.addEventListener.calledWith('click')).to.be.true;
+      expect(Overlay.prototype.addEventListener.calledWith('click')).to.be.true;
 
       document.body.removeChild(overlay);
-      OverlayElement.prototype.addEventListener.restore();
+      Overlay.prototype.addEventListener.restore();
     });
 
     it('should have a click listener on the backdrop', () => {

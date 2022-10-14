@@ -3,7 +3,7 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { OverlayElement } from '@vaadin/overlay/src/vaadin-overlay.js';
+import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { datePickerOverlayStyles } from './vaadin-date-picker-styles.js';
@@ -17,10 +17,10 @@ let memoizedTemplate;
 /**
  * An element used internally by `<vaadin-date-picker>`. Not intended to be used separately.
  *
- * @extends OverlayElement
+ * @extends Overlay
  * @private
  */
-class DatePickerOverlay extends PositionMixin(OverlayElement) {
+class DatePickerOverlay extends PositionMixin(Overlay) {
   static get is() {
     return 'vaadin-date-picker-overlay';
   }

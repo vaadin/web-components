@@ -8,7 +8,6 @@
  *
  * TODO: Remove after V23
  */
-import { OverlayElement } from '@vaadin/overlay';
 import { AccordionElement } from '@vaadin/vaadin-accordion';
 import { AccordionPanelElement } from '@vaadin/vaadin-accordion/vaadin-accordion-panel';
 import { AppLayoutElement } from '@vaadin/vaadin-app-layout';
@@ -132,7 +131,6 @@ assertType<HTMLElement>(new NotificationElement());
 assertType<HTMLElement>(new HorizontalLayoutElement());
 assertType<HTMLElement>(new VerticalLayoutElement());
 assertType<HTMLElement>(new ScrollerElement());
-assertType<HTMLElement>(new OverlayElement());
 assertType<HTMLElement>(new ProgressBarElement());
 assertType<HTMLElement>(new RadioButtonElement());
 assertType<HTMLElement>(new RadioGroupElement());
