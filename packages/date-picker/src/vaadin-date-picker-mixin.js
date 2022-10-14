@@ -364,6 +364,7 @@ export const DatePickerMixin = (subclass) =>
 
       this._boundOnClick = this._onClick.bind(this);
       this._boundOnScroll = this._onScroll.bind(this);
+      this._boundOverlayRenderer = this._overlayRenderer.bind(this);
     }
 
     /**
@@ -424,19 +425,10 @@ export const DatePickerMixin = (subclass) =>
         this._close();
       });
 
+      this.$.overlay.renderer = this._boundOverlayRenderer;
+
       this.addEventListener('mousedown', () => this.__bringToFront());
       this.addEventListener('touchstart', () => this.__bringToFront());
-
-      this.$.overlay.renderer = (root) => {
-        if (!root.firstChild) {
-          // Create and store document content element
-          const content = document.createElement('vaadin-date-picker-overlay-content');
-          root.appendChild(content);
-          this._overlayContent = content;
-
-          this._initOverlayContent(content);
-        }
-      };
     }
 
     /** @protected */
@@ -482,7 +474,17 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _initOverlayContent(content) {
+    _overlayRenderer(root) {
+      if (root.firstChild) {
+        return;
+      }
+
+      // Create and store document content element
+      const content = document.createElement('vaadin-date-picker-overlay-content');
+      root.appendChild(content);
+
+      this._overlayContent = content;
+
       content.addEventListener('close', () => {
         this._close();
       });
