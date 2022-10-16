@@ -298,13 +298,13 @@ git checkout master && git pull
 Create a new branch from master:
 
 ```sh
-git checkout -b 23.3
+git checkout -b 24.0
 ```
 
 Push a newly created branch:
 
 ```sh
-git push origin 23.3
+git push origin 24.0
 ```
 
 The newly created branch for the current major is protected by default.
@@ -313,7 +313,7 @@ The rest of the changes to that branch should happen the usual way, through a PR
 Create another branch:
 
 ```sh
-git checkout -b update-v23.3
+git checkout -b update-v24.0
 ```
 
 Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/master/wtr-utils.js) as follows:
@@ -321,7 +321,7 @@ Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/master/wtr
 ```diff
 const isLockfileChanged = () => {
 -  const log = execSync('git diff --name-only origin/master HEAD').toString();
-+  const log = execSync('git diff --name-only origin/23.3 HEAD').toString();
++  const log = execSync('git diff --name-only origin/24.0 HEAD').toString();
   return log.split('\n').some((line) => line.includes('yarn.lock'));
 };
 ```
@@ -329,7 +329,7 @@ const isLockfileChanged = () => {
 ```diff
 const getChangedPackages = () => {
 -  const output = execSync('./node_modules/.bin/lerna ls --since origin/master --json --loglevel silent');
-+  const output = execSync('./node_modules/.bin/lerna ls --since origin/23.3 --json --loglevel silent');
++  const output = execSync('./node_modules/.bin/lerna ls --since origin/24.0 --json --loglevel silent');
   return JSON.parse(output.toString());
 };
 ```
@@ -341,13 +341,13 @@ Create a PR to the version branch ([example](https://github.com/vaadin/web-compo
 Create a new branch from master:
 
 ```sh
-git checkout master && git checkout -b bump-v24
+git checkout master && git checkout -b bump-v24.1
 ```
 
 Prepare a new version for the `updateVersion` script by running the following command:
 
 ```sh
-export npm_config_bump=24.0.0-alpha0
+export npm_config_bump=24.1.0-alpha0
 ```
 
 Run the script to bump static version getters in `ElementMixin`, `Lumo` and `Material`:
@@ -359,13 +359,13 @@ node scripts/updateVersion.js
 Mark the new version with Lerna:
 
 ```sh
-lerna version 24.0.0-alpha0 --no-push --no-git-tag-version --force-publish --exact --yes
+lerna version 24.1.0-alpha0 --no-push --no-git-tag-version --force-publish --exact --yes
 ```
 
 Commit all the changes:
 
 ```sh
-git commit -a -m "chore: update master branch to Vaadin 24"
+git commit -a -m "chore: update master branch to Vaadin 24.1"
 ```
 
 Create a PR to the `master` branch ([example](https://github.com/vaadin/web-components/pull/4433)).
