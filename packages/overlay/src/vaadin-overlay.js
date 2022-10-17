@@ -186,15 +186,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
       renderer: Function,
 
       /**
-       * References the content container after the template is stamped.
-       * @type {!HTMLElement | undefined}
-       * @deprecated The content container is now the overlay itself.
-       */
-      content: {
-        type: Object,
-      },
-
-      /**
        * When true the overlay has backdrop on top of content when opened.
        * @type {boolean}
        */
@@ -389,7 +380,7 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
    */
   requestContentUpdate() {
     if (this.renderer) {
-      this.renderer.call(this.owner, this.content, this.owner, this.model);
+      this.renderer.call(this.owner, this, this.owner, this.model);
     }
   }
 
@@ -755,12 +746,11 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     this._oldOpened = opened;
 
     if (rendererChanged) {
-      this.content = this;
-      this.content.innerHTML = '';
+      this.innerHTML = '';
       // Whenever a Lit-based renderer is used, it assigns a Lit part to the node it was rendered into.
       // When clearing the rendered content, this part needs to be manually disposed of.
       // Otherwise, using a Lit-based renderer on the same node will throw an exception or render nothing afterward.
-      delete this.content._$litPart$;
+      delete this._$litPart$;
     }
 
     if (opened && renderer && (rendererChanged || openedChanged || ownerOrModelChanged)) {

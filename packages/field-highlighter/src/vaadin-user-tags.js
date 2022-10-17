@@ -209,7 +209,7 @@ export class UserTags extends PolymerElement {
   }
 
   get wrapper() {
-    return this.$.overlay.content.querySelector('[part="tags"]');
+    return this.$.overlay.querySelector('[part="tags"]');
   }
 
   createUserTag(user) {

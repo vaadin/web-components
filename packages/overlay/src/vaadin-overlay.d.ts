@@ -133,12 +133,6 @@ declare class Overlay extends ThemableMixin(DirMixin(ControllerMixin(HTMLElement
   renderer: OverlayRenderer | null | undefined;
 
   /**
-   * References the content container after the template is stamped.
-   * @deprecated The content container is now the overlay itself.
-   */
-  content: HTMLElement | undefined;
-
-  /**
    * When true the overlay has backdrop on top of content when opened.
    */
   withBackdrop: boolean;

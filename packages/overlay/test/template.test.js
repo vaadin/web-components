@@ -50,26 +50,25 @@ describe('overlay template', () => {
     });
 
     it('should use overlay host for contents, slot in content part', () => {
-      expect(overlay.content).to.equal(overlay);
       const contentSlot = overlay.$.content.querySelector('slot');
       expect(contentSlot).to.be.ok;
       expect(overlay.lastChild.assignedSlot).to.equal(contentSlot);
     });
 
     it('should stamp contents', () => {
-      expect(overlay.content.textContent).to.contain('my-overlay-view content');
+      expect(overlay.textContent).to.contain('my-overlay-view content');
     });
 
     it('should forwardHostProp for props', () => {
-      expect(overlay.content.textContent).to.contain('hostProp: foo');
+      expect(overlay.textContent).to.contain('hostProp: foo');
       wrapper.hostProp = 'bar';
-      expect(overlay.content.textContent).to.contain('hostProp: bar');
+      expect(overlay.textContent).to.contain('hostProp: bar');
     });
 
     it('should forwardHostProp for paths', () => {
-      expect(overlay.content.textContent).to.contain('hostPath.subPath: foo');
+      expect(overlay.textContent).to.contain('hostPath.subPath: foo');
       wrapper.set('hostPath.subPath', 'bar');
-      expect(overlay.content.textContent).to.contain('hostPath.subPath: bar');
+      expect(overlay.textContent).to.contain('hostPath.subPath: bar');
     });
   });
 
@@ -91,15 +90,13 @@ describe('overlay template', () => {
     });
 
     it('should use overlay host for contents, slot in content part', () => {
-      expect(overlay.content).to.equal(overlay);
       const contentSlot = overlay.$.content.querySelector('slot');
       expect(contentSlot).to.be.ok;
       expect(overlay.lastChild.assignedSlot).to.equal(contentSlot);
     });
 
     it('should stamp contents', () => {
-      expect(overlay.content).to.be.ok;
-      expect(overlay.content.textContent).to.contain('plain overlay content');
+      expect(overlay.textContent).to.contain('plain overlay content');
     });
   });
 });

@@ -208,7 +208,7 @@ function afterOverlayClosingFinished(overlay, callback) {
         expect(overlays[0].$.overlay.style.pointerEvents).to.equal('');
         done();
       });
-      overlays[0].content.querySelector('button').click();
+      overlays[0].querySelector('button').click();
     });
   });
 
