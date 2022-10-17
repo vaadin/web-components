@@ -17,6 +17,20 @@ function waitUntilScrolledTo(overlay, date, callback) {
   }
 }
 
+async function customizeFixture({ initialPosition, monthScrollerItems, monthScrollerOffset }) {
+  const overlay = fixtureSync(`<vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>`);
+  const monthScroller = overlay.$.monthScroller;
+  monthScroller.style.setProperty('--vaadin-infinite-scroller-buffer-offset', monthScrollerOffset);
+  monthScroller.style.height = `${270 * monthScrollerItems}px`;
+  overlay.i18n = getDefaultI18n();
+  overlay.$.monthScroller.bufferSize = 3;
+  overlay.$.yearScroller.bufferSize = 3;
+  overlay.initialPosition = initialPosition || new Date();
+  await nextRender();
+
+  return overlay;
+}
+
 describe('overlay', () => {
   let overlay;
 
@@ -315,58 +329,123 @@ describe('overlay', () => {
       overlay.$.yearScroller._debouncerUpdateClones.flush();
       expect(getFirstVisibleItem(overlay.$.yearScroller, offset).firstElementChild.textContent).to.contain('2000');
     });
+
+    describe('height(visible area) < height(item)', () => {
+      let overlay, monthScroller;
+
+      beforeEach(async () => {
+        overlay = await customizeFixture({
+          initialPosition: new Date(2021, 1, 1),
+          monthScrollerItems: 0.5,
+          monthScrollerOffset: 0,
+        });
+        monthScroller = overlay.$.monthScroller;
+      });
+
+      it('should scroll to a sub-month position that approximately shows the week the date is in', () => {
+        const initialPosition = monthScroller.position;
+        // Scroll to 15th
+        overlay.scrollToDate(new Date(2021, 1, 15), false);
+        const positionOf15th = monthScroller.position;
+        expect(positionOf15th).to.be.greaterThan(initialPosition);
+        expect(positionOf15th).to.be.lessThan(initialPosition + 1);
+        // Scroll to 28th
+        overlay.scrollToDate(new Date(2021, 1, 28), false);
+        const positionOf28th = monthScroller.position;
+        expect(positionOf28th).to.be.greaterThan(initialPosition);
+        expect(positionOf28th).to.be.greaterThan(positionOf15th);
+        expect(positionOf28th).to.be.lessThan(initialPosition + 1);
+        // Scroll to first of previous month
+        overlay.scrollToDate(new Date(2021, 0, 1), false);
+        const firstOfPreviousMonthPosition = monthScroller.position;
+        expect(firstOfPreviousMonthPosition).to.equal(initialPosition - 1);
+        // Scroll to first of next month
+        overlay.scrollToDate(new Date(2021, 2, 1), false);
+        const firstOfNextMonthPosition = monthScroller.position;
+        expect(firstOfNextMonthPosition).to.equal(initialPosition + 1);
+      });
+    });
+
+    describe('height(visible area) > height(item)', () => {
+      let overlay, monthScroller;
+
+      beforeEach(async () => {
+        overlay = await customizeFixture({
+          initialPosition: new Date(2021, 1, 1),
+          monthScrollerItems: 3,
+          monthScrollerOffset: 0,
+        });
+        monthScroller = overlay.$.monthScroller;
+      });
+
+      it('should always scroll to the exact position of the month that the date is in', () => {
+        const initialPosition = monthScroller.position;
+        // Scroll to 15th
+        overlay.scrollToDate(new Date(2021, 1, 15), false);
+        const positionOf15th = monthScroller.position;
+        expect(positionOf15th).to.equal(initialPosition);
+        // Scroll to 28th
+        overlay.scrollToDate(new Date(2021, 1, 28), false);
+        const positionOf28th = monthScroller.position;
+        expect(positionOf28th).to.equal(initialPosition);
+        // Scroll to first of previous month
+        overlay.scrollToDate(new Date(2021, 0, 1), false);
+        const firstOfPreviousMonthPosition = monthScroller.position;
+        expect(firstOfPreviousMonthPosition).to.equal(initialPosition - 1);
+        // Scroll to first of next month
+        overlay.scrollToDate(new Date(2021, 2, 1), false);
+        const firstOfNextMonthPosition = monthScroller.position;
+        expect(firstOfNextMonthPosition).to.equal(initialPosition + 1);
+      });
+    });
   });
 
   describe('revealDate', () => {
     let overlay, monthScroller;
 
-    async function fixtureOverlayContent({ monthScrollerItems, monthScrollerOffset }) {
-      overlay = fixtureSync(`
-        <vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>
-      `);
-      monthScroller = overlay.$.monthScroller;
-      monthScroller.style.setProperty('--vaadin-infinite-scroller-buffer-offset', monthScrollerOffset);
-      monthScroller.style.height = `calc(var(--vaadin-infinite-scroller-item-height) * ${monthScrollerItems})`;
-      overlay.i18n = getDefaultI18n();
-      overlay.$.monthScroller.bufferSize = 3;
-      overlay.$.yearScroller.bufferSize = 3;
-      overlay.initialPosition = new Date(2021, 1, 1);
-      await nextRender();
-    }
-
     describe('height(visible area) < height(item)', () => {
       beforeEach(async () => {
-        await fixtureOverlayContent({
+        overlay = await customizeFixture({
+          initialPosition: new Date(2021, 1, 1),
           monthScrollerItems: 0.5,
           monthScrollerOffset: 0,
         });
+        monthScroller = overlay.$.monthScroller;
       });
 
-      it('should scroll when the month is above the visible area', () => {
-        const position = monthScroller.position;
+      it('should scroll to a position that approximately shows the week the date is in', () => {
+        // Starting on first of February
+        const initialPosition = monthScroller.position;
+        // Scroll to 15th
+        overlay.revealDate(new Date(2021, 1, 15), false);
+        const positionOf15th = monthScroller.position;
+        expect(positionOf15th).to.be.greaterThan(initialPosition);
+        expect(positionOf15th).to.be.lessThan(initialPosition + 1);
+        // Scroll to 28th
+        overlay.revealDate(new Date(2021, 1, 28), false);
+        const positionOf28th = monthScroller.position;
+        expect(positionOf28th).to.be.greaterThan(initialPosition);
+        expect(positionOf28th).to.be.greaterThan(positionOf15th);
+        expect(positionOf28th).to.be.lessThan(initialPosition + 1);
+        // Scroll to first of previous month
         overlay.revealDate(new Date(2021, 0, 1), false);
-        expect(monthScroller.position).to.equal(position - 1);
-      });
-
-      it('should not scroll when the month is the same', () => {
-        const position = monthScroller.position;
-        overlay.revealDate(new Date(2021, 1, 10), false);
-        expect(monthScroller.position).to.equal(position);
-      });
-
-      it('should scroll when the month is below the visible area', () => {
-        const position = monthScroller.position;
+        const firstOfPreviousMonthPosition = monthScroller.position;
+        expect(firstOfPreviousMonthPosition).to.equal(initialPosition - 1);
+        // Scroll to first of next month
         overlay.revealDate(new Date(2021, 2, 1), false);
-        expect(monthScroller.position).to.equal(position + 1);
+        const firstOfNextMonthPosition = monthScroller.position;
+        expect(firstOfNextMonthPosition).to.equal(initialPosition + 1);
       });
     });
 
     describe('height(visible area) > height(item)', () => {
       beforeEach(async () => {
-        await fixtureOverlayContent({
+        overlay = await customizeFixture({
+          initialPosition: new Date(2021, 1, 1),
           monthScrollerItems: 2,
           monthScrollerOffset: 0,
         });
+        monthScroller = overlay.$.monthScroller;
       });
 
       it('should scroll when the month is above the visible area', () => {
@@ -390,10 +469,12 @@ describe('overlay', () => {
 
     describe('offset', () => {
       beforeEach(async () => {
-        await fixtureOverlayContent({
+        overlay = await customizeFixture({
+          initialPosition: new Date(2021, 1, 1),
           monthScrollerItems: 3,
           monthScrollerOffset: '10%',
         });
+        monthScroller = overlay.$.monthScroller;
       });
 
       it('should scroll when the month is above the visible area', () => {
