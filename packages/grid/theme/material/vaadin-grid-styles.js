@@ -131,13 +131,12 @@ registerStyles(
     }
 
     [part~='row']:focus,
-    [part~='cell']:focus {
+    [part~='focused-cell']:focus {
       outline: none;
     }
 
     :host([navigating]) [part~='row']:focus::before,
-    :host([navigating]) [part~='cell']:focus,
-    :host([navigating]) [part~='cell'] > [tabindex]:focus {
+    :host([navigating]) [part~='focused-cell']:focus {
       box-shadow: inset 0 0 0 2px var(--material-primary-color);
     }
 

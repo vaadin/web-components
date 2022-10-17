@@ -76,4 +76,18 @@ describe('keyboard navigation - cell button', () => {
     arrowRight(cell.firstChild);
     expect(cell.firstChild.getAttribute('tabindex')).to.equal('0');
   });
+
+  it('should set focused-cell part on the div when focusing the cell', () => {
+    cell.focus();
+    expect(cell.firstChild.getAttribute('part')).to.equal('focused-cell');
+  });
+
+  it('should remove focused-cell part from the div when focusing other cell', () => {
+    cell.focus();
+    expect(cell.firstChild.getAttribute('part')).to.equal('focused-cell');
+
+    const cell2 = getRowFirstCell(1);
+    cell2.focus();
+    expect(cell.firstChild.getAttribute('part')).to.be.null;
+  });
 });

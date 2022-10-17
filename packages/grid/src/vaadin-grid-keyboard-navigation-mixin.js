@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
 
 /**
@@ -47,6 +48,12 @@ export const KeyboardNavigationMixin = (superClass) =>
 
         /** @private */
         _focusedColumnOrder: Number,
+
+        /** @private */
+        _focusedCell: {
+          type: Object,
+          observer: '_focusedCellChanged',
+        },
 
         /**
          * Indicates whether the grid is currently in interaction mode.
@@ -135,6 +142,17 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
       if (focusable) {
         this._updateGridSectionFocusTarget(focusable);
+      }
+    }
+
+    /** @private */
+    _focusedCellChanged(focusedCell, oldFocusedCell) {
+      if (oldFocusedCell) {
+        removeValueFromAttribute(oldFocusedCell, 'part', 'focused-cell');
+      }
+
+      if (focusedCell) {
+        addValueToAttribute(focusedCell, 'part', 'focused-cell');
       }
     }
 
@@ -749,6 +767,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       this.toggleAttribute('navigating', false);
       this._detectInteracting(e);
       this._hideTooltip();
+      this._focusedCell = null;
     }
 
     /** @private */
@@ -770,10 +789,13 @@ export const KeyboardNavigationMixin = (superClass) =>
           // Fire a public event for cell.
           const context = this.getEventContext(e);
           cell.dispatchEvent(new CustomEvent('cell-focus', { bubbles: true, composed: true, detail: { context } }));
+          this._focusedCell = cell._focusButton || cell;
 
           if (isKeyboardActive() && e.target === cell) {
             this._showTooltip(e);
           }
+        } else {
+          this._focusedCell = null;
         }
       }
 

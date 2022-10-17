@@ -293,6 +293,7 @@ export interface GridEventMap<TItem> extends HTMLElementEventMap, GridCustomEven
  * `body-cell` | Body cell in the internal table
  * `footer-cell` | Footer cell in the internal table
  * `details-cell` | Row details cell in the internal table
+ * `focused-cell` | Focused cell in the internal table
  * `resize-handle` | Handle for resizing the columns
  * `reorder-ghost` | Ghost element of the header cell being dragged
  *
