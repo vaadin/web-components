@@ -762,7 +762,7 @@ describe('overflowing content', () => {
     div.style.maxWidth = '300px';
     div.style.overflow = 'auto';
     div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
-    overlay.content.appendChild(div);
+    overlay.appendChild(div);
     // Emulate removing "pointer-events: none"
     overlayPart.setAttribute('style', '');
     expect(overlayPart.offsetHeight).to.equal(container.offsetHeight);
@@ -771,7 +771,7 @@ describe('overflowing content', () => {
   it('should not overflow when using vaadin-textarea in the content', async () => {
     const textarea = document.createElement('vaadin-text-area');
     textarea.value = Array(20).join('Lorem ipsum dolor sit amet');
-    overlay.content.appendChild(textarea);
+    overlay.appendChild(textarea);
     overlay.$.content.style.padding = '20px';
     resize(overlayPart.querySelector('.s'), 0, -50);
     await nextFrame();
@@ -781,7 +781,7 @@ describe('overflowing content', () => {
   it('should not reset scroll position on resize', async () => {
     const div = document.createElement('div');
     div.textContent = Array(100).join('Lorem ipsum dolor sit amet');
-    overlay.content.appendChild(div);
+    overlay.appendChild(div);
     dialog.$.overlay.setBounds({ height: 200 });
     await nextFrame();
     overlay.$.content.style.padding = '20px';

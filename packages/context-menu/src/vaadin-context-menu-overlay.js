@@ -77,7 +77,7 @@ class ContextMenuOverlay extends PositionMixin(Overlay) {
   }
 
   getFirstChild() {
-    return this.content.querySelector(':not(style):not(slot)');
+    return this.querySelector(':not(style):not(slot)');
   }
 
   _themeChanged() {
