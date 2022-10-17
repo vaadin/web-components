@@ -143,6 +143,18 @@ class InfiniteScroller extends PolymerElement {
     }
   }
 
+  /**
+   * Force the scroller to update clones after a reset, without
+   * waiting for the debouncer to resolve.
+   */
+  forceUpdate() {
+    if (this._debouncerUpdateClones) {
+      this._buffers[0].updated = this._buffers[1].updated = false;
+      this._updateClones();
+      this._debouncerUpdateClones.cancel();
+    }
+  }
+
   _activated(active) {
     if (active && !this._initialized) {
       this._createPool();
