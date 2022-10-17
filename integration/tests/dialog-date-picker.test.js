@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import './not-animated-styles.js';
 import '@vaadin/date-picker';
 import '@vaadin/dialog';
-import { getOverlayContent, open } from '@vaadin/date-picker/test/common.js';
+import { getOverlayContent, open, waitForScrollToFinish } from '@vaadin/date-picker/test/common.js';
 
 describe('date-picker in dialog', () => {
   let dialog, datepicker;
@@ -38,11 +38,12 @@ describe('date-picker in dialog', () => {
       await sendKeys({ press: 'Tab' });
 
       await nextRender();
+      await waitForScrollToFinish(getOverlayContent(datepicker));
 
       // Focus the Today button
       await sendKeys({ press: 'Tab' });
 
-      expect(getOverlayContent(datepicker).$.todayButton.hasAttribute('focused')).to.be.true;
+      expect(getOverlayContent(datepicker)._todayButton.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus the Cancel button on Shift + Tab when inside a dialog', async () => {
@@ -51,7 +52,7 @@ describe('date-picker in dialog', () => {
       await sendKeys({ press: 'Tab' });
       await sendKeys({ up: 'Shift' });
 
-      expect(getOverlayContent(datepicker).$.cancelButton.hasAttribute('focused')).to.be.true;
+      expect(getOverlayContent(datepicker)._cancelButton.hasAttribute('focused')).to.be.true;
     });
 
     it('should focus the input on calendar date Shift Tab when inside a dialog', async () => {
@@ -59,6 +60,7 @@ describe('date-picker in dialog', () => {
       await sendKeys({ press: 'Tab' });
 
       await nextRender();
+      await waitForScrollToFinish(getOverlayContent(datepicker));
 
       const spy = sinon.spy(datepicker.inputElement, 'focus');
 

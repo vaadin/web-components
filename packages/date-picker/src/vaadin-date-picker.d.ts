@@ -112,9 +112,7 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * `years-toggle-button` | Fullscreen mode years scroller toggle
  * `months`              | Months scroller
  * `years`               | Years scroller
- * `toolbar`             | Footer bar with buttons
- * `today-button`        | Today button
- * `cancel-button`       | Cancel button
+ * `toolbar`             | Footer bar with slotted buttons
  * `month`               | Month calendar
  * `year-number`         | Year number
  * `year-separator`      | Year separator

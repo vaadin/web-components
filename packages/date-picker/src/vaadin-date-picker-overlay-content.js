@@ -13,6 +13,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
 
@@ -189,18 +190,8 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       </div>
 
       <div on-touchend="_preventDefault" role="toolbar" part="toolbar">
-        <vaadin-button
-          id="todayButton"
-          part="today-button"
-          theme="tertiary"
-          disabled="[[!_isTodayAllowed(minDate, maxDate)]]"
-          on-keydown="__onTodayButtonKeyDown"
-        >
-          [[i18n.today]]
-        </vaadin-button>
-        <vaadin-button id="cancelButton" part="cancel-button" theme="tertiary" on-keydown="__onCancelButtonKeyDown">
-          [[i18n.cancel]]
-        </vaadin-button>
+        <slot name="today-button"></slot>
+        <slot name="cancel-button"></slot>
       </div>
     `;
   }
@@ -290,11 +281,35 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
        * Input label
        */
       label: String,
+
+      _cancelButton: {
+        type: Object,
+      },
+
+      _todayButton: {
+        type: Object,
+      },
     };
+  }
+
+  static get observers() {
+    return ['__updateCancelButton(_cancelButton, i18n)', '__updateTodayButton(_todayButton, i18n, minDate, maxDate)'];
   }
 
   get __isRTL() {
     return this.getAttribute('dir') === 'rtl';
+  }
+
+  /**
+   * Whether to scroll to a sub-month position when scrolling to a date.
+   * This is active if the month scroller is not large enough to fit a
+   * full month. In that case we want to scroll to a position between
+   * two months in order to have the focused date in the visible area.
+   * @returns {boolean} whether to use sub-month scrolling
+   * @private
+   */
+  get __useSubMonthScrolling() {
+    return this.$.monthScroller.clientHeight < this.$.monthScroller.itemHeight + this.$.monthScroller.bufferOffset;
   }
 
   get calendars() {
@@ -312,8 +327,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
     addListener(this.$.scrollers, 'track', this._track.bind(this));
     addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
-    addListener(this.shadowRoot.querySelector('[part="today-button"]'), 'tap', this._onTodayTap.bind(this));
-    addListener(this.shadowRoot.querySelector('[part="cancel-button"]'), 'tap', this._cancel.bind(this));
     addListener(this.shadowRoot.querySelector('[part="toggle-button"]'), 'tap', this._cancel.bind(this));
     addListener(this.shadowRoot.querySelector('[part="years"]'), 'tap', this._onYearTap.bind(this));
     addListener(
@@ -326,6 +339,34 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       new MediaQueryController(this._desktopMediaQuery, (matches) => {
         this._desktopMode = matches;
       }),
+    );
+
+    this.addController(
+      new SlotController(
+        this,
+        'today-button',
+        () => document.createElement('vaadin-button'),
+        (_, btn) => {
+          btn.setAttribute('theme', 'tertiary');
+          btn.addEventListener('keydown', (e) => this.__onTodayButtonKeyDown(e));
+          addListener(btn, 'tap', this._onTodayTap.bind(this));
+          this._todayButton = btn;
+        },
+      ),
+    );
+
+    this.addController(
+      new SlotController(
+        this,
+        'cancel-button',
+        () => document.createElement('vaadin-button'),
+        (_, btn) => {
+          btn.setAttribute('theme', 'tertiary');
+          btn.addEventListener('keydown', (e) => this.__onCancelButtonKeyDown(e));
+          addListener(btn, 'tap', this._cancel.bind(this));
+          this._cancelButton = btn;
+        },
+      ),
     );
   }
 
@@ -347,14 +388,29 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
    * Focuses the cancel button
    */
   focusCancel() {
-    this.$.cancelButton.focus();
+    this._cancelButton.focus();
   }
 
   /**
    * Scrolls the list to the given Date.
    */
   scrollToDate(date, animate) {
-    this._scrollToPosition(this._differenceInMonths(date, this._originDate), animate);
+    const offset = this.__useSubMonthScrolling ? this._calculateWeekScrollOffset(date) : 0;
+    this._scrollToPosition(this._differenceInMonths(date, this._originDate) + offset, animate);
+    this.$.monthScroller.forceUpdate();
+  }
+
+  __updateCancelButton(cancelButton, i18n) {
+    if (cancelButton) {
+      cancelButton.textContent = i18n && i18n.cancel;
+    }
+  }
+
+  __updateTodayButton(todayButton, i18n, minDate, maxDate) {
+    if (todayButton) {
+      todayButton.textContent = i18n && i18n.today;
+      todayButton.disabled = !this._isTodayAllowed(minDate, maxDate);
+    }
   }
 
   /**
@@ -386,23 +442,63 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
    * Scrolls the month and year scrollers enough to reveal the given date.
    */
   revealDate(date, animate = true) {
-    if (date) {
-      const diff = this._differenceInMonths(date, this._originDate);
-      const scrolledAboveViewport = this.$.monthScroller.position > diff;
+    if (!date) {
+      return;
+    }
+    const diff = this._differenceInMonths(date, this._originDate);
+    // If scroll area does not fit the full month, then always scroll with an offset to
+    // approximately display the week of the date
+    if (this.__useSubMonthScrolling) {
+      const offset = this._calculateWeekScrollOffset(date);
+      this._scrollToPosition(diff + offset, animate);
+      return;
+    }
 
-      const visibleArea = Math.max(
-        this.$.monthScroller.itemHeight,
-        this.$.monthScroller.clientHeight - this.$.monthScroller.bufferOffset * 2,
-      );
-      const visibleItems = visibleArea / this.$.monthScroller.itemHeight;
-      const scrolledBelowViewport = this.$.monthScroller.position + visibleItems - 1 < diff;
+    // Otherwise determine if we need to scroll to make the month of the date visible
+    const scrolledAboveViewport = this.$.monthScroller.position > diff;
 
-      if (scrolledAboveViewport) {
-        this._scrollToPosition(diff, animate);
-      } else if (scrolledBelowViewport) {
-        this._scrollToPosition(diff - visibleItems + 1, animate);
+    const visibleArea = Math.max(
+      this.$.monthScroller.itemHeight,
+      this.$.monthScroller.clientHeight - this.$.monthScroller.bufferOffset * 2,
+    );
+    const visibleItems = visibleArea / this.$.monthScroller.itemHeight;
+    const scrolledBelowViewport = this.$.monthScroller.position + visibleItems - 1 < diff;
+
+    if (scrolledAboveViewport) {
+      this._scrollToPosition(diff, animate);
+    } else if (scrolledBelowViewport) {
+      this._scrollToPosition(diff - visibleItems + 1, animate);
+    }
+  }
+
+  /**
+   * Calculates an offset to be added to the month scroll position
+   * when using sub-month scrolling, in order ensure that the week
+   * that the date is in is visible even for small scroll areas.
+   * As the month scroller uses a month as minimal scroll unit
+   * (a value of `1` equals one month), we can not exactly identify
+   * the position of a specific week. This is a best effort
+   * implementation based on manual testing.
+   * @param date the date for which to calculate the offset
+   * @returns {number} the offset
+   * @private
+   */
+  _calculateWeekScrollOffset(date) {
+    // Get first day of month
+    const temp = new Date(0, 0);
+    temp.setFullYear(date.getFullYear());
+    temp.setMonth(date.getMonth());
+    temp.setDate(1);
+    // Determine week (=row index) of date within the month
+    let week = 0;
+    while (temp.getDate() < date.getDate()) {
+      temp.setDate(temp.getDate() + 1);
+      if (temp.getDay() === this.i18n.firstDayOfWeek) {
+        week += 1;
       }
     }
+    // Calculate magic number that approximately keeps the week visible
+    return week / 6;
   }
 
   _initialPositionChanged(initialPosition) {
@@ -767,7 +863,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
           if (this.hasAttribute('fullscreen')) {
             // Trap focus in the overlay
-            this.$.cancelButton.focus();
+            this.focusCancel();
           } else {
             this.__focusInput();
           }
