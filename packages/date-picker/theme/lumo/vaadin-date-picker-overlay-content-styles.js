@@ -36,7 +36,7 @@ registerStyles(
             + var(--lumo-size-m) * 6
             + var(--lumo-space-s)
           );
-      --vaadin-infinite-scroller-buffer-offset: 20%;
+      --vaadin-infinite-scroller-buffer-offset: 10%;
       -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
       mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
       position: relative;

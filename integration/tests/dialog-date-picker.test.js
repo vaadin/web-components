@@ -5,7 +5,7 @@ import sinon from 'sinon';
 import './not-animated-styles.js';
 import '@vaadin/date-picker';
 import '@vaadin/dialog';
-import { getOverlayContent, open } from '@vaadin/date-picker/test/common.js';
+import { getOverlayContent, open, waitForScrollToFinish } from '@vaadin/date-picker/test/common.js';
 
 describe('date-picker in dialog', () => {
   let dialog, datepicker;
@@ -38,6 +38,7 @@ describe('date-picker in dialog', () => {
       await sendKeys({ press: 'Tab' });
 
       await nextRender();
+      await waitForScrollToFinish(getOverlayContent(datepicker));
 
       // Focus the Today button
       await sendKeys({ press: 'Tab' });
@@ -59,6 +60,7 @@ describe('date-picker in dialog', () => {
       await sendKeys({ press: 'Tab' });
 
       await nextRender();
+      await waitForScrollToFinish(getOverlayContent(datepicker));
 
       const spy = sinon.spy(datepicker.inputElement, 'focus');
 
