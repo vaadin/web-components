@@ -50,19 +50,19 @@ describe('renderer', () => {
     });
 
     it('should render content by the renderer', () => {
-      expect(overlay.content.childNodes).to.have.lengthOf(1);
-      expect(overlay.content.textContent).to.equal('Content');
+      expect(overlay.childNodes).to.have.lengthOf(1);
+      expect(overlay.textContent).to.equal('Content');
     });
 
     it('should clear the content when removing the renderer', () => {
       select.renderer = null;
-      expect(overlay.content.childNodes).to.be.empty;
+      expect(overlay.childNodes).to.be.empty;
     });
 
     it('should not override the content on items property change', () => {
       select.items = [{ label: 'Item 1', value: 'value-1' }];
-      expect(overlay.content.childNodes).to.have.lengthOf(1);
-      expect(overlay.content.textContent).to.equal('Content');
+      expect(overlay.childNodes).to.have.lengthOf(1);
+      expect(overlay.textContent).to.equal('Content');
     });
   });
 

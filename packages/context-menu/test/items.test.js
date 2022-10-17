@@ -26,7 +26,7 @@ describe('items', () => {
   let rootMenu, subMenu, target;
 
   const menuComponents = (menu = rootMenu) => {
-    return Array.from(menu.$.overlay.content.firstElementChild.children);
+    return Array.from(menu.$.overlay.firstElementChild.children);
   };
 
   const open = (openTarget = target) => {
@@ -41,7 +41,7 @@ describe('items', () => {
   };
 
   const getSubMenu = (menu = rootMenu) => {
-    return menu.$.overlay.content.querySelector('vaadin-context-menu');
+    return menu.$.overlay.querySelector('vaadin-context-menu');
   };
 
   const updateItemsAndReopen = async () => {

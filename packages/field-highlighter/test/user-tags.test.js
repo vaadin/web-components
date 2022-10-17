@@ -20,7 +20,7 @@ describe('user-tags', () => {
 
   const getTags = () => {
     const { overlay } = wrapper.$;
-    return overlay.content.querySelectorAll('vaadin-user-tag');
+    return overlay.querySelectorAll('vaadin-user-tag');
   };
 
   const addUser = (user) => {

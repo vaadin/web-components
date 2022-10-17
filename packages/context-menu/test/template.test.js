@@ -20,18 +20,18 @@ describe('template', () => {
   it('should stamp template on open', () => {
     menu._setOpened(true);
 
-    expect(menu.$.overlay.content.textContent).to.contain('FOOBAR');
+    expect(menu.$.overlay.textContent).to.contain('FOOBAR');
   });
 
   it('should bind target property', () => {
     fire(target, 'vaadin-contextmenu');
 
-    expect(menu.$.overlay.content.textContent).to.contain('target');
+    expect(menu.$.overlay.textContent).to.contain('target');
   });
 
   it('should bind detail property', () => {
     fire(target, 'vaadin-contextmenu', { foo: 'bar' });
 
-    expect(menu.$.overlay.content.textContent).to.contain('bar');
+    expect(menu.$.overlay.textContent).to.contain('bar');
   });
 });

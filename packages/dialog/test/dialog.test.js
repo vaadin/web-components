@@ -198,11 +198,11 @@ describe('vaadin-dialog', () => {
 
     it('should bind parent property', () => {
       container.message = 'foo';
-      expect(overlay.content.querySelector('span').textContent.trim()).to.equal('foo');
+      expect(overlay.querySelector('span').textContent.trim()).to.equal('foo');
     });
 
     it('should support two-way data binding', () => {
-      const input = overlay.content.querySelector('input');
+      const input = overlay.querySelector('input');
       input.value = 'bar';
       input.dispatchEvent(new CustomEvent('input'));
       expect(container.text).to.equal('bar');

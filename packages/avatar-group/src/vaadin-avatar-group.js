@@ -525,7 +525,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(PolymerElement)
   __openedChanged(opened, wasOpened) {
     if (opened) {
       if (!this._menuElement) {
-        this._menuElement = this._overlayElement.content.querySelector('vaadin-list-box');
+        this._menuElement = this._overlayElement.querySelector('vaadin-list-box');
         this._menuElement.setAttribute('role', 'listbox');
       }
 
