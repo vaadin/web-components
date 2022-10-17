@@ -129,6 +129,7 @@ assertType<HTMLElement>(new MessageElement());
 assertType<HTMLElement>(new MessageInputElement());
 assertType<HTMLElement>(new MessageListElement());
 assertType<HTMLElement>(new NotificationElement());
+assertType<HTMLElement>(new OverlayElement());
 assertType<HTMLElement>(new HorizontalLayoutElement());
 assertType<HTMLElement>(new VerticalLayoutElement());
 assertType<HTMLElement>(new ScrollerElement());
