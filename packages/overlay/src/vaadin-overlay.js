@@ -286,9 +286,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     this._boundOutsideClickListener = this._outsideClickListener.bind(this);
     this._boundKeydownListener = this._keydownListener.bind(this);
 
-    // Listener for preventing closing of the paper-dialog and all components extending `iron-overlay-behavior`.
-    this._boundIronOverlayCanceledListener = this._ironOverlayCanceled.bind(this);
-
     /* c8 ignore next 3 */
     if (isIOS) {
       this._boundIosResizeListener = () => this._detectIosNavbar();
@@ -382,11 +379,6 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
     if (this.renderer) {
       this.renderer.call(this.owner, this, this.owner, this.model);
     }
-  }
-
-  /** @private */
-  _ironOverlayCanceled(event) {
-    event.preventDefault();
   }
 
   /** @private */
@@ -579,13 +571,11 @@ class Overlay extends ThemableMixin(DirMixin(ControllerMixin(PolymerElement))) {
 
   /** @protected */
   _finishOpening() {
-    document.addEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
     this.removeAttribute('opening');
   }
 
   /** @protected */
   _finishClosing() {
-    document.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
     this._detachOverlay();
     this.$.overlay.style.removeProperty('pointer-events');
     this.removeAttribute('closing');

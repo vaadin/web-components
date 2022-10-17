@@ -42,7 +42,6 @@
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
-    "@polymer/iron-overlay-behavior": "^3.0.0",
     "@vaadin/button": "24.0.0-alpha0",
     "@vaadin/polymer-legacy-adapter": "24.0.0-alpha0",
     "@vaadin/radio-group": "24.0.0-alpha0",
