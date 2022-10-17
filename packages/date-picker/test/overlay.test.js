@@ -18,12 +18,9 @@ function waitUntilScrolledTo(overlay, date, callback) {
 }
 
 async function customizeFixture({ initialPosition, monthScrollerItems, monthScrollerOffset }) {
-  const overlay = fixtureSync(`
-        <vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>
-      `);
+  const overlay = fixtureSync(`<vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>`);
   const monthScroller = overlay.$.monthScroller;
   monthScroller.style.setProperty('--vaadin-infinite-scroller-buffer-offset', monthScrollerOffset);
-  monthScroller.updateStyles({ '--vaadin-infinite-scroller-buffer-offset': monthScrollerOffset });
   monthScroller.style.height = `${270 * monthScrollerItems}px`;
   overlay.i18n = getDefaultI18n();
   overlay.$.monthScroller.bufferSize = 3;
