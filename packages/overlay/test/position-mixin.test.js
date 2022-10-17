@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import { setViewport } from '@web/test-runner-commands';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import { css } from 'lit';
 import { registerStyles } from '@vaadin/vaadin-themable-mixin/register-styles';
 import { Overlay } from '../src/vaadin-overlay.js';

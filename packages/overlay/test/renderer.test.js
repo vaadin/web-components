@@ -67,15 +67,6 @@ describe('renderer', () => {
       };
     });
 
-    it('should not call renderer on template change', () => {
-      const spy = sinon.spy();
-      overlay.opened = true;
-      overlay.renderer = () => spy();
-      spy.resetHistory();
-      overlay.template = null;
-      expect(spy.called).to.be.false;
-    });
-
     it('should call renderer on model change', () => {
       const spy = sinon.spy();
       overlay.opened = true;
@@ -92,15 +83,6 @@ describe('renderer', () => {
       spy.resetHistory();
       overlay.owner = {};
       expect(spy.calledOnce).to.be.true;
-    });
-
-    it('should remove template when added after renderer', () => {
-      overlay.renderer = () => {};
-      const template = document.createElement('template');
-      expect(() => {
-        overlay.template = template;
-      }).to.throw(Error);
-      expect(overlay.template).to.be.not.ok;
     });
 
     it('should run renderers when requesting content update', () => {
@@ -127,54 +109,6 @@ describe('renderer', () => {
       overlay.renderer = null;
 
       expect(overlay.textContent.trim()).to.equal('');
-    });
-  });
-
-  describe('with template', () => {
-    let overlay;
-
-    beforeEach(() => {
-      overlay = fixtureSync(`
-        <vaadin-overlay>
-          <template>
-            overlay-content
-          </template>
-        </vaadin-overlay>
-      `);
-    });
-
-    afterEach(() => {
-      overlay.opened = false;
-    });
-
-    it('should fallback to render content with Templatizer when renderer is not defined', () => {
-      expect(overlay.textContent.trim()).to.equal('overlay-content');
-    });
-
-    it('should throw an error when setting a renderer if there is already a template', () => {
-      expect(() => {
-        overlay.renderer = () => {};
-      }).to.throw(Error);
-    });
-
-    it('should not restamp the template on model change', () => {
-      const lastInstance = overlay._instance;
-      expect(lastInstance).to.be.ok;
-      overlay.model = {};
-      expect(overlay._instance).to.equal(lastInstance);
-    });
-
-    it('should not restamp the template on owner change', () => {
-      const lastInstance = overlay._instance;
-      overlay.owner = {};
-      expect(overlay._instance).to.equal(lastInstance);
-    });
-
-    it('should remove renderer when added after template', () => {
-      expect(() => {
-        overlay.renderer = () => {};
-      }).to.throw(Error);
-      expect(overlay.renderer).to.be.not.ok;
     });
   });
 });

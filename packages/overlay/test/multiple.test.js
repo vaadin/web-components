@@ -1,6 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { click, escKeyDown, fixtureSync, oneEvent } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-overlay.js';
 
 describe('multiple overlays', () => {
@@ -198,7 +199,7 @@ describe('multiple overlays', () => {
 
     it('should not lose scroll position when brought to front', () => {
       modeless1.opened = true;
-      modeless1.content.$.content.style.height = '200px';
+      modeless1.$.content.style.height = '200px';
 
       const overlay = modeless1.$.overlay;
       overlay.style.height = '100px';
@@ -258,7 +259,7 @@ describe('multiple overlays', () => {
 
       modeless1.opened = true;
 
-      const input = modeless1.content.querySelector('input');
+      const input = modeless1.querySelector('input');
       input.focus();
 
       escKeyDown(input);
@@ -273,7 +274,7 @@ describe('multiple overlays', () => {
       modeless2.opened = true;
       modeless1.bringToFront();
 
-      const input = modeless1.content.querySelector('input');
+      const input = modeless1.querySelector('input');
       input.focus();
 
       escKeyDown(input);
@@ -287,7 +288,7 @@ describe('multiple overlays', () => {
       modeless1.opened = true;
       modeless2.opened = true;
 
-      const input = modeless2.content.querySelector('input');
+      const input = modeless2.querySelector('input');
       input.focus();
 
       escKeyDown(input);

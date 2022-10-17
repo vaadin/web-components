@@ -2,6 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender, oneEvent, tabKeyDown } from '@vaadin/testing-helpers';
 import '@vaadin/button/vaadin-button.js';
 import '@vaadin/text-field/vaadin-text-field.js';
+import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '@vaadin/radio-group/vaadin-radio-group.js';
 import '@vaadin/radio-group/vaadin-radio-button.js';
 import '../vaadin-overlay.js';
@@ -94,6 +95,7 @@ describe('focus-trap', () => {
       parent = fixtureSync('<overlay-components-wrapper></overlay-components-wrapper>');
       await nextRender();
       overlay = parent.$.defaultOverlay;
+      overlay.requestContentUpdate();
       overlayPart = overlay.$.overlay;
       focusableElements = getFocusableElements(overlay.$.overlay);
       window.focus();
@@ -112,16 +114,16 @@ describe('focus-trap', () => {
 
     it('should properly detect focusable elements inside the content', () => {
       expect(focusableElements.length).to.equal(10);
-      expect(focusableElements[0]).to.eql(overlay.content.querySelector('textarea'));
-      expect(focusableElements[1]).to.eql(overlay.content.querySelector('select'));
+      expect(focusableElements[0]).to.eql(overlay.querySelector('textarea'));
+      expect(focusableElements[1]).to.eql(overlay.querySelector('select'));
       expect(focusableElements[2]).to.eql(overlay.$.overlay);
-      expect(focusableElements[3]).to.eql(overlay.content.querySelector('button'));
-      expect(focusableElements[4]).to.eql(overlay.content.querySelector('vaadin-text-field').focusElement);
-      expect(focusableElements[5]).to.eql(overlay.content.querySelector('#text'));
-      expect(focusableElements[6]).to.eql(overlay.content.querySelector('#radioButton1').focusElement);
-      expect(focusableElements[7]).to.eql(overlay.content.querySelector('#radioButton2').focusElement);
-      expect(focusableElements[8]).to.eql(overlay.content.querySelector('#radioButton3').focusElement);
-      expect(focusableElements[9]).to.eql(overlay.content.querySelector('vaadin-button'));
+      expect(focusableElements[3]).to.eql(overlay.querySelector('button'));
+      expect(focusableElements[4]).to.eql(overlay.querySelector('vaadin-text-field').focusElement);
+      expect(focusableElements[5]).to.eql(overlay.querySelector('#text'));
+      expect(focusableElements[6]).to.eql(overlay.querySelector('#radioButton1').focusElement);
+      expect(focusableElements[7]).to.eql(overlay.querySelector('#radioButton2').focusElement);
+      expect(focusableElements[8]).to.eql(overlay.querySelector('#radioButton3').focusElement);
+      expect(focusableElements[9]).to.eql(overlay.querySelector('vaadin-button'));
     });
 
     it('should focus focusable elements inside the content when focusTrap = true', async () => {
@@ -173,7 +175,7 @@ describe('focus-trap', () => {
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      const button = overlay.content.querySelector('vaadin-button');
+      const button = overlay.querySelector('vaadin-button');
       button.focus();
       button.blur();
 
@@ -183,13 +185,14 @@ describe('focus-trap', () => {
     describe('shadow content', () => {
       beforeEach(() => {
         overlay = parent.$.shadowOverlay;
+        overlay.requestContentUpdate();
         focusableElements = getFocusableElements(overlay.$.overlay);
       });
 
       it('should properly detect multiple focusables in web component shadowRoots', () => {
         expect(focusableElements.length).to.eql(4);
         expect(focusableElements[1]).to.eql(
-          overlay.content.querySelector('container-with-shadow').shadowRoot.getElementById('text'),
+          overlay.querySelector('container-with-shadow').shadowRoot.getElementById('text'),
         );
       });
 
@@ -253,7 +256,6 @@ describe('focus-trap', () => {
       beforeEach(() => {
         overlay = parent.$.emptyOverlay;
         overlayPart = overlay.$.overlay;
-        overlay._observer.flush();
         focusableElements = getFocusableElements(overlay.$.overlay);
       });
 
@@ -292,6 +294,7 @@ describe('focus-trap', () => {
       await nextRender();
       overlay = parent.firstElementChild;
       overlayPart = overlay.$.overlay;
+      overlay.requestContentUpdate();
       focusableElements = getFocusableElements(overlay.$.overlay);
       window.focus();
     });
@@ -309,16 +312,16 @@ describe('focus-trap', () => {
 
     it('should properly detect focusable elements inside the content', () => {
       expect(focusableElements.length).to.equal(10);
-      expect(focusableElements[0]).to.eql(overlay.content.querySelector('textarea'));
-      expect(focusableElements[1]).to.eql(overlay.content.querySelector('select'));
+      expect(focusableElements[0]).to.eql(overlay.querySelector('textarea'));
+      expect(focusableElements[1]).to.eql(overlay.querySelector('select'));
       expect(focusableElements[2]).to.eql(overlay.$.overlay);
-      expect(focusableElements[3]).to.eql(overlay.content.querySelector('button'));
-      expect(focusableElements[4]).to.eql(overlay.content.querySelector('vaadin-text-field').focusElement);
-      expect(focusableElements[5]).to.eql(overlay.content.querySelector('#text'));
-      expect(focusableElements[6]).to.eql(overlay.content.querySelector('#radioButton1').focusElement);
-      expect(focusableElements[7]).to.eql(overlay.content.querySelector('#radioButton2').focusElement);
-      expect(focusableElements[8]).to.eql(overlay.content.querySelector('#radioButton3').focusElement);
-      expect(focusableElements[9]).to.eql(overlay.content.querySelector('vaadin-button'));
+      expect(focusableElements[3]).to.eql(overlay.querySelector('button'));
+      expect(focusableElements[4]).to.eql(overlay.querySelector('vaadin-text-field').focusElement);
+      expect(focusableElements[5]).to.eql(overlay.querySelector('#text'));
+      expect(focusableElements[6]).to.eql(overlay.querySelector('#radioButton1').focusElement);
+      expect(focusableElements[7]).to.eql(overlay.querySelector('#radioButton2').focusElement);
+      expect(focusableElements[8]).to.eql(overlay.querySelector('#radioButton3').focusElement);
+      expect(focusableElements[9]).to.eql(overlay.querySelector('vaadin-button'));
     });
 
     it('should focus focusable elements inside the content when focusTrap = true', async () => {
@@ -369,7 +372,7 @@ describe('focus-trap', () => {
       overlay.opened = true;
       await oneEvent(overlay, 'vaadin-overlay-open');
 
-      const button = overlay.content.querySelector('vaadin-button');
+      const button = overlay.querySelector('vaadin-button');
       button.focus();
       button.blur();
 
@@ -387,13 +390,14 @@ describe('focus-trap', () => {
             </template>
           </vaadin-overlay>
         `);
+        overlay.requestContentUpdate();
         focusableElements = getFocusableElements(overlay.$.overlay);
       });
 
       it('should properly detect multiple focusables in web component shadowRoots', () => {
         expect(focusableElements.length).to.eql(4);
         expect(focusableElements[1]).to.eql(
-          overlay.content.querySelector('container-with-shadow').shadowRoot.getElementById('text'),
+          overlay.querySelector('container-with-shadow').shadowRoot.getElementById('text'),
         );
       });
 
@@ -464,7 +468,6 @@ describe('focus-trap', () => {
         `);
         overlay = parent.firstElementChild;
         overlayPart = overlay.$.overlay;
-        overlay._observer.flush();
         focusableElements = getFocusableElements(overlay.$.overlay);
       });
 
@@ -486,7 +489,7 @@ describe('focus-trap', () => {
       overlay.opened = true;
       focusableElements = getFocusableElements(overlay.$.overlay);
       await nextRender();
-      nested = overlay.content.querySelector('#nested');
+      nested = overlay.querySelector('#nested');
     });
 
     afterEach(() => {
@@ -498,7 +501,7 @@ describe('focus-trap', () => {
       await nextRender();
       nested.opened = false;
 
-      const button = overlay.content.querySelector('button');
+      const button = overlay.querySelector('button');
       button.focus();
       tabKeyDown(button);
 

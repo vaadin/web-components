@@ -9,16 +9,10 @@ describe('overlay', () => {
     div = document.createElement('div');
     div.style.height = '100%';
 
-    element = fixtureSync(
-      `
-        <vaadin-overlay>
-          <template>
-            <div>Simple overlay with text</div>
-          </template>
-        </vaadin-overlay>
-      `,
-      div,
-    );
+    element = fixtureSync('<vaadin-overlay></vaadin-overlay>', div);
+    element.renderer = (root) => {
+      root.textContent = 'Simple overlay with text';
+    };
   });
 
   it('basic', async () => {
