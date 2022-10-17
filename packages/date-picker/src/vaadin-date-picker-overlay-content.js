@@ -13,6 +13,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
 
@@ -189,18 +190,8 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       </div>
 
       <div on-touchend="_preventDefault" role="toolbar" part="toolbar">
-        <vaadin-button
-          id="todayButton"
-          part="today-button"
-          theme="tertiary"
-          disabled="[[!_isTodayAllowed(minDate, maxDate)]]"
-          on-keydown="__onTodayButtonKeyDown"
-        >
-          [[i18n.today]]
-        </vaadin-button>
-        <vaadin-button id="cancelButton" part="cancel-button" theme="tertiary" on-keydown="__onCancelButtonKeyDown">
-          [[i18n.cancel]]
-        </vaadin-button>
+        <slot name="today-button"></slot>
+        <slot name="cancel-button"></slot>
       </div>
     `;
   }
@@ -290,7 +281,19 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
        * Input label
        */
       label: String,
+
+      _cancelButton: {
+        type: Object,
+      },
+
+      _todayButton: {
+        type: Object,
+      },
     };
+  }
+
+  static get observers() {
+    return ['__updateCancelButton(_cancelButton, i18n)', '__updateTodayButton(_todayButton, i18n, minDate, maxDate)'];
   }
 
   get __isRTL() {
@@ -312,8 +315,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
     addListener(this.$.scrollers, 'track', this._track.bind(this));
     addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
-    addListener(this.shadowRoot.querySelector('[part="today-button"]'), 'tap', this._onTodayTap.bind(this));
-    addListener(this.shadowRoot.querySelector('[part="cancel-button"]'), 'tap', this._cancel.bind(this));
     addListener(this.shadowRoot.querySelector('[part="toggle-button"]'), 'tap', this._cancel.bind(this));
     addListener(this.shadowRoot.querySelector('[part="years"]'), 'tap', this._onYearTap.bind(this));
     addListener(
@@ -326,6 +327,34 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       new MediaQueryController(this._desktopMediaQuery, (matches) => {
         this._desktopMode = matches;
       }),
+    );
+
+    this.addController(
+      new SlotController(
+        this,
+        'today-button',
+        () => document.createElement('vaadin-button'),
+        (_, btn) => {
+          btn.setAttribute('theme', 'tertiary');
+          btn.addEventListener('keydown', (e) => this.__onTodayButtonKeyDown(e));
+          addListener(btn, 'tap', this._onTodayTap.bind(this));
+          this._todayButton = btn;
+        },
+      ),
+    );
+
+    this.addController(
+      new SlotController(
+        this,
+        'cancel-button',
+        () => document.createElement('vaadin-button'),
+        (_, btn) => {
+          btn.setAttribute('theme', 'tertiary');
+          btn.addEventListener('keydown', (e) => this.__onCancelButtonKeyDown(e));
+          addListener(btn, 'tap', this._cancel.bind(this));
+          this._cancelButton = btn;
+        },
+      ),
     );
   }
 
@@ -347,7 +376,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
    * Focuses the cancel button
    */
   focusCancel() {
-    this.$.cancelButton.focus();
+    this._cancelButton.focus();
   }
 
   /**
@@ -355,6 +384,19 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
    */
   scrollToDate(date, animate) {
     this._scrollToPosition(this._differenceInMonths(date, this._originDate), animate);
+  }
+
+  __updateCancelButton(cancelButton, i18n) {
+    if (cancelButton) {
+      cancelButton.textContent = i18n && i18n.cancel;
+    }
+  }
+
+  __updateTodayButton(todayButton, i18n, minDate, maxDate) {
+    if (todayButton) {
+      todayButton.textContent = i18n && i18n.today;
+      todayButton.disabled = !this._isTodayAllowed(minDate, maxDate);
+    }
   }
 
   /**
@@ -767,7 +809,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
           if (this.hasAttribute('fullscreen')) {
             // Trap focus in the overlay
-            this.$.cancelButton.focus();
+            this.focusCancel();
           } else {
             this.__focusInput();
           }

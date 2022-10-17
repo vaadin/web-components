@@ -161,7 +161,7 @@ describe('overlay', () => {
       it('should fire close on cancel click', () => {
         const spy = sinon.spy();
         overlay.addEventListener('close', spy);
-        tap(overlay.$.cancelButton);
+        tap(overlay._cancelButton);
         expect(spy.calledOnce).to.be.true;
       });
 
@@ -170,7 +170,7 @@ describe('overlay', () => {
           const date = new Date(2000, 1, 1);
           overlay.scrollToDate(date);
           waitUntilScrolledTo(overlay, date, () => {
-            tap(overlay.$.todayButton);
+            tap(overlay._todayButton);
             waitUntilScrolledTo(overlay, new Date(), () => {
               done();
             });
@@ -184,7 +184,7 @@ describe('overlay', () => {
           overlay.addEventListener('close', spy);
 
           waitUntilScrolledTo(overlay, today, () => {
-            tap(overlay.$.todayButton);
+            tap(overlay._todayButton);
 
             expect(overlay.selectedDate.getFullYear()).to.equal(today.getFullYear());
             expect(overlay.selectedDate.getMonth()).to.equal(today.getMonth());
@@ -202,7 +202,7 @@ describe('overlay', () => {
 
           waitUntilScrolledTo(overlay, today, () => {
             overlay.$.monthScroller.$.scroller.scrollTop -= 1;
-            tap(overlay.$.todayButton);
+            tap(overlay._todayButton);
 
             expect(overlay.selectedDate).to.be.not.ok;
             expect(spy.called).to.be.false;
@@ -216,11 +216,11 @@ describe('overlay', () => {
           const closeSpy = sinon.spy();
           overlay.addEventListener('close', closeSpy);
 
-          overlay.$.todayButton.disabled = true;
+          overlay._todayButton.disabled = true;
 
           waitUntilScrolledTo(overlay, initialDate, () => {
             const lastScrollPos = overlay.$.monthScroller.position;
-            tap(overlay.$.todayButton);
+            tap(overlay._todayButton);
 
             expect(overlay.$.monthScroller.position).to.equal(lastScrollPos);
             expect(closeSpy.called).to.be.false;
@@ -246,33 +246,33 @@ describe('overlay', () => {
           });
 
           it('should not be disabled by default', () => {
-            expect(overlay.$.todayButton.disabled).to.be.false;
+            expect(overlay._todayButton.disabled).to.be.false;
           });
 
           it('should not be disabled if today is inside the limits', () => {
             overlay.minDate = yesterdayMidnight;
             overlay.maxDate = tomorrowMidnight;
-            expect(overlay.$.todayButton.disabled).to.be.false;
+            expect(overlay._todayButton.disabled).to.be.false;
           });
 
           it('should not be disabled if today is min', () => {
             overlay.minDate = todayMidnight;
-            expect(overlay.$.todayButton.disabled).to.be.false;
+            expect(overlay._todayButton.disabled).to.be.false;
           });
 
           it('should not be disabled if today is max', () => {
             overlay.maxDate = todayMidnight;
-            expect(overlay.$.todayButton.disabled).to.be.false;
+            expect(overlay._todayButton.disabled).to.be.false;
           });
 
           it('should be disabled if the limits are in past', () => {
             overlay.maxDate = yesterdayMidnight;
-            expect(overlay.$.todayButton.disabled).to.be.true;
+            expect(overlay._todayButton.disabled).to.be.true;
           });
 
           it('should be disabled if the limits are in future', () => {
             overlay.minDate = tomorrowMidnight;
-            expect(overlay.$.todayButton.disabled).to.be.true;
+            expect(overlay._todayButton.disabled).to.be.true;
           });
         });
       });

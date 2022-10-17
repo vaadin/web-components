@@ -180,7 +180,7 @@ describe('basic features', () => {
     it('should close the dropdown on Today button Esc', async () => {
       await open(datepicker);
 
-      getOverlayContent(datepicker).$.todayButton.focus();
+      getOverlayContent(datepicker)._todayButton.focus();
       await sendKeys({ press: 'Escape' });
 
       expect(datepicker.opened).to.be.false;
@@ -189,7 +189,7 @@ describe('basic features', () => {
     it('should close the dropdown on Cancel button Esc', async () => {
       await open(datepicker);
 
-      getOverlayContent(datepicker).$.cancelButton.focus();
+      getOverlayContent(datepicker).focusCancel();
       await sendKeys({ press: 'Escape' });
 
       expect(datepicker.opened).to.be.false;
@@ -198,7 +198,7 @@ describe('basic features', () => {
     it('should remove focused attribute when closed and not focused', async () => {
       await open(datepicker);
 
-      getOverlayContent(datepicker).$.todayButton.focus();
+      getOverlayContent(datepicker)._todayButton.focus();
       await sendKeys({ press: 'Escape' });
 
       expect(datepicker.hasAttribute('focused')).to.be.false;
@@ -314,8 +314,8 @@ describe('basic features', () => {
     });
 
     it('should display buttons in correct locale', () => {
-      expect(overlayContent.$.todayButton.textContent.trim()).to.equal('Tänään');
-      expect(overlayContent.$.cancelButton.textContent.trim()).to.equal('Peruuta');
+      expect(overlayContent._todayButton.textContent.trim()).to.equal('Tänään');
+      expect(overlayContent._cancelButton.textContent.trim()).to.equal('Peruuta');
     });
   });
 

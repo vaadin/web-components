@@ -185,7 +185,7 @@ describe('keyboard', () => {
       await sendKeys({ press: 'ArrowDown' });
       await nextRender(datepicker);
       const spy = sinon.spy(input, 'focus');
-      tap(overlayContent.$.cancelButton);
+      tap(overlayContent._cancelButton);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -194,7 +194,7 @@ describe('keyboard', () => {
       await sendKeys({ press: 'ArrowDown' });
       await nextRender(datepicker);
       const spy = sinon.spy(input, 'focus');
-      tap(overlayContent.$.todayButton);
+      tap(overlayContent._todayButton);
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -223,7 +223,7 @@ describe('keyboard', () => {
     });
 
     it('should move focus to the input on Cancel button Tab', async () => {
-      overlayContent.$.cancelButton.focus();
+      overlayContent.focusCancel();
       const spy = sinon.spy(input, 'focus');
       await sendKeys({ press: 'Tab' });
       expect(spy.calledOnce).to.be.true;
@@ -233,12 +233,12 @@ describe('keyboard', () => {
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
       await sendKeys({ up: 'Shift' });
-      expect(overlayContent.$.cancelButton.hasAttribute('focused')).to.be.true;
+      expect(overlayContent._cancelButton.hasAttribute('focused')).to.be.true;
     });
 
     it('should reveal the focused date on Today button Shift Tab', async () => {
       const spy = sinon.spy(overlayContent, 'revealDate');
-      overlayContent.$.todayButton.focus();
+      overlayContent._todayButton.focus();
 
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'Tab' });
@@ -282,7 +282,7 @@ describe('keyboard', () => {
 
       it('should focus date scrolled out of the view on Today button Shift Tab', async () => {
         // Move focus to the Today button
-        overlayContent.$.todayButton.focus();
+        overlayContent._todayButton.focus();
 
         // Move focus to the calendar
         await sendKeys({ down: 'Shift' });
@@ -307,7 +307,7 @@ describe('keyboard', () => {
       });
 
       it('should move focus to Cancel button on date cell Shift Tab', async () => {
-        const spy = sinon.spy(overlayContent.$.cancelButton, 'focus');
+        const spy = sinon.spy(overlayContent._cancelButton, 'focus');
 
         await sendKeys({ down: 'Shift' });
         await sendKeys({ press: 'Tab' });

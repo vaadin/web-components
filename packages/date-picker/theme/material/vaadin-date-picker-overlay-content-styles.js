@@ -140,16 +140,15 @@ registerStyles(
       border-top: 1px solid var(--material-divider-color);
     }
 
-    [part='cancel-button'] {
+    ::slotted([slot='cancel-button']) {
       order: 1;
     }
 
-    [part='today-button'] {
+    ::slotted([slot='today-button']) {
       order: 2;
     }
 
-    [part='today-button'],
-    [part='cancel-button'] {
+    ::slotted(vaadin-button) {
       margin: 0 4px;
     }
   `,

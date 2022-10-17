@@ -124,7 +124,7 @@ registerStyles(
 
     /* Today and Cancel buttons */
 
-    [part='toolbar'] [part\$='button'] {
+    [part='toolbar'] ::slotted(vaadin-button) {
       margin: 0;
     }
 
