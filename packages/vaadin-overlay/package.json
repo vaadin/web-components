@@ -1,0 +1,39 @@
+{
+  "name": "@vaadin/vaadin-overlay",
+  "version": "23.3.0-alpha3",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "vaadin-overlay",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-overlay"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-overlay.js",
+  "module": "vaadin-overlay.js",
+  "type": "module",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
+  "keywords": [
+    "Vaadin",
+    "vaadin-overlay",
+    "overlay",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "dependencies": {
+    "@vaadin/overlay": "23.3.0-alpha3"
+  }
+}
