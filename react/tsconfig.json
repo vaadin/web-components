@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"module": "esnext",
+		"target": "ESnext",
+		"sourceMap": true,
+		"inlineSources": true,
+		"moduleResolution": "node",
+		"outDir": "dist"
+	},
+	"include": [
+		"src/**/*",
+		"scripts/packages.ts"
+	],
+	"exclude": [
+		"node_modules",
+		"dist"
+	],
+	"ts-node": {
+		"transpileOnly": true
+	}
+}
