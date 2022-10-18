@@ -14,7 +14,7 @@ function getRowFirstCell(rowIndex) {
   return getRowCell(rowIndex, 0);
 }
 
-describe('keyboard navigation - cell button', () => {
+describe('keyboard navigation - focus button mode', () => {
   let cell;
 
   beforeEach(async () => {
