@@ -460,11 +460,12 @@ class DateTimePicker extends FieldMixin(
    */
   _shouldRemoveFocus(event) {
     const target = event.relatedTarget;
+    const overlayContent = this.__datePicker._overlayContent;
 
     if (
       this.__datePicker.contains(target) ||
       this.__timePicker.contains(target) ||
-      target === this.__datePicker._overlayContent
+      (overlayContent && overlayContent.contains(target))
     ) {
       return false;
     }
