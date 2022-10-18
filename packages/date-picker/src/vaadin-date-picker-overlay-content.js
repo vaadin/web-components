@@ -8,6 +8,7 @@ import './vaadin-month-calendar.js';
 import './vaadin-date-picker-month-scroller.js';
 import './vaadin-date-picker-year-scroller.js';
 import './vaadin-date-picker-year.js';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
@@ -964,7 +965,11 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     // Wait for `vaadin-month-calendar` elements to be rendered
     if (!this.calendars.length) {
       await new Promise((resolve) => {
-        afterNextRender(this, resolve);
+        afterNextRender(this, () => {
+          // Force dom-repeat elements to render
+          flush();
+          resolve();
+        });
       });
     }
 
