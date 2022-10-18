@@ -112,9 +112,12 @@ for (const descriptionFile of descriptionFiles) {
       idReact,
       ts.factory.createStringLiteral(tag.name, true),
       exprClass,
-      ts.factory.createObjectLiteralExpression([
-
-      ])
+      ts.factory.createObjectLiteralExpression(
+        (tag.events ?? []).map(event => ts.factory.createPropertyAssignment(
+          ts.factory.createIdentifier(`on${tagNameToClassName(event.name)}`),
+          ts.factory.createStringLiteral(event.name),
+        )),
+      )
     ]
   );
 
