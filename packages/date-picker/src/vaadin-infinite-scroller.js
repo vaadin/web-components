@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
@@ -14,7 +13,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
  * @extends HTMLElement
  * @private
  */
-class InfiniteScroller extends PolymerElement {
+export class InfiniteScroller extends PolymerElement {
   static get template() {
     return html`
       <style>
@@ -67,10 +66,6 @@ class InfiniteScroller extends PolymerElement {
         <div id="fullHeight"></div>
       </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-infinite-scroller';
   }
 
   static get properties() {
@@ -130,19 +125,6 @@ class InfiniteScroller extends PolymerElement {
 
     this.$.fullHeight.style.height = `${this._initialScroll * 2}px`;
 
-    const tpl = this.querySelector('template');
-    this._TemplateClass = templatize(tpl, this, {
-      forwardHostProp(prop, value) {
-        if (prop !== 'index') {
-          this._buffers.forEach((buffer) => {
-            [...buffer.children].forEach((slot) => {
-              slot._itemWrapper.instance[prop] = value;
-            });
-          });
-        }
-      },
-    });
-
     // Firefox interprets elements with overflow:auto as focusable
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1069739
     if (isFirefox) {
@@ -160,6 +142,24 @@ class InfiniteScroller extends PolymerElement {
       this._updateClones();
       this._debouncerUpdateClones.cancel();
     }
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _createElement() {
+    // To be implemented.
+  }
+
+  /**
+   * @param {HTMLElement} _element
+   * @param {number} _index
+   * @protected
+   * @override
+   */
+  _updateElement(_element, _index) {
+    // To be implemented.
   }
 
   /** @private */
@@ -185,6 +185,7 @@ class InfiniteScroller extends PolymerElement {
       }
 
       this._initDone = true;
+      this.dispatchEvent(new CustomEvent('init-done'));
     }
   }
 
@@ -339,18 +340,16 @@ class InfiniteScroller extends PolymerElement {
         itemWrapper.setAttribute('slot', slotName);
         this.appendChild(itemWrapper);
 
-        setTimeout(() => {
-          // Only stamp the visible instances first
-          if (this._isVisible(itemWrapper, container)) {
-            this._ensureStampedInstance(itemWrapper);
-          }
-        }, 1); // Wait for first reset
+        // Only stamp the visible instances first
+        if (this._isVisible(itemWrapper, container)) {
+          this._ensureStampedInstance(itemWrapper);
+        }
       }
     });
 
-    setTimeout(() => {
-      afterNextRender(this, this._finishInit.bind(this));
-    }, 1);
+    afterNextRender(this, () => {
+      this._finishInit();
+    });
   }
 
   /** @private */
@@ -361,8 +360,8 @@ class InfiniteScroller extends PolymerElement {
 
     const tmpInstance = itemWrapper.instance;
 
-    itemWrapper.instance = new this._TemplateClass({});
-    itemWrapper.appendChild(itemWrapper.instance.root);
+    itemWrapper.instance = this._createElement();
+    itemWrapper.appendChild(itemWrapper.instance);
 
     Object.keys(tmpInstance).forEach((prop) => {
       itemWrapper.instance.set(prop, tmpInstance[prop]);
@@ -381,7 +380,7 @@ class InfiniteScroller extends PolymerElement {
         [...buffer.children].forEach((slot, index) => {
           const itemWrapper = slot._itemWrapper;
           if (!viewPortOnly || this._isVisible(itemWrapper, scrollerRect)) {
-            itemWrapper.instance.index = firstIndex + index;
+            this._updateElement(itemWrapper.instance, firstIndex + index);
           }
         });
         buffer.updated = true;
@@ -395,5 +394,3 @@ class InfiniteScroller extends PolymerElement {
     return rect.bottom > container.top && rect.top < container.bottom;
   }
 }
-
-customElements.define(InfiniteScroller.is, InfiniteScroller);

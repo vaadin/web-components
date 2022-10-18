@@ -66,6 +66,9 @@ registerStyles('vaadin-date-picker', inputFieldShared, { moduleId: 'vaadin-date-
  *
  * - `<vaadin-date-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-date-picker-overlay-content>`
+ * - `<vaadin-date-picker-month-scroller>`
+ * - `<vaadin-date-picker-year-scroller>`
+ * - `<vaadin-date-picker-year>`
  * - `<vaadin-month-calendar>`
  * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
  *
@@ -78,12 +81,15 @@ registerStyles('vaadin-date-picker', inputFieldShared, { moduleId: 'vaadin-date-
  * `clear-button`        | Fullscreen mode clear button
  * `toggle-button`       | Fullscreen mode toggle button
  * `years-toggle-button` | Fullscreen mode years scroller toggle
- * `months`              | Months scroller
- * `years`               | Years scroller
  * `toolbar`             | Footer bar with slotted buttons
- * `month`               | Month calendar
- * `year-number`         | Year number
- * `year-separator`      | Year separator
+ *
+ * The following state attributes are available on the `<vaadin-date-picker-overlay-content>` element:
+ *
+ * Attribute       | Description
+ * ----------------|-------------------------------------------------
+ * `desktop`       | Set when the overlay content is in desktop mode
+ * `fullscreen`    | Set when the overlay content is in fullscreen mode
+ * `years-visible` | Set when the year scroller is visible in fullscreen mode
  *
  * In order to style the month calendar, use `<vaadin-month-calendar>` shadow DOM parts:
  *

@@ -4,7 +4,15 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { close, getFocusedCell, getOverlayContent, idleCallback, open, waitForScrollToFinish } from './common.js';
+import {
+  close,
+  getFocusedCell,
+  getOverlayContent,
+  idleCallback,
+  open,
+  waitForOverlayRender,
+  waitForScrollToFinish,
+} from './common.js';
 
 describe('keyboard', () => {
   let datepicker;
@@ -23,6 +31,7 @@ describe('keyboard', () => {
   describe('focused date', () => {
     it('should focus parsed date', async () => {
       await sendKeys({ type: '1/20/2000' });
+      await waitForOverlayRender();
 
       expect(focusedDate().getMonth()).to.equal(0);
       expect(focusedDate().getDate()).to.equal(20);
@@ -33,12 +42,14 @@ describe('keyboard', () => {
 
       input.select();
       await sendKeys({ type: '1/30/2000' });
+      await waitForOverlayRender();
       expect(focusedDate().getDate()).to.equal(30);
     });
 
     it('should update focus on input value change', async () => {
       await sendKeys({ type: '1/20/20' });
       await sendKeys({ type: '17' });
+      await waitForOverlayRender();
 
       expect(focusedDate().getMonth()).to.equal(0);
       expect(focusedDate().getFullYear()).to.equal(2017);
@@ -115,28 +126,33 @@ describe('keyboard', () => {
   describe('open overlay', () => {
     it('should open the overlay on input', async () => {
       await sendKeys({ type: 'j' });
+      await waitForOverlayRender();
       expect(datepicker.opened).to.be.true;
     });
 
     it('should open the overlay on Arrow Down', async () => {
       await sendKeys({ press: 'ArrowDown' });
+      await waitForOverlayRender();
       expect(datepicker.opened).to.be.true;
     });
 
     it('should open the overlay on Arrow Up', async () => {
       await sendKeys({ press: 'ArrowUp' });
+      await waitForOverlayRender();
       expect(datepicker.opened).to.be.true;
     });
 
     it('should open on Arrow Down if autoOpenDisabled is true', async () => {
       datepicker.autoOpenDisabled = true;
       await sendKeys({ press: 'ArrowDown' });
+      await waitForOverlayRender();
       expect(datepicker.opened).to.be.true;
     });
 
     it('should open on Arrow Up if autoOpenDisabled is true', async () => {
       datepicker.autoOpenDisabled = true;
       await sendKeys({ press: 'ArrowUp' });
+      await waitForOverlayRender();
       expect(datepicker.opened).to.be.true;
     });
 
@@ -176,14 +192,14 @@ describe('keyboard', () => {
     it('should keep focused attribute when the focus moves to the overlay', async () => {
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
-      await nextRender(datepicker);
+      await waitForOverlayRender();
       expect(datepicker.hasAttribute('focused')).to.be.true;
     });
 
     it('should move focus back to the input on Cancel button tap', async () => {
       // Move focus to the calendar
       await sendKeys({ press: 'ArrowDown' });
-      await nextRender(datepicker);
+      await waitForOverlayRender();
       const spy = sinon.spy(input, 'focus');
       tap(overlayContent._cancelButton);
       expect(spy.calledOnce).to.be.true;
@@ -192,7 +208,7 @@ describe('keyboard', () => {
     it('should move focus back to the input on Today button tap', async () => {
       // Move focus to the calendar
       await sendKeys({ press: 'ArrowDown' });
-      await nextRender(datepicker);
+      await waitForOverlayRender();
       const spy = sinon.spy(input, 'focus');
       tap(overlayContent._todayButton);
       expect(spy.calledOnce).to.be.true;
@@ -201,6 +217,7 @@ describe('keyboard', () => {
     it('should move focus back to the input on calendar date tap', async () => {
       // Move focus to the calendar
       await sendKeys({ press: 'Tab' });
+      await waitForOverlayRender();
       const cell = getFocusedCell(overlayContent);
       const spy = sinon.spy(input, 'focus');
       tap(cell);

@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, fixtureSync, keyboardEventFor, oneEvent, tap } from '@vaadin/testing-helpers';
+import { click, fixtureSync, keyboardEventFor, oneEvent, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
@@ -197,17 +197,12 @@ describe('basic features', () => {
       datepicker.set('i18n.today', 'Tänään');
       datepicker.set('i18n.cancel', 'Peruuta');
 
-      overlayContent = getOverlayContent(datepicker);
-      overlayContent.$.monthScroller.bufferSize = 1;
-
       await open(datepicker);
-      overlayContent.$.monthScroller._finishInit();
-      overlayContent.$.yearScroller._finishInit();
-      await aTimeout(1);
+      overlayContent = getOverlayContent(datepicker);
     });
 
     it('should notify i18n mutation to children', () => {
-      const monthCalendar = overlayContent.$.monthScroller.querySelector('vaadin-month-calendar');
+      const monthCalendar = overlayContent.querySelector('vaadin-month-calendar');
       const weekdays = monthCalendar.$.monthGrid.querySelectorAll('[part="weekday"]:not(:empty)');
       const weekdayTitles = Array.prototype.map.call(weekdays, (weekday) => weekday.textContent.trim());
       expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);

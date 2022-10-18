@@ -74,7 +74,7 @@ describe('custom input', () => {
       it('should propagate theme attribute to month calendar', async () => {
         const overlayContent = getOverlayContent(datepicker);
         await waitForScrollToFinish(overlayContent);
-        const monthCalendar = overlayContent.$.monthScroller.querySelector('vaadin-month-calendar');
+        const monthCalendar = overlayContent.querySelector('vaadin-month-calendar');
         expect(monthCalendar.getAttribute('theme')).to.equal('foo');
       });
     });

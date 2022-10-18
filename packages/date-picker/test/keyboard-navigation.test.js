@@ -295,11 +295,11 @@ import {
     });
 
     it('should not scroll down when focus keeps visible', async () => {
-      const initialPosition = overlay.$.monthScroller.position;
+      const initialPosition = overlay._monthScroller.position;
       await sendKeys({ press: 'PageDown' });
       await aTimeout();
       // FF sometimes reports subpixel differences
-      expect(overlay.$.monthScroller.position).to.be.closeTo(initialPosition, 1);
+      expect(overlay._monthScroller.position).to.be.closeTo(initialPosition, 1);
     });
 
     it('should scroll down when focus goes invisible', async () => {

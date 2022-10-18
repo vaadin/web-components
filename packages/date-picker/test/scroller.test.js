@@ -1,22 +1,28 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, listenOnce } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '../src/vaadin-infinite-scroller.js';
+import { InfiniteScroller } from '../src/vaadin-infinite-scroller.js';
 import { activateScroller, getFirstVisibleItem } from './common.js';
+
+customElements.define(
+  'vaadin-infinite-scroller',
+  class extends InfiniteScroller {
+    _createElement() {
+      return document.createElement('div');
+    }
+
+    _updateElement(element, index) {
+      element.textContent = index;
+    }
+  },
+);
 
 describe('vaadin-infinite-scroller', () => {
   let scroller;
 
   beforeEach(async () => {
-    scroller = fixtureSync(`
-      <vaadin-infinite-scroller buffer-size="80">
-        <template>
-          <div>[[index]]</div>
-        </template>
-      </vaadin-infinite-scroller>
-    `);
+    scroller = fixtureSync('<vaadin-infinite-scroller buffer-size="80"></vaadin-infinite-scroller>');
     scroller.style.setProperty('--vaadin-infinite-scroller-item-height', '30px');
-    scroller.updateStyles({ '--vaadin-infinite-scroller-item-height': '30px' });
     await activateScroller(scroller);
   });
 
