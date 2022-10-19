@@ -142,6 +142,17 @@ registerStyles(
       white-space: nowrap;
     }
 
+    [part~='cell'] > [tabindex] {
+      display: flex;
+      align-items: center;
+      outline: none;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
     [part~='details-cell'] {
       position: absolute;
       bottom: 0;
