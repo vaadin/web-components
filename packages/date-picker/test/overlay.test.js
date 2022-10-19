@@ -152,7 +152,7 @@ describe('overlay', () => {
       it('should reflect value in label', () => {
         overlay.i18n.formatDate = (date) => `${date.month + 1}/${date.day}/${date.year}`;
         overlay.selectedDate = new Date(2000, 1, 1);
-        expect(overlay.root.querySelector('[part="label"]').textContent.trim()).to.equal('2/1/2000');
+        expect(overlay.shadowRoot.querySelector('[part="label"]').textContent.trim()).to.equal('2/1/2000');
       });
 
       it('should not show clear button if not value is set', () => {
@@ -311,7 +311,7 @@ describe('overlay', () => {
       const date = new Date(2000, 1, 1);
       overlay.scrollToDate(date);
       await nextRender();
-      expect(parseInt(overlay.root.querySelector('[part="years-toggle-button"]').textContent)).to.equal(2000);
+      expect(parseInt(overlay.shadowRoot.querySelector('[part="years-toggle-button"]').textContent)).to.equal(2000);
     });
 
     it('should scroll to the given date', async () => {
