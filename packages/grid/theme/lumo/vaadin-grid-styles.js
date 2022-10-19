@@ -69,12 +69,12 @@ registerStyles(
     }
 
     [part~='row']:focus,
-    [part~='cell']:focus {
+    [part~='focused-cell']:focus {
       outline: none;
     }
 
     :host([navigating]) [part~='row']:focus::before,
-    :host([navigating]) [part~='cell']:focus::before {
+    :host([navigating]) [part~='focused-cell']:focus::before {
       content: '';
       position: absolute;
       top: 0;

@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { addValueToAttribute, removeValueFromAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
 
 /**
@@ -47,6 +48,12 @@ export const KeyboardNavigationMixin = (superClass) =>
 
         /** @private */
         _focusedColumnOrder: Number,
+
+        /** @private */
+        _focusedCell: {
+          type: Object,
+          observer: '_focusedCellChanged',
+        },
 
         /**
          * Indicates whether the grid is currently in interaction mode.
@@ -109,11 +116,21 @@ export const KeyboardNavigationMixin = (superClass) =>
     }
 
     set __rowFocusMode(value) {
-      ['_itemsFocusable', '_footerFocusable', '_headerFocusable'].forEach((focusable) => {
-        if (value && this.__isCell(this[focusable])) {
-          this[focusable] = this[focusable].parentElement;
-        } else if (!value && this.__isRow(this[focusable])) {
-          this[focusable] = this[focusable].firstElementChild;
+      ['_itemsFocusable', '_footerFocusable', '_headerFocusable'].forEach((prop) => {
+        const focusable = this[prop];
+        if (value) {
+          const parent = focusable && focusable.parentElement;
+          if (this.__isCell(focusable)) {
+            // Cell itself focusable (default)
+            this[prop] = parent;
+          } else if (this.__isCell(parent)) {
+            // Focus button mode is enabled for the column,
+            // button element inside the cell is focusable.
+            this[prop] = parent.parentElement;
+          }
+        } else if (!value && this.__isRow(focusable)) {
+          const cell = focusable.firstElementChild;
+          this[prop] = cell._focusButton || cell;
         }
       });
     }
@@ -125,6 +142,17 @@ export const KeyboardNavigationMixin = (superClass) =>
       }
       if (focusable) {
         this._updateGridSectionFocusTarget(focusable);
+      }
+    }
+
+    /** @private */
+    _focusedCellChanged(focusedCell, oldFocusedCell) {
+      if (oldFocusedCell) {
+        removeValueFromAttribute(oldFocusedCell, 'part', 'focused-cell');
+      }
+
+      if (focusedCell) {
+        addValueToAttribute(focusedCell, 'part', 'focused-cell');
       }
     }
 
@@ -154,10 +182,22 @@ export const KeyboardNavigationMixin = (superClass) =>
           if (this.__rowFocusMode) {
             // Row focus mode
             this._itemsFocusable = row;
-          } else if (this._itemsFocusable.parentElement) {
+          } else {
             // Cell focus mode
-            const cellIndex = [...this._itemsFocusable.parentElement.children].indexOf(this._itemsFocusable);
-            this._itemsFocusable = row.children[cellIndex];
+            let parent = this._itemsFocusable.parentElement;
+            let cell = this._itemsFocusable;
+
+            if (parent) {
+              // Focus button mode is enabled for the column,
+              // button element inside the cell is focusable.
+              if (this.__isCell(parent)) {
+                cell = parent;
+                parent = parent.parentElement;
+              }
+
+              const cellIndex = [...parent.children].indexOf(cell);
+              this._itemsFocusable = this.__getFocusable(row, row.children[cellIndex]);
+            }
           }
         }
       });
@@ -727,6 +767,7 @@ export const KeyboardNavigationMixin = (superClass) =>
       this.toggleAttribute('navigating', false);
       this._detectInteracting(e);
       this._hideTooltip();
+      this._focusedCell = null;
     }
 
     /** @private */
@@ -737,25 +778,41 @@ export const KeyboardNavigationMixin = (superClass) =>
       if (section && (cell || row)) {
         this._activeRowGroup = section;
         if (this.$.header === section) {
-          this._headerFocusable = this.__rowFocusMode ? row : cell;
+          this._headerFocusable = this.__getFocusable(row, cell);
         } else if (this.$.items === section) {
-          this._itemsFocusable = this.__rowFocusMode ? row : cell;
+          this._itemsFocusable = this.__getFocusable(row, cell);
         } else if (this.$.footer === section) {
-          this._footerFocusable = this.__rowFocusMode ? row : cell;
+          this._footerFocusable = this.__getFocusable(row, cell);
         }
 
         if (cell) {
           // Fire a public event for cell.
           const context = this.getEventContext(e);
           cell.dispatchEvent(new CustomEvent('cell-focus', { bubbles: true, composed: true, detail: { context } }));
+          this._focusedCell = cell._focusButton || cell;
 
           if (isKeyboardActive() && e.target === cell) {
             this._showTooltip(e);
           }
+        } else {
+          this._focusedCell = null;
         }
       }
 
       this._detectFocusedItemIndex(e);
+    }
+
+    /**
+     * Get the focusable element depending on the current focus mode.
+     * It can be a row, a cell, or a focusable div inside a cell.
+     *
+     * @param {HTMLElement} row
+     * @param {HTMLElement} cell
+     * @return {HTMLElement}
+     * @private
+     */
+    __getFocusable(row, cell) {
+      return this.__rowFocusMode ? row : cell._focusButton || cell;
     }
 
     /**
@@ -847,7 +904,7 @@ export const KeyboardNavigationMixin = (superClass) =>
           const firstVisibleRow = [...this.$[section].children].find((row) => row.offsetHeight);
           const firstVisibleCell = firstVisibleRow ? [...firstVisibleRow.children].find((cell) => !cell.hidden) : null;
           if (firstVisibleRow && firstVisibleCell) {
-            this[`_${section}Focusable`] = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
+            this[`_${section}Focusable`] = this.__getFocusable(firstVisibleRow, firstVisibleCell);
           }
         }
       });
@@ -860,7 +917,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         if (firstVisibleCell && firstVisibleRow) {
           // Reset memoized column
           delete this._focusedColumnOrder;
-          this._itemsFocusable = this.__rowFocusMode ? firstVisibleRow : firstVisibleCell;
+          this._itemsFocusable = this.__getFocusable(firstVisibleRow, firstVisibleCell);
         }
       } else {
         this.__updateItemsFocusable();
