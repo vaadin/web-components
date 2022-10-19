@@ -4,7 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
-import { isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
+import { isElementFocused, isKeyboardActive } from '@vaadin/component-base/src/focus-utils.js';
 import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 
 /**
@@ -55,15 +55,15 @@ export const InteractionsMixin = (superClass) =>
 
     /**
      * Override getter from `KeyboardDirectionMixin`
-     * to look for activeElement in shadow root, or
-     * use the expanded button as a fallback.
+     * to use expanded button for arrow navigation
+     * when the sub-menu is opened and has focus.
      *
      * @return {Element | null}
      * @protected
      * @override
      */
     get focused() {
-      return this.shadowRoot.activeElement || this._expandedButton;
+      return (this._getItems() || []).find(isElementFocused) || this._expandedButton;
     }
 
     /**
@@ -87,11 +87,6 @@ export const InteractionsMixin = (superClass) =>
      */
     _getItems() {
       return this._buttons;
-    }
-
-    /** @private */
-    get __isRTL() {
-      return this.getAttribute('dir') === 'rtl';
     }
 
     /** @protected */
@@ -129,7 +124,7 @@ export const InteractionsMixin = (superClass) =>
 
     /** @protected */
     _hideTooltip(immediate) {
-      const tooltip = this._tooltipController.node;
+      const tooltip = this._tooltipController && this._tooltipController.node;
       if (tooltip) {
         tooltip._stateController.close(immediate);
       }
@@ -192,7 +187,7 @@ export const InteractionsMixin = (superClass) =>
      */
     _setFocused(focused) {
       if (focused) {
-        const target = this.shadowRoot.querySelector('[part$="button"][tabindex="0"]');
+        const target = this.querySelector('[tabindex="0"]');
         if (target) {
           this._buttons.forEach((btn) => {
             this._setTabindex(btn, btn === target);
