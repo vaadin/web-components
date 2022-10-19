@@ -102,6 +102,13 @@ registerStyles('vaadin-date-picker', inputFieldShared, { moduleId: 'vaadin-date-
  * `week-number`         | Week number element
  * `date`                | Date element
  *
+ * In order to style year scroller elements, use `<vaadin-date-picker-year>` shadow DOM parts:
+ *
+ * Part name             | Description
+ * ----------------------|--------------------
+ * `year-number`         | Year number
+ * `year-separator`      | Year separator
+ *
  * Note: the `theme` attribute value set on `<vaadin-date-picker>` is
  * propagated to the internal components listed above.
  *
