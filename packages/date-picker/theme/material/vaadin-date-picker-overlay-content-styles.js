@@ -132,11 +132,6 @@ registerStyles(
       background: var(--material-background-color);
     }
 
-    :host([years-visible]) [part='years']::after {
-      top: calc(20px + 16px);
-      height: calc(100% - 20px - 16px);
-    }
-
     [part='year-number'] {
       font-size: var(--material-small-font-size);
       line-height: 10px; /* NOTE(platosha): chosen to align years to months */
