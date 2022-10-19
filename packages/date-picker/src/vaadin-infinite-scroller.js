@@ -119,7 +119,7 @@ class InfiniteScroller extends PolymerElement {
   ready() {
     super.ready();
 
-    this._buffers = Array.prototype.slice.call(this.root.querySelectorAll('.buffer'));
+    this._buffers = [...this.shadowRoot.querySelectorAll('.buffer')];
 
     this.$.fullHeight.style.height = `${this._initialScroll * 2}px`;
 
@@ -128,8 +128,8 @@ class InfiniteScroller extends PolymerElement {
       forwardHostProp(prop, value) {
         if (prop !== 'index') {
           this._buffers.forEach((buffer) => {
-            [].forEach.call(buffer.children, (insertionPoint) => {
-              insertionPoint._itemWrapper.instance[prop] = value;
+            [...buffer.children].forEach((slot) => {
+              slot._itemWrapper.instance[prop] = value;
             });
           });
         }
@@ -166,7 +166,9 @@ class InfiniteScroller extends PolymerElement {
     if (!this._initDone) {
       // Once the first set of items start fading in, stamp the rest
       this._buffers.forEach((buffer) => {
-        [].forEach.call(buffer.children, (insertionPoint) => this._ensureStampedInstance(insertionPoint._itemWrapper));
+        [...buffer.children].forEach((slot) => {
+          this._ensureStampedInstance(slot._itemWrapper);
+        });
       });
 
       if (!this._buffers[0].translateY) {
@@ -315,10 +317,10 @@ class InfiniteScroller extends PolymerElement {
         const contentId = (InfiniteScroller._contentIndex = InfiniteScroller._contentIndex + 1 || 0);
         const slotName = `vaadin-infinite-scroller-item-content-${contentId}`;
 
-        const insertionPoint = document.createElement('slot');
-        insertionPoint.setAttribute('name', slotName);
-        insertionPoint._itemWrapper = itemWrapper;
-        buffer.appendChild(insertionPoint);
+        const slot = document.createElement('slot');
+        slot.setAttribute('name', slotName);
+        slot._itemWrapper = itemWrapper;
+        buffer.appendChild(slot);
 
         itemWrapper.setAttribute('slot', slotName);
         this.appendChild(itemWrapper);
@@ -360,8 +362,8 @@ class InfiniteScroller extends PolymerElement {
       if (!buffer.updated) {
         const firstIndex = this._firstIndex + this.bufferSize * bufferIndex;
 
-        [].forEach.call(buffer.children, (insertionPoint, index) => {
-          const itemWrapper = insertionPoint._itemWrapper;
+        [...buffer.children].forEach((slot, index) => {
+          const itemWrapper = slot._itemWrapper;
           if (!viewPortOnly || this._isVisible(itemWrapper, scrollerRect)) {
             itemWrapper.instance.index = firstIndex + index;
           }

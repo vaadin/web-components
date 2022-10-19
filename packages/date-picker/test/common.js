@@ -103,8 +103,8 @@ export function getFirstVisibleItem(scroller, bufferOffset) {
   bufferOffset = bufferOffset || 0;
 
   scroller._buffers.forEach((buffer) => {
-    [].forEach.call(buffer.children, (insertionPoint) => {
-      children.push(insertionPoint._itemWrapper);
+    [...buffer.children].forEach((slot) => {
+      children.push(slot._itemWrapper);
     });
   });
   const scrollerRect = scroller.getBoundingClientRect();

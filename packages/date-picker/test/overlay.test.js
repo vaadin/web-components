@@ -56,8 +56,8 @@ describe('overlay', () => {
       const yearScroller = overlay.$.yearScroller;
 
       yearScroller._buffers.forEach((buffer) => {
-        Array.from(buffer.children).forEach((insertionPoint) => {
-          const year = insertionPoint._itemWrapper.firstElementChild;
+        [...buffer.children].forEach((slot) => {
+          const year = slot._itemWrapper.firstElementChild;
           const isCurrent = year.textContent.indexOf(new Date().getFullYear()) > -1;
           expect(year.hasAttribute('current')).to.equal(isCurrent);
         });
@@ -69,8 +69,8 @@ describe('overlay', () => {
       overlay.selectedDate = new Date();
 
       yearScroller._buffers.forEach((buffer) => {
-        Array.from(buffer.children).forEach((insertionPoint) => {
-          const year = insertionPoint._itemWrapper.firstElementChild;
+        [...buffer.children].forEach((slot) => {
+          const year = slot._itemWrapper.firstElementChild;
           const isCurrent = year.textContent.indexOf(new Date().getFullYear()) > -1;
           expect(year.hasAttribute('selected')).to.equal(isCurrent);
         });
