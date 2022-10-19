@@ -112,8 +112,12 @@ export const ButtonsMixin = (superClass) =>
 
     /** @private */
     __i18nChanged(i18n, overflow) {
-      if (overflow && i18n && i18n.moreOptions) {
-        overflow.setAttribute('aria-label', i18n.moreOptions);
+      if (overflow && i18n && i18n.moreOptions !== undefined) {
+        if (i18n.moreOptions) {
+          overflow.setAttribute('aria-label', i18n.moreOptions);
+        } else {
+          overflow.removeAttribute('aria-label');
+        }
       }
     }
 

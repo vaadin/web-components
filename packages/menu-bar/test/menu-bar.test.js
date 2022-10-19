@@ -453,6 +453,11 @@ describe('overflow button', () => {
     menu.i18n = { ...menu.i18n, moreOptions: moreOptionsSv };
     expect(overflow.getAttribute('aria-label')).to.equal(moreOptionsSv);
   });
+
+  it('should remove the aria-label from the overflow button when empty i18n string is set', () => {
+    menu.i18n = { ...menu.i18n, moreOptions: '' };
+    expect(overflow.hasAttribute('aria-label')).to.be.false;
+  });
 });
 
 describe('has-single-button attribute', () => {

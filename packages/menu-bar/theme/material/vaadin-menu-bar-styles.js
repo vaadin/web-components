@@ -12,7 +12,7 @@ registerStyles(
       border-radius: 4px;
     }
 
-    :host([theme~='end-aligned']) ::slotted(vaadin-menu-bar-button:first-child),
+    :host([theme~='end-aligned']) ::slotted(vaadin-menu-bar-button:first-of-type),
     :host([theme~='end-aligned'][has-single-button]) ::slotted(vaadin-menu-bar-button) {
       margin-inline-start: auto;
     }
