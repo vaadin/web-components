@@ -55,7 +55,7 @@ function importCreateComponent(): [idCreateComponent: ts.Identifier, declImportC
           ts.factory.createImportSpecifier(false, undefined, idCreateComponent)
         ])
       ),
-      ts.factory.createStringLiteral('@lit-labs/react', true)
+      ts.factory.createStringLiteral('../../create-component.js', true)
     )
   ];
 }

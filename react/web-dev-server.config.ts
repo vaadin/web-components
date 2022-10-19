@@ -20,6 +20,9 @@ const devServerConfig: DevServerConfig = {
         '.tsx',
         '.json',
       ],
+      exportConditions: [
+        'development',
+      ],
     }),
     commonjs({
       include: [
