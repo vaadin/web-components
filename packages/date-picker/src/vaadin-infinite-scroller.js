@@ -89,6 +89,7 @@ class InfiniteScroller extends PolymerElement {
       /**
        * The amount of initial scroll top. Needed in order for the
        * user to be able to scroll backwards.
+       * @private
        */
       _initialScroll: {
         value: 500000,
@@ -96,17 +97,22 @@ class InfiniteScroller extends PolymerElement {
 
       /**
        * The index/position mapped at _initialScroll point.
+       * @private
        */
       _initialIndex: {
         value: 0,
       },
 
+      /** @private */
       _buffers: Array,
 
+      /** @private */
       _preventScrollEvent: Boolean,
 
+      /** @private */
       _mayHaveMomentum: Boolean,
 
+      /** @private */
       _initialized: Boolean,
 
       active: {
@@ -116,10 +122,11 @@ class InfiniteScroller extends PolymerElement {
     };
   }
 
+  /** @protected */
   ready() {
     super.ready();
 
-    this._buffers = Array.prototype.slice.call(this.root.querySelectorAll('.buffer'));
+    this._buffers = [...this.shadowRoot.querySelectorAll('.buffer')];
 
     this.$.fullHeight.style.height = `${this._initialScroll * 2}px`;
 
@@ -128,8 +135,8 @@ class InfiniteScroller extends PolymerElement {
       forwardHostProp(prop, value) {
         if (prop !== 'index') {
           this._buffers.forEach((buffer) => {
-            [].forEach.call(buffer.children, (insertionPoint) => {
-              insertionPoint._itemWrapper.instance[prop] = value;
+            [...buffer.children].forEach((slot) => {
+              slot._itemWrapper.instance[prop] = value;
             });
           });
         }
@@ -155,6 +162,7 @@ class InfiniteScroller extends PolymerElement {
     }
   }
 
+  /** @private */
   _activated(active) {
     if (active && !this._initialized) {
       this._createPool();
@@ -162,11 +170,14 @@ class InfiniteScroller extends PolymerElement {
     }
   }
 
+  /** @private */
   _finishInit() {
     if (!this._initDone) {
       // Once the first set of items start fading in, stamp the rest
       this._buffers.forEach((buffer) => {
-        [].forEach.call(buffer.children, (insertionPoint) => this._ensureStampedInstance(insertionPoint._itemWrapper));
+        [...buffer.children].forEach((slot) => {
+          this._ensureStampedInstance(slot._itemWrapper);
+        });
       });
 
       if (!this._buffers[0].translateY) {
@@ -177,6 +188,7 @@ class InfiniteScroller extends PolymerElement {
     }
   }
 
+  /** @private */
   _translateBuffer(up) {
     const index = up ? 1 : 0;
     this._buffers[index].translateY = this._buffers[index ? 0 : 1].translateY + this._bufferHeight * (index ? -1 : 1);
@@ -185,6 +197,7 @@ class InfiniteScroller extends PolymerElement {
     this._buffers.reverse();
   }
 
+  /** @private */
   _scroll() {
     if (this._scrollDisabled) {
       return;
@@ -281,10 +294,12 @@ class InfiniteScroller extends PolymerElement {
     return this._itemHeightVal;
   }
 
+  /** @private */
   get _bufferHeight() {
     return this.itemHeight * this.bufferSize;
   }
 
+  /** @private */
   _reset() {
     this._scrollDisabled = true;
     this.$.scroller.scrollTop = this._initialScroll;
@@ -304,6 +319,7 @@ class InfiniteScroller extends PolymerElement {
     this._scrollDisabled = false;
   }
 
+  /** @private */
   _createPool() {
     const container = this.getBoundingClientRect();
     this._buffers.forEach((buffer) => {
@@ -315,10 +331,10 @@ class InfiniteScroller extends PolymerElement {
         const contentId = (InfiniteScroller._contentIndex = InfiniteScroller._contentIndex + 1 || 0);
         const slotName = `vaadin-infinite-scroller-item-content-${contentId}`;
 
-        const insertionPoint = document.createElement('slot');
-        insertionPoint.setAttribute('name', slotName);
-        insertionPoint._itemWrapper = itemWrapper;
-        buffer.appendChild(insertionPoint);
+        const slot = document.createElement('slot');
+        slot.setAttribute('name', slotName);
+        slot._itemWrapper = itemWrapper;
+        buffer.appendChild(slot);
 
         itemWrapper.setAttribute('slot', slotName);
         this.appendChild(itemWrapper);
@@ -337,6 +353,7 @@ class InfiniteScroller extends PolymerElement {
     }, 1);
   }
 
+  /** @private */
   _ensureStampedInstance(itemWrapper) {
     if (itemWrapper.firstElementChild) {
       return;
@@ -352,6 +369,7 @@ class InfiniteScroller extends PolymerElement {
     });
   }
 
+  /** @private */
   _updateClones(viewPortOnly) {
     this._firstIndex = ~~((this._buffers[0].translateY - this._initialScroll) / this.itemHeight) + this._initialIndex;
 
@@ -360,8 +378,8 @@ class InfiniteScroller extends PolymerElement {
       if (!buffer.updated) {
         const firstIndex = this._firstIndex + this.bufferSize * bufferIndex;
 
-        [].forEach.call(buffer.children, (insertionPoint, index) => {
-          const itemWrapper = insertionPoint._itemWrapper;
+        [...buffer.children].forEach((slot, index) => {
+          const itemWrapper = slot._itemWrapper;
           if (!viewPortOnly || this._isVisible(itemWrapper, scrollerRect)) {
             itemWrapper.instance.index = firstIndex + index;
           }
@@ -371,6 +389,7 @@ class InfiniteScroller extends PolymerElement {
     });
   }
 
+  /** @private */
   _isVisible(element, container) {
     const rect = element.getBoundingClientRect();
     return rect.bottom > container.top && rect.top < container.bottom;
