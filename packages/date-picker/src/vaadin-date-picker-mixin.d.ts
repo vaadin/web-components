@@ -23,7 +23,6 @@ export interface DatePickerI18n {
   weekdaysShort: string[];
   firstDayOfWeek: number;
   week: string;
-  calendar: string;
   today: string;
   cancel: string;
   parseDate(date: string): DatePickerDate | undefined;
@@ -124,9 +123,6 @@ export declare class DatePickerMixinClass {
    *   // Used in screen reader announcements along with week
    *   // numbers, if they are displayed.
    *   week: 'Week',
-   *
-   *   // Translation of the Calendar icon button title.
-   *   calendar: 'Calendar',
    *
    *   // Translation of the Today shortcut button text.
    *   today: 'Today',

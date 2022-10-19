@@ -149,9 +149,6 @@ export const DatePickerMixin = (subclass) =>
          *   // numbers, if they are displayed.
          *   week: 'Week',
          *
-         *   // Translation of the Calendar icon button title.
-         *   calendar: 'Calendar',
-         *
          *   // Translation of the Today shortcut button text.
          *   today: 'Today',
          *
@@ -208,7 +205,6 @@ export const DatePickerMixin = (subclass) =>
               weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
               firstDayOfWeek: 0,
               week: 'Week',
-              calendar: 'Calendar',
               today: 'Today',
               cancel: 'Cancel',
               formatDate: (d) => {
