@@ -310,7 +310,7 @@ describe('basic features', () => {
 
     it('should reflect value in overlay header', () => {
       datepicker.value = '2000-02-01';
-      expect(overlayContent.root.querySelector('[part="label"]').textContent.trim()).to.equal('1.2.2000');
+      expect(overlayContent.shadowRoot.querySelector('[part="label"]').textContent.trim()).to.equal('1.2.2000');
     });
 
     it('should display buttons in correct locale', () => {
