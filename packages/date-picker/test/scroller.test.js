@@ -112,8 +112,8 @@ describe('vaadin-infinite-scroller', () => {
 
   it('should have an instance stamped to every wrapper', () => {
     scroller._buffers.forEach((buffer) => {
-      Array.from(buffer.children).forEach((insertionPoint) => {
-        expect(insertionPoint._itemWrapper.firstElementChild).to.be.ok;
+      [...buffer.children].forEach((slot) => {
+        expect(slot._itemWrapper.firstElementChild).to.be.ok;
       });
     });
   });

@@ -171,7 +171,7 @@ registerStyles(
       color: var(--lumo-primary-contrast-color);
     }
 
-    /* TODO magic number (same as used for iron-media-query in vaadin-date-picker-overlay-content) */
+    /* TODO magic number (same as used for media-query in vaadin-date-picker-overlay-content) */
     @media screen and (max-width: 374px) {
       :host {
         background-image: none;
