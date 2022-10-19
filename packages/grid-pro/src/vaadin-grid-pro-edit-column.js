@@ -7,6 +7,7 @@ import './vaadin-grid-pro-edit-checkbox.js';
 import './vaadin-grid-pro-edit-select.js';
 import './vaadin-grid-pro-edit-text-field.js';
 import { get, set } from '@polymer/polymer/lib/utils/path.js';
+import { addValueToAttribute } from '@vaadin/component-base/src/dom-utils.js';
 import { GridColumn } from '@vaadin/grid/src/vaadin-grid-column.js';
 
 /**
@@ -134,10 +135,8 @@ class GridProEditColumn extends GridColumn {
   /** @private */
   _cellsChanged() {
     this._cells.forEach((cell) => {
-      const part = cell.getAttribute('part');
-      if (part.indexOf('editable-cell') < 0) {
-        cell.setAttribute('part', `${part} editable-cell`);
-      }
+      const target = cell._focusButton || cell;
+      addValueToAttribute(target, 'part', 'editable-cell');
     });
   }
 

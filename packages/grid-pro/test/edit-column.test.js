@@ -474,13 +474,18 @@ describe('edit column', () => {
     it('should have editable-cell attribute on edit column cells', () => {
       const editColumnCells = flatMap(rows, (row) => getRowCells(row).slice(0, 2));
       expect(editColumnCells).to.have.lengthOf(6);
-      editColumnCells.forEach((cell) => expect(cell.getAttribute('part')).to.equal('cell body-cell editable-cell'));
+      editColumnCells.forEach((cell) => {
+        const target = cell._focusButton || cell;
+        expect(target.getAttribute('part')).to.contain('editable-cell');
+      });
     });
 
     it('should not have editable-cell attribute on normal column cells', () => {
       const normalColumnCells = rows.map((row) => getRowCells(row)[2]);
       expect(normalColumnCells).to.have.lengthOf(3);
-      normalColumnCells.forEach((cell) => expect(cell.getAttribute('part')).to.equal('cell body-cell'));
+      normalColumnCells.forEach((cell) => {
+        expect(cell.getAttribute('part')).to.equal('cell body-cell');
+      });
     });
   });
 
