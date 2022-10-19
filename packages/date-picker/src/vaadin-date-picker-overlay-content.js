@@ -734,10 +734,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     return months - date2.getMonth() + date1.getMonth();
   }
 
-  _differenceInYears(date1, date2) {
-    return this._differenceInMonths(date1, date2) / 12;
-  }
-
   _clear() {
     this._selectDate('');
   }
