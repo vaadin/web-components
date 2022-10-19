@@ -144,7 +144,7 @@ registerStyles(
 
     [part~='cell'] > [tabindex] {
       display: flex;
-      align-items: center;
+      align-items: inherit;
       outline: none;
       position: absolute;
       top: 0;
