@@ -53,6 +53,16 @@ export const DatePickerMixin = (subclass) =>
         },
 
         /**
+         * Date used as the basis to parse short dates.
+         * @type {Date | undefined}
+         * @protected
+         */
+        _referenceDate: {
+          type: Date,
+          value: undefined,
+        },
+
+        /**
          * Date which should be visible when there is no value selected.
          *
          * The same date formats as for the `value` property are supported.
@@ -170,7 +180,7 @@ export const DatePickerMixin = (subclass) =>
          *   // Must properly parse (at least) text formatted by `formatDate`.
          *   // Setting the property to null will disable keyboard input feature.
          *   // Note: The argument month is 0-based. This means that January = 0 and December = 11.
-         *   parseDate: text => {
+         *   parseDate: (text, refDate) => {
          *     // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to
          *     // an `Object` in the format `{ day: ..., month: ..., year: ... }`.
          *   }
@@ -215,20 +225,21 @@ export const DatePickerMixin = (subclass) =>
                 const yearStr = String(d.year).replace(/\d+/, (y) => '0000'.substr(y.length) + y);
                 return [d.month + 1, d.day, yearStr].join('/');
               },
-              parseDate: (text) => {
+              parseDate: (text, refDate) => {
                 const parts = text.split('/');
                 const today = new Date();
+                const todayYear = today.getFullYear();
                 let date,
                   month = today.getMonth(),
-                  year = today.getFullYear();
+                  year = todayYear;
 
                 if (parts.length === 3) {
-                  year = parseInt(parts[2]);
-                  if (parts[2].length < 3 && year >= 0) {
-                    year += year < 50 ? 2000 : 1900;
-                  }
                   month = parseInt(parts[0]) - 1;
                   date = parseInt(parts[1]);
+                  year = parseInt(parts[2]);
+                  if (parts[2].length < 3 && year >= 0) {
+                    year = this.calculateDateBasedOnReferenceDate(refDate, year, month, date);
+                  }
                 } else if (parts.length === 2) {
                   month = parseInt(parts[0]) - 1;
                   date = parseInt(parts[1]);
@@ -313,6 +324,23 @@ export const DatePickerMixin = (subclass) =>
       };
     }
 
+    static calculateDateBasedOnReferenceDate(refDate, year, month, date) {
+      if (year > 99) {
+        throw new Error('The provided year cannot have more than 2 digits.');
+      }
+      if (year < 0) {
+        throw new Error('The provided year cannot be negative.');
+      }
+      // Year values up to 2 digits are parsed based on the reference date.
+      let yearBasedOnReferenceDate = year + Math.floor(refDate.getFullYear() / 100) * 100;
+      if (refDate < new Date(yearBasedOnReferenceDate - 50, month, date)) {
+        yearBasedOnReferenceDate -= 100;
+      } else if (refDate > new Date(yearBasedOnReferenceDate + 50, month, date)) {
+        yearBasedOnReferenceDate += 100;
+      }
+      return yearBasedOnReferenceDate;
+    }
+
     static get observers() {
       return [
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
@@ -354,6 +382,16 @@ export const DatePickerMixin = (subclass) =>
         return this.inputElement.focusElement || this.inputElement;
       }
       return null;
+    }
+
+    /** @protected */
+    get referenceDate() {
+      return this._referenceDate ? this._referenceDate : new Date();
+    }
+
+    /** @protected */
+    set referenceDate(value) {
+      this._referenceDate = value;
     }
 
     constructor() {
@@ -1048,7 +1086,7 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     _getParsedDate(inputValue = this._inputValue) {
-      const dateObject = this.i18n.parseDate && this.i18n.parseDate(inputValue);
+      const dateObject = this.i18n.parseDate && this.i18n.parseDate(inputValue, this.referenceDate);
       const parsedDate = dateObject && this._parseDate(`${dateObject.year}-${dateObject.month + 1}-${dateObject.day}`);
       return parsedDate;
     }

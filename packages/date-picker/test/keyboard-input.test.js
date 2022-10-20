@@ -502,6 +502,115 @@ describe('keyboard', () => {
       expect(result.getFullYear()).to.equal(2001);
     });
 
+    it('should parse three digits with short year 4', async () => {
+      const yearToTest = new Date().getFullYear() - 49;
+      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest);
+    });
+
+    it('should parse three digits with short year 5', async () => {
+      const yearToTest = new Date().getFullYear() + 49;
+      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest);
+    });
+
+    it('should parse three digits with short year 6', async () => {
+      const yearToTest = new Date().getFullYear() - 51;
+      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest + 100);
+    });
+
+    it('should parse three digits with short year 7', async () => {
+      const yearToTest = new Date().getFullYear() + 51;
+      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest - 100);
+    });
+
+    it('should parse three digits with short year 8', async () => {
+      const today = new Date();
+      await sendKeys({
+        type: `${today.getMonth()}/${today.getDate()}/${String(today.getFullYear()).slice(2, 4)}`,
+      });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(today.getFullYear());
+    });
+
+    it('should parse three digits with short year using custom reference date 1', async () => {
+      const refDate = new Date(1999, 0, 1);
+      datepicker.referenceDate = refDate;
+      const yearToTest = refDate.getFullYear() + 49;
+      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest);
+    });
+
+    it('should parse three digits with short year using custom reference date 2', async () => {
+      const refDate = new Date(1999, 0, 1);
+      datepicker.referenceDate = refDate;
+      const yearToTest = refDate.getFullYear() - 49;
+      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest);
+    });
+
+    it('should parse three digits with short year using custom reference date 3', async () => {
+      const refDate = new Date(2001, 0, 1);
+      datepicker.referenceDate = refDate;
+      const yearToTest = refDate.getFullYear() + 49;
+      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest);
+    });
+
+    it('should parse three digits with short year using custom reference date 4', async () => {
+      const refDate = new Date(2001, 0, 1);
+      datepicker.referenceDate = refDate;
+      const yearToTest = refDate.getFullYear() - 49;
+      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest);
+    });
+
+    it('should parse three digits with short year using custom reference date 5', async () => {
+      const refDate = new Date(1999, 0, 1);
+      datepicker.referenceDate = refDate;
+      const yearToTest = refDate.getFullYear() + 51;
+      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest - 100);
+    });
+
+    it('should parse three digits with short year using custom reference date 6', async () => {
+      const refDate = new Date(1999, 0, 1);
+      datepicker.referenceDate = refDate;
+      const yearToTest = refDate.getFullYear() - 51;
+      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest + 100);
+    });
+
+    it('should parse three digits with short year using custom reference date 7', async () => {
+      const refDate = new Date(2001, 0, 1);
+      datepicker.referenceDate = refDate;
+      const yearToTest = refDate.getFullYear() + 51;
+      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest - 100);
+    });
+
+    it('should parse three digits with short year using custom reference date 8', async () => {
+      const refDate = new Date(2001, 0, 1);
+      datepicker.referenceDate = refDate;
+      const yearToTest = refDate.getFullYear() - 51;
+      await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
+      const result = focusedDate();
+      expect(result.getFullYear()).to.equal(yearToTest + 100);
+    });
+
     it('should parse three digits with negative year', async () => {
       await sendKeys({ type: '6/20/-1' });
       const result = focusedDate();
