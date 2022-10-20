@@ -430,12 +430,6 @@ function useLocalWebComponents(webComponentsNodeModulesPath: string): PluginOpti
 }
 
 const customConfig: UserConfigFn = (env) => ({
-  // Disable the Vite deps pre-bundling in the app to prevent Vite
-  // from caching connectors’ source code in the file system
-  optimizeDeps: {
-    disabled: true,
-  },
-
   plugins: [useLocalWebComponents('/path/to/web-components/node_modules')],
 });
 
