@@ -430,6 +430,10 @@ function useLocalWebComponents(webComponentsNodeModulesPath: string): PluginOpti
 }
 
 const customConfig: UserConfigFn = (env) => ({
+  // Disable the Vite dependencies pre-bundling
+  optimizeDeps: {
+    disabled: true,
+  },
   plugins: [useLocalWebComponents('/path/to/web-components/node_modules')],
 });
 
