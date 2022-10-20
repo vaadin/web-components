@@ -44,16 +44,9 @@ export function getDefaultI18n() {
   };
 }
 
-export function open(datepicker) {
-  return new Promise((resolve) => {
-    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', async () => {
-      // Wait until infinite scrollers are rendered
-      await waitForOverlayRender();
-
-      resolve();
-    });
-    datepicker.open();
-  });
+export async function open(datepicker) {
+  datepicker.open();
+  await waitForOverlayRender();
 }
 
 export async function waitForOverlayRender() {
