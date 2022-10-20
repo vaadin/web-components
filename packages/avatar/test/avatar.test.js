@@ -327,5 +327,10 @@ describe('vaadin-avatar', () => {
       const abbrElement = avatar.shadowRoot.querySelector('#avatar-abbr');
       expect(abbrElement.getAttribute('aria-hidden')).to.equal('true');
     });
+
+    it('should not override custom role set on the avatar', () => {
+      const custom = fixtureSync('<vaadin-avatar role="image"></vaadin-avatar>');
+      expect(custom.getAttribute('role')).to.equal('image');
+    });
   });
 });
