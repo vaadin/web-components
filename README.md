@@ -379,34 +379,72 @@ Add the new version branch to the `CheckoutBranch` parameter:
 
 ### Using a local clone of the repo in Vaadin app
 
-As long as your application uses webpack, you can modify the webpack config to resolve the web components modules from your local clone /instead of the versions downloaded from npm registry. This is possible for:
+When using a Vaadin app, you can modify the frontend build tool config to resolve the web components modules from your local clone, instead of the versions downloaded from npm registry.
 
-- Vaadin Starter apps created through https://start.vaadin.com
-  - modify the `webpack.config.js` in the root folder
-- running Jetty integration tests from the [Flow components repository](https://github.com/vaadin/flow-components)
-  - running the tests will create a `webpack.config.js` in the root of the Maven module, which you can modify
+<details>
+<summary>Using webpack</summary>
 
-In order to do this, modify the `webpack.config.js` in the root folder as follows:
-
-```js
-(flowDefaults.resolve.modules = ['/Users/serhii/vaadin/web-components/node_modules', ...flowDefaults.resolve.modules]),
-  (module.exports = flowDefaults);
-```
-
-If you are merging into an existing config object, as is done in the Vaadin Starter apps:
+Modify the `webpack.config.js` in the root folder as follows:
 
 ```js
 module.exports = merge(
   {
     resolve: {
-      modules: ['/Users/serhii/vaadin/web-components/node_modules', 'node_modules']
-    }
+      modules: ['/path/to/web-components/node_modules', 'node_modules'],
+    },
   },
-  flowDefaults
+  flowDefaults,
 );
 ```
 
-**NOTE:** Make sure that the path is an absolute one and that it points to the `node_modules` directory in the web components monorepo.
+</details>
+
+<details>
+<summary>Using Vite</summary>
+
+Modify the `vite.config.ts` in the root folder as follows:
+
+```ts
+import path from 'path';
+import { PluginOption, UserConfigFn } from 'vite';
+import { overrideVaadinConfig } from './vite.generated';
+
+function useLocalWebComponents(webComponentsNodeModulesPath: string): PluginOption {
+  return {
+    name: 'use-local-web-components',
+    enforce: 'pre',
+    config(config) {
+      config.server = config.server ?? {};
+      config.server.fs = config.server.fs ?? {};
+      config.server.fs.allow = config.server.fs.allow ?? [];
+      config.server.fs.allow.push(webComponentsNodeModulesPath);
+      config.server.watch = config.server.watch ?? {};
+      config.server.watch.ignored = [`!${webComponentsNodeModulesPath}/**`];
+    },
+    resolveId(id) {
+      if (/^(@polymer|@vaadin)/.test(id)) {
+        return this.resolve(path.join(webComponentsNodeModulesPath, id));
+      }
+    },
+  };
+}
+
+const customConfig: UserConfigFn = (env) => ({
+  // Disable the Vite deps pre-bundling in the app to prevent Vite
+  // from caching connectors’ source code in the file system
+  optimizeDeps: {
+    disabled: true,
+  },
+
+  plugins: [useLocalWebComponents('/path/to/web-components/node_modules')],
+});
+
+export default overrideVaadinConfig(customConfig);
+```
+
+</details>
+
+**NOTE:** Make sure that the path you provide is an absolute one and that it points to the `node_modules` directory in the web components monorepo.
 
 Then run the following command in the web components monorepo:
 
