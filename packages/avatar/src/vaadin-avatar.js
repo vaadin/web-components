@@ -217,7 +217,11 @@ class Avatar extends FocusMixin(ElementMixin(ThemableMixin(PolymerElement))) {
       this.__setTitle(this.name);
     }
 
-    this.setAttribute('role', 'button');
+    // By default, if the user hasn't provided a custom role,
+    // the role attribute is set to "button".
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'button');
+    }
 
     if (!this.hasAttribute('tabindex')) {
       this.setAttribute('tabindex', '0');
