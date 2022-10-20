@@ -57,7 +57,10 @@ export function open(datepicker) {
 }
 
 export async function waitForOverlayRender() {
-  // Wait until infinite scrollers are rendered
+  // First, wait for vaadin-overlay-open event
+  await nextRender();
+
+  // Then wait for scrollers to fully render
   await nextRender();
 
   // Force dom-repeat to render table elements

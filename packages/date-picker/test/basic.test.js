@@ -3,7 +3,7 @@ import { click, fixtureSync, keyboardEventFor, oneEvent, tap } from '@vaadin/tes
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { close, getOverlayContent, open, touchTap } from './common.js';
+import { close, getOverlayContent, open, touchTap, waitForOverlayRender } from './common.js';
 
 describe('basic features', () => {
   let datepicker, input;
@@ -42,12 +42,14 @@ describe('basic features', () => {
   it('should keep focused attribute when focus moves to overlay', async () => {
     datepicker.focus();
     await sendKeys({ press: 'ArrowDown' });
+    await waitForOverlayRender();
     expect(datepicker.hasAttribute('focused')).to.be.true;
   });
 
   it('should have focused attribute when closed and focused', async () => {
     datepicker.focus();
     await sendKeys({ press: 'ArrowDown' });
+    await waitForOverlayRender();
     await sendKeys({ press: 'Escape' });
     expect(datepicker.hasAttribute('focused')).to.be.true;
   });

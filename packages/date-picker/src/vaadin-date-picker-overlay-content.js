@@ -248,7 +248,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   }
 
   get focusableDateElement() {
-    return this.calendars.map((calendar) => calendar.isConnected && calendar.focusableDateElement).find(Boolean);
+    return this.calendars.map((calendar) => calendar.focusableDateElement).find(Boolean);
   }
 
   ready() {

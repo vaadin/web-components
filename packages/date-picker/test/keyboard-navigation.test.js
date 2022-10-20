@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, isIOS, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, isIOS, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -41,7 +41,6 @@ import {
         const today = new Date();
 
         input.click();
-        await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
         await waitForOverlayRender();
 
         // Reset overlay focused date
@@ -108,7 +107,6 @@ import {
 
       it('should be focused on initial position when focused date is empty', async () => {
         input.click();
-        await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
         await waitForOverlayRender();
 
         // Reset overlay focused date
