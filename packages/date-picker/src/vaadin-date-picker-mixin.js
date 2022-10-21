@@ -10,7 +10,13 @@ import { MediaQueryController } from '@vaadin/component-base/src/media-query-con
 import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.js';
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
-import { dateAllowed, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
+import {
+  calculateYearBasedOnReferenceDate,
+  dateAllowed,
+  dateEquals,
+  extractDateParts,
+  getClosestDate,
+} from './vaadin-date-picker-helper.js';
 
 /**
  * @polymerMixin
@@ -238,7 +244,7 @@ export const DatePickerMixin = (subclass) =>
                   date = parseInt(parts[1]);
                   year = parseInt(parts[2]);
                   if (parts[2].length < 3 && year >= 0) {
-                    year = this.calculateDateBasedOnReferenceDate(refDate, year, month, date);
+                    year = calculateYearBasedOnReferenceDate(refDate, year, month, date);
                   }
                 } else if (parts.length === 2) {
                   month = parseInt(parts[0]) - 1;
@@ -322,23 +328,6 @@ export const DatePickerMixin = (subclass) =>
         /** @protected */
         _overlayInitialized: Boolean,
       };
-    }
-
-    static calculateDateBasedOnReferenceDate(refDate, year, month, date) {
-      if (year > 99) {
-        throw new Error('The provided year cannot have more than 2 digits.');
-      }
-      if (year < 0) {
-        throw new Error('The provided year cannot be negative.');
-      }
-      // Year values up to 2 digits are parsed based on the reference date.
-      let yearBasedOnReferenceDate = year + Math.floor(refDate.getFullYear() / 100) * 100;
-      if (refDate < new Date(yearBasedOnReferenceDate - 50, month, date)) {
-        yearBasedOnReferenceDate -= 100;
-      } else if (refDate > new Date(yearBasedOnReferenceDate + 50, month, date)) {
-        yearBasedOnReferenceDate += 100;
-      }
-      return yearBasedOnReferenceDate;
     }
 
     static get observers() {

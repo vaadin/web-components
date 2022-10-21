@@ -41,3 +41,13 @@ export { extractDateParts };
  * to the expected format.
  */
 declare function extractDateParts(date: Date): { day: number; month: number; year: number };
+
+/**
+ * Calculate the year of the date based on the provided reference date
+ */
+declare function calculateYearBasedOnReferenceDate(
+  referenceDate: Date,
+  year: number,
+  month: number | null,
+  date: number | null,
+): Date;

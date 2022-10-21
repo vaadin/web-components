@@ -103,3 +103,28 @@ export function extractDateParts(date) {
     year: date.getFullYear(),
   };
 }
+
+/**
+ * Calculate the year of the date based on the provided reference date
+ * @param {!Date} referenceDate The date to act as basis in the calculation
+ * @param {!Number} year Should be in the range of [0, 999]
+ * @param {Number} month
+ * @param {Number} date
+ * @return {!Number} Adjusted year value
+ */
+export function calculateYearBasedOnReferenceDate(referenceDate, year, month, date) {
+  if (year > 99) {
+    throw new Error('The provided year cannot have more than 2 digits.');
+  }
+  if (year < 0) {
+    throw new Error('The provided year cannot be negative.');
+  }
+  // Year values up to 2 digits are parsed based on the reference date.
+  let adjustedYear = year + Math.floor(referenceDate.getFullYear() / 100) * 100;
+  if (referenceDate < new Date(adjustedYear - 50, month, date)) {
+    adjustedYear -= 100;
+  } else if (referenceDate > new Date(adjustedYear + 50, month, date)) {
+    adjustedYear += 100;
+  }
+  return adjustedYear;
+}
