@@ -155,6 +155,10 @@ export class IronListAdapter {
       // Assign a temporary placeholder sizing to elements that would otherwise end up having
       // no height.
       el.style.paddingTop = `${this.__placeholderHeight}px`;
+
+      // Manually schedule the resize handler to make sure the placeholder gets removed
+      // in case the resize observer doesn't trigger.
+      setTimeout(() => this._resizeHandler());
     } else {
       // Add element height to the queue
       this.__elementHeightQueue.push(elementHeight);
@@ -277,7 +281,7 @@ export class IronListAdapter {
     physicalItems.forEach((el) => {
       el.style.position = 'absolute';
       fragment.appendChild(el);
-      this.__resizeObserver.observe(el, { box: 'border-box' });
+      this.__resizeObserver.observe(el);
     });
     this.elementsContainer.appendChild(fragment);
     return physicalItems;
