@@ -117,13 +117,13 @@ describe('basic features', () => {
     expect(input.value).to.equal('2/1/0099');
   });
 
-  it('should not change datepicker width', () => {
+  it('should not change datepicker width', async () => {
     datepicker.style.display = 'inline-block';
 
     datepicker.value = '2000-01-01';
     const width = datepicker.clientWidth;
 
-    datepicker.open();
+    await open(datepicker);
     expect(datepicker.clientWidth).to.equal(width);
   });
 
