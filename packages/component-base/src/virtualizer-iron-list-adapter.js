@@ -277,7 +277,7 @@ export class IronListAdapter {
     physicalItems.forEach((el) => {
       el.style.position = 'absolute';
       fragment.appendChild(el);
-      this.__resizeObserver.observe(el);
+      this.__resizeObserver.observe(el, { box: 'border-box' });
     });
     this.elementsContainer.appendChild(fragment);
     return physicalItems;
