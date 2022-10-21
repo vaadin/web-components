@@ -24,8 +24,6 @@ node_modules
 # Testing files
 .coverage
 
-# Build artifacts
-build/
-
 # Generated sources
+/generated
 src/generated/

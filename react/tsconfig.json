@@ -1,22 +1,24 @@
 {
   "compilerOptions": {
-		"allowSyntheticDefaultImports": true,
-		"module": "esnext",
-		"target": "ESnext",
-		"sourceMap": true,
-		"inlineSources": true,
-		"moduleResolution": "node",
-		"outDir": "dist"
-	},
-	"include": [
-		"src/**/*",
-		"scripts/packages.ts"
-	],
-	"exclude": [
-		"node_modules",
-		"dist"
-	],
-	"ts-node": {
-		"transpileOnly": true
-	}
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "target": "es2021",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "lib": ["es2021", "dom"],
+    "strict": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "importsNotUsedAsValues": "error",
+    "noImplicitOverride": true,
+    "useDefineForClassFields": true,
+    "useUnknownInCatchVariables": true
+  },
+  "include": ["src", "scripts", "test"],
+  "exclude": ["node_modules", "dist"]
 }
