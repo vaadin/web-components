@@ -1,5 +1,4 @@
 import { fire, listenOnce, makeSoloTouchEvent, mousedown, nextRender } from '@vaadin/testing-helpers';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
 export function activateScroller(scroller) {
@@ -54,9 +53,6 @@ export async function waitForOverlayRender() {
 
   // Then wait for scrollers to fully render
   await nextRender();
-
-  // Force dom-repeat to render table elements
-  flush();
 }
 
 export function close(datepicker) {

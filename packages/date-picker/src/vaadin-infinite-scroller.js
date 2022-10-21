@@ -3,7 +3,6 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
@@ -347,7 +346,7 @@ export class InfiniteScroller extends PolymerElement {
       }
     });
 
-    afterNextRender(this, () => {
+    requestAnimationFrame(() => {
       this._finishInit();
     });
   }
@@ -364,7 +363,7 @@ export class InfiniteScroller extends PolymerElement {
     itemWrapper.appendChild(itemWrapper.instance);
 
     Object.keys(tmpInstance).forEach((prop) => {
-      itemWrapper.instance.set(prop, tmpInstance[prop]);
+      itemWrapper.instance[prop] = tmpInstance[prop];
     });
   }
 

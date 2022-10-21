@@ -8,7 +8,6 @@ import './vaadin-month-calendar.js';
 import './vaadin-date-picker-month-scroller.js';
 import './vaadin-date-picker-year-scroller.js';
 import './vaadin-date-picker-year.js';
-import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
@@ -151,6 +150,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       },
 
       _originDate: {
+        type: Object,
         value: new Date(),
       },
 
@@ -419,15 +419,13 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   __updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, ignoreTaps, theme) {
     if (calendars && calendars.length) {
       calendars.forEach((calendar) => {
-        calendar.setProperties({
-          i18n,
-          minDate,
-          maxDate,
-          focusedDate,
-          selectedDate,
-          showWeekNumbers,
-          ignoreTaps,
-        });
+        calendar.i18n = i18n;
+        calendar.minDate = minDate;
+        calendar.maxDate = maxDate;
+        calendar.focusedDate = focusedDate;
+        calendar.selectedDate = selectedDate;
+        calendar.showWeekNumbers = showWeekNumbers;
+        calendar.ignoreTaps = ignoreTaps;
 
         if (theme) {
           calendar.setAttribute('theme', theme);
@@ -534,10 +532,11 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     return week / 6;
   }
 
-  _initialPositionChanged(initialPosition) {
+  async _initialPositionChanged(initialPosition) {
     if (this._monthScroller && this._yearScroller) {
       this._monthScroller.active = true;
       this._yearScroller.active = true;
+      await new Promise(requestAnimationFrame);
     }
 
     this.scrollToDate(initialPosition);
@@ -959,8 +958,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     if (!this.calendars.length) {
       await new Promise((resolve) => {
         afterNextRender(this, () => {
-          // Force dom-repeat elements to render
-          flush();
           resolve();
         });
       });

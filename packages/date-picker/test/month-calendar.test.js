@@ -65,9 +65,10 @@ describe('vaadin-month-calendar', () => {
     expect(monthCalendar.shadowRoot.querySelector('[part="month-header"]').textContent).to.equal('January 2000');
   });
 
-  it('should fire value change on tap', () => {
+  it('should fire value change on tap', async () => {
     const dateElements = getDateCells(monthCalendar);
     tap(dateElements[10]);
+    await nextRender();
     expect(valueChangedSpy.calledOnce).to.be.true;
   });
 
@@ -191,9 +192,10 @@ describe('vaadin-month-calendar', () => {
   });
 
   describe('week numbers', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       monthCalendar.showWeekNumbers = true;
       monthCalendar.i18n = { ...monthCalendar.i18n, firstDayOfWeek: 1 };
+      await nextRender();
     });
 
     function getWeekNumbers(cal) {
@@ -237,19 +239,22 @@ describe('vaadin-month-calendar', () => {
   });
 
   describe('date limits', () => {
-    it('should be disabled when all dates are disabled', () => {
+    it('should be disabled when all dates are disabled', async () => {
       monthCalendar.minDate = new Date(2016, 2, 1);
+      await nextRender();
       expect(monthCalendar.hasAttribute('disabled')).to.be.true;
     });
 
-    it('should not be disabled if the last day is enabled', () => {
+    it('should not be disabled if the last day is enabled', async () => {
       monthCalendar.minDate = new Date(2016, 1, 29);
+      await nextRender();
       expect(monthCalendar.hasAttribute('disabled')).to.be.false;
     });
 
-    it('should not be disabled when some dates are disabled', () => {
+    it('should not be disabled when some dates are disabled', async () => {
       monthCalendar.minDate = new Date(2016, 1, 15);
       monthCalendar.maxDate = new Date(2016, 1, 20);
+      await nextRender();
       expect(monthCalendar.hasAttribute('disabled')).to.be.false;
     });
 

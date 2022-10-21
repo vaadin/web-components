@@ -3,10 +3,10 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@polymer/polymer/lib/elements/dom-repeat.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateAllowed, dateEquals, getISOWeekNumber } from './vaadin-date-picker-helper.js';
 
@@ -14,107 +14,120 @@ import { dateAllowed, dateEquals, getISOWeekNumber } from './vaadin-date-picker-
  * @extends HTMLElement
  * @private
  */
-class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
-  static get template() {
+class MonthCalendar extends FocusMixin(ThemableMixin(PolylitMixin(LitElement))) {
+  static get styles() {
+    return css`
+      :host {
+        display: block;
+      }
+
+      #monthGrid {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      #days-container tr,
+      #weekdays-container tr {
+        display: flex;
+      }
+
+      [part~='date'] {
+        outline: none;
+      }
+
+      [part~='disabled'] {
+        pointer-events: none;
+      }
+
+      [part='week-number'][hidden],
+      [part='weekday'][hidden] {
+        display: none;
+      }
+
+      [part='weekday'],
+      [part~='date'] {
+        width: calc(100% / 7);
+        padding: 0;
+        font-weight: normal;
+      }
+
+      [part='weekday']:empty,
+      [part='week-number'] {
+        width: 12.5%;
+        flex-shrink: 0;
+        padding: 0;
+      }
+
+      :host([week-numbers]) [part='weekday']:not(:empty),
+      :host([week-numbers]) [part~='date'] {
+        width: 12.5%;
+      }
+    `;
+  }
+
+  render() {
+    const weekDayNames = this._getWeekDayNames(this.i18n, this.showWeekNumbers);
+    const weeks = this._weeks;
+    const hideWeekSeparator = !this._showWeekNumbers;
+
     return html`
-      <style>
-        :host {
-          display: block;
-        }
-
-        #monthGrid {
-          width: 100%;
-          border-collapse: collapse;
-        }
-
-        #days-container tr,
-        #weekdays-container tr {
-          display: flex;
-        }
-
-        [part~='date'] {
-          outline: none;
-        }
-
-        [part~='disabled'] {
-          pointer-events: none;
-        }
-
-        [part='week-number'][hidden],
-        [part='weekday'][hidden] {
-          display: none;
-        }
-
-        [part='weekday'],
-        [part~='date'] {
-          width: calc(100% / 7);
-          padding: 0;
-          font-weight: normal;
-        }
-
-        [part='weekday']:empty,
-        [part='week-number'] {
-          width: 12.5%;
-          flex-shrink: 0;
-          padding: 0;
-        }
-
-        :host([week-numbers]) [part='weekday']:not(:empty),
-        :host([week-numbers]) [part~='date'] {
-          width: 12.5%;
-        }
-      </style>
-
-      <div part="month-header" id="month-header" aria-hidden="true">[[_getTitle(month, i18n.monthNames)]]</div>
+      <div part="month-header" id="month-header" aria-hidden="true">${this._getTitle(this.month, this.i18n)}</div>
       <table
         id="monthGrid"
         role="grid"
         aria-labelledby="month-header"
-        on-touchend="_preventDefault"
-        on-touchstart="_onMonthGridTouchStart"
+        @touchend="${this._preventDefault}"
+        @touchstart="${this._onMonthGridTouchStart}"
       >
         <thead id="weekdays-container">
           <tr role="row" part="weekdays">
-            <th
-              part="weekday"
-              aria-hidden="true"
-              hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]"
-            ></th>
-            <template
-              is="dom-repeat"
-              items="[[_getWeekDayNames(i18n.weekdays, i18n.weekdaysShort, showWeekNumbers, i18n.firstDayOfWeek)]]"
-            >
-              <th role="columnheader" part="weekday" scope="col" abbr$="[[item.weekDay]]" aria-hidden="true">
-                [[item.weekDayShort]]
-              </th>
-            </template>
+            <th part="weekday" aria-hidden="true" ?hidden="${hideWeekSeparator}"></th>
+            ${weekDayNames.map(
+              (item) => html`
+                <th role="columnheader" part="weekday" scope="col" abbr="${item.weekDay}" aria-hidden="true">
+                  ${item.weekDayShort}
+                </th>
+              `,
+            )}
           </tr>
         </thead>
         <tbody id="days-container">
-          <template is="dom-repeat" items="[[_weeks]]" as="week">
-            <tr role="row">
-              <td
-                part="week-number"
-                aria-hidden="true"
-                hidden$="[[!_showWeekSeparator(showWeekNumbers, i18n.firstDayOfWeek)]]"
-              >
-                [[__getWeekNumber(week)]]
-              </td>
-              <template is="dom-repeat" items="[[week]]">
-                <td
-                  role="gridcell"
-                  part$="[[__getDatePart(item, focusedDate, selectedDate, minDate, maxDate)]]"
-                  date="[[item]]"
-                  tabindex$="[[__getDayTabindex(item, focusedDate)]]"
-                  disabled$="[[__isDayDisabled(item, minDate, maxDate)]]"
-                  aria-selected$="[[__getDayAriaSelected(item, selectedDate)]]"
-                  aria-disabled$="[[__getDayAriaDisabled(item, minDate, maxDate)]]"
-                  aria-label$="[[__getDayAriaLabel(item)]]"
-                  >[[_getDate(item)]]</td
-                >
-              </template>
-            </tr>
-          </template>
+          ${weeks.map(
+            (week) => html`
+              <tr role="row">
+                <td part="week-number" aria-hidden="true" ?hidden="${hideWeekSeparator}">
+                  ${this.__getWeekNumber(week)}
+                </td>
+                ${week.map((date) => {
+                  const isFocused = dateEquals(date, this.focusedDate);
+                  const isSelected = dateEquals(date, this.selectedDate);
+                  const isDisabled = !dateAllowed(date, this.minDate, this.maxDate);
+
+                  const parts = [
+                    'date',
+                    isDisabled && 'disabled',
+                    isFocused && 'focused',
+                    isSelected && 'selected',
+                    this._isToday(date) && 'today',
+                  ].filter(Boolean);
+
+                  return html`
+                    <td
+                      role="gridcell"
+                      part="${parts.join(' ')}"
+                      .date="${date}"
+                      ?disabled="${isDisabled}"
+                      tabindex="${isFocused ? '0' : '-1'}"
+                      aria-selected="${isSelected ? 'true' : 'false'}"
+                      aria-disabled="${isDisabled ? 'true' : 'false'}"
+                      aria-label="${this.__getDayAriaLabel(date)}"
+                      >${this._getDate(date)}</td
+                    >
+                  `;
+                })}
+              </tr>
+            `,
+          )}
         </tbody>
       </table>
     `;
@@ -131,7 +144,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
        * month properties are actually used.
        */
       month: {
-        type: Date,
+        type: Object,
         value: new Date(),
       },
 
@@ -139,14 +152,16 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
        * A `Date` object for the currently selected date.
        */
       selectedDate: {
-        type: Date,
+        type: Object,
         notify: true,
       },
 
       /**
        * A `Date` object for the currently focused date.
        */
-      focusedDate: Date,
+      focusedDate: {
+        type: Object,
+      },
 
       showWeekNumbers: {
         type: Boolean,
@@ -162,13 +177,14 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
        */
       ignoreTaps: Boolean,
 
+      /** @private */
       _notTapping: Boolean,
 
       /**
        * The earliest date that can be selected. All earlier dates will be disabled.
        */
       minDate: {
-        type: Date,
+        type: Object,
         value: null,
       },
 
@@ -176,33 +192,34 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
        * The latest date that can be selected. All later dates will be disabled.
        */
       maxDate: {
-        type: Date,
+        type: Object,
         value: null,
       },
 
+      /** @private */
       _days: {
         type: Array,
-        computed: '_getDays(month, i18n.firstDayOfWeek, minDate, maxDate)',
       },
 
+      /** @private */
       _weeks: {
         type: Array,
-        computed: '_getWeeks(_days)',
+      },
+
+      /** @private */
+      _showWeekNumbers: {
+        type: Boolean,
       },
 
       disabled: {
         type: Boolean,
         reflectToAttribute: true,
-        computed: '_isDisabled(month, minDate, maxDate)',
       },
     };
   }
 
   static get observers() {
-    return [
-      '_showWeekNumbersChanged(showWeekNumbers, i18n.firstDayOfWeek)',
-      '__focusedDateChanged(focusedDate, _days)',
-    ];
+    return ['__focusedDateChanged(focusedDate, _days)'];
   }
 
   /** @protected */
@@ -211,13 +228,34 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     addListener(this.$.monthGrid, 'tap', this._handleTap.bind(this));
   }
 
+  /** @protected */
+  willUpdate(props) {
+    if (props.has('month') || props.has('i18n')) {
+      this._days = this._getDays(this.month, this.i18n);
+      this._weeks = this._getWeeks(this._days);
+    }
+
+    if (props.has('month') || props.has('minDate') || props.has('maxDate')) {
+      this.disabled = this._isDisabled(this.month, this.minDate, this.maxDate);
+    }
+
+    if (props.has('showWeekNumbers') || props.has('i18n')) {
+      // Currently only supported for locales that start the week on Monday.
+      this._showWeekNumbers = this.showWeekNumbers && this.i18n && this.i18n.firstDayOfWeek === 1;
+      this.toggleAttribute('week-numbers', this._showWeekNumbers);
+    }
+  }
+
   get focusableDateElement() {
     return [...this.shadowRoot.querySelectorAll('[part~=date]')].find((datePart) => {
       return dateEquals(datePart.date, this.focusedDate);
     });
   }
 
-  /* Returns true if all the dates in the month are out of the allowed range */
+  /**
+   * Returns true if all the dates in the month are out of the allowed range
+   * @private
+   */
   _isDisabled(month, minDate, maxDate) {
     // First day of the month
     const firstDate = new Date(0, 0);
@@ -244,13 +282,15 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     return !dateAllowed(firstDate, minDate, maxDate) && !dateAllowed(lastDate, minDate, maxDate);
   }
 
-  _getTitle(month, monthNames) {
-    if (month === undefined || monthNames === undefined) {
+  /** @private */
+  _getTitle(month, i18n) {
+    if (month === undefined || i18n === undefined) {
       return;
     }
-    return this.i18n.formatTitle(monthNames[month.getMonth()], month.getFullYear());
+    return i18n.formatTitle(i18n.monthNames[month.getMonth()], month.getFullYear());
   }
 
+  /** @private */
   _onMonthGridTouchStart() {
     this._notTapping = false;
     setTimeout(() => {
@@ -258,10 +298,12 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     }, 300);
   }
 
+  /** @private */
   _dateAdd(date, delta) {
     date.setDate(date.getDate() + delta);
   }
 
+  /** @private */
   _applyFirstDayOfWeek(weekDayNames, firstDayOfWeek) {
     if (weekDayNames === undefined || firstDayOfWeek === undefined) {
       return;
@@ -270,60 +312,49 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     return weekDayNames.slice(firstDayOfWeek).concat(weekDayNames.slice(0, firstDayOfWeek));
   }
 
-  _getWeekDayNames(weekDayNames, weekDayNamesShort, showWeekNumbers, firstDayOfWeek) {
-    if (
-      weekDayNames === undefined ||
-      weekDayNamesShort === undefined ||
-      showWeekNumbers === undefined ||
-      firstDayOfWeek === undefined
-    ) {
-      return;
+  /** @private */
+  _getWeekDayNames(i18n, showWeekNumbers) {
+    if (i18n === undefined || showWeekNumbers === undefined) {
+      return [];
     }
-    weekDayNames = this._applyFirstDayOfWeek(weekDayNames, firstDayOfWeek);
-    weekDayNamesShort = this._applyFirstDayOfWeek(weekDayNamesShort, firstDayOfWeek);
-    weekDayNames = weekDayNames.map((day, index) => {
+    const { weekdays, weekdaysShort, firstDayOfWeek } = i18n;
+
+    const weekDayNamesShort = this._applyFirstDayOfWeek(weekdaysShort, firstDayOfWeek);
+    const weekDayNames = this._applyFirstDayOfWeek(weekdays, firstDayOfWeek);
+
+    return weekDayNames.map((day, index) => {
       return {
         weekDay: day,
         weekDayShort: weekDayNamesShort[index],
       };
     });
-
-    return weekDayNames;
   }
 
+  /** @private */
   __focusedDateChanged(focusedDate, days) {
-    if (days.some((date) => dateEquals(date, focusedDate))) {
+    if (Array.isArray(days) && days.some((date) => dateEquals(date, focusedDate))) {
       this.removeAttribute('aria-hidden');
     } else {
       this.setAttribute('aria-hidden', 'true');
     }
   }
 
+  /** @private */
   _getDate(date) {
     return date ? date.getDate() : '';
   }
 
-  _showWeekNumbersChanged(showWeekNumbers, firstDayOfWeek) {
-    if (showWeekNumbers && firstDayOfWeek === 1) {
-      this.setAttribute('week-numbers', '');
-    } else {
-      this.removeAttribute('week-numbers');
-    }
-  }
-
-  _showWeekSeparator(showWeekNumbers, firstDayOfWeek) {
-    // Currently only supported for locales that start the week on Monday.
-    return showWeekNumbers && firstDayOfWeek === 1;
-  }
-
+  /** @private */
   _isToday(date) {
     return dateEquals(new Date(), date);
   }
 
-  _getDays(month, firstDayOfWeek) {
-    if (month === undefined || firstDayOfWeek === undefined) {
-      return;
+  /** @private */
+  _getDays(month, i18n) {
+    if (month === undefined || i18n === undefined) {
+      return [];
     }
+
     // First day of the month (at midnight).
     const date = new Date(0, 0);
     date.setFullYear(month.getFullYear());
@@ -331,7 +362,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     date.setDate(1);
 
     // Rewind to first day of the week.
-    while (date.getDay() !== firstDayOfWeek) {
+    while (date.getDay() !== i18n.firstDayOfWeek) {
       this._dateAdd(date, -1);
     }
 
@@ -347,6 +378,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     return days;
   }
 
+  /** @private */
   _getWeeks(days) {
     return days.reduce((acc, day, i) => {
       if (i % 7 === 0) {
@@ -357,6 +389,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     }, []);
   }
 
+  /** @private */
   _handleTap(e) {
     if (!this.ignoreTaps && !this._notTapping && e.target.date && !e.target.hasAttribute('disabled')) {
       this.selectedDate = e.target.date;
@@ -366,32 +399,12 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     }
   }
 
+  /** @private */
   _preventDefault(e) {
     e.preventDefault();
   }
 
-  __getDatePart(date, focusedDate, selectedDate, minDate, maxDate) {
-    const result = ['date'];
-
-    if (this.__isDayDisabled(date, minDate, maxDate)) {
-      result.push('disabled');
-    }
-
-    if (this.__isDayFocused(date, focusedDate)) {
-      result.push('focused');
-    }
-
-    if (this.__isDaySelected(date, selectedDate)) {
-      result.push('selected');
-    }
-
-    if (this._isToday(date)) {
-      result.push('today');
-    }
-
-    return result.join(' ');
-  }
-
+  /** @private */
   __getWeekNumber(days) {
     const date = days.reduce((acc, d) => {
       return !acc && d ? d : acc;
@@ -400,34 +413,7 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     return getISOWeekNumber(date);
   }
 
-  __isDayFocused(date, focusedDate) {
-    return dateEquals(date, focusedDate);
-  }
-
-  __isDaySelected(date, selectedDate) {
-    return dateEquals(date, selectedDate);
-  }
-
-  __getDayAriaSelected(date, selectedDate) {
-    if (this.__isDaySelected(date, selectedDate)) {
-      return 'true';
-    }
-  }
-
-  __isDayDisabled(date, minDate, maxDate) {
-    return !dateAllowed(date, minDate, maxDate);
-  }
-
-  __getDayAriaDisabled(date, min, max) {
-    if (date === undefined || min === undefined || max === undefined) {
-      return;
-    }
-
-    if (this.__isDayDisabled(date, min, max)) {
-      return 'true';
-    }
-  }
-
+  /** @private */
   __getDayAriaLabel(date) {
     if (!date) {
       return '';
@@ -442,14 +428,6 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
     }
 
     return ariaLabel;
-  }
-
-  __getDayTabindex(date, focusedDate) {
-    if (this.__isDayFocused(date, focusedDate)) {
-      return '0';
-    }
-
-    return '-1';
   }
 }
 
