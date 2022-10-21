@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, enter, fixtureSync, listenOnce, nextRender, tap } from '@vaadin/testing-helpers';
+import { aTimeout, enter, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -15,9 +15,10 @@ describe('keyboard', () => {
     return datepicker._overlayContent.focusedDate;
   }
 
-  beforeEach(() => {
+  beforeEach(async () => {
     datepicker = fixtureSync('<vaadin-date-picker></vaadin-date-picker>');
     input = datepicker.inputElement;
+    await nextRender();
     input.focus();
   });
 
@@ -36,6 +37,7 @@ describe('keyboard', () => {
       input.select();
       await sendKeys({ type: '1/30/2000' });
       await waitForOverlayRender();
+
       expect(focusedDate().getDate()).to.equal(30);
     });
 
@@ -50,12 +52,15 @@ describe('keyboard', () => {
 
     it('should select focused date on Enter', async () => {
       await sendKeys({ type: '1/1/2001' });
+      await waitForOverlayRender();
+
       await sendKeys({ press: 'Enter' });
       expect(datepicker.value).to.equal('2001-01-01');
     });
 
     it('should update focused date on value change', async () => {
       datepicker.value = '2000-01-01';
+      await nextRender();
       await open(datepicker);
       expect(focusedDate().getMonth()).to.equal(0);
       expect(focusedDate().getDate()).to.equal(1);
@@ -65,6 +70,8 @@ describe('keyboard', () => {
     // FIXME: flaky test often failing locally due to scroll animation
     it.skip('should display focused date while overlay focused', async () => {
       await sendKeys({ type: '1/2/2000' });
+      await waitForOverlayRender();
+
       const content = datepicker._overlayContent;
       await waitForScrollToFinish(content);
 
@@ -626,8 +633,9 @@ describe('keyboard', () => {
       expect(spy.calledOnce).to.be.true;
     });
 
-    it('should not fire change on programmatic value change', () => {
+    it('should not fire change on programmatic value change', async () => {
       datepicker.value = '2000-01-01';
+      await nextRender();
       expect(spy.called).to.be.false;
     });
 
@@ -750,18 +758,12 @@ describe('keyboard', () => {
         expect(changeSpy.called).to.be.false;
       });
 
-      it('should change after validate on overlay close', (done) => {
-        listenOnce(datepicker.$.overlay, 'vaadin-overlay-close', () => {
-          // Wait for overlay to finish closing
-          nextRender(datepicker).then(() => {
-            expect(validateSpy.calledOnce).to.be.true;
-            expect(changeSpy.calledOnce).to.be.true;
-            expect(changeSpy.calledAfter(validateSpy)).to.be.true;
-            done();
-          });
-        });
+      it('should change after validate on overlay close', async () => {
+        await close(datepicker);
 
-        datepicker.close();
+        expect(validateSpy.calledOnce).to.be.true;
+        expect(changeSpy.calledOnce).to.be.true;
+        expect(changeSpy.calledAfter(validateSpy)).to.be.true;
       });
 
       it('should change after validate on Enter', async () => {

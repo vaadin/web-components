@@ -6,6 +6,8 @@ import { getDefaultI18n, getFirstVisibleItem, monthsEqual, waitForScrollToFinish
 
 async function customizeFixture({ initialPosition, monthScrollerItems, monthScrollerOffset }) {
   const overlay = fixtureSync(`<vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>`);
+  await nextRender();
+
   const monthScroller = overlay._monthScroller;
   monthScroller.style.setProperty('--vaadin-infinite-scroller-buffer-offset', monthScrollerOffset);
   monthScroller.style.height = `${270 * monthScrollerItems}px`;
@@ -45,9 +47,10 @@ describe('overlay', () => {
       });
     });
 
-    it('should mark selected year', () => {
+    it('should mark selected year', async () => {
       const yearScroller = overlay._yearScroller;
       overlay.selectedDate = new Date();
+      await nextRender();
 
       yearScroller._buffers.forEach((buffer) => {
         [...buffer.children].forEach((slot) => {
@@ -141,9 +144,10 @@ describe('overlay', () => {
         expect(window.getComputedStyle(header).display).to.equal('none');
       });
 
-      it('should reflect value in label', () => {
-        overlay.i18n.formatDate = (date) => `${date.month + 1}/${date.day}/${date.year}`;
+      it('should reflect value in label', async () => {
+        overlay.i18n = { ...overlay.i18n, formatDate: (date) => `${date.month + 1}/${date.day}/${date.year}` };
         overlay.selectedDate = new Date(2000, 1, 1);
+        await nextRender();
         expect(overlay.shadowRoot.querySelector('[part="label"]').textContent.trim()).to.equal('2/1/2000');
       });
 
@@ -151,13 +155,15 @@ describe('overlay', () => {
         expect(window.getComputedStyle(clearButton).display).to.equal('none');
       });
 
-      it('should show clear button if value is set', () => {
+      it('should show clear button if value is set', async () => {
         overlay.selectedDate = new Date();
+        await nextRender();
         expect(window.getComputedStyle(clearButton).display).to.not.equal('none');
       });
 
-      it('should clear the value', () => {
+      it('should clear the value', async () => {
         overlay.selectedDate = new Date();
+        await nextRender();
         click(clearButton);
         expect(overlay.selectedDate).to.equal('');
       });
@@ -237,7 +243,7 @@ describe('overlay', () => {
         describe('date limits', () => {
           let todayMidnight, yesterdayMidnight, tomorrowMidnight;
 
-          beforeEach(() => {
+          beforeEach(async () => {
             const today = new Date();
             todayMidnight = new Date(0, 0);
             todayMidnight.setFullYear(today.getFullYear());
@@ -249,35 +255,41 @@ describe('overlay', () => {
             tomorrowMidnight.setDate(todayMidnight.getDate() + 1);
             overlay.minDate = null;
             overlay.maxDate = null;
+            await nextRender();
           });
 
           it('should not be disabled by default', () => {
             expect(overlay._todayButton.disabled).to.be.false;
           });
 
-          it('should not be disabled if today is inside the limits', () => {
+          it('should not be disabled if today is inside the limits', async () => {
             overlay.minDate = yesterdayMidnight;
             overlay.maxDate = tomorrowMidnight;
+            await nextRender();
             expect(overlay._todayButton.disabled).to.be.false;
           });
 
-          it('should not be disabled if today is min', () => {
+          it('should not be disabled if today is min', async () => {
             overlay.minDate = todayMidnight;
+            await nextRender();
             expect(overlay._todayButton.disabled).to.be.false;
           });
 
-          it('should not be disabled if today is max', () => {
+          it('should not be disabled if today is max', async () => {
             overlay.maxDate = todayMidnight;
+            await nextRender();
             expect(overlay._todayButton.disabled).to.be.false;
           });
 
-          it('should be disabled if the limits are in past', () => {
+          it('should be disabled if the limits are in past', async () => {
             overlay.maxDate = yesterdayMidnight;
+            await nextRender();
             expect(overlay._todayButton.disabled).to.be.true;
           });
 
-          it('should be disabled if the limits are in future', () => {
+          it('should be disabled if the limits are in future', async () => {
             overlay.minDate = tomorrowMidnight;
+            await nextRender();
             expect(overlay._todayButton.disabled).to.be.true;
           });
         });

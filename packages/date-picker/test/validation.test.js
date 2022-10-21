@@ -71,8 +71,9 @@ describe('validation', () => {
   describe('basic', () => {
     let validateSpy;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+      await nextRender();
       validateSpy = sinon.spy(datePicker, 'validate');
     });
 
@@ -112,37 +113,47 @@ describe('validation', () => {
       expect(datePicker.invalid).to.be.false;
     });
 
-    it('should validate on value change', () => {
+    it('should validate on value change', async () => {
       datePicker.value = '2020-01-01';
+      await nextRender();
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should not validate on min change when no value is provided', () => {
+    it('should not validate on min change when no value is provided', async () => {
       datePicker.min = '2020-01-01';
+      await nextRender();
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should validate on min change when a value is provided', () => {
+    it('should validate on min change when a value is provided', async () => {
       datePicker.value = '2020-01-01';
+      await nextRender();
       validateSpy.resetHistory();
+
       datePicker.min = '2020-01-01';
+      await nextRender();
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should not validate on max change when no value is provided', () => {
+    it('should not validate on max change when no value is provided', async () => {
       datePicker.max = '2020-01-01';
+      await nextRender();
       expect(validateSpy.called).to.be.false;
     });
 
-    it('should validate on max change when a value is provided', () => {
+    it('should validate on max change when a value is provided', async () => {
       datePicker.value = '2020-01-01';
+      await nextRender();
       validateSpy.resetHistory();
+
       datePicker.max = '2020-01-01';
+      await nextRender();
       expect(validateSpy.calledOnce).to.be.true;
     });
 
-    it('should be possible to force invalid status', () => {
+    it('should be possible to force invalid status', async () => {
       datePicker.invalid = true;
+      await nextRender();
       expect(datePicker.inputElement.hasAttribute('invalid')).to.be.true;
     });
 
@@ -237,8 +248,9 @@ describe('validation', () => {
   });
 
   describe('input value', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+      await nextRender();
       datePicker.inputElement.focus();
     });
 
@@ -278,8 +290,9 @@ describe('validation', () => {
   });
 
   describe('required', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker required></vaadin-date-picker>`);
+      await nextRender();
     });
 
     it('should fail validation without value', () => {
@@ -307,8 +320,9 @@ describe('validation', () => {
   });
 
   describe('min', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker min="2010-01-01"></vaadin-date-picker>`);
+      await nextRender();
     });
 
     it('should pass validation without value', () => {
@@ -350,8 +364,9 @@ describe('validation', () => {
   });
 
   describe('max', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker max="2010-01-01"></vaadin-date-picker>`);
+      await nextRender();
     });
 
     it('should pass validation without value', () => {
@@ -393,18 +408,21 @@ describe('validation', () => {
   });
 
   describe('custom validator', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       datePicker = fixtureSync(`<vaadin-date-picker-2016></vaadin-date-picker-2016>`);
+      await nextRender();
     });
 
-    it('should validate correctly with custom validator', () => {
+    it('should validate correctly with custom validator', async () => {
       // Try invalid value.
       datePicker.value = '2014-01-01';
+      await nextRender();
       expect(datePicker.validate()).to.be.false;
       expect(datePicker.invalid).to.be.true;
 
       // Try valid value.
       datePicker.value = '2016-01-01';
+      await nextRender();
       expect(datePicker.validate()).to.be.true;
       expect(datePicker.invalid).to.be.false;
     });

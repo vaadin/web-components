@@ -2,7 +2,8 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, tap } from '@vaadin/testing-helpers';
 import { sendKeys, setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-date-picker.js';
+import './not-animated-styles.js';
+import '../vaadin-date-picker.js';
 import { getFocusedCell, open, touchTap, waitForOverlayRender } from './common.js';
 
 describe('fullscreen mode', () => {
@@ -151,7 +152,7 @@ describe('fullscreen mode', () => {
       await sendKeys({ press: 'Tab' });
       await sendKeys({ up: 'Shift' });
 
-      expect(spy.calledOnce).to.be.true;
+      expect(spy.called).to.be.true;
     });
 
     it('should move focus to date cell button on Cancel button Tab', async () => {

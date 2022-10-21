@@ -44,6 +44,7 @@ export function getDefaultI18n() {
 
 export async function open(datepicker) {
   datepicker.open();
+  await datepicker._overlayContent.updateComplete;
   await waitForOverlayRender();
 }
 

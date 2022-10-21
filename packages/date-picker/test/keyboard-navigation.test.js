@@ -4,14 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import {
-  getDefaultI18n,
-  getFocusedCell,
-  idleCallback,
-  open,
-  waitForOverlayRender,
-  waitForScrollToFinish,
-} from './common.js';
+import { getDefaultI18n, getFocusedCell, open, waitForOverlayRender, waitForScrollToFinish } from './common.js';
 
 describe('keyboard navigation', () => {
   describe('date-picker', () => {
@@ -121,7 +114,7 @@ describe('keyboard navigation', () => {
   });
 
   describe('overlay', () => {
-    let overlay;
+    let overlay, initialDate;
 
     beforeEach(async () => {
       overlay = fixtureSync(`
@@ -131,19 +124,17 @@ describe('keyboard navigation', () => {
         ></vaadin-date-picker-overlay-content>
       `);
       overlay.i18n = getDefaultI18n();
-
-      // Set initialPosition to activate scrollers
-      const initialDate = new Date(2000, 0, 1);
+      initialDate = new Date(2000, 0, 1);
       overlay.initialPosition = initialDate;
-
+      await overlay.updateComplete;
       await waitForOverlayRender();
       await overlay.focusDate(initialDate);
-      await idleCallback();
     });
 
     it('should focus one week forward with arrow down', async () => {
       await sendKeys({ press: 'ArrowDown' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 0, 8));
     });
@@ -151,6 +142,7 @@ describe('keyboard navigation', () => {
     it('should focus one week backward with arrow up', async () => {
       await sendKeys({ press: 'ArrowUp' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
@@ -172,6 +164,7 @@ describe('keyboard navigation', () => {
         it(`should focus one day ${isRTL ? 'backward' : 'forward'} with arrow 'right'`, async () => {
           await sendKeys({ press: 'ArrowRight' });
           await waitForScrollToFinish(overlay);
+
           const cell = getFocusedCell(overlay);
           expect(cell.date).to.eql(isRTL ? new Date(1999, 11, 31) : new Date(2000, 0, 2));
         });
@@ -179,6 +172,7 @@ describe('keyboard navigation', () => {
         it(`should focus one day ${isRTL ? 'forward' : 'backward'} with arrow left`, async () => {
           await sendKeys({ press: 'ArrowLeft' });
           await waitForScrollToFinish(overlay);
+
           const cell = getFocusedCell(overlay);
           expect(cell.date).to.eql(isRTL ? new Date(2000, 0, 2) : new Date(1999, 11, 31));
         });
@@ -206,6 +200,7 @@ describe('keyboard navigation', () => {
       await sendKeys({ press: 'ArrowRight' });
       await sendKeys({ press: 'Space' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 0, 2));
     });
@@ -219,6 +214,7 @@ describe('keyboard navigation', () => {
       await sendKeys({ press: 'ArrowLeft' });
       await sendKeys({ press: 'Home' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 1));
     });
@@ -226,6 +222,7 @@ describe('keyboard navigation', () => {
     it('should focus last day of the month with end', async () => {
       await sendKeys({ press: 'End' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 0, 31));
     });
@@ -233,6 +230,7 @@ describe('keyboard navigation', () => {
     it('should focus next month with pagedown', async () => {
       await sendKeys({ press: 'PageDown' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 1, 1));
     });
@@ -240,6 +238,7 @@ describe('keyboard navigation', () => {
     it('should focus previous month with pageup', async () => {
       await sendKeys({ press: 'PageUp' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 1));
     });
@@ -247,8 +246,10 @@ describe('keyboard navigation', () => {
     it('should not skip a month', async () => {
       await overlay.focusDate(new Date(2000, 0, 31));
       await waitForScrollToFinish(overlay);
+
       await sendKeys({ press: 'PageDown' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 1, 29));
     });
@@ -256,8 +257,10 @@ describe('keyboard navigation', () => {
     it('should focus the previously focused date number if available', async () => {
       await overlay.focusDate(new Date(2000, 0, 31));
       await waitForScrollToFinish(overlay);
+
       await sendKeys({ press: 'PageDown' });
       await sendKeys({ press: 'PageDown' });
+
       await waitForScrollToFinish(overlay);
       expect(overlay.focusedDate).to.eql(new Date(2000, 2, 31));
     });
@@ -328,53 +331,72 @@ describe('keyboard navigation', () => {
 
     it('should move to max date when targeted date is disabled', async () => {
       overlay.maxDate = new Date(2000, 0, 7);
+      await nextRender(overlay);
+
       await sendKeys({ down: 'ArrowDown' });
       await waitForScrollToFinish(overlay);
+
       expect(overlay.focusedDate).to.eql(new Date(2000, 0, 7));
     });
 
     it('should move to min date when targeted date is disabled', async () => {
       overlay.minDate = new Date(1999, 11, 26);
+      await nextRender(overlay);
+
       await sendKeys({ down: 'ArrowUp' });
       await waitForScrollToFinish(overlay);
+
       expect(overlay.focusedDate).to.eql(new Date(1999, 11, 26));
     });
 
     it('should focus min date with home', async () => {
       overlay.minDate = new Date(1999, 11, 3);
+      await nextRender(overlay);
+
       await sendKeys({ down: 'ArrowLeft' });
       await sendKeys({ down: 'Home' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 3));
     });
 
     it('should focus max date with end', async () => {
       overlay.maxDate = new Date(2000, 0, 26);
+      await nextRender(overlay);
+
       await sendKeys({ down: 'End' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 0, 26));
     });
 
     it('should focus max date with pagedown', async () => {
       overlay.maxDate = new Date(2000, 0, 28);
+      await nextRender(overlay);
+
       await sendKeys({ press: 'PageDown' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(2000, 0, 28));
     });
 
     it('should focus min date with pageup', async () => {
       overlay.minDate = new Date(1999, 11, 3);
+      await nextRender(overlay);
+
       await sendKeys({ press: 'PageUp' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 3));
     });
 
     it('should focus max date with shift and pagedown', async () => {
       overlay.maxDate = new Date(2000, 11, 28);
+      await nextRender(overlay);
 
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'PageDown' });
@@ -387,6 +409,7 @@ describe('keyboard navigation', () => {
 
     it('should focus min date with shift and pageup', async () => {
       overlay.minDate = new Date(1999, 5, 3);
+      await nextRender(overlay);
 
       await sendKeys({ down: 'Shift' });
       await sendKeys({ press: 'PageUp' });
@@ -401,8 +424,10 @@ describe('keyboard navigation', () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
       await nextRender(overlay);
+
       await sendKeys({ press: 'PageUp' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });
@@ -411,8 +436,10 @@ describe('keyboard navigation', () => {
       overlay.focusedDate = new Date(1999, 5, 10);
       overlay.minDate = new Date(1999, 11, 25);
       await nextRender(overlay);
+
       await sendKeys({ press: 'PageDown' });
       await waitForScrollToFinish(overlay);
+
       const cell = getFocusedCell(overlay);
       expect(cell.date).to.eql(new Date(1999, 11, 25));
     });

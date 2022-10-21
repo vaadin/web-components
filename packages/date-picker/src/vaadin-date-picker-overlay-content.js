@@ -9,13 +9,13 @@ import './vaadin-date-picker-month-scroller.js';
 import './vaadin-date-picker-year-scroller.js';
 import './vaadin-date-picker-year.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { css, html, LitElement } from 'lit';
 import { timeOut } from '@vaadin/component-base/src/async.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { DirMixin } from '@vaadin/component-base/src/dir-mixin.js';
 import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures.js';
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
+import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { dateAfterXMonths, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
@@ -24,78 +24,84 @@ import { dateAfterXMonths, dateEquals, extractDateParts, getClosestDate } from '
  * @extends HTMLElement
  * @private
  */
-class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(PolymerElement))) {
-  static get template() {
+class DatePickerOverlayContent extends ThemableMixin(DirMixin(PolylitMixin(LitElement))) {
+  static get is() {
+    return 'vaadin-date-picker-overlay-content';
+  }
+
+  static get styles() {
+    return css`
+      :host {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        outline: none;
+      }
+
+      [part='overlay-header'] {
+        display: flex;
+        flex-shrink: 0;
+        flex-wrap: nowrap;
+        align-items: center;
+      }
+
+      :host(:not([fullscreen])) [part='overlay-header'] {
+        display: none;
+      }
+
+      [part='label'] {
+        flex-grow: 1;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      [part='years-toggle-button'] {
+        display: flex;
+      }
+
+      #scrollers {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+
+      :host([desktop]) ::slotted([slot='months']) {
+        right: 50px;
+        transform: none !important;
+      }
+
+      :host([desktop]) ::slotted([slot='years']) {
+        transform: none !important;
+      }
+
+      :host(.animate) ::slotted([slot='months']),
+      :host(.animate) ::slotted([slot='years']) {
+        transition: all 200ms;
+      }
+
+      [part='toolbar'] {
+        display: flex;
+        justify-content: space-between;
+        z-index: 2;
+        flex-shrink: 0;
+      }
+    `;
+  }
+
+  render() {
     return html`
-      <style>
-        :host {
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-          width: 100%;
-          outline: none;
-        }
-
-        [part='overlay-header'] {
-          display: flex;
-          flex-shrink: 0;
-          flex-wrap: nowrap;
-          align-items: center;
-        }
-
-        :host(:not([fullscreen])) [part='overlay-header'] {
-          display: none;
-        }
-
-        [part='label'] {
-          flex-grow: 1;
-        }
-
-        [hidden] {
-          display: none !important;
-        }
-
-        [part='years-toggle-button'] {
-          display: flex;
-        }
-
-        #scrollers {
-          display: flex;
-          height: 100%;
-          width: 100%;
-          position: relative;
-          overflow: hidden;
-        }
-
-        :host([desktop]) ::slotted([slot='months']) {
-          right: 50px;
-          transform: none !important;
-        }
-
-        :host([desktop]) ::slotted([slot='years']) {
-          transform: none !important;
-        }
-
-        :host(.animate) ::slotted([slot='months']),
-        :host(.animate) ::slotted([slot='years']) {
-          transition: all 200ms;
-        }
-
-        [part='toolbar'] {
-          display: flex;
-          justify-content: space-between;
-          z-index: 2;
-          flex-shrink: 0;
-        }
-      </style>
-
-      <div part="overlay-header" on-touchend="_preventDefault" aria-hidden="true">
-        <div part="label">[[_formatDisplayed(selectedDate, i18n.formatDate, label)]]</div>
-        <div part="clear-button" hidden$="[[!selectedDate]]"></div>
+      <div part="overlay-header" @touchend="${this._preventDefault}" aria-hidden="true">
+        <div part="label">${this._formatDisplayed(this.selectedDate, this.i18n, this.label)}</div>
+        <div part="clear-button" ?hidden="${!this.selectedDate}"></div>
         <div part="toggle-button"></div>
 
-        <div part="years-toggle-button" hidden$="[[_desktopMode]]" aria-hidden="true">
-          [[_yearAfterXMonths(_visibleMonthIndex)]]
+        <div part="years-toggle-button" ?hidden="${this._desktopMode}" aria-hidden="true">
+          ${this._yearAfterXMonths(this._visibleMonthIndex)}
         </div>
       </div>
 
@@ -104,15 +110,11 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
         <slot name="years"></slot>
       </div>
 
-      <div on-touchend="_preventDefault" role="toolbar" part="toolbar">
+      <div @touchend="${this._preventDefault}" role="toolbar" part="toolbar">
         <slot name="today-button"></slot>
         <slot name="cancel-button"></slot>
       </div>
     `;
-  }
-
-  static get is() {
-    return 'vaadin-date-picker-overlay-content';
   }
 
   static get properties() {
@@ -126,7 +128,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
        * The value for this element.
        */
       selectedDate: {
-        type: Date,
+        type: Object,
         value: null,
       },
 
@@ -134,42 +136,50 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
        * Date value which is focused using keyboard.
        */
       focusedDate: {
-        type: Date,
+        type: Object,
         notify: true,
         observer: '_focusedDateChanged',
       },
 
+      /** @private */
       _focusedMonthDate: Number,
 
       /**
        * Date which should be visible when there is no value selected.
        */
       initialPosition: {
-        type: Date,
+        type: Object,
         observer: '_initialPositionChanged',
       },
 
+      /** @private */
       _originDate: {
         type: Object,
         value: new Date(),
       },
 
+      /** @private */
       _visibleMonthIndex: Number,
 
+      /** @private */
       _desktopMode: {
         type: Boolean,
         observer: '_desktopModeChanged',
       },
 
+      /** @private */
       _desktopMediaQuery: {
         type: String,
         value: '(min-width: 375px)',
       },
 
+      /** @private */
       _translateX: {
+        type: Number,
         observer: '_translateXChanged',
       },
 
+      /** @private */
       _yearScrollerWidth: {
         value: 50,
       },
@@ -183,8 +193,10 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
         value: false,
       },
 
+      /** @private */
       _ignoreTaps: Boolean,
 
+      /** @private */
       _notTapping: Boolean,
 
       /**
@@ -202,19 +214,23 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
        */
       label: String,
 
+      /** @private */
       _cancelButton: {
         type: Object,
       },
 
+      /** @private */
       _todayButton: {
         type: Object,
       },
 
+      /** @private */
       calendars: {
         type: Array,
         value: () => [],
       },
 
+      /** @private */
       years: {
         type: Array,
         value: () => [],
@@ -251,10 +267,13 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     return this.calendars.map((calendar) => calendar.focusableDateElement).find(Boolean);
   }
 
-  ready() {
-    super.ready();
+  /** @protected */
+  firstUpdated() {
+    super.firstUpdated();
 
     this.setAttribute('role', 'dialog');
+
+    setTouchAction(this.$.scrollers, 'pan-y');
 
     addListener(this.$.scrollers, 'track', this._track.bind(this));
     addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
@@ -310,11 +329,9 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
    * @param {Number} detail.oldPosition old position
    */
 
-  connectedCallback() {
-    super.connectedCallback();
+  reset() {
     this._closeYearScroller();
     this._toggleAnimateClass(true);
-    setTouchAction(this.$.scrollers, 'pan-y');
   }
 
   /**
@@ -366,6 +383,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
           });
 
           this._monthScroller = scroller;
+          this._monthScroller.active = true;
         },
       ),
     );
@@ -397,6 +415,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
           });
 
           this._yearScroller = scroller;
+          this._yearScroller.active = true;
         },
       ),
     );
@@ -461,10 +480,12 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     );
   }
 
+  /** @private */
   _desktopModeChanged(desktopMode) {
     this.toggleAttribute('desktop', desktopMode);
   }
 
+  /** @private */
   _focusedDateChanged(focusedDate) {
     this.revealDate(focusedDate);
   }
@@ -532,13 +553,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     return week / 6;
   }
 
-  async _initialPositionChanged(initialPosition) {
-    if (this._monthScroller && this._yearScroller) {
-      this._monthScroller.active = true;
-      this._yearScroller.active = true;
-      await new Promise(requestAnimationFrame);
-    }
-
+  _initialPositionChanged(initialPosition) {
     this.scrollToDate(initialPosition);
   }
 
@@ -583,9 +598,9 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     });
   }
 
-  _formatDisplayed(date, formatDate, label) {
-    if (date) {
-      return formatDate(extractDateParts(date));
+  _formatDisplayed(date, i18n, label) {
+    if (date && i18n) {
+      return i18n.formatDate(extractDateParts(date));
     }
     return label;
   }
@@ -945,6 +960,10 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   async focusDate(date, keepMonth) {
     const dateToFocus = date || this.selectedDate || this.initialPosition || new Date();
     this.focusedDate = dateToFocus;
+
+    // Wait for month calendars to update
+    await new Promise(requestAnimationFrame);
+
     if (!keepMonth) {
       this._focusedMonthDate = dateToFocus.getDate();
     }

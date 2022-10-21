@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { click, fixtureSync, keyboardEventFor, oneEvent, tap } from '@vaadin/testing-helpers';
+import { click, fixtureSync, keyboardEventFor, nextRender, oneEvent, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
@@ -74,20 +74,23 @@ describe('basic features', () => {
     await oneEvent(datepicker.$.overlay, 'vaadin-overlay-open');
   });
 
-  it('should focus the input on touch tap', () => {
+  it('should focus the input on touch tap', async () => {
     touchTap(input);
+    await waitForOverlayRender();
     expect(document.activeElement).to.equal(input);
   });
 
-  it('should open on input container element click', () => {
+  it('should open on input container element click', async () => {
     const inputField = datepicker.shadowRoot.querySelector('[part="input-field"]');
     click(inputField);
+    await waitForOverlayRender();
     expect(datepicker.opened).to.be.true;
   });
 
-  it('should prevent default for the handled click event', () => {
+  it('should prevent default for the handled click event', async () => {
     const inputField = datepicker.shadowRoot.querySelector('[part="input-field"]');
     const event = click(inputField);
+    await waitForOverlayRender();
     expect(event.defaultPrevented).to.be.true;
   });
 
@@ -121,6 +124,7 @@ describe('basic features', () => {
     datepicker.style.display = 'inline-block';
 
     datepicker.value = '2000-01-01';
+    await nextRender();
     const width = datepicker.clientWidth;
 
     await open(datepicker);
@@ -212,8 +216,9 @@ describe('basic features', () => {
       expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
     });
 
-    it('should reflect value in overlay header', () => {
+    it('should reflect value in overlay header', async () => {
       datepicker.value = '2000-02-01';
+      await nextRender();
       expect(overlayContent.shadowRoot.querySelector('[part="label"]').textContent.trim()).to.equal('1.2.2000');
     });
 

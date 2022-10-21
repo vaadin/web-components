@@ -756,15 +756,13 @@ export const DatePickerMixin = (subclass) =>
     // eslint-disable-next-line max-params
     __updateOverlayContent(overlayContent, i18n, label, minDate, maxDate, focusedDate, selectedDate, showWeekNumbers) {
       if (overlayContent) {
-        overlayContent.setProperties({
-          i18n,
-          label,
-          minDate,
-          maxDate,
-          focusedDate,
-          selectedDate,
-          showWeekNumbers,
-        });
+        overlayContent.i18n = i18n;
+        overlayContent.label = label;
+        overlayContent.minDate = minDate;
+        overlayContent.maxDate = maxDate;
+        overlayContent.focusedDate = focusedDate;
+        overlayContent.selectedDate = selectedDate;
+        overlayContent.showWeekNumbers = showWeekNumbers;
       }
     }
 
@@ -793,7 +791,9 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @protected */
-    _onOverlayOpened() {
+    async _onOverlayOpened() {
+      this._overlayContent.reset();
+
       const parsedInitialPosition = parseDate(this.initialPosition);
 
       const initialPosition =
@@ -805,11 +805,12 @@ export const DatePickerMixin = (subclass) =>
         this._overlayContent.initialPosition = getClosestDate(initialPosition, [this._minDate, this._maxDate]);
       }
 
-      this._overlayContent.scrollToDate(this._overlayContent.focusedDate || this._overlayContent.initialPosition);
       // Have a default focused date
       this._ignoreFocusedDateChange = true;
       this._overlayContent.focusedDate = this._overlayContent.focusedDate || this._overlayContent.initialPosition;
-      this._ignoreFocusedDateChange = false;
+      this._overlayContent.scrollToDate(this._overlayContent.focusedDate || this._overlayContent.initialPosition);
+
+      await new Promise(requestAnimationFrame);
 
       window.addEventListener('scroll', this._boundOnScroll, true);
 
@@ -824,6 +825,8 @@ export const DatePickerMixin = (subclass) =>
         this.focusElement.blur();
         this._overlayContent.focusDateElement();
       }
+
+      this._ignoreFocusedDateChange = false;
     }
 
     /** @private */

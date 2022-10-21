@@ -2,15 +2,16 @@ import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { activateScroller, getDefaultI18n, open } from './common.js';
+import { getDefaultI18n, open } from './common.js';
 
 describe('WAI-ARIA', () => {
   describe('date picker', () => {
     let datepicker, input;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
       input = datepicker.inputElement;
+      await nextRender();
     });
 
     it('should toggle aria-expanded attribute on open', () => {
@@ -43,9 +44,8 @@ describe('WAI-ARIA', () => {
     describe('year scroller contents', () => {
       let scroller, yearScrollerContents;
 
-      beforeEach(async () => {
+      beforeEach(() => {
         scroller = overlay._yearScroller;
-        await activateScroller(scroller);
         yearScrollerContents = scroller.querySelectorAll('vaadin-date-picker-year');
       });
 

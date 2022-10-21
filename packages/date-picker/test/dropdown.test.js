@@ -2,14 +2,16 @@ import { expect } from '@esm-bundle/chai';
 import { aTimeout, fire, fixtureSync, mousedown, nextRender, oneEvent, touchstart } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import '../src/vaadin-date-picker.js';
+import './not-animated-styles.js';
+import '../vaadin-date-picker.js';
 import { getFocusedCell, monthsEqual, open, outsideClick, waitForOverlayRender } from './common.js';
 
 describe('dropdown', () => {
   let datepicker, input, overlay;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     datepicker = fixtureSync(`<vaadin-date-picker></vaadin-date-picker>`);
+    await nextRender();
     input = datepicker.inputElement;
     overlay = datepicker.$.overlay;
   });
@@ -33,8 +35,9 @@ describe('dropdown', () => {
       toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
     });
 
-    it('should open by tapping the calendar icon', () => {
+    it('should open by tapping the calendar icon', async () => {
       toggleButton.click();
+      await nextRender();
       expect(datepicker.opened).to.be.true;
       expect(overlay.opened).to.be.true;
     });
@@ -44,6 +47,7 @@ describe('dropdown', () => {
       await oneEvent(overlay, 'vaadin-overlay-open');
 
       toggleButton.click();
+      await nextRender();
       expect(datepicker.opened).to.be.false;
       expect(overlay.opened).to.be.false;
     });
@@ -67,6 +71,7 @@ describe('dropdown', () => {
 
     it('should scroll to initial position', async () => {
       datepicker.initialPosition = '2016-01-01';
+      await nextRender();
 
       datepicker.open();
       const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
@@ -79,6 +84,7 @@ describe('dropdown', () => {
 
     it('should scroll to selected value', async () => {
       datepicker.value = '2000-02-01';
+      await nextRender();
 
       datepicker.open();
       const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
@@ -121,6 +127,7 @@ describe('dropdown', () => {
 
     it('should scroll to min date when today is not allowed', async () => {
       datepicker.min = '2100-01-01';
+      await nextRender();
 
       datepicker.open();
       const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
@@ -133,6 +140,7 @@ describe('dropdown', () => {
 
     it('should scroll to max date when today is not allowed', async () => {
       datepicker.max = '2000-01-01';
+      await nextRender();
 
       datepicker.open();
       const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
@@ -146,8 +154,8 @@ describe('dropdown', () => {
     it('should scroll to initial position even when not allowed', async () => {
       datepicker.min = '2016-01-01';
       datepicker.max = '2016-12-31';
-
       datepicker.initialPosition = '2015-01-01';
+      await nextRender();
 
       datepicker.open();
       const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');

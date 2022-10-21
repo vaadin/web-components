@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, tap } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker-light.js';
@@ -8,12 +8,13 @@ import { open, setInputValue, waitForScrollToFinish } from './common.js';
 describe('custom input', () => {
   let datepicker, overlay;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     datepicker = fixtureSync(`
       <vaadin-date-picker-light attr-for-value="value">
         <input class="input">
       </vaadin-date-picker-light>
     `);
+    await nextRender();
     overlay = datepicker.$.overlay;
   });
 
