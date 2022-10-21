@@ -78,57 +78,68 @@ describe('overlay', () => {
     });
 
     describe('taps', () => {
-      beforeEach((done) => {
-        // Wait for ignoreTaps to settle after initial scroll event
-        listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => setTimeout(done, 350));
+      let monthScroller, clock;
 
-        overlay.$.monthScroller.$.scroller.scrollTop += 1;
+      beforeEach((done) => {
+        monthScroller = overlay.$.monthScroller;
+        clock = sinon.useFakeTimers({
+          shouldClearNativeTimers: true,
+        });
+
+        // Wait for ignoreTaps to settle after initial scroll event
+        listenOnce(monthScroller.$.scroller, 'scroll', () => {
+          clock.tick(350);
+          done();
+        });
+
+        monthScroller.$.scroller.scrollTop += 1;
+      });
+
+      afterEach(() => {
+        clock.restore();
       });
 
       it('should set ignoreTaps to calendar on scroll', (done) => {
-        listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => {
+        listenOnce(monthScroller.$.scroller, 'scroll', () => {
           expect(overlay.$.monthScroller.querySelector('vaadin-month-calendar').ignoreTaps).to.be.true;
           done();
         });
 
-        overlay.$.monthScroller.$.scroller.scrollTop += 1;
+        monthScroller.$.scroller.scrollTop += 1;
       });
 
       it('should not react to year tap after scroll', (done) => {
         const spy = sinon.spy(overlay, '_scrollToPosition');
 
-        listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => {
+        listenOnce(monthScroller.$.scroller, 'scroll', () => {
           tap(overlay.$.yearScroller);
           expect(spy.called).to.be.false;
           done();
         });
 
-        overlay.$.monthScroller.$.scroller.scrollTop += 1;
+        monthScroller.$.scroller.scrollTop += 1;
       });
 
       it('should react to year tap after 300ms elapsed after scroll', (done) => {
         const spy = sinon.spy(overlay, '_scrollToPosition');
 
-        listenOnce(overlay.$.monthScroller.$.scroller, 'scroll', () => {
-          setTimeout(() => {
-            tap(overlay.$.yearScroller);
-            expect(spy.called).to.be.true;
-            done();
-          }, 350);
+        listenOnce(monthScroller.$.scroller, 'scroll', () => {
+          clock.tick(350);
+          tap(overlay.$.yearScroller);
+          expect(spy.called).to.be.true;
+          done();
         });
 
-        overlay.$.monthScroller.$.scroller.scrollTop += 1;
+        monthScroller.$.scroller.scrollTop += 1;
       });
 
-      it('should not react if the tap takes more than 300ms', (done) => {
+      it('should not react if the tap takes more than 300ms', () => {
         const spy = sinon.spy(overlay, '_scrollToPosition');
         overlay._onYearScrollTouchStart();
 
-        setTimeout(() => {
-          tap(overlay.$.yearScroller);
-          expect(spy.called).to.be.false;
-          done();
-        }, 350);
+        clock.tick(350);
+        tap(overlay.$.yearScroller);
+        expect(spy.called).to.be.false;
       });
     });
 

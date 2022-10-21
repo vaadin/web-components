@@ -3,7 +3,7 @@ import { aTimeout, fixtureSync, mousedown, nextRender, oneEvent, touchstart } fr
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getFocusedCell, getOverlayContent, isFullscreen, monthsEqual, open, outsideClick } from './common.js';
+import { getFocusedCell, getOverlayContent, monthsEqual, open, outsideClick } from './common.js';
 
 describe('dropdown', () => {
   let datepicker, input, overlay;
@@ -277,29 +277,6 @@ describe('dropdown', () => {
       datepicker.close();
       await sendKeys({ press: 'Tab' });
       expect(input.inputMode).to.equal('');
-    });
-  });
-
-  describe('sizing', () => {
-    beforeEach(() => {
-      const viewport = document.createElement('meta');
-      viewport.setAttribute('name', 'viewport');
-      viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0');
-      document.getElementsByTagName('head')[0].appendChild(viewport);
-      datepicker._fullscreenMediaQuery = 'max-width: 520px';
-    });
-
-    it('should select fullscreen/desktop mode', (done) => {
-      setTimeout(() => {
-        datepicker.open();
-        datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
-          const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-          const fullscreen = viewportWidth < 520;
-
-          expect(isFullscreen(datepicker)).to.equal(fullscreen);
-          done();
-        });
-      });
     });
   });
 });

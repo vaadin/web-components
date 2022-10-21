@@ -1,4 +1,4 @@
-import { aTimeout, fire, listenOnce, mousedown, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fire, listenOnce, makeSoloTouchEvent, mousedown, nextRender } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
@@ -92,6 +92,18 @@ export function outsideClick() {
   document.body.tabIndex = -1;
   // Outside click
   document.body.click();
+}
+
+/**
+ * Emulates a touch on the target resulting in clicking and focusing it.
+ */
+export function touchTap(target) {
+  const start = makeSoloTouchEvent('touchstart', null, target);
+  const end = makeSoloTouchEvent('touchend', null, target);
+  if (!start.defaultPrevented && !end.defaultPrevented) {
+    target.click();
+    target.focus();
+  }
 }
 
 export function monthsEqual(date1, date2) {
