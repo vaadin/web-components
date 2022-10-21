@@ -6,8 +6,9 @@ import { getOverlayContent, open, waitForScrollToFinish } from './common.js';
 describe('theme attribute', () => {
   let datepicker;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     datepicker = fixtureSync(`<vaadin-date-picker theme="foo"></vaadin-date-picker>`);
+    await nextRender();
   });
 
   it('should propagate theme attribute to the input container', () => {
@@ -19,8 +20,8 @@ describe('theme attribute', () => {
     expect(datepicker.$.overlay.getAttribute('theme')).to.equal('foo');
   });
 
-  it('should propagate theme attribute to overlay content', () => {
-    datepicker.open();
+  it('should propagate theme attribute to overlay content', async () => {
+    await open(datepicker);
     const overlayContent = getOverlayContent(datepicker);
     expect(overlayContent.getAttribute('theme')).to.equal('foo');
   });
@@ -28,7 +29,6 @@ describe('theme attribute', () => {
   describe('in content', () => {
     beforeEach(async () => {
       await open(datepicker);
-      await nextRender(datepicker);
     });
 
     it('should propagate theme attribute to month calendar', async () => {
