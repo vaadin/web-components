@@ -19,7 +19,7 @@ import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
+import { dateAfterXMonths, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
 
 /**
  * @extends HTMLElement
@@ -781,14 +781,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   }
 
   _yearAfterXMonths(months) {
-    return this._dateAfterXMonths(months).getFullYear();
-  }
-
-  _dateAfterXMonths(months) {
-    const result = new Date(this._originDate);
-    result.setDate(1);
-    result.setMonth(parseInt(months) + this._originDate.getMonth());
-    return result;
+    return dateAfterXMonths(months).getFullYear();
   }
 
   _differenceInMonths(date1, date2) {

@@ -4,6 +4,7 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { css, registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { dateAfterXMonths } from './vaadin-date-picker-helper.js';
 import { InfiniteScroller } from './vaadin-infinite-scroller.js';
 
 registerStyles(
@@ -57,16 +58,7 @@ class DatePickerMonthScroller extends ThemableMixin(InfiniteScroller) {
    * @override
    */
   _updateElement(element, index) {
-    element.month = this._dateAfterXMonths(index);
-  }
-
-  /** @private */
-  _dateAfterXMonths(months) {
-    const today = new Date();
-    const result = new Date(today);
-    result.setDate(1);
-    result.setMonth(parseInt(months) + today.getMonth());
-    return result;
+    element.month = dateAfterXMonths(index);
   }
 }
 

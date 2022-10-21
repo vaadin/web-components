@@ -33,11 +33,6 @@ describe('overlay', () => {
       await waitForScrollToFinish(overlay);
     });
 
-    it('should return correct month', () => {
-      overlay._originDate = new Date(2016, 2, 31);
-      expect(overlay._dateAfterXMonths(11).getMonth()).to.equal(1);
-    });
-
     it('should mark current year', () => {
       const yearScroller = overlay._yearScroller;
 
