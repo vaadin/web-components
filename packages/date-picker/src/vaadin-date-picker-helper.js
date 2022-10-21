@@ -107,7 +107,7 @@ export function extractDateParts(date) {
 /**
  * Calculate the year of the date based on the provided reference date
  * @param {!Date} referenceDate The date to act as basis in the calculation
- * @param {!Number} year Should be in the range of [0, 999]
+ * @param {!Number} year Should be in the range of [0, 99]
  * @param {Number} month
  * @param {Number} date
  * @return {!Number} Adjusted year value
