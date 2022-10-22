@@ -2,20 +2,7 @@ import { expect } from '@esm-bundle/chai';
 import { click, fixtureSync, listenOnce, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker-overlay-content.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { getDefaultI18n, getFirstVisibleItem, monthsEqual } from './common.js';
-
-function waitUntilScrolledTo(overlay, date, callback) {
-  if (overlay.$.monthScroller.position) {
-    overlay._onMonthScroll();
-  }
-  const monthIndex = overlay._differenceInMonths(date, new Date());
-  if (overlay.$.monthScroller.position === monthIndex) {
-    afterNextRender(overlay, callback);
-  } else {
-    setTimeout(waitUntilScrolledTo, 10, overlay, date, callback);
-  }
-}
+import { getDefaultI18n, getFirstVisibleItem, monthsEqual, waitForScrollToFinish } from './common.js';
 
 async function customizeFixture({ initialPosition, monthScrollerItems, monthScrollerOffset }) {
   const overlay = fixtureSync(`<vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>`);
@@ -35,16 +22,19 @@ describe('overlay', () => {
   let overlay;
 
   describe('basic', () => {
-    beforeEach((done) => {
+    beforeEach(async () => {
       overlay = fixtureSync(`
         <vaadin-date-picker-overlay-content
           style="position: absolute; top: 0"
-        ></vaadin-date-picker-overlay-content>`);
+          scroll-duration="0"
+        ></vaadin-date-picker-overlay-content>
+      `);
       overlay.i18n = getDefaultI18n();
       overlay.$.monthScroller.bufferSize = 1;
       overlay.$.yearScroller.bufferSize = 1;
       overlay.initialPosition = new Date(2021, 1, 1);
-      afterNextRender(overlay.$.monthScroller, () => waitUntilScrolledTo(overlay, overlay.initialPosition, done));
+      await nextRender();
+      await waitForScrollToFinish(overlay);
     });
 
     it('should return correct month', () => {
@@ -191,66 +181,66 @@ describe('overlay', () => {
       });
 
       describe('today button', () => {
-        it('should scroll to current date', (done) => {
-          const date = new Date(2000, 1, 1);
-          overlay.scrollToDate(date);
-          waitUntilScrolledTo(overlay, date, () => {
-            tap(overlay._todayButton);
-            waitUntilScrolledTo(overlay, new Date(), () => {
-              done();
-            });
-          });
+        it('should scroll to current date', async () => {
+          overlay.scrollToDate(new Date(2000, 1, 1));
+          await waitForScrollToFinish(overlay);
+
+          const today = new Date();
+          const spy = sinon.spy(overlay, 'scrollToDate');
+          tap(overlay._todayButton);
+          await waitForScrollToFinish(overlay);
+
+          expect(spy.calledOnce).to.be.true;
+          const date = spy.firstCall.args[0];
+          expect(date.getFullYear()).to.equal(today.getFullYear());
+          expect(date.getMonth()).to.equal(today.getMonth());
+          expect(date.getDate()).to.equal(today.getDate());
         });
 
-        it('should close the overlay and select today if on current month', (done) => {
+        it('should close the overlay and select today if on current month', async () => {
           const today = new Date();
           overlay.scrollToDate(today);
+          await waitForScrollToFinish(overlay);
+
+          const spy = sinon.spy();
+          overlay.addEventListener('close', spy);
+          tap(overlay._todayButton);
+
+          expect(overlay.selectedDate.getFullYear()).to.equal(today.getFullYear());
+          expect(overlay.selectedDate.getMonth()).to.equal(today.getMonth());
+          expect(overlay.selectedDate.getDate()).to.equal(today.getDate());
+          expect(spy.calledOnce).to.be.true;
+        });
+
+        it('should not close the overlay and not select today if not on current month', async () => {
+          const today = new Date();
+          overlay.scrollToDate(today);
+          await waitForScrollToFinish(overlay);
+
           const spy = sinon.spy();
           overlay.addEventListener('close', spy);
 
-          waitUntilScrolledTo(overlay, today, () => {
-            tap(overlay._todayButton);
+          overlay.$.monthScroller.$.scroller.scrollTop -= 1;
+          tap(overlay._todayButton);
 
-            expect(overlay.selectedDate.getFullYear()).to.equal(today.getFullYear());
-            expect(overlay.selectedDate.getMonth()).to.equal(today.getMonth());
-            expect(overlay.selectedDate.getDate()).to.equal(today.getDate());
-            expect(spy.calledOnce).to.be.true;
-            done();
-          });
+          expect(overlay.selectedDate).to.be.not.ok;
+          expect(spy.called).to.be.false;
         });
 
-        it('should not close the overlay and not select today if not on current month', (done) => {
-          const today = new Date();
-          overlay.scrollToDate(today);
-          const spy = sinon.spy();
-          overlay.addEventListener('close', spy);
-
-          waitUntilScrolledTo(overlay, today, () => {
-            overlay.$.monthScroller.$.scroller.scrollTop -= 1;
-            tap(overlay._todayButton);
-
-            expect(overlay.selectedDate).to.be.not.ok;
-            expect(spy.called).to.be.false;
-            done();
-          });
-        });
-
-        it('should do nothing if disabled', (done) => {
+        it('should do nothing if disabled', async () => {
           const initialDate = new Date(2000, 1, 1);
           overlay.scrollToDate(initialDate);
+          await waitForScrollToFinish(overlay);
+
           const closeSpy = sinon.spy();
           overlay.addEventListener('close', closeSpy);
+          const lastScrollPos = overlay.$.monthScroller.position;
 
           overlay._todayButton.disabled = true;
+          tap(overlay._todayButton);
 
-          waitUntilScrolledTo(overlay, initialDate, () => {
-            const lastScrollPos = overlay.$.monthScroller.position;
-            tap(overlay._todayButton);
-
-            expect(overlay.$.monthScroller.position).to.equal(lastScrollPos);
-            expect(closeSpy.called).to.be.false;
-            done();
-          });
+          expect(overlay.$.monthScroller.position).to.equal(lastScrollPos);
+          expect(closeSpy.called).to.be.false;
         });
 
         describe('date limits', () => {

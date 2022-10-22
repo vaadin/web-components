@@ -14,13 +14,14 @@ describe('dropdown', () => {
     overlay = datepicker.$.overlay;
   });
 
-  it('should update position of the overlay after changing opened property', () => {
+  it('should update position of the overlay after changing opened property', async () => {
     datepicker.opened = true;
+    await oneEvent(overlay, 'vaadin-overlay-open');
     expect(input.getBoundingClientRect().bottom).to.be.closeTo(overlay.getBoundingClientRect().top, 0.01);
   });
 
-  it('should detach overlay on datepicker detach', () => {
-    datepicker.open();
+  it('should detach overlay on datepicker detach', async () => {
+    await open(datepicker);
     datepicker.parentElement.removeChild(datepicker);
     expect(overlay.parentElement).to.not.be.ok;
   });
@@ -91,16 +92,14 @@ describe('dropdown', () => {
     });
 
     it('should remember the initial position on reopen', async () => {
-      datepicker.open();
+      await open(datepicker);
       const overlayContent = getOverlayContent(datepicker);
-      await oneEvent(overlay, 'vaadin-overlay-open');
       const initialPosition = overlayContent.initialPosition;
 
       datepicker.close();
       await nextRender();
 
-      datepicker.open();
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      await open(datepicker);
       expect(overlayContent.initialPosition).to.be.eql(initialPosition);
     });
 

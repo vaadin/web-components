@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fire, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
+import { fire, fixtureSync, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker-light.js';
@@ -36,18 +36,19 @@ describe('custom input', () => {
     expect(overlay.opened).not.to.be.true;
   });
 
-  it('should close on overlay date tap', () => {
-    datepicker.open();
+  it('should close on overlay date tap', async () => {
+    await open(datepicker);
     const spy = sinon.spy(datepicker, 'close');
     const evt = new CustomEvent('date-tap', { detail: { date: new Date() }, bubbles: true, composed: true });
     getOverlayContent(datepicker).dispatchEvent(evt);
     expect(spy.called).to.be.true;
   });
 
-  it('should show week numbers', () => {
+  it('should show week numbers', async () => {
     datepicker.showWeekNumbers = true;
+    await open(datepicker);
     const overlayContent = getOverlayContent(datepicker);
-    expect(overlayContent.showWeekNumbers).to.equal(true);
+    expect(overlayContent.showWeekNumbers).to.be.true;
   });
 
   describe('theme attribute', () => {
@@ -59,8 +60,8 @@ describe('custom input', () => {
       expect(overlay.getAttribute('theme')).to.equal('foo');
     });
 
-    it('should propagate theme attribute to overlay content', () => {
-      datepicker.open();
+    it('should propagate theme attribute to overlay content', async () => {
+      await open(datepicker);
       const overlayContent = getOverlayContent(datepicker);
       expect(overlayContent.getAttribute('theme')).to.equal('foo');
     });
@@ -68,7 +69,6 @@ describe('custom input', () => {
     describe('in content', () => {
       beforeEach(async () => {
         await open(datepicker);
-        await nextRender(datepicker);
       });
 
       it('should propagate theme attribute to month calendar', async () => {

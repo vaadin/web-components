@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, tap } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-month-calendar.js';
 import { getDefaultI18n } from './common.js';
@@ -9,14 +9,15 @@ describe('vaadin-month-calendar', () => {
 
   beforeEach(async () => {
     monthCalendar = fixtureSync(`
-    <vaadin-month-calendar
-      style="position: absolute; top: 0"
-    ></vaadin-month-calendar>`);
+      <vaadin-month-calendar
+        style="position: absolute; top: 0"
+      ></vaadin-month-calendar>
+    `);
     monthCalendar.i18n = getDefaultI18n();
     monthCalendar.month = new Date(2016, 1, 1);
     valueChangedSpy = sinon.spy();
     monthCalendar.addEventListener('selected-date-changed', valueChangedSpy);
-    await aTimeout();
+    await nextRender();
   });
 
   // A helper for async test functions for 2016 month rendering.
@@ -45,8 +46,8 @@ describe('vaadin-month-calendar', () => {
   });
 
   it('should render days in correct order by first day of week', async () => {
-    monthCalendar.set('i18n.firstDayOfWeek', 1); // Start from Monday.
-    await aTimeout();
+    monthCalendar.i18n = { ...monthCalendar.i18n, firstDayOfWeek: 1 }; // Start from Monday.
+    await nextRender();
     const weekdays = monthCalendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)');
     const weekdayTitles = Array.from(weekdays).map((weekday) => weekday.textContent.trim());
     expect(weekdayTitles).to.eql(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);
@@ -54,7 +55,7 @@ describe('vaadin-month-calendar', () => {
 
   it('should re-render after changing the month', async () => {
     monthCalendar.month = new Date(2000, 0, 1); // Feb 2016 -> Jan 2000
-    await aTimeout();
+    await nextRender();
     const days = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)').length;
     expect(days).to.equal(31);
     expect(monthCalendar.shadowRoot.querySelector('[part="month-header"]').textContent).to.equal('January 2000');
@@ -133,14 +134,14 @@ describe('vaadin-month-calendar', () => {
     const month = new Date(0, 0);
     month.setFullYear(99);
     monthCalendar.month = month;
-    await aTimeout();
+    await nextRender();
     const date = monthCalendar.shadowRoot.querySelector('[part="date"]:not(:empty)').date;
     expect(date.getFullYear()).to.equal(month.getFullYear());
   });
 
   it('should not update value on disabled date tap', async () => {
     monthCalendar.maxDate = new Date('2016-02-09');
-    await aTimeout();
+    await nextRender();
     const dateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
     for (let i = 0; i < dateElements.length; i++) {
       if (dateElements[i].date.getDate() === 10) {
@@ -165,7 +166,7 @@ describe('vaadin-month-calendar', () => {
         today: 'Tänään',
         formatTitle: (monthName, fullYear) => `${monthName}-${fullYear}`,
       };
-      await aTimeout();
+      await nextRender();
     });
 
     it('should render weekdays in correct locale', () => {
@@ -187,7 +188,7 @@ describe('vaadin-month-calendar', () => {
 
     it('should label today in correct locale', async () => {
       monthCalendar.month = new Date();
-      await aTimeout();
+      await nextRender();
       const today = monthCalendar.shadowRoot.querySelector('[part="date"]:not(:empty)[today]');
       expect(today.getAttribute('aria-label').split(', ').pop()).to.equal('Tänään');
     });
@@ -200,7 +201,7 @@ describe('vaadin-month-calendar', () => {
   describe('week numbers', () => {
     beforeEach(() => {
       monthCalendar.showWeekNumbers = true;
-      monthCalendar.set('i18n.firstDayOfWeek', 1);
+      monthCalendar.i18n = { ...monthCalendar.i18n, firstDayOfWeek: 1 };
     });
 
     function getWeekNumbers(cal) {
@@ -212,7 +213,7 @@ describe('vaadin-month-calendar', () => {
     it('should render correct week numbers for Jan 2016', async () => {
       const month = new Date(2016, 0, 1);
       monthCalendar.month = month;
-      await aTimeout();
+      await nextRender();
       const weekNumbers = getWeekNumbers(monthCalendar);
       expect(weekNumbers).to.eql([53, 1, 2, 3, 4]);
     });
@@ -220,7 +221,7 @@ describe('vaadin-month-calendar', () => {
     it('should render correct week numbers for Dec 2015', async () => {
       const month = new Date(2015, 11, 1);
       monthCalendar.month = month;
-      await aTimeout();
+      await nextRender();
       const weekNumbers = getWeekNumbers(monthCalendar);
       expect(weekNumbers).to.eql([49, 50, 51, 52, 53]);
     });
@@ -228,7 +229,7 @@ describe('vaadin-month-calendar', () => {
     it('should render correct week numbers for Feb 2016', async () => {
       const month = new Date(2016, 1, 1);
       monthCalendar.month = month;
-      await aTimeout();
+      await nextRender();
       const weekNumbers = getWeekNumbers(monthCalendar);
       expect(weekNumbers).to.eql([5, 6, 7, 8, 9]);
     });
@@ -237,7 +238,7 @@ describe('vaadin-month-calendar', () => {
       const month = new Date(0, 4, 1);
       month.setFullYear(99);
       monthCalendar.month = month;
-      await aTimeout();
+      await nextRender();
       const weekNumbers = getWeekNumbers(monthCalendar);
       expect(weekNumbers).to.eql([18, 19, 20, 21, 22]);
     });
