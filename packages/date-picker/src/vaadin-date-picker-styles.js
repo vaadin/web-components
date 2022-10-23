@@ -10,11 +10,6 @@ export const datePickerStyles = css`
     direction: ltr;
   }
 
-  :host([dir='rtl']) [part='value']::placeholder {
-    direction: rtl;
-    text-align: left;
-  }
-
   :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
     direction: rtl;
     text-align: left;
