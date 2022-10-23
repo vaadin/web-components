@@ -426,12 +426,6 @@ class MonthCalendar extends FocusMixin(ThemableMixin(PolymerElement)) {
 
     return '-1';
   }
-
-  __getWeekNumbers(dates) {
-    return dates
-      .map((date) => this.__getWeekNumber(date, dates))
-      .filter((week, index, arr) => arr.indexOf(week) === index);
-  }
 }
 
 customElements.define(MonthCalendar.is, MonthCalendar);
