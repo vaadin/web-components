@@ -155,6 +155,10 @@ export class IronListAdapter {
       // Assign a temporary placeholder sizing to elements that would otherwise end up having
       // no height.
       el.style.paddingTop = `${this.__placeholderHeight}px`;
+
+      // Manually schedule the resize handler to make sure the placeholder padding is
+      // cleared in case the resize observer never triggers.
+      requestAnimationFrame(() => this._resizeHandler());
     } else {
       // Add element height to the queue
       this.__elementHeightQueue.push(elementHeight);

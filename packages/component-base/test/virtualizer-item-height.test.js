@@ -67,4 +67,27 @@ describe('virtualizer - item height', () => {
     expect(item.offsetHeight).to.be.above(EVEN_ITEM_HEIGHT);
     expect(item.offsetHeight).to.be.below(ODD_ITEM_HEIGHT);
   });
+
+  it('should clear the temporary placeholder padding from the item', async () => {
+    // Wait for the content to update (and resize observer to fire)
+    await aTimeout(200);
+
+    // Cache the height of the first item
+    const firstItem = elementsContainer.querySelector(`#item-0`);
+    const firstItemHeight = firstItem.offsetHeight;
+
+    // Update the first item. Due to how the test updateElement function is implemented,
+    // the item height will first be set to 0, which causes the virtualizer to
+    // temporarily add padding to the element.
+    virtualizer.update(0, 0);
+
+    // Manually restore the item's height
+    firstItem.style.height = `${firstItemHeight}px`;
+
+    // Give some time for the resize observer to fire
+    await aTimeout(100);
+
+    // The padding should have been be cleared and the item should have its original height.
+    expect(firstItem.offsetHeight).to.equal(firstItemHeight);
+  });
 });
