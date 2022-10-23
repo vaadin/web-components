@@ -234,10 +234,9 @@ export const DatePickerMixin = (subclass) =>
               parseDate: (text, refDate) => {
                 const parts = text.split('/');
                 const today = new Date();
-                const todayYear = today.getFullYear();
                 let date,
                   month = today.getMonth(),
-                  year = todayYear;
+                  year = today.getFullYear();
 
                 if (parts.length === 3) {
                   month = parseInt(parts[0]) - 1;
