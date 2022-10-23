@@ -15,9 +15,8 @@ import { LabelledInputController } from '@vaadin/field-base/src/labelled-input-c
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
-import { datePickerStyles } from './vaadin-date-picker-styles.js';
 
-registerStyles('vaadin-date-picker', [inputFieldShared, datePickerStyles], { moduleId: 'vaadin-date-picker-styles' });
+registerStyles('vaadin-date-picker', inputFieldShared, { moduleId: 'vaadin-date-picker-styles' });
 
 /**
  * `<vaadin-date-picker>` is an input field that allows to enter a date by typing or by selecting from a calendar overlay.
@@ -124,6 +123,15 @@ class DatePicker extends DatePickerMixin(InputControlMixin(ThemableMixin(Element
       <style>
         :host([opened]) {
           pointer-events: auto;
+        }
+
+        :host([dir='rtl']) [part='input-field'] {
+          direction: ltr;
+        }
+
+        :host([dir='rtl']) [part='input-field'] ::slotted(input)::placeholder {
+          direction: rtl;
+          text-align: left;
         }
       </style>
 

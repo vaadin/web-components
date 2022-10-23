@@ -5,12 +5,24 @@
  */
 import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
 import { PositionMixin } from '@vaadin/overlay/src/vaadin-overlay-position-mixin.js';
-import { registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { datePickerOverlayStyles } from './vaadin-date-picker-styles.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-registerStyles('vaadin-date-picker-overlay', datePickerOverlayStyles, {
-  moduleId: 'vaadin-date-picker-overlay-styles',
-});
+registerStyles(
+  'vaadin-date-picker-overlay',
+  css`
+    [part='overlay'] {
+      display: flex;
+      flex: auto;
+    }
+
+    [part~='content'] {
+      flex: auto;
+    }
+  `,
+  {
+    moduleId: 'vaadin-date-picker-overlay-styles',
+  },
+);
 
 let memoizedTemplate;
 
