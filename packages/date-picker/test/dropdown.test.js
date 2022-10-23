@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, mousedown, nextRender, oneEvent, touchstart } from '@vaadin/testing-helpers';
+import { aTimeout, fire, fixtureSync, mousedown, nextRender, oneEvent, touchstart } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
@@ -49,10 +49,8 @@ describe('dropdown', () => {
     });
 
     it('should prevent default for the toggle button mousedown', () => {
-      const e = new CustomEvent('mousedown', { bubbles: true });
-      const spy = sinon.spy(e, 'preventDefault');
-      toggleButton.dispatchEvent(e);
-      expect(spy.calledOnce).to.be.true;
+      const event = fire(toggleButton, 'mousedown');
+      expect(event.defaultPrevented).to.be.true;
     });
   });
 

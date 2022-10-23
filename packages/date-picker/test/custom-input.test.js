@@ -3,10 +3,10 @@ import { fire, fixtureSync, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker-light.js';
-import { getOverlayContent, open, waitForScrollToFinish } from './common.js';
+import { getOverlayContent, open, setInputValue, waitForScrollToFinish } from './common.js';
 
 describe('custom input', () => {
-  let datepicker, input, overlay;
+  let datepicker, overlay;
 
   beforeEach(() => {
     datepicker = fixtureSync(`
@@ -15,7 +15,6 @@ describe('custom input', () => {
       </vaadin-date-picker-light>
     `);
     overlay = datepicker.$.overlay;
-    input = datepicker.inputElement;
   });
 
   it('should open calendar on tap', () => {
@@ -24,23 +23,21 @@ describe('custom input', () => {
   });
 
   it('should open calendar on input', () => {
-    input.value = '1';
-    fire(input, 'input');
+    setInputValue(datepicker, '1');
     expect(overlay.opened).to.be.true;
   });
 
   it('should not open calendar on input when autoOpenDisabled is true', () => {
     datepicker.autoOpenDisabled = true;
-    input.value = '1';
-    fire(input, 'input');
+    setInputValue(datepicker, '1');
     expect(overlay.opened).not.to.be.true;
   });
 
   it('should close on overlay date tap', async () => {
     await open(datepicker);
     const spy = sinon.spy(datepicker, 'close');
-    const evt = new CustomEvent('date-tap', { detail: { date: new Date() }, bubbles: true, composed: true });
-    getOverlayContent(datepicker).dispatchEvent(evt);
+    const overlayContent = getOverlayContent(datepicker);
+    fire(overlayContent, 'date-tap', { date: new Date() });
     expect(spy.called).to.be.true;
   });
 

@@ -187,17 +187,19 @@ describe('basic features', () => {
     let overlayContent;
 
     beforeEach(async () => {
-      datepicker.set('i18n.weekdays', 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'));
-      datepicker.set('i18n.weekdaysShort', 'su_ma_ti_ke_to_pe_la'.split('_'));
-      datepicker.set('i18n.firstDayOfWeek', 1);
-      datepicker.set('i18n.formatDate', (d) => {
-        if (d) {
-          return [d.day, d.month + 1, d.year].join('.');
-        }
-      });
-      datepicker.set('i18n.clear', 'Tyhjennä');
-      datepicker.set('i18n.today', 'Tänään');
-      datepicker.set('i18n.cancel', 'Peruuta');
+      datepicker.i18n = {
+        ...datepicker.i18n,
+        weekdays: ['sunnuntai', 'maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai'],
+        weekdaysShort: ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'],
+        firstDayOfWeek: 1,
+        today: 'Tänään',
+        cancel: 'Peruuta',
+        formatDate: (d) => {
+          if (d) {
+            return [d.day, d.month + 1, d.year].join('.');
+          }
+        },
+      };
 
       await open(datepicker);
       overlayContent = getOverlayContent(datepicker);
