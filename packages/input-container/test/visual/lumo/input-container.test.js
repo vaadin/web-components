@@ -1,6 +1,7 @@
 import { fixtureSync } from '@vaadin/testing-helpers/dist/fixture.js';
 import { visualDiff } from '@web/test-runner-visual-regression';
 import '@vaadin/icon/vaadin-icon.js';
+import '@vaadin/vaadin-lumo-styles/test/autoload.js';
 import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 import '../../../theme/lumo/vaadin-input-container.js';
 
@@ -11,9 +12,6 @@ describe('input-container', () => {
     div = document.createElement('div');
     div.style.display = 'inline-block';
     div.style.padding = '10px';
-    div.style.color = 'var(--lumo-body-text-color)';
-    div.style.fontSize = 'var(--lumo-font-size-m)';
-    div.style.fontFamily = 'var(--lumo-font-family)';
     element = fixtureSync('<vaadin-input-container><input></vaadin-input-container>', div);
     input = element.querySelector('input');
   });
