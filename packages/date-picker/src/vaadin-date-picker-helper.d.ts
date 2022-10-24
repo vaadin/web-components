@@ -44,10 +44,6 @@ declare function extractDateParts(date: Date): { day: number; month: number; yea
 
 /**
  * Calculate the year of the date based on the provided reference date
+ * Gets a two-digit year and returns a full year.
  */
-declare function calculateYearBasedOnReferenceDate(
-  referenceDate: Date,
-  year: number,
-  month: number | null,
-  date: number | null,
-): Date;
+declare function getAdjustedYear(referenceDate: Date, year: number, month: number | null, date: number | null): Date;

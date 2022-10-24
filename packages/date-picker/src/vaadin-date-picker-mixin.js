@@ -11,10 +11,10 @@ import { DelegateFocusMixin } from '@vaadin/field-base/src/delegate-focus-mixin.
 import { InputConstraintsMixin } from '@vaadin/field-base/src/input-constraints-mixin.js';
 import { VirtualKeyboardController } from '@vaadin/field-base/src/virtual-keyboard-controller.js';
 import {
-  calculateYearBasedOnReferenceDate,
   dateAllowed,
   dateEquals,
   extractDateParts,
+  getAdjustedYear,
   getClosestDate,
 } from './vaadin-date-picker-helper.js';
 
@@ -56,16 +56,6 @@ export const DatePickerMixin = (subclass) =>
           type: String,
           notify: true,
           value: '',
-        },
-
-        /**
-         * Date used as the basis to parse short dates.
-         * @type {Date | undefined}
-         * @protected
-         */
-        _referenceDate: {
-          type: Date,
-          value: undefined,
         },
 
         /**
@@ -174,6 +164,16 @@ export const DatePickerMixin = (subclass) =>
          *   // Translation of the Cancel button text.
          *   cancel: 'Cancel',
          *
+         *   // Used for adjusting the year value when parsing dates with short years.
+         *   // The year values between 0 and 99 are evaluated and adjusted.
+         *   // Example: for a referenceDate of 1970-10-30;
+         *   //   dateToBeParsed: 40-10-30, result: 1940-10-30
+         *   //   dateToBeParsed: 80-10-30, result: 1980-10-30
+         *   //   dateToBeParsed: 10-10-30, result: 2010-10-30
+         *   // Object is in the format `{ day: ..., month: ..., year: ... }`
+         *   // The default value is the current date.
+         *   referenceDate: undefined,
+         *
          *   // A function to format given `Object` as
          *   // date string. Object is in the format `{ day: ..., month: ..., year: ... }`
          *   // Note: The argument month is 0-based. This means that January = 0 and December = 11.
@@ -186,7 +186,7 @@ export const DatePickerMixin = (subclass) =>
          *   // Must properly parse (at least) text formatted by `formatDate`.
          *   // Setting the property to null will disable keyboard input feature.
          *   // Note: The argument month is 0-based. This means that January = 0 and December = 11.
-         *   parseDate: (text, refDate) => {
+         *   parseDate: (text) => {
          *     // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to
          *     // an `Object` in the format `{ day: ..., month: ..., year: ... }`.
          *   }
@@ -227,11 +227,12 @@ export const DatePickerMixin = (subclass) =>
               calendar: 'Calendar',
               today: 'Today',
               cancel: 'Cancel',
-              formatDate: (d) => {
+              referenceDate: undefined,
+              formatDate(d) {
                 const yearStr = String(d.year).replace(/\d+/, (y) => '0000'.substr(y.length) + y);
                 return [d.month + 1, d.day, yearStr].join('/');
               },
-              parseDate: (text, refDate) => {
+              parseDate(text) {
                 const parts = text.split('/');
                 const today = new Date();
                 let date,
@@ -243,7 +244,10 @@ export const DatePickerMixin = (subclass) =>
                   date = parseInt(parts[1]);
                   year = parseInt(parts[2]);
                   if (parts[2].length < 3 && year >= 0) {
-                    year = calculateYearBasedOnReferenceDate(refDate, year, month, date);
+                    const usedReferenceDate = this.referenceDate
+                      ? new Date(this.referenceDate.year, this.referenceDate.month - 1, this.referenceDate.day)
+                      : new Date();
+                    year = getAdjustedYear(usedReferenceDate, year, month, date);
                   }
                 } else if (parts.length === 2) {
                   month = parseInt(parts[0]) - 1;
@@ -370,16 +374,6 @@ export const DatePickerMixin = (subclass) =>
         return this.inputElement.focusElement || this.inputElement;
       }
       return null;
-    }
-
-    /** @protected */
-    get referenceDate() {
-      return this._referenceDate ? this._referenceDate : new Date();
-    }
-
-    /** @protected */
-    set referenceDate(value) {
-      this._referenceDate = value;
     }
 
     constructor() {
@@ -1074,7 +1068,7 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     _getParsedDate(inputValue = this._inputValue) {
-      const dateObject = this.i18n.parseDate && this.i18n.parseDate(inputValue, this.referenceDate);
+      const dateObject = this.i18n.parseDate && this.i18n.parseDate(inputValue);
       const parsedDate = dateObject && this._parseDate(`${dateObject.year}-${dateObject.month + 1}-${dateObject.day}`);
       return parsedDate;
     }
