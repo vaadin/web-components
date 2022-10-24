@@ -119,10 +119,6 @@ export function getFirstVisibleItem(scroller, bufferOffset) {
   });
 }
 
-export function isFullscreen(datepicker) {
-  return datepicker.$.overlay.getAttribute('fullscreen') !== null;
-}
-
 export function getOverlayContent(datepicker) {
   // Ensure overlay content is rendered
   if (!datepicker._overlayContent) {
