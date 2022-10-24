@@ -3,7 +3,7 @@ import { enter, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import { DatePicker } from '../vaadin-date-picker.js';
-import { close, getOverlayContent, open, setInputValue } from './common.js';
+import { close, open, setInputValue } from './common.js';
 
 class DatePicker2016 extends DatePicker {
   checkValidity() {
@@ -197,7 +197,7 @@ describe('validation', () => {
       const invalidChangedSpy = sinon.spy();
       datePicker.addEventListener('invalid-changed', invalidChangedSpy);
       datePicker.open();
-      getOverlayContent(datePicker)._selectDate(new Date('2017-01-01')); // Invalid
+      datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
     });
 
     it('should reflect correct invalid value on value-changed eventListener', (done) => {
@@ -211,7 +211,7 @@ describe('validation', () => {
       });
 
       datePicker.open();
-      getOverlayContent(datePicker)._selectDate(new Date('2017-01-01')); // Invalid
+      datePicker._overlayContent._selectDate(new Date('2017-01-01')); // Invalid
     });
 
     it('should fire a validated event on validation success', () => {

@@ -3,7 +3,7 @@ import { fixtureSync, tap } from '@vaadin/testing-helpers';
 import { sendKeys, setViewport } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getFocusedCell, getOverlayContent, open, touchTap, waitForOverlayRender } from './common.js';
+import { getFocusedCell, open, touchTap, waitForOverlayRender } from './common.js';
 
 describe('fullscreen mode', () => {
   let datepicker, input, overlay, width, height;
@@ -66,8 +66,7 @@ describe('fullscreen mode', () => {
 
       it('should focus date element when opening overlay', async () => {
         await open(datepicker);
-        const content = getOverlayContent(datepicker);
-        const cell = getFocusedCell(content);
+        const cell = getFocusedCell(datepicker._overlayContent);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
         expect(cell.hasAttribute('today')).to.be.true;
       });
@@ -124,22 +123,49 @@ describe('fullscreen mode', () => {
   });
 
   describe('buttons', () => {
+    let overlayContent;
+
     beforeEach(async () => {
       await open(datepicker);
+      overlayContent = datepicker._overlayContent;
     });
 
     it('should close the dropdown on Today button Esc', async () => {
-      getOverlayContent(datepicker)._todayButton.focus();
+      overlayContent._todayButton.focus();
       await sendKeys({ press: 'Escape' });
 
       expect(datepicker.opened).to.be.false;
     });
 
     it('should close the dropdown on Cancel button Esc', async () => {
-      getOverlayContent(datepicker).focusCancel();
+      overlayContent.focusCancel();
       await sendKeys({ press: 'Escape' });
 
       expect(datepicker.opened).to.be.false;
+    });
+
+    it('should move focus to Cancel button on date cell Shift Tab', async () => {
+      const spy = sinon.spy(overlayContent._cancelButton, 'focus');
+
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should move focus to date cell button on Cancel button Tab', async () => {
+      const cell = getFocusedCell(overlayContent);
+      const spy = sinon.spy(cell, 'focus');
+
+      // Move focus to Cancel button
+      await sendKeys({ down: 'Shift' });
+      await sendKeys({ press: 'Tab' });
+      await sendKeys({ up: 'Shift' });
+
+      await sendKeys({ press: 'Tab' });
+
+      expect(spy.calledOnce).to.be.true;
     });
   });
 });
