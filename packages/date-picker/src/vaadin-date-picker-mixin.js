@@ -84,6 +84,7 @@ export const DatePickerMixin = (subclass) =>
          */
         showWeekNumbers: {
           type: Boolean,
+          value: false,
         },
 
         /**

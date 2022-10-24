@@ -103,3 +103,17 @@ export function extractDateParts(date) {
     year: date.getFullYear(),
   };
 }
+
+/**
+ * Get difference in months between today and given months value.
+ *
+ * @param {number} months
+ * @return {number}
+ */
+export function dateAfterXMonths(months) {
+  const today = new Date();
+  const result = new Date(today);
+  result.setDate(1);
+  result.setMonth(parseInt(months) + today.getMonth());
+  return result;
+}

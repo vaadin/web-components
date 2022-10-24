@@ -6,12 +6,10 @@ import { getDefaultI18n, getFirstVisibleItem, monthsEqual, waitForScrollToFinish
 
 async function customizeFixture({ initialPosition, monthScrollerItems, monthScrollerOffset }) {
   const overlay = fixtureSync(`<vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>`);
-  const monthScroller = overlay.$.monthScroller;
+  const monthScroller = overlay._monthScroller;
   monthScroller.style.setProperty('--vaadin-infinite-scroller-buffer-offset', monthScrollerOffset);
   monthScroller.style.height = `${270 * monthScrollerItems}px`;
   overlay.i18n = getDefaultI18n();
-  overlay.$.monthScroller.bufferSize = 3;
-  overlay.$.yearScroller.bufferSize = 3;
   overlay.initialPosition = initialPosition || new Date();
   await nextRender();
 
@@ -30,39 +28,32 @@ describe('overlay', () => {
         ></vaadin-date-picker-overlay-content>
       `);
       overlay.i18n = getDefaultI18n();
-      overlay.$.monthScroller.bufferSize = 1;
-      overlay.$.yearScroller.bufferSize = 1;
       overlay.initialPosition = new Date(2021, 1, 1);
       await nextRender();
       await waitForScrollToFinish(overlay);
     });
 
-    it('should return correct month', () => {
-      overlay._originDate = new Date(2016, 2, 31);
-      expect(overlay._dateAfterXMonths(11).getMonth()).to.equal(1);
-    });
-
     it('should mark current year', () => {
-      const yearScroller = overlay.$.yearScroller;
+      const yearScroller = overlay._yearScroller;
 
       yearScroller._buffers.forEach((buffer) => {
         [...buffer.children].forEach((slot) => {
-          const year = slot._itemWrapper.firstElementChild;
-          const isCurrent = year.textContent.indexOf(new Date().getFullYear()) > -1;
-          expect(year.hasAttribute('current')).to.equal(isCurrent);
+          const yearElement = slot._itemWrapper.firstElementChild;
+          const isCurrent = yearElement.year === new Date().getFullYear();
+          expect(yearElement.hasAttribute('current')).to.equal(isCurrent);
         });
       });
     });
 
     it('should mark selected year', () => {
-      const yearScroller = overlay.$.yearScroller;
+      const yearScroller = overlay._yearScroller;
       overlay.selectedDate = new Date();
 
       yearScroller._buffers.forEach((buffer) => {
         [...buffer.children].forEach((slot) => {
-          const year = slot._itemWrapper.firstElementChild;
-          const isCurrent = year.textContent.indexOf(new Date().getFullYear()) > -1;
-          expect(year.hasAttribute('selected')).to.equal(isCurrent);
+          const yearElement = slot._itemWrapper.firstElementChild;
+          const isCurrent = yearElement.year === new Date().getFullYear();
+          expect(yearElement.hasAttribute('selected')).to.equal(isCurrent);
         });
       });
     });
@@ -71,7 +62,7 @@ describe('overlay', () => {
       let monthScroller, clock;
 
       beforeEach((done) => {
-        monthScroller = overlay.$.monthScroller;
+        monthScroller = overlay._monthScroller;
         clock = sinon.useFakeTimers({
           shouldClearNativeTimers: true,
         });
@@ -91,7 +82,7 @@ describe('overlay', () => {
 
       it('should set ignoreTaps to calendar on scroll', (done) => {
         listenOnce(monthScroller.$.scroller, 'scroll', () => {
-          expect(overlay.$.monthScroller.querySelector('vaadin-month-calendar').ignoreTaps).to.be.true;
+          expect(monthScroller.querySelector('vaadin-month-calendar').ignoreTaps).to.be.true;
           done();
         });
 
@@ -102,7 +93,7 @@ describe('overlay', () => {
         const spy = sinon.spy(overlay, '_scrollToPosition');
 
         listenOnce(monthScroller.$.scroller, 'scroll', () => {
-          tap(overlay.$.yearScroller);
+          tap(overlay._yearScroller);
           expect(spy.called).to.be.false;
           done();
         });
@@ -115,7 +106,7 @@ describe('overlay', () => {
 
         listenOnce(monthScroller.$.scroller, 'scroll', () => {
           clock.tick(350);
-          tap(overlay.$.yearScroller);
+          tap(overlay._yearScroller);
           expect(spy.called).to.be.true;
           done();
         });
@@ -128,7 +119,7 @@ describe('overlay', () => {
         overlay._onYearScrollTouchStart();
 
         clock.tick(350);
-        tap(overlay.$.yearScroller);
+        tap(overlay._yearScroller);
         expect(spy.called).to.be.false;
       });
     });
@@ -220,7 +211,7 @@ describe('overlay', () => {
           const spy = sinon.spy();
           overlay.addEventListener('close', spy);
 
-          overlay.$.monthScroller.$.scroller.scrollTop -= 1;
+          overlay._monthScroller.$.scroller.scrollTop -= 1;
           tap(overlay._todayButton);
 
           expect(overlay.selectedDate).to.be.not.ok;
@@ -234,12 +225,12 @@ describe('overlay', () => {
 
           const closeSpy = sinon.spy();
           overlay.addEventListener('close', closeSpy);
-          const lastScrollPos = overlay.$.monthScroller.position;
+          const lastScrollPos = overlay._monthScroller.position;
 
           overlay._todayButton.disabled = true;
           tap(overlay._todayButton);
 
-          expect(overlay.$.monthScroller.position).to.equal(lastScrollPos);
+          expect(overlay._monthScroller.position).to.equal(lastScrollPos);
           expect(closeSpy.called).to.be.false;
         });
 
@@ -302,8 +293,6 @@ describe('overlay', () => {
         ></vaadin-date-picker-overlay-content>
       `);
       overlay.i18n = getDefaultI18n();
-      overlay.$.monthScroller.bufferSize = 1;
-      overlay.$.yearScroller.bufferSize = 1;
       overlay.initialPosition = new Date(2021, 1, 1);
       await nextRender();
     });
@@ -319,16 +308,16 @@ describe('overlay', () => {
       const date = new Date(2000, 1, 1);
       overlay.scrollToDate(date);
       await nextRender();
-      expect(monthsEqual(getFirstVisibleItem(overlay.$.monthScroller, 0).firstElementChild.month, date)).to.be.true;
+      expect(monthsEqual(getFirstVisibleItem(overlay._monthScroller, 0).firstElementChild.month, date)).to.be.true;
     });
 
     it('should scroll to the given year', async () => {
       const date = new Date(2000, 1, 1);
       overlay.scrollToDate(date);
       await nextRender();
-      const offset = overlay.$.yearScroller.clientHeight / 2;
-      overlay.$.yearScroller._debouncerUpdateClones.flush();
-      expect(getFirstVisibleItem(overlay.$.yearScroller, offset).firstElementChild.textContent).to.contain('2000');
+      const offset = overlay._yearScroller.clientHeight / 2;
+      overlay._yearScroller._debouncerUpdateClones.flush();
+      expect(getFirstVisibleItem(overlay._yearScroller, offset).firstElementChild.year).to.equal(2000);
     });
 
     describe('height(visible area) < height(item)', () => {
@@ -340,7 +329,7 @@ describe('overlay', () => {
           monthScrollerItems: 0.5,
           monthScrollerOffset: 0,
         });
-        monthScroller = overlay.$.monthScroller;
+        monthScroller = overlay._monthScroller;
       });
 
       it('should scroll to a sub-month position that approximately shows the week the date is in', () => {
@@ -376,7 +365,7 @@ describe('overlay', () => {
           monthScrollerItems: 3,
           monthScrollerOffset: 0,
         });
-        monthScroller = overlay.$.monthScroller;
+        monthScroller = overlay._monthScroller;
       });
 
       it('should always scroll to the exact position of the month that the date is in', () => {
@@ -411,7 +400,7 @@ describe('overlay', () => {
           monthScrollerItems: 0.5,
           monthScrollerOffset: 0,
         });
-        monthScroller = overlay.$.monthScroller;
+        monthScroller = overlay._monthScroller;
       });
 
       it('should scroll to a position that approximately shows the week the date is in', () => {
@@ -446,7 +435,7 @@ describe('overlay', () => {
           monthScrollerItems: 2,
           monthScrollerOffset: 0,
         });
-        monthScroller = overlay.$.monthScroller;
+        monthScroller = overlay._monthScroller;
       });
 
       it('should scroll when the month is above the visible area', () => {
@@ -475,7 +464,7 @@ describe('overlay', () => {
           monthScrollerItems: 3,
           monthScrollerOffset: '10%',
         });
-        monthScroller = overlay.$.monthScroller;
+        monthScroller = overlay._monthScroller;
       });
 
       it('should scroll when the month is above the visible area', () => {

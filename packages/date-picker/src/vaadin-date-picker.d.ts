@@ -98,6 +98,9 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  *
  * - `<vaadin-date-picker-overlay>` - has the same API as [`<vaadin-overlay>`](#/elements/vaadin-overlay).
  * - `<vaadin-date-picker-overlay-content>`
+ * - `<vaadin-date-picker-month-scroller>`
+ * - `<vaadin-date-picker-year-scroller>`
+ * - `<vaadin-date-picker-year>`
  * - `<vaadin-month-calendar>`
  * - [`<vaadin-input-container>`](#/elements/vaadin-input-container) - an internal element wrapping the input.
  *
@@ -110,12 +113,15 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * `clear-button`        | Fullscreen mode clear button
  * `toggle-button`       | Fullscreen mode toggle button
  * `years-toggle-button` | Fullscreen mode years scroller toggle
- * `months`              | Months scroller
- * `years`               | Years scroller
  * `toolbar`             | Footer bar with slotted buttons
- * `month`               | Month calendar
- * `year-number`         | Year number
- * `year-separator`      | Year separator
+ *
+ * The following state attributes are available on the `<vaadin-date-picker-overlay-content>` element:
+ *
+ * Attribute       | Description
+ * ----------------|-------------------------------------------------
+ * `desktop`       | Set when the overlay content is in desktop mode
+ * `fullscreen`    | Set when the overlay content is in fullscreen mode
+ * `years-visible` | Set when the year scroller is visible in fullscreen mode
  *
  * In order to style the month calendar, use `<vaadin-month-calendar>` shadow DOM parts:
  *
@@ -127,6 +133,13 @@ export interface DatePickerEventMap extends HTMLElementEventMap, DatePickerCusto
  * `week-numbers`        | Week numbers container
  * `week-number`         | Week number element
  * `date`                | Date element
+ *
+ * In order to style year scroller elements, use `<vaadin-date-picker-year>` shadow DOM parts:
+ *
+ * Part name             | Description
+ * ----------------------|--------------------
+ * `year-number`         | Year number
+ * `year-separator`      | Year separator
  *
  * Note: the `theme` attribute value set on `<vaadin-date-picker>` is
  * propagated to the internal components listed above.

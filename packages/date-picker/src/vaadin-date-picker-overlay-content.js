@@ -5,7 +5,11 @@
  */
 import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-month-calendar.js';
-import './vaadin-infinite-scroller.js';
+import './vaadin-date-picker-month-scroller.js';
+import './vaadin-date-picker-year-scroller.js';
+import './vaadin-date-picker-year.js';
+import { flush } from '@polymer/polymer/lib/utils/flush.js';
+import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
@@ -15,7 +19,7 @@ import { addListener, setTouchAction } from '@vaadin/component-base/src/gestures
 import { MediaQueryController } from '@vaadin/component-base/src/media-query-controller.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
+import { dateAfterXMonths, dateEquals, extractDateParts, getClosestDate } from './vaadin-date-picker-helper.js';
 
 /**
  * @extends HTMLElement
@@ -64,62 +68,17 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
           overflow: hidden;
         }
 
-        [part='months'],
-        [part='years'] {
-          height: 100%;
-        }
-
-        [part='months'] {
-          --vaadin-infinite-scroller-item-height: 270px;
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-        }
-
-        #scrollers[desktop] [part='months'] {
+        :host([desktop]) ::slotted([slot='months']) {
           right: 50px;
           transform: none !important;
         }
 
-        [part='years'] {
-          --vaadin-infinite-scroller-item-height: 80px;
-          width: 50px;
-          position: absolute;
-          right: 0;
-          transform: translateX(100%);
-          -webkit-tap-highlight-color: transparent;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          user-select: none;
-          /* Center the year scroller position. */
-          --vaadin-infinite-scroller-buffer-offset: 50%;
-        }
-
-        #scrollers[desktop] [part='years'] {
-          position: absolute;
+        :host([desktop]) ::slotted([slot='years']) {
           transform: none !important;
         }
 
-        [part='years']::before {
-          content: '';
-          display: block;
-          background: transparent;
-          width: 0;
-          height: 0;
-          position: absolute;
-          left: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          border-width: 6px;
-          border-style: solid;
-          border-color: transparent;
-          border-left-color: #000;
-        }
-
-        :host(.animate) [part='months'],
-        :host(.animate) [part='years'] {
+        :host(.animate) ::slotted([slot='months']),
+        :host(.animate) ::slotted([slot='years']) {
           transition: all 200ms;
         }
 
@@ -131,7 +90,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
         }
       </style>
 
-      <div part="overlay-header" on-touchend="_preventDefault" desktop$="[[_desktopMode]]" aria-hidden="true">
+      <div part="overlay-header" on-touchend="_preventDefault" aria-hidden="true">
         <div part="label">[[_formatDisplayed(selectedDate, i18n.formatDate, label)]]</div>
         <div part="clear-button" hidden$="[[!selectedDate]]"></div>
         <div part="toggle-button"></div>
@@ -141,52 +100,9 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
         </div>
       </div>
 
-      <div id="scrollers" desktop$="[[_desktopMode]]">
-        <vaadin-infinite-scroller
-          id="monthScroller"
-          on-custom-scroll="_onMonthScroll"
-          on-touchstart="_onMonthScrollTouchStart"
-          buffer-size="3"
-          active="[[initialPosition]]"
-          part="months"
-        >
-          <template>
-            <vaadin-month-calendar
-              i18n="[[i18n]]"
-              month="[[_dateAfterXMonths(index)]]"
-              selected-date="{{selectedDate}}"
-              focused-date="[[focusedDate]]"
-              ignore-taps="[[_ignoreTaps]]"
-              show-week-numbers="[[showWeekNumbers]]"
-              min-date="[[minDate]]"
-              max-date="[[maxDate]]"
-              part="month"
-              theme$="[[_theme]]"
-              on-keydown="__onMonthCalendarKeyDown"
-            >
-            </vaadin-month-calendar>
-          </template>
-        </vaadin-infinite-scroller>
-        <vaadin-infinite-scroller
-          id="yearScroller"
-          on-custom-scroll="_onYearScroll"
-          on-touchstart="_onYearScrollTouchStart"
-          buffer-size="12"
-          active="[[initialPosition]]"
-          part="years"
-          aria-hidden="true"
-        >
-          <template>
-            <div
-              part="year-number"
-              current$="[[_isCurrentYear(index)]]"
-              selected$="[[_isSelectedYear(index, selectedDate)]]"
-            >
-              [[_yearAfterXYears(index)]]
-            </div>
-            <div part="year-separator" aria-hidden="true"></div>
-          </template>
-        </vaadin-infinite-scroller>
+      <div id="scrollers">
+        <slot name="months"></slot>
+        <slot name="years"></slot>
       </div>
 
       <div on-touchend="_preventDefault" role="toolbar" part="toolbar">
@@ -240,7 +156,10 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
       _visibleMonthIndex: Number,
 
-      _desktopMode: Boolean,
+      _desktopMode: {
+        type: Boolean,
+        observer: '_desktopModeChanged',
+      },
 
       _desktopMediaQuery: {
         type: String,
@@ -261,6 +180,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
       showWeekNumbers: {
         type: Boolean,
+        value: false,
       },
 
       _ignoreTaps: Boolean,
@@ -289,11 +209,26 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
       _todayButton: {
         type: Object,
       },
+
+      calendars: {
+        type: Array,
+        value: () => [],
+      },
+
+      years: {
+        type: Array,
+        value: () => [],
+      },
     };
   }
 
   static get observers() {
-    return ['__updateCancelButton(_cancelButton, i18n)', '__updateTodayButton(_todayButton, i18n, minDate, maxDate)'];
+    return [
+      '__updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, _ignoreTaps, _theme)',
+      '__updateCancelButton(_cancelButton, i18n)',
+      '__updateTodayButton(_todayButton, i18n, minDate, maxDate)',
+      '__updateYears(years, selectedDate, _theme)',
+    ];
   }
 
   get __isRTL() {
@@ -309,11 +244,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
    * @private
    */
   get __useSubMonthScrolling() {
-    return this.$.monthScroller.clientHeight < this.$.monthScroller.itemHeight + this.$.monthScroller.bufferOffset;
-  }
-
-  get calendars() {
-    return [...this.shadowRoot.querySelectorAll('vaadin-month-calendar')];
+    return this._monthScroller.clientHeight < this._monthScroller.itemHeight + this._monthScroller.bufferOffset;
   }
 
   get focusableDateElement() {
@@ -328,7 +259,6 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     addListener(this.$.scrollers, 'track', this._track.bind(this));
     addListener(this.shadowRoot.querySelector('[part="clear-button"]'), 'tap', this._clear.bind(this));
     addListener(this.shadowRoot.querySelector('[part="toggle-button"]'), 'tap', this._cancel.bind(this));
-    addListener(this.shadowRoot.querySelector('[part="years"]'), 'tap', this._onYearTap.bind(this));
     addListener(
       this.shadowRoot.querySelector('[part="years-toggle-button"]'),
       'tap',
@@ -368,6 +298,9 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
         },
       ),
     );
+
+    this.__initMonthScroller();
+    this.__initYearScroller();
   }
 
   /**
@@ -397,7 +330,76 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   scrollToDate(date, animate) {
     const offset = this.__useSubMonthScrolling ? this._calculateWeekScrollOffset(date) : 0;
     this._scrollToPosition(this._differenceInMonths(date, this._originDate) + offset, animate);
-    this.$.monthScroller.forceUpdate();
+    this._monthScroller.forceUpdate();
+  }
+
+  __initMonthScroller() {
+    this.addController(
+      new SlotController(
+        this,
+        'months',
+        () => document.createElement('vaadin-date-picker-month-scroller'),
+        (_, scroller) => {
+          scroller.addEventListener('custom-scroll', () => {
+            this._onMonthScroll();
+          });
+
+          scroller.addEventListener('touchstart', () => {
+            this._onMonthScrollTouchStart();
+          });
+
+          scroller.addEventListener('keydown', (e) => {
+            this.__onMonthCalendarKeyDown(e);
+          });
+
+          scroller.addEventListener('init-done', () => {
+            const calendars = [...this.querySelectorAll('vaadin-month-calendar')];
+
+            // Two-way binding for selectedDate property
+            calendars.forEach((calendar) => {
+              calendar.addEventListener('selected-date-changed', (e) => {
+                this.selectedDate = e.detail.value;
+              });
+            });
+
+            this.calendars = calendars;
+          });
+
+          this._monthScroller = scroller;
+        },
+      ),
+    );
+  }
+
+  __initYearScroller() {
+    this.addController(
+      new SlotController(
+        this,
+        'years',
+        () => document.createElement('vaadin-date-picker-year-scroller'),
+        (_, scroller) => {
+          scroller.setAttribute('aria-hidden', 'true');
+
+          addListener(scroller, 'tap', (e) => {
+            this._onYearTap(e);
+          });
+
+          scroller.addEventListener('custom-scroll', () => {
+            this._onYearScroll();
+          });
+
+          scroller.addEventListener('touchstart', () => {
+            this._onYearScrollTouchStart();
+          });
+
+          scroller.addEventListener('init-done', () => {
+            this.years = [...this.querySelectorAll('vaadin-date-picker-year')];
+          });
+
+          this._yearScroller = scroller;
+        },
+      ),
+    );
   }
 
   __updateCancelButton(cancelButton, i18n) {
@@ -413,6 +415,43 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     }
   }
 
+  // eslint-disable-next-line max-params
+  __updateCalendars(calendars, i18n, minDate, maxDate, selectedDate, focusedDate, showWeekNumbers, ignoreTaps, theme) {
+    if (calendars && calendars.length) {
+      calendars.forEach((calendar) => {
+        calendar.setProperties({
+          i18n,
+          minDate,
+          maxDate,
+          focusedDate,
+          selectedDate,
+          showWeekNumbers,
+          ignoreTaps,
+        });
+
+        if (theme) {
+          calendar.setAttribute('theme', theme);
+        } else {
+          calendar.removeAttribute('theme');
+        }
+      });
+    }
+  }
+
+  __updateYears(years, selectedDate, theme) {
+    if (years && years.length) {
+      years.forEach((year) => {
+        year.selectedDate = selectedDate;
+
+        if (theme) {
+          year.setAttribute('theme', theme);
+        } else {
+          year.removeAttribute('theme');
+        }
+      });
+    }
+  }
+
   /**
    * Select a date and fire event indicating user interaction.
    * @protected
@@ -424,18 +463,12 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     );
   }
 
+  _desktopModeChanged(desktopMode) {
+    this.toggleAttribute('desktop', desktopMode);
+  }
+
   _focusedDateChanged(focusedDate) {
     this.revealDate(focusedDate);
-  }
-
-  _isCurrentYear(yearsFromNow) {
-    return yearsFromNow === 0;
-  }
-
-  _isSelectedYear(yearsFromNow, selectedDate) {
-    if (selectedDate) {
-      return selectedDate.getFullYear() === this._originDate.getFullYear() + yearsFromNow;
-    }
   }
 
   /**
@@ -455,14 +488,14 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     }
 
     // Otherwise determine if we need to scroll to make the month of the date visible
-    const scrolledAboveViewport = this.$.monthScroller.position > diff;
+    const scrolledAboveViewport = this._monthScroller.position > diff;
 
     const visibleArea = Math.max(
-      this.$.monthScroller.itemHeight,
-      this.$.monthScroller.clientHeight - this.$.monthScroller.bufferOffset * 2,
+      this._monthScroller.itemHeight,
+      this._monthScroller.clientHeight - this._monthScroller.bufferOffset * 2,
     );
-    const visibleItems = visibleArea / this.$.monthScroller.itemHeight;
-    const scrolledBelowViewport = this.$.monthScroller.position + visibleItems - 1 < diff;
+    const visibleItems = visibleArea / this._monthScroller.itemHeight;
+    const scrolledBelowViewport = this._monthScroller.position + visibleItems - 1 < diff;
 
     if (scrolledAboveViewport) {
       this._scrollToPosition(diff, animate);
@@ -502,17 +535,23 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   }
 
   _initialPositionChanged(initialPosition) {
+    if (this._monthScroller && this._yearScroller) {
+      this._monthScroller.active = true;
+      this._yearScroller.active = true;
+    }
+
     this.scrollToDate(initialPosition);
   }
 
   _repositionYearScroller() {
-    this._visibleMonthIndex = Math.floor(this.$.monthScroller.position);
-    this.$.yearScroller.position = (this.$.monthScroller.position + this._originDate.getMonth()) / 12;
+    const monthPosition = this._monthScroller.position;
+    this._visibleMonthIndex = Math.floor(monthPosition);
+    this._yearScroller.position = (monthPosition + this._originDate.getMonth()) / 12;
   }
 
   _repositionMonthScroller() {
-    this.$.monthScroller.position = this.$.yearScroller.position * 12 - this._originDate.getMonth();
-    this._visibleMonthIndex = Math.floor(this.$.monthScroller.position);
+    this._monthScroller.position = this._yearScroller.position * 12 - this._originDate.getMonth();
+    this._visibleMonthIndex = Math.floor(this._monthScroller.position);
   }
 
   _onMonthScroll() {
@@ -555,7 +594,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   _onTodayTap() {
     const today = new Date();
 
-    if (Math.abs(this.$.monthScroller.position - this._differenceInMonths(today, this._originDate)) < 0.001) {
+    if (Math.abs(this._monthScroller.position - this._differenceInMonths(today, this._originDate)) < 0.001) {
       // Select today only if the month scroller is positioned approximately
       // at the beginning of the current month
       this._selectDate(today);
@@ -576,9 +615,9 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
   _onYearTap(e) {
     if (!this._ignoreTaps && !this._notTapping) {
       const scrollDelta =
-        e.detail.y - (this.$.yearScroller.getBoundingClientRect().top + this.$.yearScroller.clientHeight / 2);
-      const yearDelta = scrollDelta / this.$.yearScroller.itemHeight;
-      this._scrollToPosition(this.$.monthScroller.position + yearDelta * 12, true);
+        e.detail.y - (this._yearScroller.getBoundingClientRect().top + this._yearScroller.clientHeight / 2);
+      const yearDelta = scrollDelta / this._yearScroller.itemHeight;
+      this._scrollToPosition(this._monthScroller.position + yearDelta * 12, true);
     }
   }
 
@@ -589,7 +628,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     }
 
     if (!animate) {
-      this.$.monthScroller.position = targetPosition;
+      this._monthScroller.position = targetPosition;
       this._targetPosition = undefined;
       this._repositionYearScroller();
       this.__tryFocusDate();
@@ -614,7 +653,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     };
 
     let start = 0;
-    const initialPosition = this.$.monthScroller.position;
+    const initialPosition = this._monthScroller.position;
 
     const smoothScroll = (timestamp) => {
       start = start || timestamp;
@@ -627,7 +666,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
           this._targetPosition - initialPosition,
           this.scrollDuration,
         );
-        this.$.monthScroller.position = currentPos;
+        this._monthScroller.position = currentPos;
         window.requestAnimationFrame(smoothScroll);
       } else {
         this.dispatchEvent(
@@ -641,7 +680,7 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
           }),
         );
 
-        this.$.monthScroller.position = this._targetPosition;
+        this._monthScroller.position = this._targetPosition;
         this._targetPosition = undefined;
 
         revealResolve();
@@ -736,26 +775,13 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
   _translateXChanged(x) {
     if (!this._desktopMode) {
-      this.$.monthScroller.style.transform = `translateX(${x - this._yearScrollerWidth}px)`;
-      this.$.yearScroller.style.transform = `translateX(${x}px)`;
+      this._monthScroller.style.transform = `translateX(${x - this._yearScrollerWidth}px)`;
+      this._yearScroller.style.transform = `translateX(${x}px)`;
     }
   }
 
-  _yearAfterXYears(index) {
-    const result = new Date(this._originDate);
-    result.setFullYear(parseInt(index) + this._originDate.getFullYear());
-    return result.getFullYear();
-  }
-
   _yearAfterXMonths(months) {
-    return this._dateAfterXMonths(months).getFullYear();
-  }
-
-  _dateAfterXMonths(months) {
-    const result = new Date(this._originDate);
-    result.setDate(1);
-    result.setMonth(parseInt(months) + this._originDate.getMonth());
-    return result;
+    return dateAfterXMonths(months).getFullYear();
   }
 
   _differenceInMonths(date1, date2) {
@@ -932,7 +958,11 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     // Wait for `vaadin-month-calendar` elements to be rendered
     if (!this.calendars.length) {
       await new Promise((resolve) => {
-        setTimeout(resolve);
+        afterNextRender(this, () => {
+          // Force dom-repeat elements to render
+          flush();
+          resolve();
+        });
       });
     }
 

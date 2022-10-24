@@ -1,17 +1,15 @@
-import { aTimeout, fire, listenOnce, makeSoloTouchEvent, mousedown, nextRender } from '@vaadin/testing-helpers';
+import { fire, listenOnce, makeSoloTouchEvent, mousedown, nextRender } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
 export function activateScroller(scroller) {
   scroller.active = true;
-  // Setting `active` triggers `_finishInit` using afterNextRender + setTimeout(1).
+  // Setting `active` triggers `_finishInit` using afterNextRender
   return new Promise((resolve) => {
-    setTimeout(() => {
-      afterNextRender(scroller, () => {
-        scroller._debouncerUpdateClones.flush();
-        resolve();
-      });
-    }, 1);
+    afterNextRender(scroller, () => {
+      scroller._debouncerUpdateClones.flush();
+      resolve();
+    });
   });
 }
 
@@ -46,21 +44,16 @@ export function getDefaultI18n() {
   };
 }
 
-export function open(datepicker) {
-  return new Promise((resolve) => {
-    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', async () => {
-      // Wait until infinite scrollers are rendered
-      await waitForOverlayRender();
-
-      resolve();
-    });
-    datepicker.open();
-  });
+export async function open(datepicker) {
+  datepicker.open();
+  await waitForOverlayRender();
 }
 
 export async function waitForOverlayRender() {
-  // Wait until infinite scrollers are rendered
-  await aTimeout(1);
+  // First, wait for vaadin-overlay-open event
+  await nextRender();
+
+  // Then wait for scrollers to fully render
   await nextRender();
 
   // Force dom-repeat to render table elements
@@ -140,7 +133,7 @@ export function getOverlayContent(datepicker) {
 }
 
 export function getFocusedMonth(overlayContent) {
-  const months = Array.from(overlayContent.shadowRoot.querySelectorAll('vaadin-month-calendar'));
+  const months = Array.from(overlayContent.querySelectorAll('vaadin-month-calendar'));
   return months.find((month) => {
     const focused = month.shadowRoot.querySelector('[part="date"][focused]');
     return !!focused;
@@ -148,7 +141,7 @@ export function getFocusedMonth(overlayContent) {
 }
 
 export function getFocusedCell(overlayContent) {
-  const months = Array.from(overlayContent.shadowRoot.querySelectorAll('vaadin-month-calendar'));
+  const months = Array.from(overlayContent.querySelectorAll('vaadin-month-calendar'));
 
   // Date that is currently focused
   let focusedCell;

@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, click, fixtureSync, keyboardEventFor, oneEvent, tap } from '@vaadin/testing-helpers';
+import { click, fixtureSync, keyboardEventFor, oneEvent, tap } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { close, getOverlayContent, open, touchTap } from './common.js';
+import { close, getOverlayContent, open, touchTap, waitForOverlayRender } from './common.js';
 
 describe('basic features', () => {
   let datepicker, input;
@@ -42,12 +42,14 @@ describe('basic features', () => {
   it('should keep focused attribute when focus moves to overlay', async () => {
     datepicker.focus();
     await sendKeys({ press: 'ArrowDown' });
+    await waitForOverlayRender();
     expect(datepicker.hasAttribute('focused')).to.be.true;
   });
 
   it('should have focused attribute when closed and focused', async () => {
     datepicker.focus();
     await sendKeys({ press: 'ArrowDown' });
+    await waitForOverlayRender();
     await sendKeys({ press: 'Escape' });
     expect(datepicker.hasAttribute('focused')).to.be.true;
   });
@@ -115,13 +117,13 @@ describe('basic features', () => {
     expect(input.value).to.equal('2/1/0099');
   });
 
-  it('should not change datepicker width', () => {
+  it('should not change datepicker width', async () => {
     datepicker.style.display = 'inline-block';
 
     datepicker.value = '2000-01-01';
     const width = datepicker.clientWidth;
 
-    datepicker.open();
+    await open(datepicker);
     expect(datepicker.clientWidth).to.equal(width);
   });
 
@@ -197,17 +199,12 @@ describe('basic features', () => {
       datepicker.set('i18n.today', 'Tänään');
       datepicker.set('i18n.cancel', 'Peruuta');
 
-      overlayContent = getOverlayContent(datepicker);
-      overlayContent.$.monthScroller.bufferSize = 1;
-
       await open(datepicker);
-      overlayContent.$.monthScroller._finishInit();
-      overlayContent.$.yearScroller._finishInit();
-      await aTimeout(1);
+      overlayContent = getOverlayContent(datepicker);
     });
 
     it('should notify i18n mutation to children', () => {
-      const monthCalendar = overlayContent.$.monthScroller.querySelector('vaadin-month-calendar');
+      const monthCalendar = overlayContent.querySelector('vaadin-month-calendar');
       const weekdays = monthCalendar.$.monthGrid.querySelectorAll('[part="weekday"]:not(:empty)');
       const weekdayTitles = Array.prototype.map.call(weekdays, (weekday) => weekday.textContent.trim());
       expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);

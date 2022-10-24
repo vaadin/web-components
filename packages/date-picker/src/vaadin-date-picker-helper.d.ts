@@ -41,3 +41,10 @@ export { extractDateParts };
  * to the expected format.
  */
 declare function extractDateParts(date: Date): { day: number; month: number; year: number };
+
+/**
+ * Get difference in months between today and given months value.
+ */
+declare function dateAfterXMonths(months: number): number;
+
+export { dateAfterXMonths };
