@@ -56,7 +56,7 @@ registerStyles(
       cursor: var(--lumo-clickable-cursor);
     }
 
-    ::slotted([slot='years']):hover {
+    ::slotted([slot='years']:hover) {
       --_lumo-date-picker-year-opacity: 1;
     }
 
