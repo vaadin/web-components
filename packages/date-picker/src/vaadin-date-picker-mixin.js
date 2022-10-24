@@ -186,7 +186,7 @@ export const DatePickerMixin = (subclass) =>
          *   // Must properly parse (at least) text formatted by `formatDate`.
          *   // Setting the property to null will disable keyboard input feature.
          *   // Note: The argument month is 0-based. This means that January = 0 and December = 11.
-         *   parseDate: (text) => {
+         *   parseDate: text => {
          *     // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to
          *     // an `Object` in the format `{ day: ..., month: ..., year: ... }`.
          *   }
