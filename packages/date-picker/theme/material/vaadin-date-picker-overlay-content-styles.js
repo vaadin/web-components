@@ -3,8 +3,6 @@ import '@vaadin/vaadin-material-styles/font-icons.js';
 import '@vaadin/vaadin-material-styles/typography.js';
 import '@vaadin/vaadin-material-styles/shadow.js';
 import '@vaadin/button/theme/material/vaadin-button.js';
-import './vaadin-date-picker-month-scroller-styles.js';
-import './vaadin-date-picker-year-scroller-styles.js';
 import './vaadin-date-picker-year-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -86,6 +84,28 @@ registerStyles(
 
     :host([years-visible]) [part='years-toggle-button']::after {
       transform: rotate(90deg);
+    }
+
+    ::slotted([slot='months']) {
+      --vaadin-infinite-scroller-item-height: 328px;
+      text-align: center;
+    }
+
+    ::slotted([slot='years']) {
+      background: var(--material-secondary-text-color);
+      color: var(--material-background-color);
+      font-size: var(--material-body-font-size);
+      font-weight: 400;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    ::slotted([slot='years'])::before {
+      border: 0;
+      width: 8px;
+      height: 8px;
+      transform: translateX(-50%) rotate(-45deg);
+      background: var(--material-background-color);
     }
 
     [part='toolbar'] {
