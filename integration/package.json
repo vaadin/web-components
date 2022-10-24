@@ -12,6 +12,7 @@
     "@vaadin/checkbox": "24.0.0-alpha0",
     "@vaadin/checkbox-group": "24.0.0-alpha0",
     "@vaadin/combo-box": "24.0.0-alpha0",
+    "@vaadin/context-menu": "24.0.0-alpha0",
     "@vaadin/custom-field": "24.0.0-alpha0",
     "@vaadin/date-picker": "24.0.0-alpha0",
     "@vaadin/date-time-picker": "24.0.0-alpha0",
