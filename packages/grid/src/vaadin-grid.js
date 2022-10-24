@@ -675,7 +675,9 @@ class Grid extends ElementMixin(
     // For now we only support tooltip on desktop
     if (!isAndroid && !isIOS) {
       cell.addEventListener('mouseenter', (event) => {
-        this._showTooltip(event);
+        if (!this.$.scroller.hasAttribute('scrolling')) {
+          this._showTooltip(event);
+        }
       });
 
       cell.addEventListener('mouseleave', () => {
