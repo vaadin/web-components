@@ -4,22 +4,14 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import {
-  close,
-  getFocusedCell,
-  getOverlayContent,
-  idleCallback,
-  open,
-  waitForOverlayRender,
-  waitForScrollToFinish,
-} from './common.js';
+import { close, getFocusedCell, idleCallback, open, waitForOverlayRender, waitForScrollToFinish } from './common.js';
 
 describe('keyboard', () => {
   let datepicker;
   let input;
 
   function focusedDate() {
-    return getOverlayContent(datepicker).focusedDate;
+    return datepicker._overlayContent.focusedDate;
   }
 
   beforeEach(() => {
@@ -61,8 +53,9 @@ describe('keyboard', () => {
       expect(datepicker.value).to.equal('2001-01-01');
     });
 
-    it('should update focused date on value change', () => {
+    it('should update focused date on value change', async () => {
       datepicker.value = '2000-01-01';
+      await open(datepicker);
       expect(focusedDate().getMonth()).to.equal(0);
       expect(focusedDate().getDate()).to.equal(1);
       expect(focusedDate().getFullYear()).to.equal(2000);
@@ -71,7 +64,7 @@ describe('keyboard', () => {
     // FIXME: flaky test often failing locally due to scroll animation
     it.skip('should display focused date while overlay focused', async () => {
       await sendKeys({ type: '1/2/2000' });
-      const content = getOverlayContent(datepicker);
+      const content = datepicker._overlayContent;
       await waitForScrollToFinish(content);
 
       // Move focus to the calendar
@@ -185,7 +178,7 @@ describe('keyboard', () => {
     beforeEach(async () => {
       // Open the overlay
       await open(datepicker);
-      overlayContent = getOverlayContent(datepicker);
+      overlayContent = datepicker._overlayContent;
       await idleCallback();
     });
 

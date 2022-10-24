@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, isIOS, nextRender } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
@@ -7,14 +7,13 @@ import '../vaadin-date-picker.js';
 import {
   getDefaultI18n,
   getFocusedCell,
-  getOverlayContent,
   idleCallback,
   open,
   waitForOverlayRender,
   waitForScrollToFinish,
 } from './common.js';
 
-(isIOS ? describe.skip : describe)('keyboard navigation', () => {
+describe('keyboard navigation', () => {
   describe('date-picker', () => {
     let datepicker;
     let input;
@@ -33,7 +32,7 @@ import {
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(getOverlayContent(datepicker));
+        const cell = getFocusedCell(datepicker._overlayContent);
         expect(cell.date).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
       });
 
@@ -49,7 +48,7 @@ import {
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(getOverlayContent(datepicker));
+        const cell = getFocusedCell(datepicker._overlayContent);
         expect(cell.date).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
       });
     });
@@ -67,14 +66,14 @@ import {
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(getOverlayContent(datepicker));
+        const cell = getFocusedCell(datepicker._overlayContent);
         expect(cell.date).to.eql(new Date(2001, 0, 1));
       });
 
       it('should not lose focused date after deselecting', async () => {
         await open(datepicker);
 
-        const content = getOverlayContent(datepicker);
+        const content = datepicker._overlayContent;
         const focused = content.focusedDate;
 
         // Move focus to the calendar
@@ -101,7 +100,7 @@ import {
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(getOverlayContent(datepicker));
+        const cell = getFocusedCell(datepicker._overlayContent);
         expect(cell.date).to.eql(new Date(2001, 0, 1));
       });
 
@@ -115,7 +114,7 @@ import {
         // Move focus to the calendar
         await sendKeys({ press: 'Tab' });
 
-        const cell = getFocusedCell(getOverlayContent(datepicker));
+        const cell = getFocusedCell(datepicker._overlayContent);
         expect(cell.date).to.eql(new Date(2001, 0, 1));
       });
     });

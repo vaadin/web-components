@@ -119,14 +119,6 @@ export function getFirstVisibleItem(scroller, bufferOffset) {
   });
 }
 
-export function getOverlayContent(datepicker) {
-  // Ensure overlay content is rendered
-  if (!datepicker._overlayContent) {
-    datepicker.$.overlay.requestContentUpdate();
-  }
-  return datepicker._overlayContent;
-}
-
 export function getFocusedMonth(overlayContent) {
   const months = Array.from(overlayContent.querySelectorAll('vaadin-month-calendar'));
   return months.find((month) => {

@@ -3,7 +3,7 @@ import { click, fixtureSync, keyboardEventFor, oneEvent, tap } from '@vaadin/tes
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { close, getOverlayContent, open, touchTap, waitForOverlayRender } from './common.js';
+import { close, open, touchTap, waitForOverlayRender } from './common.js';
 
 describe('basic features', () => {
   let datepicker, input;
@@ -202,7 +202,7 @@ describe('basic features', () => {
       };
 
       await open(datepicker);
-      overlayContent = getOverlayContent(datepicker);
+      overlayContent = datepicker._overlayContent;
     });
 
     it('should notify i18n mutation to children', () => {

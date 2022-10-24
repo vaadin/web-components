@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../src/vaadin-date-picker.js';
-import { getOverlayContent, open, waitForScrollToFinish } from './common.js';
+import { open, waitForScrollToFinish } from './common.js';
 
 describe('theme attribute', () => {
   let datepicker;
@@ -22,8 +22,7 @@ describe('theme attribute', () => {
 
   it('should propagate theme attribute to overlay content', async () => {
     await open(datepicker);
-    const overlayContent = getOverlayContent(datepicker);
-    expect(overlayContent.getAttribute('theme')).to.equal('foo');
+    expect(datepicker._overlayContent.getAttribute('theme')).to.equal('foo');
   });
 
   describe('in content', () => {
@@ -32,7 +31,7 @@ describe('theme attribute', () => {
     });
 
     it('should propagate theme attribute to month calendar', async () => {
-      const overlayContent = getOverlayContent(datepicker);
+      const overlayContent = datepicker._overlayContent;
       await waitForScrollToFinish(overlayContent);
       const monthCalendar = overlayContent.querySelector('vaadin-month-calendar');
       expect(monthCalendar.getAttribute('theme')).to.equal('foo');

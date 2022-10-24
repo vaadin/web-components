@@ -3,7 +3,7 @@ import { fire, fixtureSync, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker-light.js';
-import { getOverlayContent, open, setInputValue, waitForScrollToFinish } from './common.js';
+import { open, setInputValue, waitForScrollToFinish } from './common.js';
 
 describe('custom input', () => {
   let datepicker, overlay;
@@ -36,16 +36,14 @@ describe('custom input', () => {
   it('should close on overlay date tap', async () => {
     await open(datepicker);
     const spy = sinon.spy(datepicker, 'close');
-    const overlayContent = getOverlayContent(datepicker);
-    fire(overlayContent, 'date-tap', { date: new Date() });
+    fire(datepicker._overlayContent, 'date-tap', { date: new Date() });
     expect(spy.called).to.be.true;
   });
 
   it('should show week numbers', async () => {
     datepicker.showWeekNumbers = true;
     await open(datepicker);
-    const overlayContent = getOverlayContent(datepicker);
-    expect(overlayContent.showWeekNumbers).to.be.true;
+    expect(datepicker._overlayContent.showWeekNumbers).to.be.true;
   });
 
   describe('theme attribute', () => {
@@ -59,8 +57,7 @@ describe('custom input', () => {
 
     it('should propagate theme attribute to overlay content', async () => {
       await open(datepicker);
-      const overlayContent = getOverlayContent(datepicker);
-      expect(overlayContent.getAttribute('theme')).to.equal('foo');
+      expect(datepicker._overlayContent.getAttribute('theme')).to.equal('foo');
     });
 
     describe('in content', () => {
@@ -69,7 +66,7 @@ describe('custom input', () => {
       });
 
       it('should propagate theme attribute to month calendar', async () => {
-        const overlayContent = getOverlayContent(datepicker);
+        const overlayContent = datepicker._overlayContent;
         await waitForScrollToFinish(overlayContent);
         const monthCalendar = overlayContent.querySelector('vaadin-month-calendar');
         expect(monthCalendar.getAttribute('theme')).to.equal('foo');
