@@ -32,7 +32,6 @@ export function getDefaultI18n() {
     weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     firstDayOfWeek: 0,
-    week: 'Week',
     today: 'Today',
     cancel: 'Cancel',
     formatDate(d) {

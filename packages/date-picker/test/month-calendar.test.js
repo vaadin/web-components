@@ -162,7 +162,6 @@ describe('vaadin-month-calendar', () => {
         weekdays: 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'),
         weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
         firstDayOfWeek: 1,
-        week: 'viikko',
         today: 'Tänään',
         formatTitle: (monthName, fullYear) => `${monthName}-${fullYear}`,
       };

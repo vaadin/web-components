@@ -146,10 +146,6 @@ export const DatePickerMixin = (subclass) =>
          *   // (0 = Sunday, 1 = Monday, etc.).
          *   firstDayOfWeek: 0,
          *
-         *   // Used in screen reader announcements along with week
-         *   // numbers, if they are displayed.
-         *   week: 'Week',
-         *
          *   // Translation of the Today shortcut button text.
          *   today: 'Today',
          *
@@ -205,7 +201,6 @@ export const DatePickerMixin = (subclass) =>
               weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
               weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
               firstDayOfWeek: 0,
-              week: 'Week',
               today: 'Today',
               cancel: 'Cancel',
               formatDate: (d) => {
