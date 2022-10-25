@@ -4,6 +4,7 @@ import '@vaadin/vaadin-lumo-styles/spacing.js';
 import '@vaadin/vaadin-lumo-styles/style.js';
 import '@vaadin/vaadin-lumo-styles/typography.js';
 import '@vaadin/button/theme/lumo/vaadin-button.js';
+import './vaadin-date-picker-year-styles.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 registerStyles(
@@ -19,9 +20,7 @@ registerStyles(
       cursor: default;
     }
 
-    /* Month scroller */
-
-    [part='months'] {
+    ::slotted([slot='months']) {
       /* Month calendar height:
               header height + margin-bottom
             + weekdays height + margin-bottom
@@ -36,15 +35,14 @@ registerStyles(
             + var(--lumo-size-m) * 6
             + var(--lumo-space-s)
           );
-      --vaadin-infinite-scroller-buffer-offset: 20%;
+      --vaadin-infinite-scroller-buffer-offset: 10%;
       -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
       mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
       position: relative;
       margin-right: 57px;
     }
 
-    /* Year scroller */
-    [part='years'] {
+    ::slotted([slot='years']) {
       /* TODO get rid of fixed magic number */
       --vaadin-infinite-scroller-buffer-width: 97px;
       width: 57px;
@@ -58,15 +56,8 @@ registerStyles(
       cursor: var(--lumo-clickable-cursor);
     }
 
-    [part='year-number']:not([current]),
-    [part='year-separator'] {
-      opacity: 0.7;
-      transition: 0.2s opacity;
-    }
-
-    [part='years']:hover [part='year-number'],
-    [part='years']:hover [part='year-separator'] {
-      opacity: 1;
+    ::slotted([slot='years']:hover) {
+      --_lumo-date-picker-year-opacity: 1;
     }
 
     /* TODO unsupported selector */
@@ -75,14 +66,13 @@ registerStyles(
       display: block;
     }
 
-    /* TODO unsupported selector, should fix this in vaadin-date-picker that it adapts to the
-       * width of the year scroller */
-    #scrollers[desktop] [part='months'] {
+    /* TODO fix this in vaadin-date-picker that it adapts to the width of the year scroller */
+    :host([desktop]) ::slotted([slot='months']) {
       right: auto;
     }
 
     /* Year scroller position indicator */
-    [part='years']::before {
+    ::slotted([slot='years'])::before {
       border: none;
       width: 1em;
       height: 1em;
@@ -94,37 +84,13 @@ registerStyles(
       z-index: 1;
     }
 
-    [part='year-number'],
-    [part='year-separator'] {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 50%;
-      transform: translateY(-50%);
-    }
-
-    [part='years'] [part='year-separator']::after {
-      color: var(--lumo-disabled-text-color);
-      content: '•';
-    }
-
-    /* Current year */
-
-    [part='years'] [part='year-number'][current] {
-      color: var(--lumo-primary-text-color);
-    }
-
-    /* Toolbar (footer) */
-
     [part='toolbar'] {
       padding: var(--lumo-space-s);
       border-bottom-left-radius: var(--lumo-border-radius-l);
       margin-right: 57px;
     }
 
-    /* Today and Cancel buttons */
-
-    [part='toolbar'] [part\$='button'] {
+    [part='toolbar'] ::slotted(vaadin-button) {
       margin: 0;
     }
 
@@ -171,28 +137,25 @@ registerStyles(
       color: var(--lumo-primary-contrast-color);
     }
 
-    /* TODO magic number (same as used for iron-media-query in vaadin-date-picker-overlay-content) */
+    /* TODO magic number (same as used for media-query in vaadin-date-picker-overlay-content) */
     @media screen and (max-width: 374px) {
       :host {
         background-image: none;
       }
 
-      [part='years'] {
-        background-color: var(--lumo-shade-5pct);
-      }
-
       [part='toolbar'],
-      [part='months'] {
+      ::slotted([slot='months']) {
         margin-right: 0;
       }
 
       /* TODO make date-picker adapt to the width of the years part */
-      [part='years'] {
+      ::slotted([slot='years']) {
         --vaadin-infinite-scroller-buffer-width: 90px;
         width: 50px;
+        background-color: var(--lumo-shade-5pct);
       }
 
-      :host([years-visible]) [part='months'] {
+      :host([years-visible]) ::slotted([slot='months']) {
         padding-left: 50px;
       }
     }

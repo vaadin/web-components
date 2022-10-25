@@ -4,7 +4,6 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { templatize } from '@polymer/polymer/lib/utils/templatize.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { timeOut } from '@vaadin/component-base/src/async.js';
 import { isFirefox } from '@vaadin/component-base/src/browser-utils.js';
@@ -14,7 +13,7 @@ import { Debouncer } from '@vaadin/component-base/src/debounce.js';
  * @extends HTMLElement
  * @private
  */
-class InfiniteScroller extends PolymerElement {
+export class InfiniteScroller extends PolymerElement {
   static get template() {
     return html`
       <style>
@@ -69,10 +68,6 @@ class InfiniteScroller extends PolymerElement {
     `;
   }
 
-  static get is() {
-    return 'vaadin-infinite-scroller';
-  }
-
   static get properties() {
     return {
       /**
@@ -89,6 +84,7 @@ class InfiniteScroller extends PolymerElement {
       /**
        * The amount of initial scroll top. Needed in order for the
        * user to be able to scroll backwards.
+       * @private
        */
       _initialScroll: {
         value: 500000,
@@ -96,17 +92,22 @@ class InfiniteScroller extends PolymerElement {
 
       /**
        * The index/position mapped at _initialScroll point.
+       * @private
        */
       _initialIndex: {
         value: 0,
       },
 
+      /** @private */
       _buffers: Array,
 
+      /** @private */
       _preventScrollEvent: Boolean,
 
+      /** @private */
       _mayHaveMomentum: Boolean,
 
+      /** @private */
       _initialized: Boolean,
 
       active: {
@@ -116,25 +117,13 @@ class InfiniteScroller extends PolymerElement {
     };
   }
 
+  /** @protected */
   ready() {
     super.ready();
 
-    this._buffers = Array.prototype.slice.call(this.root.querySelectorAll('.buffer'));
+    this._buffers = [...this.shadowRoot.querySelectorAll('.buffer')];
 
     this.$.fullHeight.style.height = `${this._initialScroll * 2}px`;
-
-    const tpl = this.querySelector('template');
-    this._TemplateClass = templatize(tpl, this, {
-      forwardHostProp(prop, value) {
-        if (prop !== 'index') {
-          this._buffers.forEach((buffer) => {
-            [].forEach.call(buffer.children, (insertionPoint) => {
-              insertionPoint._itemWrapper.instance[prop] = value;
-            });
-          });
-        }
-      },
-    });
 
     // Firefox interprets elements with overflow:auto as focusable
     // https://bugzilla.mozilla.org/show_bug.cgi?id=1069739
@@ -143,6 +132,37 @@ class InfiniteScroller extends PolymerElement {
     }
   }
 
+  /**
+   * Force the scroller to update clones after a reset, without
+   * waiting for the debouncer to resolve.
+   */
+  forceUpdate() {
+    if (this._debouncerUpdateClones) {
+      this._buffers[0].updated = this._buffers[1].updated = false;
+      this._updateClones();
+      this._debouncerUpdateClones.cancel();
+    }
+  }
+
+  /**
+   * @protected
+   * @override
+   */
+  _createElement() {
+    // To be implemented.
+  }
+
+  /**
+   * @param {HTMLElement} _element
+   * @param {number} _index
+   * @protected
+   * @override
+   */
+  _updateElement(_element, _index) {
+    // To be implemented.
+  }
+
+  /** @private */
   _activated(active) {
     if (active && !this._initialized) {
       this._createPool();
@@ -150,11 +170,14 @@ class InfiniteScroller extends PolymerElement {
     }
   }
 
+  /** @private */
   _finishInit() {
     if (!this._initDone) {
       // Once the first set of items start fading in, stamp the rest
       this._buffers.forEach((buffer) => {
-        [].forEach.call(buffer.children, (insertionPoint) => this._ensureStampedInstance(insertionPoint._itemWrapper));
+        [...buffer.children].forEach((slot) => {
+          this._ensureStampedInstance(slot._itemWrapper);
+        });
       });
 
       if (!this._buffers[0].translateY) {
@@ -162,9 +185,11 @@ class InfiniteScroller extends PolymerElement {
       }
 
       this._initDone = true;
+      this.dispatchEvent(new CustomEvent('init-done'));
     }
   }
 
+  /** @private */
   _translateBuffer(up) {
     const index = up ? 1 : 0;
     this._buffers[index].translateY = this._buffers[index ? 0 : 1].translateY + this._bufferHeight * (index ? -1 : 1);
@@ -173,6 +198,7 @@ class InfiniteScroller extends PolymerElement {
     this._buffers.reverse();
   }
 
+  /** @private */
   _scroll() {
     if (this._scrollDisabled) {
       return;
@@ -269,10 +295,12 @@ class InfiniteScroller extends PolymerElement {
     return this._itemHeightVal;
   }
 
+  /** @private */
   get _bufferHeight() {
     return this.itemHeight * this.bufferSize;
   }
 
+  /** @private */
   _reset() {
     this._scrollDisabled = true;
     this.$.scroller.scrollTop = this._initialScroll;
@@ -292,6 +320,7 @@ class InfiniteScroller extends PolymerElement {
     this._scrollDisabled = false;
   }
 
+  /** @private */
   _createPool() {
     const container = this.getBoundingClientRect();
     this._buffers.forEach((buffer) => {
@@ -303,28 +332,27 @@ class InfiniteScroller extends PolymerElement {
         const contentId = (InfiniteScroller._contentIndex = InfiniteScroller._contentIndex + 1 || 0);
         const slotName = `vaadin-infinite-scroller-item-content-${contentId}`;
 
-        const insertionPoint = document.createElement('slot');
-        insertionPoint.setAttribute('name', slotName);
-        insertionPoint._itemWrapper = itemWrapper;
-        buffer.appendChild(insertionPoint);
+        const slot = document.createElement('slot');
+        slot.setAttribute('name', slotName);
+        slot._itemWrapper = itemWrapper;
+        buffer.appendChild(slot);
 
         itemWrapper.setAttribute('slot', slotName);
         this.appendChild(itemWrapper);
 
-        setTimeout(() => {
-          // Only stamp the visible instances first
-          if (this._isVisible(itemWrapper, container)) {
-            this._ensureStampedInstance(itemWrapper);
-          }
-        }, 1); // Wait for first reset
+        // Only stamp the visible instances first
+        if (this._isVisible(itemWrapper, container)) {
+          this._ensureStampedInstance(itemWrapper);
+        }
       }
     });
 
-    setTimeout(() => {
-      afterNextRender(this, this._finishInit.bind(this));
-    }, 1);
+    afterNextRender(this, () => {
+      this._finishInit();
+    });
   }
 
+  /** @private */
   _ensureStampedInstance(itemWrapper) {
     if (itemWrapper.firstElementChild) {
       return;
@@ -332,14 +360,15 @@ class InfiniteScroller extends PolymerElement {
 
     const tmpInstance = itemWrapper.instance;
 
-    itemWrapper.instance = new this._TemplateClass({});
-    itemWrapper.appendChild(itemWrapper.instance.root);
+    itemWrapper.instance = this._createElement();
+    itemWrapper.appendChild(itemWrapper.instance);
 
     Object.keys(tmpInstance).forEach((prop) => {
       itemWrapper.instance.set(prop, tmpInstance[prop]);
     });
   }
 
+  /** @private */
   _updateClones(viewPortOnly) {
     this._firstIndex = ~~((this._buffers[0].translateY - this._initialScroll) / this.itemHeight) + this._initialIndex;
 
@@ -348,10 +377,10 @@ class InfiniteScroller extends PolymerElement {
       if (!buffer.updated) {
         const firstIndex = this._firstIndex + this.bufferSize * bufferIndex;
 
-        [].forEach.call(buffer.children, (insertionPoint, index) => {
-          const itemWrapper = insertionPoint._itemWrapper;
+        [...buffer.children].forEach((slot, index) => {
+          const itemWrapper = slot._itemWrapper;
           if (!viewPortOnly || this._isVisible(itemWrapper, scrollerRect)) {
-            itemWrapper.instance.index = firstIndex + index;
+            this._updateElement(itemWrapper.instance, firstIndex + index);
           }
         });
         buffer.updated = true;
@@ -359,10 +388,9 @@ class InfiniteScroller extends PolymerElement {
     });
   }
 
+  /** @private */
   _isVisible(element, container) {
     const rect = element.getBoundingClientRect();
     return rect.bottom > container.top && rect.top < container.bottom;
   }
 }
-
-customElements.define(InfiniteScroller.is, InfiniteScroller);

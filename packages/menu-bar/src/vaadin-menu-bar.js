@@ -6,7 +6,6 @@
 import './vaadin-menu-bar-submenu.js';
 import './vaadin-menu-bar-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { DisabledMixin } from '@vaadin/component-base/src/disabled-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
@@ -38,8 +37,6 @@ import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
  * Part name         | Description
  * ------------------|----------------
  * `container`       | The container wrapping menu bar buttons.
- * `menu-bar-button` | The menu bar button.
- * `overflow-button` | The "overflow" button appearing when menu bar width is not enough to fit all the buttons.
  *
  * The following state attributes are available for styling:
  *
@@ -63,16 +60,13 @@ import { InteractionsMixin } from './vaadin-menu-bar-interactions-mixin.js';
  * @fires {CustomEvent<boolean>} item-selected - Fired when a submenu item or menu bar button without children is clicked.
  *
  * @extends HTMLElement
- * @mixes ControllerMixin
  * @mixes ButtonsMixin
  * @mixes InteractionsMixin
  * @mixes DisabledMixin
  * @mixes ElementMixin
  * @mixes ThemableMixin
  */
-class MenuBar extends ButtonsMixin(
-  DisabledMixin(InteractionsMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))))),
-) {
+class MenuBar extends ButtonsMixin(DisabledMixin(InteractionsMixin(ElementMixin(ThemableMixin(PolymerElement))))) {
   static get template() {
     return html`
       <style>
@@ -91,27 +85,11 @@ class MenuBar extends ButtonsMixin(
           flex-wrap: nowrap;
           overflow: hidden;
         }
-
-        [part$='button'] {
-          flex-shrink: 0;
-        }
-
-        [part='overflow-button'] {
-          margin-right: 0;
-        }
-
-        .dots::before {
-          display: block;
-          content: '\\00B7\\00B7\\00B7';
-          font-size: inherit;
-          line-height: inherit;
-        }
       </style>
 
       <div part="container">
-        <vaadin-menu-bar-button part="overflow-button" hidden$="[[!_hasOverflow]]" aria-label$="[[i18n.moreOptions]]">
-          <div class="dots"></div>
-        </vaadin-menu-bar-button>
+        <slot></slot>
+        <slot name="overflow"></slot>
       </div>
       <vaadin-menu-bar-submenu is-root=""></vaadin-menu-bar-submenu>
 
@@ -219,7 +197,7 @@ class MenuBar extends ButtonsMixin(
   }
 
   static get observers() {
-    return ['_themeChanged(_theme)'];
+    return ['_themeChanged(_theme, _overflow)'];
   }
 
   /** @protected */
@@ -255,8 +233,8 @@ class MenuBar extends ButtonsMixin(
    * @param {string | null} theme
    * @protected
    */
-  _themeChanged(theme) {
-    if (this.shadowRoot) {
+  _themeChanged(theme, overflow) {
+    if (overflow) {
       this._buttons.forEach((btn) => this._setButtonTheme(btn, theme));
       this.__detectOverflow();
     }

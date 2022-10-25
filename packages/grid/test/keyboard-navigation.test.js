@@ -1490,6 +1490,22 @@ describe('keyboard navigation', () => {
     });
   });
 
+  describe('focused-cell part', () => {
+    it('should add focused-cell to cell part when focused', () => {
+      focusFirstHeaderCell();
+
+      expect(getFirstHeaderCell().getAttribute('part')).to.contain('focused-cell');
+    });
+
+    it('should remove focused-cell from cell part when blurred', () => {
+      focusFirstHeaderCell();
+
+      focusable.focus();
+
+      expect(getFirstHeaderCell().getAttribute('part')).to.not.contain('focused-cell');
+    });
+  });
+
   describe('interaction mode', () => {
     beforeEach(async () => {
       grid = fixtureSync(`

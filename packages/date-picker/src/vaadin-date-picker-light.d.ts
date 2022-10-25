@@ -66,12 +66,6 @@ export interface DatePickerLightEventMap extends HTMLElementEventMap, DatePicker
  *
  * ### Styling
  *
- * The following shadow DOM parts are available for styling:
- *
- * Part name | Description | Theme for Element
- * ----------------|----------------|----------------
- * `overlay-content` | The overlay element | vaadin-date-picker-light
- *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * In addition to `<vaadin-date-picker-light>` itself, the following

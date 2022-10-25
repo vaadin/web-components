@@ -1,0 +1,53 @@
+{
+  "name": "@vaadin/overlay",
+  "version": "24.0.0-alpha0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "vaadin-overlay",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vaadin/web-components.git",
+    "directory": "packages/vaadin-overlay"
+  },
+  "author": "Vaadin Ltd",
+  "homepage": "https://vaadin.com/components",
+  "bugs": {
+    "url": "https://github.com/vaadin/web-components/issues"
+  },
+  "main": "vaadin-overlay.js",
+  "module": "vaadin-overlay.js",
+  "type": "module",
+  "files": [
+    "src",
+    "theme",
+    "vaadin-*.d.ts",
+    "vaadin-*.js"
+  ],
+  "keywords": [
+    "Vaadin",
+    "vaadin-overlay",
+    "overlay",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@vaadin/component-base": "24.0.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha0",
+    "@vaadin/vaadin-material-styles": "24.0.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha0"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/button": "24.0.0-alpha0",
+    "@vaadin/polymer-legacy-adapter": "24.0.0-alpha0",
+    "@vaadin/radio-group": "24.0.0-alpha0",
+    "@vaadin/testing-helpers": "^0.3.2",
+    "@vaadin/text-field": "24.0.0-alpha0",
+    "lit": "^2.0.0",
+    "sinon": "^13.0.2"
+  }
+}

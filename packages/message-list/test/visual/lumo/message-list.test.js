@@ -55,7 +55,7 @@ describe('message-list', () => {
         });
 
         it('focused', async () => {
-          element.shadowRoot.querySelectorAll('vaadin-message')[0].focus();
+          element.querySelectorAll('vaadin-message')[0].focus();
           await sendKeys({ press: 'ArrowDown' });
           await visualDiff(div, `${dir}-focused`);
         });

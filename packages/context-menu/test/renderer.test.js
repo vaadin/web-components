@@ -34,19 +34,19 @@ describe('renderer', () => {
     fire(target, 'vaadin-contextmenu');
 
     expect(menu.renderer.callCount).to.equal(1);
-    expect(menu.$.overlay.content.textContent).to.contain('Renderer');
+    expect(menu.$.overlay.textContent).to.contain('Renderer');
   });
 
   it('should have target in context', () => {
     fire(target, 'vaadin-contextmenu');
 
-    expect(menu.$.overlay.content.textContent).to.contain('target');
+    expect(menu.$.overlay.textContent).to.contain('target');
   });
 
   it('should have detail in context', () => {
     fire(target, 'vaadin-contextmenu', { foo: 'bar' });
 
-    expect(menu.$.overlay.content.textContent).to.contain('bar');
+    expect(menu.$.overlay.textContent).to.contain('bar');
   });
 
   it('should have contextMenu owner argument', () => {
@@ -102,10 +102,10 @@ describe('renderer', () => {
     };
     fire(target, 'vaadin-contextmenu');
 
-    expect(menu.$.overlay.content.textContent.trim()).to.equal('foo');
+    expect(menu.$.overlay.textContent.trim()).to.equal('foo');
 
     menu.renderer = null;
 
-    expect(menu.$.overlay.content.textContent.trim()).to.equal('');
+    expect(menu.$.overlay.textContent.trim()).to.equal('');
   });
 });

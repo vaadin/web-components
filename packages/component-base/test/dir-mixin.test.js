@@ -3,8 +3,8 @@ import { nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { LitElement } from 'lit';
-import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { DirMixin } from '../src/dir-mixin.js';
+import { PolylitMixin } from '../src/polylit-mixin.js';
 
 class DirMixinPolymerElement extends DirMixin(PolymerElement) {
   static get is() {
@@ -219,6 +219,15 @@ const runTests = (baseClass) => {
 
       setDir('ltr');
       await Promise.resolve();
+      expect(element.getAttribute('dir')).to.eql('ltr');
+    });
+
+    it('should keep custom direction when disconnecting and reconnecting', async () => {
+      element.setAttribute('dir', 'ltr');
+      setDir('rtl');
+      await Promise.resolve();
+      // Disconnect + reconnect
+      document.body.appendChild(element);
       expect(element.getAttribute('dir')).to.eql('ltr');
     });
   });

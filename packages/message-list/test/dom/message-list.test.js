@@ -10,7 +10,7 @@ describe('vaadin-message-list', () => {
   });
 
   it('default', async () => {
-    await expect(list).shadowDom.to.equalSnapshot();
+    await expect(list).dom.to.equalSnapshot();
   });
 
   it('items', async () => {
@@ -19,12 +19,12 @@ describe('vaadin-message-list', () => {
       { text: 'Good morning!', userName: 'Lina Roy' },
     ];
     await nextFrame();
-    await expect(list).shadowDom.to.equalSnapshot();
+    await expect(list).dom.to.equalSnapshot();
   });
 
   it('theme', async () => {
     list.items = [{ text: 'Partial service outage.', userName: 'Admin', theme: 'danger' }];
     await nextFrame();
-    await expect(list).shadowDom.to.equalSnapshot();
+    await expect(list).dom.to.equalSnapshot();
   });
 });

@@ -28,12 +28,6 @@ import { DatePickerMixin } from './vaadin-date-picker-mixin.js';
  *
  * ### Styling
  *
- * The following shadow DOM parts are available for styling:
- *
- * Part name | Description | Theme for Element
- * ----------------|----------------|----------------
- * `overlay-content` | The overlay element | vaadin-date-picker-light
- *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * In addition to `<vaadin-date-picker-light>` itself, the following
@@ -73,29 +67,13 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixin(Polyme
         id="overlay"
         fullscreen$="[[_fullscreen]]"
         opened="{{opened}}"
+        on-vaadin-overlay-escape-press="_onOverlayEscapePress"
         on-vaadin-overlay-open="_onOverlayOpened"
         on-vaadin-overlay-closing="_onOverlayClosed"
         restore-focus-on-close
         restore-focus-node="[[inputElement]]"
-        theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
-      >
-        <template>
-          <vaadin-date-picker-overlay-content
-            id="overlay-content"
-            i18n="[[i18n]]"
-            fullscreen$="[[_fullscreen]]"
-            label="[[label]]"
-            selected-date="[[_selectedDate]]"
-            focused-date="{{_focusedDate}}"
-            show-week-numbers="[[showWeekNumbers]]"
-            min-date="[[_minDate]]"
-            max-date="[[_maxDate]]"
-            part="overlay-content"
-            theme$="[[__getOverlayTheme(_theme, _overlayInitialized)]]"
-          >
-          </vaadin-date-picker-overlay-content>
-        </template>
-      </vaadin-date-picker-overlay>
+        theme$="[[_theme]]"
+      ></vaadin-date-picker-overlay>
     `;
   }
 
@@ -115,29 +93,13 @@ class DatePickerLight extends ThemableMixin(DatePickerMixin(ValidateMixin(Polyme
         type: String,
         value: 'value',
       },
-
-      /**
-       * @type {boolean}
-       * @protected
-       */
-      _overlayInitialized: {
-        type: Boolean,
-        value: true,
-      },
     };
-  }
-
-  /** @protected */
-  ready() {
-    super.ready();
-
-    this._initOverlay();
   }
 
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
-    const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
+    const cssSelector = 'vaadin-text-field,.input';
     this._setInputElement(this.querySelector(cssSelector));
     this._setFocusElement(this.inputElement);
   }

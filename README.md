@@ -19,7 +19,7 @@
 Install the components that you need from npm:
 
 ```sh
-npm install @vaadin/vaadin-grid
+npm install @vaadin/grid
 ```
 
 ## Usage
@@ -77,8 +77,8 @@ This project contains components for Vaadin 20+. Please see individual repositor
 
 The components below are licensed under the Apache License 2.0.
 
-| Component                                                                                                       | npm version (latest)                                                                                                          | npm version (next)                                                                                                                 | Issues                                                                             |
-| --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Component                                                                                                       | npm version (latest)                                                                                                          | npm version (next)                                                                                                                        | Issues                                                                             |
+| --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | [`<vaadin-accordion>`](https://github.com/vaadin/web-components/tree/master/packages/accordion)                 | [![npm version](https://badgen.net/npm/v/@vaadin/accordion)](https://www.npmjs.com/package/@vaadin/accordion)                 | [![npm version](https://badgen.net/npm/v/@vaadin/accordion/next)](https://www.npmjs.com/package/@vaadin/accordion/v/next)                 | [Issues](https://github.com/vaadin/web-components/labels/vaadin-accordion)         |
 | [`<vaadin-app-layout>`](https://github.com/vaadin/web-components/tree/master/packages/app-layout)               | [![npm version](https://badgen.net/npm/v/@vaadin/app-layout)](https://www.npmjs.com/package/@vaadin/app-layout)               | [![npm version](https://badgen.net/npm/v/@vaadin/app-layout/next)](https://www.npmjs.com/package/@vaadin/app-layout/v/next)               | [Issues](https://github.com/vaadin/web-components/labels/vaadin-app-layout)        |
 | [`<vaadin-avatar>`](https://github.com/vaadin/web-components/tree/master/packages/avatar)                       | [![npm version](https://badgen.net/npm/v/@vaadin/avatar)](https://www.npmjs.com/package/@vaadin/avatar)                       | [![npm version](https://badgen.net/npm/v/@vaadin/avatar/next)](https://www.npmjs.com/package/@vaadin/avatar/v/next)                       | [Issues](https://github.com/vaadin/web-components/labels/vaadin-avatar)            |
@@ -87,7 +87,7 @@ The components below are licensed under the Apache License 2.0.
 | [`<vaadin-checkbox>`](https://github.com/vaadin/web-components/tree/master/packages/checkbox)                   | [![npm version](https://badgen.net/npm/v/@vaadin/checkbox)](https://www.npmjs.com/package/@vaadin/checkbox)                   | [![npm version](https://badgen.net/npm/v/@vaadin/checkbox/next)](https://www.npmjs.com/package/@vaadin/checkbox/v/next)                   | [Issues](https://github.com/vaadin/web-components/labels/vaadin-checkbox)          |
 | [`<vaadin-checkbox-group>`](https://github.com/vaadin/web-components/tree/master/packages/checkbox-group)       | [![npm version](https://badgen.net/npm/v/@vaadin/checkbox-group)](https://www.npmjs.com/package/@vaadin/checkbox-group)       | [![npm version](https://badgen.net/npm/v/@vaadin/checkbox-group/next)](https://www.npmjs.com/package/@vaadin/checkbox-group/v/next)       | [Issues](https://github.com/vaadin/web-components/labels/vaadin-checkbox-group)    |
 | [`<vaadin-combo-box>`](https://github.com/vaadin/web-components/tree/master/packages/combo-box)                 | [![npm version](https://badgen.net/npm/v/@vaadin/combo-box)](https://www.npmjs.com/package/@vaadin/combo-box)                 | [![npm version](https://badgen.net/npm/v/@vaadin/combo-box/next)](https://www.npmjs.com/package/@vaadin/combo-box/v/next)                 | [Issues](https://github.com/vaadin/web-components/labels/vaadin-combo-box)         |
-| [`<vaadin-confirm-dialog>`](https://github.com/vaadin/web-components/tree/master/packages/confirm-dialog)     | [![npm version](https://badgen.net/npm/v/@vaadin/confirm-dialog)](https://www.npmjs.com/package/@vaadin/confirm-dialog)     | [![npm version](https://badgen.net/npm/v/@vaadin/confirm-dialog/next)](https://www.npmjs.com/package/@vaadin/confirm-dialog/v/next)     | [Issues](https://github.com/vaadin/web-components/labels/vaadin-confirm-dialog)   |
+| [`<vaadin-confirm-dialog>`](https://github.com/vaadin/web-components/tree/master/packages/confirm-dialog)       | [![npm version](https://badgen.net/npm/v/@vaadin/confirm-dialog)](https://www.npmjs.com/package/@vaadin/confirm-dialog)       | [![npm version](https://badgen.net/npm/v/@vaadin/confirm-dialog/next)](https://www.npmjs.com/package/@vaadin/confirm-dialog/v/next)       | [Issues](https://github.com/vaadin/web-components/labels/vaadin-confirm-dialog)    |
 | [`<vaadin-context-menu>`](https://github.com/vaadin/web-components/tree/master/packages/context-menu)           | [![npm version](https://badgen.net/npm/v/@vaadin/context-menu)](https://www.npmjs.com/package/@vaadin/context-menu)           | [![npm version](https://badgen.net/npm/v/@vaadin/context-menu/next)](https://www.npmjs.com/package/@vaadin/context-menu/v/next)           | [Issues](https://github.com/vaadin/web-components/labels/vaadin-context-menu)      |
 | [`<vaadin-custom-field>`](https://github.com/vaadin/web-components/tree/master/packages/custom-field)           | [![npm version](https://badgen.net/npm/v/@vaadin/custom-field)](https://www.npmjs.com/package/@vaadin/custom-field)           | [![npm version](https://badgen.net/npm/v/@vaadin/custom-field/next)](https://www.npmjs.com/package/@vaadin/custom-field/v/next)           | [Issues](https://github.com/vaadin/web-components/labels/vaadin-custom-field)      |
 | [`<vaadin-date-picker>`](https://github.com/vaadin/web-components/tree/master/packages/date-picker)             | [![npm version](https://badgen.net/npm/v/@vaadin/date-picker)](https://www.npmjs.com/package/@vaadin/date-picker)             | [![npm version](https://badgen.net/npm/v/@vaadin/date-picker/next)](https://www.npmjs.com/package/@vaadin/date-picker/v/next)             | [Issues](https://github.com/vaadin/web-components/labels/vaadin-date-picker)       |
@@ -116,11 +116,11 @@ The components below are licensed under the Apache License 2.0.
 | [`<vaadin-select>`](https://github.com/vaadin/web-components/tree/master/packages/select)                       | [![npm version](https://badgen.net/npm/v/@vaadin/select)](https://www.npmjs.com/package/@vaadin/select)                       | [![npm version](https://badgen.net/npm/v/@vaadin/select/next)](https://www.npmjs.com/package/@vaadin/select/v/next)                       | [Issues](https://github.com/vaadin/web-components/labels/vaadin-select)            |
 | [`<vaadin-split-layout>`](https://github.com/vaadin/web-components/tree/master/packages/split-layout)           | [![npm version](https://badgen.net/npm/v/@vaadin/split-layout)](https://www.npmjs.com/package/@vaadin/split-layout)           | [![npm version](https://badgen.net/npm/v/@vaadin/split-layout/next)](https://www.npmjs.com/package/@vaadin/split-layout/v/next)           | [Issues](https://github.com/vaadin/web-components/labels/vaadin-split-layout)      |
 | [`<vaadin-tabs>`](https://github.com/vaadin/web-components/tree/master/packages/tabs)                           | [![npm version](https://badgen.net/npm/v/@vaadin/tabs)](https://www.npmjs.com/package/@vaadin/tabs)                           | [![npm version](https://badgen.net/npm/v/@vaadin/tabs/next)](https://www.npmjs.com/package/@vaadin/tabs/v/next)                           | [Issues](https://github.com/vaadin/web-components/labels/vaadin-tabs)              |
-| [`<vaadin-tabsheet>`](https://github.com/vaadin/web-components/tree/master/packages/tabsheet)                           | [![npm version](https://badgen.net/npm/v/@vaadin/tabsheet)](https://www.npmjs.com/package/@vaadin/tabsheet)                           | [![npm version](https://badgen.net/npm/v/@vaadin/tabsheet/next)](https://www.npmjs.com/package/@vaadin/tabsheet/v/next)                           | [Issues](https://github.com/vaadin/web-components/labels/vaadin-tabsheet)              |
+| [`<vaadin-tabsheet>`](https://github.com/vaadin/web-components/tree/master/packages/tabsheet)                   | [![npm version](https://badgen.net/npm/v/@vaadin/tabsheet)](https://www.npmjs.com/package/@vaadin/tabsheet)                   | [![npm version](https://badgen.net/npm/v/@vaadin/tabsheet/next)](https://www.npmjs.com/package/@vaadin/tabsheet/v/next)                   | [Issues](https://github.com/vaadin/web-components/labels/vaadin-tabsheet)          |
 | [`<vaadin-text-area>`](https://github.com/vaadin/web-components/tree/master/packages/text-area)                 | [![npm version](https://badgen.net/npm/v/@vaadin/text-area)](https://www.npmjs.com/package/@vaadin/text-area)                 | [![npm version](https://badgen.net/npm/v/@vaadin/text-area/next)](https://www.npmjs.com/package/@vaadin/text-area/v/next)                 | [Issues](https://github.com/vaadin/web-components/labels/vaadin-text-area)         |
 | [`<vaadin-text-field>`](https://github.com/vaadin/web-components/tree/master/packages/text-field)               | [![npm version](https://badgen.net/npm/v/@vaadin/text-field)](https://www.npmjs.com/package/@vaadin/text-field)               | [![npm version](https://badgen.net/npm/v/@vaadin/text-field/next)](https://www.npmjs.com/package/@vaadin/text-field/v/next)               | [Issues](https://github.com/vaadin/web-components/labels/vaadin-text-field)        |
 | [`<vaadin-time-picker>`](https://github.com/vaadin/web-components/tree/master/packages/time-picker)             | [![npm version](https://badgen.net/npm/v/@vaadin/time-picker)](https://www.npmjs.com/package/@vaadin/time-picker)             | [![npm version](https://badgen.net/npm/v/@vaadin/time-picker/next)](https://www.npmjs.com/package/@vaadin/time-picker/v/next)             | [Issues](https://github.com/vaadin/web-components/labels/vaadin-time-picker)       |
-| [`<vaadin-tooltip>`](https://github.com/vaadin/web-components/tree/master/packages/tooltip)             | [![npm version](https://badgen.net/npm/v/@vaadin/tooltip)](https://www.npmjs.com/package/@vaadin/tooltip)             | [![npm version](https://badgen.net/npm/v/@vaadin/tooltip/next)](https://www.npmjs.com/package/@vaadin/tooltip/v/next)             | [Issues](https://github.com/vaadin/web-components/labels/vaadin-tooltip)       |
+| [`<vaadin-tooltip>`](https://github.com/vaadin/web-components/tree/master/packages/tooltip)                     | [![npm version](https://badgen.net/npm/v/@vaadin/tooltip)](https://www.npmjs.com/package/@vaadin/tooltip)                     | [![npm version](https://badgen.net/npm/v/@vaadin/tooltip/next)](https://www.npmjs.com/package/@vaadin/tooltip/v/next)                     | [Issues](https://github.com/vaadin/web-components/labels/vaadin-tooltip)           |
 | [`<vaadin-upload>`](https://github.com/vaadin/web-components/tree/master/packages/upload)                       | [![npm version](https://badgen.net/npm/v/@vaadin/upload)](https://www.npmjs.com/package/@vaadin/upload)                       | [![npm version](https://badgen.net/npm/v/@vaadin/upload/next)](https://www.npmjs.com/package/@vaadin/upload/v/next)                       | [Issues](https://github.com/vaadin/web-components/labels/vaadin-upload)            |
 | [`<vaadin-virtual-list>`](https://github.com/vaadin/web-components/tree/master/packages/virtual-list)           | [![npm version](https://badgen.net/npm/v/@vaadin/virtual-list)](https://www.npmjs.com/package/@vaadin/virtual-list)           | [![npm version](https://badgen.net/npm/v/@vaadin/virtual-list/next)](https://www.npmjs.com/package/@vaadin/virtual-list/v/next)           | [Issues](https://github.com/vaadin/web-components/labels/vaadin-virtual-list)      |
 
@@ -128,8 +128,8 @@ The components below are licensed under the Apache License 2.0.
 
 The components below are licensed under [CVDL 4.0 license](https://vaadin.com/license/cvdl-4.0) and available as part of the [Vaadin Pro Subscription](https://vaadin.com/pricing).
 
-| Component                                                                                                     | npm version (latest)                                                                                                        | npm version (next)                                                                                                               | Issues                                                                            |
-| ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Component                                                                                                     | npm version (latest)                                                                                                        | npm version (next)                                                                                                                      | Issues                                                                            |
+| ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | [`<vaadin-board>`](https://github.com/vaadin/web-components/tree/master/packages/board)                       | [![npm version](https://badgen.net/npm/v/@vaadin/board)](https://www.npmjs.com/package/@vaadin/board)                       | [![npm version](https://badgen.net/npm/v/@vaadin/board/next)](https://www.npmjs.com/package/@vaadin/board/v/next)                       | [Issues](https://github.com/vaadin/web-components/labels/vaadin-board)            |
 | [`<vaadin-charts>`](https://github.com/vaadin/web-components/tree/master/packages/charts)                     | [![npm version](https://badgen.net/npm/v/@vaadin/charts)](https://www.npmjs.com/package/@vaadin/charts)                     | [![npm version](https://badgen.net/npm/v/@vaadin/charts/next)](https://www.npmjs.com/package/@vaadin/charts/v/next)                     | [Issues](https://github.com/vaadin/web-components/labels/vaadin-charts)           |
 | [`<vaadin-cookie-consent>`](https://github.com/vaadin/web-components/tree/master/packages/cookie-consent)     | [![npm version](https://badgen.net/npm/v/@vaadin/cookie-consent)](https://www.npmjs.com/package/@vaadin/cookie-consent)     | [![npm version](https://badgen.net/npm/v/@vaadin/cookie-consent/next)](https://www.npmjs.com/package/@vaadin/cookie-consent/v/next)     | [Issues](https://github.com/vaadin/web-components/labels/vaadin-cookie-consent)   |
@@ -298,13 +298,13 @@ git checkout master && git pull
 Create a new branch from master:
 
 ```sh
-git checkout -b 23.3
+git checkout -b 24.0
 ```
 
 Push a newly created branch:
 
 ```sh
-git push origin 23.3
+git push origin 24.0
 ```
 
 The newly created branch for the current major is protected by default.
@@ -313,7 +313,7 @@ The rest of the changes to that branch should happen the usual way, through a PR
 Create another branch:
 
 ```sh
-git checkout -b update-v23.3
+git checkout -b update-v24.0
 ```
 
 Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/master/wtr-utils.js) as follows:
@@ -321,7 +321,7 @@ Update [`wtr-utils.js`](https://github.com/vaadin/web-components/blob/master/wtr
 ```diff
 const isLockfileChanged = () => {
 -  const log = execSync('git diff --name-only origin/master HEAD').toString();
-+  const log = execSync('git diff --name-only origin/23.3 HEAD').toString();
++  const log = execSync('git diff --name-only origin/24.0 HEAD').toString();
   return log.split('\n').some((line) => line.includes('yarn.lock'));
 };
 ```
@@ -329,7 +329,7 @@ const isLockfileChanged = () => {
 ```diff
 const getChangedPackages = () => {
 -  const output = execSync('./node_modules/.bin/lerna ls --since origin/master --json --loglevel silent');
-+  const output = execSync('./node_modules/.bin/lerna ls --since origin/23.3 --json --loglevel silent');
++  const output = execSync('./node_modules/.bin/lerna ls --since origin/24.0 --json --loglevel silent');
   return JSON.parse(output.toString());
 };
 ```
@@ -341,13 +341,13 @@ Create a PR to the version branch ([example](https://github.com/vaadin/web-compo
 Create a new branch from master:
 
 ```sh
-git checkout master && git checkout -b bump-v24
+git checkout master && git checkout -b bump-v24.1
 ```
 
 Prepare a new version for the `updateVersion` script by running the following command:
 
 ```sh
-export npm_config_bump=24.0.0-alpha0
+export npm_config_bump=24.1.0-alpha0
 ```
 
 Run the script to bump static version getters in `ElementMixin`, `Lumo` and `Material`:
@@ -359,13 +359,13 @@ node scripts/updateVersion.js
 Mark the new version with Lerna:
 
 ```sh
-lerna version 24.0.0-alpha0 --no-push --no-git-tag-version --force-publish --exact --yes
+lerna version 24.1.0-alpha0 --no-push --no-git-tag-version --force-publish --exact --yes
 ```
 
 Commit all the changes:
 
 ```sh
-git commit -a -m "chore: update master branch to Vaadin 24"
+git commit -a -m "chore: update master branch to Vaadin 24.1"
 ```
 
 Create a PR to the `master` branch ([example](https://github.com/vaadin/web-components/pull/4433)).
@@ -379,34 +379,70 @@ Add the new version branch to the `CheckoutBranch` parameter:
 
 ### Using a local clone of the repo in Vaadin app
 
-As long as your application uses webpack, you can modify the webpack config to resolve the web components modules from your local clone /instead of the versions downloaded from npm registry. This is possible for:
+When using a Vaadin app, you can modify the frontend build tool config to resolve the web components modules from your local clone, instead of the versions downloaded from npm registry.
 
-- Vaadin Starter apps created through https://start.vaadin.com
-  - modify the `webpack.config.js` in the root folder
-- running Jetty integration tests from the [Flow components repository](https://github.com/vaadin/flow-components)
-  - running the tests will create a `webpack.config.js` in the root of the Maven module, which you can modify
+<details>
+<summary>Using webpack</summary>
 
-In order to do this, modify the `webpack.config.js` in the root folder as follows:
-
-```js
-(flowDefaults.resolve.modules = ['/Users/serhii/vaadin/web-components/node_modules', ...flowDefaults.resolve.modules]),
-  (module.exports = flowDefaults);
-```
-
-If you are merging into an existing config object, as is done in the Vaadin Starter apps:
+Modify the `webpack.config.js` in the root folder as follows:
 
 ```js
 module.exports = merge(
   {
     resolve: {
-      modules: ['/Users/serhii/vaadin/web-components/node_modules', 'node_modules']
-    }
+      modules: ['/path/to/web-components/node_modules', 'node_modules'],
+    },
   },
-  flowDefaults
+  flowDefaults,
 );
 ```
 
-**NOTE:** Make sure that the path is an absolute one and that it points to the `node_modules` directory in the web components monorepo.
+</details>
+
+<details>
+<summary>Using Vite</summary>
+
+Modify the `vite.config.ts` in the root folder as follows:
+
+```ts
+import path from 'path';
+import { PluginOption, UserConfigFn } from 'vite';
+import { overrideVaadinConfig } from './vite.generated';
+
+function useLocalWebComponents(webComponentsNodeModulesPath: string): PluginOption {
+  return {
+    name: 'use-local-web-components',
+    enforce: 'pre',
+    config(config) {
+      config.server = config.server ?? {};
+      config.server.fs = config.server.fs ?? {};
+      config.server.fs.allow = config.server.fs.allow ?? [];
+      config.server.fs.allow.push(webComponentsNodeModulesPath);
+      config.server.watch = config.server.watch ?? {};
+      config.server.watch.ignored = [`!${webComponentsNodeModulesPath}/**`];
+    },
+    resolveId(id) {
+      if (/^(@polymer|@vaadin)/.test(id)) {
+        return this.resolve(path.join(webComponentsNodeModulesPath, id));
+      }
+    },
+  };
+}
+
+const customConfig: UserConfigFn = (env) => ({
+  // Disable the Vite dependencies pre-bundling
+  optimizeDeps: {
+    disabled: true,
+  },
+  plugins: [useLocalWebComponents('/path/to/web-components/node_modules')],
+});
+
+export default overrideVaadinConfig(customConfig);
+```
+
+</details>
+
+**NOTE:** Make sure that the path you provide is an absolute one and that it points to the `node_modules` directory in the web components monorepo.
 
 Then run the following command in the web components monorepo:
 

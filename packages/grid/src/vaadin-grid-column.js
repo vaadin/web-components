@@ -823,6 +823,19 @@ class GridColumn extends ColumnBaseMixin(DirMixin(PolymerElement)) {
       },
 
       /**
+       * When true, wraps the cell's slot into an element with role="button", and sets
+       * the tabindex attribute on the button element, instead of the cell itself.
+       * This is needed to keep focus in sync with VoiceOver cursor when navigating
+       * with Control + Option + arrow keys: focusing the `<td>` element does not fire
+       * a focus event, but focusing an element with role="button" inside a cell fires it.
+       * @protected
+       */
+      _focusButtonMode: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
        * @type {Array<!HTMLElement>}
        * @protected
        */

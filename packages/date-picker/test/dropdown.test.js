@@ -1,9 +1,9 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, mousedown, nextRender, oneEvent, touchstart } from '@vaadin/testing-helpers';
+import { aTimeout, fire, fixtureSync, mousedown, nextRender, oneEvent, touchstart } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
-import { getFocusedCell, getOverlayContent, isFullscreen, monthsEqual, open, outsideClick } from './common.js';
+import { getFocusedCell, monthsEqual, open, outsideClick, waitForOverlayRender } from './common.js';
 
 describe('dropdown', () => {
   let datepicker, input, overlay;
@@ -14,13 +14,14 @@ describe('dropdown', () => {
     overlay = datepicker.$.overlay;
   });
 
-  it('should update position of the overlay after changing opened property', () => {
+  it('should update position of the overlay after changing opened property', async () => {
     datepicker.opened = true;
+    await oneEvent(overlay, 'vaadin-overlay-open');
     expect(input.getBoundingClientRect().bottom).to.be.closeTo(overlay.getBoundingClientRect().top, 0.01);
   });
 
-  it('should detach overlay on datepicker detach', () => {
-    datepicker.open();
+  it('should detach overlay on datepicker detach', async () => {
+    await open(datepicker);
     datepicker.parentElement.removeChild(datepicker);
     expect(overlay.parentElement).to.not.be.ok;
   });
@@ -48,19 +49,17 @@ describe('dropdown', () => {
     });
 
     it('should prevent default for the toggle button mousedown', () => {
-      const e = new CustomEvent('mousedown', { bubbles: true });
-      const spy = sinon.spy(e, 'preventDefault');
-      toggleButton.dispatchEvent(e);
-      expect(spy.calledOnce).to.be.true;
+      const event = fire(toggleButton, 'mousedown');
+      expect(event.defaultPrevented).to.be.true;
     });
   });
 
   describe('scroll to date', () => {
     it('should scroll to today by default', async () => {
       datepicker.open();
-      const overlayContent = getOverlayContent(datepicker);
-      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
+      await waitForOverlayRender();
 
       const scrolledDate = spy.firstCall.args[0];
       expect(monthsEqual(scrolledDate, new Date())).to.be.true;
@@ -70,9 +69,9 @@ describe('dropdown', () => {
       datepicker.initialPosition = '2016-01-01';
 
       datepicker.open();
-      const overlayContent = getOverlayContent(datepicker);
-      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
+      await waitForOverlayRender();
 
       const scrolledDate = spy.firstCall.args[0];
       expect(scrolledDate).to.be.eql(new Date(2016, 0, 1));
@@ -82,36 +81,34 @@ describe('dropdown', () => {
       datepicker.value = '2000-02-01';
 
       datepicker.open();
-      const overlayContent = getOverlayContent(datepicker);
-      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
+      await waitForOverlayRender();
 
       const scrolledDate = spy.firstCall.args[0];
       expect(monthsEqual(scrolledDate, new Date(2000, 1, 1))).to.be.true;
     });
 
     it('should remember the initial position on reopen', async () => {
-      datepicker.open();
-      const overlayContent = getOverlayContent(datepicker);
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      await open(datepicker);
+      const overlayContent = datepicker._overlayContent;
       const initialPosition = overlayContent.initialPosition;
 
       datepicker.close();
       await nextRender();
 
-      datepicker.open();
-      await oneEvent(overlay, 'vaadin-overlay-open');
+      await open(datepicker);
       expect(overlayContent.initialPosition).to.be.eql(initialPosition);
     });
 
     it('should scroll to date on reopen', async () => {
       datepicker.open();
-      const overlayContent = getOverlayContent(datepicker);
 
       // We must scroll to initial position on reopen because
       // scrollTop can be reset while the dropdown is closed.
-      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
+      await waitForOverlayRender();
       expect(spy.called).to.be.true;
 
       datepicker.close();
@@ -126,9 +123,9 @@ describe('dropdown', () => {
       datepicker.min = '2100-01-01';
 
       datepicker.open();
-      const overlayContent = getOverlayContent(datepicker);
-      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
+      await waitForOverlayRender();
 
       const scrolledDate = spy.firstCall.args[0];
       expect(scrolledDate).to.be.eql(new Date(2100, 0, 1));
@@ -138,9 +135,9 @@ describe('dropdown', () => {
       datepicker.max = '2000-01-01';
 
       datepicker.open();
-      const overlayContent = getOverlayContent(datepicker);
-      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
+      await waitForOverlayRender();
 
       const scrolledDate = spy.firstCall.args[0];
       expect(scrolledDate).to.be.eql(new Date(2000, 0, 1));
@@ -153,9 +150,9 @@ describe('dropdown', () => {
       datepicker.initialPosition = '2015-01-01';
 
       datepicker.open();
-      const overlayContent = getOverlayContent(datepicker);
-      const spy = sinon.spy(overlayContent, 'scrollToDate');
+      const spy = sinon.spy(datepicker._overlayContent, 'scrollToDate');
       await oneEvent(overlay, 'vaadin-overlay-open');
+      await waitForOverlayRender();
 
       const scrolledDate = spy.firstCall.args[0];
       expect(scrolledDate).to.be.eql(new Date(2015, 0, 1));
@@ -208,8 +205,7 @@ describe('dropdown', () => {
 
   describe('date tap', () => {
     function dateTap() {
-      const content = getOverlayContent(datepicker);
-      const date = getFocusedCell(content);
+      const date = getFocusedCell(datepicker._overlayContent);
       mousedown(date);
       date.focus();
       date.click();
@@ -277,29 +273,6 @@ describe('dropdown', () => {
       datepicker.close();
       await sendKeys({ press: 'Tab' });
       expect(input.inputMode).to.equal('');
-    });
-  });
-
-  describe('sizing', () => {
-    beforeEach(() => {
-      const viewport = document.createElement('meta');
-      viewport.setAttribute('name', 'viewport');
-      viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0');
-      document.getElementsByTagName('head')[0].appendChild(viewport);
-      datepicker._fullscreenMediaQuery = 'max-width: 520px';
-    });
-
-    it('should select fullscreen/desktop mode', (done) => {
-      setTimeout(() => {
-        datepicker.open();
-        datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
-          const viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-          const fullscreen = viewportWidth < 520;
-
-          expect(isFullscreen(datepicker)).to.equal(fullscreen);
-          done();
-        });
-      });
     });
   });
 });

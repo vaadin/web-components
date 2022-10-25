@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/icon",
-  "version": "23.3.0-alpha3",
+  "version": "24.0.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
@@ -35,13 +35,15 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/component-base": "23.3.0-alpha3",
-    "@vaadin/vaadin-lumo-styles": "23.3.0-alpha3",
-    "@vaadin/vaadin-themable-mixin": "23.3.0-alpha3",
+    "@vaadin/component-base": "24.0.0-alpha0",
+    "@vaadin/vaadin-lumo-styles": "24.0.0-alpha0",
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha0",
     "lit": "^2.0.0"
   },
   "devDependencies": {
-    "@vaadin/testing-helpers": "^0.3.2"
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/testing-helpers": "^0.3.2",
+    "sinon": "^13.0.2"
   },
   "web-types": [
     "web-types.json",

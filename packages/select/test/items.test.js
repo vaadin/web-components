@@ -10,7 +10,7 @@ describe('items', () => {
     select = fixtureSync(`<vaadin-select></vaadin-select>`);
     select.items = [{ label: 'Option 1', value: 'value-1' }];
     overlay = select.shadowRoot.querySelector('vaadin-select-overlay');
-    listBox = overlay.content.querySelector('vaadin-select-list-box');
+    listBox = overlay.querySelector('vaadin-select-list-box');
     select.opened = true;
   });
 
@@ -39,17 +39,17 @@ describe('items', () => {
 
   it('should clear the content when setting items property to an empty array', () => {
     select.items = [];
-    expect(overlay.content.childNodes).to.be.empty;
+    expect(overlay.childNodes).to.be.empty;
   });
 
   it('should clear the content when setting items property to null', () => {
     select.items = null;
-    expect(overlay.content.childNodes).to.be.empty;
+    expect(overlay.childNodes).to.be.empty;
   });
 
   it('should clear the content when setting items property to undefined', () => {
     select.items = undefined;
-    expect(overlay.content.childNodes).to.be.empty;
+    expect(overlay.childNodes).to.be.empty;
   });
 
   it('should render item with a custom component', () => {
@@ -72,12 +72,12 @@ describe('items', () => {
     });
 
     it('should override content with the renderer', () => {
-      expect(overlay.content.textContent).to.equal('Renderer');
+      expect(overlay.textContent).to.equal('Renderer');
     });
 
     it('should render items when removing the renderer', () => {
       select.renderer = null;
-      const newListBox = overlay.content.querySelector('vaadin-select-list-box');
+      const newListBox = overlay.querySelector('vaadin-select-list-box');
       expect(newListBox).to.be.ok;
       expect(newListBox.childNodes).to.have.lengthOf(1);
       expect(newListBox.childNodes[0].textContent).to.equal('Option 1');

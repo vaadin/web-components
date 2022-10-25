@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
 import { activateScroller, getDefaultI18n, open } from './common.js';
@@ -36,19 +36,17 @@ describe('WAI-ARIA', () => {
 
     beforeEach(async () => {
       overlay = fixtureSync(`<vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>`);
-      overlay.$.monthScroller.bufferSize = 0;
-      overlay.$.yearScroller.bufferSize = 1;
       overlay.i18n = getDefaultI18n();
-      await nextFrame();
+      await nextRender();
     });
 
     describe('year scroller contents', () => {
       let scroller, yearScrollerContents;
 
       beforeEach(async () => {
-        scroller = overlay.$.yearScroller;
+        scroller = overlay._yearScroller;
         await activateScroller(scroller);
-        yearScrollerContents = scroller.querySelectorAll('div > [part="year-number"]');
+        yearScrollerContents = scroller.querySelectorAll('vaadin-date-picker-year');
       });
 
       it('should set aria-hidden on the year scroller', () => {
@@ -57,7 +55,9 @@ describe('WAI-ARIA', () => {
 
       it('should have hidden state for dots', () => {
         // Do not speak dots between years.
-        const dots = Array.from(yearScrollerContents).map((el) => el.nextElementSibling);
+        const dots = Array.from(yearScrollerContents).map((el) =>
+          el.shadowRoot.querySelector('[part="year-separator"]'),
+        );
 
         expect(dots).to.not.be.empty;
         dots.forEach((dot) => {
@@ -74,8 +74,7 @@ describe('WAI-ARIA', () => {
       monthCalendar = fixtureSync(`<vaadin-month-calendar></vaadin-month-calendar>`);
       monthCalendar.i18n = getDefaultI18n();
       monthCalendar.month = new Date(2016, 1, 1);
-      await nextFrame();
-      await aTimeout(1);
+      await nextRender();
     });
 
     it('should indicate today on date cells', async () => {

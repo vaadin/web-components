@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/lit-renderer",
-  "version": "23.3.0-alpha3",
+  "version": "24.0.0-alpha0",
   "publishConfig": {
     "access": "public"
   },
@@ -31,5 +31,10 @@
   ],
   "dependencies": {
     "lit": "^2.0.0"
+  },
+  "devDependencies": {
+    "@esm-bundle/chai": "^4.3.4",
+    "@vaadin/testing-helpers": "^0.3.2",
+    "sinon": "^13.0.2"
   }
 }

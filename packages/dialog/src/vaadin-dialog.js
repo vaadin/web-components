@@ -6,7 +6,7 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
-import { OverlayElement } from '@vaadin/vaadin-overlay/src/vaadin-overlay.js';
+import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { ThemePropertyMixin } from '@vaadin/vaadin-themable-mixin/vaadin-theme-property-mixin.js';
 import { DialogDraggableMixin } from './vaadin-dialog-draggable-mixin.js';
@@ -95,10 +95,10 @@ let memoizedTemplate;
 /**
  * An element used internally by `<vaadin-dialog>`. Not intended to be used separately.
  *
- * @extends OverlayElement
+ * @extends Overlay
  * @private
  */
-export class DialogOverlay extends OverlayElement {
+export class DialogOverlay extends Overlay {
   static get is() {
     return 'vaadin-dialog-overlay';
   }

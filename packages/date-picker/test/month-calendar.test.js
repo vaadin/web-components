@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { aTimeout, fixtureSync, tap } from '@vaadin/testing-helpers';
+import { aTimeout, fixtureSync, makeSoloTouchEvent, nextRender, tap } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../src/vaadin-month-calendar.js';
 import { getDefaultI18n } from './common.js';
@@ -7,16 +7,21 @@ import { getDefaultI18n } from './common.js';
 describe('vaadin-month-calendar', () => {
   let monthCalendar, valueChangedSpy;
 
+  function getDateCells(calendar) {
+    return [...calendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)')];
+  }
+
+  function getWeekDayCells(calendar) {
+    return [...calendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)')];
+  }
+
   beforeEach(async () => {
-    monthCalendar = fixtureSync(`
-    <vaadin-month-calendar
-      style="position: absolute; top: 0"
-    ></vaadin-month-calendar>`);
+    monthCalendar = fixtureSync('<vaadin-month-calendar></vaadin-month-calendar>');
     monthCalendar.i18n = getDefaultI18n();
     monthCalendar.month = new Date(2016, 1, 1);
     valueChangedSpy = sinon.spy();
     monthCalendar.addEventListener('selected-date-changed', valueChangedSpy);
-    await aTimeout();
+    await nextRender();
   });
 
   // A helper for async test functions for 2016 month rendering.
@@ -26,7 +31,7 @@ describe('vaadin-month-calendar', () => {
     return (done) => {
       monthCalendar.month = new Date(2016, monthNumber, 1);
       setTimeout(() => {
-        const numberOfDays = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)').length;
+        const numberOfDays = getDateCells(monthCalendar).length;
         expect(numberOfDays).to.equal(expectedDays[monthNumber]);
         done();
       });
@@ -39,29 +44,29 @@ describe('vaadin-month-calendar', () => {
   }
 
   it('should render days in correct order by default', () => {
-    const weekdays = monthCalendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)');
-    const weekdayTitles = Array.from(weekdays).map((weekday) => weekday.textContent.trim());
+    const weekdays = getWeekDayCells(monthCalendar);
+    const weekdayTitles = weekdays.map((weekday) => weekday.textContent.trim());
     expect(weekdayTitles).to.eql(['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']);
   });
 
   it('should render days in correct order by first day of week', async () => {
-    monthCalendar.set('i18n.firstDayOfWeek', 1); // Start from Monday.
-    await aTimeout();
-    const weekdays = monthCalendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)');
-    const weekdayTitles = Array.from(weekdays).map((weekday) => weekday.textContent.trim());
+    monthCalendar.i18n = { ...monthCalendar.i18n, firstDayOfWeek: 1 }; // Start from Monday.
+    await nextRender();
+    const weekdays = getWeekDayCells(monthCalendar);
+    const weekdayTitles = weekdays.map((weekday) => weekday.textContent.trim());
     expect(weekdayTitles).to.eql(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);
   });
 
   it('should re-render after changing the month', async () => {
     monthCalendar.month = new Date(2000, 0, 1); // Feb 2016 -> Jan 2000
-    await aTimeout();
-    const days = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)').length;
+    await nextRender();
+    const days = getDateCells(monthCalendar).length;
     expect(days).to.equal(31);
     expect(monthCalendar.shadowRoot.querySelector('[part="month-header"]').textContent).to.equal('January 2000');
   });
 
   it('should fire value change on tap', () => {
-    const dateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
+    const dateElements = getDateCells(monthCalendar);
     tap(dateElements[10]);
     expect(valueChangedSpy.calledOnce).to.be.true;
   });
@@ -69,7 +74,7 @@ describe('vaadin-month-calendar', () => {
   it('should fire date-tap on tap', () => {
     const tapSpy = sinon.spy();
     monthCalendar.addEventListener('date-tap', tapSpy);
-    const dateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
+    const dateElements = getDateCells(monthCalendar);
     tap(dateElements[10]);
     expect(tapSpy.calledOnce).to.be.true;
     tap(dateElements[10]);
@@ -83,7 +88,7 @@ describe('vaadin-month-calendar', () => {
   });
 
   it('should update value on tap', () => {
-    const dateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
+    const dateElements = getDateCells(monthCalendar);
     for (let i = 0; i < dateElements.length; i++) {
       if (dateElements[i].date.getDate() === 10) {
         // Tenth of February.
@@ -98,7 +103,7 @@ describe('vaadin-month-calendar', () => {
   it('should not react if the tap takes more than 300ms', async () => {
     const tapSpy = sinon.spy();
     monthCalendar.addEventListener('date-tap', tapSpy);
-    const dateElement = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)')[10];
+    const dateElement = getDateCells(monthCalendar)[10];
     monthCalendar._onMonthGridTouchStart();
     await aTimeout(350);
     tap(dateElement);
@@ -109,39 +114,30 @@ describe('vaadin-month-calendar', () => {
     const tapSpy = sinon.spy();
     monthCalendar.addEventListener('date-tap', tapSpy);
     monthCalendar.ignoreTaps = true;
-    const dateElement = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)')[10];
+    const dateElement = getDateCells(monthCalendar)[10];
     tap(dateElement);
     expect(tapSpy.called).to.be.false;
   });
 
   it('should prevent default on touchend', () => {
-    const preventDefaultSpy = sinon.spy();
-    const touchendEvent = new CustomEvent('touchend', {
-      bubbles: true,
-      cancelable: true,
-    });
-    touchendEvent.changedTouches = [{}];
-    touchendEvent.preventDefault = preventDefaultSpy;
-
-    // Dispatch a fake touchend event from a date element.
-    const dateElement = monthCalendar.shadowRoot.querySelector('[part="date"]:not(:empty)');
-    dateElement.dispatchEvent(touchendEvent);
-    expect(preventDefaultSpy.called).to.be.true;
+    const dateElement = getDateCells(monthCalendar)[0];
+    const event = makeSoloTouchEvent('touchend', null, dateElement);
+    expect(event.defaultPrevented).to.be.true;
   });
 
   it('should work with sub 100 years', async () => {
     const month = new Date(0, 0);
     month.setFullYear(99);
     monthCalendar.month = month;
-    await aTimeout();
-    const date = monthCalendar.shadowRoot.querySelector('[part="date"]:not(:empty)').date;
+    await nextRender();
+    const date = getDateCells(monthCalendar)[0].date;
     expect(date.getFullYear()).to.equal(month.getFullYear());
   });
 
   it('should not update value on disabled date tap', async () => {
     monthCalendar.maxDate = new Date('2016-02-09');
-    await aTimeout();
-    const dateElements = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
+    await nextRender();
+    const dateElements = getDateCells(monthCalendar);
     for (let i = 0; i < dateElements.length; i++) {
       if (dateElements[i].date.getDate() === 10) {
         // Tenth of February.
@@ -158,37 +154,34 @@ describe('vaadin-month-calendar', () => {
           'tammikuu_helmikuu_maaliskuu_huhtikuu_toukokuu_kesäkuu_heinäkuu_elokuu_syyskuu_lokakuu_marraskuu_joulukuu'.split(
             '_',
           ),
-        weekdays: 'sunnuntai_maanantai_tiistai_keskiviikko_torstai_perjantai_lauantai'.split('_'),
-        weekdaysShort: 'su_ma_ti_ke_to_pe_la'.split('_'),
+        weekdays: ['sunnuntai', 'maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai'],
+        weekdaysShort: ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'],
         firstDayOfWeek: 1,
-        week: 'viikko',
         today: 'Tänään',
         formatTitle: (monthName, fullYear) => `${monthName}-${fullYear}`,
       };
-      await aTimeout();
+      await nextRender();
     });
 
     it('should render weekdays in correct locale', () => {
-      const weekdays = monthCalendar.shadowRoot.querySelectorAll('[part="weekday"]:not(:empty)');
-      const weekdayTitles = Array.from(weekdays).map((weekday) => weekday.textContent.trim());
+      const weekdays = getWeekDayCells(monthCalendar);
+      const weekdayTitles = weekdays.map((weekday) => weekday.textContent.trim());
       expect(weekdayTitles).to.eql(['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su']);
     });
 
     it('should label dates in correct locale', () => {
-      const dates = monthCalendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)');
-      Array.from(dates)
-        .slice(0, 7)
-        .forEach((date, index) => {
-          const label = date.getAttribute('aria-label');
-          const day = ['maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai', 'sunnuntai'][index];
-          expect(label).to.equal(`${index + 1} helmikuu 2016, ${day}`);
-        });
+      const dates = getDateCells(monthCalendar);
+      dates.slice(0, 7).forEach((date, index) => {
+        const label = date.getAttribute('aria-label');
+        const day = ['maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai', 'sunnuntai'][index];
+        expect(label).to.equal(`${index + 1} helmikuu 2016, ${day}`);
+      });
     });
 
     it('should label today in correct locale', async () => {
       monthCalendar.month = new Date();
-      await aTimeout();
-      const today = monthCalendar.shadowRoot.querySelector('[part="date"]:not(:empty)[today]');
+      await nextRender();
+      const today = getDateCells(monthCalendar).find((date) => date.hasAttribute('today'));
       expect(today.getAttribute('aria-label').split(', ').pop()).to.equal('Tänään');
     });
 
@@ -200,7 +193,7 @@ describe('vaadin-month-calendar', () => {
   describe('week numbers', () => {
     beforeEach(() => {
       monthCalendar.showWeekNumbers = true;
-      monthCalendar.set('i18n.firstDayOfWeek', 1);
+      monthCalendar.i18n = { ...monthCalendar.i18n, firstDayOfWeek: 1 };
     });
 
     function getWeekNumbers(cal) {
@@ -212,7 +205,7 @@ describe('vaadin-month-calendar', () => {
     it('should render correct week numbers for Jan 2016', async () => {
       const month = new Date(2016, 0, 1);
       monthCalendar.month = month;
-      await aTimeout();
+      await nextRender();
       const weekNumbers = getWeekNumbers(monthCalendar);
       expect(weekNumbers).to.eql([53, 1, 2, 3, 4]);
     });
@@ -220,7 +213,7 @@ describe('vaadin-month-calendar', () => {
     it('should render correct week numbers for Dec 2015', async () => {
       const month = new Date(2015, 11, 1);
       monthCalendar.month = month;
-      await aTimeout();
+      await nextRender();
       const weekNumbers = getWeekNumbers(monthCalendar);
       expect(weekNumbers).to.eql([49, 50, 51, 52, 53]);
     });
@@ -228,7 +221,7 @@ describe('vaadin-month-calendar', () => {
     it('should render correct week numbers for Feb 2016', async () => {
       const month = new Date(2016, 1, 1);
       monthCalendar.month = month;
-      await aTimeout();
+      await nextRender();
       const weekNumbers = getWeekNumbers(monthCalendar);
       expect(weekNumbers).to.eql([5, 6, 7, 8, 9]);
     });
@@ -237,7 +230,7 @@ describe('vaadin-month-calendar', () => {
       const month = new Date(0, 4, 1);
       month.setFullYear(99);
       monthCalendar.month = month;
-      await aTimeout();
+      await nextRender();
       const weekNumbers = getWeekNumbers(monthCalendar);
       expect(weekNumbers).to.eql([18, 19, 20, 21, 22]);
     });

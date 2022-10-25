@@ -43,6 +43,13 @@ export { extractDateParts };
 declare function extractDateParts(date: Date): { day: number; month: number; year: number };
 
 /**
+ * Get difference in months between today and given months value.
+ */
+declare function dateAfterXMonths(months: number): number;
+
+export { dateAfterXMonths };
+
+/**
  * Calculate the year of the date based on the provided reference date
  * Gets a two-digit year and returns a full year.
  */

@@ -1,17 +1,15 @@
-import { aTimeout, fire, listenOnce, mousedown, nextRender } from '@vaadin/testing-helpers';
+import { fire, listenOnce, makeSoloTouchEvent, mousedown, nextRender } from '@vaadin/testing-helpers';
 import { flush } from '@polymer/polymer/lib/utils/flush.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 
 export function activateScroller(scroller) {
   scroller.active = true;
-  // Setting `active` triggers `_finishInit` using afterNextRender + setTimeout(1).
+  // Setting `active` triggers `_finishInit` using afterNextRender
   return new Promise((resolve) => {
-    setTimeout(() => {
-      afterNextRender(scroller, () => {
-        scroller._debouncerUpdateClones.flush();
-        resolve();
-      });
-    }, 1);
+    afterNextRender(scroller, () => {
+      scroller._debouncerUpdateClones.flush();
+      resolve();
+    });
   });
 }
 
@@ -34,8 +32,6 @@ export function getDefaultI18n() {
     weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     weekdaysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     firstDayOfWeek: 0,
-    week: 'Week',
-    calendar: 'Calendar',
     today: 'Today',
     cancel: 'Cancel',
     formatDate(d) {
@@ -47,21 +43,16 @@ export function getDefaultI18n() {
   };
 }
 
-export function open(datepicker) {
-  return new Promise((resolve) => {
-    listenOnce(datepicker.$.overlay, 'vaadin-overlay-open', async () => {
-      // Wait until infinite scrollers are rendered
-      await waitForOverlayRender();
-
-      resolve();
-    });
-    datepicker.open();
-  });
+export async function open(datepicker) {
+  datepicker.open();
+  await waitForOverlayRender();
 }
 
 export async function waitForOverlayRender() {
-  // Wait until infinite scrollers are rendered
-  await aTimeout(1);
+  // First, wait for vaadin-overlay-open event
+  await nextRender();
+
+  // Then wait for scrollers to fully render
   await nextRender();
 
   // Force dom-repeat to render table elements
@@ -95,6 +86,18 @@ export function outsideClick() {
   document.body.click();
 }
 
+/**
+ * Emulates a touch on the target resulting in clicking and focusing it.
+ */
+export function touchTap(target) {
+  const start = makeSoloTouchEvent('touchstart', null, target);
+  const end = makeSoloTouchEvent('touchend', null, target);
+  if (!start.defaultPrevented && !end.defaultPrevented) {
+    target.click();
+    target.focus();
+  }
+}
+
 export function monthsEqual(date1, date2) {
   return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
 }
@@ -104,8 +107,8 @@ export function getFirstVisibleItem(scroller, bufferOffset) {
   bufferOffset = bufferOffset || 0;
 
   scroller._buffers.forEach((buffer) => {
-    [].forEach.call(buffer.children, (insertionPoint) => {
-      children.push(insertionPoint._itemWrapper);
+    [...buffer.children].forEach((slot) => {
+      children.push(slot._itemWrapper);
     });
   });
   const scrollerRect = scroller.getBoundingClientRect();
@@ -116,21 +119,8 @@ export function getFirstVisibleItem(scroller, bufferOffset) {
   });
 }
 
-export function isFullscreen(datepicker) {
-  return datepicker.$.overlay.getAttribute('fullscreen') !== null;
-}
-
-// As a side-effect has to toggle the overlay once to initialize it
-export function getOverlayContent(datepicker) {
-  if (datepicker.$.overlay.hasAttribute('disable-upgrade')) {
-    datepicker.open();
-    datepicker.close();
-  }
-  return datepicker.$.overlay.content.querySelector('#overlay-content');
-}
-
 export function getFocusedMonth(overlayContent) {
-  const months = Array.from(overlayContent.shadowRoot.querySelectorAll('vaadin-month-calendar'));
+  const months = Array.from(overlayContent.querySelectorAll('vaadin-month-calendar'));
   return months.find((month) => {
     const focused = month.shadowRoot.querySelector('[part="date"][focused]');
     return !!focused;
@@ -138,7 +128,7 @@ export function getFocusedMonth(overlayContent) {
 }
 
 export function getFocusedCell(overlayContent) {
-  const months = Array.from(overlayContent.shadowRoot.querySelectorAll('vaadin-month-calendar'));
+  const months = Array.from(overlayContent.querySelectorAll('vaadin-month-calendar'));
 
   // Date that is currently focused
   let focusedCell;
