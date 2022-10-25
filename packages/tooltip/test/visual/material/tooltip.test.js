@@ -47,9 +47,19 @@ describe('tooltip', () => {
       document.documentElement.setAttribute('theme', 'dark');
     });
 
+    after(() => {
+      document.documentElement.removeAttribute('theme');
+    });
+
     it('theme-dark', async () => {
       fire(target, 'mouseenter');
       await visualDiff(div, 'theme-dark');
     });
+  });
+
+  it('max-width', async () => {
+    element.text = 'This is a tooltip with a long text (more than 40 chars), it should wrap in 2 lines for readability';
+    fire(target, 'mouseenter');
+    await visualDiff(div, 'max-width');
   });
 });
