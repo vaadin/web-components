@@ -4,7 +4,15 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { close, getFocusedCell, getOverlayContent, idleCallback, open, waitForScrollToFinish } from './common.js';
+import {
+  close,
+  getFocusedCell,
+  getOverlayContent,
+  idleCallback,
+  open,
+  waitForOverlayRender,
+  waitForScrollToFinish,
+} from './common.js';
 
 describe('keyboard', () => {
   let datepicker;
@@ -619,6 +627,15 @@ describe('keyboard', () => {
     it('should not open overlay on input', async () => {
       await sendKeys({ type: 'j' });
       expect(datepicker.opened).not.to.be.true;
+    });
+
+    it('should focus parsed date when opening overlay', async () => {
+      await sendKeys({ type: '1/20/2000' });
+      await open(datepicker);
+      await waitForOverlayRender();
+
+      expect(focusedDate().getMonth()).to.equal(0);
+      expect(focusedDate().getDate()).to.equal(20);
     });
 
     it('should set datepicker value on blur', async () => {
