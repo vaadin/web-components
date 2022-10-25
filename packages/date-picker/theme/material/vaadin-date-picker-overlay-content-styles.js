@@ -14,9 +14,6 @@ registerStyles(
       font-size: var(--material-body-font-size);
       -webkit-text-size-adjust: 100%;
       line-height: 1.4;
-
-      /* FIXME(platosha): fix the core styles and remove this override. */
-      background: transparent;
     }
 
     :host([fullscreen]) {
