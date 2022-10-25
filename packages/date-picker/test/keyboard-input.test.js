@@ -492,7 +492,10 @@ describe('keyboard', () => {
     });
 
     it('should parse in base 10', async () => {
-      datepicker.referenceDate = new Date(2022, 0, 1);
+      datepicker.i18n = {
+        ...datepicker.i18n,
+        referenceDate: extractDateParts(new Date(2022, 0, 1)),
+      };
       await sendKeys({ type: '09/09/09' });
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(2009);
