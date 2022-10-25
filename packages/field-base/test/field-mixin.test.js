@@ -462,6 +462,22 @@ const runTests = (baseClass) => {
       });
     });
 
+    describe('slotted custom element', () => {
+      beforeEach(async () => {
+        const helperTag = define[baseClass]('custom-helper', '<div>Helper</div>', (Base) => Base);
+        element = fixtureSync(`
+          <${tag}>
+            <${helperTag} slot="helper"></${helperTag}>
+          </${tag}>
+        `);
+        await nextRender();
+      });
+
+      it('should set has-helper attribute when helper is a custom element', () => {
+        expect(element.hasAttribute('has-helper')).to.be.true;
+      });
+    });
+
     describe('lazy', () => {
       describe('DOM manipulations', () => {
         let defaultHelper;
