@@ -617,7 +617,6 @@ describe('keyboard', () => {
     it('should focus parsed date when opening overlay', async () => {
       await sendKeys({ type: '1/20/2000' });
       await open(datepicker);
-      await waitForOverlayRender();
 
       expect(focusedDate().getMonth()).to.equal(0);
       expect(focusedDate().getDate()).to.equal(20);
