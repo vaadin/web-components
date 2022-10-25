@@ -54,3 +54,5 @@ export { dateAfterXMonths };
  * Gets a two-digit year and returns a full year.
  */
 declare function getAdjustedYear(referenceDate: Date, year: number, month: number | null, date: number | null): Date;
+
+export { getAdjustedYear };
