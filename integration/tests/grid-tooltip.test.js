@@ -4,6 +4,7 @@ import {
   aTimeout,
   enter,
   escKeyDown,
+  fire,
   fixtureSync,
   focusin,
   focusout,
@@ -12,6 +13,7 @@ import {
   nextRender,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
+import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/grid/vaadin-grid.js';
 import '@vaadin/tooltip/vaadin-tooltip.js';
@@ -205,6 +207,39 @@ describe('tooltip', () => {
     mouseenter(cell);
 
     grid.remove();
+
+    expect(tooltip.opened).to.be.false;
+  });
+
+  it('should hide the tooltip when starting scrolling', async () => {
+    const cell = getCell(grid, 0);
+    mouseenter(cell);
+
+    fire(grid.$.table, 'scroll');
+    await nextFrame();
+
+    expect(tooltip.opened).to.be.false;
+  });
+
+  it('should not hide the tooltip when scrolling using keyboard navigation', async () => {
+    const cell = getCell(grid, 0);
+    tabKeyDown(document.body);
+    focusin(cell);
+    expect(tooltip.opened).to.be.true;
+
+    await sendKeys({ press: 'ArrowDown' });
+    fire(grid.$.table, 'scroll');
+    await nextFrame();
+
+    expect(tooltip.opened).to.be.true;
+  });
+
+  it('should not show the tooltip on mouseenter while scrolling', async () => {
+    fire(grid.$.table, 'scroll');
+    await nextFrame();
+
+    const cell = getCell(grid, 0);
+    mouseenter(cell);
 
     expect(tooltip.opened).to.be.false;
   });
