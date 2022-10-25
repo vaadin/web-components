@@ -137,6 +137,9 @@ export const ScrollMixin = (superClass) =>
       if (!this.hasAttribute('reordering')) {
         this._scheduleScrolling();
       }
+      if (!this.hasAttribute('navigating')) {
+        this._hideTooltip(true);
+      }
 
       this._updateOverflow();
     }
