@@ -72,6 +72,15 @@ customElements.define(
   },
 );
 
+customElements.define(
+  'custom-helper',
+  class extends PolymerElement {
+    static get template() {
+      return html`<div>Helper</div>`;
+    }
+  },
+);
+
 describe('field-mixin', () => {
   let element, label, error, helper, input;
 
@@ -385,6 +394,20 @@ describe('field-mixin', () => {
       });
 
       it('should set has-helper attribute when helper children are empty', () => {
+        expect(element.hasAttribute('has-helper')).to.be.true;
+      });
+    });
+
+    describe('slotted custom element', () => {
+      beforeEach(() => {
+        element = fixtureSync(`
+          <field-mixin-element>
+            <custom-helper slot="helper">=</custom-helper>
+          </field-mixin-element>
+        `);
+      });
+
+      it('should set has-helper attribute when helper is a custom element', () => {
         expect(element.hasAttribute('has-helper')).to.be.true;
       });
     });
