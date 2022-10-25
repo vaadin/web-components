@@ -9,13 +9,11 @@ registerStyles(
   'vaadin-date-picker-overlay-content',
   css`
     :host {
+      background: var(--material-background-color);
       font-family: var(--material-font-family);
       font-size: var(--material-body-font-size);
       -webkit-text-size-adjust: 100%;
       line-height: 1.4;
-
-      /* FIXME(platosha): fix the core styles and remove this override. */
-      background: transparent;
     }
 
     :host([fullscreen]) {
