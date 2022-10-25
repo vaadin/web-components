@@ -718,11 +718,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  _isOverflowHidden(length) {
-    return length === 0;
-  }
-
-  /** @private */
   _mergeItemLabels(items) {
     return items.map((item) => this._getItemLabel(item)).join(', ');
   }
