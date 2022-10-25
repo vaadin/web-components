@@ -614,6 +614,14 @@ describe('keyboard', () => {
       expect(datepicker.opened).not.to.be.true;
     });
 
+    it('should focus parsed date when opening overlay', async () => {
+      await sendKeys({ type: '1/20/2000' });
+      await open(datepicker);
+
+      expect(focusedDate().getMonth()).to.equal(0);
+      expect(focusedDate().getDate()).to.equal(20);
+    });
+
     it('should set datepicker value on blur', async () => {
       await sendKeys({ type: '1/1/2000' });
       await sendKeys({ press: 'Tab' });

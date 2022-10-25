@@ -1082,7 +1082,7 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     _userInputValueChanged() {
-      if (this.opened && this._inputValue) {
+      if (this._inputValue) {
         const parsedDate = this._getParsedDate();
 
         if (this._isValidDate(parsedDate)) {
