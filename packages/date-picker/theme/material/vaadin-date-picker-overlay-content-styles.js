@@ -9,6 +9,7 @@ registerStyles(
   'vaadin-date-picker-overlay-content',
   css`
     :host {
+      background: var(--material-background-color);
       font-family: var(--material-font-family);
       font-size: var(--material-body-font-size);
       -webkit-text-size-adjust: 100%;
