@@ -619,6 +619,14 @@ import { close, getOverlayContent, open } from './common.js';
       expect(datepicker.opened).not.to.be.true;
     });
 
+    it('should focus parsed date when opening overlay', () => {
+      inputText('1/20/2000');
+      datepicker.open();
+
+      expect(focusedDate().getMonth()).to.equal(0);
+      expect(focusedDate().getDate()).to.equal(20);
+    });
+
     it('should set datepicker value on blur', () => {
       inputText('1/1/2000');
       target.dispatchEvent(new Event('blur'));
