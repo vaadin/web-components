@@ -82,7 +82,11 @@ export class HelperController extends SlotController {
       return false;
     }
 
-    return helperNode.children.length > 0 || this.__isNotEmpty(helperNode.textContent);
+    return (
+      helperNode.children.length > 0 ||
+      (helperNode.nodeType === Node.ELEMENT_NODE && customElements.get(helperNode.localName)) ||
+      this.__isNotEmpty(helperNode.textContent)
+    );
   }
 
   /**
