@@ -10,6 +10,10 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-tooltip-overlay',
   css`
+    [part='overlay'] {
+      max-width: 40ch;
+    }
+
     :host([position^='top'][top-aligned]) [part='overlay'],
     :host([position^='bottom'][top-aligned]) [part='overlay'] {
       margin-top: var(--vaadin-tooltip-offset-top, 0);
