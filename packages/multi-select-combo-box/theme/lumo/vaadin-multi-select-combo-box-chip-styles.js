@@ -15,34 +15,26 @@ const chip = css`
   :host {
     font-size: var(--lumo-font-size-xxs);
     line-height: 1;
-    padding: 0.3125em calc(0.5em + var(--lumo-border-radius-s) / 4);
     color: var(--lumo-body-text-color);
     border-radius: var(--lumo-border-radius-s);
     background-color: var(--lumo-contrast-20pct);
     cursor: var(--lumo-clickable-cursor);
-  }
-
-  :host([focused]) {
-    background-color: var(--lumo-primary-color);
-    color: var(--lumo-primary-contrast-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   :host([focused]) [part='remove-button'] {
     color: inherit;
   }
 
-  :host(:not([part~='overflow']):not([readonly]):not([disabled])) {
-    padding-inline-end: 0;
-  }
-
-  :host([part~='overflow']) {
+  :host([slot='overflow']) {
     position: relative;
     min-width: var(--lumo-size-xxs);
     margin-inline-start: var(--lumo-space-s);
   }
 
-  :host([part~='overflow'])::before,
-  :host([part~='overflow'])::after {
+  :host([slot='overflow'])::before,
+  :host([slot='overflow'])::after {
     position: absolute;
     content: '';
     width: 100%;
@@ -52,28 +44,28 @@ const chip = css`
     border-color: var(--lumo-contrast-30pct);
   }
 
-  :host([part~='overflow'])::before {
+  :host([slot='overflow'])::before {
     left: calc(-1 * var(--lumo-space-s) / 2);
   }
 
-  :host([part~='overflow'])::after {
+  :host([slot='overflow'])::after {
     left: calc(-1 * var(--lumo-space-s));
   }
 
-  :host([part~='overflow-two']) {
+  :host([label='2']) {
     margin-inline-start: calc(var(--lumo-space-s) / 2);
   }
 
-  :host([part~='overflow-two'])::after {
+  :host([label='2'])::after {
     display: none;
   }
 
-  :host([part~='overflow-one']) {
+  :host([label='1']) {
     margin-inline-start: 0;
   }
 
-  :host([part~='overflow-one'])::before,
-  :host([part~='overflow-one'])::after {
+  :host([label='1'])::before,
+  :host([label='1'])::after {
     display: none;
   }
 

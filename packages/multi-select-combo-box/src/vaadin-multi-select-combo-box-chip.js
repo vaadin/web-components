@@ -42,6 +42,7 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
 
       label: {
         type: String,
+        observer: '_labelChanged',
       },
 
       item: {
@@ -66,13 +67,22 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
           text-overflow: ellipsis;
         }
 
-        :host(:is([readonly], [disabled], [part~='overflow'])) [part='remove-button'] {
+        :host([hidden]),
+        :host(:is([readonly], [disabled], [slot='overflow'])) [part='remove-button'] {
           display: none !important;
         }
       </style>
       <div part="label">[[label]]</div>
       <div part="remove-button" role="button" on-click="_onRemoveClick"></div>
     `;
+  }
+
+  /** @private */
+  _labelChanged(label) {
+    // Only reflect label to attribute for overflow chip
+    if (this.getAttribute('slot') === 'overflow') {
+      this.setAttribute('label', label || 0);
+    }
   }
 
   /** @private */

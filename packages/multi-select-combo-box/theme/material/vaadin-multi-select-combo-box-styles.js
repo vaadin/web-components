@@ -29,6 +29,16 @@ const multiSelectComboBox = css`
     caret-color: var(--material-body-text-color) !important;
   }
 
+  /* Override input-container styles */
+  ::slotted([slot='chip']),
+  ::slotted([slot='overflow']) {
+    padding: 0 0.5rem;
+  }
+
+  ::slotted([slot='chip']:not([readonly]):not([disabled])) {
+    padding-inline-end: 0;
+  }
+
   [part='input-field'] {
     height: auto;
     min-height: 32px;
