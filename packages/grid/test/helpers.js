@@ -2,10 +2,10 @@ import sinon from 'sinon';
 
 export const flushGrid = (grid) => {
   grid._observer.flush();
+  grid._afterScroll();
   if (grid._debounceScrolling) {
     grid._debounceScrolling.flush();
   }
-  grid._afterScroll();
   if (grid._debounceOverflow) {
     grid._debounceOverflow.flush();
   }
