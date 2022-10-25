@@ -71,6 +71,15 @@ customElements.define(
   },
 );
 
+customElements.define(
+  'custom-helper',
+  class extends PolymerElement {
+    static get template() {
+      return html`<div>Helper</div>`;
+    }
+  },
+);
+
 describe('field-mixin', () => {
   let element, label, error, helper, input;
 
@@ -389,14 +398,12 @@ describe('field-mixin', () => {
     });
 
     describe('slotted custom element', () => {
-      beforeEach(async () => {
-        const helperTag = define[baseClass]('custom-helper', '<div>Helper</div>', (Base) => Base);
+      beforeEach(() => {
         element = fixtureSync(`
-          <${tag}>
-            <${helperTag} slot="helper"></${helperTag}>
-          </${tag}>
+          <field-mixin-element>
+            <custom-helper slot="helper">=</custom-helper>
+          </field-mixin-element>
         `);
-        await nextRender();
       });
 
       it('should set has-helper attribute when helper is a custom element', () => {
