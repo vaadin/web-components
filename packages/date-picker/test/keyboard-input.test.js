@@ -4,7 +4,15 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { close, getFocusedCell, getOverlayContent, idleCallback, open, waitForScrollToFinish } from './common.js';
+import {
+  close,
+  getFocusedCell,
+  getOverlayContent,
+  idleCallback,
+  open,
+  waitForOverlayRender,
+  waitForScrollToFinish,
+} from './common.js';
 
 describe('keyboard', () => {
   let datepicker;
