@@ -24,7 +24,7 @@ export interface DatePickerI18n {
   firstDayOfWeek: number;
   today: string;
   cancel: string;
-  referenceDate: DatePickerDate | undefined;
+  referenceDate: string;
   parseDate(date: string): DatePickerDate | undefined;
   formatDate(date: DatePickerDate): string;
   formatTitle(monthName: string, fullYear: number): string;
@@ -132,9 +132,9 @@ export declare class DatePickerMixinClass {
    *   //   dateToBeParsed: 40-10-30, result: 1940-10-30
    *   //   dateToBeParsed: 80-10-30, result: 1980-10-30
    *   //   dateToBeParsed: 10-10-30, result: 2010-10-30
-   *   // Object is in the format `{ day: ..., month: ..., year: ... }`
+   *   // Supported date format: ISO 8601 `"YYYY-MM-DD"` (default)
    *   // The default value is the current date.
-   *   referenceDate: undefined,
+   *   referenceDate: '',
    *
    *   // A function to format given `Object` as
    *   // date string. Object is in the format `{ day: ..., month: ..., year: ... }`

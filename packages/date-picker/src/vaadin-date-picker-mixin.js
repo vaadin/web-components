@@ -164,9 +164,9 @@ export const DatePickerMixin = (subclass) =>
          *   //   dateToBeParsed: 40-10-30, result: 1940-10-30
          *   //   dateToBeParsed: 80-10-30, result: 1980-10-30
          *   //   dateToBeParsed: 10-10-30, result: 2010-10-30
-         *   // Object is in the format `{ day: ..., month: ..., year: ... }`
+         *   // Supported date format: ISO 8601 `"YYYY-MM-DD"` (default)
          *   // The default value is the current date.
-         *   referenceDate: undefined,
+         *   referenceDate: '',
          *
          *   // A function to format given `Object` as
          *   // date string. Object is in the format `{ day: ..., month: ..., year: ... }`
@@ -219,7 +219,7 @@ export const DatePickerMixin = (subclass) =>
               firstDayOfWeek: 0,
               today: 'Today',
               cancel: 'Cancel',
-              referenceDate: undefined,
+              referenceDate: '',
               formatDate(d) {
                 const yearStr = String(d.year).replace(/\d+/, (y) => '0000'.substr(y.length) + y);
                 return [d.month + 1, d.day, yearStr].join('/');
@@ -236,9 +236,7 @@ export const DatePickerMixin = (subclass) =>
                   date = parseInt(parts[1]);
                   year = parseInt(parts[2]);
                   if (parts[2].length < 3 && year >= 0) {
-                    const usedReferenceDate = this.referenceDate
-                      ? new Date(this.referenceDate.year, this.referenceDate.month - 1, this.referenceDate.day)
-                      : new Date();
+                    const usedReferenceDate = this.referenceDate ? new Date(this.referenceDate) : new Date();
                     year = getAdjustedYear(usedReferenceDate, year, month, date);
                   }
                 } else if (parts.length === 2) {

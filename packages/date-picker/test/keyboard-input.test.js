@@ -4,7 +4,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import './not-animated-styles.js';
 import '../vaadin-date-picker.js';
-import { extractDateParts, getAdjustedYear } from '../src/vaadin-date-picker-helper.js';
+import { getAdjustedYear } from '../src/vaadin-date-picker-helper.js';
 import { close, getFocusedCell, idleCallback, open, waitForOverlayRender, waitForScrollToFinish } from './common.js';
 
 describe('keyboard', () => {
@@ -471,7 +471,7 @@ describe('keyboard', () => {
     it('should parse in base 10', async () => {
       datepicker.i18n = {
         ...datepicker.i18n,
-        referenceDate: extractDateParts(new Date(2022, 0, 1)),
+        referenceDate: '2022-01-01',
       };
       await sendKeys({ type: '09/09/09' });
       const result = focusedDate();
@@ -495,7 +495,7 @@ describe('keyboard', () => {
     it('should parse short year with a custom reference date later in century', async () => {
       datepicker.i18n = {
         ...datepicker.i18n,
-        referenceDate: extractDateParts(new Date(1999, 0, 1)),
+        referenceDate: '1999-01-01',
       };
       await checkYearOffsets();
     });
@@ -503,16 +503,15 @@ describe('keyboard', () => {
     it('should parse short year with a custom reference date earlier in century', async () => {
       datepicker.i18n = {
         ...datepicker.i18n,
-        referenceDate: extractDateParts(new Date(2001, 0, 1)),
+        referenceDate: '2001-01-01',
       };
       await checkYearOffsets();
     });
 
     it('should parse short year with a custom reference date and ambiguous year difference', async () => {
-      const refDate = new Date(2001, 3, 15);
       datepicker.i18n = {
         ...datepicker.i18n,
-        referenceDate: extractDateParts(refDate),
+        referenceDate: '2001-03-15',
       };
       await checkMonthAndDayOffset(0, 0, 0);
       await checkMonthAndDayOffset(0, -1, 0);
@@ -523,11 +522,12 @@ describe('keyboard', () => {
 
     async function checkMonthAndDayOffset(monthOffsetToAdd, dayOffsetToAdd, expectedYearOffset) {
       input.value = '';
-      const yearToTest = datepicker.i18n.referenceDate.year + 50;
+      const referenceDate = new Date(datepicker.i18n.referenceDate);
+      const yearToTest = referenceDate.getFullYear() + 50;
       await sendKeys({
-        type: `${datepicker.i18n.referenceDate.month + monthOffsetToAdd}/${
-          datepicker.i18n.referenceDate.day + dayOffsetToAdd
-        }/${String(yearToTest).slice(2, 4)}`,
+        type: `${referenceDate.getMonth() + 1 + monthOffsetToAdd}/${referenceDate.getDate() + dayOffsetToAdd}/${
+          yearToTest % 100
+        }`,
       });
       const result = focusedDate();
       expect(result.getFullYear()).to.equal(yearToTest + expectedYearOffset);
@@ -544,7 +544,7 @@ describe('keyboard', () => {
     async function checkYearOffset(offsetToAdd, expectedOffset) {
       input.value = '';
       const referenceDateYear = datepicker.i18n.referenceDate
-        ? datepicker.i18n.referenceDate.year
+        ? new Date(datepicker.i18n.referenceDate).getFullYear()
         : today.getFullYear();
       const yearToTest = referenceDateYear + offsetToAdd;
       await sendKeys({ type: `6/20/${String(yearToTest).slice(2, 4)}` });
