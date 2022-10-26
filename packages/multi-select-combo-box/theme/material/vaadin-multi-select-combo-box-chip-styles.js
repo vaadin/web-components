@@ -49,20 +49,20 @@ const chip = css`
     left: -0.5rem;
   }
 
-  :host([label='2']) {
+  :host([count='2']) {
     margin-inline-start: 0.25rem;
   }
 
-  :host([label='2'])::after {
+  :host([count='2'])::after {
     display: none;
   }
 
-  :host([label='1']) {
+  :host([count='1']) {
     margin-inline-start: 0;
   }
 
-  :host([label='1'])::before,
-  :host([label='1'])::after {
+  :host([count='1'])::before,
+  :host([count='1'])::after {
     display: none;
   }
 

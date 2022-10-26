@@ -27,8 +27,8 @@ snapshots["vaadin-multi-select-combo-box host default"] =
     spellcheck="false"
   >
   <vaadin-multi-select-combo-box-chip
+    count="0"
     hidden=""
-    label="0"
     slot="overflow"
     title=""
   >
