@@ -488,6 +488,18 @@ describe('keyboard', () => {
       expect(() => getAdjustedYear(today, 100, 1, 1)).to.throw(Error);
     });
 
+    it('should parse with default day value when day is not provided', () => {
+      expect(getAdjustedYear(new Date(1919, 11, 31), 70, 0)).to.equal(1870);
+      expect(getAdjustedYear(new Date(1920, 0, 1), 70, 0)).to.equal(1970);
+      expect(getAdjustedYear(new Date(1920, 0, 2), 70, 0)).to.equal(1970);
+    });
+
+    it('should parse with default month and day values when only year is provided', () => {
+      expect(getAdjustedYear(new Date(1919, 11, 31), 70)).to.equal(1870);
+      expect(getAdjustedYear(new Date(1920, 0, 1), 70)).to.equal(1970);
+      expect(getAdjustedYear(new Date(1920, 0, 2), 70)).to.equal(1970);
+    });
+
     it('should parse short year with current date as reference date', async () => {
       await checkYearOffsets();
     });
