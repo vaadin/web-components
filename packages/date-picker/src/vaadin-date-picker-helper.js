@@ -127,7 +127,7 @@ export function dateAfterXMonths(months) {
  * @param {Number} day
  * @return {!Number} Adjusted year value
  */
-export function getAdjustedYear(referenceDate, year, month, day) {
+export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
   if (year > 99) {
     throw new Error('The provided year cannot have more than 2 digits.');
   }
