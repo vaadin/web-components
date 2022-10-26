@@ -3,6 +3,7 @@ import { aTimeout, fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../vaadin-date-time-picker.js';
+import { waitForOverlayRender } from '@vaadin/date-picker/test/common.js';
 
 class DateTimePicker2020Element extends customElements.get('vaadin-date-time-picker') {
   checkValidity() {
@@ -86,6 +87,7 @@ const fixtures = {
     it('should not validate when moving focus to the date-picker dropdown', async () => {
       datePicker.focus();
       await sendKeys({ press: 'ArrowDown' });
+      await waitForOverlayRender();
       await sendKeys({ press: 'Tab' });
       expect(validateSpy.called).to.be.false;
     });
