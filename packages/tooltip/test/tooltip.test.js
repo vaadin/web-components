@@ -7,6 +7,7 @@ import {
   keyboardEventFor,
   mousedown,
   nextFrame,
+  nextRender,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
@@ -415,6 +416,18 @@ describe('vaadin-tooltip', () => {
       tabKeyDown(target);
       focusout(target, input);
       focusin(input, target);
+
+      expect(overlay.opened).to.be.false;
+    });
+
+    it('should close overlay when another overlay opens', async () => {
+      tabKeyDown(target);
+      target.focus();
+      expect(overlay.opened).to.be.true;
+
+      const otherOverlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
+      otherOverlay.opened = true;
+      await nextRender();
 
       expect(overlay.opened).to.be.false;
     });
