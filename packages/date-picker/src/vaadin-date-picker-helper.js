@@ -125,7 +125,7 @@ export function dateAfterXMonths(months) {
  * @param {!number} year Should be in the range of [0, 99]
  * @param {number} month
  * @param {number} day
- * @return {!Number} Adjusted year value
+ * @return {!number} Adjusted year value
  */
 export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
   if (year > 99) {
