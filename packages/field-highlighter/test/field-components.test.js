@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, fixtureSync, focusin, focusout, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
+import { arrowDown, fixtureSync, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/checkbox-group';
@@ -11,7 +11,7 @@ import '@vaadin/radio-group';
 import '@vaadin/select';
 import '@vaadin/text-field';
 import { html, render } from 'lit';
-import { close, waitForOverlayRender } from '@vaadin/date-picker/test/common.js';
+import { close, outsideClick, waitForOverlayRender } from '@vaadin/date-picker/test/common.js';
 import { FieldHighlighter } from '../src/vaadin-field-highlighter.js';
 
 async function waitForIntersectionObserver() {
@@ -100,8 +100,10 @@ describe('field components', () => {
       it('should not dispatch vaadin-highlight-hide event on close with focus moved to the field', async () => {
         await open(field);
         await waitForOverlayRender();
+
         field.focus();
         await close(field);
+
         expect(hideSpy.callCount).to.equal(0);
       });
 
@@ -109,8 +111,11 @@ describe('field components', () => {
         field.focus();
         await open(field);
         await waitForOverlayRender();
-        focusin(field, overlay);
+
+        await field._overlayContent.focusDateElement();
+        field.focus();
         await nextRender();
+
         expect(hideSpy.callCount).to.equal(0);
       });
 
@@ -119,8 +124,8 @@ describe('field components', () => {
         await open(field);
         await waitForOverlayRender();
 
-        focusout(field);
-        focusin(field);
+        await field._overlayContent.focusDateElement();
+        field.focus();
         await nextRender();
 
         expect(showSpy.callCount).to.equal(1);
@@ -131,7 +136,7 @@ describe('field components', () => {
         await open(field);
         await waitForOverlayRender();
 
-        focusout(field);
+        field.blur();
         field.focus();
         await nextRender();
 
@@ -143,9 +148,9 @@ describe('field components', () => {
         await open(field);
         await waitForOverlayRender();
 
-        overlay.focus();
-        focusout(overlay);
-        await close(field);
+        await field._overlayContent.focusDateElement();
+        outsideClick();
+        await nextRender();
 
         expect(hideSpy.callCount).to.equal(1);
       });
@@ -230,8 +235,7 @@ describe('field components', () => {
         field.focus();
         await open(field);
 
-        overlay.querySelector('vaadin-item').blur();
-        document.body.click();
+        outsideClick();
         await nextRender();
 
         expect(hideSpy.callCount).to.equal(0);
@@ -241,8 +245,7 @@ describe('field components', () => {
         field.focus();
         await open(field);
 
-        overlay.querySelector('vaadin-item').blur();
-        document.body.click();
+        outsideClick();
         await nextRender();
 
         expect(showSpy.callCount).to.equal(1);
@@ -257,8 +260,7 @@ describe('field components', () => {
       it('should dispatch vaadin-highlight-hide event on outside click', async () => {
         await open(field);
 
-        focusout(overlay);
-        document.body.click();
+        outsideClick();
         await nextRender();
 
         expect(hideSpy.callCount).to.equal(1);
