@@ -34,12 +34,28 @@ const multiSelectComboBox = css`
     caret-color: var(--lumo-body-text-color) !important;
   }
 
-  [part~='chip']:not(:last-of-type) {
+  /* Override input-container styles */
+  ::slotted([slot='chip']),
+  ::slotted([slot='overflow']) {
+    min-height: auto;
+    padding: 0.3125em calc(0.5em + var(--lumo-border-radius-s) / 4);
+    color: var(--lumo-body-text-color);
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  ::slotted([slot='chip']:not([readonly]):not([disabled])) {
+    padding-inline-end: 0;
+  }
+
+  ::slotted([slot='chip']:not(:last-of-type)),
+  ::slotted([slot='overflow']:not(:last-of-type)) {
     margin-inline-end: var(--lumo-space-xs);
   }
 
-  [part~='overflow']:not([hidden]) + :not(:empty) {
-    margin-inline-start: var(--lumo-space-xs);
+  ::slotted([slot='chip'][focused]) {
+    background-color: var(--lumo-primary-color);
+    color: var(--lumo-primary-contrast-color);
   }
 
   [part='toggle-button']::before {

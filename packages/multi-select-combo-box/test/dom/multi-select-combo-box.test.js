@@ -9,7 +9,15 @@ describe('vaadin-multi-select-combo-box', () => {
     multiSelectComboBox = fixtureSync('<vaadin-multi-select-combo-box></vaadin-multi-select-combo-box>');
   });
 
-  it('default', async () => {
-    await expect(multiSelectComboBox).shadowDom.to.equalSnapshot();
+  describe('host', () => {
+    it('default', async () => {
+      await expect(multiSelectComboBox).dom.to.equalSnapshot();
+    });
+  });
+
+  describe('shadow', () => {
+    it('default', async () => {
+      await expect(multiSelectComboBox).shadowDom.to.equalSnapshot();
+    });
   });
 });

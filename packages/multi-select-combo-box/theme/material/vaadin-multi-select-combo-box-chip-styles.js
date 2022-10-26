@@ -13,28 +13,25 @@ const chip = css`
   :host {
     height: 1.25rem;
     margin-inline-end: 0.25rem;
-    padding: 0 0.5rem;
     border-radius: 4px;
     background-color: rgba(0, 0, 0, 0.08);
     cursor: default;
     font-family: var(--material-font-family);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   :host([focused]) {
     background-color: rgba(0, 0, 0, 0.16);
   }
 
-  :host(:not([part~='overflow']):not([readonly]):not([disabled])) {
-    padding-inline-end: 0;
-  }
-
-  :host([part~='overflow']) {
+  :host([slot='overflow']) {
     position: relative;
     margin-inline-start: 0.5rem;
   }
 
-  :host([part~='overflow'])::before,
-  :host([part~='overflow'])::after {
+  :host([slot='overflow'])::before,
+  :host([slot='overflow'])::after {
     position: absolute;
     content: '';
     width: 100%;
@@ -44,28 +41,28 @@ const chip = css`
     border-color: rgba(0, 0, 0, 0.08);
   }
 
-  :host([part~='overflow'])::before {
+  :host([slot='overflow'])::before {
     left: -0.25rem;
   }
 
-  :host([part~='overflow'])::after {
+  :host([slot='overflow'])::after {
     left: -0.5rem;
   }
 
-  :host([part~='overflow-two']) {
+  :host([count='2']) {
     margin-inline-start: 0.25rem;
   }
 
-  :host([part~='overflow-two'])::after {
+  :host([count='2'])::after {
     display: none;
   }
 
-  :host([part~='overflow-one']) {
+  :host([count='1']) {
     margin-inline-start: 0;
   }
 
-  :host([part~='overflow-one'])::before,
-  :host([part~='overflow-one'])::after {
+  :host([count='1'])::before,
+  :host([count='1'])::after {
     display: none;
   }
 

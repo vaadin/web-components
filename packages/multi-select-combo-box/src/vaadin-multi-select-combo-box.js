@@ -10,6 +10,7 @@ import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { processTemplates } from '@vaadin/component-base/src/templates.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
 import { InputControlMixin } from '@vaadin/field-base/src/input-control-mixin.js';
@@ -23,10 +24,6 @@ const multiSelectComboBox = css`
     --input-min-width: var(--vaadin-multi-select-combo-box-input-min-width, 4em);
   }
 
-  [hidden] {
-    display: none !important;
-  }
-
   #chips {
     display: flex;
     align-items: center;
@@ -37,7 +34,8 @@ const multiSelectComboBox = css`
     flex: 1 0 var(--input-min-width);
   }
 
-  [part='chip'] {
+  ::slotted([slot='chip']),
+  ::slotted([slot='overflow']) {
     flex: 0 1 auto;
   }
 
@@ -72,17 +70,13 @@ registerStyles('vaadin-multi-select-combo-box', [inputFieldShared, multiSelectCo
  *
  * Part name              | Description
  * -----------------------|----------------
- * `chips`                | The element that wraps chips for selected items
- * `chip`                 | Chip shown for every selected item
+ * `chips`                | The element that wraps slotted chips for selected items
  * `label`                | The label element
  * `input-field`          | The element that wraps prefix, value and suffix
  * `clear-button`         | The clear button
  * `error-message`        | The error message element
  * `helper-text`          | The helper text element wrapper
  * `required-indicator`   | The `required` state indicator element
- * `overflow`             | The chip shown when component width is not enough to fit all chips
- * `overflow-one`         | Set on the overflow chip when only one chip does not fit
- * `overflow-two`         | Set on the overflow chip when two chips do not fit
  * `toggle-button`        | The toggle button
  *
  * The following state attributes are available for styling:
@@ -182,18 +176,10 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
             invalid="[[invalid]]"
             theme$="[[_theme]]"
           >
-            <vaadin-multi-select-combo-box-chip
-              id="overflow"
-              slot="prefix"
-              part$="[[_getOverflowPart(_overflowItems.length)]]"
-              disabled="[[disabled]]"
-              readonly="[[readonly]]"
-              label="[[_getOverflowLabel(_overflowItems.length)]]"
-              title$="[[_getOverflowTitle(_overflowItems)]]"
-              hidden$="[[_isOverflowHidden(_overflowItems.length)]]"
-              on-mousedown="_preventBlur"
-            ></vaadin-multi-select-combo-box-chip>
-            <div id="chips" part="chips" slot="prefix"></div>
+            <slot name="overflow" slot="prefix"></slot>
+            <div id="chips" part="chips" slot="prefix">
+              <slot name="chip"></slot>
+            </div>
             <slot name="input"></slot>
             <div
               id="clearButton"
@@ -469,7 +455,10 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   static get observers() {
-    return ['_selectedItemsChanged(selectedItems, selectedItems.*)'];
+    return [
+      '_selectedItemsChanged(selectedItems, selectedItems.*)',
+      '__updateOverflowChip(_overflow, _overflowItems, disabled, readonly)',
+    ];
   }
 
   /** @protected */
@@ -496,7 +485,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @protected */
   get _chips() {
-    return this.shadowRoot.querySelectorAll('[part~="chip"]');
+    return [...this.querySelectorAll('[slot="chip"]')];
   }
 
   /** @protected */
@@ -519,6 +508,18 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     this._tooltipController.setShouldShow((target) => !target.opened);
 
     this._inputField = this.shadowRoot.querySelector('[part="input-field"]');
+
+    this._overflowController = new SlotController(
+      this,
+      'overflow',
+      () => document.createElement('vaadin-multi-select-combo-box-chip'),
+      (_, chip) => {
+        chip.addEventListener('mousedown', (e) => this._preventBlur(e));
+        this._overflow = chip;
+      },
+    );
+    this.addController(this._overflowController);
+
     this.__updateChips();
 
     processTemplates(this);
@@ -717,34 +718,6 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  _getOverflowLabel(length) {
-    return length;
-  }
-
-  /** @private */
-  _getOverflowPart(length) {
-    let part = `chip overflow`;
-
-    if (length === 1) {
-      part += ' overflow-one';
-    } else if (length === 2) {
-      part += ' overflow-two';
-    }
-
-    return part;
-  }
-
-  /** @private */
-  _getOverflowTitle(items) {
-    return this._mergeItemLabels(items);
-  }
-
-  /** @private */
-  _isOverflowHidden(length) {
-    return length === 0;
-  }
-
-  /** @private */
   _mergeItemLabels(items) {
     return items.map((item) => this._getItemLabel(item)).join(', ');
   }
@@ -828,8 +801,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   /** @private */
   __createChip(item) {
     const chip = document.createElement('vaadin-multi-select-combo-box-chip');
-    chip.setAttribute('part', 'chip');
-    chip.setAttribute('slot', 'prefix');
+    chip.setAttribute('slot', 'chip');
 
     chip.item = item;
     chip.disabled = this.disabled;
@@ -847,16 +819,20 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @private */
   __getOverflowWidth() {
-    const chip = this.$.overflow;
+    const chip = this._overflow;
 
     chip.style.visibility = 'hidden';
     chip.removeAttribute('hidden');
 
+    const count = chip.getAttribute('count');
+
     // Detect max possible width of the overflow chip
-    chip.setAttribute('part', 'chip overflow');
+    // by measuring it with widest number (2 digits)
+    chip.setAttribute('count', '99');
     const overflowStyle = getComputedStyle(chip);
     const overflowWidth = chip.clientWidth + parseInt(overflowStyle.marginInlineStart);
 
+    chip.setAttribute('count', count);
     chip.setAttribute('hidden', '');
     chip.style.visibility = '';
 
@@ -870,10 +846,8 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     }
 
     // Clear all chips except the overflow
-    Array.from(this._chips).forEach((chip) => {
-      if (chip !== this.$.overflow) {
-        chip.remove();
-      }
+    this._chips.forEach((chip) => {
+      chip.remove();
     });
 
     const items = [...this.selectedItems];
@@ -891,7 +865,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     // Add chips until remaining width is exceeded
     for (let i = items.length - 1, refNode = null; i >= 0; i--) {
       const chip = this.__createChip(items[i]);
-      this.$.chips.insertBefore(chip, refNode);
+      this.insertBefore(chip, refNode);
 
       if (this.$.chips.clientWidth > remainingWidth) {
         chip.remove();
@@ -903,6 +877,21 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
     }
 
     this._overflowItems = items;
+  }
+
+  /** @private */
+  __updateOverflowChip(overflow, items, disabled, readonly) {
+    if (overflow) {
+      const count = items.length;
+
+      overflow.label = `${count}`;
+      overflow.setAttribute('count', `${count}`);
+      overflow.setAttribute('title', this._mergeItemLabels(items));
+      overflow.toggleAttribute('hidden', count === 0);
+
+      overflow.disabled = disabled;
+      overflow.readonly = readonly;
+    }
   }
 
   /** @private */
@@ -961,7 +950,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   _onKeyDown(event) {
     super._onKeyDown(event);
 
-    const chips = Array.from(this._chips).slice(1);
+    const chips = this._chips;
 
     if (!this.readonly && chips.length > 0) {
       switch (event.key) {
@@ -1059,7 +1048,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   /** @private */
   _focusedChipIndexChanged(focusedIndex, oldFocusedIndex) {
     if (focusedIndex > -1 || oldFocusedIndex > -1) {
-      const chips = Array.from(this._chips).slice(1);
+      const chips = this._chips;
       chips.forEach((chip, index) => {
         chip.toggleAttribute('focused', index === focusedIndex);
       });

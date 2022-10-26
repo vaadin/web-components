@@ -226,7 +226,7 @@ describe('basic', () => {
   });
 
   describe('chips', () => {
-    const getChips = (combo) => combo.shadowRoot.querySelectorAll('[part~="chip"]');
+    const getChips = (combo) => combo.querySelectorAll('vaadin-multi-select-combo-box-chip');
 
     const getChipContent = (chip) => chip.shadowRoot.querySelector('[part="label"]').textContent;
 
@@ -366,7 +366,13 @@ describe('basic', () => {
       it('should set overflow chip label as not fitting chips count', async () => {
         comboBox.selectedItems = ['apple', 'banana', 'orange'];
         await nextRender();
-        expect(overflow.label).to.equal(2);
+        expect(overflow.label).to.equal('2');
+      });
+
+      it('should set overflow chip count as not fitting chips count', async () => {
+        comboBox.selectedItems = ['apple', 'banana', 'orange'];
+        await nextRender();
+        expect(overflow.getAttribute('count')).to.equal('2');
       });
 
       it('should set overflow chip title as not fitting chips labels', async () => {
@@ -374,20 +380,6 @@ describe('basic', () => {
         await nextRender();
         const title = overflow.getAttribute('title');
         expect(title).to.equal('apple, banana');
-      });
-
-      it('should set overflow chip part if only one chip does not fit', async () => {
-        comboBox.selectedItems = ['apple', 'banana'];
-        await nextRender();
-        const part = overflow.getAttribute('part');
-        expect(part).to.contain('overflow-one');
-      });
-
-      it('should set overflow chip part if two chips do not fit', async () => {
-        comboBox.selectedItems = ['apple', 'banana', 'orange'];
-        await nextRender();
-        const part = overflow.getAttribute('part');
-        expect(part).to.contain('overflow-two');
       });
 
       describe('resize', () => {
@@ -629,7 +621,7 @@ describe('basic', () => {
     });
 
     it('should fire change when chip is removed', () => {
-      const chip = comboBox.shadowRoot.querySelector('[part="chip"]');
+      const chip = comboBox.querySelector('[slot="chip"]');
       chip.shadowRoot.querySelector('[part="remove-button"]').click();
       expect(spy.calledOnce).to.be.true;
     });

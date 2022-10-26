@@ -66,7 +66,8 @@ class MultiSelectComboBoxChip extends ThemableMixin(PolymerElement) {
           text-overflow: ellipsis;
         }
 
-        :host(:is([readonly], [disabled], [part~='overflow'])) [part='remove-button'] {
+        :host([hidden]),
+        :host(:is([readonly], [disabled], [slot='overflow'])) [part='remove-button'] {
           display: none !important;
         }
       </style>
