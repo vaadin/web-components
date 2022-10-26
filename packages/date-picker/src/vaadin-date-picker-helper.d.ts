@@ -53,6 +53,6 @@ export { dateAfterXMonths };
  * Calculate the year of the date based on the provided reference date
  * Gets a two-digit year and returns a full year.
  */
-declare function getAdjustedYear(referenceDate: Date, year: number, month: number | null, date: number | null): Date;
+declare function getAdjustedYear(referenceDate: Date, year: number, month?: number, day?: number): Date;
 
 export { getAdjustedYear };
