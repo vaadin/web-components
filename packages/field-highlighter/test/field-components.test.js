@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDown, fixtureSync, focusin, focusout, listenOnce, nextFrame } from '@vaadin/testing-helpers';
+import { arrowDown, fixtureSync, focusin, focusout, nextFrame, nextRender, oneEvent } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/checkbox-group';
@@ -10,8 +10,8 @@ import '@vaadin/list-box';
 import '@vaadin/radio-group';
 import '@vaadin/select';
 import '@vaadin/text-field';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { html, render } from 'lit';
+import { close, waitForOverlayRender } from '@vaadin/date-picker/test/common.js';
 import { FieldHighlighter } from '../src/vaadin-field-highlighter.js';
 
 async function waitForIntersectionObserver() {
@@ -29,10 +29,10 @@ describe('field components', () => {
     return elem.shadowRoot.querySelector('[part="outline"]');
   }
 
-  function open(elem, callback) {
+  async function open(elem) {
     const overlay = elem.$.overlay || elem._overlayElement;
-    listenOnce(overlay, 'vaadin-overlay-open', callback);
     arrowDown(elem.focusElement);
+    await oneEvent(overlay, 'vaadin-overlay-open');
   }
 
   describe('text field', () => {
@@ -70,10 +70,6 @@ describe('field components', () => {
       await waitForIntersectionObserver();
     });
 
-    afterEach(() => {
-      field.opened && field.close();
-    });
-
     describe('default', () => {
       it('should dispatch vaadin-highlight-show event on focus', () => {
         field.focus();
@@ -86,82 +82,72 @@ describe('field components', () => {
         expect(hideSpy.callCount).to.equal(1);
       });
 
-      it('should not dispatch vaadin-highlight-hide event on open', (done) => {
+      it('should not dispatch vaadin-highlight-hide event on open', async () => {
         field.focus();
-        open(field, () => {
-          expect(hideSpy.callCount).to.equal(0);
-          done();
-        });
+        await open(field);
+        await waitForOverlayRender();
+        expect(hideSpy.callCount).to.equal(0);
       });
 
-      it('should not dispatch vaadin-highlight-hide event on close without blur', (done) => {
+      it('should not dispatch vaadin-highlight-hide event on close without blur', async () => {
         field.focus();
-        open(field, () => {
-          listenOnce(field, 'opened-changed', () => {
-            expect(hideSpy.callCount).to.equal(0);
-            done();
-          });
-          field.close();
-        });
+        await open(field);
+        await waitForOverlayRender();
+        await close(field);
+        expect(hideSpy.callCount).to.equal(0);
       });
 
-      it('should not dispatch vaadin-highlight-hide event on close with focus moved to the field', (done) => {
-        open(field, () => {
-          listenOnce(field, 'opened-changed', () => {
-            expect(hideSpy.callCount).to.equal(0);
-            done();
-          });
-          field.focus();
-          field.close();
-        });
+      it('should not dispatch vaadin-highlight-hide event on close with focus moved to the field', async () => {
+        await open(field);
+        await waitForOverlayRender();
+        field.focus();
+        await close(field);
+        expect(hideSpy.callCount).to.equal(0);
       });
 
-      it('should not dispatch vaadin-highlight-hide event on re-focusing field', (done) => {
+      it('should not dispatch vaadin-highlight-hide event on re-focusing field', async () => {
         field.focus();
-        open(field, () => {
-          focusin(field, overlay);
-          afterNextRender(field, () => {
-            expect(hideSpy.callCount).to.equal(0);
-            done();
-          });
-        });
+        await open(field);
+        await waitForOverlayRender();
+        focusin(field, overlay);
+        await nextRender();
+        expect(hideSpy.callCount).to.equal(0);
       });
 
-      it('should not dispatch second vaadin-highlight-show event on re-focusing field', (done) => {
+      it('should not dispatch second vaadin-highlight-show event on re-focusing field', async () => {
         field.focus();
-        open(field, () => {
-          focusout(field);
-          focusin(field);
-          afterNextRender(field, () => {
-            expect(showSpy.callCount).to.equal(1);
-            done();
-          });
-        });
+        await open(field);
+        await waitForOverlayRender();
+
+        focusout(field);
+        focusin(field);
+        await nextRender();
+
+        expect(showSpy.callCount).to.equal(1);
       });
 
-      it('should not dispatch vaadin-highlight-hide event on field blur if opened', (done) => {
+      it('should not dispatch vaadin-highlight-hide event on field blur if opened', async () => {
         field.focus();
-        open(field, () => {
-          focusout(field);
-          field.focus();
-          afterNextRender(field, () => {
-            expect(hideSpy.callCount).to.equal(0);
-            done();
-          });
-        });
+        await open(field);
+        await waitForOverlayRender();
+
+        focusout(field);
+        field.focus();
+        await nextRender();
+
+        expect(hideSpy.callCount).to.equal(0);
       });
 
-      it('should dispatch vaadin-highlight-hide event on close after blur', (done) => {
+      it('should dispatch vaadin-highlight-hide event on close after blur', async () => {
         field.focus();
-        open(field, () => {
-          listenOnce(field, 'opened-changed', () => {
-            expect(hideSpy.callCount).to.equal(1);
-            done();
-          });
-          overlay.focus();
-          focusout(overlay);
-          field.close();
-        });
+        await open(field);
+        await waitForOverlayRender();
+
+        overlay.focus();
+        focusout(overlay);
+        await close(field);
+
+        expect(hideSpy.callCount).to.equal(1);
       });
     });
 
@@ -175,15 +161,11 @@ describe('field components', () => {
         expect(showSpy.callCount).to.equal(0);
       });
 
-      it('should dispatch vaadin-highlight-show event on open', (done) => {
-        listenOnce(field, 'opened-changed', () => {
-          afterNextRender(field, () => {
-            expect(showSpy.callCount).to.equal(1);
-            done();
-          });
-        });
+      it('should dispatch vaadin-highlight-show event on open', async () => {
         field.focus();
         field.click();
+        await waitForOverlayRender();
+        expect(showSpy.callCount).to.equal(1);
       });
     });
   });
@@ -228,47 +210,42 @@ describe('field components', () => {
         expect(hideSpy.callCount).to.equal(1);
       });
 
-      it('should not dispatch vaadin-highlight-hide event on open', (done) => {
+      it('should not dispatch vaadin-highlight-hide event on open', async () => {
         field.focus();
-        open(field, () => {
-          expect(hideSpy.callCount).to.equal(0);
-          done();
-        });
+        await open(field);
+        expect(hideSpy.callCount).to.equal(0);
       });
 
-      it('should not dispatch vaadin-highlight-hide event on select', (done) => {
+      it('should not dispatch vaadin-highlight-hide event on select', async () => {
         field.focus();
-        open(field, () => {
-          listenOnce(field, 'opened-changed', () => {
-            expect(hideSpy.callCount).to.equal(0);
-            done();
-          });
-          overlay.querySelector('vaadin-item').click();
-        });
+        await open(field);
+
+        overlay.querySelector('vaadin-item').click();
+        await nextRender();
+
+        expect(hideSpy.callCount).to.equal(0);
       });
 
-      it('should not dispatch vaadin-highlight-hide event on outside click', (done) => {
+      it('should not dispatch vaadin-highlight-hide event on outside click', async () => {
         field.focus();
-        open(field, () => {
-          listenOnce(field, 'opened-changed', () => {
-            expect(hideSpy.callCount).to.equal(0);
-            done();
-          });
-          overlay.querySelector('vaadin-item').blur();
-          document.body.click();
-        });
+        await open(field);
+
+        overlay.querySelector('vaadin-item').blur();
+        document.body.click();
+        await nextRender();
+
+        expect(hideSpy.callCount).to.equal(0);
       });
 
-      it('should not dispatch second vaadin-highlight-show event on outside click', (done) => {
+      it('should not dispatch second vaadin-highlight-show event on outside click', async () => {
         field.focus();
-        open(field, () => {
-          listenOnce(field, 'opened-changed', () => {
-            expect(showSpy.callCount).to.equal(1);
-            done();
-          });
-          overlay.querySelector('vaadin-item').blur();
-          document.body.click();
-        });
+        await open(field);
+
+        overlay.querySelector('vaadin-item').blur();
+        document.body.click();
+        await nextRender();
+
+        expect(showSpy.callCount).to.equal(1);
       });
     });
 
@@ -277,26 +254,24 @@ describe('field components', () => {
         field._phone = true;
       });
 
-      it('should dispatch vaadin-highlight-hide event on outside click', (done) => {
-        open(field, () => {
-          listenOnce(field, 'opened-changed', () => {
-            expect(hideSpy.callCount).to.equal(1);
-            done();
-          });
-          focusout(overlay);
-          document.body.click();
-        });
+      it('should dispatch vaadin-highlight-hide event on outside click', async () => {
+        await open(field);
+
+        focusout(overlay);
+        document.body.click();
+        await nextRender();
+
+        expect(hideSpy.callCount).to.equal(1);
       });
 
-      it('should dispatch vaadin-highlight-hide event on select', (done) => {
+      it('should dispatch vaadin-highlight-hide event on select', async () => {
         field.focus();
-        open(field, () => {
-          listenOnce(field, 'opened-changed', () => {
-            expect(hideSpy.callCount).to.equal(1);
-            done();
-          });
-          overlay.querySelector('vaadin-item').click();
-        });
+        await open(field);
+
+        overlay.querySelector('vaadin-item').click();
+        await nextRender();
+
+        expect(hideSpy.callCount).to.equal(1);
       });
     });
   });
@@ -490,18 +465,18 @@ describe('field components', () => {
       expect(showSpy.getCalls()[1].args[0].detail.fieldIndex).to.equal(0);
     });
 
-    it('should dispatch vaadin-highlight-hide event on overlay focusout to time picker', (done) => {
+    it('should dispatch vaadin-highlight-hide event on overlay focusout to time picker', async () => {
       date.focus();
-      open(date, () => {
-        listenOnce(date, 'opened-changed', () => {
-          expect(hideSpy.callCount).to.equal(1);
-          expect(hideSpy.firstCall.args[0].detail.fieldIndex).to.equal(0);
-          done();
-        });
-        date.$.overlay.focus();
-        focusout(date.$.overlay, time);
-        date.close();
-      });
+      await open(date);
+      await waitForOverlayRender();
+
+      // Focus date element and then time-picker
+      await date._overlayContent.focusDateElement();
+      time.focus();
+      await close(date);
+
+      expect(hideSpy.callCount).to.equal(1);
+      expect(hideSpy.firstCall.args[0].detail.fieldIndex).to.equal(0);
     });
 
     it('should set outline on both date and time pickers based on the fieldIndex', () => {

@@ -36,15 +36,19 @@ export class DatePickerObserver extends ComponentObserver {
     datePicker.addEventListener('focusout', (event) => this.onFocusOut(event));
   }
 
+  isEventInOverlay(node) {
+    return this.datePicker._overlayContent && this.datePicker._overlayContent.contains(node);
+  }
+
   onBlur(event) {
     const datePicker = this.datePicker;
-    if (datePicker._fullscreen && event.relatedTarget !== this.overlay) {
+    if (datePicker._fullscreen && !this.isEventInOverlay(event.relatedTarget)) {
       this.fullscreenFocus = true;
     }
   }
 
   onFocusIn(event) {
-    if (event.relatedTarget === this.overlay) {
+    if (this.isEventInOverlay(event.relatedTarget)) {
       // Focus returns from the overlay, do nothing.
       return;
     }
@@ -59,7 +63,7 @@ export class DatePickerObserver extends ComponentObserver {
   }
 
   onFocusOut(event) {
-    if (this.fullscreenFocus || event.relatedTarget === this.overlay) {
+    if (this.fullscreenFocus || this.isEventInOverlay(event.relatedTarget)) {
       // Do nothing, overlay is opening.
     } else if (!this.datePicker.opened) {
       // Field blur when closed.
