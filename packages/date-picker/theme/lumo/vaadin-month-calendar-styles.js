@@ -50,7 +50,7 @@ registerStyles(
 
     /* Date and week number cells */
 
-    [part='date'],
+    [part~='date'],
     [part='week-number'] {
       box-sizing: border-box;
       display: inline-flex;
@@ -60,28 +60,28 @@ registerStyles(
       position: relative;
     }
 
-    [part='date'] {
+    [part~='date'] {
       transition: color 0.1s;
     }
 
-    [part='date']:not(:empty) {
+    [part~='date']:not(:empty) {
       cursor: var(--lumo-clickable-cursor);
     }
 
     :host([week-numbers]) [part='weekday']:not(:empty),
-    :host([week-numbers]) [part='date'] {
+    :host([week-numbers]) [part~='date'] {
       width: calc((100% - var(--lumo-size-xs)) / 7);
     }
 
     /* Today date */
 
-    [part='date'][today] {
+    [part~='date'][part~='today'] {
       color: var(--lumo-primary-text-color);
     }
 
     /* Focused date */
 
-    [part='date']::before {
+    [part~='date']::before {
       content: '';
       position: absolute;
       z-index: -1;
@@ -97,11 +97,11 @@ registerStyles(
       border-radius: var(--lumo-border-radius-m);
     }
 
-    [part='date'][focused]::before {
+    [part~='date'][part~='focused']::before {
       box-shadow: 0 0 0 1px var(--lumo-base-color), 0 0 0 3px var(--lumo-primary-color-50pct);
     }
 
-    :host(:not([focused])) [part='date'][focused]::before {
+    :host(:not([focused])) [part~='date'][part~='focused']::before {
       animation: vaadin-date-picker-month-calendar-focus-date 1.4s infinite;
     }
 
@@ -111,33 +111,33 @@ registerStyles(
       }
     }
 
-    [part='date']:not(:empty):not([disabled]):not([selected]):hover::before {
+    [part~='date']:not(:empty):not([part~='disabled']):not([part~='selected']):hover::before {
       background-color: var(--lumo-primary-color-10pct);
     }
 
-    [part='date'][selected] {
+    [part~='date'][part~='selected'] {
       color: var(--lumo-primary-contrast-color);
     }
 
-    [part='date'][selected]::before {
+    [part~='date'][part~='selected']::before {
       background-color: var(--lumo-primary-color);
     }
 
-    [part='date'][disabled] {
+    [part~='date'][part~='disabled'] {
       color: var(--lumo-disabled-text-color);
     }
 
     @media (pointer: coarse) {
-      [part='date']:hover:not([selected])::before,
-      [part='date'][focused]:not([selected])::before {
+      [part~='date']:hover:not([part~='selected'])::before,
+      [part~='focused']:not([part~='selected'])::before {
         display: none;
       }
 
-      [part='date']:not(:empty):not([disabled]):active::before {
+      [part~='date']:not(:empty):not([part~='disabled']):active::before {
         display: block;
       }
 
-      [part='date'][selected]::before {
+      [part~='date'][part~='selected']::before {
         box-shadow: none;
       }
     }

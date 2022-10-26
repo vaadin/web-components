@@ -25,7 +25,7 @@ describe('WAI-ARIA', () => {
       await nextRender(datepicker);
       const calendars = datepicker._overlayContent.querySelectorAll('vaadin-month-calendar');
       calendars.forEach((calendar) => {
-        const focused = calendar.shadowRoot.querySelector('[part="date"][focused]');
+        const focused = calendar.shadowRoot.querySelector('[part~="focused"]');
         expect(calendar.getAttribute('aria-hidden')).to.equal(focused ? null : 'true');
       });
     });
@@ -80,7 +80,7 @@ describe('WAI-ARIA', () => {
     it('should indicate today on date cells', async () => {
       monthCalendar.month = new Date();
       await nextFrame();
-      const todayElement = monthCalendar.shadowRoot.querySelector('[part="date"]:not(:empty)[today]');
+      const todayElement = monthCalendar.shadowRoot.querySelector('[part~="today"]');
       expect(todayElement.getAttribute('aria-label')).to.match(/, Today$/);
     });
   });

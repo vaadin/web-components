@@ -35,7 +35,7 @@ registerStyles(
       color: var(--material-disabled-text-color);
     }
 
-    [part='date'] {
+    [part~='date'] {
       position: relative;
       font-size: var(--material-body-font-size);
       line-height: 42px;
@@ -43,7 +43,7 @@ registerStyles(
       cursor: default;
     }
 
-    [part='date']::after {
+    [part~='date']::after {
       content: '';
       position: absolute;
       z-index: -4;
@@ -59,13 +59,13 @@ registerStyles(
 
     /* Today */
 
-    [part='date'][today] {
+    [part~='date'][part~='today'] {
       color: var(--material-primary-text-color);
     }
 
     /* Hover */
 
-    [part='date']:not([disabled]):hover::after {
+    [part~='date']:not([part~='disabled']):hover::after {
       background-color: var(--material-secondary-background-color);
       border-color: var(--material-secondary-background-color);
       z-index: -3;
@@ -73,7 +73,7 @@ registerStyles(
 
     /* Hide for touch devices */
     @media (hover: none) {
-      [part='date']:not([disabled]):hover::after {
+      [part~='date']:not([part~='disabled']):hover::after {
         background-color: transparent;
         border-color: transparent;
         z-index: -4;
@@ -82,12 +82,12 @@ registerStyles(
 
     /* Selected */
 
-    [part='date'][selected] {
+    [part~='date'][part~='selected'] {
       font-weight: 500;
     }
 
-    [part='date']:not([disabled])[selected]::after,
-    [part='date'][selected]::after {
+    [part~='date']:not([part~='disabled'])[part~='selected']::after,
+    [part~='date'][part~='selected']::after {
       background-color: transparent;
       border-color: currentColor;
       z-index: -2;
@@ -95,24 +95,24 @@ registerStyles(
 
     /* Focused */
 
-    [part='date']:not([disabled])[focused],
-    [part='date']:not([disabled]):active {
+    [part~='date']:not([part~='disabled'])[part~='focused'],
+    [part~='date']:not([part~='disabled']):active {
       color: var(--material-primary-contrast-color);
     }
 
-    [part='date']:not([disabled])[focused]::after,
-    [part='date']:not([disabled]):active::after {
+    [part~='date']:not([part~='disabled'])[part~='focused']::after,
+    [part~='date']:not([part~='disabled']):active::after {
       opacity: 0.7;
       background-color: var(--material-primary-color);
       border-color: var(--material-primary-color);
       z-index: -1;
     }
 
-    [part='date'][disabled] {
+    [part~='date'][part~='disabled'] {
       color: var(--material-disabled-text-color);
     }
 
-    :host([focused]) [part='date']:not([disabled])[focused]::after {
+    :host([focused]) [part~='date']:not([part~='disabled'])[part~='focused']::after {
       opacity: 1;
     }
   `,

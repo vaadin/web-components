@@ -15,7 +15,7 @@ registerStyles(
 registerStyles(
   'vaadin-month-calendar',
   css`
-    [part='date'][focused]::before {
+    [part~='focused']::before {
       animation: none !important;
     }
   `,

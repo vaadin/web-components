@@ -287,7 +287,7 @@ describe('keyboard', () => {
 
         const cell = getFocusedCell(overlayContent);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
-        expect(cell.hasAttribute('today')).to.be.true;
+        expect(cell.getAttribute('part')).to.contain('today');
       });
 
       it('should focus date scrolled out of the view on Today button Shift Tab', async () => {
@@ -303,7 +303,7 @@ describe('keyboard', () => {
 
         const cell = getFocusedCell(overlayContent);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
-        expect(cell.hasAttribute('today')).to.be.true;
+        expect(cell.getAttribute('part')).to.contain('today');
       });
     });
   });
