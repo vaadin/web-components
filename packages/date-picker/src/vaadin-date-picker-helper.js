@@ -122,9 +122,9 @@ export function dateAfterXMonths(months) {
  * Calculate the year of the date based on the provided reference date.
  * Gets a two-digit year and returns a full year.
  * @param {!Date} referenceDate The date to act as basis in the calculation
- * @param {!Number} year Should be in the range of [0, 99]
- * @param {Number} month
- * @param {Number} day
+ * @param {!number} year Should be in the range of [0, 99]
+ * @param {number} month
+ * @param {number} day
  * @return {!Number} Adjusted year value
  */
 export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
