@@ -29,25 +29,6 @@ jobs:
 
       - name: Lint TypeScript
         run: yarn lint:types
-  smoke:
-    name: Smoke tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: '0'
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'yarn'
-
-      - name: Install Dependencies
-        run: yarn --frozen-lockfile --no-progress --non-interactive
-
-      - name: Test
-        run: yarn test:smoke
   snapshots:
     name: Snapshot tests
     runs-on: ubuntu-latest
