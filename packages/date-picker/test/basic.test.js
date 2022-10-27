@@ -3,6 +3,7 @@ import { click, fixtureSync, keyboardEventFor, oneEvent, tap } from '@vaadin/tes
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
+import { parseDate } from '../src/vaadin-date-picker-helper.js';
 import { close, open, touchTap, waitForOverlayRender } from './common.js';
 
 describe('basic features', () => {
@@ -21,7 +22,6 @@ describe('basic features', () => {
       date.setDate(parseInt(day));
       return date;
     };
-    const parseDate = datepicker._parseDate;
 
     expect(parseDate('2017-11-11')).to.eql(composeDate('2017', '10', '11'));
     expect(parseDate('2016-1-1')).to.eql(composeDate('2016', '0', '1'));
