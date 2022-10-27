@@ -12,6 +12,7 @@ import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '../src/vaadin-date-picker.js';
 import * as settings from '@polymer/polymer/lib/utils/settings.js';
+import { parseDate } from '../src/vaadin-date-picker-helper.js';
 import { close, getFocusedCell, getOverlayContent, idleCallback, open } from './common.js';
 
 settings.setCancelSyntheticClickEvents(false);
@@ -45,7 +46,6 @@ describe('basic features', () => {
       date.setDate(parseInt(day));
       return date;
     };
-    const parseDate = datepicker._parseDate;
 
     expect(parseDate('2017-11-11')).to.eql(composeDate('2017', '10', '11'));
     expect(parseDate('2016-1-1')).to.eql(composeDate('2016', '0', '1'));

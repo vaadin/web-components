@@ -103,3 +103,50 @@ export function extractDateParts(date) {
     year: date.getFullYear(),
   };
 }
+
+/**
+ * Calculate the year of the date based on the provided reference date.
+ * Gets a two-digit year and returns a full year.
+ * @param {!Date} referenceDate The date to act as basis in the calculation
+ * @param {!number} year Should be in the range of [0, 99]
+ * @param {number} month
+ * @param {number} day
+ * @return {!number} Adjusted year value
+ */
+export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
+  if (year > 99) {
+    throw new Error('The provided year cannot have more than 2 digits.');
+  }
+  if (year < 0) {
+    throw new Error('The provided year cannot be negative.');
+  }
+  // Year values up to 2 digits are parsed based on the reference date.
+  let adjustedYear = year + Math.floor(referenceDate.getFullYear() / 100) * 100;
+  if (referenceDate < new Date(adjustedYear - 50, month, day)) {
+    adjustedYear -= 100;
+  } else if (referenceDate > new Date(adjustedYear + 50, month, day)) {
+    adjustedYear += 100;
+  }
+  return adjustedYear;
+}
+
+/**
+ * Parse date string of one of the following date formats:
+ * - ISO 8601 `"YYYY-MM-DD"`
+ * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+ * @param {!string} str Date string to parse
+ * @return {Date} Parsed date
+ */
+export function parseDate(str) {
+  // Parsing with RegExp to ensure correct format
+  const parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/.exec(str);
+  if (!parts) {
+    return undefined;
+  }
+
+  const date = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
+  date.setFullYear(parseInt(parts[1], 10));
+  date.setMonth(parseInt(parts[2], 10) - 1);
+  date.setDate(parseInt(parts[3], 10));
+  return date;
+}
