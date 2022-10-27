@@ -4,6 +4,27 @@ import sinon from 'sinon';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ResizeMixin } from '../src/resize-mixin.js';
 
+/**
+ * Resolves once the function is invoked on the given object.
+ */
+function onceInvoked(object, functionName) {
+  return new Promise((resolve) => {
+    sinon.replace(object, functionName, (...args) => {
+      sinon.restore();
+      object[functionName](...args);
+      resolve();
+    });
+  });
+}
+
+/**
+ * Resolves once the ResizeObserver in AvatarGroup has processed a resize.
+ */
+async function onceResized(el) {
+  // Wait for the _onResize function to be invoked by the ResizeObserver
+  await onceInvoked(el, '_onResize');
+}
+
 describe('resize-mixin', () => {
   let element, observeParent;
 
@@ -25,16 +46,6 @@ describe('resize-mixin', () => {
         get _observeParent() {
           return observeParent;
         }
-
-        _onResize() {
-          this.__resolveResize?.();
-        }
-
-        nextResize() {
-          return new Promise((resolve) => {
-            this.__resolveResize = resolve;
-          });
-        }
       },
     );
   });
@@ -42,12 +53,14 @@ describe('resize-mixin', () => {
   beforeEach(async () => {
     element = fixtureSync(`<resize-mixin-element></resize-mixin-element>`);
     // Wait for the initial resize.
-    await element.nextResize();
+    await onceResized(element);
   });
 
   it('should notify resize', async () => {
+    const spy = sinon.spy(element, '_onResize');
     element.style.width = '100px';
-    await element.nextResize();
+    await onceResized(element);
+    expect(spy.calledOnce).to.be.true;
   });
 
   it('should not notify resize for detached element', async () => {
@@ -86,12 +99,14 @@ describe('resize-mixin', () => {
       beforeEach(async () => {
         parent.appendChild(element);
         // Wait for the initial resize.
-        await element.nextResize();
+        await onceResized(element);
       });
 
       it('should notify parent element resize', async () => {
+        const spy = sinon.spy(element, '_onResize');
         parent.style.width = '100px';
-        await element.nextResize();
+        await onceResized(element);
+        expect(spy.calledOnce).to.be.true;
       });
 
       describe('multiple children', () => {
@@ -128,12 +143,14 @@ describe('resize-mixin', () => {
         parent.attachShadow({ mode: 'open' });
         parent.shadowRoot.appendChild(element);
         // Wait for the initial resize.
-        await element.nextResize();
+        await onceResized(element);
       });
 
       it('should notify shadow host resize', async () => {
+        const spy = sinon.spy(element, '_onResize');
         parent.style.width = '100px';
-        await element.nextResize();
+        await onceResized(element);
+        expect(spy.calledOnce).to.be.true;
       });
     });
   });
