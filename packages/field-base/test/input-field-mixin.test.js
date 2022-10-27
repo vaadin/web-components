@@ -1,68 +1,70 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { InputController } from '../src/input-controller.js';
 import { InputFieldMixin } from '../src/input-field-mixin.js';
+import { define } from './helpers.js';
 
-customElements.define(
-  'input-field-mixin-element',
-  class extends InputFieldMixin(PolymerElement) {
-    static get template() {
-      return html`
-        <div part="label">
-          <slot name="label"></slot>
-        </div>
-        <slot name="input"></slot>
-        <button id="clearButton">Clear</button>
-        <div part="error-message">
-          <slot name="error-message"></slot>
-        </div>
-        <slot name="helper"></slot>
-      `;
-    }
+const runTests = (baseClass) => {
+  const tag = define[baseClass](
+    'input-field-mixin',
+    `
+      <div part="label">
+        <slot name="label"></slot>
+      </div>
+      <slot name="input"></slot>
+      <button id="clearButton">Clear</button>
+      <div part="error-message">
+        <slot name="error-message"></slot>
+      </div>
+      <slot name="helper"></slot>
+    `,
+    (Base) =>
+      class extends InputFieldMixin(Base) {
+        get clearElement() {
+          return this.$.clearButton;
+        }
 
-    get clearElement() {
-      return this.$.clearButton;
-    }
+        ready() {
+          super.ready();
 
-    constructor() {
-      super();
+          this.addController(
+            new InputController(this, (input) => {
+              this._setInputElement(input);
+              this._setFocusElement(input);
+              this.stateTarget = input;
+              this.ariaTarget = input;
+            }),
+          );
+        }
+      },
+  );
 
-      this.addController(
-        new InputController(this, (input) => {
-          this._setInputElement(input);
-          this._setFocusElement(input);
-          this.stateTarget = input;
-          this.ariaTarget = input;
-        }),
-      );
-    }
-  },
-);
-
-describe('input-field-mixin', () => {
   let element, input;
 
   describe('properties', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-field-mixin-element></input-field-mixin-element>');
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await nextRender();
       input = element.querySelector('[slot=input]');
     });
 
-    it('should propagate autocomplete property to the input', () => {
+    it('should propagate autocomplete property to the input', async () => {
       element.autocomplete = 'on';
+      await nextFrame();
       expect(input.autocomplete).to.equal('on');
     });
 
-    it('should propagate autocorrect property to the input', () => {
+    it('should propagate autocorrect property to the input', async () => {
       element.autocorrect = 'on';
+      await nextFrame();
       expect(input.getAttribute('autocorrect')).to.equal('on');
     });
 
-    it('should propagate autocapitalize property to the input', () => {
+    it('should propagate autocapitalize property to the input', async () => {
       element.autocapitalize = 'none';
+      await nextFrame();
       expect(input.getAttribute('autocapitalize')).to.equal('none');
     });
   });
@@ -71,7 +73,7 @@ describe('input-field-mixin', () => {
     let validateSpy;
 
     beforeEach(() => {
-      element = document.createElement('input-field-mixin-element');
+      element = document.createElement(tag);
       validateSpy = sinon.spy(element, 'validate');
     });
 
@@ -96,8 +98,9 @@ describe('input-field-mixin', () => {
   });
 
   describe('validation', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-field-mixin-element></input-field-mixin-element>');
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await nextRender();
       input = element.querySelector('[slot=input]');
     });
 
@@ -115,19 +118,21 @@ describe('input-field-mixin', () => {
     });
 
     it('should validate on input event', async () => {
-      const spy = sinon.spy(element, 'validate');
       element.required = true;
       element.invalid = true;
+      await nextFrame();
+      const spy = sinon.spy(element, 'validate');
       input.focus();
       await sendKeys({ type: 'f' });
       expect(spy.calledOnce).to.be.true;
       expect(element.invalid).to.be.false;
     });
 
-    it('should validate on value change when field is invalid', () => {
+    it('should validate on value change when field is invalid', async () => {
       const spy = sinon.spy(element, 'validate');
       element.invalid = true;
       element.value = 'foo';
+      await nextFrame();
       expect(spy.calledOnce).to.be.true;
     });
 
@@ -148,7 +153,7 @@ describe('input-field-mixin', () => {
   describe('slotted input value', () => {
     beforeEach(() => {
       sinon.stub(console, 'warn');
-      element = document.createElement('input-field-mixin-element');
+      element = document.createElement(tag);
     });
 
     afterEach(() => {
@@ -156,19 +161,29 @@ describe('input-field-mixin', () => {
       console.warn.restore();
     });
 
-    it('should warn when value is set on the slotted input', () => {
+    it('should warn when value is set on the slotted input', async () => {
       input = document.createElement('input');
       input.setAttribute('slot', 'input');
       input.value = 'foo';
       element.appendChild(input);
       document.body.appendChild(element);
+      await nextRender();
       expect(console.warn.called).to.be.true;
     });
 
-    it('should not warn when value is set on the element itself', () => {
+    it('should not warn when value is set on the element itself', async () => {
       element.value = 'foo';
       document.body.appendChild(element);
+      await nextRender();
       expect(console.warn.called).to.be.false;
     });
   });
+};
+
+describe('InputFieldMixin + Polymer', () => {
+  runTests('polymer');
+});
+
+describe('InputFieldMixin + Lit', () => {
+  runTests('lit');
 });
