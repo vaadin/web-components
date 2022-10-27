@@ -472,6 +472,7 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     this.__onMouseEnter = this.__onMouseEnter.bind(this);
     this.__onMouseLeave = this.__onMouseLeave.bind(this);
     this.__onKeyDown = this.__onKeyDown.bind(this);
+    this.__onOverlayOpen = this.__onOverlayOpen.bind(this);
 
     this.__targetVisibilityObserver = new IntersectionObserver(
       ([entry]) => {
@@ -488,6 +489,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
     super.connectedCallback();
 
     this._isConnected = true;
+
+    document.body.addEventListener('vaadin-overlay-open', this.__onOverlayOpen);
   }
 
   /** @protected */
@@ -498,6 +501,8 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
       this._stateController.close(true);
     }
     this._isConnected = false;
+
+    document.body.removeEventListener('vaadin-overlay-open', this.__onOverlayOpen);
   }
 
   /** @private */
@@ -691,6 +696,18 @@ class Tooltip extends ThemePropertyMixin(ElementMixin(PolymerElement)) {
 
     if (!this.__focusInside) {
       this._stateController.close();
+    }
+  }
+
+  /** @private */
+  __onOverlayOpen() {
+    if (this.manual) {
+      return;
+    }
+
+    // Close tooltip if another overlay is opened on top of the tooltip's overlay
+    if (this._overlayElement.opened && !this._overlayElement._last) {
+      this._stateController.close(true);
     }
   }
 
