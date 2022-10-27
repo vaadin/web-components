@@ -23,12 +23,6 @@ registerStyles(
       align-items: baseline;
     }
 
-    /* TODO(jouni): unsupported selector (not sure why there's #addFiles element wrapping the upload button) */
-    [part='primary-buttons'] > * {
-      display: block;
-      flex-grow: 1;
-    }
-
     ::slotted([slot='add-button']) {
       margin: 0 -8px;
     }

@@ -35,11 +35,11 @@ describe('file list', () => {
 
   describe('with add button', () => {
     let input;
-    let addFiles;
+    let addButton;
     let inputClickSpy;
 
     beforeEach(() => {
-      addFiles = upload.$.addFiles;
+      addButton = upload.querySelector('[slot="add-button"]');
       input = upload.$.fileInput;
       // While the synthetic "Add Files" button click event is not trusted and
       // it should generate a non-trusted click event on the hidden file input,
@@ -50,12 +50,12 @@ describe('file list', () => {
     });
 
     it('should open file dialog by click', () => {
-      click(addFiles);
+      click(addButton);
       expect(inputClickSpy.calledOnce).to.be.true;
     });
 
     it('should open file dialog by touchend', () => {
-      const event = makeSoloTouchEvent('touchend', null, addFiles);
+      const event = makeSoloTouchEvent('touchend', null, addButton);
       expect(inputClickSpy.calledOnce).to.be.true;
       expect(event.defaultPrevented).to.be.true;
     });
@@ -67,7 +67,7 @@ describe('file list', () => {
       delete input.value;
       input.value = 'foo';
 
-      click(addFiles);
+      click(addButton);
       expect(input.value).to.be.empty;
     });
 
@@ -84,8 +84,6 @@ describe('file list', () => {
     });
 
     it('should disable add button when max files added', () => {
-      const addButton = upload.querySelector('[slot="add-button"]');
-
       // Enabled with default maxFiles value
       expect(addButton.disabled).to.be.false;
 
@@ -98,7 +96,7 @@ describe('file list', () => {
 
     it('should not open upload dialog when max files added', () => {
       upload.maxFiles = 0;
-      click(addFiles);
+      click(addButton);
       expect(inputClickSpy.called).to.be.false;
     });
 

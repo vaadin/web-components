@@ -41,10 +41,8 @@ snapshots["vaadin-upload host max files"] =
 
 snapshots["vaadin-upload shadow default"] = 
 `<div part="primary-buttons">
-  <div id="addFiles">
-    <slot name="add-button">
-    </slot>
-  </div>
+  <slot name="add-button">
+  </slot>
   <div
     aria-hidden="true"
     id="dropLabelContainer"

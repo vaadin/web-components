@@ -91,9 +91,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       </style>
 
       <div part="primary-buttons">
-        <div id="addFiles" on-touchend="_onAddFilesTouchEnd" on-click="_onAddFilesClick">
-          <slot name="add-button"></slot>
-        </div>
+        <slot name="add-button"></slot>
         <div part="drop-label" hidden$="[[nodrop]]" id="dropLabelContainer" aria-hidden="true">
           <slot name="drop-label-icon"></slot>
           <slot name="drop-label"></slot>
@@ -462,6 +460,12 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         'add-button',
         () => document.createElement('vaadin-button'),
         (_, button) => {
+          button.addEventListener('touchend', (e) => {
+            this._onAddFilesTouchEnd(e);
+          });
+          button.addEventListener('click', (e) => {
+            this._onAddFilesClick(e);
+          });
           this._addButton = button;
         },
       ),

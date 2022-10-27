@@ -24,11 +24,6 @@ registerStyles(
       transition: background-color 0.6s, border-color 0.6s;
     }
 
-    [part='primary-buttons'] > * {
-      display: inline-block;
-      white-space: nowrap;
-    }
-
     [part='drop-label'] {
       display: inline-block;
       white-space: normal;
