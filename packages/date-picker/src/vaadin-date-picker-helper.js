@@ -105,20 +105,6 @@ export function extractDateParts(date) {
 }
 
 /**
- * Get difference in months between today and given months value.
- *
- * @param {number} months
- * @return {number}
- */
-export function dateAfterXMonths(months) {
-  const today = new Date();
-  const result = new Date(today);
-  result.setDate(1);
-  result.setMonth(parseInt(months) + today.getMonth());
-  return result;
-}
-
-/**
  * Calculate the year of the date based on the provided reference date.
  * Gets a two-digit year and returns a full year.
  * @param {!Date} referenceDate The date to act as basis in the calculation
