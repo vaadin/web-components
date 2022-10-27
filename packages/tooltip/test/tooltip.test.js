@@ -7,6 +7,7 @@ import {
   keyboardEventFor,
   mousedown,
   nextFrame,
+  nextRender,
   tabKeyDown,
 } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
@@ -418,6 +419,18 @@ describe('vaadin-tooltip', () => {
 
       expect(overlay.opened).to.be.false;
     });
+
+    it('should close overlay when another overlay opens', async () => {
+      tabKeyDown(target);
+      target.focus();
+      expect(overlay.opened).to.be.true;
+
+      const otherOverlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
+      otherOverlay.opened = true;
+      await nextRender();
+
+      expect(overlay.opened).to.be.false;
+    });
   });
 
   describe('inside a scrollable container', () => {
@@ -654,6 +667,17 @@ describe('vaadin-tooltip', () => {
       tooltip.opened = true;
 
       document.body.append(tooltip);
+      expect(overlay.opened).to.be.true;
+    });
+
+    it('should not close overlay when another overlay opens', async () => {
+      tooltip.opened = true;
+      expect(overlay.opened).to.be.true;
+
+      const otherOverlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
+      otherOverlay.opened = true;
+      await nextRender();
+
       expect(overlay.opened).to.be.true;
     });
   });
