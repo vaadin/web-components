@@ -26,6 +26,7 @@ export interface DatePickerI18n {
   calendar: string;
   today: string;
   cancel: string;
+  referenceDate: string;
   parseDate(date: string): DatePickerDate | undefined;
   formatDate(date: DatePickerDate): string;
   formatTitle(monthName: string, fullYear: number): string;
@@ -133,6 +134,16 @@ export declare class DatePickerMixinClass {
    *
    *   // Translation of the Cancel button text.
    *   cancel: 'Cancel',
+   *
+   *   // Used for adjusting the year value when parsing dates with short years.
+   *   // The year values between 0 and 99 are evaluated and adjusted.
+   *   // Example: for a referenceDate of 1970-10-30;
+   *   //   dateToBeParsed: 40-10-30, result: 1940-10-30
+   *   //   dateToBeParsed: 80-10-30, result: 1980-10-30
+   *   //   dateToBeParsed: 10-10-30, result: 2010-10-30
+   *   // Supported date format: ISO 8601 `"YYYY-MM-DD"` (default)
+   *   // The default value is the current date.
+   *   referenceDate: '',
    *
    *   // A function to format given `Object` as
    *   // date string. Object is in the format `{ day: ..., month: ..., year: ... }`

@@ -12,7 +12,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
 import { SlotMixin } from '@vaadin/component-base/src/slot-mixin.js';
 import { TooltipController } from '@vaadin/component-base/src/tooltip-controller.js';
-import { dateEquals } from '@vaadin/date-picker/src/vaadin-date-picker-helper.js';
+import { dateEquals, parseDate } from '@vaadin/date-picker/src/vaadin-date-picker-helper.js';
 import { FieldMixin } from '@vaadin/field-base/src/field-mixin.js';
 import { inputFieldShared } from '@vaadin/field-base/src/styles/input-field-shared-styles.js';
 import { registerStyles, ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -725,7 +725,7 @@ class DateTimePicker extends FieldMixin(
    * @private
    */
   __parseDate(str) {
-    return datePickerClass.prototype._parseDate(str);
+    return parseDate(str);
   }
 
   /**

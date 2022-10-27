@@ -41,3 +41,27 @@ export { extractDateParts };
  * to the expected format.
  */
 declare function extractDateParts(date: Date): { day: number; month: number; year: number };
+
+/**
+ * Get difference in months between today and given months value.
+ */
+declare function dateAfterXMonths(months: number): number;
+
+export { dateAfterXMonths };
+
+/**
+ * Calculate the year of the date based on the provided reference date
+ * Gets a two-digit year and returns a full year.
+ */
+declare function getAdjustedYear(referenceDate: Date, year: number, month?: number, day?: number): Date;
+
+export { getAdjustedYear };
+
+/**
+ * Parse date string of one of the following date formats:
+ * - ISO 8601 `"YYYY-MM-DD"`
+ * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+ */
+declare function parseDate(str: string): Date;
+
+export { parseDate };
