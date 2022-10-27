@@ -143,3 +143,24 @@ export function getAdjustedYear(referenceDate, year, month = 0, day = 1) {
   }
   return adjustedYear;
 }
+
+/**
+ * Parse date string of one of the following date formats:
+ * - ISO 8601 `"YYYY-MM-DD"`
+ * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+ * @param {!string} str Date string to parse
+ * @return {Date} Parsed date
+ */
+export function parseDate(str) {
+  // Parsing with RegExp to ensure correct format
+  const parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/.exec(str);
+  if (!parts) {
+    return undefined;
+  }
+
+  const date = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
+  date.setFullYear(parseInt(parts[1], 10));
+  date.setMonth(parseInt(parts[2], 10) - 1);
+  date.setDate(parseInt(parts[3], 10));
+  return date;
+}

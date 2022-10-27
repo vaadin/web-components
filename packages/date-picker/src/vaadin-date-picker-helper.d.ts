@@ -56,3 +56,12 @@ export { dateAfterXMonths };
 declare function getAdjustedYear(referenceDate: Date, year: number, month?: number, day?: number): Date;
 
 export { getAdjustedYear };
+
+/**
+ * Parse date string of one of the following date formats:
+ * - ISO 8601 `"YYYY-MM-DD"`
+ * - 6-digit extended ISO 8601 `"+YYYYYY-MM-DD"`, `"-YYYYYY-MM-DD"`
+ */
+declare function parseDate(str: string): Date;
+
+export { parseDate };

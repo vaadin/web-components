@@ -16,6 +16,7 @@ import {
   extractDateParts,
   getAdjustedYear,
   getClosestDate,
+  parseDate,
 } from './vaadin-date-picker-helper.js';
 
 /**
@@ -236,7 +237,7 @@ export const DatePickerMixin = (subclass) =>
                   date = parseInt(parts[1]);
                   year = parseInt(parts[2]);
                   if (parts[2].length < 3 && year >= 0) {
-                    const usedReferenceDate = this.referenceDate ? new Date(this.referenceDate) : new Date();
+                    const usedReferenceDate = this.referenceDate ? parseDate(this.referenceDate) : new Date();
                     year = getAdjustedYear(usedReferenceDate, year, month, date);
                   }
                 } else if (parts.length === 2) {
@@ -625,21 +626,6 @@ export const DatePickerMixin = (subclass) =>
     }
 
     /** @private */
-    _parseDate(str) {
-      // Parsing with RegExp to ensure correct format
-      const parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/.exec(str);
-      if (!parts) {
-        return;
-      }
-
-      const date = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
-      date.setFullYear(parseInt(parts[1], 10));
-      date.setMonth(parseInt(parts[2], 10) - 1);
-      date.setDate(parseInt(parts[3], 10));
-      return date;
-    }
-
-    /** @private */
     // eslint-disable-next-line max-params
     _isNoInput(inputElement, fullscreen, ios, i18n, opened, autoOpenDisabled) {
       // On fullscreen mode, text input is disabled if auto-open isn't disabled or
@@ -741,7 +727,7 @@ export const DatePickerMixin = (subclass) =>
      * @override
      */
     _valueChanged(value, oldValue) {
-      const newDate = this._parseDate(value);
+      const newDate = parseDate(value);
 
       if (value && !newDate) {
         // The new value cannot be parsed, revert the old value.
@@ -808,7 +794,7 @@ export const DatePickerMixin = (subclass) =>
 
     /** @protected */
     _onOverlayOpened() {
-      const parsedInitialPosition = this._parseDate(this.initialPosition);
+      const parsedInitialPosition = parseDate(this.initialPosition);
 
       const initialPosition =
         this._selectedDate || this._overlayContent.initialPosition || parsedInitialPosition || new Date();
@@ -1093,7 +1079,7 @@ export const DatePickerMixin = (subclass) =>
     /** @private */
     _getParsedDate(inputValue = this._inputValue) {
       const dateObject = this.i18n.parseDate && this.i18n.parseDate(inputValue);
-      const parsedDate = dateObject && this._parseDate(`${dateObject.year}-${dateObject.month + 1}-${dateObject.day}`);
+      const parsedDate = dateObject && parseDate(`${dateObject.year}-${dateObject.month + 1}-${dateObject.day}`);
       return parsedDate;
     }
 
@@ -1130,7 +1116,7 @@ export const DatePickerMixin = (subclass) =>
 
     /** @private */
     __computeMinOrMaxDate(dateString) {
-      return this._parseDate(dateString);
+      return parseDate(dateString);
     }
 
     /**
