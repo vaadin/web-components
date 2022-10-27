@@ -68,7 +68,7 @@ describe('fullscreen mode', () => {
         await open(datepicker);
         const cell = getFocusedCell(datepicker._overlayContent);
         expect(cell).to.be.instanceOf(HTMLTableCellElement);
-        expect(cell.hasAttribute('today')).to.be.true;
+        expect(cell.getAttribute('part')).to.include('today');
       });
     });
 

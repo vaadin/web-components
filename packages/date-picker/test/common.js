@@ -122,7 +122,7 @@ export function getFirstVisibleItem(scroller, bufferOffset) {
 export function getFocusedMonth(overlayContent) {
   const months = Array.from(overlayContent.querySelectorAll('vaadin-month-calendar'));
   return months.find((month) => {
-    const focused = month.shadowRoot.querySelector('[part="date"][focused]');
+    const focused = month.shadowRoot.querySelector('[part~="focused"]');
     return !!focused;
   });
 }
@@ -134,7 +134,7 @@ export function getFocusedCell(overlayContent) {
   let focusedCell;
 
   for (let i = 0; i < months.length; i++) {
-    focusedCell = months[i].shadowRoot.querySelector('[part="date"][focused]');
+    focusedCell = months[i].shadowRoot.querySelector('[part~="focused"]');
 
     if (focusedCell) {
       break;

@@ -53,8 +53,6 @@ registerStyles('vaadin-date-picker', inputFieldShared, { moduleId: 'vaadin-date-
  * Attribute  | Description                                      | Part name
  * -----------|--------------------------------------------------|-----------
  * `opened`   | Set when the date selector overlay is opened     | :host
- * `today`    | Set on the date corresponding to the current day | date
- * `selected` | Set on the selected date                         | date
  *
  * If you want to replace the default `<input>` and its container with a custom implementation to get full control
  * over the input field, consider using the [`<vaadin-date-picker-light>`](#/elements/vaadin-date-picker-light) element.
@@ -101,6 +99,10 @@ registerStyles('vaadin-date-picker', inputFieldShared, { moduleId: 'vaadin-date-
  * `week-numbers`        | Week numbers container
  * `week-number`         | Week number element
  * `date`                | Date element
+ * `disabled`            | Disabled date element
+ * `focused`             | Focused date element
+ * `selected`            | Selected date element
+ * `today`               | Date element corresponding to the current day
  *
  * In order to style year scroller elements, use `<vaadin-date-picker-year>` shadow DOM parts:
  *

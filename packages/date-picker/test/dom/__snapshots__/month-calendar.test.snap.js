@@ -646,7 +646,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="11 February 2016, Thursday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -656,7 +656,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="12 February 2016, Friday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -666,7 +666,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="13 February 2016, Saturday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -685,7 +685,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="14 February 2016, Sunday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -695,7 +695,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="15 February 2016, Monday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -705,7 +705,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="16 February 2016, Tuesday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -715,7 +715,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="17 February 2016, Wednesday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -725,7 +725,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="18 February 2016, Thursday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -735,7 +735,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="19 February 2016, Friday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -745,7 +745,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="20 February 2016, Saturday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -764,7 +764,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="21 February 2016, Sunday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -774,7 +774,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="22 February 2016, Monday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -784,7 +784,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="23 February 2016, Tuesday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -794,7 +794,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="24 February 2016, Wednesday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -804,7 +804,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="25 February 2016, Thursday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -814,7 +814,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="26 February 2016, Friday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -824,7 +824,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="27 February 2016, Saturday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -843,7 +843,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="28 February 2016, Sunday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >
@@ -853,7 +853,7 @@ snapshots["vaadin-month-calendar shadow max date"] =
         aria-disabled="true"
         aria-label="29 February 2016, Monday"
         disabled=""
-        part="date"
+        part="date disabled"
         role="gridcell"
         tabindex="-1"
       >

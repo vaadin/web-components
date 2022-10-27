@@ -8,7 +8,7 @@ describe('vaadin-month-calendar', () => {
   let monthCalendar, valueChangedSpy;
 
   function getDateCells(calendar) {
-    return [...calendar.shadowRoot.querySelectorAll('[part="date"]:not(:empty)')];
+    return [...calendar.shadowRoot.querySelectorAll('[part~="date"]:not(:empty)')];
   }
 
   function getWeekDayCells(calendar) {
@@ -82,7 +82,7 @@ describe('vaadin-month-calendar', () => {
   });
 
   it('should not fire value change on tapping an empty cell', () => {
-    const emptyDateElement = monthCalendar.shadowRoot.querySelector('[part="date"]:empty');
+    const emptyDateElement = monthCalendar.shadowRoot.querySelector('[part~="date"]:empty');
     tap(emptyDateElement);
     expect(valueChangedSpy.called).to.be.false;
   });
@@ -181,7 +181,7 @@ describe('vaadin-month-calendar', () => {
     it('should label today in correct locale', async () => {
       monthCalendar.month = new Date();
       await nextRender();
-      const today = getDateCells(monthCalendar).find((date) => date.hasAttribute('today'));
+      const today = getDateCells(monthCalendar).find((date) => date.getAttribute('part').includes('today'));
       expect(today.getAttribute('aria-label').split(', ').pop()).to.equal('Tänään');
     });
 
