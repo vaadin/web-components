@@ -669,6 +669,17 @@ describe('vaadin-tooltip', () => {
       document.body.append(tooltip);
       expect(overlay.opened).to.be.true;
     });
+
+    it('should not close overlay when another overlay opens', async () => {
+      tooltip.opened = true;
+      expect(overlay.opened).to.be.true;
+
+      const otherOverlay = fixtureSync('<vaadin-overlay></vaadin-overlay>');
+      otherOverlay.opened = true;
+      await nextRender();
+
+      expect(overlay.opened).to.be.true;
+    });
   });
 });
 
