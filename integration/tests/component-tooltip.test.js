@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender, tabKeyDown } from '@vaadin/testing-helpers';
 import '@vaadin/tooltip';
 import { Button } from '@vaadin/button';
 import { Checkbox } from '@vaadin/checkbox';
@@ -107,6 +107,74 @@ import { mouseenter, mouseleave } from '@vaadin/tooltip/test/helpers.js';
         mouseenter(tooltip.target);
         expect(tooltipOverlay.opened).to.be.false;
       }
+    });
+  });
+});
+
+[
+  {
+    tagName: ComboBox.is,
+    setup: (comboBox) => {
+      comboBox.items = [1, 2, 3];
+    },
+    open: (comboBox) => comboBox.open(),
+  },
+  {
+    tagName: DatePicker.is,
+    open: (datePicker) => datePicker.open(),
+  },
+  // DateTimePicker -> DatePicker
+  {
+    tagName: DateTimePicker.is,
+    open: (dateTimePicker) => dateTimePicker.__datePicker.open(),
+  },
+  // DateTimePicker -> TimePicker
+  {
+    tagName: DateTimePicker.is,
+    open: (dateTimePicker) => dateTimePicker.__timePicker.open(),
+  },
+  {
+    tagName: TimePicker.is,
+    open: (timePicker) => timePicker.open(),
+  },
+  {
+    tagName: Select.is,
+    setup: (select) => {
+      select.items = [
+        { label: '1', value: 1 },
+        { label: '2', value: 2 },
+        { label: '3', value: 3 },
+      ];
+    },
+    open: (select) => {
+      select.opened = true;
+    },
+  },
+].forEach(({ tagName, setup, open }) => {
+  describe(`${tagName} overlay with slotted tooltip`, () => {
+    let element, tooltip, tooltipOverlay;
+
+    beforeEach(() => {
+      element = fixtureSync(`
+        <${tagName}>
+          <vaadin-tooltip slot="tooltip" text="Tooltip text"></vaadin-tooltip>
+        </${tagName}>
+      `);
+      if (setup) {
+        setup(element);
+      }
+      tooltip = element.querySelector('vaadin-tooltip');
+      tooltipOverlay = tooltip.shadowRoot.querySelector('vaadin-tooltip-overlay');
+    });
+
+    it(`should close tooltip when opening ${tagName} overlay`, async () => {
+      tabKeyDown(element);
+      element.focus();
+      expect(tooltipOverlay.opened).to.be.true;
+
+      open(element);
+      await nextRender();
+      expect(tooltipOverlay.opened).to.be.false;
     });
   });
 });
