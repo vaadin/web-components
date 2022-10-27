@@ -1,18 +1,48 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
+snapshots["vaadin-upload host default"] = 
+`<vaadin-upload>
+  <vaadin-button
+    role="button"
+    slot="add-button"
+    tabindex="0"
+  >
+    Upload Files...
+  </vaadin-button>
+  <span slot="drop-label">
+    Drop files here
+  </span>
+  <vaadin-upload-icon slot="drop-label-icon">
+  </vaadin-upload-icon>
+</vaadin-upload>
+`;
+/* end snapshot vaadin-upload host default */
+
+snapshots["vaadin-upload host max files"] = 
+`<vaadin-upload max-files-reached="">
+  <vaadin-button
+    aria-disabled="true"
+    disabled=""
+    role="button"
+    slot="add-button"
+    tabindex="-1"
+  >
+    Upload File...
+  </vaadin-button>
+  <span slot="drop-label">
+    Drop file here
+  </span>
+  <vaadin-upload-icon slot="drop-label-icon">
+  </vaadin-upload-icon>
+</vaadin-upload>
+`;
+/* end snapshot vaadin-upload host max files */
+
 snapshots["vaadin-upload shadow default"] = 
 `<div part="primary-buttons">
   <div id="addFiles">
     <slot name="add-button">
-      <vaadin-button
-        id="addButton"
-        part="upload-button"
-        role="button"
-        tabindex="0"
-      >
-        Upload Files...
-      </vaadin-button>
     </slot>
   </div>
   <div
@@ -21,14 +51,8 @@ snapshots["vaadin-upload shadow default"] =
     part="drop-label"
   >
     <slot name="drop-label-icon">
-      <div part="drop-label-icon">
-      </div>
     </slot>
-    <slot
-      id="dropLabel"
-      name="drop-label"
-    >
-      Drop files here
+    <slot name="drop-label">
     </slot>
   </div>
 </div>

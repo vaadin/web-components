@@ -29,8 +29,7 @@ registerStyles(
       flex-grow: 1;
     }
 
-    [part='upload-button'] {
-      display: block;
+    ::slotted([slot='add-button']) {
       margin: 0 -8px;
     }
 
@@ -54,18 +53,6 @@ registerStyles(
 
     :host([max-files-reached]) [part='drop-label'] {
       color: var(--material-disabled-text-color);
-    }
-
-    [part='drop-label-icon'] {
-      display: inline-block;
-      margin-right: 8px;
-    }
-
-    [part='drop-label-icon']::before {
-      content: var(--material-icons-upload);
-      font-family: material-icons;
-      font-size: var(--material-icon-font-size);
-      line-height: 1;
     }
 
     /* Ripple */
@@ -94,6 +81,24 @@ registerStyles(
     }
   `,
   { moduleId: 'material-upload' },
+);
+
+registerStyles(
+  'vaadin-upload-icon',
+  css`
+    :host {
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    :host::before {
+      content: var(--material-icons-upload);
+      font-family: material-icons;
+      font-size: var(--material-icon-font-size);
+      line-height: 1;
+    }
+  `,
+  { moduleId: 'material-upload-icon' },
 );
 
 registerStyles(

@@ -19,6 +19,17 @@ describe('vaadin-upload', () => {
     await nextFrame();
   });
 
+  describe('host', () => {
+    it('default', async () => {
+      await expect(upload).dom.to.equalSnapshot();
+    });
+
+    it('max files', async () => {
+      upload.maxFiles = 1;
+      await expect(upload).dom.to.equalSnapshot();
+    });
+  });
+
   describe('shadow', () => {
     it('default', async () => {
       await expect(upload).shadowDom.to.equalSnapshot();

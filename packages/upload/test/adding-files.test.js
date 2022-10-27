@@ -84,7 +84,7 @@ describe('file list', () => {
     });
 
     it('should disable add button when max files added', () => {
-      const addButton = upload.$.addButton;
+      const addButton = upload.querySelector('[slot="add-button"]');
 
       // Enabled with default maxFiles value
       expect(addButton.disabled).to.be.false;

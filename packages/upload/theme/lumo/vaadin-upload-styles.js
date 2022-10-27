@@ -51,23 +51,25 @@ registerStyles(
       color: var(--lumo-disabled-text-color);
     }
 
-    [part='drop-label-icon'] {
-      display: inline-block;
+    [part='file-list'] > *:not(:first-child) > * {
+      border-top: 1px solid var(--lumo-contrast-10pct);
     }
+  `,
+  { moduleId: 'lumo-upload' },
+);
 
-    [part='drop-label-icon']::before {
+registerStyles(
+  'vaadin-upload-icon',
+  css`
+    :host::before {
       content: var(--lumo-icons-upload);
       font-family: lumo-icons;
       font-size: var(--lumo-icon-size-m);
       line-height: 1;
       vertical-align: -0.25em;
     }
-
-    [part='file-list'] > *:not(:first-child) > * {
-      border-top: 1px solid var(--lumo-contrast-10pct);
-    }
   `,
-  { moduleId: 'lumo-upload' },
+  { moduleId: 'lumo-upload-icon' },
 );
 
 const uploadFile = css`

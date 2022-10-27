@@ -3,6 +3,7 @@
  * Copyright (c) 2016 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
@@ -180,13 +181,12 @@ export interface UploadEventMap extends HTMLElementEventMap, UploadCustomEventMa
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ---|---
- * `primary-buttons` | Upload container
- * `upload-button` | Upload button
- * `drop-label` | Label for drop indicator
- * `drop-label-icon` | Icon for drop indicator
- * `file-list` | File list container
+ * Part name          | Description
+ * -------------------|-------------------------------------
+ * `primary-buttons`  | Upload container
+ * `upload-button`    | Upload button
+ * `drop-label`       | Element wrapping drop label and icon
+ * `file-list`        | File list container
  *
  * The following state attributes are available for styling:
  *
@@ -212,7 +212,7 @@ export interface UploadEventMap extends HTMLElementEventMap, UploadCustomEventMa
  * @fires {CustomEvent} upload-retry - Fired when retry upload is requested.
  * @fires {CustomEvent} upload-abort - Fired when upload abort is requested.
  */
-declare class Upload extends ThemableMixin(ElementMixin(HTMLElement)) {
+declare class Upload extends ThemableMixin(ElementMixin(ControllerMixin(HTMLElement))) {
   /**
    * Define whether the element supports dropping files on it for uploading.
    * By default it's enabled in desktop and disabled in touch devices
