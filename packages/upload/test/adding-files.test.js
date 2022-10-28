@@ -39,7 +39,7 @@ describe('file list', () => {
     let inputClickSpy;
 
     beforeEach(() => {
-      addButton = upload.querySelector('[slot="add-button"]');
+      addButton = upload._addButton;
       input = upload.$.fileInput;
       // While the synthetic "Add Files" button click event is not trusted and
       // it should generate a non-trusted click event on the hidden file input,

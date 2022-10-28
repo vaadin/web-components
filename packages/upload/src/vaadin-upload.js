@@ -32,7 +32,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * Part name          | Description
  * -------------------|-------------------------------------
  * `primary-buttons`  | Upload container
- * `upload-button`    | Upload button
  * `drop-label`       | Element wrapping drop label and icon
  * `file-list`        | File list container
  *
@@ -425,7 +424,12 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         },
       },
 
-      /** @private  */
+      /** @private */
+      _addButton: {
+        type: Object,
+      },
+
+      /** @private */
       _dropLabel: {
         type: Object,
       },

@@ -81,7 +81,6 @@ registerStyles(
   'vaadin-upload-icon',
   css`
     :host {
-      display: inline-block;
       margin-right: 8px;
     }
 

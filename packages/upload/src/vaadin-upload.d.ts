@@ -184,7 +184,6 @@ export interface UploadEventMap extends HTMLElementEventMap, UploadCustomEventMa
  * Part name          | Description
  * -------------------|-------------------------------------
  * `primary-buttons`  | Upload container
- * `upload-button`    | Upload button
  * `drop-label`       | Element wrapping drop label and icon
  * `file-list`        | File list container
  *
