@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-text-field",
-  "version": "23.1.11",
+  "version": "23.1.12",
   "publishConfig": {
     "access": "public"
   },
@@ -34,11 +34,11 @@
   ],
   "dependencies": {
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/email-field": "~23.1.11",
-    "@vaadin/integer-field": "~23.1.11",
-    "@vaadin/number-field": "~23.1.11",
-    "@vaadin/password-field": "~23.1.11",
-    "@vaadin/text-area": "~23.1.11",
-    "@vaadin/text-field": "~23.1.11"
+    "@vaadin/email-field": "~23.1.12",
+    "@vaadin/integer-field": "~23.1.12",
+    "@vaadin/number-field": "~23.1.12",
+    "@vaadin/password-field": "~23.1.12",
+    "@vaadin/text-area": "~23.1.12",
+    "@vaadin/text-field": "~23.1.12"
   }
 }
