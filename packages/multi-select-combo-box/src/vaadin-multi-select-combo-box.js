@@ -958,10 +958,10 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
           this._onBackSpace(chips);
           break;
         case 'ArrowLeft':
-          this._onArrowLeft(chips);
+          this._onArrowLeft(chips, event);
           break;
         case 'ArrowRight':
-          this._onArrowRight(chips);
+          this._onArrowRight(chips, event);
           break;
         default:
           this._focusedChipIndex = -1;
@@ -971,12 +971,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  _onArrowLeft(chips) {
+  _onArrowLeft(chips, event) {
     if (this.inputElement.selectionStart !== 0) {
       return;
     }
 
     const idx = this._focusedChipIndex;
+    if (idx !== -1) {
+      event.preventDefault();
+    }
     let newIdx;
 
     if (this.getAttribute('dir') !== 'rtl') {
@@ -1001,12 +1004,15 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
   }
 
   /** @private */
-  _onArrowRight(chips) {
+  _onArrowRight(chips, event) {
     if (this.inputElement.selectionStart !== 0) {
       return;
     }
 
     const idx = this._focusedChipIndex;
+    if (idx !== -1) {
+      event.preventDefault();
+    }
     let newIdx;
 
     if (this.getAttribute('dir') === 'rtl') {
