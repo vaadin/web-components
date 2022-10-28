@@ -8,24 +8,10 @@ import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js'
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { AvatarGroupI18n } from './vaadin-avatar-group-updater.js';
+import { AvatarGroupItem } from './vaadin-avatar-group-updater.js';
 
-export { AvatarI18n };
-
-export interface AvatarGroupI18n extends AvatarI18n {
-  activeUsers: {
-    one: string;
-    many: string;
-  };
-  joined: string;
-  left: string;
-}
-
-export interface AvatarGroupItem {
-  name?: string;
-  abbr?: string;
-  img?: string;
-  colorIndex?: number;
-}
+export { AvatarGroupItem, AvatarI18n };
 
 /**
  * `<vaadin-avatar-group>` is a Web Component providing avatar group displaying functionality.

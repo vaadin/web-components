@@ -16,6 +16,7 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import { AvatarGroupUpdater } from './vaadin-avatar-group-updater.js';
 
 const MINIMUM_DISPLAYED_AVATARS = 2;
 
@@ -260,6 +261,11 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
         type: Boolean,
         observer: '__openedChanged',
       },
+
+      /** @private */
+      _updater: {
+        type: Object,
+      },
     };
   }
 
@@ -268,7 +274,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
       '__itemsChanged(items.splices, items.*)',
       '__i18nItemsChanged(i18n.*, items.length)',
       '__updateAvatarsTheme(_overflow, _avatars, _theme)',
-      '__updateAvatars(items.*, __itemsInView, maxItemsVisible)',
+      '__updateAvatars(items.*, __itemsInView, maxItemsVisible, _updater, i18n)',
       '__updateOverflowAbbr(_overflow, items.length, __itemsInView, maxItemsVisible)',
       '__updateOverflowHidden(_overflow, items.length, __itemsInView, __maxReached)',
       '__updateOverflowTooltip(_overflowTooltip, items.length, __itemsInView, maxItemsVisible)',
@@ -298,6 +304,8 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
       },
     );
     this.addController(this._overflowController);
+
+    this._updater = new AvatarGroupUpdater(this, this._overflow, this.i18n);
 
     this.$.overlay.renderer = this.__overlayRenderer.bind(this);
 
@@ -341,21 +349,6 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
     this._overflowItems.forEach((item) => {
       listBox.appendChild(this.__createItemElement(item));
     });
-  }
-
-  /** @private */
-  __createAvatar(item) {
-    const avatar = document.createElement('vaadin-avatar');
-    avatar.name = item.name;
-    avatar.abbr = item.abbr;
-    avatar.img = item.img;
-    avatar.colorIndex = item.colorIndex;
-
-    avatar.withTooltip = true;
-    avatar.i18n = this.i18n;
-    avatar._item = item;
-
-    return avatar;
   }
 
   /** @private */
@@ -431,41 +424,19 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
   }
 
   /** @private */
-  __updateAvatars(arr, itemsInView, maxItemsVisible) {
+  __updateAvatars(arr, itemsInView, maxItemsVisible, updater, i18n) {
+    if (!updater) {
+      return;
+    }
+
     const items = arr.base || [];
     const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
 
-    const newItems = limit ? items.slice(0, limit) : items;
-    const oldItems = this.__oldAvatarItems || [];
-
-    if (newItems.length || oldItems.length) {
-      const removed = oldItems.filter((item) => !newItems.includes(item));
-      const added = [...newItems];
-
-      this._avatars.forEach((avatar) => {
-        const item = avatar._item;
-        if (removed.includes(item)) {
-          avatar.remove();
-        } else if (added.includes(item)) {
-          added.splice(added.indexOf(item), 1);
-        }
-      });
-
-      this.__addAvatars(added, newItems);
-    }
+    // Update rendered avatars
+    updater.i18n = i18n;
+    updater.items = limit ? items.slice(0, limit) : items;
 
     this._avatars = [...this.querySelectorAll('vaadin-avatar')];
-    this.__oldAvatarItems = newItems;
-  }
-
-  /** @private */
-  __addAvatars(itemsToAdd, allItems) {
-    itemsToAdd.forEach((item) => {
-      const avatar = this.__createAvatar(item);
-      const nextItem = allItems[allItems.indexOf(item) + 1];
-      const nextAvatar = this._avatars.find((el) => el._item === nextItem);
-      this.insertBefore(avatar, nextAvatar || this._overflow);
-    });
   }
 
   /** @private */
