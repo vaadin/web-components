@@ -542,7 +542,7 @@ describe('basic', () => {
               expect(chips[2].hasAttribute('focused')).to.be.true;
             });
 
-            it(`should not mark last chip on ${PREV_KEY} as focused when input has value and caret is not in starting position`, async () => {
+            it(`should not mark last chip on ${PREV_KEY} as focused when caret is not in starting position`, async () => {
               await sendKeys({ type: 'lemon' });
               await sendKeys({ press: PREV_KEY });
               const chips = getChips(comboBox);
@@ -550,16 +550,11 @@ describe('basic', () => {
               expect(chips[2].hasAttribute('focused')).to.be.false;
             });
 
-            it(`should mark last chip on ${PREV_KEY} as focused when input has value and caret is in starting position`, async () => {
-              const inputValue = 'lemon';
-              await sendKeys({ type: inputValue });
-              for (let i = 0; i < inputValue.length; i++) {
-                await sendKeys({ press: PREV_KEY });
-              }
-              const chips = getChips(comboBox);
-              expect(chips[1].hasAttribute('focused')).to.be.false;
-              expect(chips[2].hasAttribute('focused')).to.be.false;
+            it(`should mark last chip on ${PREV_KEY} as focused when caret is in starting position`, async () => {
+              await sendKeys({ type: 'lemon' });
+              inputElement.setSelectionRange(0, 0);
               await sendKeys({ press: PREV_KEY });
+              const chips = getChips(comboBox);
               expect(chips[1].hasAttribute('focused')).to.be.false;
               expect(chips[2].hasAttribute('focused')).to.be.true;
             });
