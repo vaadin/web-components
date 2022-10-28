@@ -495,12 +495,12 @@ describe('basic', () => {
           expect(chips[2].hasAttribute('focused')).to.be.false;
         });
 
-        it('should not mark last chip on Backspace as focused when dropdown is opened', async () => {
+        it('should mark last chip on Backspace as focused when dropdown is opened', async () => {
           await sendKeys({ press: 'ArrowDown' });
           await sendKeys({ press: 'Backspace' });
           const chips = getChips(comboBox);
           expect(chips[1].hasAttribute('focused')).to.be.false;
-          expect(chips[2].hasAttribute('focused')).to.be.false;
+          expect(chips[2].hasAttribute('focused')).to.be.true;
         });
 
         it('should not mark last chip on Backspace as focused when readonly', async () => {
@@ -542,7 +542,7 @@ describe('basic', () => {
               expect(chips[2].hasAttribute('focused')).to.be.true;
             });
 
-            it(`should not mark last chip on ${PREV_KEY} as focused when input has value`, async () => {
+            it(`should not mark last chip on ${PREV_KEY} as focused when caret is not in starting position`, async () => {
               await sendKeys({ type: 'lemon' });
               await sendKeys({ press: PREV_KEY });
               const chips = getChips(comboBox);
@@ -550,12 +550,21 @@ describe('basic', () => {
               expect(chips[2].hasAttribute('focused')).to.be.false;
             });
 
-            it(`should not mark last chip on ${PREV_KEY} as focused when dropdown is opened`, async () => {
+            it(`should mark last chip on ${PREV_KEY} as focused when caret is in starting position`, async () => {
+              await sendKeys({ type: 'lemon' });
+              inputElement.setSelectionRange(0, 0);
+              await sendKeys({ press: PREV_KEY });
+              const chips = getChips(comboBox);
+              expect(chips[1].hasAttribute('focused')).to.be.false;
+              expect(chips[2].hasAttribute('focused')).to.be.true;
+            });
+
+            it(`should mark last chip on ${PREV_KEY} as focused when dropdown is opened`, async () => {
               await sendKeys({ press: 'ArrowDown' });
               await sendKeys({ press: PREV_KEY });
               const chips = getChips(comboBox);
               expect(chips[1].hasAttribute('focused')).to.be.false;
-              expect(chips[2].hasAttribute('focused')).to.be.false;
+              expect(chips[2].hasAttribute('focused')).to.be.true;
             });
 
             it(`should mark previous chip on ${PREV_KEY} as focused when a chip is focused`, async () => {
@@ -564,6 +573,17 @@ describe('basic', () => {
               const chips = getChips(comboBox);
               expect(chips[1].hasAttribute('focused')).to.be.true;
               expect(chips[2].hasAttribute('focused')).to.be.false;
+            });
+
+            it(`should not change caret position after ${PREV_KEY} when a chip is focused`, async () => {
+              await sendKeys({ type: 'lemon' });
+              inputElement.blur();
+              const chips = getChips(comboBox);
+              chips[2].toggleAttribute('focused');
+              expect(chips[1].hasAttribute('focused')).to.be.false;
+              expect(chips[2].hasAttribute('focused')).to.be.true;
+              await sendKeys({ press: PREV_KEY });
+              expect(inputElement.selectionStart).to.equal(0);
             });
 
             it(`should mark next chip on ${NEXT_KEY} as focused when a chip is focused`, async () => {
@@ -589,6 +609,17 @@ describe('basic', () => {
               const chips = getChips(comboBox);
               expect(chips[1].hasAttribute('focused')).to.be.false;
               expect(chips[2].hasAttribute('focused')).to.be.false;
+            });
+
+            it(`should not change caret position after ${NEXT_KEY} when a chip is focused`, async () => {
+              await sendKeys({ type: 'lemon' });
+              inputElement.blur();
+              const chips = getChips(comboBox);
+              chips[1].toggleAttribute('focused');
+              expect(chips[1].hasAttribute('focused')).to.be.true;
+              expect(chips[2].hasAttribute('focused')).to.be.false;
+              await sendKeys({ press: NEXT_KEY });
+              expect(inputElement.selectionStart).to.equal(0);
             });
           });
         });
