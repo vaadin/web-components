@@ -134,6 +134,16 @@ describe('message-list', () => {
         expect(items.length).to.equal(3);
         expect(items[1].textContent).to.equal('Hi');
       });
+
+      it('should reuse existing vaadin-message element when updating items', async () => {
+        const firstMessage = messageList.querySelector('vaadin-message');
+        messageList.items = [messages[1], messages[2]];
+        await nextRender();
+        const items = messageList.querySelectorAll('vaadin-message');
+        expect(items.length).to.equal(2);
+        expect(items[0]).to.eql(firstMessage);
+        expect(items[1]).to.not.eql(firstMessage);
+      });
     });
 
     describe('scroll', () => {

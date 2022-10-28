@@ -42,7 +42,8 @@
     "@vaadin/component-base": "24.0.0-alpha1",
     "@vaadin/vaadin-lumo-styles": "24.0.0-alpha1",
     "@vaadin/vaadin-material-styles": "24.0.0-alpha1",
-    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha1"
+    "@vaadin/vaadin-themable-mixin": "24.0.0-alpha1",
+    "lit": "^2.0.0"
   },
   "devDependencies": {
     "@esm-bundle/chai": "^4.3.4",
