@@ -495,12 +495,12 @@ describe('basic', () => {
           expect(chips[2].hasAttribute('focused')).to.be.false;
         });
 
-        it('should not mark last chip on Backspace as focused when dropdown is opened', async () => {
+        it('should mark last chip on Backspace as focused when dropdown is opened', async () => {
           await sendKeys({ press: 'ArrowDown' });
           await sendKeys({ press: 'Backspace' });
           const chips = getChips(comboBox);
           expect(chips[1].hasAttribute('focused')).to.be.false;
-          expect(chips[2].hasAttribute('focused')).to.be.false;
+          expect(chips[2].hasAttribute('focused')).to.be.true;
         });
 
         it('should not mark last chip on Backspace as focused when readonly', async () => {
@@ -542,7 +542,7 @@ describe('basic', () => {
               expect(chips[2].hasAttribute('focused')).to.be.true;
             });
 
-            it(`should not mark last chip on ${PREV_KEY} as focused when input has value`, async () => {
+            it(`should not mark last chip on ${PREV_KEY} as focused when input has value and caret is not in starting position`, async () => {
               await sendKeys({ type: 'lemon' });
               await sendKeys({ press: PREV_KEY });
               const chips = getChips(comboBox);
@@ -550,12 +550,26 @@ describe('basic', () => {
               expect(chips[2].hasAttribute('focused')).to.be.false;
             });
 
-            it(`should not mark last chip on ${PREV_KEY} as focused when dropdown is opened`, async () => {
+            it(`should mark last chip on ${PREV_KEY} as focused when input has value and caret is in starting position`, async () => {
+              const inputValue = 'lemon';
+              await sendKeys({ type: inputValue });
+              for (let i = 0; i < inputValue.length; i++) {
+                await sendKeys({ press: PREV_KEY });
+              }
+              const chips = getChips(comboBox);
+              expect(chips[1].hasAttribute('focused')).to.be.false;
+              expect(chips[2].hasAttribute('focused')).to.be.false;
+              await sendKeys({ press: PREV_KEY });
+              expect(chips[1].hasAttribute('focused')).to.be.false;
+              expect(chips[2].hasAttribute('focused')).to.be.true;
+            });
+
+            it(`should mark last chip on ${PREV_KEY} as focused when dropdown is opened`, async () => {
               await sendKeys({ press: 'ArrowDown' });
               await sendKeys({ press: PREV_KEY });
               const chips = getChips(comboBox);
               expect(chips[1].hasAttribute('focused')).to.be.false;
-              expect(chips[2].hasAttribute('focused')).to.be.false;
+              expect(chips[2].hasAttribute('focused')).to.be.true;
             });
 
             it(`should mark previous chip on ${PREV_KEY} as focused when a chip is focused`, async () => {

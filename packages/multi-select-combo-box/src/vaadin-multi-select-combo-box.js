@@ -972,7 +972,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @private */
   _onArrowLeft(chips) {
-    if (this.inputElement.value !== '' || this.opened) {
+    if (this.inputElement.selectionStart !== 0) {
       return;
     }
 
@@ -1002,7 +1002,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @private */
   _onArrowRight(chips) {
-    if (this.inputElement.value !== '' || this.opened) {
+    if (this.inputElement.selectionStart !== 0) {
       return;
     }
 
@@ -1032,7 +1032,7 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
   /** @private */
   _onBackSpace(chips) {
-    if (this.inputElement.value !== '' || this.opened) {
+    if (this.inputElement.selectionStart !== 0) {
       return;
     }
 
