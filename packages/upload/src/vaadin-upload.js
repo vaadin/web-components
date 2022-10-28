@@ -5,12 +5,15 @@
  */
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@vaadin/button/src/vaadin-button.js';
+import './vaadin-upload-icon.js';
 import './vaadin-upload-icons.js';
 import './vaadin-upload-file.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -26,13 +29,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  *
  * The following shadow DOM parts are available for styling:
  *
- * Part name | Description
- * ---|---
- * `primary-buttons` | Upload container
- * `upload-button` | Upload button
- * `drop-label` | Label for drop indicator
- * `drop-label-icon` | Icon for drop indicator
- * `file-list` | File list container
+ * Part name          | Description
+ * -------------------|-------------------------------------
+ * `primary-buttons`  | Upload container
+ * `drop-label`       | Element wrapping drop label and icon
+ * `file-list`        | File list container
  *
  * The following state attributes are available for styling:
  *
@@ -59,10 +60,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * @fires {CustomEvent} upload-abort - Fired when upload abort is requested.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes ThemableMixin
  * @mixes ElementMixin
  */
-class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
+class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -88,18 +90,10 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
       </style>
 
       <div part="primary-buttons">
-        <div id="addFiles" on-touchend="_onAddFilesTouchEnd" on-click="_onAddFilesClick">
-          <slot name="add-button">
-            <vaadin-button part="upload-button" id="addButton" disabled="[[maxFilesReached]]">
-              [[_i18nPlural(maxFiles, i18n.addFiles, i18n.addFiles.*)]]
-            </vaadin-button>
-          </slot>
-        </div>
+        <slot name="add-button"></slot>
         <div part="drop-label" hidden$="[[nodrop]]" id="dropLabelContainer" aria-hidden="true">
-          <slot name="drop-label-icon">
-            <div part="drop-label-icon"></div>
-          </slot>
-          <slot name="drop-label" id="dropLabel"> [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]]</slot>
+          <slot name="drop-label-icon"></slot>
+          <slot name="drop-label"></slot>
         </div>
       </div>
       <slot name="file-list">
@@ -429,7 +423,24 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
           };
         },
       },
+
+      /** @private */
+      _addButton: {
+        type: Object,
+      },
+
+      /** @private */
+      _dropLabel: {
+        type: Object,
+      },
     };
+  }
+
+  static get observers() {
+    return [
+      '__updateAddButton(_addButton, maxFiles, i18n, maxFilesReached)',
+      '__updateDropLabel(_dropLabel, maxFiles, i18n)',
+    ];
   }
 
   /** @protected */
@@ -446,6 +457,36 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
     this.addEventListener('upload-start', this._onUploadStart.bind(this));
     this.addEventListener('upload-success', this._onUploadSuccess.bind(this));
     this.addEventListener('upload-error', this._onUploadError.bind(this));
+
+    this.addController(
+      new SlotController(
+        this,
+        'add-button',
+        () => document.createElement('vaadin-button'),
+        (_, button) => {
+          button.addEventListener('touchend', (e) => {
+            this._onAddFilesTouchEnd(e);
+          });
+          button.addEventListener('click', (e) => {
+            this._onAddFilesClick(e);
+          });
+          this._addButton = button;
+        },
+      ),
+    );
+
+    this.addController(
+      new SlotController(
+        this,
+        'drop-label',
+        () => document.createElement('span'),
+        (_, label) => {
+          this._dropLabel = label;
+        },
+      ),
+    );
+
+    this.addController(new SlotController(this, 'drop-label-icon', () => document.createElement('vaadin-upload-icon')));
   }
 
   /** @private */
@@ -507,6 +548,21 @@ class Upload extends ElementMixin(ThemableMixin(PolymerElement)) {
   /** @private */
   _maxFilesAdded(maxFiles, numFiles) {
     return maxFiles >= 0 && numFiles >= maxFiles;
+  }
+
+  /** @private */
+  __updateAddButton(addButton, maxFiles, i18n, maxFilesReached) {
+    if (addButton) {
+      addButton.disabled = maxFilesReached;
+      addButton.textContent = this._i18nPlural(maxFiles, i18n.addFiles);
+    }
+  }
+
+  /** @private */
+  __updateDropLabel(dropLabel, maxFiles, i18n) {
+    if (dropLabel) {
+      dropLabel.textContent = this._i18nPlural(maxFiles, i18n.dropFiles);
+    }
   }
 
   /** @private */

@@ -54,7 +54,7 @@ describe('upload', () => {
       element.files[0].held = true;
       // To show the retry button
       element.files[0].error = 'Could not upload file';
-      element.shadowRoot.querySelector('[part=upload-button]').focus();
+      element.querySelector('[slot="add-button"]').focus();
     });
 
     it('file', async () => {
