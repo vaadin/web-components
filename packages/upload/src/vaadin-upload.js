@@ -200,6 +200,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       files: {
         type: Array,
         notify: true,
+        observer: '_filesChanged',
         value: () => [],
       },
 
@@ -423,6 +424,11 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       _fileList: {
         type: Object,
       },
+
+      /** @private */
+      _files: {
+        type: Array,
+      },
     };
   }
 
@@ -430,7 +436,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
     return [
       '__updateAddButton(_addButton, maxFiles, i18n, maxFilesReached)',
       '__updateDropLabel(_dropLabel, maxFiles, i18n)',
-      '__updateFileList(_fileList, files, i18n)',
+      '__updateFileList(_fileList, _files, i18n)',
     ];
   }
 
@@ -550,6 +556,11 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   /** @private */
   _maxFilesAdded(maxFiles, numFiles) {
     return maxFiles >= 0 && numFiles >= maxFiles;
+  }
+
+  /** @private */
+  _filesChanged(files) {
+    this._files = [...files];
   }
 
   /** @private */
@@ -801,24 +812,21 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       }),
     );
     if (evt) {
+      file.abort = true;
       if (file.xhr) {
         file.xhr.abort();
       }
 
-      // Replace the file to make sure "file-remove" event is fired
-      this._notifyFileChanges(file, { ...file, abort: true });
+      this._notifyFileChanges(file);
     }
   }
 
   /** @private */
-  _notifyFileChanges(file, newFile) {
+  _notifyFileChanges(_file) {
     const files = [...this.files];
-
-    if (newFile) {
-      files.splice(files.indexOf(file), 1, newFile);
-    }
-
-    this.files = files;
+    // Force updating DOM element for specific file
+    // without setting new object to `this.files`
+    this._files = files;
   }
 
   /** @private */

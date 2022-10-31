@@ -82,13 +82,13 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
 
       <div part="row">
         <div part="info">
-          <div part="done-icon" hidden$="[[!file.complete]]" aria-hidden="true"></div>
-          <div part="warning-icon" hidden$="[[!file.error]]" aria-hidden="true"></div>
+          <div part="done-icon" hidden$="[[!complete]]" aria-hidden="true"></div>
+          <div part="warning-icon" hidden$="[[!errorMessage]]" aria-hidden="true"></div>
 
           <div part="meta">
-            <div part="name" id="name">[[file.name]]</div>
-            <div part="status" hidden$="[[!file.status]]" id="status">[[file.status]]</div>
-            <div part="error" id="error" hidden$="[[!file.error]]">[[file.error]]</div>
+            <div part="name" id="name">[[fileName]]</div>
+            <div part="status" hidden$="[[!status]]" id="status">[[status]]</div>
+            <div part="error" id="error" hidden$="[[!errorMessage]]">[[errorMessage]]</div>
           </div>
         </div>
         <div part="commands">
@@ -97,7 +97,7 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
             part="start-button"
             file-event="file-start"
             on-click="_fireFileEvent"
-            hidden$="[[!file.held]]"
+            hidden$="[[!held]]"
             aria-label$="[[i18n.file.start]]"
             aria-describedby="name"
           ></button>
@@ -106,7 +106,7 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
             part="retry-button"
             file-event="file-retry"
             on-click="_fireFileEvent"
-            hidden$="[[!file.error]]"
+            hidden$="[[!errorMessage]]"
             aria-label$="[[i18n.file.retry]]"
             aria-describedby="name"
           ></button>
@@ -131,12 +131,84 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
 
   static get properties() {
     return {
-      file: {
-        type: Object,
-        observer: '_fileChanged',
+      /**
+       * True if uploading is aborted, false otherwise.
+       */
+      abort: {
+        type: Boolean,
+        value: false,
+        observer: '_abortChanged',
       },
 
-      i18n: Object,
+      /**
+       * True if uploading is completed, false otherwise.
+       */
+      complete: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+      },
+
+      /**
+       * Error message returned by the server, if any.
+       */
+      errorMessage: {
+        type: String,
+        value: '',
+        observer: '_errorMessageChanged',
+      },
+
+      /**
+       * The object representing a file.
+       */
+      file: {
+        type: Object,
+      },
+
+      /**
+       * Name of the uploading file.
+       */
+      fileName: {
+        type: String,
+      },
+
+      /**
+       * True if uploading is not started, false otherwise.
+       */
+      held: {
+        type: Boolean,
+        value: false,
+      },
+
+      /**
+       * True if remaining time is unknown, false otherwise.
+       */
+      indeterminate: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+      },
+
+      /**
+       * The object used to localize this component.
+       */
+      i18n: {
+        type: Object,
+      },
+
+      /**
+       * Number representing the uploading progress.
+       */
+      progress: {
+        type: Number,
+      },
+
+      /**
+       * Uploading status.
+       */
+      status: {
+        type: String,
+      },
 
       /**
        * Indicates whether the element can be focused and where it participates in sequential keyboard navigation.
@@ -148,6 +220,15 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
         reflectToAttribute: true,
       },
 
+      /**
+       * True if uploading is in progress, false otherwise.
+       */
+      uploading: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+      },
+
       /** @private */
       _progress: {
         type: Object,
@@ -156,7 +237,7 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
   }
 
   static get observers() {
-    return ['__updateProgress(_progress, file.progress, file.indeterminate)'];
+    return ['__updateProgress(_progress, progress, indeterminate)'];
   }
 
   /** @protected */
@@ -203,17 +284,15 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
   }
 
   /** @private */
-  _fileChanged(file) {
-    if (file) {
-      if (file.abort) {
-        this._remove();
-      }
-
-      this.toggleAttribute('error', Boolean(file.error));
-      this.toggleAttribute('indeterminate', Boolean(file.indeterminate));
-      this.toggleAttribute('uploading', Boolean(file.uploading));
-      this.toggleAttribute('complete', Boolean(file.complete));
+  _abortChanged(abort) {
+    if (abort) {
+      this._remove();
     }
+  }
+
+  /** @private */
+  _errorMessageChanged(errorMessage) {
+    this.toggleAttribute('error', Boolean(errorMessage));
   }
 
   /** @private */

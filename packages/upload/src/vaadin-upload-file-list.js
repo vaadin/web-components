@@ -87,7 +87,19 @@ class UploadFileList extends ThemableMixin(PolymerElement) {
           items,
           (file) => html`
             <li>
-              <vaadin-upload-file .file="${file}" .i18n="${i18n}"></vaadin-upload-file>
+              <vaadin-upload-file
+                .file="${file}"
+                .abort="${file.abort}"
+                .complete="${file.complete}"
+                .errorMessage="${file.error}"
+                .fileName="${file.name}"
+                .held="${file.held}"
+                .indeterminate="${file.indeterminate}"
+                .progress="${file.progress}"
+                .status="${file.status}"
+                .uploading="${file.uploading}"
+                .i18n="${i18n}"
+              ></vaadin-upload-file>
             </li>
           `,
         )}
