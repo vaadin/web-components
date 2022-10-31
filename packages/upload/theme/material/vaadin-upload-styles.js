@@ -239,11 +239,6 @@ registerStyles(
       width: auto;
       margin-left: 28px;
     }
-
-    [part='progress'][complete],
-    [part='progress'][error] {
-      display: none;
-    }
   `,
   { moduleId: 'material-upload-file' },
 );
