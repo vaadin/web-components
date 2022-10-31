@@ -7,11 +7,15 @@ describe('vaadin-upload-file', () => {
 
   beforeEach(() => {
     uploadFile = fixtureSync('<vaadin-upload-file></vaadin-upload-file>');
-    uploadFile.file = {
-      name: 'Workflow.pdf',
-      progress: 60,
-      status: '19.7 MB: 60% (remaining time: 00:12:34)',
-    };
+
+    const name = 'Workflow.pdf';
+    const progress = 60;
+    const status = '19.7 MB: 60% (remaining time: 00:12:34)';
+
+    uploadFile.file = { name, progress, status };
+    uploadFile.fileName = name;
+    uploadFile.progress = progress;
+    uploadFile.status = status;
   });
 
   describe('shadow', () => {

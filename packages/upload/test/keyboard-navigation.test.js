@@ -33,7 +33,7 @@ describe('keyboard navigation', () => {
 
     await nextRender();
 
-    fileElement = uploadElement.shadowRoot.querySelector('vaadin-upload-file');
+    fileElement = uploadElement.querySelector('vaadin-upload-file');
   });
 
   afterEach(() => {
@@ -51,7 +51,7 @@ describe('keyboard navigation', () => {
   it('should focus on the file', async () => {
     await repeatTab(2);
 
-    expect(uploadElement.shadowRoot.activeElement).to.equal(fileElement);
+    expect(document.activeElement).to.equal(fileElement);
   });
 
   describe('file', () => {

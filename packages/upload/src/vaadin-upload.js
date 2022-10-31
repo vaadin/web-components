@@ -7,7 +7,7 @@ import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@vaadin/button/src/vaadin-button.js';
 import './vaadin-upload-icon.js';
 import './vaadin-upload-icons.js';
-import './vaadin-upload-file.js';
+import './vaadin-upload-file-list.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
 import { isTouch } from '@vaadin/component-base/src/browser-utils.js';
@@ -33,7 +33,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * -------------------|-------------------------------------
  * `primary-buttons`  | Upload container
  * `drop-label`       | Element wrapping drop label and icon
- * `file-list`        | File list container
  *
  * The following state attributes are available for styling:
  *
@@ -81,12 +80,6 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         [hidden] {
           display: none !important;
         }
-
-        [part='file-list'] {
-          padding: 0;
-          margin: 0;
-          list-style-type: none;
-        }
       </style>
 
       <div part="primary-buttons">
@@ -96,15 +89,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
           <slot name="drop-label"></slot>
         </div>
       </div>
-      <slot name="file-list">
-        <ul id="fileList" part="file-list">
-          <template is="dom-repeat" items="[[files]]" as="file">
-            <li>
-              <vaadin-upload-file file="[[file]]" i18n="[[i18n]]"></vaadin-upload-file>
-            </li>
-          </template>
-        </ul>
-      </slot>
+      <slot name="file-list"></slot>
       <slot></slot>
       <input
         type="file"
@@ -215,6 +200,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       files: {
         type: Array,
         notify: true,
+        observer: '_filesChanged',
         value: () => [],
       },
 
@@ -433,6 +419,16 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       _dropLabel: {
         type: Object,
       },
+
+      /** @private */
+      _fileList: {
+        type: Object,
+      },
+
+      /** @private */
+      _files: {
+        type: Array,
+      },
     };
   }
 
@@ -440,6 +436,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
     return [
       '__updateAddButton(_addButton, maxFiles, i18n, maxFilesReached)',
       '__updateDropLabel(_dropLabel, maxFiles, i18n)',
+      '__updateFileList(_fileList, _files, i18n)',
     ];
   }
 
@@ -481,6 +478,17 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         () => document.createElement('span'),
         (_, label) => {
           this._dropLabel = label;
+        },
+      ),
+    );
+
+    this.addController(
+      new SlotController(
+        this,
+        'file-list',
+        () => document.createElement('vaadin-upload-file-list'),
+        (_, list) => {
+          this._fileList = list;
         },
       ),
     );
@@ -550,6 +558,11 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   }
 
   /** @private */
+  _filesChanged() {
+    this._updateFileList();
+  }
+
+  /** @private */
   __updateAddButton(addButton, maxFiles, i18n, maxFilesReached) {
     if (addButton) {
       addButton.disabled = maxFilesReached;
@@ -561,6 +574,14 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   __updateDropLabel(dropLabel, maxFiles, i18n) {
     if (dropLabel) {
       dropLabel.textContent = this._i18nPlural(maxFiles, i18n.dropFiles);
+    }
+  }
+
+  /** @private */
+  __updateFileList(list, files, i18n) {
+    if (list) {
+      list.items = files;
+      list.i18n = i18n;
     }
   }
 
@@ -670,7 +691,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
           this._setStatus(file, total, loaded, elapsed);
           stalledId = setTimeout(() => {
             file.status = this.i18n.uploading.status.stalled;
-            this._notifyFileChanges(file);
+            this._updateFileList();
           }, 2000);
         } else {
           file.loadedStr = file.totalStr;
@@ -678,7 +699,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         }
       }
 
-      this._notifyFileChanges(file);
+      this._updateFileList();
       this.dispatchEvent(new CustomEvent('upload-progress', { detail: { file, xhr } }));
     };
 
@@ -688,7 +709,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         clearTimeout(stalledId);
         file.indeterminate = file.uploading = false;
         if (file.abort) {
-          this._notifyFileChanges(file);
+          this._updateFileList();
           return;
         }
         file.status = '';
@@ -718,7 +739,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
             detail: { file, xhr },
           }),
         );
-        this._notifyFileChanges(file);
+        this._updateFileList();
       }
     };
 
@@ -752,7 +773,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
           detail: { file, xhr },
         }),
       );
-      this._notifyFileChanges(file);
+      this._updateFileList();
     };
 
     // Custom listener could modify the xhr just before sending it
@@ -799,11 +820,11 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   }
 
   /** @private */
-  _notifyFileChanges(file) {
-    const p = `files.${this.files.indexOf(file)}.`;
-    Object.keys(file).forEach((i) => {
-      this.notifyPath(p + i, file[i]);
-    });
+  _updateFileList() {
+    const files = [...this.files];
+    // Re-render file list DOM without re-assigning `files`
+    // to avoid dispatching `files-changed` notify event.
+    this._files = files;
   }
 
   /** @private */
