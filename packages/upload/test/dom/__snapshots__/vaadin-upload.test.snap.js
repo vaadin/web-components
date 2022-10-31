@@ -19,10 +19,28 @@ snapshots["vaadin-upload host default"] =
         complete=""
         tabindex="0"
       >
+        <vaadin-progress-bar
+          aria-valuemax="1"
+          aria-valuemin="0"
+          aria-valuenow="0"
+          role="progressbar"
+          slot="progress"
+          style="--vaadin-progress-value:0;"
+        >
+        </vaadin-progress-bar>
       </vaadin-upload-file>
     </li>
     <li>
       <vaadin-upload-file tabindex="0">
+        <vaadin-progress-bar
+          aria-valuemax="1"
+          aria-valuemin="0"
+          aria-valuenow="0.6"
+          role="progressbar"
+          slot="progress"
+          style="--vaadin-progress-value:0.6;"
+        >
+        </vaadin-progress-bar>
       </vaadin-upload-file>
     </li>
     <li>
@@ -30,6 +48,15 @@ snapshots["vaadin-upload host default"] =
         error=""
         tabindex="0"
       >
+        <vaadin-progress-bar
+          aria-valuemax="1"
+          aria-valuemin="0"
+          aria-valuenow="0"
+          role="progressbar"
+          slot="progress"
+          style="--vaadin-progress-value:0;"
+        >
+        </vaadin-progress-bar>
       </vaadin-upload-file>
     </li>
   </vaadin-upload-file-list>
@@ -54,52 +81,6 @@ snapshots["vaadin-upload host max files"] =
     Drop file here
   </span>
   <vaadin-upload-file-list slot="file-list">
-    <li>
-      <vaadin-upload-file
-        complete=""
-        tabindex="0"
-      >
-      </vaadin-upload-file>
-    </li>
-    <li>
-      <vaadin-upload-file tabindex="0">
-      </vaadin-upload-file>
-    </li>
-    <li>
-      <vaadin-upload-file
-        error=""
-        tabindex="0"
-      >
-      </vaadin-upload-file>
-    </li>
-  </vaadin-upload-file-list>
-  <vaadin-upload-icon slot="drop-label-icon">
-  </vaadin-upload-icon>
-</vaadin-upload>
-`;
-/* end snapshot vaadin-upload host max files */
-
-snapshots["vaadin-upload shadow default"] = 
-`<div part="primary-buttons">
-  <slot name="add-button">
-  </slot>
-  <div
-    aria-hidden="true"
-    id="dropLabelContainer"
-    part="drop-label"
-  >
-    <slot name="drop-label-icon">
-    </slot>
-    <slot name="drop-label">
-    </slot>
-  </div>
-</div>
-<slot name="file-list">
-<<<<<<< HEAD
-  <ul
-    id="fileList"
-    part="file-list"
-  >
     <li>
       <vaadin-upload-file
         complete=""
@@ -145,16 +126,29 @@ snapshots["vaadin-upload shadow default"] =
         </vaadin-progress-bar>
       </vaadin-upload-file>
     </li>
-    <dom-repeat
-      as="file"
-      style="display: none;"
-    >
-      <template is="dom-repeat">
-      </template>
-    </dom-repeat>
-  </ul>
-=======
->>>>>>> a9f1b6c13 (refactor!: render upload file elements in light DOM)
+  </vaadin-upload-file-list>
+  <vaadin-upload-icon slot="drop-label-icon">
+  </vaadin-upload-icon>
+</vaadin-upload>
+`;
+/* end snapshot vaadin-upload host max files */
+
+snapshots["vaadin-upload shadow default"] = 
+`<div part="primary-buttons">
+  <slot name="add-button">
+  </slot>
+  <div
+    aria-hidden="true"
+    id="dropLabelContainer"
+    part="drop-label"
+  >
+    <slot name="drop-label-icon">
+    </slot>
+    <slot name="drop-label">
+    </slot>
+  </div>
+</div>
+<slot name="file-list">
 </slot>
 <slot>
 </slot>
