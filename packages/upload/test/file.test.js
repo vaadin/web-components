@@ -19,7 +19,7 @@ describe('<vaadin-upload-file> element', () => {
     });
 
     it('should reflect uploading', () => {
-      fileElement.set('file.uploading', true);
+      fileElement.file = { ...fileObject, uploading: true };
       expect(fileElement.hasAttribute('uploading')).to.be.true;
     });
 
@@ -28,7 +28,7 @@ describe('<vaadin-upload-file> element', () => {
     });
 
     it('should reflect indeterminate', () => {
-      fileElement.set('file.indeterminate', true);
+      fileElement.file = { ...fileObject, indeterminate: true };
       expect(fileElement.hasAttribute('indeterminate')).to.be.true;
     });
 
@@ -37,7 +37,7 @@ describe('<vaadin-upload-file> element', () => {
     });
 
     it('should reflect complete', () => {
-      fileElement.set('file.complete', true);
+      fileElement.file = { ...fileObject, complete: true };
       expect(fileElement.hasAttribute('complete')).to.be.true;
     });
 
@@ -46,7 +46,7 @@ describe('<vaadin-upload-file> element', () => {
     });
 
     it('should reflect error', () => {
-      fileElement.set('file.error', true);
+      fileElement.file = { ...fileObject, error: true };
       expect(fileElement.hasAttribute('error')).to.be.true;
     });
   });
@@ -54,7 +54,7 @@ describe('<vaadin-upload-file> element', () => {
   describe('focus', () => {
     beforeEach(() => {
       // Show the "Start" button
-      fileElement.set('file.held', true);
+      fileElement.file = { ...fileObject, held: true };
     });
 
     it('should not add focus-ring to the host on programmatic focus', () => {

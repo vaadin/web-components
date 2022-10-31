@@ -41,7 +41,9 @@ describe('upload', () => {
       let clock;
 
       beforeEach(() => {
-        clock = sinon.useFakeTimers();
+        clock = sinon.useFakeTimers({
+          shouldClearNativeTimers: true,
+        });
       });
 
       afterEach(() => {
@@ -279,7 +281,9 @@ describe('upload', () => {
       let clock;
 
       beforeEach(() => {
-        clock = sinon.useFakeTimers();
+        clock = sinon.useFakeTimers({
+          shouldClearNativeTimers: true,
+        });
       });
 
       afterEach(() => {
@@ -333,7 +337,9 @@ describe('upload', () => {
         serverTime: 500,
       });
 
-      clock = sinon.useFakeTimers();
+      clock = sinon.useFakeTimers({
+        shouldClearNativeTimers: true,
+      });
     });
 
     afterEach(() => {
@@ -375,7 +381,9 @@ describe('upload', () => {
         stepTime: 2500,
       });
 
-      clock = sinon.useFakeTimers();
+      clock = sinon.useFakeTimers({
+        shouldClearNativeTimers: true,
+      });
     });
 
     afterEach(() => {

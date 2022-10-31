@@ -13,6 +13,26 @@ snapshots["vaadin-upload host default"] =
   <span slot="drop-label">
     Drop files here
   </span>
+  <vaadin-upload-file-list slot="file-list">
+    <li>
+      <vaadin-upload-file
+        complete=""
+        tabindex="0"
+      >
+      </vaadin-upload-file>
+    </li>
+    <li>
+      <vaadin-upload-file tabindex="0">
+      </vaadin-upload-file>
+    </li>
+    <li>
+      <vaadin-upload-file
+        error=""
+        tabindex="0"
+      >
+      </vaadin-upload-file>
+    </li>
+  </vaadin-upload-file-list>
   <vaadin-upload-icon slot="drop-label-icon">
   </vaadin-upload-icon>
 </vaadin-upload>
@@ -33,6 +53,26 @@ snapshots["vaadin-upload host max files"] =
   <span slot="drop-label">
     Drop file here
   </span>
+  <vaadin-upload-file-list slot="file-list">
+    <li>
+      <vaadin-upload-file
+        complete=""
+        tabindex="0"
+      >
+      </vaadin-upload-file>
+    </li>
+    <li>
+      <vaadin-upload-file tabindex="0">
+      </vaadin-upload-file>
+    </li>
+    <li>
+      <vaadin-upload-file
+        error=""
+        tabindex="0"
+      >
+      </vaadin-upload-file>
+    </li>
+  </vaadin-upload-file-list>
   <vaadin-upload-icon slot="drop-label-icon">
   </vaadin-upload-icon>
 </vaadin-upload>
@@ -55,6 +95,7 @@ snapshots["vaadin-upload shadow default"] =
   </div>
 </div>
 <slot name="file-list">
+<<<<<<< HEAD
   <ul
     id="fileList"
     part="file-list"
@@ -112,6 +153,8 @@ snapshots["vaadin-upload shadow default"] =
       </template>
     </dom-repeat>
   </ul>
+=======
+>>>>>>> a9f1b6c13 (refactor!: render upload file elements in light DOM)
 </slot>
 <slot>
 </slot>

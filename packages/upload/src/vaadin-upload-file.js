@@ -131,7 +131,10 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
 
   static get properties() {
     return {
-      file: Object,
+      file: {
+        type: Object,
+        observer: '_fileChanged',
+      },
 
       i18n: Object,
 
@@ -153,14 +156,7 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
   }
 
   static get observers() {
-    return [
-      '_fileAborted(file.abort)',
-      '_toggleHostAttribute(file.error, "error")',
-      '_toggleHostAttribute(file.indeterminate, "indeterminate")',
-      '_toggleHostAttribute(file.uploading, "uploading")',
-      '_toggleHostAttribute(file.complete, "complete")',
-      '__updateProgress(_progress, file.progress, file.indeterminate)',
-    ];
+    return ['__updateProgress(_progress, file.progress, file.indeterminate)'];
   }
 
   /** @protected */
@@ -207,9 +203,16 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
   }
 
   /** @private */
-  _fileAborted(abort) {
-    if (abort) {
-      this._remove();
+  _fileChanged(file) {
+    if (file) {
+      if (file.abort) {
+        this._remove();
+      }
+
+      this.toggleAttribute('error', Boolean(file.error));
+      this.toggleAttribute('indeterminate', Boolean(file.indeterminate));
+      this.toggleAttribute('uploading', Boolean(file.uploading));
+      this.toggleAttribute('complete', Boolean(file.complete));
     }
   }
 
@@ -242,19 +245,6 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
         composed: true,
       }),
     );
-  }
-
-  /** @private */
-  _toggleHostAttribute(value, attributeName) {
-    const shouldHave = Boolean(value);
-    const has = this.hasAttribute(attributeName);
-    if (has !== shouldHave) {
-      if (shouldHave) {
-        this.setAttribute(attributeName, '');
-      } else {
-        this.removeAttribute(attributeName);
-      }
-    }
   }
 
   /**
