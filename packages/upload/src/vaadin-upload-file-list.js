@@ -6,7 +6,8 @@
 import './vaadin-upload-file.js';
 import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { html, render } from 'lit';
-import { repeat } from 'lit/directives/repeat.js';
+import { timeOut } from '@vaadin/component-base/src/async.js';
+import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -69,7 +70,9 @@ class UploadFileList extends ThemableMixin(PolymerElement) {
   /** @private */
   __updateItems(items, i18n) {
     if (items && i18n) {
-      this.requestContentUpdate();
+      this.__debounceUpdate = Debouncer.debounce(this.__debounceUpdate, timeOut.after(0), () => {
+        this.requestContentUpdate();
+      });
     }
   }
 
@@ -83,8 +86,7 @@ class UploadFileList extends ThemableMixin(PolymerElement) {
 
     render(
       html`
-        ${repeat(
-          items,
+        ${items.map(
           (file) => html`
             <li>
               <vaadin-upload-file

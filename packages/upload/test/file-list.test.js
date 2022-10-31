@@ -1,5 +1,5 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
+import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import '../vaadin-upload.js';
 import { createFiles, removeFile, xhrCreator } from './common.js';
 
@@ -20,7 +20,7 @@ describe('file list', () => {
 
     const files = createFiles(2);
     files.forEach((file) => upload._addFile(file));
-    await nextFrame();
+    await nextRender();
 
     const fileListItems = getFileListItems(upload);
     expect(fileListItems.length).to.equal(2);
@@ -33,14 +33,14 @@ describe('file list', () => {
   it('should remove files', async () => {
     const files = createFiles(2);
     files.forEach((file) => upload._addFile(file));
-    await nextFrame();
+    await nextRender();
 
     removeFile(upload, 1);
-    await nextFrame();
+    await nextRender();
     expect(getFileListItems(upload).length).to.equal(1);
 
     removeFile(upload, 0);
-    await nextFrame();
+    await nextRender();
     expect(getFileListItems(upload).length).to.equal(0);
   });
 
