@@ -63,14 +63,6 @@ describe('menu-bar with tooltip', () => {
     expect(tooltip.opened).to.be.true;
   });
 
-  it('should use hover delay on menu button mouseover', async () => {
-    tooltip.hoverDelay = 10;
-    mouseover(buttons[0]);
-    expect(tooltip.opened).to.be.false;
-    await aTimeout(10);
-    expect(tooltip.opened).to.be.true;
-  });
-
   it('should use the tooltip property of an item as tooltip', () => {
     mouseover(buttons[0]);
     expect(getTooltipText()).to.equal('Edit tooltip');
@@ -93,15 +85,6 @@ describe('menu-bar with tooltip', () => {
   it('should hide tooltip on menu bar mouseleave', () => {
     mouseover(buttons[0]);
     mouseleave(menuBar);
-    expect(tooltip.opened).to.be.false;
-  });
-
-  it('should use hide delay on menu button mouseleave', async () => {
-    tooltip.hideDelay = 10;
-    mouseover(buttons[0]);
-    mouseleave(menuBar);
-    expect(tooltip.opened).to.be.true;
-    await aTimeout(10);
     expect(tooltip.opened).to.be.false;
   });
 
@@ -141,13 +124,6 @@ describe('menu-bar with tooltip', () => {
     expect(tooltip.opened).to.be.false;
   });
 
-  it('should not use hide delay on menu button mousedown', () => {
-    tooltip.hideDelay = 10;
-    mouseover(buttons[0]);
-    mousedown(buttons[0]);
-    expect(tooltip.opened).to.be.false;
-  });
-
   it('should not show tooltip on focus without keyboard interaction', async () => {
     buttons[0].focus();
     await nextRender();
@@ -157,15 +133,6 @@ describe('menu-bar with tooltip', () => {
   it('should show tooltip on menu button keyboard focus', () => {
     tabKeyDown(document.body);
     focusin(buttons[0]);
-    expect(tooltip.opened).to.be.true;
-  });
-
-  it('should use focus delay on menu button keyboard focus', async () => {
-    tooltip.focusDelay = 10;
-    tabKeyDown(document.body);
-    focusin(buttons[0]);
-    expect(tooltip.opened).to.be.false;
-    await aTimeout(10);
     expect(tooltip.opened).to.be.true;
   });
 
@@ -199,14 +166,6 @@ describe('menu-bar with tooltip', () => {
   });
 
   it('should hide tooltip on menuBar menu button content Esc', () => {
-    tabKeyDown(document.body);
-    focusin(buttons[0]);
-    escKeyDown(buttons[0]);
-    expect(tooltip.opened).to.be.false;
-  });
-
-  it('should not use hide delay on menu button Esc', () => {
-    tooltip.hideDelay = 10;
     tabKeyDown(document.body);
     focusin(buttons[0]);
     escKeyDown(buttons[0]);
@@ -298,6 +257,54 @@ describe('menu-bar with tooltip', () => {
     it('should not show tooltip on mouseover for button with children', () => {
       menuBar.openOnHover = true;
       mouseover(buttons[1]);
+      expect(tooltip.opened).to.be.false;
+    });
+  });
+
+  describe('delay', () => {
+    afterEach(async () => {
+      // Wait for cooldown timeout.
+      await aTimeout(1);
+    });
+
+    it('should use hover delay on menu button mouseover', async () => {
+      tooltip.hoverDelay = 1;
+      mouseover(buttons[0]);
+      expect(tooltip.opened).to.be.false;
+      await aTimeout(1);
+      expect(tooltip.opened).to.be.true;
+    });
+
+    it('should use hide delay on menu button mouseleave', async () => {
+      tooltip.hideDelay = 1;
+      mouseover(buttons[0]);
+      mouseleave(menuBar);
+      expect(tooltip.opened).to.be.true;
+      await aTimeout(1);
+      expect(tooltip.opened).to.be.false;
+    });
+
+    it('should not use hide delay on menu button mousedown', () => {
+      tooltip.hideDelay = 1;
+      mouseover(buttons[0]);
+      mousedown(buttons[0]);
+      expect(tooltip.opened).to.be.false;
+    });
+
+    it('should use focus delay on menu button keyboard focus', async () => {
+      tooltip.focusDelay = 1;
+      tabKeyDown(document.body);
+      focusin(buttons[0]);
+      expect(tooltip.opened).to.be.false;
+      await aTimeout(1);
+      expect(tooltip.opened).to.be.true;
+    });
+
+    it('should not use hide delay on menu button Esc', () => {
+      tooltip.hideDelay = 1;
+      tabKeyDown(document.body);
+      focusin(buttons[0]);
+      escKeyDown(buttons[0]);
       expect(tooltip.opened).to.be.false;
     });
   });
