@@ -235,7 +235,7 @@ registerStyles(
       color: var(--material-error-text-color);
     }
 
-    [part='progress'] {
+    ::slotted([slot='progress']) {
       width: auto;
       margin-left: 28px;
     }

@@ -64,10 +64,28 @@ snapshots["vaadin-upload shadow default"] =
         complete=""
         tabindex="0"
       >
+        <vaadin-progress-bar
+          aria-valuemax="1"
+          aria-valuemin="0"
+          aria-valuenow="0"
+          role="progressbar"
+          slot="progress"
+          style="--vaadin-progress-value:0;"
+        >
+        </vaadin-progress-bar>
       </vaadin-upload-file>
     </li>
     <li>
       <vaadin-upload-file tabindex="0">
+        <vaadin-progress-bar
+          aria-valuemax="1"
+          aria-valuemin="0"
+          aria-valuenow="0.6"
+          role="progressbar"
+          slot="progress"
+          style="--vaadin-progress-value:0.6;"
+        >
+        </vaadin-progress-bar>
       </vaadin-upload-file>
     </li>
     <li>
@@ -75,6 +93,15 @@ snapshots["vaadin-upload shadow default"] =
         error=""
         tabindex="0"
       >
+        <vaadin-progress-bar
+          aria-valuemax="1"
+          aria-valuemin="0"
+          aria-valuenow="0"
+          role="progressbar"
+          slot="progress"
+          style="--vaadin-progress-value:0;"
+        >
+        </vaadin-progress-bar>
       </vaadin-upload-file>
     </li>
     <dom-repeat
