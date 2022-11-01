@@ -68,13 +68,15 @@ class CrudGrid extends IncludedMixin(Grid) {
 
   /** @private */
   __toggleEditColumn() {
-    const el = this.querySelector('vaadin-crud-edit-column');
+    let editColumn = this.querySelector('vaadin-crud-edit-column');
     if (this.hideEditColumn) {
-      if (el) {
-        this.removeChild(el);
+      if (editColumn) {
+        this.removeChild(editColumn);
       }
-    } else if (!el) {
-      this.appendChild(document.createElement('vaadin-crud-edit-column'));
+    } else if (!editColumn) {
+      editColumn = document.createElement('vaadin-crud-edit-column');
+      editColumn.frozenToEnd = true;
+      this.appendChild(editColumn);
     }
   }
 
