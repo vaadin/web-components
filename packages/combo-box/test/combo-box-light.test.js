@@ -9,7 +9,6 @@ import {
   isIOS,
   mousedown,
   mouseup,
-  nextFrame,
   nextRender,
   touchend,
   touchstart,
@@ -17,10 +16,8 @@ import {
 import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import '@vaadin/text-field/vaadin-text-field.js';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box-light.js';
-import '@polymer/polymer/lib/elements/dom-repeat.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { getFirstItem } from './helpers.js';
 
@@ -460,38 +457,5 @@ describe('theme attribute', () => {
     comboBox.items = ['bar', 'baz'];
     comboBox.open();
     expect(getFirstItem(comboBox).getAttribute('theme')).to.equal('foo');
-  });
-});
-
-describe('nested template', () => {
-  let comboBox;
-
-  beforeEach(async () => {
-    comboBox = fixtureSync(`
-      <vaadin-combo-box-light>
-        <vaadin-text-field>
-          <div slot="prefix">
-            <dom-repeat items="[1, 2]">
-              <template>
-                [[item]] foo
-              </template>
-            </dom-repeat>
-          </div>
-        </vaadin-text-field>
-      </vaadin-combo-box-light>
-    `);
-    await nextRender();
-    comboBox.items = ['bar', 'baz', 'qux'];
-  });
-
-  it('should not throw error on open', () => {
-    expect(() => comboBox.open()).not.to.throw(Error);
-  });
-
-  it('should not use nested template as the item template', async () => {
-    comboBox.open();
-    await nextFrame();
-    expect(comboBox.querySelector('[slot="prefix"]').innerHTML).to.contain('1 foo');
-    expect(getFirstItem(comboBox).innerHTML).to.equal('bar');
   });
 });

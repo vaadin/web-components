@@ -1,11 +1,12 @@
 import { expect } from '@esm-bundle/chai';
-import { arrowDownKeyDown, fixtureSync, nextRender } from '@vaadin/testing-helpers';
+import { arrowDownKeyDown, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
+import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import './fixtures/mock-combo-box-template-wrapper.js';
 import './fixtures/mock-combo-box-light-template-wrapper.js';
-import { getFirstItem } from './helpers.js';
+import { getFirstItem } from '@vaadin/combo-box/test/helpers.js';
 
 describe('item template', () => {
   let wrapper, comboBox, firstItem;
@@ -84,6 +85,39 @@ describe('item template', () => {
         comboBox.open();
         expect(firstItem.getAttribute('dir')).to.eql('ltr');
       });
+    });
+  });
+
+  describe('nested template', () => {
+    let comboBox;
+
+    beforeEach(async () => {
+      comboBox = fixtureSync(`
+        <vaadin-combo-box-light>
+          <vaadin-text-field>
+            <div slot="prefix">
+              <dom-repeat items="[1, 2]">
+                <template>
+                  [[item]] foo
+                </template>
+              </dom-repeat>
+            </div>
+          </vaadin-text-field>
+        </vaadin-combo-box-light>
+      `);
+      await nextRender();
+      comboBox.items = ['bar', 'baz', 'qux'];
+    });
+
+    it('should not throw error on open', () => {
+      expect(() => comboBox.open()).not.to.throw(Error);
+    });
+
+    it('should not use nested template as the item template', async () => {
+      comboBox.open();
+      await nextFrame();
+      expect(comboBox.querySelector('[slot="prefix"]').innerHTML).to.contain('1 foo');
+      expect(getFirstItem(comboBox).innerHTML).to.equal('bar');
     });
   });
 });

@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import './not-animated-styles.js';
 import '../vaadin-combo-box.js';
 import { getFirstItem } from './helpers.js';
@@ -10,12 +9,7 @@ describe('item renderer', () => {
   let comboBox;
 
   beforeEach(() => {
-    comboBox = fixtureSync(`
-      <vaadin-combo-box
-        item-label-path="name"
-        item-value-path="symbol">
-      </vaadin-combo-box>
-    `);
+    comboBox = fixtureSync('<vaadin-combo-box></vaadin-combo-box>');
     comboBox.items = ['foo', 'bar', 'baz'];
   });
 

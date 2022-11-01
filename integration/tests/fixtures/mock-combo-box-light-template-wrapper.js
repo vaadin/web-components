@@ -1,10 +1,13 @@
-import '../../vaadin-combo-box.js';
+import '@vaadin/combo-box/vaadin-combo-box-light.js';
+import '@vaadin/text-field/vaadin-text-field.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 
-class MockComboBoxTemplateWrapper extends PolymerElement {
+class MockComboBoxLightTemplateWrapper extends PolymerElement {
   static get template() {
     return html`
-      <vaadin-combo-box id="comboBox" items="[[items]]">
+      <vaadin-combo-box-light id="comboBox" items="[[items]]">
+        <vaadin-text-field></vaadin-text-field>
+
         <template>
           <div>index: [[index]]</div>
           <div>item: [[item]]</div>
@@ -15,7 +18,7 @@ class MockComboBoxTemplateWrapper extends PolymerElement {
           <div>parentMethod: [[parentMethod()]]</div>
           <button on-click="parentEventHandler"></button>
         </template>
-      </vaadin-combo-box>
+      </vaadin-combo-box-light>
     `;
   }
 
@@ -34,4 +37,4 @@ class MockComboBoxTemplateWrapper extends PolymerElement {
   }
 }
 
-customElements.define('mock-combo-box-template-wrapper', MockComboBoxTemplateWrapper);
+customElements.define('mock-combo-box-light-template-wrapper', MockComboBoxLightTemplateWrapper);
