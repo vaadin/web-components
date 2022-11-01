@@ -14,12 +14,6 @@ function createCopyright() {
  */`;
 }
 
-function addWarning() {
-  return `console.warn(
-  \`WARNING: Since Vaadin 23.1, using <iron-icon> is deprecated. Please use <vaadin-icon> and '@vaadin/icons/vaadin-iconset.js' instead.\`,
-);`;
-}
-
 function iconFileModifier(prefix) {
   return function (file, contents) {
     const id = file.path.replace(/.*\/(.*).svg/, '$1');
@@ -33,38 +27,7 @@ function iconFileModifier(prefix) {
   };
 }
 
-gulp.task('iron-icons', () => {
-  return gulp
-    .src(['assets/svg/*.svg'], { base: '.' })
-    .pipe(
-      modify({
-        fileModifier: iconFileModifier(''),
-      }),
-    )
-    .pipe(concat('iconset.js'))
-    .pipe(
-      modify({
-        fileModifier(file, contents) {
-          // Enclose all icons in an iron-iconset-svg
-          return `${createCopyright()}
-import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
-
-${addWarning()}
-
-const template = document.createElement('template');
-
-template.innerHTML = \`<iron-iconset-svg name="vaadin" size="16">
-<svg><defs>\n${contents}\n</defs></svg>
-</iron-iconset-svg>\`;
-
-document.head.appendChild(template.content);\n`;
-        },
-      }),
-    )
-    .pipe(gulp.dest('.'));
-});
-
-gulp.task('vaadin-icons', () => {
+gulp.task('icons', () => {
   return gulp
     .src(['assets/svg/*.svg'], { base: '.' })
     .pipe(
@@ -93,5 +56,3 @@ document.head.appendChild(template.content);\n`;
     )
     .pipe(gulp.dest('.'));
 });
-
-gulp.task('icons', gulp.parallel('iron-icons', 'vaadin-icons'));
