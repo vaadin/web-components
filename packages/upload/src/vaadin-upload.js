@@ -692,7 +692,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
           this._setStatus(file, total, loaded, elapsed);
           stalledId = setTimeout(() => {
             file.status = this.i18n.uploading.status.stalled;
-            this._notifyFileChanges(file);
+            this._updateFileList();
           }, 2000);
         } else {
           file.loadedStr = file.totalStr;
@@ -700,7 +700,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         }
       }
 
-      this._notifyFileChanges(file);
+      this._updateFileList();
       this.dispatchEvent(new CustomEvent('upload-progress', { detail: { file, xhr } }));
     };
 
@@ -710,7 +710,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         clearTimeout(stalledId);
         file.indeterminate = file.uploading = false;
         if (file.abort) {
-          this._notifyFileChanges(file);
+          this._updateFileList();
           return;
         }
         file.status = '';
@@ -740,7 +740,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
             detail: { file, xhr },
           }),
         );
-        this._notifyFileChanges(file);
+        this._updateFileList();
       }
     };
 
@@ -774,7 +774,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
           detail: { file, xhr },
         }),
       );
-      this._notifyFileChanges(file);
+      this._updateFileList();
     };
 
     // Custom listener could modify the xhr just before sending it
@@ -817,15 +817,15 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         file.xhr.abort();
       }
 
-      this._notifyFileChanges(file);
+      this._updateFileList();
     }
   }
 
   /** @private */
-  _notifyFileChanges(_file) {
+  _updateFileList() {
     const files = [...this.files];
-    // Force updating DOM element for specific file
-    // without setting new object to `this.files`
+    // Re-render file list DOM without re-assigning `files`
+    // to avoid dispatching `files-changed` notify event.
     this._files = files;
   }
 
