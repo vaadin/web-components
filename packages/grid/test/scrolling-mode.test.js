@@ -1,8 +1,6 @@
 import { expect } from '@esm-bundle/chai';
-import { fixtureSync, isDesktopSafari, isFirefox, listenOnce, nextFrame } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
+import { fixtureSync, isDesktopSafari, isFirefox, listenOnce, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../vaadin-grid.js';
-import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 import { flushGrid, infiniteDataProvider, onceResized, scrollToEnd } from './helpers.js';
 
 describe('scrolling mode', () => {
@@ -11,11 +9,12 @@ describe('scrolling mode', () => {
   beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 50px; height: 400px;" size="1000">
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);
+    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
+      root.textContent = model.index;
+    };
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
   });
@@ -143,19 +142,18 @@ describe('empty grid', () => {
   beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 50px; height: 400px;" size="1000">
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);
+    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
+      root.textContent = model.index;
+    };
     flushGrid(grid);
   });
 
-  it('should not have vertical scroll bars', (done) => {
-    afterNextRender(grid, () => {
-      expect(grid.clientHeight).not.to.be.below(grid.$.header.clientHeight + grid.$.items.clientHeight);
-      done();
-    });
+  it('should not have vertical scroll bars', async () => {
+    await nextRender();
+    expect(grid.clientHeight).not.to.be.below(grid.$.header.clientHeight + grid.$.items.clientHeight);
   });
 });
 
@@ -164,13 +162,14 @@ describe('scroll on attach', () => {
     document.body.style.paddingTop = '10000px';
     document.documentElement.scrollTop = 10000;
     const scrollTop = document.documentElement.scrollTop;
-    fixtureSync(`
+    const grid = fixtureSync(`
       <vaadin-grid style="width: 50px; height: 400px;" size="1000">
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);
+    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
+      root.textContent = model.index;
+    };
     const newScrollTop = document.documentElement.scrollTop;
     // Cleanup
     document.body.style.paddingTop = '';

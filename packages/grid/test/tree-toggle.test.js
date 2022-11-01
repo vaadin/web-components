@@ -1,7 +1,6 @@
 import { expect } from '@esm-bundle/chai';
 import { click, fixtureSync } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-tree-toggle.js';
 import '../vaadin-grid-tree-column.js';

@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync } from '@vaadin/testing-helpers';
-import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { flushGrid, getFirstVisibleItem, infiniteDataProvider } from './helpers.js';
@@ -29,11 +28,12 @@ describe('dynamic item size', () => {
   beforeEach(() => {
     grid = fixtureSync(`
       <vaadin-grid style="width: 200px; height: 200px;" size="1000">
-        <vaadin-grid-column>
-          <template>[[index]]</template>
-        </vaadin-grid-column>
+        <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     `);
+    grid.querySelector('vaadin-grid-column').renderer = (root, _, model) => {
+      root.textContent = model.index;
+    };
     grid.dataProvider = infiniteDataProvider;
     flushGrid(grid);
   });
