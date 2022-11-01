@@ -58,29 +58,10 @@ describe('tooltip', () => {
     expect(tooltip.opened).to.be.true;
   });
 
-  it('should use hover delay on cell mouseenter', async () => {
-    tooltip.hoverDelay = 10;
-    const cell = getCell(grid, 0);
-    mouseenter(cell);
-    expect(tooltip.opened).to.be.false;
-    await aTimeout(10);
-    expect(tooltip.opened).to.be.true;
-  });
-
   it('should hide tooltip on cell mouseleave', () => {
     const cell = getCell(grid, 0);
     mouseenter(cell);
     mouseleave(cell);
-    expect(tooltip.opened).to.be.false;
-  });
-
-  it('should use hide delay on cell mouseleave', async () => {
-    tooltip.hideDelay = 10;
-    const cell = getCell(grid, 0);
-    mouseenter(cell);
-    mouseleave(cell);
-    expect(tooltip.opened).to.be.true;
-    await aTimeout(10);
     expect(tooltip.opened).to.be.false;
   });
 
@@ -115,28 +96,10 @@ describe('tooltip', () => {
     expect(tooltip.opened).to.be.false;
   });
 
-  it('should not use hide delay on cell mousedown', () => {
-    tooltip.hideDelay = 10;
-    const cell = getCell(grid, 0);
-    mouseenter(cell);
-    mousedown(cell);
-    expect(tooltip.opened).to.be.false;
-  });
-
   it('should show tooltip on cell keyboard focus', () => {
     const cell = getCell(grid, 0);
     tabKeyDown(document.body);
     focusin(cell);
-    expect(tooltip.opened).to.be.true;
-  });
-
-  it('should use focus delay on cell keyboard focus', async () => {
-    tooltip.focusDelay = 10;
-    const cell = getCell(grid, 0);
-    tabKeyDown(document.body);
-    focusin(cell);
-    expect(tooltip.opened).to.be.false;
-    await aTimeout(10);
     expect(tooltip.opened).to.be.true;
   });
 
@@ -186,15 +149,6 @@ describe('tooltip', () => {
   });
 
   it('should hide tooltip on grid cell content Esc', () => {
-    const cell = getCell(grid, 0);
-    tabKeyDown(document.body);
-    focusin(cell._content);
-    escKeyDown(cell._content);
-    expect(tooltip.opened).to.be.false;
-  });
-
-  it('should not use hide delay on grid cell content Esc', () => {
-    tooltip.hideDelay = 10;
     const cell = getCell(grid, 0);
     tabKeyDown(document.body);
     focusin(cell._content);
@@ -278,5 +232,58 @@ describe('tooltip', () => {
     mouseenter(cell);
 
     expect(spy.calledOnce).to.be.false;
+  });
+
+  describe('delay', () => {
+    afterEach(async () => {
+      // Wait for cooldown timeout.
+      await aTimeout(1);
+    });
+
+    it('should use hover delay on cell mouseenter', async () => {
+      tooltip.hoverDelay = 1;
+      const cell = getCell(grid, 0);
+      mouseenter(cell);
+      expect(tooltip.opened).to.be.false;
+      await aTimeout(1);
+      expect(tooltip.opened).to.be.true;
+    });
+
+    it('should use hide delay on cell mouseleave', async () => {
+      tooltip.hideDelay = 1;
+      const cell = getCell(grid, 0);
+      mouseenter(cell);
+      mouseleave(cell);
+      expect(tooltip.opened).to.be.true;
+      await aTimeout(1);
+      expect(tooltip.opened).to.be.false;
+    });
+
+    it('should not use hide delay on cell mousedown', () => {
+      tooltip.hideDelay = 1;
+      const cell = getCell(grid, 0);
+      mouseenter(cell);
+      mousedown(cell);
+      expect(tooltip.opened).to.be.false;
+    });
+
+    it('should use focus delay on cell keyboard focus', async () => {
+      tooltip.focusDelay = 1;
+      const cell = getCell(grid, 0);
+      tabKeyDown(document.body);
+      focusin(cell);
+      expect(tooltip.opened).to.be.false;
+      await aTimeout(1);
+      expect(tooltip.opened).to.be.true;
+    });
+
+    it('should not use hide delay on grid cell content Esc', () => {
+      tooltip.hideDelay = 1;
+      const cell = getCell(grid, 0);
+      tabKeyDown(document.body);
+      focusin(cell._content);
+      escKeyDown(cell._content);
+      expect(tooltip.opened).to.be.false;
+    });
   });
 });
