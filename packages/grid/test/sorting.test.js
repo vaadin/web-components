@@ -291,6 +291,15 @@ describe('sorting', () => {
         expect(sorterLast._order).to.equal(null);
       });
 
+      it('should clear multi-sort on regular click when multi-sort enabled', () => {
+        grid.multiSort = true;
+        click(sorterLast);
+        expect(sorterFirst.direction).to.be.null;
+        expect(sorterLast.direction).to.be.null;
+        expect(sorterFirst._order).to.equal(null);
+        expect(sorterLast._order).to.equal(null);
+      });
+
       it('should add to active sorters on regular click if sorter has direction', () => {
         click(sorterFirst);
         expect(grid._sorters.length).to.equal(1);

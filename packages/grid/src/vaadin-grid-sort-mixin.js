@@ -146,7 +146,7 @@ export const SortMixin = (superClass) =>
 
       sorter._order = null;
 
-      if (this.multiSort || (this.multiSortOnShiftClick && shiftClick)) {
+      if ((this.multiSort && !this.multiSortOnShiftClick) || (this.multiSortOnShiftClick && shiftClick)) {
         if (this.multiSortPriority === 'append') {
           this.__appendSorter(sorter);
         } else {
