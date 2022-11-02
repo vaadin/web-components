@@ -245,7 +245,7 @@ describe('sorting', () => {
       expect(sorterLast._order).to.equal(null);
     });
 
-    describe('multi-sort-on-shift-click=true', () => {
+    describe('multiSortOnShiftClick', () => {
       beforeEach(() => {
         grid.multiSort = false;
         grid.multiSortOnShiftClick = true;
@@ -271,10 +271,34 @@ describe('sorting', () => {
         expect(sorterLast._order).to.equal(1);
       });
 
+      it('should single-sort on shift-click if multi-sort-on-shift-click not enabled', () => {
+        grid.multiSortOnShiftClick = false;
+        sorterLast.direction = null;
+        sorterFirst.direction = null;
+        shiftClick(sorterLast);
+        shiftClick(sorterFirst);
+        expect(sorterLast._order).to.equal(null);
+        expect(sorterFirst._order).to.equal(null);
+        expect(sorterLast.direction).to.equal(null);
+        expect(sorterFirst.direction).to.equal('asc');
+      });
+
       it('should clear multi-sort on regular click', () => {
-        click(sorterFirst);
+        click(sorterLast);
+        expect(sorterFirst.direction).to.be.null;
+        expect(sorterLast.direction).to.be.null;
         expect(sorterFirst._order).to.equal(null);
         expect(sorterLast._order).to.equal(null);
+      });
+
+      it('should add to active sorters on regular click if sorter has direction', () => {
+        click(sorterFirst);
+        expect(grid._sorters.length).to.equal(1);
+      });
+
+      it('should not add to active sorters on regular click if sorter has no direction', () => {
+        click(sorterLast);
+        expect(grid._sorters).to.be.empty;
       });
     });
 
