@@ -52,20 +52,19 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   static get template() {
     return html`
       <style>
-        [part='vaadin-login-native-form'] * {
+        vaadin-login-form-wrapper > form > * {
           width: 100%;
         }
       </style>
       <vaadin-login-form-wrapper
         theme$="[[_theme]]"
-        part="vaadin-login-native-form-wrapper"
         error="[[error]]"
         no-forgot-password="[[noForgotPassword]]"
         i18n="[[i18n]]"
         on-login="_retargetEvent"
         on-forgot-password="_retargetEvent"
       >
-        <form part="vaadin-login-native-form" method="POST" action$="[[action]]" slot="form">
+        <form method="POST" action$="[[action]]" slot="form">
           <input id="csrf" type="hidden" />
           <vaadin-text-field
             name="username"
@@ -92,9 +91,9 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
             <input type="password" slot="input" on-keyup="_handleInputKeyup" />
           </vaadin-password-field>
 
-          <vaadin-button part="vaadin-login-submit" theme="primary contained" on-click="submit" disabled$="[[disabled]]"
-            >[[i18n.form.submit]]</vaadin-button
-          >
+          <vaadin-button theme="primary contained" on-click="submit" disabled$="[[disabled]]">
+            [[i18n.form.submit]]
+          </vaadin-button>
         </form>
       </vaadin-login-form-wrapper>
     `;
@@ -161,7 +160,7 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
         this.$.csrf.name = csrfMetaName.content;
         this.$.csrf.value = csrfMetaValue.content;
       }
-      this.querySelector('[part="vaadin-login-native-form"]').submit();
+      this.querySelector('form').submit();
     }
   }
 
