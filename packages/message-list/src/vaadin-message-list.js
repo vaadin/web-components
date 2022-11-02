@@ -3,12 +3,13 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, render } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 import { Message } from './vaadin-message.js';
-import { MessageListUpdater } from './vaadin-message-list-updater.js';
 
 /**
  * `<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>
@@ -79,7 +80,7 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
   }
 
   static get template() {
-    return html`
+    return legacyHtml`
       <style>
         :host {
           display: block;
@@ -103,8 +104,6 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
     // Make screen readers announce new messages
     this.setAttribute('aria-relevant', 'additions');
     this.setAttribute('role', 'log');
-
-    this._updater = new MessageListUpdater(this, this._onMessageFocusIn);
   }
 
   /**
@@ -133,9 +132,7 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
       const focusedIndex = this._getIndexOfFocusableElement();
       const closeToBottom = this.scrollHeight < this.clientHeight + this.scrollTop + 50;
 
-      // Update rendered messages
-      this._updater.items = items;
-
+      this._renderMessages(items);
       this._setTabIndexesByIndex(focusedIndex);
 
       requestAnimationFrame(() => {
@@ -144,6 +141,32 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
         }
       });
     }
+  }
+
+  /** @private */
+  _renderMessages(items) {
+    render(
+      html`
+        ${items.map(
+          (item) =>
+            html`
+              <vaadin-message
+                role="listitem"
+                .time="${item.time}"
+                .userAbbr="${item.userAbbr}"
+                .userName="${item.userName}"
+                .userImg="${item.userImg}"
+                .userColorIndex="${item.userColorIndex}"
+                theme="${ifDefined(item.theme)}"
+                @focusin="${this._onMessageFocusIn}"
+                >${item.text}</vaadin-message
+              >
+            `,
+        )}
+      `,
+      this,
+      { host: this },
+    );
   }
 
   /** @private */

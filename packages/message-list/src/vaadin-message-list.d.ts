@@ -6,7 +6,16 @@
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { MessageListItem } from './vaadin-message-list-updater.js';
+
+export interface MessageListItem {
+  text?: string;
+  time?: string;
+  userName?: string;
+  userAbbr?: string;
+  userImg?: string;
+  userColorIndex?: number;
+  theme?: string;
+}
 
 /**
  * `<vaadin-message-list>` is a Web Component for showing an ordered list of messages. The messages are rendered as <vaadin-message>
@@ -68,4 +77,4 @@ declare global {
   }
 }
 
-export { MessageList, MessageListItem };
+export { MessageList };
