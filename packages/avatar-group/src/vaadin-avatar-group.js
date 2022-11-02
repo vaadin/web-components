@@ -9,14 +9,14 @@ import '@vaadin/list-box/src/vaadin-list-box.js';
 import './vaadin-avatar-group-overlay.js';
 import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, render } from 'lit';
 import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ResizeMixin } from '@vaadin/component-base/src/resize-mixin.js';
 import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
-import { AvatarGroupUpdater } from './vaadin-avatar-group-updater.js';
 
 const MINIMUM_DISPLAYED_AVATARS = 2;
 
@@ -66,7 +66,7 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  */
 class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
   static get template() {
-    return html`
+    return legacyHtml`
       <style>
         :host {
           display: block;
@@ -261,11 +261,6 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
         type: Boolean,
         observer: '__openedChanged',
       },
-
-      /** @private */
-      _updater: {
-        type: Object,
-      },
     };
   }
 
@@ -274,7 +269,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
       '__itemsChanged(items.splices, items.*)',
       '__i18nItemsChanged(i18n.*, items.length)',
       '__updateAvatarsTheme(_overflow, _avatars, _theme)',
-      '__updateAvatars(items.*, __itemsInView, maxItemsVisible, _updater, i18n)',
+      '__updateAvatars(items.*, __itemsInView, maxItemsVisible, _overflow, i18n)',
       '__updateOverflowAbbr(_overflow, items.length, __itemsInView, maxItemsVisible)',
       '__updateOverflowHidden(_overflow, items.length, __itemsInView, __maxReached)',
       '__updateOverflowTooltip(_overflowTooltip, items.length, __itemsInView, maxItemsVisible)',
@@ -304,8 +299,6 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
       },
     );
     this.addController(this._overflowController);
-
-    this._updater = new AvatarGroupUpdater(this, this._overflow, this.i18n);
 
     this.$.overlay.renderer = this.__overlayRenderer.bind(this);
 
@@ -424,17 +417,38 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
   }
 
   /** @private */
-  __updateAvatars(arr, itemsInView, maxItemsVisible, updater, i18n) {
-    if (!updater) {
+  __renderAvatars(items) {
+    render(
+      html`
+        ${items.map(
+          (item) =>
+            html`
+              <vaadin-avatar
+                .name="${item.name}"
+                .abbr="${item.abbr}"
+                .img="${item.img}"
+                .colorIndex="${item.colorIndex}"
+                .i18n="${this.i18n}"
+                with-tooltip
+              ></vaadin-avatar>
+            `,
+        )}
+      `,
+      this,
+      { renderBefore: this._overflow },
+    );
+  }
+
+  /** @private */
+  __updateAvatars(arr, itemsInView, maxItemsVisible, overflow) {
+    if (!overflow) {
       return;
     }
 
     const items = arr.base || [];
     const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
 
-    // Update rendered avatars
-    updater.i18n = i18n;
-    updater.items = limit ? items.slice(0, limit) : items;
+    this.__renderAvatars(limit ? items.slice(0, limit) : items);
 
     this._avatars = [...this.querySelectorAll('vaadin-avatar')];
   }
