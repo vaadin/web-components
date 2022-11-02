@@ -85,6 +85,16 @@ describe('avatar-group', () => {
       const items = group.querySelectorAll('vaadin-avatar');
       expect(items[1].abbr).to.equal('GG');
     });
+
+    it('should reuse existing vaadin-avatar element when updating items', async () => {
+      const avatar = group.querySelector('vaadin-avatar');
+      group.items = [group.items[1], group.items[2]];
+      await nextRender();
+      const items = group.querySelectorAll('vaadin-avatar');
+      expect(items.length).to.equal(3);
+      expect(items[0]).to.eql(avatar);
+      expect(items[1]).to.not.eql(avatar);
+    });
   });
 
   describe('maxItemsVisible property', () => {

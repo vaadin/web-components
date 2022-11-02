@@ -9,7 +9,8 @@ import '@vaadin/list-box/src/vaadin-list-box.js';
 import './vaadin-avatar-group-overlay.js';
 import { calculateSplices } from '@polymer/polymer/lib/utils/array-splice.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, render } from 'lit';
 import { announce } from '@vaadin/component-base/src/a11y-announcer.js';
 import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
@@ -65,7 +66,7 @@ const MINIMUM_DISPLAYED_AVATARS = 2;
  */
 class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin(PolymerElement)))) {
   static get template() {
-    return html`
+    return legacyHtml`
       <style>
         :host {
           display: block;
@@ -268,7 +269,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
       '__itemsChanged(items.splices, items.*)',
       '__i18nItemsChanged(i18n.*, items.length)',
       '__updateAvatarsTheme(_overflow, _avatars, _theme)',
-      '__updateAvatars(items.*, __itemsInView, maxItemsVisible)',
+      '__updateAvatars(items.*, __itemsInView, maxItemsVisible, _overflow, i18n)',
       '__updateOverflowAbbr(_overflow, items.length, __itemsInView, maxItemsVisible)',
       '__updateOverflowHidden(_overflow, items.length, __itemsInView, __maxReached)',
       '__updateOverflowTooltip(_overflowTooltip, items.length, __itemsInView, maxItemsVisible)',
@@ -344,21 +345,6 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
   }
 
   /** @private */
-  __createAvatar(item) {
-    const avatar = document.createElement('vaadin-avatar');
-    avatar.name = item.name;
-    avatar.abbr = item.abbr;
-    avatar.img = item.img;
-    avatar.colorIndex = item.colorIndex;
-
-    avatar.withTooltip = true;
-    avatar.i18n = this.i18n;
-    avatar._item = item;
-
-    return avatar;
-  }
-
-  /** @private */
   __createItemElement(item) {
     const itemElement = document.createElement('vaadin-item');
     itemElement.setAttribute('theme', 'avatar-group-item');
@@ -431,41 +417,40 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
   }
 
   /** @private */
-  __updateAvatars(arr, itemsInView, maxItemsVisible) {
-    const items = arr.base || [];
-    const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
-
-    const newItems = limit ? items.slice(0, limit) : items;
-    const oldItems = this.__oldAvatarItems || [];
-
-    if (newItems.length || oldItems.length) {
-      const removed = oldItems.filter((item) => !newItems.includes(item));
-      const added = [...newItems];
-
-      this._avatars.forEach((avatar) => {
-        const item = avatar._item;
-        if (removed.includes(item)) {
-          avatar.remove();
-        } else if (added.includes(item)) {
-          added.splice(added.indexOf(item), 1);
-        }
-      });
-
-      this.__addAvatars(added, newItems);
-    }
-
-    this._avatars = [...this.querySelectorAll('vaadin-avatar')];
-    this.__oldAvatarItems = newItems;
+  __renderAvatars(items) {
+    render(
+      html`
+        ${items.map(
+          (item) =>
+            html`
+              <vaadin-avatar
+                .name="${item.name}"
+                .abbr="${item.abbr}"
+                .img="${item.img}"
+                .colorIndex="${item.colorIndex}"
+                .i18n="${this.i18n}"
+                with-tooltip
+              ></vaadin-avatar>
+            `,
+        )}
+      `,
+      this,
+      { renderBefore: this._overflow },
+    );
   }
 
   /** @private */
-  __addAvatars(itemsToAdd, allItems) {
-    itemsToAdd.forEach((item) => {
-      const avatar = this.__createAvatar(item);
-      const nextItem = allItems[allItems.indexOf(item) + 1];
-      const nextAvatar = this._avatars.find((el) => el._item === nextItem);
-      this.insertBefore(avatar, nextAvatar || this._overflow);
-    });
+  __updateAvatars(arr, itemsInView, maxItemsVisible, overflow) {
+    if (!overflow) {
+      return;
+    }
+
+    const items = arr.base || [];
+    const limit = this.__getLimit(items.length, itemsInView, maxItemsVisible);
+
+    this.__renderAvatars(limit ? items.slice(0, limit) : items);
+
+    this._avatars = [...this.querySelectorAll('vaadin-avatar')];
   }
 
   /** @private */

@@ -25,6 +25,7 @@ snapshots["vaadin-avatar-group items"] =
     abbr="YY"
     role="button"
     tabindex="0"
+    with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
     </vaadin-tooltip>
@@ -34,6 +35,7 @@ snapshots["vaadin-avatar-group items"] =
     name="Tomi Virkki"
     role="button"
     tabindex="0"
+    with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
     </vaadin-tooltip>
@@ -64,6 +66,7 @@ snapshots["vaadin-avatar-group theme"] =
     role="button"
     tabindex="0"
     theme="small"
+    with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
     </vaadin-tooltip>
@@ -74,6 +77,7 @@ snapshots["vaadin-avatar-group theme"] =
     role="button"
     tabindex="0"
     theme="small"
+    with-tooltip=""
   >
     <vaadin-tooltip slot="tooltip">
     </vaadin-tooltip>
