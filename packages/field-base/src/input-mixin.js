@@ -77,6 +77,12 @@ export const InputMixin = dedupingMixin(
        */
       clear() {
         this.value = '';
+
+        // Clear the input immediately without waiting for the observer.
+        // Otherwise, when using Lit, the old value would be restored.
+        if (this.inputElement) {
+          this.inputElement.value = '';
+        }
       }
 
       /**

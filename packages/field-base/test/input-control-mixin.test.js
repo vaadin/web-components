@@ -1,65 +1,66 @@
 import { expect } from '@esm-bundle/chai';
-import { escKeyDown, fixtureSync, keyboardEventFor, keyDownOn } from '@vaadin/testing-helpers';
+import { escKeyDown, fixtureSync, keyboardEventFor, keyDownOn, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { InputControlMixin } from '../src/input-control-mixin.js';
 import { InputController } from '../src/input-controller.js';
+import { define } from './helpers.js';
 
-customElements.define(
-  'input-control-mixin-element',
-  class extends InputControlMixin(PolymerElement) {
-    static get template() {
-      return html`
-        <div part="label">
-          <slot name="label"></slot>
-        </div>
-        <slot name="input"></slot>
-        <button id="clearButton">Clear</button>
-        <div part="error-message">
-          <slot name="error-message"></slot>
-        </div>
-        <slot name="helper"></slot>
-      `;
-    }
+const runTests = (baseClass) => {
+  const tag = define[baseClass](
+    'input-control-mixin',
+    `
+      <div part="label">
+        <slot name="label"></slot>
+      </div>
+      <slot name="input"></slot>
+      <button id="clearButton">Clear</button>
+      <div part="error-message">
+        <slot name="error-message"></slot>
+      </div>
+      <slot name="helper"></slot>
+    `,
+    (Base) =>
+      class extends InputControlMixin(Base) {
+        get clearElement() {
+          return this.$.clearButton;
+        }
 
-    get clearElement() {
-      return this.$.clearButton;
-    }
+        ready() {
+          super.ready();
 
-    constructor() {
-      super();
+          this.addController(
+            new InputController(this, (input) => {
+              this._setInputElement(input);
+              this._setFocusElement(input);
+              this.stateTarget = input;
+              this.ariaTarget = input;
+            }),
+          );
+        }
+      },
+  );
 
-      this.addController(
-        new InputController(this, (input) => {
-          this._setInputElement(input);
-          this._setFocusElement(input);
-          this.stateTarget = input;
-          this.ariaTarget = input;
-        }),
-      );
-    }
-  },
-);
-
-describe('input-control-mixin', () => {
   let element, input;
 
   describe('clear button', () => {
     let button;
 
-    beforeEach(() => {
-      element = fixtureSync('<input-control-mixin-element value="foo"></input-control-mixin-element>');
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag} value="foo"></${tag}>`);
+      await nextRender();
       input = element.querySelector('[slot=input]');
-      button = element.$.clearButton;
+      button = element.clearElement;
     });
 
-    it('should clear the field value on clear button click', () => {
+    it('should clear the field value on clear button click', async () => {
       button.click();
+      await nextFrame();
       expect(element.value).to.equal('');
     });
 
-    it('should clear the input value on clear button click', () => {
+    it('should clear the input value on clear button click', async () => {
       button.click();
+      await nextFrame();
       expect(input.value).to.equal('');
     });
 
@@ -95,17 +96,20 @@ describe('input-control-mixin', () => {
       expect(event.defaultPrevented).to.be.true;
     });
 
-    it('should reflect clearButtonVisible property to attribute', () => {
+    it('should reflect clearButtonVisible property to attribute', async () => {
       element.clearButtonVisible = true;
+      await nextFrame();
       expect(element.hasAttribute('clear-button-visible')).to.be.true;
 
       element.clearButtonVisible = false;
+      await nextFrame();
       expect(element.hasAttribute('clear-button-visible')).to.be.false;
     });
 
-    it('should clear value on Esc when clearButtonVisible is true', () => {
+    it('should clear value on Esc when clearButtonVisible is true', async () => {
       element.clearButtonVisible = true;
       escKeyDown(button);
+      await nextFrame();
       expect(input.value).to.equal('');
     });
 
@@ -153,8 +157,9 @@ describe('input-control-mixin', () => {
   });
 
   describe('name', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-control-mixin-element name="foo"></input-control-mixin-element>');
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag} name="foo"></${tag}>`);
+      await nextRender();
       input = element.querySelector('[slot=input]');
     });
 
@@ -162,15 +167,17 @@ describe('input-control-mixin', () => {
       expect(input.getAttribute('name')).to.equal('foo');
     });
 
-    it('should propagate name property to the input', () => {
+    it('should propagate name property to the input', async () => {
       element.name = 'bar';
+      await nextFrame();
       expect(input.getAttribute('name')).to.equal('bar');
     });
   });
 
   describe('title', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-control-mixin-element title="foo"></input-control-mixin-element>');
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag} title="foo"></${tag}>`);
+      await nextRender();
       input = element.querySelector('[slot=input]');
     });
 
@@ -178,15 +185,17 @@ describe('input-control-mixin', () => {
       expect(input.getAttribute('title')).to.equal('foo');
     });
 
-    it('should propagate title property to the input', () => {
+    it('should propagate title property to the input', async () => {
       element.title = 'bar';
+      await nextFrame();
       expect(input.getAttribute('title')).to.equal('bar');
     });
   });
 
   describe('placeholder', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-control-mixin-element placeholder="foo"></input-control-mixin-element>');
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag} placeholder="foo"></${tag}>`);
+      await nextRender();
       input = element.querySelector('[slot=input]');
     });
 
@@ -194,15 +203,17 @@ describe('input-control-mixin', () => {
       expect(input.placeholder).to.equal('foo');
     });
 
-    it('should propagate placeholder property to the input', () => {
+    it('should propagate placeholder property to the input', async () => {
       element.placeholder = 'bar';
+      await nextFrame();
       expect(input.placeholder).to.equal('bar');
     });
   });
 
   describe('readonly', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-control-mixin-element readonly></input-control-mixin-element>');
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag} readonly></${tag}>`);
+      await nextRender();
       input = element.querySelector('[slot=input]');
     });
 
@@ -210,15 +221,17 @@ describe('input-control-mixin', () => {
       expect(input.readOnly).to.be.true;
     });
 
-    it('should propagate readonly property to the input', () => {
+    it('should propagate readonly property to the input', async () => {
       element.readonly = false;
+      await nextFrame();
       expect(input.readOnly).to.be.false;
     });
   });
 
   describe('required', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-control-mixin-element required></input-control-mixin-element>');
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag} required></${tag}>`);
+      await nextRender();
       input = element.querySelector('[slot=input]');
     });
 
@@ -226,15 +239,17 @@ describe('input-control-mixin', () => {
       expect(input.required).to.be.true;
     });
 
-    it('should propagate required property to the input', () => {
+    it('should propagate required property to the input', async () => {
       element.required = false;
+      await nextFrame();
       expect(input.required).to.be.false;
     });
   });
 
   describe('invalid', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-control-mixin-element invalid></input-control-mixin-element>');
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag} invalid></${tag}>`);
+      await nextRender();
       input = element.querySelector('[slot=input]');
     });
 
@@ -250,20 +265,23 @@ describe('input-control-mixin', () => {
       expect(input.getAttribute('aria-invalid')).to.equal('true');
     });
 
-    it('should remove invalid attribute when valid', () => {
+    it('should remove invalid attribute when valid', async () => {
       element.invalid = false;
+      await nextFrame();
       expect(input.hasAttribute('invalid')).to.be.false;
     });
 
-    it('should remove aria-invalid attribute when valid', () => {
+    it('should remove aria-invalid attribute when valid', async () => {
       element.invalid = false;
+      await nextFrame();
       expect(input.hasAttribute('aria-invalid')).to.be.false;
     });
   });
 
   describe('autoselect', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-control-mixin-element></input-control-mixin-element>');
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
+      await nextRender();
       input = element.querySelector('[slot=input]');
     });
 
@@ -276,9 +294,10 @@ describe('input-control-mixin', () => {
   });
 
   describe('allowed char pattern', () => {
-    beforeEach(() => {
-      element = fixtureSync('<input-control-mixin-element></input-control-mixin-element>');
+    beforeEach(async () => {
+      element = fixtureSync(`<${tag}></${tag}>`);
       element.allowedCharPattern = '[-+\\d]';
+      await nextRender();
       input = element.querySelector('[slot=input]');
     });
 
@@ -428,10 +447,19 @@ describe('input-control-mixin', () => {
         console.error.restore();
       });
 
-      it('should not throw an error when incorrect pattern provided', () => {
-        fixtureSync('<input-control-mixin-element allowed-char-pattern="[a]*"></input-control-mixin-element>');
+      it('should not throw an error when incorrect pattern provided', async () => {
+        fixtureSync(`<${tag} allowed-char-pattern="[a]*"></${tag}>`);
+        await nextRender();
         expect(console.error.calledOnce).to.be.true;
       });
     });
   });
+};
+
+describe('InputControlMixin + Polymer', () => {
+  runTests('polymer');
+});
+
+describe('InputControlMixin + Lit', () => {
+  runTests('lit');
 });
