@@ -559,8 +559,8 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   }
 
   /** @private */
-  _filesChanged(files) {
-    this._files = [...files];
+  _filesChanged() {
+    this._updateFileList();
   }
 
   /** @private */
