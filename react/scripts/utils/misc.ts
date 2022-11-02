@@ -1,4 +1,6 @@
-import { access, constants } from 'node:fs/promises';
+import { access } from 'node:fs/promises';
+import { constants } from 'node:fs';
+import { join } from 'node:path';
 import ts, {
   type Node,
   type SourceFile,
@@ -6,8 +8,8 @@ import ts, {
   type TransformationContext,
   type TransformerFactory,
 } from 'typescript';
-import type { WalkOptions } from './fswalk.js';
-import { fswalk } from './fswalk.js';
+import { fswalk, type WalkOptions } from './fswalk.js';
+import { elementsWithMissingEntrypoint } from './settings.js';
 
 export function camelCase(str: string) {
   // CamelCase join
@@ -39,9 +41,14 @@ export async function exists(file: string): Promise<boolean> {
 
 export type SearchOptions = WalkOptions;
 
-export async function search(nameVariants: string[], dir: string, options?: SearchOptions): Promise<string | undefined> {
-  for await (const [path] of fswalk(dir, options)) {
-    if (nameVariants.some(name => path.endsWith(name))) {
+export async function search(elementName: string, dir: string, options?: SearchOptions): Promise<string | undefined> {
+  if (elementsWithMissingEntrypoint.has(elementName)) {
+    dir = join(dir, 'src');
+  }
+
+  const fileName = `${elementName}.js`;
+  for await (const [path, entry] of fswalk(dir, options)) {
+    if (entry.name === fileName) {
       return path;
     }
   }

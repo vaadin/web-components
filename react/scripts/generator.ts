@@ -64,7 +64,7 @@ async function prepareElementFiles(
         throw new ElementNameMissingError(packageName);
       }
 
-      const path = await search([`${element.name}.js`], resolve(nodeModulesDir, packageName));
+      const path = await search(element.name, resolve(nodeModulesDir, packageName));
 
       if (path) {
         elementFilesMap.set(element, {

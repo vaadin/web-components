@@ -58,3 +58,7 @@ export const elementsWithEventIssues = new Map<string, MissingEvents>([
   ],
   ['RadioButton', { some: ['value-changed'] }],
 ]);
+
+export const elementsWithMissingEntrypoint = new Set([
+  'vaadin-chart-series'
+]);

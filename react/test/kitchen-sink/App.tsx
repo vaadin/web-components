@@ -8,7 +8,7 @@ import { AvatarGroup } from '../../src/AvatarGroup.js';
 import { Board } from '../../src/Board.js';
 import { BoardRow } from '../../src/BoardRow.js';
 import { Button } from '../../src/Button.js';
-import { Chart } from '../../src/Chart.js';
+import { Chart, ChartModule } from '../../src/Chart.js';
 import { Checkbox } from '../../src/Checkbox.js';
 import { CheckboxGroup } from '../../src/CheckboxGroup.js';
 import { ComboBox } from '../../src/ComboBox.js';
@@ -21,6 +21,7 @@ import { Details } from '../../src/Details.js';
 import { DrawerToggle } from '../../src/DrawerToggle.js';
 import { FormItem } from '../../src/FormItem.js';
 import { FormLayout } from '../../src/FormLayout.js';
+import { ChartSeries } from '../../src/generated/ChartSeries.js';
 import { Grid } from '../../src/Grid.js';
 import { GridColumn } from '../../src/GridColumn.js';
 import { GridColumnGroup } from '../../src/GridColumnGroup.js';
@@ -131,7 +132,9 @@ export default function App({}) {
             </AccordionPanel>
           </Accordion>
           <AvatarGroup prefix="Users: " items={[{ name: 'Jane Roe', abbr: 'JD' }]}></AvatarGroup>
-          <Chart></Chart>
+          <Chart title='Chart' style={{ height: '300px' }}>
+            <ChartSeries title='Items' type='bar' values={[ 10, 20, 30 ]}></ChartSeries>
+          </Chart>
         </BoardRow>
         <BoardRow>
           <CheckboxGroup label="CheckboxGroup">
