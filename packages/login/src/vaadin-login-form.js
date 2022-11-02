@@ -59,11 +59,9 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       <vaadin-login-form-wrapper
         theme$="[[_theme]]"
         part="vaadin-login-native-form-wrapper"
-        action="{{action}}"
-        disabled="{{disabled}}"
-        error="{{error}}"
-        no-forgot-password="{{noForgotPassword}}"
-        i18n="{{i18n}}"
+        error="[[error]]"
+        no-forgot-password="[[noForgotPassword]]"
+        i18n="[[i18n]]"
         on-login="_retargetEvent"
         on-forgot-password="_retargetEvent"
       >
