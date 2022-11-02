@@ -3,6 +3,7 @@
  * Copyright (c) 2018 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
+import '@vaadin/button/src/vaadin-button.js';
 import '@vaadin/text-field/src/vaadin-text-field.js';
 import '@vaadin/password-field/src/vaadin-password-field.js';
 import './vaadin-login-form-wrapper.js';
@@ -58,14 +59,7 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
           width: 100%;
         }
       </style>
-      <vaadin-login-form-wrapper
-        theme$="[[_theme]]"
-        error="[[error]]"
-        no-forgot-password="[[noForgotPassword]]"
-        i18n="[[i18n]]"
-        on-login="_retargetEvent"
-        on-forgot-password="_retargetEvent"
-      >
+      <vaadin-login-form-wrapper theme$="[[_theme]]" error="[[error]]" i18n="[[i18n]]">
         <form method="POST" action$="[[action]]" slot="form">
           <input id="csrf" type="hidden" />
           <vaadin-text-field
@@ -97,6 +91,15 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
             [[i18n.form.submit]]
           </vaadin-button>
         </form>
+
+        <vaadin-button
+          slot="forgot-password"
+          theme="tertiary small"
+          on-click="_onForgotPasswordClick"
+          hidden$="[[noForgotPassword]]"
+        >
+          [[i18n.form.forgotPassword]]
+        </vaadin-button>
       </vaadin-login-form-wrapper>
     `;
   }
@@ -188,6 +191,11 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
     if (e.key === 'Tab' && input instanceof HTMLInputElement) {
       input.select();
     }
+  }
+
+  /** @private */
+  _onForgotPasswordClick() {
+    this.dispatchEvent(new CustomEvent('forgot-password'));
   }
 }
 

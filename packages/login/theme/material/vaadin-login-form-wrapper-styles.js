@@ -22,7 +22,7 @@ const loginFormWrapper = css`
     font-size: var(--material-h5-font-size);
   }
 
-  #forgotPasswordButton {
+  ::slotted([slot='forgot-password']) {
     margin: 0.5rem auto;
     padding-bottom: 12px;
     padding-top: 12px;

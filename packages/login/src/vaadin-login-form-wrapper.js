@@ -3,7 +3,6 @@
  * Copyright (c) 2018 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import '@vaadin/button/src/vaadin-button.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -55,13 +54,7 @@ class LoginFormWrapper extends LoginMixin(ElementMixin(ThemableMixin(PolymerElem
 
         <slot name="form"></slot>
 
-        <vaadin-button
-          id="forgotPasswordButton"
-          theme="tertiary small forgot-password"
-          on-click="_forgotPassword"
-          hidden$="[[noForgotPassword]]"
-          >[[i18n.form.forgotPassword]]</vaadin-button
-        >
+        <slot name="forgot-password"></slot>
 
         <div part="footer">
           <p>[[i18n.additionalInformation]]</p>
@@ -72,10 +65,6 @@ class LoginFormWrapper extends LoginMixin(ElementMixin(ThemableMixin(PolymerElem
 
   static get is() {
     return 'vaadin-login-form-wrapper';
-  }
-
-  _forgotPassword() {
-    this.dispatchEvent(new CustomEvent('forgot-password'));
   }
 }
 

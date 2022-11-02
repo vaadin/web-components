@@ -69,13 +69,11 @@ describe('login form', () => {
   });
 
   it('should emit forgot password event', () => {
-    let eventWasCaught = false;
-    login.addEventListener('forgot-password', () => {
-      eventWasCaught = true;
-    });
-
-    formWrapper.$.forgotPasswordButton.click();
-    expect(eventWasCaught).to.be.true;
+    const spy = sinon.spy();
+    login.addEventListener('forgot-password', spy);
+    const forgotElement = login.querySelector('vaadin-button[slot="forgot-password"]');
+    forgotElement.click();
+    expect(spy.calledOnce).to.be.true;
   });
 
   it('should mark only username as invalid if user hits ENTER when field is empty', () => {
