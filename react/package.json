@@ -8,11 +8,12 @@
   "scripts": {
     "build:load-schema": "node --loader @esbuild-kit/esm-loader scripts/schema-loader.ts",
     "build:generate": "node --loader @esbuild-kit/esm-loader scripts/generator.ts",
+    "build:generate-css": "node --experimental-vm-modules --loader @esbuild-kit/esm-loader scripts/css-generator.ts",
     "build:generate-stubs": "node --loader @esbuild-kit/esm-loader scripts/stub-generator.ts",
     "build:update-packagejson": "node --loader @esbuild-kit/esm-loader scripts/package-json-update.ts",
     "build:typescript": "tsc -p tsconfig.build.json",
     "clean": "rimraf dist build",
-    "build": "npm run build:loadSchema && npm run build:generate && npm run build:typescript",
+    "build": "npm run build:load-schema && npm run build:generate && npm run build:typescript && npm run build:generate-css",
     "dev": "vite dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
