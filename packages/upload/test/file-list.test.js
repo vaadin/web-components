@@ -1,7 +1,7 @@
 import { expect } from '@esm-bundle/chai';
 import { fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
 import '../vaadin-upload.js';
-import { createFiles, xhrCreator } from './common.js';
+import { createFiles, removeFile, xhrCreator } from './common.js';
 
 describe('file list', () => {
   let upload;
@@ -35,13 +35,11 @@ describe('file list', () => {
     files.forEach((file) => upload._addFile(file));
     await nextFrame();
 
-    const removeButton1 = getFileListItems(upload)[0].shadowRoot.querySelector('[part="remove-button"]');
-    removeButton1.click();
+    removeFile(upload, 1);
     await nextFrame();
     expect(getFileListItems(upload).length).to.equal(1);
 
-    const removeButton2 = getFileListItems(upload)[0].shadowRoot.querySelector('[part="remove-button"]');
-    removeButton2.click();
+    removeFile(upload, 0);
     await nextFrame();
     expect(getFileListItems(upload).length).to.equal(0);
   });

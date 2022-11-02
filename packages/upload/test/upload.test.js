@@ -3,7 +3,7 @@ import { fixtureSync, nextRender } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '../vaadin-upload.js';
 import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
-import { createFile, createFiles, xhrCreator } from './common.js';
+import { createFile, createFiles, removeFile, xhrCreator } from './common.js';
 
 describe('upload', () => {
   let upload, file;
@@ -509,7 +509,8 @@ describe('upload', () => {
     it('should fire `file-remove` and remove from files', async () => {
       upload.addEventListener('upload-progress', (e) => {
         if (e.detail.file === files[0] && e.detail.file.progress === 50) {
-          upload._abortFileUpload(e.detail.file);
+          const idx = upload.files.indexOf(e.detail.file);
+          removeFile(upload, idx);
         }
       });
 
@@ -523,21 +524,18 @@ describe('upload', () => {
       expect(upload.files.length).to.be.equal(1);
     });
 
-    it('should remove all files', (done) => {
-      const removeFirst = () => {
-        if (upload.files.length === 0) {
-          done();
-        } else {
-          clock.tickAsync(1).then(() => {
-            upload._abortFileUpload(upload.files[0]);
-          });
-        }
-      };
-
+    it('should remove all files', async () => {
       upload.noAuto = true;
       upload._addFiles(files);
-      upload.addEventListener('file-remove', removeFirst);
-      removeFirst();
+      await clock.tickAsync(1);
+
+      removeFile(upload, 1);
+      await clock.tickAsync(1);
+      expect(upload.files.length).to.equal(1);
+
+      removeFile(upload, 0);
+      await clock.tickAsync(1);
+      expect(upload.files.length).to.equal(0);
     });
   });
 });
