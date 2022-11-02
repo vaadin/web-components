@@ -63,17 +63,8 @@ snapshots["vaadin-upload-file shadow default"] =
     </button>
   </div>
 </div>
-<vaadin-progress-bar
-  aria-valuemax="1"
-  aria-valuemin="0"
-  aria-valuenow="0.6"
-  id="progress"
-  part="progress"
-  role="progressbar"
-  style="--vaadin-progress-value:0.6;"
-  value="0.6"
->
-</vaadin-progress-bar>
+<slot name="progress">
+</slot>
 `;
 /* end snapshot vaadin-upload-file shadow default */
 

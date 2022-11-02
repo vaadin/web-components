@@ -169,7 +169,7 @@ const uploadFile = css`
     color: var(--lumo-error-text-color);
   }
 
-  [part='progress'] {
+  ::slotted([slot='progress']) {
     width: auto;
     margin-left: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
     margin-right: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));

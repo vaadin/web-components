@@ -6,7 +6,9 @@
 import '@vaadin/progress-bar/src/vaadin-progress-bar.js';
 import './vaadin-upload-icons.js';
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { ControllerMixin } from '@vaadin/component-base/src/controller-mixin.js';
 import { FocusMixin } from '@vaadin/component-base/src/focus-mixin.js';
+import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
@@ -30,7 +32,6 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * `start-button`   | Start file upload button
  * `retry-button`   | Retry file upload button
  * `remove-button`  | Remove file button
- * `progress`       | Progress bar
  *
  * The following state attributes are available for styling:
  *
@@ -46,10 +47,11 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
  * @extends HTMLElement
+ * @mixes ControllerMixin
  * @mixes FocusMixin
  * @mixes ThemableMixin
  */
-class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
+class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement))) {
   static get template() {
     return html`
       <style>
@@ -72,8 +74,8 @@ class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
           box-shadow: none;
         }
 
-        :host([complete]) [part='progress'],
-        :host([error]) [part='progress'] {
+        :host([complete]) ::slotted([slot='progress']),
+        :host([error]) ::slotted([slot='progress']) {
           display: none !important;
         }
       </style>
@@ -119,12 +121,7 @@ class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
         </div>
       </div>
 
-      <vaadin-progress-bar
-        part="progress"
-        id="progress"
-        value$="[[_formatProgressValue(file.progress)]]"
-        indeterminate$="[[file.indeterminate]]"
-      ></vaadin-progress-bar>
+      <slot name="progress"></slot>
     `;
   }
 
@@ -147,6 +144,11 @@ class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
         value: 0,
         reflectToAttribute: true,
       },
+
+      /** @private */
+      _progress: {
+        type: Object,
+      },
     };
   }
 
@@ -157,12 +159,24 @@ class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
       '_toggleHostAttribute(file.indeterminate, "indeterminate")',
       '_toggleHostAttribute(file.uploading, "uploading")',
       '_toggleHostAttribute(file.complete, "complete")',
+      '__updateProgress(_progress, file.progress, file.indeterminate)',
     ];
   }
 
   /** @protected */
   ready() {
     super.ready();
+
+    this.addController(
+      new SlotController(
+        this,
+        'progress',
+        () => document.createElement('vaadin-progress-bar'),
+        (_, progress) => {
+          this._progress = progress;
+        },
+      ),
+    );
 
     // Handle moving focus to the button on Tab.
     this.shadowRoot.addEventListener('focusin', (e) => {
@@ -211,8 +225,11 @@ class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
   }
 
   /** @private */
-  _formatProgressValue(progress) {
-    return progress / 100;
+  __updateProgress(progress, value, indeterminate) {
+    if (progress) {
+      progress.value = isNaN(value) ? 0 : value / 100;
+      progress.indeterminate = indeterminate;
+    }
   }
 
   /** @private */
