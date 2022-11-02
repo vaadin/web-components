@@ -74,7 +74,7 @@ class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
 
         :host([complete]) [part='progress'],
         :host([error]) [part='progress'] {
-          display: none;
+          display: none !important;
         }
       </style>
 
