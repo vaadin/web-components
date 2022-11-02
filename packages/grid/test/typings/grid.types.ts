@@ -1,6 +1,21 @@
 import type { DisabledMixinClass } from '@vaadin/component-base/src/disabled-mixin.js';
 import type { ElementMixinClass } from '@vaadin/component-base/src/element-mixin.js';
 import type { ThemableMixinClass } from '@vaadin/vaadin-themable-mixin';
+import type {
+  GridColumnGroup,
+  GridFilter,
+  GridFilterColumn,
+  GridFilterValueChangedEvent,
+  GridSelectionColumn,
+  GridSelectionColumnSelectAllChangedEvent,
+  GridSortColumn,
+  GridSortColumnDirectionChangedEvent,
+  GridSorter,
+  GridSorterDirectionChangedEvent,
+  GridTreeColumn,
+  GridTreeToggle,
+  GridTreeToggleExpandedChangedEvent,
+} from '../../all-imports.js';
 import type { ActiveItemMixinClass } from '../../src/vaadin-grid-active-item-mixin';
 import type { ArrayDataProviderMixinClass } from '../../src/vaadin-grid-array-data-provider-mixin';
 import type { ColumnReorderingMixinClass } from '../../src/vaadin-grid-column-reordering-mixin';
@@ -40,17 +55,6 @@ import type {
   GridSorterDefinition,
   GridSorterDirection,
 } from '../../vaadin-grid.js';
-import type { GridColumnGroup } from '../../vaadin-grid-column-group';
-import type { GridFilter, GridFilterValueChangedEvent } from '../../vaadin-grid-filter.js';
-import type { GridFilterColumn } from '../../vaadin-grid-filter-column';
-import type {
-  GridSelectionColumn,
-  GridSelectionColumnSelectAllChangedEvent,
-} from '../../vaadin-grid-selection-column.js';
-import type { GridSortColumn, GridSortColumnDirectionChangedEvent } from '../../vaadin-grid-sort-column.js';
-import type { GridSorter, GridSorterDirectionChangedEvent } from '../../vaadin-grid-sorter.js';
-import type { GridTreeColumn } from '../../vaadin-grid-tree-column';
-import type { GridTreeToggle, GridTreeToggleExpandedChangedEvent } from '../../vaadin-grid-tree-toggle.js';
 
 interface TestGridItem {
   testProperty: string;
