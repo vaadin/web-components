@@ -137,7 +137,6 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
       abort: {
         type: Boolean,
         value: false,
-        observer: '_abortChanged',
       },
 
       /**
@@ -284,26 +283,8 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
   }
 
   /** @private */
-  _abortChanged(abort) {
-    if (abort) {
-      this._remove();
-    }
-  }
-
-  /** @private */
   _errorMessageChanged(errorMessage) {
     this.toggleAttribute('error', Boolean(errorMessage));
-  }
-
-  /** @private */
-  _remove() {
-    this.dispatchEvent(
-      new CustomEvent('file-remove', {
-        detail: { file: this.file },
-        bubbles: true,
-        composed: true,
-      }),
-    );
   }
 
   /** @private */
