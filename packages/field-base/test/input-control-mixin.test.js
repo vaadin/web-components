@@ -49,7 +49,7 @@ const runTests = (baseClass) => {
       element = fixtureSync(`<${tag} value="foo"></${tag}>`);
       await nextRender();
       input = element.querySelector('[slot=input]');
-      button = element.$.clearButton;
+      button = element.clearElement;
     });
 
     it('should clear the field value on clear button click', async () => {
