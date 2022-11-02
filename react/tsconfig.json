@@ -12,8 +12,6 @@
     "strict": true,
     "sourceMap": true,
     "inlineSources": true,
-    "skipDefaultLibCheck": true,
-    "skipLibCheck": true,
     "importsNotUsedAsValues": "error",
     "noImplicitOverride": true,
     "useDefineForClassFields": true,

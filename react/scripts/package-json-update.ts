@@ -26,7 +26,7 @@ filterEmptyItems(
         throw new ElementNameMissingError(packageName);
       }
 
-      if (!(await search(element.name, resolve(nodeModulesDir, packageName)))) {
+      if (!(await search([`${element.name}.js`], resolve(nodeModulesDir, packageName)))) {
         return;
       }
 

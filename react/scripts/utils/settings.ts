@@ -3,12 +3,28 @@ export interface MissingEvents {
   some?: readonly string[];
 }
 
-export const genericElements = new Map<string, number>([
-  ['ComboBox', 1],
-  ['ComboBoxLight', 1],
-  ['Crud', 1],
-  ['Grid', 1],
-  ['GridPro', 1],
+export enum NonGenericInterface {
+  EVENT_MAP,
+}
+
+export type GenericElementInfo = Readonly<{
+  numberOfGenerics: number;
+  nonGenericInterfaces?: readonly NonGenericInterface[];
+}>;
+
+export const genericElements = new Map<string, GenericElementInfo>([
+  ['ComboBox', { numberOfGenerics: 1 }],
+  ['ComboBoxLight', { numberOfGenerics: 1 }],
+  ['Crud', { numberOfGenerics: 1 }],
+  ['Grid', { numberOfGenerics: 1 }],
+  ['GridColumn', { numberOfGenerics: 1, nonGenericInterfaces: [NonGenericInterface.EVENT_MAP] }],
+  ['GridFilterColumn', { numberOfGenerics: 1, nonGenericInterfaces: [NonGenericInterface.EVENT_MAP] }],
+  ['GridPro', { numberOfGenerics: 1 }],
+  ['GridProEditColumn', { numberOfGenerics: 1 }],
+  ['GridSelectionColumn', { numberOfGenerics: 1, nonGenericInterfaces: [NonGenericInterface.EVENT_MAP] }],
+  ['GridSortColumn', { numberOfGenerics: 1, nonGenericInterfaces: [NonGenericInterface.EVENT_MAP] }],
+  ['GridTreeColumn', { numberOfGenerics: 1, nonGenericInterfaces: [NonGenericInterface.EVENT_MAP] }],
+  ['VirtualList', { numberOfGenerics: 1, nonGenericInterfaces: [NonGenericInterface.EVENT_MAP] }],
 ]);
 
 export const elementsWithEventIssues = new Map<string, MissingEvents>([
