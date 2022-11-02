@@ -1,5 +1,3 @@
-import './theme/lumo/all-imports.js';
-
 export * from './vaadin-grid-column-group.js';
 export * from './vaadin-grid-column.js';
 export * from './vaadin-grid-filter.js';
