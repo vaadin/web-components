@@ -71,6 +71,11 @@ class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
           border: none;
           box-shadow: none;
         }
+
+        :host([complete]) [part='progress'],
+        :host([error]) [part='progress'] {
+          display: none !important;
+        }
       </style>
 
       <div part="row">
@@ -118,10 +123,7 @@ class UploadFile extends FocusMixin(ThemableMixin(PolymerElement)) {
         part="progress"
         id="progress"
         value$="[[_formatProgressValue(file.progress)]]"
-        error$="[[file.error]]"
         indeterminate$="[[file.indeterminate]]"
-        uploading$="[[file.uploading]]"
-        complete$="[[file.complete]]"
       ></vaadin-progress-bar>
     `;
   }

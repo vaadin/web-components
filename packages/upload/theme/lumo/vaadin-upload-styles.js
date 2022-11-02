@@ -174,11 +174,6 @@ const uploadFile = css`
     margin-left: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
     margin-right: calc(var(--lumo-icon-size-m) + var(--lumo-space-xs));
   }
-
-  [part='progress'][complete],
-  [part='progress'][error] {
-    display: none;
-  }
 `;
 
 registerStyles('vaadin-upload-file', [fieldButton, uploadFile], { moduleId: 'lumo-upload-file' });
