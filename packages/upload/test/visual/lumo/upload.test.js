@@ -49,11 +49,14 @@ describe('upload', () => {
   describe('focus', () => {
     beforeEach(() => {
       element = fixtureSync('<vaadin-upload></vaadin-upload>', div);
-      element.files = [{ name: 'Don Quixote.pdf' }, { name: 'Hamlet.pdf', progress: 100, complete: true }];
-      // To show the start button
-      element.files[0].held = true;
-      // To show the retry button
-      element.files[0].error = 'Could not upload file';
+      element.files = [
+        {
+          name: 'Don Quixote.pdf',
+          held: true, // Show the start button
+          error: 'Could not upload file', // Show the retry button
+        },
+        { name: 'Hamlet.pdf', progress: 100, complete: true },
+      ];
       element.querySelector('[slot="add-button"]').focus();
     });
 

@@ -56,11 +56,13 @@ describe('keyboard navigation', () => {
 
   describe('file', () => {
     beforeEach(() => {
-      // To show the start button
-      uploadElement.files[0].held = true;
-      // To show the retry button
-      uploadElement.files[0].error = 'Error';
-      uploadElement._notifyFileChanges(uploadElement.files[0]);
+      uploadElement.files = [
+        {
+          ...FAKE_FILE,
+          held: true, // Show the start button
+          error: 'Error', // Show the retry button
+        },
+      ];
     });
 
     it('should focus on the start button', async () => {
