@@ -3,7 +3,9 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html as legacyHtml, PolymerElement } from '@polymer/polymer/polymer-element.js';
+import { html, render } from 'lit';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { KeyboardDirectionMixin } from '@vaadin/component-base/src/keyboard-direction-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
@@ -78,7 +80,7 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
   }
 
   static get template() {
-    return html`
+    return legacyHtml`
       <style>
         :host {
           display: block;
@@ -130,20 +132,7 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
       const focusedIndex = this._getIndexOfFocusableElement();
       const closeToBottom = this.scrollHeight < this.clientHeight + this.scrollTop + 50;
 
-      const removed = oldItems.filter((item) => !items.includes(item));
-      const added = [...items];
-
-      this._messages.forEach((message) => {
-        const item = message._item;
-        if (removed.includes(item)) {
-          message.remove();
-        } else if (added.includes(item)) {
-          added.splice(added.indexOf(item), 1);
-        }
-      });
-
-      this.__addMessages(added, items);
-
+      this._renderMessages(items);
       this._setTabIndexesByIndex(focusedIndex);
 
       requestAnimationFrame(() => {
@@ -155,42 +144,29 @@ class MessageList extends KeyboardDirectionMixin(ElementMixin(ThemableMixin(Poly
   }
 
   /** @private */
-  __addMessages(itemsToAdd, allItems) {
-    itemsToAdd.forEach((item) => {
-      const message = this.__createMessage(item);
-      const nextItem = allItems[allItems.indexOf(item) + 1];
-      const nextMessage = this._messages.find((msg) => msg._item === nextItem);
-      if (nextMessage) {
-        this.insertBefore(message, nextMessage);
-      } else {
-        this.appendChild(message);
-      }
-    });
-  }
-
-  /** @private */
-  __createMessage(item) {
-    const message = document.createElement('vaadin-message');
-    message.setAttribute('role', 'listitem');
-
-    message.textContent = item.text;
-    message.time = item.time;
-    message.userName = item.userName;
-    message.userAbbr = item.userAbbr;
-    message.userImg = item.userImg;
-    message.userColorIndex = item.userColorIndex;
-
-    message._item = item;
-
-    if (item.theme) {
-      message.setAttribute('theme', item.theme);
-    }
-
-    message.addEventListener('focusin', (e) => {
-      this._onMessageFocusIn(e);
-    });
-
-    return message;
+  _renderMessages(items) {
+    render(
+      html`
+        ${items.map(
+          (item) =>
+            html`
+              <vaadin-message
+                role="listitem"
+                .time="${item.time}"
+                .userAbbr="${item.userAbbr}"
+                .userName="${item.userName}"
+                .userImg="${item.userImg}"
+                .userColorIndex="${item.userColorIndex}"
+                theme="${ifDefined(item.theme)}"
+                @focusin="${this._onMessageFocusIn}"
+                >${item.text}</vaadin-message
+              >
+            `,
+        )}
+      `,
+      this,
+      { host: this },
+    );
   }
 
   /** @private */
