@@ -20,6 +20,7 @@
   "module": "vaadin-grid.js",
   "type": "module",
   "files": [
+    "all-imports.d.ts",
     "all-imports.js",
     "src",
     "theme",
