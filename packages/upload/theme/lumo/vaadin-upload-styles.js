@@ -45,10 +45,6 @@ registerStyles(
     :host([max-files-reached]) [part='drop-label'] {
       color: var(--lumo-disabled-text-color);
     }
-
-    [part='file-list'] > *:not(:first-child) > * {
-      border-top: 1px solid var(--lumo-contrast-10pct);
-    }
   `,
   { moduleId: 'lumo-upload' },
 );
@@ -65,6 +61,16 @@ registerStyles(
     }
   `,
   { moduleId: 'lumo-upload-icon' },
+);
+
+registerStyles(
+  'vaadin-upload-file-list',
+  css`
+    ::slotted(li:not(:first-of-type)) {
+      border-top: 1px solid var(--lumo-contrast-10pct);
+    }
+  `,
+  { moduleId: 'lumo-upload-file-list' },
 );
 
 const uploadFile = css`

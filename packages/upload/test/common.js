@@ -107,7 +107,7 @@ export function xhrCreator(c) {
  * Removes a file at given index.
  */
 export function removeFile(upload, idx = 0) {
-  const files = upload.shadowRoot.querySelectorAll('vaadin-upload-file');
+  const files = upload.querySelectorAll('vaadin-upload-file');
   const file = files[idx];
   file.shadowRoot.querySelector('[part="remove-button"]').click();
 }

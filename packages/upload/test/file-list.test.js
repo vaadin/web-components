@@ -7,7 +7,7 @@ describe('file list', () => {
   let upload;
 
   const getFileListItems = (upload) => {
-    return upload.$.fileList.querySelectorAll('vaadin-upload-file');
+    return upload._fileList.querySelectorAll('vaadin-upload-file');
   };
 
   beforeEach(() => {
