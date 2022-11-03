@@ -91,12 +91,22 @@ const treeGridData: TreeGridDataItem[] = [
       { id: 6, size: 10, name: 'Leaf 2' },
     ],
   },
+  ...Array.from(new Array(1000)).map((_, index) => ({
+    id: (index + 10),
+    size: (index + 10),
+    name: `Leaf ${index + 10}`,
+  })),
 ];
+
+function NameRenderer({ item: { name } }: GridBodyReactRendererProps<TreeGridDataItem>) {
+  const [typePart, numberPart] = name.split(' ');
+  return <><b>{typePart}</b>: {numberPart}</>;
+}
 
 const TreeGridDataProvider: GridModule.GridDataProvider<TreeGridDataItem> = (params, callback) => {
   const items = params.parentItem ? (params.parentItem.children || []) : treeGridData;
   const offset = params.page * params.pageSize;
-  callback(items.slice(offset, offset + params.pageSize), treeGridData.length);
+  callback(items.slice(offset, offset + params.pageSize), items.length);
 };
 
 enum CrudRole {
@@ -185,7 +195,7 @@ export default function App({}) {
             <PasswordField placeholder="Password"></PasswordField>
           </CustomField>
           <Details opened>
-            <h4 slot="summary">Details</h4>
+            <label slot="summary">Details</label>
             <p>Details content</p>
           </Details>
           <FormLayout>
@@ -203,7 +213,7 @@ export default function App({}) {
             <GridTreeColumn path="id"></GridTreeColumn>
             <GridColumnGroup>
               <GridSortColumn path="size"></GridSortColumn>
-              <GridFilterColumn path="name"></GridFilterColumn>
+              <GridFilterColumn path="name" renderer={NameRenderer}></GridFilterColumn>
             </GridColumnGroup>
           </Grid>
           <GridPro<CrudDataItem> items={crudData}>
