@@ -90,7 +90,7 @@ gulp.task('icons', (done) => {
     )
     .pipe(gulp.dest(folder))
     .on('finish', () => {
-      // Iron-iconset-svg
+      // Generate vaadin-iconset
       fs.readdir(folder, (err, filenames) => {
         if (err) {
           console.error(err);
