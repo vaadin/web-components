@@ -36,7 +36,6 @@ import { LoginMixin } from './vaadin-login-mixin.js';
  * `error-message`| Container for error message, contains error-message-title and error-message-description parts. Hidden by default.
  * `error-message-title`       | Container for error message title
  * `error-message-description` | Container for error message description
- * `error-message-description` | Container for error message description
  * `footer`  | Container additional information text from `i18n` object
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
@@ -60,11 +59,9 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       <vaadin-login-form-wrapper
         theme$="[[_theme]]"
         part="vaadin-login-native-form-wrapper"
-        action="{{action}}"
-        disabled="{{disabled}}"
-        error="{{error}}"
-        no-forgot-password="{{noForgotPassword}}"
-        i18n="{{i18n}}"
+        error="[[error]]"
+        no-forgot-password="[[noForgotPassword]]"
+        i18n="[[i18n]]"
         on-login="_retargetEvent"
         on-forgot-password="_retargetEvent"
       >
@@ -110,7 +107,7 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   /** @protected */
   connectedCallback() {
     super.connectedCallback();
-    this._handleInputKeydown = this._handleInputKeydown.bind(this);
+
     if (!this.noAutofocus) {
       this.$.vaadinLoginUsername.focus();
     }
@@ -137,7 +134,10 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   }
 
   submit() {
-    if (this.disabled || !(this.__isValid(this.$.vaadinLoginUsername) && this.__isValid(this.$.vaadinLoginPassword))) {
+    const userName = this.$.vaadinLoginUsername;
+    const password = this.$.vaadinLoginPassword;
+
+    if (this.disabled || !(userName.validate() && password.validate())) {
       return;
     }
 
@@ -148,8 +148,8 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
       bubbles: true,
       cancelable: true,
       detail: {
-        username: this.$.vaadinLoginUsername.value,
-        password: this.$.vaadinLoginPassword.value,
+        username: userName.value,
+        password: password.value,
       },
     };
 
@@ -166,23 +166,13 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
   }
 
   /** @private */
-  __isValid(input) {
-    return (input.validate && input.validate()) || (input.checkValidity && input.checkValidity());
-  }
-
-  /** @private */
-  _isEnterKey(e) {
-    return e.key === 'Enter' || e.keyCode === 13;
-  }
-
-  /** @private */
   _handleInputKeydown(e) {
-    if (this._isEnterKey(e)) {
+    if (e.key === 'Enter') {
       const { currentTarget: inputActive } = e;
       const nextInput =
         inputActive.id === 'vaadinLoginUsername' ? this.$.vaadinLoginPassword : this.$.vaadinLoginUsername;
-      if (this.__isValid(inputActive)) {
-        if (this.__isValid(nextInput)) {
+      if (inputActive.validate()) {
+        if (nextInput.validate()) {
           this.submit();
         } else {
           nextInput.focus();
@@ -193,12 +183,9 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
 
   /** @private */
   _handleInputKeyup(e) {
-    const isTab = e.key === 'Tab' || e.keyCode === 9;
     const input = e.currentTarget;
-    if (isTab && input && input.select) {
+    if (e.key === 'Tab' && input instanceof HTMLInputElement) {
       input.select();
-      // IOS 9 workaround: https://stackoverflow.com/a/7436574
-      setTimeout(() => input.setSelectionRange(0, 9999));
     }
   }
 }

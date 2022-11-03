@@ -46,7 +46,6 @@ export interface LoginFormEventMap extends HTMLElementEventMap, LoginFormCustomE
  * `error-message`| Container for error message, contains error-message-title and error-message-description parts. Hidden by default.
  * `error-message-title`       | Container for error message title
  * `error-message-description` | Container for error message description
- * `error-message-description` | Container for error message description
  * `footer`  | Container additional information text from `i18n` object
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
