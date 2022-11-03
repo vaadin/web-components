@@ -43,6 +43,19 @@ export const SortMixin = (superClass) =>
         },
 
         /**
+         * When `true`, Shift-clicking an unsorted column's sorter adds it to the multi-sort.
+         * Shift + Space does the same action via keyboard. This property has precedence over the
+         * `multiSort` property. If `multiSortOnShiftClick` is true, the multiSort property is effectively ignored.
+         *
+         * @attr {boolean} multi-sort-on-shift-click
+         * @type {boolean}
+         */
+        multiSortOnShiftClick: {
+          type: Boolean,
+          value: false,
+        },
+
+        /**
          * @type {!Array<!GridSorterDefinition>}
          * @protected
          */
@@ -81,7 +94,7 @@ export const SortMixin = (superClass) =>
       const sorter = e.target;
       e.stopPropagation();
       sorter._grid = this;
-      this.__updateSorter(sorter);
+      this.__updateSorter(sorter, e.detail.shiftClick);
       this.__applySorters();
     }
 
@@ -126,22 +139,22 @@ export const SortMixin = (superClass) =>
     }
 
     /** @private */
-    __updateSorter(sorter) {
+    __updateSorter(sorter, shiftClick) {
       if (!sorter.direction && this._sorters.indexOf(sorter) === -1) {
         return;
       }
 
       sorter._order = null;
 
-      if (this.multiSort) {
+      if ((this.multiSort && !this.multiSortOnShiftClick) || (this.multiSortOnShiftClick && shiftClick)) {
         if (this.multiSortPriority === 'append') {
           this.__appendSorter(sorter);
         } else {
           this.__prependSorter(sorter);
         }
-      } else if (sorter.direction) {
+      } else if (sorter.direction || this.multiSortOnShiftClick) {
         const otherSorters = this._sorters.filter((s) => s !== sorter);
-        this._sorters = [sorter];
+        this._sorters = sorter.direction ? [sorter] : [];
         otherSorters.forEach((sorter) => {
           sorter._order = null;
           sorter.direction = null;

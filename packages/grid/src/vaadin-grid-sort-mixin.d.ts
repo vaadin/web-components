@@ -36,4 +36,13 @@ export declare class SortMixinClass {
    * @attr {string} multi-sort-priority
    */
   multiSortPriority: 'append' | 'prepend';
+
+  /**
+   * When `true`, Shift-clicking an unsorted column's sorter adds it to the multi-sort.
+   * Shift + Space does the same action via keyboard. This property has precedence over the
+   * `multiSort` property. If `multiSortOnShiftClick` is true, the multiSort property is effectively ignored.
+   *
+   * @attr {boolean} multi-sort-on-shift-click
+   */
+  multiSortOnShiftClick: boolean;
 }

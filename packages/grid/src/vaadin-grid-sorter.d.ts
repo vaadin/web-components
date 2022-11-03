@@ -9,12 +9,17 @@ import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mix
 export type GridSorterDirection = 'asc' | 'desc' | null;
 
 /**
+ * Fired when the `path` or `direction` property changes.
+ */
+export type GridSorterChangedEvent = CustomEvent<{ shiftClick: boolean }>;
+
+/**
  * Fired when the `direction` property changes.
  */
 export type GridSorterDirectionChangedEvent = CustomEvent<{ value: GridSorterDirection }>;
 
 export interface GridSorterCustomEventMap {
-  'sorter-changed': Event;
+  'sorter-changed': GridSorterChangedEvent;
 
   'direction-changed': GridSorterDirectionChangedEvent;
 }
