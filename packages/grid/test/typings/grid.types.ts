@@ -11,6 +11,7 @@ import type {
   GridSortColumn,
   GridSortColumnDirectionChangedEvent,
   GridSorter,
+  GridSorterChangedEvent,
   GridSorterDirectionChangedEvent,
   GridTreeColumn,
   GridTreeToggle,
@@ -291,6 +292,11 @@ narrowedSortColumn.addEventListener('direction-changed', (event) => {
 /* GridSorter */
 const sorter = document.createElement('vaadin-grid-sorter');
 assertType<GridSorter>(sorter);
+
+sorter.addEventListener('sorter-changed', (event) => {
+  assertType<GridSorterChangedEvent>(event);
+  assertType<boolean>(event.detail.shiftClick);
+});
 
 sorter.addEventListener('direction-changed', (event) => {
   assertType<GridSorterDirectionChangedEvent>(event);
