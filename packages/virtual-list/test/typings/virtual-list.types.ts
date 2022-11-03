@@ -35,3 +35,6 @@ assertType<void>(virtualList.scrollToIndex(3));
 
 assertType<number>(virtualList.firstVisibleIndex);
 assertType<number>(virtualList.lastVisibleIndex);
+
+virtualList.renderer = undefined;
+virtualList.renderer = null;

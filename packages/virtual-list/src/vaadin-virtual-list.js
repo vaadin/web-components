@@ -88,7 +88,7 @@ class VirtualList extends ElementMixin(ControllerMixin(ThemableMixin(PolymerElem
        *   item, contains:
        *   - `model.index` The index of the rendered item.
        *   - `model.item` The item.
-       * @type {VirtualListRenderer | undefined}
+       * @type {VirtualListRenderer | null | undefined}
        */
       renderer: Function,
 

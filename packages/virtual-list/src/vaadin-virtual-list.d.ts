@@ -71,7 +71,7 @@ declare class VirtualList<TItem = VirtualListDefaultItem> extends ElementMixin(
    *   - `model.index` The index of the rendered item.
    *   - `model.item` The item.
    */
-  renderer: VirtualListRenderer<TItem> | undefined;
+  renderer: VirtualListRenderer<TItem> | null | undefined;
 
   /**
    * An array containing items determining how many instances to render.
