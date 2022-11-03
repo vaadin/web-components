@@ -264,15 +264,6 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
    * @param {Object} detail
    * @param {Object} detail.file file to abort upload of
    */
-
-  /**
-   * Fired after the upload is aborted. It is listened by `vaadin-upload` which
-   * will actually remove the file from the upload file list.
-   *
-   * @event file-remove
-   * @param {Object} detail
-   * @param {Object} detail.file file to remove from the list
-   */
 }
 
 customElements.define(UploadFile.is, UploadFile);
