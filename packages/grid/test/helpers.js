@@ -269,3 +269,7 @@ function onceInvoked(object, functionName) {
 export async function onceResized(grid) {
   await onceInvoked(grid, '_onResize');
 }
+
+export const shiftClick = (node) => {
+  node.dispatchEvent(new MouseEvent('click', { shiftKey: true }));
+};
