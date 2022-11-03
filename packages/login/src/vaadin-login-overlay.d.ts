@@ -9,11 +9,25 @@ import { LoginMixin } from './vaadin-login-mixin.js';
 export { LoginI18n } from './vaadin-login-mixin.js';
 
 /**
+ * Fired when the `disabled` property changes.
+ */
+export type LoginOverlayDisabledChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `error` property changes.
+ */
+export type LoginOverlayErrorChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when a user submits the login.
  */
 export type LoginOverlayLoginEvent = CustomEvent<{ username: string; password: string }>;
 
 export interface LoginOverlayCustomEventMap {
+  'disabled-changed': LoginOverlayDisabledChangedEvent;
+
+  'error-changed': LoginOverlayErrorChangedEvent;
+
   'forgot-password': Event;
 
   login: LoginOverlayLoginEvent;
@@ -48,6 +62,8 @@ export interface LoginOverlayEventMap extends HTMLElementEventMap, LoginOverlayC
  * See [`<vaadin-login-form>`](#/elements/vaadin-login-form)
  * documentation for  `<vaadin-login-form-wrapper>` stylable parts.
  *
+ * @fires {CustomEvent} disabled-changed - Fired when the `disabled` property changes.
+ * @fires {CustomEvent} error-changed - Fired when the `error` property changes.
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.
  */
