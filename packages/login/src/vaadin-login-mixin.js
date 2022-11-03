@@ -32,7 +32,6 @@ export const LoginMixin = (superClass) =>
         action: {
           type: String,
           value: null,
-          notify: true,
         },
 
         /**
@@ -67,7 +66,6 @@ export const LoginMixin = (superClass) =>
         noForgotPassword: {
           type: Boolean,
           value: false,
-          notify: true,
         },
 
         /**
