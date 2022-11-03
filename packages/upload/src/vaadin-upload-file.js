@@ -154,7 +154,6 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
 
   static get observers() {
     return [
-      '_fileAborted(file.abort)',
       '_toggleHostAttribute(file.error, "error")',
       '_toggleHostAttribute(file.indeterminate, "indeterminate")',
       '_toggleHostAttribute(file.uploading, "uploading")',
@@ -204,24 +203,6 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
    */
   _shouldSetFocus(event) {
     return event.composedPath()[0] === this;
-  }
-
-  /** @private */
-  _fileAborted(abort) {
-    if (abort) {
-      this._remove();
-    }
-  }
-
-  /** @private */
-  _remove() {
-    this.dispatchEvent(
-      new CustomEvent('file-remove', {
-        detail: { file: this.file },
-        bubbles: true,
-        composed: true,
-      }),
-    );
   }
 
   /** @private */
@@ -277,22 +258,11 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
 
   /**
    * Fired when abort button is pressed. It is listened by `vaadin-upload` which
-   * will abort the upload in progress, but will not remove the file from the list
-   * to allow the animation to hide the element to be run.
+   * will abort the upload in progress, and then remove the file from the list.
    *
    * @event file-abort
    * @param {Object} detail
    * @param {Object} detail.file file to abort upload of
-   */
-
-  /**
-   * Fired after the animation to hide the element has finished. It is listened
-   * by `vaadin-upload` which will actually remove the file from the upload
-   * file list.
-   *
-   * @event file-remove
-   * @param {Object} detail
-   * @param {Object} detail.file file to remove from the  upload of
    */
 }
 

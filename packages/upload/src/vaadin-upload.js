@@ -451,7 +451,6 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
     this.addEventListener('drop', this._onDrop.bind(this));
     this.addEventListener('file-retry', this._onFileRetry.bind(this));
     this.addEventListener('file-abort', this._onFileAbort.bind(this));
-    this.addEventListener('file-remove', this._onFileRemove.bind(this));
     this.addEventListener('file-start', this._onFileStart.bind(this));
     this.addEventListener('file-reject', this._onFileReject.bind(this));
     this.addEventListener('upload-start', this._onUploadStart.bind(this));
@@ -795,7 +794,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       if (file.xhr) {
         file.xhr.abort();
       }
-      this._notifyFileChanges(file);
+      this._removeFile(file);
     }
   }
 
@@ -866,6 +865,14 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   _removeFile(file) {
     if (this.files.indexOf(file) > -1) {
       this.files = this.files.filter((i) => i !== file);
+
+      this.dispatchEvent(
+        new CustomEvent('file-remove', {
+          detail: { file },
+          bubbles: true,
+          composed: true,
+        }),
+      );
     }
   }
 
@@ -905,11 +912,6 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   /** @private */
   _onFileAbort(event) {
     this._abortFileUpload(event.detail.file);
-  }
-
-  /** @private */
-  _onFileRemove(event) {
-    this._removeFile(event.detail.file);
   }
 
   /** @private */
