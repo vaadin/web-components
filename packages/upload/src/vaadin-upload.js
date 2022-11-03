@@ -783,7 +783,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   }
 
   /** @private */
-  _abortFileUpload(file) {
+  _abortFileUpload(file, fileElement) {
     const evt = this.dispatchEvent(
       new CustomEvent('upload-abort', {
         detail: { file, xhr: file.xhr },
@@ -795,7 +795,13 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       if (file.xhr) {
         file.xhr.abort();
       }
-      this._notifyFileChanges(file);
+      fileElement.dispatchEvent(
+        new CustomEvent('file-remove', {
+          detail: { file },
+          bubbles: true,
+          composed: true,
+        }),
+      );
     }
   }
 
@@ -904,7 +910,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
 
   /** @private */
   _onFileAbort(event) {
-    this._abortFileUpload(event.detail.file);
+    this._abortFileUpload(event.detail.file, event.composedPath()[0]);
   }
 
   /** @private */
