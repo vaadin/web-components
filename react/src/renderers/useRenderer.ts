@@ -20,7 +20,7 @@ function rendererReducer<W extends WebComponentRenderer>(
   state: Map<HTMLElement, Slice<Parameters<W>, 1>>,
   [root, ...args]: Parameters<W>,
 ): Map<HTMLElement, Slice<Parameters<W>, 1>> {
-  return new Map(state.set(root, args as Slice<Parameters<W>, 1>));
+  return new Map(state).set(root, args as Slice<Parameters<W>, 1>);
 }
 
 export function useRenderer<P extends {}, W extends WebComponentRenderer>(

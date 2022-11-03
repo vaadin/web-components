@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { Accordion } from '../../src/Accordion.js';
 import { AccordionPanel } from '../../src/AccordionPanel.js';
@@ -17,12 +17,14 @@ import { ContextMenu } from '../../src/ContextMenu.js';
 import { CookieConsent } from '../../src/CookieConsent.js';
 import { Crud } from '../../src/Crud.js';
 import { CustomField } from '../../src/CustomField.js';
+import { DatePicker } from '../../src/DatePicker.js';
+import { DateTimePicker } from '../../src/DateTimePicker.js';
 import { Details } from '../../src/Details.js';
 import { DrawerToggle } from '../../src/DrawerToggle.js';
 import { FormItem } from '../../src/FormItem.js';
 import { FormLayout } from '../../src/FormLayout.js';
 import { ChartSeries } from '../../src/generated/ChartSeries.js';
-import { Grid } from '../../src/Grid.js';
+import { Grid, GridModule } from '../../src/Grid.js';
 import { GridColumn } from '../../src/GridColumn.js';
 import { GridColumnGroup } from '../../src/GridColumnGroup.js';
 import { GridFilterColumn } from '../../src/GridFilterColumn.js';
@@ -55,10 +57,13 @@ import { Tab } from '../../src/Tab.js';
 import { Tabs } from '../../src/Tabs.js';
 import { TextArea } from '../../src/TextArea.js';
 import { TextField } from '../../src/TextField.js';
+import { TimePicker } from '../../src/TimePicker.js';
 import { Tooltip } from '../../src/Tooltip.js';
 import { Upload } from '../../src/Upload.js';
 import { VerticalLayout } from '../../src/VerticalLayout.js';
 import { VirtualList } from '../../src/VirtualList.js';
+import '../../dist/css/lumo/Typography.css';
+import { Notification } from "../../src/Notification.js";
 
 type TreeGridDataItem = {
   id: number;
@@ -88,6 +93,12 @@ const treeGridData: TreeGridDataItem[] = [
   },
 ];
 
+const TreeGridDataProvider: GridModule.GridDataProvider<TreeGridDataItem> = (params, callback) => {
+  const items = params.parentItem ? (params.parentItem.children || []) : treeGridData;
+  const offset = params.page * params.pageSize;
+  callback(items.slice(offset, offset + params.pageSize), treeGridData.length);
+};
+
 enum CrudRole {
   ADMIN = 'admin',
   USER = 'user',
@@ -110,7 +121,16 @@ function Display({ item: { name } }: GridBodyReactRendererProps<CrudDataItem>) {
   return <div style={displayColor}>{name}</div>;
 }
 
+function SelectListBox() {
+  return <ListBox>
+    <Item value="1">One</Item>
+    <Item value="2">Two</Item>
+  </ListBox>;
+}
+
 export default function App({}) {
+  let [ notificationOpened, setNotificationOpened ] = useState(false);
+
   return (
     <AppLayout>
       <DrawerToggle slot="navbar"></DrawerToggle>
@@ -118,7 +138,12 @@ export default function App({}) {
         Kitchen Sink
       </h3>
       <Avatar slot="navbar" name="User Name" abbr="UN"></Avatar>
-      <Button slot="navbar">Hello</Button>
+      <Button slot="navbar" onClick={() => setNotificationOpened(true)}>Hello</Button>
+      <Notification
+        opened={notificationOpened}
+        renderer={() => <>Hi!</>}
+        onOpenedChanged={(e) => setNotificationOpened(e.detail.value)}
+      />
       <Tabs slot="drawer" orientation="vertical">
         <Tab>Tab 1</Tab>
         <Tab>Tab 2</Tab>
@@ -150,7 +175,7 @@ export default function App({}) {
             </ListBox>
           </ContextMenu>
           <CookieConsent position="bottom-right"></CookieConsent>
-          {/*<Crud items={crudData}></Crud>*/}
+          <Crud items={crudData}></Crud>
         </BoardRow>
         <BoardRow>
           <CustomField label="Custom field">
@@ -168,11 +193,14 @@ export default function App({}) {
               <label slot="label">Form item</label>
               <output>value</output>
             </FormItem>
+            <DatePicker label="DatePicker"></DatePicker>
+            <TimePicker label="TimePicker"></TimePicker>
+            <DateTimePicker label="DateTimePicker"></DateTimePicker>
           </FormLayout>
         </BoardRow>
         <BoardRow>
-          <Grid items={treeGridData}>
-            <GridTreeColumn path="id" itemHasChildrenPath="children"></GridTreeColumn>
+          <Grid dataProvider={TreeGridDataProvider} itemHasChildrenPath="children">
+            <GridTreeColumn path="id"></GridTreeColumn>
             <GridColumnGroup>
               <GridSortColumn path="size"></GridSortColumn>
               <GridFilterColumn path="name"></GridFilterColumn>
@@ -232,12 +260,15 @@ export default function App({}) {
             </RadioButton>
           </RadioGroup>
           <RichTextEditor></RichTextEditor>
-          <Select
+          <Select 
+            label="Select"
+            value="2"
             items={[
-              { label: 'one', value: '1' },
-              { label: 'two', value: '2' },
+              { label: 'One', value: '1' },
+              { label: 'Two', value: '2' },
             ]}
-          ></Select>
+            renderer={SelectListBox}>
+          </Select>
         </BoardRow>
         <BoardRow>
           <SplitLayout>
