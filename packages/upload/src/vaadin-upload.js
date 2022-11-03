@@ -200,7 +200,6 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
       files: {
         type: Array,
         notify: true,
-        observer: '_filesChanged',
         value: () => [],
       },
 
@@ -436,7 +435,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
     return [
       '__updateAddButton(_addButton, maxFiles, i18n, maxFilesReached)',
       '__updateDropLabel(_dropLabel, maxFiles, i18n)',
-      '__updateFileList(_fileList, _files, i18n)',
+      '__updateFileList(_fileList, files, i18n)',
     ];
   }
 
@@ -558,11 +557,6 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   }
 
   /** @private */
-  _filesChanged() {
-    this._updateFileList();
-  }
-
-  /** @private */
   __updateAddButton(addButton, maxFiles, i18n, maxFilesReached) {
     if (addButton) {
       addButton.disabled = maxFilesReached;
@@ -580,7 +574,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   /** @private */
   __updateFileList(list, files, i18n) {
     if (list) {
-      list.items = files;
+      list.items = [...files];
       list.i18n = i18n;
     }
   }
@@ -691,7 +685,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
           this._setStatus(file, total, loaded, elapsed);
           stalledId = setTimeout(() => {
             file.status = this.i18n.uploading.status.stalled;
-            this._updateFileList();
+            this._renderFileList();
           }, 2000);
         } else {
           file.loadedStr = file.totalStr;
@@ -699,7 +693,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         }
       }
 
-      this._updateFileList();
+      this._renderFileList();
       this.dispatchEvent(new CustomEvent('upload-progress', { detail: { file, xhr } }));
     };
 
@@ -709,7 +703,6 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         clearTimeout(stalledId);
         file.indeterminate = file.uploading = false;
         if (file.abort) {
-          this._updateFileList();
           return;
         }
         file.status = '';
@@ -739,7 +732,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
             detail: { file, xhr },
           }),
         );
-        this._updateFileList();
+        this._renderFileList();
       }
     };
 
@@ -773,7 +766,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
           detail: { file, xhr },
         }),
       );
-      this._updateFileList();
+      this._renderFileList();
     };
 
     // Custom listener could modify the xhr just before sending it
@@ -820,11 +813,12 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   }
 
   /** @private */
-  _updateFileList() {
-    const files = [...this.files];
-    // Re-render file list DOM without re-assigning `files`
-    // to avoid dispatching `files-changed` notify event.
-    this._files = files;
+  _renderFileList() {
+    if (this._fileList) {
+      // Re-render file list DOM without re-assigning `files`
+      // to avoid dispatching `files-changed` notify event.
+      this._fileList.items = [...this.files];
+    }
   }
 
   /** @private */
