@@ -7,6 +7,7 @@ yarn-error.log
 
 # Failures from visual tests
 packages/*/test/visual/*/screenshots/*/failed
+packages/icons/test/visual/screenshots/failed
 
 # MacOS DS_Store files
 .DS_Store
