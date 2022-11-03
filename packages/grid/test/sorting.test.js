@@ -1,11 +1,20 @@
 import { expect } from '@esm-bundle/chai';
-import { click, fixtureSync, nextFrame } from '@vaadin/testing-helpers';
+import { click, fixtureSync, keyUpOn, nextFrame } from '@vaadin/testing-helpers';
 import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid-sorter.js';
 import '../vaadin-grid-sort-column.js';
 import { Grid } from '../vaadin-grid.js';
-import { buildDataSet, flushGrid, getBodyCellContent, getHeaderCellContent, getRowCells, getRows } from './helpers.js';
+import {
+  buildDataSet,
+  flushGrid,
+  getBodyCellContent,
+  getContainerCell,
+  getHeaderCellContent,
+  getRowCells,
+  getRows,
+  shiftClick,
+} from './helpers.js';
 
 describe('sorting', () => {
   describe('sorter', () => {
@@ -47,6 +56,22 @@ describe('sorting', () => {
       sorter.direction = 'asc';
 
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it('should add shiftClick detail on sorter-changed event', () => {
+      const clickSpy = sinon.spy();
+      sorter.addEventListener('sorter-changed', clickSpy);
+      click(sorter);
+
+      const clickEvent = clickSpy.args[0][0];
+      expect(clickEvent.detail.shiftClick).to.be.false;
+
+      const shiftClickSpy = sinon.spy();
+      sorter.addEventListener('sorter-changed', shiftClickSpy);
+      shiftClick(sorter);
+
+      const shiftClickEvent = shiftClickSpy.args[0][0];
+      expect(shiftClickEvent.detail.shiftClick).to.be.true;
     });
 
     it('should show order indicator', () => {
@@ -172,8 +197,8 @@ describe('sorting', () => {
           </vaadin-grid-column>
           <vaadin-grid-column>
             <template class="header">
-              <span class="title">last</span>
               <vaadin-grid-sorter path="last" direction="desc">
+                <span class="title">last</span>
               </vaadin-grid-sorter>
             </template>
             <template>[[item.last]]</template>
@@ -218,6 +243,72 @@ describe('sorting', () => {
       sorterLast.direction = null;
       expect(sorterFirst._order).to.equal(null);
       expect(sorterLast._order).to.equal(null);
+    });
+
+    describe('multiSortOnShiftClick', () => {
+      beforeEach(() => {
+        grid.multiSort = false;
+        grid.multiSortOnShiftClick = true;
+      });
+
+      it('should add to sort on shift-click', () => {
+        sorterLast.direction = null;
+        sorterFirst.direction = null;
+        shiftClick(sorterLast);
+        shiftClick(sorterFirst);
+        expect(sorterFirst._order).to.equal(0);
+        expect(sorterLast._order).to.equal(1);
+      });
+
+      it('should add to sort on Shift+Space', () => {
+        sorterFirst.direction = null;
+        sorterLast.direction = null;
+        const lastCell = getContainerCell(grid.$.header, 0, 1);
+        const firstCell = getContainerCell(grid.$.header, 0, 0);
+        keyUpOn(lastCell, 32, 'shift', ' ');
+        keyUpOn(firstCell, 32, 'shift', ' ');
+        expect(sorterFirst._order).to.equal(0);
+        expect(sorterLast._order).to.equal(1);
+      });
+
+      it('should single-sort on shift-click if multi-sort-on-shift-click not enabled', () => {
+        grid.multiSortOnShiftClick = false;
+        sorterLast.direction = null;
+        sorterFirst.direction = null;
+        shiftClick(sorterLast);
+        shiftClick(sorterFirst);
+        expect(sorterLast._order).to.equal(null);
+        expect(sorterFirst._order).to.equal(null);
+        expect(sorterLast.direction).to.equal(null);
+        expect(sorterFirst.direction).to.equal('asc');
+      });
+
+      it('should clear multi-sort on regular click', () => {
+        click(sorterLast);
+        expect(sorterFirst.direction).to.be.null;
+        expect(sorterLast.direction).to.be.null;
+        expect(sorterFirst._order).to.equal(null);
+        expect(sorterLast._order).to.equal(null);
+      });
+
+      it('should clear multi-sort on regular click when multi-sort enabled', () => {
+        grid.multiSort = true;
+        click(sorterLast);
+        expect(sorterFirst.direction).to.be.null;
+        expect(sorterLast.direction).to.be.null;
+        expect(sorterFirst._order).to.equal(null);
+        expect(sorterLast._order).to.equal(null);
+      });
+
+      it('should add to active sorters on regular click if sorter has direction', () => {
+        click(sorterFirst);
+        expect(grid._sorters.length).to.equal(1);
+      });
+
+      it('should not add to active sorters on regular click if sorter has no direction', () => {
+        click(sorterLast);
+        expect(grid._sorters).to.be.empty;
+      });
     });
 
     describe('array data provider', () => {

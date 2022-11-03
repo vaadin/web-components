@@ -11,6 +11,7 @@ import type {
   GridSortColumn,
   GridSortColumnDirectionChangedEvent,
   GridSorter,
+  GridSorterChangedEvent,
   GridSorterDirectionChangedEvent,
   GridTreeColumn,
   GridTreeToggle,
@@ -181,6 +182,7 @@ assertType<(arg0: TestGridItem) => void>(narrowedGrid.deselectItem);
 
 assertType<boolean>(narrowedGrid.multiSort);
 assertType<'append' | 'prepend'>(narrowedGrid.multiSortPriority);
+assertType<boolean>(narrowedGrid.multiSortOnShiftClick);
 
 assertType<GridCellClassNameGenerator<TestGridItem> | null | undefined>(narrowedGrid.cellClassNameGenerator);
 assertType<() => void>(narrowedGrid.generateCellClassNames);
@@ -290,6 +292,11 @@ narrowedSortColumn.addEventListener('direction-changed', (event) => {
 /* GridSorter */
 const sorter = document.createElement('vaadin-grid-sorter');
 assertType<GridSorter>(sorter);
+
+sorter.addEventListener('sorter-changed', (event) => {
+  assertType<GridSorterChangedEvent>(event);
+  assertType<boolean>(event.detail.shiftClick);
+});
 
 sorter.addEventListener('direction-changed', (event) => {
   assertType<GridSorterDirectionChangedEvent>(event);

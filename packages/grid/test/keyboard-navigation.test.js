@@ -1388,25 +1388,27 @@ describe('keyboard navigation', () => {
         right();
       });
 
-      it('should click first cell child on space keyup', () => {
+      it('should dispatch click event on first cell child on space keyup', () => {
         const firstChild = getCellContent(header.children[0].children[2]).children[0];
-        const clickStub = sinon.stub(firstChild, 'click');
+        const dispatchEventStub = sinon.stub(firstChild, 'dispatchEvent');
 
         spaceDown();
-        expect(clickStub.called).to.be.false;
+        expect(dispatchEventStub.called).to.be.false;
 
         spaceUp();
-        expect(clickStub.called).to.be.true;
+        expect(dispatchEventStub.called).to.be.true;
+        expect(dispatchEventStub.args[0][0] instanceof MouseEvent).to.be.true;
+        expect(dispatchEventStub.args[0][0].type).to.equal('click');
       });
 
-      it('should not click other cell children on space keyup', () => {
+      it('should not dispatch click event on other cell children on space keyup', () => {
         const secondChild = getCellContent(header.children[0].children[2]).children[1];
-        const clickStub = sinon.stub(secondChild, 'click');
+        const dispatchEventStub = sinon.stub(secondChild, 'dispatchEvent');
 
         spaceDown();
         spaceUp();
 
-        expect(clickStub.called).to.be.false;
+        expect(dispatchEventStub.called).to.be.false;
       });
 
       it('should prevent default keydown action when clicking on space', () => {

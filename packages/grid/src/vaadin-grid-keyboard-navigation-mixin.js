@@ -732,7 +732,14 @@ export const KeyboardNavigationMixin = (superClass) =>
       const cell = e.composedPath()[0];
       if (cell._content && cell._content.firstElementChild) {
         const wasNavigating = this.hasAttribute('navigating');
-        cell._content.firstElementChild.click();
+        cell._content.firstElementChild.dispatchEvent(
+          new MouseEvent('click', {
+            shiftKey: e.shiftKey,
+            bubbles: true,
+            composed: true,
+            cancelable: true,
+          }),
+        );
         this.toggleAttribute('navigating', wasNavigating);
       }
     }

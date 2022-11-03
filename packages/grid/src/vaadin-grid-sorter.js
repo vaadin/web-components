@@ -153,6 +153,12 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
         type: Boolean,
         observer: '__isConnectedChanged',
       },
+
+      /** @private */
+      _shiftClick: {
+        type: Boolean,
+        value: false,
+      },
     };
   }
 
@@ -202,7 +208,13 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
       return;
     }
 
-    this.dispatchEvent(new CustomEvent('sorter-changed', { bubbles: true, composed: true }));
+    this.dispatchEvent(
+      new CustomEvent('sorter-changed', {
+        detail: { shiftClick: this._shiftClick },
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 
   /** @private */
@@ -219,6 +231,7 @@ class GridSorter extends ThemableMixin(DirMixin(PolymerElement)) {
     }
 
     e.preventDefault();
+    this._shiftClick = e.shiftKey;
     if (this.direction === 'asc') {
       this.direction = 'desc';
     } else if (this.direction === 'desc') {
