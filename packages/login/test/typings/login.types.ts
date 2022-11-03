@@ -5,6 +5,7 @@ import type {
   LoginFormLoginEvent,
 } from '../../vaadin-login-form.js';
 import type {
+  LoginOverlayDescriptionChangedEvent,
   LoginOverlayDisabledChangedEvent,
   LoginOverlayErrorChangedEvent,
   LoginOverlayLoginEvent,
@@ -28,6 +29,11 @@ overlay.addEventListener('error-changed', (event) => {
 overlay.addEventListener('disabled-changed', (event) => {
   assertType<LoginOverlayErrorChangedEvent>(event);
   assertType<boolean>(event.detail.value);
+});
+
+overlay.addEventListener('description-changed', (event) => {
+  assertType<LoginOverlayDescriptionChangedEvent>(event);
+  assertType<string>(event.detail.value);
 });
 
 const form = document.createElement('vaadin-login-form');
