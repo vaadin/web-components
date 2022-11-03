@@ -24,7 +24,6 @@
   },
   "files": [
     "assets/**/*",
-    "iconset.js",
     "vaadin-icons.js",
     "vaadin-iconset.js"
   ],
@@ -36,8 +35,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@polymer/iron-icon": "^3.0.0",
-    "@polymer/iron-iconset-svg": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
     "@vaadin/icon": "24.0.0-alpha1"
   },
