@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login form</title>
+    <script type="module" src="./common.js"></script>
+
+    <script type="module">
+      import '@vaadin/login/vaadin-login-form.js';
+    </script>
+  </head>
+
+  <body>
+    <style>
+      #wrapper {
+        background-color: var(--lumo-contrast-5pct);
+        justify-content: center;
+        padding: var(--lumo-space-l);
+        display: flex !important;
+      }
+    </style>
+
+    <div id="wrapper">
+      <vaadin-login-form no-autofocus></vaadin-login-form>
+    </div>
+  </body>
+</html>
