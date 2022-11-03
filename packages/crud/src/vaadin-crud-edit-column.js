@@ -36,7 +36,7 @@ class CrudEditColumn extends GridColumn {
        */
       width: {
         type: String,
-        value: '4em',
+        value: '4rem',
       },
 
       /**
