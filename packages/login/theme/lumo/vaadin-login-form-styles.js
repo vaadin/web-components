@@ -4,7 +4,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-login-form',
   css`
-    vaadin-button {
+    form > vaadin-button[theme~='submit'] {
       margin-top: var(--lumo-space-l);
       margin-bottom: var(--lumo-space-s);
     }

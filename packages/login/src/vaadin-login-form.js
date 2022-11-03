@@ -91,7 +91,7 @@ class LoginForm extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement))) 
             <input type="password" slot="input" on-keyup="_handleInputKeyup" />
           </vaadin-password-field>
 
-          <vaadin-button theme="primary contained" on-click="submit" disabled$="[[disabled]]">
+          <vaadin-button theme="primary contained submit" on-click="submit" disabled$="[[disabled]]">
             [[i18n.form.submit]]
           </vaadin-button>
         </form>
