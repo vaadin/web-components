@@ -11,7 +11,7 @@ describe('login form submit', () => {
   function testFormSubmitValues(preventDefault, expectation, done) {
     fillUsernameAndPassword(login);
 
-    const loginForm = login.querySelector('[part="vaadin-login-native-form"]');
+    const loginForm = login.querySelector('form');
     loginForm.setAttribute('method', 'GET');
     loginForm.setAttribute('target', iframe.getAttribute('name'));
 
@@ -23,7 +23,7 @@ describe('login form submit', () => {
       done();
     };
 
-    login.querySelector('vaadin-button[part="vaadin-login-submit"]').click();
+    login.querySelector('vaadin-button').click();
     expect(submitSpy.called).to.equal(expectation);
 
     if (preventDefault) {

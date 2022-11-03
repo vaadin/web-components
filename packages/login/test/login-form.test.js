@@ -61,7 +61,7 @@ describe('login form', () => {
 
   beforeEach(() => {
     login = fixtureSync('<vaadin-login-form action="login-action"></vaadin-login-form>');
-    formWrapper = login.querySelector('[part="vaadin-login-native-form-wrapper"]');
+    formWrapper = login.querySelector('vaadin-login-form-wrapper');
   });
 
   afterEach(() => {
@@ -75,7 +75,7 @@ describe('login form', () => {
 
     const usernameElement = login.querySelector('#vaadinLoginUsername');
     const passwordElement = login.querySelector('#vaadinLoginPassword');
-    const submitElement = login.querySelector('vaadin-button[part="vaadin-login-submit"]');
+    const submitElement = login.querySelector('vaadin-button');
     const forgotElement = formWrapper.shadowRoot.querySelector('#forgotPasswordButton');
 
     const footerElement = formWrapper.shadowRoot.querySelector('[part="footer"] p');
@@ -86,7 +86,7 @@ describe('login form', () => {
 
     expect(usernameElement.label).to.be.equal(login.i18n.form.username);
     expect(passwordElement.label).to.be.equal(login.i18n.form.password);
-    expect(submitElement.textContent).to.be.equal(login.i18n.form.submit);
+    expect(submitElement.textContent.trim()).to.be.equal(login.i18n.form.submit);
     expect(forgotElement.textContent).to.be.equal(login.i18n.form.forgotPassword);
 
     expect(footerElement.textContent).to.be.equal('');
@@ -169,14 +169,14 @@ describe('login form', () => {
   });
 
   it('should disable button after submitting form', () => {
-    const submit = login.querySelector('vaadin-button[part="vaadin-login-submit"]');
+    const submit = login.querySelector('vaadin-button');
     const { vaadinLoginPassword } = fillUsernameAndPassword(login);
     enter(vaadinLoginPassword);
     expect(submit.disabled).to.be.true;
   });
 
   it('should prevent submit call when login is disabled', () => {
-    const submit = login.querySelector('vaadin-button[part="vaadin-login-submit"]');
+    const submit = login.querySelector('vaadin-button');
     const { vaadinLoginPassword } = fillUsernameAndPassword(login);
 
     login.setAttribute('disabled', 'disabled');
@@ -188,14 +188,14 @@ describe('login form', () => {
   });
 
   it('should not disable button on button click if form is invalid', () => {
-    const submit = login.querySelector('vaadin-button[part="vaadin-login-submit"]');
+    const submit = login.querySelector('vaadin-button');
     expect(submit.disabled).to.not.be.true;
     tap(submit);
     expect(submit.disabled).to.not.be.true;
   });
 
   it('should disable button on button click if form is valid', () => {
-    const submit = login.querySelector('vaadin-button[part="vaadin-login-submit"]');
+    const submit = login.querySelector('vaadin-button');
     fillUsernameAndPassword(login);
     tap(submit);
     expect(submit.disabled).to.be.true;
@@ -273,7 +273,7 @@ describe('no forgot password', () => {
   });
 
   it('should hide forgot password button', () => {
-    const formWrapper = login.querySelector('[part="vaadin-login-native-form-wrapper"]');
+    const formWrapper = login.querySelector('vaadin-login-form-wrapper');
     expect(formWrapper.$.forgotPasswordButton.hidden).to.be.true;
   });
 });
@@ -296,7 +296,7 @@ describe('error message', () => {
 
   beforeEach(() => {
     login = fixtureSync('<vaadin-login-form error></vaadin-login-form>');
-    formWrapper = login.querySelector('[part="vaadin-login-native-form-wrapper"]');
+    formWrapper = login.querySelector('vaadin-login-form-wrapper');
   });
 
   it('should show error message if the error attribute is set', () => {
@@ -321,7 +321,7 @@ describe('stylable parts', () => {
 
   beforeEach(() => {
     login = fixtureSync('<vaadin-login-form theme="green"></vaadin-login-form>');
-    formWrapper = login.querySelector('[part="vaadin-login-native-form-wrapper"]');
+    formWrapper = login.querySelector('vaadin-login-form-wrapper');
   });
 
   it('should be possible to style parts', () => {

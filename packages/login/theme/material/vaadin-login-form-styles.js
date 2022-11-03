@@ -3,7 +3,7 @@ import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themab
 registerStyles(
   'vaadin-login-form',
   css`
-    vaadin-button[part='vaadin-login-submit'] {
+    form > vaadin-button[theme~='submit'] {
       margin-top: 3em;
       margin-bottom: 2em;
       flex-grow: 0;
@@ -11,7 +11,7 @@ registerStyles(
 
     /* Small screen */
     @media only screen and (max-width: 1023px) {
-      vaadin-button[part='vaadin-login-submit'] {
+      form > vaadin-button[theme~='submit'] {
         margin-top: 2.5em;
         margin-bottom: 1em;
       }
