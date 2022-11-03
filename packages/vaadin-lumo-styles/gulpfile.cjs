@@ -32,12 +32,6 @@ function createCopyright() {
  */`;
 }
 
-function addWarning() {
-  return `console.warn(
-  \`WARNING: Since Vaadin 23.1, using <iron-icon> is deprecated. Please use <vaadin-icon> and '@vaadin/vaadin-lumo-styles/vaadin-iconset.js' instead.\`,
-);`;
-}
-
 function createIconset(folder, filenames, idPrefix = '') {
   let output = `<svg xmlns="http://www.w3.org/2000/svg">\n<defs>\n`;
   filenames.forEach((filename) => {
@@ -96,7 +90,7 @@ gulp.task('icons', (done) => {
     )
     .pipe(gulp.dest(folder))
     .on('finish', () => {
-      // Iron-iconset-svg
+      // Generate vaadin-iconset
       fs.readdir(folder, (err, filenames) => {
         if (err) {
           console.error(err);
@@ -104,24 +98,6 @@ gulp.task('icons', (done) => {
         }
 
         filenames.sort(sortIconFilesNormalized);
-
-        const ironIcons = `${createCopyright()}
-import '@polymer/iron-iconset-svg/iron-iconset-svg.js';
-import './version.js';
-
-${addWarning()}
-
-const template = document.createElement('template');
-
-template.innerHTML = \`<iron-iconset-svg size="1000" name="lumo">
-${createIconset(folder, filenames)}
-</iron-iconset-svg>\`;\n\ndocument.head.appendChild(template.content);\n`;
-
-        fs.writeFile('iconset.js', ironIcons, (err) => {
-          if (err) {
-            return console.error(err);
-          }
-        });
 
         const vaadinIcons = `${createCopyright()}
 import '@vaadin/icon/vaadin-iconset.js';
