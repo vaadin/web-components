@@ -128,7 +128,6 @@ export const LoginMixin = (superClass) =>
               },
             };
           },
-          notify: true,
         },
 
         /**
