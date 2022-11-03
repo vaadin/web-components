@@ -815,9 +815,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
   /** @private */
   _renderFileList() {
     if (this._fileList) {
-      // Re-render file list DOM without re-assigning `files`
-      // to avoid dispatching `files-changed` notify event.
-      this._fileList.items = [...this.files];
+      this._fileList.requestContentUpdate();
     }
   }
 
