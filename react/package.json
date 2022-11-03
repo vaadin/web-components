@@ -1,6 +1,6 @@
 {
   "name": "@hilla/react-components",
-  "version": "0.0.0",
+  "version": "1.3.0-alpha3",
   "description": "React wrappers for Vaadin components",
   "type": "module",
   "module": "dist/index.js",
