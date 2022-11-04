@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/icons",
-  "version": "23.3.0-alpha4",
+  "version": "23.3.0-alpha5",
   "publishConfig": {
     "access": "public"
   },
@@ -39,7 +39,7 @@
     "@polymer/iron-icon": "^3.0.0",
     "@polymer/iron-iconset-svg": "^3.0.0",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/icon": "23.3.0-alpha4"
+    "@vaadin/icon": "23.3.0-alpha5"
   },
   "devDependencies": {
     "cheerio": "^1.0.0-rc.10",
