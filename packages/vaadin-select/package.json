@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-select",
-  "version": "23.2.7",
+  "version": "23.2.8",
   "publishConfig": {
     "access": "public"
   },
@@ -33,6 +33,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/select": "~23.2.7"
+    "@vaadin/select": "~23.2.8"
   }
 }
