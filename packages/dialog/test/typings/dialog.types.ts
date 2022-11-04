@@ -1,5 +1,6 @@
 import '../../vaadin-dialog.js';
 import {
+  Dialog,
   DialogOpenedChangedEvent,
   DialogRenderer,
   DialogResizeDimensions,
@@ -26,3 +27,10 @@ assertType<DialogRenderer | null | undefined>(dialog.renderer);
 assertType<DialogRenderer | null | undefined>(dialog.headerRenderer);
 assertType<DialogRenderer | null | undefined>(dialog.footerRenderer);
 assertType<() => void>(dialog.requestContentUpdate);
+
+const renderer: DialogRenderer = (root, owner) => {
+  assertType<HTMLElement>(root);
+  assertType<Dialog>(owner);
+};
+
+dialog.renderer = renderer;
