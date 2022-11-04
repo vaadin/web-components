@@ -40,6 +40,8 @@ import { LoginMixin } from './vaadin-login-mixin.js';
  *
  * See [Styling Components](https://vaadin.com/docs/latest/styling/custom-theme/styling-components) documentation.
  *
+ * @fires {CustomEvent} disabled-changed - Fired when the `disabled` property changes.
+ * @fires {CustomEvent} error-changed - Fired when the `error` property changes.
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.
  *
