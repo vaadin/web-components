@@ -18,3 +18,6 @@ packages/icons/test/visual/screenshots/failed
 # Generated web-types JSON files
 web-types.json
 web-types.lit.json
+
+# Generated auto-complete CSS file for Lumo theme
+packages/vaadin-lumo-styles/auto-complete.css
