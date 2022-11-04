@@ -16,8 +16,8 @@ export interface ContextMenuRendererContext {
 
 export type ContextMenuRenderer = (
   root: HTMLElement,
-  contextMenu?: ContextMenu,
-  context?: ContextMenuRendererContext,
+  contextMenu: ContextMenu,
+  context: ContextMenuRendererContext,
 ) => void;
 
 /**
