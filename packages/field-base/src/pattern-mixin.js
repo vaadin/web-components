@@ -32,15 +32,4 @@ export const PatternMixin = (superclass) =>
     static get constraints() {
       return [...super.constraints, 'pattern'];
     }
-
-    /**
-     * @param {Event} event
-     * @protected
-     * @override
-     */
-    _onInput(event) {
-      this._checkInputValue();
-
-      super._onInput(event);
-    }
   };
