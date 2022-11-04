@@ -11,6 +11,8 @@ import type {
   CrudSaveEvent,
   CrudSizeChangedEvent,
 } from '../../vaadin-crud.js';
+import type { CrudEdit } from '../../vaadin-crud-edit.js';
+import type { CrudEditColumn } from '../../vaadin-crud-edit-column.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -68,3 +70,9 @@ crud.addEventListener('save', (event) => {
   assertType<User>(event.detail.item);
   assertType<boolean>(event.detail.new);
 });
+
+const edit: CrudEdit = document.createElement('vaadin-crud-edit');
+assertType<boolean>(edit.disabled);
+
+const column: CrudEditColumn = document.createElement('vaadin-crud-edit-column');
+assertType<string>(column.ariaLabel);
