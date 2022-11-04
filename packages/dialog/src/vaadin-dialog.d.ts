@@ -14,7 +14,7 @@ import { DialogResizableMixin } from './vaadin-dialog-resizable-mixin.js';
  */
 export class DialogOverlay extends Overlay {}
 
-export type DialogRenderer = (root: HTMLElement, dialog?: Dialog) => void;
+export type DialogRenderer = (root: HTMLElement, dialog: Dialog) => void;
 
 export type DialogResizableDirection = 'e' | 'n' | 'ne' | 'nw' | 's' | 'se' | 'sw' | 'w';
 
