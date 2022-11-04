@@ -317,16 +317,6 @@ describe('validation', () => {
       enter(timePicker.inputElement);
       expect(timePicker.invalid).to.be.false;
     });
-
-    it('should prevent invalid input', () => {
-      timePicker.preventInvalidInput = true;
-
-      setInputValue(timePicker, '22:00');
-      expect(timePicker.inputElement.value).to.be.not.ok;
-
-      setInputValue(timePicker, '12:34');
-      expect(timePicker.inputElement.value).to.equal('12:34');
-    });
   });
 
   describe('custom validator', () => {

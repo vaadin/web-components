@@ -105,13 +105,6 @@ describe('Properties', () => {
       comboBox.value = 'foo';
       expect(comboBox.validate()).to.be.false;
     });
-
-    it('should support preventInvalidInput property', () => {
-      comboBox.pattern = '[0-9]*';
-      comboBox.preventInvalidInput = true;
-      setInputValue(comboBox, 'foo');
-      expect(comboBox.value).to.equal('');
-    });
   });
 
   describe('has-value attribute', () => {

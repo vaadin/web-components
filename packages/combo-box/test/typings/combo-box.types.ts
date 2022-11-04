@@ -119,7 +119,6 @@ assertType<string | null | undefined>(narrowedComboBox.errorMessage);
 assertType<string>(narrowedComboBox.placeholder);
 assertType<string | null | undefined>(narrowedComboBox.helperText);
 assertType<string>(narrowedComboBox.pattern);
-assertType<boolean | null | undefined>(narrowedComboBox.preventInvalidInput);
 assertType<boolean>(narrowedComboBox.readonly);
 assertType<string | null | undefined>(narrowedComboBox.label);
 assertType<string>(narrowedComboBox.value);

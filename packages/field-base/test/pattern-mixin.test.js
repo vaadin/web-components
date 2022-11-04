@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { fire, fixtureSync, nextFrame, nextRender } from '@vaadin/testing-helpers';
-import { sendKeys } from '@web/test-runner-commands';
 import sinon from 'sinon';
 import { InputController } from '../src/input-controller.js';
 import { PatternMixin } from '../src/pattern-mixin.js';
@@ -184,104 +183,6 @@ const runTests = (baseClass) => {
       await nextFrame();
       commitInputValue('A\nJ');
       expect(element.checkValidity()).to.be.true;
-    });
-  });
-
-  describe('prevent invalid input', () => {
-    beforeEach(async () => {
-      element = fixtureSync(`<${tag}></${tag}>`);
-      await nextRender();
-      sinon.stub(console, 'warn');
-      element.preventInvalidInput = true;
-      element.value = '1';
-      input = element.querySelector('[slot=input]');
-      input.focus();
-      await nextFrame();
-    });
-
-    afterEach(() => {
-      console.warn.restore();
-    });
-
-    it('should warn about using preventInvalidInput', () => {
-      expect(console.warn.calledOnce).to.be.true;
-    });
-
-    it('should prevent invalid pattern', async () => {
-      element.pattern = '[0-9]*';
-      await nextFrame();
-      await sendKeys({ type: 'f' });
-      await nextFrame();
-      expect(element.value).to.equal('1');
-    });
-
-    it('should temporarily set input-prevented attribute on invalid input', async () => {
-      element.pattern = '[0-9]*';
-      await nextFrame();
-      await sendKeys({ type: 'f' });
-      await nextFrame();
-      expect(element.hasAttribute('input-prevented')).to.be.true;
-    });
-
-    it('should not set input-prevented attribute on valid input', async () => {
-      element.pattern = '[0-9]*';
-      await nextFrame();
-      await sendKeys({ type: '1' });
-      await nextFrame();
-      expect(element.hasAttribute('input-prevented')).to.be.false;
-    });
-
-    it('should remove input-prevented attribute after 200ms timeout', async () => {
-      element.pattern = '[0-9]*';
-      await nextFrame();
-      const clock = sinon.useFakeTimers();
-      await sendKeys({ type: 'f' });
-      clock.tick(200);
-      expect(element.hasAttribute('input-prevented')).to.be.false;
-      clock.restore();
-    });
-
-    it('should prevent entering invalid characters', async () => {
-      element.value = '';
-      element.pattern = '[0-9]*';
-      await nextFrame();
-      await sendKeys({ type: 'f' });
-      await nextFrame();
-      expect(input.value).to.equal('');
-    });
-
-    it('should not fire value-changed event when prevented', async () => {
-      const spy = sinon.spy();
-      element.addEventListener('value-changed', spy);
-      element.pattern = '[0-9]*';
-      await nextFrame();
-      await sendKeys({ type: 'f' });
-      await nextFrame();
-      expect(spy.called).to.be.false;
-    });
-
-    it('should not prevent valid pattern', async () => {
-      element.pattern = '[0-9]*';
-      await nextFrame();
-      await sendKeys({ type: '2' });
-      await nextFrame();
-      expect(input.value).to.equal('12');
-    });
-
-    it('should not prevent too short value', async () => {
-      input.minlength = 1;
-      await nextFrame();
-      await sendKeys({ press: 'Backspace' });
-      await nextFrame();
-      expect(input.value).to.equal('');
-    });
-
-    it('should not prevent empty value for required field', async () => {
-      element.required = true;
-      await nextFrame();
-      await sendKeys({ press: 'Backspace' });
-      await nextFrame();
-      expect(input.value).to.equal('');
     });
   });
 };
