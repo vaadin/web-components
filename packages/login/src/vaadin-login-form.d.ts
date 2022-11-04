@@ -9,11 +9,25 @@ import { LoginMixin } from './vaadin-login-mixin.js';
 export { LoginI18n } from './vaadin-login-mixin.js';
 
 /**
+ * Fired when the `disabled` property changes.
+ */
+export type LoginFormDisabledChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
+ * Fired when the `error` property changes.
+ */
+export type LoginFormErrorChangedEvent = CustomEvent<{ value: boolean }>;
+
+/**
  * Fired when a user submits the login.
  */
 export type LoginFormLoginEvent = CustomEvent<{ username: string; password: string }>;
 
 export interface LoginFormCustomEventMap {
+  'disabled-changed': LoginFormDisabledChangedEvent;
+
+  'error-changed': LoginFormErrorChangedEvent;
+
   'forgot-password': Event;
 
   login: LoginFormLoginEvent;
@@ -50,6 +64,8 @@ export interface LoginFormEventMap extends HTMLElementEventMap, LoginFormCustomE
  *
  * See [Styling Components](https://vaadin.com/docs/latest/ds/customization/styling-components) documentation.
  *
+ * @fires {CustomEvent} disabled-changed - Fired when the `disabled` property changes.
+ * @fires {CustomEvent} error-changed - Fired when the `error` property changes.
  * @fires {CustomEvent} forgot-password - Fired when user clicks on the "Forgot password" button.
  * @fires {CustomEvent} login - Fired when a user submits the login.
  */
