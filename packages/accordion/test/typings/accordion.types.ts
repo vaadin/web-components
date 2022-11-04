@@ -1,6 +1,6 @@
 import '../../vaadin-accordion.js';
 import { AccordionItemsChangedEvent, AccordionOpenedChangedEvent } from '../../vaadin-accordion.js';
-import { AccordionPanel } from '../../vaadin-accordion-panel';
+import { AccordionPanel, AccordionPanelOpenedChangedEvent } from '../../vaadin-accordion-panel';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -21,5 +21,6 @@ accordion.addEventListener('items-changed', (event) => {
 const panel = document.createElement('vaadin-accordion-panel');
 
 panel.addEventListener('opened-changed', (event) => {
+  assertType<AccordionPanelOpenedChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });

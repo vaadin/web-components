@@ -6,6 +6,17 @@
 import { Details } from '@vaadin/details/src/vaadin-details.js';
 
 /**
+ * Fired when the `opened` property changes.
+ */
+export type AccordionPanelOpenedChangedEvent = CustomEvent<{ value: boolean }>;
+
+export interface AccordionPanelCustomEventMap {
+  'opened-changed': AccordionPanelOpenedChangedEvent;
+}
+
+export type AccordionPanelEventMap = AccordionPanelCustomEventMap & HTMLElementEventMap;
+
+/**
  * The accordion panel element.
  *
  * ### Styling
@@ -32,7 +43,19 @@ import { Details } from '@vaadin/details/src/vaadin-details.js';
  *
  * @fires {CustomEvent} opened-changed - Fired when the `opened` property changes.
  */
-declare class AccordionPanel extends Details {}
+declare class AccordionPanel extends Details {
+  addEventListener<K extends keyof AccordionPanelEventMap>(
+    type: K,
+    listener: (this: AccordionPanel, ev: AccordionPanelEventMap[K]) => void,
+    options?: AddEventListenerOptions | boolean,
+  ): void;
+
+  removeEventListener<K extends keyof AccordionPanelEventMap>(
+    type: K,
+    listener: (this: AccordionPanel, ev: AccordionPanelEventMap[K]) => void,
+    options?: EventListenerOptions | boolean,
+  ): void;
+}
 
 declare global {
   interface HTMLElementTagNameMap {
