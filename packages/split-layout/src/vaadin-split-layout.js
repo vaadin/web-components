@@ -333,16 +333,6 @@ class SplitLayout extends ElementMixin(ThemableMixin(PolymerElement)) {
   }
 
   /**
-   * @deprecated Since Vaadin 23, `notifyResize()` is deprecated. The component uses a
-   * ResizeObserver internally and doesn't need to be explicitly notified of resizes.
-   */
-  notifyResize() {
-    console.warn(
-      `WARNING: Since Vaadin 23, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`,
-    );
-  }
-
-  /**
    * Fired after dragging the splitter have ended.
    *
    * @event splitter-dragend

@@ -156,12 +156,6 @@ declare class SplitLayout extends ElementMixin(ThemableMixin(HTMLElement)) {
    */
   orientation: 'horizontal' | 'vertical';
 
-  /**
-   * @deprecated Since Vaadin 23, `notifyResize()` is deprecated. The component uses a
-   * ResizeObserver internally and doesn't need to be explicitly notified of resizes.
-   */
-  notifyResize(): void;
-
   addEventListener<K extends keyof SplitLayoutEventMap>(
     type: K,
     listener: (this: SplitLayout, ev: SplitLayoutEventMap[K]) => void,

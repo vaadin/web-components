@@ -86,15 +86,5 @@ export const ResizeMixin = dedupingMixin(
       _onResize(_contentRect) {
         // To be implemented.
       }
-
-      /**
-       * @deprecated Since Vaadin 23, `notifyResize()` is deprecated. The component uses a
-       * ResizeObserver internally and doesn't need to be explicitly notified of resizes.
-       */
-      notifyResize() {
-        console.warn(
-          `WARNING: Since Vaadin 23, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`,
-        );
-      }
     },
 );

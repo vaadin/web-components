@@ -1088,21 +1088,6 @@ class Grid extends ElementMixin(
       this.__virtualizer.update(start, end);
     }
   }
-
-  /**
-   * Updates the computed metrics and positioning of internal grid parts
-   * (row/details cell positioning etc). Needs to be invoked whenever the sizing of grid
-   * content changes asynchronously to ensure consistent appearance (e.g. when a
-   * contained image whose bounds aren't known beforehand finishes loading).
-   *
-   * @deprecated Since Vaadin 22, `notifyResize()` is deprecated. The component uses a
-   * ResizeObserver internally and doesn't need to be explicitly notified of resizes.
-   */
-  notifyResize() {
-    console.warn(
-      `WARNING: Since Vaadin 22, notifyResize() is deprecated. The component uses a ResizeObserver internally and doesn't need to be explicitly notified of resizes.`,
-    );
-  }
 }
 
 customElements.define(Grid.is, Grid);

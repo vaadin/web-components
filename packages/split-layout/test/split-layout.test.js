@@ -75,15 +75,6 @@ describe('split layout', () => {
       expect(getComputedStyle(second).pointerEvents).to.equal('visible');
     });
   });
-
-  it('should warn when calling deprecated notifyResize()', () => {
-    const stub = sinon.stub(console, 'warn');
-    splitLayout.notifyResize();
-    stub.restore();
-
-    expect(stub.calledOnce).to.be.true;
-    expect(stub.args[0][0]).to.include('WARNING: Since Vaadin 23, notifyResize() is deprecated.');
-  });
 });
 
 function testDimensions(isVertical) {

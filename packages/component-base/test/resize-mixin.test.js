@@ -71,22 +71,6 @@ describe('resize-mixin', () => {
     expect(spy.called).to.be.false;
   });
 
-  describe('console warnings', () => {
-    beforeEach(() => {
-      sinon.stub(console, 'warn');
-    });
-
-    afterEach(() => {
-      console.warn.restore();
-    });
-
-    it('should warn when calling deprecated notifyResize()', () => {
-      element.notifyResize();
-      expect(console.warn.calledOnce).to.be.true;
-      expect(console.warn.args[0][0]).to.include('WARNING: Since Vaadin 23, notifyResize() is deprecated.');
-    });
-  });
-
   describe('observe parent', () => {
     let parent;
 

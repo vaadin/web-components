@@ -1,6 +1,5 @@
 import { expect } from '@esm-bundle/chai';
 import { aTimeout, fixtureSync, nextFrame, oneEvent } from '@vaadin/testing-helpers';
-import sinon from 'sinon';
 import '@vaadin/polymer-legacy-adapter/template-renderer.js';
 import '../vaadin-grid.js';
 import '../vaadin-grid-column-group.js';
@@ -51,15 +50,6 @@ describe('resizing', () => {
     grid.hidden = false;
     await oneEvent(grid, 'animationend');
     flushGrid(grid);
-  });
-
-  it('should warn when calling deprecated notifyResize()', () => {
-    const stub = sinon.stub(console, 'warn');
-    grid.notifyResize();
-    stub.restore();
-
-    expect(stub.calledOnce).to.be.true;
-    expect(stub.args[0][0]).to.include('WARNING: Since Vaadin 22, notifyResize() is deprecated.');
   });
 
   it('should align rows correctly', () => {
