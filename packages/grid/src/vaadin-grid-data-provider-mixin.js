@@ -193,6 +193,7 @@ export const DataProviderMixin = (superClass) =>
         itemHasChildrenPath: {
           type: String,
           value: 'children',
+          observer: '__itemHasChildrenPathChanged',
         },
 
         /**
@@ -234,6 +235,15 @@ export const DataProviderMixin = (superClass) =>
       this._cache.size += delta;
       this._cache.effectiveSize += delta;
       this._effectiveSize = this._cache.effectiveSize;
+    }
+
+    /** @private */
+    __itemHasChildrenPathChanged(value, oldValue) {
+      if (!oldValue && value === 'children') {
+        // Avoid an unnecessary content update on init.
+        return;
+      }
+      this.requestContentUpdate();
     }
 
     /**

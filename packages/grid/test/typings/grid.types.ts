@@ -320,7 +320,6 @@ assertType<GridTreeColumn>(genericTreeColumn);
 const narrowedTreeColumn = genericTreeColumn as GridTreeColumn<TestGridItem>;
 assertType<GridColumn<TestGridItem>>(narrowedTreeColumn);
 assertType<string | null | undefined>(narrowedTreeColumn.path);
-assertType<string | null | undefined>(narrowedTreeColumn.itemHasChildrenPath);
 
 /* GridTreeToggle */
 const treeToggle = document.createElement('vaadin-grid-tree-toggle');
