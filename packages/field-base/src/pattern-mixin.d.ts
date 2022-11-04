@@ -11,7 +11,7 @@ import type { InputMixinClass } from './input-mixin.js';
 import type { ValidateMixinClass } from './validate-mixin.js';
 
 /**
- * A mixin to provide `pattern` and `preventInvalidInput` properties.
+ * A mixin to provide `pattern` property.
  */
 export declare function PatternMixin<T extends Constructor<HTMLElement>>(
   base: T,
@@ -29,12 +29,4 @@ export declare class PatternMixinClass {
    * The pattern must match the entire value, not just some subset.
    */
   pattern: string;
-
-  /**
-   * When set to true, user is prevented from typing a value that
-   * conflicts with the given `pattern`.
-   * @attr {boolean} prevent-invalid-input
-   * @deprecated Please use `allowedCharPattern` instead.
-   */
-  preventInvalidInput: boolean | null | undefined;
 }

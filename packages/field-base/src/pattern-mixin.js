@@ -3,12 +3,10 @@
  * Copyright (c) 2021 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { timeOut } from '@vaadin/component-base/src/async.js';
-import { Debouncer } from '@vaadin/component-base/src/debounce.js';
 import { InputConstraintsMixin } from './input-constraints-mixin.js';
 
 /**
- * A mixin to provide `pattern` and `preventInvalidInput` properties.
+ * A mixin to provide `pattern` property.
  *
  * @polymerMixin
  * @mixes InputConstraintsMixin
@@ -24,17 +22,6 @@ export const PatternMixin = (superclass) =>
         pattern: {
           type: String,
         },
-
-        /**
-         * When set to true, user is prevented from typing a value that
-         * conflicts with the given `pattern`.
-         * @attr {boolean} prevent-invalid-input
-         * @deprecated Please use `allowedCharPattern` instead.
-         */
-        preventInvalidInput: {
-          type: Boolean,
-          observer: '_preventInvalidInputChanged',
-        },
       };
     }
 
@@ -46,21 +33,6 @@ export const PatternMixin = (superclass) =>
       return [...super.constraints, 'pattern'];
     }
 
-    /** @private */
-    _checkInputValue() {
-      if (this.preventInvalidInput) {
-        const input = this.inputElement;
-        if (input && input.value.length > 0 && !this.checkValidity()) {
-          input.value = this.value || '';
-          // Add input-prevented attribute for 200ms
-          this.setAttribute('input-prevented', '');
-          this._inputDebouncer = Debouncer.debounce(this._inputDebouncer, timeOut.after(200), () => {
-            this.removeAttribute('input-prevented');
-          });
-        }
-      }
-    }
-
     /**
      * @param {Event} event
      * @protected
@@ -70,14 +42,5 @@ export const PatternMixin = (superclass) =>
       this._checkInputValue();
 
       super._onInput(event);
-    }
-
-    /** @private */
-    _preventInvalidInputChanged(preventInvalidInput) {
-      if (preventInvalidInput) {
-        console.warn(
-          `WARNING: Since Vaadin 23.2, "preventInvalidInput" is deprecated. Please use "allowedCharPattern" instead.`,
-        );
-      }
     }
   };
