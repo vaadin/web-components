@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-crud",
-  "version": "23.1.12",
+  "version": "23.1.13",
   "publishConfig": {
     "access": "public"
   },
@@ -34,6 +34,6 @@
     "polymer"
   ],
   "dependencies": {
-    "@vaadin/crud": "~23.1.12"
+    "@vaadin/crud": "~23.1.13"
   }
 }
