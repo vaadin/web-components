@@ -76,7 +76,7 @@ export type CrudNewEvent = CustomEvent<{ item: null }>;
 /**
  * Fired when user wants to edit an existing item.
  */
-export type CrudEditEvent<T> = CustomEvent<{ item: T }>;
+export type CrudEditEvent<T> = CustomEvent<{ item: T; index: number }>;
 
 /**
  * Fired when user wants to delete item.
