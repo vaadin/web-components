@@ -60,11 +60,11 @@ class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement)
         <vaadin-login-form
           theme="with-overlay"
           id="vaadinLoginForm"
-          action="{{action}}"
+          action="[[action]]"
           disabled="{{disabled}}"
           error="{{error}}"
           no-autofocus="[[noAutofocus]]"
-          no-forgot-password="{{noForgotPassword}}"
+          no-forgot-password="[[noForgotPassword]]"
           i18n="{{i18n}}"
           on-login="_retargetEvent"
           on-forgot-password="_retargetEvent"
