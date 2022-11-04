@@ -25,6 +25,7 @@
   "files": [
     "*.d.ts",
     "*.js",
+    "auto-complete.css",
     "mixins/*.d.ts",
     "mixins/*.js",
     "presets/*.js",
