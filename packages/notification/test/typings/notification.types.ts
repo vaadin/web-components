@@ -1,5 +1,5 @@
 import '../../vaadin-notification.js';
-import type { NotificationOpenedChangedEvent } from '../../vaadin-notification.js';
+import type { NotificationOpenedChangedEvent, NotificationRenderer } from '../../vaadin-notification.js';
 import { Notification } from '../../vaadin-notification.js';
 
 const assertType = <TExpected>(value: TExpected) => value;
@@ -12,3 +12,10 @@ notification.addEventListener('opened-changed', (event) => {
 });
 
 Notification.show('Hello world', { position: 'middle', duration: 7000, theme: 'error' });
+
+const renderer: NotificationRenderer = (root, owner) => {
+  assertType<HTMLElement>(root);
+  assertType<Notification>(owner);
+};
+
+notification.renderer = renderer;
