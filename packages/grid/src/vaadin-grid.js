@@ -661,16 +661,8 @@ class Grid extends ElementMixin(
   }
 
   /** @private */
-  _createCell(tagName, column) {
-    const contentId = (this._contentIndex = this._contentIndex + 1 || 0);
-    const slotName = `vaadin-grid-cell-content-${contentId}`;
-
-    const cellContent = document.createElement('vaadin-grid-cell-content');
-    cellContent.setAttribute('slot', slotName);
-
+  _createCell(tagName) {
     const cell = document.createElement(tagName);
-    cell.id = slotName.replace('-content-', '-');
-    cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
 
     // For now we only support tooltip on desktop
     if (!isAndroid && !isIOS) {
@@ -689,56 +681,8 @@ class Grid extends ElementMixin(
       });
     }
 
-    const slot = document.createElement('slot');
-    slot.setAttribute('name', slotName);
-
-    if (column && column._focusButtonMode) {
-      const div = document.createElement('div');
-      div.setAttribute('role', 'button');
-      div.setAttribute('tabindex', '-1');
-      cell.appendChild(div);
-
-      // Patch `focus()` to use the button
-      cell._focusButton = div;
-      cell.focus = function () {
-        cell._focusButton.focus();
-      };
-
-      div.appendChild(slot);
-    } else {
-      cell.setAttribute('tabindex', '-1');
-      cell.appendChild(slot);
-    }
-
-    cell._content = cellContent;
-
-    // With native Shadow DOM, mousedown on slotted element does not focus
-    // focusable slot wrapper, that is why cells are not focused with
-    // mousedown. Workaround: listen for mousedown and focus manually.
-    cellContent.addEventListener('mousedown', () => {
-      if (isChrome) {
-        // Chrome bug: focusing before mouseup prevents text selection, see http://crbug.com/771903
-        const mouseUpListener = (event) => {
-          // If focus is on element within the cell content — respect it, do not change
-          const contentContainsFocusedElement = cellContent.contains(this.getRootNode().activeElement);
-          // Only focus if mouse is released on cell content itself
-          const mouseUpWithinCell = event.composedPath().includes(cellContent);
-          if (!contentContainsFocusedElement && mouseUpWithinCell) {
-            cell.focus();
-          }
-          document.removeEventListener('mouseup', mouseUpListener, true);
-        };
-        document.addEventListener('mouseup', mouseUpListener, true);
-      } else {
-        // Focus on mouseup, on the other hand, removes selection on Safari.
-        // Watch out sync focus removal issue, only async focus works here.
-        setTimeout(() => {
-          if (!cellContent.contains(this.getRootNode().activeElement)) {
-            cell.focus();
-          }
-        });
-      }
-    });
+    cell.setAttribute('tabindex', '-1');
+    cell._content = cell;
 
     return cell;
   }
