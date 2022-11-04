@@ -19,7 +19,7 @@ export type NotificationPosition =
   | 'top-start'
   | 'top-stretch';
 
-export type NotificationRenderer = (root: HTMLElement, notification?: Notification) => void;
+export type NotificationRenderer = (root: HTMLElement, notification: Notification) => void;
 
 /**
  * Fired when the `opened` property changes.
