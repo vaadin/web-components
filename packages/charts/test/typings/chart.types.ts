@@ -1,5 +1,5 @@
 import '../../vaadin-chart.js';
-import type { Axis, Chart as HighchartsChart, Point, Series } from 'highcharts';
+import type { Axis, Chart as HighchartsChart, Point, Series, SeriesOptionsType } from 'highcharts';
 import type {
   ChartAddSeriesEvent,
   ChartAfterExportEvent,
@@ -32,6 +32,7 @@ import type {
   ChartXaxesExtremesSetEvent,
   ChartYaxesExtremesSetEvent,
 } from '../../vaadin-chart.js';
+import type { ChartSeries, ChartSeriesOptions, ChartSeriesValues } from '../../vaadin-chart-series.js';
 
 const assertType = <TExpected>(actual: TExpected) => actual;
 
@@ -228,3 +229,18 @@ chart.addEventListener('yaxes-extremes-set', (event) => {
   assertType<number>(event.detail.originalEvent.dataMin);
   assertType<number>(event.detail.originalEvent.dataMax);
 });
+
+// Series properties
+const series: ChartSeries = document.createElement('vaadin-chart-series');
+assertType<ChartSeriesOptions>(series.options);
+assertType<ChartSeriesValues | null>(series.values);
+assertType<number | null | undefined>(series.valueMin);
+assertType<number | null | undefined>(series.valueMax);
+assertType<string>(series.title);
+assertType<string | null | undefined>(series.type);
+assertType<string | null | undefined>(series.unit);
+assertType<number | string>(series.stack);
+assertType<number | string>(series.neckPosition);
+assertType<number | string>(series.neckWidth);
+assertType<SeriesOptionsType | null | undefined>(series.additionalOptions);
+assertType<(highChartsSeries: Series) => void>(series.setSeries);
