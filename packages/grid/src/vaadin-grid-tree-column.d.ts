@@ -24,13 +24,6 @@ declare class GridTreeColumn<TItem = GridDefaultItem> extends GridColumn<TItem> 
    * JS Path of the property in the item used as text content for the tree toggle.
    */
   path: string | null | undefined;
-
-  /**
-   * JS Path of the property in the item that indicates whether the item has child items.
-   * @attr {string} item-has-children-path
-   * @deprecated Use `grid.itemHasChildrenPath` instead.
-   */
-  itemHasChildrenPath: string | null | undefined;
 }
 
 declare global {

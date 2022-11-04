@@ -162,25 +162,15 @@ describe('tree toggle', () => {
       });
 
       it('should have a higher level', () => {
-        column.itemHasChildrenPath = 'hasChildren';
+        grid.itemHasChildrenPath = 'hasChildren';
         toggle.expanded = true;
         const childToggle = getBodyCellContent(grid, 1, 0).firstElementChild;
         expect(childToggle.level).to.equal(1);
       });
 
       it('should not be a leaf', () => {
-        column.itemHasChildrenPath = 'hasChildren';
+        grid.itemHasChildrenPath = 'hasChildren';
         expect(toggle.leaf).to.be.false;
-      });
-
-      it('should warn when setting column property', () => {
-        column.itemHasChildrenPath = 'hasChildren';
-        expect(console.warn.called).to.be.true;
-      });
-
-      it('should forward column property to the grid', () => {
-        column.itemHasChildrenPath = 'hasChildren';
-        expect(grid.itemHasChildrenPath).to.equal('hasChildren');
       });
     });
   });
