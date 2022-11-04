@@ -4,17 +4,6 @@ const path = require('path');
 const PACKAGE_BASE = 'packages/vaadin-lumo-styles';
 
 const styleModules = ['color', 'sizing', 'spacing', 'style', 'typography', 'user-colors'];
-const utilityModules = [
-  'accessibility',
-  'background',
-  'border',
-  'flexbox-grid',
-  'layout',
-  'shadows',
-  'sizing',
-  'spacing',
-  'typography',
-];
 
 function getCustomProperties() {
   const result = [];
@@ -40,20 +29,23 @@ function getCustomProperties() {
 function getUtilityClasses() {
   const result = [];
 
-  utilityModules.forEach((module) => {
-    const content = fs.readFileSync(path.join(PACKAGE_BASE, 'utilities', `${module}.js`), 'utf8');
-    const cssSectionRegex = /css`((.|\s)*?)`/gm;
-    let match;
+  const modules = fs.readdirSync(path.join(PACKAGE_BASE, 'utilities'));
+  modules
+    .filter((module) => module.endsWith('.js'))
+    .forEach((module) => {
+      const content = fs.readFileSync(path.join(PACKAGE_BASE, 'utilities', module), 'utf8');
+      const cssSectionRegex = /css`((.|\s)*?)`/gm;
+      let match;
 
-    while ((match = cssSectionRegex.exec(content))) {
-      let section = match[1];
-      // Remove escape backslash
-      section = section.replace(/\\\\/g, '\\');
-      // Unindent
-      section = section.replace(/\n\s{2}/g, '\n');
-      result.push(section);
-    }
-  });
+      while ((match = cssSectionRegex.exec(content))) {
+        let section = match[1];
+        // Remove escape backslash
+        section = section.replace(/\\\\/g, '\\');
+        // Unindent
+        section = section.replace(/\n\s{2}/g, '\n');
+        result.push(section);
+      }
+    });
 
   return result;
 }
