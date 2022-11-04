@@ -53,6 +53,7 @@ crud.addEventListener('new', (event) => {
 crud.addEventListener('edit', (event) => {
   assertType<CrudEditEvent<User>>(event);
   assertType<User>(event.detail.item);
+  assertType<number>(event.detail.index);
 });
 
 crud.addEventListener('delete', (event) => {
