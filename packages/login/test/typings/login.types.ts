@@ -44,12 +44,12 @@ form.addEventListener('login', (event) => {
   assertType<string>(event.detail.password);
 });
 
-overlay.addEventListener('error-changed', (event) => {
+form.addEventListener('error-changed', (event) => {
   assertType<LoginFormErrorChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
 
-overlay.addEventListener('disabled-changed', (event) => {
+form.addEventListener('disabled-changed', (event) => {
   assertType<LoginFormDisabledChangedEvent>(event);
   assertType<boolean>(event.detail.value);
 });
