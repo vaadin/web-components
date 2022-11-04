@@ -6,11 +6,7 @@
 import { Constructor } from '@open-wc/dedupe-mixin';
 import { Grid, GridItemModel } from './vaadin-grid.js';
 
-export type GridRowDetailsRenderer<TItem> = (
-  root: HTMLElement,
-  grid?: Grid<TItem>,
-  model?: GridItemModel<TItem>,
-) => void;
+export type GridRowDetailsRenderer<TItem> = (root: HTMLElement, grid: Grid<TItem>, model: GridItemModel<TItem>) => void;
 
 export declare function RowDetailsMixin<TItem, T extends Constructor<HTMLElement>>(
   base: T,

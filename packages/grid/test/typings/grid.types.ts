@@ -172,6 +172,13 @@ assertType<() => void>(narrowedGrid.filterDragAndDrop);
 assertType<(arg0: Event) => GridEventContext<TestGridItem>>(narrowedGrid.getEventContext);
 
 assertType<GridRowDetailsRenderer<TestGridItem> | null | undefined>(narrowedGrid.rowDetailsRenderer);
+const rowDetailsRenderer: GridRowDetailsRenderer<TestGridItem> = (root, grid, model) => {
+  assertType<HTMLElement>(root);
+  assertType<Grid>(grid);
+  assertType<TestGridItem>(model.item);
+};
+narrowedGrid.rowDetailsRenderer = rowDetailsRenderer;
+
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.openItemDetails);
 assertType<(arg0: TestGridItem) => void>(narrowedGrid.closeItemDetails);
 assertType<(arg0: number) => void>(narrowedGrid.scrollToIndex);
