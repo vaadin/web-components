@@ -22,10 +22,4 @@ export declare class InteractionsMixinClass {
    * @attr {boolean} open-on-hover
    */
   openOnHover: boolean | null | undefined;
-
-  /**
-   * @deprecated Since Vaadin 23, `notifyResize()` is deprecated. The component uses a
-   * ResizeObserver internally and doesn't need to be explicitly notified of resizes.
-   */
-  notifyResize(): void;
 }
