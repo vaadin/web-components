@@ -18,7 +18,7 @@ describe('crud', () => {
   });
 
   it('edit-button-focus', async () => {
-    const button = element.$.grid.querySelector('vaadin-crud-edit');
+    const button = element.querySelector('vaadin-crud-edit');
     button.focus();
     button.setAttribute('focus-ring', '');
     await visualDiff(div, 'edit-button-focus');
