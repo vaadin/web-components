@@ -1,7 +1,7 @@
 /* @web/test-runner snapshot v1 */
 export const snapshots = {};
 
-snapshots["vaadin-form-form host default"] = 
+snapshots["vaadin-login-form host default"] = 
 `<vaadin-login-form>
   <vaadin-login-form-wrapper>
     <form
@@ -96,9 +96,9 @@ snapshots["vaadin-form-form host default"] =
   </vaadin-login-form-wrapper>
 </vaadin-login-form>
 `;
-/* end snapshot vaadin-form-form host default */
+/* end snapshot vaadin-login-form host default */
 
-snapshots["vaadin-form-form host i18n"] = 
+snapshots["vaadin-login-form host i18n"] = 
 `<vaadin-login-form>
   <vaadin-login-form-wrapper>
     <form
@@ -193,9 +193,9 @@ snapshots["vaadin-form-form host i18n"] =
   </vaadin-login-form-wrapper>
 </vaadin-login-form>
 `;
-/* end snapshot vaadin-form-form host i18n */
+/* end snapshot vaadin-login-form host i18n */
 
-snapshots["vaadin-form-form shadow default"] = 
+snapshots["vaadin-login-form shadow default"] = 
 `<section part="form">
   <h2 part="form-title">
     Log in
@@ -227,9 +227,9 @@ snapshots["vaadin-form-form shadow default"] =
   </div>
 </section>
 `;
-/* end snapshot vaadin-form-form shadow default */
+/* end snapshot vaadin-login-form shadow default */
 
-snapshots["vaadin-form-form shadow error"] = 
+snapshots["vaadin-login-form shadow error"] = 
 `<section part="form">
   <h2 part="form-title">
     Log in
@@ -258,9 +258,9 @@ snapshots["vaadin-form-form shadow error"] =
   </div>
 </section>
 `;
-/* end snapshot vaadin-form-form shadow error */
+/* end snapshot vaadin-login-form shadow error */
 
-snapshots["vaadin-form-form shadow noForgotPassword"] = 
+snapshots["vaadin-login-form shadow noForgotPassword"] = 
 `<section part="form">
   <h2 part="form-title">
     Log in
@@ -293,9 +293,9 @@ snapshots["vaadin-form-form shadow noForgotPassword"] =
   </div>
 </section>
 `;
-/* end snapshot vaadin-form-form shadow noForgotPassword */
+/* end snapshot vaadin-login-form shadow noForgotPassword */
 
-snapshots["vaadin-form-form shadow i18n"] = 
+snapshots["vaadin-login-form shadow i18n"] = 
 `<section part="form">
   <h2 part="form-title">
     Kirjaudu sisään
@@ -328,5 +328,5 @@ snapshots["vaadin-form-form shadow i18n"] =
   </div>
 </section>
 `;
-/* end snapshot vaadin-form-form shadow i18n */
+/* end snapshot vaadin-login-form shadow i18n */
 
