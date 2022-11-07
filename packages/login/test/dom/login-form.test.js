@@ -35,6 +35,11 @@ describe('vaadin-login-form', () => {
       form.i18n = I18N_FINNISH;
       await expect(form).dom.to.equalSnapshot();
     });
+
+    it('noForgotPassword', async () => {
+      form.noForgotPassword = true;
+      await expect(form).dom.to.equalSnapshot();
+    });
   });
 
   describe('shadow', () => {
@@ -50,11 +55,6 @@ describe('vaadin-login-form', () => {
 
     it('error', async () => {
       form.error = true;
-      await expect(wrapper).shadowDom.to.equalSnapshot();
-    });
-
-    it('noForgotPassword', async () => {
-      form.noForgotPassword = true;
       await expect(wrapper).shadowDom.to.equalSnapshot();
     });
 
