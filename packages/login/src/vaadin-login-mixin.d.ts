@@ -89,6 +89,4 @@ export declare class LoginMixinClass {
    * ```
    */
   i18n: LoginI18n;
-
-  protected _retargetEvent(e: Event): void;
 }
