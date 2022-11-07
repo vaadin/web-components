@@ -102,6 +102,14 @@ snapshots["vaadin-login-overlay host default"] =
           Log in
         </vaadin-button>
       </form>
+      <vaadin-button
+        role="button"
+        slot="forgot-password"
+        tabindex="0"
+        theme="tertiary small"
+      >
+        Forgot password
+      </vaadin-button>
     </vaadin-login-form-wrapper>
   </vaadin-login-form>
 </vaadin-login-overlay-wrapper>
@@ -209,6 +217,14 @@ snapshots["vaadin-login-overlay host i18n"] =
           Kirjaudu sisään
         </vaadin-button>
       </form>
+      <vaadin-button
+        role="button"
+        slot="forgot-password"
+        tabindex="0"
+        theme="tertiary small"
+      >
+        Unohtuiko salasana?
+      </vaadin-button>
     </vaadin-login-form-wrapper>
   </vaadin-login-form>
 </vaadin-login-overlay-wrapper>
