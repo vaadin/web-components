@@ -3,7 +3,7 @@ import { fixtureSync, nextFrame } from '@vaadin/testing-helpers';
 import '../../vaadin-login-overlay.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
-describe('vaadin-form-form', () => {
+describe('vaadin-form-overlay', () => {
   let overlay, wrapper;
 
   const I18N_FINNISH = {
