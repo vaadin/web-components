@@ -3,7 +3,7 @@ import { fixtureSync } from '@vaadin/testing-helpers';
 import '../../vaadin-login-form.js';
 import { resetUniqueId } from '@vaadin/component-base/src/unique-id-utils.js';
 
-describe('vaadin-form-form', () => {
+describe('vaadin-login-form', () => {
   let form;
 
   const I18N_FINNISH = {
