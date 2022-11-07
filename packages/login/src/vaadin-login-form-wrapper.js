@@ -4,18 +4,16 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 /**
  * An element used internally by `<vaadin-login-form>`. Not intended to be used separately.
  *
  * @extends HTMLElement
- * @mixes ElementMixin
  * @mixes ThemableMixin
  * @private
  */
-class LoginFormWrapper extends ElementMixin(ThemableMixin(PolymerElement)) {
+class LoginFormWrapper extends ThemableMixin(PolymerElement) {
   static get template() {
     return html`
       <style>
