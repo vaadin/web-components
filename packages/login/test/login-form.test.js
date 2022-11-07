@@ -68,35 +68,6 @@ describe('login form', () => {
     submitStub.resetHistory();
   });
 
-  it('should display default strings', () => {
-    const formTitleElement = formWrapper.shadowRoot.querySelector('[part="form"] h2');
-    const errorTitleElement = formWrapper.shadowRoot.querySelector('[part="error-message"] h5');
-    const errorMessageElement = formWrapper.shadowRoot.querySelector('[part="error-message"] p');
-
-    const usernameElement = login.querySelector('#vaadinLoginUsername');
-    const passwordElement = login.querySelector('#vaadinLoginPassword');
-    const submitElement = login.querySelector('vaadin-button');
-    const forgotElement = formWrapper.shadowRoot.querySelector('#forgotPasswordButton');
-
-    const footerElement = formWrapper.shadowRoot.querySelector('[part="footer"] p');
-
-    expect(formTitleElement.textContent).to.be.equal(login.i18n.form.title);
-    expect(errorTitleElement.textContent).to.be.equal(login.i18n.errorMessage.title);
-    expect(errorMessageElement.textContent).to.be.equal(login.i18n.errorMessage.message);
-
-    expect(usernameElement.label).to.be.equal(login.i18n.form.username);
-    expect(passwordElement.label).to.be.equal(login.i18n.form.password);
-    expect(submitElement.textContent.trim()).to.be.equal(login.i18n.form.submit);
-    expect(forgotElement.textContent).to.be.equal(login.i18n.form.forgotPassword);
-
-    expect(footerElement.textContent).to.be.equal('');
-    expect(login.i18n.additionalInformation).to.be.undefined;
-  });
-
-  it('should show forgot password button', () => {
-    expect(formWrapper.$.forgotPasswordButton.hidden).to.be.false;
-  });
-
   it('should emit forgot password event', () => {
     let eventWasCaught = false;
     login.addEventListener('forgot-password', () => {
@@ -105,21 +76,6 @@ describe('login form', () => {
 
     formWrapper.$.forgotPasswordButton.click();
     expect(eventWasCaught).to.be.true;
-  });
-
-  it('should be able to internationalize via `i18n` property', () => {
-    const additionalInformation = formWrapper.shadowRoot.querySelector('[part="footer"] p');
-    expect(additionalInformation.textContent).to.be.equal('');
-    expect(formWrapper.$.forgotPasswordButton.textContent).to.be.equal(login.i18n.form.forgotPassword);
-
-    const i18n = {
-      ...login.i18n,
-      additionalInformation: 'Mais informações',
-      form: { forgotPassword: 'Esqueci a senha' },
-    };
-    login.i18n = i18n;
-    expect(additionalInformation.textContent).to.be.equal(login.i18n.additionalInformation);
-    expect(formWrapper.$.forgotPasswordButton.textContent).to.be.equal(login.i18n.form.forgotPassword);
   });
 
   it('should mark only username as invalid if user hits ENTER when field is empty', () => {
@@ -262,19 +218,6 @@ describe('login form', () => {
   it('should have autocomplete attribute set', () => {
     const passwordField = login.$.vaadinLoginPassword;
     expect(passwordField.getAttribute('autocomplete')).to.be.equal('current-password');
-  });
-});
-
-describe('no forgot password', () => {
-  let login;
-
-  beforeEach(() => {
-    login = fixtureSync('<vaadin-login-form no-forgot-password></vaadin-login-form>');
-  });
-
-  it('should hide forgot password button', () => {
-    const formWrapper = login.querySelector('vaadin-login-form-wrapper');
-    expect(formWrapper.$.forgotPasswordButton.hidden).to.be.true;
   });
 });
 
