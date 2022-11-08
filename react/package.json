@@ -13,7 +13,7 @@
     "build:update-packagejson": "node --loader @esbuild-kit/esm-loader scripts/package-json-update.ts",
     "build:typescript": "tsc -p tsconfig.build.json",
     "clean": "rimraf dist build",
-    "build": "npm run build:load-schema && npm run build:generate && npm run build:typescript && npm run build:generate-css",
+    "build": "npm run build:load-schema && npm run build:generate && npm run build:typescript && npm run build:generate-css && npm run build:update-packagejson",
     "dev": "vite dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,60 +22,60 @@
     "url": "github.com/vaadin/react-components"
   },
   "dependencies": {
-    "@vaadin/accordion": "23.3.0-alpha3",
-    "@vaadin/app-layout": "23.3.0-alpha3",
-    "@vaadin/avatar": "23.3.0-alpha3",
-    "@vaadin/avatar-group": "23.3.0-alpha3",
-    "@vaadin/board": "23.3.0-alpha3",
-    "@vaadin/button": "23.3.0-alpha3",
-    "@vaadin/charts": "23.3.0-alpha3",
-    "@vaadin/checkbox": "23.3.0-alpha3",
-    "@vaadin/checkbox-group": "23.3.0-alpha3",
-    "@vaadin/combo-box": "23.3.0-alpha3",
-    "@vaadin/confirm-dialog": "23.3.0-alpha3",
-    "@vaadin/context-menu": "23.3.0-alpha3",
-    "@vaadin/cookie-consent": "23.3.0-alpha3",
-    "@vaadin/crud": "23.3.0-alpha3",
-    "@vaadin/custom-field": "23.3.0-alpha3",
-    "@vaadin/date-picker": "23.3.0-alpha3",
-    "@vaadin/date-time-picker": "23.3.0-alpha3",
-    "@vaadin/details": "23.3.0-alpha3",
-    "@vaadin/dialog": "23.3.0-alpha3",
-    "@vaadin/email-field": "23.3.0-alpha3",
-    "@vaadin/field-base": "23.3.0-alpha3",
-    "@vaadin/field-highlighter": "23.3.0-alpha3",
-    "@vaadin/form-layout": "23.3.0-alpha3",
-    "@vaadin/grid": "23.3.0-alpha3",
-    "@vaadin/grid-pro": "23.3.0-alpha3",
-    "@vaadin/horizontal-layout": "23.3.0-alpha3",
-    "@vaadin/icon": "23.3.0-alpha3",
-    "@vaadin/icons": "23.3.0-alpha3",
-    "@vaadin/input-container": "23.3.0-alpha3",
-    "@vaadin/integer-field": "23.3.0-alpha3",
-    "@vaadin/item": "23.3.0-alpha3",
-    "@vaadin/list-box": "23.3.0-alpha3",
-    "@vaadin/login": "23.3.0-alpha3",
-    "@vaadin/map": "23.3.0-alpha3",
-    "@vaadin/menu-bar": "23.3.0-alpha3",
-    "@vaadin/message-input": "23.3.0-alpha3",
-    "@vaadin/message-list": "23.3.0-alpha3",
-    "@vaadin/notification": "23.3.0-alpha3",
-    "@vaadin/number-field": "23.3.0-alpha3",
-    "@vaadin/password-field": "23.3.0-alpha3",
-    "@vaadin/progress-bar": "23.3.0-alpha3",
-    "@vaadin/radio-group": "23.3.0-alpha3",
-    "@vaadin/rich-text-editor": "23.3.0-alpha3",
-    "@vaadin/scroller": "23.3.0-alpha3",
-    "@vaadin/select": "23.3.0-alpha3",
-    "@vaadin/split-layout": "23.3.0-alpha3",
-    "@vaadin/tabs": "23.3.0-alpha3",
-    "@vaadin/text-area": "23.3.0-alpha3",
-    "@vaadin/text-field": "23.3.0-alpha3",
-    "@vaadin/time-picker": "23.3.0-alpha3",
-    "@vaadin/tooltip": "23.3.0-alpha3",
-    "@vaadin/upload": "23.3.0-alpha3",
-    "@vaadin/vertical-layout": "23.3.0-alpha3",
-    "@vaadin/virtual-list": "23.3.0-alpha3",
+    "@vaadin/accordion": "23.3.0-alpha4",
+    "@vaadin/app-layout": "23.3.0-alpha4",
+    "@vaadin/avatar": "23.3.0-alpha4",
+    "@vaadin/avatar-group": "23.3.0-alpha4",
+    "@vaadin/board": "23.3.0-alpha4",
+    "@vaadin/button": "23.3.0-alpha4",
+    "@vaadin/charts": "23.3.0-alpha4",
+    "@vaadin/checkbox": "23.3.0-alpha4",
+    "@vaadin/checkbox-group": "23.3.0-alpha4",
+    "@vaadin/combo-box": "23.3.0-alpha4",
+    "@vaadin/confirm-dialog": "23.3.0-alpha4",
+    "@vaadin/context-menu": "23.3.0-alpha4",
+    "@vaadin/cookie-consent": "23.3.0-alpha4",
+    "@vaadin/crud": "23.3.0-alpha4",
+    "@vaadin/custom-field": "23.3.0-alpha4",
+    "@vaadin/date-picker": "23.3.0-alpha4",
+    "@vaadin/date-time-picker": "23.3.0-alpha4",
+    "@vaadin/details": "23.3.0-alpha4",
+    "@vaadin/dialog": "23.3.0-alpha4",
+    "@vaadin/email-field": "23.3.0-alpha4",
+    "@vaadin/field-base": "23.3.0-alpha4",
+    "@vaadin/field-highlighter": "23.3.0-alpha4",
+    "@vaadin/form-layout": "23.3.0-alpha4",
+    "@vaadin/grid": "23.3.0-alpha4",
+    "@vaadin/grid-pro": "23.3.0-alpha4",
+    "@vaadin/horizontal-layout": "23.3.0-alpha4",
+    "@vaadin/icon": "23.3.0-alpha4",
+    "@vaadin/icons": "23.3.0-alpha4",
+    "@vaadin/input-container": "23.3.0-alpha4",
+    "@vaadin/integer-field": "23.3.0-alpha4",
+    "@vaadin/item": "23.3.0-alpha4",
+    "@vaadin/list-box": "23.3.0-alpha4",
+    "@vaadin/login": "23.3.0-alpha4",
+    "@vaadin/map": "23.3.0-alpha4",
+    "@vaadin/menu-bar": "23.3.0-alpha4",
+    "@vaadin/message-input": "23.3.0-alpha4",
+    "@vaadin/message-list": "23.3.0-alpha4",
+    "@vaadin/notification": "23.3.0-alpha4",
+    "@vaadin/number-field": "23.3.0-alpha4",
+    "@vaadin/password-field": "23.3.0-alpha4",
+    "@vaadin/progress-bar": "23.3.0-alpha4",
+    "@vaadin/radio-group": "23.3.0-alpha4",
+    "@vaadin/rich-text-editor": "23.3.0-alpha4",
+    "@vaadin/scroller": "23.3.0-alpha4",
+    "@vaadin/select": "23.3.0-alpha4",
+    "@vaadin/split-layout": "23.3.0-alpha4",
+    "@vaadin/tabs": "23.3.0-alpha4",
+    "@vaadin/text-area": "23.3.0-alpha4",
+    "@vaadin/text-field": "23.3.0-alpha4",
+    "@vaadin/time-picker": "23.3.0-alpha4",
+    "@vaadin/tooltip": "23.3.0-alpha4",
+    "@vaadin/upload": "23.3.0-alpha4",
+    "@vaadin/vertical-layout": "23.3.0-alpha4",
+    "@vaadin/virtual-list": "23.3.0-alpha4",
     "@vitejs/plugin-react": "^2.1.0",
     "react": "^18.2.0"
   },
@@ -104,221 +104,370 @@
     "dist/**/*"
   ],
   "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
     "./index.js": {
+      "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
     "./Accordion.js": {
+      "types": "./dist/Accordion.d.ts",
       "default": "./dist/Accordion.js"
     },
     "./AccordionPanel.js": {
+      "types": "./dist/AccordionPanel.d.ts",
       "default": "./dist/AccordionPanel.js"
     },
     "./AppLayout.js": {
+      "types": "./dist/AppLayout.d.ts",
       "default": "./dist/AppLayout.js"
     },
     "./Avatar.js": {
+      "types": "./dist/Avatar.d.ts",
       "default": "./dist/Avatar.js"
     },
     "./AvatarGroup.js": {
+      "types": "./dist/AvatarGroup.d.ts",
       "default": "./dist/AvatarGroup.js"
     },
     "./Board.js": {
+      "types": "./dist/Board.d.ts",
       "default": "./dist/Board.js"
     },
     "./BoardRow.js": {
+      "types": "./dist/BoardRow.d.ts",
       "default": "./dist/BoardRow.js"
     },
     "./Button.js": {
+      "types": "./dist/Button.d.ts",
       "default": "./dist/Button.js"
     },
     "./Chart.js": {
+      "types": "./dist/Chart.d.ts",
       "default": "./dist/Chart.js"
     },
+    "./ChartSeries.js": {
+      "types": "./dist/ChartSeries.d.ts",
+      "default": "./dist/ChartSeries.js"
+    },
     "./Checkbox.js": {
+      "types": "./dist/Checkbox.d.ts",
       "default": "./dist/Checkbox.js"
     },
     "./CheckboxGroup.js": {
+      "types": "./dist/CheckboxGroup.d.ts",
       "default": "./dist/CheckboxGroup.js"
     },
     "./ComboBox.js": {
+      "types": "./dist/ComboBox.d.ts",
       "default": "./dist/ComboBox.js"
     },
     "./ComboBoxLight.js": {
+      "types": "./dist/ComboBoxLight.d.ts",
       "default": "./dist/ComboBoxLight.js"
     },
     "./ConfirmDialog.js": {
+      "types": "./dist/ConfirmDialog.d.ts",
       "default": "./dist/ConfirmDialog.js"
     },
     "./ContextMenu.js": {
+      "types": "./dist/ContextMenu.d.ts",
       "default": "./dist/ContextMenu.js"
     },
     "./CookieConsent.js": {
+      "types": "./dist/CookieConsent.d.ts",
       "default": "./dist/CookieConsent.js"
     },
     "./Crud.js": {
+      "types": "./dist/Crud.d.ts",
       "default": "./dist/Crud.js"
     },
     "./CustomField.js": {
+      "types": "./dist/CustomField.d.ts",
       "default": "./dist/CustomField.js"
     },
     "./DatePicker.js": {
+      "types": "./dist/DatePicker.d.ts",
       "default": "./dist/DatePicker.js"
     },
     "./DatePickerLight.js": {
+      "types": "./dist/DatePickerLight.d.ts",
       "default": "./dist/DatePickerLight.js"
     },
     "./DateTimePicker.js": {
+      "types": "./dist/DateTimePicker.d.ts",
       "default": "./dist/DateTimePicker.js"
     },
     "./Details.js": {
+      "types": "./dist/Details.d.ts",
       "default": "./dist/Details.js"
     },
     "./Dialog.js": {
+      "types": "./dist/Dialog.d.ts",
       "default": "./dist/Dialog.js"
     },
     "./DrawerToggle.js": {
+      "types": "./dist/DrawerToggle.d.ts",
       "default": "./dist/DrawerToggle.js"
     },
     "./EmailField.js": {
+      "types": "./dist/EmailField.d.ts",
       "default": "./dist/EmailField.js"
     },
     "./FormItem.js": {
+      "types": "./dist/FormItem.d.ts",
       "default": "./dist/FormItem.js"
     },
     "./FormLayout.js": {
+      "types": "./dist/FormLayout.d.ts",
       "default": "./dist/FormLayout.js"
     },
     "./Grid.js": {
+      "types": "./dist/Grid.d.ts",
       "default": "./dist/Grid.js"
     },
     "./GridColumn.js": {
+      "types": "./dist/GridColumn.d.ts",
       "default": "./dist/GridColumn.js"
     },
     "./GridColumnGroup.js": {
+      "types": "./dist/GridColumnGroup.d.ts",
       "default": "./dist/GridColumnGroup.js"
     },
     "./GridFilter.js": {
+      "types": "./dist/GridFilter.d.ts",
       "default": "./dist/GridFilter.js"
     },
     "./GridFilterColumn.js": {
+      "types": "./dist/GridFilterColumn.d.ts",
       "default": "./dist/GridFilterColumn.js"
     },
     "./GridPro.js": {
+      "types": "./dist/GridPro.d.ts",
       "default": "./dist/GridPro.js"
     },
     "./GridProEditColumn.js": {
+      "types": "./dist/GridProEditColumn.d.ts",
       "default": "./dist/GridProEditColumn.js"
     },
     "./GridSelectionColumn.js": {
+      "types": "./dist/GridSelectionColumn.d.ts",
       "default": "./dist/GridSelectionColumn.js"
     },
     "./GridSortColumn.js": {
+      "types": "./dist/GridSortColumn.d.ts",
       "default": "./dist/GridSortColumn.js"
     },
     "./GridSorter.js": {
+      "types": "./dist/GridSorter.d.ts",
       "default": "./dist/GridSorter.js"
     },
     "./GridTreeColumn.js": {
+      "types": "./dist/GridTreeColumn.d.ts",
       "default": "./dist/GridTreeColumn.js"
     },
     "./GridTreeToggle.js": {
+      "types": "./dist/GridTreeToggle.d.ts",
       "default": "./dist/GridTreeToggle.js"
     },
     "./HorizontalLayout.js": {
+      "types": "./dist/HorizontalLayout.d.ts",
       "default": "./dist/HorizontalLayout.js"
     },
     "./Icon.js": {
+      "types": "./dist/Icon.d.ts",
       "default": "./dist/Icon.js"
     },
     "./Iconset.js": {
+      "types": "./dist/Iconset.d.ts",
       "default": "./dist/Iconset.js"
     },
     "./IntegerField.js": {
+      "types": "./dist/IntegerField.d.ts",
       "default": "./dist/IntegerField.js"
     },
     "./Item.js": {
+      "types": "./dist/Item.d.ts",
       "default": "./dist/Item.js"
     },
     "./ListBox.js": {
+      "types": "./dist/ListBox.d.ts",
       "default": "./dist/ListBox.js"
     },
     "./LoginForm.js": {
+      "types": "./dist/LoginForm.d.ts",
       "default": "./dist/LoginForm.js"
     },
     "./LoginOverlay.js": {
+      "types": "./dist/LoginOverlay.d.ts",
       "default": "./dist/LoginOverlay.js"
     },
     "./Map.js": {
+      "types": "./dist/Map.d.ts",
       "default": "./dist/Map.js"
     },
     "./MenuBar.js": {
+      "types": "./dist/MenuBar.d.ts",
       "default": "./dist/MenuBar.js"
     },
     "./Message.js": {
+      "types": "./dist/Message.d.ts",
       "default": "./dist/Message.js"
     },
     "./MessageInput.js": {
+      "types": "./dist/MessageInput.d.ts",
       "default": "./dist/MessageInput.js"
     },
     "./MessageList.js": {
+      "types": "./dist/MessageList.d.ts",
       "default": "./dist/MessageList.js"
     },
     "./Notification.js": {
+      "types": "./dist/Notification.d.ts",
       "default": "./dist/Notification.js"
     },
     "./NumberField.js": {
+      "types": "./dist/NumberField.d.ts",
       "default": "./dist/NumberField.js"
     },
     "./PasswordField.js": {
+      "types": "./dist/PasswordField.d.ts",
       "default": "./dist/PasswordField.js"
     },
     "./ProgressBar.js": {
+      "types": "./dist/ProgressBar.d.ts",
       "default": "./dist/ProgressBar.js"
     },
     "./RadioButton.js": {
+      "types": "./dist/RadioButton.d.ts",
       "default": "./dist/RadioButton.js"
     },
     "./RadioGroup.js": {
+      "types": "./dist/RadioGroup.d.ts",
       "default": "./dist/RadioGroup.js"
     },
     "./RichTextEditor.js": {
+      "types": "./dist/RichTextEditor.d.ts",
       "default": "./dist/RichTextEditor.js"
     },
     "./Scroller.js": {
+      "types": "./dist/Scroller.d.ts",
       "default": "./dist/Scroller.js"
     },
     "./Select.js": {
+      "types": "./dist/Select.d.ts",
       "default": "./dist/Select.js"
     },
     "./SplitLayout.js": {
+      "types": "./dist/SplitLayout.d.ts",
       "default": "./dist/SplitLayout.js"
     },
     "./Tab.js": {
+      "types": "./dist/Tab.d.ts",
       "default": "./dist/Tab.js"
     },
     "./Tabs.js": {
+      "types": "./dist/Tabs.d.ts",
       "default": "./dist/Tabs.js"
     },
     "./TextArea.js": {
+      "types": "./dist/TextArea.d.ts",
       "default": "./dist/TextArea.js"
     },
     "./TextField.js": {
+      "types": "./dist/TextField.d.ts",
       "default": "./dist/TextField.js"
     },
     "./TimePicker.js": {
+      "types": "./dist/TimePicker.d.ts",
       "default": "./dist/TimePicker.js"
     },
     "./Tooltip.js": {
+      "types": "./dist/Tooltip.d.ts",
       "default": "./dist/Tooltip.js"
     },
     "./Upload.js": {
+      "types": "./dist/Upload.d.ts",
       "default": "./dist/Upload.js"
     },
     "./VerticalLayout.js": {
+      "types": "./dist/VerticalLayout.d.ts",
       "default": "./dist/VerticalLayout.js"
     },
     "./VirtualList.js": {
+      "types": "./dist/VirtualList.d.ts",
       "default": "./dist/VirtualList.js"
+    },
+    "./css/Material.css": {
+      "default": "./dist/css/Material.css"
+    },
+    "./css/Lumo.css": {
+      "default": "./dist/css/Lumo.css"
+    },
+    "./css/lumo/Typography.css": {
+      "default": "./dist/css/lumo/Typography.css"
+    },
+    "./css/lumo/ColorBase.css": {
+      "default": "./dist/css/lumo/ColorBase.css"
+    },
+    "./css/lumo/Utility.module.css": {
+      "default": "./dist/css/lumo/Utility.module.css"
+    },
+    "./css/lumo/UserColors.css": {
+      "default": "./dist/css/lumo/UserColors.css"
+    },
+    "./css/lumo/Spacing.css": {
+      "default": "./dist/css/lumo/Spacing.css"
+    },
+    "./css/lumo/FontIcons.css": {
+      "default": "./dist/css/lumo/FontIcons.css"
+    },
+    "./css/lumo/Badge.css": {
+      "default": "./dist/css/lumo/Badge.css"
+    },
+    "./css/lumo/Style.css": {
+      "default": "./dist/css/lumo/Style.css"
+    },
+    "./css/lumo/Sizing.css": {
+      "default": "./dist/css/lumo/Sizing.css"
+    },
+    "./css/lumo/Font.css": {
+      "default": "./dist/css/lumo/Font.css"
+    },
+    "./css/lumo/ColorLegacy.css": {
+      "default": "./dist/css/lumo/ColorLegacy.css"
+    },
+    "./css/lumo/Color.css": {
+      "default": "./dist/css/lumo/Color.css"
+    },
+    "./css/material/Typography.css": {
+      "default": "./dist/css/material/Typography.css"
+    },
+    "./css/material/ColorBase.css": {
+      "default": "./dist/css/material/ColorBase.css"
+    },
+    "./css/material/UserColors.css": {
+      "default": "./dist/css/material/UserColors.css"
+    },
+    "./css/material/FontIcons.css": {
+      "default": "./dist/css/material/FontIcons.css"
+    },
+    "./css/material/Shadow.css": {
+      "default": "./dist/css/material/Shadow.css"
+    },
+    "./css/material/ColorDark.css": {
+      "default": "./dist/css/material/ColorDark.css"
+    },
+    "./css/material/Font.css": {
+      "default": "./dist/css/material/Font.css"
+    },
+    "./css/material/ColorLight.css": {
+      "default": "./dist/css/material/ColorLight.css"
+    },
+    "./css/material/Color.css": {
+      "default": "./dist/css/material/Color.css"
     }
   }
 }

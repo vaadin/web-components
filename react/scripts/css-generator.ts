@@ -3,7 +3,7 @@ import * as vm from 'node:vm';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import fsPromises from 'node:fs/promises';
-import { stylePackages, nodeModulesDir } from './utils/config.js';
+import { rootDir, stylePackages, nodeModulesDir } from './utils/config.js';
 import * as themableMixinModule from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 // @ts-ignore
@@ -330,10 +330,9 @@ for (const stylePackage of stylePackages) {
 }
 
 // Write files
-const cssOutputDir = '../dist';
-const __dirname = path.dirname(import.meta.url.replace(/^file:/, ''));
+const cssOutputDir = 'dist';
 for (const [cssPath, contents] of output) {
-  const filePath = path.resolve(__dirname, cssOutputDir, cssPath);
+  const filePath = path.resolve(rootDir, cssOutputDir, cssPath);
   await fsPromises.mkdir(path.dirname(filePath), {recursive: true});
   await fsPromises.writeFile(filePath, contents, {encoding: 'utf-8'});
 }
