@@ -236,8 +236,10 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
     super.ready();
 
     this.addController(
-      new SlotController(this, 'progress', 'vaadin-progress-bar', (progress) => {
-        this._progress = progress;
+      new SlotController(this, 'progress', 'vaadin-progress-bar', {
+        initializer: (progress) => {
+          this._progress = progress;
+        },
       }),
     );
 

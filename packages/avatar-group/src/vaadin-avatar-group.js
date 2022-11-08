@@ -280,18 +280,20 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
   ready() {
     super.ready();
 
-    this._overflowController = new SlotController(this, 'overflow', 'vaadin-avatar', (overflow) => {
-      overflow.setAttribute('aria-haspopup', 'listbox');
-      overflow.setAttribute('aria-expanded', 'false');
-      overflow.addEventListener('click', (e) => this._onOverflowClick(e));
-      overflow.addEventListener('keydown', (e) => this._onOverflowKeyDown(e));
+    this._overflowController = new SlotController(this, 'overflow', 'vaadin-avatar', {
+      initializer: (overflow) => {
+        overflow.setAttribute('aria-haspopup', 'listbox');
+        overflow.setAttribute('aria-expanded', 'false');
+        overflow.addEventListener('click', (e) => this._onOverflowClick(e));
+        overflow.addEventListener('keydown', (e) => this._onOverflowKeyDown(e));
 
-      const tooltip = document.createElement('vaadin-tooltip');
-      tooltip.setAttribute('slot', 'tooltip');
-      overflow.appendChild(tooltip);
+        const tooltip = document.createElement('vaadin-tooltip');
+        tooltip.setAttribute('slot', 'tooltip');
+        overflow.appendChild(tooltip);
 
-      this._overflow = overflow;
-      this._overflowTooltip = tooltip;
+        this._overflow = overflow;
+        this._overflowTooltip = tooltip;
+      },
     });
     this.addController(this._overflowController);
 

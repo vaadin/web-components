@@ -56,16 +56,18 @@ export const ButtonsMixin = (superClass) =>
 
       this.setAttribute('role', 'menubar');
 
-      this._overflowController = new SlotController(this, 'overflow', 'vaadin-menu-bar-button', (btn) => {
-        btn.setAttribute('hidden', '');
+      this._overflowController = new SlotController(this, 'overflow', 'vaadin-menu-bar-button', {
+        initializer: (btn) => {
+          btn.setAttribute('hidden', '');
 
-        const dots = document.createElement('div');
-        dots.setAttribute('aria-hidden', 'true');
-        dots.textContent = '···';
-        btn.appendChild(dots);
+          const dots = document.createElement('div');
+          dots.setAttribute('aria-hidden', 'true');
+          dots.textContent = '···';
+          btn.appendChild(dots);
 
-        this._overflow = btn;
-        this._initButtonAttrs(btn);
+          this._overflow = btn;
+          this._initButtonAttrs(btn);
+        },
       });
       this.addController(this._overflowController);
     }

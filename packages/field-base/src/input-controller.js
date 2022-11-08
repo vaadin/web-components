@@ -10,11 +10,8 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  */
 export class InputController extends SlotController {
   constructor(host, callback) {
-    super(
-      host,
-      'input',
-      'input',
-      (node, host) => {
+    super(host, 'input', 'input', {
+      initializer: (node, host) => {
         if (host.value) {
           node.setAttribute('value', host.value);
         }
@@ -29,7 +26,7 @@ export class InputController extends SlotController {
           callback(node);
         }
       },
-      true,
-    );
+      useUniqueId: true,
+    });
   }
 }

@@ -27,7 +27,7 @@ describe('slot-controller', () => {
         initializeSpy = sinon.stub().callsFake((node) => {
           node.textContent = 'foo';
         });
-        controller = new SlotController(element, 'foo', 'div', initializeSpy);
+        controller = new SlotController(element, 'foo', 'div', { initializer: initializeSpy });
         element.addController(controller);
         child = element.querySelector('[slot="foo"]');
       });
@@ -62,7 +62,7 @@ describe('slot-controller', () => {
         // Get element reference before adding the controller
         child = element.querySelector('[slot="foo"]');
         initializeSpy = sinon.spy();
-        controller = new SlotController(element, 'foo', 'div', initializeSpy);
+        controller = new SlotController(element, 'foo', 'div', { initializer: initializeSpy });
         element.addController(controller);
       });
 
@@ -94,7 +94,7 @@ describe('slot-controller', () => {
         initializeSpy = sinon.stub().callsFake((node) => {
           node.textContent = 'bar';
         });
-        controller = new SlotController(element, '', 'div', initializeSpy);
+        controller = new SlotController(element, '', 'div', { initializer: initializeSpy });
         element.addController(controller);
         child = element.querySelector(':not([slot])');
       });
@@ -129,7 +129,7 @@ describe('slot-controller', () => {
         // Get element reference before adding the controller
         child = element.querySelector(':not([slot])');
         initializeSpy = sinon.spy();
-        controller = new SlotController(element, '', 'div', initializeSpy);
+        controller = new SlotController(element, '', 'div', { initializer: initializeSpy });
         element.addController(controller);
       });
 
@@ -157,7 +157,7 @@ describe('slot-controller', () => {
       beforeEach(() => {
         element = fixtureSync('<slot-controller-element>baz</slot-controller-element>');
         initializeSpy = sinon.spy();
-        controller = new SlotController(element, '', 'div', initializeSpy);
+        controller = new SlotController(element, '', 'div', { initializer: initializeSpy });
         element.addController(controller);
         // Check last child to ensure no custom node is added.
         child = element.lastChild;
@@ -190,8 +190,10 @@ describe('slot-controller', () => {
       });
 
       it('should override an empty text node passed to un-named slot', () => {
-        controller = new SlotController(element, '', 'div', (node) => {
-          node.textContent = 'bar';
+        controller = new SlotController(element, '', 'div', {
+          initializer: (node) => {
+            node.textContent = 'bar';
+          },
         });
         element.addController(controller);
         expect(controller.getSlotChild().textContent).to.equal('bar');
@@ -204,8 +206,10 @@ describe('slot-controller', () => {
 
     beforeEach(async () => {
       element = fixtureSync('<slot-controller-element></slot-controller-element>');
-      controller = new SlotController(element, 'foo', 'div', (node) => {
-        node.textContent = 'foo';
+      controller = new SlotController(element, 'foo', 'div', {
+        initializer: (node) => {
+          node.textContent = 'bar';
+        },
       });
       element.addController(controller);
       defaultNode = element.querySelector('[slot="foo"]');

@@ -138,38 +138,42 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
   ready() {
     super.ready();
 
-    this._buttonController = new SlotController(this, 'button', 'vaadin-button', (btn) => {
-      btn.setAttribute('theme', 'primary contained');
+    this._buttonController = new SlotController(this, 'button', 'vaadin-button', {
+      initializer: (btn) => {
+        btn.setAttribute('theme', 'primary contained');
 
-      btn.addEventListener('click', () => {
-        this.__submit();
-      });
+        btn.addEventListener('click', () => {
+          this.__submit();
+        });
 
-      this._button = btn;
+        this._button = btn;
+      },
     });
     this.addController(this._buttonController);
 
-    this._textAreaController = new SlotController(this, 'textarea', 'vaadin-text-area', (textarea) => {
-      textarea.addEventListener('value-changed', (event) => {
-        this.value = event.detail.value;
-      });
+    this._textAreaController = new SlotController(this, 'textarea', 'vaadin-text-area', {
+      initializer: (textarea) => {
+        textarea.addEventListener('value-changed', (event) => {
+          this.value = event.detail.value;
+        });
 
-      textarea.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' && !event.shiftKey) {
-          event.preventDefault();
-          event.stopImmediatePropagation();
-          this.__submit();
-        }
-      });
+        textarea.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            this.__submit();
+          }
+        });
 
-      const input = textarea.inputElement;
-      input.removeAttribute('aria-labelledby');
+        const input = textarea.inputElement;
+        input.removeAttribute('aria-labelledby');
 
-      // Set initial height to one row
-      input.setAttribute('rows', 1);
-      input.style.minHeight = '0';
+        // Set initial height to one row
+        input.setAttribute('rows', 1);
+        input.style.minHeight = '0';
 
-      this._textArea = textarea;
+        this._textArea = textarea;
+      },
     });
     this.addController(this._textAreaController);
 
