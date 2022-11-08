@@ -164,6 +164,21 @@ class LoginOverlay extends LoginMixin(ElementMixin(ThemableMixin(PolymerElement)
     e.preventDefault();
   }
 
+  /**
+   * @param {!Event} e
+   * @private
+   */
+  _retargetEvent(e) {
+    e.stopPropagation();
+    const { detail, composed, cancelable, bubbles } = e;
+
+    const firedEvent = this.dispatchEvent(new CustomEvent(e.type, { bubbles, cancelable, composed, detail }));
+    // Check if `eventTarget.preventDefault()` was called to prevent default in the original event
+    if (!firedEvent) {
+      e.preventDefault();
+    }
+  }
+
   /** @private */
   _onOpenedChange() {
     if (!this.opened) {
