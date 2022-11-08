@@ -138,11 +138,8 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
   ready() {
     super.ready();
 
-    this._buttonController = new SlotController(
-      this,
-      'button',
-      () => document.createElement('vaadin-button'),
-      (btn) => {
+    this._buttonController = new SlotController(this, 'button', 'vaadin-button', {
+      initializer: (btn) => {
         btn.setAttribute('theme', 'primary contained');
 
         btn.addEventListener('click', () => {
@@ -151,14 +148,11 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
 
         this._button = btn;
       },
-    );
+    });
     this.addController(this._buttonController);
 
-    this._textAreaController = new SlotController(
-      this,
-      'textarea',
-      () => document.createElement('vaadin-text-area'),
-      (textarea) => {
+    this._textAreaController = new SlotController(this, 'textarea', 'vaadin-text-area', {
+      initializer: (textarea) => {
         textarea.addEventListener('value-changed', (event) => {
           this.value = event.detail.value;
         });
@@ -180,7 +174,7 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
 
         this._textArea = textarea;
       },
-    );
+    });
     this.addController(this._textAreaController);
 
     this._tooltipController = new TooltipController(this);

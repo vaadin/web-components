@@ -10,8 +10,10 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  */
 export class HelperController extends SlotController {
   constructor(host) {
-    // Do not provide slot factory, as only create helper lazily.
-    super(host, 'helper', null, null, true);
+    // Do not provide tag name, as we create helper lazily.
+    super(host, 'helper', null, {
+      useUniqueId: true,
+    });
   }
 
   get helperId() {
@@ -106,8 +108,8 @@ export class HelperController extends SlotController {
     const hasHelperText = this.__isNotEmpty(helperText);
 
     if (hasHelperText && !helperNode) {
-      // Set slot factory lazily to only create helper node when needed.
-      this.slotFactory = () => document.createElement('div');
+      // Set tag name lazily to only create helper node when needed.
+      this.tagName = 'div';
 
       helperNode = this.attachDefaultNode();
 

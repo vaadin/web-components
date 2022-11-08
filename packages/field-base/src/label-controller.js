@@ -10,11 +10,8 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  */
 export class LabelController extends SlotController {
   constructor(host) {
-    super(
-      host,
-      'label',
-      () => document.createElement('label'),
-      (node) => {
+    super(host, 'label', 'label', {
+      initializer: (node) => {
         // Set ID attribute or use the existing one.
         this.__updateLabelId(node);
 
@@ -23,8 +20,8 @@ export class LabelController extends SlotController {
 
         this.__observeLabel(node);
       },
-      true,
-    );
+      useUniqueId: true,
+    });
   }
 
   /**

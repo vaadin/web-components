@@ -152,17 +152,14 @@ export class PasswordField extends TextField {
 
     this._revealPart = this.shadowRoot.querySelector('[part="reveal-button"]');
 
-    this._revealButtonController = new SlotController(
-      this,
-      'reveal',
-      () => document.createElement('vaadin-password-field-button'),
-      (btn) => {
+    this._revealButtonController = new SlotController(this, 'reveal', 'vaadin-password-field-button', {
+      initializer: (btn) => {
         btn.disabled = this.disabled;
 
         btn.addEventListener('click', this.__boundRevealButtonClick);
         btn.addEventListener('touchend', this.__boundRevealButtonTouchend);
       },
-    );
+    });
     this.addController(this._revealButtonController);
 
     this.__updateAriaLabel(this.i18n);

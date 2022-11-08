@@ -10,17 +10,14 @@ import { SlotController } from '@vaadin/component-base/src/slot-controller.js';
  */
 export class ErrorController extends SlotController {
   constructor(host) {
-    super(
-      host,
-      'error-message',
-      () => document.createElement('div'),
-      (node) => {
+    super(host, 'error-message', 'div', {
+      initializer: (node) => {
         this.__updateErrorId(node);
 
         this.__updateHasError();
       },
-      true,
-    );
+      useUniqueId: true,
+    });
   }
 
   /**
