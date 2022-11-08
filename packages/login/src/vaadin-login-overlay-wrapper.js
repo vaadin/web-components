@@ -3,56 +3,56 @@
  * Copyright (c) 2018 - 2022 Vaadin Ltd.
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
-import { DomModule } from '@polymer/polymer/lib/elements/dom-module.js';
+import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 import { Overlay } from '@vaadin/overlay/src/vaadin-overlay.js';
+import { css, registerStyles } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
-const template = document.createElement('template');
+registerStyles(
+  'vaadin-login-overlay-wrapper',
+  css`
+    [part='overlay'] {
+      outline: none;
+    }
 
-template.innerHTML = `<dom-module id="vaadin-login-overlay-wrapper-template">
-  <template>
-    <style>
-      [part="overlay"] {
-        outline: none;
-      }
+    [part='card'] {
+      max-width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
 
-      [part="card"] {
-        max-width: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-      }
+    [part='brand'] {
+      box-sizing: border-box;
+      overflow: hidden;
+      flex-grow: 1;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
 
-      [part="brand"] {
-        box-sizing: border-box;
-        overflow: hidden;
-        flex-grow: 1;
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-      }
+    [part='brand'] h1 {
+      color: inherit;
+      margin: 0;
+    }
+  `,
+  { moduleId: 'vaadin-login-overlay-wrapper-styles' },
+);
 
-      [part="brand"] h1 {
-        color: inherit;
-        margin: 0;
-      }
-    </style>
-    <section part="card">
-      <div part="brand">
-        <slot name="title">
-          <h1 part="title">[[title]]</h1>
-        </slot>
-        <p part="description">[[description]]</p>
-      </div>
-      <div part="form">
-        <slot></slot>
-      </div>
-    </section>
-  </template>
-</dom-module>`;
-
-document.head.appendChild(template.content);
+const template = html`
+  <section part="card">
+    <div part="brand">
+      <slot name="title">
+        <h1 part="title">[[title]]</h1>
+      </slot>
+      <p part="description">[[description]]</p>
+    </div>
+    <div part="form">
+      <slot></slot>
+    </div>
+  </section>
+`;
 
 let memoizedTemplate;
 
@@ -90,15 +90,10 @@ class LoginOverlayWrapper extends Overlay {
       // Clone the superclass template
       memoizedTemplate = super.template.cloneNode(true);
 
-      // Retrieve the elements from component's template
-      const thisTemplate = DomModule.import(`${this.is}-template`, 'template');
-      const card = thisTemplate.content.querySelector('[part=card]');
-      const styles = thisTemplate.content.querySelector('style');
-
-      // Append elements to cloned template
+      // Replace overlay slot with card
+      const card = template.content.querySelector('[part=card]');
       const content = memoizedTemplate.content.querySelector('#content');
       content.replaceChild(card, content.children[0]);
-      content.appendChild(styles);
     }
 
     return memoizedTemplate;
