@@ -163,13 +163,10 @@ describe('custom field', () => {
   });
 
   describe('custom parser and formatter', () => {
-    it('should use custom parser if that exists', () => {
-      customField.set(
-        'i18n.parseValue',
-        sinon.stub().callsFake((value) => {
-          return value.split(' ').map((value) => parseInt(value) + 1);
-        }),
-      );
+    it('should use custom parser from I18N object if that exists', () => {
+      customField.i18n.parseValue = (value) => {
+        return value.split(' ').map((value) => parseInt(value) + 1);
+      };
 
       customField.value = '1 1';
 
@@ -178,13 +175,66 @@ describe('custom field', () => {
       });
     });
 
-    it('should use custom formatter if that exists', () => {
-      customField.set(
-        'i18n.formatValue',
-        sinon.stub().callsFake((inputValues) => {
-          return inputValues.map((value) => parseInt(value) + 1 || '').join(' ');
-        }),
-      );
+    it('should use custom parseValue property if that exists', () => {
+      customField.parseValue = (value) => {
+        return value.split(' ').map((value) => parseInt(value) + 1);
+      };
+
+      customField.value = '1 1';
+
+      customField.inputs.forEach((el) => {
+        expect(el.value).to.equal('2');
+      });
+    });
+
+    it('should use prefer the custom parseValue property over i18n object', () => {
+      customField.parseValue = (value) => {
+        return value.split(' ').map((value) => parseInt(value) + 1);
+      };
+      customField.i18n.parseValue = (value) => {
+        return value.split(' ').map((value) => parseInt(value) + 2);
+      };
+
+      customField.value = '1 1';
+
+      customField.inputs.forEach((el) => {
+        expect(el.value).to.equal('2');
+      });
+    });
+
+    it('should use custom formatter from I18N object if that exists', () => {
+      customField.i18n.formatValue = (inputValues) => {
+        return inputValues.map((value) => parseInt(value) + 1 || '').join(' ');
+      };
+
+      customField.inputs.forEach((el) => {
+        el.value = '1';
+        dispatchChange(el);
+      });
+
+      expect(customField.value).to.be.equal('2 2');
+    });
+
+    it('should use custom formatValue property if that exists', () => {
+      customField.formatValue = (inputValues) => {
+        return inputValues.map((value) => parseInt(value) + 1 || '').join(' ');
+      };
+
+      customField.inputs.forEach((el) => {
+        el.value = '1';
+        dispatchChange(el);
+      });
+
+      expect(customField.value).to.be.equal('2 2');
+    });
+
+    it('should prefer the custom formatValue property over the i18n object', () => {
+      customField.formatValue = (inputValues) => {
+        return inputValues.map((value) => parseInt(value) + 1 || '').join(' ');
+      };
+      customField.i18n.formatValue = (inputValues) => {
+        return inputValues.map((value) => parseInt(value) + 2 || '').join(' ');
+      };
 
       customField.inputs.forEach((el) => {
         el.value = '1';
@@ -203,8 +253,15 @@ describe('custom field', () => {
         console.warn.restore();
       });
 
-      it('should warn if custom parser has not returned array of values', () => {
-        customField.set('i18n.parseValue', () => '');
+      it('should warn if custom parser from I18N object has not returned array of values', () => {
+        customField.i18n.parseValue = () => '';
+
+        customField.value = 'foo';
+        expect(console.warn.callCount).to.equal(1);
+      });
+
+      it('should warn if custom parseValue property has not returned array of values', () => {
+        customField.parseValue = () => '';
 
         customField.value = 'foo';
         expect(console.warn.callCount).to.equal(1);

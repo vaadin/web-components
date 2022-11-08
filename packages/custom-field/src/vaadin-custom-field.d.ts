@@ -112,6 +112,39 @@ declare class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMi
   readonly inputs: HTMLElement[] | undefined;
 
   /**
+   * A function to format the values of the individual fields contained by
+   * the custom field into a single component value. The function receives
+   * an array of all values of the individual fields in the order of their
+   * presence in the DOM, and must return a single component value.
+   * This function is called each time a value of an internal field is
+   * changed.
+   *
+   * Example:
+   * ```js
+   * customField.formatValue = (fieldValues) => {
+   *   return fieldValues.join("-");
+   * }
+   * ```
+   */
+  formatValue: CustomFieldFormatValueFn | undefined;
+
+  /**
+   * A function to parse the component value into values for the individual
+   * fields contained by the custom field. The function receives the
+   * component value, and must return an array of values for the individual
+   * fields in the order of their presence in the DOM.
+   * The function is called each time the value of the component changes.
+   *
+   * Example:
+   * ```js
+   * customField.parseValue = (componentValue) => {
+   *   return componentValue.split("-");
+   * }
+   * ```
+   */
+  parseValue: CustomFieldParseValueFn | undefined;
+
+  /**
    * The object used to localize this component.
    * To change the default localization, replace the entire
    * _i18n_ object or just the property you want to modify.
@@ -140,6 +173,9 @@ declare class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMi
    *   }
    * }
    * ```
+   * @deprecated Since 23.3
+   * Use the [`formatValue`](#/elements/vaadin-custom-field#property-formatValue)
+   * and [`parseValue`](#/elements/vaadin-custom-field#property-parseValue) properties instead
    */
   i18n: CustomFieldI18n;
 
@@ -151,8 +187,10 @@ declare class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMi
   /**
    * The value of the field. When wrapping several inputs, it will contain `\t`
    * (Tab character) as a delimiter indicating parts intended to be used as the
-   * corresponding inputs values. Use the [`i18n`](#/elements/vaadin-custom-field#property-i18n)
-   * property to customize this behavior.
+   * corresponding inputs values.
+   * Use the [`formatValue`](#/elements/vaadin-custom-field#property-formatValue)
+   * and [`parseValue`](#/elements/vaadin-custom-field#property-parseValue)
+   * properties to customize this behavior.
    */
   value: string | null | undefined;
 
