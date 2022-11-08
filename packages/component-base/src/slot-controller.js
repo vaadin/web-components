@@ -111,7 +111,7 @@ export class SlotController extends EventTarget {
     // Don't try to bind `this` to initializer (normally it's arrow function).
     // Instead, pass the host as a first argument to access component's state.
     if (slotInitializer) {
-      slotInitializer(this.host, node);
+      slotInitializer(node, this.host);
     }
   }
 

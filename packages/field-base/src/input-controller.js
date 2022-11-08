@@ -14,7 +14,7 @@ export class InputController extends SlotController {
       host,
       'input',
       () => document.createElement('input'),
-      (host, node) => {
+      (node, host) => {
         if (host.value) {
           node.setAttribute('value', host.value);
         }

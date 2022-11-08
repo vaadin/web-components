@@ -14,7 +14,7 @@ export class ErrorController extends SlotController {
       host,
       'error-message',
       () => document.createElement('div'),
-      (_host, node) => {
+      (node) => {
         this.__updateErrorId(node);
 
         this.__updateHasError();

@@ -60,7 +60,7 @@ export const ButtonsMixin = (superClass) =>
         this,
         'overflow',
         () => document.createElement('vaadin-menu-bar-button'),
-        (_, btn) => {
+        (btn) => {
           btn.setAttribute('hidden', '');
 
           const dots = document.createElement('div');

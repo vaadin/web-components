@@ -156,11 +156,11 @@ export class PasswordField extends TextField {
       this,
       'reveal',
       () => document.createElement('vaadin-password-field-button'),
-      (host, btn) => {
-        btn.disabled = host.disabled;
+      (btn) => {
+        btn.disabled = this.disabled;
 
-        btn.addEventListener('click', host.__boundRevealButtonClick);
-        btn.addEventListener('touchend', host.__boundRevealButtonTouchend);
+        btn.addEventListener('click', this.__boundRevealButtonClick);
+        btn.addEventListener('touchend', this.__boundRevealButtonTouchend);
       },
     );
     this.addController(this._revealButtonController);

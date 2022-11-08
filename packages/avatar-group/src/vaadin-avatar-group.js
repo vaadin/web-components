@@ -284,7 +284,7 @@ class AvatarGroup extends ResizeMixin(ElementMixin(ThemableMixin(ControllerMixin
       this,
       'overflow',
       () => document.createElement('vaadin-avatar'),
-      (_, overflow) => {
+      (overflow) => {
         overflow.setAttribute('aria-haspopup', 'listbox');
         overflow.setAttribute('aria-expanded', 'false');
         overflow.addEventListener('click', (e) => this._onOverflowClick(e));
