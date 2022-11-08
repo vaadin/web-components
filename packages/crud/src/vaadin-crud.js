@@ -928,7 +928,12 @@ class Crud extends SlotMixin(ControllerMixin(ElementMixin(ThemableMixin(PolymerE
     if (form) {
       form.include = include;
       form.exclude = exclude;
-      form.setAttribute('theme', theme);
+
+      if (theme) {
+        form.setAttribute('theme', theme);
+      } else {
+        form.removeAttribute('theme');
+      }
     }
   }
 
