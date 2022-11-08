@@ -106,8 +106,8 @@ export class HelperController extends SlotController {
     const hasHelperText = this.__isNotEmpty(helperText);
 
     if (hasHelperText && !helperNode) {
-      // Set slot factory lazily to only create helper node when needed.
-      this.slotFactory = () => document.createElement('div');
+      // Set tag name lazily to only create helper node when needed.
+      this.tagName = 'div';
 
       helperNode = this.attachDefaultNode();
 

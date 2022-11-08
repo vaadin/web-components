@@ -509,15 +509,10 @@ class MultiSelectComboBox extends ResizeMixin(InputControlMixin(ThemableMixin(El
 
     this._inputField = this.shadowRoot.querySelector('[part="input-field"]');
 
-    this._overflowController = new SlotController(
-      this,
-      'overflow',
-      () => document.createElement('vaadin-multi-select-combo-box-chip'),
-      (chip) => {
-        chip.addEventListener('mousedown', (e) => this._preventBlur(e));
-        this._overflow = chip;
-      },
-    );
+    this._overflowController = new SlotController(this, 'overflow', 'vaadin-multi-select-combo-box-chip', (chip) => {
+      chip.addEventListener('mousedown', (e) => this._preventBlur(e));
+      this._overflow = chip;
+    });
     this.addController(this._overflowController);
 
     this.__updateChips();

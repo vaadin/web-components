@@ -182,16 +182,11 @@ class Message extends FocusMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
   ready() {
     super.ready();
 
-    this._avatarController = new SlotController(
-      this,
-      'avatar',
-      () => document.createElement('vaadin-avatar'),
-      (avatar) => {
-        avatar.setAttribute('tabindex', '-1');
-        avatar.setAttribute('aria-hidden', 'true');
-        this._avatar = avatar;
-      },
-    );
+    this._avatarController = new SlotController(this, 'avatar', 'vaadin-avatar', (avatar) => {
+      avatar.setAttribute('tabindex', '-1');
+      avatar.setAttribute('aria-hidden', 'true');
+      this._avatar = avatar;
+    });
     this.addController(this._avatarController);
   }
 

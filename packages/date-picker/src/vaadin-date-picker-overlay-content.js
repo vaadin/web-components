@@ -272,31 +272,21 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
     );
 
     this.addController(
-      new SlotController(
-        this,
-        'today-button',
-        () => document.createElement('vaadin-button'),
-        (btn) => {
-          btn.setAttribute('theme', 'tertiary');
-          btn.addEventListener('keydown', (e) => this.__onTodayButtonKeyDown(e));
-          addListener(btn, 'tap', this._onTodayTap.bind(this));
-          this._todayButton = btn;
-        },
-      ),
+      new SlotController(this, 'today-button', 'vaadin-button', (btn) => {
+        btn.setAttribute('theme', 'tertiary');
+        btn.addEventListener('keydown', (e) => this.__onTodayButtonKeyDown(e));
+        addListener(btn, 'tap', this._onTodayTap.bind(this));
+        this._todayButton = btn;
+      }),
     );
 
     this.addController(
-      new SlotController(
-        this,
-        'cancel-button',
-        () => document.createElement('vaadin-button'),
-        (btn) => {
-          btn.setAttribute('theme', 'tertiary');
-          btn.addEventListener('keydown', (e) => this.__onCancelButtonKeyDown(e));
-          addListener(btn, 'tap', this._cancel.bind(this));
-          this._cancelButton = btn;
-        },
-      ),
+      new SlotController(this, 'cancel-button', 'vaadin-button', (btn) => {
+        btn.setAttribute('theme', 'tertiary');
+        btn.addEventListener('keydown', (e) => this.__onCancelButtonKeyDown(e));
+        addListener(btn, 'tap', this._cancel.bind(this));
+        this._cancelButton = btn;
+      }),
     );
 
     this.__initMonthScroller();
@@ -335,70 +325,60 @@ class DatePickerOverlayContent extends ControllerMixin(ThemableMixin(DirMixin(Po
 
   __initMonthScroller() {
     this.addController(
-      new SlotController(
-        this,
-        'months',
-        () => document.createElement('vaadin-date-picker-month-scroller'),
-        (scroller) => {
-          scroller.addEventListener('custom-scroll', () => {
-            this._onMonthScroll();
-          });
+      new SlotController(this, 'months', 'vaadin-date-picker-month-scroller', (scroller) => {
+        scroller.addEventListener('custom-scroll', () => {
+          this._onMonthScroll();
+        });
 
-          scroller.addEventListener('touchstart', () => {
-            this._onMonthScrollTouchStart();
-          });
+        scroller.addEventListener('touchstart', () => {
+          this._onMonthScrollTouchStart();
+        });
 
-          scroller.addEventListener('keydown', (e) => {
-            this.__onMonthCalendarKeyDown(e);
-          });
+        scroller.addEventListener('keydown', (e) => {
+          this.__onMonthCalendarKeyDown(e);
+        });
 
-          scroller.addEventListener('init-done', () => {
-            const calendars = [...this.querySelectorAll('vaadin-month-calendar')];
+        scroller.addEventListener('init-done', () => {
+          const calendars = [...this.querySelectorAll('vaadin-month-calendar')];
 
-            // Two-way binding for selectedDate property
-            calendars.forEach((calendar) => {
-              calendar.addEventListener('selected-date-changed', (e) => {
-                this.selectedDate = e.detail.value;
-              });
+          // Two-way binding for selectedDate property
+          calendars.forEach((calendar) => {
+            calendar.addEventListener('selected-date-changed', (e) => {
+              this.selectedDate = e.detail.value;
             });
-
-            this.calendars = calendars;
           });
 
-          this._monthScroller = scroller;
-        },
-      ),
+          this.calendars = calendars;
+        });
+
+        this._monthScroller = scroller;
+      }),
     );
   }
 
   __initYearScroller() {
     this.addController(
-      new SlotController(
-        this,
-        'years',
-        () => document.createElement('vaadin-date-picker-year-scroller'),
-        (scroller) => {
-          scroller.setAttribute('aria-hidden', 'true');
+      new SlotController(this, 'years', 'vaadin-date-picker-year-scroller', (scroller) => {
+        scroller.setAttribute('aria-hidden', 'true');
 
-          addListener(scroller, 'tap', (e) => {
-            this._onYearTap(e);
-          });
+        addListener(scroller, 'tap', (e) => {
+          this._onYearTap(e);
+        });
 
-          scroller.addEventListener('custom-scroll', () => {
-            this._onYearScroll();
-          });
+        scroller.addEventListener('custom-scroll', () => {
+          this._onYearScroll();
+        });
 
-          scroller.addEventListener('touchstart', () => {
-            this._onYearScrollTouchStart();
-          });
+        scroller.addEventListener('touchstart', () => {
+          this._onYearScrollTouchStart();
+        });
 
-          scroller.addEventListener('init-done', () => {
-            this.years = [...this.querySelectorAll('vaadin-date-picker-year')];
-          });
+        scroller.addEventListener('init-done', () => {
+          this.years = [...this.querySelectorAll('vaadin-date-picker-year')];
+        });
 
-          this._yearScroller = scroller;
-        },
-      ),
+        this._yearScroller = scroller;
+      }),
     );
   }
 

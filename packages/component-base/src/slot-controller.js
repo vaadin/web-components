@@ -23,12 +23,12 @@ export class SlotController extends EventTarget {
     return `${prefix}-${host.localName}-${generateUniqueId()}`;
   }
 
-  constructor(host, slotName, slotFactory, slotInitializer, useUniqueId) {
+  constructor(host, slotName, tagName, slotInitializer, useUniqueId) {
     super();
 
     this.host = host;
     this.slotName = slotName;
-    this.slotFactory = slotFactory;
+    this.tagName = tagName;
     this.slotInitializer = slotInitializer;
 
     // Only generate the default ID if requested by the controller.
@@ -63,14 +63,14 @@ export class SlotController extends EventTarget {
    * @protected
    */
   attachDefaultNode() {
-    const { host, slotName, slotFactory } = this;
+    const { host, slotName, tagName } = this;
 
     // Check if the node was created previously and if so, reuse it.
     let node = this.defaultNode;
 
     // Slot factory is optional, some slots don't have default content.
-    if (!node && slotFactory) {
-      node = slotFactory(host);
+    if (!node && tagName) {
+      node = document.createElement(tagName);
       if (node instanceof Element) {
         if (slotName !== '') {
           node.setAttribute('slot', slotName);

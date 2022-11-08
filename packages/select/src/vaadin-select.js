@@ -348,23 +348,18 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
     this._overlayElement = this.shadowRoot.querySelector('vaadin-select-overlay');
     this._inputContainer = this.shadowRoot.querySelector('[part~="input-field"]');
 
-    this._valueButtonController = new SlotController(
-      this,
-      'value',
-      () => document.createElement('vaadin-select-value-button'),
-      (btn) => {
-        this._setFocusElement(btn);
-        this.ariaTarget = btn;
-        this.stateTarget = btn;
+    this._valueButtonController = new SlotController(this, 'value', 'vaadin-select-value-button', (btn) => {
+      this._setFocusElement(btn);
+      this.ariaTarget = btn;
+      this.stateTarget = btn;
 
-        btn.setAttribute('aria-haspopup', 'listbox');
-        btn.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
+      btn.setAttribute('aria-haspopup', 'listbox');
+      btn.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
 
-        this._updateAriaExpanded(this.opened);
+      this._updateAriaExpanded(this.opened);
 
-        btn.addEventListener('keydown', this._boundOnKeyDown);
-      },
-    );
+      btn.addEventListener('keydown', this._boundOnKeyDown);
+    });
     this.addController(this._valueButtonController);
 
     this.addController(

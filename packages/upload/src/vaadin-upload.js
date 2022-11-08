@@ -454,45 +454,30 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
     this.addEventListener('upload-error', this._onUploadError.bind(this));
 
     this.addController(
-      new SlotController(
-        this,
-        'add-button',
-        () => document.createElement('vaadin-button'),
-        (button) => {
-          button.addEventListener('touchend', (e) => {
-            this._onAddFilesTouchEnd(e);
-          });
-          button.addEventListener('click', (e) => {
-            this._onAddFilesClick(e);
-          });
-          this._addButton = button;
-        },
-      ),
+      new SlotController(this, 'add-button', 'vaadin-button', (button) => {
+        button.addEventListener('touchend', (e) => {
+          this._onAddFilesTouchEnd(e);
+        });
+        button.addEventListener('click', (e) => {
+          this._onAddFilesClick(e);
+        });
+        this._addButton = button;
+      }),
     );
 
     this.addController(
-      new SlotController(
-        this,
-        'drop-label',
-        () => document.createElement('span'),
-        (label) => {
-          this._dropLabel = label;
-        },
-      ),
+      new SlotController(this, 'drop-label', 'span', (label) => {
+        this._dropLabel = label;
+      }),
     );
 
     this.addController(
-      new SlotController(
-        this,
-        'file-list',
-        () => document.createElement('vaadin-upload-file-list'),
-        (list) => {
-          this._fileList = list;
-        },
-      ),
+      new SlotController(this, 'file-list', 'vaadin-upload-file-list', (list) => {
+        this._fileList = list;
+      }),
     );
 
-    this.addController(new SlotController(this, 'drop-label-icon', () => document.createElement('vaadin-upload-icon')));
+    this.addController(new SlotController(this, 'drop-label-icon', 'vaadin-upload-icon'));
   }
 
   /** @private */

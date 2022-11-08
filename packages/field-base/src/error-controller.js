@@ -13,7 +13,7 @@ export class ErrorController extends SlotController {
     super(
       host,
       'error-message',
-      () => document.createElement('div'),
+      'div',
       (node) => {
         this.__updateErrorId(node);
 
