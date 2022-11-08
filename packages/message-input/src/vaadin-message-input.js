@@ -142,7 +142,7 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
       this,
       'button',
       () => document.createElement('vaadin-button'),
-      (_, btn) => {
+      (btn) => {
         btn.setAttribute('theme', 'primary contained');
 
         btn.addEventListener('click', () => {
@@ -158,7 +158,7 @@ class MessageInput extends ElementMixin(ThemableMixin(ControllerMixin(PolymerEle
       this,
       'textarea',
       () => document.createElement('vaadin-text-area'),
-      (_, textarea) => {
+      (textarea) => {
         textarea.addEventListener('value-changed', (event) => {
           this.value = event.detail.value;
         });

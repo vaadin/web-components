@@ -352,7 +352,7 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
       this,
       'value',
       () => document.createElement('vaadin-select-value-button'),
-      (host, btn) => {
+      (btn) => {
         this._setFocusElement(btn);
         this.ariaTarget = btn;
         this.stateTarget = btn;
@@ -360,7 +360,7 @@ class Select extends DelegateFocusMixin(DelegateStateMixin(FieldMixin(ElementMix
         btn.setAttribute('aria-haspopup', 'listbox');
         btn.setAttribute('aria-labelledby', `${this._labelId} ${this._fieldId}`);
 
-        this._updateAriaExpanded(host.opened);
+        this._updateAriaExpanded(this.opened);
 
         btn.addEventListener('keydown', this._boundOnKeyDown);
       },

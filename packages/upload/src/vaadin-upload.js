@@ -458,7 +458,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         this,
         'add-button',
         () => document.createElement('vaadin-button'),
-        (_, button) => {
+        (button) => {
           button.addEventListener('touchend', (e) => {
             this._onAddFilesTouchEnd(e);
           });
@@ -475,7 +475,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         this,
         'drop-label',
         () => document.createElement('span'),
-        (_, label) => {
+        (label) => {
           this._dropLabel = label;
         },
       ),
@@ -486,7 +486,7 @@ class Upload extends ElementMixin(ThemableMixin(ControllerMixin(PolymerElement))
         this,
         'file-list',
         () => document.createElement('vaadin-upload-file-list'),
-        (_, list) => {
+        (list) => {
           this._fileList = list;
         },
       ),

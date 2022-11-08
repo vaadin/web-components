@@ -186,7 +186,7 @@ class Message extends FocusMixin(ElementMixin(ThemableMixin(ControllerMixin(Poly
       this,
       'avatar',
       () => document.createElement('vaadin-avatar'),
-      (_, avatar) => {
+      (avatar) => {
         avatar.setAttribute('tabindex', '-1');
         avatar.setAttribute('aria-hidden', 'true');
         this._avatar = avatar;

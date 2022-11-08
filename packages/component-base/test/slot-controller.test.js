@@ -54,8 +54,8 @@ describe('slot-controller', () => {
 
       it('should run initializer for named slot child', () => {
         expect(initializeSpy.calledOnce).to.be.true;
-        expect(initializeSpy.firstCall.args[0]).to.equal(element);
-        expect(initializeSpy.firstCall.args[1]).to.equal(child);
+        expect(initializeSpy.firstCall.args[0]).to.equal(child);
+        expect(initializeSpy.firstCall.args[1]).to.equal(element);
       });
     });
 
@@ -97,8 +97,8 @@ describe('slot-controller', () => {
 
       it('should run initializer for custom named slot child', () => {
         expect(initializeSpy.calledOnce).to.be.true;
-        expect(initializeSpy.firstCall.args[0]).to.equal(element);
-        expect(initializeSpy.firstCall.args[1]).to.equal(child);
+        expect(initializeSpy.firstCall.args[0]).to.equal(child);
+        expect(initializeSpy.firstCall.args[1]).to.equal(element);
       });
     });
   });
@@ -137,8 +137,8 @@ describe('slot-controller', () => {
 
       it('should run initializer for un-named slot child', () => {
         expect(initializeSpy.calledOnce).to.be.true;
-        expect(initializeSpy.firstCall.args[0]).to.equal(element);
-        expect(initializeSpy.firstCall.args[1]).to.equal(child);
+        expect(initializeSpy.firstCall.args[0]).to.equal(child);
+        expect(initializeSpy.firstCall.args[1]).to.equal(element);
       });
     });
 
@@ -180,8 +180,8 @@ describe('slot-controller', () => {
 
       it('should run initializer for un-named slot element', () => {
         expect(initializeSpy.calledOnce).to.be.true;
-        expect(initializeSpy.firstCall.args[0]).to.equal(element);
-        expect(initializeSpy.firstCall.args[1]).to.equal(child);
+        expect(initializeSpy.firstCall.args[0]).to.equal(child);
+        expect(initializeSpy.firstCall.args[1]).to.equal(element);
       });
     });
 
@@ -219,8 +219,8 @@ describe('slot-controller', () => {
 
       it('should run initializer for the slotted text node', () => {
         expect(initializeSpy.calledOnce).to.be.true;
-        expect(initializeSpy.firstCall.args[0]).to.equal(element);
-        expect(initializeSpy.firstCall.args[1]).to.equal(child);
+        expect(initializeSpy.firstCall.args[0]).to.equal(child);
+        expect(initializeSpy.firstCall.args[1]).to.equal(element);
       });
     });
 
@@ -237,6 +237,7 @@ describe('slot-controller', () => {
           return div;
         });
         element.addController(controller);
+        expect(controller.getSlotChild().textContent).to.equal('bar');
       });
     });
   });

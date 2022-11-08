@@ -14,7 +14,7 @@ export class LabelController extends SlotController {
       host,
       'label',
       () => document.createElement('label'),
-      (_host, node) => {
+      (node) => {
         // Set ID attribute or use the existing one.
         this.__updateLabelId(node);
 

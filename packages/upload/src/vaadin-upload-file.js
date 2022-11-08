@@ -240,7 +240,7 @@ class UploadFile extends FocusMixin(ThemableMixin(ControllerMixin(PolymerElement
         this,
         'progress',
         () => document.createElement('vaadin-progress-bar'),
-        (_, progress) => {
+        (progress) => {
           this._progress = progress;
         },
       ),

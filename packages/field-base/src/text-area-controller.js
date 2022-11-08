@@ -14,7 +14,7 @@ export class TextAreaController extends SlotController {
       host,
       'textarea',
       () => document.createElement('textarea'),
-      (host, node) => {
+      (node, host) => {
         const value = host.getAttribute('value');
         if (value) {
           node.value = value;
