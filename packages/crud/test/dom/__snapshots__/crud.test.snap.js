@@ -9,10 +9,7 @@ snapshots["vaadin-crud host default"] =
   <h3 slot="header">
     Edit item
   </h3>
-  <vaadin-crud-form
-    slot="form"
-    theme="undefined"
-  >
+  <vaadin-crud-form slot="form">
   </vaadin-crud-form>
   <vaadin-button
     aria-disabled="true"
