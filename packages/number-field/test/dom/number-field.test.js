@@ -54,6 +54,11 @@ describe('vaadin-number-field', () => {
       await expect(field).shadowDom.to.equalSnapshot();
     });
 
+    it('step-buttons-visible', async () => {
+      field.stepButtonsVisible = true;
+      await expect(field).shadowDom.to.equalSnapshot();
+    });
+
     it('disabled', async () => {
       field.disabled = true;
       await expect(field).shadowDom.to.equalSnapshot();
