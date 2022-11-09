@@ -13,12 +13,6 @@ export type CustomFieldParseValueFn = (value: string) => unknown[];
 
 export type CustomFieldFormatValueFn = (inputValues: unknown[]) => string;
 
-export interface CustomFieldI18n {
-  parseValue: CustomFieldParseValueFn;
-
-  formatValue: CustomFieldFormatValueFn;
-}
-
 /**
  * Fired when the user commits a value change.
  */
@@ -112,36 +106,37 @@ declare class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMi
   readonly inputs: HTMLElement[] | undefined;
 
   /**
-   * The object used to localize this component.
-   * To change the default localization, replace the entire
-   * _i18n_ object or just the property you want to modify.
+   * A function to format the values of the individual fields contained by
+   * the custom field into a single component value. The function receives
+   * an array of all values of the individual fields in the order of their
+   * presence in the DOM, and must return a single component value.
+   * This function is called each time a value of an internal field is
+   * changed.
    *
-   * The object has the following JSON structure:
-   *
-   * ```
-   * {
-   *   // A function to format given `Array` as
-   *   // component value. Array is list of all internal values
-   *   // in the order of their presence in the DOM
-   *   // This function is called each time the internal input
-   *   // value is changed.
-   *   formatValue: inputValues => {
-   *     // returns a representation of the given array of values
-   *     // in the form of string with delimiter characters
-   *   },
-   *
-   *   // A function to parse the given value to an `Array` in the format
-   *   // of the list of all internal values
-   *   // in the order of their presence in the DOM
-   *   // This function is called when value of the
-   *   // custom field is set.
-   *   parseValue: value => {
-   *     // returns the array of values from parsed value string.
-   *   }
+   * Example:
+   * ```js
+   * customField.formatValue = (fieldValues) => {
+   *   return fieldValues.join("-");
    * }
    * ```
    */
-  i18n: CustomFieldI18n;
+  formatValue: CustomFieldFormatValueFn | undefined;
+
+  /**
+   * A function to parse the component value into values for the individual
+   * fields contained by the custom field. The function receives the
+   * component value, and must return an array of values for the individual
+   * fields in the order of their presence in the DOM.
+   * The function is called each time the value of the component changes.
+   *
+   * Example:
+   * ```js
+   * customField.parseValue = (componentValue) => {
+   *   return componentValue.split("-");
+   * }
+   * ```
+   */
+  parseValue: CustomFieldParseValueFn | undefined;
 
   /**
    * The name of the control, which is submitted with the form data.
@@ -151,8 +146,10 @@ declare class CustomField extends FieldMixin(FocusMixin(KeyboardMixin(ThemableMi
   /**
    * The value of the field. When wrapping several inputs, it will contain `\t`
    * (Tab character) as a delimiter indicating parts intended to be used as the
-   * corresponding inputs values. Use the [`i18n`](#/elements/vaadin-custom-field#property-i18n)
-   * property to customize this behavior.
+   * corresponding inputs values.
+   * Use the [`formatValue`](#/elements/vaadin-custom-field#property-formatValue)
+   * and [`parseValue`](#/elements/vaadin-custom-field#property-parseValue)
+   * properties to customize this behavior.
    */
   value: string | null | undefined;
 
