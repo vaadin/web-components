@@ -153,7 +153,7 @@ snapshots["vaadin-number-field shadow default"] =
 `;
 /* end snapshot vaadin-number-field shadow default */
 
-snapshots["vaadin-number-field shadow controls"] = 
+snapshots["vaadin-number-field shadow step-buttons-visible"] = 
 `<div class="vaadin-field-container">
   <div part="label">
     <slot name="label">
@@ -209,7 +209,7 @@ snapshots["vaadin-number-field shadow controls"] =
 <slot name="tooltip">
 </slot>
 `;
-/* end snapshot vaadin-number-field shadow controls */
+/* end snapshot vaadin-number-field shadow step-buttons-visible */
 
 snapshots["vaadin-number-field shadow disabled"] = 
 `<div class="vaadin-field-container">

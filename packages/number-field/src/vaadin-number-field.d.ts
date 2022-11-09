@@ -70,10 +70,10 @@ export interface NumberFieldEventMap extends HTMLElementEventMap, NumberFieldCus
  */
 declare class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(HTMLElement))) {
   /**
-   * Set to true to display value increase/decrease controls.
-   * @attr {boolean} has-controls
+   * Set to true to show increase/decrease buttons.
+   * @attr {boolean} step-buttons-visible
    */
-  hasControls: boolean;
+  stepButtonsVisible: boolean;
 
   /**
    * The minimum value of the field.

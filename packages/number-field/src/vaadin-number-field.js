@@ -100,7 +100,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
             part="decrease-button"
             on-click="_decreaseValue"
             on-touchend="_decreaseButtonTouchend"
-            hidden$="[[!hasControls]]"
+            hidden$="[[!stepButtonsVisible]]"
             aria-hidden="true"
             slot="prefix"
           ></div>
@@ -113,7 +113,7 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
             part="increase-button"
             on-click="_increaseValue"
             on-touchend="_increaseButtonTouchend"
-            hidden$="[[!hasControls]]"
+            hidden$="[[!stepButtonsVisible]]"
             aria-hidden="true"
             slot="suffix"
           ></div>
@@ -135,10 +135,10 @@ export class NumberField extends InputFieldMixin(ThemableMixin(ElementMixin(Poly
   static get properties() {
     return {
       /**
-       * Set to true to display value increase/decrease controls.
-       * @attr {boolean} has-controls
+       * Set to true to show increase/decrease buttons.
+       * @attr {boolean} step-buttons-visible
        */
-      hasControls: {
+      stepButtonsVisible: {
         type: Boolean,
         value: false,
         reflectToAttribute: true,
