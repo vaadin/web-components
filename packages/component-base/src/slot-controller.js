@@ -26,11 +26,12 @@ export class SlotController extends EventTarget {
   constructor(host, slotName, tagName, config = {}) {
     super();
 
-    const { initializer, useUniqueId } = config;
+    const { initializer, observe, useUniqueId } = config;
 
     this.host = host;
     this.slotName = slotName;
     this.tagName = tagName;
+    this.observe = typeof observe === 'boolean' ? observe : true;
     this.slotInitializer = initializer;
 
     // Only generate the default ID if requested by the controller.
@@ -52,8 +53,9 @@ export class SlotController extends EventTarget {
 
       this.initNode(node);
 
-      // TODO: Consider making this behavior opt-in to improve performance.
-      this.observe();
+      if (this.observe) {
+        this.observeSlot();
+      }
 
       this.initialized = true;
     }
@@ -137,7 +139,7 @@ export class SlotController extends EventTarget {
    * Setup the observer to manage slot content changes.
    * @protected
    */
-  observe() {
+  observeSlot() {
     const { slotName } = this;
     const selector = slotName === '' ? 'slot:not([name])' : `slot[name=${slotName}]`;
     const slot = this.host.shadowRoot.querySelector(selector);

@@ -27,6 +27,7 @@ export class SlotController extends EventTarget implements ReactiveController {
     slotName: string,
     tagName?: string,
     config?: {
+      observe?: boolean;
       useUniqueId?: boolean;
       initializer?(host: HTMLElement, node: HTMLElement): void;
     },
@@ -56,5 +57,5 @@ export class SlotController extends EventTarget implements ReactiveController {
   /**
    * Setup the observer to manage slot content changes.
    */
-  protected observe(): void;
+  protected observeSlot(): void;
 }
